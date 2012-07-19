@@ -58,7 +58,11 @@ class QGraphicsView;
 class QGraphicsScene;
 class QDomElement;
 class QDockWidget;
+class QStackedWidget;
 class QDomElement;
+class QScrollArea;
+class QStandardItemModel;
+class QActionGroup;
 class KUndo2Command;
 
 namespace KPlato
@@ -66,12 +70,14 @@ namespace KPlato
 
 class Project;
 class ReportView;
+class ReportWidget;
+class ReportDesigner;
 class ReportData;
 class ReportSourceEditor;
 class ReportNavigator;
 class ReportDesignPanel;
 class ReportSourceModel;
-
+class GroupSectionEditor;
 
 class ReportPrintingDialog : public KoPrintingDialog
 {
@@ -99,19 +105,57 @@ protected:
 };
 
 //-------------------
-class KPLATOUI_EXPORT ReportView : public ViewBase 
+class KPLATOUI_EXPORT ReportView : public ViewBase
 {
     Q_OBJECT
 public:
     ReportView( KoDocument *part, QWidget *parent );
+
+    void setProject( Project *project );
+
+    KoPrintJob *createPrintJob();
+
+    /// Load the design document @p doc
+    bool loadXML( const QDomDocument &doc );
+    /// Loads context info into this view.
+    virtual bool loadContext( const KoXmlElement &context );
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &context ) const;
+
+    ReportWidget *reportWidget() const;
+    ReportDesigner *reportDesigner() const;
+
+    QDomDocument document() const;
+    QList<ReportData*> reportDataModels() const;
+
+public slots:
+    void setGuiActive( bool active );
+    void setScheduleManager( ScheduleManager *sm );
+
+private slots:
+    void slotEditReport();
+    void slotViewReport();
+
+signals:
+    void editReportDesign( ReportWidget* );
+
+private:
+    QStackedWidget *m_stack;
+};
+//-------------------
+class KPLATOUI_EXPORT ReportWidget : public ViewBase
+{
+    Q_OBJECT
+public:
+    ReportWidget( KoDocument *part, QWidget *parent );
 
 public slots:
     void setGuiActive( bool active );
     
     void renderPage( int page );
     
-    /// Return the design document
-    QDomDocument document() const;
+    /// Return true if document is null
+    bool documentIsNull() const;
     /// Load the design document @p doc
     bool loadXML( const QDomDocument &doc );
     /// Loads context info into this view.
@@ -128,7 +172,7 @@ public slots:
     QList<ReportData*> reportDataModels() const { return m_reportdatamodels; }
 
 signals:
-    void editReportDesign( ReportView *view );
+    void editReportDesign();
 
 public slots:
     /// refresh display
@@ -142,7 +186,6 @@ private slots:
     void prevPage();
     void firstPage();
     void lastPage();
-    void slotEditReport();
 
     void slotExport();
     void slotExportFinished( int result );
@@ -194,7 +237,7 @@ public:
     ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
     
     /// Edit the report definition in @p view
-    ReportDesignDialog( ReportView *view, QWidget *parent = 0 );
+    ReportDesignDialog( KPlato::ReportView* view, QWidget* parent = 0 );
 
     QDomDocument document() const;
 
@@ -223,7 +266,7 @@ private:
 class  KPLATOUI_EXPORT ModifyReportDefinitionCmd : public NamedCommand
 {
 public:
-    ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const QString& name = QString() );
+    ModifyReportDefinitionCmd( ReportView *view, const QDomDocument &value, const QString &name = QString() );
     void execute();
     void unexecute();
 
@@ -231,6 +274,54 @@ private:
     ReportView *m_view;
     QDomDocument m_newvalue;
     QDomDocument m_oldvalue;
+};
+
+//-------------------------
+class  KPLATOUI_EXPORT ReportDesigner : public ViewBase
+{
+    Q_OBJECT
+public:
+    ReportDesigner( KoDocument *part, QWidget *parent = 0 );
+
+    bool isModified() const;
+    QDomDocument document() const;
+    void setData( const QDomDocument doc );
+
+    /// Loads context info into this view.
+    virtual bool loadContext( const KoXmlElement &context );
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &context ) const;
+
+public slots:
+    void setReportData( const QString &tag );
+
+signals:
+    void viewReport();
+    void resetButtonState( bool );
+    void raiseClicked();
+    void lowerClicked();
+    void cutActivated();
+    void copyActivated();
+    void pasteActivated();
+    void deleteActivated();
+
+protected:
+    void setupGui();
+    void createDockers();
+    QStandardItemModel *createSourceModel( QObject *parent ) const;
+
+protected slots:
+    void slotPropertySetChanged();
+    void slotInsertAction();
+    void slotItemInserted( const QString & );
+    void slotSectionToggled( bool );
+private:
+    QScrollArea *m_scrollarea;
+    KoReportDesigner *m_designer;
+    ReportSourceEditor *m_sourceeditor;
+    KoProperty::EditorView *m_propertyeditor;
+    QList<ReportData*> m_reportdatamodels;
+    GroupSectionEditor *m_groupsectioneditor;
 };
 
 } // namespace KPlato

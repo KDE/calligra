@@ -26,18 +26,21 @@
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
 #include "reportexportpanel.h"
-#include "ReportODTRenderer.h"
-#include "kptnodechartmodel.h"
-#include "kptdebug.h"
+#include "odt/ReportODTRenderer.h"
+#include "ui_reportsectionswidget.h"
+#include "ui_reporttoolswidget.h"
+
 #include "KoPageLayout.h"
-#include <KoReportPage.h>
-#include <KoReportPreRenderer.h>
-#include <KoReportPrintRenderer.h>
-#include <renderobjects.h>
-#include <KoReportKSpreadRenderer.h>
-#include <KoReportHTMLCSSRenderer.h>
-#include <reportsection.h>
-#include <koproperty/EditorView.h>
+#include "KoReportPage.h"
+#include "KoReportPreRenderer.h"
+#include "KoReportPrintRenderer.h"
+#include "renderobjects.h"
+#include "KoReportKSpreadRenderer.h"
+#include "KoReportHTMLCSSRenderer.h"
+#include "reportsection.h"
+#include "reportsectiondetail.h"
+#include "reportsectiondetailgroup.h"
+#include "koproperty/EditorView.h"
 
 #include "kptglobal.h"
 #include "kptaccountsmodel.h"
@@ -47,6 +50,8 @@
 #include "kptresourcemodel.h"
 #include "kptresourceappointmentsmodel.h"
 #include "kptschedule.h"
+#include "kptnodechartmodel.h"
+#include "kptdebug.h"
 
 #include "KoDocument.h"
 
@@ -74,9 +79,12 @@
 #include <QLayout>
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QModelIndexList>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QActionGroup>
+#include <QStackedWidget>
+#include <qpushbutton.h>
 
 
 namespace KPlato
@@ -152,20 +160,143 @@ QAbstractPrintDialog::PrintDialogOptions ReportPrintingDialog::printDialogOption
 
 //---------------------
 ReportView::ReportView( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent )
+{
+//    kDebug(planDbg())<<"--------------- ReportView ------------------";
+    setObjectName("ReportView");
+
+    QLayout *l = new QHBoxLayout( this );
+    m_stack = new QStackedWidget( this );
+    l->addWidget( m_stack );
+
+    ReportWidget *v = new ReportWidget( part, m_stack );
+    m_stack->addWidget( v );
+    connect(v, SIGNAL(editReportDesign()),SLOT(slotEditReport()));
+    connect(v, SIGNAL(guiActivated(ViewBase*, bool)), SIGNAL(guiActivated(ViewBase*, bool)));
+
+    ReportDesigner *d = new ReportDesigner( part, m_stack );
+    m_stack->addWidget( d );
+    connect(d, SIGNAL(viewReport()), SLOT(slotViewReport()));
+    connect(d, SIGNAL(guiActivated(ViewBase*, bool)), SIGNAL(guiActivated(ViewBase*, bool)));
+    connect(d, SIGNAL(optionsModified()), SIGNAL(optionsModified()));
+
+    m_stack->setCurrentIndex( 0 );
+}
+
+void ReportView::slotEditReport()
+{
+    reportWidget()->setGuiActive( false );
+    m_stack->setCurrentIndex( 1 );
+    reportDesigner()->setGuiActive( true );
+}
+
+void ReportView::slotViewReport()
+{
+    reportDesigner()->setGuiActive( false );
+    if ( reportWidget()->documentIsNull() || reportDesigner()->isModified() ) {
+        reportWidget()->loadXML( reportDesigner()->document() );
+    }
+    m_stack->setCurrentIndex( 0 );
+    reportWidget()->setGuiActive( true );
+}
+
+void ReportView::setProject( Project *project )
+{
+    reportWidget()->setProject( project );
+    reportDesigner()->setProject( project );
+}
+
+void ReportView::setScheduleManager( ScheduleManager *sm )
+{
+    reportWidget()->setScheduleManager( sm );
+    reportDesigner()->setScheduleManager( sm );
+}
+
+KoPrintJob *ReportView::createPrintJob()
+{
+    return static_cast<ViewBase*>( m_stack->currentWidget() )->createPrintJob();
+}
+
+void ReportView::setGuiActive( bool active )
+{
+    return static_cast<ViewBase*>( m_stack->currentWidget() )->setGuiActive( active );
+}
+
+bool ReportView::loadXML( const QDomDocument &doc )
+{
+    reportDesigner()->setData( doc );
+    return reportWidget()->loadXML( doc );
+}
+
+bool ReportView::loadContext( const KoXmlElement &context )
+{
+    bool res = true;
+    // designer first, widget uses it's data
+    res = reportDesigner()->loadContext( context );
+    res &= reportWidget()->loadContext( context );
+
+    // Hmmm. always go to report view atm
+    slotViewReport();
+//     KoXmlElement e = context.namedItem( "view" ).toElement();
+//     int idx = 0;
+//     if ( ! e.isNull() ) {
+//         idx = e.attribute( "current-view", "0" ).toInt();
+//     }
+//     if ( idx == 0 ) {
+//         slotViewReport();
+//     } else {
+//         slotEditReport();
+//     }
+    return res;
+}
+
+void ReportView::saveContext( QDomElement &context ) const
+{
+    QDomElement e = context.ownerDocument().createElement( "view" );
+    context.appendChild( e );
+    e.setAttribute( "current-view", m_stack->currentIndex() );
+
+    reportDesigner()->saveContext( context );
+    reportWidget()->saveContext( context );
+}
+
+ReportWidget *ReportView::reportWidget() const
+{
+    return static_cast<ReportWidget*>( m_stack->widget( 0 ) );
+}
+
+ReportDesigner *ReportView::reportDesigner() const
+{
+    return static_cast<ReportDesigner*>( m_stack->widget( 1 ) );
+}
+
+QDomDocument ReportView::document() const
+{
+    return reportDesigner()->document();
+}
+
+QList< ReportData* > ReportView::reportDataModels() const
+{
+    return reportWidget()->reportDataModels();
+}
+
+
+//---------------------
+ReportWidget::ReportWidget( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_reportdatamodels( Report::createBaseReportDataModels() )
 {
-//    kDebug(planDbg())<<"--------------- ReportView ------------------";
+//    kDebug(planDbg())<<"--------------- ReportWidget ------------------";
 
     m_preRenderer = 0;
-    setObjectName("ReportView");
-    
-    m_reportView = new QGraphicsView(this);   
+    setObjectName("ReportWidget");
+
+    m_reportView = new QGraphicsView(this);
     m_reportScene = new QGraphicsScene(this);
     m_reportScene->setSceneRect(0,0,1000,2000);
     m_reportView->setScene(m_reportScene);
     m_reportScene->setBackgroundBrush(palette().brush(QPalette::Dark));
-    
+
     QVBoxLayout *l = new QVBoxLayout( this );
     l->addWidget( m_reportView );
     m_pageSelector = new ReportNavigator( this );
@@ -184,42 +315,37 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
 
 //-----------------
 
-void ReportView::renderPage( int page )
+void ReportWidget::renderPage( int page )
 {
     m_reportPage->renderPage( page );
 }
 
-void ReportView::nextPage()
+void ReportWidget::nextPage()
 {
     m_pageSelector->ui_selector->setValue( m_pageSelector->ui_selector->value() + 1 );
 }
 
-void ReportView::prevPage()
+void ReportWidget::prevPage()
 {
     m_pageSelector->ui_selector->setValue( m_pageSelector->ui_selector->value() - 1 );
 }
 
-void ReportView::firstPage()
+void ReportWidget::firstPage()
 {
     m_pageSelector->ui_selector->setValue( 1 );
 }
 
-void ReportView::lastPage()
+void ReportWidget::lastPage()
 {
     m_pageSelector->ui_selector->setValue( m_pageSelector->ui_max->value() );
 }
 
-void ReportView::slotEditReport()
-{
-    emit editReportDesign( this );
-}
-
-KoPrintJob *ReportView::createPrintJob()
+KoPrintJob *ReportWidget::createPrintJob()
 {
     return new ReportPrintingDialog( this, m_reportDocument );
 }
 
-void ReportView::slotExport()
+void ReportWidget::slotExport()
 {
     ReportExportPanel *p = new ReportExportPanel();
     p->setObjectName( "ReportExportPanel" );
@@ -237,7 +363,7 @@ void ReportView::slotExport()
     dia->activateWindow();
 }
 
-KoPageLayout ReportView::pageLayout() const
+KoPageLayout ReportWidget::pageLayout() const
 {
     KoPageLayout p = ViewBase::pageLayout();
     ReportPageOptions opt = m_reportDocument->pageOptions();
@@ -260,7 +386,7 @@ KoPageLayout ReportView::pageLayout() const
     return p;
 }
 
-void ReportView::slotExportFinished( int result )
+void ReportWidget::slotExportFinished( int result )
 {
     //TODO confirm overwrite
     KFileDialog *dia = dynamic_cast<KFileDialog*>( sender() );
@@ -289,7 +415,7 @@ void ReportView::slotExportFinished( int result )
     dia->deleteLater();
 }
 
-void ReportView::exportToOdt( KoReportRendererContext &context )
+void ReportWidget::exportToOdt( KoReportRendererContext &context )
 {
     kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
     KoReportRendererBase *renderer = new ReportODTRenderer();
@@ -303,7 +429,7 @@ void ReportView::exportToOdt( KoReportRendererContext &context )
     }
 }
 
-void ReportView::exportToOds( KoReportRendererContext &context )
+void ReportWidget::exportToOds( KoReportRendererContext &context )
 {
     kDebug(planDbg())<<"Export to ods:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
@@ -317,7 +443,7 @@ void ReportView::exportToOds( KoReportRendererContext &context )
     }
 }
 
-void ReportView::exportToHtml( KoReportRendererContext &context )
+void ReportWidget::exportToHtml( KoReportRendererContext &context )
 {
     kDebug(planDbg())<<"Export to html:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
@@ -331,7 +457,7 @@ void ReportView::exportToHtml( KoReportRendererContext &context )
     }
 }
 
-void ReportView::exportToXHtml( KoReportRendererContext &context )
+void ReportWidget::exportToXHtml( KoReportRendererContext &context )
 {
     kDebug(planDbg())<<"Export to xhtml:"<<context.destinationUrl;
     KoReportRendererBase *renderer;
@@ -345,16 +471,16 @@ void ReportView::exportToXHtml( KoReportRendererContext &context )
     }
 }
 
-void ReportView::setupGui()
+void ReportWidget::setupGui()
 {
     /*KActionCollection *coll = actionCollection();*/
     KAction *a = 0;
     QString name = "reportview_list";
 
-    a = new KAction( KIcon( "document-edit" ), i18n( "Edit Report" ), this );
+    a = new KAction( KIcon( "go-next-view" ), i18n( "Edit Report" ), this );
     a->setToolTip( i18nc( "@info:tooltip", "Edit the report definition" ) );
     a->setWhatsThis( i18nc( "@info:whatsthis", "Opens the report design in the report design dialog." ) );
-    connect(a, SIGNAL(triggered()), this, SLOT(slotEditReport()));
+    connect(a, SIGNAL(triggered()), this, SIGNAL(editReportDesign()));
     addAction( name, a );
 
     a = new KAction( KIcon( "document-export" ), i18n( "Export" ), this );
@@ -364,7 +490,7 @@ void ReportView::setupGui()
     addAction( name, a );
 }
 
-void ReportView::setGuiActive( bool active ) // virtual slot
+void ReportWidget::setGuiActive( bool active ) // virtual slot
 {
     if ( active ) {
         slotRefreshView();
@@ -372,7 +498,7 @@ void ReportView::setGuiActive( bool active ) // virtual slot
     ViewBase::setGuiActive( active );
 }
 
-void ReportView::slotRefreshView()
+void ReportWidget::slotRefreshView()
 {
     if ( ! isVisible() ) {
         kDebug(planDbg())<<"Not visible";
@@ -395,21 +521,21 @@ void ReportView::slotRefreshView()
 
     m_reportPage = new KoReportPage(this, m_reportDocument);
     m_reportPage->setObjectName("ReportPage");
-    
+
     m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
     m_reportScene->addItem(m_reportPage);
     m_reportPage->setPos(20,20);
     m_reportView->centerOn(0,0);
-	    
+
     return;
 }
 
-void ReportView::setReportDataModels( const QList<ReportData*> &models )
+void ReportWidget::setReportDataModels( const QList<ReportData*> &models )
 {
     m_reportdatamodels = models;
 }
 
-ReportData *ReportView::createReportData( const QDomElement &element )
+ReportData *ReportWidget::createReportData( const QDomElement &element )
 {
     // get the data source
     QDomElement e = element.firstChildElement( "data-source" );
@@ -418,9 +544,8 @@ ReportData *ReportView::createReportData( const QDomElement &element )
     return createReportData( modelname );
 }
 
-ReportData *ReportView::createReportData( const QString &type )
+ReportData *ReportWidget::createReportData( const QString &type )
 {
-    kDebug(planDbg())<<type<<m_reportdatamodels;
     ReportData *r = Report::findReportData( m_reportdatamodels, type );
     Q_ASSERT( r );
     if ( r ) {
@@ -432,36 +557,25 @@ ReportData *ReportView::createReportData( const QString &type )
     return r;
 }
 
-bool ReportView::loadXML( const QDomDocument &doc )
+bool ReportWidget::loadXML( const QDomDocument &doc )
 {
     m_design = doc;
     slotRefreshView();
     return true;
 }
 
-bool ReportView::loadContext( const KoXmlElement &context )
+bool ReportWidget::loadContext( const KoXmlElement &/*context*/ )
 {
-    KoXmlElement e = context.namedItem( "planreportdefinition" ).toElement();
-    if ( e.isNull() ) {
-         e = context.namedItem( "kplatoreportdefinition" ).toElement();
-    }
-    if ( ! e.isNull() ) {
-        QDomDocument doc( "context" );
-        KoXml::asQDomElement( doc, e );
-        m_design = doc;
-    } else kDebug(planDbg())<<"Invalid context xml";
-    slotRefreshView();
     return true;
 }
 
-void ReportView::saveContext( QDomElement &context ) const
+void ReportWidget::saveContext( QDomElement &/*context*/ ) const
 {
-    context.appendChild( m_design.documentElement().cloneNode() );
 }
 
-QDomDocument ReportView::document() const
+bool ReportWidget::documentIsNull() const
 {
-    return m_design.cloneNode().toDocument();
+    return m_design.isNull();
 }
 
 //------------------
@@ -637,8 +751,11 @@ void ReportDesignDialog::slotSaveToView()
 
 void ReportDesignDialog::slotViewCreated( ViewBase *view )
 {
-    m_view = dynamic_cast<ReportView*>( view );
-    saveToView(); // always save
+    ReportView *v = dynamic_cast<ReportView*>( view );
+    if ( v ) {
+        m_view = v;
+        saveToView(); // always save
+    }
 }
 
 void ReportDesignDialog::saveToView()
@@ -689,7 +806,10 @@ ReportDesignPanel::ReportDesignPanel( QWidget *parent )
     m_designer = new KoReportDesigner( sa );
     sa->setWidget( m_designer );
 
-    connect( model, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
+    m_designer->setReportData( createReportData( m_sourceeditor->selectFromTag() ) );
+    slotPropertySetChanged();
+
+    connect( m_sourceeditor, SIGNAL( selectFromChanged( const QString& ) ), SLOT( setReportData( const QString& ) ) );
 
     connect( this, SIGNAL( insertItem( const QString& ) ), m_designer, SLOT( slotItem( const QString& ) ) );
 
@@ -748,7 +868,7 @@ ReportDesignPanel::ReportDesignPanel( const QDomElement &element, const QList<Re
     connect( m_designer, SIGNAL( propertySetChanged() ), SLOT( slotPropertySetChanged() ) );
     connect( m_designer, SIGNAL( dirty() ), SLOT( setModified() ) );
     connect( m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
-    
+
     populateToolbar( tb );
 }
 
@@ -789,7 +909,6 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     a = new KAction( KIcon( "document-properties" ), i18n( "Section Editor" ), this );
     a->setObjectName("sectionedit");
-    connect(a, SIGNAL(triggered(bool)), m_designer, SLOT(slotSectionEditor()));
     tb->addAction( a );
 
     tb->addSeparator();
@@ -817,21 +936,22 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
 void ReportDesignPanel::slotPropertySetChanged()
 {
+    kDebug(planDbg())<<m_propertyeditor;
     if ( m_propertyeditor ) {
         m_propertyeditor->changeSet( m_designer->itemPropertySet() );
     }
 }
 
 void ReportDesignPanel::slotInsertAction()
-{   
+{
     emit insertItem( sender()->objectName() );
 }
 
-void ReportDesignPanel::slotItemInserted(const QString &) 
+void ReportDesignPanel::slotItemInserted(const QString &)
 {
     if (m_actionGroup->checkedAction())  {
         m_actionGroup->checkedAction()->setChecked(false);
-    }    
+    }
 }
 
 void ReportDesignPanel::setReportData( const QString &tag )
@@ -911,6 +1031,632 @@ void ModifyReportDefinitionCmd ::execute()
 void ModifyReportDefinitionCmd ::unexecute()
 {
     m_view->loadXML( m_oldvalue );
+}
+
+//--------------------------
+
+ReportDesigner::ReportDesigner( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent ),
+    m_designer( 0 ),
+    m_reportdatamodels( Report::createBaseReportDataModels() ),
+    m_groupsectioneditor( new GroupSectionEditor( this ) )
+{
+    QVBoxLayout *l = new QVBoxLayout( this );
+    m_scrollarea = new QScrollArea( this );
+    l->addWidget( m_scrollarea );
+
+    setupGui();
+    QDomDocument doc;
+    doc.setContent( QString( "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan<\">"
+        "<data-source select-from=\"tasks\"/>"
+        "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" "
+        "xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" "
+        "xmlns:svg=\"urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0\">"
+        "<report:title>Report</report:title>"
+        "</report:content>"
+        "</planreportdefinition>" ) );
+    setData( doc );
+}
+
+void ReportDesigner::setupGui()
+{
+    /*KActionCollection *coll = actionCollection();*/
+    KAction *a = 0;
+    QString name = "edit_copypaste";
+
+    a =  KStandardAction::cut( this );
+    connect(a, SIGNAL(activated()), this, SIGNAL(cutActivated()));
+    addAction( name, a );
+
+    a =  KStandardAction::copy( this );
+    connect(a, SIGNAL(activated()), this, SIGNAL(copyActivated()));
+    addAction( name, a );
+
+    a =  KStandardAction::paste( this );
+    connect(a, SIGNAL(activated()), this, SIGNAL(pasteActivated()));
+    addAction( name, a );
+
+    const KGuiItem del = KStandardGuiItem::del();
+    a = new KAction(del.icon(), del.text(), this);
+    a->setObjectName( "edit_delete" );
+    a->setToolTip(del.toolTip());
+    a->setShortcut( QKeySequence::Delete );
+    connect(a, SIGNAL(activated()), this, SIGNAL(deleteActivated()));
+    addAction( name, a );
+
+    name = "reportdesigner_list";
+    a = new KAction( KIcon( "go-previous-view" ), i18n( "View report" ), this );
+    a->setObjectName( "view_report" );
+    connect(a, SIGNAL(activated()), SIGNAL(viewReport()));
+    addAction( name, a );
+
+    createDockers();
+}
+
+bool ReportDesigner::isModified() const
+{
+    return m_designer->isModified();
+}
+
+void ReportDesigner::setData( const QDomDocument doc )
+{
+    delete m_designer;
+    QDomElement e = doc.documentElement().firstChildElement( "report:content" );
+    if ( e.isNull() ) {
+        m_designer = new KoReportDesigner( m_scrollarea );
+    } else {
+        m_designer = new KoReportDesigner( m_scrollarea, e );
+    }
+    m_scrollarea->setWidget( m_designer );
+
+    m_sourceeditor->setSourceData( doc.documentElement().firstChildElement( "data-source" ) );
+    blockSignals( true );
+    setReportData( m_sourceeditor->selectFromTag() );
+    blockSignals( false );
+    slotPropertySetChanged();
+
+    connect(m_designer, SIGNAL(dirty()), SIGNAL(optionsModified()));
+    connect(m_designer, SIGNAL(propertySetChanged()), SLOT( slotPropertySetChanged()));
+    connect(m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
+
+    connect(this, SIGNAL(cutActivated()), m_designer, SLOT(slotEditCut()));
+    connect(this, SIGNAL(copyActivated()), m_designer, SLOT(slotEditCopy()));
+    connect(this, SIGNAL(pasteActivated()), m_designer, SLOT(slotEditPaste()));
+    connect(this, SIGNAL(deleteActivated()), m_designer, SLOT(slotEditDelete()));
+
+}
+
+QDomDocument ReportDesigner::document() const
+{
+    QDomDocument document( "planreportdefinition" );
+    document.appendChild( document.createProcessingInstruction(
+        "xml",
+        "version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+    QDomElement e = document.createElement( "planreportdefinition" );
+    e.setAttribute( "editor", "Plan" );
+    e.setAttribute( "mime", "application/x-vnd.kde.plan.report.definition" );
+    e.setAttribute( "version", "1.0" );
+    document.appendChild( e );
+
+    if ( m_sourceeditor ) {
+        m_sourceeditor->sourceData( e );
+    }
+    e.appendChild( m_designer->document() );
+    /*    kDebug(planDbg())<<"ReportDesignerView::document:";
+     *    kDebug(planDbg())<<document.toString();*/
+    return document;
+}
+
+void ReportDesigner::createDockers()
+{
+    // Add dockers
+    DockWidget *dw;
+    QWidget *w;
+
+    dw = new DockWidget( this, "Tools", i18nc( "@title:window report group edit tools", "Tools" ) );
+    dw->setLocation( Qt::LeftDockWidgetArea );
+    w = new QWidget( dw );
+    Ui::ReportToolsWidget tw;
+    tw.setupUi( w );
+
+    // allow only the following item types, there is not appropriate data for others
+    QStringList itemtypes;
+    itemtypes << "report:label"
+    << "report:field"
+    << "report:text"
+    << "report:check"
+    << "report:line"
+    << "report:chart"
+    << "report:web";
+    QActionGroup *ag = new QActionGroup( this );
+    int i = 0;
+    foreach( QAction *a, m_designer->actions( ag ) ) {
+        if ( itemtypes.contains( a->objectName() ) ) {
+            QToolButton *tb = new QToolButton( w );
+            tb->setObjectName( a->objectName() );
+            tb->setIcon( a->icon() );
+            tb->setText( a->text() );
+            if ( tb->objectName() == "report:web" ) {
+                tb->setToolTip( i18nc( "@into:tooltip", "Richt text" ) );
+            } else {
+                tb->setToolTip( a->toolTip() );
+            }
+            tb->setCheckable( true );
+            tw.horizontalLayout->insertWidget( i++, tb );
+            connect(tb, SIGNAL(clicked(bool)), SLOT(slotInsertAction()));
+            connect(this, SIGNAL(resetButtonState(bool)), tb, SLOT(setChecked(bool)));
+        }
+    }
+
+    m_sourceeditor = tw.sourceEditor;
+    m_sourceeditor->setModel( createSourceModel( m_sourceeditor ) );
+    connect(m_sourceeditor, SIGNAL(selectFromChanged(const QString&)), SLOT(setReportData(const QString&)));
+
+    m_propertyeditor = tw.propertyEditor;
+
+    dw->setWidget( w );
+    addDocker( dw );
+
+    dw = new DockWidget( this, "Sections", i18nc( "@title:window report section docker", "Headers && Footers" ) );
+    dw->setLocation( Qt::RightDockWidgetArea );
+    w = new QScrollArea( dw );
+    Ui::ReportSectionsWidget sw;
+    sw.setupUi( w );
+    dw->setWidget( w );
+    connect(sw.reportheader, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.reportfooter, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.headerFirstpage, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.headerLastpage, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.headerOddpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.headerEvenpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.headerAllpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.footerFirstpage, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.footerLastpage, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.footerOddpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.footerEvenpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+    connect(sw.footerAllpages, SIGNAL(toggled(bool)), this, SLOT(slotSectionToggled(bool)));
+
+    addDocker( dw );
+
+    dw = new DockWidget( this, "Groups", i18nc( "@title:window report group section docker", "Groups" ) );
+    dw->setLocation( Qt::RightDockWidgetArea );
+    w = new QWidget( dw );
+    m_groupsectioneditor->setupUi( w );
+
+    dw->setWidget( w );
+
+    addDocker( dw );
+}
+
+void ReportDesigner::setReportData( const QString &tag )
+{
+
+    ReportData *rd = Report::findReportData( m_reportdatamodels, tag );
+    if ( rd != m_designer->reportData() ) {
+        emit optionsModified();
+    }
+    m_designer->setReportData( rd );
+
+    m_groupsectioneditor->setData( m_designer, rd );
+}
+
+QStandardItemModel *ReportDesigner::createSourceModel( QObject *parent ) const
+{
+    QStandardItemModel *m = new QStandardItemModel( parent );
+    foreach ( ReportData *r, m_reportdatamodels ) {
+        if ( r->isMainDataSource() ) {
+            QStandardItem *item = new QStandardItem( r->sourceName() );
+            item->setData( r->objectName(), Reports::TagRole );
+            item->setEditable( false );
+            m->appendRow( item );
+        }
+    }
+    return m;
+}
+
+void ReportDesigner::slotPropertySetChanged()
+{
+    if ( m_propertyeditor ) {
+        m_propertyeditor->changeSet( m_designer->itemPropertySet() );
+    }
+}
+
+void ReportDesigner::slotInsertAction()
+{
+    m_designer->slotItem( sender()->objectName() );
+}
+
+void ReportDesigner::slotItemInserted(const QString &)
+{
+    emit resetButtonState( false );
+}
+
+void ReportDesigner::slotSectionToggled( bool on )
+{
+    QString n = sender()->objectName();
+    if ( n == "reportheader" ) {
+        on ? m_designer->insertSection( KRSectionData::ReportHeader )
+           : m_designer->removeSection( KRSectionData::ReportHeader );
+    } else if ( n == "reportfooter" ) {
+        on ? m_designer->insertSection( KRSectionData::ReportFooter )
+        : m_designer->removeSection( KRSectionData::ReportFooter );
+    } else if ( n == "headerFirstpage" ) {
+        on ? m_designer->insertSection( KRSectionData::PageHeaderFirst )
+        : m_designer->removeSection( KRSectionData::PageHeaderFirst );
+    } else if ( n == "headerLastpage" ) {
+        on ? m_designer->insertSection( KRSectionData::PageHeaderLast )
+        : m_designer->removeSection( KRSectionData::PageHeaderLast );
+    } else if ( n == "headerOddpages" ) {
+        on ? m_designer->insertSection( KRSectionData::PageHeaderOdd )
+        : m_designer->removeSection( KRSectionData::PageHeaderOdd );
+    } else if ( n == "headerEvenpages" ) {
+        on ? m_designer->insertSection( KRSectionData::PageHeaderEven )
+        : m_designer->removeSection( KRSectionData::PageHeaderEven );
+    } else if ( n == "headerAllpages" ) {
+        on ? m_designer->insertSection( KRSectionData::PageHeaderAny )
+        : m_designer->removeSection( KRSectionData::PageHeaderAny );
+    } else if ( n == "footerFirstpage" ) {
+        on ? m_designer->insertSection( KRSectionData::PageFooterFirst )
+        : m_designer->removeSection( KRSectionData::PageFooterFirst );
+    } else if ( n == "footerLastpage" ) {
+        on ? m_designer->insertSection( KRSectionData::PageFooterLast )
+        : m_designer->removeSection( KRSectionData::PageFooterLast );
+    } else if ( n == "footerOddpages" ) {
+        on ? m_designer->insertSection( KRSectionData::PageFooterOdd )
+        : m_designer->removeSection( KRSectionData::PageFooterOdd );
+    } else if ( n == "footerEvenpages" ) {
+        on ? m_designer->insertSection( KRSectionData::PageFooterEven )
+        : m_designer->removeSection( KRSectionData::PageFooterEven );
+    } else if ( n == "footerAllpages" ) {
+        on ? m_designer->insertSection( KRSectionData::PageFooterAny )
+        : m_designer->removeSection( KRSectionData::PageFooterAny );
+    } else {
+        kDebug(planDbg())<<"unknown section";
+    }
+}
+
+bool ReportDesigner::loadContext(const KoXmlElement& context)
+{
+    KoXmlElement e = context.namedItem( "planreportdefinition" ).toElement();
+    if ( e.isNull() ) {
+        e = context.namedItem( "kplatoreportdefinition" ).toElement();
+    }
+    if ( ! e.isNull() ) {
+        QDomDocument doc( "context" );
+        KoXml::asQDomElement( doc, e );
+        setData( doc );
+    } else {
+        kDebug(planDbg())<<"Invalid context xml";
+        setData( QDomDocument() ); // create an empty designer
+    }
+    return true;
+}
+
+void ReportDesigner::saveContext(QDomElement& context) const
+{
+    context.appendChild( document().documentElement().cloneNode() );
+}
+
+//---------------------
+GroupSectionEditor::GroupSectionEditor( QObject *parent )
+    : QObject( parent ),
+    designer( 0 ),
+    reportdata( 0 )
+{
+    clear();
+}
+
+void GroupSectionEditor::setupUi( QWidget *widget )
+{
+    gsw.setupUi( widget );
+    gsw.view->setModel( &model );
+    gsw.view->setItemDelegateForColumn( 0, new EnumDelegate( gsw.view ) );
+    gsw.view->setItemDelegateForColumn( 1, new EnumDelegate( gsw.view ) );
+    gsw.view->setItemDelegateForColumn( 2, new EnumDelegate( gsw.view ) );
+    gsw.view->setItemDelegateForColumn( 3, new EnumDelegate( gsw.view ) );
+    gsw.view->setItemDelegateForColumn( 4, new EnumDelegate( gsw.view ) );
+
+    gsw.btnRemove->setEnabled( false );
+    gsw.btnMoveUp->setEnabled( false );
+    gsw.btnMoveDown->setEnabled( false );
+
+    connect(gsw.view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), SLOT(slotSelectionChanged(const QItemSelection&)));
+}
+
+void GroupSectionEditor::slotSelectionChanged( const QItemSelection &sel )
+{
+    QItemSelectionModel *m = gsw.view->selectionModel();
+    gsw.btnRemove->setEnabled( ! sel.isEmpty() );
+    gsw.btnMoveUp->setEnabled( ! sel.isEmpty() && ! m->isRowSelected( 0, QModelIndex() ) );
+    gsw.btnMoveDown->setEnabled( ! sel.isEmpty() && ! m->isRowSelected( model.rowCount() - 1, QModelIndex() ) );
+}
+
+void GroupSectionEditor::clear()
+{
+    model.clear();
+    QStringList n;
+    n << i18nc( "@title:column", "Column" )
+        << i18nc( "@title:column", "Sort" )
+        << i18nc( "@title:column", "Header" )
+        << i18nc( "@title:column", "Footer" )
+        << i18nc( "@title:column", "Page Break" );
+    model.setHorizontalHeaderLabels( n );
+
+    model.setHeaderData( 0, Qt::Horizontal, i18nc( "@info:tooltip", "Groups data by the selected column" ), Qt::ToolTipRole );
+    model.setHeaderData( 1, Qt::Horizontal, i18nc( "@info:tooltip", "Sorts data" ), Qt::ToolTipRole );
+    model.setHeaderData( 2, Qt::Horizontal, i18nc( "@info:tooltip", "Show header section" ), Qt::ToolTipRole );
+    model.setHeaderData( 3, Qt::Horizontal, i18nc( "@info:tooltip", "Show footer section" ), Qt::ToolTipRole );
+    model.setHeaderData( 4, Qt::Horizontal, i18nc( "@info:tooltip", "Insert page break" ), Qt::ToolTipRole );
+}
+
+void GroupSectionEditor::setData( KoReportDesigner *d, ReportData *rd )
+{
+    clear();
+    designer = d;
+    reportdata = rd;
+    ReportSectionDetail *sd = designer->detailSection();
+    if ( ! sd ) {
+        return;
+    }
+    for (int i = 0; i < sd->groupSectionCount(); i++) {
+        ReportSectionDetailGroup *g = sd->groupSection( i );
+        ColumnItem *ci = new ColumnItem( g );
+        ci->names = rd->fieldNames();
+        ci->keys = rd->fieldKeys();
+
+        SortItem *si = new SortItem( g );
+        HeaderItem *hi = new HeaderItem( g );
+        FooterItem *fi = new FooterItem( g );
+        PageBreakItem *pi = new PageBreakItem( g );
+
+        model.appendRow( QList<QStandardItem*>() << ci << si << hi << fi << pi );
+    }
+    connect(gsw.btnAdd, SIGNAL(clicked(bool)), SLOT(slotAddRow()));
+    connect(gsw.btnRemove, SIGNAL(clicked(bool)), SLOT(slotRemoveRows()));
+    connect(gsw.btnMoveUp, SIGNAL(clicked(bool)), SLOT(slotMoveRowUp()));
+    connect(gsw.btnMoveDown, SIGNAL(clicked(bool)), SLOT(slotMoveRowDown()));
+}
+
+void GroupSectionEditor::slotAddRow()
+{
+    ReportSectionDetail *sd = designer->detailSection();
+    if ( ! sd ) {
+        return;
+    }
+    ReportSectionDetailGroup * g = new ReportSectionDetailGroup( reportdata->fieldKeys().value( 0 ), sd, sd );
+
+    sd->insertSection( sd->groupSectionCount(), g );
+
+    ColumnItem *ci = new ColumnItem( g );
+    ci->names = reportdata->fieldNames();
+    ci->keys = reportdata->fieldKeys();
+
+    SortItem *si = new SortItem( g );
+    HeaderItem *hi = new HeaderItem( g );
+    FooterItem *fi = new FooterItem( g );
+    PageBreakItem *pi = new PageBreakItem( g );
+
+    model.appendRow( QList<QStandardItem*>() << ci << si << hi << fi << pi );
+}
+
+void GroupSectionEditor::slotRemoveRows()
+{
+    ReportSectionDetail *sd = designer->detailSection();
+    if ( ! sd ) {
+        return;
+    }
+    QList<int> rows;
+    foreach ( const QModelIndex &idx, gsw.view->selectionModel()->selectedRows() ) {
+        rows <<idx.row();
+    }
+    qSort( rows );
+    for (int i = rows.count() - 1; i >= 0; --i ) {
+        int row = rows.at( i );
+        QList<QStandardItem*> items = model.takeRow( row );
+        sd->removeSection( row, true );
+        qDeleteAll( items );
+    }
+}
+
+void GroupSectionEditor::slotMoveRowUp()
+{
+    ReportSectionDetail *sd = designer->detailSection();
+    if ( ! sd ) {
+        return;
+    }
+    QList<int> rows;
+    foreach ( const QModelIndex &idx, gsw.view->selectionModel()->selectedRows() ) {
+        rows <<idx.row();
+    }
+    qSort( rows );
+    if ( rows.isEmpty() || rows.first() == 0 ) {
+        return;
+    }
+    foreach ( int row, rows ) {
+        QList<QStandardItem*> items = model.takeRow( row );
+        ReportSectionDetailGroup *g = sd->groupSection( row );
+        bool showgh = g->groupHeaderVisible();
+        bool showgf = g->groupFooterVisible();
+        sd->removeSection( row );
+        sd->insertSection( row - 1, g );
+        g->setGroupHeaderVisible( showgh );
+        g->setGroupFooterVisible( showgf );
+        model.insertRow( row - 1, items );
+    }
+    QModelIndex idx1 = model.index( rows.first()-1, 0 );
+    QModelIndex idx2 = model.index( rows.last()-1, 0 );
+    QItemSelection s = QItemSelection ( idx1, idx2 );
+    gsw.view->selectionModel()->select( s, QItemSelectionModel::Rows | QItemSelectionModel::Clear | QItemSelectionModel::Select );
+}
+
+
+void GroupSectionEditor::slotMoveRowDown()
+{
+    ReportSectionDetail *sd = designer->detailSection();
+    if ( ! sd ) {
+        return;
+    }
+    QList<int> rows;
+    foreach ( const QModelIndex &idx, gsw.view->selectionModel()->selectedRows() ) {
+        rows <<idx.row();
+    }
+    qSort( rows );
+    if ( rows.isEmpty() || rows.last() >= model.rowCount() - 1 ) {
+        return;
+    }
+    for ( int i = rows.count() - 1; i >= 0; --i ) {
+        int row = rows.at( i );
+        QList<QStandardItem*> items = model.takeRow( row );
+        ReportSectionDetailGroup *g = sd->groupSection( row );
+        bool showgh = g->groupHeaderVisible();
+        bool showgf = g->groupFooterVisible();
+        sd->removeSection( row );
+        sd->insertSection( row + 1, g );
+        g->setGroupHeaderVisible( showgh );
+        g->setGroupFooterVisible( showgf );
+        model.insertRow( row + 1, items );
+    }
+    QModelIndex idx1 = model.index( rows.first()+1, 0 );
+    QModelIndex idx2 = model.index( rows.last()+1, 0 );
+    QItemSelection s = QItemSelection ( idx1, idx2 );
+    gsw.view->selectionModel()->select( s, QItemSelectionModel::Rows | QItemSelectionModel::Clear | QItemSelectionModel::Select );
+}
+
+//----------------
+GroupSectionEditor::ColumnItem::ColumnItem( ReportSectionDetailGroup *g )
+    : Item( g )
+{
+}
+
+QVariant GroupSectionEditor::ColumnItem::data( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: return names.value( keys.indexOf( group->column() ) );
+        case Role::EnumList: return names;
+        case Role::EnumListValue: return keys.indexOf( group->column() );
+        default: break;
+    }
+    return Item::data( role );
+}
+
+void GroupSectionEditor::ColumnItem::setData( const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole ) {
+        group->setColumn( keys.value( value.toInt() ) );
+        return;
+    }
+    return Item::setData( value, role );
+}
+
+//---------------------
+GroupSectionEditor::SortItem::SortItem( ReportSectionDetailGroup *g )
+    : Item( g )
+{
+    names << i18n( "Ascending" ) << i18n( "Descending" );
+}
+
+QVariant GroupSectionEditor::SortItem::data( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: return QVariant();
+        case Qt::ToolTipRole: return group->sort() ? names.value( 1 ) : names.value( 0 );
+        case Qt::DecorationRole: return group->sort() ? KIcon( "arrow-down" ) :  KIcon( "arrow-up" );
+        case Role::EnumList: return names;
+        case Role::EnumListValue: return  group->sort() ? 1 : 0;
+        default: break;
+    }
+    return Item::data( role );
+}
+
+void GroupSectionEditor::SortItem::setData( const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole ) {
+        group->setSort( value.toInt() == 0 ? Qt::AscendingOrder : Qt::DescendingOrder );
+        return;
+    }
+    return Item::setData( value, role );
+}
+
+//---------------------
+GroupSectionEditor::HeaderItem::HeaderItem( ReportSectionDetailGroup *g )
+    : Item( g )
+{
+    names << "No" << "Yes";
+}
+
+QVariant GroupSectionEditor::HeaderItem::data( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: return group->groupHeaderVisible() ? names.value( 1 ) : names.value( 0 );
+        case Role::EnumList: return names;
+        case Role::EnumListValue: return  group->groupHeaderVisible() ? 1 : 0;
+        default: break;
+    }
+    return Item::data( role );
+}
+
+void GroupSectionEditor::HeaderItem::setData( const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole ) {
+        group->setGroupHeaderVisible( value.toInt() == 1 );
+        return;
+    }
+    return Item::setData( value, role );
+}
+
+//---------------------
+GroupSectionEditor::FooterItem::FooterItem( ReportSectionDetailGroup *g )
+    : Item( g )
+{
+    names << "No" << "Yes";
+}
+
+QVariant GroupSectionEditor::FooterItem::data( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: return group->groupFooterVisible() ? names.value( 1 ) : names.value( 0 );
+        case Role::EnumList: return names;
+        case Role::EnumListValue: return group->groupFooterVisible() ? 1 : 0;
+        default: break;
+    }
+    return Item::data( role );
+}
+
+void GroupSectionEditor::FooterItem::setData( const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole ) {
+        group->setGroupFooterVisible( value.toInt() == 1 );
+        return;
+    }
+    return Item::setData( value, role );
+}
+
+//---------------------
+GroupSectionEditor::PageBreakItem::PageBreakItem( ReportSectionDetailGroup *g )
+    : Item( g )
+{
+    names << i18n( "None" ) << i18n( "After footer" ) << i18n( "Before header" );
+}
+
+QVariant GroupSectionEditor::PageBreakItem::data( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: return names.value( (int)group->pageBreak() );
+        case Role::EnumList: return names;
+        case Role::EnumListValue: return (int)group->pageBreak();
+        default: break;
+    }
+    return Item::data( role );
+}
+
+void GroupSectionEditor::PageBreakItem::setData( const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole ) {
+        group->setPageBreak( (ReportSectionDetailGroup::PageBreak)( value.toInt() ) );
+        return;
+    }
+    return Item::setData( value, role );
 }
 
 } // namespace KPlato

@@ -548,7 +548,8 @@ ChartReportData::ChartReportData( QObject *parent )
 }
 
 ChartReportData::ChartReportData( const ChartReportData &other )
-    : ReportData( other )
+    : ReportData( other ),
+    m_fakedata( true )
 {
 }
 
@@ -559,6 +560,10 @@ bool ChartReportData::open()
 
 int ChartReportData::firstRow()
 {
+    if ( m_fakedata ) {
+        return 0;
+    }
+
     int row = 0;
     QDate s;
     if ( m_expressions.contains( "start" ) ) {
@@ -578,6 +583,9 @@ int ChartReportData::firstRow()
 
 int ChartReportData::lastRow() const
 {
+    if ( m_fakedata ) {
+        return 3;
+    }
     int row = cbs
             ? m_model.columnCount() - 5 // cbs has data as columns + name, description, total (0-2) and parent (last)
             : m_model.rowCount() - 1;
@@ -642,6 +650,10 @@ qint64 ChartReportData::recordCount() const
 
 QVariant ChartReportData::value ( unsigned int i ) const
 {
+    if ( m_fakedata ) {
+        kDebug(planDbg())<<m_row<<i;
+        return QVariant( ( int )( m_row * i ) );
+    }
     QVariant value;
     int row = m_row + m_firstrow;
     if ( cbs ) {
@@ -737,6 +749,7 @@ CostPerformanceReportData::CostPerformanceReportData( const CostPerformanceRepor
     : ChartReportData( other ),
     m_chartmodel( 0 )
 {
+    m_fakedata = false;
     cbs = other.cbs;
     createModels();
 }
@@ -790,6 +803,7 @@ EffortPerformanceReportData::EffortPerformanceReportData( const EffortPerformanc
     : ChartReportData( other ),
     m_chartmodel( 0 )
 {
+    m_fakedata = false;
     cbs = other.cbs;
     createModels();
 }
@@ -842,6 +856,7 @@ CostBreakdownReportData::CostBreakdownReportData( QObject *parent )
 CostBreakdownReportData::CostBreakdownReportData( const CostBreakdownReportData &other )
     : ChartReportData( other )
 {
+    m_fakedata = false;
     cbs = other.cbs;
     createModels();
 }

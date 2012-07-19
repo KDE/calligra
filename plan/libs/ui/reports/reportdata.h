@@ -274,6 +274,7 @@ protected:
     int m_lastrow;
     QDate m_startdate;
     QStringList m_keywords;
+    bool m_fakedata;
 };
 
 class KPLATOUI_EXPORT CostPerformanceReportData : public ChartReportData
