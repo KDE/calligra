@@ -15,10 +15,8 @@ endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
-    KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
-    KoDocumentAdaptor.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
@@ -41,7 +39,6 @@ set(komain_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoVersionDialog.cpp
-    KoViewAdaptor.cpp
     KoView.cpp
     calligraversion.cpp
     KoFilterManager.cpp
@@ -92,6 +89,16 @@ set(komain_LIB_SRCS
     KoFindOptionSet.cpp
     KoFindStyle.cpp
 )
+
+if (QT_QTDBUS_FOUND)
+set(komain_LIB_SRCS
+    ${komain_LIB_SRCS}
+    KoApplicationAdaptor.cpp
+    KoDocumentAdaptor.cpp
+    KoViewAdaptor.cpp
+)
+endif (QT_QTDBUS_FOUND)
+
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         rdf/KoDocumentRdf.cpp
@@ -196,7 +203,6 @@ install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 install( FILES
     KoApplication.h
-    KoApplicationAdaptor.h
     KoDocument.h
     KoDocumentEntry.h
     KoDocumentInfo.h
@@ -225,7 +231,6 @@ install( FILES
     KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
-    KoViewAdaptor.h
     calligraversion.h
     KoProgressUpdater.h
     KoProgressBar.h
@@ -261,3 +266,10 @@ if( Soprano_FOUND )
     DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 endif( Soprano_FOUND )
 
+if (QT_QTDBUS_FOUND)
+install( FILES
+    KoApplicationAdaptor.h
+    KoViewAdaptor.h
+    KoDocumentAdaptor.h
+    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+endif (QT_QTDBUS_FOUND)

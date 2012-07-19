@@ -163,10 +163,10 @@ KoView::KoView(KoDocument *document, QWidget *parent)
     Q_ASSERT(document);
 
     setObjectName(newObjectName());
-
+#ifndef QT_NO_DBUS
     new KoViewAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
-
+#endif
     //kDebug(30003) <<"KoView::KoView" << this;
     d->document = document;
     KParts::PartBase::setPartObject(this);

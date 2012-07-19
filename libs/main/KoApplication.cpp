@@ -45,7 +45,10 @@
 #include <krecentdirs.h>
 #endif
 
+#ifndef QT_NO_DBUS
 #include <QtDBus/QtDBus>
+#endif
+
 #include <QFile>
 #include <QSplashScreen>
 #include <QSysInfo>
@@ -75,10 +78,10 @@ KoApplication::KoApplication()
 
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
-
+#ifndef QT_NO_DBUS
     new KoApplicationAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/application", this);
-
+#endif
     m_starting = true;
 #ifdef Q_WS_WIN
     QSysInfo::WinVersion version = QSysInfo::windowsVersion();
@@ -221,7 +224,7 @@ bool KoApplication::start()
 
         // all autosave files for our application
         autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
-
+#ifndef QT_NO_DBUS
         // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
         QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
         QStringList pids;
@@ -252,7 +255,7 @@ bool KoApplication::start()
                 }
             }
         }
-
+#endif
         // Allow the user to make their selection
         if (autoSaveFiles.size() > 0) {
             KoAutoSaveRecoveryDialog dlg(autoSaveFiles);

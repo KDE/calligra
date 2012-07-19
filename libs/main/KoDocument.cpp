@@ -72,7 +72,9 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QTimer>
+#ifndef QT_NO_DBUS
 #include <QtDBus/QDBusConnection>
+#endif
 #include <QLayout>
 #include <QApplication>
 #include <QPrinter>
@@ -278,9 +280,10 @@ KoDocument::KoDocument(QObject *parent, KUndo2Stack *undoStack)
     setAutoSave(defaultAutoSave());
 
     setObjectName(newObjectName());
+#ifndef QT_NO_DBUS
     new KoDocumentAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + objectName(), this);
-
+#endif
     d->docInfo = new KoDocumentInfo(this);
     d->docRdf = 0;
 #ifdef SHOULD_BUILD_RDF
