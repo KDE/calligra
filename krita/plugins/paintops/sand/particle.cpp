@@ -34,16 +34,6 @@
 #include "particle.h"
 
 ///Parameterized constructor
-// Particle::Particle( bool life = true,
-//                     float mass = 1.0,
-//                     float radius = 1,
-//                     int lifespan = 10000,
-//                     float friction = 0.00005,
-//                     float dissipation = 0.0, //dissipation constant
-//                     QPoint * position = 0,
-//                     QPointF * velocity = 0,
-//                     QPointF * acceleration = 0
-//                   )
 Particle::Particle( bool life,
                     float mass,
                     int radius,
@@ -80,16 +70,7 @@ Particle::Particle(const Particle & p)
     _accel = p.accel();
 }
 
-
 //Methods of the particle dynamics
-
-/** Responsible for update the actual force interacting with this particle. The force is applied by the mouse,
- *  which should behave like there is a particle on it's position, so we could do a simple collision and move
- *  the grains on the canvas.
-    *
- * The emission of grains will be responsible by the ParticleEmitter, but will use this method as well.
- * OBS: Perhaps I should set this method as a slot
- */ 
 
 void Particle::applyForce(){
 
@@ -172,7 +153,6 @@ void Particle::applyForce(){
 
 
 
-
 Derivative Particle::eval(const State & init, double dt, const Derivative & der)
 {
     State st;
@@ -202,7 +182,6 @@ QPointF Particle::accel(const State &state, double t)
     return QPointF( qreal(-k * state.pos.x() - b*state.vel.x() ), qreal(-k * state.pos.y() - b*state.vel.y()));
 }
 
-///rk4 implementation for this particle
 void Particle::integrationStep(double dt)
 {
     //this particle current state
@@ -227,6 +206,9 @@ void Particle::integrationStep(double dt)
     _vel->ry() += (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
 }
 
+/*
+ * Serialization operation overload
+ */
 
 QDataStream &operator<<(QDataStream &out, const Particle &particle)
 {   

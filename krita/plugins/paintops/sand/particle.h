@@ -66,11 +66,10 @@ class Particle : public QObject
 {
     Q_OBJECT
 public:
-    ///Default constructor
      explicit Particle(QObject *parent = 0);
-
-    ///Parameterized constructor
-    Particle( bool life,
+     
+    ///Construct a particle with arguments (or its default values)
+    Particle( bool life = true,
               float mass = 1.0,
               int radius = 1,
               int lifespan = 10000,
@@ -81,18 +80,41 @@ public:
               QPointF * acceleration = 0
             );
 
+    ///Copy constructor
     Particle(const Particle & p);
 
-    //Methods of the particle dynamics
+    /*
+     * Methods of the particle dynamics
+     */
 
-    ///responsible for update the actual force interacting with this particle. The forces is applied by the mouse.
+    /**
+     * Responsible for update the actual force interacting with this particle. The force is applied by the mouse,
+     * which should behave like there is a particle on it's position, so we could do a simple collision and move
+     * the grains on the canvas.
+     */
     void applyForce();
 
-    ///rk4 implementation for this particle
+    ///Runge-Kutta 4 implementation for this particle
+
+    /**
+     * Advances the particle state in one timestep.
+     */
     void integrationStep(double dt);
+
+    /**
+     * Calculate the particle acceleration based on applied forces
+     */
     QPointF accel(const State &state, double t);
+
+    /**
+     * Evaluate the integration step to update the particle state
+     */
     Derivative eval(const State & init, double dt, const Derivative & der);
     
+    /*
+     * Object methods
+     */
+
     //Gets
     
     bool isAlive() const {return _life;}
@@ -108,6 +130,7 @@ public:
     QPointF * accel()const {return _accel;}
 
     //Sets
+    
     void setLife(bool lf){ _life = lf;}
     void setMass(float m) { _mass = m;}
     void setForce(float f) {_force = f;}
@@ -115,17 +138,16 @@ public:
     void setLifespan(int l) { _lifespan = l;}
     void setFriction(float f) { _friction = f;}
     void setDissipation(float d) {_dissipation = d;}
-
     void setPos(QPoint * p){ _pos = p;}
     void setVel(QPointF * v){ _vel = v;}
     void setAccel(QPointF * a){ _accel = a;}
 
 
     ///Operator overload to serialization of the Particle to use KisAnnotation
+    
     friend QDataStream &operator<<(QDataStream &out, const Particle &particle);
     friend QDataStream &operator>>(QDataStream &in, Particle &particle);
 
-//     Particle& operator=(const Particle & p);
 signals:
 
 public slots:
@@ -137,19 +159,19 @@ private:
     ///This particle mass.
     float _mass;
 
-    ///The force been applied on this particle
+    ///The force that have been applied in this particle
     float _force;
     
-    ///Size of this particle radius
+    ///Particle radius
     int _radius;
 
-    ///Quantity of timesteps this particle endures
+    ///Quantity of timesteps this particle endures (not useful right now)
     int _lifespan;
 
-    ///Young modulus (friction) (should be tunned)
+    ///Young modulus (friction) (should be tunned to proper behaviour)
     float _friction;
 
-    /// The A dissipative constant (should be tunned)
+    /// The A dissipative constant (should be tunned to proper behaviour)
     float _dissipation;
 
     ///Particle position on canvas
@@ -162,9 +184,6 @@ private:
     QPointF * _accel;
 
 };
-
-
-
 
 #endif // PARTICLE_H
  

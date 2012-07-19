@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Francisco Fernandes <francisco.fernandes.j@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,17 +52,18 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
 
     if(m_image->annotation("Particle")){
         qDebug() << "Retrieving particles...\n" ;
-        retrieveParticles();
+        QList<Particle *> p;
+        m_sandBrush->getGrains(p);
+        retrieveParticles(p);
+        qDebug() << "Setting the grains..." ;
+        m_sandBrush->setGrains(p);
     }
-    //if we have an annotation of Particle type, initialize the particles in the paintop
-//     if(m_image->annotation("Particle")){
-//         
-//         m_sandBrush.setGrains();
-//     }
+    qDebug() << "SandPaintop creation done." ;
 }
 
 KisSandPaintOp::~KisSandPaintOp()
 {
+    
     delete m_sandBrush;
 }
 
@@ -123,14 +124,12 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
             stream << *parts.at(i);
         }
 
-//     qDebug() << b_array;
     m_image->addAnnotation(KisAnnotationSP(new KisAnnotation("Particle", "Set of grains that was added by the paintop", *b_array)));
 
     }
     
     return 1.0;
 }
-
 
 void KisSandPaintOp::retrieveParticles(QList<Particle *> &p)
 {
@@ -140,10 +139,8 @@ void KisSandPaintOp::retrieveParticles(QList<Particle *> &p)
     QDataStream data( array , QIODevice::ReadWrite);
 
     while(!data.atEnd()){
-        Particle *part;
+        Particle *part = new Particle(true);
+        data >> *part;
         p.append(part);
     }
-
-    
-
 }

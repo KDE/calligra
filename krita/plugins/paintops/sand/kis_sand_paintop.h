@@ -37,8 +37,13 @@ public:
     virtual ~KisSandPaintOp();
 
     qreal paintAt(const KisPaintInformation& info);
-
-    void retrieveParticles();
+    
+    /**
+     * Fill the QList with the particles previously added by brush strokes.
+     * The purpose is to populate the list of particles of the SandBrush class,
+     * so it can do the spread.
+     */
+    void retrieveParticles(QList<Particle *> &p);
 
 private:
     KisImageWSP m_image;

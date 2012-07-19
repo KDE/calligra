@@ -68,6 +68,7 @@ public:
     KisSandOpOption();
     ~KisSandOpOption();
 
+    
     int radius() const;
     void setRadius(int radius) const;
 
@@ -100,17 +101,33 @@ private:
 class SandProperties {
     
 public:
+    ///Brush size
     int radius;
+
+    ///Amount of the sand per stroke
     int amount;
+
+    ///Enable sand quantity limitation per stroke
     bool sandDepletion;
+
+    ///Particle radius
     int size;
+
+    ///Particle mass
     double mass;
+
+    ///Particle friction
     double friction;
-    
+
+    ///Brush mode: pouring or spreading
     //bool mode;
+
+    ///Energy dissipation of the particle (damping)
     //float dissipation;
-    
-    
+
+    /**
+     * Read the particle configuration from the brush settings widget
+     */
     void readOptionSetting(const KisPropertiesConfiguration* settings){
         radius = settings->getInt(SAND_RADIUS);
         amount = settings->getInt(SAND_AMOUNT);

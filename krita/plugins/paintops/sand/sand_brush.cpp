@@ -201,3 +201,13 @@ void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel,
     painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     painter.paintPolygon(points);
 }
+
+void SandBrush::getGrains(QList<Particle *> &g_copy){
+        for(int i=0; i < m_grains.size(); i++)
+            g_copy.append(m_grains[i]);
+}
+
+void SandBrush::setGrains(QList<Particle *> &g_copy){
+    for(int i = 0; i < g_copy.size(); i++)
+        m_grains.append(g_copy[i]);
+}

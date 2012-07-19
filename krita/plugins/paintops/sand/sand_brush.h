@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2012 Francisco Fernandes <francisco.fernandes.j@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,6 +14,17 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * \file particle.h
+ *
+ * \brief Contains most of the operations done in the paintop. It do the painting and hold the objects to do proper
+ * operations, like selection and collision
+ * 
+ * \version 0.0
+ * \date Jun 2012
+ *
  */
 
 #ifndef SAND_BRUSH_H_
@@ -38,32 +49,38 @@ public:
     SandBrush(const SandProperties * properties, KoColorTransformation* transformation);
     ~SandBrush();
     void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
-    void drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel); //Obs
-    void getGrains(QList<Particle *> &g_copy){
-        for(int i=0; i < m_grains.size(); i++)
-            g_copy.append(m_grains[i]);
-    };
 
-    void setGrains(QList<Particle *> &g_copy){
-        for(int i=0; i < g_copy.size(); i++)
-            m_grains.append(g_copy[i]);
-    }
+    ///Draw, create and append a Particle to the grains container, so it is possible to do the desired operations
+    void drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel); //Obs
+
+    ///Retrieve the current Particles in use
+    void getGrains(QList<Particle *> &g_copy);
+
+    ///Set the Particles to be used in the desired operations
+    void setGrains(QList<Particle *> &g_copy);
 
 private:
     KoColor m_inkColor;
-    int m_counter;                          //to calculate the mouse reduction in the sand depletion
-    unsigned int m_grainCount;              //to calculate the amount of particles to be spread
-    const SandProperties * m_properties;
-    KoColorTransformation* m_transfo;
-    int m_saturationId;
+
+    ///Counter to calculate the mouse reduction in the sand depletion (used in the asymptotic function of paint operation)
+    int m_counter;
+
+    ///Calculate the amount of particles to be spread
+    unsigned int m_grainCount;
+
+    ///Time of the previous mouse movement (to dynamic calculation purposes)
     int m_prevTime;
-    QPointF m_prevVel;                      //previous mouse velocity to calculate acceleration
-    QList<Particle *> m_grains;             //hold the particles created by this paintop
+
+    ///Previous mouse velocity to calculate acceleration
+    QPointF m_prevVel;
+
+    ///Hold the particles created by this paintop
+    QList<Particle *> m_grains;
 
     /**
      * Hold the grid structure. The grid is created by taking the canvas width and height and
      * dividing each by a number of rows/columns disired.
-     * Supose we have a m_grains list with the following particle structure :
+     * Supose we have the m_grains list with the following particle structure :
      * 
      *  0 1 2 3 4
      *  | | | | |
@@ -98,12 +115,19 @@ private:
      * 
      *
      * In the position (3,4) of 'grid', we have a list of indices of all particles that
-     * are closest to B.
+     * are on this grid cell and making possible to search in the neightborhood of the
+     * cell for the particles closest to B
      *
      * QList<uint> b_neighbors = grid.at(3).at(4);
      * 
      */
     QList< QList<QList<uint> > > grid;
+
+    //Usual members to painting operations
+    
+    int m_saturationId;
+    const SandProperties * m_properties;
+    KoColorTransformation* m_transfo;
 };
 
 #endif
