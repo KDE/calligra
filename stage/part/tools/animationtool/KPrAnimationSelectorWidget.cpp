@@ -84,12 +84,9 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
 KPrAnimationSelectorWidget::~KPrAnimationSelectorWidget()
 {
     savePreviewConfig();
-    // stop animation before delete it
+    // stop animation
     if (m_docker->previewMode()) {
         m_docker->previewMode()->stopAnimation();
-    }
-    if (m_previewAnimation) {
-        delete(m_previewAnimation);
     }
 }
 

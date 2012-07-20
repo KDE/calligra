@@ -27,6 +27,7 @@
 #include "KPrEditAnimationsWidget.h"
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationGroupProxyModel.h"
+#include "KPrAnimationSelectorWidget.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -91,7 +92,6 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     hlayout->addWidget(m_editAnimation);
     hlayout->addStretch();
 
-    //TODO: Implement Edition Features
     DialogMenu *editMenu = new DialogMenu(this);
     m_editAnimationsPanel = new KPrEditAnimationsWidget(this);
     QGridLayout *containerLayout = new QGridLayout(editMenu);
@@ -102,7 +102,14 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_buttonAddAnimation = new QToolButton();
     m_buttonAddAnimation->setIcon(SmallIcon("list-add", KIconLoader::SizeSmallMedium));
     m_buttonAddAnimation->setToolTip(i18n("Add new animation"));
-    m_buttonAddAnimation->setEnabled(false);
+
+    DialogMenu *addMenu = new DialogMenu(this);
+    KPrAnimationSelectorWidget *addDialog = new KPrAnimationSelectorWidget(this);
+    QGridLayout *addMenuLayout = new QGridLayout(addMenu);
+    addMenuLayout->addWidget(addDialog,0,0);
+    m_buttonAddAnimation->setMenu(addMenu);
+    m_buttonAddAnimation->setPopupMode(QToolButton::InstantPopup);
+
 
     m_buttonRemoveAnimation = new QToolButton();
     m_buttonRemoveAnimation->setIcon(SmallIcon("list-remove", KIconLoader::SizeSmallMedium));
@@ -164,6 +171,7 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateEditDialogIndex(QModelIndex)));
         connect(m_editAnimationsPanel, SIGNAL(itemClicked(QModelIndex)), this, SLOT(syncWithEditDialogIndex(QModelIndex)));
+        connect(m_editAnimationsPanel, SIGNAL(requestAnimationPreview()), this, SLOT(slotAnimationPreview()));
     }
 }
 
