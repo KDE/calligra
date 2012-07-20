@@ -72,6 +72,8 @@ public slots:
     /// Plays a preview of the shape animation
     void slotAnimationPreview();
 
+    void previewAnimation(KPrShapeAnimation *animation);
+
     /// Remove selected animations
     void slotRemoveAnimations();
 
@@ -83,6 +85,8 @@ public slots:
     KPrShapeAnimations *mainModel();
     KPrViewModePreviewShapeAnimations *previewMode();
     void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
+
+    KoShape *getSelectedShape();
 
 private slots:
     void testEditPanelRoot();

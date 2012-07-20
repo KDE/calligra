@@ -21,8 +21,6 @@
 #define KPREDITANIMATIONSWIDGET_H
 
 #include <QWidget>
-#include <QMap>
-#include <KoXmlReader.h>
 
 class KPrAnimationsTimeLineView;
 class KPrView;
@@ -30,16 +28,9 @@ class KoPAViewBase;
 class QModelIndex;
 class KoShape;
 class QModelIndex;
-class KPrCustomAnimationItem;
 class QComboBox;
 class QTimeEdit;
-class QListWidget;
-class QListView;
 class KPrShapeAnimation;
-class KoXmlElement;
-class KoShapeLoadingContext;
-class KPrCollectionItemModel;
-class QListWidgetItem;
 class KPrAnimationGroupProxyModel;
 class KPrShapeAnimationDocker;
 
@@ -62,7 +53,6 @@ public:
     
 signals:
     void itemClicked(const QModelIndex &index);
-    void requestAnimationPreview();
     void rootRemoved();
 
 public slots:
@@ -73,48 +63,18 @@ public slots:
     void syncCurrentItem();
 
 protected slots:
-    /**
-     * Changes the current shape collection
-     */
-    void activateShapeCollection(QListWidgetItem *item);
 
-    void setAnimation(const QModelIndex& index);
-
-    void automaticPreviewRequested(const QModelIndex &index);
-    void setPreviewState(bool isEnable);
+    void changeCurrentAnimation(KPrShapeAnimation *animation);
 
 
 private:
-    void loadDefaultAnimations();
-    void readDefaultAnimations();
-    QString animationName(const QString id) const;
-    QIcon loadAnimationIcon(const QString id);
-    KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape = 0);
-
-    /**
-     * Add a collection to the docker
-     */
-    bool addCollection(const QString& id, const QString& title, KPrCollectionItemModel* model);
-
-
-    /// load / save automatic preview checkbox state
-    bool loadPreviewConfig();
-    void savePreviewConfig();
-
     KPrView* m_view;
     KPrAnimationsTimeLineView *m_timeLineView;
     KPrAnimationGroupProxyModel *m_timeLineModel;
     QComboBox *m_triggerEventList;
     QTimeEdit *m_delayEdit;
     QTimeEdit *m_durationEdit;
-    QListWidget *m_collectionChooser;
-    QListView *m_collectionView;
-    QList<KPrShapeAnimation *> m_animations;
-    QList<KoXmlElement> m_animationContext;
-    QMap<QString, KPrCollectionItemModel*> m_modelMap;
     KPrShapeAnimationDocker *m_docker;
-    KPrShapeAnimation *m_previewAnimation;
-    bool showAutomaticPreview;
 };
 
 #endif // KPREDITANIMATIONSWIDGET_H

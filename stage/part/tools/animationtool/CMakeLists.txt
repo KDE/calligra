@@ -11,6 +11,7 @@ set(calligrastagetoolanimation_PART_SRCS
     KPrEditAnimationsWidget.cpp
     KPrCollectionItemModel.cpp
     KPrAnimationGroupProxyModel.cpp
+    KPrAnimationSelectorWidget.cpp
     )
 
 

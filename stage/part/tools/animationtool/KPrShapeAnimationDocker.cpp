@@ -164,7 +164,6 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateEditDialogIndex(QModelIndex)));
         connect(m_editAnimationsPanel, SIGNAL(itemClicked(QModelIndex)), this, SLOT(syncWithEditDialogIndex(QModelIndex)));
-        connect(m_editAnimationsPanel, SIGNAL(requestAnimationPreview()), this, SLOT(slotAnimationPreview()));
     }
 }
 
@@ -343,6 +342,26 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
     m_view->setViewMode(m_previewMode); // play the effect (it reverts to normal  when done)
 }
 
+void KPrShapeAnimationDocker::previewAnimation(KPrShapeAnimation *animation)
+{
+    if(!animation) {
+        return;
+    }
+    QModelIndex index = m_animationsView->currentIndex();
+    index = m_animationsModel->index(index.row(), index.column(), index.parent());
+    KPrShapeAnimation *currentAnimation = m_animationsModel->animationByRow(index.row());
+
+    if (currentAnimation && (currentAnimation->shape() == animation->shape())) {
+        animation->setKoTextBlockData(currentAnimation->textBlockData());
+    }
+
+    if(!previewMode()) {
+        setPreviewMode(new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas()));
+    }
+    previewMode()->setShapeAnimation(animation);
+    m_view->setViewMode(previewMode()); // play the effect (it reverts to normal  when done)
+}
+
 void KPrShapeAnimationDocker::slotRemoveAnimations()
 {
     QModelIndex index = m_animationsView->currentIndex();
@@ -362,6 +381,23 @@ KPrViewModePreviewShapeAnimations *KPrShapeAnimationDocker::previewMode()
 void KPrShapeAnimationDocker::setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode)
 {
     m_previewMode = previewMode;
+}
+
+KoShape *KPrShapeAnimationDocker::getSelectedShape()
+{
+    if (m_animationsView->currentIndex().isValid()) {
+            syncCanvasWithIndex(m_animationsView->currentIndex());
+    }
+    //Return current shape selected on canvas
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if (!selection->selectedShapes().isEmpty()) {
+        if (selection->selectedShapes().first()) {
+            KoShape *selectedShape = selection->selectedShapes().first();
+            return selectedShape;
+        }
+    }
+    return 0;
 }
 
 void KPrShapeAnimationDocker::testEditPanelRoot()
