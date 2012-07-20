@@ -1371,6 +1371,11 @@ void GroupSectionEditor::setupUi( QWidget *widget )
     gsw.view->setItemDelegateForColumn( 3, new EnumDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 4, new EnumDelegate( gsw.view ) );
 
+    gsw.btnAdd->setIcon( KIcon( "list-add" ) );
+    gsw.btnRemove->setIcon( KIcon( "list-remove" ) );
+    gsw.btnMoveUp->setIcon( KIcon( "arrow-up" ) );
+    gsw.btnMoveDown->setIcon( KIcon( "arrow-down" ) );
+
     gsw.btnRemove->setEnabled( false );
     gsw.btnMoveUp->setEnabled( false );
     gsw.btnMoveDown->setEnabled( false );
