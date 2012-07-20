@@ -254,6 +254,16 @@ public:
 
     KPrShapeAnimation *animationByRow(const int row) const;
 
+    /**
+     * @brief add new animation after index
+     *
+     * @param newAnimation animation to be inserted
+     * @param previousAnimation index of the previous animation
+     */
+    void insertNewAnimation(KPrShapeAnimation *newAnimation, const QModelIndex &previousAnimation);
+
+    QModelIndex indexByAnimation(KPrShapeAnimation *animation);
+
 public slots:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
@@ -272,7 +282,6 @@ private:
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
     QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
     void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes);
-    QModelIndex indexByAnimation(KPrShapeAnimation *animation);
     QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation, bool connectItems);
     QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
     bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,

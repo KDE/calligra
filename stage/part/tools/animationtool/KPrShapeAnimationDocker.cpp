@@ -75,6 +75,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     : QWidget(parent)
     , m_view(0)
     , m_previewMode(0)
+    , m_lastSelectedShape(0)
 {
     setObjectName("KPrShapeAnimationDocker");
     QHBoxLayout *hlayout = new QHBoxLayout;
@@ -145,6 +146,10 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     connect(m_buttonRemoveAnimation, SIGNAL(clicked()), this, SLOT(slotRemoveAnimations()));
     connect(m_buttonAnimationOrderUp, SIGNAL(clicked()), this, SLOT(moveAnimationUp()));
     connect(m_buttonAnimationOrderDown, SIGNAL(clicked()), this, SLOT(moveAnimationDown()));
+    connect(addDialog, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
+            this, SLOT(previewAnimation(KPrShapeAnimation*)));
+    connect(addDialog, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
+            this, SLOT(addNewAnimation(KPrShapeAnimation*)));
 
     //load View and model
     m_animationsView = new QTreeView();
@@ -207,6 +212,17 @@ void KPrShapeAnimationDocker::moveAnimationDown()
 {
     QModelIndex index = m_animationsView->currentIndex();
     m_animationsModel->moveDown(index);
+}
+
+void KPrShapeAnimationDocker::addNewAnimation(KPrShapeAnimation *animation)
+{
+    if (!animation || !animation->shape()) {
+        return;
+    }
+    QModelIndex index = m_animationsView->currentIndex();
+    m_animationsModel->insertNewAnimation(animation, index);
+    m_animationsView->setCurrentIndex(m_animationsModel->indexByAnimation(animation));
+
 }
 
 KPrShapeAnimations *KPrShapeAnimationDocker::animationsByPage(KoPAPageBase *page)
@@ -393,15 +409,30 @@ void KPrShapeAnimationDocker::setPreviewMode(KPrViewModePreviewShapeAnimations *
 
 KoShape *KPrShapeAnimationDocker::getSelectedShape()
 {
-    if (m_animationsView->currentIndex().isValid()) {
-            syncCanvasWithIndex(m_animationsView->currentIndex());
-    }
-    //Return current shape selected on canvas
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if (m_animationsView->currentIndex().isValid()) {
+        syncCanvasWithIndex(m_animationsView->currentIndex());
+    }
+    else if (m_lastSelectedShape) {
+        if (selection->selectedShapes().contains(m_lastSelectedShape)) {
+            return m_lastSelectedShape;
+        }
+
+        foreach (KoShape* shape, selection->selectedShapes()) {
+            shape->update();
+        }
+
+        selection->deselectAll();
+        selection->select(m_lastSelectedShape);
+        selection->update();
+        m_lastSelectedShape->update();
+    }
+    //Return current shape selected on canvas
     if (!selection->selectedShapes().isEmpty()) {
         if (selection->selectedShapes().first()) {
             KoShape *selectedShape = selection->selectedShapes().first();
+            m_lastSelectedShape = selectedShape;
             return selectedShape;
         }
     }

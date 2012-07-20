@@ -33,7 +33,6 @@ class KPrShapeAnimations;
 class KPrAnimationsDataModel;
 class KPrAnimationsTimeLineView;
 class KPrViewModePreviewShapeAnimations;
-class KPrCustomAnimationItem;
 class KPrEditAnimationsWidget;
 class QModelIndex;
 class KoPAPageBase;
@@ -48,6 +47,12 @@ class KPrShapeAnimationDocker : public QWidget
 public:
     explicit KPrShapeAnimationDocker(QWidget *parent = 0);
     void setView(KoPAViewBase *view);
+
+    KPrShapeAnimations *mainModel();
+    KPrViewModePreviewShapeAnimations *previewMode();
+    void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
+
+    KoShape *getSelectedShape();
     
 signals:
     
@@ -82,11 +87,7 @@ public slots:
     void moveAnimationUp();
     void moveAnimationDown();
 
-    KPrShapeAnimations *mainModel();
-    KPrViewModePreviewShapeAnimations *previewMode();
-    void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
-
-    KoShape *getSelectedShape();
+    void addNewAnimation(KPrShapeAnimation *animation);
 
 private slots:
     void testEditPanelRoot();
@@ -108,6 +109,7 @@ private:
     QToolButton *m_buttonAnimationOrderDown;
     QToolButton *m_buttonPreviewAnimation;
     KPrViewModePreviewShapeAnimations *m_previewMode;
+    KoShape *m_lastSelectedShape;
     
 };
 

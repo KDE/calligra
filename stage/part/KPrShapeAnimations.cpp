@@ -34,6 +34,7 @@
 #include <commands/KPrEditAnimationTimeLineCommand.h>
 #include <commands/KPrAnimationEditNodeTypeCommand.h>
 #include <commands/KPrReplaceAnimationCommand.h>
+#include <commands/KPrAnimationCreateCommand.h>
 
 //Calligra Headers
 #include <KoShape.h>
@@ -279,10 +280,10 @@ void KPrShapeAnimations::add(KPrShapeAnimation * animation)
 {
     if (!steps().contains(animation->step())) {
         if ((animation->stepIndex() >= 0) && (animation->stepIndex() <= steps().count())) {
-            steps().insert(animation->stepIndex(), animation->step());
+            m_shapeAnimations.insert(animation->stepIndex(), animation->step());
         }
         else {
-            steps().append(animation->step());
+            m_shapeAnimations.append(animation->step());
         }
     }
     if (!(animation->step()->indexOfAnimation(animation->subStep()) > 0)) {
@@ -291,7 +292,7 @@ void KPrShapeAnimations::add(KPrShapeAnimation * animation)
             animation->step()->insertAnimation(animation->subStepIndex(), animation->subStep());
         }
         else {
-            animation->step()->addAnimation(animation);
+            animation->step()->addAnimation(animation->subStep());
         }
     }
     if ((animation->animIndex() >= 0) &&
@@ -789,6 +790,32 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row) const
 {
     int groupCount = 0;
     return animationByRow(row, groupCount);
+}
+
+void KPrShapeAnimations::insertNewAnimation(KPrShapeAnimation *newAnimation, const QModelIndex &previousAnimation)
+{
+    Q_ASSERT(newAnimation);
+    // Create new Parent step and substep
+    KPrAnimationStep *newStep = new KPrAnimationStep();
+    KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
+    int stepIndex = 0;
+    // insert step and substep
+    if (previousAnimation.isValid()) {
+        KPrShapeAnimation *previous = animationByRow(previousAnimation.row());
+        stepIndex = steps().indexOf(previous->step()) + 1;
+    }
+    else {
+        stepIndex = steps().count();
+    }
+
+    // Setup new Animation
+    newAnimation->setStepIndex(stepIndex);
+    newAnimation->setStep(newStep);
+    newAnimation->setSubStep(newSubStep);
+    newStep->addAnimation(newSubStep);
+    Q_ASSERT(m_document);
+    KPrAnimationCreateCommand *command = new KPrAnimationCreateCommand(m_document, newAnimation);
+    m_document->addCommand(command);
 }
 
 QString KPrShapeAnimations::getAnimationName(KPrShapeAnimation *animation) const
