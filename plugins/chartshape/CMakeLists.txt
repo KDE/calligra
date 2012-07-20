@@ -45,6 +45,7 @@ SET (chartshape_LIB_SRCS
     commands/ChartTypeCommand.cpp
     commands/LegendCommand.cpp
     commands/AxisCommand.cpp
+    commands/DatasetCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS

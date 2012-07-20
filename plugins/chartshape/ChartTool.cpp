@@ -64,6 +64,7 @@
 #include "commands/ChartTypeCommand.h"
 #include "commands/LegendCommand.h"
 #include "commands/AxisCommand.h"
+#include "commands/DatasetCommand.h"
 
 
 using namespace KChart;
@@ -464,7 +465,12 @@ void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color)
     if (!dataSet)
         return;
 
-    dataSet->setBrush(QBrush(color));
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    if (command!=0) {
+        command->setDataSetBrush(color);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
@@ -473,7 +479,12 @@ void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
     if (!dataSet)
         return;
 
-    dataSet->setPen(QPen(color));
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    if (command!=0) {
+        command->setDataSetPen(color);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
@@ -483,7 +494,12 @@ void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
     if (!dataSet)
         return;
 
-    dataSet->setMarkerStyle(style);
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    if (command!=0) {
+        command->setDataSetMarker(style);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
