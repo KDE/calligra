@@ -116,7 +116,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
         m_buffer = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     }
 
-
+    QBrush checkBrush = QBrush();
     QPainter gc(&m_buffer);
 
     // we double buffer, so we paint on an image first, then from the image onto the canvas,
@@ -132,7 +132,12 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.setCompositionMode(QPainter::CompositionMode_Source);
     if(image->isCanvasInfinite())
     {
-        gc.fillRect(QRect(QPoint(0, 0), size()), m_d->checkBrush);
+        QImage check = m_d->checkBrush.texture().toImage();
+        QPainter ch(&check);
+        ch.fillRect(check.rect(),borderColor());
+        ch.drawImage(check.rect(),check);
+        checkBrush = QBrush(check);
+        gc.fillRect(QRect(QPoint(0, 0), size()), checkBrush);
     }
     else
     {
@@ -146,7 +151,10 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
     gc.setPen(Qt::NoPen);
-    gc.setBrush(m_d->checkBrush);
+    if(image->isCanvasInfinite())
+        gc.setBrush(checkBrush);
+    else
+        gc.setBrush(m_d->checkBrush);
     gc.setBrushOrigin(brushOrigin);
     gc.setTransform(checkersTransform);
     gc.drawPolygon(polygon);
@@ -159,6 +167,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     QRectF viewportRect = converter->widgetToViewport(ev->rect());
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    m_d->prescaledProjection->setImage(image);
     gc.drawImage(viewportRect, m_d->prescaledProjection->prescaledQImage(),
                  viewportRect);
 
