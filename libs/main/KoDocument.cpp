@@ -55,7 +55,6 @@
 #include <kdialog.h>
 #include <kfileitem.h>
 #include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -2315,9 +2314,9 @@ bool KoDocument::hasExternURL() const
 
 void KoDocument::slotStarted(KIO::Job *job)
 {
-    if (job && job->ui()) {
-        job->ui()->setWindow(currentShell());
-    }
+//    if (job && job->ui()) {
+//        job->ui()->setWindow(currentShell());
+//    }
 }
 
 static const struct {
