@@ -69,7 +69,7 @@ void TestLogicFunctions::testAND()
     CHECK_EVAL("AND(FALSE();TRUE())", Value(false));
     CHECK_EVAL("AND(TRUE();FALSE())", Value(false));
     CHECK_EVAL("AND(TRUE();TRUE())", Value(true));
-    // errors propogate
+    // errors propagate
     CHECK_EVAL("AND(TRUE();NA())", Value::errorNA());
     CHECK_EVAL("AND(NA();TRUE())", Value::errorNA());
     // Nonzero considered TRUE
@@ -148,7 +148,7 @@ void TestLogicFunctions::testOR()
     CHECK_EVAL("OR(FALSE();TRUE())", Value(true));
     CHECK_EVAL("OR(TRUE();FALSE())", Value(true));
     CHECK_EVAL("OR(TRUE();TRUE())", Value(true));
-    // errors propogate
+    // errors propagate
     CHECK_EVAL("OR(TRUE();NA())", Value::errorNA());
     CHECK_EVAL("OR(NA();TRUE())", Value::errorNA());
     // Nonzero considered TRUE
@@ -191,7 +191,7 @@ void TestLogicFunctions::testXOR()
     CHECK_EVAL("XOR(FALSE();TRUE())", Value(true));
     CHECK_EVAL("XOR(TRUE();FALSE())", Value(true));
     CHECK_EVAL("XOR(TRUE();TRUE())", Value(false));
-    // errors propogate
+    // errors propagate
     CHECK_EVAL("XOR(TRUE();NA())", Value::errorNA());
     CHECK_EVAL("XOR(NA();TRUE())", Value::errorNA());
     CHECK_EVAL("XOR(FALSE();NA())", Value::errorNA());

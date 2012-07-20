@@ -106,6 +106,9 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     reports/reportsourceeditor.ui
     reports/reportnavigator.ui
     reports/reportexportpanel.ui
+    reports/reportsectionswidget.ui
+    reports/reportgroupsectionswidget.ui
+    reports/reporttoolswidget.ui
 
     kptresourceappointmentsdisplayoptions.ui
     kptganttchartdisplayoptions.ui
