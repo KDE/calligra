@@ -207,12 +207,12 @@ bool ConfigDialog::isDefault()
 
 //------------------------------------
 View::View( Part* part, QWidget* parent )
-        : KoView( part, parent ),
-        m_currentEstimateType( Estimate::Use_Expected ),
-        m_scheduleActionGroup( new QActionGroup( this ) ),
-        m_trigged( false ),
-        m_nextScheduleManager( 0 ),
-        m_readWrite( false )
+    : KoView( part, parent ),
+    m_currentEstimateType( Estimate::Use_Expected ),
+    m_scheduleActionGroup( new QActionGroup( this ) ),
+    m_trigged( false ),
+    m_nextScheduleManager( 0 ),
+    m_readWrite( false )
 {
     //kDebug(planDbg());
 //    getProject().setCurrentSchedule( Schedule::Expected );
@@ -311,11 +311,7 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
     connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
 
-    actionCreateReport  = new KAction(KIcon( "document-new" ), i18n("Create Report..."), this);
-    actionCollection()->addAction( "reportdesigner_create_report", actionCreateReport );
-    connect( actionCreateReport, SIGNAL( triggered( bool ) ), SLOT( slotCreateReport() ) );
-
-    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open File..."), this);
+    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open Report Definition File..."), this);
     actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
@@ -1334,14 +1330,12 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     }
 
     v->setProject( &getProject() );
-    v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
     v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign( ReportView* ) ) );
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -2629,20 +2623,6 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
     m_viewlist->blockSignals( false );
 }
 
-void View::slotCreateReport()
-{
-    ReportView v( getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.createReportModels( &getProject(), currentScheduleManager() ), this );
-    // The ReportDesignDialog can not know how to create and insert views,
-    // so faciclitate this in the slotCreateReportView() slot.
-    connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
-    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
-    dlg->show();
-    dlg->raise();
-    dlg->activateWindow();
-}
-
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
@@ -2678,26 +2658,12 @@ void View::slotOpenReportFileFinished( int result )
     QDomDocument doc;
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
-    ReportView v( getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), e, v.reportModels(), this );
+    ReportDesignDialog *dlg = new ReportDesignDialog( e, Report::createBaseReportDataModels( this ), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    dlg->show();
-    dlg->raise();
-    dlg->activateWindow();
-}
-
-void View::slotEditReportDesign( ReportView *view )
-{
-    if ( view == 0 ) {
-        return;
-    }
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
-    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();

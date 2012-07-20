@@ -7,7 +7,7 @@ ADD_DEFINITIONS( -DHAVE_CONFIG_H )
 #
 # However, in practice, these have now diverged sufficiently from the
 # generated files for this to be impractical. At this point, the generated
-# files have value only for comparision purposes.
+# files have value only for comparison purposes.
 SET( wv2_GENERATED
     word95_generated.h
     word95_generated.cpp

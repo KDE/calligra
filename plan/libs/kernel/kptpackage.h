@@ -32,7 +32,7 @@ namespace KPlato {
 
 class Project;
 
-// temporary convinience class
+// temporary convenience class
 class KPLATOKERNEL_EXPORT Package
 {
 public:

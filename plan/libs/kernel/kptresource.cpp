@@ -1020,7 +1020,7 @@ DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, con
 {
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constEnd();
     if ( start.isValid() && start <= time ) {
-        // possibly usefull cache
+        // possibly useful cache
         it = intervals.map().lowerBound( time.date() );
     }
     if ( it == intervals.map().constEnd() ) {
@@ -1059,7 +1059,7 @@ DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, co
     }
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constBegin();
     if ( time.isValid() && limit.isValid() && end.isValid() && end >= time && ! intervals.isEmpty() ) {
-        // possibly usefull cache
+        // possibly useful cache
         it = intervals.map().upperBound( time.date() );
     }
     if ( it == intervals.map().constBegin() ) {
@@ -2101,7 +2101,7 @@ void ResourceGroupRequest::allocateDynamicRequests( const DateTime &time, const 
         ResourceRequest *rr = find( r );
         if ( rr ) {
             if ( rr->isDynamicallyAllocated() ) {
-                --num; // allready allocated
+                --num; // already allocated
             }
             continue;
         }
