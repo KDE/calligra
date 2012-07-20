@@ -76,9 +76,10 @@ XFigImportFilter::convert( const QByteArray& from, const QByteArray& to )
     if( ! document ) {
         return KoFilter::CreationError;
     }
-    if (! odgWriter.write(document)) {
-        return KoFilter::CreationError;
-    }
 
-    return KoFilter::OK;
+    const bool isWritten = odgWriter.write(document);
+
+    delete document;
+
+    return isWritten ? KoFilter::OK : KoFilter::CreationError;
 }
