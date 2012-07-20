@@ -10,3 +10,9 @@ CMakeLists.txt.user*
 *.swp
 .gdb_history
 .kdev_include_paths
+*.config
+*.creator
+*.creator.user
+*.files
+*.includes
+
