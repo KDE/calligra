@@ -22,7 +22,9 @@
 #include "KoApplication.h"
 
 #include "KoGlobal.h"
+#ifndef QT_NO_DBUS
 #include "KoApplicationAdaptor.h"
+#endif
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
 #include "KoDocument.h"

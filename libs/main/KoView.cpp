@@ -27,7 +27,9 @@
 #include "KoDockRegistry.h"
 #include "KoDocument.h"
 #include "KoMainWindow.h"
+#ifndef QT_NO_DBUS
 #include "KoViewAdaptor.h"
+#endif
 #include "KoDockFactoryBase.h"
 #include "KoUndoStackAction.h"
 #include "KoGlobal.h"

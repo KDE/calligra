@@ -24,7 +24,9 @@
 #include "KoDocument.h"
 
 #include "KoServiceProvider.h"
+#ifndef QT_NO_DBUS
 #include "KoDocumentAdaptor.h"
+#endif
 #include "KoGlobal.h"
 #include "KoView.h"
 #include "KoEmbeddedDocumentSaver.h"
