@@ -3,10 +3,8 @@
 xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:calligra="http://www.calligra.org/2005/" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:delta="http://www.deltaxml.com/ns/track-changes/delta-namespace" xmlns:split="http://www.deltaxml.com/ns/track-changes/split-namespace" xmlns:ac="http://www.deltaxml.com/ns/track-changes/attribute-change-namespace" office:version="1.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" presentation:node-type="main-sequence">
   <anim:par>
     <anim:par>
-    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel">
-      <anim:set smil:begin="0s" smil:dur="1ms" smil:attributeName="visibility" smil:to="visible"/>
-      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
-      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="0;1" smil:keyTimes="0;1" anim:formula="height*sin(2.5*pi*$)"/>
+    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="ooo-entrance-appear">
+    <anim:set smil:begin="0s" smil:dur="0.001s" smil:fill="hold" smil:targetElement="id1" smil:attributeName="visibility" smil:to="visible"/>
     </anim:par>
     </anim:par>
   </anim:par>
@@ -44,6 +42,24 @@ xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn
   </anim:par>
   <anim:par>
     <anim:par>
+    <anim:par presentation:preset-property="Direction" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel" presentation:preset-sub-type="horizontal">
+      <anim:set smil:begin="0s" smil:dur="1ms" smil:attributeName="visibility" smil:to="visible"/>
+      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
+      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="0;1" smil:keyTimes="0;1" anim:formula="height*sin(2.5*pi*$)"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par>
+    <anim:par>
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel" presentation:preset-sub-type="vertical">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="0;1" smil:keyTimes="0;1" anim:formula="width*sin(2.5*pi*$)"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
+  <anim:par>
+    <anim:par>
     <anim:par presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-bounce">
 	<anim:animate smil:begin="0" smil:dur="1.822" smil:attributeName="x" smil:values="x;x+0.25" smil:keyTimes="0;1" smil:keySplines="0,0;0.14,0.31;0.43,0.73;0.71,0.91;1,1"/>
 	<anim:animate smil:begin="1.822" smil:dur="0.178" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
@@ -64,4 +80,22 @@ xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn
     </anim:par>
     </anim:par>
   </anim:par>
+  <anim:par>
+    <anim:par>
+    <anim:par presentation:preset-property="Zoom" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="in">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;4*width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;4*height" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par>
+    <anim:par>
+    <anim:par presentation:preset-property="Zoom" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="out">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;0" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;0" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+    </anim:par>
 </anim:seq>

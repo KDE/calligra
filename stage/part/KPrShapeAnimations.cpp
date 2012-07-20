@@ -278,6 +278,9 @@ void KPrShapeAnimations::init(const QList<KPrAnimationStep *> animations)
 
 void KPrShapeAnimations::add(KPrShapeAnimation * animation)
 {
+    if (m_shapeAnimations.isEmpty()) {
+        m_shapeAnimations.append(new KPrAnimationStep());
+    }
     if (!steps().contains(animation->step())) {
         if ((animation->stepIndex() >= 0) && (animation->stepIndex() <= steps().count())) {
             m_shapeAnimations.insert(animation->stepIndex(), animation->step());
@@ -798,11 +801,14 @@ void KPrShapeAnimations::insertNewAnimation(KPrShapeAnimation *newAnimation, con
     // Create new Parent step and substep
     KPrAnimationStep *newStep = new KPrAnimationStep();
     KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
-    int stepIndex = 0;
+    int stepIndex = -1;
     // insert step and substep
     if (previousAnimation.isValid()) {
         KPrShapeAnimation *previous = animationByRow(previousAnimation.row());
         stepIndex = steps().indexOf(previous->step()) + 1;
+    }
+    else if (steps().count() < 1) {
+        stepIndex = -1;
     }
     else {
         stepIndex = steps().count();
@@ -818,13 +824,16 @@ void KPrShapeAnimations::insertNewAnimation(KPrShapeAnimation *newAnimation, con
     m_document->addCommand(command);
 }
 
-QString KPrShapeAnimations::getAnimationName(KPrShapeAnimation *animation) const
+QString KPrShapeAnimations::getAnimationName(KPrShapeAnimation *animation, bool omitSubType) const
 {
     if (animation) {
         QStringList descriptionList = animation->id().split("-");
         if (descriptionList.count() > 2) {
             descriptionList.removeFirst();
             descriptionList.removeFirst();
+        }
+        if (!omitSubType && (!animation->presetSubType().isEmpty())) {
+            descriptionList.append(animation->presetSubType());
         }
         return descriptionList.join(QString(" "));
     }
@@ -851,7 +860,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
     if (!animation) {
         return QPixmap();
     }
-    QString name = getAnimationName(animation);
+    QString name = getAnimationName(animation, true);
     if (!name.isEmpty()) {
         name = name.append("_animation");
         name.replace(" ", "_");

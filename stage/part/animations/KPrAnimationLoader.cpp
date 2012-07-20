@@ -172,6 +172,7 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     //TODO: motion-path, ole-action, media-call are not supported
     QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
     QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
+    QString presetSubType = element.attributeNS(KoXmlNS::presentation, "preset-sub-type");
     qDebug() << "Preset class: " << presetClass;
     qDebug() << "Preset id: " << animationId;
     qDebug() << "node-type" << element.attributeNS(KoXmlNS::presentation, "node-type");
@@ -241,9 +242,11 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         else{
             shapeAnimation->setPresetClass(KPrShapeAnimation::None);
         }
-        //TODO: Check if id is one of Stage Predefined animations
         if (!animationId.isEmpty()) {
             shapeAnimation->setId(animationId);
+        }
+        if (!presetSubType.isEmpty()) {
+            shapeAnimation->setPresetSubType(presetSubType);
         }
     }
     return true;

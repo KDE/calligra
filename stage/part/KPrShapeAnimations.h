@@ -277,7 +277,7 @@ signals:
 
 private:
     KPrShapeAnimation *animationByRow(const int row, int &groupCount) const;
-    QString getAnimationName(KPrShapeAnimation *animation) const;
+    QString getAnimationName(KPrShapeAnimation *animation, bool omitSubType = false) const;
     QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
     QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;

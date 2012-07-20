@@ -31,7 +31,7 @@
 
 //Qt Headers
 #include <QCheckBox>
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QListWidget>
 #include <QListView>
 
@@ -56,16 +56,15 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     , m_docker(docker)
     , showAutomaticPreview(true)
 {
+    QGridLayout *containerLayout = new QGridLayout;
     m_animations = QList<KPrShapeAnimation *>();
     m_animationContext = QList<KoXmlElement>();
-    QVBoxLayout *layout = new QVBoxLayout;
+
     QCheckBox *previewCheckBox = new QCheckBox(i18n("Automatic animation preview"), this);
     previewCheckBox->setChecked(loadPreviewConfig());
     showAutomaticPreview = previewCheckBox->isChecked();
 
-    QHBoxLayout *containerLayout = new QHBoxLayout;
     m_collectionChooser = new QListWidget;
-    containerLayout->addWidget(m_collectionChooser);
     m_collectionChooser->setViewMode(QListView::IconMode);
     m_collectionChooser->setIconSize(QSize(KIconLoader::SizeLarge, KIconLoader::SizeLarge));
     m_collectionChooser->setSelectionMode(QListView::SingleSelection);
@@ -77,8 +76,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_collectionChooser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem *)),
             this, SLOT(activateShapeCollection(QListWidgetItem *)));
+
     m_collectionView = new QListView;
-    containerLayout->addWidget(m_collectionView);
     m_collectionView->setViewMode(QListView::IconMode);
     m_collectionView->setIconSize(QSize(KIconLoader::SizeLarge, KIconLoader::SizeLarge));
     m_collectionView->setDragDropMode(QListView::DragOnly);
@@ -90,13 +89,32 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     connect(m_collectionView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(setAnimation(const QModelIndex&)));
 
+    m_subTypeView = new QListView;
+    m_subTypeView->setViewMode(QListView::IconMode);
+    m_subTypeView->setIconSize(QSize(KIconLoader::SizeLarge, KIconLoader::SizeLarge));
+    m_subTypeView->setDragDropMode(QListView::DragOnly);
+    m_subTypeView->setSelectionMode(QListView::SingleSelection);
+    m_subTypeView->setResizeMode(QListView::Adjust);
+    m_subTypeView->setGridSize(QSize(75, 64));
+    m_subTypeView->setFixedHeight(79);
+    m_subTypeView->setWordWrap(true);
+    m_subTypeView->viewport()->setMouseTracking(true);
+    m_subTypeView->hide();
+    connect(m_subTypeView, SIGNAL(clicked(const QModelIndex&)),
+            this, SLOT(setAnimation(const QModelIndex&)));
+
+    containerLayout->addWidget(m_collectionChooser, 0, 0,2,1);
+    containerLayout->addWidget(m_collectionView, 0, 1, 1, 1);
+    containerLayout->addWidget(m_subTypeView, 1, 1, 1, 1);
+    containerLayout->addWidget(previewCheckBox, 2, 1, 1, 2);
+
+
     // set signals
     connect(m_collectionView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
+    connect(m_subTypeView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
     connect(previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(setPreviewState(bool)));
 
-    layout->addLayout(containerLayout);
-    layout->addWidget(previewCheckBox);
-    setLayout(layout);
+    setLayout(containerLayout);
 
     loadDefaultAnimations();
 }
@@ -115,7 +133,17 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &in
     if(!index.isValid() || !showAutomaticPreview) {
         return;
     }
-    KoXmlElement newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
+    KoXmlElement newAnimationContext;
+    if (QObject::sender() == m_collectionView) {
+        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
+    }
+    else if (QObject::sender() == m_subTypeView) {
+        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_subTypeView->model())->animationContext(index);
+    }
+    else {
+        return;
+    }
+
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext context(stylesReader, 0);
     KoShapeLoadingContext shapeContext(context, 0);
@@ -140,6 +168,8 @@ void KPrAnimationSelectorWidget::activateShapeCollection(QListWidgetItem *item)
     else {
         kWarning(31000) << "Didn't find a model with id ==" << id;
     }
+    m_subTypeView->setModel(0);
+    m_subTypeView->hide();
 }
 
 void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
@@ -147,7 +177,24 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
     if(!index.isValid()) {
         return;
     }
-    KoXmlElement newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
+    KoXmlElement newAnimationContext;
+    if (QObject::sender() == m_collectionView) {
+        m_subTypeView->hide();
+        QString id = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->data(index, Qt::UserRole).toString();
+        if (m_subModelMap.contains(id)){
+            m_subTypeView->setModel(m_subModelMap[id]);
+            m_subTypeView->show();
+            return;
+        }
+        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
+    }
+    else if (QObject::sender() == m_subTypeView) {
+        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_subTypeView->model())->animationContext(index);
+    }
+    else {
+        return;
+    }
+
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext context(stylesReader, 0);
     KoShapeLoadingContext shapeContext(context, 0);
@@ -155,7 +202,6 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
     KoShape *shape = m_docker->getSelectedShape();
     if (!shape) {
         kWarning(31000) << "No shape found";
-        qDebug() << "Error no shape found";
         return;
     }
 
@@ -184,13 +230,40 @@ void KPrAnimationSelectorWidget::loadDefaultAnimations()
     QList<KPrCollectionItem> ole_ActionList;
     QList<KPrCollectionItem> media_CallList;
 
+    QMap<QString, QList<KPrCollectionItem> > subModelList;
+
     foreach(KPrShapeAnimation *animation, m_animations) {
+        bool isSubItem = false;
         KPrCollectionItem temp;
         temp.id = animation->id();
         temp.name = animationName(animation->id());
         temp.toolTip = animationName(animation->id());
         temp.icon = loadAnimationIcon(animation->id());
         temp.animationContext = m_animationContext.value(m_animations.indexOf(animation));
+
+        if (!animation->presetSubType().isEmpty()) {
+            isSubItem = true;
+            if (!subModelList.contains(animation->id())) {
+                QList<KPrCollectionItem> tempList = QList<KPrCollectionItem>();
+                subModelList.insert(animation->id(), tempList);
+                isSubItem = false;
+            }
+            KPrCollectionItem subItem;
+            QString newId = animation->id();
+            newId.append("-");
+            newId.append(animation->presetSubType());
+            subItem.id = newId;
+            subItem.name = animationName(newId);
+            subItem.toolTip = animationName(newId);
+            subItem.icon = loadSubTypeIcon(animation->id(), animation->presetSubType());
+            subItem.animationContext = m_animationContext.value(m_animations.indexOf(animation));
+
+            subModelList[animation->id()].append(subItem);
+            if (isSubItem) {
+                continue;
+            }
+        }
+
         if (animation->presetClass() == KPrShapeAnimation::Entrance) {
             entranceList.append(temp);
         }
@@ -248,6 +321,15 @@ void KPrAnimationSelectorWidget::loadDefaultAnimations()
         model = new KPrCollectionItemModel(this);
         model->setAnimationClassList(media_CallList);
         addCollection("media_call", i18n("Media Call"), model);
+    }
+
+    if (!subModelList.isEmpty()) {
+        QMap<QString, QList<KPrCollectionItem> >::const_iterator i;
+        for (i = subModelList.constBegin(); i != subModelList.constEnd(); ++i) {
+            model = new KPrCollectionItemModel(this);
+            model->setAnimationClassList(i.value());
+            addSubCollection(i.key(), model);
+        }
     }
 
     m_collectionChooser->setCurrentRow(0);
@@ -322,12 +404,44 @@ QIcon KPrAnimationSelectorWidget::loadAnimationIcon(const QString id)
     return KIcon("unrecognized_animation");
 }
 
+QIcon KPrAnimationSelectorWidget::loadSubTypeIcon(const QString mainId, const QString subTypeId)
+{
+    // icon name ex: entrance_zoom_in_animations
+    QString subId = subTypeId;
+    subId.replace("-", "_");
+
+    QString name = animationName(mainId);
+    name.append("_");
+    name.append(subId);
+    name.append("_animation");
+
+    QIcon icon;
+    QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
+    if (!path.isNull()) {
+        icon = KIcon(name);
+    }
+    else {
+        // icon name ex: in_animations
+        name = subId;
+        name.append("_animations");
+        path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
+        if (!path.isNull()) {
+            icon = KIcon(name);
+        }
+        else {
+            icon = KIcon("unrecognized_animation");
+        }
+    }
+    return icon;
+}
+
 KPrShapeAnimation *KPrAnimationSelectorWidget::loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape)
 {
     // load preset and id
     //TODO: motion-path, ole-action, media-call are not supported
     QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
     QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
+    QString presetSubType = element.attributeNS(KoXmlNS::presentation, "preset-sub-type");
 
     KPrShapeAnimation::Node_Type l_nodeType = KPrShapeAnimation::On_Click;
 
@@ -375,6 +489,9 @@ KPrShapeAnimation *KPrAnimationSelectorWidget::loadOdfShapeAnimation(const KoXml
         if (!animationId.isEmpty()) {
             shapeAnimation->setId(animationId);
         }
+        if (!presetSubType.isEmpty()) {
+            shapeAnimation->setPresetSubType(presetSubType);
+        }
     }
     return shapeAnimation;
 }
@@ -398,6 +515,14 @@ bool KPrAnimationSelectorWidget::addCollection(const QString &id, const QString 
     QListWidgetItem *collectionChooserItem = new QListWidgetItem(icon, title);
     collectionChooserItem->setData(Qt::UserRole, id);
     m_collectionChooser->addItem(collectionChooserItem);
+    return true;
+}
+
+bool KPrAnimationSelectorWidget::addSubCollection(const QString &id, KPrCollectionItemModel *model)
+{
+    if(m_subModelMap.contains(id))
+        return false;
+    m_subModelMap.insert(id, model);
     return true;
 }
 

@@ -35,6 +35,7 @@ KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockD
 , m_triggerEvent(KPrShapeAnimation::On_Click)
 , m_class(KPrShapeAnimation::None)
 , m_id(QString())
+, m_presetSubType(QString())
 , m_step(0)
 , m_subStep(0)
 , m_stepIndex(-1)
@@ -65,6 +66,7 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     QString nodeType;
     QString l_presetClass = presetClassText();
     QString l_id = id();
+    QString l_presetSubType = presetSubType();
     if (startStep && startSubStep) {
         nodeType = QString("on-click");
     }
@@ -81,6 +83,9 @@ bool KPrShapeAnimation::saveOdf(KoPASavingContext &paContext, bool startStep, bo
     }
     if (!l_id.isEmpty()) {
         writer.addAttribute("presentation:preset-id", l_id);
+    }
+    if (!l_presetSubType.isEmpty()) {
+        writer.addAttribute("presentation:preset-sub-type", l_presetSubType);
     }
     for(int i = 0 ;i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);
@@ -225,6 +230,11 @@ void KPrShapeAnimation::setId(QString id)
     m_id = id;
 }
 
+void KPrShapeAnimation::setPresetSubType(QString subType)
+{
+    m_presetSubType = subType;
+}
+
 KPrShapeAnimation::Node_Type KPrShapeAnimation::NodeType() const
 {
     return m_triggerEvent;
@@ -266,6 +276,11 @@ QString KPrShapeAnimation::presetClassText() const
     else {
         return QString("custom");
     }
+}
+
+QString KPrShapeAnimation::presetSubType() const
+{
+    return m_presetSubType;
 }
 
 void KPrShapeAnimation::setStep(KPrAnimationStep *step)

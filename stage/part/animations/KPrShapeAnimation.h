@@ -150,6 +150,8 @@ public:
      */
     void setId(QString id);
 
+    void setPresetSubType(QString subType);
+
     /**
      * @brief Returns the stored node type for the animation
      *
@@ -177,6 +179,8 @@ public:
      * @return animation class text
      */
     QString presetClassText() const;
+
+    QString presetSubType() const;
 
     /**
      * @brief Set a pointer to the parent step of the animation
@@ -232,6 +236,7 @@ private:
     Node_Type m_triggerEvent;
     Preset_Class m_class;
     QString m_id;
+    QString m_presetSubType;
     KPrAnimationStep *m_step;
     KPrAnimationSubStep *m_subStep;
     int m_stepIndex;
