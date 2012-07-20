@@ -164,21 +164,21 @@ endif (APPLE)
 ##
 ## Test for sqlite
 ##
-set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.7.12)
-set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-find_package(CalligraSqlite 3.6.16 REQUIRED)
-macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
-                    "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
-                    "Required by Calligra's default database handler.")
+#set(SQLITE_MIN_VERSION 3.6.16)
+#set(SQLITE_RECOMMENDED_VERSION 3.7.12)
+#set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
+#find_package(CalligraSqlite 3.6.16 REQUIRED)
+#macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+#                    "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+#                    "Required by Calligra's default database handler.")
 
 ##
 ## Test for ICU
 ##
-find_package(ICU REQUIRED)
-macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
-                    "http://icu-project.org" FALSE ""
-                    "Required by Calligra's default database handler.")
+#find_package(ICU REQUIRED)
+#macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+#                    "http://icu-project.org" FALSE ""
+#                    "Required by Calligra's default database handler.")
 
  ################################
 #################################
