@@ -22,7 +22,7 @@
 #define INTERNALSOURCESELECTOR_H
 
 #include <QComboBox>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 class InternalSourceSelector : public QComboBox
 {

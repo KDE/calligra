@@ -24,7 +24,7 @@
 #include <QVariant>
 #include <QObject>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 
 namespace Scripting
 {

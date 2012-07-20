@@ -95,14 +95,11 @@
 #include <kicon.h>
 #include <kdialog.h>
 #include <KToggleAction>
-#include <KStandardDirs>
-#include <KTemporaryFile>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
 #include <KParts/PartManager>
 
 KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
@@ -475,31 +472,8 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::createTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = m_document->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(".ott");
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close();
-    delete tempFile;
-
-    m_document->saveNativeFormat(fileName);
-
-    KoTemplateCreateDia::createTemplate("words_template", KWFactory::componentData(),
-                                        fileName, pix, this);
-
-    KWFactory::componentData().dirs()->addResourceType("words_template",
-            "data", "words/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("words_template", ".ott",
+                                        KWFactory::componentData(), m_document, this);
 }
 
 void KWView::addBookmark()

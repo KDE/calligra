@@ -25,7 +25,7 @@
 #include <kassistantdialog.h>
 #include <kapplication.h>
 
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 #include "migratemanager.h"
 
 #include <QProgressBar>

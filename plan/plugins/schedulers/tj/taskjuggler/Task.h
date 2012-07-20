@@ -530,7 +530,7 @@ private:
     /// Effort (in man days) needed to complete the task
     double effort;
 
-    /// Duration in calender days
+    /// Duration in calendar days
     double duration;
 
     /// The already completed effort in a scheduler run.
@@ -549,14 +549,14 @@ private:
 
     /**
      * Since the full time slot might not be available we need to
-     * store the tentative start of a task in a seperate
+     * store the tentative start of a task in a separate
      * variable. Storing the information in 'start' would mark the
      * task as fully scheduled which might not yet be the case. */
     time_t tentativeStart;
 
     /**
      * Since the full time slot might not be available we need to
-     * store the tentative end of a task in a seperate
+     * store the tentative end of a task in a separate
      * variable. Storing the information in 'end' would mark the task
      * as fully scheduled which might not yet be the case. */
     time_t tentativeEnd;

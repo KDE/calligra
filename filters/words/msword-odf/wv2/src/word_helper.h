@@ -696,7 +696,7 @@ namespace wvWare
         }
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear()
         {
@@ -771,7 +771,7 @@ namespace wvWare
         bool write( OLEStreamWriter* stream, bool preservePos = false ) const;
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear();
 

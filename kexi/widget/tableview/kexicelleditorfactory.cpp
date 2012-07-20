@@ -23,8 +23,8 @@
 #include <QHash>
 #include <KGlobal>
 
-#include <kexidb/indexschema.h>
-#include <kexidb/tableschema.h>
+#include <db/indexschema.h>
+#include <db/tableschema.h>
 #include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexidatetableedit.h"
 #include "kexitimetableedit.h"

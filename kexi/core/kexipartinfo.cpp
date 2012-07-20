@@ -21,7 +21,7 @@
 #include "kexipartinfo_p.h"
 #include "KexiMainWindowIface.h"
 
-#include <kexidb/global.h>
+#include <db/global.h>
 #include <KActionCollection>
 
 using namespace KexiPart;

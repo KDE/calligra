@@ -22,7 +22,7 @@
 
 #include <KPageDialog>
 
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <core/kexiprojectdata.h>
 
 class KexiProjectData;

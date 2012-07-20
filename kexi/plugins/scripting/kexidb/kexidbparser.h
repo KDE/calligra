@@ -24,8 +24,8 @@
 #include <QObject>
 #include <QPointer>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/parser/parser.h>
+#include <db/drivermanager.h>
+#include <db/parser/parser.h>
 
 namespace Scripting
 {

@@ -20,6 +20,7 @@
 
 //#include <KLibLoader>
 #include <KServiceTypeTrader>
+#include <KServiceType>
 #include <KDebug>
 #include <KConfig>
 #include <KConfigGroup>
@@ -31,8 +32,8 @@
 #include "kexistaticpart.h"
 #include "kexi_version.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 
 using namespace KexiPart;
 

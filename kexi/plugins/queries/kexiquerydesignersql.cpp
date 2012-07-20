@@ -33,9 +33,9 @@
 #include <KDialog>
 
 #include <kexiutils/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/parser/parser.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/parser/parser.h>
 
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
