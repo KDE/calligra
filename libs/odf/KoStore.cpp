@@ -22,9 +22,9 @@
 #include "KoStore.h"
 #include "KoStore_p.h"
 
-#include "KoTarStore.h"
+//#include "KoTarStore.h"
 #include "KoZipStore.h"
-#include "KoDirectoryStore.h"
+//#include "KoDirectoryStore.h"
 #ifdef QCA2
 #include "KoEncryptedStore.h"
 #endif
@@ -76,8 +76,8 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
         }
     }
     switch (backend) {
-    case Tar:
-        return new KoTarStore(fileName, mode, appIdentification);
+//    case Tar:
+//        return new KoTarStore(fileName, mode, appIdentification);
     case Zip:
 #ifdef QCA2
         if (automatic && mode == Read) {
@@ -86,8 +86,8 @@ KoStore* KoStore::createStore(const QString& fileName, Mode mode, const QByteArr
         }
 #endif
         return new KoZipStore(fileName, mode, appIdentification);
-    case Directory:
-        return new KoDirectoryStore(fileName /* should be a dir name.... */, mode);
+//    case Directory:
+//        return new KoDirectoryStore(fileName /* should be a dir name.... */, mode);
 #ifdef QCA2
     case Encrypted:
         return new KoEncryptedStore(fileName, mode, appIdentification);
@@ -113,11 +113,11 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
         }
     }
     switch (backend) {
-    case Tar:
-        return new KoTarStore(device, mode, appIdentification);
-    case Directory:
-        kError(30002) << "Can't create a Directory store for a memory buffer!" << endl;
-        // fallback
+//    case Tar:
+//        return new KoTarStore(device, mode, appIdentification);
+//    case Directory:
+//        kError(30002) << "Can't create a Directory store for a memory buffer!" << endl;
+//        // fallback
     case Zip:
 #ifdef QCA2
         if (automatic && mode == Read) {
@@ -162,8 +162,8 @@ KoStore* KoStore::createStore(QWidget* window, const KUrl& url, Mode mode, const
         }
     }
     switch (backend) {
-    case Tar:
-        return new KoTarStore(window, url, tmpFile, mode, appIdentification);
+//    case Tar:
+//        return new KoTarStore(window, url, tmpFile, mode, appIdentification);
     case Zip:
 #ifdef QCA2
         if (automatic && mode == Read) {

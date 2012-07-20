@@ -36,8 +36,8 @@ set(koodf_LIB_SRCS
     KoPageLayout.cpp
     KoPageFormat.cpp
     KoStore.cpp
-    KoTarStore.cpp
-    KoDirectoryStore.cpp
+#   KoTarStore.cpp
+#   KoDirectoryStore.cpp
     KoZipStore.cpp
     KoXmlReader.cpp
     KoXmlWriter.cpp
