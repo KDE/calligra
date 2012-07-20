@@ -69,7 +69,7 @@ Item {
         name: "pressed";
         when: mouse.pressed;
 
-        PropertyChanges { target: shadow; size: Constants.DefaultMargin / 2; }
+        PropertyChanges { target: shadow; size: Constants.DefaultMargin * 0.333; }
         PropertyChanges { target: fill; color: base.highlightColor; }
     }
 

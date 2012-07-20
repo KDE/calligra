@@ -24,12 +24,14 @@
     <file>panels/CreateNewSection.qml</file>
 
     <file>images/divider.png</file>
-    <file>images/DropShadow.png</file>
     <file>images/document-new.png</file>
     <file>images/document-open.png</file>
     <file>images/camera-web.png</file>
     <file>images/edit-paste.png</file>
     <file>images/image-x-generic.png</file>
     <file>images/krita.png</file>
+    <file>images/shadow-corner.png</file>
+    <file>images/shadow-edge-horizontal.png</file>
+    <file>images/shadow-edge-vertical.png</file>
 </qresource>
 </RCC>

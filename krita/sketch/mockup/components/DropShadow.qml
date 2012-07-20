@@ -19,15 +19,107 @@
 import QtQuick 1.1
 
 Item {
-    property real size: Constants.DefaultMargin;
+    id: base;
+    property real size: Constants.DefaultMargin * 0.666;
 
-    BorderImage {
-        anchors.centerIn: parent;
-        width: parent.width + 2 * parent.size;
-        height: parent.height + 2 * parent.size;
+    Image {
+        anchors.right: parent.left;
+        anchors.bottom: parent.top;
 
-        border { left: 16; right: 16; top: 16; bottom: 16; }
+        width: parent.size;
+        height: parent.size;
 
-        source: ":/images/DropShadow.png"
+        opacity: 0.5;
+
+        source: ":/images/shadow-corner.png";
+    }
+
+    Image {
+        anchors.horizontalCenter: parent.horizontalCenter;
+        anchors.bottom: parent.top;
+
+        width: parent.width;
+        height: parent.size;
+
+        opacity: 0.5;
+
+        source: ":/images/shadow-edge-horizontal.png";
+    }
+
+    Image {
+        anchors.left: parent.right;
+        anchors.bottom: parent.top;
+
+        width: parent.size;
+        height: parent.size;
+        rotation: 90;
+
+        opacity: 0.5;
+
+        source: ":/images/shadow-corner.png";
+    }
+
+    Image {
+        anchors.left: parent.right;
+        anchors.verticalCenter: parent.verticalCenter;
+
+        width: parent.size;
+        height: parent.height;
+        scale: -1;
+
+        opacity: 0.5;
+
+        source: ":/images/shadow-edge-vertical.png";
+    }
+
+    Image {
+        anchors.left: parent.right;
+        anchors.top: parent.bottom;
+
+        width: parent.size;
+        height: parent.size;
+        rotation: 180;
+
+        opacity: 0.5;
+
+        source: ":/images/shadow-corner.png";
+    }
+
+    Image {
+        anchors.horizontalCenter: parent.horizontalCenter;
+        anchors.top: parent.bottom;
+
+        width: parent.width;
+        height: parent.size;
+        scale: -1;
+
+        opacity: 0.5;
+
+        source: ":/images/shadow-edge-horizontal.png";
+    }
+
+    Image {
+        anchors.right: parent.left;
+        anchors.top: parent.bottom;
+
+        width: parent.size;
+        height: parent.size;
+        rotation: 270;
+
+        opacity: 0.5;
+
+        source: ":/images/shadow-corner.png";
+    }
+
+    Image {
+        anchors.right: parent.left;
+        anchors.verticalCenter: parent.verticalCenter;
+
+        width: parent.size;
+        height: parent.height;
+
+        opacity: 0.5;
+
+        source: ":/images/shadow-edge-vertical.png";
     }
 }
