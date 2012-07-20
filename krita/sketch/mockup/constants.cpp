@@ -18,6 +18,9 @@
 
 #include "constants.h"
 
+#include <QApplication>
+#include <QWidget>
+
 Theme::Theme(QObject* parent)
     : QObject(parent)
 {
@@ -63,16 +66,31 @@ Constants::Constants(QObject* parent)
     : QObject(parent)
 {
     m_theme = new Theme( this );
+
+    m_gridWidth = qApp->activeWindow()->width() / gridColumns();
+    m_gridHeight = qApp->activeWindow()->height() / gridHeight();
 }
 
 qreal Constants::gridHeight() const
 {
-    return 600 / 8;
+    return m_gridHeight;
+}
+
+void Constants::setGridHeight( qreal height )
+{
+    m_gridHeight = height;
+    emit gridSizeChanged();
 }
 
 qreal Constants::gridWidth() const
 {
-    return 1024 / 12;
+    return m_gridWidth;
+}
+
+void Constants::setGridWidth( qreal width )
+{
+    m_gridWidth = width;
+    emit gridSizeChanged();
 }
 
 int Constants::gridRows() const
@@ -85,34 +103,35 @@ int Constants::gridColumns() const
     return 12;
 }
 
-qreal Constants::defaultMargin() const
-{
-    return 8;
-}
 
 QObject* Constants::theme() const
 {
     return m_theme;
 }
 
+qreal Constants::defaultMargin() const
+{
+    return 0.1 * m_gridHeight;
+}
+
 qreal Constants::smallFontSize() const
 {
-    return 16;
+    return 0.2 * m_gridHeight;
 }
 
 qreal Constants::defaultFontSize() const
 {
-    return 20;
+    return 0.3 * m_gridHeight;
 }
 
 qreal Constants::largeFontSize() const
 {
-    return 24;
+    return 0.4 * m_gridHeight;
 }
 
 qreal Constants::hugeFontSize() const
 {
-    return 46;
+    return 0.6 * m_gridHeight;
 }
 
 #include "constants.moc"

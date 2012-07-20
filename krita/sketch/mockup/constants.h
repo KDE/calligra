@@ -48,16 +48,17 @@ public:
 class Constants : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY( qreal GridHeight READ gridHeight CONSTANT )
-    Q_PROPERTY( qreal GridWidth READ gridWidth CONSTANT )
     Q_PROPERTY( int GridRows READ gridRows CONSTANT )
     Q_PROPERTY( int GridColumns READ gridColumns CONSTANT )
-    Q_PROPERTY( qreal DefaultMargin READ defaultMargin CONSTANT )
     Q_PROPERTY( QObject* Theme READ theme CONSTANT )
-    Q_PROPERTY( qreal SmallFontSize READ smallFontSize CONSTANT )
-    Q_PROPERTY( qreal DefaultFontSize READ defaultFontSize CONSTANT )
-    Q_PROPERTY( qreal LargeFontSize READ largeFontSize CONSTANT )
-    Q_PROPERTY( qreal HugeFontSize READ hugeFontSize CONSTANT )
+
+    Q_PROPERTY( qreal DefaultMargin READ defaultMargin NOTIFY gridSizeChanged )
+    Q_PROPERTY( qreal GridHeight READ gridHeight NOTIFY gridSizeChanged )
+    Q_PROPERTY( qreal GridWidth READ gridWidth NOTIFY gridSizeChanged )
+    Q_PROPERTY( qreal SmallFontSize READ smallFontSize NOTIFY gridSizeChanged )
+    Q_PROPERTY( qreal DefaultFontSize READ defaultFontSize NOTIFY gridSizeChanged )
+    Q_PROPERTY( qreal LargeFontSize READ largeFontSize NOTIFY gridSizeChanged )
+    Q_PROPERTY( qreal HugeFontSize READ hugeFontSize NOTIFY gridSizeChanged )
 
 public:
     Constants( QObject* parent = 0 );
@@ -73,8 +74,16 @@ public:
     qreal largeFontSize() const;
     qreal hugeFontSize() const;
 
+    void setGridWidth( qreal width );
+    void setGridHeight( qreal height );
+
+Q_SIGNALS:
+    void gridSizeChanged();
+
 private:
     Theme* m_theme;
+    qreal m_gridWidth;
+    qreal m_gridHeight;
 };
 
 #endif // CONSTANTS_H

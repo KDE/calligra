@@ -9,10 +9,11 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${QT_INCLUDES})
 set(krita-sketch_SRCS
     constants.cpp
     main.cpp
+    mainwindow.cpp
 )
 
 qt4_automoc(${krita-sketch_SRCS})
 qt4_add_resources(krita-sketch_SRCS krita-sketch.qrc)
 
 add_executable(krita-sketch ${krita-sketch_SRCS})
-target_link_libraries(krita-sketch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
+target_link_libraries(krita-sketch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} )

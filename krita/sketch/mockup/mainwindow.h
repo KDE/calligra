@@ -16,16 +16,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QApplication>
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include "mainwindow.h"
+#include <QMainWindow>
 
-int main( int argc, char** argv )
+
+class MainWindow : public QMainWindow
 {
-    QApplication app( argc, argv );
+Q_OBJECT
+public:
+    explicit MainWindow(QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    virtual ~MainWindow();
 
-    MainWindow win;
-    win.show();
+    virtual void resizeEvent( QResizeEvent* event );
 
-    return app.exec();
-}
+private:
+    class Private;
+    Private * const d;
+};
+
+#endif // MAINWINDOW_H
