@@ -1381,6 +1381,10 @@ void GroupSectionEditor::setupUi( QWidget *widget )
     gsw.btnMoveDown->setEnabled( false );
 
     connect(gsw.view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), SLOT(slotSelectionChanged(const QItemSelection&)));
+    connect(gsw.btnAdd, SIGNAL(clicked(bool)), SLOT(slotAddRow()));
+    connect(gsw.btnRemove, SIGNAL(clicked(bool)), SLOT(slotRemoveRows()));
+    connect(gsw.btnMoveUp, SIGNAL(clicked(bool)), SLOT(slotMoveRowUp()));
+    connect(gsw.btnMoveDown, SIGNAL(clicked(bool)), SLOT(slotMoveRowDown()));
 }
 
 void GroupSectionEditor::slotSelectionChanged( const QItemSelection &sel )
@@ -1431,10 +1435,6 @@ void GroupSectionEditor::setData( KoReportDesigner *d, ReportData *rd )
 
         model.appendRow( QList<QStandardItem*>() << ci << si << hi << fi << pi );
     }
-    connect(gsw.btnAdd, SIGNAL(clicked(bool)), SLOT(slotAddRow()));
-    connect(gsw.btnRemove, SIGNAL(clicked(bool)), SLOT(slotRemoveRows()));
-    connect(gsw.btnMoveUp, SIGNAL(clicked(bool)), SLOT(slotMoveRowUp()));
-    connect(gsw.btnMoveDown, SIGNAL(clicked(bool)), SLOT(slotMoveRowDown()));
 }
 
 void GroupSectionEditor::slotAddRow()
