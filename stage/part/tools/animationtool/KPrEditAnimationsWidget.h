@@ -53,7 +53,6 @@ public:
     
 signals:
     void itemClicked(const QModelIndex &index);
-    void rootRemoved();
     void requestAnimationPreview();
 
 public slots:

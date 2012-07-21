@@ -119,6 +119,8 @@ public:
      */
     void swapSteps(int i, int j);
 
+    void swapAnimations(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
+
     /**
      * @brief Replace old animation with new animation
      *

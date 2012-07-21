@@ -26,16 +26,14 @@
 #include "animations/KPrShapeAnimation.h"
 #include "KLocale"
 
-KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel, KPrAnimationStep *step,
-                                                       KPrAnimationStep *newStep, KUndo2Command *parent)
+KPrReorderAnimationCommand::KPrReorderAnimationCommand(KPrShapeAnimations *shapeAnimationsModel, KPrShapeAnimation *oldAnimation,
+                                                       KPrShapeAnimation *newAnimation, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shapeAnimationsModel(shapeAnimationsModel)
-    , m_step(step)
-    , m_newStep(newStep)
+    , m_oldAnimation(oldAnimation)
+    , m_newAnimation(newAnimation)
 {
     setText(i18nc("(qtundo-format)", "Reorder animations"));
-    m_oldRow = m_shapeAnimationsModel->steps().indexOf(m_step);
-    m_newRow = m_shapeAnimationsModel->steps().indexOf(m_newStep);
 }
 
 KPrReorderAnimationCommand::~KPrReorderAnimationCommand()
@@ -44,10 +42,11 @@ KPrReorderAnimationCommand::~KPrReorderAnimationCommand()
 
 void KPrReorderAnimationCommand::redo()
 {
-    m_shapeAnimationsModel->swapSteps(m_oldRow, m_newRow);
+
+    m_shapeAnimationsModel->swapAnimations(m_oldAnimation, m_newAnimation);
 }
 
 void KPrReorderAnimationCommand::undo()
 {
-    m_shapeAnimationsModel->swapSteps(m_newRow, m_oldRow);
+    m_shapeAnimationsModel->swapAnimations(m_newAnimation, m_oldAnimation);
 }

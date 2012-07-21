@@ -186,32 +186,28 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
     if (index.isValid()) {
         m_buttonRemoveAnimation->setEnabled(true);
         m_editAnimation->setEnabled(true);
-        QModelIndex triggerEventIndex = m_animationsModel->index(index.row(), KPrShapeAnimations::Node_Type);
-        if (static_cast<KPrShapeAnimation::Node_Type>(m_animationsModel->data(triggerEventIndex).toInt()) ==
-                KPrShapeAnimation::On_Click) {
-            m_buttonAnimationOrderUp->setEnabled(true);
-            m_buttonAnimationOrderDown->setEnabled(true);
-        }
-        else {
-            m_buttonAnimationOrderUp->setEnabled(false);
-            m_buttonAnimationOrderDown->setEnabled(false);
-        }
+        m_buttonAnimationOrderUp->setEnabled(true);
+        m_buttonAnimationOrderDown->setEnabled(true);
         return;
     }
     m_buttonRemoveAnimation->setEnabled(false);
     m_editAnimation->setEnabled(false);
+    m_buttonAnimationOrderUp->setEnabled(false);
+    m_buttonAnimationOrderDown->setEnabled(false);
 }
 
 void KPrShapeAnimationDocker::moveAnimationUp()
 {
     QModelIndex index = m_animationsView->currentIndex();
     m_animationsModel->moveUp(index);
+    m_animationsView->setCurrentIndex(m_animationsModel->index(index.row() - 1, 0));
 }
 
 void KPrShapeAnimationDocker::moveAnimationDown()
 {
     QModelIndex index = m_animationsView->currentIndex();
     m_animationsModel->moveDown(index);
+    m_animationsView->setCurrentIndex(m_animationsModel->index(index.row() + 1, 0));
 }
 
 void KPrShapeAnimationDocker::addNewAnimation(KPrShapeAnimation *animation)

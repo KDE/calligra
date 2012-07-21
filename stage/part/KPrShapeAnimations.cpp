@@ -355,6 +355,48 @@ void KPrShapeAnimations::swapSteps(int i, int j)
     emit dataChanged(this->index(j,0), this->index(j, COLUMN_COUNT));
 }
 
+void KPrShapeAnimations::swapAnimations(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
+{
+    KPrAnimationStep *oldStep = oldAnimation->step();
+    KPrAnimationSubStep *oldSubStep = oldAnimation->subStep();
+    KPrShapeAnimation::Node_Type oldType = oldAnimation->NodeType();
+    KPrAnimationSubStep *newSubStep = newAnimation->subStep();
+    int oldIndex = oldSubStep->indexOfAnimation(oldAnimation);
+    int newIndex = newSubStep->indexOfAnimation(newAnimation);
+    if (oldSubStep != newSubStep) {
+        oldSubStep->removeAnimation(oldAnimation);
+        newSubStep->removeAnimation(newAnimation);
+        oldSubStep->insertAnimation(oldIndex, newAnimation);
+        newSubStep->insertAnimation(newIndex, oldAnimation);
+    }
+    else {
+        if (oldIndex < newIndex) {
+            oldSubStep->removeAnimation(newAnimation);
+            oldSubStep->insertAnimation(oldIndex, newAnimation);
+        }
+        else {
+            oldSubStep->removeAnimation(oldAnimation);
+            oldSubStep->insertAnimation(newIndex, oldAnimation);
+        }
+    }
+
+    oldAnimation->setStep(newAnimation->step());
+    oldAnimation->setSubStep(newSubStep);
+    oldAnimation->setNodeType(newAnimation->NodeType());
+    newAnimation->setStep(oldStep);
+    newAnimation->setSubStep(oldSubStep);
+    newAnimation->setNodeType(oldType);
+    QModelIndex indexOld = indexByAnimation(oldAnimation);
+    QModelIndex indexNew = indexByAnimation(newAnimation);
+    emit dataChanged(this->index(indexOld.row(), 0), this->index(indexOld.row(), COLUMN_COUNT));
+    emit dataChanged(this->index(indexNew.row(), 0), this->index(indexNew.row(), COLUMN_COUNT));
+    if ((newAnimation->NodeType() == KPrShapeAnimation::On_Click) ||
+            (oldAnimation->NodeType() == KPrShapeAnimation::On_Click)) {
+        notifyOnClickEventChanged();
+    }
+
+}
+
 void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
 {
     KPrAnimationSubStep *subStep = oldAnimation->subStep();
@@ -612,6 +654,8 @@ QModelIndex KPrShapeAnimations::moveUp(const QModelIndex &index)
     if (!index.isValid() || index.row() < 1) {
         return QModelIndex();
     }
+    return moveItem(index.row(), index.row() - 1);
+    /*
     KPrShapeAnimation *animationOld = animationByRow(index.row());
     if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
         if (steps().indexOf(animationOld->step()) < 1) {
@@ -626,7 +670,7 @@ QModelIndex KPrShapeAnimations::moveUp(const QModelIndex &index)
         }
         return moveItem(index.row(), oldRow);
     }
-    return QModelIndex();
+    return QModelIndex();*/
 }
 
 QModelIndex KPrShapeAnimations::moveDown(const QModelIndex &index)
@@ -634,7 +678,9 @@ QModelIndex KPrShapeAnimations::moveDown(const QModelIndex &index)
     if (!index.isValid() || (index.row() >= (rowCount() - 1))) {
         return QModelIndex();
     }
-    KPrShapeAnimation *animationOld = animationByRow(index.row());
+
+    return moveItem(index.row(), index.row() + 1);
+    /*KPrShapeAnimation *animationOld = animationByRow(index.row());
     if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
         if (steps().indexOf(animationOld->step()) > (steps().count() - 1)) {
             return QModelIndex();
@@ -648,7 +694,7 @@ QModelIndex KPrShapeAnimations::moveDown(const QModelIndex &index)
         }
         return moveItem(index.row(), oldRow);
     }
-    return QModelIndex();
+    return QModelIndex();*/
 }
 
 QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
@@ -656,10 +702,19 @@ QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
     Q_ASSERT(0 <= oldRow && oldRow < rowCount() &&
              0 <= newRow && newRow < rowCount());
     QModelIndex newIndex;
-    // swap top level items
+    // swap items
     KPrShapeAnimation *animationOld = animationByRow(oldRow);
+    KPrShapeAnimation *animationNew = animationByRow(newRow);
     Q_ASSERT(animationOld);
-    if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
+    Q_ASSERT(animationNew);
+    if (m_document) {
+        newIndex = index(newRow, 0);
+        KPrReorderAnimationCommand *cmd = new KPrReorderAnimationCommand(this, animationOld, animationNew);
+        m_document->addCommand(cmd);
+    }
+    return newIndex;
+
+    /*if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
         KPrShapeAnimation *animationNew = animationByRow(newRow);
         if (animationOld && animationNew) {
             if (m_document) {
@@ -668,7 +723,7 @@ QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
             }
         }
     }
-    return newIndex;
+    return newIndex;*/
 }
 
 QModelIndex KPrShapeAnimations::removeItemByIndex(const QModelIndex &index)
