@@ -106,7 +106,7 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     containerLayout->addWidget(m_collectionChooser, 0, 0,2,1);
     containerLayout->addWidget(m_collectionView, 0, 1, 1, 1);
     containerLayout->addWidget(m_subTypeView, 1, 1, 1, 1);
-    containerLayout->addWidget(previewCheckBox, 2, 1, 1, 2);
+    containerLayout->addWidget(previewCheckBox, 2, 0, 1, 2);
 
 
     // set signals
@@ -380,7 +380,6 @@ void KPrAnimationSelectorWidget::readDefaultAnimations()
 
 QString KPrAnimationSelectorWidget::animationName(const QString id) const
 {
-    //TODO: Identify animations supported by stage
     QStringList descriptionList = id.split("-");
     if (descriptionList.count() > 2) {
         descriptionList.removeFirst();
@@ -392,6 +391,7 @@ QString KPrAnimationSelectorWidget::animationName(const QString id) const
 
 QIcon KPrAnimationSelectorWidget::loadAnimationIcon(const QString id)
 {
+    // Animation icon names examples: zoom_animation, spiral_in_animation
     QString name = animationName(id);
     if (!name.isEmpty()) {
         name = name.append("_animation");

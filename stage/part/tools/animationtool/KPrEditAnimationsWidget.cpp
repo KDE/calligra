@@ -97,8 +97,12 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
 
     // layout widgets
     layout->addWidget(animationSelector);
-    layout->addWidget(m_buttonPreviewAnimation);
-    layout->addWidget(label);
+
+    QHBoxLayout *playLayout = new QHBoxLayout;
+    playLayout->addWidget(label);
+    playLayout->addStretch();
+    playLayout->addWidget(m_buttonPreviewAnimation);
+    layout->addLayout(playLayout);
     layout->addWidget(m_timeLineView);
     layout->addWidget(startLabel);
     layout->addWidget(m_triggerEventList);
@@ -215,6 +219,10 @@ void KPrEditAnimationsWidget::changeCurrentAnimation(KPrShapeAnimation *animatio
     QModelIndex itemIndex = m_timeLineModel->mapToSource(m_timeLineView->currentIndex());
     KPrShapeAnimation *currentAnimation = m_docker->mainModel()->animationByRow(itemIndex.row());
     if (!itemIndex.isValid() || !animation || (animation->shape() != currentAnimation->shape())) {
+        return;
+    }
+    //if it's the same animation do anything
+    if ((currentAnimation->id() == animation->id()) && (currentAnimation->presetSubType() == animation->presetSubType())) {
         return;
     }
     m_docker->mainModel()->replaceAnimation(itemIndex, animation);

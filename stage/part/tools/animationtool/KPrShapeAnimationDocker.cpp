@@ -263,6 +263,7 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
     connect(m_animationsModel, SIGNAL(onClickEventChanged()), this, SLOT(testEditPanelRoot()));
+    getSelectedShape();
     checkAnimationSelected();
 }
 
@@ -414,6 +415,9 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
     if (m_animationsView->currentIndex().isValid()) {
         syncCanvasWithIndex(m_animationsView->currentIndex());
     }
+    else if (!selection->selectedShapes().isEmpty()) {
+        return selection->selectedShapes().first();
+    }
     else if (m_lastSelectedShape) {
         if (selection->selectedShapes().contains(m_lastSelectedShape)) {
             return m_lastSelectedShape;
@@ -427,6 +431,15 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
         selection->select(m_lastSelectedShape);
         selection->update();
         m_lastSelectedShape->update();
+    }
+    else if (!(canvasController->canvas()->shapeManager()->shapes().isEmpty())){
+        foreach (KoShape* shape, selection->selectedShapes()) {
+            shape->update();
+        }
+        selection->deselectAll();
+        selection->select(canvasController->canvas()->shapeManager()->shapes().last());
+        selection->update();
+        m_view->kopaCanvas()->shapeManager()->shapes().first()->update();
     }
     //Return current shape selected on canvas
     if (!selection->selectedShapes().isEmpty()) {
