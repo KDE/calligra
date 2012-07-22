@@ -45,12 +45,13 @@
 #include <QComboBox>
 #include <QTimeEdit>
 #include <QTime>
-#include <QTabWidget>
+#include <QActionGroup>
 
 //KDE Headers
 #include <KIcon>
 #include <KLocale>
 #include <KIconLoader>
+#include <KAction>
 #include <KDebug>
 
 //Calligra Headers
@@ -69,6 +70,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
 {
     QVBoxLayout *layout = new QVBoxLayout;
     m_timeLineView = new KPrAnimationsTimeLineView();
+    m_timeLineView->setContextMenuPolicy(Qt::CustomContextMenu);
     QLabel *label = new QLabel(i18n("Manage animation delay and duration: "));
     QLabel *startLabel = new QLabel(i18n("Start: "));
     m_triggerEventList = new QComboBox;
@@ -127,6 +129,8 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
             docker, SLOT(previewAnimation(KPrShapeAnimation*)));
     connect(animationSelector, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
             this, SLOT(changeCurrentAnimation(KPrShapeAnimation*)));
+    connect(m_timeLineView, SIGNAL(customContextMenuRequested(QPoint)), this,
+            SLOT(showTimeLineCustomContextMenu(QPoint)));
 }
 
 KPrEditAnimationsWidget::~KPrEditAnimationsWidget()
@@ -206,11 +210,63 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
     }
 }
 
+void KPrEditAnimationsWidget::setTriggerEvent(QAction *action)
+{
+    int row = action->data().toInt();
+    setTriggerEvent(row);
+}
+
 void KPrEditAnimationsWidget::syncCurrentItem()
 {
     QModelIndex index = m_timeLineView->currentIndex();
     if (index.isValid()) {
         updateIndex(index);
+    }
+}
+
+void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
+{
+    if (m_timeLineView->currentIndex().isValid()) {
+        QMenu menu(m_timeLineView);
+        QModelIndex index = m_timeLineView->currentIndex();
+        if (!index.isValid()) {
+            return;
+        }
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Node_Type);
+        KPrShapeAnimation::Node_Type currentType = static_cast <KPrShapeAnimation::Node_Type>(m_timeLineModel->data(triggerIndex).toInt());
+
+        QActionGroup *actionGroup = new QActionGroup(m_timeLineView);
+        actionGroup->setExclusive(true);
+        KAction *onClickAction = new KAction(KIcon("onclick"), i18n("start on mouse click"), m_timeLineView);
+        onClickAction->setCheckable(true);
+        onClickAction->setData(KPrShapeAnimation::On_Click);
+        KAction *afterAction = new KAction(KIcon("after_previous"), i18n("start after previous animation"), m_timeLineView);
+        afterAction->setCheckable(true);
+        afterAction->setData(KPrShapeAnimation::After_Previous);
+        KAction *withAction = new KAction(KIcon("with_previous"), i18n("start with previous animation"), m_timeLineView);
+        withAction->setCheckable(true);
+        withAction->setData(KPrShapeAnimation::With_Previous);
+
+        actionGroup->addAction(onClickAction);
+        actionGroup->addAction(afterAction);
+        actionGroup->addAction(withAction);
+        actionGroup->setExclusive(true);
+
+        if (currentType == KPrShapeAnimation::On_Click) {
+            onClickAction->setChecked(true);
+        }
+        else if (currentType == KPrShapeAnimation::After_Previous) {
+            afterAction->setChecked(true);
+        }
+        else {
+            withAction->setChecked(true);
+        }
+
+        menu.addAction(onClickAction);
+        menu.addAction(afterAction);
+        menu.addAction(withAction);
+        connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setTriggerEvent(QAction*)));
+        menu.exec(this->mapToGlobal(m_timeLineView->mapToParent(pos)));
     }
 }
 

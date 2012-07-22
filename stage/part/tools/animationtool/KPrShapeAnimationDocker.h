@@ -114,6 +114,7 @@ private:
     KPrViewModePreviewShapeAnimations *m_previewMode;
     KoShape *m_lastSelectedShape;
     DialogMenu *m_addMenu;
+    DialogMenu *m_editMenu;
     
 };
 

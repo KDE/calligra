@@ -95,11 +95,11 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     hlayout->addWidget(m_editAnimation);
     hlayout->addStretch();
 
-    DialogMenu *editMenu = new DialogMenu(this);
+    m_editMenu = new DialogMenu(this);
     m_editAnimationsPanel = new KPrEditAnimationsWidget(this);
-    QGridLayout *containerLayout = new QGridLayout(editMenu);
+    QGridLayout *containerLayout = new QGridLayout(m_editMenu);
     containerLayout->addWidget(m_editAnimationsPanel,0,0);
-    m_editAnimation->setMenu(editMenu);
+    m_editAnimation->setMenu(m_editMenu);
     m_editAnimation->setPopupMode(QToolButton::InstantPopup);
 
     m_buttonAddAnimation = new QToolButton();
@@ -159,6 +159,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     connect(m_buttonRemoveAnimation, SIGNAL(clicked()), this, SLOT(slotRemoveAnimations()));
     connect(m_buttonAnimationOrderUp, SIGNAL(clicked()), this, SLOT(moveAnimationUp()));
     connect(m_buttonAnimationOrderDown, SIGNAL(clicked()), this, SLOT(moveAnimationDown()));
+    connect(m_animationsView, SIGNAL(doubleClicked(QModelIndex)), m_editAnimation, SLOT(showMenu()));
     connect(m_animationsView, SIGNAL(customContextMenuRequested(QPoint)), this,
             SLOT(showAnimationsCustomContextMenu(QPoint)));
     connect(addDialog, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
@@ -472,6 +473,7 @@ void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
     QMenu menu(m_animationsView);
     menu.addAction(KIcon("document-new"), i18n("Add a new animation"), m_buttonAddAnimation, SLOT(showMenu()));
     menu.addAction(KIcon("edit-delete"), i18n("Delete current animation"), this, SLOT(slotRemoveAnimations()));
+    menu.addAction(KIcon("edit_animation"), i18n("Edit animation"), m_editAnimation, SLOT(showMenu()));
     menu.addSeparator();
     if ((m_animationsView->selectionModel()->selectedRows().count() == 1) &&
             (m_animationsView->currentIndex().isValid())) {

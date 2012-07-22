@@ -60,10 +60,11 @@ public slots:
     void setBeginTime();
     void setDuration();
     void setTriggerEvent(int row);
+    void setTriggerEvent(QAction *action);
     void syncCurrentItem();
 
 protected slots:
-
+    void showTimeLineCustomContextMenu(const QPoint &pos);
     void changeCurrentAnimation(KPrShapeAnimation *animation);
 
 

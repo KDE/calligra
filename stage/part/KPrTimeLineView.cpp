@@ -132,40 +132,42 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
 
     m_mainView->setSelectedRow(row);
     m_mainView->setSelectedColumn(column);
-    if (column == KPrShapeAnimations::StartTime) {
-        m_resize = false;
-        m_move = false;
-        int startPos = 0;
-        for (int i = 0; i < KPrShapeAnimations::StartTime; i++) {
-            startPos = startPos + m_mainView->widthOfColumn(i);
-        }
-        int y = row * m_mainView->rowsHeigth();
-        QRect rect(startPos, y, startPos+m_mainView->widthOfColumn(column), m_mainView->rowsHeigth());
-
-        int lineHeigth = qMin(LINE_HEIGHT, rect.height());
-        int yCenter = (rect.height() - lineHeigth)/2;
-        qreal  stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)/m_mainView->numberOfSteps();
-        qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
-        int startOffSet = m_mainView->calculateStartOffset(row);
-        qreal start = (m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() +
-                startOffSet) / 1000.0;
-
-        QRectF lineRect(rect.x() + stepSize * start + stepSize * duration - 6, rect.y() + yCenter,
-                        8, lineHeigth);
-        // If user click near the end of the line he could resize
-        if (lineRect.contains(event->x(), event->y())) {
-            m_resize = true;
-            m_resizedRow = row;
-            setCursor(Qt::SizeHorCursor);
-        } else {
+    if (event->button() == Qt::LeftButton) {
+        if (column == KPrShapeAnimations::StartTime) {
             m_resize = false;
             m_move = false;
-            lineRect = QRectF(rect.x() + stepSize*start, rect.y() + yCenter, stepSize*duration, lineHeigth);
+            int startPos = 0;
+            for (int i = 0; i < KPrShapeAnimations::StartTime; i++) {
+                startPos = startPos + m_mainView->widthOfColumn(i);
+            }
+            int y = row * m_mainView->rowsHeigth();
+            QRect rect(startPos, y, startPos+m_mainView->widthOfColumn(column), m_mainView->rowsHeigth());
+
+            int lineHeigth = qMin(LINE_HEIGHT, rect.height());
+            int yCenter = (rect.height() - lineHeigth)/2;
+            qreal  stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)/m_mainView->numberOfSteps();
+            qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
+            int startOffSet = m_mainView->calculateStartOffset(row);
+            qreal start = (m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() +
+                    startOffSet) / 1000.0;
+
+            QRectF lineRect(rect.x() + stepSize * start + stepSize * duration - 6, rect.y() + yCenter,
+                            8, lineHeigth);
+            // If user click near the end of the line he could resize
             if (lineRect.contains(event->x(), event->y())) {
-                startDragPos = event->x() - lineRect.x();
-                m_move = true;
+                m_resize = true;
                 m_resizedRow = row;
-                setCursor(Qt::DragMoveCursor);
+                setCursor(Qt::SizeHorCursor);
+            } else {
+                m_resize = false;
+                m_move = false;
+                lineRect = QRectF(rect.x() + stepSize*start, rect.y() + yCenter, stepSize*duration, lineHeigth);
+                if (lineRect.contains(event->x(), event->y())) {
+                    startDragPos = event->x() - lineRect.x();
+                    m_move = true;
+                    m_resizedRow = row;
+                    setCursor(Qt::DragMoveCursor);
+                }
             }
         }
     }
