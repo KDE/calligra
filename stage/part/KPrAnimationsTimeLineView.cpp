@@ -78,6 +78,7 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     //Connect Signals
     connect(m_view, SIGNAL(clicked(const QModelIndex&)), this, SIGNAL(clicked(const QModelIndex&)));
     connect(m_view, SIGNAL(timeValuesChanged(QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
+    connect(m_view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(requestContextMenu(QPoint)));
 }
 
 void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
@@ -239,6 +240,11 @@ void KPrAnimationsTimeLineView::notifyTimeValuesChanged(const QModelIndex &index
 {
     QModelIndex newIndex = m_model->mapFromSource(index);
     emit timeValuesChanged(newIndex);
+}
+
+void KPrAnimationsTimeLineView::requestContextMenu(QPoint pos)
+{
+    emit customContextMenuRequested(m_view->mapToParent(pos));
 }
 
 int KPrAnimationsTimeLineView::stepsScale()

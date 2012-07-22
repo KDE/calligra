@@ -132,6 +132,9 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
 
     m_mainView->setSelectedRow(row);
     m_mainView->setSelectedColumn(column);
+    if (event->button()== Qt::RightButton) {
+        emit customContextMenuRequested(event->pos());
+    }
     if (event->button() == Qt::LeftButton) {
         if (column == KPrShapeAnimations::StartTime) {
             m_resize = false;

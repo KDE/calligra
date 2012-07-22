@@ -70,7 +70,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
 {
     QVBoxLayout *layout = new QVBoxLayout;
     m_timeLineView = new KPrAnimationsTimeLineView();
-    m_timeLineView->setContextMenuPolicy(Qt::CustomContextMenu);
+    //m_timeLineView->setContextMenuPolicy(Qt::CustomContextMenu);
     QLabel *label = new QLabel(i18n("Manage animation delay and duration: "));
     QLabel *startLabel = new QLabel(i18n("Start: "));
     m_triggerEventList = new QComboBox;
@@ -266,7 +266,7 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         menu.addAction(afterAction);
         menu.addAction(withAction);
         connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setTriggerEvent(QAction*)));
-        menu.exec(this->mapToGlobal(m_timeLineView->mapToParent(pos)));
+        menu.exec(m_timeLineView->mapToGlobal(pos));
     }
 }
 

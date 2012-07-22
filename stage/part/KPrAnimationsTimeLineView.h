@@ -60,6 +60,7 @@ signals:
     void clicked(const QModelIndex&);
     void timeValuesChanged(const QModelIndex&);
     void layoutChanged();
+    void customContextMenuRequested(const QPoint &pos);
 
 public slots:
     /// updates all widget
@@ -73,6 +74,8 @@ public slots:
     void adjustScale();
 
     void notifyTimeValuesChanged(const QModelIndex& index);
+
+    void requestContextMenu(QPoint pos);
 
 protected:
     /// return width of column
