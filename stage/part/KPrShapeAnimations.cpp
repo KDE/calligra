@@ -735,11 +735,9 @@ QModelIndex KPrShapeAnimations::removeItemByIndex(const QModelIndex &index)
     Q_ASSERT(animation);
 
     if (animation) {
-        beginRemoveRows(index.parent(), index.row(), index.row());
         Q_ASSERT(m_document);
         KPrAnimationRemoveCommand *command = new KPrAnimationRemoveCommand(m_document, animation);
         m_document->addCommand(command);
-        endRemoveRows();
     }
     return QModelIndex();
 }

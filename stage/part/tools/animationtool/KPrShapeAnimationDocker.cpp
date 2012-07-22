@@ -104,11 +104,11 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_buttonAddAnimation->setIcon(SmallIcon("list-add", KIconLoader::SizeSmallMedium));
     m_buttonAddAnimation->setToolTip(i18n("Add new animation"));
 
-    DialogMenu *addMenu = new DialogMenu(this);
+    m_addMenu = new DialogMenu(this);
     KPrAnimationSelectorWidget *addDialog = new KPrAnimationSelectorWidget(this);
-    QGridLayout *addMenuLayout = new QGridLayout(addMenu);
+    QGridLayout *addMenuLayout = new QGridLayout(m_addMenu);
     addMenuLayout->addWidget(addDialog,0,0);
-    m_buttonAddAnimation->setMenu(addMenu);
+    m_buttonAddAnimation->setMenu(m_addMenu);
     m_buttonAddAnimation->setPopupMode(QToolButton::InstantPopup);
 
 
@@ -218,6 +218,7 @@ void KPrShapeAnimationDocker::addNewAnimation(KPrShapeAnimation *animation)
     QModelIndex index = m_animationsView->currentIndex();
     m_animationsModel->insertNewAnimation(animation, index);
     m_animationsView->setCurrentIndex(m_animationsModel->indexByAnimation(animation));
+    m_addMenu->hide();
 
 }
 

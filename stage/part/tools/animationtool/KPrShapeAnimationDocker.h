@@ -37,6 +37,7 @@ class KPrEditAnimationsWidget;
 class QModelIndex;
 class KoPAPageBase;
 class KoShape;
+class DialogMenu;
 
 /**
  * Shape animations docker widget: let's edition of animations.
@@ -110,6 +111,7 @@ private:
     QToolButton *m_buttonPreviewAnimation;
     KPrViewModePreviewShapeAnimations *m_previewMode;
     KoShape *m_lastSelectedShape;
+    DialogMenu *m_addMenu;
     
 };
 
