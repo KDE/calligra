@@ -2,6 +2,14 @@
 Calligra Plan current:
 ----------------------
 
+* Reports export: Add option to output data into table.
+  This will not use the reports layout.
+  The "old" export option that tries to honour the layout is still available.
+
+* Report designer usability improvements.
+  Designer moved from a dialog into a view using dockers for editing.
+  This removes the need for multi-layered dialogs.
+
 * Bug 186639 -  Use a more "descriptive" mouse cursor for wiring tasks in the graphic
 
 * Bug 286332 - Auto allocate selected resources to new tasks
