@@ -1296,7 +1296,7 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
     popupMenuActions.insert("comment", action);
 
-    action = new KAction(KIcon("clearComment"),i18n("Clear Comment"), q);
+    action = new KAction(KIcon("removecomment"),i18n("Clear Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
     popupMenuActions.insert("clearComment", action);
 
