@@ -330,13 +330,13 @@ void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
                 }
             }
             QModelIndex index = m_animationsModel->indexByShape(selectedShape);
+            m_animationsView->setCurrentIndex(index);
             if (index.isValid()) {
-                m_animationsView->setCurrentIndex(index);
                 if (m_animationGroupModel->setCurrentIndex(index)) {
                     m_editAnimationsPanel->updateView();
                 }
-                updateEditDialogIndex(index);
             }
+            updateEditDialogIndex(index);
         }
     }
     checkAnimationSelected();
