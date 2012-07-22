@@ -1,4 +1,5 @@
 add_subdirectory(defaultdockers)
+add_subdirectory(overviewdocker)
 add_subdirectory(smallcolorselector)
 add_subdirectory(specificcolorselector)
 add_subdirectory(digitalmixer)

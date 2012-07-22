@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Image Overview Docker
+Type=Service
+X-KDE-ServiceTypes=Krita/Dock
+X-KDE-Library=kritaoverviewdocker
+X-Krita-Version=5

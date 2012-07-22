@@ -36,12 +36,14 @@ class KoRuler;
 class KoCanvasController;
 class QPoint;
 
+#include "krita_export.h"
+
 /**
    The zoom manager handles all user actions related to zooming
    and unzooming. The actual computation of zoom levels and things
    are the job of KoZoomHandler or its descendants
 */
-class KisZoomManager : public QObject
+class KRITAUI_EXPORT KisZoomManager : public QObject
 {
 
     Q_OBJECT
