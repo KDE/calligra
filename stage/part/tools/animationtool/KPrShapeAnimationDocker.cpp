@@ -37,11 +37,13 @@
 #include <QTreeView>
 #include <QHeaderView>
 #include <QMenu>
+#include <QActionGroup>
 #include <QDebug>
 
 //KDE Headers
 #include <KIcon>
 #include <KLocale>
+#include <KAction>
 #include <KIconLoader>
 
 //Calligra Headers
@@ -141,25 +143,28 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     hlayout2->addWidget(m_buttonAnimationOrderUp);
     hlayout2->addWidget(m_buttonAnimationOrderDown);
 
-    //Connect Signals.
-    connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SLOT(slotAnimationPreview()));
-    connect(m_buttonRemoveAnimation, SIGNAL(clicked()), this, SLOT(slotRemoveAnimations()));
-    connect(m_buttonAnimationOrderUp, SIGNAL(clicked()), this, SLOT(moveAnimationUp()));
-    connect(m_buttonAnimationOrderDown, SIGNAL(clicked()), this, SLOT(moveAnimationDown()));
-    connect(addDialog, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
-            this, SLOT(previewAnimation(KPrShapeAnimation*)));
-    connect(addDialog, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
-            this, SLOT(addNewAnimation(KPrShapeAnimation*)));
-
     //load View and model
     m_animationsView = new QTreeView();
     m_animationsView->setAllColumnsShowFocus(true);
+    m_animationsView->setContextMenuPolicy(Qt::CustomContextMenu);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addLayout(hlayout);
     layout->addWidget(m_animationsView);
     layout->addLayout(hlayout2);
     setLayout(layout);
+
+    //Connect Signals.
+    connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SLOT(slotAnimationPreview()));
+    connect(m_buttonRemoveAnimation, SIGNAL(clicked()), this, SLOT(slotRemoveAnimations()));
+    connect(m_buttonAnimationOrderUp, SIGNAL(clicked()), this, SLOT(moveAnimationUp()));
+    connect(m_buttonAnimationOrderDown, SIGNAL(clicked()), this, SLOT(moveAnimationDown()));
+    connect(m_animationsView, SIGNAL(customContextMenuRequested(QPoint)), this,
+            SLOT(showAnimationsCustomContextMenu(QPoint)));
+    connect(addDialog, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
+            this, SLOT(previewAnimation(KPrShapeAnimation*)));
+    connect(addDialog, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
+            this, SLOT(addNewAnimation(KPrShapeAnimation*)));
 
 }
 
@@ -460,4 +465,65 @@ void KPrShapeAnimationDocker::testEditPanelRoot()
     m_animationGroupModel->forceUpdateModel();
     m_editAnimationsPanel->updateView();
     updateEditDialogIndex(editPanelIndex);
+}
+
+void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
+{
+    QMenu menu(m_animationsView);
+    menu.addAction(KIcon("document-new"), i18n("Add a new animation"), m_buttonAddAnimation, SLOT(showMenu()));
+    menu.addAction(KIcon("edit-delete"), i18n("Delete current animation"), this, SLOT(slotRemoveAnimations()));
+    menu.addSeparator();
+    if ((m_animationsView->selectionModel()->selectedRows().count() == 1) &&
+            (m_animationsView->currentIndex().isValid())) {
+        KPrShapeAnimation *currentAnimation = m_animationsModel->animationByRow(m_animationsView->currentIndex().row());
+        QActionGroup *actionGroup = new QActionGroup(m_animationsView);
+        actionGroup->setExclusive(true);
+        KAction *onClickAction = new KAction(KIcon("onclick"), i18n("start on mouse click"), m_animationsView);
+        onClickAction->setCheckable(true);
+        onClickAction->setData(KPrShapeAnimation::On_Click);
+        KAction *afterAction = new KAction(KIcon("after_previous"), i18n("start after previous animation"), m_animationsView);
+        afterAction->setCheckable(true);
+        afterAction->setData(KPrShapeAnimation::After_Previous);
+        KAction *withAction = new KAction(KIcon("with_previous"), i18n("start with previous animation"), m_animationsView);
+        withAction->setCheckable(true);
+        withAction->setData(KPrShapeAnimation::With_Previous);
+
+        actionGroup->addAction(onClickAction);
+        actionGroup->addAction(afterAction);
+        actionGroup->addAction(withAction);
+        actionGroup->setExclusive(true);
+
+        if (currentAnimation->NodeType() == KPrShapeAnimation::On_Click) {
+            onClickAction->setChecked(true);
+        }
+        else if (currentAnimation->NodeType() == KPrShapeAnimation::After_Previous) {
+            afterAction->setChecked(true);
+        }
+        else {
+            withAction->setChecked(true);
+        }
+
+        menu.addAction(onClickAction);
+        menu.addAction(afterAction);
+        menu.addAction(withAction);
+        connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setTriggerEvent(QAction*)));
+    }
+    menu.exec(m_animationsView->mapToGlobal(pos));
+}
+
+void KPrShapeAnimationDocker::setTriggerEvent(QAction *action)
+{
+    if (!m_animationsView->currentIndex().isValid())
+        return;
+
+    int row = action->data().toInt();
+    QModelIndex triggerIndex = m_animationsModel->index(m_animationsView->currentIndex().row(),
+                                                        KPrShapeAnimations::Node_Type);
+    if (row != m_animationsModel->data(triggerIndex).toInt()) {
+        KPrShapeAnimation::Node_Type newType;
+        if (row == 0) newType = KPrShapeAnimation::On_Click;
+        else if (row == 1) newType = KPrShapeAnimation::After_Previous;
+        else newType = KPrShapeAnimation::With_Previous;
+        m_animationsModel->setTriggerEvent(m_animationsView->currentIndex(), newType);
+    }
 }

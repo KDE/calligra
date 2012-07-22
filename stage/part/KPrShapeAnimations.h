@@ -266,9 +266,14 @@ public:
 
     QModelIndex indexByAnimation(KPrShapeAnimation *animation);
 
+    void resyncStepsWithAnimations();
+
 public slots:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
+
+    /// Notify an external edition of an animation
+    void notifyAnimationChanged(KPrShapeAnimation *animation);
 
     /// Notify if an animation set as OnClick has changed of trigger event
     void notifyOnClickEventChanged();

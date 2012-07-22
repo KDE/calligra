@@ -809,6 +809,14 @@ void KPrShapeAnimations::notifyAnimationEdited()
     }
 }
 
+void KPrShapeAnimations::notifyAnimationChanged(KPrShapeAnimation *animation)
+{
+    QModelIndex index = indexByAnimation(animation);
+    if (index.isValid()) {
+        emit dataChanged(this->index(index.row(), 0), this->index(index.row(), COLUMN_COUNT));
+    }
+}
+
 void KPrShapeAnimations::notifyOnClickEventChanged()
 {
     emit onClickEventChanged();
@@ -819,15 +827,26 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, int &groupC
     int rowCount = 0;
     groupCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
+        int stepChild = -1;
         for (int i=0; i < step->animationCount(); i++) {
             QAbstractAnimation *animation = step->animationAt(i);
             if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
+                int subStepChild = -1;
                 for (int j=0; j < a->animationCount(); j++) {
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
-                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {           
                         if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
-                            if (b->NodeType() == KPrShapeAnimation::On_Click) {
+                            stepChild++;
+                            subStepChild++;
+                            if (stepChild == 0) {
+                                b->setNodeType(KPrShapeAnimation::On_Click);
                                 groupCount = groupCount + 1;
+                            }
+                            else if (subStepChild == 0) {
+                                b->setNodeType(KPrShapeAnimation::After_Previous);
+                            }
+                            else {
+                                b->setNodeType(KPrShapeAnimation::With_Previous);
                             }
                             if (rowCount == row) {
                                 return b;
@@ -994,6 +1013,28 @@ QModelIndex KPrShapeAnimations::indexByAnimation(KPrShapeAnimation *animation)
         }
     }
     return QModelIndex();
+}
+
+void KPrShapeAnimations::resyncStepsWithAnimations()
+{
+    int row = -1;
+    foreach (KPrAnimationStep *step, m_shapeAnimations) {
+        row++;
+        for (int i=0; i < step->animationCount(); i++) {
+            QAbstractAnimation *subStep = step->animationAt(i);
+            if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(subStep)) {
+                for (int j=0; j < a->animationCount(); j++) {
+                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
+                        if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
+                            b->setStep(step);
+                            b->setSubStep(a);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeAnimation *animation, bool connectItems)

@@ -65,21 +65,17 @@ void KPrAnimationEditNodeTypeCommand::redo()
         if (m_newSubStep != m_oldSubStep) {
             if (m_oldSubStep->indexOfAnimation(m_animation) >= 0) {
                 m_newSubStep->addAnimation(m_oldSubStep->takeAnimation(m_oldSubStep->indexOfAnimation(m_animation)));
-                m_animation->setSubStep(m_newSubStep);
             }
             if (!m_children.isEmpty()) {
                 foreach(KPrShapeAnimation *anim, m_children) {
                     if ((m_oldSubStep->indexOfAnimation(anim) >= 0) && (m_oldSubStep->indexOfAnimation(anim) < m_oldSubStep->animationCount())) {
                         m_newSubStep->addAnimation(m_oldSubStep->takeAnimation(m_oldSubStep->indexOfAnimation(anim)));
-                        anim->setSubStep(m_newSubStep);
-                    }
-                    else {
                     }
                 }
             }
         }
         // If newStep reparent subSteps and children
-        if (m_newStep != m_newSubStep->parent()) {
+        if (m_newStep != m_animation->step() || (m_newStep != m_newSubStep->parent())) {
             if (m_substeps.isEmpty()) {
                 m_substeps.append(m_newSubStep);
             }
@@ -95,14 +91,8 @@ void KPrAnimationEditNodeTypeCommand::redo()
                 else {
                     m_newStep->addAnimation(subStep);
                 }
-                for (int j=0; j < subStep->animationCount(); j++) {
-                    QAbstractAnimation *shapeAnimation = subStep->animationAt(j);
-                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
-                        b->setStep(m_newStep);
-                        notifyOnClickChange = true;
-                    }
-                }
             }
+            m_substeps.removeAll(m_newSubStep);
         }
 
         // If old substep or spte is empty remove from list;
@@ -111,7 +101,7 @@ void KPrAnimationEditNodeTypeCommand::redo()
             m_oldSubStep->setParent(0);
         }
         if (m_oldStep->children().isEmpty() && m_animationsModel) {
-            m_oldStepRow =m_animationsModel->steps().indexOf(m_oldStep);
+            m_oldStepRow = m_animationsModel->steps().indexOf(m_oldStep);
             m_animationsModel->removeStep(m_oldStep);
         }
 
@@ -129,6 +119,8 @@ void KPrAnimationEditNodeTypeCommand::redo()
         if ((m_oldType == KPrShapeAnimation::On_Click) || notifyOnClickChange || ((m_newType == KPrShapeAnimation::On_Click))) {
             m_animationsModel->notifyOnClickEventChanged();
         }
+        m_animationsModel->notifyAnimationChanged(m_animation);
+        m_animationsModel->resyncStepsWithAnimations();
     }
 }
 
@@ -139,44 +131,33 @@ void KPrAnimationEditNodeTypeCommand::undo()
         if (m_newSubStep != m_oldSubStep) {
             if (m_newSubStep->indexOfAnimation(m_animation) >= 0) {
                 m_oldSubStep->addAnimation(m_newSubStep->takeAnimation(m_newSubStep->indexOfAnimation(m_animation)));
-                m_animation->setSubStep(m_oldSubStep);
             }
             if (!m_children.isEmpty()) {
                 foreach(KPrShapeAnimation *anim, m_children) {
                     if ((m_newSubStep->indexOfAnimation(anim) >= 0) && (m_newSubStep->indexOfAnimation(anim) < m_newSubStep->animationCount())) {
                         m_oldSubStep->addAnimation(m_newSubStep->takeAnimation(m_newSubStep->indexOfAnimation(anim)));
-                        anim->setSubStep(m_oldSubStep);
-                    }
-                    else {
                     }
                 }
             }
         }
-
-        if (m_oldStep != m_oldSubStep->parent()) {
+        if (m_oldStep != m_animation->step() || (m_oldStep != m_oldSubStep->parent())) {
             if (m_substeps.isEmpty()) {
                 m_substeps.append(m_oldSubStep);
             }
             else {
-                    m_substeps.insert(0, m_oldSubStep);
+                m_substeps.insert(0, m_oldSubStep);
             }
             foreach(KPrAnimationSubStep *subStep, m_substeps) {
                 int row = 0;
                 if (m_oldSubstepRow != INVALID) {
-                    m_newStep->insertAnimation(m_oldSubstepRow + row, subStep);
+                    m_oldStep->insertAnimation(m_oldSubstepRow + row, subStep);
                     row++;
                 }
                 else {
                     m_oldStep->addAnimation(subStep);
                 }
-                for (int j=0; j < subStep->animationCount(); j++) {
-                    QAbstractAnimation *shapeAnimation = subStep->animationAt(j);
-                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
-                        b->setStep(m_oldStep);
-                        notifyOnClickChange = true;
-                    }
-                }
             }
+            m_substeps.removeAll(m_oldSubStep);
         }
 
         if (m_newSubStep->children().isEmpty()) {
@@ -205,5 +186,7 @@ void KPrAnimationEditNodeTypeCommand::undo()
         if ((m_oldType == KPrShapeAnimation::On_Click) || notifyOnClickChange || ((m_newType == KPrShapeAnimation::On_Click))) {
             m_animationsModel->notifyOnClickEventChanged();
         }
+        m_animationsModel->notifyAnimationChanged(m_animation);
+        m_animationsModel->resyncStepsWithAnimations();
     }
 }

@@ -92,6 +92,8 @@ public slots:
 
 private slots:
     void testEditPanelRoot();
+    void showAnimationsCustomContextMenu(const QPoint &pos);
+    void setTriggerEvent(QAction *action);
 
 private:
 

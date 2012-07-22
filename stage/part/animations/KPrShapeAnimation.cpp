@@ -216,8 +216,10 @@ void KPrShapeAnimation::deactivate()
 
 void KPrShapeAnimation::setNodeType(KPrShapeAnimation::Node_Type type)
 {
-    m_triggerEvent = type;
-    emit triggerEventChanged(type);
+    if (type != m_triggerEvent) {
+        m_triggerEvent = type;
+        emit triggerEventChanged(type);
+    }
 }
 
 void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::Preset_Class presetClass)
@@ -285,12 +287,16 @@ QString KPrShapeAnimation::presetSubType() const
 
 void KPrShapeAnimation::setStep(KPrAnimationStep *step)
 {
-    m_step = step;
+    if (step != m_step) {
+        m_step = step;
+    }
 }
 
 void KPrShapeAnimation::setSubStep(KPrAnimationSubStep *subStep)
 {
-    m_subStep = subStep;
+    if (subStep != m_subStep) {
+        m_subStep = subStep;
+    }
 }
 
 KPrAnimationStep *KPrShapeAnimation::step()
