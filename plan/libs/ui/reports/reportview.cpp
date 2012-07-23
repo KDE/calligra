@@ -656,7 +656,7 @@ ReportDesignDialog::ReportDesignDialog( Project *project, ScheduleManager *manag
     setCaption( i18nc( "@title:window", "Edit Report" ) );
     setButtons( KDialog::Close | KDialog::User1 | KDialog::User2 );
     setButtonText( KDialog::User1, i18n( "Save To View" ) );
-    setButtonIcon( KDialog::User1, KIcon( "window" ) );
+    setButtonIcon( KDialog::User1, KIcon( "window-new" ) );
     setButtonText( KDialog::User2, i18n( "Save To File" ) );
     setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
 
