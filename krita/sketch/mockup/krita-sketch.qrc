@@ -12,7 +12,6 @@
     <file>components/DropShadow.qml</file>
     <file>components/Label.qml</file>
     <file>components/RecentFilesList.qml</file>
-    <file>components/CreateNewList.qml</file>
     <file>components/Button.qml</file>
     <file>components/TextField.qml</file>
     <file>components/Divider.qml</file>
@@ -23,6 +22,12 @@
     <file>panels/Panel.qml</file>
     <file>panels/MenuPanel.qml</file>
     <file>panels/NewImagePanel.qml</file>
+    <file>panels/OpenImagePanel.qml</file>
+    <file>panels/PresetsPanel.qml</file>
+    <file>panels/LayersPanel.qml</file>
+    <file>panels/ToolPanel.qml</file>
+    <file>panels/SelectPanel.qml</file>
+    <file>panels/FilterPanel.qml</file>
 
     <file>images/divider.png</file>
     <file>images/document-new.png</file>

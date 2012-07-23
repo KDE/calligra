@@ -25,7 +25,43 @@ PageStack {
 
     signal clicked();
 
-    Component { id: createNewListPage; Page { CreateNewList { anchors.fill: parent; onClicked: pageStack.push( createNewPage ); } } }
+    Component { id: createNewListPage; Page {
+        ListView {
+            anchors.fill: parent;
+
+            delegate: Rectangle {
+                width: parent.width;
+                height: Constants.GridHeight;
+
+                Button {
+                    id: thumbnail;
+
+                    image: model.image;
+
+                    onClicked: pageStack.push( createNewPage );
+                }
+
+                Label {
+                    anchors {
+                        left: thumbnail.right;
+                        leftMargin: Constants.DefaultMargin;
+                        verticalCenter: parent.verticalCenter;
+                    }
+
+                    text: model.name;
+                }
+            }
+
+            model: ListModel {
+                ListElement { name: "Blank Image (A4)"; image: "../images/document-new.png" }
+                ListElement { name: "Blank Image (A3)"; image: "../images/document-new.png" }
+                ListElement { name: "Custom Size"; image: "../images/document-new.png" }
+                ListElement { name: "From Clipboard"; image: "../images/edit-paste.png" }
+                ListElement { name: "From Camera"; image: "../images/camera-web.png" }
+            }
+        }
+    } }
+
     Component { id: createNewPage; Page {
         Column {
             anchors.fill: parent;
@@ -71,6 +107,5 @@ PageStack {
                 }
             }
         }
-    }
-    }
+    } }
 }
