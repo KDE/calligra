@@ -23,10 +23,14 @@ Item {
 
     signal clicked();
 
+    property bool checkable: false;
+    property bool checked: false;
+
     property alias image: icon.source;
     property alias color: fill.color;
     property alias text: label.text;
     property alias textColor: label.color;
+    property bool shadow: true;
 
     property color highlightColor: color;
 
@@ -37,37 +41,37 @@ Item {
         id: shadow;
         anchors.fill: parent;
         anchors.margins: Constants.DefaultMargin;
-    }
+        size: base.shadow ? Constants.DefaultMargin : 0;
 
-    Rectangle {
-        id: fill;
-        anchors.fill: parent;
-        anchors.margins: Constants.DefaultMargin;
-
-        color: "white";
-
-        Image {
-            id: icon;
+        Rectangle {
+            id: fill;
             anchors.fill: parent;
-            anchors.margins: Constants.DefaultMargin;
-            fillMode: Image.PreserveAspectFit;
-        }
 
-        Label {
-            id: label;
-            anchors.centerIn: parent;
+            color: "white";
+
+            Image {
+                id: icon;
+                anchors.fill: parent;
+                anchors.margins: Constants.DefaultMargin;
+                fillMode: Image.PreserveAspectFit;
+            }
+
+            Label {
+                id: label;
+                anchors.centerIn: parent;
+            }
         }
     }
 
     MouseArea {
         id: mouse;
         anchors.fill: parent;
-        onClicked: base.clicked();
+        onClicked: { base.clicked(); if( base.checkable ) base.checked = !base.checked; }
     }
 
     states: State {
         name: "pressed";
-        when: mouse.pressed;
+        when: mouse.pressed || base.checked;
 
         PropertyChanges { target: shadow; size: Constants.DefaultMargin * 0.333; }
         PropertyChanges { target: fill; color: base.highlightColor; }
