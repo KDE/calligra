@@ -41,32 +41,59 @@ Page {
             }
         }
 
+        Row {
+            height: parent.height;
+            PresetsPanel { width: Constants.GridWidth * 2; height: parent.height; }
+            LayersPanel { width: Constants.GridWidth * 2; height: parent.height; }
+            FilterPanel { width: Constants.GridWidth * 2; height: parent.height; }
+            SelectPanel { width: Constants.GridWidth * 2; height: parent.height; }
+            ToolPanel { width: Constants.GridWidth * 2; height: parent.height; }
+        }
+
+        NewImagePanel {
+            id: newPanel;
+            anchors.left: parent.left;
+            width: Constants.GridWidth * 4;
+            height: parent.height;
+        }
+
+        OpenImagePanel {
+            id: openPanel;
+            anchors.left: parent.left;
+            width: Constants.GridWidth * 4;
+            height: parent.height;
+        }
+
         MenuPanel {
             anchors.bottom: parent.bottom;
 
             width: parent.width;
             z: 10;
 
+            newButtonChecked: !newPanel.collapsed;
+            openButtonChecked: !openPanel.collapsed;
+
+            onCollapsedChanged: if( collapsed ) {
+                newPanel.collapsed = true;
+                openPanel.collapsed = true;
+            }
+
             onButtonClicked: {
                 switch( button ) {
-                    case "new":
+                    case "new": {
                         newPanel.collapsed = !newPanel.collapsed;
-                        break;
+                        openPanel.collapsed = true;
+                    }
+                    case "open": {
+                        openPanel.collapsed = !openPanel.collapsed;
+                        newPanel.collapsed = true;
+                    }
                     case "settings":
                         pageStack.push( settingsPage );
-                        break;
                     case "share":
                         pageStack.push( sharePage );
-                        break;
                 }
             }
-        }
-
-        CreateNewPanel {
-            id: newPanel;
-            anchors.left: parent.left;
-            width: Constants.GridWidth * 4;
-            height: Constants.GridHeight * 7;
         }
     }
 
