@@ -668,29 +668,6 @@ ReportDesignDialog::ReportDesignDialog( const QDomElement &element, const QList<
     connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
 }
 
-ReportDesignDialog::ReportDesignDialog( ReportView *view, QWidget *parent )
-    : KDialog( parent ),
-    m_view( view )
-{
-    setCaption( i18nc( "@title:window", "Edit Report" ) );
-    setButtons( KDialog::Close | KDialog::User1 | KDialog::User2 );
-    setButtonText( KDialog::User1, i18n( "Save To View" ) );
-    setButtonIcon( KDialog::User1, KIcon( "window" ) );
-    setButtonText( KDialog::User2, i18n( "Save To File" ) );
-    setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
-
-    QDomElement e;
-    if ( view ) {
-        e = view->document().documentElement();
-    }
-    m_panel = new ReportDesignPanel( e, view->reportDataModels(), this );
-
-    setMainWidget( m_panel );
-
-    connect( this, SIGNAL( user1Clicked() ), SLOT( slotSaveToView() ) );
-    connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
-}
-
 void ReportDesignDialog::closeEvent ( QCloseEvent * e )
 {
     if ( m_panel->m_modified ) {

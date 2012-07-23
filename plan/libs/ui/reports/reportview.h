@@ -236,9 +236,6 @@ public:
     explicit ReportDesignDialog( QWidget *parent = 0 );
     
     ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
-    
-    /// Edit the report definition in @p view
-    ReportDesignDialog( KPlato::ReportView* view, QWidget* parent = 0 );
 
     QDomDocument document() const;
 
