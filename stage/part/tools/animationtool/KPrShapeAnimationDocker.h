@@ -94,6 +94,8 @@ private slots:
     void testEditPanelRoot();
     void showAnimationsCustomContextMenu(const QPoint &pos);
     void setTriggerEvent(QAction *action);
+protected:
+     bool eventFilter(QObject *ob, QEvent *ev);
 
 private:
 

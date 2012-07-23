@@ -289,7 +289,7 @@ void KPrShapeAnimations::add(KPrShapeAnimation * animation)
             m_shapeAnimations.append(animation->step());
         }
     }
-    if (!(animation->step()->indexOfAnimation(animation->subStep()) > 0)) {
+    if (!(animation->step()->indexOfAnimation(animation->subStep()) >= 0)) {
         if ((animation->subStepIndex() >= 0) &&
                 (animation->subStepIndex() <= animation->step()->animationCount())) {
             animation->step()->insertAnimation(animation->subStepIndex(), animation->subStep());
@@ -322,12 +322,12 @@ void KPrShapeAnimations::remove(KPrShapeAnimation *animation)
     KPrAnimationStep *step = animation->step();
     KPrAnimationSubStep *subStep = animation->subStep();
     if (subStep->animationCount() <= 1) {
-        if (step->animationCount() <= 1) {
+        animation->setSubStepIndex(step->indexOfAnimation(subStep));
+        step->removeAnimation(subStep);
+        if (step->animationCount() <= 0) {
             animation->setStepIndex(steps().indexOf(step));
             steps().removeAll(step);
         }
-        animation->setSubStepIndex(step->indexOfAnimation(subStep));
-        step->removeAnimation(subStep);
     }
     animation->setAnimIndex(subStep->indexOfAnimation(animation));
     subStep->removeAnimation(animation);
@@ -746,7 +746,9 @@ KoShape *KPrShapeAnimations::shapeByIndex(const QModelIndex &index)
 {
     if (index.isValid()) {
         KPrShapeAnimation *animation = animationByRow(index.row());
-        return animation->shape();
+        if (animation) {
+            return animation->shape();
+        }
     }
     return 0;
 }

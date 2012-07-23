@@ -147,6 +147,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_animationsView = new QTreeView();
     m_animationsView->setAllColumnsShowFocus(true);
     m_animationsView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_animationsView->installEventFilter(this);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addLayout(hlayout);
@@ -289,6 +290,9 @@ void KPrShapeAnimationDocker::syncWithEditDialogIndex(const QModelIndex &index)
 
 void KPrShapeAnimationDocker::syncCanvasWithIndex(const QModelIndex &index)
 {
+    if (!index.isValid())  {
+        return;
+    }
     KoShape *shape = m_animationsModel->shapeByIndex(index);
     if (!shape) {
         return;
@@ -394,6 +398,7 @@ void KPrShapeAnimationDocker::slotRemoveAnimations()
 {
     QModelIndex index = m_animationsView->currentIndex();
     m_animationsModel->removeItemByIndex(index);
+    syncCanvasWithIndex(index);
 }
 
 KPrShapeAnimations *KPrShapeAnimationDocker::mainModel()
@@ -528,4 +533,16 @@ void KPrShapeAnimationDocker::setTriggerEvent(QAction *action)
         else newType = KPrShapeAnimation::With_Previous;
         m_animationsModel->setTriggerEvent(m_animationsView->currentIndex(), newType);
     }
+}
+
+bool KPrShapeAnimationDocker::eventFilter(QObject *ob, QEvent *ev)
+{
+    if (ob == m_animationsView && ev->type() == QEvent::KeyPress) {
+        if (QKeyEvent *keyEvent = static_cast<QKeyEvent*>(ev)) {
+            if (keyEvent->key() == Qt::Key_Delete) {
+                slotRemoveAnimations();
+            }
+        }
+    }
+    return QWidget::eventFilter(ob, ev);
 }
