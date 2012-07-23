@@ -32,6 +32,14 @@
 class KoConnectionShapePrivate;
 
 /// API docs go here
+/**
+ * KoConnectionShape is a shape represents connectors. A connector has
+ * one start handle, one end handle, and three control handles at most,
+ * depending on the connection type and path. When new connectors added,
+ * default path and control handles generated through updatePath() method,
+ * when loaded with predefined path, control handles are generated refering
+ * predefined path in finishLoadingConnection() method.
+ */
 class FLAKE_EXPORT KoConnectionShape : public KoParameterShape
 {
 public:
@@ -49,6 +57,11 @@ public:
         ControlHandle_1,
         ControlHandle_2,
         ControlHandle_3
+    };
+
+    enum HandleDirection {
+        DirectionX,
+        DirectionY
     };
 
     KoConnectionShape();
