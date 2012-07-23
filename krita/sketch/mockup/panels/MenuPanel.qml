@@ -24,6 +24,9 @@ Item {
 
     property bool collapsed: true;
 
+    property alias newButtonChecked: newButton.checked;
+    property alias openButtonChecked: openButton.checked;
+
     signal buttonClicked( string button );
 
     height: Constants.GridHeight;
@@ -71,10 +74,18 @@ Item {
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "saveAs" );
             }
+            Button {
+                id: shareButton;
+                width: Constants.GridWidth;
+                height: Constants.GridHeight;
+                text: "Share";
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: base.buttonClicked( "share" );
+            }
         }
 
         Row {
-            anchors.horizontalCenter: parent.horizontalCenter;
+            anchors.right: parent.right;
 
             Button {
                 id: undoButton;
@@ -92,18 +103,17 @@ Item {
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "redo" );
             }
-        }
-
-        Row {
-            anchors.right: parent.right;
-
-            Button {
-                id: shareButton;
+            Item {
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "Share";
+            }
+            Button {
+                id: helpButton;
+                width: Constants.GridWidth;
+                height: Constants.GridHeight;
+                text: "?";
                 highlightColor: Constants.Theme.HighlightColor;
-                onClicked: base.buttonClicked( "share" );
+                onClicked: base.buttonClicked( "help" );
             }
             Button {
                 id: settingsButton;
@@ -137,11 +147,27 @@ Item {
                 color: "white";
             }
         }
+    }
 
-        MouseArea {
-            anchors.fill: parent;
-            onClicked: base.collapsed = !base.collapsed;
+    MouseArea {
+        anchors.bottom: parent.top;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+
+        height: Constants.GridHeight / 2;
+
+        property real start: NaN;
+
+        onClicked: base.collapsed = !base.collapsed;
+        onPositionChanged: {
+            var dist = mouse.y - start;
+            if( dist > 30 ) {
+                base.collapsed = true;
+            } else if( dist < -30 ) {
+                base.collapsed = false;
+            }
         }
+        onPressed: start = mouse.y;
     }
 
     states: State {
