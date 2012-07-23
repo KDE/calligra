@@ -26,27 +26,26 @@ Item {
     DropShadow {
         anchors.fill: parent;
         anchors.margins: Constants.DefaultMargin;
-    }
 
-    Rectangle {
-        anchors.fill: parent;
-        anchors.margins: Constants.DefaultMargin;
+        Rectangle {
+            anchors.fill: parent;
 
-        Label {
-            id: placeholder;
-            anchors.left: parent.left;
-            anchors.verticalCenter: parent.verticalCenter;
-            anchors.margins: Constants.DefaultMargin;
-            color: Constants.Theme.SecondaryTextColor;
-        }
+            Label {
+                id: placeholder;
+                anchors.left: parent.left;
+                anchors.verticalCenter: parent.verticalCenter;
+                anchors.margins: Constants.DefaultMargin;
+                color: Constants.Theme.SecondaryTextColor;
+            }
 
-        TextInput {
-            id: input;
-            anchors.left: parent.left;
-            anchors.right: parent.right;
-            anchors.verticalCenter: parent.verticalCenter;
-            anchors.margins: Constants.DefaultMargin;
-            font.pixelSize: Constants.DefaultFontSize;
+            TextInput {
+                id: input;
+                anchors.left: parent.left;
+                anchors.right: parent.right;
+                anchors.verticalCenter: parent.verticalCenter;
+                anchors.margins: Constants.DefaultMargin;
+                font.pixelSize: Constants.DefaultFontSize;
+            }
         }
     }
 
