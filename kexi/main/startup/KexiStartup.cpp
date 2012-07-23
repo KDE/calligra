@@ -601,7 +601,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KMessageBox::information(0,
                                  i18n("You have specified a few database objects to be opened automatically, "
                                       "using startup options.\n"
-                                      "These options will be ignored because it is not available while creating "
+                                      "These options will be ignored because they are not available while creating "
                                       "or dropping projects."));
     }
 
