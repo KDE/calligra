@@ -22,7 +22,7 @@
 
     <file>panels/Panel.qml</file>
     <file>panels/MenuPanel.qml</file>
-    <file>panels/CreateNewPanel.qml</file>
+    <file>panels/NewImagePanel.qml</file>
 
     <file>images/divider.png</file>
     <file>images/document-new.png</file>

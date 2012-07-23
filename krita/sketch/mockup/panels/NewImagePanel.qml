@@ -57,7 +57,11 @@ Item {
                 }
             }
 
-            CreateNewSection { anchors.top: header.bottom; }
+            NewImageList {
+                anchors.top: header.bottom;
+                width: parent.width;
+                height: Constants.GridHeight * 6;
+            }
         }
     }
 
