@@ -81,6 +81,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     QWidget *m_customShowsToolBar = new QWidget();
 
     QHBoxLayout *toolBarLayout = new QHBoxLayout(m_customShowsToolBar);
+    toolBarLayout->setMargin(0);
     QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
     centralWidgetLayout->setMargin(0);
     centralWidgetLayout->setSpacing(0);
