@@ -17,7 +17,6 @@
  */
 
 import QtQuick 1.1
-import ":/components"
 
 PageStack {
     id: base;

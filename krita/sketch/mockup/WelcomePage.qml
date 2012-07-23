@@ -121,7 +121,7 @@ Page {
 
         Divider { height: Constants.GridHeight * 6; }
 
-        CreateNewSection {
+        NewImageList {
             width: Constants.GridWidth * 4 - 2;
             height: Constants.GridHeight * 6;
             onClicked: pageStack.push( main );

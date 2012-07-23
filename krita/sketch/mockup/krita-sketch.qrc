@@ -18,10 +18,10 @@
     <file>components/Divider.qml</file>
     <file>components/Header.qml</file>
     <file>components/CategorySwitcher.qml</file>
+    <file>components/NewImageList.qml</file>
 
     <file>panels/MenuPanel.qml</file>
     <file>panels/CreateNewPanel.qml</file>
-    <file>panels/CreateNewSection.qml</file>
 
     <file>images/divider.png</file>
     <file>images/document-new.png</file>
