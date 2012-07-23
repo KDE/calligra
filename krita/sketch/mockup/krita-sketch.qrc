@@ -20,6 +20,7 @@
     <file>components/CategorySwitcher.qml</file>
     <file>components/NewImageList.qml</file>
 
+    <file>panels/Panel.qml</file>
     <file>panels/MenuPanel.qml</file>
     <file>panels/CreateNewPanel.qml</file>
 
