@@ -53,6 +53,9 @@ public:
     KoConnectionShape::Type connectionType;
     bool forceUpdate;
     bool hasCustomPath;
+    bool resetControlHandles;
+    QList<QPair<QPointF, QPointF> > edgePoints;
+    QList<KoConnectionShape::HandleDirection> handleDirections;
     Q_DECLARE_PUBLIC(KoConnectionShape)
 };
 

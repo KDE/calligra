@@ -46,7 +46,8 @@ KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     connectionPointId2(-1),
     connectionType(KoConnectionShape::Standard),
     forceUpdate(false),
-    hasCustomPath(false)
+    hasCustomPath(false),
+    resetControlHandles(true)
 {
 }
 
@@ -293,6 +294,7 @@ void KoConnectionShape::updateConnections()
 
     if (updateHandles || d->forceUpdate) {
         update(); // ugly, for repainting the connection we just changed
+        d->resetControlHandles = true;
         updatePath(QSizeF());
         update(); // ugly, for repainting the connection we just changed
         d->forceUpdate = false;
@@ -469,11 +471,8 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         else {
             d->hasCustomPath = false;
         }
-        finishLoadingConnection();
-    } else {
-        d->forceUpdate = true;
-        updateConnections();
     }
+    finishLoadingConnection();
 
     loadText(element, context);
 
@@ -526,6 +525,7 @@ void KoConnectionShape::finishLoadingConnection()
             viewMatrix.scale(targetRect.width(), targetRect.height());
             d->map(viewMatrix);
 
+            //d->resetControlHandles = true;
             // pretend we are during a forced update, so normalize()
             // will not trigger an updateConnections() call
             d->forceUpdate = true;
@@ -533,6 +533,7 @@ void KoConnectionShape::finishLoadingConnection()
             d->forceUpdate = false;
         }
     } else {
+        d->forceUpdate = true;
         updateConnections();
     }
 }
@@ -545,7 +546,25 @@ void KoConnectionShape::moveHandleAction(int handleId, const QPointF &point, Qt:
     if (handleId >= d->handles.size())
         return;
 
-    d->handles[handleId] = point;
+    if (handleId == StartHandle || handleId == EndHandle) {
+        d->handles[handleId] = point;
+    } else {
+        QPointF p(point);
+        if (d->handleDirections[handleId-2] == DirectionX) {
+            p.setY(d->handles[handleId].y()); // keep position on y axis
+            if (d->connectionType == Standard) {
+                d->edgePoints[handleId-2].first.setX(point.x());
+                d->edgePoints[handleId-2].second.setX(point.x());
+            }
+        } else {
+            p.setX(d->handles[handleId].x()); // keep position on x axis
+            if (d->connectionType == Standard) {
+                d->edgePoints[handleId-2].first.setY(point.y());
+                d->edgePoints[handleId-2].second.setY(point.y());
+            }
+        }
+        d->handles[handleId] = p;
+    }
 }
 
 void KoConnectionShape::updatePath(const QSizeF &size)
@@ -553,48 +572,112 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     Q_UNUSED(size);
     Q_D(KoConnectionShape);
 
-    const qreal MinimumEscapeLength = (qreal)20.;
     clear();
-    switch (d->connectionType) {
-    case Standard: {
-        d->normalPath(MinimumEscapeLength);
-        if (d->path.count() != 0){
-            moveTo(d->path[0]);
-            for (int index = 1; index < d->path.count(); ++index)
-                lineTo(d->path[index]);
+
+    if (d->resetControlHandles) {
+        QList<QPointF> handles;
+        handles.append(d->handles[StartHandle]);
+        handles.append(d->handles[EndHandle]);
+
+        QList<HandleDirection> handleDirections;
+
+        const qreal MinimumEscapeLength = (qreal)20.;
+        switch (d->connectionType) {
+        case Standard: {
+            d->normalPath(MinimumEscapeLength);
+            if (d->path.count() != 0){
+                moveTo(d->path[0]);
+                QList<QPair<QPointF, QPointF> > edgePoints;
+                for (int index = 1; index < d->path.count(); ++index) {
+                    lineTo(d->path[index]);
+                    if (index > 1 && index < d->path.count()-2) {
+                        QPointF controlHandle = (d->path[index-1] + d->path[index]) / 2;
+                        handles << controlHandle;
+                        handleDirections << (d->path[index-1].x() == d->path[index].x() ? DirectionX : DirectionY);
+                        edgePoints.append(qMakePair(d->path[index-1], d->path[index]));
+                    }
+                }
+                d->edgePoints = edgePoints;
+            }
+            break;
+        }
+        case Lines: {
+            QPointF direction1 = d->escapeDirection(0);
+            QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
+            moveTo(d->handles[StartHandle]);
+            if (! direction1.isNull()) {
+                QPointF controlHandle = d->handles[StartHandle] + MinimumEscapeLength * direction1;
+                lineTo(controlHandle);
+                handles << controlHandle;
+                handleDirections << (direction1.y() == 0 ? DirectionX : DirectionY);
+            }
+            if (! direction2.isNull()) {
+                QPointF controlHandle = d->handles[EndHandle] + MinimumEscapeLength * direction2;
+                lineTo(controlHandle);
+                handles << controlHandle;
+                handleDirections << (direction2.y() == 0 ? DirectionX : DirectionY);
+            }
+            lineTo(d->handles[EndHandle]);
+            break;
+        }
+        case Straight:
+            moveTo(d->handles[StartHandle]);
+            lineTo(d->handles[EndHandle]);
+            break;
+        case Curve:
+            // TODO
+            QPointF direction1 = d->escapeDirection(0);
+            QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
+            moveTo(d->handles[StartHandle]);
+            if (! direction1.isNull() && ! direction2.isNull()) {
+                QPointF curvePoint1 = d->handles[StartHandle] + 5.0 * MinimumEscapeLength * direction1;
+                QPointF curvePoint2 = d->handles[EndHandle] + 5.0 * MinimumEscapeLength * direction2;
+                curveTo(curvePoint1, curvePoint2, d->handles[EndHandle]);
+                handles << curvePoint1 << curvePoint2;
+                handleDirections << (direction1.y() == 0 ? DirectionX : DirectionY);
+                handleDirections << (direction2.y() == 0 ? DirectionX : DirectionY);
+            } else {
+                lineTo(d->handles[EndHandle]);
+            }
+            break;
         }
 
-        break;
-    }
-    case Lines: {
-        QPointF direction1 = d->escapeDirection(0);
-        QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
-        moveTo(d->handles[StartHandle]);
-        if (! direction1.isNull())
-            lineTo(d->handles[StartHandle] + MinimumEscapeLength * direction1);
-        if (! direction2.isNull())
-            lineTo(d->handles[EndHandle] + MinimumEscapeLength * direction2);
-        lineTo(d->handles[EndHandle]);
-        break;
-    }
-    case Straight:
-        moveTo(d->handles[StartHandle]);
-        lineTo(d->handles[EndHandle]);
-        break;
-    case Curve:
-        // TODO
-        QPointF direction1 = d->escapeDirection(0);
-        QPointF direction2 = d->escapeDirection(d->handles.count() - 1);
-        moveTo(d->handles[StartHandle]);
-        if (! direction1.isNull() && ! direction2.isNull()) {
-            QPointF curvePoint1 = d->handles[StartHandle] + 5.0 * MinimumEscapeLength * direction1;
-            QPointF curvePoint2 = d->handles[EndHandle] + 5.0 * MinimumEscapeLength * direction2;
-            curveTo(curvePoint1, curvePoint2, d->handles[EndHandle]);
-        } else {
-            lineTo(d->handles[EndHandle]);
+        setHandles(handles);
+        d->handleDirections = handleDirections;
+
+    } else {
+        switch (d->connectionType) {
+        case Standard: {
+            moveTo(d->handles[StartHandle]);
+            if (d->handles.count() > EndHandle) {
+                lineTo(d->edgePoints[0].first);
+                for (int index = 2; index < d->handles.count(); ++index) { // ControlHandle_1 = 2
+                    lineTo(d->edgePoints[index-2].second);
+                }
+            }
+            lineTo(d->handles[EndHandle]); //FIXME
+            break;
         }
-        break;
+        case Lines: {
+            moveTo(d->handles[StartHandle]);
+            for (int index = 2; index < d->handles.count(); ++index) { // ControlHandle_1 = 2
+                lineTo(d->handles[index]);
+            }
+            lineTo(d->handles[EndHandle]); //FIXME
+            break;
+        }
+        case Straight:
+            moveTo(d->handles[StartHandle]);
+            lineTo(d->handles[EndHandle]);
+            break;
+        case Curve:
+            moveTo(d->handles[StartHandle]);
+            if (d->handles.count() == ControlHandle_2 + 1)
+                curveTo(d->handles[ControlHandle_1], d->handles[ControlHandle_2], d->handles[EndHandle]);
+            break;
+        }
     }
+
     normalize();
 }
 
@@ -686,6 +769,7 @@ void KoConnectionShape::setType(Type connectionType)
 {
     Q_D(KoConnectionShape);
     d->connectionType = connectionType;
+    d->resetControlHandles = true;
     updatePath(size());
 }
 
