@@ -580,7 +580,7 @@ if(SHOULD_BUILD_KRITA)
 endif(SHOULD_BUILD_KRITA)
 
 if(SHOULD_BUILD_KARBON)
-  macro_optional_add_subdirectory(karbon)
+	#  macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
 if(SHOULD_BUILD_BRAINDUMP)
@@ -608,7 +608,7 @@ else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     set(SHOULD_BUILD_CSTESTER FALSE)
 endif(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
 
-macro_optional_add_subdirectory(doc)
+#macro_optional_add_subdirectory(doc)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
@@ -619,7 +619,7 @@ add_subdirectory(plugins)
 add_subdirectory(servicetypes)
 add_subdirectory(templates)
 add_subdirectory(tools)
-add_subdirectory(filters)
+#add_subdirectory(filters)
 
 macro_display_feature_log()
 
