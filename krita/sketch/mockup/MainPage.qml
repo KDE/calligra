@@ -41,14 +41,7 @@ Page {
             }
         }
 
-        Row {
-            height: parent.height;
-            PresetsPanel { width: Constants.GridWidth * 2; height: parent.height; }
-            LayersPanel { width: Constants.GridWidth * 2; height: parent.height; }
-            FilterPanel { width: Constants.GridWidth * 2; height: parent.height; }
-            SelectPanel { width: Constants.GridWidth * 2; height: parent.height; }
-            ToolPanel { width: Constants.GridWidth * 2; height: parent.height; }
-        }
+        PanelBar { height: parent.height; width: parent.width; }
 
         NewImagePanel {
             id: newPanel;
