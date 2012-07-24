@@ -33,6 +33,8 @@ class QListWidget;
 class KoShape;
 class KPrShapeAnimationDocker;
 
+/** This class holds the data model for predefined animations
+  parsed from the animations.xml file*/
 class KPrPredefinedAnimationsLoader : public QObject
 {
     Q_OBJECT
@@ -40,15 +42,17 @@ public:
     KPrPredefinedAnimationsLoader(QObject* parent = 0);
 
     //Data is not ready until this method is called
+    /// Populate categories view
     bool populateMainView (QListWidget *view);
+    /// Return model for each id category
     KPrCollectionItemModel *modelById(const QString &id);
+    /// Return sub model (Model for preset sub types
     KPrCollectionItemModel *subModelById(const QString &id);
-
+    /// Returns animation from context xml data
     KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context,
                                              KoShape *animShape = 0);
 
 private:
-
     void loadDefaultAnimations();
     void readDefaultAnimations();
 

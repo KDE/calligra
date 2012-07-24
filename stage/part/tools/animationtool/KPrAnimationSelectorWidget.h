@@ -31,6 +31,8 @@ class QListWidgetItem;
 class KPrShapeAnimationDocker;
 class KPrPredefinedAnimationsLoader;
 
+/** Widget used to select animations. Holds three views: categories, animations
+    and subtypes (optional)*/
 class KPrAnimationSelectorWidget : public QWidget
 {
     Q_OBJECT
@@ -39,13 +41,14 @@ public:
                                         QWidget *parent = 0);
     ~KPrAnimationSelectorWidget();
 
+    /// Loads data from data model (call this method before use the widget)
     void init();
     
 signals:
+    /// this signal is emited when an animation is hovered
     void requestPreviewAnimation(KPrShapeAnimation *animation);
+    /// this signal is emited when an animation is selected
     void requestAcceptAnimation(KPrShapeAnimation *animation);
-    
-public slots:
 
 private slots:
     void automaticPreviewRequested(const QModelIndex &index);
