@@ -26,13 +26,17 @@
 #include "kptproject.h"
 #include "kptnode.h"
 #include "kpttaskcompletedelegate.h"
+#include "kptxmlloaderobject.h"
 #include "kptdebug.h"
+
+#include "KoStore.h"
 
 #include <QAbstractItemModel>
 #include <QMimeData>
 #include <QModelIndex>
 #include <QWidget>
 #include <QPair>
+#include <QByteArray>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -45,6 +49,7 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 #include <KRichTextWidget>
+#include <KMimeType>
 
 #include <kdganttglobal.h>
 #include <math.h>
@@ -3646,7 +3651,9 @@ Qt::DropActions NodeItemModel::supportedDropActions() const
 
 QStringList NodeItemModel::mimeTypes() const
 {
-    return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal" << "application/x-vnd.kde.plan.resourceitemmodel.internal";
+    return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal"
+                        << "application/x-vnd.kde.plan.resourceitemmodel.internal"
+                        << "application/x-vnd.kde.plan.project";
 }
 
 QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
@@ -3709,6 +3716,8 @@ bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosi
             default:
                 break;
         }
+    } else if ( "application/x-vnd.kde.plan.project" ) {
+        return true;
     } else {
         kDebug(planDbg())<<"Unknown mimetype";
     }
@@ -3839,6 +3848,32 @@ bool NodeItemModel::dropResourceMimeData( const QMimeData *data, Qt::DropAction 
     return true;
 }
 
+bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    Node *n = node( parent );
+    kDebug(planDbg())<<n<<parent;
+    if ( n == 0 ) {
+        n = m_project;
+    }
+    kDebug(planDbg())<<n->name()<<action<<row<<parent;
+
+    KoXmlDocument doc;
+    doc.setContent( data->data( "application/x-vnd.kde.plan.project" ) );
+    KoXmlElement element = doc.documentElement().namedItem( "project" ).toElement();
+    Project *project = new Project();
+    XMLLoaderObject status;
+    status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
+    status.setProject( project );
+    if ( ! project->load( element, status ) ) {
+        kDebug(planDbg())<<"Failed to load project";
+        delete project;
+        return false;
+    }
+    KUndo2Command *cmd = new InsertProjectCmd( *project, n, n->childNode( row - 1 ), i18nc( "(qtundo) 1=project or task name", "Insert %1", project->name() ) );
+    emit executeCommand( cmd );
+    return true;
+}
+
 KUndo2Command *NodeItemModel::createAllocationCommand( Task &task, const QList<Resource*> &lst )
 {
     MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify resource allocations" ) );
@@ -3890,42 +3925,46 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
     if ( data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
         return dropResourceMimeData( data, action, row, column, parent );
     }
-    if ( !data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
-        return false;
-    }
-    if ( action == Qt::MoveAction ) {
-        //kDebug(planDbg())<<"MoveAction";
+    if ( data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
+        if ( action == Qt::MoveAction ) {
+            //kDebug(planDbg())<<"MoveAction";
 
-        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
-        QDataStream stream(&encodedData, QIODevice::ReadOnly);
-        Node *par = 0;
-        if ( parent.isValid() ) {
-            par = node( parent );
-        } else {
-            par = m_project;
-        }
-        QList<Node*> lst = nodeList( stream );
-        QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
-        foreach ( Node *n, nodes ) {
-            if ( ! m_project->canMoveTask( n, par ) ) {
-                //kDebug(planDbg())<<"Can't move task:"<<n->name();
-                return false;
+            QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
+            QDataStream stream(&encodedData, QIODevice::ReadOnly);
+            Node *par = 0;
+            if ( parent.isValid() ) {
+                par = node( parent );
+            } else {
+                par = m_project;
             }
+            QList<Node*> lst = nodeList( stream );
+            QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
+            foreach ( Node *n, nodes ) {
+                if ( ! m_project->canMoveTask( n, par ) ) {
+                    //kDebug(planDbg())<<"Can't move task:"<<n->name();
+                    return false;
+                }
+            }
+            int offset = 0;
+            MacroCommand *cmd = 0;
+            foreach ( Node *n, nodes ) {
+                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
+                // append nodes if dropped *on* another node, insert if dropped *after*
+                int pos = row == -1 ? -1 : row + offset;
+                cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
+                offset++;
+            }
+            if ( cmd ) {
+                emit executeCommand( cmd );
+            }
+            //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+            return true;
         }
-        int offset = 0;
-        MacroCommand *cmd = 0;
-        foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
-            // append nodes if dropped *on* another node, insert if dropped *after*
-            int pos = row == -1 ? -1 : row + offset;
-            cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
-            offset++;
-        }
-        if ( cmd ) {
-            emit executeCommand( cmd );
-        }
-        //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
-        return true;
+    }
+    if ( data->hasFormat( "application/x-vnd.kde.plan.project" ) ) {
+        kDebug(planDbg());
+        return dropProjectMimeData( data, action, row, column, parent );
+
     }
     return false;
 }
@@ -5124,6 +5163,176 @@ bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & p
     //kDebug(planDbg())<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
     return accepted;
 }
+
+//------------------
+TaskModuleModel::TaskModuleModel( QObject *parent )
+    : QAbstractItemModel( parent )
+{
+}
+
+void TaskModuleModel::addTaskModule( Project *project )
+{
+    beginInsertRows( QModelIndex(), m_modules.count(), m_modules.count() );
+    m_modules << project;
+    endInsertRows();
+}
+
+Qt::ItemFlags TaskModuleModel::flags( const QModelIndex &idx ) const
+{
+    Qt::ItemFlags f = QAbstractItemModel::flags( idx ) | Qt::ItemIsDropEnabled;
+    if ( idx.isValid() ) {
+        f |=  Qt::ItemIsDragEnabled;
+    }
+    return f;
+}
+
+int TaskModuleModel::columnCount (const QModelIndex &idx ) const
+{
+    return 1;
+}
+
+int TaskModuleModel::rowCount( const QModelIndex &idx ) const
+{
+    return idx.isValid() ? 0 : m_modules.count();
+}
+
+QVariant TaskModuleModel::data( const QModelIndex& idx, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: return m_modules.value( idx.row() )->name();
+        case Qt::ToolTipRole: return m_modules.value( idx.row() )->description();
+        case Qt::WhatsThisRole: return m_modules.value( idx.row() )->description();
+        default: break;
+    }
+    return QVariant();
+}
+
+QVariant TaskModuleModel::headerData( int section, Qt::Orientation orientation , int role ) const
+{
+    if ( orientation == Qt::Horizontal ) {
+        switch ( role ) {
+            case Qt::DisplayRole: return i18nc( "@title:column", "Name" );
+            default: break;
+        }
+    }
+    return QVariant();
+}
+
+QModelIndex TaskModuleModel::parent( const QModelIndex& /*idx*/ ) const
+{
+    return QModelIndex();
+}
+
+QModelIndex TaskModuleModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( parent.isValid() ) {
+        return QModelIndex();
+    }
+    return createIndex( row, column, m_modules.value( row ) );
+}
+
+QStringList TaskModuleModel::mimeTypes() const
+{
+    return QStringList() << "application/x-vnd.kde.plan" << "text/uri-list";
+}
+
+bool TaskModuleModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    if ( data->hasUrls() ) {
+        QList<QUrl> urls = data->urls();
+        kDebug(planDbg())<<urls;
+        foreach ( const QUrl &url, urls ) {
+            KMimeType::Ptr mime = KMimeType::findByUrl( url );
+            kDebug(planDbg())<<url<<mime->name();
+            if ( mime->is( "application/x-vnd.kde.plan" ) || mime->is( "application/xml" ) ) {
+                importProject( url );
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool TaskModuleModel::importProject( const KUrl &url, bool emitsignal )
+{
+    if ( ! url.isLocalFile() ) {
+        kDebug(planDbg())<<"TODO: download if url not local";
+        return false;
+    }
+    KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
+    if ( store->bad() ) {
+        //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
+        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        delete store;
+        //        QApplication::restoreOverrideCursor();
+        return false;
+    }
+    if ( ! store->open( "root" ) ) { // maindoc.xml
+        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        delete store;
+        return false;
+    }
+    KoXmlDocument doc;
+    doc.setContent( store->device() );
+    KoXmlElement element = doc.documentElement().namedItem( "project" ).toElement();
+    Project *project = new Project();
+    XMLLoaderObject status;
+    status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
+    status.setProject( project );
+    if ( project->load( element, status ) ) {
+        stripProject( project );
+        addTaskModule( project );
+        if ( emitsignal ) {
+            emit saveTaskModule( url, project );
+        }
+    } else {
+        kDebug(planDbg())<<"Failed to load project from:"<<url;
+        delete project;
+        return false;
+    }
+    return true;
+}
+
+QMimeData* TaskModuleModel::mimeData( const QModelIndexList &lst ) const
+{
+    QMimeData *mime = new QMimeData();
+    if ( lst.count() == 1 ) {
+        QModelIndex idx = lst.at( 0 );
+        if ( idx.isValid() ) {
+            Project *project = m_modules.value( idx.row() );
+            project->generateUniqueNodeIds();
+            QDomDocument document( "plan" );
+            document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+            QDomElement doc = document.createElement( "plan" );
+            doc.setAttribute( "editor", "Plan" );
+            doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
+            doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
+            document.appendChild( doc );
+            project->save( doc );
+            mime->setData( "application/x-vnd.kde.plan.project", document.toByteArray() );
+        }
+    }
+    return mime;
+}
+
+void TaskModuleModel::stripProject( Project *project ) const
+{
+    foreach ( ScheduleManager *sm, project->scheduleManagers() ) {
+        DeleteScheduleManagerCmd c( *project, sm );
+    }
+    foreach ( const Schedule *s, project->schedules() ) {
+        Q_ASSERT( s->isDeleted() );
+    }
+}
+
+void TaskModuleModel::loadTaskModules( const QStringList &files )
+{
+    kDebug(planDbg())<<files;
+    foreach ( const QString &file, files ) {
+        importProject( KUrl( file ), false );
+    }
+}
+
 
 } //namespace KPlato
 

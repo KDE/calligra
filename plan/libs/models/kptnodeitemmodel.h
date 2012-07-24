@@ -27,10 +27,12 @@
 #include <QDate>
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
+#include <qstandarditemmodel.h>
 
 class KUndo2Command;
 class QMimeData;
 class QModelIndex;
+class QMimeData;
 
 namespace KPlato
 {
@@ -352,6 +354,7 @@ protected:
     bool setAllocation( Node *node, const QVariant &value, int role );
 
     bool dropResourceMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    bool dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
     KUndo2Command *createAllocationCommand( Task &task, const QList<Resource*> &lst );
 
 protected:
@@ -530,6 +533,42 @@ protected:
 private:
     NodeItemModel *m_model;
     bool m_filterUnscheduled;
+};
+
+class KPLATOMODELS_EXPORT TaskModuleModel : public QAbstractItemModel
+{
+    Q_OBJECT
+public:
+    TaskModuleModel( QObject *parent = 0 );
+
+    void addTaskModule( Project *project );
+
+    Qt::ItemFlags flags( const QModelIndex &idx ) const;
+    int columnCount( const QModelIndex &idx = QModelIndex() ) const;
+    int rowCount( const QModelIndex &idx = QModelIndex() ) const;
+    QVariant data( const QModelIndex &idx, int role = Qt::DisplayRole ) const;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    QModelIndex parent( const QModelIndex &idx ) const;
+    QModelIndex index( int row, int column, const QModelIndex &parent ) const;
+    QStringList mimeTypes() const;
+    bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    QMimeData *mimeData( const QModelIndexList &idx ) const;
+
+    bool importProject( const KUrl &url, bool emitsignal = true );
+
+public slots:
+    void loadTaskModules( const QStringList &files );
+
+signals:
+    void executeCommand( KUndo2Command *cmd );
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
+
+protected:
+    void stripProject( Project *project ) const;
+
+private:
+    QList<Project*> m_modules;
 };
 
 } //namespace KPlato
