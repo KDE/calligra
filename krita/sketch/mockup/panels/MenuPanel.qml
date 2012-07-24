@@ -135,39 +135,35 @@ Item {
 
         DropShadow {
             anchors.fill: parent;
+
+            Rectangle {
+                anchors.fill: parent;
+                color: Constants.Theme.MainColor;
+
+                Label {
+                    anchors.centerIn: parent;
+                    text: "Menu";
+                    color: "white";
+                }
+            }
         }
 
-        Rectangle {
+        MouseArea {
             anchors.fill: parent;
-            color: Constants.Theme.MainColor;
 
-            Label {
-                anchors.centerIn: parent;
-                text: "Menu";
-                color: "white";
+            property real start: NaN;
+
+            onClicked: base.collapsed = !base.collapsed;
+            onPositionChanged: {
+                var dist = mouse.y - start;
+                if( dist > 30 ) {
+                    base.collapsed = true;
+                } else if( dist < -30 ) {
+                    base.collapsed = false;
+                }
             }
+            onPressed: start = mouse.y;
         }
-    }
-
-    MouseArea {
-        anchors.bottom: parent.top;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-
-        height: Constants.GridHeight / 2;
-
-        property real start: NaN;
-
-        onClicked: base.collapsed = !base.collapsed;
-        onPositionChanged: {
-            var dist = mouse.y - start;
-            if( dist > 30 ) {
-                base.collapsed = true;
-            } else if( dist < -30 ) {
-                base.collapsed = false;
-            }
-        }
-        onPressed: start = mouse.y;
     }
 
     states: State {
