@@ -260,7 +260,7 @@ QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
 QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
 {
     // Animation icon names examples: zoom_animation, spiral_in_animation
-    QString name = animationName(id);
+    QString name = id;
     if (!name.isEmpty()) {
         name = name.append("_animation");
         name.replace(" ", "_");
