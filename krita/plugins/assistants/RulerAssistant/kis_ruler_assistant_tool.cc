@@ -28,7 +28,6 @@
 #include <kmessagebox.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <kio/jobuidelegate.h>
 
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
@@ -292,15 +291,18 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
+#ifndef QT_NO_DBUS
     KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedGet(file);
     connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));
     job->start();
+#endif
 }
 
 void KisRulerAssistantTool::saveAssistants()
 {
+#ifndef QT_NO_DBUS
     QByteArray data;
     QXmlStreamWriter xml(&data);
     xml.writeStartDocument();
@@ -339,10 +341,12 @@ void KisRulerAssistantTool::saveAssistants()
     KIO::StoredTransferJob* job = KIO::storedPut(data, file, -1);
     connect(job, SIGNAL(result(KJob*)), SLOT(saveFinish(KJob*)));
     job->start();
+#endif
 }
 
 void KisRulerAssistantTool::openFinish(KJob* job)
 {
+#ifndef QT_NO_DBUS
     job->deleteLater();
     if (job->error()) {
         dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
@@ -427,15 +431,19 @@ void KisRulerAssistantTool::openFinish(KJob* job)
     }
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->updateCanvas();
+#endif
 }
 
 void KisRulerAssistantTool::saveFinish(KJob* job)
 {
+#ifndef QT_NO_DBUS
     if (job->error()) {
         dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
     }
     job->deleteLater();
+#endif
 }
+
 
 QWidget *KisRulerAssistantTool::createOptionWidget()
 {
@@ -449,8 +457,13 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);
         }
+#ifndef QT_NO_DBUS
         connect(m_options.saveButton, SIGNAL(clicked()), SLOT(saveAssistants()));
         connect(m_options.loadButton, SIGNAL(clicked()), SLOT(loadAssistants()));
+#else
+        m_options.saveButton->hide();
+        m_options.loadButton->hide();
+#endif
         connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;
