@@ -38,8 +38,13 @@
     <file>images/edit-paste.png</file>
     <file>images/image-x-generic.png</file>
     <file>images/krita.png</file>
-    <file>images/shadow-corner.png</file>
-    <file>images/shadow-edge-horizontal.png</file>
-    <file>images/shadow-edge-vertical.png</file>
+    <file>images/shadow-tl.png</file>
+    <file>images/shadow-tc.png</file>
+    <file>images/shadow-tr.png</file>
+    <file>images/shadow-rc.png</file>
+    <file>images/shadow-br.png</file>
+    <file>images/shadow-bc.png</file>
+    <file>images/shadow-bl.png</file>
+    <file>images/shadow-lc.png</file>
 </qresource>
 </RCC>

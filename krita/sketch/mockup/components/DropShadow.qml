@@ -31,7 +31,9 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-corner.png";
+        source: ":/images/shadow-tl.png";
+
+        fillMode: Image.Stretch;
     }
 
     Image {
@@ -43,7 +45,8 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-edge-horizontal.png";
+        source: ":/images/shadow-tc.png";
+        fillMode: Image.Stretch;
     }
 
     Image {
@@ -52,11 +55,11 @@ Item {
 
         width: parent.size;
         height: parent.size;
-        rotation: 90;
 
         opacity: 0.5;
 
-        source: ":/images/shadow-corner.png";
+        source: ":/images/shadow-tr.png";
+        fillMode: Image.Stretch;
     }
 
     Image {
@@ -65,11 +68,11 @@ Item {
 
         width: parent.size;
         height: parent.height;
-        scale: -1;
 
         opacity: 0.5;
 
-        source: ":/images/shadow-edge-vertical.png";
+        source: ":/images/shadow-rc.png";
+        fillMode: Image.Stretch;
     }
 
     Image {
@@ -78,11 +81,11 @@ Item {
 
         width: parent.size;
         height: parent.size;
-        rotation: 180;
 
         opacity: 0.5;
 
-        source: ":/images/shadow-corner.png";
+        source: ":/images/shadow-br.png";
+        fillMode: Image.Stretch;
     }
 
     Image {
@@ -91,11 +94,11 @@ Item {
 
         width: parent.width;
         height: parent.size;
-        scale: -1;
 
         opacity: 0.5;
 
-        source: ":/images/shadow-edge-horizontal.png";
+        source: ":/images/shadow-bc.png";
+        fillMode: Image.Stretch;
     }
 
     Image {
@@ -104,11 +107,11 @@ Item {
 
         width: parent.size;
         height: parent.size;
-        rotation: 270;
 
         opacity: 0.5;
 
-        source: ":/images/shadow-corner.png";
+        source: ":/images/shadow-bl.png";
+        fillMode: Image.Stretch;
     }
 
     Image {
@@ -120,6 +123,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-edge-vertical.png";
+        source: ":/images/shadow-lc.png";
+        fillMode: Image.Stretch;
     }
 }
