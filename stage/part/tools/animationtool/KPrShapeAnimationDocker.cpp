@@ -436,21 +436,20 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
         syncCanvasWithIndex(m_animationsView->currentIndex());
     }
     else if (!selection->selectedShapes().isEmpty()) {
+        m_lastSelectedShape = selection->selectedShapes().first();
         return selection->selectedShapes().first();
     }
     else if (m_lastSelectedShape) {
-        if (selection->selectedShapes().contains(m_lastSelectedShape)) {
-            return m_lastSelectedShape;
-        }
-
         foreach (KoShape* shape, selection->selectedShapes()) {
             shape->update();
         }
-
         selection->deselectAll();
         selection->select(m_lastSelectedShape);
         selection->update();
         m_lastSelectedShape->update();
+        if (selection->selectedShapes().contains(m_lastSelectedShape)) {
+            return m_lastSelectedShape;
+        }
     }
     else if (!(canvasController->canvas()->shapeManager()->shapes().isEmpty())){
         foreach (KoShape* shape, selection->selectedShapes()) {
