@@ -30,7 +30,6 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QFont>
-#include <QElapsedTimer>
 
 //KDE Headers
 #include <KLocale>
@@ -103,8 +102,6 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
     QList<KPrCollectionItem> media_CallList;
 
     QMap<QString, QList<KPrCollectionItem> > subModelList;
-    QElapsedTimer timer;
-    timer.start();
     int row = -1;
     foreach(KPrShapeAnimation *animation, m_animations) {
         row++;
@@ -196,7 +193,6 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         model->setAnimationClassList(media_CallList);
         addCollection("media_call", i18n("Media Call"), model);
     }
-    qDebug() << "start loading subModel" << timer.elapsed();
     if (!subModelList.isEmpty()) {
         QMap<QString, QList<KPrCollectionItem> >::const_iterator i;
         for (i = subModelList.constBegin(); i != subModelList.constEnd(); ++i) {
