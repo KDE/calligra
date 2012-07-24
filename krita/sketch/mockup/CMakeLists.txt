@@ -8,6 +8,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${QT_INCLUDES})
 
 set(krita-sketch_SRCS
     constants.cpp
+    settings.cpp
     main.cpp
     mainwindow.cpp
 )

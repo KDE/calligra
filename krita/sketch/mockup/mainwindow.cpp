@@ -22,15 +22,16 @@
 #include <QResizeEvent>
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
-#include <QGLWidget>
 
 #include "constants.h"
+#include "settings.h"
 
 class MainWindow::Private
 {
     public:
         QDeclarativeView* view;
         Constants* constants;
+        QObject* settings;
 };
 
 MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
@@ -41,9 +42,11 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
     setAttribute( Qt::WA_AcceptTouchEvents );
 
     d->constants = new Constants( this );
+    d->settings = new Settings( this );
+
     QDeclarativeView* view = new QDeclarativeView();
-    view->setViewport( new QGLWidget() );
-    view->rootContext()->setContextProperty("Constants", d->constants );
+    view->rootContext()->setContextProperty( "Constants", d->constants );
+    view->rootContext()->setContextProperty( "Settings", d->settings );
     view->setSource( QUrl( "qrc:/main.qml" ) );
     view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
     setCentralWidget( view );
