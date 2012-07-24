@@ -30,6 +30,9 @@ Item {
     property alias peekContents: peek.children;
     property alias fullContents: full.children;
 
+    signal collapsed();
+    signal expanded();
+
     state: "collapsed";
 
     DropShadow {
@@ -211,9 +214,20 @@ Item {
         Transition {
             from: "collapsed";
             to: "full";
-            reversible: true;
 
-            NumberAnimation { properties: "height,width,opacity"; duration: 250; }
+            SequentialAnimation {
+                NumberAnimation { properties: "height,width,opacity"; duration: 250; }
+                ScriptAction { script: base.expanded(); }
+            }
+        },
+        Transition {
+            from: "full";
+            to: "collapsed";
+
+            SequentialAnimation {
+                NumberAnimation { properties: "height,width,opacity"; duration: 250; }
+                ScriptAction { script: base.collapsed(); }
+            }
         }
     ]
 }
