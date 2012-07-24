@@ -66,9 +66,9 @@ Panel {
     ListModel {
         id: model;
 
-        ListElement { name: "Paint"; }
-        ListElement { name: "Fill"; }
-        ListElement { name: "Smudge"; }
+        ListElement { name: "Red"; file: ":/images/red.png"; }
+        ListElement { name: "Green"; file: ":/images/green.png"; }
+        ListElement { name: "Blue"; file: ":/images/blue.png"; }
     }
 
     Component {
@@ -84,7 +84,10 @@ Panel {
 
             highlightColor: Constants.Theme.HighlightColor;
 
-            onClicked: GridView.view.currentIndex = index;
+            onClicked: {
+                GridView.view.currentIndex = index;
+                Settings.currentPreset = model.file;
+            }
         }
     }
 }

@@ -17,8 +17,9 @@
  */
 
 import QtQuick 1.1
-import "components"
-import "panels"
+import Qt.labs.particles 1.0
+import ":/components"
+import ":/panels"
 
 Page {
     Rectangle {
@@ -27,16 +28,38 @@ Page {
 
         DropShadow {
             anchors.centerIn: parent;
-            width: parent.width / 2;
-            height: parent.height / 2;
+            width: parent.width * 0.75;
+            height: parent.height * 0.75;
 
             Rectangle {
                 anchors.fill: parent;
                 color: "white";
 
+                  Particles {
+                    id: particles;
+
+                    count: 100;
+                    emissionRate: 0;
+
+                    fadeInDuration: 0;
+                    fadeOutDuration: 10000;
+
+                    lifeSpan: 15000;
+
+                    source: Settings.currentPreset;
+                }
+
                 MouseArea {
                     anchors.fill: parent;
-                    onClicked: pageStack.pop();
+
+                    onPressed: update( mouse );
+                    onPositionChanged: update( mouse );
+
+                    function update( mouse ) {
+                        particles.x = mouse.x;
+                        particles.y = mouse.y;
+                        particles.burst(1);
+                    }
                 }
             }
         }
