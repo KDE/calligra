@@ -2,6 +2,10 @@
 Calligra Plan current:
 ----------------------
 
+* Task Editor: Add a Task Module docker to ease project creation.
+  This makes it possible to define typical solutions with multiple tasks,
+  task dependencies, including resources and resource allocations.
+
 * Reports export: Add option to output data into table.
   This will not use the reports layout.
   The "old" export option that tries to honour the layout is still available.
