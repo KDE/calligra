@@ -111,13 +111,10 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     KMenu *menu = new KMenu(button);
     button->setMenu(menu);
     button->setPopupMode(QToolButton::InstantPopup);
-    if (pageType == KoPageApp::Slide) {
-        menu->addAction(SmallIcon("document-new"), i18n("Slide"), this, SLOT(addPage()));
-    }
-    else {
-        menu->addAction(SmallIcon("document-new"), i18n("Page"), this, SLOT(addPage()));
-    }
-    m_addLayerAction = menu->addAction(SmallIcon("layer-new"), i18n("Layer"), this, SLOT(addLayer()));
+    const QString pageTypeName = (pageType == KoPageApp::Slide) ? i18n("Slide") : i18n("Page");
+    // TODO: missing icon "layer-new", so also not using "document-new"
+    menu->addAction(pageTypeName, this, SLOT(addPage()));
+    m_addLayerAction = menu->addAction(i18n("Layer"), this, SLOT(addLayer()));
 
     m_buttonGroup = new QButtonGroup(mainWidget);
     m_buttonGroup->setExclusive(false);
