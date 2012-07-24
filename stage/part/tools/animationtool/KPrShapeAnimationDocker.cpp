@@ -28,6 +28,7 @@
 #include "KPrAnimationsTimeLineView.h"
 #include "KPrAnimationGroupProxyModel.h"
 #include "KPrAnimationSelectorWidget.h"
+#include "KPrPredefinedAnimationsLoader.h"
 
 //Qt Headers
 #include <QToolButton>
@@ -38,6 +39,7 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QActionGroup>
+#include <QTimer>
 #include <QDebug>
 
 //KDE Headers
@@ -80,6 +82,10 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     , m_lastSelectedShape(0)
 {
     setObjectName("KPrShapeAnimationDocker");
+
+    // load predefined animations data
+    m_animationsData = new KPrPredefinedAnimationsLoader(this);
+
     QHBoxLayout *hlayout = new QHBoxLayout;
     QHBoxLayout *hlayout2 = new QHBoxLayout;
 
@@ -107,9 +113,9 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_buttonAddAnimation->setToolTip(i18n("Add new animation"));
 
     m_addMenu = new DialogMenu(this);
-    KPrAnimationSelectorWidget *addDialog = new KPrAnimationSelectorWidget(this);
+    m_addDialog = new KPrAnimationSelectorWidget(this, m_animationsData);
     QGridLayout *addMenuLayout = new QGridLayout(m_addMenu);
-    addMenuLayout->addWidget(addDialog,0,0);
+    addMenuLayout->addWidget(m_addDialog,0,0);
     m_buttonAddAnimation->setMenu(m_addMenu);
     m_buttonAddAnimation->setPopupMode(QToolButton::InstantPopup);
 
@@ -163,10 +169,11 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     connect(m_animationsView, SIGNAL(doubleClicked(QModelIndex)), m_editAnimation, SLOT(showMenu()));
     connect(m_animationsView, SIGNAL(customContextMenuRequested(QPoint)), this,
             SLOT(showAnimationsCustomContextMenu(QPoint)));
-    connect(addDialog, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
+    connect(m_addDialog, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
             this, SLOT(previewAnimation(KPrShapeAnimation*)));
-    connect(addDialog, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
+    connect(m_addDialog, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
             this, SLOT(addNewAnimation(KPrShapeAnimation*)));
+    QTimer::singleShot(500, this, SLOT(initializeView()));
 
 }
 
@@ -416,6 +423,11 @@ void KPrShapeAnimationDocker::setPreviewMode(KPrViewModePreviewShapeAnimations *
     m_previewMode = previewMode;
 }
 
+KPrPredefinedAnimationsLoader *KPrShapeAnimationDocker::animationsLoader()
+{
+    return m_animationsData;
+}
+
 KoShape *KPrShapeAnimationDocker::getSelectedShape()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
@@ -533,6 +545,11 @@ void KPrShapeAnimationDocker::setTriggerEvent(QAction *action)
         else newType = KPrShapeAnimation::With_Previous;
         m_animationsModel->setTriggerEvent(m_animationsView->currentIndex(), newType);
     }
+}
+
+void KPrShapeAnimationDocker::initializeView()
+{
+    m_addDialog->init();
 }
 
 bool KPrShapeAnimationDocker::eventFilter(QObject *ob, QEvent *ev)

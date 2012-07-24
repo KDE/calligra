@@ -95,10 +95,10 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     m_buttonPreviewAnimation->setToolTip(i18n("Preview Shape Animation"));
     m_buttonPreviewAnimation->setEnabled(true);
 
-    KPrAnimationSelectorWidget *animationSelector = new KPrAnimationSelectorWidget(docker);
+    m_animationSelector = new KPrAnimationSelectorWidget(docker, docker->animationsLoader());
 
     // layout widgets
-    layout->addWidget(animationSelector);
+    layout->addWidget(m_animationSelector);
 
     QHBoxLayout *playLayout = new QHBoxLayout;
     playLayout->addWidget(label);
@@ -125,12 +125,13 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     connect(m_delayEdit, SIGNAL(editingFinished()), this, SLOT(setBeginTime()));
     connect(m_durationEdit, SIGNAL(editingFinished()), this, SLOT(setDuration()));
     connect(m_triggerEventList, SIGNAL(currentIndexChanged(int)), this, SLOT(setTriggerEvent(int)));
-    connect(animationSelector, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
+    connect(m_animationSelector, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
             docker, SLOT(previewAnimation(KPrShapeAnimation*)));
-    connect(animationSelector, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
+    connect(m_animationSelector, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
             this, SLOT(changeCurrentAnimation(KPrShapeAnimation*)));
     connect(m_timeLineView, SIGNAL(customContextMenuRequested(QPoint)), this,
             SLOT(showTimeLineCustomContextMenu(QPoint)));
+    QTimer::singleShot(700, this, SLOT(initializeView()));
 }
 
 KPrEditAnimationsWidget::~KPrEditAnimationsWidget()
@@ -282,4 +283,9 @@ void KPrEditAnimationsWidget::changeCurrentAnimation(KPrShapeAnimation *animatio
         return;
     }
     m_docker->mainModel()->replaceAnimation(itemIndex, animation);
+}
+
+void KPrEditAnimationsWidget::initializeView()
+{
+    m_animationSelector->init();
 }

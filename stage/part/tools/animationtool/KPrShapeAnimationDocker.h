@@ -38,6 +38,8 @@ class QModelIndex;
 class KoPAPageBase;
 class KoShape;
 class DialogMenu;
+class KPrPredefinedAnimationsLoader;
+class KPrAnimationSelectorWidget;
 
 /**
  * Shape animations docker widget: let's edition of animations.
@@ -52,6 +54,8 @@ public:
     KPrShapeAnimations *mainModel();
     KPrViewModePreviewShapeAnimations *previewMode();
     void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
+
+    KPrPredefinedAnimationsLoader *animationsLoader();
 
     KoShape *getSelectedShape();
     
@@ -94,6 +98,7 @@ private slots:
     void testEditPanelRoot();
     void showAnimationsCustomContextMenu(const QPoint &pos);
     void setTriggerEvent(QAction *action);
+    void initializeView();
 protected:
      bool eventFilter(QObject *ob, QEvent *ev);
 
@@ -117,6 +122,8 @@ private:
     KoShape *m_lastSelectedShape;
     DialogMenu *m_addMenu;
     DialogMenu *m_editMenu;
+    KPrPredefinedAnimationsLoader *m_animationsData;
+    KPrAnimationSelectorWidget *m_addDialog;
     
 };
 

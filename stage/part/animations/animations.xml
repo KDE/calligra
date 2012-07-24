@@ -1,101 +1,631 @@
 <?xml version="1.0"?>
 <anim:seq xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" 
 xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:calligra="http://www.calligra.org/2005/" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:delta="http://www.deltaxml.com/ns/track-changes/delta-namespace" xmlns:split="http://www.deltaxml.com/ns/track-changes/split-namespace" xmlns:ac="http://www.deltaxml.com/ns/track-changes/attribute-change-namespace" office:version="1.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" presentation:node-type="main-sequence">
-  <anim:par>
-    <anim:par>
-    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="ooo-entrance-appear">
-    <anim:set smil:begin="0s" smil:dur="0.001s" smil:fill="hold" smil:targetElement="id1" smil:attributeName="visibility" smil:to="visible"/>
+<!-- Entrance Animations -->
+<!-- A - B -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+      <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-appear">
+	<anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+      </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- E - F -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:iterate presentation:text-only="true" smil:begin="0" smil:fill="hold" smil:accelerate="0.5" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-falling-in" anim:iterate-type="by-letter" anim:iterate-interval="0.5s">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:set smil:begin="0" smil:dur="0.455" smil:fill="hold" smil:attributeName="rotate" smil:to="-45"/>
+        <anim:animate smil:begin="0.455" smil:dur="0.455" smil:fill="hold" smil:attributeName="rotate" smil:values="-45;45;0" smil:keyTimes="0;0.699;1"/>
+        <anim:animate smil:begin="0" smil:dur="0.455" smil:fill="hold" smil:attributeName="y" smil:values="y-1;y-(0.354*width-0.172*height)" smil:keyTimes="0;1"/>
+        <anim:animate smil:begin="0.455" smil:dur="0.156" smil:fill="hold" smil:decelerate="0.5" smil:autoReverse="true" smil:attributeName="y" smil:values="y-(0.354*width-0.172*height);y-(0.354*width-0.172*height)-height/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:begin="0.864" smil:dur="0.136" smil:fill="hold" smil:attributeName="y" smil:values="y-(0.354*width-0.172*height);y" smil:keyTimes="0;1"/>
+    </anim:iterate>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-flash-once">
+        <anim:set smil:begin="0" smil:dur="1" smil:attributeName="visibility" smil:to="visible"/>
     </anim:par>
     </anim:par>
   </anim:par>
-  <anim:par>
-    <anim:par>
-    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-bounce">
-      <anim:set smil:begin="0s" smil:dur="1ms" smil:attributeName="visibility" smil:to="visible"/>
-      <anim:transitionFilter smil:begin="0" smil:dur="0.58" smil:type="barWipe" smil:subtype="topToBottom"/>
-      <anim:animate smil:begin="0" smil:dur="1.822" smil:attributeName="x" smil:values="x-0.25;x" smil:keyTimes="0;1" smil:keySplines="0,0;0.14,0.36;0.43,0.73;0.71,0.91;1,1"/>
-      <anim:animate smil:begin="0" smil:dur="0.664" smil:attributeName="y" smil:values="0.5;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/3" smil:keySplines="0,0;0.25,0.07;0.5,0.2;0.75,0.467;1,1"/>
-      <anim:animate smil:begin="0.664" smil:dur="0.664" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/9" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
-      <anim:animate smil:begin="1.324" smil:dur="0.332" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/27" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
-      <anim:animate smil:begin="1.656" smil:dur="0.164" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y-sin(pi*$)/81" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
-      <anim:animateTransform smil:begin="0.65" smil:dur="0.026" smil:to="1,0.6" svg:type="scale"/>
-      <anim:animateTransform smil:begin="0.676" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
-      <anim:animateTransform smil:begin="1.312" smil:dur="0.026" smil:to="1,0.8" svg:type="scale"/>
-      <anim:animateTransform smil:begin="1.338" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
-      <anim:animateTransform smil:begin="1.642" smil:dur="0.026" smil:to="1,0.9" svg:type="scale"/>
-      <anim:animateTransform smil:begin="1.668" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
-      <anim:animateTransform smil:begin="1.808" smil:dur="0.026" smil:to="1,0.95" svg:type="scale"/>
-      <anim:animateTransform smil:begin="1.834" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in-slow" presentation:preset-sub-type="from-bottom">
+	<anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+	<anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+	<anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="y" smil:values="1+height/2;y" smil:keyTimes="0;1"/>
     </anim:par>
     </anim:par>
   </anim:par>
-  <anim:par>
-    <anim:par>
-    <anim:par presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-spiral-in">
-      <anim:set smil:begin="0s" smil:dur="2ms" smil:attributeName="visibility" smil:to="visible"/>
-      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
-      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
-      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="x" smil:values="0;1" smil:keyTimes="0;1" anim:formula="x+(cos(-2*pi*(1-$))*-x-sin(-2*pi*(1-$))*(1-y))*(1-$)"/>
-      <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y+(sin(-2*pi*(1-$))*-x+cos(-2*pi*(1-$))*(1-y))*(1-$)"/>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in-slow" presentation:preset-sub-type="from-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="x" smil:values="0-width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
     </anim:par>
     </anim:par>
   </anim:par>
-  <anim:par>
-    <anim:par>
-    <anim:par presentation:preset-property="Direction" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel" presentation:preset-sub-type="horizontal">
-      <anim:set smil:begin="0s" smil:dur="1ms" smil:attributeName="visibility" smil:to="visible"/>
-      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
-      <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="0;1" smil:keyTimes="0;1" anim:formula="height*sin(2.5*pi*$)"/>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in-slow" presentation:preset-sub-type="from-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="x" smil:values="1+width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
     </anim:par>
     </anim:par>
   </anim:par>
-  <anim:par>
-    <anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in-slow" presentation:preset-sub-type="from-top">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="y" smil:values="0-height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-bottom">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="1+height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="0-width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="1+width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-top">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="0-height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-bottom-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="0-width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="1+height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-bottom-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="1+width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="1+height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-top-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="0-width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="0-height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-fly-in" presentation:preset-sub-type="from-top-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="1+width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="0-height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- M - N - O - P -->
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-movie-credits">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="15" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="15" smil:fill="hold" smil:attributeName="y" smil:values="y+1;y-1" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- Q - R - S - T -->
+    <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-spiral-in">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="x" smil:values="0;1" smil:keyTimes="0;1" anim:formula="x+(cos(-2*pi*(1-$))*-x-sin(-2*pi*(1-$))*(1-y))*(1-$)"/>
+        <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="y" smil:values="0;1" smil:keyTimes="0;1" anim:formula="y+(sin(-2*pi*(1-$))*-x+cos(-2*pi*(1-$))*(1-y))*(1-$)"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="across">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="downward">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>    
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-bottom">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y+height/2;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x-width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x+width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-top">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y-height/2;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-top-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x+width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y-height/2;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-bottom-right">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x+width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y+height/2;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-top-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x-width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y-height/2;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-stretchy" presentation:preset-sub-type="from-bottom-left">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x-width/2;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y+height/2;y" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
     <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel" presentation:preset-sub-type="vertical">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="0;1" smil:keyTimes="0;1" anim:formula="width*sin(2.5*pi*$)"/>
         <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1"/>
     </anim:par>
     </anim:par>
-    </anim:par>
-  <anim:par>
-    <anim:par>
-    <anim:par presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-bounce">
-	<anim:animate smil:begin="0" smil:dur="1.822" smil:attributeName="x" smil:values="x;x+0.25" smil:keyTimes="0;1" smil:keySplines="0,0;0.14,0.31;0.43,0.73;0.71,0.91;1,1"/>
-	<anim:animate smil:begin="1.822" smil:dur="0.178" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
-	<anim:animate smil:begin="0" smil:dur="0.664" smil:attributeName="y" smil:values="y;y+0.026;y+0.052;y+0.078;y+0.103;y+0.151;y+0.196;y+0.236;y+0.270;y+0.297;y+0.317;y+0.329;y+0.333" smil:keyTimes="0;0.05;0.1;0.15;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.25,0.07;0.5,0.2;0.75,0.467;1,1"/>
-	<anim:animate smil:begin="0.664" smil:dur="0.664" smil:attributeName="y" smil:values="y;y-0.034;y-0.065;y-0.090;y-0.106;y-0.111;y-0.106;y-0.090;y-0.065;y-0.034;y" smil:keyTimes="0;0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
-	<anim:animate smil:begin="1.324" smil:dur="0.332" smil:attributeName="y" smil:values="y;y-0.011;y-0.022;y-0.030;y-0.035;y-0.037;y-0.035;y-0.030;y-0.022;y-0.011;y" smil:keyTimes="0;0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
-	<anim:animate smil:begin="1.656" smil:dur="0.164" smil:attributeName="y" smil:values="y;y-0.004;y-0.007;y-0.010;y-0.012;y-0.0123;y-0.012;y-0.010;y-0.007;y-0.004;y" smil:keyTimes="0;0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8;0.9;1" smil:keySplines="0,0;0.125,0.2665;0.25,0.4;0.375,0.465;0.5,0.5;0.625,0.535;0.75,0.6;0.875,0.7335;1,1"/>
-	<anim:animate smil:begin="1.82" smil:dur="0.18" smil:accelerate="0.5" smil:attributeName="y" smil:values="y;y+height" smil:keyTimes="0;1"/>
-	<anim:animateTransform smil:begin="0.62" smil:dur="0.026" smil:to="1,0.6" svg:type="scale"/>
-	<anim:animateTransform smil:begin="0.646" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
-	<anim:animateTransform smil:begin="1.312" smil:dur="0.026" smil:to="1,0.8" svg:type="scale"/>
-	<anim:animateTransform smil:begin="1.338" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
-	<anim:animateTransform smil:begin="1.642" smil:dur="0.026" smil:to="1,0.9" svg:type="scale"/>
-	<anim:animateTransform smil:begin="1.668" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
-	<anim:animateTransform smil:begin="1.808" smil:dur="0.026" smil:to="1,0.95" svg:type="scale"/>
-	<anim:animateTransform smil:begin="1.834" smil:dur="0.166" smil:decelerate="0.5" smil:to="1,1" svg:type="scale"/>
-	<anim:set smil:begin="1.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel" presentation:preset-sub-type="horizontal">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="0;1" smil:keyTimes="0;1" anim:formula="height*sin(2.5*pi*$)"/>
     </anim:par>
     </anim:par>
   </anim:par>
-  <anim:par>
-    <anim:par>
-    <anim:par presentation:preset-property="Zoom" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="in">
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" smil:accelerate="1" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-thread">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="height/20;height/20;height" smil:keyTimes="0;0.5;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="width+.3;width+.3;width" smil:keyTimes="0;0.5;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x-.3;x;x" smil:keyTimes="0;0.5;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- W - X  - Y - Z -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-zoom" presentation:preset-sub-type="in">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-zoom" presentation:preset-sub-type="in-from-screen-center">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="0.5;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="0.5;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-zoom" presentation:preset-sub-type="in-slightly">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="2/3*width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="2/3*height;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-zoom" presentation:preset-sub-type="out">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="4*width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="4*height;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-zoom" presentation:preset-sub-type="out-from-screen-center">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="(6*min(max(width*height,.3),1)-7.4)/-.7*width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="(6*min(max(width*height,.3),1)-7.4)/-.7*height;height" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="0.5;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="1+(6*min(max(width*height,.3),1)-7.4)/-.7*height/2;y" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-zoom" presentation:preset-sub-type="out-slightly">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="width" smil:values="4/3*width;width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="height" smil:values="4/3*height;height" smil:keyTimes="0;1"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- Emphasis Animations -->
+<!-- ================================================================================================================================================ -->
+<!-- A - B -->
+<!-- C - D -->
+<!-- E - F --> 
+<!-- P - Q - R -->
+<!-- S - T -->
+<!-- Exit Animations -->
+<!-- ================================================================================================================================================ -->
+<!-- A -B -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-breaks">
+        <anim:animate smil:begin="0" smil:dur="1" smil:attributeName="x" smil:from="(x)" smil:to="(x+1)"/>
+        <anim:animate smil:begin="0" smil:dur="0.2" smil:accelerate="0.5" smil:attributeName="skewX" smil:from="0" smil:to="-1"/>
+        <anim:set smil:begin="0.2" smil:dur="0.8" smil:attributeName="skewX" smil:to="-1"/>
+        <anim:set smil:begin="0.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- C -D -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-collapse" presentation:preset-sub-type="across">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;0" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:iterate presentation:preset-property="Color1;Color2" presentation:text-only="true" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-colored-lettering" anim:iterate-type="by-letter" anim:iterate-interval="0.04s">
+        <anim:animate smil:dur="0.08" smil:attributeName="color" smil:values="#009999;#333399" smil:keyTimes="0;0.5" smil:calcMode="discrete"/>
+        <anim:animate smil:dur="0.08" smil:attributeName="fill-color" smil:values="#009999;#333399" smil:keyTimes="0;0.5" smil:calcMode="discrete"/>
+        <anim:set smil:dur="0.08" smil:attributeName="fill" smil:to="solid"/>
+        <anim:set smil:begin="0.079" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:iterate>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-crawl-out" presentation:preset-sub-type="from-bottom">
+        <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-crawl-out" presentation:preset-sub-type="from-left">
+        <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-crawl-out" presentation:preset-sub-type="from-right">
+        <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-crawl-out" presentation:preset-sub-type="from-top">
+        <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-disappear">
+        <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- E -F -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-flash-once">
+        <anim:animate smil:dur="1" smil:attributeName="visibility" smil:values="hidden;visible" smil:keyTimes="0;0.5" smil:calcMode="discrete"/>
+        <anim:set smil:begin="0.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-bottom">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-left">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-right">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-top">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-bottom-left">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-bottom-right">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;1+height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-top-left">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;0-width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction;Accelerate;Decelerate" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-fly-out" presentation:preset-sub-type="from-top-right">
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;1+width/2" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;0-height/2" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- M - N - O -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-movie-credits">
+        <anim:animate smil:dur="15" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="15" smil:attributeName="y" smil:values="y-1;y+1" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="14.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- P -Q - R -->
+<!-- S -T -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-spiral-out">
+        <anim:animate smil:dur="1" smil:attributeName="width" smil:values="width;0" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="1" smil:attributeName="height" smil:values="height;0" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="1" smil:attributeName="x" smil:values="x;x+-0.0500*(x*0.9511+(1-y)*0.3090);x+-0.1000*(x*0.8090+(1-y)*0.5878);x+-0.1500*(x*0.5878+(1-y)*0.8090);x+-0.2000*(x*0.3090+(1-y)*0.9511);x+-0.2500*(x*-0.0000+(1-y)*1.0000);x+-0.3000*(x*-0.3090+(1-y)*0.9511);x+-0.3500*(x*-0.5878+(1-y)*0.8090);x+-0.4000*(x*-0.8090+(1-y)*0.5878);x+-0.4500*(x*-0.9511+(1-y)*0.3090);x+-0.5000*(x*-1.0000+(1-y)*-0.0000);x+-0.5500*(x*-0.9511+(1-y)*-0.3090);x+-0.6000*(x*-0.8090+(1-y)*-0.5878);x+-0.6500*(x*-0.5878+(1-y)*-0.8090);x+-0.7000*(x*-0.3090+(1-y)*-0.9511);x+-0.7500*(x*0.0000+(1-y)*-1.0000);x+-0.8000*(x*0.3090+(1-y)*-0.9511);x+-0.8500*(x*0.5878+(1-y)*-0.8090);x+-0.9000*(x*0.8090+(1-y)*-0.5878);x+-0.9500*(x*0.9511+(1-y)*-0.3090);x+-1.0000*(x*1.0000+(1-y)*0.0000)" smil:keyTimes="0;0.05;0.1;0.15;0.2;0.25;0.3;0.35;0.4;0.45;0.5;0.55;0.6;0.65;0.7;0.75;0.8;0.85;0.9;0.95;1"/>
+        <anim:animate smil:dur="1" smil:attributeName="y" smil:values="y;y+-0.0500*(x*0.3090-(1-y)*0.9511);y+-0.1000*(x*0.5878-(1-y)*0.8090);y+-0.1500*(x*0.8090-(1-y)*0.5878);y+-0.2000*(x*0.9511-(1-y)*0.3090);y+-0.2500*(x*1.0000-(1-y)*-0.0000);y+-0.3000*(x*0.9511-(1-y)*-0.3090);y+-0.3500*(x*0.8090-(1-y)*-0.5878);y+-0.4000*(x*0.5878-(1-y)*-0.8090);y+-0.4500*(x*0.3090-(1-y)*-0.9511);y+-0.5000*(x*-0.0000-(1-y)*-1.0000);y+-0.5500*(x*-0.3090-(1-y)*-0.9511);y+-0.6000*(x*-0.5878-(1-y)*-0.8090);y+-0.6500*(x*-0.8090-(1-y)*-0.5878);y+-0.7000*(x*-0.9511-(1-y)*-0.3090);y+-0.7500*(x*-1.0000-(1-y)*0.0000);y+-0.8000*(x*-0.9511-(1-y)*0.3090);y+-0.8500*(x*-0.8090-(1-y)*0.5878);y+-0.9000*(x*-0.5878-(1-y)*0.8090);y+-0.9500*(x*-0.3090-(1-y)*0.9511);y+-1.0000*(x*0.0000-(1-y)*1.0000)" smil:keyTimes="0;0.05;0.1;0.15;0.2;0.25;0.3;0.35;0.4;0.45;0.5;0.55;0.6;0.65;0.7;0.75;0.8;0.85;0.9;0.95;1"/>
+        <anim:set smil:begin="0.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-swivel" presentation:preset-sub-type="vertical">
+        <anim:animate smil:dur="5" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:attributeName="width" smil:values="width;0.92*width;0.71*width;0.38*width;0;-0.38*width;-0.71*width;-0.92*width;-width;-0.92*width;-0.71*width;-0.38*width;0;0.38*width;0.71*width;0.92*width;width;0.92*width;0.71*width;0.38*width;0" smil:keyTimes="0;0.05;0.1;0.15;0.2;0.25;0.3;0.35;0.4;0.45;0.5;0.55;0.6;0.65;0.7;0.75;0.8;0.85;0.9;0.95;1"/>
+        <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:iterate presentation:text-only="true" smil:begin="0" smil:fill="hold" smil:accelerate="0.5" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-swish" anim:iterate-type="by-letter" anim:iterate-interval="0.5s">
+        <anim:animate smil:begin="0" smil:dur="1" smil:attributeName="rotate" smil:values="0;45" smil:keyTimes="0;1"/>
+        <anim:animate smil:begin="0" smil:dur="1" smil:attributeName="y" smil:values="y;y+1" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:iterate>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold" smil:decelerate="1" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-thread">
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;height/20;height/20" smil:keyTimes="0;0.5;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;width+.3;width+.3" smil:keyTimes="0;0.5;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;x;x-.3" smil:keyTimes="0;0.5;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+<!-- W - X - Y - Z -->
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="out">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;0" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;0" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="544">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;0" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;0" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;0.5" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;0.5" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="out-slightly">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;2/3*width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;2/3*height" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+    </anim:par>
+    </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="in">
         <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;4*width" smil:keyTimes="0;1"/>
         <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;4*height" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
   </anim:par>
-  <anim:par>
-    <anim:par>
-    <anim:par presentation:preset-property="Zoom" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="out">
-        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;0" smil:keyTimes="0;1"/>
-        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;0" smil:keyTimes="0;1"/>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="20">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;(6*min(max(width*height,.3),1)-7.4)/-.7*width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;(6*min(max(width*height,.3),1)-7.4)/-.7*height" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;1+(6*min(max(width*height,.3),1)-7.4)/-.7*height/2" smil:keyTimes="0;1"/>
         <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
+  </anim:par>
+  <anim:par smil:begin="indefinite" smil:fill="hold">
+    <anim:par smil:begin="0" smil:fill="hold">
+    <anim:par presentation:preset-property="Zoom" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-zoom" presentation:preset-sub-type="in-slightly">
+        <anim:animate smil:dur="0.5" smil:attributeName="width" smil:values="width;4/3*width" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;4/3*height" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="0.499" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
+    </anim:par>
+  </anim:par>
 </anim:seq>

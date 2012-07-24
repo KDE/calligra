@@ -33,6 +33,7 @@ class QTimeEdit;
 class KPrShapeAnimation;
 class KPrAnimationGroupProxyModel;
 class KPrShapeAnimationDocker;
+class KPrAnimationSelectorWidget;
 
 /** This Widget holds the configuration popup dialog
     used to edit animation properties of existing or new
@@ -66,6 +67,7 @@ public slots:
 protected slots:
     void showTimeLineCustomContextMenu(const QPoint &pos);
     void changeCurrentAnimation(KPrShapeAnimation *animation);
+    void initializeView();
 
 
 private:
@@ -76,6 +78,7 @@ private:
     QTimeEdit *m_delayEdit;
     QTimeEdit *m_durationEdit;
     KPrShapeAnimationDocker *m_docker;
+    KPrAnimationSelectorWidget *m_animationSelector;
 };
 
 #endif // KPREDITANIMATIONSWIDGET_H

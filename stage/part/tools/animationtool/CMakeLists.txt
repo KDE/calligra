@@ -12,6 +12,7 @@ set(calligrastagetoolanimation_PART_SRCS
     KPrCollectionItemModel.cpp
     KPrAnimationGroupProxyModel.cpp
     KPrAnimationSelectorWidget.cpp
+    KPrPredefinedAnimationsLoader.cpp
     )
 
 
