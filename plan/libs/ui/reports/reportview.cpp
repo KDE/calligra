@@ -1343,7 +1343,7 @@ void GroupSectionEditor::setupUi( QWidget *widget )
     gsw.setupUi( widget );
     gsw.view->setModel( &model );
     gsw.view->setItemDelegateForColumn( 0, new EnumDelegate( gsw.view ) );
-    gsw.view->setItemDelegateForColumn( 1, new EnumDelegate( gsw.view ) );
+    gsw.view->setItemDelegateForColumn( 1, new CheckStateItemDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 2, new EnumDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 3, new EnumDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 4, new EnumDelegate( gsw.view ) );
@@ -1558,6 +1558,7 @@ QVariant GroupSectionEditor::SortItem::data( int role ) const
         case Qt::DisplayRole: return QVariant();
         case Qt::ToolTipRole: return group->sort() ? names.value( 1 ) : names.value( 0 );
         case Qt::DecorationRole: return group->sort() ? KIcon( "arrow-down" ) :  KIcon( "arrow-up" );
+        case Qt::EditRole: return group->sort() ? Qt::Unchecked : Qt::Checked;
         case Role::EnumList: return names;
         case Role::EnumListValue: return  group->sort() ? 1 : 0;
         default: break;
@@ -1570,6 +1571,9 @@ void GroupSectionEditor::SortItem::setData( const QVariant &value, int role )
     if ( role == Qt::EditRole ) {
         group->setSort( value.toInt() == 0 ? Qt::AscendingOrder : Qt::DescendingOrder );
         return;
+    } else if ( role == Qt::CheckStateRole ) {
+        group->setSort( value.toInt() == 0 ? Qt::DescendingOrder : Qt::AscendingOrder );
+        return;
     }
     return Item::setData( value, role );
 }
@@ -1578,13 +1582,15 @@ void GroupSectionEditor::SortItem::setData( const QVariant &value, int role )
 GroupSectionEditor::HeaderItem::HeaderItem( ReportSectionDetailGroup *g )
     : Item( g )
 {
-    names << "No" << "Yes";
+    names << i18n( "No" ) << i18n( "Yes" );
+    setCheckable( true );
 }
 
 QVariant GroupSectionEditor::HeaderItem::data( int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole: return group->groupHeaderVisible() ? names.value( 1 ) : names.value( 0 );
+        case Qt::DisplayRole: return QVariant();
+        case Qt::CheckStateRole: return  group->groupHeaderVisible() ? Qt::Checked : Qt::Unchecked;
         case Role::EnumList: return names;
         case Role::EnumListValue: return  group->groupHeaderVisible() ? 1 : 0;
         default: break;
@@ -1594,8 +1600,12 @@ QVariant GroupSectionEditor::HeaderItem::data( int role ) const
 
 void GroupSectionEditor::HeaderItem::setData( const QVariant &value, int role )
 {
+    kDebug(planDbg())<<value<<role;
     if ( role == Qt::EditRole ) {
         group->setGroupHeaderVisible( value.toInt() == 1 );
+        return;
+    } else if ( role == Qt::CheckStateRole ) {
+        group->setGroupHeaderVisible( value.toInt() > 0 );
         return;
     }
     return Item::setData( value, role );
@@ -1605,13 +1615,15 @@ void GroupSectionEditor::HeaderItem::setData( const QVariant &value, int role )
 GroupSectionEditor::FooterItem::FooterItem( ReportSectionDetailGroup *g )
     : Item( g )
 {
-    names << "No" << "Yes";
+    names << i18n( "No" ) << i18n( "Yes" );
+    setCheckable( true );
 }
 
 QVariant GroupSectionEditor::FooterItem::data( int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole: return group->groupFooterVisible() ? names.value( 1 ) : names.value( 0 );
+        case Qt::DisplayRole: return QVariant();
+        case Qt::CheckStateRole: return group->groupFooterVisible() ? Qt::Checked : Qt::Unchecked;
         case Role::EnumList: return names;
         case Role::EnumListValue: return group->groupFooterVisible() ? 1 : 0;
         default: break;
@@ -1623,6 +1635,9 @@ void GroupSectionEditor::FooterItem::setData( const QVariant &value, int role )
 {
     if ( role == Qt::EditRole ) {
         group->setGroupFooterVisible( value.toInt() == 1 );
+        return;
+    } else if ( role == Qt::CheckStateRole ) {
+        group->setGroupFooterVisible( value.toInt() > 0 );
         return;
     }
     return Item::setData( value, role );
@@ -1639,6 +1654,7 @@ QVariant GroupSectionEditor::PageBreakItem::data( int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole: return names.value( (int)group->pageBreak() );
+        case Qt::ToolTipRole: return names.value( (int)group->pageBreak() );
         case Role::EnumList: return names;
         case Role::EnumListValue: return (int)group->pageBreak();
         default: break;
