@@ -8,6 +8,10 @@ Item {
         height: Constants.GridHeight / 2;
         z: 2;
 
+        move: Transition {
+            NumberAnimation { properties: "x"; duration: 100; }
+        }
+
         PresetsPanel {
             id: presetsPanel;
             objectName: "presets";
@@ -48,12 +52,20 @@ Item {
             onStateChanged: panelStateChanged( toolPanel, state );
             onCollapsed: setCollapsedParent( toolPanel );
         }
+        ColorPanel {
+            id: colorPanel;
+            objectName: "color";
+            width: Constants.GridWidth * 2;
+            height: base.height;
+            onStateChanged: panelStateChanged( colorPanel, state );
+            onCollapsed: setCollapsedParent( colorPanel );
+        }
     }
 
     QtObject {
         id: d;
 
-        property variant panels: [ presetsPanel, layersPanel, filterPanel, selectPanel, toolPanel ];
+        property variant panels: [ presetsPanel, layersPanel, filterPanel, selectPanel, toolPanel, colorPanel ];
     }
 
     function panelStateChanged( panel, state ) {
