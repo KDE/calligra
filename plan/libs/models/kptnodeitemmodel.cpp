@@ -3871,6 +3871,7 @@ bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction a
     }
     KUndo2Command *cmd = new InsertProjectCmd( *project, n, n->childNode( row - 1 ), i18nc( "(qtundo) 1=project or task name", "Insert %1", project->name() ) );
     emit executeCommand( cmd );
+    delete project;
     return true;
 }
 
