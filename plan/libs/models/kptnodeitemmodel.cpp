@@ -3855,7 +3855,7 @@ bool NodeItemModel::dropResourceMimeData( const QMimeData *data, Qt::DropAction 
     return true;
 }
 
-bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
     Node *n = node( parent );
     kDebug(planDbg())<<n<<parent;
@@ -3898,7 +3898,7 @@ bool NodeItemModel::dropUrlMimeData( const QMimeData *data, Qt::DropAction actio
     return false;
 }
 
-bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction /*action*/, int row, int /*column*/, const QModelIndex &parent )
 {
     if ( ! url.isLocalFile() ) {
         kDebug(planDbg())<<"TODO: download if url not local";
@@ -5254,7 +5254,7 @@ Qt::ItemFlags TaskModuleModel::flags( const QModelIndex &idx ) const
     return f;
 }
 
-int TaskModuleModel::columnCount (const QModelIndex &idx ) const
+int TaskModuleModel::columnCount (const QModelIndex &/*idx*/ ) const
 {
     return 1;
 }
@@ -5275,7 +5275,7 @@ QVariant TaskModuleModel::data( const QModelIndex& idx, int role ) const
     return QVariant();
 }
 
-QVariant TaskModuleModel::headerData( int section, Qt::Orientation orientation , int role ) const
+QVariant TaskModuleModel::headerData( int /*section*/, Qt::Orientation orientation , int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
         switch ( role ) {
@@ -5304,7 +5304,7 @@ QStringList TaskModuleModel::mimeTypes() const
     return QStringList() << "application/x-vnd.kde.plan" << "text/uri-list";
 }
 
-bool TaskModuleModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+bool TaskModuleModel::dropMimeData( const QMimeData *data, Qt::DropAction /*action*/, int /*row*/, int /*column*/, const QModelIndex &/*parent*/ )
 {
     if ( data->hasUrls() ) {
         QList<QUrl> urls = data->urls();
@@ -5386,9 +5386,6 @@ void TaskModuleModel::stripProject( Project *project ) const
 {
     foreach ( ScheduleManager *sm, project->scheduleManagers() ) {
         DeleteScheduleManagerCmd c( *project, sm );
-    }
-    foreach ( const Schedule *s, project->schedules() ) {
-        Q_ASSERT( s->isDeleted() );
     }
 }
 
