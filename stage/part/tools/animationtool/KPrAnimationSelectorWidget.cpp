@@ -33,6 +33,7 @@
 #include <QListWidget>
 #include <QListView>
 #include <QFont>
+#include <QToolButton>
 
 //KDE Headers
 #include <KLocale>
@@ -47,12 +48,13 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoViewItemContextBar.h>
 
 KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData,
                                                        QWidget *parent)
     : QWidget(parent)
     , m_docker(docker)
-    , showAutomaticPreview(true)
+    , showAutomaticPreview(false)
     , m_animationsData(animationsData)
 {   
     QGridLayout *containerLayout = new QGridLayout;
@@ -117,7 +119,6 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     connect(m_collectionView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
     connect(m_subTypeView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
     connect(previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(setPreviewState(bool)));
-
     setLayout(containerLayout);
 }
 
@@ -168,6 +169,41 @@ void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &in
     }
 }
 
+void KPrAnimationSelectorWidget::automaticPreviewRequested()
+{
+    QModelIndex index;
+    KoXmlElement newAnimationContext;
+    if (QObject::sender() == m_collectionPreviewButton) {
+       index = m_collectionContextBar->currentIndex();
+       if (!index.isValid()) {
+           return;
+       }
+       newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
+    }
+    else if (QObject::sender() == m_subTypePreviewButton) {
+        index = m_subTypeContextBar->currentIndex();
+        if (!index.isValid()) {
+            return;
+        }
+        newAnimationContext = static_cast<KPrCollectionItemModel*>(m_subTypeView->model())->animationContext(index);
+    }
+    else {
+        return;
+    }
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext context(stylesReader, 0);
+    KoShapeLoadingContext shapeContext(context, 0);
+
+    KoShape *shape = m_docker->getSelectedShape();
+    if (!shape) {
+        return;
+    }
+    m_previewAnimation = m_animationsData->loadOdfShapeAnimation(newAnimationContext, shapeContext, shape);
+    if (m_previewAnimation) {
+        emit requestPreviewAnimation(m_previewAnimation);
+    }
+}
+
 void KPrAnimationSelectorWidget::activateShapeCollection(QListWidgetItem *item)
 {
     if (!item) {
@@ -177,6 +213,11 @@ void KPrAnimationSelectorWidget::activateShapeCollection(QListWidgetItem *item)
     m_collectionView->setModel(m_animationsData->modelById(id));
     m_subTypeView->setModel(0);
     m_subTypeView->hide();
+
+    // Init context bar
+    if (!showAutomaticPreview) {
+        createCollectionContextBar();
+    }
 }
 
 void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
@@ -191,6 +232,10 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
         if (m_animationsData->subModelById(id)){
             m_subTypeView->setModel(m_animationsData->subModelById(id));
             m_subTypeView->show();
+            // Init context bar
+            if (!showAutomaticPreview) {
+                createSubTypeContextBar();
+            }
             return;
         }
         newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
@@ -221,6 +266,20 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
 {
     showAutomaticPreview = isEnable;
+    if (!isEnable) {
+        if (m_collectionView->model()) {
+            createCollectionContextBar();
+        }
+        if (m_subTypeView->model()) {
+            createSubTypeContextBar();
+        }
+    }
+    if (isEnable) {
+        m_collectionContextBar = 0;
+        m_collectionPreviewButton = 0;
+        m_subTypeContextBar = 0;
+        m_subTypePreviewButton = 0;
+    }
 }
 
 bool KPrAnimationSelectorWidget::loadPreviewConfig()
@@ -240,4 +299,20 @@ void KPrAnimationSelectorWidget::savePreviewConfig()
     KSharedConfigPtr config = KPrFactory::componentData().config();
     KConfigGroup interface = config->group("Interface");
     interface.writeEntry("ShowAutomaticPreviewAnimationEditDocker", showAutomaticPreview);
+}
+
+void KPrAnimationSelectorWidget::createCollectionContextBar()
+{
+    m_collectionContextBar = new KoViewItemContextBar(m_collectionView);
+    m_collectionPreviewButton = m_collectionContextBar->addContextButton(i18n("Preview animation"),QString("media-playback-start"));
+    m_collectionContextBar->setShowSelectionToggleButton(false);
+    connect(m_collectionPreviewButton, SIGNAL(clicked()), this, SLOT(automaticPreviewRequested()));
+}
+
+void KPrAnimationSelectorWidget::createSubTypeContextBar()
+{
+    m_subTypeContextBar = new KoViewItemContextBar(m_subTypeView);
+    m_subTypePreviewButton = m_subTypeContextBar->addContextButton(i18n("Preview animation"),QString("media-playback-start"));
+    m_subTypeContextBar->setShowSelectionToggleButton(false);
+    connect(m_subTypePreviewButton, SIGNAL(clicked()), this, SLOT(automaticPreviewRequested()));
 }

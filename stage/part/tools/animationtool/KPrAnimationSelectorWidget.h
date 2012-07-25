@@ -30,6 +30,8 @@ class KPrShapeAnimation;
 class QListWidgetItem;
 class KPrShapeAnimationDocker;
 class KPrPredefinedAnimationsLoader;
+class QToolButton;
+class KoViewItemContextBar;
 
 /** Widget used to select animations. Holds three views: categories, animations
     and subtypes (optional)*/
@@ -52,6 +54,8 @@ signals:
 
 private slots:
     void automaticPreviewRequested(const QModelIndex &index);
+
+    void automaticPreviewRequested();
     /**
      * Changes the current shape collection
      */
@@ -65,6 +69,8 @@ private:
     /// load / save automatic preview checkbox state
     bool loadPreviewConfig();
     void savePreviewConfig();
+    void createCollectionContextBar();
+    void createSubTypeContextBar();
 
     QListWidget *m_collectionChooser;
     QListView *m_collectionView;
@@ -73,6 +79,10 @@ private:
     KPrShapeAnimation *m_previewAnimation;
     bool showAutomaticPreview;
     KPrPredefinedAnimationsLoader *m_animationsData;
+    QToolButton *m_collectionPreviewButton;
+    KoViewItemContextBar *m_collectionContextBar;
+    QToolButton *m_subTypePreviewButton;
+    KoViewItemContextBar *m_subTypeContextBar;
     
 };
 

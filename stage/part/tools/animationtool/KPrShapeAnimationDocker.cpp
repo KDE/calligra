@@ -196,8 +196,18 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
 
 void KPrShapeAnimationDocker::checkAnimationSelected()
 {
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if (selection->selectedShapes().isEmpty()) {
+        m_buttonAddAnimation->setEnabled(false);
+    }
+    else {
+        m_buttonAddAnimation->setEnabled(true);
+    }
+
     QModelIndex index = m_animationsView->currentIndex();
     if (index.isValid()) {
+        m_buttonAddAnimation->setEnabled(true);
         m_buttonRemoveAnimation->setEnabled(true);
         m_editAnimation->setEnabled(true);
         m_buttonAnimationOrderUp->setEnabled(true);
