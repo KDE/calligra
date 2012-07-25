@@ -356,6 +356,8 @@ protected:
     bool dropResourceMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
     bool dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
     KUndo2Command *createAllocationCommand( Task &task, const QList<Resource*> &lst );
+    bool dropUrlMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    bool importProjectFile( const KUrl &url, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
 protected:
     Node *m_node; // for sanety check

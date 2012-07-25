@@ -3653,7 +3653,8 @@ QStringList NodeItemModel::mimeTypes() const
 {
     return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal"
                         << "application/x-vnd.kde.plan.resourceitemmodel.internal"
-                        << "application/x-vnd.kde.plan.project";
+                        << "application/x-vnd.kde.plan.project"
+                        << "text/uri-list";
 }
 
 QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
@@ -3860,18 +3861,75 @@ bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction a
     KoXmlDocument doc;
     doc.setContent( data->data( "application/x-vnd.kde.plan.project" ) );
     KoXmlElement element = doc.documentElement().namedItem( "project" ).toElement();
-    Project *project = new Project();
+    Project project;
     XMLLoaderObject status;
     status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
-    status.setProject( project );
-    if ( ! project->load( element, status ) ) {
+    status.setProject( &project );
+    if ( ! project.load( element, status ) ) {
         kDebug(planDbg())<<"Failed to load project";
-        delete project;
         return false;
     }
-    KUndo2Command *cmd = new InsertProjectCmd( *project, n, n->childNode( row - 1 ), i18nc( "(qtundo) 1=project or task name", "Insert %1", project->name() ) );
+    project.generateUniqueNodeIds();
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo) 1=project or task name", "Insert %1", project.name() ) );
     emit executeCommand( cmd );
-    delete project;
+    return true;
+}
+
+bool NodeItemModel::dropUrlMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    if ( data->hasUrls() ) {
+        QList<QUrl> urls = data->urls();
+        kDebug(planDbg())<<urls;
+        foreach ( const QUrl &url, urls ) {
+            KMimeType::Ptr mime = KMimeType::findByUrl( url );
+            kDebug(planDbg())<<url<<mime->name();
+            if ( mime->is( "application/x-vnd.kde.plan" ) ) {
+                importProjectFile( url, action, row, column, parent );
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    if ( ! url.isLocalFile() ) {
+        kDebug(planDbg())<<"TODO: download if url not local";
+        return false;
+    }
+    KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
+    if ( store->bad() ) {
+        //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
+        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        delete store;
+        //        QApplication::restoreOverrideCursor();
+        return false;
+    }
+    if ( ! store->open( "root" ) ) { // maindoc.xml
+        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        delete store;
+        return false;
+    }
+    KoXmlDocument doc;
+    doc.setContent( store->device() );
+    KoXmlElement element = doc.documentElement().namedItem( "project" ).toElement();
+    Project project;
+    XMLLoaderObject status;
+    status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
+    status.setProject( &project );
+    if ( ! project.load( element, status ) ) {
+        kDebug(planDbg())<<"Failed to load project from:"<<url;
+        return false;
+    }
+    project.generateUniqueNodeIds();
+    Node *n = node( parent );
+    kDebug(planDbg())<<n<<parent;
+    if ( n == 0 ) {
+        n = m_project;
+    }
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo)", "Insert %1", url.fileName() ) );
+    emit executeCommand( cmd );
     return true;
 }
 
@@ -3966,6 +4024,9 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
         kDebug(planDbg());
         return dropProjectMimeData( data, action, row, column, parent );
 
+    }
+    if ( data->hasUrls() ) {
+        return dropUrlMimeData( data, action, row, column, parent );
     }
     return false;
 }
@@ -5301,7 +5362,6 @@ QMimeData* TaskModuleModel::mimeData( const QModelIndexList &lst ) const
         QModelIndex idx = lst.at( 0 );
         if ( idx.isValid() ) {
             Project *project = m_modules.value( idx.row() );
-            project->generateUniqueNodeIds();
             QDomDocument document( "plan" );
             document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
             QDomElement doc = document.createElement( "plan" );

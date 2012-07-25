@@ -2,6 +2,8 @@
 Calligra Plan current:
 ----------------------
 
+* Enable dropping Plan project files into the Task Editor.
+
 * Task Editor: Add a Task Module docker to ease project creation.
   This makes it possible to define typical solutions with multiple tasks,
   task dependencies, including resources and resource allocations.
