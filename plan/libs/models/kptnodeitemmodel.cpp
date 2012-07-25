@@ -3685,7 +3685,7 @@ bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosi
     }
     Node *dn = node( index ); // returns project if ! index.isValid()
     if ( dn == 0 ) {
-        kError()<<"no node to drop on!";
+        kError()<<"no node (or project) to drop on!";
         return false; // hmmm
     }
     if ( data->hasFormat("application/x-vnd.kde.plan.resourceitemmodel.internal") ) {
@@ -3702,7 +3702,10 @@ bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosi
             default:
                 break;
         }
-    } else if ( data->hasFormat("application/x-vnd.kde.plan.nodeitemmodel.internal") ) {
+    } else if ( data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal")
+                || data->hasFormat( "application/x-vnd.kde.plan.project" )
+                || data->hasUrls() )
+    {
         switch ( dropIndicatorPosition ) {
             case ItemModelBase::AboveItem:
             case ItemModelBase::BelowItem:
@@ -3717,8 +3720,6 @@ bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosi
             default:
                 break;
         }
-    } else if ( "application/x-vnd.kde.plan.project" ) {
-        return true;
     } else {
         kDebug(planDbg())<<"Unknown mimetype";
     }
@@ -3746,18 +3747,23 @@ bool NodeItemModel::dropAllowed( Node *on, const QMimeData *data )
     if ( ! m_projectshown && on == m_project ) {
         return true;
     }
-    QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
-    QList<Node*> lst = nodeList( stream );
-    foreach ( Node *n, lst ) {
-        if ( n->type() == Node::Type_Project || on == n || on->isChildOf( n ) ) {
-            return false;
-        }
+    if ( on->isBaselined() && on->type() != Node::Type_Summarytask ) {
+        return false;
     }
-    lst = removeChildNodes( lst );
-    foreach ( Node *n, lst ) {
-        if ( ! m_project->canMoveTask( n, on ) ) {
-            return false;
+    if ( data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
+        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        QList<Node*> lst = nodeList( stream );
+        foreach ( Node *n, lst ) {
+            if ( n->type() == Node::Type_Project || on == n || on->isChildOf( n ) ) {
+                return false;
+            }
+        }
+        lst = removeChildNodes( lst );
+        foreach ( Node *n, lst ) {
+            if ( ! m_project->canMoveTask( n, on ) ) {
+                return false;
+            }
         }
     }
     return true;
