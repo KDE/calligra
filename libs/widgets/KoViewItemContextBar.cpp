@@ -152,7 +152,7 @@ void KoViewItemContextBar::showContextBar(const QRect &rect)
     // Center bar in FullContextBar mode, left align in
     // SelectionOnlyContextBar mode
     const int posX = 0;
-    const int posY = CONTEXTBAR_MARGIN;
+    const int posY = CONTEXTBAR_MARGIN / 4;
     int numButtons = 0;
     m_ContextBar->move(rect.topLeft() + QPoint(posX, posY));
     //Hide buttons if item is too small
