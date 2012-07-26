@@ -131,6 +131,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
             this, SLOT(changeCurrentAnimation(KPrShapeAnimation*)));
     connect(m_timeLineView, SIGNAL(customContextMenuRequested(QPoint)), this,
             SLOT(showTimeLineCustomContextMenu(QPoint)));
+    connect(m_animationSelector, SIGNAL(previousStateChanged(bool)), this, SIGNAL(previousStateChanged(bool)));
     QTimer::singleShot(700, this, SLOT(initializeView()));
 }
 

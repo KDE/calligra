@@ -173,6 +173,8 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
             this, SLOT(previewAnimation(KPrShapeAnimation*)));
     connect(m_addDialog, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
             this, SLOT(addNewAnimation(KPrShapeAnimation*)));
+    connect(m_addDialog, SIGNAL(previousStateChanged(bool)), this, SIGNAL(previousStateChanged(bool)));
+    connect(m_editAnimationsPanel, SIGNAL(previousStateChanged(bool)), this, SIGNAL(previousStateChanged(bool)));
     QTimer::singleShot(500, this, SLOT(initializeView()));
 
 }

@@ -55,6 +55,7 @@ public:
 signals:
     void itemClicked(const QModelIndex &index);
     void requestAnimationPreview();
+    void previousStateChanged(bool isEnabled);
 
 public slots:
     void updateIndex(const QModelIndex &index);

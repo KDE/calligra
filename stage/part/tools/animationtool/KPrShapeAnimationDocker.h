@@ -60,6 +60,7 @@ public:
     KoShape *getSelectedShape();
     
 signals:
+    void previousStateChanged(bool isEnabled);
     
 public slots:
     /// Update widget with animations of the new active page

@@ -56,12 +56,16 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     , m_docker(docker)
     , showAutomaticPreview(false)
     , m_animationsData(animationsData)
+    , m_collectionContextBar(0)
+    , m_collectionPreviewButton(0)
+    , m_subTypeContextBar(0)
+    , m_subTypePreviewButton(0)
 {   
     QGridLayout *containerLayout = new QGridLayout;
 
-    QCheckBox *previewCheckBox = new QCheckBox(i18n("Automatic animation preview"), this);
-    previewCheckBox->setChecked(loadPreviewConfig());
-    showAutomaticPreview = previewCheckBox->isChecked();
+    m_previewCheckBox = new QCheckBox(i18n("Automatic animation preview"), this);
+    m_previewCheckBox->setChecked(loadPreviewConfig());
+    showAutomaticPreview = m_previewCheckBox->isChecked();
 
     QFont viewWidgetFont  = KGlobalSettings::generalFont();
     qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
@@ -112,13 +116,14 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     containerLayout->addWidget(m_collectionChooser, 0, 0,2,1);
     containerLayout->addWidget(m_collectionView, 0, 1, 1, 1);
     containerLayout->addWidget(m_subTypeView, 1, 1, 1, 1);
-    containerLayout->addWidget(previewCheckBox, 2, 0, 1, 2);
+    containerLayout->addWidget(m_previewCheckBox, 2, 0, 1, 2);
 
 
     // set signals
     connect(m_collectionView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
     connect(m_subTypeView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
-    connect(previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(setPreviewState(bool)));
+    connect(m_previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(setPreviewState(bool)));
+    connect(docker, SIGNAL(previousStateChanged(bool)), this, SLOT(setPreviewState(bool)));
     setLayout(containerLayout);
 }
 
@@ -137,6 +142,11 @@ void KPrAnimationSelectorWidget::init()
     m_animationsData->populateMainView(m_collectionChooser);
     m_collectionChooser->setCurrentRow(0);
     activateShapeCollection(m_collectionChooser->item(0));
+    // Init context bar
+    if (!showAutomaticPreview) {
+        createCollectionContextBar();
+        createSubTypeContextBar();
+    }
 }
 
 void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &index)
@@ -213,11 +223,6 @@ void KPrAnimationSelectorWidget::activateShapeCollection(QListWidgetItem *item)
     m_collectionView->setModel(m_animationsData->modelById(id));
     m_subTypeView->setModel(0);
     m_subTypeView->hide();
-
-    // Init context bar
-    if (!showAutomaticPreview) {
-        createCollectionContextBar();
-    }
 }
 
 void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
@@ -232,10 +237,6 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
         if (m_animationsData->subModelById(id)){
             m_subTypeView->setModel(m_animationsData->subModelById(id));
             m_subTypeView->show();
-            // Init context bar
-            if (!showAutomaticPreview) {
-                createSubTypeContextBar();
-            }
             return;
         }
         newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
@@ -265,21 +266,36 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 
 void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
 {
+    if ((showAutomaticPreview == isEnable)) {
+        return;
+    }
     showAutomaticPreview = isEnable;
+    m_previewCheckBox->setChecked(isEnable);
     if (!isEnable) {
-        if (m_collectionView->model()) {
+        if (!m_collectionContextBar) {
             createCollectionContextBar();
         }
-        if (m_subTypeView->model()) {
+        if (!m_subTypeContextBar) {
             createSubTypeContextBar();
         }
     }
     if (isEnable) {
+        delete m_collectionContextBar;
+        delete m_collectionPreviewButton;
         m_collectionContextBar = 0;
         m_collectionPreviewButton = 0;
+
+        if (m_subTypeContextBar) {
+            delete m_subTypeContextBar;
+        }
+        if (m_subTypePreviewButton) {
+            delete m_subTypePreviewButton;
+        }
         m_subTypeContextBar = 0;
         m_subTypePreviewButton = 0;
+
     }
+    emit previousStateChanged(isEnable);
 }
 
 bool KPrAnimationSelectorWidget::loadPreviewConfig()
