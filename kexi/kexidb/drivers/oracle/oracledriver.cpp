@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "oracledriver.h"
 #include "oracleconnection.h"
-#include <kexidb/driver_p.h>
+#include <db/driver_p.h>
 //#include <occiCommon.h>
 #include <kdebug.h>
 using namespace KexiDB;

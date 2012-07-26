@@ -355,7 +355,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         localizedNumber = removeTrailingZeros(localizedNumber, decimalSymbol);
     }
 
-    // Remove thousands seperators if necessary
+    // Remove thousands separators if necessary
     if (!thousandsSep) {
         QString seperator = m_converter->settings()->locale()->thousandsSeparator();
         if (!seperator.isNull()) {

@@ -22,8 +22,8 @@
 
 #include <QStringList>
 
-#include <kexidb/connection.h>
-#include <kexidb/tableschema.h>
+#include <db/connection.h>
+#include <db/tableschema.h>
 
 #include <sql.h>
 #include <sqlext.h>

@@ -32,7 +32,7 @@
 
 #include <kdebug.h>
 
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <kexiutils/utils.h>
 #include <formeditor/utils.h>
 

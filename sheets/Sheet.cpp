@@ -2258,7 +2258,7 @@ bool Sheet::compareRows(int row1, int row2, int maxCols, OdfSavingContext& table
 #else
     Q_UNUSED(maxCols);
 
-    // Optimized comparision by using the RowRepeatStorage to compare the content
+    // Optimized comparison by using the RowRepeatStorage to compare the content
     // rather then an expensive loop like compareCellsInRows.
     int row1repeated = cellStorage()->rowRepeat(row1);
     Q_ASSERT( row2 > row1 );

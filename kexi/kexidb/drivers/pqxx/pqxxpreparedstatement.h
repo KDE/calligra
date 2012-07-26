@@ -24,8 +24,8 @@
 //
 #ifndef PQXXPREPAREDSTATEMENT_H
 #define PQXXPREPAREDSTATEMENT_H
-#include <kexidb/preparedstatement.h>
-#include <kexidb/connection_p.h>
+#include <db/preparedstatement.h>
+#include <db/connection_p.h>
 
 /**
   @author Adam Pigg <adam@piggz.co.uk>

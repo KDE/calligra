@@ -10,7 +10,7 @@ of QUndoCommand.
 
 Each command is created from the user interface.
 The commands working on cell ranges, i.e. derivatives of KSpread::AbstractRegionCommand,
-have to check wether the operation is allowed before execution. Cells may be
+have to check whether the operation is allowed before execution. Cells may be
 protected or locked as elements of matrices. KSpread::AbstractRegionCommand::execute
 takes care of that. If the operation is not allowed, the command will neither
 get executed nor added to the undo stack.

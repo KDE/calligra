@@ -20,13 +20,15 @@
 #ifndef KEXIDB_ALTER_H
 #define KEXIDB_ALTER_H
 
-#include "connection.h"
+#include "kexidb_export.h"
+
+#include <db/connection.h>
+#include <db/autodeletedhash.h>
 
 #include <QList>
 #include <QHash>
 
 #include <KDebug>
-#include <kexiutils/utils.h>
 
 namespace KexiDB
 {
@@ -142,8 +144,8 @@ public:
 
     class ActionBase;
     //! For collecting actions related to a single field
-    typedef KexiUtils::AutodeletedHash<QByteArray, ActionBase*> ActionDict;
-    typedef KexiUtils::AutodeletedHash<int, ActionDict*> ActionDictDict; //!< for collecting groups of actions by field UID
+    typedef KexiDB::AutodeletedHash<QByteArray, ActionBase*> ActionDict;
+    typedef KexiDB::AutodeletedHash<int, ActionDict*> ActionDictDict; //!< for collecting groups of actions by field UID
     typedef QHash<QByteArray, ActionBase*>::Iterator ActionDictIterator;
     typedef QHash<QByteArray, ActionBase*>::ConstIterator ActionDictConstIterator;
     typedef QHash<int, ActionDict*>::Iterator ActionDictDictIterator;

@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QMap>
 
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 #include <kexiutils/InternalPropertyMap.h>
 #include "kexi.h"
 
