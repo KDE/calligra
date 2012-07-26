@@ -158,7 +158,6 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
             media_CallList.append(temp);
         }
     }
-
     KPrCollectionItemModel* model = new KPrCollectionItemModel(this);
     model->setAnimationClassList(entranceList);
     addCollection("entrance", i18n("Entrance"), model);
@@ -274,31 +273,20 @@ QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
 
 QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const QString subTypeId)
 {
+    Q_UNUSED(mainId);
+    QIcon icon;
     // icon name ex: entrance_zoom_in_animations
     QString subId = subTypeId;
     subId.replace("-", "_");
-
-    QString name = animationName(mainId);
-    name.append("_");
-    name.append(subId);
-    name.append("_animation");
-
-    QIcon icon;
+    // icon name ex: in_animations
+    QString name = subId;
+    name.append("_animations");
     QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
         icon = KIcon(name);
     }
     else {
-        // icon name ex: in_animations
-        name = subId;
-        name.append("_animations");
-        path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
-        if (!path.isNull()) {
-            icon = KIcon(name);
-        }
-        else {
-            icon = KIcon("unrecognized_animation");
-        }
+        icon = KIcon("unrecognized_animation");
     }
     return icon;
 }
