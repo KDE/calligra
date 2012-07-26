@@ -62,6 +62,16 @@ QColor Theme::secondaryTextColor() const
     return QColor( 175, 175, 175 );
 }
 
+QColor Theme::positiveColor() const
+{
+    return QColor( 0, 128, 0 );
+}
+
+QColor Theme::negativeColor() const
+{
+    return QColor( 128, 0, 0 );
+}
+
 Constants::Constants(QObject* parent)
     : QObject(parent)
 {

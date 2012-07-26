@@ -32,6 +32,8 @@ class Theme : public QObject
     Q_PROPERTY( QColor QuaternaryColor READ quaternaryColor CONSTANT )
     Q_PROPERTY( QColor TextColor READ textColor CONSTANT )
     Q_PROPERTY( QColor SecondaryTextColor READ secondaryTextColor CONSTANT )
+    Q_PROPERTY( QColor PositiveColor READ positiveColor CONSTANT )
+    Q_PROPERTY( QColor NegativeColor READ negativeColor CONSTANT )
 
 public:
     Theme( QObject* parent = 0 );
@@ -43,6 +45,8 @@ public:
     QColor quaternaryColor() const;
     QColor textColor() const;
     QColor secondaryTextColor() const;
+    QColor positiveColor() const;
+    QColor negativeColor() const;
 };
 
 class Constants : public QObject
