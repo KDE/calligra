@@ -45,7 +45,7 @@ Page {
             rightArea: Button {
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "?";
+                image: ":/images/help-about.png";
                 highlightColor: Constants.Theme.HighlightColor;
             }
         }

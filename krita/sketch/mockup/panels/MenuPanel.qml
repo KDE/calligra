@@ -62,7 +62,7 @@ Item {
                 id: saveButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "Save";
+                image: ":/images/document-save.png";
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "save" );
             }
@@ -70,7 +70,7 @@ Item {
                 id: saveAsButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "Save As";
+                image: ":/images/document-save-as.png";
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "saveAs" );
             }
@@ -78,7 +78,7 @@ Item {
                 id: shareButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "Share";
+                image: ":/images/document-share.png";
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "share" );
             }
@@ -91,7 +91,7 @@ Item {
                 id: undoButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "Undo";
+                image: ":/images/edit-undo.png";
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "undo" );
             }
@@ -99,7 +99,7 @@ Item {
                 id: redoButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "Redo";
+                image: ":/images/edit-redo.png";
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "redo" );
             }
@@ -111,7 +111,7 @@ Item {
                 id: helpButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "?";
+                image: ":/images/help-about.png";
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "help" );
             }
@@ -119,7 +119,7 @@ Item {
                 id: settingsButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                text: "Settings";
+                image: ":/images/configure.png";
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "settings" );
             }

@@ -49,5 +49,12 @@
     <file>images/red.png</file>
     <file>images/green.png</file>
     <file>images/blue.png</file>
+    <file>images/document-save.png</file>
+    <file>images/document-save-as.png</file>
+    <file>images/document-share.png</file>
+    <file>images/edit-undo.png</file>
+    <file>images/edit-redo.png</file>
+    <file>images/help-about.png</file>
+    <file>images/configure.png</file>
 </qresource>
 </RCC>
