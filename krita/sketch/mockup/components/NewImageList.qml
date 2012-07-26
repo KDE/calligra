@@ -83,16 +83,16 @@ PageStack {
                     font.pixelSize: Constants.LargeFontSize;
                 }
             }
-            TextField { width: parent.width; height: Constants.GridHeight; placeholder: "Width" }
-            TextField { width: parent.width; height: Constants.GridHeight; placeholder: "Height" }
-            TextField { width: parent.width; height: Constants.GridHeight; placeholder: "Resolution" }
+            TextField { placeholder: "Width" }
+            TextField { placeholder: "Height" }
+            TextField { placeholder: "Resolution" }
             Item { width: parent.width; height: Constants.GridHeight; }
             Row {
                 width: parent.width;
                 Button {
                     width: parent.width / 2;
                     height: Constants.GridHeight;
-                    color: Constants.Theme.SecondaryColor;
+                    color: Constants.Theme.NegativeColor;
                     text: "Cancel";
                     textColor: "white";
                     onClicked: pageStack.pop();
@@ -100,7 +100,7 @@ PageStack {
                 Button {
                     width: parent.width / 2;
                     height: Constants.GridHeight;
-                    color: Constants.Theme.TertiaryColor;
+                    color: Constants.Theme.PositiveColor;
                     text: "Create";
                     textColor: "white";
                     onClicked: base.clicked();
