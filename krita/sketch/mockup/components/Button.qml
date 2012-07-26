@@ -27,11 +27,13 @@ Item {
     property bool checked: false;
 
     property alias image: icon.source;
-    property alias color: fill.color;
+    property color color: "white";
     property alias text: label.text;
     property alias textColor: label.color;
+    property alias textSize: label.font.pixelSize;
     property bool shadow: true;
 
+    property bool highlight: true;
     property color highlightColor: color;
 
     width: Constants.GridWidth;
@@ -47,13 +49,15 @@ Item {
             id: fill;
             anchors.fill: parent;
 
-            color: "white";
+            color: base.state == "pressed" && base.highlight ? base.highlightColor : base.color;
+            Behavior on color { ColorAnimation { duration: 50; } }
 
             Image {
                 id: icon;
                 anchors.fill: parent;
                 anchors.margins: Constants.DefaultMargin;
                 fillMode: Image.PreserveAspectFit;
+                smooth: true;
             }
 
             Label {
@@ -74,13 +78,11 @@ Item {
         when: mouse.pressed || base.checked;
 
         PropertyChanges { target: shadow; size: Constants.DefaultMargin * 0.333; }
-        PropertyChanges { target: fill; color: base.highlightColor; }
     }
 
     transitions: Transition {
         ParallelAnimation {
             NumberAnimation { properties: "size"; duration: 50; }
-            ColorAnimation { duration: 50; }
         }
     }
 }
