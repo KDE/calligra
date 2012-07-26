@@ -30,6 +30,7 @@
     <file>panels/FilterPanel.qml</file>
     <file>panels/ColorPanel.qml</file>
     <file>panels/PanelBar.qml</file>
+    <file>panels/EditPresetPage.qml</file>
 
     <file>images/divider.png</file>
     <file>images/document-new.png</file>

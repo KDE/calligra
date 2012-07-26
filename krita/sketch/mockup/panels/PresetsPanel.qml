@@ -20,10 +20,13 @@ import QtQuick 1.1
 import ":/components"
 
 Panel {
+    id: base;
     name: "Presets";
 
     actions: [
         Button {
+            id: addButton;
+
             width: Constants.GridWidth;
             height: Constants.GridHeight;
 
@@ -31,8 +34,29 @@ Panel {
             color: "transparent";
             textColor: "white";
             shadow: false;
+            highlight: false;
+            onClicked: base.toggleEdit();
+
+            states: State {
+                name: "edit"
+                when: base.state == "edit";
+
+                PropertyChanges { target: addButton; text: "Cancel"; color: Constants.Theme.NegativeColor; width: Constants.GridWidth * 2; }
+            }
+
+            transitions: Transition {
+                to: "edit";
+                reversible: true;
+
+                ParallelAnimation {
+                    NumberAnimation { target: addButton; properties: "width"; duration: 250; }
+                    ColorAnimation { target: addButton; properties: "color"; duration: 250; }
+                }
+            }
         },
         Button {
+            id: editButton;
+
             width: Constants.GridWidth;
             height: Constants.GridHeight;
 
@@ -40,6 +64,25 @@ Panel {
             color: "transparent";
             textColor: "white";
             shadow: false;
+            highlight: false;
+            onClicked: base.toggleEdit();
+
+            states: State {
+                name: "edit"
+                when: base.state == "edit";
+
+                PropertyChanges { target: editButton; text: "Save"; color: Constants.Theme.PositiveColor; width: Constants.GridWidth * 2; }
+            }
+
+            transitions: Transition {
+                to: "edit";
+                reversible: true;
+
+                ParallelAnimation {
+                    NumberAnimation { target: editButton; properties: "width"; duration: 250; }
+                    ColorAnimation { target: editButton; properties: "color"; duration: 250; }
+                }
+            }
         }
     ]
 
@@ -53,14 +96,22 @@ Panel {
         cellHeight: Constants.GridHeight;
     }
 
-    fullContents: GridView {
+    fullContents: PageStack {
+        id: contentArea;
         anchors.fill: parent;
+        initialPage: GridView {
+            anchors.fill: parent;
 
-        model: model;
-        delegate: delegate;
+            model: model;
+            delegate: delegate;
 
-        cellWidth: Constants.GridWidth;
-        cellHeight: Constants.GridHeight;
+            cellWidth: Constants.GridWidth;
+            cellHeight: Constants.GridHeight;
+        }
+    }
+
+    onStateChanged: if( state != "edit" && contentArea.depth > 1 ) {
+        contentArea.pop();
     }
 
     ListModel {
@@ -90,4 +141,16 @@ Panel {
             }
         }
     }
+
+    function toggleEdit() {
+        if( base.state == "edit" ) {
+            base.state = "full";
+            contentArea.pop();
+        } else if( base.state == "full" ) {
+            base.state = "edit";
+            contentArea.push( editPresetPage );
+        }
+    }
+
+    Component { id: editPresetPage; EditPresetPage { } }
 }
