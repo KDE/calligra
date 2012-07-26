@@ -44,7 +44,7 @@ Page {
             rightArea: Button {
                 width: Constants.GridWidth * 2;
                 height: Constants.GridHeight;
-                color: Constants.Theme.TertiaryColor;
+                color: Constants.Theme.PositiveColor;
                 textColor: "white";
                 text: "Upload";
                 onClicked: pageStack.pop();
