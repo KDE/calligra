@@ -67,8 +67,6 @@ public:
 
     int lastId; // pageIds are distributed serially,
 
-    bool preferPageSpread;
-
     QHash<QString, KWPageStyle> pageStyles;
     QHash<QString, QString> pageStyleNames; // map display-name to name
     KoInsets padding;

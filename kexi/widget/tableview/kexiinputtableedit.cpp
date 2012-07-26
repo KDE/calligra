@@ -37,7 +37,7 @@
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <kexidb/fieldvalidator.h>
 
 //! @internal
@@ -115,8 +115,8 @@ void KexiInputTableEdit::init()
         m_lineedit->setAlignment(Qt::AlignRight);
     }
 
-    if (field()->isTextType()) {
-        m_lineedit->setMaxLength(field()->length());
+    if (field()->type() == KexiDB::Field::Text && field()->maxLength() > 0) {
+        m_lineedit->setMaxLength(field()->maxLength());
     }
     setViewWidget(m_lineedit);
     m_calculatedCell = false;

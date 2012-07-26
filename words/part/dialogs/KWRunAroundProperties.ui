@@ -6,21 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>342</width>
-    <height>335</height>
+    <width>339</width>
+    <height>456</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout">
-   <property name="spacing">
-    <number>6</number>
-   </property>
-   <property name="margin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
       <string>Text elsewhere will:</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -103,40 +100,167 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>The shape affects the text by its:</string>
      </property>
-     <property name="margin">
-      <number>0</number>
+     <property name="flat">
+      <bool>true</bool>
      </property>
-     <item>
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Distance Between Shape and Text:</string>
-       </property>
-       <property name="buddy">
-        <cstring>distance</cstring>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KoUnitDoubleSpinBox" name="distance"/>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="box">
+        <property name="text">
+         <string>Bounding box</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="outside">
+        <property name="text">
+         <string>Contour</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Shape and text is separated:</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Left by:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>distanceLeft</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="distanceLeft"/>
+      </item>
+      <item row="0" column="2">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>180</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Above by:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>distanceLeft</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="distanceTop"/>
+      </item>
+      <item row="2" column="2">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>180</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Below by:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>distanceLeft</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="distanceBottom"/>
+      </item>
+      <item row="4" column="2">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>180</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Right by:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>distanceLeft</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KoUnitDoubleSpinBox" name="distanceRight"/>
+      </item>
+      <item row="1" column="2">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>180</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+     <zorder>distanceLeft</zorder>
+     <zorder>label_6</zorder>
+     <zorder>distanceTop</zorder>
+     <zorder>label_8</zorder>
+     <zorder>distanceBottom</zorder>
+     <zorder>label_5</zorder>
+     <zorder>label_7</zorder>
+     <zorder>distanceRight</zorder>
+     <zorder></zorder>
+    </widget>
    </item>
    <item>
     <spacer>

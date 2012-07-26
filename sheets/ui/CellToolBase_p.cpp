@@ -59,7 +59,6 @@
 
 // ui
 #include "ui/CellEditor.h"
-#include "ui/CellToolOptionWidget.h"
 #include "ui/ExternalEditor.h"
 #include "ui/SheetView.h"
 
@@ -73,6 +72,7 @@
 #include <KFontAction>
 #include <KFontChooser>
 #include <KFontSizeAction>
+#include <kdeversion.h>
 
 // Qt
 #include <QApplication>
@@ -87,11 +87,11 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     const Cell& theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
     const Style style = theCell.style();
     if (q->selection()->activeSheet()->isProtected() && style.hideFormula()) {
-        optionWidget->editor()->setPlainText(theCell.displayText());
+        externalEditor->setPlainText(theCell.displayText());
     } else if (q->selection()->activeSheet()->isProtected() && style.hideAll()) {
-        optionWidget->editor()->clear();
+        externalEditor->clear();
     } else {
-        optionWidget->editor()->setPlainText(theCell.userInput());
+        externalEditor->setPlainText(theCell.userInput());
     }
 }
 
@@ -183,8 +183,8 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     const QList<KAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
-    optionWidget->formulaButton()->setEnabled(enable);
-    optionWidget->editor()->setEnabled(enable);
+    q->action("insertFormula")->setEnabled(enable);
+    externalEditor->setEnabled(enable);
 
     // These actions are always enabled.
     q->action("copy")->setEnabled(true);
@@ -752,7 +752,11 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     case Qt::Key_Dollar:
         command->setText(i18nc("(qtundo-format)", "Currency Format"));
         command->setFormatType(Format::Money);
+#if KDE_IS_VERSION(4,4,0)
+        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces());
+#else
         command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits());
+#endif
         break;
 
     case Qt::Key_Percent:

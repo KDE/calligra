@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
    and will be merged back with Calligra Libraries.
@@ -41,9 +42,9 @@
 
 #include <kdialog.h>
 
-#include <kexiutils/tristate.h>
-#include <kexidb/connection.h>
-
+#include <db/tristate.h>
+#include <db/connection.h>
+#include <QModelIndex>
 #include "kexicsvimportoptionsdlg.h"
 
 class QVBoxLayout;
@@ -51,7 +52,7 @@ class QHBoxLayout;
 class QGridLayout;
 class QCheckBox;
 class QLabel;
-class Q3Table;
+class QTableView;
 class QFile;
 class KComboBox;
 class KIntSpinBox;
@@ -61,6 +62,7 @@ class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiProject;
+class KexiCSVImportDialogModel;
 namespace KexiPart {
 class Item;
 }
@@ -108,7 +110,8 @@ private:
 
     QGridLayout* MyDialogLayout;
     QHBoxLayout* Layout1;
-    Q3Table* m_table;
+    KexiCSVImportDialogModel *m_table;
+    QTableView *m_tableView;
     KexiCSVDelimiterWidget* m_delimiterWidget;
     bool m_detectDelimiter; //!< true if delimiter should be detected
     //!< (true by default, set to false if user sets delimiter)
@@ -189,7 +192,6 @@ private:
     QString m_clipboardData;
     QByteArray m_fileArray;
     Mode m_mode;
-    int m_prevSelectedCol;
 
     //! vector of detected types, 0==text (the default), 1==number, 2==date
 //! @todo more types
@@ -200,8 +202,7 @@ private:
     QVector< QList<int>* > m_uniquenessTest;
 
     QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
-    QVector<QString> m_typeNames, m_columnNames;
-    QBitArray m_changedColumnNames;
+    QVector<QString> m_typeNames;
     bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once
     bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row
     bool m_firstFillTableCall : 1; //!< used to know whether it's 1st fillTable() call
@@ -249,12 +250,10 @@ private slots:
     void delimiterChanged(const QString& delimiter);
     void startlineSelected(int line);
     void textquoteSelected(int);
-    void currentCellChanged(int, int col);
+    void currentCellChanged(const QModelIndex &prev, const QModelIndex &cur);
     void ignoreDuplicatesChanged(int);
-    void slot1stRowForFieldNamesChanged(int);
-    void cellValueChanged(int row, int col);
+    void slot1stRowForFieldNamesChanged(int state);
     void optionsButtonClicked();
     void slotPrimaryKeyFieldToggled(bool on);
 };
-
 #endif

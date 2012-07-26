@@ -2512,10 +2512,8 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     const MouseOverTextInfo* mouseover = 0;
     for (int i = 0; i < tc->interactive.size(); ++i) {
         const TextContainerInteractiveInfo& ti = tc->interactive[i];
-        const MouseClickTextInfo* a =
-                ti.interactive.get<MouseClickTextInfo>();
-        const MouseOverTextInfo* b =
-                ti.interactive.get<MouseOverTextInfo>();
+        const MouseClickTextInfo *a = ti.interactive.get<MouseClickTextInfo>();
+        const MouseOverTextInfo *b = ti.interactive.get<MouseOverTextInfo>();
         if (a && start >= a->text.range.begin && start < a->text.range.end) {
             mouseclick = a;
         }
@@ -2549,14 +2547,27 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     out.xml.startElement("text:span", false);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
+    // [MS-PPT]: exHyperlinkIdRef must be ignored unless action is in
+    // {II_JumpAction, II_HyperlinkAction, II_CustomShowAction (0x7)}
+    //
+    // NOTE: Jumps to other slides and shows not supported atm.
     if (mouseclick) {
-        // The [MS-PPT] spec. states that exHyperlinkIdRef must be
-        // ignored unless action is equal to II_JumpAction (0x3),
-        // II_HyperlinkAction (0x4), or II_CustomShowAction (0x7).
+        const InteractiveInfoAtom *info = &mouseclick->interactive.interactiveInfoAtom;
+        if (info->action != II_HyperlinkAction) {
+            mouseclick = 0;
+        }
+    }
+    if (mouseover) {
+        const InteractiveInfoAtom *info = &mouseover->interactive.interactiveInfoAtom;
+        if (info->action != II_HyperlinkAction) {
+            mouseover = 0;
+        }
+    }
 
+    if (mouseclick) {
         out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
-                mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+            mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
             out.xml.addAttribute("xlink:type", "simple");
@@ -2567,7 +2578,7 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     } else if (mouseover) {
         out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
-                mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+            mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
             out.xml.addAttribute("xlink:type", "simple");

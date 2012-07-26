@@ -30,8 +30,9 @@
 #include <kdebug.h>
 #include <kimageio.h>
 #include <kglobal.h>
+#include <KMimeType>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 K_GLOBAL_STATIC(KexiBLOBBuffer, _buffer)
 

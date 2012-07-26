@@ -78,9 +78,24 @@ void MSOOXML_CURRENT_CLASS::initDrawingML()
     qsrand(QTime::currentTime().msec());
 }
 
+bool MSOOXML_CURRENT_CLASS::isCustomShape()
+{
+    if (m_contentType.isEmpty()) {
+	return false;
+    }
+    if (m_contentType == "rect") {
+	return false;
+    }
+    if (unsupportedPredefinedShape()) {
+	return false;
+    }
+    return true;
+}
+
 bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
 {
-    // some conditions are not supported with custom shapes properly yet, remove them when possible
+    // TODO: Some conditions are not supported with custom shapes
+    // properly yet, remove them when possible.
 
     // Custom geometry has its own handling
     if (m_contentType == "custom") {
@@ -92,8 +107,8 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
         return false;
     }
 
-    // These shapes are not properly supported atm. some have bugs in predefinedShapes.xml,
-    // some might have xml parser / calligra bugs
+    // These shapes are not properly supported atm. some have bugs in
+    // predefinedShapes.xml, some might have xml_parser/calligra bugs.
     if (m_contentType == "circularArrow" || m_contentType == "curvedDownArrow" ||
         m_contentType == "curvedLeftArrow" || m_contentType == "curvedUpArrow" ||
         m_contentType == "curvedRightArrow" || m_contentType == "gear6" ||
@@ -101,6 +116,28 @@ bool MSOOXML_CURRENT_CLASS::unsupportedPredefinedShape()
         return true;
     }
     return false;
+}
+
+/* bodyPr (Body Properties) defaults
+ * ECMA-376, 21.1.2.1.1, p.3556 - DrawingML
+ */
+void MSOOXML_CURRENT_CLASS::inheritDefaultBodyProperties()
+{
+    if (m_shapeTextPosition.isEmpty()) {
+        m_shapeTextPosition = "top";
+    }
+    if (m_shapeTextTopOff.isEmpty()) {
+        m_shapeTextTopOff = "45720";
+    }
+    if (m_shapeTextLeftOff.isEmpty()) {
+        m_shapeTextLeftOff = "91440";
+    }
+    if (m_shapeTextRightOff.isEmpty()) {
+        m_shapeTextRightOff = "91440";
+    }
+    if (m_shapeTextBottomOff.isEmpty()) {
+        m_shapeTextBottomOff = "45720";
+    }
 }
 
 // ----------------------------------------------------------------
@@ -277,7 +314,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_pic()
         qreal angle, xDiff, yDiff;
         MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
         QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                            .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+                            .arg(angle).arg((m_svgX + xDiff)/360000, 3, 'f').arg((m_svgY + yDiff)/360000, 3, 'f');
         body->addAttribute("draw:transform", rotString);
     }
 
@@ -1041,13 +1078,13 @@ void MSOOXML_CURRENT_CLASS::preReadSp()
 
 void MSOOXML_CURRENT_CLASS::generateFrameSp()
 {
+    inheritDefaultBodyProperties();
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    bool isCustomShape = false;
     kDebug() << "outputDrawFrame for" << (m_context->type == SlideLayout ? "SlideLayout" : "Slide");
 
-    inheritDefaultBodyProperties();
-    inheritBodyProperties(); // Properties may or may not override default ones.
+    // Properties may or may not override default ones.
+    inheritBodyProperties();
 
     // FIXME: The draw:fit-to-size attribute specifies whether to stretch the
     // text content of a drawing object to fill an entire object.  The
@@ -1064,19 +1101,18 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:line");
     }
     else if (m_contentType.contains("Connector")) {
-        body->startElement("draw:line"); // This should be maybe draw:connector but calligra doesn't seem to
-                                         // handle that element yet
+        // This should be maybe draw:connector but calligra doesn't
+        // seem to handle that element atm.
+        body->startElement("draw:line");
     }
-    else if (m_contentType == "custom") { // custGeom
+    else if (m_contentType == "custom") {
         body->startElement("draw:custom-shape");
-#ifdef PPTXXMLSLIDEREADER_CPP
-        isCustomShape = true;
-#endif
     }
-    else if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+    else if (!isCustomShape()) {
 #ifdef PPTXXMLSLIDEREADER_CPP
         if (d->phType == "sldImg") {
-            body->startElement("draw:page-thumbnail"); // Special feature for presentation notes
+	    // Special feature for presentation notes
+            body->startElement("draw:page-thumbnail");
         } else {
             body->startElement("draw:frame");
         }
@@ -1084,11 +1120,9 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
         body->startElement("draw:frame");
 #endif
     }
-    else { // For predefined shapes
+    // For predefined shapes
+    else {
         body->startElement("draw:custom-shape");
-#ifdef PPTXXMLSLIDEREADER_CPP
-        isCustomShape = true;
-#endif
     }
 
     if (!m_cNvPrName.isEmpty()) {
@@ -1108,7 +1142,7 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 
     // NOTE: Workaround: Set padding to ZERO until the fo:wrap-option support
     // arrives and other text on shape related issues get fixed.
-    if (isCustomShape) {
+    if (isCustomShape()) {
         m_currentDrawStyle->removeProperty("fo:padding-left");
         m_currentDrawStyle->removeProperty("fo:padding-right");
         m_currentDrawStyle->removeProperty("fo:padding-top");
@@ -1246,64 +1280,68 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
                     MSOOXML::Utils::rotateString(m_rot, m_svgWidth, m_svgHeight, angle, xDiff, yDiff);
                 }
 
-                QString rotString = QString("rotate(%1) translate(%2cm %3cm)")
-                                        .arg(angle).arg((m_svgX + xDiff)/360000).arg((m_svgY + yDiff)/360000);
+                QString rotString = QString("rotate(%1) translate(%2cm %3cm)").
+                                    arg(angle).arg((m_svgX + xDiff)/360000, 3, 'f').
+                                    arg((m_svgY + yDiff)/360000, 3, 'f');
                 body->addAttribute("draw:transform", rotString);
             }
             body->addAttribute("svg:width", EMU_TO_CM_STRING(m_svgWidth));
             body->addAttribute("svg:height", EMU_TO_CM_STRING(m_svgHeight));
-            if (m_contentType == "custom") {
-                body->startElement("draw:enhanced-geometry");
-                if (m_flipV) {
-                    body->addAttribute("draw:mirror-vertical", "true");
-                }
-                if (m_flipH) {
-                    body->addAttribute("draw:mirror-horizontal", "true");
-                }
-                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
-                body->addAttribute("draw:enhanced-path", m_customPath);
-                if (!m_textareas.isEmpty()) {
-                    body->addAttribute("draw:text-areas", m_textareas);
-                }
-                body->addCompleteElement(m_customEquations.toUtf8());
-                body->endElement(); // draw:enhanced-geometry
-            }
-            else if (m_contentType != "rect" && !m_contentType.isEmpty() && !unsupportedPredefinedShape()) {
-                body->startElement("draw:enhanced-geometry");
-                if (m_flipV) {
-                    body->addAttribute("draw:mirror-vertical", "true");
-                }
-                if (m_flipH) {
-                    body->addAttribute("draw:mirror-horizontal", "true");
-                }
-                body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
-                body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
-
-                QString textareas = m_context->import->m_shapeHelper.textareas.value(m_contentType);
-                if (!textareas.isEmpty()) {
-                    body->addAttribute("draw:text-areas", textareas);
-                }
-
-                QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
-                // It is possible that some of the values are overwrritten by custom values in prstGeom, here we check for that
-                if (m_contentAvLstExists) {
-                    QMapIterator<QString, QString> i(m_avModifiers);
-                    while (i.hasNext()) {
-                        i.next();
-                        int index = 0;
-                        index = equations.indexOf(i.key());
-                        if (index > -1) {
-                            // We go forward by name and '" draw:formula="'
-                            index += i.key().length() + 16;
-                            equations.replace(index, equations.indexOf('\"', index) - index, i.value());
-                        }
-                    }
-                }
-                body->addCompleteElement(equations.toUtf8());
-                body->endElement(); // draw:enhanced-geometry
-            }
         }
     }
+}
+
+void MSOOXML_CURRENT_CLASS::writeEnhancedGeometry()
+{
+    if (!isCustomShape()) {
+        return;
+    }
+    body->startElement("draw:enhanced-geometry");
+    body->addAttribute("svg:viewBox", QString("0 0 %1 %2").arg(m_svgWidth).arg(m_svgHeight));
+
+    if (m_flipV) {
+        body->addAttribute("draw:mirror-vertical", "true");
+    }
+    if (m_flipH) {
+        body->addAttribute("draw:mirror-horizontal", "true");
+    }
+
+    if (m_contentType == "custom") {
+        body->addAttribute("draw:enhanced-path", m_customPath);
+        if (!m_textareas.isEmpty()) {
+            body->addAttribute("draw:text-areas", m_textareas);
+        }
+        if (!m_customEquations.isEmpty()) {
+            body->addCompleteElement(m_customEquations.toUtf8());
+        }
+    } else {
+        body->addAttribute("draw:enhanced-path", m_context->import->m_shapeHelper.attributes.value(m_contentType));
+
+        QString textareas = m_context->import->m_shapeHelper.textareas.value(m_contentType);
+        if (!textareas.isEmpty()) {
+            body->addAttribute("draw:text-areas", textareas);
+        }
+        QString equations = m_context->import->m_shapeHelper.equations.value(m_contentType);
+
+        // Some of the values might be overwritten by prstGeom.
+        if (m_contentAvLstExists) {
+            QMapIterator<QString, QString> i(m_avModifiers);
+            while (i.hasNext()) {
+                i.next();
+                int index = 0;
+                index = equations.indexOf(i.key());
+                if (index > -1) {
+                    // We go forward by name and '" draw:formula="'
+                    index += i.key().length() + 16;
+                    equations.replace(index, equations.indexOf('\"', index) - index, i.value());
+                }
+            }
+        }
+        if (!equations.isEmpty()) {
+            body->addCompleteElement(equations.toUtf8());
+        }
+    }
+    body->endElement(); // draw:enhanced-geometry
 }
 
 #undef CURRENT_EL
@@ -1311,7 +1349,8 @@ void MSOOXML_CURRENT_CLASS::generateFrameSp()
 //! cxnSp (Connection Shape)
 //! ECMA-376, 19.3.1.19, p.2833 (PresentationML)
 //! ECMA-376, 20.1.2.2.10, p.3029 (DrawingML)
-/* This element specifies a connection shape that is used to connect
+/*
+   This element specifies a connection shape that is used to connect
    two sp elements.  Once a connection is specified using a cxnSp, it
    is left to the generating application to determine the exact path
    the connector takes.  That is the connector routing algorithm is
@@ -1392,6 +1431,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_cxnSp()
     generateFrameSp();
 
     (void)drawFrameBuf.releaseWriter();
+
+    if (isCustomShape()) {
+	writeEnhancedGeometry();
+    }
     body->endElement(); //draw:frame, //draw:line
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -1516,6 +1559,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_sp()
 
     (void)drawFrameBuf.releaseWriter();
 
+    if (isCustomShape()) {
+	writeEnhancedGeometry();
+    }
     body->endElement(); //draw:frame, //draw:line
 
 #ifdef PPTXXMLSLIDEREADER_CPP
@@ -2205,9 +2251,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_listStylePropertiesAltered = false;
 
     m_currentCombinedBulletProperties.clear();
-    m_currentListLevel = 1; // By default we're in the first level
 
 #ifdef PPTXXMLSLIDEREADER_CPP
+    m_currentListLevel = 1; // By default we're in the first level
     inheritListStyles();
 #else
     // TODO: MS Word: There's a different positioning logic for a list inside
@@ -2245,7 +2291,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
     m_currentParagraphStyle.addProperty("fo:line-height", "100%" );
 #endif
     bool pprRead = false;
@@ -2327,6 +2372,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
         inheritParagraphStyle(m_currentParagraphStyle);
         m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
     }
+    if (m_currentParagraphStyle.property("fo:line-height").endsWith('%')) {
+        m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true");
+    }
 #else
     Q_UNUSED(pprRead);
 #endif
@@ -2356,10 +2404,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 #ifdef PPTXXMLSLIDEREADER_CPP
     // MS PowerPoint treats each paragraph as a list-item.
     m_listStylePropertiesAltered = true;
+#else
+    if (m_currentListLevel == 0) {
+	m_listStylePropertiesAltered = false;
+    }
 #endif
 
     //required to set size of the picture bullet properly
-    if (m_currentBulletProperties.bulletSizePt() == "UNUSED") {
+    if (m_listStylePropertiesAltered && m_currentBulletProperties.bulletSizePt() == "UNUSED") {
         if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
             fontSize.chop(2);
             qreal bulletSize = fontSize.toDouble();
@@ -2370,7 +2422,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
                 m_currentBulletProperties.setBulletRelativeSize(100);
             }
             m_currentBulletProperties.setBulletSizePt(bulletSize);
-            m_listStylePropertiesAltered = true;
         }
     }
 
@@ -2430,11 +2481,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     // Empty paragraph is NOT considered to be a list-item at the moment.
     // Prevent stage of displaying a bullet in front of it.
+#ifdef PPTXXMLSLIDEREADER_CPP
     if (!rRead) {
         m_listStylePropertiesAltered = true;
         m_prevListStyleName.clear();
         m_currentListLevel = 0;
     }
+#endif
 
     body = textPBuf.originalWriter();
 
@@ -3083,30 +3136,34 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     TRY_READ_ATTR_WITHOUT_NS(indent)
     TRY_READ_ATTR_WITHOUT_NS(defTabSz)
 
-    bool ok = false;
-
     // Following settings are only applied if defined so they don't overwrite defaults
-    // previous defined either in the slideLayoutm SlideMaster or the defaultStyles.
+    // previous defined either in the slideLayout, SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
-        m_currentBulletProperties.setMargin(marginal);
+        qreal marLeft;
+        STRING_TO_QREAL(marL, marLeft, "attr:marL")
+        marLeft = EMU_TO_POINT(marLeft);
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marLeft);
+        m_currentBulletProperties.setMargin(marLeft);
         m_listStylePropertiesAltered = true;
     }
     if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        qreal firstInd;
+        STRING_TO_QREAL(indent, firstInd, "attr:indent")
+        firstInd = EMU_TO_POINT(firstInd);
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
         m_listStylePropertiesAltered = true;
     }
 
     if (!marR.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+        qreal marRight;
+        STRING_TO_QREAL(marR, marRight, "attr:marR")
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", EMU_TO_POINT(marRight));
     }
     if (!defTabSz.isEmpty()) {
-        const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
+        qreal tabSize;
+        STRING_TO_QREAL(defTabSz, tabSize, "attr:defTabSz")
+        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", EMU_TO_POINT(tabSize));
     }
 
     m_currentTextStyleProperties = new KoCharacterStyle();
@@ -4277,8 +4334,9 @@ void MSOOXML_CURRENT_CLASS::readWrap()
 
 #undef CURRENT_EL
 #define CURRENT_EL lstStyle
-//! lstStyle handler (Text List Styles) ECMA-376, DrawingML 21.1.2.4.12, p. 3651.
-//!          This element specifies the list of styles associated with this body of text.
+//! lstStyle handler (Text List Styles)
+//! ECMA-376, DrawingML 21.1.2.4.12, p. 3651.
+//! This element specifies the list of styles associated with this body of text.
 /*!
  Parent elements:
  - lnDef (§20.1.4.1.20)
@@ -4959,8 +5017,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_outerShdw()
     qreal xDist = EMU_TO_CM(dist.toInt() / 2) * cos(angle);
     qreal yDist = EMU_TO_CM(dist.toInt() / 2) * sin(angle);
 
-    m_currentDrawStyle->addProperty("draw:shadow-offset-x", QString("%1cm").arg(xDist));
-    m_currentDrawStyle->addProperty("draw:shadow-offset-y", QString("%1cm").arg(yDist));
+    m_currentDrawStyle->addProperty("draw:shadow-offset-x", QString("%1cm").arg(xDist, 3, 'f'));
+    m_currentDrawStyle->addProperty("draw:shadow-offset-y", QString("%1cm").arg(yDist, 3, 'f'));
 
     while (!atEnd()) {
         readNext();
@@ -4999,7 +5057,6 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     m_currentListLevel = QString(level.at(3)).toInt();
 
     m_currentBulletProperties = m_currentCombinedBulletProperties[m_currentListLevel];
-
     Q_ASSERT(m_currentListLevel > 0);
     m_currentBulletProperties.m_level = m_currentListLevel;
 
@@ -5008,35 +5065,38 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     TRY_READ_ATTR_WITHOUT_NS(indent)
     TRY_READ_ATTR_WITHOUT_NS(defTabSz)
 
-    bool ok = false;
-
     m_currentParagraphStyle = KoGenStyle(KoGenStyle::ParagraphAutoStyle, "paragraph");
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
 #ifdef PPTXXMLSLIDEREADER_CPP
-    m_currentParagraphStyle.addProperty("style:font-independent-line-spacing", "true" );
     inheritTextStyle(m_currentTextStyle);
 #endif
 
     // Following settings are only applied if defined so they don't overwrite
     // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marL.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marginal);
-        m_currentBulletProperties.setMargin(marginal);
+        qreal marLeft;
+        STRING_TO_QREAL(marL, marLeft, "attr:marL")
+        marLeft = EMU_TO_POINT(marLeft);
+        m_currentParagraphStyle.addPropertyPt("fo:margin-left", marLeft);
+        m_currentBulletProperties.setMargin(marLeft);
     }
     if (!indent.isEmpty()) {
-        const qreal firstInd = qreal(EMU_TO_POINT(indent.toDouble(&ok)));
+        qreal firstInd;
+        STRING_TO_QREAL(indent, firstInd, "attr:indent")
+        firstInd = EMU_TO_POINT(firstInd);
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
     }
     if (!marR.isEmpty()) {
-        const qreal marginal = qreal(EMU_TO_POINT(marR.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("fo:margin-right", marginal);
+        qreal marRight;
+        STRING_TO_QREAL(marR, marRight, "attr:marR")
+        m_currentParagraphStyle.addPropertyPt("fo:margin-right", EMU_TO_POINT(marRight));
     }
     if (!defTabSz.isEmpty()) {
-        const qreal tabSize = qreal(EMU_TO_POINT(defTabSz.toDouble(&ok)));
-        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", tabSize);
+        qreal tabSize;
+        STRING_TO_QREAL(defTabSz, tabSize, "attr:defTabSz")
+        m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", EMU_TO_POINT(tabSize));
     }
 
     TRY_READ_ATTR_WITHOUT_NS(algn)
@@ -5842,14 +5902,13 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_lnSpc()
 
 #undef CURRENT_EL
 #define CURRENT_EL spcPts
-//! spcPts - spacing points
+//! spcPts (Spacing Points), ECMA-376, DrawingML 21.1.2.2.12, p.3600
 /*!
  Parent elements:
  - [done] lnSpc (§21.1.2.2.5)
  - [done] spcAft (§21.1.2.2.9)
  - [done] spcBef (§21.1.2.2.10)
 */
-//! @todo support all attributes
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 {
     READ_PROLOGUE
@@ -5858,21 +5917,19 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 
     TRY_READ_ATTR_WITHOUT_NS(val)
 
-    bool ok = false;
-    const int margin = val.toDouble(&ok);
+    int margin;
+    STRING_TO_INT(val, margin, "attr:val")
 
-    if (ok) {
-        switch (m_currentSpacingType) {
-            case (spacingMarginTop):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100.0);
-                break;
-            case (spacingMarginBottom):
-                m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100.0);
-                break;
-            case (spacingLines):
-                m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100.0);
-                break;
-        }
+    switch (m_currentSpacingType) {
+    case (spacingMarginTop):
+        m_currentParagraphStyle.addPropertyPt("fo:margin-top", margin/100.0);
+        break;
+    case (spacingMarginBottom):
+        m_currentParagraphStyle.addPropertyPt("fo:margin-bottom", margin/100.0);
+        break;
+    case (spacingLines):
+        m_currentParagraphStyle.addPropertyPt("fo:line-height", margin/100.0);
+        break;
     }
 
     readNext();
@@ -5881,7 +5938,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 
 #undef CURRENT_EL
 #define CURRENT_EL spcPct
-//! spcPct - spacing percentage
+//! spcPct (Spacing Percent), ECMA-376, DrawingML 21.1.2.2.11, p.3599
 /*!
  Parent elements:
  - [done] lnSpc (§21.1.2.2.5)
@@ -5896,23 +5953,24 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
     const QXmlStreamAttributes attrs(attributes());
 
     TRY_READ_ATTR_WITHOUT_NS(val)
-    bool ok = false;
-    int lineSpace = val.toDouble(&ok)/1000;
-    if (ok) {
-        QString space = "%1";
-        space = space.arg(lineSpace);
-        space.append('%');
-        switch (m_currentSpacingType) {
-            case (spacingMarginTop):
-                m_currentParagraphStyle.addProperty("fo:margin-top", space);
-                break;
-            case (spacingMarginBottom):
-                m_currentParagraphStyle.addProperty("fo:margin-bottom", space);
-                break;
-            case (spacingLines):
-                m_currentParagraphStyle.addProperty("fo:line-height", space);
-                break;
-        }
+
+    int lineSpace;
+    STRING_TO_INT(val, lineSpace, "attr:val")
+
+    QString space = "%1";
+    space = space.arg(lineSpace/1000.0);
+    space.append('%');
+
+    switch (m_currentSpacingType) {
+    case (spacingMarginTop):
+        m_currentParagraphStyle.addProperty("fo:margin-top", space);
+        break;
+    case (spacingMarginBottom):
+        m_currentParagraphStyle.addProperty("fo:margin-bottom", space);
+        break;
+    case (spacingLines):
+        m_currentParagraphStyle.addProperty("fo:line-height", space);
+        break;
     }
 
     readNext();
@@ -6006,7 +6064,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 //! bodyPr handler (Body Properties)
 /*! ECMA-376, 21.1.2.1.1, p.3556 - DrawingML
 
- This element defines the body properties for the text body within a shape.
+ This element defines the body properties for the text body within a
+ shape.
 
  Parent elements:
  - lnDef (§20.1.4.1.20)
@@ -6035,39 +6094,31 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_defRPr()
 KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 {
     READ_PROLOGUE
+
     const QXmlStreamAttributes attrs(attributes());
-    // wrap (Text Wrapping Type)
-    // Specifies the wrapping options to be used for this text body. If this attribute is omitted,
-    // then a value of square is implied which wraps the text using the bounding text box.
-    // The possible values for this attribute are defined by the ST_TextWrappingType simple type (§20.1.10.85):
-    // - none (Text Wrapping Type Enum ( None ))
-    //        No wrapping occurs on this text body. Words spill out without paying attention to the bounding
-    //        rectangle boundaries.
-    // - square (Text Wrapping Type Enum ( Square ))
-    //        Determines whether we wrap words within the bounding rectangle.
-    TRY_READ_ATTR_WITHOUT_NS(wrap)
+
     TRY_READ_ATTR_WITHOUT_NS(anchor)
     TRY_READ_ATTR_WITHOUT_NS(lIns)
     TRY_READ_ATTR_WITHOUT_NS(rIns)
     TRY_READ_ATTR_WITHOUT_NS(bIns)
     TRY_READ_ATTR_WITHOUT_NS(tIns)
     TRY_READ_ATTR_WITHOUT_NS(vert)
+    TRY_READ_ATTR_WITHOUT_NS(wrap)
 
-    // Todo
-    if (!vert.isEmpty()) {
-        if (vert == "vert270") {
-        }
-    }
+    //TODO:
+    /* TRY_READ_ATTR_WITHOUT_NS(fontAlgn) */
 
-//TODO    TRY_READ_ATTR_WITHOUT_NS(fontAlgn)
+    //TODO:
+    /* if (!vert.isEmpty()) { */
+    /*     if (vert == "vert270") { */
+    /*     } */
+    /* } */
 
     m_shapeTextPosition.clear();
     m_shapeTextTopOff.clear();
     m_shapeTextBottomOff.clear();
     m_shapeTextLeftOff.clear();
     m_shapeTextRightOff.clear();
-
-    m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
 
     if (!lIns.isEmpty()) {
         m_shapeTextLeftOff = lIns;
@@ -6099,6 +6150,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 
 //! @todo more atributes
 
+    m_normAutofit =  MSOOXML::Utils::autoFitUnUsed;
+
     bool spAutoFit = false;
     while (!atEnd()) {
         readNext();
@@ -6123,16 +6176,25 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_bodyPr()
 #ifdef PPTXXMLSLIDEREADER_CPP
     saveBodyProperties();
 
+    const KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+
     m_currentPresentationStyle.addProperty("draw:auto-grow-height",
-            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, KoGenStyle::GraphicType);
-    m_currentPresentationStyle.addProperty("draw:auto-grow-width",
-            (!spAutoFit || wrap == QLatin1String("square"))
-            ? MsooXmlReader::constFalse : MsooXmlReader::constTrue, KoGenStyle::GraphicType);
+            spAutoFit ? MsooXmlReader::constTrue : MsooXmlReader::constFalse, gt);
+
+    // If the wrap attribute is omitted, then a value of square is implied.
+    if (!spAutoFit || (wrap == QLatin1String("square") || wrap.isEmpty())) {
+	m_currentPresentationStyle.addProperty("draw:auto-grow-width", MsooXmlReader::constFalse, gt);
+    } else {
+	m_currentPresentationStyle.addProperty("draw:auto-grow-width", MsooXmlReader::constTrue, gt);
+    }
     // text in shape
-    m_currentPresentationStyle.addProperty("fo:wrap-option",
-        wrap == QLatin1String("none") ? QLatin1String("no-wrap") : QLatin1String("wrap"), KoGenStyle::GraphicType);
+    if (wrap == QLatin1String("none")) {
+	m_currentPresentationStyle.addProperty("fo:wrap-option", "no-wrap", gt);
+    } else {
+	m_currentPresentationStyle.addProperty("fo:wrap-option", "wrap", gt);
+    }
 #else
-  Q_UNUSED(spAutoFit);
+    Q_UNUSED(spAutoFit);
 #endif
     READ_EPILOGUE
 }
@@ -6223,7 +6285,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_txBody(txBodyCa
 
     bool textBoxCreated = false;
     if (caller != DrawingML_txBody_tc) {
-        if (m_contentType == "rect" || m_contentType.isEmpty() || unsupportedPredefinedShape()) {
+        if (!isCustomShape()) {
             body->startElement("draw:text-box");
             textBoxCreated = true;
         }

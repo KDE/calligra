@@ -56,6 +56,7 @@
 #include <kdebug.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
+#include <ktogglefullscreenaction.h>
 
 #include <kglobalsettings.h>
 #include <ktip.h>
@@ -71,11 +72,11 @@
 #include <KXMLGUIFactory>
 #include <KMultiTabBar>
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/utils.h>
+#include <db/cursor.h>
+#include <db/admin.h>
 #include <kexidb/dbobjectnamevalidator.h>
-#include <kexidb/admin.h>
 #include <kexiutils/utils.h>
 
 #include <core/KexiWindow.h>
@@ -222,7 +223,7 @@ void KexiMainWindowTabWidget::contextMenu(int index, const QPoint& point)
     KTabWidget::contextMenu(index, point);
 }
     
-void KexiMainWindowTabWidget::setTabIndexFromContextMenu(const int clickedIndex)
+void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 {
     if (currentIndex() == -1) {
         m_tabIndex = -1;
@@ -343,6 +344,18 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
     connect(d->mainWidget, SIGNAL(currentTabIndexChanged(int)), this, SLOT(showTabIfNeeded()));
+    if (Kexi::startupHandler().forcedFullScreen()) {
+        toggleFullScreen(true);
+    }
+
+    // --- global config
+    //! @todo move to specialized KexiConfig class
+    KConfigGroup tablesGroup(d->config->group("Tables"));
+    const int defaultMaxLengthForTextFields = tablesGroup.readEntry("DefaultMaxLengthForTextFields", int(-1));
+    if (defaultMaxLengthForTextFields >= 0) {
+        KexiDB::Field::setDefaultMaxLength(defaultMaxLengthForTextFields);
+    }
+    // --- /global config
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -879,6 +892,17 @@ void KexiMainWindow::setupActions()
     d->action_window_previous->setWhatsThis(i18n("Switches to the previous window."));
     connect(d->action_window_previous, SIGNAL(triggered()),
             this, SLOT(activatePreviousWindow()));
+
+    d->action_window_fullscreen = KStandardAction::fullScreen(this, SLOT(toggleFullScreen(bool)), this, ac);
+    ac->addAction("full_screen", d->action_window_fullscreen);
+    QList<QKeySequence> shortcuts;
+    KShortcut *shortcut = new KShortcut(d->action_window_fullscreen->shortcut().primary(), QKeySequence("F11"));
+    shortcuts = shortcut->toList();
+    d->action_window_fullscreen->setShortcuts(shortcuts);
+    QShortcut *s = new QShortcut(d->action_window_fullscreen->shortcut().primary(), this);
+    connect(s, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));
+    QShortcut *sa = new QShortcut(d->action_window_fullscreen->shortcut().alternate(), this);
+    connect(sa, SIGNAL(activated()), d->action_window_fullscreen, SLOT(trigger()));
 
     //SETTINGS MENU
 #ifdef __GNUC__
@@ -4499,6 +4523,24 @@ void KexiMainWindow::showTabIfNeeded()
 KexiUserFeedbackAgent* KexiMainWindow::userFeedbackAgent() const
 {
     return &d->userFeedback;
+}
+
+void KexiMainWindow::toggleFullScreen(bool isFullScreen)
+{
+    static bool isTabbarRolledDown;
+
+    if (isFullScreen) {
+        isTabbarRolledDown = !d->tabbedToolBar->isRolledUp();
+        if (isTabbarRolledDown) {
+            d->tabbedToolBar->toggleRollDown();
+        }
+    } else {
+        if (isTabbarRolledDown && d->tabbedToolBar->isRolledUp()) {
+            d->tabbedToolBar->toggleRollDown();
+        }
+    }
+
+    KToggleFullScreenAction::setFullScreen(this, isFullScreen);
 }
 
 #include "KexiMainWindow.moc"

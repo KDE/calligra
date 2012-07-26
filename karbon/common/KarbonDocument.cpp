@@ -10,7 +10,7 @@
    Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Gabor Lehel <illissius@gmail.com>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 

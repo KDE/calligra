@@ -20,10 +20,11 @@
 #define KEXIREPORTVIEW_H
 
 #include <core/KexiView.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <QDomDocument>
 #include "kexireportpart.h"
 #include <KoReportRendererBase.h>
+#include <QGraphicsView>
 
 class KoReportPreRenderer;
 class ORODocument;
@@ -64,8 +65,11 @@ public:
 private:
     KoReportPreRenderer *m_preRenderer;
     ORODocument *m_reportDocument;
-    QScrollArea *m_scrollArea;
-    KoReportPage *m_reportWidget;
+    //QScrollArea *m_scrollArea;
+    QGraphicsView *m_reportView;
+    QGraphicsScene *m_reportScene;
+    KoReportPage *m_reportPage;
+    
 #ifndef KEXI_MOBILE
     KexiRecordNavigator *m_pageSelector;
 #endif
@@ -77,12 +81,14 @@ private:
     KexiScriptAdaptor *m_kexi;
     KRScriptFunctions *m_functions;
     KoReportRendererFactory m_factory;
-    
+
+    KUrl getExportUrl(const QString &mimetype, const QString &caption);
+
 private slots:
     void slotPrintReport();
-    void slotRenderTables();
-    void slotExportHTML();
-    void slotRenderODT();
+    void slotExportAsSpreadsheet();
+    void slotExportAsWebPage();
+    void slotExportAsTextDocument();
 };
 
 #endif

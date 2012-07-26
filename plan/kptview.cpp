@@ -59,7 +59,6 @@
 #include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
@@ -127,6 +126,7 @@
 #include "kptdebug.h"
 
 #include "plansettings.h"
+#include "kptprintingcontrolprivate.h"
 
 // #include "KPtViewAdaptor.h"
 
@@ -231,7 +231,7 @@ View::View( Part* part, QWidget* parent )
     layout->addWidget( m_sp );
 
     ViewListDocker *docker = 0;
-    if ( part->isEmbedded() || shell() == 0 ) {
+    if ( shell() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget( part, m_sp );
     } else {
@@ -450,20 +450,8 @@ void View::initiateViews()
 
 void View::slotCreateTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = getPart()->generatePreview(QSize(width, height));
-
-    KTemporaryFile tempFile;
-    tempFile.setSuffix( ".plant" );
-    //Check that creation of temp file was successful
-    if ( ! tempFile.open() ) {
-        kWarning()<<"Creation of temprary file to store template failed.";
-        return;
-    }
-    kDebug(planDbg())<<"Created temporaray file:"<<tempFile.fileName();
-    getPart()->saveNativeFormat( tempFile.fileName() );
-    KoTemplateCreateDia::createTemplate( "plan_template", Factory::global(), tempFile.fileName(), pix, this );
+    KoTemplateCreateDia::createTemplate("plan_template", ".plant",
+                                        Factory::global(), getPart(), this);
 }
 
 void View::createViews()
@@ -811,7 +799,7 @@ ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, cons
 {
     ResourceEditor *resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
-    resourceeditor->draw( getProject() );
+    resourceeditor->setProject( &(getProject()) );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "", index );
     ViewInfo vi = defaultViewInfo( "ResourceEditor" );
@@ -849,7 +837,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
         i->setToolTip( 0, tip );
     }
 
-    taskeditor->draw( getProject() );
+    taskeditor->setProject( &(getProject()) );
     taskeditor->setScheduleManager( currentScheduleManager() );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskeditor, SLOT( setScheduleManager( ScheduleManager* ) ) );
@@ -2567,6 +2555,16 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
         foreach( const QString &name, view->actionListNames() ) {
             plugActionList( name, view->actionList( name ) );
         }
+        foreach ( DockWidget *ds, view->dockers() ) {
+            m_dockers.append( ds );
+            ds->activate( shell() );
+        }
+        kDebug(planDbg())<<"Added dockers:"<<view<<m_dockers;
+    } else {
+        kDebug(planDbg())<<"Remove dockers:"<<view<<m_dockers;
+        while ( ! m_dockers.isEmpty() ) {
+            m_dockers.takeLast()->deactivate( shell() );
+        }
     }
 }
 
@@ -2771,6 +2769,27 @@ QWidget *View::canvas() const
     return m_tab->currentWidget();//KoView::canvas();
 }
 
+KoPageLayout View::pageLayout() const
+{
+    return currentView()->pageLayout();
+}
+
+QPrintDialog *View::createPrintDialog( KoPrintJob *printJob, QWidget *parent )
+{
+    kDebug(planDbg())<<printJob;
+    KoPrintingDialog *job = dynamic_cast<KoPrintingDialog*>( printJob );
+    if ( ! job ) {
+        return 0;
+    }
+    QPrintDialog *dia = KoView::createPrintDialog( job, parent );
+
+    PrintingDialog *j = dynamic_cast<PrintingDialog*>( job );
+    if ( j ) {
+        new PrintingControlPrivate( j, dia );
+    }
+    return dia;
+}
+
 void View::slotCurrentChanged( int )
 {
     ViewListItem *item = m_viewlist->findItem( qobject_cast<ViewBase*>( m_tab->currentWidget() ) );
@@ -2844,7 +2863,7 @@ bool View::loadContext()
 {
     Context *ctx = getPart()->context();
     if ( ctx == 0 || ! ctx->isLoaded() ) {
-        return true;
+        return false;
     }
     KoXmlElement n = ctx->context();
     QString cv = n.attribute( "current-view" );
@@ -3081,7 +3100,34 @@ QString View::standardTaskStatusReport() const
     return s;
 }
 
+//---------------------------------
+PrintingControlPrivate::PrintingControlPrivate( PrintingDialog *job, QPrintDialog *dia )
+    : QObject( dia ),
+    m_job( job ),
+    m_dia( dia )
+{
+    connect(job, SIGNAL(changed()), SLOT(slotChanged()));
+}
+
+void PrintingControlPrivate::slotChanged()
+{
+    if ( ! m_job || ! m_dia ) {
+        return;
+    }
+    QSpinBox *to = m_dia->findChild<QSpinBox*>("to");
+    QSpinBox *from = m_dia->findChild<QSpinBox*>("from");
+    if ( to && from ) {
+        from->setMinimum( m_job->documentFirstPage() );
+        from->setMaximum( m_job->documentLastPage() );
+        from->setValue( from->minimum() );
+        to->setMinimum( from->minimum() );
+        to->setMaximum( from->maximum() );
+        to->setValue( to->maximum() );
+    }
+}
+
 
 }  //KPlato namespace
 
+#include "kptprintingcontrolprivate.moc"
 #include "kptview.moc"

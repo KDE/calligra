@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,13 +41,13 @@
 #include <koproperty/Set.h>
 #include <koproperty/Utils.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/error.h>
-#include <kexidb/lookupfieldschema.h>
+#include <db/cursor.h>
+#include <db/tableschema.h>
+#include <db/connection.h>
+#include <db/utils.h>
+#include <db/roweditbuffer.h>
+#include <db/error.h>
+#include <db/lookupfieldschema.h>
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
@@ -398,7 +398,11 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
                      = new KoProperty::Property("unsigned", QVariant(field.isUnsigned()), i18n("Unsigned Number")));
 
     set->addProperty(prop
-                     = new KoProperty::Property("length", (int)field.length()/*200?*/, i18n("Length")));
+                     = new KoProperty::Property("maxLength", (uint)field.maxLength(), i18n("Max Length")));
+
+    set->addProperty(prop
+                     = new KoProperty::Property("maxLengthIsDefault", field.maxLengthStrategy() == KexiDB::Field::DefaultMaxLength));
+    prop->setVisible(false);//always hidden
 
     set->addProperty(prop
                      = new KoProperty::Property("precision", (int)field.precision()/*200?*/, i18n("Precision")));
@@ -882,12 +886,16 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
         QString fieldName(KexiUtils::string2Identifier(fieldCaption));
 
         KexiDB::Field::Type fieldType = KexiDB::intToFieldType(intFieldType);
+        uint maxLength = 0;
+        if (fieldType == KexiDB::Field::Text) {
+            maxLength = KexiDB::Field::defaultMaxLength();
+        }
         KexiDB::Field field( //tmp
             fieldName,
             fieldType,
             KexiDB::Field::NoConstraints,
             KexiDB::Field::NoOptions,
-            /*length*/0,
+            maxLength,
             /*precision*/0,
             /*defaultValue*/QVariant(),
             fieldCaption,
@@ -896,9 +904,15 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
 //  m_newTable->addField( field );
 
         // reasonable case for boolean type: set notNull flag and "false" as default value
-        if (fieldType == KexiDB::Field::Boolean) {
+        switch (fieldType) {
+        case KexiDB::Field::Boolean:
             field.setNotNull(true);
             field.setDefaultValue(QVariant(false));
+            break;
+        case KexiDB::Field::Text:
+            field.setMaxLengthStrategy(KexiDB::Field::DefaultMaxLength);
+            break;
+        default:;
         }
 
         kDebug() << field.debugString();

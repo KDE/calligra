@@ -29,7 +29,7 @@
 
 #include "kexitableview.h"
 
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
 
 #include <QEvent>

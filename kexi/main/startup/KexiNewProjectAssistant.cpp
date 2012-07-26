@@ -28,8 +28,8 @@
 #include <kexiprojectdata.h>
 #include <kexiguimsghandler.h>
 #include <kexitextmsghandler.h>
-#include <kexidb/utils.h>
-#include <kexidb/object.h>
+#include <db/utils.h>
+#include <db/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
@@ -253,7 +253,7 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 void KexiProjectTitleSelectionPage::updateUrl()
 {
     KUrl url = contents->file_requester->url();
-    QString fn = KexiUtils::string2FileName(contents->le_title->text());
+    QString fn = KexiDB::string2FileName(contents->le_title->text());
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
     url.setFileName(fn);

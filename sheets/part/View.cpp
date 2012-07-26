@@ -71,8 +71,6 @@
 #include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <KToggleAction>
 #include <ktoolinvocation.h>
 #include <kparts/event.h>
@@ -103,6 +101,7 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
+#include <KoModeBoxFactory.h>
 
 // KSpread includes
 #include "ApplicationSettings.h"
@@ -699,6 +698,7 @@ void View::initView()
     connect(d->selection, SIGNAL(modified(const Region&)), this, SLOT(refreshSelection(const Region&)));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
     connect(d->selection, SIGNAL(refreshSheetViews()), this, SLOT(refreshSheetViews()));
+    connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
     connect(this, SIGNAL(documentReadWriteToggled(bool)),
             d->selection, SIGNAL(documentReadWriteToggled(bool)));
     connect(this, SIGNAL(sheetProtectionToggled(bool)),
@@ -715,15 +715,15 @@ void View::initView()
 
     if (shell())
     {
-        // Setup the tool dock widget.
         KoToolManager::instance()->addController(d->canvasController);
         KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
-        KoToolBoxFactory toolBoxFactory(d->canvasController);
-        shell()->createDockWidget(&toolBoxFactory);
+        KoModeBoxFactory modeBoxFactory(canvasController, qApp->applicationName(), i18n("Tools"));
+        shell()->createDockWidget(&modeBoxFactory);
+        shell()->dockerManager()->removeToolOptionsDocker();
 
         // Setup the tool options dock widget manager.
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+        //connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+        //        shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
@@ -1158,31 +1158,8 @@ void View::updateReadWrite(bool readwrite)
 
 void View::createTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = doc()->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile;
-    tempFile->setSuffix(".ots");
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close();
-    delete tempFile;
-
-    doc()->saveNativeFormat(fileName);
-
-    KoTemplateCreateDia::createTemplate("sheets_template", Factory::global(),
-                                        fileName, pix, this);
-
-    Factory::global().dirs()->addResourceType("sheets_template",
-            "data", "sheets/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("sheets_template", ".ots",
+                                        Factory::global(), doc(), this);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)
@@ -1559,6 +1536,7 @@ void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
     Q_ASSERT(mode == KoZoomMode::ZOOM_CONSTANT);
     selection()->emitCloseEditor(true); // save changes
     setHeaderMinima();
+    d->canvas->update();
     d->columnHeader->update();
     d->rowHeader->update();
     d->selectAllButton->update();
@@ -2166,6 +2144,11 @@ KoPrintJob * View::createPrintJob()
     // About to print; close the editor.
     selection()->emitCloseEditor(true); // save changes
     return new PrintJob(this);
+}
+
+void View::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
+{
+    sheetView(sheet)->updateAccessedCellRange(location);
 }
 
 #include "View.moc"

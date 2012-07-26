@@ -103,6 +103,9 @@ protected:
     KoFilter::ConversionStatus read_endnotePr();
     KoFilter::ConversionStatus read_lnNumType();
     KoFilter::ConversionStatus read_numFmt();
+    KoFilter::ConversionStatus read_numRestart();
+    KoFilter::ConversionStatus read_numStart();
+    KoFilter::ConversionStatus read_pos();
     KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_del();
@@ -269,6 +272,10 @@ protected:
     //! inserted into the following paragraph.
     QString m_floatingTable;
 
+    //! The complete XML snippet representing a bookmark-start or
+    //! bookmark-end, which MUST be inserted into the following paragraph.
+    QString m_bookmarkSnippet;
+
     QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
 
 private:
@@ -353,6 +360,7 @@ private:
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
+    bool m_insideParagraph;
 
     QString m_currentNumId;
 

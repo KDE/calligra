@@ -32,12 +32,12 @@
 #include <koproperty/Set.h>
 
 #include <kexi_global.h>
-#include <kexidb/cursor.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/error.h>
+#include <db/cursor.h>
+#include <db/tableschema.h>
+#include <db/connection.h>
+#include <db/utils.h>
+#include <db/roweditbuffer.h>
+#include <db/error.h>
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
@@ -221,13 +221,13 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
     visible = KexiDB::Field::isNumericType(fieldType);
     setVisibilityIfNeeded(set, prop, visible, changed, commandGroup);
 
-    prop = &set["length"];
+    prop = &set["maxLength"];
     visible = (fieldType == KexiDB::Field::Text);
     if (prop->isVisible() != visible) {
 //    prop->setVisible( visible );
         //update the length when it makes sense
-        const int lengthToSet = visible ? KexiDB::Field::defaultTextLength() : 0;
-        setPropertyValueIfNeeded(set, "length", lengthToSet,
+        const int lengthToSet = visible ? KexiDB::Field::defaultMaxLength() : 0;
+        setPropertyValueIfNeeded(set, "maxLength", lengthToSet,
                                  commandGroup, false, false /*!rememberOldValue*/);
 //  if (lengthToSet != prop->value().toInt())
 //   prop->setValue( lengthToSet, false );

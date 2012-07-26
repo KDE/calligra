@@ -28,7 +28,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QFile>
 #include <kdebug.h>
 #include "oracleconnection_p.h"
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <string>
 
 using namespace NAMESPACE;

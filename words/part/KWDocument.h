@@ -62,7 +62,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit KWDocument(QObject* parent = 0);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
@@ -76,6 +76,8 @@ public:
     void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
+    /// reimplemented from KoDocument
+    virtual QPixmap generatePreview(const QSize& size);
     /// reimplemented from KoDocument
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument

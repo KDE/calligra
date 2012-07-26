@@ -25,12 +25,12 @@
 #include <QLabel>
 #include <QLineEdit>
 
-#include <kexidb/tableschema.h>
+#include <db/tableschema.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <KexiWindow.h>
 
 using namespace KexiMigration;

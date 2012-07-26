@@ -53,7 +53,7 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     m_requiredList->hideColumn( 1 ); // child node name
     m_requiredList->setEditTriggers( QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed );
     connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-    updateReadWrite( part->isReadWrite() && ! part->isEmbedded() );
+    updateReadWrite( part->isReadWrite() );
 
     widget.addBtn->setIcon( KIcon( "arrow-right" ) );
     widget.removeBtn->setIcon( KIcon( "arrow-left" ) );
