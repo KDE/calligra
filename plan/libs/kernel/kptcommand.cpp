@@ -3526,16 +3526,28 @@ ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
+#if KDE_IS_VERSION(4,4,0)
+    m_oldvalue(locale->monetaryDecimalPlaces())
+#else
     m_oldvalue( locale->fracDigits() )
+#endif
 {
 };
 void ModifyCurrencyFractionalDigitsCmd::execute()
 {
+#if KDE_IS_VERSION(4,4,0)
+    m_locale->setMonetaryDecimalPlaces(m_newvalue);
+#else
     m_locale->setFracDigits( m_newvalue );
+#endif
 }
 void ModifyCurrencyFractionalDigitsCmd::unexecute()
 {
+#if KDE_IS_VERSION(4,4,0)
+    m_locale->setMonetaryDecimalPlaces(m_oldvalue);
+#else
     m_locale->setFracDigits( m_oldvalue );
+#endif
 }
 
 ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )

@@ -34,13 +34,13 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <kexidb/field.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/connection.h>
-#include <kexidb/parser/parser.h>
-#include <kexidb/parser/sqlparser.h>
-#include <kexidb/utils.h>
-#include <kexidb/roweditbuffer.h>
+#include <db/field.h>
+#include <db/queryschema.h>
+#include <db/connection.h>
+#include <db/parser/parser.h>
+#include <db/parser/sqlparser.h>
+#include <db/utils.h>
+#include <db/roweditbuffer.h>
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
@@ -1385,7 +1385,7 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
     } else if (str.toLower() == "null") {
         valueExpr = new KexiDB::ConstExpr(SQL_NULL, QVariant());
     } else {//identfier
-        if (!KexiUtils::isIdentifier(str))
+        if (!KexiDB::isIdentifier(str))
             return 0;
         valueExpr = new KexiDB::VariableExpr(str);
         //find first matching field for name 'str':
@@ -1447,7 +1447,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeColumnCellChanged(KexiDB::RecordData 
         const int id = fieldId.indexOf(':');
         if (id > 0) {
             alias = fieldId.left(id).trimmed().toLatin1();
-            if (!KexiUtils::isIdentifier(alias)) {
+            if (!KexiDB::isIdentifier(alias)) {
                 result->success = false;
                 result->allowToDiscardChanges = true;
                 result->column = COLUMN_ID_COLUMN;
@@ -1811,7 +1811,7 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
      */
     if (pname == "alias" || pname == "name") {
         const QVariant& v = property.value();
-        if (!v.toString().trimmed().isEmpty() && !KexiUtils::isIdentifier(v.toString())) {
+        if (!v.toString().trimmed().isEmpty() && !KexiDB::isIdentifier(v.toString())) {
             KMessageBox::sorry(this,
                                KexiUtils::identifierExpectedMessage(property.caption(), v.toString()));
             property.resetValue();

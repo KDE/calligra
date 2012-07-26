@@ -162,7 +162,7 @@ void Part::setProject( Project *project )
 
 KoView *Part::createViewInstance( QWidget *parent )
 {
-    // syncronize view selector
+    // synchronize view selector
     View *view = dynamic_cast<View*>( views().value( 0 ) );
     if ( view && m_context ) {
         QDomDocument doc = m_context->save( view );

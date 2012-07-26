@@ -1248,7 +1248,7 @@ void ConstraintAtom::finishBuild(Context* context) {
         // nothing to do cause this constraint is already attached to the correct layout.
         Q_ASSERT( context->m_parentLayout->constraints().contains(ptr) );
     } else {
-        // We need to select the choosen data-points and determinate the layoutNotes which are connected with
+        // We need to select the chosen data-points and determinate the layoutNotes which are connected with
         // them to look where we need to move this constraint to.
         QList<AbstractNode*> nodes;
         if ( m_for == "ch" ) { // Children
@@ -1357,7 +1357,7 @@ void ConstraintAtom::finishBuild(Context* context) {
 
 void ConstraintAtom::applyConstraint(Context* context, LayoutNodeAtom* atom) {
     // Following block shows how we tried to determinate the layouts using there data-points. But that seems to be
-    // wrong (with me07_basic_radial.xlsx) cause 'for' and 'refFor' are refering to the layout-tree and not the
+    // wrong (with me07_basic_radial.xlsx) cause 'for' and 'refFor' are referring to the layout-tree and not the
     // data-tree which can be rather different.
 #if 0
     QExplicitlySharedDataPointer<ConstraintAtom> ptr(this);
@@ -2100,7 +2100,7 @@ bool IfAtom::testAtom(Context* context) {
             if(!isInt) {
                 // right, that's untested atm since I didn't found a single document that does it and the specs don't cover
                 // such "details" anyways so it seems. So, if you run into this then it's up to you to fix it :)
-                kWarning()<<"TODO figure out how non-integer comparision is expected to work";
+                kWarning()<<"TODO figure out how non-integer comparison is expected to work";
             }
             if(m_operator == QLatin1String("gt")) {
                 istrue = isInt ? funcValueInt > valueInt : funcValue > m_value;
@@ -2933,9 +2933,9 @@ void PyramidAlgorithm::virtualDoLayout() {
 
 /****************************************************************************************************/
 
-//NOTE I start to assume that the parent layout-algorithms are also resposible for setting defaults at children
+//NOTE I start to assume that the parent layout-algorithms are also responsible for setting defaults at children
 //layout-algorithms. If that's the case then the question is how/where that happens. To bad the specs are
-//missing the most basic informations :-(
+//missing the most basic information :-(
 qreal SpaceAlg::virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) {
     Q_UNUSED(values);
     qreal value = -1.0;

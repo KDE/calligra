@@ -27,8 +27,8 @@
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>

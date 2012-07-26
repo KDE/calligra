@@ -34,7 +34,7 @@
 #include <widget/fields/KexiFieldListView.h>
 #include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <kexiproject.h>
 
 #include <koproperty/Property.h>

@@ -28,8 +28,8 @@
 #include <kexiutils/identifier.h>
 #include <core/kexi.h>
 #include <core/kexiproject.h>
-#include <kexidb/drivermanager.h>
-#include <kexidb/utils.h>
+#include <db/drivermanager.h>
+#include <db/utils.h>
 
 using namespace KexiDB;
 using namespace KexiMigration;

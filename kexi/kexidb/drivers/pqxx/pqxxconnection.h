@@ -22,7 +22,7 @@
 
 #include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "pqxxcursor.h"
 
 

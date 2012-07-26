@@ -24,7 +24,7 @@
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiFileWidget.h>
 #include <kexiutils/utils.h>
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <kexi_global.h>
 
 #include <QLayout>

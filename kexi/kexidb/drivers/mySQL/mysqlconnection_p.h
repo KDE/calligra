@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef KEXIDB_MYSQLCLIENT_P_H
 #define KEXIDB_MYSQLCLIENT_P_H
 
-#include <kexidb/connection_p.h>
+#include <db/connection_p.h>
 
 #ifdef Q_WS_WIN
 # ifdef _MSC_VER

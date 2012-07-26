@@ -27,11 +27,11 @@
 
 #include <kexiutils/validator.h>
 
-#include <kexidb/field.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/queryschema.h>
+#include <db/roweditbuffer.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 #include <kexi.h>
 
 #include <kdebug.h>

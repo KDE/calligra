@@ -21,9 +21,9 @@
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
 #include <KLocalizedString>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <kdebug.h>
 #include <drivers/xbase/xbaseexport.h>
 #include <QMimeData>
