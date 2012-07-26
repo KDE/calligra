@@ -30,6 +30,8 @@ Item {
     property alias peekContents: peek.children;
     property alias fullContents: full.children;
 
+    property real editWidth: Constants.GridWidth * 4;
+
     signal collapsed();
     signal expanded();
 
@@ -190,6 +192,11 @@ Item {
         },
         State {
             name: "full";
+        },
+        State {
+            name: "edit";
+
+            PropertyChanges { target: base; width: base.editWidth; }
         }
     ]
 
@@ -228,6 +235,13 @@ Item {
                 NumberAnimation { properties: "height,width,opacity"; duration: 250; }
                 ScriptAction { script: base.collapsed(); }
             }
+        },
+        Transition {
+            from: "full"
+            to: "edit"
+            reversible: true;
+
+            NumberAnimation { properties: "width"; duration: 250; }
         }
     ]
 }
