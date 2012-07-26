@@ -19,6 +19,8 @@
 import QtQuick 1.1
 
 Item {
+    width: parent ? parent.width : 0;
+    height: Constants.GridHeight;
 
     property alias text: input.text;
     property alias placeholder: placeholder.text;
@@ -56,7 +58,7 @@ Item {
 
     states: State {
         name: "input";
-        when: input.focus || input.text;
+        when: input.focus || input.text != "";
 
         PropertyChanges { target: placeholder; opacity: 0.5; }
         AnchorChanges { target: placeholder; anchors.left: undefined; anchors.right: parent.right }
