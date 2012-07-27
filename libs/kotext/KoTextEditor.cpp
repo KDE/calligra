@@ -1419,6 +1419,61 @@ void KoTextEditor::insertBibliography(KoBibliographyInfo *info)
     emit cursorPositionChanged();
 }
 
+void KoTextEditor::insertBibliography(KoBibliographyInfo *info, const QList<KoInlineCite *> &cites)
+{
+    bool hasSelection = d->caret.hasSelection();
+    if (!hasSelection) {
+        d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bibliography"));
+    } else {
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Insert Bibliography"));
+        deleteChar(false, topCommand);
+        d->caret.beginEditBlock();
+    }
+
+    QTextBlockFormat bibFormat;
+    KoBibliographyInfo *newBibInfo = info->clone();
+    QTextDocument *bibDocument = new QTextDocument();
+
+    bibFormat.setProperty( KoParagraphStyle::BibliographyData, QVariant::fromValue<KoBibliographyInfo*>(newBibInfo));
+    bibFormat.setProperty( KoParagraphStyle::GeneratedDocument, QVariant::fromValue<QTextDocument*>(bibDocument));
+
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (changeTracker && changeTracker->recordChanges()) {
+        QTextCharFormat charFormat = d->caret.charFormat();
+        QTextBlockFormat blockFormat = d->caret.blockFormat();
+        QString title = i18n("Insert Bibliography");
+
+        int changeId;
+        if (!d->caret.atBlockStart()) {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        } else {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        }
+
+        if (!changeId) {
+            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+        }
+
+        bibFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    }
+
+    d->caret.insertBlock();
+    d->caret.movePosition(QTextCursor::Left);
+    d->caret.insertBlock(bibFormat);
+    d->caret.movePosition(QTextCursor::Right);
+
+    new BibliographyGenerator(bibDocument, block(), newBibInfo, cites);
+
+    if (hasSelection) {
+        d->caret.endEditBlock();
+        endEditBlock();
+    } else {
+        d->updateState(KoTextEditor::Private::NoOp);
+    }
+
+    emit cursorPositionChanged();
+}
+
 KoInlineCite *KoTextEditor::insertCitation()
 {
     bool hasSelection = d->caret.hasSelection();

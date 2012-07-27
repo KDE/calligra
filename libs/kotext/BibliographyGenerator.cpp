@@ -35,11 +35,11 @@
 
 static QList<SortKeyPair> sortKeys;
 
-BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo)
-    : QObject(bibDocument)
-    , m_bibDocument(bibDocument)
-    , m_bibInfo(bibInfo)
-    , m_block(block)
+BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo) :
+    QObject(bibDocument),
+    m_bibDocument(bibDocument),
+    m_bibInfo(bibInfo),
+    m_block(block)
 {
     Q_ASSERT(bibDocument);
     Q_ASSERT(bibInfo);
@@ -47,7 +47,23 @@ BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBl
     m_bibInfo->setGenerator(this);
 
     bibDocument->setUndoRedoEnabled(false);
-    generate();
+    generate(QList<KoInlineCite *>());
+}
+
+BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block,
+                                             KoBibliographyInfo *bibInfo, const QList<KoInlineCite *> &cites) :
+    QObject(bibDocument),
+    m_bibDocument(bibDocument),
+    m_bibInfo(bibInfo),
+    m_block(block)
+{
+    Q_ASSERT(bibDocument);
+    Q_ASSERT(bibInfo);
+
+    m_bibInfo->setGenerator(this);
+
+    bibDocument->setUndoRedoEnabled(false);
+    generate(cites);
 }
 
 BibliographyGenerator::~BibliographyGenerator()
@@ -57,7 +73,7 @@ BibliographyGenerator::~BibliographyGenerator()
 
 static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
-    if ( keyIndex == sortKeys.size() ) {
+    if (keyIndex == sortKeys.size()) {
         return false;
     } else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
         if (c1->value(sortKeys[keyIndex].first) < c2->value(sortKeys[keyIndex].first)) {
@@ -72,7 +88,7 @@ static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
             return true;
         }
     } else {
-        return compare_on( keyIndex + 1, c1, c2 );
+        return compare_on(keyIndex + 1, c1, c2);
     }
 
     return false;
@@ -91,7 +107,7 @@ static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, QList<SortKeyPair
     return cites;
 }
 
-void BibliographyGenerator::generate()
+void BibliographyGenerator::generate(const QList<KoInlineCite *> &cites)
 {
     if (!m_bibInfo)
         return;
@@ -119,7 +135,9 @@ void BibliographyGenerator::generate()
     QTextCharFormat savedCharFormat = cursor.charFormat();
 
     QList<KoInlineCite*> citeList;
-    if ( KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortByPosition() ) {
+    if (!cites.isEmpty()) {
+        citeList = cites;
+    } else if (KoTextDocument(m_block.document()).styleManager()->bibliographyConfiguration()->sortByPosition()) {
         citeList = KoTextDocument(m_block.document())
                 .inlineTextObjectManager()->citationsSortedByPosition(false, m_block.document()->firstBlock());
     } else {

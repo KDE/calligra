@@ -435,6 +435,8 @@ public slots:
 
     void insertBibliography(KoBibliographyInfo *info);
 
+    void insertBibliography(KoBibliographyInfo *info, const QList<KoInlineCite *> &cites);
+
     KoInlineCite *insertCitation();
 
     void insertText(const QString &text);

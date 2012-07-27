@@ -37,12 +37,14 @@ class KOTEXT_EXPORT BibliographyGenerator : public QObject, public BibliographyG
     Q_OBJECT
 public:
     explicit BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block, KoBibliographyInfo *bibInfo);
+    explicit BibliographyGenerator(QTextDocument *bibDocument, QTextBlock block,
+                                   KoBibliographyInfo *bibInfo, const QList<KoInlineCite *> &cites);
     virtual ~BibliographyGenerator();
 
     static QMap<QString, BibliographyEntryTemplate> defaultBibliographyEntryTemplates();
 
 public slots:
-    void generate();
+    void generate(const QList<KoInlineCite *> &cites);
 
 private:
     QTextDocument *m_document;
