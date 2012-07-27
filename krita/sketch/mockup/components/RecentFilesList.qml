@@ -55,6 +55,7 @@ Item {
                 }
 
                 text: model.name;
+                verticalAlignment: Text.AlignTop;
             }
 
             Label {
@@ -68,6 +69,7 @@ Item {
                 text: model.date;
                 color: Constants.Theme.SecondaryTextColor;
                 font.pixelSize: Constants.SmallFontSize;
+                verticalAlignment: Text.AlignBottom;
             }
         }
 
@@ -100,7 +102,6 @@ Item {
             anchors {
                 left: icon.right;
                 leftMargin: Constants.DefaultMargin;
-                verticalCenter: parent.verticalCenter;
             }
 
             text: "Open Image";
