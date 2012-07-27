@@ -48,6 +48,7 @@ Item {
         Rectangle {
             id: fill;
             anchors.fill: parent;
+            anchors.margins: -1;
 
             color: base.state == "pressed" && base.highlight ? base.highlightColor : base.color;
             Behavior on color { ColorAnimation { duration: 50; } }
