@@ -56,9 +56,37 @@ Page {
         anchors.bottom: parent.bottom;
         height: Constants.GridHeight * 7;
 
-        categories: [ { name: "DeviantArt", page: deviantArtPage }, { name: "MediaGoblin", page: mediaGoblinPage } ];
+        categories: [ { name: "DeviantArt", page: contentPage }, { name: "MediaGoblin", page: contentPage } ];
 
-        Component { id: deviantArtPage; Page { Label { anchors.centerIn: parent; text: "DeviantArt" } } }
-        Component { id: mediaGoblinPage; Page { Label { anchors.centerIn: parent; text: "MediaGoblin" } } }
+        Component { id: contentPage; Page {
+            Flickable {
+                anchors.fill: parent;
+                anchors.margins: Constants.DefaultMargin;
+
+                contentWidth: width;
+                contentHeight: content.height;
+
+                Column {
+                    id: content;
+                    width: parent.width;
+                    spacing: Constants.DefaultMargin;
+
+                    DropShadow {
+                        anchors.horizontalCenter: parent.horizontalCenter;
+                        width: Constants.GridWidth * 4;
+                        height: Constants.GridHeight * 3;
+
+//                         Image {
+//                             anchors.fill: parent;
+//                             source:
+//                         }
+                    }
+
+                    TextField { placeholder: "Title"; }
+                    TextField { placeholder: "Tags"; }
+                    TextField { height: Constants.GridHeight * 4; placeholder: "Description"; }
+                }
+            }
+        }}
     }
 }
