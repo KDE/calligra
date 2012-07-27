@@ -402,7 +402,8 @@ void ReportWidget::slotExportFinished( int result )
             KMessageBox::error(this, i18nc( "@info", "Cannot export report. Invalid url:<br>file:<br><filename>%1</filename>", context.destinationUrl.url() ), i18n( "Not Saved" ) );
         } else {
             switch ( p->selectedFormat() ) {
-                case Reports::EF_Odt: exportToOdt( context ); break;
+                case Reports::EF_OdtTable: exportToOdtTable( context ); break;
+                case Reports::EF_OdtFrames: exportToOdtFrames( context ); break;
                 case Reports::EF_Ods: exportToOds( context ); break;
                 case Reports::EF_Html: exportToHtml( context ); break;
                 case Reports::EF_XHtml: exportToXHtml( context ); break;
@@ -415,11 +416,24 @@ void ReportWidget::slotExportFinished( int result )
     dia->deleteLater();
 }
 
-void ReportWidget::exportToOdt( KoReportRendererContext &context )
+void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
+{
+    kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
+    KoReportRendererBase *renderer = m_factory.createInstance("odt");
+    if ( renderer == 0 ) {
+        kError()<<"Cannot create odt (table) renderer";
+        return;
+    }
+    if (!renderer->render(context, m_reportDocument)) {
+        KMessageBox::error(this, i18nc( "@info", "Failed to export to <filename>%1</filename>", context.destinationUrl.prettyUrl()) , i18n("Export to text document failed"));
+    }
+}
+
+void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
 {
     kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
     KoReportRendererBase *renderer = new ReportODTRenderer();
-//    renderer = m_factory.createInstance("odt");
+    //    renderer = m_factory.createInstance("odt");
     if ( renderer == 0 ) {
         kError()<<"Cannot create odt renderer";
         return;
@@ -647,29 +661,6 @@ ReportDesignDialog::ReportDesignDialog( const QDomElement &element, const QList<
     setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
 
     m_panel = new ReportDesignPanel( element, models, this );
-
-    setMainWidget( m_panel );
-
-    connect( this, SIGNAL( user1Clicked() ), SLOT( slotSaveToView() ) );
-    connect( this, SIGNAL( user2Clicked() ), SLOT( slotSaveToFile() ) );
-}
-
-ReportDesignDialog::ReportDesignDialog( ReportView *view, QWidget *parent )
-    : KDialog( parent ),
-    m_view( view )
-{
-    setCaption( i18nc( "@title:window", "Edit Report" ) );
-    setButtons( KDialog::Close | KDialog::User1 | KDialog::User2 );
-    setButtonText( KDialog::User1, i18n( "Save To View" ) );
-    setButtonIcon( KDialog::User1, KIcon( "window" ) );
-    setButtonText( KDialog::User2, i18n( "Save To File" ) );
-    setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
-
-    QDomElement e;
-    if ( view ) {
-        e = view->document().documentElement();
-    }
-    m_panel = new ReportDesignPanel( e, view->reportDataModels(), this );
 
     setMainWidget( m_panel );
 
@@ -1352,16 +1343,25 @@ void GroupSectionEditor::setupUi( QWidget *widget )
     gsw.setupUi( widget );
     gsw.view->setModel( &model );
     gsw.view->setItemDelegateForColumn( 0, new EnumDelegate( gsw.view ) );
-    gsw.view->setItemDelegateForColumn( 1, new EnumDelegate( gsw.view ) );
+    gsw.view->setItemDelegateForColumn( 1, new CheckStateItemDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 2, new EnumDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 3, new EnumDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 4, new EnumDelegate( gsw.view ) );
+
+    gsw.btnAdd->setIcon( KIcon( "list-add" ) );
+    gsw.btnRemove->setIcon( KIcon( "list-remove" ) );
+    gsw.btnMoveUp->setIcon( KIcon( "arrow-up" ) );
+    gsw.btnMoveDown->setIcon( KIcon( "arrow-down" ) );
 
     gsw.btnRemove->setEnabled( false );
     gsw.btnMoveUp->setEnabled( false );
     gsw.btnMoveDown->setEnabled( false );
 
     connect(gsw.view->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), SLOT(slotSelectionChanged(const QItemSelection&)));
+    connect(gsw.btnAdd, SIGNAL(clicked(bool)), SLOT(slotAddRow()));
+    connect(gsw.btnRemove, SIGNAL(clicked(bool)), SLOT(slotRemoveRows()));
+    connect(gsw.btnMoveUp, SIGNAL(clicked(bool)), SLOT(slotMoveRowUp()));
+    connect(gsw.btnMoveDown, SIGNAL(clicked(bool)), SLOT(slotMoveRowDown()));
 }
 
 void GroupSectionEditor::slotSelectionChanged( const QItemSelection &sel )
@@ -1412,10 +1412,6 @@ void GroupSectionEditor::setData( KoReportDesigner *d, ReportData *rd )
 
         model.appendRow( QList<QStandardItem*>() << ci << si << hi << fi << pi );
     }
-    connect(gsw.btnAdd, SIGNAL(clicked(bool)), SLOT(slotAddRow()));
-    connect(gsw.btnRemove, SIGNAL(clicked(bool)), SLOT(slotRemoveRows()));
-    connect(gsw.btnMoveUp, SIGNAL(clicked(bool)), SLOT(slotMoveRowUp()));
-    connect(gsw.btnMoveDown, SIGNAL(clicked(bool)), SLOT(slotMoveRowDown()));
 }
 
 void GroupSectionEditor::slotAddRow()
@@ -1562,6 +1558,7 @@ QVariant GroupSectionEditor::SortItem::data( int role ) const
         case Qt::DisplayRole: return QVariant();
         case Qt::ToolTipRole: return group->sort() ? names.value( 1 ) : names.value( 0 );
         case Qt::DecorationRole: return group->sort() ? KIcon( "arrow-down" ) :  KIcon( "arrow-up" );
+        case Qt::EditRole: return group->sort() ? Qt::Unchecked : Qt::Checked;
         case Role::EnumList: return names;
         case Role::EnumListValue: return  group->sort() ? 1 : 0;
         default: break;
@@ -1574,6 +1571,9 @@ void GroupSectionEditor::SortItem::setData( const QVariant &value, int role )
     if ( role == Qt::EditRole ) {
         group->setSort( value.toInt() == 0 ? Qt::AscendingOrder : Qt::DescendingOrder );
         return;
+    } else if ( role == Qt::CheckStateRole ) {
+        group->setSort( value.toInt() == 0 ? Qt::DescendingOrder : Qt::AscendingOrder );
+        return;
     }
     return Item::setData( value, role );
 }
@@ -1582,13 +1582,15 @@ void GroupSectionEditor::SortItem::setData( const QVariant &value, int role )
 GroupSectionEditor::HeaderItem::HeaderItem( ReportSectionDetailGroup *g )
     : Item( g )
 {
-    names << "No" << "Yes";
+    names << i18n( "No" ) << i18n( "Yes" );
+    setCheckable( true );
 }
 
 QVariant GroupSectionEditor::HeaderItem::data( int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole: return group->groupHeaderVisible() ? names.value( 1 ) : names.value( 0 );
+        case Qt::DisplayRole: return QVariant();
+        case Qt::CheckStateRole: return  group->groupHeaderVisible() ? Qt::Checked : Qt::Unchecked;
         case Role::EnumList: return names;
         case Role::EnumListValue: return  group->groupHeaderVisible() ? 1 : 0;
         default: break;
@@ -1598,8 +1600,12 @@ QVariant GroupSectionEditor::HeaderItem::data( int role ) const
 
 void GroupSectionEditor::HeaderItem::setData( const QVariant &value, int role )
 {
+    kDebug(planDbg())<<value<<role;
     if ( role == Qt::EditRole ) {
         group->setGroupHeaderVisible( value.toInt() == 1 );
+        return;
+    } else if ( role == Qt::CheckStateRole ) {
+        group->setGroupHeaderVisible( value.toInt() > 0 );
         return;
     }
     return Item::setData( value, role );
@@ -1609,13 +1615,15 @@ void GroupSectionEditor::HeaderItem::setData( const QVariant &value, int role )
 GroupSectionEditor::FooterItem::FooterItem( ReportSectionDetailGroup *g )
     : Item( g )
 {
-    names << "No" << "Yes";
+    names << i18n( "No" ) << i18n( "Yes" );
+    setCheckable( true );
 }
 
 QVariant GroupSectionEditor::FooterItem::data( int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole: return group->groupFooterVisible() ? names.value( 1 ) : names.value( 0 );
+        case Qt::DisplayRole: return QVariant();
+        case Qt::CheckStateRole: return group->groupFooterVisible() ? Qt::Checked : Qt::Unchecked;
         case Role::EnumList: return names;
         case Role::EnumListValue: return group->groupFooterVisible() ? 1 : 0;
         default: break;
@@ -1627,6 +1635,9 @@ void GroupSectionEditor::FooterItem::setData( const QVariant &value, int role )
 {
     if ( role == Qt::EditRole ) {
         group->setGroupFooterVisible( value.toInt() == 1 );
+        return;
+    } else if ( role == Qt::CheckStateRole ) {
+        group->setGroupFooterVisible( value.toInt() > 0 );
         return;
     }
     return Item::setData( value, role );
@@ -1643,6 +1654,7 @@ QVariant GroupSectionEditor::PageBreakItem::data( int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole: return names.value( (int)group->pageBreak() );
+        case Qt::ToolTipRole: return names.value( (int)group->pageBreak() );
         case Role::EnumList: return names;
         case Role::EnumListValue: return (int)group->pageBreak();
         default: break;

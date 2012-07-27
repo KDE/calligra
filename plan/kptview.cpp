@@ -68,6 +68,7 @@
 #include <KConfigDialog>
 #include <KToolInvocation>
 #include <KRun>
+#include <KStandardDirs>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -850,10 +851,14 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     connect( taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
     connect( taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
 
-
+    connect(taskeditor, SIGNAL(saveTaskModule(const KUrl&, Project*)), SLOT(saveTaskModule(const KUrl&, Project*)));
+    connect(taskeditor, SIGNAL(removeTaskModule(const KUrl&)), SLOT(removeTaskModule(const KUrl&)));
 
     connect( taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
     taskeditor->updateReadWrite( m_readWrite );
+
+    // last:
+    taskeditor->setTaskModules( Factory::global().dirs()->findAllResources( "plan_taskmodules", QString(), KStandardDirs::NoDuplicates ) );
     return taskeditor;
 }
 
@@ -2971,6 +2976,29 @@ void View::slotCurrencyConfigFinished( int result )
         }
     }
     dlg->deleteLater();
+}
+
+void View::saveTaskModule( const KUrl &url, Project *project )
+{
+    kDebug(planDbg())<<url<<project;
+    QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
+    kDebug(planDbg())<<"dir="<<dir;
+    if ( ! dir.isEmpty() ) {
+        Part part;
+        part.insertProject( *project, 0, 0 );
+        part.getProject().setName( project->name() );
+        part.getProject().setLeader( project->leader() );
+        part.getProject().setDescription( project->description() );
+        part.saveNativeFormat( dir + url.fileName() );
+        kDebug(planDbg())<<dir + url.fileName();
+    } else {
+        kDebug(planDbg())<<"Could not find a location";
+    }
+}
+
+void View::removeTaskModule( const KUrl &url )
+{
+    kDebug(planDbg())<<url;
 }
 
 QString View::standardTaskStatusReport() const
