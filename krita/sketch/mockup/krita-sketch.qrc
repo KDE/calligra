@@ -19,6 +19,7 @@
     <file>components/Header.qml</file>
     <file>components/CategorySwitcher.qml</file>
     <file>components/NewImageList.qml</file>
+    <file>components/NewsList.qml</file>
 
     <file>panels/Panel.qml</file>
     <file>panels/MenuPanel.qml</file>

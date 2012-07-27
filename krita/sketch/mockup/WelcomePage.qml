@@ -47,15 +47,18 @@ Page {
                 height: Constants.GridHeight;
                 image: ":/images/help-about.png";
                 highlightColor: Constants.Theme.HighlightColor;
+
+                onClicked: pageStack.push( help );
             }
         }
 
         Row {
             anchors.bottom: parent.bottom;
+            width: parent.width;
 
             Rectangle {
                 height: Constants.GridHeight;
-                width: Constants.GridWidth * 4;
+                width: parent.width / 3;
 
                 color: Constants.Theme.SecondaryColor;
 
@@ -73,7 +76,7 @@ Page {
 
             Rectangle {
                 height: Constants.GridHeight;
-                width: Constants.GridWidth * 4;
+                width: parent.width / 3;
 
                 color: Constants.Theme.TertiaryColor;
 
@@ -91,7 +94,7 @@ Page {
 
             Rectangle {
                 height: Constants.GridHeight;
-                width: Constants.GridWidth * 4;
+                width: parent.width / 3;
 
                 color: Constants.Theme.QuaternaryColor;
 
@@ -111,9 +114,10 @@ Page {
 
     Row {
         anchors.bottom: parent.bottom;
+        width: parent.width;
 
         RecentFilesList {
-            width: Constants.GridWidth * 4 - 1;
+            width: parent.width / 3 - 1;
             height: Constants.GridHeight * 6;
 
             onClicked: pageStack.push( main );
@@ -122,18 +126,19 @@ Page {
         Divider { height: Constants.GridHeight * 6; }
 
         NewImageList {
-            width: Constants.GridWidth * 4 - 2;
+            width: parent.width / 3 - 2;
             height: Constants.GridHeight * 6;
             onClicked: pageStack.push( main );
         }
 
         Divider { height: Constants.GridHeight * 6; }
 
-        ListView {
-            width: Constants.GridWidth * 4 - 1;
+        NewsList {
+            width: parent.width / 3 - 1;
             height: Constants.GridHeight * 6;
         }
     }
 
     Component { id: main; MainPage { } }
+    Component { id: help; HelpPage { } }
 }
