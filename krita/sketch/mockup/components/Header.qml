@@ -25,7 +25,7 @@ Rectangle {
     property alias rightArea: right.children;
 
     height: Constants.GridHeight;
-    width: Constants.GridWidth * Constants.GridColumns;
+    width: parent.width;
 
     color: Constants.Theme.MainColor;
 
