@@ -67,6 +67,7 @@ Row {
 
         width: Constants.GridWidth * 8 - 1;
         height: parent.height;
+        clip: true;
 
         initialPage: categories[0].page;
     }
