@@ -23,16 +23,13 @@
 
 //Stage Headers
 #include "KPrShapeAnimationDocker.h"
-#include "KPrPage.h"
 #include "KPrView.h"
-#include "KPrDocument.h"
 #include "animations/KPrShapeAnimation.h"
-#include "KPrEditAnimationsWidget.h"
 #include "KPrAnimationGroupProxyModel.h"
 #include "KPrAnimationsTimeLineView.h"
-#include "animations/KPrAnimationBase.h"
 #include "animations/KPrShapeAnimation.h"
 #include "KPrAnimationSelectorWidget.h"
+#include "KPrShapeAnimations.h"
 
 //Qt Headers
 #include <QToolButton>

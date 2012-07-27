@@ -20,8 +20,6 @@
 
 #include "KPrAnimationGroupProxyModel.h"
 
-#include "QDebug"
-
 KPrAnimationGroupProxyModel::KPrAnimationGroupProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
     , m_currentGrup(-1)

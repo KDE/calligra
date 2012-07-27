@@ -20,7 +20,6 @@
 #include "KPrAnimationRemoveCommand.h"
 
 #include "KPrDocument.h"
-#include "KPrShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
 
 KPrAnimationRemoveCommand::KPrAnimationRemoveCommand(KPrDocument *doc, KPrShapeAnimation *animation)

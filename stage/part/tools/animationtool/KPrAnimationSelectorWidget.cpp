@@ -22,9 +22,9 @@
 //Stage Headers
 #include "KPrShapeAnimationDocker.h"
 #include "KPrCollectionItemModel.h"
-#include "KPrViewModePreviewShapeAnimations.h"
 #include "animations/KPrShapeAnimation.h"
 #include <KPrPredefinedAnimationsLoader.h>
+#include "KPrViewModePreviewShapeAnimations.h"
 #include "KPrFactory.h"
 
 //Qt Headers

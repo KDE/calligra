@@ -31,7 +31,6 @@ class QTreeView;
 class KPrAnimationGroupProxyModel;
 class KPrShapeAnimations;
 class KPrAnimationsDataModel;
-class KPrAnimationsTimeLineView;
 class KPrViewModePreviewShapeAnimations;
 class KPrEditAnimationsWidget;
 class QModelIndex;

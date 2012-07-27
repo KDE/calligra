@@ -17,12 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef KPRANIMATIONREMOVECOMMAND_H
 #define KPRANIMATIONREMOVECOMMAND_H
 
 #include <kundo2command.h>
-
 #include "stage_export.h"
 
 class KPrDocument;
