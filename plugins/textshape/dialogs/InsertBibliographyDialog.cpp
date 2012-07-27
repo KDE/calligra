@@ -109,7 +109,7 @@ void InsertBibliographyDialog::addField()
         newEntry->dataField = newDataField;
 
         m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(newEntry));
-        connect(dialog.addedFields, SIGNAL(itemChanged( QListWidgetItem * )), this, SLOT(spanChanged( QListWidgetItem *)));
+        connect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem *)), this, SLOT(spanChanged(QListWidgetItem *)));
     }
 }
 
@@ -142,12 +142,12 @@ void InsertBibliographyDialog::addSpan()
     m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(span));
 }
 
-void InsertBibliographyDialog::spanChanged( QListWidgetItem *item )
+void InsertBibliographyDialog::spanChanged(QListWidgetItem *item)
 {
     int row = dialog.addedFields->currentRow();
 
     if (row != -1) {
-        IndexEntrySpan *span = static_cast<IndexEntrySpan *>( m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row) );
+        IndexEntrySpan *span = static_cast<IndexEntrySpan *>(m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.at(row));
         span->text = item->text();
     }
 }

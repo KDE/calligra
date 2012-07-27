@@ -41,8 +41,6 @@ public:
 
     static const QString pipeIn;
     
-signals:
-    
 public slots:
     void handleNewEngine();
     void handle(QObject *o);
