@@ -33,6 +33,11 @@ PageStack {
                 width: parent.width;
                 height: Constants.GridHeight;
 
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: pageStack.push( createNewPage );
+                }
+
                 Button {
                     id: thumbnail;
 
@@ -91,7 +96,6 @@ PageStack {
                 width: parent.width;
                 Button {
                     width: parent.width / 2;
-                    height: Constants.GridHeight;
                     color: Constants.Theme.NegativeColor;
                     text: "Cancel";
                     textColor: "white";
@@ -99,7 +103,6 @@ PageStack {
                 }
                 Button {
                     width: parent.width / 2;
-                    height: Constants.GridHeight;
                     color: Constants.Theme.PositiveColor;
                     text: "Create";
                     textColor: "white";
