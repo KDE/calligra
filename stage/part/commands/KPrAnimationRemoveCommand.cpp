@@ -40,7 +40,7 @@ KPrAnimationRemoveCommand::~KPrAnimationRemoveCommand()
 
 void KPrAnimationRemoveCommand::redo()
 {
-    m_doc->removeAnimation(m_animation, false);
+    m_doc->removeAnimation(m_animation);
     m_deleteAnimation = true;
 }
 

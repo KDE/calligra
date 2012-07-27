@@ -28,7 +28,6 @@ KPrShapeApplicationData::KPrShapeApplicationData()
 
 KPrShapeApplicationData::~KPrShapeApplicationData()
 {
-    qDeleteAll( m_animations );
 }
 
 QSet<KPrShapeAnimation *> & KPrShapeApplicationData::animations()

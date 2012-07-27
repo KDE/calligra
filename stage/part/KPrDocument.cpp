@@ -210,12 +210,12 @@ void KPrDocument::addAnimation( KPrShapeAnimation * animation )
     animations.add( animation );
 
     // add animation to the shape animation data so that it can be regenerated on delete shape and undo
-   /* KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
+    KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData == 0 ) {
         applicationData = new KPrShapeApplicationData();
         shape->setApplicationData( applicationData );
     }
-    applicationData->animations().insert( animation );*/
+    applicationData->animations().insert( animation );
     emit animationAdded(animation);
 }
 
@@ -262,7 +262,6 @@ void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
 
 void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
 {
-    qDebug() << "postRemoveShape";
     Q_UNUSED( page );
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {

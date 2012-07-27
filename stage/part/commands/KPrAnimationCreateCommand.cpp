@@ -49,6 +49,6 @@ void KPrAnimationCreateCommand::redo ()
 
 void KPrAnimationCreateCommand::undo ()
 {
-    m_doc->removeAnimation(m_animation, false);
+    m_doc->removeAnimation(m_animation);
     m_deleteAnimation = true;
 }

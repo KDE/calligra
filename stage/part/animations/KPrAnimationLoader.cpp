@@ -24,6 +24,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoTextBlockData.h>
+#include <KoShape.h>
 
 #include <QVariant>
 #include <QDomDocument>
@@ -36,6 +37,7 @@
 #include "KPrAnimationFactory.h"
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
+#include "KPrShapeApplicationData.h"
 #include <QDebug>
 
 KPrAnimationLoader::KPrAnimationLoader()
@@ -247,6 +249,15 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         }
         if (!presetSubType.isEmpty()) {
             shapeAnimation->setPresetSubType(presetSubType);
+        }
+        // Register animation in shape
+        if (shapeAnimation->shape()) {
+            KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>(shapeAnimation->shape()->applicationData());
+            if (applicationData == 0) {
+                applicationData = new KPrShapeApplicationData();
+                shapeAnimation->shape()->setApplicationData(applicationData);
+            }
+            applicationData->animations().insert(shapeAnimation);
         }
     }
     return true;

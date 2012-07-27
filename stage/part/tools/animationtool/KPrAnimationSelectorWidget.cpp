@@ -145,7 +145,6 @@ void KPrAnimationSelectorWidget::init()
     // Init context bar
     if (!showAutomaticPreview) {
         createCollectionContextBar();
-        createSubTypeContextBar();
     }
 }
 
@@ -237,6 +236,9 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
         if (m_animationsData->subModelById(id)){
             m_subTypeView->setModel(m_animationsData->subModelById(id));
             m_subTypeView->show();
+            if (!showAutomaticPreview && !m_subTypeContextBar) {
+                createSubTypeContextBar();
+            }
             return;
         }
         newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);
@@ -275,7 +277,7 @@ void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
         if (!m_collectionContextBar) {
             createCollectionContextBar();
         }
-        if (!m_subTypeContextBar) {
+        if (!m_subTypeContextBar && m_subTypeView->model()) {
             createSubTypeContextBar();
         }
     }

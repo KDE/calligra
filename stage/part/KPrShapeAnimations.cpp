@@ -680,21 +680,6 @@ QModelIndex KPrShapeAnimations::moveDown(const QModelIndex &index)
     }
 
     return moveItem(index.row(), index.row() + 1);
-    /*KPrShapeAnimation *animationOld = animationByRow(index.row());
-    if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
-        if (steps().indexOf(animationOld->step()) > (steps().count() - 1)) {
-            return QModelIndex();
-        }
-        int oldRow = -1;
-        for (int i = index.row() + animationOld->subStep()->animationCount(); i < rowCount(); i++) {
-            if (animationByRow(i)->NodeType() == KPrShapeAnimation::On_Click) {
-                oldRow = i;
-                break;
-            }
-        }
-        return moveItem(index.row(), oldRow);
-    }
-    return QModelIndex();*/
 }
 
 QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
@@ -713,17 +698,6 @@ QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
         m_document->addCommand(cmd);
     }
     return newIndex;
-
-    /*if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
-        KPrShapeAnimation *animationNew = animationByRow(newRow);
-        if (animationOld && animationNew) {
-            if (m_document) {
-                KPrReorderAnimationCommand *cmd = new KPrReorderAnimationCommand(this, animationOld->step(), animationNew->step());
-                m_document->addCommand(cmd);
-            }
-        }
-    }
-    return newIndex;*/
 }
 
 QModelIndex KPrShapeAnimations::removeItemByIndex(const QModelIndex &index)
