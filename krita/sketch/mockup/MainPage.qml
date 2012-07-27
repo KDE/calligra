@@ -108,6 +108,8 @@ Page {
                         pageStack.push( settingsPage );
                     case "share":
                         pageStack.push( sharePage );
+                    case "help":
+                        pageStack.push( helpPage );
                 }
             }
         }
@@ -115,4 +117,5 @@ Page {
 
     Component { id: sharePage; SharePage { } }
     Component { id: settingsPage; SettingsPage { } }
+    Component { id: helpPage; HelpPage { } }
 }

@@ -5,6 +5,7 @@
     <file>MainPage.qml</file>
     <file>SharePage.qml</file>
     <file>SettingsPage.qml</file>
+    <file>HelpPage.qml</file>
 
     <file>components/PageStack.qml</file>
     <file>components/PageStack.js</file>
