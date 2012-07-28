@@ -511,10 +511,42 @@ QModelIndex KPrShapeAnimations::replaceAnimation(const QModelIndex &index, KPrSh
 
 bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type)
 {
-    KPrShapeAnimation *item = animationByRow(index.row());
-    if (item) {
+    KPrShapeAnimation *animation = animationByRow(index.row());
+    if (animation) {
+        KPrShapeAnimation::Node_Type currentType =
+                static_cast<KPrShapeAnimation::Node_Type>(data(this->index(index.row(),
+                                                                           KPrShapeAnimations::Node_Type)).toInt());
+        if (currentType == KPrShapeAnimation::After_Previous) {
+            if (type == KPrShapeAnimation::With_Previous) {
+                Q_ASSERT(index.row() > 0);
+            }
+        }
+        else if (currentType == KPrShapeAnimation::On_Click) {
+             if (index.row() < 1) {
+                 // Resync trigger event edit widget
+                 emit layoutChanged();
+                 return false;
+             }
+        }
+        if (type != currentType) {
+            return createTriggerEventEditCmd(animation, currentType, type);
+        }
+    }
+    return false;
+}
+
+bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShapeAnimation::Node_Type type)
+{
+    resyncStepsWithAnimations();
+    if (animation) {
+        QModelIndex index = indexByAnimation(animation);
+        if (!index.isValid()) {
+            return false;
+        }
         QList<KPrShapeAnimation *> movedChildren = QList<KPrShapeAnimation *>();
         QList<KPrAnimationSubStep *>movedSubSteps = QList<KPrAnimationSubStep *>();
+        KPrAnimationSubStep *newSubStep = 0;
+        KPrAnimationStep *newStep = 0;
         KPrShapeAnimation::Node_Type currentType =
                 static_cast<KPrShapeAnimation::Node_Type>(data(this->index(index.row(),
                                                                            KPrShapeAnimations::Node_Type)).toInt());
@@ -524,79 +556,74 @@ bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShap
                 //use previous animation to reparent current animation
                 Q_ASSERT(index.row() > 0);
                 KPrShapeAnimation * previousAnimation = animationByRow(index.row() - 1);
-                KPrAnimationSubStep *newSubStep = previousAnimation->subStep();
-                movedChildren = getWithPreviousSiblings(item);
-                return createTriggerEventEditCmd(item, item->step(),
-                                                 newSubStep, type, movedChildren, movedSubSteps, this);
+                newSubStep = previousAnimation->subStep();
+                movedChildren = getWithPreviousSiblings(animation);
             }
 
             // After Previous to On Click
-            if (type == KPrShapeAnimation::On_Click) {
+            else if (type == KPrShapeAnimation::On_Click) {
                  // Get index of current substep
-                 int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
-                 int subStepCount = item->step()->animationCount();
+                 int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
+                 int subStepCount = animation->step()->animationCount();
 
                  //Create new step to reparent currrent item and all following items.
-                 KPrAnimationStep *newStep = new KPrAnimationStep();
+                 newStep = new KPrAnimationStep();
 
                  // Add step after original one
-                 int currentStepIndex = steps().indexOf(item->step());
+                 int currentStepIndex = steps().indexOf(animation->step());
                  insertStep(currentStepIndex + 1, newStep);
 
                  //reparent children
                  if (currentSubStepIndex < subStepCount-1) {
-                     movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, item->step());
+                     movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, animation->step());
                  }
-                 return createTriggerEventEditCmd(item, newStep, item->subStep(),
-                                                  type, movedChildren, movedSubSteps, this);
+            }
+            else {
+                return false;
             }
         }
-        if (currentType == KPrShapeAnimation::With_Previous) {
+        else if (currentType == KPrShapeAnimation::With_Previous) {
            // With Previous to After Previous
            if (type == KPrShapeAnimation::After_Previous) {
-               //int childrenCount = parent->childCount();
                // Get index of current substep
-               int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
+               int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
                //Create new substep to reparent currrent item and all following items.
-               KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
+               newSubStep = new KPrAnimationSubStep();
 
                // Add substep after original one
-               item->step()->insertAnimation(currentSubStepIndex + 1, newSubStep);
+               animation->step()->insertAnimation(currentSubStepIndex + 1, newSubStep);
 
                //reparent children
-               movedChildren = getWithPreviousSiblings(item);
-               return createTriggerEventEditCmd(item, item->step(),
-                                                newSubStep, type, movedChildren, movedSubSteps, this);
+               movedChildren = getWithPreviousSiblings(animation);
            }
            // With Previous to On Click
-           if (type == KPrShapeAnimation::On_Click) {
-                //int childrenCount = parent->childCount();
+           else if (type == KPrShapeAnimation::On_Click) {
                 // Get index of current substep
-                int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
-                int subStepCount = item->step()->animationCount();
+                int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
+                int subStepCount = animation->step()->animationCount();
 
                 //Create new step to reparent currrent item and all following items.
-                KPrAnimationStep *newStep = new KPrAnimationStep();
+                newStep = new KPrAnimationStep();
 
                 //Create new substep to reparent currrent item and all following items.
-                KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
+                newSubStep = new KPrAnimationSubStep();
 
                 // Add step after original one
                 //insert new Step
-                int currentStepIndex = steps().indexOf(item->step());
+                int currentStepIndex = steps().indexOf(animation->step());
                 insertStep(currentStepIndex + 1, newStep);
 
                 //reparent children
                 if (currentSubStepIndex < subStepCount - 1) {
-                    movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, item->step());
+                    movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, animation->step());
                 }
-                movedChildren = getWithPreviousSiblings(item);
-                return createTriggerEventEditCmd(item, newStep, newSubStep,
-                                                 type, movedChildren, movedSubSteps, this);
-
+                movedChildren = getWithPreviousSiblings(animation);
+           }
+           else {
+               return false;
            }
         }
-        if (currentType == KPrShapeAnimation::On_Click) {
+        else if (currentType == KPrShapeAnimation::On_Click) {
              if (index.row() < 1) {
                  // Resync trigger event edit widget
                  emit layoutChanged();
@@ -606,34 +633,80 @@ bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShap
             if (type == KPrShapeAnimation::With_Previous) {
                 // Get previous animation
                 KPrShapeAnimation *previousAnimation = animationByRow(index.row() - 1);
-                KPrAnimationStep *newStep = previousAnimation->step();
-                KPrAnimationSubStep *newSubStep = previousAnimation->subStep();
+                newStep = previousAnimation->step();
+                newSubStep = previousAnimation->subStep();
 
-                movedChildren = getWithPreviousSiblings(item);
+                movedChildren = getWithPreviousSiblings(animation);
 
-                int subStepCount = item->step()->animationCount();
-                int currentSubStepIndex = item->step()->indexOfAnimation(item->subStep());
+                int subStepCount = animation->step()->animationCount();
+                int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
                 if (subStepCount > 1) {
-                    movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, item->step());
+                    movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, animation->step());
                 }
-                return createTriggerEventEditCmd(item, newStep, newSubStep,
-                                                 type, movedChildren, movedSubSteps, this);
             }
 
             // On click to After Previous
-            if (type == KPrShapeAnimation::After_Previous) {
+            else if (type == KPrShapeAnimation::After_Previous) {
                  // Get previous animation
                  KPrShapeAnimation *previousAnimation = animationByRow(index.row() - 1);
-                 KPrAnimationStep *newStep = previousAnimation->step();
-
-                 int subStepCount = item->step()->animationCount();
+                 newStep = previousAnimation->step();
+                 int subStepCount = animation->step()->animationCount();
                  if (subStepCount > 1) {
-                     movedSubSteps = getSubSteps(1, subStepCount, item->step());
+                     movedSubSteps = getSubSteps(1, subStepCount, animation->step());
                  }
-                 return createTriggerEventEditCmd(item, newStep, item->subStep(),
-                                                  type, movedChildren, movedSubSteps, this);
+            }
+            else {
+                return false;
             }
         }
+        else {
+            return false;
+        }
+        KPrAnimationSubStep *oldSubStep = animation->subStep();
+        KPrAnimationStep *oldStep = animation->step();
+
+        // if new subStep reparent main item and children
+        if (newSubStep) {
+            if (oldSubStep->indexOfAnimation(animation) >= 0) {
+                newSubStep->addAnimation(oldSubStep->takeAnimation(oldSubStep->indexOfAnimation(animation)));
+            }
+            if (!movedChildren.isEmpty()) {
+                foreach(KPrShapeAnimation *anim, movedChildren) {
+                    if ((oldSubStep->indexOfAnimation(anim) >= 0) && (oldSubStep->indexOfAnimation(anim) < oldSubStep->animationCount())) {
+                        newSubStep->addAnimation(oldSubStep->takeAnimation(oldSubStep->indexOfAnimation(anim)));
+                    }
+                }
+            }
+        }
+        // If newStep reparent subSteps and children
+        if (newStep) {
+            if (!newSubStep) {
+                newSubStep = oldSubStep;
+            }
+            if (movedSubSteps.isEmpty()) {
+                movedSubSteps.append(newSubStep);
+            }
+            else {
+                movedSubSteps.insert(0, newSubStep);
+            }
+            foreach(KPrAnimationSubStep *subStep, movedSubSteps) {
+                newStep->addAnimation(subStep);
+            }
+        }
+        // If old substep or step is empty remove from list;
+        if (oldSubStep->children().isEmpty()) {
+            oldSubStep->setParent(0);
+        }
+        if (oldStep->children().isEmpty()) {
+            removeStep(oldStep);
+        }
+
+        if ((currentType == KPrShapeAnimation::On_Click) || (type == KPrShapeAnimation::On_Click)) {
+            notifyOnClickEventChanged();
+        }
+        notifyAnimationChanged(animation);
+        resyncStepsWithAnimations();
+        return true;
     }
     return false;
 }
@@ -1042,11 +1115,9 @@ QList<KPrAnimationSubStep *> KPrShapeAnimations::getSubSteps(int start, int end,
     return movedSubSteps;
 }
 
-bool KPrShapeAnimations::createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep, KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children, QList<KPrAnimationSubStep *> movedSubSteps, KPrShapeAnimations *shapeAnimations)
+bool KPrShapeAnimations::createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::Node_Type oldType, KPrShapeAnimation::Node_Type newType)
 {
-    KPrAnimationEditNodeTypeCommand *command =
-            new KPrAnimationEditNodeTypeCommand(animation, newStep, newSubStep,
-                                                newType, children, movedSubSteps, shapeAnimations);
+    KPrAnimationEditNodeTypeCommand *command =new KPrAnimationEditNodeTypeCommand(animation, oldType, newType, this);
     if (m_document) {
         m_document->addCommand(command);
         emit timeScaleModified();

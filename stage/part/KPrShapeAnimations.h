@@ -184,12 +184,20 @@ public:
     QModelIndex replaceAnimation(const QModelIndex &index, KPrShapeAnimation *newAnimation);
 
     /**
-     * @brief Change trigger event of the animation on index
+     * @brief Create command to change trigger event of the animation on index
      *
      * @param index index of the animation
      * @param type new Node Type for the animation
      */
     bool setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type);
+
+    /**
+     * @brief Change trigger event of the animation
+     *
+     * @param animation
+     * @param type new Node Type for the animation
+     */
+    bool setNodeType(KPrShapeAnimation *animation, const KPrShapeAnimation::Node_Type type);
 
     /**
      * @brief Redefine start of the animation if is moved below the minimun limit
@@ -291,9 +299,7 @@ private:
     void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes);
     QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation);
     QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
-    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
-                                   KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children,
-                                   QList<KPrAnimationSubStep *> movedSubSteps, KPrShapeAnimations *shapeAnimations);
+    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::Node_Type oldType, KPrShapeAnimation::Node_Type newType);
 
     QList<KPrAnimationStep *> m_shapeAnimations;
     KPrShapeAnimation *m_currentEditedAnimation;

@@ -36,12 +36,14 @@ private slots:
     void replaceSwap();
     void helperMethods();
     void getTriggerEvent();
+    void setTriggerEvent();
     void timeHelperMethods();
     void cleanupTestCase();
 
 private:
     void createAnimationTree(KPrShapeAnimations *animations);
     void cleanStepSubStepData();
+    void checkOrder(KPrShapeAnimations *animations);
     QList<MockShapeAnimation *> m_animation;
     QList<MockShape *> shapes;
 };
