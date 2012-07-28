@@ -366,8 +366,8 @@ void KPrShapeAnimationDocker::syncWithCanvasSelectedShape()
             }
             updateEditDialogIndex(index);
         }
+        checkAnimationSelected();
     }
-    checkAnimationSelected();
 }
 
 void KPrShapeAnimationDocker::slotAnimationPreview()
