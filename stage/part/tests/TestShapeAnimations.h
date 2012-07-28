@@ -22,7 +22,7 @@
 
 #include <QtTest>
 
-class KPrShapeAnimation;
+class MockShapeAnimation;
 class KPrShapeAnimations;
 class MockShape;
 
@@ -35,12 +35,13 @@ private slots:
     void replaceSwap();
     void helperMethods();
     void getTriggerEvent();
+    void timeHelperMethods();
     void cleanupTestCase();
 
 private:
     void createAnimationTree(KPrShapeAnimations *animations);
     void cleanStepSubStepData();
-    QList<KPrShapeAnimation *> m_animation;
+    QList<MockShapeAnimation *> m_animation;
     QList<MockShape *> shapes;
 };
 

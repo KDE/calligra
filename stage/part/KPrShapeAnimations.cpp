@@ -459,7 +459,7 @@ void KPrShapeAnimations::setDocument(KPrDocument *document)
     reset();
 }
 
-qreal KPrShapeAnimations::previousItemEnd(const QModelIndex &index)
+int KPrShapeAnimations::animationEndByIndex(const QModelIndex &index)
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
@@ -468,17 +468,17 @@ qreal KPrShapeAnimations::previousItemEnd(const QModelIndex &index)
         }
         if (previousAnimation->NodeType() == KPrShapeAnimation::With_Previous) {
             return previousAnimation->timeRange().second +
-                    previousItemBegin(this->index(index.row() - 1, index.column(), QModelIndex()));
+                    scaleBeginForAnimation(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
         else if (previousAnimation->NodeType() == KPrShapeAnimation::After_Previous) {
             return previousAnimation->timeRange().second +
-                    previousItemEnd(this->index(index.row() - 1, index.column(), QModelIndex()));
+                    animationEndByIndex(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
     }
-    return 0.0;
+    return 0;
 }
 
-qreal KPrShapeAnimations::previousItemBegin(const QModelIndex &index)
+int KPrShapeAnimations::scaleBeginForAnimation(const QModelIndex &index)
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
@@ -486,13 +486,13 @@ qreal KPrShapeAnimations::previousItemBegin(const QModelIndex &index)
             return previousAnimation->timeRange().first;
         }
         if (previousAnimation->NodeType() == KPrShapeAnimation::With_Previous) {
-            return previousItemBegin(this->index(index.row() - 1, index.column(), QModelIndex()));
+            return scaleBeginForAnimation(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
         else if (previousAnimation->NodeType() == KPrShapeAnimation::After_Previous) {
-            return previousItemEnd(this->index(index.row() - 1, index.column(), QModelIndex()));
+            return animationEndByIndex(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
     }
-    return 0.0;
+    return 0;
 }
 
 QModelIndex KPrShapeAnimations::replaceAnimation(const QModelIndex &index, KPrShapeAnimation *newAnimation)
@@ -650,7 +650,7 @@ void KPrShapeAnimations::recalculateStart(const QModelIndex &mIndex)
 
     KPrShapeAnimation::Node_Type type = animation->NodeType();
     if (type == KPrShapeAnimation::After_Previous) {
-        setTimeRange(animation, previousItemEnd(mIndex), animation->globalDuration());
+        setTimeRange(animation, animationEndByIndex(mIndex), animation->globalDuration());
         setTriggerEvent(mIndex, KPrShapeAnimation::With_Previous);
     }
     else if (type == KPrShapeAnimation::With_Previous) {

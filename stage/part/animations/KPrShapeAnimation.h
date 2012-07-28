@@ -97,25 +97,25 @@ public:
     /**
       * Return the begin and end time of the animation as a QPair
       */
-    QPair<int, int> timeRange();
+    virtual QPair<int, int> timeRange();
     /**
       * Return global duration of the shape animation
       */
-    int globalDuration();
+    virtual int globalDuration();
 
     /**
      * @brief Set the begin time for the animation
      *
      * @param timeMS time in miliseconds
      */
-    void setBeginTime(int timeMS);
+    virtual void setBeginTime(int timeMS);
 
     /**
      * @brief Set duration time for the animation
      *
      * @param timeMS time in miliseconds
      */
-    void setGlobalDuration(int timeMS);
+    virtual void setGlobalDuration(int timeMS);
 
     /**
      * @brief asign text block data

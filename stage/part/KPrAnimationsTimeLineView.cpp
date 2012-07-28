@@ -306,11 +306,11 @@ int KPrAnimationsTimeLineView::calculateStartOffset(int row)
     }
     if (triggerEvent == KPrShapeAnimation::After_Previous) {
         QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::Node_Type));
-        return m_shapeModel->previousItemEnd(sourceIndex);
+        return m_shapeModel->animationEndByIndex(sourceIndex);
     }
     if (triggerEvent == KPrShapeAnimation::With_Previous) {
         QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::Node_Type));
-        return m_shapeModel->previousItemBegin(sourceIndex);
+        return m_shapeModel->scaleBeginForAnimation(sourceIndex);
     }
     return 0;
 }

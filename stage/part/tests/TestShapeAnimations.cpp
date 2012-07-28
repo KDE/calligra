@@ -27,6 +27,7 @@
 #include <../animations/KPrAnimationSubStep.h>
 #include <modeltest.h>
 #include "PAMock.h"
+#include "MockShapeAnimation.h"
 #include "QDebug"
 
 void TestShapeAnimations::initTestCase()
@@ -37,7 +38,7 @@ void TestShapeAnimations::initTestCase()
         MockShape *shape = new MockShape();
         shape->setSize(QSizeF(100, 100));
         shapes.append(shape);
-        KPrShapeAnimation *animation = new KPrShapeAnimation(shape, textBlockData);
+        MockShapeAnimation *animation = new MockShapeAnimation(shape, textBlockData);
         animation->setPresetClass(KPrShapeAnimation::Entrance);
         m_animation.append(animation);
     }
@@ -178,7 +179,37 @@ void TestShapeAnimations::getTriggerEvent()
     QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Group)).toInt(), 2);
     QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Group)).toInt(), 3);
     QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Group)).toInt(), 3);
+}
 
+void TestShapeAnimations::timeHelperMethods()
+{
+    KPrShapeAnimations animations;
+    MockDocument doc;
+    animations.setDocument(&doc);
+    new ModelTest(&animations, this);
+    createAnimationTree(&animations);
+
+    //Previous animation Begin
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(0, 0)), 0);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(1, 0)), 0);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(2, 0)), 0);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(3, 0)), 5000);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(4, 0)), 5000);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(5, 0)), 1000);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(6, 0)), 3000);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(7, 0)), 0);
+    QCOMPARE(animations.scaleBeginForAnimation(animations.index(8, 0)), 0);
+
+    //Previous animation End
+    QCOMPARE(animations.animationEndByIndex(animations.index(0, 0)), 4000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(1, 0)), 2000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(2, 0)), 5000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(3, 0)), 6000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(4, 0)), 6000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(5, 0)), 3000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(6, 0)), 6000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(7, 0)), 5000);
+    QCOMPARE(animations.animationEndByIndex(animations.index(8, 0)), 6000);
 }
 
 void TestShapeAnimations::cleanupTestCase()
@@ -189,22 +220,22 @@ void TestShapeAnimations::cleanupTestCase()
 
 /* Tree structure:
   Step 1
-  |_ SubStep1
-        |_Anim0         On click
-        |_Anim1         With Previous
-        |_Anim2         With Previous
+  |_ SubStep1                           1   2   3   4   5   6
+        |_Anim0         On click        HHHHHHHHHHHHH
+        |_Anim1         With Previous   HHHHH
+        |_Anim2         With Previous       HHHHHHHHHHHHH
   |_ SubStep2
-        |_Anim3         After Previous
-        |_Anim4         With Previous
+        |_Anim3         After Previous                  HHHHHH
+        |_Anim4         With Previous                   HHHHHH
   Step 2
   |_ SubStep3
-        |_Anim5         On click
+        |_Anim5         On click            HHHHHHHHH
   |_ SubStep4
-        |_Anim6         After Click
+        |_Anim6         After Previous                  HHHHH
   Step 3
   |_ SubStep5
-        |_Anim7         On click
-        |_Anim8         With Previous
+        |_Anim7         On click        HHHHHHHHHHHHHHHHH
+        |_Anim8         With Previous               HHHHHHHHHHHH
 
   */
 void TestShapeAnimations::createAnimationTree(KPrShapeAnimations *animations)
@@ -231,6 +262,25 @@ void TestShapeAnimations::createAnimationTree(KPrShapeAnimations *animations)
     subStep4->addAnimation(m_animation[6]);
     subStep5->addAnimation(m_animation[7]);
     subStep5->addAnimation(m_animation[8]);
+    foreach(MockShapeAnimation *animation, m_animation) {
+        animation->setBeginTime(0);
+        animation->setGlobalDuration(1);
+    }
+    //Set times
+    m_animation[0]->setGlobalDuration(4000);
+    m_animation[1]->setGlobalDuration(2000);
+    m_animation[2]->setBeginTime(2000);
+    m_animation[2]->setGlobalDuration(3000);
+    m_animation[3]->setGlobalDuration(1000);
+    m_animation[4]->setGlobalDuration(1000);
+    m_animation[5]->setBeginTime(1000);
+    m_animation[5]->setGlobalDuration(2000);
+    m_animation[6]->setBeginTime(2000);
+    m_animation[6]->setGlobalDuration(1000);
+    m_animation[7]->setGlobalDuration(5000);
+    m_animation[8]->setBeginTime(4000);
+    m_animation[8]->setGlobalDuration(2000);
+
     QList<KPrAnimationStep *> stepsList;
     stepsList.append(step1);
     stepsList.append(step2);
@@ -242,7 +292,7 @@ void TestShapeAnimations::createAnimationTree(KPrShapeAnimations *animations)
 
 void TestShapeAnimations::cleanStepSubStepData()
 {
-    foreach(KPrShapeAnimation *animation, m_animation) {
+    foreach(MockShapeAnimation *animation, m_animation) {
         animation->setStep(0);
         animation->setSubStep(0);
     }

@@ -160,20 +160,20 @@ public:
     void setDocument(KPrDocument *document);
 
     /**
-     * Get the previous animation end time for the given animation
+     * Get the end time for the given animation
      *
      * @param index of the animation
-     * @return the time in seconds of the previous animation end
+     * @return the time in miliseconds of the animation end
      */
-    qreal previousItemEnd(const QModelIndex &index);
+    int animationEndByIndex(const QModelIndex &index);
 
     /**
-     * Get the previous animation begin for the given animation
+     * Get the scale begin time for the given animation
      *
      * @param index of the animation
-     * @return the time in seconds of the previous animation begin
+     * @return the time in miliseconds where the scale begin (relative to the parent onclik animation)
      */
-    qreal previousItemBegin(const QModelIndex &index);
+    int scaleBeginForAnimation(const QModelIndex &index);
 
     /**
      * @brief Replace animation in the given index
@@ -193,7 +193,7 @@ public:
 
     /**
      * @brief Redefine start of the animation if is moved below the minimun limit
-     * of its animation trigger event.
+     * of its animation trigger event scale.
      *
      * @param mIndex index of the animation
      */
