@@ -117,7 +117,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
     }
     if (role == Qt::TextAlignmentRole) {
         if (index.column() == Name) {
-            return static_cast<int>(Qt::AlignCenter);
+            return static_cast<int>(Qt::AlignLeft|Qt::AlignVCenter);
         }
         return static_cast<int>(Qt::AlignCenter);
     }

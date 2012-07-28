@@ -265,9 +265,10 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         m_animationsModel->setDocument(doc);
         m_animationsView->setModel(m_animationsModel);
         //Config columns
-        m_animationsView->hideColumn(0);
         m_animationsView->setColumnWidth(1, 3);
+        m_animationsView->resizeColumnToContents(KPrShapeAnimations::ShapeThumbnail);
         m_animationsView->header()->moveSection(4, 3);
+        m_animationsView->hideColumn(0);
         m_animationsView->hideColumn(5);
         m_animationsView->hideColumn(6);
         m_animationsView->hideColumn(7);
