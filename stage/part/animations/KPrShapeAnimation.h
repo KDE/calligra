@@ -32,6 +32,7 @@ class KoTextBlockData;
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
+class KoPASavingContext;
 class KPrAnimationCache;
 class KPrAnimationStep;
 class KPrAnimationSubStep;

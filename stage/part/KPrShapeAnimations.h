@@ -221,14 +221,14 @@ public:
      *
      * @param index of the animation
      */
-    QModelIndex moveItem(int oldRow, int newRow);
+    QModelIndex moveAnimation(int oldRow, int newRow);
 
     /**
      * @brief remove animation on index
      *
      * @param index of the animation to be removed
      */
-    QModelIndex removeItemByIndex(const QModelIndex &index);
+    QModelIndex removeAnimationByIndex(const QModelIndex &index);
 
     /**
      * @brief Return the shape of the animation on given index

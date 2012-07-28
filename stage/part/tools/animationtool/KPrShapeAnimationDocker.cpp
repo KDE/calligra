@@ -415,7 +415,7 @@ void KPrShapeAnimationDocker::previewAnimation(KPrShapeAnimation *animation)
 void KPrShapeAnimationDocker::slotRemoveAnimations()
 {
     QModelIndex index = m_animationsView->currentIndex();
-    m_animationsModel->removeItemByIndex(index);
+    m_animationsModel->removeAnimationByIndex(index);
     syncCanvasWithIndex(index);
 }
 

@@ -116,10 +116,10 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
         }
     }
     if (role == Qt::TextAlignmentRole) {
-        if (index.column() == Name)
-            return static_cast<int>(Qt::AlignVCenter|
-                                    Qt::AlignLeft);
-        return static_cast<int>(Qt::AlignVCenter|Qt::AlignRight);
+        if (index.column() == Name) {
+            return static_cast<int>(Qt::AlignCenter);
+        }
+        return static_cast<int>(Qt::AlignCenter);
     }
     if (role == Qt::DecorationRole) {
         switch (index.column()) {
@@ -281,6 +281,14 @@ void KPrShapeAnimations::add(KPrShapeAnimation * animation)
     if (m_shapeAnimations.isEmpty()) {
         m_shapeAnimations.append(new KPrAnimationStep());
     }
+    if (!animation->step()) {
+        KPrAnimationStep *newStep = new KPrAnimationStep();
+        animation->setStep(newStep);
+    }
+    if (!animation->subStep()) {
+        KPrAnimationSubStep *newSubStep = new KPrAnimationSubStep();
+        animation->setSubStep(newSubStep);
+    }
     if (!steps().contains(animation->step())) {
         if ((animation->stepIndex() >= 0) && (animation->stepIndex() <= steps().count())) {
             m_shapeAnimations.insert(animation->stepIndex(), animation->step());
@@ -298,6 +306,7 @@ void KPrShapeAnimations::add(KPrShapeAnimation * animation)
             animation->step()->addAnimation(animation->subStep());
         }
     }
+
     if ((animation->animIndex() >= 0) &&
             (animation->animIndex() <= animation->subStep()->animationCount())) {
         animation->subStep()->insertAnimation(animation->animIndex(), animation);
@@ -654,23 +663,7 @@ QModelIndex KPrShapeAnimations::moveUp(const QModelIndex &index)
     if (!index.isValid() || index.row() < 1) {
         return QModelIndex();
     }
-    return moveItem(index.row(), index.row() - 1);
-    /*
-    KPrShapeAnimation *animationOld = animationByRow(index.row());
-    if (animationOld->NodeType() == KPrShapeAnimation::On_Click) {
-        if (steps().indexOf(animationOld->step()) < 1) {
-            return QModelIndex();
-        }
-        int oldRow = -1;
-        for (int i = index.row() - 1; i >= 0; i--) {
-            if (animationByRow(i)->NodeType() == KPrShapeAnimation::On_Click) {
-                oldRow = i;
-                break;
-            }
-        }
-        return moveItem(index.row(), oldRow);
-    }
-    return QModelIndex();*/
+    return moveAnimation(index.row(), index.row() - 1);
 }
 
 QModelIndex KPrShapeAnimations::moveDown(const QModelIndex &index)
@@ -679,10 +672,10 @@ QModelIndex KPrShapeAnimations::moveDown(const QModelIndex &index)
         return QModelIndex();
     }
 
-    return moveItem(index.row(), index.row() + 1);
+    return moveAnimation(index.row(), index.row() + 1);
 }
 
-QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
+QModelIndex KPrShapeAnimations::moveAnimation(int oldRow, int newRow)
 {
     Q_ASSERT(0 <= oldRow && oldRow < rowCount() &&
              0 <= newRow && newRow < rowCount());
@@ -700,7 +693,7 @@ QModelIndex KPrShapeAnimations::moveItem(int oldRow, int newRow)
     return newIndex;
 }
 
-QModelIndex KPrShapeAnimations::removeItemByIndex(const QModelIndex &index)
+QModelIndex KPrShapeAnimations::removeAnimationByIndex(const QModelIndex &index)
 {
     if (!index.isValid()) {
         return index;

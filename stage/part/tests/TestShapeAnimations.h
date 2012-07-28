@@ -22,8 +22,9 @@
 
 #include <QtTest>
 
-class MockAppearAnimation;
-class MockDisappearAnimation;
+class KPrShapeAnimation;
+class KPrShapeAnimations;
+class MockShape;
 
 class TestShapeAnimations : public QObject
 {
@@ -31,16 +32,16 @@ class TestShapeAnimations : public QObject
 private slots:
     void initTestCase();
     void addRemove();
-    void animations();
-    void steps();
+    void replaceSwap();
+    void helperMethods();
+    void getTriggerEvent();
     void cleanupTestCase();
 
-private:    
-    MockAppearAnimation * m_animation1_2;
-    MockAppearAnimation * m_animation2_0;
-    MockDisappearAnimation * m_animation2_2;
-    MockAppearAnimation * m_animation2_4;
-    MockDisappearAnimation * m_animation3_3;
+private:
+    void createAnimationTree(KPrShapeAnimations *animations);
+    void cleanStepSubStepData();
+    QList<KPrShapeAnimation *> m_animation;
+    QList<MockShape *> shapes;
 };
 
 #endif // TESTPAPAGEDELETECOMMAND_H
