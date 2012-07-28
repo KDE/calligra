@@ -299,8 +299,6 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
     QString presetSubType = element.attributeNS(KoXmlNS::presentation, "preset-sub-type");
 
-    KPrShapeAnimation::Node_Type l_nodeType = KPrShapeAnimation::On_Click;
-
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is
     KoXmlElement e;
@@ -317,7 +315,7 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     }
 
     if (shapeAnimation) {
-        shapeAnimation->setNodeType(l_nodeType);
+        shapeAnimation->setNodeType(KPrShapeAnimation::On_Click);
         if (presetClass == "custom") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Custom);
         }

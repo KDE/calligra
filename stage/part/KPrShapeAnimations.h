@@ -289,7 +289,7 @@ private:
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
     QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
     void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes);
-    QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation, bool connectItems);
+    QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation);
     QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
     bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrAnimationStep *newStep, KPrAnimationSubStep *newSubStep,
                                    KPrShapeAnimation::Node_Type newType, QList<KPrShapeAnimation *> children,

@@ -228,8 +228,6 @@ public:
 signals:
     /// Notify if an animation stored property has been changed
     void timeChanged(int begin, int end);
-    void triggerEventChanged(KPrShapeAnimation::Node_Type event);
-
 
 private:
     KoShape *m_shape;

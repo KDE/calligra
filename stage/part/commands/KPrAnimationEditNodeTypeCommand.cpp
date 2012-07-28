@@ -49,7 +49,7 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
     setText(i18nc("(qtundo-format)", "Edit animation trigger event" ) );
     m_oldStep = m_animation->step();
     m_oldSubStep = m_animation->subStep();
-    m_oldType = m_animation->NodeType();
+    m_oldType = animation->NodeType();
 }
 
 KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()
@@ -115,7 +115,6 @@ void KPrAnimationEditNodeTypeCommand::redo()
             }
         }
 
-        m_animation->setNodeType(m_newType);
         if ((m_oldType == KPrShapeAnimation::On_Click) || notifyOnClickChange || ((m_newType == KPrShapeAnimation::On_Click))) {
             m_animationsModel->notifyOnClickEventChanged();
         }
@@ -182,7 +181,6 @@ void KPrAnimationEditNodeTypeCommand::undo()
                 m_animationsModel->insertStep(m_animationsModel->steps().count(), m_oldStep);
             }
         }
-        m_animation->setNodeType(m_oldType);
         if ((m_oldType == KPrShapeAnimation::On_Click) || notifyOnClickChange || ((m_newType == KPrShapeAnimation::On_Click))) {
             m_animationsModel->notifyOnClickEventChanged();
         }

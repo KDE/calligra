@@ -218,7 +218,6 @@ void KPrShapeAnimation::setNodeType(KPrShapeAnimation::Node_Type type)
 {
     if (type != m_triggerEvent) {
         m_triggerEvent = type;
-        emit triggerEventChanged(type);
     }
 }
 

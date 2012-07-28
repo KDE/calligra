@@ -133,7 +133,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
     kDebug() << "nodeType:" << nodeType;
     KPrAnimationSubStep *subStep = 0;
-    KPrShapeAnimation::Node_Type l_nodeType = KPrShapeAnimation::On_Click;
     if (nodeType == "on-click") {
         // if there is already an animation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
@@ -142,7 +141,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         }
         subStep = new KPrAnimationSubStep();
         (*animationStep)->addAnimation(subStep);
-        l_nodeType = KPrShapeAnimation::On_Click;
         // add par animation
     }
     else if (nodeType == "after-previous") {
@@ -150,7 +148,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // add par
         subStep = new KPrAnimationSubStep();
         (*animationStep)->addAnimation(subStep);
-        l_nodeType = KPrShapeAnimation::After_Previous;
         // add par animation
     }
     else {
@@ -160,12 +157,10 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // use the current substep
         if ((*animationStep)->animationCount()) {
             subStep = dynamic_cast<KPrAnimationSubStep*>((*animationStep)->animationAt((*animationStep)->animationCount() - 1));
-            l_nodeType = KPrShapeAnimation::With_Previous;
         }
         else {
             subStep = new KPrAnimationSubStep();
             (*animationStep)->addAnimation(subStep);
-            l_nodeType = KPrShapeAnimation::With_Previous;
         }
         // add par to current par
     }
@@ -217,7 +212,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
 
     if (shapeAnimation) {
         subStep->addAnimation(shapeAnimation);
-        shapeAnimation->setNodeType(l_nodeType);
         shapeAnimation->setSubStep(subStep);
         shapeAnimation->setStep((*animationStep));
         if (presetClass == "custom") {
