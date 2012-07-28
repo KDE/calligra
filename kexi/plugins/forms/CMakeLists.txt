@@ -50,6 +50,7 @@ target_link_libraries(
     kformdesigner
     kexiformutils
     kexidb
+    ${CALLIGRADB_LIBS}
     kexicore
     kexiguiutils
     kexidataviewcommon
@@ -110,6 +111,7 @@ target_link_libraries(
     kexiextendedwidgets
     kformdesigner
     kexidb
+    ${CALLIGRADB_LIBS}
     kexiutils
     kexidataviewcommon
     kexidatatable

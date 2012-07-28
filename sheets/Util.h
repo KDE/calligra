@@ -53,7 +53,7 @@ namespace Util
 /**
  * Call this function to decode the text of a column label to an integer,
  * e.g. 1 for A and 27 for AA.
- * Converted are all characters matching [A-Za-z]+ regular expresion, the rest is ignored.
+ * Converted are all characters matching [A-Za-z]+ regular expression, the rest is ignored.
  * 0 is returned if no characters match.
  */
 CALLIGRA_SHEETS_ODF_EXPORT int decodeColumnLabelText(const QString &labelText);

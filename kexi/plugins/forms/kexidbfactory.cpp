@@ -38,8 +38,8 @@
 #include <core/kexi.h>
 #include <core/kexipart.h>
 #include <core/KexiMainWindowIface.h>
-#include <kexidb/utils.h>
-#include <kexidb/connection.h>
+#include <db/utils.h>
+#include <db/connection.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiCommandLinkButton.h>
 #include <widget/properties/KexiCustomPropertyFactory.h>

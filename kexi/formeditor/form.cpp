@@ -59,6 +59,7 @@
 #include <kexiutils/styleproxy.h>
 #include <kexi_global.h>
 
+#include <db/utils.h>
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
 
@@ -1962,7 +1963,7 @@ bool Form::isNameValid(const QString &name) const
 //! @todo add to the undo buffer
     QWidget *w = d->selected.first();
     //also update widget's name in QObject member
-    if (!KexiUtils::isIdentifier(name)) {
+    if (!KexiDB::isIdentifier(name)) {
         KMessageBox::sorry(widget(),
                            i18n("Could not rename widget \"%1\" to \"%2\" because "
                                 "\"%3\" is not a valid name (identifier) for a widget.\n",

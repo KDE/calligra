@@ -66,14 +66,11 @@ public:
     /// reimplemented
     virtual bool displayShape(KoShape *shape) const;
 
-    QImage thumbImage(const QSize& = QSize(512, 512));
+    virtual QImage thumbImage(const QSize& = QSize(512, 512));
     /// reimplemented
     virtual QPixmap generateThumbnail( const QSize& );
     /// reimplemented
     virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
-
-private:
-    QImage createPageThumbnail() const;
 
 private:
     KoShape *m_textShape;

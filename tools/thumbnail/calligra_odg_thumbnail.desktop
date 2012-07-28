@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=OpenDocument Drawings
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

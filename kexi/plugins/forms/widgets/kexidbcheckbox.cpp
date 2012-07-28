@@ -21,7 +21,7 @@
 #include "kexidbcheckbox.h"
 
 #include <kexiutils/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 KexiDBCheckBox::KexiDBCheckBox(const QString &text, QWidget *parent)
         : QCheckBox(text, parent), KexiFormDataItemInterface()

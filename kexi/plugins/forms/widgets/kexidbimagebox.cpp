@@ -46,9 +46,9 @@
 
 #include <widget/utils/kexidropdownbutton.h>
 #include <kexiutils/utils.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/queryschema.h>
 #include <formeditor/widgetlibrary.h>
 #include <formeditor/utils.h>
 #include <kexi_global.h>

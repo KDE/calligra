@@ -29,7 +29,7 @@
 #include "KexiMobileToolbar.h"
 #include "KexiMobileNavigator.h"
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 #include <kdebug.h>
 #include <KMimeType>
 #include <QFileDialog>

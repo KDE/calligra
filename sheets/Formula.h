@@ -371,7 +371,7 @@ public:
     /**
      * Evaluates the formula and returns the result.
      * The optional cellIndirections parameter can be used to replace all
-     * occurences of a references to certain cells with references to
+     * occurrences of a references to certain cells with references to
      * different cells. If this mapping is non-empty this does mean
      * that intermediate results can't be cached.
      */

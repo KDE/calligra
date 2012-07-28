@@ -133,6 +133,7 @@
 #include <KStandardAction>
 #include <KStandardDirs>
 #include <KToggleAction>
+#include <kdeversion.h>
 
 // Qt
 #include <QBuffer>
@@ -412,13 +413,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- misc style attribute actions --
 
-    action = new KAction(KIcon("fontsizeup"), i18n("Upper Case"), this);
+    action = new KAction(KIcon() /*TODO: "format-text-uppercase/"*/, i18n("Upper Case"), this);
     action->setIconText(i18n("Upper"));
     addAction("toUpperCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toUpperCase()));
     action->setToolTip(i18n("Convert all letters to upper case"));
 
-    action = new KAction(KIcon("fontsizedown"), i18n("Lower Case"), this);
+    action = new KAction(KIcon() /*TODO:"format-text-lowercase/"*/, i18n("Lower Case"), this);
     action->setIconText(i18n("Lower"));
     addAction("toLowerCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toLowerCase()));
@@ -2012,7 +2013,12 @@ void CellToolBase::currency(bool enable)
     command->setSheet(selection()->activeSheet());
     command->setText(i18nc("(qtundo-format)", "Format Money"));
     command->setFormatType(enable ? Format::Money : Format::Generic);
+#if KDE_IS_VERSION(4,4,0)
+    command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces() : 0);
+#else
     command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits() : 0);
+#endif
+
     command->add(*selection());
     command->execute(canvas());
 }

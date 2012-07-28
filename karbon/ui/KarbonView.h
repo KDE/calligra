@@ -128,7 +128,7 @@ public slots:
 
     void configure();
 
-    void pageLayout();
+    void configurePageLayout();
 
     void selectionChanged();
 

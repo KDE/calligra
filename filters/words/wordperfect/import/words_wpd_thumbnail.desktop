@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=WordPerfect Documents
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.wordperfect;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

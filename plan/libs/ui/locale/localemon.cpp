@@ -28,6 +28,7 @@
 #include "kptcommand.h"
 #include "kptdebug.h"
 
+#include <kdeversion.h>
 #include <QCheckBox>
 #include <QComboBox>
 
@@ -134,8 +135,13 @@ void LocaleConfigMoney::save()
 
   i = entGrp.readEntry("FracDigits", 2);
   group.deleteEntry("FracDigits", KConfig::Persistent | KConfig::Global);
+#if KDE_IS_VERSION(4,4,0)
+  if (i != m_locale->monetaryDecimalPlaces())
+    group.writeEntry("FracDigits", m_locale->monetaryDecimalPlaces(), KConfig::Persistent|KConfig::Global);
+#else
   if (i != m_locale->fracDigits())
     group.writeEntry("FracDigits", m_locale->fracDigits(), KConfig::Persistent|KConfig::Global);
+#endif
 
   b = entGrp.readEntry("PositivePrefixCurrencySymbol", true);
   group.deleteEntry("PositivePrefixCurrencySymbol", KConfig::Persistent | KConfig::Global);
@@ -180,7 +186,11 @@ void LocaleConfigMoney::slotLocaleChanged()
   m_edMonCurSym->setText( m_locale->currencySymbol() );
 /*  m_edMonDecSym->setText( m_locale->monetaryDecimalSymbol() );
   m_edMonThoSep->setText( m_locale->monetaryThousandsSeparator() );*/
+#if KDE_IS_VERSION(4,4,0)
+  m_inMonFraDig->setValue(m_locale->monetaryDecimalPlaces());
+#else
   m_inMonFraDig->setValue( m_locale->fracDigits() );
+#endif
 
   m_chMonPosPreCurSym->setChecked( m_locale->positivePrefixCurrencySymbol() );
   m_chMonNegPreCurSym->setChecked( m_locale->negativePrefixCurrencySymbol() );
@@ -340,7 +350,11 @@ MacroCommand *LocaleConfigMoney::buildCommand()
     if ( m_locale->currencySymbol() != m_edMonCurSym->text() ) {
         m->addCommand( new ModifyCurrencySymolCmd( m_locale, m_edMonCurSym->text() ) );
     }
+#if KDE_IS_VERSION(4,4,0)
+    if (m_locale->monetaryDecimalPlaces() != m_inMonFraDig->value()) {
+#else
     if ( m_locale->fracDigits() != m_inMonFraDig->value() ) {
+#endif
         m->addCommand( new ModifyCurrencyFractionalDigitsCmd( m_locale, m_inMonFraDig->value() ) );
     }
     if ( m_locale->positivePrefixCurrencySymbol() != m_chMonPosPreCurSym->isChecked() ) {

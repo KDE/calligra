@@ -209,12 +209,6 @@ private:
     void processStyles();
     void processAssociatedStrings();
 
-/*     enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 }; */
-/*     void generateFrameBorder(QDomElement& frameElementOut, */
-/*                              const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, */
-/*                              const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, */
-/*                              const wvWare::Word97::SHD& shd); */
-
     void setPageLayoutStyle(KoGenStyle* pageLayoutStyle, wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                             bool firstPage);
 
@@ -262,9 +256,6 @@ private:
     bool m_writeMasterPageName; //whether to write the master-page name into a paragraph/table
     bool m_omittMasterPage; //whether master-page style for current section has been omitted
     bool m_useLastMasterPage; //whether to use the last define master-page style for current section
-
-    int m_initialFootnoteNumber;
-    int m_initialEndnoteNumber;
 
     QString m_lineNumbersStyleName;
     QString m_lastMasterPageName;

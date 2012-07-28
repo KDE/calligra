@@ -22,6 +22,8 @@
 
 #include "KPrAnimationBase.h"
 
+#include <QPainterPath>
+
 class KPrAnimateMotion : public KPrAnimationBase
 {
 public:
@@ -34,6 +36,9 @@ public:
 
 protected:
     virtual void next(int currentTime);
+
+private:
+    QPainterPath m_path;
 };
 
 #endif // KPRANIMATEMOTION_H
