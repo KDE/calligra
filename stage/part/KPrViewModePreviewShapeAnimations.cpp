@@ -23,6 +23,7 @@
 #include "KPrShapeManagerAnimationStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
 #include "animations/KPrAnimationCache.h"
+#include "KPrView.h"
 
 //Qt Headers
 #include <QPainter>
@@ -38,6 +39,7 @@
 #include <KoCanvasController.h>
 #include <KoZoomController.h>
 #include <KoShapePaintingContext.h>
+#include <KPrViewModePresentation.h>
 
 KPrViewModePreviewShapeAnimations::KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas)
     : KoPAViewMode(view, canvas)
@@ -193,6 +195,12 @@ void KPrViewModePreviewShapeAnimations::stopAnimation()
 
 void KPrViewModePreviewShapeAnimations::activateSavedViewMode()
 {
+    if(KPrView *view = dynamic_cast<KPrView *>(m_view)) {
+        if (m_savedViewMode == view->presentationMode()) {
+            view->showNormal();
+            return;
+        }
+    }
     m_view->setViewMode(m_savedViewMode);
 }
 

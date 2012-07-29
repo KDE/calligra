@@ -279,8 +279,8 @@ xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par presentation:preset-property="Direction" smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-swivel" presentation:preset-sub-type="horizontal">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
+	<anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="0;1" smil:keyTimes="0;1" anim:formula="height*sin(2.5*pi*$)"/>
         <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="width" smil:values="width;width" smil:keyTimes="0;1"/>
-        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="height" smil:values="0;1" smil:keyTimes="0;1" anim:formula="height*sin(2.5*pi*$)"/>
     </anim:par>
     </anim:par>
   </anim:par>
