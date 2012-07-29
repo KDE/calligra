@@ -22,7 +22,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>
 #include <KoReportData.h>

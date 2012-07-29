@@ -86,7 +86,7 @@ bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
 
 void AbstractRegionCommand::redo()
 {
-    //sebsauer; follwing conditions and warning makes no sense cause we would crash
+    //sebsauer; following conditions and warning makes no sense cause we would crash
     //later on cause m_sheet is direct accessed without NULL-check. So, let's add
     //some asserts to check for the m_sheet=NULL case to be able to fix it if we
     //can reproduce the situation.

@@ -29,8 +29,8 @@
 #include <QVector>
 #include <QList>
 
-#include <kexidb/field.h>
-#include <kexidb/queryschema.h>
+#include <db/field.h>
+#include <db/queryschema.h>
 
 #include <kexi_export.h>
 

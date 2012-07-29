@@ -307,8 +307,8 @@ private:
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
         REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
-        //REF = 0x03, ///< Reference
-        //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
+        REF = 0x03, ///< Reference
+        //FTNREF = 0x05, ///< Identical to NOTEREF (not a reference)
         //SET = 0x06,
         //IF = 0x07,
         //INDEX = 0x08,
@@ -401,9 +401,10 @@ private:
             m_insideField(false),
             m_afterSeparator(false),
             m_hyperLinkActive(false),
-            m_tabLeader(QChar::Null),
             m_hyperLinkUrl(QString::null),
+            m_refFormat(QString::null),
             m_styleName(QString::null),
+            m_tabLeader(QChar::Null),
             m_instructions(QString::null),
 /*             m_result(QString::null), */
             m_writer(0),
@@ -422,32 +423,37 @@ private:
             m_buffer = 0;
         }
 
-        //set to UNSUPPORTED for a field we can't handle, anything else is the field type
+        // Set to UNSUPPORTED for a field we can't handle.
         fldType m_type;
 
-        //other field related variables
         bool m_insideField;
         bool m_afterSeparator;
+
+        // Whether to interpret the field content as a hyperlink.
         bool m_hyperLinkActive;
 
-        //the tab leader character for a TOC entry
-        QChar m_tabLeader;
-
-        //stores the location (bookmark/URL) to jump to
+        // Stores the location (bookmark/URL) to jump to.
         QString m_hyperLinkUrl;
 
-        //KoGenStyle name for the <text:span> element encapsulating content of the
-        //processed field (if applicable)
+        // The text:reference-format value to be used in text:bookmark-ref.
+        QString m_refFormat;
+
+        // Name of a KoGenStyle for the <text:span> element encapsulating the
+        // XML interpretation of the processed field (if applicable).
         QString m_styleName;
 
-        //stores field instructions
+        // The tab leader character for a TOC entry.
+        QChar m_tabLeader;
+
+        // Stores field instructions.
         QString m_instructions;
 
-        //stores the field result
+        // Stores the field result. NOTE: Disabled, becasue we use either
+        // m_writer or save the result as vanilla text.
 /*         QString m_result; */
 
-        //writer and buffer used to place bookmark elements into the field result,
-        //if bookmarks are not to be supported by your field type, use m_result
+        // A writer and buffer used to interpret bookmark elements and tabs in
+        // the field result (if applicable to the field type).
         KoXmlWriter* m_writer;
         QBuffer* m_buffer;
     };

@@ -22,7 +22,7 @@
 #include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
 #include <kexiutils/identifier.h>
-#include <kexidb/msghandler.h>
+#include <db/msghandler.h>
 
 #include <QTimer>
 #include <QImage>

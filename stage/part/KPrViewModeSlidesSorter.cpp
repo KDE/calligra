@@ -81,6 +81,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     QWidget *m_customShowsToolBar = new QWidget();
 
     QHBoxLayout *toolBarLayout = new QHBoxLayout(m_customShowsToolBar);
+    toolBarLayout->setMargin(0);
     QVBoxLayout *centralWidgetLayout = new QVBoxLayout(m_centralWidget);
     centralWidgetLayout->setMargin(0);
     centralWidgetLayout->setSpacing(0);
@@ -293,7 +294,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
 void KPrViewModeSlidesSorter::deactivate()
 {
-    // Give the ressources back to the canvas
+    // Give the resources back to the canvas
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     // Active the view as a basic but active one
     m_view->setActionEnabled(KoPAView::AllActions, true);

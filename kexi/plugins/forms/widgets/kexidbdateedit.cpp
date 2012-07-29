@@ -29,7 +29,7 @@
 #include <kdatetable.h>
 
 #include <kexiutils/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent)
         : QWidget(parent), KexiFormDataItemInterface()

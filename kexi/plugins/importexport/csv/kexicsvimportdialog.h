@@ -42,8 +42,8 @@
 
 #include <kdialog.h>
 
-#include <kexiutils/tristate.h>
-#include <kexidb/connection.h>
+#include <db/tristate.h>
+#include <db/connection.h>
 #include <QModelIndex>
 #include "kexicsvimportoptionsdlg.h"
 

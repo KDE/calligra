@@ -450,8 +450,8 @@ void TestPageCommands::testPageStylePropertiesCommand() // basic properties chan
     style.setPageLayout(oldLayout);
 
     KoColumns oldColumns;
-    oldColumns.columns = 4;
-    oldColumns.columnSpacing = 21;
+    oldColumns.count = 4;
+    oldColumns.gapWidth = 21;
     style.setColumns(oldColumns);
     KWPage page1 = manager->appendPage(style);
     page1.setDirectionHint(KoText::LeftRightTopBottom);
@@ -462,7 +462,7 @@ void TestPageCommands::testPageStylePropertiesCommand() // basic properties chan
     QCOMPARE(page1.leftMargin(), 13.); // its a right-sided page
     QCOMPARE(page1.pageEdgeMargin(), 7.);
     QCOMPARE(page1.directionHint(), KoText::LeftRightTopBottom);
-    QCOMPARE(page1.pageStyle().columns().columns, 4);
+    QCOMPARE(page1.pageStyle().columns().count, 4);
     QCOMPARE(page1.pageSide(), KWPage::Right);
 
     // new ;)
@@ -476,8 +476,9 @@ void TestPageCommands::testPageStylePropertiesCommand() // basic properties chan
     newLayout.bindingSide = -1;
     style2.setPageLayout(newLayout);
     KoColumns newColumns;
-    newColumns.columns = 2;
-    newColumns.columnSpacing = 12;
+    newColumns.count = 2;
+    newColumns.columnData.append(ColumnDatum(1.0, 2.0, 1.0, 1.0, 25));
+    newColumns.columnData.append(ColumnDatum(1.0, 1.0, 1.0, 1.0, 50));
     style2.setColumns(newColumns);
     style2.setDirection(KoText::RightLeftTopBottom);
 
@@ -502,7 +503,7 @@ void TestPageCommands::testPageStylePropertiesCommand() // basic properties chan
     page1.setDirectionHint(KoText::InheritDirection); // reset to what the style says
     QCOMPARE(page1.directionHint(), KoText::RightLeftTopBottom);
     QCOMPARE(style.pageLayout().width, 401.); // style changed
-    QCOMPARE(page1.pageStyle().columns().columns, 2);
+    QCOMPARE(page1.pageStyle().columns().count, 2);
     QCOMPARE(page1.pageNumber(), 1);
     QCOMPARE(page1.pageSide(), KWPage::Right);
 
@@ -526,7 +527,7 @@ void TestPageCommands::testPageStylePropertiesCommand() // basic properties chan
     QCOMPARE(page1.leftMargin(), 13.);
     QCOMPARE(page1.directionHint(), KoText::AutoDirection);
     QCOMPARE(style.pageLayout().width, 101.);
-    QCOMPARE(page1.pageStyle().columns().columns, 4);
+    QCOMPARE(page1.pageStyle().columns().count, 4);
     QCOMPARE(page1.pageNumber(), 1);
     QCOMPARE(page1.pageSide(), KWPage::Right);
     QCOMPARE(manager->pageCount(), 2);

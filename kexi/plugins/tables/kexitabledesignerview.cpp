@@ -41,13 +41,13 @@
 #include <koproperty/Set.h>
 #include <koproperty/Utils.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/error.h>
-#include <kexidb/lookupfieldschema.h>
+#include <db/cursor.h>
+#include <db/tableschema.h>
+#include <db/connection.h>
+#include <db/utils.h>
+#include <db/roweditbuffer.h>
+#include <db/error.h>
+#include <db/lookupfieldschema.h>
 #include <kexiutils/identifier.h>
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>

@@ -25,9 +25,9 @@
 #include "kexiguimsghandler.h"
 #include "KexiStartupDialog.h"
 
-#include <kexidb/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
+#include <db/utils.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
@@ -601,7 +601,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KMessageBox::information(0,
                                  i18n("You have specified a few database objects to be opened automatically, "
                                       "using startup options.\n"
-                                      "These options will be ignored because it is not available while creating "
+                                      "These options will be ignored because they are not available while creating "
                                       "or dropping projects."));
     }
 

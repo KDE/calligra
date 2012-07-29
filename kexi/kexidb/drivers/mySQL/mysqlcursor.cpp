@@ -22,8 +22,8 @@
 #include "mysqlcursor.h"
 #include "mysqlconnection.h"
 #include "mysqlconnection_p.h"
-#include <kexidb/error.h>
-#include <kexidb/utils.h>
+#include <db/error.h>
+#include <db/utils.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>

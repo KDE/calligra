@@ -39,10 +39,10 @@
 #include <klineedit.h>
 #include <kiconloader.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/utils.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connectiondata.h>
+#include <db/utils.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>

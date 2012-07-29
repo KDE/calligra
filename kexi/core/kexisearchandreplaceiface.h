@@ -21,7 +21,7 @@
 #define KexiSearchAndReplaceViewInterface_H
 
 #include <kexi_export.h>
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 #include <QString>
 class QVariant;
 class QStringList;
