@@ -69,7 +69,7 @@ SandBrush::~SandBrush()
 }
 
 
-void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info)
+void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info)
 {
     //We do not need to, in every mouse movement, add pixels, so it has been randomized (as in
     // the dirtThreshold), so it can drop particles more faster
@@ -124,7 +124,7 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
     for (int by = -r; by <= r; by++) {
         int bySquared = by*by;
         for (int bx = -r; bx <= r; bx++) {
-            // let's call that noise from ground to sand :)
+
             double ran = drand48();
             if ( ((bx*bx + bySquared) > radiusSquared) || ran < dirtThreshold) {
                 continue;
@@ -140,13 +140,26 @@ void SandBrush::paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &col
             
             if(m_grainCount > 0)
                 m_grainCount--; //decrease the amount of grains
-            else
-                m_grainCount = 0;
         }
     }
 
     m_prevVel = vel;
     m_prevTime = info.currentTime();
+}
+
+void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info)
+{
+    //(1) Retrieve the neighbor particles where the mouse is positioned
+
+    //(2) Verify which ones the mouse is really "colliding"
+
+    //(3) Take the mouse dynamic properties (as in the pouring operation)
+
+    //(4) Apply the force in the particles that the mouse touched
+
+    //(5) Animate the movement
+
+    
 }
 
 void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel)

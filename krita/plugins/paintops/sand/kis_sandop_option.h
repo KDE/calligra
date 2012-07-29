@@ -57,7 +57,7 @@ const QString SAND_FRICTION = "Sand/friction";    //Young modulus -
  * (...)
  */
 
-// const QString SAND_MODE = "Sand/mode"    //set the operation mode for this brush (drop or spread)
+const QString SAND_MODE = "Sand/mode";    //set the operation mode for this brush (drop or spread)
 // const QString SAND_DISSIPATION = "Sand/dissipation" //living time of a particle (this is necessary?)
 
 class KisSandOpOptionsWidget;
@@ -85,6 +85,7 @@ public:
     void setMass(double mass) const;
     
     bool sandDepletion() const;
+    bool mode() const;
 
 //     void setDissipation(float dissipation) const;
 //     float dissipation () const;
@@ -120,7 +121,7 @@ public:
     double friction;
 
     ///Brush mode: pouring or spreading
-    //bool mode;
+    bool mode;
 
     ///Energy dissipation of the particle (damping)
     //float dissipation;
@@ -135,7 +136,7 @@ public:
         size = settings->getInt(SAND_SIZE);
         mass = settings->getFloat(SAND_MASS);
         friction = settings->getFloat(SAND_FRICTION);
-//         mode = settings->getBool(SAND_MODE); //??
+        mode = settings->getBool(SAND_MODE); //??
 //         dissipation = settings->getFloat(SAND_DISSIPATION);
     }
 };

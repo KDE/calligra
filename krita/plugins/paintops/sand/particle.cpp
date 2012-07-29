@@ -72,7 +72,8 @@ Particle::Particle(const Particle & p)
 
 //Methods of the particle dynamics
 
-void Particle::applyForce(){
+void Particle::applyForce(const KisPaintInformation& info)
+{
 
     /*
      * xi calculation is imcomplete. It should be like this:

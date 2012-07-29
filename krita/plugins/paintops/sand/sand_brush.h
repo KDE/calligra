@@ -48,7 +48,9 @@ class SandBrush
 public:
     SandBrush(const SandProperties * properties, KoColorTransformation* transformation);
     ~SandBrush();
-    void paint(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
+
+    void pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
+    void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
 
     ///Draw, create and append a Particle to the grains container, so it is possible to do the desired operations
     void drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel); //Obs
@@ -58,8 +60,6 @@ public:
 
     ///Set the Particles to be used in the desired operations
     void setGrains(QList<Particle *> &g_copy);
-
-
 
 private:
     KoColor m_inkColor;

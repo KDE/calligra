@@ -42,6 +42,7 @@
 #include <iostream>
 #include <math.h>
 #include <QDebug>
+#include <kis_types.h>
 
 using namespace std;
 
@@ -92,7 +93,7 @@ public:
      * which should behave like there is a particle on it's position, so we could do a simple collision and move
      * the grains on the canvas.
      */
-    void applyForce();
+    void applyForce(const KisPaintInformation& info);
 
     ///Runge-Kutta 4 implementation for this particle
 

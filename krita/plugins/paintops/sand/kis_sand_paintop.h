@@ -46,7 +46,7 @@ public:
     void retrieveParticles(QList<Particle *> &p);
 
     ///Construct the image grid to retrieve a particle and its neightbors
-    void makeGrid();
+    void makeGrid(QList<Particle *> &grains);
 
     ///Vefify if two pairs of particles positions indicate a valid neighborhood relation
     bool is_valid_neighbor(int ix, int iy, int iix, int iiy);
@@ -56,6 +56,19 @@ public:
      * selection/collision operations
      */
     void makeNeighbors();
+
+    /**
+     * Retrieve particles from a given grid cell
+     */
+
+    void retrieveCellParticles(int gx, int gy, QList<Particle *> &p, QList<Particle *> &parts);
+
+    /**
+     * Retrieve the neighbors relationship from a given grid cell.
+     * The QPair< a, b> represents that a particle of index value "a" in the
+     * grains of the SandBrush is neighbor of the particle of the "b"
+     */
+    void getNeighborhood(int gx, int gy, QList<Particle *> &p);
 
 private:
     KisImageWSP m_image;
@@ -108,11 +121,11 @@ private:
      * QList<uint> b_neighbors = grid.at(3).at(4);
      *
      */
-    QList< QList<QList<uint> > > grid;
+    QVector< QVector<QVector<int> > > grid;
 
     /**
      * Vector representing the neighborhood of the particles.
-     * The pair<int,int> represents a pair of neighbor particles
+     * The pair< int, int> represents a pair of neighbor particles
      * This relation is built based on search of half of neighborhood space
      * of one grid cell.
      */  

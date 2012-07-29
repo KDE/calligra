@@ -24,7 +24,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_5">
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QGroupBox" name="brushBox">
        <property name="title">
@@ -106,16 +106,30 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="depletionLayout">
+         <layout class="QVBoxLayout" name="checkablesLayout">
           <item>
-           <widget class="QCheckBox" name="sandDepletionCHBox">
-            <property name="text">
-             <string>Sand depletion</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QCheckBox" name="sandDepletionCHBox">
+              <property name="text">
+               <string>Sand depletion</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="modeCHBox">
+              <property name="text">
+               <string>Mode</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -213,8 +227,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>amountLabel_3</zorder>
-  <zorder>verticalLayoutWidget</zorder>
  </widget>
  <resources/>
  <connections>
