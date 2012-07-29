@@ -222,12 +222,12 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         int row = m_resizedRow;
         //calculate real start
-        qreal startOffSet = m_mainView->calculateStartOffset(row);
-
+        qreal startOffSet = m_mainView->calculateStartOffset(row) / 1000;
         qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
         qreal start = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() / 1000.0;
         qreal totalSteps = m_mainView->numberOfSteps();
         qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / totalSteps;
+        qreal Threshold = 0.4;
         if ((event->pos().x() > (startPos + startDragPos + startOffSet*stepSize)) &&
                 ((event->pos().x() + (duration*stepSize-startDragPos) + Padding * 2)  <
                  (startPos+m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
@@ -244,7 +244,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
                     (startPos+m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
             m_mainView->incrementScale();
         }
-        else {
+        else if (event->pos().x() < (startPos + startDragPos + startOffSet*stepSize + Threshold)) {
             m_mainView->changeStartLimit(row);
         }
         update();
