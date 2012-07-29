@@ -143,8 +143,8 @@ xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="entrance" presentation:preset-id="stage-entrance-movie-credits">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
-        <anim:animate smil:dur="15" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
-        <anim:animate smil:dur="15" smil:fill="hold" smil:attributeName="y" smil:values="y+1;y-1" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:fill="hold" smil:attributeName="y" smil:values="y+1;y-1" smil:keyTimes="0;1"/>
     </anim:par>
     </anim:par>
   </anim:par>
@@ -522,9 +522,9 @@ xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn
   <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold" presentation:node-type="on-click" presentation:preset-class="exit" presentation:preset-id="stage-exit-movie-credits">
-        <anim:animate smil:dur="15" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
-        <anim:animate smil:dur="15" smil:attributeName="y" smil:values="y-1;y+1" smil:keyTimes="0;1"/>
-        <anim:set smil:begin="14.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
+        <anim:animate smil:dur="5" smil:attributeName="x" smil:values="x;x" smil:keyTimes="0;1"/>
+        <anim:animate smil:dur="5" smil:attributeName="y" smil:values="y-1;y+1" smil:keyTimes="0;1"/>
+        <anim:set smil:begin="4.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
     </anim:par>
     </anim:par>
   </anim:par>
