@@ -69,6 +69,7 @@ class ScheduleManager;
 class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
+class TaskModuleModel;
 class Calendar;
 class Part;
 class Node;
@@ -83,6 +84,7 @@ class Context;
 class ViewAdaptor;
 class HtmlView;
 class ReportView;
+class ReportWidget;
 
 class ReportDesignDialog;
 
@@ -291,10 +293,11 @@ protected slots:
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
-    void slotEditReportDesign( ReportView *view );
-    void slotCreateReport();
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
+
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
 
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
@@ -311,7 +314,7 @@ protected:
     void updateView( QWidget *widget );
 
     ViewBase *currentView() const;
-    
+
     ViewBase *createWelcomeView();
 
 private slots:
@@ -377,7 +380,7 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    // if multiple changes occure, only issue the last change
+    // if multiple changes occur, only issue the last change
     bool m_trigged;
     ScheduleManager *m_nextScheduleManager;
 
@@ -409,7 +412,6 @@ private:
     KAction *actionInsertFile;
     KAction *actionCurrencyConfig;
 
-    KAction *actionCreateReport;
     KAction *actionOpenReportFile;
 
     // ------ Settings

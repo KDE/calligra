@@ -89,7 +89,7 @@ protected:
             KoOdfWriters *writers) = 0;
 
     /**
-     * This method is called when writting the xml-settings to the ODF document.
+     * This method is called when writing the xml-settings to the ODF document.
      */
     virtual void writeConfigurationSettings(KoXmlWriter* settings) const = 0;
 

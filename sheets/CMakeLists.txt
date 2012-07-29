@@ -311,7 +311,7 @@ install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
+kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-sheets.png")
 
 kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 

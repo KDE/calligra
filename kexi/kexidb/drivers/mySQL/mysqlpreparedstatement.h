@@ -20,7 +20,7 @@
 #ifndef MYSQLPREPAREDSTATEMENT_H
 #define MYSQLPREPAREDSTATEMENT_H
 
-#include <kexidb/preparedstatement.h>
+#include <db/preparedstatement.h>
 #include "mysqlconnection_p.h"
 
 //todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT

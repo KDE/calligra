@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/vnd.oasis.opendocument.graphics;application/x-karbon;application/illustrator;image/x-eps;application/postscript;image/svg+xml;image/svg+xml-compressed;image/x-wmf;application/pdf;image/x-xfig;
+Actions=Print;
+
+[Desktop Action Print]
+Name=Print with Karbon...
+
+Exec=karbon --print %U
+Icon=document-print

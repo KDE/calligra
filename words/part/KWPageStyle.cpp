@@ -51,8 +51,7 @@ void KWPageStylePrivate::clear()
     headers = Words::HFTypeNone;
     footers = Words::HFTypeNone;
     pageUsage = KWPageStyle::AllPages;
-    columns.columns = 1;
-    columns.columnSpacing = 17; // ~ 6mm
+    columns.reset();
     direction = KoText::AutoDirection;
     headerDynamicSpacing = false;
     footerDynamicSpacing = false;
@@ -246,19 +245,8 @@ KoGenStyle KWPageStyle::saveOdf() const
     pageLayout.setAutoStyleInStylesDotXml(true);
     pageLayout.addAttribute("style:page-usage", "all");
 
-    if (d->columns.columns > 1) {
-        QBuffer buffer;
-        buffer.open(QIODevice::WriteOnly);
-        KoXmlWriter writer(&buffer);
-
-        writer.startElement("style:columns");
-        writer.addAttribute("fo:column-count", d->columns.columns);
-        writer.addAttributePt("fo:column-gap", d->columns.columnSpacing);
-        writer.endElement();
-
-        QString contentElement = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
-        pageLayout.addChildElement("columnsEnzo", contentElement);
-    }
+    // save column data
+    d->columns.saveOdf(pageLayout);
 
     //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
     //writer.startElement("style:footnote-sep");
@@ -333,16 +321,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
         d->pageUsage = AllPages;
     }
 
-    KoXmlElement columns = KoXml::namedItemNS(props, KoXmlNS::style, "columns");
-    if (!columns.isNull()) {
-        d->columns.columns = columns.attributeNS(KoXmlNS::fo, "column-count", "15").toInt();
-        if (d->columns.columns < 1)
-            d->columns.columns = 1;
-        d->columns.columnSpacing = KoUnit::parseValue(columns.attributeNS(KoXmlNS::fo, "column-gap"));
-    } else {
-        d->columns.columns = 1;
-        d->columns.columnSpacing = 17; // ~ 6mm
-    }
+    d->columns.loadOdf(props);
 
     KoXmlElement header = KoXml::namedItemNS(style, KoXmlNS::style, "header-style");
     if (! header.isNull()) {

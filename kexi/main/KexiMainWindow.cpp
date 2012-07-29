@@ -72,11 +72,11 @@
 #include <KXMLGUIFactory>
 #include <KMultiTabBar>
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/utils.h>
+#include <db/cursor.h>
+#include <db/admin.h>
 #include <kexidb/dbobjectnamevalidator.h>
-#include <kexidb/admin.h>
 #include <kexiutils/utils.h>
 
 #include <core/KexiWindow.h>
@@ -338,8 +338,8 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         setupPropertyEditor();
     }
 
-    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
-    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is split
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is split
 
     invalidateActions();
     d->timer.singleShot(0, this, SLOT(slotLastActions()));
@@ -1420,8 +1420,8 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
     d->tabbedToolBar->showTab("data");
     d->tabbedToolBar->showTab("external");
     d->tabbedToolBar->showTab("tools");
-    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is splitted
-    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is splitted
+    d->tabbedToolBar->hideTab("form");//temporalily until createToolbar is split
+    d->tabbedToolBar->hideTab("report");//temporalily until createToolbar is split
     //d->tabbedToolBar->showTab("form");
     //d->tabbedToolBar->showTab("report");
 

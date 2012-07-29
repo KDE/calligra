@@ -18,7 +18,7 @@
 */
 
 #include "AlterSchemaTableModel.h"
-#include <kexidb/tableschema.h>
+#include <db/tableschema.h>
 #include <kdebug.h>
 
 AlterSchemaTableModel::AlterSchemaTableModel ( QObject* parent ) : QAbstractTableModel ( parent )

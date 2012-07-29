@@ -27,8 +27,8 @@
 #include <core/kexiprojectdata.h>
 #include <core/kexiguimsghandler.h>
 #include <core/kexitextmsghandler.h>
-#include <kexidb/utils.h>
-#include <kexidb/object.h>
+#include <db/utils.h>
+#include <db/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>

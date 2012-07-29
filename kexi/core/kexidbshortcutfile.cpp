@@ -19,7 +19,7 @@
 
 #include "kexidbshortcutfile.h"
 #include <core/kexiprojectdata.h>
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 

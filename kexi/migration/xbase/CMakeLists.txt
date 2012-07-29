@@ -12,6 +12,7 @@ target_link_libraries(
     keximigrate
     kexidb
     kexiutils
+    ${CALLIGRADB_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${XBase_LIBRARIES} 

@@ -110,7 +110,7 @@ QString SubStyle::name(Style::Key key)
     case Style::Prefix:                 name = "Prefix"; break;
     case Style::Postfix:                name = "Postfix"; break;
     case Style::Precision:              name = "Precision"; break;
-    case Style::ThousandsSep:           name = "Thousands seperator"; break;
+    case Style::ThousandsSep:           name = "Thousands separator"; break;
     case Style::FormatTypeKey:          name = "Format type"; break;
     case Style::FloatFormatKey:         name = "Float format"; break;
     case Style::FloatColorKey:          name = "Float color"; break;

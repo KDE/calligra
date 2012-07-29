@@ -30,7 +30,7 @@
 
 #include "KexiTableViewColumn.h"
 #include <kexiutils/utils.h>
-#include <kexidb/RecordData.h>
+#include <db/RecordData.h>
 
 namespace KexiDB
 {
@@ -38,7 +38,7 @@ class RowEditBuffer;
 class Cursor;
 }
 
-typedef KexiUtils::AutodeletedList<KexiDB::RecordData*> KexiTableViewDataBase;
+typedef KexiDB::AutodeletedList<KexiDB::RecordData*> KexiTableViewDataBase;
 
 /*! Reimplements QPtrList to allow configurable sorting and more.
   Original author: Till Busch.

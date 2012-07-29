@@ -50,7 +50,7 @@ QML.Item {
         PlasmaComponents.Button {
             id: button2
 
-            iconSource: "kspread"
+            iconSource: "sheets"
             text: "Spreadsheet"
             width: buttonWidth; height: buttonHeight
 

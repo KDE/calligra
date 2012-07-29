@@ -37,7 +37,7 @@
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <kexidb/fieldvalidator.h>
 
 //! @internal

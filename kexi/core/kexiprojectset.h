@@ -20,8 +20,8 @@
 #ifndef KEXIPROJECTSET_H
 #define KEXIPROJECTSET_H
 
-#include <kexidb/connectiondata.h>
-#include <kexidb/object.h>
+#include <db/connectiondata.h>
+#include <db/object.h>
 
 #include "kexiprojectdata.h"
 

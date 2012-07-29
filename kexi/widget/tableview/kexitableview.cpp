@@ -72,7 +72,7 @@
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
 #include <widget/utils/kexidisplayutils.h>
-#include <kexidb/cursor.h>
+#include <db/cursor.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
         : alternateBackgroundColor(
