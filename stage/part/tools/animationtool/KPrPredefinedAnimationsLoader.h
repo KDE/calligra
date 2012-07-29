@@ -59,6 +59,7 @@ private:
     QString animationName(const QString id) const;
     QIcon loadAnimationIcon(const QString id);
     QIcon loadSubTypeIcon(const QString mainId, const QString subTypeId);
+    QIcon loadMotionPathIcon(const KoXmlElement &element);
 
     /**
      * Add a collection to the docker

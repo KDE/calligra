@@ -29,6 +29,9 @@
 //Qt Headers
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QPainterPath>
+#include <QPainter>
+#include <QImage>
 #include <QFont>
 
 //KDE Headers
@@ -46,6 +49,8 @@
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
+#include <KoPathShape.h>
+#include <KoPathShapeLoader.h>
 
 KPrPredefinedAnimationsLoader::KPrPredefinedAnimationsLoader(QObject *parent)
     : QObject(parent)
@@ -128,13 +133,17 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
                 continue;
             }
         }
-
         KPrCollectionItem temp;
         temp.id = animId;
         temp.name = animationName(animId);
-        temp.toolTip = temp.name;
-        temp.icon = loadAnimationIcon(temp.name);
+        temp.toolTip = temp.name;      
         temp.animationContext = m_animationContext.value(row);
+        if (animation->presetClass() == KPrShapeAnimation::Motion_Path) {
+            temp.icon = loadMotionPathIcon(temp.animationContext);
+        }
+        else {
+            temp.icon = loadAnimationIcon(temp.name);
+        }
 
         if (animation->presetClass() == KPrShapeAnimation::Entrance) {
             entranceList.append(temp);
@@ -289,6 +298,45 @@ QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const
         icon = KIcon("unrecognized_animation");
     }
     return icon;
+}
+
+QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &element)
+{
+    KoXmlElement e;
+    QString path;
+    forEachElement(e, element) {
+        path = e.attributeNS(KoXmlNS::svg, "path");
+        if (!path.isEmpty()) {
+            break;
+        }
+    }
+    if (!path.isEmpty()) {
+        const int margin = 8;
+        const int width = 4;
+        KoPathShape pathShape;
+        KoPathShapeLoader loader(&pathShape);
+        loader.parseSvg(path, true);
+        QImage thumb(QSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge), QImage::Format_RGB32);
+        // fill backgroung
+        thumb.fill(QColor(Qt::white).rgb());
+        QRect imageRect = thumb.rect();
+        // adjust to left space for margins
+        imageRect.adjust(margin, margin, -margin, -margin);
+        pathShape.setSize(imageRect.size());
+        QPainterPath m_path = pathShape.outline();
+        //Center path
+        m_path.translate(-m_path.boundingRect().x() + margin, -m_path.boundingRect().y() + margin);
+        QPainter painter(&thumb);
+        painter.setPen(QPen(QColor(0, 100, 224), width, Qt::SolidLine,
+                            Qt::FlatCap, Qt::MiterJoin));
+        painter.drawPath(m_path);
+        QPixmap iconPixmap;
+        if (iconPixmap.convertFromImage(thumb)) {
+            return QIcon(iconPixmap);
+        }
+    }
+    // Default icon if path was not found (It must be a error?)
+    return KIcon("unrecognized_animation");
 }
 
 KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape)
