@@ -35,8 +35,8 @@ class QGraphicsSceneWheelEvent;
 #include "flake_export.h"
 
 /**
- * KoPointerEvent is a synthetic event that can be built from a mouse
- * or a tablet event. In addition to always providing tools with tablet
+ * KoPointerEvent is a synthetic event that can be built from a mouse,
+ * touch or tablet event. In addition to always providing tools with tablet
  * pressure characteristics, KoPointerEvent has both the original
  * (canvas based) position as well as the normalized position, that is,
  * the position of the event _in_ the document coordinates.
