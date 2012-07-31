@@ -138,7 +138,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         temp.name = animationName(animId);
         temp.toolTip = temp.name;      
         temp.animationContext = m_animationContext.value(row);
-        if (animation->presetClass() == KPrShapeAnimation::Motion_Path) {
+        if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
             temp.icon = loadMotionPathIcon(temp.animationContext);
         }
         else {
@@ -157,13 +157,13 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         else if (animation->presetClass() == KPrShapeAnimation::Custom) {
             customList.append(temp);
         }
-        else if (animation->presetClass() == KPrShapeAnimation::Motion_Path) {
+        else if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
             motion_PathList.append(temp);
         }
-        else if (animation->presetClass() == KPrShapeAnimation::Ole_Action) {
+        else if (animation->presetClass() == KPrShapeAnimation::OleAction) {
             ole_ActionList.append(temp);
         }
-        else if (animation->presetClass() == KPrShapeAnimation::Media_Call) {
+        else if (animation->presetClass() == KPrShapeAnimation::MediaCall) {
             media_CallList.append(temp);
         }
     }
@@ -363,7 +363,7 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     }
 
     if (shapeAnimation) {
-        shapeAnimation->setNodeType(KPrShapeAnimation::On_Click);
+        shapeAnimation->setNodeType(KPrShapeAnimation::OnClick);
         if (presetClass == "custom") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Custom);
         }
@@ -377,13 +377,13 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
             shapeAnimation->setPresetClass(KPrShapeAnimation::Emphasis);
         }
         else if (presetClass == "motion-path") {
-            shapeAnimation->setPresetClass(KPrShapeAnimation::Motion_Path);
+            shapeAnimation->setPresetClass(KPrShapeAnimation::MotionPath);
         }
         else if (presetClass == "ole-action") {
-            shapeAnimation->setPresetClass(KPrShapeAnimation::Ole_Action);
+            shapeAnimation->setPresetClass(KPrShapeAnimation::OleAction);
         }
         else if (presetClass == "media-call") {
-            shapeAnimation->setPresetClass(KPrShapeAnimation::Media_Call);
+            shapeAnimation->setPresetClass(KPrShapeAnimation::MediaCall);
         }
         else{
             shapeAnimation->setPresetClass(KPrShapeAnimation::None);

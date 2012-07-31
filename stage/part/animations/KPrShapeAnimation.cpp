@@ -32,7 +32,7 @@
 KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
-, m_triggerEvent(KPrShapeAnimation::On_Click)
+, m_triggerEvent(KPrShapeAnimation::OnClick)
 , m_class(KPrShapeAnimation::None)
 , m_id(QString())
 , m_presetSubType(QString())
@@ -214,14 +214,14 @@ void KPrShapeAnimation::deactivate()
 
 
 
-void KPrShapeAnimation::setNodeType(KPrShapeAnimation::Node_Type type)
+void KPrShapeAnimation::setNodeType(KPrShapeAnimation::NodeType type)
 {
     if (type != m_triggerEvent) {
         m_triggerEvent = type;
     }
 }
 
-void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::Preset_Class presetClass)
+void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::PresetClass presetClass)
 {
     m_class = presetClass;
 }
@@ -236,12 +236,12 @@ void KPrShapeAnimation::setPresetSubType(QString subType)
     m_presetSubType = subType;
 }
 
-KPrShapeAnimation::Node_Type KPrShapeAnimation::NodeType() const
+KPrShapeAnimation::NodeType KPrShapeAnimation::nodeType() const
 {
     return m_triggerEvent;
 }
 
-KPrShapeAnimation::Preset_Class KPrShapeAnimation::presetClass() const
+KPrShapeAnimation::PresetClass KPrShapeAnimation::presetClass() const
 {
     return m_class;
 }
@@ -265,13 +265,13 @@ QString KPrShapeAnimation::presetClassText() const
     else if (presetClass() == KPrShapeAnimation::Exit) {
         return QString("exit");
     }
-    else if (presetClass() == KPrShapeAnimation::Motion_Path) {
+    else if (presetClass() == KPrShapeAnimation::MotionPath) {
         return QString("motion-path");
     }
-    else if (presetClass() == KPrShapeAnimation::Ole_Action) {
+    else if (presetClass() == KPrShapeAnimation::OleAction) {
         return QString("ole-action");
     }
-    else if (presetClass() == KPrShapeAnimation::Media_Call) {
+    else if (presetClass() == KPrShapeAnimation::MediaCall) {
         return QString("media-call");
     }
     else {

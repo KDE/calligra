@@ -24,8 +24,8 @@
 
 const int INVALID = -1;
 
-KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrShapeAnimation::Node_Type oldType,
-                                                                 KPrShapeAnimation::Node_Type newType,
+KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType,
+                                                                 KPrShapeAnimation::NodeType newType,
                                                                  KPrShapeAnimations *animationModel, KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_animation(animation)

@@ -31,7 +31,7 @@ class KPrShapeAnimations;
 class STAGE_EXPORT KPrAnimationEditNodeTypeCommand : public KUndo2Command
 {
 public:
-    KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrShapeAnimation::Node_Type oldType, KPrShapeAnimation::Node_Type newType, KPrShapeAnimations *animationModel, KUndo2Command *parent=0);
+    KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType, KPrShapeAnimation::NodeType newType, KPrShapeAnimations *animationModel, KUndo2Command *parent=0);
 
 
     virtual ~KPrAnimationEditNodeTypeCommand();
@@ -43,8 +43,8 @@ public:
 
 private:
     KPrShapeAnimation * m_animation;
-    KPrShapeAnimation::Node_Type m_newType;
-    KPrShapeAnimation::Node_Type m_oldType;
+    KPrShapeAnimation::NodeType m_newType;
+    KPrShapeAnimation::NodeType m_oldType;
     KPrShapeAnimations *m_model;
 };
 

@@ -43,26 +43,26 @@ class STAGE_EXPORT KPrShapeAnimation : public QParallelAnimationGroup, KPrAnimat
 public:
 
     /// Node Type (Trigger Event of the animation)
-    enum Node_Type {
-        On_Click,
-        After_Previous,
-        With_Previous
+    enum NodeType {
+        OnClick,
+        AfterPrevious,
+        WithPrevious
     };
 
     /// Animation class
-    enum Preset_Class {
+    enum PresetClass {
         None,
         Entrance,
         Exit,
         Emphasis,
         Custom,
-        Motion_Path,
-        Ole_Action,
-        Media_Call
+        MotionPath,
+        OleAction,
+        MediaCall
     };
 
     /// State of the animation
-    enum Animation_State {
+    enum AnimationState {
         Valid,
         Invalid
     };
@@ -135,14 +135,14 @@ public:
      *
      * @param type Node Type
      */
-    void setNodeType(Node_Type type);
+    void setNodeType(NodeType type);
 
     /**
      * @brief Set class of the animation
      *
      * @param presetClass
      */
-    void setPresetClass(Preset_Class presetClass);
+    void setPresetClass(PresetClass presetClass);
 
     /**
      * @brief Set the id (name) of the animation
@@ -158,14 +158,14 @@ public:
      *
      * @return Node_Type
      */
-    Node_Type NodeType() const;
+    NodeType nodeType() const;
 
     /**
      * @brief Returns stored class of the animation
      *
      * @return Preset_Class
      */
-    Preset_Class presetClass() const;
+    PresetClass presetClass() const;
 
     /**
      * @brief Returns the id (name) of the animation
@@ -232,8 +232,8 @@ signals:
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;
-    Node_Type m_triggerEvent;
-    Preset_Class m_class;
+    NodeType m_triggerEvent;
+    PresetClass m_class;
     QString m_id;
     QString m_presetSubType;
     KPrAnimationStep *m_step;

@@ -281,8 +281,8 @@ void KPrAnimationsTimeLineView::setMaxLineLength(qreal length)
 QColor KPrAnimationsTimeLineView::colorforRow(int row)
 {
     if (m_model) {
-        KPrShapeAnimation::Preset_Class type =
-                static_cast<KPrShapeAnimation::Preset_Class>(m_model->data(m_model->index(row, KPrShapeAnimations::AnimationClass)).toInt());
+        KPrShapeAnimation::PresetClass type =
+                static_cast<KPrShapeAnimation::PresetClass>(m_model->data(m_model->index(row, KPrShapeAnimations::AnimationClass)).toInt());
         if (type == KPrShapeAnimation::Entrance) {
             return Qt::darkGreen;
         } else if (type == KPrShapeAnimation::Emphasis) {
@@ -299,17 +299,17 @@ QColor KPrAnimationsTimeLineView::colorforRow(int row)
 int KPrAnimationsTimeLineView::calculateStartOffset(int row)
 {
     //calculate real start
-    KPrShapeAnimation::Node_Type triggerEvent = static_cast<KPrShapeAnimation::Node_Type>(
-               m_model->data(m_model->index(row, KPrShapeAnimations::Node_Type)).toInt());
+    KPrShapeAnimation::NodeType triggerEvent = static_cast<KPrShapeAnimation::NodeType>(
+               m_model->data(m_model->index(row, KPrShapeAnimations::NodeType)).toInt());
     if (row <= 0) {
         return 0;
     }
-    if (triggerEvent == KPrShapeAnimation::After_Previous) {
-        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::Node_Type));
+    if (triggerEvent == KPrShapeAnimation::AfterPrevious) {
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::NodeType));
         return m_shapeModel->animationEndByIndex(sourceIndex);
     }
-    if (triggerEvent == KPrShapeAnimation::With_Previous) {
-        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::Node_Type));
+    if (triggerEvent == KPrShapeAnimation::WithPrevious) {
+        QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::NodeType));
         return m_shapeModel->scaleBeginForAnimation(sourceIndex);
     }
     return 0;

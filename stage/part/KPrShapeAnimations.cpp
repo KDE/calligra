@@ -98,7 +98,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
         switch (index.column()) {
             case Group: return groupCount;
             case StepCount:
-                if (thisAnimation->NodeType() == KPrShapeAnimation::On_Click) {
+                if (thisAnimation->nodeType() == KPrShapeAnimation::OnClick) {
                     return groupCount;
                 }
                 else {
@@ -111,7 +111,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StartTime: return thisAnimation->timeRange().first;
             case Duration: return thisAnimation->globalDuration();
             case AnimationClass: return thisAnimation->presetClass();
-            case Node_Type: return thisAnimation->NodeType();
+            case NodeType: return thisAnimation->nodeType();
             default: Q_ASSERT(false);
         }
     }
@@ -126,13 +126,13 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case Group: return QVariant();
             case StepCount: return QVariant();
             case TriggerEvent:
-                if (thisAnimation->NodeType() == KPrShapeAnimation::On_Click)
+                if (thisAnimation->nodeType() == KPrShapeAnimation::OnClick)
                     return KIcon("onclick").pixmap(KIconLoader::SizeSmall,
                                                    KIconLoader::SizeSmall);
-                if (thisAnimation->NodeType() == KPrShapeAnimation::After_Previous)
+                if (thisAnimation->nodeType() == KPrShapeAnimation::AfterPrevious)
                     return KIcon("after_previous").pixmap(KIconLoader::SizeSmall,
                                                           KIconLoader::SizeSmall);
-                if (thisAnimation->NodeType() == KPrShapeAnimation::With_Previous)
+                if (thisAnimation->nodeType() == KPrShapeAnimation::WithPrevious)
                     return KIcon("with_previous").pixmap(KIconLoader::SizeSmall,
                                                          KIconLoader::SizeSmall);
             case Name: return QVariant();
@@ -141,7 +141,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StartTime: return QVariant();
             case Duration: return QVariant();
             case AnimationClass: return QVariant();
-            case Node_Type: return QVariant();
+            case NodeType: return QVariant();
             default: Q_ASSERT(false);
         }
     }
@@ -156,7 +156,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StartTime:
             case Duration:
             case AnimationClass: return QVariant();
-            case Node_Type: return QVariant();
+            case NodeType: return QVariant();
             default: Q_ASSERT(false);
         }
     }
@@ -165,11 +165,11 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case Group:
             case StepCount: return QVariant();
             case TriggerEvent:
-                if (thisAnimation->NodeType() == KPrShapeAnimation::On_Click)
+                if (thisAnimation->nodeType() == KPrShapeAnimation::OnClick)
                     return i18n("start on mouse click");
-                if (thisAnimation->NodeType() == KPrShapeAnimation::After_Previous)
+                if (thisAnimation->nodeType() == KPrShapeAnimation::AfterPrevious)
                     return i18n("start after previous animation");
-                if (thisAnimation->NodeType() == KPrShapeAnimation::With_Previous)
+                if (thisAnimation->nodeType() == KPrShapeAnimation::WithPrevious)
                     return i18n("start with previous animation");
             case Name: return QVariant();
             case ShapeThumbnail: return thisAnimation->shape()->name();
@@ -179,7 +179,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
                                     arg(thisAnimation->globalDuration() / 1000);
             case Duration: return QVariant();
             case AnimationClass: return thisAnimation->presetClassText();
-            case Node_Type: return QVariant();
+            case NodeType: return QVariant();
             default: Q_ASSERT(false);
             }
         }
@@ -396,8 +396,8 @@ void KPrShapeAnimations::swapAnimations(KPrShapeAnimation *oldAnimation, KPrShap
     QModelIndex indexNew = indexByAnimation(newAnimation);
     emit dataChanged(this->index(indexOld.row(), 0), this->index(indexOld.row(), COLUMN_COUNT));
     emit dataChanged(this->index(indexNew.row(), 0), this->index(indexNew.row(), COLUMN_COUNT));
-    if ((newAnimation->NodeType() == KPrShapeAnimation::On_Click) ||
-            (oldAnimation->NodeType() == KPrShapeAnimation::On_Click)) {
+    if ((newAnimation->nodeType() == KPrShapeAnimation::OnClick) ||
+            (oldAnimation->nodeType() == KPrShapeAnimation::OnClick)) {
         notifyOnClickEventChanged();
     }
 
@@ -459,17 +459,17 @@ int KPrShapeAnimations::animationEndByIndex(const QModelIndex &index)
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
-        KPrShapeAnimation::Node_Type previousNodeType =
-                static_cast<KPrShapeAnimation::Node_Type>(data(this->index(index.row(),
-                                                                           KPrShapeAnimations::Node_Type)).toInt());
-        if (previousNodeType == KPrShapeAnimation::On_Click) {
+        KPrShapeAnimation::NodeType previousNodeType =
+                static_cast<KPrShapeAnimation::NodeType>(data(this->index(index.row(),
+                                                                           KPrShapeAnimations::NodeType)).toInt());
+        if (previousNodeType == KPrShapeAnimation::OnClick) {
             return previousAnimation->timeRange().second;
         }
-        if (previousNodeType == KPrShapeAnimation::With_Previous) {
+        if (previousNodeType == KPrShapeAnimation::WithPrevious) {
             return previousAnimation->timeRange().second +
                     scaleBeginForAnimation(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
-        else if (previousNodeType == KPrShapeAnimation::After_Previous) {
+        else if (previousNodeType == KPrShapeAnimation::AfterPrevious) {
             return previousAnimation->timeRange().second +
                     animationEndByIndex(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
@@ -481,16 +481,16 @@ int KPrShapeAnimations::scaleBeginForAnimation(const QModelIndex &index)
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
-        KPrShapeAnimation::Node_Type previousNodeType =
-                static_cast<KPrShapeAnimation::Node_Type>(data(this->index(index.row(),
-                                                                           KPrShapeAnimations::Node_Type)).toInt());
-        if (previousNodeType == KPrShapeAnimation::On_Click) {
+        KPrShapeAnimation::NodeType previousNodeType =
+                static_cast<KPrShapeAnimation::NodeType>(data(this->index(index.row(),
+                                                                           KPrShapeAnimations::NodeType)).toInt());
+        if (previousNodeType == KPrShapeAnimation::OnClick) {
             return previousAnimation->timeRange().first;
         }
-        if (previousNodeType == KPrShapeAnimation::With_Previous) {
+        if (previousNodeType == KPrShapeAnimation::WithPrevious) {
             return scaleBeginForAnimation(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
-        else if (previousNodeType == KPrShapeAnimation::After_Previous) {
+        else if (previousNodeType == KPrShapeAnimation::AfterPrevious) {
             return animationEndByIndex(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
     }
@@ -509,19 +509,19 @@ QModelIndex KPrShapeAnimations::replaceAnimation(const QModelIndex &index, KPrSh
     return index;
 }
 
-bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::Node_Type type)
+bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShapeAnimation::NodeType type)
 {
     KPrShapeAnimation *animation = animationByRow(index.row());
     if (animation) {
-        KPrShapeAnimation::Node_Type currentType =
-                static_cast<KPrShapeAnimation::Node_Type>(data(this->index(index.row(),
-                                                                           KPrShapeAnimations::Node_Type)).toInt());
-        if (currentType == KPrShapeAnimation::After_Previous) {
-            if (type == KPrShapeAnimation::With_Previous) {
+        KPrShapeAnimation::NodeType currentType =
+                static_cast<KPrShapeAnimation::NodeType>(data(this->index(index.row(),
+                                                                           KPrShapeAnimations::NodeType)).toInt());
+        if (currentType == KPrShapeAnimation::AfterPrevious) {
+            if (type == KPrShapeAnimation::WithPrevious) {
                 Q_ASSERT(index.row() > 0);
             }
         }
-        else if (currentType == KPrShapeAnimation::On_Click) {
+        else if (currentType == KPrShapeAnimation::OnClick) {
              if (index.row() < 1) {
                  // Resync trigger event edit widget
                  emit layoutChanged();
@@ -535,7 +535,7 @@ bool KPrShapeAnimations::setTriggerEvent(const QModelIndex &index, const KPrShap
     return false;
 }
 
-bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShapeAnimation::Node_Type type)
+bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShapeAnimation::NodeType type)
 {
     resyncStepsWithAnimations();
     if (animation) {
@@ -547,12 +547,12 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
         QList<KPrAnimationSubStep *>movedSubSteps = QList<KPrAnimationSubStep *>();
         KPrAnimationSubStep *newSubStep = 0;
         KPrAnimationStep *newStep = 0;
-        KPrShapeAnimation::Node_Type currentType =
-                static_cast<KPrShapeAnimation::Node_Type>(data(this->index(index.row(),
-                                                                           KPrShapeAnimations::Node_Type)).toInt());
-        if (currentType == KPrShapeAnimation::After_Previous) {
+        KPrShapeAnimation::NodeType currentType =
+                static_cast<KPrShapeAnimation::NodeType>(data(this->index(index.row(),
+                                                                           KPrShapeAnimations::NodeType)).toInt());
+        if (currentType == KPrShapeAnimation::AfterPrevious) {
             // After Previous to With Previous
-            if (type == KPrShapeAnimation::With_Previous) {
+            if (type == KPrShapeAnimation::WithPrevious) {
                 //use previous animation to reparent current animation
                 Q_ASSERT(index.row() > 0);
                 KPrShapeAnimation * previousAnimation = animationByRow(index.row() - 1);
@@ -561,7 +561,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
             }
 
             // After Previous to On Click
-            else if (type == KPrShapeAnimation::On_Click) {
+            else if (type == KPrShapeAnimation::OnClick) {
                  // Get index of current substep
                  int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
                  int subStepCount = animation->step()->animationCount();
@@ -582,9 +582,9 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
                 return false;
             }
         }
-        else if (currentType == KPrShapeAnimation::With_Previous) {
+        else if (currentType == KPrShapeAnimation::WithPrevious) {
            // With Previous to After Previous
-           if (type == KPrShapeAnimation::After_Previous) {
+           if (type == KPrShapeAnimation::AfterPrevious) {
                // Get index of current substep
                int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
                //Create new substep to reparent currrent item and all following items.
@@ -597,7 +597,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
                movedChildren = getWithPreviousSiblings(animation);
            }
            // With Previous to On Click
-           else if (type == KPrShapeAnimation::On_Click) {
+           else if (type == KPrShapeAnimation::OnClick) {
                 // Get index of current substep
                 int currentSubStepIndex = animation->step()->indexOfAnimation(animation->subStep());
                 int subStepCount = animation->step()->animationCount();
@@ -623,14 +623,14 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
                return false;
            }
         }
-        else if (currentType == KPrShapeAnimation::On_Click) {
+        else if (currentType == KPrShapeAnimation::OnClick) {
              if (index.row() < 1) {
                  // Resync trigger event edit widget
                  emit layoutChanged();
                  return false;
              }
             // On click to With Previous
-            if (type == KPrShapeAnimation::With_Previous) {
+            if (type == KPrShapeAnimation::WithPrevious) {
                 // Get previous animation
                 KPrShapeAnimation *previousAnimation = animationByRow(index.row() - 1);
                 newStep = previousAnimation->step();
@@ -646,7 +646,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
             }
 
             // On click to After Previous
-            else if (type == KPrShapeAnimation::After_Previous) {
+            else if (type == KPrShapeAnimation::AfterPrevious) {
                  // Get previous animation
                  KPrShapeAnimation *previousAnimation = animationByRow(index.row() - 1);
                  newStep = previousAnimation->step();
@@ -701,7 +701,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
             removeStep(oldStep);
         }
 
-        if ((currentType == KPrShapeAnimation::On_Click) || (type == KPrShapeAnimation::On_Click)) {
+        if ((currentType == KPrShapeAnimation::OnClick) || (type == KPrShapeAnimation::OnClick)) {
             notifyOnClickEventChanged();
         }
         notifyAnimationChanged(animation);
@@ -721,14 +721,14 @@ void KPrShapeAnimations::recalculateStart(const QModelIndex &mIndex)
     }
     KPrShapeAnimation *animation = animationByRow(mIndex.row());
 
-    KPrShapeAnimation::Node_Type type =
-            static_cast<KPrShapeAnimation::Node_Type>(data(this->index(mIndex.row(),
-                                                                       KPrShapeAnimations::Node_Type)).toInt());
-    if (type == KPrShapeAnimation::After_Previous) {
+    KPrShapeAnimation::NodeType type =
+            static_cast<KPrShapeAnimation::NodeType>(data(this->index(mIndex.row(),
+                                                                       KPrShapeAnimations::NodeType)).toInt());
+    if (type == KPrShapeAnimation::AfterPrevious) {
         setTimeRange(animation, animationEndByIndex(mIndex), animation->globalDuration());
-        setTriggerEvent(mIndex, KPrShapeAnimation::With_Previous);
+        setTriggerEvent(mIndex, KPrShapeAnimation::WithPrevious);
     }
-    else if (type == KPrShapeAnimation::With_Previous) {
+    else if (type == KPrShapeAnimation::WithPrevious) {
         recalculateStart(index(mIndex.row() - 1, 0));
     }
 }
@@ -883,14 +883,14 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, int &groupC
                             stepChild++;
                             subStepChild++;
                             if (stepChild == 0) {
-                                b->setNodeType(KPrShapeAnimation::On_Click);
+                                b->setNodeType(KPrShapeAnimation::OnClick);
                                 groupCount = groupCount + 1;
                             }
                             else if (subStepChild == 0) {
-                                b->setNodeType(KPrShapeAnimation::After_Previous);
+                                b->setNodeType(KPrShapeAnimation::AfterPrevious);
                             }
                             else {
-                                b->setNodeType(KPrShapeAnimation::With_Previous);
+                                b->setNodeType(KPrShapeAnimation::WithPrevious);
                             }
                             if (rowCount == row) {
                                 return b;
@@ -1115,7 +1115,7 @@ QList<KPrAnimationSubStep *> KPrShapeAnimations::getSubSteps(int start, int end,
     return movedSubSteps;
 }
 
-bool KPrShapeAnimations::createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::Node_Type oldType, KPrShapeAnimation::Node_Type newType)
+bool KPrShapeAnimations::createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType, KPrShapeAnimation::NodeType newType)
 {
     KPrAnimationEditNodeTypeCommand *command =new KPrAnimationEditNodeTypeCommand(animation, oldType, newType, this);
     if (m_document) {

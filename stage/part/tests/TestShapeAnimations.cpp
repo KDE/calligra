@@ -153,24 +153,24 @@ void TestShapeAnimations::getTriggerEvent()
     new ModelTest(&animations, this);
     createAnimationTree(&animations);
     // Test Trigger Event
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     // Test group
     QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Group)).toInt(), 1);
     QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Group)).toInt(), 1);
@@ -194,213 +194,213 @@ void TestShapeAnimations::setTriggerEvent()
     createAnimationTree(&animations);
     // From On click
     // To After Previous
-    animations.setNodeType(m_animation[5], KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[5], KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     // To With Previous
-    animations.setNodeType(m_animation[7], KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[7], KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     // From After Previous
     // To On click
-    animations.setNodeType(m_animation[3], KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[3], KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     // To With previous
-    animations.setNodeType(m_animation[6], KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[6], KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     // From with previous
     // To On click
-    animations.setNodeType(m_animation[1], KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[1], KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     // To after previous
-    animations.setNodeType(m_animation[6], KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[6], KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     // From On click
     // To After Previous (with childrem)
-    animations.setNodeType(m_animation[3], KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[3], KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     //From On Click
     // To after previous (invald for the first animation)
-    animations.setNodeType(m_animation[0], KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[0], KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 
     //To with previous (invalid for the first item)
-    animations.setNodeType(m_animation[0], KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::On_Click);
-    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::After_Previous);
-    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
-    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::Node_Type)).toInt(),
-             (int)KPrShapeAnimation::With_Previous);
+    animations.setNodeType(m_animation[0], KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(0, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(1, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::OnClick);
+    QCOMPARE(animations.data(animations.index(2, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(3, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(4, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(5, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(6, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::AfterPrevious);
+    QCOMPARE(animations.data(animations.index(7, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
+    QCOMPARE(animations.data(animations.index(8, KPrShapeAnimations::NodeType)).toInt(),
+             (int)KPrShapeAnimation::WithPrevious);
     checkOrder(&animations);
     QVERIFY(animations.rowCount() == ANIMATIONS_COUNT);
 }

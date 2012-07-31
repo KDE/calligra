@@ -171,7 +171,7 @@ QModelIndex KPrEditAnimationsWidget::currentIndex()
 void KPrEditAnimationsWidget::updateIndex(const QModelIndex &index)
 {
     if (index.isValid() && (index.row() == m_timeLineView->currentIndex().row())) {
-        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Node_Type);
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::NodeType);
         QModelIndex beginTimeIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::StartTime);
         QModelIndex durationIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Duration);
         m_triggerEventList->setCurrentIndex(m_timeLineModel->data(triggerIndex).toInt());
@@ -198,12 +198,12 @@ void KPrEditAnimationsWidget::setTriggerEvent(int row)
 {
     QModelIndex index = m_timeLineView->currentIndex();
     if ((row >= 0) && index.isValid()) {
-        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Node_Type);
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::NodeType);
         if (row != m_timeLineModel->data(triggerIndex).toInt()) {
-            KPrShapeAnimation::Node_Type newType;
-            if (row == 0) newType = KPrShapeAnimation::On_Click;
-            else if (row == 1) newType = KPrShapeAnimation::After_Previous;
-            else newType = KPrShapeAnimation::With_Previous;
+            KPrShapeAnimation::NodeType newType;
+            if (row == 0) newType = KPrShapeAnimation::OnClick;
+            else if (row == 1) newType = KPrShapeAnimation::AfterPrevious;
+            else newType = KPrShapeAnimation::WithPrevious;
             m_docker->mainModel()->setTriggerEvent(m_timeLineModel->mapToSource(m_timeLineView->currentIndex()), newType);
         }
     }
@@ -231,30 +231,30 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         if (!index.isValid()) {
             return;
         }
-        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::Node_Type);
-        KPrShapeAnimation::Node_Type currentType = static_cast <KPrShapeAnimation::Node_Type>(m_timeLineModel->data(triggerIndex).toInt());
+        QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::NodeType);
+        KPrShapeAnimation::NodeType currentType = static_cast <KPrShapeAnimation::NodeType>(m_timeLineModel->data(triggerIndex).toInt());
 
         QActionGroup *actionGroup = new QActionGroup(m_timeLineView);
         actionGroup->setExclusive(true);
         KAction *onClickAction = new KAction(KIcon("onclick"), i18n("start on mouse click"), m_timeLineView);
         onClickAction->setCheckable(true);
-        onClickAction->setData(KPrShapeAnimation::On_Click);
+        onClickAction->setData(KPrShapeAnimation::OnClick);
         KAction *afterAction = new KAction(KIcon("after_previous"), i18n("start after previous animation"), m_timeLineView);
         afterAction->setCheckable(true);
-        afterAction->setData(KPrShapeAnimation::After_Previous);
+        afterAction->setData(KPrShapeAnimation::AfterPrevious);
         KAction *withAction = new KAction(KIcon("with_previous"), i18n("start with previous animation"), m_timeLineView);
         withAction->setCheckable(true);
-        withAction->setData(KPrShapeAnimation::With_Previous);
+        withAction->setData(KPrShapeAnimation::WithPrevious);
 
         actionGroup->addAction(onClickAction);
         actionGroup->addAction(afterAction);
         actionGroup->addAction(withAction);
         actionGroup->setExclusive(true);
 
-        if (currentType == KPrShapeAnimation::On_Click) {
+        if (currentType == KPrShapeAnimation::OnClick) {
             onClickAction->setChecked(true);
         }
-        else if (currentType == KPrShapeAnimation::After_Previous) {
+        else if (currentType == KPrShapeAnimation::AfterPrevious) {
             afterAction->setChecked(true);
         }
         else {

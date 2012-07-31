@@ -227,13 +227,13 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
             shapeAnimation->setPresetClass(KPrShapeAnimation::Emphasis);
         }
         else if (presetClass == "motion-path") {
-            shapeAnimation->setPresetClass(KPrShapeAnimation::Motion_Path);
+            shapeAnimation->setPresetClass(KPrShapeAnimation::MotionPath);
         }
         else if (presetClass == "ole-action") {
-            shapeAnimation->setPresetClass(KPrShapeAnimation::Ole_Action);
+            shapeAnimation->setPresetClass(KPrShapeAnimation::OleAction);
         }
         else if (presetClass == "media-call") {
-            shapeAnimation->setPresetClass(KPrShapeAnimation::Media_Call);
+            shapeAnimation->setPresetClass(KPrShapeAnimation::MediaCall);
         }
         else{
             shapeAnimation->setPresetClass(KPrShapeAnimation::None);

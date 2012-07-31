@@ -38,6 +38,9 @@ class KPrTimeLineView: public QWidget
      Q_OBJECT
 public:
     KPrTimeLineView(QWidget* parent = 0);
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual bool eventFilter(QObject *target, QEvent *event);
 
 signals:
     void clicked(const QModelIndex&);
@@ -45,9 +48,6 @@ signals:
     void timeValuesChanged(const QModelIndex&);
 
 private:
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
-    bool eventFilter(QObject *target, QEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -72,8 +72,6 @@ private:
     int m_resizedRow;
     int startDragPos;
     bool m_adjust;
-
-    friend class KPrAnimationsTimeLineView;
 };
 
 #endif // KPRTIMELINEVIEW_H
