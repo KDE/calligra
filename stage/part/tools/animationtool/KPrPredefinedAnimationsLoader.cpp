@@ -363,7 +363,6 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     }
 
     if (shapeAnimation) {
-        shapeAnimation->setNodeType(KPrShapeAnimation::OnClick);
         if (presetClass == "custom") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Custom);
         }

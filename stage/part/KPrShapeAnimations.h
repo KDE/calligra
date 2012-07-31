@@ -31,6 +31,12 @@
 
 class KPrDocument;
 
+struct AnimationTmpData
+{
+    int group;
+    KPrShapeAnimation::NodeType nodeType;
+};
+
 
 /**
  * Model for Animations data of each KPrPage
@@ -276,6 +282,8 @@ public:
 
     void resyncStepsWithAnimations();
 
+    KPrShapeAnimation::NodeType triggerEventByIndex(const QModelIndex &index);
+
 public slots:
     /// Notify a external edition of begin or end time
     void notifyAnimationEdited();
@@ -291,7 +299,7 @@ signals:
     void onClickEventChanged();
 
 private:
-    KPrShapeAnimation *animationByRow(const int row, int &groupCount) const;
+    KPrShapeAnimation *animationByRow(const int row, AnimationTmpData &currentData) const;
     QString getAnimationName(KPrShapeAnimation *animation, bool omitSubType = false) const;
     QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;

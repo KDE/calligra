@@ -128,14 +128,6 @@ public:
     /// to different params of the animation
     /// Use set methods to mantain them in sync with the
     /// real animation data
-    /**
-     * @brief Set the node type of the animation
-     * used just like quick access, Node Type is actually
-     * determined using the step, substep structure
-     *
-     * @param type Node Type
-     */
-    void setNodeType(NodeType type);
 
     /**
      * @brief Set class of the animation
@@ -152,13 +144,6 @@ public:
     void setId(QString id);
 
     void setPresetSubType(QString subType);
-
-    /**
-     * @brief Returns the stored node type for the animation
-     *
-     * @return Node_Type
-     */
-    NodeType nodeType() const;
 
     /**
      * @brief Returns stored class of the animation

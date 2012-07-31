@@ -87,19 +87,20 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
     }
 
     // Read Data
-    int groupCount = -1;
+    AnimationTmpData currentData;
+    currentData.group = -1;
     int thisRow = index.row();
-    KPrShapeAnimation *thisAnimation = animationByRow(thisRow, groupCount);
+    KPrShapeAnimation *thisAnimation = animationByRow(thisRow, currentData);
     if (!thisAnimation) {
         return QVariant();
     }
 
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         switch (index.column()) {
-            case Group: return groupCount;
+            case Group: return currentData.group;
             case StepCount:
-                if (thisAnimation->nodeType() == KPrShapeAnimation::OnClick) {
-                    return groupCount;
+                if (currentData.nodeType == KPrShapeAnimation::OnClick) {
+                    return currentData.group;
                 }
                 else {
                     return QVariant();
@@ -111,7 +112,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StartTime: return thisAnimation->timeRange().first;
             case Duration: return thisAnimation->globalDuration();
             case AnimationClass: return thisAnimation->presetClass();
-            case NodeType: return thisAnimation->nodeType();
+            case NodeType: return currentData.nodeType;
             default: Q_ASSERT(false);
         }
     }
@@ -126,13 +127,13 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case Group: return QVariant();
             case StepCount: return QVariant();
             case TriggerEvent:
-                if (thisAnimation->nodeType() == KPrShapeAnimation::OnClick)
+                if (currentData.nodeType == KPrShapeAnimation::OnClick)
                     return KIcon("onclick").pixmap(KIconLoader::SizeSmall,
                                                    KIconLoader::SizeSmall);
-                if (thisAnimation->nodeType() == KPrShapeAnimation::AfterPrevious)
+                if (currentData.nodeType == KPrShapeAnimation::AfterPrevious)
                     return KIcon("after_previous").pixmap(KIconLoader::SizeSmall,
                                                           KIconLoader::SizeSmall);
-                if (thisAnimation->nodeType() == KPrShapeAnimation::WithPrevious)
+                if (currentData.nodeType == KPrShapeAnimation::WithPrevious)
                     return KIcon("with_previous").pixmap(KIconLoader::SizeSmall,
                                                          KIconLoader::SizeSmall);
             case Name: return QVariant();
@@ -165,11 +166,11 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case Group:
             case StepCount: return QVariant();
             case TriggerEvent:
-                if (thisAnimation->nodeType() == KPrShapeAnimation::OnClick)
+                if (currentData.nodeType == KPrShapeAnimation::OnClick)
                     return i18n("start on mouse click");
-                if (thisAnimation->nodeType() == KPrShapeAnimation::AfterPrevious)
+                if (currentData.nodeType == KPrShapeAnimation::AfterPrevious)
                     return i18n("start after previous animation");
-                if (thisAnimation->nodeType() == KPrShapeAnimation::WithPrevious)
+                if (currentData.nodeType == KPrShapeAnimation::WithPrevious)
                     return i18n("start with previous animation");
             case Name: return QVariant();
             case ShapeThumbnail: return thisAnimation->shape()->name();
@@ -238,8 +239,7 @@ bool KPrShapeAnimations::setData(const QModelIndex &index, const QVariant &value
         return false;
     }
     // Read Data
-    int groupCount = -1;
-    KPrShapeAnimation *thisAnimation = animationByRow(index.row(), groupCount);
+    KPrShapeAnimation *thisAnimation = animationByRow(index.row());
     if (!thisAnimation) {
         return false;
     }
@@ -396,11 +396,6 @@ void KPrShapeAnimations::swapAnimations(KPrShapeAnimation *oldAnimation, KPrShap
     QModelIndex indexNew = indexByAnimation(newAnimation);
     emit dataChanged(this->index(indexOld.row(), 0), this->index(indexOld.row(), COLUMN_COUNT));
     emit dataChanged(this->index(indexNew.row(), 0), this->index(indexNew.row(), COLUMN_COUNT));
-    if ((newAnimation->nodeType() == KPrShapeAnimation::OnClick) ||
-            (oldAnimation->nodeType() == KPrShapeAnimation::OnClick)) {
-        notifyOnClickEventChanged();
-    }
-
 }
 
 void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
@@ -866,10 +861,10 @@ void KPrShapeAnimations::notifyOnClickEventChanged()
     emit onClickEventChanged();
 }
 
-KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, int &groupCount) const
+KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, AnimationTmpData &currentData) const
 {
     int rowCount = 0;
-    groupCount = 0;
+    int groupCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
         int stepChild = -1;
         for (int i=0; i < step->animationCount(); i++) {
@@ -883,16 +878,17 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, int &groupC
                             stepChild++;
                             subStepChild++;
                             if (stepChild == 0) {
-                                b->setNodeType(KPrShapeAnimation::OnClick);
+                                currentData.nodeType = KPrShapeAnimation::OnClick;
                                 groupCount = groupCount + 1;
                             }
                             else if (subStepChild == 0) {
-                                b->setNodeType(KPrShapeAnimation::AfterPrevious);
+                                currentData.nodeType = KPrShapeAnimation::AfterPrevious;
                             }
                             else {
-                                b->setNodeType(KPrShapeAnimation::WithPrevious);
+                                currentData.nodeType = KPrShapeAnimation::WithPrevious;
                             }
                             if (rowCount == row) {
+                                currentData.group = groupCount;
                                 return b;
                             }
                             rowCount++;
@@ -907,8 +903,8 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, int &groupC
 
 KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row) const
 {
-    int groupCount = 0;
-    return animationByRow(row, groupCount);
+    AnimationTmpData tmpData;
+    return animationByRow(row, tmpData);
 }
 
 void KPrShapeAnimations::insertNewAnimation(KPrShapeAnimation *newAnimation, const QModelIndex &previousAnimation)
@@ -1079,6 +1075,16 @@ void KPrShapeAnimations::resyncStepsWithAnimations()
             }
         }
     }
+}
+
+KPrShapeAnimation::NodeType KPrShapeAnimations::triggerEventByIndex(const QModelIndex &index)
+{
+    Q_ASSERT(index.isValid());
+    AnimationTmpData currentData;
+    currentData.group = -1;
+    int thisRow = index.row();
+    animationByRow(thisRow, currentData);
+    return currentData.nodeType;
 }
 
 QList<KPrShapeAnimation *> KPrShapeAnimations::getWithPreviousSiblings(KPrShapeAnimation *animation)

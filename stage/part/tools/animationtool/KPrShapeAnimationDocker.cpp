@@ -505,7 +505,6 @@ void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
     menu.addSeparator();
     if ((m_animationsView->selectionModel()->selectedRows().count() == 1) &&
             (m_animationsView->currentIndex().isValid())) {
-        KPrShapeAnimation *currentAnimation = m_animationsModel->animationByRow(m_animationsView->currentIndex().row());
         QActionGroup *actionGroup = new QActionGroup(m_animationsView);
         actionGroup->setExclusive(true);
         KAction *onClickAction = new KAction(KIcon("onclick"), i18n("start on mouse click"), m_animationsView);
@@ -523,10 +522,11 @@ void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
         actionGroup->addAction(withAction);
         actionGroup->setExclusive(true);
 
-        if (currentAnimation->nodeType() == KPrShapeAnimation::OnClick) {
+        KPrShapeAnimation::NodeType currentNodeType = m_animationsModel->triggerEventByIndex(m_animationsView->currentIndex());
+        if (currentNodeType == KPrShapeAnimation::OnClick) {
             onClickAction->setChecked(true);
         }
-        else if (currentAnimation->nodeType() == KPrShapeAnimation::AfterPrevious) {
+        else if (currentNodeType == KPrShapeAnimation::AfterPrevious) {
             afterAction->setChecked(true);
         }
         else {

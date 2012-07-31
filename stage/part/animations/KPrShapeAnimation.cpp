@@ -212,15 +212,6 @@ void KPrShapeAnimation::deactivate()
 // onClick would create a new animation
 // when putting data in it could check if the shape is the correct one if not create a parallel one (with previous)
 
-
-
-void KPrShapeAnimation::setNodeType(KPrShapeAnimation::NodeType type)
-{
-    if (type != m_triggerEvent) {
-        m_triggerEvent = type;
-    }
-}
-
 void KPrShapeAnimation::setPresetClass(KPrShapeAnimation::PresetClass presetClass)
 {
     m_class = presetClass;
@@ -234,11 +225,6 @@ void KPrShapeAnimation::setId(QString id)
 void KPrShapeAnimation::setPresetSubType(QString subType)
 {
     m_presetSubType = subType;
-}
-
-KPrShapeAnimation::NodeType KPrShapeAnimation::nodeType() const
-{
-    return m_triggerEvent;
 }
 
 KPrShapeAnimation::PresetClass KPrShapeAnimation::presetClass() const
