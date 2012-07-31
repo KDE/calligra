@@ -29,6 +29,10 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 
+#ifndef QT_NO_DBUS
+#include <kio/jobuidelegate.h>
+#endif
+
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
 
@@ -121,7 +125,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             return;
         }
-        
+
         m_assistantDrag = 0;
         foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
             QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
@@ -269,9 +273,9 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
         QPainterPath path;
         path.addEllipse(ellipse);
-        KisPaintingAssistant::drawPath(_gc, path);        
+        KisPaintingAssistant::drawPath(_gc, path);
     }
-    
+
     QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
     QPixmap iconMove = KIcon("transform-move").pixmap(32, 32);
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
