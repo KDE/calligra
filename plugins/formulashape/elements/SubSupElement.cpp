@@ -83,11 +83,11 @@ void SubSupElement::layout( const AttributeManager* am )
     }
     qreal largestWidth = 0;
     if(m_subScript) {
-        largestWidth = m_subScript->width();
+        largestWidth = m_subScript->width();        
     }
     if(m_superScript) {
         largestWidth = qMax( largestWidth, m_superScript->width());
-        m_superScript->setOrigin( QPointF( m_baseElement->width(), 0) );
+        m_superScript->setOrigin( QPointF( m_baseElement->width(), -4) );
     }
 
     setWidth( m_baseElement->width() + largestWidth );
@@ -100,7 +100,7 @@ void SubSupElement::layout( const AttributeManager* am )
                                      m_baseElement->height() - m_subScript->baseLine() 
                                      + subscriptshift );
         m_subScript->setOrigin( QPointF( m_baseElement->width(), yPos ) );
-	setHeight( yPos + m_subScript->height() );
+        setHeight( yPos + m_subScript->height() );
     } else {
         setHeight( yOffset + m_baseElement->height() );
     }
@@ -269,3 +269,4 @@ bool SubSupElement::moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcur
     }
     return false;
 }
+

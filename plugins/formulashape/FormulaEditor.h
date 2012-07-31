@@ -27,13 +27,9 @@
 #include <QString>
 #include <QPair>
 #include "FormulaData.h"
-#include "CollectionElement.h"
 #include "FormulaCursor.h"
-#include "FormulaRenderer.h"
-#include "TokenElement.h"
 
 class BasicElement;
-class GroupElement;
 class QString;
 class QPainter;
 class QPointF;
@@ -104,8 +100,6 @@ public:
     /// @return the cursor that contains the current selection and position
     FormulaCursor& cursor();
 
-    bool insideCollectionElement();
-
 private:
     /// @return the mathml token element, that should be used for this character
     QString tokenType(const QChar& character) const;
@@ -117,15 +111,8 @@ private:
     /// The formulaData
     FormulaData* m_data;
 
-
-    CollectionElement* m_collector;
-
-
     /// Buffer for the user input
     QString m_inputBuffer;
-
-    bool m_isspace;
-
 
 };
 

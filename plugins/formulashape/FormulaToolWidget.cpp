@@ -33,6 +33,7 @@
 #include <QLabel>
 #include <kdebug.h>
 #include <QMessageBox>
+#include <KFontComboBox>
 #include "FormulaCursor.h"
 #include "IdentifierElement.h"
 #include "SubSupElement.h"
@@ -42,6 +43,10 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
 {
     m_tool = tool;
     setupUi( this );
+
+  //  qDebug()<<fontComboBox->currentFont().toString();
+
+    connect(fontComboBox,SIGNAL(currentFontChanged(const QFont)),this,SLOT(print(QFont)));
     // setup the element insert menus
     m_fractionMenu.addAction( m_tool->action( "insert_fraction" ) );
     m_fractionMenu.addAction( m_tool->action( "insert_bevelled_fraction" ) );
@@ -50,8 +55,9 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     m_fenceMenu.addAction( m_tool->action( "insert_fence" ) );
     m_fenceMenu.addAction( m_tool->action( "insert_enclosed" ) );
     
-
+    m_tableMenu.addAction( m_tool->action( "insert_22table" ) );
     m_tableMenu.addAction( m_tool->action( "insert_33table" ) );
+    m_tableMenu.addAction( m_tool->action( "insert_44table" ) );
     m_tableMenu.addAction( m_tool->action( "insert_21table" ) );
 
     m_rootMenu.addAction( m_tool->action( "insert_root" ) );
@@ -247,9 +253,6 @@ void FormulaToolWidget::setupformulaButton(QList<QString>list)
              this, SLOT( insertFormula(int,int)));
 
     connect( table,SIGNAL(cellClicked(int,int)),
-             this, SLOT( insertSymbol(QLabel*)));
-
-    connect( table,SIGNAL(cellClicked(int,int)),
              &m_formulaMenu, SLOT(hide()));
 
 
@@ -263,6 +266,13 @@ void FormulaToolWidget::setupformulaButton(QList<QString>list)
 KoFormulaTool* FormulaToolWidget:: formulatool()
 {
     return m_tool;
+}
+
+void FormulaToolWidget::print(QFont font)
+{
+    QString abc = font.toString();
+    abc.chop(abc.length()-abc.indexOf(","));
+    qDebug()<<abc;
 }
 
 

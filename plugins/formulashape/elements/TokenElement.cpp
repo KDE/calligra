@@ -27,10 +27,11 @@
 #include <QPainter>
 #include <kdebug.h>
 
+
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_stretchHorizontally = false;
-    m_stretchVertically = false;
+    m_stretchVertically = true;
 }
 
 const QList<BasicElement*> TokenElement::childElements() const
@@ -55,9 +56,41 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
         color = am->colorOf( "color", this );
 
     painter.translate( m_xoffset, baseLine() );
-    if(m_stretchHorizontally || m_stretchVertically)
-        painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height());
+    if(m_stretchHorizontally || m_stretchVertically){
 
+        if(parentElement()->elementType()==Formula);
+        // nothing much to be done
+
+        else if(parentElement()->parentElement()->elementType()==Fraction && parentElement()->parentElement()->parentElement()->elementType()==Formula)
+            painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height());
+
+        else if(parentElement()->elementType()==SquareRoot && parentElement()->parentElement()->elementType()==Formula)
+            painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height());
+
+        else if((parentElement()->parentElement()->elementType()==SubScript || parentElement()->parentElement()->elementType()==SupScript) && parentElement()==parentElement()->parentElement()->childElements().at(1))
+        painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height()/2);
+
+        else if(parentElement()->parentElement()->elementType()==SubSupScript && (parentElement()==parentElement()->parentElement()->childElements().at(1) || parentElement()==parentElement()->parentElement()->childElements().at(2)))
+           painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height()/2);
+
+        else if(parentElement()->parentElement()->elementType()==Fraction && parentElement()->parentElement()->parentElement()==parentElement()->parentElement()->parentElement()->parentElement()->childElements().at(1))
+             painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height()/2);
+
+        else if(parentElement()->elementType()==SquareRoot && parentElement()->parentElement()==parentElement()->parentElement()->parentElement()->childElements().at(1))
+            painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height()/2);
+
+        else if (parentElement()->parentElement()->elementType()==Root && parentElement()==parentElement()->parentElement()->childElements().at(0))
+            painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height()/3);
+
+        else if (parentElement()->parentElement()->elementType()==Root && parentElement()==parentElement()->parentElement()->childElements().at(1))
+            painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height()/2);
+
+        else if (parentElement()->parentElement()->elementType()==Root && parentElement()==parentElement()->parentElement()->childElements().at(1))
+            painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height());
+
+        else if(parentElement()->parentElement()->elementType()==Root && parentElement()->parentElement()->parentElement()==parentElement()->parentElement()->parentElement()->parentElement()->childElements().at(1))
+            painter.scale(width() / m_originalSize.width(), height() / m_originalSize.height()/2);
+}
     painter.setPen( color );
     painter.setBrush( QBrush( color ) );
     painter.drawPath( m_contentPath );
@@ -205,7 +238,7 @@ int TokenElement::removeText ( int position, int length )
             counter++;
         }
     }
-    
+
     int start=0;
     //find out where we should start removing glyphs
     if (counter>0) {
@@ -214,7 +247,7 @@ int TokenElement::removeText ( int position, int length )
                 start++;
             }
         }
-    } 
+    }
     for (int i=start; i<start+counter; ++i) {
         m_glyphs.removeAt(i);
     }
@@ -235,9 +268,9 @@ bool TokenElement::setCursorTo(FormulaCursor& cursor, QPointF point) {
             break;
         }
     }
-    
+
     //Find out, if we should place the cursor before or after the character
-    if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {	
+    if ((point.x()-cursorOffset(i-1))<(cursorOffset(i)-point.x())) {
         --i;
     }
     cursor.setPosition(i);
@@ -339,7 +372,7 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
 
 void TokenElement::writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const
 {
-    // split the m_rawString into text content chunks that are divided by glyphs 
+    // split the m_rawString into text content chunks that are divided by glyphs
     // which are represented as ObjectReplacementCharacter and write each chunk
     QStringList tmp = m_rawString.split( QChar( QChar::ObjectReplacementCharacter ) );
     for ( int i = 0; i < tmp.count(); i++ ) {
@@ -362,3 +395,5 @@ const QString TokenElement::writeElementContent() const
 {
     return m_rawString;
 }
+
+

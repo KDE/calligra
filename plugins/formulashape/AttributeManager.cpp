@@ -368,6 +368,7 @@ QFont AttributeManager::font( const BasicElement* element ) const
     // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
 
     QFont font;
+    font.setFamily("Courier New");
     Length unit = parseUnit( findValue( "fontsize", element ), element );
     if ( unit.type == Length::Absolute ) {
         font.setPointSizeF( lengthToPixels( unit,  element,  "fontsize" ) );

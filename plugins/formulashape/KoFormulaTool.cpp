@@ -40,6 +40,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+
 #include <KoOdfStylesReader.h>
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
@@ -273,6 +274,8 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Home:
             m_formulaEditor->cursor().moveHome();
             break;
+        case Qt::Key_Space:
+            m_formulaEditor->cursor().move(MoveRight);
         default:
             if( event->text().length() != 0 ) {
                 command=m_formulaEditor->insertText( event->text() );
@@ -413,11 +416,19 @@ void KoFormulaTool::setupActions()
 
     addTemplateAction(i18n("Insert fraction"),"insert_fraction","<mfrac><mrow><mrow/></mrow><mrow/></mfrac>","frac");
     addTemplateAction(i18n("Insert bevelled fraction"),"insert_bevelled_fraction","<mfrac bevelled=\"true\"><mrow><mrow/></mrow><mrow/></mfrac>","bevelled");
-    
+
+    addTemplateAction(i18n("Insert 2x2 table"),"insert_22table",
+                      "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd></mtr>" \
+                      "<mtr><mtd></mtd><mtd></mtd></mtr></mtable>","matrix");
     addTemplateAction(i18n("Insert 3x3 table"),"insert_33table",
                       "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd><mtd></mtd></mtr>" \
                       "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
                       "<mtr><mtd></mtd><mtd></mtd><mtd></mtd></mtr></mtable>","matrix");
+    addTemplateAction(i18n("Insert 4x4 table"),"insert_44table",
+                      "<mtable><mtr><mtd><mrow /></mtd><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
+                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
+                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd><mtd></mtd></mtr>" \
+                      "<mtr><mtd></mtd><mtd></mtd><mtd></mtd><mtd></mtd></mtr></mtable>","matrix");
     addTemplateAction(i18n("Insert 2 dimensional vector"),"insert_21table",
                       "<mtable><mtr><mtd><mrow/></mtd></mtr><mtr><mtd></mtd></mtr></mtable>" ,"vector");
                       
