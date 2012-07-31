@@ -22,8 +22,6 @@
 #include <QList>
 #include <Qt>
 
-#include <kis_abstract_canvas_widget.h>
-
 class QColor;
 class QImage;
 class QSize;
@@ -35,18 +33,30 @@ class QTabletEvent;
 class QWheelEvent;
 class QInputMethodEvent;
 class QVariant;
+class QWidget;
+class QRect;
+class QPoint;
+class QPainter;
+class QRect;
 
+class KoToolProxy;
 class KoViewConverter;
 class KisCoordinatesConverter;
 
-class KisCanvasWidgetBase : public KisAbstractCanvasWidget
+class KisCanvas2;
+class KisCanvasDecoration;
+
+
+class KisCanvasWidgetBase
 {
 public:
     KisCanvasWidgetBase(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter);
 
     virtual ~KisCanvasWidgetBase();
 
-public: // KisAbstractCanvasWidget
+public:
+
+    virtual QWidget * widget() = 0;
 
     virtual KoToolProxy * toolProxy();
 

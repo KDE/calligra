@@ -107,7 +107,7 @@ protected:
     void resizeGL(int width, int height);
     void initializeGL();
 
-public: // KisAbstractCanvasWidget
+public:
 
     QWidget * widget() {
         return this;

@@ -73,7 +73,7 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-public: // KisAbstractCanvasWidget
+public:
 
     QWidget * widget() {
         return this;

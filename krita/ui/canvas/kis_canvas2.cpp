@@ -46,7 +46,6 @@
 #include "kis_view2.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
-#include "kis_abstract_canvas_widget.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_group_layer.h"
 #include "flake/kis_shape_controller.h"
@@ -93,7 +92,7 @@ public:
 
     KisCoordinatesConverter *coordinatesConverter;
     KisView2 *view;
-    KisAbstractCanvasWidget *canvasWidget;
+    KisCanvasWidgetBase *canvasWidget;
     KoShapeManager *shapeManager;
     KoColorProfile *monitorProfile;
     bool currentCanvasIsOpenGL;
@@ -156,8 +155,8 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     connect(widget, SIGNAL(needAdjustOrigin()), this, SLOT(adjustOrigin()), Qt::DirectConnection);
 
-    KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
-    Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
+    KisCanvasWidgetBase *tmp = dynamic_cast<KisCanvasWidgetBase*>(widget);
+    Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisCanvasWidgetBase");
     emit canvasDestroyed(widget);
 
     if(m_d->canvasWidget!=0)
