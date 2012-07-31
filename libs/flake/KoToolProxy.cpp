@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include <QTimer>
 #include <QApplication>
+#include <QTouchEvent>
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
     : activeTool(0),
@@ -132,6 +133,7 @@ void KoToolProxy::repaintDecorations()
     if (d->activeTool) d->activeTool->repaintDecorations();
 }
 
+
 QPointF KoToolProxy::widgetToDocument(const QPointF &widgetPoint) const
 {
     QPoint offset = QPoint(d->controller->canvasOffsetX(), d->controller->canvasOffsetY());
@@ -147,6 +149,29 @@ KoCanvasBase* KoToolProxy::canvas() const
 }
 
 #include <KDebug>
+
+void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter, const QPointF &documentOffset)
+{
+    QPointF point;
+    QList<KoTouchPoint> touchPoints;
+
+    foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
+        QPointF docPoint = viewConverter->viewToDocument(p.normalizedPos()) + documentOffset;
+        if (p.isPrimary()) {
+            point = docPoint;
+        }
+        KoTouchPoint touchPoint;
+        touchPoint.touchPoint = p;
+        touchPoint.point = point;
+        touchPoint.lastPoint = viewConverter->viewToDocument(p.lastNormalizedPos()) + documentOffset;
+        touchPoints << touchPoint;
+    }
+
+    KoPointerEvent pointEv(event, point, touchPoints);
+
+    // XXX: now do the smart stuff about press, move, release. This will likely get complicated...
+}
+
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
     // don't process tablet events for stylus middle and right mouse button
