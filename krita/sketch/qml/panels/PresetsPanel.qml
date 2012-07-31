@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import ":/qml/components"
+import ":/components"
 
 Panel {
     id: base;

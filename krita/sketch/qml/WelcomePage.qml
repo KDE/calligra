@@ -17,8 +17,8 @@
  */
 
 import QtQuick 1.1
-import "qml/components"
-import "qml/panels"
+import "components"
+import "panels"
 
 Page {
 
