@@ -1,38 +1,38 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file>qml/main.qml</file>
-    <file>qml/WelcomePage.qml</file>
-    <file>qml/MainPage.qml</file>
-    <file>qml/SharePage.qml</file>
-    <file>qml/SettingsPage.qml</file>
-    <file>qml/HelpPage.qml</file>
+    <file>main.qml</file>
+    <file>WelcomePage.qml</file>
+    <file>MainPage.qml</file>
+    <file>SharePage.qml</file>
+    <file>SettingsPage.qml</file>
+    <file>HelpPage.qml</file>
 
-    <file>qml/components/PageStack.qml</file>
-    <file>qml/components/PageStack.js</file>
-    <file>qml/components/Page.qml</file>
-    <file>qml/components/DropShadow.qml</file>
-    <file>qml/components/Label.qml</file>
-    <file>qml/components/RecentFilesList.qml</file>
-    <file>qml/components/Button.qml</file>
-    <file>qml/components/TextField.qml</file>
-    <file>qml/components/Divider.qml</file>
-    <file>qml/components/Header.qml</file>
-    <file>qml/components/CategorySwitcher.qml</file>
-    <file>qml/components/NewImageList.qml</file>
-    <file>qml/components/NewsList.qml</file>
+    <file>components/PageStack.qml</file>
+    <file>components/PageStack.js</file>
+    <file>components/Page.qml</file>
+    <file>components/DropShadow.qml</file>
+    <file>components/Label.qml</file>
+    <file>components/RecentFilesList.qml</file>
+    <file>components/Button.qml</file>
+    <file>components/TextField.qml</file>
+    <file>components/Divider.qml</file>
+    <file>components/Header.qml</file>
+    <file>components/CategorySwitcher.qml</file>
+    <file>components/NewImageList.qml</file>
+    <file>components/NewsList.qml</file>
 
-    <file>qml/panels/Panel.qml</file>
-    <file>qml/panels/MenuPanel.qml</file>
-    <file>qml/panels/NewImagePanel.qml</file>
-    <file>qml/panels/OpenImagePanel.qml</file>
-    <file>qml/panels/PresetsPanel.qml</file>
-    <file>qml/panels/LayersPanel.qml</file>
-    <file>qml/panels/ToolPanel.qml</file>
-    <file>qml/panels/SelectPanel.qml</file>
-    <file>qml/panels/FilterPanel.qml</file>
-    <file>qml/panels/ColorPanel.qml</file>
-    <file>qml/panels/PanelBar.qml</file>
-    <file>qml/panels/EditPresetPage.qml</file>
+    <file>panels/Panel.qml</file>
+    <file>panels/MenuPanel.qml</file>
+    <file>panels/NewImagePanel.qml</file>
+    <file>panels/OpenImagePanel.qml</file>
+    <file>panels/PresetsPanel.qml</file>
+    <file>panels/LayersPanel.qml</file>
+    <file>panels/ToolPanel.qml</file>
+    <file>panels/SelectPanel.qml</file>
+    <file>panels/FilterPanel.qml</file>
+    <file>panels/ColorPanel.qml</file>
+    <file>panels/PanelBar.qml</file>
+    <file>panels/EditPresetPage.qml</file>
 
     <file>images/divider.png</file>
     <file>images/document-new.png</file>

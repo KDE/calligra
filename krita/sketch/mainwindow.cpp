@@ -28,6 +28,7 @@
 
 #include "kis_doc2.h"
 #include "kis_view2.h"
+#include "klibloader.h"
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
@@ -53,14 +54,19 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
     QDeclarativeView* view = new QDeclarativeView();
     view->rootContext()->setContextProperty( "Constants", d->constants );
     view->rootContext()->setContextProperty( "Settings", d->settings );
-    view->setSource( QUrl( "qrc:/qml/main.qml" ) );
+    view->setSource( QUrl( "qrc:/main.qml" ) );
     view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
-    KisDoc2 *doc = new KisDoc2(this);
-    Q_ASSERT(doc->viewCount() > 0);
+
+    KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
+    KisDoc2 *doc = static_cast<KisDoc2*>(factory->create(0, "KritaPart"));
+    qDebug() << "doc:" << doc << "views" << doc->viewCount();
+
     doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
-    KisView2 *kisView = qobject_cast<KisView2*>(doc->views().first());
-    view->setViewport(kisView->canvas());
+    KoView *kisView = qobject_cast<KisView2*>(doc->createView(this));
+    //Q_ASSERT(doc->viewCount() > 0);
+
+    //view->setViewport(kisView->canvas());
 
     setCentralWidget( view );
 }

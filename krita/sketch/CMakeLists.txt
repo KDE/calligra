@@ -11,7 +11,7 @@ set(kritasketch_SRCS
     main.cpp
     mainwindow.cpp
 )
-qt4_add_resources(kritasketch_SRCS krita-sketch.qrc)
+qt4_add_resources(kritasketch_SRCS qml/krita-sketch.qrc)
 kde4_add_executable(kritasketch ${kritasketch_SRCS})
 
 target_link_libraries(kritasketch
