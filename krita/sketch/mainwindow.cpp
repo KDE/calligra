@@ -64,9 +64,9 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
 
     doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
     KoView *kisView = qobject_cast<KisView2*>(doc->createView(this));
-    //Q_ASSERT(doc->viewCount() > 0);
+    Q_ASSERT(doc->viewCount() > 0);
 
-    //view->setViewport(kisView->canvas());
+    view->setViewport(kisView->canvas());
 
     setCentralWidget( view );
 }
