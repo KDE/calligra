@@ -2,9 +2,6 @@
 # drivers will be moved out of this dir in Predicate, and then area will be redefined
 #remove_definitions(-DKDE_DEFAULT_DEBUG_AREA)
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
-IF (SQLITE_FOUND)
-  add_subdirectory( sqlite )
-ENDIF (SQLITE_FOUND)
 
 INCLUDE (FindMySQL)
 IF (MYSQL_FOUND)
@@ -33,6 +30,3 @@ INCLUDE(FindXBase)
 IF(XBASE_FOUND)
    add_subdirectory(xbase)
 ENDIF(XBASE_FOUND)
-
-#message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(pgsql_dir)")
-#message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(mysql_dir)")

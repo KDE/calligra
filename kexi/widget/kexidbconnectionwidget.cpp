@@ -21,8 +21,8 @@
 
 #include <kexi.h>
 #include <kexiguimsghandler.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 #include "kexidbdrivercombobox.h"
 
 #include <kdebug.h>

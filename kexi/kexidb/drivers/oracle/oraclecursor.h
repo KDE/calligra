@@ -17,8 +17,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #ifndef _ORACLECURSOR_H_
 #define _ORACLECURSOR_H_
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
+#include <db/cursor.h>
+#include <db/connection.h>
 #include "oracleconnection.h"
 #include <occi.h>
 //#include <vector>

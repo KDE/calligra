@@ -27,9 +27,9 @@
 
 #include <main/startup/KexiStartup.h>
 
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/drivermanager.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
 
 namespace KexiWebForms {
 namespace Model {

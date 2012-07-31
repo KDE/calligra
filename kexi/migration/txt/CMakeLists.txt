@@ -17,6 +17,7 @@ target_link_libraries(keximigrate_txt
     keximigrate
     kexidb
     kexiutils
+    ${CALLIGRADB_LIBS}
 )
 
 install(TARGETS keximigrate_txt  DESTINATION ${PLUGIN_INSTALL_DIR})

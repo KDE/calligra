@@ -316,7 +316,7 @@ void rcps_solver_set_duration_callback(struct rcps_solver *s,
 void rcps_solver_solve(struct rcps_solver *s, struct rcps_problem *p);
 
 /* after solving a problem, get the number of reproduction cycles that were
- * needed. this is only usefull if you want to compare the performance of
+ * needed. this is only useful if you want to compare the performance of
  * different settings, and not really meant for normal use */
 int rcps_solver_getreps(struct rcps_solver *s);
 

@@ -163,7 +163,7 @@ KUrl KexiReportView::getExportUrl(const QString &mimetype, const QString &captio
 {
     KUrl result;
 
-    // loop until an url has been choosen or the file selection has been cancelled
+    // loop until an url has been chosen or the file selection has been cancelled
     while (true) {
         result = KFileDialog::getSaveUrl(KUrl(), mimetype, this, caption);
 

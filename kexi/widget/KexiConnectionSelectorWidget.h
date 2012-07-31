@@ -21,7 +21,7 @@
 #define KEXICONNECTIONSELECTORWIDGET_H
 
 #include <kexidbconnectionset.h>
-#include <kexidb/driver.h>
+#include <db/driver.h>
 
 #include <KDialog>
 #include <kabstractfilewidget.h>

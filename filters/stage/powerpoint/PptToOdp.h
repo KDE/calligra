@@ -329,7 +329,16 @@ private:
 
     void addPresentationStyleToDrawElement(Writer& out, const MSO::OfficeArtSpContainer& o);
 
+    /**
+     * Create office:document-content XML tree to be saved into the content.xml file.
+     */
     QByteArray createContent(KoGenStyles& styles);
+
+    /**
+     * Create office:document-meta XML tree to be saved into the meta.xml file.
+     */
+    QByteArray createMeta();
+
     void processSlideForBody(unsigned slideNo, Writer& out);
 
     /**

@@ -42,7 +42,7 @@
 
 #include <KexiMainWindowIface.h>
 //#include <kexidialogbase.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <QTextDocument>
 
 /// @internal

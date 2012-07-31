@@ -17,15 +17,14 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/connection.h>
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
+#include <db/utils.h>
 
 #include <kdebug.h>
-
-#include "kexidb/drivermanager.h"
-#include "kexidb/utils.h"
 
 #include "xbasedriver.h"
 #include "xbaseconnection.h"

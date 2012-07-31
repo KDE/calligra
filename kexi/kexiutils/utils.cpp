@@ -628,59 +628,6 @@ QFont KexiUtils::smallFont(QWidget *init)
     return *_smallFont;
 }
 
-//---------
-
-//! @internal
-class StaticSetOfStrings::Private
-{
-public:
-    Private() : array(0), set(0) {}
-    ~Private() {
-        delete set;
-    }
-    const char** array;
-    QSet<QByteArray> *set;
-};
-
-StaticSetOfStrings::StaticSetOfStrings()
-        : d(new Private)
-{
-}
-
-StaticSetOfStrings::StaticSetOfStrings(const char* array[])
-        : d(new Private)
-{
-    setStrings(array);
-}
-
-StaticSetOfStrings::~StaticSetOfStrings()
-{
-    delete d;
-}
-
-void StaticSetOfStrings::setStrings(const char* array[])
-{
-    delete d->set;
-    d->set = 0;
-    d->array = array;
-}
-
-bool StaticSetOfStrings::isEmpty() const
-{
-    return d->array == 0;
-}
-
-bool StaticSetOfStrings::contains(const QByteArray& string) const
-{
-    if (!d->set) {
-        d->set = new QSet<QByteArray>();
-        for (const char ** p = d->array;*p;p++) { 
-            d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)));
-        }
-    }
-    return d->set->contains(string);
-}
-
 //---------------------
 
 KTextEditorFrame::KTextEditorFrame(QWidget * parent, Qt::WindowFlags f)

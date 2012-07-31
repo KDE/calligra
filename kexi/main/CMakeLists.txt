@@ -60,6 +60,7 @@ target_link_libraries(
     kexicore
     kexiutils
     ${KOPROPERTY_LIBS}
+    ${CALLIGRADB_LIBS}
     kexiextendedwidgets
     kexiguiutils
     ${KDE4_KNEWSTUFF_LIBS}

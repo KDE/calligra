@@ -29,7 +29,7 @@ KarbonFilterEffectsToolFactory::KarbonFilterEffectsToolFactory()
 {
     setToolTip(i18n("Filter Effects Editing Tool"));
     setToolType("karbon,krita");
-    setIcon("effectimages");
+    setIcon("tool_imageeffects"); // TODO: better icon, e.g. black Fx bad on dark UI
     setPriority(3);
 }
 
