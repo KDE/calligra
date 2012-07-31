@@ -167,9 +167,35 @@ void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter,
         touchPoints << touchPoint;
     }
 
-    KoPointerEvent pointEv(event, point, touchPoints);
+    KoPointerEvent ev(event, point, touchPoints);
 
-    // XXX: now do the smart stuff about press, move, release. This will likely get complicated...
+    KoInputDevice id;
+    KoToolManager::instance()->priv()->switchInputDevice(id);
+
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+        ev.setTabletButton(Qt::LeftButton);
+        if (d->activeTool) {
+            d->activeTool->mousePressEvent(&ev);
+        }
+        break;
+    case QEvent::TouchUpdate:
+        ev.setTabletButton(Qt::LeftButton);
+        if (d->activeTool) {
+            d->activeTool->mouseMoveEvent(&ev);
+        }
+        break;
+    case QEvent::TouchEnd:
+        ev.setTabletButton(Qt::LeftButton);
+        if (d->activeTool) {
+            d->activeTool->mouseReleaseEvent(&ev);
+        }
+        break;
+    default:
+        ; // ingore the rest
+    }
+    d->mouseLeaveWorkaround = true;
+
 }
 
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
