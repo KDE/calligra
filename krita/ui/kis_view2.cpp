@@ -279,7 +279,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
     connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
 
-    connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 
     if (koDocument()->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
@@ -341,14 +340,16 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     }
 
     //Workaround, by default has the same shortcut as hide/show dockers
-    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
-    if (action) {
-        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
-        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
-    }
+    if (shell()) {
 
-    if (shell())
-    {
+        connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+
+        action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
+        if (action) {
+            action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+            action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+        }
+
         KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
@@ -561,14 +562,14 @@ void KisView2::dropEvent(QDropEvent *event)
                         if (m_d->doc->isModified()) {
                             m_d->doc->save();
                         }
-                        if (shell() != 0) {
+                        if (shell()) {
                             shell()->openDocument(url);
+                            shell()->close();
                         }
-                        shell()->close();
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
-                        if (shell() != 0) {
+                        if (shell()) {
                             shell()->openDocument(url);
                         }
                     }
@@ -754,8 +755,11 @@ void KisView2::slotLoadingFinished()
      */
     if (m_d->viewConverter)
         m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
-    if (m_d->zoomManager && m_d->zoomManager->zoomController())
-        m_d->zoomManager->zoomController()->setAspectMode(true);
+    // XXX: we don't always have a shell!
+    if (shell()) {
+        if (m_d->zoomManager && m_d->zoomManager->zoomController())
+            m_d->zoomManager->zoomController()->setAspectMode(true);
+    }
     if (m_d->paintingAssistantManager){
         foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
             m_d->paintingAssistantManager->addAssistant(assist);
@@ -1098,7 +1102,9 @@ void KisView2::slotSaveIncremental()
     pDoc->saveAs(fileName);
     pDoc->setSaveInBatchMode(false);
 
-    shell()->updateCaption();
+    if (shell()) {
+        shell()->updateCaption();
+    }
 }
 
 void KisView2::slotSaveIncrementalBackup()
@@ -1164,7 +1170,9 @@ void KisView2::slotSaveIncrementalBackup()
         }
         pDoc->saveAs(fileName);
 
-        shell()->updateCaption();
+        if (shell()) {
+            shell()->updateCaption();
+        }
     }
     else { // if NOT working on a backup...
         // Navigate directory searching for latest backup version, ignore letters
@@ -1203,7 +1211,9 @@ void KisView2::slotSaveIncrementalBackup()
         pDoc->saveAs(fileName);
         pDoc->setSaveInBatchMode(false);
 
-        shell()->updateCaption();
+        if (shell()) {
+            shell()->updateCaption();
+        }
     }
 }
 
@@ -1246,27 +1256,27 @@ void KisView2::showJustTheCanvas(bool toggled)
         }
     }
 
-    if (cfg.hideDockersFullscreen()) {
+    if (cfg.hideDockersFullscreen() && shell()) {
         action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
         if (action && action->isChecked() == toggled) {
             action->setChecked(!toggled);
         }
     }
 
-    if (cfg.hideTitlebarFullscreen()) {
+    if (cfg.hideTitlebarFullscreen() && shell()) {
         action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_fullscreen"));
         if (action && action->isChecked() != toggled) {
             action->setChecked(toggled);
         }
     }
 
-    if (cfg.hideMenuFullscreen()) {
+    if (cfg.hideMenuFullscreen() && shell()) {
         if (shell()->menuBar()->isVisible() == toggled) {
             shell()->menuBar()->setVisible(!toggled);
         }
     }
 
-    if (cfg.hideToolbarFullscreen()) {
+    if (cfg.hideToolbarFullscreen() && shell()) {
         foreach(KToolBar* toolbar, shell()->toolBars()) {
             if (toolbar->isVisible() == toggled) {
                 toolbar->setVisible(!toggled);
