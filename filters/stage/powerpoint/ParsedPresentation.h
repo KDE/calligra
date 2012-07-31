@@ -30,6 +30,7 @@ public:
     MSO::CurrentUserStream currentUserStream;
     MSO::PowerPointStructs presentation;
     MSO::PicturesStream pictures;
+    MSO::SummaryInformationPropertySetStream summaryInfo;
     // map persistObjectIds to stream offsets
     QMap<quint32, quint32> persistDirectory;
     const MSO::DocumentContainer* documentContainer;

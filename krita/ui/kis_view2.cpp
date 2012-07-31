@@ -1184,9 +1184,7 @@ void KisView2::slotSaveIncrementalBackup()
             newVersion = baseNewVersion;
             newVersion.prepend("~");
             newVersion.append(".");
-            qDebug() << backupFileName << " version1";
             backupFileName.replace(regex, newVersion);
-            qDebug() << backupFileName << " version2";
             fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, this);
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
@@ -1197,7 +1195,6 @@ void KisView2::slotSaveIncrementalBackup()
                     baseNewVersion.prepend("0");
                 }
             }
-            qDebug() << "idiot";
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow

@@ -88,7 +88,7 @@ public:
     void setCursorStyle(enumCursorStyle style);
 
     QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile);
+    void setMonitorProfile(const QString & monitorProfile, bool override = false);
     static const KoColorProfile* getScreenProfile(int screen = -1);
     const KoColorProfile *displayProfile(int screen = -1);
 
@@ -264,6 +264,18 @@ public:
 
     QString exportConfiguration(const QString &filterId) const;
     void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
+
+    bool useOcio();
+    void setUseOcio(bool useOCIO);
+
+    bool useOcioEnvironmentVariable();
+    void setUseOcioEnvironmentVariable(bool useOCIO);
+
+    QString ocioConfigurationPath();
+    void setOcioConfigurationPath(const QString &path);
+
+    QString ocioLutPath();
+    void setOcioLutPath(const QString &path);
 
     bool useSystemMonitorProfile() const;
     void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);

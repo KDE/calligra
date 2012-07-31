@@ -193,7 +193,8 @@ private slots:
 private:
     ReportData *createReportData( const QDomElement &connection );
     ReportData *createReportData( const QString &type );
-    void exportToOdt( KoReportRendererContext &context );
+    void exportToOdtTable( KoReportRendererContext &context );
+    void exportToOdtFrames( KoReportRendererContext &context );
     void exportToOds( KoReportRendererContext &context );
     void exportToHtml( KoReportRendererContext &context );
     void exportToXHtml( KoReportRendererContext &context );
@@ -235,9 +236,6 @@ public:
     explicit ReportDesignDialog( QWidget *parent = 0 );
     
     ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
-    
-    /// Edit the report definition in @p view
-    ReportDesignDialog( KPlato::ReportView* view, QWidget* parent = 0 );
 
     QDomDocument document() const;
 
