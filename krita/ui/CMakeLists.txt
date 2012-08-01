@@ -209,6 +209,11 @@ if(HAVE_OPENGL)
             opengl/kis_opengl_vertex_shader.cpp
             opengl/kis_opengl_program.cpp
             opengl/kis_opengl_gradient_program.cpp
+
+            opengl2/kis_gl2_canvas.cpp
+            opengl2/kis_gl2_tilemanager.cpp
+            opengl2/kis_gl2_tile.cpp
+            opengl2/kis_gl2_tile_updater.cpp
             )
     endif(HAVE_GLEW)
     set(kritaui_LIB_SRCS
