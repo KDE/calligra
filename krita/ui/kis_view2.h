@@ -52,6 +52,7 @@ class KisPaintingAssistantsManager;
 class KisGridManager;
 class KoFavoriteResourceManager;
 class KisPaintopBox;
+class KisCanvasController;
 
 /**
  * Krita view class
@@ -118,6 +119,7 @@ public:  // Krita specific interfaces
     /// and knows where to start painting on the canvas widget, i.e.,
     /// the document offset.
     KoCanvasController * canvasController();
+    KisCanvasController *canvasControllerWidget();
 
     /// The node manager handles everything about nodes
     KisNodeManager * nodeManager();

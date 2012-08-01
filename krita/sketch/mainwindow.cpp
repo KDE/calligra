@@ -22,6 +22,7 @@
 #include <QResizeEvent>
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
+#include <QDeclarativeError>
 
 #include "constants.h"
 #include "settings.h"
@@ -29,7 +30,9 @@
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include "klibloader.h"
+#include "kis_canvas_controller.h"
 
+#include <KoCanvasControllerWidget.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 
@@ -51,24 +54,24 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
     d->constants = new Constants( this );
     d->settings = new Settings( this );
 
-    QDeclarativeView* view = new QDeclarativeView();
-    view->rootContext()->setContextProperty( "Constants", d->constants );
-    view->rootContext()->setContextProperty( "Settings", d->settings );
-    view->setSource( QUrl( "qrc:/main.qml" ) );
-    view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
-
 
     KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
     KisDoc2 *doc = static_cast<KisDoc2*>(factory->create(0, "KritaPart"));
     qDebug() << "doc:" << doc << "views" << doc->viewCount();
 
-    doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
-    KoView *kisView = qobject_cast<KisView2*>(doc->createView(this));
+    doc->newImage("test", 1000, 1000, KoColorSpaceRegistry::instance()->rgb8());
+    KisView2 *kisView = qobject_cast<KisView2*>(doc->createView(this));
     Q_ASSERT(doc->viewCount() > 0);
 
-    view->setViewport(kisView->canvas());
+    QDeclarativeView *view = kisView->canvasControllerWidget();
+    view->rootContext()->setContextProperty( "Constants", d->constants );
+    view->rootContext()->setContextProperty( "Settings", d->settings );
+    view->setSource( QUrl( "qrc:/main.qml" ) );
+    view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
     setCentralWidget( view );
+
+    qDebug() << view->errors();
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

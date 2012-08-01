@@ -193,7 +193,7 @@ public:
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KisCoordinatesConverter * viewConverter;
-    KoCanvasController * canvasController;
+    KisCanvasController * canvasController;
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
@@ -238,7 +238,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->doc = doc;
     m_d->viewConverter = new KisCoordinatesConverter();
 
-    KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
+    KisCanvasController *canvasController = new KisCanvasController(this, actionCollection());
     canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
@@ -628,6 +628,11 @@ KisSelectionManager * KisView2::selectionManager()
 }
 
 KoCanvasController * KisView2::canvasController()
+{
+    return m_d->canvasController;
+}
+
+KisCanvasController *KisView2::canvasControllerWidget()
 {
     return m_d->canvasController;
 }
