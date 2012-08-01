@@ -6,12 +6,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR})
 
 set(kritasketch_SRCS
-    constants.cpp
-    settings.cpp
+    Constants.cpp
+    Settings.cpp
     main.cpp
-    mainwindow.cpp
+    MainWindow.cpp
+    KisSketchView.cpp
+    KisDeclarativeCanvasItem.cpp
+    CanvasControllerDeclarative.cpp
+    DocumentListModel.cpp
+    IconImageProvider.cpp
+    ProgressProxy.cpp
 )
-qt4_add_resources(kritasketch_SRCS qml/krita-sketch.qrc)
+
 kde4_add_executable(kritasketch ${kritasketch_SRCS})
 
 target_link_libraries(kritasketch
