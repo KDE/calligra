@@ -224,7 +224,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 
 ////////////
 KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
-    : QAbstractScrollArea(parent)
+    : QDeclarativeView(parent)
     , KoCanvasController(actionCollection)
     , d(new Private(this))
 {

@@ -26,7 +26,7 @@
 
 #include "flake_export.h"
 
-#include <QAbstractScrollArea>
+#include <QDeclarativeView>
 #include <QMap>
 #include <QString>
 
@@ -39,7 +39,7 @@ class KoView;
 /**
  * KoCanvasController implementation for QWidget based canvases
  */
-class FLAKE_EXPORT KoCanvasControllerWidget : public QAbstractScrollArea, public KoCanvasController
+class FLAKE_EXPORT KoCanvasControllerWidget : public QDeclarativeView, public KoCanvasController
 {
     Q_OBJECT
 public:
