@@ -827,7 +827,7 @@ KisGroupLayerSP KisImage::rootLayer() const
     return m_d->rootLayer;
 }
 
-KisPaintDeviceSP KisImage::projection()
+KisPaintDeviceSP KisImage::projection() const
 {
     Q_ASSERT(m_d->rootLayer);
     KisPaintDeviceSP projection = m_d->rootLayer->projection();
