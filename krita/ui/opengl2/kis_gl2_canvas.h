@@ -40,11 +40,16 @@ public:
     virtual void paintGL();
     virtual void resizeGL(int w, int h);
 
+    QPoint canvasOffset() const;
+    qreal zoom() const;
+
+public slots:
+    void configChanged();
+    void update(const QRect& area);
+
 private:
     class Private;
     Private * const d;
-public slots:
-    void configChanged();
 };
 
 #endif // KIS_GL2_CANVAS_H

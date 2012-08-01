@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) Lukáš Tvrdý <lukast.dev@gmail.com>, (C) 2010
+ * Copyright (C) LukÃ¡Å¡ TvrdÃ½ <lukast.dev@gmail.com>, (C) 2010
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -59,6 +59,7 @@
 #include "opengl/kis_opengl_image_textures.h"
 #ifdef HAVE_OPENGL
 #include <QGLFormat>
+#include "opengl2/kis_gl2_canvas.h"
 #endif
 
 //Favorite resource Manager
@@ -345,17 +346,26 @@ void KisCanvas2::createQPainterCanvas()
 
 void KisCanvas2::createOpenGLCanvas()
 {
-#ifdef HAVE_OPENGL
-    m_d->currentCanvasIsOpenGL = true;
-
-    // XXX: The image isn't done loading here!
-    m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
-    KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
-    m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
-    setCanvasWidget(canvasWidget);
-#else
-    qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
-#endif
+//#ifdef HAVE_OPENGL
+//     m_d->currentCanvasIsOpenGL = true;
+//
+//     // XXX: The image isn't done loading here!
+//     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
+//     KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
+//     m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
+//     setCanvasWidget(canvasWidget);
+    KisGL2Canvas* canvas = new KisGL2Canvas(this, m_d->coordinatesConverter, m_d->view);
+    m_d->prescaledProjection = new KisPrescaledProjection();
+    m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
+    m_d->prescaledProjection->setMonitorProfile(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
+    //canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
+    setCanvasWidget(canvas);
+    m_d->currentCanvasUsesOpenGLShaders = true;
+    canvas->initialize(m_d->view->image());
+    connect(m_d->view->image(), SIGNAL(sigImageUpdated(QRect)), canvas, SLOT(update(QRect)));
+//#else
+    //qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
+//#endif
 }
 
 void KisCanvas2::createCanvas(bool useOpenGL)

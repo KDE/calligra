@@ -25,6 +25,7 @@
 
 #define KIS_GL2_TILE_SIZE 256
 
+class QGLShaderProgram;
 class QGLBuffer;
 class KisGL2Tile
 {
@@ -35,7 +36,9 @@ public:
     QRect area() const;
     uint glTexture() const;
 
-    static const QGLBuffer* tileVertexBuffer();
+    void render(QGLShaderProgram* shader, int location);
+
+    static QGLBuffer* tileVertexBuffer();
 
 private:
     QRect m_area;

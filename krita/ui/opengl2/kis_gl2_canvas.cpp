@@ -29,6 +29,8 @@
 #include <kis_image.h>
 
 #include "kis_gl2_tilemanager.h"
+#include <kis_view2.h>
+#include <kis_canvas2.h>
 
 class KisGL2Canvas::Private
 {
@@ -59,6 +61,8 @@ bool KisGL2Canvas::callFocusNextPrevChild(bool next)
 
 void KisGL2Canvas::initialize(KisImageWSP image)
 {
+    const_cast<QGLContext*>(context())->makeCurrent();
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -72,14 +76,22 @@ void KisGL2Canvas::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Draw the background
-
-    //Draw the tiles
+    d->tileManager->render();
 }
 
 void KisGL2Canvas::resizeGL(int w, int h)
 {
     glViewport(0, 0, w, h);
+}
+
+QPoint KisGL2Canvas::canvasOffset() const
+{
+    return canvas()->documentOffset();
+}
+
+qreal KisGL2Canvas::zoom() const
+{
+    return canvas()->viewConverter()->zoom();
 }
 
 void KisGL2Canvas::configChanged()
@@ -88,4 +100,9 @@ void KisGL2Canvas::configChanged()
     QColor clearColor = cfg.canvasBorderColor();
 
     glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), 1.0);
+}
+
+void KisGL2Canvas::update(const QRect& area)
+{
+    d->tileManager->update(area);
 }

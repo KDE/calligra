@@ -35,7 +35,7 @@ public:
     virtual ~KisGL2TileManager();
 
     void initialize(KisImageWSP image);
-    void update(KisImageWSP image, const QRect &area);
+    void update(const QRect &area);
     void render();
 
 private:

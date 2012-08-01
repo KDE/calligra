@@ -20,9 +20,14 @@
 
 #include "kis_gl2_tile.h"
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 #include <QGLBuffer>
+#include <QGLShader>
+
+#include <Eigen/Geometry>
+
+using namespace Eigen;
 
 QGLBuffer* KisGL2Tile::m_vertexBuffer = 0;
 
@@ -34,7 +39,7 @@ KisGL2Tile::KisGL2Tile(const QRect& area)
     glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, KIS_GL2_TILE_SIZE, KIS_GL2_TILE_SIZE, 0, GL_RGBA8, GL_UNSIGNED_BYTE, 0);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, KIS_GL2_TILE_SIZE, KIS_GL2_TILE_SIZE, 0, GL_RGBA8, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -53,10 +58,41 @@ unsigned int KisGL2Tile::glTexture() const
     return m_glTexture;
 }
 
-const QGLBuffer* KisGL2Tile::tileVertexBuffer()
+void KisGL2Tile::render(QGLShaderProgram* shader, int location)
+{
+    QMatrix4x4 mat;
+    mat.translate(m_area.x(), m_area.y());
+    mat.scale(m_area.width(), m_area.height());
+
+    shader->setUniformValue(location, mat.transposed());
+    glBindTexture(GL_TEXTURE_2D, m_glTexture);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+QGLBuffer* KisGL2Tile::tileVertexBuffer()
 {
     if(!m_vertexBuffer) {
         m_vertexBuffer = new QGLBuffer(QGLBuffer::VertexBuffer);
+        m_vertexBuffer->create();
+        m_vertexBuffer->bind();
+
+        QVector<float> vertices;
+        vertices << 0.0f <<  0.0f << 0.0f;
+        vertices << 1.0f <<  0.0f << 0.0f;
+        vertices << 1.0f << -1.0f << 0.0f;
+        vertices << 0.0f << -1.0f << 0.0f;
+        int vertSize = sizeof(float) * vertices.count();
+        QVector<float> uvs;
+        uvs << 0.f << 0.f;
+        uvs << 1.f << 0.f;
+        uvs << 1.f << 1.f;
+        uvs << 0.f << 1.f;
+        int uvSize = sizeof(float) * uvs.count();
+
+        m_vertexBuffer->allocate(vertSize + uvSize);
+        m_vertexBuffer->write(0, reinterpret_cast<void*>(vertices.data()), vertSize);
+        m_vertexBuffer->write(vertSize, reinterpret_cast<void*>(uvs.data()), uvSize);
+        m_vertexBuffer->release();
     }
     return m_vertexBuffer;
 }
