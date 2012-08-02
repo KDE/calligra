@@ -260,9 +260,6 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     Q_ASSERT( m_view );
     if (m_view->activePage()) {
         m_animationsModel = animationsByPage(m_view->activePage());
-        KPrDocument *doc = dynamic_cast<KPrDocument *>(m_view->kopaDocument());
-        Q_ASSERT(doc);
-        m_animationsModel->setDocument(doc);
         m_animationsView->setModel(m_animationsModel);
         //Config columns
         m_animationsView->setColumnWidth(1, 3);

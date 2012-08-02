@@ -249,21 +249,22 @@ void KPrAnimationsTimeLineView::requestContextMenu(QPoint pos)
 
 int KPrAnimationsTimeLineView::stepsScale()
 {
-    if (numberOfSteps() < 15)
+    int stepsNumber = numberOfSteps();
+    if (stepsNumber < 15)
         return 1;
-    else if (numberOfSteps() < 50)
+    else if (stepsNumber < 50)
         return 2;
-    else if (numberOfSteps() < 100)
+    else if (stepsNumber < 100)
         return 5;
-    else if (numberOfSteps() < 200)
+    else if (stepsNumber < 200)
         return 10;
-    else if (numberOfSteps() < 300)
+    else if (stepsNumber < 300)
         return 20;
-    else if (numberOfSteps() < 500)
+    else if (stepsNumber < 500)
         return 25;
-    else if (numberOfSteps() < SCALE_LIMIT)
+    else if (stepsNumber < SCALE_LIMIT)
         return 60;
-    return 1;
+    return 60;
 }
 
 qreal KPrAnimationsTimeLineView::maxLineLength() const
@@ -278,7 +279,7 @@ void KPrAnimationsTimeLineView::setMaxLineLength(qreal length)
     }
 }
 
-QColor KPrAnimationsTimeLineView::colorforRow(int row)
+QColor KPrAnimationsTimeLineView::barColor(int row)
 {
     if (m_model) {
         KPrShapeAnimation::PresetClass type =
@@ -296,7 +297,7 @@ QColor KPrAnimationsTimeLineView::colorforRow(int row)
     return Qt::gray;
 }
 
-int KPrAnimationsTimeLineView::calculateStartOffset(int row)
+int KPrAnimationsTimeLineView::calculateStartOffset(int row) const
 {
     //calculate real start
     KPrShapeAnimation::NodeType triggerEvent = static_cast<KPrShapeAnimation::NodeType>(
@@ -310,7 +311,7 @@ int KPrAnimationsTimeLineView::calculateStartOffset(int row)
     }
     if (triggerEvent == KPrShapeAnimation::WithPrevious) {
         QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::NodeType));
-        return m_shapeModel->scaleBeginForAnimation(sourceIndex);
+        return m_shapeModel->animationStart(sourceIndex);
     }
     return 0;
 }

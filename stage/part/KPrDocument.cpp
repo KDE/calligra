@@ -192,7 +192,7 @@ KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 
 KoPAMasterPage * KPrDocument::newMasterPage()
 {
-    return new KPrMasterPage();
+    return new KPrMasterPage(this);
 }
 
 KoOdf::DocumentType KPrDocument::documentType() const
@@ -216,7 +216,6 @@ void KPrDocument::addAnimation( KPrShapeAnimation * animation )
         shape->setApplicationData( applicationData );
     }
     applicationData->animations().insert( animation );
-    emit animationAdded(animation);
 }
 
 void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData )
@@ -234,7 +233,6 @@ void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFro
         Q_ASSERT( applicationData );
         applicationData->animations().remove( animation );
     }
-    emit animationRemoved(animation);
 }
 
 void KPrDocument::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation)
@@ -244,7 +242,6 @@ void KPrDocument::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnim
 
     // remove animation from the list of animations
     animations.replaceAnimation(oldAnimation, newAnimation);
-    emit animationReplaced(oldAnimation, newAnimation);
 }
 
 void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )

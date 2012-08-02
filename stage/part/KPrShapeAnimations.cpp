@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KPrShapeAnimations.h"
+
 //Qt Headers
 #include <QList>
 #include <QSet>
@@ -26,8 +28,6 @@
 #include <QPainterPath>
 
 //Stage Headers
-#include "KPrPage.h"
-#include "KPrView.h"
 #include "KPrDocument.h"
 #include "animations/KPrAnimationSubStep.h"
 #include "animations/KPrAnimateMotion.h"
@@ -55,13 +55,13 @@
 const int COLUMN_COUNT = 10;
 const int INVALID = -1;
 
-KPrShapeAnimations::KPrShapeAnimations(QObject *parent)
+KPrShapeAnimations::KPrShapeAnimations(KPrDocument *document, QObject *parent)
     :QAbstractTableModel(parent)
     , m_currentEditedAnimation(0)
     , m_firstEdition(true)
     , m_oldBegin(INVALID)
     , m_oldDuration(INVALID)
-    , m_document(0)
+    , m_document(document)
 {
 }
 
@@ -447,12 +447,6 @@ void KPrShapeAnimations::setTimeRange(KPrShapeAnimation *item, const int begin, 
     }
 }
 
-void KPrShapeAnimations::setDocument(KPrDocument *document)
-{
-    m_document = document;
-    reset();
-}
-
 int KPrShapeAnimations::animationEndByIndex(const QModelIndex &index)
 {
     if (index.isValid()) {
@@ -465,7 +459,7 @@ int KPrShapeAnimations::animationEndByIndex(const QModelIndex &index)
         }
         if (previousNodeType == KPrShapeAnimation::WithPrevious) {
             return previousAnimation->timeRange().second +
-                    scaleBeginForAnimation(this->index(index.row() - 1, index.column(), QModelIndex()));
+                    animationStart(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
         else if (previousNodeType == KPrShapeAnimation::AfterPrevious) {
             return previousAnimation->timeRange().second +
@@ -475,7 +469,7 @@ int KPrShapeAnimations::animationEndByIndex(const QModelIndex &index)
     return 0;
 }
 
-int KPrShapeAnimations::scaleBeginForAnimation(const QModelIndex &index)
+int KPrShapeAnimations::animationStart(const QModelIndex &index)
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
@@ -486,7 +480,7 @@ int KPrShapeAnimations::scaleBeginForAnimation(const QModelIndex &index)
             return previousAnimation->timeRange().first;
         }
         if (previousNodeType == KPrShapeAnimation::WithPrevious) {
-            return scaleBeginForAnimation(this->index(index.row() - 1, index.column(), QModelIndex()));
+            return animationStart(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
         else if (previousNodeType == KPrShapeAnimation::AfterPrevious) {
             return animationEndByIndex(this->index(index.row() - 1, index.column(), QModelIndex()));

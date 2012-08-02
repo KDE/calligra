@@ -114,10 +114,10 @@ protected:
     void setMaxLineLength(qreal length);
 
     /// Return color of the bar depending on animation type: entrance, exit, etc.
-    QColor colorforRow(int row);
+    QColor barColor(int row);
 
 private:
-    int calculateStartOffset(int row);
+    int calculateStartOffset(int row) const;
 
     KPrTimeLineView *m_view;
     KPrTimeLineHeader *m_header;
