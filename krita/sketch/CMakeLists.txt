@@ -1,7 +1,7 @@
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} 
-                    ${CMAKE_CURRENT_SOURCE_DIR}/.. 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/..
                     ${KRITA_INCLUDES}
                     ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -11,7 +11,6 @@ set(kritasketch_SRCS
     main.cpp
     MainWindow.cpp
     KisSketchView.cpp
-    KisDeclarativeCanvasItem.cpp
     CanvasControllerDeclarative.cpp
     DocumentListModel.cpp
     IconImageProvider.cpp
@@ -26,6 +25,7 @@ target_link_libraries(kritasketch
     komain
     kritaui
     kowidgets
+    ${GLEW_LIBRARY}
 )
 
 install(TARGETS kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
