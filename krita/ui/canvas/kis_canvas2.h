@@ -120,6 +120,12 @@ public: // KoCanvasBase implementation
 
     virtual const QWidget* canvasWidget() const;
 
+    void setCanvasItem(QGraphicsObject *canvasItem);
+
+    virtual QGraphicsObject *canvasItem();
+
+    virtual const QGraphicsObject *canvasItem() const;
+
     virtual KoUnit unit() const;
 
     virtual KoToolProxy* toolProxy() const;

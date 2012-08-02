@@ -77,6 +77,7 @@ public:
         : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
+        , canvasItem(0)
         , shapeManager(new KoShapeManager(parent))
         , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
@@ -95,6 +96,7 @@ public:
     KisCoordinatesConverter *coordinatesConverter;
     KisView2 *view;
     KisCanvasWidgetBase *canvasWidget;
+    QGraphicsObject *canvasItem;
     KoShapeManager *shapeManager;
     KoColorProfile *monitorProfile;
     KoColorConversionTransformation::Intent renderingIntent;
@@ -321,6 +323,21 @@ const QWidget* KisCanvas2::canvasWidget() const
     return m_d->canvasWidget->widget();
 }
 
+void KisCanvas2::setCanvasItem(QGraphicsObject *canvasItem)
+{
+    Q_ASSERT(!m_d->canvasItem);
+    m_d->canvasItem = canvasItem;
+}
+
+QGraphicsObject *KisCanvas2::canvasItem()
+{
+    return m_d->canvasItem;
+}
+
+const QGraphicsObject *KisCanvas2::canvasItem() const
+{
+    return m_d->canvasItem;
+}
 
 KoUnit KisCanvas2::unit() const
 {
