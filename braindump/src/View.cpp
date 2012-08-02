@@ -189,7 +189,8 @@ void View::initActions()
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
     // Shapes menu
-    KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18nc("Duplicate selection", "&Duplicate"), this);
+    // TODO: get an icon "edit-duplicate"
+    KAction *actionDuplicate  = new KAction(i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("shapes_duplicate", actionDuplicate);
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
