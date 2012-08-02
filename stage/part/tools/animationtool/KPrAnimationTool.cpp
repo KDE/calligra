@@ -84,7 +84,7 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.restore();
     }
     // Paint motion paths
-    QList<KoShape *> currentShapes = canvas()->shapeManager()->shapes();
+    /*QList<KoShape *> currentShapes = canvas()->shapeManager()->shapes();
     foreach (KoShape* shape, currentShapes) {
         if (KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>(shape->applicationData())) {
             foreach(KPrShapeAnimation *anim, applicationData->animations()) {
@@ -117,7 +117,7 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
                 }
             }
         }
-    }
+    }*/
     KoCreatePathTool::paint(painter, converter);
 }
 
@@ -128,7 +128,7 @@ void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShap
     Q_UNUSED(shapes);
     useCursor(Qt::ArrowCursor);
     repaintDecorations();
-    //loadMotionPathShapes();
+    loadMotionPathShapes();
     KoCreatePathTool::activate(toolActivation, shapes);
 }
 
@@ -224,7 +224,14 @@ void KPrAnimationTool::loadMotionPathShapes()
                             KoPathShape *path = KoPathShape::createShapeFromPainterPath(outlinePath);
                             path->setPosition(QPointF(shape->position().x(), shape->position().y() + shape->size().height()/2));
 
-                            //path->setStroke(shape->stroke());
+                            KoShapeStroke *stroke = new KoShapeStroke();
+                            QVector<qreal> dashes;
+                            qreal space = 8;
+                            dashes << 1 << space << 3 << space;
+                            stroke->setLineStyle(Qt::DashLine, dashes);
+                            stroke->setLineWidth(4);
+                            stroke->setColor(Qt::gray);
+                            path->setStroke(stroke);
                             if (!m_motionP.contains(anim)) {
                                 currentAnimation = anim;
                                 m_motionP.insert(anim, path);
@@ -244,7 +251,7 @@ void KPrAnimationTool::addPathShape(KoPathShape *pathShape)
 {
     qDebug() << "add path";
     m_motionPaths.append(pathShape);
-    //canvas()->shapeManager()->addShape(pathShape);
+    canvas()->shapeManager()->addShape(pathShape);
 }
 
 void KPrAnimationTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
