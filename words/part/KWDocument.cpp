@@ -829,8 +829,7 @@ void KWDocument::removeFrameFromViews(KWFrame *frame)
 QList<KoDocument::CustomDocumentWidgetItem> KWDocument::createCustomDocumentWidgets(QWidget *parent)
 {
     KoColumns columns;
-    columns.columns = 1;
-    columns.columnSpacing = m_config.defaultColumnSpacing();
+    columns.gapWidth = m_config.defaultColumnSpacing();
 
     QList<KoDocument::CustomDocumentWidgetItem> widgetList;
     KoDocument::CustomDocumentWidgetItem item;

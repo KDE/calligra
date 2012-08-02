@@ -243,6 +243,7 @@ set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
+if (NOT CREATIVEONLY)
 ##
 ## Test for soprano
 ##
@@ -285,6 +286,8 @@ if( MARBLE_FOUND )
         endif( SETMARBLEWIDGET)
     endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
+
+endif (NOT CREATIVEONLY)
 
 
 

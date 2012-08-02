@@ -4,6 +4,7 @@
  * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2010 by Nokia, Matus Hanzes
+ * Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -158,7 +159,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     }
 
     // create main text frame. All columns of them.
-    int columns = page.pageStyle().columns().columns;
+    int columns = page.pageStyle().columns().count;
     Q_ASSERT(columns >= 1);
     KWTextFrameSet *fs = getOrCreate(Words::MainTextFrameSet, page);
     QRectF rect(QPointF(0, page.offsetInDocument()), QSizeF(page.width(), page.height()));
@@ -230,19 +231,18 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                             - layout.leftPadding - layout.rightPadding;
 
     KWPageStyle pageStyle = page.pageStyle();
-    const int columns = pageStyle.columns().columns;
-    int columnsCount = columns;
+    KoColumns columns = pageStyle.columns();
     int columnIndex = 0;
     KWFrame **main;
     KWFrame *footer = 0, *header = 0;
     KWFrame *pageBackground = 0;
-    main = new KWFrame*[columnsCount];
-    if (columns > 0)
+    main = new KWFrame*[columns.count];
+    if (columns.count > 0)
         main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     QList<KWFrame *> frames = framesInPage(pageRect);
 
-    kDebug(32001) << "pageNumber=" << pageNumber << "columns=" << pageStyle.columns().columns << "frameCount=" << frames.count();
+    kDebug(32001) << "pageNumber=" << pageNumber << "columns=" << columns.count << "frameCount=" << frames.count();
     foreach (KWFrame *frame, frames) {
         KWTextFrameSet *textFrameSet = 0;
         switch (frame->frameSet()->type()) {
@@ -298,8 +298,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             break;
         }
         case Words::MainTextFrameSet: {
-            if (columnIndex == columnsCount) {
-                kWarning(32001) << "Too many columns present on page, ignoring 1, columnsCount=" << columnsCount;
+            if (columnIndex == columns.count) {
+                kWarning(32001) << "Too many columns present on page, ignoring 1, columns.count=" << columns.count;
                 break;
             }
             main[columnIndex] = frame;
@@ -320,9 +320,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     pageBackground = frameOn(m_backgroundFrameSet, pageNumber);
 
     --minZIndex;
-    for (int i = 0; i < columns; ++i) {
-        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
-        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWFrame for column=%1 columnCount=%2").arg(i).arg(columns).toLocal8Bit());
+    for (int i = 0; i < columns.count; ++i) {
+        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWFrame for column=%1 columnCount=%2").arg(i).arg(columns.count).toLocal8Bit());
+        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWFrame for column=%1 columnCount=%2").arg(i).arg(columns.count).toLocal8Bit());
         if (main[i] && main[i]->shape())
             main[i]->shape()->setZIndex(minZIndex);
     }
@@ -374,31 +374,62 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     }
 
     // actually move / size the frames.
-    if (columns > 0 && main[0]) {
-        const qreal columnWidth = (textWidth
-                - page.pageStyle().columns().columnSpacing * (columns- 1 ))/ columns;
-        const qreal columnStep = columnWidth + page.pageStyle().columns().columnSpacing;
-        QPointF *points = new QPointF[columns];
-        for (int i = 0; i < columns; i++)
-            points[i] = QPointF(left + layout.leftMargin + layout.leftPadding +columnStep * i, resultingPositions[3]);
-        for (int i = 0; i < columns; i++) {
-            for (int f = 0; f < columns; f++) {
+    if (columns.count > 0 && main[0]) {
+        const qreal fullColumnHeight = resultingPositions[4] - resultingPositions[3];
+        const qreal columnsXOffset = left + layout.leftMargin + layout.leftPadding;
+
+        QRectF *columnRects = new QRectF[columns.count];
+        // uniform columns?
+        if (columns.columnData.isEmpty()) {
+            const qreal columnWidth = (textWidth - columns.gapWidth * (columns.count - 1)) / columns.count;
+            const qreal columnStep = columnWidth + columns.gapWidth;
+
+            for (int i = 0; i < columns.count; i++) {
+                columnRects[i] = QRectF(
+                    columnsXOffset + columnStep * i,
+                    resultingPositions[3],
+                    columnWidth,
+                    fullColumnHeight);
+            }
+        } else {
+            qreal totalRelativeWidth = 0.0;
+            foreach(const KoColumns::ColumnDatum &cd, columns.columnData) {
+                totalRelativeWidth += cd.relativeWidth;
+            }
+            int relativeColumnXOffset = 0;
+            for (int i = 0; i < columns.count; i++) {
+                const KoColumns::ColumnDatum &columnDatum = columns.columnData.at(i);
+                const qreal columnWidth = textWidth * columnDatum.relativeWidth / totalRelativeWidth;
+                const qreal columnXOffset = textWidth * relativeColumnXOffset / totalRelativeWidth;
+
+                columnRects[i] = QRectF(
+                    columnsXOffset + columnXOffset + columnDatum.leftMargin,
+                    resultingPositions[3] + columnDatum.topMargin,
+                    columnWidth - columnDatum.leftMargin - columnDatum.rightMargin,
+                    fullColumnHeight - columnDatum.topMargin - columnDatum.bottomMargin);
+
+                relativeColumnXOffset += columnDatum.relativeWidth;
+            }
+        }
+        // what is this doing? Friedrich
+        for (int i = 0; i < columns.count; i++) {
+            for (int f = 0; f < columns.count; f++) {
                 if (f == i) continue;
-                if (qAbs(main[f]->shape()->position().x() - points[i].x()) < 10.0) {
+                if (qAbs(main[f]->shape()->position().x() - columnRects[i].x()) < 10.0) {
                     qSwap(main[f], main[i]);
                     break;
                 }
             }
         }
 
-        for (int i = columns - 1; i >= 0; i--) {
+        for (int i = columns.count - 1; i >= 0; i--) {
             main[i]->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(Words::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
-            shape->setPosition(points[i]);
-            shape->setSize(QSizeF(columnWidth, resultingPositions[4] - resultingPositions[3]));
+            shape->setPosition(columnRects[i].topLeft());
+            shape->setSize(columnRects[i].size());
         }
-        delete[] points;
+        delete[] columnRects;
 
         // We need to store the content rect so layout can place it's anchored shapes
         // correctly
