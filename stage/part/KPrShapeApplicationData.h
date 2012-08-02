@@ -24,10 +24,11 @@
 #include <KoShapeApplicationData.h>
 
 #include <QSet>
+#include "stage_export.h"
 
 class KPrShapeAnimation;
 
-class KPrShapeApplicationData : public KoShapeApplicationData
+class STAGE_EXPORT KPrShapeApplicationData : public KoShapeApplicationData
 {
 public:
     KPrShapeApplicationData();

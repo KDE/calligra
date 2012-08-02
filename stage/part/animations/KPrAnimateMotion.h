@@ -23,8 +23,9 @@
 #include "KPrAnimationBase.h"
 
 #include <QPainterPath>
+#include "stage_export.h"
 
-class KPrAnimateMotion : public KPrAnimationBase
+class STAGE_EXPORT KPrAnimateMotion : public KPrAnimationBase
 {
 public:
     KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
@@ -33,6 +34,7 @@ public:
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
+    virtual QPainterPath path();
 
 protected:
     virtual void next(int currentTime);

@@ -21,13 +21,15 @@
 #ifndef KPRANIMATIONTOOL_H
 #define KPRANIMATIONTOOL_H
 
-#include <KoToolBase.h>
+#include <KoCreatePathTool.h>
+#include <QMap>
+#include <animations/KPrShapeAnimation.h>
 
 /**
  * The animation tool (associated with the clapperboard icon) is the tool in KPresenter where the user
  * animates shapes and sets up slide transitions.
  */
-class KPrAnimationTool : public KoToolBase
+class KPrAnimationTool : public KoCreatePathTool
 {
     Q_OBJECT
 public:
@@ -48,8 +50,8 @@ public slots:
 public: // Events
 
     virtual void mousePressEvent( KoPointerEvent *event );
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    //virtual void mouseMoveEvent( KoPointerEvent *event );
+    //virtual void mouseReleaseEvent( KoPointerEvent *event );
 //    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
 //    virtual void keyPressEvent(QKeyEvent *event);
@@ -58,9 +60,20 @@ public: // Events
 protected:
     QRectF handlesSize();
 
-    QList<QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
+
+    void loadMotionPathShapes();
+
+    virtual void addPathShape(KoPathShape *pathShape);
+
+    virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
 private:
+
+    QList<KoPathShape *>m_motionPaths;
+    QMap<KPrShapeAnimation *, KoPathShape *> m_motionP;
+    KPrShapeAnimation *currentAnimation;
+    KoPathShape *currentPath;
 };
 
 #endif

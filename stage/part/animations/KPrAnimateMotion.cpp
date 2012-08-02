@@ -47,7 +47,7 @@ bool KPrAnimateMotion::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
         KoPathShapeLoader loader(&pathShape);
         loader.parseSvg(path, true);
         m_path = pathShape.outline();
-        qDebug() << Q_FUNC_INFO << m_path << path;
+        //qDebug() << Q_FUNC_INFO << m_path << path;
     }
     KPrAnimationBase::loadOdf(element, context);
 
@@ -84,13 +84,18 @@ void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
     }
 }
 
+QPainterPath KPrAnimateMotion::path()
+{
+    return m_path;
+}
+
 void KPrAnimateMotion::next(int currentTime)
 {
     Q_ASSERT(m_animationCache);
     QSizeF pageSize = m_animationCache->pageSize();
     QPointF point = m_path.pointAtPercent(qreal(currentTime)/qreal(animationDuration()));
     QPointF offset(point.x() * pageSize.width(), point.y() * pageSize.height());
-    qDebug() << Q_FUNC_INFO << currentTime << point << offset;
+    //qDebug() << Q_FUNC_INFO << currentTime << point << offset;
 
     KoShape *shape = m_shapeAnimation->shape();
     QTransform transform;
