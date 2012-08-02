@@ -33,6 +33,7 @@ public:
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
+    QPainterPath path();
 
 protected:
     virtual void next(int currentTime);
