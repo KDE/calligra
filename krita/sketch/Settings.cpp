@@ -28,7 +28,7 @@ class Settings::Private
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
-    d->currentPreset = QString( ":/images/red.png" );
+    d->currentPreset = QString( "images/red.png" );
 }
 
 Settings::~Settings()

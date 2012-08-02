@@ -17,51 +17,22 @@
  */
 
 import QtQuick 1.1
-import Qt.labs.particles 1.0
-import ":/components"
-import ":/panels"
+import org.krita.sketch 1.0 as Krita
+import "components"
+import "panels"
 
 Page {
-    Rectangle {
+    //anchors.fill: parent;
+    Item {
         anchors.fill: parent;
-        color: "grey"
 
-        DropShadow {
-            anchors.centerIn: parent;
-            width: parent.width * 0.75;
-            height: parent.height * 0.75;
+        Krita.SketchView {
+            //anchors.fill: parent;
+            width: parent.width;
+            onWidthChanged: console.log("new width %1".arg(width));
+            height: parent.height;
 
-            Rectangle {
-                anchors.fill: parent;
-                color: "white";
-
-                  Particles {
-                    id: particles;
-
-                    count: 100;
-                    emissionRate: 0;
-
-                    fadeInDuration: 0;
-                    fadeOutDuration: 10000;
-
-                    lifeSpan: 15000;
-
-                    source: Settings.currentPreset;
-                }
-
-                MouseArea {
-                    anchors.fill: parent;
-
-                    onPressed: update( mouse );
-                    onPositionChanged: update( mouse );
-
-                    function update( mouse ) {
-                        particles.x = mouse.x;
-                        particles.y = mouse.y;
-                        particles.burst(1);
-                    }
-                }
-            }
+            //Component.onCompleted: createDocument();
         }
 
         PanelBar { height: parent.height; width: parent.width; }

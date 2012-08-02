@@ -20,6 +20,8 @@
 
 #include "MainWindow.h"
 
+#include "opengl/kis_opengl.h"
+
 #include <QApplication>
 #include <QResizeEvent>
 #include <QDeclarativeView>
@@ -42,8 +44,7 @@
 #include "IconImageProvider.h"
 #include "CanvasControllerDeclarative.h"
 #include "DocumentListModel.h"
-
-#include "calligraversion.h"
+#include "KisSketchView.h"
 
 #include "Constants.h"
 #include "Settings.h"
@@ -66,28 +67,34 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->constants = new Constants( this );
     d->settings = new Settings( this );
 
+    qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
+    qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
+
     d->view = new QDeclarativeView();
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
 
     d->view->rootContext()->setContextProperty("Constants", d->constants);
     d->view->rootContext()->setContextProperty("Settings", d->settings);
-    d->view->rootContext()->setContextProperty("CALLIGRA_VERSION_STRING", CALLIGRA_VERSION_STRING);
-    d->view->rootContext()->setContextProperty("MEEGO_OFFICE_VERSION", "0.85");
-    d->view->rootContext()->setContextProperty("mainWindow", this);
-    d->view->rootContext()->setContextProperty("qApp", qApp);
 
     // This is needed because OpenGL viewport doesn't support partial updates.
     d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    d->view->setViewport(new QGLWidget);
+    QGLWidget* glWidget = new QGLWidget(this, KisOpenGL::sharedContextWidget());
+    d->view->setViewport(glWidget);
 
     d->view->engine()->addImageProvider("icon", new IconImageProvider);
-    QStringList dataPaths = KGlobal::dirs()->findDirs("data", "qml");
+    QStringList dataPaths = KGlobal::dirs()->findDirs("appdata", "qml");
     foreach(const QString& path, dataPaths) {
         d->view->engine()->addImportPath(path);
     }
 
-    d->view->setSource(QUrl(KStandardDirs::locate("data", "qml/main.qml")));
+    d->view->setSource(QUrl::fromLocalFile(KStandardDirs::locate("appdata", "qml/main.qml")));
     d->view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
+
+//     if(d->view->errors().count() > 0) {
+//         foreach(const QDeclarativeError &error, d->view->errors()) {
+//             qDebug() << error.toString();
+//         }
+//     }
 
     // Use these to populate the list of recent files, open the last one automatically
     Q_UNUSED(fileNames);

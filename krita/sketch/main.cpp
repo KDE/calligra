@@ -22,6 +22,7 @@
 #include <QStringList>
 #include <QString>
 
+#include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
@@ -33,9 +34,7 @@
 
 int main( int argc, char** argv )
 {
-    QApplication::setGraphicsSystem("opengl");
-
-    KAboutData aboutData("Krita Sketch",
+    KAboutData aboutData("kritasketch",
                          0,
                          ki18n("Krita Sketch"),
                          "0.1",
@@ -64,11 +63,8 @@ int main( int argc, char** argv )
         }
     }
 
-    QApplication app(argc, argv);
-    app.setApplicationName("org.krita.sketch");
-
-    qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
-    qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "KisSketchView");
+    KApplication app;
+    //app.setApplicationName("org.krita.sketch");
 
     MainWindow window(fileNames);
     window.showMaximized();

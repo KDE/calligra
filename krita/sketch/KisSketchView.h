@@ -32,6 +32,11 @@ public:
 
     QObject* doc() const;
 
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+
+    virtual void componentComplete();
+    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+
 public Q_SLOTS:
 
     /// XXX: add parameter options... Or how does QML interact with a class like this?
