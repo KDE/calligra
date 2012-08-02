@@ -554,7 +554,7 @@ void KexiCSVImportDialog::fillTable()
     if (true != loadRows(field, row, column, maxColumn, true))
         return;
 
-    // file with only one line without '\n'
+    // file with only one line without EOL
     if (field.length() > 0) {
         setText(row - m_startline, column, field, true);
         ++row;
@@ -638,6 +638,7 @@ QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(
     QList<int> tabsPerLine, semicolonsPerLine, commasPerLine;
     int tabs = 0, semicolons = 0, commas = 0;
     int line = 0;
+    bool wasChar13 = false; // true if previous x was '\r'
     for (uint i = 0; !inputStream.atEnd() && i < MAX_CHARS_TO_SCAN_WHILE_DETECTING_DELIMITER; i++) {
         (*m_inputStream) >> c; // read one char
         if (prevChar == '"') {
@@ -650,7 +651,12 @@ QString KexiCSVImportDialog::detectDelimiterByLookingAtFirstBytesOfFile(
         }
         if (c == ' ')
             continue;
-        if (c == '\n') {//end of line
+        if (wasChar13 && c == '\n') {
+            wasChar13 = false;
+            continue; // previous x was '\r', eat '\n'
+        }
+        wasChar13 = c == '\r';
+        if (c == '\n' || c == '\r') {//end of line
             //remember # of tabs/semicolons/commas in this line
             tabsPerLine += tabs;
             tabs = 0;
@@ -755,6 +761,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
         m_elapsedMs = m_elapsedTimer.elapsed();
     }
     int offset = 0;
+    bool wasChar13 = false; // true if previous x was '\r'
     for (;!m_inputStream->atEnd(); offset++) {
 //disabled: this breaks wide spreadsheets
 // if (column >= m_maximumRowsForPreview)
@@ -775,9 +782,11 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 
         (*m_inputStream) >> x; // read one char
 
-        if (x == '\r') {
-            continue; // eat '\r', to handle RFC-compliant files
+        if (wasChar13 && x == '\n') {
+            wasChar13 = false;
+            continue; // previous x was '\r', eat '\n'
         }
+        wasChar13 = x == '\r';
         if (offset == 0 && x.unicode() == 0xfeff) {
             // Ignore BOM, the "Byte Order Mark"
             // (http://en.wikipedia.org/wiki/Byte_Order_Mark, // http://www.unicode.org/charts/PDF/UFFF0.pdf)
@@ -794,7 +803,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                 if ((ignoreDups == false) || (lastCharDelimiter == false))
                     ++column;
                 lastCharDelimiter = true;
-            } else if (x == '\n') {
+            } else if (x == '\n' || x == '\r') {
                 if (!inGUI) {
                     //fill remaining empty fields (database wants them explicitly)
                     for (int additionalColumn = column; additionalColumn <= maxColumn; additionalColumn++) {
@@ -845,10 +854,10 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             if (x == m_textquote) {
                 field += x; //no, this was just escaped quote character
                 state = S_QUOTED_FIELD;
-            } else if (x == delimiter || x == '\n') {
+            } else if (x == delimiter || x == '\n' || x == '\r') {
                 setText(row - m_startline, column, field, inGUI);
                 field.clear();
-                if (x == '\n') {
+                if (x == '\n' || x == '\r') {
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
@@ -864,10 +873,10 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
             }
             break;
         case S_END_OF_QUOTED_FIELD :
-            if (x == delimiter || x == '\n') {
+            if (x == delimiter || x == '\n' || x == '\r') {
                 setText(row - m_startline, column, field, inGUI);
                 field.clear();
-                if (x == '\n') {
+                if (x == '\n' || x == '\r') {
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
@@ -889,10 +898,10 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                 break;
             }
         case S_NORMAL_FIELD :
-            if (x == delimiter || x == '\n') {
+            if (x == delimiter || x == '\n' || x == '\r') {
                 setText(row - m_startline, column, field, inGUI);
                 field.clear();
-                if (x == '\n') {
+                if (x == '\n' || x == '\r') {
                     nextRow = true;
                     maxColumn = qMax(maxColumn, column);
                     column = 1;
