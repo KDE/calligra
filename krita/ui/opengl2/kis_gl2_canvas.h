@@ -21,12 +21,14 @@
 #ifndef KIS_GL2_CANVAS_H
 #define KIS_GL2_CANVAS_H
 
+#include <GL/glew.h>
 #include <QGLWidget>
 
 #include "kis_canvas_widget_base.h"
 #include <kis_types.h>
+#include "krita_export.h"
 
-class KisGL2Canvas : public QGLWidget, public KisCanvasWidgetBase
+class KRITAUI_EXPORT KisGL2Canvas : public QGLWidget, public KisCanvasWidgetBase
 {
     Q_OBJECT
 public:
@@ -42,6 +44,8 @@ public:
 
     QPoint canvasOffset() const;
     qreal zoom() const;
+
+    uint framebufferTexture() const;
 
 public slots:
     void configChanged();

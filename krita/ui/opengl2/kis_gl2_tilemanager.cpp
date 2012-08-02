@@ -20,6 +20,10 @@
 
 #include "kis_gl2_tilemanager.h"
 
+#include <GL/glew.h>
+
+#include "kis_gl2_canvas.h"
+
 #include <QtCore>
 #include <QGLFramebufferObject>
 #include <QThreadPool>
@@ -30,7 +34,6 @@
 #include <kis_image.h>
 
 #include "kis_gl2_tile.h"
-#include "kis_gl2_canvas.h"
 #include "kis_gl2_tile_updater.h"
 
 class KisGL2TileManager::Private
@@ -73,6 +76,8 @@ KisGL2TileManager::~KisGL2TileManager()
 
 void KisGL2TileManager::initialize(KisImageWSP image)
 {
+    qDebug() << Q_FUNC_INFO;
+
     d->framebuffer = new QGLFramebufferObject(d->canvas->width(), d->canvas->height());
 
     d->image = image;
@@ -83,14 +88,14 @@ void KisGL2TileManager::initialize(KisImageWSP image)
     update(imageSize);
 
     d->shader = new QGLShaderProgram(this);
-    d->shader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("appdata", "shaders/gl2.vert"));
-    d->shader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("appdata", "shaders/gl2.frag"));
+    d->shader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
+    d->shader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.frag"));
     d->shader->link();
 
     d->modelMatrixLocation = d->shader->uniformLocation("modelMatrix");
     d->viewMatrixLocation = d->shader->uniformLocation("viewMatrix");
     d->projectionMatrixLocation = d->shader->uniformLocation("projectionMatrix");
-    d->texture0Location = d->shader->uniformLocation("modelMatrix");
+    d->texture0Location = d->shader->uniformLocation("texture0");
     d->vertexLocation = d->shader->attributeLocation("vertex");
     d->uv0Location = d->shader->attributeLocation("uv0");
 
@@ -152,8 +157,12 @@ void KisGL2TileManager::update(const QRect& area)
 
 void KisGL2TileManager::render()
 {
+    if (GLEW_GREMEDY_string_marker) {
+        glStringMarkerGREMEDY(0, Q_FUNC_INFO);
+    }
+
     //Bind the Framebuffer
-    //d->framebuffer->bind();
+    d->framebuffer->bind();
     //d->context->makeCurrent();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -187,6 +196,22 @@ void KisGL2TileManager::render()
         tile->render(d->shader, d->modelMatrixLocation);
     }
 
+    d->framebuffer->release();
+
+    QMatrix4x4 model;
+    model.scale(1.0f, -1.0f);
+    d->shader->setUniformValue(d->modelMatrixLocation, model);
+
+    view.setToIdentity();
+    d->shader->setUniformValue(d->viewMatrixLocation, view);
+
+    proj.setToIdentity();
+    proj.ortho(0, 1, 0, 1, -1, 1);
+    d->shader->setUniformValue(d->projectionMatrixLocation, proj.transposed());
+
+    glBindTexture(GL_TEXTURE_2D, d->framebuffer->texture());
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
     d->shader->disableAttributeArray(d->uv0Location);
     d->shader->disableAttributeArray(d->vertexLocation);
 
@@ -195,16 +220,32 @@ void KisGL2TileManager::render()
     d->shader->release();
 
     //Release the framebuffer
-    //d->framebuffer->release();
 
     //Render the framebuffer
     //d->framebuffer->
 }
 
+void KisGL2TileManager::resize(int width, int height)
+{
+    if(d->framebuffer)
+        delete d->framebuffer;
+
+    d->framebuffer = new QGLFramebufferObject(width, height);
+}
+
+uint KisGL2TileManager::framebufferTexture() const
+{
+    if(d->framebuffer) {
+        return d->framebuffer->texture();
+    }
+
+    return 0;
+}
+
 void KisGL2TileManager::Private::createTiles(const QRect& size)
 {
-    int cols = qCeil(size.width() / KIS_GL2_TILE_SIZE);
-    int rows = qCeil(size.height() / KIS_GL2_TILE_SIZE);
+    int cols = qCeil(size.width() / KIS_GL2_TILE_SIZE) + 1;
+    int rows = qCeil(size.height() / KIS_GL2_TILE_SIZE) + 1;
 
     QRect area;
     for(int r = 0; r < rows; ++r) {

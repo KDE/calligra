@@ -37,6 +37,9 @@ public:
     void initialize(KisImageWSP image);
     void update(const QRect &area);
     void render();
+    void resize(int width, int height);
+
+    uint framebufferTexture() const;
 
 private:
     class Private;

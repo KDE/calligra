@@ -61,7 +61,7 @@ unsigned int KisGL2Tile::glTexture() const
 void KisGL2Tile::render(QGLShaderProgram* shader, int location)
 {
     QMatrix4x4 mat;
-    mat.translate(m_area.x(), m_area.y());
+    mat.translate(m_area.x(), -m_area.y());
     mat.scale(m_area.width(), m_area.height());
 
     shader->setUniformValue(location, mat.transposed());

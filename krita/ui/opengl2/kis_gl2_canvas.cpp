@@ -20,13 +20,11 @@
 
 #include "kis_gl2_canvas.h"
 
-#include <QGLWidget>
-
-#include <GL/gl.h>
-
 #include <kis_config.h>
 #include <kis_config_notifier.h>
 #include <kis_image.h>
+
+#include <opengl/kis_opengl.h>
 
 #include "kis_gl2_tilemanager.h"
 #include <kis_view2.h>
@@ -39,7 +37,7 @@ public:
 };
 
 KisGL2Canvas::KisGL2Canvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent)
-    : QGLWidget(parent), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
+    : QGLWidget(parent, KisOpenGL::sharedContextWidget()), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
 {
     d->tileManager = new KisGL2TileManager(this);
 }
@@ -82,6 +80,7 @@ void KisGL2Canvas::paintGL()
 void KisGL2Canvas::resizeGL(int w, int h)
 {
     glViewport(0, 0, w, h);
+    d->tileManager->resize(w, h);
 }
 
 QPoint KisGL2Canvas::canvasOffset() const
@@ -106,3 +105,10 @@ void KisGL2Canvas::update(const QRect& area)
 {
     d->tileManager->update(area);
 }
+
+uint KisGL2Canvas::framebufferTexture() const
+{
+    return d->tileManager->framebufferTexture();
+}
+
+#include "kis_gl2_canvas.moc"
