@@ -34,6 +34,8 @@ public:
 
 public Q_SLOTS:
 
+    /// XXX: add parameter options... Or how does QML interact with a class like this?
+    void createDocument();
     void loadDocument();
 
 Q_SIGNALS:

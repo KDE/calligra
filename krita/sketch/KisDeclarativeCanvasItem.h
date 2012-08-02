@@ -21,18 +21,41 @@
 #define KISDECLARATIVECANVAS_H
 
 #include <QDeclarativeItem>
+#include <KoCanvasBase.h>
+
+class KisCanvas2;
 
 
-class KisDeclarativeCanvas : public QDeclarativeItem, KoCanvasBase
+/**
+ * @brief The KisDeclarativeCanvas class is a declarative item that wraps a Krita canvas widget,
+ * either an opengl widget (in which case it will share the framebuffer) or a qpainter canvas widget,
+ * in which case all best are off.
+ */
+class KisDeclarativeCanvasItem : public QDeclarativeItem //, public KoCanvasBase
 {
     Q_OBJECT
 public:
-    explicit KisDeclarativeCanvas(QDeclarativeItem *parent = 0);
+    explicit KisDeclarativeCanvasItem(KisCanvas2 *canvas, QDeclarativeItem *parent = 0);
+
+//    virtual void KoCanvasBase::gridSize(qreal*, qreal*) const;
+//    virtual bool KoCanvasBase::snapToGrid() const;
+//    virtual void KoCanvasBase::setCursor(const QCursor&);
+//    virtual void KoCanvasBase::addCommand(KUndo2Command*);
+//    virtual KoShapeManager* KoCanvasBase::shapeManager() const;
+//    virtual void KoCanvasBase::updateCanvas(const QRectF&);
+//    virtual KoToolProxy* KoCanvasBase::toolProxy() const;
+//    virtual KoViewConverter* KoCanvasBase::viewConverter() const;
+//    virtual QWidget* KoCanvasBase::canvasWidget();
+//    virtual const QWidget* KoCanvasBase::canvasWidget() const;
+//    virtual KoUnit KoCanvasBase::unit() const;
+//    virtual void KoCanvasBase::updateInputMethodInfo();
 
 signals:
 
 public slots:
+private:
 
+    KisCanvas2 *m_canvas;
 };
 
 #endif // KISDECLARATIVECANVAS_H

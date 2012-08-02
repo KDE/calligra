@@ -28,11 +28,16 @@
 #include <KoProgressUpdater.h>
 #include <KoToolProxy.h>
 #include <KoFilterManager.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceRegistry.h>
 
 #include "ProgressProxy.h"
+#include "KisDeclarativeCanvasItem.h"
 
 #include "kis_doc2.h"
 #include "kis_canvas2.h"
+#include "kis_config.h"
+#include "kis_view2.h"
 
 class KisSketchView::Private
 {
@@ -40,7 +45,9 @@ public:
     Private( KisSketchView* qq)
         : q(qq)
         , doc(0)
+        , view(0)
         , canvas(0)
+        , canvasItem(0)
     { }
     ~Private() { }
 
@@ -52,8 +59,17 @@ public:
     KisSketchView* q;
 
     KisDoc2* doc;
+    KisView2* view;
     KisCanvas2* canvas;
+    KisDeclarativeCanvasItem *canvasItem;
 };
+
+void KisSketchView::Private::update()
+{
+    //
+}
+
+
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
     : CanvasControllerDeclarative(parent)
@@ -61,6 +77,12 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 {
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
+
+    // make sure we use the opengl canvas
+    KisConfig cfg;
+    cfg.setUseOpenGL(true);
+    cfg.setUseOpenGLShaders(true);
+    cfg.setUseOpenGLTrilinearFiltering(true);
 }
 
 KisSketchView::~KisSketchView()
@@ -71,6 +93,23 @@ KisSketchView::~KisSketchView()
 QObject* KisSketchView::doc() const
 {
     return d->doc;
+}
+
+void KisSketchView::createDocument()
+{
+    KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
+    d->doc = static_cast<KisDoc2*>(factory->create(0, "KritaPart"));
+    d->doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
+    d->view = qobject_cast<KisView2*>(d->doc->createView(0));
+    d->canvas = d->view->canvasBase();
+    d->canvasItem = new KisDeclarativeCanvasItem(d->view->canvasBase());
+
+    setCanvas(d->canvas);
+    connect(d->canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
+    //d->canvas->updateSize();
+    resetDocumentOffset();
+    d->canvas->updateCanvas(QRectF(0, 0, width(), height()));
+
 }
 
 void KisSketchView::loadDocument()
@@ -110,32 +149,6 @@ void KisSketchView::loadDocument()
     emit progress(100);
     emit completed();
 */
-}
-
-void KisSketchView::Private::updateCanvas()
-{
-/*
-    if (canvas && canvas->document() != doc) {
-        delete canvas;
-        canvas = 0;
-    }
-
-    if (!canvas && doc != 0) {
-        canvas = static_cast<KWCanvasItem*>(doc->canvasItem());
-        canvas->setCacheEnabled(true);
-        q->setCanvas(canvas);
-        connect(canvas, SIGNAL(documentSize(QSizeF)), q->zoomController(), SLOT(setDocumentSize(QSizeF)));
-        canvas->updateSize();
-        q->resetDocumentOffset();
-    }
-
-    canvas->updateCanvas(QRectF(0, 0, q->width(), q->height()));
-*/
-}
-
-void KisSketchView::Private::update()
-{
-    //
 }
 
 void KisSketchView::onSingleTap( const QPointF& location)

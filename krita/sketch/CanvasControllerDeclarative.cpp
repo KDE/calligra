@@ -553,12 +553,14 @@ void CanvasControllerDeclarative::Private::updateMinMax()
 
 void CanvasControllerDeclarative::Private::updateCanvasSize()
 {
-    if(canvas) {
-        canvas->canvasItem()->setX(0);
-        canvas->canvasItem()->setY(0);
-        canvas->canvasItem()->setGeometry(0, 0, q->width(), q->height());
+    if (canvas) {
+        QDeclarativeItem *item = qobject_cast<QDeclarativeItem*>(canvas->canvasItem());
+        item->setX(0);
+        item->setY(0);
+        item->setWidth(q->width());
+        item->setHeight(q->height());
         canvas->updateCanvas(canvas->viewConverter()->viewToDocument(QRectF(0, 0, q->width(), q->height())));
-        canvas->canvasItem()->update();
+        item->update();
         updateMinMax();
         timer->start();
     }

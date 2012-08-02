@@ -17,9 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KisDeclarativeCanvas.h"
+#include "KisDeclarativeCanvasItem.h"
 
-KisDeclarativeCanvas::KisDeclarativeCanvas(QDeclarativeItem *parent)
+#include "kis_canvas2.h"
+
+KisDeclarativeCanvasItem::KisDeclarativeCanvasItem(KisCanvas2 *canvas, QDeclarativeItem *parent)
     : QDeclarativeItem(parent)
+    , m_canvas(canvas)
 {
+    m_canvas->setCanvasItem(this);
+
+    // and do clever stuff!
 }

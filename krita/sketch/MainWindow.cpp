@@ -41,7 +41,7 @@
 
 #include "IconImageProvider.h"
 #include "CanvasControllerDeclarative.h"
-#include "shared/DocumentListModel.h"
+#include "DocumentListModel.h"
 
 #include "calligraversion.h"
 
@@ -91,14 +91,6 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     // Use these to populate the list of recent files, open the last one automatically
     Q_UNUSED(fileNames);
-
-//    KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
-//    KisDoc2 *doc = static_cast<KisDoc2*>(factory->create(0, "KritaPart"));
-//    qDebug() << "doc:" << doc << "views" << doc->viewCount();
-
-//    doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
-//    KoView *kisView = qobject_cast<KisView2*>(doc->createView(this));
-//    Q_ASSERT(doc->viewCount() > 0);
 
 //    d->view->setViewport(kisView->canvas());
 
