@@ -60,11 +60,13 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
         retrieveParticles(p);
         qDebug() << "Particles size :" << p.size() ;
 
+        qDebug() << "Setting the grains..." ;
+        setGrains(p);
+        
         qDebug() << "Creating the grid cells..." ;
         makeGrid();
 
-        qDebug() << "Setting the grains..." ;
-        setGrains(p);
+
 
     }
     qDebug() << "SandPaintop creation done." ;
