@@ -41,18 +41,34 @@ K_PLUGIN_FACTORY(SandPaintOpPluginFactory, registerPlugin<SandPaintOpPlugin>();)
 K_EXPORT_PLUGIN(SandPaintOpPluginFactory("krita"))
 
 
+/**
+ * Construct the Sand plugin and register in the plugin factory
+ */
+
 SandPaintOpPlugin::SandPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     qDebug() << "Loading Sand Paintop...";
+
+    //Gets the instance of the Paintop Register
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSandPaintOp, KisSandPaintOpSettings, KisSandPaintOpSettingsWidget>("sandbrush", i18n("Sand brush"),
-                                                          KisPaintOpFactory::categoryExperimental(), "krita-sand.png"));
+
+    //Creates the paintop plugin
+    r->add( new KisSimplePaintOpFactory<KisSandPaintOp,
+                KisSandPaintOpSettings,
+                KisSandPaintOpSettingsWidget>("sandbrush",
+                                              i18n("Sand brush"),
+                                              KisPaintOpFactory::categoryExperimental(),
+                                              "krita-sand.png"
+                                             )
+          );
+    
     qDebug() << "Sand Paintop loaded!";
 }
 
 SandPaintOpPlugin::~SandPaintOpPlugin()
 {
+    
 }
 
 #include "sand_paintop_plugin.moc"

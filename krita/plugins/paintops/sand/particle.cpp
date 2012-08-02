@@ -81,15 +81,19 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
      * dist_x = _position->x() - info.pos().x();   //distance between particle centers: X
      * dist_y = _position->y() - info.pos().x();   //distance between particle centers: Y
      * dist_centers = sqrt(dist_x^2 + dist_y^2);        //distance norm
-     * double xi = _radius + m_properties->size() - dist_centers;
+     * double xi = _radius + m_properties->radius - dist_centers;
      *
      * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
-    
+
      double dist_x = _pos->x() - pos.x();   //distance between particle centers: X
      double dist_y = _pos->y() - pos.y();   //distance between particle centers: Y
      double dist_centers = sqrt(dist_x*dist_x + dist_y*dist_y);        //distance norm
-     double xi = _radius + properties->size - dist_centers;
+     qDebug() << "dist_centers :" << dist_centers ;
+     
+     double xi = _radius + properties->radius - dist_centers;
+
+     qDebug() << "xi :" << xi ;
 //     double xi = double( _radius );
 
     //No collision? Exit function
@@ -101,6 +105,7 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
         * double Y = _friction * brush_friction / (friction + brush_friction)
         */
     double Y = _friction * properties->friction / (_friction + properties->friction);
+    qDebug() << "Y " << Y ;
 //         double Y = _friction;  // Young modulus
     /*
         * dissipative constant: function of the material viscosity
@@ -114,7 +119,7 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
         * mu AND gamma COEFFICIENTS
         */
 
-
+    
     double reff = ( _radius * properties->radius )/( _radius + properties->radius );
 
 //         double reff = double(_radius);
@@ -150,6 +155,7 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
     //NORMAL FORCE ON THIS PARTICLE
 //         double fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
     double fn = sqrt(xi)*Y*sqrt(reff)*(xi+xidot);
+    qDebug() << "fn " << fn ;
 
     //PERHAPS I HAVE TO MODIFY THIS, SINCE WE CAN HAVE A FORCE IN A DIFFERENT DIRECTION OF THE MOVEMENT
     if( fn< 0)

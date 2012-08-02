@@ -16,17 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-/**
- * \file sand_brush.h
- *
- * \brief Contains most of the operations done in the paintop. It do the painting and hold the objects to do proper
- * operations, like selection and collision
- * 
- * \version 0.0
- * \date Jun 2012
- *
- */
-
 #ifndef SAND_BRUSH_H_
 #define SAND_BRUSH_H_
 
@@ -43,6 +32,10 @@
 class KisPaintInformation;
 class Particle;
 
+/**
+ * Do the direct operations in the canvas, like adding and manipulating the particles
+ * to do the desired effects of the painting.
+ */
 class SandBrush
 {
 
@@ -50,22 +43,28 @@ public:
     SandBrush(const SandProperties * properties, KoColorTransformation* transformation);
     ~SandBrush();
 
+    ///Add particles in the canvas
     void pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
+
+    ///Spread the particles in the canvas
     void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
 
-    ///Draw, create and append a Particle to the grains container, so it is possible to do the desired operations
+    ///Draw a Particle in the canvas
     void drawParticle(KisPainter &painter, Particle *p); //Obs
 
-    ///Retrieve the current Particles in use
+    ///Retrieve the current Particles in use in the current operation
     void getGrains(QList<Particle *> &g_copy);
 
-    ///Set the Particles to be used in the desired operations
+    ///Set the Particles to be used in the current operations
     void setGrains(QList<Particle *> &g_copy);
 
 private:
     KoColor m_inkColor;
 
-    ///Counter to calculate the mouse reduction in the sand depletion (used in the asymptotic function of paint operation)
+    /**
+     * Counter to calculate the mouse reduction in the sand depletion (used in the asymptotic
+     * function of paint operation)
+     */
     int m_counter;
 
     ///Calculate the amount of particles to be spread
@@ -79,9 +78,6 @@ private:
 
     ///Hold a few particles for this operation step
     QList<Particle *> m_grains;
-
-
-    //Usual members to painting operations
     
     int m_saturationId;
     const SandProperties * m_properties;

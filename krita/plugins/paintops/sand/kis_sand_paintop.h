@@ -28,6 +28,17 @@
 
 class KisPainter;
 
+/**
+ * KisSandPaintOp acts as a manager of the sand painting operation. It holds all the particles
+ * created by the SandBrush class ( SandBrush::pouring() ), sending a smaller set of particles
+ * to this class to execute the spread ( SandBrush::spread() ), creates the canvas grid and its
+ * neighborhood relationships to speed up the particles selection and physicals operations.
+ * 
+ * Some of the main interactions with outside classes, like annotations and image information
+ * reading is done here and passed to SandBrush.
+ * 
+ */
+
 class KisSandPaintOp : public KisPaintOp
 {
 
@@ -36,56 +47,110 @@ public:
     KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSandPaintOp();
 
+    /**
+     */
     qreal paintAt(const KisPaintInformation& info);
     
     /**
-     * Fill the QList with the particles previously added by brush strokes.
+     * @brief Fill the QList with the particles previously added by brush strokes.
      * The purpose is to populate the list of particles of the SandBrush class,
      * so it can do the spread.
+     *
+     * @param p The list which will hold the retrived particles.
      */
     void retrieveParticles(QList<Particle *> &p);
 
-    ///Construct the image grid to retrieve a particle and its neightbors
+    /**
+     * @brief Construct the image grid to retrieve a particle and its neightbors.
+     * 
+     * @attention Does not take any parameter, since the grid dimensions are a property
+     * of this class.
+     */
     void makeGrid();
 
-    ///Vefify if two pairs of particles positions indicate a valid neighborhood relation
+    /**
+     * Vefify if two pairs of particles positions indicate a valid neighborhood relation.
+     *
+     * @param ix x-position of the first grid cell
+     * @param iy y-position of the first grid cell
+     * @param iix x-position of the second grid cell
+     * @param iiy y-position of the second grid cell
+     * 
+     */
     bool is_valid_neighbor(int ix, int iy, int iix, int iiy);
 
     /**
-     * Construct the neighborhood relations between particles to gain performance in particle
-     * selection/collision operations
+     * @brief Construct the neighborhood relations between particles to gain performance in
+     * particle selection/collision operations.
+     *
+     * @attention In this stage, this method does not have a decisive operation, since the
+     * colisions are only between the mouse and the particles already in the canvas. However,
+     * to future improvements, this method will have a very important role, since it will
+     * construct possible relations between grains.
+     * 
      */
     void makeNeighbors();
 
     /**
-     * Retrieve particles from a given grid cell
+     * @brief Retrieve particles from a given grid cell, so it can be used to any operation.
+     * This method speed up the search of particles based on mouse position, so the physics
+     * operations can be more responsive.
+     *
+     * @param gx grid cell x-position
+     * @param gy grid cell y-position
+     * @param p the QList that will hold the particles from this cell.
+     *
      */
-
     void retrieveCellParticles(int gx, int gy, QList<Particle *> &p);
 
     /**
-     * Retrieve the neighbors relationship from a given grid cell.
+     * @brief Retrieve the neighbors relationship from a given grid cell.
      * The QPair< a, b> represents that a particle of index value "a" in the
      * grains of the SandBrush is neighbor of the particle of the "b"
+     *
+     * @param gx grid cell x-position
+     * @param gy grid cell y-position
+     * @param n QVector of pairs representing indices of neighbor particles in the m_grains list
+     * 
      */
     void getNeighborhood(int gx, int gy, QVector<QPair<int,int > > n);
 
-    ///Retrieve the current Particles in use
+    /**
+     * @brief Retrieve the current Particles in use
+     *
+     * @param p the QList that will hold the particles.
+     */
     void getGrains(QList<Particle *> &g_copy);
 
-    ///Set the Particles to be used in the desired operations
+    /**
+     * @brief Set the Particles to be used in the desired operations
+     *
+     * @param p the QList that will hold the particles.
+     */
     void setGrains(QList<Particle *> &g_copy);
 
 
 
 private:
-    KisImageWSP m_image;
+    
     KisPaintDeviceSP m_dab;
-    SandBrush * m_sandBrush;
     KisPressureOpacityOption m_opacityOption;
     SandProperties m_properties;
+    //Image to use in the grid's cell calculations
+    KisImageWSP m_image;
 
-    ///Hold the particles created by this paintop
+    //Do the mathematical operations of the brush
+    SandBrush * m_sandBrush;
+
+    /**
+     * Hold all the particles created by this paintop. In the constructor, its
+     * called the method retrieveParticles so it can populate with the previously
+     * added particles.
+     *
+     * Smaller sets of particles are taken from here so it can be passed to do
+     * more faster operations.
+     * 
+     */
     QList<Particle *> m_grains;
 
      /**
@@ -115,8 +180,8 @@ private:
      * 12 |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
      * 13 |__|__|__|__|__|__|__|__|__|__|__|__|__|__|
      *
-     * If we have a grid of 7x7 cells of size 2, in pixels, if we want all the neightbors of B, I get the cell
-     * where B is, and :
+     * If we have a grid of 7x7 cells of size 2, in pixels, if we want all the neightbors of B,
+     * I get the cell where B is, and :
      *
      * -> get B position (6,8)
      * -> divide by the image size (14,14)
@@ -129,7 +194,7 @@ private:
      * are on this grid cell and making possible to search in the neightborhood of the
      * cell for the particles closest to B
      *
-     * QList<uint> b_neighbors = grid.at(3).at(4);
+     * QList< int> b_neighbors = grid[3][4]
      *
      */
     QVector< QVector<QVector<int> > > grid;
