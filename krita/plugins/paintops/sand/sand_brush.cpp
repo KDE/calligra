@@ -135,8 +135,19 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
             pixelX = qRound(x + bx*vel.x()*10);
             pixelY = qRound(y + by*vel.y()*10);
 
-
-            drawParticle(drawer, pixelX , pixelY, vel, accel);
+            Particle *p = new Particle ( true,
+                                float( m_properties->mass),
+                                float( m_properties->size),
+                                1000,
+                                float( m_properties->friction),
+                                0.0,
+                                new QPoint(pixelX, pixelY),
+                                new QPointF(vel.x(), vel.y()),
+                                new QPointF(accel.x(), accel.y())
+                            );
+//             drawParticle(drawer, pixelX , pixelY, vel, accel);
+            drawParticle(drawer, p);
+            m_grains.append(p);
             
             if(m_grainCount > 0)
                 m_grainCount--; //decrease the amount of grains
@@ -145,38 +156,65 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
 
     m_prevVel = vel;
     m_prevTime = info.currentTime();
+    qDebug() << "sandbrush->m_grains size : " << m_grains.size();
 }
 
 void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info)
 {
-    //(1) Retrieve the neighbor particles where the mouse is positioned
 
-    //(2) Verify which ones the mouse is really "colliding"
 
-    //(3) Take the mouse dynamic properties (as in the pouring operation)
+    KisPainter drawer(dev);
+    drawer.setPaintColor(m_inkColor);
+//     
+//     //(1) Retrieve the neighbor particles where the mouse is positioned
+// //     m_grains;
+// 
+//     //(2) Take the mouse dynamic properties (as in the pouring operation)
+//     int time = m_prevTime;
+//     //mouse velocity and acceleration calc
+//     if(info.currentTime() != m_prevTime)
+//         time = info.currentTime() - time;
+// 
+//     QPointF pos = toQPointF(info.movement()); //obs: this is an inline function
+//     QPointF vel(pos.x()/time, pos.y()/time);    //current velocity
+//     QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current acce
+// 
+// 
+//     //iterate over the set of grains in the neighborhood, assigned to m_grains
+//     for(int i = 0; i < m_grains.size(); i++){
+//         //(3.a) Verify which ones the mouse is really "colliding"
+//     //(3.b) and apply the force in the particles that the mouse touched (made in the applyForce method of Particle)
+//         m_grains.at(i)->applyForce(pos, vel, m_properties);
+// 
+//         //(4) Animate the movements based on past forces
+//         if(m_grains.at(i)->force())
+//             m_grains.at(i)->integrationStep(double(time));
+// 
+//         //have to delete the previous positions before painting them again
+//         drawParticle(drawer, m_grains.at(i));
+//     }
 
-    //(4) Apply the force in the particles that the mouse touched
+    //(5) Update the canvas
 
-    //(5) Animate the movement
-
-    
 }
 
-void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel)
+// void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel)
+void SandBrush::drawParticle(KisPainter &painter, Particle *p)
 {
-    Particle *p = new Particle ( true,
-                                 float( m_properties->mass),
-                                 float( m_properties->size),
-                                 1000,
-                                 float( m_properties->friction),
-                                 0.0,
-                                 new QPoint(x, y),
-                                 new QPointF(vel.x(), vel.y()),
-                                 new QPointF(accel.x(), accel.y())
-                               );
+
+//     Particle *p = new Particle ( true,
+//                     float( m_properties->mass),
+//                     float( m_properties->size),
+//                     1000,
+//                     float( m_properties->friction),
+//                     0.0,
+//                     new QPoint(x, y),
+//                     new QPointF(vel.x(), vel.y()),
+//                     new QPointF(accel.x(), accel.y())
+//                 );
 //     qDebug() << "Size -> " << m_properties->size;
 
-    m_grains.append(p);
+//        m_grains.append(p);
 
 //     qDebug() << "Particle : \n"  << "Life" << p->lifespan() << "\n"
 //                             << "Mass" << p->mass() << "\n"
@@ -206,8 +244,10 @@ void SandBrush::drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel,
         cx *= radius;
         cy *= radius;
 
-        cx += x;
-        cy += y;
+//         cx += x;
+//         cy += y;
+        cx += p->pos()->x();
+        cy += p->pos()->y();
 
         points.append(QPointF(cx, cy));
     }
@@ -222,6 +262,7 @@ void SandBrush::getGrains(QList<Particle *> &g_copy){
 }
 
 void SandBrush::setGrains(QList<Particle *> &g_copy){
+    m_grains.clear();
     for(int i = 0; i < g_copy.size(); i++)
         m_grains.append(g_copy[i]);
 }

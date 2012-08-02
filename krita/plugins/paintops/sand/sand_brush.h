@@ -17,7 +17,7 @@
  */
 
 /**
- * \file particle.h
+ * \file sand_brush.h
  *
  * \brief Contains most of the operations done in the paintop. It do the painting and hold the objects to do proper
  * operations, like selection and collision
@@ -41,6 +41,7 @@
 #include "particle.h"
 
 class KisPaintInformation;
+class Particle;
 
 class SandBrush
 {
@@ -53,7 +54,7 @@ public:
     void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
 
     ///Draw, create and append a Particle to the grains container, so it is possible to do the desired operations
-    void drawParticle(KisPainter &painter, qreal x, qreal y, QPointF vel, QPointF accel); //Obs
+    void drawParticle(KisPainter &painter, Particle *p); //Obs
 
     ///Retrieve the current Particles in use
     void getGrains(QList<Particle *> &g_copy);
@@ -76,8 +77,9 @@ private:
     ///Previous mouse velocity to calculate acceleration
     QPointF m_prevVel;
 
-    ///Hold the particles created by this paintop
+    ///Hold a few particles for this operation step
     QList<Particle *> m_grains;
+
 
     //Usual members to painting operations
     

@@ -42,7 +42,7 @@
 #include <iostream>
 #include <math.h>
 #include <QDebug>
-#include <kis_types.h>
+#include "sand_brush.h"
 
 using namespace std;
 
@@ -93,7 +93,7 @@ public:
      * which should behave like there is a particle on it's position, so we could do a simple collision and move
      * the grains on the canvas.
      */
-    void applyForce(const KisPaintInformation& info);
+    void applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties);
 
     ///Runge-Kutta 4 implementation for this particle
 

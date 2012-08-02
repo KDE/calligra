@@ -46,7 +46,7 @@ public:
     void retrieveParticles(QList<Particle *> &p);
 
     ///Construct the image grid to retrieve a particle and its neightbors
-    void makeGrid(QList<Particle *> &grains);
+    void makeGrid();
 
     ///Vefify if two pairs of particles positions indicate a valid neighborhood relation
     bool is_valid_neighbor(int ix, int iy, int iix, int iiy);
@@ -61,14 +61,22 @@ public:
      * Retrieve particles from a given grid cell
      */
 
-    void retrieveCellParticles(int gx, int gy, QList<Particle *> &p, QList<Particle *> &parts);
+    void retrieveCellParticles(int gx, int gy, QList<Particle *> &p);
 
     /**
      * Retrieve the neighbors relationship from a given grid cell.
      * The QPair< a, b> represents that a particle of index value "a" in the
      * grains of the SandBrush is neighbor of the particle of the "b"
      */
-    void getNeighborhood(int gx, int gy, QList<Particle *> &p);
+    void getNeighborhood(int gx, int gy, QVector<QPair<int,int > > n);
+
+    ///Retrieve the current Particles in use
+    void getGrains(QList<Particle *> &g_copy);
+
+    ///Set the Particles to be used in the desired operations
+    void setGrains(QList<Particle *> &g_copy);
+
+
 
 private:
     KisImageWSP m_image;
@@ -76,6 +84,9 @@ private:
     SandBrush * m_sandBrush;
     KisPressureOpacityOption m_opacityOption;
     SandProperties m_properties;
+
+    ///Hold the particles created by this paintop
+    QList<Particle *> m_grains;
 
      /**
      * Hold the grid structure. The grid is created by taking the canvas width and height and

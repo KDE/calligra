@@ -72,84 +72,90 @@ Particle::Particle(const Particle & p)
 
 //Methods of the particle dynamics
 
-void Particle::applyForce(const KisPaintInformation& info)
+void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties)
 {
 
     /*
      * xi calculation is imcomplete. It should be like this:
      *
-     * dist_x = _position->x() - mouse_position->x();   //distance between particle centers: X
-     * dist_y = _position->y() - mouse_position->y();   //distance between particle centers: Y
+     * dist_x = _position->x() - info.pos().x();   //distance between particle centers: X
+     * dist_y = _position->y() - info.pos().x();   //distance between particle centers: Y
      * dist_centers = sqrt(dist_x^2 + dist_y^2);        //distance norm
-     * double xi = _radius + brush_size - dist_centers
+     * double xi = _radius + m_properties->size() - dist_centers;
      *
      * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
-    double xi = double(_radius) ;
+    
+     double dist_x = _pos->x() - pos.x();   //distance between particle centers: X
+     double dist_y = _pos->y() - pos.y();   //distance between particle centers: Y
+     double dist_centers = sqrt(dist_x*dist_x + dist_y*dist_y);        //distance norm
+     double xi = _radius + properties->size - dist_centers;
+//     double xi = double( _radius );
 
-    //this is a simple formality, the collision detection will be made before the force application
-    if( xi > 0){
+    //No collision? Exit function
+    if( xi <= 0)
+        return;
 
-        /* normalized young modulus between the MOUSE (brush) particle and this particle
-         * double Y = _friction * brush_friction / (friction + brush_friction)
-         */
-        double Y = _friction;  // Young modulus
-        /*
-         * dissipative constant: function of the material viscosity
-         * Maybe it won't be needed to set this for the MOUSE (BRUSH) PARTICLE
-         * double A = 0.5*( _dissipation + brush_dissipation );
-         */
-        double A =  _dissipation;
+    
+    /* normalized young modulus between the MOUSE (brush) particle and this particle
+        * double Y = _friction * brush_friction / (friction + brush_friction)
+        */
+    double Y = _friction * properties->friction / (_friction + properties->friction);
+//         double Y = _friction;  // Young modulus
+    /*
+        * dissipative constant: function of the material viscosity
+        * Maybe it won't be needed to set this for the MOUSE (BRUSH) PARTICLE
+        * double A = 0.5*( _dissipation + m_properties->dissipation() );
+        */
+    double A =  _dissipation;
 
-        /*
-         * ATTENTION: IN A SITUATION WHERE PARTICLES HAVE ANGULAR MOVEMENT (ROTATIONS), WE WOULD NEED THE
-         * mu AND gamma COEFFICIENTS
-         */
-
-        /*
-         * double reff = ( _radius * brush_size )/( _radius + brush_size );
-         */
-        double reff = double(_radius);
-
-        /*
-         * FOR THE VELOCITY DERIVATION. Same as above: we need the velocity of the
-         * MOUSE particle:
-         *
-         * double dvx = _vel->x() - _brush_vel->x()
-         * double dvy = _vel->y() - _brush_vel->y()
-         *
-         */
-        double dvx = _vel->x();
-        double dvy = _vel->y();
+    /*
+        * ATTENTION: IN A SITUATION WHERE PARTICLES HAVE ANGULAR MOVEMENT (ROTATIONS), WE WOULD NEED THE
+        * mu AND gamma COEFFICIENTS
+        */
 
 
-        /*
-         * rr_rez = 1 /dist_centers
-         */
+    double reff = ( _radius * properties->radius )/( _radius + properties->radius );
+
+//         double reff = double(_radius);
+
+    /*
+        * FOR THE VELOCITY DERIVATION. Same as above: we need the velocity of the
+        * MOUSE particle:
+        *
+        * double dvx = _vel->x() - brush->vel->x();
+        * double dvy = _vel->y() - brush->vel->y();
+        *
+        */
+
+    double dvx = _vel->x() - vel.x();
+    double dvy = _vel->y() - vel.y();
+//         double dvx = _vel->x();
+//         double dvy = _vel->y();
+
+
+
+    double rr_rez = 1 /dist_centers;
+
 //         double rr_rez = 1 / radius;
 
-        /*
-         * dist_x = _position->x() - mouse_position->x();   //distance between particle centers: X
-         * dist_y = _position->y() - mouse_position->y();   //distance between particle centers: Y
-         *
-         * double ex = dist_x * rr_rez;
-         * double ey = dist_y * rr_rez;
-         */
+    double ex = dist_x * rr_rez;
+    double ey = dist_y * rr_rez;
 
-        double ex = 1;  //modify
-        double ey = 1;  //modify
-        double xidot = - (ex*dvx + ey*dvy);
+//         double ex = 1;  //modify
+//         double ey = 1;  //modify
+    //Xi derivative (velocity based)
+    double xidot = - (ex*dvx + ey*dvy);
 
-        //NORMAL FORCE ON THIS PARTICLE
-        double fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot);
+    //NORMAL FORCE ON THIS PARTICLE
+//         double fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
+    double fn = sqrt(xi)*Y*sqrt(reff)*(xi+xidot);
 
-        //PERHAPS I HAVE TO MODIFY THIS, SINCE WE CAN HAVE A FORCE IN A DIFFERENT DIRECTION OF THE MOVEMENT
-         if( fn< 0)
-            fn = 0;
-         else
-             _force += fn;
-
-    }
+    //PERHAPS I HAVE TO MODIFY THIS, SINCE WE CAN HAVE A FORCE IN A DIFFERENT DIRECTION OF THE MOVEMENT
+    if( fn< 0)
+        fn = 0;
+    else
+        _force += fn;
 }
 
 

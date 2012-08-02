@@ -57,17 +57,14 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
     if(m_image->annotation("Particle")){
         qDebug() << "Retrieving particles from an annotation...\n" ;
         QList<Particle *> p;
-        m_sandBrush->getGrains(p);
-        retrieveParticles(p);       
+        retrieveParticles(p);
+        qDebug() << "Particles size :" << p.size() ;
 
         qDebug() << "Creating the grid cells..." ;
-        makeGrid(p);
-        QList<Particle *> cell;
-        retrieveCellParticles(0, 0, cell, p);
-        qDebug() << "Amount of grid particles..." << cell.size();
+        makeGrid();
 
         qDebug() << "Setting the grains..." ;
-        m_sandBrush->setGrains(p);
+        setGrains(p);
 
     }
     qDebug() << "SandPaintop creation done." ;
@@ -84,6 +81,9 @@ KisSandPaintOp::~KisSandPaintOp()
  */
 qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
 {
+
+//Annotation test
+
 //     Particle *p = new Particle(true, 0.5, 1, 100,
 //                                0.4, 1, new QPoint(1,3),
 //                                new QPointF(2,4), new QPointF(3,5));
@@ -115,9 +115,47 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
     //Verify the painting mode
-    if(m_properties.mode){
+    if(!m_properties.mode){
+        //Add particles to the canvas
         m_sandBrush->pouring(m_dab, x1, y1, painter()->paintColor(), info);
+
+        //Serialize the particles added by the pouring and hold them in an annotation
+        QList<Particle *> parts;
+        m_sandBrush->getGrains(parts);
+        getGrains(parts);
+        
+
+        if(parts.size() > 0){
+            QByteArray * b_array = new QByteArray();
+            QDataStream stream(b_array, QIODevice::ReadWrite);
+            for(int i = 0; i < parts.size(); i++){
+                stream << *parts.at(i);
+            }
+            
+            m_image->addAnnotation(KisAnnotationSP(new KisAnnotation( "Particle",
+                                                                    "Set of grains created by the paintop",
+                                                                    *b_array)
+                                                )
+                                  );
+        }
+        
     }else{
+
+        //Get the grid cell where the mouse is now
+        int gx = g_numx*x1/m_image->size().width();
+        int gy = g_numy*y1/m_image->size().height();
+        qDebug() << "(x,y) : (" << x1 << ", " << y1 << ")";
+        qDebug() << "grid pos : (" << gx << ", " << gy << ")";
+
+        //Retrieve the particles from that cell and its neighborhood
+        QList<Particle *> cell;
+
+        retrieveCellParticles(gx, gy, cell);
+
+        //Set the particles of this operation
+        m_sandBrush->setGrains(cell);
+
+        //Do the spread operations
         m_sandBrush->spread(m_dab, x1, y1, painter()->paintColor(), info);
     }
     
@@ -132,29 +170,12 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
      * Add particles to annotation
      */
 
-    //Serialize the particles in the m_grains
-    QList<Particle *> parts;
-    m_sandBrush->getGrains(parts);
-
-    if(parts.size() > 0){
-        QByteArray * b_array = new QByteArray();
-        QDataStream stream(b_array, QIODevice::ReadWrite);
-        for(int i = 0; i < parts.size(); i++){
-            stream << *parts.at(i);
-        }
-
-        m_image->addAnnotation(KisAnnotationSP(new KisAnnotation( "Particle",
-                                                                  "Set of grains that was added by the paintop",
-                                                                  *b_array)
-                                              ));
-
-    }
-
     return 1.0;
 }
 
 void KisSandPaintOp::retrieveParticles(QList<Particle *> &p)
 {
+    qDebug() << "(retrieveParticles) Amount : " << p.size();
     KisAnnotationSP annot = m_image->annotation("Particle");
     QByteArray * array = &annot->annotation();
 
@@ -165,11 +186,11 @@ void KisSandPaintOp::retrieveParticles(QList<Particle *> &p)
         data >> *part;
         p.append(part);
     }
-    qDebug() << "Amount of grains :" << p.size();
+    qDebug() << "(retrieveParticles) Amount : " << p.size();
 }
 
 
-void KisSandPaintOp::makeGrid(QList<Particle *> &grains)
+void KisSandPaintOp::makeGrid()
 {
 
     /*
@@ -184,13 +205,13 @@ void KisSandPaintOp::makeGrid(QList<Particle *> &grains)
     }
 
     //Get the grid cells where each particle is and hold it in the grid list
-    for(int i = 0; i < grains.size(); i++){
+    for(int i = 0; i < m_grains.size(); i++){
         /*
          * Calculate the indices of the particles
          */
-        int ix = int( g_numx * grains[i]->pos()->x()/m_image->width() );
-        int iy = int( g_numy * grains[i]->pos()->y()/m_image->height() );
-
+        int ix = int( g_numx * m_grains[i]->pos()->x()/m_image->width() );
+        int iy = int( g_numy * m_grains[i]->pos()->y()/m_image->height() );
+        qDebug() << "ix, iy" << ix << ", " << iy;
         /*
          * Verify the indices and the grid limits
          */
@@ -198,10 +219,11 @@ void KisSandPaintOp::makeGrid(QList<Particle *> &grains)
         if(( ix >= 0) && ( ix < g_numx ) && ( iy >= 0) && ( iy < g_numy )){
             //if the position is correct
             grid[ix][iy].push_back(i);
-
+            qDebug() << "(" << ix << ", " << iy << ") inserted!";
         } else {
             //if the position is out of the grid size
-            exit(0);
+            qDebug() << "out of bounds";
+            return;
         }
     }
 //     qDebug() << "First element " << grid[0][0][0];
@@ -277,29 +299,40 @@ void KisSandPaintOp::makeNeighbors()
 }
 
 
-void KisSandPaintOp::retrieveCellParticles(int gx, int gy, QList<Particle *> &p, QList<Particle *> &parts)
+void KisSandPaintOp::retrieveCellParticles(int gx, int gy, QList<Particle *> &p)
 {
     qDebug() << "Cell size : " << grid[gx][gy].size();
     if(!grid[gx][gy].size()){
         return;
     }
     
-//     m_sandBrush->getGrains(parts);
-    
     for(int i = 0; i < grid[gx][gy].size(); i++){
-        int index = grid[gx][gy][i];    //index of the particle in the list
-        qDebug() << "Index : " << index ;
-        p.append(parts.at(index));
+        int index = grid[gx][gy][i];
+        p.append(m_grains.at(index));
     }
 }
 
-void KisSandPaintOp::getNeighborhood(int gx, int gy, QList<Particle *> &p)
+void KisSandPaintOp::getNeighborhood(int gx, int gy, QVector<QPair<int,int > > n)
 {
-    QVector<QPair<int,int > > n;
     for(int i = 0; i < neighbors[gx][gy].size(); i++){
         QPair<int,int> pair = neighbors[gx][gy][i];    //index of the particle in the list
         qDebug() << "neighbor : " << pair;
         n.push_back(pair);
     }
     
+}
+
+void KisSandPaintOp::getGrains(QList<Particle *> &g_copy){
+        qDebug() << "(get) Amount : " << m_grains.size();
+        for(int i=0; i < m_grains.size(); i++)
+            g_copy.append(m_grains[i]);
+}
+
+void KisSandPaintOp::setGrains(QList<Particle *> &g_copy){
+    qDebug() << "(set) Amount : " << g_copy.size();
+//     m_grains.clear(); //obs
+    for(int i = 0; i < g_copy.size(); i++)
+        m_grains.append(g_copy[i]);
+
+    qDebug() << "(set) Amount : " << m_grains.size();
 }
