@@ -398,25 +398,25 @@ void KisCanvas2::createCanvas(bool useOpenGL)
 
     Q_ASSERT(m_d->renderingIntent < 4);
 
-    if (useOpenGL) {
-#ifdef HAVE_OPENGL
-        if (QGLFormat::hasOpenGL()) {
-            createOpenGLCanvas();
-        } else {
-            warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
-            createQPainterCanvas();
-        }
-#else
-        warnKrita << "OpenGL requested while its not available, starting qpainter canvas";
-        createQPainterCanvas();
-#endif
-    } else {
-#ifdef HAVE_OPENGL
-        // Free shared pointer
-        m_d->openGLImageTextures = 0;
-#endif
-        createQPainterCanvas();
-    }
+//     if (useOpenGL) {
+// #ifdef HAVE_OPENGL
+//         if (QGLFormat::hasOpenGL()) {
+    createOpenGLCanvas();
+//         } else {
+//             warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
+//             createQPainterCanvas();
+//         }
+// #else
+//         warnKrita << "OpenGL requested while its not available, starting qpainter canvas";
+//         createQPainterCanvas();
+// #endif
+//     } else {
+// #ifdef HAVE_OPENGL
+//         // Free shared pointer
+//         m_d->openGLImageTextures = 0;
+// #endif
+//         createQPainterCanvas();
+//     }
 }
 
 void KisCanvas2::connectCurrentImage()
