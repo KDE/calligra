@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import ":/components"
+import "../components"
 
 Panel {
     id: base;
@@ -117,9 +117,9 @@ Panel {
     ListModel {
         id: model;
 
-        ListElement { name: "Red"; file: ":/images/red.png"; }
-        ListElement { name: "Green"; file: ":/images/green.png"; }
-        ListElement { name: "Blue"; file: ":/images/blue.png"; }
+        ListElement { name: "Red"; file: "images/red.png"; }
+        ListElement { name: "Green"; file: "images/green.png"; }
+        ListElement { name: "Blue"; file: "images/blue.png"; }
     }
 
     Component {

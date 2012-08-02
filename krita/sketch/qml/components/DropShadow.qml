@@ -31,7 +31,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-tl.png";
+        source: "../images/shadow-tl.png";
 
         fillMode: Image.Stretch;
     }
@@ -45,7 +45,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-tc.png";
+        source: "../images/shadow-tc.png";
         fillMode: Image.Stretch;
     }
 
@@ -58,7 +58,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-tr.png";
+        source: "../images/shadow-tr.png";
         fillMode: Image.Stretch;
     }
 
@@ -71,7 +71,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-rc.png";
+        source: "../images/shadow-rc.png";
         fillMode: Image.Stretch;
     }
 
@@ -84,7 +84,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-br.png";
+        source: "../images/shadow-br.png";
         fillMode: Image.Stretch;
     }
 
@@ -97,7 +97,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-bc.png";
+        source: "../images/shadow-bc.png";
         fillMode: Image.Stretch;
     }
 
@@ -110,7 +110,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-bl.png";
+        source: "../images/shadow-bl.png";
         fillMode: Image.Stretch;
     }
 
@@ -123,7 +123,7 @@ Item {
 
         opacity: 0.5;
 
-        source: ":/images/shadow-lc.png";
+        source: "../images/shadow-lc.png";
         fillMode: Image.Stretch;
     }
 }

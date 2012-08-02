@@ -74,11 +74,11 @@ Item {
         }
 
         model: ListModel {
-            ListElement { name: "Recent Image 00"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 01"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 02"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 03"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 04"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
+            ListElement { name: "Recent Image 00"; date: "18-07-2012 18:00"; image: "image://icon/image-x-generic" }
+            ListElement { name: "Recent Image 01"; date: "18-07-2012 18:00"; image: "image://icon/image-x-generic" }
+            ListElement { name: "Recent Image 02"; date: "18-07-2012 18:00"; image: "image://icon/image-x-generic" }
+            ListElement { name: "Recent Image 03"; date: "18-07-2012 18:00"; image: "image://icon/image-x-generic" }
+            ListElement { name: "Recent Image 04"; date: "18-07-2012 18:00"; image: "image://icon/image-x-generic" }
         }
     }
 
@@ -95,7 +95,7 @@ Item {
         Button {
             id: icon;
             onClicked: base.clicked();
-            image: "../images/document-open.png";
+            image: "image://icon/document-open";
         }
 
         Label {

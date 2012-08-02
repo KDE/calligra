@@ -58,11 +58,11 @@ PageStack {
             }
 
             model: ListModel {
-                ListElement { name: "Blank Image (A4)"; image: "../images/document-new.png" }
-                ListElement { name: "Blank Image (A3)"; image: "../images/document-new.png" }
-                ListElement { name: "Custom Size"; image: "../images/document-new.png" }
-                ListElement { name: "From Clipboard"; image: "../images/edit-paste.png" }
-                ListElement { name: "From Camera"; image: "../images/camera-web.png" }
+                ListElement { name: "Blank Image (A4)"; image: "image://icon/document-new" }
+                ListElement { name: "Blank Image (A3)"; image: "image://icon/document-new" }
+                ListElement { name: "Custom Size"; image: "image://icon/document-new" }
+                ListElement { name: "From Clipboard"; image: "image://icon/edit-paste" }
+                ListElement { name: "From Camera"; image: "image://icon/camera-web" }
             }
         }
     } }
@@ -78,7 +78,7 @@ PageStack {
                     anchors.left: parent.left;
                     anchors.verticalCenter: parent.verticalCenter;
                     anchors.margins: Constants.DefaultMargin;
-                    source: ":/images/document-new.png"
+                    source: "image://icon/document-new"
                 }
                 Label {
                     anchors.left: titleImage.right;
