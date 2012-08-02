@@ -93,7 +93,8 @@ public:
      * which should behave like there is a particle on it's position, so we could do a simple collision and move
      * the grains on the canvas.
      */
-    void applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties);
+    
+    void applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties, int width, int height);
 
     ///Runge-Kutta 4 implementation for this particle
 

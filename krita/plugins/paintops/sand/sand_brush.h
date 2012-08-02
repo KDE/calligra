@@ -47,8 +47,8 @@ public:
     void pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
 
     ///Spread the particles in the canvas
-    void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
-
+    void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height);
+    
     ///Draw a Particle in the canvas
     void drawParticle(KisPainter &painter, Particle *p); //Obs
 
@@ -58,6 +58,9 @@ public:
     ///Set the Particles to be used in the current operations
     void setGrains(QList<Particle *> &g_copy);
 
+    ///Calculate the amount of particles to be spread
+    unsigned int m_grainCount;
+    
 private:
     KoColor m_inkColor;
 
@@ -67,8 +70,7 @@ private:
      */
     int m_counter;
 
-    ///Calculate the amount of particles to be spread
-    unsigned int m_grainCount;
+
 
     ///Time of the previous mouse movement (to dynamic calculation purposes)
     int m_prevTime;

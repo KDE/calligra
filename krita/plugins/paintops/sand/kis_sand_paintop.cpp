@@ -43,7 +43,7 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
         : KisPaintOp(painter),
           m_image(image)
 {
-
+    qDebug() << "Initial m_grains :" << m_grains.size();
     //Them que construir um widget pra redimensionar estes grids
     g_numx = g_numy = 100;
     m_opacityOption.readOptionSetting(settings);
@@ -80,6 +80,28 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
 
 KisSandPaintOp::~KisSandPaintOp()
 {
+    //Serialize the particles added by the pouring and hold them in an annotation
+    QList<Particle *> parts;
+    getGrains(parts);
+    if(parts.size() > 0){
+
+        QByteArray * b_array = new QByteArray();
+        QDataStream stream(b_array, QIODevice::ReadWrite);
+        for(int i = 0; i < parts.size(); i++){
+            stream << *parts.at(i);
+        }
+
+        /*
+            * Add particles to the "Particle" annotation
+            */
+        m_image->addAnnotation(KisAnnotationSP(new KisAnnotation( "Particle",
+                                                                "Set of grains created by the paintop",
+                                                                *b_array)
+                                            )
+                                );
+    }
+
+    qDebug() << "Final m_grains :" << m_grains.size();
 
     delete m_sandBrush;
 }
@@ -90,6 +112,9 @@ KisSandPaintOp::~KisSandPaintOp()
 qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
 {
 
+
+    
+    qDebug() << "paintAt m_grains :" << m_grains.size();
     if (!painter())
         return 1.0;
 
@@ -111,33 +136,19 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
      * difference between the pouring and the spreading
      */
     if(!m_properties.mode){
-        
+
         //Add particles to the canvas
         m_sandBrush->pouring(m_dab, x1, y1, painter()->paintColor(), info);
 
-        //Serialize the particles added by the pouring and hold them in an annotation
+        //Isso ta meio estranho... depois ver se isso é necessario
         QList<Particle *> parts;
         m_sandBrush->getGrains(parts);
-        getGrains(parts);
-        
-        //Verify the size of the particle before adding it to the annotation
-        if(parts.size() > 0){
-            
-            QByteArray * b_array = new QByteArray();
-            QDataStream stream(b_array, QIODevice::ReadWrite);
-            for(int i = 0; i < parts.size(); i++){
-                stream << *parts.at(i);
-            }
 
-            /*
-             * Add particles to the "Particle" annotation
-             */
-            m_image->addAnnotation(KisAnnotationSP(new KisAnnotation( "Particle",
-                                                                    "Set of grains created by the paintop",
-                                                                    *b_array)
-                                                )
-                                  );
-        }
+        //add recently added particles
+        setGrains(parts);
+        parts.clear();
+        m_sandBrush->setGrains(parts);
+
     }else{
 
         //Get the grid cell where the mouse is now
@@ -153,7 +164,7 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
         m_sandBrush->setGrains(cell);
 
         //Do the spread operations
-        m_sandBrush->spread(m_dab, x1, y1, painter()->paintColor(), info);
+        m_sandBrush->spread(m_dab, x1, y1, painter()->paintColor(), info, m_image->size().width(), m_image->size().height() );
     }
     
 
@@ -316,5 +327,4 @@ void KisSandPaintOp::getGrains(QList<Particle *> &g_copy){
 void KisSandPaintOp::setGrains(QList<Particle *> &g_copy){
     for(int i = 0; i < g_copy.size(); i++)
         m_grains.append(g_copy[i]);
-
 }

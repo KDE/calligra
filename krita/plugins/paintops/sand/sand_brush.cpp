@@ -166,10 +166,11 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
     //Update the velocity and time of the mouse
     m_prevVel = vel;
     m_prevTime = info.currentTime();
+    qDebug() << "Amount added : " << m_grains.size();
 }
 
 //I'm actually trying to do this function work properly
-void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info)
+void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height)
 {
 
     KisPainter drawer(dev);
@@ -192,7 +193,7 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     for(int i = 0; i < m_grains.size(); i++){
         //(3.a) Verify which ones the mouse is really "colliding"
     //(3.b) and apply the force in the particles that the mouse touched (made in the applyForce method of Particle)
-        m_grains.at(i)->applyForce(pos, vel, m_properties);
+        m_grains.at(i)->applyForce(pos, vel, m_properties, width, height);
 
         //(4) Animate the movements based on past forces
 //         if(m_grains.at(i)->force())
@@ -243,5 +244,7 @@ void SandBrush::setGrains(QList<Particle *> &g_copy){
     m_grains.clear();
     for(int i = 0; i < g_copy.size(); i++)
         m_grains.append(g_copy[i]);
+
+    qDebug() << "set m_grains :" << m_grains.size();
 }
 

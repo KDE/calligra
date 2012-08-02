@@ -72,7 +72,7 @@ Particle::Particle(const Particle & p)
 
 //Methods of the particle dynamics
 
-void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties)
+void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties, int width, int height)
 {
 
     /*
@@ -86,8 +86,10 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
      * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
 
-     double dist_x = _pos->x() - pos.x();   //distance between particle centers: X
-     double dist_y = _pos->y() - pos.y();   //distance between particle centers: Y
+     double dist_x = (_pos->x() - pos.x())/width;   //distance between particle centers: X
+     double dist_y = (_pos->y() - pos.y())/height;   //distance between particle centers: Y
+
+     
      double dist_centers = sqrt(dist_x*dist_x + dist_y*dist_y);        //distance norm
      qDebug() << "dist_centers :" << dist_centers ;
      
@@ -121,6 +123,7 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
 
     
     double reff = ( _radius * properties->radius )/( _radius + properties->radius );
+    qDebug() << "reff :" << reff ;
 
 //         double reff = double(_radius);
 
@@ -135,25 +138,30 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
 
     double dvx = _vel->x() - vel.x();
     double dvy = _vel->y() - vel.y();
+    qDebug() << "dvx, dvy : " << dvx << ", " << dvy ;
 //         double dvx = _vel->x();
 //         double dvy = _vel->y();
 
 
 
     double rr_rez = 1 /dist_centers;
+    qDebug() << "rr_rez : " << rr_rez ;
 
 //         double rr_rez = 1 / radius;
 
     double ex = dist_x * rr_rez;
     double ey = dist_y * rr_rez;
+    qDebug() << "ex, ey : " << ex << ", " << ey ;
 
 //         double ex = 1;  //modify
 //         double ey = 1;  //modify
     //Xi derivative (velocity based)
     double xidot = - (ex*dvx + ey*dvy);
+    qDebug() << "xidot :" << xidot ;
 
     //NORMAL FORCE ON THIS PARTICLE
 //         double fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
+    
     double fn = sqrt(xi)*Y*sqrt(reff)*(xi+xidot);
     qDebug() << "fn " << fn ;
 
