@@ -23,12 +23,14 @@
 #include <QList>
 #include <QSet>
 #include <QPainter>
+#include <QPainterPath>
 
 //Stage Headers
 #include "KPrPage.h"
 #include "KPrView.h"
 #include "KPrDocument.h"
 #include "animations/KPrAnimationSubStep.h"
+#include "animations/KPrAnimateMotion.h"
 #include "commands/KPrAnimationRemoveCommand.h"
 #include "commands/KPrReorderAnimationCommand.h"
 #include <commands/KPrEditAnimationTimeLineCommand.h>
@@ -42,6 +44,7 @@
 #include <KoPADocument.h>
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
+#include <KoPathShape.h>
 
 //KDE Headers
 #include <KIcon>
@@ -973,7 +976,41 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
         return QPixmap();
     }
     QString name = getAnimationName(animation, true);
-    if (!name.isEmpty()) {
+    // Return Path Motion Animation icon
+    if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
+        QPainterPath m_path = QPainterPath();
+        for (int i = 0; i < animation->animationCount(); i++) {
+            if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(animation->animationAt(i))) {
+                m_path = motion->path();
+                break;
+            }
+        }
+        if (!m_path.isEmpty()) {
+            const int margin = 8;
+            const int width = 4;
+            QImage thumb(QSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge), QImage::Format_RGB32);
+            // fill backgroung
+            thumb.fill(QColor(Qt::white).rgb());
+            QRect imageRect = thumb.rect();
+            // adjust to left space for margins
+            imageRect.adjust(margin, margin, -margin, -margin);
+            KoPathShape pathShape = *(KoPathShape::createShapeFromPainterPath(m_path));
+            pathShape.setSize(imageRect.size());
+            m_path = pathShape.outline();
+            //Center path
+            m_path.translate(-m_path.boundingRect().x() + margin, -m_path.boundingRect().y() + margin);
+            QPainter painter(&thumb);
+            painter.setPen(QPen(QColor(0, 100, 224), width, Qt::SolidLine,
+                                Qt::FlatCap, Qt::MiterJoin));
+            painter.drawPath(m_path);
+            QPixmap iconPixmap;
+            if (iconPixmap.convertFromImage(thumb)) {
+                return iconPixmap;
+            }
+        }
+    }
+    // Return animation icon
+    else if (!name.isEmpty()) {
         name = name.append("_animation");
         name.replace(" ", "_");
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
