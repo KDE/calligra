@@ -41,7 +41,6 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "ProgressProxy.h"
-#include "KisDeclarativeCanvasItem.h"
 
 #include "kis_doc2.h"
 #include "kis_canvas2.h"
@@ -71,7 +70,6 @@ public:
     KisDoc2* doc;
     KisView2* view;
     KisCanvas2* canvas;
-    KisDeclarativeCanvasItem *canvasItem;
 
     KisGL2Canvas* glCanvas;
 
