@@ -34,10 +34,14 @@ class KisGL2Canvas::Private
 {
 public:
     KisGL2TileManager *tileManager;
+
+    static QGLWidget *shareWidget;
 };
 
+QGLWidget *KisGL2Canvas::Private::shareWidget = 0;
+
 KisGL2Canvas::KisGL2Canvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent)
-    : QGLWidget(parent, KisOpenGL::sharedContextWidget()), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
+    : QGLWidget(parent, KisGL2Canvas::shareWidget()), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
 {
     d->tileManager = new KisGL2TileManager(this);
 }
@@ -109,6 +113,15 @@ void KisGL2Canvas::update(const QRect& area)
 uint KisGL2Canvas::framebufferTexture() const
 {
     return d->tileManager->framebufferTexture();
+}
+
+QGLWidget* KisGL2Canvas::shareWidget()
+{
+    if(!KisGL2Canvas::Private::shareWidget) {
+        KisGL2Canvas::Private::shareWidget = new QGLWidget();
+    }
+
+    return KisGL2Canvas::Private::shareWidget;
 }
 
 #include "kis_gl2_canvas.moc"

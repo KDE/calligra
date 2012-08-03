@@ -47,6 +47,8 @@ public:
 
     uint framebufferTexture() const;
 
+    static QGLWidget *shareWidget();
+
 public slots:
     void configChanged();
     void update(const QRect& area);
