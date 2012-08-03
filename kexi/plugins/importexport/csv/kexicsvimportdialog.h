@@ -193,14 +193,6 @@ private:
     QByteArray m_fileArray;
     Mode m_mode;
 
-    //! vector of detected types, 0==text (the default), 1==number, 2==date
-//! @todo more types
-    QVector<int> m_detectedTypes;
-
-    //! m_detectedUniqueColumns[i]==true means that i-th column has unique values
-    //! (only for numeric type)
-    QVector< QList<int>* > m_uniquenessTest;
-
     QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
     QVector<QString> m_typeNames;
     bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once
@@ -241,6 +233,9 @@ private:
     QTime m_elapsedTimer; //!< Used to update progress
 #endif
     qint64 m_elapsedMs;
+
+    class Private;
+    Private * const d;
 
 private slots:
     void fillTable();
