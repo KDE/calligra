@@ -65,6 +65,7 @@ int main( int argc, char** argv )
 
     KApplication app;
     //app.setApplicationName("org.krita.sketch");
+    QApplication::setStyle("plastique");
 
     MainWindow window(fileNames);
     window.showMaximized();
