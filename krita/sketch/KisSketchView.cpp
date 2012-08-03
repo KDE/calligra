@@ -121,9 +121,12 @@ void KisSketchView::createDocument()
 {
     KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
     d->doc = static_cast<KisDoc2*>(factory->create(this, "KritaPart"));
-    d->doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
-    d->view = qobject_cast<KisView2*>(d->doc->createView());
-    //d->view->hide();
+    //d->doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
+    d->doc->openUrl(QUrl::fromLocalFile("/usr/share/wallpapers/stripes.png"));
+
+    d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
+    d->view->hide();
+    d->view->setGeometry(x(), y(), width(), height());
     d->canvas = d->view->canvasBase();
     d->canvas->setCanvasItem(this);
 
@@ -133,7 +136,6 @@ void KisSketchView::createDocument()
     d->canvas->updateCanvas(QRectF(0, 0, width(), height()));
 
     d->glCanvas = qobject_cast<KisGL2Canvas*>(d->canvas->canvasWidget());
-    //const_cast<QGLContext*>(d->glCanvas->context())->
 }
 
 void KisSketchView::loadDocument()
@@ -181,11 +183,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if (GLEW_GREMEDY_string_marker) {
-        glStringMarkerGREMEDY(0, Q_FUNC_INFO);
-    }
-
-    d->canvas->updateCanvas();
+    d->glCanvas->paintGL();
 
     const_cast<QGLContext*>(qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->context())->makeCurrent();
 
@@ -194,18 +192,18 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     d->indexBuffer->bind();
 
     QMatrix4x4 model;
+    model.scale(1.0f, -1.0f);
     d->shader->setUniformValue(d->modelMatrixLocation, model);
 
     QMatrix4x4 view;
     d->shader->setUniformValue(d->viewMatrixLocation, view);
 
     QMatrix4x4 projection;
-    projection.ortho(0, 1, -1, 0, -1, 1);
+    projection.ortho(0, 1, 0, 1, -1, 1);
     d->shader->setUniformValue(d->projectionMatrixLocation, projection.transposed());
 
-    glActiveTexture(GL_TEXTURE4);
     glBindTexture(GL_TEXTURE_2D, d->glCanvas->framebufferTexture());
-    d->shader->setUniformValue(d->texture0Location, 4);
+    d->shader->setUniformValue(d->texture0Location, 0);
 
     d->shader->setAttributeBuffer(d->vertexAttributeLocation, GL_FLOAT, 0, 3);
     d->shader->enableAttributeArray(d->vertexAttributeLocation);
