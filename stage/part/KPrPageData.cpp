@@ -21,20 +21,21 @@
 #include "KPrPageData.h"
 #include "KPrShapeAnimations.h"
 
-KPrPageData::KPrPageData()
+KPrPageData::KPrPageData(KPrDocument *document)
+    : m_animations(new KPrShapeAnimations(document))
 {
 }
 
 KPrPageData::~KPrPageData()
 {
-    foreach (KPrAnimationStep *step, m_animations.steps()) {
+    foreach (KPrAnimationStep *step, m_animations->steps()) {
         delete step;
     }
 }
 
 KPrShapeAnimations & KPrPageData::animations()
 {
-    return m_animations;
+    return *(m_animations);
 }
 
 KPrPlaceholders & KPrPageData::placeholders()
@@ -49,5 +50,5 @@ const KPrPlaceholders & KPrPageData::placeholders() const
 
 QList<KPrAnimationStep *> KPrPageData::animationSteps() const
 {
-    return m_animations.steps();
+    return m_animations->steps();
 }

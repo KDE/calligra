@@ -352,7 +352,7 @@ void KPrTimeLineView::paintRow(QPainter *painter, int row, int y, const int RowH
 
 void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, bool selected)
 {
-    QColor m_color = m_mainView->colorforRow(row);
+    QColor m_color = m_mainView->barColor(row);
     int lineHeigth = qMin(LINE_HEIGHT , rect.height());
     int vPadding = (rect.height() - lineHeigth)/2;
     qreal stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / m_mainView->numberOfSteps();

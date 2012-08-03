@@ -30,7 +30,7 @@ class KprAnimationStep;
 class STAGE_EXPORT KPrPageData
 {
 public:
-    KPrPageData();
+    KPrPageData(KPrDocument * document);
     ~KPrPageData();
 
     KPrShapeAnimations & animations();
@@ -38,7 +38,7 @@ public:
     const KPrPlaceholders & placeholders() const;
     QList<KPrAnimationStep *> animationSteps() const;
 private:
-    KPrShapeAnimations m_animations;
+    KPrShapeAnimations *m_animations;
     KPrPlaceholders m_placeholders;
 };
 

@@ -167,10 +167,6 @@ signals:
      */
     void customSlideShowsModified();
 
-    void animationAdded(KPrShapeAnimation *animation);
-    void animationRemoved(KPrShapeAnimation *animation);
-    void animationReplaced(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
-
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );

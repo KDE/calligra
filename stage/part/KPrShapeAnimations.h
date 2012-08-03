@@ -31,13 +31,6 @@
 
 class KPrDocument;
 
-struct AnimationTmpData
-{
-    int group;
-    KPrShapeAnimation::NodeType nodeType;
-};
-
-
 /**
  * Model for Animations data of each KPrPage
  */
@@ -55,19 +48,25 @@ public:
 
     /// column names
     enum ColumnNames {
-        Group = 0,
-        StepCount = 1,
-        TriggerEvent = 2,
-        Name = 3,
-        ShapeThumbnail = 4,
-        AnimationIcon = 5,
-        StartTime = 6,
-        Duration = 7,
-        AnimationClass = 8,
-        NodeType = 9
+        Group,
+        StepCount,
+        TriggerEvent,
+        Name,
+        ShapeThumbnail,
+        AnimationIcon,
+        StartTime,
+        Duration,
+        AnimationClass,
+        NodeType
     };
 
-    explicit KPrShapeAnimations(QObject *parent = 0);
+    struct AnimationTmpData
+    {
+        int group;
+        KPrShapeAnimation::NodeType nodeType;
+    };
+
+    explicit KPrShapeAnimations(KPrDocument *document, QObject *parent = 0);
     ~KPrShapeAnimations();
 
     /// Model Methods
@@ -162,9 +161,6 @@ public:
      */
     void setTimeRange(KPrShapeAnimation *item, const int begin, const int duration);
 
-    /// requiere to send commands
-    void setDocument(KPrDocument *document);
-
     /**
      * Get the end time for the given animation
      *
@@ -179,7 +175,7 @@ public:
      * @param index of the animation
      * @return the time in miliseconds where the scale begin (relative to the parent onclik animation)
      */
-    int scaleBeginForAnimation(const QModelIndex &index);
+    int animationStart(const QModelIndex &index);
 
     /**
      * @brief Replace animation in the given index

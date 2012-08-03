@@ -49,9 +49,8 @@ void TestShapeAnimations::initTestCase()
 
 void TestShapeAnimations::addRemove()
 {
-    KPrShapeAnimations animations;
     MockDocument doc;
-    animations.setDocument(&doc);
+    KPrShapeAnimations animations(&doc);
     new ModelTest(&animations, this);
     cleanStepSubStepData();
     animations.add(m_animation[1]);
@@ -87,9 +86,8 @@ void TestShapeAnimations::addRemove()
 
 void TestShapeAnimations::replaceSwap()
 {
-    KPrShapeAnimations animations;
     MockDocument doc;
-    animations.setDocument(&doc);
+    KPrShapeAnimations animations(&doc);
     new ModelTest(&animations, this);
     cleanStepSubStepData();
     animations.add(m_animation[1]);
@@ -112,9 +110,8 @@ void TestShapeAnimations::replaceSwap()
 
 void TestShapeAnimations::helperMethods()
 {
-    KPrShapeAnimations animations;
     MockDocument doc;
-    animations.setDocument(&doc);
+    KPrShapeAnimations animations(&doc);
     new ModelTest(&animations, this);
     cleanStepSubStepData();
     animations.add(m_animation[1]);
@@ -147,9 +144,8 @@ void TestShapeAnimations::helperMethods()
 
 void TestShapeAnimations::getTriggerEvent()
 {
-    KPrShapeAnimations animations;
     MockDocument doc;
-    animations.setDocument(&doc);
+    KPrShapeAnimations animations(&doc);
     new ModelTest(&animations, this);
     createAnimationTree(&animations);
     // Test Trigger Event
@@ -187,9 +183,8 @@ void TestShapeAnimations::getTriggerEvent()
 
 void TestShapeAnimations::setTriggerEvent()
 {
-    KPrShapeAnimations animations;
     MockDocument doc;
-    animations.setDocument(&doc);
+    KPrShapeAnimations animations(&doc);
     new ModelTest(&animations, this);
     createAnimationTree(&animations);
     // From On click
@@ -407,22 +402,21 @@ void TestShapeAnimations::setTriggerEvent()
 
 void TestShapeAnimations::timeHelperMethods()
 {
-    KPrShapeAnimations animations;
     MockDocument doc;
-    animations.setDocument(&doc);
+    KPrShapeAnimations animations(&doc);
     new ModelTest(&animations, this);
     createAnimationTree(&animations);
 
     //Previous animation Begin
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(0, 0)), 0);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(1, 0)), 0);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(2, 0)), 0);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(3, 0)), 5000);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(4, 0)), 5000);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(5, 0)), 1000);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(6, 0)), 3000);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(7, 0)), 0);
-    QCOMPARE(animations.scaleBeginForAnimation(animations.index(8, 0)), 0);
+    QCOMPARE(animations.animationStart(animations.index(0, 0)), 0);
+    QCOMPARE(animations.animationStart(animations.index(1, 0)), 0);
+    QCOMPARE(animations.animationStart(animations.index(2, 0)), 0);
+    QCOMPARE(animations.animationStart(animations.index(3, 0)), 5000);
+    QCOMPARE(animations.animationStart(animations.index(4, 0)), 5000);
+    QCOMPARE(animations.animationStart(animations.index(5, 0)), 1000);
+    QCOMPARE(animations.animationStart(animations.index(6, 0)), 3000);
+    QCOMPARE(animations.animationStart(animations.index(7, 0)), 0);
+    QCOMPARE(animations.animationStart(animations.index(8, 0)), 0);
 
     //Previous animation End
     QCOMPARE(animations.animationEndByIndex(animations.index(0, 0)), 4000);
