@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) LukÃ¡Å¡ TvrdÃ½ <lukast.dev@gmail.com>, (C) 2010
+ * Copyright (C) Lukáš Tvrdý <lukast.dev@gmail.com>, (C) 2010
  * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
