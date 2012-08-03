@@ -21,15 +21,20 @@
 #ifndef KPRANIMATIONTOOL_H
 #define KPRANIMATIONTOOL_H
 
-#include <KoCreatePathTool.h>
+#include <KoPathTool.h>
 #include <QMap>
 #include <animations/KPrShapeAnimation.h>
+#include <KoFlake.h>
+
+class KoPathShape;
+class KoSelection;
+class KPrAnimateMotion;
 
 /**
  * The animation tool (associated with the clapperboard icon) is the tool in KPresenter where the user
  * animates shapes and sets up slide transitions.
  */
-class KPrAnimationTool : public KoCreatePathTool
+class KPrAnimationTool : public KoPathTool
 {
     Q_OBJECT
 public:
@@ -40,14 +45,7 @@ public:
     explicit KPrAnimationTool( KoCanvasBase *canvas );
     virtual ~KPrAnimationTool();
 
-public:
-
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
-
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-
-public: // Events
 
     virtual void mousePressEvent( KoPointerEvent *event );
     //virtual void mouseMoveEvent( KoPointerEvent *event );
@@ -56,6 +54,10 @@ public: // Events
 
 //    virtual void keyPressEvent(QKeyEvent *event);
     void repaintDecorations();
+
+public slots:
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void deactivate();
 
 protected:
     QRectF handlesSize();
@@ -68,12 +70,21 @@ protected:
 
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
+private slots:
+    void saveMotionPath();
+    void init();
+    void verifyMotionPathChanged(KoShape *shape);
+
 private:
 
     QList<KoPathShape *>m_motionPaths;
+    KoPathShape *m_lastMotionPath;
     QMap<KPrShapeAnimation *, KoPathShape *> m_motionP;
+    QMap<KoPathShape *, KPrAnimateMotion *> m_pathList;
+    QMap<KoPathShape *, KoShape *> m_shapeList;
     KPrShapeAnimation *currentAnimation;
     KoPathShape *currentPath;
+    bool m_deleteMotionPaths;
 };
 
 #endif

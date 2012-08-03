@@ -60,6 +60,8 @@ public:
     
 signals:
     void previousStateChanged(bool isEnabled);
+    void shapeAnimationsChanged(KoShape *shape);
+    void motionPathAddedRemoved();
     
 public slots:
     /// Update widget with animations of the new active page
@@ -93,6 +95,8 @@ public slots:
     void moveAnimationDown();
 
     void addNewAnimation(KPrShapeAnimation *animation);
+
+    void verifyMotionPathChanged(const QModelIndex &index, const QModelIndex &indexEnd);
 
 private slots:
     void testEditPanelRoot();

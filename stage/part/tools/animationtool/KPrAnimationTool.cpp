@@ -51,11 +51,14 @@
 #include "KPrShapeAnimationDocker.h"
 #include "KPrShapeApplicationData.h"
 #include "animations/KPrAnimateMotion.h"
+#include "KPrPageData.h"
 
 const int HANDLE_DISTANCE = 10;
 
 KPrAnimationTool::KPrAnimationTool( KoCanvasBase *canvas )
-    : KoCreatePathTool( canvas )
+    : KoPathTool( canvas )
+    , m_lastMotionPath(0)
+    , m_deleteMotionPaths(true)
 {
 }
 
@@ -63,10 +66,8 @@ KPrAnimationTool::~KPrAnimationTool()
 {
 }
 
-
 void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-
     foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection)) {
         painter.save();
 
@@ -83,53 +84,57 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
         painterMatrix = painter.worldTransform();
         painter.restore();
     }
-    // Paint motion paths
-    /*QList<KoShape *> currentShapes = canvas()->shapeManager()->shapes();
-    foreach (KoShape* shape, currentShapes) {
-        if (KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>(shape->applicationData())) {
-            foreach(KPrShapeAnimation *anim, applicationData->animations()) {
-                if (anim->presetClass() == KPrShapeAnimation::MotionPath) {
-                    for (int i = 0; i < anim->animationCount(); i++) {
-                        if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(anim->animationAt(i))) {
-                            qDebug() << "anim " << anim->id();
-                            QPainterPath outlinePath = motion->path();
-                            qreal zoom;
-                            (dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->zoomHandler()->zoom(&zoom, &zoom);
-                            QSizeF pageSize = dynamic_cast<KoPACanvas *>(canvas())->koPAView()->zoomController()->documentSize();
-                            outlinePath = outlinePath * QTransform().scale(pageSize.width()*zoom,
-                                                                           pageSize.height()*zoom);
-                            KoPathShape *path = KoPathShape::createShapeFromPainterPath(outlinePath);
-                            path->setPosition(QPointF(shape->position().x(), shape->position().y() + shape->size().height()/2));
-                            KoShapeStroke *stroke = new KoShapeStroke();
-                            QVector<qreal> dashes;
-                            qreal space = 8;
-                            dashes << 1 << space << 3 << space;
-                            stroke->setLineStyle(Qt::DashLine, dashes);
-                            stroke->setLineWidth(4);
-                            stroke->setColor(Qt::gray);
-                            path->setStroke(stroke);
-                            painter.save();
-                            this->paintPath(*(path), painter, converter);
-                            painter.restore();
-                        }
-
-                    }
-                }
-            }
+    foreach(KoPathShape *shape, m_motionPaths) {
+        if (!canvas()->shapeManager()->shapes().contains(shape)) {
+            qDebug() << "adding shape";
+            canvas()->shapeManager()->addShape(shape);
         }
-    }*/
-    KoCreatePathTool::paint(painter, converter);
+    }
+    KoPathTool::paint(painter, converter);
 }
 
 
 void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    qDebug() << "activate tool" << m_deleteMotionPaths;
     Q_UNUSED(toolActivation);
     Q_UNUSED(shapes);
     useCursor(Qt::ArrowCursor);
     repaintDecorations();
-    loadMotionPathShapes();
-    KoCreatePathTool::activate(toolActivation, shapes);
+
+    if (m_deleteMotionPaths) {
+        init();
+    }
+
+    QList<KoPathShape*> selectedShapes;
+    foreach(KoShape *shape, shapes) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+        if (shape->isEditable() && pathShape && !shape->isPrintable()) {
+            if (m_lastMotionPath == pathShape) {
+                return;
+            }
+            selectedShapes.append(pathShape);
+        }
+    }
+    if (!selectedShapes.isEmpty()) {
+        qDebug() << "call to parent activate";
+        KoPathTool::activate(toolActivation, shapes);
+    }
+    useCursor(Qt::ArrowCursor);
+}
+
+void KPrAnimationTool::deactivate()
+{
+    qDebug() << "deactivate";
+    foreach(KoPathShape *shape, m_motionPaths) {
+        canvas()->shapeManager()->remove(shape);
+    }
+    m_motionPaths.clear();
+    m_motionP.clear();
+    m_deleteMotionPaths = true;
+    //save paths
+
+    KoPathTool::deactivate();
 }
 
 void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
@@ -148,7 +153,17 @@ void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
         selection->update();
         shape->update();
     }
-    //KoCreatePathTool::mousePressEvent(event);
+    if (KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape)) {
+        if (!pathShape->isPrintable()) {
+            QSet<KoShape*> shapes;
+            qDebug() << "activate kk";
+            shapes << pathShape;
+            m_deleteMotionPaths = false;
+            activate(DefaultActivation, shapes);
+            m_lastMotionPath = pathShape;
+        }
+    }
+    KoPathTool::mousePressEvent(event);
 }
 
 /*void KPrAnimationTool::mouseMoveEvent( KoPointerEvent *event )
@@ -190,6 +205,8 @@ QList<QWidget *> KPrAnimationTool::createOptionWidgets()
 
     KPrShapeAnimationDocker *shapeAnimationWidget = new KPrShapeAnimationDocker();
     shapeAnimationWidget->setView((dynamic_cast<KoPACanvas *>(canvas()))->koPAView());
+    connect(shapeAnimationWidget, SIGNAL(shapeAnimationsChanged(KoShape*)), this, SLOT(verifyMotionPathChanged(KoShape*)));
+    connect(shapeAnimationWidget, SIGNAL(motionPathAddedRemoved()), this, SLOT(init()));
 
     QList<QWidget *> widgets;
     effectWidget->setWindowTitle(i18n("Slide Transitions"));
@@ -205,43 +222,44 @@ void KPrAnimationTool::loadMotionPathShapes()
 {
     qDebug() << "load motion paths loaded";
     m_motionPaths.clear();
-    QList<KoShape *> currentShapes = canvas()->shapeManager()->shapes();
-    //selection->deselectAll();
-    foreach (KoShape* shape, currentShapes) {
-        if (KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>(shape->applicationData())) {
-            foreach(KPrShapeAnimation *anim, applicationData->animations()) {
-                if (anim->presetClass() == KPrShapeAnimation::MotionPath) {
-                    for (int i = 0; i < anim->animationCount(); i++) {
-                        if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(anim->animationAt(i))) {
-                            qDebug() << "anim " << anim->id();
-                            QPainterPath outlinePath = motion->path();
-                            qreal zoom;
-                            (dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->zoomHandler()->zoom(&zoom, &zoom);
-                            QSizeF pageSize = dynamic_cast<KoPACanvas *>(canvas())->koPAView()->zoomController()->documentSize();
-                            qDebug() << "zoom: "<< zoom << pageSize << outlinePath.boundingRect() << outlinePath.boundingRect();
-                            outlinePath = outlinePath * QTransform().scale(pageSize.width()*zoom,
-                                                                           pageSize.height()*zoom);
-                            KoPathShape *path = KoPathShape::createShapeFromPainterPath(outlinePath);
-                            path->setPosition(QPointF(shape->position().x(), shape->position().y() + shape->size().height()/2));
-
-                            KoShapeStroke *stroke = new KoShapeStroke();
-                            QVector<qreal> dashes;
-                            qreal space = 8;
-                            dashes << 1 << space << 3 << space;
-                            stroke->setLineStyle(Qt::DashLine, dashes);
-                            stroke->setLineWidth(4);
-                            stroke->setColor(Qt::gray);
-                            path->setStroke(stroke);
-                            if (!m_motionP.contains(anim)) {
-                                currentAnimation = anim;
-                                m_motionP.insert(anim, path);
-
-                            }
-                            addPathShape(path);
-                        }
-
-                    }
+    m_pathList.clear();
+    m_shapeList.clear();
+    KPrPageData *pageData = dynamic_cast<KPrPageData *>((dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->activePage());
+    Q_ASSERT(pageData);
+    KPrShapeAnimations *animations =  &(pageData->animations());
+    for (int j = 0; j < animations->rowCount(); j++) {
+        KPrShapeAnimation *anim = animations->animationByRow(j);
+        if (anim->presetClass() == KPrShapeAnimation::MotionPath) {
+            for (int i = 0; i < anim->animationCount(); i++) {
+                if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(anim->animationAt(i))) {
+                    qDebug() << "anim " << anim->id();
+                    QPainterPath outlinePath = motion->path();
+                    qDebug() << "bounding rect " << outlinePath.boundingRect();
+                    qreal outlineX = outlinePath.boundingRect().x();
+                    qreal outlineY = outlinePath.boundingRect().y();
+                    qreal zoom;
+                    (dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->zoomHandler()->zoom(&zoom, &zoom);
+                    QSizeF pageSize = dynamic_cast<KoPACanvas *>(canvas())->koPAView()->zoomController()->documentSize();
+                    qDebug() << "zoom: "<< zoom << pageSize << outlinePath.boundingRect() << outlinePath.boundingRect();
+                    outlineX = outlineX * pageSize.width() * zoom;
+                    outlineY = outlineY * pageSize.height() * zoom;
+                    outlinePath = outlinePath * QTransform().scale(pageSize.width()*zoom,
+                                                                   pageSize.height()*zoom);
+                    KoPathShape *path = KoPathShape::createShapeFromPainterPath(outlinePath);
+                    path->setPosition(QPointF(anim->shape()->position().x() + anim->shape()->size().width()/2 + outlineX, anim->shape()->position().y() + anim->shape()->size().height()/2 + outlineY));
+                    m_pathList.insert(path, motion);
+                    m_shapeList.insert(path, anim->shape());
+                    KoShapeStroke *stroke = new KoShapeStroke();
+                    QVector<qreal> dashes;
+                    qreal space = 8;
+                    dashes << 1 << space << 3 << space;
+                    stroke->setLineStyle(Qt::DashLine, dashes);
+                    stroke->setLineWidth(2);
+                    stroke->setColor(Qt::gray);
+                    path->setStroke(stroke);
+                    addPathShape(path);
                 }
+
             }
         }
     }
@@ -249,8 +267,9 @@ void KPrAnimationTool::loadMotionPathShapes()
 
 void KPrAnimationTool::addPathShape(KoPathShape *pathShape)
 {
-    qDebug() << "add path";
+    //qDebug() << "add path";
     m_motionPaths.append(pathShape);
+    pathShape->setPrintable(false);
     canvas()->shapeManager()->addShape(pathShape);
 }
 
@@ -266,6 +285,58 @@ void KPrAnimationTool::paintPath(KoPathShape &pathShape, QPainter &painter, cons
         painter.save();
         pathShape.stroke()->paint(&pathShape, painter, converter);
         painter.restore();
+    }
+}
+
+void KPrAnimationTool::saveMotionPath()
+{
+    qDebug() <<"Saving Motion path";
+    QMapIterator<KoPathShape *, KPrAnimateMotion *> i(m_pathList);
+    while (i.hasNext()) {
+        i.next();
+        QPainterPath outlinePath = i.key()->outline();
+        qDebug() << i.key()->position();
+        qDebug() << m_shapeList.value(i.key())->position();
+        qDebug() << outlinePath.boundingRect();
+
+        qreal zoom;
+        (dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->zoomHandler()->zoom(&zoom, &zoom);
+        QSizeF pageSize = dynamic_cast<KoPACanvas *>(canvas())->koPAView()->zoomController()->documentSize();
+        qreal offsetX = -(m_shapeList.value(i.key())->size().width()/2 + m_shapeList.value(i.key())->position().x() - i.key()->position().x());
+        qreal offsetY = -(m_shapeList.value(i.key())->size().height()/2 + m_shapeList.value(i.key())->position().y() - i.key()->position().y());
+        outlinePath = outlinePath * QTransform().translate(offsetX, offsetY);
+        outlinePath = outlinePath * QTransform().scale(1/(pageSize.width()*zoom),
+                                                       1/(pageSize.height()*zoom));
+        i.value()->setPath(outlinePath);
+        outlinePath = i.value()->path();
+        qreal outlineX = outlinePath.boundingRect().x();
+        qreal outlineY = outlinePath.boundingRect().y();
+        outlineX = outlineX * pageSize.width() * zoom;
+        outlineY = outlineY * pageSize.height() * zoom;
+        //i.key()->setPosition(QPointF(m_shapeList.value(i.key())->position().x() + m_shapeList.value(i.key())->size().width()/2 + outlineX,
+        //                             m_shapeList.value(i.key())->position().y() + m_shapeList.value(i.key())->size().height()/2 + outlineY));
+    }
+}
+
+void KPrAnimationTool::init()
+{
+    foreach(KoPathShape *shape, m_motionPaths) {
+        canvas()->shapeManager()->remove(shape);
+    }
+    m_motionPaths.clear();
+    m_motionP.clear();
+    loadMotionPathShapes();
+    connect(canvas()->shapeManager(), SIGNAL(contentChanged()), this, SLOT(saveMotionPath()));
+}
+
+void KPrAnimationTool::verifyMotionPathChanged(KoShape *shape)
+{
+    QMapIterator<KoPathShape *, KoShape *> i(m_shapeList);
+    while (i.hasNext()) {
+        i.next();
+        if (i.value() == shape) {
+            init();
+        }
     }
 }
 

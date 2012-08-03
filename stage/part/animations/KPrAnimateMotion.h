@@ -35,6 +35,7 @@ public:
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
     QPainterPath path();
+    void setPath(QPainterPath path);
 
 protected:
     virtual void next(int currentTime);

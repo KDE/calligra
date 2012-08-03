@@ -199,7 +199,7 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    if (selection->selectedShapes().isEmpty()) {
+    if (selection->selectedShapes().isEmpty() || !(selection->selectedShapes().first()->isPrintable())) {
         m_buttonAddAnimation->setEnabled(false);
     }
     else {
@@ -244,7 +244,19 @@ void KPrShapeAnimationDocker::addNewAnimation(KPrShapeAnimation *animation)
     m_animationsModel->insertNewAnimation(animation, index);
     m_animationsView->setCurrentIndex(m_animationsModel->indexByAnimation(animation));
     m_addMenu->hide();
+}
 
+void KPrShapeAnimationDocker::verifyMotionPathChanged(const QModelIndex &index, const QModelIndex &indexEnd)
+{
+    Q_UNUSED(indexEnd);
+    if (index.isValid()) {
+        KPrShapeAnimation *animation = m_animationsModel->animationByRow(index.row());
+        if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
+            emit motionPathAddedRemoved();
+            return;
+        }
+        emit shapeAnimationsChanged(animation->shape());
+    }
 }
 
 KPrShapeAnimations *KPrShapeAnimationDocker::animationsByPage(KoPAPageBase *page)
@@ -286,6 +298,9 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
     connect(m_animationsModel, SIGNAL(onClickEventChanged()), this, SLOT(testEditPanelRoot()));
+    connect(m_animationsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(verifyMotionPathChanged(QModelIndex,QModelIndex)));
+    connect(m_animationsModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SIGNAL(motionPathAddedRemoved()));
+    connect(m_animationsModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SIGNAL(motionPathAddedRemoved()));
     getSelectedShape();
     checkAnimationSelected();
 }
@@ -388,7 +403,6 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
     if(!m_previewMode) {
         m_previewMode = new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas());
     }
-
     m_previewMode->setShapeAnimation(shapeAnimation);
     m_view->setViewMode(m_previewMode); // play the effect (it reverts to normal  when done)
 }

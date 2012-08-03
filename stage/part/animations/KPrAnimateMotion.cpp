@@ -89,6 +89,11 @@ QPainterPath KPrAnimateMotion::path()
     return m_path;
 }
 
+void KPrAnimateMotion::setPath(QPainterPath path)
+{
+    m_path = path;
+}
+
 void KPrAnimateMotion::next(int currentTime)
 {
     Q_ASSERT(m_animationCache);
