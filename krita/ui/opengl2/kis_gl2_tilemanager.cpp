@@ -78,6 +78,8 @@ void KisGL2TileManager::initialize(KisImageWSP image)
 {
     qDebug() << Q_FUNC_INFO;
 
+    d->context->makeCurrent();
+
     d->framebuffer = new QGLFramebufferObject(d->canvas->width(), d->canvas->height());
 
     d->image = image;
@@ -157,13 +159,12 @@ void KisGL2TileManager::update(const QRect& area)
 
 void KisGL2TileManager::render()
 {
-    if (GLEW_GREMEDY_string_marker) {
-        glStringMarkerGREMEDY(0, Q_FUNC_INFO);
-    }
+    d->context->makeCurrent();
 
-    //Bind the Framebuffer
+    //Bind the framebuffer
     d->framebuffer->bind();
-    //d->context->makeCurrent();
+
+    //Clear it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //Render the background
@@ -189,7 +190,6 @@ void KisGL2TileManager::render()
     d->shader->setAttributeBuffer(d->uv0Location, GL_FLOAT, 12 * sizeof(float), 2);
     d->shader->enableAttributeArray(d->uv0Location);
 
-    glActiveTexture(GL_TEXTURE0);
     d->shader->setUniformValue(d->texture0Location, 0);
 
     foreach(KisGL2Tile* tile, d->tiles) {
@@ -218,11 +218,6 @@ void KisGL2TileManager::render()
     d->indexBuffer->release();
     d->vertexBuffer->release();
     d->shader->release();
-
-    //Release the framebuffer
-
-    //Render the framebuffer
-    //d->framebuffer->
 }
 
 void KisGL2TileManager::resize(int width, int height)
