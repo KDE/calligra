@@ -20,7 +20,7 @@
 
 #include "MainWindow.h"
 
-#include "opengl/kis_opengl.h"
+#include <opengl2/kis_gl2_canvas.h>
 
 #include <QApplication>
 #include <QResizeEvent>
@@ -78,7 +78,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     // This is needed because OpenGL viewport doesn't support partial updates.
     d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    QGLWidget* glWidget = new QGLWidget(this, KisOpenGL::sharedContextWidget());
+    QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
     d->view->setViewport(glWidget);
 
     d->view->engine()->addImageProvider("icon", new IconImageProvider);
