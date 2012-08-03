@@ -56,7 +56,6 @@ public:
         , doc(0)
         , view(0)
         , canvas(0)
-        , canvasItem(0)
     { }
     ~Private() { }
 
