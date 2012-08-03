@@ -23,8 +23,6 @@
 
 #include <KoPathTool.h>
 #include <QMap>
-#include <animations/KPrShapeAnimation.h>
-#include <KoFlake.h>
 
 class KoPathShape;
 class KoSelection;
@@ -48,16 +46,17 @@ public:
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
     virtual void mousePressEvent( KoPointerEvent *event );
-    //virtual void mouseMoveEvent( KoPointerEvent *event );
-    //virtual void mouseReleaseEvent( KoPointerEvent *event );
-//    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
 
-//    virtual void keyPressEvent(QKeyEvent *event);
     void repaintDecorations();
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
+
+private slots:
+    void saveMotionPath();
+    void reloadMotionPaths();
+    void verifyMotionPathChanged(KoShape *shape);
 
 protected:
     QRectF handlesSize();
@@ -70,21 +69,14 @@ protected:
 
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
-private slots:
-    void saveMotionPath();
-    void init();
-    void verifyMotionPathChanged(KoShape *shape);
+    QPair<qreal, qreal> getScaleCorrection();
 
 private:
-
     QList<KoPathShape *>m_motionPaths;
-    KoPathShape *m_lastMotionPath;
-    QMap<KPrShapeAnimation *, KoPathShape *> m_motionP;
-    QMap<KoPathShape *, KPrAnimateMotion *> m_pathList;
-    QMap<KoPathShape *, KoShape *> m_shapeList;
-    KPrShapeAnimation *currentAnimation;
-    KoPathShape *currentPath;
-    bool m_deleteMotionPaths;
+    KoPathShape *m_currentMotionPathSelected;
+    QMap<KoPathShape *, KPrAnimateMotion *> m_pathMap;
+    QMap<KoPathShape *, KoShape *> m_shapesMap;
+    bool m_reloadMotionPaths;
 };
 
 #endif

@@ -173,17 +173,7 @@ public:
      * @brief Paint the shape
      * The class extending this one is responsible for painting itself.  Since we do not
      * assume the shape is square the paint must also clear its background if it will draw
-     * something transparent on top.            foreach(KPrShapeAnimation *anim, applicationData->animations()) {
-                if (anim->presetClass() == KPrShapeAnimation::MotionPath) {
-                    for (int i = 0; i < anim->animationCount(); i++) {
-                        if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(anim->animationAt(i))) {
-                            KoPathShape *path = KoPathShape::createShapeFromPainterPath(motion->path());
-                            addPathShape(path);
-                        }
-
-                    }
-                }
-            }
+     * something transparent on top.
      * This can be done with a method like:
      * <code>
        painter.fillRect(converter.normalToView(QRectF(QPointF(0.0,0.0), size())), background());</code>
