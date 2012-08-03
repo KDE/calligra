@@ -49,7 +49,7 @@ void KisGL2TileUpdater::run()
     quint8 *buffer = projectionColorSpace->allocPixelBuffer(pixelCount);
     m_image->projection()->readBytes(buffer, m_tile->area());
 
-    const KoColorSpace *framebufferColorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), QString());
+    const KoColorSpace *framebufferColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     quint8 *dest = framebufferColorSpace->allocPixelBuffer(pixelCount);
     projectionColorSpace->convertPixelsTo(buffer,
         dest,
@@ -58,8 +58,16 @@ void KisGL2TileUpdater::run()
         KoColorConversionTransformation::IntentRelativeColorimetric,
         KoColorConversionTransformation::BlackpointCompensation | KoColorConversionTransformation::NoOptimization);
 
+    quint32 *rgba = reinterpret_cast<quint32*>(dest);
+
+    //Convert ARGB to RGBA
+    for( int x = 0; x < pixelCount; ++x )
+    {
+        rgba[x] = ((rgba[x] << 16) & 0xff0000) | ((rgba[x] >> 16) & 0xff) | (rgba[x] & 0xff00ff00);
+    }
+
     m_context->makeCurrent();
     glBindTexture(GL_TEXTURE_2D, m_tile->glTexture());
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tileArea.width(), tileArea.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tileArea.width(), tileArea.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
     m_context->doneCurrent();
 }
