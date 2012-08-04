@@ -25,7 +25,7 @@
 #include <calligraversion.h>
 
 static const char* BRAINDUMP_DESCRIPTION = I18N_NOOP("Braindump: directly from your brain to the computer.");
-static const char* BRAINDUMP_VERSION = "0.10.9";
+static const char* BRAINDUMP_VERSION = "0.11.0";
 
 inline KAboutData* newBrainDumpAboutData()
 {
