@@ -40,6 +40,7 @@ public:
 
     explicit InsertCitationDialog(KoTextEditor *editor ,QWidget *parent = 0);
     explicit InsertCitationDialog(BibliographyDb *db ,QWidget *parent = 0);
+    void init();
     KoInlineCite *toCite();                 //returns cite with values filled in form
     void fillValuesFrom(KoInlineCite *cite);        //fills form with values in cite
     QMap<QString, KoInlineCite*> citations();
@@ -47,13 +48,16 @@ public:
 public slots:
     void insert();
     void selectionChangedFromExistingCites();
+    void selectionChangedFromDatabaseCites();
 
 private:
     Ui::InsertCitationDialog dialog;
     bool m_blockSignals;
     KoTextEditor *m_editor;
     BibliographyDb *m_table;
+    BibliographyDb *m_biblio;
     QMap<QString, KoInlineCite*> m_cites;
+    QMap<QString, KoInlineCite*> m_records;
     Mode m_mode;
 };
 

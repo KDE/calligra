@@ -33,21 +33,12 @@ InsertCitationDialog::InsertCitationDialog(KoTextEditor *editor ,QWidget *parent
     m_blockSignals(false),
     m_editor(editor),
     m_table(0),
+    m_biblio(new BibliographyDb(this, QDir::home().absolutePath().append(QDir::separator()).append(".calligra"), "biblio.sqlite")),
     m_mode(InsertCitationDialog::Default)
 {
     Q_ASSERT(m_editor);
 
-    dialog.setupUi(this);
-    connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
-    connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
-
-    m_cites = citations();
-    QStringList existingCites(m_cites.keys());
-    existingCites.prepend(i18n("Select"));
-    existingCites.removeDuplicates();
-    dialog.existingCites->addItems(existingCites);
-
-    show();
+    init();
 }
 
 InsertCitationDialog::InsertCitationDialog(BibliographyDb *db, QWidget *parent) :
@@ -55,26 +46,41 @@ InsertCitationDialog::InsertCitationDialog(BibliographyDb *db, QWidget *parent) 
     m_blockSignals(false),
     m_editor(0),
     m_table(db),
+    m_biblio(new BibliographyDb(this, QDir::home().absolutePath().append(QDir::separator()).append(".calligra"), "biblio.sqlite")),
     m_mode(InsertCitationDialog::DB)
 {
     Q_ASSERT(m_table);
 
+    init();
+}
+
+void InsertCitationDialog::init()
+{
     dialog.setupUi(this);
     connect(dialog.buttonBox,SIGNAL(accepted()),this,SLOT(insert()));
     connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
+    connect(dialog.databaseCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromDatabaseCites()));
+
+    dialog.fromDocument->setChecked(true);
 
     m_cites = citations();
-    QStringList existingCites(m_cites.keys());
-    existingCites.prepend(i18n("Select"));
-    existingCites.removeDuplicates();
-    dialog.existingCites->addItems(existingCites);
+    QStringList citeList(m_cites.keys());
+    citeList.prepend(i18n("Select"));
+    citeList.removeDuplicates();
+    dialog.existingCites->addItems(citeList);
+
+    m_records = m_biblio->citationRecords();
+    citeList = QStringList(m_records.keys());
+    citeList.prepend(i18n("Select"));
+    citeList.removeDuplicates();
+    dialog.databaseCites->addItems(citeList);
 
     show();
 }
 
 void InsertCitationDialog::insert()
 {
-    if (m_mode == InsertCitationDialog::Default &&
+    if (m_mode == InsertCitationDialog::Default && dialog.fromDocument->isChecked() &&
             m_cites.contains(dialog.shortName->text()) && *m_cites.value(dialog.shortName->text()) != *toCite()) {
 
         //prompts if values are changed
@@ -100,7 +106,6 @@ void InsertCitationDialog::insert()
     }
 
     if (m_mode == InsertCitationDialog::DB) {
-
         if (!m_table->insertCitation(toCite()) && m_table->isLastErrorValid()) {
             QMessageBox::critical(this, i18n("Error"), QString(i18n("Unable to insert citation record to database. "))
                                   .append(m_table->lastError()), QMessageBox::Ok);
@@ -109,7 +114,15 @@ void InsertCitationDialog::insert()
             m_table->removeRow(m_table->rowCount() - 1);
             return;
         }
+    } else if (dialog.fromDatabase->isChecked()) {
+        if (!m_biblio->insertCitation(toCite()) && m_biblio->isLastErrorValid()) {
+            QMessageBox::critical(this, i18n("Error"), QString(i18n("Unable to insert citation record to database. "))
+                                  .append(m_biblio->lastError()), QMessageBox::Ok);
 
+            //Remove invalid row appended last
+            m_biblio->removeRow(m_biblio->rowCount() - 1);
+            return;
+        }
     } else {
         KoInlineCite *cite = m_editor->insertCitation();
         cite->setFields(toCite()->fieldMap());
@@ -123,6 +136,19 @@ void InsertCitationDialog::selectionChangedFromExistingCites()
         KoInlineCite *cite = m_cites[dialog.existingCites->currentText()];
         this->fillValuesFrom(cite);
     } else if (dialog.existingCites->currentIndex() == 0) {
+        KoInlineCite *blankCite = new KoInlineCite(KoInlineCite::Citation);
+        blankCite->setField("bibliography-type", "Article");      //default bibliography type
+        blankCite->setField("identifier", QString(i18n("Short name%1")).arg(QString::number(this->citations().count()+1)));
+        fillValuesFrom(blankCite);
+    }
+}
+
+void InsertCitationDialog::selectionChangedFromDatabaseCites()
+{
+    if (dialog.databaseCites->currentIndex() != 0) {
+        KoInlineCite *cite = m_records[dialog.databaseCites->currentText()];
+        this->fillValuesFrom(cite);
+    } else if (dialog.databaseCites->currentIndex() == 0) {
         KoInlineCite *blankCite = new KoInlineCite(KoInlineCite::Citation);
         blankCite->setField("bibliography-type", "Article");      //default bibliography type
         blankCite->setField("identifier", QString(i18n("Short name%1")).arg(QString::number(this->citations().count()+1)));
