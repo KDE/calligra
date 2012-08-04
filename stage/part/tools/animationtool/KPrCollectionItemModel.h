@@ -40,6 +40,7 @@ struct KPrCollectionItem
     KoXmlElement animationContext;
 };
 
+/** Model use to store loaded predefined animations */
 class KPrCollectionItemModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -54,8 +55,12 @@ class KPrCollectionItemModel : public QAbstractListModel
          * Set the list of KoCollectionItem to be stored in the model
          */
         void setAnimationClassList(const QList<KPrCollectionItem>& newlist);
+
         QList<KPrCollectionItem> animationClassList () const { return m_animationClassList; }
 
+        /**
+         * Return the xml context for the animation on index
+         */
         KoXmlElement animationContext(const QModelIndex& index) const;
 
     private:

@@ -54,8 +54,13 @@ public slots:
     virtual void deactivate();
 
 private slots:
+    /// Update motion path of the selected shape
     void saveMotionPath();
+
+    /// Reload motion path shapes (For all shapes with motion paths on current page)
     void reloadMotionPaths();
+
+    /// Verify if a motion path shape has changed (to update the canvas)
     void verifyMotionPathChanged(KoShape *shape);
 
 protected:
@@ -63,12 +68,16 @@ protected:
 
     virtual QList<QWidget *> createOptionWidgets();
 
+    /// Load motion path shapes (For all shapes with motion paths on current page)
     void loadMotionPathShapes();
 
+    /// Add motion path shape to the current shapes manager
     virtual void addPathShape(KoPathShape *pathShape);
 
+    /// Paint motion path shape
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
+    /// Helper method to scale the motion path shape (using current page size and zoom)
     QPair<qreal, qreal> getScaleCorrection();
 
 private:

@@ -46,28 +46,51 @@ class KPrEditAnimationsWidget : public QWidget
 public:
     explicit KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent = 0);
     ~KPrEditAnimationsWidget();
+
     void setView(KoPAViewBase *view);
+
+    /// Verify if the parent (on click animation) for the given index has changed
+    /// If it has changed update the view
     void setCurrentIndex(const QModelIndex &index);
+
+    /// Set proxy model for animations Time line View
     void setProxyModel(KPrAnimationGroupProxyModel *model);
+
+    /// Update time line view
     void updateView();
+
+    /** Return current parent animation index (On click animation)
+        The index belongs to the proxy model*/
     QModelIndex currentIndex();
     
 signals:
+    /// emited if an item on Time line view has been clicked
     void itemClicked(const QModelIndex &index);
+    /// Request animation preview for the current index
     void requestAnimationPreview();
+    /// Emited if user has changed the state of automatic preview check box
     void previousStateChanged(bool isEnabled);
 
 public slots:
+    /// Sync node type and time combo boxes with the given index
     void updateIndex(const QModelIndex &index);
+    /// Change current animation begin time
     void setBeginTime();
+    /// Change current animation duration
     void setDuration();
+    /// Change current animation node type
     void setTriggerEvent(int row);
+    /// Helper method to set new node type
     void setTriggerEvent(QAction *action);
+    /// call update index
     void syncCurrentItem();
 
 protected slots:
+    /// Display context menu for the time line view
     void showTimeLineCustomContextMenu(const QPoint &pos);
+    /// Use to sync with animations selected on main view or canvas
     void changeCurrentAnimation(KPrShapeAnimation *animation);
+    /// load predefined animations
     void initializeView();
 
 

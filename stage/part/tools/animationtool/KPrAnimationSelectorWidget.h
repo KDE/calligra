@@ -52,26 +52,40 @@ signals:
     void requestPreviewAnimation(KPrShapeAnimation *animation);
     /// this signal is emited when an animation is selected
     void requestAcceptAnimation(KPrShapeAnimation *animation);
-
     void previousStateChanged(bool state);
 
 private slots:
+    /**
+     * Request animation preview for the animation on index
+     */
     void automaticPreviewRequested(const QModelIndex &index);
 
+    /**
+     * Request animation preview for current animation
+     * (animation selected on collection view)
+     */
     void automaticPreviewRequested();
+
     /**
      * Changes the current shape collection
      */
     void activateShapeCollection(QListWidgetItem *item);
 
+    /**
+     * Animation was selected
+     */
     void setAnimation(const QModelIndex& index);
 
+    /**
+     * Automatic preview checkbox state has changed
+     */
     void setPreviewState(bool isEnable);
 
 private:
     /// load / save automatic preview checkbox state
     bool loadPreviewConfig();
     void savePreviewConfig();
+    /// Create on hover buttons
     void createCollectionContextBar();
     void createSubTypeContextBar();
 

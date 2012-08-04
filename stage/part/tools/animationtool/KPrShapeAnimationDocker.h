@@ -50,17 +50,47 @@ public:
     explicit KPrShapeAnimationDocker(QWidget *parent = 0);
     void setView(KoPAViewBase *view);
 
+    /**
+      * Return the Animations data Model
+      *
+      * @return a KPrShapeAnimations pointer
+      */
     KPrShapeAnimations *mainModel();
+
+    /**
+      * Return the preview animations view mode
+      *
+      * @return a KPrViewModePreviewShapeAnimations pointer
+      */
     KPrViewModePreviewShapeAnimations *previewMode();
+
+    /**
+     * Set the current preview animations view mode
+     * @param pointer to the new KPrViewModePreviewShapeAnimations class
+     */
     void setPreviewMode(KPrViewModePreviewShapeAnimations *previewMode);
 
+    /**
+      * Return the predefined animations loader class
+      *
+      * @return a KPrPredefinedAnimationsLoader pointer
+      */
     KPrPredefinedAnimationsLoader *animationsLoader();
 
+    /**
+      * Return the current selected shape (the animation selected on animations list
+      * view if the shape has an animation or just the selected shape on canvas)
+      *
+      * @return a KPrPredefinedAnimationsLoader pointer
+      */
     KoShape *getSelectedShape();
     
 signals:
+    /// emited if the configuration for automatic preview is changed
     void previousStateChanged(bool isEnabled);
+    /// emited if an animation of the given shape is changed
     void shapeAnimationsChanged(KoShape *shape);
+    /// emited if a motion path animation is added or removed
     void motionPathAddedRemoved();
     
 public slots:
@@ -73,6 +103,7 @@ public slots:
     /// Update canvas with selected shape on Animations View
     void syncWithEditDialogIndex(const QModelIndex &index);
 
+    /// Update canvas with the given index (of the main model)
     void syncCanvasWithIndex(const QModelIndex &index);
 
     /// Update canvas with selected shape on Time Line View
@@ -84,35 +115,43 @@ public slots:
     /// Plays a preview of the shape animation
     void slotAnimationPreview();
 
+    /// Play animation preview for the given animation
     void previewAnimation(KPrShapeAnimation *animation);
 
     /// Remove selected animations
     void slotRemoveAnimations();
 
+    /// Check type of animation
     void checkAnimationSelected();
 
+    /// slot for moving animations up or down buttons
     void moveAnimationUp();
     void moveAnimationDown();
 
+    /// slot for add animation button
     void addNewAnimation(KPrShapeAnimation *animation);
 
+    /// Verify if animations on given index range are motion paths
     void verifyMotionPathChanged(const QModelIndex &index, const QModelIndex &indexEnd);
 
 private slots:
+    /// Test if the current on click animation displayed as root in edit panel has changed
     void testEditPanelRoot();
+    /// Display context menu
     void showAnimationsCustomContextMenu(const QPoint &pos);
+    /// Change current animation Node Type
     void setTriggerEvent(QAction *action);
+    /// load predefined animations
     void initializeView();
 protected:
      bool eventFilter(QObject *ob, QEvent *ev);
 
 private:
-
+    /// Return a pointer to the KPrShapeAnimations for the given page
     KPrShapeAnimations *animationsByPage(KoPAPageBase *page);
 
     KPrView* m_view;
     QTreeView * m_animationsView;
-    //KPrAnimationsTreeModel *m_animationsModel;
     KPrShapeAnimations *m_animationsModel;
     KPrAnimationGroupProxyModel *m_animationGroupModel;
     QToolButton *m_editAnimation;
@@ -128,7 +167,6 @@ private:
     DialogMenu *m_editMenu;
     KPrPredefinedAnimationsLoader *m_animationsData;
     KPrAnimationSelectorWidget *m_addDialog;
-    
 };
 
 #endif // KPRSHAPEANIMATIONDOCKER_H
