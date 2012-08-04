@@ -29,9 +29,9 @@ KPrCollectionItemModel::KPrCollectionItemModel(QObject* parent)
     setSupportedDragActions(Qt::IgnoreAction);
 }
 
-QVariant KPrCollectionItemModel::data(const QModelIndex& index, int role) const
+QVariant KPrCollectionItemModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.row() > m_animationClassList.count ())
+    if (!index.isValid() || index.row() > m_animationClassList.count())
         return QVariant();
 
     switch(role)
@@ -55,13 +55,13 @@ QVariant KPrCollectionItemModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int KPrCollectionItemModel::rowCount(const QModelIndex& parent) const
+int KPrCollectionItemModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_animationClassList.count();
 }
 
-void KPrCollectionItemModel::setAnimationClassList(const QList<KPrCollectionItem>& newlist)
+void KPrCollectionItemModel::setAnimationClassList(const QList<KPrCollectionItem> &newlist)
 {
     m_animationClassList = newlist;
     reset();
@@ -72,7 +72,7 @@ KoXmlElement KPrCollectionItemModel::animationContext(const QModelIndex &index) 
     return m_animationClassList.value(index.row()).animationContext;
 }
 
-Qt::ItemFlags KPrCollectionItemModel::flags(const QModelIndex& index) const
+Qt::ItemFlags KPrCollectionItemModel::flags(const QModelIndex &index) const
 {
     if(index.isValid())
         return QAbstractListModel::flags(index);

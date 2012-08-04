@@ -208,8 +208,9 @@ QVariant KPrShapeAnimations::headerData(int section, Qt::Orientation orientation
 
 int KPrShapeAnimations::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return 0;
+    }
     int rowCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
         for (int i=0; i < step->animationCount(); i++) {
@@ -279,7 +280,7 @@ void KPrShapeAnimations::init(const QList<KPrAnimationStep *> animations)
     m_shapeAnimations = animations;
 }
 
-void KPrShapeAnimations::add(KPrShapeAnimation * animation)
+void KPrShapeAnimations::add(KPrShapeAnimation *animation)
 {
     if (m_shapeAnimations.isEmpty()) {
         m_shapeAnimations.append(new KPrAnimationStep());
@@ -547,7 +548,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
             if (type == KPrShapeAnimation::WithPrevious) {
                 //use previous animation to reparent current animation
                 Q_ASSERT(index.row() > 0);
-                KPrShapeAnimation * previousAnimation = animationByRow(index.row() - 1);
+                KPrShapeAnimation *previousAnimation = animationByRow(index.row() - 1);
                 newSubStep = previousAnimation->subStep();
                 movedChildren = getWithPreviousSiblings(animation);
             }
@@ -566,7 +567,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
                  insertStep(currentStepIndex + 1, newStep);
 
                  //reparent children
-                 if (currentSubStepIndex < subStepCount-1) {
+                 if (currentSubStepIndex < subStepCount - 1) {
                      movedSubSteps = getSubSteps(currentSubStepIndex + 1, subStepCount, animation->step());
                  }
             }
@@ -664,7 +665,8 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
             }
             if (!movedChildren.isEmpty()) {
                 foreach(KPrShapeAnimation *anim, movedChildren) {
-                    if ((oldSubStep->indexOfAnimation(anim) >= 0) && (oldSubStep->indexOfAnimation(anim) < oldSubStep->animationCount())) {
+                    if ((oldSubStep->indexOfAnimation(anim) >= 0) && (oldSubStep->indexOfAnimation(anim) <
+                                                                      oldSubStep->animationCount())) {
                         newSubStep->addAnimation(oldSubStep->takeAnimation(oldSubStep->indexOfAnimation(anim)));
                     }
                 }
@@ -705,10 +707,7 @@ bool KPrShapeAnimations::setNodeType(KPrShapeAnimation *animation, const KPrShap
 
 void KPrShapeAnimations::recalculateStart(const QModelIndex &mIndex)
 {
-    if (!mIndex.isValid()) {
-        return;
-    }
-    if (mIndex.row() < 1) {
+    if (!mIndex.isValid() || mIndex.row() < 1) {
         return;
     }
     KPrShapeAnimation *animation = animationByRow(mIndex.row());

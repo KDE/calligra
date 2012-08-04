@@ -49,7 +49,7 @@ public:
     void keyReleaseEvent(QKeyEvent *event);
     void wheelEvent(QWheelEvent *event, const QPointF &point);
 
-    void activate(KoPAViewMode * previousViewMode);
+    void activate(KoPAViewMode *previousViewMode);
     void deactivate();
 
     /// reimplemented
@@ -74,10 +74,10 @@ protected slots:
 
 private:
 
-    KoPAViewMode * m_savedViewMode;
+    KoPAViewMode *m_savedViewMode;
     QTimeLine m_timeLine;
     KPrShapeAnimation *m_shapeAnimation;
-    KPrAnimationCache * m_animationCache;
+    KPrAnimationCache *m_animationCache;
     QRect m_pageRect;
 };
 

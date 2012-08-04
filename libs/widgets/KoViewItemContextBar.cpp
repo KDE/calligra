@@ -162,7 +162,7 @@ void KoViewItemContextBar::showContextBar(const QRect &rect)
         width = qMin(m_contextBarButtons.at(0)->width(), MIN_BUTTON_WIDTH);
     }
     for (int i=m_contextBarButtons.size()-1; i>=0; --i) {
-        if ((rect.width() - 2*CONTEXTBAR_MARGIN) > ((i+1) * width)) {
+        if ((rect.width() - 2 * CONTEXTBAR_MARGIN) > ((i + 1) * width)) {
             m_contextBarButtons.at(i)->setVisible(true);
             numButtons++;
             continue;

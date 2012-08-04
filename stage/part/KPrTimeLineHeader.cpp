@@ -46,7 +46,7 @@ KPrTimeLineHeader::KPrTimeLineHeader(QWidget *parent)
 
 QSize KPrTimeLineHeader::minimumSizeHint() const
 {
-    return QSize(m_mainView->totalWidth()*0.25, HEADER_HEIGHT);
+    return QSize(m_mainView->totalWidth() * 0.25, HEADER_HEIGHT);
 }
 
 void KPrTimeLineHeader::paintEvent(QPaintEvent *event)
@@ -103,9 +103,9 @@ void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
     painter->setFont(QFont("", 8));
     int totalWidth = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime);
     int stepScale = m_mainView->stepsScale();
-    int stepRatio = m_mainView->numberOfSteps()/m_mainView->stepsScale();
-    int stepSize = totalWidth/stepRatio;
-    for (int x = 0; x < totalWidth-Padding; x+=stepSize) {
+    int stepRatio = m_mainView->numberOfSteps() / m_mainView->stepsScale();
+    int stepSize = totalWidth / stepRatio;
+    for (int x = 0; x < totalWidth-Padding; x += stepSize) {
         int z = x + rect.x() + Padding;
         if (z > 0) {
             // Draw numbers
@@ -136,7 +136,8 @@ bool KPrTimeLineHeader::eventFilter(QObject *target, QEvent *event)
                 size.setHeight(sizeHint().height());
                 int width = size.width() + ExtraWidth - scrollArea->verticalScrollBar()->sizeHint().width();
                 size.setWidth(width);
-                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime), size.height()));
+                setMinimumSize(QSize(m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime),
+                                     size.height()));
                 resize(size);
             }
         }

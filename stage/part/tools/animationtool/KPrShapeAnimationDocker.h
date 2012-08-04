@@ -150,8 +150,8 @@ private:
     /// Return a pointer to the KPrShapeAnimations for the given page
     KPrShapeAnimations *animationsByPage(KoPAPageBase *page);
 
-    KPrView* m_view;
-    QTreeView * m_animationsView;
+    KPrView *m_view;
+    QTreeView *m_animationsView;
     KPrShapeAnimations *m_animationsModel;
     KPrAnimationGroupProxyModel *m_animationGroupModel;
     QToolButton *m_editAnimation;

@@ -31,14 +31,14 @@ class KPrDocument;
 class STAGE_EXPORT KPrReplaceAnimationCommand : public KUndo2Command
 {
 public:
-    KPrReplaceAnimationCommand(KPrDocument * doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent=0);
+    KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent=0);
 
     virtual ~KPrReplaceAnimationCommand();
 
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 
 private:
     KPrShapeAnimation *m_oldAnimation;

@@ -78,7 +78,7 @@ public:
     int rowCount(const QModelIndex &parent=QModelIndex()) const;
     int columnCount(const QModelIndex &parent=QModelIndex()) const;
     bool setHeaderData(int, Qt::Orientation, const QVariant&,
-                       int=Qt::EditRole) { return false; }
+                       int=Qt::EditRole) {return false;}
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role=Qt::EditRole);
 
@@ -92,14 +92,14 @@ public:
      *
      * @parama animation the animation to insert
      */
-    void add( KPrShapeAnimation * animation );
+    void add(KPrShapeAnimation *animation);
 
     /**
      * Remove  animation to the animations
      *
      * @parama animation the animation to remove
      */
-    void remove( KPrShapeAnimation * animation );
+    void remove(KPrShapeAnimation *animation);
 
     /**
      * @brief Insert a new step on the steps list
@@ -299,11 +299,13 @@ private:
     QString getAnimationName(KPrShapeAnimation *animation, bool omitSubType = false) const;
     QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;
     QPixmap getAnimationIcon(KPrShapeAnimation *animation) const;
-    QImage createThumbnail(KoShape* shape, const QSize &thumbSize) const;
-    void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin, const int duration, TimeUpdated updatedTimes);
+    QImage createThumbnail(KoShape *shape, const QSize &thumbSize) const;
+    void setTimeRangeIncrementalChange(KPrShapeAnimation *item, const int begin,
+                                       const int duration, TimeUpdated updatedTimes);
     QList<KPrShapeAnimation *> getWithPreviousSiblings(KPrShapeAnimation *animation);
     QList<KPrAnimationSubStep *> getSubSteps(int start, int end, KPrAnimationStep *step);
-    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType, KPrShapeAnimation::NodeType newType);
+    bool createTriggerEventEditCmd(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType,
+                                   KPrShapeAnimation::NodeType newType);
 
     QList<KPrAnimationStep *> m_shapeAnimations;
     KPrShapeAnimation *m_currentEditedAnimation;

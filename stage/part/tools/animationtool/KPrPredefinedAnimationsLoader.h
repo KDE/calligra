@@ -64,7 +64,7 @@ private:
     /**
      * Add a collection to the docker
      */
-    bool addCollection(const QString& id, const QString& title, KPrCollectionItemModel* model);
+    bool addCollection(const QString &id, const QString &title, KPrCollectionItemModel *model);
 
     bool addSubCollection(const QString &id, KPrCollectionItemModel *model);
 

@@ -121,11 +121,11 @@ int KPrAnimationsTimeLineView::widthOfColumn(int column) const
 {
     switch (column) {
     case KPrShapeAnimations::ShapeThumbnail:
-        return rowsHeigth()*3/2;
+        return rowsHeigth() * 3 / 2;
     case KPrShapeAnimations::AnimationIcon:
-        return rowsHeigth()*5/4;
+        return rowsHeigth() * 5 / 4;
     case KPrShapeAnimations::StartTime:
-        return 2*(rowsHeigth()*2/3+rowsHeigth()*10/4 + 10);
+        return 2 * (rowsHeigth() * 2 / 3 + rowsHeigth() * 10 / 4 + 10);
     default:
         return 0;
     }

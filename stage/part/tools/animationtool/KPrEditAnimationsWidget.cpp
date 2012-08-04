@@ -67,7 +67,6 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
 {
     QVBoxLayout *layout = new QVBoxLayout;
     m_timeLineView = new KPrAnimationsTimeLineView();
-    //m_timeLineView->setContextMenuPolicy(Qt::CustomContextMenu);
     QLabel *label = new QLabel(i18n("Manage animation delay and duration: "));
     QLabel *startLabel = new QLabel(i18n("Start: "));
     m_triggerEventList = new QComboBox;

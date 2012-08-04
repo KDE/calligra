@@ -399,8 +399,9 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
 
 bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QString &title, KPrCollectionItemModel *model)
 {
-    if(m_modelMap.contains(id))
+    if(m_modelMap.contains(id)) {
         return false;
+    }
     m_modelMap.insert(id, model);
     QString iconName = id;
     iconName.append("_animations");
@@ -421,8 +422,9 @@ bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QStri
 
 bool KPrPredefinedAnimationsLoader::addSubCollection(const QString &id, KPrCollectionItemModel *model)
 {
-    if(m_subModelMap.contains(id))
+    if(m_subModelMap.contains(id)) {
         return false;
+    }
     m_subModelMap.insert(id, model);
     return true;
 }

@@ -44,27 +44,27 @@ struct KPrCollectionItem
 class KPrCollectionItemModel : public QAbstractListModel
 {
     Q_OBJECT
-    public:
-        KPrCollectionItemModel(QObject* parent = 0);
+public:
+    KPrCollectionItemModel(QObject* parent = 0);
 
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-        virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-        /**
-         * Set the list of KoCollectionItem to be stored in the model
-         */
-        void setAnimationClassList(const QList<KPrCollectionItem>& newlist);
+    /**
+     * Set the list of KoCollectionItem to be stored in the model
+     */
+    void setAnimationClassList(const QList<KPrCollectionItem> &newlist);
 
-        QList<KPrCollectionItem> animationClassList () const { return m_animationClassList; }
+    QList<KPrCollectionItem> animationClassList() const {return m_animationClassList;}
 
-        /**
-         * Return the xml context for the animation on index
-         */
-        KoXmlElement animationContext(const QModelIndex& index) const;
+    /**
+     * Return the xml context for the animation on index
+     */
+    KoXmlElement animationContext(const QModelIndex &index) const;
 
-    private:
-        QList<KPrCollectionItem> m_animationClassList;
-        QString m_family;
+private:
+    QList<KPrCollectionItem> m_animationClassList;
+    QString m_family;
 };
 #endif // KPRCOLLECTIONITEMMODEL_H

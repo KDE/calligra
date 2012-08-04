@@ -30,17 +30,17 @@ class KPrShapeAnimation;
 class STAGE_EXPORT KPrAnimationRemoveCommand : public KUndo2Command
 {
 public:
-    KPrAnimationRemoveCommand(KPrDocument * doc, KPrShapeAnimation * animation);
+    KPrAnimationRemoveCommand(KPrDocument *doc, KPrShapeAnimation *animation);
     virtual ~KPrAnimationRemoveCommand();
 
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 
 private:
-    KPrDocument * m_doc;
-    KPrShapeAnimation * m_animation;
+    KPrDocument *m_doc;
+    KPrShapeAnimation *m_animation;
     bool m_deleteAnimation;
 };
 

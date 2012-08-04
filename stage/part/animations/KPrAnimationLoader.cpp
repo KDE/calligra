@@ -38,7 +38,6 @@
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
 #include "KPrShapeApplicationData.h"
-#include <QDebug>
 
 KPrAnimationLoader::KPrAnimationLoader()
 {
@@ -170,9 +169,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
     QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
     QString presetSubType = element.attributeNS(KoXmlNS::presentation, "preset-sub-type");
-    qDebug() << "Preset class: " << presetClass;
-    qDebug() << "Preset id: " << animationId;
-    qDebug() << "node-type" << element.attributeNS(KoXmlNS::presentation, "node-type");
 
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is

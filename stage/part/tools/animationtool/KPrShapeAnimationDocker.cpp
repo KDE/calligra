@@ -61,7 +61,7 @@
 class DialogMenu : public QMenu
 {
     public:
-        DialogMenu(QWidget * parent = 0);
+        DialogMenu(QWidget *parent = 0);
         virtual QSize sizeHint() const;
 };
 
@@ -197,7 +197,7 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
 
 void KPrShapeAnimationDocker::checkAnimationSelected()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     if (selection->selectedShapes().isEmpty() || !(selection->selectedShapes().first()->isPrintable())) {
         m_buttonAddAnimation->setEnabled(false);

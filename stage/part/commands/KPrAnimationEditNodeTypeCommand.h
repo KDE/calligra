@@ -37,12 +37,12 @@ public:
     virtual ~KPrAnimationEditNodeTypeCommand();
 
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
 
 private:
-    KPrShapeAnimation * m_animation;
+    KPrShapeAnimation *m_animation;
     KPrShapeAnimation::NodeType m_newType;
     KPrShapeAnimation::NodeType m_oldType;
     KPrShapeAnimations *m_model;

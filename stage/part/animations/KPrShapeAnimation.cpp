@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+ * Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -113,8 +114,8 @@ void KPrShapeAnimation::init(KPrAnimationCache *animationCache, int step)
         m_textBlockData->setPaintStrategy(new KPrTextBlockPaintStrategy(m_textBlockData, animationCache));
     }
     for (int i = 0; i < this->animationCount(); ++i) {
-        QAbstractAnimation * animation = this->animationAt(i);
-        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
             a->init(animationCache, step);
         }
     }
@@ -138,7 +139,7 @@ QPair<int, int> KPrShapeAnimation::timeRange()
 
     for (int i = 0;i < this->animationCount(); i++) {
         QAbstractAnimation * animation = this->animationAt(i);
-        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+        if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
             minStart = qMin(minStart, a->begin());
             maxEnd = qMax(maxEnd, a->duration());
         }
@@ -164,10 +165,10 @@ void KPrShapeAnimation::setBeginTime(int timeMS)
     int minStart = timeRange().first;
     int timeDiff = timeMS - minStart;
     for (int i = 0;i < this->animationCount(); i++) {
-        QAbstractAnimation * animation = this->animationAt(i);
-        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
 
-            a->setBegin(a->begin()+timeDiff);
+            a->setBegin(a->begin() + timeDiff);
         }
     }
     emit timeChanged(timeMS, timeRange().second);
@@ -183,8 +184,8 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
     int minStart = timeRange().first;
     qreal timeRatio = timeMS / (qreal)maxDuration;
     for (int i = 0;i < this->animationCount(); i++) {
-        QAbstractAnimation * animation = this->animationAt(i);
-        if (KPrAnimationBase * a = dynamic_cast<KPrAnimationBase *>(animation)) {
+        QAbstractAnimation *animation = this->animationAt(i);
+        if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
             a->setDuration((a->duration()-a->begin()) * timeRatio);
             a->setBegin((a->begin() - minStart) * timeRatio + minStart);
         }

@@ -54,8 +54,8 @@
 
 const int HANDLE_DISTANCE = 10;
 
-KPrAnimationTool::KPrAnimationTool( KoCanvasBase *canvas )
-    : KoPathTool( canvas )
+KPrAnimationTool::KPrAnimationTool(KoCanvasBase *canvas)
+    : KoPathTool(canvas)
     , m_currentMotionPathSelected(0)
     , m_reloadMotionPaths(true)
 {
@@ -138,7 +138,7 @@ void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
 {
     //If no shape was click deselect all
     KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach (KoShape* shape, selection->selectedShapes()) {
+    foreach (KoShape *shape, selection->selectedShapes()) {
         shape->update();
     }
     selection->deselectAll();
@@ -295,8 +295,8 @@ void KPrAnimationTool::saveMotionPath()
                           m_shapesMap.value(i.key())->position().y() - i.key()->position().y());
 
         outlinePath = outlinePath * QTransform().translate(offsetX, offsetY);
-        outlinePath = outlinePath * QTransform().scale(1/(scaleCorrection.first),
-                                                       1/(scaleCorrection.second));
+        outlinePath = outlinePath * QTransform().scale(1 / (scaleCorrection.first),
+                                                       1 / (scaleCorrection.second));
         i.value()->setPath(outlinePath);
     }
 }
@@ -309,8 +309,8 @@ void KPrAnimationTool::reloadMotionPaths()
     }
     m_motionPaths.clear();
     // Remove handles
-    QList<KoPathShape*> shapes;
-    m_pointSelection.setSelectedShapes(shapes);
+    m_pointSelection.clear();
+    m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
     m_pointSelection.update();
     // Load motion paths
     loadMotionPathShapes();

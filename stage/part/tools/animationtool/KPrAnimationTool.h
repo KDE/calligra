@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
+   Copyright (C) 2012 Paul Mendez <paulestebanms@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,12 +41,12 @@ public:
      * Constructor for animation tool
      * @param canvas the canvas this tool will be working for.
      */
-    explicit KPrAnimationTool( KoCanvasBase *canvas );
+    explicit KPrAnimationTool(KoCanvasBase *canvas);
     virtual ~KPrAnimationTool();
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
 
     void repaintDecorations();
 
@@ -75,7 +76,7 @@ protected:
     virtual void addPathShape(KoPathShape *pathShape);
 
     /// Paint motion path shape
-    virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
+    virtual void paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter);
 
     /// Helper method to scale the motion path shape (using current page size and zoom)
     QPair<qreal, qreal> getScaleCorrection();

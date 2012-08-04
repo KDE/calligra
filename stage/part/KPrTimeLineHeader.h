@@ -33,7 +33,7 @@ class KPrTimeLineHeader : public QWidget
 public:
     KPrTimeLineHeader(QWidget *parent);
     QSize minimumSizeHint() const;
-    QSize sizeHint() const {return minimumSizeHint(); }
+    QSize sizeHint() const {return minimumSizeHint();}
 protected:
     void paintEvent(QPaintEvent *event);
     void paintHeader(QPainter *painter, const int RowHeight);

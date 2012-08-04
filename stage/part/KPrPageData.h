@@ -30,7 +30,7 @@ class KprAnimationStep;
 class STAGE_EXPORT KPrPageData
 {
 public:
-    KPrPageData(KPrDocument * document);
+    KPrPageData(KPrDocument *document);
     ~KPrPageData();
 
     KPrShapeAnimations & animations();
