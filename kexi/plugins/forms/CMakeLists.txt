@@ -32,6 +32,7 @@ target_link_libraries(
     kexiformutils
     ${KDE4_KDECORE_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
+    kexiextendedwidgets
     )
 
 install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})

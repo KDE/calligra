@@ -71,7 +71,7 @@
 #include "kexidbfactory.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
-
+#include <QFontMetrics>
 //////////////////////////////////////////
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
@@ -357,8 +357,22 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         addClass(wi);
     }
 
-    
-
+    m_propDesc["invertedAppearance"] = i18n("Inverted");
+    m_propDesc["minimum"] = i18n("Minimum");
+    m_propDesc["maximum"] = i18n("Maximum");
+    m_propDesc["format"] = i18n("Format");
+    m_propDesc["orientation"] = i18n("Orientation");
+    m_propDesc["textDirection"] = i18n("Text Direction");
+    m_propDesc["textVisible"] = i18n("Text Visible");
+    m_propDesc["value"] = i18n("Value");
+    m_propDesc["date"] = i18n("Date");
+    m_propDesc["arrowVisible"] = i18n("Arrow Visible");
+    m_propDesc["description"] = i18n("Description");
+    m_propDesc["pageStep"] = i18n("Page Step");
+    m_propDesc["singleStep"] = i18n("Single Step");
+    m_propDesc["tickInterval"] = i18n("Tick Interval");
+    m_propDesc["tickPosition"] = i18n("Tick Position");
+    m_propDesc["showEditor"] = i18n("Show Editor");
     m_propDesc["formName"] = i18n("Form Name");
     m_propDesc["onClickAction"] = i18n("On Click");
     m_propDesc["onClickActionOption"] = i18n("On Click Option");
@@ -379,6 +393,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     m_propValDesc["MultiLineText"] = i18nc("AutoField editor's type", "Multiline Text");
     m_propValDesc["ComboBox"] = i18nc("AutoField editor's type", "Drop-Down List");
     m_propValDesc["Image"] = i18nc("AutoField editor's type", "Image");
+
+    m_propValDesc["NoTicks"] = i18n("No Ticks");
+    m_propValDesc["TicksAbove"] = i18n("Above");
+    m_propValDesc["TicksLeft"] = i18n("Left");
+    m_propValDesc["TicksBelow"] = i18n("Below");
+    m_propValDesc["TicksRight"] = i18n("Right");
+    m_propValDesc["TicksBothSides"] = i18n("Both Sides");
 
 // m_propDesc["labelCaption"] = i18n("Label Text");
     m_propDesc["autoCaption"] = i18n("Auto Label");
@@ -588,9 +609,11 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         args.text = linkButton->text();
         const QRect r(linkButton->style()->subElementRect(
                         QStyle::SE_PushButtonContents, &option, linkButton));
-        args.geometry = QRect(linkButton->x() + r.x(), linkButton->y() + r.y(), r.width(), r.height());
+
+        QFontMetrics fm(linkButton->font());
+        args.geometry = QRect(linkButton->x() + linkButton->iconSize().width() + 6, linkButton->y() + r.y(), r.width()  - 6, fm.height()+14);
+
         return true;
-        
     }
     else if (args.classname == "KexiDBLabel") {
         KexiDBLabel *label = static_cast<KexiDBLabel*>(args.widget);
@@ -718,6 +741,12 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              ;
      } else if (classname == "KexiDBCommandLinkButton") {
         ok = property != "isDragEnabled"
+             && property != "default"
+             && property != "checkable"
+             && property != "autoDefault"
+             && property != "autoRepeat"
+             && property != "autoRepeatDelay"
+             && property != "autoRepeatInterval"
 #ifdef KEXI_NO_UNFINISHED
              && property != "onClickAction" /*! @todo reenable */
              && property != "onClickActionOption" /*! @todo reenable */
@@ -727,9 +756,11 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
 #endif
              ;
      } else if (classname == "KexiDBSlider") {
-        ok = property != "focusPolicy";
+        ok = property != "sliderPosition"
+             && property != "tracking";
      } else if (classname == "KexiDBProgressBar") {
-        ok = property != "focusPolicy";
+        ok = property != "focusPolicy"
+             && property != "value";
      } else if (classname == "KexiDBLineEdit")
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
@@ -791,6 +822,11 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
             return false;
         ok = property != "autoRepeat";
     }
+    else if (classname == "KexiDBDatePicker") {
+        ok = property != "closeButton"
+             && property != "fontSize";
+    }
+
 
     return ok && KexiDBFactoryBase::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
@@ -820,7 +856,12 @@ bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
         oldText = widget->property("caption").toString();
         changeProperty(form, widget, "caption", text);
         return true;
+    } else if (n == "KexiDBCommandLinkButton") {
+        oldText = widget->property("text").toString();
+        changeProperty(form, widget, "text", text);
+        return true;
     }
+
 //! @todo check field's geometry
     return false;
 }
