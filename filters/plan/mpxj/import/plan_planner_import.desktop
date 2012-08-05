@@ -2,6 +2,7 @@
 Type=Service
 Name=Planner Import Filter
 Name[da]=Planner-importfilter
+Name[de]=Planner-Importfilter
 Name[el]=Φίλτρο εισαγωγής Planner
 Name[es]=Filtro de importación de Planner
 Name[et]=Planneri impordifilter

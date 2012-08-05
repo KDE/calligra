@@ -2,6 +2,7 @@
 Type=Service
 Name=MS Project Import Filter
 Name[da]=MS Project-importfilter
+Name[de]=MS-Projekt-Importfilter
 Name[el]=Φίλτρο εισαγωγής MS Project
 Name[es]=Filtro de importación de MS Project
 Name[et]=MS Projecti impordifilter
