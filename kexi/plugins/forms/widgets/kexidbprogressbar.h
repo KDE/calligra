@@ -35,10 +35,9 @@ class KEXIFORMUTILS_EXPORT KexiDBProgressBar : public QProgressBar,
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
     Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
-//    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
-    KexiDBProgressBar(QWidget *parent);
+    explicit KexiDBProgressBar(QWidget *parent = 0);
     virtual ~KexiDBProgressBar();
 
     inline QString dataSource() const {
@@ -81,7 +80,6 @@ public slots:
     }
     void slotValueChanged();
     virtual void setReadOnly(bool set);
-
 protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 

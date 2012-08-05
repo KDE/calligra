@@ -69,6 +69,7 @@ class ScheduleManager;
 class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
+class TaskModuleModel;
 class Calendar;
 class Part;
 class Node;
@@ -295,6 +296,9 @@ protected slots:
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
 
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
+
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );
@@ -310,7 +314,7 @@ protected:
     void updateView( QWidget *widget );
 
     ViewBase *currentView() const;
-    
+
     ViewBase *createWelcomeView();
 
 private slots:

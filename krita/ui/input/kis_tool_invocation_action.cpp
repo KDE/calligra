@@ -97,7 +97,17 @@ void KisToolInvocationAction::end()
 
 void KisToolInvocationAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseMove) {
+    if(event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
+        d->modifiers = mevent->modifiers();
+        inputManager()->toolProxy()->mousePressEvent(mevent, mousePosition());
+    } else if(event->type() == QEvent::MouseButtonRelease) {
+        QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
+        setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
+        d->modifiers = mevent->modifiers();
+        inputManager()->toolProxy()->mouseReleaseEvent(mevent, mousePosition());
+    } else if(event->type() == QEvent::MouseMove) {
         QMouseEvent* mevent = static_cast<QMouseEvent*>(event);
         setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
         d->modifiers = mevent->modifiers();
@@ -107,6 +117,12 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
         setMousePosition(d->tabletToPixel(tevent->hiResGlobalPos()));
         d->modifiers = tevent->modifiers();
         inputManager()->toolProxy()->tabletEvent(tevent, mousePosition());
+    } else if(event->type() == QEvent::KeyPress) {
+        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+        inputManager()->toolProxy()->keyPressEvent(kevent);
+    } else if(event->type() == QEvent::KeyRelease) {
+        QKeyEvent* kevent = static_cast<QKeyEvent*>(event);
+        inputManager()->toolProxy()->keyReleaseEvent(kevent);
     }
 }
 

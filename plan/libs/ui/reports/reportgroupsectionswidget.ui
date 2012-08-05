@@ -24,18 +24,12 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset theme="list-add"/>
-       </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="btnRemove">
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset theme="list-remove"/>
        </property>
       </widget>
      </item>
@@ -44,18 +38,12 @@
        <property name="text">
         <string>...</string>
        </property>
-       <property name="icon">
-        <iconset theme="arrow-up"/>
-       </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="btnMoveDown">
        <property name="text">
         <string>...</string>
-       </property>
-       <property name="icon">
-        <iconset theme="arrow-down"/>
        </property>
       </widget>
      </item>
