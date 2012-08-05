@@ -132,6 +132,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     gc.setCompositionMode(QPainter::CompositionMode_Source);
     if(image->isCanvasInfinite())
     {
+        //converter->setDocumentOrigin((ev->rect() | converter->imageRectInWidgetPixels().toRect()).topLeft());
         QImage check = m_d->checkBrush.texture().toImage();
         QPainter ch(&check);
         ch.fillRect(check.rect(),borderColor());
@@ -151,9 +152,9 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
     gc.setPen(Qt::NoPen);
-    if(image->isCanvasInfinite())
-        gc.setBrush(checkBrush);
-    else
+    //if(image->isCanvasInfinite())
+  //      gc.setBrush(checkBrush);
+//    else
         gc.setBrush(m_d->checkBrush);
     gc.setBrushOrigin(brushOrigin);
     gc.setTransform(checkersTransform);
@@ -165,9 +166,12 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
     }
 
     QRectF viewportRect = converter->widgetToViewport(ev->rect());
+    if(image->isCanvasInfinite())  // problem being caused because image size is 1x1 and the update area being requested is larger (totalbounds())
+    {
+        m_d->prescaledProjection->updateCache(image->bounds() | viewportRect.toRect());
+    }
 
     gc.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    m_d->prescaledProjection->setImage(image);
     gc.drawImage(viewportRect, m_d->prescaledProjection->prescaledQImage(),
                  viewportRect);
 
@@ -185,6 +189,8 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     QPainter painter(this);
     painter.drawImage(ev->rect(), m_buffer, ev->rect());
+    if(image->isCanvasInfinite())
+        canvas()->updateCanvas();
 }
 
 bool KisQPainterCanvas::event(QEvent *e)
@@ -216,6 +222,8 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
     }
 
     coordinatesConverter()->setCanvasWidgetSize(size);
+    if(canvas()->image() && canvas()->image()->isCanvasInfinite())
+        coordinatesConverter()->setCanvasWidgetSize(coordinatesConverter()->imageRectInWidgetPixels().size().expandedTo(size).toSize());
     m_d->prescaledProjection->notifyCanvasSizeChanged(size);
     emit needAdjustOrigin();
 }

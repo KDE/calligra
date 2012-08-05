@@ -194,8 +194,6 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
      * outside QImage and copyQImage will not chatch it
      */
     QRect newViewportRect = QRect(QPoint(0,0), m_d->viewportSize);
-    //if(!image().isNull() && image()->isCanvasInfinite())
-        //newViewportRect = m_d->coordinatesConverter->;
     QRect oldViewportRect = newViewportRect.translated(alignedOffset);
 
     QRegion updateRegion = newViewportRect;
@@ -250,13 +248,12 @@ KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
      * paint there, anyway we won't show him anything =)
      */
     QRect croppedImageRect = dirtyImageRect & m_d->image->bounds();
+    if(m_d->image->isCanvasInfinite())
+        croppedImageRect = dirtyImageRect | m_d->image->bounds();
     if (croppedImageRect.isEmpty()) return new KisPPUpdateInfo();
 
     KisPPUpdateInfoSP info = getInitialUpdateInformation(croppedImageRect);
-    if(m_d->image->isCanvasInfinite())
-        m_d->projectionBackend->updateCache(dirtyImageRect);
-    else
-        m_d->projectionBackend->updateCache(croppedImageRect);
+    m_d->projectionBackend->updateCache(croppedImageRect);
 
     return info;
 }
@@ -280,9 +277,14 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
-    /*if(!image().isNull() && image()->isCanvasInfinite())
-        updateViewportSize();*/
     QRect viewportRect(QPoint(0, 0), m_d->viewportSize);
+
+    if(!image().isNull() && image()->isCanvasInfinite())
+    {
+        updateViewportSize();
+        viewportRect = QRect(m_d->image->bounds().topLeft(), m_d->viewportSize);
+    }
+
     QRect imageRect =
         m_d->coordinatesConverter->viewportToImage(viewportRect).toAlignedRect();
 
@@ -387,12 +389,24 @@ KisPPUpdateInfoSP KisPrescaledProjection::getInitialUpdateInformation(const QRec
 void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
                                                      KisPPUpdateInfoSP info)
 {
-    /*if(!image().isNull() && image()->isCanvasInfinite())
-        updateViewportSize();*/
+    bool flag = false;
+    if(!image().isNull() && image()->isCanvasInfinite())
+    {
+        QSize prevSize = m_d->viewportSize;
+        updateViewportSize();
+        QSize newSize = m_d->viewportSize;
+        if(prevSize != newSize)
+        {
+            flag = true;
+        }
+    }
+
     m_d->coordinatesConverter->imageScale(&info->scaleX, &info->scaleY);
 
     // first, crop the part of the view rect that is outside of the canvas
     QRect croppedViewRect = viewportRect.intersected(QRect(QPoint(0, 0), m_d->viewportSize));
+    if(flag)
+        croppedViewRect = m_d->coordinatesConverter->imageRectInViewportPixels().toRect();
 
     // second, align this rect to the KisImage's pixels and pixels
     // of projection backend.
