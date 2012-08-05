@@ -702,8 +702,8 @@ void KisCanvas2::adjustOrigin()
             newOrigin.ry() = qRound(0.5 * heightDiff);
     }
 
-    /*if(m_d->view->image()->isCanvasInfinite())
-        newOrigin = m_d->canvasWidget->widget()->rect().topLeft();*/
+    if(m_d->view->image()->isCanvasInfinite())
+        newOrigin = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect().topLeft();
 
     m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
 
