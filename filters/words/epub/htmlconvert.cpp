@@ -442,7 +442,7 @@ void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)
     }
 
     writer->startElement("link");
-    writer->addAttribute("href", "styleSheet.css");
+    writer->addAttribute("href", "styles.css");
     writer->addAttribute("type", "text/css");
     writer->addAttribute("rel", "stylesheet");
     writer->endElement(); // link

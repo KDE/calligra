@@ -137,7 +137,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         return status;
     }
     kDebug(30517) << "create CSS finished";
-    epub.addContentFile("stylesheet", "OEBPS/styleSheet.css", "text/css", cssContent);
+    epub.addContentFile("stylesheet", "OEBPS/styles.css", "text/css", cssContent);
 
     // ----------------------------------------------------------------
     // Write the finished epub file to disk

@@ -46,7 +46,7 @@ Fix known bugs / misfeatures
 
 Conform to standards
  * Name the chapters chapterNN.xhtml instead of bodyN.html      [ingwa]
- * Name the style sheet styles.css instead                      [ingwa]
+ * Name the style sheet styles.css instead                      [Done]
 
 Features
  * Support for internal links                                   [moji]
