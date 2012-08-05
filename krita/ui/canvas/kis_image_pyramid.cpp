@@ -293,7 +293,7 @@ void KisImagePyramid::alignSourceRect(QRect& rect, qreal scale)
      * Assume that KisImage pixels are always positive
      * It allows us to use binary op-s for aligning
      */
-    Q_ASSERT(rect.left() >= 0 && rect.top() >= 0);
+    //Q_ASSERT(rect.left() >= 0 && rect.top() >= 0);
 
     qint32 x1, y1, x2, y2;
     rect.getCoords(&x1, &y1, &x2, &y2);
