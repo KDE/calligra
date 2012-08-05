@@ -36,9 +36,7 @@ Time frame: (days / weeks)
 assigned to a person.]
 
 Fix known bugs / misfeatures
- * break-before in inherited styles don't break chapters.       [ingwa]
- * Some problem with character styles. See the glossary in      [ingwa]
-   the white paper.
+ * break-before in inherited styles don't break chapters.       [Done]
  * Collect images in a list while doing the conversion to
    html and go through them afterwards and save them.
  * Make it look at namespaced tags                              [moji]

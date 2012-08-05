@@ -165,6 +165,7 @@ void handleStyles(KoXmlNode &stylesNode,
         forEachElement (propertiesElement, styleElement) {
             //Check for fo:break-before
             if (propertiesElement.hasAttribute("break-before")) {
+                //kDebug(30517) << "Found break-before in style" << styleName;
                 styleInfo->hasBreakBefore = true;
             }
             handleStyleAttributes(propertiesElement, attList, styleInfo);
@@ -330,12 +331,14 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
     forEachElement (nodeElement, currentNode) {
 
         //kDebug(30517) << nodeElement.tagName() <<pFlag;
-        if (nodeElement.tagName() == "p") {
+        if (nodeElement.tagName() == "p" || nodeElement.tagName() == "h") {
 
             // A break-before in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
             StyleInfo *style = styles.value(nodeElement.attribute("style-name"));
             if (style && style->hasBreakBefore) {
+                //kDebug(30517) << "Found paragraph with style with break-before -- breaking new chapter";
+
                 // This paragraph is at top level so we should close
                 // the html file and start on the next file.
                 bodyWriter->endElement();
