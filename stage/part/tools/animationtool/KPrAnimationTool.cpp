@@ -277,6 +277,8 @@ QPair<qreal, qreal> KPrAnimationTool::getScaleCorrection()
     qreal zoom;
     (dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->zoomHandler()->zoom(&zoom, &zoom);
     QSizeF pageSize = dynamic_cast<KoPACanvas *>(canvas())->koPAView()->zoomController()->documentSize();
+    const qreal zoomCorrection = 1.375;
+    zoom = zoom / zoomCorrection;
     return QPair<qreal, qreal>(pageSize.width() * zoom, pageSize.height() * zoom);
 }
 
