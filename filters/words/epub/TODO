@@ -40,7 +40,7 @@ Fix known bugs / misfeatures
  * Collect images in a list while doing the conversion to
    html and go through them afterwards and save them.
  * Make it look at namespaced tags                              [moji]
- * Get the document title and put it into OPF file              [ingwa]
+ * Get the document title and put it into OPF file              [Done]
  * Get the book ID somewhere from. We may have to add this      [ingwa]
    to metadata as well. Same for language.
 
