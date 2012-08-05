@@ -161,7 +161,7 @@ KoFilter::ConversionStatus ExportEpub2::parseMetadata(KoStore *odfStore)
     int errorLine;
     int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occured while parsing meta.xml "
+        kDebug() << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
@@ -287,7 +287,7 @@ KoFilter::ConversionStatus ExportEpub2::parseMetaInfImagesData(KoStore *odfStore
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occured while parsing meta.xml "
+        kDebug() << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         return KoFilter::ParsingError;

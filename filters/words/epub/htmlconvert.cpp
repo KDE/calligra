@@ -96,7 +96,7 @@ KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occured while parsing styles.xml "
+        kDebug() << "Error occurred while parsing styles.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
@@ -120,7 +120,7 @@ KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
         return KoFilter::FileNotFound;
     }
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occured while parsing styles.xml "
+        kDebug() << "Error occurred while parsing styles.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
@@ -305,7 +305,7 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
     int errorLine;
     int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug(30517) << "Error occured while parsing content.xml "
+        kDebug(30517) << "Error occurred while parsing content.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
