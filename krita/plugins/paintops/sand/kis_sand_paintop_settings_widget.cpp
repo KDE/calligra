@@ -62,6 +62,6 @@ void KisSandPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 
 QSizeF KisSandPaintOpSettingsWidget::paintOpSize() const
 {
-    qreal width = m_sandOption->radius() * 2.0 + 1.0;
+    qreal width = m_sandOption->radius() + 1.0;
     return QSizeF(width, width);
 }
