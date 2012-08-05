@@ -296,7 +296,7 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
                                           QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     if (!odfStore->open("content.xml")) {
-        kDebug(30517) << "Can not open content.html .";
+        kDebug(30517) << "Can not open content.xml .";
         return KoFilter::FileNotFound;
     }
 
@@ -331,7 +331,7 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
     createHtmlHead(bodyWriter, metaData);
     bodyWriter->startElement("body");
 
-    QString prefix = "body";    // FIXME: Change to "chapter". Beware of hardcoded "body" here and there.
+    QString prefix = "chapter";
     int      id = 1;            // Number of current output chapter.
 
     forEachElement (nodeElement, currentNode) {
@@ -353,7 +353,7 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
 
                 // Write output file to the epub object.
                 QString fileId = prefix + QString::number(id);
-                QString fileName = "OEBPS/" + fileId + ".html";
+                QString fileName = "OEBPS/" + fileId + ".xhtml";
                 epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
 
                 // Prepare for the next file.
@@ -415,7 +415,7 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
 
     // Write output of the last file to the epub object.
     QString fileId = prefix + QString::number(id);
-    QString fileName = "OEBPS/" + fileId + ".html";
+    QString fileName = "OEBPS/" + fileId + ".xhtml";
     epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
 
     delete bodyWriter;
