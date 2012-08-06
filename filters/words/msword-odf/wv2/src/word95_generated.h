@@ -2912,7 +2912,7 @@ struct DOP {
     U16 copts_fNoSpaceRaiseLower:1;
 
     /**
-     * compatibility option: when 1, supress the paragraph Space Before and
+     * compatibility option: when 1, suppress the paragraph Space Before and
      * Space After options after a page break
      */
     U16 copts_fSuppressSpbfAfterPageBreak:1;

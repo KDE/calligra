@@ -59,6 +59,10 @@ private:
 public slots:
 
 private:
+    void fixStyleTree(QHash<QString, StyleInfo*> &styles);
+
+
+private:
     QHash<QString, QString> m_meta;
 };
 

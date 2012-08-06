@@ -36,19 +36,17 @@ Time frame: (days / weeks)
 assigned to a person.]
 
 Fix known bugs / misfeatures
- * break-before in inherited styles don't break chapters.       [ingwa]
- * Some problem with character styles. See the glossary in      [ingwa]
-   the white paper.
+ * break-before in inherited styles don't break chapters.       [Done]
  * Collect images in a list while doing the conversion to
    html and go through them afterwards and save them.
  * Make it look at namespaced tags                              [moji]
- * Get the document title and put it into OPF file              [ingwa]
+ * Get the document title and put it into OPF file              [Done]
  * Get the book ID somewhere from. We may have to add this      [ingwa]
    to metadata as well. Same for language.
 
 Conform to standards
  * Name the chapters chapterNN.xhtml instead of bodyN.html      [ingwa]
- * Name the style sheet styles.css instead                      [ingwa]
+ * Name the style sheet styles.css instead                      [Done]
 
 Features
  * Support for internal links                                   [moji]

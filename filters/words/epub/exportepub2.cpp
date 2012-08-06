@@ -87,6 +87,8 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         delete odfStore;
         return status;
     }
+    // propagate some inherited stuff.
+    fixStyleTree(styles);
 
 #if 0
     kDebug(30517) << "======== >> Styles";
@@ -135,7 +137,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         return status;
     }
     kDebug(30517) << "create CSS finished";
-    epub.addContentFile("stylesheet", "OEBPS/styleSheet.css", "text/css", cssContent);
+    epub.addContentFile("stylesheet", "OEBPS/styles.css", "text/css", cssContent);
 
     // ----------------------------------------------------------------
     // Write the finished epub file to disk
@@ -146,6 +148,41 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     qDeleteAll(styles);
 
     return KoFilter::OK;
+}
+
+
+void ExportEpub2::fixStyleTree(QHash<QString, StyleInfo*> &styles)
+{
+    // For all styles:
+    //    Propagate the hasBreakBefore bool upwards in the inheritance tree.
+    foreach (const QString &styleName, styles.keys()) {
+        QVector<StyleInfo *> styleStack(styles.size());
+
+        // Create a stack of styles that we have to check.
+        //
+        // After this, styleStack will contain a list of styles to
+        // check with the deepest one last in the list.
+        StyleInfo *style = styles[styleName];
+        int index = 0;
+        while (style) {
+            styleStack[index++] = style;
+
+            // Quit when we are at the bottom or found a break-before.
+            if (style->hasBreakBefore || style->parent.isEmpty()) {
+                break;
+            }
+
+            style = styles[style->parent];
+        }
+
+        // If the bottom most has a break, then all the ones in the list should inherit it.
+        if (styleStack[index - 1]->hasBreakBefore) {
+            for (int i = 0; i < index - 1; ++i) {
+                styleStack[i]->hasBreakBefore = true;
+            }
+        }
+    }
+
 }
 
 
@@ -161,7 +198,7 @@ KoFilter::ConversionStatus ExportEpub2::parseMetadata(KoStore *odfStore)
     int errorLine;
     int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occured while parsing meta.xml "
+        kDebug() << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         odfStore->close();
@@ -287,7 +324,7 @@ KoFilter::ConversionStatus ExportEpub2::parseMetaInfImagesData(KoStore *odfStore
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occured while parsing meta.xml "
+        kDebug() << "Error occurred while parsing meta.xml "
                  << errorMsg << " in Line: " << errorLine
                  << " Column: " << errorColumn;
         return KoFilter::ParsingError;

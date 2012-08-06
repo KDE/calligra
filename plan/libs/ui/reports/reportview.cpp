@@ -1169,7 +1169,7 @@ void ReportDesigner::createDockers()
             tb->setIcon( a->icon() );
             tb->setText( a->text() );
             if ( tb->objectName() == "report:web" ) {
-                tb->setToolTip( i18nc( "@into:tooltip", "Richt text" ) );
+                tb->setToolTip( i18nc( "@into:tooltip", "Rich text" ) );
             } else {
                 tb->setToolTip( a->toolTip() );
             }

@@ -49,9 +49,10 @@ public:
 
 private:
     KoFilter::ConversionStatus  writeMetaInf(KoStore *epubStore);
-    KoFilter::ConversionStatus  writeOpf(KoStore *epubStore);
+    KoFilter::ConversionStatus  writeOpf(KoStore *epubStore,
+                                         QHash<QString, QString> &metadata);
     KoFilter::ConversionStatus  writeNcx(KoStore *epubStore,
-                                         QHash<QString, QString> metadata);
+                                         QHash<QString, QString> &metadata);
 
 private:
     EpubFilePrivate * const d;
