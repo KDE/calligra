@@ -109,7 +109,7 @@ class KPLATOUI_EXPORT ReportView : public ViewBase
 {
     Q_OBJECT
 public:
-    ReportView( KoDocument *part, QWidget *parent );
+    ReportView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setProject( Project *project );
 
@@ -147,7 +147,7 @@ class KPLATOUI_EXPORT ReportWidget : public ViewBase
 {
     Q_OBJECT
 public:
-    ReportWidget( KoDocument *part, QWidget *parent );
+    ReportWidget(KoPart *part, KoDocument *doc, QWidget *parent);
 
 public slots:
     void setGuiActive( bool active );
@@ -279,7 +279,7 @@ class  KPLATOUI_EXPORT ReportDesigner : public ViewBase
 {
     Q_OBJECT
 public:
-    ReportDesigner( KoDocument *part, QWidget *parent = 0 );
+    ReportDesigner(KoPart *part, KoDocument *doc, QWidget *parent = 0);
 
     bool isModified() const;
     QDomDocument document() const;

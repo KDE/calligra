@@ -112,6 +112,7 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
+#include "Part.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -138,6 +139,7 @@ public:
     Sheet* activeSheet;
     ColumnHeaderItem* columnHeader;
     RowHeaderItem* rowHeader;
+    Part *part;
 };
 
 CanvasItem::CanvasItem(Doc *doc)
@@ -177,7 +179,7 @@ CanvasItem::CanvasItem(Doc *doc)
 
 CanvasItem::~CanvasItem()
 {
-    if (doc()->isReadWrite())
+    if (d->part->isReadWrite())
         selection()->emitCloseEditor(true);
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);

@@ -19,6 +19,7 @@
 
 #include "kptfactory.h"
 #include "kptpart.h"
+#include "kptpartpart.h"
 #include "kptaboutdata.h"
 #include <kcomponentdata.h>
 #include <kiconloader.h>
@@ -52,7 +53,9 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    Part *part = new Part(parent);
+    PartPart *part = new PartPart(parent);
+    Part *doc = new Part(part);
+    part->setDocument(doc);
 
     return part;
 }

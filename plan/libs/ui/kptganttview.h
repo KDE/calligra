@@ -238,7 +238,7 @@ class KPLATOUI_EXPORT GanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    GanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
 
     //~GanttView();
 
@@ -335,7 +335,7 @@ class KPLATOUI_EXPORT MilestoneGanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    MilestoneGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
 
     virtual void setZoom( double zoom );
     void show();
@@ -401,7 +401,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    ResourceAppointmentsGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
     ~ResourceAppointmentsGanttView();
 
     virtual void setZoom( double zoom );

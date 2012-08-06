@@ -23,6 +23,7 @@
 #include "KPrDocument.h"
 
 #include <KoOdf.h>
+#include <QGraphicsItem>
 
 class KoView;
 

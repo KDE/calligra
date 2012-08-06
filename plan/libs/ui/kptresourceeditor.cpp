@@ -116,8 +116,8 @@ QList<Resource*> ResourceTreeView::selectedResources() const
 }
 
 //-----------------------------------
-ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceEditor::ResourceEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setWhatsThis( i18nc( "@info:whatsthis", 
         "<title>Resource Editor</title>"
@@ -154,7 +154,7 @@ ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     }
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 

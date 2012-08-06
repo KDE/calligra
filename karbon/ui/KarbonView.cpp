@@ -57,6 +57,7 @@
 #include "KarbonPart.h"
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
+#include "KarbonKoDocument.h"
 #include "KarbonPrintJob.h"
 #include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"
@@ -152,8 +153,8 @@
 class KarbonView::Private
 {
 public:
-    Private(KarbonPart * p)
-            : part(p), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
+    Private(KarbonPart *part, KarbonKoDocument * doc)
+            : karbonPart(part), part(doc), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
             , colorBar(0), closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
             , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
@@ -164,7 +165,8 @@ public:
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
 
-    KarbonPart * part;
+    KarbonPart * karbonPart;
+    KarbonKoDocument * part;
     KarbonCanvas * canvas;
     KoCanvasController * canvasController;
     KoRuler * horizRuler;
@@ -202,19 +204,16 @@ public:
     QWidget * zoomActionWidget; ///< zoom action widget
 };
 
-KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
-        : KoView(p, parent), d(new Private(p))
+KarbonView::KarbonView(KarbonPart *karbonPart, KarbonKoDocument* doc, QWidget* parent)
+        : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
 {
     setComponentData(KarbonFactory::componentData(), true);
     setAcceptDrops(true);
 
-    if (!p->isReadWrite())
-        setXMLFile(QString::fromLatin1("karbon_readonly.rc"));
-    else
-        setXMLFile(QString::fromLatin1("karbon.rc"));
+    setXMLFile(QString::fromLatin1("karbon.rc"));
 
     const int viewMargin = 250;
-    d->canvas = new KarbonCanvas(p);
+    d->canvas = new KarbonCanvas(doc);
     d->canvas->setParent(this);
     d->canvas->setDocumentViewMargin(viewMargin);
     connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
@@ -269,16 +268,16 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // widgets:
     d->horizRuler = new KoRuler(this, Qt::Horizontal, d->canvas->viewConverter());
     d->horizRuler->setShowMousePosition(true);
-    d->horizRuler->setUnit(p->unit());
+    d->horizRuler->setUnit(doc->unit());
     d->horizRuler->setRightToLeft(false);
     d->horizRuler->setVisible(false);
     new KoRulerController(d->horizRuler, d->canvas->resourceManager());
 
-    connect(p, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
+    connect(doc, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
 
     d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
     d->vertRuler->setShowMousePosition(true);
-    d->vertRuler->setUnit(p->unit());
+    d->vertRuler->setUnit(doc->unit());
     d->vertRuler->setVisible(false);
 
     connect(d->canvas, SIGNAL(documentOriginChanged(QPoint)), this, SLOT(pageOffsetChanged()));
@@ -352,7 +351,7 @@ KarbonView::~KarbonView()
     delete d;
 }
 
-KarbonPart * KarbonView::part() const
+KarbonKoDocument * KarbonView::part() const
 {
     return d->part;
 }
@@ -491,9 +490,12 @@ void KarbonView::fileImportGraphic()
 
     QMap<QString, KoDataCenterBase*> dataCenters = part()->document().dataCenterMap();
 
-    KarbonPart importPart;
+    KarbonPart importPart(0);
+    KarbonKoDocument importDocument(&importPart);
+    importPart.setDocument(&importDocument);
+
     // use data centers of this document for importing
-    importPart.document().useExternalDataCenterMap(dataCenters);
+    importDocument.document().useExternalDataCenterMap(dataCenters);
 
     bool success = true;
 
@@ -558,20 +560,20 @@ void KarbonView::fileImportGraphic()
     // check if we are loading our native format
     if (nativeMimeType == currentMimeFilter) {
         // directly load the native format
-        success = importPart.loadNativeFormat(fname);
+        success = importDocument.loadNativeFormat(fname);
         if (!success) {
             importPart.showLoadingErrorDialog();
         }
     } else {
         // use import filters to load the file
-        KoFilterManager man(&importPart);
+        KoFilterManager man(&importDocument);
         KoFilter::ConversionStatus status = KoFilter::OK;
         QString importedFile = man.importDocument(fname, QString(), status);
         if (status != KoFilter::OK) {
             importPart.showLoadingErrorDialog();
             success = false;
         } else if (!importedFile.isEmpty()) {
-            success = importPart.loadNativeFormat(importedFile);
+            success = importDocument.loadNativeFormat(importedFile);
             if (!success) {
                 importPart.showLoadingErrorDialog();
             }
@@ -581,9 +583,9 @@ void KarbonView::fileImportGraphic()
     }
 
     if (success) {
-        QList<KoShape*> importedShapes = importPart.document().shapes();
+        QList<KoShape*> importedShapes = importDocument.document().shapes();
 
-        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importPart);
+        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importDocument);
         d->canvas->addCommand(cmd);
 
         foreach(KoShape * shape, importedShapes) {
@@ -1416,14 +1418,15 @@ void KarbonView::createLayersTabDock()
     {
         KarbonLayerDockerFactory layerFactory;
         KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(shell()->createDockWidget(&layerFactory));
-        layerDocker->setPart(d->part);
+        layerDocker->setPart(d->karbonPart);
         connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
-        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
-                layerDocker, SLOT(setPart(KParts::Part*)));
+// XXX: reenable once we figure out what the this is for, and if it's still useful
+//        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+//                layerDocker, SLOT(setPart(KParts::Part*)));
     }
 }
 

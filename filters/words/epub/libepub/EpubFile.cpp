@@ -124,13 +124,13 @@ KoFilter::ConversionStatus EpubFile::writeEpub(const QString &fileName,
     }
 
     // Write content.opf
-    status =  writeOpf(epubStore);
+    status =  writeOpf(epubStore, metadata);
     if (status != KoFilter::OK) {
         delete epubStore;
         return status;
     }
 
-    // Write toc.ncx.opf
+    // Write toc.ncx
     status =  writeNcx(epubStore, metadata);
 
     delete epubStore;
@@ -165,14 +165,14 @@ KoFilter::ConversionStatus EpubFile::writeMetaInf(KoStore *epubStore)
     writer.endElement(); // rootfile
 
     writer.endElement(); // rootfiles
-
     writer.endElement(); // container
 
     epubStore->close();
     return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore)
+KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
+                                              QHash<QString, QString> &metadata)
 {
     if (!epubStore->open("OEBPS/content.opf")) {
         kDebug(30517) << "Can not create content.opf .";
@@ -196,8 +196,9 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore)
     writer.startElement("metadata");
 
     // Required elements are: title, language and identifier
+
     writer.startElement("dc:title");
-    writer.addTextNode("Example book"); // FIXME: Where to get this?
+    writer.addTextNode(metadata.value("title"));
     writer.endElement(); // dc:title
 
     writer.startElement("dc:language");
@@ -269,7 +270,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore)
 }
 
 KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
-                                              QHash<QString, QString> metadata)
+                                              QHash<QString, QString> &metadata)
 {
     if (!epubStore->open("OEBPS/toc.ncx")) {
         kDebug(30517) << "Can not create toc.ncx.";
@@ -319,11 +320,9 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
 
     // ###### title ########
     writer.startElement("docTitle");
-
     writer.startElement("text");
     writer.addTextNode(metadata.value("title"));
     writer.endElement();
-
     writer.endElement(); // docTitle
 
     // ##### docAuthor ######

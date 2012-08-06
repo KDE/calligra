@@ -19,15 +19,8 @@ Legend
 ================================================================
                         Milestones
 
+Next Milestone: <not decided>
 
-Milestone 1: Create a valid EPUB 2.0.1 file                     [DONE]
-             Features: text with formatting, tables, images
-
-Milestone 2: Make it stable                                     [DONE]
-             Make it work for all odt test files, including
-             those created by LO.
-
-Milestone 3: Clean up code and merge into master
 
 
 ================================================================
@@ -42,17 +35,22 @@ Time frame: (days / weeks)
 [These issues are picked from the medium and long term issues and
 assigned to a person.]
 
-Fix issues in the review
- * All the smaller issues                                       [Done]
- * QDom -> KoXml                                                [Done]
- * Better style handling                                        [Done]
+Fix known bugs / misfeatures
+ * break-before in inherited styles don't break chapters.       [Done]
+ * Collect images in a list while doing the conversion to
+   html and go through them afterwards and save them.
+ * Make it look at namespaced tags                              [moji]
+ * Get the document title and put it into OPF file              [Done]
+ * Get the book ID somewhere from. We may have to add this      [ingwa]
+   to metadata as well. Same for language.
 
-Fix known bugs
- * Make it not stop working when coming across unknown tags     [Done]
+Conform to standards
+ * Name the chapters chapterNN.xhtml instead of bodyN.html      [ingwa]
+ * Name the style sheet styles.css instead                      [Done]
 
 Features
- * Support for lists                                            [Done]
- * Support for links                                            [Done]
+ * Support for internal links                                   [moji]
+
 
 
 Medium term issues
@@ -96,4 +94,3 @@ EPUB 3.0
  * Multimedia, video
  * Multimedia, audio
  * Scripting with Javascript
-

@@ -121,8 +121,8 @@ ScheduleManager *ScheduleTreeView::selectedManager() const
 }
 
 //-----------------------------------
-ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setupGui();
     slotEnableActions();
@@ -154,7 +154,7 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     m_view->setDefaultColumns( show );
 
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
@@ -561,8 +561,8 @@ void ScheduleLogTreeView::slotEditCopy()
 }
 
 //-----------------------------------
-ScheduleLogView::ScheduleLogView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ScheduleLogView::ScheduleLogView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent )
 {
     setupGui();
     slotEnableActions( 0 );
@@ -704,27 +704,27 @@ void ScheduleLogView::saveContext( QDomElement &/*context */) const
 
 //---------------------------
 
-ScheduleHandlerView::ScheduleHandlerView( KoDocument *part, QWidget *parent )
-    : SplitterView( part, parent )
+ScheduleHandlerView::ScheduleHandlerView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : SplitterView(part, doc, parent)
 {
     kDebug(planDbg())<<"---------------- Create ScheduleHandlerView ------------------";
-    m_scheduleEditor = new ScheduleEditor( part, this );
+    m_scheduleEditor = new ScheduleEditor(part, doc, this );
     m_scheduleEditor->setObjectName( "ScheduleEditor" );
     addView( m_scheduleEditor );
 
     QTabWidget *tab = addTabWidget();
 
-    PertResult *p = new PertResult( part, tab );
+    PertResult *p = new PertResult(part, doc, tab);
     p->setObjectName( "PertResult" );
     addView( p, tab, i18n( "Result" ) );
     connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), p, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
 
-    PertCpmView *c = new PertCpmView( part, tab );
+    PertCpmView *c = new PertCpmView(part, doc, tab);
     c->setObjectName( "PertCpmView" );
     addView( c, tab, i18n( "Critical Path" ) );
     connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), c, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
 
-    ScheduleLogView *v = new ScheduleLogView( part, tab );
+    ScheduleLogView *v = new ScheduleLogView(part, doc, tab);
     v->setObjectName( "ScheduleLogView" );
     addView( v, tab, i18n( "Scheduling Log" ) );
     connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), v, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );

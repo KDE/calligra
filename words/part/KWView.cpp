@@ -102,15 +102,15 @@
 #include <kfiledialog.h>
 #include <KParts/PartManager>
 
-KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
-        : KoView(document, parent)
+KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
+        : KoView(part, document, parent)
         , m_canvas(0)
 {
     setAcceptDrops(true);
 
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
-    m_gui = new KWGui(viewMode, this);
+    m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
@@ -129,10 +129,6 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-    KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
-    if(win) {
-        connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
-    }
 
     m_find = new KoFindText(this);
     m_find->setDocuments(texts);
