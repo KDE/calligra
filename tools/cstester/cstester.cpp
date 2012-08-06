@@ -55,8 +55,8 @@ KoDocument* openFile(const QString &filename)
     const QString mimetype = KMimeType::findByPath(filename)->name();
 
     QString error;
-    KoPart *part = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoPart>(
-                               mimetype, 0, 0, QString(),
+    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
+                               mimetype, QLatin1String("CalligraPart"), 0, QString(),
                                QVariantList(), &error );
 
     if (!error.isEmpty()) {

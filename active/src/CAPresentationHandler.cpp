@@ -79,7 +79,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
-    KoPart* part= KMimeTypeTrader::createPartInstanceFromQuery<KoPart> (mimetype,
+    KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
                       QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
 
     if (!part) {
