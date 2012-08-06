@@ -102,7 +102,6 @@ bool CAPresentationHandler::openDocument (const QString& uri)
                                 d->document);
         paCanvasItem->setView (d->paView);
 
-        documentController()->canvasController()->setZoomController (d->paView->zoomController());
         documentController()->canvasController()->setZoomHandler (static_cast<KoZoomHandler*> (paCanvasItem->viewConverter()));
 
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
@@ -125,6 +124,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 
     d->document;
 
+    emit totalNumberOfSlidesChanged();
     nextSlide();
 
     return true;
@@ -176,11 +176,11 @@ void CAPresentationHandler::zoomToFit()
     if (canvasSize.width() < canvasSize.height()) {
         canvasItem->setGeometry (0, (canvasSize.height() - newSize.height()) / 2,
                                  newSize.width(), newSize.height());
-        zoomHandler->setZoom (canvasSize.width() / pageSize.width() * 0.75);
+        zoomHandler->setZoom (canvasSize.width() / pageSize.width() * 0.65);
     } else {
         canvasItem->setGeometry ( (canvasSize.width() - newSize.width()) / 2, 0,
                                   newSize.width(), newSize.height());
-        zoomHandler->setZoom (canvasSize.height() / pageSize.height() * 0.75);
+        zoomHandler->setZoom (canvasSize.height() / pageSize.height() * 0.65);
     }
 
     updateCanvas();
