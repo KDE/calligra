@@ -29,6 +29,8 @@
 #include <kfiledialog.h>
 #include <kstatusbar.h>
 
+#include <KoIcon.h>
+
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>
@@ -252,7 +254,7 @@ void KPrView::initActions()
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
     connect( m_actionEditCustomSlideShows, SIGNAL( activated() ), this, SLOT( editCustomSlideShows() ) );
 
-    m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
+    m_actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
     KAction* action = new KAction( i18n( "From Current Slide" ), this );

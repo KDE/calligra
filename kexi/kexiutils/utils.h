@@ -30,7 +30,7 @@
 #include <QFrame>
 
 #include <KMimeType>
-#include <kiconloader.h>
+#include <KIconLoader>
 
 class QColor;
 class QMetaProperty;

@@ -29,13 +29,15 @@
 #include <kcombobox.h>
 #include <klocale.h>
 #include <KDebug>
-#include <kiconloader.h>
 #include <kpushbutton.h>
 #include <KMenu>
 #include <KDialog>
 
 #include <db/connection.h>
 #include <db/utils.h>
+
+#include <KoIcon.h>
+
 #include <kexiutils/utils.h>
 
 #include <kexiproject.h>
@@ -120,22 +122,22 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
     d->areaPopup = new KMenu(this);
     d->areaPopup->setObjectName("areaPopup");
 
-    d->appendSelectedFieldAction = new KAction(KIcon("add_field"), i18n("&Append Field"), this);
+    d->appendSelectedFieldAction = new KAction(koIcon("add_field"), i18n("&Append Field"), this);
     d->appendSelectedFieldAction->setObjectName("relationsview_appendField");
     connect(d->appendSelectedFieldAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->appendSelectedFieldsAction = new KAction(KIcon("add_field"), i18n("&Append Fields"), this);
+    d->appendSelectedFieldsAction = new KAction(koIcon("add_field"), i18n("&Append Fields"), this);
     d->appendSelectedFieldsAction->setObjectName("relationsview_appendFields");
     connect(d->appendSelectedFieldsAction, SIGNAL(triggered()),
             this, SLOT(appendSelectedFields()));
 
-    d->openSelectedTableAction = new KAction(KIcon("document-open"), i18n("&Open Table"), this);
+    d->openSelectedTableAction = new KAction(koIcon("document-open"), i18n("&Open Table"), this);
     d->openSelectedTableAction->setObjectName("relationsview_openTable");
     connect(d->openSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(openSelectedTable()));
 
-    d->designSelectedTableAction = new KAction(KIcon("document-properties"), i18n("&Design Table"), this);
+    d->designSelectedTableAction = new KAction(koIcon("document-properties"), i18n("&Design Table"), this);
     connect(d->designSelectedTableAction, SIGNAL(triggered()),
             this, SLOT(designSelectedTable()));
     d->designSelectedTableAction->setObjectName("relationsview_designTable");
@@ -380,7 +382,7 @@ void KexiRelationsView::aboutToShowPopupMenu()
     if (currentTableContainer /*&& currentTableContainer->schema()->table()*/) {
         /*! @todo what about query? */
         d->tableQueryPopup->clear();
-        d->tableQueryPopup->addTitle(KIcon("table"),
+        d->tableQueryPopup->addTitle(koIcon("table"),
                                      QString(d->scrollArea->focusedTableContainer()->schema()->name()) + " : " + i18n("Table"));
         QStringList selectedFieldNames(currentTableContainer->selectedFieldNames());
         if (currentTableContainer && !selectedFieldNames.isEmpty()) {

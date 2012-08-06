@@ -19,6 +19,7 @@
 #include "kexirelationdesignfactory.h"
 #include "kexirelationdesignshape.h"
 #include <KoShapeLoadingContext.h>
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -27,7 +28,7 @@ KexiRelationDesignFactory::KexiRelationDesignFactory()
                          i18n("Kexi Relation Design"))
 {
     setToolTip(i18n("A kexi relation design shape"));
-    setIcon("kexi");
+    setIconName(koIconNameCStr("kexi"));
     setXmlElementNames("http://www.calligra.org/kexirelationdesign", QStringList("shape"));
     setLoadingPriority(1);
 }

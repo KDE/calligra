@@ -57,6 +57,7 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
+#include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoUnitDoubleSpinBox.h>
 
@@ -2435,11 +2436,16 @@ void CellFormatPageBorder::InitializeGrids()
 
     const char shortcutButtonNames[BorderShortcutType_END][20] = {"remove", "all", "outline"};
 
-    QString borderButtonIconNames[BorderType_END] = {"border_top", "border_bottom", "border_left", "border_right",
-            "border_vertical", "border_horizontal", "border_fall", "border_up"
-                                                    };
+    QString borderButtonIconNames[BorderType_END] = {
+        koIconName("border_top"), koIconName("border_bottom"),
+        koIconName("border_left"), koIconName("border_right"),
+        koIconName("border_vertical"), koIconName("border_horizontal"),
+        koIconName("border_fall"), koIconName("border_up")
+    };
 
-    QString shortcutButtonIconNames[BorderShortcutType_END] = { "border_remove", "", "border_outline"};
+    QString shortcutButtonIconNames[BorderShortcutType_END] = {
+        koIconName("border_remove"), QString(), koIconName("border_outline")
+    };
 
     int borderButtonPositions[BorderType_END][2] = {{0, 2}, {4, 2}, {2, 0}, {2, 4}, {4, 4}, {4, 0}, {0, 0}, {0, 4}};
 
@@ -2487,11 +2493,11 @@ void CellFormatPageBorder::InitializeGrids()
     /* the "all" button is different depending on what kind of region is currently
        selected */
     if ((dlg->oneRow == true) && (dlg->oneCol == false)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = "border_vertical";
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_vertical");
     } else if ((dlg->oneRow == false) && (dlg->oneCol == true)) {
-        shortcutButtonIconNames[BorderShortcutType_All] = "border_horizontal";
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_horizontal");
     } else {
-        shortcutButtonIconNames[BorderShortcutType_All] = "border_inside";
+        shortcutButtonIconNames[BorderShortcutType_All] = koIconName("border_inside");
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
@@ -2726,9 +2732,9 @@ QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
     return pixmap;
 }
 
-void CellFormatPageBorder::loadIcon(const QString& _pix, BorderButton *_button)
+void CellFormatPageBorder::loadIcon(const QString &iconName, BorderButton *_button)
 {
-    _button->setIcon(KIcon(_pix));
+    _button->setIcon(KIcon(iconName));
 }
 
 void CellFormatPageBorder::apply(StyleCommand* obj)

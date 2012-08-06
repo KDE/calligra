@@ -23,13 +23,12 @@
 #include "kptdebug.h"
 
 #include <kaction.h>
-#include <ktoggleaction.h>
-#include <kicon.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 #include <knotification.h>
 
+#include <KoIcon.h>
 #include "calligraversion.h"
 #include <KoDocument.h>
 #include <KoPart.h>
@@ -580,7 +579,7 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void ViewBase::createOptionAction()
 {
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
@@ -1809,7 +1808,7 @@ void DoubleTreeViewBase::init()
     connect( m_leftview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
     connect( m_rightview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
 
-    m_actionSplitView = new KAction(KIcon("view-split-left-right"), "", this);
+    m_actionSplitView = new KAction(koIcon("view-split-left-right"), QString(), this);
     setViewSplitMode( true );
 
     connect( m_leftview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotLeftSortIndicatorChanged( int, Qt::SortOrder ) ) );
@@ -2145,10 +2144,10 @@ void DoubleTreeViewBase::setViewSplitMode( bool split )
 {
     if ( split ) {
         m_actionSplitView->setText( i18n( "Unsplit View" ) );
-        m_actionSplitView->setIcon( KIcon( "view-close" ) );
+        m_actionSplitView->setIcon(koIcon("view-close"));
     } else {
         m_actionSplitView->setText( i18n( "Split View" ) );
-        m_actionSplitView->setIcon( KIcon( "view-split-left-right" ) );
+        m_actionSplitView->setIcon(koIcon("view-split-left-right"));
     }
 
     if ( m_mode == split ) {

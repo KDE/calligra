@@ -60,10 +60,11 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
-#include <kiconloader.h>
 #include <kcharsets.h>
 #include <knuminput.h>
 #include <KProgressDialog>
+
+#include <KoIcon.h>
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
@@ -81,7 +82,7 @@
 #include "kexicsvwidgets.h"
 #include <kexi_global.h>
 
-#define _IMPORT_ICON KIcon("table") /*todo: change to "file_import" or so*/
+#define _IMPORT_ICON koIconNeededWithSubs("change to file_import or so", "file_import","table")
 #define _TEXT_TYPE 0
 //#define _NUMBER_TYPE 1
 #define _INT_TYPE 1
@@ -227,7 +228,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     m_minimumYearFor100YearSlidingWindow = importExportGroup.readEntry(
         "MinimumYearFor100YearSlidingWindow", MINIMUM_YEAR_FOR_100_YEAR_SLIDING_WINDOW);
 
-    m_pkIcon = SmallIcon("key");
+    m_pkIcon = koSmallIcon("key");
 
 //Qt3 m_uniquenessTest.setAutoDelete(true);
 
@@ -433,7 +434,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     }
 
     if (m_mode == Clipboard) {
-        m_infoLbl->setIcon("edit-paste");
+        m_infoLbl->setIcon(koIconName("edit-paste"));
     }
     //updateRowCountInfo();
 

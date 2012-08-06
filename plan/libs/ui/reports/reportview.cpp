@@ -54,6 +54,7 @@
 #include "kptdebug.h"
 
 #include "KoDocument.h"
+#include <KoIcon.h>
 
 #include <KTabWidget>
 #include <KAction>
@@ -491,13 +492,13 @@ void ReportWidget::setupGui()
     KAction *a = 0;
     QString name = "reportview_list";
 
-    a = new KAction( KIcon( "go-next-view" ), i18n( "Edit Report" ), this );
+    a = new KAction(koIcon("go-next-view"), i18n("Edit Report"), this);
     a->setToolTip( i18nc( "@info:tooltip", "Edit the report definition" ) );
     a->setWhatsThis( i18nc( "@info:whatsthis", "Opens the report design in the report design dialog." ) );
     connect(a, SIGNAL(triggered()), this, SIGNAL(editReportDesign()));
     addAction( name, a );
 
-    a = new KAction( KIcon( "document-export" ), i18n( "Export" ), this );
+    a = new KAction(koIcon("document-export"), i18n("Export"), this);
     a->setToolTip( i18nc( "@info:tooltip", "Export to file" ) );
     a->setWhatsThis( i18nc( "@info:whatsthis", "Exports the report to a supported file format." ) );
     connect(a, SIGNAL(triggered()), this, SLOT(slotExport()));
@@ -597,10 +598,10 @@ ReportNavigator::ReportNavigator( QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
-    ui_first->setIcon( KIcon( "go-first-view-page" ) );
-    ui_last->setIcon( KIcon( "go-last-view-page" ) );
-    ui_prev->setIcon( KIcon( "go-previous-view-page" ) );
-    ui_next->setIcon( KIcon( "go-next-view-page" ) );
+    ui_first->setIcon(koIcon("go-first-view-page"));
+    ui_last->setIcon(koIcon("go-last-view-page"));
+    ui_prev->setIcon(koIcon("go-previous-view-page"));
+    ui_next->setIcon(koIcon("go-next-view-page"));
 
     connect( ui_max, SIGNAL(valueChanged(int)), SLOT(slotMaxChanged(int)));
 
@@ -656,9 +657,9 @@ ReportDesignDialog::ReportDesignDialog( const QDomElement &element, const QList<
     setCaption( i18nc( "@title:window", "Report Designer" ) );
     setButtons( KDialog::Close | KDialog::User1 | KDialog::User2 );
     setButtonText( KDialog::User1, i18n( "Save To View" ) );
-    setButtonIcon( KDialog::User1, KIcon( "window-new" ) );
+    setButtonIcon(KDialog::User1, koIcon("window-new"));
     setButtonText( KDialog::User2, i18n( "Save To File" ) );
-    setButtonIcon( KDialog::User2, KIcon( "document-save-as" ) );
+    setButtonIcon(KDialog::User2, koIcon("document-save-as"));
 
     m_panel = new ReportDesignPanel( element, models, this );
 
@@ -889,16 +890,16 @@ void ReportDesignPanel::populateToolbar( KToolBar *tb )
 
     tb->addSeparator();
 
-    a = new KAction( KIcon( "arrow-up" ), i18n( "Raise" ), this );
+    a = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
     connect(a, SIGNAL(activated()), m_designer, SLOT(slotRaiseSelected()));
     tb->addAction( a );
-    a = new KAction( KIcon( "arrow-down" ), i18n( "Lower" ), this );
+    a = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
     connect(a, SIGNAL(activated()), m_designer, SLOT(slotLowerSelected()));
     tb->addAction( a );
 
     tb->addSeparator();
 
-    a = new KAction( KIcon( "document-properties" ), i18n( "Section Editor" ), this );
+    a = new KAction(koIcon("document-properties"), i18n("Section Editor"), this);
     a->setObjectName("sectionedit");
     tb->addAction( a );
 
@@ -1076,7 +1077,7 @@ void ReportDesigner::setupGui()
     addAction( name, a );
 
     name = "reportdesigner_list";
-    a = new KAction( KIcon( "go-previous-view" ), i18n( "View report" ), this );
+    a = new KAction(koIcon("go-previous-view"), i18n("View report"), this);
     a->setObjectName( "view_report" );
     connect(a, SIGNAL(activated()), SIGNAL(viewReport()));
     addAction( name, a );
@@ -1348,10 +1349,10 @@ void GroupSectionEditor::setupUi( QWidget *widget )
     gsw.view->setItemDelegateForColumn( 3, new EnumDelegate( gsw.view ) );
     gsw.view->setItemDelegateForColumn( 4, new EnumDelegate( gsw.view ) );
 
-    gsw.btnAdd->setIcon( KIcon( "list-add" ) );
-    gsw.btnRemove->setIcon( KIcon( "list-remove" ) );
-    gsw.btnMoveUp->setIcon( KIcon( "arrow-up" ) );
-    gsw.btnMoveDown->setIcon( KIcon( "arrow-down" ) );
+    gsw.btnAdd->setIcon(koIcon("list-add"));
+    gsw.btnRemove->setIcon(koIcon("list-remove"));
+    gsw.btnMoveUp->setIcon(koIcon("arrow-up"));
+    gsw.btnMoveDown->setIcon(koIcon("arrow-down"));
 
     gsw.btnRemove->setEnabled( false );
     gsw.btnMoveUp->setEnabled( false );
@@ -1557,7 +1558,7 @@ QVariant GroupSectionEditor::SortItem::data( int role ) const
     switch ( role ) {
         case Qt::DisplayRole: return QVariant();
         case Qt::ToolTipRole: return group->sort() ? names.value( 1 ) : names.value( 0 );
-        case Qt::DecorationRole: return group->sort() ? KIcon( "arrow-down" ) :  KIcon( "arrow-up" );
+        case Qt::DecorationRole: return group->sort() ? koIcon("arrow-down") : koIcon("arrow-up");
         case Qt::EditRole: return group->sort() ? Qt::Unchecked : Qt::Checked;
         case Role::EnumList: return names;
         case Role::EnumListValue: return  group->sort() ? 1 : 0;

@@ -39,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <KTabWidget>
+#include <KoIcon.h>
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
 #include <kexiutils/SmallToolButton.h>
@@ -879,7 +880,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     d->helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(),
                                 true/*showWhatsThis*/, d->ac);
     QAction* help_report_bug_action = d->ac->action("help_report_bug");
-    help_report_bug_action->setIcon(KIcon("tools-report-bug")); // good icon for toolbar
+    help_report_bug_action->setIcon(koIcon("tools-report-bug")); // good icon for toolbar
     help_report_bug_action->setWhatsThis(i18n("Shows bug reporting tool for Kexi application."));
     QAction* help_whats_this_action =  d->ac->action("help_whats_this");
     help_whats_this_action->setWhatsThis(i18n("Activates \"What's This\" tool."));
@@ -989,7 +990,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
       addAction(tbar, "help_whats_this");
       addAction(tbar, "help_report_bug");
       a = d->ac->action("help_report_bug");
-      a->setIcon(KIcon("tools-report-bug"));
+      a->setIcon(koIcon("tools-report-bug"));
       addAction(tbar, "help_about_app");
       addAction(tbar, "help_about_kde");
     */

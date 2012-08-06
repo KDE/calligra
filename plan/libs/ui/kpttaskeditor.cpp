@@ -33,6 +33,7 @@
 #include "kptresourceallocationmodel.h"
 
 #include <KoDocument.h>
+#include <KoIcon.h>
 
 #include <QItemSelectionModel>
 #include <QModelIndex>
@@ -42,7 +43,6 @@
 #include <QDragMoveEvent>
 #include <QDockWidget>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kactionmenu.h>
 #include <kglobal.h>
@@ -694,7 +694,7 @@ void TaskEditor::setupGui()
 {
     QString name = "taskeditor_add_list";
 
-    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), i18n( "Add Task" ), this );
+    menuAddTask = new KActionMenu(koIcon("view-task-add"), i18n("Add Task"), this);
     actionCollection()->addAction("add_task", menuAddTask );
     connect( menuAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, menuAddTask );
@@ -710,7 +710,7 @@ void TaskEditor::setupGui()
     menuAddTask->addAction( actionAddMilestone );
 
 
-    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), i18n( "Add Sub-Task" ), this );
+    menuAddSubTask = new KActionMenu(koIcon("view-task-child-add"), i18n("Add Sub-Task"), this);
     actionCollection()->addAction("add_subtask", menuAddTask );
     connect( menuAddSubTask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, menuAddSubTask );
@@ -725,7 +725,7 @@ void TaskEditor::setupGui()
     connect( actionAddSubMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddSubMilestone() ) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
-    actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete" ), this);
+    actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
@@ -733,22 +733,22 @@ void TaskEditor::setupGui()
 
 
     name = "taskeditor_move_list";
-    actionIndentTask  = new KAction(KIcon("format-indent-more"), i18n("Indent Task"), this);
+    actionIndentTask  = new KAction(koIcon("format-indent-more"), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
     connect(actionIndentTask, SIGNAL(triggered(bool) ), SLOT(slotIndentTask()));
     addAction( name, actionIndentTask );
 
-    actionUnindentTask  = new KAction(KIcon("format-indent-less"), i18n("Unindent Task"), this);
+    actionUnindentTask  = new KAction(koIcon("format-indent-less"), i18n("Unindent Task"), this);
     actionCollection()->addAction("unindent_task", actionUnindentTask );
     connect(actionUnindentTask, SIGNAL(triggered(bool) ), SLOT(slotUnindentTask()));
     addAction( name, actionUnindentTask );
 
-    actionMoveTaskUp  = new KAction(KIcon("arrow-up"), i18n("Move Up"), this);
+    actionMoveTaskUp  = new KAction(koIcon("arrow-up"), i18n("Move Up"), this);
     actionCollection()->addAction("move_task_up", actionMoveTaskUp );
     connect(actionMoveTaskUp, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskUp()));
     addAction( name, actionMoveTaskUp );
 
-    actionMoveTaskDown  = new KAction(KIcon("arrow-down"), i18n("Move Down"), this);
+    actionMoveTaskDown  = new KAction(koIcon("arrow-down"), i18n("Move Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect(actionMoveTaskDown, SIGNAL(triggered(bool) ), SLOT(slotMoveTaskDown()));
     addAction( name, actionMoveTaskDown );
@@ -1494,7 +1494,7 @@ void TaskWorkPackageView::setupGui()
 //    KActionCollection *coll = actionCollection();
 
     QString name = "workpackage_list";
-    actionMailWorkpackage  = new KAction(KIcon( "mail-send" ), i18n("Send..."), this);
+    actionMailWorkpackage  = new KAction(koIcon("mail-send"), i18n("Send..."), this);
     actionMailWorkpackage->setShortcut( KShortcut( Qt::CTRL + Qt::Key_M ) );
     actionCollection()->addAction("send_workpackage", actionMailWorkpackage );
     connect( actionMailWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotMailWorkpackage() ) );

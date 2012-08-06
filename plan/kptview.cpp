@@ -25,6 +25,7 @@
 
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
+#include <KoIcon.h>
 
 #include <QApplication>
 #include <QLabel>
@@ -45,7 +46,6 @@
 #include <QTimer>
 #include <QDockWidget>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -287,76 +287,76 @@ View::View(KoPart *part, Part *doc, QWidget *parent)
     // ------ Insert
 
     // ------ Project
-    actionEditMainProject  = new KAction(KIcon( "view-time-schedule-edit" ), i18n("Edit Main Project..."), this);
+    actionEditMainProject  = new KAction(koIcon("view-time-schedule-edit"), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
 
-    actionEditStandardWorktime  = new KAction(KIcon( "configure" ), i18n("Define Estimate Conversions..."), this);
+    actionEditStandardWorktime  = new KAction(koIcon("configure"), i18n("Define Estimate Conversions..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
 
 
     // ------ Tools
-    actionDefineWBS  = new KAction(KIcon( "configure" ), i18n("Define WBS Pattern..."), this);
+    actionDefineWBS  = new KAction(koIcon("configure"), i18n("Define WBS Pattern..."), this);
     actionCollection()->addAction("tools_define_wbs", actionDefineWBS );
     connect( actionDefineWBS, SIGNAL( triggered( bool ) ), SLOT( slotDefineWBS() ) );
 
-    actionInsertFile  = new KAction(KIcon( "document-import" ), i18n("Insert Project File..."), this);
+    actionInsertFile  = new KAction(koIcon("document-import"), i18n("Insert Project File..."), this);
     actionCollection()->addAction("insert_file", actionInsertFile );
     connect( actionInsertFile, SIGNAL( triggered( bool ) ), SLOT( slotInsertFile() ) );
 
     // ------ Settings
-    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure Plan..."), this);
+    actionConfigure  = new KAction(koIcon("configure"), i18n("Configure Plan..."), this);
     actionCollection()->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
-    actionCurrencyConfig  = new KAction(KIcon( "configure" ), i18n("Define Currency..."), this);
+    actionCurrencyConfig  = new KAction(koIcon("configure"), i18n("Define Currency..."), this);
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
     connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
 
-    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open Report Definition File..."), this);
+    actionOpenReportFile  = new KAction(koIcon("document-open"), i18n("Open Report Definition File..."), this);
     actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
     // ------ Help
-    actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
+    actionIntroduction  = new KAction(koIcon("dialog-information"), i18n("Introduction to Plan"), this);
     actionCollection()->addAction("plan_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
     // ------ Popup
-    actionOpenNode  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
+    actionOpenNode  = new KAction(koIcon("document-edit"), i18n("Edit..."), this);
     actionCollection()->addAction("node_properties", actionOpenNode );
     connect( actionOpenNode, SIGNAL( triggered( bool ) ), SLOT( slotOpenNode() ) );
-    actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Progress..."), this);
+    actionTaskProgress  = new KAction(koIcon("document-edit"), i18n("Progress..."), this);
     actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
-    actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
+    actionDeleteTask  = new KAction(koIcon("edit-delete"), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
-    actionTaskDescription  = new KAction(KIcon( "document-edit" ), i18n("Description..."), this);
+    actionTaskDescription  = new KAction(koIcon("document-edit"), i18n("Description..."), this);
     actionCollection()->addAction("task_description", actionTaskDescription );
     connect( actionTaskDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
-    actionIndentTask = new KAction(KIcon( "format-indent-more" ), i18n("Indent Task"), this);
+    actionIndentTask = new KAction(koIcon("format-indent-more"), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
     connect( actionIndentTask, SIGNAL( triggered( bool ) ), SLOT( slotIndentTask() ) );
-    actionUnindentTask= new KAction(KIcon( "format-indent-less" ), i18n("Unindent Task"), this);
+    actionUnindentTask= new KAction(koIcon("format-indent-less"), i18n("Unindent Task"), this);
     actionCollection()->addAction("unindent_task", actionUnindentTask );
     connect( actionUnindentTask, SIGNAL( triggered( bool ) ), SLOT( slotUnindentTask() ) );
-    actionMoveTaskUp = new KAction(KIcon( "arrow-up" ), i18n("Move Task Up"), this);
+    actionMoveTaskUp = new KAction(koIcon("arrow-up"), i18n("Move Task Up"), this);
     actionCollection()->addAction("move_task_up", actionMoveTaskUp );
     connect( actionMoveTaskUp, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskUp() ) );
-    actionMoveTaskDown = new KAction(KIcon( "arrow-down" ), i18n("Move Task Down"), this);
+    actionMoveTaskDown = new KAction(koIcon("arrow-down"), i18n("Move Task Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
 
-    actionEditResource  = new KAction(KIcon( "document-edit" ), i18n("Edit Resource..."), this);
+    actionEditResource  = new KAction(koIcon("document-edit"), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
 
-    actionEditRelation  = new KAction(KIcon( "document-edit" ), i18n("Edit Dependency..."), this);
+    actionEditRelation  = new KAction(koIcon("document-edit"), i18n("Edit Dependency..."), this);
     actionCollection()->addAction("edit_dependency", actionEditRelation );
     connect( actionEditRelation, SIGNAL( triggered( bool ) ), SLOT( slotModifyRelation() ) );
-    actionDeleteRelation  = new KAction(KIcon( "edit-delete" ), i18n("Delete Dependency"), this);
+    actionDeleteRelation  = new KAction(koIcon("edit-delete"), i18n("Delete Dependency"), this);
     actionCollection()->addAction("delete_dependency", actionDeleteRelation );
     connect( actionDeleteRelation, SIGNAL( triggered( bool ) ), SLOT( slotDeleteRelation() ) );
 
