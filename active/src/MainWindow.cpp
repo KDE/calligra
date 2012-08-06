@@ -23,6 +23,7 @@
 #include "CACanvasController.h"
 #include "CADocumentInfo.h"
 #include "CADocumentController.h"
+#include "CACanvasItem.h"
 #include "calligra_active_global.h"
 
 #include <KDE/KGlobal>
@@ -42,6 +43,7 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterType<CACanvasController> ("CalligraActive", 1, 0, "CanvasController");
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
+    qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
 
     m_view = new QDeclarativeView (this);
@@ -84,7 +86,7 @@ MainWindow::MainWindow (QWidget* parent)
 
     setCentralWidget (m_view);
     connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
-    resize (800, 600);
+    resize (1024, 768);
 
     if (!documentPath.isEmpty()) {
         QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));

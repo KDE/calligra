@@ -30,7 +30,7 @@ Item {
 
     CADocumentController {
         id: docDocumentController
-        canvasController: canvas
+        canvasController: theCanvasController
         onDocumentOpened: {
             docRootRect.documentLoaded();
             docToolbars.initToolbars();
@@ -38,29 +38,46 @@ Item {
     }
 
     CanvasController {
-        id: canvas
+        id: theCanvasController
         anchors.fill: parent
-
-        cameraX: docFlickable.contentX
-        cameraY: docFlickable.contentY
+        caCanvasItem: canvasItem
 
         Flickable {
             id: docFlickable
             anchors.fill: parent
-            z: 1
+            contentWidth: canvasItem.width; contentHeight: canvasItem.height
+            contentX: Math.max(theCanvasController.cameraX - width/2, 0)
+            contentY: Math.max(theCanvasController.cameraY - height/2, 0)
 
-            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
+            CACanvasItem {
+                id: canvasItem
+                editable: false
+//                 width: docRootRect.width
 
-            MouseArea {
-                anchors.fill: parent
-                z: 1
+                Rectangle {
+                    color: "red"; opacity: 0.1; radius: 10; anchors.fill: parent; z: 2
 
-                onClicked: docToolbars.toggle()
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: docToolbars.toggle()
+                    }
+                }
+            }
+
+            Behavior on contentX {
+                NumberAnimation {
+                    duration: 1000
+                    easing.type: Easing.OutExpo
+                }
+            }
+
+            Behavior on contentY {
+                NumberAnimation {
+                    duration: 1000
+                    easing.type: Easing.OutExpo
+                }
             }
         }
-
-        onCameraXChanged: if (docFlickable.contentX != cameraX) docFlickable.contentX = cameraX
-        onCameraYChanged: if (docFlickable.contentY != cameraY) docFlickable.contentY = cameraY
     }
 
     Toolbars {

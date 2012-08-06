@@ -24,12 +24,14 @@
 
 
 #include "CACanvasController.h"
+#include "CACanvasItem.h"
 
 #include <KoCanvasBase.h>
 #include <KoShape.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 
+#include <KDE/KActionCollection>
 #include <KDebug>
 
 #include <QPoint>
@@ -56,6 +58,10 @@ void CACanvasController::setZoomWithWheel (bool zoom)
 
 void CACanvasController::updateDocumentSize (const QSize& sz, bool recalculateCenter)
 {
+    m_caCanvasItem->updateDocumentSize(sz, recalculateCenter);
+    KoCanvasController::setDocumentSize(sz);
+
+    return;
     m_documentSize = sz;
     emit docHeightChanged();
     emit docWidthChanged();
@@ -97,7 +103,8 @@ void CACanvasController::zoomTo (const QRect& rect)
 
 void CACanvasController::zoomBy (const QPoint& center, qreal zoom)
 {
-    //kDebug() << center << zoom;
+    proxyObject->emitZoomBy(zoom);
+    canvas()->canvasItem()->update();
 }
 
 void CACanvasController::zoomOut (const QPoint& center)
@@ -112,21 +119,13 @@ void CACanvasController::zoomIn (const QPoint& center)
 
 void CACanvasController::ensureVisible (KoShape* shape)
 {
-    setCameraX (shape->position().x());
-    setCameraY (shape->position().y());
+    ensureVisible(shape->boundingRect(), true);
 }
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
-    if (smooth) {
-        setCameraY(rect.center().y());
-    } else {
-        int y = rect.center().y() - height()/2;
-        if (y<0) {
-            y = 0;
-        }
-        setCameraY(y);
-    }
+    setCameraX(rect.center().x());
+    setCameraY(rect.center().y());
 }
 
 int CACanvasController::canvasOffsetY() const
@@ -151,7 +150,7 @@ int CACanvasController::visibleHeight() const
 
 KoCanvasBase* CACanvasController::canvas() const
 {
-    return m_canvas;
+    return m_caCanvasItem->koCanvas();
 }
 
 KoCanvasControllerProxyObject* CACanvasController::canvasControllerProxyObject()
@@ -159,15 +158,29 @@ KoCanvasControllerProxyObject* CACanvasController::canvasControllerProxyObject()
     return proxyObject;
 }
 
+QObject* CACanvasController::caCanvasItem()
+{
+    return dynamic_cast<QObject*>(m_caCanvasItem);
+}
+
+void CACanvasController::setCACanvasItem(QObject* caCanvas)
+{
+    m_caCanvasItem = static_cast<CACanvasItem*>(caCanvas);
+}
+
 void CACanvasController::setCanvas (KoCanvasBase* canvas)
 {
-    QGraphicsWidget* widget = canvas->canvasItem();
-    widget->setParentItem (this);
-    canvas->setCanvasController (this);
-    widget->setVisible (true);
-    m_canvas = canvas;
-
-    zoomToFit();
+//     m_canvas = canvas;
+    canvas->setCanvasController(this);
+    m_caCanvasItem->setKoCanvas(canvas);
+    emit caCanvasItemChanged();
+//     QGraphicsWidget* widget = canvas->canvasItem();
+//     widget->setParentItem (this);
+//     canvas->setCanvasController (this);
+//     widget->setVisible (true);
+//     m_canvas = canvas;
+// 
+//     zoomToFit();
 }
 
 void CACanvasController::setDrawShadow (bool drawShadow)
@@ -221,6 +234,7 @@ void CACanvasController::setCameraY (int cameraY)
 
 void CACanvasController::centerToCamera()
 {
+    return;
     if (proxyObject) {
         proxyObject->emitMoveDocumentOffset (m_currentPoint);
     }
@@ -233,6 +247,7 @@ CACanvasController::~CACanvasController()
 
 void CACanvasController::zoomToFit()
 {
+    return;
     emit needsCanvasResize(QSizeF(width(), height()));
     emit docHeightChanged();
     emit docWidthChanged();
@@ -240,11 +255,14 @@ void CACanvasController::zoomToFit()
 
 void CACanvasController::updateCanvas()
 {
+    return;
     emit needCanvasUpdate();
 }
 
 void CACanvasController::geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry)
 {
+    QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
+    return;
     if (m_canvas) {
         QGraphicsWidget* widget = m_canvas->canvasItem();
         widget->setParentItem (this);
@@ -253,7 +271,6 @@ void CACanvasController::geometryChanged (const QRectF& newGeometry, const QRect
 
         zoomToFit();
     }
-    QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
 }
 
 KoZoomController* CACanvasController::zoomController()
@@ -266,15 +283,12 @@ KoZoomHandler* CACanvasController::zoomHandler()
     return m_zoomHandler;
 }
 
-void CACanvasController::setZoomController (KoZoomController* zoomController)
-{
-    m_zoomController = zoomController;
-    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(updateZoomValue(KoZoomMode::Mode,qreal)));
-}
-
 void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
 {
-    m_zoomHandler = zoomHandler;
+    if (!m_zoomController) {
+        m_zoomHandler = zoomHandler;
+        m_zoomController = new KoZoomController(this, zoomHandler, new KActionCollection(this));
+    }
 }
 
 void CACanvasController::setZoom(qreal zoom)

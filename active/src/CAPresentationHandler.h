@@ -32,7 +32,7 @@ class CAPresentationHandler : public CAAbstractDocumentHandler
     Q_OBJECT
     Q_PROPERTY(int slideshowDelay READ slideshowDelay WRITE setSlideshowDelay NOTIFY slideshowDelayChanged)
     Q_PROPERTY(int currentSlideNumber READ currentSlideNumber NOTIFY currentSlideNumChanged)
-    Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides)
+    Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides NOTIFY totalNumberOfSlidesChanged)
 
 public:
     explicit CAPresentationHandler (CADocumentController* documentController);
@@ -67,6 +67,7 @@ signals:
     void slideshowStarted();
     void slideshowStopped();
     void currentSlideNumChanged();
+    void totalNumberOfSlidesChanged();
 
 protected:
     virtual KoDocument* document();
