@@ -2634,7 +2634,7 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
     createView( cat, item->viewType(), item->tag(), item->text( 0 ), item->toolTip( 0 ), index );
     m_viewlist->blockSignals( false );
 }
-
+/*
 void View::slotCreateReport()
 {
     ReportView v(getKoPart(), getPart(), 0 );
@@ -2648,7 +2648,7 @@ void View::slotCreateReport()
     dlg->raise();
     dlg->activateWindow();
 }
-
+*/
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
