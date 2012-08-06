@@ -424,6 +424,33 @@ void TaskEditor::createDockers()
     connect(this, SIGNAL(readWriteChanged(bool)), m, SLOT(setReadWrite(bool)));
     connect(m, SIGNAL(executeCommand(KUndo2Command*)), part(), SLOT(addCommand(KUndo2Command*)));
     addDocker( ds );
+
+    {
+        ds = new DockWidget( this, "Taskmodules", i18nc( "@title", "Task Modules" ) );
+        ds->setToolTip( i18nc( "@info:tooltip", "Drag a task module into the <emphasis>Task Editor</emphasis> to add it to the project" ) );
+        ds->setLocation( Qt::LeftDockWidgetArea );
+        e = new QTreeView( ds );
+        TaskModuleModel *m = new TaskModuleModel( e );
+        e->setModel( m );
+        e->setHeaderHidden( true );
+        e->setRootIsDecorated( false );
+        e->setSelectionBehavior( QAbstractItemView::SelectRows );
+        e->setSelectionMode( QAbstractItemView::SingleSelection );
+//         e->resizeColumnToContents( 0 );
+        e->setDragDropMode( QAbstractItemView::DragDrop );
+        e->setAcceptDrops( true );
+        e->setDragEnabled ( true );
+        ds->setWidget( e );
+        connect(this, SIGNAL(loadTaskModules(const QStringList&)), m, SLOT(loadTaskModules(const QStringList&)));
+        connect(m, SIGNAL(saveTaskModule(const KUrl&, Project*)), this, SIGNAL(saveTaskModule(const KUrl&, Project*)));
+        connect(m, SIGNAL(removeTaskModule(const KUrl&)), this, SIGNAL(removeTaskModule(const KUrl&)));
+        addDocker( ds );
+    }
+}
+
+void TaskEditor::setTaskModules(const QStringList& files)
+{
+    emit loadTaskModules( files );
 }
 
 void TaskEditor::setGuiActive( bool activate )

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.visio;
+Actions=Print;
+
+[Desktop Action Print]
+Name=Print with Calligra Flow...
+
+Exec=calligraflow --print %U
+Icon=document-print

@@ -1203,7 +1203,7 @@ void KarbonView::initActions()
 
     KAction *actionPageLayout  = new KAction(i18n("Page &Layout..."), this);
     actionCollection()->addAction("page_layout", actionPageLayout);
-    connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(pageLayout()));
+    connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(configurePageLayout()));
 
     // view ---->
     KAction * zoomSelection = new KAction(KIcon("zoom-select"), i18n("Zoom to Selection"), this);
@@ -1327,7 +1327,7 @@ void KarbonView::configure()
     d->canvas->update();
 }
 
-void KarbonView::pageLayout()
+void KarbonView::configurePageLayout()
 {
     QPointer<KoPageLayoutDialog> dlg = new KoPageLayoutDialog(this, part()->pageLayout());
     dlg->showPageSpread(false);

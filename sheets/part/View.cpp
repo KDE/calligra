@@ -71,8 +71,6 @@
 #include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <KToggleAction>
 #include <ktoolinvocation.h>
 #include <kparts/event.h>
@@ -1155,31 +1153,8 @@ void View::updateReadWrite(bool readwrite)
 
 void View::createTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = doc()->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile;
-    tempFile->setSuffix(".ots");
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close();
-    delete tempFile;
-
-    doc()->saveNativeFormat(fileName);
-
-    KoTemplateCreateDia::createTemplate("sheets_template", Factory::global(),
-                                        fileName, pix, this);
-
-    Factory::global().dirs()->addResourceType("sheets_template",
-            "data", "sheets/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("sheets_template", ".ots",
+                                        Factory::global(), doc(), this);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)

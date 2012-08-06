@@ -180,6 +180,9 @@ public:  // Krita specific interfaces
     void enableControls();
     void disableControls();
 
+    /// shows a floating message in the top right corner of the canvas
+    void showFloatingMessage(const QString message, const QIcon& icon);
+
 signals:
 
     void sigLoadingFinished();

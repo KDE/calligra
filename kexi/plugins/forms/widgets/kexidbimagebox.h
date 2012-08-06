@@ -57,7 +57,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
 // Q_PROPERTY( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
     Q_PROPERTY(bool dropDownButtonVisible READ dropDownButtonVisible WRITE setDropDownButtonVisible)
     Q_PROPERTY(Qt::FocusPolicy focusPolicy READ focusPolicyInternal WRITE setFocusPolicy)
-    // overriden to update image geometry
+    // overridden to update image geometry
     Q_ENUMS(Shape Shadow)
     Q_PROPERTY(Shape frameShape READ frameShape WRITE setFrameShape)
     Q_PROPERTY(Shadow frameShadow READ frameShadow WRITE setFrameShadow)

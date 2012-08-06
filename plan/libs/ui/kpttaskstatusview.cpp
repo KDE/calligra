@@ -1108,7 +1108,7 @@ KoPrintJob *PerformanceStatusTreeView::createPrintJob( ViewBase *view )
     return m_chart->createPrintJob( view );
 }
 
-// hackish way to get resonable initial splitter sizes
+// hackish way to get reasonable initial splitter sizes
 void PerformanceStatusTreeView::resizeSplitters()
 {
     int x1 = sizes().value( 0 );

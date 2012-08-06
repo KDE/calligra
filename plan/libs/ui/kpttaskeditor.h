@@ -132,7 +132,9 @@ public:
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
     virtual KoPrintJob *createPrintJob();
-    
+
+    void setTaskModules( const QStringList &files );
+
 signals:
     void taskSelected( Task *task );
     void openNode();
@@ -145,6 +147,10 @@ signals:
     void moveTaskDown();
     void indentTask();
     void unindentTask();
+
+    void loadTaskModules( const QStringList &files );
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
 
 public slots:
     /// Activate/deactivate the gui

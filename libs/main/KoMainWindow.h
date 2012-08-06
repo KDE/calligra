@@ -371,11 +371,6 @@ private:
      */
     bool isImporting() const;
 
-    /**
-     * Save the list of recent files.
-     */
-    void saveRecentFiles();
-
     KRecentFilesAction *recentAction() const;
 
 protected slots:
@@ -383,6 +378,10 @@ protected slots:
     void slotActivePartChanged(KParts::Part *newPart);
 
 private slots:
+    /**
+     * Save the list of recent files.
+     */
+    void saveRecentFiles();
 
     void slotLoadCompleted();
     void slotLoadCanceled(const QString &);

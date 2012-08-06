@@ -3459,7 +3459,9 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     else {
         baseBrush = pal.base();
         QColor baseColor(baseBrush.color());
-        baseColor.setAlpha(120);
+        if (!args.widget->inherits("KexiCommandLinkButton")) { //! @todo HACK! any idea??
+            baseColor.setAlpha(120);
+        }
         baseBrush.setColor(baseColor);
     }
     pal.setBrush(QPalette::Base, baseBrush);

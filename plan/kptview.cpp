@@ -59,7 +59,6 @@
 #include <KConfigDialogManager>
 #include <kstatusbar.h>
 #include <kxmlguifactory.h>
-#include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <ktoggleaction.h>
 #include <ktemporaryfile.h>
@@ -69,6 +68,7 @@
 #include <KConfigDialog>
 #include <KToolInvocation>
 #include <KRun>
+#include <KStandardDirs>
 
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
@@ -314,11 +314,7 @@ View::View(KoPart *part, Part *doc, QWidget *parent)
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
     connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
 
-    actionCreateReport  = new KAction(KIcon( "document-new" ), i18n("Create Report..."), this);
-    actionCollection()->addAction( "reportdesigner_create_report", actionCreateReport );
-    connect( actionCreateReport, SIGNAL( triggered( bool ) ), SLOT( slotCreateReport() ) );
-
-    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open File..."), this);
+    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open Report Definition File..."), this);
     actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
@@ -453,20 +449,8 @@ void View::initiateViews()
 
 void View::slotCreateTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = getPart()->generatePreview(QSize(width, height));
-
-    KTemporaryFile tempFile;
-    tempFile.setSuffix( ".plant" );
-    //Check that creation of temp file was successful
-    if ( ! tempFile.open() ) {
-        kWarning()<<"Creation of temprary file to store template failed.";
-        return;
-    }
-    kDebug(planDbg())<<"Created temporaray file:"<<tempFile.fileName();
-    getPart()->saveNativeFormat( tempFile.fileName() );
-    KoTemplateCreateDia::createTemplate( "plan_template", Factory::global(), tempFile.fileName(), pix, this );
+    KoTemplateCreateDia::createTemplate("plan_template", ".plant",
+                                        Factory::global(), getPart(), this);
 }
 
 void View::createViews()
@@ -869,10 +853,14 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     connect( taskeditor, SIGNAL( indentTask() ), SLOT( slotIndentTask() ) );
     connect( taskeditor, SIGNAL( unindentTask() ), SLOT( slotUnindentTask() ) );
 
-
+    connect(taskeditor, SIGNAL(saveTaskModule(const KUrl&, Project*)), SLOT(saveTaskModule(const KUrl&, Project*)));
+    connect(taskeditor, SIGNAL(removeTaskModule(const KUrl&)), SLOT(removeTaskModule(const KUrl&)));
 
     connect( taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
     taskeditor->updateReadWrite( m_readWrite );
+
+    // last:
+    taskeditor->setTaskModules( Factory::global().dirs()->findAllResources( "plan_taskmodules", QString(), KStandardDirs::NoDuplicates ) );
     return taskeditor;
 }
 
@@ -1349,14 +1337,12 @@ ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QS
     }
 
     v->setProject( &getProject() );
-    v->setReportModels( v->createReportModels( &getProject(), currentScheduleManager(), this ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     connect( this, SIGNAL(currentScheduleManagerChanged(ScheduleManager* )), v, SLOT(slotRefreshView()));
     v->setScheduleManager( currentScheduleManager() );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-    connect( v, SIGNAL( editReportDesign( ReportView* ) ), SLOT( slotEditReportDesign( ReportView* ) ) );
     v->updateReadWrite( m_readWrite );
     return v;
 }
@@ -2698,26 +2684,12 @@ void View::slotOpenReportFileFinished( int result )
     QDomDocument doc;
     doc.setContent( &file );
     QDomElement e = doc.documentElement();
-    ReportView v(getKoPart(), getPart(), 0 );
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), e, v.reportModels(), this );
+    ReportDesignDialog *dlg = new ReportDesignDialog( e, Report::createBaseReportDataModels( this ), this );
     // The ReportDesignDialog can not know how to create and insert views,
     // so faciclitate this in the slotCreateReportView() slot.
     connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
     connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    dlg->show();
-    dlg->raise();
-    dlg->activateWindow();
-}
-
-void View::slotEditReportDesign( ReportView *view )
-{
-    if ( view == 0 ) {
-        return;
-    }
-    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), view, this );
-    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
-    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
     dlg->show();
     dlg->raise();
     dlg->activateWindow();
@@ -3026,6 +2998,29 @@ void View::slotCurrencyConfigFinished( int result )
         }
     }
     dlg->deleteLater();
+}
+
+void View::saveTaskModule( const KUrl &url, Project *project )
+{
+    kDebug(planDbg())<<url<<project;
+    QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
+    kDebug(planDbg())<<"dir="<<dir;
+    if ( ! dir.isEmpty() ) {
+        Part part;
+        part.insertProject( *project, 0, 0 );
+        part.getProject().setName( project->name() );
+        part.getProject().setLeader( project->leader() );
+        part.getProject().setDescription( project->description() );
+        part.saveNativeFormat( dir + url.fileName() );
+        kDebug(planDbg())<<dir + url.fileName();
+    } else {
+        kDebug(planDbg())<<"Could not find a location";
+    }
+}
+
+void View::removeTaskModule( const KUrl &url )
+{
+    kDebug(planDbg())<<url;
 }
 
 QString View::standardTaskStatusReport() const

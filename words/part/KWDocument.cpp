@@ -214,9 +214,10 @@ QPixmap KWDocument::generatePreview(const QSize &size)
     // use shape manager from canvasItem even for QWidget environments
     // if using the shape manager from one of the views there is no guarantee
     // that the view, its canvas and the shapemanager is not destroyed in between
-    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(canvasItem())->shapeManager();
+//FIXME    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(canvasItem())->shapeManager();
 
-    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
+//FIXME    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
+        return QPixmap();
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
@@ -735,7 +736,6 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
     }
     relayout(framesets);
 }
-
 
 void KWDocument::saveConfig()
 {

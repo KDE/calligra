@@ -94,6 +94,55 @@ QSize ItemDelegate::sizeHint( const QStyleOptionViewItem & option, const QModelI
 }
 
 //----------------------
+CheckStateItemDelegate::CheckStateItemDelegate( QObject *parent )
+    : ItemDelegate( parent )
+{
+}
+
+bool CheckStateItemDelegate::editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index )
+{
+    Q_ASSERT(event);
+    Q_ASSERT(model);
+    kDebug(planDbg());
+
+    Qt::ItemFlags flags = model->flags(index);
+    if ( ! ( option.state & QStyle::State_Enabled ) || ! ( flags & Qt::ItemIsEnabled ) ) {
+        return false;
+    }
+
+    // make sure that we have a check state
+    QVariant value = index.data( Qt::EditRole );
+    if ( ! value.isValid() ) {
+        return false;
+    }
+
+    QStyle *style = QApplication::style();
+
+    // make sure that we have the right event type
+    if ( ( event->type() == QEvent::MouseButtonRelease ) || ( event->type() == QEvent::MouseButtonDblClick ) || ( event->type() == QEvent::MouseButtonPress ) ) {
+        QStyleOptionViewItemV4 viewOpt( option );
+        initStyleOption( &viewOpt, index );
+        QRect checkRect = style->subElementRect( QStyle::SE_ItemViewItemDecoration, &viewOpt, 0 );
+        QMouseEvent *me = static_cast<QMouseEvent*>( event );
+        if ( me->button() != Qt::LeftButton || ! checkRect.contains( me->pos() ) ) {
+            return false;
+        }
+        if ( ( event->type() == QEvent::MouseButtonPress ) || ( event->type() == QEvent::MouseButtonDblClick ) ) {
+            return true;
+        }
+    } else if ( event->type() == QEvent::KeyPress ) {
+        if (static_cast<QKeyEvent*>(event)->key() != Qt::Key_Space && static_cast<QKeyEvent*>(event)->key() != Qt::Key_Select) {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    Qt::CheckState state = ( static_cast<Qt::CheckState>( value.toInt() ) == Qt::Checked ? Qt::Unchecked : Qt::Checked );
+    return model->setData(index, state, Qt::CheckStateRole);
+}
+
+
+//----------------------
 DateTimeCalendarDelegate::DateTimeCalendarDelegate( QObject *parent )
     : ItemDelegate( parent )
 {

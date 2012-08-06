@@ -133,6 +133,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
 
     setWindowFlags(Qt::WindowStaysOnBottomHint | Qt::FramelessWindowHint | Qt::Tool);
     setFocusPolicy(Qt::NoFocus);
+    setAttribute(Qt::WA_ShowWithoutActivating);
 
     setFont(QFont("sans-serif"));
 
@@ -218,6 +219,10 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
     // correct for screen position
     newPos += screen.topLeft();
+    if (parentWidget()) {
+        // Move a bit to the left as there could be a scrollbar
+        newPos.setX(newPos.x() - MARGIN);
+    }
 
     QRect rc(newPos, rect.size());
 

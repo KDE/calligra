@@ -119,16 +119,9 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
         image = m_doc->generatePreview(size).toImage();
     }
 
-<<<<<<< HEAD
-void CalligraCreator::timerEvent(QTimerEvent *)
-{
     m_part->closeUrl();
-    m_completed = true;
-=======
-    m_doc->closeUrl();
 
     return m_loadingCompleted;
->>>>>>> master
 }
 
 void CalligraCreator::onLoadingCompleted()

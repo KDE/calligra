@@ -93,6 +93,16 @@ private:
     Delegate::EndEditHint m_lastHint;
 };
 
+class KPLATOMODELS_EXPORT CheckStateItemDelegate : public ItemDelegate
+{
+    Q_OBJECT
+public:
+    CheckStateItemDelegate( QObject *parent = 0 );
+
+protected:
+    bool editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index );
+};
+
 class KPLATOMODELS_EXPORT DateTimeCalendarDelegate : public ItemDelegate
 {
   Q_OBJECT

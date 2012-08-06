@@ -36,10 +36,10 @@ namespace KPlato
 /**
     FlatProxyModel is a proxy model that makes a tree source model flat.
     
-    This might be usefull to present data from a tree model in e.g. a table view or a report.
+    This might be useful to present data from a tree model in e.g. a table view or a report.
     
-    Note that the source model should have the same number of columns for all parent indeces,
-    since a flat model obviously have the same number of columns for all indeces.
+    Note that the source model should have the same number of columns for all parent indices,
+    since a flat model obviously have the same number of columns for all indices.
     If this is not the case, the behavior is undefined.
     
     The row sequence of the flat model is the same as if the source model was fully expanded.

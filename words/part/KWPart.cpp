@@ -102,8 +102,8 @@ QGraphicsItem *KWPart::createCanvasItem()
 QList<KoPart::CustomDocumentWidgetItem> KWPart::createCustomDocumentWidgets(QWidget *parent)
 {
     KoColumns columns;
-    columns.columns = 1;
-    columns.columnSpacing = 20;
+    columns.count = 1;
+    columns.gapWidth = 20;
 
     QList<KoPart::CustomDocumentWidgetItem> widgetList;
     KoPart::CustomDocumentWidgetItem item;

@@ -72,6 +72,7 @@
 #include <KFontAction>
 #include <KFontChooser>
 #include <KFontSizeAction>
+#include <kdeversion.h>
 
 // Qt
 #include <QApplication>
@@ -751,7 +752,11 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     case Qt::Key_Dollar:
         command->setText(i18nc("(qtundo-format)", "Currency Format"));
         command->setFormatType(Format::Money);
+#if KDE_IS_VERSION(4,4,0)
+        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces());
+#else
         command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits());
+#endif
         break;
 
     case Qt::Key_Percent:
@@ -1296,7 +1301,7 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
     popupMenuActions.insert("comment", action);
 
-    action = new KAction(KIcon("clearComment"),i18n("Clear Comment"), q);
+    action = new KAction(KIcon("removecomment"),i18n("Clear Comment"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
     popupMenuActions.insert("clearComment", action);
 
