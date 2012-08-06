@@ -75,9 +75,6 @@ protected:
     /// Add motion path shape to the current shapes manager
     virtual void addPathShape(KoPathShape *pathShape);
 
-    /// Paint motion path shape
-    virtual void paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter);
-
     /// Helper method to scale the motion path shape (using current page size and zoom)
     QPair<qreal, qreal> getScaleCorrection();
 
@@ -86,6 +83,7 @@ private:
     KoPathShape *m_currentMotionPathSelected;
     QMap<KoPathShape *, KPrAnimateMotion *> m_pathMap;
     QMap<KoPathShape *, KoShape *> m_shapesMap;
+    KoShapeManager *m_pathShapeManager;
     bool m_reloadMotionPaths;
 };
 
