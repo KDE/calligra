@@ -86,8 +86,8 @@ static double dist[][2] = {
 };
 
 //-----------------------------------
-PertResult::PertResult( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+PertResult::PertResult(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent ),
     m_node( 0 ),
     m_project( 0 ),
     current_schedule( 0 )
@@ -304,8 +304,8 @@ KoPrintJob *PertResult::createPrintJob()
 }
 
 //--------------------
-PertCpmView::PertCpmView( KoDocument *part, QWidget *parent ) 
-    : ViewBase( part, parent ),
+PertCpmView::PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 ),
     current_schedule( 0 ),
     block( false )

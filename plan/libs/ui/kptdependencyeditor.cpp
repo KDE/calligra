@@ -1996,8 +1996,8 @@ void DependencyeditorConfigDialog::slotOk()
 }
 
 //--------------------
-DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+DependencyEditor::DependencyEditor(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
     m_currentnode( 0 ),
     m_manager( 0 )
 {

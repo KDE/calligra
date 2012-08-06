@@ -32,6 +32,7 @@
 
 #include "calligraversion.h"
 #include <KoDocument.h>
+#include <KoPart.h>
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
@@ -463,8 +464,8 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
 }
 
 //--------------
-ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
-    : KoView( doc, parent ),
+ViewBase::ViewBase(KoPart *part, KoDocument *doc, QWidget *parent)
+    : KoView(part, doc, parent),
     m_readWrite( false ),
     m_proj( 0 ),
     m_schedulemanager( 0 )

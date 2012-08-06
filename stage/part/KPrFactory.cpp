@@ -21,6 +21,7 @@
 #include "KPrFactory.h"
 #include "KPrDocument.h"
 #include "KPrAboutData.h"
+#include "KPrPart.h"
 
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -50,8 +51,10 @@ QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, Q
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
-    KPrDocument *doc = new KPrDocument(parent);
-    return doc;
+    KPrPart *part = new KPrPart(parent);
+    KPrDocument *doc = new KPrDocument(part);
+    part->setDocument(doc);
+    return part;
 }
 
 KAboutData* KPrFactory::aboutData()

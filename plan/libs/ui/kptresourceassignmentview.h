@@ -99,7 +99,7 @@ class KPLATOUI_EXPORT ResourceAssignmentView : public ViewBase
     Q_OBJECT
 
 public:
-    ResourceAssignmentView( KoDocument *part, QWidget *parent);
+    ResourceAssignmentView(KoPart *part, KoDocument *doc, QWidget *parent);
     using ViewBase::draw;
     Project *project() const { return m_project; }
     void draw( Project &project );

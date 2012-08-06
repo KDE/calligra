@@ -24,6 +24,7 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 #include <KarbonLayerReorderCommand.h>
 
 #include <KoShapeManager.h>
@@ -202,7 +203,7 @@ void KarbonLayerDocker::updateView()
 
 void KarbonLayerDocker::setPart(KParts::Part * part)
 {
-    m_part = dynamic_cast<KarbonPart*>(part);
+    m_part = dynamic_cast<KarbonKoDocument*>(part);
     if (! m_part) {
         m_sortModel->setDocument(0);
         m_model->setDocument(0);

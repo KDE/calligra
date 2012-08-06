@@ -47,6 +47,7 @@
 #include <rdf/KoRdfPrefixMapping.h>
 #include <rdf/KoSopranoTableModel.h>
 
+#include <KoPart.h>
 #include <KoBookmark.h>
 #include <KoTextInlineRdf.h>
 #include <KoStore.h>
@@ -919,7 +920,7 @@ void TestRdf::testRoundtrip()
         QCOMPARE(position.second, 497);
 
         // Save the document -- this changes all xmlid's
-        doc->saveAs(url);
+        doc->documentPart()->saveAs(url);
 
         // Check the position again -- this xmlid doesn't exist anymore, so
         // should be 0,0

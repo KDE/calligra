@@ -25,6 +25,7 @@
 #include "kptdebug.h"
 
 #include <KoDocument.h>
+#include <KoPart.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -36,8 +37,8 @@ namespace KPlato
 {
 
 //-----------------------------------
-PertEditor::PertEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+PertEditor::PertEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 )
 {
     kDebug(planDbg()) <<" ---------------- KPlato: Creating PertEditor ----------------";
@@ -52,7 +53,7 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     m_requiredList = widget.required;
     m_requiredList->hideColumn( 1 ); // child node name
     m_requiredList->setEditTriggers( QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed );
-    connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
     updateReadWrite( part->isReadWrite() );
 
     widget.addBtn->setIcon( KIcon( "arrow-right" ) );
@@ -67,7 +68,7 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     connect( widget.addBtn, SIGNAL(clicked()), this, SLOT(slotAddClicked() ) );
     connect( widget.removeBtn, SIGNAL(clicked() ), this, SLOT(slotRemoveClicked() ) );
 
-    connect( this, SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( this, SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 }
 
 void PertEditor::slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem *prev )

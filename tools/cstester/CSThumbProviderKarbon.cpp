@@ -22,6 +22,7 @@
 #include "CSThumbProviderKarbon.h"
 
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <QApplication>
 #include <QEventLoop>
@@ -37,7 +38,7 @@ void processEvents()
     }
 }
 
-CSThumbProviderKarbon::CSThumbProviderKarbon(KarbonPart *doc)
+CSThumbProviderKarbon::CSThumbProviderKarbon(KarbonKoDocument *doc)
 : m_doc(doc)
 {
 }

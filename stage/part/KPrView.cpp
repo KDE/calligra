@@ -41,6 +41,7 @@
 #include <KoZoomController.h>
 
 #include "KPrDocument.h"
+#include "KPrPart.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
@@ -64,8 +65,9 @@
 
 #include "KPrPdfPrintJob.h"
 
-KPrView::KPrView( KPrDocument *document, QWidget *parent )
-  : KoPAView( document, parent )
+KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
+  : KoPAView(part, document, parent)
+  , m_part(part)
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
@@ -201,7 +203,7 @@ void KPrView::initGUI()
 void KPrView::initActions()
 {
     setComponentData(KPrFactory::componentData());
-    if ( !kopaDocument()->isReadWrite() )
+    if (!m_part->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
        setXMLFile( "stage.rc" );
@@ -517,6 +519,13 @@ void KPrView::restoreZoomConfig()
 {
     zoomController()->setZoom(zoomMode(), zoom()/100.);
     centerPage();
+}
+
+void KPrView::replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage)
+{
+    if (page == activePage() ) {
+        viewMode()->updateActivePage(newActivePage);
+    }
 }
 
 #include "KPrView.moc"

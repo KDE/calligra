@@ -26,6 +26,7 @@
 #include <QTextTable>
 #include <QList>
 
+#include <KoPart.h>
 #include <KoBookmark.h>
 #include <KoStore.h>
 #include <KoTextDocument.h>
@@ -167,7 +168,7 @@ void TestKoBookmark::testRoundtrip()
 
         // Save the document
         KUrl url(QString(FILES_OUTPUT_DIR) + "/bookmark_roundtrip.odt");
-        doc->saveAs(url);
+        doc->documentPart()->saveAs(url);
 
         // check the number of bookmark characters
         KoInlineTextObjectManager *inlineObjectManager = koTextDocument.inlineTextObjectManager();

@@ -159,8 +159,8 @@ QAbstractPrintDialog::PrintDialogOptions ReportPrintingDialog::printDialogOption
 }
 
 //---------------------
-ReportView::ReportView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ReportView::ReportView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent )
 {
 //    kDebug(planDbg())<<"--------------- ReportView ------------------";
     setObjectName("ReportView");
@@ -169,12 +169,12 @@ ReportView::ReportView( KoDocument *part, QWidget *parent )
     m_stack = new QStackedWidget( this );
     l->addWidget( m_stack );
 
-    ReportWidget *v = new ReportWidget( part, m_stack );
+    ReportWidget *v = new ReportWidget(part, doc, m_stack);
     m_stack->addWidget( v );
     connect(v, SIGNAL(editReportDesign()),SLOT(slotEditReport()));
     connect(v, SIGNAL(guiActivated(ViewBase*, bool)), SIGNAL(guiActivated(ViewBase*, bool)));
 
-    ReportDesigner *d = new ReportDesigner( part, m_stack );
+    ReportDesigner *d = new ReportDesigner(part, doc, m_stack);
     m_stack->addWidget( d );
     connect(d, SIGNAL(viewReport()), SLOT(slotViewReport()));
     connect(d, SIGNAL(guiActivated(ViewBase*, bool)), SIGNAL(guiActivated(ViewBase*, bool)));
@@ -282,8 +282,8 @@ QList< ReportData* > ReportView::reportDataModels() const
 
 
 //---------------------
-ReportWidget::ReportWidget( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+ReportWidget::ReportWidget(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent ),
     m_reportdatamodels( Report::createBaseReportDataModels() )
 {
 //    kDebug(planDbg())<<"--------------- ReportWidget ------------------";
@@ -1026,8 +1026,8 @@ void ModifyReportDefinitionCmd ::unexecute()
 
 //--------------------------
 
-ReportDesigner::ReportDesigner( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+ReportDesigner::ReportDesigner(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_designer( 0 ),
     m_reportdatamodels( Report::createBaseReportDataModels() ),
     m_groupsectioneditor( new GroupSectionEditor( this ) )
@@ -1037,8 +1037,8 @@ ReportDesigner::ReportDesigner( KoDocument *part, QWidget *parent )
     l->addWidget( m_scrollarea );
 
     setupGui();
-    QDomDocument doc;
-    doc.setContent( QString( "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan<\">"
+    QDomDocument domdoc;
+    domdoc.setContent( QString( "<planreportdefinition version=\"1.0\" mime=\"application/x-vnd.kde.plan.report.definition\" editor=\"Plan<\">"
         "<data-source select-from=\"tasks\"/>"
         "<report:content xmlns:report=\"http://kexi-project.org/report/2.0\" "
         "xmlns:fo=\"urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0\" "
@@ -1046,7 +1046,7 @@ ReportDesigner::ReportDesigner( KoDocument *part, QWidget *parent )
         "<report:title>Report</report:title>"
         "</report:content>"
         "</planreportdefinition>" ) );
-    setData( doc );
+    setData( domdoc );
 }
 
 void ReportDesigner::setupGui()
