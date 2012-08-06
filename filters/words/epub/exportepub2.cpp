@@ -340,8 +340,6 @@ KoFilter::ConversionStatus ExportEpub2::parseMetaInfImagesData(KoStore *odfStore
         if (type.contains("image")) {
             imagesData.insert(path, type);
         }
-        childNode = childNode.nextSibling();
-        nodeElement = childNode.toElement();
     }
 
     odfStore->close();

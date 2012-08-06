@@ -69,9 +69,9 @@ static void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles);
 static void handleTagTab(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles);
-static void handleTagContentOfTable(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
+static void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles);
-static void handleTagContentOfTableBody(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
+static void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles);
 
 
@@ -399,7 +399,7 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
             handleTagA(nodeElement, bodyWriter, styles);
         }
         else if (nodeElement.localName() == "table-of-content" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagContentOfTable(nodeElement, bodyWriter, styles);
+            handleTagTableOfContent(nodeElement, bodyWriter, styles);
         }
         else {
             bodyWriter->startElement("div");
@@ -712,7 +712,7 @@ void handleTagTab (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         bodyWriter->addTextNode("\u00a0");
 }
 
-void handleTagContentOfTable (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
+void handleTagTableOfContent (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                               QHash<QString, StyleInfo *> &styles)
 {
     KoXmlNode indexBody = KoXml::namedItemNS(nodeElement, KoXmlNS::text, "index-body");
@@ -726,11 +726,11 @@ void handleTagContentOfTable (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter
             }
         }// end of index-title
         else
-            handleTagContentOfTableBody(element, bodyWriter, styles);
+            handleTagTableOfContentBody(element, bodyWriter, styles);
     }
 }
 
-void handleTagContentOfTableBody (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
+void handleTagTableOfContentBody (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                                   QHash<QString, StyleInfo *> &styles)
 {
     if (nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text) {
@@ -767,9 +767,11 @@ void handleUnknownTags (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
     KoXmlElement element = node.toElement();
     while (!node.isNull()) {
 
-//        if (node.isText())
-//            handleCharacterData(node, bodyWriter, styles);
-        if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text)
+        if (node.isText())
+            handleCharacterData(node, bodyWriter, styles);
+        else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text)
+            handleTagP(element, bodyWriter, styles);
+        else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text)
             handleTagSpan(element, bodyWriter, styles);
         else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw)
             handleTagFrame(element, bodyWriter, styles);

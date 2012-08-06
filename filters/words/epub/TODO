@@ -49,7 +49,7 @@ Conform to standards
  * Name the style sheet styles.css instead                      [Done]
 
 Features
- * Support for internal links                                   [moji]
+ * Support for internal links                                   [Done]
 
 
 
@@ -74,9 +74,9 @@ Frames
    don't recognize.
 
 Conversions to supported formats inside the EPUB
- * Convert wmf to svg
- * Convert emf to svg
- * Convert svm to svg
+ * Convert wmf to svg						[moji]
+ * Convert emf to svg						[moji]
+ * Convert svm to svg						[moji]
 
 More formatting
  * Space before/after a paragraph
