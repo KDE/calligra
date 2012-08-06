@@ -110,6 +110,24 @@ bool KoToolProxyPrivate::isActiveLayerEditable()
     return true;
 }
 
+void KoToolProxyPrivate::activateFallbackTool(KoToolBase *tool)
+{
+    qDebug()<<"activating a fall back tool";
+    QSet<KoShape*> shapesToOperateOn;
+    KoSelection *selection = tool->canvas()->shapeManager()->selection();
+    Q_ASSERT(selection);
+
+    foreach(KoShape *shape, selection->selectedShapes()) {
+        QSet<KoShape*> delegates = shape->toolDelegates();
+        if (delegates.isEmpty()) { // no delegates, just the orig shape
+            shapesToOperateOn << shape;
+        } else {
+            shapesToOperateOn += delegates;
+        }
+    }
+    tool->activate(KoToolBase::FallbackActivation, shapesToOperateOn);
+}
+
 KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
         : QObject(parent),
         d(new KoToolProxyPrivate(this))
@@ -265,13 +283,13 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
             break;
 
         ev->accept();
+        d->activateFallbackTool(tool);
+qDebug()<<"falling back, mousePressEvent";
         tool->mousePressEvent(ev);
 
         if (ev->isAccepted())
             d->activeFallbackTool = tool;
     }
-
-
 }
 
 void KoToolProxy::mousePressEvent(QMouseEvent *event, const QPointF &point)
@@ -296,40 +314,8 @@ void KoToolProxy::mouseDoubleClickEvent(KoPointerEvent *event)
 
 void KoToolProxy::mouseMoveEvent(QMouseEvent *event, const QPointF &point)
 {
-    if (d->mouseLeaveWorkaround) {
-        d->mouseLeaveWorkaround = false;
-        return;
-    }
-    KoInputDevice id;
-    KoToolManager::instance()->priv()->switchInputDevice(id);
-    if (d->activeTool == 0) {
-        event->ignore();
-        return;
-    }
-
     KoPointerEvent ev(event, point);
-    d->activeTool->mouseMoveEvent(&ev);
-
-    // Just in case the main tool didn't accept the event let the fallback tools have their chance
-    d->activeFallbackTool = 0;
-    foreach (KoToolBase *tool, d->fallbackTools) {
-        if (ev.isAccepted())
-            break;
-        if (tool == d->activeTool)
-            continue;
-
-        ev.accept();
-        connect(tool, SIGNAL(cursorChanged(const QCursor&)),
-                   d->activeTool, SIGNAL(cursorChanged(const QCursor&)));
-        tool->mouseMoveEvent(&ev);
-        disconnect(tool, SIGNAL(cursorChanged(const QCursor&)),
-                   d->activeTool, SIGNAL(cursorChanged(const QCursor&)));
-
-        if (ev.isAccepted())
-            d->activeFallbackTool = tool;
-    }
-
-    d->checkAutoScroll(ev);
+    mouseMoveEvent(&ev);
 }
 
 void KoToolProxy::mouseMoveEvent(KoPointerEvent *event)
@@ -340,26 +326,52 @@ void KoToolProxy::mouseMoveEvent(KoPointerEvent *event)
     }
     KoInputDevice id;
     KoToolManager::instance()->priv()->switchInputDevice(id);
-    if (d->activeTool == 0) {
-        event->ignore();
-        return;
-    }
 
-    d->activeTool->mouseMoveEvent(event);
-
-    // Just in case the main tool didn't accept the event let the fallback tools have their chance
-    d->activeFallbackTool = 0;
-    foreach (KoToolBase *tool, d->fallbackTools) {
-        if (event->isAccepted())
-            break;
-
+    event->ignore();
+    if (d->activeFallbackTool && d->activeFallbackTool->wantsMouseEvents()) {
+        // In case the fallback tool is eg dragging someting it want's to grap the mouse
+        // so only let the fallback tool handle events until it says stop
         event->accept();
-        tool->mouseMoveEvent(event);
+        connect(d->activeFallbackTool, SIGNAL(cursorChanged(const QCursor&)),
+                d->activeTool, SIGNAL(cursorChanged(const QCursor&)));
+        d->activeFallbackTool->mouseMoveEvent(event);
+        disconnect(d->activeFallbackTool, SIGNAL(cursorChanged(const QCursor&)),
+                d->activeTool, SIGNAL(cursorChanged(const QCursor&)));
+        if (!event->isAccepted())
+            d->activeFallbackTool = 0;
+    } else {
+        // No fallback grapping the mouse so let's do the normal thing of having the active
+        // tool handle events
+        if (d->activeTool) {
+            d->activeTool->mouseMoveEvent(event);
+        }
 
-        if (event->isAccepted())
-            d->activeFallbackTool = tool;
+        if (d->activeFallbackTool) {
+            d->activeFallbackTool->repaintDecorations();
+        }
+
+        // In case the main tool didn't accept the event let the fallback tools have their chance
+        d->activeFallbackTool = 0;
+        foreach (KoToolBase *tool, d->fallbackTools) {
+            if (event->isAccepted())
+                break;
+
+            if (tool == d->activeTool) {
+                continue;
+            }
+            event->accept();
+            d->activateFallbackTool(tool);
+            connect(tool, SIGNAL(cursorChanged(const QCursor&)),
+                    d->activeTool, SIGNAL(cursorChanged(const QCursor&)));
+            tool->mouseMoveEvent(event);
+            disconnect(tool, SIGNAL(cursorChanged(const QCursor&)),
+                    d->activeTool, SIGNAL(cursorChanged(const QCursor&)));
+
+            qDebug()<<"testing if move accepted"<<event->isAccepted();
+            if (event->isAccepted())
+                d->activeFallbackTool = tool;
+        }
     }
-
     d->checkAutoScroll(*event);
 }
 
@@ -404,6 +416,7 @@ void KoToolProxy::mouseReleaseEvent(QMouseEvent *event, const QPointF &point)
             break;
 
         ev.accept();
+        d->activateFallbackTool(tool);
         tool->mouseReleaseEvent(&ev);
 
         if (ev.isAccepted())
@@ -451,6 +464,7 @@ void KoToolProxy::mouseReleaseEvent(KoPointerEvent* event)
             break;
 
         event->accept();
+        d->activateFallbackTool(tool);
         tool->mousePressEvent(event);
 
         if (event->isAccepted())

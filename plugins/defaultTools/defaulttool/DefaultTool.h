@@ -60,6 +60,7 @@ public:
 
 public:
 
+    virtual bool wantsMouseEvents() const;
     virtual bool wantsAutoScroll() const;
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
@@ -174,6 +175,8 @@ private:
 
     class GuideLine;
     GuideLine * m_guideLine;
+
+    bool m_fallback;
 };
 
 #endif

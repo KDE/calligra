@@ -50,6 +50,12 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter);
 
     /**
+     * Sets how to paint the decortations.
+     * @param gray dray the handles and outline in gray tones.
+     */
+    void setGrayMode();
+
+    /**
      * set the selection that is to be painted.
      * @param selection the current selection.
      */
@@ -73,6 +79,7 @@ private:
     static KoFlake::Position m_hotPosition;
     KoSelection *m_selection;
     int m_handleRadius;
+    bool m_gray;
 };
 
 #endif

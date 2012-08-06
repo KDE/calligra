@@ -38,6 +38,7 @@ SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
 , m_shearHandles(shearHandles)
 , m_arrows(arrows)
 , m_handleRadius( 3 )
+, m_gray(false)
 {
     if(s_rotateCursor == 0) {
         s_rotateCursor->load(KStandardDirs::locate("lib", "flake/rotate.png"));
@@ -62,6 +63,11 @@ KoFlake::Position SelectionDecorator::hotPosition()
     return m_hotPosition;
 }
 
+void SelectionDecorator::setGrayMode()
+{
+    m_gray = true;
+}
+
 void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &converter)
 {
     QRectF handleArea;
@@ -70,7 +76,11 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // save the original painter transformation
     QTransform painterMatrix = painter.worldTransform();
 
-    painter.setPen( Qt::green );
+    if (m_gray) {
+        painter.setPen(Qt::gray);
+    } else {
+        painter.setPen(Qt::green);
+    }
     bool editable=false;
     foreach (KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation
@@ -115,8 +125,13 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     painter.setTransform(QTransform());
     painter.setRenderHint( QPainter::Antialiasing, false );
 
-    painter.setPen(Qt::black);
-    painter.setBrush(Qt::yellow);
+    if (m_gray) {
+        painter.setPen(Qt::gray);
+        painter.setBrush(Qt::gray);
+    } else {
+        painter.setPen(Qt::black);
+        painter.setBrush(Qt::yellow);
+    }
 
     QPolygonF outline = painterMatrix.map( handleArea );
 

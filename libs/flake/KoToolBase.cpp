@@ -74,6 +74,11 @@ void KoToolBase::resourceChanged(int key, const QVariant & res)
     Q_UNUSED(res);
 }
 
+bool KoToolBase::wantsMouseEvents() const
+{
+    return false;
+}
+
 bool KoToolBase::wantsAutoScroll() const
 {
     return true;

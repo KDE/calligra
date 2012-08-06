@@ -107,9 +107,9 @@ void KoInteractionTool::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-KoInteractionStrategy *KoInteractionTool::currentStrategy()
+KoInteractionStrategy *KoInteractionTool::currentStrategy() const
 {
-    Q_D(KoInteractionTool);
+    Q_D(const KoInteractionTool);
     return d->currentStrategy;
 }
 

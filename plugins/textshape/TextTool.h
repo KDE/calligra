@@ -310,7 +310,7 @@ private:
     void repaintSelection();
     KoPointedAt hitTest(const QPointF & point) const;
     void updateStyleManager();
-    void updateSelectedShape(const QPointF &point);
+    bool updateSelectedShape(const QPointF &point, bool onlyTopMost); // returnvalue true if textshape
     void updateSelectionHandler();
     void editingPluginEvents();
     void finishedWord();

@@ -62,6 +62,7 @@ class FLAKE_EXPORT KoToolBase : public QObject
 public:
     /// Option for activate()
     enum ToolActivation {
+        FallbackActivation, ///< The tool is activated temporarily for one event only, No deactivate
         TemporaryActivation, ///< The tool is activated temporarily and works 'in-place' of another one.
         DefaultActivation   ///< The tool is activated normally and emitting 'done' goes to the defaultTool
     };
@@ -85,6 +86,12 @@ public:
      * an update call on the canvas, but does not paint directly.
      */
     virtual void repaintDecorations();
+
+    /**
+     * Return if the tool in fallback mode want's to grab mouse movements (default is false).
+     * @return if this tool wants to grap mouse events
+     */
+    virtual bool wantsMouseEvents() const;
 
     /**
      * Return if dragging (moving with the mouse down) to the edge of a canvas should scroll the

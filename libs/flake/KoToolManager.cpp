@@ -600,15 +600,18 @@ void KoToolManager::Private::selectionChanged(QList<KoShape*> shapes)
             }
         }
     }
+        qDebug()<<"Selection changed"<<canvasData->activationShapeId<<types;
 
     // check if there is still a shape selected the active tool can work on
     // there needs to be at least one shape for a tool without an activationShapeId
     // to work
     // if not change the current tool to the default tool
     if (!(canvasData->activationShapeId.isNull() && shapes.size() > 0)
-        && canvasData->activationShapeId != "flake/always"
+        //&& !canvasData->activationShapeId.endsWith("/always")
         && canvasData->activationShapeId != "flake/edit"
+        && canvasData->activationShapeId != "flake/always"
         && ! types.contains(canvasData->activationShapeId)) {
+        qDebug()<<"DEFAULT TOOOOOL"<<canvasData->activationShapeId<<types;
         switchTool(KoInteractionTool_ID, false);
     }
 
@@ -888,6 +891,7 @@ QString KoToolManager::preferredToolForSelection(const QList<KoShape*> &shapes)
         if (helper->toolType() == KoToolFactoryBase::mainToolType())
             continue;
         if (types.contains(helper->activationShapeId())) {
+//        if (types.contains(QString(helper->activationShapeId()).remove("/always"))) {
             toolType = helper->id();
             prio = helper->priority();
         }

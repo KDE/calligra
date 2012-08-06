@@ -824,20 +824,23 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.restore();
 }
 
-void TextTool::updateSelectedShape(const QPointF &point)
+bool TextTool::updateSelectedShape(const QPointF &point, bool onlyTopMost)
 {
     QRectF area(point, QSizeF(1, 1));
     if (m_textEditor.data()->hasSelection())
         repaintSelection();
     else
         repaintCaret();
+
+    KoSelection *selection = canvas()->shapeManager()->selection();
     QList<KoShape*> sortedShapes = canvas()->shapeManager()->shapesAt(area, true);
     qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);
 
-        if (shape->isContentProtected())
+        if (shape->isContentProtected()) {
             continue;
+        }
         TextShape *textShape = dynamic_cast<TextShape*>(shape);
         if (textShape) {
             if (textShape != m_textShape) {
@@ -852,16 +855,29 @@ void TextTool::updateSelectedShape(const QPointF &point)
                 rect = m_textShape->absoluteTransformation(0).mapRect(rect);
                 v.setValue(rect);
                 canvas()->resourceManager()->setResource(KoCanvasResourceManager::ActiveRange, v);
+
+                if (onlyTopMost && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
+                    selection->deselectAll();
+                    selection->select(m_textShape);
+                }
             }
-            return;
+
+            return count == sortedShapes.count() - 1;
+        }
+
+        if (onlyTopMost) {
+            // Let's select it flakewise but keep the textshape reference within our tool
+            selection->deselectAll();
+            selection->select(shape);
+            return false;
         }
     }
+    return false;
 }
 
 void TextTool::mousePressEvent(KoPointerEvent *event)
 {
     event->ignore();
-    return;
 
     if (m_textEditor.isNull())
         return;
@@ -886,12 +902,10 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         }
     }
 
-    updateSelectedShape(event->point);
-
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    if (m_textShape && !selection->isSelected(m_textShape) && m_textShape->isSelectable()) {
-        selection->deselectAll();
-        selection->select(m_textShape);
+    // when clicking we want to select whatever shape is topmost, thus 2nd arg true
+    if (updateSelectedShape(event->point, true)) {
+        // we clicked in a textshape, so accept event
+        event->accept();
     }
 
     bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
@@ -1276,13 +1290,12 @@ void TextTool::mouseTripleClickEvent(KoPointerEvent *event)
 
 void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    event->ignore();
-    return;
-
     m_editTipPos = event->globalPos();
 
-    if (event->buttons()) {
-        updateSelectedShape(event->point);
+    event->ignore();
+    // when dragging text we want to move cursor to any suitable textshape, thus 2nd arg false
+    if (updateSelectedShape(event->point, false)) {
+        event->accept();
     }
 
     m_editTipTimer.stop();
@@ -1917,12 +1930,16 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
     Q_UNUSED(toolActivation);
     m_caretTimer.start();
     m_caretTimerState = true;
+    qDebug()<<"TextTool::activate called";
     foreach (KoShape *shape, shapes) {
-        m_textShape = dynamic_cast<TextShape*>(shape);
-        if (m_textShape)
+        TextShape *textShape = dynamic_cast<TextShape*>(shape);
+        if (textShape) {
+            m_textShape = textShape;
             break;
+        }
     }
-    if (!m_textShape) { // none found
+    if (!m_textShape) { // no textshape, not even the last one
+    qDebug()<<"TextTool::activate emitting done";
         emit done();
         // This is how we inform the rulers of the active range
         // No shape means no active range
@@ -1953,7 +1970,7 @@ void TextTool::deactivate()
     m_caretTimer.stop();
     m_caretTimerState = false;
     repaintCaret();
-    m_textShape = 0;
+//    m_textShape = 0;
 
     // This is how we inform the rulers of the active range
     // No shape means no active range

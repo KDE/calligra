@@ -182,6 +182,11 @@ DefaultTool::~DefaultTool()
     delete m_guideLine;
 }
 
+bool DefaultTool::wantsMouseEvents() const
+{
+    return currentStrategy() != 0;
+}
+
 bool DefaultTool::wantsAutoScroll() const
 {
     return true;
@@ -483,6 +488,7 @@ void DefaultTool::updateCursor()
 
 void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    qDebug()<<"def tool paint"<<currentStrategy()<<koSelection()->count();
     KoInteractionTool::paint(painter, converter);
     if (currentStrategy() == 0 && koSelection()->count() > 0) {
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
@@ -490,6 +496,8 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         decorator.setSelection(koSelection());
         decorator.setHandleRadius(handleRadius());
         decorator.setHotPosition(m_hotPosition);
+        if (m_fallback)
+            decorator.setGrayMode();
         decorator.paint(painter, converter);
     }
     painter.save();
@@ -507,19 +515,24 @@ void DefaultTool::mousePressEvent(KoPointerEvent *event)
 void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
 {
     KoInteractionTool::mouseMoveEvent(event);
+    qDebug()<<"def tool move"<<currentStrategy()<<koSelection()->count();
     if (currentStrategy() == 0 && koSelection()->count() > 0) {
         QRectF bound = handlesSize();
+
+        if (m_fallback) {
+    qDebug()<<"def tool call paint";
+            repaintDecorations();
+        }
         if (bound.contains(event->point)) {
+            event->accept();
             bool inside;
             KoFlake::SelectionHandle newDirection = handleAt(event->point, &inside);
             if (inside != m_mouseWasInsideHandles || m_lastHandle != newDirection) {
                 m_lastHandle = newDirection;
                 m_mouseWasInsideHandles = inside;
-                //repaintDecorations();
+
             }
         } else {
-            /*if (m_lastHandle != KoFlake::NoHandle)
-                repaintDecorations(); */
             m_lastHandle = KoFlake::NoHandle;
             m_mouseWasInsideHandles = false;
 
@@ -534,6 +547,7 @@ void DefaultTool::mouseMoveEvent(KoPointerEvent *event)
             }
         }
     } else {
+        event->accept();
         if (m_guideLine->isSelected()) {
             GuidesTool *guidesTool = dynamic_cast<GuidesTool*>(KoToolManager::instance()->toolById(canvas(), GuidesToolId));
             if (guidesTool) {
@@ -920,7 +934,7 @@ void DefaultTool::recalcSelectionBox()
     }
 }
 
-void DefaultTool::activate(ToolActivation, const QSet<KoShape*> &)
+void DefaultTool::activate(ToolActivation a, const QSet<KoShape*> &)
 {
     m_mouseWasInsideHandles = false;
     m_lastHandle = KoFlake::NoHandle;
@@ -929,6 +943,8 @@ void DefaultTool::activate(ToolActivation, const QSet<KoShape*> &)
     delete m_guideLine;
     m_guideLine = new GuideLine();
     updateActions();
+    m_fallback = (a == KoToolBase::FallbackActivation);
+    qDebug() << "def tool activate"<<m_fallback;
 }
 
 void DefaultTool::selectionAlignHorizontalLeft()

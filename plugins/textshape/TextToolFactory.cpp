@@ -30,7 +30,7 @@ TextToolFactory::TextToolFactory()
     setToolType(dynamicToolType()+",calligrawords");
     setIcon("tool-text");
     setPriority(1);
-    setActivationShapeId(TextShape_SHAPEID);
+    setActivationShapeId(TextShape_SHAPEID"/always");
 }
 
 TextToolFactory::~TextToolFactory()
