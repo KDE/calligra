@@ -124,7 +124,7 @@ void TestKoBookmark::testRoundtrip()
                 );
     {
         // Get the words part and create a document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         doc->initEmpty();
@@ -191,7 +191,7 @@ void TestKoBookmark::testRoundtrip()
     }
     {
         // Load the document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         KUrl url(QString(FILES_OUTPUT_DIR) + "/bookmark_roundtrip.odt");
