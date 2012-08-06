@@ -270,7 +270,10 @@ QRectF KisCoordinatesConverter::totalImageBounds() const
     if(!m_d->image)
         return QRect();
     QRectF boundingRect = QRectF(m_d->image.data()->bounds());
-    return QRectF(boundingRect | imageToWidget(QRectF(QPointF(0,0), m_d->canvasWidgetSize)));
+    if(boundingRect.contains(QRectF(QPointF(0,0), m_d->canvasWidgetSize)))
+        return QRectF(boundingRect | imageToWidget(QRectF(QPointF(0,0), m_d->canvasWidgetSize)));
+    else
+        return boundingRect;
 }
 
 QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
