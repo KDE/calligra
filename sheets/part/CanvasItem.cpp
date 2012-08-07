@@ -139,7 +139,7 @@ public:
     Sheet* activeSheet;
     ColumnHeaderItem* columnHeader;
     RowHeaderItem* rowHeader;
-    Part *part;
+    KoPart *part;
 };
 
 CanvasItem::CanvasItem(Doc *doc)
@@ -160,6 +160,7 @@ CanvasItem::CanvasItem(Doc *doc)
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
+    d->part = doc->documentPart();
     d->rowHeader = 0;
     d->columnHeader = 0;
 
