@@ -58,7 +58,7 @@ class KPLATO_EXPORT Part : public KoDocument
     Q_OBJECT
 
 public:
-    explicit Part(QObject* parent = 0);
+    explicit Part(KoPart *part = 0);
     ~Part();
 
     void setReadWrite( bool rw );
@@ -93,7 +93,6 @@ public:
 
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
 
-    void activate( QWidget *w = 0 );
     DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
 
     bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
@@ -127,14 +126,16 @@ public slots:
     /// If @p keep is true, packages that has been refused will not be checked for again
     void checkForWorkPackages( bool keep = false );
 
+    void setLoadingTemplate( bool );
+
 signals:
     void changed();
     void workPackageLoaded();
     void viewlistModified( bool );
+    void viewListItemAdded(const ViewListItem *item, const ViewListItem *parent, int index);
+    void viewListItemRemoved(const ViewListItem *item);
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent );
-
     /// Load kplato specific files
     virtual bool completeLoading( KoStore* store );
     /// Save kplato specific files
@@ -152,7 +153,6 @@ protected:
 
 protected slots:
     void slotViewDestroyed();
-    virtual void openTemplate( const KUrl& url );
     void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
 
     void autoCheckForWorkPackages();

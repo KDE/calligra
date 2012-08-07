@@ -76,7 +76,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inSty
 
     //init the background-color stack to page background-color
     if (m_bgColors.size() > 0) {
-        kWarning(30513) << "BUG: m_bgColors stack NOT emty, clearing!";
+        kWarning(30513) << "BUG: m_bgColors stack NOT empty, clearing!";
         m_bgColors.clear();
     }
 

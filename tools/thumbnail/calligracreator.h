@@ -26,6 +26,7 @@
 // Qt
 #include <QEventLoop>
 
+class KoPart;
 class KoDocument;
 
 
@@ -42,6 +43,7 @@ private slots:
     void onLoadingCompleted();
 
 private:
+    KoPart *m_part;
     KoDocument *m_doc;
 
     bool m_loadingCompleted :1;

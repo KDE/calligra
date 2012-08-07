@@ -26,9 +26,10 @@
 
 #include "kptaccountsmodel.h" // FIXME hack to get at i18n'ed header text
 
+#include <KoIcon.h>
+
 #include <QComboBox>
 
-#include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -74,8 +75,8 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     //kDebug(planworkDbg());
     setupUi(this);
 
-    addEntryBtn->setIcon( KIcon( "list-add" ) );
-    removeEntryBtn->setIcon( KIcon( "list-remove" ) );
+    addEntryBtn->setIcon(koIcon("list-add"));
+    removeEntryBtn->setIcon(koIcon("list-remove"));
 
     CompletionEntryItemModel *m = new CompletionEntryItemModel( this );
     entryTable->setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );

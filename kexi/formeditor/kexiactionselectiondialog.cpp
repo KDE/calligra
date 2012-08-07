@@ -27,9 +27,9 @@
 #include <kexipart.h>
 #include <kexiactioncategories.h>
 #include <KexiMainWindowIface.h>
+#include <KoIcon.h>
 
 #include <kaction.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <kstandardguiitem.h>
 #include <kpushbutton.h>
@@ -210,7 +210,7 @@ public:
         itm = new ActionSelectorDialogTreeItem(i18n("Application actions"), this );
 	itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "kaction");
 	itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, "kaction");
-        itm->setIcon(SmallIcon("kexi"));
+        itm->setIcon(koIcon("kexi"));
 
         KexiPart::PartInfoList *pl = Kexi::partManager().infoList();
         if (pl) {
@@ -222,7 +222,7 @@ public:
 		itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "navObject");
 		itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, info->objectName());
 		itm->setData(ActionSelectorDialogTreeItem::ActionPartClassRole, info->partClass());
-		itm->setIcon(SmallIcon(part->info()->itemIcon()));
+		itm->setIcon(KIcon(part->info()->itemIconName()));
             }
 	}
 	
@@ -235,7 +235,7 @@ public:
 		
         itm->setData(ActionSelectorDialogTreeItem::ActionCategoryRole, "currentForm");
         itm->setData(ActionSelectorDialogTreeItem::ActionDataRole, "currentForm");
-        itm->setIcon(SmallIcon("form"));
+        itm->setIcon(koIcon("form"));
         
         expandAll();
 	setSortingEnabled(false);
@@ -272,18 +272,18 @@ public:
         if (supportedViewModes & Kexi::DataViewMode) {
             itm = new ActionSelectorDialogTreeItem(i18n("Open in Data View"), this);
 	    itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "open");
-            itm->setIcon(SmallIcon("document-open"));
+            itm->setIcon(koIcon("document-open"));
         }
         if (part->info()->isExecuteSupported()) {
             itm = new ActionSelectorDialogTreeItem(i18n("Execute"), this);
 	    itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "execute");
-            itm->setIcon(SmallIcon("media-playback-start"));
+            itm->setIcon(koIcon("media-playback-start"));
         }
 #ifndef KEXI_NO_QUICK_PRINTING
         if (part->info()->isPrintingSupported()) {
             ActionSelectorDialogListItem *printItem = new ActionSelectorDialogListItem(
                 "print", this, i18n("Print"));
-            printItem->setPixmap(0, SmallIcon("document-print"));
+            printItem->setPixmap(0, koIcon("document-print"));
             KAction *a = KStandardAction::printPreview(0, 0, 0);
             item = new ActionSelectorDialogListItem("printPreview", printItem,
                                                     a->text().replace("&", "").replace("...", ""));
@@ -300,23 +300,23 @@ public:
             itm = new ActionSelectorDialogTreeItem(
                 i18nc("Note: use multiple rows if needed", "Export to File\nAs Data Table"), this);
 	    itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "exportToCSV");
-	    itm->setIcon(SmallIcon("table"));
+	    itm->setIcon(koIcon("table"));
 	    
             QTreeWidgetItem *eitem = itm;
             
             itm = new ActionSelectorDialogTreeItem(i18nc("Note: use multiple rows if needed", "Copy to Clipboard\nAs Data Table"), eitem);
 	    itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "copyToClipboardAsCSV");
-            itm->setIcon(SmallIcon("table"));
+            itm->setIcon(koIcon("table"));
         }
         
         itm = new ActionSelectorDialogTreeItem(i18n("Create New Object"), this);
 	itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "new");
-        itm->setIcon(SmallIcon("document-new"));
+        itm->setIcon(koIcon("document-new"));
 	
         if (supportedViewModes & Kexi::DesignViewMode) {
             itm = new ActionSelectorDialogTreeItem(i18n("Open in Design View"), this);
 	    itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "design");
-            itm->setIcon(SmallIcon("document-properties"));
+            itm->setIcon(koIcon("document-properties"));
         }
         if (supportedViewModes & Kexi::TextViewMode) {
             itm = new ActionSelectorDialogTreeItem(i18n("Open in Text View"), this);
@@ -326,7 +326,7 @@ public:
         
         itm = new ActionSelectorDialogTreeItem( i18n("Close View"), this);
 	itm->setData(ActionSelectorDialogTreeItem::ActionDataRole , "close");
-        itm->setIcon(SmallIcon("window-close"));
+        itm->setIcon(koIcon("window-close"));
 	
         expandAll();
 	setSortingEnabled(true);

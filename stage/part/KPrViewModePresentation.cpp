@@ -71,7 +71,8 @@ KoViewConverter * KPrViewModePresentation::viewConverter( KoPACanvasBase * canva
         return m_pvAnimationDirector->viewConverter();
     }
     else {
-        return 0;
+        // the m_animationDirector is not yet set up fully therefore return the viewConverter of the view
+        return m_view->viewConverter();
     }
 }
 

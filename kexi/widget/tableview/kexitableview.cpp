@@ -54,13 +54,14 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <KAction>
 
 #ifndef KEXI_NO_PRINT
 #include <QPrinter>
 #endif
+
+#include <KoIcon.h>
 
 #include "kexitableview.h"
 #include <kexi_global.h>
@@ -241,12 +242,12 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     d->menu_id_addRecord = m_contextMenu->insertItem(
                                i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL + Qt::Key_Insert);
     d->menu_id_removeRecord = m_contextMenu->insertItem(
-                                  KIconLoader::global()->loadIcon("dialog-cancel", KIconLoader::Small),
+                                  koIcon("dialog-cancel"),
                                   i18n("Remove Record"), this, SLOT(removeRecord()), Qt::CTRL + Qt::Key_Delete);
 #endif
 
 //! \todo replace lineedit with table_field icon
-//2.0    setContextMenuTitle(KIcon("lineedit"), i18n("Record"));   // the default
+//2.0    setContextMenuTitle(koIcon("lineedit"), i18n("Record"));   // the default
     // cannot display anything here - most actions in the context menu
     // are related to a single cell (Cut, Copy..) and others to entire row (Delete Row):
     setContextMenuEnabled(false);

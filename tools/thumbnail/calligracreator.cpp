@@ -20,6 +20,7 @@
 #include "calligracreator.h"
 
 // KDE
+#include <KoPart.h>
 #include <KoStore.h>
 #include <KoDocument.h>
 #include <KMimeTypeTrader>
@@ -40,12 +41,14 @@ extern "C"
 }
 
 CalligraCreator::CalligraCreator()
-    : m_doc(0)
+    : m_part(0)
+    , m_doc(0)
 {
 }
 
 CalligraCreator::~CalligraCreator()
 {
+    delete m_part;
     delete m_doc;
 }
 
@@ -77,15 +80,16 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 
     // load document and render the thumbnail ourselves
     const QString mimetype = KMimeType::findByPath(path)->name();
-    m_doc = KMimeTypeTrader::self()->createInstanceFromQuery<KoDocument>(mimetype, QLatin1String("CalligraPart"));
+    m_part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(mimetype, QLatin1String("CalligraPart"));
 
-    if (!m_doc)
-        return false;
+    if (!m_part) return false;
+
+    m_doc = m_part->document();
 
     // prepare the document object
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(false); // don't show message boxes
-    connect(m_doc, SIGNAL(completed()), SLOT(onLoadingCompleted()));
+    connect(m_part, SIGNAL(completed()), SLOT(slotCompleted()));
 
     // load the document content
     m_loadingCompleted = false;
@@ -113,7 +117,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
         image = m_doc->generatePreview(size).toImage();
     }
 
-    m_doc->closeUrl();
+    m_part->closeUrl();
 
     return m_loadingCompleted;
 }

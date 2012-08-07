@@ -11,7 +11,8 @@ include_directories(
 
 set(karbonui_SRCS
     KarbonFactory.cpp
-    KarbonPart.cpp 
+    KarbonKoDocument.cpp 
+    KarbonPart.cpp
     KarbonView.cpp 
     KarbonPrintJob.cpp
     KarbonZoomController.cpp

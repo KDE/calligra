@@ -507,7 +507,7 @@ class KPLATOUI_EXPORT DependencyEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    DependencyEditor( KoDocument *part, QWidget *parent );
+    DependencyEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }

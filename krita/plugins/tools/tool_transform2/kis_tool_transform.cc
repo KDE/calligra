@@ -646,10 +646,12 @@ void KisToolTransform::setFunctionalCursor()
             useCursor(m_scaleCursors[rotOctant]);
             break;
         case TOPRIGHTSCALE:
-        case TOPLEFTSCALE:
         case BOTTOMLEFTSCALE:
+            useCursor(KisCursor::sizeBDiagCursor());
+            break;
+        case TOPLEFTSCALE:
         case BOTTOMRIGHTSCALE:
-            useCursor(KisCursor::sizeAllCursor());
+            useCursor(KisCursor::sizeFDiagCursor());
             break;
         case MOVECENTER:
             useCursor(KisCursor::handCursor());
