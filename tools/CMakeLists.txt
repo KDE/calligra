@@ -1,6 +1,9 @@
 macro_optional_add_subdirectory( converter )
 macro_optional_add_subdirectory( thumbnail )
 macro_optional_add_subdirectory( quickprint )
+
+if (NOT CREATIVEONLY)
+
 macro_optional_add_subdirectory( slidecompare )
 if(SHOULD_BUILD_CSTESTER)
     macro_optional_add_subdirectory( cstester )
@@ -18,3 +21,5 @@ if(OKULAR_FOUND AND NOT CREATIVEONLY)
 endif(OKULAR_FOUND AND NOT CREATIVEONLY)
 
 add_subdirectory(scripts)
+
+endif (NOT CREATIVEONLY)
