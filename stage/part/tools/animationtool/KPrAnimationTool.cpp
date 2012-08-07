@@ -84,7 +84,9 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.restore();
     }
     // Paint motion paths
-    m_pathShapeManager->paint(painter, converter, false);
+    if (m_pathShapeManager) {
+        m_pathShapeManager->paint(painter, converter, false);
+    }
     KoPathTool::paint(painter, converter);
 }
 
@@ -260,6 +262,9 @@ void KPrAnimationTool::initMotionPathShapes()
 
 void KPrAnimationTool::addPathShape(KoPathShape *pathShape)
 {
+    if (!m_pathShapeManager) {
+        return;
+    }
     pathShape->setPrintable(false);
     m_pathShapeManager->addShape(pathShape);
 }
