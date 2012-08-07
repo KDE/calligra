@@ -42,6 +42,8 @@
 
 //Default height for rows
 const int LINE_HEIGHT = 25;
+const int BAR_MARGIN = 2;
+const int RESIZE_RADIUS = 2;
 
 //Default invalid value for columns and rows index
 const int INVALID = -1;
@@ -141,7 +143,8 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
             m_move = false;
 
             QRectF lineRect = getRowRect(row, column);
-            QRectF endLineRect = QRectF(lineRect.right() - 2, lineRect.top(), 4,  lineRect.height());
+            QRectF endLineRect = QRectF(lineRect.right() - RESIZE_RADIUS, lineRect.top(),
+                                        RESIZE_RADIUS * 2, lineRect.height());
 
             // If user click near the end of the line he could resize
             if (endLineRect.contains(event->x(), event->y())) {
@@ -239,7 +242,9 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
     int column = columnAt(event->x());
     if (column == KPrShapeAnimations::StartTime) {
         QRectF lineRect = getRowRect(row, column);
-        QRectF endLineRect = QRectF(lineRect.right() - 2, lineRect.top(), 4,  lineRect.height());
+        QRectF endLineRect = QRectF(lineRect.right() - RESIZE_RADIUS, lineRect.top() + BAR_MARGIN,
+                                    RESIZE_RADIUS * 2,  lineRect.height() - 2 * BAR_MARGIN);
+
         // If user is near the end of the line he could resize
         if (endLineRect.contains(event->x(), event->y())) {
             setCursor(Qt::SizeHorCursor);
@@ -390,7 +395,7 @@ void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, b
             + startOffSet;
     QRectF lineRect(rect.x() + stepSize * start, rect.y() + vPadding, stepSize * duration, lineHeigth);
 
-    QRectF fillRect (lineRect.x(),lineRect.y() + 2, lineRect.width(), lineRect.height() - 4);
+    QRectF fillRect (lineRect.x(),lineRect.y() + BAR_MARGIN, lineRect.width(), lineRect.height() - BAR_MARGIN * 2);
     QLinearGradient s_grad(lineRect.center().x(), lineRect.top(),
                            lineRect.center().x(), lineRect.bottom());
     if (selected) {
