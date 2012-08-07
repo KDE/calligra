@@ -34,7 +34,6 @@
 #include <QEvent>
 #include <QGridLayout>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QPainter>
 #include <QShowEvent>
 #include <QTimeLine>
@@ -42,6 +41,26 @@
 #include <QPointer>
 #include <QPainterPath>
 #include <QTransform>
+#include <QTimer>
+
+#define LAYOUT_SPACING 6
+
+ClickableLabel::ClickableLabel(QWidget *parent)
+ : QLabel(parent)
+{
+}
+
+ClickableLabel::~ClickableLabel()
+{
+}
+
+void ClickableLabel::mousePressEvent(QMouseEvent *ev)
+{
+    if (ev->button() == Qt::LeftButton) {
+        emit clicked();
+    }
+    QLabel::mousePressEvent(ev);
+}
 
 //---------------------------------------------------------------------
 // KMessageWidgetFrame
@@ -196,8 +215,8 @@ public:
 
     KMessageWidget* q;
     KMessageWidgetFrame* content;
-    QLabel* iconLabel;
-    QLabel* textLabel;
+    ClickableLabel* iconLabel;
+    ClickableLabel* textLabel;
     KexiLinkButton* closeButton;
     QTimeLine* timeLine;
 
@@ -213,6 +232,7 @@ public:
     KColorScheme::ForegroundRole fgRole;
     bool autoDelete;
     QWidget* contentsWidget;
+    bool clickClosesMessage;
 
     void createLayout();
     void updateSnapShot();
@@ -220,6 +240,7 @@ public:
     void slotTimeLineChanged(qreal);
     void slotTimeLineFinished();
     void updateStyleSheet();
+    void tryClickCloseMessage();
 };
 
 KMessageWidgetPrivate::KMessageWidgetPrivate()
@@ -247,13 +268,15 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
         textLabel = 0;
     }
     else {
-        iconLabel = new QLabel(content);
+        iconLabel = new ClickableLabel(content);
         iconLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        QObject::connect(iconLabel, SIGNAL(clicked()), q, SLOT(tryClickCloseMessage()));
 
-        textLabel = new QLabel(content);
+        textLabel = new ClickableLabel(content);
         textLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
         textLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
         textLabel->setContentsMargins(0, 0, 0, 0);
+        QObject::connect(textLabel, SIGNAL(clicked()), q, SLOT(tryClickCloseMessage()));
 #if 0
     content->setAutoFillBackground(true);
     content->setBackgroundRole(QPalette::Dark);
@@ -272,6 +295,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
 
     defaultAction = 0;
     autoDelete = false;
+    clickClosesMessage = false;
     q->setMessageType(KMessageWidget::Information);
 }
 
@@ -312,7 +336,7 @@ void KMessageWidgetPrivate::createLayout()
 
     if (wordWrap) {
         QGridLayout* layout = new QGridLayout(content);
-        layout->setSpacing(6);
+        layout->setSpacing(LAYOUT_SPACING);
         if (contentsWidget) {
             layout->addItem(new QSpacerItem(1, 6), 0, 0);
             layout->addWidget(contentsWidget, 1, 0, 1, 2);
@@ -381,24 +405,37 @@ void KMessageWidgetPrivate::createLayout()
     int left, top, right, bottom;
     q->getContentsMargins(&left, &top, &right, &bottom);
     kDebug() << "q->getContentsMargins:" << left << top << right << bottom;
-    int add = buttons.isEmpty() ? 2 : (content->radius - 1);
-    top *= 2;
-    bottom*= 2;
-    left *= 2;
-    right *= 2;
-    add *= 2;
     switch (content->calloutPointerDirection()) {
     case KMessageWidget::Up:
-        top += add;
+        left += 1;
+        top += 4;
+        bottom += 4;
+        right += 2;
+        if (!buttons.isEmpty()) {
+            top += 4;
+            right += 3;
+        }
         break;
     case KMessageWidget::Down:
-        bottom += add;
+        left += 1;
+        top += 4;
+        bottom += 4;
+        right += 2;
+        if (!buttons.isEmpty()) {
+            right += 3;
+        }
         break;
     case KMessageWidget::Left:
-        left += add + 8;
+        left += 0;
+        top += 3;
+        bottom += 3;
+        right += 1;
         break;
     case KMessageWidget::Right:
-        right += add + 6;
+        left += 0;
+        top += 3;
+        bottom += 3;
+        right += 1;
         break;
     default:;
     }
@@ -507,6 +544,13 @@ void KMessageWidgetPrivate::updateStyleSheet()
         .arg(fg.color().name())
     );
 #endif
+}
+
+void KMessageWidgetPrivate::tryClickCloseMessage()
+{
+    if (clickClosesMessage) {
+        QTimer::singleShot(100, q, SLOT(animatedHide()));
+    }
 }
 
 //---------------------------------------------------------------------
@@ -642,6 +686,11 @@ bool KMessageWidget::event(QEvent* event)
             }
         }
     }
+    else if (event->type() == QEvent::MouseButtonPress) {
+        if (static_cast<QMouseEvent*>(event)->button() == Qt::LeftButton) {
+            d->tryClickCloseMessage();
+        }
+    }
     return QFrame::event(event);
 }
 
@@ -700,6 +749,16 @@ bool KMessageWidget::isCloseButtonVisible() const
 void KMessageWidget::setCloseButtonVisible(bool show)
 {
     d->closeButton->setVisible(show);
+}
+
+bool KMessageWidget::clickClosesMessage() const
+{
+    return d->clickClosesMessage;
+}
+
+void KMessageWidget::setClickClosesMessage(bool set)
+{
+    d->clickClosesMessage = set;
 }
 
 void KMessageWidget::addAction(QAction* action)
@@ -800,6 +859,15 @@ QBrush KMessageWidget::backgroundBrush() const
 QBrush KMessageWidget::borderBrush() const
 {
     return d->content->borderBrush;
+}
+
+void KMessageWidget::resizeToContents()
+{
+//    kDebug() << LAYOUT_SPACING + d->iconLabel->width() + LAYOUT_SPACING + d->textLabel->width() + LAYOUT_SPACING;
+//    kDebug() << "sizeHint():" << sizeHint();
+//    kDebug() << "d->content->sizeHint():" << d->content->sizeHint();
+    (void)sizeHint(); // to update d->content->sizeHint()
+    setFixedSize(d->content->sizeHint());
 }
 
 #include "kmessagewidget.moc"
