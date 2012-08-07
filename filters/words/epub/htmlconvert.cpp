@@ -52,33 +52,30 @@ static void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaDat
 static void handleCharacterData(KoXmlNode &node, KoXmlWriter *bodyWriter,
                                 QHash<QString, StyleInfo*> &styles);
 static void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                           QHash<QString, StyleInfo*> &styles);
+                           QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 static void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                           QHash<QString, StyleInfo*> &styles);
+                           QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 static void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
+                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 static void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                          QHash<QString, StyleInfo*> &styles);
+                          QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 static void handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                                QHash<QString, StyleInfo*> &styles);
 static void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
+                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 static void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
+                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 static void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
-static void handleTagTab(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
+                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+static void handleTagTab(KoXmlWriter *bodyWriter);
 static void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
+                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+static void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
+                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 static void handleTagLineBreak(KoXmlWriter *bodyWriter);
 
-static void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
-
-
 static void handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                       QHash<QString, StyleInfo*> &styles);
+                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
 
 
 StyleInfo::StyleInfo()
@@ -296,7 +293,7 @@ void handleStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attL
 
 KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
                                           EpubFile *epub,
-                                          QHash<QString, StyleInfo*> &styles)
+                                          QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     if (!odfStore->open("content.xml")) {
         kDebug(30517) << "Can not open content.html .";
@@ -374,41 +371,41 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
                 bodyWriter->startElement("body");
             }
             if (nodeElement.localName() == "p")
-                handleTagP(nodeElement, bodyWriter, styles);
+                handleTagP(nodeElement, bodyWriter, styles, imagesSrcList);
             else
-                handleTagH(nodeElement, bodyWriter, styles);
+                handleTagH(nodeElement, bodyWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "span" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagSpan(nodeElement, bodyWriter, styles);
+            handleTagSpan(nodeElement, bodyWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "table" && nodeElement.namespaceURI() == KoXmlNS::table) {
             // Handle table
-            handleTagTable(nodeElement, bodyWriter, styles);
+            handleTagTable(nodeElement, bodyWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
             // Handle frame
             bodyWriter->startElement("div");
-            handleTagFrame(nodeElement, bodyWriter, styles);
+            handleTagFrame(nodeElement, bodyWriter, styles, imagesSrcList);
             bodyWriter->endElement(); // end div
         }
         else if (nodeElement.localName() == "soft-page-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagPageBreak(nodeElement, bodyWriter, styles);
         }
         else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagList(nodeElement, bodyWriter, styles);
+            handleTagList(nodeElement, bodyWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "a" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagA(nodeElement, bodyWriter, styles);
+            handleTagA(nodeElement, bodyWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "table-of-content" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagTableOfContent(nodeElement, bodyWriter, styles);
+            handleTagTableOfContent(nodeElement, bodyWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagLineBreak(bodyWriter);
         }
         else {
             bodyWriter->startElement("div");
-            handleUnknownTags(nodeElement, bodyWriter, styles);
+            handleUnknownTags(nodeElement, bodyWriter, styles, imagesSrcList);
             bodyWriter->endElement();
         }
     }
@@ -467,7 +464,7 @@ void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)
 
 
 void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                    QHash<QString, StyleInfo*> &styles)
+                    QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
@@ -500,11 +497,11 @@ void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                 forEachElement (cellTextElement, cellElement) {
                     QString cellTag = cellTextElement.localName();
                     if (cellTag == "p" && cellTextElement.namespaceURI() == KoXmlNS::text)
-                        handleTagP(cellTextElement, bodyWriter, styles);
+                        handleTagP(cellTextElement, bodyWriter, styles, imagesSrcList);
                     else if (cellTag == "table" && cellTextElement.namespaceURI() == KoXmlNS::table)
-                        handleTagTable(cellTextElement, bodyWriter, styles);
+                        handleTagTable(cellTextElement, bodyWriter, styles, imagesSrcList);
                     else if (cellTag == "frame" && cellTextElement.namespaceURI() == KoXmlNS::draw)
-                        handleTagFrame(cellTextElement, bodyWriter, styles);
+                        handleTagFrame(cellTextElement, bodyWriter, styles, imagesSrcList);
                 }
                 bodyWriter->endElement(); // td
             } // end for write tag cell
@@ -516,7 +513,7 @@ void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
 }
 
 void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                    QHash<QString, StyleInfo*> &styles)
+                    QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
@@ -527,15 +524,32 @@ void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
     }
     bodyWriter->addAttribute("alt", "(No Description)");
 
+    // Find height and width
+    QString height = nodeElement.attribute("height");
+    QString width  = nodeElement.attribute("width");
+    // remove characters "in" or "pt" from their end
+    height = height.left(height.length()-2);
+    width  = width.left(width.length()-2);
+    // Convert them to real
+    qreal qHeight = height.toFloat();
+    qreal qWidth = width.toFloat();
+    QSizeF size(qWidth, qHeight);
+
     // Check image tag to find image source
-    KoXmlElement imgElement = nodeElement.firstChildElement();
-    QString imgSrc = imgElement.attribute("href").section('/', 1);
-    bodyWriter->addAttribute("src", imgSrc);
+    KoXmlElement imgElement;
+    forEachElement (imgElement, nodeElement) {
+        if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
+            QString imgSrc = imgElement.attribute("href").section('/', -1);
+            bodyWriter->addAttribute("src", imgSrc);
+
+            imagesSrcList.insert(imgElement.attribute("href"), size);
+        }
+    }
     bodyWriter->endElement(); // end img
 }
 
 void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                QHash<QString, StyleInfo*> &styles)
+                QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
@@ -554,13 +568,13 @@ void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         if (node.isText())
             handleCharacterData(node, bodyWriter, styles);
         else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text)
-            handleTagSpan(element, bodyWriter, styles);
+            handleTagSpan(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw)
-            handleTagFrame(element, bodyWriter, styles);
+            handleTagFrame(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text)
             handleTagPageBreak(element, bodyWriter, styles);
         else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text)
-            handleTagA(element, bodyWriter, styles);
+            handleTagA(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
         }
@@ -568,7 +582,7 @@ void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
             handleTagLineBreak(bodyWriter);
         }
         else
-            handleUnknownTags(element, bodyWriter, styles);
+            handleUnknownTags(element, bodyWriter, styles, imagesSrcList);
 
         node = node.nextSibling();
         element = node.toElement();
@@ -586,7 +600,7 @@ void handleCharacterData(KoXmlNode &node, KoXmlWriter *bodyWriter,
 }
 
 void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                   QHash<QString, StyleInfo*> &styles)
+                   QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
@@ -605,15 +619,15 @@ void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         if (node.isText())
             handleCharacterData(node, bodyWriter, styles);
         else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text)
-            handleTagSpan(element, bodyWriter, styles);
+            handleTagSpan(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw)
-            handleTagFrame(element, bodyWriter, styles);
+            handleTagFrame(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text)
             handleTagPageBreak(element, bodyWriter, styles);
         else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text)
-            handleTagA(element, bodyWriter, styles);
+            handleTagA(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "tab" && element.namespaceURI() == KoXmlNS::text)
-            handleTagTab(element, bodyWriter, styles);
+            handleTagTab(bodyWriter);
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
         }
@@ -621,7 +635,7 @@ void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
             handleTagLineBreak(bodyWriter);
         }
         else
-            handleUnknownTags(element, bodyWriter, styles);
+            handleUnknownTags(element, bodyWriter, styles, imagesSrcList);
 
         node = node.nextSibling();
         element = node.toElement();
@@ -639,7 +653,7 @@ void handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
 }
 
 void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                QHash<QString, StyleInfo*> &styles)
+                QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
@@ -659,13 +673,13 @@ void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         if (node.isText())
             handleCharacterData(node, bodyWriter, styles);
         else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text)
-            handleTagSpan(element, bodyWriter, styles);
+            handleTagSpan(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw)
-            handleTagFrame(element, bodyWriter, styles);
+            handleTagFrame(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text)
             handleTagPageBreak(element, bodyWriter, styles);
         else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text)
-            handleTagA(element, bodyWriter, styles);
+            handleTagA(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
         }
@@ -673,7 +687,7 @@ void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
             handleTagLineBreak(bodyWriter);
         }
         else
-            handleUnknownTags(element, bodyWriter, styles);
+            handleUnknownTags(element, bodyWriter, styles, imagesSrcList);
 
         node = node.nextSibling();
         element = node.toElement();
@@ -682,7 +696,7 @@ void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
 }
 
 void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                         QHash<QString, StyleInfo *> &styles)
+                         QHash<QString, StyleInfo *> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
@@ -698,7 +712,7 @@ void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         KoXmlElement listItemElement;
         forEachElement (listItemElement, listItem) {
             if (listItemElement.localName() == "p" && listItemElement.namespaceURI() == KoXmlNS::text)
-                handleTagP(listItemElement, bodyWriter, styles);
+                handleTagP(listItemElement, bodyWriter, styles, imagesSrcList);
         }
         bodyWriter->endElement();
     }
@@ -706,7 +720,7 @@ void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
 }
 
 void handleTagA (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                 QHash<QString, StyleInfo *> &styles)
+                 QHash<QString, StyleInfo *> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     bodyWriter->startElement("a");
     bodyWriter->addAttribute("href", nodeElement.attribute("href"));
@@ -714,20 +728,19 @@ void handleTagA (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
     // it can be more just for now too see more documents
     KoXmlElement child = nodeElement.firstChildElement();
     if (child.localName() == "span" && child.namespaceURI() == KoXmlNS::text)
-        handleTagSpan(child, bodyWriter, styles);
+        handleTagSpan(child, bodyWriter, styles, imagesSrcList);
 
     bodyWriter->endElement();
 }
 
-void handleTagTab (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                   QHash<QString, StyleInfo *> &styles)
+void handleTagTab (KoXmlWriter *bodyWriter)
 {
     for (int i = 0; i <10; i++)
         bodyWriter->addTextNode("\u00a0");
 }
 
 void handleTagTableOfContent (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                              QHash<QString, StyleInfo *> &styles)
+                              QHash<QString, StyleInfo *> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     KoXmlNode indexBody = KoXml::namedItemNS(nodeElement, KoXmlNS::text, "index-body");
     KoXmlElement  element;
@@ -736,16 +749,16 @@ void handleTagTableOfContent (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter
             KoXmlElement titleElement;
             forEachElement (titleElement, element) {
                 if (titleElement.localName() == "p" && titleElement.namespaceURI() == KoXmlNS::text)
-                    handleTagP(titleElement, bodyWriter, styles);
+                    handleTagP(titleElement, bodyWriter, styles, imagesSrcList);
             }
         }// end of index-title
         else
-            handleTagTableOfContentBody(element, bodyWriter, styles);
+            handleTagTableOfContentBody(element, bodyWriter, styles, imagesSrcList);
     }
 }
 
 void handleTagTableOfContentBody (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                                  QHash<QString, StyleInfo *> &styles)
+                                  QHash<QString, StyleInfo *> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     if (nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text) {
         bodyWriter->startElement("p");
@@ -756,13 +769,13 @@ void handleTagTableOfContentBody (KoXmlElement &nodeElement, KoXmlWriter *bodyWr
         forEachElement (element, nodeElement) {
             if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text) {
                 kDebug(30517)<<"in span ****";
-                handleTagSpan(element, bodyWriter, styles);
+                handleTagSpan(element, bodyWriter, styles, imagesSrcList);
             }
             else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text) {
                 // We ignore many elemetns here especially Tag a. just check tags, we want.
                 KoXmlElement child = element.firstChildElement();
                 if (child.localName() == "span" && child.namespaceURI() == KoXmlNS::text)
-                    handleTagSpan(child, bodyWriter, styles);
+                    handleTagSpan(child, bodyWriter, styles, imagesSrcList);
             }
             else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
                 bodyWriter->addTextNode("\u00a0");
@@ -779,7 +792,7 @@ void handleTagLineBreak (KoXmlWriter *bodyWriter)
 }
 
 void handleUnknownTags (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
-                        QHash<QString, StyleInfo *> &styles)
+                        QHash<QString, StyleInfo *> &styles, QHash<QString, QSizeF> &imagesSrcList)
 {
     //just go dipper to find known tags
 
@@ -790,15 +803,15 @@ void handleUnknownTags (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         if (node.isText())
             handleCharacterData(node, bodyWriter, styles);
         else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text)
-            handleTagP(element, bodyWriter, styles);
+            handleTagP(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text)
-            handleTagSpan(element, bodyWriter, styles);
+            handleTagSpan(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw)
-            handleTagFrame(element, bodyWriter, styles);
+            handleTagFrame(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text)
             handleTagPageBreak(element, bodyWriter, styles);
         else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text)
-            handleTagA(element, bodyWriter, styles);
+            handleTagA(element, bodyWriter, styles, imagesSrcList);
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
         }
@@ -806,7 +819,7 @@ void handleUnknownTags (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
             handleTagLineBreak(bodyWriter);
         }
         else
-            handleUnknownTags(element, bodyWriter, styles);
+            handleUnknownTags(element, bodyWriter, styles, imagesSrcList);
 
         node = node.nextSibling();
         element = node.toElement();

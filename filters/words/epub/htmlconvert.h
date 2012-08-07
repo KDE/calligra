@@ -28,6 +28,7 @@
 #include <KoFilter.h>
 
 class QByteArray;
+class QSizeF;
 class QStringList;
 class KoStore;
 class EpubFile;
@@ -44,8 +45,8 @@ struct StyleInfo {
 KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
                                        QHash<QString, StyleInfo*> &styles);
 KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
-                                          EpubFile *epub,
-                                          QHash<QString, StyleInfo*> &styles);
+                                          EpubFile *epub,QHash<QString, StyleInfo*> &styles,
+                                          QHash<QString, QSizeF> &imagesSrcList);
 
 #endif // HTMLCONVERT_H
 
