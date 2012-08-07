@@ -140,7 +140,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_buttonPreviewAnimation = new QToolButton();
     m_buttonPreviewAnimation->setIcon(SmallIcon("media-playback-start"));
     m_buttonPreviewAnimation->setToolTip(i18n("Preview Shape Animation"));
-    m_buttonPreviewAnimation->setEnabled(true);
+    m_buttonPreviewAnimation->setEnabled(false);
 
     hlayout2->addWidget(m_buttonPreviewAnimation);
     hlayout2->addStretch();
@@ -211,12 +211,14 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
         m_editAnimation->setEnabled(true);
         m_buttonAnimationOrderUp->setEnabled(true);
         m_buttonAnimationOrderDown->setEnabled(true);
+        m_buttonPreviewAnimation->setEnabled(true);
         return;
     }
     m_buttonRemoveAnimation->setEnabled(false);
     m_editAnimation->setEnabled(false);
     m_buttonAnimationOrderUp->setEnabled(false);
     m_buttonAnimationOrderDown->setEnabled(false);
+    m_buttonPreviewAnimation->setEnabled(false);
 }
 
 void KPrShapeAnimationDocker::moveAnimationUp()
