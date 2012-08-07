@@ -28,6 +28,7 @@
 class KoPathShape;
 class KoSelection;
 class KPrAnimateMotion;
+class KPrShapeAnimationDocker;
 
 /**
  * The animation tool (associated with the clapperboard icon) is the tool in KPresenter where the user
@@ -70,7 +71,7 @@ protected:
     virtual QList<QWidget *> createOptionWidgets();
 
     /// Load motion path shapes (For all shapes with motion paths on current page)
-    void loadMotionPathShapes();
+    void initMotionPathShapes();
 
     /// Add motion path shape to the current shapes manager
     virtual void addPathShape(KoPathShape *pathShape);
@@ -78,13 +79,16 @@ protected:
     /// Helper method to scale the motion path shape (using current page size and zoom)
     QPair<qreal, qreal> getScaleCorrection();
 
+    /// remove motion paths of motion path manager
+    void cleanMotionPathManager();
+
 private:
-    QList<KoPathShape *>m_motionPaths;
     KoPathShape *m_currentMotionPathSelected;
     QMap<KoPathShape *, KPrAnimateMotion *> m_pathMap;
     QMap<KoPathShape *, KoShape *> m_shapesMap;
     KoShapeManager *m_pathShapeManager;
-    bool m_reloadMotionPaths;
+    bool m_initializeTool;
+    KPrShapeAnimationDocker *m_shapeAnimationWidget;
 };
 
 #endif

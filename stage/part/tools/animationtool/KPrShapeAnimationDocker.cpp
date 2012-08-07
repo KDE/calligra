@@ -186,8 +186,6 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         //load model
         slotActivePageChanged();
         m_editAnimationsPanel->setView(m_view);
-        connect(m_view->proxyObject, SIGNAL(activePageChanged()),
-                 this, SLOT(slotActivePageChanged()));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
         connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateEditDialogIndex(QModelIndex)));
         connect(m_editAnimationsPanel, SIGNAL(itemClicked(QModelIndex)), this, SLOT(syncWithEditDialogIndex(QModelIndex)));
@@ -467,12 +465,15 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
             shape->update();
         }
         selection->deselectAll();
-        selection->select(m_lastSelectedShape);
-        selection->update();
-        m_lastSelectedShape->update();
-        if (selection->selectedShapes().contains(m_lastSelectedShape)) {
-            return m_lastSelectedShape;
+        if (canvasController->canvas()->shapeManager()->shapes().contains(m_lastSelectedShape)) {
+            selection->select(m_lastSelectedShape);
+            selection->update();
+            m_lastSelectedShape->update();
+            if (selection->selectedShapes().contains(m_lastSelectedShape)) {
+                return m_lastSelectedShape;
+            }
         }
+        m_lastSelectedShape = 0;
     }
     else if (!(canvasController->canvas()->shapeManager()->shapes().isEmpty())){
         foreach (KoShape* shape, selection->selectedShapes()) {
