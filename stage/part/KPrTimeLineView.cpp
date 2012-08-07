@@ -139,32 +139,18 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
         if (column == KPrShapeAnimations::StartTime) {
             m_resize = false;
             m_move = false;
-            int startPos = 0;
-            for (int i = 0; i < KPrShapeAnimations::StartTime; i++) {
-                startPos = startPos + m_mainView->widthOfColumn(i);
-            }
-            int y = row * m_mainView->rowsHeigth();
-            QRect rect(startPos, y, startPos+m_mainView->widthOfColumn(column), m_mainView->rowsHeigth());
 
-            int lineHeigth = qMin(LINE_HEIGHT, rect.height());
-            int yCenter = (rect.height() - lineHeigth) / 2;
-            qreal  stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / m_mainView->numberOfSteps();
-            qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
-            int startOffSet = m_mainView->calculateStartOffset(row);
-            qreal start = (m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() +
-                    startOffSet) / 1000.0;
+            QRectF lineRect = getRowRect(row, column);
+            QRectF endLineRect = QRectF(lineRect.right() - 2, lineRect.top(), 4,  lineRect.height());
 
-            QRectF lineRect(rect.x() + stepSize * start + stepSize * duration - 6, rect.y() + yCenter,
-                            8, lineHeigth);
             // If user click near the end of the line he could resize
-            if (lineRect.contains(event->x(), event->y())) {
+            if (endLineRect.contains(event->x(), event->y())) {
                 m_resize = true;
                 m_resizedRow = row;
                 setCursor(Qt::SizeHorCursor);
             } else {
                 m_resize = false;
                 m_move = false;
-                lineRect = QRectF(rect.x() + stepSize*start, rect.y() + yCenter, stepSize*duration, lineHeigth);
                 if (lineRect.contains(event->x(), event->y())) {
                     startDragPos = event->x() - lineRect.x();
                     m_move = true;
@@ -249,8 +235,25 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
         }
         update();
     }
+    int row = rowAt(event->y());
+    int column = columnAt(event->x());
+    if (column == KPrShapeAnimations::StartTime) {
+        QRectF lineRect = getRowRect(row, column);
+        QRectF endLineRect = QRectF(lineRect.right() - 2, lineRect.top(), 4,  lineRect.height());
+        // If user is near the end of the line he could resize
+        if (endLineRect.contains(event->x(), event->y())) {
+            setCursor(Qt::SizeHorCursor);
+        }
+        else {
+            if (lineRect.contains(event->x(), event->y())) {
+                setCursor(Qt::DragMoveCursor);
+            }
+            else {
+                setCursor(Qt::ArrowCursor);
+            }
+        }
+    }
     QWidget::mouseMoveEvent(event);
-
 }
 
 void KPrTimeLineView::mouseReleaseEvent(QMouseEvent *event)
@@ -305,6 +308,25 @@ int KPrTimeLineView::columnAt(int xpos)
         column = KPrShapeAnimations::StartTime;
     }
     return column;
+}
+
+QRectF KPrTimeLineView::getRowRect(const int row, const int column)
+{
+    int startPos = 0;
+    for (int i = 0; i < KPrShapeAnimations::StartTime; i++) {
+        startPos = startPos + m_mainView->widthOfColumn(i);
+    }
+    int y = row * m_mainView->rowsHeigth();
+    QRect rect(startPos, y, startPos+m_mainView->widthOfColumn(column), m_mainView->rowsHeigth());
+
+    int lineHeigth = qMin(LINE_HEIGHT, rect.height());
+    int yCenter = (rect.height() - lineHeigth) / 2;
+    qreal  stepSize  = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) / m_mainView->numberOfSteps();
+    qreal duration = m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::Duration)).toInt() / 1000.0;
+    int startOffSet = m_mainView->calculateStartOffset(row);
+    qreal start = (m_mainView->model()->data(m_mainView->model()->index(row, KPrShapeAnimations::StartTime)).toInt() +
+            startOffSet) / 1000.0;
+    return QRectF(rect.x() + stepSize * start, rect.y() + yCenter, stepSize * duration, lineHeigth);
 }
 
 void KPrTimeLineView::paintEvent(QPaintEvent *event)

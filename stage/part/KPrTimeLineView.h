@@ -56,6 +56,7 @@ private:
 
     int rowAt(int ypos);
     int columnAt(int xpos);
+    QRectF getRowRect(const int row, const int column);
 
     /// Helper method to paint view items
     void paintEvent(QPaintEvent * event);
