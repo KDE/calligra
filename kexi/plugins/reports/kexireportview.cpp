@@ -208,7 +208,7 @@ void KexiReportView::slotExportAsSpreadsheet()
                                i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
     }
 }
@@ -232,7 +232,7 @@ void KexiReportView::slotExportAsTextDocument()
                                i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
     }
 }
@@ -270,7 +270,7 @@ void KexiReportView::slotExportAsWebPage()
                            i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
                            i18n("Export Failed"));
     } else {
-        KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+        (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
     }
 }
 
@@ -426,15 +426,15 @@ void KexiReportView::moveToPreviousRecordRequested()
 
 void KexiReportView::moveToRecordRequested(uint r)
 {
-
+    Q_UNUSED(r);
 }
 
-long int KexiReportView::currentRecord()
+int KexiReportView::currentRecord() const
 {
     return m_currentPage;
 }
 
-long int KexiReportView::recordCount()
+int KexiReportView::recordCount() const
 {
     return m_pageCount;
 }
