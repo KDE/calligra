@@ -109,6 +109,7 @@ private slots:
 
 protected:
     KoPathToolSelection m_pointSelection; ///< the point selection
+    QCursor m_selectCursor;
 
 private:
 
@@ -139,7 +140,6 @@ private:
     KAction *m_actionJoinSegment;
     KAction *m_actionMergePoints;
     KAction *m_actionConvertToPath;
-    QCursor m_selectCursor;
     QCursor m_moveCursor;
 
     Q_DECLARE_PRIVATE(KoToolBase)

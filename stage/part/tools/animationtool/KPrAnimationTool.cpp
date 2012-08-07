@@ -93,7 +93,7 @@ void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShap
 {
     Q_UNUSED(toolActivation);
     Q_UNUSED(shapes);
-    useCursor(Qt::ArrowCursor);
+    useCursor(m_selectCursor);
     repaintDecorations();
 
     if (!m_pathShapeManager) {
@@ -137,6 +137,7 @@ void KPrAnimationTool::deactivate()
              m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
     m_initializeTool = true;
     delete m_pathShapeManager;
+    m_pathShapeManager = 0;
     KoPathTool::deactivate();
 }
 
@@ -275,6 +276,9 @@ QPair<qreal, qreal> KPrAnimationTool::getScaleCorrection()
 
 void KPrAnimationTool::cleanMotionPathManager()
 {
+    if (!m_pathShapeManager) {
+        return;
+    }
     foreach(KoShape *shape, m_pathShapeManager->shapes()) {
         m_pathShapeManager->remove(shape);
     }
