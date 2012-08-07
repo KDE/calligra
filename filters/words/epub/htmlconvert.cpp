@@ -71,6 +71,8 @@ static void handleTagTab(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles);
 static void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles);
+static void handleTagLineBreak(KoXmlWriter *bodyWriter);
+
 static void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles);
 
@@ -401,6 +403,9 @@ KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QStr
         else if (nodeElement.localName() == "table-of-content" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagTableOfContent(nodeElement, bodyWriter, styles);
         }
+        else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
+            handleTagLineBreak(bodyWriter);
+        }
         else {
             bodyWriter->startElement("div");
             handleUnknownTags(nodeElement, bodyWriter, styles);
@@ -559,6 +564,9 @@ void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
         }
+        else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagLineBreak(bodyWriter);
+        }
         else
             handleUnknownTags(element, bodyWriter, styles);
 
@@ -609,6 +617,9 @@ void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
         }
+        else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagLineBreak(bodyWriter);
+        }
         else
             handleUnknownTags(element, bodyWriter, styles);
 
@@ -657,6 +668,9 @@ void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
             handleTagA(element, bodyWriter, styles);
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
+        }
+        else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagLineBreak(bodyWriter);
         }
         else
             handleUnknownTags(element, bodyWriter, styles);
@@ -758,6 +772,12 @@ void handleTagTableOfContentBody (KoXmlElement &nodeElement, KoXmlWriter *bodyWr
     }
 }
 
+void handleTagLineBreak (KoXmlWriter *bodyWriter)
+{
+    bodyWriter->startElement("br");
+    bodyWriter->endElement();
+}
+
 void handleUnknownTags (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                         QHash<QString, StyleInfo *> &styles)
 {
@@ -781,6 +801,9 @@ void handleUnknownTags (KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
             handleTagA(element, bodyWriter, styles);
         else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
             bodyWriter->addTextNode("\u00a0");
+        }
+        else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagLineBreak(bodyWriter);
         }
         else
             handleUnknownTags(element, bodyWriter, styles);
