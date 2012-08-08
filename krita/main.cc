@@ -50,6 +50,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     options.add("+[file(s)]", ki18n("File(s) or URL(s) to open"));
     KCmdLineArgs::addCmdLineOptions(options);
 
+    QCoreApplication::setAttribute(Qt::AA_X11InitThreads);
+
     // first create the application so we can create a  pixmap
     KoApplication app;
 
