@@ -46,6 +46,8 @@
 #include "ui/Selection.h"
 #include "Sheet.h"
 
+#include <KoIcon.h>
+
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <ktextbrowser.h>
@@ -131,7 +133,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     selectFunction = new QPushButton(page);
     selectFunction->setToolTip(i18n("Insert function"));
-    selectFunction->setIcon(BarIcon("go-down", KIconLoader::SizeSmall));
+    selectFunction->setIcon(koIcon("go-down"));
     grid1->addWidget(selectFunction, 3, 0);
 
     result = new KLineEdit(page);
@@ -715,8 +717,6 @@ void FormulaDialog::slotShowFunction(const QString& function)
     slotActivated(category);
 
     // select the function
-    //Q3ListBoxItem* item = functions->findItem( function, QKeySequence::ExactMatch | Qt::CaseSensitive );
-    //if( item ) functions->setCurrentItem( item );
     int row = functionsModel->stringList().indexOf(function);
     const QModelIndex sourcemodelindex = functionsModel->index(row, 0);
     const QModelIndex proxymodelindex = proxyModel->mapFromSource(sourcemodelindex);

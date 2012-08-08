@@ -36,6 +36,7 @@
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
 
+#include <KoIcon.h>
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 #include <KoColorSpace.h>
@@ -90,6 +91,7 @@
 #include "kis_progress_widget.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
+#include "kis_mirror_visitor.h"
 
 
 class KisSaveGroupVisitor : public KisNodeVisitor
@@ -290,11 +292,11 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
+    m_layerSaveAs  = new KAction(koIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    m_groupLayersSave = new KAction(KIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = new KAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
     actionCollection->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
@@ -730,82 +732,6 @@ void KisLayerManager::layerBack()
     layer = activeLayer();
     m_commandsAdapter->toBottom(layer);
     layer->parent()->setDirty();
-}
-
-void KisLayerManager::mirrorLayerX()
-{
-    KisLayerSP layer = activeLayer();
-    m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer X"));
-
-    if (layer->inherits("KisShapeLayer")) {
-
-        KisTransformVisitor visitor(m_view->image(), -1.0, 1.0, 0.0, 0.0, 0.0, m_view->image()->width(), 0, 0, 0);
-        layer->accept(visitor);
-    } else {
-        KisPaintDeviceSP dev = activeDevice();
-        if (!dev) return;
-
-        KisTransaction transaction(i18n("Mirror Layer X"), dev);
-
-        QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
-        m_activeLayer->setDirty(dirty);
-
-        transaction.commit(m_view->image()->undoAdapter());
-    }
-    // Now for the masks
-    KoProperties properties;
-    foreach(KisNodeSP mask, layer->childNodes(QStringList("KisMask"), properties)) {
-        KisPaintDeviceSP dev = qobject_cast<KisMask*>(mask.data())->selection()->getOrCreatePixelSelection();
-        if (!dev) continue;
-        KisTransaction transaction(i18n("Mirror Mask X"), dev);
-        QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
-        transaction.commit(m_view->image()->undoAdapter());
-        mask->setDirty(dirty);
-    }
-
-    m_view->image()->undoAdapter()->endMacro();
-    m_doc->setModified(true);
-    layersUpdated();
-    m_view->canvas()->update();
-}
-
-void KisLayerManager::mirrorLayerY()
-{
-    KisLayerSP layer = activeLayer();
-
-    m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer Y"));
-
-    if (layer->inherits("KisShapeLayer")) {
-        KisTransformVisitor visitor(m_view->image(), 1.0, -1.0, 0.0, 0.0, 0.0, 0, m_view->image()->height(), 0, 0);
-        layer->accept(visitor);
-
-    } else {
-        KisPaintDeviceSP dev = activeDevice();
-        if (!dev) return;
-
-        KisTransaction transaction(i18n("Mirror Layer Y"), dev);
-
-        QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
-        m_activeLayer->setDirty(dirty);
-
-        transaction.commit(m_view->image()->undoAdapter());
-    }
-    // Now for the masks
-    KoProperties properties;
-    foreach(KisNodeSP mask, layer->childNodes(QStringList("KisMask"), properties)) {
-        KisPaintDeviceSP dev = qobject_cast<KisMask*>(mask.data())->selection()->getOrCreatePixelSelection();
-        if (!dev) continue;
-        KisTransaction transaction(i18n("Mirror Mask Y"), dev);
-        QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
-        transaction.commit(m_view->image()->undoAdapter());
-        mask->setDirty(dirty);
-    }
-
-    m_view->image()->undoAdapter()->endMacro();
-
-    m_doc->setModified(true);
-    layersUpdated();
-    m_view->canvas()->update();
 }
 
 void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy)

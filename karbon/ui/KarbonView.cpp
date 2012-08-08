@@ -57,6 +57,7 @@
 #include "KarbonPart.h"
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
+#include "KarbonKoDocument.h"
 #include "KarbonPrintJob.h"
 #include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"
@@ -114,17 +115,16 @@
 #include <KoImageData.h>
 #include <KoProperties.h>
 #include <KoZoomController.h>
+#include <KoIcon.h>
 
 // kde header
 #include <kaction.h>
 #include <kcolormimedata.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstandardaction.h>
@@ -152,8 +152,8 @@
 class KarbonView::Private
 {
 public:
-    Private(KarbonPart * p)
-            : part(p), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
+    Private(KarbonPart *part, KarbonKoDocument * doc)
+            : karbonPart(part), part(doc), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
             , colorBar(0), closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
             , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
@@ -164,7 +164,8 @@ public:
             , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
     {}
 
-    KarbonPart * part;
+    KarbonPart * karbonPart;
+    KarbonKoDocument * part;
     KarbonCanvas * canvas;
     KoCanvasController * canvasController;
     KoRuler * horizRuler;
@@ -202,19 +203,16 @@ public:
     QWidget * zoomActionWidget; ///< zoom action widget
 };
 
-KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
-        : KoView(p, parent), d(new Private(p))
+KarbonView::KarbonView(KarbonPart *karbonPart, KarbonKoDocument* doc, QWidget* parent)
+        : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
 {
     setComponentData(KarbonFactory::componentData(), true);
     setAcceptDrops(true);
 
-    if (!p->isReadWrite())
-        setXMLFile(QString::fromLatin1("karbon_readonly.rc"));
-    else
-        setXMLFile(QString::fromLatin1("karbon.rc"));
+    setXMLFile(QString::fromLatin1("karbon.rc"));
 
     const int viewMargin = 250;
-    d->canvas = new KarbonCanvas(p);
+    d->canvas = new KarbonCanvas(doc);
     d->canvas->setParent(this);
     d->canvas->setDocumentViewMargin(viewMargin);
     connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
@@ -269,16 +267,16 @@ KarbonView::KarbonView(KarbonPart* p, QWidget* parent)
     // widgets:
     d->horizRuler = new KoRuler(this, Qt::Horizontal, d->canvas->viewConverter());
     d->horizRuler->setShowMousePosition(true);
-    d->horizRuler->setUnit(p->unit());
+    d->horizRuler->setUnit(doc->unit());
     d->horizRuler->setRightToLeft(false);
     d->horizRuler->setVisible(false);
     new KoRulerController(d->horizRuler, d->canvas->resourceManager());
 
-    connect(p, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
+    connect(doc, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
 
     d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
     d->vertRuler->setShowMousePosition(true);
-    d->vertRuler->setUnit(p->unit());
+    d->vertRuler->setUnit(doc->unit());
     d->vertRuler->setVisible(false);
 
     connect(d->canvas, SIGNAL(documentOriginChanged(QPoint)), this, SLOT(pageOffsetChanged()));
@@ -352,7 +350,7 @@ KarbonView::~KarbonView()
     delete d;
 }
 
-KarbonPart * KarbonView::part() const
+KarbonKoDocument * KarbonView::part() const
 {
     return d->part;
 }
@@ -491,9 +489,12 @@ void KarbonView::fileImportGraphic()
 
     QMap<QString, KoDataCenterBase*> dataCenters = part()->document().dataCenterMap();
 
-    KarbonPart importPart;
+    KarbonPart importPart(0);
+    KarbonKoDocument importDocument(&importPart);
+    importPart.setDocument(&importDocument);
+
     // use data centers of this document for importing
-    importPart.document().useExternalDataCenterMap(dataCenters);
+    importDocument.document().useExternalDataCenterMap(dataCenters);
 
     bool success = true;
 
@@ -558,20 +559,20 @@ void KarbonView::fileImportGraphic()
     // check if we are loading our native format
     if (nativeMimeType == currentMimeFilter) {
         // directly load the native format
-        success = importPart.loadNativeFormat(fname);
+        success = importDocument.loadNativeFormat(fname);
         if (!success) {
             importPart.showLoadingErrorDialog();
         }
     } else {
         // use import filters to load the file
-        KoFilterManager man(&importPart);
+        KoFilterManager man(&importDocument);
         KoFilter::ConversionStatus status = KoFilter::OK;
         QString importedFile = man.importDocument(fname, QString(), status);
         if (status != KoFilter::OK) {
             importPart.showLoadingErrorDialog();
             success = false;
         } else if (!importedFile.isEmpty()) {
-            success = importPart.loadNativeFormat(importedFile);
+            success = importDocument.loadNativeFormat(importedFile);
             if (!success) {
                 importPart.showLoadingErrorDialog();
             }
@@ -581,9 +582,9 @@ void KarbonView::fileImportGraphic()
     }
 
     if (success) {
-        QList<KoShape*> importedShapes = importPart.document().shapes();
+        QList<KoShape*> importedShapes = importDocument.document().shapes();
 
-        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importPart);
+        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importDocument);
         d->canvas->addCommand(cmd);
 
         foreach(KoShape * shape, importedShapes) {
@@ -1039,13 +1040,13 @@ void KarbonView::initActions()
     actionCollection()->addAction("file_import", actionImportGraphic);
     connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));
 
-    d->deleteSelectionAction  = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    d->deleteSelectionAction  = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction);
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
 
-    KAction *actionEditGuides = new KAction(KIcon("edit-guides"), i18n("Edit Guides"), this);
+    KAction *actionEditGuides = new KAction(koIcon("edit-guides"), i18n("Edit Guides"), this);
     actionCollection()->addAction("edit_guides", actionEditGuides);
     connect(actionEditGuides, SIGNAL(triggered()), this, SLOT(editGuides()));
     // edit <-----
@@ -1056,35 +1057,35 @@ void KarbonView::initActions()
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    KAction *actionDistributeHorizontalCenter  = new KAction(KIcon("distribute-horizontal-center"), i18n("Distribute Center (Horizontal)"), this);
+    KAction *actionDistributeHorizontalCenter  = new KAction(koIcon("distribute-horizontal-center"), i18n("Distribute Center (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter);
     connect(actionDistributeHorizontalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalCenter()));
 
-    KAction *actionDistributeHorizontalGap  = new KAction(KIcon("distribute-horizontal-equal"), i18n("Distribute Gaps (Horizontal)"), this);
+    KAction *actionDistributeHorizontalGap  = new KAction(koIcon("distribute-horizontal-equal"), i18n("Distribute Gaps (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_gap", actionDistributeHorizontalGap);
     connect(actionDistributeHorizontalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalGap()));
 
-    KAction *actionDistributeLeft  = new KAction(KIcon("distribute-horizontal-left"), i18n("Distribute Left Borders"), this);
+    KAction *actionDistributeLeft  = new KAction(koIcon("distribute-horizontal-left"), i18n("Distribute Left Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_left", actionDistributeLeft);
     connect(actionDistributeLeft, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalLeft()));
 
-    KAction *actionDistributeRight  = new KAction(KIcon("distribute-horizontal-right"), i18n("Distribute Right Borders"), this);
+    KAction *actionDistributeRight  = new KAction(koIcon("distribute-horizontal-right"), i18n("Distribute Right Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_right", actionDistributeRight);
     connect(actionDistributeRight, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalRight()));
 
-    KAction *actionDistributeVerticalCenter  = new KAction(KIcon("distribute-vertical-center"), i18n("Distribute Center (Vertical)"), this);
+    KAction *actionDistributeVerticalCenter  = new KAction(koIcon("distribute-vertical-center"), i18n("Distribute Center (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_center", actionDistributeVerticalCenter);
     connect(actionDistributeVerticalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalCenter()));
 
-    KAction *actionDistributeVerticalGap  = new KAction(KIcon("distribute-vertical-equal"), i18n("Distribute Gaps (Vertical)"), this);
+    KAction *actionDistributeVerticalGap  = new KAction(koIcon("distribute-vertical-equal"), i18n("Distribute Gaps (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_gap", actionDistributeVerticalGap);
     connect(actionDistributeVerticalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalGap()));
 
-    KAction *actionDistributeBottom  = new KAction(KIcon("distribute-vertical-bottom"), i18n("Distribute Bottom Borders"), this);
+    KAction *actionDistributeBottom  = new KAction(koIcon("distribute-vertical-bottom"), i18n("Distribute Bottom Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_bottom", actionDistributeBottom);
     connect(actionDistributeBottom, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalBottom()));
 
-    KAction *actionDistributeTop  = new KAction(KIcon("distribute-vertical-top"), i18n("Distribute Top Borders"), this);
+    KAction *actionDistributeTop  = new KAction(koIcon("distribute-vertical-top"), i18n("Distribute Top Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_top", actionDistributeTop);
     connect(actionDistributeTop, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalTop()));
 
@@ -1129,11 +1130,11 @@ void KarbonView::initActions()
     actionCollection()->addAction("object_unclip", d->unclipObjects );
     connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
 
-    d->flipVertical = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    d->flipVertical = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection()->addAction("object_flip_vertical", d->flipVertical);
     connect(d->flipVertical, SIGNAL(triggered()), this, SLOT(flipVertical()));
 
-    d->flipHorizontal = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    d->flipHorizontal = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     actionCollection()->addAction("object_flip_horizontal", d->flipHorizontal);
     connect(d->flipHorizontal, SIGNAL(triggered()), this, SLOT(flipHorizontal()));
 
@@ -1195,20 +1196,20 @@ void KarbonView::initActions()
 
     // path <-----
 
-    d->configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
+    d->configureAction  = new KAction(koIcon("configure"), i18n("Configure Karbon..."), this);
     actionCollection()->addAction("configure", d->configureAction);
     connect(d->configureAction, SIGNAL(triggered()), this, SLOT(configure()));
 
     KAction *actionPageLayout  = new KAction(i18n("Page &Layout..."), this);
     actionCollection()->addAction("page_layout", actionPageLayout);
-    connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(pageLayout()));
+    connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(configurePageLayout()));
 
     // view ---->
-    KAction * zoomSelection = new KAction(KIcon("zoom-select"), i18n("Zoom to Selection"), this);
+    KAction * zoomSelection = new KAction(koIcon("zoom-select"), i18n("Zoom to Selection"), this);
     actionCollection()->addAction("view_zoom_selection", zoomSelection);
     connect(zoomSelection, SIGNAL(triggered()), this, SLOT(zoomSelection()));
 
-    KAction * zoomDrawing = new KAction(KIcon("zoom-draw"), i18n("Zoom to Drawing"), this);
+    KAction * zoomDrawing = new KAction(koIcon("zoom-draw"), i18n("Zoom to Drawing"), this);
     actionCollection()->addAction("view_zoom_drawing", zoomDrawing);
     connect(zoomDrawing, SIGNAL(triggered()), this, SLOT(zoomDrawing()));
     // view <-----
@@ -1325,7 +1326,7 @@ void KarbonView::configure()
     d->canvas->update();
 }
 
-void KarbonView::pageLayout()
+void KarbonView::configurePageLayout()
 {
     QPointer<KoPageLayoutDialog> dlg = new KoPageLayoutDialog(this, part()->pageLayout());
     dlg->showPageSpread(false);
@@ -1416,14 +1417,15 @@ void KarbonView::createLayersTabDock()
     {
         KarbonLayerDockerFactory layerFactory;
         KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(shell()->createDockWidget(&layerFactory));
-        layerDocker->setPart(d->part);
+        layerDocker->setPart(d->karbonPart);
         connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
-        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
-                layerDocker, SLOT(setPart(KParts::Part*)));
+// XXX: reenable once we figure out what the this is for, and if it's still useful
+//        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+//                layerDocker, SLOT(setPart(KParts::Part*)));
     }
 }
 

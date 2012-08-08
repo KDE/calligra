@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Service
+Name=Words Epub2 Export Filter
+
+X-KDE-Export=application/epub+zip
+X-KDE-Import=application/vnd.oasis.opendocument.text
+X-KDE-Weight=1
+X-KDE-Library=exportepub2
+X-KDE-ServiceTypes=CalligraFilter
+ 

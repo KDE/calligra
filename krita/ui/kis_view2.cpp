@@ -61,7 +61,6 @@
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
 #include <kactioncollection.h>
 
 #include <KoStore.h>
@@ -86,38 +85,40 @@
 #include "kis_composite_progress_proxy.h"
 #include <kis_layer.h>
 
-#include "kra/kis_kra_loader.h"
-#include "kis_config.h"
-#include "kis_config_notifier.h"
-#include "kis_statusbar.h"
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
+#include "canvas/kis_grid_manager.h"
+#include "canvas/kis_perspective_grid_manager.h"
+#include "dialogs/kis_dlg_preferences.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_config.h"
+#include "kis_config_notifier.h"
+#include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
+#include "kis_custom_palette.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_selection_manager.h"
-#include "kis_image_manager.h"
-#include "kis_control_frame.h"
-#include "kis_paintop_box.h"
-#include "kis_zoom_manager.h"
-#include "canvas/kis_grid_manager.h"
-#include "canvas/kis_perspective_grid_manager.h"
-#include "kis_mask_manager.h"
-#include "dialogs/kis_dlg_preferences.h"
 #include "kis_group_layer.h"
-#include "kis_custom_palette.h"
-#include "kis_resource_server_provider.h"
+#include "kis_image_manager.h"
+#include "kis_mask_manager.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
-#include "kis_selection.h"
-#include "kis_print_job.h"
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
+#include "kis_paintop_box.h"
+#include "kis_part2.h"
+#include "kis_print_job.h"
 #include "kis_progress_widget.h"
+#include "kis_resource_server_provider.h"
+#include "kis_selection.h"
+#include "kis_selection_manager.h"
 #include "kis_shape_layer.h"
+#include "kis_statusbar.h"
+#include "kis_zoom_manager.h"
+#include "kra/kis_kra_loader.h"
 #include "widgets/kis_floating_message.h"
+
 
 #include <QDebug>
 #include <QPoint>
@@ -153,6 +154,7 @@ public:
     KisView2Private()
         : canvas(0)
         , doc(0)
+        , part(0)
         , viewConverter(0)
         , canvasController(0)
         , resourceProvider(0)
@@ -193,6 +195,7 @@ public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
+    KisPart2 *part;
     KisCoordinatesConverter * viewConverter;
     KoCanvasController * canvasController;
     KisCanvasResourceProvider * resourceProvider;
@@ -217,26 +220,24 @@ public:
 };
 
 
-KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
-    : KoView(doc, parent),
+KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
+    : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
+    setComponentData(KisFactory2::componentData());
+    setXMLFile("krita.rc");
+
     // populate theme menu
     m_d->themeManager = new Digikam::ThemeManager(this);
 
     setFocusPolicy(Qt::NoFocus);
-
-    if (!doc->isReadWrite()) {
-        setXMLFile("krita_readonly.rc");
-    } else {
-        setXMLFile("krita.rc");
-    }
 
     if (mainWindow()) {
         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
     }
 
     m_d->doc = doc;
+    m_d->part = part;
     m_d->viewConverter = new KisCoordinatesConverter();
 
     KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
@@ -559,8 +560,8 @@ void KisView2::dropEvent(QDropEvent *event)
                         m_d->imageManager->importImage(KUrl(url));
                     }
                     else if (action == replaceCurrentDocument) {
-                        if (m_d->doc->isModified()) {
-                            m_d->doc->save();
+                        if (m_d->part->isModified()) {
+                            m_d->part->save();
                         }
                         if (shell() != 0) {
                             shell()->openDocument(url);
@@ -999,30 +1000,8 @@ void KisView2::slotTotalRefresh()
 
 void KisView2::slotCreateTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(".kra");
-
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close(); // need to close on Windows before we can open it again to save
-    delete tempFile; // now the file has disappeared and we can create a new file with the generated name
-
-    m_d->doc->saveNativeFormat(fileName);
-    KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
-                                        fileName, pix, this);
-
-    KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("krita_template", ".kra",
+                                        KisFactory2::componentData(), m_d->doc, this);
 }
 
 void KisView2::slotDocumentSaved()
@@ -1118,7 +1097,7 @@ void KisView2::slotSaveIncremental()
         return;
     }
     pDoc->setSaveInBatchMode(true);
-    pDoc->saveAs(fileName);
+    m_d->part->saveAs(fileName);
     pDoc->setSaveInBatchMode(false);
 
     shell()->updateCaption();
@@ -1185,7 +1164,7 @@ void KisView2::slotSaveIncrementalBackup()
             KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
             return;
         }
-        pDoc->saveAs(fileName);
+        m_d->part->saveAs(fileName);
 
         shell()->updateCaption();
     }
@@ -1207,9 +1186,7 @@ void KisView2::slotSaveIncrementalBackup()
             newVersion = baseNewVersion;
             newVersion.prepend("~");
             newVersion.append(".");
-            qDebug() << backupFileName << " version1";
             backupFileName.replace(regex, newVersion);
-            qDebug() << backupFileName << " version2";
             fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, this);
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
@@ -1220,13 +1197,12 @@ void KisView2::slotSaveIncrementalBackup()
                     baseNewVersion.prepend("0");
                 }
             }
-            qDebug() << "idiot";
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow
         pDoc->setSaveInBatchMode(true);
-        pDoc->saveAs(backupFileName);
-        pDoc->saveAs(fileName);
+        m_d->part->saveAs(backupFileName);
+        m_d->part->saveAs(fileName);
         pDoc->setSaveInBatchMode(false);
 
         shell()->updateCaption();
@@ -1319,5 +1295,12 @@ void KisView2::showJustTheCanvas(bool toggled)
     }
 }
 
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
+{
+    KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
+    floatingMessage->setShowOverParent(true);
+    floatingMessage->setIcon(icon);
+    floatingMessage->showMessage();
+}
 
 #include "kis_view2.moc"

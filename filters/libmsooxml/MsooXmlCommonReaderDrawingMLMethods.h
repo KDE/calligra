@@ -82,12 +82,12 @@ void initDrawingML();
 
 /**
  * @return true in case a custom or supported predefined shape is
- * beeing processed and false in case of a text-box and rectangle.
+ * being processed and false in case of a text-box and rectangle.
  */
 bool isCustomShape();
 
 /**
- * @return true in case an unsupported shape is beeing processed.
+ * @return true in case an unsupported shape is being processed.
  */
 bool unsupportedPredefinedShape();
 
@@ -228,16 +228,10 @@ KoFilter::ConversionStatus read_spAutoFit();
 //! Inherit default body properties
 void inheritDefaultBodyProperties();
 
-//! Sets the style:wrap attribute of graphic-properties for read_anchor().
-void saveStyleWrap(const char *style);
-
 void algnToODF(const char *odfEl, const QString& emuValue);
 
 //! Sets the fo:margin-* attribute of graphic-properties for read_anchor().
 void distToODF(const char *odfEl, const QString& emuValue);
-
-//! Used by read_wrap*()
-void readWrap();
 
 // ----------------------------------------
 // MSOOXML_CURRENT_NS == (DRAWINGML_NS || DRAWINGML_TXBODY_NS)

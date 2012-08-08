@@ -72,7 +72,7 @@ quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' <
 struct KisGbrBrush::Private {
 
     QByteArray data;
-    bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate wether the data is loaded from file (ownData = true) or memory (ownData = false) */
+    bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate whether the data is loaded from file (ownData = true) or memory (ownData = false) */
 
     bool useColorAsMask;
 
@@ -298,7 +298,7 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image->convertToQImage(0, x, y, w, h));
+    setImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation));
     setName(image->objectName());
 
     setHasColor(true);

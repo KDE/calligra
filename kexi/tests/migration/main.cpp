@@ -24,7 +24,6 @@
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 #include <kcomponentdata.h>
-#include <kiconloader.h>
 #include <kaboutdata.h>
 
 #include <db/drivermanager.h>

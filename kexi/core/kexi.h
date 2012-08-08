@@ -138,7 +138,7 @@ KEXICORE_EXPORT QString msgYouCanImproveData();
 }//namespace Kexi
 
 //! Icon name for database servers
-#define KEXI_ICON_DATABASE_SERVER "network-server-database"
+#define KEXI_DATABASE_SERVER_ICON_NAME (koIconName("network-server-database"))
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 

@@ -23,7 +23,6 @@
 #include <QLayout>
 #include <QLabel>
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>

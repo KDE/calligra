@@ -1151,6 +1151,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.endElement(); //draw:image
 
     //check for user edited wrap points
+#if 0
     if (ds.fEditedWrap()) {
         QString points;
         IMsoArray _v = ds.pWrapPolygonVertices_complex();
@@ -1178,6 +1179,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         out.xml.addAttribute("draw:points", points);
         out.xml.endElement(); //draw:contour-polygon
     }
+#endif
     out.xml.endElement(); //draw:frame
     return;
 }

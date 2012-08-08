@@ -21,10 +21,12 @@
 
 */
 
+#include <math.h>
+#include <kdebug.h>
+
 #include "paragraph.h"
 #include "conversion.h"
 #include "msdoc.h"
-#include <kdebug.h>
 
 //define the static attribute
 QStack<QString> Paragraph::m_bgColors;
@@ -74,7 +76,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inSty
 
     //init the background-color stack to page background-color
     if (m_bgColors.size() > 0) {
-        kWarning(30513) << "BUG: m_bgColors stack NOT emty, clearing!";
+        kWarning(30513) << "BUG: m_bgColors stack NOT empty, clearing!";
         m_bgColors.clear();
     }
 
@@ -653,7 +655,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             //
             // Get the proportion & turn it into a percentage for the
             // attribute.
-            QString proportionalLineSpacing(QString::number(pap.lspd.dyaLine / 2.4f, 'f'));
+            QString proportionalLineSpacing(QString::number(ceil(pap.lspd.dyaLine / 2.4f)));
             style->addProperty("fo:line-height", proportionalLineSpacing.append("%"), pt);
         } else if (pap.lspd.fMultLinespace == 0) {
             // Magnitude of lspd.dyaLine specifies the amount of space

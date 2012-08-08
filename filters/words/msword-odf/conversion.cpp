@@ -926,9 +926,22 @@ qreal Conversion::twipsToPt(int twips)
     return pt;
 }
 
-QString Conversion::rncToStartNumberingAt(int rnc)
+const char* Conversion::fpcToFtnPosition(quint16 fpc)
 {
-    switch(rnc) {
+    switch (fpc) {
+    case 0:
+        return "section";
+    case 2:
+        return "text";
+    case 1:
+    default:
+        return "page";
+    }
+}
+
+const char* Conversion::rncToStartNumberingAt(quint16 rnc)
+{
+    switch (rnc) {
     case 0:
         return "document";
     case 1:

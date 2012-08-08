@@ -97,7 +97,7 @@ public:
     virtual bool usePert() const;
     
     enum OBState { OBS_Parent, OBS_Allow, OBS_Deny };
-    /// Sets wether overbooking resources is allowed locally for this schedule
+    /// Sets whether overbooking resources is allowed locally for this schedule
     /// If @p state is OBS_Parent, the parent is checked when allowOverbooking() is called
     virtual void setAllowOverbookingState( OBState state );
     OBState allowOverbookingState() const;
@@ -632,7 +632,7 @@ public:
     int maxProgress() const { return m_maxprogress; }
 
     /// Log added by MainSchedule
-    /// Emits sigLogAdded() to enable syncronization between schedules
+    /// Emits sigLogAdded() to enable synchronization between schedules
     void logAdded( Schedule::Log &log );
 
     /// Create and load a MainSchedule

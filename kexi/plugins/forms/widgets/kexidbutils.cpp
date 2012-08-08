@@ -28,6 +28,9 @@
 
 #include <db/queryschema.h>
 #include <db/utils.h>
+
+#include <KoIcon.h>
+
 #include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>
 #include "../kexiformpart.h"
@@ -51,10 +54,10 @@ struct KexiFormStatics
         if (!m_dataSourceTagIcon.isNull())
             return;
         QFontMetrics fm(QApplication::fontMetrics());
-        int size = KIconLoader::global()->currentSize(KIconLoader::Small);
+        int size = IconSize(KIconLoader::Small);
         if (size < KIconLoader::SizeSmallMedium && fm.height() >= KIconLoader::SizeSmallMedium)
             size = KIconLoader::SizeSmallMedium;
-        m_dataSourceTagIcon = KIconLoader::global()->loadIcon(QLatin1String("data-source-tag"), KIconLoader::Small, size);
+        m_dataSourceTagIcon = SmallIcon(koIconName("data-source-tag"), size);
         KIconEffect::semiTransparent(m_dataSourceTagIcon);
         m_dataSourceRTLTagIcon = QPixmap::fromImage(m_dataSourceTagIcon.toImage().mirrored(true /*h*/, false /*v*/));
     }

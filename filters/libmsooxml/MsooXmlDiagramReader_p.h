@@ -77,7 +77,7 @@ class AlgorithmAtom;
 class AbstractAlgorithm;
 class ShapeAtom;
 
-/// The evaluation context that is passed around and contains all kind of state-informations.
+/// The evaluation context that is passed around and contains all kind of state-information.
 class Context
 {
     public:
