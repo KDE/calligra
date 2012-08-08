@@ -18,3 +18,42 @@ qt4_add_resources(krita-sketch_SRCS krita-sketch.qrc)
 
 add_executable(krita-sketch ${krita-sketch_SRCS})
 target_link_libraries(krita-sketch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} )
+
+add_custom_target(QmlFiles ALL ${CMAKE_COMMAND} -E echo "Main application QML files"
+    SOURCES
+    MainPage.qml
+    SettingsPage.qml
+    SharePage.qml
+    WelcomePage.qml
+)
+add_custom_target(QmlComponentFiles ALL ${CMAKE_COMMAND} -E echo "QML Component files"
+    SOURCES
+    components/Button.qml
+    components/CategorySwitcher.qml
+    components/Divider.qml
+    components/DropShadow.qml
+    components/Header.qml
+    components/Label.qml
+    components/NewImageList.qml
+    components/NewsList.qml
+    components/Page.qml
+    components/PageStack.js
+    components/PageStack.qml
+    components/RecentFilesList.qml
+    components/TextField.qml
+)
+add_custom_target(QmlPanelFiles ALL ${CMAKE_COMMAND} -E echo "Panel QML files"
+    SOURCES
+    panels/ColorPanel.qml
+    panels/EditPresetPage.qml
+    panels/FilterPanel.qml
+    panels/LayersPanel.qml
+    panels/MenuPanel.qml
+    panels/NewImagePanel.qml
+    panels/OpenImagePanel.qml
+    panels/PanelBar.qml
+    panels/Panel.qml
+    panels/PresetsPanel.qml
+    panels/SelectPanel.qml
+    panels/ToolPanel.qml
+)
