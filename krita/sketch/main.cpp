@@ -63,6 +63,7 @@ int main( int argc, char** argv )
         }
     }
 
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
     KApplication app;
     //app.setApplicationName("org.krita.sketch");
     QApplication::setStyle("plastique");

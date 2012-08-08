@@ -47,6 +47,9 @@ Q_SIGNALS:
 
     void doubleTapped();
 
+protected:
+    virtual bool sceneEvent(QEvent* event);
+
 private:
     class Private;
     Private * const d;

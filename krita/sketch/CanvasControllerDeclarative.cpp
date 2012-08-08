@@ -196,7 +196,9 @@ QPoint CanvasControllerDeclarative::scrollBarValue() const
 
 void CanvasControllerDeclarative::pan(const QPoint& distance)
 {
-    Q_UNUSED(distance)
+    QPoint newOffset = documentOffset() + distance;
+    setDocumentOffset(newOffset);
+    proxyObject->emitMoveDocumentOffset(newOffset);
 }
 
 QPoint CanvasControllerDeclarative::preferredCenter() const

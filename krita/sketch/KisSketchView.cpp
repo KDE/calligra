@@ -25,6 +25,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
+#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
+
 #include <QGLShaderProgram>
 #include <QGLBuffer>
 
@@ -47,6 +50,7 @@
 #include "kis_config.h"
 #include "kis_view2.h"
 #include <opengl2/kis_gl2_canvas.h>
+#include <input/kis_input_manager.h>
 
 class KisSketchView::Private
 {
@@ -80,6 +84,7 @@ public:
     int viewMatrixLocation;
     int projectionMatrixLocation;
     int texture0Location;
+    int textureScaleLocation;
     int vertexAttributeLocation;
     int uv0AttributeLocation;
 };
@@ -96,6 +101,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     , d(new Private(this))
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
 
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
@@ -205,6 +211,8 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     glBindTexture(GL_TEXTURE_2D, d->glCanvas->framebufferTexture());
     d->shader->setUniformValue(d->texture0Location, 0);
 
+    d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
+
     d->shader->setAttributeBuffer(d->vertexAttributeLocation, GL_FLOAT, 0, 3);
     d->shader->enableAttributeArray(d->vertexAttributeLocation);
     d->shader->setAttributeBuffer(d->uv0AttributeLocation, GL_FLOAT, 12 * sizeof(float), 2);
@@ -222,9 +230,6 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 
 void KisSketchView::componentComplete()
 {
-//     qDebug() << Q_FUNC_INFO;
-//     qDebug() << width() << height();
-
     const_cast<QGLContext*>(qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->context())->makeCurrent();
 
     d->shader = new QGLShaderProgram(this);
@@ -236,6 +241,7 @@ void KisSketchView::componentComplete()
     d->viewMatrixLocation = d->shader->uniformLocation("viewMatrix");
     d->projectionMatrixLocation = d->shader->uniformLocation("projectionMatrix");
     d->texture0Location = d->shader->uniformLocation("texture0");
+    d->textureScaleLocation = d->shader->uniformLocation("textureScale");
     d->vertexAttributeLocation = d->shader->attributeLocation("vertex");
     d->uv0AttributeLocation = d->shader->attributeLocation("uv0");
 
@@ -274,9 +280,39 @@ void KisSketchView::componentComplete()
     createDocument();
 }
 
+bool KisSketchView::sceneEvent(QEvent* event)
+{
+    if(d->canvas) {
+        switch(event->type()) {
+            case QEvent::GraphicsSceneMousePress: {
+                QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+                QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+                d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+                return true;
+            }
+            case QEvent::GraphicsSceneMouseMove: {
+                QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+                QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+                d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+                return true;
+            }
+            case QEvent::GraphicsSceneMouseRelease: {
+                QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+                QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+                d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+                return true;
+            }
+            default:
+                break;
+        }
+    }
+    return QDeclarativeItem::sceneEvent(event);
+}
+
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     d->glCanvas->setGeometry(newGeometry.toRect());
+    d->glCanvas->resizeGL(newGeometry.width(), newGeometry.height());
 }
 
 void KisSketchView::onSingleTap( const QPointF& location)
