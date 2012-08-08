@@ -34,6 +34,7 @@
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
 
+class KisInputManager;
 class KoToolProxy;
 class KoColorProfile;
 
@@ -153,6 +154,8 @@ public: // KisCanvas2 methods
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
+
+    KisInputManager *inputManager() const;
 
 signals:
 

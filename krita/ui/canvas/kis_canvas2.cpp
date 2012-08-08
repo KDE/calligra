@@ -349,6 +349,11 @@ KoToolProxy * KisCanvas2::toolProxy() const
     return m_d->toolProxy;
 }
 
+KisInputManager* KisCanvas2::inputManager() const
+{
+    return m_d->inputManager;
+}
+
 void KisCanvas2::createQPainterCanvas()
 {
     m_d->currentCanvasIsOpenGL = false;
@@ -371,6 +376,8 @@ void KisCanvas2::createOpenGLCanvas()
 //     KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
 //     m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
 //     setCanvasWidget(canvasWidget);
+    m_d->currentCanvasIsOpenGL = true;
+
     KisGL2Canvas* canvas = new KisGL2Canvas(this, m_d->coordinatesConverter, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
@@ -526,8 +533,8 @@ void KisCanvas2::setMonitorProfile(KoColorProfile* monitorProfile,
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
+        //Q_ASSERT(m_d->openGLImageTextures);
+        //m_d->openGLImageTextures->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
 
 #else
         Q_ASSERT_X(0, "KisCanvas2::setMonitorProfile", "Bad use of setMonitorProfile(). It shouldn't have happened =(");
@@ -549,8 +556,8 @@ void KisCanvas2::setDisplayFilter(KisDisplayFilter *displayFilter)
 
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->setDisplayFilter(displayFilter);
+        //Q_ASSERT(m_d->openGLImageTextures);
+        //m_d->openGLImageTextures->setDisplayFilter(displayFilter);
 #endif
     }
     else {
@@ -576,8 +583,8 @@ void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->slotImageSizeChanged(w, h);
+        //Q_ASSERT(m_d->openGLImageTextures);
+        //m_d->openGLImageTextures->slotImageSizeChanged(w, h);
 
 #else
         Q_ASSERT_X(0, "finishResizingImage()", "Bad use of finishResizingImage(). It shouldn't have happened =(");
@@ -592,10 +599,10 @@ void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        KisUpdateInfoSP info = m_d->openGLImageTextures->updateCache(rc);
+        //Q_ASSERT(m_d->openGLImageTextures);
+        //KisUpdateInfoSP info = m_d->openGLImageTextures->updateCache(rc);
 
-        emit sigCanvasCacheUpdated(info);
+        //emit sigCanvasCacheUpdated(info);
 #else
         Q_ASSERT_X(0, "startUpdateCanvasProjection()", "Bad use of startUpdateCanvasProjection(). It shouldn't have happened =(");
 #endif
@@ -611,8 +618,8 @@ void KisCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 {
     if (m_d->currentCanvasIsOpenGL) {
 #ifdef HAVE_OPENGL
-        Q_ASSERT(m_d->openGLImageTextures);
-        m_d->openGLImageTextures->recalculateCache(info);
+        //Q_ASSERT(m_d->openGLImageTextures);
+        //m_d->openGLImageTextures->recalculateCache(info);
 
         /**
          * FIXME: Please not update entire canvas
@@ -718,9 +725,9 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 bool KisCanvas2::usingHDRExposureProgram()
 {
 #ifdef HAVE_OPENGL
-    if (m_d->currentCanvasIsOpenGL) {
-        return m_d->openGLImageTextures->usingHDRExposureProgram();
-    }
+//     if (m_d->currentCanvasIsOpenGL) {
+//         return m_d->openGLImageTextures->usingHDRExposureProgram();
+//     }
 #endif
     return false;
 }
