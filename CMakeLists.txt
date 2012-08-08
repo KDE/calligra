@@ -309,6 +309,12 @@ if(NEPOMUK)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
 
+##
+## Test for libCmpx
+##
+macro_optional_find_package(Cmpx)
+macro_log_feature(CMPX_FOUND "libCmpx" "Library for color-managed printing extension" "www.oyranos.org/wiki/index.php?title=LibCmpx" FALSE "" "Required for color-managed printing")
+
 #Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
