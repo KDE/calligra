@@ -36,8 +36,9 @@ KisGL2Tile::KisGL2Tile(const QRect& area)
 {
     glGenTextures(1, &m_glTexture);
     glBindTexture(GL_TEXTURE_2D, m_glTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, KIS_GL2_TILE_SIZE, KIS_GL2_TILE_SIZE, 0, GL_RGBA8, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);

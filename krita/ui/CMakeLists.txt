@@ -214,6 +214,7 @@ if(HAVE_OPENGL)
             opengl2/kis_gl2_tilemanager.cpp
             opengl2/kis_gl2_tile.cpp
             opengl2/kis_gl2_tile_updater.cpp
+            opengl2/kis_gl2_texture_updater.cpp
             )
     endif(HAVE_GLEW)
     set(kritaui_LIB_SRCS

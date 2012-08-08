@@ -42,8 +42,9 @@ public:
     virtual void paintGL();
     virtual void resizeGL(int w, int h);
 
-    QPoint canvasOffset() const;
-    qreal zoom() const;
+    QPoint translation() const;
+    qreal rotation() const;
+    qreal scaling() const;
 
     uint framebufferTexture() const;
 

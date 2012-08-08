@@ -20,6 +20,8 @@
 
 #include "kis_gl2_canvas.h"
 
+#include <QApplication>
+
 #include <kis_config.h>
 #include <kis_config_notifier.h>
 #include <kis_image.h>
@@ -27,6 +29,7 @@
 #include <opengl/kis_opengl.h>
 
 #include "kis_gl2_tilemanager.h"
+#include "kis_gl2_texture_updater.h"
 #include <kis_view2.h>
 #include <kis_canvas2.h>
 
@@ -34,6 +37,9 @@ class KisGL2Canvas::Private
 {
 public:
     KisGL2TileManager *tileManager;
+
+    KisGL2TextureUpdater *updater;
+    GLuint imageTexture;
 
     static QGLWidget *shareWidget;
 };
@@ -72,13 +78,38 @@ void KisGL2Canvas::initialize(KisImageWSP image)
     configChanged();
 
     d->tileManager->initialize(image);
+
+    int pixelCount = image->width() * image->height();
+    quint8 *buffer = image->projection()->colorSpace()->allocPixelBuffer(pixelCount);
+    image->projection()->readBytes(buffer, image->bounds());
+
+    quint32 *rgba = reinterpret_cast<quint32*>(buffer);
+
+    //Convert ARGB to RGBA
+    for( int x = 0; x < pixelCount; ++x )
+    {
+        rgba[x] = ((rgba[x] << 16) & 0xff0000) | ((rgba[x] >> 16) & 0xff) | (rgba[x] & 0xff00ff00);
+    }
+
+    glGenTextures(1, &d->imageTexture);
+    glBindTexture(GL_TEXTURE_2D, d->imageTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image->width(), image->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    d->updater = new KisGL2TextureUpdater(image, d->imageTexture);
+    d->updater->start();
+    d->updater->moveToThread(d->updater);
+    connect(image, SIGNAL(sigImageUpdated(QRect)), d->updater, SLOT(imageUpdated(QRect)), Qt::QueuedConnection);
 }
 
 void KisGL2Canvas::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    d->tileManager->render();
+    //qDebug() << "Application thread:" << qApp->thread();
+
+    d->tileManager->render(d->imageTexture);
 }
 
 void KisGL2Canvas::resizeGL(int w, int h)
@@ -87,12 +118,17 @@ void KisGL2Canvas::resizeGL(int w, int h)
     d->tileManager->resize(w, h);
 }
 
-QPoint KisGL2Canvas::canvasOffset() const
+QPoint KisGL2Canvas::translation() const
 {
     return canvas()->documentOffset();
 }
 
-qreal KisGL2Canvas::zoom() const
+qreal KisGL2Canvas::rotation() const
+{
+    return canvas()->rotationAngle();
+}
+
+qreal KisGL2Canvas::scaling() const
 {
     return canvas()->viewConverter()->zoom();
 }
@@ -107,7 +143,8 @@ void KisGL2Canvas::configChanged()
 
 void KisGL2Canvas::update(const QRect& area)
 {
-    d->tileManager->update(area);
+    //d->tileManager->update(area);
+    //paintGL();
 }
 
 uint KisGL2Canvas::framebufferTexture() const

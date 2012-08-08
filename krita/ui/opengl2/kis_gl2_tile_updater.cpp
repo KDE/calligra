@@ -42,6 +42,9 @@ KisGL2TileUpdater::~KisGL2TileUpdater()
 
 void KisGL2TileUpdater::run()
 {
+    QElapsedTimer timer;
+    timer.start();
+
     QRect tileArea = m_tile->area();
     int pixelCount = tileArea.width() * tileArea.height();
     KoColorSpace *projectionColorSpace = m_image->projection()->colorSpace();
@@ -66,8 +69,13 @@ void KisGL2TileUpdater::run()
         rgba[x] = ((rgba[x] << 16) & 0xff0000) | ((rgba[x] >> 16) & 0xff) | (rgba[x] & 0xff00ff00);
     }
 
-    m_context->makeCurrent();
+    //qDebug() << "Getting and converting data took" << timer.elapsed() << "msec";
+    timer.restart();
+
+    //m_context->makeCurrent();
+
     glBindTexture(GL_TEXTURE_2D, m_tile->glTexture());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tileArea.width(), tileArea.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
-    m_context->doneCurrent();
+
+    //qDebug() << "Uploading to GL took" << timer.elapsed() << "msec";
 }
