@@ -1070,11 +1070,10 @@ void KexiCSVImportDialog::updateColumnText(int col)
         if (it != list->constEnd()) {
             //duplicates:
             list->clear();
-        } else {
+        }
+        else {
             //a candidate for PK (autodetected)!
-            if (-1 == m_primaryKeyColumn) {
-                m_primaryKeyColumn = col;
-            }
+            m_primaryKeyColumn = col;
         }
     }
     if (list) //not needed now: conserve memory
