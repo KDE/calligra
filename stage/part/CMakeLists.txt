@@ -73,9 +73,6 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesManagerView.cpp
      KPrCustomSlideShowsModel.cpp
      KPrSlidesSorterItemDelegate.cpp
-     KPrAnimationsTimeLineView.cpp
-     KPrTimeLineHeader.cpp
-     KPrTimeLineView.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrAnimationRemoveCommand.cpp

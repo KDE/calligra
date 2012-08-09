@@ -13,6 +13,9 @@ set(calligrastagetoolanimation_PART_SRCS
     KPrAnimationGroupProxyModel.cpp
     KPrAnimationSelectorWidget.cpp
     KPrPredefinedAnimationsLoader.cpp
+    KPrAnimationsTimeLineView.cpp
+    KPrTimeLineHeader.cpp
+    KPrTimeLineView.cpp
     )
 
 
