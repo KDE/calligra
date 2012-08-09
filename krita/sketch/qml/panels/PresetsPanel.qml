@@ -110,6 +110,23 @@ Panel {
         }
     }
 
+    dragDelegate: Component {
+        Rectangle {
+            color: Constants.Theme.MainColor;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            Label {
+                anchors.centerIn: parent;
+
+                text: "Presets";
+                color: "white";
+
+                font.pixelSize: Constants.SmallFontSize;
+            }
+        }
+    }
+
     onStateChanged: if( state != "edit" && contentArea.depth > 1 ) {
         contentArea.pop();
     }

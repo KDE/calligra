@@ -22,4 +22,21 @@ import "../components"
 Panel {
     name: "Select";
     panelColor: Constants.Theme.QuaternaryColor;
+
+    dragDelegate: Component {
+        Rectangle {
+            color: Constants.Theme.QuaternaryColor;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            Label {
+                anchors.centerIn: parent;
+
+                text: "Select";
+                color: "white";
+
+                font.pixelSize: Constants.SmallFontSize;
+            }
+        }
+    }
 }

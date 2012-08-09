@@ -22,4 +22,21 @@ import "../components"
 Panel {
     name: "Filter";
     panelColor: Constants.Theme.TertiaryColor;
+
+    dragDelegate: Component {
+        Rectangle {
+            color: Constants.Theme.TertiaryColor;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            Label {
+                anchors.centerIn: parent;
+
+                text: "Filter";
+                color: "white";
+
+                font.pixelSize: Constants.SmallFontSize;
+            }
+        }
+    }
 }

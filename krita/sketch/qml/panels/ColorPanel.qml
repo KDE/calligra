@@ -22,4 +22,21 @@ import "../components"
 Panel {
     name: "Color";
     panelColor: "#006666";
+
+    dragDelegate: Component {
+        Rectangle {
+            color: "#006666";
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            Label {
+                anchors.centerIn: parent;
+
+                text: "Color";
+                color: "white";
+
+                font.pixelSize: Constants.SmallFontSize;
+            }
+        }
+    }
 }
