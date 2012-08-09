@@ -262,9 +262,8 @@ int KPrAnimationsTimeLineView::stepsScale()
         return 20;
     else if (stepsNumber < 500)
         return 25;
-    else if (stepsNumber < SCALE_LIMIT)
+    else
         return 60;
-    return 60;
 }
 
 qreal KPrAnimationsTimeLineView::maxLineLength() const
@@ -281,20 +280,16 @@ void KPrAnimationsTimeLineView::setMaxLineLength(qreal length)
 
 QColor KPrAnimationsTimeLineView::barColor(int row)
 {
-    if (m_model) {
-        KPrShapeAnimation::PresetClass type =
-                static_cast<KPrShapeAnimation::PresetClass>(m_model->data(m_model->index(row, KPrShapeAnimations::AnimationClass)).toInt());
-        if (type == KPrShapeAnimation::Entrance) {
-            return Qt::darkGreen;
-        } else if (type == KPrShapeAnimation::Emphasis) {
-            return Qt::blue;
-        } else if (type == KPrShapeAnimation::Custom) {
-            return Qt::gray;
-        } else if (type == KPrShapeAnimation::Exit) {
-            return Qt::red;
-        }
+    Q_ASSERT(m_model);
+    KPrShapeAnimation::PresetClass type =
+            static_cast<KPrShapeAnimation::PresetClass>(m_model->data(m_model->index(row, KPrShapeAnimations::AnimationClass)).toInt());
+    switch (type) {
+        case KPrShapeAnimation::Entrance: return Qt::darkGreen;
+        case KPrShapeAnimation::Emphasis: return Qt::blue;
+        case KPrShapeAnimation::Custom: return Qt::gray;
+        case KPrShapeAnimation::Exit: return Qt::red;
+        default: return Qt::gray;
     }
-    return Qt::gray;
 }
 
 int KPrAnimationsTimeLineView::calculateStartOffset(int row) const
