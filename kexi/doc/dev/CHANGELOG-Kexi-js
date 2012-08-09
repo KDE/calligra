@@ -132,9 +132,51 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
+===================== Kexi 2.5  =====================
+
+~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
+
+2012-08-09
+CSV Import
+*Use KexiDB data types in implementation
+REVIEW:105947
+*'Format for column N' now properly updates to current type
+BUG:304859
+*Fix uniqueness detection for integer column
+BUG:304883
+REVIEW:105949
+*Import last line even if it is only ""
+BUG:304891
+REVIEW:105950
+
+2012-08-06
+Table View
+*Fixed misplaced 'Date/Time data error' validation popup in tableview
+BUG:282295
+*Show warning when invalid date values in tables and forms are rejected
+BUG:299867
+*Clicking validation popup editor is focus again allowing to correct the value
+*Use new message widget for validation popups
+REVIEW:105906
+
+2012-08-05
+KexiDB
+*Display cmake warning if libpqxx is not in version 3.x
+**move checks for pgsql, mysql, tds, xbase dependencies to global area
+BUG:300871
+REVIEW:105874
+2012-08-03
+CSV Import
+*Fix crash on importing CSV files with more than 1024 columns
+BUG:304405
+REVIEW:105844
+Fix crash on importing CSV files with Mac line endings
+BUG:304329
+REVIEW:105843
+
 ~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
 
-~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.5 Beta 1 (2.4.91) ~~~~~~~~~~~~~~~~
 
 TODO:
 Table Designer
@@ -157,7 +199,7 @@ CCBUG:301277
 CCBUG:301277
 TODO: Port to Predicate
 
-~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.91) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.90) ~~~~~~~~~~~~~~~~
 
 2012-03-03
 Main Window
