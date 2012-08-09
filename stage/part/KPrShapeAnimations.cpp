@@ -974,7 +974,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
         QPainterPath m_path = QPainterPath();
         for (int i = 0; i < animation->animationCount(); i++) {
             if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(animation->animationAt(i))) {
-                m_path = motion->path();
+                m_path = motion->pathOutline();
                 break;
             }
         }

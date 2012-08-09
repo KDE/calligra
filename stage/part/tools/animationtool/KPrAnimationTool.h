@@ -56,8 +56,6 @@ public slots:
     virtual void deactivate();
 
 private slots:
-    /// Update motion path of the selected shape
-    void saveMotionPath();
 
     /// Reload motion path shapes (For all shapes with motion paths on current page)
     void reloadMotionPaths();
@@ -77,7 +75,7 @@ protected:
     virtual void addPathShape(KoPathShape *pathShape);
 
     /// Helper method to scale the motion path shape (using current page size and zoom)
-    QPair<qreal, qreal> getScaleCorrection();
+    QPair<QSizeF, qreal> getPageSizeAndZoom();
 
     /// remove motion paths of motion path manager
     void cleanMotionPathManager();
