@@ -194,7 +194,6 @@ private:
     Mode m_mode;
 
     QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
-    QVector<QString> m_typeNames;
     bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once
     bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row
     bool m_firstFillTableCall : 1; //!< used to know whether it's 1st fillTable() call
