@@ -134,6 +134,7 @@ KPrAnimationSelectorWidget::~KPrAnimationSelectorWidget()
     if (m_docker->previewMode()) {
         m_docker->previewMode()->stopAnimation();
     }
+    delete m_previewAnimation;
 }
 
 void KPrAnimationSelectorWidget::init()
