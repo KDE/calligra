@@ -17,77 +17,220 @@
  */
 
 import QtQuick 1.1
+import org.krita.draganddrop 1.0 as DnD
 
 Item {
     id: base;
 
-    Row {
-        id: layout;
-        height: Constants.GridHeight / 2;
-        z: 2;
+    PresetsPanel {
+        id: presetsPanel;
+        objectName: "presets";
+        width: Constants.GridWidth * 2;
+        height: base.height;
+        onPeek: beginPeek( presetsPanel );
+        onCollapsed: endPeek( presetsPanel );
+        onDragStarted: beginDrag( presetsPanel );
+        onDrop: endDrag( presetsPanel, action );
+    }
+    LayersPanel {
+        id: layersPanel;
+        objectName: "layers";
+        width: Constants.GridWidth * 2;
+        height: base.height;
+        onPeek: beginPeek( layersPanel );
+        onCollapsed: endPeek( layersPanel );
+        onDragStarted: beginDrag( layersPanel );
+        onDrop: endDrag( layersPanel, action );
+    }
+    FilterPanel {
+        id: filterPanel;
+        objectName: "filter";
+        width: Constants.GridWidth * 2;
+        height: base.height;
+        onPeek: beginPeek( filterPanel );
+        onCollapsed: endPeek( filterPanel );
+        onDragStarted: beginDrag( filterPanel );
+        onDrop: endDrag( filterPanel, action );
+    }
+    SelectPanel {
+        id: selectPanel;
+        objectName: "select";
+        width: Constants.GridWidth * 2;
+        height: base.height;
+        onPeek: beginPeek( selectPanel );
+        onCollapsed: endPeek( selectPanel );
+        onDragStarted: beginDrag( selectPanel );
+        onDrop: endDrag( selectPanel, action );
+    }
+    ToolPanel {
+        id: toolPanel;
+        objectName: "tool";
+        width: Constants.GridWidth * 2;
+        height: base.height;
+        onPeek: beginPeek( toolPanel );
+        onCollapsed: endPeek( toolPanel );
+        onDragStarted: beginDrag( toolPanel );
+        onDrop: endDrag( toolPanel, action );
+    }
+    ColorPanel {
+        id: colorPanel;
+        objectName: "color";
+        width: Constants.GridWidth * 2;
+        height: base.height;
+        onPeek: beginPeek( colorPanel );
+        onCollapsed: endPeek( colorPanel );
+        onDragStarted: beginDrag( colorPanel );
+        onDrop: endDrag( colorPanel, action );
+    }
 
-        PresetsPanel {
-            id: presetsPanel;
-            objectName: "presets";
-            width: Constants.GridWidth * 2;
-            height: base.height;
-            onStateChanged: panelStateChanged( presetsPanel, state );
-            onCollapsed: setCollapsedParent( presetsPanel );
+    Component.onCompleted: {
+        for( var i in d.panels ) {
+            d.panels[i].parent = centerTopArea.children[i];
         }
-        LayersPanel {
-            id: layersPanel;
-            objectName: "layers";
-            width: Constants.GridWidth * 2;
-            height: base.height;
-            onStateChanged: panelStateChanged( layersPanel, state );
-            onCollapsed: setCollapsedParent( layersPanel );
+    }
+
+
+    PanelDropArea {
+        id: leftArea;
+
+        anchors.bottom: parent.bottom;
+        anchors.left: parent.left;
+
+        height: parent.height;
+        onHeightChanged: if( children.length > 0 ) children[0].height = height;
+        Behavior on height { NumberAnimation { duration: 100; } }
+        width: Constants.GridWidth * 2;
+        state: "full";
+    }
+
+    PanelDropArea {
+        id: rightArea;
+
+        anchors.bottom: parent.bottom;
+        anchors.right: parent.right;
+
+        height: parent.height;
+        onHeightChanged: if( children.length > 0 ) children[0].height = height;
+        Behavior on height { NumberAnimation { duration: 100; } }
+        width: Constants.GridWidth * 2;
+        state: "full";
+    }
+
+    PanelDropArea {
+        id: leftTopArea1;
+
+        width: Constants.GridWidth;
+        height: Constants.GridHeight / 2;
+
+        onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+    }
+
+    PanelDropArea {
+        id: leftTopArea2;
+
+        anchors.left: leftTopArea1.right;
+        anchors.leftMargin: 1;
+
+        width: Constants.GridWidth;
+        height: Constants.GridHeight / 2;
+
+        onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+    }
+
+    Row {
+        id: centerTopArea;
+        anchors.left: leftTopArea2.right;
+        anchors.leftMargin: 1;
+
+        spacing: 1;
+        Repeater {
+            model: Constants.GridColumns - 4;
+
+            delegate: PanelDropArea {
+                width: Constants.GridWidth;
+                height: Constants.GridHeight / 2;
+            }
         }
-        FilterPanel {
-            id: filterPanel;
-            objectName: "filter";
-            width: Constants.GridWidth * 2;
-            height: base.height;
-            onStateChanged: panelStateChanged( filterPanel, state );
-            onCollapsed: setCollapsedParent( filterPanel );
+    }
+
+    PanelDropArea {
+        id: rightTopArea1;
+
+        anchors.right: rightTopArea2.left;
+        anchors.rightMargin: 1;
+
+        width: Constants.GridWidth;
+        height: Constants.GridHeight / 2;
+
+        onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+    }
+
+    PanelDropArea {
+        id: rightTopArea2;
+
+        anchors.right: parent.right;
+
+        width: Constants.GridWidth;
+        height: Constants.GridHeight / 2;
+
+        onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+    }
+
+    Item {
+        id: dropOverlay;
+        anchors.fill: parent;
+
+        opacity: 0;
+        Behavior on opacity { NumberAnimation { } }
+
+        Row {
+            id: dropRow;
+            spacing: 1;
+            Repeater {
+                model: Constants.GridColumns;
+
+                delegate: Rectangle {
+                    width: Constants.GridWidth;
+                    height: Constants.GridHeight / 2;
+
+                    color: "transparent";
+
+                    border.color: "white";
+                    border.width: 5;
+                }
+            }
         }
-        SelectPanel {
-            id: selectPanel;
-            objectName: "select";
+
+        Rectangle {
             width: Constants.GridWidth * 2;
-            height: base.height;
-            onStateChanged: panelStateChanged( selectPanel, state );
-            onCollapsed: setCollapsedParent( selectPanel );
+            anchors.top: dropRow.bottom;
+            anchors.bottom: parent.bottom;
+
+            color: "transparent";
+
+            border.color: "white";
+            border.width: 5;
         }
-        ToolPanel {
-            id: toolPanel;
-            objectName: "tool";
+
+        Rectangle {
             width: Constants.GridWidth * 2;
-            height: base.height;
-            onStateChanged: panelStateChanged( toolPanel, state );
-            onCollapsed: setCollapsedParent( toolPanel );
-        }
-        ColorPanel {
-            id: colorPanel;
-            objectName: "color";
-            width: Constants.GridWidth * 2;
-            height: base.height;
-            onStateChanged: panelStateChanged( colorPanel, state );
-            onCollapsed: setCollapsedParent( colorPanel );
+            anchors.top: dropRow.bottom;
+            anchors.bottom: parent.bottom;
+            anchors.right: parent.right;
+
+            color: "transparent";
+
+            border.color: "white";
+            border.width: 5;
         }
     }
 
     MouseArea {
         id: peekCapture;
         anchors.fill: parent;
-        z: 3;
         enabled: false;
 
-        onClicked: if( d.peeking != null ) {
-            d.peeking.state = "collapsed";
-            d.peeking.z = 0;
-            enabled = false;
-            d.peeking = null;
-        }
+        onClicked: d.peeking.state = "collapsed";
     }
 
     QtObject {
@@ -95,38 +238,41 @@ Item {
 
         property variant panels: [ presetsPanel, layersPanel, filterPanel, selectPanel, toolPanel, colorPanel ];
         property Item peeking: null;
+        property Item dragParent: null;
     }
 
-    function panelStateChanged( panel, state ) {
-        if( state == "full" ) {
-            setPanelsState( "collapsed", panel );
+    function beginPeek( item ) {
+        d.peeking = item;
+        item.parent.z = 11;
+        peekCapture.enabled = true;
 
-            panel.parent = base;
-            panel.anchors.top = layout.bottom;
-            panel.anchors.left = base.left;
-            panel.anchors.bottom = base.bottom;
-        }
-
-        if( state == "peek" ) {
-            setPanelsState( "collapsed", panel );
-
-            d.peeking = panel;
-            layout.z = 4;
-            peekCapture.enabled = true;
+        for( var i in d.panels ) {
+            var obj = d.panels[i];
+            if( obj.state == "peek" && obj.objectName != item.objectName ) {
+                obj.state = "collapsed";
+            }
         }
     }
 
-    function setCollapsedParent( panel ) {
-        panel.parent = layout;
-        panel.anchors.top = layout.top;
-        panel.anchors.left = undefined;
-        panel.anchors.bottom = undefined;
+    function endPeek( item ) {
+        d.peeking = null;
+        item.parent.z = 0;
+        peekCapture.enabled = false;
     }
 
-    function setPanelsState( state, exclude ) {
-        for ( var i in d.panels ) {
-            if( d.panels[i].objectName != exclude.objectName )
-                d.panels[i].state = state;
+    function beginDrag( item ) {
+        dropOverlay.opacity = 1;
+        item.parent.z = 0;
+        d.dragParent = item.parent;
+        item.parent = null;
+        item.opacity = 0;
+    }
+
+    function endDrag( item, action ) {
+        dropOverlay.opacity = 0;
+        item.opacity = 1;
+        if(action == Qt.IgnoreAction) {
+            item.parent = d.dragParent;
         }
     }
 }
