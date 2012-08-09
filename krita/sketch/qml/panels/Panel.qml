@@ -36,7 +36,7 @@ Item {
     property Component dragDelegate;
 
     signal collapsed();
-    signal expanded();
+    signal peek();
     signal dragStarted();
     signal drop(int action);
 
@@ -204,11 +204,21 @@ Item {
         Transition {
             from: "collapsed";
             to: "peek";
-            reversible: true;
 
             SequentialAnimation {
+                ScriptAction { script: base.peek(); }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,width,opacity"; duration: 250; }
+            }
+        },
+        Transition {
+            from: "peek";
+            to: "collapsed";
+
+            SequentialAnimation {
+                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,width,opacity"; duration: 250; }
+                PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
+                ScriptAction { script: base.collapsed(); }
             }
         },
         Transition {
@@ -222,19 +232,13 @@ Item {
             from: "collapsed";
             to: "full";
 
-            SequentialAnimation {
-                NumberAnimation { properties: "height,width,opacity"; duration: 250; }
-                ScriptAction { script: base.expanded(); }
-            }
+            NumberAnimation { properties: "height,width,opacity"; duration: 250; }
         },
         Transition {
             from: "full";
             to: "collapsed";
 
-            SequentialAnimation {
-                NumberAnimation { properties: "height,width,opacity"; duration: 250; }
-                ScriptAction { script: base.collapsed(); }
-            }
+            NumberAnimation { properties: "height,width,opacity"; duration: 250; }
         },
         Transition {
             from: "full"
