@@ -89,6 +89,7 @@ set(PIGMENT_INSTALL_FILES
         KoMixColorsOp.h
         KoMixColorsOpImpl.h
         KoHistogramProducer.h
+        resources/KoResource.h
 )
 
 set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB})
