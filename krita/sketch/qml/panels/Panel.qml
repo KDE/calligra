@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.draganddrop 1.0 as DnD
 import "../components"
 
 Item {
@@ -32,8 +33,12 @@ Item {
 
     property real editWidth: Constants.GridWidth * 4;
 
+    property Component dragDelegate;
+
     signal collapsed();
     signal expanded();
+    signal dragStarted();
+    signal drop(int action);
 
     state: "collapsed";
 
@@ -116,18 +121,13 @@ Item {
                     }
                 }
 
-                MouseArea {
+                DnD.DragArea {
                     anchors.fill: parent;
+                    delegate: base.dragDelegate;
+                    source: base;
 
-                    property real start: NaN;
-
-                    onPressed: start = mouse.y;
-                    onPositionChanged: {
-                        var dist = mouse.y - start;
-                        if( dist < -30 ) {
-                            base.state = "collapsed";
-                        }
-                    }
+                    onDragStarted: base.dragStarted();
+                    onDrop: base.drop(action);
                 }
             }
         }
@@ -156,17 +156,17 @@ Item {
             font.pixelSize: Constants.SmallFontSize;
         }
 
-        MouseArea {
+        DnD.DragArea {
             anchors.fill: parent;
+            delegate: base.dragDelegate;
+            source: base;
 
-            property real start: NaN;
+            onDragStarted: base.dragStarted();
+            onDrop: base.drop(action);
 
-            onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
-            onPressed: start = mouse.y;
-            onPositionChanged: {
-                var dist = mouse.y - start;
-                if( dist > 30 )
-                    base.state = "full";
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
             }
         }
     }
