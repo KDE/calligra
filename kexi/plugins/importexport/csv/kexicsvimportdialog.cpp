@@ -560,7 +560,7 @@ void KexiCSVImportDialog::initLater()
         return;
     }
 
-    currentCellChanged(QModelIndex(), m_table->index(0,0));
+    currentCellChanged(m_table->index(0,0), QModelIndex());
 
 // updateGeometry();
     adjustSize();
@@ -656,7 +656,7 @@ void KexiCSVImportDialog::fillTable()
     }
 
     m_tableView->setCurrentIndex(m_table->index(0, 0));
-    currentCellChanged(QModelIndex(),m_table->index(0, 0));
+    currentCellChanged(m_table->index(0, 0), QModelIndex());
     if (m_primaryKeyColumn != -1)
         m_table->setData(m_table->index(0, m_primaryKeyColumn), m_pkIcon, Qt::DecorationRole);
 
@@ -1425,7 +1425,7 @@ void KexiCSVImportDialog::startlineSelected(int startline)
     m_tableView->setFocus();
 }
 
-void KexiCSVImportDialog::currentCellChanged(const QModelIndex &prev, const QModelIndex &cur)
+void KexiCSVImportDialog::currentCellChanged(const QModelIndex &cur, const QModelIndex &prev)
 {
     if (prev.column() == cur.column() || !cur.isValid())
         return;

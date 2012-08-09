@@ -244,7 +244,7 @@ private slots:
     void delimiterChanged(const QString& delimiter);
     void startlineSelected(int line);
     void textquoteSelected(int);
-    void currentCellChanged(const QModelIndex &prev, const QModelIndex &cur);
+    void currentCellChanged(const QModelIndex &cur, const QModelIndex &prev);
     void ignoreDuplicatesChanged(int);
     void slot1stRowForFieldNamesChanged(int state);
     void optionsButtonClicked();
