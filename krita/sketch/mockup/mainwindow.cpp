@@ -22,9 +22,12 @@
 #include <QResizeEvent>
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
+#include <QDeclarativeEngine>
 
 #include "constants.h"
 #include "settings.h"
+
+#include "presetimageprovider.h"
 
 class MainWindow::Private
 {
@@ -45,6 +48,7 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
     d->settings = new Settings( this );
 
     QDeclarativeView* view = new QDeclarativeView();
+    view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     view->rootContext()->setContextProperty( "Constants", d->constants );
     view->rootContext()->setContextProperty( "Settings", d->settings );
     view->setSource( QUrl( "qrc:/main.qml" ) );
