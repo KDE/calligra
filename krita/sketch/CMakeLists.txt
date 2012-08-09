@@ -5,6 +5,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KRITA_INCLUDES}
                     ${CMAKE_CURRENT_BINARY_DIR})
 
+add_subdirectory(draganddrop)
+
 set(kritasketch_SRCS
     Constants.cpp
     Settings.cpp
