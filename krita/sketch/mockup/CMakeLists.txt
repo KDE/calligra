@@ -3,14 +3,22 @@ cmake_minimum_required(VERSION 2.6)
 project(krita-sketch)
 
 find_package(Qt 4.8 REQUIRED)
+find_package(KDE4 REQUIRED)
+find_package(KDE4Internal REQUIRED)
+find_package(Nepomuk REQUIRED)
+find_package(CalligraLibs 2.4 REQUIRED)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${QT_INCLUDES})
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${KDE4_INCLUDES} ${NEPOMUK_INCLUDE_DIRS} ${QT_INCLUDES} ${CALLIGRALIBS_INCLUDE_DIR})
+
+# Krita includes etc
+include_directories(../../)
 
 set(krita-sketch_SRCS
     constants.cpp
     settings.cpp
     main.cpp
     mainwindow.cpp
+    presetimageprovider.cpp
 )
 
 qt4_automoc(${krita-sketch_SRCS})
