@@ -176,6 +176,6 @@ Item {
     }
 
     transitions: Transition {
-        NumberAnimation { duration: 250; properties: "height,opacity"; }
+        NumberAnimation { duration: 200; properties: "height,opacity"; easing.type: Easing.InOutQuad }
     }
 }
