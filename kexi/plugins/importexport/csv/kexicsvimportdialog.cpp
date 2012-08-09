@@ -1084,7 +1084,7 @@ void KexiCSVImportDialog::updateColumnText(int col)
 void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QString& text)
 {
     int intValue;
-    const KexiDB::Field::Type type = d->detectedType(col);
+    KexiDB::Field::Type type = d->detectedType(col);
     if (row == 1 || type != KexiDB::Field::Text) {
         bool found = false;
         if (text.isEmpty() && type == KexiDB::Field::InvalidType)
@@ -1159,20 +1159,25 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
         }
         //default: text type (already set)
     }
-    //check uniqueness for this value
-    QList<int> *list = d->uniquenessTest(col);
-    if (row == 1 && (!list || !list->isEmpty()) && !text.isEmpty()
-        && KexiDB::Field::Integer == d->detectedType(col))
-    {
-        if (!list) {
-            list = new QList<int>();
-            d->setUniquenessTest(col, list);
+
+    type = d->detectedType(col);
+    kDebug() << type;
+
+    if (type == KexiDB::Field::Integer) {
+        // check uniqueness for this value
+        QList<int> *list = d->uniquenessTest(col);
+        if (text.isEmpty()) {
+            if (list) {
+                list->clear(); // empty value cannot be in PK
+            }
         }
-        list->append(intValue);
-    } else {
-        //the value is empty or uniqueness test failed in the past
-        if (list && !list->isEmpty())
-            list->clear(); //indicate that uniqueness test failed
+        else {
+            if (!list) {
+                list = new QList<int>();
+                d->setUniquenessTest(col, list);
+            }
+            list->append(intValue);
+        }
     }
 }
 
