@@ -94,7 +94,7 @@ private:
     QListView *m_subTypeView;
     KPrShapeAnimationDocker *m_docker;
     KPrShapeAnimation *m_previewAnimation;
-    bool showAutomaticPreview;
+    bool m_showAutomaticPreview;
     KPrPredefinedAnimationsLoader *m_animationsData;
     KoViewItemContextBar *m_collectionContextBar;
     QToolButton *m_collectionPreviewButton;

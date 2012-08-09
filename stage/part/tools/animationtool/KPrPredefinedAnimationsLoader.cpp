@@ -54,7 +54,7 @@
 
 KPrPredefinedAnimationsLoader::KPrPredefinedAnimationsLoader(QObject *parent)
     : QObject(parent)
-    , isInitialized(false)
+    , m_isInitialized(false)
 {
     readDefaultAnimations();
 }
@@ -94,10 +94,10 @@ KPrCollectionItemModel *KPrPredefinedAnimationsLoader::subModelById(const QStrin
 
 void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
 {
-    if (m_animations.isEmpty() || isInitialized) {
+    if (m_animations.isEmpty() || m_isInitialized) {
         return;
     }
-    isInitialized = true;
+    m_isInitialized = true;
     QList<KPrCollectionItem> entranceList;
     QList<KPrCollectionItem> emphasisList;
     QList<KPrCollectionItem> exitList;

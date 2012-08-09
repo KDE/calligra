@@ -54,7 +54,7 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
                                                        QWidget *parent)
     : QWidget(parent)
     , m_docker(docker)
-    , showAutomaticPreview(false)
+    , m_showAutomaticPreview(false)
     , m_animationsData(animationsData)
     , m_collectionContextBar(0)
     , m_collectionPreviewButton(0)
@@ -65,7 +65,7 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
 
     m_previewCheckBox = new QCheckBox(i18n("Automatic animation preview"), this);
     m_previewCheckBox->setChecked(loadPreviewConfig());
-    showAutomaticPreview = m_previewCheckBox->isChecked();
+    m_showAutomaticPreview = m_previewCheckBox->isChecked();
 
     QFont viewWidgetFont  = KGlobalSettings::generalFont();
     qreal pointSize = KGlobalSettings::smallestReadableFont().pointSizeF();
@@ -143,14 +143,14 @@ void KPrAnimationSelectorWidget::init()
     m_collectionChooser->setCurrentRow(0);
     activateShapeCollection(m_collectionChooser->item(0));
     // Init context bar
-    if (!showAutomaticPreview) {
+    if (!m_showAutomaticPreview) {
         createCollectionContextBar();
     }
 }
 
 void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &index)
 {
-    if(!index.isValid() || !showAutomaticPreview) {
+    if(!index.isValid() || !m_showAutomaticPreview) {
         return;
     }
     KoXmlElement newAnimationContext;
@@ -236,7 +236,7 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
         if (m_animationsData->subModelById(id)){
             m_subTypeView->setModel(m_animationsData->subModelById(id));
             m_subTypeView->show();
-            if (!showAutomaticPreview && !m_subTypeContextBar) {
+            if (!m_showAutomaticPreview && !m_subTypeContextBar) {
                 createSubTypeContextBar();
             }
             return;
@@ -268,10 +268,10 @@ void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 
 void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
 {
-    if ((showAutomaticPreview == isEnable)) {
+    if ((m_showAutomaticPreview == isEnable)) {
         return;
     }
-    showAutomaticPreview = isEnable;
+    m_showAutomaticPreview = isEnable;
     m_previewCheckBox->setChecked(isEnable);
     if (!isEnable) {
         if (!m_collectionContextBar) {
@@ -281,7 +281,7 @@ void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
             createSubTypeContextBar();
         }
     }
-    if (isEnable) {
+    else {
         delete m_collectionContextBar;
         delete m_collectionPreviewButton;
         m_collectionContextBar = 0;
@@ -316,7 +316,7 @@ void KPrAnimationSelectorWidget::savePreviewConfig()
 {
     KSharedConfigPtr config = KPrFactory::componentData().config();
     KConfigGroup interface = config->group("Interface");
-    interface.writeEntry("ShowAutomaticPreviewAnimationEditDocker", showAutomaticPreview);
+    interface.writeEntry("ShowAutomaticPreviewAnimationEditDocker", m_showAutomaticPreview);
 }
 
 void KPrAnimationSelectorWidget::createCollectionContextBar()

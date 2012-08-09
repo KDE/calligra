@@ -26,14 +26,14 @@ KPrReplaceAnimationCommand::KPrReplaceAnimationCommand(KPrDocument *doc, KPrShap
     , m_oldAnimation(oldAnimation)
     , m_newAnimation(newAnimation)
     , m_document(doc)
-    , m_deleteAnimation(true)
+    , m_deleteAnimation(DeleteOld)
 {
 
 }
 
 KPrReplaceAnimationCommand::~KPrReplaceAnimationCommand()
 {
-    if (m_deleteAnimation) {
+    if (m_deleteAnimation == DeleteOld) {
         delete m_oldAnimation;
     }
     else {
@@ -44,11 +44,11 @@ KPrReplaceAnimationCommand::~KPrReplaceAnimationCommand()
 void KPrReplaceAnimationCommand::redo()
 {
     m_document->replaceAnimation(m_oldAnimation, m_newAnimation);
-    m_deleteAnimation = true;
+    m_deleteAnimation = DeleteOld;
 }
 
 void KPrReplaceAnimationCommand::undo()
 {
     m_document->replaceAnimation(m_newAnimation, m_oldAnimation);
-    m_deleteAnimation = false;
+    m_deleteAnimation = DeleteNew;
 }

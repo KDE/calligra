@@ -22,7 +22,7 @@
 
 KPrAnimationGroupProxyModel::KPrAnimationGroupProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
-    , m_currentGrup(-1)
+    , m_currentGroup(-1)
 {
 }
 
@@ -34,15 +34,15 @@ bool KPrAnimationGroupProxyModel::filterAcceptsRow(int source_row, const QModelI
 {
     QModelIndex currentIndex = sourceModel()->index(source_row, 0, source_parent);
     int currentGroup = sourceModel()->data(currentIndex).toInt();
-    return (currentGroup == m_currentGrup) ? true : false;
+    return (currentGroup == m_currentGroup);
 }
 
 bool KPrAnimationGroupProxyModel::setCurrentIndex(const QModelIndex &index)
 {
     QModelIndex currentIndex = sourceModel()->index(index.row(), 0);
     int currentGroup = sourceModel()->data(currentIndex).toInt();
-    if (currentGroup != m_currentGrup) {
-        m_currentGrup = currentGroup;
+    if (currentGroup != m_currentGroup) {
+        m_currentGroup = currentGroup;
         invalidateFilter();
         revert();
         return true;

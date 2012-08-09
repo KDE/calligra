@@ -59,8 +59,11 @@ void KPrViewModePreviewShapeAnimations::paint(KoPACanvasBase *canvas, QPainter &
 {
 #ifdef NDEBUG
     Q_UNUSED(canvas);
-#endif
+#else
     Q_ASSERT(m_canvas == canvas);
+#endif
+
+
     painter.translate(-m_canvas->documentOffset());
     painter.setRenderHint(QPainter::Antialiasing);
     QRect clipRect = paintRect.translated(m_canvas->documentOffset()).toRect();
@@ -171,6 +174,7 @@ void KPrViewModePreviewShapeAnimations::deactivate()
     m_shapeAnimation->deactivate();
     m_canvas->shapeManager()->setPaintingStrategy(new KoShapeManagerPaintingStrategy(m_canvas->shapeManager()));
     delete (m_animationCache);
+    m_animationCache = 0;
     disconnect(&m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()));
 }
 
@@ -182,7 +186,7 @@ void KPrViewModePreviewShapeAnimations::updateActivePage(KoPAPageBase *page)
 void KPrViewModePreviewShapeAnimations::setShapeAnimation(KPrShapeAnimation *shapeAnimation)
 {
     m_shapeAnimation = shapeAnimation;
-    if(m_savedViewMode) {           //stop the previous playing
+    if (m_savedViewMode) {           //stop the previous playing
         activateSavedViewMode();
     }
 }
@@ -196,7 +200,7 @@ void KPrViewModePreviewShapeAnimations::stopAnimation()
 
 void KPrViewModePreviewShapeAnimations::activateSavedViewMode()
 {
-    if(KPrView *view = dynamic_cast<KPrView *>(m_view)) {
+    if (KPrView *view = dynamic_cast<KPrView *>(m_view)) {
         if (m_savedViewMode == view->presentationMode()) {
             view->showNormal();
             return;

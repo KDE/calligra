@@ -43,7 +43,7 @@ public:
 
     //Data is not ready until this method is called
     /// Populate categories view
-    bool populateMainView (QListWidget *view);
+    bool populateMainView(QListWidget *view);
     /// Return model for each id category
     KPrCollectionItemModel *modelById(const QString &id);
     /// Return sub model (Model for preset sub types
@@ -73,7 +73,7 @@ private:
     QMap<QString, KPrCollectionItemModel*> m_modelMap;
     QMap<QString, KPrCollectionItemModel*> m_subModelMap;
     QList<QListWidgetItem *> m_mainItemsCollection;
-    bool isInitialized;
+    bool m_isInitialized;
 };
 
 #endif // KPRPREDEFINEDANIMATIONSLOADER_H

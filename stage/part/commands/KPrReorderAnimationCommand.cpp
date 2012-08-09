@@ -21,8 +21,6 @@
 #include "KPrReorderAnimationCommand.h"
 
 #include "KPrShapeAnimations.h"
-#include "animations/KPrAnimationStep.h"
-#include "animations/KPrAnimationSubStep.h"
 #include "animations/KPrShapeAnimation.h"
 #include "KLocale"
 
@@ -42,7 +40,6 @@ KPrReorderAnimationCommand::~KPrReorderAnimationCommand()
 
 void KPrReorderAnimationCommand::redo()
 {
-
     m_shapeAnimationsModel->swapAnimations(m_oldAnimation, m_newAnimation);
 }
 
