@@ -833,7 +833,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
     }
     int offset = 0;
     bool wasChar13 = false; // true if previous x was '\r'
-    for (;!m_inputStream->atEnd(); offset++) {
+    for (;; ++offset) {
 //disabled: this breaks wide spreadsheets
 // if (column >= m_maximumRowsForPreview)
 //  return true;
@@ -850,8 +850,18 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
                 return ::cancelled;
             }
         }
-
-        (*m_inputStream) >> x; // read one char
+        if (m_inputStream->atEnd()) {
+            if (x != '\n' && x != '\r') {
+                x = '\n'; // simulate missing \n at end
+                wasChar13 = false;
+            }
+            else {
+                break; // finish!
+            }
+        }
+        else {
+            (*m_inputStream) >> x; // read one char
+        }
 
         if (wasChar13 && x == '\n') {
             wasChar13 = false;
