@@ -10,3 +10,4 @@ CMakeLists.txt.user*
 *.swp
 .gdb_history
 .kdev_include_paths
+.DS_Store

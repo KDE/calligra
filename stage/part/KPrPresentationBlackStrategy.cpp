@@ -21,7 +21,6 @@
 #include <QKeyEvent>
 #include <QApplication>
 
-#include <kiconloader.h>
 
 #include <KoPACanvas.h>
 

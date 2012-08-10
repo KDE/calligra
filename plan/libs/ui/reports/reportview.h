@@ -109,7 +109,7 @@ class KPLATOUI_EXPORT ReportView : public ViewBase
 {
     Q_OBJECT
 public:
-    ReportView( KoDocument *part, QWidget *parent );
+    ReportView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setProject( Project *project );
 
@@ -147,7 +147,7 @@ class KPLATOUI_EXPORT ReportWidget : public ViewBase
 {
     Q_OBJECT
 public:
-    ReportWidget( KoDocument *part, QWidget *parent );
+    ReportWidget(KoPart *part, KoDocument *doc, QWidget *parent);
 
 public slots:
     void setGuiActive( bool active );
@@ -193,7 +193,8 @@ private slots:
 private:
     ReportData *createReportData( const QDomElement &connection );
     ReportData *createReportData( const QString &type );
-    void exportToOdt( KoReportRendererContext &context );
+    void exportToOdtTable( KoReportRendererContext &context );
+    void exportToOdtFrames( KoReportRendererContext &context );
     void exportToOds( KoReportRendererContext &context );
     void exportToHtml( KoReportRendererContext &context );
     void exportToXHtml( KoReportRendererContext &context );
@@ -235,9 +236,6 @@ public:
     explicit ReportDesignDialog( QWidget *parent = 0 );
     
     ReportDesignDialog( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
-    
-    /// Edit the report definition in @p view
-    ReportDesignDialog( KPlato::ReportView* view, QWidget* parent = 0 );
 
     QDomDocument document() const;
 
@@ -281,7 +279,7 @@ class  KPLATOUI_EXPORT ReportDesigner : public ViewBase
 {
     Q_OBJECT
 public:
-    ReportDesigner( KoDocument *part, QWidget *parent = 0 );
+    ReportDesigner(KoPart *part, KoDocument *doc, QWidget *parent = 0);
 
     bool isModified() const;
     QDomDocument document() const;

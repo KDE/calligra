@@ -30,7 +30,6 @@
 #include <QLabel>
 
 #include <assert.h>
-#include <kicon.h>
 
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
@@ -53,7 +52,6 @@
 
 #include <kfiledialog.h>
 #include <kfileitem.h>
-#include <kiconloader.h>
 #include <kiconloader.h>
 #include <klibloader.h>
 #include <klocale.h>

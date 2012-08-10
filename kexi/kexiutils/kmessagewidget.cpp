@@ -22,13 +22,12 @@
 #include "kmessagewidget_p.h"
 
 #include <KexiLinkButton.h>
+#include <KoIcon.h>
 
 #include <kaction.h>
 #include <kcolorscheme.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <kstandardaction.h>
 #include <KStandardGuiItem>
 
@@ -266,7 +265,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     closeButton = new QToolButton(content);
     closeButton->setAutoRaise(true);
     closeButton->setDefaultAction(closeAction);*/
-    closeButton = new KexiLinkButton(KIcon("close"), content);
+    closeButton = new KexiLinkButton(koIcon("close"), content);
     closeButton->setToolTip(KStandardGuiItem::close().plainText());
     closeButton->setUsesForegroundColor(true);
     QObject::connect(closeButton, SIGNAL(clicked()), q, SLOT(animatedHide()));
@@ -566,28 +565,28 @@ void KMessageWidget::setMessageType(KMessageWidget::MessageType type)
     d->colorSet = KColorScheme::View;
     switch (type) {
     case Positive:
-        icon = KIcon("dialog-ok");
+        icon = koIcon("dialog-ok");
         d->bgRole = KColorScheme::PositiveBackground;
         d->fgRole = KColorScheme::PositiveText;
         break;
     case Information:
-        icon = KIcon("dialog-information");
+        icon = koIcon("dialog-information");
         d->bgRole = KColorScheme::NeutralBackground;
         d->fgRole = KColorScheme::NeutralText;
         break;
     case Warning:
-        icon = KIcon("dialog-warning");
+        icon = koIcon("dialog-warning");
         d->bgRole = KColorScheme::NeutralBackground;
         d->fgRole = KColorScheme::NeutralText;
         break;
     case Error:
-        icon = KIcon("dialog-error");
+        icon = koIcon("dialog-error");
         d->bgRole = KColorScheme::NegativeBackground;
         d->fgRole = KColorScheme::NegativeText;
         break;
     }
     if (d->iconLabel) {
-        const int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+        const int size = IconSize(KIconLoader::MainToolbar);
         d->iconLabel->setPixmap(icon.pixmap(size));
     }
 

@@ -34,6 +34,8 @@
 #include "KoResourceModel.h"
 #include "KoResourceServerAdapter.h"
 
+#include <KoIcon.h>
+
 #include <KInputDialog>
 #include <KDebug>
 
@@ -63,23 +65,23 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     KoGenericRegistryModel<KoFilterEffectFactoryBase*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactoryBase*>(KoFilterEffectRegistry::instance());
 
     effectSelector->setModel(filterEffectModel);
-    removeEffect->setIcon(KIcon("list-remove"));
+    removeEffect->setIcon(koIcon("list-remove"));
     connect(removeEffect, SIGNAL(clicked()), this, SLOT(removeSelectedItem()));
-    addEffect->setIcon(KIcon("list-add"));
+    addEffect->setIcon(koIcon("list-add"));
     addEffect->setToolTip(i18n("Add effect to current filter stack"));
     connect(addEffect, SIGNAL(clicked()), this, SLOT(addSelectedEffect()));
 
     // TODO: make these buttons do something useful
-    raiseEffect->setIcon(KIcon("arrow-up"));
+    raiseEffect->setIcon(koIcon("arrow-up"));
     raiseEffect->hide();
-    lowerEffect->setIcon(KIcon("arrow-down"));
+    lowerEffect->setIcon(koIcon("arrow-down"));
     lowerEffect->hide();
 
-    addPreset->setIcon(KIcon("list-add"));
+    addPreset->setIcon(koIcon("list-add"));
     addPreset->setToolTip(i18n("Add to filter presets"));
     connect(addPreset, SIGNAL(clicked()), this, SLOT(addToPresets()));
 
-    removePreset->setIcon(KIcon("list-remove"));
+    removePreset->setIcon(koIcon("list-remove"));
     removePreset->setToolTip(i18n("Remove filter preset"));
     connect(removePreset, SIGNAL(clicked()), this, SLOT(removeFromPresets()));
 

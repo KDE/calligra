@@ -25,10 +25,10 @@
 #include <k3listview.h>
 #include <ktabwidget.h>
 #include <k3listbox.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
@@ -57,35 +57,35 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     //// Setup the icon toolbar /////////////////
     Q3VBoxLayout *vlayout = new Q3VBoxLayout(layout, 3);
     QToolButton *newRow = new QToolButton(m_contentsPageItem->widget());
-    newRow->setIconSet(KIcon("list-add"));
+    newRow->setIconSet(koIcon("list-add"));
     newRow->setTextLabel(i18n("&Add Item"), true);
     vlayout->addWidget(newRow);
     m_buttons.insert(BNewRow, newRow);
     connect(newRow, SIGNAL(clicked()), this, SLOT(newRow()));
 
     QToolButton *newChild = new QToolButton(m_contentsPageItem->widget());
-    newChild->setIconSet(KIcon("arrow-right"));
+    newChild->setIconSet(koIcon("arrow-right"));
     newChild->setTextLabel(i18n("New &Subitem"), true);
     vlayout->addWidget(newChild);
     m_buttons.insert(BNewChild, newChild);
     connect(newChild, SIGNAL(clicked()), this, SLOT(newChildRow()));
 
     QToolButton *delRow = new QToolButton(m_contentsPageItem->widget());
-    delRow->setIconSet(KIcon("list-remove"));
+    delRow->setIconSet(koIcon("list-remove"));
     delRow->setTextLabel(i18n("&Remove Item"), true);
     vlayout->addWidget(delRow);
     m_buttons.insert(BRemRow, delRow);
     connect(delRow, SIGNAL(clicked()), this, SLOT(removeRow()));
 
     QToolButton *rowUp = new QToolButton(m_contentsPageItem->widget());
-    rowUp->setIconSet(KIcon("arrow-up"));
+    rowUp->setIconSet(koIcon("arrow-up"));
     rowUp->setTextLabel(i18n("Move Item &Up"), true);
     vlayout->addWidget(rowUp);
     m_buttons.insert(BRowUp, rowUp);
     connect(rowUp, SIGNAL(clicked()), this, SLOT(MoveRowUp()));
 
     QToolButton *rowDown = new QToolButton(m_contentsPageItem->widget());
-    rowDown->setIconSet(KIcon("arrow-down"));
+    rowDown->setIconSet(koIcon("arrow-down"));
     rowDown->setTextLabel(i18n("Move Item &Down"), true);
     vlayout->addWidget(rowDown);
     m_buttons.insert(BRowDown, rowDown);
@@ -133,28 +133,28 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     // Setup the icon toolbar //////////
     Q3VBoxLayout *vbox = new Q3VBoxLayout(hbox, 3);
     QToolButton *add = new QToolButton(m_columnsPageItem->widget());
-    add->setIconSet(KIcon("list-add"));
+    add->setIconSet(koIcon("list-add"));
     add->setTextLabel(i18n("&Add Item"), true);
     vbox->addWidget(add);
     m_buttons.insert(BColAdd, add);
     connect(add, SIGNAL(clicked()), this, SLOT(newItem()));
 
     QToolButton *remove = new QToolButton(m_columnsPageItem->widget());
-    remove->setIconSet(KIcon("list-remove"));
+    remove->setIconSet(koIcon("list-remove"));
     remove->setTextLabel(i18n("&Remove Item"), true);
     vbox->addWidget(remove);
     m_buttons.insert(BColRem, remove);
     connect(remove, SIGNAL(clicked()), this, SLOT(removeItem()));
 
     QToolButton *up = new QToolButton(m_columnsPageItem->widget());
-    up->setIconSet(KIcon("arrow-up"));
+    up->setIconSet(koIcon("arrow-up"));
     up->setTextLabel(i18n("Move Item &Up"), true);
     vbox->addWidget(up);
     m_buttons.insert(BColUp, up);
     connect(up, SIGNAL(clicked()), this, SLOT(MoveItemUp()));
 
     QToolButton *down = new QToolButton(m_columnsPageItem->widget());
-    down->setIconSet(KIcon("arrow-down"));
+    down->setIconSet(koIcon("arrow-down"));
     down->setTextLabel(i18n("Move Item &Down"), true);
     vbox->addWidget(down);
     m_buttons.insert(BColDown, down);

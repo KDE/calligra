@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <KoIcon.h>
+
 #include <QStackedWidget>
 #include <QFrame>
 #include <QDomDocument>
@@ -37,7 +39,6 @@
 #include <KDebug>
 
 #include <KInputDialog>
-#include <KIcon>
 #include <KAction>
 
 #include "containerfactory.h"
@@ -294,7 +295,7 @@ SubForm::setFormName(const QString &name)
 
 AddTabAction::AddTabAction(KFormDesigner::Container *container,
                            TabWidgetBase *receiver, QObject *parent)
-    : KAction(KIcon("tab-new"), i18nc("Add page to tab widget", "Add Page"),
+    : KAction(koIcon("tab-new"), i18nc("Add page to tab widget", "Add Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -318,7 +319,7 @@ void AddTabAction::slotTriggered()
 
 RemoveTabAction::RemoveTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
-    : KAction(KIcon("tab-close-other"), i18nc("Remove tab widget's page", "Remove Page"),
+    : KAction(koIcon("tab-close-other"), i18nc("Remove tab widget's page", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -339,7 +340,7 @@ void RemoveTabAction::slotTriggered()
 
 RenameTabAction::RenameTabAction(KFormDesigner::Container *container,
                                  TabWidgetBase *receiver, QObject *parent)
-    : KAction(KIcon("edit-rename"), i18nc("Rename tab widget's page", "Rename Page..."),
+    : KAction(koIcon("edit-rename"), i18nc("Rename tab widget's page", "Rename Page..."),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -362,7 +363,7 @@ void RenameTabAction::slotTriggered()
 
 AddStackPageAction::AddStackPageAction(KFormDesigner::Container *container,
                                        QWidget *receiver, QObject *parent)
-    : KAction(KIcon("tab-new"), i18nc("Add page to a stacked widget", "Add Page..."),
+    : KAction(koIcon("tab-new"), i18nc("Add page to a stacked widget", "Add Page..."),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -389,7 +390,7 @@ void AddStackPageAction::slotTriggered()
 
 RemoveStackPageAction::RemoveStackPageAction(KFormDesigner::Container *container,
                                              QWidget *receiver, QObject *parent)
-    : KAction(KIcon("tab-close-other"), i18nc("Remove page from a stacked widget", "Remove Page"),
+    : KAction(koIcon("tab-close-other"), i18nc("Remove page from a stacked widget", "Remove Page"),
               parent)
     , m_container(container)
     , m_receiver(receiver)
@@ -435,7 +436,7 @@ void RemoveStackPageAction::slotTriggered()
 GoToStackPageAction::GoToStackPageAction(Direction direction,
                                          KFormDesigner::Container *container,
                                          QWidget *receiver, QObject *parent)
-    : KAction(KIcon(direction == Previous ? "go-previous" : "go-next"),
+    : KAction(KIcon(direction == Previous ? koIconName("go-previous") : koIconName("go-next")),
               direction == Previous ? i18nc("Go to Previous Page of a Stacked Widget", "Go to Previous Page")
                                     : i18nc("Go to Next Page of a Stacked Widget", "Go to Next Page"),
               parent)
@@ -473,7 +474,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
 {
 #if 0 // not needed?
     KFormDesigner::WidgetInfo *wBtnGroup = new KFormDesigner::WidgetInfo(this);
-    wBtnGroup->setPixmap("frame");
+    wBtnGroup->setIconName(koIconName("frame"));
     wBtnGroup->setClassName("QButtonGroup");
     wBtnGroup->setName(i18n("Button Group"));
     wBtnGroup->setNamePrefix(
@@ -483,7 +484,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
 #endif
 
     KFormDesigner::WidgetInfo *wTabWidget = new KFormDesigner::WidgetInfo(this);
-    wTabWidget->setPixmap("tabwidget");
+    wTabWidget->setIconName(koIconName("tabwidget"));
     wTabWidget->setClassName("KFDTabWidget");
     wTabWidget->addAlternateClassName("KTabWidget");
     wTabWidget->addAlternateClassName("QTabWidget");
@@ -497,7 +498,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wTabWidget);
 
     KFormDesigner::WidgetInfo *wWidget = new KFormDesigner::WidgetInfo(this);
-    wWidget->setPixmap("frame");
+    wWidget->setIconName(koIconName("frame"));
     wWidget->setClassName("QWidget");
     wWidget->addAlternateClassName("ContainerWidget");
     wWidget->setName(i18n("Basic container"));
@@ -507,7 +508,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wWidget);
 
     KFormDesigner::WidgetInfo *wGroupBox = new KFormDesigner::WidgetInfo(this);
-    wGroupBox->setPixmap("groupbox");
+    wGroupBox->setIconName(koIconName("groupbox"));
     wGroupBox->setClassName("QGroupBox");
     wGroupBox->addAlternateClassName("GroupBox");
     wGroupBox->setName(i18n("Group Box"));
@@ -517,7 +518,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wGroupBox);
 
     KFormDesigner::WidgetInfo *wFrame = new KFormDesigner::WidgetInfo(this);
-    wFrame->setPixmap("frame");
+    wFrame->setIconName(koIconName("frame"));
     wFrame->setClassName("QFrame");
     wFrame->setName(i18n("Frame"));
     wFrame->setNamePrefix(
@@ -526,7 +527,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wFrame);
 
     KFormDesigner::WidgetInfo *wWidgetStack = new KFormDesigner::WidgetInfo(this);
-    wWidgetStack->setPixmap("widgetstack");
+    wWidgetStack->setIconName(koIconName("widgetstack"));
     wWidgetStack->setClassName("QStackedWidget");
     wWidgetStack->addAlternateClassName("QWidgetStack");
     wWidgetStack->setName(i18n("Widget Stack"));
@@ -536,7 +537,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wWidgetStack);
 
     KFormDesigner::WidgetInfo *wHBox = new KFormDesigner::WidgetInfo(this);
-    wHBox->setPixmap("frame");
+    wHBox->setIconName(koIconName("frame"));
     wHBox->setClassName("HBox");
     wHBox->setName(i18n("Horizontal Box"));
     wHBox->setNamePrefix(
@@ -545,7 +546,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wHBox);
 
     KFormDesigner::WidgetInfo *wVBox = new KFormDesigner::WidgetInfo(this);
-    wVBox->setPixmap("frame");
+    wVBox->setIconName(koIconName("frame"));
     wVBox->setClassName("VBox");
     wVBox->setName(i18n("Vertical Box"));
     wVBox->setNamePrefix(
@@ -554,7 +555,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wVBox);
 
     KFormDesigner::WidgetInfo *wGrid = new KFormDesigner::WidgetInfo(this);
-    wGrid->setPixmap("frame");
+    wGrid->setIconName(koIconName("frame"));
     wGrid->setClassName("Grid");
     wGrid->setName(i18n("Grid Box"));
     wGrid->setNamePrefix(
@@ -563,8 +564,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wGrid);
 
     KFormDesigner::WidgetInfo *wSplitter = new KFormDesigner::WidgetInfo(this);
-//! @todo horizontal/vertical splitter icons
-    wSplitter->setPixmap("frame");
+    wSplitter->setIconName(koIconNameNeededWithSubs("an icon for a container to allow user to resize its children",
+                                                    "splitter","frame"));
     wSplitter->setClassName("Splitter");
     wSplitter->addAlternateClassName("QSplitter");
     wSplitter->setName(i18n("Splitter"));
@@ -575,8 +576,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wSplitter);
 
     KFormDesigner::WidgetInfo *wHFlow = new KFormDesigner::WidgetInfo(this);
-//! @todo hflow icon
-    wHFlow->setPixmap("frame");
+    wHFlow->setIconName(koIconNameNeededWithSubs("icon for a container to group widgets by rows","hflow","frame"));
     wHFlow->setClassName("HFlow");
     wHFlow->setName(i18n("Row Layout"));
     wHFlow->setNamePrefix(
@@ -585,8 +585,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
     addClass(wHFlow);
 
     KFormDesigner::WidgetInfo *wVFlow = new KFormDesigner::WidgetInfo(this);
-//! @todo vflow icon
-    wVFlow->setPixmap("frame");
+    wVFlow->setIconName(koIconNameNeededWithSubs("icon for a container to group widgets by columns","vflow","frame"));
     wVFlow->setClassName("VFlow");
     wVFlow->setName(i18n("Column Layout"));
     wVFlow->setNamePrefix(
@@ -597,7 +596,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
 //todo
 #if 0
     KFormDesigner::WidgetInfo *wSubForm = new KFormDesigner::WidgetInfo(this);
-    wSubForm->setPixmap("form");
+    wSubForm->setIconName(koIconName("form"));
     wSubForm->setClassName("SubForm");
     wSubForm->setName(i18n("Sub Form"));
     wSubForm->setNamePrefix(

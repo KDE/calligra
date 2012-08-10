@@ -7374,7 +7374,7 @@ e.g. for KexiDialogBase.
 
 - KexiPart items are now removable! (both from GUI and db backend)
 - Kexi Browser is items are removed if required
-- KexiDialog: now has itemIcon() possible for reimpl. and Kexi Relation View reimpl this, since 
+- KexiDialog: now has itemIconName() possible for reimpl. and Kexi Relation View reimpl this, since 
   it has no KexiPart
 - Kexi Relation View: small crash fixed
 

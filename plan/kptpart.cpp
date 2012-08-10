@@ -70,17 +70,15 @@
 namespace KPlato
 {
 
-Part::Part(QObject *parent)
-        : KoDocument(parent),
+Part::Part(KoPart *part)
+        : KoDocument(part),
         m_project( 0 ),
         m_context( 0 ), m_xmlLoader(),
         m_loadingTemplate( false ),
         m_viewlistModified( false ),
         m_checkingForWorkPackages( false )
 {
-    setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
-    setTemplateType( "plan_template" );
-    m_config.setReadWrite( isReadWrite() );
+    m_config.setReadWrite( true );
     // Add library translation files
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
@@ -158,19 +156,6 @@ void Part::setProject( Project *project )
     }
     m_aboutPage.setProject( project );
     emit changed();
-}
-
-KoView *Part::createViewInstance( QWidget *parent )
-{
-    // synchronize view selector
-    View *view = dynamic_cast<View*>( views().value( 0 ) );
-    if ( view && m_context ) {
-        QDomDocument doc = m_context->save( view );
-        m_context->setContent( doc.toString() );
-    }
-    view = new View( this, parent );
-    connect( view, SIGNAL( destroyed() ), this, SLOT( slotViewDestroyed() ) );
-    return view;
 }
 
 bool Part::loadOdf( KoOdfReadStore &odfStore )
@@ -625,7 +610,7 @@ void Part::autoCheckForWorkPackages()
 
 void Part::checkForWorkPackages( bool keep )
 {
-    if ( m_checkingForWorkPackages || ! isReadWrite() || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
+    if ( m_checkingForWorkPackages || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
         return;
     }
     m_checkingForWorkPackages = true;
@@ -843,19 +828,9 @@ void Part::slotViewDestroyed()
 {
 }
 
-void Part::activate( QWidget *w )
+void Part::setLoadingTemplate(bool loading)
 {
-    if ( manager() )
-        manager()->setActivePart( this, w );
-}
-
-void Part::openTemplate( const KUrl &url )
-{
-    //kDebug(planDbg())<<url;
-    // HACK because we can't really reimplemt openTemplate() (private methods)
-    m_loadingTemplate = true;
-    KoDocument::openTemplate( url );
-    m_loadingTemplate = false;
+    m_loadingTemplate = loading;
 }
 
 bool Part::completeLoading( KoStore *store )
@@ -890,7 +865,7 @@ bool Part::completeLoading( KoStore *store )
 }
 
 bool Part::completeSaving( KoStore *store )
-{
+{/*FIXME
     // Seems like a hack, but imo the best to do
     View *view = dynamic_cast<View*>( views().value( 0 ) );
     if ( view ) {
@@ -906,7 +881,7 @@ bool Part::completeSaving( KoStore *store )
             m_viewlistModified = false;
             emit viewlistModified( false );
         }
-    }
+    }*/
     return true;
 }
 
@@ -995,28 +970,18 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
     return true;
 }
 
-void Part::insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index )
+void Part::insertViewListItem( View */*view*/, const ViewListItem *item, const ViewListItem *parent, int index )
 {
-    foreach ( KoView *v, views() ) {
-        View *vv = dynamic_cast<View*>( v );
-        if ( vv == 0 || vv == view ) {
-            continue;
-        }
-        vv->addViewListItem( item, parent, index );
-    }
+    // FIXME callers should take care that they now get a signal even if originating from themselves
+    emit viewListItemAdded(item, parent, index);
     setModified( true );
     m_viewlistModified = true;
 }
 
-void Part::removeViewListItem( View *view, const ViewListItem *item )
+void Part::removeViewListItem( View */*view*/, const ViewListItem *item )
 {
-    foreach ( KoView *v, views() ) {
-        View *vv = dynamic_cast<View*>( v );
-        if ( vv == 0 || vv == view ) {
-            continue;
-        }
-        vv->removeViewListItem( item );
-    }
+    // FIXME callers should take care that they now get a signal even if originating from themselves
+    emit viewListItemRemoved(item);
     setModified( true );
     m_viewlistModified = true;
 }

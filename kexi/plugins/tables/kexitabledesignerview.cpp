@@ -27,16 +27,16 @@
 #include <QSplitter>
 #include <QByteArray>
 
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <KAction>
 #include <KToggleAction>
 #include <KMenu>
 #include <kmessagebox.h>
-#include <kiconeffect.h>
 #include <k3command.h>
 #include <KActionCollection>
+
+#include <KoIcon.h>
 
 #include <koproperty/Set.h>
 #include <koproperty/Utils.h>
@@ -128,7 +128,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 
     KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, QString(),
             i18n("Additional information about the field"));
-    col->setIcon(KexiUtils::colorizeIconToTextColor(SmallIcon("help-about"), d->view->palette()));
+    col->setIcon(KexiUtils::colorizeIconToTextColor(koSmallIcon("help-about"), d->view->palette()));
     col->setHeaderTextVisible(false);
     col->field()->setSubType("KIcon");
     col->setReadOnly(true);
@@ -190,7 +190,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     // - setup local actions
     QList<QAction*> viewActions;
     QAction* a;
-    viewActions << (d->action_toggle_pkey = new KToggleAction(KIcon("key"), i18n("Primary Key"), this));
+    viewActions << (d->action_toggle_pkey = new KToggleAction(koIcon("key"), i18n("Primary Key"), this));
     a = d->action_toggle_pkey;
     a->setObjectName("tablepart_toggle_pkey");
     a->setToolTip(i18n("Sets or removes primary key"));
@@ -1686,7 +1686,7 @@ void KexiTableDesignerView::slotAboutToShowContextMenu()
         title = i18nc("Empty table row", "Empty Row");
     }
 //! \todo replace lineedit with table_field icon
-    d->view->setContextMenuTitle(KIcon("lineedit"), title);
+    d->view->setContextMenuTitle(koIcon("lineedit"), title);
 }
 
 QString KexiTableDesignerView::debugStringForCurrentTableSchema(tristate& result)

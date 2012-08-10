@@ -192,14 +192,14 @@ void KexiSmallToolButton::setIcon(const QIcon& icon)
     update(text(), icon);
 }
 
-void KexiSmallToolButton::setIcon(const QString& icon)
+void KexiSmallToolButton::setIcon(const QString &iconName)
 {
-    setIcon(KIcon(icon));
+    setIcon(KIcon(iconName));
 }
 
 void KexiSmallToolButton::setText(const QString& text)
 {
-    update(text, KIcon(icon()));
+    update(text, icon());
 }
 
 #if 0

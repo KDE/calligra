@@ -26,6 +26,7 @@
 #include <kdebug.h>
 
 // Calligra includes
+#include <KoIcon.h>
 // KSpread includes
 
 using namespace Calligra::Sheets;
@@ -41,15 +42,15 @@ SheetSelectPage::SheetSelectPage(QWidget *parent)
     ListViewSelected->setSortingEnabled(false);
 
     //setup icons
-    ButtonSelectAll->setIcon(KIcon("go-last"));
-    ButtonSelect->setIcon(KIcon("go-next"));
-    ButtonRemove->setIcon(KIcon("go-previous"));
-    ButtonRemoveAll->setIcon(KIcon("go-first"));
+    ButtonSelectAll->setIcon(koIcon("go-last"));
+    ButtonSelect->setIcon(koIcon("go-next"));
+    ButtonRemove->setIcon(koIcon("go-previous"));
+    ButtonRemoveAll->setIcon(koIcon("go-first"));
 
-    ButtonMoveTop->setIcon(KIcon("go-top"));
-    ButtonMoveUp->setIcon(KIcon("go-up"));
-    ButtonMoveDown->setIcon(KIcon("go-down"));
-    ButtonMoveBottom->setIcon(KIcon("go-bottom"));
+    ButtonMoveTop->setIcon(koIcon("go-top"));
+    ButtonMoveUp->setIcon(koIcon("go-up"));
+    ButtonMoveDown->setIcon(koIcon("go-down"));
+    ButtonMoveBottom->setIcon(koIcon("go-bottom"));
 
     //connect buttons
     connect(ButtonSelectAll, SIGNAL(clicked()), this, SLOT(selectAll()));
