@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@ KexiAboutData::KexiAboutData()
         "submit@bugs.kde.org"
     )
 {
-    // authors sorted by last nontrivial contribution date
+    // authors sorted by last nontrivial contribution date * size
     addAuthor(
         ki18n("Jarosław Staniek"), ki18n("Project maintainer & developer, design, KexiDB, commercially supported version, MS Windows version"), "staniek@kde.org");
     addAuthor(
@@ -51,11 +51,13 @@ KexiAboutData::KexiAboutData()
     addAuthor(
         ki18n("Adam Pigg"), ki18n("PostgreSQL database driver, Migration and Reporting modules"), "adam@piggz.co.uk");
     addAuthor(
+        ki18n("Dimitrios T. Tanis"), ki18n("Users Manual for Kexi 2, main window improvements, numerous bug repors"),  "dimitrios.tanis@kdemail.net");
+    addAuthor(
+        ki18n("Oleg Kukharchuk"), ki18n("Several form widgets, porting to Qt 4, stabilization"), "oleg.kuh@gmail.com");
+    addAuthor(
         ki18n("Radosław Wicik"), ki18n("Map elements for forms and reports, map flake shape"), "radoslaw@wicik.pl");
     addAuthor(
         ki18n("Shreya Pandit"), ki18n("Web elements for forms and reports"), "shreya.pandit25@gmail.com");
-    addAuthor(
-        ki18n("Dimitrios T. Tanis"), ki18n("Users Manual for Kexi 2, main window improvements, numerous bug repors"),  "dimitrios.tanis@kdemail.net");
     addAuthor(
         ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
     addAuthor(
