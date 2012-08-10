@@ -117,9 +117,9 @@ class KisDoc2::KisDocPrivate
 public:
 
     KisDocPrivate()
-            : nserver(0)
-            , macroNestDepth(0)
-            , kraLoader(0)
+        : nserver(0)
+        , macroNestDepth(0)
+        , kraLoader(0)
     {
     }
 
@@ -146,7 +146,7 @@ public:
 
 KisDoc2::KisDoc2(KoPart *parent)
     : KoDocument(parent, new UndoStack(this))
-        , m_d(new KisDocPrivate())
+    , m_d(new KisDocPrivate())
 {
     m_d->part = qobject_cast<KisPart2*>(parent);
 
@@ -318,7 +318,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     setModified(false);
     m_d->shapeController->setImage(m_d->image);
 
-    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
+    connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
 
     emit sigLoadingFinished();
 
@@ -361,7 +361,7 @@ bool KisDoc2::newImage(const QString& name,
     image = new KisImage(createUndoStore(), width, height, cs, name);
     Q_CHECK_PTR(image);
 
-    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
+    connect(image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
     image->setResolution(imageResolution, imageResolution);
 
     image->assignImageProfile(cs->profile());
@@ -486,7 +486,7 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
 
     setModified(false);
 
-    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setModified()));
+    connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(setModified(bool)));
 
     emit sigLoadingFinished();
 }
@@ -497,6 +497,7 @@ void KisDoc2::initEmpty()
     const KoColorSpace * rgb = KoColorSpaceRegistry::instance()->rgb8();
     newImage("", cfg.defImageWidth(), cfg.defImageHeight(), rgb);
 }
+
 
 KisUndoStore* KisDoc2::createUndoStore()
 {
@@ -512,7 +513,7 @@ void KisDoc2::undoIndexChanged(int idx)
     if(!image) return;
 
     KisDocumentUndoStore *undoStore =
-        dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
+            dynamic_cast<KisDocumentUndoStore*>(image->undoStore());
     Q_ASSERT(undoStore);
 
     undoStore->notifyCommandExecuted(command);
