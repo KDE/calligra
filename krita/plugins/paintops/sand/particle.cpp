@@ -36,6 +36,7 @@
 ///Parameterized constructor
 Particle::Particle( bool life,
                     float mass,
+                    float force,
                     int radius,
                     int lifespan,
                     float friction,
@@ -54,11 +55,14 @@ Particle::Particle( bool life,
     _pos = position;
     _vel = velocity;
     _accel = acceleration;
+    _force = force;
+    _forceVec = new QPointF(0.0,0.0);
 }
 
 ///Copy constructor
 Particle::Particle(const Particle & p)
 {
+    _force  = p.force();
     _life   = p.isAlive();
     _mass   = p.mass();
     _radius =  p.radius();
@@ -68,114 +72,93 @@ Particle::Particle(const Particle & p)
     _pos = p.pos();
     _vel = p.vel();
     _accel = p.accel();
+    _forceVec = p.forceVec();
 }
 
 //Methods of the particle dynamics
 
 void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties, int width, int height)
 {
+//     qDebug() << "bf. _force :" << _force;
 
     /*
-     * xi calculation is imcomplete. It should be like this:
+     * xi calculation is incomplete. It should be like this:
      *
      * dist_x = _position->x() - info.pos().x();   //distance between particle centers: X
      * dist_y = _position->y() - info.pos().x();   //distance between particle centers: Y
      * dist_centers = sqrt(dist_x^2 + dist_y^2);        //distance norm
-     * double xi = _radius + m_properties->radius - dist_centers;
+     * float xi = _radius + m_properties->radius - dist_centers;
      *
      * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
-
-     double dist_x = (_pos->x() - pos.x())/width;   //distance between particle centers: X
-     double dist_y = (_pos->y() - pos.y())/height;   //distance between particle centers: Y
+    qDebug() << " _pos :" << *_pos << " radius : " << _radius ;
+    float dist_x = (_pos->x() - pos.x())/width;   //distance between particle centers: X
+    float dist_y = (_pos->y() - pos.y())/height;   //distance between particle centers: Y
 
      
-     double dist_centers = sqrt(dist_x*dist_x + dist_y*dist_y);        //distance norm
-     qDebug() << "dist_centers :" << dist_centers ;
-     
-     double xi = _radius + properties->radius - dist_centers;
-
-     qDebug() << "xi :" << xi ;
-//     double xi = double( _radius );
+    float dist_centers = sqrt(dist_x*dist_x + dist_y*dist_y);        //distance norm
+    float xi = float(_radius + properties->radius) - dist_centers;
 
     //No collision? Exit function
     if( xi <= 0)
         return;
 
     
-    /* normalized young modulus between the MOUSE (brush) particle and this particle
-        * double Y = _friction * brush_friction / (friction + brush_friction)
-        */
-    double Y = _friction * properties->friction / (_friction + properties->friction);
-    qDebug() << "Y " << Y ;
-//         double Y = _friction;  // Young modulus
     /*
-        * dissipative constant: function of the material viscosity
-        * Maybe it won't be needed to set this for the MOUSE (BRUSH) PARTICLE
-        * double A = 0.5*( _dissipation + m_properties->dissipation() );
-        */
-    double A =  _dissipation;
-
-    /*
-        * ATTENTION: IN A SITUATION WHERE PARTICLES HAVE ANGULAR MOVEMENT (ROTATIONS), WE WOULD NEED THE
-        * mu AND gamma COEFFICIENTS
-        */
-
+     * normalized young modulus between the MOUSE (brush) particle and this particle
+     */
     
-    double reff = ( _radius * properties->radius )/( _radius + properties->radius );
-    qDebug() << "reff :" << reff ;
-
-//         double reff = double(_radius);
-
+    float Y = float(_friction * properties->friction) / float(_friction + properties->friction);
     /*
-        * FOR THE VELOCITY DERIVATION. Same as above: we need the velocity of the
-        * MOUSE particle:
-        *
-        * double dvx = _vel->x() - brush->vel->x();
-        * double dvy = _vel->y() - brush->vel->y();
-        *
-        */
+     * dissipative constant: function of the material viscosity
+     * Maybe it won't be needed to set this for the MOUSE (BRUSH) PARTICLE
+     * float A = 0.5*( _dissipation + m_properties->dissipation() );
+     */
+    
+    float A =  _dissipation;
 
-    double dvx = _vel->x() - vel.x();
-    double dvy = _vel->y() - vel.y();
-    qDebug() << "dvx, dvy : " << dvx << ", " << dvy ;
-//         double dvx = _vel->x();
-//         double dvy = _vel->y();
+    float reff = ( float(_radius * properties->radius) )/( float( _radius + properties->radius) );
+//     qDebug() << "reff = ( " << _radius << " * " << properties->radius << " )/( " << _radius << " + " << properties->radius << ") = " << reff;
 
+   /*
+    * FOR THE VELOCITY DERIVATION. Same as above: we need the velocity of the
+    * MOUSE particle:
+    *
+    */
 
+    float dvx = _vel->x() - vel.x();
+    float dvy = _vel->y() - vel.y();
 
-    double rr_rez = 1 /dist_centers;
-    qDebug() << "rr_rez : " << rr_rez ;
+    float rr_rez = 1 /dist_centers;
 
-//         double rr_rez = 1 / radius;
+    float ex = dist_x * rr_rez;
+    float ey = dist_y * rr_rez;
 
-    double ex = dist_x * rr_rez;
-    double ey = dist_y * rr_rez;
-    qDebug() << "ex, ey : " << ex << ", " << ey ;
-
-//         double ex = 1;  //modify
-//         double ey = 1;  //modify
     //Xi derivative (velocity based)
-    double xidot = - (ex*dvx + ey*dvy);
-    qDebug() << "xidot :" << xidot ;
+    float xidot = - (ex*dvx + ey*dvy);
 
     //NORMAL FORCE ON THIS PARTICLE
-//         double fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
-    
-    double fn = sqrt(xi)*Y*sqrt(reff)*(xi+xidot);
-    qDebug() << "fn " << fn ;
-
+//         float fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
+    float fn = sqrt(xi)*Y*sqrt(reff)*(xi+xidot);
+//     qDebug() << _force << " + fn = sqrt( " << xi << " )* " << Y <<" *sqrt( " << reff << " )*( " << xi << " + " << xidot << ") = " << fn;
+//     qDebug() << "ex, ey : " << ex << ", " << ey;
     //PERHAPS I HAVE TO MODIFY THIS, SINCE WE CAN HAVE A FORCE IN A DIFFERENT DIRECTION OF THE MOVEMENT
     if( fn< 0)
         fn = 0;
-    else
+    else{
         _force += fn;
+//         _forceVec->rx() = _forceVec->rx() + fn*ex;
+//         _forceVec->ry() = _forceVec->ry() + fn*ey;
+        _forceVec->rx() =  fn*ex;
+        _forceVec->ry() =  fn*ey;
+    }
+
+//     qDebug() << "af. _force : " << *_forceVec;
 }
-
-
 
 Derivative Particle::eval(const State & init, double dt, const Derivative & der)
 {
+    
     State st;
     st.pos.rx() = init.pos.x() + der.dpos.x()*dt;            //apply the position modification
     st.pos.ry() = init.pos.y() + der.dpos.y()*dt;
@@ -187,6 +170,9 @@ Derivative Particle::eval(const State & init, double dt, const Derivative & der)
 
     out.dpos.rx() = st.vel.x();                          //derivative velocity
     out.dpos.ry() = st.vel.y();
+
+//     qDebug() << "end_pos "  << st.pos.x() << ", "<< st.pos.y();
+//     qDebug() << "end_vel "  << st.vel.x() << ", "<< st.vel.y();
     out.dvel = accel(st, dt);                   //derivative acceleration
 
     return out;
@@ -198,33 +184,62 @@ Derivative Particle::eval(const State & init, double dt, const Derivative & der)
  */
 QPointF Particle::accel(const State &state, double t)
 {
-    const double k = 3.2; //dumping
-    const double b = _mass;
-    return QPointF( qreal(-k * state.pos.x() - b*state.vel.x() ), qreal(-k * state.pos.y() - b*state.vel.y()));
+    const float k = 0.1; //dumping, provavelmente usar a "dissipation"
+    const float b = _mass;
+    QPointF result = QPointF( qreal(_forceVec->x()/_mass ), qreal(_forceVec->y()/_mass));
+//     qDebug() << "result :" << result;
+//     QPointF result = QPointF( qreal(-k * state.pos.x() - b*state.vel.x() ), qreal(-k * state.pos.y() - b*state.vel.y()));
+//     qDebug() << "result (" << result << ") = QPointF(" << -k << "*" << state.pos.x() << "-" << b << "*" << state.vel.x() << ","
+//                                                        << -k << "*" << state.pos.y() << "-" << b << "*" << state.vel.y() << ")";
+
+    return result;
 }
 
 void Particle::integrationStep(double dt)
 {
+//     qDebug() << "bef.: pos :" << *_pos << " vel :" << *_vel ;
+    
+    float p_length = sqrt(_pos->x()*_pos->x() + _pos->y()*_pos->y());
+
+    float v_length = sqrt(_vel->x()*_vel->x() + _vel->y()*_vel->y());
+
+    //gambiarra... tenho q ver uma melhor maneira de assegurar a normalizacao
+//     if(p_length == 0)
+//         p_length = 1;
+    if(v_length == 0.0)
+        v_length = 1.0;
+
     //this particle current state
     State state;
-    state.pos.rx() = _pos->x();
-    state.pos.ry() = _pos->y();
-    state.vel.rx() = _vel->x();
-    state.vel.ry() = _vel->y();
+    state.pos.setX( _pos->x()/p_length);
+    state.pos.setY( _pos->y()/p_length);
+    state.vel.setX( _vel->x()/v_length);
+    state.vel.setY( _vel->y()/v_length);
+
 
     //derivatives for the RK terms
+
     Derivative k1 = eval(state, 0.0, Derivative());
     Derivative k2 = eval(state, dt*0.5, k1);
     Derivative k3 = eval(state, dt*0.5, k2);
     Derivative k4 = eval(state, dt, k3);
 
-    QPointF d_pos = 1.0/6.0 * (k1.dpos + 2*(k2.dpos + k3.dpos) + k4.dpos);
-    QPointF d_vel = 1.0/6.0 * (k1.dvel + 2*(k2.dvel + k3.dvel) + k4.dvel);
+//     QPointF d_pos = 1.0/6.0 * (k1.dpos + 2*(k2.dpos + k3.dpos) + k4.dpos);
+//     QPointF d_vel = 1.0/6.0 * (k1.dvel + 2*(k2.dvel + k3.dvel) + k4.dvel);
+    float pos_x = (1.0/6.0 * (k1.dpos.x() + 2*(k2.dpos.x() + k3.dpos.x()) + k4.dpos.x()))*dt;
+    float pos_y = (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
+    float vel_x = (1.0/6.0 * (k1.dvel.x() + 2*(k2.dvel.x() + k3.dvel.x()) + k4.dvel.x()))*dt;
+    float vel_y = (1.0/6.0 * (k1.dvel.y() + 2*(k2.dvel.y() + k3.dvel.y()) + k4.dvel.y()))*dt;
 
-    _pos->rx() += (1.0/6.0 * (k1.dpos.x() + 2*(k2.dpos.x() + k3.dpos.x()) + k4.dpos.x()))*dt;
-    _pos->ry() += (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
-    _vel->rx() += (1.0/6.0 * (k1.dpos.x() + 2*(k2.dpos.x() + k3.dpos.x()) + k4.dpos.x()))*dt;
-    _vel->ry() += (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
+//     qDebug() << "vals. pos: " << pos_x << ", " << pos_y << " vel.: " << vel_x << ", " << vel_y;
+    
+    _pos->rx() += pos_x;
+    _pos->ry() += pos_y;
+    _vel->rx() += vel_x;
+    _vel->ry() += vel_y;
+
+//     qDebug() << "aft.: pos :" << *_pos << " vel :" << *_vel ;
+
 }
 
 /*

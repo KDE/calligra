@@ -53,7 +53,7 @@ using namespace std;
 
 ///Current state of this particle
 typedef struct{
-    QPoint pos; //current position
+    QPointF pos; //current position
     QPointF vel; //current velocity
 } State;
 
@@ -72,6 +72,7 @@ public:
     ///Construct a particle with arguments (or its default values)
     Particle( bool life = true,
               float mass = 1.0,
+              float force = 0.0,
               int radius = 1,
               int lifespan = 10000,
               float friction = 0.00005, //default value of friction
@@ -130,6 +131,8 @@ public:
     QPoint * pos() const {return _pos;}
     QPointF * vel() const {return _vel;}
     QPointF * accel()const {return _accel;}
+    QPoint * bounds() const {return _bounds;}
+    QPointF * forceVec() const {return _forceVec;}
 
     //Sets
     
@@ -143,6 +146,8 @@ public:
     void setPos(QPoint * p){ _pos = p;}
     void setVel(QPointF * v){ _vel = v;}
     void setAccel(QPointF * a){ _accel = a;}
+    void setBounds(QPoint * b){ _bounds = b;}
+    void setForceVec(QPointF * f){ _forceVec = f;}
 
 
     ///Operator overload to serialization of the Particle to use KisAnnotation
@@ -184,6 +189,12 @@ private:
 
     ///Particle acceleration
     QPointF * _accel;
+
+    ///Image boundary for normalization purposes
+    QPoint * _bounds;
+
+    ///Force vector
+    QPointF * _forceVec;
 
 };
 

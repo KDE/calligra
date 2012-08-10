@@ -44,7 +44,7 @@ public:
     ~SandBrush();
 
     ///Add particles in the canvas
-    void pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info);
+    void pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height);
 
     ///Spread the particles in the canvas
     void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height);

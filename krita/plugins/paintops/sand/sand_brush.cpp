@@ -68,7 +68,7 @@ SandBrush::~SandBrush()
 }
 
 
-void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info)
+void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height)
 {
     //We do not need to, in every mouse movement, add pixels, so it has been randomized (as in
     // the dirtThreshold), so it can drop particles more faster
@@ -143,6 +143,7 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
             //Create a particle with the current settings in the widget
             Particle *p = new Particle ( true,
                                 float( m_properties->mass), //mass
+                                0.0,                        //force
                                 float( m_properties->size), //particle radius
                                 1000,                       //lifespan (not used for now)
                                 float( m_properties->friction), //friction (used in the force application
@@ -151,6 +152,8 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
                                 new QPointF(vel.x(), vel.y()),  //velocity 
                                 new QPointF(accel.x(), accel.y()) //acceleration
                             );
+            //to normalization
+            p->setBounds(new QPoint(width, height));
 
             //Draw the particle on the canvas
             drawParticle(drawer, p);
@@ -166,7 +169,7 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
     //Update the velocity and time of the mouse
     m_prevVel = vel;
     m_prevTime = info.currentTime();
-    qDebug() << "Amount added : " << m_grains.size();
+//     qDebug() << "Amount added : " << m_gr4ains.size();
 }
 
 //I'm actually trying to do this function work properly
@@ -174,6 +177,7 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
 {
 
     KisPainter drawer(dev);
+//     m_inkColor = color; //
     drawer.setPaintColor(m_inkColor);
     //(1) Retrieve the neighbor particles where the mouse is positioned (done in the KisSandPaintOp)
 
@@ -183,26 +187,40 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
     //mouse velocity and acceleration calc
     if(info.currentTime() != m_prevTime)
         time = info.currentTime() - time;
+    
 
-    QPointF pos = toQPointF(info.movement()); //obs: this is an inline function
-    QPointF vel(pos.x()/time, pos.y()/time);    //current velocity
+    QPointF disp = toQPointF(info.movement()); //obs: this is an inline function
+    QPointF pos(info.pos().x(), info.pos().y());
+    QPointF vel(disp.x()/time, disp.y()/time);    //current velocity
     QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current acce
 
+    qDebug() << " time :" << time << " Pos : " << pos << " vel : " << vel << " accel : " << accel;
 
     //iterate over the set of grains in the neighborhood, assigned to m_grains
     for(int i = 0; i < m_grains.size(); i++){
         //(3.a) Verify which ones the mouse is really "colliding"
     //(3.b) and apply the force in the particles that the mouse touched (made in the applyForce method of Particle)
+        
         m_grains.at(i)->applyForce(pos, vel, m_properties, width, height);
 
         //(4) Animate the movements based on past forces
-//         if(m_grains.at(i)->force())
-//             m_grains.at(i)->integrationStep(double(time));
+        if(m_grains.at(i)->force()){
+            m_grains.at(i)->integrationStep(double(time));
+        }
 
-        //have to delete the previous positions before painting them again
-        drawParticle(drawer, m_grains.at(i));
+        //verify if a particle is out of bounds
+        if(m_grains.at(i)->pos()->x() > width || m_grains.at(i)->pos()->y() > height){
+            m_grains.removeAt(i);
+        }
+        else{
+            //have to delete the previous positions before painting them again
+            drawParticle(drawer, m_grains.at(i));
+        }
+
+
     }
 
+    m_prevTime = info.currentTime();
     //(5) Update the canvas (have to do the erase particle operation)
 
 }
@@ -245,6 +263,6 @@ void SandBrush::setGrains(QList<Particle *> &g_copy){
     for(int i = 0; i < g_copy.size(); i++)
         m_grains.append(g_copy[i]);
 
-    qDebug() << "set m_grains :" << m_grains.size();
+//     qDebug() << "set m_grains :" << m_grains.size();
 }
 

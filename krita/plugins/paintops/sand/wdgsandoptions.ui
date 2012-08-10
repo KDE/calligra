@@ -175,26 +175,29 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>15</number>
+             <number>10</number>
             </property>
             <property name="value">
-             <number>5</number>
+             <number>2</number>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QSlider" name="sizeSlider">
             <property name="minimum">
-             <number>5</number>
+             <number>1</number>
             </property>
             <property name="maximum">
-             <number>15</number>
+             <number>10</number>
             </property>
             <property name="pageStep">
              <number>5</number>
             </property>
             <property name="value">
-             <number>5</number>
+             <number>2</number>
+            </property>
+            <property name="sliderPosition">
+             <number>2</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
