@@ -54,42 +54,54 @@ void DatasetCommand::redo()
 {
     // save the old type
     /*m_oldType = m_dataSet->chartType();
-    m_oldSubtype = m_dataSet->chartSubType();
+    m_oldSubtype = m_dataSet->chartSubType();*/
     m_oldShowCategory = m_dataSet->valueLabelType().category;
     m_oldShowNumber = m_dataSet->valueLabelType().number;
     m_oldShowPercent = m_dataSet->valueLabelType().percentage;
-    m_oldShowSymbol = m_dataSet->valueLabelType().symbol;*/
+    m_oldShowSymbol = m_dataSet->valueLabelType().symbol;
     m_oldBrushColor = m_dataSet->brush().color();
     m_oldPenColor = m_dataSet->pen().color();
     m_oldMarkerStyle = m_dataSet->markerStyle();
-    //m_oldAxis = m_dataSet->attachedAxis();
+    m_oldAxis = m_dataSet->attachedAxis();
 
-    if (m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
+    if (m_oldShowCategory == m_newShowCategory && m_oldShowNumber == m_newShowNumber
+            && m_oldShowPercent == m_newShowPercent && m_oldShowSymbol == m_newShowSymbol
+            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
         return;
 
     // Actually do the work
-    /*DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
-    if (m_newShowCategory) valueLabelType.category = m_newShowCategory;
-    m_dataSet->setValueLabelType(valueLabelType);*/
+    DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
+    valueLabelType.category = m_newShowCategory;
+    valueLabelType.number = m_newShowNumber;
+    valueLabelType.percentage = m_newShowPercent;
+    valueLabelType.symbol = m_newShowSymbol;
+    m_dataSet->setValueLabelType(valueLabelType);
 
     m_dataSet->setBrush(QBrush(m_newBrushColor));
     m_dataSet->setPen(QPen(m_newPenColor));
     m_dataSet->setMarkerStyle(m_newMarkerStyle);
+    m_dataSet->setAttachedAxis(m_newAxis);
     m_chart->update();
 }
 
 void DatasetCommand::undo()
 {
-    if (m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
+    if (m_oldShowCategory == m_newShowCategory && m_oldShowNumber == m_newShowNumber
+            && m_oldShowPercent == m_newShowPercent && m_oldShowSymbol == m_newShowSymbol
+            && m_oldBrushColor == m_newBrushColor && m_oldPenColor == m_newPenColor && m_oldMarkerStyle == m_newMarkerStyle)
         return;
 
-    /*DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
-    if (m_oldShowCategory) valueLabelType.category = m_oldShowCategory;
-    m_dataSet->setValueLabelType(valueLabelType);*/
+    DataSet::ValueLabelType valueLabelType = m_dataSet->valueLabelType();
+    valueLabelType.category = m_oldShowCategory;
+    valueLabelType.number = m_oldShowNumber;
+    valueLabelType.percentage = m_oldShowPercent;
+    valueLabelType.symbol = m_oldShowSymbol;
+    m_dataSet->setValueLabelType(valueLabelType);
 
     m_dataSet->setBrush(QBrush(m_oldBrushColor));
     m_dataSet->setPen(QPen(m_oldPenColor));
     m_dataSet->setMarkerStyle(m_oldMarkerStyle);
+    m_dataSet->setAttachedAxis(m_oldAxis);
     m_chart->update();
 }
 
