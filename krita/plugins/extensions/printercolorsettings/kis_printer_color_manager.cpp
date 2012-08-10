@@ -85,7 +85,7 @@ void KisPrinterColorManager::setCurrentProfile(const KoColorProfile *profile)
     int error = m_colormanager->setProfile(profile);
     
     if (error) {
-        label->setText("*Unable to set profile*"); 
+        label->setText("Please select a printer profile."); 
     } else {
         label->setText(m_colormanager->profileName());
         m_profile = profile;
@@ -107,7 +107,7 @@ void KisPrinterColorManager::slotChangePrinterSelection(int index)
 void KisPrinterColorManager::slotSetAutoCheckBox(bool checkState)
 {
     if (checkState == true) {
-        m_watcher.setFuture(m_colormanager->setAutoProfile(m_currentprinter));
+        m_watcher.setFuture(m_colormanager->setAutoProfile());
         label->setText("Searching for profile...");
 
         m_selectorui->setHidden(true);

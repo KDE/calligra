@@ -49,7 +49,7 @@ public:
     virtual int setPrinter(const QPrinter *);
     virtual int setProfile(const KoColorProfile *);        
     
-    QFuture<void> setAutoProfile(QPrinter *);  
+    QFuture<void> setAutoProfile();  
     
     virtual QString renderSpoolPdf(KisImageWSP, const KoColorProfile *);
     virtual QImage renderPreviewImage(KisImageWSP, const KoColorProfile *);

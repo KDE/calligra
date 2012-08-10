@@ -150,10 +150,8 @@ QPrinter * KisCmpx::printer(void)
     return printer;
 }
 
-QFuture<void> KisCmpx::setAutoProfile(QPrinter *printer)
+QFuture<void> KisCmpx::setAutoProfile()
 {
-    setPrinter(printer);
-   
     // Automatic profile selection takes a little time at the moment.
     return QtConcurrent::run(cmpxAPI_setAutoProfile, &m_colormanager);    
 }
