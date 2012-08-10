@@ -27,7 +27,7 @@ qt4_automoc(${krita-sketch_SRCS})
 qt4_add_resources(krita-sketch_SRCS krita-sketch.qrc)
 
 add_executable(krita-sketch ${krita-sketch_SRCS})
-target_link_libraries(krita-sketch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${KRITAUI_LIBRARY})
+target_link_libraries(krita-sketch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${PIGMENTCMS_LIBRARY} ${KRITAUI_LIBRARY})
 
 add_custom_target(QmlFiles ALL ${CMAKE_COMMAND} -E echo "Main application QML files"
     SOURCES
