@@ -542,22 +542,66 @@ void ChartTool::Private::setDataSetShowLabel(DataSet *dataSet, bool *number, boo
 
 void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, 0, 0, &b, 0);
+    //d->setDataSetShowLabel(dataSet, 0, 0, &b, 0);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    if (command!=0) {
+        command->setDataSetShowCategory(b);
+        canvas()->addCommand(command);
+    }
+
+    d->shape->update();
 }
 
 void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, &b, 0, 0, 0);
+    //d->setDataSetShowLabel(dataSet, &b, 0, 0, 0);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    if (command!=0) {
+        command->setDataSetShowNumber(b);
+        canvas()->addCommand(command);
+    }
+
+    d->shape->update();
 }
 
 void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, 0, &b, 0, 0);
+    //d->setDataSetShowLabel(dataSet, 0, &b, 0, 0);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    if (command!=0) {
+        command->setDataSetShowPercent(b);
+        canvas()->addCommand(command);
+    }
+
+    d->shape->update();
 }
 
 void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b)
 {
-    d->setDataSetShowLabel(dataSet, 0, 0, 0, &b);
+    //d->setDataSetShowLabel(dataSet, 0, 0, 0, &b);
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
+    if (command!=0) {
+        command->setDataSetShowSymbol(b);
+        canvas()->addCommand(command);
+    }
+
+    d->shape->update();
 }
 
 void ChartTool::setThreeDMode(bool threeD)
