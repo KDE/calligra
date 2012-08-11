@@ -70,6 +70,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
+    odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
         kError(30517) << "Unable to open input file!" << endl;
         delete odfStore;
@@ -308,8 +309,13 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
 
     // Extract images and add them to epubFile one bye one
     QByteArray imgContent;
-    foreach (QString imgSrc, m_imagesSrcList.keys()) {
-        odfStore->extractFile(imgSrc, imgContent);
+    foreach (const QString imgSrc, m_imagesSrcList.keys()) {
+        kDebug(30517) << imgSrc;
+        if (!odfStore->extractFile(imgSrc, imgContent)) {
+            kDebug(30517) << "Can not to extract file";
+            return KoFilter::FileNotFound;
+        }
+
         VectorType type = vectorType(imgContent);
         QSizeF qSize = m_imagesSrcList.value(imgSrc);
         switch (type) {
