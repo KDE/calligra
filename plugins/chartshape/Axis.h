@@ -144,9 +144,6 @@ public:
     void requestRepaint() const;
     void layoutPlanes();
     
-signals:
-    void updateConfigWidget();
-
 public slots:
     void setGapBetweenBars(int percent);
     void setGapBetweenSets(int percent);

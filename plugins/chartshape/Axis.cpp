@@ -1230,8 +1230,6 @@ void Axis::setShowMinorGrid(bool showGrid)
 void Axis::setTitleText(const QString &text)
 {
     d->titleData->document()->setPlainText(text);
-
-    emit updateConfigWidget();
 }
 
 void Axis::setShowLabels(bool show)

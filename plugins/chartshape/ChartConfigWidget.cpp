@@ -1145,6 +1145,9 @@ void ChartConfigWidget::update()
     d->ui.showSubTitle->setChecked(d->shape->subTitle()->isVisible());
     d->ui.showFooter->setChecked(d->shape->footer()->isVisible());
 
+    // Update properties in "Data Sets" tab
+    ui_dataSetSelectionChanged(d->selectedDataSet);
+
     // Update "Bar Properties" in "Data Sets" tab
     d->ui.gapBetweenBars->setValue(d->shape->plotArea()->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(d->shape->plotArea()->gapBetweenSets());
