@@ -309,6 +309,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
 
     // Extract images and add them to epubFile one bye one
     QByteArray imgContent;
+    int imgId = 1;
     foreach (const QString imgSrc, m_imagesSrcList.keys()) {
         kDebug(30517) << imgSrc;
         if (!odfStore->extractFile(imgSrc, imgContent)) {
@@ -330,7 +331,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 return KoFilter::ParsingError;
             }
 
-            epubFile->addContentFile(imgSrc.section('/', -1).remove(" "), ("OEBPS/" + imgSrc.section('/', -1)),
+            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
                                      "image/svg+xml", outPut);
             break;
         }
@@ -343,7 +344,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 return KoFilter::ParsingError;
             }
 
-            epubFile->addContentFile(imgSrc.section('/', -1).remove(" "), ("OEBPS/" + imgSrc.section('/', -1)),
+            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
                                      "image/x-emf", outPut);
             break;
         }
@@ -356,7 +357,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 return KoFilter::ParsingError;
             }
 
-            epubFile->addContentFile(imgSrc.section('/', -1).remove(" "), ("OEBPS/" + imgSrc.section('/', -1)),
+            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
                                      "image/x-wmf", outPut);
             break;
         }
@@ -364,7 +365,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             // we add it directly and find its mimtype form metaInf
         case ExportEpub2::VectorTypeOther: {
             kDebug(30517) << "Other file";
-            epubFile->addContentFile(imgSrc.section('/', -1), ("OEBPS/" + imgSrc.section('/', -1)),
+            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
                                      metaImagesData.value(imgSrc).toUtf8(), imgContent);
             break;
         }
