@@ -206,7 +206,7 @@ signals:
     void acceptRequested();
 
 protected:
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+    //virtual bool eventFilter(QObject* watched, QEvent* e);
 
     /*! Sets \a v as view widget for this editor. The view will be assigned as focus proxy
      for the editor, its events will be filtered, it will be resized when neede, and so on. */
