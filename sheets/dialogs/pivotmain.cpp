@@ -26,6 +26,10 @@
 #include "pivotfilters.h"
 #include "ui/Selection.h"
 #include "Sheet.h"
+#include<QMessageBox>
+#include "Value.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
 
 using namespace Calligra::Sheets;
 
@@ -35,7 +39,6 @@ public:
     Selection *selection;
     Ui::PivotMain mainWidget;
 };
-
 PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     KDialog(parent),
     d(new Private)
@@ -50,6 +53,7 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     setButtonGuiItem(User2, KGuiItem(i18n("Add Filter")));
     enableButton(User1,true);
     enableButton(User2,true);
+    enableButton(Ok,true);
     d->mainWidget.TotalRows->setChecked(true);
     d->mainWidget.TotalColumns->setChecked(true);
 
@@ -87,7 +91,7 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     connect(this,SIGNAL(user2Clicked()),this,SLOT(on_AddFilter_clicked()));
     connect(this, SIGNAL(user1Clicked()), this, SLOT(on_Options_clicked()));
     extractColumnNames();
-
+    connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));
 }
 
 PivotMain::~PivotMain()
@@ -104,10 +108,8 @@ void PivotMain::extractColumnNames()
 
     Cell cell;
     QListWidgetItem * item;
-
     QString text;
-
-    int index = 0;
+    //int index = 0;
     for (int i = range.left(); i <= r; ++i) {
         cell = Cell(sheet, i, row);
         text = cell.displayText();
@@ -140,4 +142,134 @@ void PivotMain::on_AddFilter_clicked()
         pFilters->setModal(true);
         pFilters->exec();
 
+}
+void PivotMain::Summarize()
+{
+    Sheet *const sheet = d->selection->lastSheet();
+    const QRect range = d->selection->lastRange();
+
+    int r = range.right();
+    int row=range.top();
+    int bottom=range.bottom();
+    Cell cell;
+    
+    ValueConverter *c;
+    
+    Value res(0);
+    ValueCalc *calc= new ValueCalc(c);
+    
+    QVector<Value> vect;    
+    for (int i = range.left(); i <= r; ++i) {
+	cell= Cell(sheet,i,row);
+	vect.append(Value(cell.value()));
+	
+      }
+//    qDebug()<<vect;
+
+  
+  //For Creating QLists for Rows,Columns,Values and PageField
+  int counter;
+  QListWidgetItem *item1;
+  QList<QListWidgetItem *> rowList,columnList,valueList,pageList;
+  
+  counter= d->mainWidget.Rows->count();
+  for(int i=0;i<counter;i++)
+  {
+	qDebug()<<"1";
+        item1=d->mainWidget.Rows->item(i);
+        rowList.append(item1);
+        qDebug()<<"rowList"<<rowList.at(i)->text();
+    
+  }
+  counter= d->mainWidget.Columns->count();
+  for(int i=0;i<counter;i++)
+  {
+	qDebug()<<"2";
+        item1=d->mainWidget.Columns->item(i);
+        columnList.append(item1);
+        qDebug()<<"Column List"<<columnList.at(i)->text();
+    
+  }
+  counter= d->mainWidget.PageFields->count();
+  for(int i=0;i<counter;i++)
+  {
+	qDebug()<<"3";
+        item1=d->mainWidget.PageFields->item(i);
+        pageList.append(item1);
+        qDebug()<<"PageFields"<<pageList.at(i)->text();
+    
+  }
+  counter= d->mainWidget.Values->count();
+  for(int i=0;i<counter;i++)
+  {
+	qDebug()<<"4";
+        item1=d->mainWidget.Values->item(i);
+        valueList.append(item1);
+        qDebug()<<"Values"<<valueList.at(i)->text(); 
+  }
+  qDebug()<<valueList;
+  
+  //Summarization using vectors
+  int rowpos,colpos,valpos;
+  QVector<Value> rowVector;
+  QVector<Value> columnVector;
+  QVector<Value> valueVector;
+  for(int i=0;i<rowList.size();i++)
+  {
+      rowpos=vect.indexOf(Value(rowList.at(i)->text()));
+      for(int j=row+1;j<=bottom;j++)
+      {
+	cell =Cell(sheet,rowpos+1,j);
+	if(rowVector.contains(Value(cell.value()))==0)
+	rowVector.append(Value(cell.value()));
+      }
+  }
+  for(int i=0;i<columnList.size();i++)
+  {
+      colpos=vect.indexOf(Value(columnList.at(i)->text()));
+      for(int j=row+1;j<=bottom;j++)
+      {
+	cell =Cell(sheet,colpos+1,j);
+	if(columnVector.contains(Value(cell.value()))==0)
+	columnVector.append(Value(cell.value()));
+      }
+  }
+  qDebug()<<"rowVector"<<rowVector;
+  qDebug()<<"ColumnVector"<<columnVector;
+  for(int i=0;i<valueList.size();i++)
+  {
+     valpos=vect.indexOf(Value(valueList.at(i)->text()));
+      
+  }
+  qDebug()<<rowpos<<colpos<<valpos<<valueList;
+  for(int i=0;i<rowVector.count();i++)
+  {
+    for(int j=0;j<columnVector.count();j++)
+    {
+      QVector<Value> aggregate;
+	
+      
+      for(int k=row+1;k<=bottom;k++)
+      {
+      if(Cell(sheet,rowpos+1,k).value()==rowVector.at(i) && Cell(sheet,colpos+1,k).value()==columnVector.at(j))
+	aggregate.append(Cell(sheet,valpos+1,k).value());
+    
+      }
+      qDebug()<<"Working till here";
+      calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
+      qDebug()<<rowVector.at(i)<<columnVector.at(j)<<aggregate<<res;
+      aggregate.clear();
+      res=Value(0);
+    }
+  }
+}
+
+void PivotMain::on_Ok_clicked()
+{
+  
+  Summarize();
+  QMessageBox msgBox;
+  msgBox.setText("Pivot Tables under Construction");
+  msgBox.exec();
+  
 }

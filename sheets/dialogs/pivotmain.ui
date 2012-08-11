@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>284</width>
+    <width>291</width>
     <height>249</height>
    </rect>
   </property>
@@ -94,7 +94,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="Values"/>
+            <widget class="QListWidget" name="PageFields"/>
            </item>
           </layout>
          </item>
@@ -108,7 +108,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QListWidget" name="PageFields"/>
+            <widget class="QListWidget" name="Values"/>
            </item>
           </layout>
          </item>
