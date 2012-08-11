@@ -30,9 +30,9 @@
 #include <KDebug>
 
 //Kexi Includes
-#include <kexidb/driver.h>
-#include <kexidb/cursor.h>
-#include <kexidb/error.h>
+#include <db/driver.h>
+#include <db/cursor.h>
+#include <db/error.h>
 
 //Local Includes
 #include "odbcconnection.h"

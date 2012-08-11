@@ -63,6 +63,7 @@
 #include "KoTextSoftPageBreak.h"
 #include "KoDocumentRdfBase.h"
 #include "KoElementReference.h"
+#include "KoTextTableTemplate.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -1845,6 +1846,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
             QTextCharFormat newCharFormat = cursor.charFormat();
             newCharFormat.setAnchor(true);
+            newCharFormat.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
             newCharFormat.setAnchorHref(target);
             cursor.setCharFormat(newCharFormat);
 
@@ -1920,6 +1922,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             if (!bookmarkName.isEmpty()) {
                 QTextCharFormat linkCf(cf); // and copy it to alter it
                 linkCf.setAnchor(true);
+                linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Bookmark);
                 QStringList anchorName;
                 anchorName << bookmarkName;
                 linkCf.setAnchorHref('#'+ bookmarkName);
@@ -2181,6 +2184,37 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         KoTableStyle *tblStyle = d->textSharedData->tableStyle(tableStyleName, d->stylesDotXml);
         if (tblStyle)
             tblStyle->applyStyle(tableFormat);
+    }
+
+    QString tableTemplateName = tableElem.attributeNS(KoXmlNS::table, "template-name", "");
+    if (! tableTemplateName.isEmpty()) {
+        if(KoTextTableTemplate *tableTemplate = d->styleManager->tableTemplate(tableTemplateName)) {
+            tableFormat.setProperty(KoTableStyle::TableTemplate, tableTemplate->styleId());
+        }
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-banding-columns-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseBandingColumnStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-banding-rows-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseBandingRowStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-first-column-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseFirstColumnStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-first-row-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseFirstRowStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-last-column-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseLastColumnStyles, true);
+    }
+
+    if (tableElem.attributeNS(KoXmlNS::table, "use-last-row-styles", "false") == "true") {
+        tableFormat.setProperty(KoTableStyle::UseLastRowStyles, true);
     }
 
     // Let's try to figure out when to hide the current block

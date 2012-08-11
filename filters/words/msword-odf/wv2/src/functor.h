@@ -56,7 +56,7 @@ namespace wvWare
     };
 
     /**
-     * A small helper function to avoid unnecessary uglyness in the template
+     * A small helper function to avoid unnecessary ugliness in the template
      * creation code. The function figures out the types and we don't have to
      * specify them explicitly every time we create a functor.
      */

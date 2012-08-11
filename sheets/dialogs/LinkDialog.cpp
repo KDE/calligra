@@ -30,14 +30,14 @@
 #include "ui/Selection.h"
 #include "Sheet.h"
 
+#include <KoIcon.h>
+
 #include <QLabel>
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
 #include <kdesktopfile.h>
 #include <kpagedialog.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -79,7 +79,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->internetPage = new QWidget();
     d->p1 = addPage(d->internetPage, i18n("Internet"));
     d->p1->setHeader(i18n("Link to Internet Address"));
-    d->p1->setIcon(KIcon("internet-web-browser"));
+    d->p1->setIcon(koIcon("internet-web-browser"));
     QVBoxLayout* iLayout = new QVBoxLayout(d->internetPage);
     iLayout->addWidget(new QLabel(i18n("Text to display:"), d->internetPage));
     d->internetText = new KLineEdit(d->internetPage);
@@ -95,7 +95,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->mailPage = new QWidget();
     d->p2 = addPage(d->mailPage, i18n("Email"));
     d->p2->setHeader(i18n("Link to Email Address"));
-    d->p2->setIcon(KIcon("internet-mail"));
+    d->p2->setIcon(koIcon("internet-mail"));
     QVBoxLayout* mLayout = new QVBoxLayout(d->mailPage);
     mLayout->addWidget(new QLabel(i18n("Text to display:"), d->mailPage));
     d->mailText = new KLineEdit(d->mailPage);
@@ -114,7 +114,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->filePage = new QWidget();
     d->p3 = addPage(d->filePage, i18n("File"));
     d->p3->setHeader(i18n("Link to File"));
-    d->p3->setIcon(KIcon("system-file-manager"));
+    d->p3->setIcon(koIcon("system-file-manager"));
     QVBoxLayout* fLayout = new QVBoxLayout(d->filePage);
     fLayout->addWidget(new QLabel(i18n("Text to display:"), d->filePage));
     d->fileText = new KLineEdit(d->filePage);
@@ -152,7 +152,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->cellPage = new QWidget();
     d->p4 = addPage(d->cellPage, i18n("Cell"));
     d->p4->setHeader(i18n("Link to Cell"));
-    d->p4->setIcon(KIcon("table"));
+    d->p4->setIcon(koIcon("table"));
     QVBoxLayout* cLayout = new QVBoxLayout(d->cellPage);
     cLayout->addWidget(new QLabel(i18n("Text to display:"), d->cellPage));
     d->cellText = new KLineEdit(d->cellPage);

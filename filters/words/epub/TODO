@@ -1,0 +1,83 @@
+This file describes short and long term tasks that we want to do in
+the epub filter.
+
+
+Legend
+------
+
+* Main issue
++ Sub issue
+- Sub sub issue
+
+[DONE]    Main issue is done
+[Done]    Sub issue is done
+[done]    Sub sub issue is done
+
+[name]    <name> is assigned to this task
+
+
+================================================================
+                        Milestones
+
+Next Milestone: <not decided>
+
+
+
+================================================================
+                        Issues
+
+
+Short term issues
+-----------------
+
+Time frame: (days / weeks)
+
+[These issues are picked from the medium and long term issues and
+assigned to a person.]
+
+Fix known bugs / misfeatures
+ * Collect images in a list while doing the conversion to
+   html and go through them afterwards and save them.
+ * Get the book ID somewhere from. We may have to add this      [ingwa]
+   to metadata as well. Same for language.
+
+Improve style handling
+ * Collect default styles and let all styles that don't have
+   a parent style use this one as parent.
+
+Features
+ * Support for internal links                                   [Done]
+
+
+
+Medium term issues
+------------------
+
+Time frame: (weeks / months)
+
+Frames
+ * Different anchor and text run-around cases
+ * Get replacement images from content shapes that we
+   don't recognize.
+
+Conversions to supported formats inside the EPUB
+ * Convert wmf to svg						[moji]
+ * Convert emf to svg						[moji]
+ * Convert svm to svg						[moji]
+
+More formatting
+ * Space before/after a paragraph
+
+
+
+Long term issues
+----------------
+
+Time frame: (months / years)
+ 
+EPUB 3.0
+ * SVG
+ * MathML
+ * Multimedia, video
+ * Multimedia, audio
+ * Scripting with Javascript

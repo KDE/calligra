@@ -609,8 +609,8 @@ void MyKDGanttView::createDependencies()
 }
 
 //------------------------------------------
-GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
-    : ViewBase( part, parent ),
+GanttView::GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite)
+    : ViewBase(part, doc, parent),
     m_readWrite( readWrite ),
     m_project( 0 )
 {
@@ -940,8 +940,8 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
 
 //------------------------------------------
 
-MilestoneGanttView::MilestoneGanttView( KoDocument *part, QWidget *parent, bool readWrite )
-    : ViewBase( part, parent ),
+MilestoneGanttView::MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite)
+    : ViewBase(part, doc, parent),
         m_readWrite( readWrite ),
         m_project( 0 )
 {
@@ -1094,8 +1094,8 @@ ResourceAppointmentsGanttViewSettingsDialog::ResourceAppointmentsGanttViewSettin
 
 //------------------------------------------
 
-ResourceAppointmentsGanttView::ResourceAppointmentsGanttView( KoDocument *part, QWidget *parent, bool readWrite )
-    : ViewBase( part, parent ),
+ResourceAppointmentsGanttView::ResourceAppointmentsGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite)
+    : ViewBase(part, doc, parent),
     m_project( 0 ),
     m_model( new ResourceAppointmentsGanttModel( this ) )
 {

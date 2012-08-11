@@ -134,7 +134,7 @@ public:
     /// Create a unique tag
     QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
-    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, ViewBase *view, KoDocument *doc, const QString& icon = QString(), int index = -1 );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString &name, ViewBase *view, KoDocument *doc, const QString &iconName = QString(), int index = -1 );
 
     void setSelected( QTreeWidgetItem *item );
     ViewListItem *currentItem() const;

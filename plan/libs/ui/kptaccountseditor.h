@@ -90,7 +90,7 @@ class KPLATOUI_EXPORT AccountsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    AccountsEditor( KoDocument *KoDocument, QWidget *parent );
+    AccountsEditor(KoPart *part, KoDocument *document, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }

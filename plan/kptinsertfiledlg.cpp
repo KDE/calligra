@@ -21,7 +21,6 @@
 #include "kptnode.h"
 #include "kptproject.h"
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
 #include <kdebug.h>
@@ -30,12 +29,6 @@
 
 namespace KPlato
 {
-
-// little helper stolen from kmail/words
-static inline QPixmap loadIcon( const char * name ) {
-  return KIconLoader::global()->loadIcon( QString::fromLatin1(name), KIconLoader::NoGroup, KIconLoader::SizeMedium );
-}
-
 
 InsertFileDialog::InsertFileDialog( Project &project, Node *currentNode, QWidget *parent )
     : KDialog(parent)

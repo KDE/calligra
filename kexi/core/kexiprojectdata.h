@@ -22,8 +22,8 @@
 #define KEXIPROJECTDATA_H
 
 #include <kexi_export.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/schemadata.h>
+#include <db/connectiondata.h>
+#include <db/schemadata.h>
 
 #include <QDateTime>
 #include <QList>

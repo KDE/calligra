@@ -291,7 +291,7 @@ public:
      By default it is equal to @a item but e.g. for pages of QTabWidget,
      item for the widget itself is returned.
      Used when user clicks on the Widget Tree item or when parent of the current
-     widget should to be selected. Defaults can be overriden by reimplementing this method. */
+     widget should to be selected. Defaults can be overridden by reimplementing this method. */
     virtual ObjectTreeItem* selectableItem(ObjectTreeItem* item);
 
 protected:

@@ -123,10 +123,33 @@ parsePictures(POLE::Storage& storage, PicturesStream& pps)
     }
     return true;
 }
+
+bool
+parseSummaryInformationStream(POLE::Storage& storage, SummaryInformationPropertySetStream& sis)
+{
+    QBuffer buffer;
+    if (!readStream(storage, "/SummaryInformation", buffer)) {
+        qDebug() << "Failed to open /SummaryInformation stream, no big deal (OPTIONAL).";
+        return true;
+    }
+    LEInputStream stream(&buffer);
+    try {
+        parseSummaryInformationPropertySetStream(stream, sis);
+    } catch (const IOException& e) {
+        qDebug() << "caught IOException while parsing SummaryInformation" << " " << e.msg;
+        qDebug() << "stream position: " << stream.getPosition();
+        return false;
+    } catch (...) {
+        qDebug() << "caught unknown exception while parsing SummaryInformation";
+        return false;
+    }
+    return true;
+}
+
 /**
-  * get the UserEditAtom that is at position @offset in the stream.
-  * return 0 if it is not present.
-  **/
+ * get the UserEditAtom that is at position @offset in the stream.
+ * return 0 if it is not present.
+ **/
 template <typename T>
 const T*
 get(const PowerPointStructs& pps, quint32 offset)
@@ -184,6 +207,11 @@ ParsedPresentation::parse(POLE::Storage& storage)
         qDebug() << "error parsing PicturesStream";
         return false;
     }
+    if (!parseSummaryInformationStream(storage, summaryInfo)) {
+        qDebug() << "error parsing SummaryInformationStream";
+        return false;
+    }
+
 // Part 1: Construct the persist object directory
     const UserEditAtom* userEditAtom = get<UserEditAtom>(presentation,
                                        currentUserStream.anon1.offsetToCurrentEdit);

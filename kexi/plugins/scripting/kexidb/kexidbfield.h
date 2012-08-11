@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/field.h>
+#include <db/drivermanager.h>
+#include <db/field.h>
 
 namespace Scripting
 {

@@ -25,11 +25,11 @@
 
 #include <kmenu.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kapplication.h>
-#include <KIcon>
+
+#include <KoIcon.h>
 
 #include "kexiquerydesignersqlhistory.h"
 #include <QTextDocument>
@@ -47,7 +47,7 @@ KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent)
     m_history = new History();
 
     m_popup = new KMenu(this);
-    m_popup->addAction(KIcon("edit-copy"), i18n("Copy to Clipboard"),
+    m_popup->addAction(koIcon("edit-copy"), i18n("Copy to Clipboard"),
                        this, SLOT(slotToClipboard()));
     installEventFilter(this);
 }
@@ -161,13 +161,13 @@ void KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 {
   KMenu p(this);
-  p.insertItem(SmallIcon("edit-copy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
+  p.insertItem(koIcon("edit-copy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
 
 
 #ifndef KEXI_NO_UNFINISHED
   p.insertSeparator();
-  p.insertItem(SmallIcon("document-properties"), i18n("Edit"), this, SLOT(slotEdit()));
-  p.insertItem(SmallIcon("view-refresh"), i18n("Requery"));
+  p.insertItem(koIcon("document-properties"), i18n("Edit"), this, SLOT(slotEdit()));
+  p.insertItem(koIcon("view-refresh"), i18n("Requery"));
 #endif
 
   p.exec(pos);
@@ -259,10 +259,8 @@ void HistoryEntry::drawItem(QPainter *p, int width)
     int lineHeight = QFontMetrics(p->font()).height();
     p->drawRect(2, 2, 150, lineHeight);
 
-    if (m_succeeded)
-        p->drawPixmap(4, 4, SmallIcon("dialog-ok"));
-    else
-        p->drawPixmap(4, 4, SmallIcon("dialog-error"));
+    const char *const iconName = (m_succeeded ? koIconNameCStr("dialog-ok") : koIconNameCStr("dialog-error"));
+    p->drawPixmap(4, 4, SmallIcon(QLatin1String(iconName)));
 
     p->setPen(fgBrush.color());
     p->setBrush(fgBrush);

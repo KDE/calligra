@@ -42,8 +42,8 @@
 
 #include <kdialog.h>
 
-#include <kexiutils/tristate.h>
-#include <kexidb/connection.h>
+#include <db/tristate.h>
+#include <db/connection.h>
 #include <QModelIndex>
 #include "kexicsvimportoptionsdlg.h"
 
@@ -193,16 +193,7 @@ private:
     QByteArray m_fileArray;
     Mode m_mode;
 
-    //! vector of detected types, 0==text (the default), 1==number, 2==date
-//! @todo more types
-    QVector<int> m_detectedTypes;
-
-    //! m_detectedUniqueColumns[i]==true means that i-th column has unique values
-    //! (only for numeric type)
-    QVector< QList<int>* > m_uniquenessTest;
-
     QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
-    QVector<QString> m_typeNames;
     bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once
     bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row
     bool m_firstFillTableCall : 1; //!< used to know whether it's 1st fillTable() call
@@ -242,6 +233,9 @@ private:
 #endif
     qint64 m_elapsedMs;
 
+    class Private;
+    Private * const d;
+
 private slots:
     void fillTable();
     void fillTableLater();
@@ -250,7 +244,7 @@ private slots:
     void delimiterChanged(const QString& delimiter);
     void startlineSelected(int line);
     void textquoteSelected(int);
-    void currentCellChanged(const QModelIndex &prev, const QModelIndex &cur);
+    void currentCellChanged(const QModelIndex &cur, const QModelIndex &prev);
     void ignoreDuplicatesChanged(int);
     void slot1stRowForFieldNamesChanged(int state);
     void optionsButtonClicked();

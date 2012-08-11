@@ -20,29 +20,9 @@
 
 #include "identifier.h"
 #include "transliteration_table.h"
+#include <db/utils.h>
 
 using namespace KexiUtils;
-
-bool KexiUtils::isIdentifier(const QString& s)
-{
-    uint i;
-    const uint sLength = s.length();
-    for (i = 0; i < sLength; i++) {
-        QChar c = s.at(i).toLower();
-        if (!(c == '_' || (c >= 'a' && c <= 'z') || (i > 0 && c >= '0' && c <= '9')))
-            break;
-    }
-    return i > 0 && i == sLength;
-}
-
-QString KexiUtils::string2FileName(const QString &s)
-{
-    QString fn = s.simplified();
-    fn.replace(' ', "_"); fn.replace('$', "_");
-    fn.replace('\\', "-"); fn.replace('/', "-");
-    fn.replace(':', "-"); fn.replace('*', "-");
-    return fn;
-}
 
 inline QString char2Identifier(const QChar& c)
 {
@@ -125,7 +105,7 @@ Validator::Result IdentifierValidator::internalCheck(
     const QString &valueName, const QVariant& v,
     QString &message, QString & /*details*/)
 {
-    if (isIdentifier(v.toString()))
+    if (KexiDB::isIdentifier(v.toString()))
         return Validator::Ok;
     message = identifierExpectedMessage(valueName, v);
     return Validator::Error;

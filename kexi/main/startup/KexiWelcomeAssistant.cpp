@@ -27,15 +27,14 @@
 #include <core/kexiprojectdata.h>
 #include <core/kexiguimsghandler.h>
 #include <core/kexitextmsghandler.h>
-#include <kexidb/utils.h>
-#include <kexidb/object.h>
+#include <db/utils.h>
+#include <db/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -236,7 +235,7 @@ void KexiWelcomeAssistant::showErrorMessage(
     //! @todo + _details
     if (!d->messageWidgetActionTryAgain) {
         d->messageWidgetActionTryAgain = new QAction(
-            KIcon("view-refresh"), i18n("Try Again"), this);
+            koIcon("view-refresh"), i18n("Try Again"), this);
         connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
                 this, SLOT(tryAgainActionTriggered()));
     }

@@ -37,9 +37,9 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/indexschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/indexschema.h>
+#include <db/utils.h>
 
 #include "KexiRelationsScrollArea.h"
 #include "KexiRelationsView.h"

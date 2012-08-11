@@ -47,7 +47,6 @@ public:
     bool loadXML(const KoXmlDocument &doc, KoStore *store);
     
     bool saveOdf(SavingContext &context);
-    KoView *createViewInstance(QWidget *parent);
     
     void paintContent(QPainter &painter, const QRect &rect); 
     

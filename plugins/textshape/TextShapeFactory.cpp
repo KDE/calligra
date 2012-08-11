@@ -34,6 +34,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoInlineNote.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kundo2stack.h>
 #include <QTextCursor>
@@ -50,7 +52,7 @@ TextShapeFactory::TextShapeFactory()
 
     KoShapeTemplate t;
     t.name = i18n("Text");
-    t.icon = "x-shape-text";
+    t.iconName = koIconName("x-shape-text");
     t.toolTip = i18n("Text Shape");
     KoProperties *props = new KoProperties();
     t.properties = props;
@@ -92,6 +94,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
             KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             document.setChangeTracker(changeTracker);
         }
+
+        //update the resources of the document
+        text->updateDocumentData();
 
         text->setImageCollection(documentResources->imageCollection());
     }

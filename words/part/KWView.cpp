@@ -85,6 +85,7 @@
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoIcon.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -92,28 +93,24 @@
 #include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <kdialog.h>
 #include <KToggleAction>
-#include <KStandardDirs>
-#include <KTemporaryFile>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
 #include <KParts/PartManager>
 
-KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
-        : KoView(document, parent)
+KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
+        : KoView(part, document, parent)
         , m_canvas(0)
 {
     setAcceptDrops(true);
 
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
-    m_gui = new KWGui(viewMode, this);
+    m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
@@ -132,10 +129,6 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-    KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
-    if(win) {
-        connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
-    }
 
     m_find = new KoFindText(this);
     m_find->setDocuments(texts);
@@ -237,14 +230,14 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
+    m_actionAddBookmark = new KAction(koIcon("bookmark-new"), i18n("Bookmark..."), this);
     m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
     action->setIconText(i18n("Bookmark"));
-    action->setIcon(KIcon("bookmarks"));
+    action->setIcon(koIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
@@ -272,7 +265,7 @@ void KWView::setupActions()
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
 
-    action = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
+    action = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
@@ -359,7 +352,7 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
 
     // -------------- Settings menu
-    action = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
 
@@ -475,31 +468,8 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::createTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = m_document->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(".ott");
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close();
-    delete tempFile;
-
-    m_document->saveNativeFormat(fileName);
-
-    KoTemplateCreateDia::createTemplate("words_template", KWFactory::componentData(),
-                                        fileName, pix, this);
-
-    KWFactory::componentData().dirs()->addResourceType("words_template",
-            "data", "words/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("words_template", ".ott",
+                                        KWFactory::componentData(), m_document, this);
 }
 
 void KWView::addBookmark()

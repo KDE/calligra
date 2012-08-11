@@ -62,7 +62,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_SCRIPTING TRUE)
+    set(SHOULD_BUILD_SCRIPTING FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -107,8 +107,8 @@ else (QT3SUPPORT)
     find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
 endif (QT3SUPPORT)
 
-include(KDE4Defaults)
-include(MacroLibrary)
+include (KDE4Defaults)
+include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
@@ -161,22 +161,39 @@ if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
 
- ################################
-#################################
-## Check for OpenEXR           ##
-#################################
-################################
-
-
-macro_optional_find_package(OpenEXR)
-macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-
-
  ###########################
 ############################
 ## Optional dependencies  ##
 ############################
 ###########################
+
+##
+## Test for sqlite
+##
+set(SQLITE_MIN_VERSION 3.6.16)
+set(SQLITE_RECOMMENDED_VERSION 3.7.12)
+set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
+macro_optional_find_package(CalligraSqlite 3.6.16)
+macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
+macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+                    "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+		    "Required by Calligra's default database handler for Kexi and Words.")
+
+##
+## Test for ICU
+##
+macro_optional_find_package(ICU)
+macro_bool_to_01(ICU_FOUND HAVE_ICU)
+macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+                    "http://icu-project.org" FALSE ""
+		    "Required by Calligra's default database handler for Kexi and Words.")
+
+##
+## Check for OpenEXR 
+##
+
+macro_optional_find_package(OpenEXR)
+macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 
 ##
 ## Look for OpenGL
@@ -261,25 +278,25 @@ if( MARBLE_FOUND )
     ##
     find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
     if( MARBLECONTROLBOX_H )
-	file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
-	string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
     endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
-
-
 ##
 ## Test for lcms
 ##
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Will be used for color management and is necesary for Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+        set(HAVE_LCMS24 TRUE)
+    endif(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
-    set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
 ##
@@ -320,20 +337,26 @@ endif(WIN32)
 ##
 ## Test for Fontconfig
 ##
-macro_optional_find_package(Fontconfig)
-macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Fontconfig)
+    macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
 ##
 ## Test for Freetype
 ##
-macro_optional_find_package(Freetype)
-macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Freetype)
+    macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
 if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
 else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+    add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
   
 ##
@@ -454,6 +477,10 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
 
+# calligradb
+SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs)  # TODO remove when Predicate lib arrives
+
  #############################################
 ##############################################
 ## Detect which applications can be compile ##
@@ -511,32 +538,7 @@ option(BUILD_koreport "Build directory libs/koreport" ON)
 ### HACK ###
 
 if(BUILD_kexi AND SHOULD_BUILD_KEXI)
-    ##
-    ## Test for sqlite
-    ##
-    set(SQLITE_MIN_VERSION 3.6.16)
-    set(SQLITE_RECOMMENDED_VERSION 3.7.12)
-    set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-    find_package(CalligraSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
-                      "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
-                      "Required by Kexi for its default database driver.")
-    if(NOT SQLITE_FOUND)
-        set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Because of that, Kexi will not be built.")
-    endif(NOT SQLITE_FOUND)
-
-    ##
-    ## Test for ICU
-    ##
-    find_package(ICU)
-    macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
-                      "http://icu-project.org" FALSE "" "Required by Kexi")
-
-    if(NOT ICU_FOUND)
-        set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Because of that, Kexi will not be built.")
-    endif(NOT ICU_FOUND)
+###
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
  ###################
