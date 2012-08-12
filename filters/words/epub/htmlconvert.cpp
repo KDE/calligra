@@ -279,7 +279,7 @@ void handleStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attL
         << "border-top" << "border-bottom" << "border-left" << "border-right" << "border"
         // padding
         << "padding-top" << "padding-bottom" << "padding-left" << "padding-right" << "padding"
-        << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" << "margin"
+        << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" //<< "margin"
         << "auto";
 
     foreach(const QString &attrName, attributes) {
@@ -813,10 +813,8 @@ void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *bodyWri
                                  QHash<QString, KoXmlElement> &endNotes)
 {
     if (nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text) {
-        bodyWriter->startElement("p");
-        handleInsideElementsTag(nodeElement, bodyWriter, styles, imagesSrcList,
+        handleTagP(nodeElement, bodyWriter, styles, imagesSrcList,
                                 linksInfo, footNotes, endNotes);
-        bodyWriter->endElement();
     }
 }
 
