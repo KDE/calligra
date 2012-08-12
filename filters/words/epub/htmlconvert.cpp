@@ -81,7 +81,8 @@ static void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *
                        QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList,
                                         QHash<QString, QString> linksInfo);
 static void handleTagLineBreak(KoXmlWriter *bodyWriter);
-static void handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter);
+static void handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter);
+static void handleTagBookMarkEnd(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter);
 static void handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
                        QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList,
                               QHash<QString, QString> linksInfo);
@@ -726,12 +727,16 @@ void handleTagLineBreak (KoXmlWriter *bodyWriter)
     bodyWriter->endElement();
 }
 
-void handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter)
+void handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter)
 {
     QString anchor = nodeElement.attribute("name");
     bodyWriter->startElement("a");
-    bodyWriter->addAttribute("type", "simple");
-    bodyWriter->addAttribute("name", anchor);
+    //bodyWriter->addAttribute("name", anchor);
+    bodyWriter->addAttribute("id", anchor);
+}
+
+void handleTagBookMarkEnd(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter)
+{
     bodyWriter->endElement();
 }
 
@@ -789,7 +794,10 @@ void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *bodyWriter,
             handleTagTab(bodyWriter);
         }
         else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagBookMark(element, bodyWriter);
+            handleTagBookMarkStart(element, bodyWriter);
+        }
+        else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagBookMarkEnd(element, bodyWriter);
         }
         else
             handleUnknownTags(element, bodyWriter, styles, imagesSrcList, linksInfo);
@@ -819,7 +827,7 @@ void collectInternalLinksInfo(KoXmlElement &currentElement, QHash<QString, Style
         else if (nodeElement.localName() == "bookmark-start" && nodeElement.namespaceURI() == KoXmlNS::text) {
             // FIXME : This is a hard code for nameing body we should change it when
             // we change body to chapter.
-            QString value = "body" + QString::number(currentChapter) + ".html";
+            QString value = "chapter" + QString::number(currentChapter) + ".xhtml";
             QString key = "#" + nodeElement.attribute("name");
             kDebug(30517) << value <<key;
             linksInfo.insert(key, value);
