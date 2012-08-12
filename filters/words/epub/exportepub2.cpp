@@ -127,9 +127,6 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // Extract images
 
     // Check for the pictures directory in the odf store.
-    //
-    // FIXME: Don't  hardcode the "Pictures"  directory, it is  only a
-    //        convention, not a standard.
         status = extractImages(odfStore, &epub);
         if (status != KoFilter::OK) {
             delete odfStore;
