@@ -54,6 +54,7 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
                                                        QWidget *parent)
     : QWidget(parent)
     , m_docker(docker)
+    , m_previewAnimation(0)
     , m_showAutomaticPreview(false)
     , m_animationsData(animationsData)
     , m_collectionContextBar(0)
