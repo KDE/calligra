@@ -30,7 +30,9 @@
 #include "Value.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
-
+#include "Map.h"
+#include "DocBase.h"
+#include<QObject>
 using namespace Calligra::Sheets;
 
 class PivotMain::Private
@@ -147,7 +149,22 @@ void PivotMain::Summarize()
 {
     Sheet *const sheet = d->selection->lastSheet();
     const QRect range = d->selection->lastRange();
-
+    
+    
+    //DocBase* doc=new DocBase();
+    //qDebug()<<"doc"<<doc;
+    Map* myMap = sheet->map();
+    //myMap->createSheet("PivotSheet");
+    
+    
+    
+    //Sheet *mysheet=new Sheet(myMap,"PivotSheet");
+    Sheet* mysheet=myMap->createSheet("PivotSheet");
+   // Cell(mysheet,1,1).setValue(Value(23));
+    //qDebug()<<"cellvalue"<<Cell(mysheet,1,1).value();
+    //myMap->addSheet(mysheet);
+    //qDebug()<<"Sheet number"<<myMap->indexOf(mysheet);
+    
     int r = range.right();
     int row=range.top();
     int bottom=range.bottom();
@@ -164,7 +181,7 @@ void PivotMain::Summarize()
 	vect.append(Value(cell.value()));
 	
       }
-//    qDebug()<<vect;
+
 
   
   //For Creating QLists for Rows,Columns,Values and PageField
@@ -237,11 +254,42 @@ void PivotMain::Summarize()
   qDebug()<<"rowVector"<<rowVector;
   qDebug()<<"ColumnVector"<<columnVector;
   for(int i=0;i<valueList.size();i++)
-  {
+  {{
+    for(int j=0;j<columnVector.count();j++)
+    {
+      QVector<Value> aggregate;
+	
+      
+      for(int k=row+1;k<=bottom;k++)
+      {
+      if(Cell(sheet,rowpos+1,k).value()==rowVector.at(i) && Cell(sheet,colpos+1,k).value()==columnVector.at(j))
+	aggregate.append(Cell(sheet,valpos+1,k).value());
+    
+      }
+      qDebug()<<"Working till here";
+      calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
+      qDebug()<<rowVector.at(i)<<columnVector.at(j)<<aggregate<<res;
+      Cell(mysheet,i+2,j+2).setValue(res);
+      aggregate.clear();
+      res=Value(0);
+    }
+  }
      valpos=vect.indexOf(Value(valueList.at(i)->text()));
       
   }
-  qDebug()<<rowpos<<colpos<<valpos<<valueList;
+  
+  
+  Cell(mysheet,1,1).setValue(Value("PIVOT"));
+  
+  for(int i=1;i<=rowVector.count();i++)
+  {
+    Cell(mysheet,i+1,1).setValue(rowVector.at(i-1));
+  }
+  for(int i=1;i<=columnVector.count();i++)
+  {
+    Cell(mysheet,1,i+1).setValue(columnVector.at(i-1));
+  }
+  //qDebug()<<rowpos<<colpos<<valpos<<valueList;
   for(int i=0;i<rowVector.count();i++)
   {
     for(int j=0;j<columnVector.count();j++)
@@ -258,18 +306,24 @@ void PivotMain::Summarize()
       qDebug()<<"Working till here";
       calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
       qDebug()<<rowVector.at(i)<<columnVector.at(j)<<aggregate<<res;
+      Cell(mysheet,i+2,j+2).setValue(res);
       aggregate.clear();
       res=Value(0);
     }
   }
+  rowVector.clear();
+  columnVector.clear();
+  valueVector.clear();
+  myMap->addSheet(mysheet);
+  
 }
 
 void PivotMain::on_Ok_clicked()
 {
   
   Summarize();
-  QMessageBox msgBox;
-  msgBox.setText("Pivot Tables under Construction");
-  msgBox.exec();
+  //QMessageBox msgBox;
+  //msgBox.setText("Pivot Tables under Construction");
+  //msgBox.exec();
   
 }
