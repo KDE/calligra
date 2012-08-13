@@ -21,10 +21,10 @@
 #ifndef _KEXICOMBOBOXTABLEEDIT_H_
 #define _KEXICOMBOBOXTABLEEDIT_H_
 
-#include "kexidb/field.h"
 #include "kexiinputtableedit.h"
 #include "kexicomboboxbase.h"
-#include <kexidb/lookupfieldschema.h>
+#include <db/field.h>
+#include <db/lookupfieldschema.h>
 
 //Added by qt3to4:
 #include <QKeyEvent>

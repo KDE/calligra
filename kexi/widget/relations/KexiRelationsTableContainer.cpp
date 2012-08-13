@@ -34,14 +34,13 @@
 #include <QStyleOptionFocusRect>
 
 #include <KDebug>
-#include <KIconLoader>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
 
 #include <kexiutils/utils.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/utils.h>
 #include <kexidragobjects.h>
 #include "KexiRelationsTableContainer.h"
 #include "KexiRelationsTableContainer_p.h"

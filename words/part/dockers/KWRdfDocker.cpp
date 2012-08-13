@@ -2,6 +2,7 @@
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2012 Ben Martin
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,11 +34,11 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
-#include <kicon.h>
 #include <kdebug.h>
 
-#include <QTimer>
 #include <QTextDocument>
 #include <KMenu>
 
@@ -46,18 +47,14 @@
 KWRdfDocker::KWRdfDocker()
     : m_canvas(0),
       m_lastCursorPosition(-1),
-      m_autoUpdate(false),
       m_document(0),
-      m_timer(new QTimer(this)),
       m_textDocument(0)
 {
     setWindowTitle(i18n("RDF"));
-    m_timer->setInterval(300);
-    m_timer->setSingleShot(true);
 
     QWidget *widget = new QWidget();
     widgetDocker.setupUi(widget);
-    widgetDocker.refresh->setIcon(KIcon("view-refresh"));
+
     // Semantic view
     m_rdfSemanticTree = KoRdfSemanticTree::createTree(widgetDocker.semanticView);
 
@@ -65,12 +62,6 @@ KWRdfDocker::KWRdfDocker()
     connect(widgetDocker.semanticView, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showSemanticViewContextMenu(const QPoint &)));
     setWidget(widget);
-
-    connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateDataForced()));
-    connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
-
-    widgetDocker.autoRefresh->setCheckState( Qt::Unchecked );
 }
 
 KWRdfDocker::~KWRdfDocker()
@@ -101,7 +92,6 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
                 this, SLOT(semanticObjectUpdated(KoRdfSemanticItem*)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
-    setAutoUpdate(widgetDocker.autoRefresh->checkState());
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant&)),
             this, SLOT(resourceChanged(int,const QVariant&)));
 }
@@ -138,7 +128,7 @@ void KWRdfDocker::semanticObjectUpdated(KoRdfSemanticItem *item)
  */
 void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
 {
-    QPointer<KMenu> menu = new KMenu(0); // TODO why QPointer???
+    KMenu* menu = new KMenu(0);
     QList<KAction *> actions;
     if (QTreeWidgetItem *baseitem = widgetDocker.semanticView->itemAt(position)) {
         if (KoRdfSemanticTreeWidgetItem *item = dynamic_cast<KoRdfSemanticTreeWidgetItem*>(baseitem)) {
@@ -151,7 +141,7 @@ void KWRdfDocker::showSemanticViewContextMenu(const QPoint &position)
         }
         menu->exec(widgetDocker.semanticView->mapToGlobal(position));
     }
-    // TODO this leaks
+    delete menu;
 }
 
 void KWRdfDocker::updateDataForced()
@@ -179,11 +169,11 @@ void KWRdfDocker::updateData()
         if (m_lastCursorPosition == editor->position())
             return;
         m_lastCursorPosition = editor->position();
-        Soprano::Model* model = rdf->findStatements(editor);
+        QSharedPointer<Soprano::Model> model = rdf->findStatements(editor);
         //kDebug(30015) << "----- current Rdf ----- sz:" << model->statementCount();
 
         //
-        // Now expand the found Rdf a little bit
+        // Now expand the found RDF a little bit
         // and try to show any Semantic Objects
         // it contains. The user probably doesn't
         // care about the triples, just the meaning.
@@ -191,24 +181,6 @@ void KWRdfDocker::updateData()
         if (widgetDocker.semanticView) {
             m_rdfSemanticTree.update(rdf, model);
         }
-        delete model;
-    }
-}
-
-void KWRdfDocker::setAutoUpdate(int state)
-{
-    // XXX: autoupdate should probably not use a timer, but the text editor plugin
-    //      functionality, like the statistics docker.
-    if (m_canvas) {
-        //kDebug(30015) << "m_textDocument:" << m_textDocument;
-        if (state == Qt::Checked) {
-            m_autoUpdate = true;
-            m_timer->start();
-        } else {
-            m_autoUpdate = false;
-            m_timer->stop();
-        }
-        widgetDocker.refresh->setVisible(!m_autoUpdate);
     }
 }
 

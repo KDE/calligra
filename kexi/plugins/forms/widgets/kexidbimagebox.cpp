@@ -44,11 +44,12 @@
 #include <kguiitem.h>
 #include <KIconEffect>
 
+#include <KoIcon.h>
 #include <widget/utils/kexidropdownbutton.h>
 #include <kexiutils/utils.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/queryschema.h>
 #include <formeditor/widgetlibrary.h>
 #include <formeditor/utils.h>
 #include <kexi_global.h>
@@ -809,7 +810,7 @@ void KexiDBImageBox::updatePixmap()
     if (!KexiDBImageBox_static->pixmap) {
         const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
         QPixmap pm( KIconLoader::global()->loadMimeTypeIcon(
-            "image-x-generic", KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
+            koIconNameCStr("image-x-generic"), KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
         if (!pm.isNull()) {
             KIconEffect::semiTransparent(pm);
             KIconEffect::semiTransparent(pm);

@@ -22,9 +22,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "mysqldriver_global.h"
 #include "mysqldriver.h"
 #include "mysqlconnection.h"
-#include <kexidb/field.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 
 #include <QVariant>
 #include <QFile>

@@ -20,7 +20,6 @@
 #ifndef KEXINAMEDIALOG_H
 #define KEXINAMEDIALOG_H
 
-#include <QPixmap>
 #include <QLabel>
 #include <KDialog>
 
@@ -44,8 +43,7 @@ public:
         return m_widget;
     }
 
-public slots:
-    virtual void setDialogIcon(const QPixmap& icon);
+    void setDialogIcon(const QString &iconName);
 
 protected slots:
     void slotTextChanged();

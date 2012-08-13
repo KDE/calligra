@@ -18,11 +18,12 @@
  */
 
 #include "kexiprjtypeselector.h"
+
+#include <KoIcon.h>
 #include <QLabel>
-#include <kiconloader.h>
 #include <kmimetype.h>
-#include <kexidb/driver.h>
-#include <kexidb/utils.h>
+#include <db/driver.h>
+#include <db/utils.h>
 #include <core/kexi.h>
 
 KexiPrjTypeSelector::KexiPrjTypeSelector(QWidget* parent)
@@ -31,9 +32,9 @@ KexiPrjTypeSelector::KexiPrjTypeSelector(QWidget* parent)
     setupUi(this);
     setObjectName("KexiPrjTypeSelector");
     QString none;
-    icon_file->setPixmap(DesktopIcon(KexiDB::defaultFileBasedDriverIcon(), 48));
+    icon_file->setPixmap(KIcon(KexiDB::defaultFileBasedDriverIconName()).pixmap(48,48));
     icon_file->setFixedSize(icon_file->pixmap()->size() / 2);
-    icon_server->setPixmap(DesktopIcon(KEXI_ICON_DATABASE_SERVER, 48));
+    icon_server->setPixmap(KIcon(KEXI_DATABASE_SERVER_ICON_NAME).pixmap(48,48));
     icon_server->setFixedSize(icon_server->pixmap()->size() / 2);
 
     connect(buttonGroup, SIGNAL(clicked(int)),

@@ -37,8 +37,8 @@
 #include <core/kexitabledesignerinterface.h>
 #include <core/kexiinternalpart.h>
 #include <kexiutils/utils.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 
 QString testFilename;
 QFile testFile;

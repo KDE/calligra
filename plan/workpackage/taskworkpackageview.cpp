@@ -29,6 +29,7 @@
 #include "kptitemviewsettup.h"
 #include "planworksettings.h"
 
+#include <KoIcon.h>
 
 #include <QDragMoveEvent>
 #include <QMenu>
@@ -38,7 +39,6 @@
 #include <QHeaderView>
 #include <QPointer>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -358,7 +358,7 @@ void TaskWorkPackageView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
@@ -374,7 +374,7 @@ void TaskWorkPackageView::slotSplitView()
 void TaskWorkPackageView::slotOptions()
 {
     kDebug(planworkDbg());
-    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( m_view, this );
+    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( 0, m_view, this );
     dlg->exec();
     delete dlg;
     saveContext();

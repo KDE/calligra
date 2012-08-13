@@ -39,12 +39,11 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <knotification.h>
 
+#include <KoIcon.h>
 #include "kptdebug.h"
 
 #include "kdatepicker.moc"
@@ -221,7 +220,7 @@ void KDatePicker::init( const QDate &dt )
   d->selectWeek->installEventFilter( this );
 
   d->todayButton = new QPushButton(this);
-  d->todayButton->setIcon(KIcon("go-jump-today"));
+  d->todayButton->setIcon(koIcon("go-jump-today"));
   d->todayButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
   d->todayButton->setMaximumSize( QSize( 25, 25 ) );
   d->todayButton->installEventFilter( this );
@@ -241,17 +240,17 @@ void KDatePicker::init( const QDate &dt )
   d->line->installEventFilter( this );
   if ( QApplication::isRightToLeft() )
   {
-      d->yearForward->setIcon(KIcon(QLatin1String("arrow-left-double")));
-      d->yearBackward->setIcon(KIcon(QLatin1String("arrow-right-double")));
-      d->monthForward->setIcon(KIcon(QLatin1String("arrow-left")));
-      d->monthBackward->setIcon(KIcon(QLatin1String("arrow-right")));
+      d->yearForward->setIcon(koIcon("arrow-left-double"));
+      d->yearBackward->setIcon(koIcon("arrow-right-double"));
+      d->monthForward->setIcon(koIcon("arrow-left"));
+      d->monthBackward->setIcon(koIcon("arrow-right"));
   }
   else
   {
-      d->yearForward->setIcon(KIcon(QLatin1String("arrow-right-double")));
-      d->yearBackward->setIcon(KIcon(QLatin1String("arrow-left-double")));
-      d->monthForward->setIcon(KIcon(QLatin1String("arrow-right")));
-      d->monthBackward->setIcon(KIcon(QLatin1String("arrow-left")));
+      d->yearForward->setIcon(koIcon("arrow-right-double"));
+      d->yearBackward->setIcon(koIcon("arrow-left-double"));
+      d->monthForward->setIcon(koIcon("arrow-right"));
+      d->monthBackward->setIcon(koIcon("arrow-left"));
   }
 
   connect(d->table, SIGNAL(dateChanged(const QDate&)), SLOT(dateChangedSlot(const QDate&)));
@@ -704,7 +703,7 @@ KDatePicker::setCloseButton( bool enable )
         d->navigationLayout->addSpacing(KDialog::spacingHint());
         d->navigationLayout->addWidget(d->closeButton);
         d->closeButton->setToolTip(i18n("Close"));
-        d->closeButton->setIcon( SmallIcon("list-remove") );
+        d->closeButton->setIcon(koIcon("list-remove"));
         connect( d->closeButton, SIGNAL( clicked() ),
                  topLevelWidget(), SLOT( close() ) );
     }

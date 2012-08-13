@@ -39,6 +39,7 @@
 #include <KoCanvasController.h>
 #include <KoPACanvasItem.h>
 #include <KoZoomHandler.h>
+#include <KoPart.h>
 
 CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument)
     : m_canvasController (canvasController), m_paCanvas (canvas), m_prDocument (prDocument), m_page (0)
@@ -46,7 +47,7 @@ CAPAView::CAPAView (KoCanvasController* canvasController, KoPACanvasBase* canvas
     KoPAViewModeNormal* mode = new KoPAViewModeNormal (this, m_paCanvas);
     setViewMode (mode);
     m_zoomController = new KoZoomController (canvasController, static_cast<KoZoomHandler*> (viewConverter()),
-            prDocument->actionCollection());
+            prDocument->documentPart()->actionCollection());
     connect (m_zoomController, SIGNAL (zoomChanged (KoZoomMode::Mode, qreal)), SLOT (slotZoomChanged (KoZoomMode::Mode, qreal)));
 }
 

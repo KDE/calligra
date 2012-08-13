@@ -113,7 +113,7 @@ namespace wvWare {
    * </pre>
    *
    * If that sounds confusing your best bet is to simply forget about the
-   * existance of this class and treat is as being identical to @ref UChar.
+   * existence of this class and treat is as being identical to @ref UChar.
    */
   class WV2_EXPORT UCharReference {
     friend class UString;

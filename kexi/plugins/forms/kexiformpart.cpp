@@ -24,7 +24,6 @@
 #include <KDebug>
 #include <KDialog>
 #include <ktabwidget.h>
-#include <kiconloader.h>
 #include <kcombobox.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -32,15 +31,17 @@
 #include <KActionMenu>
 #include <KActionCollection>
 
+#include <KoIcon.h>
+
 #include <KexiView.h>
 #include <KexiWindow.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 #include <kexipartitem.h>
 #include <widget/KexiDataSourceComboBox.h>
-#include <kexidb/connection.h>
-#include <kexidb/fieldlist.h>
-#include <kexidb/field.h>
+#include <db/connection.h>
+#include <db/fieldlist.h>
+#include <db/field.h>
 #include <kexiutils/utils.h>
 
 #include <kexi_global.h>
@@ -485,7 +486,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     KexiProject *prj = KexiMainWindowIface::global()->project();
     d->dataSourcePage->setProject(prj);
 
-    tab->addTab(d->dataSourcePage, KIcon("server-database"), QString());
+    tab->addTab(d->dataSourcePage, koIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->dataSourcePage), i18n("Data Source"));
 
     if (!d->widgetTreeWidget) {
@@ -496,7 +497,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
         d->widgetTree->setObjectName("KexiFormPart:WidgetTreeWidget");
         lyr->addWidget(d->widgetTree);
     }
-    tab->addTab(d->widgetTreeWidget, KIcon("widgets"), QString());
+    tab->addTab(d->widgetTreeWidget, koIcon("widgets"), QString());
     tab->setTabToolTip(tab->indexOf(d->widgetTreeWidget), i18n("Widgets"));
 }
 

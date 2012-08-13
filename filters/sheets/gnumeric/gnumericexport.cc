@@ -1046,7 +1046,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
 
     QString str;
 
-    View * view = ksdoc->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->views().first());
+    View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
     Canvas * canvas = 0L;
     QString activeTableName;
     if (view) {

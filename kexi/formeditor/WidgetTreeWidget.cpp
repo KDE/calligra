@@ -26,8 +26,9 @@
 
 #include <KDebug>
 #include <KIconEffect>
-#include <KIconLoader>
 #include <KLocale>
+
+#include <KoIcon.h>
 
 #include "objecttree.h"
 #include "form.h"
@@ -70,7 +71,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
 {
     QString itemName;
     QString itemClass;
-    QString itemIcon;
+    QString itemIconName;
     Qt::ItemFlags itemFlags = flags();
     WidgetTreeWidget *widgetTreeWidget = qobject_cast<WidgetTreeWidget*>(treeWidget());
     ObjectTreeItem* selectable = widgetTreeWidget ? widgetTreeWidget->selectableItem(m_data) : m_data;
@@ -106,7 +107,7 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
                 kDebug() << "m_customSortingKey" << m_customSortingKey;
                 itemFlags |= Qt::ItemIsSelectable;
                 itemFlags ^= Qt::ItemIsSelectable;
-                itemIcon = "tabwidget_tab";
+                itemIconName = koIconName("tabwidget_tab");
             }
         }
     }
@@ -117,9 +118,9 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     if (itemClass.isEmpty()) {
         itemClass = m_data->className();
     }
-    if (itemIcon.isEmpty()) {
+    if (itemIconName.isEmpty()) {
         if (widgetTreeWidget) {
-            itemIcon = widgetTreeWidget->iconNameForClass(m_data->widget()->metaObject()->className());
+            itemIconName = widgetTreeWidget->iconNameForClass(m_data->widget()->metaObject()->className());
         }
     }
     // set:
@@ -128,8 +129,8 @@ void WidgetTreeWidgetItem::initTextAndIcon(int forcedTabPageIndex, const QString
     }
     setText(0, itemName);
     setText(1, itemClass);
-    if (!itemIcon.isEmpty()) {
-        QPixmap icon(SmallIcon(itemIcon));
+    if (!itemIconName.isEmpty()) {
+        QPixmap icon(SmallIcon(itemIconName));
         if (!(itemFlags & Qt::ItemIsSelectable)) {
             KIconEffect::semiTransparent(icon);
         }

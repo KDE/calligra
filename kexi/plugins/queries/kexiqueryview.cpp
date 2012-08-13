@@ -19,9 +19,9 @@
 */
 
 #include <kexiproject.h>
-#include <kexidb/connection.h>
-#include <kexidb/parser/parser.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/parser/parser.h>
+#include <db/cursor.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 #include <KexiWindow.h>

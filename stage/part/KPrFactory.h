@@ -25,7 +25,6 @@
 #include "stage_export.h"
 
 class KAboutData;
-class KIconLoader;
 
 class STAGE_EXPORT KPrFactory : public KPluginFactory
 {
@@ -40,12 +39,9 @@ public:
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
 
-    static KIconLoader* iconLoader();
-
 private:
     static KComponentData* s_instance;
     static KAboutData* s_aboutData;
-    static KIconLoader* s_iconLoader;
 };
 
 #endif

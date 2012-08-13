@@ -38,7 +38,6 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
@@ -245,6 +244,11 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 
     d->colorSet = colorSet;
     d->fillColors();
+}
+
+KoColorSet* KoColorSetWidget::colorSet()
+{
+    return d->colorSet;
 }
 
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)

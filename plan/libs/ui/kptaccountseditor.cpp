@@ -31,15 +31,17 @@
 #include "kptdebug.h"
 
 #include <KoDocument.h>
+#include <KoPageLayoutWidget.h>
+#include <KoIcon.h>
 
 #include <QList>
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QContextMenuEvent>
 #include <QDragMoveEvent>
+#include <QMenu>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -47,6 +49,41 @@
 
 namespace KPlato
 {
+
+
+AccountseditorConfigDialog::AccountseditorConfigDialog( ViewBase *view, AccountTreeView *treeview, QWidget *p)
+    : KPageDialog(p),
+    m_view( view ),
+    m_treeview( treeview )
+{
+    setCaption( i18n("Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    showButtonSeparator( true );
+
+    QTabWidget *tab = new QTabWidget();
+
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( view );
+    m_headerfooter->setOptions( view->printingOptions() );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
+    page->setHeader( i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+}
+
+void AccountseditorConfigDialog::slotOk()
+{
+    kDebug(planDbg());
+    m_view->setPageLayout( m_pagelayout->pageLayout() );
+    m_view->setPrintingOptions( m_headerfooter->options() );
+}
 
 
 //--------------------
@@ -123,8 +160,8 @@ QList<Account*> AccountTreeView::selectedAccounts() const
 
 
 //-----------------------------------
-AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+AccountsEditor::AccountsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setupGui();
     
@@ -134,13 +171,14 @@ AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
     
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
     
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void AccountsEditor::updateReadWrite( bool readwrite )
@@ -173,17 +211,16 @@ void AccountsEditor::setGuiActive( bool activate )
 void AccountsEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
     kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
-    QString name;
-    if ( index.isValid() ) {
-        Account *a = m_view->model()->account( index );
-        if ( a ) {
-            name = "accountseditor_accounts_popup";
-        } else {
-            name = "accountseditor_popup";
-        }
+    slotHeaderContextMenuRequested( pos );
+}
+
+void AccountsEditor::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug(planDbg());
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
     }
-    kDebug(planDbg())<<name;
-    emit requestPopupMenu( name, pos );
 }
 
 Account *AccountsEditor::currentAccount() const
@@ -224,24 +261,35 @@ void AccountsEditor::setupGui()
 {
     QString name = "accountseditor_edit_list";
     
-    actionAddAccount  = new KAction(KIcon( "document-new" ), i18n("Add Account"), this);
+    actionAddAccount  = new KAction(koIcon("document-new"), i18n("Add Account"), this);
     actionCollection()->addAction("add_account", actionAddAccount );
     actionAddAccount->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddAccount, SIGNAL( triggered( bool ) ), SLOT( slotAddAccount() ) );
     addAction( name, actionAddAccount );
-    
-    actionAddSubAccount  = new KAction(KIcon( "document-new" ), i18n("Add Subaccount"), this);
+
+    actionAddSubAccount  = new KAction(koIcon("document-new"), i18n("Add Subaccount"), this);
     actionCollection()->addAction("add_subaccount", actionAddSubAccount );
     actionAddSubAccount->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubAccount, SIGNAL( triggered( bool ) ), SLOT( slotAddSubAccount() ) );
     addAction( name, actionAddSubAccount );
-    
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete"), this);
+
+    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
-    
+
+    createOptionAction();
+}
+
+void AccountsEditor::slotOptions()
+{
+    kDebug(planDbg());
+    AccountseditorConfigDialog *dlg = new AccountseditorConfigDialog( this, m_view, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void AccountsEditor::slotAddAccount()

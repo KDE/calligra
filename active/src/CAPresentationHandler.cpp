@@ -29,6 +29,7 @@
 #include <KoPACanvasItem.h>
 #include <KoPAPageBase.h>
 
+#include <KoPart.h>
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
@@ -78,18 +79,18 @@ bool CAPresentationHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
-    KoDocument* doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument> (mimetype, 0, 0, QString(),
-                      QVariantList(), &error);
+    KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
+                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
 
-    if (!doc) {
+    if (!part) {
         kDebug() << "Doc can't be openend" << error;
         return false;
     }
 
-    d->document = static_cast<KPrDocument*> (doc);
+    d->document = qobject_cast<KPrDocument*> (part->document());
     d->document->openUrl (KUrl (uri));
 
-    KoCanvasBase* paCanvas = dynamic_cast<KoCanvasBase*> (d->document->canvasItem());
+    KoCanvasBase* paCanvas = dynamic_cast<KoCanvasBase*> (part->canvasItem());
     KoPACanvasItem* paCanvasItem = dynamic_cast<KoPACanvasItem*> (paCanvas);
     if (!paCanvasItem) {
         kDebug() << "Failed to fetch a canvas item";

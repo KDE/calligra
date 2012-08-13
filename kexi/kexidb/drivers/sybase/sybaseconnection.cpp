@@ -28,7 +28,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "sybaseconnection_p.h"
 #include "sybasecursor.h"
 #include "sybasepreparedstatement.h"
-#include <kexidb/error.h>
+#include <db/error.h>
 
 
 using namespace KexiDB;

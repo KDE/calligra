@@ -109,12 +109,12 @@ class KPLATOUI_EXPORT TaskEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskEditor( KoDocument *part, QWidget *parent );
+    TaskEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
+    void setProject( Project *project );
     Project *project() const { return m_view->project(); }
-    virtual void draw( Project &project );
-    virtual void draw();
+    virtual void createDockers();
 
     virtual Node *currentNode() const;
     QList<Node*> selectedNodes() const ;
@@ -132,8 +132,11 @@ public:
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
     virtual KoPrintJob *createPrintJob();
-    
+
+    void setTaskModules( const QStringList &files );
+
 signals:
+    void taskSelected( Task *task );
     void openNode();
     void addTask();
     void addMilestone();
@@ -144,6 +147,10 @@ signals:
     void moveTaskDown();
     void indentTask();
     void unindentTask();
+
+    void loadTaskModules( const QStringList &files );
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
 
 public slots:
     /// Activate/deactivate the gui
@@ -204,7 +211,7 @@ class KPLATOUI_EXPORT TaskView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskView( KoDocument *part, QWidget *parent );
+    TaskView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -288,7 +295,7 @@ class KPLATOUI_EXPORT TaskWorkPackageView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskWorkPackageView( KoDocument *part, QWidget *parent );
+    TaskWorkPackageView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
     Project *project() const;

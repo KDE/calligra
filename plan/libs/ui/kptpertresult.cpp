@@ -31,7 +31,6 @@
 #include <QAbstractItemView>
 #include <QMenu>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -86,8 +85,8 @@ static double dist[][2] = {
 };
 
 //-----------------------------------
-PertResult::PertResult( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+PertResult::PertResult(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent ),
     m_node( 0 ),
     m_project( 0 ),
     current_schedule( 0 )
@@ -223,7 +222,8 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.treeWidgetTaskResult, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.treeWidgetTaskResult, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -303,8 +303,8 @@ KoPrintJob *PertResult::createPrintJob()
 }
 
 //--------------------
-PertCpmView::PertCpmView( KoDocument *part, QWidget *parent ) 
-    : ViewBase( part, parent ),
+PertCpmView::PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 ),
     current_schedule( 0 ),
     block( false )
@@ -423,7 +423,8 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.cpmTable, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.cpmTable, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

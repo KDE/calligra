@@ -591,6 +591,11 @@ void KoTextEditor::insertFrameBreak()
         return;
     }
 
+    QTextCursor curr(d->caret.block());
+    if (dynamic_cast<QTextTable *> (curr.currentFrame())) {
+        return;
+    }
+
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Insert Break"));
     QTextBlock block = d->caret.block();
     if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
@@ -671,14 +676,12 @@ bool KoTextEditor::paste(KoTextEditor *editor,
         if (pasteAsText) {
             insertText(data->text());
         } else {
-            const Soprano::Model *rdfModel = 0;
+            QSharedPointer<Soprano::Model> rdfModel = QSharedPointer<Soprano::Model>(0);
 #ifdef SHOULD_BUILD_RDF
-            bool weOwnRdfModel = true;
-            rdfModel = Soprano::createModel();
-            if (rdf) {
-                delete rdfModel;
+            if(!rdf) {
+                rdfModel = QSharedPointer<Soprano::Model>(Soprano::createModel());
+            } else {
                 rdfModel = rdf->model();
-                weOwnRdfModel = false;
             }
 #endif
 
@@ -690,9 +693,6 @@ bool KoTextEditor::paste(KoTextEditor *editor,
 #ifdef SHOULD_BUILD_RDF
             if (rdf) {
                 rdf->updateInlineRdfStatements(d->document);
-            }
-            if (weOwnRdfModel && rdfModel) {
-                delete rdfModel;
             }
 #endif
         }

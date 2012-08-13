@@ -24,7 +24,7 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <formeditor/container.h>
 #include <formeditor/widgetwithsubpropertiesinterface.h>
 #include <formeditor/FormWidgetInterface.h>

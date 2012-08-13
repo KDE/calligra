@@ -35,7 +35,6 @@
 #include <QWidget>
 #include <QMenu>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -74,8 +73,8 @@ void RelationTreeView::slotCurrentChanged(const QModelIndex &curr, const QModelI
 }
 
 //-----------------------------------
-RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+RelationEditor::RelationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     kDebug(planDbg())<<"----------------- Create RelationEditor ----------------------";
 
@@ -94,8 +93,7 @@ RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-
+    connect(model(), SIGNAL(executeCommand(KUndo2Command *)), doc, SLOT(addCommand(KUndo2Command *)));
 }
 
 void RelationEditor::updateReadWrite( bool rw )
@@ -188,7 +186,7 @@ void RelationEditor::slotOptions()
         v = m_view->masterView();
         col0 = true;
     }
-    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( v, col0, this );
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( this, v, col0, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();

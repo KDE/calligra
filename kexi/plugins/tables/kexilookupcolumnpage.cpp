@@ -29,12 +29,14 @@
 #include <kdebug.h>
 #include <klineedit.h>
 
+#include <KoIcon.h>
+
 #include <widget/properties/KexiPropertyPaneViewBase.h>
 #include <widget/KexiDataSourceComboBox.h>
 #include <widget/fields/KexiFieldListView.h>
 #include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <kexiproject.h>
 
 #include <koproperty/Property.h>
@@ -149,7 +151,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     hlyr->addWidget(d->rowSourceLabel);
     hlyr->addStretch();
 
-    d->gotoRowSourceButton = new KexiSmallToolButton(KIcon("go-jump"), QString());
+    d->gotoRowSourceButton = new KexiSmallToolButton(koIcon("go-jump"), QString());
     d->gotoRowSourceButton->setObjectName("gotoRowSourceButton");
     d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
     d->gotoRowSourceButton->setToolTip(i18n("Go to selected record source"));
@@ -157,7 +159,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
 
 /*2.0    d->clearRowSourceButton = new KexiSmallToolButton(
-        KIcon("edit-clear-locationbar-rtl"), QString(), contents);
+        koIcon("edit-clear-locationbar-rtl"), QString(), contents);
     d->clearRowSourceButton->setObjectName("clearRowSourceButton");
     d->clearRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
     d->clearRowSourceButton->setToolTip(i18n("Clear record source"));
@@ -183,7 +185,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     mainLayout()->addWidget(d->boundColumnLabel);
 
 /*2.0    d->clearBoundColumnButton = new KexiSmallToolButton(
-        KIcon("edit-clear-locationbar-rtl"), QString(), contents);
+        koIcon("edit-clear-locationbar-rtl"), QString(), contents);
     d->clearBoundColumnButton->setObjectName("clearBoundColumnButton");
     d->clearBoundColumnButton->setMinimumHeight(d->boundColumnLabel->minimumHeight());
     d->clearBoundColumnButton->setToolTip(i18n("Clear bound column"));
@@ -209,7 +211,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     mainLayout()->addWidget(d->visibleColumnLabel);
 
 /*2.0    d->clearVisibleColumnButton = new KexiSmallToolButton(
-        KIcon("edit-clear-locationbar-rtl"), QString(), contents);
+        koIcon("edit-clear-locationbar-rtl"), QString(), contents);
     d->clearVisibleColumnButton->setObjectName("clearVisibleColumnButton");
     d->clearVisibleColumnButton->setMinimumHeight(d->visibleColumnLabel->minimumHeight());
     d->clearVisibleColumnButton->setToolTip(i18n("Clear visible column"));

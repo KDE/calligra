@@ -159,8 +159,8 @@ void AccountsTreeView::setShowMode( int show )
 }
 
 //------------------------
-AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+AccountsView::AccountsView(KoPart *part, Project *project, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
         m_project(project),
         m_manager( 0 )
 {
@@ -209,7 +209,7 @@ void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )
 void AccountsView::slotOptions()
 {
     kDebug(planDbg());
-    AccountsviewConfigDialog *dlg = new AccountsviewConfigDialog( m_view, this );
+    AccountsviewConfigDialog *dlg = new AccountsviewConfigDialog( this, m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -264,6 +264,8 @@ void AccountsView::print( QPrinter &printer, QPrintDialog &printDialog )
 bool AccountsView::loadContext( const KoXmlElement &context )
 {
     //kDebug(planDbg());
+    ViewBase::loadContext( context );
+
     m_view->setShowMode( context.attribute( "show-mode" ).toInt() );
     m_view->setCumulative( (bool)( context.attribute( "cumulative" ).toInt() ) );
     m_view->setPeriodType( context.attribute( "period-type", "0" ).toInt() );
@@ -279,6 +281,8 @@ bool AccountsView::loadContext( const KoXmlElement &context )
 void AccountsView::saveContext( QDomElement &context ) const
 {
     //kDebug(planDbg());
+    ViewBase::saveContext( context );
+
     context.setAttribute( "show-mode", m_view->showMode() );
     context.setAttribute( "cumulative", m_view->cumulative() );
     context.setAttribute( "period-type", m_view->periodType() );
@@ -286,7 +290,6 @@ void AccountsView::saveContext( QDomElement &context ) const
     context.setAttribute( "start-date", m_view->startDate().toString( Qt::ISODate ) );
     context.setAttribute( "end-mode", m_view->endMode() );
     context.setAttribute( "end-date", m_view->endDate().toString( Qt::ISODate ) );
-    
 }
 
 KoPrintJob *AccountsView::createPrintJob()

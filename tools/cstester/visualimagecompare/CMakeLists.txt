@@ -2,7 +2,6 @@ macro_optional_find_package(Poppler)
 
 if (POPPLER_FOUND)
     add_definitions(-DHAS_POPPLER)
-endif (POPPLER_FOUND)
 
 include_directories(
     ${QT_INCLUDES}
@@ -22,3 +21,4 @@ target_link_libraries(visualimagecompare ${POPPLER_LIBRARY} ${QT_QTCORE_LIBRARY}
 
 install(TARGETS visualimagecompare ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+endif (POPPLER_FOUND)

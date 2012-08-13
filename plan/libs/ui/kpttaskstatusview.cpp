@@ -28,7 +28,8 @@
 #include "kpteffortcostmap.h"
 #include "kptdebug.h"
 
-#include <KoDocument.h>
+#include "KoDocument.h"
+#include "KoPageLayoutWidget.h"
 
 #include <QDragMoveEvent>
 #include <QMenu>
@@ -50,7 +51,6 @@
 #include <QResizeEvent>
 #include <QTimer>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -211,8 +211,8 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
 
 
 //-----------------------------------
-TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+TaskStatusView::TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
     m_id( -1 )
 {
     kDebug(planDbg())<<"-------------------- creating TaskStatusView -------------------";
@@ -222,7 +222,7 @@ TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
     setupGui();
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 
@@ -327,7 +327,8 @@ void TaskStatusView::slotRefreshView()
 void TaskStatusView::slotOptions()
 {
     kDebug(planDbg());
-    TaskStatusViewSettingsDialog *dlg = new TaskStatusViewSettingsDialog( m_view, this );
+    TaskStatusViewSettingsDialog *dlg = new TaskStatusViewSettingsDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -413,10 +414,10 @@ void TaskStatusViewSettingsPanel::setDefault()
     weekdays->setCurrentIndex( m_view->defaultWeekday() - 1 );
 }
 
-TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent )
-    : SplitItemViewSettupDialog( view, parent )
+TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( ViewBase *view, TaskStatusTreeView *treeview, QWidget *parent )
+    : SplitItemViewSettupDialog( view, treeview, parent )
 {
-    TaskStatusViewSettingsPanel *panel = new TaskStatusViewSettingsPanel( view );
+    TaskStatusViewSettingsPanel *panel = new TaskStatusViewSettingsPanel( treeview );
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "General" ), i18n( "General Settings" ) );
     setCurrentPage( page );
     //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
@@ -426,8 +427,8 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( TaskStatusTreeView *
 }
 
 //-----------------------------------
-ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+ProjectStatusView::ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
     m_project( 0 )
 {
     kDebug(planDbg())<<"-------------------- creating ProjectStatusView -------------------";
@@ -475,7 +476,7 @@ void ProjectStatusView::setupGui()
 
 void ProjectStatusView::slotOptions()
 {
-    ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( m_view, this );
+    ProjectStatusViewSettingsDialog *dlg = new ProjectStatusViewSettingsDialog( this, m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1106,7 +1107,7 @@ KoPrintJob *PerformanceStatusTreeView::createPrintJob( ViewBase *view )
     return m_chart->createPrintJob( view );
 }
 
-// hackish way to get resonable initial splitter sizes
+// hackish way to get reasonable initial splitter sizes
 void PerformanceStatusTreeView::resizeSplitters()
 {
     int x1 = sizes().value( 0 );
@@ -1126,8 +1127,8 @@ void PerformanceStatusTreeView::resizeSplitters()
 }
 
 //-----------------------------------
-PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+PerformanceStatusView::PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent )
 {
     kDebug(planDbg())<<"-------------------- creating PerformanceStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -1216,7 +1217,7 @@ void PerformanceStatusView::setupGui()
 void PerformanceStatusView::slotOptions()
 {
     kDebug(planDbg());
-    PerformanceStatusViewSettingsDialog *dlg = new PerformanceStatusViewSettingsDialog( m_view, this );
+    PerformanceStatusViewSettingsDialog *dlg = new PerformanceStatusViewSettingsDialog( this, m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -1298,12 +1299,13 @@ void PerformanceStatusViewSettingsPanel::setDefault()
 }
 
 //-----------------
-PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent )
-    : ItemViewSettupDialog( view->treeView(), true, parent )
+PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent )
+    : ItemViewSettupDialog( view, treeview->treeView(), true, parent )
 {
-    PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( view->chartView(), this );
+    PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( treeview->chartView(), this );
     KPageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
     setCurrentPage( page );
+    addPrintingOptions();
     //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
 
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
@@ -1311,18 +1313,39 @@ PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( Perfor
 }
 
 //-----------------
-ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent )
-    : KPageDialog( parent )
+ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent )
+    : KPageDialog( parent ),
+    m_base( base )
 {
     PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( view, this );
     KPageWidgetItem *page = new KPageWidgetItem( panel, i18n( "Chart" ) );
     page->setHeader( i18n( "Chart Settings" ) );
     addPage( page );
 
-    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    QTabWidget *tab = new QTabWidget();
+
+    QWidget *w = ViewBase::createPageLayoutWidget( base );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( base );
+    m_headerfooter->setOptions( base->printingOptions() );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    page = addPage( tab, i18n( "Printing" ) );
+    page->setHeader( i18n( "Printing Options" ) );
 
     connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+}
+
+void ProjectStatusViewSettingsDialog::slotOk()
+{
+    kDebug(planDbg());
+    m_base->setPageLayout( m_pagelayout->pageLayout() );
+    m_base->setPrintingOptions( m_headerfooter->options() );
 }
 
 

@@ -31,7 +31,7 @@
 #include <kapplication.h>
 #include <kcomponentdata.h>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 #include <widget/kexidbdrivercombobox.h>
 
 /*

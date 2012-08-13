@@ -25,8 +25,8 @@
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <kexidb/field.h>
-#include <kexidb/connection.h>
+#include <db/field.h>
+#include <db/connection.h>
 #include <QByteArray>
 
 namespace KexiMigration

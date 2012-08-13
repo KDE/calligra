@@ -102,6 +102,30 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
     d->paragraphStyle = new KoParagraphStyle(this);
 }
 
+KoTableCellStyle::KoTableCellStyle(const KoTableCellStyle &other)
+    :QObject(other.parent())
+    , d_ptr(new KoTableCellStylePrivate)
+{
+    Q_D(KoTableCellStyle);
+
+    copyProperties(&other);
+    d->paragraphStyle = other.paragraphStyle()->clone(this);
+}
+
+KoTableCellStyle& KoTableCellStyle::operator=(const KoTableCellStyle &other)
+{
+    Q_D(KoTableCellStyle);
+
+    if (this == &other) {
+        return *this;
+    }
+
+    copyProperties(&other);
+    d->paragraphStyle = other.paragraphStyle()->clone(this);
+
+    return *this;
+}
+
 KoTableCellStyle::~KoTableCellStyle()
 {
 }
@@ -218,9 +242,9 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
-KoParagraphStyle *KoTableCellStyle::paragraphStyle()
+KoParagraphStyle *KoTableCellStyle::paragraphStyle() const
 {
-    Q_D(KoTableCellStyle);
+    Q_D(const KoTableCellStyle);
     return d->paragraphStyle;
 }
 
@@ -734,18 +758,6 @@ void KoTableCellStyle::loadOdfProperties(KoShapeLoadingContext &context, KoStyle
         }
     }
 
-    if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
-        const QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
-        if (!opacity.isEmpty() && opacity.right(1) == "%") {
-            float percent = opacity.left(opacity.length() - 1).toFloat();
-            QBrush brush = background();
-            QColor color = brush.color();
-            color.setAlphaF(percent / 100.0);
-            brush.setColor(color);
-            setBackground(brush);
-        }
-    }
-
     QString fillStyle = styleStack.property(KoXmlNS::draw, "fill");
     if (fillStyle == "solid" || fillStyle == "hatch") {
         styleStack.save();
@@ -886,9 +898,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style, KoShapeSavingContext &context)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableCellType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableCellType);
-            if (!backBrush.isOpaque()) {
-                style.addProperty("draw:opacity", QString("%1%").arg(backBrush.color().alphaF() * 100.0), KoGenStyle::GraphicType);
-            }
         } else if (key == VerticalAlignment) {
             if (propertyInt(VerticalAlignment) == 0)
                 style.addProperty("style:vertical-align", "automatic", KoGenStyle::TableCellType);

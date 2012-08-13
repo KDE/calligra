@@ -40,7 +40,7 @@
 #include "kexidbform.h"
 
 #include <kexi_global.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <formeditor/utils.h>
 #include <kexiutils/utils.h>
 

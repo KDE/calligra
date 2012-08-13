@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
@@ -24,6 +25,7 @@
 #include <KAction>
 #include <KLocalizedString>
 #include <KActionCollection>
+#include <QApplication>
 
 #include <KoToolProxy.h>
 
@@ -51,8 +53,9 @@ public:
         , toolProxy(0)
         , currentAction(0)
         , currentShortcut(0)
-        , eventCount(0)
         , tabletPressEvent(0)
+        , setMirrorMode(false)
+        , fixedAction(false)
     { }
 
     void match(QEvent *event);
@@ -75,9 +78,10 @@ public:
 
     QPointF mousePosition;
 
-    int eventCount;
-
     QTabletEvent *tabletPressEvent;
+
+    bool setMirrorMode;
+    bool fixedAction;
 };
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
@@ -101,6 +105,9 @@ KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
     setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
     connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));
+
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            SLOT(slotToolChanged()));
 }
 
 KisInputManager::~KisInputManager()
@@ -118,9 +125,17 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         case QEvent::MouseButtonDblClick: {
             d->mousePosition = widgetToPixel(static_cast<QMouseEvent*>(event)->posF());
 
-            //If the palette is visible, then hide it.
+            //If the palette is visible, then hide it and eat the event.
             if (canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
                 canvas()->favoriteResourceManager()->slotShowPopupPalette();
+                return true;
+            }
+
+            if (d->setMirrorMode) {
+                d->canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, d->canvas->image()->documentToPixel(d->mousePosition));
+                QApplication::restoreOverrideCursor();
+                d->setMirrorMode = false;
+                return true;
             }
         } //Intentional fall through
         case QEvent::KeyPress:
@@ -142,7 +157,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
                 d->currentShortcut->match(event);
 
-                if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch) {
+                if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
                     d->clearState();
                     break;
                 }
@@ -249,7 +264,23 @@ QTabletEvent* KisInputManager::tabletPressEvent() const
 
 void KisInputManager::setMirrorAxis()
 {
-    d->canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, d->canvas->image()->documentToPixel(d->mousePosition));
+    d->setMirrorMode = true;
+    QApplication::setOverrideCursor(Qt::CrossCursor);
+}
+
+void KisInputManager::slotToolChanged()
+{
+    QString toolId = KoToolManager::instance()->activeToolId();
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+        d->fixedAction = true;
+        if (!d->currentAction) {
+            d->currentShortcut = d->shortcuts.at(0);
+            d->currentAction = d->currentShortcut->action();
+            d->currentAction->begin(d->currentShortcut->shortcutIndex());
+        }
+    } else {
+        d->fixedAction = false;
+    }
 }
 
 QPointF KisInputManager::widgetToPixel(const QPointF& position)
@@ -260,6 +291,9 @@ QPointF KisInputManager::widgetToPixel(const QPointF& position)
 
 void KisInputManager::Private::match(QEvent* event)
 {
+    if (fixedAction) {
+        return;
+    }
     //Go through all possible shortcuts and update their state.
     foreach (KisShortcut* shortcut, potentialShortcuts) {
         shortcut->match(event);
@@ -274,12 +308,10 @@ void KisInputManager::Private::match(QEvent* event)
         //With the current input, there is simply no shortcut that matches,
         //so restart the matching.
         potentialShortcuts = shortcuts;
-        eventCount = 0;
         return;
     }
 
-    eventCount++;
-    if (potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || eventCount >= 5) {
+    if (potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
         //Either we have only one possible match or we reached the queue threshold.
         KisShortcut* completedShortcut = 0;
         foreach (KisShortcut* shortcut, potentialShortcuts) {
@@ -299,8 +331,6 @@ void KisInputManager::Private::match(QEvent* event)
             currentAction = completedShortcut->action();
             currentAction->begin(completedShortcut->shortcutIndex());
         }
-
-        eventCount = 0;
     }
 }
 
@@ -310,8 +340,11 @@ void KisInputManager::Private::setupActions()
     KisAbstractInputAction* action = new KisToolInvocationAction(q);
     actions.append(action);
 
-    KisShortcut* shortcut = createShortcut(action, 0);
+    KisShortcut* shortcut = createShortcut(action, KisToolInvocationAction::ActivateShortcut);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::LeftButton);
+
+    shortcut = createShortcut(action, KisToolInvocationAction::ConfirmShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Return);
 
     action = new KisAlternateInvocationAction(q);
     actions.append(action);
@@ -334,7 +367,11 @@ void KisInputManager::Private::setupActions()
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Space);
 
     shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
+#if QT_VERSION >= 0x040700
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
 
     shortcut = createShortcut(action, KisPanAction::PanLeftShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Left);
@@ -353,7 +390,11 @@ void KisInputManager::Private::setupActions()
 
     shortcut = createShortcut(action, KisRotateCanvasAction::RotateToggleShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Shift);
+#if QT_VERSION >= 0x040700
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
 
     shortcut = createShortcut(action, KisRotateCanvasAction::RotateLeftShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_4);
@@ -372,7 +413,11 @@ void KisInputManager::Private::setupActions()
 
     shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Control);
+#if QT_VERSION >= 0x040700
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MiddleButton);
+#else
+    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
+#endif
 
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setWheel(KisShortcut::WheelUp);
@@ -388,13 +433,18 @@ void KisInputManager::Private::setupActions()
     shortcut = createShortcut(action, KisZoomAction::ZoomResetShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_1);
     shortcut = createShortcut(action, KisZoomAction::ZoomToPageShortcut);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_0);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_2);
+    shortcut = createShortcut(action, KisZoomAction::ZoomToWidthShortcut);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_3);
 
     action = new KisShowPaletteAction(q);
     actions.append(action);
 
     shortcut = createShortcut(action, 0);
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
 }
 
 KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)
@@ -409,15 +459,21 @@ KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* ac
 
 void KisInputManager::Private::clearState()
 {
+    if (fixedAction) {
+        return;
+    }
+
     if (currentShortcut) {
         currentAction->end();
         currentAction = 0;
-        currentShortcut->clear();
         currentShortcut = 0;
         potentialShortcuts = shortcuts;
-        eventCount = 0;
 
         delete tabletPressEvent;
         tabletPressEvent = 0;
+    }
+
+    foreach (KisShortcut* shortcut, shortcuts) {
+        shortcut->clear();
     }
 }

@@ -30,7 +30,6 @@
 #include <QRect>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -235,7 +234,7 @@ void ImageSize::slotNodeChanged(const KisNodeSP node)
 
 void ImageSize::slotSelectionChanged()
 {
-    m_scaleSelectionAction->setEnabled(m_view->selectionManager()->havePixelsSelected());
+    m_scaleSelectionAction->setEnabled(m_view->selectionEditable() && m_view->selectionManager()->havePixelsSelected());
 }
 
 #include "imagesize.moc"

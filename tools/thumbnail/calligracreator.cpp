@@ -1,5 +1,6 @@
 /*  This file is part of the KDE libraries
     Copyright (C) 2002 Simon MacMullen <calligra@babysimon.co.uk>
+    Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,24 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "calligracreator.h"
-#include <time.h>
 
-#include <QPixmap>
-#include <QImage>
-#include <QPainter>
-#include <QTimerEvent>
-
-#include <kapplication.h>
-#include <kfileitem.h>
-#include <klibloader.h>
-#include <kparts/part.h>
-#include <kparts/componentfactory.h>
-
+// KDE
+#include <KoPart.h>
 #include <KoStore.h>
 #include <KoDocument.h>
-#include <QAbstractEventDispatcher>
-#include <kmimetype.h>
-#include <kdemacros.h>
+#include <KMimeTypeTrader>
+#include <KMimeType>
+// Qt
+#include <QPainter>
+#include <QTimer>
+
+static const int minThumbnailSize = 400;
+static const int timeoutTime = 5000; // in msec
 
 extern "C"
 {
@@ -45,85 +41,98 @@ extern "C"
 }
 
 CalligraCreator::CalligraCreator()
-    : m_doc(0)
+    : m_part(0)
+    , m_doc(0)
 {
 }
 
 CalligraCreator::~CalligraCreator()
 {
+    delete m_part;
     delete m_doc;
 }
 
-bool CalligraCreator::create(const QString &path, int width, int height, QImage &img)
+bool CalligraCreator::create(const QString &path, int width, int height, QImage &image)
 {
-    KoStore* store = KoStore::createStore(path, KoStore::Read);
+    // try to use any embedded thumbnail
+    KoStore *store = KoStore::createStore(path, KoStore::Read);
 
-    if ( store && ( store->open( QString("Thumbnails/thumbnail.png") ) || store->open( QString("preview.png") ) ) )
-    {
+    if (store &&
+        (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
+         store->open(QLatin1String("preview.png")))) {
         // Hooray! No long delay for the user...
-        QByteArray bytes = store->read(store->size());
-        store->close();
-        delete store;
-        return img.loadFromData(bytes);
+        const QByteArray thumbnailData = store->read(store->size());
+
+        QImage thumbnail;
+        if (thumbnail.loadFromData(thumbnailData) &&
+            thumbnail.width() >= width && thumbnail.height() >= height) {
+            // put a white background behind the thumbnail
+            // as lots of old(?) OOo files have thumbnails with transparent background
+            image = QImage(thumbnail.size(), QImage::Format_RGB32);
+            image.fill(QColor(Qt::white).rgb());
+            QPainter p(&image);
+            p.drawImage(QPoint(0, 0), thumbnail);
+            delete store;
+            return true;
+        }
     }
     delete store;
 
-    QString mimetype = KMimeType::findByPath( path )->name();
+    // load document and render the thumbnail ourselves
+    const QString mimetype = KMimeType::findByPath(path)->name();
+    m_part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(mimetype, QLatin1String("CalligraPart"));
 
-    m_doc = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>( mimetype );
+    if (!m_part) return false;
 
-    if (!m_doc) return false;
+    m_doc = m_part->document();
 
-    connect(m_doc, SIGNAL(completed()), SLOT(slotCompleted()));
+    // prepare the document object
+    m_doc->setCheckAutoSaveFile(false);
+    m_doc->setAutoErrorHandlingEnabled(false); // don't show message boxes
+    connect(m_part, SIGNAL(completed()), SLOT(onLoadingCompleted()));
+
+    // load the document content
+    m_loadingCompleted = false;
 
     KUrl url;
-    url.setPath( path );
-    m_doc->setCheckAutoSaveFile( false );
-    m_doc->setAutoErrorHandlingEnabled( false ); // don't show message boxes
-    if ( !m_doc->openUrl( url ) )
+    url.setPath(path);
+    if (!m_doc->openUrl(url)) {
+        delete m_doc;
         return false;
-    m_completed = false;
-    startTimer(5000);
-//     while (!m_completed)
-//         kapp->processOneEvent();
-    QAbstractEventDispatcher::instance()->unregisterTimers(this);
-
-    // render the page on a bigger pixmap and use smoothScale,
-    // looks better than directly scaling with the QPainter (malte)
-    QPixmap pix;
-    if (width > 400)
-    {
-        pix = m_doc->generatePreview(QSize(width, height));
-    }
-    else
-    {
-        pix = m_doc->generatePreview(QSize(400, 400));
     }
 
-    img = pix.toImage();
-    return true;
+    if (! m_loadingCompleted) {
+        // loading is done async, so wait here for a while
+        // Using a QEventLoop here seems fine, thumbnailers are only used inside the
+        // thumbnail protocol slave, it seems
+        QTimer::singleShot(timeoutTime, &m_eventLoop, SLOT(quit()));
+        m_eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
+    }
+
+    if (m_loadingCompleted) {
+        // render the page on a bigger pixmap and use smoothScale,
+        // looks better than directly scaling with the QPainter (malte)
+        const bool usePassedSize = (width > minThumbnailSize && height > minThumbnailSize);
+        const QSize size = usePassedSize ? QSize(width, height) : QSize(minThumbnailSize, minThumbnailSize);
+        image = m_doc->generatePreview(size).toImage();
+    }
+
+    m_part->closeUrl();
+
+    return m_loadingCompleted;
 }
 
-void CalligraCreator::timerEvent(QTimerEvent *)
+void CalligraCreator::onLoadingCompleted()
 {
-    m_doc->closeUrl();
-    m_completed = true;
-}
-
-void CalligraCreator::slotCompleted()
-{
-    m_completed = true;
+    m_loadingCompleted = true;
+    m_eventLoop.quit();
 }
 
 ThumbCreator::Flags CalligraCreator::flags() const
 {
-    if (m_doc && (m_doc->mimeType() == "image/openraster" || m_doc->mimeType() == "application/x-krita")) {
-        return (Flags)(DrawFrame);
-    }
-    else {
-        return (Flags)(DrawFrame | BlendIcon);
-    }
+#ifdef NO_ICON_BLENDING
+    return DrawFrame;
+#else
+    return (Flags)(DrawFrame | BlendIcon);
+#endif
 }
-
-#include "calligracreator.moc"
-
