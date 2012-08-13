@@ -32,6 +32,7 @@
 #include "ValueConverter.h"
 #include "Map.h"
 #include "DocBase.h"
+#include<QTimer>
 #include<QObject>
 using namespace Calligra::Sheets;
 
@@ -111,22 +112,18 @@ void PivotMain::extractColumnNames()
     Cell cell;
     QListWidgetItem * item;
     QString text;
-    //int index = 0;
+    
     for (int i = range.left(); i <= r; ++i) {
         cell = Cell(sheet, i, row);
         text = cell.displayText();
-       // d->mainWidget.Labels->insertItem(index++, text);
+       
 	if(text.length() >0)
 	{
         item = new QListWidgetItem(text);
-        item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-        item->setCheckState(Qt::Unchecked);
+	item->setFlags(item->flags());
         d->mainWidget.Labels->addItem(item);
-	}
-	  
-    }
-
-  
+	}  
+    }  
 }
 
 
@@ -150,20 +147,8 @@ void PivotMain::Summarize()
     Sheet *const sheet = d->selection->lastSheet();
     const QRect range = d->selection->lastRange();
     
-    
-    //DocBase* doc=new DocBase();
-    //qDebug()<<"doc"<<doc;
     Map* myMap = sheet->map();
-    //myMap->createSheet("PivotSheet");
-    
-    
-    
-    //Sheet *mysheet=new Sheet(myMap,"PivotSheet");
-    Sheet* mysheet=myMap->createSheet("PivotSheet");
-   // Cell(mysheet,1,1).setValue(Value(23));
-    //qDebug()<<"cellvalue"<<Cell(mysheet,1,1).value();
-    //myMap->addSheet(mysheet);
-    //qDebug()<<"Sheet number"<<myMap->indexOf(mysheet);
+    Sheet* mySheet=myMap->createSheet("PivotTest");
     
     int r = range.right();
     int row=range.top();
@@ -192,45 +177,36 @@ void PivotMain::Summarize()
   counter= d->mainWidget.Rows->count();
   for(int i=0;i<counter;i++)
   {
-	qDebug()<<"1";
+	
         item1=d->mainWidget.Rows->item(i);
         rowList.append(item1);
-        qDebug()<<"rowList"<<rowList.at(i)->text();
     
   }
   counter= d->mainWidget.Columns->count();
   for(int i=0;i<counter;i++)
   {
-	qDebug()<<"2";
+	
         item1=d->mainWidget.Columns->item(i);
-        columnList.append(item1);
-        qDebug()<<"Column List"<<columnList.at(i)->text();
-    
+        columnList.append(item1); 
   }
   counter= d->mainWidget.PageFields->count();
   for(int i=0;i<counter;i++)
   {
-	qDebug()<<"3";
         item1=d->mainWidget.PageFields->item(i);
         pageList.append(item1);
-        qDebug()<<"PageFields"<<pageList.at(i)->text();
-    
   }
   counter= d->mainWidget.Values->count();
   for(int i=0;i<counter;i++)
   {
-	qDebug()<<"4";
         item1=d->mainWidget.Values->item(i);
-        valueList.append(item1);
-        qDebug()<<"Values"<<valueList.at(i)->text(); 
+        valueList.append(item1); 
   }
-  qDebug()<<valueList;
   
   //Summarization using vectors
-  int rowpos,colpos,valpos;
-  QVector<Value> rowVector;
-  QVector<Value> columnVector;
-  QVector<Value> valueVector;
+  int rowpos=-1,colpos=-1,valpos=-1;
+  QVector<Value> rowVector,rowVectorArr[rowList.size()],columnVectorArr[columnList.size()],columnVector,valueVector;
+  QVector<int> rowposVect,colposVect,valposVect;
+  
   for(int i=0;i<rowList.size();i++)
   {
       rowpos=vect.indexOf(Value(rowList.at(i)->text()));
@@ -238,9 +214,15 @@ void PivotMain::Summarize()
       {
 	cell =Cell(sheet,rowpos+1,j);
 	if(rowVector.contains(Value(cell.value()))==0)
-	rowVector.append(Value(cell.value()));
+	{
+	  rowVector.append(Value(cell.value()));
+	  rowVectorArr[i].append(Value(cell.value()));
+      
+	}  
       }
+      rowposVect.append(rowpos);
   }
+    
   for(int i=0;i<columnList.size();i++)
   {
       colpos=vect.indexOf(Value(columnList.at(i)->text()));
@@ -248,73 +230,111 @@ void PivotMain::Summarize()
       {
 	cell =Cell(sheet,colpos+1,j);
 	if(columnVector.contains(Value(cell.value()))==0)
-	columnVector.append(Value(cell.value()));
+	{
+ 	columnVector.append(Value(cell.value()));
+	columnVectorArr[i].append(Value(cell.value()));
+	}
       }
+      colposVect.append(colpos);
   }
-  qDebug()<<"rowVector"<<rowVector;
-  qDebug()<<"ColumnVector"<<columnVector;
+  
+  int count=1,count2=0,prevcount=1;
+  QVector<Value> rowVect[rowposVect.count()];
+  for(int i=0;i<rowposVect.count();i++)
+  {
+    for(int j=i+1;j<rowposVect.count();j++)
+    {
+      count*=rowVectorArr[j].count();
+    }
+    for(int k=0;k<(rowVectorArr[i].count())*prevcount;k++)
+    {
+      Cell(mySheet,((k)*count)+1+colposVect.count(),i+1).setValue(rowVectorArr[i].at(k%rowVectorArr[i].count()));
+      
+      for(int l=0;l<count;l++)
+	rowVect[i].append(rowVectorArr[i].at(k%rowVectorArr[i].count()));
+      
+      count2++;
+    }
+    prevcount=count2;
+    count=1;
+    count2=0;
+  }
+
+  count=1,count2=0,prevcount=1;
+  QVector<Value> colVect[colposVect.count()];
+  for(int i=0;i<colposVect.count();i++)
+  {
+    for(int j=i+1;j<colposVect.count();j++)
+    {
+      count*=columnVectorArr[j].count();
+    }
+    for(int k=0;k<(columnVectorArr[i].count())*prevcount;k++)
+    {
+       
+      Cell(mySheet,i+1,((k)*count)+1+rowposVect.count()).setValue(columnVectorArr[i].at(k%columnVectorArr[i].count()));
+      
+      for(int l=0;l<count;l++)
+	colVect[i].append(columnVectorArr[i].at(k%columnVectorArr[i].count()));
+      
+      count2++;
+    }
+    prevcount=count2;
+    count=1;
+    count2=0;
+  }  
+  
   for(int i=0;i<valueList.size();i++)
-  {{
-    for(int j=0;j<columnVector.count();j++)
-    {
-      QVector<Value> aggregate;
-	
-      
-      for(int k=row+1;k<=bottom;k++)
-      {
-      if(Cell(sheet,rowpos+1,k).value()==rowVector.at(i) && Cell(sheet,colpos+1,k).value()==columnVector.at(j))
-	aggregate.append(Cell(sheet,valpos+1,k).value());
-    
-      }
-      qDebug()<<"Working till here";
-      calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
-      qDebug()<<rowVector.at(i)<<columnVector.at(j)<<aggregate<<res;
-      Cell(mysheet,i+2,j+2).setValue(res);
-      aggregate.clear();
-      res=Value(0);
-    }
-  }
+  {
      valpos=vect.indexOf(Value(valueList.at(i)->text()));
-      
+     valposVect.append(valpos);    
   }
   
   
-  Cell(mysheet,1,1).setValue(Value("PIVOT"));
-  
-  for(int i=1;i<=rowVector.count();i++)
+
+  Cell(mySheet,1,1).setValue(Value("PIVOT TABLES"));
+  for(int l=0;l<rowVect[0].count();l++)
   {
-    Cell(mysheet,i+1,1).setValue(rowVector.at(i-1));
-  }
-  for(int i=1;i<=columnVector.count();i++)
-  {
-    Cell(mysheet,1,i+1).setValue(columnVector.at(i-1));
-  }
-  //qDebug()<<rowpos<<colpos<<valpos<<valueList;
-  for(int i=0;i<rowVector.count();i++)
-  {
-    for(int j=0;j<columnVector.count();j++)
-    {
-      QVector<Value> aggregate;
-	
-      
-      for(int k=row+1;k<=bottom;k++)
+    for(int m=0;m<colVect[0].count();m++)
       {
-      if(Cell(sheet,rowpos+1,k).value()==rowVector.at(i) && Cell(sheet,colpos+1,k).value()==columnVector.at(j))
-	aggregate.append(Cell(sheet,valpos+1,k).value());
-    
+
+	      QVector<Value> aggregate;
+	      for(int k=row+1;k<=bottom;k++)
+	      {int flag=0;
+		for(int i=0;i<rowposVect.count();i++)
+		{
+		  for(int j=0;j<colposVect.count();j++)
+		    {
+ 
+		      if(!(Cell(sheet,rowposVect.at(i)+1,k).value()==rowVect[i].at(l) && Cell(sheet,colposVect.at(j)+1,k).value()==colVect[j].at(m)))
+			flag=1;
+		      
+		    }
+		  }
+		if(flag==0)
+		aggregate.append(Cell(sheet,valpos+1,k).value());
+	      }
+
+		calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
+ 		
+		Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setValue(res);
+
+		aggregate.clear();
+		res=Value(0);
+	    
       }
-      qDebug()<<"Working till here";
-      calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
-      qDebug()<<rowVector.at(i)<<columnVector.at(j)<<aggregate<<res;
-      Cell(mysheet,i+2,j+2).setValue(res);
-      aggregate.clear();
-      res=Value(0);
     }
-  }
+  
+  
+  //Clearing Vectors
   rowVector.clear();
   columnVector.clear();
   valueVector.clear();
-  myMap->addSheet(mysheet);
+  rowposVect.clear();
+  colposVect.clear();
+  valposVect.clear();
+  
+  //Adding built sheet to myMap for viewing
+  myMap->addSheet(mySheet);
   
 }
 
@@ -322,8 +342,7 @@ void PivotMain::on_Ok_clicked()
 {
   
   Summarize();
-  //QMessageBox msgBox;
-  //msgBox.setText("Pivot Tables under Construction");
-  //msgBox.exec();
-  
+  QMessageBox msgBox;
+  msgBox.setText("Pivot Tables Built");
+  msgBox.exec();
 }
