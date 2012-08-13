@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.6)
 
 project(krita-sketch)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_INSTALL_PREFIX}/share/apps/cmake/modules)
+
 find_package(Qt 4.8 REQUIRED)
 find_package(KDE4 REQUIRED)
 find_package(KDE4Internal REQUIRED)
