@@ -40,8 +40,10 @@
 #include "libepub/EpubFile.h"
 
 
+// Handle a collection of styles from either content.xml or styles.xml
 static void handleStyles(KoXmlNode &stylesNode,
                          QHash<QString, StyleInfo*> &styles);
+// 
 static void handleStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attList,
                                   StyleInfo *styleInfo);
 
@@ -136,9 +138,19 @@ static void writeEndNotes(KoXmlWriter *bodyWriter, QHash<QString, StyleInfo*> &s
   * page break before too, and we have an id that goes up when i see page break
   * so we now we are in which file or chapter and this id is the value of hash
   * and at the end when we want to write html file, when we see an id, find it in hash
-  * and set it instead < a  href = hash.value(key) + #key /> */
-static void collectInternalLinksInfo(KoXmlElement &currentElement, QHash<QString, StyleInfo*> &styles,
+  * and set it instead < a  href = hash.value(key) + #key />
+  */
+static void collectInternalLinksInfo(KoXmlElement &currentElement,
+                                     QHash<QString, StyleInfo*> &styles,
                                      QHash<QString, QString> &linksInfo, int &chapter);
+
+
+//FIXME : we should make an object out of it
+static int currentChapter;
+
+// ================================================================
+//                         Style parsing
+
 
 StyleInfo::StyleInfo()
     : hasBreakBefore(false)
@@ -146,15 +158,9 @@ StyleInfo::StyleInfo()
 {
 }
 
-//FIXME : we should make an object out of it
-static int currentChapter;
-// ================================================================
-//                         Style parsing
 
-
-
-KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
-                                       QHash<QString, StyleInfo*> &styles)
+KoFilter::ConversionStatus convertStyles(KoStore *odfStore,
+                                         QHash<QString, StyleInfo*> &styles)
 {
     //kDebug(30517) << "parse content.xml styles";
     if (!odfStore->open("content.xml")) {
@@ -162,9 +168,11 @@ KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
         return KoFilter::FileNotFound;
     }
 
+    // Try to set content.xml as a KoXmlDocument. Return if it failed.
     KoXmlDocument doc;
     QString errorMsg;
-    int errorLine, errorColumn;
+    int errorLine;
+    int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
         kDebug() << "Error occurred while parsing styles.xml "
                  << errorMsg << " in Line: " << errorLine
@@ -177,13 +185,14 @@ KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
     KoXmlNode stylesNode = doc.documentElement();
     stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "automatic-styles");
 
-    // Collect attributes in the styles.
+    // Collect info about the styles.
     handleStyles(stylesNode, styles);
 
     odfStore->close(); // end of parsing styles in content.xml
 
     // ----------------------------------------------------------------
 
+    // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
     //kDebug(30517) << "************ parse styles.xml styles **********************";
     if (!odfStore->open("styles.xml")) {
         kError(30517) << "Unable to open input file! style.xml" << endl;
@@ -203,7 +212,7 @@ KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
     stylesNode = doc.documentElement();
     stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "styles");
 
-    // Collect attributes in the styles.
+    // Collect info about the styles.
     handleStyles(stylesNode, styles);
 
     odfStore->close();
@@ -234,8 +243,8 @@ void handleStyles(KoXmlNode &stylesNode,
         KoXmlElement propertiesElement;
         forEachElement (propertiesElement, styleElement) {
             //Check for fo:break-before
-            if (propertiesElement.hasAttribute("break-before")) {
-                //kDebug(30517) << "Found break-before in style" << styleName;
+            if (propertiesElement.attribute("break-before") == "page") {
+                //kDebug(30517) << "Found break-before=page in style" << styleName;
                 styleInfo->hasBreakBefore = true;
             }
             handleStyleAttributes(propertiesElement, attList, styleInfo);
@@ -282,6 +291,7 @@ void handleStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attL
         << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" //<< "margin"
         << "auto";
 
+    // Handle all general text formatting attributes
     foreach(const QString &attrName, attributes) {
         QString attrVal = propertiesElement.attribute(attrName);
 
@@ -304,20 +314,20 @@ void handleStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attL
         styleInfo->attributes.insert("direction", attribute);
     }
 
-    // image align
+    // Image align
     attribute = propertiesElement.attribute("horizontal-pos");
     if (!attribute.isEmpty()) {
         kDebug(30517) << "horisontal pos attribute"<<attribute;
         if (attribute == "right" || attribute == "from-left") {
             styleInfo->attributes.insert("float", "right");
-            styleInfo->attributes.insert("margin","5px 0 5px 15px");
+            styleInfo->attributes.insert("margin", "5px 0 5px 15px");
         }
         // Center doesnt show very well.
-//        if (attribute == "center") {
+//        else if (attribute == "center") {
 //            styleInfo->attributes.insert("display", "block");
 //            styleInfo->attributes.insert("margin", "10px auto");
 //        }
-        if (attribute == "left") {
+        else if (attribute == "left") {
             styleInfo->attributes.insert("display", "inline");
             styleInfo->attributes.insert("float", "left");
             styleInfo->attributes.insert("margin","5px 15px 5px 0");
@@ -344,7 +354,7 @@ void handleStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attL
         styleInfo->attributes.insert("list-style-type:", attribute);
         styleInfo->attributes.insert("list-style-position:", "outside");
     }
-    else if (propertiesElement.hasAttribute("bullet-char")){
+    else if (propertiesElement.hasAttribute("bullet-char")) {
         attribute = propertiesElement.attribute("bullet-char");
         if (!attribute.isEmpty()) {
             switch (attribute[0].unicode()) {

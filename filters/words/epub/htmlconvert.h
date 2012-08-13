@@ -42,8 +42,24 @@ struct StyleInfo {
     QHash<QString, QString> attributes;
 };
 
-KoFilter::ConversionStatus parseStyles(KoStore *odfStore,
-                                       QHash<QString, StyleInfo*> &styles);
+/** Parse all styles in the store, convert them to CSS styles and return info about them.
+ *
+ * This function opens contents.xml and styles.xml and parses the
+ * character and paragraph properties of them. It also records the
+ * parent name, wether it has the fo:break-before="page" attribute and
+ * wether it is in use in the contents.
+ *
+ * @param odfStore the store where content.xml and styles.xml can be found.
+ * @param styles the out parameter where the styles are returned. This
+ * is a QHash with the style internal style name as index (not the
+ * printed name) and a StyleInfo pointer as value
+ *
+ * @return KoFilter::OK if the parsing was successful
+ * @return other if the parsing was not successful
+ */
+ 
+KoFilter::ConversionStatus convertStyles(KoStore *odfStore,
+                                         QHash<QString, StyleInfo*> &styles);
 KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
                                           EpubFile *epub,QHash<QString, StyleInfo*> &styles,
                                           QHash<QString, QSizeF> &imagesSrcList);

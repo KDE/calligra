@@ -47,8 +47,10 @@
 #include "SvmParser.h"
 #include "SvmPainterBackend.h"
 
+
 K_PLUGIN_FACTORY(ExportEpub2Factory, registerPlugin<ExportEpub2>();)
 K_EXPORT_PLUGIN(ExportEpub2Factory("calligrafilters"))
+
 
 ExportEpub2::ExportEpub2(QObject *parent, const QVariantList&) :
     KoFilter(parent)
@@ -94,15 +96,15 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Parse styles
     QHash<QString, StyleInfo*> styles;
-    status = parseStyles(odfStore, styles);
+    status = convertStyles(odfStore, styles);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
     }
-    // propagate some inherited stuff.
+    // Propagate some inherited stuff.
     fixStyleTree(styles);
 
-#if 0
+#if 0 // Debug
     kDebug(30517) << "======== >> Styles";
     foreach(const QString &name, styles.keys()) {
         kDebug(30517) << name << styles.value(name)->parent
@@ -133,7 +135,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
             return status;
         }
 
-    // Create CSS contents
+    // Create CSS contents and store it in the epub file.
     QByteArray  cssContent;
     status = createCSS(styles, cssContent);
     if (status != KoFilter::OK) {
@@ -150,6 +152,37 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     delete odfStore;
     qDeleteAll(styles);
 
+    return KoFilter::OK;
+}
+
+
+KoFilter::ConversionStatus ExportEpub2::parseMetadata(KoStore *odfStore)
+{
+    if (!odfStore->open("meta.xml")) {
+        kDebug(30517) << "Cannot open meta.xml";
+        return KoFilter::FileNotFound;
+    }
+
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug() << "Error occurred while parsing meta.xml "
+                 << errorMsg << " in Line: " << errorLine
+                 << " Column: " << errorColumn;
+        odfStore->close();
+        return KoFilter::ParsingError;
+    }
+
+    KoXmlNode childNode = doc.documentElement();
+    childNode = KoXml::namedItemNS(childNode, KoXmlNS::office, "meta");
+    KoXmlElement element;
+    forEachElement (element, childNode) {
+        m_meta.insert(element.tagName(), element.text());
+    }
+
+    odfStore->close();
     return KoFilter::OK;
 }
 
@@ -185,39 +218,8 @@ void ExportEpub2::fixStyleTree(QHash<QString, StyleInfo*> &styles)
             }
         }
     }
-
 }
 
-
-KoFilter::ConversionStatus ExportEpub2::parseMetadata(KoStore *odfStore)
-{
-    if (!odfStore->open("meta.xml")) {
-        kDebug(30517) << "Cannot open meta.xml";
-        return KoFilter::FileNotFound;
-    }
-
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing meta.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return KoFilter::ParsingError;
-    }
-
-    KoXmlNode childNode = doc.documentElement();
-    childNode = KoXml::namedItemNS(childNode, KoXmlNS::office, "meta");
-    KoXmlElement element;
-    forEachElement (element, childNode) {
-        m_meta.insert(element.tagName(), element.text());
-    }
-
-    odfStore->close();
-    return KoFilter::OK;
-}
 
 KoFilter::ConversionStatus ExportEpub2::createCSS(QHash<QString, StyleInfo*> &styles,
                                                   QByteArray &cssContent)
@@ -225,7 +227,8 @@ KoFilter::ConversionStatus ExportEpub2::createCSS(QHash<QString, StyleInfo*> &st
     // There is no equivalent to the ODF style inheritance using
     // parent-style-name in CSS. This means that to simulate the same
     // behaviour we have to "flatten" the style tree, i.e. we have to
-    // transfer all the attributes from a style's parent into itself.
+    // transfer all the inherited attributes from a style's parent
+    // into itself.
     flattenStyles(styles);
 
     QByteArray begin("{\n");
@@ -238,6 +241,7 @@ KoFilter::ConversionStatus ExportEpub2::createCSS(QHash<QString, StyleInfo*> &st
         if (!styleInfo || !styleInfo->inUse)
             continue;
 
+        // The style name
         head = QString("." + styleName).toUtf8();
         cssContent.append(head);
         cssContent.append(begin);
@@ -295,7 +299,7 @@ void ExportEpub2::flattenStyle(const QString &styleName, QHash<QString, StyleInf
 
 KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFile *epubFile)
 {
-    QHash <QString, QString> metaImagesData; // hash <src, mimetype>
+    QHash <QString, QString> metaImagesData; // hash <filename, mimetype>
 
     KoFilter::ConversionStatus status;
     status = parseMetaInfImagesData(odfStore, metaImagesData);
@@ -318,54 +322,63 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
         QSizeF qSize = m_imagesSrcList.value(imgSrc);
         switch (type) {
 
-        case ExportEpub2::VectorTypeSvm: {
+        case ExportEpub2::VectorTypeSvm:
+            {
+                kDebug(30517) << "Svm file";
+                QSize size(qSize.width(), qSize.height());
+                QByteArray output;
+                if (!convertSvm(imgContent, output, size)) {
+                    kDebug(30517) << "Svm Parse error";
+                    return KoFilter::ParsingError;
+                }
 
-            kDebug(30517) << "Svm file";
-            QSize size(qSize.width(), qSize.height());
-            QByteArray outPut;
-            if (!convertSvm(imgContent,outPut, size)) {
-                kDebug(30517) << "Svm Parse error";
-                return KoFilter::ParsingError;
+                epubFile->addContentFile(("image" + QString::number(imgId)),
+                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         "image/svg+xml", output);
+                break;
+            }
+        case ExportEpub2::VectorTypeEmf:
+            {
+                kDebug(30517) << "EMF file";
+                QSize size(qSize.width(), qSize.height());
+                QByteArray output;
+                if (!convertEmf(imgContent, output, size)) {
+                    kDebug(30517) << "EMF Parse error";
+                    return KoFilter::ParsingError;
+                }
+
+                epubFile->addContentFile(("image" + QString::number(imgId)),
+                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         "image/svg+xml", output);
+                break;
+            }
+        case ExportEpub2::VectorTypeWmf:
+            {
+                kDebug(30517) << "WMF file";
+                QByteArray output;
+                if (!convertWmf(imgContent, output, qSize)) {
+                    kDebug(30517) << "WMF Parse error";
+                    return KoFilter::ParsingError;
+                }
+
+                epubFile->addContentFile(("image" + QString::number(imgId)),
+                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         "image/svg+xml", output);
+                break;
             }
 
-            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
-                                     "image/svg+xml", outPut);
-            break;
-        }
-        case ExportEpub2::VectorTypeEmf: {
-            kDebug(30517) << "EMF file";
-            QSize size(qSize.width(), qSize.height());
-            QByteArray outPut;
-            if (!convertEmf(imgContent,outPut, size)) {
-                kDebug(30517) << "Svm Parse error";
-                return KoFilter::ParsingError;
+            // If it's not one of the types we can convert, let's just
+            // assume that the image can be used as it is. The user
+            // will find out soon anyway when s/he tries to look at
+            // the image.
+        case ExportEpub2::VectorTypeOther:
+            {
+                kDebug(30517) << "Other file";
+                epubFile->addContentFile(("image" + QString::number(imgId)),
+                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         metaImagesData.value(imgSrc).toUtf8(), imgContent);
+                break;
             }
-
-            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
-                                     "image/x-emf", outPut);
-            break;
-        }
-        case ExportEpub2::VectorTypeWmf: {
-
-            kDebug(30517) << "WMF file";
-            QByteArray outPut;
-            if (!convertWmf(imgContent,outPut, qSize)) {
-                kDebug(30517) << "Svm Parse error";
-                return KoFilter::ParsingError;
-            }
-
-            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
-                                     "image/x-wmf", outPut);
-            break;
-        }
-            // epub support and doesnt need to convert to other format so we add
-            // we add it directly and find its mimtype form metaInf
-        case ExportEpub2::VectorTypeOther: {
-            kDebug(30517) << "Other file";
-            epubFile->addContentFile(("image"+ QString::number(imgId)), ("OEBPS/" + imgSrc.section('/', -1)),
-                                     metaImagesData.value(imgSrc).toUtf8(), imgContent);
-            break;
-        }
 
         default:
             kDebug(30517) << "";
@@ -416,7 +429,7 @@ bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
     generator.setOutputDevice(outBuf);
     generator.setSize(QSize(200, 200));
     generator.setTitle("Svg image");
-    generator.setDescription("This is a svg image that is converted from svm by Calligra");
+    generator.setDescription("This is an svg image that is converted from svm by Calligra");
 
     Libsvm::SvmParser  svmParser;
 
@@ -428,8 +441,8 @@ bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
     }
 
     painter.scale(50,50);
-    Libsvm::SvmPainterBackend svmpainterBackend(&painter, size);
-    svmParser.setBackend(&svmpainterBackend);
+    Libsvm::SvmPainterBackend svmPainterBackend(&painter, size);
+    svmParser.setBackend(&svmPainterBackend);
     if (!svmParser.parse(input)) {
         kDebug(30517) << "Can not Parse the Svm file";
         return false;
@@ -446,7 +459,7 @@ bool ExportEpub2::convertEmf(QByteArray &input, QByteArray &output, QSize size)
     generator.setOutputDevice(outBuf);
     generator.setSize(QSize(200, 200));
     generator.setTitle("Svg image");
-    generator.setDescription("This is a svg image that is converted from svm by Calligra");
+    generator.setDescription("This is an svg image that is converted from EMF by Calligra");
 
     Libemf::Parser  emfParser;
 
@@ -461,7 +474,7 @@ bool ExportEpub2::convertEmf(QByteArray &input, QByteArray &output, QSize size)
     Libemf::OutputPainterStrategy  emfPaintOutput(painter, size, true );
     emfParser.setOutput( &emfPaintOutput );
     if (!emfParser.load(input)) {
-        kDebug(30517) << "Can not Parse the Svm file";
+        kDebug(30517) << "Can not Parse the EMF file";
         return false;
     }
     painter.end();
@@ -476,7 +489,7 @@ bool ExportEpub2::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
     generator.setOutputDevice(outBuf);
     generator.setSize(QSize(200, 200));
     generator.setTitle("Svg image");
-    generator.setDescription("This is a svg image that is converted from svm by Calligra");
+    generator.setDescription("This is an svg image that is converted from WMF by Calligra");
 
     QPainter painter;
 
@@ -488,17 +501,21 @@ bool ExportEpub2::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
     painter.scale(50,50);
     Libwmf::WmfPainterBackend  wmfPainter(&painter, size);
     if (!wmfPainter.load(input)) {
-        kDebug(30517) << "Can not Parse the Svm file";
+        kDebug(30517) << "Can not Parse the WMF file";
         return false;
     }
-    painter.save();
+
     // Actually paint the WMF.
+    painter.save();
     wmfPainter.play();
     painter.restore();
     painter.end();
 
     return true;
 }
+
+// ----------------------------------------------------------------
+// These functions were taken from the vector shape.
 
 ExportEpub2::VectorType  ExportEpub2::vectorType(QByteArray &content)
 {
