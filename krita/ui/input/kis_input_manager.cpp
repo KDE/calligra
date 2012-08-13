@@ -121,6 +121,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object)
     switch (event->type()) {
+    case QEvent::TouchBegin:
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
         d->mousePosition = widgetToPixel(static_cast<QMouseEvent*>(event)->posF());
@@ -153,6 +154,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             }
         }
         //Intentional fall through
+    case QEvent::TouchEnd:
     case QEvent::MouseButtonRelease:
         if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
             d->currentShortcut->match(event);
@@ -236,11 +238,15 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //Always ignore tablet release events and have them generate mouse events instead.
         event->ignore();
         break;
-    case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
-    case QEvent::TouchEnd:
-        event->ignore();
-       break;
+        if (!d->currentAction) {
+            QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+            // Update the current tool so things like the brush outline gets updated.
+            d->toolProxy->touchEvent(touchEvent, d->canvas->viewConverter(), d->canvas->documentOffset());
+        } else {
+            d->currentAction->inputEvent(event);
+        }
+        return true;
     default:
         break;
     }
