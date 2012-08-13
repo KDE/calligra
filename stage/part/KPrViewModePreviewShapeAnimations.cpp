@@ -154,11 +154,10 @@ void KPrViewModePreviewShapeAnimations::activate(KoPAViewMode *previousViewMode)
     m_timeLine.setDuration(m_shapeAnimation->duration());
     m_timeLine.setCurrentTime(0);
     m_animationCache->clear();
-    m_animationCache->setPageSize(view()->zoomController()->documentSize());
+    m_animationCache->setPageSize(view()->zoomController()->pageSize());
     qreal zoom;
     view()->zoomHandler()->zoom(&zoom, &zoom);
-    const qreal zoomCorrection = zoom / 1.375;
-    m_animationCache->setZoom(zoom * zoomCorrection);
+    m_animationCache->setZoom(zoom);
     m_shapeAnimation->init(m_animationCache, 0);
     m_animationCache->startStep(0);
     m_timeLine.start();

@@ -87,14 +87,9 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
     QMapIterator<KoPathShape *, KPrAnimateMotion *> i(m_pathMap);
     while (i.hasNext()) {
         i.next();
-        /*if (!m_pathShapeManager->shapes().contains(i.key())) {
-            addPathShape(i.key());
-        }*/
-        QPair<QSizeF, qreal> pageSizeAndZoom = getPageSizeAndZoom();
-        qreal zoom = pageSizeAndZoom.second;
-        QSizeF pageSize = pageSizeAndZoom.first;
-        if ((i.value()->currentPageSize() != pageSize) || (i.value()->currentZoom() != zoom)) {
-            i.value()->getPath(zoom, pageSize);
+        QSizeF pageSize = getPageSize();
+        if (i.value()->currentPageSize() != pageSize) {
+            i.value()->getPath(1, pageSize);
         }
     }
     if (m_pathShapeManager) {
@@ -241,10 +236,8 @@ void KPrAnimationTool::initMotionPathShapes()
             for (int i = 0; i < anim->animationCount(); i++) {
                 if (KPrAnimateMotion *motion = dynamic_cast<KPrAnimateMotion *>(anim->animationAt(i))) {
                     // Load motion path
-                    QPair<QSizeF, qreal> pageSizeAndZoom = getPageSizeAndZoom();
-                    qreal zoom = pageSizeAndZoom.second;
-                    QSizeF pageSize = pageSizeAndZoom.first;
-                    KoPathShape *path = motion->getPath(zoom, pageSize);
+                    QSizeF pageSize = getPageSize();
+                    KoPathShape *path = motion->getPath(1, pageSize);
                     m_pathMap.insert(path, motion);
                     m_shapesMap.insert(path, anim->shape());
                     // change stroke apparience
@@ -272,14 +265,10 @@ void KPrAnimationTool::addPathShape(KoPathShape *pathShape)
     m_pathShapeManager->addShape(pathShape);
 }
 
-QPair<QSizeF, qreal> KPrAnimationTool::getPageSizeAndZoom()
+QSizeF KPrAnimationTool::getPageSize()
 {
-    qreal zoom;
-    (dynamic_cast<KoPACanvas *>(canvas()))->koPAView()->zoomHandler()->zoom(&zoom, &zoom);
-    QSizeF pageSize = dynamic_cast<KoPACanvas *>(canvas())->koPAView()->zoomController()->documentSize();
-    const qreal zoomCorrection = 1.375;
-    zoom = zoom / zoomCorrection;
-    return QPair<QSizeF, qreal>(pageSize, zoom);
+    QSizeF pageSize = dynamic_cast<KoPACanvas *>(canvas())->koPAView()->zoomController()->pageSize();
+    return pageSize;
 }
 
 void KPrAnimationTool::cleanMotionPathManager()

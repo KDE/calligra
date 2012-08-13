@@ -75,7 +75,7 @@ protected:
     virtual void addPathShape(KoPathShape *pathShape);
 
     /// Helper method to scale the motion path shape (using current page size and zoom)
-    QPair<QSizeF, qreal> getPageSizeAndZoom();
+    QSizeF getPageSize();
 
     /// remove motion paths of motion path manager
     void cleanMotionPathManager();
