@@ -77,7 +77,24 @@ QVariant PresetModel::data(const QModelIndex &index, int role) const
 
 QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    return QVariant();
+    Q_UNUSED(orientation);
+    QVariant result;
+    if(section == 0)
+    {
+        switch(role)
+        {
+        case ImageRole:
+            result = QString("Thumbnail");
+            break;
+        case TextRole:
+            result = QString("Name");
+            break;
+        default:
+            result = "";
+            break;
+        }
+    }
+    return result;
 }
 
 #include "presetmodel.moc"
