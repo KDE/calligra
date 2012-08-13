@@ -17,7 +17,7 @@
  */
 
 import QtQuick 1.1
-import ":/components"
+import "../components"
 
 Item {
     id: base;

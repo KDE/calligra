@@ -18,8 +18,8 @@
 
 import QtQuick 1.1
 import Qt.labs.particles 1.0
-import ":/components"
-import ":/panels"
+import "components"
+import "panels"
 
 Page {
     Rectangle {
