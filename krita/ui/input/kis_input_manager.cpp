@@ -235,6 +235,12 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     case QEvent::TabletRelease:
         //Always ignore tablet release events and have them generate mouse events instead.
         event->ignore();
+        break;
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+        event->ignore();
+       break;
     default:
         break;
     }
