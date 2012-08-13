@@ -24,7 +24,6 @@
 #include "kexiprojectset.h"
 #include "kexiguimsghandler.h"
 #include "KexiStartupDialog.h"
-#include <KexiMainWindow.h>
 
 #include <db/utils.h>
 #include <db/driver.h>
