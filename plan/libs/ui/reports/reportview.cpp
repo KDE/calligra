@@ -236,18 +236,8 @@ bool ReportView::loadContext( const KoXmlElement &context )
     res = reportDesigner()->loadContext( context );
     res &= reportWidget()->loadContext( context );
 
-    // Hmmm. always go to report view atm
-    slotViewReport();
-//     KoXmlElement e = context.namedItem( "view" ).toElement();
-//     int idx = 0;
-//     if ( ! e.isNull() ) {
-//         idx = e.attribute( "current-view", "0" ).toInt();
-//     }
-//     if ( idx == 0 ) {
-//         slotViewReport();
-//     } else {
-//         slotEditReport();
-//     }
+    reportWidget()->loadXML( reportDesigner()->document() );
+
     return res;
 }
 
