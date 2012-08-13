@@ -17,11 +17,8 @@ include_directories(../../)
 FIND_LIBRARY(KRITAUI_LIBRARY NAMES kritaui)
 
 set(krita-sketch_SRCS
-    constants.cpp
-    settings.cpp
     main.cpp
     mainwindow.cpp
-    presetimageprovider.cpp
     presetmodel.cpp
 )
 
@@ -30,6 +27,18 @@ qt4_add_resources(krita-sketch_SRCS krita-sketch.qrc)
 
 add_executable(krita-sketch ${krita-sketch_SRCS})
 target_link_libraries(krita-sketch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${PIGMENTCMS_LIBRARY} ${KRITAUI_LIBRARY})
+
+set(krita-sketch-qmlplugin_SRCS
+    kritasketchqmlextensions.cpp
+    constants.cpp
+    settings.cpp
+    presetimageprovider.cpp
+)
+
+qt4_automoc(${krita-sketch-qmlplugin_SRCS})
+
+add_library(krita-sketch-qmlplugin SHARED ${krita-sketch-qmlplugin_SRCS})
+target_link_libraries(krita-sketch-qmlplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${PIGMENTCMS_LIBRARY} ${KRITAUI_LIBRARY})
 
 add_custom_target(QmlFiles ALL ${CMAKE_COMMAND} -E echo "Main application QML files"
     SOURCES

@@ -77,8 +77,10 @@ Constants::Constants(QObject* parent)
 {
     m_theme = new Theme( this );
 
-    m_gridWidth = qApp->activeWindow()->width() / gridColumns();
-    m_gridHeight = qApp->activeWindow()->height() / gridHeight();
+    //m_gridWidth = qApp->activeWindow()->width() / gridColumns();
+    m_gridWidth = 200;
+    //m_gridHeight = qApp->activeWindow()->height() / gridHeight();
+    m_gridHeight = 50;
 }
 
 qreal Constants::gridHeight() const

@@ -25,18 +25,13 @@
 #include <QDeclarativeEngine>
 
 #include "constants.h"
-#include "settings.h"
-
 #include "presetmodel.h"
-#include "presetimageprovider.h"
 
 class MainWindow::Private
 {
     public:
         QDeclarativeView* view;
         Constants* constants;
-        PresetModel* presets;
-        QObject* settings;
 };
 
 MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
@@ -46,15 +41,8 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
 
     setAttribute( Qt::WA_AcceptTouchEvents );
 
-    d->constants = new Constants( this );
-    d->settings = new Settings( this );
-    d->presets = new PresetModel( this );
-
     QDeclarativeView* view = new QDeclarativeView();
-    view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
-    view->rootContext()->setContextProperty( "Constants", d->constants );
-    view->rootContext()->setContextProperty( "Settings", d->settings );
-    view->rootContext()->setContextProperty( "PresetsModel", d->presets );
+    view->rootContext()->setContextProperty( "PresetsModel", new PresetModel( this ) );
     view->setSource( QUrl( "qrc:/main.qml" ) );
     view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
     setCentralWidget( view );
@@ -62,8 +50,8 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
-    d->constants->setGridWidth( event->size().width() / d->constants->gridColumns() );
-    d->constants->setGridHeight( event->size().height() / d->constants->gridRows() );
+//    d->constants->setGridWidth( event->size().width() / d->constants->gridColumns() );
+//    d->constants->setGridHeight( event->size().height() / d->constants->gridRows() );
     QWidget::resizeEvent(event);
 }
 
