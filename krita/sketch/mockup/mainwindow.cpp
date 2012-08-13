@@ -27,6 +27,7 @@
 #include "constants.h"
 #include "settings.h"
 
+#include "presetmodel.h"
 #include "presetimageprovider.h"
 
 class MainWindow::Private
@@ -34,6 +35,7 @@ class MainWindow::Private
     public:
         QDeclarativeView* view;
         Constants* constants;
+        PresetModel* presets;
         QObject* settings;
 };
 
@@ -46,11 +48,13 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
 
     d->constants = new Constants( this );
     d->settings = new Settings( this );
+    d->presets = new PresetModel( this );
 
     QDeclarativeView* view = new QDeclarativeView();
     view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     view->rootContext()->setContextProperty( "Constants", d->constants );
     view->rootContext()->setContextProperty( "Settings", d->settings );
+    view->rootContext()->setContextProperty( "PresetsModel", d->presets );
     view->setSource( QUrl( "qrc:/main.qml" ) );
     view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
     setCentralWidget( view );
