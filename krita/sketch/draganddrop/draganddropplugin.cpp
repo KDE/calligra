@@ -31,7 +31,7 @@
 
 void DragAndDropPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.draganddrop"));
+    Q_ASSERT(uri == QLatin1String("org.krita.draganddrop"));
 
     qmlRegisterType<DeclarativeDropArea>(uri, 1, 0, "DropArea");
     qmlRegisterType<DeclarativeDragArea>(uri, 1, 0, "DragArea");
