@@ -175,6 +175,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
     widget->setMouseTracking(true);
     widget->setAcceptDrops(true);
     widget->installEventFilter(m_d->inputManager);
+    widget->setAttribute(Qt::WA_AcceptTouchEvents, true);
     KoCanvasControllerWidget *controller = dynamic_cast<KoCanvasControllerWidget*>(canvasController());
     if (controller) {
         Q_ASSERT(controller->canvas() == this);
