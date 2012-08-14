@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoSimpleOdtLine.h"
+#include "KoOdtFrameReportLine.h"
 #include <KoXmlWriter.h>
 #include <KoDpi.h>
 #include <KoOdfGraphicStyles.h>
@@ -39,36 +39,34 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 
-extern int planDbg();
-
-KoSimpleOdtLine::KoSimpleOdtLine(OROLine *primitive)
-    : KoSimpleOdtPrimitive(primitive)
+KoOdtFrameReportLine::KoOdtFrameReportLine(OROLine *primitive)
+    : KoOdtFrameReportPrimitive(primitive)
 {
 }
 
-KoSimpleOdtLine::~KoSimpleOdtLine()
+KoOdtFrameReportLine::~KoOdtFrameReportLine()
 {
 }
 
-OROLine *KoSimpleOdtLine::line() const
+OROLine *KoOdtFrameReportLine::line() const
 {
     return static_cast<OROLine*>(m_primitive);
 }
 
-void KoSimpleOdtLine::createStyle(KoGenStyles &coll)
+void KoOdtFrameReportLine::createStyle(KoGenStyles &coll)
 {
     KoGenStyle ps(KoGenStyle::ParagraphStyle, "paragraph");
     m_paragraphStyleName = coll.insert(ps, "P");
 
     KoGenStyle gs(KoGenStyle::GraphicStyle, "graphic");
     gs.addProperty("draw:fill", "none");
-    gs.addProperty("fo:margin", "0.000000000000000pt");
+    gs.addPropertyPt("fo:margin", 0);
     gs.addProperty("style:horizontal-pos", "from-left");
     gs.addProperty("style:horizontal-rel", "page");
     gs.addProperty("style:vertical-pos", "from-top");
     gs.addProperty("style:vertical-rel", "page");
     gs.addProperty("style:wrap", "dynamic");
-    gs.addProperty("style:wrap-dynamic-threshold", "0.000000000000000pt");
+    gs.addPropertyPt("style:wrap-dynamic-threshold", 0);
 
     QPen pen;
     qreal weight = line()->lineStyle().weight;
@@ -81,10 +79,10 @@ void KoSimpleOdtLine::createStyle(KoGenStyles &coll)
     KoOdfGraphicStyles::saveOdfStrokeStyle(gs, coll, pen);
 
     m_frameStyleName = coll.insert(gs, "F");
-    kDebug(planDbg())<<coll;
+    kDebug()<<coll;
 }
 
-void KoSimpleOdtLine::createBody(KoXmlWriter *bodyWriter) const
+void KoOdtFrameReportLine::createBody(KoXmlWriter *bodyWriter) const
 {
     // convert to inches
     qreal sx = INCH_TO_POINT(line()->startPoint().x() / KoDpi::dpiX());
@@ -94,7 +92,7 @@ void KoSimpleOdtLine::createBody(KoXmlWriter *bodyWriter) const
     qreal width = ex - sx;
     qreal height = ey - sy;
 
-    kDebug(planDbg())<<line()->startPoint()<<line()->endPoint();
+    kDebug()<<line()->startPoint()<<line()->endPoint();
 
     bodyWriter->startElement("draw:rect");
     bodyWriter->addAttribute("draw:id", itemName());

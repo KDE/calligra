@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,38 +18,42 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSIMPLEODTCHECKBOX_H
-#define KOSIMPLEODTCHECKBOX_H
-
-#include "KoSimpleOdtPrimitive.h"
+#ifndef KOODTFRAMESREPORTPRIMITIVE_H
+#define KOODTFRAMESREPORTPRIMITIVE_H
 
 #include <QString>
 
 class KoGenStyles;
 class KoXmlWriter;
-class OROCheck;
 class OROPrimitive;
+class KoStore;
 
-
-class KoSimpleOdtCheckBox : public KoSimpleOdtPrimitive
+class KoOdtFrameReportPrimitive
 {
 public:
-    KoSimpleOdtCheckBox(OROCheck *primitive);
-    virtual ~KoSimpleOdtCheckBox();
+    explicit KoOdtFrameReportPrimitive(OROPrimitive *primitive = 0);
+    virtual ~KoOdtFrameReportPrimitive();
 
-    virtual void createStyle(KoGenStyles &coll);
+    bool isValid() const;
+    void setPrimitive(OROPrimitive *primitive);
+    /// @note OROPrimitive page starts at 0, odt starts at 1
+    int pageNumber() const;
+    void setUID(int uid);
+    int uid() const;
+
+    virtual void createStyle(KoGenStyles&);
     virtual void createBody(KoXmlWriter *bodyWriter) const;
-    virtual bool saveData(KoStore *store, KoXmlWriter *manifestWriter) const;
-
-    OROCheck *checkBox() const;
+    virtual bool saveData(KoStore *store, KoXmlWriter*) const;
 
 protected:
-    void frameStyle(KoGenStyles &coll);
-    QString imageName() const;
+    QString itemName() const;
+    void commonAttributes(KoXmlWriter *bodyWriter) const;
 
-private:
-    QString m_paragraphStyleName;
-    QString m_textStyleName;
+protected:
+    OROPrimitive *m_primitive;
+    int m_uid;
+    QString m_frameStyleName;
+
 };
 
-#endif // KOSIMPLEODTCHECKBOX_H
+#endif // KOODTFRAMESREPORTPRIMITIVE_H
