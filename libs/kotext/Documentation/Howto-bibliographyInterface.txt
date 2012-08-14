@@ -1,0 +1,73 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2012 Smit Patel <smitpatel24@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+Bibliography engines and Reference management software can use bibliography bridge interface of Calligra Words to perform 3 operations.
+
+1.  To insert bibliography entry (citation) in document
+2.  To insert bibliography entry (citation) in biblio database managed by Words
+3.  To insert bibliography in document
+
+To perform any of these operation, application must connect to KoBridgeServer through local socket. Calligra Words uses $HOME/.calligra/pipe.in socket file by default. After connecting to server, application can send/receive messages in JSON format in following way (protocol).
+
+1.  Insert bibliography entry
+
+    {
+        "action" : "insert_citation",
+        "fieldname" : "fieldvalue",
+        ...
+    }
+    For field name, please refer to ODF specification v1.2.
+
+2.  Insert bibliography entry in biblio database.
+
+    {
+        "action" : "insert_cite_record",
+        "fieldname" : "fieldvalue",
+        ...
+    }
+    For fieldname, please refer to ODF specification v1.2.
+
+3.  Insert bibliography
+
+	{
+		"action": "insert_bibliography",
+		"bibliography-source": {
+			"index-title": "Bibliography",
+			"bibliography-entry-template": [
+				{
+					"bibliography-type": "article",
+					"index-entry": [
+						{ "entry-type": "bibliography", "bibliography-data-field": "identifier" },
+						{ "entry-type": "span", "span-text": ":"},
+						...
+					]
+				},
+				...
+			]
+		},
+		"bibliography-entry": [
+			{ "identifier": "GOT09", "bibliography-type": "book", "author": "George R. R. Martin", "title": "A Song of Ice and Fire", "pages": "280" },
+			...
+		]
+	}
+    
+    To insert bibliography, application must set bibliography-source which is meta-data for generating bibliography index. It contains index title and entry templates for different 
+    type of bibliography entries. If bibliography entry template is not provided, Words uses default entry template for that bibliography type. For bibliography-source, 
+    please refer to ODF specification v1.2.
+
