@@ -25,6 +25,8 @@
 
 #include "stage_export.h"
 
+/** Filter animations model to display only groups of after preview / with preview
+    animations that begin with an on click animation */
 class STAGE_EXPORT KPrAnimationGroupProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -32,9 +34,12 @@ public:
     explicit KPrAnimationGroupProxyModel(QObject *parent = 0);
     ~KPrAnimationGroupProxyModel();
 
-    // Takes a source model index to set the group to be displayed
+    /** Takes a source model index to set the group to be displayed
+        Main model assigns a group number to each batch of with previous / after previous animations
+        that starts with an on click animation. */
     bool setCurrentIndex(const QModelIndex &index);
 
+    /// Reset filter and restart model
     void forceUpdateModel();
 
 protected:

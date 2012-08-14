@@ -41,23 +41,65 @@ class KPrAnimationsTimeLineView : public QWidget
     Q_OBJECT
 public:
     explicit KPrAnimationsTimeLineView(QWidget *parent = 0);
+
+    /**
+     * @brief Set the filter model (model that returns animations belonging to the same group)
+     *
+     * @param model a KPrAnimationGroupProxyModel pointer
+     */
     void setModel(KPrAnimationGroupProxyModel *model);
     void resizeEvent(QResizeEvent *event);
+
+    /**
+      * Return the filter model for animation groups
+      *
+      * @return a KPrAnimationGroupProxyModel pointer
+      */
     KPrAnimationGroupProxyModel *model();
+
+    /**
+      * Return the main model for animations
+      *
+      * @return an KPrShapeAnimations pointer
+      */
     KPrShapeAnimations *animationsModel();
+
+    /**
+      * Return the current index
+      *
+      * @return a QModelIndex holding current index
+      */
     QModelIndex currentIndex();
+
+    /**
+     * @brief Set the current index
+     *
+     * @param index
+     */
     void setCurrentIndex(const QModelIndex &index);
+
     int rowCount() const;
-    friend class KPrTimeLineView;
-    friend class KPrTimeLineHeader;
     virtual QSize sizeHint() const;
+
+    /** Helper classes to get the column range that the view has to display*/
     int startColumn() const;
     int endColumn() const;
 
+    /** Helper classes holding the custom animations table view and the header */
+    friend class KPrTimeLineView;
+    friend class KPrTimeLineHeader;
+
 signals:
+    /// emited if an item is clicked (return index of the item clicked)
     void clicked(const QModelIndex&);
+
+    /// emited if an item time range has changed (return the index of the item changed)
     void timeValuesChanged(const QModelIndex&);
+
+    /// emited if the layout has changed
     void layoutChanged();
+
+    /// emited if the context menu is called
     void customContextMenuRequested(const QPoint &pos);
 
 public slots:
@@ -69,10 +111,14 @@ public slots:
 
     void resetData();
 
+    /// Change the scale if an item has exceded the scale limit
+    /// or the items are too short for the current scale
     void adjustScale();
 
+    /// helper slot to emit timeValuesChanged signal mapping index to the main model
     void notifyTimeValuesChanged(const QModelIndex& index);
 
+    /// helper slot to emit customContextMenuRequested signal mapping pos to the parent widget
     void requestContextMenu(QPoint pos);
 
 protected:
@@ -115,6 +161,7 @@ protected:
     QColor barColor(int row);
 
 private:
+    /// Calculate where the animation bar has to start depending on the type (on click, with previous, after previous)
     int calculateStartOffset(int row) const;
 
     KPrTimeLineView *m_view;

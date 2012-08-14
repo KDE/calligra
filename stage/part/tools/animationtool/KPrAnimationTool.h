@@ -71,18 +71,18 @@ protected:
     /// Load motion path shapes (For all shapes with motion paths on current page)
     void initMotionPathShapes();
 
-    /// Add motion path shape to the current shapes manager
+    /// Add motion path shape to the motion path shapes manager
     virtual void addPathShape(KoPathShape *pathShape);
 
-    /// Helper method to scale the motion path shape (using current page size and zoom)
+    /// Helper method to get the current page size
     QSizeF getPageSize();
 
-    /// remove motion paths of motion path manager
+    /// remove motion paths of motion path manager and helper maps
     void cleanMotionPathManager();
 
 private:
     KoPathShape *m_currentMotionPathSelected;
-    QMap<KoPathShape *, KPrAnimateMotion *> m_pathMap;
+    QMap<KoPathShape *, KPrAnimateMotion *> m_animateMotionMap;
     QMap<KoPathShape *, KoShape *> m_shapesMap;
     KoShapeManager *m_pathShapeManager;
     bool m_initializeTool;

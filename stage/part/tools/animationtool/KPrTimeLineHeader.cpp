@@ -98,13 +98,16 @@ void KPrTimeLineHeader::paintHeaderItem(QPainter *painter, const QRect &rect, co
 
 void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
 {
+    // set a marging
     const int Padding = 3;
     painter->setPen(palette().windowText().color());
     painter->setFont(QFont("", 8));
+    // calculate size of scale steps
     int totalWidth = m_mainView->widthOfColumn(KPrShapeAnimations::StartTime);
     int stepScale = m_mainView->stepsScale();
     int stepRatio = m_mainView->numberOfSteps() / m_mainView->stepsScale();
     int stepSize = totalWidth / stepRatio;
+    // Draw lines on steps and numbers
     for (int x = 0; x < totalWidth-Padding; x += stepSize) {
         int z = x + rect.x() + Padding;
         if (z > 0) {

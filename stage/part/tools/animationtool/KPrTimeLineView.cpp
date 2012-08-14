@@ -134,9 +134,11 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
 
     m_mainView->setSelectedRow(row);
     m_mainView->setSelectedColumn(column);
+    // Request context menu
     if (event->button()== Qt::RightButton) {
         emit customContextMenuRequested(event->pos());
     }
+    // Check if user wants to move the time bars
     if (event->button() == Qt::LeftButton) {
         if (column == KPrShapeAnimations::StartTime) {
             m_resize = false;
@@ -146,7 +148,7 @@ void KPrTimeLineView::mousePressEvent(QMouseEvent *event)
             QRectF endLineRect = QRectF(lineRect.right() - RESIZE_RADIUS, lineRect.top(),
                                         RESIZE_RADIUS * 2, lineRect.height());
 
-            // If user click near the end of the line he could resize
+            // If user click near the end of the line he could resize otherwise he move the bar
             if (endLineRect.contains(event->x(), event->y())) {
                 m_resize = true;
                 m_resizedRow = row;
@@ -190,6 +192,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
                 ((event->pos().x()) < (startPos + m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
             qreal newLength = (event->pos().x() - startPos - stepSize * start) / (stepSize) - startOffSet;
             newLength = qFloor((newLength - modD(newLength, subSteps)) * 100.0) / 100.0;
+            // update bar length
             m_mainView->model()->setData(m_mainView->model()->index(row, KPrShapeAnimations::Duration), newLength * 1000);
             emit timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::Duration));
             m_adjust = false;
@@ -222,6 +225,7 @@ void KPrTimeLineView::mouseMoveEvent(QMouseEvent *event)
                  (startPos+m_mainView->widthOfColumn( KPrShapeAnimations::StartTime)))) {
             qreal newPos = (event->pos().x() - (startPos + startDragPos)) / (stepSize) - startOffSet;
             newPos = qFloor((newPos - modD(newPos, subSteps)) * 100.0) / 100.0;
+            // update bar position
             m_mainView->model()->setData(m_mainView->model()->index(row, KPrShapeAnimations::StartTime), newPos * 1000);
             emit timeValuesChanged(m_mainView->model()->index(row, KPrShapeAnimations::StartTime));
             m_adjust = false;
@@ -379,8 +383,6 @@ void KPrTimeLineView::paintRow(QPainter *painter, int row, int y, const int RowH
                         row == m_mainView->selectedRow());
     paintLine(painter, row, rect,
               row == m_mainView->selectedRow());
-
-
 }
 
 void KPrTimeLineView::paintLine(QPainter *painter, int row, const QRect &rect, bool selected)

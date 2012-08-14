@@ -98,6 +98,8 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         return;
     }
     m_isInitialized = true;
+
+    // Initialize animation class lists
     QList<KPrCollectionItem> entranceList;
     QList<KPrCollectionItem> emphasisList;
     QList<KPrCollectionItem> exitList;
@@ -112,6 +114,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         row++;
         bool isSubItem = true;
         QString animId = animation->id();
+        // Check if this animation has sub types (and add them to the sub model list)
         if (!animation->presetSubType().isEmpty()) {
             if (!subModelList.contains(animId)) {
                 QList<KPrCollectionItem> tempList = QList<KPrCollectionItem>();
@@ -171,6 +174,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
     model->setAnimationClassList(entranceList);
     addCollection("entrance", i18n("Entrance"), model);
 
+    // Populate animation class models using animation class lists
     if (!exitList.isEmpty()) {
         model = new KPrCollectionItemModel(this);
         model->setAnimationClassList(exitList);
@@ -201,6 +205,8 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         model->setAnimationClassList(media_CallList);
         addCollection("media_call", i18n("Media Call"), model);
     }
+
+    // Create models for subtypes and populate them using sub model list
     if (!subModelList.isEmpty()) {
         QMap<QString, QList<KPrCollectionItem> >::const_iterator i;
         for (i = subModelList.constBegin(); i != subModelList.constEnd(); ++i) {
@@ -213,8 +219,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
 
 void KPrPredefinedAnimationsLoader::readDefaultAnimations()
 {
-    // use the same mechanism for loading the markers that are available
-    // per default as when loading the normal markers.
+    // Read animation data from xml file and store data on lists
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext context(stylesReader, 0);
     KoShapeLoadingContext shapeContext(context, 0);
@@ -258,8 +263,10 @@ QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
 {
     QStringList descriptionList = id.split("-");
     if (descriptionList.count() > 2) {
+        // Remove the "stage-type" part (type: entrance, exit, motion-path, etc.)
         descriptionList.removeFirst();
         descriptionList.removeFirst();
+        // Replace "-" on id with spaces
         return descriptionList.join(QString(" "));
     }
     return QString();
@@ -268,6 +275,8 @@ QString KPrPredefinedAnimationsLoader::animationName(const QString id) const
 QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
 {
     // Animation icon names examples: zoom_animation, spiral_in_animation
+    // If an specific animation icon does not exist then return a generic
+    // unrecognized animation icon
     QString name = id;
     if (!name.isEmpty()) {
         name = name.append("_animation");
@@ -295,6 +304,8 @@ QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const
         icon = KIcon(name);
     }
     else {
+        // If an specific animation icon does not exist then return a generic
+        // unrecognized animation icon
         icon = KIcon("unrecognized_animation");
     }
     return icon;
@@ -310,6 +321,7 @@ QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &elem
             break;
         }
     }
+    // Create icon drawing the path
     if (!path.isEmpty()) {
         const int margin = 8;
         const int width = 4;
@@ -329,6 +341,7 @@ QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &elem
         QPainter painter(&thumb);
         painter.setPen(QPen(QColor(0, 100, 224), width, Qt::SolidLine,
                             Qt::FlatCap, Qt::MiterJoin));
+        // Draw path
         painter.drawPath(m_path);
         QPixmap iconPixmap;
         if (iconPixmap.convertFromImage(thumb)) {

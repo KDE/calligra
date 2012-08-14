@@ -84,7 +84,7 @@ void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.restore();
     }
     // Paint motion paths
-    QMapIterator<KoPathShape *, KPrAnimateMotion *> i(m_pathMap);
+    QMapIterator<KoPathShape *, KPrAnimateMotion *> i(m_animateMotionMap);
     while (i.hasNext()) {
         i.next();
         QSizeF pageSize = getPageSize();
@@ -238,7 +238,7 @@ void KPrAnimationTool::initMotionPathShapes()
                     // Load motion path
                     QSizeF pageSize = getPageSize();
                     KoPathShape *path = motion->getPath(1, pageSize);
-                    m_pathMap.insert(path, motion);
+                    m_animateMotionMap.insert(path, motion);
                     m_shapesMap.insert(path, anim->shape());
                     // change stroke apparience
                     KoShapeStroke *stroke = new KoShapeStroke();
@@ -279,7 +279,7 @@ void KPrAnimationTool::cleanMotionPathManager()
     foreach(KoShape *shape, m_pathShapeManager->shapes()) {
         m_pathShapeManager->remove(shape);
     }
-    m_pathMap.clear();
+    m_animateMotionMap.clear();
     m_shapesMap.clear();
     m_currentMotionPathSelected = 0;
 }

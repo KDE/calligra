@@ -249,6 +249,7 @@ void KPrAnimationsTimeLineView::requestContextMenu(QPoint pos)
 
 int KPrAnimationsTimeLineView::stepsScale()
 {
+    // Set step size depending on the scale length
     int stepsNumber = numberOfSteps();
     if (stepsNumber < 15)
         return 1;

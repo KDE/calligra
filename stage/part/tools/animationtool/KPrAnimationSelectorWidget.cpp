@@ -131,7 +131,7 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
 KPrAnimationSelectorWidget::~KPrAnimationSelectorWidget()
 {
     savePreviewConfig();
-    // stop animation
+    // stop animation before deleting it.
     if (m_docker->previewMode()) {
         m_docker->previewMode()->stopAnimation();
     }
@@ -152,9 +152,11 @@ void KPrAnimationSelectorWidget::init()
 
 void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &index)
 {
+    // Test if index is valid an show automatic preview checkbox is checked
     if(!index.isValid() || !m_showAutomaticPreview) {
         return;
     }
+    // Parse xml context in a new animation
     KoXmlElement newAnimationContext;
     if (QObject::sender() == m_collectionView) {
         newAnimationContext = static_cast<KPrCollectionItemModel*>(m_collectionView->model())->animationContext(index);

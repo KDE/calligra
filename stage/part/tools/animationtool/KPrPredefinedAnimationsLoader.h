@@ -53,12 +53,41 @@ public:
                                              KoShape *animShape = 0);
 
 private:
+    /// Create KPrAnimationItem using data stored on animations list
     void loadDefaultAnimations();
+    /// Read animations from xml file and populate animations list
     void readDefaultAnimations();
 
+    /**
+      * Return a pritable animation name using animation id
+      *
+      * @param id QString holding the animation id
+      * @return a QString holding the name
+      */
     QString animationName(const QString id) const;
+
+    /**
+      * Return the animation class icon (Ex of classes: zoom, swivel, appear, etc)
+      *
+      * @param id QString holding the animation id
+      * @return a QIcon depending on animation class
+      */
     QIcon loadAnimationIcon(const QString id);
+
+    /**
+      * Return the animation sub type icon (Ex of subtypes: up, down, from left, etc)
+      *
+      * @param id QString holding the animation id
+      * @return a QIcon depending on animation sub type
+      */
     QIcon loadSubTypeIcon(const QString mainId, const QString subTypeId);
+
+    /**
+      * Return an animation icon created using the motion path
+      *
+      * @param id QString holding the animation id
+      * @return a QIcon depending on motion path
+      */
     QIcon loadMotionPathIcon(const KoXmlElement &element);
 
     /**
@@ -66,6 +95,9 @@ private:
      */
     bool addCollection(const QString &id, const QString &title, KPrCollectionItemModel *model);
 
+    /**
+     * Add a sub collection to the docker
+     */
     bool addSubCollection(const QString &id, KPrCollectionItemModel *model);
 
     QList<KPrShapeAnimation *> m_animations;

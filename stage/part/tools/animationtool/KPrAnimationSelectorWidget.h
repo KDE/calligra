@@ -34,8 +34,9 @@ class QToolButton;
 class KoViewItemContextBar;
 class QCheckBox;
 
-/** Widget used to select animations. Holds three views: categories, animations
-    and subtypes (optional)*/
+/** Widget used to select predefined animations. Holds three views: categories, animations
+    and subtypes (optional). This widget is used to add a new animation or change the type
+    of an existing animation */
 class KPrAnimationSelectorWidget : public QWidget
 {
     Q_OBJECT
@@ -52,6 +53,7 @@ signals:
     void requestPreviewAnimation(KPrShapeAnimation *animation);
     /// this signal is emited when an animation is selected
     void requestAcceptAnimation(KPrShapeAnimation *animation);
+    /// signal emited if automatic preview checkbox state is changed
     void previousStateChanged(bool state);
 
 private slots:
@@ -85,8 +87,9 @@ private:
     /// load / save automatic preview checkbox state
     bool loadPreviewConfig();
     void savePreviewConfig();
-    /// Create on hover buttons
+    /// Create on hover buttons for animations view
     void createCollectionContextBar();
+    /// Create on hover buttons for subtype view
     void createSubTypeContextBar();
 
     QListWidget *m_collectionChooser;

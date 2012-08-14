@@ -197,6 +197,7 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    // If a shape is selected enable add animation button
     if (selection->selectedShapes().isEmpty() || !(selection->selectedShapes().first()->isPrintable())) {
         m_buttonAddAnimation->setEnabled(false);
     }
@@ -204,6 +205,7 @@ void KPrShapeAnimationDocker::checkAnimationSelected()
         m_buttonAddAnimation->setEnabled(true);
     }
 
+    // If a valid animation is selected on main view, enable edition buttons
     QModelIndex index = m_animationsView->currentIndex();
     if (index.isValid()) {
         m_buttonAddAnimation->setEnabled(true);
@@ -455,13 +457,16 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    // Sync canvas with main view
     if (m_animationsView->currentIndex().isValid()) {
         syncCanvasWithIndex(m_animationsView->currentIndex());
     }
+    // If a shape is already selected return it
     else if (!selection->selectedShapes().isEmpty()) {
         m_lastSelectedShape = selection->selectedShapes().first();
         return selection->selectedShapes().first();
     }
+    // Restore last selected shape after an animation preview
     else if (m_lastSelectedShape) {
         foreach (KoShape* shape, selection->selectedShapes()) {
             shape->update();
@@ -500,7 +505,7 @@ KoShape *KPrShapeAnimationDocker::getSelectedShape()
 void KPrShapeAnimationDocker::testEditPanelRoot()
 {
     QModelIndex editPanelIndex = m_animationGroupModel->mapToSource(m_editAnimationsPanel->currentIndex());
-
+    // Check if current root item on edit view is still valid
     if (!editPanelIndex.isValid()) {
         editPanelIndex = m_animationsView->currentIndex();
     }

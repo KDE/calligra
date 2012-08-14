@@ -43,8 +43,10 @@ public:
     virtual bool eventFilter(QObject *target, QEvent *event);
 
 signals:
+    /// emited if an item is clicked (returns the index of the item clicked
     void clicked(const QModelIndex&);
 
+    /// emited if an item time range has changed (return the index of the item changed)
     void timeValuesChanged(const QModelIndex&);
 
 private:
@@ -54,16 +56,25 @@ private:
     void mouseReleaseEvent(QMouseEvent *event);
     bool event(QEvent *event);
 
+    /// Return the row under mouse y pos
     int rowAt(int ypos);
+    /// Returns the column under mouse x pos
     int columnAt(int xpos);
+
+    /// returns rect for cell in row and column
     QRectF getRowRect(const int row, const int column);
 
     /// Helper method to paint view items
     void paintEvent(QPaintEvent * event);
+    /// main paint method
     void paintRow(QPainter *painter, int  row, int y, const int RowHeight);
+    /// paint background of items
     void paintItemBackground(QPainter *painter, const QRect &rect, bool selected);
+    /// Paint cells of time bars
     void paintLine(QPainter *painter, int row, const QRect &rect, bool selected);
+    /// pant text cells
     void paintTextRow(QPainter *painter, int x, int y, int row, int column, const int RowHeight);
+    /// paint icon cells
     void paintIconRow(QPainter *painter, int x, int y, int row, int column, int iconSize, const int RowHeight);
     double modD(double x, double y);
 

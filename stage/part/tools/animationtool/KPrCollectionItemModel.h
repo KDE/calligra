@@ -33,14 +33,14 @@
  */
 struct KPrCollectionItem
 {
-    QString id;
-    QString name;
-    QString toolTip;
-    QIcon icon;
-    KoXmlElement animationContext;
+    QString id;                     //animation id
+    QString name;                   //animation name (text to be displayed on animations view)
+    QString toolTip;                // text of animation tool tip
+    QIcon icon;                     // icon of the animation type
+    KoXmlElement animationContext;  //xml data used to instantiate animations of this type
 };
 
-/** Model use to store loaded predefined animations */
+/** Model used to store predefined animations data */
 class KPrCollectionItemModel : public QAbstractListModel
 {
     Q_OBJECT

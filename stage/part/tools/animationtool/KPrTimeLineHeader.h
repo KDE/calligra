@@ -36,8 +36,14 @@ public:
     QSize sizeHint() const {return minimumSizeHint();}
 protected:
     void paintEvent(QPaintEvent *event);
+    /// Helper methods used to paint the header
+    /// main paint method
     void paintHeader(QPainter *painter, const int RowHeight);
+
+    /// Paint each column header (except for the scale)
     void paintHeaderItem(QPainter *painter, const QRect &rect, const QString &text);
+
+    /// Paint the scale for the bar column
     void paintTimeScale(QPainter *painter, const QRect &rect);
     bool eventFilter(QObject *target, QEvent *event);
     KPrAnimationsTimeLineView *m_mainView;

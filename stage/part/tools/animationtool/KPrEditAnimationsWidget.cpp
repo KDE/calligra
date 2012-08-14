@@ -227,12 +227,11 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
     if (m_timeLineView->currentIndex().isValid()) {
         QMenu menu(m_timeLineView);
         QModelIndex index = m_timeLineView->currentIndex();
-        if (!index.isValid()) {
-            return;
-        }
+        // get animation data
         QModelIndex triggerIndex = m_timeLineModel->index(index.row(), KPrShapeAnimations::NodeType);
         KPrShapeAnimation::NodeType currentType = static_cast <KPrShapeAnimation::NodeType>(m_timeLineModel->data(triggerIndex).toInt());
 
+        // Populate context menu
         QActionGroup *actionGroup = new QActionGroup(m_timeLineView);
         actionGroup->setExclusive(true);
         KAction *onClickAction = new KAction(KIcon("onclick"), i18n("start on mouse click"), m_timeLineView);
@@ -250,6 +249,7 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         actionGroup->addAction(withAction);
         actionGroup->setExclusive(true);
 
+        // Select current nodetype
         if (currentType == KPrShapeAnimation::OnClick) {
             onClickAction->setChecked(true);
         }
