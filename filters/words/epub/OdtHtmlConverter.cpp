@@ -125,11 +125,6 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertStyles(KoStore *odfStore,
 
 void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
 {
-    // FIXME: Something is fishy here.  As far as I can see attList
-    //        collects a number of attributes but they are never used
-    //        anywhere. What am I missing? /iw
-    QList <QString> attList;
-
     KoXmlElement styleElement;
     forEachElement (styleElement, stylesNode) {
         StyleInfo *styleInfo = new StyleInfo;
@@ -140,8 +135,10 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
 
         // Limit picture size to 99% of the page size whatever that may be.
         if (styleElement.attribute("family") == "graphic") {
-            attList << "max-heigh: 99%" << "max-width: 99%";
-            attList << "width: auto" << "height: auto";
+            styleInfo->attributes.insert("max-heigh", "99%");
+            styleInfo->attributes.insert("max-width", "99%");
+            styleInfo->attributes.insert("heigh", "auto");
+            styleInfo->attributes.insert("width", "auto");
         }
 
         styleInfo->hasBreakBefore = false;
@@ -152,21 +149,18 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
                 //kDebug(30517) << "Found break-before=page in style" << styleName;
                 styleInfo->hasBreakBefore = true;
             }
-            collectStyleAttributes(propertiesElement, attList, styleInfo);
+            collectStyleAttributes(propertiesElement, styleInfo);
         }
         styles.insert(styleName, styleInfo);
-        attList.clear();
     }
 }
 
-void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement,
-                                              QList<QString> &attList, StyleInfo *styleInfo)
+void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo)
 {
     // font properties
     QString attribute = propertiesElement.attribute("font-family");
     if (!attribute.isEmpty()) {
         attribute = '"' + attribute + '"';
-        attList << ("font-family:" + attribute);
         styleInfo->attributes.insert("font-family", attribute);
     }
 
@@ -201,7 +195,6 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement,
         QString attrVal = propertiesElement.attribute(attrName);
 
         if (!attrVal.isEmpty()) {
-            attList << attrName + ':' + attrVal;
             styleInfo->attributes.insert(attrName, attrVal);
         }
     }
@@ -215,7 +208,6 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement,
             attribute = "ltr";
         else
             attribute = "inherited";
-        attList << ("direction:" + attribute);
         styleInfo->attributes.insert("direction", attribute);
     }
 
