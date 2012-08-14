@@ -32,7 +32,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-#include "htmlconvert.h"
+#include "OdtHtmlConverter.h"
 #include "libepub/EpubFile.h"
 
 #include <QSvgGenerator>
@@ -81,6 +81,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     odfStore->close();
 
     // Start the conversion
+    OdtHtmlConverter converter;
     EpubFile  epub;
     KoFilter::ConversionStatus  status;
 
@@ -96,7 +97,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Parse styles
     QHash<QString, StyleInfo*> styles;
-    status = convertStyles(odfStore, styles);
+    status = converter.convertStyles(odfStore, styles);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -120,7 +121,8 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Create html contents.
     // Note that this also sets the inUse flag for the styles thare are used.
-    status = convertContent(odfStore, m_meta, &epub, styles, m_imagesSrcList);
+    
+    status = converter.convertContent(odfStore, m_meta, &epub, styles, m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;

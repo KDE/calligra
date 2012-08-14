@@ -11,7 +11,7 @@ include_directories(
 )
 set(exportepub2_PART_SRCS
     exportepub2.cpp
-    htmlconvert.cpp
+    OdtHtmlConverter.cpp
 
     libepub/EpubFile.cpp
     
