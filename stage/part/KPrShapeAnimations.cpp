@@ -168,7 +168,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case Group:
             case StepCount: return QVariant();
-            case TriggerEvent:
+            case TriggerEvent:/// emited if an item time range has changed (return the index of the item changed)
                 if (currentData.nodeType == KPrShapeAnimation::OnClick)
                     return i18n("start on mouse click");
                 if (currentData.nodeType == KPrShapeAnimation::AfterPrevious)
@@ -863,24 +863,30 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, AnimationTm
     int groupCount = 0;
     foreach (KPrAnimationStep *step, m_shapeAnimations) {
         int stepChild = -1;
+        if (step->animationCount() > 0) {
+            currentData.nodeType = KPrShapeAnimation::OnClick;
+            groupCount = groupCount + 1;
+        }
         for (int i=0; i < step->animationCount(); i++) {
             QAbstractAnimation *animation = step->animationAt(i);
             if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
                 int subStepChild = -1;
+                if (stepChild != -1) {
+                    currentData.nodeType = KPrShapeAnimation::AfterPrevious;
+                }
+                if (rowCount + a->animationCount() < row) {
+                    rowCount = rowCount + a->animationCount();
+                    stepChild = stepChild + a->animationCount();
+                    subStepChild = subStepChild + a->animationCount();
+                    continue;
+                }
                 for (int j=0; j < a->animationCount(); j++) {
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {           
                         if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
                             stepChild++;
                             subStepChild++;
-                            if (stepChild == 0) {
-                                currentData.nodeType = KPrShapeAnimation::OnClick;
-                                groupCount = groupCount + 1;
-                            }
-                            else if (subStepChild == 0) {
-                                currentData.nodeType = KPrShapeAnimation::AfterPrevious;
-                            }
-                            else {
+                            if (subStepChild > 0) {
                                 currentData.nodeType = KPrShapeAnimation::WithPrevious;
                             }
                             if (rowCount == row) {
