@@ -1097,45 +1097,48 @@ bool KexiProject::checkProject(const QString& singlePartClass)
         setError(d->connection);
         return false;
     }
-    QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
-    if (!singlePartClass.isEmpty()) {
-        sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
-    }
-    KexiDB::Cursor *cursor = d->connection->executeQuery(sql);
-    if (!cursor) {
-        setError(d->connection);
-        return false;
-    }
+    bool containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
+    if (containsKexi__partsTable) { // check if kexi__parts exists, if missing, createInternalStructures() will create it
+        QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
+        if (!singlePartClass.isEmpty()) {
+            sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
+        }
+        KexiDB::Cursor *cursor = d->connection->executeQuery(sql);
+        if (!cursor) {
+            setError(d->connection);
+            return false;
+        }
 
-    bool saved = false;
-    for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
-        const QString partMime( cursor->value(2).toString() );
-        QString partClass( cursor->value(3).toString() );
-        partClass = realPartClass(partClass, partMime);
-        if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
-            partClass = QLatin1String("org.kexi-project.report");
+        bool saved = false;
+        for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
+            const QString partMime( cursor->value(2).toString() );
+            QString partClass( cursor->value(3).toString() );
+            partClass = realPartClass(partClass, partMime);
+            if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
+                partClass = QLatin1String("org.kexi-project.report");
+            }
+            KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
+            bool ok;
+            const int classId = cursor->value(0).toInt(&ok);
+            if (!ok || classId <= 0) {
+                kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
+            }
+            if (info && ok && classId > 0) {
+                d->saveClassId(partClass, classId);
+                saved = true;
+            }
+            else {
+                KexiPart::MissingPart m;
+                m.name = cursor->value(1).toString();
+                m.className = partClass;
+                d->missingParts.append(m);
+            }
         }
-        KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
-        bool ok;
-        const int classId = cursor->value(0).toInt(&ok);
-        if (!ok || classId <= 0) {
-            kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
-        }
-        if (info && ok && classId > 0) {
-            d->saveClassId(partClass, classId);
-            saved = true;
-        }
-        else {
-            KexiPart::MissingPart m;
-            m.name = cursor->value(1).toString();
-            m.className = partClass;
-            d->missingParts.append(m);
-        }
-    }
 
-    d->connection->deleteCursor(cursor);
-    if (!saved && !singlePartClass.isEmpty()) {
-        return false; // failure is single part class was not found
+        d->connection->deleteCursor(cursor);
+        if (!saved && !singlePartClass.isEmpty()) {
+            return false; // failure is single part class was not found
+        }
     }
     return true;
 }
