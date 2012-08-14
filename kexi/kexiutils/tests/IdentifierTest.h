@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
-   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
+   Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,21 +17,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIUTILS_IDENTIFIER_TEST_H
-#define KEXIUTILS_IDENTIFIER_TEST_H
+#ifndef KEXIUTILS_IDENTIFIERTEST_H
+#define KEXIUTILS_IDENTIFIERTEST_H
 
-#include <QtTest/QtTest>
+#include <QtCore/QObject>
 
 class IdentifierTest : public QObject
 {
     Q_OBJECT
-
-private slots:
-
-    void testCreation();
-    void testDrawDab();
-    void testGetColor();
-
+private Q_SLOTS:
+    void initTestCase();
+//! @todo move to libCalligraDB void testIsIdentifier();
+    void testString2FileName_data();
+    void testString2FileName();
+    void cleanupTestCase();
 };
 
 #endif
