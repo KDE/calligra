@@ -31,15 +31,10 @@ Item {
 
     height: Constants.GridHeight;
 
-    DropShadow {
-        id: shadow;
-        anchors.fill: parent;
-    }
-
     Rectangle {
         id: background;
+        color: "#1d3458"
         anchors.fill: parent;
-        color: Constants.Theme.MainColor;
 
         Row {
             Button {
@@ -130,28 +125,109 @@ Item {
         anchors.bottom: parent.top;
         anchors.horizontalCenter: parent.horizontalCenter;
 
-        width: Constants.GridWidth * 2;
-        height: Constants.GridHeight / 2;
+        width: Constants.GridWidth * 2
+        height: Constants.GridHeight /2
 
-        DropShadow {
+        Rectangle {
+            id: rectangle1
+            x: 8
+            y: 8
+            width: 240
+            height: 24
+            color: "#1d3458"
+            radius: 0
+            anchors.topMargin: 8
+            anchors.leftMargin: 8
+            anchors.rightMargin: 8
+            anchors.bottomMargin: 0
             anchors.fill: parent;
 
-            Rectangle {
-                anchors.fill: parent;
-                color: Constants.Theme.MainColor;
-
-                Label {
-                    anchors.centerIn: parent;
-                    text: "Menu";
-                    color: "white";
-                }
+            BorderImage {
+                id: border_image5
+                x: (Constants.GridWidth * 2) - 16
+                y: -8
+                width: 8
+                height: 8
+                source: "../images/corner-menu-upright.png"
             }
+
+            BorderImage {
+                id: border_image4
+                x: (Constants.GridWidth * 2) - 16
+                y: 0
+                width: 8
+                height: (Constants.GridHeight /2) - 8
+                source: "../images/border-menu.png"
+            }
+
+            BorderImage {
+                id: border_image3
+                x: -8
+                y: -8
+                width: 8
+                height: 9
+                source: "../images/corner-menu-upleft.png"
+            }
+
+            BorderImage {
+                id: border_image2
+                x: -8
+                y: 0
+                width: 8
+                height: (Constants.GridHeight /2) - 8
+                source: "../images/border-menu.png"
+            }
+
+            BorderImage {
+                id: border_image6
+                x: 0
+                y: -8
+                width: (Constants.GridWidth * 2) - 16
+                height: 8
+                source: "../images/border-menu.png"
+            }
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+        Label {
+            x: 176
+            y: -17
+            height: Constants.GridHeight
+            text: "Menu";
+            font.pixelSize: Constants.DefaultFontSize
+            anchors.verticalCenterOffset: 0
+            anchors.horizontalCenterOffset: 0
+            anchors.horizontalCenter: mousearea1.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.bold: true
+            font.family: "Source Sans Pro"
+            color: "white";
         }
 
         MouseArea {
+            id: mousearea1
             anchors.fill: parent;
 
             property real start: NaN;
+            x: 0
+            y: 0
+            width: 300
+            height: 25
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
+            anchors.rightMargin: 0
+            anchors.topMargin: 0
 
             onClicked: base.collapsed = !base.collapsed;
             onPositionChanged: {
@@ -164,7 +240,17 @@ Item {
             }
             onPressed: start = mouse.y;
         }
+
+
+
+
+
+
+
     }
+
+
+
 
     states: State {
         name: "collapsed";

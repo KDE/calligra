@@ -21,5 +21,5 @@ import "../components"
 
 Panel {
     name: "Color";
-    panelColor: "#006666";
+    panelColor: "#d37300"
 }

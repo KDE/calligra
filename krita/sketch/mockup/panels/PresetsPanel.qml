@@ -22,10 +22,13 @@ import "../components"
 Panel {
     id: base;
     name: "Presets";
+    panelColor: "#1e0058"
 
     actions: [
         Button {
             id: addButton;
+            x: 128
+            y: 0
 
             width: Constants.GridWidth;
             height: Constants.GridHeight;
@@ -56,6 +59,8 @@ Panel {
         },
         Button {
             id: editButton;
+            x: 128
+            y: 64
 
             width: Constants.GridWidth;
             height: Constants.GridHeight;

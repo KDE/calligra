@@ -21,5 +21,5 @@ import "../components"
 
 Panel {
     name: "Select";
-    panelColor: Constants.Theme.QuaternaryColor;
+    panelColor: "#00821e"
 }

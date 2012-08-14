@@ -20,8 +20,8 @@ import QtQuick 1.1
 import "components"
 
 PageStack {
-    width: 1024;
-    height: 600;
+    width: 1366;
+    height: 768;
 
     initialPage: welcomePage;
 

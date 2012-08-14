@@ -38,18 +38,11 @@ Item {
     state: "collapsed";
 
     DropShadow {
-        x: handle.x;
-        y: handle.y;
-        width: handle.width;
-        height: handle.height;
-        visible: handle.visible;
-    }
-
-    DropShadow {
         id: fill;
 
         width: parent.width;
         height: parent.height;
+        size: 0
 
         Rectangle {
             anchors.fill: parent;
@@ -85,6 +78,7 @@ Item {
                 height: Constants.GridHeight;
 
                 Rectangle {
+                    id: rectangle1
                     anchors.fill: parent;
                     color: base.panelColor;
 
@@ -157,6 +151,7 @@ Item {
         }
 
         MouseArea {
+            id: mousearea1
             anchors.fill: parent;
 
             property real start: NaN;
@@ -171,13 +166,66 @@ Item {
         }
     }
 
+
     states: [
         State {
             name: "collapsed";
 
-            PropertyChanges { target: base; width: Constants.GridWidth; }
+            PropertyChanges { target: base; width: (Constants.GridWidth * 1) - 8 }
             PropertyChanges { target: fill; opacity: 0; height: 0; }
-            PropertyChanges { target: handle; opacity: 1; }
+            PropertyChanges { target: handle; x: 0; y: 0; width: (Constants.GridWidth * 1) - 8; anchors.topMargin: 0; opacity: 1; }
+
+            PropertyChanges {
+                target: rectangle1
+                x: 0
+                y: 0
+                width: 120
+                height: 64
+                anchors.leftMargin: 0
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: mousearea1
+                x: 0
+                y: 0
+                width: 120
+                height: 32
+                anchors.topMargin: 0
+                anchors.rightMargin: 0
+                anchors.bottomMargin: 0
+                anchors.leftMargin: 0
+            }
+
+            PropertyChanges {
+                target: header
+                x: 0
+                y: 0
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: actionsLayout
+                x: 0
+                y: 0
+                width: 120
+                height: 64
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: footer
+                anchors.bottomMargin: 0
+            }
+
+            PropertyChanges {
+                target: item1
+                x: 0
+                y: 0
+                width: 120
+                height: 32
+                opacity: 1
+            }
         },
         State {
             name: "peek";
@@ -185,7 +233,7 @@ Item {
             PropertyChanges { target: base; width: Constants.GridWidth * 3; }
             PropertyChanges { target: fill; height: Constants.GridHeight * 2; }
             PropertyChanges { target: header; height: Constants.GridHeight * 2; width: Constants.GridWidth; }
-            PropertyChanges { target: handle; opacity: 1; }
+            PropertyChanges { target: handle; width: (Constants.GridWidth * 1)-8; opacity: 1; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
             PropertyChanges { target: footer; opacity: 0; }

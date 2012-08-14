@@ -21,5 +21,5 @@ import "../components"
 
 Panel {
     name: "Filter";
-    panelColor: Constants.Theme.TertiaryColor;
+    panelColor: "#dba000"
 }

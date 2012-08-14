@@ -21,5 +21,5 @@ import "../components"
 
 Panel {
     name: "Layers";
-    panelColor: Constants.Theme.SecondaryColor;
+    panelColor: "#78001e"
 }

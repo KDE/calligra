@@ -23,7 +23,9 @@ Item {
 
     Row {
         id: layout;
+        width: 0
         height: Constants.GridHeight / 2;
+        spacing: 8
         z: 2;
 
         PresetsPanel {
