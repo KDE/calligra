@@ -47,10 +47,14 @@ public:
 
 public slots:
     virtual void slotSetFuzziness(int);
+    virtual void slotSetSizemod(int);
+    virtual void slotSetFeather(int);
     virtual void slotLimitToCurrentLayer(int);
 
 private:
-    int m_fuzziness;
+    int  m_fuzziness;
+    int  m_sizemod;
+    int  m_feather;
     bool m_limitToCurrentLayer;
 };
 

@@ -1,5 +1,5 @@
 /*
-   KoReport Library
+   Calligra Report Engine
    Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoSimpleOdtCheckBox.h"
+#include "KoOdtFrameReportCheckBox.h"
 #include <KoXmlWriter.h>
 #include <KoDpi.h>
 #include <KoOdfGraphicStyles.h>
@@ -37,33 +37,33 @@
 
 #include <kmimetype.h>
 
-#include "kptdebug.h"
+#include <kdebug.h>
 
-KoSimpleOdtCheckBox::KoSimpleOdtCheckBox(OROCheck *primitive)
-    : KoSimpleOdtPrimitive(primitive)
+KoOdtFrameReportCheckBox::KoOdtFrameReportCheckBox(OROCheck *primitive)
+    : KoOdtFrameReportPrimitive(primitive)
 {
 }
 
-KoSimpleOdtCheckBox::~KoSimpleOdtCheckBox()
+KoOdtFrameReportCheckBox::~KoOdtFrameReportCheckBox()
 {
 }
 
-OROCheck *KoSimpleOdtCheckBox::checkBox() const
+OROCheck *KoOdtFrameReportCheckBox::checkBox() const
 {
     return static_cast<OROCheck*>(m_primitive);
 }
 
-void KoSimpleOdtCheckBox::createStyle(KoGenStyles &coll)
+void KoOdtFrameReportCheckBox::createStyle(KoGenStyles &coll)
 {
     KoGenStyle gs(KoGenStyle::GraphicStyle, "graphic");
     gs.addProperty("draw:fill", "none");
-    gs.addProperty("fo:margin", "0.000000000000000pt");
+    gs.addPropertyPt("fo:margin", 0);
     gs.addProperty("style:horizontal-pos", "from-left");
     gs.addProperty("style:horizontal-rel", "page");
     gs.addProperty("style:vertical-pos", "from-top");
     gs.addProperty("style:vertical-rel", "page");
     gs.addProperty("style:wrap", "dynamic");
-    gs.addProperty("style:wrap-dynamic-threshold", "0.000000000000000pt");
+    gs.addPropertyPt("style:wrap-dynamic-threshold", 0);
 
     QPen pen;
     qreal weight = checkBox()->lineStyle().weight;
@@ -78,7 +78,7 @@ void KoSimpleOdtCheckBox::createStyle(KoGenStyles &coll)
     m_frameStyleName = coll.insert(gs, "F");
 }
 
-void KoSimpleOdtCheckBox::createBody(KoXmlWriter *bodyWriter) const
+void KoOdtFrameReportCheckBox::createBody(KoXmlWriter *bodyWriter) const
 {
     bodyWriter->startElement("draw:frame");
     bodyWriter->addAttribute("draw:id", itemName());
@@ -100,12 +100,12 @@ void KoSimpleOdtCheckBox::createBody(KoXmlWriter *bodyWriter) const
     bodyWriter->endElement(); // draw:frame
 }
 
-QString KoSimpleOdtCheckBox::imageName() const
+QString KoOdtFrameReportCheckBox::imageName() const
 {
     return QString("Checkbox_%1.png").arg(m_uid);
 }
 
-bool KoSimpleOdtCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) const
+bool KoOdtFrameReportCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) const
 {
     QString name = "Pictures/" + imageName();
     if (!store->open(name)) {
@@ -175,9 +175,9 @@ bool KoSimpleOdtCheckBox::saveData(KoStore* store, KoXmlWriter* manifestWriter) 
     if (ok) {
         const QString mimetype(KMimeType::findByPath(name, 0 , true)->name());
         manifestWriter->addManifestEntry(name,  mimetype);
-        kDebug(planDbg())<<"manifest:"<<mimetype;
+        kDebug()<<"manifest:"<<mimetype;
     }
     bool cl = store->close();
-    kDebug(planDbg())<<ok<<cl;
+    kDebug()<<ok<<cl;
     return ok && cl;
 }

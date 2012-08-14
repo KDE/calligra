@@ -2679,6 +2679,11 @@ void KexiTableView::slotContentsMoving(int x, int y)
     updateContents(); // (js) needed in Qt 4, no idea why, this fix consumed me hours
 }*/
 
+int KexiTableView::horizontalHeaderHeight() const
+{
+    return m_horizontalHeader->height();
+}
+
 QWidget* KexiTableView::navPanelWidget() const
 {
     return dynamic_cast<QWidget*>(m_navPanel);

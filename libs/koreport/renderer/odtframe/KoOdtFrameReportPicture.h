@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,33 +18,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSIMPLEODTIMAGE_H
-#define KOSIMPLEODTIMAGE_H
+#ifndef KOODTFRAMESREPORTPICTURE_H
+#define KOODTFRAMESREPORTPICTURE_H
 
-#include "KoSimpleOdtPrimitive.h"
+#include "KoOdtFrameReportPrimitive.h"
 
 #include <QString>
 
 class KoXmlWriter;
-class OROImage;
+class KoStore;
+class OROPicture;
 class OROPrimitive;
 
-class KoSimpleOdtImage : public KoSimpleOdtPrimitive
+class KoOdtFrameReportPicture : public KoOdtFrameReportPrimitive
 {
 public:
-    KoSimpleOdtImage(OROImage *primitive);
-    virtual ~KoSimpleOdtImage();
+    KoOdtFrameReportPicture(OROPrimitive *primitive);
+    virtual ~KoOdtFrameReportPicture();
 
     virtual void createBody(KoXmlWriter *bodyWriter) const;
-    virtual bool saveData(KoStore *store, KoXmlWriter *manifestWriter) const;
+    bool saveData(KoStore* store, KoXmlWriter* manifestWriter) const;
 
-    OROImage *image() const;
-
-    void setImageName(const QString &name);
-    QString imageName() const { return m_name; }
-
-private:
-    QString m_name;
+    OROPicture *picture() const;
+    //NOTE: Store as png atm
+    QString pictureName() const { return QString("Picture_%1.png").arg(m_uid); }
 };
 
-#endif // KOSIMPLEODTIMAGE_H
+#endif // KOODTFRAMESREPORTPICTURE_H

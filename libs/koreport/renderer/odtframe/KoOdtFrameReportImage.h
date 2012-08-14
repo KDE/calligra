@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,36 +18,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSIMPLEODTTEXTBOX_H
-#define KOSIMPLEODTTEXTBOX_H
+#ifndef KOODTFRAMESREPORTIMAGE_H
+#define KOODTFRAMESREPORTIMAGE_H
 
-#include "KoSimpleOdtPrimitive.h"
+#include "KoOdtFrameReportPrimitive.h"
 
 #include <QString>
 
-class KoGenStyles;
 class KoXmlWriter;
-class OROTextBox;
+class OROImage;
 class OROPrimitive;
 
-class KoSimpleOdtTextBox : public KoSimpleOdtPrimitive
+class KoOdtFrameReportImage : public KoOdtFrameReportPrimitive
 {
 public:
-    KoSimpleOdtTextBox(OROTextBox *primitive);
-    virtual ~KoSimpleOdtTextBox();
+    KoOdtFrameReportImage(OROImage *primitive);
+    virtual ~KoOdtFrameReportImage();
 
-    virtual void createStyle(KoGenStyles &coll);
     virtual void createBody(KoXmlWriter *bodyWriter) const;
-    
-    OROTextBox *textBox() const;
+    virtual bool saveData(KoStore *store, KoXmlWriter *manifestWriter) const;
 
-protected:
-    void frameStyle(KoGenStyles &coll);
+    OROImage *image() const;
+
+    void setImageName(const QString &name);
+    QString imageName() const { return m_name; }
 
 private:
-    QString m_paragraphStyleName;
-    QString m_textStyleName;
-
+    QString m_name;
 };
 
-#endif // KOSIMPLEODTTEXTBOX_H
+#endif // KOODTFRAMESREPORTIMAGE_H

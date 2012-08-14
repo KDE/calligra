@@ -1,6 +1,7 @@
 /*
- * Kexi Report Plugin
+ * Calligra Report Engine
  * Copyright (C) 2010 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2012 by Dag Andersen (danders@get2net.dk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,60 +17,57 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ReportODTRenderer.h"
-#include "KoSimpleOdtDocument.h"
-#include "KoSimpleOdtTextBox.h"
-#include "KoSimpleOdtImage.h"
-#include "KoSimpleOdtPicture.h"
-#include "KoSimpleOdtLine.h"
-#include "KoSimpleOdtCheckBox.h"
+#include "KoOdtFrameReportRenderer.h"
+#include "odtframe/KoOdtFrameReportDocument.h"
+#include "odtframe/KoOdtFrameReportTextBox.h"
+#include "odtframe/KoOdtFrameReportImage.h"
+#include "odtframe/KoOdtFrameReportPicture.h"
+#include "odtframe/KoOdtFrameReportLine.h"
+#include "odtframe/KoOdtFrameReportCheckBox.h"
 #include "renderobjects.h"
 
-#include "kptdebug.h"
+#include <kdebug.h>
 
-
-ReportODTRenderer::ReportODTRenderer()
+KoOdtFrameReportRenderer::KoOdtFrameReportRenderer()
 {
 
 }
 
-ReportODTRenderer::~ReportODTRenderer()
+KoOdtFrameReportRenderer::~KoOdtFrameReportRenderer()
 {
 }
 
-bool ReportODTRenderer::render(const KoReportRendererContext& context, ORODocument* document, int /*page*/)
+bool KoOdtFrameReportRenderer::render(const KoReportRendererContext& context, ORODocument* document, int /*page*/)
 {
     int uid = 1;
-    KoSimpleOdtDocument doc;
+    KoOdtFramesReportDocument doc;
     doc.setPageOptions(document->pageOptions());
     for (int page = 0; page < document->pages(); page++) {
         OROPage *p = document->page(page);
         for (int i = 0; i < p->primitives(); i++) {
             OROPrimitive *prim = p->primitive(i);
             if (prim->type() == OROTextBox::TextBox) {
-                KoSimpleOdtPrimitive *sp = new KoSimpleOdtTextBox(static_cast<OROTextBox*>(prim));
+                KoOdtFrameReportPrimitive *sp = new KoOdtFrameReportTextBox(static_cast<OROTextBox*>(prim));
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);
             } else if (prim->type() == OROImage::Image) {
-                KoSimpleOdtPrimitive *sp = new KoSimpleOdtImage(static_cast<OROImage*>(prim));
+                KoOdtFrameReportPrimitive *sp = new KoOdtFrameReportImage(static_cast<OROImage*>(prim));
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);
             } else if (prim->type() == OROPicture::Picture) {
-                KoSimpleOdtPrimitive *sp = new KoSimpleOdtPicture(static_cast<OROPicture*>(prim));
+                KoOdtFrameReportPrimitive *sp = new KoOdtFrameReportPicture(static_cast<OROPicture*>(prim));
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);
             } else if (prim->type() == OROLine::Line) {
-                KoSimpleOdtPrimitive *sp = new KoSimpleOdtLine(static_cast<OROLine*>(prim));
+                KoOdtFrameReportPrimitive *sp = new KoOdtFrameReportLine(static_cast<OROLine*>(prim));
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);
             } else if (prim->type() == OROCheck::Check) {
-                KoSimpleOdtPrimitive *sp = new KoSimpleOdtCheckBox(static_cast<OROCheck*>(prim));
+                KoOdtFrameReportPrimitive *sp = new KoOdtFrameReportCheckBox(static_cast<OROCheck*>(prim));
                 sp->setUID(uid++);
                 doc.addPrimitive(sp);
-            } else if (prim->type() == ORORect::Rect) {
-                // TODO: section background
             } else {
-                kDebug(planDbg()) << "unhandled primitive type."<<prim->type();
+                kDebug() << "unhandled primitive type."<<prim->type();
             }
         }
     }

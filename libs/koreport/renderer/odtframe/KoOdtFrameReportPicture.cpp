@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,41 +18,45 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoSimpleOdtImage.h"
+#include "KoOdtFrameReportPicture.h"
 #include <KoXmlWriter.h>
 #include <KoDpi.h>
+#include <KoOdfGraphicStyles.h>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
+#include <KoUnit.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
 #include "renderobjects.h"
 
-#include <kmimetype.h>
+#include <KMimeType>
 #include <kdebug.h>
 
-KoSimpleOdtImage::KoSimpleOdtImage(OROImage *primitive)
-    : KoSimpleOdtPrimitive(primitive)
+#include <QPainter>
+#include <QPicture>
+
+#include <kdebug.h>
+
+KoOdtFrameReportPicture::KoOdtFrameReportPicture(OROPrimitive *primitive)
+    : KoOdtFrameReportPrimitive(primitive)
 {
 }
 
-KoSimpleOdtImage::~KoSimpleOdtImage()
+KoOdtFrameReportPicture::~KoOdtFrameReportPicture()
 {
 }
 
-OROImage *KoSimpleOdtImage::image() const
+OROPicture *KoOdtFrameReportPicture::picture() const
 {
-    return static_cast<OROImage*>(m_primitive);
+    return dynamic_cast<OROPicture*>(m_primitive);
 }
 
-void KoSimpleOdtImage::setImageName(const QString &name)
-{
-    m_name = name;
-}
-
-void KoSimpleOdtImage::createBody(KoXmlWriter *bodyWriter) const
+void KoOdtFrameReportPicture::createBody(KoXmlWriter *bodyWriter) const
 {
     bodyWriter->startElement("draw:frame");
-    bodyWriter->addAttribute("draw:style-name", "picture");
     bodyWriter->addAttribute("draw:id", itemName());
+    bodyWriter->addAttribute("xml:id", itemName());
     bodyWriter->addAttribute("draw:name", itemName());
     bodyWriter->addAttribute("text:anchor-type", "page");
     bodyWriter->addAttribute("text:anchor-page-number", pageNumber());
@@ -61,7 +65,7 @@ void KoSimpleOdtImage::createBody(KoXmlWriter *bodyWriter) const
     commonAttributes(bodyWriter);
 
     bodyWriter->startElement("draw:image");
-    bodyWriter->addAttribute("xlink:href", "Pictures/" + imageName());
+    bodyWriter->addAttribute("xlink:href", "Pictures/" + pictureName());
     bodyWriter->addAttribute("xlink:type", "simple");
     bodyWriter->addAttribute("xlink:show", "embed");
     bodyWriter->addAttribute("xlink:actuate", "onLoad");
@@ -70,14 +74,22 @@ void KoSimpleOdtImage::createBody(KoXmlWriter *bodyWriter) const
     bodyWriter->endElement(); // draw:frame
 }
 
-bool KoSimpleOdtImage::saveData(KoStore* store, KoXmlWriter* manifestWriter) const
+bool KoOdtFrameReportPicture::saveData(KoStore* store, KoXmlWriter* manifestWriter) const
 {
-    QString name = "Pictures/" + imageName();
+    QString name = "Pictures/" + pictureName();
     if (!store->open(name)) {
         return false;
     }
     KoStoreDevice device(store);
-    bool ok = image()->image().save(&device, "PNG");
+    QImage image(m_primitive->size().toSize(), QImage::Format_ARGB32);
+    image.fill(0);
+    QPainter painter;
+    painter.begin(&image);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.drawPicture(0, 0, *(picture()->picture()));
+    painter.end();
+    kDebug()<<image.format();
+    bool ok = image.save(&device, "PNG");
     if (ok) {
         const QString mimetype(KMimeType::findByPath(name, 0 , true)->name());
         manifestWriter->addManifestEntry(name,  mimetype);

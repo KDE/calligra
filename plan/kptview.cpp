@@ -218,7 +218,8 @@ View::View(KoPart *part, Part *doc, QWidget *parent)
         m_partpart (part)
 {
     //kDebug(planDbg());
-//    getProject().setCurrentSchedule( Schedule::Expected );
+
+    doc->registerView( this );
 
     setComponentData( Factory::global() );
     if ( !part->isReadWrite() )

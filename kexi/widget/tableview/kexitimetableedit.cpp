@@ -128,6 +128,12 @@ bool KexiTimeTableEdit::valueIsValid()
     return m_formatter.fromString(m_lineedit->text()).isValid();
 }
 
+bool KexiTimeTableEdit::valueChanged()
+{
+    kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    return m_origValue != m_lineedit->text();
+}
+
 void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
     Q_UNUSED(visibleValue);
