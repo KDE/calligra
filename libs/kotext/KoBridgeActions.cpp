@@ -22,6 +22,8 @@
 #include "KoInlineCite.h"
 #include "KoTextEditor.h"
 #include "KoBibliographyInfo.h"
+#include "BibliographyGenerator.h"
+
 #include <KoOdfBibliographyConfiguration.h>
 
 #include <QDataStream>
@@ -74,6 +76,7 @@ void InsertBibliographyBridgeAction::performAction()
     KoBibliographyInfo *info = new KoBibliographyInfo;
     QVariantMap bibSource = m_data["bibliography-source"].toMap();
     info->m_indexTitleTemplate.text = bibSource["index-title"].toString();
+    info->m_entryTemplate = BibliographyGenerator::defaultBibliographyEntryTemplates();
 
     foreach(QVariant temp, bibSource["bibliography-entry-template"].toList()) {
         QVariantMap entryTemplateMap = temp.toMap();
