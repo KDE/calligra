@@ -136,6 +136,17 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
 
+2012-08-14
+KexiDB
+*Fixed bug: New Kexi project file is created in current directory instead of the selected one
+**Ported to Predicate
+BUG:305163
+REVIEW:106023
+*Missing table kexi__parts is no longer a critical error in Kexi
+**This enables opening databases created without KexiProject but with pure KexiDB::Connection
+**Useful e.g. for Bibliography storage implementation
+*Added unit test for creating .kexi database file with KexiDB::Connection and adding test data
+
 2012-08-09
 CSV Import
 *Use KexiDB data types in implementation
