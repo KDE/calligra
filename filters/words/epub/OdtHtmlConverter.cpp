@@ -135,9 +135,9 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
 
         // Limit picture size to 99% of the page size whatever that may be.
         if (styleElement.attribute("family") == "graphic") {
-            styleInfo->attributes.insert("max-heigh", "99%");
+            styleInfo->attributes.insert("max-height", "99%");
             styleInfo->attributes.insert("max-width", "99%");
-            styleInfo->attributes.insert("heigh", "auto");
+            styleInfo->attributes.insert("height", "auto");
             styleInfo->attributes.insert("width", "auto");
         }
 
@@ -197,6 +197,20 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
         if (!attrVal.isEmpty()) {
             styleInfo->attributes.insert(attrName, attrVal);
         }
+    }
+
+    // Text Decorations
+    attribute = propertiesElement.attribute("text-underline-style");
+    if (!attribute.isEmpty() && attribute != "none") {
+        styleInfo->attributes.insert("text-decoration", "underline");
+    }
+    attribute = propertiesElement.attribute("text-overline-style");
+    if (!attribute.isEmpty() && attribute != "none") {
+        styleInfo->attributes.insert("text-decoration", "overline");
+    }
+    attribute = propertiesElement.attribute("text-line-through-style");
+    if (!attribute.isEmpty() && attribute != "none") {
+        styleInfo->attributes.insert("text-decoration", "line-through");
     }
 
     // Visual Display Model
