@@ -22,6 +22,8 @@
 #include <ui/kis_resource_server_provider.h>
 #include <image/brushengine/kis_paintop_preset.h>
 
+#include <QDebug>
+
 class PresetImageProvider::Private {
 public:
     Private()
@@ -32,20 +34,22 @@ public:
     KoResourceServer<KisPaintOpPreset> * rserver;
 };
 
-PresetImageProvider::PresetImageProvider() :
-    QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+PresetImageProvider::PresetImageProvider()
+    : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+    , d(new Private)
 {
 }
 
 QImage PresetImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     Q_UNUSED(size);
+    Q_UNUSED(requestedSize);
     QImage image(requestedSize, QImage::Format_ARGB32);
     QList<KisPaintOpPreset*> resources = d->rserver->resources();
     int theID = id.toInt();
     if(theID >= 0 && theID < resources.count())
     {
-        image = resources.at(theID)->image().scaled(requestedSize, Qt::KeepAspectRatio);
+        image = resources.at(theID)->image();
     }
     return image;
 }
