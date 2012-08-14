@@ -6,6 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_INSTALL_PREFIX}/share/apps/cm
 
 find_package(Qt 4.8 REQUIRED)
 find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
 find_package(KDE4Internal REQUIRED)
 find_package(Nepomuk REQUIRED)
 find_package(CalligraLibs 2.4 REQUIRED)
@@ -19,14 +20,17 @@ FIND_LIBRARY(KRITAUI_LIBRARY NAMES kritaui)
 set(krita-sketch_SRCS
     main.cpp
     mainwindow.cpp
+    constants.cpp
+    settings.cpp
     presetmodel.cpp
+    presetimageprovider.cpp
 )
 
 qt4_automoc(${krita-sketch_SRCS})
 qt4_add_resources(krita-sketch_SRCS krita-sketch.qrc)
 
 add_executable(krita-sketch ${krita-sketch_SRCS})
-target_link_libraries(krita-sketch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${PIGMENTCMS_LIBRARY} ${KRITAUI_LIBRARY})
+target_link_libraries(krita-sketch ${KDE4_KDEUI_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${KOMAIN_LIBRARY} ${KOWIDGETS_LIBRARY} ${PIGMENTCMS_LIBRARY} ${KRITAUI_LIBRARY})
 
 set(krita-sketch-qmlplugin_SRCS
     kritasketchqmlextensions.cpp
