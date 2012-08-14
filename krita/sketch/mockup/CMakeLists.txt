@@ -36,7 +36,6 @@ set(krita-sketch-qmlplugin_SRCS
     kritasketchqmlextensions.cpp
     constants.cpp
     settings.cpp
-    presetimageprovider.cpp
 )
 
 qt4_automoc(${krita-sketch-qmlplugin_SRCS})
