@@ -38,7 +38,7 @@ public:
     const KPrPlaceholders & placeholders() const;
     QList<KPrAnimationStep *> animationSteps() const;
 private:
-    KPrShapeAnimations *m_animations;
+    KPrShapeAnimations m_animations;
     KPrPlaceholders m_placeholders;
 };
 
