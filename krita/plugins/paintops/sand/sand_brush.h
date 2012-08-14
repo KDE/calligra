@@ -47,10 +47,10 @@ public:
     void pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height);
 
     ///Spread the particles in the canvas
-    void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height);
+    void spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_color,const KoColor &f_color, const KisPaintInformation& info, int width, int height);
     
     ///Draw a Particle in the canvas
-    void drawParticle(KisPainter &painter, Particle *p); //Obs
+    void drawParticle(KisPainter &painter, Particle *p, bool old); //Obs
 
     ///Retrieve the current Particles in use in the current operation
     void getGrains(QList<Particle *> &g_copy);

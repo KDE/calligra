@@ -134,6 +134,9 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
     x1 = info.pos().x();
     y1 = info.pos().y();
 
+//     if(x1 > m_image->size().width() || y1 > m_image->size().height())
+//         return 1.0;
+
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
     /* Verify the painting mode
@@ -177,7 +180,7 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
 
 
             //Do the spread operations
-            m_sandBrush->spread(m_dab, x1, y1, painter()->paintColor(), info, m_image->size().width(), m_image->size().height() );
+            m_sandBrush->spread(m_dab, x1, y1, painter()->backgroundColor(), painter()->paintColor(), info, m_image->size().width(), m_image->size().height() );
         }
 
 //         qDebug() << "done" ;

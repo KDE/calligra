@@ -102,7 +102,7 @@ public:
     /**
      * Advances the particle state in one timestep.
      */
-    void integrationStep(double dt);
+    void integrationStep(double dt, int width, int height);
 
     /**
      * Calculate the particle acceleration based on applied forces
@@ -129,6 +129,7 @@ public:
     float dissipation() const {return _dissipation;}
     
     QPoint * pos() const {return _pos;}
+    QPoint * old() const {return _old;} //old position
     QPointF * vel() const {return _vel;}
     QPointF * accel()const {return _accel;}
     QPoint * bounds() const {return _bounds;}
@@ -183,6 +184,9 @@ private:
 
     ///Particle position on canvas
     QPoint  * _pos;
+
+    ///Old particle position on canvas (to deletion)
+    QPoint  * _old;
 
     ///Particle velocity
     QPointF * _vel;

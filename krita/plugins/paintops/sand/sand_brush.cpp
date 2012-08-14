@@ -147,7 +147,7 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
                                 float( m_properties->size), //particle radius
                                 1000,                       //lifespan (not used for now)
                                 float( m_properties->friction), //friction (used in the force application
-                                0.0,                            //dissipation (not used for now)
+                                0.5,                            //dissipation (not used for now)
                                 new QPoint(pixelX, pixelY), //position
                                 new QPointF(vel.x(), vel.y()),  //velocity 
                                 new QPointF(accel.x(), accel.y()) //acceleration
@@ -156,7 +156,7 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
             p->setBounds(new QPoint(width, height));
 
             //Draw the particle on the canvas
-            drawParticle(drawer, p);
+            drawParticle(drawer, p, false);
 
             //Put the particle in the list
             m_grains.append(p);
@@ -173,12 +173,13 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
 }
 
 //I'm actually trying to do this function work properly
-void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &color, const KisPaintInformation& info, int width, int height)
+void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_color,const KoColor &f_color, const KisPaintInformation& info, int width, int height)
 {
 
     KisPainter drawer(dev);
-//     m_inkColor = color; //
-    drawer.setPaintColor(m_inkColor);
+
+    drawer.setPaintColor(f_color);
+    drawer.setBackgroundColor(b_color);
     //(1) Retrieve the neighbor particles where the mouse is positioned (done in the KisSandPaintOp)
 
     //(2) Take the mouse dynamic properties (as in the pouring operation)
@@ -189,44 +190,53 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &co
         time = info.currentTime() - time;
     
 
+    
     QPointF disp = toQPointF(info.movement()); //obs: this is an inline function
     QPointF pos(info.pos().x(), info.pos().y());
     QPointF vel(disp.x()/time, disp.y()/time);    //current velocity
     QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current acce
 
-    qDebug() << " time :" << time << " Pos : " << pos << " vel : " << vel << " accel : " << accel;
+//     qDebug() << " time :" << time <<" disp: " << disp <<  " Pos : " << pos << " vel : " << vel << " accel : " << accel;
 
+//     qDebug() << "bfr. m_grains mem : " << sizeof(m_grains);
     //iterate over the set of grains in the neighborhood, assigned to m_grains
     for(int i = 0; i < m_grains.size(); i++){
         //(3.a) Verify which ones the mouse is really "colliding"
     //(3.b) and apply the force in the particles that the mouse touched (made in the applyForce method of Particle)
-        
         m_grains.at(i)->applyForce(pos, vel, m_properties, width, height);
 
         //(4) Animate the movements based on past forces
         if(m_grains.at(i)->force()){
-            m_grains.at(i)->integrationStep(double(time));
+            m_grains.at(i)->integrationStep(double(time), width, height);
+            drawParticle(drawer, m_grains.at(i), true);
         }
 
         //verify if a particle is out of bounds
-        if(m_grains.at(i)->pos()->x() > width || m_grains.at(i)->pos()->y() > height){
-            m_grains.removeAt(i);
+        if(sqrt(m_grains.at(i)->pos()->x()*m_grains.at(i)->pos()->x()) < width &&
+           sqrt(m_grains.at(i)->pos()->y()*m_grains.at(i)->pos()->y()) < height){
+            qDebug() << "pos at " << *m_grains.at(i)->pos() <<" less equal than (" << width << ", " << height;
+            drawParticle(drawer, m_grains.at(i), false);
         }
         else{
             //have to delete the previous positions before painting them again
-            drawParticle(drawer, m_grains.at(i));
+            m_grains.removeAt(i);
         }
 
+        m_grains.at(i)->vel()->setX(0.0);
+        m_grains.at(i)->vel()->setY(0.0);
+
+//     qDebug() << "aft. m_grains mem : " << sizeof(m_grains);
 
     }
 
     m_prevTime = info.currentTime();
     //(5) Update the canvas (have to do the erase particle operation)
 
+
 }
 
 
-void SandBrush::drawParticle(KisPainter &painter, Particle *p)
+void SandBrush::drawParticle(KisPainter &painter, Particle *p, bool old)
 {
     QVector<QPointF> points;
     qreal cx, cy;
@@ -249,8 +259,14 @@ void SandBrush::drawParticle(KisPainter &painter, Particle *p)
         points.append(QPointF(cx, cy));
     }
 
-    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    if(!old)
+        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+    else
+        painter.setFillStyle(KisPainter::FillStyleBackgroundColor);
+
+    
     painter.paintPolygon(points);
+
 }
 
 void SandBrush::getGrains(QList<Particle *> &g_copy){

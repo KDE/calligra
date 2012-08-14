@@ -33,6 +33,7 @@
 
 #include "particle.h"
 
+
 ///Parameterized constructor
 Particle::Particle( bool life,
                     float mass,
@@ -57,6 +58,7 @@ Particle::Particle( bool life,
     _accel = acceleration;
     _force = force;
     _forceVec = new QPointF(0.0,0.0);
+    _old = new QPoint(0,0);
 }
 
 ///Copy constructor
@@ -70,6 +72,7 @@ Particle::Particle(const Particle & p)
     _friction = p.friction();
     _dissipation = p.dissipation();
     _pos = p.pos();
+    _old = p.old();
     _vel = p.vel();
     _accel = p.accel();
     _forceVec = p.forceVec();
@@ -89,9 +92,8 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
      * dist_centers = sqrt(dist_x^2 + dist_y^2);        //distance norm
      * float xi = _radius + m_properties->radius - dist_centers;
      *
-     * COMPLETE THIS EQUATION WHEN GET THE MOUSE INFORMATION
      */
-    qDebug() << " _pos :" << *_pos << " radius : " << _radius ;
+//    qDebug() << " _pos :" << *_pos << " radius : " << _radius ;
     float dist_x = (_pos->x() - pos.x())/width;   //distance between particle centers: X
     float dist_y = (_pos->y() - pos.y())/height;   //distance between particle centers: Y
 
@@ -112,10 +114,10 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
     /*
      * dissipative constant: function of the material viscosity
      * Maybe it won't be needed to set this for the MOUSE (BRUSH) PARTICLE
-     * float A = 0.5*( _dissipation + m_properties->dissipation() );
      */
     
-    float A =  _dissipation;
+//     float A =  _dissipation;
+    float A = 0.5*( _dissipation + 0.5 );
 
     float reff = ( float(_radius * properties->radius) )/( float( _radius + properties->radius) );
 //     qDebug() << "reff = ( " << _radius << " * " << properties->radius << " )/( " << _radius << " + " << properties->radius << ") = " << reff;
@@ -128,6 +130,7 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
 
     float dvx = _vel->x() - vel.x();
     float dvy = _vel->y() - vel.y();
+//     qDebug() << "vel :" << *_vel;
 
     float rr_rez = 1 /dist_centers;
 
@@ -138,20 +141,20 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
     float xidot = - (ex*dvx + ey*dvy);
 
     //NORMAL FORCE ON THIS PARTICLE
-//         float fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
-    float fn = sqrt(xi)*Y*sqrt(reff)*(xi+xidot);
-//     qDebug() << _force << " + fn = sqrt( " << xi << " )* " << Y <<" *sqrt( " << reff << " )*( " << xi << " + " << xidot << ") = " << fn;
+    float fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
+//     float fn = sqrt(xi)*Y*sqrt(reff)*(xi+xidot);
+//     qDebug() << _force << " + fn = sqrt( " << xi << " )* " << Y <<" *sqrt( " << reff << " )*( " << xi << " + "<< A << "*" << xidot << ") = " << fn;
 //     qDebug() << "ex, ey : " << ex << ", " << ey;
     //PERHAPS I HAVE TO MODIFY THIS, SINCE WE CAN HAVE A FORCE IN A DIFFERENT DIRECTION OF THE MOVEMENT
-    if( fn< 0)
-        fn = 0;
-    else{
+//     if( fn< 0)
+//         fn = 0;
+//     else{
         _force += fn;
 //         _forceVec->rx() = _forceVec->rx() + fn*ex;
 //         _forceVec->ry() = _forceVec->ry() + fn*ey;
         _forceVec->rx() =  fn*ex;
         _forceVec->ry() =  fn*ey;
-    }
+//     }
 
 //     qDebug() << "af. _force : " << *_forceVec;
 }
@@ -186,16 +189,14 @@ QPointF Particle::accel(const State &state, double t)
 {
     const float k = 0.1; //dumping, provavelmente usar a "dissipation"
     const float b = _mass;
-    QPointF result = QPointF( qreal(_forceVec->x()/_mass ), qreal(_forceVec->y()/_mass));
-//     qDebug() << "result :" << result;
-//     QPointF result = QPointF( qreal(-k * state.pos.x() - b*state.vel.x() ), qreal(-k * state.pos.y() - b*state.vel.y()));
-//     qDebug() << "result (" << result << ") = QPointF(" << -k << "*" << state.pos.x() << "-" << b << "*" << state.vel.x() << ","
-//                                                        << -k << "*" << state.pos.y() << "-" << b << "*" << state.vel.y() << ")";
+    //Acceleration due to force minus linear momentum dumping (due to friction)
+    QPointF result ( qreal( _forceVec->x()/_mass + (-k * state.pos.x() - b*state.vel.x())),
+                     qreal( _forceVec->y()/_mass + (-k * state.pos.y() - b*state.vel.y())));
 
     return result;
 }
 
-void Particle::integrationStep(double dt)
+void Particle::integrationStep(double dt, int width, int height)
 {
 //     qDebug() << "bef.: pos :" << *_pos << " vel :" << *_vel ;
     
@@ -209,7 +210,7 @@ void Particle::integrationStep(double dt)
     if(v_length == 0.0)
         v_length = 1.0;
 
-    //this particle current state
+//    //this particle current state
     State state;
     state.pos.setX( _pos->x()/p_length);
     state.pos.setY( _pos->y()/p_length);
@@ -217,26 +218,33 @@ void Particle::integrationStep(double dt)
     state.vel.setY( _vel->y()/v_length);
 
 
-    //derivatives for the RK terms
+//    //derivatives for the RK terms
 
     Derivative k1 = eval(state, 0.0, Derivative());
     Derivative k2 = eval(state, dt*0.5, k1);
     Derivative k3 = eval(state, dt*0.5, k2);
     Derivative k4 = eval(state, dt, k3);
 
-//     QPointF d_pos = 1.0/6.0 * (k1.dpos + 2*(k2.dpos + k3.dpos) + k4.dpos);
-//     QPointF d_vel = 1.0/6.0 * (k1.dvel + 2*(k2.dvel + k3.dvel) + k4.dvel);
+////     QPointF d_pos = 1.0/6.0 * (k1.dpos + 2*(k2.dpos + k3.dpos) + k4.dpos);
+////     QPointF d_vel = 1.0/6.0 * (k1.dvel + 2*(k2.dvel + k3.dvel) + k4.dvel);
     float pos_x = (1.0/6.0 * (k1.dpos.x() + 2*(k2.dpos.x() + k3.dpos.x()) + k4.dpos.x()))*dt;
     float pos_y = (1.0/6.0 * (k1.dpos.y() + 2*(k2.dpos.y() + k3.dpos.y()) + k4.dpos.y()))*dt;
     float vel_x = (1.0/6.0 * (k1.dvel.x() + 2*(k2.dvel.x() + k3.dvel.x()) + k4.dvel.x()))*dt;
     float vel_y = (1.0/6.0 * (k1.dvel.y() + 2*(k2.dvel.y() + k3.dvel.y()) + k4.dvel.y()))*dt;
 
 //     qDebug() << "vals. pos: " << pos_x << ", " << pos_y << " vel.: " << vel_x << ", " << vel_y;
+    float newPos_x = _pos->x() + pos_x;
+    float newPos_y = _pos->y() + pos_y;
     
-    _pos->rx() += pos_x;
-    _pos->ry() += pos_y;
-    _vel->rx() += vel_x;
-    _vel->ry() += vel_y;
+    if( sqrt(newPos_x*newPos_x) < width && sqrt(newPos_y*newPos_y) < height ){
+        _old->rx() = _pos->x();
+        _old->ry() = _pos->y();
+        _pos->rx() = newPos_x;
+        _pos->ry() = newPos_y;
+        _vel->rx() = vel_x;
+        _vel->ry() = vel_y;
+    }
+
 
 //     qDebug() << "aft.: pos :" << *_pos << " vel :" << *_vel ;
 
