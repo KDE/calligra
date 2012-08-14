@@ -62,7 +62,7 @@ QVariant PresetModel::data(const QModelIndex &index, int role) const
         switch(role)
         {
         case ImageRole:
-            result = QString("presetthumb:/%1").arg(index.row());
+            result = QString("image://presetthumb/%1").arg(index.row());
             break;
         case TextRole:
             result = d->rserver->resources().at(index.row())->name();
