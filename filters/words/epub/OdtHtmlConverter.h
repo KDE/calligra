@@ -76,9 +76,9 @@ class OdtHtmlConverter
  private:
 
     // Handle a collection of styles from either content.xml or styles.xml
-    void handleStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
-    void handleStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attList,
-                               StyleInfo *styleInfo);
+    void collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
+    void collectStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attList,
+                                StyleInfo *styleInfo);
 
     void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData);
 
@@ -168,14 +168,12 @@ class OdtHtmlConverter
     int m_currentChapter;
 
     // Footnotes are collected while parsing a chapter and written at
-    // the end of a chapter.
-    //
-    // Endnotes are collected while parsing all chapters and are
-    // written into its own file at the end of the book.
+    // the end of a chapter. Endnotes are collected while parsing all
+    // chapters and are written into its own file at the end of the book.
     //
     // The format is QHash<id, noteElement>
     // where
-    //    id is a unique name for this footnote
+    //    id          is a unique name for this footnote
     //    noteElement is the KoXmlElement that contains the body of the note
     QHash<QString, KoXmlElement> m_footNotes;
     QHash<QString, KoXmlElement> m_endNotes;

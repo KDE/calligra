@@ -90,7 +90,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertStyles(KoStore *odfStore,
     stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "automatic-styles");
 
     // Collect info about the styles.
-    handleStyles(stylesNode, styles);
+    collectStyles(stylesNode, styles);
 
     odfStore->close(); // end of parsing styles in content.xml
 
@@ -117,15 +117,17 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertStyles(KoStore *odfStore,
     stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "styles");
 
     // Collect info about the styles.
-    handleStyles(stylesNode, styles);
+    collectStyles(stylesNode, styles);
 
     odfStore->close();
     return KoFilter::OK;
 }
 
-void OdtHtmlConverter::handleStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
+void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
 {
-    QString attribute;
+    // FIXME: Something is fishy here.  As far as I can see attList
+    //        collects a number of attributes but they are never used
+    //        anywhere. What am I missing? /iw
     QList <QString> attList;
 
     KoXmlElement styleElement;
@@ -150,15 +152,15 @@ void OdtHtmlConverter::handleStyles(KoXmlNode &stylesNode, QHash<QString, StyleI
                 //kDebug(30517) << "Found break-before=page in style" << styleName;
                 styleInfo->hasBreakBefore = true;
             }
-            handleStyleAttributes(propertiesElement, attList, styleInfo);
+            collectStyleAttributes(propertiesElement, attList, styleInfo);
         }
         styles.insert(styleName, styleInfo);
         attList.clear();
     }
 }
 
-void OdtHtmlConverter::handleStyleAttributes(KoXmlElement &propertiesElement,
-                                             QList<QString> &attList, StyleInfo *styleInfo)
+void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement,
+                                              QList<QString> &attList, StyleInfo *styleInfo)
 {
     // font properties
     QString attribute = propertiesElement.attribute("font-family");
@@ -220,7 +222,7 @@ void OdtHtmlConverter::handleStyleAttributes(KoXmlElement &propertiesElement,
     // Image align
     attribute = propertiesElement.attribute("horizontal-pos");
     if (!attribute.isEmpty()) {
-        kDebug(30517) << "horisontal pos attribute"<<attribute;
+        kDebug(30517) << "horisontal pos attribute" << attribute;
         if (attribute == "right" || attribute == "from-left") {
             styleInfo->attributes.insert("float", "right");
             styleInfo->attributes.insert("margin", "5px 0 5px 15px");
@@ -235,8 +237,8 @@ void OdtHtmlConverter::handleStyleAttributes(KoXmlElement &propertiesElement,
             styleInfo->attributes.insert("float", "left");
             styleInfo->attributes.insert("margin","5px 15px 5px 0");
         }
-
     }
+
     // Lists and numbering
     if (propertiesElement.hasAttribute("num-format")) {
         attribute = propertiesElement.attribute("num-format");
