@@ -89,7 +89,7 @@ Panel {
     peekContents: GridView {
         anchors.fill: parent;
 
-        model: model;
+        model: PresetsModel;
         delegate: delegate;
 
         cellWidth: Constants.GridWidth;
@@ -102,7 +102,7 @@ Panel {
         initialPage: GridView {
             anchors.fill: parent;
 
-            model: model;
+            model: PresetsModel;
             delegate: delegate;
 
             cellWidth: Constants.GridWidth;
@@ -117,9 +117,9 @@ Panel {
     ListModel {
         id: model;
 
-        ListElement { name: "Red"; file: ":/images/red.png"; }
-        ListElement { name: "Green"; file: ":/images/green.png"; }
-        ListElement { name: "Blue"; file: ":/images/blue.png"; }
+        ListElement { text: "Red"; icon: ":/images/red.png"; }
+        ListElement { text: "Green"; icon: ":/images/green.png"; }
+        ListElement { text: "Blue"; icon: ":/images/blue.png"; }
     }
 
     Component {
@@ -131,13 +131,15 @@ Panel {
 
             checked: GridView.isCurrentItem;
 
-            text: model.name;
+            text: model.text;
+            textSize: 10;
+            image: model.image;
 
             highlightColor: Constants.Theme.HighlightColor;
 
             onClicked: {
                 GridView.view.currentIndex = index;
-                Settings.currentPreset = model.file;
+                Settings.currentPreset = model.image;
             }
         }
     }
