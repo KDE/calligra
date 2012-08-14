@@ -77,8 +77,7 @@ class OdtHtmlConverter
 
     // Handle a collection of styles from either content.xml or styles.xml
     void collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
-    void collectStyleAttributes(KoXmlElement &propertiesElement, QList<QString> &attList,
-                                StyleInfo *styleInfo);
+    void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
 
     void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData);
 
