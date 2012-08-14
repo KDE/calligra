@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,41 +18,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSIMPLEODTPRIMITIVE_H
-#define KOSIMPLEODTPRIMITIVE_H
+#ifndef KOODTFRAMESREPORTTEXTBOX_H
+#define KOODTFRAMESREPORTTEXTBOX_H
+
+#include "KoOdtFrameReportPrimitive.h"
 
 #include <QString>
 
 class KoGenStyles;
 class KoXmlWriter;
+class OROTextBox;
 class OROPrimitive;
-class KoStore;
 
-class KoSimpleOdtPrimitive
+class KoOdtFrameReportTextBox : public KoOdtFrameReportPrimitive
 {
 public:
-    explicit KoSimpleOdtPrimitive(OROPrimitive *primitive = 0);
-    virtual ~KoSimpleOdtPrimitive();
+    KoOdtFrameReportTextBox(OROTextBox *primitive);
+    virtual ~KoOdtFrameReportTextBox();
 
-    bool isValid() const;
-    void setPrimitive(OROPrimitive *primitive);
-    int pageNumber() const;
-    void setUID(int uid);
-    int uid() const;
-
-    virtual void createStyle(KoGenStyles&);
+    virtual void createStyle(KoGenStyles &coll);
     virtual void createBody(KoXmlWriter *bodyWriter) const;
-    virtual bool saveData(KoStore *store, KoXmlWriter*) const;
+
+    OROTextBox *textBox() const;
 
 protected:
-    QString itemName() const;
-    void commonAttributes(KoXmlWriter *bodyWriter) const;
+    void frameStyle(KoGenStyles &coll);
 
-protected:
-    OROPrimitive *m_primitive;
-    int m_uid;
-    QString m_frameStyleName;
+private:
+    QString m_paragraphStyleName;
+    QString m_textStyleName;
 
 };
 
-#endif // KOSIMPLEODTPRIMITIVE_H
+#endif // KOODTFRAMESREPORTTEXTBOX_H

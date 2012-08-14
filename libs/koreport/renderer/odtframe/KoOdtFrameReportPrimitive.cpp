@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoSimpleOdtPrimitive.h"
+#include "KoOdtFrameReportPrimitive.h"
 #include <KoXmlWriter.h>
 #include <KoDpi.h>
 #include <KoGenStyle.h>
@@ -28,66 +28,65 @@
 
 #include <kdebug.h>
 
-KoSimpleOdtPrimitive::KoSimpleOdtPrimitive(OROPrimitive *primitive)
+KoOdtFrameReportPrimitive::KoOdtFrameReportPrimitive(OROPrimitive *primitive)
     : m_primitive(primitive)
 {
 }
 
-KoSimpleOdtPrimitive::~KoSimpleOdtPrimitive()
+KoOdtFrameReportPrimitive::~KoOdtFrameReportPrimitive()
 {
 }
 
-bool KoSimpleOdtPrimitive::isValid() const
+bool KoOdtFrameReportPrimitive::isValid() const
 {
     return (bool)m_primitive;
 }
 
-void KoSimpleOdtPrimitive::setPrimitive(OROPrimitive *primitive)
+void KoOdtFrameReportPrimitive::setPrimitive(OROPrimitive *primitive)
 {
     m_primitive = primitive;
 }
 
-int KoSimpleOdtPrimitive::pageNumber() const
+int KoOdtFrameReportPrimitive::pageNumber() const
 {
-    //NOTE OROPrimitive page starts at 0, odt starts at 1
-    return isValid() ? m_primitive->page()->page() + 1 : 0;
+    return isValid() && m_primitive->page() ? m_primitive->page()->page() + 1 : 0;
 }
 
-void KoSimpleOdtPrimitive::setUID(int uid)
+void KoOdtFrameReportPrimitive::setUID(int uid)
 {
     m_uid = uid;
 }
 
-int KoSimpleOdtPrimitive::uid() const
+int KoOdtFrameReportPrimitive::uid() const
 {
     return m_uid;
 }
 
-QString KoSimpleOdtPrimitive::itemName() const
+QString KoOdtFrameReportPrimitive::itemName() const
 {
     return QString("Item_%1").arg(m_uid);
 }
 
-void KoSimpleOdtPrimitive::createStyle(KoGenStyles &coll)
+void KoOdtFrameReportPrimitive::createStyle(KoGenStyles &coll)
 {
     KoGenStyle gs(KoGenStyle::GraphicStyle, "graphic");
     gs.addProperty("draw:fill", "none");
-    gs.addProperty("fo:margin", "0.000000000000000pt");
+    gs.addPropertyPt("fo:margin", 0);
     gs.addProperty("style:horizontal-pos", "from-left");
     gs.addProperty("style:horizontal-rel", "page");
     gs.addProperty("style:vertical-pos", "from-top");
     gs.addProperty("style:vertical-rel", "page");
     gs.addProperty("style:wrap", "dynamic");
-    gs.addProperty("style:wrap-dynamic-threshold", "0.000000000000000pt");
+    gs.addPropertyPt("style:wrap-dynamic-threshold", 0);
 
     m_frameStyleName = coll.insert(gs, "F");
 }
 
-void KoSimpleOdtPrimitive::createBody(KoXmlWriter *bodyWriter) const
+void KoOdtFrameReportPrimitive::createBody(KoXmlWriter *bodyWriter) const
 {
 }
 
-void KoSimpleOdtPrimitive::commonAttributes(KoXmlWriter *bodyWriter) const
+void KoOdtFrameReportPrimitive::commonAttributes(KoXmlWriter *bodyWriter) const
 {
     // convert to inches
     qreal x = m_primitive->position().x() / KoDpi::dpiX();
@@ -102,7 +101,7 @@ void KoSimpleOdtPrimitive::commonAttributes(KoXmlWriter *bodyWriter) const
     bodyWriter->addAttribute("draw:z-index", "3");
 }
 
-bool KoSimpleOdtPrimitive::saveData(KoStore */*store*/, KoXmlWriter*) const
+bool KoOdtFrameReportPrimitive::saveData(KoStore */*store*/, KoXmlWriter*) const
 {
     return true;
 }

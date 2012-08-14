@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,40 +18,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSIMPLEODTLINE_H
-#define KOSIMPLEODTLINE_H
+#ifndef KOODTFRAMESREPORTCHECKBOX_H
+#define KOODTFRAMESREPORTCHECKBOX_H
 
-#include "KoSimpleOdtPrimitive.h"
+#include "KoOdtFrameReportPrimitive.h"
 
 #include <QString>
 
 class KoGenStyles;
 class KoXmlWriter;
-class OROLine;
+class OROCheck;
 class OROPrimitive;
 
-// FIXME:
-// This implementation is a hack because neither words nor libre writer
-// implements lines in a good way.
 
-class KoSimpleOdtLine : public KoSimpleOdtPrimitive
+class KoOdtFrameReportCheckBox : public KoOdtFrameReportPrimitive
 {
 public:
-    KoSimpleOdtLine(OROLine *primitive);
-    virtual ~KoSimpleOdtLine();
+    KoOdtFrameReportCheckBox(OROCheck *primitive);
+    virtual ~KoOdtFrameReportCheckBox();
 
     virtual void createStyle(KoGenStyles &coll);
     virtual void createBody(KoXmlWriter *bodyWriter) const;
-    
-    OROLine *line() const;
+    virtual bool saveData(KoStore *store, KoXmlWriter *manifestWriter) const;
+
+    OROCheck *checkBox() const;
 
 protected:
     void frameStyle(KoGenStyles &coll);
-    
+    QString imageName() const;
+
 private:
-    QString m_frameStyleName;
     QString m_paragraphStyleName;
     QString m_textStyleName;
 };
 
-#endif // KOSIMPLEODTLINE_H
+#endif // KOODTFRAMESREPORTCHECKBOX_H
