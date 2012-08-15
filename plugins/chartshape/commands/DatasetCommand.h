@@ -44,9 +44,6 @@ class DataSet;
 class ChartShape;
 class Axis;
 
-/**
- * Chart type replacement command.
- */
 class DatasetCommand : public KUndo2Command
 {
 public:

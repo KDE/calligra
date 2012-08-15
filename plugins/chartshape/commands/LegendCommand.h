@@ -42,9 +42,6 @@ namespace KChart
 
 class Legend;
 
-/**
- * Chart type replacement command.
- */
 class LegendCommand : public KUndo2Command
 {
 public:

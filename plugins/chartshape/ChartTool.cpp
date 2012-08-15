@@ -64,6 +64,7 @@
 #include "commands/LegendCommand.h"
 #include "commands/AxisCommand.h"
 #include "commands/DatasetCommand.h"
+#include "commands/ChartTextShapeCommand.h"
 
 
 using namespace KChart;
@@ -620,7 +621,12 @@ void ChartTool::setShowTitle(bool show)
     if (!d->shape)
         return;
 
-    d->shape->showTitle(show);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->title());
+    if (command!=0) {
+        command->setVisible(show);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
@@ -630,7 +636,12 @@ void ChartTool::setShowSubTitle(bool show)
     if (!d->shape)
         return;
 
-    d->shape->showSubTitle(show);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->subTitle());
+    if (command!=0) {
+        command->setVisible(show);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
@@ -640,7 +651,12 @@ void ChartTool::setShowFooter(bool show)
     if (!d->shape)
         return;
 
-    d->shape->showFooter(show);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer());
+    if (command!=0) {
+        command->setVisible(show);
+        canvas()->addCommand(command);
+    }
+
     d->shape->update();
 }
 
