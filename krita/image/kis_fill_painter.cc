@@ -209,6 +209,8 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP p
 {
     Q_ASSERT(m_width > 0);
     Q_ASSERT(m_height > 0);
+    setWidth(device()->exactBounds().width());
+    setHeight(device()->exactBounds().height());
 
     m_size = m_width * m_height;
 
@@ -252,6 +254,8 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     bool canOptimizeDifferences = (projection->colorSpace()->pixelSize() == 4);
     QHash<quint32, quint8> differences;
 
+    bool isCanvasInfinite = device()->defaultBounds()->isCanvasInfinite();
+
     if (m_width < 0 || m_height < 0) {
         if (selection() && m_careForSelection) {
             QRect rc = selection()->selectedExactRect();
@@ -264,7 +268,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     Q_ASSERT(m_width > 0 && m_height > 0);
 
     // Don't try to fill if we start outside the borders, just return an empty 'fill'
-    if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height)
+    if (startX < 0 || startY < 0 || startX >= m_width || startY >= m_height && !isCanvasInfinite)
         return new KisSelection(new KisSelectionDefaultBounds(device()));
 
     KisPaintDeviceSP sourceDevice = KisPaintDeviceSP(0);
@@ -353,7 +357,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         } else
             *selIt->rawData() = MAX_SELECTED;
 
-        if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
+        if (isCanvasInfinite? y > qint32_MIN: y > 0 && (map[m_width *(y - 1) + x] == None)) {
             map[m_width *(y - 1) + x] = Added;
             Q_ASSERT(x >= 0);
             Q_ASSERT(x < m_width);
@@ -378,9 +382,9 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         pixelIt->moveTo(x,y);
         selIt->moveTo(x,y);
 
-        if (x > 0) {
+        if (isCanvasInfinite? x > qint32_MIN : x > 0) {
             // go to the left
-            while (!stop && x >= 0 && (map[m_width * y + x] != Checked)) { // FIXME optimizeable?
+            while (!stop && isCanvasInfinite? x > qint32_MIN: x >= 0 && (map[m_width * y + x] != Checked)) { // FIXME optimizeable?
                 map[m_width * y + x] = Checked;
                 quint8 diff;
                 if (canOptimizeDifferences) {
@@ -396,7 +400,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                     diff = devColorSpace->difference(source, pixelIt->rawData());
                 }
                 if (diff > m_threshold
-                        || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
+                        || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {qDebug()<<ppVar(stop);
                     stop = true;
                     continue;
                 }
@@ -407,7 +411,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                     *selIt->rawData() = MAX_SELECTED;
                 }
 
-                if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
+                if (isCanvasInfinite? y > qint32_MIN: y > 0 && (map[m_width *(y - 1) + x] == None)) {
                     map[m_width *(y - 1) + x] = Added;
                     Q_ASSERT(x >= 0);
                     Q_ASSERT(x < m_width);
@@ -425,12 +429,13 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 }
                 ++pixelsDone;
 
-                --x;
+                --x;qDebug() <<ppVar(pixelIt->x());
                 pixelIt->moveTo(x,y);
                 selIt->moveTo(x,y);
 
             }
         }
+        qDebug() << "Yeah! I came out!!";
 
         x = segment.x + 1;
         //delete segment;
@@ -480,7 +485,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 *selIt->rawData() = MAX_SELECTED;
             }
 
-            if (y > 0 && (map[m_width *(y - 1) + x] == None)) {
+            if (isCanvasInfinite? y > qint32_MIN: y > 0 && (map[m_width *(y - 1) + x] == None)) {
                 map[m_width *(y - 1) + x] = Added;
                 Q_ASSERT(x >= 0);
                 Q_ASSERT(x < m_width);
