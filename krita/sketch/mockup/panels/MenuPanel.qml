@@ -43,7 +43,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-filenew.png";
+                image: ":/images/svg/icon-filenew.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "new" );
             }
@@ -53,7 +53,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-fileopen.png"
+                image: ":/images/svg/icon-fileopen.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "open" );
             }
@@ -63,7 +63,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-filesave.png"
+                image: ":/images/svg/icon-filesave.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "save" );
             }
@@ -73,7 +73,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-filesaveas.png"
+                image: ":/images/svg/icon-filesaveas.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "saveAs" );
             }
@@ -83,7 +83,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-fileshare.png"
+                image: ":/images/svg/icon-fileshare.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "share" );
             }
@@ -98,7 +98,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-undo.png"
+                image: ":/images/svg/icon-undo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "undo" );
             }
@@ -108,7 +108,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-redo.png"
+                image: ":/images/svg/icon-redo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "redo" );
             }
@@ -122,7 +122,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-help.png"
+                image: ":/images/svg/icon-help.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "help" );
             }
@@ -132,7 +132,7 @@ Item {
                 height: Constants.GridHeight;
                 color: "#1d3458"
                 shadow: false
-                image: ":/images/icon-48px-settings.png"
+                image: ":/images/svg/icon-settings.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "settings" );
             }

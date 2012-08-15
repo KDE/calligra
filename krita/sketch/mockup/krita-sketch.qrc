@@ -57,14 +57,14 @@
         <file>images/help-about.png</file>
         <file>images/configure.png</file>
         <file>images/handle-menu.png</file>
-        <file>images/icon-48px-filenew.png</file>
-        <file>images/icon-48px-fileopen.png</file>
-        <file>images/icon-48px-filesave.png</file>
-        <file>images/icon-48px-filesaveas.png</file>
-        <file>images/icon-48px-fileshare.png</file>
-        <file>images/icon-48px-help.png</file>
-        <file>images/icon-48px-redo.png</file>
-        <file>images/icon-48px-settings.png</file>
-        <file>images/icon-48px-undo.png</file>
+        <file>images/svg/icon-filenew.svg</file>
+        <file>images/svg/icon-fileopen.svg</file>
+        <file>images/svg/icon-filesave.svg</file>
+        <file>images/svg/icon-filesaveas.svg</file>
+        <file>images/svg/icon-fileshare.svg</file>
+        <file>images/svg/icon-help.svg</file>
+        <file>images/svg/icon-redo.svg</file>
+        <file>images/svg/icon-settings.svg</file>
+        <file>images/svg/icon-undo.svg</file>
     </qresource>
 </RCC>
