@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2011 by Dag Andersen (danders@get2net.dk)
+   Calligra Report Engine
+   Copyright (C) 2011, 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,30 +18,40 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSIMPLEODTPICTURE_H
-#define KOSIMPLEODTPICTURE_H
+#ifndef KOODTFRAMESREPORTLINE_H
+#define KOODTFRAMESREPORTLINE_H
 
-#include "KoSimpleOdtPrimitive.h"
+#include "KoOdtFrameReportPrimitive.h"
 
 #include <QString>
 
+class KoGenStyles;
 class KoXmlWriter;
-class KoStore;
-class OROPicture;
+class OROLine;
 class OROPrimitive;
 
-class KoSimpleOdtPicture : public KoSimpleOdtPrimitive
+// FIXME:
+// This implementation is a hack because neither words nor libre writer
+// implements lines in a good way.
+
+class KoOdtFrameReportLine : public KoOdtFrameReportPrimitive
 {
 public:
-    KoSimpleOdtPicture(OROPrimitive *primitive);
-    virtual ~KoSimpleOdtPicture();
+    KoOdtFrameReportLine(OROLine *primitive);
+    virtual ~KoOdtFrameReportLine();
 
+    virtual void createStyle(KoGenStyles &coll);
     virtual void createBody(KoXmlWriter *bodyWriter) const;
-    bool saveData(KoStore* store, KoXmlWriter* manifestWriter) const;
-    
-    OROPicture *picture() const;
-    //NOTE: Store as png atm
-    QString pictureName() const { return QString("Picture_%1.png").arg(m_uid); }
+
+    OROLine *line() const;
+
+protected:
+    void frameStyle(KoGenStyles &coll);
+
+private:
+    QString m_frameStyleName;
+    QString m_paragraphStyleName;
+    QString m_textStyleName;
 };
 
-#endif // KOSIMPLEODTPICTURE_H
+#endif // KOODTFRAMESREPORTLINE_H

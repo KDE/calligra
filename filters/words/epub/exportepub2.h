@@ -32,7 +32,7 @@
 #include <QHash>
 #include <QList>
 
-#include "htmlconvert.h"
+#include "OdtHtmlConverter.h"
 
 class EpubFile;
 

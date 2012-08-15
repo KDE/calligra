@@ -26,11 +26,10 @@
 #include "reportsourceeditor.h"
 #include "reportscripts.h"
 #include "reportexportpanel.h"
-#include "odt/ReportODTRenderer.h"
 #include "ui_reportsectionswidget.h"
 #include "ui_reporttoolswidget.h"
 
-#include "KoPageLayout.h"
+#include "KoReportODTRenderer.h"
 #include "KoReportPage.h"
 #include "KoReportPreRenderer.h"
 #include "KoReportPrintRenderer.h"
@@ -53,8 +52,9 @@
 #include "kptnodechartmodel.h"
 #include "kptdebug.h"
 
+#include "KoPageLayout.h"
 #include "KoDocument.h"
-#include <KoIcon.h>
+#include "KoIcon.h"
 
 #include <KTabWidget>
 #include <KAction>
@@ -410,7 +410,7 @@ void ReportWidget::slotExportFinished( int result )
 void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
 {
     kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
-    KoReportRendererBase *renderer = m_factory.createInstance("odt");
+    KoReportRendererBase *renderer = m_factory.createInstance("odttable");
     if ( renderer == 0 ) {
         kError()<<"Cannot create odt (table) renderer";
         return;
@@ -423,10 +423,9 @@ void ReportWidget::exportToOdtTable( KoReportRendererContext &context )
 void ReportWidget::exportToOdtFrames( KoReportRendererContext &context )
 {
     kDebug(planDbg())<<"Export to odt:"<<context.destinationUrl;
-    KoReportRendererBase *renderer = new ReportODTRenderer();
-    //    renderer = m_factory.createInstance("odt");
+    KoReportRendererBase *renderer = m_factory.createInstance("odtframes");
     if ( renderer == 0 ) {
-        kError()<<"Cannot create odt renderer";
+        kError()<<"Cannot create odt (frames) renderer";
         return;
     }
     if (!renderer->render(context, m_reportDocument)) {

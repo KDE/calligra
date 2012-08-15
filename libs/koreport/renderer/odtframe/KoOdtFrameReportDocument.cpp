@@ -1,6 +1,6 @@
 /*
-   KoReport Library
-   Copyright (C) 2010 by Adam Pigg (adam@piggz.co.uk)
+   Calligra Report Engine
+   Copyright (C) 2012 by Dag Andersen (danders@get2net.dk)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoSimpleOdtDocument.h"
-#include "KoSimpleOdtPrimitive.h"
+#include "KoOdtFrameReportDocument.h"
+#include "KoOdtFrameReportPrimitive.h"
 #include <KoOdfWriteStore.h>
 #include <KoXmlWriter.h>
 #include <KoOdfGraphicStyles.h>
@@ -34,39 +34,44 @@
 #include <QLayout>
 #include <QVarLengthArray>
 
-#include "kptdebug.h"
+#include <kdebug.h>
 
-KoSimpleOdtDocument::KoSimpleOdtDocument()
+KoOdtFramesReportDocument::KoOdtFramesReportDocument()
     : manifestWriter(0)
 {
 }
 
-KoSimpleOdtDocument::~KoSimpleOdtDocument()
+KoOdtFramesReportDocument::~KoOdtFramesReportDocument()
 {
-    foreach (const QList<KoSimpleOdtPrimitive*> &lst, m_pagemap) {
-        foreach(KoSimpleOdtPrimitive *p, lst) {
+    foreach (const QList<KoOdtFrameReportPrimitive*> &lst, m_pagemap) {
+        foreach(KoOdtFrameReportPrimitive *p, lst) {
             delete p;
         }
     }
 }
 
-void KoSimpleOdtDocument::setPageOptions(const ReportPageOptions &pageOptions)
+void KoOdtFramesReportDocument::setPageOptions(const ReportPageOptions &pageOptions)
 {
     m_pageOptions = pageOptions;
 }
 
-void KoSimpleOdtDocument::addPrimitive(KoSimpleOdtPrimitive *data)
+void KoOdtFramesReportDocument::startTable(OROSection* section)
+{
+
+}
+
+void KoOdtFramesReportDocument::addPrimitive(KoOdtFrameReportPrimitive *data)
 {
     m_pagemap[data->pageNumber()].append( data);
 }
 
-QFile::FileError KoSimpleOdtDocument::saveDocument(const QString& path)
+QFile::FileError KoOdtFramesReportDocument::saveDocument(const QString& path)
 {
     // create output store
     KoStore *store = KoStore::createStore(path, KoStore::Write,
                                     "application/vnd.oasis.opendocument.text", KoStore::Zip);
     if (!store) {
-        kDebug(planDbg()) << "Couldn't open the requested file.";
+        kDebug() << "Couldn't open the requested file.";
         return QFile::OpenError;
     }
 
@@ -76,12 +81,12 @@ QFile::FileError KoSimpleOdtDocument::saveDocument(const QString& path)
         return QFile::NoError;
     }
     // save extra data like images...
-    foreach (const QList<KoSimpleOdtPrimitive*> &lst, m_pagemap) {
-        foreach(KoSimpleOdtPrimitive *p, lst) {
+    foreach (const QList<KoOdtFrameReportPrimitive*> &lst, m_pagemap) {
+        foreach(KoOdtFrameReportPrimitive *p, lst) {
             p->saveData(store, manifestWriter);
         }
     }
-    kDebug(planDbg())<<"data saved";
+    kDebug()<<"data saved";
     KoGenStyles coll;
     createStyles(coll); // create basic styles
     bool ok = createContent(&oasisStore, coll);
@@ -95,7 +100,7 @@ QFile::FileError KoSimpleOdtDocument::saveDocument(const QString& path)
 
 }
 
-void KoSimpleOdtDocument::createStyles(KoGenStyles &coll)
+void KoOdtFramesReportDocument::createStyles(KoGenStyles &coll)
 {
     // convert to inches
     qreal pw = m_pageOptions.widthPx() / KoDpi::dpiX();
@@ -105,16 +110,16 @@ void KoSimpleOdtDocument::createStyles(KoGenStyles &coll)
     qreal leftMargin = m_pageOptions.getMarginLeft() / KoDpi::dpiX();
     qreal rightMargin = m_pageOptions.getMarginRight() / KoDpi::dpiX();
     QString orientation = m_pageOptions.isPortrait() ? "portrait" : "landscape";
-    
-    kDebug(planDbg())<<"Page:"<<pw<<ph<<orientation;
-    kDebug(planDbg())<<"Margin:"<<topMargin<<bottomMargin<<leftMargin<<rightMargin;
+
+    kDebug()<<"Page:"<<pw<<ph<<orientation;
+    kDebug()<<"Margin:"<<topMargin<<bottomMargin<<leftMargin<<rightMargin;
 
     KoGenStyle page(KoGenStyle::PageLayoutStyle, "page-layout");
     page.addProperty("style:num-format", "1");
     page.addProperty("style:print-orientation", orientation);
     page.addProperty("style:writing-mode", "lr-tb");
     page.addProperty("style:footnote-max-height", "0cm");
-    
+
     page.addProperty("fo:page-width", QString("%1in").arg(pw));
     page.addProperty("fo:page-height", QString("%1in").arg(ph));
     page.addProperty("fo:margin-top", QString("%1in").arg(topMargin));
@@ -134,20 +139,20 @@ void KoSimpleOdtDocument::createStyles(KoGenStyles &coll)
     fs.addProperty("horizontal-pos", "from-left");
     fs.addProperty("horizontal-rel", "page");
     coll.insert(fs, "Frame", KoGenStyles::DontAddNumberToName);
-    
+
     KoGenStyle ps(KoGenStyle::ParagraphStyle, "paragraph");
     ps.addAttribute("style:parent-style-name", "Standard");
     coll.insert(ps, "P1", KoGenStyles::DontAddNumberToName);
 
 }
 
-bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &coll)
+bool KoOdtFramesReportDocument::createContent(KoOdfWriteStore* store, KoGenStyles &coll)
 {
     KoXmlWriter* bodyWriter = store->bodyWriter();
     KoXmlWriter* contentWriter = store->contentWriter();
 
     if (!bodyWriter || !contentWriter || !manifestWriter) {
-        kDebug(planDbg()) << "Bad things happened";
+        kWarning()<<"Failed to created odt writer";
         return false;
     }
 
@@ -167,7 +172,7 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     contentWriter->addAttribute("fo:break-before", "page"); // needed by LibreOffice
     contentWriter->endElement(); // style:paragraph-properties
     contentWriter->endElement(); // style:style
-    
+
     contentWriter->startElement("text:sequence-decls");
     contentWriter->startElement("text:sequence-decl");
     contentWriter->addAttribute("text:display-outline-level", "0");
@@ -200,14 +205,14 @@ bool KoSimpleOdtDocument::createContent(KoOdfWriteStore* store, KoGenStyles &col
     return store->closeContentWriter();
 }
 
-void KoSimpleOdtDocument::createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll)
+void KoOdtFramesReportDocument::createPages(KoXmlWriter* bodyWriter, KoGenStyles &coll)
 {
-    QMap<int, QList<KoSimpleOdtPrimitive*> >::const_iterator it;
+    QMap<int, QList<KoOdtFrameReportPrimitive*> >::const_iterator it;
     for (it = m_pagemap.constBegin(); it != m_pagemap.constEnd(); ++it) {
         bodyWriter->startElement("text:p");
         bodyWriter->addAttribute("text:style-name", "NewPage");
         // all frames need to be *inside* or else LibreWriter shows nothing
-        foreach (KoSimpleOdtPrimitive *data, it.value()) {
+        foreach (KoOdtFrameReportPrimitive *data, it.value()) {
             data->createStyle(coll);
             data->createBody(bodyWriter);
         }
