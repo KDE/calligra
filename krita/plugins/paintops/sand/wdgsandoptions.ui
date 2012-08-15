@@ -138,13 +138,26 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="modeCHBox">
-              <property name="text">
-               <string>Mode</string>
+             <widget class="QComboBox" name="modeComboBox">
+              <property name="currentIndex">
+               <number>0</number>
               </property>
-              <property name="checked">
-               <bool>true</bool>
+              <property name="maxVisibleItems">
+               <number>5</number>
               </property>
+              <property name="modelColumn">
+               <number>0</number>
+              </property>
+              <item>
+               <property name="text">
+                <string>Spread</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Pouring</string>
+               </property>
+              </item>
              </widget>
             </item>
            </layout>

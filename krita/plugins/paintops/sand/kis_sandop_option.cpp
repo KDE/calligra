@@ -46,7 +46,10 @@ KisSandOpOption::KisSandOpOption()
     connect(m_options->frictionDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     
 //     connect(m_options->dissipationSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->modeCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+//     connect(m_options->modeCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));  //old checkbox: remove when the combo box is working properly
+
+    //OBS!!
+    connect(m_options->modeComboBox, SIGNAL(currentIndexChanged(QString)), SIGNAL(sigSettingChanged()));
 
     setConfigurationPage(m_options);
 }
@@ -91,7 +94,14 @@ bool KisSandOpOption::sandDepletion() const
  */
 bool KisSandOpOption::mode() const
 {
-    return m_options->modeCHBox->isChecked();
+    //if the combo box has selected "Pouring"
+    if(m_options->modeComboBox->currentText() == "Pouring")
+        return false;
+
+    //if the combo box has selected "Spread"
+    return true;
+    
+//     return m_options->modeCHBox->isChecked();
 }
 
 int KisSandOpOption::size() const
@@ -161,6 +171,13 @@ void KisSandOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->massDoubleSpinBox->setValue(setting->getDouble(SAND_MASS));
     m_options->frictionDoubleSpinBox->setValue(setting->getDouble(SAND_FRICTION));
     
-    m_options->modeCHBox->setChecked(setting->getBool(SAND_MODE));
+//     m_options->modeCHBox->setChecked(setting->getBool(SAND_MODE));
+    
+    if(setting->getBool(SAND_MODE)){
+        m_options->modeComboBox->setCurrentIndex(0); //pouring
+    }else{
+        m_options->modeComboBox->setCurrentIndex(1); //spread
+    }
+    
 //     m_options->dissipationSpinBox->setValue(setting->getInt(SAND_DISSIPATION));   
 }

@@ -117,9 +117,6 @@ KisSandPaintOp::~KisSandPaintOp()
 qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
 {
 
-
-    
-//     qDebug() << "paintAt m_grains :" << m_grains.size();
     if (!painter())
         return 1.0;
 
@@ -139,10 +136,7 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
 
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
 
-    /* Verify the painting mode
-     * This have to be a more "usable" term in a sense that the user know the
-     * difference between the pouring and the spreading
-     */
+    //if the user selected to do some grain pouring...
     if(!m_properties.mode){
 
         //Add particles to the canvas
@@ -157,11 +151,14 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
         parts.clear();
         m_sandBrush->setGrains(parts);
 
-    }else{
+    }
+
+    //if spread is selected AND you have already spread some grains on the canvas ... 
+    if(m_properties.mode && m_grains.size()){
 
         QList<Particle *> parts;
         getGrains(parts);
-//         qDebug() << "Grains : " << parts.size();
+
         //Get the grid cell where the mouse is now
         int gx = g_numx*x1/m_image->size().width();
         int gy = g_numy*y1/m_image->size().height();
@@ -175,28 +172,17 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
         
             //Set the particles of this operation
             m_sandBrush->setGrains(cell);
-//             qDebug() << "Grains populated?" ;
-//             qDebug() << "cell size: " << cell.size();
-
 
             //Do the spread operations
             m_sandBrush->spread(m_dab, x1, y1, painter()->backgroundColor(), painter()->paintColor(), info, m_image->size().width(), m_image->size().height() );
         }
-
-//         qDebug() << "done" ;
     }
     
-
-//     qDebug() << "rect" ;
     QRect rc = m_dab->extent();
-//     qDebug() << "bitBlt" ;
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-//     qDebug() << "renderMirrorMask" ;
     painter()->renderMirrorMask(rc,m_dab);
-//     qDebug() << "setOpacity" ;
     painter()->setOpacity(origOpacity);
-
-//     qDebug() << "exit" ;
+    
     return 1.0;
 }
 
