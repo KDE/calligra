@@ -125,7 +125,7 @@ Item {
         anchors.bottom: parent.top;
         anchors.horizontalCenter: parent.horizontalCenter;
 
-        width: Constants.GridWidth * 2
+        width: Constants.GridWidth * 1.5
         height: Constants.GridHeight /2
 
         Rectangle {
@@ -144,7 +144,7 @@ Item {
 
             BorderImage {
                 id: border_image5
-                x: (Constants.GridWidth * 2) - 16
+                x: (Constants.GridWidth * 1.5) - 16
                 y: -8
                 width: 8
                 height: 8
@@ -153,7 +153,7 @@ Item {
 
             BorderImage {
                 id: border_image4
-                x: (Constants.GridWidth * 2) - 16
+                x: (Constants.GridWidth * 1.5) - 16
                 y: 0
                 width: 8
                 height: (Constants.GridHeight /2) - 8
@@ -182,7 +182,7 @@ Item {
                 id: border_image6
                 x: 0
                 y: -8
-                width: (Constants.GridWidth * 2) - 16
+                width: (Constants.GridWidth * 1.5) - 16
                 height: 8
                 source: "../images/border-menu.png"
             }
