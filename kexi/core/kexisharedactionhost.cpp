@@ -27,7 +27,6 @@
 #include <kexi_global.h>
 
 #include <QApplication>
-#include <kiconloader.h>
 #include <kguiitem.h>
 #include <kdebug.h>
 #include <ktoggleaction.h>
@@ -251,26 +250,26 @@ QList<KAction*> KexiSharedActionHost::sharedActions() const
   QPtrDict<QWidget> unplugged;
 };*/
 
-KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name,
+KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &iconName,
         const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
     if (!col)
         col = d->mainWin->actionCollection();
 
     if (subclassName == 0) {
-        KAction* action = new KAction(KIcon(pix_name), text, col);
+        KAction *action = new KAction(KIcon(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);
         return createSharedActionInternal(action);
     } else if (qstricmp(subclassName, "KToggleAction") == 0) {
-        KToggleAction* action = new KToggleAction(KIcon(pix_name), text, col);
+        KToggleAction *action = new KToggleAction(KIcon(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);
         return createSharedActionInternal(action);
     } else if (qstricmp(subclassName, "KActionMenu") == 0) {
-        KActionMenu* action = new KActionMenu(KIcon(pix_name), text, col);
+        KActionMenu *action = new KActionMenu(KIcon(iconName), text, col);
         action->setObjectName(name);
         action->setShortcut(cut);
         col->addAction(name, action);

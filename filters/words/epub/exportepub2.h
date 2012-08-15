@@ -32,7 +32,7 @@
 #include <QHash>
 #include <QList>
 
-#include "htmlconvert.h"
+#include "OdtHtmlConverter.h"
 
 class EpubFile;
 
@@ -40,6 +40,14 @@ class ExportEpub2 : public KoFilter
 {
     Q_OBJECT
 public:
+    enum VectorType {
+        VectorTypeOther,         // Uninitialized
+        VectorTypeWmf,          // Windows MetaFile
+        VectorTypeEmf,          // Extended MetaFile
+        VectorTypeSvm           // StarView Metafile
+        // ... more here later
+    };
+
     ExportEpub2(QObject *parent, const QVariantList &);
     virtual ~ExportEpub2();
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
@@ -55,6 +63,14 @@ private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
     KoFilter::ConversionStatus parseMetaInfImagesData(KoStore *odfStore,
                                                       QHash<QString, QString> &imagesData);
+    ExportEpub2::VectorType vectorType(QByteArray &content);
+    bool convertSvm(QByteArray &input, QByteArray &output, QSize size);
+    bool convertEmf(QByteArray &input, QByteArray &output, QSize size);
+    bool convertWmf(QByteArray &input, QByteArray &output, QSizeF size);
+
+    bool isSvm(QByteArray &content);
+    bool isEmf(QByteArray &content);
+    bool isWmf(QByteArray &content);
 
 public slots:
 
@@ -64,6 +80,7 @@ private:
 
 private:
     QHash<QString, QString> m_meta;
+    QHash<QString, QSizeF> m_imagesSrcList;
 };
 
 #endif // EXPORTEPUB2_H

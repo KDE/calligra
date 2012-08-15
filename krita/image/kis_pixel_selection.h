@@ -21,8 +21,6 @@
 #include <QRect>
 #include <QPainterPath>
 
-#include <kicon.h>
-
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_selection_component.h"
@@ -54,7 +52,7 @@ public:
 
     KisSelectionComponent* clone(KisSelection*);
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect) const;
 
     /**
      * Fill the specified rect with the specified selectedness.

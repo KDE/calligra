@@ -250,9 +250,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
         // Since paths are relative from where this file is, remove
         // the common prefix from the reference.
         QString relativeFilename = file->m_fileName;
-
-        // FIXME: we should change it when i change the name fo html files to anpther name.
-        if (relativeFilename.contains("body")) {
+        if (relativeFilename.contains("chapter")) {
             if (relativeFilename.startsWith("OEBPS/"))
                 relativeFilename = relativeFilename.right(relativeFilename.size() - 6);
             writer.startElement("itemref");
@@ -342,8 +340,7 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
         // Since paths are relative from where this file is, remove
         // the common prefix from the reference.
         QString relativeFilename = file->m_fileName;
-        // FIXME: we should change it when i change the name fo html files to anpther name.
-        if (relativeFilename.contains("body")) {
+        if (relativeFilename.contains("chapter")) {
             if (relativeFilename.startsWith("OEBPS/"))
                 relativeFilename = relativeFilename.right(relativeFilename.size() - 6);
 

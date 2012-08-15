@@ -32,6 +32,7 @@
 
 #include <KoDocument.h>
 #include <KoPageLayoutWidget.h>
+#include <KoIcon.h>
 
 #include <QList>
 #include <QVBoxLayout>
@@ -41,7 +42,6 @@
 #include <QMenu>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -160,8 +160,8 @@ QList<Account*> AccountTreeView::selectedAccounts() const
 
 
 //-----------------------------------
-AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+AccountsEditor::AccountsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setupGui();
     
@@ -171,7 +171,7 @@ AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
     
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
@@ -261,19 +261,19 @@ void AccountsEditor::setupGui()
 {
     QString name = "accountseditor_edit_list";
     
-    actionAddAccount  = new KAction(KIcon( "document-new" ), i18n("Add Account"), this);
+    actionAddAccount  = new KAction(koIcon("document-new"), i18n("Add Account"), this);
     actionCollection()->addAction("add_account", actionAddAccount );
     actionAddAccount->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddAccount, SIGNAL( triggered( bool ) ), SLOT( slotAddAccount() ) );
     addAction( name, actionAddAccount );
-    
-    actionAddSubAccount  = new KAction(KIcon( "document-new" ), i18n("Add Subaccount"), this);
+
+    actionAddSubAccount  = new KAction(koIcon("document-new"), i18n("Add Subaccount"), this);
     actionCollection()->addAction("add_subaccount", actionAddSubAccount );
     actionAddSubAccount->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubAccount, SIGNAL( triggered( bool ) ), SLOT( slotAddSubAccount() ) );
     addAction( name, actionAddSubAccount );
-    
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete"), this);
+
+    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );

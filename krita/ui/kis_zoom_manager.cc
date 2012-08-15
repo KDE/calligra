@@ -28,7 +28,6 @@
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <kis_debug.h>
 

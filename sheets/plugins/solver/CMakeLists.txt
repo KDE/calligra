@@ -27,7 +27,6 @@ kde4_add_plugin( kspreadsolver ${solver_PART_SRCS} )
 
 target_link_libraries( kspreadsolver
 	${GSL_LIBRARIES}
-	${GSL_CBLAS_LIBRARIES}
         calligrasheetscommon
 )
 

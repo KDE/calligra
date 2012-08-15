@@ -20,11 +20,13 @@
 #include "kexirelationdesigntool.h"
 #include "kexirelationdesignshape.h"
 
+#include <KoIcon.h>
+
 KexiRelationDesignToolFactory::KexiRelationDesignToolFactory()
     : KoToolFactoryBase("KexiRelationDesignToolFactoryId")
 {
     setToolTip(i18n("Relation design tool"));
-    setIcon("kexi");
+    setIconName(koIconNameCStr("kexi"));
     setToolType(dynamicToolType());
     setPriority(1);
     setActivationShapeId(KEXIRELATIONDEISGNSHAPEID);

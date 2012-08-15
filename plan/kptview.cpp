@@ -25,6 +25,7 @@
 
 #include "KoDocumentInfo.h"
 #include "KoMainWindow.h"
+#include <KoIcon.h>
 
 #include <QApplication>
 #include <QLabel>
@@ -45,7 +46,6 @@
 #include <QTimer>
 #include <QDockWidget>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -73,6 +73,7 @@
 #include <KoDocumentEntry.h>
 #include <KoTemplateCreateDia.h>
 #include <KoProgressUpdater.h>
+#include <KoPart.h>
 
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
@@ -207,16 +208,18 @@ bool ConfigDialog::isDefault()
 }
 
 //------------------------------------
-View::View( Part* part, QWidget* parent )
-    : KoView( part, parent ),
-    m_currentEstimateType( Estimate::Use_Expected ),
-    m_scheduleActionGroup( new QActionGroup( this ) ),
-    m_trigged( false ),
-    m_nextScheduleManager( 0 ),
-    m_readWrite( false )
+View::View(KoPart *part, Part *doc, QWidget *parent)
+        : KoView(part, doc, parent),
+        m_currentEstimateType( Estimate::Use_Expected ),
+        m_scheduleActionGroup( new QActionGroup( this ) ),
+        m_trigged( false ),
+        m_nextScheduleManager( 0 ),
+        m_readWrite( false ),
+        m_partpart (part)
 {
     //kDebug(planDbg());
-//    getProject().setCurrentSchedule( Schedule::Expected );
+
+    doc->registerView( this );
 
     setComponentData( Factory::global() );
     if ( !part->isReadWrite() )
@@ -234,7 +237,7 @@ View::View( Part* part, QWidget* parent )
     ViewListDocker *docker = 0;
     if ( shell() == 0 ) {
         // Don't use docker if embedded
-        m_viewlist = new ViewListWidget( part, m_sp );
+        m_viewlist = new ViewListWidget(doc, m_sp);
     } else {
         ViewListDockerFactory vl(this);
         docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
@@ -285,76 +288,76 @@ View::View( Part* part, QWidget* parent )
     // ------ Insert
 
     // ------ Project
-    actionEditMainProject  = new KAction(KIcon( "view-time-schedule-edit" ), i18n("Edit Main Project..."), this);
+    actionEditMainProject  = new KAction(koIcon("view-time-schedule-edit"), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
 
-    actionEditStandardWorktime  = new KAction(KIcon( "configure" ), i18n("Define Estimate Conversions..."), this);
+    actionEditStandardWorktime  = new KAction(koIcon("configure"), i18n("Define Estimate Conversions..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
 
 
     // ------ Tools
-    actionDefineWBS  = new KAction(KIcon( "configure" ), i18n("Define WBS Pattern..."), this);
+    actionDefineWBS  = new KAction(koIcon("configure"), i18n("Define WBS Pattern..."), this);
     actionCollection()->addAction("tools_define_wbs", actionDefineWBS );
     connect( actionDefineWBS, SIGNAL( triggered( bool ) ), SLOT( slotDefineWBS() ) );
 
-    actionInsertFile  = new KAction(KIcon( "document-import" ), i18n("Insert Project File..."), this);
+    actionInsertFile  = new KAction(koIcon("document-import"), i18n("Insert Project File..."), this);
     actionCollection()->addAction("insert_file", actionInsertFile );
     connect( actionInsertFile, SIGNAL( triggered( bool ) ), SLOT( slotInsertFile() ) );
 
     // ------ Settings
-    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure Plan..."), this);
+    actionConfigure  = new KAction(koIcon("configure"), i18n("Configure Plan..."), this);
     actionCollection()->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
-    actionCurrencyConfig  = new KAction(KIcon( "configure" ), i18n("Define Currency..."), this);
+    actionCurrencyConfig  = new KAction(koIcon("configure"), i18n("Define Currency..."), this);
     actionCollection()->addAction( "config_currency", actionCurrencyConfig );
     connect( actionCurrencyConfig, SIGNAL( triggered( bool ) ), SLOT( slotCurrencyConfig() ) );
 
-    actionOpenReportFile  = new KAction(KIcon( "document-open" ), i18n("Open Report Definition File..."), this);
+    actionOpenReportFile  = new KAction(koIcon("document-open"), i18n("Open Report Definition File..."), this);
     actionCollection()->addAction( "reportdesigner_open_file", actionOpenReportFile );
     connect( actionOpenReportFile, SIGNAL( triggered( bool ) ), SLOT( slotOpenReportFile() ) );
 
     // ------ Help
-    actionIntroduction  = new KAction( KIcon( "dialog-information" ), i18n("Introduction to Plan"), this);
+    actionIntroduction  = new KAction(koIcon("dialog-information"), i18n("Introduction to Plan"), this);
     actionCollection()->addAction("plan_introduction", actionIntroduction );
     connect( actionIntroduction, SIGNAL( triggered( bool ) ), SLOT( slotIntroduction() ) );
 
     // ------ Popup
-    actionOpenNode  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
+    actionOpenNode  = new KAction(koIcon("document-edit"), i18n("Edit..."), this);
     actionCollection()->addAction("node_properties", actionOpenNode );
     connect( actionOpenNode, SIGNAL( triggered( bool ) ), SLOT( slotOpenNode() ) );
-    actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Progress..."), this);
+    actionTaskProgress  = new KAction(koIcon("document-edit"), i18n("Progress..."), this);
     actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
-    actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
+    actionDeleteTask  = new KAction(koIcon("edit-delete"), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
-    actionTaskDescription  = new KAction(KIcon( "document-edit" ), i18n("Description..."), this);
+    actionTaskDescription  = new KAction(koIcon("document-edit"), i18n("Description..."), this);
     actionCollection()->addAction("task_description", actionTaskDescription );
     connect( actionTaskDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
-    actionIndentTask = new KAction(KIcon( "format-indent-more" ), i18n("Indent Task"), this);
+    actionIndentTask = new KAction(koIcon("format-indent-more"), i18n("Indent Task"), this);
     actionCollection()->addAction("indent_task", actionIndentTask );
     connect( actionIndentTask, SIGNAL( triggered( bool ) ), SLOT( slotIndentTask() ) );
-    actionUnindentTask= new KAction(KIcon( "format-indent-less" ), i18n("Unindent Task"), this);
+    actionUnindentTask= new KAction(koIcon("format-indent-less"), i18n("Unindent Task"), this);
     actionCollection()->addAction("unindent_task", actionUnindentTask );
     connect( actionUnindentTask, SIGNAL( triggered( bool ) ), SLOT( slotUnindentTask() ) );
-    actionMoveTaskUp = new KAction(KIcon( "arrow-up" ), i18n("Move Task Up"), this);
+    actionMoveTaskUp = new KAction(koIcon("arrow-up"), i18n("Move Task Up"), this);
     actionCollection()->addAction("move_task_up", actionMoveTaskUp );
     connect( actionMoveTaskUp, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskUp() ) );
-    actionMoveTaskDown = new KAction(KIcon( "arrow-down" ), i18n("Move Task Down"), this);
+    actionMoveTaskDown = new KAction(koIcon("arrow-down"), i18n("Move Task Down"), this);
     actionCollection()->addAction("move_task_down", actionMoveTaskDown );
     connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
 
-    actionEditResource  = new KAction(KIcon( "document-edit" ), i18n("Edit Resource..."), this);
+    actionEditResource  = new KAction(koIcon("document-edit"), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
 
-    actionEditRelation  = new KAction(KIcon( "document-edit" ), i18n("Edit Dependency..."), this);
+    actionEditRelation  = new KAction(koIcon("document-edit"), i18n("Edit Dependency..."), this);
     actionCollection()->addAction("edit_dependency", actionEditRelation );
     connect( actionEditRelation, SIGNAL( triggered( bool ) ), SLOT( slotModifyRelation() ) );
-    actionDeleteRelation  = new KAction(KIcon( "edit-delete" ), i18n("Delete Dependency"), this);
+    actionDeleteRelation  = new KAction(koIcon("edit-delete"), i18n("Delete Dependency"), this);
     actionCollection()->addAction("delete_dependency", actionDeleteRelation );
     connect( actionDeleteRelation, SIGNAL( triggered( bool ) ), SLOT( slotDeleteRelation() ) );
 
@@ -372,7 +375,7 @@ View::View( Part* part, QWidget* parent )
     connect( &getProject(), SIGNAL( scheduleRemoved( const MainSchedule* ) ), SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     slotPlugScheduleActions();
 
-    connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
+    connect( doc, SIGNAL( changed() ), SLOT( slotUpdate() ) );
 
     connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
 
@@ -720,7 +723,7 @@ void View::slotOpenUrlRequest( HtmlView *v, const KUrl &url )
 
 ViewBase *View::createWelcomeView()
 {
-    HtmlView *v = new HtmlView( getPart(), m_tab );
+    HtmlView *v = new HtmlView(getKoPart(), getPart(), m_tab );
     v->htmlPart().setJScriptEnabled(false);
     v->htmlPart().setJavaEnabled(false);
     v->htmlPart().setMetaRefreshEnabled(false);
@@ -736,7 +739,7 @@ ViewBase *View::createWelcomeView()
 
 ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ResourceAppointmentsGanttView *v = new ResourceAppointmentsGanttView( getPart(), m_tab );
+    ResourceAppointmentsGanttView *v = new ResourceAppointmentsGanttView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
@@ -766,7 +769,7 @@ ViewBase *View::createResourceAppointmentsGanttView( ViewListItem *cat, const QS
 
 ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ResourceAppointmentsView *v = new ResourceAppointmentsView( getPart(), m_tab );
+    ResourceAppointmentsView *v = new ResourceAppointmentsView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
@@ -794,7 +797,7 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
 
 ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ResourceEditor *resourceeditor = new ResourceEditor( getPart(), m_tab );
+    ResourceEditor *resourceeditor = new ResourceEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
     resourceeditor->setProject( &(getProject()) );
 
@@ -820,7 +823,7 @@ ViewBase *View::createResourceEditor( ViewListItem *cat, const QString tag, cons
 
 ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    TaskEditor *taskeditor = new TaskEditor( getPart(), m_tab );
+    TaskEditor *taskeditor = new TaskEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskeditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "", index );
@@ -864,7 +867,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
 
 ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    AccountsEditor *ae = new AccountsEditor( getPart(), m_tab );
+    AccountsEditor *ae = new AccountsEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( ae );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ae, getPart(), "", index );
@@ -887,7 +890,7 @@ ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, cons
 
 ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    CalendarEditor *calendareditor = new CalendarEditor( getPart(), m_tab );
+    CalendarEditor *calendareditor = new CalendarEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( calendareditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, calendareditor, getPart(), "", index );
@@ -912,7 +915,7 @@ ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, cons
 
 ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ScheduleHandlerView *handler = new ScheduleHandlerView( getPart(), m_tab );
+    ScheduleHandlerView *handler = new ScheduleHandlerView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( handler );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, handler, getPart(), "", index );
@@ -951,7 +954,7 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
 
 ScheduleEditor *View::createScheduleEditor( QWidget *parent )
 {
-    ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), parent );
+    ScheduleEditor *scheduleeditor = new ScheduleEditor(getKoPart(), getPart(), parent );
 
     connect( scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
     connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
@@ -966,7 +969,7 @@ ScheduleEditor *View::createScheduleEditor( QWidget *parent )
 
 ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), m_tab );
+    ScheduleEditor *scheduleeditor = new ScheduleEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( scheduleeditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, scheduleeditor, getPart(), "", index );
@@ -999,7 +1002,7 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
 
 ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    DependencyEditor *editor = new DependencyEditor( getPart(), m_tab );
+    DependencyEditor *editor = new DependencyEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( editor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, editor, getPart(), "", index );
@@ -1038,7 +1041,7 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
 
 ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    PertEditor *perteditor = new PertEditor( getPart(), m_tab );
+    PertEditor *perteditor = new PertEditor(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( perteditor );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, perteditor, getPart(), "", index );
@@ -1062,7 +1065,7 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
 
 ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ProjectStatusView *v = new ProjectStatusView( getPart(), m_tab );
+    ProjectStatusView *v = new ProjectStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
@@ -1088,7 +1091,7 @@ ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, c
 
 ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    PerformanceStatusView *v = new PerformanceStatusView( getPart(), m_tab );
+    PerformanceStatusView *v = new PerformanceStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
@@ -1117,7 +1120,7 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
 
 ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
+    TaskStatusView *taskstatusview = new TaskStatusView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( taskstatusview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, taskstatusview, getPart(), "", index );
@@ -1145,7 +1148,7 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
 
 ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    TaskView *v = new TaskView( getPart(), m_tab );
+    TaskView *v = new TaskView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
@@ -1173,7 +1176,7 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
 
 ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    TaskWorkPackageView *v = new TaskWorkPackageView( getPart(), m_tab );
+    TaskWorkPackageView *v = new TaskWorkPackageView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
@@ -1206,7 +1209,7 @@ ViewBase *View::createTaskWorkPackageView( ViewListItem *cat, const QString tag,
 
 ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    GanttView *ganttview = new GanttView( getPart(), m_tab, getPart()->isReadWrite() );
+    GanttView *ganttview = new GanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
@@ -1240,7 +1243,7 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
 
 ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    MilestoneGanttView *ganttview = new MilestoneGanttView( getPart(), m_tab, getPart()->isReadWrite() );
+    MilestoneGanttView *ganttview = new MilestoneGanttView(getKoPart(), getPart(), m_tab, getKoPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "", index );
@@ -1269,7 +1272,7 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
 
 ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    AccountsView *accountsview = new AccountsView( &getProject(), getPart(), m_tab );
+    AccountsView *accountsview = new AccountsView(getKoPart(), &getProject(), getPart(), m_tab );
     m_tab->addWidget( accountsview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, accountsview, getPart(), "", index );
@@ -1294,7 +1297,7 @@ ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const 
 
 ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ResourceAssignmentView *resourceAssignmentView = new ResourceAssignmentView( getPart(), m_tab );
+    ResourceAssignmentView *resourceAssignmentView = new ResourceAssignmentView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( resourceAssignmentView );
     m_updateResourceAssignmentView = true;
 
@@ -1320,7 +1323,7 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
 
 ViewBase *View::createReportView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
-    ReportView *v = new ReportView( getPart(), m_tab );
+    ReportView *v = new ReportView(getKoPart(), getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "", index );
@@ -2516,6 +2519,11 @@ Part *View::getPart() const
     return ( Part * ) koDocument();
 }
 
+KoPart *View::getKoPart() const
+{
+    return m_partpart;
+}
+
 void View::slotConnectNode()
 {
     //kDebug(planDbg());
@@ -2627,7 +2635,21 @@ void View::addViewListItem( const ViewListItem *item, const ViewListItem *parent
     createView( cat, item->viewType(), item->tag(), item->text( 0 ), item->toolTip( 0 ), index );
     m_viewlist->blockSignals( false );
 }
-
+/*
+void View::slotCreateReport()
+{
+    ReportView v(getKoPart(), getPart(), 0 );
+    ReportDesignDialog *dlg = new ReportDesignDialog( &(getProject()), currentScheduleManager(), QDomElement(), v.createReportModels( &getProject(), currentScheduleManager() ), this );
+    // The ReportDesignDialog can not know how to create and insert views,
+    // so faciclitate this in the slotCreateReportView() slot.
+    connect( dlg, SIGNAL( createReportView(ReportDesignDialog* ) ), SLOT( slotCreateReportView(ReportDesignDialog*)));
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotReportDesignFinished(int)));
+    connect(dlg, SIGNAL(modifyReportDefinition(KUndo2Command*)), SLOT(slotModifyReportDefinition(KUndo2Command*)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
+}
+*/
 void View::slotCreateReportView( ReportDesignDialog *dlg )
 {
     QPointer<ViewListReportsDialog> vd = new ViewListReportsDialog( this, *m_viewlist, dlg );
@@ -2724,7 +2746,8 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         m_tab->setCurrentWidget( item->view() );
         if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
             // Put back my own gui (removed when (if) viewing different doc)
-            getPart()->activate( this );
+            if (getKoPart()->manager() )
+                getKoPart()->manager()->setActivePart(getKoPart(), this );
         }
         // Add sub-view specific gui
         ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );

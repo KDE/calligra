@@ -42,6 +42,10 @@
 #include <kdebug.h>
 #include <limits.h>
 
+/**
+ * This shape is a helper class for drawing the background of pages
+ * and/or the separators between multiple columns.
+ */
 class KWPageBackground : public KoShape
 {
 public:
@@ -55,11 +59,24 @@ public:
     }
     virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
     {
+        applyConversion(painter, converter);
+
+        // paint background
         if (background()) {
-            applyConversion(painter, converter);
             QPainterPath p;
             p.addRect(QRectF(QPointF(), size()));
             background()->paint(painter, converter, paintContext, p);
+        }
+
+        // paint separators
+        if (! m_separatorPositions.isEmpty()) {
+            QPen separatorPen(QBrush(m_separatorColor), m_separatorWidth,
+                              Qt::PenStyle(m_separatorStyle), Qt::FlatCap);
+            painter.setPen(separatorPen);
+            foreach(qreal separatorPos, m_separatorPositions) {
+                QLineF line(separatorPos, m_separatorY, separatorPos, m_separatorY+m_separatorHeight);
+                painter.drawLine(line);
+            }
         }
     }
     virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
@@ -69,6 +86,33 @@ public:
     virtual void saveOdf(KoShapeSavingContext &) const
     {
     }
+
+    void setSeparators(KoColumns::SeparatorStyle separatorStyle, const QColor &color,
+                       const QList<qreal> &separatorPositions, qreal separatorY,
+                       qreal separatorWidth, qreal separatorHeight)
+    {
+        m_separatorStyle = separatorStyle;
+        m_separatorColor = color;
+        m_separatorPositions = separatorPositions;
+        m_separatorY = separatorY;
+        m_separatorWidth = separatorWidth;
+        m_separatorHeight = separatorHeight;
+    }
+
+    void clearSeparators()
+    {
+        m_separatorPositions.clear();
+    }
+
+private:
+    KoColumns::SeparatorStyle m_separatorStyle;
+    QColor m_separatorColor;
+
+    QList<qreal> m_separatorPositions;
+    qreal m_separatorY;
+    /** Width in pt */
+    qreal m_separatorWidth;
+    qreal m_separatorHeight;
 };
 
 KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets)
@@ -86,8 +130,9 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     kDebug(32001) << "pageNumber=" << pageNumber;
 
     m_setup = false; // force reindexing of types
-    KWPage page = m_pageManager->page(pageNumber);
+    const KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
+    const KWPageStyle pageStyle = page.pageStyle();
 
     // Header footer handling.
     // first make a list of all types.
@@ -102,7 +147,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, true, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        kDebug(32001) << "HeaderTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << page.pageStyle().name();
+        kDebug(32001) << "HeaderTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << pageStyle.name();
         if (!frameOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
         }
@@ -111,7 +156,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     if (shouldHaveHeaderOrFooter(pageNumber, false, &origin)) {
         allHFTypes.removeAll(origin);
         KWTextFrameSet *fs = getOrCreate(origin, page);
-        kDebug(32001) << "FooterTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << page.pageStyle().name();
+        kDebug(32001) << "FooterTextFrame" << fs << "frameOn=" << frameOn(fs, pageNumber) << "pageStyle=" << pageStyle.name();
         if (!frameOn(fs, pageNumber)) {
             createCopyFrame(fs, page);
         }
@@ -119,7 +164,53 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
 
     //kDebug(32001) <<"createNewFramesForPage" << pageNumber << "TextFrameSetType=" << Words::frameSetTypeName(origin);
 
-    if (page.pageStyle().background()) {
+    // delete headers/footer frames that are not needed on this page
+    foreach (KWFrame *frame, framesInPage(page.rect())) {
+        if (frame->frameSet()->type() != Words::TextFrameSet)
+            continue;
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+        if (tfs && (allHFTypes.contains(tfs->textFrameSetType())
+                || (tfs->pageStyle() != pageStyle && Words::isHeaderFooter(tfs)))) {
+            Q_ASSERT(frame->shape());
+            KWPage p = m_pageManager->page(frame->shape());
+            Q_ASSERT(p.isValid());
+            kDebug(32001)<<"Delete disabled header/footer frame=" << frame << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
+            tfs->removeFrame(frame);
+            delete frame->shape();
+        }
+    }
+
+    // create main text frame. All columns of them.
+    const int columnsCount = pageStyle.columns().count;
+    Q_ASSERT(columnsCount >= 1);
+    KWTextFrameSet *fs = getOrCreate(Words::MainTextFrameSet, page);
+    QRectF rect(QPointF(0, page.offsetInDocument()), QSizeF(page.width(), page.height()));
+
+    kDebug(32001) << "MainTextFrame" << fs << "pageRect=" << rect << "columnsCount=" << columnsCount;
+    int neededColumnsCount = columnsCount;
+    // Check existing column shapes
+    foreach (KWFrame *frame, framesInPage(rect)) {
+        if (frame->frameSet() == fs) {
+            --neededColumnsCount;
+            if (neededColumnsCount < 0) {
+                kDebug(32001) << "Deleting KWFrame from MainTextFrame";
+                fs->removeFrame(frame);
+                delete frame->shape();
+            }
+        }
+    }
+    const qreal colwidth = pageStyle.pageLayout().width / columnsCount;
+    const qreal colheight = pageStyle.pageLayout().height;
+    // Create missing column shapes
+    for (int c = 0; c < neededColumnsCount; ++c) {
+        kDebug(32001) << "Creating KWFrame for MainTextFrame";
+        KoShape * shape = createTextShape(page);
+        shape->setPosition(QPoint(c * colwidth, page.offsetInDocument()));
+        shape->setSize(QSizeF(colwidth, colheight));
+        new KWFrame(shape, fs);
+    }
+
+    if (pageStyle.background() || (columnsCount > 1)) {
         // create page background
         if (!m_backgroundFrameSet) {
             m_backgroundFrameSet = new KWFrameSet(Words::BackgroundFrameSet);
@@ -134,56 +225,12 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             background = new KWFrame(shape, m_backgroundFrameSet);
             shape->setTextRunAroundSide(KoShape::RunThrough);
         }
-        background->shape()->setBackground(page.pageStyle().background());
+        background->shape()->setBackground(pageStyle.background());
     } else {
         // check if there is a frame, if so, delete it, we don't need it.
         KWFrame *background = frameOn(m_backgroundFrameSet, pageNumber);
         if (background)
             delete background->shape();
-    }
-
-    // delete headers/footer frames that are not needed on this page
-    foreach (KWFrame *frame, framesInPage(page.rect())) {
-        if (frame->frameSet()->type() != Words::TextFrameSet)
-            continue;
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-        if (tfs && (allHFTypes.contains(tfs->textFrameSetType())
-                || (tfs->pageStyle() != page.pageStyle() && Words::isHeaderFooter(tfs)))) {
-            Q_ASSERT(frame->shape());
-            KWPage p = m_pageManager->page(frame->shape());
-            Q_ASSERT(p.isValid());
-            kDebug(32001)<<"Delete disabled header/footer frame=" << frame << "pageRect=" << page.rect() << "pageNumber=" << p.pageNumber();
-            tfs->removeFrame(frame);
-            delete frame->shape();
-        }
-    }
-
-    // create main text frame. All columns of them.
-    int columns = page.pageStyle().columns().count;
-    Q_ASSERT(columns >= 1);
-    KWTextFrameSet *fs = getOrCreate(Words::MainTextFrameSet, page);
-    QRectF rect(QPointF(0, page.offsetInDocument()), QSizeF(page.width(), page.height()));
-
-    kDebug(32001) << "MainTextFrame" << fs << "pageRect=" << rect << "columns=" << columns;
-    foreach (KWFrame *frame, framesInPage(rect)) {
-        if (frame->frameSet() == fs) {
-            columns--;
-            if (columns < 0) {
-                kDebug(32001) << "Deleting KWFrame from MainTextFrame";
-                fs->removeFrame(frame);
-                delete frame->shape();
-            }
-        }
-    }
-    qreal colwidth = page.pageStyle().pageLayout().width / columns;
-    qreal colheight = page.pageStyle().pageLayout().height;
-    //for (--columns; columns >= 0; --columns) {
-    for (int c = 0; c < columns; ++c) {
-        kDebug(32001) << "Creating KWFrame for MainTextFrame";
-        KoShape * shape = createTextShape(page);
-        shape->setPosition(QPoint(c * colwidth, page.offsetInDocument()));
-        shape->setSize(QSizeF(colwidth, colheight));
-        new KWFrame(shape, fs);
     }
 
     layoutFramesOnPage(pageNumber);
@@ -226,9 +273,9 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     layout.rightMargin = page.rightMargin();
     layout.leftPadding = page.leftPadding();
     layout.rightPadding = page.rightPadding();
-    qreal left = 0, width = page.width();
-    qreal textWidth = width - layout.leftMargin - layout.rightMargin
-                            - layout.leftPadding - layout.rightPadding;
+    const qreal left = 0, width = page.width();
+    const qreal textWidth = width - layout.leftMargin - layout.rightMargin
+                                  - layout.leftPadding - layout.rightPadding;
 
     KWPageStyle pageStyle = page.pageStyle();
     KoColumns columns = pageStyle.columns();
@@ -321,8 +368,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
 
     --minZIndex;
     for (int i = 0; i < columns.count; ++i) {
-        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWFrame for column=%1 columnCount=%2").arg(i).arg(columns.count).toLocal8Bit());
-        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWFrame for column=%1 columnCount=%2").arg(i).arg(columns.count).toLocal8Bit());
+        Q_ASSERT_X(main[i], __FUNCTION__, QString("No KWFrame for column=%1 columnsCount=%2").arg(i).arg(columns.count).toLocal8Bit());
+        Q_ASSERT_X(main[i]->shape(), __FUNCTION__, QString("No TextShape in KWFrame for column=%1 columnsCount=%2").arg(i).arg(columns.count).toLocal8Bit());
         if (main[i] && main[i]->shape())
             main[i]->shape()->setZIndex(minZIndex);
     }
@@ -341,8 +388,6 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         KoShape *bs = pageBackground->shape();
         bs->setRunThrough(-10); //so it will be below everything
         bs->setZIndex(--minZIndex);
-        bs->setSize(pageRect.size());
-        bs->setPosition(pageRect.topLeft());
     }
 
     // spread space across items.
@@ -392,10 +437,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
                     fullColumnHeight);
             }
         } else {
-            qreal totalRelativeWidth = 0.0;
-            foreach(const KoColumns::ColumnDatum &cd, columns.columnData) {
-                totalRelativeWidth += cd.relativeWidth;
-            }
+            const qreal totalRelativeWidth = columns.totalRelativeWidth();
+
             int relativeColumnXOffset = 0;
             for (int i = 0; i < columns.count; i++) {
                 const KoColumns::ColumnDatum &columnDatum = columns.columnData.at(i);
@@ -422,6 +465,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             }
         }
 
+        // finally set size and position of the shapes
         for (int i = columns.count - 1; i >= 0; i--) {
             main[i]->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
             main[i]->setNewFrameBehavior(Words::ReconnectNewFrame);
@@ -429,6 +473,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
             shape->setPosition(columnRects[i].topLeft());
             shape->setSize(columnRects[i].size());
         }
+
         delete[] columnRects;
 
         // We need to store the content rect so layout can place it's anchored shapes
@@ -446,9 +491,50 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         footer->shape()->setSize(QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
     }
     if (pageBackground) {
-        pageBackground->shape()->setPosition(
-            QPointF(left, page.offsetInDocument()));
-        pageBackground->shape()->setSize(QSizeF(width, page.height()));
+        pageBackground->shape()->setPosition(QPointF(left + layout.leftMargin, page.offsetInDocument() + layout.topMargin));
+        pageBackground->shape()->setSize(QSizeF(width - layout.leftMargin - layout.rightMargin,
+                                                page.height() - layout.topMargin - layout.bottomMargin));
+
+        // set separator data
+        KWPageBackground *bs = dynamic_cast<KWPageBackground *>(pageBackground->shape());
+        if (columns.count > 1) {
+            const qreal fullColumnHeight = resultingPositions[4] - resultingPositions[3];
+
+            QList<qreal> separatorXPositions;
+            // uniform columns?
+            if (columns.columnData.isEmpty()) {
+                const qreal separatorXBaseOffset = layout.leftPadding - (columns.gapWidth * 0.5);
+                const qreal columnWidth = (textWidth - columns.gapWidth * (columns.count - 1)) / columns.count;
+                const qreal columnStep = columnWidth + columns.gapWidth;
+                for (int i = 1; i < columns.count; ++i) {
+                    separatorXPositions << separatorXBaseOffset + columnStep * i;
+                }
+            } else {
+                const qreal totalRelativeWidth = columns.totalRelativeWidth();
+
+                int relativeColumnXOffset = 0;
+                for (int i = 0; i < columns.count-1; i++) {
+                    const KoColumns::ColumnDatum &columnDatum = columns.columnData.at(i);
+                    relativeColumnXOffset += columnDatum.relativeWidth;
+                    const qreal columnXOffset = textWidth * relativeColumnXOffset / totalRelativeWidth;
+
+                    separatorXPositions << layout.leftPadding + columnXOffset;
+                }
+            }
+            const qreal separatorHeight = fullColumnHeight * columns.separatorHeight / 100.0;
+            const qreal separatorY = layout.topPadding +
+                ((columns.separatorVerticalAlignment == KoColumns::AlignBottom) ?
+                    fullColumnHeight * (100 - columns.separatorHeight) / 100.0 :
+                 (columns.separatorVerticalAlignment == KoColumns::AlignVCenter) ?
+                    fullColumnHeight * (100 - columns.separatorHeight) / 200.0 :
+                /* default: KoColumns::AlignTop */
+                    0);
+            bs->setSeparators(columns.separatorStyle, columns.separatorColor,
+                              separatorXPositions, separatorY,
+                              columns.separatorWidth, separatorHeight);
+        } else {
+            bs->clearSeparators();
+        }
     }
     delete [] main;
 }

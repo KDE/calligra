@@ -39,6 +39,8 @@
 #include <widget/KexiDBTitlePage.h>
 #include <widget/KexiProjectSelectorWidget.h>
 
+#include <KoIcon.h>
+
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
@@ -108,7 +110,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "blank";
     info.caption = i18n("Blank database");
     info.description = i18n("Database project without any objects");
-    info.icon = KIcon(KexiDB::defaultFileBasedDriverIcon()); //"x-office-document");
+    info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName()); //"x-office-document");
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
     
@@ -121,7 +123,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "contacts";
     info.caption = i18n("Contacts");
     info.description = i18n("Database for collecting and managing contacts");
-    info.icon = KIcon("view-pim-contacts");
+    info.icon = koIcon("view-pim-contacts");
     //info.enabled = false;
     templateCategory.addTemplate(info);
     
@@ -129,7 +131,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "movie";
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
-    info.icon = KIcon("video-x-generic");
+    info.icon = koIcon("video-x-generic");
     //info.enabled = false;
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
@@ -171,11 +173,11 @@ KexiProjectStorageTypeSelectionPage::KexiProjectStorageTypeSelectionPage(QWidget
     setBackButtonVisible(true);
     QWidget* contents = new QWidget;
     setupUi(contents);
-    int dsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-    btn_file->setIcon(KIcon(KexiDB::defaultFileBasedDriverIcon()));
+    const int dsize = IconSize(KIconLoader::Desktop);
+    btn_file->setIcon(KIcon(KexiDB::defaultFileBasedDriverIconName()));
     btn_file->setIconSize(QSize(dsize, dsize));
     connect(btn_file, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    btn_server->setIcon(KIcon(KEXI_ICON_DATABASE_SERVER));
+    btn_server->setIcon(KIcon(KEXI_DATABASE_SERVER_ICON_NAME));
     btn_server->setIconSize(QSize(dsize, dsize));
     connect(btn_server, SIGNAL(clicked()), this, SLOT(buttonClicked()));
     setFocusWidget(btn_file);
@@ -673,7 +675,7 @@ void KexiNewProjectAssistant::showErrorMessage(
     //! @todo + _details
     if (!d->messageWidgetActionTryAgain) {
         d->messageWidgetActionTryAgain = new QAction(
-            KIcon("view-refresh"), i18n("Try Again"), this);
+            koIcon("view-refresh"), i18n("Try Again"), this);
         connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
                 this, SLOT(tryAgainActionTriggered()));
     }

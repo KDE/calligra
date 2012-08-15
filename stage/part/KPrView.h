@@ -26,6 +26,7 @@
 #include <KoPAView.h>
 
 class KPrDocument;
+class KPrPart;
 class KPrViewAdaptor;
 class KPrViewModeNotes;
 class KPrViewModeSlidesSorter;
@@ -39,7 +40,7 @@ class STAGE_EXPORT KPrView : public KoPAView
     Q_OBJECT
     friend class KPrConfigureSlideShowDialog;
 public:
-    explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
+    explicit KPrView(KPrPart *part, KPrDocument *document, QWidget *parent = 0);
     ~KPrView();
 
     using KoPAViewBase::viewConverter;
@@ -128,6 +129,8 @@ public slots:
     /** Change current view mode using a given index */
     void changeViewByIndex(int index);
 
+    void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
+
 protected:
     void initGUI();
     void initActions();
@@ -149,6 +152,7 @@ protected slots:
     void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
 private:
+    KPrPart *m_part;
     KActionMenu *m_actionStartPresentation;
     KAction *m_actionCreateAnimation;
     KAction *m_actionViewModeNormal;

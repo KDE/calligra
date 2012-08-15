@@ -24,18 +24,18 @@
 
 #include "CSThumbProvider.h"
 
-class KarbonPart;
+class KarbonKoDocument;
 
 class CSThumbProviderKarbon : public CSThumbProvider
 {
 public:
-    CSThumbProviderKarbon(KarbonPart *doc);
+    CSThumbProviderKarbon(KarbonKoDocument *doc);
     virtual ~CSThumbProviderKarbon();
 
     virtual QList<QImage> createThumbnails(const QSize &thumbSize);
 
 private:
-    KarbonPart *m_doc;
+    KarbonKoDocument *m_doc;
 };
 
 #endif // CSTHUMBPROVIDERKARBON_H

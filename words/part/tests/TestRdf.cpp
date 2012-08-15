@@ -47,6 +47,7 @@
 #include <rdf/KoRdfPrefixMapping.h>
 #include <rdf/KoSopranoTableModel.h>
 
+#include <KoPart.h>
 #include <KoBookmark.h>
 #include <KoTextInlineRdf.h>
 #include <KoStore.h>
@@ -834,7 +835,7 @@ void TestRdf::testRoundtrip()
     {
 
         // Get the words part and create a document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         doc->initEmpty();
@@ -919,7 +920,7 @@ void TestRdf::testRoundtrip()
         QCOMPARE(position.second, 497);
 
         // Save the document -- this changes all xmlid's
-        doc->saveAs(url);
+        doc->documentPart()->saveAs(url);
 
         // Check the position again -- this xmlid doesn't exist anymore, so
         // should be 0,0
@@ -944,7 +945,7 @@ void TestRdf::testRoundtrip()
     }
     {
         // Load the document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
 

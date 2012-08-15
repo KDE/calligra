@@ -39,6 +39,7 @@
 #include <kio/netaccess.h>
 #include <KRun>
 
+#include <KoIcon.h>
 #include <renderobjects.h>
 #include <KoReportPreRenderer.h>
 
@@ -78,7 +79,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     QAction* a;
 
 #ifndef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("document-print"), i18n("Print"), this));
+    viewActions << (a = new KAction(koIcon("document-print"), i18n("Print"), this));
     a->setObjectName("print_report");
     a->setToolTip(i18n("Print report"));
     a->setWhatsThis(i18n("Prints the current report."));
@@ -89,9 +90,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     viewActions << (a = new KAction(i18n("Export:"), this));
     a->setEnabled(false); //!TODO this is a bit of a dirty way to add what looks like a label to the toolbar! 
     // " ", not "", is said to be needed in maemo, the icon didn't display properly without it
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
+    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.text"), i18n("Export as Text Document"), this));
+    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.text"), i18n("Export as Text Document"), this));
 #endif
     a->setObjectName("export_as_text_document");
     a->setToolTip(i18n("Export the report as a text document (in OpenDocument Text format)"));
@@ -100,9 +101,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsTextDocument()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
+    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(KIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Export as Spreadsheet"), this));
+    viewActions << (a = new KAction(koIcon("application-vnd.oasis.opendocument.spreadsheet"), i18n("Export as Spreadsheet"), this));
 #endif
     a->setObjectName("export_as_spreadsheet");
     a->setToolTip(i18n("Export the report as a spreadsheet (in OpenDocument Spreadsheet format)"));
@@ -111,9 +112,9 @@ KexiReportView::KexiReportView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotExportAsSpreadsheet()));
 
 #ifdef KEXI_MOBILE
-    viewActions << (a = new KAction(KIcon("text-html"), QLatin1String(" "), this));
+    viewActions << (a = new KAction(koIcon("text-html"), QLatin1String(" "), this));
 #else
-    viewActions << (a = new KAction(KIcon("text-html"), i18n("Export as Web Page"), this));
+    viewActions << (a = new KAction(koIcon("text-html"), i18n("Export as Web Page"), this));
 #endif
     a->setObjectName("export_as_web_page");
     a->setToolTip(i18n("Export the report as a web page (in HTML format)"));
@@ -207,7 +208,7 @@ void KexiReportView::slotExportAsSpreadsheet()
                                i18n("Failed to export the report as spreadsheet to %1.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
     }
 }
@@ -231,7 +232,7 @@ void KexiReportView::slotExportAsTextDocument()
                                i18n("Exporting the report as text document to %1 failed.", cxt.destinationUrl.prettyUrl()),
                                i18n("Export Failed"));
         } else {
-            KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+            (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
         }
     }
 }
@@ -269,7 +270,7 @@ void KexiReportView::slotExportAsWebPage()
                            i18n("Exporting the report as web page to %1 failed.", cxt.destinationUrl.prettyUrl()),
                            i18n("Export Failed"));
     } else {
-        KRun *runner = new KRun(cxt.destinationUrl, this->topLevelWidget());
+        (void)new KRun(cxt.destinationUrl, this->topLevelWidget());
     }
 }
 
@@ -425,15 +426,15 @@ void KexiReportView::moveToPreviousRecordRequested()
 
 void KexiReportView::moveToRecordRequested(uint r)
 {
-
+    Q_UNUSED(r);
 }
 
-long int KexiReportView::currentRecord()
+int KexiReportView::currentRecord() const
 {
     return m_currentPage;
 }
 
-long int KexiReportView::recordCount()
+int KexiReportView::recordCount() const
 {
     return m_pageCount;
 }
