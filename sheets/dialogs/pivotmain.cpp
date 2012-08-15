@@ -42,6 +42,8 @@ public:
     Selection *selection;
     Ui::PivotMain mainWidget;
     QString func;
+    QVector<QString> retVect;
+    QVector<Value> posVect;
 };
 PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     KDialog(parent),
@@ -169,8 +171,7 @@ void PivotMain::Summarize()
     for (int i = range.left(); i <= r; ++i) {
 	cell= Cell(sheet,i,row);
 	vect.append(Value(cell.value()));
-	
-      }
+    }
 
 
   
@@ -350,6 +351,42 @@ void PivotMain::Summarize()
   
 }
 
+QVector<QString> PivotMain::ValueData(QString str)
+{
+  
+      Sheet *const sheet = d->selection->lastSheet();
+      const QRect range = d->selection->lastRange();
+      
+      int row = range.top();
+      int bottom = range.bottom();
+      int r=range.right();
+      
+      ValueConverter *conv;
+    
+      for (int i = range.left(); i <= r; ++i) {
+	d->posVect.append(Value(Cell(sheet,i,row).value()));
+      }
+      
+      int position=d->posVect.indexOf(Value(str));
+      qDebug()<<"posVect"<<d->posVect;
+      for(int j=row+1;j<=bottom;j++)
+      {
+	//qDebug()<<"Here"<<j;
+	//qDebug()<<"Here i am"<<Cell(sheet,position+1,j).value();
+	if(!Cell(sheet,position+1,j).value().isString())
+	{
+	  qDebug()<<"here2";
+	  if(d->retVect.contains(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))))==0)
+	   d->retVect.append(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))));
+	  qDebug()<<"here3";
+	  
+	}
+	else if(d->retVect.contains(conv->toString(Value(Cell(sheet,position+1,j).value())))==0)
+	   d->retVect.append(conv->toString(Value(Cell(sheet,position+1,j).value())));
+      }
+      return d->retVect;
+ 
+}
 void PivotMain::on_Ok_clicked()
 {
   

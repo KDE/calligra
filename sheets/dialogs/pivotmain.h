@@ -33,6 +33,7 @@ class PivotMain : public KDialog
 
 public:
     explicit PivotMain(QWidget* parent,Selection* selection);
+    QVector<QString> ValueData(QString str);
     ~PivotMain();
 
 private slots:
