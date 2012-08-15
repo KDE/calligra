@@ -130,22 +130,22 @@ qreal Constants::defaultMargin() const
 
 qreal Constants::smallFontSize() const
 {
-    return 0.3 * m_gridHeight;
+    return 0.2 * m_gridHeight;
 }
 
 qreal Constants::defaultFontSize() const
 {
-    return 0.4 * m_gridHeight;
+    return 0.3 * m_gridHeight;
 }
 
 qreal Constants::largeFontSize() const
 {
-    return 0.5 * m_gridHeight;
+    return 0.4 * m_gridHeight;
 }
 
 qreal Constants::hugeFontSize() const
 {
-    return 0.7 * m_gridHeight;
+    return 0.6 * m_gridHeight;
 }
 
 #include "constants.moc"

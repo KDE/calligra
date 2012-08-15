@@ -39,40 +39,48 @@ Item {
     width: Constants.GridWidth;
     height: Constants.GridHeight;
 
-    DropShadow {
-        id: shadow;
+    Rectangle {
+        id: fill;
+        x: 5
+        y: 5
         anchors.fill: parent;
-        anchors.margins: Constants.DefaultMargin;
-        size: base.shadow ? Constants.DefaultMargin : 0;
+        anchors.margins: 0;
 
-        Rectangle {
-            id: fill;
+        color: base.state == "pressed" && base.highlight ? base.highlightColor : base.color;
+        Behavior on color { ColorAnimation { duration: 50; } }
+        visible: true
+
+        Image {
+            id: icon;
+            anchors.rightMargin: 8
+            anchors.leftMargin: 8
+            anchors.bottomMargin: 8
+            anchors.topMargin: 8
             anchors.fill: parent;
-            anchors.margins: -1;
+            anchors.margins: Constants.DefaultMargin;
+            fillMode: Image.PreserveAspectFit;
+            smooth: true;
+        }
 
-            color: base.state == "pressed" && base.highlight ? base.highlightColor : base.color;
-            Behavior on color { ColorAnimation { duration: 50; } }
-
-            Image {
-                id: icon;
-                anchors.fill: parent;
-                anchors.margins: Constants.DefaultMargin;
-                fillMode: Image.PreserveAspectFit;
-                smooth: true;
-            }
-
-            Label {
-                id: label;
-                anchors.centerIn: parent;
-            }
+        Label {
+            id: label;
+            anchors.centerIn: parent;
         }
     }
 
     MouseArea {
         id: mouse;
-        anchors.fill: parent;
+        anchors.rightMargin: -128
+        anchors.leftMargin: -128
+        anchors.bottomMargin: -64
+        anchors.top: fill.bottom
+        anchors.right: fill.left
+        anchors.bottom: fill.top
+        anchors.left: fill.right
+        anchors.topMargin: -64
         onClicked: { base.clicked(); if( base.checkable ) base.checked = !base.checked; }
     }
+
 
     states: State {
         name: "pressed";

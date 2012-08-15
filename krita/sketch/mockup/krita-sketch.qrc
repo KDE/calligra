@@ -56,8 +56,15 @@
         <file>images/edit-redo.png</file>
         <file>images/help-about.png</file>
         <file>images/configure.png</file>
-        <file>images/border-menu.png</file>
-        <file>images/corner-menu-upleft.png</file>
-        <file>images/corner-menu-upright.png</file>
+        <file>images/handle-menu.png</file>
+        <file>images/icon-48px-filenew.png</file>
+        <file>images/icon-48px-fileopen.png</file>
+        <file>images/icon-48px-filesave.png</file>
+        <file>images/icon-48px-filesaveas.png</file>
+        <file>images/icon-48px-fileshare.png</file>
+        <file>images/icon-48px-help.png</file>
+        <file>images/icon-48px-redo.png</file>
+        <file>images/icon-48px-settings.png</file>
+        <file>images/icon-48px-undo.png</file>
     </qresource>
 </RCC>

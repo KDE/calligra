@@ -147,7 +147,7 @@ Item {
             text: base.name;
             color: base.textColor;
 
-            font.pixelSize: Constants.SmallFontSize;
+            font.pixelSize: Constants.DefaultFontSize;
         }
 
         MouseArea {
