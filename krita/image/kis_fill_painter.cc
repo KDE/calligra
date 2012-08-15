@@ -185,7 +185,15 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP projecti
     KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace()));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(0, 0, m_width, m_height, paintColor());
+    if(device()->defaultBounds()->isCanvasInfinite())
+    {
+        int x = projection->extent().topLeft().x();
+        int y = projection->extent().topLeft().y();
+        painter.fillRect(x, y , m_width, m_height, paintColor());
+    }
+    else
+        painter.fillRect(0, 0, m_width, m_height, paintColor());
+
     painter.end();
 
     genericFillEnd(filled);
@@ -199,7 +207,15 @@ void KisFillPainter::fillPattern(int startX, int startY, KisPaintDeviceSP projec
     KisPaintDeviceSP filled = KisPaintDeviceSP(new KisPaintDevice(device()->colorSpace()));
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
-    painter.fillRect(0, 0, m_width, m_height, pattern());
+    if(device()->defaultBounds()->isCanvasInfinite())
+    {
+        int x = projection->extent().topLeft().x();
+        int y = projection->extent().topLeft().y();
+        painter.fillRect(x, y , m_width, m_height, pattern());
+    }
+    else
+        painter.fillRect(0, 0, m_width, m_height, pattern());
+
     painter.end();
 
     genericFillEnd(filled);
@@ -209,8 +225,8 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP p
 {
     Q_ASSERT(m_width > 0);
     Q_ASSERT(m_height > 0);
-    setWidth(device()->exactBounds().width());
-    setHeight(device()->exactBounds().height());
+    setWidth(projection->extent().width());
+    setHeight(projection->extent().height());
 
     m_size = m_width * m_height;
 
@@ -232,7 +248,15 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
 
     KisSelectionSP tmpSelection = selection();
     setSelection(m_fillSelection);
-    bitBlt(0, 0, filled, 0, 0, m_width, m_height);
+    if(device()->defaultBounds()->isCanvasInfinite())
+    {
+        int x = filled->extent().topLeft().x();
+        int y = filled->extent().topLeft().y();
+        bitBlt(x, y, filled, x, y, m_width, m_height);
+    }
+    else
+        bitBlt(0, 0, filled, 0, 0, m_width, m_height);
+
     setSelection(tmpSelection);
 
     if (progressUpdater()) progressUpdater()->setProgress(100);
@@ -400,7 +424,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                     diff = devColorSpace->difference(source, pixelIt->rawData());
                 }
                 if (diff > m_threshold
-                        || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {qDebug()<<ppVar(stop);
+                        || (hasSelection && srcSel->selected(x, y) == MIN_SELECTED)) {
                     stop = true;
                     continue;
                 }
@@ -429,13 +453,12 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
                 }
                 ++pixelsDone;
 
-                --x;qDebug() <<ppVar(pixelIt->x());
+                --x;
                 pixelIt->moveTo(x,y);
                 selIt->moveTo(x,y);
 
             }
         }
-        qDebug() << "Yeah! I came out!!";
 
         x = segment.x + 1;
         //delete segment;
