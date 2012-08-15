@@ -41,6 +41,7 @@ class PivotMain::Private
 public:
     Selection *selection;
     Ui::PivotMain mainWidget;
+    QString func;
 };
 PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     KDialog(parent),
@@ -91,6 +92,8 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     d->mainWidget.PageFields->viewport()->setAcceptDrops(true);
     d->mainWidget.PageFields->setDropIndicatorShown(true);
     
+    d->func="sum";
+    
     connect(this,SIGNAL(user2Clicked()),this,SLOT(on_AddFilter_clicked()));
     connect(this, SIGNAL(user1Clicked()), this, SLOT(on_Options_clicked()));
     extractColumnNames();
@@ -132,8 +135,8 @@ void PivotMain::on_Options_clicked()
     PivotOptions *pOptions=new PivotOptions(this,d->selection);
     pOptions->setModal(true);
     pOptions->exec();
+    d->func=pOptions->returnFunction();
 }
-
 void PivotMain::on_AddFilter_clicked()
 {
 
@@ -144,11 +147,13 @@ void PivotMain::on_AddFilter_clicked()
 }
 void PivotMain::Summarize()
 {
+    
     Sheet *const sheet = d->selection->lastSheet();
     const QRect range = d->selection->lastRange();
     
+    static int z=1;
     Map* myMap = sheet->map();
-    Sheet* mySheet=myMap->createSheet("PivotTest");
+    Sheet* mySheet=myMap->createSheet("Pivot Sheet"+QString::number(z++));
     
     int r = range.right();
     int row=range.top();
@@ -290,8 +295,8 @@ void PivotMain::Summarize()
   }
   
   
-
-  Cell(mySheet,1,1).setValue(Value("PIVOT TABLES"));
+  QString title=d->func + "-" + valueList.at(0)->text();
+  Cell(mySheet,1,1).setValue(Value(title));
   for(int l=0;l<rowVect[0].count();l++)
   {
     for(int m=0;m<colVect[0].count();m++)
@@ -313,9 +318,16 @@ void PivotMain::Summarize()
 		if(flag==0)
 		aggregate.append(Cell(sheet,valpos+1,k).value());
 	      }
-
-		calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
+		if(d->func!="average")
+		calc->arrayWalk(aggregate,res,calc->awFunc(d->func),Value(0));
  		
+		else
+		{
+		  calc->arrayWalk(aggregate,res,calc->awFunc("sum"),Value(0));
+		  if(aggregate.count()!=0)
+		  res=calc->div(res,aggregate.count());
+		  
+		}
 		Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setValue(res);
 
 		aggregate.clear();

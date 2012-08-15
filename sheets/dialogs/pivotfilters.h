@@ -29,7 +29,7 @@ namespace Calligra{
 class Selection;    
 class PivotFilters : public KDialog
 {
-  //  Q_OBJECT
+  Q_OBJECT
 
 public:
     explicit PivotFilters(QWidget* parent,Selection* selection);

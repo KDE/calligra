@@ -22,7 +22,10 @@
 #include "ui_pivotoptions.h"
 #include "Sheet.h"
 #include "ui/Selection.h"
-
+#include<QtGui>
+#include<QListWidgetItem>
+#include<QListWidget>
+#include<QObject>
 using namespace Calligra::Sheets;
 
 class PivotOptions::Private
@@ -30,22 +33,37 @@ class PivotOptions::Private
 public:
     Selection *selection;
     Ui::PivotOptions mainWidget;
+    QString function;
 };
 
 PivotOptions::PivotOptions(QWidget* parent,Selection* selection) :
     KDialog(parent),
     d(new Private)
-    //ui(new Ui::PivotOptions)
 {
-   // ui->setupUi(this);
+   
+   setButtons(Ok|Cancel);
    QWidget* widget = new QWidget;
    d->mainWidget.setupUi(widget);
    setCaption(i18n("Pivot Options"));
    setMainWidget(widget);
    d->selection= selection;
-   selectBase();
+   selectBase();   
+   enableButton(Ok,true);
+   d->mainWidget.SelectFunction->addItem("prod");
+   d->mainWidget.SelectFunction->addItem("devsq");
+   //qDebug()<<returnFunction();
+   connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));   
+     
+}
+
+QString PivotOptions::returnFunction()
+{
+    d->function=d->mainWidget.SelectFunction->currentText();
+    return d->function;
   
 }
+
+
 
 void PivotOptions::selectBase()
 {
@@ -72,8 +90,13 @@ void PivotOptions::selectBase()
 	}
     }
 }
+void PivotOptions::on_Ok_clicked()
+{
+  //returnFunction();
+}
 
 PivotOptions::~PivotOptions()
 {
     delete d;
 }
+//#include "PivotOptions.moc"

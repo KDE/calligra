@@ -72,3 +72,4 @@ PivotFilters::~PivotFilters()
 {
     delete d;
 }
+//#include "PivotFilters.moc"

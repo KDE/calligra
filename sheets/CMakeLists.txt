@@ -99,8 +99,8 @@ SET (dialogs_DIR_SRCS
     dialogs/ValidityDialog.cpp
     dialogs/pivot.cpp
     dialogs/pivotmain.cpp
-    dialogs/pivotfilters
-    dialogs/pivotoptions
+    dialogs/pivotfilters.cpp
+    dialogs/pivotoptions.cpp
     
     )
 
@@ -141,7 +141,6 @@ SET (part_DIR_SRCS
     part/CellToolFactory.cpp
     #part/Digest.cpp
     part/Doc.cpp
-    part/Part.cpp
     part/Factory.cpp
     part/Find.cpp
     part/Headers.cpp
@@ -321,7 +320,7 @@ install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-sheets.png")
+kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
 
 kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 

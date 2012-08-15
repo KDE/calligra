@@ -6,19 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>250</height>
+    <width>407</width>
+    <height>292</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>PivotOptions</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <property name="margin">
-      <number>4</number>
-     </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
@@ -27,48 +24,57 @@
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="SelectFunction">
-       <item>
-        <property name="text">
-         <string>Sum</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Count</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Average</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Max</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Min</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Product</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Value Type</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Base Field</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Base Item</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QComboBox" name="SelectFunction">
+       <item>
+        <property name="text">
+         <string>sum</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>average</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>count</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>max</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>min</string>
+        </property>
+       </item>
       </widget>
      </item>
      <item>
@@ -105,43 +111,51 @@
        </item>
        <item>
         <property name="text">
-         <string> </string>
+         <string/>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="BaseField">
+       <item>
+        <property name="text">
+         <string>None</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="BaseItem">
+       <item>
+        <property name="text">
+         <string>None</string>
         </property>
        </item>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Base Field</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="BaseField"/>
-     </item>
-    </layout>
-   </item>
-   <item row="3" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Base Item</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="BaseItem"/>
-     </item>
-    </layout>
-   </item>
   </layout>
  </widget>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>ValueType</sender>
+   <signal>activated(QString)</signal>
+   <receiver>PivotOptions</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>367</x>
+     <y>166</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

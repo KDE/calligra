@@ -22,25 +22,27 @@
 #define PIVOTOPTIONS_H
 
 #include <KDialog>
+#include<QListWidgetItem>
+#include<QObject>
 namespace Calligra{
   namespace Sheets{
     /**
  * \ingroup UI
  * Dialog to create PivotOptions.
  */
-// namespace Ui {
-//     class PivotOptions;
-// }
 class Selection;
 class PivotOptions : public KDialog
 {
-   //Q_OBJECT
+   Q_OBJECT
 
 public:
     explicit PivotOptions(QWidget* parent, Selection* selection);
     ~PivotOptions();
-
+    QString returnFunction();
+public slots:
+    void on_Ok_clicked();
 private:
+    
     void selectBase();
     class Private;
     Private *const d;
