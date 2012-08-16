@@ -24,8 +24,11 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 
+#include "colorimageprovider.h"
 #include "constants.h"
 #include "settings.h"
+#include "palettecolorsmodel.h"
+#include "palettemodel.h"
 #include "presetmodel.h"
 #include "presetimageprovider.h"
 
@@ -47,6 +50,9 @@ MainWindow::MainWindow( QWidget* parent, Qt::WindowFlags flags )
 
     QDeclarativeView* view = new QDeclarativeView();
     view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
+    view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);
+    view->rootContext()->setContextProperty( "PaletteModel", new PaletteModel( this ) );
+    view->rootContext()->setContextProperty( "PaletteColorsModel", new PaletteColorsModel( this ) );
     view->rootContext()->setContextProperty( "PresetsModel", new PresetModel( this ) );
     view->rootContext()->setContextProperty( "Constants", d->constants );
     view->rootContext()->setContextProperty( "Settings", new Settings( this ) );
