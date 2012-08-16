@@ -38,6 +38,9 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+public Q_SLOTS:
+    void activatePreset(int index);
+
 private:
     class Private;
     Private* d;

@@ -97,4 +97,13 @@ QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int r
     return result;
 }
 
+void PresetModel::activatePreset(int index)
+{
+    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    if(index >= 0 && index < resources.count())
+    {
+
+    }
+}
+
 #include "presetmodel.moc"
