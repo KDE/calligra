@@ -114,7 +114,7 @@ int Constants::gridRows() const
 
 int Constants::gridColumns() const
 {
-    return 11;
+    return 12;
 }
 
 
