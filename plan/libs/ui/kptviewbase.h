@@ -29,6 +29,7 @@
 #include <KoView.h>
 #include <KoPrintingDialog.h>
 #include <KoPageLayout.h>
+#include <KoDockFactoryBase.h>
 
 #include <QMap>
 #include <QTreeView>
@@ -67,15 +68,32 @@ class ViewBase;
 class TreeViewBase;
 class DoubleTreeViewBase;
 
+class DockWidget;
+
 //------------------
+class ViewDockerFactory : public KoDockFactoryBase
+{
+public:
+    ViewDockerFactory( DockWidget *docker );
+
+    virtual QString id() const;
+    virtual QDockWidget* createDockWidget();
+    /// @return the dock widget area the widget should appear in by default
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
+
+private:
+    DockWidget *m_docker;
+};
+
 class KPLATOUI_EXPORT DockWidget : public QDockWidget
 {
     Q_OBJECT
 public:
     DockWidget( ViewBase *v, const QString &identity, const QString &title );
 
-    void activate( QMainWindow *shell );
-    void deactivate( QMainWindow *shell );
+    void activate( KoMainWindow *shell );
+    void deactivate( KoMainWindow *shell );
+    bool shown() const;
 
     bool saveXml( QDomElement &context ) const;
     void loadXml( const KoXmlElement &context );
