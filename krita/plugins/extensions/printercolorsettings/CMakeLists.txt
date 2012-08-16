@@ -1,3 +1,4 @@
+include_directories( ${CMPX_INCLUDE_DIR} )
 
 set(KRITA_PRINTERCOLORSETTINGS_PART_SRCS 
     printercolorsettings.cpp 
