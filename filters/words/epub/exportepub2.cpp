@@ -102,18 +102,23 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         delete odfStore;
         return status;
     }
-    // Propagate some inherited stuff.
-    fixStyleTree(styles);
 
 #if 0 // Debug
     kDebug(30517) << "======== >> Styles";
     foreach(const QString &name, styles.keys()) {
-        kDebug(30517) << name << styles.value(name)->parent
+        kDebug(30517) << "==" << name << ":\t"
+                      << styles.value(name)->parent
+                      << styles.value(name)->family
+                      << styles.value(name)->isDefaultStyle
                       << styles.value(name)->hasBreakBefore
-                      << styles.value(name)->attributes;
+                      << styles.value(name)->attributes
+            ;
     }
     kDebug(30517) << "======== << Styles";
 #endif
+
+    // Propagate some inherited stuff.
+    fixStyleTree(styles);
 
     // ----------------------------------------------------------------
 

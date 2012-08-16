@@ -47,7 +47,8 @@
 
 
 StyleInfo::StyleInfo()
-    : hasBreakBefore(false)
+    : isDefaultStyle(false)
+    , hasBreakBefore(false)
     , inUse(false)
 {
 }
@@ -127,10 +128,33 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
 {
     KoXmlElement styleElement;
     forEachElement (styleElement, stylesNode) {
+
+        // FIXME: Handle text:outline-style also.
+        QString tagName = styleElement.tagName();
+        if (tagName != "style" && tagName != "default-style")
+            continue;
+
         StyleInfo *styleInfo = new StyleInfo;
 
-        QString styleName  = styleElement.attribute("name");
+        // Get the style name. Default styles don't have a name so
+        // give them a constructed name by combining "default" and the
+        // style family in a way that should not collide with any real
+        // style name.
+        QString styleName = styleElement.attribute("name");
+        if (tagName == "default-style") {
+            // This name should not collide with any real name.
+            styleName = QString("default%") + styleElement.attribute("family");
+            styleInfo->isDefaultStyle = true;
+        }
+
+        styleInfo->family = styleElement.attribute("family");
+
+        // Every style should have a parent. If the style has no
+        // parent, then use the appropriate default style.
         QString parentName = styleElement.attribute("parent-style-name");
+        if (!styleInfo->isDefaultStyle && parentName.isEmpty()) {
+            parentName = QString("default%") + styleInfo->family;
+        }
         styleInfo->parent = parentName;
 
         // Limit picture size to 99% of the page size whatever that may be.
@@ -151,6 +175,15 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
             }
             collectStyleAttributes(propertiesElement, styleInfo);
         }
+
+#if 0 // debug
+        kDebug(30517) << "==" << styleName << ":\t"
+                      << styleInfo->parent
+                      << styleInfo->family
+                      << styleInfo->isDefaultStyle
+                      << styleInfo->hasBreakBefore
+                      << styleInfo->attributes;
+#endif
         styles.insert(styleName, styleInfo);
     }
 }
