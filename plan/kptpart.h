@@ -115,6 +115,8 @@ public:
     bool extractFiles( KoStore *store, Package *package );
     bool extractFile( KoStore *store, Package *package, const Document *doc );
 
+    void registerView( View *view );
+
 public slots:
     /// Inserts an item into all other views than @p view
     void insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index );
@@ -191,6 +193,8 @@ private:
 
     bool m_viewlistModified;
     bool m_checkingForWorkPackages;
+
+    QList<QPointer<View> > m_views;
 };
 
 

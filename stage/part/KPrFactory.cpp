@@ -23,14 +23,12 @@
 #include "KPrAboutData.h"
 #include "KPrPart.h"
 
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 
 
 KComponentData* KPrFactory::s_instance = 0;
 KAboutData* KPrFactory::s_aboutData = 0;
-KIconLoader* KPrFactory::s_iconLoader = 0;
 
 KPrFactory::KPrFactory( QObject* parent, const char* /*name*/ )
     : KPluginFactory( *aboutData(), parent )
@@ -63,18 +61,6 @@ KAboutData* KPrFactory::aboutData()
         s_aboutData = newKPresenterAboutData();
 
     return s_aboutData;
-}
-
-KIconLoader* KPrFactory::iconLoader()
-{
-    if( !s_iconLoader )
-    {
-        s_iconLoader = new KIconLoader( componentData().componentName() );
-        // Tell the iconloader about share/apps/calligra/icons
-        s_iconLoader->addAppDir("calligra");
-    }
-
-    return s_iconLoader;
 }
 
 const KComponentData &KPrFactory::componentData()

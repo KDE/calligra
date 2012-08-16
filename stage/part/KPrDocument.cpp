@@ -289,7 +289,7 @@ void KPrDocument::initEmpty()
     bool ok = loadNativeFormat( fileName );
     if ( !ok ) {
         // use initEmpty from  kopageapp
-        //FIXME showLoadingErrorDialog();
+        documentPart()->showLoadingErrorDialog();
         KoPADocument::initEmpty();
     }
     resetURL();

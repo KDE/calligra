@@ -89,7 +89,7 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
     // prepare the document object
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(false); // don't show message boxes
-    connect(m_part, SIGNAL(completed()), SLOT(slotCompleted()));
+    connect(m_part, SIGNAL(completed()), SLOT(onLoadingCompleted()));
 
     // load the document content
     m_loadingCompleted = false;

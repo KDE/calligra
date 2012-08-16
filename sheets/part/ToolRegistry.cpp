@@ -82,7 +82,7 @@ void ToolRegistry::loadTools()
             if (KoToolRegistry::instance()->contains(toolFactory->id())) {
                 continue;
             }
-            toolFactory->setIcon(pluginInfo.service()->icon());
+            toolFactory->setIconName(pluginInfo.service()->icon());
             toolFactory->setPriority(10);
             toolFactory->setToolTip(pluginInfo.service()->comment());
             KoToolRegistry::instance()->add(toolFactory);

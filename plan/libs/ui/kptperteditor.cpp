@@ -26,6 +26,7 @@
 
 #include <KoDocument.h>
 #include <KoPart.h>
+#include <KoIcon.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -56,8 +57,8 @@ PertEditor::PertEditor(KoPart *part, KoDocument *doc, QWidget *parent)
     connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
     updateReadWrite( part->isReadWrite() );
 
-    widget.addBtn->setIcon( KIcon( "arrow-right" ) );
-    widget.removeBtn->setIcon( KIcon( "arrow-left" ) );
+    widget.addBtn->setIcon(koIcon("arrow-right"));
+    widget.removeBtn->setIcon(koIcon("arrow-left"));
     slotAvailableChanged( 0 );
     slotRequiredChanged( QModelIndex() );
 

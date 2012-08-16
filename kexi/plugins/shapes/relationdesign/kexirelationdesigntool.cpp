@@ -29,6 +29,8 @@
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoIcon.h>
+
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QLabel>
@@ -95,7 +97,7 @@ QWidget *KexiRelationDesignTool::createOptionWidget()
     m_relationCombo = new KComboBox();
 
     fileButton = new QToolButton(optionWidget);
-    fileButton->setIcon(SmallIcon("document-open"));
+    fileButton->setIcon(koIcon("document-open"));
     fileButton->setToolTip(i18n("Open Database"));
 
     connect(fileButton, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));

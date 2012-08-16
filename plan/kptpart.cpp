@@ -864,24 +864,36 @@ bool Part::completeLoading( KoStore *store )
     return true;
 }
 
+// TODO:
+// Due to splitting of KoDocument into a document and a part,
+// we simmulate the old behaviour by registering all views in the document.
+// Find a better solution!
+void Part::registerView( View* view )
+{
+    if ( view && ! m_views.contains( view ) ) {
+        m_views << QPointer<View>( view );
+    }
+}
+
 bool Part::completeSaving( KoStore *store )
-{/*FIXME
-    // Seems like a hack, but imo the best to do
-    View *view = dynamic_cast<View*>( views().value( 0 ) );
-    if ( view ) {
-        if ( store->open( "context.xml" ) ) {
-            if ( m_context == 0 ) m_context = new Context();
-            QDomDocument doc = m_context->save( view );
+{
+    foreach ( View *view, m_views ) {
+        if ( view ) {
+            if ( store->open( "context.xml" ) ) {
+                if ( m_context == 0 ) m_context = new Context();
+                QDomDocument doc = m_context->save( view );
 
-            KoStoreDevice dev( store );
-            QByteArray s = doc.toByteArray(); // this is already Utf8!
-            (void)dev.write( s.data(), s.size() );
-            (void)store->close();
+                KoStoreDevice dev( store );
+                QByteArray s = doc.toByteArray(); // this is already Utf8!
+                (void)dev.write( s.data(), s.size() );
+                (void)store->close();
 
-            m_viewlistModified = false;
-            emit viewlistModified( false );
+                m_viewlistModified = false;
+                emit viewlistModified( false );
+            }
+            break;
         }
-    }*/
+    }
     return true;
 }
 

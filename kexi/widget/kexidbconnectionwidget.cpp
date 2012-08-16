@@ -25,8 +25,9 @@
 #include <db/utils.h>
 #include "kexidbdrivercombobox.h"
 
+#include <KoIcon.h>
+
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <klineedit.h>
 #include <knuminput.h>
 #include <kpassworddialog.h>
@@ -63,7 +64,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 {
     setupUi(this);
     setObjectName("KexiConnectionSelectorWidget");
-    iconLabel->setPixmap(DesktopIcon(KEXI_ICON_DATABASE_SERVER));
+    iconLabel->setPixmap(DesktopIcon(KEXI_DATABASE_SERVER_ICON_NAME));
 
     QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
     m_driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(),
@@ -77,7 +78,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 #ifdef NO_LOAD_DB_LIST
     btnLoadDBList->hide();
 #endif
-    btnLoadDBList->setIcon(KIcon("view-refresh"));
+    btnLoadDBList->setIcon(koIcon("view-refresh"));
     btnLoadDBList->setToolTip(i18n("Load database list from the server"));
     btnLoadDBList->setWhatsThis(
         i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));

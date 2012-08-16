@@ -34,7 +34,6 @@
 #include <QStyleOptionFocusRect>
 
 #include <KDebug>
-#include <KIconLoader>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>

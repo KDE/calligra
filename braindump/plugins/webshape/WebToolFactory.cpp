@@ -21,6 +21,7 @@
 #include "WebTool.h"
 #include "WebShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 WebToolFactory::WebToolFactory()
@@ -28,7 +29,7 @@ WebToolFactory::WebToolFactory()
 {
     setToolTip(i18n("Web Shape Tool"));
     setToolType(dynamicToolType());
-    setIcon("applications-internet");
+    setIconName(koIconNameCStr("applications-internet"));
     setPriority(1);
     setActivationShapeId(WEBSHAPEID);
 }

@@ -24,6 +24,8 @@
 #include "KexiLinkWidget.h"
 #include "KexiLinkButton.h"
 
+#include <KoIcon.h>
+
 #include <KAcceleratorManager>
 #include <KStandardGuiItem>
 #include <KLocale>
@@ -118,7 +120,7 @@ KexiAssistantPage::KexiAssistantPage(const QString& title, const QString& descri
     d->descriptionLabel->setWordWrap(true);
     d->mainLyr->addWidget(d->descriptionLabel, 1, 1, Qt::AlignTop);
     
-    d->cancelButton = new KexiLinkButton(KIcon("close"));
+    d->cancelButton = new KexiLinkButton(koIcon("close"));
     d->cancelButton->setToolTip(KStandardGuiItem::cancel().plainText());
     d->cancelButton->setUsesForegroundColor(true);
     connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));

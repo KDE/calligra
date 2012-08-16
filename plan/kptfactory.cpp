@@ -80,7 +80,6 @@ const KComponentData &Factory::global()
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
-        
     }
     return *s_global;
 }

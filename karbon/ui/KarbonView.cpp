@@ -115,17 +115,16 @@
 #include <KoImageData.h>
 #include <KoProperties.h>
 #include <KoZoomController.h>
+#include <KoIcon.h>
 
 // kde header
 #include <kaction.h>
 #include <kcolormimedata.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstandardaction.h>
@@ -1041,13 +1040,13 @@ void KarbonView::initActions()
     actionCollection()->addAction("file_import", actionImportGraphic);
     connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));
 
-    d->deleteSelectionAction  = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    d->deleteSelectionAction  = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction);
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
 
-    KAction *actionEditGuides = new KAction(KIcon("edit-guides"), i18n("Edit Guides"), this);
+    KAction *actionEditGuides = new KAction(koIcon("edit-guides"), i18n("Edit Guides"), this);
     actionCollection()->addAction("edit_guides", actionEditGuides);
     connect(actionEditGuides, SIGNAL(triggered()), this, SLOT(editGuides()));
     // edit <-----
@@ -1058,35 +1057,35 @@ void KarbonView::initActions()
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    KAction *actionDistributeHorizontalCenter  = new KAction(KIcon("distribute-horizontal-center"), i18n("Distribute Center (Horizontal)"), this);
+    KAction *actionDistributeHorizontalCenter  = new KAction(koIcon("distribute-horizontal-center"), i18n("Distribute Center (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter);
     connect(actionDistributeHorizontalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalCenter()));
 
-    KAction *actionDistributeHorizontalGap  = new KAction(KIcon("distribute-horizontal-equal"), i18n("Distribute Gaps (Horizontal)"), this);
+    KAction *actionDistributeHorizontalGap  = new KAction(koIcon("distribute-horizontal-equal"), i18n("Distribute Gaps (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_gap", actionDistributeHorizontalGap);
     connect(actionDistributeHorizontalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalGap()));
 
-    KAction *actionDistributeLeft  = new KAction(KIcon("distribute-horizontal-left"), i18n("Distribute Left Borders"), this);
+    KAction *actionDistributeLeft  = new KAction(koIcon("distribute-horizontal-left"), i18n("Distribute Left Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_left", actionDistributeLeft);
     connect(actionDistributeLeft, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalLeft()));
 
-    KAction *actionDistributeRight  = new KAction(KIcon("distribute-horizontal-right"), i18n("Distribute Right Borders"), this);
+    KAction *actionDistributeRight  = new KAction(koIcon("distribute-horizontal-right"), i18n("Distribute Right Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_right", actionDistributeRight);
     connect(actionDistributeRight, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalRight()));
 
-    KAction *actionDistributeVerticalCenter  = new KAction(KIcon("distribute-vertical-center"), i18n("Distribute Center (Vertical)"), this);
+    KAction *actionDistributeVerticalCenter  = new KAction(koIcon("distribute-vertical-center"), i18n("Distribute Center (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_center", actionDistributeVerticalCenter);
     connect(actionDistributeVerticalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalCenter()));
 
-    KAction *actionDistributeVerticalGap  = new KAction(KIcon("distribute-vertical-equal"), i18n("Distribute Gaps (Vertical)"), this);
+    KAction *actionDistributeVerticalGap  = new KAction(koIcon("distribute-vertical-equal"), i18n("Distribute Gaps (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_gap", actionDistributeVerticalGap);
     connect(actionDistributeVerticalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalGap()));
 
-    KAction *actionDistributeBottom  = new KAction(KIcon("distribute-vertical-bottom"), i18n("Distribute Bottom Borders"), this);
+    KAction *actionDistributeBottom  = new KAction(koIcon("distribute-vertical-bottom"), i18n("Distribute Bottom Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_bottom", actionDistributeBottom);
     connect(actionDistributeBottom, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalBottom()));
 
-    KAction *actionDistributeTop  = new KAction(KIcon("distribute-vertical-top"), i18n("Distribute Top Borders"), this);
+    KAction *actionDistributeTop  = new KAction(koIcon("distribute-vertical-top"), i18n("Distribute Top Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_top", actionDistributeTop);
     connect(actionDistributeTop, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalTop()));
 
@@ -1131,11 +1130,11 @@ void KarbonView::initActions()
     actionCollection()->addAction("object_unclip", d->unclipObjects );
     connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
 
-    d->flipVertical = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    d->flipVertical = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection()->addAction("object_flip_vertical", d->flipVertical);
     connect(d->flipVertical, SIGNAL(triggered()), this, SLOT(flipVertical()));
 
-    d->flipHorizontal = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    d->flipHorizontal = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     actionCollection()->addAction("object_flip_horizontal", d->flipHorizontal);
     connect(d->flipHorizontal, SIGNAL(triggered()), this, SLOT(flipHorizontal()));
 
@@ -1197,7 +1196,7 @@ void KarbonView::initActions()
 
     // path <-----
 
-    d->configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
+    d->configureAction  = new KAction(koIcon("configure"), i18n("Configure Karbon..."), this);
     actionCollection()->addAction("configure", d->configureAction);
     connect(d->configureAction, SIGNAL(triggered()), this, SLOT(configure()));
 
@@ -1206,11 +1205,11 @@ void KarbonView::initActions()
     connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(configurePageLayout()));
 
     // view ---->
-    KAction * zoomSelection = new KAction(KIcon("zoom-select"), i18n("Zoom to Selection"), this);
+    KAction * zoomSelection = new KAction(koIcon("zoom-select"), i18n("Zoom to Selection"), this);
     actionCollection()->addAction("view_zoom_selection", zoomSelection);
     connect(zoomSelection, SIGNAL(triggered()), this, SLOT(zoomSelection()));
 
-    KAction * zoomDrawing = new KAction(KIcon("zoom-draw"), i18n("Zoom to Drawing"), this);
+    KAction * zoomDrawing = new KAction(koIcon("zoom-draw"), i18n("Zoom to Drawing"), this);
     actionCollection()->addAction("view_zoom_drawing", zoomDrawing);
     connect(zoomDrawing, SIGNAL(triggered()), this, SLOT(zoomDrawing()));
     // view <-----

@@ -20,13 +20,14 @@
 #include "utils.h"
 #include "utils_p.h"
 
+#include <KoIcon.h>
+
 #include <q3header.h>
 #include <QLayout>
 #include <QThread>
 
 #include <ktabwidget.h>
 #include <k3listview.h>
-#include <kiconloader.h>
 #include <kpagedialog.h>
 #include <kpushbutton.h>
 #include <kguiitem.h>
@@ -49,7 +50,7 @@ QWidget *KexiUtils::createDebugWindow(QWidget *parent)
     debugWindowTab->setObjectName("debugWindowTab");
     lyr->addWidget(debugWindowTab);
     debugWindow->resize(900, 600);
-    debugWindow->setWindowIcon(KIcon("document-properties"));
+    debugWindow->setWindowIcon(koIcon("document-properties"));
     debugWindow->setWindowTitle("Kexi Internal Debugger");
     debugWindow->show();
     return debugWindow;

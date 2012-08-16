@@ -42,7 +42,8 @@ public:
 
     void setPriority(int priority);
     void setToolTip(const QString& toolTip);
-    void setIcon(const QString& icon);
+    void setIconName(const char *iconName);
+    void setIconName(const QString &iconName);
 };
 
 } // namespace Sheets
