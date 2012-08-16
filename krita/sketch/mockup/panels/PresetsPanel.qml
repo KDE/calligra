@@ -57,6 +57,8 @@ Panel {
         },
         Button {
             id: editButton;
+            x: 0
+            y: 0
 
             width: Constants.GridWidth / 2
             height: Constants.GridHeight;
@@ -100,7 +102,7 @@ Panel {
         model: PresetsModel;
         delegate: delegate;
 
-        cellWidth: (Constants.GridWidth / 2) - 8
+        cellWidth: Constants.GridWidth - 8
         cellHeight: (Constants.GridHeight * 1) - 8
     }
 
@@ -108,13 +110,19 @@ Panel {
         id: contentArea;
         anchors.fill: parent;
         initialPage: GridView {
+            x: 0
+            y: 0
+            anchors.rightMargin: 0
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
+            anchors.topMargin: 0
             anchors.fill: parent;
 
             model: PresetsModel;
             delegate: delegate;
 
-            cellWidth: Constants.GridWidth;
-            cellHeight: Constants.GridHeight;
+            cellWidth: Constants.GridWidth - 8
+            cellHeight: Constants.GridHeight - 8
         }
     }
 
