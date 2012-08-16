@@ -95,7 +95,7 @@ Item {
 
                     Flow {
                         id: actionsLayout;
-                        anchors.fill: parent;
+
                     }
                 }
             }
@@ -156,8 +156,7 @@ Item {
 
         Rectangle {
             id: rectangle2
-
-            anchors.top: fill.bottom;
+            anchors.top: parent.top;
 
             width: (Constants.GridWidth * 1) - 8
             height: Constants.GridHeight / 2
@@ -256,14 +255,6 @@ Item {
                 anchors.bottomMargin: 0
             }
 
-            PropertyChanges {
-                target: item1
-                x: 0
-                y: 0
-                width: 120
-                height: 32
-                opacity: 1
-            }
 
             PropertyChanges {
                 target: rectangle2
@@ -314,12 +305,7 @@ Item {
                 clip: false
             }
 
-            PropertyChanges {
-                target: rectangle6
-                radius: 8
-                clip: true
-            }
-        },
+         },
         State {
             name: "edit";
 

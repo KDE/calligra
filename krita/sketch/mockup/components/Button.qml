@@ -85,7 +85,6 @@ Item {
         name: "pressed";
         when: mouse.pressed || base.checked;
 
-        PropertyChanges { target: shadow; size: Constants.DefaultMargin * 0.333; }
 
         PropertyChanges {
             target: icon

@@ -27,8 +27,6 @@ Panel {
     actions: [
         Button {
             id: addButton;
-            anchors.top: parent.top
-            anchors.left: parent.left
 
             width: Constants.GridWidth / 2
             height: Constants.GridHeight;
@@ -59,8 +57,6 @@ Panel {
         },
         Button {
             id: editButton;
-            anchors.top: parent.top
-            anchors.right: parent.right
 
             width: Constants.GridWidth / 2
             height: Constants.GridHeight;

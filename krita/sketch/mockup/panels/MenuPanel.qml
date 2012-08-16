@@ -220,7 +220,6 @@ Item {
         when: base.collapsed;
 
         PropertyChanges { target: base; height: 0 }
-        PropertyChanges { target: shadow; opacity: 0 }
         PropertyChanges { target: background; opacity: 0 }
     }
 

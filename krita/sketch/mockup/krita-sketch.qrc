@@ -67,5 +67,7 @@
         <file>images/svg/icon-settings.svg</file>
         <file>images/svg/icon-undo.svg</file>
         <file>images/svg/shadow-presets.svg</file>
+        <file>images/svg/icon-add.svg</file>
+        <file>images/svg/icon-edit.svg</file>
     </qresource>
 </RCC>
