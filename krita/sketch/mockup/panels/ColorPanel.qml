@@ -22,4 +22,35 @@ import "../components"
 Panel {
     name: "Color";
     panelColor: "#d37300"
+
+    peekContents: GridView {
+        anchors.fill: parent;
+        model: PaletteModel
+        delegate: delegate;
+        cellWidth: Constants.GridWidth;
+        cellHeight: Constants.GridHeight;
+    }
+
+    Component {
+        id: delegate;
+
+        Button {
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
+
+            checked: GridView.isCurrentItem;
+
+            text: model.text;
+            shadow: false
+            textSize: 10;
+            image: model.image;
+
+            highlightColor: Constants.Theme.HighlightColor;
+
+            onClicked: {
+                GridView.view.currentIndex = index;
+                //Settings.currentColor = model.color;
+            }
+        }
+    }
 }
