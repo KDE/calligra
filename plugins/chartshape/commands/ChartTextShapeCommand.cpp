@@ -31,8 +31,9 @@
 
 using namespace KChart;
 
-ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape)
+ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *chart)
     : m_textShape(textShape)
+    , m_chart(chart)
 {
 }
 
@@ -50,6 +51,7 @@ void ChartTextShapeCommand::redo()
 
     // Actually do the work
     m_textShape->setVisible(m_newIsVisible);
+    m_chart->update();
 }
 
 void ChartTextShapeCommand::undo()
@@ -58,6 +60,7 @@ void ChartTextShapeCommand::undo()
         return;
 
     m_textShape->setVisible(m_oldIsVisible);
+    m_chart->update();
 }
 
 void ChartTextShapeCommand::setVisible(bool isVisible)

@@ -110,7 +110,7 @@ private slots:
     void setAxisLabelsFont(Axis *axis, const QFont& font);
 
     // Legend
-    void setShowLegend(bool b);
+    void setShowLegend(bool show);
     void setLegendTitle(const QString& title);
     void setLegendFont(const QFont& font);
     void setLegendFontSize(int size);

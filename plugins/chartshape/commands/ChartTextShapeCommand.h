@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    ChartTextShapeCommand(KoShape* textShape);
+    ChartTextShapeCommand(KoShape* textShape, ChartShape* chart);
 
     /**
      * Destructor.
@@ -73,6 +73,7 @@ public:
 
 private:
     KoShape *m_textShape;
+    ChartShape *m_chart;
     bool m_oldIsVisible;
     bool m_newIsVisible;
 };

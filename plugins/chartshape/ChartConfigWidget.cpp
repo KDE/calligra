@@ -1243,6 +1243,10 @@ void ChartConfigWidget::update()
 
     if (d->shape->legend()) {
         d->ui.legendTitle->blockSignals(true);
+        d->ui.showLegend->setChecked(d->shape->legend()->isVisible());
+        d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
         d->ui.legendTitle->setText(d->shape->legend()->title());
         d->ui.legendTitle->blockSignals(false);
 

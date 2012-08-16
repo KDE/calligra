@@ -621,7 +621,7 @@ void ChartTool::setShowTitle(bool show)
     if (!d->shape)
         return;
 
-    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->title());
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->title(), d->shape);
     if (command!=0) {
         command->setVisible(show);
         canvas()->addCommand(command);
@@ -636,7 +636,7 @@ void ChartTool::setShowSubTitle(bool show)
     if (!d->shape)
         return;
 
-    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->subTitle());
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->subTitle(), d->shape);
     if (command!=0) {
         command->setVisible(show);
         canvas()->addCommand(command);
@@ -651,7 +651,7 @@ void ChartTool::setShowFooter(bool show)
     if (!d->shape)
         return;
 
-    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer());
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer(), d->shape);
     if (command!=0) {
         command->setVisible(show);
         canvas()->addCommand(command);
@@ -933,11 +933,16 @@ void ChartTool::setPieExplodeFactor(DataSet *dataSet, int percent)
     d->shape->update();
 }
 
-void ChartTool::setShowLegend(bool b)
+void ChartTool::setShowLegend(bool show)
 {
     Q_ASSERT(d->shape);
 
-    d->shape->legend()->setVisible(b);
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->legend(), d->shape);
+    if (command!=0) {
+        command->setVisible(show);
+        canvas()->addCommand(command);
+    }
+
     d->shape->legend()->update();
 }
 
