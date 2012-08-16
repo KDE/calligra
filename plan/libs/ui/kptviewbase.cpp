@@ -65,6 +65,7 @@ DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &ti
 {
     setWindowTitle( title );
     setObjectName( v->objectName() + '-' + identity );
+    toggleViewAction()->setObjectName( objectName() );
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(setLocation(Qt::DockWidgetArea)));
 }
 
