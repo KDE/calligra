@@ -71,6 +71,7 @@ set(PIGMENT_INSTALL_FILES
         KoColorSpaceConstants.h
         KoColorSpaceMaths.h
         KoColorSpaceRegistry.h
+        KoCompositeOpRegistry.h
         KoCmykColorSpaceTraits.h
         KoColorSpaceTraits.h
         KoGrayColorSpaceTraits.h
@@ -89,6 +90,9 @@ set(PIGMENT_INSTALL_FILES
         KoMixColorsOp.h
         KoMixColorsOpImpl.h
         KoHistogramProducer.h
+        resources/KoAbstractGradient.h
+        resources/KoColorSet.h
+        resources/KoPattern.h
         resources/KoResource.h
 )
 

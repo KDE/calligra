@@ -122,6 +122,7 @@ install( FILES
     KoResourceServer.h
     KoResourceServerAdapter.h
     KoResourceServerObserver.h
+    KoResourceServerProvider.h
     KoResourceTagging.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
