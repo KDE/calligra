@@ -66,5 +66,6 @@
         <file>images/svg/icon-redo.svg</file>
         <file>images/svg/icon-settings.svg</file>
         <file>images/svg/icon-undo.svg</file>
+        <file>images/svg/shadow-presets.svg</file>
     </qresource>
 </RCC>

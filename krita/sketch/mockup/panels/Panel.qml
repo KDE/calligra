@@ -45,18 +45,29 @@ Item {
         size: 0
 
         Rectangle {
+            id: rectangle3
             anchors.fill: parent;
             color: "white";
 
             clip: true;
+
+            Rectangle {
+                id: rectangle4
+                anchors.top: parent.top;
+                anchors.left: parent.left;
+                width: parent.width;
+                height: parent.height;
+                color: "#ffffff"
+                opacity: 0
+            }
 
             Item {
                 id: peek;
 
                 opacity: 0;
 
-                width: Constants.GridWidth * 2;
-                height: Constants.GridHeight * 2;
+                width: (Constants.GridWidth * 2) - 8;
+                height: Constants.GridHeight * 3;
             }
 
             Item {
@@ -71,8 +82,8 @@ Item {
             DropShadow {
                 id: header;
 
-                anchors.top: parent.top;
-                anchors.right: parent.right;
+                anchors.bottom: parent.bottom;
+                anchors.left: parent.left;
 
                 width: parent.width;
                 height: Constants.GridHeight;
@@ -97,6 +108,7 @@ Item {
                 height: Constants.GridHeight;
 
                 Rectangle {
+                    id: rectangle5
                     anchors.fill: parent;
                     color: base.panelColor;
 
@@ -124,6 +136,7 @@ Item {
                     }
                 }
             }
+
         }
     }
 
@@ -133,18 +146,33 @@ Item {
         anchors.top: fill.bottom;
 
         color: base.panelColor;
+        radius: 0
 
-        width: Constants.GridWidth;
-        height: Constants.GridHeight / 2;
+        width: (Constants.GridWidth * 1) - 8
+        height: Constants.GridHeight / 4
 
-        opacity: 0;
+        opacity: 0
+
+
+        Rectangle {
+            id: rectangle2
+
+            anchors.top: fill.bottom;
+
+            width: (Constants.GridWidth * 1) - 8
+            height: Constants.GridHeight / 2
+            color: base.panelColor
+            radius: 8
+            clip: true
+        }
 
         Label {
             id: handleLabel;
 
-            anchors.centerIn: parent;
 
             text: base.name;
+            anchors.horizontalCenter: rectangle2.horizontalCenter
+            anchors.verticalCenter: rectangle2.verticalCenter
             color: base.textColor;
 
             font.pixelSize: Constants.DefaultFontSize;
@@ -152,9 +180,16 @@ Item {
 
         MouseArea {
             id: mousearea1
-            anchors.fill: parent;
 
             property real start: NaN;
+            anchors.rightMargin: -120
+            anchors.leftMargin: -120
+            anchors.bottomMargin: -16
+            anchors.top: rectangle2.bottom
+            anchors.right: rectangle2.left
+            anchors.bottom: rectangle2.top
+            anchors.left: rectangle2.right
+            anchors.topMargin: -32
 
             onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
             onPressed: start = mouse.y;
@@ -164,6 +199,9 @@ Item {
                     base.state = "full";
             }
         }
+
+
+
     }
 
 
@@ -226,20 +264,61 @@ Item {
                 height: 32
                 opacity: 1
             }
+
+            PropertyChanges {
+                target: rectangle2
+                x: 0
+                y: 0
+                color: base.panelColor
+                opacity: 1
+            }
         },
         State {
             name: "peek";
 
-            PropertyChanges { target: base; width: Constants.GridWidth * 3; }
-            PropertyChanges { target: fill; height: Constants.GridHeight * 2; }
-            PropertyChanges { target: header; height: Constants.GridHeight * 2; width: Constants.GridWidth; }
+            PropertyChanges { target: base; width: (Constants.GridWidth * 2) - 8 }
+            PropertyChanges { target: fill; height: Constants.GridHeight * 4 }
+            PropertyChanges { target: header; height: Constants.GridHeight; width: (Constants.GridWidth * 2) - 8 }
             PropertyChanges { target: handle; width: (Constants.GridWidth * 1)-8; opacity: 1; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
             PropertyChanges { target: footer; opacity: 0; }
+
+            PropertyChanges {
+                target: rectangle3
+                x: 0
+                y: 0
+                color: base.panelColor
+                anchors.topMargin: 0
+                anchors.rightMargin: 0
+                anchors.bottomMargin: 0
+                anchors.leftMargin: 0
+            }
+
+            PropertyChanges {
+                target: rectangle4
+                opacity: 0.630
+            }
         },
         State {
             name: "full";
+
+            PropertyChanges {
+                target: rectangle3
+                radius: 8
+            }
+
+            PropertyChanges {
+                target: rectangle5
+                radius: 0
+                clip: false
+            }
+
+            PropertyChanges {
+                target: rectangle6
+                radius: 8
+                clip: true
+            }
         },
         State {
             name: "edit";

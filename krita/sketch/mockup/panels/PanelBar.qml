@@ -20,6 +20,9 @@ import QtQuick 1.1
 
 Item {
     id: base;
+    width: 0
+    smooth: false
+    visible: true
 
     Row {
         id: layout;

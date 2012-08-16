@@ -43,11 +43,10 @@ Item {
         id: fill;
         x: 5
         y: 5
+        color: "#00000000"
         anchors.fill: parent;
         anchors.margins: 0;
 
-        color: base.state == "pressed" && base.highlight ? base.highlightColor : base.color;
-        Behavior on color { ColorAnimation { duration: 50; } }
         visible: true
 
         Image {
@@ -70,14 +69,14 @@ Item {
 
     MouseArea {
         id: mouse;
-        anchors.rightMargin: -128
-        anchors.leftMargin: -128
-        anchors.bottomMargin: -64
+        anchors.rightMargin: 0
+        anchors.leftMargin: 0
+        anchors.bottomMargin: 0
         anchors.top: fill.bottom
         anchors.right: fill.left
         anchors.bottom: fill.top
         anchors.left: fill.right
-        anchors.topMargin: -64
+        anchors.topMargin: 0
         onClicked: { base.clicked(); if( base.checkable ) base.checked = !base.checked; }
     }
 
@@ -87,6 +86,16 @@ Item {
         when: mouse.pressed || base.checked;
 
         PropertyChanges { target: shadow; size: Constants.DefaultMargin * 0.333; }
+
+        PropertyChanges {
+            target: icon
+            opacity: 0.600
+        }
+
+        PropertyChanges {
+            target: mouse
+            anchors.topMargin: 0
+        }
     }
 
     transitions: Transition {

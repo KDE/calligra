@@ -27,14 +27,14 @@ Panel {
     actions: [
         Button {
             id: addButton;
-            x: 128
-            y: 0
+            anchors.top: parent.top
+            anchors.left: parent.left
 
-            width: Constants.GridWidth;
+            width: Constants.GridWidth / 2
             height: Constants.GridHeight;
 
-            text: "Add";
             color: "transparent";
+            image: ":/images/svg/icon-add.svg"
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -59,13 +59,14 @@ Panel {
         },
         Button {
             id: editButton;
-            x: 128
-            y: 64
+            anchors.top: parent.top
+            anchors.right: parent.right
 
-            width: Constants.GridWidth;
+            width: Constants.GridWidth / 2
             height: Constants.GridHeight;
 
-            text: "Edit";
+            text: ""
+            image: ":/images/svg/icon-edit.svg"
             color: "transparent";
             textColor: "white";
             shadow: false;
@@ -92,13 +93,19 @@ Panel {
     ]
 
     peekContents: GridView {
-        anchors.fill: parent;
+        x: 0
+        y: 0
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        keyNavigationWraps: false
 
         model: PresetsModel;
         delegate: delegate;
 
-        cellWidth: Constants.GridWidth;
-        cellHeight: Constants.GridHeight;
+        cellWidth: (Constants.GridWidth / 2) - 8
+        cellHeight: (Constants.GridHeight * 1) - 8
     }
 
     fullContents: PageStack {
@@ -137,6 +144,7 @@ Panel {
             checked: GridView.isCurrentItem;
 
             text: model.text;
+            shadow: false
             textSize: 10;
             image: model.image;
 
