@@ -63,6 +63,50 @@ void KisPrintJob::startPrinting(RemovePolicy removePolicy)
         deleteLater();
 }
 
+/** 
+ * startPrinting2
+ * 
+ * The following code demonstrates color-managed printing using the PDF printing workflow.
+ *  
+ * A printer color profile is obtained from the "Printer Color Settings" docker
+ * and loaded here.  The KisCmpx class is responsible for taking a Krita image and 
+ * converting it into a PDF image file, which will then be appropriately rendered using 
+ * the obtained printer profile.
+ * 
+ * Currently, there needs to be a way to transport the rendered PDF to CUPS.
+ 
+@code
+ #include "kis_cmpx.h"
+
+void KisPrintJob::startPrinting2(RemovePolicy removePolicy)
+{
+    if (!m_image) return;
+    
+    KisConfig cfg;
+    
+    /// Get profile set by the "Printer Color Settings" docker.
+    QString printerProfileName = cfg.printerProfile();
+    const KoColorProfile *printerProfile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
+    
+    KisCmpx colorManager;
+    
+    /// Register the printer so that the KisCmpx object will properly render a PDF.
+    colorManager.setPrinter(&m_printer);
+ 
+    /// Process a color-managed PDF spool file.
+    QString pdfFileName = colorManager.renderSpoolPdf(m_image, printerProfile);
+    
+    if (!pdfFileName.isEmpty()) {
+        // FIXME There needs to be some "hook" right here to transport the PDF file
+        //       to the CUPS system.
+    }
+    
+    if (removePolicy == DeleteWhenDone)
+        deleteLater();
+}
+
+*/
+
 QList<QWidget*> KisPrintJob::createOptionWidgets() const
 {
     return QList<QWidget*>();

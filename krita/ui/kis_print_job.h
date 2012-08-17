@@ -35,6 +35,9 @@ protected:
     }
     virtual QList<QWidget*> createOptionWidgets() const;
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+    
+    /// For color-managed printing using the new PDF printing workflow.
+    //virtual void startPrinting2(RemovePolicy removePolicy = DoNotDelete);
 
 private:
     KisImageWSP m_image;
