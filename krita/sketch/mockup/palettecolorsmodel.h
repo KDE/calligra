@@ -24,13 +24,27 @@
 class PaletteColorsModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* colorSet READ colorSet WRITE setColorSet NOTIFY colorSetChanged)
 public:
+    enum PaletteColorsRoles
+    {
+        ImageRole = Qt::UserRole + 1,
+        TextRole
+    };
+
     explicit PaletteColorsModel(QObject *parent = 0);
     virtual ~PaletteColorsModel();
 
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
+public Q_SLOTS:
+    void setColorSet(QObject* newColorSet);
+    QObject* colorSet() const;
+
+Q_SIGNALS:
+    void colorSetChanged();
 
 private:
     class Private;

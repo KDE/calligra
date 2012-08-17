@@ -25,12 +25,15 @@
 
 class PaletteModel::Private {
 public:
-    Private(QObject* q) {
+    Private(QObject* q)
+        : currentSet(0)
+    {
         KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
         serverAdaptor = new KoResourceServerAdapter<KoColorSet>(rServer, q);
         serverAdaptor->connectToResourceServer();
     }
     KoResourceServerAdapter<KoColorSet>* serverAdaptor;
+    KoColorSet* currentSet;
 };
 
 PaletteModel::PaletteModel(QObject *parent)
@@ -77,8 +80,38 @@ QVariant PaletteModel::data(const QModelIndex &index, int role) const
 
 QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(orientation);
     QVariant result;
+    if(section == 0)
+    {
+        switch(role)
+        {
+        case ImageRole:
+            result = QString("Thumbnail");
+            break;
+        case TextRole:
+            result = QString("Name");
+            break;
+        default:
+            break;
+        }
+    }
     return result;
+}
+
+void PaletteModel::itemActivated(int index)
+{
+    QList<KoResource*> resources = d->serverAdaptor->resources();
+    if(index >= 0 && index < resources.count())
+    {
+        d->currentSet = dynamic_cast<KoColorSet*>(resources.at(index));
+        emit colorSetChanged();
+    }
+}
+
+QObject* PaletteModel::colorSet() const
+{
+    return d->currentSet;
 }
 
 #include "palettemodel.moc"

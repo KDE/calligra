@@ -18,15 +18,25 @@
 
 #include "palettecolorsmodel.h"
 
+#include <KoColorSet.h>
+
 class PaletteColorsModel::Private {
 public:
-    Private() {}
+    Private()
+        : colorSet(0)
+    {}
+
+    KoColorSet* colorSet;
 };
 
 PaletteColorsModel::PaletteColorsModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
+    QHash<int, QByteArray> roles;
+    roles[ImageRole] = "image";
+    roles[TextRole] = "text";
+    setRoleNames(roles);
 }
 
 PaletteColorsModel::~PaletteColorsModel()
@@ -38,19 +48,64 @@ int PaletteColorsModel::rowCount(const QModelIndex &parent) const
 {
     if(parent.isValid())
         return 0;
-    return 0;
+    if(!d->colorSet)
+        return 0;
+    return d->colorSet->nColors();
 }
 
 QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
+    QColor color;
+    if(index.isValid() && d->colorSet)
+    {
+        switch(role)
+        {
+        case ImageRole:
+            color = d->colorSet->getColor(index.row()).color.toQColor();
+            result = QString("image://color/%1,%2,%3,%4").arg(color.redF()).arg(color.greenF()).arg(color.blueF()).arg(color.alphaF());
+            break;
+        case TextRole:
+            result = d->colorSet->getColor(index.row()).name;
+            break;
+        default:
+            break;
+        }
+    }
     return result;
 }
 
 QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(orientation);
     QVariant result;
+    if(section == 0)
+    {
+        switch(role)
+        {
+        case ImageRole:
+            result = QString("Thumbnail");
+            break;
+        case TextRole:
+            result = QString("Name");
+            break;
+        default:
+            break;
+        }
+    }
     return result;
+}
+
+void PaletteColorsModel::setColorSet(QObject *newColorSet)
+{
+    d->colorSet = qobject_cast<KoColorSet*>(newColorSet);
+    reset();
+    emit colorSetChanged();
+}
+
+QObject* PaletteColorsModel::colorSet() const
+{
+    return d->colorSet;
 }
 
 #include "palettecolorsmodel.moc"
