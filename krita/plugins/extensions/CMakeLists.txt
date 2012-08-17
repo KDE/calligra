@@ -12,7 +12,6 @@ add_subdirectory( rotateimage )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
-add_subdirectory( printercolorsettings )
 
 find_package(OpenShiva)
 find_package(QtShiva )
