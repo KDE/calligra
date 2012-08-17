@@ -82,7 +82,6 @@ public:
  * the user clicks the Apply button : the semi-transparent image displayed
  * until the user click that button is only a preview.
  */
-
 class KisToolTransform : public KisTool, KisCommandHistoryListener
 {
 
