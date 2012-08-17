@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Printer Color Settings
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritaprintercolorsettings
+X-Krita-Version=5
