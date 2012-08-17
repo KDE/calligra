@@ -15,14 +15,16 @@ QPixmap ColorImageProvider::requestPixmap(const QString &id, QSize *size, const 
     QPixmap pixmap(requestedSize.width() > 0 ? requestedSize.width() : width,
                    requestedSize.height() > 0 ? requestedSize.height() : height);
     if(QColor::isValidColor(id))
+    {
         pixmap.fill(QColor(id).rgba());
+    }
     else
     {
         QList<QString> elements = id.split(",");
         if(elements.count() == 4)
-            pixmap.fill(QColor(elements.at(0).toInt(), elements.at(1).toInt(), elements.at(2).toInt(), elements.at(3).toInt()));
+            pixmap.fill(QColor(elements.at(0).toFloat() * 255, elements.at(1).toFloat() * 255, elements.at(2).toFloat() * 255, elements.at(3).toFloat() * 255));
         if(elements.count() == 3)
-            pixmap.fill(QColor(elements.at(0).toInt(), elements.at(1).toInt(), elements.at(2).toInt()));
+            pixmap.fill(QColor(elements.at(0).toFloat() * 255, elements.at(1).toFloat() * 255, elements.at(2).toFloat() * 255));
     }
     return pixmap;
 }
