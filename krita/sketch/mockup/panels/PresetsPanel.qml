@@ -57,8 +57,6 @@ Panel {
         },
         Button {
             id: editButton;
-            x: 0
-            y: 0
 
             width: Constants.GridWidth / 2
             height: Constants.GridHeight;
@@ -103,7 +101,7 @@ Panel {
         delegate: delegate;
 
         cellWidth: Constants.GridWidth - 8
-        cellHeight: (Constants.GridHeight * 1) - 8
+        cellHeight: Constants.GridHeight - 8
     }
 
     fullContents: PageStack {

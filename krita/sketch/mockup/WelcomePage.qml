@@ -29,10 +29,11 @@ Page {
             right: parent.right;
         }
 
-        height: Constants.GridHeight * 2;
+        height: Constants.GridHeight * 3;
         z: 10;
 
         Header {
+            height: Constants.GridHeight * 2;
             text: "Krita Sketch";
 
             leftArea: Item {
@@ -118,24 +119,24 @@ Page {
 
         RecentFilesList {
             width: parent.width / 3 - 1;
-            height: Constants.GridHeight * 6;
+            height: Constants.GridHeight * 9;
 
             onClicked: pageStack.push( main );
         }
 
-        Divider { height: Constants.GridHeight * 6; }
+        Divider { height: Constants.GridHeight * 9; }
 
         NewImageList {
             width: parent.width / 3 - 2;
-            height: Constants.GridHeight * 6;
+            height: Constants.GridHeight * 9;
             onClicked: pageStack.push( main );
         }
 
-        Divider { height: Constants.GridHeight * 6; }
+        Divider { height: Constants.GridHeight * 9; }
 
         NewsList {
             width: parent.width / 3 - 1;
-            height: Constants.GridHeight * 6;
+            height: Constants.GridHeight * 9;
         }
     }
 
