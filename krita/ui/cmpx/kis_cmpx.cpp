@@ -18,12 +18,13 @@
 
 #include "kis_cmpx.h"
 
-#include <KoColorProfile.h>
+#include <stdlib.h>
 #include <QtCore>
+
+#include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_image.h>
 #include "kis_config.h"
-#include <stdlib.h>
 
 static const char KisCmpxSpoolPdfFile[] = "kis_cmpx_spool.pdf";
 static const char KisCmpxPreviewPdfFile[] = "kis_cmpx_preview.pdf";

@@ -22,9 +22,9 @@
 #include "cmpx_export.h"
 
 #include <QFuture>
+#include <QImage>
 
 class QByteArray;
-class QImage;
 
 /**
  * KoCmpx is a wrapper class that is designed to provide color management

@@ -19,12 +19,13 @@
 #ifndef KISCMPX_H
 #define KISCMPX_H
 
+#include <KoCmpx.h>
+
 #include <QPrinter>
 #include <QPrinterInfo>
 #include <QImage>
 #include <QFuture>
 #include <kis_types.h>
-#include <KoCmpx.h>
 
 #include "krita_export.h"
 

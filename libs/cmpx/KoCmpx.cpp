@@ -1,12 +1,7 @@
 #include "KoCmpx.h"
 
-#include <cmpx.h>
- 
-#include <KoColorProfile.h>
-
+#include <cmpx.h> 
 #include <QtCore>
-#include <QImage>
-#include <QByteArray>
 
 static const int KoCmpxMaxString = 256;
 
