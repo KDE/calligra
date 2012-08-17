@@ -1,3 +1,4 @@
+add_subdirectory( cmpx )
 add_subdirectory( koplugin )
 add_subdirectory( widgets )
 add_subdirectory( odf )

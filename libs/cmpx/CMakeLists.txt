@@ -7,7 +7,7 @@ set(kocmpx_SRCS
 kde4_add_library(kocmpx SHARED ${kocmpx_SRCS})
 
 target_link_libraries(kocmpx ${CMPX_LIBRARIES} ${KDE4_KDECORE_LIBS}
-                             ${QT_QTCORE_LIBRARY})
+                             ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 install(TARGETS kocmpx ${INSTALL_TARGETS_DEFAULT_ARGS})
 

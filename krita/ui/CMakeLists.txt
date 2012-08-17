@@ -1,6 +1,7 @@
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
+	${CMAKE_SOURCE_DIR}/libs/cmpx
 	${CMAKE_CURRENT_SOURCE_DIR}/flake
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
@@ -32,6 +33,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_update_info.cpp
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
+    cmpx/kis_cmpx.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -275,6 +277,11 @@ if(HAVE_OPENGL)
         target_link_libraries(kritaui ${GLEW_LIBRARIES})
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
+
+# not quite sure if the following is appropriate.
+if(HAVE_CMPX)
+    target_link_libraries(kritaui kocmpx)
+endif(HAVE_CMPX)
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )
 

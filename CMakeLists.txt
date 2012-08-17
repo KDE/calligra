@@ -316,6 +316,9 @@ endif(NEPOMUK)
 ##
 macro_optional_find_package(Cmpx)
 macro_log_feature(CMPX_FOUND "libCmpx" "Library for color-managed printing extension" "www.oyranos.org/wiki/index.php?title=LibCmpx" FALSE "" "Required for color-managed printing")
+if(CMPX_FOUND)
+    set(HAVE_CMPX TRUE)
+endif(CMPX_FOUND)
 
 #Set the build of TextShape changetraker
 
@@ -408,6 +411,11 @@ include(MacroCalligraAddBenchmark)
 
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/interfaces )
+
+# kocmpx is at the bottom of the stack
+set(CMPX_INCLUDES ${CMAKE_SOURCE_DIR}/libs/cmpx
+                  ${QT_INCLUDES}
+                  ${KDE4_INCLUDES})
 
 # koplugin is at the bottom of the stack
 set(KOPLUGIN_INCLUDES ${CMAKE_SOURCE_DIR}/libs/koplugin)
