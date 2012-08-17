@@ -69,15 +69,13 @@ Item {
 
     MouseArea {
         id: mouse;
-        anchors.rightMargin: 0
-        anchors.leftMargin: 0
-        anchors.bottomMargin: 0
-        anchors.top: fill.bottom
-        anchors.right: fill.left
-        anchors.bottom: fill.top
-        anchors.left: fill.right
-        anchors.topMargin: 0
-        onClicked: { base.clicked(); if( base.checkable ) base.checked = !base.checked; }
+        anchors.fill: parent;
+        onClicked: {
+            base.clicked();
+            if( base.checkable ) {
+                base.checked = !base.checked;
+            }
+        }
     }
 
 
