@@ -189,6 +189,9 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
+    if(!d->glCanvas)
+        return;
+
     d->glCanvas->paintGL();
 
     const_cast<QGLContext*>(qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->context())->makeCurrent();
@@ -311,8 +314,10 @@ bool KisSketchView::sceneEvent(QEvent* event)
 
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    d->glCanvas->setGeometry(newGeometry.toRect());
-    d->glCanvas->resizeGL(newGeometry.width(), newGeometry.height());
+    if(d->glCanvas) {
+        d->glCanvas->setGeometry(newGeometry.toRect());
+        d->glCanvas->resizeGL(newGeometry.width(), newGeometry.height());
+    }
 }
 
 void KisSketchView::onSingleTap( const QPointF& location)
