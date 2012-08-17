@@ -107,8 +107,6 @@ void KisGL2Canvas::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //qDebug() << "Application thread:" << qApp->thread();
-
     d->tileManager->render(d->imageTexture);
 }
 

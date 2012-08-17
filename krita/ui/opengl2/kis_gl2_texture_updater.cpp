@@ -22,6 +22,7 @@
 
 #include <QGLPixelBuffer>
 #include <QGLBuffer>
+#include <QTimer>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -42,6 +43,7 @@ public:
     GLuint glTexture;
 
     QRect transferRect;
+    QRect changedRect;
 };
 
 KisGL2TextureUpdater::KisGL2TextureUpdater(KisImageWSP image, uint texture, QObject* parent)
@@ -58,14 +60,31 @@ KisGL2TextureUpdater::~KisGL2TextureUpdater()
 
 void KisGL2TextureUpdater::imageUpdated(const QRect& rect)
 {
-    d->currentBuffer->bind();
-    glTexSubImage2D(GL_TEXTURE_2D, 0, d->transferRect.x(), d->transferRect.y(), d->transferRect.width(), d->transferRect.height(), GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    d->changedRect = d->changedRect.united(rect);
 
-    int pixelCount = rect.width() * rect.height();
+    if(d->changedRect.width() >= 256 || d->changedRect.height() >= 256) {
+        timeout();
+    }
+}
+
+void KisGL2TextureUpdater::timeout()
+{
+    if(!d->transferRect.isEmpty()) {
+        d->currentBuffer->bind();
+        glTexSubImage2D(GL_TEXTURE_2D, 0, d->transferRect.x(), d->transferRect.y(), d->transferRect.width(), d->transferRect.height(), GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        d->currentBuffer->release();
+    }
+
+    if(d->changedRect.isEmpty()) {
+        d->transferRect = QRect();
+        return;
+    }
+
+    int pixelCount = d->changedRect.width() * d->changedRect.height();
     KoColorSpace *projectionColorSpace = d->image->projection()->colorSpace();
 
     quint8 *buffer = projectionColorSpace->allocPixelBuffer(pixelCount);
-    d->image->projection()->readBytes(buffer, rect);
+    d->image->projection()->readBytes(buffer, d->changedRect);
 
     const KoColorSpace *framebufferColorSpace = KoColorSpaceRegistry::instance()->rgb8();
     quint8 *dest = framebufferColorSpace->allocPixelBuffer(pixelCount);
@@ -84,14 +103,19 @@ void KisGL2TextureUpdater::imageUpdated(const QRect& rect)
         rgba[x] = ((rgba[x] << 16) & 0xff0000) | ((rgba[x] >> 16) & 0xff) | (rgba[x] & 0xff00ff00);
     }
 
-    //glTexSubImage2D(GL_TEXTURE_2D, 0, rect.x(), rect.y(), rect.width(), rect.height(), GL_RGBA, GL_UNSIGNED_BYTE, rgba);
-
     d->nextBuffer->bind();
-    d->nextBuffer->allocate(rgba, pixelCount * sizeof(quint32));
+    d->nextBuffer->allocate(pixelCount * sizeof(quint32));
+
+    void* vid = d->nextBuffer->map(QGLBuffer::WriteOnly);
+    memcpy(vid, rgba, pixelCount * sizeof(quint32));
+    d->nextBuffer->unmap();
+
     d->nextBuffer->release();
 
     qSwap(d->currentBuffer, d->nextBuffer);
-    d->transferRect = rect;
+
+    d->transferRect = d->changedRect;
+    d->changedRect = QRect();
 }
 
 void KisGL2TextureUpdater::run()
@@ -102,9 +126,15 @@ void KisGL2TextureUpdater::run()
     glBindTexture(GL_TEXTURE_2D, d->glTexture);
 
     d->currentBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
+    d->currentBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
     d->currentBuffer->create();
     d->nextBuffer = new QGLBuffer(QGLBuffer::PixelUnpackBuffer);
+    d->nextBuffer->setUsagePattern(QGLBuffer::DynamicDraw);
     d->nextBuffer->create();
+
+    QTimer *timer = new QTimer;
+    connect(timer, SIGNAL(timeout()), SLOT(timeout()));
+    timer->start(16);
 
     exec();
 

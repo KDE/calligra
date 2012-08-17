@@ -33,6 +33,7 @@ public:
 
 public Q_SLOTS:
     void imageUpdated(const QRect& rect);
+    void timeout();
 
 protected:
     virtual void run();
