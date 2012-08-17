@@ -54,6 +54,7 @@ public:
         , currentAction(0)
         , currentShortcut(0)
         , tabletPressEvent(0)
+        , touchEvent(0)
         , setMirrorMode(false)
         , fixedAction(false)
     { }
@@ -79,6 +80,7 @@ public:
     QPointF mousePosition;
 
     QTabletEvent *tabletPressEvent;
+    QTouchEvent *touchEvent;
 
     bool setMirrorMode;
     bool fixedAction;
@@ -272,6 +274,11 @@ QPointF KisInputManager::mousePosition() const
 QTabletEvent* KisInputManager::tabletPressEvent() const
 {
     return d->tabletPressEvent;
+}
+
+QTouchEvent *KisInputManager::touchEvent() const
+{
+    return d->touchEvent;
 }
 
 void KisInputManager::setMirrorAxis()

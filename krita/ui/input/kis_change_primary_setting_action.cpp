@@ -21,6 +21,7 @@
 #include <KLocalizedString>
 
 #include "kis_input_manager.h"
+#include "kis_canvas2.h"
 #include <KoToolProxy.h>
 
 KisChangePrimarySettingAction::KisChangePrimarySettingAction(KisInputManager* manager)
@@ -37,6 +38,7 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 void KisChangePrimarySettingAction::begin(int shortcut)
 {
+    // XXX: how to extend this with touch?
     QMouseEvent mevent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
     inputManager()->toolProxy()->mousePressEvent(&mevent, inputManager()->mousePosition());
 }
@@ -49,10 +51,14 @@ void KisChangePrimarySettingAction::end()
 
 void KisChangePrimarySettingAction::inputEvent(QEvent* event)
 {
-    if(event->type() == QEvent::MouseMove) {
+    if (event->type() == QEvent::MouseMove) {
         QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
         setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
         inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
+    }
+    else if (event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchEnd) {
+        QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+        inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
     }
 }
 

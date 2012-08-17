@@ -23,6 +23,7 @@
 
 class QPointF;
 class QTabletEvent;
+class QTouchEvent;
 class KoToolProxy;
 class KisCanvas2;
 class KisInputAction;
@@ -71,14 +72,17 @@ public:
      * Return the canvas this input manager is associated with.
      */
     KisCanvas2 *canvas() const;
+
     /**
      * The tool proxy of the current application.
      */
     KoToolProxy *toolProxy() const;
+
     /**
      * The mouse position of the last mouse press event.
      */
     QPointF mousePosition() const;
+
     /**
      * This method can be used by actions to check whether we are
      * dealing with tablet events.
@@ -86,6 +90,13 @@ public:
      * \return A tablet press event if there was one, otherwise 0.
      */
     QTabletEvent *tabletPressEvent() const;
+
+    /**
+     * Touch events are special, too.
+     *
+     * \return a touch event if there was one, otherwise 0
+     */
+    QTouchEvent *touchEvent() const;
 
     /**
      * Convert a widget position to a pixel position.

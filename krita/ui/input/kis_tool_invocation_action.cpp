@@ -70,7 +70,8 @@ void KisToolInvocationAction::begin(int shortcut)
             d->tabletID = pressEvent->uniqueId();
             setMousePosition(d->tabletToPixel(pressEvent->hiResGlobalPos()));
 
-        } else {
+        }
+        else {
             QMouseEvent pressEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
             inputManager()->toolProxy()->mousePressEvent(&pressEvent, inputManager()->mousePosition());
             setMousePosition(inputManager()->mousePosition());
