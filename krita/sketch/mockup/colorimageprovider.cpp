@@ -22,9 +22,9 @@ QPixmap ColorImageProvider::requestPixmap(const QString &id, QSize *size, const 
     {
         QList<QString> elements = id.split(",");
         if(elements.count() == 4)
-            pixmap.fill(QColor(elements.at(0).toFloat() * 255, elements.at(1).toFloat() * 255, elements.at(2).toFloat() * 255, elements.at(3).toFloat() * 255));
+            pixmap.fill(QColor::fromRgbF(elements.at(0).toFloat(), elements.at(1).toFloat(), elements.at(2).toFloat(), elements.at(3).toFloat()));
         if(elements.count() == 3)
-            pixmap.fill(QColor(elements.at(0).toFloat() * 255, elements.at(1).toFloat() * 255, elements.at(2).toFloat() * 255));
+            pixmap.fill(QColor::fromRgbF(elements.at(0).toFloat(), elements.at(1).toFloat(), elements.at(2).toFloat()));
     }
     return pixmap;
 }
