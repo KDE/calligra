@@ -71,12 +71,18 @@ void KisToolInvocationAction::begin(int shortcut)
             setMousePosition(d->tabletToPixel(pressEvent->hiResGlobalPos()));
 
         }
+        else if (inputManager()->touchEvent()) {
+            QTouchEvent *touchEvent = inputManager()->touchEvent();
+            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
+            setMousePosition(inputManager()->mousePosition());
+        }
         else {
             QMouseEvent pressEvent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, 0);
             inputManager()->toolProxy()->mousePressEvent(&pressEvent, inputManager()->mousePosition());
             setMousePosition(inputManager()->mousePosition());
         }
-    } else {
+    }
+    else {
         QKeyEvent pressEvent(QEvent::KeyPress, Qt::Key_Return, 0);
         inputManager()->toolProxy()->keyPressEvent(&pressEvent);
         QKeyEvent releaseEvent(QEvent::KeyRelease, Qt::Key_Return, 0);
@@ -111,7 +117,7 @@ void KisToolInvocationAction::inputEvent(QEvent* event)
         d->modifiers = tevent->modifiers();
         inputManager()->toolProxy()->tabletEvent(tevent, mousePosition());
     }
-    else if (event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchEnd) {
+    else if (event->type() == QEvent::TouchUpdate) {
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
     }

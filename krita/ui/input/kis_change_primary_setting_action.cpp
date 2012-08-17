@@ -36,9 +36,8 @@ KisChangePrimarySettingAction::~KisChangePrimarySettingAction()
 
 }
 
-void KisChangePrimarySettingAction::begin(int shortcut)
+void KisChangePrimarySettingAction::begin(int /*shortcut*/)
 {
-    // XXX: how to extend this with touch?
     QMouseEvent mevent(QEvent::MouseButtonPress, inputManager()->mousePosition().toPoint(), Qt::LeftButton, Qt::LeftButton, Qt::ShiftModifier);
     inputManager()->toolProxy()->mousePressEvent(&mevent, inputManager()->mousePosition());
 }
@@ -56,7 +55,7 @@ void KisChangePrimarySettingAction::inputEvent(QEvent* event)
         setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
         inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
     }
-    else if (event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchEnd) {
+    else if (event->type() == QEvent::TouchUpdate ) {
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
     }

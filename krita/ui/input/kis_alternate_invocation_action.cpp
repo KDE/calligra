@@ -56,7 +56,7 @@ void KisAlternateInvocationAction::inputEvent(QEvent* event)
         setMousePosition(inputManager()->widgetToPixel(mevent->posF()));
         inputManager()->toolProxy()->mouseMoveEvent(mevent, mousePosition());
     }
-    else if (event->type() == QEvent::TouchUpdate || event->type() == QEvent::TouchBegin || event->type() == QEvent::TouchEnd) {
+    else if (event->type() == QEvent::TouchUpdate) {
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
     }
