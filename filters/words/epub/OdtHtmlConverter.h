@@ -38,7 +38,9 @@ class EpubFile;
 struct StyleInfo {
     StyleInfo();
 
+    QString family;
     QString parent;
+    bool isDefaultStyle;
     bool hasBreakBefore;
     bool inUse;
     QHash<QString, QString> attributes;

@@ -34,6 +34,7 @@
 
 #include <kexipart.h>
 #include <kexipartitem.h>
+#include <KoIcon.h>
 #include <kxmlguiclient.h>
 //#include <kexidialogbase.h>
 #include <kconfig.h>
@@ -230,8 +231,8 @@ void KexiScriptPart::initPartActions()
 void KexiScriptPart::initInstanceActions()
 {
     kDebug();
-    //createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "media-playback-start", 0, "data_execute");
-    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", KShortcut(), "script_config_editor");
+    //createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), koIconName("media-playback-start"), 0, "data_execute");
+    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), koIconName("configure"), KShortcut(), "script_config_editor");
 }
 
 KexiView* KexiScriptPart::createView(QWidget *parent,
