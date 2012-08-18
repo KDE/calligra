@@ -43,6 +43,8 @@
 #include "KexiSearchLineEdit.h"
 #include "KexiUserFeedbackAgent.h"
 #include <kexiutils/SmallToolButton.h>
+#include <kexiutils/styleproxy.h>
+
 class KexiProjectNavigator;
 
 static const int KEXITABBEDTOOLBAR_FIRSTTAB_SPACING = 20;
@@ -231,6 +233,41 @@ private:
     int m_duration;
 };
 
+//! A style proxy for KexiMenuWidget
+class KexiMenuWidgetStyle : public KexiUtils::StyleProxy
+{
+public:
+    explicit KexiMenuWidgetStyle(QStyle *style) : KexiUtils::StyleProxy(style) {
+    }
+    virtual ~KexiMenuWidgetStyle() {
+    }
+    virtual void drawControl(ControlElement element, const QStyleOption *option,
+                             QPainter *painter, const QWidget *widget = 0) const
+    {
+        if (element == QStyle::CE_MenuItem
+            && (option->state & QStyle::State_Selected) && (option->state & QStyle::State_Enabled)
+            && parentStyle()->objectName() == QLatin1String("oxygen"))
+        {
+            // Ugly fix for visual glitch of oxygen; no chance for improvement since
+            // we've forked QMenu and oxygen checks for qobject_cast<QMenu*> directly.
+            QColor c(option->palette.color(QPalette::Window));
+            int h, s, v, a;
+            c.getHsv(&h, &s, &v, &a);
+            // Why 0.91208791? I knew you're curious. There are some algorithms in Oxygen
+            // to make color a bit lighter. They are not in the public API nor they are simple.
+            // So the number was computed by me to find the proper value for the color
+            // (the accuracy is quite OK). 
+            // It's also related to the fact that Oxygen's menus have gradient background. 
+            // A lot of computation happens under the mask...
+            c.setHsv(h, s, v * 0.91208791, a); 
+            painter->fillRect(option->rect.x() + 6, option->rect.y() + 6,
+                              option->rect.width() - 12, option->rect.height() - 12,
+                              c);
+        }
+        KexiUtils::StyleProxy::drawControl(element, option, painter, widget);
+    }
+};
+
 //! Main menu
 class KexiMainMenu : public QWidget
 {
@@ -361,6 +398,13 @@ protected:
             hlyr->setSpacing(0);
             hlyr->setMargin(0);
             m_menuWidget = new KexiMenuWidget;
+            if (KDE::version() < KDE_MAKE_VERSION(4, 8, 0) // a fix is apparently needed for glitch in KDE < 4.8
+                && m_menuWidget->style()->objectName() == QLatin1String("oxygen"))
+            {
+                KexiMenuWidgetStyle *customStyle = new KexiMenuWidgetStyle(m_menuWidget->style());
+                m_menuWidget->setStyle(customStyle);
+                customStyle->setParent(this);
+            }
             m_menuWidget->installEventFilter(this);
             m_menuWidget->setFocusPolicy(Qt::StrongFocus);
             setFocusProxy(m_menuWidget);
@@ -507,7 +551,6 @@ public:
     int lowestIndex;
 };
 
-#include <kexiutils/styleproxy.h>
 #include <KTabBar>
 #include <QTabBar>
 #include <QPainter>

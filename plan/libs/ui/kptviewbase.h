@@ -71,19 +71,6 @@ class DoubleTreeViewBase;
 class DockWidget;
 
 //------------------
-class ViewDockerFactory : public KoDockFactoryBase
-{
-public:
-    ViewDockerFactory( DockWidget *docker );
-
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    /// @return the dock widget area the widget should appear in by default
-    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
-
-private:
-    DockWidget *m_docker;
-};
 
 class KPLATOUI_EXPORT DockWidget : public QDockWidget
 {

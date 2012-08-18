@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1114,6 +1114,8 @@ void KexiMainWindow::setupActions()
     acat->addAction("window_next", Kexi::GlobalActionCategory);
 
     acat->addAction("window_previous", Kexi::GlobalActionCategory);
+
+    acat->addAction("full_screen", Kexi::GlobalActionCategory);
 
     //skipped - design view only
     acat->addAction("format_font", Kexi::NoActionCategory);
