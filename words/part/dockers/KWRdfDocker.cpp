@@ -34,8 +34,9 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
-#include <kicon.h>
 #include <kdebug.h>
 
 #include <QTextDocument>

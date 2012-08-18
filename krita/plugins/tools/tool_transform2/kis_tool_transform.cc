@@ -647,11 +647,11 @@ void KisToolTransform::setFunctionalCursor()
             break;
         case TOPRIGHTSCALE:
         case BOTTOMLEFTSCALE:
-            useCursor(KisCursor::KisCursor::sizeBDiagCursor());
+            useCursor(KisCursor::sizeBDiagCursor());
             break;
         case TOPLEFTSCALE:
         case BOTTOMRIGHTSCALE:
-            useCursor(KisCursor::KisCursor::sizeFDiagCursor());
+            useCursor(KisCursor::sizeFDiagCursor());
             break;
         case MOVECENTER:
             useCursor(KisCursor::handCursor());
@@ -2029,9 +2029,9 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 
         const KisImage *kisimage = image();
         m_transform = QTransform();
-        m_origImg = dev->convertToQImage(0, x, y, w, h);
+        m_origImg = dev->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         if (selection) {
-            m_origSelectionImg = selection->projection()->convertToQImage(0, x, y, w, h);
+            m_origSelectionImg = selection->projection()->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         }
         else {
             m_origSelectionImg = QImage(w, h, QImage::Format_ARGB32_Premultiplied);

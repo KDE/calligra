@@ -281,7 +281,7 @@ bool OpenCalcExport::exportSettings(KoStore * store, const Doc * ksdoc)
     attribute.setAttribute("config:name", "ActiveTable");
     attribute.setAttribute("config:type", "string");
 
-    View * view = ksdoc->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->views().first());
+    View *view = const_cast<Doc*>(ksdoc)->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(const_cast<Doc*>(ksdoc)->documentPart()->views().first());
     QString activeTable;
     if (view) { // no view if embedded document
         Canvas * canvas = view->canvasWidget();

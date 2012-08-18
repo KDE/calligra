@@ -1,6 +1,7 @@
 project(calligra)
 
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+cmake_policy(SET CMP0002 OLD)
 
  ############
 #############
@@ -62,7 +63,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_FLOW FALSE)
     set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_SCRIPTING TRUE)
+    set(SHOULD_BUILD_SCRIPTING FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -107,8 +108,8 @@ else (QT3SUPPORT)
     find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL QtSql QtNetwork)
 endif (QT3SUPPORT)
 
-include(KDE4Defaults)
-include(MacroLibrary)
+include (KDE4Defaults)
+include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
@@ -161,41 +162,39 @@ if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
 
+ ###########################
+############################
+## Optional dependencies  ##
+############################
+###########################
+
 ##
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
 set(SQLITE_RECOMMENDED_VERSION 3.7.12)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
-find_package(CalligraSqlite 3.6.16 REQUIRED)
+macro_optional_find_package(CalligraSqlite 3.6.16)
+macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
 macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
                     "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
-                    "Required by Calligra's default database handler.")
+		    "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
 ## Test for ICU
 ##
-find_package(ICU REQUIRED)
+macro_optional_find_package(ICU)
+macro_bool_to_01(ICU_FOUND HAVE_ICU)
 macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
                     "http://icu-project.org" FALSE ""
-                    "Required by Calligra's default database handler.")
+		    "Required by Calligra's default database handler for Kexi and Words.")
 
- ################################
-#################################
-## Check for OpenEXR           ##
-#################################
-################################
-
+##
+## Check for OpenEXR 
+##
 
 macro_optional_find_package(OpenEXR)
 macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-
-
- ###########################
-############################
-## Optional dependencies  ##
-############################
-###########################
 
 ##
 ## Look for OpenGL
@@ -245,7 +244,6 @@ set(EXIV2_MIN_VERSION "0.16")
 macro_optional_find_package(Exiv2)
 macro_log_feature(EXIV2_FOUND "Exiv2" "Image metadata library and tools" "http://www.exiv2.org" FALSE "0.16" "Required by Krita")
 
-if (NOT CREATIVEONLY)
 ##
 ## Test for soprano
 ##
@@ -289,19 +287,17 @@ if( MARBLE_FOUND )
     endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
-endif (NOT CREATIVEONLY)
-
-
-
 ##
 ## Test for lcms
 ##
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Will be used for color management and is necesary for Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+        set(HAVE_LCMS24 TRUE)
+    endif(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
-    set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
 

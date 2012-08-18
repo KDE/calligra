@@ -122,7 +122,7 @@ public:
 
     /*! \return name of icon provided by part that created this dialog.
      The name is used by KexiMainWindow to set/reset icon for this dialog. */
-    virtual QString itemIcon();
+    virtual QString itemIconName();
 
     /*! \return true if this dialog supports switching to \a mode.
      \a mode is one of Kexi::ViewMode enum elements.

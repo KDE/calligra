@@ -33,13 +33,14 @@
 #include "kptschedulerplugin.h"
 #include "kptdebug.h"
 
+#include <KoIcon.h>
+
 #include <QObject>
 #include <QStringList>
 
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <KIcon>
 
 
 namespace KPlato
@@ -367,7 +368,7 @@ QVariant ScheduleItemModel::name( const QModelIndex &index, int role ) const
             return QVariant();
         case Qt::DecorationRole:
             if ( sm->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
             }
             return QVariant();
         default:

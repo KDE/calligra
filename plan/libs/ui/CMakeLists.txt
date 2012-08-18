@@ -37,14 +37,6 @@ set(kplatoui_LIB_SRCS
     reports/reportsourceeditor.cpp
     reports/reportscripts.cpp
     reports/reportexportpanel.cpp
-    reports/odt/ReportODTRenderer.cpp
-    reports/odt/KoSimpleOdtDocument.cpp
-    reports/odt/KoSimpleOdtImage.cpp
-    reports/odt/KoSimpleOdtPicture.cpp
-    reports/odt/KoSimpleOdtTextBox.cpp
-    reports/odt/KoSimpleOdtLine.cpp
-    reports/odt/KoSimpleOdtCheckBox.cpp
-    reports/odt/KoSimpleOdtPrimitive.cpp
 
     kptganttitemdelegate.cpp
 

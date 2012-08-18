@@ -47,9 +47,9 @@
 #include <KDebug>
 
 #include <KInputDialog>
-#include <KIcon>
 #include <KAction>
 
+#include <KoIcon.h>
 
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
@@ -137,7 +137,7 @@ private:
 EditRichTextAction::EditRichTextAction(KFormDesigner::Container *container, 
                                        QWidget *receiver, QObject *parent,
                                        StdWidgetFactory *factory)
-    : KAction(KIcon("document-edit"),
+    : KAction(koIcon("document-edit"),
               i18nc("Edit rich text for a widget", "Edit Rich Text"),
               parent)
     , m_container(container)
@@ -181,7 +181,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
         : KFormDesigner::WidgetFactory(parent, "stdwidgets")
 {
     KFormDesigner::WidgetInfo *wFormWidget = new KFormDesigner::WidgetInfo(this);
-    wFormWidget->setPixmap("form");
+    wFormWidget->setIconName(koIconName("form"));
     wFormWidget->setClassName("FormWidgetBase");
     wFormWidget->setName(i18n("Form"));
     wFormWidget->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
@@ -190,7 +190,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wFormWidget);
 
     KFormDesigner::WidgetInfo *wCustomWidget = new KFormDesigner::WidgetInfo(this);
-    wCustomWidget->setPixmap("unknown_widget");
+    wCustomWidget->setIconName(koIconName("unknown_widget"));
     wCustomWidget->setClassName("CustomWidget");
     wCustomWidget->setName(i18n("Custom Widget"));
     wCustomWidget->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
@@ -199,7 +199,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wCustomWidget);
 
     KFormDesigner::WidgetInfo *wLabel = new KFormDesigner::WidgetInfo(this);
-    wLabel->setPixmap("label");
+    wLabel->setIconName(koIconName("label"));
     wLabel->setClassName("QLabel");
     wLabel->setName(i18n("Text Label"));
     wLabel->setNamePrefix(
@@ -209,7 +209,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wLabel);
 
     KFormDesigner::WidgetInfo *wPixLabel = new KFormDesigner::WidgetInfo(this);
-    wPixLabel->setPixmap("pixmaplabel");
+    wPixLabel->setIconName(koIconName("pixmaplabel"));
     wPixLabel->setClassName("KexiPictureLabel");
     wPixLabel->setName(i18n("Picture Label"));
 //! @todo Qt designer compatibility: maybe use this class when QLabel has a pixmap set...?
@@ -222,7 +222,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wPixLabel);
 
     KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
-    wLineEdit->setPixmap("lineedit");
+    wLineEdit->setIconName(koIconName("lineedit"));
     wLineEdit->setClassName("KLineEdit");
     wLineEdit->addAlternateClassName("QLineEdit");
     wLineEdit->setIncludeFileName("klineedit.h");
@@ -234,7 +234,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
     KFormDesigner::WidgetInfo *wSpring = new KFormDesigner::WidgetInfo(this);
-    wSpring->setPixmap("spring");
+    wSpring->setIconName(koIconName("spring"));
     wSpring->setClassName("Spring");
     wSpring->setName(i18n("Spring"));
     wSpring->setNamePrefix(
@@ -250,7 +250,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 #endif
 
     KFormDesigner::WidgetInfo *wPushButton = new KFormDesigner::WidgetInfo(this);
-    wPushButton->setPixmap("button");
+    wPushButton->setIconName(koIconName("button"));
     wPushButton->setClassName("KPushButton");
     wPushButton->addAlternateClassName("QPushButton");
     wPushButton->setIncludeFileName("kpushbutton.h");
@@ -262,7 +262,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wPushButton);
 
     KFormDesigner::WidgetInfo *wRadioButton = new KFormDesigner::WidgetInfo(this);
-    wRadioButton->setPixmap("radio");
+    wRadioButton->setIconName(koIconName("radio"));
     wRadioButton->setClassName("QRadioButton");
     wRadioButton->setName(i18n("Option Button"));
     wRadioButton->setNamePrefix(
@@ -271,7 +271,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wRadioButton);
 
     KFormDesigner::WidgetInfo *wCheckBox = new KFormDesigner::WidgetInfo(this);
-    wCheckBox->setPixmap("check");
+    wCheckBox->setIconName(koIconName("check"));
     wCheckBox->setClassName("QCheckBox");
     wCheckBox->setName(i18n("Check Box"));
     wCheckBox->setNamePrefix(
@@ -280,7 +280,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wCheckBox);
 
     KFormDesigner::WidgetInfo *wSpinBox = new KFormDesigner::WidgetInfo(this);
-    wSpinBox->setPixmap("spin");
+    wSpinBox->setIconName(koIconName("spin"));
     wSpinBox->setClassName("KIntSpinBox");
     wSpinBox->addAlternateClassName("QSpinBox");
     wSpinBox->setIncludeFileName("knuminput.h");
@@ -291,7 +291,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wSpinBox);
 
     KFormDesigner::WidgetInfo *wComboBox = new KFormDesigner::WidgetInfo(this);
-    wComboBox->setPixmap("combo");
+    wComboBox->setIconName(koIconName("combo"));
     wComboBox->setClassName("KComboBox");
     wComboBox->addAlternateClassName("QComboBox");
     wComboBox->setIncludeFileName("kcombobox.h");
@@ -304,7 +304,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     KFormDesigner::WidgetInfo *wListBox = new KFormDesigner::WidgetInfo(this);
-    wListBox->setPixmap("listbox");
+    wListBox->setIconName(koIconName("listbox"));
     wListBox->setClassName("KListBox");
     wListBox->addAlternateClassName("QListBox");
     wListBox->addAlternateClassName("KListBox");
@@ -317,7 +317,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wListBox);
 
     KFormDesigner::WidgetInfo *wTreeWidget = new KFormDesigner::WidgetInfo(this);
-    wTreeWidget->setPixmap("listwidget");
+    wTreeWidget->setIconName(koIconName("listwidget"));
     wTreeWidget->setClassName("QTreetWidget");
 //?    wTreeWidget->addAlternateClassName("QListView");
 //?    wTreeWidget->addAlternateClassName("KListView");
@@ -331,7 +331,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
 #endif
 
     KFormDesigner::WidgetInfo *wTextEdit = new KFormDesigner::WidgetInfo(this);
-    wTextEdit->setPixmap("textedit");
+    wTextEdit->setIconName(koIconName("textedit"));
     wTextEdit->setClassName("KTextEdit");
     wTextEdit->addAlternateClassName("QTextEdit");
     wTextEdit->setIncludeFileName("ktextedit.h");
@@ -343,7 +343,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wTextEdit);
 
     KFormDesigner::WidgetInfo *wSlider = new KFormDesigner::WidgetInfo(this);
-    wSlider->setPixmap("slider");
+    wSlider->setIconName(koIconName("slider"));
     wSlider->setClassName("QSlider");
     wSlider->setName(i18n("Slider"));
     wSlider->setNamePrefix(
@@ -352,7 +352,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wSlider);
 
     KFormDesigner::WidgetInfo *wProgressBar = new KFormDesigner::WidgetInfo(this);
-    wProgressBar->setPixmap("progress");
+    wProgressBar->setIconName(koIconName("progress"));
     wProgressBar->setClassName("QProgressBar");
     wProgressBar->setName(i18n("Progress Bar"));
     wProgressBar->setNamePrefix(
@@ -361,7 +361,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wProgressBar);
 
     KFormDesigner::WidgetInfo *wLine = new KFormDesigner::WidgetInfo(this);
-    wLine->setPixmap("line");
+    wLine->setIconName(koIconName("line"));
     wLine->setClassName("Line");
     wLine->setName(i18n("Line"));
     wLine->setNamePrefix(
@@ -376,7 +376,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wLine);
 
     KFormDesigner::WidgetInfo *wDate = new KFormDesigner::WidgetInfo(this);
-    wDate->setPixmap("dateedit");
+    wDate->setIconName(koIconName("dateedit"));
     wDate->setClassName("QDateEdit");
     wDate->addAlternateClassName("KDateWidget");
     wDate->setIncludeFileName("qdateedit.h");
@@ -388,7 +388,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wDate);
 
     KFormDesigner::WidgetInfo *wTime = new KFormDesigner::WidgetInfo(this);
-    wTime->setPixmap("timeedit");
+    wTime->setIconName(koIconName("timeedit"));
     wTime->setClassName("QTimeEdit");
     wTime->addAlternateClassName("KTimeWidget");
     wTime->setIncludeFileName("qtimewidget.h");
@@ -400,7 +400,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     addClass(wTime);
 
     KFormDesigner::WidgetInfo *wDateTime = new KFormDesigner::WidgetInfo(this);
-    wDateTime->setPixmap("datetimeedit");
+    wDateTime->setIconName(koIconName("datetimeedit"));
     wDateTime->setClassName("QDateTimeEdit");
     wDateTime->addAlternateClassName("KDateTimeWidget");
     wDateTime->setIncludeFileName("qdatetimewidget.h");
@@ -490,7 +490,7 @@ StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     if (c == "QLabel")
         w = new QLabel(text, p);
     else if (c == "KexiPictureLabel")
-        w = new KexiPictureLabel(DesktopIcon("image-x-generic"), p);
+        w = new KexiPictureLabel(koDesktopIcon("image-x-generic"), p);
     else if (c == "KLineEdit") {
         w = new KLineEdit(p);
 //2.0        if (designMode)
@@ -587,7 +587,7 @@ StdWidgetFactory::createMenuActions(const QByteArray &classname, QWidget *w,
     }
 #ifndef KEXI_FORMS_NO_LIST_WIDGET
     else if (classname == "QTreeWidget") {
-        menu->addAction(KIcon("document-properties"), i18n("Edit Contents of List Widget"), 
+        menu->addAction(koIcon("document-properties"), i18n("Edit Contents of List Widget"), 
             this, SLOT(editListContents()));
         return true;
     }

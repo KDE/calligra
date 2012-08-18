@@ -63,7 +63,7 @@ class KPLATOUI_EXPORT DocumentsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    DocumentsEditor( KoDocument *part, QWidget *parent );
+    DocumentsEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     using ViewBase::draw;

@@ -33,6 +33,8 @@
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmimetype.h>
@@ -169,7 +171,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
         setButtonText(KDialog::User1, i18n("&Details") + " >>");
     }
     setButtonText(KDialog::Ok, i18n("&Open"));
-    setButtonIcon(KDialog::Ok, KIcon("document-open"));
+    setButtonIcon(KDialog::Ok, koIcon("document-open"));
 }
 
 KexiDBPasswordDialog::~KexiDBPasswordDialog()

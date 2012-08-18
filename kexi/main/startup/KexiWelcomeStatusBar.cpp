@@ -27,7 +27,6 @@
 #include "KexiUserFeedbackAgent.h"
 
 #include <KGlobalSettings>
-#include <KIconLoader>
 #include <KColorUtils>
 #include <KColorScheme>
 #include <KStandardDirs>
