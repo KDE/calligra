@@ -325,7 +325,7 @@ bool KisDoc2::completeLoading(KoStore *store)
     return true;
 }
 
-
+/*
 QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets(QWidget *parent)
 {
     KisConfig cfg;
@@ -347,7 +347,7 @@ QList<KoDocument::CustomDocumentWidgetItem> KisDoc2::createCustomDocumentWidgets
     widgetList << item;
 
     return widgetList;
-}
+}*/
 
 
 
