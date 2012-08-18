@@ -282,6 +282,7 @@ public:
     ReportDesigner(KoPart *part, KoDocument *doc, QWidget *parent = 0);
 
     bool isModified() const;
+    void setModified( bool on );
     QDomDocument document() const;
     void setData( const QDomDocument doc );
 
@@ -307,12 +308,16 @@ protected:
     void setupGui();
     void createDockers();
     QStandardItemModel *createSourceModel( QObject *parent ) const;
+    void setData();
 
 protected slots:
     void slotPropertySetChanged();
     void slotInsertAction();
     void slotItemInserted( const QString & );
     void slotSectionToggled( bool );
+    void undoAllChanges();
+    void slotModified();
+
 private:
     QScrollArea *m_scrollarea;
     KoReportDesigner *m_designer;
@@ -320,6 +325,8 @@ private:
     KoProperty::EditorView *m_propertyeditor;
     QList<ReportData*> m_reportdatamodels;
     GroupSectionEditor *m_groupsectioneditor;
+    QDomDocument m_original;
+    QAction *m_undoaction;
 };
 
 } // namespace KPlato

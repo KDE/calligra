@@ -89,8 +89,6 @@ def readDotDesktopIcons(missingIconData):
                         missingIcon.addDesktopFileLocation(fileName)
                         missingIconData[iconName] = missingIcon
 
-    return missingIconData
-
 
 def main():
     #if len(sys.argv) < 1:
@@ -127,7 +125,7 @@ def main():
             missingIcon.addPoFileLocations(entry.occurrences, entry.msgctxt)
             missingIconData[iconName] = missingIcon
 
-    dotDesktopIcons = readDotDesktopIcons(missingIconData)
+    readDotDesktopIcons(missingIconData)
 
     # output missing icons
     for iconName, missingIcon in missingIconData.iteritems():

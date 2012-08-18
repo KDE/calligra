@@ -197,6 +197,10 @@ void ReportView::slotViewReport()
     if ( reportWidget()->documentIsNull() || reportDesigner()->isModified() ) {
         reportWidget()->loadXML( reportDesigner()->document() );
     }
+    if ( reportDesigner()->isModified() ) {
+        emit optionsModified();
+        reportDesigner()->setModified( false );
+    }
     m_stack->setCurrentIndex( 0 );
     reportWidget()->setGuiActive( true );
 }
@@ -1071,7 +1075,24 @@ void ReportDesigner::setupGui()
     connect(a, SIGNAL(activated()), SIGNAL(viewReport()));
     addAction( name, a );
 
+    m_undoaction = new KAction(koIcon("edit-undo"), i18n("Undo all changes"), this);
+    m_undoaction->setObjectName( "undo_all_changes" );
+    m_undoaction->setEnabled( false );
+    connect(m_undoaction, SIGNAL(activated()), SLOT(undoAllChanges()));
+    addAction( name, m_undoaction );
     createDockers();
+}
+
+void ReportDesigner::undoAllChanges()
+{
+    if ( isModified() ) {
+        setData();
+    }
+}
+
+void ReportDesigner::slotModified()
+{
+    m_undoaction->setEnabled( isModified() );
 }
 
 bool ReportDesigner::isModified() const
@@ -1079,10 +1100,23 @@ bool ReportDesigner::isModified() const
     return m_designer->isModified();
 }
 
+void ReportDesigner::setModified( bool on )
+{
+    m_designer->setModified( on );
+    m_undoaction->setEnabled( on );
+}
+
+
 void ReportDesigner::setData( const QDomDocument doc )
 {
+    m_original = doc.cloneNode().toDocument();
+    setData();
+}
+
+void ReportDesigner::setData()
+{
     delete m_designer;
-    QDomElement e = doc.documentElement().firstChildElement( "report:content" );
+    QDomElement e = m_original.documentElement().firstChildElement( "report:content" );
     if ( e.isNull() ) {
         m_designer = new KoReportDesigner( m_scrollarea );
     } else {
@@ -1090,13 +1124,13 @@ void ReportDesigner::setData( const QDomDocument doc )
     }
     m_scrollarea->setWidget( m_designer );
 
-    m_sourceeditor->setSourceData( doc.documentElement().firstChildElement( "data-source" ) );
+    m_sourceeditor->setSourceData( m_original.documentElement().firstChildElement( "data-source" ) );
     blockSignals( true );
     setReportData( m_sourceeditor->selectFromTag() );
     blockSignals( false );
     slotPropertySetChanged();
 
-    connect(m_designer, SIGNAL(dirty()), SIGNAL(optionsModified()));
+    connect(m_designer, SIGNAL(dirty()), SLOT(slotModified()));
     connect(m_designer, SIGNAL(propertySetChanged()), SLOT( slotPropertySetChanged()));
     connect(m_designer, SIGNAL(itemInserted(QString)), this, SLOT( slotItemInserted(QString)));
 
@@ -1105,6 +1139,8 @@ void ReportDesigner::setData( const QDomDocument doc )
     connect(this, SIGNAL(pasteActivated()), m_designer, SLOT(slotEditPaste()));
     connect(this, SIGNAL(deleteActivated()), m_designer, SLOT(slotEditDelete()));
 
+    m_designer->setModified( false );
+    slotModified();
 }
 
 QDomDocument ReportDesigner::document() const
