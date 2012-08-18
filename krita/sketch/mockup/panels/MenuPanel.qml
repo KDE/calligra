@@ -159,7 +159,7 @@ Item {
             border.top: 8
             border.right: 8
             border.left: 8
-            source: "../images/handle-menu.png"
+            source: ":/images/handle-menu.png"
         }
 
         Label {
@@ -220,7 +220,7 @@ Item {
         when: base.collapsed;
 
         PropertyChanges { target: base; height: 0 }
-        PropertyChanges { target: background; opacity: 0 }
+        //PropertyChanges { target: background; opacity: 0 }
     }
 
     transitions: Transition {
