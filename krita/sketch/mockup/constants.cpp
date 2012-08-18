@@ -39,7 +39,7 @@ QColor Theme::highlightColor() const
 
 QColor Theme::secondaryColor() const
 {
-    return QColor( 128, 0, 0 );
+    return QColor( 132, 34, 34 );
 }
 
 QColor Theme::tertiaryColor() const
@@ -145,7 +145,7 @@ qreal Constants::largeFontSize() const
 
 qreal Constants::hugeFontSize() const
 {
-    return 0.6 * m_gridHeight;
+    return 1 * m_gridHeight;
 }
 
 #include "constants.moc"

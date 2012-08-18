@@ -42,7 +42,21 @@ Item {
                 Rectangle {
                     anchors.fill: parent;
 
-                    color: Constants.Theme.TertiaryColor;
+                    gradient: Gradient {
+                        GradientStop {
+                            position: 0
+                            color: "#3B9BA5"
+                        }
+
+
+                        GradientStop {
+                            position: 1
+                            color: "#148793"
+                        }
+                    }
+
+
+                    Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
                     Label {
                         anchors {
@@ -60,7 +74,7 @@ Item {
             NewImageList {
                 anchors.top: header.bottom;
                 width: parent.width;
-                height: Constants.GridHeight * 6;
+                height: Constants.GridHeight * 9;
             }
         }
     }

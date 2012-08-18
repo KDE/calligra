@@ -31,7 +31,28 @@ PageStack {
 
             delegate: Rectangle {
                 width: parent.width;
-                height: Constants.GridHeight;
+                height: Constants.GridHeight * 1.75;
+
+
+                Rectangle{
+                    x: Constants.GridWidth / 4;
+                    y: Constants.GridHeight * 0.25
+                    width: parent.width - (Constants.GridWidth / 2);
+                    height: parent.height - (Constants.GridHeight * 0.5);
+                    Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+                    gradient: Gradient {
+                        GradientStop {
+                            position: 0
+                            color: "#FAFCFD"
+                        }
+
+                        GradientStop {
+                            position: 0.4
+                            color: "#F0F5FA"
+                        }
+                    }
+                }
+
 
                 MouseArea {
                     anchors.fill: parent;
@@ -40,6 +61,9 @@ PageStack {
 
                 Button {
                     id: thumbnail;
+
+                    x: Constants.GridWidth * 0.125;
+                    y: Constants.GridHeight * 0.375;
 
                     image: model.image;
 
@@ -58,11 +82,11 @@ PageStack {
             }
 
             model: ListModel {
-                ListElement { name: "Blank Image (A4)"; image: "../images/document-new.png" }
-                ListElement { name: "Blank Image (A3)"; image: "../images/document-new.png" }
-                ListElement { name: "Custom Size"; image: "../images/document-new.png" }
-                ListElement { name: "From Clipboard"; image: "../images/edit-paste.png" }
-                ListElement { name: "From Camera"; image: "../images/camera-web.png" }
+                ListElement { name: "Blank Image (A4)"; image: "../images/svg/icon-filenew-green.svg" }
+                ListElement { name: "Blank Image (A3)"; image: "../images/svg/icon-filenew-green.svg" }
+                ListElement { name: "Custom Size"; image: "../images/svg/icon-filenew-green.svg" }
+                ListElement { name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
+                ListElement { name: "From Camera"; image: "../images/svg/icon-camera-green.svg" }
             }
         }
     } }
@@ -78,7 +102,7 @@ PageStack {
                     anchors.left: parent.left;
                     anchors.verticalCenter: parent.verticalCenter;
                     anchors.margins: Constants.DefaultMargin;
-                    source: ":/images/document-new.png"
+                    source: ":/images/svg/icon-filenew-green.svg"
                 }
                 Label {
                     anchors.left: titleImage.right;

@@ -19,6 +19,6 @@
 import QtQuick 1.1
 
 Image {
-    width: 2;
-    source: ":/images/divider.png"
+    width: 8;
+    source: ":/images/divider2.png"
 }
