@@ -23,6 +23,7 @@
 #define PIVOTMAIN_H
 
 #include <KDialog>
+#include "Sheet.h"
 namespace Calligra{
   namespace Sheets{
 
@@ -34,6 +35,8 @@ class PivotMain : public KDialog
 public:
     explicit PivotMain(QWidget* parent,Selection* selection);
     QVector<QString> ValueData(QString str);
+    bool checkCondition(QString field,QString condition,QString value,int line);
+    Sheet* filter();
     ~PivotMain();
 
 private slots:
@@ -43,6 +46,7 @@ private slots:
    void on_AddFilter_clicked();
    void on_Ok_clicked();
    void Summarize();
+   void Reset();
 
 private:
     void extractColumnNames();

@@ -24,6 +24,8 @@
 
 #include <KDialog>
 #include<QtGui>
+#include<QString>
+#include<QVector>
 namespace Calligra{
   namespace Sheets{
 class Selection;    
@@ -33,6 +35,7 @@ class PivotFilters : public KDialog
 
 public:
     explicit PivotFilters(QWidget* parent,Selection* selection);
+     QVector<QString> filterData();
     ~PivotFilters();
 private slots:
     void activateBoxes();
@@ -41,6 +44,7 @@ private slots:
     void fillValue2();
     void fillValue3();
 
+   
 private:
     void selectFields(QComboBox* box);
     class Private;

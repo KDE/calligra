@@ -24,6 +24,7 @@
 #include "ui/Selection.h"
 #include "pivotmain.h"
 #include<QtGui>
+#include<QString>
 using namespace Calligra::Sheets;
 
 class PivotFilters::Private
@@ -33,6 +34,7 @@ public:
     Ui::PivotFilters mainWidget;
     int flag1,flag2;
     bool flag;
+    QVector<QString> conditions;
 };
 
 
@@ -48,11 +50,15 @@ PivotFilters::PivotFilters(QWidget* parent,Selection* selection):
     d->flag1=1;
     d->flag2=1;
     d->flag=false;
+    
+//     setButtons(Ok|Cancel);
+//     enableButton(Ok,"true");
     connect(d->mainWidget.Operator,SIGNAL(activated(const QString&)),this,SLOT(activateBoxes()));
     connect(d->mainWidget.Operator2,SIGNAL(activated(const QString&)),this,SLOT(activateBoxes2()));
     connect(d->mainWidget.Field,SIGNAL(activated(const QString&)),this,SLOT(fillValue()));
     connect(d->mainWidget.Field2,SIGNAL(activated(const QString&)),this,SLOT(fillValue2()));
     connect(d->mainWidget.Field3,SIGNAL(activated(const QString&)),this,SLOT(fillValue3()));
+  
 }
 
 
@@ -160,6 +166,35 @@ void PivotFilters::fillValue3()
     d->mainWidget.Value3->addItem(str.at(i));
   }
 }
+
+QVector<QString> PivotFilters::filterData()
+{
+  QVector<QString> data;
+  data.append(d->mainWidget.Field->currentText());
+  data.append(d->mainWidget.Condition->currentText());
+  data.append(d->mainWidget.Value->currentText());
+  qDebug()<<"operator"<<d->mainWidget.Operator->currentText();
+  if(d->mainWidget.Operator->currentText()!="None")
+  {
+    data.append(d->mainWidget.Operator->currentText());
+    data.append(d->mainWidget.Field2->currentText());
+    data.append(d->mainWidget.Condition2->currentText());
+    data.append(d->mainWidget.Value2->currentText());   
+  }
+  if(d->mainWidget.Operator2->currentText()!="None" && d->mainWidget.Operator->currentText()!="None")
+  {
+    data.append(d->mainWidget.Operator2->currentText());
+    data.append(d->mainWidget.Field3->currentText());
+    data.append(d->mainWidget.Condition3->currentText());
+    data.append(d->mainWidget.Value3->currentText());   
+  }
+    
+    return data;
+}
+
+
+
+
 
 PivotFilters::~PivotFilters()
 {

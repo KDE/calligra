@@ -34,6 +34,11 @@
 #include "DocBase.h"
 #include<QTimer>
 #include<QObject>
+#include "Cell.h"
+#include "Style.h"
+#include<QColor>
+#include<QPen>
+
 using namespace Calligra::Sheets;
 
 class PivotMain::Private
@@ -44,6 +49,9 @@ public:
     QString func;
     QVector<QString> retVect;
     QVector<Value> posVect;
+    QVector<QString> filterVect;
+    Sheet* filterSheet;
+    int filtersize;
 };
 PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     KDialog(parent),
@@ -54,12 +62,14 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     setMainWidget(widget);
     d->selection=selection;
     setCaption(i18n("Pivot Main"));
-    setButtons(Ok|Cancel|User1|User2);
+    setButtons(Ok|Cancel|User1|User2|User3);
     setButtonGuiItem(User1, KGuiItem(i18n("Options")));
     setButtonGuiItem(User2, KGuiItem(i18n("Add Filter")));
+    setButtonGuiItem(User3, KGuiItem(i18n("Reset DnD")));
     enableButton(User1,true);
     enableButton(User2,true);
     enableButton(Ok,true);
+    enableButton(User3,true);
     d->mainWidget.TotalRows->setChecked(true);
     d->mainWidget.TotalColumns->setChecked(true);
 
@@ -100,6 +110,8 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     connect(this, SIGNAL(user1Clicked()), this, SLOT(on_Options_clicked()));
     extractColumnNames();
     connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));
+    connect(this, SIGNAL(user3Clicked()), this, SLOT(Reset()));
+  
 }
 
 PivotMain::~PivotMain()
@@ -110,7 +122,7 @@ void PivotMain::extractColumnNames()
 {
     Sheet *const sheet = d->selection->lastSheet();
     const QRect range = d->selection->lastRange();
-
+    
     int r = range.right();
     int row = range.top();
 
@@ -145,16 +157,178 @@ void PivotMain::on_AddFilter_clicked()
         PivotFilters *pFilters=new PivotFilters(this,d->selection);
         pFilters->setModal(true);
         pFilters->exec();
-
+	d->filterVect=pFilters->filterData();
 }
+
+Sheet* PivotMain::filter()
+{
+  
+  Sheet *const sheet1 = d->selection->lastSheet();
+  const QRect range2 = d->selection->lastRange();
+  
+  Map *mymap=sheet1->map();
+  Sheet* sheet2=mymap->createSheet("Filtered Sheet");
+  
+  
+  int r= range2.right();
+  int b=range2.bottom();
+  int row=range2.top();
+  QVector<QString> vect;
+  QVector<int> filtered;
+  
+  if(d->filterVect.count()==0)
+      return sheet1;
+  
+  for(int k=row+1;k<=b;k++)
+  {
+      bool pass=true;
+      qDebug()<<"DEBUG"<<d->filterVect<<d->filterVect.count();
+      if(d->filterVect.count()==3)
+      {
+	  qDebug()<<"here am i";
+	  pass=checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k);
+      }
+      else if(d->filterVect.count()==7)
+      {
+	  qDebug()<<"here am i 2";
+	  if(d->filterVect.at(3)=="And")
+	    pass= checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) && 
+				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
+      
+	  if(d->filterVect.at(3)=="Or") 
+	      pass=  checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) || 
+				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
+				
+	  
+      }
+      
+      else if(d->filterVect.count()==11)
+      {
+	  qDebug()<<"here am i 3";
+	  if(d->filterVect.at(3)=="And")
+	    pass= checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) && 
+				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
+			
+      
+	  if(d->filterVect.at(3)=="Or") 
+	    pass=  checkCondition(d->filterVect.at(0),d->filterVect.at(1),d->filterVect.at(2),k) || 
+				checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
+				
+
+	  if(d->filterVect.at(7)=="And")
+	      pass= pass && checkCondition(d->filterVect.at(9),d->filterVect.at(10),d->filterVect.at(11),k);
+				
+      
+	  if(d->filterVect.at(7)=="Or") 
+	    pass=  pass || checkCondition(d->filterVect.at(4),d->filterVect.at(5),d->filterVect.at(6),k);
+				
+	  }
+      
+      if(pass==true)
+	filtered.append(k);
+    }
+    //qDebug()<<filtered;
+      for(int j=1;j<=r;j++)
+	Cell(sheet2,j,1).setValue(Cell(sheet1,j,1).value());
+      for(int i=0;i<filtered.count();i++)
+      {
+	for(int j=1;j<=r;j++)
+	{
+	  Cell(sheet2,j,i+2).setValue(Cell(sheet1,j,filtered.at(i)).value());
+	}
+      }
+  d->filtersize=filtered.count()+1;
+  return sheet2;
+}
+
+
+bool PivotMain::checkCondition(QString field,QString condition,QString value,int line)
+{
+  Sheet *const sheet1 = d->selection->lastSheet();
+  const QRect range2 = d->selection->lastRange();
+  int r= range2.right();
+  int b=range2.bottom();
+  int row=range2.top();
+  
+  QVector<QString> vect;
+  
+  for(int i=range2.left();i<=r;i++)
+    vect.append(Cell(sheet1,i,row).displayText());  
+  qDebug()<<"i am here";
+  qDebug()<<condition;
+    if(condition==">"){
+      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() > value){
+		 
+
+		  return true;
+      }
+      else
+	    return false;
+    }
+	
+    if(condition=="<"){
+      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() < value){
+	 qDebug()<<"comparing";	 
+	return true;}
+      else
+		  return false;
+    }
+		  
+    if(condition== "=="){
+      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() == value)
+		  return true;
+      else
+		  return false;
+    }
+      
+    if(condition=="!="){
+      if(Cell(sheet1,vect.indexOf(field)+1,line).displayText() != value)
+		  return true;
+      else
+		  return false;
+    }
+    return false;
+    
+}
+
+
+
+
 void PivotMain::Summarize()
 {
+  
     
+    /*qDebug()<<"before";
+     Sheet *const sheet2=filter();
+    qDebug()<<"after";
     Sheet *const sheet = d->selection->lastSheet();
-    const QRect range = d->selection->lastRange();
+    const QRect range = d->selection->lastRange();*/
+    
+    Map* myMap = d->selection->lastSheet()->map();
+    Sheet* sheet=myMap->createSheet("Filtered Sheet");
+    sheet=filter();
+    const QRect range(1,1,d->selection->lastRange().right(),d->filtersize);
+    QColor color,color2("lightGray");
+    color.setBlue(50);
+    QPen pen(color);
+    
+    qDebug()<<"range"<<range;
+    //qDebug()<<"range2"<<range2;
+    Style st,st2,st3,str,stl,stb,stt;
+    st.setFontUnderline(true);
+    st3.setBackgroundColor("lightGray");
+    st.setRightBorderPen(pen);
+    st.setLeftBorderPen(pen);
+    st.setTopBorderPen(pen);
+    st.setBottomBorderPen(pen);
+    str.setRightBorderPen(pen);
+    stl.setLeftBorderPen(pen);
+    stt.setTopBorderPen(pen);
+    stb.setBottomBorderPen(pen);
+    
     
     static int z=1;
-    Map* myMap = sheet->map();
+    
     Sheet* mySheet=myMap->createSheet("Pivot Sheet"+QString::number(z++));
     
     int r = range.right();
@@ -168,7 +342,7 @@ void PivotMain::Summarize()
     ValueCalc *calc= new ValueCalc(c);
     
     QVector<Value> vect;    
-    for (int i = range.left(); i <= r; ++i) {
+    for (int i = 1; i <= r; ++i) {
 	cell= Cell(sheet,i,row);
 	vect.append(Value(cell.value()));
     }
@@ -255,7 +429,7 @@ void PivotMain::Summarize()
     for(int k=0;k<(rowVectorArr[i].count())*prevcount;k++)
     {
       Cell(mySheet,((k)*count)+1+colposVect.count(),i+1).setValue(rowVectorArr[i].at(k%rowVectorArr[i].count()));
-      
+     
       for(int l=0;l<count;l++)
 	rowVect[i].append(rowVectorArr[i].at(k%rowVectorArr[i].count()));
       
@@ -278,16 +452,55 @@ void PivotMain::Summarize()
     {
        
       Cell(mySheet,i+1,((k)*count)+1+rowposVect.count()).setValue(columnVectorArr[i].at(k%columnVectorArr[i].count()));
-      
+//       Cell(mySheet,i+1,((k)*count)+1+rowposVect.count()).setStyle(st2);
       for(int l=0;l<count;l++)
 	colVect[i].append(columnVectorArr[i].at(k%columnVectorArr[i].count()));
       
       count2++;
     }
+    
+    
     prevcount=count2;
     count=1;
     count2=0;
-  }  
+  } 
+  
+  // Styling
+  
+  for(int m=0;m<colVect[0].count();m++)
+    {
+      Cell(mySheet,1,m+1+rowList.count()).setStyle(stl);
+      Cell(mySheet,columnList.count(),m+1+rowList.count()).setStyle(str);
+      Cell(mySheet,columnList.count()+rowVect[0].count(),m+1+rowList.count()).setStyle(str);
+      
+    }
+  
+  
+  for(int m=0;m<rowVect[0].count();m++)
+    {
+      Cell(mySheet,m+1+columnList.count(),1).setStyle(stt);
+      Cell(mySheet,m+1+columnList.count(),rowList.count()).setStyle(stb);
+      Cell(mySheet,m+1+columnList.count(),rowList.count()+colVect[0].count()).setStyle(stb);
+      
+    }
+    
+   for(int m=0;m<rowList.count();m++)
+    {
+      Cell(mySheet,columnList.count()+1,m+1).setStyle(stl);
+      Cell(mySheet,columnList.count()+rowVect[0].count(),m+1).setStyle(str);
+    }
+  
+  
+  for(int m=0;m<columnList.count();m++)
+    {
+      Cell(mySheet,m+1,rowList.count()+1).setStyle(stt);
+      Cell(mySheet,m+1,rowList.count()+colVect[0].count()).setStyle(stb);
+    } 
+      
+    
+    
+    
+   //Styling Done
   
   for(int i=0;i<valueList.size();i++)
   {
@@ -298,6 +511,7 @@ void PivotMain::Summarize()
   
   QString title=d->func + "-" + valueList.at(0)->text();
   Cell(mySheet,1,1).setValue(Value(title));
+  Cell(mySheet,1,1).setStyle(st);
   for(int l=0;l<rowVect[0].count();l++)
   {
     for(int m=0;m<colVect[0].count();m++)
@@ -330,7 +544,9 @@ void PivotMain::Summarize()
 		  
 		}
 		Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setValue(res);
-
+		if(m%2==0)
+		  Cell(mySheet,l+colposVect.count()+1,m+rowposVect.count()+1).setStyle(st3);
+		
 		aggregate.clear();
 		res=Value(0);
 	    
@@ -371,21 +587,26 @@ QVector<QString> PivotMain::ValueData(QString str)
       qDebug()<<"posVect"<<d->posVect;
       for(int j=row+1;j<=bottom;j++)
       {
-	//qDebug()<<"Here"<<j;
-	//qDebug()<<"Here i am"<<Cell(sheet,position+1,j).value();
 	if(!Cell(sheet,position+1,j).value().isString())
 	{
-	  qDebug()<<"here2";
+	
 	  if(d->retVect.contains(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))))==0)
-	   d->retVect.append(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))));
-	  qDebug()<<"here3";
-	  
+	   d->retVect.append(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value())))); 
 	}
 	else if(d->retVect.contains(conv->toString(Value(Cell(sheet,position+1,j).value())))==0)
 	   d->retVect.append(conv->toString(Value(Cell(sheet,position+1,j).value())));
       }
       return d->retVect;
  
+}
+
+void PivotMain::Reset()
+{
+  d->mainWidget.Rows->clear();
+  d->mainWidget.Values->clear();
+  d->mainWidget.Columns->clear();
+  d->mainWidget.PageFields->clear();
+  extractColumnNames();
 }
 void PivotMain::on_Ok_clicked()
 {
