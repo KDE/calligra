@@ -39,6 +39,7 @@
 
 #include <kis_debug.h>
 
+#include <KoIcon.h>
 #include <KoCompositeOp.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoColorSpaceRegistry.h>
@@ -101,9 +102,9 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, KisDoc2* doc, qint32
     connect(createButton, SIGNAL(clicked()), this, SLOT(createImage()));
     createButton->setDefault(true);
 
-    bnPortrait->setIcon(KIcon("portrait"));
+    bnPortrait->setIcon(koIcon("portrait"));
     connect(bnPortrait, SIGNAL(toggled(bool)), SLOT(switchWidthHeight()));
-    bnLandscape->setIcon(KIcon("landscape"));
+    bnLandscape->setIcon(koIcon("landscape"));
 
     connect(bnSaveAsPredefined, SIGNAL(clicked()), this, SLOT(saveAsPredefined()));
 
@@ -170,10 +171,10 @@ void KisCustomImageWidget::heightUnitChanged(int index)
 {
     doubleHeight->blockSignals(true);
 
-    m_widthUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
-    if (m_widthUnit.type() == KoUnit::Pixel) {
+    m_heightUnit = KoUnit::fromListForUi(index, KoUnit::ListAll);
+    if (m_heightUnit.type() == KoUnit::Pixel) {
         doubleHeight->setDecimals(0);
-        m_widthUnit.setFactor(doubleResolution->value() / 72.0);
+        m_heightUnit.setFactor(doubleResolution->value() / 72.0);
     } else {
         doubleHeight->setDecimals(2);
     }
@@ -195,11 +196,10 @@ void KisCustomImageWidget::createImage()
     QColor qc = cmbColor->color();
 
     qint32 width, height;
-    double resolution;
-    resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
+    double resolution =  doubleResolution->value() / 72.0;  // internal resolution is in pixels per pt
 
-    width = static_cast<qint32>(0.5  + KoUnit::ptToUnit(m_width, KoUnit(KoUnit::Pixel, resolution)));
-    height = static_cast<qint32>(0.5 + KoUnit::ptToUnit(m_height, KoUnit(KoUnit::Pixel, resolution)));
+    width  = static_cast<qint32>(0.5 + KoUnit::convertFromUnitToUnit(m_width, KoUnit((KoUnit::Type)cmbWidthUnit->currentIndex()), KoUnit(KoUnit::Pixel), resolution));
+    height = static_cast<qint32>(0.5 + KoUnit::convertFromUnitToUnit(m_height, KoUnit((KoUnit::Type)cmbHeightUnit->currentIndex()), KoUnit(KoUnit::Pixel), resolution));
 
     qc.setAlpha(backgroundOpacity());
     KoColor bgColor(qc, cs);

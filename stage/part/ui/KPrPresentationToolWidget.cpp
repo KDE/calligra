@@ -21,11 +21,11 @@
 
 #include "KPrPresentationToolWidget.h"
 
+#include <KoIcon.h>
+
 #include <QPainter>
 #include <QPaintEvent>
 #include <QDesktopWidget>
-
-#include <KIcon>
 
 KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
 : QWidget( parent )
@@ -42,9 +42,9 @@ KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     m_uiWidget.blackButton->setIconSize( size );
     // Set the buttons Icon
     // TODO add tooltip
-    m_uiWidget.penButton->setIcon( KIcon( "pen" ) );
-    m_uiWidget.highLightButton->setIcon( KIcon( "highlight" ) );
-    m_uiWidget.blackButton->setIcon( KIcon( "black" ) );
+    m_uiWidget.penButton->setIcon(koIcon("pen") );
+    m_uiWidget.highLightButton->setIcon(koIcon("highlight"));
+    m_uiWidget.blackButton->setIcon(koIcon("black"));
 }
 
 void KPrPresentationToolWidget::paintEvent( QPaintEvent *event )

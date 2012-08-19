@@ -22,7 +22,6 @@
 #include <KexiSearchableModel.h>
 
 #include <KLocale>
-#include <KIcon>
 #include <KDebug>
 
 #include <kexiutils/completer/KexiCompleter.h>

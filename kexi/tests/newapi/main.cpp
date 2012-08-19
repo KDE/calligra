@@ -27,15 +27,17 @@
 #include <kiconloader.h>
 #include <kaboutdata.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/indexschema.h>
-#include <kexidb/parser/parser.h>
+#include <KoIcon.h>
+
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/cursor.h>
+#include <db/field.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/indexschema.h>
+#include <db/parser/parser.h>
 #include <core/kexiproject.h>
 
 #include <iostream>
@@ -163,7 +165,7 @@ int main(int argc, char** argv)
 
     if (gui) {
         app = new KApplication(true);
-        app->setWindowIcon(KIcon("table"));
+        app->setWindowIcon(koIcon("table"));
         instance = new KComponentData(KGlobal::mainComponent());
         KIconLoader::global()->addAppDir("kexi");
     } else {

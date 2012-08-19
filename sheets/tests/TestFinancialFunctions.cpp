@@ -951,7 +951,7 @@ void TestFinancialFunctions::testPPMT()
     CHECK_EVAL("PPMT(8%;10;24;10000;2000)",   Value(-359.2921746011));     // With nPer=10 and Future=2000
     CHECK_EVAL("PPMT(8%;10;24;10000;2000;1)", Value(-332.6779394454));     // With Type=1
 
-    // these tests seems to be wrong in specs. remove superflous parameter "1".
+    // these tests seems to be wrong in specs. remove superfluous parameter "1".
     CHECK_EVAL("PPMT(3%;1;12;100;200)",       Value(-21.1386256419));      // With future value
     CHECK_EVAL("PPMT(3%;1;12;100;200;1)",     Value(-20.5229375164));      // With future value and type
 }

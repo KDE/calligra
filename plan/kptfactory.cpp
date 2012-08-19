@@ -19,6 +19,7 @@
 
 #include "kptfactory.h"
 #include "kptpart.h"
+#include "kptpartpart.h"
 #include "kptaboutdata.h"
 #include <kcomponentdata.h>
 #include <kiconloader.h>
@@ -52,7 +53,9 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    Part *part = new Part(parent);
+    PartPart *part = new PartPart(parent);
+    Part *doc = new Part(part);
+    part->setDocument(doc);
 
     return part;
 }
@@ -72,11 +75,11 @@ const KComponentData &Factory::global()
 
         // Add any application-specific resource directories here
         s_global->dirs()->addResourceType("plan_template", "data", "plan/templates/");
+        s_global->dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
         s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
-        
     }
     return *s_global;
 }

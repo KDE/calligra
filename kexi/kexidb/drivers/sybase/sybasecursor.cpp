@@ -24,8 +24,8 @@
 
 #include <QtGlobal>
 
-#include <kexidb/error.h>
-#include <kexidb/utils.h>
+#include <db/error.h>
+#include <db/utils.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>

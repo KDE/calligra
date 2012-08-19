@@ -1,5 +1,6 @@
 /*  This file is part of the KDE libraries
     Copyright (C) 2002 Simon MacMullen <calligra@babysimon.co.uk>
+    Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -18,14 +19,16 @@
 */
 
 #ifndef _CALLIGRACREATOR_H_
-#define _CALLIGRACREATOR_H_ 
+#define _CALLIGRACREATOR_H_
 
+// KDE
 #include <kio/thumbcreator.h>
-#include <kparts/part.h>
-//Added by qt3to4:
-#include <QTimerEvent>
+// Qt
+#include <QEventLoop>
 
+class KoPart;
 class KoDocument;
+
 
 class CalligraCreator : public QObject, public ThumbCreator
 {
@@ -33,18 +36,18 @@ class CalligraCreator : public QObject, public ThumbCreator
 public:
     CalligraCreator();
     virtual ~CalligraCreator();
-    virtual bool create(const QString &path, int width, int height, QImage &img);
+    virtual bool create(const QString &path, int width, int height, QImage &image);
     virtual Flags flags() const;
 
-protected:
-    virtual void timerEvent(QTimerEvent *);
-
 private slots:
-    void slotCompleted();
+    void onLoadingCompleted();
 
 private:
+    KoPart *m_part;
     KoDocument *m_doc;
-    bool m_completed;
+
+    bool m_loadingCompleted :1;
+    QEventLoop m_eventLoop;
 };
 
 #endif

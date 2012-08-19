@@ -17,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "krscriptfunctions.h"
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 #include <kdebug.h>
 
 KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)

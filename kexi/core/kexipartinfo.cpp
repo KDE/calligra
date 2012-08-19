@@ -21,7 +21,7 @@
 #include "kexipartinfo_p.h"
 #include "KexiMainWindowIface.h"
 
-#include <kexidb/global.h>
+#include <db/global.h>
 #include <KActionCollection>
 
 using namespace KexiPart;
@@ -31,7 +31,7 @@ Info::Private::Private(const KService::Ptr& aPtr)
         , instanceCaption(aPtr->name())
         , groupName(aPtr->genericName())
 //        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
-        , itemIcon(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
+        , itemIconName(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
         , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
 //        , projectPartID( aPtr->property("X-Kexi-TypeId").toInt() )
         , partClass(aPtr->property("X-Kexi-Class", QVariant::String).toString())
@@ -102,7 +102,7 @@ Info::Private::Private()
 //------------------------------
 
 KexiNewObjectAction::KexiNewObjectAction(Info* info, QObject *parent)
-    : KAction(KIcon(info->createItemIcon()), info->instanceCaption() + "...", parent)
+    : KAction(KIcon(info->createItemIconName()), info->instanceCaption() + "...", parent)
     , m_info(info)
 {
     setObjectName(KexiPart::nameForCreateAction(*m_info));
@@ -137,12 +137,12 @@ Info::Info(KService::Ptr ptr)
     }
 }
 
-Info::Info(const QString& partClass, const QString& itemIcon,
-           const QString& objectName)
+Info::Info(const QString &partClass, const QString &itemIconName,
+           const QString &objectName)
         : d(new Private)
 {                       
     d->partClass = partClass;
-    d->itemIcon = itemIcon;
+    d->itemIconName = itemIconName;
     d->objectName = objectName;
 }                       
                        
@@ -166,14 +166,14 @@ QString Info::partClass() const
     return d->partClass;
 }
 
-QString Info::itemIcon() const
+QString Info::itemIconName() const
 {
-    return d->itemIcon;
+    return d->itemIconName;
 }
 
-QString Info::createItemIcon() const
+QString Info::createItemIconName() const
 {
-    return d->itemIcon + "_newobj";
+    return d->itemIconName + QLatin1String("_newobj");
 }
 
 QString Info::objectName() const

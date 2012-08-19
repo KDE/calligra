@@ -24,7 +24,7 @@
 #include <KoPADocument.h>
 #include <KWDocument.h>
 #include <sheets/part/Doc.h>
-
+#include <KoPart.h>
 #include <KMimeType>
 #include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
@@ -46,6 +46,7 @@
 
 #ifdef BUILD_KARBON
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 #include "CSThumbProviderKarbon.h"
 #endif
 
@@ -54,14 +55,16 @@ KoDocument* openFile(const QString &filename)
     const QString mimetype = KMimeType::findByPath(filename)->name();
 
     QString error;
-    KoDocument *document = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>(
-                               mimetype, 0, 0, QString(),
+    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
+                               mimetype, QLatin1String("CalligraPart"), 0, QString(),
                                QVariantList(), &error );
 
     if (!error.isEmpty()) {
-        qWarning() << "Error cerating document" << mimetype << error;
+        qWarning() << "Error creating document" << mimetype << error;
         return 0;
     }
+
+    KoDocument *document = part->document();
 
     if (0 != document) {
         KUrl url;
@@ -104,7 +107,7 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     KUrl url;
     url.setPath(saveAs);
     document->setOutputMimeType(mimetype, 0);
-    document->saveAs(url);
+    document->documentPart()->saveAs(url);
     kDebug(31000) << "save done";
     return saveAs;
 }
@@ -123,7 +126,7 @@ QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
         tp = new CSThumbProviderWords(doc);
     }
 #ifdef BUILD_KARBON
-    else if (KarbonPart *doc = qobject_cast<KarbonPart*>(document)) {
+    else if (KarbonKoDocument *doc = qobject_cast<KarbonKoDocument *>(document)) {
         tp = new CSThumbProviderKarbon(doc);
     }
 #endif

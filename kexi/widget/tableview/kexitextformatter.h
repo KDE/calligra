@@ -21,7 +21,7 @@
 #define KEXITEXTFORMATTER_H
 
 #include <kexi_export.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 
 //! @short Text formatter used to format QVariant values to text for displaying and back to QVariant
 /*! Used by KexiInputTableEdit, KexiDateTableEdit, KexiTimeTableEdit, KexiDateTimeTableEdit,

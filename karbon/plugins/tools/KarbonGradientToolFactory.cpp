@@ -22,6 +22,7 @@
 
 #include <KoToolRegistry.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -30,7 +31,7 @@ KarbonGradientToolFactory::KarbonGradientToolFactory()
 {
     setToolTip(i18n("Gradient Editing Tool"));
     setToolType("karbon, krita");
-    setIcon("format-fill-color");
+    setIconName(koIconNameCStr("format-fill-color"));
     // or probably rather "fill-gradient", please request that icon on TechBase
     setPriority(3);
 }

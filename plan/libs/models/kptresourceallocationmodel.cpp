@@ -36,7 +36,6 @@
 #include <QStringList>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -153,7 +152,7 @@ QVariant ResourceAllocationModel::type( const ResourceGroup *res, int role ) con
 
 QVariant ResourceAllocationModel::allocation( const ResourceGroup *group, const Resource *res, int role ) const
 {
-    if ( m_task == 0 ) {
+    if ( m_project == 0 || m_task == 0 ) {
         return QVariant();
     }
     const ResourceGroupRequest *rg = m_task->requests().find( group );
@@ -195,7 +194,7 @@ QVariant ResourceAllocationModel::allocation( const ResourceGroup *group, const 
 
 QVariant ResourceAllocationModel::allocation( const ResourceGroup *res, int role ) const
 {
-    if ( m_task == 0 ) {
+    if ( m_project == 0 || m_task == 0 ) {
         return QVariant();
     }
     const ResourceGroupRequest *req = m_task->requests().find( res );
@@ -504,7 +503,7 @@ void ResourceAllocationItemModel::filldata( Task *task )
     qDeleteAll( m_groupCache );
     m_groupCache.clear();
     m_requiredChecked.clear();
-    if ( task ) {
+    if ( m_project && task ) {
         foreach ( const ResourceGroup *g, m_project->resourceGroups() ) {
             const ResourceGroupRequest *gr = task->requests().find( g );
             if ( gr ) {

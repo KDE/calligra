@@ -37,12 +37,14 @@ class KWCanvas;
 class KWFrame;
 class KWGui;
 
+class KoPart;
 class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoFindStyle;
 class KoRdfSemanticItem;
 class KoTextAnchor;
+typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
 
 class KToggleAction;
 /**
@@ -60,11 +62,11 @@ public:
      * The view will have a canvas as a member which does all the actual painting, the view will
      * be responsible for handling the actions.  The View is technically speaking the controller
      * class in the MVC design.
-     * @param viewMode the KWViewMode we should show initially.
+     * @param part a KoPart
      * @param document the document we show.
      * @param parent a parent widget we show ourselves in.
      */
-    KWView(const QString &viewMode, KWDocument *document, QWidget *parent);
+    KWView(KoPart *part, KWDocument *document, QWidget *parent);
     virtual ~KWView();
 
     /**
@@ -178,7 +180,7 @@ private slots:
     /// open the configure dialog.
     void configure();
     /// A semantic item was updated and should have it's text refreshed.
-    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
+    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
     /// The document has finished loading. This is used to update the text that can be searched.

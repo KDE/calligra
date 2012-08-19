@@ -27,9 +27,9 @@
 /// The stage-global namespace for all Stage related things.
 namespace KPresenter
 {
-    /// Specifies the KPresenter specific resources that you can put and get from the KoDocumentResourceManager
+    /// Specifies the Stage specific resources that you can put and get from the KoDocumentResourceManager
     enum KPresenterDocumentResources {
-        SoundCollection = KoDocumentResourceManager::KPresenterStart + 1,
+        SoundCollection = KoDocumentResourceManager::StageStart + 1,
         PageLayouts ///< of type KPrPageLayouts
     };
 }

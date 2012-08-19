@@ -33,7 +33,6 @@
 
 // KDE
 #include <KLocale>
-#include <KIcon>
 #include <KDebug>
 
 // Calligra
@@ -61,6 +60,7 @@
 #include "ChartProxyModel.h"
 #include "ChartConfigWidget.h"
 #include "KDChartConvertions.h"
+#include "commands/ChartTypeCommand.h"
 
 
 using namespace KChart;
@@ -96,12 +96,12 @@ ChartTool::ChartTool(KoCanvasBase *canvas)
     // Create QActions here.
 #if 0
     QActionGroup *group = new QActionGroup(this);
-    m_foo  = new QAction(KIcon("this-action"), i18n("Do something"), this);
+    m_foo  = new QAction(koIcon("this-action"), i18n("Do something"), this);
     m_foo->setCheckable(true);
     group->addAction(m_foo);
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchFoo(bool)));
 
-    m_bar  = new QAction(KIcon("that-action"), i18n("Do something else"), this);
+    m_bar  = new QAction(koIcon("that-action"), i18n("Do something else"), this);
     m_bar->setCheckable(true);
     group->addAction(m_bar);
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)));
@@ -275,6 +275,8 @@ QWidget *ChartTool::createOptionWidget()
             this,   SLOT(setDataSetChartSubType(DataSet*, ChartSubtype)));
     connect(widget, SIGNAL(datasetBrushChanged(DataSet*, const QColor&)),
             this, SLOT(setDataSetBrush(DataSet*, const QColor&)));
+    connect(widget, SIGNAL(dataSetMarkerChanged(DataSet*,OdfMarkerStyle)),
+            this, SLOT(setDataSetMarker(DataSet*,OdfMarkerStyle)));
     connect(widget, SIGNAL(datasetPenChanged(DataSet*, const QColor&)),
             this, SLOT(setDataSetPen(DataSet*, const QColor&)));
     connect(widget, SIGNAL(datasetShowCategoryChanged(DataSet*, bool)),
@@ -297,8 +299,8 @@ QWidget *ChartTool::createOptionWidget()
     connect(widget, SIGNAL(showLegendChanged(bool)),
             this,   SLOT(setShowLegend(bool)));
 
-    connect(widget, SIGNAL(chartTypeChanged(ChartType)),
-            this,   SLOT(setChartType(ChartType)));
+    connect(widget, SIGNAL(chartTypeChanged(ChartType, ChartSubtype)),
+            this,   SLOT(setChartType(ChartType, ChartSubtype)));
     connect(widget, SIGNAL(chartSubTypeChanged(ChartSubtype)),
             this,   SLOT(setChartSubType(ChartSubtype)));
     connect(widget, SIGNAL(threeDModeToggled(bool)),
@@ -353,6 +355,10 @@ QWidget *ChartTool::createOptionWidget()
     connect(widget, SIGNAL(legendShowFrameChanged(bool)) ,
             this,   SLOT(setLegendShowFrame(bool)));
 
+    connect(d->shape, SIGNAL(updateConfigWidget()),
+            widget,     SLOT(update()));
+
+
     return widget;
 }
 
@@ -363,11 +369,12 @@ void ChartTool::setChartType(ChartType type, ChartSubtype subtype)
     if (!d->shape)
         return;
     
-    d->shape->setChartType(type);
-    d->shape->setChartSubType(subtype);
-    d->shape->update();
-    d->shape->legend()->update();
-    
+    ChartTypeCommand *command = new ChartTypeCommand(d->shape);
+    if (command!=0) {
+        command->setChartType(type, subtype);
+        canvas()->addCommand(command);
+    }
+
     foreach (QWidget *w, optionWidgets())
         w->update();
 }
@@ -463,6 +470,15 @@ void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
     d->shape->update();
 }
 
+void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
+{
+    Q_ASSERT(d->shape);
+    if (!dataSet)
+        return;
+
+    dataSet->setMarkerStyle(style);
+    d->shape->update();
+}
 void ChartTool::setDataSetAxis(DataSet *dataSet, Axis *axis)
 {
     Q_ASSERT(d->shape);

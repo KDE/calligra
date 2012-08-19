@@ -184,14 +184,29 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
     return d->inlineTextObjectManager;
 }
 
+void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
+{
+    d->inlineTextObjectManager = manager;
+}
+
 KoChangeTracker *KoTextDocumentLayout::changeTracker() const
 {
     return d->changeTracker;
 }
 
+void KoTextDocumentLayout::setChangeTracker(KoChangeTracker *tracker)
+{
+    d->changeTracker = tracker;
+}
+
 KoStyleManager *KoTextDocumentLayout::styleManager() const
 {
     return d->styleManager;
+}
+
+void KoTextDocumentLayout::setStyleManager(KoStyleManager *manager)
+{
+    d->styleManager = manager;
 }
 
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
@@ -470,7 +485,7 @@ void KoTextDocumentLayout::allowPositionInlineObject(bool allow)
     d->allowPositionInlineObject = allow;
 }
 
-// This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
+// This method is called by qt every time  QTextLine.setWidth()/setNumColumns() is called
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
     // Note: "item" used to be what was positioned. We don't actually use qtextinlineobjects anymore
@@ -705,7 +720,7 @@ bool KoTextDocumentLayout::doLayout()
         footNoteAutoCount += rootArea->footNoteAutoCount();
 
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
-                                               // 50 just to seperate pages
+                                               // 50 just to separate pages
     }
 
     while (transferedFootNoteCursor || d->layoutPosition->it != document()->rootFrame()->end()) {
@@ -773,7 +788,7 @@ bool KoTextDocumentLayout::doLayout()
         footNoteAutoCount += rootArea->footNoteAutoCount();
 
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
-                                               // 50 just to seperate pages
+                                               // 50 just to separate pages
     }
 
     return true; // Finished layouting

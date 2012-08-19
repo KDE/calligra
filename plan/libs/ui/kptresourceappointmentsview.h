@@ -119,7 +119,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsView : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsView( KoDocument *part, QWidget *parent );
+    ResourceAppointmentsView(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     virtual void setProject( Project *project );

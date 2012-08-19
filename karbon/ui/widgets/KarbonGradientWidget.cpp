@@ -31,7 +31,6 @@
 #include <KarbonGradientHelper.h>
 
 #include <KLocale>
-#include <KIconLoader>
 #include <KColorDialog>
 
 #include <QLabel>

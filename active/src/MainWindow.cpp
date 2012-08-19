@@ -25,6 +25,8 @@
 #include "CADocumentController.h"
 #include "calligra_active_global.h"
 
+#include <libs/main/calligraversion.h>
+
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
 #include <KDE/KDebug>
@@ -76,6 +78,7 @@ MainWindow::MainWindow (QWidget* parent)
     }
 
     m_view->rootContext()->setContextProperty ("mainwindow", this);
+    m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
     loadMetadataModel();
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
@@ -86,7 +89,9 @@ MainWindow::MainWindow (QWidget* parent)
     connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
     resize (800, 600);
 
-    QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
+    if (!documentPath.isEmpty()) {
+        QTimer::singleShot(1000, this, SLOT(checkForAndOpenDocument()));
+    }
 }
 
 void MainWindow::openFile (const QString& path)
@@ -132,10 +137,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::checkForAndOpenDocument()
 {
-    if (documentPath.isEmpty()) {
-        return;
-    }
-
     QObject* object = m_view->rootObject();
     QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
 }

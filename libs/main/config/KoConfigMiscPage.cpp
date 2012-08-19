@@ -25,6 +25,7 @@
 #include <KoDocument.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoDocumentResourceManager.h>
+#include <KoPart.h>
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
@@ -66,7 +67,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     d->oldGrabSensitivity = d->docResources->grabSensitivity();
     d->oldHandleRadius = d->docResources->handleRadius();
@@ -78,8 +79,6 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
     QGroupBox* tmpQGroupBox = new QGroupBox(i18n("Misc"), this);
 
     QGridLayout* grid = new QGridLayout();
-    grid->setSpacing(KDialog::spacingHint());
-    grid->setMargin(KDialog::marginHint());
 
     //#################"laurent
     //don't load unitType from config file because unit is

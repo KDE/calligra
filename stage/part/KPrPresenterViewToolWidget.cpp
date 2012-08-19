@@ -19,12 +19,12 @@
 
 #include "KPrPresenterViewToolWidget.h"
 
+#include <KoIcon.h>
 #include <QBoxLayout>
 #include <QLabel>
 #include <QToolButton>
 #include <QTimer>
 
-#include <KIcon>
 
 KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     : QFrame(parent)
@@ -34,12 +34,12 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     QToolButton *toolButton = new QToolButton;
-    toolButton->setIcon( KIcon( "go-previous" ) );
+    toolButton->setIcon(koIcon("go-previous"));
     toolButton->setIconSize( iconSize );
     connect( toolButton, SIGNAL( clicked() ), this, SIGNAL( previousSlideClicked() ) );
     hLayout->addWidget(toolButton);
     toolButton = new QToolButton;
-    toolButton->setIcon( KIcon( "go-next" ) );
+    toolButton->setIcon(koIcon("go-next"));
     toolButton->setIconSize( iconSize );
     connect( toolButton, SIGNAL( clicked() ), this, SIGNAL( nextSlideClicked() ) );
     hLayout->addWidget( toolButton );
@@ -53,7 +53,7 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
 
     m_slidesToolButton = new QToolButton;
     m_slidesToolButton->setCheckable( true );
-    m_slidesToolButton->setIcon( KIcon( "view-list-icons.png" ) );
+    m_slidesToolButton->setIcon(koIcon("view-list-icons"));
     m_slidesToolButton->setIconSize( iconSize );
     connect( m_slidesToolButton, SIGNAL( toggled( bool ) ), this, SIGNAL( slideThumbnailsToggled( bool ) ) );
     mainLayout->addWidget( m_slidesToolButton );
@@ -66,7 +66,7 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
 
     hLayout = new QHBoxLayout;
     QLabel *iconLabel = new QLabel;
-    iconLabel->setPixmap( KIcon( "user-away").pixmap( iconSize ) );
+    iconLabel->setPixmap(koIcon("user-away").pixmap(iconSize));
     hLayout->addWidget( iconLabel );
     m_clockLabel = new QLabel( QTime::currentTime().toString( "hh:mm:ss ap" ) );
     m_clockLabel->setStyleSheet("QLabel { font-size: 24px }");
@@ -81,7 +81,7 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
 
     hLayout = new QHBoxLayout;
     iconLabel = new QLabel;
-    iconLabel->setPixmap( KIcon( "chronometer" ).pixmap( iconSize ) );
+    iconLabel->setPixmap(koIcon("chronometer").pixmap(iconSize));
     hLayout->addWidget(iconLabel);
     m_timerLabel = new QLabel( "00:00:00");
     m_timerLabel->setStyleSheet("QLabel { font-size: 24px }");

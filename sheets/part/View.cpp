@@ -71,14 +71,11 @@
 #include <kreplacedialog.h>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 #include <KToggleAction>
 #include <ktoolinvocation.h>
 #include <kparts/event.h>
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
-#include <kicon.h>
 #include <knotifyconfigwidget.h>
 
 // Calligra includes
@@ -104,6 +101,7 @@
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
 #include <KoModeBoxFactory.h>
+#include <KoIcon.h>
 
 // KSpread includes
 #include "ApplicationSettings.h"
@@ -286,18 +284,18 @@ void View::Private::initActions()
     connect(actions->sheetProperties, SIGNAL(triggered(bool)), view, SLOT(sheetProperties()));
     actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
 
-    actions->insertSheet = new KAction(KIcon("insert-table"), i18n("Sheet"), view);
+    actions->insertSheet = new KAction(koIcon("insert-table"), i18n("Sheet"), view);
     actions->insertSheet->setIconText(i18n("Insert Sheet"));
     actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
     ac->addAction("insertSheet", actions->insertSheet);
     connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT(insertSheet()));
 
-    actions->duplicateSheet = new KAction(/*KIcon("inserttable"),*/ i18n("Duplicate Sheet"), view);
+    actions->duplicateSheet = new KAction(/*koIcon("inserttable"),*/ i18n("Duplicate Sheet"), view);
     actions->duplicateSheet->setToolTip(i18n("Duplicate the selected sheet"));
     ac->addAction("duplicateSheet", actions->duplicateSheet);
     connect(actions->duplicateSheet, SIGNAL(triggered(bool)), view, SLOT(duplicateSheet()));
 
-    actions->deleteSheet = new KAction(KIcon("edit-delete"), i18n("Sheet"), view);
+    actions->deleteSheet = new KAction(koIcon("edit-delete"), i18n("Sheet"), view);
     actions->deleteSheet->setIconText(i18n("Remove Sheet"));
     actions->deleteSheet->setToolTip(i18n("Remove the active sheet"));
     ac->addAction("deleteSheet", actions->deleteSheet);
@@ -334,7 +332,7 @@ void View::Private::initActions()
     connect(actions->showPageBorders, SIGNAL(toggled(bool)), view, SLOT(togglePageBorders(bool)));
 
     actions->recalcWorksheet  = new KAction(i18n("Recalculate Sheet"), view);
-    actions->recalcWorksheet->setIcon(KIcon("view-refresh"));
+    actions->recalcWorksheet->setIcon(koIcon("view-refresh"));
     actions->recalcWorksheet->setIconText(i18n("Recalculate"));
     ac->addAction("RecalcWorkSheet", actions->recalcWorksheet);
     actions->recalcWorksheet->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F9));
@@ -342,7 +340,7 @@ void View::Private::initActions()
     actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
     actions->recalcWorkbook  = new KAction(i18n("Recalculate Document"), view);
-    actions->recalcWorkbook->setIcon(KIcon("view-refresh"));
+    actions->recalcWorkbook->setIcon(koIcon("view-refresh"));
     actions->recalcWorkbook->setIconText(i18n("Recalculate"));
     ac->addAction("RecalcWorkBook", actions->recalcWorkbook);
     actions->recalcWorkbook->setShortcut(QKeySequence(Qt::Key_F9));
@@ -377,27 +375,27 @@ void View::Private::initActions()
 
     // -- navigation actions --
 
-    actions->nextSheet  = new KAction(KIcon("go-next"), i18n("Next Sheet"), view);
+    actions->nextSheet  = new KAction(koIcon("go-next"), i18n("Next Sheet"), view);
     actions->nextSheet->setIconText(i18n("Next"));
     actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
     ac->addAction("go_next", actions->nextSheet);
     actions->nextSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageDown));
     connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT(nextSheet()));
 
-    actions->prevSheet  = new KAction(KIcon("go-previous"), i18n("Previous Sheet"), view);
+    actions->prevSheet  = new KAction(koIcon("go-previous"), i18n("Previous Sheet"), view);
     actions->prevSheet->setIconText(i18n("Previous"));
     actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
     ac->addAction("go_previous", actions->prevSheet);
     actions->prevSheet->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_PageUp));
     connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT(previousSheet()));
 
-    actions->firstSheet  = new KAction(KIcon("go-first"), i18n("First Sheet"), view);
+    actions->firstSheet  = new KAction(koIcon("go-first"), i18n("First Sheet"), view);
     actions->firstSheet->setIconText(i18n("First"));
     actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
     ac->addAction("go_first", actions->firstSheet);
     connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT(firstSheet()));
 
-    actions->lastSheet  = new KAction(KIcon("go-last"), i18n("Last Sheet"), view);
+    actions->lastSheet  = new KAction(koIcon("go-last"), i18n("Last Sheet"), view);
     actions->lastSheet->setIconText(i18n("Last"));
     actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
     ac->addAction("go_last", actions->lastSheet);
@@ -501,7 +499,7 @@ void View::Private::initActions()
     actions->calcCountA->setActionGroup(groupCalc);
 
     //Shape actions
-    actions->deleteShape = new KAction(KIcon("edit-delete"), i18n("Delete"), view);
+    actions->deleteShape = new KAction(koIcon("edit-delete"), i18n("Delete"), view);
     actions->deleteShape->setShortcut(QKeySequence("Del"));
     connect(actions->deleteShape, SIGNAL(triggered()), view, SLOT(editDeleteSelection()));
     connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), actions->deleteShape, SLOT(setEnabled(bool)));
@@ -554,8 +552,8 @@ void View::Private::adjustActions(bool mode)
  *
  *****************************************************************************/
 
-View::View(QWidget *_parent, Doc *_doc)
-        : KoView(_doc, _parent)
+View::View(KoPart *part, QWidget *_parent, Doc *_doc)
+        : KoView(part, _doc, _parent)
         , d(new Private)
 {
     ElapsedTime et("View constructor");
@@ -568,10 +566,7 @@ View::View(QWidget *_parent, Doc *_doc)
     d->loading = true;
 
     setComponentData(Factory::global());
-    if (doc()->isReadWrite())
-        setXMLFile("sheets.rc");
-    else
-        setXMLFile("sheets_readonly.rc");
+    setXMLFile("sheets.rc");
 
     // GUI Initializations
     initView();
@@ -614,8 +609,7 @@ View::View(QWidget *_parent, Doc *_doc)
 
 View::~View()
 {
-    if (doc()->isReadWrite())   // make sure we're not embedded in Konq
-        selection()->emitCloseEditor(true); // save changes
+    selection()->emitCloseEditor(true); // save changes
 
     // if (d->calcLabel) disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
@@ -1114,8 +1108,7 @@ void View::initialPosition()
     // Initialize shape anchoring action.
     shapeSelectionChanged();
 
-    if (koDocument()->isReadWrite())
-        initConfig();
+    initConfig();
 
     d->canvas->setFocus();
 
@@ -1155,36 +1148,13 @@ void View::updateReadWrite(bool readwrite)
         d->actions->hideSheet->setEnabled(true);
     }
     d->actions->showPageBorders->setEnabled(true);
-    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
+    d->tabBar->setReadOnly(doc()->map()->isProtected());
 }
 
 void View::createTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = doc()->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile;
-    tempFile->setSuffix(".ots");
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close();
-    delete tempFile;
-
-    doc()->saveNativeFormat(fileName);
-
-    KoTemplateCreateDia::createTemplate("sheets_template", Factory::global(),
-                                        fileName, pix, this);
-
-    Factory::global().dirs()->addResourceType("sheets_template",
-            "data", "sheets/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("sheets_template", ".ots",
+                                        Factory::global(), doc(), this);
 }
 
 void View::setActiveSheet(Sheet* sheet, bool updateSheet)
@@ -1511,7 +1481,7 @@ void View::toggleProtectDoc(bool mode)
 
     doc()->setModified(true);
     stateChanged("map_is_protected", mode ? StateNoReverse : StateReverse);
-    d->tabBar->setReadOnly(!doc()->isReadWrite() || doc()->map()->isProtected());
+    d->tabBar->setReadOnly(doc()->map()->isProtected());
 }
 
 void View::toggleProtectSheet(bool mode)
@@ -1911,7 +1881,7 @@ void View::calcStatusBarOp()
 void View::statusBarClicked(const QPoint&)
 {
     QPoint mousepos = QCursor::pos();
-    if (koDocument()->isReadWrite() && factory())
+    if (factory())
         if (QMenu* menu = dynamic_cast<QMenu*>(factory()->container("calc_popup" , this)))
             menu->popup(mousepos);
 }
@@ -1961,19 +1931,19 @@ void View::guiActivateEvent(KParts::GUIActivateEvent *ev)
 
 void View::popupTabBarMenu(const QPoint & _point)
 {
-    if (!koDocument()->isReadWrite() || !factory())
+    if (!factory())
         return;
     if (d->tabBar) {
         QMenu* const menu = static_cast<QMenu*>(factory()->container("menupage_popup", this));
         if (!menu)
             return;
 
-        QAction* insertSheet = new KAction(KIcon("insert-table"), i18n("Insert Sheet"), this);
+        QAction* insertSheet = new KAction(koIcon("insert-table"), i18n("Insert Sheet"), this);
         insertSheet->setToolTip(i18n("Remove the active sheet"));
         connect(insertSheet, SIGNAL(triggered(bool)), this, SLOT(insertSheet()));
         menu->insertAction(d->actions->duplicateSheet, insertSheet);
 
-        QAction* deleteSheet = new KAction(KIcon("delete_table"), i18n("Remove Sheet"), this);
+        QAction* deleteSheet = new KAction(koIcon("delete_table"), i18n("Remove Sheet"), this);
         deleteSheet->setToolTip(i18n("Remove the active sheet"));
         connect(deleteSheet, SIGNAL(triggered(bool)), this, SLOT(deleteSheet()));
         menu->insertAction(d->actions->hideSheet, deleteSheet);

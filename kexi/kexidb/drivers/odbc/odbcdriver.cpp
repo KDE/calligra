@@ -24,9 +24,9 @@
 #include "odbctypeinfoqueryunit.h"
 #include "odbcspecialcolumnsqueryunit.h"
 
-#include <kexidb/field.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 
 #include <QVariant>
 #include <QFile>
@@ -327,7 +327,7 @@ bool ODBCDriver::populateTypeInfo(ODBCConnection* connection )
 
 bool ODBCDriver::populateROWID(ODBCConnection* connection ) {
     // pass true, as we want *some* table. If there are no tables which already exist
-    // lets atleast get the kexidb system tables
+    // lets at least get the kexidb system tables
     QStringList tableNames = connection->tableNames(true);
     if ( tableNames.size() == 0 ) {
         return false;

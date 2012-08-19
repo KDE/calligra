@@ -39,7 +39,7 @@
 #include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexirecordmarker.h>
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 
 //#include "kexitableviewheader.h"
 
@@ -561,7 +561,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             }
         }
         if (m_errorMessagePopup) {
-            m_errorMessagePopup->close();
+            m_errorMessagePopup->animatedHide();
         }
 
         if ((m_curRow != newrow || forceSet) && m_navPanel)  {//update current row info
@@ -920,7 +920,7 @@ void KexiDataAwareObjectInterface::removeEditor()
 bool KexiDataAwareObjectInterface::cancelEditor()
 {
     if (m_errorMessagePopup) {
-        m_errorMessagePopup->close();
+        m_errorMessagePopup->animatedHide();
     }
     if (!m_editor)
         return true;
@@ -961,14 +961,26 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             if (par && edit) {
 //! @todo allow displaying user-defined warning
 //! @todo also use for other error messages
+                delete m_errorMessagePopup;
+                m_errorMessagePopup = 0;
                 if (!m_errorMessagePopup) {
-//     m_errorMessagePopup->close();
-                    m_errorMessagePopup = new KexiArrowTip(
-                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
-                        dynamic_cast<QWidget*>(this));
-                    m_errorMessagePopup->move(
-                        par->mapToGlobal(edit->pos()) + QPoint(6, edit->height() + 0));
-                    m_errorMessagePopup->show();
+                    KexiContextMessage msg(
+                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()));
+                    m_errorMessagePopup = new KexiContextMessageWidget(dynamic_cast<QWidget*>(this), 0, 0, msg);
+                    QPoint arrowPos =
+                        par->mapToGlobal(edit->pos()) + QPoint(12, edit->height() + 6);
+                    if (m_verticalHeader) {
+                        arrowPos += QPoint(m_verticalHeader->width(), horizontalHeaderHeight());
+                    }
+                    m_errorMessagePopup->setMessageType(KMessageWidget::Error);
+                    m_errorMessagePopup->setCalloutPointerDirection(KMessageWidget::Up);
+                    m_errorMessagePopup->setCalloutPointerPosition(arrowPos);
+                    m_errorMessagePopup->setWordWrap(false);
+                    m_errorMessagePopup->setClickClosesMessage(true);
+                    m_errorMessagePopup->resizeToContents();
+                    m_errorMessagePopup->animatedShow();
+                    QObject::connect(m_errorMessagePopup, SIGNAL(animatedHideFinished()),
+                                     dynamic_cast<QWidget*>(m_editor), SLOT(setFocus()));
                 }
                 m_editor->setFocus();
             }
@@ -2151,4 +2163,9 @@ void KexiDataAwareObjectInterface::setRowEditing(bool set)
         emit rowEditStarted(m_curRow);
     else
         emit rowEditTerminated(m_curRow);
+}
+
+int KexiDataAwareObjectInterface::horizontalHeaderHeight() const
+{
+    return 0;
 }

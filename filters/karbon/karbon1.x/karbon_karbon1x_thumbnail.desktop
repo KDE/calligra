@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Karbon 14 Drawings
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-karbon;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

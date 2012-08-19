@@ -122,11 +122,13 @@ void Task::addRequest(ResourceGroup *group, int numResources) {
 void Task::addRequest(ResourceGroupRequest *request) {
     //kDebug(planDbg())<<m_name<<request<<request->group()<<request->group()->id()<<request->group()->name();
     m_requests.addRequest(request);
+    changed( this );
 }
 
 void Task::takeRequest(ResourceGroupRequest *request) {
     //kDebug(planDbg())<<request;
     m_requests.takeRequest(request);
+    changed( this );
 }
 
 QStringList Task::requestNameList() const {
@@ -1062,14 +1064,14 @@ DateTime Task::calculateForward(int use) {
         DateTime time = calculatePredeccessors(dependParentNodes(), use);
         if (time.isValid() && time > cs->earlyStart) {
             cs->earlyStart = time;
-            //cs->logDebug( QString( "calulate forward: early start moved to: %1" ).arg( cs->earlyStart.toString() ) );
+            //cs->logDebug( QString( "calculate forward: early start moved to: %1" ).arg( cs->earlyStart.toString() ) );
         }
     }
     if (!m_parentProxyRelations.isEmpty()) {
         DateTime time = calculatePredeccessors(m_parentProxyRelations, use);
         if (time.isValid() && time > cs->earlyStart) {
             cs->earlyStart = time;
-            //cs->logDebug( QString( "calulate forward: early start moved to: %1" ).arg( cs->earlyStart.toString() ) );
+            //cs->logDebug( QString( "calculate forward: early start moved to: %1" ).arg( cs->earlyStart.toString() ) );
         }
     }
     //cs->logDebug( "calculateForward: earlyStart=" + cs->earlyStart.toString() );
@@ -1634,7 +1636,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             //kDebug(planDbg())<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish;
             makeAppointments();
             if ( cs->plannedEffort() == 0 && cs->lateFinish < cs->earlyFinish ) {
-                // the backward pass failed to calulate sane values, try to handle it
+                // the backward pass failed to calculate sane values, try to handle it
                 //TODO add an error indication
                 cs->logWarning( i18n( "%1: Scheduling failed using late finish, trying early finish instead.", constraintToString() ) );
                 cs->endTime = workTimeBefore( cs->earlyFinish, cs );
@@ -1779,10 +1781,12 @@ DateTime Task::scheduleFromStartTime(int use) {
         default:
             break;
         }
-        // HACK scheduling may accept deviation less than 5 mins to improve performance
-        cs->effortNotMet = ( estimate()->value( use, cs->usePert() ) - cs->plannedEffort() ) > ( 5 * 60000 );
-        if ( cs->effortNotMet ) {
-            cs->logError( i18n( "Effort not met. Estimate: %1, planned: %2", estimate()->value( use, cs->usePert() ).toHours(), cs->plannedEffort().toHours() ) );
+        if ( m_estimate->type() == Estimate::Type_Effort ) {
+            // HACK scheduling may accept deviation less than 5 mins to improve performance
+            cs->effortNotMet = ( m_estimate->value( use, cs->usePert() ) - cs->plannedEffort() ) > ( 5 * 60000 );
+            if ( cs->effortNotMet ) {
+                cs->logError( i18n( "Effort not met. Estimate: %1, planned: %2", estimate()->value( use, cs->usePert() ).toHours(), cs->plannedEffort().toHours() ) );
+            }
         }
     } else if (type() == Node::Type_Milestone) {
         if ( cs->recalculate() && completion().isFinished() ) {
@@ -2127,10 +2131,12 @@ DateTime Task::scheduleFromEndTime(int use) {
             break;
         }
         m_requests.reserve(cs->startTime, cs->duration);
-        // HACK scheduling may accept deviation less than 5 mins to improve performance
-        cs->effortNotMet = ( estimate()->value( use, cs->usePert() ) - cs->plannedEffort() ) > ( 5 * 60000 );
-        if ( cs->effortNotMet ) {
-            cs->logError( i18n( "Effort not met. Estimate: %1, planned: %2", estimate()->value( use, cs->usePert() ).toHours(), cs->plannedEffort().toHours() ) );
+        if ( m_estimate->type() == Estimate::Type_Effort ) {
+            // HACK scheduling may accept deviation less than 5 mins to improve performance
+            cs->effortNotMet = ( m_estimate->value( use, cs->usePert() ) - cs->plannedEffort() ) > ( 5 * 60000 );
+            if ( cs->effortNotMet ) {
+                cs->logError( i18n( "Effort not met. Estimate: %1, planned: %2", estimate()->value( use, cs->usePert() ).toHours(), cs->plannedEffort().toHours() ) );
+            }
         }
     } else if (type() == Node::Type_Milestone) {
         switch (m_constraint) {

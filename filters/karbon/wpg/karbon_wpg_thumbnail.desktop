@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=WordPerfect/DrawPerfect Images
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-wpg;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

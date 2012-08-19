@@ -30,11 +30,11 @@ Name[x-test]=xxCalligra Scalable Graphics Componentxx
 Name[zh_CN]=Calligra 可缩放图像组件
 Name[zh_TW]=Calligra 可縮放圖片元件
 X-KDE-Library=karbonpart
-MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;image/x-xfig;
+MimeType=application/x-karbon;image/x-eps;application/postscript;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;image/x-xfig;
 # kghostview has 6 for application/postscript, we need to be under that...
 InitialPreference=5
 Type=Service
-X-KDE-ServiceTypes=CalligraPart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=CalligraPart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template

@@ -38,7 +38,6 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 
 #include <KoColorSet.h>
 #include <KoColorPatch.h>
@@ -182,7 +181,6 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->recentsLayout = new QHBoxLayout();
     d->mainLayout->addLayout(d->recentsLayout);
     d->recentsLayout->setMargin(0);
-    d->recentsLayout->setSpacing(KDialog::spacingHint());
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
 
@@ -245,6 +243,11 @@ void KoColorSetWidget::setColorSet(KoColorSet *colorSet)
 
     d->colorSet = colorSet;
     d->fillColors();
+}
+
+KoColorSet* KoColorSetWidget::colorSet()
+{
+    return d->colorSet;
 }
 
 void KoColorSetWidget::resizeEvent(QResizeEvent *event)

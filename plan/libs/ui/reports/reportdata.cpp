@@ -22,6 +22,15 @@
 
 #include "kptproject.h"
 #include "kptschedule.h"
+#include "kptnodeitemmodel.h"
+#include "kptflatproxymodel.h"
+#include "kpttaskstatusmodel.h"
+#include "kptresourcemodel.h"
+#include "kptnodechartmodel.h"
+#include "kptaccountsmodel.h"
+#include "kptresourcemodel.h"
+#include "kptresourceallocationmodel.h"
+#include "kptresourceappointmentsmodel.h"
 
 #include <kdebug.h>
 
@@ -34,11 +43,76 @@ extern int planDbg();
 namespace KPlato
 {
 
-ReportData::ReportData()
-    : m_row( 0 ),
+KPLATOUI_EXPORT QList<ReportData*> Report::createBaseReportDataModels( QObject *parent )
+{
+    QList<ReportData*> lst;
+
+    ReportData *data = new TaskReportData( parent );
+    lst << data;
+
+    data = new TaskStatusReportData( parent );
+    lst << data;
+
+    data = new ResourceAssignmentReportData( parent );
+    lst << data;
+
+    data = new ResourceReportData( parent );
+    lst << data;
+
+    data = new CostPerformanceReportData( parent );
+    lst << data;
+
+    data = new EffortPerformanceReportData( parent );
+    lst << data;
+
+    data = new CostBreakdownReportData( parent );
+    lst << data;
+
+    foreach ( ReportData *r, lst ) {
+        QList<ReportData*> sub;
+        foreach ( ReportData *d, lst ) {
+            if ( d->isSubDataSource() ) {
+                sub << d;
+            }
+        }
+        r->setSubDataSources( sub );
+    }
+    return lst;
+}
+
+KPLATOUI_EXPORT ReportData *Report::findReportData( const QList<ReportData*> &lst, const QString &type )
+{
+    foreach( ReportData *r, lst ) {
+        if ( r->objectName() == type ) {
+            return r;
+        }
+    }
+    return 0;
+}
+
+//------------------
+ReportData::ReportData( QObject *parent )
+    : QObject( parent ),
+    m_row( 0 ),
+    m_project( 0 ),
+    m_schedulemanager( 0 ),
+    m_maindatasource( false ),
+    m_subdatasource( false )
+{
+}
+
+ReportData::ReportData( const ReportData &other )
+    : QObject(),
     m_project( 0 ),
     m_schedulemanager( 0 )
 {
+    setObjectName( other.objectName() );
+    m_name = other.m_name;
+    m_columnroles = other.m_columnroles;
+    m_sortlist = other.m_sortlist;
+    m_maindatasource = other.m_maindatasource;
+    m_subdatasource = other.m_subdatasource;
+    m_subdatasources = other.m_subdatasources;
 }
 
 ReportData::~ReportData()
@@ -52,21 +126,48 @@ void ReportData::setColumnRole( int column, int role )
 
 bool ReportData::open()
 {
-    ItemModelBase *m = itemModel();
-    if ( m ) {
-        m->setScheduleManager( m_schedulemanager );
-        kDebug(planDbg())<<this<<m_schedulemanager;
+    close();
+    ItemModelBase *basemodel = itemModel();
+    if ( basemodel ) {
+        basemodel->setProject( m_project );
+        basemodel->setScheduleManager( m_schedulemanager );
     } else kError()<<"No item model";
+
+    if ( ! m_sortlist.isEmpty() ) {
+        QAbstractItemModel *sourcemodel = m_model.sourceModel();
+        foreach ( const SortedField &sort, m_sortlist ) {
+            int col = fieldNumber( sort.field );
+            QSortFilterProxyModel *sf = new QSortFilterProxyModel( &m_model );
+            sf->setSourceModel( sourcemodel );
+            if ( basemodel ) {
+                sf->setSortRole( basemodel->sortRole( col ) );
+            }
+            sf->sort( col, sort.order );
+            sourcemodel = sf;
+            m_sortmodels << sf;
+        }
+        m_model.setSourceModel( sourcemodel );
+    }
     return true;
 }
 
 bool ReportData::close()
 {
+    while ( ! m_sortmodels.isEmpty() ) {
+        QAbstractProxyModel *m = qobject_cast<QAbstractProxyModel*>( m_sortmodels.takeLast() );
+        for ( QAbstractProxyModel *p = &m_model; p != 0; p = qobject_cast<QAbstractProxyModel*>( p->sourceModel() ) ) {
+            if ( p->sourceModel() == m ) {
+                p->setSourceModel( m->sourceModel() );
+                delete m;
+                break;
+            }
+        }
+    }
     return true;
 }
 
 QString ReportData::sourceName() const {
-    return QString();
+    return m_name;
 }
 
 int ReportData::fieldNumber ( const QString &fld ) const
@@ -161,47 +262,42 @@ qint64 ReportData::recordCount() const {
 
 QStringList ReportData::dataSources() const
 {
-    //TODO
-    return QStringList() << "costbreakdown" << "costperformance" << "effortperformance";
+     QStringList lst;
+     foreach ( ReportData *r, m_subdatasources ) {
+         if ( r->isSubDataSource() ) {
+             lst << r->objectName();
+         }
+     }
+     return lst;
 }
 
 QStringList ReportData::dataSourceNames() const
 {
-    //TODO
-    return QStringList() << i18n( "Cost Breakdown" ) << i18n( "Cost Performance" ) << i18n( "Effort Performance" );
+    QStringList lst;
+    foreach ( ReportData *r, m_subdatasources ) {
+        if ( r->isSubDataSource() ) {
+            lst << r->sourceName();
+        }
+    }
+    return lst;
 }
 
 void ReportData::setSorting(const QList<SortedField>& lst )
 {
-    //FIXME the actual sorting should prob be in open(), but I don't think it matters for now
-    if ( lst.isEmpty() ) {
-        return;
-    }
-    QSortFilterProxyModel *sf = 0;
-    QAbstractItemModel *source_model = m_model.sourceModel();
-
-    foreach ( const SortedField &sort, lst ) {
-        int col = fieldNumber( sort.field );
-        sf = new QSortFilterProxyModel( &m_model );
-        sf->setSourceModel( source_model );
-        if ( itemModel() ) {
-            sf->setSortRole( itemModel()->sortRole( col ) );
-        }
-        sf->sort( col, sort.order );
-        source_model = sf;
-    }
-    m_model.setSourceModel( sf );
+    m_sortlist = lst;
 }
 
 KoReportData* ReportData::data(const QString &source)
 {
-    emit createReportData( source, this );
-    return m_datasource;
-}
-
-void ReportData::setDataSource( ReportData *source )
-{
-    m_datasource = source;
+    ReportData *r = Report::findReportData( m_subdatasources, source );
+    if ( r ) {
+        r = r->clone();
+        r->setParent( this );
+        r->setProject( m_project );
+        r->setScheduleManager( m_schedulemanager );
+    }
+    kDebug(planDbg())<<this<<m_subdatasources<<r;
+    return r;
 }
 
 void ReportData::setModel( QAbstractItemModel *model )
@@ -236,26 +332,210 @@ ItemModelBase *ReportData::itemModel() const
 void ReportData::setProject( Project *project )
 {
     m_project = project;
-    ItemModelBase *m = itemModel();
-    if ( m ) {
-        m->setProject( m_project );
-    }
 }
 
 void ReportData::setScheduleManager( ScheduleManager *sm )
 {
     m_schedulemanager = sm;
-    ItemModelBase *m = itemModel();
-    if ( m ) {
-        m->setScheduleManager( m_schedulemanager );
-    }
-    emit scheduleManagerChanged( sm );
 }
 
+//---------------------------
+TaskReportData::TaskReportData( QObject *parent )
+    : ReportData( parent )
+{
+    m_maindatasource = true;
+    m_subdatasource = false;
+    setObjectName( "tasks" );
+    m_name = i18n( "Tasks" );
+    setColumnRole( NodeModel::NodeDescription, Qt::EditRole );
+    createModels();
+}
+
+TaskReportData::TaskReportData( const TaskReportData &other )
+    : ReportData( other )
+{
+    createModels();
+}
+
+bool TaskReportData::loadXml( const KoXmlElement &element )
+{
+    return true;
+}
+
+void TaskReportData::saveXml( QDomElement &element ) const
+{
+}
+
+ReportData *TaskReportData::clone() const
+{
+    return new TaskReportData( *this );
+}
+
+void TaskReportData::createModels()
+{
+    QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
+    QSortFilterProxyModel *sf = new QSortFilterProxyModel( &m_model );
+    m_model.setSourceModel( sf );
+    sf->setFilterKeyColumn( NodeModel::NodeType );
+    sf->setFilterRole( Qt::EditRole );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    FlatProxyModel *fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    GeneralNodeItemModel *m = new GeneralNodeItemModel( fm );
+    fm->setSourceModel( m );
+}
 
 //---------------------------
-ChartReportData::ChartReportData()
-    : ReportData(),
+TaskStatusReportData::TaskStatusReportData( QObject *parent )
+    : ReportData( parent )
+{
+    m_maindatasource = true;
+    m_subdatasource = false;
+    setObjectName( "taskstatus" );
+    m_name = i18n( "Task status" );
+
+    setColumnRole( NodeModel::NodeDescription, Qt::EditRole );
+    createModels();
+}
+
+TaskStatusReportData::TaskStatusReportData( const TaskStatusReportData &other )
+    : ReportData( other )
+{
+    createModels();
+}
+
+bool TaskStatusReportData::loadXml( const KoXmlElement &element )
+{
+    return true;
+}
+
+void TaskStatusReportData::saveXml( QDomElement &element ) const
+{
+}
+
+ReportData *TaskStatusReportData::clone() const
+{
+    return new TaskStatusReportData( *this );
+}
+
+void TaskStatusReportData::createModels()
+{
+    QRegExp rex( QString( "^(%1|%2)$" ).arg( (int)Node::Type_Task ).arg( (int)Node::Type_Milestone ) );
+    QSortFilterProxyModel *sf = new QSortFilterProxyModel( &m_model );
+    m_model.setSourceModel( sf );
+    sf->setFilterKeyColumn( NodeModel::NodeType );
+    sf->setFilterRole( Qt::EditRole );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    FlatProxyModel *fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    TaskStatusItemModel *m = new TaskStatusItemModel( fm );
+    fm->setSourceModel( m );
+}
+
+//---------------------------
+ResourceReportData::ResourceReportData( QObject *parent )
+    : ReportData( parent )
+{
+    m_maindatasource = true;
+    m_subdatasource = false;
+    setObjectName( "resources" );
+    m_name = i18n( "Resource assignments" );
+
+    createModels();
+}
+
+ResourceReportData::ResourceReportData( const ResourceReportData &other )
+    : ReportData( other )
+{
+    createModels();
+}
+
+bool ResourceReportData::loadXml( const KoXmlElement &element )
+{
+    return true;
+}
+
+void ResourceReportData::saveXml( QDomElement &element ) const
+{
+}
+
+ReportData *ResourceReportData::clone() const
+{
+    return new ResourceReportData( *this );
+}
+
+void ResourceReportData::createModels()
+{
+    ItemModelBase *m = 0;
+
+    QRegExp rex( QString( "^(%1)$" ).arg( (int)OT_Resource ) );
+    QSortFilterProxyModel *sf = new QSortFilterProxyModel( &m_model );
+    m_model.setSourceModel( sf );
+    sf->setFilterKeyColumn( 0 );
+    sf->setFilterRole( Role::ObjectType );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    FlatProxyModel *fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    m = new ResourceItemModel( fm );
+    fm->setSourceModel( m );
+}
+
+//---------------------------
+ResourceAssignmentReportData::ResourceAssignmentReportData( QObject *parent )
+    : ReportData( parent )
+{
+    m_maindatasource = true;
+    m_subdatasource = false;
+    setObjectName( "resourceassignments" );
+    m_name = i18n( "Resources" );
+
+    createModels();
+}
+
+ResourceAssignmentReportData::ResourceAssignmentReportData( const ResourceAssignmentReportData &other )
+    : ReportData( other )
+{
+    createModels();
+}
+
+bool ResourceAssignmentReportData::loadXml( const KoXmlElement &element )
+{
+    return true;
+}
+
+void ResourceAssignmentReportData::saveXml( QDomElement &element ) const
+{
+}
+
+ReportData *ResourceAssignmentReportData::clone() const
+{
+    return new ResourceAssignmentReportData( *this );
+}
+
+void ResourceAssignmentReportData::createModels()
+{
+    QSortFilterProxyModel *sf = 0;
+    ItemModelBase *m = 0;
+
+    QRegExp rex( QString( "^(%1)$" ).arg( (int)OT_Appointment ) );
+    sf = new QSortFilterProxyModel( &m_model );
+    sf->setFilterKeyColumn( 0 );
+    sf->setFilterRole( Role::ObjectType );
+    sf->setFilterRegExp( rex );
+    sf->setDynamicSortFilter( true );
+    FlatProxyModel *fm = new FlatProxyModel( sf );
+    sf->setSourceModel( fm );
+    m = new ResourceAppointmentsRowModel( fm );
+    fm->setSourceModel( m );
+    m_model.setSourceModel( sf );
+}
+
+//---------------------------
+ChartReportData::ChartReportData( QObject *parent )
+    : ReportData( parent ),
     cbs( false ),
     m_firstrow( 0 ),
     m_lastrow( -1 )
@@ -267,25 +547,23 @@ ChartReportData::ChartReportData()
                 << "days";
 }
 
+ChartReportData::ChartReportData( const ChartReportData &other )
+    : ReportData( other ),
+    m_fakedata( true )
+{
+}
+
 bool ChartReportData::open()
 {
-    if ( ! ReportData::open() ) {
-        return false;
-    }
-    if ( cbs ) {
-        m_startdate = m_model.headerData( 3, Qt::Horizontal, Qt::EditRole ).toDate();
-    } else {
-        m_startdate = m_model.headerData( 0, Qt::Vertical, Qt::EditRole ).toDate();
-    }
-    kDebug(planDbg())<<m_expressions;
-    m_firstrow = firstRow();
-    m_lastrow = lastRow();
-    kDebug(planDbg())<<m_firstrow<<"-"<<m_lastrow<<":"<<recordCount();
-    return true;
+    return ReportData::open();
 }
 
 int ChartReportData::firstRow()
 {
+    if ( m_fakedata ) {
+        return 0;
+    }
+
     int row = 0;
     QDate s;
     if ( m_expressions.contains( "start" ) ) {
@@ -305,6 +583,9 @@ int ChartReportData::firstRow()
 
 int ChartReportData::lastRow() const
 {
+    if ( m_fakedata ) {
+        return 3;
+    }
     int row = cbs
             ? m_model.columnCount() - 5 // cbs has data as columns + name, description, total (0-2) and parent (last)
             : m_model.rowCount() - 1;
@@ -369,6 +650,10 @@ qint64 ChartReportData::recordCount() const
 
 QVariant ChartReportData::value ( unsigned int i ) const
 {
+    if ( m_fakedata ) {
+        kDebug(planDbg())<<m_row<<i;
+        return QVariant( ( int )( m_row * i ) );
+    }
     QVariant value;
     int row = m_row + m_firstrow;
     if ( cbs ) {
@@ -436,6 +721,170 @@ void ChartReportData::addExpression( const QString &field, const QVariant &/*val
     } else {
         kWarning()<<"Invalid key or data:"<<field;
     }
+}
+
+bool ChartReportData::loadXml( const KoXmlElement &element )
+{
+    return true;
+}
+
+void ChartReportData::saveXml( QDomElement &element ) const
+{
+}
+
+//-----------------
+CostPerformanceReportData::CostPerformanceReportData( QObject *parent )
+    : ChartReportData( parent ),
+    m_chartmodel( 0 )
+{
+    m_maindatasource = false;
+    m_subdatasource = true;
+    setObjectName( "costperformance" );
+    m_name = i18n( "Cost Performance" );
+    cbs = false;
+    createModels();
+}
+
+CostPerformanceReportData::CostPerformanceReportData( const CostPerformanceReportData &other )
+    : ChartReportData( other ),
+    m_chartmodel( 0 )
+{
+    m_fakedata = false;
+    cbs = other.cbs;
+    createModels();
+}
+
+bool CostPerformanceReportData::open()
+{
+    if ( ! ChartReportData::open() ) {
+        return false;
+    }
+    if ( m_chartmodel ) {
+        m_chartmodel->setNodes( m_project ? QList<Node*>() << m_project : QList<Node*>() );
+    }
+    m_startdate = m_model.headerData( 0, Qt::Vertical, Qt::EditRole ).toDate();
+
+    m_firstrow = firstRow();
+    m_lastrow = lastRow();
+
+    return true;
+}
+
+ReportData *CostPerformanceReportData::clone() const
+{
+    return new CostPerformanceReportData( *this );
+}
+
+void CostPerformanceReportData::createModels()
+{
+    ChartProxyModel *cpm = new ChartProxyModel( &m_model );
+    m_model.setSourceModel( cpm );
+    // hide effort
+    cpm->setRejectColumns( QList<int>() << 3 << 4 << 5 );
+    cpm->setZeroColumns( QList<int>() << 3 << 4 << 5 );
+    m_chartmodel = new ChartItemModel( cpm );
+    cpm->setSourceModel( m_chartmodel );
+}
+
+//-----------------
+EffortPerformanceReportData::EffortPerformanceReportData( QObject *parent )
+    : ChartReportData( parent ),
+    m_chartmodel( 0 )
+{
+    m_maindatasource = false;
+    m_subdatasource = true;
+    setObjectName( "effortperformance" );
+    m_name = i18n( "Effort Performance" );
+    cbs = false;
+    createModels();
+}
+
+EffortPerformanceReportData::EffortPerformanceReportData( const EffortPerformanceReportData &other )
+    : ChartReportData( other ),
+    m_chartmodel( 0 )
+{
+    m_fakedata = false;
+    cbs = other.cbs;
+    createModels();
+}
+
+bool EffortPerformanceReportData::open()
+{
+    if ( ! ChartReportData::open() ) {
+        return false;
+    }
+    if ( m_chartmodel ) {
+        m_chartmodel->setNodes( m_project ? QList<Node*>() << m_project : QList<Node*>() );
+    }
+    m_startdate = m_model.headerData( 0, Qt::Vertical, Qt::EditRole ).toDate();
+
+    m_firstrow = firstRow();
+    m_lastrow = lastRow();
+
+    return true;
+}
+
+ReportData *EffortPerformanceReportData::clone() const
+{
+    return new EffortPerformanceReportData( *this );
+}
+
+void EffortPerformanceReportData::createModels()
+{
+    ChartProxyModel *cpm = new ChartProxyModel( &m_model );
+    // hide cost
+    cpm->setRejectColumns( QList<int>() << 0 << 1 << 2 );
+    cpm->setZeroColumns( QList<int>() << 0 << 1 << 2 );
+    m_chartmodel = new ChartItemModel( cpm );
+    cpm->setSourceModel( m_chartmodel );
+    m_model.setSourceModel( cpm );
+}
+
+//-----------------
+CostBreakdownReportData::CostBreakdownReportData( QObject *parent )
+    : ChartReportData( parent )
+{
+    m_maindatasource = false;
+    m_subdatasource = true;
+    setObjectName( "costbreakdown" );
+    m_name = i18n( "Cost Breakdown" );
+
+    cbs = true;
+    createModels();
+}
+
+CostBreakdownReportData::CostBreakdownReportData( const CostBreakdownReportData &other )
+    : ChartReportData( other )
+{
+    m_fakedata = false;
+    cbs = other.cbs;
+    createModels();
+}
+
+bool CostBreakdownReportData::open()
+{
+    if ( ! ChartReportData::open() ) {
+        return false;
+    }
+    m_startdate = m_model.headerData( 3, Qt::Horizontal, Qt::EditRole ).toDate();
+
+    m_firstrow = firstRow();
+    m_lastrow = lastRow();
+
+    return true;
+}
+
+ReportData *CostBreakdownReportData::clone() const
+{
+    return new CostBreakdownReportData( *this );
+}
+
+void CostBreakdownReportData::createModels()
+{
+    FlatProxyModel *fm = new FlatProxyModel( &m_model );
+    ItemModelBase *m = new CostBreakdownItemModel( fm );
+    fm->setSourceModel( m );
+    m_model.setSourceModel( fm );
 }
 
 } //namespace KPlato
