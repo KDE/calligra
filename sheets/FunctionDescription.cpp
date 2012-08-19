@@ -150,6 +150,23 @@ FunctionDescription::FunctionDescription(const QDomElement& element)
                     m_related.append(i18n(e2.text().toUtf8()));
             }
         }
+        // 'More' tag - specifying max params allowed, number of params after which repetition starts,
+        //                  params in a single set to be displayed seperated by ","
+        else if (e.tagName() == "More") {
+            m_more = e.text();
+            int delim = 0;      // number of delimeters
+            for (int i = 0; i < m_more.length(); i++) {
+                if (m_more.at(i).unicode() == 44) {     // if char = ","
+                    delim++;
+                    continue;
+                }
+                if (delim < 1)
+                    m_max.append(m_more.at(i));     // first param of 'More' tag
+                if (delim > 0 && delim < 2)
+                    m_push.append(m_more.at(i));    // second param of 'More' tag
+            }
+            m_set = delim - 1;  // number of params in a set
+        }
     }
 }
 
@@ -161,6 +178,7 @@ FunctionDescription::FunctionDescription(const FunctionDescription& desc)
     m_help = desc.m_help;
     m_name = desc.m_name;
     m_type = desc.m_type;
+    m_more = desc.m_more;
 }
 
 QString FunctionDescription::toQML() const

@@ -35,6 +35,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
+#include "Cell.h"
 
 #include <KLocale>
 
@@ -54,6 +55,7 @@ Value func_dollar(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_exact(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_find(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hyperlink(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_jis(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_left(valVector args, ValueCalc *calc, FuncExtra *);
 Value func_len(valVector args, ValueCalc *calc, FuncExtra *);
@@ -147,6 +149,9 @@ TextModule::TextModule(QObject* parent, const QVariantList&)
     add(f);
     f = new Function("FIXED", func_fixed);
     f->setParamCount(1, 3);
+    add(f);
+    f = new Function("HYPERLINK", func_hyperlink);
+    f->setParamCount(1, 2);
     add(f);
     f = new Function("LEFT", func_left);
     f->setParamCount(1, 2);
@@ -387,6 +392,23 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
                    locale->positiveSign());
 
     return Value(result);
+}
+
+// Function: HYPERLINK
+Value func_hyperlink(valVector args, ValueCalc *calc, FuncExtra *e)
+{
+    const Value link = calc->conv()->asString(args[0]);
+    Value displayName;
+
+    if (args.count() < 2)
+        displayName = link;
+    else
+        displayName = calc->conv()->asString(args[1]);
+
+    Calligra::Sheets::Cell c(e->sheet, e->mycol, e->myrow);
+    c.setLink(link.asString());
+
+    return displayName;
 }
 
 // Function: JIS

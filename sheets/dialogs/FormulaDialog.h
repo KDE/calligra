@@ -31,6 +31,9 @@
 #include <QLabel>
 #include <QEvent>
 #include <QListView>
+#include <QVBoxLayout>
+
+#include "FunctionDescription.h"
 
 #include <kcompletion.h>
 #include <kdialog.h>
@@ -67,7 +70,7 @@ private:
      * Turns the @p text into a parameter that koscript can understand. The type
      * of this parameter is extracted by looking at parameter number @p param in @ref #m_desc.
      */
-    QString createParameter(const QString& _text, int param);
+    QString createParameter(const QString& _text, const ParameterType type);
     /**
      * Reads the text out of @ref #firstElement and friends and creates a parameter
      * list for the function.
@@ -132,6 +135,8 @@ private slots:
      */
     void slotPressReturn();
 
+    void slotShowParamSet();
+
 public:
     /**
      * Find out which widget got focus.
@@ -148,8 +153,10 @@ private:
     QWidget* m_input;
 
     QPushButton *selectFunction;
+    QPushButton *addParam;
     KComboBox *typeFunction;
     QListView *functions;
+    QVBoxLayout *grid2;
     QStringListModel *functionsModel;
     QSortFilterProxyModel *proxyModel;
     KLineEdit *result;
@@ -162,13 +169,13 @@ private:
     QLabel* label3;
     QLabel* label4;
     QLabel* label5;
-    //QLabel* labels[252];
+    QLabel* labels[122];
     KLineEdit *firstElement;
     KLineEdit *secondElement;
     KLineEdit *thirdElement;
     KLineEdit *fourElement;
     KLineEdit *fiveElement;
-    //KLineEdit *extraElements[252];
+    KLineEdit *extraElements[122];
     /**
      * Tells which of the lineedits has the logical focus currently.
      * It may happen that a lineedit does not have qt focus but
@@ -178,6 +185,7 @@ private:
 
     int m_column;
     int m_row;
+    int m_paramSlotCount;
     QString m_oldText;
 
     QString m_funcName;

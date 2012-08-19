@@ -125,38 +125,7 @@
            <Comment>Criteria 1</Comment>
            <Type>String</Type>
        </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 2</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 2</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 3</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 3</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 4</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 4</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 5</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 5</Comment>
-           <Type>String</Type>
-       </Parameter>
+       <More>127,1,Criteria range,Criteria</More>
        <Help>
            <Text>Averages the values of cells in the reference range A that meet the Criterion C1 in the reference range R1 and the Criterion C2 in the reference range 		 R2, and so on. All reference ranges shall have the same dimension and size, else an Error is returned. A logical AND is applied between each array 			 result of each selection; a cell of reference range A is evaluated only if the same position in each array is the result of a Criterion match. If no 			 numbers are in the result set to be averaged, an Error is returned.
 	   </Text>
@@ -892,6 +861,56 @@
                    <Text>The LEGACYFDIST() function returns the f-distribution.</Text>
                    <Syntax>LEGACYFDIST(number;degrees_freedom_1;degrees_freedom_2)</Syntax>
                    <Example>LEGACYFDIST(0.8;8;12) yields 0.61</Example>
+               </Help>
+           </Function>
+
+           <Function>
+               <Name>LINEST</Name>
+               <Type>Float</Type>
+               <Parameter>
+                   <Comment>Array knownY</Comment>
+                   <Type range="true">Float</Type>
+               </Parameter>
+               <Parameter optional = "true">
+                   <Comment>Array knownX </Comment>
+                   <Type range="true">Float</Type>
+               </Parameter>
+               <Parameter optional="false">
+                   <Comment>Const</Comment>
+                   <Type>Boolean</Type>
+               </Parameter>
+               <Parameter optional="false">
+                   <Comment>Stats</Comment>
+                   <Type>Boolean</Type>
+               </Parameter>
+               <Help>
+                   <Text>The LINEST() function Returns the parameters of a linear trend best fitting the given data. This function shall be entered as an array formula.</Text>
+                   <Syntax>LINEST(knownY;knownX;Const;Stats)</Syntax>
+               </Help>
+           </Function>
+
+           <Function>
+               <Name>LOGEST</Name>
+               <Type>Float</Type>
+               <Parameter>
+                   <Comment>Array knownY</Comment>
+                   <Type range="true">Float</Type>
+               </Parameter>
+               <Parameter optional = "true">
+                   <Comment>Array knownX </Comment>
+                   <Type range="true">Float</Type>
+               </Parameter>
+               <Parameter optional="false">
+                   <Comment>Const</Comment>
+                   <Type>Boolean</Type>
+               </Parameter>
+               <Parameter optional="false">
+                   <Comment>Stats</Comment>
+                   <Type>Boolean</Type>
+               </Parameter>
+               <Help>
+                   <Text>The LOGEST() function Returns the array of values for an exponential curve that best fits your data. This function shall be entered as an array formula.</Text>
+                   <Syntax>LINEST(knownY;knownX;Const;Stats)</Syntax>
                </Help>
            </Function>
 

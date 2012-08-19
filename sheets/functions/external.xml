@@ -1,0 +1,27 @@
+<!DOCTYPE KSpreadFunctions>
+<KSpreadFunctions>
+
+<Group>
+    <GroupName>External</GroupName>
+
+   <Function>
+       <Name>HYPERLINK</Name>
+       <Type>Text</Type>
+       <Parameter optional="false">
+           <Comment>Link</Comment>
+           <Type range="false">String</Type>
+       </Parameter>
+       <Parameter optional="true">
+           <Comment>Display name</Comment>
+           <Type range="false">String</Type>
+       </Parameter>
+       <Help>
+           <Text>The HYPERLINK() creates a hyperlink involving an evaluated expression.</Text>
+           <Syntax>HYPERLINK(link;display_name)</Syntax>
+       </Help>
+   </Function>
+
+
+</Group>
+
+</KSpreadFunctions>

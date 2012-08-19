@@ -61,11 +61,14 @@
 #include <QStringListModel>
 #include <QSortFilterProxyModel>
 #include <QItemSelectionModel>
+#include <QPushButton>
+#include <QScrollBar>
 
 using namespace Calligra::Sheets;
 
 FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBase* editor, const QString& formulaName)
-        : KDialog(parent)
+        : KDialog(parent),
+          m_paramSlotCount(0)
 {
     setCaption(i18n("Function"));
     setButtons(Ok | Cancel);
@@ -88,6 +91,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     QWidget *page = new QWidget(this);
     setMainWidget(page);
+    page->setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 
     QGridLayout *grid1 = new QGridLayout(page);
 
@@ -150,9 +154,15 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     m_input = new QWidget(m_tabwidget);
 
-    QVBoxLayout *grid2 = new QVBoxLayout(m_input);
+    // creating the "Add more" button for extra params
+    addParam = new QPushButton(tr("Add more"), m_input);
+    addParam->setGeometry(280, 0, 70, 30);
+    connect(addParam, SIGNAL(clicked()), this, SLOT(slotShowParamSet()));
 
-    // grid2->setResizeMode (QLayout::Minimum);
+    //QGridLayout *grid2 = new QGridLayout(m_input);
+    grid2 = new QVBoxLayout(m_input);
+    grid2->setMargin(KDialog::marginHint());
+    grid2->setSpacing(KDialog::spacingHint());
 
     label1 = new QLabel(m_input);
     grid2->addWidget(label1);
@@ -184,18 +194,19 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     fiveElement = new KLineEdit(m_input);
     grid2->addWidget(fiveElement);
 
-    /*for (int i = 0; i < 252; i++) {
+    // creating extra params
+    for (int i = 0; i < 122; i++) {
         labels[i] = new QLabel(m_input);
         grid2->addWidget(labels[i]);
 
         extraElements[i] = new KLineEdit(m_input);
         grid2->addWidget(extraElements[i]);
-    }*/
+    }
 
     grid2->addStretch(10);
 
     m_tabwidget->addTab(m_input, i18n("Parameters"));
-    m_tabwidget->setTabEnabled(m_tabwidget->indexOf(m_input), false);
+    m_tabwidget->setTabEnabled(m_tabwidget->indexOf(m_input), false);;
 
     m_tabwidget->setCurrentIndex(index);
 
@@ -229,10 +240,10 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
             this, SLOT(slotChangeText(const QString &)));
     connect(fiveElement, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotChangeText(const QString &)));
-    /*for (int i = 0; i < 252; i++) {
+    for (int i = 0; i < 122; i++) {
         connect(extraElements[i], SIGNAL(textChanged(const QString &)),
-                this, SLOT(slotChangeText(const QString &)));;
-    }*/
+                this, SLOT(slotChangeText(const QString &)));
+    }
 
     connect(m_selection, SIGNAL(changed(const Region&)),
             this, SLOT(slotSelectionChanged()));
@@ -335,13 +346,13 @@ bool FormulaDialog::eventFilter(QObject* obj, QEvent* ev)
         m_focus = fourElement;
     else if (obj == fiveElement && ev->type() == QEvent::FocusIn)
         m_focus = fiveElement;
-    /*else if (obj == extraElements[0] && ev->type() == QEvent::FocusIn)
-        for (int i = 0; i < 252; i++) {
+    else if (obj == extraElements[0] && ev->type() == QEvent::FocusIn)
+        for (int i = 0; i < 122; i++) {
             if (obj == extraElements[i] && ev->type() == QEvent::FocusIn)
                 m_focus = extraElements[i];
             else if (obj == extraElements[i+1] && ev->type() == QEvent::FocusIn)
                 m_focus = extraElements[i+1];
-        }*/
+        }
     else
         return false;
 
@@ -433,56 +444,67 @@ QString FormulaDialog::createFormula()
         return QString();
 
     bool first = true;
+    bool flag = false;
 
     int count = m_desc->params();
 
+    if (!m_desc->more().isEmpty())
+        flag = true;
+
     if (!firstElement->text().isEmpty() && count >= 1) {
-        tmp = tmp + createParameter(firstElement->text(), 0);
+        tmp = tmp + createParameter(firstElement->text(), m_desc->param(0).type());
         first = false;
     }
 
     if (!secondElement->text().isEmpty() && count >= 2) {
         first = false;
         if (!first)
-            tmp = tmp + ';' + createParameter(secondElement->text(), 1);
+            tmp = tmp + ';' + createParameter(secondElement->text(), m_desc->param(1).type());
         else
-            tmp = tmp + createParameter(secondElement->text(), 1);
+            tmp = tmp + createParameter(secondElement->text(), m_desc->param(1).type());
     }
     if (!thirdElement->text().isEmpty() && count >= 3) {
         first = false;
         if (!first)
-            tmp = tmp + ';' + createParameter(thirdElement->text(), 2);
+            tmp = tmp + ';' + createParameter(thirdElement->text(), m_desc->param(2).type());
         else
-            tmp = tmp + createParameter(thirdElement->text(), 2);
+            tmp = tmp + createParameter(thirdElement->text(), m_desc->param(2).type());
     }
     if (!fourElement->text().isEmpty() && count >= 4) {
         first = false;
         if (!first)
-            tmp = tmp + ';' + createParameter(fourElement->text(), 3);
+            tmp = tmp + ';' + createParameter(fourElement->text(), m_desc->param(3).type());
         else
-            tmp = tmp + createParameter(fourElement->text(), 3);
+            tmp = tmp + createParameter(fourElement->text(), m_desc->param(3).type());
     }
     if (!fiveElement->text().isEmpty() && count >= 5) {
         first = false;
         if (!first)
-            tmp = tmp + ';' + createParameter(fiveElement->text(), 4);
+            tmp = tmp + ';' + createParameter(fiveElement->text(), m_desc->param(4).type());
         else
-            tmp = tmp + createParameter(fiveElement->text(), 4);
+            tmp = tmp + createParameter(fiveElement->text(), m_desc->param(4).type());
     }
-    /*for (int i = 6; i < m_desc->params(); i++) {
-        if (!extraElements[i-6]->text().isEmpty() && count >= i) {
-            first = false;
-            if (!first)
-                tmp = tmp + ';' + createParameter(extraElements[i-6]->text(), i-1);
-            else
-                tmp = tmp + createParameter(extraElements[i-6]->text(), i-1);
+    if (flag) {
+        int j = 0;
+        count = 122;
+        for (int i = 0; i < count; i++) {
+            if (j == m_desc->paramSet()-1)
+                j = 0;
+            if (!extraElements[i]->text().isEmpty() && count >= i-6) {
+                first = false;
+                if (!first)
+                    tmp = tmp + ';' + createParameter(extraElements[i]->text(), m_desc->param(m_desc->push().toInt() + j).type());
+                else
+                    tmp = tmp + createParameter(extraElements[i]->text(), m_desc->param(m_desc->push().toInt() + j).type());
+            }
+            j++;
         }
-    }*/
+    }
 
     return(tmp);
 }
 
-QString FormulaDialog::createParameter(const QString& _text, int param)
+QString FormulaDialog::createParameter(const QString& _text, const ParameterType type)
 {
     if (_text.isEmpty())
         return QString("");
@@ -492,9 +514,7 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
 
     QString text;
 
-    ParameterType elementType = m_desc->param(param).type();
-
-    switch (elementType) {
+    switch (type) {
     case KSpread_Any: {
         bool isNumber;
         double tmp = m_selection->activeSheet()->map()->calculationSettings()->locale()->readNumber(_text, &isNumber);
@@ -558,9 +578,9 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
     return text;
 }
 
-static void showEntry(KLineEdit* edit, QLabel* label,
+/*static void showEntry(KLineEdit* edit, QLabel* label,
                       FunctionDescription* desc, int param)
-{
+{    
     edit->show();
     label->setText(desc->param(param).helpText() + ':');
     label->show();
@@ -584,6 +604,40 @@ static void showEntry(KLineEdit* edit, QLabel* label,
         break;
     }
 
+}*/
+
+static void showEntry(KLineEdit* edit, QLabel* label, const ParameterType type)
+{
+    edit->show();
+    label->show();
+    KDoubleValidator *validate = 0;
+    switch (type) {
+    case KSpread_String:
+    case KSpread_Boolean:
+    case KSpread_Any:
+        edit->setValidator(0);
+        break;
+    case KSpread_Float:
+        validate = new KDoubleValidator(edit);
+        validate->setAcceptLocalizedNumbers(true);
+        edit->setValidator(validate);
+        edit->setText("0");
+        break;
+    case KSpread_Int:
+        edit->setValidator(new QIntValidator(edit));
+        edit->setText("0");
+        break;
+    }
+}
+
+// slot to show the extra elements - set wise (A set is the number of elements to be shown in a single click)
+void FormulaDialog::slotShowParamSet()
+{
+    for (int i = 0; i < m_desc->paramSet(); i++) {
+        showEntry(extraElements[m_paramSlotCount+i], labels[m_paramSlotCount+i],
+                  m_desc->param(i + m_desc->push().toInt()).type());
+    }
+    m_paramSlotCount += m_desc->paramSet();
 }
 
 void FormulaDialog::slotDoubleClicked(QModelIndex item)
@@ -613,54 +667,90 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     if (m_desc->params() > 0) {
         m_focus = firstElement;
         firstElement->setFocus();
-
-        showEntry(firstElement, label1, m_desc, 0);
+        label1->setText(m_desc->param(0).helpText() + ':');
+        showEntry(firstElement, label1, m_desc->param(0).type());
     } else {
         label1->hide();
         firstElement->hide();
+        addParam->hide();
     }
 
     if (m_desc->params() > 1) {
-        showEntry(secondElement, label2, m_desc, 1);
+        label2->setText(m_desc->param(1).helpText() + ':');
+        showEntry(secondElement, label2, m_desc->param(1).type());
     } else {
         label2->hide();
         secondElement->hide();
+        addParam->hide();
     }
 
     if (m_desc->params() > 2) {
-        showEntry(thirdElement, label3, m_desc, 2);
+        label3->setText(m_desc->param(2).helpText() + ':');
+        showEntry(thirdElement, label3, m_desc->param(2).type());
     } else {
         label3->hide();
         thirdElement->hide();
+        addParam->hide();
     }
 
     if (m_desc->params() > 3) {
-        showEntry(fourElement, label4, m_desc, 3);
+        label4->setText(m_desc->param(3).helpText() + ':');
+        showEntry(fourElement, label4, m_desc->param(3).type());
     } else {
         label4->hide();
         fourElement->hide();
+        addParam->hide();
     }
 
     if (m_desc->params() > 4) {
-        showEntry(fiveElement, label5, m_desc, 4);
+        label5->setText(m_desc->param(4).helpText() + ':');
+        showEntry(fiveElement, label5, m_desc->param(4).type());
     } else {
         label5->hide();
         fiveElement->hide();
+        addParam->hide();
     }
 
-    if (m_desc->params() > 5)
-        kDebug(36001) << "Error in param->nb_param";
-
-    /*if (m_desc->params() > 5) {
+    //if (m_desc->params() > 5)
         //kDebug(36001) << "Error in param->nb_param";
-        for (int i = 0; i < m_desc->params()-5; i++)
-            showEntry(extraElements[i], labels[i], m_desc, (i+5));
+
+    // initially hiding all the extra params
+    for (int i = 0; i < 122; i++) {
+        labels[i]->hide();
+        extraElements[i]->hide();
     }
-    else
-        for (int i = 0; i < 252; i++) {
+
+    // if more parameters are allowed
+    if (!m_desc->more().isEmpty()) {
+
+        addParam->show();
+        m_paramSlotCount = 0;
+
+        int delim = 0;      // to count the number of delimeters given in the 'More' tag
+        QString temp[m_desc->paramSet()];       // string array to store the set's label names
+        for (int i = 0; i < m_desc->more().length(); i++) {
+            if (m_desc->more().at(i).unicode() == 44) {     // if char = ","
+                delim++;
+                continue;
+            }
+            if (delim > 1)
+                temp[delim-2].append(m_desc->more().at(i)); // append only the names of the labels
+        }
+
+        int num = 2;
+        for (int j = 0; j < 122; j += m_desc->paramSet()) {
+            for (int i = 0; i < m_desc->paramSet(); i++) {
+                labels[j+i]->setText(temp[i] + " " + QString("%1").arg(2+num-m_desc->paramSet()));  // set label's text with the correct number
+            }
+            num++;
+        }
+    } else {
+        addParam->hide();
+        for (int i = 0; i < 122; i++) {
             labels[i]->hide();
             extraElements[i]->hide();
-        }*/
+        }
+    }
 
     refresh_result = true;
 
@@ -685,7 +775,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
     }
 
     //
-    // Put focus somewhere is there are no KLineEdits visible
+    // Put focus somewhere if there are no KLineEdits visible
     //
     if (m_desc->params() == 0) {
         label1->show();
@@ -782,7 +872,7 @@ void FormulaDialog::slotActivated(const QString& category)
     else
         lst = FunctionRepository::self()->functionNames(category);
 
-    kDebug(36001) << "category:" << category << " (" << lst.count() << "functions)";
+    //kDebug(36001) << "category:" << category << " (" << lst.count() << "functions)";
 
     functionsModel->setStringList(lst);
 

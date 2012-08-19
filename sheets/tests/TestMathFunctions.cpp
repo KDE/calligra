@@ -112,11 +112,11 @@ void TestMathFunctions::initTestCase()
     storage->setValue(2, 9, Value::errorDIV0());
 
     //C3:C7
-    storage->setValue(3, 3, Value("Apples"));
-    storage->setValue(3, 4, Value("Bananas"));
-    storage->setValue(3, 5, Value("Apples"));
-    storage->setValue(3, 6, Value("Artichokes"));
-    storage->setValue(3, 7, Value("Lemon"));
+    storage->setValue(3, 3, Value("Hi"));
+    storage->setValue(3, 4, Value(1));
+    storage->setValue(3, 5, Value(3));
+    storage->setValue(3, 6, Value(1));
+    storage->setValue(3, 7, Value("Hello"));
 
     // D3:D7
     storage->setValue(4, 3, Value(1));
@@ -869,8 +869,8 @@ void TestMathFunctions::testSUMIF()
 
 void TestMathFunctions::testSUMIFS()
 {
-    CHECK_EVAL("SUMIFS(B4:B5;C4:C5;\"Apples\";D4:D5;\">2.5\")",    Value(3));     // D4:D5 = {2,3}, so only D5 has value greater than 2.5.
-    CHECK_EVAL("SUMIFS(B3:B7;C3:C7;C3;D3:D7;\">0\")",              Value(3));     // Test if a cell equals the value in C3 in the range C3:C7 AND greater than 0 in D3:D7
+    CHECK_EVAL("SUMIFS(B4:B5;C4:C5;3;D4:D5;\">2.5\")",             Value(3));     // D4:D5 = {2,3}, so only D5 has value greater than 2.5.
+    CHECK_EVAL("SUMIFS(B3:B7;C3:C7;C5;D3:D7;\">0\")",              Value(3));     // Test if a cell equals the value in C3 in the range C3:C7 AND greater than 0 in D3:D7
     CHECK_EVAL("SUMIFS("";C3:C7;C2;D3:D7;D2)",            Value::errorNUM());     // Constant values are not allowed for the range.
     CHECK_EVAL("SUMIFS(B3:B7;"";B4;C3:C7;C4)",                     Value(0));     // Range not specified for first condition => no matches, AND with second result, should result in 0
     CHECK_EVAL("SUMIFS(B3:B7;D3:D7;1+1)",                          Value(2));     // The criteria can be an expression.

@@ -159,7 +159,7 @@ StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
     f->setAcceptArray();
     f->setNeedsExtra(true);
     add(f);
-    f = new Function("AVERAGEIFS",         func_averageifs);
+    f = new Function("AVERAGEIFS", func_averageifs);
     f->setParamCount(3, -1);
     f->setAcceptArray();
     f->setNeedsExtra(true);
@@ -2257,7 +2257,6 @@ Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
         slope.append(calc->div(FunctionCaller(func_slope, valVector() << args[0] << argsX[i], calc).exec(), Value(n)));
         if (lConst)
             intercept = calc->add(intercept, FunctionCaller(func_intercept, valVector() << args[0] << argsX[i], calc).exec());
-        //qDebug() << "\n\nslope: " << slope.value(i);
     }
 
     // calculating intercept
@@ -2284,7 +2283,6 @@ Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
         for (uint i = 0; i < n; i++) {
             Value dino = calc->sub(calc->mul(k, calc->sumsq(argsX[i])), calc->sqr(calc->sum(argsX[i])));
             stderrSlope.append(calc->mul(stderrY, calc->sqrt(calc->div(k, dino))));
-            //qDebug() << "\n\nstderrslope: " << stderrSlope.value(i);
         }
             stderrIntercept = calc->sub(calc->mul(k, calc->sumsq(argsX[0])), calc->sqr(calc->sum(argsX[0])));
             stderrIntercept = calc->mul(stderrY, calc->sqrt(calc->div(calc->sumsq(argsX[0]), stderrIntercept)));
@@ -2309,8 +2307,6 @@ Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
             stderrSlope.append(calc->div(stderrY, calc->sqrt(calc->sumsq(argsX[i]))));
         stderrIntercept = Value::errorNUM();
     }
-    //qDebug() << "\n\nvalues: " << slope << intercept << stderrSlope << stderrIntercept << rsq <<
-                //stderrY << F << DF << SSreg << SSresid;
 
     // storing result
     Value result(Value::Array);
@@ -2344,6 +2340,7 @@ Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
     for (uint i = 2; i < result.rows(); i++)
         qDebug() << result.element(0, i) << result.element(1, i) << "\n";
     */
+
     return result;
 }
 
@@ -2351,18 +2348,19 @@ Value func_linest(valVector args, ValueCalc *calc, FuncExtra *)
 // function: logest
 //
 // TODO: For multiple arrays of X
-Value func_logest(valVector args, ValueCalc *calc, FuncExtra *) {
+Value func_logest(valVector args, ValueCalc *calc, FuncExtra *)
+{
+    Value lnY(Value::Array);
 
+    // taking ln() of the known Ys
     for (uint i = 0; i < args.value(0).count(); i++)
-        args[0].element(i) = calc->ln(args[0].element(i));
+         lnY.setElement(0, i, calc->ln(args[0].element(i)));
 
     Value result(Value::Array);
 
-    result = FunctionCaller(func_linest, valVector() << args[0] << args[1] << args[2] << args[3], calc).exec();
-    result.setElement(0, 0, calc->exp(result.element(0, 0)));
+    result = FunctionCaller(func_linest, valVector() << lnY << args[1] << args[2] << args[3], calc).exec();
+    result.setElement(0, 0, result.element(0, 0));
 
-    //for (uint i = 0; i < result.rows(); i++)
-        //qDebug() << "\n\nresult: " << result.element(0, i) << result.element(1, i);
     return result;
 }
 

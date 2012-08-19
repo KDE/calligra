@@ -91,8 +91,8 @@ private slots:
 //     void testLEGACYNORMSDIST(); // same as NORMDIST required for OpenFormula compliance
 
 
-//     void testLINEST(); // ???
-//     void testLOGEST(); // ???
+//    void testLINEST();      // TODO: For multiple arrays of X
+//    void testLOGEST();
     void testLOGINV();
     void testLOGNORMDIST();
     void testMAX();

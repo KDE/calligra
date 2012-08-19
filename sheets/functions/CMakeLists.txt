@@ -43,6 +43,14 @@ install(FILES engineering.xml DESTINATION ${DATA_INSTALL_DIR}/sheets/functions)
 
 ########### next target ###############
 
+kde4_add_plugin(kspreadexternalmodule external.cpp)
+target_link_libraries(kspreadexternalmodule calligrasheetscommon)
+install(TARGETS kspreadexternalmodule DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES kspreadexternalmodule.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES external.xml DESTINATION ${DATA_INSTALL_DIR}/sheets/functions)
+
+########### next target ###############
+
 kde4_add_plugin(kspreadfinancialmodule financial.cpp)
 target_link_libraries(kspreadfinancialmodule calligrasheetscommon)
 install(TARGETS kspreadfinancialmodule DESTINATION ${PLUGIN_INSTALL_DIR})

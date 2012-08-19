@@ -89,6 +89,15 @@ public:
     QString name() const {
         return m_name;
     }
+    QString more() const {
+        return m_more;
+    }
+    QString push() const {
+        return m_push;
+    }
+    QString maxParams() const {
+        return m_max;
+    }
     ParameterType type() const {
         return m_type;
     }
@@ -96,12 +105,18 @@ public:
     int params() const {
         return m_params.count();
     }
+    int paramSet() const {
+        return m_set;
+    }
     FunctionParameter& param(int i) {
         return m_params[ i ];
     }
 
     void setGroup(const QString& g) {
         m_group = g;
+    }
+    void setHelpText(const QString& s) {
+        m_help.append(s);
     }
     QString group() const {
         return m_group;
@@ -116,6 +131,10 @@ private:
     QStringList m_related;
     QStringList m_help;
     QString m_name;
+    QString m_more;     // String contained by 'More' tag
+    QString m_max;      // max params allowed - first param in 'More' tag
+    QString m_push;     // number of params after which repetition starts - secong param in 'More' tag
+    int m_set;          // number of params in a set
     ParameterType m_type;
     QList<FunctionParameter> m_params;
 };

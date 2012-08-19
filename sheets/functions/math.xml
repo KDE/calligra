@@ -368,38 +368,7 @@
            <Comment>Criteria 1</Comment>
            <Type>String</Type>
        </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 2</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 2</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 3</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 3</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 4</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 4</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 5</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 5</Comment>
-           <Type>String</Type>
-       </Parameter>
+       <More>127,0,Criteria range,Criteria</More>
        <Help>
            <Text>Counts the number of cells that meet the Criterion C1 in the reference range R1 and the Criterion C2 in the reference range R2, and so on. All 		 reference ranges shall have the same dimension and size, else an Error is returned. A logical AND is applied between each array result of each 		 selection; an entry is counted only if the same position in each array is the result of a Criterion match.
 	   </Text>
@@ -520,38 +489,7 @@
            <Comment>Criteria 1</Comment>
            <Type>String</Type>
        </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 2</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 2</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 3</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 3</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 4</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 4</Comment>
-           <Type>String</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria range 5</Comment>
-           <Type range="true">Float</Type>
-       </Parameter>
-       <Parameter optional="ture">
-           <Comment>Criteria 5</Comment>
-           <Type>String</Type>
-       </Parameter>
+       <More>127,1,Criteria range,Criteria</More>
         <Help>
             <Text>Sums the value of cells in range R that meet the Criterion C1 in the reference range R1 and the Criterion C2 in the reference range R2, and so on. All 			  reference ranges shall have the same dimension and size, else an Error is returned. A logical AND is applied between each array result of each 			  selection; an entry is counted only if the same position in each array is the result of a criteria match.</Text>
             <Syntax> SUMIFS( Reference R ; Reference R1 ; Criterion C1 [ ; Reference R2 ; Criterion C2 ]... )</Syntax>

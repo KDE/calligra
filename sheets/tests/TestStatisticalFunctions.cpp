@@ -394,7 +394,7 @@ void TestStatisticalFunctions::testAVERAGEIFS()
     CHECK_EVAL("AVERAGEIFS(A19:A23;B3:B7;C22)",                Value::errorDIV0());   // No condition matches => divide by zero
     CHECK_EVAL("AVERAGEIFS(A19:A23;B4:B5;3)",                            Value(2));   // Sum range length != Condition range length, gives sum of the cells for matching condition for the curroesponding iteration.
 
-    //For the last case-taken as:
+    //For the last case, taken as:
     //  Cell | Value      Cell | Value
     // ------+------     ------+------
     //  A19  |    1         B4 |  2

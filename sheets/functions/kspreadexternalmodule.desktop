@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=External Functions
+Comment=HYPERLINK
+Icon=funct
+Type=Service
+X-KDE-Library=kspreadexternallmodule
+X-KDE-ServiceTypes=CalligraSheets/Plugin,KPluginInfo
+X-CalligraSheets-InterfaceVersion=0
+X-KDE-PluginInfo-Author=The KSpread Team
+X-KDE-PluginInfo-Email=calligra-devel@kde.org
+X-KDE-PluginInfo-Name=ExternalModule
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=http://www.calligra.org/
+X-KDE-PluginInfo-Category=FunctionModule
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
