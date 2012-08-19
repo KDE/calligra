@@ -58,6 +58,11 @@ SandBrush::SandBrush(const SandProperties* properties, KoColorTransformation* tr
     srand48(time(0));
     m_prevTime = 0;
     m_prevVel = QPointF(0,0);
+
+    //mouse pos/vel filter
+//     m_cursorFilter = new SandFilter();
+    m_cursorFilter.setMass(5.0);
+    m_cursorFilter.setDrag(0.5);
     
 }
 
@@ -96,14 +101,8 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
     QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current accel
     
     m_counter++;
-
-    //IGNORE THIS FOR NOW
-    // sand depletion: it's not working as it should. Get an better assymptotic function to reduce the radius
     qreal result = 0;
-//     if (m_properties->sandDepletion) {
-//         result = log((qreal)m_counter * m_properties->radius)/10;
-//     }
-
+    
     //Brush radius
     int r = m_properties->radius - int(result)*m_properties->radius;
 
@@ -191,18 +190,19 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_
         time = info.currentTime() - m_prevTime;
     }
     
-    
-    QPointF disp = toQPointF(info.movement()); //obs: this is an inline function
-    QPointF pos(info.pos().x(), info.pos().y());
-    QPointF vel(disp.x()/time, disp.y()/time);    //current velocity
-//     QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current acce
 
+    if(!m_cursorFilter.applyFilter(x, y)){
+        return;
+    }
+    
+    QPointF pos(info.pos().x(), info.pos().y()); //obs: this is an inline function
+    QPointF vel(m_cursorFilter.velocityX(), m_cursorFilter.velocityY());    //current velocity
 
     //iterate over the set of grains in the neighborhood, assigned to m_grains
       for(int i = 0; i < m_grains.size(); i++){
         //(3.a) Verify which ones the mouse is really "colliding"
-    //(3.b) and apply the force in the particles that the mouse touched (made in the applyForce method of Particle)
-        m_grains.at(i)->applyForce(pos, vel, m_properties, width, height);
+        //(3.b) and apply an impulse in the particles that the mouse touched (made in the applyForce method of Particle)
+        m_grains.at(i)->applyForce(pos, vel, m_properties, width, height, time);
 
         //(4) Animate the movements based on past forces
         if(m_grains.at(i)->force()){
@@ -216,20 +216,13 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_
            sqrt(m_grains.at(i)->pos()->y()*m_grains.at(i)->pos()->y()) >= height){
             m_grains.removeAt(i);
         }
-        
         m_grains.at(i)->vel()->setX(0.0);
         m_grains.at(i)->vel()->setY(0.0);
 
-//     qDebug() << "aft. m_grains mem : " << sizeof(m_grains);
-
     }
-
     m_prevTime = info.currentTime();
-    //(5) Update the canvas (have to do the erase particle operation)
-
 
 }
-
 
 void SandBrush::drawParticle(KisPainter &painter, Particle *p, bool old)
 {
@@ -240,7 +233,6 @@ void SandBrush::drawParticle(KisPainter &painter, Particle *p, bool old)
 
     if (old)
         radius += 1;
-
 
     qreal length = 2.0 * 3.14;
     qreal step = 1.0 / steps;
@@ -262,12 +254,8 @@ void SandBrush::drawParticle(KisPainter &painter, Particle *p, bool old)
     }
     else {
         painter.setFillStyle(KisPainter::FillStyleBackgroundColor);
-
     }
-
-
     painter.paintPolygon(points);
-
 }
 
 void SandBrush::getGrains(QList<Particle *> &g_copy){

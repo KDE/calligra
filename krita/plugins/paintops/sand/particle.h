@@ -95,7 +95,7 @@ public:
      * the grains on the canvas.
      */
     
-    void applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties, int width, int height);
+    void applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties, int width, int height, int dt);
 
     ///Runge-Kutta 4 implementation for this particle
 

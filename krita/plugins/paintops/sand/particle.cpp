@@ -80,7 +80,7 @@ Particle::Particle(const Particle & p)
 
 //Methods for particle dynamics
 
-void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties, int width, int height)
+void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * properties, int width, int height, int dt)
 {
     /*
      * xi calculation is incomplete. It should be like this:
@@ -100,9 +100,10 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
     float xi = float(_radius + properties->radius) - dist_centers;
 
     //No collision? Exit function
-    if( xi <= 0)
+    if( xi <= 0){
+        qDebug() << "quit!";
         return;
-
+    }
     
     /*
      * normalized young modulus between the MOUSE (brush) particle and this particle
@@ -150,6 +151,10 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
     _forceVec->rx() =  fn*ex;
     _forceVec->ry() =  fn*ey;
 
+    //impulse
+    _vel->rx() = _forceVec->x()*dt;
+    _vel->ry() = _forceVec->y()*dt;
+
 }
 
 Derivative Particle::eval(const State & init, double dt, const Derivative & der)
@@ -178,16 +183,12 @@ Derivative Particle::eval(const State & init, double dt, const Derivative & der)
  */
 QPointF Particle::accel(const State &state, double t)
 {
-    const float k = 0.9; //put this as a property in the brush configuration
+    const float k = 0.1; //put this as a property in the brush configuration
     const float b = _mass;
     
-    //Acceleration due to force minus linear momentum dumping (due to friction)
-    QPointF result ( qreal(-k * state.pos.x() - b*state.vel.x()),
-                     qreal(-k * state.pos.y() - b*state.vel.y()));
-
-//     QPointF result ( qreal( -_forceVec->x()/_mass + (k * state.pos.x() + b*state.vel.x())),
-//                      qreal( -_forceVec->y()/_mass + (k * state.pos.y() + b*state.vel.y())));
-
+    //inear momentum dumping (due to friction)
+    QPointF result (qreal( -k*state.vel.x()/b ),
+                    qreal( -k*state.vel.y()/b ) );
     return result;
 }
 
@@ -195,15 +196,13 @@ void Particle::integrationStep(double dt, int width, int height)
 {
     
     float p_length = sqrt(_pos->x()*_pos->x() + _pos->y()*_pos->y());
-    float v_length = sqrt(_vel->x()*_vel->x() + _vel->y()*_vel->y());
 
    //this particle current state
     State state;
     state.pos.setX( _pos->x()/p_length);
     state.pos.setY( _pos->y()/p_length);
-    state.vel.setX( _vel->x()/v_length);
-    state.vel.setY( _vel->y()/v_length);
-
+    state.vel.setX( _vel->x());
+    state.vel.setY( _vel->y());
 
    //derivatives for the RK terms
 
@@ -219,6 +218,8 @@ void Particle::integrationStep(double dt, int width, int height)
 
     float newPos_x = _pos->x() + pos_x;
     float newPos_y = _pos->y() + pos_y;
+
+//     qDebug() << "nPos " << newPos_x << ", " << newPos_y;
     
     if( sqrt(newPos_x * newPos_x) < width && sqrt(newPos_y * newPos_y) < height ){
         _old->rx() = _pos->x();

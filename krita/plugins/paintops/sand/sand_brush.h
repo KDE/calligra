@@ -28,6 +28,7 @@
 #include "kis_paint_device.h"
 
 #include "particle.h"
+#include "sfilter.h"
 
 class KisPaintInformation;
 class Particle;
@@ -80,6 +81,9 @@ private:
 
     ///Hold a few particles for this operation step
     QList<Particle *> m_grains;
+
+    ///Filter the mouse position to velocity calculation
+    SandFilter m_cursorFilter;
     
     int m_saturationId;
     const SandProperties * m_properties;

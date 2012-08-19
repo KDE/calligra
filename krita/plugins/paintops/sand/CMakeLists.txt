@@ -5,6 +5,7 @@ set(kritasandpaintop_PART_SRCS
     kis_sand_paintop_settings.cpp
     kis_sand_paintop_settings_widget.cpp
     sand_brush.cpp
+    sfilter.cpp
     particle.cpp
     )
 
