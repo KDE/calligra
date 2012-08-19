@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2012 C. Boemann <cbo@kogmbh.com>
+   Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,35 +18,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWPART_H
-#define KWPART_H
+#ifndef CAUPART_H
+#define CAUPART_H
 
-#include <KoPart.h>
+#include <KWPart.h>
 
 #include "words_export.h"
 
 class KoMainWindow;
-class KWDocument;
-class KWView;
-class KComponentData;
-class QGraphicsItem;
 
-class WORDS_EXPORT KWPart : public KoPart
+class WORDS_EXPORT CAuPart : public KWPart
 {
     Q_OBJECT
 
 public:
-    KWPart(QObject *parent);
-
-    virtual ~KWPart();
-
-    QGraphicsItem *createCanvasItem(); ///reimplemented
-
-    void setDocument(KWDocument *document);
-    KWDocument *document() const;
-
-    /// reimplemented from super
-    QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
+    CAuPart(QObject *parent);
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
@@ -54,10 +41,7 @@ private slots:
 
 protected:
 
-    virtual KoView *createViewInstance(QWidget *parent); ///reimplemented
-    virtual void setupViewInstance(KWView *view);
-
-    KWDocument *m_document;
+    virtual KoView *createViewInstance(QWidget *parent); ///< reimplemented
 };
 
 #endif
