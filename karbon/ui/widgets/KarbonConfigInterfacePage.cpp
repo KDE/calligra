@@ -22,6 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
+#include "KarbonKoDocument.h"
 #include "KarbonFactory.h"
 
 #include <KoUnitDoubleSpinBox.h>
@@ -96,7 +97,7 @@ void KarbonConfigInterfacePage::apply()
 {
     bool showStatusBar = m_showStatusBar->isChecked();
 
-    KarbonPart* part = m_view->part();
+    KarbonKoDocument* part = m_view->part();
 
     KConfigGroup interfaceGroup = m_config->group("Interface");
 

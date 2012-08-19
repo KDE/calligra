@@ -28,6 +28,8 @@
 // Local
 #include "PreferenceDialog.h"
 
+#include <KoIcon.h>
+
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -36,7 +38,6 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
@@ -318,7 +319,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     widget = new QWidget(this);
     d->interfaceOptions.setupUi(widget);
     page = new KPageWidgetItem(widget, i18n("Interface"));
-    page->setIcon(KIcon("preferences-desktop-theme"));
+    page->setIcon(koIcon("preferences-desktop-theme"));
     addPage(page);
     d->page2 = page;
 
@@ -351,7 +352,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     widget = new QWidget(this);
     d->fileOptions.setupUi(widget);
     page = new KPageWidgetItem(widget, i18n("Open/Save"));
-    page->setIcon(KIcon("document-save"));
+    page->setIcon(koIcon("document-save"));
     addPage(page);
     d->page3 = page;
 
@@ -369,7 +370,7 @@ PreferenceDialog::PreferenceDialog(View* view)
                                   i18n("Tools"), "Tool");
     d->pluginSelector->load();
     page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
-    page->setIcon(KIcon("preferences-plugin"));
+    page->setIcon(koIcon("preferences-plugin"));
     addPage(page);
     d->pluginPage = page;
 
@@ -377,7 +378,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
     d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
-    page->setIcon(KIcon("tools-check-spelling"));
+    page->setIcon(koIcon("tools-check-spelling"));
     page->setHeader(i18n("Spell Checker Behavior"));
     addPage(page);
     d->page4 = page;
@@ -386,7 +387,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
     page = addPage(d->authorPage, i18nc("@title:tab Author page", "Author"));
     page->setHeader(i18n("Author"));
-    page->setIcon(KIcon("user-identity"));
+    page->setIcon(koIcon("user-identity"));
 }
 
 PreferenceDialog::~PreferenceDialog()

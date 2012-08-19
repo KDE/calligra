@@ -29,6 +29,7 @@
 #include <KoView.h>
 #include <KoPrintingDialog.h>
 #include <KoPageLayout.h>
+#include <KoDockFactoryBase.h>
 
 #include <QMap>
 #include <QTreeView>
@@ -49,6 +50,7 @@ class QMainWindow;
 class KoDocument;
 class KoPrintJob;
 class KoPageLayoutWidget;
+class KoPart;
 
 /// The main namespace
 namespace KPlato
@@ -66,15 +68,19 @@ class ViewBase;
 class TreeViewBase;
 class DoubleTreeViewBase;
 
+class DockWidget;
+
 //------------------
+
 class KPLATOUI_EXPORT DockWidget : public QDockWidget
 {
     Q_OBJECT
 public:
     DockWidget( ViewBase *v, const QString &identity, const QString &title );
 
-    void activate( QMainWindow *shell );
-    void deactivate( QMainWindow *shell );
+    void activate( KoMainWindow *shell );
+    void deactivate( KoMainWindow *shell );
+    bool shown() const;
 
     bool saveXml( QDomElement &context ) const;
     void loadXml( const KoXmlElement &context );
@@ -229,7 +235,7 @@ class KPLATOUI_EXPORT ViewBase : public KoView, public ViewActionLists
     Q_OBJECT
 public:
     /// Contructor
-    ViewBase(KoDocument *doc, QWidget *parent);
+    ViewBase(KoPart *part, KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~ViewBase();
     /// Return the part (document) this view handles

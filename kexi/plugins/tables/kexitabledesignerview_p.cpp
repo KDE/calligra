@@ -24,7 +24,6 @@
 #include <QLabel>
 #include <QSplitter>
 
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <KActionCollection>

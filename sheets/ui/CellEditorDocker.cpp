@@ -26,7 +26,6 @@
 
 // KDE
 #include <KAction>
-#include <KIcon>
 #include <KLocale>
 
 #include <kdebug.h>

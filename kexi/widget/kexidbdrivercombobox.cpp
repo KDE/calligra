@@ -19,6 +19,8 @@
 
 #include "kexidbdrivercombobox.h"
 
+#include <KoIcon.h>
+
 KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
         const KexiDB::Driver::InfoHash& driversInfo, Options options)
         : KComboBox(parent)
@@ -42,7 +44,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
         foreach(QString caption, captionsForFileBasedDrivers) {
             const KexiDB::Driver::Info& info = driversInfo[ fileBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
-            addItem(KIcon("application-x-executable"), info.caption);
+            addItem(koIcon("application-x-executable"), info.caption);
             m_drivers.insert(info.caption, info.name.toLower());
         }
     }
@@ -51,7 +53,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
         foreach(QString caption, captionsForServerBasedDrivers) {
             const KexiDB::Driver::Info& info = driversInfo[ serverBasedDriversDict[ caption ] ];
             //! @todo change this if better icon is available
-            addItem(KIcon("application-x-executable"), info.caption);
+            addItem(koIcon("application-x-executable"), info.caption);
             m_drivers.insert(info.caption, info.name.toLower());
         }
     }

@@ -29,9 +29,9 @@
 
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoIcon.h>
 
 #include <KAction>
-#include <KIcon>
 #include <kparts/event.h>
 #include <KXMLGUIClient>
 
@@ -199,7 +199,7 @@ void MapViewModel::addSheet(Sheet *sheet)
 
     // Update the goto sheet action group
     const QString name = sheet->sheetName();
-    QAction *action = new KAction(KIcon("x-office-spreadsheet"), name, this);
+    QAction *action = new KAction(koIcon("x-office-spreadsheet"), name, this);
     action->setCheckable(true);
     action->setToolTip(i18nc("Activate sheet named foo", "Activate %1", name));
 

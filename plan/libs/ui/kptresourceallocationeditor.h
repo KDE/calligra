@@ -67,7 +67,7 @@ class KPLATOUI_EXPORT ResourceAllocationEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAllocationEditor( KoDocument *part, QWidget *parent );
+    ResourceAllocationEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }

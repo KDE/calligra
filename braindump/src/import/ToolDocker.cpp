@@ -24,9 +24,10 @@
 #include <KoDockWidgetTitleBarButton.h>
 #include <KoDockWidgetTitleBar.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
 
@@ -47,11 +48,12 @@ public:
     Private(ToolDocker *dock)
         : q(dock)
         , tabbed(false)
-        , hasTitle(false) {
-        lockIcon = KIcon("object-locked");
-        unlockIcon = KIcon("object-unlocked");
-        tabIcon = KIcon("tab-new");
-        unTabIcon = KIcon("tab-close");
+        , hasTitle(false)
+        , lockIcon(koIconName("object-locked"))
+        , unlockIcon(koIconName("object-unlocked"))
+        , tabIcon(koIconName("tab-new"))
+        , unTabIcon(koIconName("tab-close"))
+    {
     }
 
     QList<QWidget *> currentWidgetList;
@@ -62,8 +64,8 @@ public:
     QGridLayout *housekeeperLayout;
     ToolDocker *q;
     Qt::DockWidgetArea dockingArea;
-    bool tabbed;
-    bool hasTitle;
+    bool tabbed :1;
+    bool hasTitle :1;
     KIcon lockIcon;
     KIcon unlockIcon;
     KIcon tabIcon;

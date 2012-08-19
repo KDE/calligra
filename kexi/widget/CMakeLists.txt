@@ -42,6 +42,7 @@ set(kexiextendedwidgets_LIB_SRCS
     kexicharencodingcombobox.cpp
     KexiDBTitlePage.cpp
     KexiProjectSelectorWidget.cpp
+    kexislider.cpp
   )
 
 IF (KEXI_MOBILE)

@@ -132,6 +132,7 @@ SET (part_DIR_SRCS
     part/CellToolFactory.cpp
     #part/Digest.cpp
     part/Doc.cpp
+    part/Part.cpp
     part/Factory.cpp
     part/Find.cpp
     part/Headers.cpp

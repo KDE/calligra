@@ -29,7 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
-
+#include <KoIcon.h>
 
 // KDE
 #include <klocale.h>
@@ -40,8 +40,7 @@ VectorShapeFactory::VectorShapeFactory()
     : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))
 {
     setToolTip(i18n("A shape that shows a vector image (EMF/WMF/SVM)"));
-    // FIXME: x-shape-vectorimage
-    setIcon("application-x-wmf");
+    setIconName(koIconNameCStrNeededWithSubs("a generic vector image icon", "x-shape-vectorimage", "application-x-wmf"));
     setXmlElementNames(KoXmlNS::draw, QStringList("image"));
     setLoadingPriority(2);
 }
@@ -72,7 +71,16 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
                 mimetype == QLatin1String("image/x-wmf") ||
                 // next two for backward compatibility with Calligra
                 mimetype == QLatin1String("application/x-emf") ||
-                mimetype == QLatin1String("application/x-wmf");
+                mimetype == QLatin1String("application/x-wmf") ||
+                // guessing of svm files returns application/octet-stream so also test on that
+                // see sundaram.fedorapeople.org%2Fpresentations%2Ffedora-fail-learn.odp
+                mimetype == QLatin1String("application/octet-stream") ||
+                // seems like MSO does not always write a mimetype
+                // see jeffcoweb.jeffco.k12.co.us%2Fhigh%2Fchatfield%2Fdepartments%2Fbusiness%2Fbanking_finance%2Funit_Plan_Budget.odp
+                mimetype.isEmpty() ||
+                // next for compatibility with OO/LO and our filters
+                // see drwho.virtadpt.net%2Ffiles%2FNOVALUG-Tor.odp
+                mimetype.startsWith("application/x-openoffice");
         }
         return true;
     }

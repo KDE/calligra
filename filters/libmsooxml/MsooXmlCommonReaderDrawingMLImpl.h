@@ -5897,7 +5897,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPts()
 
     TRY_READ_ATTR_WITHOUT_NS(val)
 
-    int margin;
+    int margin = 0;
     STRING_TO_INT(val, margin, "attr:val")
 
     switch (m_currentSpacingType) {
@@ -5934,7 +5934,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spcPct()
 
     TRY_READ_ATTR_WITHOUT_NS(val)
 
-    int lineSpace;
+    int lineSpace = 0;
     STRING_TO_INT(val, lineSpace, "attr:val")
 
     QString space = "%1";

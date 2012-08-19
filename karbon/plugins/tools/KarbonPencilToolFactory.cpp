@@ -22,6 +22,7 @@
 
 #include <KoToolRegistry.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -30,7 +31,7 @@ KarbonPencilToolFactory::KarbonPencilToolFactory()
 {
     setToolTip(i18n("Freehand Path Drawing Tool"));
     setToolType("karbon, krita");
-    setIcon("draw-freehand");
+    setIconName(koIconNameCStr("draw-freehand"));
     setPriority(3);
     setActivationShapeId("flake/edit");
 }

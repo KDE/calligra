@@ -33,6 +33,8 @@
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmimetype.h>
@@ -169,7 +171,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
         setButtonText(KDialog::User1, i18n("&Details") + " >>");
     }
     setButtonText(KDialog::Ok, i18n("&Open"));
-    setButtonIcon(KDialog::Ok, KIcon("document-open"));
+    setButtonIcon(KDialog::Ok, koIcon("document-open"));
 }
 
 KexiDBPasswordDialog::~KexiDBPasswordDialog()
@@ -601,7 +603,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KMessageBox::information(0,
                                  i18n("You have specified a few database objects to be opened automatically, "
                                       "using startup options.\n"
-                                      "These options will be ignored because it is not available while creating "
+                                      "These options will be ignored because they are not available while creating "
                                       "or dropping projects."));
     }
 

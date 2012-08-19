@@ -102,8 +102,6 @@ void RowHeader::mousePress(KoPointerEvent * _ev)
 {
     if (!m_cellToolIsActive)
         return;
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
@@ -194,9 +192,6 @@ void RowHeader::mouseRelease(KoPointerEvent * _ev)
         m_lSize->hide();
 
     m_bMousePressed = false;
-
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
@@ -305,7 +300,7 @@ void RowHeader::mouseDoubleClick(KoPointerEvent*)
     if (!sheet)
         return;
 
-    if (!m_pCanvas->doc()->isReadWrite() || sheet->isProtected())
+    if (sheet->isProtected())
         return;
 
     AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
@@ -322,8 +317,6 @@ void RowHeader::mouseMove(KoPointerEvent* _ev)
         setCursor(Qt::ArrowCursor);
         return;
     }
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
@@ -547,8 +540,6 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 {
     if (!m_cellToolIsActive)
         return;
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
 
     if (_ev->button() == Qt::LeftButton) {
         m_bMousePressed = true;
@@ -692,9 +683,6 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
 
     m_bMousePressed = false;
 
-    if (!m_pCanvas->doc()->isReadWrite())
-        return;
-
     register Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
@@ -811,7 +799,7 @@ void ColumnHeader::mouseDoubleClick(KoPointerEvent*)
     if (!sheet)
         return;
 
-    if (!m_pCanvas->doc()->isReadWrite() || sheet->isProtected())
+    if (sheet->isProtected())
         return;
 
     AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
@@ -824,8 +812,6 @@ void ColumnHeader::mouseDoubleClick(KoPointerEvent*)
 void ColumnHeader::mouseMove(KoPointerEvent* _ev)
 {
     if (!m_cellToolIsActive)
-        return;
-    if (!m_pCanvas->doc()->isReadWrite())
         return;
 
     register Sheet * const sheet = m_pCanvas->activeSheet();

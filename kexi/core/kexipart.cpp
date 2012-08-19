@@ -35,7 +35,6 @@
 #include <kexiutils/utils.h>
 
 #include <kactioncollection.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kxmlguifactory.h>
@@ -279,7 +278,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
      - displaying item.caption() as caption, if not empty, without instanceName
      - displaying the same as above in tabCaption (or not) */
     window->setId(item.identifier()); //not needed, but we did it
-    window->setWindowIcon(SmallIcon(window->itemIcon()));
+    window->setWindowIcon(KIcon(window->itemIconName()));
     KexiWindowData *windowData = createWindowData(window);
     if (!windowData) {
         d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
@@ -517,10 +516,10 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
         }
     }
 
-// new KAction(part->d->names["new"], part->info()->itemIcon(), 0, this,
+// new KAction(part->d->names["new"], part->info()->itemIconName(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
-// new KAction(i18nInstanceName+"...", part->info()->itemIcon(), 0, this,
+// new KAction(i18nInstanceName+"...", part->info()->itemIconName(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
 
 // win->guiFactory()->addClient(this);

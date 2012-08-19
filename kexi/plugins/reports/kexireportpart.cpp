@@ -25,6 +25,7 @@
 #include <kmainwindow.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <KoIcon.h>
 #include <core/KexiWindow.h>
 #include "kexireportview.h"
 #include "kexireportdesignview.h"
@@ -163,7 +164,7 @@ void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
     if (!d->ksrc)
         d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection());
-    tab->addTab(d->ksrc, KIcon("server-database"), QString());
+    tab->addTab(d->ksrc, koIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->ksrc), i18n("Data Source"));
 }
 

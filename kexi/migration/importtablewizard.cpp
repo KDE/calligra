@@ -22,6 +22,8 @@
 #include "keximigratedata.h"
 #include "AlterSchemaWidget.h"
 
+#include <KoIcon.h>
+
 #include <QSet>
 #include <QVBoxLayout>
 #include <QListWidget>
@@ -231,7 +233,7 @@ void ImportTableWizard::setupImportingPage()
     vbox->addWidget(options_widget);
     QVBoxLayout *options_vbox = new QVBoxLayout(options_widget);
     options_vbox->setSpacing(KDialog::spacingHint());
-    m_importOptionsButton = new KPushButton(KIcon("configure"), i18n("Advanced Options"), options_widget);
+    m_importOptionsButton = new KPushButton(koIcon("configure"), i18n("Advanced Options"), options_widget);
     connect(m_importOptionsButton, SIGNAL(clicked()),this, SLOT(slotOptionsButtonClicked()));
     options_vbox->addWidget(m_importOptionsButton);
     options_vbox->addStretch(1);

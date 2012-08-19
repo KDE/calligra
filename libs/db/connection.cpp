@@ -548,7 +548,13 @@ bool Connection::createDatabase(const QString &dbName)
     }
     if (m_driver->isFileDriver()) {
         //update connection data if filename differs
-        d->conn_data->setFileName(dbName);
+        if (QFileInfo(dbName).isAbsolute()) {
+            d->conn_data->setFileName(dbName);
+        }
+        else {
+            d->conn_data->setFileName(
+                d->conn_data->dbPath() + QDir::separator() +  QFileInfo(dbName).fileName());
+        }
     }
 
     QString tmpdbName;
@@ -1922,7 +1928,7 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
     const QString oldTableName = tableSchema.name();
     const QString newTableName = newName.toLower().trimmed();
     if (oldTableName.toLower().trimmed() == newTableName) {
-        setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.",
+        setError(ERR_OBJECT_THE_SAME, i18n("Could not rename table \"%1\" using the same name.",
                                            newTableName));
         return false;
     }
