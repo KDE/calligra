@@ -418,6 +418,8 @@ void View::hideToolDocker()
                         a->removeAction( act );
                     }
                 }
+                a->addSeparator();
+                break;
             }
         }
     }

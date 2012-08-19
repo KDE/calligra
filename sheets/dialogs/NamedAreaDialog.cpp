@@ -75,7 +75,6 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
 
     QVBoxLayout *vboxLayout = new QVBoxLayout(widget);
     vboxLayout->setMargin(0);
-    vboxLayout->setSpacing(KDialog::spacingHint());
 
     m_list = new KListWidget(this);
     m_list->setSortingEnabled(true);
@@ -226,8 +225,6 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     setMainWidget(page);
 
     QGridLayout * gridLayout = new QGridLayout(page);
-    gridLayout->setMargin(KDialog::marginHint());
-    gridLayout->setSpacing(KDialog::spacingHint());
 
     QLabel * textLabel4 = new QLabel(page);
     textLabel4->setText(i18n("Cells:"));

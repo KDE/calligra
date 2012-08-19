@@ -64,3 +64,5 @@ if(FALSE) # TODO: install when we move to independent place
     KexiAssistantWidget.h KexiAnimatedLayout.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif(FALSE)
+
+add_subdirectory(tests)
