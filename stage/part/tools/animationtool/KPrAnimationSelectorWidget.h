@@ -49,7 +49,7 @@ public:
      * @brief Loads data from data model (call this method before use the widget)
      */
     void init();
-    
+
 signals:
     /// this signal is emited when an animation is hovered
     void requestPreviewAnimation(KPrShapeAnimation *animation);
@@ -113,7 +113,6 @@ private:
     KoViewItemContextBar *m_subTypeContextBar;
     QToolButton *m_subTypePreviewButton;
     QCheckBox *m_previewCheckBox;
-    
 };
 
 #endif // KPRANIMATIONSELECTORWIDGET_H

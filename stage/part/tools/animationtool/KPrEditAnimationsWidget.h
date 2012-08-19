@@ -75,7 +75,7 @@ public:
      * The index belongs to the proxy model
      */
     QModelIndex currentIndex();
-    
+
 signals:
     /// emited if an item on Time line view has been clicked
     void itemClicked(const QModelIndex &index);

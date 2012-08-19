@@ -84,7 +84,7 @@ public:
       * @return a KPrPredefinedAnimationsLoader pointer
       */
     KoShape *getSelectedShape();
-    
+
 signals:
     /// emited if the configuration for automatic preview is changed
     void previousStateChanged(bool isEnabled);
@@ -92,7 +92,7 @@ signals:
     void shapeAnimationsChanged(KoShape *shape);
     /// emited if a motion path animation is added or removed
     void motionPathAddedRemoved();
-    
+
 public slots:
     /**
      * @brief Update widget with animations of the new active page

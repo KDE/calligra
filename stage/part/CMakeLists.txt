@@ -200,7 +200,7 @@ install(FILES
         DESTINATION ${DATA_INSTALL_DIR}/stage/animations)
 
 ### Include files ###
-install( FILES 
+install( FILES
         stage_export.h
         KPrAnimationDirector.h
         KPrCustomSlideShows.h

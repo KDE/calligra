@@ -42,7 +42,7 @@ KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockD
 , m_stepIndex(-1)
 , m_subStepIndex(-1)
 {
-    // this is needed so we save the xml id's on saving and therefor are able to 
+    // this is needed so we save the xml id's on saving and therefor are able to
     // save animation back even when they have not yet run.
     if (m_textBlockData) {
         m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());

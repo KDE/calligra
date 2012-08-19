@@ -217,7 +217,7 @@ QList<QWidget *> KPrAnimationTool::createOptionWidgets()
     effectWidget->setWindowTitle(i18n("Slide Transitions"));
     widgets.append(effectWidget);
     clickActionWidget->setWindowTitle(i18n("Shape Click Actions"));
-    widgets.append(clickActionWidget);   
+    widgets.append(clickActionWidget);
     m_shapeAnimationWidget->setWindowTitle(i18n("Shape Animations"));
     widgets.append(m_shapeAnimationWidget);
     return widgets;

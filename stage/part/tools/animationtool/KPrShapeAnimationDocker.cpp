@@ -182,7 +182,7 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
 {
     KPrView *n_view = dynamic_cast<KPrView *>(view);
     if (n_view) {
-        m_view = n_view;    
+        m_view = n_view;
         //load model
         slotActivePageChanged();
         m_editAnimationsPanel->setView(m_view);

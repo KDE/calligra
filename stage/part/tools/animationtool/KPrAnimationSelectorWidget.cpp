@@ -61,7 +61,7 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     , m_collectionPreviewButton(0)
     , m_subTypeContextBar(0)
     , m_subTypePreviewButton(0)
-{   
+{
     QGridLayout *containerLayout = new QGridLayout;
 
     m_previewCheckBox = new QCheckBox(i18n("Automatic animation preview"), this);

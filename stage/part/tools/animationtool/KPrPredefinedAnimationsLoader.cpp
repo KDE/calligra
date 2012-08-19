@@ -139,7 +139,7 @@ void KPrPredefinedAnimationsLoader::loadDefaultAnimations()
         KPrCollectionItem temp;
         temp.id = animId;
         temp.name = animationName(animId);
-        temp.toolTip = temp.name;      
+        temp.toolTip = temp.name;
         temp.animationContext = m_animationContext.value(row);
         if (animation->presetClass() == KPrShapeAnimation::MotionPath) {
             temp.icon = loadMotionPathIcon(temp.animationContext);

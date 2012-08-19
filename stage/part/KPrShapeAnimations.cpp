@@ -882,7 +882,7 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, AnimationTm
                 }
                 for (int j=0; j < a->animationCount(); j++) {
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
-                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {           
+                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
                             stepChild++;
                             subStepChild++;
