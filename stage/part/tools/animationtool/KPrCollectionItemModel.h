@@ -52,14 +52,18 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     /**
-     * Set the list of KoCollectionItem to be stored in the model
+     * @brief Set the list of KoCollectionItem to be stored in the model
+     *
+     * @param List of KPrCollectionItem
      */
     void setAnimationClassList(const QList<KPrCollectionItem> &newlist);
 
     QList<KPrCollectionItem> animationClassList() const {return m_animationClassList;}
 
     /**
-     * Return the xml context for the animation on index
+     * @brief Return the xml context for the animation on index
+     *
+     * @param index of the animation
      */
     KoXmlElement animationContext(const QModelIndex &index) const;
 

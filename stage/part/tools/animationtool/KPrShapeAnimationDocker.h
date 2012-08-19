@@ -94,44 +94,82 @@ signals:
     void motionPathAddedRemoved();
     
 public slots:
-    /// Update widget with animations of the new active page
+    /**
+     * @brief Update widget with animations of the new active page
+     */
     void slotActivePageChanged();
 
-    /// Update canvas with selected shape on Animations View
+    /**
+     * @brief Update canvas with shape of selected animation on Animations View
+     * @param index of selected animation
+     */
     void SyncWithAnimationsViewIndex(const QModelIndex &index);
 
-    /// Update canvas with selected shape on Animations View
+    /**
+     * @brief Update canvas with shape of animation selected on edition view
+     * @param index of selected animation on edition view
+     */
     void syncWithEditDialogIndex(const QModelIndex &index);
 
-    /// Update canvas with the given index (of the main model)
+    /**
+     * @brief Update canvas with the given index (of the main model)
+     * @param index of animation
+     */
     void syncCanvasWithIndex(const QModelIndex &index);
 
-    /// Update canvas with selected shape on Time Line View
+    /**
+     * @brief Update canvas with selected shape on Time Line View
+     * @param index (main model index)
+     */
     void updateEditDialogIndex(const QModelIndex &index);
 
-    /// Update Time Line View with selected shape on canvas
+    /**
+     * @brief Update Time Line View with selected shape on canvas
+     */
     void syncWithCanvasSelectedShape();
 
-    /// Plays a preview of the shape animation
+    /**
+     * @brief Plays a preview of the shape animation
+     */
     void slotAnimationPreview();
 
-    /// Play animation preview for the given animation
+    /**
+     * @brief Play animation preview for the given animation
+     * @param animation to be played
+     */
     void previewAnimation(KPrShapeAnimation *animation);
 
-    /// Remove selected animations
+    /**
+     * @brief Remove selected animations
+     */
     void slotRemoveAnimations();
 
-    /// Check type of animation
+    /**
+     * @brief Check type of animation
+     */
     void checkAnimationSelected();
 
-    /// slot for moving animations up or down buttons
+    /**
+     * @brief slot for moving current animation up on animation view
+     */
     void moveAnimationUp();
+
+    /**
+     * @brief slot for moving current animation down on animation view
+     */
     void moveAnimationDown();
 
-    /// slot for add animation button
+    /**
+     * @brief add new animation
+     * @param animation to be added
+     */
     void addNewAnimation(KPrShapeAnimation *animation);
 
-    /// Verify if animations on given index range are motion paths
+    /**
+     * @brief Verify if animations on given index range are motion paths
+     * @param index where range to be verified starts
+     * @param indexEnd where range to be verified ends
+     */
     void verifyMotionPathChanged(const QModelIndex &index, const QModelIndex &indexEnd);
 
 private slots:

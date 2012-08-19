@@ -41,21 +41,43 @@ class KPrPredefinedAnimationsLoader : public QObject
 public:
     KPrPredefinedAnimationsLoader(QObject* parent = 0);
 
-    //Data is not ready until this method is called
-    /// Populate categories view
+    // Data is not ready until this method is called
+    /**
+     * @brief Populate categories view
+     * @param view QListWidget pointer of the view to be populated with predefined animations data
+     */
     bool populateMainView(QListWidget *view);
-    /// Return model for each id category
+
+    /**
+     * @brief Return model for each id category
+     * @param id of the model
+     */
     KPrCollectionItemModel *modelById(const QString &id);
-    /// Return sub model (Model for preset sub types
+
+    /**
+     * @brief Return sub model (Model for preset sub types
+     * @param id of the sub model
+     */
     KPrCollectionItemModel *subModelById(const QString &id);
-    /// Returns animation from context xml data
+
+    /**
+     * @brief Returns animation from context xml data
+     * @param element KoXmlElemnt with xml data of the animation
+     * @param context KoShapeLoadingContext class
+     * @param animShape Shape that holds the animation
+     */
     KPrShapeAnimation *loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context,
                                              KoShape *animShape = 0);
 
 private:
-    /// Create KPrAnimationItem using data stored on animations list
+    /**
+     * @brief Create KPrAnimationItem using data stored on animations list
+     */
     void loadDefaultAnimations();
-    /// Read animations from xml file and populate animations list
+
+    /**
+     * @brief Read animations from xml file and populate animations list
+     */
     void readDefaultAnimations();
 
     /**
@@ -91,12 +113,12 @@ private:
     QIcon loadMotionPathIcon(const KoXmlElement &element);
 
     /**
-     * Add a collection to the docker
+     * @brief Add a collection to the docker
      */
     bool addCollection(const QString &id, const QString &title, KPrCollectionItemModel *model);
 
     /**
-     * Add a sub collection to the docker
+     * @brief Add a sub collection to the docker
      */
     bool addSubCollection(const QString &id, KPrCollectionItemModel *model);
 

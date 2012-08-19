@@ -49,18 +49,31 @@ public:
 
     void setView(KoPAViewBase *view);
 
-    /// Verify if the parent (on click animation) for the given index has changed
-    /// If it has changed update the view
+    /**
+     * @brief Verify if the parent (on click animation) for the given index has changed
+     * If it has changed update the view
+     *
+     * @param index of the current animation
+     */
     void setCurrentIndex(const QModelIndex &index);
 
-    /// Set proxy model for animations Time line View
+    /**
+     * @brief Set proxy model for animations Time line View
+     *
+     * @param model, KPrAniamtionGroupProxyModel to be used as base model for the
+     *        time line view
+     */
     void setProxyModel(KPrAnimationGroupProxyModel *model);
 
-    /// Update time line view
+    /**
+     * @brief Update time line view
+     */
     void updateView();
 
-    /** Return current parent animation index (On click animation)
-        The index belongs to the proxy model*/
+    /**
+     * @brief Return current parent animation index (On click animation)
+     * The index belongs to the proxy model
+     */
     QModelIndex currentIndex();
     
 signals:
@@ -72,27 +85,55 @@ signals:
     void previousStateChanged(bool isEnabled);
 
 public slots:
-    /// Sync node type and time combo boxes with the given index
+    /**
+     * @brief Sync node type and time combo boxes with the given index
+     * @param index of the animation
+     */
     void updateIndex(const QModelIndex &index);
-    /// Change current animation begin time
-    void setBeginTime();
-    /// Change current animation duration
-    void setDuration();
-    /// Change current animation node type
-    void setTriggerEvent(int row);
-    /// Helper method to set new node type
-    void setTriggerEvent(QAction *action);
-    /// call update index
-    void syncCurrentItem();
 
 protected slots:
-    /// Display context menu for the time line view
-    void showTimeLineCustomContextMenu(const QPoint &pos);
-    /// Use to sync with animations selected on main view or canvas
-    void changeCurrentAnimation(KPrShapeAnimation *animation);
-    /// load predefined animations
-    void initializeView();
+    /**
+     * @brief Change current animation begin time
+     */
+    void setBeginTime();
 
+    /**
+     * @brief Change current animation duration
+     */
+    void setDuration();
+
+    /**
+     * @brief Change current animation node type
+     */
+    void setTriggerEvent(int row);
+
+    /**
+     * @brief call update index
+     */
+    void syncCurrentItem();
+
+    /**
+     * @brief Helper method to set new node type
+     * @param action that call the slot
+     */
+    void setTriggerEvent(QAction *action);
+
+    /**
+     * @brief Display context menu for the time line view
+     * @param pos, position where the context menu need to be displayed
+     */
+    void showTimeLineCustomContextMenu(const QPoint &pos);
+
+    /**
+     * @brief Use to sync with animations selected on main view or canvas
+     * @param animation to be used as current animation
+     */
+    void changeCurrentAnimation(KPrShapeAnimation *animation);
+
+    /**
+     * @brief load predefined animations
+     */
+    void initializeView();
 
 private:
     KPrView* m_view;

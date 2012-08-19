@@ -57,10 +57,14 @@ public slots:
 
 private slots:
 
-    /// Reload motion path shapes (For all shapes with motion paths on current page)
+    /**
+      * @brief Reload motion path shapes (For all shapes with motion paths on current page)
+      */
     void reloadMotionPaths();
 
-    /// Verify if a motion path shape has changed (to update the canvas)
+    /**
+      * @brief Verify if a motion path shape has changed (to update the canvas)
+      */
     void verifyMotionPathChanged(KoShape *shape);
 
 protected:
@@ -68,16 +72,24 @@ protected:
 
     virtual QList<QWidget *> createOptionWidgets();
 
-    /// Load motion path shapes (For all shapes with motion paths on current page)
+    /**
+      * @brief Load motion path shapes (For all shapes with motion paths on current page)
+      */
     void initMotionPathShapes();
 
-    /// Add motion path shape to the motion path shapes manager
+    /**
+      * @brief Add motion path shape to the motion path shapes manager
+      */
     virtual void addPathShape(KoPathShape *pathShape);
 
-    /// Helper method to get the current page size
+    /**
+      * @brief Helper method to get the current page size
+      */
     QSizeF getPageSize();
 
-    /// remove motion paths of motion path manager and helper maps
+    /**
+      * @brief remove motion paths of motion path manager and helper maps
+      */
     void cleanMotionPathManager();
 
 private:

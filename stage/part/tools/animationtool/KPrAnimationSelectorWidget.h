@@ -45,7 +45,9 @@ public:
                                         QWidget *parent = 0);
     ~KPrAnimationSelectorWidget();
 
-    /// Loads data from data model (call this method before use the widget)
+    /**
+     * @brief Loads data from data model (call this method before use the widget)
+     */
     void init();
     
 signals:
@@ -58,28 +60,35 @@ signals:
 
 private slots:
     /**
-     * Request animation preview for the animation on index
+     * @brief Request animation preview for the animation on index
+     *
+     * @param index of the animation to be displayed
      */
     void automaticPreviewRequested(const QModelIndex &index);
 
     /**
-     * Request animation preview for current animation
+     * @brief Request animation preview for current animation
      * (animation selected on collection view)
+     *
      */
     void automaticPreviewRequested();
 
     /**
-     * Changes the current shape collection
+     * @brief Changes the current shape collection
      */
     void activateShapeCollection(QListWidgetItem *item);
 
     /**
-     * Animation was selected
+     * @brief Called if an animation was selected
+     *
+     * @param index of the animation selected
      */
     void setAnimation(const QModelIndex& index);
 
     /**
-     * Automatic preview checkbox state has changed
+     * @brief Automatic preview checkbox state has changed
+     *
+     * @param true if automatic preview is going to be enabled
      */
     void setPreviewState(bool isEnable);
 

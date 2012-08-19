@@ -34,12 +34,18 @@ public:
     explicit KPrAnimationGroupProxyModel(QObject *parent = 0);
     ~KPrAnimationGroupProxyModel();
 
-    /** Takes a source model index to set the group to be displayed
-        Main model assigns a group number to each batch of with previous / after previous animations
-        that starts with an on click animation. */
+    /**
+     * @brief Takes a source model index to set the group to be displayed
+     * Main model assigns a group number to each batch of with previous / after previous animations
+     * that starts with an on click animation.
+     * @param index of the parent animation
+     * @return true if the animation group was changed
+     */
     bool setCurrentIndex(const QModelIndex &index);
 
-    /// Reset filter and restart model
+    /**
+     * @brief Reset filter and restart model
+     */
     void forceUpdateModel();
 
 protected:
