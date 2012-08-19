@@ -16,21 +16,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-/**
- * These options are for the sand addition/deletion brush. We will have two ways for this brush work:
- *
- * (1) Add / Delete sand grains, where the sand addition/removal will follow the mouse
- * position and dynamics.
- * 
- *  a) Add an AMOUNT of particles with initial conditions (velocity, position and acceleration) based
- *     on the mouse movements. As the user will be adding some sand, the amount falling will be reduced as it moves.
- *  b) Remove all the particles under the brush RADIUS. It's independent of the mouse dynamics.
- *  c) The particle properties will be default. Perhaps in the future we can let a user modify the radius, friction
- *     and dissipation properties of a grain.
- *  
- *  
- * 
- */
 #ifndef KIS_SANDOP_OPTION_H
 #define KIS_SANDOP_OPTION_H
 
@@ -38,27 +23,18 @@
 #include <krita_export.h>
 
 /*
- * Sand add/remove strings
+ * Sand  strings
  */
+
 const QString SAND_RADIUS = "Sand/radius";
 const QString SAND_AMOUNT = "Sand/amount";
 const QString SAND_DEPLETION = "Sand/sandDepletion";
-const QString SAND_SIZE = "Sand/size"; //size of a grain (particle)
-const QString SAND_MASS = "Sand/mass";    //
-const QString SAND_FRICTION = "Sand/friction";    //Young modulus -
-
-/*
- * Sand spread strings
- * Obs.: Have to choose a better name for this functionality
- * Particle (*)
- * Brush
- * Spread
- * Stroke
- * (...)
- */
-
-const QString SAND_MODE = "Sand/mode";    //set the operation mode for this brush (drop or spread)
-// const QString SAND_DISSIPATION = "Sand/dissipation" //living time of a particle (this is necessary?)
+const QString SAND_SIZE = "Sand/size";
+const QString SAND_MASS = "Sand/mass";
+const QString SAND_FRICTION = "Sand/friction";
+const QString SAND_BMASS = "Sand/brushMass";
+const QString SAND_BFRICTION = "Sand/brushFriction";    
+const QString SAND_MODE = "Sand/mode";    //set the operation mode for this brush (pouring or spread)
 
 class KisSandOpOptionsWidget;
 
@@ -87,9 +63,6 @@ public:
     bool sandDepletion() const;
     bool mode() const;
 
-//     void setDissipation(float dissipation) const;
-//     float dissipation () const;
-    
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 

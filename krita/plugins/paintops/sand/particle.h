@@ -151,7 +151,7 @@ public:
     void setForceVec(QPointF * f){ _forceVec = f;}
 
 
-    ///Operator overload to serialization of the Particle to use KisAnnotation
+    ///Operator overload to serialization of the Particle to use KisAnnotations
     
     friend QDataStream &operator<<(QDataStream &out, const Particle &particle);
     friend QDataStream &operator>>(QDataStream &in, Particle &particle);

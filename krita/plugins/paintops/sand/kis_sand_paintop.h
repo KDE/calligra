@@ -31,7 +31,7 @@ class KisPainter;
 /**
  * KisSandPaintOp acts as a manager of the sand painting operation. It holds all the particles
  * created by the SandBrush class ( SandBrush::pouring() ), sending a smaller set of particles
- * to this class to execute the spread ( SandBrush::spread() ), creates the canvas grid and its
+ * to SandBrush to execute the spread ( SandBrush::spread() ), creates the canvas grid and its
  * neighborhood relationships to speed up the particles selection and physicals operations.
  * 
  * Some of the main interactions with outside classes, like annotations and image information
@@ -56,7 +56,7 @@ public:
      * The purpose is to populate the list of particles of the SandBrush class,
      * so it can do the spread.
      *
-     * @param p The list which will hold the retrived particles.
+     * @param p The list which holds the retrived particles.
      */
     void retrieveParticles(QList<Particle *> &p);
 
@@ -136,10 +136,11 @@ private:
     KisPaintDeviceSP m_dab;
     KisPressureOpacityOption m_opacityOption;
     SandProperties m_properties;
+    
     //Image to use in the grid's cell calculations
     KisImageWSP m_image;
 
-    //Do the mathematical operations of the brush
+    //Do mathematical operations of the brush
     SandBrush * m_sandBrush;
 
     /**

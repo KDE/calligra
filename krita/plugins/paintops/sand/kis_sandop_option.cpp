@@ -44,9 +44,6 @@ KisSandOpOption::KisSandOpOption()
     connect(m_options->sizeSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->massDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->frictionDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
-    
-//     connect(m_options->dissipationSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-//     connect(m_options->modeCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));  //old checkbox: remove when the combo box is working properly
 
     //OBS!!
     connect(m_options->modeComboBox, SIGNAL(currentIndexChanged(QString)), SIGNAL(sigSettingChanged()));
