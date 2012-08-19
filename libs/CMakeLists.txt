@@ -1,4 +1,3 @@
-add_subdirectory( cmpx )
 add_subdirectory( koplugin )
 add_subdirectory( widgets )
 add_subdirectory( odf )
@@ -8,6 +7,10 @@ add_subdirectory( flake )
 add_subdirectory( pigment )
 add_subdirectory( main )
 add_subdirectory( kundo2 )
+
+if (CMPX_FOUND)
+    add_subdirectory( cmpx )
+endif (CMPX_FOUND)
 
 if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory( kokross )

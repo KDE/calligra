@@ -1,7 +1,7 @@
 include_directories( ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
+    ${CMPX_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
-	${CMAKE_SOURCE_DIR}/libs/cmpx
 	${CMAKE_CURRENT_SOURCE_DIR}/flake
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
