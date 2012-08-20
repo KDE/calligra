@@ -81,5 +81,13 @@
         <file>images/svg/icon-palette-orange.svg</file>
         <file>images/svg/icon-palette.svg</file>
         <file>images/svg/icon-color_wheel.svg</file>
+        <file>images/divider-vertical.png</file>
+        <file>images/svg/combo-arrows-white.svg</file>
+        <file>images/svg/divider-arrows-white.svg</file>
+        <file>images/svg/icon-add-orange.svg</file>
+        <file>images/svg/icon-delete-orange.svg</file>
+        <file>images/svg/icon-palette-add-orange.svg</file>
+        <file>images/svg/icon-palette-delete-orange.svg</file>
+        <file>images/svg/icon-switch-small.svg</file>
     </qresource>
 </RCC>
