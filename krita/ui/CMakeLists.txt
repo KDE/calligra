@@ -297,6 +297,7 @@ install( FILES
     canvas/kis_canvas_decoration.h
     canvas/kis_coordinates_converter.h
     tool/kis_tool.h
+    kis_canvas_resource_provider.h
     kis_cursor.h
     kis_view2.h
     kis_ui_types.h
