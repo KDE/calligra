@@ -91,6 +91,7 @@ Panel {
 
     PresetModel {
         id: presetsModel;
+        view: sketchView.view;
     }
     
     peekContents: GridView {
@@ -140,6 +141,7 @@ Panel {
             highlightColor: Constants.Theme.HighlightColor;
 
             onClicked: {
+                presetsModel.activatePreset(index);
                 GridView.view.currentIndex = index;
                 Settings.currentPreset = model.image;
             }
