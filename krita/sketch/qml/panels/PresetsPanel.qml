@@ -22,16 +22,17 @@ import "../components"
 Panel {
     id: base;
     name: "Presets";
+    panelColor: "#1e0058"
 
     actions: [
         Button {
             id: addButton;
 
-            width: Constants.GridWidth;
+            width: Constants.GridWidth / 2
             height: Constants.GridHeight;
 
-            text: "Add";
             color: "transparent";
+            image: ":/images/svg/icon-add.svg"
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -57,10 +58,11 @@ Panel {
         Button {
             id: editButton;
 
-            width: Constants.GridWidth;
+            width: Constants.GridWidth / 2
             height: Constants.GridHeight;
 
-            text: "Edit";
+            text: ""
+            image: ":/images/svg/icon-edit.svg"
             color: "transparent";
             textColor: "white";
             shadow: false;
@@ -87,43 +89,38 @@ Panel {
     ]
 
     peekContents: GridView {
-        anchors.fill: parent;
+        x: 0
+        y: 0
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        keyNavigationWraps: false
 
-        model: model;
+        model: PresetsModel;
         delegate: delegate;
 
-        cellWidth: Constants.GridWidth;
-        cellHeight: Constants.GridHeight;
+        cellWidth: Constants.GridWidth - 8
+        cellHeight: Constants.GridHeight - 8
     }
 
     fullContents: PageStack {
         id: contentArea;
         anchors.fill: parent;
         initialPage: GridView {
+            x: 0
+            y: 0
+            anchors.rightMargin: 0
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
+            anchors.topMargin: 0
             anchors.fill: parent;
 
-            model: model;
+            model: PresetsModel;
             delegate: delegate;
 
-            cellWidth: Constants.GridWidth;
-            cellHeight: Constants.GridHeight;
-        }
-    }
-
-    dragDelegate: Component {
-        Rectangle {
-            color: Constants.Theme.MainColor;
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-
-            Label {
-                anchors.centerIn: parent;
-
-                text: "Presets";
-                color: "white";
-
-                font.pixelSize: Constants.SmallFontSize;
-            }
+            cellWidth: Constants.GridWidth - 8
+            cellHeight: Constants.GridHeight - 8
         }
     }
 
@@ -134,9 +131,9 @@ Panel {
     ListModel {
         id: model;
 
-        ListElement { name: "Red"; file: "images/red.png"; }
-        ListElement { name: "Green"; file: "images/green.png"; }
-        ListElement { name: "Blue"; file: "images/blue.png"; }
+        ListElement { text: "Red"; icon: ":/images/red.png"; }
+        ListElement { text: "Green"; icon: ":/images/green.png"; }
+        ListElement { text: "Blue"; icon: ":/images/blue.png"; }
     }
 
     Component {
@@ -148,13 +145,16 @@ Panel {
 
             checked: GridView.isCurrentItem;
 
-            text: model.name;
+            text: model.text;
+            shadow: false
+            textSize: 10;
+            image: model.image;
 
             highlightColor: Constants.Theme.HighlightColor;
 
             onClicked: {
                 GridView.view.currentIndex = index;
-                Settings.currentPreset = model.file;
+                Settings.currentPreset = model.image;
             }
         }
     }

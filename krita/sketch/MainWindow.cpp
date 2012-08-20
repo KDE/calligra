@@ -45,6 +45,11 @@
 #include "CanvasControllerDeclarative.h"
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
+#include "ColorImageProvider.h"
+#include "PaletteColorsModel.h"
+#include "PaletteModel.h"
+#include "PresetModel.h"
+#include "PresetImageProvider.h"
 
 #include "Constants.h"
 #include "Settings.h"
@@ -73,6 +78,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view = new QDeclarativeView();
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
 
+    d->view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
+    d->view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);
+    d->view->rootContext()->setContextProperty( "PaletteModel", new PaletteModel( this ) );
+    d->view->rootContext()->setContextProperty( "PaletteColorsModel", new PaletteColorsModel( this ) );
+    d->view->rootContext()->setContextProperty( "PresetsModel", new PresetModel( this ) );
     d->view->rootContext()->setContextProperty("Constants", d->constants);
     d->view->rootContext()->setContextProperty("Settings", d->settings);
 

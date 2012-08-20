@@ -21,21 +21,76 @@ import "../components"
 
 Panel {
     name: "Color";
-    panelColor: "#006666";
+    panelColor: "#d37300"
 
-    dragDelegate: Component {
-        Rectangle {
-            color: "#006666";
+    peekContents: GridView {
+        anchors.fill: parent;
+        model: PaletteColorsModel
+        delegate: delegate;
+        cellWidth: Constants.GridWidth;
+        cellHeight: Constants.GridHeight;
+    }
+
+    fullContents: Item {
+        anchors.fill: parent;
+        ListView {
+            id: fullPaletteList
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+            height: Constants.GridHeight;
+            orientation: ListView.Horizontal;
+            model: PaletteModel
+            delegate: Button {
+                height: Constants.GridHeight;
+                width: Constants.GridWidth;
+                text: model.text;
+                textSize: 10;
+                image: model.image;
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: {
+                    ListView.view.currentIndex = index;
+                    PaletteModel.itemActivated(index);
+                    PaletteColorsModel.colorSet = PaletteModel.colorSet;
+                }
+            }
+        }
+        GridView {
+            anchors {
+                top: fullPaletteList.bottom;
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            model: PaletteColorsModel;
+            delegate: delegate;
+            clip: true;
+            cellWidth: Constants.GridWidth - 8;
+            cellHeight: Constants.GridHeight - 8;
+        }
+    }
+
+    Component {
+        id: delegate;
+
+        Button {
             width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
+            height: Constants.GridHeight;
 
-            Label {
-                anchors.centerIn: parent;
+            checked: GridView.isCurrentItem;
 
-                text: "Color";
-                color: "white";
+            text: model.text;
+            shadow: false
+            textSize: 10;
+            image: model.image;
 
-                font.pixelSize: Constants.SmallFontSize;
+            highlightColor: Constants.Theme.HighlightColor;
+
+            onClicked: {
+                GridView.view.currentIndex = index;
+                //Settings.currentColor = model.color;
             }
         }
     }
