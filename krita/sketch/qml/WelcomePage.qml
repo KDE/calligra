@@ -40,12 +40,12 @@ Page {
                 height: Constants.GridHeight;
 
                 Rectangle { anchors.fill: parent; anchors.margins: Constants.DefaultMargin; color: "white"; }
-                Image { anchors.centerIn: parent; source: ":/images/krita.png" }
+                Image { anchors.centerIn: parent; source: "./images/krita.png" }
             }
             rightArea: Button {
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/help-about.png";
+                image: "./images/help-about.png";
                 highlightColor: Constants.Theme.HighlightColor;
 
                 onClicked: pageStack.push( help );
@@ -118,24 +118,24 @@ Page {
 
         RecentFilesList {
             width: parent.width / 3 - 1;
-            height: Constants.GridHeight * 6;
+            height: Constants.GridHeight * (Constants.GridRows - 2);
 
             onClicked: pageStack.push( main );
         }
 
-        Divider { height: Constants.GridHeight * 6; }
+        Divider { height: Constants.GridHeight * (Constants.GridRows - 2); }
 
         NewImageList {
             width: parent.width / 3 - 2;
-            height: Constants.GridHeight * 6;
+            height: Constants.GridHeight * (Constants.GridRows - 2);
             onClicked: pageStack.push( main );
         }
 
-        Divider { height: Constants.GridHeight * 6; }
+        Divider { height: Constants.GridHeight * (Constants.GridRows - 2); }
 
         NewsList {
             width: parent.width / 3 - 1;
-            height: Constants.GridHeight * 6;
+            height: Constants.GridHeight * (Constants.GridRows - 2);
         }
     }
 

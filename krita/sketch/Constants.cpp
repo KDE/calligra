@@ -106,7 +106,7 @@ void Constants::setGridWidth( qreal width )
 
 int Constants::gridRows() const
 {
-    return 8;
+    return 12;
 }
 
 int Constants::gridColumns() const

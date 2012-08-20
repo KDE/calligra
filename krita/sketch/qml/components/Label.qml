@@ -26,6 +26,7 @@ Text {
     font.pixelSize: Constants.DefaultFontSize;
 
     color: Constants.Theme.TextColor;
+    font.family: "Source Sans Pro"
 
     elide: Text.ElideRight;
 }

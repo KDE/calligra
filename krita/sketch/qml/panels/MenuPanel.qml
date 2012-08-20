@@ -31,22 +31,19 @@ Item {
 
     height: Constants.GridHeight;
 
-    DropShadow {
-        id: shadow;
-        anchors.fill: parent;
-    }
-
     Rectangle {
         id: background;
+        color: "#1d3458"
         anchors.fill: parent;
-        color: Constants.Theme.MainColor;
 
         Row {
             Button {
                 id: newButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/document-new.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-filenew.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "new" );
             }
@@ -54,7 +51,9 @@ Item {
                 id: openButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/document-open.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-fileopen.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "open" );
             }
@@ -62,7 +61,9 @@ Item {
                 id: saveButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/document-save.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-filesave.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "save" );
             }
@@ -70,7 +71,9 @@ Item {
                 id: saveAsButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/document-save-as.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-filesaveas.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "saveAs" );
             }
@@ -78,7 +81,9 @@ Item {
                 id: shareButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/document-share.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-fileshare.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "share" );
             }
@@ -91,7 +96,9 @@ Item {
                 id: undoButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/edit-undo.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-undo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "undo" );
             }
@@ -99,7 +106,9 @@ Item {
                 id: redoButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/edit-redo.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-redo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "redo" );
             }
@@ -111,7 +120,9 @@ Item {
                 id: helpButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/help-about.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-help.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "help" );
             }
@@ -119,7 +130,9 @@ Item {
                 id: settingsButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/configure.png";
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-settings.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "settings" );
             }
@@ -130,28 +143,49 @@ Item {
         anchors.bottom: parent.top;
         anchors.horizontalCenter: parent.horizontalCenter;
 
-        width: Constants.GridWidth * 2;
-        height: Constants.GridHeight / 2;
+        width: Constants.GridWidth * 1.5
+        height: Constants.GridHeight /2
 
-        DropShadow {
-            anchors.fill: parent;
+        BorderImage {
+            id: border_image1
+            x: 0
+            y: 0
+            width: Constants.GridWidth * 1.5
+            height: Constants.GridHeight /2
+            border.top: 8
+            border.right: 8
+            border.left: 8
+            source: "../images/handle-menu.png"
+        }
 
-            Rectangle {
-                anchors.fill: parent;
-                color: Constants.Theme.MainColor;
-
-                Label {
-                    anchors.centerIn: parent;
-                    text: "Menu";
-                    color: "white";
-                }
-            }
+        Label {
+            x: 176
+            y: -17
+            height: Constants.GridHeight
+            text: "Menu";
+            font.pixelSize: Constants.DefaultFontSize
+            anchors.verticalCenterOffset: 0
+            anchors.horizontalCenterOffset: 0
+            anchors.horizontalCenter: mousearea1.horizontalCenter
+            anchors.verticalCenter: mousearea1.verticalCenter
+            font.bold: true
+            font.family: "Source Sans Pro"
+            color: "white";
         }
 
         MouseArea {
+            id: mousearea1
             anchors.fill: parent;
 
             property real start: NaN;
+            x: 0
+            y: 0
+            width: 300
+            height: 25
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
+            anchors.rightMargin: 0
+            anchors.topMargin: 0
 
             onClicked: base.collapsed = !base.collapsed;
             onPositionChanged: {
@@ -171,11 +205,10 @@ Item {
         when: base.collapsed;
 
         PropertyChanges { target: base; height: 0 }
-        PropertyChanges { target: shadow; opacity: 0 }
-        PropertyChanges { target: background; opacity: 0 }
+        //PropertyChanges { target: background; opacity: 0 }
     }
 
     transitions: Transition {
-        NumberAnimation { duration: 250; properties: "height,opacity"; }
+        NumberAnimation { duration: 200; properties: "height,opacity"; easing.type: Easing.InOutQuad }
     }
 }

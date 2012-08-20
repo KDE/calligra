@@ -43,32 +43,32 @@ Item {
     state: "collapsed";
 
     DropShadow {
-        x: handle.x;
-        y: handle.y;
-        width: handle.width;
-        height: handle.height;
-        visible: handle.visible;
-    }
-
-    DropShadow {
         id: fill;
 
         width: parent.width;
         height: parent.height;
 
         Rectangle {
+            id: rectangle3
             anchors.fill: parent;
-            color: "white";
-
+            color: base.panelColor;
             clip: true;
+
+            Rectangle {
+                id: rectangle4
+                anchors.fill: parent;
+                color: "#ffffff"
+                opacity: 0.630
+            }
 
             Item {
                 id: peek;
 
                 opacity: 0;
 
-                width: Constants.GridWidth * 2;
-                height: Constants.GridHeight * 2;
+                width: (Constants.GridWidth * 2) - 8;
+                anchors.bottom: header.top
+                height: Constants.GridHeight * 3;
             }
 
             Item {
@@ -83,19 +83,30 @@ Item {
             DropShadow {
                 id: header;
 
+                anchors.left: parent.left;
                 anchors.top: parent.top;
                 anchors.right: parent.right;
-
-                width: parent.width;
+                //y: Constants.GridHeight * 3;
+                //width: parent.width;
                 height: Constants.GridHeight;
 
+
                 Rectangle {
+                    id: rectanglehead
+                    color: base.panelColor;
+                    y: Constants.GridHeight / 2;
+                    width: parent.width;
+                    height: Constants.GridHeight / 2;
+                    visible: false;
+                }
+
+                Rectangle {
+                    id: rectangle1
                     anchors.fill: parent;
                     color: base.panelColor;
 
                     Flow {
                         id: actionsLayout;
-                        anchors.fill: parent;
                     }
                 }
             }
@@ -106,6 +117,13 @@ Item {
                 anchors.bottom: parent.bottom;
                 width: parent.width;
                 height: Constants.GridHeight;
+
+                Rectangle {
+                    id: rectanglefoot
+                    color: base.panelColor;
+                    width: parent.width;
+                    height: Constants.GridHeight / 2;
+                }
 
                 Rectangle {
                     anchors.fill: parent;
@@ -139,25 +157,42 @@ Item {
         anchors.top: fill.bottom;
 
         color: base.panelColor;
+        radius: 0
 
-        width: Constants.GridWidth;
-        height: Constants.GridHeight / 2;
+        width: (Constants.GridWidth * 1) - 8
+        height: Constants.GridHeight / 4
 
-        opacity: 0;
+        opacity: 0
+
+
+        Rectangle {
+            id: rectangle2
+            anchors.top: parent.top;
+
+            width: (Constants.GridWidth * 1) - 8
+            height: Constants.GridHeight / 2
+            color: base.panelColor
+            radius: 8
+            clip: true
+        }
 
         Label {
             id: handleLabel;
 
-            anchors.centerIn: parent;
 
             text: base.name;
+            anchors.horizontalCenter: rectangle2.horizontalCenter
+            anchors.verticalCenter: rectangle2.verticalCenter
             color: base.textColor;
 
-            font.pixelSize: Constants.SmallFontSize;
+            font.pixelSize: Constants.DefaultFontSize;
         }
 
         DnD.DragArea {
-            anchors.fill: parent;
+            anchors.top: rectangle2.bottom
+            anchors.right: rectangle2.left
+            anchors.bottom: rectangle2.top
+            anchors.left: rectangle2.right
             delegate: base.dragDelegate;
             source: base;
 

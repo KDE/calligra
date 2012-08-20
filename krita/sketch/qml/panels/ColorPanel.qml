@@ -46,6 +46,7 @@ Panel {
             delegate: Button {
                 height: Constants.GridHeight;
                 width: Constants.GridWidth;
+                color: "transparent";
                 text: model.text;
                 textSize: 10;
                 image: model.image;
@@ -81,6 +82,7 @@ Panel {
 
             checked: GridView.isCurrentItem;
 
+            color: "transparent";
             text: model.text;
             shadow: false
             textSize: 10;

@@ -32,7 +32,7 @@ Panel {
             height: Constants.GridHeight;
 
             color: "transparent";
-            image: ":/images/svg/icon-add.svg"
+            image: "../images/svg/icon-add.svg"
             textColor: "white";
             shadow: false;
             highlight: false;
@@ -62,7 +62,7 @@ Panel {
             height: Constants.GridHeight;
 
             text: ""
-            image: ":/images/svg/icon-edit.svg"
+            image: "../images/svg/icon-edit.svg"
             color: "transparent";
             textColor: "white";
             shadow: false;
@@ -89,12 +89,7 @@ Panel {
     ]
 
     peekContents: GridView {
-        x: 0
-        y: 0
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
+        anchors.fill: parent;
         keyNavigationWraps: false
 
         model: PresetsModel;
@@ -108,12 +103,6 @@ Panel {
         id: contentArea;
         anchors.fill: parent;
         initialPage: GridView {
-            x: 0
-            y: 0
-            anchors.rightMargin: 0
-            anchors.bottomMargin: 0
-            anchors.leftMargin: 0
-            anchors.topMargin: 0
             anchors.fill: parent;
 
             model: PresetsModel;

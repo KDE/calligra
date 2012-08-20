@@ -66,7 +66,7 @@ QVariant PaletteModel::data(const QModelIndex &index, int role) const
         switch(role)
         {
         case ImageRole:
-            result = ":/images/help-about.png";
+            result = "../images/help-about.png";
             break;
         case TextRole:
             result = d->serverAdaptor->resources().at(index.row())->name();
