@@ -39,6 +39,8 @@
 class KisGL2TileManager::Private
 {
 public:
+    Private() : canvas(0), context(0), framebuffer(0) { }
+
     void createTiles(const QRect &size);
 
     KisGL2Canvas *canvas;
@@ -69,9 +71,6 @@ KisGL2TileManager::KisGL2TileManager(KisGL2Canvas* parent)
     : QObject(parent), d(new Private)
 {
     d->canvas = parent;
-
-    //Hack because QtOpenGL does not provide a non-const getter
-    d->context = const_cast<QGLContext*>(parent->context());
 }
 
 KisGL2TileManager::~KisGL2TileManager()
@@ -81,6 +80,9 @@ KisGL2TileManager::~KisGL2TileManager()
 
 void KisGL2TileManager::initialize(KisImageWSP image)
 {
+    //Hack because QtOpenGL does not provide a non-const getter
+    d->context = const_cast<QGLContext*>(d->canvas->context());
+
     d->context->makeCurrent();
 
     d->framebuffer = new QGLFramebufferObject(d->canvas->width(), d->canvas->height());
@@ -197,6 +199,7 @@ void KisGL2TileManager::render(uint texture)
 {
     //qDebug() << "Time since last frame:" << d->timer.elapsed();
     //d->timer.restart();
+	d->context = const_cast<QGLContext*>(d->canvas->context());
 
     d->context->makeCurrent();
 

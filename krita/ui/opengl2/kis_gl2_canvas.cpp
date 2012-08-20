@@ -21,6 +21,7 @@
 #include "kis_gl2_canvas.h"
 
 #include <QApplication>
+#include <QTimer>
 
 #include <kis_config.h>
 #include <kis_config_notifier.h>
@@ -94,6 +95,8 @@ void KisGL2Canvas::initialize(KisImageWSP image)
     glGenTextures(1, &d->imageTexture);
     glBindTexture(GL_TEXTURE_2D, d->imageTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image->width(), image->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
     glBindTexture(GL_TEXTURE_2D, 0);
 
