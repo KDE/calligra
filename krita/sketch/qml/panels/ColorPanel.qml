@@ -26,6 +26,7 @@ Panel {
     
     PaletteColorsModel {
         id: paletteColorsModel;
+        view: sketchView.view;
     }
     PaletteModel {
         id: paletteModel;
@@ -101,6 +102,7 @@ Panel {
             onClicked: {
                 GridView.view.currentIndex = index;
                 //Settings.currentColor = model.color;
+                paletteColorsModel.activateColor(index);
             }
         }
     }
