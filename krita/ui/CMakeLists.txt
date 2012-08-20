@@ -33,7 +33,6 @@ set(kritaui_LIB_SRCS
     canvas/kis_update_info.cpp
     canvas/kis_image_patch.cpp
     canvas/kis_image_pyramid.cpp
-    cmpx/kis_cmpx.cpp
     dialogs/kis_dlg_adj_layer_props.cc
     dialogs/kis_dlg_adjustment_layer.cc
     dialogs/kis_dlg_filter.cpp
@@ -220,6 +219,15 @@ if(HAVE_OPENGL)
         )
 endif(HAVE_OPENGL)
 
+# not quite sure if the following is appropriate.
+
+#if(HAVE_CMPX)
+#    set(kritaui_LIB_SRCS 
+#        ${kritaui_LIB_SRCS}
+#        cmpx/kis_cmpx.cpp
+#       )
+#endif(HAVE_CMPX)
+
 add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
@@ -278,9 +286,9 @@ if(HAVE_OPENGL)
     endif(HAVE_GLEW)
 endif(HAVE_OPENGL)
 
-# not quite sure if the following is appropriate.
+# NOTE Linking with kritaui fails. 
 if(HAVE_CMPX)
-    target_link_libraries(kritaui kocmpx)
+    #target_link_libraries(kritaui kocmpx)
 endif(HAVE_CMPX)
 
 target_link_libraries(kritaui LINK_INTERFACE_LIBRARIES kritaimage komain ${GL_INTERFACE_LIBRARIES} )

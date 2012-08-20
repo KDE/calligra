@@ -11,7 +11,10 @@ add_subdirectory(artisticcolorselector)
 add_subdirectory(tasksetdocker)
 add_subdirectory(compositiondocker)
 add_subdirectory(patterndocker)
-# add_subdirectory(cmpx)
+
+if(HAVE_CMPX)
+    add_subdirectory(printercolorsettings)
+endif(HAVE_CMPX)
 
 if(HAVE_OCIO)
     add_subdirectory(lut)
