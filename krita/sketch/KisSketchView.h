@@ -25,12 +25,14 @@ class KisSketchView : public CanvasControllerDeclarative
 {
     Q_OBJECT
     Q_PROPERTY(QObject* document READ doc)
+    Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
 
 public:
     KisSketchView(QDeclarativeItem* parent = 0);
     virtual ~KisSketchView();
 
     QObject* doc() const;
+    QObject* view() const;
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
@@ -44,7 +46,7 @@ public Q_SLOTS:
     void loadDocument();
 
 Q_SIGNALS:
-
+    void viewChanged();
     void doubleTapped();
 
 protected:

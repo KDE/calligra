@@ -125,6 +125,11 @@ QObject* KisSketchView::doc() const
     return d->doc;
 }
 
+QObject* KisSketchView::view() const
+{
+    return d->view;
+}
+
 void KisSketchView::createDocument()
 {
     KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
@@ -132,6 +137,7 @@ void KisSketchView::createDocument()
     d->doc->newImage("test", 1000, 1000, KoColorSpaceRegistry::instance()->rgb8());
 
     d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
+    emit viewChanged();
     d->view->hide();
     d->view->setGeometry(x(), y(), width(), height());
     d->canvas = d->view->canvasBase();
