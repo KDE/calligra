@@ -17,6 +17,8 @@
  */
 
 #include "PaletteColorsModel.h"
+#include <kis_view2.h>
+#include <kis_canvas_resource_provider.h>
 
 #include <KoColorSet.h>
 
@@ -24,9 +26,11 @@ class PaletteColorsModel::Private {
 public:
     Private()
         : colorSet(0)
+        , view(0)
     {}
 
     KoColorSet* colorSet;
+    KisView2* view;
 };
 
 PaletteColorsModel::PaletteColorsModel(QObject *parent)
@@ -106,6 +110,29 @@ void PaletteColorsModel::setColorSet(QObject *newColorSet)
 QObject* PaletteColorsModel::colorSet() const
 {
     return d->colorSet;
+}
+
+
+QObject* PaletteColorsModel::view() const
+{
+    return d->view;
+}
+
+void PaletteColorsModel::setView(QObject* newView)
+{
+    d->view = qobject_cast<KisView2*>( newView );
+    emit viewChanged();
+}
+
+void PaletteColorsModel::activateColor(int index)
+{
+    if( !d->view )
+        return;
+
+    if(index >= 0 && index < d->colorSet->nColors())
+    {
+        d->view->resourceProvider()->setFGColor( d->colorSet->getColor( index ).color );
+    }
 }
 
 #include "PaletteColorsModel.moc"

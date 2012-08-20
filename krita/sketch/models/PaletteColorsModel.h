@@ -25,6 +25,7 @@ class PaletteColorsModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* colorSet READ colorSet WRITE setColorSet NOTIFY colorSetChanged)
+    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
 public:
     enum PaletteColorsRoles
     {
@@ -39,12 +40,17 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-public Q_SLOTS:
-    void setColorSet(QObject* newColorSet);
+    QObject* view() const;
+    void setView(QObject* newView);
     QObject* colorSet() const;
+    void setColorSet(QObject* newColorSet);
 
 Q_SIGNALS:
     void colorSetChanged();
+    void viewChanged();
+
+public Q_SLOTS:
+    void activateColor(int index);
 
 private:
     class Private;
