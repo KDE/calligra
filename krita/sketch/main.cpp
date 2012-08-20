@@ -18,6 +18,7 @@
  */
 
 #include <QApplication>
+#include <QFontDatabase>
 #include <QFile>
 #include <QStringList>
 #include <QString>
@@ -26,6 +27,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
+#include <KStandardDirs>
 
 #include "MainWindow.h"
 
@@ -65,8 +67,16 @@ int main( int argc, char** argv )
 
     QApplication::setAttribute(Qt::AA_X11InitThreads);
     KApplication app;
-    //app.setApplicationName("org.krita.sketch");
+
     QApplication::setStyle("plastique");
+
+    QStringList fonts = KGlobal::dirs()->findAllResources( "appdata", "fonts/*.otf" );
+    foreach( const QString &font, fonts ) {
+        QFontDatabase::addApplicationFont( font );
+    }
+
+    QFontDatabase db;
+    QApplication::setFont( db.font( "Source Sans Pro", "Regular", 12 ) );
 
     MainWindow window(fileNames);
     window.showMaximized();
