@@ -19,7 +19,15 @@ set(kritasketch_SRCS
     ProgressProxy.cpp
 )
 
-kde4_add_executable(kritasketch ${kritasketch_SRCS})
+set(kritasketch_kritaintegrationmodels_SRCS
+    models/ColorImageProvider.cpp
+    models/PaletteColorsModel.cpp
+    models/PaletteModel.cpp
+    models/PresetImageProvider.cpp
+    models/PresetModel.cpp
+)
+
+kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS})
 
 target_link_libraries(kritasketch
     ${QT_QTDECLARATIVE_LIBRARY}
@@ -34,4 +42,3 @@ install(TARGETS kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS  kritasketch.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(DIRECTORY qml DESTINATION ${DATA_INSTALL_DIR}/kritasketch)
 install( FILES kritasketchrc DESTINATION ${CONFIG_INSTALL_DIR} )
-

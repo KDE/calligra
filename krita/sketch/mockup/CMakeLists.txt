@@ -17,16 +17,19 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${KDE4_INCLUDES} ${NEPOMUK_INCLU
 include_directories(../../)
 FIND_LIBRARY(KRITAUI_LIBRARY NAMES kritaui)
 
+# Cheaty hack
+include_directories(../models/)
+
 set(krita-sketch_SRCS
     main.cpp
     mainwindow.cpp
-    colorimageprovider.cpp
-    palettemodel.cpp
-    palettecolorsmodel.cpp
     constants.cpp
     settings.cpp
-    presetmodel.cpp
-    presetimageprovider.cpp
+    ../models/ColorImageProvider.cpp
+    ../models/PaletteModel.cpp
+    ../models/PaletteColorsModel.cpp
+    ../models/PresetModel.cpp
+    ../models/PresetImageProvider.cpp
 )
 
 qt4_automoc(${krita-sketch_SRCS})

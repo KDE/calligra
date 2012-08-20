@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "presetimageprovider.h"
+#include "PresetImageProvider.h"
 
 #include <KoResourceServerAdapter.h>
 #include <ui/kis_resource_server_provider.h>

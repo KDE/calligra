@@ -16,29 +16,22 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "palettemodel.h"
+#include "PaletteColorsModel.h"
 
 #include <KoColorSet.h>
-#include <KoResourceServerAdapter.h>
-#include <KoResourceServerProvider.h>
-#include <ui/kis_resource_server_provider.h>
 
-class PaletteModel::Private {
+class PaletteColorsModel::Private {
 public:
-    Private(QObject* q)
-        : currentSet(0)
-    {
-        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        serverAdaptor = new KoResourceServerAdapter<KoColorSet>(rServer, q);
-        serverAdaptor->connectToResourceServer();
-    }
-    KoResourceServerAdapter<KoColorSet>* serverAdaptor;
-    KoColorSet* currentSet;
+    Private()
+        : colorSet(0)
+    {}
+
+    KoColorSet* colorSet;
 };
 
-PaletteModel::PaletteModel(QObject *parent)
+PaletteColorsModel::PaletteColorsModel(QObject *parent)
     : QAbstractListModel(parent)
-    , d(new Private(this))
+    , d(new Private)
 {
     QHash<int, QByteArray> roles;
     roles[ImageRole] = "image";
@@ -46,30 +39,34 @@ PaletteModel::PaletteModel(QObject *parent)
     setRoleNames(roles);
 }
 
-PaletteModel::~PaletteModel()
+PaletteColorsModel::~PaletteColorsModel()
 {
     delete d;
 }
 
-int PaletteModel::rowCount(const QModelIndex &parent) const
+int PaletteColorsModel::rowCount(const QModelIndex &parent) const
 {
     if(parent.isValid())
         return 0;
-    return d->serverAdaptor->resources().count();
+    if(!d->colorSet)
+        return 0;
+    return d->colorSet->nColors();
 }
 
-QVariant PaletteModel::data(const QModelIndex &index, int role) const
+QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
-    if(index.isValid())
+    QColor color;
+    if(index.isValid() && d->colorSet)
     {
         switch(role)
         {
         case ImageRole:
-            result = ":/images/help-about.png";
+            color = d->colorSet->getColor(index.row()).color.toQColor();
+            result = QString("image://color/%1,%2,%3,%4").arg(color.redF()).arg(color.greenF()).arg(color.blueF()).arg(color.alphaF());
             break;
         case TextRole:
-            result = d->serverAdaptor->resources().at(index.row())->name();
+            result = d->colorSet->getColor(index.row()).name;
             break;
         default:
             break;
@@ -78,7 +75,7 @@ QVariant PaletteModel::data(const QModelIndex &index, int role) const
     return result;
 }
 
-QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(orientation);
     QVariant result;
@@ -99,19 +96,16 @@ QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int 
     return result;
 }
 
-void PaletteModel::itemActivated(int index)
+void PaletteColorsModel::setColorSet(QObject *newColorSet)
 {
-    QList<KoResource*> resources = d->serverAdaptor->resources();
-    if(index >= 0 && index < resources.count())
-    {
-        d->currentSet = dynamic_cast<KoColorSet*>(resources.at(index));
-        emit colorSetChanged();
-    }
+    d->colorSet = qobject_cast<KoColorSet*>(newColorSet);
+    reset();
+    emit colorSetChanged();
 }
 
-QObject* PaletteModel::colorSet() const
+QObject* PaletteColorsModel::colorSet() const
 {
-    return d->currentSet;
+    return d->colorSet;
 }
 
-#include "palettemodel.moc"
+#include "PaletteColorsModel.moc"

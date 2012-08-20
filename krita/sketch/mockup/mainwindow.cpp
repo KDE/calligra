@@ -24,13 +24,13 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 
-#include "colorimageprovider.h"
+#include "ColorImageProvider.h"
 #include "constants.h"
 #include "settings.h"
-#include "palettecolorsmodel.h"
-#include "palettemodel.h"
-#include "presetmodel.h"
-#include "presetimageprovider.h"
+#include "PaletteColorsModel.h"
+#include "PaletteModel.h"
+#include "PresetModel.h"
+#include "PresetImageProvider.h"
 
 class MainWindow::Private
 {

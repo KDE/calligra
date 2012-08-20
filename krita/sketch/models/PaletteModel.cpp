@@ -16,25 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "presetmodel.h"
+#include "PaletteModel.h"
 
+#include <KoColorSet.h>
 #include <KoResourceServerAdapter.h>
+#include <KoResourceServerProvider.h>
 #include <ui/kis_resource_server_provider.h>
-#include <image/brushengine/kis_paintop_preset.h>
 
-class PresetModel::Private {
+class PaletteModel::Private {
 public:
-    Private()
+    Private(QObject* q)
+        : currentSet(0)
     {
-        rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
+        serverAdaptor = new KoResourceServerAdapter<KoColorSet>(rServer, q);
+        serverAdaptor->connectToResourceServer();
     }
-
-    KoResourceServer<KisPaintOpPreset> * rserver;
+    KoResourceServerAdapter<KoColorSet>* serverAdaptor;
+    KoColorSet* currentSet;
 };
 
-PresetModel::PresetModel(QObject *parent)
+PaletteModel::PaletteModel(QObject *parent)
     : QAbstractListModel(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     QHash<int, QByteArray> roles;
     roles[ImageRole] = "image";
@@ -42,19 +46,19 @@ PresetModel::PresetModel(QObject *parent)
     setRoleNames(roles);
 }
 
-PresetModel::~PresetModel()
+PaletteModel::~PaletteModel()
 {
     delete d;
 }
 
-int PresetModel::rowCount(const QModelIndex &parent) const
+int PaletteModel::rowCount(const QModelIndex &parent) const
 {
     if(parent.isValid())
         return 0;
-    return d->rserver->resources().count();
+    return d->serverAdaptor->resources().count();
 }
 
-QVariant PresetModel::data(const QModelIndex &index, int role) const
+QVariant PaletteModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
     if(index.isValid())
@@ -62,20 +66,19 @@ QVariant PresetModel::data(const QModelIndex &index, int role) const
         switch(role)
         {
         case ImageRole:
-            result = QString("image://presetthumb/%1").arg(index.row());
+            result = ":/images/help-about.png";
             break;
         case TextRole:
-            result = d->rserver->resources().at(index.row())->name();
+            result = d->serverAdaptor->resources().at(index.row())->name();
             break;
         default:
-            result = "";
             break;
         }
     }
     return result;
 }
 
-QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(orientation);
     QVariant result;
@@ -90,20 +93,25 @@ QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int r
             result = QString("Name");
             break;
         default:
-            result = "";
             break;
         }
     }
     return result;
 }
 
-void PresetModel::activatePreset(int index)
+void PaletteModel::itemActivated(int index)
 {
-    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    QList<KoResource*> resources = d->serverAdaptor->resources();
     if(index >= 0 && index < resources.count())
     {
-
+        d->currentSet = dynamic_cast<KoColorSet*>(resources.at(index));
+        emit colorSetChanged();
     }
 }
 
-#include "presetmodel.moc"
+QObject* PaletteModel::colorSet() const
+{
+    return d->currentSet;
+}
+
+#include "PaletteModel.moc"

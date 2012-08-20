@@ -1,4 +1,4 @@
-#include "colorimageprovider.h"
+#include "ColorImageProvider.h"
 
 ColorImageProvider::ColorImageProvider()
     : QDeclarativeImageProvider(QDeclarativeImageProvider::Pixmap)
