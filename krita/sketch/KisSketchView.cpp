@@ -49,8 +49,10 @@
 #include "kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_view2.h"
+#include "kis_image.h"
 #include <opengl2/kis_gl2_canvas.h>
 #include <input/kis_input_manager.h>
+#include <kis_canvas_resource_provider.h>
 
 class KisSketchView::Private
 {
@@ -91,7 +93,7 @@ public:
 
 void KisSketchView::Private::update()
 {
-    //
+    q->scene()->update();
 }
 
 
@@ -127,19 +129,21 @@ void KisSketchView::createDocument()
 {
     KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
     d->doc = static_cast<KisDoc2*>(factory->create(this, "KritaPart"));
-    //d->doc->newImage("test", 1000, 100, KoColorSpaceRegistry::instance()->rgb8());
-    d->doc->openUrl(QUrl::fromLocalFile("/usr/share/wallpapers/stripes.png"));
+    d->doc->newImage("test", 1000, 1000, KoColorSpaceRegistry::instance()->rgb8());
 
     d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
     d->view->hide();
     d->view->setGeometry(x(), y(), width(), height());
     d->canvas = d->view->canvasBase();
     d->canvas->setCanvasItem(this);
+    connect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(update()));
 
     setCanvas(d->canvas);
     connect(d->canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
     resetDocumentOffset();
     d->canvas->updateCanvas(QRectF(0, 0, width(), height()));
+
+    KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
     d->glCanvas = qobject_cast<KisGL2Canvas*>(d->canvas->canvasWidget());
 }
@@ -304,6 +308,11 @@ bool KisSketchView::sceneEvent(QEvent* event)
                 QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
                 d->canvas->inputManager()->eventFilter(d->canvas, mevent);
                 return true;
+            }
+            case QEvent::GraphicsSceneWheel: {
+                QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
+                QWheelEvent *wevent = new QWheelEvent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
+                d->canvas->inputManager()->eventFilter(d->canvas, wevent);
             }
             default:
                 break;
