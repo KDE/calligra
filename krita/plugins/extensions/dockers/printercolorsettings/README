@@ -1,0 +1,36 @@
+ 
+README    
+"Printer Color Settings" Docker
+by Joseph Simon (jsimon383@gmail.com)
+
+(8-19-12)
+
+
+==OVERVIEW==
+
+This docker is an interface extension for color-managed printing in Krita.  It uses a libCmpx wrapper class for Krita (called "KisCmpx") to provide a smart ICC profile selection mechanism.  The docker interface is designed to be compact, and used as a direct interface for choosing an appropriate profile to be used for printing.
+
+The 'Main' view displays the currently active printer profile, as well as a combobox listing the installed printers.  
+
+A user may wish to select a color profile by themselves, to which they can click 'Profile Chooser' tab to view the standard Krita color space selector.  Clicking "Automatic Profile Selection" in 'Main' will disable the 'Profile Chooser', and allow a best-fit automatic profile to be set up based on a selected printer.  The underlying system will install a profile if it can be determined.  
+
+For convenience, a user may wish to check a color preview and print the image directly from the docker.  These tasks can be performed within the 'Print' tab.
+
+==FILE LIST==
+
+(printercolorsettings/_dock)
+Files used for registering this dock.
+
+(kis_color_ma
+
+==RECENT UPDATES==
+
+-The docker is available, using the newly implemented KisCmpx class. (JS)
+-The basic profile selection mechanism is in place and is able to register a printer profile to Krita. (JS)
+
+==BEING TESTED==
+
+-Print preview within the docker. (JS)
+-Saving a sample color-managed PDF spool file for sampling (to be used until PDF printing is ready). (JS)
+-Narrow user profile selection to select an appropriate profile for print.
+

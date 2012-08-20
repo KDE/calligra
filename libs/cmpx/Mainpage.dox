@@ -1,0 +1,51 @@
+/**
+ * \mainpage
+ *
+ * KoCmpx is a library for general use that extends color management to printers
+ * in Calligra applications.  It is actually a wrapper for 
+ * <a href="www.oyranos.org/wiki/index.php?title=LibCmpx">libCmpx</a>, which handles
+ * the duties of offering automatic printer profile selection, color simulated print preview, 
+ * and the embedding of ICC profile information to the outgoing print spool file.  
+ *
+ * It is recommended that KoCmpx be used as a base class to an application, and using the
+ * protected functions to hide the calls to libCmpx. These functions provide enough
+ * to communicate with the underlying system, and only require at most string arguments to be
+ * passed in from the inherited class.
+ *
+ * @see /calligra/krita/ui/cmpx/kis_cmpx.cpp
+ *
+ * CODE USAGE:
+ *
+ * Much like the actual library it's based on, KoCmpx's API is rather loose in that 
+ * names of its required properties - printer, profile, and render file - can be specified
+ * prior to submitting an actual call to a job.
+ *
+ * To obtain a best-fit printer profile automatically, both a printer name (CUPS destination name 
+ * in Linux) and a profile filename need to be set up prior to calling 'autoProfile()':
+ * 
+ *    KoCmpx colorManager;
+ *
+ *    colorManager.setPrinterName("MyPrinterDest331");
+ *    colorManager.setProfileName("myprinter.icc");
+ *
+ *    colorManager.setAutoProfile();
+ *
+ * Rendering a PDF spool file requires both a PDF filename and an ICC profile filename, following a 
+ * call to 'renderSpool()':
+ *
+ *    colorManager.setRenderFileName("imageToBeSpooled.pdf");
+ *    colorManager.setProfileName("profileToBeEmbedded.icm");
+ *
+ *    int error = colorManager.renderSpool();
+ *
+ * Creating a color simulated print preview file also requires both PDF and ICC profile filenames,
+ * but with a call to 'createPreviewImage()' 
+ *
+ *    // Set both PDF filename and ICC profile filenames 
+ *    // as in the previous example.
+ *
+ *    QImage printPreviewImage = colorManager.createPreviewImage();
+ *
+ */
+ 
+ 
