@@ -20,7 +20,7 @@ KoCmpx::KoCmpx()
 int KoCmpx::setPrinterName(const QByteArray& printerId)
 {
     int error = 0;
-  
+    
     if (!printerId.isEmpty()) {
         error = cmpxAPI_setCurrentPrinter(&d->m_colormanager, printerId);
     } else {
@@ -97,10 +97,10 @@ QByteArray KoCmpx::pdfFileName()
     return nameString;
 }
 
-QFuture<void> KoCmpx::autoProfile()
+QFuture<void> KoCmpx::setAutoProfile()
 {
     // Automatic profile selection takes a little time at the moment.
-    return QtConcurrent::run(cmpxAPI_setAutoProfile, &d->m_colormanager);    
+    return QtConcurrent::run(cmpxAPI_setAutoProfile, &d->m_colormanager);  
 }
 
 int KoCmpx::renderSpool()

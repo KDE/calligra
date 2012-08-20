@@ -18,18 +18,20 @@
 
 #include "kis_cmpx.h"
 
+#include <KoCmpx.h>
+
 #include <stdlib.h>
 #include <QtCore>
 
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_image.h>
-#include "kis_config.h"
+#include <kis_config.h>
 
 static const char KisCmpxSpoolPdfFile[] = "kis_cmpx_spool.pdf";
 static const char KisCmpxPreviewPdfFile[] = "kis_cmpx_preview.pdf";
 
-KisCmpx::KisCmpx() : KoCmpx()
+KisCmpx::KisCmpx() 
 {    
 }
 
@@ -115,11 +117,6 @@ QPrinter * KisCmpx::printer(void)
     return printer;
 }
 
-QFuture<void> KisCmpx::setAutoProfile()
-{
-    return setAutoProfile();    
-}
-
 QString KisCmpx::renderSpoolPdf(KisImageWSP image, 
                                 const KoColorProfile* profile)
 {
@@ -151,9 +148,9 @@ QImage KisCmpx::renderPreviewImage(KisImageWSP image, const KoColorProfile *prof
     QString tempPdf = convertImageToPdf(image, KisCmpxPreviewPdfFile);
     
     if (!tempPdf.isEmpty()) {
-        setPdfFile(tempPdf);
-        
+        setPdfFile(tempPdf);        
         setProfile(profile);
+
         previewImage = createPreviewImage();
     }
     
@@ -170,6 +167,10 @@ void KisCmpx::saveProfile(void)
 
 void KisCmpx::loadProfile(void)
 {
+    KisConfig cfg;
+    QString name = cfg.printerProfile();
+    
+    setProfileName(name.toLocal8Bit());
 }
 
 QString KisCmpx::convertImageToPdf(KisImageWSP image, const QString name)

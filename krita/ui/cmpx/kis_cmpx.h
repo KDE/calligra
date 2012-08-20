@@ -94,13 +94,6 @@ public:
     virtual int setProfile(const KoColorProfile *);
     
     /**
-     * Sets the profile based on the currently stored printer.
-     * 
-     * @return concurrently running state of profile ranking process
-     */
-    virtual QFuture<void> setAutoProfile();  
-    
-    /**
      * Creates a color-managed PDF spool file. If a profile is specified,
      * then the default color space will also be tagged in the PDF file.  
      * 

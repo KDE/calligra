@@ -39,6 +39,12 @@ public:
     KoCmpx();
     virtual ~KoCmpx();
     
+    /**
+     * Sets the current profile automatically based on printer settings.
+     * (Processing of a best-fit profile will run concurrently in the background.)
+     */
+    virtual QFuture<void> setAutoProfile(void);
+    
 protected:
     
     /**
@@ -69,12 +75,6 @@ protected:
     QByteArray printerName(void);
     QByteArray profileName(void);
     QByteArray pdfFileName(void);
-    
-    /**
-     * Sets the current profile automatically based on printer settings.
-     * (Processing of a best-fit profile will run concurrently in the background.)
-     */
-    QFuture<void> autoProfile(void);
     
     /// Renders a PDF spool file and tags it with the default profile colorspace.
     int renderSpool(void);
