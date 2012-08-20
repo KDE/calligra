@@ -315,7 +315,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     }
 
 
-    // Extract images and add them to epubFile one bye one
+    // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
     foreach (const QString imgSrc, m_imagesSrcList.keys()) {
