@@ -50,14 +50,13 @@ Item {
 
         Image {
             id: icon;
-            anchors.rightMargin: 8
-            anchors.leftMargin: 8
-            anchors.bottomMargin: 8
-            anchors.topMargin: 8
             anchors.fill: parent;
-            anchors.margins: Constants.DefaultMargin;
+            anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
+
+            sourceSize.width: width > height ? height : width;
+            sourceSize.height: width > height ? height : width;
         }
 
         Label {
