@@ -20,16 +20,20 @@
 
 #include <KoResourceServerAdapter.h>
 #include <ui/kis_resource_server_provider.h>
+#include <kis_view2.h>
+#include <kis_canvas_resource_provider.h>
 #include <image/brushengine/kis_paintop_preset.h>
 
 class PresetModel::Private {
 public:
     Private()
+        : view(0)
     {
         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     }
 
     KoResourceServer<KisPaintOpPreset> * rserver;
+    KisView2* view;
 };
 
 PresetModel::PresetModel(QObject *parent)
@@ -97,12 +101,26 @@ QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int r
     return result;
 }
 
+QObject* PresetModel::view() const
+{
+    return d->view;
+}
+
+void PresetModel::setView(QObject* newView)
+{
+    d->view = qobject_cast<KisView2*>( newView );
+    emit viewChanged();
+}
+
 void PresetModel::activatePreset(int index)
 {
+    if( !d->view )
+        return;
+
     QList<KisPaintOpPreset*> resources = d->rserver->resources();
     if(index >= 0 && index < resources.count())
     {
-
+        d->view->resourceProvider()->setPaintOpPreset( resources.at( index ) );
     }
 }
 
