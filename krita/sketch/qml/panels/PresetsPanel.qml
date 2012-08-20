@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../components"
 
 Panel {
@@ -88,11 +89,15 @@ Panel {
         }
     ]
 
+    PresetModel {
+        id: presetsModel;
+    }
+    
     peekContents: GridView {
         anchors.fill: parent;
         keyNavigationWraps: false
 
-        model: PresetsModel;
+        model: presetsModel;
         delegate: delegate;
 
         cellWidth: Constants.GridWidth - 8
@@ -105,7 +110,7 @@ Panel {
         initialPage: GridView {
             anchors.fill: parent;
 
-            model: PresetsModel;
+            model: presetsModel;
             delegate: delegate;
 
             cellWidth: Constants.GridWidth - 8

@@ -17,15 +17,23 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../components"
 
 Panel {
     name: "Color";
     panelColor: "#d37300"
+    
+    PaletteColorsModel {
+        id: paletteColorsModel;
+    }
+    PaletteModel {
+        id: paletteModel;
+    }
 
     peekContents: GridView {
         anchors.fill: parent;
-        model: PaletteColorsModel
+        model: paletteColorsModel;
         delegate: delegate;
         cellWidth: Constants.GridWidth;
         cellHeight: Constants.GridHeight;
@@ -42,7 +50,7 @@ Panel {
             }
             height: Constants.GridHeight;
             orientation: ListView.Horizontal;
-            model: PaletteModel
+            model: paletteModel
             delegate: Button {
                 height: Constants.GridHeight;
                 width: Constants.GridWidth;
@@ -53,8 +61,8 @@ Panel {
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: {
                     ListView.view.currentIndex = index;
-                    PaletteModel.itemActivated(index);
-                    PaletteColorsModel.colorSet = PaletteModel.colorSet;
+                    paletteModel.itemActivated(index);
+                    paletteColorsModel.colorSet = paletteModel.colorSet;
                 }
             }
         }
@@ -65,7 +73,7 @@ Panel {
                 right: parent.right;
                 bottom: parent.bottom;
             }
-            model: PaletteColorsModel;
+            model: paletteColorsModel;
             delegate: delegate;
             clip: true;
             cellWidth: Constants.GridWidth - 8;

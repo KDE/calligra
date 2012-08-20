@@ -73,6 +73,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->settings = new Settings( this );
 
     qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
+    qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");
+    qmlRegisterType<PaletteColorsModel>("org.krita.sketch", 1, 0, "PaletteColorsModel");
+    qmlRegisterType<PresetModel>("org.krita.sketch", 1, 0, "PresetModel");
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
 
     d->view = new QDeclarativeView();
@@ -80,9 +83,6 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     d->view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     d->view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);
-    d->view->rootContext()->setContextProperty( "PaletteModel", new PaletteModel( this ) );
-    d->view->rootContext()->setContextProperty( "PaletteColorsModel", new PaletteColorsModel( this ) );
-    d->view->rootContext()->setContextProperty( "PresetsModel", new PresetModel( this ) );
     d->view->rootContext()->setContextProperty("Constants", d->constants);
     d->view->rootContext()->setContextProperty("Settings", d->settings);
 
