@@ -16,12 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+
 #include "kis_printer_color_manager.h"
-#include "cmpx/kis_cmpx.h"
 #include "kis_printer_profile_selector.h"
+
+#include <cmpx/kis_cmpx.h>
 
 #include <QPainter>
 #include <QPrinter>
+#include <QPrintPreviewDialog>
+#include <QMessageBox>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -29,31 +33,29 @@
 
 #include <kis_image.h>
 
-#include <stdio.h>
-
 KisPrinterColorManager::KisPrinterColorManager(QWidget *parent) 
     : QWidget(parent)
 {    
     setupUi(this);
     
-    m_colormanager = new KisCmpx();
-    m_selectorui = new KisPrinterProfileChooser(profileSelectorWidget);
-         
-    QString printerProfileName = m_cfg.readEntry("kiscmpx::printer.profile", QString(""));
-    m_profile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
+    int printerCount = populatePrinterList();
     
-    label->setText(printerProfileName);
-    
-    populatePrinterList();
-    
-    //m_image = new KisImage(0, 100, 100, 0, "dummy", true);
-    
-    bool autoProfileCheckState = m_cfg.readEntry("kiscmpx::autoprofile.checked", false);
-    emit slotSetAutoCheckBox(autoProfileCheckState);
-    
-    if (autoProfileCheckState == false) {
-       setCurrentProfile(m_profile);
-    }    
+    // If no printer is detected, we disable the color manager.
+    if (printerCount < 1) {
+        mainTabWidget->setEnabled(false);
+        activeProfileLabel->setText("**Printer not detected**  Printer color management disabled.");
+    } else {    
+        m_colormanager = new KisCmpx();
+        m_selectorui = new KisPrinterProfileChooser(profileSelectorWidget);
+   
+        KisConfig mc;
+        QString printerProfileName = mc.printerProfile();
+        m_profile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
+            
+        if (m_profile) {
+            setCurrentProfile(m_profile);
+        }
+    }
     
     connect(printerListComboBox, SIGNAL(currentIndexChanged(int)), 
             this, SLOT(slotChangePrinterSelection(int)));
@@ -63,34 +65,35 @@ KisPrinterColorManager::KisPrinterColorManager(QWidget *parent)
             this, SLOT(slotFinishedAutoProfile()));
     connect(m_selectorui, SIGNAL(colorSpaceChanged(const KoColorSpace*)), 
             this, SLOT(slotUserProfileChanged(const KoColorSpace*)));
-    //connect(printButton, SIGNAL(clicked()), 
-    //        this, SLOT(slotPrint()));
+    connect(printButton, SIGNAL(clicked()), 
+            this, SLOT(slotPrint()));
+    connect(refreshButton, SIGNAL(clicked()), 
+            this, SLOT(slotRefreshPreview()));
 }
 
-#if 0
+/// Clicking the "Print" Button
 void KisPrinterColorManager::slotPrint()
 {
     //simulatePrintJob();
 }
-#endif
 
+/// Changing the profile from the profile selection combobox.
 void KisPrinterColorManager::slotUserProfileChanged(const KoColorSpace* colorSpace)
 {
     const KoColorProfile * profile = colorSpace->profile();
     setCurrentProfile(profile);
 }
 
+/// Sets a profile for KisCmpx.
 void KisPrinterColorManager::setCurrentProfile(const KoColorProfile *profile)
 {
-    int error = m_colormanager->setProfile(profile);
-    
-    if (error) {
-        label->setText("Please select a printer profile."); 
+    if (!profile) {
+        activeProfileLabel->setText("Please set a printer profile."); 
     } else {
-        label->setText(m_colormanager->profileName());
-        m_profile = profile;
+        m_colormanager->setProfile(profile);
 
-        registerCurrentProfile();
+        activeProfileLabel->setText(profile->name());
+        m_profile = profile;
     } 
 }
 
@@ -98,68 +101,100 @@ void KisPrinterColorManager::slotChangePrinterSelection(int index)
 {  
     QPrinter selectedPrinter(m_printerlist.at(index), QPrinter::ScreenResolution);       
     
-    m_colormanager->setPrinter(&selectedPrinter);    
-    m_currentprinter = &selectedPrinter;
+    m_colormanager->setPrinter(&selectedPrinter);  
     
     emit slotSetAutoCheckBox(autoProfileCheckBox->isChecked());
 }
 
+/// Action performed when the "Automatic Profile Selection" box is checked.
 void KisPrinterColorManager::slotSetAutoCheckBox(bool checkState)
 {
     if (checkState == true) {
-        m_watcher.setFuture(m_colormanager->setAutoProfile());
-        label->setText("Searching for profile...");
-
         m_selectorui->setHidden(true);
         autoProfileWarningLabel->setHidden(false);
+
+        activeProfileLabel->setText("Searching for profile...");
+
+        m_watcher.setFuture(m_colormanager->setAutoProfile());
     } else if (checkState == false) {
         m_selectorui->setHidden(false);
+
         autoProfileWarningLabel->setHidden(true);
     }
-    
-    m_cfg.writeEntry("kiscmpx::autoprofile.checked", checkState);
 }
 
+/// This is called whenever an auto-profile process is complete
 void KisPrinterColorManager::slotFinishedAutoProfile(void)
 {
-    label->setText(m_colormanager->profileName());
+    const KoColorProfile * obtainedProfile = m_colormanager->profile();
+    setCurrentProfile(obtainedProfile);
 }
 
+/// Displays the simulated color preview of an image.
+void KisPrinterColorManager::slotRefreshPreview()
+{
+    // NOTE This needs a little more testing.
+    //QImage previewImage = m_colormanager->renderPreviewImage(m_image, m_colormanager->profile());
+    //previewLabel->setPixmap(QPixmap::fromImage(previewImage));
+}
 
+/// Create a color-managed PDF spool file.
 void KisPrinterColorManager::simulatePrintJob()
-{
-    QString spoolFile = m_colormanager->renderSpoolPdf(m_image, m_profile);
-    // ...
+{ 
+    QMessageBox msgBox(this);
+    
+    QPrinter *currentPrinter = 0;
+    const KoColorProfile *currentProfile = 0;
+    
+    currentPrinter = m_colormanager->printer();
+    currentProfile = m_colormanager->profile();
+ 
+    QString pdfFileName = m_colormanager->renderSpoolPdf(m_image, currentProfile);
+    
+    if (!pdfFileName.isEmpty())
+        msgBox.setText("Color-managed PDF spool file set at " + pdfFileName);
+    else
+        msgBox.setText("Unable to set PDF spool file.");
+    
+    msgBox.exec();
 }
 
-void KisPrinterColorManager::registerCurrentProfile(void)
+/// Set an image from the view.
+void KisPrinterColorManager::setImage(KisImageWSP image)
 {
-    QString profileFileName =  m_profile->fileName();
-    m_cfg.writeEntry("kiscmpx::printer.profile", profileFileName);
+    m_image = image;
 }
 
-void KisPrinterColorManager::populatePrinterList(void)
+/// Detects the available printers in the system.
+int KisPrinterColorManager::populatePrinterList(void)
 {    
     int defaultPrinterIndex;
     QString printerName;
     QString defaultPrinterName;       
     QPrinterInfo currentPrinter;
 
-    m_printerlist = QPrinterInfo::availablePrinters();    
+    m_printerlist = QPrinterInfo::availablePrinters();
+    
+    int count = m_printerlist.count();
 
-    for (int i = 0; i < m_printerlist.count(); i++) { 
+    for (int i = 0; i < count; i++) { 
         currentPrinter = m_printerlist.at(i);  
         printerName = currentPrinter.printerName();
 
         printerListComboBox->addItem(printerName, 0);
     }
+   
+    if (count > 0) {    
+        defaultPrinterName = QPrinterInfo::defaultPrinter().printerName();
+        defaultPrinterIndex = printerListComboBox->findText(defaultPrinterName, Qt::MatchExactly);
     
-    defaultPrinterName = QPrinterInfo::defaultPrinter().printerName();
-    defaultPrinterIndex = printerListComboBox->findText(defaultPrinterName, Qt::MatchExactly);
+        QPrinter p(m_printerlist.at(0), QPrinter::ScreenResolution);  
+        m_colormanager->setPrinter(&p);
+
+        emit slotChangePrinterSelection(defaultPrinterIndex);
+    } 
     
-    m_currentprinter = new QPrinter(m_printerlist.at(0), QPrinter::ScreenResolution);  
-    
-    emit slotChangePrinterSelection(defaultPrinterIndex);
+    return count;
 }
 
 KisPrinterColorManager::~KisPrinterColorManager()

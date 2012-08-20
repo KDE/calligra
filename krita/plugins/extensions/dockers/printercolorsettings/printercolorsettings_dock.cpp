@@ -22,15 +22,15 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <stdio.h>
-
+#include <kis_view2.h>
 #include "kis_printer_color_manager.h"
 
 PrinterColorSettingsDock::PrinterColorSettingsDock(KisView2 *view)
     : QDockWidget(i18n("Printer Color Settings")),
     m_view(view)
 {  
-    KisPrinterColorManager *myWidget = new KisPrinterColorManager(this);  
-    setWidget(myWidget);
+    KisPrinterColorManager *dockWidget = new KisPrinterColorManager(this);  
+    setWidget(dockWidget);
 }
 
 PrinterColorSettingsDock::~PrinterColorSettingsDock()

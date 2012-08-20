@@ -28,6 +28,7 @@
 #include "ui_wdgprintcolorsettings.h"
 #include "ui_wdgprintcolorspaceselector.h"
 #include <kis_image.h>
+#include <kis_view2.h>
 
 class KisCmpx;
 class KoColorSpace;
@@ -35,6 +36,9 @@ class KoColorProfile;
 class KisPrinterProfileChooser;
 class KisConfig;
 
+/**
+ * Docker interface for printer profile selection.
+ */
 class KisPrinterColorManager : public QWidget, Ui::WdgPrintColorSettings
 {
     Q_OBJECT
@@ -42,27 +46,26 @@ public:
     KisPrinterColorManager(QWidget *parent = 0);
     virtual ~KisPrinterColorManager();
     
-    virtual void populatePrinterList();
+    virtual int populatePrinterList();
     virtual void simulatePrintJob();
-    virtual void registerCurrentProfile();
     virtual void setCurrentProfile(const KoColorProfile *);
+    virtual void setImage(KisImageWSP);
     
 private slots:
     void slotChangePrinterSelection(int);
     void slotSetAutoCheckBox(bool);
     void slotFinishedAutoProfile(void);
     void slotUserProfileChanged(const KoColorSpace*);
-    //void slotPrint(void);
+    void slotPrint(void);
+    void slotRefreshPreview(void);
     
 private:
     KisCmpx *m_colormanager;
-    KisConfig m_cfg;
     QList< QMap<QString, QString> > m_profilemap;     
     QList<QPrinterInfo> m_printerlist;
     QFutureWatcher<void> m_watcher;
     const KoColorProfile * m_profile;
     KisPrinterProfileChooser * m_selectorui;
-    QPrinter *m_currentprinter;
     KisImageWSP m_image;
 };
 

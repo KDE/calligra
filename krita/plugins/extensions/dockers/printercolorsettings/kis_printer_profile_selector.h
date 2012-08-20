@@ -20,8 +20,11 @@ class KisPrinterProfileChooser : public KisColorSpaceSelector
 public:
     KisPrinterProfileChooser(QWidget *parent = 0);
     ~KisPrinterProfileChooser();
+private slots:
+    void slotNarrowProfileSelection(bool);
 private:
     QPrinter *m_printer;
+    Ui::WdgPrinterProfileChooser m_ui;
 };
 
 #endif

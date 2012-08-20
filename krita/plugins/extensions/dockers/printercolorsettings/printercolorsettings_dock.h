@@ -25,7 +25,6 @@
 
 class KisView2;
 class KisCanvas2;
-class KisSpecificColorSelectorWidget;
 
 class PrinterColorSettingsDock : public QDockWidget
 {
