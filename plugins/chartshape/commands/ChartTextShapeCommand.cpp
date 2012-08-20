@@ -31,10 +31,16 @@
 
 using namespace KChart;
 
-ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *chart)
+ChartTextShapeCommand::ChartTextShapeCommand(KoShape* textShape, ChartShape *chart, bool isVisible)
     : m_textShape(textShape)
     , m_chart(chart)
+    , m_newIsVisible(isVisible)
 {
+    if (m_newIsVisible) {
+        setText(i18nc("(qtundo-format)", "Show Textshape"));
+    } else {
+        setText(i18nc("(qtundo-format)", "Hide Textshape"));
+    }
 }
 
 ChartTextShapeCommand::~ChartTextShapeCommand()
@@ -61,15 +67,4 @@ void ChartTextShapeCommand::undo()
 
     m_textShape->setVisible(m_oldIsVisible);
     m_chart->update();
-}
-
-void ChartTextShapeCommand::setVisible(bool isVisible)
-{
-    m_newIsVisible = isVisible;
-
-    if (isVisible) {
-        setText(i18nc("(qtundo-format)", "Show Textshape"));
-    } else {
-        setText(i18nc("(qtundo-format)", "Hide Textshape"));
-    }
 }

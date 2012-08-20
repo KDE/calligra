@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    ChartTextShapeCommand(KoShape* textShape, ChartShape* chart);
+    ChartTextShapeCommand(KoShape* textShape, ChartShape* chart, bool isVisible);
 
     /**
      * Destructor.
@@ -68,8 +68,6 @@ public:
      * Executes the actual operation in reverse order.
      */
     virtual void undo();
-
-    void setVisible(bool isVisible);
 
 private:
     KoShape *m_textShape;

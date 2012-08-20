@@ -466,10 +466,8 @@ void ChartTool::setDataSetBrush(DataSet *dataSet, const QColor& color)
         return;
 
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    if (command!=0) {
-        command->setDataSetBrush(color);
-        canvas()->addCommand(command);
-    }
+    command->setDataSetBrush(color);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -480,10 +478,8 @@ void ChartTool::setDataSetPen(DataSet *dataSet, const QColor& color)
         return;
 
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    if (command!=0) {
-        command->setDataSetPen(color);
-        canvas()->addCommand(command);
-    }
+    command->setDataSetPen(color);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -495,10 +491,8 @@ void ChartTool::setDataSetMarker(DataSet *dataSet, OdfMarkerStyle style)
         return;
 
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    if (command!=0) {
-        command->setDataSetMarker(style);
-        canvas()->addCommand(command);
-    }
+    command->setDataSetMarker(style);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -549,10 +543,8 @@ void ChartTool::setDataSetShowCategory(DataSet *dataSet, bool b)
         return;
 
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    if (command!=0) {
-        command->setDataSetShowCategory(b);
-        canvas()->addCommand(command);
-    }
+    command->setDataSetShowCategory(b);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -565,10 +557,8 @@ void ChartTool::setDataSetShowNumber(DataSet *dataSet, bool b)
         return;
 
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    if (command!=0) {
-        command->setDataSetShowNumber(b);
-        canvas()->addCommand(command);
-    }
+    command->setDataSetShowNumber(b);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -581,10 +571,8 @@ void ChartTool::setDataSetShowPercent(DataSet *dataSet, bool b)
         return;
 
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    if (command!=0) {
-        command->setDataSetShowPercent(b);
-        canvas()->addCommand(command);
-    }
+    command->setDataSetShowPercent(b);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -597,10 +585,8 @@ void ChartTool::setDataSetShowSymbol(DataSet *dataSet, bool b)
         return;
 
     DatasetCommand *command = new DatasetCommand(dataSet, d->shape);
-    if (command!=0) {
-        command->setDataSetShowSymbol(b);
-        canvas()->addCommand(command);
-    }
+    command->setDataSetShowSymbol(b);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -621,11 +607,8 @@ void ChartTool::setShowTitle(bool show)
     if (!d->shape)
         return;
 
-    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->title(), d->shape);
-    if (command!=0) {
-        command->setVisible(show);
-        canvas()->addCommand(command);
-    }
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->title(), d->shape, show);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -636,11 +619,8 @@ void ChartTool::setShowSubTitle(bool show)
     if (!d->shape)
         return;
 
-    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->subTitle(), d->shape);
-    if (command!=0) {
-        command->setVisible(show);
-        canvas()->addCommand(command);
-    }
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->subTitle(), d->shape, show);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -651,11 +631,8 @@ void ChartTool::setShowFooter(bool show)
     if (!d->shape)
         return;
 
-    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer(), d->shape);
-    if (command!=0) {
-        command->setVisible(show);
-        canvas()->addCommand(command);
-    }
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->footer(), d->shape, show);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -677,10 +654,8 @@ void ChartTool::setLegendTitle(const QString &title)
     Q_ASSERT(d->shape->legend());
 
     LegendCommand *command = new LegendCommand(d->shape->legend());
-    if (command!=0) {
-        command->setLegendTitle(title);
-        canvas()->addCommand(command);
-    }
+    command->setLegendTitle(title);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendFont(const QFont &font)
@@ -690,10 +665,8 @@ void ChartTool::setLegendFont(const QFont &font)
 
     // There only is a general font, for the legend items and the legend title
     LegendCommand *command = new LegendCommand(d->shape->legend());
-    if (command!=0) {
-        command->setLegendFont(font);
-        canvas()->addCommand(command);
-    }
+    command->setLegendFont(font);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendFontSize(int size)
@@ -702,10 +675,8 @@ void ChartTool::setLegendFontSize(int size)
     Q_ASSERT(d->shape->legend());
 
     LegendCommand *command = new LegendCommand(d->shape->legend());
-    if (command!=0) {
-        command->setLegendFontSize(size);
-        canvas()->addCommand(command);
-    }
+    command->setLegendFontSize(size);
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendOrientation(Qt::Orientation orientation)
@@ -714,10 +685,8 @@ void ChartTool::setLegendOrientation(Qt::Orientation orientation)
     Q_ASSERT(d->shape->legend());
 
     LegendCommand *command = new LegendCommand(d->shape->legend());
-    if (command!=0) {
-        command->setLegendExpansion(QtOrientationToLegendExpansion(orientation));
-        canvas()->addCommand(command);
-    }
+    command->setLegendExpansion(QtOrientationToLegendExpansion(orientation));
+    canvas()->addCommand(command);
 }
 
 void ChartTool::setLegendAlignment(Qt::Alignment alignment)
@@ -767,10 +736,8 @@ void ChartTool::setLegendShowFrame(bool show)
     Q_ASSERT(d->shape->legend());
 
     LegendCommand *command = new LegendCommand(d->shape->legend());
-    if (command!=0) {
-        command->setLegendShowFrame(show);
-        canvas()->addCommand(command);
-    }
+    command->setLegendShowFrame(show);
+    canvas()->addCommand(command);
 }
 
 
@@ -796,10 +763,8 @@ void ChartTool::setAxisTitle(Axis *axis, const QString& title)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisTitle(title);
-        canvas()->addCommand(command);
-    }
+    command->setAxisTitle(title);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -809,10 +774,8 @@ void ChartTool::setAxisShowTitle(Axis *axis, bool show)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisShowTitle(show);
-        canvas()->addCommand(command);
-    }
+    command->setAxisShowTitle(show);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -822,10 +785,8 @@ void ChartTool::setAxisShowGridLines(Axis *axis, bool b)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisShowGridLines(b);
-        canvas()->addCommand(command);
-    }
+    command->setAxisShowGridLines(b);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -835,10 +796,8 @@ void ChartTool::setAxisUseLogarithmicScaling(Axis *axis, bool b)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisUseLogarithmicScaling(b);
-        canvas()->addCommand(command);
-    }
+    command->setAxisUseLogarithmicScaling(b);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -848,10 +807,8 @@ void ChartTool::setAxisStepWidth(Axis *axis, qreal width)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisStepWidth(width);
-        canvas()->addCommand(command);
-    }
+    command->setAxisStepWidth(width);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -861,10 +818,8 @@ void ChartTool::setAxisSubStepWidth(Axis *axis, qreal width)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisSubStepWidth(width);
-        canvas()->addCommand(command);
-    }
+    command->setAxisSubStepWidth(width);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -874,10 +829,8 @@ void ChartTool::setAxisUseAutomaticStepWidth(Axis *axis, bool automatic)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisUseAutomaticStepWidth(automatic);
-        canvas()->addCommand(command);
-    }
+    command->setAxisUseAutomaticStepWidth(automatic);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -887,10 +840,8 @@ void ChartTool::setAxisUseAutomaticSubStepWidth(Axis *axis, bool automatic)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisUseAutomaticSubStepWidth(automatic);
-        canvas()->addCommand(command);
-    }
+    command->setAxisUseAutomaticSubStepWidth(automatic);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -900,10 +851,8 @@ void ChartTool::setAxisLabelsFont(Axis *axis, const QFont &font)
     Q_ASSERT(d->shape);
 
     AxisCommand *command = new AxisCommand(axis, d->shape);
-    if (command!=0) {
-        command->setAxisLabelsFont(font);
-        canvas()->addCommand(command);
-    }
+    command->setAxisLabelsFont(font);
+    canvas()->addCommand(command);
 
     d->shape->update();
 }
@@ -937,11 +886,8 @@ void ChartTool::setShowLegend(bool show)
 {
     Q_ASSERT(d->shape);
 
-    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->legend(), d->shape);
-    if (command!=0) {
-        command->setVisible(show);
-        canvas()->addCommand(command);
-    }
+    ChartTextShapeCommand *command = new ChartTextShapeCommand(d->shape->legend(), d->shape, show);
+    canvas()->addCommand(command);
 
     d->shape->legend()->update();
 }
