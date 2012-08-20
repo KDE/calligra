@@ -27,6 +27,7 @@ Page {
         anchors.fill: parent;
 
         Krita.SketchView {
+            id: sketchView;
             //anchors.fill: parent;
             width: parent.width;
             onWidthChanged: console.log("new width %1".arg(width));
