@@ -93,10 +93,8 @@ public:
 
 void KisSketchView::Private::update()
 {
-    q->scene()->update();
+    q->scene()->invalidate( 0, 0, q->width(), q->height() );
 }
-
-
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
     : CanvasControllerDeclarative(parent)
