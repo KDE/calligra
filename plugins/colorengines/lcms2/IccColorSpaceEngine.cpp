@@ -56,13 +56,13 @@ public:
         }
 
 
+        m_transform = cmsCreateTransform(srcProfile->lcmsProfile(),
+                                              srcColorSpaceType,
+                                              dstProfile->lcmsProfile(),
+                                              dstColorSpaceType,
+                                              renderingIntent,
+                                              conversionFlags);
 
-        m_transform = this->createTransform(srcColorSpaceType,
-                                            srcProfile,
-                                            dstColorSpaceType,
-                                            dstProfile,
-                                            renderingIntent,
-                                            conversionFlags);
         Q_ASSERT(m_transform);
     }
 
@@ -83,7 +83,7 @@ public:
 
         // Lcms does nothing to the destination alpha channel so we must convert that manually.
         while (numPixels > 0) {
-            quint8 alpha = srcColorSpace()->opacityU8(src);
+            qreal alpha = srcColorSpace()->opacityF(src);
             dstColorSpace()->setOpacity(dst, alpha, 1);
 
             src += srcPixelSize;
@@ -91,25 +91,6 @@ public:
             numPixels--;
         }
 
-    }
-private:
-
-    cmsHTRANSFORM createTransform(quint32 srcColorSpaceType,
-                                  LcmsColorProfileContainer *srcProfile,
-                                  quint32 dstColorSpaceType,
-                                  LcmsColorProfileContainer *dstProfile,
-                                  qint32 renderingIntent,
-                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const
-    {
-
-        cmsHTRANSFORM tf = cmsCreateTransform(srcProfile->lcmsProfile(),
-                                              srcColorSpaceType,
-                                              dstProfile->lcmsProfile(),
-                                              dstColorSpaceType,
-                                              renderingIntent,
-                                              conversionFlags);
-
-        return tf;
     }
 private:
     mutable cmsHTRANSFORM m_transform;
