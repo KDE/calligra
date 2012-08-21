@@ -30,8 +30,9 @@ KPrEditAnimationTimeLineCommand::KPrEditAnimationTimeLineCommand(KPrShapeAnimati
     , m_newBegin(begin)
     , m_newDuration(duration)
 {
-    m_oldBegin = m_animation->timeRange().first;
-    m_oldDuration = m_animation->globalDuration();
+    QPair<int, int> range = m_animation->timeRange();
+    m_oldBegin = range.first;
+    m_oldDuration = range.second - range.first;
     setText(i18nc("(qtundo-format)", "Edit animation delay/duration"));
 }
 

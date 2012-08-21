@@ -62,12 +62,6 @@ public:
         MediaCall
     };
 
-    /// State of the animation
-    enum AnimationState {
-        Valid,
-        Invalid
-    };
-
     KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData);
     virtual ~KPrShapeAnimation();
 
@@ -98,11 +92,11 @@ public:
     /**
       * Return the begin and end time of the animation as a QPair
       */
-    virtual QPair<int, int> timeRange();
+    virtual QPair<int, int> timeRange() const;
     /**
       * Return global duration of the shape animation
       */
-    virtual int globalDuration();
+    virtual int globalDuration() const;
 
     /**
      * @brief Set the begin time for the animation
@@ -218,7 +212,6 @@ signals:
 private:
     KoShape *m_shape;
     KoTextBlockData *m_textBlockData;
-    NodeType m_triggerEvent;
     PresetClass m_class;
     QString m_id;
     QString m_presetSubType;

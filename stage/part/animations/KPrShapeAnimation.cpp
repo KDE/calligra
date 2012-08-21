@@ -33,10 +33,7 @@
 KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
 : m_shape(shape)
 , m_textBlockData(textBlockData)
-, m_triggerEvent(KPrShapeAnimation::OnClick)
 , m_class(KPrShapeAnimation::None)
-, m_id(QString())
-, m_presetSubType(QString())
 , m_step(0)
 , m_subStep(0)
 , m_stepIndex(-1)
@@ -131,7 +128,7 @@ bool KPrShapeAnimation::visible()
     return true;
 }
 
-QPair<int, int> KPrShapeAnimation::timeRange()
+QPair<int, int> KPrShapeAnimation::timeRange() const
 {
     const int INVALID_START = 99999;
     int minStart = INVALID_START;
@@ -150,7 +147,7 @@ QPair<int, int> KPrShapeAnimation::timeRange()
     return pair;
 }
 
-int KPrShapeAnimation::globalDuration()
+int KPrShapeAnimation::globalDuration() const
 {
     QPair<int, int> range = timeRange();
     return range.second - range.first;
@@ -167,7 +164,6 @@ void KPrShapeAnimation::setBeginTime(int timeMS)
     for (int i = 0;i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);
         if (KPrAnimationBase *a = dynamic_cast<KPrAnimationBase *>(animation)) {
-
             a->setBegin(a->begin() + timeDiff);
         }
     }
@@ -180,8 +176,9 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
         return;
     }
     //Add timeMS duration to all animations, proportional to the max duration
-    int maxDuration = timeRange().second - timeRange().first;
-    int minStart = timeRange().first;
+    QPair<int, int> range = timeRange();
+    int maxDuration = range.second - range.first;
+    int minStart = range.first;
     qreal timeRatio = timeMS / (qreal)maxDuration;
     for (int i = 0;i < this->animationCount(); i++) {
         QAbstractAnimation *animation = this->animationAt(i);

@@ -22,13 +22,12 @@
 
 #include <kundo2command.h>
 
-#include "stage_export.h"
 #include "animations/KPrShapeAnimation.h"
 
 class KPrShapeAnimations;
 
 /// Command to edit node type
-class STAGE_EXPORT KPrAnimationEditNodeTypeCommand : public KUndo2Command
+class KPrAnimationEditNodeTypeCommand : public KUndo2Command
 {
 public:
     KPrAnimationEditNodeTypeCommand(KPrShapeAnimation *animation, KPrShapeAnimation::NodeType oldType,

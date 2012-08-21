@@ -38,7 +38,6 @@ KPrAnimationEditNodeTypeCommand::KPrAnimationEditNodeTypeCommand(KPrShapeAnimati
 
 KPrAnimationEditNodeTypeCommand::~KPrAnimationEditNodeTypeCommand()
 {
-
 }
 
 void KPrAnimationEditNodeTypeCommand::redo()

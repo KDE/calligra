@@ -355,10 +355,7 @@ QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &elem
 KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape)
 {
     // load preset and id
-    //TODO: motion-path, ole-action, media-call are not supported
-    QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
-    QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
-    QString presetSubType = element.attributeNS(KoXmlNS::presentation, "preset-sub-type");
+    //TODO: ole-action, media-call are not supported
 
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is
@@ -376,6 +373,9 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     }
 
     if (shapeAnimation) {
+        QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
+        QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
+        QString presetSubType = element.attributeNS(KoXmlNS::presentation, "preset-sub-type");
         if (presetClass == "custom") {
             shapeAnimation->setPresetClass(KPrShapeAnimation::Custom);
         }

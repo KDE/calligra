@@ -34,11 +34,11 @@ public:
     /**
       * Return the begin and end time of the animation as a QPair
       */
-    QPair<int, int> timeRange() {return QPair<int, int>(m_beginTime, m_beginTime + m_duration);}
+    QPair<int, int> timeRange() const {return QPair<int, int>(m_beginTime, m_beginTime + m_duration);}
     /**
       * Return global duration of the shape animation
       */
-    int globalDuration() {return m_duration;}
+    int globalDuration() const {return m_duration;}
 
     /**
      * @brief Set the begin time for the animation
