@@ -36,13 +36,13 @@ Panel {
         anchors.fill: parent;
         model: paletteColorsModel;
         delegate: delegate;
-        cellWidth: Constants.GridWidth;
-        cellHeight: Constants.GridHeight;
+        cellWidth: Constants.GridWidth - 8;
+        cellHeight: Constants.GridHeight - 8;
     }
 
     fullContents: Item {
         anchors.fill: parent;
-        ListView {
+        ExpandingListView {
             id: fullPaletteList
             anchors {
                 top: parent.top;
@@ -50,21 +50,10 @@ Panel {
                 right: parent.right;
             }
             height: Constants.GridHeight;
-            orientation: ListView.Horizontal;
             model: paletteModel
-            delegate: Button {
-                height: Constants.GridHeight;
-                width: Constants.GridWidth;
-                color: "transparent";
-                text: model.text;
-                textSize: 10;
-                image: model.image;
-                highlightColor: Constants.Theme.HighlightColor;
-                onClicked: {
-                    ListView.view.currentIndex = index;
-                    paletteModel.itemActivated(index);
-                    paletteColorsModel.colorSet = paletteModel.colorSet;
-                }
+            onCurrentIndexChanged: {
+                paletteModel.itemActivated(currentIndex);
+                paletteColorsModel.colorSet = paletteModel.colorSet;
             }
         }
         GridView {
