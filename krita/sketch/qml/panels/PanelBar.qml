@@ -22,6 +22,14 @@ import org.krita.draganddrop 1.0 as DnD
 Item {
     id: base;
 
+    MouseArea {
+        id: peekCapture;
+        anchors.fill: parent;
+        enabled: false;
+
+        onClicked: d.peeking.state = "collapsed";
+    }
+
     PresetsPanel {
         id: presetsPanel;
         objectName: "presets";
@@ -223,14 +231,6 @@ Item {
             border.color: "white";
             border.width: 5;
         }
-    }
-
-    MouseArea {
-        id: peekCapture;
-        anchors.fill: parent;
-        enabled: false;
-
-        onClicked: d.peeking.state = "collapsed";
     }
 
     QtObject {
