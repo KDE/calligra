@@ -89,5 +89,6 @@
         <file>images/svg/icon-palette-add-orange.svg</file>
         <file>images/svg/icon-palette-delete-orange.svg</file>
         <file>images/svg/icon-switch-small.svg</file>
+        <file>components/ExpandingListView.qml</file>
     </qresource>
 </RCC>

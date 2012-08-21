@@ -33,7 +33,7 @@ Panel {
 
     fullContents: Item {
         anchors.fill: parent;
-        ListView {
+        ExpandingListView {
             id: fullPaletteList
             anchors {
                 top: parent.top;
@@ -41,9 +41,14 @@ Panel {
                 right: parent.right;
             }
             height: Constants.GridHeight;
-            orientation: ListView.Horizontal;
+            //orientation: ListView.Horizontal;
             model: PaletteModel
-            delegate: Button {
+            onCurrentIndexChanged: {
+                PaletteModel.itemActivated(currentIndex);
+                PaletteColorsModel.colorSet = PaletteModel.colorSet;
+            }
+
+            /*delegate: Button {
                 height: Constants.GridHeight;
                 width: Constants.GridWidth;
                 text: model.text;
@@ -55,7 +60,7 @@ Panel {
                     PaletteModel.itemActivated(index);
                     PaletteColorsModel.colorSet = PaletteModel.colorSet;
                 }
-            }
+            }*/
         }
         GridView {
             anchors {
