@@ -287,8 +287,6 @@ void KisSketchView::componentComplete()
     indices << 0 << 1 << 2 << 0 << 2 << 3;
     d->indexBuffer->allocate(reinterpret_cast<void*>(indices.data()), indices.size() * sizeof(uint));
     d->indexBuffer->release();
-
-    createDocument();
 }
 
 bool KisSketchView::sceneEvent(QEvent* event)

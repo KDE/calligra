@@ -33,7 +33,7 @@ Page {
             onWidthChanged: console.log("new width %1".arg(width));
             height: parent.height;
 
-            //Component.onCompleted: createDocument();
+            Component.onCompleted: createDocument();
         }
 
         PanelBar { height: parent.height; width: parent.width; }
