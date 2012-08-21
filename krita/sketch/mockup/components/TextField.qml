@@ -26,17 +26,30 @@ Item {
     property alias placeholder: placeholder.text;
 
     DropShadow {
+        size: 0
         anchors.fill: parent;
         anchors.margins: Constants.DefaultMargin;
 
         Rectangle {
+            color: "#00000000"
+            radius: Constants.GridHeight / 2
+            border.color: "#6c6c6c"
             anchors.fill: parent;
+            smooth: true;
+
+            Rectangle {
+                color: "#ffffff"
+                radius: Constants.GridHeight / 2
+                anchors.fill: parent;
+                opacity: 0.3;
+                smooth: true;
+               }
 
             Label {
                 id: placeholder;
                 anchors.left: parent.left;
                 anchors.verticalCenter: parent.verticalCenter;
-                anchors.margins: Constants.DefaultMargin;
+                anchors.margins: Constants.GridHeight / 4;
                 color: Constants.Theme.SecondaryTextColor;
             }
 
@@ -45,10 +58,14 @@ Item {
                 anchors.left: parent.left;
                 anchors.right: parent.right;
                 anchors.verticalCenter: parent.verticalCenter;
-                anchors.margins: Constants.DefaultMargin;
+                anchors.margins: Constants.GridHeight / 4;
                 font.pixelSize: Constants.DefaultFontSize;
             }
+
+
+
         }
+
     }
 
     MouseArea {

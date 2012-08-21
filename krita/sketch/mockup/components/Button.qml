@@ -51,10 +51,10 @@ Item {
 
         Image {
             id: icon;
-            anchors.rightMargin: 8
+         /* anchors.rightMargin: 8
             anchors.leftMargin: 8
             anchors.bottomMargin: 8
-            anchors.topMargin: 8
+            anchors.topMargin: 8 */
             anchors.fill: parent;
             anchors.margins: Constants.DefaultMargin;
             fillMode: Image.PreserveAspectFit;
