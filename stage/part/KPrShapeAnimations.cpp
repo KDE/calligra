@@ -1005,7 +1005,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
         name.replace(" ", "_");
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
-            return koIcon(name.toLatin1()).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
+            return KIcon(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
         }
     }
     return koIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
