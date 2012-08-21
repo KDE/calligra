@@ -63,16 +63,16 @@ Item {
 
             Item {
                 id: peek;
-
+                clip: true;
                 anchors.top: parent.top;
-                anchors.bottom: parent.bottom;
+                anchors.bottom: header.top;
                 anchors.left: parent.left;
-                anchors.right: header.left;
+                anchors.right: parent.right;
             }
 
             Item {
                 id: full;
-
+                clip: true;
                 anchors.top: header.bottom;
                 anchors.bottom: footer.top;
                 anchors.left: parent.left;
@@ -82,10 +82,9 @@ Item {
             DropShadow {
                 id: header;
 
-                anchors.top: parent.top;
+                anchors.left: parent.left
                 anchors.right: parent.right;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight * 2;
+                height: Constants.GridHeight;
 
                 Rectangle {
                     id: rectangle1
@@ -201,24 +200,23 @@ Item {
         State {
             name: "peek";
 
-            PropertyChanges { target: base; width: Constants.GridWidth * 3; }
-            PropertyChanges { target: fill; height: Constants.GridHeight * 2; }
+            PropertyChanges { target: base; width: Constants.GridWidth * 2; }
+            PropertyChanges { target: fill; height: Constants.GridHeight * 3; }
             PropertyChanges { target: handle; opacity: 1; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
+            AnchorChanges { target: header; anchors.bottom: parent.bottom }
             PropertyChanges { target: footer; opacity: 0; }
         },
         State {
             name: "full";
             PropertyChanges { target: peek; opacity: 0; }
             PropertyChanges { target: full; opacity: 1; }
-            PropertyChanges { target: header; height: Constants.GridHeight; width: parent.width; }
         },
         State {
             name: "edit";
             PropertyChanges { target: peek; opacity: 0; }
             PropertyChanges { target: full; opacity: 1; }
-            PropertyChanges { target: header; height: Constants.GridHeight; width: parent.width; }
             PropertyChanges { target: base; width: base.editWidth; }
         }
     ]
@@ -230,6 +228,7 @@ Item {
 
             SequentialAnimation {
                 ScriptAction { script: base.peek(); }
+                AnchorAnimation { targets: [ header ] ; duration: 0; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,width,opacity"; duration: 250; }
             }
@@ -240,6 +239,7 @@ Item {
 
             SequentialAnimation {
                 NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,width,opacity"; duration: 250; }
+                AnchorAnimation { targets: [ header ] ; duration: 0; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 ScriptAction { script: base.collapsed(); }
             }
