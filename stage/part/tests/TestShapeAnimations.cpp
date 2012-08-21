@@ -419,15 +419,15 @@ void TestShapeAnimations::timeHelperMethods()
     QCOMPARE(animations.animationStart(animations.index(8, 0)), 0);
 
     //Previous animation End
-    QCOMPARE(animations.animationEndByIndex(animations.index(0, 0)), 4000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(1, 0)), 2000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(2, 0)), 5000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(3, 0)), 6000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(4, 0)), 6000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(5, 0)), 3000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(6, 0)), 6000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(7, 0)), 5000);
-    QCOMPARE(animations.animationEndByIndex(animations.index(8, 0)), 6000);
+    QCOMPARE(animations.animationEnd(animations.index(0, 0)), 4000);
+    QCOMPARE(animations.animationEnd(animations.index(1, 0)), 2000);
+    QCOMPARE(animations.animationEnd(animations.index(2, 0)), 5000);
+    QCOMPARE(animations.animationEnd(animations.index(3, 0)), 6000);
+    QCOMPARE(animations.animationEnd(animations.index(4, 0)), 6000);
+    QCOMPARE(animations.animationEnd(animations.index(5, 0)), 3000);
+    QCOMPARE(animations.animationEnd(animations.index(6, 0)), 6000);
+    QCOMPARE(animations.animationEnd(animations.index(7, 0)), 5000);
+    QCOMPARE(animations.animationEnd(animations.index(8, 0)), 6000);
 }
 
 void TestShapeAnimations::cleanupTestCase()

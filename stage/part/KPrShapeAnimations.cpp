@@ -47,7 +47,7 @@
 #include <KoPathShape.h>
 
 //KDE Headers
-#include <KIcon>
+#include <KoIcon.h>
 #include <KIconLoader>
 #include <KLocale>
 #include <kdebug.h>
@@ -131,13 +131,13 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case StepCount: return QVariant();
             case TriggerEvent:
                 if (currentData.nodeType == KPrShapeAnimation::OnClick)
-                    return KIcon("onclick").pixmap(KIconLoader::SizeSmall,
+                    return koIcon("onclick").pixmap(KIconLoader::SizeSmall,
                                                    KIconLoader::SizeSmall);
                 if (currentData.nodeType == KPrShapeAnimation::AfterPrevious)
-                    return KIcon("after_previous").pixmap(KIconLoader::SizeSmall,
+                    return koIcon("after_previous").pixmap(KIconLoader::SizeSmall,
                                                           KIconLoader::SizeSmall);
                 if (currentData.nodeType == KPrShapeAnimation::WithPrevious)
-                    return KIcon("with_previous").pixmap(KIconLoader::SizeSmall,
+                    return koIcon("with_previous").pixmap(KIconLoader::SizeSmall,
                                                          KIconLoader::SizeSmall);
             case Name: return QVariant();
             case ShapeThumbnail: return getAnimationShapeThumbnail(thisAnimation);
@@ -216,14 +216,7 @@ int KPrShapeAnimations::rowCount(const QModelIndex &parent) const
         for (int i=0; i < step->animationCount(); i++) {
             QAbstractAnimation *animation = step->animationAt(i);
             if (KPrAnimationSubStep *a = dynamic_cast<KPrAnimationSubStep*>(animation)) {
-                for (int j=0; j < a->animationCount(); j++) {
-                    QAbstractAnimation *shapeAnimation = a->animationAt(j);
-                    if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
-                        if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
-                            rowCount++;
-                        }
-                    }
-                }
+                rowCount = rowCount + a->animationCount();
             }
         }
     }
@@ -448,7 +441,7 @@ void KPrShapeAnimations::setTimeRange(KPrShapeAnimation *item, const int begin, 
     }
 }
 
-int KPrShapeAnimations::animationEndByIndex(const QModelIndex &index)
+int KPrShapeAnimations::animationEnd(const QModelIndex &index)
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
@@ -464,7 +457,7 @@ int KPrShapeAnimations::animationEndByIndex(const QModelIndex &index)
         }
         else if (previousNodeType == KPrShapeAnimation::AfterPrevious) {
             return previousAnimation->timeRange().second +
-                    animationEndByIndex(this->index(index.row() - 1, index.column(), QModelIndex()));
+                    animationEnd(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
     }
     return 0;
@@ -484,7 +477,7 @@ int KPrShapeAnimations::animationStart(const QModelIndex &index)
             return animationStart(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
         else if (previousNodeType == KPrShapeAnimation::AfterPrevious) {
-            return animationEndByIndex(this->index(index.row() - 1, index.column(), QModelIndex()));
+            return animationEnd(this->index(index.row() - 1, index.column(), QModelIndex()));
         }
     }
     return 0;
@@ -716,7 +709,7 @@ void KPrShapeAnimations::recalculateStart(const QModelIndex &mIndex)
             static_cast<KPrShapeAnimation::NodeType>(data(this->index(mIndex.row(),
                                                                        KPrShapeAnimations::NodeType)).toInt());
     if (type == KPrShapeAnimation::AfterPrevious) {
-        setTimeRange(animation, animationEndByIndex(mIndex), animation->globalDuration());
+        setTimeRange(animation, animationEnd(mIndex), animation->globalDuration());
         setTriggerEvent(mIndex, KPrShapeAnimation::WithPrevious);
     }
     else if (type == KPrShapeAnimation::WithPrevious) {
@@ -883,18 +876,16 @@ KPrShapeAnimation *KPrShapeAnimations::animationByRow(const int row, AnimationTm
                 for (int j=0; j < a->animationCount(); j++) {
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
-                        if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
-                            stepChild++;
-                            subStepChild++;
-                            if (subStepChild > 0) {
-                                currentData.nodeType = KPrShapeAnimation::WithPrevious;
-                            }
-                            if (rowCount == row) {
-                                currentData.group = groupCount;
-                                return b;
-                            }
-                            rowCount++;
+                        stepChild++;
+                        subStepChild++;
+                        if (subStepChild > 0) {
+                            currentData.nodeType = KPrShapeAnimation::WithPrevious;
                         }
+                        if (rowCount == row) {
+                            currentData.group = groupCount;
+                            return b;
+                        }
+                        rowCount++;
                     }
                 }
             }
@@ -1014,10 +1005,10 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
         name.replace(" ", "_");
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
-            return KIcon(name).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
+            return koIcon(name.toLatin1()).pixmap(KIconLoader::SizeHuge, KIconLoader::SizeHuge);
         }
     }
-    return KIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+    return koIcon("unrecognized_animation").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
 }
 
 QImage KPrShapeAnimations::createThumbnail(KoShape *shape, const QSize &thumbSize) const

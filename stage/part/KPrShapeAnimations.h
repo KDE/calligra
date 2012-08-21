@@ -60,12 +60,6 @@ public:
         NodeType
     };
 
-    struct AnimationTmpData
-    {
-        int group;
-        KPrShapeAnimation::NodeType nodeType;
-    };
-
     explicit KPrShapeAnimations(KPrDocument *document, QObject *parent = 0);
     ~KPrShapeAnimations();
 
@@ -167,7 +161,7 @@ public:
      * @param index of the animation
      * @return the time in miliseconds of the animation end
      */
-    int animationEndByIndex(const QModelIndex &index);
+    int animationEnd(const QModelIndex &index);
 
     /**
      * Get the scale begin time for the given animation
@@ -295,6 +289,13 @@ signals:
     void onClickEventChanged();
 
 private:
+
+    struct AnimationTmpData
+    {
+        int group;
+        KPrShapeAnimation::NodeType nodeType;
+    };
+
     KPrShapeAnimation *animationByRow(const int row, AnimationTmpData &currentData) const;
     QString getAnimationName(KPrShapeAnimation *animation, bool omitSubType = false) const;
     QPixmap getAnimationShapeThumbnail(KPrShapeAnimation *animation) const;

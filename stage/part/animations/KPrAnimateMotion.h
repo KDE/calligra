@@ -47,7 +47,6 @@ protected:
     virtual void next(int currentTime);
 
 private:
-    QPainterPath m_path;
     KoPathShape *m_motionPath;
     mutable qreal m_currentZoom;
     mutable QSizeF m_currentPageSize;

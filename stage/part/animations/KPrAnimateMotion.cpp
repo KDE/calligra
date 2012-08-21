@@ -50,7 +50,6 @@ bool KPrAnimateMotion::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
     if (!path.isEmpty()) {
         KoPathShapeLoader loader(m_motionPath);
         loader.parseSvg(path, true);
-        m_path = m_motionPath->outline();
 
         //qDebug() << Q_FUNC_INFO << m_path << path;
     }
@@ -76,7 +75,7 @@ bool KPrAnimateMotion::saveOdf(KoPASavingContext & paContext) const
 
 void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
 {
-    m_path = m_motionPath->outline();
+    QPainterPath m_path = m_motionPath->outline();
     if (m_fill == FillHold) {
         KoShape *shape = m_shapeAnimation->shape();
         m_animationCache = animationCache;
@@ -88,7 +87,7 @@ void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
 
 QPainterPath KPrAnimateMotion::pathOutline()
 {
-    m_path = m_motionPath->outline();
+    QPainterPath m_path = m_motionPath->outline();
     return m_path;
 }
 
@@ -136,7 +135,7 @@ qreal KPrAnimateMotion::currentZoom()
 void KPrAnimateMotion::next(int currentTime)
 {
     Q_ASSERT(m_animationCache);
-    m_path = getPath(1.0, QSizeF(1, 1), false)->outline();
+    QPainterPath m_path = getPath(1.0, QSizeF(1, 1), false)->outline();
     QSizeF pageSize = m_animationCache->pageSize();
     QPointF point = m_path.pointAtPercent(qreal(currentTime)/qreal(animationDuration()));
     QPointF offset(point.x() * pageSize.width(), point.y() * pageSize.height());

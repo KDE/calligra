@@ -303,7 +303,7 @@ int KPrAnimationsTimeLineView::calculateStartOffset(int row) const
     }
     if (triggerEvent == KPrShapeAnimation::AfterPrevious) {
         QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::NodeType));
-        return m_shapeModel->animationEndByIndex(sourceIndex);
+        return m_shapeModel->animationEnd(sourceIndex);
     }
     if (triggerEvent == KPrShapeAnimation::WithPrevious) {
         QModelIndex sourceIndex = m_model->mapToSource(m_model->index(row - 1, KPrShapeAnimations::NodeType));
