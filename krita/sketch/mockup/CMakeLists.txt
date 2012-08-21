@@ -63,6 +63,7 @@ add_custom_target(QmlComponentFiles ALL ${CMAKE_COMMAND} -E echo "QML Component 
     components/CategorySwitcher.qml
     components/Divider.qml
     components/DropShadow.qml
+    components/ExpandingListView.qml
     components/Header.qml
     components/Label.qml
     components/NewImageList.qml
