@@ -45,7 +45,7 @@ Item {
         y: 5
         anchors.fill: parent;
         anchors.margins: 0;
-
+        color: "transparent";
         visible: true
 
         Image {

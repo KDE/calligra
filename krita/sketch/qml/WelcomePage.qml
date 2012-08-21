@@ -29,23 +29,43 @@ Page {
             right: parent.right;
         }
 
-        height: Constants.GridHeight * 2;
+        height: Constants.GridHeight * 3;
         z: 10;
 
         Header {
-            text: "Krita Sketch";
+            height: Constants.GridHeight * 2;
+            //text: "Krita Sketch";
+           Image { anchors.fill: parent; source: "./images/header_krita_sketch.png" }
+            Label { text: "KRITA SKETCH"; font.bold: true; font.pixelSize: Constants.HugeFontSize; anchors.centerIn: parent; color: "white";}
+            Image { anchors.fill: parent; source: "./images/header_krita_sketch_light.png" }
 
-            leftArea: Item {
-                width: Constants.GridWidth;
+            //leftArea:
+
+              /* Item {
+                width: Constants.GridWidth / 2;
                 height: Constants.GridHeight;
+                z: 10;
+                Rectangle { anchors.fill: parent; anchors.margins: Constants.DefaultMargin; color: "white"; } */
 
-                Rectangle { anchors.fill: parent; anchors.margins: Constants.DefaultMargin; color: "white"; }
-                Image { anchors.centerIn: parent; source: "./images/krita.png" }
+            Image {
+                x: Constants.GridWidth / 2;
+                y: Constants.GridHeight / 2;
+                width: Constants.GridWidth / 2;
+                height: Constants.GridHeight;
+                source: "./images/svg/icon-krita_sketch.svg";
+                fillMode: Image.PreserveAspectFit;
+                smooth: true;
+
             }
-            rightArea: Button {
+          //}
+            //rightArea:
+
+            Button {
+                x: Constants.GridWidth * 11;
+                y: Constants.GridHeight / 2;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: "./images/help-about.png";
+                image: "./images/svg/icon-help.svg";
                 highlightColor: Constants.Theme.HighlightColor;
 
                 onClicked: pageStack.push( help );
@@ -60,7 +80,19 @@ Page {
                 height: Constants.GridHeight;
                 width: parent.width / 3;
 
-                color: Constants.Theme.SecondaryColor;
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#994747"
+                    }
+
+
+                    GradientStop {
+                        position: 1
+                        color: "#862525"
+                    }
+                }
+
 
                 Label {
                     anchors {
@@ -72,13 +104,27 @@ Page {
                     font.pixelSize: Constants.LargeFontSize;
                     color: "white";
                 }
+
+                Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+
             }
 
             Rectangle {
                 height: Constants.GridHeight;
                 width: parent.width / 3;
 
-                color: Constants.Theme.TertiaryColor;
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#3B9BA5"
+                    }
+
+
+                    GradientStop {
+                        position: 1
+                        color: "#148793"
+                    }
+                }
 
                 Label {
                     anchors {
@@ -90,13 +136,27 @@ Page {
                     font.pixelSize: Constants.LargeFontSize;
                     color: "white";
                 }
+
+               Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+
             }
 
             Rectangle {
                 height: Constants.GridHeight;
                 width: parent.width / 3;
 
-                color: Constants.Theme.QuaternaryColor;
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: "#D49A57"
+                    }
+
+
+                    GradientStop {
+                        position: 1
+                        color: "#CB8636"
+                    }
+                }
 
                 Label {
                     anchors {
@@ -108,6 +168,9 @@ Page {
                     font.pixelSize: Constants.LargeFontSize;
                     color: "white";
                 }
+
+                Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+
             }
         }
     }
@@ -117,25 +180,25 @@ Page {
         width: parent.width;
 
         RecentFilesList {
-            width: parent.width / 3 - 1;
-            height: Constants.GridHeight * (Constants.GridRows - 2);
+            width: parent.width / 3 - 4;
+            height: Constants.GridHeight * 9;
 
             onClicked: pageStack.push( main );
         }
 
-        Divider { height: Constants.GridHeight * (Constants.GridRows - 2); }
+        Divider { height: Constants.GridHeight * 9; }
 
         NewImageList {
-            width: parent.width / 3 - 2;
-            height: Constants.GridHeight * (Constants.GridRows - 2);
+            width: parent.width / 3 - 8;
+            height: Constants.GridHeight * 9;
             onClicked: pageStack.push( main );
         }
 
-        Divider { height: Constants.GridHeight * (Constants.GridRows - 2); }
+        Divider { height: Constants.GridHeight * 9; }
 
         NewsList {
-            width: parent.width / 3 - 1;
-            height: Constants.GridHeight * (Constants.GridRows - 2);
+            width: parent.width / 3 - 4;
+            height: Constants.GridHeight * 9;
         }
     }
 

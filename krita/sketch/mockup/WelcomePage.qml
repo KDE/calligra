@@ -35,9 +35,9 @@ Page {
         Header {
             height: Constants.GridHeight * 2;
             //text: "Krita Sketch";
-           Image { anchors.fill: parent; source: ":/images/header_krita_sketch.png" }
+           Image { anchors.fill: parent; source: "./images/header_krita_sketch.png" }
             Label { text: "KRITA SKETCH"; font.bold: true; font.pixelSize: Constants.HugeFontSize; anchors.centerIn: parent; color: "white";}
-            Image { anchors.fill: parent; source: ":/images/header_krita_sketch_light.png" }
+            Image { anchors.fill: parent; source: "./images/header_krita_sketch_light.png" }
 
             //leftArea:
 
@@ -52,7 +52,7 @@ Page {
                 y: Constants.GridHeight / 2;
                 width: Constants.GridWidth / 2;
                 height: Constants.GridHeight;
-                source: ":/images/svg/icon-krita_sketch.svg";
+                source: "./images/svg/icon-krita_sketch.svg";
                 fillMode: Image.PreserveAspectFit;
                 smooth: true;
 
@@ -65,7 +65,7 @@ Page {
                 y: Constants.GridHeight / 2;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
-                image: ":/images/svg/icon-help.svg";
+                image: "./images/svg/icon-help.svg";
                 highlightColor: Constants.Theme.HighlightColor;
 
                 onClicked: pageStack.push( help );
@@ -105,7 +105,7 @@ Page {
                     color: "white";
                 }
 
-                Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+                Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
             }
 
@@ -137,7 +137,7 @@ Page {
                     color: "white";
                 }
 
-               Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+               Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
             }
 
@@ -169,7 +169,7 @@ Page {
                     color: "white";
                 }
 
-                Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+                Image { source: "./images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
             }
         }

@@ -55,7 +55,7 @@ Item {
                         }
                     }
 
-                    Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+                    Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
                     Label {
                         anchors {

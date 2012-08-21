@@ -40,7 +40,7 @@ Item {
                    y: Constants.GridHeight * 0.25
                    width: parent.width - (Constants.GridWidth / 2);
                    height: parent.height - (Constants.GridHeight * 0.5);
-                   Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+                   Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
                    gradient: Gradient {
                        GradientStop {
                            position: 0
@@ -69,7 +69,7 @@ Item {
                 source: model.image;
                 x: Constants.GridWidth * 0.375
                 y: Constants.GridHeight * 0.5
-                Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+                Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
 
             }
 
@@ -119,7 +119,7 @@ Item {
             y: Constants.GridHeight * 0.25
             width: parent.width - (Constants.GridWidth / 2);
             height: parent.height - (Constants.GridHeight * 0.5);
-            Image { source: ":/images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+            Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
             gradient: Gradient {
                 GradientStop {
                     position: 0
