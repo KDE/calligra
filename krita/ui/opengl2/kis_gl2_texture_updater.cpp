@@ -51,6 +51,8 @@ public:
     QEventLoop *loop;
 
     bool stop;
+
+    QElapsedTimer timer;
 };
 
 KisGL2TextureUpdater::KisGL2TextureUpdater(KisImageWSP image, uint texture, QObject* parent)
@@ -73,18 +75,20 @@ void KisGL2TextureUpdater::imageUpdated(const QRect& rect)
     if(d->changedRect.width() >= 256 || d->changedRect.height() >= 256) {
         timeout();
     }
+
+    d->timer.restart();
 }
 
 void KisGL2TextureUpdater::timeout()
 {
-//    if(!d->transferRect.isEmpty()) {
-//        d->currentBuffer->bind();
-//        glTexSubImage2D(GL_TEXTURE_2D, 0, d->transferRect.x(), d->transferRect.y(), d->transferRect.width(), d->transferRect.height(), GL_RGBA, GL_UNSIGNED_BYTE, 0);
-//        d->currentBuffer->release();
-//    }
+    if(!d->transferRect.isEmpty()) {
+        d->currentBuffer->bind();
+        glTexSubImage2D(GL_TEXTURE_2D, 0, d->transferRect.x(), d->transferRect.y(), d->transferRect.width(), d->transferRect.height(), GL_RGBA, GL_UNSIGNED_BYTE, 0);
+        d->currentBuffer->release();
+    }
 
     if(d->changedRect.isEmpty()) {
-//        d->transferRect = QRect();
+        d->transferRect = QRect();
         return;
     }
 
@@ -111,20 +115,18 @@ void KisGL2TextureUpdater::timeout()
         rgba[x] = ((rgba[x] << 16) & 0xff0000) | ((rgba[x] >> 16) & 0xff) | (rgba[x] & 0xff00ff00);
     }
 
-//    d->nextBuffer->bind();
-//    d->nextBuffer->allocate(rgba, pixelCount * sizeof(quint32));
+    d->nextBuffer->bind();
+    d->nextBuffer->allocate(rgba, pixelCount * sizeof(quint32));
 
-////    void* vid = d->nextBuffer->map(QGLBuffer::WriteOnly);
-////    memcpy(vid, rgba, pixelCount * sizeof(quint32));
-////    d->nextBuffer->unmap();
+    void* vid = d->nextBuffer->map(QGLBuffer::WriteOnly);
+    memcpy(vid, rgba, pixelCount * sizeof(quint32));
+    d->nextBuffer->unmap();
 
-//    d->nextBuffer->release();
+    d->nextBuffer->release();
 
-//    qSwap(d->currentBuffer, d->nextBuffer);
+    qSwap(d->currentBuffer, d->nextBuffer);
 
-//    d->transferRect = d->changedRect;
-
-    glTexSubImage2D(GL_TEXTURE_2D, 0, d->changedRect.x(), d->changedRect.y(), d->changedRect.width(), d->changedRect.height(), GL_RGBA, GL_UNSIGNED_BYTE, rgba);
+    d->transferRect = d->changedRect;
     d->changedRect = QRect();
 }
 
@@ -144,6 +146,7 @@ void KisGL2TextureUpdater::run()
 
     d->loop = new QEventLoop();
 
+    d->timer.start();
     forever {
         d->loop->processEvents();
         timeout();
@@ -151,7 +154,9 @@ void KisGL2TextureUpdater::run()
         if(d->stop)
             break;
 
-        msleep(2);
+        //Slow down the loop when we're not processing to prevent 100% CPU usage.
+        if( d->timer.elapsed() > 100 )
+            msleep(1);
     }
 
     delete d->currentBuffer;
