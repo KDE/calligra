@@ -64,11 +64,10 @@ Item {
             Item {
                 id: peek;
 
-                opacity: 0;
-
-                width: (Constants.GridWidth * 2) - 8;
-                anchors.bottom: header.top
-                height: Constants.GridHeight * 3;
+                anchors.top: parent.top;
+                anchors.bottom: parent.bottom;
+                anchors.left: parent.left;
+                anchors.right: header.left;
             }
 
             Item {
@@ -76,29 +75,17 @@ Item {
 
                 anchors.top: header.bottom;
                 anchors.bottom: footer.top;
-
-                width: parent.width;
+                anchors.left: parent.left;
+                anchors.right: parent.right;
             }
 
             DropShadow {
                 id: header;
 
-                anchors.left: parent.left;
                 anchors.top: parent.top;
                 anchors.right: parent.right;
-                //y: Constants.GridHeight * 3;
-                //width: parent.width;
-                height: Constants.GridHeight;
-
-
-                Rectangle {
-                    id: rectanglehead
-                    color: base.panelColor;
-                    y: Constants.GridHeight / 2;
-                    width: parent.width;
-                    height: Constants.GridHeight / 2;
-                    visible: false;
-                }
+                width: Constants.GridWidth;
+                height: Constants.GridHeight * 2;
 
                 Rectangle {
                     id: rectangle1
@@ -107,6 +94,7 @@ Item {
 
                     Flow {
                         id: actionsLayout;
+                        anchors.fill: parent;
                     }
                 }
             }
@@ -174,36 +162,32 @@ Item {
             color: base.panelColor
             radius: 8
             clip: true
-        }
+            Label {
+                id: handleLabel;
 
-        Label {
-            id: handleLabel;
+                text: base.name;
+                anchors.horizontalCenter: rectangle2.horizontalCenter
+                anchors.verticalCenter: rectangle2.verticalCenter
+                color: base.textColor;
 
-
-            text: base.name;
-            anchors.horizontalCenter: rectangle2.horizontalCenter
-            anchors.verticalCenter: rectangle2.verticalCenter
-            color: base.textColor;
-
-            font.pixelSize: Constants.DefaultFontSize;
-        }
-
-        DnD.DragArea {
-            anchors.top: rectangle2.bottom
-            anchors.right: rectangle2.left
-            anchors.bottom: rectangle2.top
-            anchors.left: rectangle2.right
-            delegate: base.dragDelegate;
-            source: base;
-
-            onDragStarted: base.dragStarted();
-            onDrop: base.drop(action);
-
-            MouseArea {
+                font.pixelSize: Constants.DefaultFontSize;
+            }
+            DnD.DragArea {
                 anchors.fill: parent;
-                onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
+                delegate: base.dragDelegate;
+                source: base;
+
+                onDragStarted: base.dragStarted();
+                onDrop: base.drop(action);
+
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
+                }
             }
         }
+
+
     }
 
     states: [
@@ -219,7 +203,6 @@ Item {
 
             PropertyChanges { target: base; width: Constants.GridWidth * 3; }
             PropertyChanges { target: fill; height: Constants.GridHeight * 2; }
-            PropertyChanges { target: header; height: Constants.GridHeight * 2; width: Constants.GridWidth; }
             PropertyChanges { target: handle; opacity: 1; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
@@ -227,10 +210,15 @@ Item {
         },
         State {
             name: "full";
+            PropertyChanges { target: peek; opacity: 0; }
+            PropertyChanges { target: full; opacity: 1; }
+            PropertyChanges { target: header; height: Constants.GridHeight; width: parent.width; }
         },
         State {
             name: "edit";
-
+            PropertyChanges { target: peek; opacity: 0; }
+            PropertyChanges { target: full; opacity: 1; }
+            PropertyChanges { target: header; height: Constants.GridHeight; width: parent.width; }
             PropertyChanges { target: base; width: base.editWidth; }
         }
     ]
