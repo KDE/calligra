@@ -37,7 +37,7 @@
 //KDE Headers
 #include <KLocale>
 #include <KIconLoader>
-#include <KIcon>
+#include <KoIcon.h>
 #include <KStandardDirs>
 #include <KConfigGroup>
 #include <KDebug>
@@ -283,10 +283,10 @@ QIcon KPrPredefinedAnimationsLoader::loadAnimationIcon(const QString id)
         name.replace(" ", "_");
         QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
         if (!path.isNull()) {
-            return KIcon(name);
+            return koIcon(name.toLatin1());
         }
     }
-    return KIcon("unrecognized_animation");
+    return koIcon("unrecognized_animation");
 }
 
 QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const QString subTypeId)
@@ -301,12 +301,12 @@ QIcon KPrPredefinedAnimationsLoader::loadSubTypeIcon(const QString mainId, const
     name.append("_animations");
     QString path = KIconLoader::global()->iconPath(name, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
-        icon = KIcon(name);
+        icon = koIcon(name.toLatin1());
     }
     else {
         // If an specific animation icon does not exist then return a generic
         // unrecognized animation icon
-        icon = KIcon("unrecognized_animation");
+        icon = koIcon("unrecognized_animation");
     }
     return icon;
 }
@@ -349,7 +349,7 @@ QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &elem
         }
     }
     // Default icon if path was not found (It must be a error?)
-    return KIcon("unrecognized_animation");
+    return koIcon("unrecognized_animation");
 }
 
 KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const KoXmlElement &element, KoShapeLoadingContext &context, KoShape *animShape)
@@ -421,10 +421,10 @@ bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QStri
     QIcon icon;
     QString path = KIconLoader::global()->iconPath(iconName, KIconLoader::Toolbar, true);
     if (!path.isNull()) {
-        icon = KIcon(iconName);
+        icon = koIcon(iconName.toLatin1());
     }
     else {
-        icon = KIcon("unrecognized_animation");
+        icon = koIcon("unrecognized_animation");
     }
 
     QListWidgetItem *collectionChooserItem = new QListWidgetItem(icon, title);

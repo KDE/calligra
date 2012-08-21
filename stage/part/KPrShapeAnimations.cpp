@@ -949,7 +949,7 @@ QPixmap KPrShapeAnimations::getAnimationShapeThumbnail(KPrShapeAnimation *animat
 {
     if (animation) {
         //TODO: Draw image file to load when shape thumbnail can't be created
-       QPixmap thumbnail = KIcon("stage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
+       QPixmap thumbnail = koIcon("stage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
 
         if (thumbnail.convertFromImage(createThumbnail(animation->shape(),
                                                        QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))) {

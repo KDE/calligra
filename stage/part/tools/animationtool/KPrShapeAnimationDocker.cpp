@@ -42,7 +42,7 @@
 #include <QDebug>
 
 //KDE Headers
-#include <KIcon>
+#include <KoIcon.h>
 #include <KLocale>
 #include <KAction>
 #include <KIconLoader>
@@ -93,7 +93,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_editAnimation->setText(i18n("Edit animation"));
     m_editAnimation->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_editAnimation->setIconSize(QSize(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
-    m_editAnimation->setIcon(KIcon("edit_animation"));
+    m_editAnimation->setIcon(koIcon("edit_animation"));
     m_editAnimation->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_editAnimation->setToolTip(i18n("Edit animation"));
     m_editAnimation->setEnabled(false);
@@ -108,7 +108,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     m_editAnimation->setPopupMode(QToolButton::InstantPopup);
 
     m_buttonAddAnimation = new QToolButton();
-    m_buttonAddAnimation->setIcon(SmallIcon("list-add", KIconLoader::SizeSmallMedium));
+    m_buttonAddAnimation->setIcon(koSmallIcon("list-add"));
     m_buttonAddAnimation->setToolTip(i18n("Add new animation"));
 
     m_addMenu = new DialogMenu(this);
@@ -120,7 +120,7 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
 
 
     m_buttonRemoveAnimation = new QToolButton();
-    m_buttonRemoveAnimation->setIcon(SmallIcon("list-remove", KIconLoader::SizeSmallMedium));
+    m_buttonRemoveAnimation->setIcon(koSmallIcon("list-remove"));
     m_buttonRemoveAnimation->setEnabled(false);
     m_buttonRemoveAnimation->setToolTip(i18n("Remove animation"));
     hlayout->addWidget(m_buttonAddAnimation);
@@ -128,17 +128,17 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
 
     QLabel *orderLabel = new QLabel(i18n("Order: "));
     m_buttonAnimationOrderUp = new QToolButton();
-    m_buttonAnimationOrderUp->setIcon(SmallIcon("arrow-up"));
+    m_buttonAnimationOrderUp->setIcon(koSmallIcon("arrow-up"));
     m_buttonAnimationOrderUp->setToolTip(i18n("Move animation up"));
     m_buttonAnimationOrderUp->setEnabled(false);
 
     m_buttonAnimationOrderDown = new QToolButton();
-    m_buttonAnimationOrderDown->setIcon(SmallIcon("arrow-down"));
+    m_buttonAnimationOrderDown->setIcon(koSmallIcon("arrow-down"));
     m_buttonAnimationOrderDown->setToolTip(i18n("Move animation down"));
     m_buttonAnimationOrderDown->setEnabled(false);
 
     m_buttonPreviewAnimation = new QToolButton();
-    m_buttonPreviewAnimation->setIcon(SmallIcon("media-playback-start"));
+    m_buttonPreviewAnimation->setIcon(koSmallIcon("media-playback-start"));
     m_buttonPreviewAnimation->setToolTip(i18n("Preview Shape Animation"));
     m_buttonPreviewAnimation->setEnabled(false);
 
@@ -518,21 +518,21 @@ void KPrShapeAnimationDocker::testEditPanelRoot()
 void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
 {
     QMenu menu(m_animationsView);
-    menu.addAction(KIcon("document-new"), i18n("Add a new animation"), m_buttonAddAnimation, SLOT(showMenu()));
-    menu.addAction(KIcon("edit-delete"), i18n("Delete current animation"), this, SLOT(slotRemoveAnimations()));
-    menu.addAction(KIcon("edit_animation"), i18n("Edit animation"), m_editAnimation, SLOT(showMenu()));
+    menu.addAction(koIcon("document-new"), i18n("Add a new animation"), m_buttonAddAnimation, SLOT(showMenu()));
+    menu.addAction(koIcon("edit-delete"), i18n("Delete current animation"), this, SLOT(slotRemoveAnimations()));
+    menu.addAction(koIcon("edit_animation"), i18n("Edit animation"), m_editAnimation, SLOT(showMenu()));
     menu.addSeparator();
     if ((m_animationsView->selectionModel()->selectedRows().count() == 1) &&
             (m_animationsView->currentIndex().isValid())) {
         QActionGroup *actionGroup = new QActionGroup(m_animationsView);
         actionGroup->setExclusive(true);
-        KAction *onClickAction = new KAction(KIcon("onclick"), i18n("start on mouse click"), m_animationsView);
+        KAction *onClickAction = new KAction(koIcon("onclick"), i18n("start on mouse click"), m_animationsView);
         onClickAction->setCheckable(true);
         onClickAction->setData(KPrShapeAnimation::OnClick);
-        KAction *afterAction = new KAction(KIcon("after_previous"), i18n("start after previous animation"), m_animationsView);
+        KAction *afterAction = new KAction(koIcon("after_previous"), i18n("start after previous animation"), m_animationsView);
         afterAction->setCheckable(true);
         afterAction->setData(KPrShapeAnimation::AfterPrevious);
-        KAction *withAction = new KAction(KIcon("with_previous"), i18n("start with previous animation"), m_animationsView);
+        KAction *withAction = new KAction(koIcon("with_previous"), i18n("start with previous animation"), m_animationsView);
         withAction->setCheckable(true);
         withAction->setData(KPrShapeAnimation::WithPrevious);
 

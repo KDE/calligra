@@ -45,7 +45,7 @@
 #include <QActionGroup>
 
 //KDE Headers
-#include <KIcon>
+#include <KoIcon.h>
 #include <KLocale>
 #include <KIconLoader>
 #include <KAction>
@@ -72,9 +72,9 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     m_triggerEventList = new QComboBox;
     m_triggerEventList->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     m_triggerEventList->setEditable(false);
-    m_triggerEventList->addItem(KIcon("onclick"), i18n("on mouse click"));
-    m_triggerEventList->addItem(KIcon("after_previous"), i18n("after previous animation"));
-    m_triggerEventList->addItem(KIcon("with_previous"), i18n("with previous animation"));
+    m_triggerEventList->addItem(koIcon("onclick"), i18n("on mouse click"));
+    m_triggerEventList->addItem(koIcon("after_previous"), i18n("after previous animation"));
+    m_triggerEventList->addItem(koIcon("with_previous"), i18n("with previous animation"));
 
     QLabel *delayLabel = new QLabel(i18n("Delay: "));
     m_delayEdit = new QTimeEdit;
@@ -87,7 +87,7 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     m_durationEdit->setDisplayFormat("H:mm:ss.zzz");
 
     QToolButton *m_buttonPreviewAnimation = new QToolButton();
-    m_buttonPreviewAnimation->setIcon(SmallIcon("media-playback-start"));
+    m_buttonPreviewAnimation->setIcon(koSmallIcon("media-playback-start"));
     m_buttonPreviewAnimation->setToolTip(i18n("Preview Shape Animation"));
     m_buttonPreviewAnimation->setEnabled(true);
 
@@ -234,13 +234,13 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         // Populate context menu
         QActionGroup *actionGroup = new QActionGroup(m_timeLineView);
         actionGroup->setExclusive(true);
-        KAction *onClickAction = new KAction(KIcon("onclick"), i18n("start on mouse click"), m_timeLineView);
+        KAction *onClickAction = new KAction(koIcon("onclick"), i18n("start on mouse click"), m_timeLineView);
         onClickAction->setCheckable(true);
         onClickAction->setData(KPrShapeAnimation::OnClick);
-        KAction *afterAction = new KAction(KIcon("after_previous"), i18n("start after previous animation"), m_timeLineView);
+        KAction *afterAction = new KAction(koIcon("after_previous"), i18n("start after previous animation"), m_timeLineView);
         afterAction->setCheckable(true);
         afterAction->setData(KPrShapeAnimation::AfterPrevious);
-        KAction *withAction = new KAction(KIcon("with_previous"), i18n("start with previous animation"), m_timeLineView);
+        KAction *withAction = new KAction(koIcon("with_previous"), i18n("start with previous animation"), m_timeLineView);
         withAction->setCheckable(true);
         withAction->setData(KPrShapeAnimation::WithPrevious);
 
