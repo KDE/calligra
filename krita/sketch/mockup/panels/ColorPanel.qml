@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * Copyright (C) 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,8 +28,8 @@ Panel {
         anchors.fill: parent;
         model: PaletteColorsModel
         delegate: delegate;
-        cellWidth: Constants.GridWidth;
-        cellHeight: Constants.GridHeight;
+        cellWidth: Constants.GridWidth - 8;
+        cellHeight: Constants.GridHeight - 8;
     }
 
     fullContents: Item {
@@ -41,26 +42,11 @@ Panel {
                 right: parent.right;
             }
             height: Constants.GridHeight;
-            //orientation: ListView.Horizontal;
             model: PaletteModel
             onCurrentIndexChanged: {
                 PaletteModel.itemActivated(currentIndex);
                 PaletteColorsModel.colorSet = PaletteModel.colorSet;
             }
-
-            /*delegate: Button {
-                height: Constants.GridHeight;
-                width: Constants.GridWidth;
-                text: model.text;
-                textSize: 10;
-                image: model.image;
-                highlightColor: Constants.Theme.HighlightColor;
-                onClicked: {
-                    ListView.view.currentIndex = index;
-                    PaletteModel.itemActivated(index);
-                    PaletteColorsModel.colorSet = PaletteModel.colorSet;
-                }
-            }*/
         }
         GridView {
             anchors {

@@ -56,6 +56,7 @@ Item {
 
     ListView {
         id: listView;
+        clip: true;
         anchors {
             top: topButton.bottom;
             left: parent.left;
