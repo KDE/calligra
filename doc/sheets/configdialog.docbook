@@ -126,14 +126,15 @@ Open Recent</guisubmenu></menuchoice>.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Autosave delay (minutes):</guilabel></term>
+<term><guilabel>Autosave interval:</guilabel></term>
 <listitem><para>Here you can select the time between autosaves, or disable 
-this feature altogether by choosing <guilabel>Do not save automatically</guilabel>.
+this feature altogether by choosing <guilabel>No autosave</guilabel>
+(by selecting the minimum value).
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Create backup files</guilabel></term>
+<term><guilabel>Create backup file:</guilabel></term>
 <listitem><para>Check this box if you want some backup files created. This is checked per default.
 </para></listitem>
 </varlistentry>

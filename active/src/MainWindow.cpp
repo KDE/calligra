@@ -25,6 +25,8 @@
 #include "CADocumentController.h"
 #include "calligra_active_global.h"
 
+#include <libs/main/calligraversion.h>
+
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
 #include <KDE/KDebug>
@@ -76,6 +78,7 @@ MainWindow::MainWindow (QWidget* parent)
     }
 
     m_view->rootContext()->setContextProperty ("mainwindow", this);
+    m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
     loadMetadataModel();
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()

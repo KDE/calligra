@@ -66,7 +66,7 @@ Rectangle {
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap
-            text: "<p>Calligra Active 1.0 Beta using Calligra Engine 2.4</p> \
+            text: "<p>Calligra Active 1.0 Beta using Calligra Engine " + _calligra_version_string + "</p> \
                    <p>Calligra Active is a office document viewer for touch based tablets especially tailored for the Plasma Active platform.</p> \
                    <p><a href=\"http://www.calligra.org/\">http://www.calligra.org</a></p>"
             color: theme.textColor
