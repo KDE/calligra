@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -99,6 +99,16 @@ public:
             classNames.insert(id, partClass);
         }
 //! @todo what to do with extra ids for the same part or extra class name for the same ID?
+    }
+
+    //! @return user name for the current project
+    //! @todo the name is taken from connection but it also can be specified otherwise
+    //!       if the same connection data is shared by multiple users. This will be especially
+    //!       true for 3-tier architectures.
+    QString userName() const
+    {
+        QString name = connection->data()->userName;
+        return name.isNull() ? "" : name;
     }
 
     QPointer<KexiDB::Connection> connection;
@@ -488,6 +498,24 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
         return false;
     }
 
+    // User data storage
+    KexiDB::InternalTableSchema *t_userdata = new KexiDB::InternalTableSchema("kexi__userdata");
+    t_userdata->addField(new KexiDB::Field("d_user", KexiDB::Field::Text, KexiDB::Field::NotNull))
+        .addField(new KexiDB::Field("o_id", KexiDB::Field::Integer, KexiDB::Field::Unsigned | KexiDB::Field::NotNull))
+        .addField(new KexiDB::Field("d_sub_id", KexiDB::Field::Text, KexiDB::Field::NotNull | KexiDB::Field::NotEmpty))
+        .addField(new KexiDB::Field("d_data", KexiDB::Field::LongText));
+
+    bool containsKexi__userdataTable = d->connection->drv_containsTable("kexi__userdata");
+    if (containsKexi__userdataTable) {
+        d->connection->insertInternalTable(*t_userdata);
+    }
+    else if (!d->connection->isReadOnly()) {
+        if (!d->connection->createTable(t_userdata, true/*replaceExisting*/)) {
+            delete t_userdata;
+            return false;
+        }
+    }
+
     if (insideTransaction) {
         if (tg.transaction().active() && !tg.commit())
             return false;
@@ -867,6 +895,10 @@ bool KexiProject::removeObject(KexiPart::Item& item)
             setError(d->connection);
             return false;
         }
+        if (!removeUserDataBlock(item.identifier())) {
+            setError(ERR_DELETE_SERVER_ERROR, i18n("Could not remove object's user data."));
+            return false;
+        }
         if (!tg.commit()) {
             setError(d->connection);
             return false;
@@ -1209,6 +1241,72 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
 KexiPart::MissingPartsList KexiProject::missingParts() const
 {
     return d->missingParts;
+}
+
+static bool checkObjectId(const char* method, int objectID)
+{
+    if (objectID <= 0) {
+        kWarning() << method <<  ": Invalid objectID" << objectID;
+        return false;
+    }
+    return true;
+}
+
+tristate KexiProject::loadUserDataBlock(int objectID, const QString& dataID, QString *dataString)
+{
+    if (!checkObjectId("loadUserDataBlock", objectID)) {
+        return false;
+    }
+    return d->connection->querySingleString(
+               QString::fromLatin1("SELECT d_data FROM kexi__userdata WHERE o_id=") + QString::number(objectID)
+                + " AND " + KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_user", d->userName())
+                + " AND " + KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_sub_id", dataID),
+               *dataString);
+}
+
+bool KexiProject::storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString)
+{
+    if (!checkObjectId("storeUserDataBlock", objectID)) {
+        return false;
+    }
+    QString sql(QString::fromLatin1(
+                    "SELECT kexi__userdata.o_id FROM kexi__userdata WHERE o_id=%1").arg(objectID));
+    QString sql_sub(
+        KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_user", d->userName())
+        + " AND " + KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_sub_id", dataID));
+
+    bool ok;
+    bool exists = d->connection->resultExists(sql + " AND " + sql_sub, ok);
+    if (!ok)
+        return false;
+    if (exists) {
+        return d->connection->executeSQL("UPDATE kexi__userdata SET d_data="
+                          + d->connection->driver()->valueToSQL(KexiDB::Field::LongText, dataString)
+                          + " WHERE o_id=" + QString::number(objectID) + " AND " + sql_sub);
+    }
+    return d->connection->executeSQL(
+               QString::fromLatin1("INSERT INTO kexi__userdata (d_user, o_id, d_sub_id, d_data) VALUES (")
+               + d->connection->driver()->valueToSQL(KexiDB::Field::Text, d->userName())
+               + ", " + QString::number(objectID)
+               + ", " + d->connection->driver()->valueToSQL(KexiDB::Field::Text, dataID)
+               + ", " + d->connection->driver()->valueToSQL(KexiDB::Field::LongText, dataString)
+               + ")");
+}
+
+bool KexiProject::removeUserDataBlock(int objectID, const QString& dataID)
+{
+    if (!checkObjectId("removeUserDataBlock", objectID)) {
+        return false;
+    }
+    if (dataID.isEmpty())
+        return KexiDB::deleteRow(*d->connection, "kexi__userdata",
+                                 "o_id", KexiDB::Field::Integer, objectID,
+                                 "d_user", KexiDB::Field::Text, d->userName());
+    else
+        return KexiDB::deleteRow(*d->connection, "kexi__userdata",
+                                 "o_id", KexiDB::Field::Integer, objectID,
+                                 "d_user", KexiDB::Field::Text, d->userName(),
+                                 "d_sub_id", KexiDB::Field::Text, dataID);
 }
 
 #include "kexiproject.moc"

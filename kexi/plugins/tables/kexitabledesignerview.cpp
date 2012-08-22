@@ -417,7 +417,7 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
 
 //! @todo set reasonable default for column width
     set->addProperty(prop
-                     = new KoProperty::Property("width", (int)field.width()/*200?*/, i18n("Column Width")));
+                     = new KoProperty::Property("width", QVariant(0) /*field.width()*//*200?*/, i18n("Column Width")));
 #ifdef KEXI_NO_UNFINISHED
     prop->setVisible(false);
 #endif
@@ -899,8 +899,7 @@ void KexiTableDesignerView::slotRowUpdated(KexiDB::RecordData *record)
             /*precision*/0,
             /*defaultValue*/QVariant(),
             fieldCaption,
-            description,
-            /*width*/0);
+            description);
 //  m_newTable->addField( field );
 
         // reasonable case for boolean type: set notNull flag and "false" as default value
