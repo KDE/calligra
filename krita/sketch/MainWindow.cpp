@@ -41,6 +41,7 @@
 #include "kis_view2.h"
 #include "klibloader.h"
 
+#include "ColorSelectorItem.h"
 #include "IconImageProvider.h"
 #include "CanvasControllerDeclarative.h"
 #include "DocumentListModel.h"
@@ -72,6 +73,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->constants = new Constants( this );
     d->settings = new Settings( this );
 
+    qmlRegisterType<ColorSelectorItem>("org.krita.sketch", 1, 0, "ColorSelectorItem");
     qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
     qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");
     qmlRegisterType<PaletteColorsModel>("org.krita.sketch", 1, 0, "PaletteColorsModel");
