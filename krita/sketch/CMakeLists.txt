@@ -18,6 +18,7 @@ set(kritasketch_SRCS
     DocumentListModel.cpp
     IconImageProvider.cpp
     ProgressProxy.cpp
+    ColorSelectorItem.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
@@ -28,7 +29,29 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/PresetModel.cpp
 )
 
-kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS})
+
+set(KRITA_COLORSELECTORNG_PART_SRCS
+../plugins/extensions/dockers/advancedcolorselector/kis_my_paint_shade_selector.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_patches.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_history.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_common_colors.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_common_colors_recalculation_runner.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_minimal_shade_selector.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_line_combo_box.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_shade_selector_lines_settings.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_container.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_base.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_component.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_ring.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_triangle.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_simple.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_wheel.cpp
+../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
+)
+
+kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 target_link_libraries(kritasketch
     ${QT_QTDECLARATIVE_LIBRARY}
