@@ -42,7 +42,7 @@ Item {
 
     state: "collapsed";
 
-    DropShadow {
+    Item {
         id: fill;
 
         width: parent.width;
@@ -51,14 +51,26 @@ Item {
         Rectangle {
             id: rectangle3
             anchors.fill: parent;
-            color: base.panelColor;
+            color: "transparent";// base.panelColor;
             clip: true;
 
             Rectangle {
-                id: rectangle4
-                anchors.fill: parent;
-                color: "#ffffff"
-                opacity: 0.630
+                id: background;
+                anchors {
+                    top: parent.top;
+                    bottom: parent.bottom;
+                    left: parent.left;
+                    right: parent.right;
+                    topMargin: Constants.DefaultMargin;
+                    bottomMargin: Constants.DefaultMargin;
+                }
+                color: base.panelColor;
+                Rectangle {
+                    id: rectangle4
+                    anchors.fill: parent;
+                    color: "#ffffff"
+                    opacity: 0.630
+                }
             }
 
             Item {
@@ -104,22 +116,26 @@ Item {
                 anchors.bottom: parent.bottom;
                 width: parent.width;
                 height: Constants.GridHeight;
+                clip: true;
 
                 Rectangle {
                     id: rectanglefoot
                     color: base.panelColor;
                     width: parent.width;
-                    height: Constants.GridHeight / 2;
+                    height: parent.height + Constants.DefaultMargin;
+                    y: -Constants.DefaultMargin;
+                    radius: Constants.DefaultMargin;
                 }
 
                 Rectangle {
                     anchors.fill: parent;
-                    color: base.panelColor;
+                    color: "transparent";//base.panelColor;
 
                     Label {
                         anchors.left: parent.left;
                         anchors.leftMargin: Constants.DefaultMargin;
-                        anchors.verticalCenter: parent.verticalCenter;
+                        anchors.baseline: parent.bottom;
+                        anchors.baselineOffset: -Constants.DefaultMargin;
 
                         text: base.name;
                         color: base.textColor;
@@ -196,6 +212,7 @@ Item {
             PropertyChanges { target: base; width: Constants.GridWidth; }
             PropertyChanges { target: fill; opacity: 0; height: 0; }
             PropertyChanges { target: handle; opacity: 1; }
+            PropertyChanges { target: background; anchors.topMargin: 0; }
         },
         State {
             name: "peek";
@@ -207,6 +224,7 @@ Item {
             PropertyChanges { target: full; opacity: 0; }
             AnchorChanges { target: header; anchors.bottom: parent.bottom }
             PropertyChanges { target: footer; opacity: 0; }
+            PropertyChanges { target: background; anchors.topMargin: 0; }
         },
         State {
             name: "full";
@@ -249,19 +267,19 @@ Item {
             to: "full";
             reversible: true;
 
-            NumberAnimation { properties: "height,width,opacity"; duration: 250; }
+            NumberAnimation { properties: "height,width,opacity"; duration: 0; }
         },
         Transition {
             from: "collapsed";
             to: "full";
 
-            NumberAnimation { properties: "height,width,opacity"; duration: 250; }
+            NumberAnimation { properties: "height,width,opacity"; duration: 0; }
         },
         Transition {
             from: "full";
             to: "collapsed";
 
-            NumberAnimation { properties: "height,width,opacity"; duration: 250; }
+            NumberAnimation { properties: "height,width,opacity"; duration: 0; }
         },
         Transition {
             from: "full"
