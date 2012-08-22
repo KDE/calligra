@@ -49,7 +49,6 @@ Panel {
                 left: parent.left;
                 right: parent.right;
             }
-            height: Constants.GridHeight;
             model: paletteModel
             onCurrentIndexChanged: {
                 paletteModel.itemActivated(currentIndex);

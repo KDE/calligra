@@ -20,37 +20,65 @@ import QtQuick 1.1
 
 Item {
     id: base
+    property alias labelText: label.text;
     property alias model: listView.model;
     property alias currentIndex: listView.currentIndex;
+    height: topPart.height;
 
-    Rectangle {
-        id: topButton
-        border {
-            width: 2;
-            color: "gray";
-        }
-        radius: 5;
+    Item {
+        id: topPart;
         anchors {
             top: parent.top;
-            right: parent.right;
             left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
         }
-        height: Constants.GridHeight;
+        height: topButton.height + (topButton.border.width * 2) + Constants.DefaultMargin;
         Label {
-            id: buttonText;
-            text: listView.currentItem.text;
+            id: label
+            anchors {
+                baseline: buttonText.baseline;
+                left: parent.left;
+            }
         }
-
-        MouseArea {
-            anchors.fill: parent;
-            onClicked: {
-                if(base.state === "expanded") {
-                    base.state = "";
-                }
-                else {
-                    base.state = "expanded";
+        Rectangle {
+            id: topButton
+            border {
+                width: 2;
+                color: "silver";
+            }
+            color: "white";
+            opacity: 0.2;
+            anchors {
+                top: parent.top;
+                right: parent.right;
+                left: label.right;
+            }
+            height: Constants.SmallFontSize + (Constants.DefaultMargin * 2);
+            radius: height / 2;
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: {
+                    if(base.state === "expanded") {
+                        base.state = "";
+                    }
+                    else {
+                        base.state = "expanded";
+                    }
                 }
             }
+        }
+        Label {
+            id: buttonText;
+            anchors {
+                top: topButton.top;
+                right: topButton.right;
+                bottom: topButton.bottom;
+                left: topButton.left;
+                leftMargin: topButton.height / 2;
+            }
+            text: listView.currentItem.text;
+            font.pixelSize: Constants.SmallFontSize;
         }
     }
 
@@ -58,9 +86,9 @@ Item {
         id: listView;
         clip: true;
         anchors {
-            top: topButton.bottom;
-            left: parent.left;
-            right: parent.right;
+            top: topPart.bottom;
+            left: topPart.left;
+            right: topPart.right;
             bottom: parent.bottom;
         }
         opacity: 0;
@@ -68,7 +96,9 @@ Item {
             property alias text: delegateLabel.text
             anchors {
                 left: parent.left;
+                leftMargin: Constants.DefaultMargin;
                 right: parent.right;
+                rightMargin: Constants.DefaultMargin;
             }
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             Label {
