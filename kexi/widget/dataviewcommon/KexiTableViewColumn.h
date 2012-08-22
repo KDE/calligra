@@ -62,8 +62,7 @@ public:
                         uint length = 0, uint precision = 0,
                         QVariant defaultValue = QVariant(),
                         const QString& caption = QString(),
-                        const QString& description = QString(),
-                        uint width = 0);
+                        const QString& description = QString());
 
     /*! Not db-aware, convenience ctor, simplified version of the above. */
     KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype, const QString& caption,
@@ -191,21 +190,19 @@ public:
         return m_visibleLookupColumnInfo;
     }
 
-    //! \retrun true if data is stored in DB, not only in memeory.
+    //! \return true if data is stored in DB, not only in memeory.
     inline bool isDBAware() const {
         return m_isDBAware;
     }
 
+    /*! Sets visible width for this column to \a w (usually in pixels or points).
+        0 means there is no hint for the width. */
+    void setWidth(uint w);
 
-    /*  QString caption;
-        int type; //!< one of KexiDB::Field::Type
-        uint width;
-    */
-//  bool isNull() const;
+    /*! \return width of this field (usually in pixels or points).
+         0 (the default) means there is no hint for the width. */
+    uint width() const;
 
-    /*  virtual QString caption() const;
-        virtual void setCaption(const QString& c);
-      */
 protected:
     //! special ctor that does not allocate d member;
     KexiTableViewColumn(bool);
@@ -232,6 +229,7 @@ protected:
     //! @see visibleLookupColumnInfo()
     KexiDB::QueryColumnInfo* m_visibleLookupColumnInfo;
 
+    uint m_width;
     bool m_isDBAware; //!< true if data is stored in DB, not only in memeory
     bool m_readOnly;
     bool m_fieldOwned;
