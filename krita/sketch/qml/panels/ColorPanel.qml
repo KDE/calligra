@@ -42,10 +42,24 @@ Panel {
 
     fullContents: Item {
         anchors.fill: parent;
+        Item {
+            id: colorSelector;
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+                margins: Constants.DefaultMargin;
+            }
+            height: parent.width;
+            ColorSelectorItem {
+                anchors.fill: parent;
+                view: sketchView;
+            }
+        }
         ExpandingListView {
             id: fullPaletteList
             anchors {
-                top: parent.top;
+                top: colorSelector.bottom;
                 left: parent.left;
                 right: parent.right;
             }
