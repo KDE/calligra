@@ -124,14 +124,18 @@ void PaletteColorsModel::setView(QObject* newView)
     emit viewChanged();
 }
 
-void PaletteColorsModel::activateColor(int index)
+void PaletteColorsModel::activateColor(int index, bool setBackgroundColor)
 {
     if( !d->view )
         return;
 
     if(index >= 0 && index < d->colorSet->nColors())
     {
-        d->view->resourceProvider()->setFGColor( d->colorSet->getColor( index ).color );
+        if(setBackgroundColor)
+            d->view->resourceProvider()->setBGColor( d->colorSet->getColor( index ).color );
+        else
+            d->view->resourceProvider()->setFGColor( d->colorSet->getColor( index ).color );
+        emit colorChanged(d->colorSet->getColor( index ).color.toQColor(), setBackgroundColor);
     }
 }
 

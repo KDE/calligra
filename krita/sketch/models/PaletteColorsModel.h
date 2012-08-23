@@ -20,6 +20,7 @@
 #define PALETTECOLORSMODEL_H
 
 #include <QAbstractListModel>
+#include <QColor>
 
 class PaletteColorsModel : public QAbstractListModel
 {
@@ -46,11 +47,12 @@ public:
     void setColorSet(QObject* newColorSet);
 
 Q_SIGNALS:
+    void colorChanged(QColor newColor, bool backgroundChanged);
     void colorSetChanged();
     void viewChanged();
 
 public Q_SLOTS:
-    void activateColor(int index);
+    void activateColor(int index, bool setBackgroundColor);
 
 private:
     class Private;
