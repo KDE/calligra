@@ -984,12 +984,14 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
             QRect imageRect = thumb.rect();
             // adjust to left space for margins
             imageRect.adjust(margin, margin, -margin, -margin);
-            KoPathShape pathShape = *(KoPathShape::createShapeFromPainterPath(m_path));
-            pathShape.setSize(imageRect.size());
-            m_path = pathShape.outline();
             //Center path
             m_path.translate(-m_path.boundingRect().x() + margin, -m_path.boundingRect().y() + margin);
+            QTransform transform;
+            transform.scale(thumb.width() / (m_path.boundingRect().width() + 2 * margin),
+                            thumb.height() / (m_path.boundingRect().height() + 2 * margin));
+            m_path = m_path * transform;
             QPainter painter(&thumb);
+            painter.setRenderHints(QPainter::Antialiasing);
             painter.setPen(QPen(QColor(0, 100, 224), width, Qt::SolidLine,
                                 Qt::FlatCap, Qt::MiterJoin));
             painter.drawPath(m_path);
