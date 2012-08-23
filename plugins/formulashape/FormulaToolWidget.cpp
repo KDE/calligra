@@ -54,6 +54,7 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     
     m_fenceMenu.addAction( m_tool->action( "insert_fence" ) );
     m_fenceMenu.addAction( m_tool->action( "insert_enclosed" ) );
+    m_fenceMenu.addAction(m_tool->action("insert_parantheses"));
     
     m_tableMenu.addAction( m_tool->action( "insert_22table" ) );
     m_tableMenu.addAction( m_tool->action( "insert_33table" ) );
@@ -69,7 +70,6 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     m_scriptsMenu.addAction( m_tool->action( "insert_underscript" ) );
     m_scriptsMenu.addAction( m_tool->action( "insert_overscript" ) );
     m_scriptsMenu.addAction( m_tool->action( "insert_underoverscript" ) );
-    
 
     m_alterTableMenu.addAction( m_tool->action( "insert_row") );
     m_alterTableMenu.addAction( m_tool->action( "insert_column") );
@@ -134,8 +134,6 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     m_printformula<<QString("cos")+QString(0x03B1)+QString(" + cos")+QString(0x03B2)+QString(" = 2cos(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("cos(")+QString(0x03B1)+QString("-")+QString(0x03B2)+QString(")/2 ");
     m_printformula<<QString("cos")+QString(0x03B1)+QString(" - cos")+QString(0x03B2)+QString(" = 2sin(")+QString(0x03B1)+QString("+")+QString(0x03B2)+QString(")/2 ")+QString("sin(")+QString(0x03B2)+QString("-")+QString(0x03B1)+QString(")/2 ");
     setupformulaButton(formulalist);
-
-
 
     connect( buttonLoad, SIGNAL( clicked() ), m_tool, SLOT( loadFormula() ) );
     connect( buttonSave, SIGNAL( clicked() ), m_tool, SLOT( saveFormula() ) );
@@ -267,14 +265,5 @@ KoFormulaTool* FormulaToolWidget:: formulatool()
 {
     return m_tool;
 }
-
-void FormulaToolWidget::print(QFont font)
-{
-    QString abc = font.toString();
-    abc.chop(abc.length()-abc.indexOf(","));
-    qDebug()<<abc;
-}
-
-
 
 #include "FormulaToolWidget.moc"

@@ -54,7 +54,8 @@ public:
     
     /// @return The element's ElementType
     ElementType elementType() const;
-    
+
+
 private:
     /// The buffer the element paints its visual content
     QPainterPath m_fence;

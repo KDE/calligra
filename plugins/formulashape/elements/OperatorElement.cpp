@@ -26,11 +26,20 @@
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-QPainterPath OperatorElement::renderForFence( const QString& raw, Form form )
+QPainterPath OperatorElement::renderForFence( const QString& raw, Form form,const QPointF& pos)
 {
-    Q_UNUSED( raw )
-    Q_UNUSED( form )
-    return QPainterPath();
+    QPainterPath path;
+
+    QFont font;
+    font.setFamily("Courier New");
+    QFontMetrics metrics(font);
+    if(form==Prefix){
+        path.addText(pos.x()-10,pos.y()+metrics.ascent()-3,font,raw);
+    }
+    else
+        path.addText(pos.x(),pos.y()+metrics.ascent(),font,raw);
+
+    return path;
 }
 
 QRectF OperatorElement::renderToPath( const QString& raw, QPainterPath& path ) const

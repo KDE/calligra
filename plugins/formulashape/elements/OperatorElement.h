@@ -42,7 +42,7 @@ public:
      * @param form Indicates whether raw is interpreted as fence or separator
      * @return The painter path with the rendered content
      */
-    QPainterPath renderForFence( const QString& raw, Form form );
+    QPainterPath renderForFence( const QString& raw, Form form,const QPointF& pos);
 
     /// @return The element's ElementType
     ElementType elementType() const;

@@ -24,9 +24,13 @@
 #include "OperatorElement.h"
 #include "AttributeManager.h"
 #include <QPainter>
+#include <QVariant>
+#include <QDebug>
 
 FencedElement::FencedElement( BasicElement* parent ) : RowElement( parent )
-{}
+{
+
+}
 
 void FencedElement::paint( QPainter& painter, AttributeManager* am )
 {
@@ -40,20 +44,27 @@ void FencedElement::paint( QPainter& painter, AttributeManager* am )
 
 void FencedElement::layout( const AttributeManager* am )
 {
+    RowElement::layout(am);
     m_fence = QPainterPath();  // empty path buffer
     OperatorElement op;
-    m_fence.addPath( op.renderForFence( am->stringOf( "open", this ), Prefix ) );
+       QPointF point = m_fence.currentPosition();
 
+    m_fence.addPath( op.renderForFence( am->stringOf( "open", this ), Prefix,m_fence.currentPosition()));
     const QString separators = am->stringOf( "separators", this );
     int count = 0;
     foreach( const BasicElement* tmp, childElements() ) {
         m_fence.moveTo( m_fence.currentPosition() + QPointF( tmp->width() , 0.0 ) );
         if( tmp != childElements().last() )
-            m_fence.addPath( op.renderForFence( separators.at( count ), Infix ) );
+            m_fence.addPath( op.renderForFence( separators.at( count ), Infix,m_fence.currentPosition()));
         count++;
     }
 
-    m_fence.addPath( op.renderForFence( am->stringOf( "close", this ), Postfix ) );
+    if(childElements().count()==0)
+        m_fence.moveTo(point.x()+15,point.y()-3);
+    else
+    m_fence.moveTo(m_fence.currentPosition().x()+8,m_fence.currentPosition().y()-7);
+
+    m_fence.addPath( op.renderForFence( am->stringOf( "close", this ), Postfix,m_fence.currentPosition()));
 
     setWidth( m_fence.boundingRect().width() );
     setHeight( m_fence.boundingRect().height() );
@@ -75,4 +86,6 @@ ElementType FencedElement::elementType() const
 {
     return Fenced;
 }
+
+
 

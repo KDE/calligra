@@ -40,7 +40,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
-
+#include <FencedElement.h>
 #include <KoOdfStylesReader.h>
 #include "FormulaCommand.h"
 #include "FormulaCommandUpdate.h"
@@ -50,7 +50,6 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include "FormulaRenderer.h"
 #include <QClipboard>
-
 
 
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoToolBase( canvas ),
@@ -111,8 +110,7 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
         m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
     }
     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString&)), this, SLOT(insert(const QString&)));
-    //Only for debugging:
+       //Only for debugging:
     connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
 }
 
@@ -409,7 +407,8 @@ void KoFormulaTool::setupActions()
     //notice that only empty mrows hows parent is a inferred mrow are treated as placeholders
     //this causes the <mrow><mrow/></mrow> constructs
     addTemplateAction(i18n("Insert fenced element"),"insert_fence","<mfenced><mrow/></mfenced>", "brackets");
-    addTemplateAction(i18n("Insert enclosed element"),"insert_enclosed","<menclosed><mrow/></menclosed>","enclosed");
+    addTemplateAction(i18n("Insert parantheses element"),"insert_parantheses", "<mfenced open=\"{\" close=\"}\"><mrow/></mfenced>","parentheses");
+    addTemplateAction(i18n("Insert enclosed element"),"insert_enclosed","<mfenced open=\"(\" close=\")\"><mrow/></mfenced>","paren");
     
     addTemplateAction(i18n("Insert root"),"insert_root","<mroot><mrow><mrow/></mrow></mroot>","root");
     addTemplateAction(i18n("Insert square root"),"insert_sqrt","<msqrt><mrow/></msqrt>","sqrt");
@@ -490,6 +489,9 @@ void KoFormulaTool::addTemplateAction(const QString& caption, const QString& nam
     addAction( name , action );
     action->setIcon(KIcon(iconName));
     connect( action, SIGNAL (triggered()), m_signalMapper, SLOT (map()));
+ //   if(name=="insert_fence" || name=="insert_parantheses" || name=="insert_enclosed")
+    connect(action,SIGNAL(map),fe,SLOT(index(int)));
+
 }
 
 
