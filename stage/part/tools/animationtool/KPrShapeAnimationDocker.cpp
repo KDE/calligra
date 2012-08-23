@@ -399,7 +399,7 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
         return;
     }
 
-    if(!m_previewMode) {
+    if (!m_previewMode) {
         m_previewMode = new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas());
     }
     m_previewMode->setShapeAnimation(shapeAnimation);
@@ -408,7 +408,7 @@ void KPrShapeAnimationDocker::slotAnimationPreview()
 
 void KPrShapeAnimationDocker::previewAnimation(KPrShapeAnimation *animation)
 {
-    if(!animation) {
+    if (!animation) {
         return;
     }
     QModelIndex index = m_animationsView->currentIndex();
@@ -419,7 +419,7 @@ void KPrShapeAnimationDocker::previewAnimation(KPrShapeAnimation *animation)
         animation->setKoTextBlockData(currentAnimation->textBlockData());
     }
 
-    if(!previewMode()) {
+    if (!previewMode()) {
         setPreviewMode(new KPrViewModePreviewShapeAnimations(m_view, m_view->kopaCanvas()));
     }
     previewMode()->setShapeAnimation(animation);

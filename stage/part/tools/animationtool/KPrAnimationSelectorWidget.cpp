@@ -153,7 +153,7 @@ void KPrAnimationSelectorWidget::init()
 void KPrAnimationSelectorWidget::automaticPreviewRequested(const QModelIndex &index)
 {
     // Test if index is valid an show automatic preview checkbox is checked
-    if(!index.isValid() || !m_showAutomaticPreview) {
+    if (!index.isValid() || !m_showAutomaticPreview) {
         return;
     }
     // Parse xml context in a new animation
@@ -230,7 +230,7 @@ void KPrAnimationSelectorWidget::activateShapeCollection(QListWidgetItem *item)
 
 void KPrAnimationSelectorWidget::setAnimation(const QModelIndex &index)
 {
-    if(!index.isValid()) {
+    if (!index.isValid()) {
         return;
     }
     KoXmlElement newAnimationContext;

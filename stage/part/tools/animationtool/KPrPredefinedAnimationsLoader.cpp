@@ -75,7 +75,7 @@ bool KPrPredefinedAnimationsLoader::populateMainView(QListWidget *view)
 
 KPrCollectionItemModel *KPrPredefinedAnimationsLoader::modelById(const QString &id)
 {
-    if(m_modelMap.contains(id)) {
+    if (m_modelMap.contains(id)) {
        return m_modelMap[id];
     }
     else {
@@ -412,7 +412,7 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
 
 bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QString &title, KPrCollectionItemModel *model)
 {
-    if(m_modelMap.contains(id)) {
+    if (m_modelMap.contains(id)) {
         return false;
     }
     m_modelMap.insert(id, model);
@@ -435,7 +435,7 @@ bool KPrPredefinedAnimationsLoader::addCollection(const QString &id, const QStri
 
 bool KPrPredefinedAnimationsLoader::addSubCollection(const QString &id, KPrCollectionItemModel *model)
 {
-    if(m_subModelMap.contains(id)) {
+    if (m_subModelMap.contains(id)) {
         return false;
     }
     m_subModelMap.insert(id, model);

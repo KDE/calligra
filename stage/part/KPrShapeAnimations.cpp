@@ -790,7 +790,7 @@ QModelIndex KPrShapeAnimations::indexByShape(KoShape *shape)
                     QAbstractAnimation *shapeAnimation = a->animationAt(j);
                     if (KPrShapeAnimation *b = dynamic_cast<KPrShapeAnimation*>(shapeAnimation)) {
                         if ((b->presetClass() != KPrShapeAnimation::None) && (b->shape())) {
-                            if(b->shape() == shape)
+                            if (b->shape() == shape)
                                 return this->index(rowCount, 0);
                         }
                         rowCount++;
@@ -829,7 +829,7 @@ void KPrShapeAnimations::setDuration(const QModelIndex &index, const int duratio
 
 void KPrShapeAnimations::notifyAnimationEdited()
 {
-    if(KPrShapeAnimation *animation = qobject_cast<KPrShapeAnimation*>(sender())) {
+    if (KPrShapeAnimation *animation = qobject_cast<KPrShapeAnimation*>(sender())) {
         QModelIndex index = indexByAnimation(animation);
         if (index.isValid()) {
             emit dataChanged(index, index);

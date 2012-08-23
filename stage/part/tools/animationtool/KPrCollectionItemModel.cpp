@@ -74,8 +74,9 @@ KoXmlElement KPrCollectionItemModel::animationContext(const QModelIndex &index) 
 
 Qt::ItemFlags KPrCollectionItemModel::flags(const QModelIndex &index) const
 {
-    if(index.isValid())
+    if (index.isValid()) {
         return QAbstractListModel::flags(index);
+    }
 
     return QAbstractListModel::flags(index);
 }
