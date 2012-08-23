@@ -41,6 +41,7 @@ KPrAnimateMotion::KPrAnimateMotion(KPrShapeAnimation *shapeAnimation)
 
 KPrAnimateMotion::~KPrAnimateMotion()
 {
+    delete m_motionPath;
 }
 
 bool KPrAnimateMotion::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

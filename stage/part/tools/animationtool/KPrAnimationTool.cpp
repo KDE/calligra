@@ -65,6 +65,8 @@ KPrAnimationTool::KPrAnimationTool(KoCanvasBase *canvas)
 
 KPrAnimationTool::~KPrAnimationTool()
 {
+    cleanMotionPathManager();
+    delete m_pathShapeManager;
 }
 
 void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converter)

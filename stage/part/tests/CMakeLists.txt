@@ -9,7 +9,7 @@ include_directories(${KOMAIN_INCLUDES} ${KOPAGEAPP_INCLUDES} ${KOTEXT_INCLUDES} 
 
 ########### next target ###############
 
-set(TestShapeAnimations_test_SRCS TestShapeAnimations.cpp modeltest.cpp)
+set(TestShapeAnimations_test_SRCS TestShapeAnimations.cpp ModelTest.cpp)
 
 kde4_add_unit_test(TestShapeAnimations TESTNAME stage-part-TestShapeAnimations  ${TestShapeAnimations_test_SRCS})
 

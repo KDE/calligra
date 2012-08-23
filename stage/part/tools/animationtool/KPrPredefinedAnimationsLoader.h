@@ -40,6 +40,7 @@ class KPrPredefinedAnimationsLoader : public QObject
     Q_OBJECT
 public:
     KPrPredefinedAnimationsLoader(QObject* parent = 0);
+    ~KPrPredefinedAnimationsLoader();
 
     // Data is not ready until this method is called
     /**

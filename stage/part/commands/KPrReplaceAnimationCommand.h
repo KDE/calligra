@@ -31,11 +31,6 @@ class KPrDocument;
 class STAGE_EXPORT KPrReplaceAnimationCommand : public KUndo2Command
 {
 public:
-    enum AnimationDelete  {
-        DeleteOld,
-        DeleteNew
-    };
-
     KPrReplaceAnimationCommand(KPrDocument *doc, KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation, KUndo2Command *parent=0);
 
     virtual ~KPrReplaceAnimationCommand();
@@ -46,6 +41,10 @@ public:
     void undo();
 
 private:
+    enum AnimationDelete  {
+        DeleteOld,
+        DeleteNew
+    };
     KPrShapeAnimation *m_oldAnimation;
     KPrShapeAnimation *m_newAnimation;
     KPrDocument *m_document;

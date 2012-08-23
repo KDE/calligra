@@ -59,6 +59,11 @@ KPrPredefinedAnimationsLoader::KPrPredefinedAnimationsLoader(QObject *parent)
     readDefaultAnimations();
 }
 
+KPrPredefinedAnimationsLoader::~KPrPredefinedAnimationsLoader()
+{
+    qDeleteAll(m_animations);
+}
+
 bool KPrPredefinedAnimationsLoader::populateMainView(QListWidget *view)
 {
     loadDefaultAnimations();
@@ -328,25 +333,22 @@ QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &elem
         KoPathShape pathShape;
         KoPathShapeLoader loader(&pathShape);
         loader.parseSvg(path, true);
-        QImage thumb(QSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge), QImage::Format_RGB32);
+        QPixmap thumbnail(QSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge));
         // fill backgroung
-        thumb.fill(QColor(Qt::white).rgb());
-        QRect imageRect = thumb.rect();
+        thumbnail.fill(QColor(Qt::white).rgb());
+        QRect imageRect = thumbnail.rect();
         // adjust to left space for margins
         imageRect.adjust(margin, margin, -margin, -margin);
         pathShape.setSize(imageRect.size());
         QPainterPath m_path = pathShape.outline();
         //Center path
         m_path.translate(-m_path.boundingRect().x() + margin, -m_path.boundingRect().y() + margin);
-        QPainter painter(&thumb);
+        QPainter painter(&thumbnail);
         painter.setPen(QPen(QColor(0, 100, 224), width, Qt::SolidLine,
                             Qt::FlatCap, Qt::MiterJoin));
         // Draw path
         painter.drawPath(m_path);
-        QPixmap iconPixmap;
-        if (iconPixmap.convertFromImage(thumb)) {
-            return QIcon(iconPixmap);
-        }
+        return QIcon(thumbnail);
     }
     // Default icon if path was not found (It must be a error?)
     return koIcon("unrecognized_animation");
@@ -367,7 +369,7 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
             shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
         }
         KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));
-        if (shapeAnimation && animation) {
+        if (animation) {
             shapeAnimation->addAnimation(animation);
         }
     }

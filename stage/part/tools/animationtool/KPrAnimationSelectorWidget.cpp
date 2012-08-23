@@ -291,12 +291,8 @@ void KPrAnimationSelectorWidget::setPreviewState(bool isEnable)
         m_collectionContextBar = 0;
         m_collectionPreviewButton = 0;
 
-        if (m_subTypeContextBar) {
-            delete m_subTypeContextBar;
-        }
-        if (m_subTypePreviewButton) {
-            delete m_subTypePreviewButton;
-        }
+        delete m_subTypeContextBar;
+        delete m_subTypePreviewButton;
         m_subTypeContextBar = 0;
         m_subTypePreviewButton = 0;
 

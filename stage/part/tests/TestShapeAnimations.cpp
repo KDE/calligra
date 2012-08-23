@@ -23,13 +23,12 @@
 #include "MockAnimation.h"
 #include <KPrShapeAnimations.h>
 #include <MockShapes.h>
-#include <../animations/KPrShapeAnimation.h>
-#include <../animations/KPrAnimationStep.h>
-#include <../animations/KPrAnimationSubStep.h>
-#include <modeltest.h>
+#include "../animations/KPrShapeAnimation.h"
+#include "../animations/KPrAnimationStep.h"
+#include "../animations/KPrAnimationSubStep.h"
+#include "ModelTest.h"
 #include "PAMock.h"
 #include "MockShapeAnimation.h"
-#include "QDebug"
 
 const int ANIMATIONS_COUNT = 9;
 
