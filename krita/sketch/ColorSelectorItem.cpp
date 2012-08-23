@@ -40,6 +40,7 @@ public:
         , lastColorRole(KisColorSelectorBase::Foreground)
         , grabbingComponent(0)
         , colorUpdateAllowed(true)
+        , changeBackground(false)
     {
         ring = new KisColorSelectorRing(selector);
         triangle = new KisColorSelectorTriangle(selector);
@@ -78,6 +79,7 @@ public:
 
     void commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role);
     bool colorUpdateAllowed;
+    bool changeBackground;
 };
 
 void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role)
@@ -191,7 +193,7 @@ void ColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     if(d->lastColor != d->currentColor && d->currentColor.isValid())
     {
         d->lastColor = d->currentColor;
-        if(event->button() == Qt::LeftButton)
+        if(event->button() == Qt::LeftButton && d->changeBackground != true)
             d->lastColorRole=KisColorSelectorBase::Foreground;
         else
             d->lastColorRole=KisColorSelectorBase::Background;
@@ -229,6 +231,17 @@ void ColorSelectorItem::setView(QObject* newView)
                 this, SLOT(bgColorChanged(KoColor)));
     }
     emit viewChanged();
+}
+
+bool ColorSelectorItem::changeBackground() const
+{
+    return d->changeBackground;
+}
+
+void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
+{
+    d->changeBackground = newChangeBackground;
+    emit changeBackgroundChanged();
 }
 
 void ColorSelectorItem::fgColorChanged(const KoColor& newColor)

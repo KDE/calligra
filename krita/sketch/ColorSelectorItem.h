@@ -27,6 +27,7 @@ class ColorSelectorItem : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(bool changeBackground READ changeBackground WRITE setChangeBackground NOTIFY changeBackgroundChanged)
 public:
     ColorSelectorItem(QDeclarativeItem* parent = 0);
     virtual ~ColorSelectorItem();
@@ -35,8 +36,12 @@ public:
     QObject* view() const;
     void setView(QObject* newView);
 
+    bool changeBackground() const;
+    void setChangeBackground(bool newChangeBackground);
+
 Q_SIGNALS:
     void viewChanged();
+    void changeBackgroundChanged();
     void colorChanged(QColor newColor, bool backgroundChanged);
 
 protected:

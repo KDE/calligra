@@ -70,6 +70,7 @@ Panel {
             ColorSelectorItem {
                 anchors.fill: parent;
                 view: sketchView.view;
+                changeBackground: swatch.chooseBG;
                 onColorChanged: {
                     if(backgroundChanged) {
                         swatch.bgColor = newColor;
