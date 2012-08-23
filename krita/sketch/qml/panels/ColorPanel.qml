@@ -53,7 +53,7 @@ Panel {
             height: parent.width;
             ColorSelectorItem {
                 anchors.fill: parent;
-                view: sketchView;
+                view: sketchView.view;
             }
         }
         ExpandingListView {
