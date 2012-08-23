@@ -33,8 +33,9 @@
 class ColorSelectorItem::Private
 {
 public:
-    Private()
-        : selector(new KisColorSelector)
+    Private(ColorSelectorItem* qq)
+        : q(qq)
+        , selector(new KisColorSelector)
         , view(0)
         , lastColorRole(KisColorSelectorBase::Foreground)
         , grabbingComponent(0)
@@ -55,6 +56,8 @@ public:
         main->setConfiguration(selector->configuration().mainTypeParameter, selector->configuration().mainType);
         sub->setConfiguration(selector->configuration().subTypeParameter, selector->configuration().subType);
     }
+    
+    ColorSelectorItem* q;
 
     KisColorSelector* selector;
 
@@ -85,16 +88,22 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelec
     colorUpdateAllowed=false;
 
     if (role==KisColorSelectorBase::Foreground)
+    {
         view->resourceProvider()->setFGColor(color);
+        emit q->colorChanged(color.toQColor(), false);
+    }
     else
+    {
         view->resourceProvider()->setBGColor(color);
+        emit q->colorChanged(color.toQColor(), true);
+    }
 
     colorUpdateAllowed=true;
 }
 
 ColorSelectorItem::ColorSelectorItem(QDeclarativeItem* parent)
     : QDeclarativeItem(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     setFlag( QGraphicsItem::ItemHasNoContents, false );
     setAcceptedMouseButtons( Qt::LeftButton | Qt::RightButton );
