@@ -90,5 +90,16 @@
         <file>images/svg/icon-palette-delete-orange.svg</file>
         <file>images/svg/icon-switch-small.svg</file>
         <file>components/ExpandingListView.qml</file>
+        <file>images/svg/icon-visible_off-red.svg</file>
+        <file>images/svg/icon-visible_on-red.svg</file>
+        <file>images/svg/icon-locked_off-red.svg</file>
+        <file>images/svg/icon-locked_on-red.svg</file>
+        <file>images/svg/icon-link_chain-closed.svg</file>
+        <file>images/svg/icon-link_chain-open.svg</file>
+        <file>images/svg/icon-layer_filter-red.svg</file>
+        <file>images/svg/icon-layer_group-red.svg</file>
+        <file>images/svg/icon-layer_paint-red.svg</file>
+        <file>images/svg/icon-filter_save-red.svg</file>
+        <file>images/svg/icon-filter_load-red.svg</file>
     </qresource>
 </RCC>
