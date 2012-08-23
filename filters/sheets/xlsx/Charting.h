@@ -76,13 +76,13 @@ namespace Charting
             None = 0x0005,
             DarkGrayPattern = 0x0006,
             MediumGrayPattern = 0x0007,
-            LightGrayPattern = 0x0008,
+            LightGrayPattern = 0x0008
         };
         enum Tickness {
             Hairline = 0xFFFF,
             NarrowSingle = 0x0000,
             MediumDouble = 0x0001,
-            WideTriple = 0x0002,
+            WideTriple = 0x0002
         };
         Style m_style;
         Tickness m_tickness;
@@ -265,7 +265,7 @@ namespace Charting
         enum Type {
             HorizontalValueAxis = 0x0000,
             VerticalValueAxis = 0x0001,
-            SeriesAxis = 0x0002,
+            SeriesAxis = 0x0002
         };
         Type m_type;
 

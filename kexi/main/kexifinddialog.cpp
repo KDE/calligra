@@ -26,7 +26,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
-#include <kiconloader.h>
 #include <KAction>
 #include <KShortcut>
 
@@ -100,7 +99,7 @@ KexiFindDialog::KexiFindDialog(QWidget* parent)
     layout()->setSpacing(KDialog::spacingHint());
     KAction *a = KStandardAction::findNext(0, 0, 0);
     m_btnFind->setText(a->text());
-    m_btnFind->setIcon(KIcon(a->icon()));
+    m_btnFind->setIcon(a->icon());
     delete a;
     m_btnClose->setText(KStandardGuiItem::close().text());
     m_btnClose->setIcon(KStandardGuiItem::close().icon());

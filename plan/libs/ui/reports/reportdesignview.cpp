@@ -26,6 +26,7 @@
 #include <core/Window.h>
 #include "reportentityselector.h"
 #include "kexisourceselector.h"
+#include <KoIcon.h>
 #include <KPushButton>
 
 namespace KPlato
@@ -40,21 +41,21 @@ ReportDesignView::ReportDesignView ( QWidget *parent, ReportEntitySelector* r , 
     
     _rd = 0;
 
-    editCutAction = new KAction ( KIcon ( "edit-cut" ), i18n ( "Cut" ), this );
+    editCutAction = new KAction(koIcon("edit-cut"), i18n("Cut"), this);
     editCutAction->setObjectName ( "editcut" );
-    editCopyAction = new KAction ( KIcon ( "edit-copy" ), i18n ( "Copy" ), this );
+    editCopyAction = new KAction(koIcon("edit-copy"), i18n("Copy"), this);
     editCopyAction->setObjectName ( "editcopy" );
-    editPasteAction = new KAction ( KIcon ( "edit-paste" ), i18n ( "Paste" ), this );
+    editPasteAction = new KAction(koIcon("edit-paste"), i18n("Paste"), this);
     editPasteAction->setObjectName ( "editpaste" );
-    editDeleteAction = new KAction ( KIcon ( "edit-delete" ), i18n ( "Delete" ), this );
+    editDeleteAction = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
     editDeleteAction->setObjectName ( "editdelete" );
 
     sectionEdit = new KAction ( i18n ( "Section Editor" ), this );
     sectionEdit->setObjectName ( "sectionedit" );
 
-    itemRaiseAction = new KAction ( KIcon ( "arrow-up" ), i18n ( "Raise" ), this );
+    itemRaiseAction = new KAction(koIcon("arrow-up"), i18n("Raise"), this);
     itemRaiseAction->setObjectName ( "itemraise" );
-    itemLowerAction = new KAction ( KIcon ( "arrow-down" ), i18n ( "Lower" ), this );
+    itemLowerAction = new KAction(koIcon("arrow-down"), i18n("Lower"), this);
     itemLowerAction->setObjectName ( "itemlower" );
     //parameterEdit = new KAction ( i18n ( "Parameter Editor" ), this );
     //parameterEdit->setObjectName("parameteredit");

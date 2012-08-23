@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Mani Chandrasekar <maninc@gmail.com>
+ *  Copyright (c) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,6 +76,9 @@ void OnlineDocument::slotOnlineDocument()
         if (QDialog::Accepted == m_login->exec()) {
             connect(m_login->googleService(), SIGNAL(receivedDocument(QString)), this,
                     SLOT(receivedOnlineDocument(QString )));
+        } else {
+            delete m_login;
+            m_login = 0;
         }
     } else {
         m_login->googleService()->showDocumentListWindow(true);
@@ -83,13 +87,6 @@ void OnlineDocument::slotOnlineDocument()
 
 void OnlineDocument::receivedOnlineDocument(QString  path)
 {
-//    QString mimetype = KMimeType::findByPath(path)->name();
-//    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimetype);
-//    QString error;
-//    KoDocument *doc = entry.createDoc(&error);
-//    KUrl url;
-//    url.setPath(path);
-//    doc->openUrl(url);
     KoView *view = dynamic_cast<KoView *>(parent());
     if (!view) {
         return;

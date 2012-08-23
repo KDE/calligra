@@ -25,7 +25,6 @@
 
 #include <KLocale>
 #include <KDebug>
-#include <KIconLoader>
 #include <KActionCollection>
 #include <KStandardAction>
 #include <KPluginFactory>

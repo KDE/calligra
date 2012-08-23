@@ -58,14 +58,14 @@ public:
 //  inline QString groupIcon() const { return m_groupIcon; }
 
     /**
-     * @return the icon for a item
+     * @return the icon name for a item
      */
-    QString itemIcon() const;
+    QString itemIconName() const;
 
     /**
-     * @return the icon for a item
+     * @return the icon name for a item
      */
-    QString createItemIcon() const;
+    QString createItemIconName() const;
 
     /**
      * @return the object name associated with this part (e.g. "table")
@@ -140,8 +140,8 @@ protected:
     /**
      * Used in StaticPartInfo
      */
-    Info(const QString& partClass, const QString& itemIcon,
-         const QString& objectName);
+    Info(const QString &partClass, const QString &itemIconName,
+         const QString &objectName);
 
     explicit Info(KService::Ptr service);
 

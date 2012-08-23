@@ -26,6 +26,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoPart.h>
 
 #include <part/Doc.h> // FIXME detach from part
 #include <Map.h>
@@ -53,7 +54,7 @@ public:
 
 void SheetTest::init()
 {
-    m_doc = new Doc();
+    m_doc = new Doc(new MockPart);
     m_doc->map()->addNewSheet();
     m_sheet = m_doc->map()->sheet(0);
     m_sheet->map()->setDefaultRowHeight(10.0);

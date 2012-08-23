@@ -28,7 +28,6 @@
 
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -41,8 +40,8 @@ namespace KPlato
 {
 
 //-----------------------------------
-HtmlView::HtmlView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+HtmlView::HtmlView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     m_htmlPart = new KHTMLPart( this );
     m_htmlPart->view()->setFrameStyle( QFrame::StyledPanel );

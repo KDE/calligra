@@ -689,6 +689,8 @@ protected:
     /*! Implementation for KexiDataItemChangesListener. */
     virtual bool cursorAtNewRow() const;
 
+    virtual int horizontalHeaderHeight() const;
+
     QWidget* navPanelWidget() const;
     
     KexiTableViewPrivate * const d;

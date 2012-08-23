@@ -67,7 +67,7 @@ public slots:
     /// reimplemented
     virtual void deactivate();
     /// reimplemented
-    virtual void resourceChanged(int key, const QVariant & res);
+    virtual void documentResourceChanged(int key, const QVariant & res);
 
 protected:
     /**
@@ -87,8 +87,8 @@ protected:
     virtual QList<QWidget *> createOptionWidgets();
 
 private:
-    Q_DECLARE_PRIVATE(KoCreatePathTool);
-    Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int));
+    Q_DECLARE_PRIVATE(KoCreatePathTool)
+    Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
 };
 #endif
 

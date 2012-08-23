@@ -30,6 +30,7 @@
 #include "kptdebug.h"
 
 #include "KoStore.h"
+#include <KoIcon.h>
 
 #include <QAbstractItemModel>
 #include <QMimeData>
@@ -38,7 +39,6 @@
 #include <QPair>
 #include <QByteArray>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -98,7 +98,7 @@ QVariant NodeModel::name( const Node *node, int role ) const
             return QVariant();
         case Qt::DecorationRole:
             if ( node->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
             }
             break;
         case Role::Foreground: {

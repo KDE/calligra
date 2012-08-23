@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Name=Calligra Author
+Exec=calligraauthor %u
+GenericName=Author tool
+GenericName[x-test]=xxAuthor Toolxx
+Comment=Write ebooks and textbooks
+MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/msword;application/rtf;text/plain;application/x-mswrite;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.openxmlformats-officedocument.wordprocessingml.template;application/vnd.ms-works;application/vnd.wordperfect;
+X-KDE-ServiceTypes=Calligra/Application
+Icon=author
+X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
+X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.text-template,application/msword,application/rtf,text/plain,application/x-mswrite,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-works,application/vnd.wordperfect
+X-DocPath=http://userbase.kde.org/Special:MyLanguage/Author
+X-KDE-StartupNotify=true
+X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.calligra.author
+Categories=Qt;KDE;Office;
+InitialPreference=3

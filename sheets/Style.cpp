@@ -27,6 +27,7 @@
 #include <QPen>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 #include <KoGenStyles.h>

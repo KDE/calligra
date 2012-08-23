@@ -21,6 +21,8 @@
 #include "TableTool.h"
 #include "SheetsEditor.h"
 
+#include <KoIcon.h>
+
 #include <QApplication>
 #include <QGridLayout>
 #include <QLabel>
@@ -33,7 +35,6 @@
 #include <kdebug.h>
 #include <klineedit.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <kaction.h>
 #include <kfiledialog.h>
 #include <kpagedialog.h>
@@ -77,12 +78,12 @@ TableTool::TableTool(KoCanvasBase* canvas)
     d->selection = new Selection(canvas);
     d->tableShape = 0;
 
-    KAction* importAction = new KAction(KIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+    KAction* importAction = new KAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
     importAction->setIconText(i18n("Import"));
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    KAction* exportAction = new KAction(KIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    KAction* exportAction = new KAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
     exportAction->setIconText(i18n("Export"));
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
@@ -266,7 +267,7 @@ QList<QWidget*> TableTool::createOptionWidgets()
     }
     connect(d->sheetComboBox, SIGNAL(activated(QString)), this, SLOT(sheetActivated(QString)));
 
-    QPushButton *sheetbtn = new QPushButton(KIcon("table"), QString(), optionWidget);
+    QPushButton *sheetbtn = new QPushButton(koIcon("table"), QString(), optionWidget);
     sheetbtn->setFixedHeight(d->sheetComboBox->sizeHint().height());
     connect(sheetbtn, SIGNAL(clicked()), this, SLOT(sheetsBtnClicked()));
     sheetlayout->addWidget(sheetbtn);
