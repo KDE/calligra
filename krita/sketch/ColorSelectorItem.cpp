@@ -165,26 +165,20 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    event->setAccepted(false);
-    if(!event->isAccepted())
-    {
-        if(d->main->wantsGrab(event->pos().x(), event->pos().y()))
-            d->grabbingComponent=d->main;
-        else if(d->sub->wantsGrab(event->pos().x(), event->pos().y()))
-            d->grabbingComponent=d->sub;
-        mouseEvent(event);
-    }
+    if(d->main->wantsGrab(event->pos().x(), event->pos().y()))
+        d->grabbingComponent=d->main;
+    else if(d->sub->wantsGrab(event->pos().x(), event->pos().y()))
+        d->grabbingComponent=d->sub;
+    mouseEvent(event);
 }
 
 void ColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-    qDebug() << "Mouse moved";
     mouseEvent(event);
 }
 
 void ColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    qDebug() << "Mouse released";
     if(d->lastColor != d->currentColor && d->currentColor.isValid())
     {
         d->lastColor = d->currentColor;
@@ -207,6 +201,7 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
         d->currentColor=d->main->currentColor();
         KoColor kocolor(d->currentColor, d->view->resourceProvider()->resourceManager()->foregroundColor().colorSpace());
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->lastColorRole);
+        update();
     }
 }
 
