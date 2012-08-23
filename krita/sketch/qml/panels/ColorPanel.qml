@@ -24,9 +24,25 @@ Panel {
     name: "Color";
     panelColor: "#d37300"
     
+    actions: [
+        ColorSwatch {
+            id: swatch;
+            height: parent.height;
+            width: height;
+        }
+    ]
+    
     PaletteColorsModel {
         id: paletteColorsModel;
         view: sketchView.view;
+        onColorChanged: {
+            if(backgroundChanged) {
+                swatch.bgColor = newColor;
+            }
+            else {
+                swatch.fgColor = newColor;
+            }
+        }
     }
     PaletteModel {
         id: paletteModel;
@@ -54,6 +70,14 @@ Panel {
             ColorSelectorItem {
                 anchors.fill: parent;
                 view: sketchView.view;
+                onColorChanged: {
+                    if(backgroundChanged) {
+                        swatch.bgColor = newColor;
+                    }
+                    else {
+                        swatch.fgColor = newColor;
+                    }
+                }
             }
         }
         ExpandingListView {
@@ -104,7 +128,7 @@ Panel {
             onClicked: {
                 GridView.view.currentIndex = index;
                 //Settings.currentColor = model.color;
-                paletteColorsModel.activateColor(index);
+                paletteColorsModel.activateColor(index, swatch.chooseBG);
             }
         }
     }
