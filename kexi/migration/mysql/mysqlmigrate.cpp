@@ -29,7 +29,7 @@
 #endif
 
 #include "mysqlmigrate.h"
-#include <kexidb/drivers/mySQL/mysqldriver_global.h>
+#include <kexidb/drivers/mysql/mysqldriver_global.h>
 
 #include <QString>
 #include <QRegExp>
@@ -49,8 +49,8 @@
 #include <kexidb/cursor.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
-#include <kexidb/drivers/mySQL/mysqlconnection_p.cpp>
 #include <kexidb/drivermanager.h>
+#include <kexidb/drivers/mysql/mysqlconnection_p.cpp>
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
