@@ -23,6 +23,7 @@
 
 #include <QtDeclarative/qdeclarativeitem.h>
 
+class KoColor;
 class ColorSelectorItem : public QDeclarativeItem
 {
     Q_OBJECT
@@ -39,9 +40,14 @@ Q_SIGNALS:
     void viewChanged();
 
 protected:
-    virtual bool sceneEvent(QEvent* event );
-    virtual bool event(QEvent* event );
-    virtual void inputMethodEvent(QInputMethodEvent* event );
+    virtual void mouseMoveEvent( QGraphicsSceneMouseEvent* event );
+    virtual void mousePressEvent( QGraphicsSceneMouseEvent* event );
+    virtual void mouseReleaseEvent( QGraphicsSceneMouseEvent* event );
+    virtual void mouseEvent( QGraphicsSceneMouseEvent* event );
+
+private Q_SLOTS:
+    void fgColorChanged(const KoColor& newColor);
+    void bgColorChanged(const KoColor& newColor);
 
 private:
     class Private;
