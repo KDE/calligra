@@ -1,5 +1,5 @@
 set(KEXI_SQLITE_DUMP_TOOL kexi_sqlite3_dump)
-ADD_DEFINITIONS( -DKEXI_SQLITE_DUMP_TOOL=\\"${KEXI_SQLITE_DUMP_TOOL}\\" )
+add_definitions( -DKEXI_SQLITE_DUMP_TOOL=\"${KEXI_SQLITE_DUMP_TOOL}\" )
 
 set(kexi_sqlite_dump_tool_SRCS main.cpp shell.c)
 

@@ -70,8 +70,6 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     addPage(page1, i18n("&Criteria"));
 
     QGridLayout* tmpGridLayout = new QGridLayout(page1);
-    tmpGridLayout->setMargin(KDialog::marginHint());
-    tmpGridLayout->setSpacing(KDialog::spacingHint());
 
     QLabel *tmpQLabel = new QLabel(page1);
     tmpQLabel->setText(i18n("Allow:"));
@@ -159,8 +157,6 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     addPage(page2, i18n("&Error Alert"));
 
     tmpGridLayout = new QGridLayout(page2);
-    tmpGridLayout->setMargin(KDialog::marginHint());
-    tmpGridLayout->setSpacing(KDialog::spacingHint());
 
     displayMessage = new QCheckBox(i18n("Show error message when invalid values are entered"), page2);
     displayMessage->setChecked(true);
@@ -195,8 +191,6 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     addPage(page3, i18n("Input Help"));
 
     tmpGridLayout = new QGridLayout(page3);
-    tmpGridLayout->setMargin(KDialog::marginHint());
-    tmpGridLayout->setSpacing(KDialog::spacingHint());
 
     displayHelp = new QCheckBox(i18n("Show input help when cell is selected"), page3);
     displayMessage->setChecked(false);

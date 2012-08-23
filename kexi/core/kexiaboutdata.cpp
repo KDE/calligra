@@ -33,10 +33,10 @@ KexiAboutData::KexiAboutData()
  : KAboutData(
         "kexi", 0,
         ki18n(KEXI_APP_NAME),
-        KEXI_VERSION_STRING " (Calligra " CALLIGRA_VERSION_STRING ")",
+        KEXI_VERSION_STRING,
         ki18n(description),
         KAboutData::License_LGPL_V2,
-        ki18n("(c) 2002-2011, Kexi Team"),
+        ki18n("© 2002-2012, The Kexi Team"),
         ki18n("This software is developed by Kexi Team - an international group\n"
               "of independent developers."),
         "http://www.calligra.org/kexi",

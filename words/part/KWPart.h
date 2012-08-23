@@ -26,6 +26,7 @@
 
 class KoMainWindow;
 class KWDocument;
+class KWView;
 class KComponentData;
 class QGraphicsItem;
 
@@ -41,6 +42,7 @@ public:
     QGraphicsItem *createCanvasItem(); ///reimplemented
 
     void setDocument(KWDocument *document);
+    KWDocument *document() const;
 
     /// reimplemented from super
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
@@ -53,6 +55,7 @@ private slots:
 protected:
 
     virtual KoView *createViewInstance(QWidget *parent); ///reimplemented
+    virtual void setupViewInstance(KWView *view);
 
     KWDocument *m_document;
 };
