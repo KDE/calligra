@@ -23,7 +23,7 @@ import "../components"
 Panel {
     name: "Color";
     panelColor: "#d37300"
-    
+
     actions: [
         ColorSwatch {
             id: swatch;
@@ -31,7 +31,7 @@ Panel {
             width: height;
         }
     ]
-    
+
     PaletteColorsModel {
         id: paletteColorsModel;
         view: sketchView.view;
