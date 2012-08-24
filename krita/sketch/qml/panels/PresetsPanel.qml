@@ -23,7 +23,24 @@ import "../components"
 Panel {
     id: base;
     name: "Presets";
-    panelColor: "#1e0058"
+    panelColor: "#1e0058";
+    dragDelegate: Component {
+        Rectangle {
+            color: "#1e0058";
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+            radius: 8
+
+            Label {
+                anchors.centerIn: parent;
+
+                text: "Presets";
+                color: "white";
+
+                font.pixelSize: Constants.DefaultFontSize;
+            }
+        }
+    }
 
     actions: [
         Button {

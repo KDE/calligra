@@ -28,6 +28,7 @@ Panel {
             color: Constants.Theme.QuaternaryColor;
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
+            radius: 8;
 
             Label {
                 anchors.centerIn: parent;
@@ -35,7 +36,7 @@ Panel {
                 text: "Select";
                 color: "white";
 
-                font.pixelSize: Constants.SmallFontSize;
+                font.pixelSize: Constants.DefaultFontSize;
             }
         }
     }
