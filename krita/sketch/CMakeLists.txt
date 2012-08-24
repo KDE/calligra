@@ -24,6 +24,7 @@ set(kritasketch_SRCS
 set(kritasketch_kritaintegrationmodels_SRCS
     models/ColorImageProvider.cpp
     models/LayerModel.cpp
+    models/LayerChannelDetails.cpp
     models/PaletteColorsModel.cpp
     models/PaletteModel.cpp
     models/PresetImageProvider.cpp
