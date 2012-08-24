@@ -62,6 +62,7 @@ KPrPredefinedAnimationsLoader::KPrPredefinedAnimationsLoader(QObject *parent)
 KPrPredefinedAnimationsLoader::~KPrPredefinedAnimationsLoader()
 {
     qDeleteAll(m_animations);
+    qDeleteAll(m_mainItemsCollection);
 }
 
 bool KPrPredefinedAnimationsLoader::populateMainView(QListWidget *view)

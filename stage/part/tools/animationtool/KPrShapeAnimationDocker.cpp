@@ -77,6 +77,7 @@ QSize DialogMenu::sizeHint() const
 KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     : QWidget(parent)
     , m_view(0)
+    , m_animationGroupModel(0)
     , m_previewMode(0)
     , m_lastSelectedShape(0)
 {
@@ -176,6 +177,11 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     connect(m_editAnimationsPanel, SIGNAL(previousStateChanged(bool)), this, SIGNAL(previousStateChanged(bool)));
     QTimer::singleShot(500, this, SLOT(initializeView()));
 
+}
+
+KPrShapeAnimationDocker::~KPrShapeAnimationDocker()
+{
+    delete m_animationGroupModel;
 }
 
 void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
@@ -286,7 +292,9 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
         m_animationsView->hideColumn(8);
         m_animationsView->hideColumn(9);
 
-        m_animationGroupModel = new KPrAnimationGroupProxyModel;
+        if (!m_animationGroupModel) {
+            m_animationGroupModel = new KPrAnimationGroupProxyModel;
+        }
         m_animationGroupModel->setSourceModel(m_animationsModel);
         m_editAnimationsPanel->setProxyModel(m_animationGroupModel);
 
