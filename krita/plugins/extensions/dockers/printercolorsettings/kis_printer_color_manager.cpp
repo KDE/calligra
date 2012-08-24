@@ -38,16 +38,16 @@ KisPrinterColorManager::KisPrinterColorManager(QWidget *parent)
 {    
     setupUi(this);
     
+    m_colormanager = new KisCmpx();
+    m_selectorui = new KisPrinterProfileChooser(profileSelectorWidget);
+    
     int printerCount = populatePrinterList();
     
     // If no printer is detected, we disable the color manager.
     if (printerCount < 1) {
         mainTabWidget->setEnabled(false);
         activeProfileLabel->setText("**Printer not detected**  Printer color management disabled.");
-    } else {    
-        m_colormanager = new KisCmpx();
-        m_selectorui = new KisPrinterProfileChooser(profileSelectorWidget);
-   
+    } else {       
         KisConfig mc;
         QString printerProfileName = mc.printerProfile();
         m_profile = KoColorSpaceRegistry::instance()->profileByName(printerProfileName);
@@ -187,11 +187,12 @@ int KisPrinterColorManager::populatePrinterList(void)
     if (count > 0) {    
         defaultPrinterName = QPrinterInfo::defaultPrinter().printerName();
         defaultPrinterIndex = printerListComboBox->findText(defaultPrinterName, Qt::MatchExactly);
-    
-        QPrinter p(m_printerlist.at(0), QPrinter::ScreenResolution);  
-        m_colormanager->setPrinter(&p);
 
-        emit slotChangePrinterSelection(defaultPrinterIndex);
+        QPrinter p(m_printerlist.at(0), QPrinter::ScreenResolution);  
+        //m_colormanager->setPrinter(&p);
+
+        // TODO Fix seg fault (possible signal/slot issue)
+        //emit slotChangePrinterSelection(0);
     } 
     
     return count;
