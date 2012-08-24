@@ -219,7 +219,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     projection.ortho(0, 1, 0, 1, -1, 1);
     d->shader->setUniformValue(d->projectionMatrixLocation, projection.transposed());
 
-    glBindTexture(GL_TEXTURE_2D, d->glCanvas->framebufferTexture());
+    //glBindTexture(GL_TEXTURE_2D, d->glCanvas->framebufferTexture());
     d->shader->setUniformValue(d->texture0Location, 0);
 
     d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
