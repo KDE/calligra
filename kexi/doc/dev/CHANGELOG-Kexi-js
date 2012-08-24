@@ -132,9 +132,36 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
+===================== Kexi 2.6  =====================
+
+~~~~~~~~~~~~~~~~ 2.6 Alpha 1 ~~~~~~~~~~~~~~~~
+
+2012-08-13..23
+Core
+*Add support for user data storage
+FEATURE:305074
+Table View
+*Remember column widths in tabular data view
+FEATURE:230994
+
+2012-08-14
+KexiDB
+*Added unit test for creating .kexi database file with KexiDB::Connection and test data
+
+2012-08-11
+Main Window
+*Declare 'full screen' as global action for use in user commands or scripts
+
 ===================== Kexi 2.5  =====================
 
 ~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
+
+2012-08-23
+KexiDB
+*Make it possible to disable db drivers even if the libs are present and found
+**renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config flag (by jstaniek)
+BUG:305683
+REVIEW:106152
 
 2012-08-14
 KexiDB
