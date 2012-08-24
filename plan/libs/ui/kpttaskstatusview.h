@@ -183,6 +183,7 @@ struct PerformanceChartInfo
 {
     bool showBarChart;
     bool showLineChart;
+    bool showTableView;
 
     bool showCost;
     bool showBCWSCost;
@@ -202,7 +203,7 @@ struct PerformanceChartInfo
     bool acwpEffort() const { return showEffort && showACWPEffort; }
 
     PerformanceChartInfo() {
-        showBarChart = false; showLineChart = true;
+        showBarChart = false; showLineChart = true; showTableView = false;
         showCost = showBCWSCost = showBCWPCost = showACWPCost = true;
         showEffort = showBCWSEffort = showBCWPEffort = showACWPEffort = true;
     }
@@ -262,6 +263,8 @@ public:
     /// Create a print job dialog
     KoPrintJob *createPrintJob( ViewBase *parent );
 
+    void setNodes( const QList<Node*> nodes );
+
 public slots:
     void refreshChart();
 
@@ -272,8 +275,6 @@ protected:
     void createLineChart();
     void setEffortValuesVisible( bool visible );
     void setCostValuesVisible( bool visible );
-
-    void drawValues();
 
 protected slots:
     void slotUpdate();

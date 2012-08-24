@@ -47,13 +47,15 @@ public:
     ChartProxyModel( QObject *parent = 0 ) : QSortFilterProxyModel( parent ) {}
 
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const {
-        //if ( role == Qt::DisplayRole || role == KDChart::DatasetBrushRole ) kDebug()<<"fetch:"<<orientation<<section<<mapToSource( index(0, section) ).column()<<m_rejects;
+        //if ( role == Qt::DisplayRole && orientation == Qt::Vertical ) kDebug()<<"fetch:"<<orientation<<section<<mapToSource( index(0, section) ).column()<<m_rejects;
         return QSortFilterProxyModel::headerData( section, orientation, role );
     }
 
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const {
         if ( role == Qt::DisplayRole && ! m_zerocolumns.isEmpty() ) {
-            if ( m_zerocolumns.contains( mapToSource( index ).column() ) ) {
+            int column = mapToSource( index ).column();
+            // Always skip spi/cpi (column 6 - 9)
+            if ( column > 5 || m_zerocolumns.contains( column ) ) {
                 //kDebug()<<"zero:"<<index.column()<<mapToSource( index ).column();
                 return QVariant();
             }
@@ -71,7 +73,8 @@ public:
 protected:
     bool filterAcceptsColumn ( int source_column, const QModelIndex &/*source_parent */) const {
         //kDebug()<<this<<source_column<<m_rejects<<(! m_rejects.contains( source_column ));
-        return ! m_rejects.contains( source_column );
+        // Always skip spi/cpi (column 6 - 9)
+        return source_column < 6 && ! m_rejects.contains( source_column );
     }
 
 private:
@@ -110,6 +113,8 @@ public:
     QDate endDate() const;
     void calculate();
 
+    void setLocalizeValues( bool on );
+
 public slots:
     void setScheduleManager( ScheduleManager *sm );
     void slotNodeRemoved( Node *node );
@@ -119,18 +124,37 @@ public slots:
 
 protected:
     double bcwsEffort( int day ) const;
-    QVariant bcwpEffort( int day ) const;
+    double bcwpEffort( int day ) const;
     double acwpEffort( int day ) const;
     double bcwsCost( int day ) const;
-    QVariant bcwpCost( int day ) const;
+    double bcwpCost( int day ) const;
     double acwpCost( int day ) const;
+    double spiEffort( int day ) const;
+    double cpiEffort( int day ) const;
+    double spiCost( int day ) const;
+    double cpiCost( int day ) const;
 
-private:
+protected:
     QList<Node*> m_nodes;
     EffortCostMap m_bcws;
     EffortCostMap m_acwp;
+    bool m_localizeValues;
 };
 
+class KPLATOMODELS_EXPORT PerformanceDataCurrentDateModel : public ChartItemModel
+{
+    Q_OBJECT
+public:
+    PerformanceDataCurrentDateModel( QObject *parent );
+
+    int rowCount( const QModelIndex &parent = QModelIndex() ) const;
+    int columnCount( const QModelIndex &parent = QModelIndex() ) const;
+    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
+    QVariant data( const QModelIndex &proxyIndex, int role = Qt::DisplayRole ) const;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    QModelIndex mapIndex( const QModelIndex &idx ) const;
+};
 
 } //namespace KPlato
 

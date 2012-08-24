@@ -450,7 +450,7 @@ void ProjectStatusView::setScheduleManager( ScheduleManager *sm )
     m_view->setScheduleManager( sm );
     m_view->model()->clearNodes();
     if ( m_project ) {
-        m_view->model()->addNode( m_project );
+        m_view->setNodes( QList<Node*>() << m_project );
     }
 }
 
@@ -555,28 +555,8 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     m_manager( 0 )
 {
     setupUi( this );
-    dateEdit->hide();
-#ifdef KPLATODEBUG
-    labelDate->hide();
-    dateEdit->show();
-    dateEdit->setDate( QDate::currentDate() );
-    connect(dateEdit, SIGNAL(dateChanged(const QDate &)), SLOT(slotUpdate()));
-#endif
-    QAbstractItemModel *m = ui_performancetable->model();
-    m->setHeaderData( 0, Qt::Horizontal, ToolTip::nodeBCWS(), Qt::ToolTipRole );
-    m->setHeaderData( 1, Qt::Horizontal, ToolTip::nodeBCWP(), Qt::ToolTipRole );
-    m->setHeaderData( 2, Qt::Horizontal, ToolTip::nodeACWP(), Qt::ToolTipRole );
-    m->setHeaderData( 3, Qt::Horizontal, i18nc( "@info:tooltip", "Cost performance index (BCWP/ACWP)" ), Qt::ToolTipRole );
-    m->setHeaderData( 4, Qt::Horizontal, ToolTip::nodePerformanceIndex(), Qt::ToolTipRole );
 
-    for ( int r = 0; r < ui_performancetable->verticalHeader()->count(); ++r ) {
-        for ( int c = 0; c < ui_performancetable->horizontalHeader()->count(); ++c ) {
-            QTableWidgetItem *itm = ui_performancetable->item( r, c );
-            Q_ASSERT( itm );
-            itm->setFlags( Qt::ItemIsEnabled );
-            kDebug(planDbg())<<itm<<itm->flags();
-        }
-    }
+    ui_performancetable->setModel( new PerformanceDataCurrentDateModel( this ) );
 
     BackgroundAttributes backgroundAttrs( ui_chart->backgroundAttributes() );
     backgroundAttrs.setVisible( true );
@@ -606,7 +586,9 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     createBarChart();
     createLineChart();
     setupChart();
-
+#ifdef PLAN_CHART_DEBUG
+    ui_tableView->setModel( &m_chartmodel );
+#endif
     connect(&m_chartmodel, SIGNAL(modelReset()), SLOT(slotUpdate()));
     setContextMenuPolicy ( Qt::DefaultContextMenu );
 }
@@ -735,9 +717,18 @@ void PerformanceStatusBase::setupChart()
     }
     if ( m_chartinfo.showBarChart ) {
         setupChart( m_barchart );
-    } else /*if ( m_chartinfo.showLineChart )*/ {
+    } else if ( m_chartinfo.showLineChart ) {
         setupChart( m_linechart );
+    } else {
+#ifdef PLAN_CHART_DEBUG
+        ui_stack->setCurrentIndex( 1 );
+        refreshChart();
+        return;
+#else
+        setupChart( m_linechart );
+#endif
     }
+    ui_stack->setCurrentIndex( 0 );
     kDebug(planDbg())<<"Planes:"<<ui_chart->coordinatePlanes();
     foreach ( AbstractCoordinatePlane *pl, ui_chart->coordinatePlanes() ) {
         CartesianCoordinatePlane *p = dynamic_cast<CartesianCoordinatePlane*>( pl );
@@ -752,7 +743,11 @@ void PerformanceStatusBase::setupChart()
     m_legend->setDatasetHidden( 3, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWSEffort ) );
     m_legend->setDatasetHidden( 4, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWPEffort ) );
     m_legend->setDatasetHidden( 5, ! ( m_chartinfo.showEffort && m_chartinfo.showACWPEffort ) );
-    
+    // hide spi/cpi
+    m_legend->setDatasetHidden( 6, true );
+    m_legend->setDatasetHidden( 7, true );
+    m_legend->setDatasetHidden( 8, true );
+    m_legend->setDatasetHidden( 9, true );
     setEffortValuesVisible( m_chartinfo.showEffort );
     setCostValuesVisible( m_chartinfo.showCost );
     refreshChart();
@@ -887,7 +882,6 @@ void PerformanceStatusBase::contextMenuEvent( QContextMenuEvent *event )
 void PerformanceStatusBase::slotUpdate()
 {
     //kDebug(planDbg());
-    drawValues();
     refreshChart();
 }
 
@@ -896,6 +890,7 @@ void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
     //kDebug(planDbg());
     m_manager = sm;
     m_chartmodel.setScheduleManager( sm );
+    static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setScheduleManager( sm );
 }
 
 void PerformanceStatusBase::setProject( Project *project )
@@ -908,6 +903,7 @@ void PerformanceStatusBase::setProject( Project *project )
         connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLocaleChanged() ) );
     }
     m_chartmodel.setProject( project );
+    static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setProject( project );
 
     slotLocaleChanged();
 }
@@ -926,61 +922,6 @@ void PerformanceStatusBase::slotLocaleChanged()
     if ( m_project == 0 ) {
         return;
     }
-    drawValues();
-}
-
-void PerformanceStatusBase::drawValues()
-{
-    if ( m_project == 0 ) {
-        return;
-    }
-    KLocale *locale = m_project->locale();
-    QDate date = QDate::currentDate();
-#ifdef KPLATODEBUG
-    date = dateEdit->date();
-#endif
-    QAbstractItemModel *m = ui_performancetable->model();
-
-    const EffortCostMap &budget = m_chartmodel.bcwp();
-    const EffortCostMap &actual = m_chartmodel.acwp();
-
-    // cost based
-    double bc = budget.costTo( date );
-    m->setData( m->index( 0, 0 ), locale->formatMoney( bc ) );
-    m->setData( m->index( 0, 1 ), locale->formatMoney( budget.bcwpCost( date ) ) );
-    m->setData( m->index( 0, 2 ), locale->formatMoney( actual.costTo( date ) ) );
-
-    double spi_ = 0.0;
-    if ( bc > 0.0 ) {
-        spi_ = budget.bcwpCost( date ) / bc;
-    }
-    double cpi_ = 0.0;
-    if ( actual.costTo( date ) > 0.0 ) {
-        cpi_ = budget.bcwpCost( date ) / actual.costTo( date );
-    }
-    m->setData( m->index( 0, 3 ), locale->formatNumber( cpi_ ) );
-    m->setData( m->index( 0, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
-    m->setData( m->index( 0, 4 ), locale->formatNumber( spi_ ) );
-    m->setData( m->index( 0, 4 ), ( spi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
-
-    // effort based
-    double bh = budget.hoursTo( date );
-    m->setData( m->index( 1, 0 ), locale->formatNumber( bh, 1 ) );
-    m->setData( m->index( 1, 1 ), locale->formatNumber( budget.bcwpEffort( date ), 1 ) );
-    m->setData( m->index( 1, 2 ), locale->formatNumber( actual.hoursTo( date ), 1 ) );
-
-    spi_ = 0.0;
-    if ( bh > 0.0 ) {
-        spi_ = budget.bcwpEffort( date ) / bh;
-    }
-    cpi_ = 0.0;
-    if ( actual.effortTo( date ) > 0.0 ) {
-        cpi_ = budget.bcwpEffort( date ) / actual.hoursTo( date );
-    }
-    m->setData( m->index( 1, 3 ), locale->formatNumber( cpi_ ) );
-    m->setData( m->index( 1, 3 ), ( cpi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
-    m->setData( m->index( 1, 4 ), locale->formatNumber( spi_ ) );
-    m->setData( m->index( 1, 4 ), ( spi_ < 1.0 ? Qt::red : Qt::black ), Qt::ForegroundRole );
 }
 
 
@@ -989,6 +930,7 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     kDebug(planDbg());
     m_chartinfo.showBarChart = context.attribute( "show-bar-chart", "0" ).toInt();
     m_chartinfo.showLineChart = context.attribute( "show-line-chart", "1" ).toInt();
+    m_chartinfo.showTableView = context.attribute( "show-table-view", "0" ).toInt();
 
     m_chartinfo.showCost = context.attribute( "show-cost", "1" ).toInt();
     m_chartinfo.showBCWSCost = context.attribute( "show-bcws-cost", "1" ).toInt();
@@ -1007,6 +949,10 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
 
 void PerformanceStatusBase::saveContext( QDomElement &context ) const
 {
+    context.setAttribute( "show-bar-chart", m_chartinfo.showBarChart );
+    context.setAttribute( "show-line-chart", m_chartinfo.showLineChart );
+    context.setAttribute( "show-table-view", m_chartinfo.showTableView );
+
     context.setAttribute( "show-cost", m_chartinfo.showCost );
     context.setAttribute( "show-bcws-cost", m_chartinfo.showBCWSCost );
     context.setAttribute( "show-bcwp-cost", m_chartinfo.showBCWPCost );
@@ -1023,6 +969,12 @@ KoPrintJob *PerformanceStatusBase::createPrintJob( ViewBase *parent )
     PerformanceStatusPrintingDialog *dia = new PerformanceStatusPrintingDialog( parent, this, parent->project() );
     dia->printer().setCreator("Plan");
     return dia;
+}
+
+void PerformanceStatusBase::setNodes( const QList<Node *> nodes )
+{
+    m_chartmodel.setNodes( nodes );
+    static_cast<PerformanceDataCurrentDateModel*>( ui_performancetable->model() )->setNodes( nodes );
 }
 
 //-----------------------------------
@@ -1056,7 +1008,7 @@ void PerformanceStatusTreeView::slotSelectionChanged( const QItemSelection&, con
             nodes.append( n );
         }
     }
-    m_chart->model()->setNodes( nodes );
+    m_chart->setNodes( nodes );
 }
 
 NodeItemModel *PerformanceStatusTreeView::nodeModel() const
@@ -1248,12 +1200,16 @@ PerformanceStatusViewSettingsPanel::PerformanceStatusViewSettingsPanel( Performa
     m_view( view )
 {
     setupUi( this );
-
+#ifndef PLAN_CHART_DEBUG
+    ui_table->hide();
+#endif
     PerformanceChartInfo info = m_view->chartInfo();
 
     ui_linechart->setChecked( info.showLineChart );
     ui_barchart->setChecked( info.showBarChart );
-
+#ifdef PLAN_CHART_DEBUG
+    ui_table->setChecked( info.showTableView );
+#endif
     ui_bcwsCost->setCheckState( info.showBCWSCost ? Qt::Checked : Qt::Unchecked );
     ui_bcwpCost->setCheckState( info.showBCWPCost ? Qt::Checked : Qt::Unchecked );
     ui_acwpCost->setCheckState( info.showACWPCost ? Qt::Checked : Qt::Unchecked );
@@ -1270,6 +1226,7 @@ void PerformanceStatusViewSettingsPanel::slotOk()
     PerformanceChartInfo info;
     info.showLineChart = ui_linechart->isChecked();
     info.showBarChart = ui_barchart->isChecked();
+    info.showTableView = ui_table->isChecked();
 
     info.showBCWSCost = ui_bcwsCost->checkState() == Qt::Unchecked ? false : true;
     info.showBCWPCost = ui_bcwpCost->checkState() == Qt::Unchecked ? false : true;

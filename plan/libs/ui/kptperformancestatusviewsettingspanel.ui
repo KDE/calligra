@@ -34,6 +34,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QRadioButton" name="ui_table">
+        <property name="text">
+         <string>Table</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
