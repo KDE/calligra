@@ -37,7 +37,7 @@ public:
         : q(qq)
         , selector(new KisColorSelector)
         , view(0)
-        , lastColorRole(KisColorSelectorBase::Foreground)
+        , colorRole(KisColorSelectorBase::Foreground)
         , grabbingComponent(0)
         , colorUpdateAllowed(true)
         , changeBackground(false)
@@ -72,9 +72,8 @@ public:
     KisColorSelectorComponent* sub;
 
     KisView2* view;
-    KisColorSelectorBase::ColorRole lastColorRole;
+    KisColorSelectorBase::ColorRole colorRole;
     QColor currentColor;
-    QColor lastColor;
     KisColorSelectorComponent* grabbingComponent;
 
     void commitColor(const KoColor& color, KisColorSelectorBase::ColorRole role);
@@ -164,7 +163,7 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     }
     if(d->view)
     {
-        if (d->lastColorRole == KisColorSelectorBase::Foreground)
+        if (d->colorRole == KisColorSelectorBase::Foreground)
             d->selector->setColor(d->view->resourceProvider()->resourceManager()->foregroundColor().toQColor());
         else
             d->selector->setColor(d->view->resourceProvider()->resourceManager()->backgroundColor().toQColor());
@@ -176,6 +175,10 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
+    if(event->button() == Qt::LeftButton && d->changeBackground != true)
+        d->colorRole=KisColorSelectorBase::Foreground;
+    else
+        d->colorRole=KisColorSelectorBase::Background;
     if(d->main->wantsGrab(event->pos().x(), event->pos().y()))
         d->grabbingComponent=d->main;
     else if(d->sub->wantsGrab(event->pos().x(), event->pos().y()))
@@ -190,16 +193,6 @@ void ColorSelectorItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 
 void ColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 {
-    if(d->lastColor != d->currentColor && d->currentColor.isValid())
-    {
-        d->lastColor = d->currentColor;
-        if(event->button() == Qt::LeftButton && d->changeBackground != true)
-            d->lastColorRole=KisColorSelectorBase::Foreground;
-        else
-            d->lastColorRole=KisColorSelectorBase::Background;
-        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->lastColorRole);
-    }
-    event->accept();
     d->grabbingComponent=0;
 }
 
@@ -211,7 +204,7 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
 
         d->currentColor=d->main->currentColor();
         KoColor kocolor(d->currentColor, d->view->resourceProvider()->resourceManager()->foregroundColor().colorSpace());
-        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->lastColorRole);
+        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
         update();
     }
 }
@@ -241,12 +234,13 @@ bool ColorSelectorItem::changeBackground() const
 void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
 {
     d->changeBackground = newChangeBackground;
+    d->colorRole = newChangeBackground ? KisColorSelectorBase::Background : KisColorSelectorBase::Foreground;
     emit changeBackgroundChanged();
 }
 
 void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
 {
-    if (d->lastColorRole == KisColorSelectorBase::Foreground )
+    if (d->colorRole == KisColorSelectorBase::Foreground )
     {
         QColor c = d->selector->findGeneratingColor(newColor);
         if(d->colorUpdateAllowed==false)
@@ -258,7 +252,7 @@ void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
 
 void ColorSelectorItem::bgColorChanged(const KoColor& newColor)
 {
-    if (d->lastColorRole == KisColorSelectorBase::Background )
+    if (d->colorRole == KisColorSelectorBase::Background )
     {
         QColor c = d->selector->findGeneratingColor(newColor);
         if(d->colorUpdateAllowed==false)
