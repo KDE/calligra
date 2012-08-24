@@ -18,10 +18,36 @@
 
 import QtQuick 1.1
 import "../components"
+import org.krita.sketch 1.0
 
 Panel {
     name: "Layers";
     panelColor: Constants.Theme.SecondaryColor;
+
+    LayerModel {
+        id: layerModel;
+        view: sketchView.view;
+    }
+
+    peekContents: ListView {
+        anchors.fill: parent;
+        model: layerModel;
+        delegate: Rectangle {
+            color: "#1e0058";
+            width: parent.width;
+            height: Constants.GridHeight;
+            radius: 8
+
+            Label {
+                anchors.centerIn: parent;
+
+                text: model.name;
+                color: "white";
+
+                font.pixelSize: Constants.DefaultFontSize;
+            }
+        }
+    }
 
     dragDelegate: Component {
         Rectangle {
