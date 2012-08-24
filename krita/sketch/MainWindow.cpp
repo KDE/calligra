@@ -48,7 +48,7 @@
 #include "KisSketchView.h"
 #include "ColorImageProvider.h"
 #include "LayerModel.h"
-#include "LayerChannelDetails.h"
+#include "LayerCompositeDetails.h"
 #include "PaletteColorsModel.h"
 #include "PaletteModel.h"
 #include "PresetModel.h"
@@ -82,7 +82,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<PresetModel>("org.krita.sketch", 1, 0, "PresetModel");
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
     qmlRegisterType<LayerModel>("org.krita.sketch", 1, 0, "LayerModel");
-    qmlRegisterUncreatableType<LayerChannelDetails>("org.krita.sketch", 1, 0, "LayerChannelDetails", "This type is returned by the LayerModel class");
+    qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
     d->view = new QDeclarativeView();
     d->view->setAttribute(Qt::WA_AcceptTouchEvents);
