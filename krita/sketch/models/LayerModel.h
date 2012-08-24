@@ -20,14 +20,17 @@
 #define LAYERMODEL_H
 
 #include <QAbstractProxyModel>
+#include <kis_types.h>
 
 class LayerModel : public QAbstractProxyModel
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
 public:
     enum LayerRoles {
         IconRole = Qt::UserRole + 1,
         NameRole,
+        ActiveLayerRole,
         OpacityRole,
         PercentOpacityRole,
         VisibleRole,
@@ -37,6 +40,10 @@ public:
     };
     explicit LayerModel(QObject* parent = 0);
     virtual ~LayerModel();
+
+    QObject* view() const;
+    void setView(QObject* newView);
+
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex & p = QModelIndex()) const;
@@ -48,6 +55,9 @@ public:
     virtual QModelIndex parent(const QModelIndex &) const;
     virtual QModelIndex index(int, int, const QModelIndex & p = QModelIndex()) const;
 
+Q_SIGNALS:
+    void viewChanged();
+
 private slots:
     void source_rowsAboutToBeInserted(QModelIndex, int, int);
     void source_rowsAboutToBeRemoved(QModelIndex, int, int);
@@ -55,6 +65,7 @@ private slots:
     void source_rowsRemoved(QModelIndex, int, int);
     void source_dataChanged(QModelIndex, QModelIndex);
     void source_modelReset();
+    void currentNodeChanged(KisNodeSP newActiveNode);
 
 private:
     class Private;
