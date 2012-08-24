@@ -19,17 +19,46 @@
 #ifndef LAYERMODEL_H
 #define LAYERMODEL_H
 
-#include <QtCore/QModelIndex>
+#include <QAbstractProxyModel>
 
-class LayerModel : public QAbstractListModel
+class LayerModel : public QAbstractProxyModel
 {
     Q_OBJECT
 public:
+    enum LayerRoles {
+        IconRole = Qt::UserRole + 1,
+        NameRole,
+        OpacityRole,
+        PercentOpacityRole,
+        VisibleRole,
+        LockedRole,
+        CompositeDetailsRole,
+        FilterRole
+    };
     explicit LayerModel(QObject* parent = 0);
     virtual ~LayerModel();
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex & p = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+    virtual QModelIndex mapFromSource(const QModelIndex &) const;
+    virtual QModelIndex mapToSource(const QModelIndex &) const;
+
+    virtual QModelIndex parent(const QModelIndex &) const;
+    virtual QModelIndex index(int, int, const QModelIndex & p = QModelIndex()) const;
+
+private slots:
+    void source_rowsAboutToBeInserted(QModelIndex, int, int);
+    void source_rowsAboutToBeRemoved(QModelIndex, int, int);
+    void source_rowsInserted(QModelIndex, int, int);
+    void source_rowsRemoved(QModelIndex, int, int);
+    void source_dataChanged(QModelIndex, QModelIndex);
+    void source_modelReset();
+
+private:
+    class Private;
+    Private* d;
 };
 
 #endif // LAYERMODEL_H
