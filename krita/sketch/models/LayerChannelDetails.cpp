@@ -25,7 +25,7 @@ LayerChannelDetails::LayerChannelDetails(QObject* parent)
 
 }
 
-LayerChannelDetails::~QObject()
+LayerChannelDetails::~LayerChannelDetails()
 {
 
 }
