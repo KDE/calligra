@@ -3,7 +3,7 @@ README
 "Printer Color Settings" Docker
 by Joseph Simon (jsimon383@gmail.com)
 
-(8-19-12)
+(8-24-12)
 
 
 ==OVERVIEW==
@@ -21,7 +21,18 @@ For convenience, a user may wish to check a color preview and print the image di
 (printercolorsettings/_dock)
 Files used for registering this dock.
 
-(kis_color_ma
+(kis_printer_color_manager)
+Main docker code.
+
+(kis_cmpx)
+Class to handle the print color management processes.  Ideally, this should be located in "Krita/Ui"
+
+(wdgprintcolorsettings.ui)
+Main interface widget for docker.
+
+(wdgprintcolorspaceselector.ui)
+Printer profile selector, extended from Krita color space widget.
+
 
 ==RECENT UPDATES==
 
@@ -33,4 +44,3 @@ Files used for registering this dock.
 -Print preview within the docker. (JS)
 -Saving a sample color-managed PDF spool file for sampling (to be used until PDF printing is ready). (JS)
 -Narrow user profile selection to select an appropriate profile for print.
-
