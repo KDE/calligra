@@ -25,7 +25,7 @@
 #include <QGLWidget>
 
 #include "kis_canvas_widget_base.h"
-#include <kis_types.h>
+#include "kis_types.h"
 #include "krita_export.h"
 
 class KRITAUI_EXPORT KisGL2Canvas : public QGLWidget, public KisCanvasWidgetBase
@@ -46,13 +46,7 @@ public:
     qreal rotation() const;
     qreal scaling() const;
 
-    uint framebufferTexture() const;
-
     static QGLWidget *shareWidget();
-
-public slots:
-    void configChanged();
-    void update(const QRect& area);
 
 private:
     class Private;

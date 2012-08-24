@@ -32,8 +32,9 @@ public:
     virtual ~KisGL2TextureUpdater();
 
 public Q_SLOTS:
-    void imageUpdated(const QRect& rect);
-    void timeout();
+    void imageChanged(const QRect& rect);
+    void update();
+    void stop();
 
 protected:
     virtual void run();

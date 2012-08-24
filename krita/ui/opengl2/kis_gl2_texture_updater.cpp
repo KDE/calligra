@@ -50,9 +50,9 @@ public:
 
     QEventLoop *loop;
 
-    bool stop;
+    volatile bool stop;
 
-    QElapsedTimer timer;
+    QElapsedTimer idleTimer;
 };
 
 KisGL2TextureUpdater::KisGL2TextureUpdater(KisImageWSP image, uint texture, QObject* parent)
@@ -64,22 +64,16 @@ KisGL2TextureUpdater::KisGL2TextureUpdater(KisImageWSP image, uint texture, QObj
 
 KisGL2TextureUpdater::~KisGL2TextureUpdater()
 {
-    d->stop = true;
     delete d;
 }
 
-void KisGL2TextureUpdater::imageUpdated(const QRect& rect)
+void KisGL2TextureUpdater::imageChanged(const QRect& rect)
 {
     d->changedRect = d->changedRect.united(rect);
-
-    if(d->changedRect.width() >= 256 || d->changedRect.height() >= 256) {
-        timeout();
-    }
-
-    d->timer.restart();
+    d->idleTimer.restart();
 }
 
-void KisGL2TextureUpdater::timeout()
+void KisGL2TextureUpdater::update()
 {
     if(!d->transferRect.isEmpty()) {
         d->currentBuffer->bind();
@@ -130,6 +124,11 @@ void KisGL2TextureUpdater::timeout()
     d->changedRect = QRect();
 }
 
+void KisGL2TextureUpdater::stop()
+{
+    d->stop = true;
+}
+
 void KisGL2TextureUpdater::run()
 {
     d->pbuffer = new QGLPixelBuffer(1, 1, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
@@ -146,16 +145,16 @@ void KisGL2TextureUpdater::run()
 
     d->loop = new QEventLoop();
 
-    d->timer.start();
+    d->idleTimer.start();
     forever {
         d->loop->processEvents();
-        timeout();
+        update();
 
         if(d->stop)
             break;
 
         //Slow down the loop when we're not processing to prevent 100% CPU usage.
-        if( d->timer.elapsed() > 100 )
+        if( d->idleTimer.elapsed() > 100 )
             msleep(1);
     }
 

@@ -18,32 +18,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_GL2_TILEMANAGER_H
-#define KIS_GL2_TILEMANAGER_H
+#ifndef KIS_GL2_RENDERTHREAD_H
+#define KIS_GL2_RENDERTHREAD_H
 
-#include <QObject>
+#include <QThread>
 #include <kis_types.h>
 
 class QRect;
 class KisGL2Canvas;
 
-class KisGL2TileManager : public QObject
+class KisGL2RenderThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit KisGL2TileManager(KisGL2Canvas* parent = 0);
-    virtual ~KisGL2TileManager();
+    explicit KisGL2RenderThread(KisGL2Canvas *canvas, KisImageWSP image);
+    virtual ~KisGL2RenderThread();
 
-    void initialize(KisImageWSP image);
-    void update(const QRect &area);
-    void render(uint texture);
-    void resize(int width, int height);
+    void initialize();
 
     uint framebufferTexture() const;
+
+public Q_SLOTS:
+    void render();
+    void resize(int width, int height);
+    void stop();
+    void configChanged();
+
+Q_SIGNALS:
+    void renderFinished();
+
+protected:
+    virtual void run();
 
 private:
     class Private;
     Private * const d;
 };
 
-#endif // KIS_GL2_TILEMANAGER_H
+#endif // KIS_GL2_RENDERTHREAD_H
