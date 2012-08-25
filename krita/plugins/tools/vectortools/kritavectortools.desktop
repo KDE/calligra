@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Krita Vector Tools
+Name[es]=Herramientas Vectoriales de Krita
+X-KDE-ServiceTypes=Calligra/Tool
+Type=Service
+X-KDE-Library=kritavectortools
+X-Flake-MinVersion=4
+X-Flake-PluginVersion=4
