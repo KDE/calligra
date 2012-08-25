@@ -39,17 +39,17 @@
 #include <kcombobox.h>
 
 #include <QStackedWidget>
-#include <QGroupBox>
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QLabel>
+#include <QPainterPath>
 
-#include <math.h>
 
 KritaBlobTool::KritaBlobTool(KoCanvasBase *canvas)  :  KoToolBase(canvas)
 {
     m_shape = 0;
+    m_qshape = 0;
 }
 
 KritaBlobTool::~KritaBlobTool()
@@ -58,11 +58,16 @@ KritaBlobTool::~KritaBlobTool()
 
 void KritaBlobTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_shape) {
+    /*
+    if (m_qshape) {
+        KoPathShape *path = KoPathShape::createShapeFromPainterPath(*m_qshape);
+        path->setShapeId(KoPathShapeId);
         painter.save();
-        m_shape->stroke()->paint(m_shape, painter, converter);
+        KoShapePaintingContext paintContext; //FIXME
+        m_shape->paint(painter, converter, paintContext);
         painter.restore();
     }
+    */
 }
 
 void KritaBlobTool::repaintDecorations()
@@ -71,22 +76,54 @@ void KritaBlobTool::repaintDecorations()
 
 void KritaBlobTool::mousePressEvent(KoPointerEvent *event)
 {
+    QRectF area = QRectF(event->point, QSizeF(5, 5));
+    if (!m_qshape) {
+        m_qshape = new QPainterPath;
+        m_qshape->addEllipse(area);
+    }
+    /*
     if (!m_shape) {
         m_shape = new KoPathShape();
         m_shape->setShapeId(KoPathShapeId);
-        m_shape->setStroke(0);
+        KoShapeStroke * stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
+        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+        m_shape->setStroke(stroke);
     }
+    m_shape->lineTo(event->point);
+    canvas()->updateCanvas(m_shape->boundingRect());
+    */
 }
 
 void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
 {
     qDebug() << "Mouse moved to ";
     qDebug() << event->pos();
+    
+    if (m_qshape) {
+        QRectF area = QRectF(event->point, QSizeF(5, 5));
+        QPainterPath elli;
+        elli.addEllipse(area);
+        *m_qshape = m_qshape->united(elli);
+    }
 }
 
 void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     qDebug() << "Mouse has been released";
+
+    KoPathShape *path = KoPathShape::createShapeFromPainterPath(*m_qshape);
+    path->setShapeId(KoPathShapeId);
+    KUndo2Command *cmd = canvas()->shapeController()->addShape(path);
+    
+    if (cmd) {
+        KoSelection *selection = canvas()->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(path);
+        canvas()->addCommand(cmd);
+    } else {
+        canvas()->updateCanvas(path->boundingRect());
+        delete path;
+    }
 }
 
 void KritaBlobTool::keyPressEvent(QKeyEvent *event)
@@ -95,12 +132,15 @@ void KritaBlobTool::keyPressEvent(QKeyEvent *event)
 
 void KritaBlobTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-
+    useCursor(Qt::ArrowCursor);
 }
 
 void KritaBlobTool::deactivate()
 {
-
+    delete m_shape;
+    delete m_qshape;
+    m_shape = 0;
+    m_qshape = 0;
 }
 
 QWidget *KritaBlobTool::createOptionWidget()

@@ -26,6 +26,7 @@
 class KoPathShape;
 class KoShapeStroke;
 class KoPathPoint;
+class QPainterPath;
 
 class KritaBlobTool : public KoToolBase
 {
@@ -51,6 +52,7 @@ protected:
     
 private:
     KoPathShape *m_shape;
+    QPainterPath *m_qshape;
     
 };
 
