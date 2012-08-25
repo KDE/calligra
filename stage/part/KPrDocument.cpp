@@ -101,6 +101,7 @@ KPrDocument::~KPrDocument()
 {
     saveKPrConfig();
     delete m_customSlideShows;
+    delete m_declarations;
 }
 
 const char * KPrDocument::odfTagName( bool withNamespace )
