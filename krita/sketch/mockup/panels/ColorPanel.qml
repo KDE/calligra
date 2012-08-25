@@ -29,19 +29,20 @@ Panel {
         model: PaletteColorsModel
         delegate: delegate;
         cellWidth: Constants.GridWidth - 8;
-        cellHeight: Constants.GridHeight - 8;
+        cellHeight: Constants.GridHeight  - 8;
     }
 
     fullContents: Item {
         anchors.fill: parent;
         ExpandingListView {
             id: fullPaletteList
+            y: 8;
             anchors {
-                top: parent.top;
+                //top: parent.top ;
                 left: parent.left;
                 right: parent.right;
             }
-            height: Constants.GridHeight;
+            height: Constants.GridHeight / 2;
             model: PaletteModel
             onCurrentIndexChanged: {
                 PaletteModel.itemActivated(currentIndex);

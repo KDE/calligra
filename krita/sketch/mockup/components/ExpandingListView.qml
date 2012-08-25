@@ -26,19 +26,39 @@ Item {
     Rectangle {
         id: topButton
         border {
-            width: 2;
-            color: "gray";
+            width: 1;
+            color: "white";
         }
-        radius: 5;
+        radius: Constants.GridHeight / 4;
         anchors {
-            top: parent.top;
+            top: parent.top ;
             right: parent.right;
             left: parent.left;
         }
-        height: Constants.GridHeight;
+        width: (Constants.GridWidth * 2) - 8 ;
+        height: Constants.GridHeight / 2;
+        color: "#63ffffff"
+        z: 10;
+
+
+        Image {
+            id: arrowsList
+            width: Constants.GridWidth / 4
+            height: Constants.GridHeight / 2
+            source: ":/images/svg/combo-arrows-white.svg"
+            x: (Constants.GridWidth * 1.75) - 8
+            y: Constants.GridHeight / 64
+            smooth: true
+        }
+
         Label {
             id: buttonText;
             text: listView.currentItem.text;
+            width: (Constants.GridWidth * 1.7) - 8;
+            height: Constants.GridHeight / 2;
+            color: "#96000000"
+            x: 8;
+
         }
 
         MouseArea {
@@ -52,6 +72,8 @@ Item {
                 }
             }
         }
+
+
     }
 
     ListView {
@@ -75,6 +97,7 @@ Item {
                 id: delegateLabel
                 anchors.fill: parent
                 text: model.text;
+                color: "#96000000"
             }
             MouseArea {
                 anchors.fill: parent;
@@ -85,6 +108,7 @@ Item {
             }
         }
     }
+
 
     states: [
         State {
