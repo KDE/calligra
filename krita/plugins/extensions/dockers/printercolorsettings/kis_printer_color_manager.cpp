@@ -97,6 +97,12 @@ void KisPrinterColorManager::setCurrentProfile(const KoColorProfile *profile)
     } 
 }
 
+/// Get current profile from KisCmpx
+const KoColorProfile * KisPrinterColorManager::currentProfile(void)
+{
+    return m_colormanager->profile();
+}
+
 void KisPrinterColorManager::slotChangePrinterSelection(int index)
 {  
     QPrinter selectedPrinter(m_printerlist.at(index), QPrinter::ScreenResolution);       
@@ -110,23 +116,16 @@ void KisPrinterColorManager::slotChangePrinterSelection(int index)
 void KisPrinterColorManager::slotSetAutoCheckBox(bool checkState)
 {
     if (checkState == true) {
-        m_selectorui->setHidden(true);
-        autoProfileWarningLabel->setHidden(false);
-
-        activeProfileLabel->setText("Searching for profile...");
-
-        m_watcher.setFuture(m_colormanager->setAutoProfile());
+        enableAutoProfile();
     } else if (checkState == false) {
-        m_selectorui->setHidden(false);
-
-        autoProfileWarningLabel->setHidden(true);
+        disableAutoProfile();    
     }
 }
 
 /// This is called whenever an auto-profile process is complete
 void KisPrinterColorManager::slotFinishedAutoProfile(void)
 {
-    const KoColorProfile * obtainedProfile = m_colormanager->profile();
+    const KoColorProfile * obtainedProfile = currentProfile();
     setCurrentProfile(obtainedProfile);
 }
 
@@ -134,8 +133,24 @@ void KisPrinterColorManager::slotFinishedAutoProfile(void)
 void KisPrinterColorManager::slotRefreshPreview()
 {
     // NOTE This needs a little more testing.
-    //QImage previewImage = m_colormanager->renderPreviewImage(m_image, m_colormanager->profile());
+    //QImage previewImage = m_colormanager->renderPreviewImage(m_image, currentProfile());
     //previewLabel->setPixmap(QPixmap::fromImage(previewImage));
+}
+
+void KisPrinterColorManager::enableAutoProfile(void)
+{
+    m_selectorui->setHidden(true);
+    autoProfileWarningLabel->setHidden(false);
+
+    activeProfileLabel->setText("Searching for profile...");
+
+    m_watcher.setFuture(m_colormanager->setAutoProfile());
+}
+
+void KisPrinterColorManager::disableAutoProfile(void)
+{
+    m_selectorui->setHidden(false);
+    autoProfileWarningLabel->setHidden(true);
 }
 
 /// Create a color-managed PDF spool file.
@@ -144,12 +159,11 @@ void KisPrinterColorManager::simulatePrintJob()
     QMessageBox msgBox(this);
     
     QPrinter *currentPrinter = 0;
-    const KoColorProfile *currentProfile = 0;
+    const KoColorProfile *profile = currentProfile();
     
     currentPrinter = m_colormanager->printer();
-    currentProfile = m_colormanager->profile();
  
-    QString pdfFileName = m_colormanager->renderSpoolPdf(m_image, currentProfile);
+    QString pdfFileName = m_colormanager->renderSpoolPdf(m_image, profile);
     
     if (!pdfFileName.isEmpty())
         msgBox.setText("Color-managed PDF spool file set at " + pdfFileName);

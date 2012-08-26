@@ -46,11 +46,6 @@ public:
     KisPrinterColorManager(QWidget *parent = 0);
     virtual ~KisPrinterColorManager();
     
-    virtual int populatePrinterList();
-    virtual void simulatePrintJob();
-    virtual void setCurrentProfile(const KoColorProfile *);
-    virtual void setImage(KisImageWSP);
-    
 private slots:
     void slotChangePrinterSelection(int);
     void slotSetAutoCheckBox(bool);
@@ -59,13 +54,23 @@ private slots:
     void slotPrint(void);
     void slotRefreshPreview(void);
     
-private:
+private:    
+    virtual int populatePrinterList();
+    virtual void simulatePrintJob();
+    virtual void setCurrentProfile(const KoColorProfile *);
+    virtual const KoColorProfile * currentProfile(void);
+    virtual void setImage(KisImageWSP);
+    
+    virtual void enableAutoProfile(void);
+    virtual void disableAutoProfile(void);
+    
+    // Private data members.
     KisCmpx *m_colormanager;
     QList< QMap<QString, QString> > m_profilemap;     
     QList<QPrinterInfo> m_printerlist;
     QFutureWatcher<void> m_watcher;
     const KoColorProfile * m_profile;
-    KisPrinterProfileChooser * m_selectorui;
+    KisPrinterProfileChooser *m_selectorui;
     KisImageWSP m_image;
 };
 
