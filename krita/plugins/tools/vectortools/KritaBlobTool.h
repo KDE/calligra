@@ -25,6 +25,7 @@
 
 class KoPathShape;
 class KoShapeStroke;
+class KoShapeBackground;
 class KoPathPoint;
 class QPainterPath;
 
@@ -53,6 +54,7 @@ protected:
 private:
     KoPathShape *m_shape;
     QPainterPath *m_qshape;
+    KoShapeStroke *m_stroke;
     
 };
 

@@ -22,6 +22,7 @@
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
 #include <KoShapeStroke.h>
+#include <KoShapeBackground.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
@@ -46,10 +47,13 @@
 #include <QPainterPath>
 
 
-KritaBlobTool::KritaBlobTool(KoCanvasBase *canvas)  :  KoToolBase(canvas)
+KritaBlobTool::KritaBlobTool(KoCanvasBase *canvas)
+              : KoToolBase(canvas)
 {
     m_shape = 0;
     m_qshape = 0;
+    m_stroke = new KoShapeStroke(canvas->resourceManager()->activeStroke());
+    m_stroke->setColor(canvas->resourceManager()->foregroundColor().toQColor());
 }
 
 KritaBlobTool::~KritaBlobTool()
@@ -58,16 +62,18 @@ KritaBlobTool::~KritaBlobTool()
 
 void KritaBlobTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    /*
     if (m_qshape) {
-        KoPathShape *path = KoPathShape::createShapeFromPainterPath(*m_qshape);
-        path->setShapeId(KoPathShapeId);
         painter.save();
-        KoShapePaintingContext paintContext; //FIXME
-        m_shape->paint(painter, converter, paintContext);
-        painter.restore();
+        m_shape = KoPathShape::createShapeFromPainterPath(*m_qshape);
+        m_shape->setShapeId(KoPathShapeId);
+        painter.setTransform(m_shape->absoluteTransformation(&converter) * painter.transform());
+        KoShapePaintingContext paintContext;
+        if (m_shape->stroke()) {
+            painter.save();
+            m_shape->stroke()->paint(m_shape, painter, converter);
+            painter.restore();
+        }
     }
-    */
 }
 
 void KritaBlobTool::repaintDecorations()
@@ -81,17 +87,7 @@ void KritaBlobTool::mousePressEvent(KoPointerEvent *event)
         m_qshape = new QPainterPath;
         m_qshape->addEllipse(area);
     }
-    /*
-    if (!m_shape) {
-        m_shape = new KoPathShape();
-        m_shape->setShapeId(KoPathShapeId);
-        KoShapeStroke * stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
-        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
-        m_shape->setStroke(stroke);
-    }
-    m_shape->lineTo(event->point);
-    canvas()->updateCanvas(m_shape->boundingRect());
-    */
+    //canvas()->updateCanvas(m_qshape->boundingRect());
 }
 
 void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
@@ -105,6 +101,7 @@ void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
         elli.addEllipse(area);
         *m_qshape = m_qshape->united(elli);
     }
+    //canvas()->updateCanvas(m_qshape->boundingRect());
 }
 
 void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -113,6 +110,7 @@ void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
 
     KoPathShape *path = KoPathShape::createShapeFromPainterPath(*m_qshape);
     path->setShapeId(KoPathShapeId);
+    path->setStroke(m_stroke);
     KUndo2Command *cmd = canvas()->shapeController()->addShape(path);
     
     if (cmd) {
@@ -120,6 +118,8 @@ void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
         selection->deselectAll();
         selection->select(path);
         canvas()->addCommand(cmd);
+        m_qshape = 0;
+        m_shape = 0;
     } else {
         canvas()->updateCanvas(path->boundingRect());
         delete path;
