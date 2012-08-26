@@ -113,7 +113,7 @@ public:
     virtual void next( const Data &data );
 
     /**
-     * Finish the the page effect.
+     * Finish the page effect.
      *
      * Trigger a repaint of the part of the widget that changed since
      * the last call to next. The default implementation repaints the

@@ -22,7 +22,6 @@ Legend
 Next Milestone: EPUB 2.0.1 filter done
 
 
-
 ================================================================
                         Issues
 
@@ -45,6 +44,9 @@ Medium term issues
 
 Time frame: (weeks / months)
 
+Allow user to add a book cover image
+ * Send parameter (filename) to the filter
+ * UI to find / edit the filename
 
 
 

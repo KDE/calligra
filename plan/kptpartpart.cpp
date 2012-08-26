@@ -44,7 +44,7 @@ void PartPart::setDocument(KPlato::Part *document)
 
 KoView *PartPart::createViewInstance(QWidget *parent)
 {
-    // syncronize view selector
+    // synchronize view selector
     View *view = dynamic_cast<View*>(views().value(0));
     /*FIXME
     if (view && m_context) {
