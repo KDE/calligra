@@ -127,7 +127,7 @@ void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* ma
             style->loadOdf(stylesReader, *styleElem, name, conditions, this, map->parser());
             // TODO Stefan: conditions
             insertStyle(style);
-            // insert it into the the map sorted the OpenDocument name
+            // insert it into the map sorted the OpenDocument name
             m_oasisStyles[oasisName] = style->name();
             kDebug(36003) << "Style" << style->name() << ":" << style;
         }
