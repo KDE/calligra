@@ -145,12 +145,12 @@ void Part::configChanged()
 void Part::setProject( Project *project )
 {
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+        disconnect( m_project, SIGNAL( projectChanged() ), this, SIGNAL( changed() ) );
         delete m_project;
     }
     m_project = project;
     if ( m_project ) {
-        connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+        connect( m_project, SIGNAL( projectChanged() ), this, SIGNAL( changed() ) );
 //        m_project->setConfig( config() );
         m_project->setSchedulerPlugins( m_schedulerPlugins );
     }
