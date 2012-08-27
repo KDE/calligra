@@ -73,7 +73,8 @@ class OdtHtmlConverter
                                              QHash<QString, StyleInfo*> &styles);
     KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
                                               EpubFile *epub, QHash<QString, StyleInfo*> &styles,
-                                              QHash<QString, QSizeF> &imagesSrcList);
+                                              // Out parameters:
+                                              QHash<QString, QSizeF> &images);
 
  private:
 
@@ -92,37 +93,35 @@ class OdtHtmlConverter
                              QHash<QString, StyleInfo*> &styles);
 
     void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                        QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                        QHash<QString, StyleInfo*> &styles);
 
     void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                        QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                        QHash<QString, StyleInfo*> &styles);
 
     void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                    QHash<QString, StyleInfo*> &styles);
 
     void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                       QHash<QString, StyleInfo*> &styles);
 
     void handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
                             QHash<QString, StyleInfo*> &styles);
 
     void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                    QHash<QString, StyleInfo*> &styles);
 
     void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                       QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                       QHash<QString, StyleInfo*> &styles);
 
     void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                    QHash<QString, StyleInfo*> &styles);
 
     void handleTagTab(KoXmlWriter *htmlWriter);
     void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                 QHash<QString, StyleInfo*> &styles,
-                                 QHash<QString, QSizeF> &imagesSrcList);
+                                 QHash<QString, StyleInfo*> &styles);
 
     void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                     QHash<QString, StyleInfo*> &styles,
-                                     QHash<QString, QSizeF> &imagesSrcList);
+                                     QHash<QString, StyleInfo*> &styles);
 
     void handleTagLineBreak(KoXmlWriter *htmlWriter);
     void handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
@@ -131,20 +130,17 @@ class OdtHtmlConverter
 
 
     void handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                           QHash<QString, StyleInfo*> &styles,
-                           QHash<QString, QSizeF> &imagesSrcList);
+                           QHash<QString, StyleInfo*> &styles);
 
     void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                 QHash<QString, StyleInfo*> &styles,
-                                 QHash<QString, QSizeF> &imagesSrcList);
+                                 QHash<QString, StyleInfo*> &styles);
 
     void handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
     void writeFootNotes(KoXmlWriter *htmlWriter,
-                        QHash<QString, StyleInfo*> &styles, QHash<QString, QSizeF> &imagesSrcList);
+                        QHash<QString, StyleInfo*> &styles);
 
-    void writeEndNotes(KoXmlWriter *htmlWriter, QHash<QString, StyleInfo*> &styles,
-                       QHash<QString, QSizeF> &imagesSrcList);
+    void writeEndNotes(KoXmlWriter *htmlWriter, QHash<QString, StyleInfo*> &styles);
 
     /** Before start parsing go inside content.xml and collect links id from
      * book-mark-start tag and save its id in hash as key for its value save
@@ -166,8 +162,19 @@ class OdtHtmlConverter
     // The number of the current chapter during the conversion.
     int m_currentChapter;
 
-    // Internal links have to be done in a two pass fashion.
+    // A list of images and their sizes. This list is collected during
+    // the conversion and returned from convertContent() using an
+    // outparameter.
+    //
+    // The format is QHash<name, size>
+    // where
+    //    name   is the name of the picture inside the ODT file
+    //    size   is the size in points.
+    //
+    QHash<QString, QSizeF>  m_images;
 
+    // Internal links have to be done in a two pass fashion.
+    //
     // The first pass just quickly steps through the content and
     // collects the anchors in linksInfo. The second pass is the
     // actual conversion where linksInfo is used to create the
