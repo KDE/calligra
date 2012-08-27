@@ -42,7 +42,15 @@
 class KisGL2RenderThread::Private
 {
 public:
-    Private() : canvas(0), framebuffer(0), checkerTexture(0), imageTexture(0), stop(false) { }
+    Private() :
+        canvas(0),
+        framebuffer(0),
+        checkerTexture(0),
+        imageTexture(0),
+        stop(false),
+        newWidth(0),
+        newHeight(0)
+    { }
 
     void createImageTexture();
     void createCheckerTexture(int size, const QColor& color);
@@ -74,7 +82,8 @@ public:
     volatile bool stop;
     QEventLoop *eventLoop;
 
-    QSize newSize;
+    volatile uint newWidth;
+    volatile uint newHeight;
 };
 
 KisGL2RenderThread::KisGL2RenderThread(KisGL2Canvas *canvas, KisImageWSP image)
@@ -107,10 +116,7 @@ void KisGL2RenderThread::initialize()
     connect(d->image, SIGNAL(sigImageUpdated(QRect)), d->updater, SLOT(imageChanged(QRect)), Qt::QueuedConnection);
 
     d->createShader();
-
     d->createMesh();
-
-    glClearColor(1.f, 0.f, 1.f, 1.f);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
     configChanged();
@@ -143,9 +149,7 @@ void KisGL2RenderThread::render()
     d->shader->setUniformValue(d->viewMatrixLocation, view.transposed());
 
     QMatrix4x4 proj;
-    qreal w = d->canvas->width();
-    qreal h = d->canvas->height();
-    proj.ortho(0, w, -h, 0, -10, 10);
+    proj.ortho(0, d->canvas->width(), -d->canvas->height(), 0, -10, 10);
     d->shader->setUniformValue(d->projectionMatrixLocation, proj.transposed());
 
     //Setup the geometry for rendering
@@ -194,7 +198,8 @@ void KisGL2RenderThread::render()
 
 void KisGL2RenderThread::resize(int width, int height)
 {
-    d->newSize = QSize(width, height);
+    d->newWidth = width;
+    d->newHeight = height;
 }
 
 void KisGL2RenderThread::stop()
@@ -228,10 +233,11 @@ void KisGL2RenderThread::run()
         if(d->stop)
             break;
 
-        if(d->newSize.isValid()) {
+        if(d->newWidth != 0 && d->newHeight != 0) {
             delete d->framebuffer;
-            d->framebuffer = new QGLFramebufferObject(d->newSize.width(), d->newSize.height());
-            d->newSize = QSize();
+            d->framebuffer = new QGLFramebufferObject(d->newWidth, d->newHeight);
+            d->newWidth = 0;
+            d->newHeight = 0;
         }
 
         remainder = timePerFrame - d->frameTimer.elapsed();
