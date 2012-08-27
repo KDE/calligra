@@ -52,8 +52,8 @@ K_PLUGIN_FACTORY(ExportEpub2Factory, registerPlugin<ExportEpub2>();)
 K_EXPORT_PLUGIN(ExportEpub2Factory("calligrafilters"))
 
 
-ExportEpub2::ExportEpub2(QObject *parent, const QVariantList&) :
-    KoFilter(parent)
+ExportEpub2::ExportEpub2(QObject *parent, const QVariantList&)
+    : KoFilter(parent)
 {
 }
 
@@ -65,7 +65,7 @@ ExportEpub2::~ExportEpub2()
 KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QByteArray &to)
 {
     // Check mimetypes
-    if (to != "application/epub+zip" || from != "application/vnd.oasis.opendocument.text") {
+    if (from != "application/vnd.oasis.opendocument.text" || to != "application/epub+zip") {
         return KoFilter::NotImplemented;
     }
 

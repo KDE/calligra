@@ -340,10 +340,6 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         return KoFilter::FileNotFound;
     }
 
-    QByteArray htmlContent;
-    QBuffer *outBuf = new QBuffer(&htmlContent);
-    KoXmlWriter *htmlWriter = new KoXmlWriter(outBuf);
-
     // ----------------------------------------------------------------
     // Parse body from content.xml
 
@@ -353,8 +349,8 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
         kDebug(30517) << "Error occurred while parsing content.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
+                      << errorMsg << " in Line: " << errorLine
+                      << " Column: " << errorColumn;
         odfStore->close();
         return KoFilter::ParsingError;
     }
@@ -365,24 +361,23 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "body");
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "text");
 
-    // Write the beginning of the output.
-    htmlWriter->startElement("html");
-    htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-    createHtmlHead(htmlWriter, metaData);
-    htmlWriter->startElement("body");
-
     // Collect information about internal links.
     KoXmlElement element = currentNode.toElement(); // node for passing it to collectInter...()
     int chapter = 1;
     collectInternalLinksInfo(element, styles, chapter);
 
+    // Write the beginning of the output.
+    beginHtmlFile(metaData);
+
     QString prefix = "chapter"; // Prefix of chapter names.
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
 
-        //kDebug(30517) << nodeElement.tagName() <<pFlag;
-        if ((nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text)
-                || (nodeElement.localName() == "h" && nodeElement.namespaceURI() == KoXmlNS::text)) {
+        // text:h and text:p are treated special since they can have
+        // styling that makes us start on a new html file,
+        // a.k.a. chapter.
+        if (nodeElement.namespaceURI() == KoXmlNS::text && (nodeElement.localName() == "p"
+                                                            || nodeElement.localName() == "h")) {
 
             // A fo:break-before="page" in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
@@ -392,118 +387,118 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
 
                 // Write out any footnotes
                 if (!m_footNotes.isEmpty()) {
-                    writeFootNotes(htmlWriter, styles, imagesSrcList);
+                    writeFootNotes(m_htmlWriter, styles, imagesSrcList);
                 }
-                // This paragraph is at top level so we should close
-                // the html file and start on the next file.
-                htmlWriter->endElement();
-                htmlWriter->endElement();
 
-                // Write output file to the epub object.
+                // And finally close all tags.
+                endHtmlFile(); 
+
+                // Write the result to the epub object.
                 QString fileId = prefix + QString::number(m_currentChapter);
                 QString fileName = "OEBPS/" + fileId + ".xhtml";
-                epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
+                epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
-                // Prepare for the next file.
-                htmlContent.clear();
-                delete htmlWriter;
-                delete outBuf;
-                outBuf = new QBuffer(&htmlContent);
-                htmlWriter = new KoXmlWriter(outBuf);
+                // And begin a new chapter.
+                beginHtmlFile(metaData);
                 m_currentChapter++;
-
-                // Write the beginning of the output for the next file.
-                htmlWriter->startElement("html");
-                htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-                createHtmlHead(htmlWriter, metaData);
-                htmlWriter->startElement("body");
             }
 
             // Actually handle the contents.
             if (nodeElement.localName() == "p")
-                handleTagP(nodeElement, htmlWriter, styles, imagesSrcList);
+                handleTagP(nodeElement, m_htmlWriter, styles, imagesSrcList);
             else
-                handleTagH(nodeElement, htmlWriter, styles, imagesSrcList);
+                handleTagH(nodeElement, m_htmlWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "span" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagSpan(nodeElement, htmlWriter, styles, imagesSrcList);
+            handleTagSpan(nodeElement, m_htmlWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "table" && nodeElement.namespaceURI() == KoXmlNS::table) {
             // Handle table
-            handleTagTable(nodeElement, htmlWriter, styles, imagesSrcList);
+            handleTagTable(nodeElement, m_htmlWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
             // Handle frame
-            htmlWriter->startElement("div");
-            handleTagFrame(nodeElement, htmlWriter, styles, imagesSrcList);
-            htmlWriter->endElement(); // end div
+            m_htmlWriter->startElement("div");
+            handleTagFrame(nodeElement, m_htmlWriter, styles, imagesSrcList);
+            m_htmlWriter->endElement(); // end div
         }
         else if (nodeElement.localName() == "soft-page-break" &&
                  nodeElement.namespaceURI() == KoXmlNS::text) {
 
-            handleTagPageBreak(nodeElement, htmlWriter, styles);
+            handleTagPageBreak(nodeElement, m_htmlWriter, styles);
         }
         else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagList(nodeElement, htmlWriter, styles, imagesSrcList);
+            handleTagList(nodeElement, m_htmlWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "a" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagA(nodeElement, htmlWriter, styles, imagesSrcList);
+            handleTagA(nodeElement, m_htmlWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "table-of-content" &&
                  nodeElement.namespaceURI() == KoXmlNS::text) {
 
-            handleTagTableOfContent(nodeElement, htmlWriter, styles, imagesSrcList);
+            handleTagTableOfContent(nodeElement, m_htmlWriter, styles, imagesSrcList);
         }
         else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagLineBreak(htmlWriter);
+            handleTagLineBreak(m_htmlWriter);
         }
         else {
-            htmlWriter->startElement("div");
-            handleUnknownTags(nodeElement, htmlWriter, styles, imagesSrcList);
-            htmlWriter->endElement();
+            m_htmlWriter->startElement("div");
+            handleUnknownTags(nodeElement, m_htmlWriter, styles, imagesSrcList);
+            m_htmlWriter->endElement();
         }
     }
 
-    htmlWriter->endElement(); // body
-    htmlWriter->endElement(); // html
+    endHtmlFile();
 
     // Write output of the last file to the epub object.
     QString fileId = prefix + QString::number(m_currentChapter);
     QString fileName = "OEBPS/" + fileId + ".xhtml";
-    epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
+    epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
     // if we had end notes, make a new chapter for end notes
     if (!m_endNotes.isEmpty()) {
 
-        htmlContent.clear();
-        delete htmlWriter;
-        delete outBuf;
-        outBuf = new QBuffer(&htmlContent);
-        htmlWriter = new KoXmlWriter(outBuf);
-
         // Write the beginning of the output for the next file.
-        htmlWriter->startElement("html");
-        htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-        createHtmlHead(htmlWriter, metaData);
-        htmlWriter->startElement("body");
-
-        writeEndNotes(htmlWriter, styles, imagesSrcList);
-
-        htmlWriter->endElement(); // body
-        htmlWriter->endElement(); // html
+        beginHtmlFile(metaData);
+        writeEndNotes(m_htmlWriter, styles, imagesSrcList);
+        endHtmlFile();
 
         QString fileId = "chapter-endnotes";
         QString fileName = "OEBPS/" + fileId + ".xhtml";
-        epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
-
+        epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
     }
-
-    delete htmlWriter;
-    delete outBuf;
 
     odfStore->close();
     return KoFilter::OK;
 }
+
+void OdtHtmlConverter::beginHtmlFile(QHash<QString, QString> &metaData)
+{
+    m_htmlContent.clear();
+    m_outBuf = new QBuffer(&m_htmlContent);
+    m_htmlWriter = new KoXmlWriter(m_outBuf);
+
+    m_htmlWriter->startElement("html");
+    m_htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+    createHtmlHead(m_htmlWriter, metaData);
+    m_htmlWriter->startElement("body");
+
+    // NOTE: At this point we have two open tags: <html> and <body>.
+}
+
+void OdtHtmlConverter::endHtmlFile()
+{
+    // NOTE: At this point we have two open tags: <html> and <body>.
+
+    // Close the two tags opened by beginHtmlFile().
+    m_htmlWriter->endElement();
+    m_htmlWriter->endElement();
+
+    // Prepare for the next file.
+    delete m_htmlWriter;
+    delete m_outBuf;
+}
+
 
 
 void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)

@@ -81,6 +81,9 @@ class OdtHtmlConverter
     void collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
     void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
 
+    // Helper functions to create the html contents.
+    void beginHtmlFile(QHash<QString, QString> &metaData);
+    void endHtmlFile();
     void createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData);
 
 
@@ -155,6 +158,12 @@ class OdtHtmlConverter
                                   QHash<QString, StyleInfo*> &styles, int &chapter);
 
  private:
+    // Some variables used while creating the HTML contents.
+    QByteArray   m_htmlContent;
+    QBuffer     *m_outBuf;
+    KoXmlWriter *m_htmlWriter;
+
+    // The number of the current chapter during the conversion.
     int m_currentChapter;
 
     // Internal links have to be done in a two pass fashion.

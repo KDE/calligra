@@ -48,6 +48,11 @@ Allow user to add a book cover image
  * Send parameter (filename) to the filter
  * UI to find / edit the filename
 
+Create a generic HTML export filter
+ * Refactor some things
+    - Add OEBPS/ as a configurable parameter instead of hardcoded.
+    - Make staring a new html file and ending another functions
+
 
 
 Long term issues
