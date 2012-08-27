@@ -19,10 +19,9 @@
  */
 
 #include "KWStatisticsDocker.h"
-
+#include "ui_KWStatisticsDocker.h"
 #include "KWCanvas.h"
-#include "dockers/KWStatistics.h"
-
+#include <QDebug>
 
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
@@ -53,12 +52,14 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
     } else
         m_canvasReset = false;
 
-    KWStatistics *statistics = new KWStatistics(canvas->resourceManager(),
+    statisticsDock = new KWStatistics(canvas->resourceManager(),
                                                 canvas->document(),
                                                 canvas->shapeManager()->selection(),
                                                 this);
 
-    setWidget(statistics);
+    setWidget(statisticsDock);
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
+
 }
 
 void KWStatisticsDocker::unsetCanvas()
@@ -67,6 +68,41 @@ void KWStatisticsDocker::unsetCanvas()
         delete widget();
         setWidget(0);
     }
+}
+void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
+{
+    if(newArea == 8) {
+	updateHorizontalUi();
+    }
+}
+
+void KWStatisticsDocker::updateHorizontalUi()
+{
+  statisticsDock->widgetDocker.groupBox->hide();
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Words);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Words);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_words);
+
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Sentences);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_sentences);
+  
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Syllables);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_syllables);
+
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Lines);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_lines);
+
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.spaces);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_spaces);
+
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.nospaces);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_nospaces);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Cjkchars);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_cjkchars);
+
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Flesch);
+  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_flesch);
+
 }
 
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
@@ -82,7 +118,6 @@ QDockWidget *KWStatisticsDockerFactory::createDockWidget()
 {
     KWStatisticsDocker *widget = new KWStatisticsDocker();
     widget->setObjectName(id());
-
     return widget;
 }
 

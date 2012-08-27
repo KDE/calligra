@@ -22,9 +22,11 @@
 #define KWSTATISTICSDOCKER_H
 
 #include <QDockWidget>
+#include <dockers/KWStatistics.h>
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 class KoCanvasBase;
+class KWStatistics;
 
 class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -33,20 +35,23 @@ class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWStatisticsDocker();
     ~KWStatisticsDocker();
-
+    void updateHorizontalUi();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
 private:
     bool m_canvasReset;
+    KWStatistics *statisticsDock;
+
+public slots:
+    void ondockLocationChanged(Qt::DockWidgetArea newArea);
 };
 
 class KWStatisticsDockerFactory : public KoDockFactoryBase
 {
 public:
     KWStatisticsDockerFactory();
-
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
     DockPosition defaultDockPosition() const {

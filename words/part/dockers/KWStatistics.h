@@ -43,7 +43,7 @@ public:
                  KoSelection *selection = 0, QWidget *parent = 0);
 
     virtual ~KWStatistics();
-
+    Ui::KWStatisticsDocker widgetDocker;
     void updateDataUi();
 
 public slots:
@@ -60,7 +60,6 @@ public slots:
 
 private:
     int countCJKChars(const QString &text);
-    Ui::KWStatisticsDocker widgetDocker;
 
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
