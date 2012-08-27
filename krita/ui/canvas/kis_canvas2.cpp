@@ -379,14 +379,13 @@ void KisCanvas2::createOpenGLCanvas()
 //     setCanvasWidget(canvasWidget);
     m_d->currentCanvasIsOpenGL = true;
 
-    KisGL2Canvas* canvas = new KisGL2Canvas(this, m_d->coordinatesConverter, m_d->view);
+    KisGL2Canvas* canvas = new KisGL2Canvas(this, m_d->coordinatesConverter, m_d->view->image(), m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
     m_d->prescaledProjection->setMonitorProfile(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
     //canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
     setCanvasWidget(canvas);
     m_d->currentCanvasUsesOpenGLShaders = true;
-    canvas->initialize(m_d->view->image());
     connect(m_d->view->image(), SIGNAL(sigImageUpdated(QRect)), canvas, SLOT(update(QRect)));
 #else
     //qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");

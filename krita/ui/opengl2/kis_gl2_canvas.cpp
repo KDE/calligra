@@ -43,6 +43,8 @@ public:
 
     KisGL2RenderThread *renderer;
 
+    KisImageWSP image;
+
     QGLShaderProgram *shader;
     QGLBuffer *vertexBuffer;
     QGLBuffer *indexBuffer;
@@ -61,15 +63,17 @@ public:
 
 QGLWidget *KisGL2Canvas::Private::shareWidget = 0;
 
-KisGL2Canvas::KisGL2Canvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent)
+KisGL2Canvas::KisGL2Canvas(KisCanvas2* canvas, KisCoordinatesConverter* coordinatesConverter, KisImageWSP image, QWidget* parent)
     : QGLWidget(parent, KisGL2Canvas::shareWidget()), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
 {
+    d->image = image;
 }
 
 KisGL2Canvas::~KisGL2Canvas()
 {
     d->renderer->stop();
     d->renderer->wait();
+    delete d->renderer;
     delete d;
 }
 
@@ -83,16 +87,12 @@ bool KisGL2Canvas::callFocusNextPrevChild(bool next)
     return focusNextPrevChild(next);
 }
 
-void KisGL2Canvas::initialize(KisImageWSP image)
+void KisGL2Canvas::initializeGL()
 {
-    d->renderer = new KisGL2RenderThread(this, image);
+    d->renderer = new KisGL2RenderThread(this, d->image);
     d->renderer->start();
     d->renderer->moveToThread(d->renderer);
     connect(d->renderer, SIGNAL(renderFinished()), this, SLOT(update()), Qt::QueuedConnection);
-
-    makeCurrent();
-
-    glClearColor(1.f, 0.f, 1.f, 1.f);
 
     d->createShader();
     d->createMesh();
@@ -105,7 +105,7 @@ void KisGL2Canvas::paintGL()
     d->shader->bind();
 
     QMatrix4x4 model;
-    model.scale(width(), height());
+    model.scale(1, -1);
     d->shader->setUniformValue(d->modelMatrixLocation, model.transposed());
 
     //Set view/projection matrices
@@ -113,7 +113,7 @@ void KisGL2Canvas::paintGL()
     d->shader->setUniformValue(d->viewMatrixLocation, view.transposed());
 
     QMatrix4x4 proj;
-    proj.ortho(0, width(), -height(), 0, -1, 1);
+    proj.ortho(0, 1, 0, 1, -1, 1);
     d->shader->setUniformValue(d->projectionMatrixLocation, proj.transposed());
 
     //Setup the geometry for rendering
