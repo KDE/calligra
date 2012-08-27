@@ -101,5 +101,25 @@
         <file>images/svg/icon-layer_paint-red.svg</file>
         <file>images/svg/icon-filter_save-red.svg</file>
         <file>images/svg/icon-filter_load-red.svg</file>
+        <file>images/svg/icon-select-add.svg</file>
+        <file>images/svg/icon-select-apply.svg</file>
+        <file>images/svg/icon-select-area.svg</file>
+        <file>images/svg/icon-select-color.svg</file>
+        <file>images/svg/icon-select-deselect.svg</file>
+        <file>images/svg/icon-select-hide.svg</file>
+        <file>images/svg/icon-select-intersect.svg</file>
+        <file>images/svg/icon-select-polygon.svg</file>
+        <file>images/svg/icon-select-rectangle.svg</file>
+        <file>images/svg/icon-select-replace.svg</file>
+        <file>images/svg/icon-select-reselect.svg</file>
+        <file>images/svg/icon-select-show.svg</file>
+        <file>images/svg/icon-select-sub.svg</file>
+        <file>images/svg/icon-apply.svg</file>
+        <file>images/svg/icon-filter_delete-red.svg</file>
+        <file>images/svg/icon-filter_delete-yellow.svg</file>
+        <file>images/svg/icon-filter_load-yellow.svg</file>
+        <file>images/svg/icon-filter_save-yellow.svg</file>
+        <file>images/svg/icon-visible_off.svg</file>
+        <file>images/svg/icon-visible_on.svg</file>
     </qresource>
 </RCC>
