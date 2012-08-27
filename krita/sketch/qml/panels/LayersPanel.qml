@@ -24,7 +24,7 @@ Panel {
     name: "Layers";
     panelColor: Constants.Theme.SecondaryColor;
 
-    LayerModel {
+    /*LayerModel {
         id: layerModel;
         view: sketchView.view;
     }
@@ -47,7 +47,7 @@ Panel {
                 font.pixelSize: Constants.DefaultFontSize;
             }
         }
-    }
+    }*/
 
     dragDelegate: Component {
         Rectangle {
