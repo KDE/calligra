@@ -545,7 +545,8 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
 
 
 // ----------------------------------------------------------------
-// Traversal of the 
+//                 Traversal of the XML contents
+
 
 void OdtHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
                                       QHash<QString, StyleInfo *> &styles)
@@ -636,8 +637,8 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->endElement(); // end img
 }
 
-void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement,
-                                  KoXmlWriter *htmlWriter, QHash<QString, StyleInfo *> &styles)
+void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
+                                  QHash<QString, StyleInfo *> &styles)
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
@@ -871,7 +872,7 @@ void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlW
             handleTagH(element, htmlWriter, styles);
         }
         else if (element.localName() == "table" && element.namespaceURI() == KoXmlNS::table) {
-            handleTagH(element, htmlWriter, styles);
+            handleTagTable(element, htmlWriter, styles);
         }
         else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text) {
             handleTagSpan(element, htmlWriter, styles);
@@ -910,8 +911,11 @@ void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlW
         else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
             handleTagNote(element, htmlWriter);
         }
-        else
+        else {
+            // FIXME: The same code in convertContent() inserts <div>
+            //        around this call.
             handleUnknownTags(element, htmlWriter, styles);
+        }
 
         node = node.nextSibling();
         element = node.toElement();

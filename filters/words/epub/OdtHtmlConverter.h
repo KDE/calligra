@@ -89,32 +89,31 @@ class OdtHtmlConverter
 
 
     // All handleTag*() are named after the tag in the ODF that they handle.
+    void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
+                                 QHash<QString, StyleInfo*> &styles);
+    void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
+                    QHash<QString, StyleInfo*> &styles);
+    void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
+                    QHash<QString, StyleInfo*> &styles);
+    void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
+                       QHash<QString, StyleInfo*> &styles);
     void handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWriter,
                              QHash<QString, StyleInfo*> &styles);
 
     void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
                         QHash<QString, StyleInfo*> &styles);
 
-    void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                        QHash<QString, StyleInfo*> &styles);
-
-    void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
+    void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
                     QHash<QString, StyleInfo*> &styles);
 
-    void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                       QHash<QString, StyleInfo*> &styles);
+    void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
+                        QHash<QString, StyleInfo*> &styles);
 
     void handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
                             QHash<QString, StyleInfo*> &styles);
 
-    void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles);
-
     void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
                        QHash<QString, StyleInfo*> &styles);
-
-    void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles);
 
     void handleTagTab(KoXmlWriter *htmlWriter);
     void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
@@ -131,9 +130,6 @@ class OdtHtmlConverter
 
     void handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
                            QHash<QString, StyleInfo*> &styles);
-
-    void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                 QHash<QString, StyleInfo*> &styles);
 
     void handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
