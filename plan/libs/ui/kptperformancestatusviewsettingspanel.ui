@@ -131,7 +131,6 @@
              </widget>
             </item>
            </layout>
-           <zorder>ui_effort</zorder>
            <zorder>ui_acwpCost</zorder>
            <zorder>ui_bcwpCost</zorder>
            <zorder>ui_bcwsCost</zorder>
@@ -180,7 +179,6 @@
              </widget>
             </item>
            </layout>
-           <zorder>ui_bcwsEffort</zorder>
            <zorder>ui_bcwpEffort</zorder>
            <zorder>ui_acwpEffort</zorder>
            <zorder>ui_bcwsEffort</zorder>
@@ -238,13 +236,10 @@
           </spacer>
          </item>
         </layout>
-        <zorder>frame_2</zorder>
-        <zorder>ui_spieffort</zorder>
         <zorder>ui_spicost</zorder>
         <zorder>ui_cpicost</zorder>
         <zorder>ui_spieffort</zorder>
         <zorder>ui_cpieffort</zorder>
-        <zorder>verticalSpacer_2</zorder>
        </widget>
       </widget>
      </item>
