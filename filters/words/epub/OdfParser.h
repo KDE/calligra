@@ -18,26 +18,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef EXPORTEPUB2_H
-#define EXPORTEPUB2_H
+#ifndef ODFPARSER_H
+#define ODFPARSER_H
 
-#include <QObject>
+// Qt
 #include <QString>
 #include <QVariantList>
 #include <QFile>
 #include <QObject>
 #include <QTextStream>
-#include <KoFilter.h>
-#include <KoStore.h>
 #include <QHash>
 #include <QList>
 
+// Calligra
+#include <KoFilter.h>
 
-class EpubFile;
+class KoStore;
 
-class ExportEpub2 : public KoFilter
+
+class OdfParser
 {
-    Q_OBJECT
 public:
     enum VectorType {
         VectorTypeOther,        // Uninitialized
@@ -47,29 +47,17 @@ public:
         // ... more here later
     };
 
-    ExportEpub2(QObject *parent, const QVariantList &);
-    virtual ~ExportEpub2();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    OdfParser();
+    virtual ~OdfParser();
 
-private:
-    KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
+    KoFilter::ConversionStatus parseMetadata(KoStore *odfStore,
+                                             QHash<QString, QString> &metadata);
+#if 0
     KoFilter::ConversionStatus parseMetaInfImagesData(KoStore *odfStore,
                                                       QHash<QString, QString> &imagesData);
-    ExportEpub2::VectorType vectorType(QByteArray &content);
-    bool convertSvm(QByteArray &input, QByteArray &output, QSize size);
-    bool convertEmf(QByteArray &input, QByteArray &output, QSize size);
-    bool convertWmf(QByteArray &input, QByteArray &output, QSizeF size);
-
-    bool isSvm(QByteArray &content);
-    bool isEmf(QByteArray &content);
-    bool isWmf(QByteArray &content);
-
-public slots:
-
+#endif
 
 private:
-    QHash<QString, QString> m_metadata;
-    QHash<QString, QSizeF> m_imagesSrcList;
 };
 
-#endif // EXPORTEPUB2_H
+#endif // ODFPARSER_H

@@ -20,11 +20,20 @@
 */
 
 
+// Own
 #include "exportepub2.h"
 
+// Qt
+#include <QSvgGenerator>
+#include <QBuffer>
+#include <QPainter>
+
+// KDE
 #include <kdebug.h>
-#include <KoFilterChain.h>
 #include <kpluginfactory.h>
+
+// Calligra
+#include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
@@ -32,12 +41,10 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+// This plugin
+#include "OdfParser.h"
 #include "OdtHtmlConverter.h"
 #include "libepub/EpubFile.h"
-
-#include <QSvgGenerator>
-#include <QBuffer>
-#include <QPainter>
 
 #include "WmfPainterBackend.h"
 
@@ -85,14 +92,15 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Start the conversion
     OdtHtmlConverter converter;
-    EpubFile  epub;
+    OdfParser        odfParser;
+    EpubFile         epub;
     KoFilter::ConversionStatus  status;
 
     // ----------------------------------------------------------------
     // Parse input files
 
-    // Parse meta.xml into m_meta
-    status = parseMetadata(odfStore);
+    // Parse meta.xml into m_metadata
+    status = odfParser.parseMetadata(odfStore, m_metadata);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -103,7 +111,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Create html contents.
     // m_imagesSrcList is an output parameter from the conversion.    
-    status = converter.convertContent(odfStore, m_meta, &epub, m_imagesSrcList);
+    status = converter.convertContent(odfStore, m_metadata, &epub, m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -119,41 +127,10 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // ----------------------------------------------------------------
     // Write the finished epub file to disk
 
-    epub.writeEpub(m_chain->outputFile(), to, m_meta);
+    epub.writeEpub(m_chain->outputFile(), to, m_metadata);
 
     delete odfStore;
 
-    return KoFilter::OK;
-}
-
-
-KoFilter::ConversionStatus ExportEpub2::parseMetadata(KoStore *odfStore)
-{
-    if (!odfStore->open("meta.xml")) {
-        kDebug(30517) << "Cannot open meta.xml";
-        return KoFilter::FileNotFound;
-    }
-
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing meta.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return KoFilter::ParsingError;
-    }
-
-    KoXmlNode childNode = doc.documentElement();
-    childNode = KoXml::namedItemNS(childNode, KoXmlNS::office, "meta");
-    KoXmlElement element;
-    forEachElement (element, childNode) {
-        m_meta.insert(element.tagName(), element.text());
-    }
-
-    odfStore->close();
     return KoFilter::OK;
 }
 
@@ -167,7 +144,6 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     if (status != KoFilter::OK) {
         return status;
     }
-
 
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;

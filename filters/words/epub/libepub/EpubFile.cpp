@@ -124,14 +124,14 @@ KoFilter::ConversionStatus EpubFile::writeEpub(const QString &fileName,
     }
 
     // Write content.opf
-    status =  writeOpf(epubStore, metadata);
+    status = writeOpf(epubStore, metadata);
     if (status != KoFilter::OK) {
         delete epubStore;
         return status;
     }
 
     // Write toc.ncx
-    status =  writeNcx(epubStore, metadata);
+    status = writeNcx(epubStore, metadata);
 
     delete epubStore;
     return status;
@@ -209,7 +209,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.addAttribute("id", "BookId");
     writer.addAttribute("opf:scheme", "ISBN");
     writer.addTextNode("123456789X");  // FIXME: Where to get this?
-    writer.endElement(); // dc:language
+    writer.endElement(); // dc:identifier
 
     // FIXME: dc:creator and many more (optional)
 
@@ -233,14 +233,14 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
         writer.endElement(); // item
     }
 
-    // toc.ncx
+    // toc.ncx 
     writer.startElement("item");
     writer.addAttribute("id", "ncx");
     writer.addAttribute("href", "toc.ncx");
     writer.addAttribute("media-type", "application/x-dtbncx+xml");
     writer.endElement(); // item
 
-    writer.endElement(); // metadata
+    writer.endElement(); // manifest
 
     // ==== spine ==== 
     writer.startElement("spine");
