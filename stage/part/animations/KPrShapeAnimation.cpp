@@ -38,6 +38,7 @@ KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockD
 , m_subStep(0)
 , m_stepIndex(-1)
 , m_subStepIndex(-1)
+, m_animIndex(-1)
 {
     // this is needed so we save the xml id's on saving and therefor are able to
     // save animation back even when they have not yet run.

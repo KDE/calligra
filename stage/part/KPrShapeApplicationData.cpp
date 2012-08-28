@@ -23,13 +23,13 @@
 #include "animations/KPrShapeAnimation.h"
 
 KPrShapeApplicationData::KPrShapeApplicationData()
-    : m_deleteAnimationsOnExit(false)
+    : m_deleteAnimations(false)
 {
 }
 
 KPrShapeApplicationData::~KPrShapeApplicationData()
 {
-    if (m_deleteAnimationsOnExit) {
+    if (m_deleteAnimations) {
         qDeleteAll(m_animations);
     }
 }
@@ -39,7 +39,7 @@ QSet<KPrShapeAnimation *> & KPrShapeApplicationData::animations()
     return m_animations;
 }
 
-void KPrShapeApplicationData::setDeleteAnimationsOnExit(bool enabled)
+void KPrShapeApplicationData::setDeleteAnimations(bool enabled)
 {
-    m_deleteAnimationsOnExit = enabled;
+    m_deleteAnimations = enabled;
 }

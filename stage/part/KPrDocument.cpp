@@ -198,7 +198,7 @@ void KPrDocument::addAnimation( KPrShapeAnimation * animation )
         shape->setApplicationData( applicationData );
     }
     applicationData->animations().insert( animation );
-    applicationData->setDeleteAnimationsOnExit(false);
+    applicationData->setDeleteAnimations(false);
 }
 
 void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData )
@@ -216,7 +216,7 @@ void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFro
         // remove animation from the shape animation data
         applicationData->animations().remove(animation);
     } else {
-        applicationData->setDeleteAnimationsOnExit(true);
+        applicationData->setDeleteAnimations(true);
     }
 }
 

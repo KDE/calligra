@@ -36,12 +36,12 @@ public:
 
     QSet<KPrShapeAnimation *> & animations();
 
-    void setDeleteAnimationsOnExit(bool enabled);
+    void setDeleteAnimations(bool enabled);
 
 private:
     // stores the animations of a shape
     QSet<KPrShapeAnimation *> m_animations;
-    bool m_deleteAnimationsOnExit;
+    bool m_deleteAnimations;
 };
 
 
