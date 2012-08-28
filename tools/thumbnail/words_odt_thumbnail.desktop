@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+Name=OpenDocument Texts
+Name[nl]=OpenDocument teksten
+Name[pt]=Textos em OpenDocument
+Name[pt_BR]=Textos OpenDocument
+Name[uk]=Тексти OpenDocument (ODT)
+Name[x-test]=xxOpenDocument Textsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

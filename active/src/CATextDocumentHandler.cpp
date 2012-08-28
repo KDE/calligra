@@ -34,6 +34,7 @@
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoPart.h>
 
 #include <KMimeType>
 #include <KMimeTypeTrader>
@@ -61,7 +62,7 @@ CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentCont
     , d (new Private())
 {
     QList<QTextDocument*> texts;
-    d->findText = new KoFindText (texts, this);
+    d->findText = new KoFindText(this);
     connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
     connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
     connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
@@ -83,18 +84,18 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
-    KoDocument* doc = KMimeTypeTrader::createPartInstanceFromQuery<KoDocument> (mimetype, 0, 0, QString(),
-                      QVariantList(), &error);
+    KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
+                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
 
-    if (!doc) {
+    if (!part) {
         kDebug() << "Doc can't be openend" << error;
         return false;
     }
 
-    d->document = static_cast<KWDocument*> (doc);
+    d->document = static_cast<KWDocument*> (part->document());
     d->document->openUrl (KUrl (uri));
 
-    setCanvas (dynamic_cast<KoCanvasBase*> (doc->canvasItem()));
+    setCanvas (dynamic_cast<KoCanvasBase*> (part->canvasItem()));
     KoToolManager::instance()->addController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()));
     KoSelection *sel = canvas()->shapeManager()->selection();
 
@@ -120,7 +121,7 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
     documentController()->canvasController()->setZoomHandler (zoomHandler);
     KoZoomController* zoomController =
         new KoZoomController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()),
-                              zoomHandler, doc->actionCollection());
+                              zoomHandler, part->actionCollection());
     documentController()->canvasController()->setZoomController (zoomController);
     d->currentTextDocPage = d->document->pageManager()->begin();
     zoomController->setPageSize (d->currentTextDocPage.rect().size());
@@ -144,9 +145,9 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
 
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(kwCanvasItem->shapeManager()->shapes(), texts);
-    d->findText->addDocuments(texts);
+    d->findText->setDocuments(texts);
 
-    KAction *action = doc->actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
+    KAction *action = part->actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(canvas(), action);
 
     return true;
@@ -244,7 +245,7 @@ QString CATextDocumentHandler::leftToolbarSource() const
 
 void CATextDocumentHandler::copy()
 {
-    document()->actionCollection()->action("edit_copy")->activate(QAction::Trigger);
+    document()->documentPart()->actionCollection()->action("edit_copy")->activate(QAction::Trigger);
 }
 
 #include "CATextDocumentHandler.moc"

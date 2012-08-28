@@ -1061,7 +1061,7 @@ void WordsGraphicsHandler::processInlinePictureFrame(const MSO::OfficeArtSpConta
     // NOTE: The default margin-left/margin-right values DO NOT make sense for
     // inline pictures, also after conversion of test files to DOCX, both
     // attributes were set to ZEROs.  Default margin-top/margin-bottom is ZERO.
-    style.addPropertyPt("style:margin", 0);
+    style.addPropertyPt("fo:margin", 0);
 
     styleName = out.styles.insert(style);
 
@@ -1151,6 +1151,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
     out.xml.endElement(); //draw:image
 
     //check for user edited wrap points
+#if 0
     if (ds.fEditedWrap()) {
         QString points;
         IMsoArray _v = ds.pWrapPolygonVertices_complex();
@@ -1164,12 +1165,12 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
                 a = _v.data.mid(offset, _v.cbElem);
                 a2 = a.mid(0, _v.cbElem / 2);
                 p = (int*) a2.data();
-                points.append(QString::number(twipsToPt(*p)));
+                points.append(QString::number(twipsToPt(*p), 'f'));
                 points.append(",");
                 // y coordinate of this point
                 a2 = a.mid(_v.cbElem / 2, _v.cbElem / 2);
                 p = (int*) a2.data();
-                points.append(QString::number(twipsToPt(*p)));
+                points.append(QString::number(twipsToPt(*p), 'f'));
                 points.append(" ");
             }
             points.chop(1); //remove last space
@@ -1178,6 +1179,7 @@ void WordsGraphicsHandler::processFloatingPictureFrame(const MSO::OfficeArtSpCon
         out.xml.addAttribute("draw:points", points);
         out.xml.endElement(); //draw:contour-polygon
     }
+#endif
     out.xml.endElement(); //draw:frame
     return;
 }
@@ -1216,11 +1218,11 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
         break;
     case hAlignCenter:
         hrAlign = QString("center");
-        xPos = QString::number((base_width / 2.0) - ((width * base_width) / 200.0)).append("in");
+        xPos = QString::number((base_width / 2.0) - ((width * base_width) / 200.0), 'f').append("in");
         break;
     case hAlignRight:
         hrAlign = QString("right");
-        xPos = QString::number(base_width - (width * base_width) / 100.0).append("in");
+        xPos = QString::number(base_width - (width * base_width) / 100.0, 'f').append("in");
         break;
     }
     //process the content of HR specific properties
@@ -1241,10 +1243,10 @@ void WordsGraphicsHandler::processLineShape(const MSO::OfficeArtSpContainer& o, 
     setAnchorTypeAttribute(out);
     setZIndexAttribute(out);
 
-    QString height = QString::number(ds.dxHeightHR() / 1440.0f).append("in");
+    QString height = QString::number(ds.dxHeightHR() / 1440.0f, 'f').append("in");
     out.xml.addAttribute("svg:height", height);
 
-    QString width_str = QString::number(width * base_width / 100.0f).append("in");
+    QString width_str = QString::number(width * base_width / 100.0f, 'f').append("in");
     out.xml.addAttribute("svg:width", width_str);
     out.xml.addAttribute("svg:x", xPos);
 

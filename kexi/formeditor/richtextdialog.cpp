@@ -19,6 +19,8 @@
 
 #include "richtextdialog.h"
 
+#include <KoIcon.h>
+
 #include <QLayout>
 #include <QAction>
 #include <QVBoxLayout>
@@ -28,7 +30,6 @@
 #include <kcolorcombo.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <KIcon>
 
 using namespace KFormDesigner;
 
@@ -63,31 +64,31 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
     m_colorComboAction = m_toolbar->addWidget(/*js: TBColor, 30,*/ m_colorCombo);
     connect(m_colorCombo, SIGNAL(activated(const QColor&)), this, SLOT(changeColor(const QColor&)));
 
-    m_boldTextAction = m_toolbar->addAction(KIcon("format-text-bold"), i18n("Bold"));
+    m_boldTextAction = m_toolbar->addAction(koIcon("format-text-bold"), i18n("Bold"));
     m_boldTextAction->setCheckable(true);
-    m_italicTextAction = m_toolbar->addAction(KIcon("format-text-italic"), i18n("Italic"));
+    m_italicTextAction = m_toolbar->addAction(koIcon("format-text-italic"), i18n("Italic"));
     m_italicTextAction->setCheckable(true);
-    m_underlineTextAction = m_toolbar->addAction(KIcon("format-text-underline"), i18n("Underline"));
+    m_underlineTextAction = m_toolbar->addAction(koIcon("format-text-underline"), i18n("Underline"));
     m_underlineTextAction->setCheckable(true);
     m_toolbar->addSeparator();
 
-    m_superscriptTextAction = m_toolbar->addAction(KIcon("format-text-superscript"), i18n("Superscript"));
+    m_superscriptTextAction = m_toolbar->addAction(koIcon("format-text-superscript"), i18n("Superscript"));
     m_superscriptTextAction->setCheckable(true);
-    m_subscriptTextAction = m_toolbar->addAction(KIcon("format-text-suscript"), i18n("Subscript"));
+    m_subscriptTextAction = m_toolbar->addAction(koIcon("format-text-subscript"), i18n("Subscript"));
     m_subscriptTextAction->setCheckable(true);
     m_toolbar->addSeparator();
 
     m_alignActionGroup = new QActionGroup(this);
-    m_alignLeftAction = m_toolbar->addAction(KIcon("text_left"), i18n("Left Align"));
+    m_alignLeftAction = m_toolbar->addAction(koIcon("format-justify-left"), i18n("Left Align"));
     m_alignLeftAction->setCheckable(true);
     m_alignActionGroup->addAction(m_alignLeftAction);
-    m_alignCenterAction = m_toolbar->addAction(KIcon("text_center"), i18n("Centered"));
+    m_alignCenterAction = m_toolbar->addAction(koIcon("format-justify-center"), i18n("Centered"));
     m_alignCenterAction->setCheckable(true);
     m_alignActionGroup->addAction(m_alignCenterAction);
-    m_alignRightAction = m_toolbar->addAction(KIcon("text_right"), i18n("Right Align"));
+    m_alignRightAction = m_toolbar->addAction(koIcon("format-justify-right"), i18n("Right Align"));
     m_alignRightAction->setCheckable(true);
     m_alignActionGroup->addAction(m_alignRightAction);
-    m_alignJustifyAction = m_toolbar->addAction(KIcon("format-justify-fill"), i18n("Justified"));
+    m_alignJustifyAction = m_toolbar->addAction(koIcon("format-justify-fill"), i18n("Justified"));
     m_alignJustifyAction->setCheckable(true);
     m_alignActionGroup->addAction(m_alignJustifyAction);
 

@@ -112,6 +112,7 @@
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
+#include "Part.h"
 
 // commands
 #include "commands/CopyCommand.h"
@@ -138,6 +139,7 @@ public:
     Sheet* activeSheet;
     ColumnHeaderItem* columnHeader;
     RowHeaderItem* rowHeader;
+    KoPart *part;
 };
 
 CanvasItem::CanvasItem(Doc *doc)
@@ -158,6 +160,7 @@ CanvasItem::CanvasItem(Doc *doc)
     setAcceptDrops(true);
     setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
+    d->part = doc->documentPart();
     d->rowHeader = 0;
     d->columnHeader = 0;
 
@@ -170,13 +173,14 @@ CanvasItem::CanvasItem(Doc *doc)
     d->selection->setActiveSheet(activeSheet());
     connect(d->selection, SIGNAL(refreshSheetViews()), SLOT(refreshSheetViews()));
     connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
+    connect(d->selection, SIGNAL(updateAccessedCellRange(Sheet*,QPoint)), this, SLOT(updateAccessedCellRange(Sheet*,QPoint)));
     connect(doc->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
             SLOT(handleDamages(const QList<Damage*>&)));
 }
 
 CanvasItem::~CanvasItem()
 {
-    if (doc()->isReadWrite())
+    if (d->part->isReadWrite())
         selection()->emitCloseEditor(true);
     d->selection->emitCloseEditor(false);
     d->selection->endReferenceSelection(false);
@@ -493,6 +497,11 @@ void CanvasItem::setObscuredRange(const QSize &size)
     if (!sheetView) return;
 
     emit obscuredRangeChanged(sheetView->sheet(), size);
+}
+
+void CanvasItem::updateAccessedCellRange(Sheet* sheet, const QPoint &location)
+{
+    sheetView(sheet)->updateAccessedCellRange(location);
 }
 
 #include "CanvasItem.moc"

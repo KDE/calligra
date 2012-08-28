@@ -28,6 +28,7 @@
 #include "ODrawToOdf.h"
 #include "msodraw.h"
 #include "msppt.h"
+#include "msoleps.h"
 
 #include <kdebug.h>
 #include <KoOdf.h>
@@ -906,11 +907,44 @@ PptToOdp::doConversion(KoStore* storeout)
         return KoFilter::CreationError;
     }
     storeout->write(createContent(styles));
-    storeout->close();
+    if (!storeout->close()) {
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
     manifest->addManifestEntry("content.xml", "text/xml");
 
     // store document styles
     styles.saveOdfStylesDotXml(storeout, manifest);
+
+    if (!storeout->open("meta.xml")) {
+        kWarning() << "Couldn't open the file 'meta.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write(createMeta());
+    if (!storeout->close()) {
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    manifest->addManifestEntry("meta.xml", "text/xml");
+
+    if (!storeout->open("settings.xml")) {
+        kWarning() << "Couldn't open the file 'settings.xml'.";
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    storeout->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+        "<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" office:version=\"1.2\"/>\n");
+    if (!storeout->close()) {
+        delete p;
+        p = 0;
+        return KoFilter::CreationError;
+    }
+    manifest->addManifestEntry("settings.xml", "text/xml");
 
     odfWriter.closeManifestWriter();
 
@@ -1211,7 +1245,9 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
         style.addProperty("fo:font-family", name, text);
     }
     // fo:font-size
-    style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    if (cf.fontSize() > 0) {
+        style.addProperty("fo:font-size", pt(cf.fontSize()), text);
+    }
     // fo:font-style: "italic", "normal" or "oblique
     style.addProperty("fo:font-style", cf.italic() ?"italic" :"normal", text);
     // fo:font-variant: "normal" or "small-caps"
@@ -1232,7 +1268,7 @@ void PptToOdp::defineTextProperties(KoGenStyle& style,
     // style:country-complex
     // style:font-charset
     if (isSymbolFont) {
-        style.addProperty("fo:font-charset", "x-symbol", text);
+        style.addProperty("style:font-charset", "x-symbol", text);
     }
     // style:font-family-asian
     // style:font-family-complex
@@ -1625,6 +1661,7 @@ void PptToOdp::defineListStyle(KoGenStyle& style, const quint16 depth,
         elementName = "text:list-level-style-image";
         out.startElement("text:list-level-style-image");
         out.addAttribute("xlink:href", bulletPictureNames.value(i.pf.bulletBlipRef()));
+        out.addAttribute("xlink:type", "simple");
     }
     else if (i.pf.fBulletHasAutoNumber() || i.pf.fHasBullet()) {
 
@@ -2194,7 +2231,7 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     contentWriter.addAttribute("xmlns:presentation", "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
     contentWriter.addAttribute("xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
     contentWriter.addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    contentWriter.addAttribute("office:version", "1.0");
+    contentWriter.addAttribute("office:version", "1.2");
 
     // office:automatic-styles
     styles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, &contentWriter);
@@ -2202,16 +2239,69 @@ QByteArray PptToOdp::createContent(KoGenStyles& styles)
     // office:body
     contentWriter.startElement("office:body");
     contentWriter.startElement("office:presentation");
-
     contentWriter.addCompleteElement(&presentationBuffer);
-
     contentWriter.endElement();  // office:presentation
-
     contentWriter.endElement();  // office:body
-
     contentWriter.endElement();  // office:document-content
     contentWriter.endDocument();
     return contentData;
+}
+
+QByteArray PptToOdp::createMeta()
+{
+    QByteArray metaData;
+    QBuffer buff(&metaData);
+    buff.open(QIODevice::WriteOnly);
+    KoXmlWriter metaWriter(&buff);
+
+    metaWriter.startDocument("office:document-meta");
+    metaWriter.startElement("office:document-meta");
+    metaWriter.addAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+    metaWriter.addAttribute("xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+    metaWriter.addAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+    metaWriter.addAttribute("office:version", "1.2");
+    metaWriter.startElement("office:meta");
+
+    const char *p_str = 0;
+    const MSO::PropertySet &ps = p->summaryInfo.propertySet.propertySet1;
+
+    for (uint i = 0; i < ps.numProperties; i++) {
+        switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
+        case PIDSI_TITLE:
+            p_str = "dc:title";
+            break;
+        case PIDSI_SUBJECT:
+            p_str = "dc:subject";
+            break;
+        case PIDSI_AUTHOR:
+            p_str = "meta:initial-creator";
+            break;
+        case PIDSI_KEYWORDS:
+            p_str = "meta:keyword";
+            break;
+        case PIDSI_COMMENTS:
+            p_str = "dc:description";
+            break;
+        case PIDSI_LASTAUTHOR:
+            p_str = "dc:creator";
+            break;
+        default:
+            break;
+        }
+        if (p_str) {
+            if (ps.property.at(i).vt_lpstr) {
+                metaWriter.startElement(p_str);
+                metaWriter.addTextNode(ps.property.at(i).vt_lpstr->characters);
+                metaWriter.endElement();
+            }
+            p_str = 0;
+        }
+    }
+
+    metaWriter.endElement();  // office:meta
+    metaWriter.endElement();  // office:document-meta
+
+    return metaData;
 }
 
 QString PptToOdp::utf16ToString(const QVector<quint16> &data)
@@ -2488,10 +2578,8 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     const MouseOverTextInfo* mouseover = 0;
     for (int i = 0; i < tc->interactive.size(); ++i) {
         const TextContainerInteractiveInfo& ti = tc->interactive[i];
-        const MouseClickTextInfo* a =
-                ti.interactive.get<MouseClickTextInfo>();
-        const MouseOverTextInfo* b =
-                ti.interactive.get<MouseOverTextInfo>();
+        const MouseClickTextInfo *a = ti.interactive.get<MouseClickTextInfo>();
+        const MouseOverTextInfo *b = ti.interactive.get<MouseOverTextInfo>();
         if (a && start >= a->text.range.begin && start < a->text.range.end) {
             mouseclick = a;
         }
@@ -2525,27 +2613,44 @@ int PptToOdp::processTextSpan(Writer& out, PptTextCFRun& cf, const MSO::TextCont
     out.xml.startElement("text:span", false);
     out.xml.addAttribute("text:style-name", out.styles.insert(style));
 
+    // [MS-PPT]: exHyperlinkIdRef must be ignored unless action is in
+    // {II_JumpAction, II_HyperlinkAction, II_CustomShowAction (0x7)}
+    //
+    // NOTE: Jumps to other slides and shows not supported atm.
     if (mouseclick) {
-        // The [MS-PPT] spec. states that exHyperlinkIdRef must be
-        // ignored unless action is equal to II_JumpAction (0x3),
-        // II_HyperlinkAction (0x4), or II_CustomShowAction (0x7).
+        const InteractiveInfoAtom *info = &mouseclick->interactive.interactiveInfoAtom;
+        if (info->action != II_HyperlinkAction) {
+            mouseclick = 0;
+        }
+    }
+    if (mouseover) {
+        const InteractiveInfoAtom *info = &mouseover->interactive.interactiveInfoAtom;
+        if (info->action != II_HyperlinkAction) {
+            mouseover = 0;
+        }
+    }
 
+    if (mouseclick) {
         out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
-                mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+            mouseclick->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else if (mouseover) {
         out.xml.startElement("text:a", false);
         QPair<QString, QString> link = findHyperlink(
-                mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
+            mouseover->interactive.interactiveInfoAtom.exHyperlinkIdRef);
         if (!link.second.isEmpty()) { // target
             out.xml.addAttribute("xlink:href", link.second);
+            out.xml.addAttribute("xlink:type", "simple");
         } else if (!link.first.isEmpty()) {
             out.xml.addAttribute("xlink:href", link.first);
+            out.xml.addAttribute("xlink:type", "simple");
         }
     } else {
         // count - specifies the number of characters of the

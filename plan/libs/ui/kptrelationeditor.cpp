@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 - 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -34,7 +35,6 @@
 #include <QWidget>
 #include <QMenu>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -45,7 +45,6 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -74,8 +73,8 @@ void RelationTreeView::slotCurrentChanged(const QModelIndex &curr, const QModelI
 }
 
 //-----------------------------------
-RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+RelationEditor::RelationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     kDebug(planDbg())<<"----------------- Create RelationEditor ----------------------";
 
@@ -94,8 +93,7 @@ RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-
+    connect(model(), SIGNAL(executeCommand(KUndo2Command *)), doc, SLOT(addCommand(KUndo2Command *)));
 }
 
 void RelationEditor::updateReadWrite( bool rw )
@@ -188,7 +186,7 @@ void RelationEditor::slotOptions()
         v = m_view->masterView();
         col0 = true;
     }
-    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( v, col0, this );
+    ItemViewSettupDialog *dlg = new ItemViewSettupDialog( this, v, col0, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -218,11 +216,13 @@ void RelationEditor::slotDeleteRelation( Relation *r)
 bool RelationEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 
 void RelationEditor::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( m_view->model()->columnMap(), context );
 }
 

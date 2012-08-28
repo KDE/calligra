@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -29,6 +29,9 @@
 #include "kptaccount.h"
 #include "kptdatetime.h"
 #include "kptschedule.h"
+#include "kptdebug.h"
+
+#include <KoIcon.h>
 
 #include <QList>
 #include <QObject>
@@ -36,10 +39,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <KIcon>
-#include <kdebug.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -99,7 +99,7 @@ QVariant AccountModel::name( const Account *a, int role ) const
              return  m_project && m_project->isBaselined() ? QVariant() : Qt::Unchecked;
          case Qt::DecorationRole:
              if ( a->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
              }
              break;
     }

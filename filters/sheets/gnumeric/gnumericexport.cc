@@ -510,7 +510,7 @@ QDomElement GNUMERICExport::GetLinkStyle(QDomDocument gnumeric_doc)
 
     link_style.setAttribute("target", path);
 
-    // Calligra Tables doesn't support link tips.
+    // Calligra Sheets doesn't support link tips.
     link_style.setAttribute("tip", "");
 
     return link_style;
@@ -633,14 +633,14 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
     else
         cell_style.setAttribute("WrapText", "0");
 
-    // ShrinkToFit not supported by Calligra Tables (?)
+    // ShrinkToFit not supported by Calligra Sheets (?)
     cell_style.setAttribute("ShrinkToFit", "0");
 
     // I'm not sure about the rotation values.
     // I never got it to work in GNumeric.
     cell_style.setAttribute("Rotation", QString::number(-1*style.angle()));
 
-    // The indentation in GNumeric is an integer value. In Calligra Tables, it's a double.
+    // The indentation in GNumeric is an integer value. In Calligra Sheets, it's a double.
     // Save the double anyway, makes it even better when importing the document back in KSpread.
     // TODO verify if it's correct, in import we "* 10.0"
     cell_style.setAttribute("Indent", QString::number(style.indentation()));
@@ -1046,7 +1046,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
 
     QString str;
 
-    View * view = ksdoc->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->views().first());
+    View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
     Canvas * canvas = 0L;
     QString activeTableName;
     if (view) {

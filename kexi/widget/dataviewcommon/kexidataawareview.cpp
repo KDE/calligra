@@ -23,7 +23,7 @@
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/KexiStandardAction.h>
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 
 #include <QVBoxLayout>
 

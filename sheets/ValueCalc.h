@@ -277,8 +277,16 @@ public:
     Value sumIf(const Value &range, const Condition &cond);
     Value sumIf(const Cell &sumRangeStart,
                 const Value &checkRange, const Condition &cond);
+    Value sumIfs(const Cell &sumRangeStart,
+                 QList<Value> c_Range, QList<Condition> cond, const float limit);
+    Value averageIf(const Value &range, const Condition &cond);
+    Value averageIf(const Cell &avgRangeStart,
+                const Value &checkRange, const Condition &cond);
+    Value averageIfs(const Cell &avgRangeStart,
+                 QList<Value> c_Range, QList<Condition> cond, const float limit);
     int count(const Value &range, bool full = true);
     int countIf(const Value &range, const Condition &cond);
+    Value countIfs(const Cell &cntRangeStart, QList<Value> c_range, QList<Condition> cond, const float limit);
     Value avg(const Value &range, bool full = true);
     Value max(const Value &range, bool full = true);
     Value min(const Value &range, bool full = true);

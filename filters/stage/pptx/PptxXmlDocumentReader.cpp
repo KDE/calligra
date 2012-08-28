@@ -802,9 +802,6 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_defaultTextStyle()
     READ_PROLOGUE
     m_currentListStyle = KoGenStyle(KoGenStyle::ListStyle);
 
-    //TODO: Handle the case when default values of attributes were not
-    //provided, those are described in the spec.
-
     while (!atEnd()) {
         readNext();
         kDebug() << *this;
@@ -906,6 +903,15 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_presentation()
         KoGenStyle style(KoGenStyle::ParagraphStyle, "paragraph");
         style.setDefaultStyle(true);
         style.addPropertyPt("fo:font-size", 18, KoGenStyle::TextType);
+
+        // TODO: Add all defaults defined by the spec. Values defined by
+        // defaultTextStyle/defPPr come on top.
+        style.addPropertyPt("fo:margin-left", EMU_TO_POINT(347663));
+        style.addPropertyPt("fo:margin-top", 0);
+        style.addPropertyPt("fo:margin-right", 0);
+        style.addPropertyPt("fo:margin-bottom", 0);
+        style.addPropertyPt("fo:text-indent", EMU_TO_POINT(-342900));
+
         mainStyles->insert(style);
 
         style = KoGenStyle(KoGenStyle::TextStyle, "text");

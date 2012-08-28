@@ -59,7 +59,6 @@
 
 // ui
 #include "ui/CellEditor.h"
-#include "ui/CellToolOptionWidget.h"
 #include "ui/ExternalEditor.h"
 #include "ui/SheetView.h"
 
@@ -68,11 +67,13 @@
 #include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
 #include <KoViewConverter.h>
+#include <KoIcon.h>
 
 // KDE
 #include <KFontAction>
 #include <KFontChooser>
 #include <KFontSizeAction>
+#include <kdeversion.h>
 
 // Qt
 #include <QApplication>
@@ -87,11 +88,11 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     const Cell& theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
     const Style style = theCell.style();
     if (q->selection()->activeSheet()->isProtected() && style.hideFormula()) {
-        optionWidget->editor()->setPlainText(theCell.displayText());
+        externalEditor->setPlainText(theCell.displayText());
     } else if (q->selection()->activeSheet()->isProtected() && style.hideAll()) {
-        optionWidget->editor()->clear();
+        externalEditor->clear();
     } else {
-        optionWidget->editor()->setPlainText(theCell.userInput());
+        externalEditor->setPlainText(theCell.userInput());
     }
 }
 
@@ -183,8 +184,8 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     const QList<KAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
-    optionWidget->formulaButton()->setEnabled(enable);
-    optionWidget->editor()->setEnabled(enable);
+    q->action("insertFormula")->setEnabled(enable);
+    externalEditor->setEnabled(enable);
 
     // These actions are always enabled.
     q->action("copy")->setEnabled(true);
@@ -752,7 +753,11 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     case Qt::Key_Dollar:
         command->setText(i18nc("(qtundo-format)", "Currency Format"));
         command->setFormatType(Format::Money);
+#if KDE_IS_VERSION(4,4,0)
+        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces());
+#else
         command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits());
+#endif
         break;
 
     case Qt::Key_Percent:
@@ -1234,9 +1239,9 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             }
         }
         actions.append(popupMenuActions["separator6"]);
-        actions.append(q->action("comment"));
+        actions.append(popupMenuActions["comment"]);
         if (!cell.comment().isEmpty()) {
-            actions.append(q->action("clearComment"));
+            actions.append(popupMenuActions["clearComment"]);
         }
 
         if (testListChoose(q->selection())) {
@@ -1257,41 +1262,50 @@ void CellToolBase::Private::createPopupMenuActions()
         popupMenuActions.insert(QString("separator%1").arg(i), action);
     }
 
-    action = new KAction(KIcon("insertcell"), i18n("Insert Cells..."), q);
+    action = new KAction(koIcon("insertcell"), i18n("Insert Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertCells()));
     popupMenuActions.insert("insertCell", action);
 
-    action = new KAction(KIcon("removecell"), i18n("Delete Cells..."), q);
+    action = new KAction(koIcon("removecell"), i18n("Delete Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteCells()));
     popupMenuActions.insert("deleteCell", action);
 
-    action = new KAction(KIcon("adjustcol"), i18n("Adjust Column"), q);
+    action = new KAction(koIcon("adjustcol"), i18n("Adjust Column"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustColumn()));
     popupMenuActions.insert("adjustColumn", action);
 
-    action = new KAction(KIcon("insert_table_col"), i18n("Insert Columns"), q);
+    action = new KAction(koIcon("edit-table-insert-column-left"), i18n("Insert Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertColumn()));
     popupMenuActions.insert("insertColumn", action);
 
-    action = new KAction(KIcon("delete_table_col"), i18n("Delete Columns"), q);
+    action = new KAction(koIcon("edit-table-delete-column"), i18n("Delete Columns"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteColumn()));
     popupMenuActions.insert("deleteColumn", action);
 
-    action = new KAction(KIcon("adjustrow"), i18n("Adjust Row"), q);
+    action = new KAction(koIcon("adjustrow"), i18n("Adjust Row"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(adjustRow()));
     popupMenuActions.insert("adjustRow", action);
 
-    action = new KAction(KIcon("insert_table_row"), i18n("Insert Rows"), q);
+    action = new KAction(koIcon("edit-table-insert-row-above"), i18n("Insert Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertRow()));
     popupMenuActions.insert("insertRow", action);
 
-    action = new KAction(KIcon("delete_table_row"), i18n("Delete Rows"), q);
+    action = new KAction(koIcon("edit-table-delete-row"), i18n("Delete Rows"), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(deleteRow()));
     popupMenuActions.insert("deleteRow", action);
 
     action = new KAction(i18n("Selection List..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
+
+    action = new KAction(koIcon("comment"), i18n("Comment"), q);
+    connect(action, SIGNAL(triggered(bool)), q, SLOT(comment()));
+    popupMenuActions.insert("comment", action);
+
+    action = new KAction(koIcon("removecomment"),i18n("Clear Comment"), q);
+    connect(action, SIGNAL(triggered(bool)), q, SLOT(clearComment()));
+    popupMenuActions.insert("clearComment", action);
+
 }
 
 bool CellToolBase::Private::testListChoose(Selection *selection) const

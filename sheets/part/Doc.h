@@ -54,8 +54,11 @@ class KoOasisSettings;
 class KoDocumentResourceManager;
 class KoStore;
 class KoXmlWriter;
+class KoView;
+class KoPart;
 
 #define MIME_TYPE "application/x-kspread"
+
 
 namespace Calligra
 {
@@ -84,7 +87,7 @@ public:
      * @param parent the parent object
      * @param singleViewMode enables single view mode, if @c true
      */
-    explicit Doc(QWidget* parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit Doc(KoPart *part = 0);
 
     /**
      * Destroys the document.
@@ -123,8 +126,6 @@ public:
     virtual int supportedSpecialFormats() const;
 
     virtual bool loadChildren(KoStore* _store);
-
-    virtual void addView(KoView *_view);
 
     bool docData(QString const & xmlTag, QDomDocument & data);
 
@@ -165,25 +166,20 @@ Q_SIGNALS:
      */
     void updateView();
 
+    /**
+     * Emitted, if all editors have to be closed.
+     */
+    void closeEditor(bool);
+
 protected Q_SLOTS:
-    virtual void openTemplate(const KUrl& url);
-
     void sheetAdded(Sheet* sheet);
+
 protected:
-
-    KoView* createViewInstance(QWidget* parent);
-
-    QGraphicsItem *createCanvasItem();
 
     /**
      * @reimp Overloaded function of KoDocument.
      */
     virtual bool completeLoading(KoStore*);
-
-    /**
-     * @reimp Overloaded function of KoDocument.
-     */
-    virtual bool saveChildren(KoStore* _store);
 
     virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
     virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter);

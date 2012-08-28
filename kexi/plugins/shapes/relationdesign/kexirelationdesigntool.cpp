@@ -25,10 +25,12 @@
 #pragma WARNING( replace KexiStartupDialog by the new assistant )
 #endif
 #include "kexi/main/startup/KexiStartupDialog.h"
-#include "kexi/kexidb/utils.h"
+#include <db/utils.h>
 #include <KoSelection.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoIcon.h>
+
 #include <QVBoxLayout>
 #include <QToolButton>
 #include <QLabel>
@@ -95,7 +97,7 @@ QWidget *KexiRelationDesignTool::createOptionWidget()
     m_relationCombo = new KComboBox();
 
     fileButton = new QToolButton(optionWidget);
-    fileButton->setIcon(SmallIcon("document-open"));
+    fileButton->setIcon(koIcon("document-open"));
     fileButton->setToolTip(i18n("Open Database"));
 
     connect(fileButton, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));

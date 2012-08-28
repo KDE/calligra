@@ -441,18 +441,30 @@ monthOfWeek(time_t t, bool beginOnMonday)
     if (tm_mday < 4)
     {
         if (dayOfWeek(t, beginOnMonday) - tm_mday >= 3)
+	{
             if (tm_mon == 0)
+	    {
                 return 12;
+	    }
             else
+	    {
                 return tm_mon;
+	    }
+	}
     }
     else if (tm_mday > lastDayOfMonth - 4)
     {
         if (tm_mday - dayOfWeek(t, beginOnMonday) > lastDayOfMonth - 4)
+	{
             if (tm_mon == 11)
+	    {
                 return 1;
+	    }
             else
+	    {
                 return tm_mon + 2;
+	    }
+	}
     }
     return tm_mon + 1;
 }

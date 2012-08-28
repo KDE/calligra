@@ -19,6 +19,7 @@
 
 #include "kptfactory.h"
 #include "kptpart.h"
+#include "kptpartpart.h"
 #include "kptaboutdata.h"
 #include <kcomponentdata.h>
 #include <kiconloader.h>
@@ -46,24 +47,15 @@ Factory::~Factory()
     s_global = 0L;
 }
 
-QObject* Factory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
 
-    // If classname is "KoDocument", our host is a calligra application
-    // otherwise, the host wants us as a simple part, so switch to readonly
-    // and single view.
-    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
-
-    // parentWidget and widgetName are used by KoDocument for the
-    // "readonly+singleView" case.
-    Part *part = new Part(parentWidget, parent,
-                          !bWantKoDocument);
-
-    if (!bWantKoDocument)
-      part->setReadWrite(false);
+    PartPart *part = new PartPart(parent);
+    Part *doc = new Part(part);
+    part->setDocument(doc);
 
     return part;
 }
@@ -83,11 +75,11 @@ const KComponentData &Factory::global()
 
         // Add any application-specific resource directories here
         s_global->dirs()->addResourceType("plan_template", "data", "plan/templates/");
+        s_global->dirs()->addResourceType("plan_taskmodules", "data", "plan/taskmodules/");
         s_global->dirs()->addResourceType("toolbar", "data", "calligra/toolbar/");
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
-        
     }
     return *s_global;
 }

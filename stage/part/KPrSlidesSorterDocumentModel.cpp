@@ -34,9 +34,7 @@
 #include <KoShapeRenameCommand.h>
 #include <KoPAPageDeleteCommand.h>
 #include "commands/KPrDeleteSlidesCommand.h"
-
-//KDE Headers
-#include <KIcon>
+#include <KoIcon.h>
 
 //Qt Headers
 #include <QMimeData>
@@ -299,15 +297,15 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             QString seq = QKeySequence(Qt::ShiftModifier).toString();
             seq.chop(1);
             QAction *popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
-            popupMoveAction->setIcon(KIcon("go-jump"));
+            popupMoveAction->setIcon(koIcon("go-jump"));
             seq = QKeySequence(Qt::ControlModifier).toString();
             seq.chop(1);
             QAction *popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
-            popupCopyAction->setIcon(KIcon("edit-copy"));
+            popupCopyAction->setIcon(koIcon("edit-copy"));
             seq = QKeySequence( Qt::ControlModifier + Qt::ShiftModifier ).toString();
             seq.chop(1);
             QAction *popupCancelAction = new QAction(i18n("C&ancel") + '\t' + QKeySequence(Qt::Key_Escape).toString(), this);
-            popupCancelAction->setIcon(KIcon("process-stop"));
+            popupCancelAction->setIcon(koIcon("process-stop"));
 
             if (enableMove) {
                 popup.addAction(popupMoveAction);
@@ -378,6 +376,7 @@ bool KPrSlidesSorterDocumentModel::removeSlides(const QList<KoPAPageBase *> &sli
         KPrDocument *doc = static_cast<KPrDocument *>(m_document);
         KUndo2Command *cmd = new KPrDeleteSlidesCommand(doc, slides);
         if (cmd) {
+            removeRows(m_document->pageIndex(slides.first()), slides.count(), QModelIndex());
             m_document->addCommand(cmd);
             return true;
         }

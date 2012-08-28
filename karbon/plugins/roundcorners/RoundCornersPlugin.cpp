@@ -38,10 +38,10 @@
 #include <KoParameterShape.h>
 #include <KoParameterToPathCommand.h>
 #include <KoUnitDoubleSpinBox.h>
+#include <KoIcon.h>
 
 #include <kpluginfactory.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 
@@ -55,7 +55,7 @@ K_EXPORT_PLUGIN(RoundCornersPluginFactory("karbonroundcornersplugin"))
 RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
         : Plugin(parent)
 {
-    KAction *actionRoundCorners  = new KAction(KIcon("14_roundcorners"), i18n("&Round Corners..."), this);
+    KAction *actionRoundCorners  = new KAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
     connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
 

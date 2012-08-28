@@ -25,13 +25,15 @@
 #include "kexiguimsghandler.h"
 #include "KexiStartupDialog.h"
 
-#include <kexidb/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
+#include <db/utils.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
 #include <widget/KexiConnectionSelectorWidget.h>
 #include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
+
+#include <KoIcon.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -169,7 +171,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
         setButtonText(KDialog::User1, i18n("&Details") + " >>");
     }
     setButtonText(KDialog::Ok, i18n("&Open"));
-    setButtonIcon(KDialog::Ok, KIcon("document-open"));
+    setButtonIcon(KDialog::Ok, koIcon("document-open"));
 }
 
 KexiDBPasswordDialog::~KexiDBPasswordDialog()
@@ -368,6 +370,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     m_forcedDesignMode = args->isSet("design-mode");
     m_isProjectNavigatorVisible = args->isSet("show-navigator");
     m_isMainMenuVisible = !args->isSet("hide-menu");
+    m_forcedFullScreen = args->isSet("fullscreen");
     bool createDB = args->isSet("createdb");
     const bool alsoOpenDB = args->isSet("create-opendb");
     if (alsoOpenDB)
@@ -600,7 +603,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KMessageBox::information(0,
                                  i18n("You have specified a few database objects to be opened automatically, "
                                       "using startup options.\n"
-                                      "These options will be ignored because it is not available while creating "
+                                      "These options will be ignored because they are not available while creating "
                                       "or dropping projects."));
     }
 

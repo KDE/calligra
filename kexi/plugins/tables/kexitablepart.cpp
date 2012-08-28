@@ -21,10 +21,11 @@
 
 #include "kexitablepart.h"
 
+#include <KoIcon.h>
+
 #include <KDebug>
 #include <KMessageBox>
 #include <KTabWidget>
-#include <KIconLoader>
 #include <KPluginFactory>
 
 #include <KexiMainWindowIface.h>
@@ -36,8 +37,8 @@
 #include "kexitabledesigner_dataview.h"
 #include "kexilookupcolumnpage.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 #include <KexiWindow.h>
 
 //! @internal
@@ -77,7 +78,7 @@ void KexiTablePart::initPartActions()
 
 void KexiTablePart::initInstanceActions()
 {
-//moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), "view-filter", 0, "tablepart_filter");
+//moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), koIconName("view-filter"), 0, "tablepart_filter");
     /*2.0 moved to createViewActions()
       KAction *a = createSharedToggleAction(
         Kexi::DesignViewMode, i18n("Primary Key"), "key", KShortcut(),
@@ -240,7 +241,7 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     d->lookupColumnPage->setProject(prj);
 
 //! @todo add lookup field icon
-    tab->addTab(d->lookupColumnPage, KIcon("combo"), "");
+    tab->addTab(d->lookupColumnPage, koIcon("combo"), QString());
     tab->setTabToolTip(tab->indexOf(d->lookupColumnPage), i18n("Lookup column"));
 }
 

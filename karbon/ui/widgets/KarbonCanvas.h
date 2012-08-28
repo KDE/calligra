@@ -9,7 +9,7 @@
    Copyright (C) 2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2007 David Faure <faure@kde.org>
 
@@ -40,7 +40,7 @@
 #include <QList>
 #include <QBrush>
 
-class KarbonPart;
+class KarbonKoDocument;
 class KoViewConverter;
 class KoShapeManager;
 class KoToolProxy;
@@ -56,7 +56,7 @@ class KarbonCanvas: public QWidget, public KoCanvasBase
     Q_OBJECT
 
 public:
-    explicit KarbonCanvas(KarbonPart *p);
+    explicit KarbonCanvas(KarbonKoDocument *p);
     virtual ~KarbonCanvas();
 
     /// reimplemented from KoCanvasBase

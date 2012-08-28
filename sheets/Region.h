@@ -248,21 +248,21 @@ public:
 
     /* TODO Stefan #3: Improve! */
     /**
-     * Substracts the point @p point from this region.
+     * Subtracts the point @p point from this region.
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
     void sub(const QPoint& point, Sheet* sheet);
 
     /**
-     * Substracts the range @p range from this region.
+     * Subtracts the range @p range from this region.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
     void sub(const QRect& range, Sheet* sheet);
 
     /**
-     * Substracts the region @p region from this region.
+     * Subtracts the region @p region from this region.
      * @param region the region to subtract
      */
     void sub(const Region& region);

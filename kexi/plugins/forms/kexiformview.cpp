@@ -42,12 +42,12 @@
 #include <kexi.h>
 #include <kexi_global.h>
 #include <kexidragobjects.h>
-#include <kexidb/field.h>
-#include <kexidb/fieldlist.h>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
-#include <kexidb/preparedstatement.h>
+#include <db/field.h>
+#include <db/fieldlist.h>
+#include <db/connection.h>
+#include <db/cursor.h>
+#include <db/utils.h>
+#include <db/preparedstatement.h>
 #include <dataviewcommon/kexitableviewdata.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
@@ -1453,7 +1453,7 @@ void KexiFormView::updateActionsInternal()
         widget_assign_action->setEnabled(
                viewMode()==Kexi::DesignViewMode
             && selectedWidget
-            && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton")
+            && (wClass == "QPushButton" || wClass == "KPushButton" || wClass == "KexiPushButton" || wClass == "KexiDBCommandLinkButton")
         );
     }
 #ifdef KEXI_DEBUG_GUI

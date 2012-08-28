@@ -28,14 +28,14 @@
 
 #include <kexiutils/identifier.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
-#include <kexidb/utils.h>
-#include <kexidb/parser/parser.h>
-#include <kexidb/msghandler.h>
-#include <kexidb/dbproperties.h>
+#include <db/connection.h>
+#include <db/cursor.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
+#include <db/utils.h>
+#include <db/parser/parser.h>
+#include <db/msghandler.h>
+#include <db/dbproperties.h>
 #include <kexiutils/utils.h>
 
 #include "kexiproject.h"
@@ -644,7 +644,7 @@ bool KexiProject::retrieveItems()
         int ident = cursor->value(0).toInt(&ok);
         QString objName(cursor->value(1).toString());
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
-                && KexiUtils::isIdentifier(objName))
+                && KexiDB::isIdentifier(objName))
         {
             KexiPart::Item *it = new KexiPart::Item();
             it->setIdentifier(ident);
@@ -1097,45 +1097,48 @@ bool KexiProject::checkProject(const QString& singlePartClass)
         setError(d->connection);
         return false;
     }
-    QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
-    if (!singlePartClass.isEmpty()) {
-        sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
-    }
-    KexiDB::Cursor *cursor = d->connection->executeQuery(sql);
-    if (!cursor) {
-        setError(d->connection);
-        return false;
-    }
+    bool containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
+    if (containsKexi__partsTable) { // check if kexi__parts exists, if missing, createInternalStructures() will create it
+        QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
+        if (!singlePartClass.isEmpty()) {
+            sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
+        }
+        KexiDB::Cursor *cursor = d->connection->executeQuery(sql);
+        if (!cursor) {
+            setError(d->connection);
+            return false;
+        }
 
-    bool saved = false;
-    for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
-        const QString partMime( cursor->value(2).toString() );
-        QString partClass( cursor->value(3).toString() );
-        partClass = realPartClass(partClass, partMime);
-        if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
-            partClass = QLatin1String("org.kexi-project.report");
+        bool saved = false;
+        for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
+            const QString partMime( cursor->value(2).toString() );
+            QString partClass( cursor->value(3).toString() );
+            partClass = realPartClass(partClass, partMime);
+            if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
+                partClass = QLatin1String("org.kexi-project.report");
+            }
+            KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
+            bool ok;
+            const int classId = cursor->value(0).toInt(&ok);
+            if (!ok || classId <= 0) {
+                kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
+            }
+            if (info && ok && classId > 0) {
+                d->saveClassId(partClass, classId);
+                saved = true;
+            }
+            else {
+                KexiPart::MissingPart m;
+                m.name = cursor->value(1).toString();
+                m.className = partClass;
+                d->missingParts.append(m);
+            }
         }
-        KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
-        bool ok;
-        const int classId = cursor->value(0).toInt(&ok);
-        if (!ok || classId <= 0) {
-            kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
-        }
-        if (info && ok && classId > 0) {
-            d->saveClassId(partClass, classId);
-            saved = true;
-        }
-        else {
-            KexiPart::MissingPart m;
-            m.name = cursor->value(1).toString();
-            m.className = partClass;
-            d->missingParts.append(m);
-        }
-    }
 
-    d->connection->deleteCursor(cursor);
-    if (!saved && !singlePartClass.isEmpty()) {
-        return false; // failure is single part class was not found
+        d->connection->deleteCursor(cursor);
+        if (!saved && !singlePartClass.isEmpty()) {
+            return false; // failure is single part class was not found
+        }
     }
     return true;
 }

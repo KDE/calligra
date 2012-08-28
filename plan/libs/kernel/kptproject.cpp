@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  Copyright (C) 2001 Thomas zander <zander@kde.org>
- Copyright (C) 2004 - 2010 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2004 - 2010, 2012 Dag Andersen <danders@get2net.dk>
  Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
  Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
 
@@ -29,6 +29,7 @@
 #include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
 #include "kptschedulerplugin.h"
+#include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
@@ -39,12 +40,11 @@
 #include <QList>
 
 #include <kdatetime.h>
-#include <kdebug.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
 #include <krandom.h>
+#include <kdeversion.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -200,7 +200,7 @@ void Project::calculate( const DateTime &dt )
         cs->notScheduled = false;
         calcFreeFloat();
         emit scheduleChanged( cs );
-        emit changed();
+        emit projectChanged();
     } else if ( type() == Type_Subproject ) {
         kWarning() << "Subprojects not implemented";
     } else {
@@ -241,7 +241,7 @@ void Project::calculate( ScheduleManager &sm )
     emit sigCalculationFinished( this, &sm );
     emit scheduleManagerChanged( &sm );
     emit projectCalculated( &sm );
-    emit changed();
+    emit projectChanged();
     sm.setScheduling( false );
 }
 
@@ -352,7 +352,7 @@ void Project::calculate()
         cs->notScheduled = false;
         calcFreeFloat();
         emit scheduleChanged( cs );
-        emit changed();
+        emit projectChanged();
     } else if ( type() == Type_Subproject ) {
         kWarning() << "Subprojects not implemented";
     } else {
@@ -368,7 +368,7 @@ void Project::finishCalculation( ScheduleManager &sm )
     cs->notScheduled = false;
     calcFreeFloat();
     emit scheduleChanged( cs );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setProgress( int progress, ScheduleManager *sm )
@@ -828,7 +828,11 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 
 //            l->setMonetaryThousandsSeparator( e.attribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() ) );
             if ( e.hasAttribute( "currency-digits" ) ) {
+#if KDE_IS_VERSION(4,4,0)
+                l->setMonetaryDecimalPlaces(e.attribute("currency-digits").toInt());
+#else
                 l->setFracDigits( e.attribute( "currency-digits" ).toInt() );
+#endif
             }
             if ( e.hasAttribute( "positive-monetary-sign-position" ) ) {
                 l->setPositiveMonetarySignPosition( (KLocale::SignPosition)( e.attribute( "positive-monetary-sign-position" ).toInt() ) );
@@ -1143,7 +1147,11 @@ void Project::save( QDomElement &element ) const
     loc.setAttribute( "currency-symbol", l->currencySymbol() );
 //    loc.setAttribute( "monetary-decimal-symbol", l->monetaryDecimalSymbol() );
 //    loc.setAttribute( "monetary-thousands-separator", l->monetaryThousandsSeparator() );
+#if KDE_IS_VERSION(4,4,0)
+    loc.setAttribute("currency-digits", l->monetaryDecimalPlaces());
+#else
     loc.setAttribute( "currency-digits", l->fracDigits() );
+#endif
     loc.setAttribute( "positive-monetary-sign-position", l->positiveMonetarySignPosition() );
     loc.setAttribute( "positive-prefix-currency-symbol", l->positivePrefixCurrencySymbol() );
     loc.setAttribute( "negative-monetary-sign-position", l->negativeMonetarySignPosition() );
@@ -1257,7 +1265,7 @@ void Project::addResourceGroup( ResourceGroup *group, int index )
         r->setProject( this );
     }
     emit resourceGroupAdded( group );
-    emit changed();
+    emit projectChanged();
 }
 
 ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
@@ -1277,7 +1285,7 @@ ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
         removeResourceId( r->id() );
     }
     emit resourceGroupRemoved( g );
-    emit changed();
+    emit projectChanged();
     return g;
 }
 
@@ -1293,7 +1301,7 @@ void Project::addResource( ResourceGroup *group, Resource *resource, int index )
     group->addResource( i, resource, 0 );
     setResourceId( resource );
     emit resourceAdded( resource );
-    emit changed();
+    emit projectChanged();
 }
 
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
@@ -1311,7 +1319,7 @@ Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
         kWarning() << "Cound not take resource from group";
     }
     emit resourceRemoved( resource );
-    emit changed();
+    emit projectChanged();
     return r;
 }
 
@@ -1392,7 +1400,7 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     connect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), task, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
     if ( emitSignal ) {
         emit nodeAdded( task );
-        emit changed();
+        emit projectChanged();
         if ( p != this && p->numChildren() == 1 ) {
             emit nodeChanged( p );
         }
@@ -1414,7 +1422,7 @@ void Project::takeTask( Node *node, bool emitSignal )
     parent->takeChildNode( node );
     if ( emitSignal ) {
         emit nodeRemoved( node );
-        emit changed();
+        emit projectChanged();
         if ( parent != this && parent->type() != Node::Type_Summarytask ) {
             emit nodeChanged( parent );
         }
@@ -1768,6 +1776,17 @@ ResourceGroup *Project::groupByName( const QString& name ) const
     return 0;
 }
 
+QList<Resource*> Project::autoAllocateResources() const
+{
+    QList<Resource*> lst;
+    foreach ( Resource *r, resourceIdDict ) {
+        if ( r->autoAllocate() ) {
+            lst << r;
+        }
+    }
+    return lst;
+}
+
 void Project::insertResourceId( const QString &id, Resource *resource )
 {
     resourceIdDict.insert( id, resource );
@@ -1839,6 +1858,10 @@ QStringList Project::resourceNameList() const
 EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate &end, long id, EffortCostCalculationType typ ) const
 {
     //kDebug(planDbg())<<start<<end<<id;
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return EffortCostMap();
+    }
     EffortCostMap ec;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -2068,7 +2091,7 @@ void Project::addCalendar( Calendar *calendar, Calendar *parent, int index )
     }
     setCalendarId( calendar );
     emit calendarAdded( calendar );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::takeCalendar( Calendar *calendar )
@@ -2088,7 +2111,7 @@ void Project::takeCalendar( Calendar *calendar )
     }
     emit calendarRemoved( calendar );
     calendar->setProject( 0 );
-    emit changed();
+    emit projectChanged();
 }
 
 int Project::indexOf( const Calendar *calendar ) const
@@ -2172,7 +2195,7 @@ void Project::setDefaultCalendar( Calendar *cal )
         cal->setDefault( true );
     }
     emit defaultCalendarChanged( cal );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )
@@ -2287,7 +2310,7 @@ void Project::setWbsDefinition( const WBSDefinition &def )
     //kDebug(planDbg());
     m_wbsDefinition = def;
     emit wbsDefinitionChanged();
-    emit changed();
+    emit projectChanged();
 }
 
 QString Project::generateWBSCode( QList<int> &indexes ) const
@@ -2319,7 +2342,7 @@ void Project::setCurrentSchedule( long id )
         r->setCurrentSchedule( id );
     }
     emit currentScheduleChanged();
-    emit changed();
+    emit projectChanged();
 }
 
 ScheduleManager *Project::scheduleManager( long id ) const
@@ -2398,7 +2421,7 @@ void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent, 
     m_managerIdMap.insert( sm->managerId(), sm );
 
     emit scheduleManagerAdded( sm );
-    emit changed();
+    emit projectChanged();
     //kDebug(planDbg())<<"Added:"<<sm->name()<<", now"<<m_managers.count();
 }
 
@@ -2418,7 +2441,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
             sm->setParentManager( 0 );
             m_managerIdMap.remove( sm->managerId() );
             emit scheduleManagerRemoved( sm );
-            emit changed();
+            emit projectChanged();
         }
     } else {
         index = indexOf( sm );
@@ -2427,7 +2450,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
             m_managers.removeAt( indexOf( sm ) );
             m_managerIdMap.remove( sm->managerId() );
             emit scheduleManagerRemoved( sm );
-            emit changed();
+            emit projectChanged();
         }
     }
     return index;
@@ -2534,34 +2557,38 @@ void Project::insertCalendarId( const QString &id, Calendar *calendar )
     calendarIdDict.insert( id, calendar );
 }
 
-void Project::changed( Node *node )
+void Project::changed( Node *node, int property )
 {
     if ( m_parent == 0 ) {
-        emit nodeChanged( node );
-        emit changed();
+        Node::changed( node, property ); // reset cache
+        if ( property != Node::Type ) {
+            // add/remove node is handled elsewhere
+            emit nodeChanged( node );
+            emit projectChanged();
+        }
         return;
     }
-    Node::changed( node );
+    Node::changed( node, property );
 }
 
 void Project::changed( ResourceGroup *group )
 {
     //kDebug(planDbg());
     emit resourceGroupChanged( group );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( ScheduleManager *sm )
 {
     emit scheduleManagerChanged( sm );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( MainSchedule *sch )
 {
     //kDebug(planDbg())<<sch->id();
     emit scheduleChanged( sch );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::sendScheduleToBeAdded( const ScheduleManager *sm, int row )
@@ -2573,7 +2600,7 @@ void Project::sendScheduleAdded( const MainSchedule *sch )
 {
     //kDebug(planDbg())<<sch->id();
     emit scheduleAdded( sch );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::sendScheduleToBeRemoved( const MainSchedule *sch )
@@ -2586,25 +2613,25 @@ void Project::sendScheduleRemoved( const MainSchedule *sch )
 {
     //kDebug(planDbg())<<sch->id();
     emit scheduleRemoved( sch );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( Resource *resource )
 {
     emit resourceChanged( resource );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( Calendar *cal )
 {
     emit calendarChanged( cal );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::changed( StandardWorktime *w )
 {
     emit standardWorktimeChanged( w );
-    emit changed();
+    emit projectChanged();
 }
 
 bool Project::addRelation( Relation *rel, bool check )
@@ -2619,7 +2646,7 @@ bool Project::addRelation( Relation *rel, bool check )
     rel->parent()->addDependChildNode( rel );
     rel->child()->addDependParentNode( rel );
     emit relationAdded( rel );
-    emit changed();
+    emit projectChanged();
     return true;
 }
 
@@ -2629,7 +2656,7 @@ void Project::takeRelation( Relation *rel )
     rel->parent() ->takeDependChildNode( rel );
     rel->child() ->takeDependParentNode( rel );
     emit relationRemoved( rel );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setRelationType( Relation *rel, Relation::Type type )
@@ -2637,7 +2664,7 @@ void Project::setRelationType( Relation *rel, Relation::Type type )
     emit relationToBeModified( rel );
     rel->setType( type );
     emit relationModified( rel );
-    emit changed();
+    emit projectChanged();
 }
 
 void Project::setRelationLag( Relation *rel, const Duration &lag )
@@ -2645,7 +2672,7 @@ void Project::setRelationLag( Relation *rel, const Duration &lag )
     emit relationToBeModified( rel );
     rel->setLag( lag );
     emit relationModified( rel );
-    emit changed();
+    emit projectChanged();
 }
 
 QList<Node*> Project::flatNodeList( Node *parent )

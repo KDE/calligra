@@ -35,7 +35,6 @@ SET (commands_DIR_SRCS
     commands/AutoFilterCommand.cpp
     commands/AutoFormatCommand.cpp
     commands/BorderColorCommand.cpp
-    commands/ColumnStyleCommand.cpp
     commands/CommentCommand.cpp
     commands/ConditionCommand.cpp
     commands/CopyCommand.cpp
@@ -50,7 +49,6 @@ SET (commands_DIR_SRCS
     commands/PasteCommand.cpp
     commands/PrecisionCommand.cpp
     commands/RowColumnManipulators.cpp
-    commands/RowStyleCommand.cpp
     commands/SheetCommands.cpp
     commands/SortManipulator.cpp
     commands/SpellCheckCommand.cpp
@@ -134,6 +132,7 @@ SET (part_DIR_SRCS
     part/CellToolFactory.cpp
     #part/Digest.cpp
     part/Doc.cpp
+    part/Part.cpp
     part/Factory.cpp
     part/Find.cpp
     part/Headers.cpp
@@ -161,12 +160,13 @@ kde4_add_ui_files(part_DIR_SRCS
 
 SET (ui_DIR_SRCS
     ui/AbstractSelectionStrategy.cpp
+    ui/ActionOptionWidget.cpp
     ui/AutoFillStrategy.cpp
     ui/CellEditorBase.cpp
     ui/CellEditor.cpp
+    ui/CellEditorDocker.cpp
     ui/CellToolBase.cpp
     ui/CellToolBase_p.cpp
-    ui/CellToolOptionWidget.cpp
     ui/CellView.cpp
     ui/DragAndDropStrategy.cpp
     ui/FormulaEditorHighlighter.cpp
@@ -312,7 +312,7 @@ install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
+kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-sheets.png")
 
 kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 
@@ -331,7 +331,8 @@ install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES  sheets.rc sheets_readonly.rc sheets.notifyrc DESTINATION ${DATA_INSTALL_DIR}/sheets)
+install( FILES  sheets.rc sheets_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/sheets)
+install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/sheets)
 install( FILES  sheetspart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( PROGRAMS  sheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  sheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )

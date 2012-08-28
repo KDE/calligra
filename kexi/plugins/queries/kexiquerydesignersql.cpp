@@ -24,19 +24,19 @@
 #include <QLabel>
 #include <QPalette>
 #include <QToolTip>
-//Qt4#include <Q3SimpleRichText>
 
 #include <KDebug>
 #include <KMessageBox>
-#include <KIconLoader>
 #include <KAction>
 #include <KMenu>
 #include <KDialog>
 
+#include <KoIcon.h>
+
 #include <kexiutils/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/parser/parser.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/parser/parser.h>
 
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
@@ -65,9 +65,9 @@ public:
     Private() :
             history(0)
             , historyHead(0)
-            , statusPixmapOk(DesktopIcon("dialog-ok"))
-            , statusPixmapErr(DesktopIcon("dialog-error"))
-            , statusPixmapInfo(DesktopIcon("dialog-information"))
+            , statusPixmapOk(koDesktopIcon("dialog-ok"))
+            , statusPixmapErr(koDesktopIcon("dialog-error"))
+            , statusPixmapInfo(koDesktopIcon("dialog-information"))
             , parsedQuery(0)
             , heightForStatusMode(-1)
             , heightForHistoryMode(-1)
@@ -201,7 +201,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     // -- setup local actions
     QList<QAction*> viewActions;
     QAction* a;
-    viewActions << (a = new KAction(KIcon("test_it"), i18n("Check Query"), this));
+    viewActions << (a = new KAction(koIcon("test_it"), i18n("Check Query"), this));
     a->setObjectName("querypart_check_query");
     a->setShortcut(Qt::Key_F9);
     a->setToolTip(i18n("Check Query"));
@@ -209,7 +209,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     connect(a, SIGNAL(triggered()), this, SLOT(slotCheckQuery()));
 
     viewActions << (d->action_toggle_history = new KAction(
-        KIcon("view-history"), i18n("Show SQL History"), this));
+        koIcon("view-history"), i18n("Show SQL History"), this));
     a = d->action_toggle_history;
     a->setCheckable(true);
     a->setObjectName("querypart_view_toggle_history");
@@ -232,11 +232,11 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
 
     const QString msg_back(i18n("Back to Selected Query"));
     const QString msg_clear(i18n("Clear History"));
-    d->historyHead->addButton(KIcon("go-jump"), msg_back, this, SLOT(slotSelectQuery()));
-    d->historyHead->addButton(KIcon("edit-clear-locationbar-rtl"), msg_clear, d->history, SLOT(clear()));
-    d->history->popupMenu()->addAction(KIcon("go-jump"), msg_back,
+    d->historyHead->addButton(koIcon("go-jump"), msg_back, this, SLOT(slotSelectQuery()));
+    d->historyHead->addButton(koIcon("edit-clear-locationbar-rtl"), msg_clear, d->history, SLOT(clear()));
+    d->history->popupMenu()->addAction(koIcon("go-jump"), msg_back,
                                        this, SLOT(slotSelectQuery()));
-    d->history->popupMenu()->addAction(KIcon("edit-clear-locationbar-rtl"), msg_clear,
+    d->history->popupMenu()->addAction(koIcon("edit-clear-locationbar-rtl"), msg_clear,
                                        d->history, SLOT(clear()));
     connect(d->history, SIGNAL(currentItemDoubleClicked()), this, SLOT(slotSelectQuery()));
 

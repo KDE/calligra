@@ -22,8 +22,8 @@
 
 #include "kexidbconnectionset.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
-#include <kexidb/connectiondata.h>
-#include <kexidb/msghandler.h>
+#include <db/connectiondata.h>
+#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>

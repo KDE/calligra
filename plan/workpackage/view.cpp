@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-  Copyright (C) 2002 - 2009, 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -44,7 +44,6 @@
 #include <QDomDocument>
 #include <QPointer>
 
-#include <kicon.h>
 #include <kactionmenu.h>
 #include <kmenu.h>
 #include <kstandardaction.h>
@@ -74,6 +73,8 @@
 #include <kprocess.h>
 #include <kurl.h>
 
+#include <KoIcon.h>
+
 #include "part.h"
 #include "factory.h"
 
@@ -90,7 +91,7 @@
 
 #include <assert.h>
 
-extern int planworkDbg();
+#include "debugarea.h"
 
 namespace KPlatoWork
 {
@@ -123,51 +124,51 @@ View::View( Part *part,  QWidget *parent, KActionCollection *collection )
     actionCopy = collection->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
     actionPaste = collection->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( slotEditPaste() ));
 
-    actionRemoveSelectedPackages  = new KAction(KIcon( "edit-delete" ), i18n("Remove Packages"), this);
+    actionRemoveSelectedPackages  = new KAction(koIcon("edit-delete"), i18n("Remove Packages"), this);
     collection->addAction("package_remove_selected", actionRemoveSelectedPackages );
     connect( actionRemoveSelectedPackages, SIGNAL( triggered( bool ) ), SLOT( slotRemoveSelectedPackages() ) );
 
-    actionRemoveCurrentPackage  = new KAction(KIcon( "edit-delete" ), i18n("Remove Package"), this);
+    actionRemoveCurrentPackage  = new KAction(koIcon("edit-delete"), i18n("Remove Package"), this);
     collection->addAction("package_remove_current", actionRemoveCurrentPackage );
     connect( actionRemoveCurrentPackage, SIGNAL( triggered( bool ) ), SLOT( slotRemoveCurrentPackage() ) );
 
 
-//     actionTaskProgress  = new KAction(KIcon( "document-edit" ), i18n("Progress..."), this);
+//     actionTaskProgress  = new KAction(koIcon("document-edit"), i18n("Progress..."), this);
 //     collection->addAction("task_progress", actionTaskProgress );
 //     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
 
     //------ Settings
-    actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure PlanWork..."), this);
+    actionConfigure  = new KAction(koIcon("configure"), i18n("Configure PlanWork..."), this);
     collection->addAction("configure", actionConfigure );
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
     //------ Popups
-    actionEditDocument  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
+    actionEditDocument  = new KAction(koIcon("document-edit"), i18n("Edit..."), this);
     collection->addAction("edit_document", actionEditDocument );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
 
-    actionViewDocument  = new KAction(KIcon( "document-preview" ), i18nc( "@verb", "View..."), this);
+    actionViewDocument  = new KAction(koIcon("document-preview"), i18nc( "@verb", "View..."), this);
     collection->addAction("view_document", actionViewDocument );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
 
     // FIXME remove UndoText::removeDocument() when string freeze is lifted
-    actionRemoveDocument = new KAction(KIcon( "list-remove" ), UndoText::removeDocument(), this);
+    actionRemoveDocument = new KAction(koIcon("list-remove"), UndoText::removeDocument(), this);
     collection->addAction("remove_document", actionRemoveDocument );
     connect( actionRemoveDocument, SIGNAL( triggered( bool ) ), SLOT( slotRemoveDocument() ) );
 
-    actionSendPackage  = new KAction(KIcon( "mail-send" ), i18n("Send Package..."), this);
+    actionSendPackage  = new KAction(koIcon("mail-send"), i18n("Send Package..."), this);
     collection->addAction("edit_sendpackage", actionSendPackage );
     connect( actionSendPackage, SIGNAL( triggered( bool ) ), SLOT( slotSendPackage() ) );
 
-    actionPackageSettings  = new KAction(KIcon( "document-properties" ), i18n("Package Settings..."), this);
+    actionPackageSettings  = new KAction(koIcon("document-properties"), i18n("Package Settings..."), this);
     collection->addAction("edit_packagesettings", actionPackageSettings );
     connect( actionPackageSettings, SIGNAL( triggered( bool ) ), SLOT( slotPackageSettings() ) );
 
-    actionTaskCompletion  = new KAction(KIcon( "document-edit" ), i18n("Edit Progress..."), this);
+    actionTaskCompletion  = new KAction(koIcon("document-edit"), i18n("Edit Progress..."), this);
     collection->addAction("task_progress", actionTaskCompletion );
     connect( actionTaskCompletion, SIGNAL( triggered( bool ) ), SLOT( slotTaskCompletion() ) );
 
-    actionViewDescription  = new KAction(/*KIcon( "document_view" ),*/ i18n("View Description..."), this);
+    actionViewDescription  = new KAction(/*koIcon("document_view"),*/ i18n("View Description..."), this);
     collection->addAction("task_description", actionViewDescription );
     connect( actionViewDescription, SIGNAL( triggered( bool ) ), SLOT( slotTaskDescription() ) );
 

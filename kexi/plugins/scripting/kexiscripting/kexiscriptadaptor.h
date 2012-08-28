@@ -31,7 +31,7 @@
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 /**
 * Adaptor class that provides Kexi specific functionality to

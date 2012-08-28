@@ -23,7 +23,6 @@
 #include <KoShapePainter.h>
 
 #include <KoShapeManager.h>
-#include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -35,14 +34,14 @@
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
 #include <KoShapeUngroupCommand.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
-#include <kicon.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 
 #include <QAbstractItemModel>
 #include <QMimeData>
+#include <QPainter>
 
 KoShapeContainer *shapeToContainer(KoShape *shape)
 {
@@ -257,8 +256,8 @@ bool KarbonLayerModel::setData(const QModelIndex &index, const QVariant &value, 
 KoDocumentSectionModel::PropertyList KarbonLayerModel::properties(KoShape* shape) const
 {
     PropertyList l;
-    l << Property(i18nc("Visibility state of the shape", "Visible"), SmallIcon("layer-visible-on"), SmallIcon("layer-visible-off"), shape->isVisible());
-    l << Property(i18nc("Lock state of the shape", "Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
+    l << Property(i18nc("Visibility state of the shape", "Visible"), koIcon("layer-visible-on"), koIcon("layer-visible-off"), shape->isVisible());
+    l << Property(i18nc("Lock state of the shape", "Locked"), koIcon("object-locked"), koIcon("object-unlocked"), shape->isGeometryProtected());
     l << Property(i18nc("The z-index of the shape", "zIndex"), QString("%1").arg(shape->zIndex()));
     l << Property(i18nc("The opacity of the shape", "Opacity"), QString("%1").arg(1.0 - shape->transparency()));
     l << Property(i18nc("Clipped state of the shape", "Clipped"), shape->clipPath() ? i18n("yes") : i18n("no"));

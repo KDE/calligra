@@ -38,6 +38,7 @@
 #include <QPointF>
 #include <KoView.h>
 #include <KoZoomMode.h>
+#include <KoPart.h>
 #include <sheets/calligra_sheets_export.h>
 
 class QAction;
@@ -87,7 +88,7 @@ class CALLIGRA_SHEETS_COMMON_EXPORT View : public KoView
 
 public:
     /** Creates a new view displaying \p document and with \p parent as parent. */
-    View(QWidget *parent, Doc *document);
+    View(KoPart *part, QWidget *parent, Doc *document);
 
     /** Destroys the view */
     ~View();
@@ -336,6 +337,8 @@ public slots:
 
     /** Calls KoToolProxy::deleteSelection(). */
     void editDeleteSelection();
+
+    void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
 
 public: // reimplementations
     // KoView interface

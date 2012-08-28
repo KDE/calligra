@@ -10,7 +10,7 @@
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2005-2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2005-2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
  * Copyright (C) 2006 Martin Ellis <martin.ellis@kdemail.net>
  * Copyright (C) 2006 Boudewijn Rempt <boud@valdyas.org>
@@ -51,7 +51,7 @@ class QRectF;
 class QPrinter;
 
 class KAction;
-class KarbonPart;
+class KarbonKoDocument;
 class KSelectAction;
 class KToggleAction;
 
@@ -62,6 +62,7 @@ class KoColor;
 class KarbonLayerDocker;
 class KarbonZoomController;
 
+class KarbonPart;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
@@ -70,11 +71,11 @@ class KARBONUI_EXPORT KarbonView : public KoView
     Q_OBJECT
 
 public:
-    explicit KarbonView(KarbonPart* part, QWidget* parent = 0);
+    KarbonView(KarbonPart *part, KarbonKoDocument* doc, QWidget* parent = 0);
     virtual ~KarbonView();
 
     /// Returns the view is attached to
-    KarbonPart * part() const;
+    KarbonKoDocument * part() const;
 
     /// Returns the canvas widget of this view
     KarbonCanvas * canvasWidget() const;
@@ -128,7 +129,7 @@ public slots:
 
     void configure();
 
-    void pageLayout();
+    void configurePageLayout();
 
     void selectionChanged();
 

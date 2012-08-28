@@ -98,15 +98,15 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         smilCalcMode = KPrAnimationValue::linear;
     } else if (calcMode == "discrete") {
         smilCalcMode = KPrAnimationValue::discrete;
-        kWarning(33003) << "calcMode discrete not yes supported";
+        kWarning(33003) << "calcMode discrete not yet supported";
         retval = false;
     } else if (calcMode == "paced") {
         smilCalcMode = KPrAnimationValue::paced;
-        kWarning(33003) << "calcMode paced not yes supported";
+        kWarning(33003) << "calcMode paced not yet supported";
         retval = false;
     } else if (calcMode == "spline") {
         smilCalcMode = KPrAnimationValue::spline;
-        kWarning(33003) << "calcMode spline not yes supported";
+        kWarning(33003) << "calcMode spline not yet supported";
         retval = false;
     }
 
@@ -114,8 +114,12 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     // value
     QString formula = element.attributeNS(KoXmlNS::anim, "formula", QString());
     if (!formula.isEmpty()) {
-        kWarning(33003) << "formula not yes supported";
-        retval = false;
+        QString keyTimes = element.attributeNS(KoXmlNS::smil, "keyTimes", QString());
+        QString values = element.attributeNS(KoXmlNS::smil, "values", QString());
+        QString keySplines = element.attributeNS(KoXmlNS::smil, "keySplines", QString());
+        KPrSmilValues * smilValue = new KPrSmilValues(m_shapeAnimation);
+        retval = retval && smilValue->loadFormula(values, keyTimes, keySplines, smilCalcMode, formula);
+        m_values = smilValue;
     }
     else {
         QString values = element.attributeNS(KoXmlNS::smil, "values", QString());

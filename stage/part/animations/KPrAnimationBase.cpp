@@ -35,7 +35,8 @@
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
 , m_begin(0)
-,m_duration(1)
+, m_duration(1)
+, m_fill(FillAuto)
 {
 }
 
@@ -60,6 +61,29 @@ bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
         m_duration = 1;
     }
     m_duration += m_begin;
+
+    QString fill = element.attributeNS(KoXmlNS::smil, "fill");
+    if (!fill.isEmpty()) {
+        if (fill == "remove") {
+            m_fill = FillRemove;
+        }
+        if (fill == "freeze") {
+            m_fill = FillFreeze;
+        }
+        if (fill == "hold") {
+            m_fill = FillHold;
+        }
+        if (fill == "transition") {
+            m_fill = FillTransition;
+        }
+        if (fill == "auto") {
+            m_fill = FillAuto;
+        }
+        if (fill == "default") {
+            m_fill = FillDefault;
+        }
+    }
+
     return true;
 }
 
@@ -92,5 +116,32 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
     else {
         writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->shape()).toString());
     }
+
+    QString fill;
+    switch (m_fill) {
+    case FillRemove:
+        fill = "remove";
+        break;
+    case FillFreeze:
+        fill = "freeze";
+        break;
+    case FillHold:
+        fill = "hold";
+        break;
+    case FillTransition:
+        fill = "transition";
+        break;
+    case FillAuto:
+        fill = "auto";
+        break;
+    case FillDefault:
+        fill = "default";
+        break;
+    }
+
+    if (!fill.isEmpty()) {
+        writer.addAttribute("smil:fill", fill);
+    }
+
     return true;
 }

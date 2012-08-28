@@ -66,15 +66,15 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     QVBoxLayout* btnlayout = new QVBoxLayout(this);
     layout->addLayout(btnlayout);
 
-    d->renamebtn = new QPushButton(/*KIcon("rename"),*/ i18n("Rename"), this);
+    d->renamebtn = new QPushButton(/*koIcon("edit-rename"),*/ i18n("Rename"), this);
     connect(d->renamebtn, SIGNAL(clicked()), this, SLOT(renameClicked()));
     btnlayout->addWidget(d->renamebtn);
 
-    d->addbtn = new QPushButton(/*KIcon("list-add"),*/ i18n("Add"), this);
+    d->addbtn = new QPushButton(/*koIcon("list-add"),*/ i18n("Add"), this);
     connect(d->addbtn, SIGNAL(clicked()), this, SLOT(addClicked()));
     btnlayout->addWidget(d->addbtn);
 
-    d->rembtn = new QPushButton(/*KIcon("edit-delete"),*/ i18n("Remove"), this);
+    d->rembtn = new QPushButton(/*koIcon("edit-delete"),*/ i18n("Remove"), this);
     connect(d->rembtn, SIGNAL(clicked()), this, SLOT(removeClicked()));
     btnlayout->addWidget(d->rembtn);
 

@@ -3,7 +3,7 @@
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
    Copyright (C) 2005, 2006 Sven Lüppken <sven@kde.org>
-   Copyright (C) 2008 - 2009 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2008 - 2009, 2012 Dag Andersen <danders@get2net.dk>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -34,7 +34,6 @@
 #include <kundo2qstack.h>
 
 #include <assert.h>
-#include <kicon.h>
 //#include "koshellsettings.h"
 
 #include <KoApplicationAdaptor.h>
@@ -52,7 +51,6 @@
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
@@ -68,7 +66,6 @@
 #include <kaboutdata.h>
 #include <kxmlguifactory.h>
 #include <kcomponentdata.h>
-#include <kiconloader.h>
 #include <ktoolinvocation.h>
 #include <kservice.h>
 #include <kio/netaccess.h>
@@ -79,7 +76,7 @@
 #include <KoView.h>
 #include <KoFilterManager.h>
 
-extern int planworkDbg();
+#include "debugarea.h"
 
 KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     : KParts::MainWindow()

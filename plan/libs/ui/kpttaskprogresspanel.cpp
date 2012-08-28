@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 - 2007 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2007, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,8 @@
 #include "kpttaskprogresspanel.h"
 #include "kptusedefforteditor.h"
 
+#include <KoIcon.h>
+
 #include <QCheckBox>
 #include <QDate>
 #include <QTableWidget>
@@ -31,8 +33,6 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <KIcon>
-#include <kdebug.h>
 
 #include "kpttask.h"
 #include "kptcommand.h"
@@ -41,8 +41,8 @@
 #include "kptdurationspinbox.h"
 #include "kptschedule.h"
 #include "kptproject.h"
+#include "kptdebug.h"
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -236,8 +236,8 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
 {
     setupUi(this);
 
-    addEntryBtn->setIcon( KIcon( "list-add" ) );
-    removeEntryBtn->setIcon( KIcon( "list-remove" ) );
+    addEntryBtn->setIcon(koIcon("list-add"));
+    removeEntryBtn->setIcon(koIcon("list-remove"));
 
     connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
     removeEntryBtn->setEnabled( false );

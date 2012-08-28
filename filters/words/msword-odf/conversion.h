@@ -197,9 +197,14 @@ namespace Conversion
     int fldToFieldType(const wvWare::FLD* fld);
 
     /**
-     * TODO:
+     * Convert footnote automatic numbering restart code to ODF equivalent.
      */
-    QString rncToStartNumberingAt(int rnc);
+    const char* rncToStartNumberingAt(quint16 rnc);
+
+    /**
+     * Convert footnote placement code to ODF equivalent.
+     */
+    const char* fpcToFtnPosition(quint16 fpc);
 
     /**
      * TODO:

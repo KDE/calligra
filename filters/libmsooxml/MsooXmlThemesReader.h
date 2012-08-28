@@ -131,7 +131,7 @@ class MSOOXML_EXPORT DrawingMLFillBase
 {
 public:
     virtual ~DrawingMLFillBase();
-    // This function will create the fill style and fill the approriate styles
+    // This function will create the fill style and fill the appropriate styles
     // and filePath if needed.
     // Number is used to index to correct style, color is the color which should be used when making the styles
     virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color) = 0;
@@ -162,7 +162,7 @@ private:
 class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
-    // Simplified gradient constuctor
+    // Simplified gradient constructor
     DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
                           QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);

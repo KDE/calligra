@@ -22,8 +22,8 @@
 #include <QString>
 #include <QStringList>
 
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 
 #include <KoReportData.h>
 
@@ -51,7 +51,7 @@ public:
     virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
 
     virtual QString sourceName() const;
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
     virtual QVariant value(unsigned int) const;
     virtual QVariant value(const QString &field) const;
 

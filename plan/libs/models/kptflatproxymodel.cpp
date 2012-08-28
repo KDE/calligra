@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -27,9 +27,7 @@
 #include <QPersistentModelIndex>
 #include <QItemSelection>
 
-#include <kdebug.h>
-
-extern int planDbg();
+#include "kptdebug.h"
 
 namespace KPlato
 {
@@ -387,7 +385,7 @@ QModelIndex FlatProxyModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
     QPersistentModelIndex idx = sourceIndex;
     if ( idx.column() != 0 ) {
-        // we only map indeces with column 0
+        // we only map indices with column 0
         idx = sourceModel()->index( idx.row(), 0, idx.parent() );
     }
     QModelIndex proxy_index = index( m_sourceIndexList.indexOf( idx ), sourceIndex.column() );

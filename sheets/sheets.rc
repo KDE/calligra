@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="Calligra Sheets" version="41">
+<gui name="Calligra Sheets" version="42">
 <MenuBar>
 <!-- <<<<<<<<<<<<<<<<<<<<<>>>>><   File Menu   >>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
  <Menu name="file"><text>&amp;File</text>
@@ -178,6 +178,7 @@
   <Action name="showVerticalScrollBar" group="settings_show"/>
   <Action name="showTabBar" group="settings_show" />
   <Action name="showStatusBar" group="settings_show" />
+  <Action name="settings_active_author" group="settings_configure"/>
   <Action name="configureNotifications" group="settings_configure"/>
   <Action name="preference" group="settings_configure"/>
  </Menu>

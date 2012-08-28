@@ -24,8 +24,8 @@
 #include <kinputdialog.h>
 #include <knumvalidator.h>
 
-#include <kexidb/queryschemaparameter.h>
-#include <kexidb/utils.h>
+#include <db/queryschemaparameter.h>
+#include <db/utils.h>
 #include <kexi_global.h>
 #include "utils/kexidatetimeformatter.h"
 

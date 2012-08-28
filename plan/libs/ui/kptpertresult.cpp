@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,13 +24,13 @@
 #include "kptnode.h"
 #include "kptschedule.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
 #include <QAbstractItemView>
 #include <QMenu>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -41,7 +41,6 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -86,8 +85,8 @@ static double dist[][2] = {
 };
 
 //-----------------------------------
-PertResult::PertResult( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+PertResult::PertResult(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent ),
     m_node( 0 ),
     m_project( 0 ),
     current_schedule( 0 )
@@ -223,7 +222,8 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.treeWidgetTaskResult, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.treeWidgetTaskResult, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -287,11 +287,13 @@ void PertResult::setProject( Project *project )
 bool PertResult::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg());
+    ViewBase::loadContext( context );
     return widget.treeWidgetTaskResult->loadContext( model()->columnMap(), context );
 }
 
 void PertResult::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.treeWidgetTaskResult->saveContext( model()->columnMap(), context );
 }
 
@@ -301,8 +303,8 @@ KoPrintJob *PertResult::createPrintJob()
 }
 
 //--------------------
-PertCpmView::PertCpmView( KoDocument *part, QWidget *parent ) 
-    : ViewBase( part, parent ),
+PertCpmView::PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 ),
     current_schedule( 0 ),
     block( false )
@@ -421,7 +423,8 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( widget.cpmTable, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, widget.cpmTable, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -581,11 +584,13 @@ void PertCpmView::slotUpdate()
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return widget.cpmTable->loadContext( model()->columnMap(), context );
 }
 
 void PertCpmView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     widget.cpmTable->saveContext( model()->columnMap(), context );
 }
 

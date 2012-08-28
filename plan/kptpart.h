@@ -58,9 +58,7 @@ class KPLATO_EXPORT Part : public KoDocument
     Q_OBJECT
 
 public:
-    explicit Part( QWidget *parentWidget = 0,
-          QObject* parent = 0,
-          bool singleViewMode = false );
+    explicit Part(KoPart *part = 0);
     ~Part();
 
     void setReadWrite( bool rw );
@@ -95,7 +93,6 @@ public:
 
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
 
-    void activate( QWidget *w = 0 );
     DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
 
     bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
@@ -118,6 +115,8 @@ public:
     bool extractFiles( KoStore *store, Package *package );
     bool extractFile( KoStore *store, Package *package, const Document *doc );
 
+    void registerView( View *view );
+
 public slots:
     /// Inserts an item into all other views than @p view
     void insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index );
@@ -129,14 +128,16 @@ public slots:
     /// If @p keep is true, packages that has been refused will not be checked for again
     void checkForWorkPackages( bool keep = false );
 
+    void setLoadingTemplate( bool );
+
 signals:
     void changed();
     void workPackageLoaded();
     void viewlistModified( bool );
+    void viewListItemAdded(const ViewListItem *item, const ViewListItem *parent, int index);
+    void viewListItemRemoved(const ViewListItem *item);
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent );
-
     /// Load kplato specific files
     virtual bool completeLoading( KoStore* store );
     /// Save kplato specific files
@@ -154,7 +155,6 @@ protected:
 
 protected slots:
     void slotViewDestroyed();
-    virtual void openTemplate( const KUrl& url );
     void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
 
     void autoCheckForWorkPackages();
@@ -193,6 +193,8 @@ private:
 
     bool m_viewlistModified;
     bool m_checkingForWorkPackages;
+
+    QList<QPointer<View> > m_views;
 };
 
 

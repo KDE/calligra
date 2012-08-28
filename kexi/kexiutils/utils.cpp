@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +36,6 @@
 #include <KCursor>
 #include <KApplication>
 #include <KIconEffect>
-#include <KIconLoader>
 #include <KGlobalSettings>
 #include <KAction>
 #include <KDialog>
@@ -628,59 +627,6 @@ QFont KexiUtils::smallFont(QWidget *init)
     return *_smallFont;
 }
 
-//---------
-
-//! @internal
-class StaticSetOfStrings::Private
-{
-public:
-    Private() : array(0), set(0) {}
-    ~Private() {
-        delete set;
-    }
-    const char** array;
-    QSet<QByteArray> *set;
-};
-
-StaticSetOfStrings::StaticSetOfStrings()
-        : d(new Private)
-{
-}
-
-StaticSetOfStrings::StaticSetOfStrings(const char* array[])
-        : d(new Private)
-{
-    setStrings(array);
-}
-
-StaticSetOfStrings::~StaticSetOfStrings()
-{
-    delete d;
-}
-
-void StaticSetOfStrings::setStrings(const char* array[])
-{
-    delete d->set;
-    d->set = 0;
-    d->array = array;
-}
-
-bool StaticSetOfStrings::isEmpty() const
-{
-    return d->array == 0;
-}
-
-bool StaticSetOfStrings::contains(const QByteArray& string) const
-{
-    if (!d->set) {
-        d->set = new QSet<QByteArray>();
-        for (const char ** p = d->array;*p;p++) { 
-            d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)));
-        }
-    }
-    return d->set->contains(string);
-}
-
 //---------------------
 
 KTextEditorFrame::KTextEditorFrame(QWidget * parent, Qt::WindowFlags f)
@@ -732,6 +678,16 @@ void KexiUtils::replaceColors(QImage* original, const QColor& color)
 bool KexiUtils::isLightColorScheme()
 {
     return KColorScheme(QPalette::Active, KColorScheme::Window).background().color().lightness() >= 128;
+}
+
+QPalette KexiUtils::paletteForReadOnly(const QPalette &palette)
+{
+    QPalette p(palette);
+    p.setBrush(QPalette::QPalette::Base, palette.brush(QPalette::Disabled, QPalette::Base));
+    p.setBrush(QPalette::Text, palette.brush(QPalette::Disabled, QPalette::Text));
+    p.setBrush(QPalette::Highlight, palette.brush(QPalette::Disabled, QPalette::Highlight));
+    p.setBrush(QPalette::HighlightedText, palette.brush(QPalette::Disabled, QPalette::HighlightedText));
+    return p;
 }
 
 //---------------------

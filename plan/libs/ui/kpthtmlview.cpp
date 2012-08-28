@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -28,23 +28,20 @@
 
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <khtmlview.h>
 
-#include <kdebug.h>
-
-extern int planDbg();
+#include "kptdebug.h"
 
 namespace KPlato
 {
 
 //-----------------------------------
-HtmlView::HtmlView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+HtmlView::HtmlView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     m_htmlPart = new KHTMLPart( this );
     m_htmlPart->view()->setFrameStyle( QFrame::StyledPanel );

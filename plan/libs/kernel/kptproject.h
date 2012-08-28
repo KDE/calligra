@@ -337,6 +337,9 @@ public:
     /// returns a unique resourcegroup id
     QString uniqueResourceGroupId() const;
 
+    /// Return a list of resources that will be allocated to new tasks
+    QList<Resource*> autoAllocateResources() const;
+
     Resource *findResource( const QString &id ) const
     {
         if ( resourceIdDict.contains( id ) )
@@ -517,7 +520,7 @@ public slots:
 
 signals:
     /// Emitted when anything in the project is changed (use with care)
-    void changed();
+    void projectChanged();
     /// Emitted when the WBS code definition has changed. This may change all nodes.
     void wbsDefinitionChanged();
     /// Emitted when a schedule has been calculated
@@ -589,12 +592,12 @@ signals:
     void calendarRemoved( const Calendar *cal );
 
     /**
-     * Emitted when the the default calendar pointer has changed
+     * Emitted when the default calendar pointer has changed
      * @parem cal The new default calendar. May be 0.
      */
     void defaultCalendarChanged( Calendar *cal );
     /**
-     * Emitted when the the standard worktime has been changed.
+     * Emitted when the standard worktime has been changed.
      */
     void standardWorktimeChanged( StandardWorktime* );
     
@@ -635,8 +638,8 @@ protected:
 
 protected:
     friend class KPlatoXmlLoaderBase;
-
-    virtual void changed(Node *node);
+    using Node::changed;
+    virtual void changed(Node *node, int property = -1);
     
     Accounts m_accounts;
     QList<ResourceGroup*> m_resourceGroups;

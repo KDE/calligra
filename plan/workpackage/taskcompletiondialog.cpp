@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,13 +26,14 @@
 
 #include "kptaccountsmodel.h" // FIXME hack to get at i18n'ed header text
 
+#include <KoIcon.h>
+
 #include <QComboBox>
 
-#include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
 
-extern int planworkDbg();
+#include "debugarea.h"
 
 using namespace KPlato;
 
@@ -74,8 +75,8 @@ TaskCompletionPanel::TaskCompletionPanel(WorkPackage &p, ScheduleManager *sm, QW
     //kDebug(planworkDbg());
     setupUi(this);
 
-    addEntryBtn->setIcon( KIcon( "list-add" ) );
-    removeEntryBtn->setIcon( KIcon( "list-remove" ) );
+    addEntryBtn->setIcon(koIcon("list-add"));
+    removeEntryBtn->setIcon(koIcon("list-remove"));
 
     CompletionEntryItemModel *m = new CompletionEntryItemModel( this );
     entryTable->setItemDelegateForColumn ( 1, new ProgressBarDelegate( this ) );

@@ -26,8 +26,11 @@
 #include "kptproject.h"
 #include "kptrelation.h"
 #include "kptschedule.h"
+#include "kptdebug.h"
 
 #include "calligraversion.h"
+#include "KoPageLayoutWidget.h"
+#include <KoIcon.h>
 
 #include <QGraphicsSceneMouseEvent>
 #include <QItemSelectionModel>
@@ -41,7 +44,6 @@
 #include <QKeyEvent>
 
 #include <kmenu.h>
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -53,14 +55,12 @@
 #include <kactioncollection.h>
 #include <kdeversion.h>
 
-KPLATOUI_EXPORT int planDependencyEditorDbg() {
-#if KDE_IS_VERSION( 4, 3, 80 )
-    static int s_area = KDebug::registerArea( "plan (Dependency Editor)" );
+
+#if QT_VERSION >= 0x040700
+#define ConnectCursor Qt::DragLinkCursor
 #else
-    static int s_area = 0;
+#define ConnectCursor Qt::UpArrowCursor
 #endif
-    return s_area;
-}
 
 namespace KPlato
 {
@@ -485,7 +485,7 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
     m_ctype( type ),
     m_editable( false )
 {
-    setCursor( Qt::UpArrowCursor );
+    setCursor( ConnectCursor);
     setAcceptsHoverEvents( true );
     setZValue( 500.0 );
 
@@ -1067,7 +1067,7 @@ void DependencyScene::setFromItem( DependencyConnectorItem *item )
                 }
             }
         }
-        item->setCursor( Qt::UpArrowCursor );
+        item->setCursor( ConnectCursor );
         m_connectionitem->setPredConnector( item );
         m_connectionitem->show();
     } else {
@@ -1094,8 +1094,7 @@ bool DependencyScene::connectionIsValid( DependencyConnectorItem *pred, Dependen
 void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool entered )
 {
     //kDebug(planDependencyEditorDbg())<<entered;
-    //TODO special cursor
-    item->setCursor( Qt::UpArrowCursor );
+    item->setCursor( ConnectCursor );
     if ( ! entered ) {
         // when we leave a connector we don't have a successor
         m_connectionitem->setSuccConnector( 0 );
@@ -1103,7 +1102,7 @@ void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool ente
     }
     if ( m_connectionitem->predConnector == item ) {
         // when inside the predecessor, clicking is allowed (deselects connector)
-        item->setCursor( Qt::UpArrowCursor );
+        item->setCursor( ConnectCursor );
         return;
     }
     if ( ! m_connectionitem->isVisible() ) {
@@ -1936,17 +1935,19 @@ void DependencyView::mouseMoveEvent( QMouseEvent *mouseEvent )
         foreach ( QGraphicsItem *i, itemScene()->items( spos ) ) {
             if ( i->type() == DependencyConnectorItem::Type ) {
                 if ( i == itemScene()->fromItem() ) {
-                    c = Qt::UpArrowCursor;
+                    c = ConnectCursor;
                 } else {
                     if ( itemScene()->connectionIsValid( itemScene()->fromItem(), static_cast<DependencyConnectorItem*>( i ) ) ) {
-                        c = Qt::UpArrowCursor;
+                        c = ConnectCursor;
                     } else {
                         c = Qt::ForbiddenCursor;
                     }
                 }
             }
         }
-        viewport()->setCursor( c );
+        if ( viewport()->cursor().shape() != c ) {
+            viewport()->setCursor( c );
+        }
     }
     QGraphicsView::mouseMoveEvent( mouseEvent );
     //kDebug(planDependencyEditorDbg())<<mouseEvent->scenePos()<<","<<mouseEvent->isAccepted();
@@ -1961,8 +1962,42 @@ void DependencyView::slotAutoScroll()
 }
 
 //-----------------------------------
-DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+DependencyeditorConfigDialog::DependencyeditorConfigDialog( ViewBase *view, QWidget *p)
+    : KPageDialog(p),
+    m_view( view )
+{
+    setCaption( i18n("Settings") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    showButtonSeparator( true );
+
+    QTabWidget *tab = new QTabWidget();
+
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( view );
+    m_headerfooter->setOptions( view->printingOptions() );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    KPageWidgetItem *page = addPage( tab, i18n( "Printing" ) );
+    page->setHeader( i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+}
+
+void DependencyeditorConfigDialog::slotOk()
+{
+    kDebug(planDbg());
+    m_view->setPageLayout( m_pagelayout->pageLayout() );
+    m_view->setPrintingOptions( m_headerfooter->options() );
+}
+
+//--------------------
+DependencyEditor::DependencyEditor(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
     m_currentnode( 0 ),
     m_manager( 0 )
 {
@@ -2160,12 +2195,12 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             KMenu menu;;
             foreach ( DependencyLinkItem *i, c->predecessorItems() ) {
                 items << i;
-                actions << menu.addAction( KIcon( "document-properties" ), i->predItem->text() );
+                actions << menu.addAction(koIcon("document-properties"), i->predItem->text());
             }
             menu.addSeparator();
             foreach ( DependencyLinkItem *i, c->successorItems() ) {
                 items << i;
-                actions << menu.addAction( KIcon( "document-properties" ), i->succItem->text() );
+                actions << menu.addAction(koIcon("document-properties"), i->succItem->text());
             }
             if ( ! actions.isEmpty() ) {
                 QAction *action = menu.exec( pos );
@@ -2179,6 +2214,11 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
     //kDebug(planDependencyEditorDbg())<<name;
     if ( ! name.isEmpty() ) {
         emit requestPopupMenu( name, pos );
+    } else {
+        QList<QAction*> lst = contextActionList();
+        if ( ! lst.isEmpty() ) {
+            QMenu::exec( lst, pos,  lst.first() );
+        }
     }
     m_currentnode = 0;
     m_currentrelation = 0;
@@ -2264,7 +2304,7 @@ void DependencyEditor::setupGui()
 
     QString name = "taskeditor_add_list";
 
-    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), i18n( "Add Task" ), this );
+    menuAddTask = new KActionMenu(koIcon("view-task-add"), i18n("Add Task"), this);
     coll->addAction("add_task", menuAddTask );
     connect( menuAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, menuAddTask );
@@ -2280,7 +2320,7 @@ void DependencyEditor::setupGui()
     menuAddTask->addAction( actionAddMilestone );
 
 
-    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), i18n( "Add Sub-Task" ), this );
+    menuAddSubTask = new KActionMenu(koIcon("view-task-child-add"), i18n("Add Sub-Task"), this);
     coll->addAction("add_subtask", menuAddTask );
     connect( menuAddSubTask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, menuAddSubTask );
@@ -2295,11 +2335,23 @@ void DependencyEditor::setupGui()
     connect( actionAddSubMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddSubMilestone() ) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
-    actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete"), this);
+    actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     coll->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     addAction( name, actionDeleteTask );
+
+    createOptionAction();
+}
+
+void DependencyEditor::slotOptions()
+{
+    kDebug(planDbg());
+    DependencyeditorConfigDialog *dlg = new DependencyeditorConfigDialog( this, this );
+    connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
+    dlg->show();
+    dlg->raise();
+    dlg->activateWindow();
 }
 
 void DependencyEditor::slotAddTask()

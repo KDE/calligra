@@ -20,9 +20,10 @@
 
 
 #include "KexiMobileToolbar.h"
+#include <KoIcon.h>
+
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <KIcon>
 #include <QAction>
 #include <kdebug.h>
 #include <QPushButton>
@@ -33,11 +34,11 @@ KexiMobileToolbar::KexiMobileToolbar(QWidget* parent): QToolBar(parent),
 {
     setOrientation(Qt::Vertical);
 
-    m_gotoNavigatorAction = new QAction(KIcon("application-vnd.oasis.opendocument.database"), "Project", this);
+    m_gotoNavigatorAction = new QAction(koIcon("application-vnd.oasis.opendocument.database"), "Project", this);
     
     
-    m_previousRecord = new QAction(KIcon("go-previous"), "Previous", this);
-    m_nextRecord = new QAction(KIcon("go-next"), "Next", this);
+    m_previousRecord = new QAction(koIcon("go-previous"), "Previous", this);
+    m_nextRecord = new QAction(koIcon("go-next"), "Next", this);
     m_recordNumber = new QAction("0 of 0", this);
 
     setIconSize(QSize(48,48));

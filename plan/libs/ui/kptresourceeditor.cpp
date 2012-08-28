@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 - 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 - 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,8 +30,10 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
+#include <KoIcon.h>
 
 #include <QMenu>
 #include <QList>
@@ -40,15 +42,11 @@
 #include <QDragMoveEvent>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
-#include <kdebug.h>
-
-extern int planDbg();
 
 namespace KPlato
 {
@@ -118,8 +116,8 @@ QList<Resource*> ResourceTreeView::selectedResources() const
 }
 
 //-----------------------------------
-ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceEditor::ResourceEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setWhatsThis( i18nc( "@info:whatsthis", 
         "<title>Resource Editor</title>"
@@ -156,7 +154,7 @@ ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     }
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
@@ -173,13 +171,11 @@ void ResourceEditor::updateReadWrite( bool readwrite )
     m_view->setReadWrite( readwrite );
 }
 
-void ResourceEditor::draw( Project &project )
+void ResourceEditor::setProject( Project *project )
 {
-    m_view->setProject( &project );
-}
-
-void ResourceEditor::draw()
-{
+    kDebug(planDbg())<<project;
+    m_view->setProject( project );
+    ViewBase::setProject( project );
 }
 
 void ResourceEditor::setGuiActive( bool activate )
@@ -280,19 +276,19 @@ void ResourceEditor::updateActionsEnabled(  bool on )
 void ResourceEditor::setupGui()
 {
     QString name = "resourceeditor_edit_list";
-    actionAddGroup  = new KAction(KIcon( "resource-group-new" ), i18n( "Add Resource Group" ), this);
+    actionAddGroup  = new KAction(koIcon("resource-group-new"), i18n("Add Resource Group"), this);
     actionCollection()->addAction("add_group", actionAddGroup );
     actionAddGroup->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );
     addAction( name, actionAddGroup );
     
-    actionAddResource  = new KAction(KIcon( "list-add-user" ), i18n( "Add Resource" ), this);
+    actionAddResource  = new KAction(koIcon("list-add-user"), i18n("Add Resource"), this);
     actionCollection()->addAction("add_resource", actionAddResource );
     actionAddResource->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionAddResource, SIGNAL( triggered( bool ) ), SLOT( slotAddResource() ) );
     addAction( name, actionAddResource );
     
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete" ), this);
+    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
@@ -315,7 +311,8 @@ void ResourceEditor::slotSplitView()
 void ResourceEditor::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -387,12 +384,14 @@ void ResourceEditor::slotDeleteSelection()
 bool ResourceEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceEditor::saveContext( QDomElement &context ) const
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::saveContext( context );
     m_view->saveContext( model()->columnMap(), context );
 }
 

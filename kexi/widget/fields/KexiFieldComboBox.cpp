@@ -28,17 +28,17 @@
 #include <QBitmap>
 #include <QStyle>
 #include <QPixmap>
+#include <QLineEdit>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexidragobjects.h>
 #include <kexiproject.h>
@@ -144,7 +144,7 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
         if (d->tableOrQueryName != objectName) {
             d->fieldOrExpression = name;
             setCurrentIndex(0);
-            setEditText(name);
+            lineEdit()->setText(name);
 //! @todo show error
             kWarning() << "KexiFieldComboBox::setField(): invalid table/query name in '" << name << "'";
             return;
@@ -155,19 +155,22 @@ void KexiFieldComboBox::setFieldOrExpression(const QString& string)
     const int index = findText(d->fieldOrExpression);
     if (index == -1) {
         setCurrentIndex(0);
-        setEditText(d->fieldOrExpression);
+        lineEdit()->setText(d->fieldOrExpression);
 //! @todo show 'the item doesn't match' info?
         return;
     }
     
     setCurrentIndex(index);
-    setEditText(d->fieldOrExpression);
+    lineEdit()->setText(d->fieldOrExpression);
+    kDebug() << index << currentText() << currentIndex() << lineEdit()->text();
 }
 
 void KexiFieldComboBox::setFieldOrExpression(int index)
 {
     kDebug() << index;
-    index++; //skip 1st empty item
+    if (index >= 0) {
+        index++; //skip 1st empty item
+    }
     if (index >= count()) {
         kWarning() << QString("KexiFieldComboBox::setFieldOrExpression(int index): index %1 "
                             "out of range (0..%2)").arg(index).arg(count() - 1);
@@ -179,6 +182,8 @@ void KexiFieldComboBox::setFieldOrExpression(int index)
     } else {
         setCurrentIndex(index);
         d->fieldOrExpression = itemData(currentIndex(), Qt::DisplayRole).toString();
+        lineEdit()->setText(d->fieldOrExpression);
+        kDebug() << currentText() << currentIndex() << lineEdit()->text();
     }
 }
 

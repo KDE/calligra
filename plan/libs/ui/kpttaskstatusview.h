@@ -36,10 +36,13 @@
 
 #include "KDChartBarDiagram"
 
+
 class QTextBrowser;
 class QItemSelection;
 
 class KoDocument;
+class KoPageLayoutWidget;
+class PrintingHeaderFooter;
 
 class KAction;
 
@@ -101,7 +104,7 @@ class KPLATOUI_EXPORT TaskStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusView( KoDocument *part, QWidget *parent );
+    TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     virtual void setProject( Project *project );
@@ -172,7 +175,7 @@ class TaskStatusViewSettingsDialog : public SplitItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent = 0 );
+    explicit TaskStatusViewSettingsDialog( ViewBase *view, TaskStatusTreeView *treeview, QWidget *parent = 0 );
 
 };
 
@@ -180,6 +183,10 @@ struct PerformanceChartInfo
 {
     bool showBarChart;
     bool showLineChart;
+    bool showTableView;
+
+    bool showBaseValues;
+    bool showIndeces;
 
     bool showCost;
     bool showBCWSCost;
@@ -191,21 +198,33 @@ struct PerformanceChartInfo
     bool showBCWPEffort;
     bool showACWPEffort;
 
-    bool bcwsCost() const { return showCost && showBCWSCost; }
-    bool bcwpCost() const { return showCost && showBCWPCost; }
-    bool acwpCost() const { return showCost && showACWPCost; }
-    bool bcwsEffort() const { return showEffort && showBCWSEffort; }
-    bool bcwpEffort() const { return showEffort && showBCWPEffort; }
-    bool acwpEffort() const { return showEffort && showACWPEffort; }
+    bool showSpiCost;
+    bool showCpiCost;
+    bool showSpiEffort;
+    bool showCpiEffort;
+
+    bool bcwsCost() const { return showBaseValues && showCost && showBCWSCost; }
+    bool bcwpCost() const { return showBaseValues && showCost && showBCWPCost; }
+    bool acwpCost() const { return showBaseValues && showCost && showACWPCost; }
+    bool bcwsEffort() const { return showBaseValues && showEffort && showBCWSEffort; }
+    bool bcwpEffort() const { return showBaseValues && showEffort && showBCWPEffort; }
+    bool acwpEffort() const { return showBaseValues && showEffort && showACWPEffort; }
+
+    bool spiCost() const { return showIndeces && showSpiCost; }
+    bool cpiCost() const { return showIndeces && showCpiCost; }
+    bool spiEffort() const { return showIndeces && showSpiEffort; }
+    bool cpiEffort() const { return showIndeces && showCpiEffort; }
 
     PerformanceChartInfo() {
-        showBarChart = false; showLineChart = true;
+        showBarChart = false; showLineChart = true; showTableView = false;
+        showBaseValues = true; showIndeces = false;
         showCost = showBCWSCost = showBCWPCost = showACWPCost = true;
         showEffort = showBCWSEffort = showBCWPEffort = showACWPEffort = true;
     }
     bool operator!=( const PerformanceChartInfo &o ) const { return ! operator==( o ); }
     bool operator==( const PerformanceChartInfo &o ) const {
         return showBarChart == o.showBarChart && showLineChart == o.showLineChart &&
+                showBaseValues == o.showBaseValues && showIndeces == o.showIndeces &&
                 showCost == o.showCost && 
                 showBCWSCost == o.showBCWSCost &&
                 showBCWPCost == o.showBCWPCost &&
@@ -213,7 +232,11 @@ struct PerformanceChartInfo
                 showEffort == o.showEffort &&
                 showBCWSEffort == o.showBCWSEffort &&
                 showBCWPEffort == o.showBCWPEffort &&
-                showACWPEffort == o.showACWPEffort;
+                showACWPEffort == o.showACWPEffort &&
+                showSpiCost == o.showSpiCost &&
+                showCpiCost == o.showCpiCost &&
+                showSpiEffort == o.showSpiEffort &&
+                showCpiEffort == o.showCpiEffort;
     }
 };
 
@@ -259,6 +282,8 @@ public:
     /// Create a print job dialog
     KoPrintJob *createPrintJob( ViewBase *parent );
 
+    void setNodes( const QList<Node*> nodes );
+
 public slots:
     void refreshChart();
 
@@ -269,8 +294,6 @@ protected:
     void createLineChart();
     void setEffortValuesVisible( bool visible );
     void setCostValuesVisible( bool visible );
-
-    void drawValues();
 
 protected slots:
     void slotUpdate();
@@ -297,6 +320,11 @@ private:
         KDChart::CartesianAxis *effortaxis;
         KDChart::CartesianAxis *costaxis;
         KDChart::CartesianAxis *dateaxis;
+
+        ChartProxyModel piproxy;
+        KDChart::CartesianCoordinatePlane *piplane;
+        KDChart::AbstractDiagram *pidiagram;
+        KDChart::CartesianAxis *piaxis;
     };
     void setupChart( ChartContents &cc );
 
@@ -317,7 +345,7 @@ class KPLATOUI_EXPORT ProjectStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    ProjectStatusView( KoDocument *part, QWidget *parent );
+    ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
 
     void setupGui();
     Project *project() const { return m_project; }
@@ -384,7 +412,7 @@ class KPLATOUI_EXPORT PerformanceStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    PerformanceStatusView( KoDocument *part, QWidget *parent );
+    PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
 
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -434,6 +462,9 @@ public slots:
 signals:
     void changed();
 
+protected slots:
+    void switchStackWidget();
+
 private:
     PerformanceStatusBase *m_view;
 };
@@ -442,7 +473,7 @@ class PerformanceStatusViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent = 0 );
+    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent = 0 );
 
 };
 
@@ -450,8 +481,15 @@ class ProjectStatusViewSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent = 0 );
+    explicit ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent = 0 );
 
+protected slots:
+    void slotOk();
+
+private:
+    ViewBase *m_base;
+    KoPageLayoutWidget *m_pagelayout;
+    PrintingHeaderFooter *m_headerfooter;
 };
 
 

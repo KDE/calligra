@@ -29,8 +29,8 @@
 #include "kexipartinfo.h"
 #include "kexiproject.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
@@ -42,7 +42,6 @@
 
 #include <KDebug>
 #include <KApplication>
-#include <KIconLoader>
 #include <KToolBar>
 #include <KActionCollection>
 #include <KDialog>
@@ -257,7 +256,7 @@ void KexiWindow::createSubwidgets()
     */
     /*TODO
     // "data_execute"
-      a = new KAction(KIcon("media-playback-start"), i18n("&Execute"), this);
+      a = new KAction(koIcon("system-run"), i18n("&Execute"), this);
       //a->setToolTip(i18n("")); //TODO
       //a->setWhatsThis(i18n("")); //TODO */
 
@@ -510,7 +509,7 @@ void KexiWindow::setDirty(bool dirty)
     dirtyChanged(d->viewThatRecentlySetDirtyFlag); //update
 }
 
-QString KexiWindow::itemIcon()
+QString KexiWindow::itemIconName()
 {
     if (!d->part || !d->part->info()) {
         KexiView *v = selectedView();
@@ -519,7 +518,7 @@ QString KexiWindow::itemIcon()
         }
         return QString();
     }
-    return d->part->info()->itemIcon();
+    return d->part->info()->itemIconName();
 }
 
 KexiPart::GUIClient* KexiWindow::guiClient() const

@@ -31,7 +31,6 @@
 #include <QPoint>
 #include <QLayout>
 #include <QToolButton>
-#include <q3datetimeedit.h>
 #include <QClipboard>
 
 #include <kdebug.h>
@@ -127,6 +126,12 @@ bool KexiTimeTableEdit::valueIsValid()
     if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is valid
         return true;
     return m_formatter.fromString(m_lineedit->text()).isValid();
+}
+
+bool KexiTimeTableEdit::valueChanged()
+{
+    kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    return m_origValue != m_lineedit->text();
 }
 
 void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

@@ -187,10 +187,10 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (type == "release")
         return Value(QString(CALLIGRA_VERSION_STRING));
-
+/*FIXME
     if (type == "numfile")
         return Value(KoDocument::documentList() ? KoDocument::documentList()->count() : 0);
-
+*/
     if (type == "recalc") {
         QString result;
         if (!calc->settings()->isAutoCalculationEnabled())
@@ -302,7 +302,7 @@ Value func_iseven(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ISFORMULA
-Value func_isformula(valVector args, ValueCalc *calc, FuncExtra *e)
+Value func_isformula(valVector /*args*/, ValueCalc */*calc*/, FuncExtra *e)
 {
     const Calligra::Sheets::Region &region = e->regions[0];
     QPoint p = region.firstRange().topLeft();

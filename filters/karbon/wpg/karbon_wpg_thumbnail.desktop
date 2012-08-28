@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+Name=WordPerfect/DrawPerfect Images
+Name[nl]=Afbeeldingen van WordPerfect/DrawPerfect
+Name[pt]=Imagens do WordPerfect/DrawPerfect
+Name[pt_BR]=Imagens do WordPerfect/DrawPerfect
+Name[uk]=Зображення WordPerfect/DrawPerfect
+Name[x-test]=xxWordPerfect/DrawPerfect Imagesxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-wpg;
+
+X-KDE-Library=calligraimagethumbnail
+CacheThumbnail=true

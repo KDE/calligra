@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="Calligra Plan" version="22">
+<kpartgui name="Calligra Plan" version="24">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -9,9 +9,10 @@
             <Action name="edit_undo"/>
             <Action name="edit_redo"/>
             <Separator/>
-            <Action name="project_edit"/>
+            <ActionList name="edit_copypaste"/>
             <Separator/>
-<!--            <Action name="edit_cut"/>
+            <Action name="project_edit"/>
+            <!--            <Action name="edit_cut"/>
             <Action name="edit_copy"/>
             <Action name="edit_paste"/>
             <Separator/> -->
@@ -33,8 +34,9 @@
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>
             <Separator/>
-            <ActionList name="view_schedule_list"/>
+            <ActionList name="view_docker_list"/>
             <Separator/>
+            <ActionList name="view_schedule_list"/>
         </Menu>
 <!--        <Menu name="project"><text>&amp;Project</text>
             <Action name="project_edit"/>
@@ -48,12 +50,7 @@
             <Action name="project_worktime"/>
             <Action name="tools_define_wbs"/>
             <Action name="config_currency"/>
-            <Menu name="reports"><text>&amp;Reports</text>
-                <Action name="reportdesigner_create_report"/>
-                <Action name="reportdesigner_open_file"/>
-                <Separator/>
-                <ActionList name="reportdesigner_view_list"/>
-            </Menu>
+            <Action name="reportdesigner_open_file"/>
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
             <Action name="configure" group="settings_configure"/>
@@ -87,11 +84,9 @@
         <Separator/>
         <ActionList name="workpackage_list"/>
         <Separator/>
-        <ActionList name="reportdesigner_add_list"/>
-        <Separator/>
-        <ActionList name="reportdesigner_edit_list"/>
-        <Separator/>
         <ActionList name="reportview_list"/>
+        <Separator/>
+        <ActionList name="reportdesigner_list"/>
     </ToolBar>
     <Menu name="task_edit_popup">
         <Action name="node_properties"/>

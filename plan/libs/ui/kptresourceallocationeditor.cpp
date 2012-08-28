@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009, 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
@@ -40,15 +41,11 @@
 
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
-#include <kdebug.h>
-
-extern int planDbg();
 
 namespace KPlato
 {
@@ -75,8 +72,8 @@ QObject *ResourceAllocationTreeView::currentObject() const
 }
 
 //-----------------------------------
-ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceAllocationEditor::ResourceAllocationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -97,7 +94,7 @@ ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *p
     }
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
@@ -197,7 +194,8 @@ void ResourceAllocationEditor::slotSplitView()
 void ResourceAllocationEditor::slotOptions()
 {
     kDebug(planDbg());
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( this, m_view, this );
+    dlg->addPrintingOptions();
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -208,12 +206,14 @@ void ResourceAllocationEditor::slotOptions()
 bool ResourceAllocationEditor::loadContext( const KoXmlElement &context )
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::loadContext( context );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceAllocationEditor::saveContext( QDomElement &context ) const
 {
     kDebug(planDbg())<<objectName();
+    ViewBase::saveContext( context );
     m_view->saveContext( model()->columnMap(), context );
 }
 

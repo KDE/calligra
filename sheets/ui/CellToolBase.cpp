@@ -30,12 +30,12 @@
 #include "CellToolBase_p.h"
 
 // KSpread
+#include "ActionOptionWidget.h"
 #include "ApplicationSettings.h"
 #include "AutoFillStrategy.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "CellEditor.h"
-#include "CellToolOptionWidget.h"
 #include "CellView.h"
 #include "Damages.h"
 #include "database/Database.h"
@@ -119,19 +119,21 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoColor.h>
+#include <KoIcon.h>
 
 // KDE
 #include <KAction>
 #include <KFind>
 #include <KFontAction>
 #include <KFontSizeAction>
-#include <KIcon>
 #include <KInputDialog>
 #include <KLocale>
 #include <KMessageBox>
 #include <KReplace>
 #include <KStandardAction>
+#include <KStandardDirs>
 #include <KToggleAction>
+#include <kdeversion.h>
 
 // Qt
 #include <QBuffer>
@@ -152,9 +154,9 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
         , d(new Private(this))
 {
     d->cellEditor = 0;
+    d->externalEditor = 0;
     d->formulaDialog = 0;
     d->specialCharDialog = 0;
-    d->optionWidget = 0;
     d->initialized = false;
     d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
@@ -181,7 +183,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell style actions --
 
-    action = new KAction(KIcon("cell_layout"), i18n("Cell Format..."), this);
+    action = new KAction(koIcon("cell_layout"), i18n("Cell Format..."), this);
     action->setIconText(i18n("Format"));
     addAction("cellStyle", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_F));
@@ -211,22 +213,22 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- font actions --
 
-    action = new KToggleAction(KIcon("format-text-bold"), i18n("Bold"), this);
+    action = new KToggleAction(koIcon("format-text-bold"), i18n("Bold"), this);
     addAction("bold", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(bold(bool)));
 
-    action = new KToggleAction(KIcon("format-text-italic"), i18n("Italic"), this);
+    action = new KToggleAction(koIcon("format-text-italic"), i18n("Italic"), this);
     addAction("italic", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(italic(bool)));
 
-    action = new KToggleAction(KIcon("format-text-underline"), i18n("Underline"), this);
+    action = new KToggleAction(koIcon("format-text-underline"), i18n("Underline"), this);
     addAction("underline", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_U));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
 
-    action = new KToggleAction(KIcon("format-text-strikethrough"), i18n("Strike Out"), this);
+    action = new KToggleAction(koIcon("format-text-strikethrough"), i18n("Strike Out"), this);
     addAction("strikeOut", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(strikeOut(bool)));
 
@@ -240,16 +242,16 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("fontSize", action);
     connect(action, SIGNAL(fontSizeChanged(int)), this, SLOT(fontSize(int)));
 
-    action = new KAction(KIcon("format-font-size-more"), i18n("Increase Font Size"), this);
+    action = new KAction(koIcon("format-font-size-more"), i18n("Increase Font Size"), this);
     addAction("increaseFontSize", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(increaseFontSize()));
 
-    action = new KAction(KIcon("format-font-size-less"), i18n("Decrease Font Size"), this);
+    action = new KAction(koIcon("format-font-size-less"), i18n("Decrease Font Size"), this);
     addAction("decreaseFontSize", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(decreaseFontSize()));
 
     action = new KoColorPopupAction(this);
-    action->setIcon(KIcon("format-text-color"));
+    action->setIcon(koIcon("format-text-color"));
     action->setText(i18n("Text Color"));
     action->setToolTip(i18n("Set the text color"));
     addAction("textColor", action);
@@ -258,21 +260,21 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     // -- horizontal alignment actions --
 
     QActionGroup* groupAlign = new QActionGroup(this);
-    action = new KToggleAction(KIcon("format-justify-left"), i18n("Align Left"), this);
+    action = new KToggleAction(koIcon("format-justify-left"), i18n("Align Left"), this);
     action->setIconText(i18n("Left"));
     addAction("alignLeft", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignLeft(bool)));
     action->setToolTip(i18n("Left justify the cell contents"));
     action->setActionGroup(groupAlign);
 
-    action = new KToggleAction(KIcon("format-justify-center"), i18n("Align Center"), this);
+    action = new KToggleAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     action->setIconText(i18n("Center"));
     addAction("alignCenter", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignCenter(bool)));
     action->setToolTip(i18n("Center the cell contents"));
     action->setActionGroup(groupAlign);
 
-    action = new KToggleAction(KIcon("format-justify-right"), i18n("Align Right"), this);
+    action = new KToggleAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     action->setIconText(i18n("Right"));
     addAction("alignRight", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignRight(bool)));
@@ -282,21 +284,21 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     // -- vertical alignment actions --
 
     QActionGroup* groupPos = new QActionGroup(this);
-    action = new KToggleAction(KIcon("text_top"), i18n("Align Top"), this);
+    action = new KToggleAction(koIcon("text_top"), i18n("Align Top"), this);
     action->setIconText(i18n("Top"));
     addAction("alignTop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignTop(bool)));
     action->setToolTip(i18n("Align cell contents along the top of the cell"));
     action->setActionGroup(groupPos);
 
-    action = new KToggleAction(KIcon("middle"), i18n("Align Middle"), this);
+    action = new KToggleAction(koIcon("middle"), i18n("Align Middle"), this);
     action->setIconText(i18n("Middle"));
     addAction("alignMiddle", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignMiddle(bool)));
     action->setToolTip(i18n("Align cell contents centered in the cell"));
     action->setActionGroup(groupPos);
 
-    action = new KToggleAction(KIcon("text_bottom"), i18n("Align Bottom"), this);
+    action = new KToggleAction(koIcon("text_bottom"), i18n("Align Bottom"), this);
     action->setIconText(i18n("Bottom"));
     addAction("alignBottom", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(alignBottom(bool)));
@@ -305,50 +307,50 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- border actions --
 
-    action = new KAction(KIcon("border_left"), i18n("Border Left"), this);
+    action = new KAction(koIcon("border_left"), i18n("Border Left"), this);
     action->setIconText(i18n("Left"));
     addAction("borderLeft", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderLeft()));
     action->setToolTip(i18n("Set a left border to the selected area"));
 
-    action = new KAction(KIcon("border_right"), i18n("Border Right"), this);
+    action = new KAction(koIcon("border_right"), i18n("Border Right"), this);
     action->setIconText(i18n("Right"));
     addAction("borderRight", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderRight()));
     action->setToolTip(i18n("Set a right border to the selected area"));
 
-    action = new KAction(KIcon("border_top"), i18n("Border Top"), this);
+    action = new KAction(koIcon("border_top"), i18n("Border Top"), this);
     action->setIconText(i18n("Top"));
     addAction("borderTop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderTop()));
     action->setToolTip(i18n("Set a top border to the selected area"));
 
-    action = new KAction(KIcon("border_bottom"), i18n("Border Bottom"), this);
+    action = new KAction(koIcon("border_bottom"), i18n("Border Bottom"), this);
     action->setIconText(i18n("Bottom"));
     addAction("borderBottom", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderBottom()));
     action->setToolTip(i18n("Set a bottom border to the selected area"));
 
-    action = new KAction(KIcon("border_all"), i18n("All Borders"), this);
+    action = new KAction(koIcon("border_all"), i18n("All Borders"), this);
     action->setIconText(i18n("All"));
     addAction("borderAll", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderAll()));
     action->setToolTip(i18n("Set a border around all cells in the selected area"));
 
-    action = new KAction(KIcon("border_remove"), i18n("No Borders"), this);
+    action = new KAction(koIcon("border_remove"), i18n("No Borders"), this);
     action->setIconText(i18n("None"));
     addAction("borderRemove", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderRemove()));
     action->setToolTip(i18n("Remove all borders in the selected area"));
 
-    action = new KAction(KIcon(("border_outline")), i18n("Border Outline"), this);
+    action = new KAction(koIcon(("border_outline")), i18n("Border Outline"), this);
     action->setIconText(i18n("Outline"));
     addAction("borderOutline", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(borderOutline()));
     action->setToolTip(i18n("Set a border to the outline of the selected area"));
 
     action = new KoColorPopupAction(this);
-    action->setIcon(KIcon("format-stroke-color"));
+    action->setIcon(koIcon("format-stroke-color"));
     action->setToolTip(i18n("Select a new border color"));
     action->setText(i18n("Border Color"));
     static_cast<KoColorPopupAction*>(action)->setCurrentColor(Qt::black);
@@ -357,24 +359,24 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- text layout actions --
 
-    action = new KToggleAction(KIcon("multirow"), i18n("Wrap Text"), this);
+    action = new KToggleAction(koIcon("multirow"), i18n("Wrap Text"), this);
     action->setIconText(i18n("Wrap"));
     addAction("wrapText", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(wrapText(bool)));
     action->setToolTip(i18n("Make the cell text wrap onto multiple lines"));
 
-    action = new KToggleAction(KIcon("vertical_text"), i18n("Vertical Text"), this);
+    action = new KToggleAction(koIcon("vertical_text"), i18n("Vertical Text"), this);
     action->setIconText(i18n("Vertical"));
     addAction("verticalText", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(verticalText(bool)));
     action->setToolTip(i18n("Print cell contents vertically"));
 
-    action = new KAction(KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"), i18n("Increase Indent"), this);
+    action = new KAction(KIcon(QApplication::isRightToLeft() ? koIconNameCStr("format-indent-less") : koIconNameCStr("format-indent-more")), i18n("Increase Indent"), this);
     addAction("increaseIndentation", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(increaseIndentation()));
     action->setToolTip(i18n("Increase the indentation"));
 
-    action = new KAction(KIcon(QApplication::isRightToLeft() ? "format-indent-more" : "format-indent-less"), i18n("Decrease Indent"), this);
+    action = new KAction(KIcon(QApplication::isRightToLeft() ? koIconNameCStr("format-indent-more") : koIconNameCStr("format-indent-less")), i18n("Decrease Indent"), this);
     addAction("decreaseIndentation", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(decreaseIndentation()));
     action->setToolTip(i18n("Decrease the indentation"));
@@ -387,50 +389,50 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- value format actions --
 
-    action = new KToggleAction(KIcon("percent"), i18n("Percent Format"), this);
+    action = new KToggleAction(koIcon("percent"), i18n("Percent Format"), this);
     action->setIconText(i18n("Percent"));
     addAction("percent", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(percent(bool)));
     action->setToolTip(i18n("Set the cell formatting to look like a percentage"));
 
-    action = new KToggleAction(KIcon("money"), i18n("Money Format"), this);
+    action = new KToggleAction(koIcon("money"), i18n("Money Format"), this);
     action->setIconText(i18n("Money"));
     addAction("currency", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(currency(bool)));
     action->setToolTip(i18n("Set the cell formatting to look like your local currency"));
 
-    action = new KAction(KIcon("prec_plus"), i18n("Increase Precision"), this);
+    action = new KAction(koIcon("prec_plus"), i18n("Increase Precision"), this);
     addAction("increasePrecision", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(increasePrecision()));
     action->setToolTip(i18n("Increase the decimal precision shown onscreen"));
 
-    action = new KAction(KIcon("prec_minus"), i18n("Decrease Precision"), this);
+    action = new KAction(koIcon("prec_minus"), i18n("Decrease Precision"), this);
     addAction("decreasePrecision", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(decreasePrecision()));
     action->setToolTip(i18n("Decrease the decimal precision shown onscreen"));
 
     // -- misc style attribute actions --
 
-    action = new KAction(KIcon("fontsizeup"), i18n("Upper Case"), this);
+    action = new KAction(koIconWanted("no icon in Kate, so perhaps not really needed", "format-text-uppercase/"), i18n("Upper Case"), this);
     action->setIconText(i18n("Upper"));
     addAction("toUpperCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toUpperCase()));
     action->setToolTip(i18n("Convert all letters to upper case"));
 
-    action = new KAction(KIcon("fontsizedown"), i18n("Lower Case"), this);
+    action = new KAction(koIconWanted("no icon in Kate, so perhaps not really needed", "format-text-lowercase/"), i18n("Lower Case"), this);
     action->setIconText(i18n("Lower"));
     addAction("toLowerCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(toLowerCase()));
     action->setToolTip(i18n("Convert all letters to lower case"));
 
-    action = new KAction(KIcon("first_letter_upper"), i18n("Convert First Letter to Upper Case"), this);
+    action = new KAction(koIcon("first_letter_upper"), i18n("Convert First Letter to Upper Case"), this);
     action->setIconText(i18n("First Letter Upper"));
     addAction("firstLetterToUpperCase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(firstLetterToUpperCase()));
     action->setToolTip(i18n("Capitalize the first letter"));
 
     action = new KoColorPopupAction(this);
-    action->setIcon(KIcon("format-fill-color"));
+    action->setIcon(koIcon("format-fill-color"));
     action->setToolTip(i18n("Set the background color"));
     action->setText(i18n("Background Color"));
     addAction("backgroundColor", action);
@@ -438,99 +440,99 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell merging actions --
 
-    action = new KAction(KIcon("mergecell"), i18n("Merge Cells"), this);
+    action = new KAction(koIcon("mergecell"), i18n("Merge Cells"), this);
     addAction("mergeCells", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeCells()));
     action->setToolTip(i18n("Merge the selected region"));
 
-    action = new KAction(KIcon("mergecell-horizontal"), i18n("Merge Cells Horizontally"), this);
+    action = new KAction(koIcon("mergecell-horizontal"), i18n("Merge Cells Horizontally"), this);
     action->setToolTip(i18n("Merge the selected region horizontally"));
     addAction("mergeCellsHorizontal", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeCellsHorizontal()));
 
-    action = new KAction(KIcon("mergecell-vertical"), i18n("Merge Cells Vertically"), this);
+    action = new KAction(koIcon("mergecell-vertical"), i18n("Merge Cells Vertically"), this);
     action->setToolTip(i18n("Merge the selected region vertically"));
     addAction("mergeCellsVertical", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeCellsVertical()));
 
-    action = new KAction(KIcon("dissociatecell"), i18n("Dissociate Cells"), this);
+    action = new KAction(koIcon("dissociatecell"), i18n("Dissociate Cells"), this);
     action->setToolTip(i18n("Unmerge the selected region"));
     addAction("dissociateCells", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(dissociateCells()));
 
     // -- column & row actions --
 
-    action = new KAction(KIcon("resizecol"), i18n("Resize Column..."), this);
+    action = new KAction(koIcon("resizecol"), i18n("Resize Column..."), this);
     addAction("resizeCol", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(resizeColumn()));
     action->setToolTip(i18n("Change the width of a column"));
 
-    action = new KAction(KIcon("insert_table_col"), i18n("Columns"), this);
+    action = new KAction(koIcon("edit-table-insert-column-left"), i18n("Columns"), this);
     action->setIconText(i18n("Insert Columns"));
     action->setToolTip(i18n("Inserts a new column into the spreadsheet"));
     addAction("insertColumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertColumn()));
 
-    action = new KAction(KIcon("delete_table_col"), i18n("Columns"), this);
+    action = new KAction(koIcon("edit-table-delete-column"), i18n("Columns"), this);
     action->setIconText(i18n("Remove Columns"));
-    action->setToolTip(i18n("Removes a column from the spreadsheet"));
+    action->setToolTip(i18n("Removes the selected columns from the spreadsheet"));
     addAction("deleteColumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteColumn()));
 
-    action = new KAction(KIcon("hide_table_column"), i18n("Hide Columns"), this);
+    action = new KAction(koIcon("hide_table_column"), i18n("Hide Columns"), this);
     addAction("hideColumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(hideColumn()));
     action->setToolTip(i18n("Hide the column from this"));
 
-    action = new KAction(KIcon("show_table_column"), i18n("Show Columns..."), this);
+    action = new KAction(koIcon("show_table_column"), i18n("Show Columns..."), this);
     addAction("showColumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotShowColumnDialog()));
     action->setToolTip(i18n("Show hidden columns"));
 
-    action = new KAction(KIcon("adjustcol"), i18n("Equalize Column"), this);
+    action = new KAction(koIcon("adjustcol"), i18n("Equalize Column"), this);
     addAction("equalizeCol", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(equalizeColumn()));
     action->setToolTip(i18n("Resizes selected columns to be the same size"));
 
-    action = new KAction(KIcon("show_sheet_column"), i18n("Show Columns"), this);
+    action = new KAction(koIcon("show_table_column"), i18n("Show Columns"), this);
     addAction("showSelColumns", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showColumn()));
     action->setToolTip(i18n("Show hidden columns in the selection"));
     action->setEnabled(false);
 
-    action = new KAction(KIcon("resizerow"), i18n("Resize Row..."), this);
+    action = new KAction(koIcon("resizerow"), i18n("Resize Row..."), this);
     addAction("resizeRow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(resizeRow()));
     action->setToolTip(i18n("Change the height of a row"));
 
-    action = new KAction(KIcon("insert_table_row"), i18n("Rows"), this);
+    action = new KAction(koIcon("edit-table-insert-row-above"), i18n("Rows"), this);
     action->setIconText(i18n("Insert Rows"));
     action->setToolTip(i18n("Inserts a new row into the spreadsheet"));
     addAction("insertRow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertRow()));
 
-    action = new KAction(KIcon("delete_table_row"), i18n("Rows"), this);
+    action = new KAction(koIcon("edit-table-delete-row"), i18n("Rows"), this);
     action->setIconText(i18n("Remove Rows"));
     action->setToolTip(i18n("Removes a row from the spreadsheet"));
     addAction("deleteRow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteRow()));
 
-    action = new KAction(KIcon("hide_table_row"), i18n("Hide Rows"), this);
+    action = new KAction(koIcon("hide_table_row"), i18n("Hide Rows"), this);
     addAction("hideRow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(hideRow()));
     action->setToolTip(i18n("Hide a row from this"));
 
-    action = new KAction(KIcon("show_table_row"), i18n("Show Rows..."), this);
+    action = new KAction(koIcon("show_table_row"), i18n("Show Rows..."), this);
     addAction("showRow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotShowRowDialog()));
     action->setToolTip(i18n("Show hidden rows"));
 
-    action = new KAction(KIcon("adjustrow"), i18n("Equalize Row"), this);
+    action = new KAction(koIcon("adjustrow"), i18n("Equalize Row"), this);
     addAction("equalizeRow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(equalizeRow()));
     action->setToolTip(i18n("Resizes selected rows to be the same size"));
 
-    action = new KAction(KIcon("show_table_row"), i18n("Show Rows"), this);
+    action = new KAction(koIcon("show_table_row"), i18n("Show Rows"), this);
     addAction("showSelRows", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(showRow()));
     action->setEnabled(false);
@@ -543,13 +545,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell insert/remove actions --
 
-    action = new KAction(KIcon("insertcell"), i18n("Cells..."), this);
+    action = new KAction(koIcon("insertcell"), i18n("Cells..."), this);
     action->setIconText(i18n("Insert Cells..."));
     action->setToolTip(i18n("Insert a blank cell into the spreadsheet"));
     addAction("insertCell", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertCells()));
 
-    action = new KAction(KIcon("removecell"), i18n("Cells..."), this);
+    action = new KAction(koIcon("removecell"), i18n("Cells..."), this);
     action->setIconText(i18n("Remove Cells..."));
     action->setToolTip(i18n("Removes the cells from the spreadsheet"));
     addAction("deleteCell", action);
@@ -557,24 +559,24 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell content actions --
 
-    action = new KAction(KIcon("deletecell"), i18n("All"), this);
+    action = new KAction(koIcon("deletecell"), i18n("All"), this);
     action->setIconText(i18n("Clear All"));
     action->setToolTip(i18n("Clear all contents and formatting of the current cell"));
     addAction("clearAll", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(clearAll()));
 
-    action = new KAction(KIcon("edit-clear"), i18n("Contents"), this);
+    action = new KAction(koIcon("edit-clear"), i18n("Contents"), this);
     action->setIconText(i18n("Clear Contents"));
     action->setToolTip(i18n("Remove the contents of the current cell"));
     addAction("clearContents", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(clearContents()));
 
-    action = new KAction(KIcon("comment"), i18n("Comment..."), this);
+    action = new KAction(koIcon("comment"), i18n("Comment..."), this);
     action->setToolTip(i18n("Edit a comment for this cell"));
     addAction("comment", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(comment()));
 
-    action = new KAction(KIcon("removecomment"), i18n("Comment"), this);
+    action = new KAction(koIcon("removecomment"), i18n("Comment"), this);
     action->setIconText(i18n("Remove Comment"));
     action->setToolTip(i18n("Remove this cell's comment"));
     addAction("clearComment", action);
@@ -591,7 +593,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("clearConditional", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(clearConditionalStyles()));
 
-    action = new KAction(KIcon("insert-link"), i18n("&Link..."), this);
+    action = new KAction(koIcon("insert-link"), i18n("&Link..."), this);
     addAction("insertHyperlink", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertHyperlink()));
     action->setToolTip(i18n("Insert an Internet hyperlink"));
@@ -620,76 +622,76 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sort()));
     action->setToolTip(i18n("Sort a group of cells"));
 
-    action = new KAction(KIcon("view-sort-descending"), i18n("Sort &Decreasing"), this);
+    action = new KAction(koIcon("view-sort-descending"), i18n("Sort &Decreasing"), this);
     addAction("sortDec", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sortDec()));
     action->setToolTip(i18n("Sort a group of cells in decreasing(last to first) order"));
 
-    action = new KAction(KIcon("view-sort-ascending"), i18n("Sort &Increasing"), this);
+    action = new KAction(koIcon("view-sort-ascending"), i18n("Sort &Increasing"), this);
     addAction("sortInc", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sortInc()));
     action->setToolTip(i18n("Sort a group of cells in ascending(first to last) order"));
 
-    action = new KAction(KIcon("view-filter"), i18n("&Auto-Filter"), this);
+    action = new KAction(koIcon("view-filter"), i18n("&Auto-Filter"), this);
     addAction("autoFilter", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(autoFilter()));
     action->setToolTip(i18n("Add an automatic filter to a cell range"));
 
     // -- fill actions --
 
-    action = new KAction(/*KIcon("arrow-left"), */i18n("&Left"), this);
+    action = new KAction(/*koIcon("arrow-left"), */i18n("&Left"), this);
     addAction("fillLeft", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(fillLeft()));
 
-    action = new KAction(/*KIcon("arrow-right"), */i18n("&Right"), this);
+    action = new KAction(/*koIcon("arrow-right"), */i18n("&Right"), this);
     addAction("fillRight", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(fillRight()));
 
-    action = new KAction(/*KIcon("arrow-up"), */i18n("&Up"), this);
+    action = new KAction(/*koIcon("arrow-up"), */i18n("&Up"), this);
     addAction("fillUp", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(fillUp()));
 
-    action = new KAction(/*KIcon("arrow-down"), */i18n("&Down"), this);
+    action = new KAction(/*koIcon("arrow-down"), */i18n("&Down"), this);
     addAction("fillDown", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(fillDown()));
 
-    action = new KAction(KIcon("black_sum"), i18n("Autosum"), this);
+    action = new KAction(koIcon("black_sum"), i18n("Autosum"), this);
     addAction("autoSum", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(autoSum()));
     action->setToolTip(i18n("Insert the 'sum' function"));
 
     // -- data insert actions --
 
-    action = new KAction(KIcon("series"), i18n("&Series..."), this);
+    action = new KAction(koIcon("series"), i18n("&Series..."), this);
     addAction("insertSeries", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertSeries()));
     action ->setToolTip(i18n("Insert a series"));
 
-    action = new KAction(KIcon("funct"), i18n("&Function..."), this);
+    action = new KAction(koIcon("funct"), i18n("&Function..."), this);
     addAction("insertFormula", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertFormula()));
     action->setToolTip(i18n("Insert math expression"));
 
-    action = new KAction(KIcon("accessories-character-map"), i18n("S&pecial Character..."), this);
+    action = new KAction(koIcon("accessories-character-map"), i18n("S&pecial Character..."), this);
     addAction("insertSpecialChar", action);
     action->setToolTip(i18n("Insert one or more symbols or letters not found on the keyboard"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertSpecialChar()));
 
 #ifndef QT_NO_SQL
-    action = new KAction(KIcon("network-server-database"), i18n("From &Database..."), this);
+    action = new KAction(koIcon("network-server-database"), i18n("From &Database..."), this);
     action->setIconText(i18n("Database"));
     addAction("insertFromDatabase", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertFromDatabase()));
     action->setToolTip(i18n("Insert data from a SQL database"));
 #endif
 
-    action = new KAction(KIcon("text-plain"), i18n("From &Text File..."), this);
+    action = new KAction(koIcon("text-plain"), i18n("From &Text File..."), this);
     action->setIconText(i18n("Text File"));
     addAction("insertFromTextfile", action);
     connect(action, SIGNAL(triggered(bool)), this,  SLOT(insertFromTextfile()));
     action->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
 
-    action = new KAction(KIcon("klipper"), i18n("From &Clipboard..."), this);
+    action = new KAction(koIcon("edit-paste"), i18n("From &Clipboard..."), this);
     action->setIconText(i18n("Clipboard"));
     addAction("insertFromClipboard", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertFromClipboard()));
@@ -728,7 +730,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action = new KAction(i18n("Named Areas..."), this);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G));
     action->setIconText(i18n("Named Areas"));
-    action->setIcon(KIcon("bookmarks"));
+    action->setIcon(koIcon("bookmarks"));
     action->setToolTip(i18n("Edit or select named areas"));
     addAction("namedAreaDialog", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(namedAreaDialog()));
@@ -751,7 +753,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- general editing actions --
 
-    action = new KAction(KIcon("cell_edit"), i18n("Modify Cell"), this);
+    action = new KAction(koIcon("cell_edit"), i18n("Modify Cell"), this);
     addAction("editCell", action);
     action->setShortcuts(QList<QKeySequence>() << Qt::Key_F2 << QKeySequence(Qt::CTRL + Qt::Key_M));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(edit()));
@@ -769,12 +771,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Paste the contents of the clipboard at the cursor"));
     addAction("paste", action);
 
-    action = new KAction(KIcon("special_paste"), i18n("Special Paste..."), this);
+    action = new KAction(koIcon("special_paste"), i18n("Special Paste..."), this);
     addAction("specialPaste", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(specialPaste()));
     action->setToolTip(i18n("Paste the contents of the clipboard with special options"));
 
-    action = new KAction(KIcon("insertcellcopy"), i18n("Paste with Insertion"), this);
+    action = new KAction(koIcon("insertcellcopy"), i18n("Paste with Insertion"), this);
     addAction("pasteWithInsertion", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(pasteWithInsertion()));
     action->setToolTip(i18n("Inserts a cell from the clipboard into the spreadsheet"));
@@ -797,7 +799,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- misc actions --
 
-    action = new KAction(KIcon("go-jump"), i18n("Goto Cell..."), this);
+    action = new KAction(koIcon("go-jump"), i18n("Goto Cell..."), this);
     action->setIconText(i18n("Goto"));
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_G));
     addAction("gotoCell", action);
@@ -808,13 +810,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Check the spelling"));
     addAction("tools_spelling", action);
 
-    action = new KAction(KIcon("inspector"), i18n("Run Inspector..."), this);
+    action = new KAction(koIcon("inspector"), i18n("Run Inspector..."), this);
     addAction("inspector", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(inspector()));
 
 #ifndef NDEBUG
-    action = new KAction(KIcon("table"), i18n("Show QTableView..."), this);
+    action = new KAction(koIcon("table"), i18n("Show QTableView..."), this);
     addAction("qTableView", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(qTableView()));
@@ -1130,16 +1132,36 @@ void CellToolBase::init()
 QList <QWidget*> CellToolBase::createOptionWidgets()
 {
     QList<QWidget *> widgets;
-    d->optionWidget = new CellToolOptionWidget(this);
 
-    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
-            d->optionWidget->locationComboBox(), SLOT(slotAddAreaName(const QString&)));
-    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaRemoved(const QString&)),
-            d->optionWidget->locationComboBox(), SLOT(slotRemoveAreaName(const QString&)));
+    QString xmlName = KStandardDirs::locate("appdata", "CellToolOptionWidgets.xml");
+    kDebug() << xmlName;
+    if (xmlName.isEmpty()) {
+        kWarning() << "couldn't find CellToolOptionWidgets.xml file";
+        return widgets;
+    }
 
-    selection()->update(); // initialize the location combobox
-    d->optionWidget->setWindowTitle(i18n("Cell Editor"));
-    widgets.append(d->optionWidget);
+    QFile f(xmlName);
+    if (!f.open(QIODevice::ReadOnly)) {
+        kWarning() << "couldn't open CellToolOptionWidgets.xml file";
+        return widgets;
+    }
+
+    QDomDocument doc(QString::fromLatin1("optionWidgets"));
+    QString errorMsg;
+    int errorLine, errorCol;
+    if (!doc.setContent(&f, &errorMsg, &errorLine, &errorCol)) {
+        f.close();
+        kWarning() << "couldn't parse CellToolOptionWidgets.xml file:" << errorMsg << "on line" << errorLine << "column" << errorCol;
+        return widgets;
+    }
+    f.close();
+
+    QDomNodeList widgetNodes = doc.elementsByTagName("optionWidget");
+    for (int i = 0; i < widgetNodes.size(); i++) {
+        QDomElement e = widgetNodes.at(i).toElement();
+        widgets.append(new ActionOptionWidget(this, e));
+    }
+
     return widgets;
 }
 
@@ -1239,7 +1261,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 void CellToolBase::selectionChanged(const Region& region)
 {
     Q_UNUSED(region);
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     // Update the editor, if the reference selection is enabled.
@@ -1347,14 +1369,15 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         d->cellEditor->setEditorFont(cell.style().font(), true, canvas()->viewConverter());
         connect(action("permuteFixation"), SIGNAL(triggered(bool)),
                 d->cellEditor, SLOT(permuteFixation()));
-    if(d->optionWidget && d->optionWidget->editor()) {
-        connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
-                d->optionWidget->editor(), SLOT(setText(const QString &)));
-        connect(d->optionWidget->editor(), SIGNAL(textChanged(const QString &)),
-                d->cellEditor, SLOT(setText(const QString &)));
-        d->optionWidget->applyButton()->setEnabled(true);
-        d->optionWidget->cancelButton()->setEnabled(true);
-    }
+
+        if(d->externalEditor) {
+            connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
+                    d->externalEditor, SLOT(setText(const QString &)));
+            connect(d->externalEditor, SIGNAL(textChanged(const QString &)),
+                    d->cellEditor, SLOT(setText(const QString &)));
+            d->externalEditor->applyAction()->setEnabled(true);
+            d->externalEditor->cancelAction()->setEnabled(true);
+        }
 
         double w = cell.width();
         double h = cell.height();
@@ -1444,8 +1467,8 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     } else {
         selection()->update();
     }
-    d->optionWidget->applyButton()->setEnabled(false);
-    d->optionWidget->cancelButton()->setEnabled(false);
+    d->externalEditor->applyAction()->setEnabled(false);
+    d->externalEditor->cancelAction()->setEnabled(false);
     canvas()->canvasWidget()->setFocus();
 }
 
@@ -1471,7 +1494,7 @@ void CellToolBase::activeSheetChanged(Sheet* sheet)
 
 void CellToolBase::updateEditor()
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
@@ -1491,13 +1514,13 @@ void CellToolBase::focusEditorRequested()
     // This screws up <Tab> though (David)
     if (selection()->originSheet() != selection()->activeSheet()) {
         // Always focus the external editor, if not on the origin sheet.
-        d->optionWidget->editor()->setFocus();
+        d->externalEditor->setFocus();
     } else {
         // Focus the last active editor, if on the origin sheet.
         if (d->lastEditorWithFocus == EmbeddedEditor) {
             editor()->widget()->setFocus();
         } else {
-            d->optionWidget->editor()->setFocus();
+            d->externalEditor->setFocus();
         }
     }
 }
@@ -1535,7 +1558,7 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     d->setProtectedActionsEnabled(readWrite);
@@ -1543,7 +1566,7 @@ void CellToolBase::documentReadWriteToggled(bool readWrite)
 
 void CellToolBase::sheetProtectionToggled(bool protect)
 {
-    if (!d->optionWidget) {
+    if (!d->externalEditor) {
         return;
     }
     d->setProtectedActionsEnabled(!protect);
@@ -1990,7 +2013,12 @@ void CellToolBase::currency(bool enable)
     command->setSheet(selection()->activeSheet());
     command->setText(i18nc("(qtundo-format)", "Format Money"));
     command->setFormatType(enable ? Format::Money : Format::Generic);
+#if KDE_IS_VERSION(4,4,0)
+    command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces() : 0);
+#else
     command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits() : 0);
+#endif
+
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2856,7 +2884,7 @@ void CellToolBase::edit()
     } else {
         // Switch focus.
         if (editor()->widget()->hasFocus()) {
-            d->optionWidget->editor()->setFocus();
+            d->externalEditor->setFocus();
         } else {
             editor()->widget()->setFocus();
         }
@@ -3506,4 +3534,9 @@ void CellToolBase::breakBeforeRow(bool enable)
     command->setReverse(!enable);
     command->add(*selection());
     command->execute(canvas());
+}
+
+void CellToolBase::setExternalEditor(Calligra::Sheets::ExternalEditor *editor)
+{
+    d->externalEditor = editor;
 }

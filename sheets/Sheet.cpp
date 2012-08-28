@@ -575,6 +575,42 @@ void Sheet::adjustDocumentHeight(double deltaHeight)
     emit documentSizeChanged(d->documentSize);
 }
 
+void Sheet::adjustCellAnchoredShapesX(qreal minX, qreal maxX, qreal delta)
+{
+    foreach (KoShape* s, d->shapes) {
+        if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
+            if (s->position().x() >= minX && s->position().x() < maxX) {
+                QPointF p = s->position();
+                p.setX(qMax(minX, p.x() + delta));
+                s->setPosition(p);
+            }
+        }
+    }
+}
+
+void Sheet::adjustCellAnchoredShapesX(qreal delta, int firstCol, int lastCol)
+{
+    adjustCellAnchoredShapesX(columnPosition(firstCol), columnPosition(lastCol+1), delta);
+}
+
+void Sheet::adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta)
+{
+    foreach (KoShape* s, d->shapes) {
+        if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
+            if (s->position().y() >= minY && s->position().y() < maxY) {
+                QPointF p = s->position();
+                p.setY(qMax(minY, p.y() + delta));
+                s->setPosition(p);
+            }
+        }
+    }
+}
+
+void Sheet::adjustCellAnchoredShapesY(qreal delta, int firstRow, int lastRow)
+{
+    adjustCellAnchoredShapesY(rowPosition(firstRow), rowPosition(lastRow+1), delta);
+}
+
 int Sheet::leftColumn(qreal _xpos, qreal &_left) const
 {
     _left = 0.0;
@@ -2222,7 +2258,7 @@ bool Sheet::compareRows(int row1, int row2, int maxCols, OdfSavingContext& table
 #else
     Q_UNUSED(maxCols);
 
-    // Optimized comparision by using the RowRepeatStorage to compare the content
+    // Optimized comparison by using the RowRepeatStorage to compare the content
     // rather then an expensive loop like compareCellsInRows.
     int row1repeated = cellStorage()->rowRepeat(row1);
     Q_ASSERT( row2 > row1 );
@@ -2553,6 +2589,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
 
     // flake
     // Create a dict of cell anchored shapes with the cell as key.
+    int sheetAnchoredCount = 0;
     foreach(KoShape* shape, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell()) {
             qreal dummy;
@@ -2560,15 +2597,14 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
             const int col = leftColumn(position.x(), dummy);
             const int row = topRow(position.y(), dummy);
             tableContext.insertCellAnchoredShape(this, row, col, shape);
+        } else {
+            sheetAnchoredCount++;
         }
     }
 
-    const QRect usedArea = this->usedArea();
-    saveOdfColRowCell(xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
-
     // flake
     // Save the remaining shapes, those that are anchored in the page.
-    if (!d->shapes.isEmpty()) {
+    if (sheetAnchoredCount) {
         xmlWriter.startElement("table:shapes");
         foreach(KoShape* shape, d->shapes) {
             if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell())
@@ -2577,6 +2613,9 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
         }
         xmlWriter.endElement();
     }
+
+    const QRect usedArea = this->usedArea();
+    saveOdfColRowCell(xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
 
     xmlWriter.endElement();
     return true;
@@ -2880,7 +2919,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull()) {
+    do {
 //         kDebug(36003) <<"Sheet::saveOdfCells:"
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
@@ -2902,7 +2941,7 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
         }
 
         nextCell = d->cellStorage->nextInRow(i, row);
-    }
+    } while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull());
 
     // Fill the row with empty cells, if there's a row default cell style.
     if (tableContext.rowDefaultStyles.contains(row)) {
@@ -3313,23 +3352,6 @@ const RowFormatStorage* Sheet::rowFormats() const
 void Sheet::showStatusMessage(const QString &message, int timeout)
 {
     emit statusMessage(message, timeout);
-}
-
-bool Sheet::saveChildren(KoStore* _store, const QString &_path)
-{
-    Q_UNUSED(_store);
-    Q_UNUSED(_path);
-#if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
-    int i = 0;
-    foreach(EmbeddedObject* object, doc()->embeddedObjects()) {
-        if (object->sheet() == this && (object->getType() == OBJECT_CALLIGRA_PART || object->getType() == OBJECT_CHART)) {
-            QString path = QString("%1/%2").arg(_path).arg(i++);
-            if (!dynamic_cast<EmbeddedCalligraObject*>(object)->embeddedObject()->document()->saveToStore(_store, path))
-                return false;
-        }
-    }
-#endif // CALLIGRA_SHEETS_KOPART_EMBEDDING
-    return true;
 }
 
 void Sheet::hideSheet(bool _hide)

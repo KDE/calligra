@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include "CellTool.h"
 
 using namespace Calligra::Sheets;
@@ -29,9 +30,9 @@ using namespace Calligra::Sheets;
 CellToolFactory::CellToolFactory(const QString& id)
         : KoToolFactoryBase(id)
 {
-    setToolTip(i18n("Cell Tool"));
-    setIcon("kspread");
-    setToolType("CalligraSheets");
+    setToolTip(i18n("Cell formatting"));
+    setIconName(koIconNameCStr("sheets"));
+    setToolType(dynamicToolType()+",calligrasheets");
     setPriority(0);
     setActivationShapeId("flake/always");
 }
@@ -55,7 +56,12 @@ void CellToolFactory::setToolTip(const QString& toolTip)
     KoToolFactoryBase::setToolTip(toolTip);
 }
 
-void CellToolFactory::setIcon(const QString& icon)
+void CellToolFactory::setIconName(const char *iconName)
 {
-    KoToolFactoryBase::setIcon(icon);
+    KoToolFactoryBase::setIconName(iconName);
+}
+
+void CellToolFactory::setIconName(const QString &iconName)
+{
+    KoToolFactoryBase::setIconName(iconName);
 }

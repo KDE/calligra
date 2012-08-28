@@ -62,10 +62,13 @@ void ProjectTester::initTestCase()
     m_project = new Project();
     m_project->setId( m_project->uniqueNodeId() );
     m_project->registerNodeId( m_project );
+    m_project->setConstraintStartTime( DateTime::fromString( "2012-02-01T00:00", KDateTime::LocalZone ) );
+    m_project->setConstraintEndTime( DateTime::fromString( "2013-02-01T00:00", KDateTime::LocalZone ) );
     // standard worktime defines 8 hour day as default
     QVERIFY( m_project->standardWorktime() );
     QCOMPARE( m_project->standardWorktime()->day(), 8.0 );
     m_calendar = new Calendar();
+    m_calendar->setName( "C1" );
     m_calendar->setDefault( true );
     QTime t1( 9, 0, 0 );
     QTime t2 ( 17, 0, 0 );
@@ -141,7 +144,7 @@ void ProjectTester::testTaskDeleteCmd()
 
 void ProjectTester::schedule()
 {
-    QDate today = QDate::currentDate();
+    QDate today = QDate::fromString( "2012-02-01", Qt::ISODate );
     QDate tomorrow = today.addDays( 1 );
     QDate yesterday = today.addDays( -1 );
     QDate nextweek = today.addDays( 7 );
@@ -1373,7 +1376,7 @@ void ProjectTester::scheduleWithExternalAppointments()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 3 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -1472,7 +1475,7 @@ void ProjectTester::reschedule()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 7 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -1605,7 +1608,7 @@ void ProjectTester::materialResource()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 7 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -1685,7 +1688,7 @@ void ProjectTester::requiredResource()
     project.setName( "P1" );
     project.setId( project.uniqueNodeId() );
     project.registerNodeId( &project );
-    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetstart = DateTime( QDate::fromString( "2012-02-01", Qt::ISODate ), QTime(0,0,0) );
     DateTime targetend = DateTime( targetstart.addDays( 7 ) );
     project.setConstraintStartTime( targetstart );
     project.setConstraintEndTime( targetend);
@@ -2051,7 +2054,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2072,7 +2075,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 0, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2091,7 +2094,7 @@ void ProjectTester::team()
 //    Debug::print( r2, s);
     Debug::print( team, s, false);
     Debug::print( &project, task1, s);
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     expectedEndTime = targetstart + Duration( 1, 16, 0 );
     QCOMPARE( task1->endTime(), expectedEndTime );
 
@@ -2108,7 +2111,7 @@ void ProjectTester::inWBSOrder()
     p.setName( "WBS Order" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2207,7 +2210,7 @@ void ProjectTester::resourceConflictALAP()
     p.setName( "resourceConflictALAP" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2381,7 +2384,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.setName( "resourceConflictMustStartOn" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01T00:00:00", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2465,7 +2468,7 @@ void ProjectTester::resourceConflictMustStartOn()
 //     Debug::print ( c, s );
 //     Debug::print( r1, s );
      Debug::print( &p, s, true );
-     Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     
     QCOMPARE( p.allTasks().count(), 4 );
     QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
@@ -2490,7 +2493,7 @@ void ProjectTester::resourceConflictMustStartOn()
 //     Debug::print ( c, s );
 //     Debug::print( r1, s );
      Debug::print( &p, s, true );
-     Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
     
     QCOMPARE( p.allTasks().count(), 4 );
     QCOMPARE( p.allTasks().at( 0 )->startTime(), st + Duration( 1, 8, 0 ) );
@@ -2547,7 +2550,7 @@ void ProjectTester::resourceConflictMustStartOn()
     p.calculate( *sm );
 
     Debug::print( &p, s, true );
-    Debug::printSchedulingLog( *sm, s );
+//     Debug::printSchedulingLog( *sm, s );
 
     QCOMPARE( task1->startTime(), task1->mustStartOn() );
     QCOMPARE( task2->startTime(), et - Duration( 0, 16, 0 ) );
@@ -2597,7 +2600,7 @@ void ProjectTester::resourceConflictMustFinishOn()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = p.constraintStartTime();
+    DateTime st = QDateTime::fromString( "2012-02-01", Qt::ISODate );
     st = DateTime( st.addDays( 1 ) );
     st.setTime( QTime ( 0, 0, 0 ) );
     p.setConstraintStartTime( st );
@@ -2802,7 +2805,7 @@ void ProjectTester::fixedInterval()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = DateTime::fromString( "2010-10-20 08:00" );
+    DateTime st = DateTime::fromString( "2010-10-20T08:00", KDateTime::LocalZone );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 
@@ -2827,8 +2830,8 @@ void ProjectTester::fixedInterval()
     Task *task1 = p.createTask();
     task1->setName( "T1" );
     task1->setConstraint( Node::FixedInterval );
-    task1->setConstraintStartTime( DateTime::fromString( "2010-10-21 08:00" ) );
-    task1->setConstraintEndTime( DateTime::fromString( "2010-10-22 08:00" ) );
+    task1->setConstraintStartTime( st );
+    task1->setConstraintEndTime( st.addDays( 1 ) );
     p.addTask( task1, &p );
 
     QString s = "Schedule T1 Fixed interval -------";
@@ -2864,7 +2867,7 @@ void ProjectTester::estimateDuration()
     p.setName( "P1" );
     p.setId( p.uniqueNodeId() );
     p.registerNodeId( &p );
-    DateTime st = DateTime::fromString( "2010-10-20 08:00" );
+    DateTime st = QDateTime::fromString( "2010-10-20 08:00" );
     p.setConstraintStartTime( st );
     p.setConstraintEndTime( st.addDays( 5 ) );
 

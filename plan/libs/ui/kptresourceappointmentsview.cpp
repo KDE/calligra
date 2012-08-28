@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 - 2010 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2005 - 2010, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +31,10 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptviewbase.h"
+#include "kptdebug.h"
 
+#include "KoPageLayoutWidget.h"
 #include <KoDocument.h>
 
 #include <QMenu>
@@ -39,16 +42,13 @@
 #include <QObject>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QTabWidget>
 
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 
-#include <kdebug.h>
-
-extern int planDbg();
 
 namespace KPlato
 {
@@ -86,15 +86,37 @@ void ResourceAppointmentsDisplayOptionsPanel::setDefault()
 }
 
 //----
-ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ResourceAppointmentsItemModel *model, QWidget *parent )
-    : KPageDialog( parent )
+ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ViewBase *view, ResourceAppointmentsItemModel *model, QWidget *parent )
+    : KPageDialog( parent ),
+    m_view( view )
 {
     ResourceAppointmentsDisplayOptionsPanel *panel = new ResourceAppointmentsDisplayOptionsPanel( model );
     KPageWidgetItem *page = addPage( panel, i18n( "General" ) );
     page->setHeader( i18n( "Resource Assignments View Settings" ) );
 
-    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+    QTabWidget *tab = new QTabWidget();
+
+    QWidget *w = ViewBase::createPageLayoutWidget( view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( view );
+    m_headerfooter->setOptions( view->printingOptions() );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    page = addPage( tab, i18n( "Printing" ) );
+    page->setHeader( i18n( "Printing Options" ) );
+
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect( this, SIGNAL(okClicked()), panel, SLOT(slotOk()));
+    connect( this, SIGNAL(defaultClicked()), panel, SLOT(setDefault()));
+}
+
+void ResourceAppointmentsSettingsDialog::slotOk()
+{
+    m_view->setPageLayout( m_pagelayout->pageLayout() );
+    m_view->setPrintingOptions( m_headerfooter->options() );
 }
 
 //---------------------------------------
@@ -156,8 +178,8 @@ QModelIndex ResourceAppointmentsTreeView::currentIndex() const
 
 //-----------------------------------
 
-ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceAppointmentsView::ResourceAppointmentsView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     kDebug(planDbg())<<"------------------- ResourceAppointmentsView -----------------------";
 
@@ -170,7 +192,7 @@ ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *p
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
@@ -289,7 +311,7 @@ void ResourceAppointmentsView::setupGui()
 void ResourceAppointmentsView::slotOptions()
 {
     kDebug(planDbg());
-    ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( m_view->model(), this );
+    ResourceAppointmentsSettingsDialog *dlg = new ResourceAppointmentsSettingsDialog( this, m_view->model(), this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -348,11 +370,13 @@ void ResourceAppointmentsView::slotDeleteSelection()
 
 bool ResourceAppointmentsView::loadContext( const KoXmlElement &context )
 {
+    ViewBase::loadContext( context );
     return m_view->loadContext( context );
 }
 
 void ResourceAppointmentsView::saveContext( QDomElement &context ) const
 {
+    ViewBase::saveContext( context );
     m_view->saveContext( context );
 }
 

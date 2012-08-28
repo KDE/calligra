@@ -32,6 +32,7 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 
 #include <KoShapePainter.h>
 #include <KoFilter.h>
@@ -72,7 +73,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
     if (! document)
         return KoFilter::ParsingError;
 
-    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>(document);
+    KarbonKoDocument * karbonPart = dynamic_cast<KarbonKoDocument*>(document);
     if (! karbonPart)
         return KoFilter::WrongFormat;
 
@@ -95,8 +96,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
         widget->enableBackgroundOpacity(format == "PNG");
 
         KDialog dlg;
-        //dlg.setCaption(i18n("PNG Export Options"));
-        dlg.setCaption("Image Export Options"); // TODO add i18n after release
+        dlg.setCaption(i18n("PNG Export Options"));
         dlg.setButtons(KDialog::Ok | KDialog::Cancel);
         dlg.setMainWidget(widget);
         if (dlg.exec() != QDialog::Accepted)

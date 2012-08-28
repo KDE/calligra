@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Works Document
+Name[nl]=Microsoft Works-document
+Name[pt]=Documento do Microsoft Works
+Name[pt_BR]=Documentos do Microsoft Works
+Name[uk]=Документ Microsoft Works
+Name[x-test]=xxMicrosoft Works Documentxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.ms-works;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

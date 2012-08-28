@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- Copyright (C) 2005 - 2011 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2005 - 2011, 2012 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include "kpttask.h"
 #include "kptxmlloaderobject.h"
 #include "kptschedulerplugin.h"
+#include "kptdebug.h"
 
 #include <KoXmlReader.h>
 
@@ -36,9 +37,7 @@
 #include <QStringList>
 
 #include <klocale.h>
-#include <kdebug.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -234,8 +233,6 @@ void Schedule::initiateCalculation()
     effortNotMet = false;
     workStartTime = DateTime();
     workEndTime = DateTime();
-
-
 }
 
 void Schedule::calcResourceOverbooked()
@@ -519,15 +516,21 @@ void Schedule::copyAppointments( Schedule::CalculationMode from, Schedule::Calcu
     }
 }
 
-
 EffortCostMap Schedule::bcwsPrDay( EffortCostCalculationType type ) const
 {
+    return const_cast<Schedule*>( this )->bcwsPrDay( type );
+}
+
+EffortCostMap Schedule::bcwsPrDay( EffortCostCalculationType type )
+{
     //kDebug(planDbg())<<m_name<<m_appointments;
-    EffortCostMap ec;
-    foreach ( Appointment *a, m_appointments ) {
-        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date(), type );
+    EffortCostCache &ec = m_bcwsPrDay[ (int)type ];
+    if ( ! ec.cached ) {
+        foreach ( Appointment *a, m_appointments ) {
+            ec.effortcostmap += a->plannedPrDay( a->startTime().date(), a->endTime().date(), type );
+        }
     }
-    return ec;
+    return ec.effortcostmap;
 }
 
 EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type ) const
@@ -668,6 +671,13 @@ QString Schedule::Log::formatMsg() const
     s += resource ? QString( "%1 ").arg(resource->name(), -8 ) : "";
     s += message;
     return s;
+}
+
+void Schedule::clearPerformanceCache()
+{
+    m_bcwsPrDay.clear();
+    m_bcwpPrDay.clear();
+    m_acwp.clear();
 }
 
 //-------------------------------------------------
@@ -1138,10 +1148,7 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
                 if ( units <= i.load() ) {
                     ci.first = t; // fully booked, so move forvard to appointment end
                 }
-                if ( ! res.first.isValid() ) {
-                    res.first = ci.first;
-                }
-                res.second = ci.second;
+                res = ci;
                 //kDebug(planDbg())<<"available next 2:"<<interval<<i<<":"<<ci<<res;
                 continue;
             }

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+Name=KPresenter Presentations
+Name[nl]=KPresenter-presentatie
+Name[pt]=Apresentações do KPresenter
+Name[pt_BR]=Apresentações do KPresenter
+Name[uk]=Презентації KPresenter
+Name[x-test]=xxKPresenter Presentationsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/x-kpresenter;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

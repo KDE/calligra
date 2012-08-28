@@ -21,41 +21,12 @@
 
 */
 
-#include "paragraph.h"
-#include "conversion.h"
-
+#include <math.h>
 #include <kdebug.h>
 
-//specifies the type of alignment which is applied to the text that is entered
-//at the tab stop
-enum TabJC {
-    jcLeft,      //Left justification.
-    jcCenter,    //Center justification.
-    jcRight,     //Right justification.
-    jcDecimal,   //[1]
-    jcBar,       //Specifies that the current tab is a bar tab.
-    jcList = 0x6 //Specifies that the current tab is a list tab.
-};
-
-//specifies the characters that are used to fill in the space which is created
-//by a tab that ends at a custom tab stop.
-enum TabLC {
-    tlcNone,         //No leader.
-    tlcDot,          //Dot leader.
-    tlcHyphen,       //Dashed leader.
-    tlcUnderscore,   //Underscore leader.
-    tlcHeavy,        //Same as tlcUnderscore.
-    tlcMiddleDot,    //Centered dot leader.
-    tlcDefault = 0x7 //Same as tlcNone.
-};
-
-//[1] - Specifies that the current tab stop results in a location in the
-//document at which all following text is aligned around the first decimal
-//separator in the following text runs. If there is no decimal separator, text
-//is aligned around the implicit decimal separator after the last digit of the
-//first numeric value that appears in the following text. All text runs before
-//the first decimal character appear before the tab stop; all text runs after
-//it appear after the tab stop location.
+#include "paragraph.h"
+#include "conversion.h"
+#include "msdoc.h"
 
 //define the static attribute
 QStack<QString> Paragraph::m_bgColors;
@@ -105,7 +76,7 @@ Paragraph::Paragraph(KoGenStyles* mainStyles, const QString& bgColor, bool inSty
 
     //init the background-color stack to page background-color
     if (m_bgColors.size() > 0) {
-        kWarning(30513) << "BUG: m_bgColors stack NOT emty, clearing!";
+        kWarning(30513) << "BUG: m_bgColors stack NOT empty, clearing!";
         m_bgColors.clear();
     }
 
@@ -684,8 +655,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             //
             // Get the proportion & turn it into a percentage for the
             // attribute.
-            QString proportionalLineSpacing(QString::number((qreal)pap.lspd.dyaLine
-                                                  / (qreal)2.4));
+            QString proportionalLineSpacing(QString::number(ceil(pap.lspd.dyaLine / 2.4f)));
             style->addProperty("fo:line-height", proportionalLineSpacing.append("%"), pt);
         } else if (pap.lspd.fMultLinespace == 0) {
             // Magnitude of lspd.dyaLine specifies the amount of space
@@ -695,7 +665,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             qreal value = qAbs((qreal)pap.lspd.dyaLine / (qreal)20.0); // twip -> pt
             // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
             if (pap.lspd.dyaLine > 0)
-                style->addPropertyPt("fo:line-height-at-least", value, pt);
+                style->addPropertyPt("style:line-height-at-least", value, pt);
             else if (pap.lspd.dyaLine < 0 && pap.dcs.fdct==0)
                 style->addPropertyPt("fo:line-height", value, pt);
         } else
@@ -793,13 +763,12 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
         style->addChildElement("style:drop-cap", contents);
 #endif
     }
-    //TODO: introduce diff for tabs too like in: if(!refPap || refPap->fKeep != pap
+    //TODO: Compare with the parent style to avoid duplicity.
 
     // Tabulators, only if not in a list.  itbdMac = number of tabs stops
     // defined for paragraph.  Must be in <0,64>.
-    if (pap.itbdMac && ((pap.ilfo == 0) || (paragraph && paragraph->isHeading()))) {
-        kDebug(30513) << "processing tab stops";
-        //looks like we need to write these out with an xmlwriter
+    if (pap.itbdMac) {
+
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);
         KoXmlWriter tmpWriter(&buf, 3);//root, office:automatic-styles, style:style
@@ -814,7 +783,7 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             //QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
             tmpWriter.addAttributePt("style:position", (double)td.dxaTab / 20.0);
 
-            //td.tbd.jc = justification code, default "left" (can be ignored)
+            //td.tbd.jc = justification code
             switch (td.tbd.jc) {
             case jcCenter:
                 tmpWriter.addAttribute("style:type", "center");
@@ -824,13 +793,14 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
                 break;
             case jcDecimal:
                 tmpWriter.addAttribute("style:type", "char");
+                tmpWriter.addAttribute("style:char", ".");
                 break;
             case jcBar:
                 //bar -> just creates a vertical bar at that point that's always visible
                 kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
                 break;
             default:
-//                 tmpWriter.addAttribute("style:type", "left");
+                //ODF: The default value for this attribute is left.
                 break;
             }
             //td.tbd.tlc = tab leader code, default no leader (can be ignored)
@@ -847,10 +817,13 @@ void Paragraph::applyParagraphProperties(const wvWare::ParagraphProperties& prop
             case tlcHeavy:
                 leader = QChar('_');
                 break;
+            case tlcNone:
             default:
+                //ODF: The default value for this attribute is “ “ (U+0020, SPACE).
                 break;
             }
-            if (!leader.isNull()) {
+            //The value MUST be ignored if jc is equal jcBar.
+            if (td.tbd.jc != jcBar && leader > 0) {
                 tmpWriter.addAttribute("style:leader-text", leader);
             }
             tmpWriter.endElement();//style:tab-stop
@@ -1013,7 +986,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //fImprint = text engraved if 1
     if (!refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint) {
         if (chp->fShadow)
-            style->addProperty("style:text-shadow", "1pt", tt);
+            style->addProperty("fo:text-shadow", "1pt", tt);
         if (chp->fImprint)
             style->addProperty("style:font-relief", "engraved", tt);
     }
@@ -1053,7 +1026,7 @@ void Paragraph::applyCharacterProperties(const wvWare::Word97::CHP* chp, KoGenSt
     //wCharScale - MUST be greater than or equal to 1 and less than or equal to 600
     if (!refChp || refChp->wCharScale != chp->wCharScale) {
         if (chp->wCharScale) {
-            style->addProperty("style:text-scale", chp->wCharScale, tt);
+            style->addProperty("style:text-scale", QString::number(chp->wCharScale) + "%", tt);
         }
     }
 

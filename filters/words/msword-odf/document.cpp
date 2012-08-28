@@ -32,6 +32,7 @@
 //#include "versionmagic.h"
 #include "mswordodfimport.h"
 #include "msodraw.h"
+#include "msoleps.h"
 #include "msdoc.h"
 
 #include <KoUnit.h>
@@ -60,7 +61,7 @@ Document::Document(const std::string& fileName,
 //                    KoFilterChain* chain,
                    KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
                    KoStore* store, KoGenStyles* mainStyles,
-                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data)
+                   LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si)
         : m_textHandler(0)
         , m_tableHandler(0)
         , m_replacementHandler(new WordsReplacementHandler)
@@ -87,6 +88,7 @@ Document::Document(const std::string& fileName,
         , m_wdstm(wordDocument)
         , m_tblstm(0)
         , m_datastm(data)
+        , m_sistm(si)
         , m_tblstm_pole(table)
 {
     kDebug(30513);
@@ -152,45 +154,21 @@ Document::~Document()
     delete m_tableHandler;
     delete m_replacementHandler;
     delete m_graphicsHandler;
-    //expecting the background-color of the document on top of the stack
+
+    // expecting the background-color of the document on top of the stack
     Q_ASSERT(m_bgColors.size() == 1);
     m_bgColors.clear();
 }
 
-//set whether or not document has header or footer
-//set tabstop value
-//add footnote settings & endnote settings
-//write out header & footer type
-//write out picture information
 void Document::finishDocument()
 {
     kDebug(30513);
 
-    //finish a header if we need to - this should only be necessary if there's
-    //an even header w/o an odd header
-//     if (m_oddOpen) {
-//         QString contents = QString::fromUtf8(m_buffer->buffer(), m_buffer->buffer().size());
-//         m_masterStyle->addChildElement(QString::number(m_headerCount), contents);
-
-//         m_oddOpen = false;
-//         delete m_headerWriter;
-//         m_headerWriter = 0;
-//         delete m_buffer;
-//         m_buffer = 0;
-//         //we're done with this header, so reset to false
-//         m_writingHeader = false;
-//     }
-
     const wvWare::Word97::DOP& dop = m_parser->dop();
 
-    m_initialFootnoteNumber = dop.nFtn;
-    m_initialEndnoteNumber = dop.nEdn;
-
-    //"tabStopValue", (double)dop.dxaTab / 20.0
-
     Q_ASSERT(m_mainStyles);
-    if (m_mainStyles) {
 
+    if (m_mainStyles) {
         QString footnoteConfig("<text:notes-configuration "
                                "text:note-class=\"footnote\" "
                                "text:default-style-name=\"Footnote\" "
@@ -199,18 +177,19 @@ void Document::finishDocument()
                                "text:master-page-name=\"Footnote\" "
                                "style:num-format=\"%1\" "
                                "text:start-value=\"%2\" "
-                               "text:footnotes-position=\"page\" "
-                               "text:start-numbering-at=\"%3\" "
+                               "text:footnotes-position=\"%3\" "
+                               "text:start-numbering-at=\"%4\" "
                                "/>");
         //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
         //use the infos from SEP (sprmSFpc, sprmSRncFtn, sprmSNFtn, sprmSNfcFtnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          footnoteConfig.arg(Conversion::numberFormatCode(dop.nfcFtnRef2))
-                                                       .arg(m_initialFootnoteNumber)
-                                                       .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
-                                                       .toLatin1());
+                                         .arg(dop.nFtn)
+                                         .arg(Conversion::fpcToFtnPosition(dop.fpc))
+                                         .arg(Conversion::rncToStartNumberingAt(dop.rncFtn))
+                                         .toLatin1());
 
-        // ms-word has start-numbering-at (rncEdn) for endnotes, but ODF doesn't really support it
+        // MS Word has start-numbering-at (rncEdn) for endnotes, but ODF doesn't really support it
         QString endnoteConfig("<text:notes-configuration "
                               "text:note-class=\"endnote\" "
                               "text:default-style-name=\"Endnote\" "
@@ -221,87 +200,132 @@ void Document::finishDocument()
                               "text:start-value=\"%2\" "
                               //"text:start-numbering-at=\"%3\" "
                               "/>");
+
         //FIXME: If document that has an nFib <= 0x00D9, then use DOP.  Else
         //use the infos from SEP (sprmSFEndnote, sprmSRncEdn, sprmSNEdn, sprmSNfcEdnRef).
         m_mainStyles->insertRawOdfStyles(KoGenStyles::DocumentStyles,
                                          endnoteConfig.arg(Conversion::numberFormatCode(dop.nfcEdnRef2))
-                                                      .arg(m_initialEndnoteNumber)
-//                                                           .arg(Conversion::rncToStartNumberingAt(dop.rncEdn))
-                                                      .toLatin1());
+                                         .arg(dop.nEdn)
+                                         // .arg(Conversion::rncToStartNumberingAt(dop.rncEdn))
+                                         .toLatin1());
     }
-//     QDomElement elementDoc = m_mainDocument.documentElement();
-//     QDomElement element;
-//     element = m_mainDocument.createElement("ATTRIBUTES");
-//     element.setAttribute("processing",0); // WP
-//     char allHeaders = ( wvWare::HeaderData::HeaderEven |
-//                         wvWare::HeaderData::HeaderOdd |
-//                         wvWare::HeaderData::HeaderFirst );
-//     element.setAttribute("hasHeader", m_headerFooters & allHeaders ? 1 : 0 );
-//     char allFooters = ( wvWare::HeaderData::FooterEven |
-//                         wvWare::HeaderData::FooterOdd |
-//                         wvWare::HeaderData::FooterFirst );
-//     element.setAttribute("hasFooter", m_headerFooters & allFooters ? 1 : 0 );
-//     //element.setAttribute("unit","mm"); // How to figure out the unit to use?
-
-//     element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
-//     elementDoc.appendChild(element);
-
-//     // Done at the end: write the type of headers/footers,
-//     // depending on which kind of headers and footers we received.
-//     QDomElement paperElement = elementDoc.namedItem("PAPER").toElement();
-//     Q_ASSERT ( !paperElement.isNull() ); // slotSectionFound should have been called!
-//     if ( !paperElement.isNull() ) {
-//         kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
-//         paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
-//         paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
-//     }
-
-//     // Write out <PICTURES> tag
-//     QDomElement picturesElem = m_mainDocument.createElement("PICTURES");
-//     elementDoc.appendChild( picturesElem );
-//     for( QStringList::Iterator it = m_pictureList.begin(); it != m_pictureList.end(); ++it ) {
-//         QDomElement keyElem = m_mainDocument.createElement("KEY");
-//         picturesElem.appendChild( keyElem );
-//         keyElem.setAttribute( "filename", *it );
-//         keyElem.setAttribute( "name", *it );
-//     }
 }
 
 //write document info, author, fullname, title, about
 void Document::processAssociatedStrings()
 {
     kDebug(30513) ;
+
+    MSO::SummaryInformationPropertySetStream *si = 0;
+    if (m_sistm) {
+        si = new MSO::SummaryInformationPropertySetStream();
+        try {
+            parseSummaryInformationPropertySetStream(*m_sistm, *si);
+        } catch (const IOException &e) {
+            kError(30513) << e.msg;
+        } catch (...) {
+            kWarning(30513) << "Warning: Caught an unknown exception!";
+        }
+    }
+
+    QString title;
+    QString subject;
+    QString keywords;
+    QString author;
+    QString lastRevBy;
+    QString comments;
+    QString *p_str = 0;
+
+    if (si) {
+        MSO::PropertySet &ps = si->propertySet.propertySet1;
+
+        for (uint i = 0; i < ps.numProperties; i++) {
+            switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
+            case PIDSI_TITLE:
+                p_str = &title;
+                break;
+            case PIDSI_SUBJECT:
+                p_str = &subject;
+                break;
+            case PIDSI_AUTHOR:
+                p_str = &author;
+                break;
+            case PIDSI_KEYWORDS:
+                p_str = &keywords;
+                break;
+            case PIDSI_COMMENTS:
+                p_str = &comments;
+                break;
+            case PIDSI_LASTAUTHOR:
+                p_str = &lastRevBy;
+                break;
+            default:
+                break;
+            }
+            if (p_str) {
+                if (ps.property.at(i).vt_lpstr) {
+                    *p_str = ps.property.at(i).vt_lpstr->characters;
+                }
+                p_str = 0;
+            }
+        }
+    }
+
     wvWare::AssociatedStrings strings(m_parser->associatedStrings());
-    if (!strings.author().isNull()) {
-        m_metaWriter->startElement("meta:initial-creator");
-        m_metaWriter->addTextNode(Conversion::string(strings.author()));
-        m_metaWriter->endElement();
+    if (title.isEmpty() && !strings.title().isEmpty()) {
+        title = Conversion::string(strings.title());
     }
-    if (!strings.title().isNull()) {
+    if (subject.isEmpty() && !strings.subject().isEmpty()) {
+        subject = Conversion::string(strings.subject());
+    }
+    if (author.isEmpty() && !strings.author().isEmpty()) {
+        author = Conversion::string(strings.author() );
+    }
+    if (keywords.isEmpty() && !strings.keywords().isEmpty()) {
+        keywords = Conversion::string(strings.keywords());
+    }
+    //NOTE: According to the Word6/Word8 spec. SttbfAssoc does contain
+    //comments.  However it's not reproducible in MSOffice2000.
+    if (comments.isEmpty() && !strings.comments().isEmpty()) {
+        comments = Conversion::string(strings.comments());
+    }
+    if (lastRevBy.isEmpty() && !strings.lastRevBy().isEmpty()) {
+        lastRevBy = Conversion::string(strings.lastRevBy() );
+    }
+
+    if (!title.isEmpty()) {
         m_metaWriter->startElement("dc:title");
-        kDebug(30513) << "TITLE: " << Conversion::string(strings.title());
-        m_metaWriter->addTextNode(Conversion::string(strings.title()));
+        m_metaWriter->addTextNode(title);
         m_metaWriter->endElement();
     }
-    if (!strings.subject().isNull()) {
+    if (!subject.isEmpty()) {
         m_metaWriter->startElement("dc:subject");
-        m_metaWriter->addTextNode(Conversion::string(strings.subject()));
+        m_metaWriter->addTextNode(subject);
         m_metaWriter->endElement();
     }
-    if (!strings.lastRevBy().isNull()) {
-        m_metaWriter->startElement("dc:creator");
-        m_metaWriter->addTextNode(Conversion::string(strings.lastRevBy()));
+    if (!author.isEmpty()) {
+        m_metaWriter->startElement("meta:initial-creator");
+        m_metaWriter->addTextNode(author);
         m_metaWriter->endElement();
     }
-    if (!strings.keywords().isNull()) {
+    if (!keywords.isEmpty()) {
         m_metaWriter->startElement("meta:keyword");
-        m_metaWriter->addTextNode(Conversion::string(strings.keywords()));
+        m_metaWriter->addTextNode(keywords);
         m_metaWriter->endElement();
     }
-    if (!strings.comments().isNull()) {
-        m_metaWriter->startElement("meta:comments");
-        m_metaWriter->addTextNode(Conversion::string(strings.comments()));
+    if (!comments.isEmpty()) {
+        m_metaWriter->startElement("dc:description");
+        m_metaWriter->addTextNode(comments);
         m_metaWriter->endElement();
+    }
+    if (!lastRevBy.isEmpty()) {
+        m_metaWriter->startElement("dc:creator");
+        m_metaWriter->addTextNode(lastRevBy);
+        m_metaWriter->endElement();
+    }
+
+    if (si) {
+        delete si;
     }
 }
 
@@ -390,7 +414,7 @@ void Document::processStyles()
             kDebug(30513) << "added style " << actualName;
         }
     }
-    //also create a defaul style which is needed to store the default tab spacing
+    //also create a default style which is needed to store the default tab spacing
     KoGenStyle defaultStyle(KoGenStyle::ParagraphStyle, "paragraph");
     defaultStyle.setDefaultStyle(true);
     defaultStyle.addPropertyPt("style:tab-stop-distance", (qreal)m_parser->dop().dxaTab / 20.0);
@@ -776,103 +800,6 @@ void Document::annotationEnd()
 {
 }
 
-//NOTE: disable this for now - we should be able to do everything in
-//TableHandler create frame for the table cell?
-// void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect,
-//                                    const QString& tableName,
-//                                    const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom,
-//                                    const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight,
-//                                    const wvWare::Word97::SHD& shd )
-// {
-//     kDebug(30513) ;
-
-//     //need to set up cell style here probably don't need generateFrameBorder()
-//     //<table:table-cell> tag in content.xml
-
-//     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
-//     framesetElement.setAttribute( "frameType", 1 /* text */ );
-//     framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
-//     framesetElement.setAttribute( "grpMgr", tableName );
-//     QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
-//     framesetElement.setAttribute( "name", name );
-//     framesetElement.setAttribute( "row", row );
-//     framesetElement.setAttribute( "col", column );
-//     framesetElement.setAttribute( "rows", rowSpan );
-//     framesetElement.setAttribute( "cols", columnSpan );
-//     m_framesetsElement.appendChild(framesetElement);
-
-//     QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
-//     generateFrameBorder( frameElem, brcTop, brcBottom, brcLeft, brcRight, shd );
-
-//     m_textHandler->setFrameSetElement( framesetElement );
-// }
-
-//add empty element to end it?
-// void Document::slotTableCellEnd()
-// {
-//     kDebug(30513) ;
-//     //</table:table-cell>
-//     m_textHandler->setFrameSetElement( QDomElement() );
-// }
-
-//set up frame borders (like for a table cell?)
-//set the background fill
-// void Document::generateFrameBorder( QDomElement& frameElementOut,
-//                                     const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom,
-//                                     const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight,
-//                                     const wvWare::Word97::SHD& shd )
-// {
-//     kDebug(30513) ;
-//     // Frame borders
-//     //figure out what this is supposed to do!
-
-//     if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
-//     Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
-//     if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
-//     Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
-//     if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
-//     Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
-//     if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
-//     Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
-
-//     // Frame background brush (color and fill style)
-//     if ( shd.icoFore != 0 || shd.icoBack != 0 )
-//     {
-//         // If ipat = 0 (solid fill), icoBack is the background color.  But
-//         // otherwise, icoFore is the one we need to set as bkColor (and icoBack
-//         // is usually white; it's the other color of the pattern, something
-//         // that we can't set in Qt apparently).
-//     int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-//     kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
-
-//         // Reverse-engineer MSWord's own hackery: it models various gray levels
-//         // using dithering. But this looks crappy with Qt. So we go back to a
-//         // QColor.
-//         bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
-//         if ( grayHack )
-//         {
-//             bool ok;
-//             int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
-//             if ( ok )
-//             {
-//                 QColor color( 0, 0, grayLevel, QColor::Hsv );
-//                 QString prefix = "bk";
-//                 frameElementOut.setAttribute( "bkRed", color.red() );
-//                 frameElementOut.setAttribute( "bkBlue", color.blue() );
-//                 frameElementOut.setAttribute( "bkGreen", color.green() );
-//             }
-//             else grayHack = false;
-//         }
-//         if ( !grayHack )
-//         {
-//             Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
-//             //Fill style
-//             int brushStyle = Conversion::fillPatternStyle( shd.ipat );
-//             frameElementOut.setAttribute( "bkStyle", brushStyle );
-//         }
-//     }
-// }
-
 //create SubDocument object & add it to the queue
 void Document::slotSubDocFound(const wvWare::FunctorBase* functor, int data)
 {
@@ -955,8 +882,10 @@ void Document::slotTextBoxFound(unsigned int index, bool stylesxml)
 void Document::processSubDocQueue()
 {
     kDebug(30513) ;
+
     // Table cells can contain footnotes, and footnotes can contain tables [without footnotes though]
     // This is why we need to repeat until there's nothing more do to (#79024)
+
     while (!m_subdocQueue.empty()) {// || !m_tableQueue.empty()) {
         while (!m_subdocQueue.empty()) {
             SubDocument subdoc(m_subdocQueue.front());
@@ -1061,7 +990,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     // NOTE: margin-top and margin-bottom are updated in slotSectionFound based
     // on the information if the header/footer was empty/non-empty.
     //
-    // Maybe we shoud set the minimum height of header/footer to qAbs(dyaTop -
+    // Maybe we should set the minimum height of header/footer to qAbs(dyaTop -
     // dyaHdrTop)/qAbs(dyaBottom - dyaHdrBottom)
     //
     // The height of both header and footer is unknown, so it's not possible to
@@ -1090,7 +1019,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
 #if 0
         qreal headerMarginTop = qAbs(sep->dyaTop) - sep->dyaHdrTop;
         if (headerMarginTop > 0) {
-            header.append(QString::number(headerMarginTop / 20.0));
+            header.append(QString::number(headerMarginTop / 20.0, 'f'));
         } else
 #endif
             header.append("0");
@@ -1114,7 +1043,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
         footer.append(" fo:margin-top=\"");
         qreal headerMarginBottom = qAbs(sep->dyaBottom) - sep->dyaHdrBottom;
         if (headerMarginBottom >= 400) {
-            footer.append(QString::number(headerMarginBottom / 20.0));
+            footer.append(QString::number(headerMarginBottom / 20.0, 'f'));
         } else {
             footer.append("14");
         }
@@ -1166,7 +1095,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
     pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
 
-    // the pgbOffsetFrom variable determins how to calculate the margins and paddings.
+    // the pgbOffsetFrom variable determines how to calculate the margins and paddings.
     switch (sep->pgbOffsetFrom) {
     case pgbFromText:
         pageLayoutStyle->addPropertyPt("fo:padding-left",   sep->brcLeft.dptSpace);

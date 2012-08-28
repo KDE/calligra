@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 - 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2009, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include "kptitemviewsettup.h"
 #include "planworksettings.h"
 
+#include <KoIcon.h>
 
 #include <QDragMoveEvent>
 #include <QMenu>
@@ -38,7 +39,6 @@
 #include <QHeaderView>
 #include <QPointer>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -49,7 +49,7 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
-extern int planworkDbg();
+#include "debugarea.h"
 
 using namespace KPlato;
 
@@ -358,7 +358,7 @@ void TaskWorkPackageView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
@@ -374,7 +374,7 @@ void TaskWorkPackageView::slotSplitView()
 void TaskWorkPackageView::slotOptions()
 {
     kDebug(planworkDbg());
-    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( m_view, this );
+    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( 0, m_view, this );
     dlg->exec();
     delete dlg;
     saveContext();

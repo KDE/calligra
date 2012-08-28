@@ -21,8 +21,8 @@
 #include "pqxxconnection.h"
 #include "pqxxconnection_p.h"
 
-#include <kexidb/error.h>
-#include <kexidb/global.h>
+#include <db/error.h>
+#include <db/global.h>
 
 #include <klocale.h>
 #include <kdebug.h>

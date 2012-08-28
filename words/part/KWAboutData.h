@@ -46,6 +46,7 @@ KAboutData * newWordsAboutData()
     aboutData->addAuthor(ki18n("Shreya Pandit"), ki18n("Statistics docker"), "");
     aboutData->addAuthor(ki18n("Brijesh Patel"), ki18n("Foot and endnotes"), "");
     aboutData->addAuthor(ki18n("Smit Patel"), ki18n("Bibliography"), "");
+    aboutData->addAuthor(ki18n("Mojtaba Shahi"), ki18n("Style Manager"), "");
     aboutData->addAuthor(ki18n("Lassi Nieminen"), ki18n("Filter"), "lassniem@gmail.com");
     aboutData->addAuthor(ki18n("Hanzes Matus"), ki18n("Filter"), "matus.hanzes@ixonos.com");
     aboutData->addAuthor(ki18n("Lukáš Tvrdý"), ki18n("Filter"), "lukast.dev@gmail.com");
@@ -70,6 +71,7 @@ KAboutData * newWordsAboutData()
     aboutData->addAuthor(ki18n("Ewald Snel"), ki18n("Filter"), "ewald@rambo.its.tudelft.nl");
     aboutData->addAuthor(ki18n("Tomasz Grobelny"), ki18n("Filter"), "grotk@poczta.onet.pl");
     aboutData->addAuthor(ki18n("Michael Johnson"), ki18n("Filter"));
+    aboutData->addAuthor(ki18n("Fatcow Web Hosting"), ki18n("Page break icon"), "http://www.fatcow.com/free-icons");
     return aboutData;
 }
 

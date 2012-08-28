@@ -25,11 +25,10 @@
 #include <QMimeData>
 
 #include "CellStorage.h"
-#include "commands/ColumnStyleCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
+#include "commands/PageBreakCommand.h"
 #include "commands/RowColumnManipulators.h"
-#include "commands/RowStyleCommand.h"
 #include "DependencyManager.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
@@ -472,10 +471,20 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
                     const int col = columnFormat.column();
                     const int cols = qMax(pasteArea.width(), number);
                     for (int coff = 0; col - xOffset + coff <= cols; coff += number) {
-                        ColumnStyleCommand *const command = new ColumnStyleCommand(this);
-                        command->setSheet(m_sheet);
-                        command->add(Region(col + coff, 1, 1, 1, m_sheet));
-                        command->setTemplate(columnFormat);
+                        ResizeColumnManipulator *const resize = new ResizeColumnManipulator(this);
+                        resize->setSheet(m_sheet);
+                        resize->add(Region(col + coff, 1, 1, 1, m_sheet));
+                        resize->setSize(columnFormat.width());
+                        HideShowManipulator *const hideShow = new HideShowManipulator(this);
+                        hideShow->setManipulateColumns(true);
+                        hideShow->setSheet(m_sheet);
+                        hideShow->add(Region(col + coff, 1, 1, 1, m_sheet));
+                        hideShow->setReverse(!columnFormat.isHidden());
+                        PageBreakCommand *const pageBreak = new PageBreakCommand(this);
+                        pageBreak->setMode(PageBreakCommand::BreakBeforeColumn);
+                        pageBreak->setSheet(m_sheet);
+                        pageBreak->add(Region(col + coff, 1, 1, 1, m_sheet));
+                        pageBreak->setReverse(!columnFormat.hasPageBreak());
                     }
                 }
             }
@@ -507,10 +516,20 @@ bool PasteCommand::processXmlData(Element *element, KoXmlDocument *data)
                     const int row = rowFormat.row();
                     const int rows = qMax(pasteArea.height(), number);
                     for (int roff = 0; row - yOffset + roff <= rows; roff += number) {
-                        RowStyleCommand *const command = new RowStyleCommand(this);
-                        command->setSheet(m_sheet);
-                        command->add(Region(1, rowFormat.row(), 1, 1, m_sheet));
-                        command->setTemplate(rowFormat);
+                        ResizeRowManipulator *const resize = new ResizeRowManipulator(this);
+                        resize->setSheet(m_sheet);
+                        resize->add(Region(1, rowFormat.row(), 1, 1, m_sheet));
+                        resize->setSize(rowFormat.height());
+                        HideShowManipulator *const hideShow = new HideShowManipulator(this);
+                        hideShow->setManipulateColumns(false);
+                        hideShow->setSheet(m_sheet);
+                        hideShow->add(Region(1, rowFormat.row(), 1, 1, m_sheet));
+                        hideShow->setReverse(!rowFormat.isHidden());
+                        PageBreakCommand *const pageBreak = new PageBreakCommand(this);
+                        pageBreak->setMode(PageBreakCommand::BreakBeforeRow);
+                        pageBreak->setSheet(m_sheet);
+                        pageBreak->add(Region(1, rowFormat.row(), 1, 1, m_sheet));
+                        pageBreak->setReverse(!rowFormat.hasPageBreak());
                     }
                 }
             }

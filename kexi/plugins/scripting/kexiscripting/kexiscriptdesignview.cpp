@@ -28,6 +28,8 @@
 #include <kross/core/action.h>
 #include <kross/core/interpreter.h>
 
+#include <KoIcon.h>
+
 #include <QLayout>
 #include <QSplitter>
 #include <QTimer>
@@ -42,7 +44,7 @@
 
 #include <KexiMainWindowIface.h>
 //#include <kexidialogbase.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <QTextDocument>
 
 /// @internal
@@ -120,25 +122,25 @@ KexiScriptDesignView::KexiScriptDesignView(
     // setup local actions
     QList<QAction*> viewActions;
 
-    KActionMenu* filemenu = new KActionMenu(KIcon("system-file-manager"), i18n("File"), this);
+    KActionMenu *filemenu = new KActionMenu(koIcon("system-file-manager"), i18n("File"), this);
     filemenu->setObjectName("script_file_menu");
     filemenu->setToolTip(i18n("File actions"));
     filemenu->setWhatsThis(i18n("File actions"));
-    QAction *a = new QAction(KIcon("document-new"), i18n("New"), this);
+    QAction *a = new QAction(koIcon("document-new"), i18n("New"), this);
     a->setShortcut(Qt::CTRL + Qt::Key_N);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileNew()));
     filemenu->addAction(a);
-    a = new QAction(KIcon("document-open"), i18n("Open..."), this);
+    a = new QAction(koIcon("document-open"), i18n("Open..."), this);
     a->setShortcut(Qt::CTRL + Qt::Key_O);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileOpen()));
     filemenu->addAction(a);
-    a = new QAction(KIcon("document-save-as"), i18n("Save As..."), this);
+    a = new QAction(koIcon("document-save-as"), i18n("Save As..."), this);
     a->setShortcut(Qt::CTRL + Qt::Key_S);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileSave()));
     filemenu->addAction(a);
     viewActions << filemenu;
 
-    KActionMenu* menu = new KActionMenu(KIcon("document-properties"), i18n("Edit"), this);
+    KActionMenu *menu = new KActionMenu(koIcon("document-properties"), i18n("Edit"), this);
     menu->setObjectName("script_edit_menu");
     menu->setToolTip(i18n("Edit actions"));
     menu->setWhatsThis(i18n("Edit actions"));
@@ -147,7 +149,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     }
     if (KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode avaiable.
         menu->addSeparator();
-        QAction* a = new KAction(KIcon("configure"), i18n("Configure Editor..."), this);
+        QAction *a = new KAction(koIcon("configure"), i18n("Configure Editor..."), this);
         a->setObjectName("script_config_editor");
         a->setToolTip(i18n("Configure the scripting editor"));
         a->setWhatsThis(i18n("Configure the scripting editor"));
@@ -156,7 +158,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     }
     viewActions << menu;
     {
-        QAction* a = new KAction(KIcon("media-playback-start"), i18n("Execute"), this);
+        QAction *a = new KAction(koIcon("system-run"), i18n("Execute"), this);
         a->setObjectName("script_execute");
         a->setToolTip(i18n("Execute the scripting code"));
         a->setWhatsThis(i18n("Execute the scripting code"));

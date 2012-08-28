@@ -9,7 +9,7 @@
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
 
@@ -31,6 +31,7 @@
 
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
+#include <KarbonKoDocument.h>
 #include "KarbonPart.h"
 #include <KarbonOutlinePaintingStrategy.h>
 
@@ -79,7 +80,7 @@ public:
     KoToolProxy *toolProxy;
 
     KarbonDocument *document;
-    KarbonPart *part;
+    KarbonKoDocument *part;
     QPoint origin;         ///< the origin of the document page rect
     bool showMargins;      ///< should page margins be shown
     QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
@@ -88,7 +89,7 @@ public:
     KoGridData pixelGrid;  ///< pixel grid data
 };
 
-KarbonCanvas::KarbonCanvas(KarbonPart *p)
+KarbonCanvas::KarbonCanvas(KarbonKoDocument *p)
         : QWidget() , KoCanvasBase(p), d(new KarbonCanvasPrivate())
 {
     d->part = p;

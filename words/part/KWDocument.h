@@ -31,6 +31,7 @@
 #include "words_export.h"
 
 #include <KoDocument.h>
+#include <KoShapeManager.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoXmlReader.h>
 
@@ -48,6 +49,7 @@ class KoUpdater;
 class KoTextAnchor;
 class KoShapeContainer;
 class KoShapeController;
+class KoPart;
 
 class KLocalizedString;
 class QIODevice;
@@ -62,7 +64,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit KWDocument(KoPart *part = 0);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
@@ -77,6 +79,8 @@ public:
 
     // KoDocument interface
     /// reimplemented from KoDocument
+    virtual QPixmap generatePreview(const QSize& size);
+    /// reimplemented from KoDocument
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
     virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);
@@ -84,10 +88,6 @@ public:
     virtual bool loadOdf(KoOdfReadStore &odfStore);
     /// reimplemented from KoOdfDocument
     virtual bool saveOdf(SavingContext &documentContext);
-    /// reimplemented from KoDocument
-    virtual KoView* createViewInstance(QWidget*);
-    /// reimplemented from KoDocument
-    virtual QGraphicsItem *createCanvasItem();
     /// reimplemented from KoDocument
     virtual int pageCount() const {
         return pageManager()->pageCount();
@@ -159,9 +159,6 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
-    /// reimplemented from super
-    QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
-
     KWApplicationConfig &config() {
         return m_config;
     }
@@ -174,8 +171,6 @@ public:
 
     // reimplemented slot from KoDocument
     virtual void initEmpty();
-    // reimplemented slot from KoDocument
-    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
 
     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
 
@@ -220,13 +215,20 @@ signals:
     /// signal emitted when a page has been added
     void pageSetupChanged();
 
+    /// emitted whenever a shape is added.
+    void shapeAdded(KoShape *, KoShapeManager::Repaint repaint = KoShapeManager::PaintShapeOnAdd);
+
+    /// emitted whenever a shape is removed
+    void shapeRemoved(KoShape *);
+
+    /// emitted wheneve a resources needs to be set on the canvasResourceManager
+    void resourceChanged(int key, const QVariant &value);
+
 private slots:
     /// Frame maintenance on already registered framesets
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
-    void removeFrameFromViews(KWFrame*);
     /// Called after the constructor figures out there is an install problem.
-    void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
     void layoutProgressChanged(int percent);
@@ -253,7 +255,6 @@ private:
      */
     void clear();
 
-    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
     /**
      * emits pageSetupChanged
      */
@@ -261,7 +262,6 @@ private:
 
 private:
     QList<KWFrameSet*> m_frameSets;
-    QString m_viewMode;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;

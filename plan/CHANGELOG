@@ -1,6 +1,49 @@
 
 Calligra Plan current:
+----------------------
 
+* Performance charts:
+  Show both effort- and cost based performance index values.
+  Add charting of perfomance indeces
+
+* Enable dropping Plan project files into the Task Editor.
+
+* Task Editor: Add a Task Module docker to ease project creation.
+  This makes it possible to define typical solutions with multiple tasks,
+  task dependencies, including resources and resource allocations.
+
+* Reports export: Add option to output data into table.
+  This will not use the reports layout.
+  The "old" export option that tries to honour the layout is still available.
+
+* Report designer usability improvements.
+  Designer moved from a dialog into a view using dockers for editing.
+  This removes the need for multi-layered dialogs.
+
+* Bug 186639 -  Use a more "descriptive" mouse cursor for wiring tasks in the graphic
+
+* Bug 286332 - Auto allocate selected resources to new tasks
+
+* Improve printing:
+    Add printing options to view configuration dialog
+    Save/load option settings
+
+Release 2.5:
+------------
+
+* Fix crash when two dependent tasks are deleted in one go
+
+* Fix bug 301888 - New: setting task duration messes up schedule
+
+* Fix bug 301326 - Export to pdf does not respect reports page layout
+
+* Fix Bug 286564 -  plan do not update the resources allocation number when selected
+
+* Add mpxj based filter capable of importing data from
+  Planner, PrimaVera and various MS Project file formats,
+
+Release 2.4:
+------------
 * Fix bug 292931: Crash when scheduling task of type Duration.
 
 * Fix crash in reports due incorrect use of KoXml to QDom conversion

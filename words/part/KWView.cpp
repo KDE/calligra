@@ -37,9 +37,8 @@
 #include "dialogs/KWPrintingDialog.h"
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
+#include "dialogs/KWConfigureDialog.h"
 #include "commands/KWFrameCreateCommand.h"
-#include "commands/KWClipFrameCommand.h"
-#include "commands/KWRemoveFrameClipCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include <KoShapeReorderCommand.h>
 #include "ui_KWInsertImage.h"
@@ -65,7 +64,6 @@
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoShapeController.h>
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
@@ -83,9 +81,11 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+#include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoIcon.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -93,28 +93,24 @@
 #include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <kdialog.h>
 #include <KToggleAction>
-#include <KStandardDirs>
-#include <KTemporaryFile>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
 #include <KParts/PartManager>
 
-KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
-        : KoView(document, parent)
+KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
+        : KoView(part, document, parent)
         , m_canvas(0)
 {
     setAcceptDrops(true);
 
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
-    m_gui = new KWGui(viewMode, this);
+    m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
@@ -133,12 +129,9 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-    KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
-    if(win) {
-        connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
-    }
 
-    m_find = new KoFindText(texts, this);
+    m_find = new KoFindText(this);
+    m_find->setDocuments(texts);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
@@ -163,11 +156,15 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
 
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)),
                 this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
     }
 #endif
+    if (m_document->inlineTextObjectManager()) {
+        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
+           m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
+    }
 }
 
 KWView::~KWView()
@@ -193,12 +190,13 @@ QWidget *KWView::canvas() const
 void KWView::updateReadWrite(bool readWrite)
 {
     m_actionFormatFrameSet->setEnabled(readWrite);
-    m_actionInsertFrameBreak->setEnabled(readWrite);
     m_actionViewHeader->setEnabled(readWrite);
     m_actionViewFooter->setEnabled(readWrite);
     m_actionViewSnapToGrid->setEnabled(readWrite);
     m_actionAddBookmark->setEnabled(readWrite);
-    QAction *action = actionCollection()->action("insert_variable");
+    QAction *action = actionCollection()->action("insert_framebreak");
+    if (action) action->setEnabled(readWrite);
+    action = actionCollection()->action("insert_variable");
     if (action) action->setEnabled(readWrite);
     action = actionCollection()->action("select_bookmark"); // TODO fix the dialog to honor read-only instead
     if (action) action->setEnabled(readWrite);
@@ -232,13 +230,138 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    m_actionInsertFrameBreak  = new KAction(QString(), this);
-    actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak);
-    m_actionInsertFrameBreak->setShortcut(KShortcut(Qt::CTRL + Qt::Key_Return));
-    connect(m_actionInsertFrameBreak, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
-    m_actionInsertFrameBreak->setText(i18n("Page Break"));
-    m_actionInsertFrameBreak->setToolTip(i18n("Force the remainder of the text into the next page"));
-    m_actionInsertFrameBreak->setWhatsThis(i18n("All text after this point will be moved into the next page."));
+    m_actionAddBookmark = new KAction(koIcon("bookmark-new"), i18n("Bookmark..."), this);
+    m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
+    actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
+    connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
+
+    KAction *action = new KAction(i18n("Select Bookmark..."), this);
+    action->setIconText(i18n("Bookmark"));
+    action->setIcon(koIcon("bookmarks"));
+    action->setShortcut(Qt::CTRL + Qt::Key_G);
+    actionCollection()->addAction("select_bookmark", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
+
+    action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
+
+    action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
+
+    // -------------- File menu
+    m_actionCreateTemplate = new KAction(i18n("Create Template From Document..."), this);
+    m_actionCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
+    m_actionCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
+    actionCollection()->addAction("extra_template", m_actionCreateTemplate);
+    connect(m_actionCreateTemplate, SIGNAL(triggered()), this, SLOT(createTemplate()));
+
+    // -------------- Edit actions
+    action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
+    new KoCutController(canvasBase(), action);
+    action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
+    new KoCopyController(canvasBase(), action);
+    action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
+    new KoPasteController(canvasBase(), action);
+
+    action = new KAction(i18n("Select All Shapes"), this);
+    actionCollection()->addAction("edit_selectallframes", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
+
+    action = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
+    action->setShortcut(QKeySequence("Del"));
+    connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
+    connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
+    actionCollection()->addAction("edit_delete", action);
+
+    // -------------- View menu
+    action = new KAction(i18n("Show Formatting Characters"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_formattingchars", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, QVariant(false));
+    action->setChecked(m_document->config().showFormattingChars()); // will change resource if true
+    action->setToolTip(i18n("Toggle the display of non-printing characters"));
+    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
+
+    action = new KAction(i18n("Show Text Shape Borders"), this);
+    action->setToolTip(i18n("Turns the border display on and off"));
+    action->setCheckable(true);
+    actionCollection()->addAction("view_frameborders", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
+    action->setChecked(m_document->config().viewFrameBorders()); // will change resource if true
+    action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
+
+    action = new KAction(i18n("Show Table Borders"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_tableborders", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(false));
+    action->setChecked(m_document->config().showTableBorders()); // will change resource if true
+    action->setToolTip(i18n("Toggle the display of table borders"));
+    action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
+
+    action = new KAction(i18n("Show Rulers"), this);
+    action->setCheckable(true);
+    action->setToolTip(i18n("Shows or hides rulers"));
+    action->setWhatsThis(i18n("The rulers are the white measuring spaces top and left of the "
+                              "document. The rulers show the position and width of pages and of frames and can "
+                              "be used to position tabulators among others.<p>Uncheck this to disable "
+                              "the rulers from being displayed.</p>"));
+    action->setChecked(m_document->config().viewRulers());
+    actionCollection()->addAction("show_ruler", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
+
+    action = m_document->gridData().gridToggleAction(m_canvas);
+    actionCollection()->addAction("view_grid", action);
+
+    m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
+    actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
+    m_actionViewSnapToGrid->setChecked(m_snapToGrid);
+    connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
+
+    KToggleAction *guides = KoStandardAction::showGuides(this, SLOT(setGuideVisibility(bool)), actionCollection());
+    guides->setChecked(m_document->guidesData().showGuideLines());
+
+    KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
+    tAction->setToolTip(i18n("Shows or hides the status bar"));
+    actionCollection()->addAction("showStatusBar", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+
+#ifdef SHOULD_BUILD_RDF
+    action = new KAction(i18n("Semantic Stylesheets..."), this);
+    actionCollection()->addAction("edit_semantic_stylesheets", action);
+    action->setToolTip(i18n("Modify and add semantic stylesheets"));
+    action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
+    connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
+
+    if (KoDocumentRdf* rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
+        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
+        actionCollection()->addAction("insert_semanticobject_ref", createRef);
+        KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
+        actionCollection()->addAction("insert_semanticobject_new", subMenu);
+        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
+            subMenu->addAction(action);
+        }
+    }
+#endif
+
+    // -------------- Frame menu
+    action  = new KAction(i18n("Create Linked Copy"), this);
+    actionCollection()->addAction("create_linked_frame", action);
+    action->setToolTip(i18n("Create a copy of the current frame, always showing the same contents"));
+    action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
+    connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
+
+    // -------------- Settings menu
+    action = new KAction(koIcon("configure"), i18n("Configure..."), this);
+    actionCollection()->addAction("configure", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(configure()));
+
+    // -------------- Page tool
+    action = new KAction(i18n("Page Layout..."), this);
+    actionCollection()->addAction("format_page", action);
+    action->setToolTip(i18n("Change properties of entire page"));
+    action->setWhatsThis(i18n("Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
+    connect(action, SIGNAL(triggered()), this, SLOT(formatPage()));
 
     m_actionViewHeader = new KAction(i18n("Create Header"), this);
     actionCollection()->addAction("insert_header", m_actionViewHeader);
@@ -252,207 +375,40 @@ void KWView::setupActions()
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
 
-    m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
-    actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
-    m_actionViewSnapToGrid->setChecked(m_snapToGrid);
-    connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
-
-    m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
-    m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
-    actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
-    connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
-
-    KAction *action = new KAction(i18n("Select Bookmark..."), this);
-    action->setIconText(i18n("Bookmark"));
-    action->setIcon(KIcon("bookmarks"));
-    action->setShortcut(Qt::CTRL + Qt::Key_G);
-    actionCollection()->addAction("select_bookmark", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
-
-    action = new KAction(i18n("Show Text Shape Borders"), this);
-    action->setToolTip(i18n("Turns the border display on and off"));
-    action->setCheckable(true);
-    actionCollection()->addAction("view_frameborders", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
-    action->setChecked(m_document->config().viewFrameBorders()); // will change resource if true
-    action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
-
-    action = new KAction(i18n("Show Formatting Characters"), this);
-    action->setCheckable(true);
-    actionCollection()->addAction("view_formattingchars", action);
-
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, QVariant(false));
-    action->setChecked(m_document->config().showFormattingChars()); // will change resource if true
-    action->setToolTip(i18n("Toggle the display of non-printing characters"));
-    action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
-
-    action = new KAction(i18n("Show Table Borders"), this);
-    action->setCheckable(true);
-    actionCollection()->addAction("view_tableborders", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
-    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(false));
-    action->setChecked(m_document->config().showTableBorders()); // will change resource if true
-    action->setToolTip(i18n("Toggle the display of table borders"));
-    action->setWhatsThis(i18n("Toggle the display of table borders.<br/><br/>When this is enabled, Words shows you any invisible table borders with a thin gray line."));
-
-    action = new KAction(i18n("Page Layout..."), this);
-    actionCollection()->addAction("format_page", action);
-    action->setToolTip(i18n("Change properties of entire page"));
-    action->setWhatsThis(i18n("Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
-    connect(action, SIGNAL(triggered()), this, SLOT(formatPage()));
-
-#ifdef SHOULD_BUILD_RDF
-    action = new KAction(i18n("Semantic Stylesheets..."), this);
-    actionCollection()->addAction("edit_semantic_stylesheets", action);
-    action->setToolTip(i18n("Modify and add semantic stylesheets"));
-    action->setWhatsThis(i18n("Stylesheets are used to format contact, event, and location information which is stored in Rdf"));
-    connect(action, SIGNAL(triggered()), this, SLOT(editSemanticStylesheets()));
-
-    if (KoDocumentRdf* rdf = m_document->documentRdf()) {
-        KAction* createRef = rdf->createInsertSemanticObjectReferenceAction(canvasBase());
-        actionCollection()->addAction("insert_semanticobject_ref", createRef);
-        KActionMenu *subMenu = new KActionMenu(i18n("Create"), this);
-        actionCollection()->addAction("insert_semanticobject_new", subMenu);
-        foreach(KAction *action, rdf->createInsertSemanticObjectNewActions(canvasBase())) {
-            subMenu->addAction(action);
-        }
-    }
-#endif
-
-
-    action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
-
-    action = actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
-
-    // -------------- Edit actions
-    action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
-    new KoCutController(canvasBase(), action);
-    action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
-    new KoCopyController(canvasBase(), action);
-    action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
-    new KoPasteController(canvasBase(), action);
-
-    action = new KAction(i18n("Show Rulers"), this);
-    action->setCheckable(true);
-    action->setToolTip(i18n("Shows or hides rulers"));
-    action->setWhatsThis(i18n("The rulers are the white measuring spaces top and left of the "
-                              "document. The rulers show the position and width of pages and of frames and can "
-                              "be used to position tabulators among others.<p>Uncheck this to disable "
-                              "the rulers from being displayed.</p>"));
-    action->setChecked(m_document->config().viewRulers());
-    actionCollection()->addAction("show_ruler", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
-
-    action = new KAction(i18n("Select All Shapes"), this);
-    actionCollection()->addAction("edit_selectallframes", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
-
-    action = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
-    action->setShortcut(QKeySequence("Del"));
-    connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
-    actionCollection()->addAction("edit_delete", action);
-
-    action = m_document->gridData().gridToggleAction(m_canvas);
-    actionCollection()->addAction("view_grid", action);
-
-    KToggleAction *guides = KoStandardAction::showGuides(this, SLOT(setGuideVisibility(bool)), actionCollection());
-    guides->setChecked(m_document->guidesData().showGuideLines());
-
-    // -------------- Frame menu
-    action  = new KAction(i18n("Create Linked Copy"), this);
-    actionCollection()->addAction("create_linked_frame", action);
-    action->setToolTip(i18n("Create a copy of the current frame, always showing the same contents"));
-    action->setWhatsThis(i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies."));
-    connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
-
-    action = new KAction(i18n("Create Frame-clip"), this);
-    actionCollection()->addAction("create_clipped_frame", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(createFrameClipping()));
-
-    action = new KAction(i18n("Remove Frame-clip"), this);
-    actionCollection()->addAction("remove_clipped_frame", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(removeFrameClipping()));
-
-    KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
-    tAction->setToolTip(i18n("Shows or hides the status bar"));
-    actionCollection()->addAction("showStatusBar", tAction);
-    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
-
-    // -------------- File menu
-    m_actionCreateTemplate = new KAction(i18n("Create Template From Document..."), this);
-    m_actionCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
-    m_actionCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
-    actionCollection()->addAction("extra_template", m_actionCreateTemplate);
-    connect(m_actionCreateTemplate, SIGNAL(triggered()), this, SLOT(createTemplate()));
 
     /* ********** From old kwview ****
     We probably want to have each of these again, so just move them when you want to implement it
     This saves problems with finding out which we missed near the end.
 
-        (void) new KAction(i18n("Configure Mail Merge..."), "configure",0,
-        this, SLOT(editMailMergeDataBase()),
-        actionCollection(), "edit_sldatabase");
+    m_actionEditCustomVarsEdit = new KAction(i18n("Custom Variables..."), 0,
+            this, SLOT(editCustomVars()), // TODO: new dialog w add etc.
+            actionCollection(), "custom_vars");
 
+    m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
+            this, SLOT(editCustomVariable()),
+            actionCollection(), "edit_customvars");
 
-        QAction *mailMergeLabelAction = new KWMailMergeLabelAction::KWMailMergeLabelAction(
-        i18n("Drag Mail Merge Variable"), actionCollection(), "mailmerge_draglabel");
-        connect(mailMergeLabelAction, SIGNAL(triggered(bool)), this, SLOT(editMailMergeDataBase()));
+    m_actionImportStyle= new KAction(i18n("Import Styles..."), 0,
+            this, SLOT(importStyle()),
+            actionCollection(), "import_style");
+    m_actionAddLinkToBookmak = new KAction(i18n("Add to Bookmark"), 0,
+            this, SLOT(addToBookmark()),
+            actionCollection(), "add_to_bookmark");
 
-        //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
+    m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
+            this, SLOT(addBookmark()),
+            actionCollection(), "add_bookmark");
+    m_actionSelectBookmark= new KAction(i18n("Select Bookmark..."), 0,
+            this, SLOT(selectBookmark()),
+            actionCollection(), "select_bookmark");
 
-        m_actionEditCustomVarsEdit = new KAction(i18n("Custom Variables..."), 0,
-                this, SLOT(editCustomVars()), // TODO: new dialog w add etc.
-                actionCollection(), "custom_vars");
+    m_actionConfigureCompletion = new KAction(i18n("Configure Completion..."), 0,
+            this, SLOT(configureCompletion()),
+            actionCollection(), "configure_completion");
+    m_actionConfigureCompletion->setToolTip(i18n("Change the words and options for autocompletion"));
+    m_actionConfigureCompletion->setWhatsThis(i18n("Add words or change the options for autocompletion."));
 
-        m_actionConfigureHeaderFooter=new KAction(i18n("Configure Header/Footer..."), 0,
-                this, SLOT(configureHeaderFooter()),
-                actionCollection(), "configure_headerfooter");
-        m_actionConfigureHeaderFooter->setToolTip(i18n("Configure the currently selected header or footer"));
-        m_actionConfigureHeaderFooter->setWhatsThis(i18n("Configure the currently selected header or footer."));
-
-        m_actionAddLinkToBookmak = new KAction(i18n("Add to Bookmark"), 0,
-                this, SLOT(addToBookmark()),
-                actionCollection(), "add_to_bookmark");
-
-        m_actionConfigureCompletion = new KAction(i18n("Configure Completion..."), 0,
-                this, SLOT(configureCompletion()),
-                actionCollection(), "configure_completion");
-        m_actionConfigureCompletion->setToolTip(i18n("Change the words and options for autocompletion"));
-        m_actionConfigureCompletion->setWhatsThis(i18n("Add words or change the options for autocompletion."));
-
-        new KAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
-
-        // --------
-        m_actionEditCustomVars = new KAction(i18n("Edit Variable..."), 0,
-                this, SLOT(editCustomVariable()),
-                actionCollection(), "edit_customvars");
-
-        m_actionCreateStyleFromSelection = new KAction(i18n("Create Style From Selection..."), 0,
-                this, SLOT(createStyleFromSelection()),
-                actionCollection(), "create_style");
-        m_actionCreateStyleFromSelection->setToolTip(i18n("Create a new style based on the currently selected text"));
-        m_actionCreateStyleFromSelection->setWhatsThis(i18n("Create a new style based on the currently selected text.")); // ## "on the current paragraph, taking the formatting from where the cursor is. Selecting text isn't even needed."
-
-
-        m_actionAddBookmark= new KAction(i18n("Bookmark..."), 0,
-                this, SLOT(addBookmark()),
-                actionCollection(), "add_bookmark");
-        m_actionSelectBookmark= new KAction(i18n("Select Bookmark..."), 0,
-                this, SLOT(selectBookmark()),
-                actionCollection(), "select_bookmark");
-
-        m_actionImportStyle= new KAction(i18n("Import Styles..."), 0,
-                this, SLOT(importStyle()),
-                actionCollection(), "import_style");
-
-        m_actionCreateFrameStyle = new KAction(i18n("Create Framestyle From Frame..."), 0,
-                this, SLOT(createFrameStyle()),
-                actionCollection(), "create_framestyle");
-        m_actionCreateFrameStyle->setToolTip(i18n("Create a new style based on the currently selected frame"));
-        m_actionCreateFrameStyle->setWhatsThis(i18n("Create a new framestyle based on the currently selected frame."));
+    new KAction(i18n("Completion"), KStdAccel::shortcut(KStdAccel::TextCompletion), this, SLOT(slotCompletion()), actionCollection(), "completion");
     */
 }
 
@@ -512,43 +468,8 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::createTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = m_document->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(".ott");
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close();
-    delete tempFile;
-
-    m_document->saveNativeFormat(fileName);
-
-    KoTemplateCreateDia::createTemplate("words_template", KWFactory::componentData(),
-                                        fileName, pix, this);
-
-    KWFactory::componentData().dirs()->addResourceType("words_template",
-            "data", "words/templates/");
-
-    QDir d;
-    d.remove(fileName);
-}
-
-void KWView::insertFrameBreak()
-{
-    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
-    if (editor) {
-        // this means we have the text tool selected right now.
-        editor->insertFrameBreak();
-    } else if (m_document->mainFrameSet()) { // lets just add one to the main text frameset
-        KoTextDocument doc(m_document->mainFrameSet()->document());
-        doc.textEditor()->insertFrameBreak();
-    }
+    KoTemplateCreateDia::createTemplate("words_template", ".ott",
+                                        KWFactory::componentData(), m_document, this);
 }
 
 void KWView::addBookmark()
@@ -727,7 +648,7 @@ void KWView::pageSettingsDialogFinished()
 void KWView::editSemanticStylesheets()
 {
 #ifdef SHOULD_BUILD_RDF
-    if (KoDocumentRdf *rdf = m_document->documentRdf()) {
+    if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
         KoSemanticStylesheetsEditor *dia = new KoSemanticStylesheetsEditor(this, rdf);
         dia->show();
         // TODO this leaks memory
@@ -787,40 +708,19 @@ void KWView::editDeleteSelection()
     canvasBase()->toolProxy()->deleteSelection();
 }
 
-void KWView::createFrameClipping()
-{
-    QSet<KWFrame *> clipFrames;
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        if (frame->shape()->parent() == 0)
-            clipFrames << frame;
-    }
-    if (!clipFrames.isEmpty()) {
-        KWClipFrameCommand *cmd = new KWClipFrameCommand(clipFrames.toList(), m_document);
-        m_document->addCommand(cmd);
-    }
-}
-
-void KWView::removeFrameClipping()
-{
-    QSet<KWFrame *> unClipFrames;
-    foreach (KoShape *shape, canvasBase()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = kwdocument()->frameOfShape(shape);
-        Q_ASSERT(frame);
-        if (frame->shape()->parent())
-            unClipFrames << frame;
-    }
-    if (!unClipFrames.isEmpty()) {
-        KWRemoveFrameClipCommand *cmd = new KWRemoveFrameClipCommand(unClipFrames.toList(), m_document);
-        m_document->addCommand(cmd);
-    }
-}
-
 void KWView::setGuideVisibility(bool on)
 {
     m_document->guidesData().setShowGuideLines(on);
     m_canvas->update();
+}
+
+
+void KWView::configure()
+{
+    QPointer<KWConfigureDialog> dialog(new KWConfigureDialog(this));
+    dialog->exec();
+    delete dialog;
+    // TODO update canvas
 }
 
 // end of actions
@@ -1022,7 +922,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
         setCurrentPage(page);
 }
 
-void KWView::semanticObjectViewSiteUpdated(KoRdfSemanticItem* item, const QString &xmlid)
+void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
 {
 #ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
@@ -1053,7 +953,7 @@ void KWView::loadingCompleted()
 {
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-    m_find->addDocuments(texts);
+    m_find->setDocuments(texts);
 }
 
 void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)

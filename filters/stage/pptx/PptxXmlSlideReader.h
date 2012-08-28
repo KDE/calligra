@@ -251,9 +251,6 @@ protected:
     // Inherits correct paragraph styles to m_currentParagraphStyle
     void inheritParagraphStyle(KoGenStyle& targetStyle);
 
-    // Inherits default body properties
-    void inheritDefaultBodyProperties();
-
     // Inherit correct body properties from slideMaster/slideLayout if needed
     void inheritBodyProperties();
 
@@ -270,7 +267,7 @@ protected:
     void inheritShapeGeometry();
 
     /**
-     * MS PowerPoint specifc calculation of the paragraph margin.
+     * MS PowerPoint specific calculation of the paragraph margin.
      * @param spcAft/spcBef (paragraph spacing) as provided in pptx [%]
      * @param minimum font size detected in the paragraph [point]
      * @return paragraph margin [point]

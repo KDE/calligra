@@ -27,7 +27,7 @@
 
 #include <kexi_global.h>
 #include <kmainwindow.h>
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 
 #include "kexisharedactionhost.h"
 #include "kexi.h"

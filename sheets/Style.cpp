@@ -27,6 +27,7 @@
 #include <QPen>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <klocale.h>
 
 #include <KoGenStyles.h>
@@ -37,6 +38,7 @@
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoOdfWorkaround.h>
 
 #include "Condition.h"
 #include "Currency.h"
@@ -109,7 +111,7 @@ QString SubStyle::name(Style::Key key)
     case Style::Prefix:                 name = "Prefix"; break;
     case Style::Postfix:                name = "Postfix"; break;
     case Style::Precision:              name = "Precision"; break;
-    case Style::ThousandsSep:           name = "Thousands seperator"; break;
+    case Style::ThousandsSep:           name = "Thousands separator"; break;
     case Style::FormatTypeKey:          name = "Format type"; break;
     case Style::FloatFormatKey:         name = "Float format"; break;
     case Style::FloatColorKey:          name = "Float color"; break;
@@ -411,6 +413,9 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
     }
     if (styleStack.hasProperty(KoXmlNS::style, "cell-protect")) {
         str = styleStack.property(KoXmlNS::style, "cell-protect");
+#ifndef NWORKAROUND_ODF_BUGS
+        KoOdfWorkaround::fixBadFormulaHiddenForStyleCellProtect(str);
+#endif
         if (str == "none")
             setNotProtected(true);
         else if (str == "hidden-and-protected")
@@ -479,10 +484,12 @@ void Style::loadOdfTableCellProperties(KoOdfStylesReader& stylesReader, const Ko
         setGoUpDiagonalPen(Odf::decodePen(str));
     }
 
-    if (styleStack.hasProperty(KoXmlNS::draw, "style-name")) {
-        kDebug(36003) << " style name :" << styleStack.property(KoXmlNS::draw, "style-name");
+    if (styleStack.hasProperty(KoXmlNS::draw, "style-name") || styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name")) {
+        QString styleName = styleStack.hasProperty(KoXmlNS::calligra, "fill-style-name") ? styleStack.property(KoXmlNS::calligra, "fill-style-name")
+                : styleStack.property(KoXmlNS::draw, "style-name");
+        kDebug(36003) << " style name :" << styleName;
 
-        const KoXmlElement * style = stylesReader.findStyle(styleStack.property(KoXmlNS::draw, "style-name"), "graphic");
+        const KoXmlElement * style = stylesReader.findStyle(styleName, "graphic");
         kDebug(36003) << " style :" << style;
         if (style) {
             KoStyleStack drawStyleStack;
@@ -1350,9 +1357,9 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         if (isNotProtected && !hideFormula)
             style.addProperty("style:cell-protect", "none");
         else if (isNotProtected && hideFormula)
-            style.addProperty("style:cell-protect", "Formula.hidden");
+            style.addProperty("style:cell-protect", "formula-hidden");
         else if (hideFormula)
-            style.addProperty("style:cell-protect", "protected Formula.hidden");
+            style.addProperty("style:cell-protect", "protected formula-hidden");
         else if (keysToStore.contains(NotProtected) && !isNotProtected)
             // write out, only if it is explicitly set
             style.addProperty("style:cell-protect", "protected");
@@ -1424,7 +1431,7 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
     if (keysToStore.contains(BackgroundBrush) && (backgroundBrush().style() != Qt::NoBrush)) {
         QString tmp = saveOdfBackgroundStyle(mainStyles, backgroundBrush());
         if (!tmp.isEmpty())
-            style.addProperty("draw:style-name", tmp);
+            style.addProperty("calligra:fill-style-name", tmp);
     }
 
     QString _prefix;

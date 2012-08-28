@@ -203,6 +203,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 QString KexiComboBoxBase::valueForString(const QString& str, int* row,
         uint lookInColumn, uint returnFromColumn, bool allowNulls)
 {
+    Q_UNUSED(returnFromColumn);
     KexiTableViewData *relData = column() ? column()->relatedData() : 0;
     if (!relData)
         return QString(); //safety

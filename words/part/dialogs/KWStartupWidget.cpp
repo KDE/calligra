@@ -45,18 +45,15 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     m_sizeWidget->showPageSpread(true);
     m_sizeWidget->setUnit(m_unit);
     lay->addWidget(m_sizeWidget);
-    lay->setMargin(0);
 
     lay = new QVBoxLayout(widget.columnsTab);
     m_columnsWidget = new KWDocumentColumns(widget.columnsTab, m_columns);
     m_columnsWidget->setUnit(m_unit);
     m_columnsWidget->setShowPreview(false);
     lay->addWidget(m_columnsWidget);
-    lay->setMargin(0);
 
     lay = new QVBoxLayout(widget.previewPane);
     widget.previewPane->setLayout(lay);
-    lay->setMargin(0);
     KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget.previewPane);
     lay->addWidget(prev);
     prev->setColumns(columns);
@@ -90,10 +87,6 @@ void KWStartupWidget::buttonClicked()
 {
     m_doc->initEmpty();
 
-    if (m_layout.leftMargin < 0) {
-        m_layout.width /= 2.0;
-        m_doc->pageManager()->setPreferPageSpread(true);
-    }
     KWPageStyle style = m_doc->pageManager()->defaultPageStyle();
     Q_ASSERT(style.isValid());
     style.setColumns(m_columns);

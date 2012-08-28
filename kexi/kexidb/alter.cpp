@@ -18,7 +18,7 @@
 */
 
 #include "alter.h"
-#include "utils.h"
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <QMap>
 #include <stdlib.h>
@@ -29,7 +29,9 @@ class AlterTableHandler::Private
 {
 public:
     Private() {}
-    ~Private() {}
+    ~Private() {
+        qDeleteAll(actions);
+    }
     ActionList actions;
     QPointer<Connection> conn;
 };
@@ -127,7 +129,7 @@ struct KexiDB_AlterTableHandlerStatic {
         I("caption", MainSchemaAlteringRequired);
         I("description", MainSchemaAlteringRequired);
         I2("unsigned", PhysicalAlteringRequired, DataConversionRequired); // always?
-        I2("length", PhysicalAlteringRequired, DataConversionRequired); // always?
+        I2("maxLength", PhysicalAlteringRequired, DataConversionRequired); // always?
         I2("precision", PhysicalAlteringRequired, DataConversionRequired); // always?
         I("width", MainSchemaAlteringRequired);
         // defaultValue: depends on backend, for mysql it can only by a constant or now()...
@@ -255,7 +257,7 @@ static void debugAction(AlterTableHandler::ActionBase *action, int nestingLevel,
         KexiDBDbg << debugString;
 #ifdef KEXI_DEBUG_GUI
         if (simulate)
-            KexiUtils::addAlterTableActionDebug(debugString, nestingLevel);
+            KexiDB::addAlterTableActionDebug(debugString, nestingLevel);
 #endif
     }
 }
@@ -276,7 +278,7 @@ static void debugActionDict(AlterTableHandler::ActionDict *dict, int fieldUID, b
     KexiDBDbg << dbg;
 #ifdef KEXI_DEBUG_GUI
     if (simulate)
-        KexiUtils::addAlterTableActionDebug(dbg, 1);
+        KexiDB::addAlterTableActionDebug(dbg, 1);
 #endif
     for (;it != dict->constEnd(); ++it) {
         debugAction(it.value(), 2, simulate);
@@ -287,7 +289,7 @@ static void debugFieldActions(const AlterTableHandler::ActionDictDict &fieldActi
 {
 #ifdef KEXI_DEBUG_GUI
     if (simulate)
-        KexiUtils::addAlterTableActionDebug("** Simplified Field Actions:");
+        KexiDB::addAlterTableActionDebug("** Simplified Field Actions:");
 #endif
     for (AlterTableHandler::ActionDictDictConstIterator it(fieldActions.constBegin()); it != fieldActions.constEnd(); ++it) {
         debugActionDict(it.value(), it.key(), simulate);
@@ -453,7 +455,7 @@ tristate AlterTableHandler::ChangeFieldPropertyAction::execute(Connection &conn,
          TODO: more cases to check
         */
     }
-    if (m_propertyName == "length") {
+    if (m_propertyName == "maxLength") {
         //use "select max( length(o_name) ) from kexi__Objects"
 
     }
@@ -652,12 +654,12 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
                 setField(f);
                 field().debug();
 #ifdef KEXI_DEBUG_GUI
-                KexiUtils::addAlterTableActionDebug(
+                KexiDB::addAlterTableActionDebug(
                     QString("** Property-set actions moved to field definition itself:\n") + field().debugString(), 0);
 #endif
             } else {
 #ifdef KEXI_DEBUG_GUI
-                KexiUtils::addAlterTableActionDebug(
+                KexiDB::addAlterTableActionDebug(
                     QString("** Failed to set properties for field ") + field().debugString(), 0);
 #endif
                 KexiDBWarn << "AlterTableHandler::InsertFieldAction::simplifyActions(): KexiDB::setFieldProperties() failed!";
@@ -782,6 +784,7 @@ void AlterTableHandler::clear()
 
 void AlterTableHandler::setActions(const ActionList& actions)
 {
+    qDeleteAll(d->actions);
     d->actions = actions;
 }
 
@@ -902,14 +905,14 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
 
 #ifdef KEXI_DEBUG_GUI
     if (args.simulate)
-        KexiUtils::addAlterTableActionDebug(dbg, 0);
+        KexiDB::addAlterTableActionDebug(dbg, 0);
 #endif
     dbg = QString("** Ordered, simplified actions (%1, was %2):")
           .arg(currentActionsCount).arg(allActionsCount);
     KexiDBDbg << dbg;
 #ifdef KEXI_DEBUG_GUI
     if (args.simulate)
-        KexiUtils::addAlterTableActionDebug(dbg, 0);
+        KexiDB::addAlterTableActionDebug(dbg, 0);
 #endif
     for (int i = 0; i < allActionsCount; i++) {
         debugAction(actionsVector.at(i), 1, args.simulate, QString("%1: ").arg(i + 1), args.debugString);

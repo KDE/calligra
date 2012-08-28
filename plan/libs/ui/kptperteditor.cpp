@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -22,22 +22,24 @@
 #include "kptperteditor.h"
 #include "kptproject.h"
 #include "kptrelationeditor.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
+#include <KoPart.h>
+#include <KoIcon.h>
 
 #include <kglobal.h>
 #include <klocale.h>
 
 #include <QModelIndex>
 
-extern int planDbg();
 
 namespace KPlato
 {
 
 //-----------------------------------
-PertEditor::PertEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+PertEditor::PertEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 )
 {
     kDebug(planDbg()) <<" ---------------- KPlato: Creating PertEditor ----------------";
@@ -52,11 +54,11 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     m_requiredList = widget.required;
     m_requiredList->hideColumn( 1 ); // child node name
     m_requiredList->setEditTriggers( QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed );
-    connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-    updateReadWrite( part->isReadWrite() && ! part->isEmbedded() );
+    connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    updateReadWrite( part->isReadWrite() );
 
-    widget.addBtn->setIcon( KIcon( "arrow-right" ) );
-    widget.removeBtn->setIcon( KIcon( "arrow-left" ) );
+    widget.addBtn->setIcon(koIcon("arrow-right"));
+    widget.removeBtn->setIcon(koIcon("arrow-left"));
     slotAvailableChanged( 0 );
     slotRequiredChanged( QModelIndex() );
 
@@ -67,7 +69,7 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     connect( widget.addBtn, SIGNAL(clicked()), this, SLOT(slotAddClicked() ) );
     connect( widget.removeBtn, SIGNAL(clicked() ), this, SLOT(slotRemoveClicked() ) );
 
-    connect( this, SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( this, SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 }
 
 void PertEditor::slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem *prev )

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
   Copyright (C) 2006 - 2007 Frederic BECQUIER <frederic.becquier@gmail.com>
+  Copyright (C) 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,10 +25,9 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptrelation.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
-
-#include <kdebug.h>
 
 #include <QWidget>
 #include <QSplitter>
@@ -37,8 +37,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-
-extern int planDbg();
 
 namespace KPlato
 {
@@ -95,8 +93,8 @@ void ResourceAssignmentView::drawResourcesName( QTreeWidgetItem *parent, Resourc
 
 
 /*Constructor*/
-ResourceAssignmentView::ResourceAssignmentView( KoDocument *part, QWidget *parent)
-    : ViewBase( part, parent ),
+ResourceAssignmentView::ResourceAssignmentView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 )
 {
     kDebug(planDbg()) <<" ---------------- KPlato: Creating ResourceAssignmentView ----------------";
@@ -133,7 +131,7 @@ ResourceAssignmentView::ResourceAssignmentView( KoDocument *part, QWidget *paren
     m_splitter = widget.m_splitter;
     m_resList = (ResourcesList *)widget.m_resList;
     m_taskList = (ResourcesList *)widget.m_taskList;
-    m_part = part;
+    m_part = doc;
     m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
 
     connect( m_resList, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );

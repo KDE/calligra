@@ -86,7 +86,7 @@ public:
         ScheduleBackward = 8
     };
     /// Return the schedulers capabilities.
-    /// By default returns all capabilites
+    /// By default returns all capabilities
     virtual int capabilities() const;
     /// Stop calculation of the schedule @p sm. Current result may be used.
     void stopCalculation( ScheduleManager *sm );
@@ -135,7 +135,7 @@ private:
  fetch data from the private calculated project into the actual project.
  
  To track progress, the progress() method should be called from the ui thread with
- an apropriate interval to avoid overload of the ui thread.
+ an appropriate interval to avoid overload of the ui thread.
  The progressChanged() signal may also be used but note that async signal handling are very slow
  so it may affect the ui threads performance too much.
 */

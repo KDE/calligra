@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 
 //! @internal
 class KexiProjectDataPrivate
@@ -99,7 +99,7 @@ KexiProjectData::KexiProjectData(
 {
     setObjectName("KexiProjectData");
     d->connData = cdata;
-    setDatabaseName(dbname);
+    setDatabaseName(cdata.dbFileName().isEmpty() ? dbname : cdata.dbFileName());
     setCaption(caption);
 }
 
@@ -227,7 +227,7 @@ bool KexiProjectData::isReadOnly() const
 */
 
 #include "kexiprojectdata.h"
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 

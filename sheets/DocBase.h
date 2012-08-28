@@ -37,6 +37,7 @@
 
 class KoOasisSettings;
 class KoDocumentResourceManager;
+class KoPart;
 
 namespace Calligra
 {
@@ -61,7 +62,7 @@ public:
      * @param parent the parent object
      * @param singleViewMode enables single view mode, if @c true
      */
-    explicit DocBase(QWidget* parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit DocBase(KoPart *part = 0);
     ~DocBase();
 
     /**
@@ -130,7 +131,6 @@ protected:
 
     virtual void paintContent(QPainter & painter, const QRect & rect);
     virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
-    virtual KoView* createViewInstance(QWidget* parent);
 
     virtual void saveOdfViewSettings(KoXmlWriter& settingsWriter);
     virtual void saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter& settingsWriter);

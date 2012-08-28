@@ -31,6 +31,7 @@
 #include <QLayout>
 #include <kdebug.h>
 
+#include <part/Part.h>
 #include <part/Doc.h>
 #include <part/View.h>
 #include <interfaces/ViewAdaptor.h>
@@ -38,7 +39,7 @@
 #include <interfaces/SheetAdaptor.h>
 #include <Map.h>
 #include <interfaces/MapAdaptor.h>
-#include <KoDocumentAdaptor.h>
+#include <KoPartAdaptor.h>
 #include <KoApplicationAdaptor.h>
 
 extern "C" {
@@ -79,8 +80,11 @@ Calligra::Sheets::Doc* ScriptingModule::kspreadDoc()
     if (! d->doc) {
         if (Calligra::Sheets::View* v = kspreadView())
             d->doc = v->doc();
-        if (! d->doc)
-            d->doc = new Calligra::Sheets::Doc(0, this);
+        if (! d->doc) {
+            Calligra::Sheets::Part *part = new Calligra::Sheets::Part(this);
+            d->doc = new Calligra::Sheets::Doc(part);
+            part->setDocument(d->doc);
+        }
     }
     return d->doc;
 }
@@ -174,7 +178,7 @@ bool ScriptingModule::openUrl(const QString& url)
 
 bool ScriptingModule::saveUrl(const QString& url)
 {
-    return kspreadDoc()->saveAs(url);
+    return kspreadDoc()->documentPart()->saveAs(url);
 }
 
 bool ScriptingModule::importUrl(const QString& url)

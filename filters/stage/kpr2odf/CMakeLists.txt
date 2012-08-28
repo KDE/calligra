@@ -6,3 +6,4 @@ target_link_libraries(Filterkpr2odf komain)
 
 install(TARGETS Filterkpr2odf DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  Filterkpr2odf.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  stage_kpr_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

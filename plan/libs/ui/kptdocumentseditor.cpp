@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -28,6 +28,9 @@
 #include "kptdocuments.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
+
+#include <KoIcon.h>
 
 #include <QMenu>
 #include <QList>
@@ -35,7 +38,6 @@
 
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -44,7 +46,6 @@
 
 #include <KoDocument.h>
 
-extern int planDbg();
 
 namespace KPlato
 {
@@ -102,8 +103,8 @@ QList<Document*> DocumentTreeView::selectedDocuments() const
 }
 
 //-----------------------------------
-DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+DocumentsEditor::DocumentsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setupGui();
     
@@ -114,7 +115,7 @@ DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
@@ -213,20 +214,20 @@ void DocumentsEditor::updateActionsEnabled(  bool on )
 void DocumentsEditor::setupGui()
 {
     QString name = "documentseditor_edit_list";
-    actionEditDocument  = new KAction(KIcon( "document-properties" ), i18n("Edit..."), this);
+    actionEditDocument  = new KAction(koIcon("document-properties"), i18n("Edit..."), this);
     actionCollection()->addAction("edit_documents", actionEditDocument );
 //    actionEditDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
     addAction( name, actionEditDocument );
-    
-    actionViewDocument  = new KAction(KIcon( "document-preview" ), i18nc("@action View a document", "View..."), this);
+
+    actionViewDocument  = new KAction(koIcon("document-preview"), i18nc("@action View a document", "View..."), this);
     actionCollection()->addAction("view_documents", actionViewDocument );
 //    actionViewDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
     addAction( name, actionViewDocument );
 
     
-/*    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete"), this);
+/*    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
@@ -239,7 +240,7 @@ void DocumentsEditor::setupGui()
 void DocumentsEditor::slotOptions()
 {
     kDebug(planDbg());
-    ItemViewSettupDialog dlg( m_view/*->masterView()*/ );
+    ItemViewSettupDialog dlg( this, m_view/*->masterView()*/ );
     dlg.exec();
 }
 

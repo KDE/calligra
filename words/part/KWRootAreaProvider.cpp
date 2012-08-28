@@ -154,7 +154,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     if (rootAreaPage && m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
         Q_ASSERT(rootAreaPage->page.isValid());
         Q_ASSERT(rootAreaPage->page.pageStyle().isValid());
-        requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().columns;
+        requiredRootAreaCount = rootAreaPage->page.pageStyle().columns().count;
     }
     if (rootAreaPage && rootAreaPage->rootAreas.count() < requiredRootAreaCount) {
         pageNumber = m_pages.count(); // the root-area is still on the same page
@@ -385,7 +385,9 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     QRectF updateRect = rootArea->associatedShape()->outlineRect();
     //rootArea->associatedShape()->update(updateRect);
 
-    QSizeF newSize = rootArea->associatedShape()->size();
+    QSizeF newSize = rootArea->associatedShape()->size()
+                    - QSizeF(data->leftPadding() + data->rightPadding(),
+                             data->topPadding() + data->bottomPadding());
     if (isHeaderFooter
         ||data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
@@ -406,8 +408,12 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
     }
 
     // To make sure footnotes always end up at the bottom of the main area we need to set this
-    rootArea->setBottom(rootArea->top() + newSize.height());
+    if (m_textFrameSet->textFrameSetType() == Words::MainTextFrameSet) {
+        rootArea->setBottom(rootArea->top() + newSize.height());
+    }
 
+    newSize += QSizeF(data->leftPadding() + data->rightPadding(),
+                      data->topPadding() + data->bottomPadding());
     if (newSize != rootArea->associatedShape()->size()) {
         //QPointF centerpos = rootArea->associatedShape()->absolutePosition();
         rootArea->associatedShape()->setSize(newSize);
@@ -567,13 +573,15 @@ QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(data);
 
-    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
-        QSizeF size = shape->size();
+    QSizeF size = shape->size() - QSizeF(data->leftPadding() + data->rightPadding(), data->topPadding() + data->bottomPadding());
+    size.setWidth(qMax(size.width(), qreal(1.0)));
+    size.setHeight(qMax(size.height(), qreal(1.0)));
+    if (data->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight || data->resizeMethod() == KoTextShapeData::AutoGrowHeight
+        || m_textFrameSet->textFrameSetType() == Words::OtherTextFrameSet) {
         size.setHeight(1E6);
-        return size;
     }
 
-    return shape->size();
+    return size;
 }
 
 QList<KoTextLayoutObstruction *> KWRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)

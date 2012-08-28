@@ -93,6 +93,16 @@ private:
     Delegate::EndEditHint m_lastHint;
 };
 
+class KPLATOMODELS_EXPORT CheckStateItemDelegate : public ItemDelegate
+{
+    Q_OBJECT
+public:
+    CheckStateItemDelegate( QObject *parent = 0 );
+
+protected:
+    bool editorEvent( QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index );
+};
+
 class KPLATOMODELS_EXPORT DateTimeCalendarDelegate : public ItemDelegate
 {
   Q_OBJECT
@@ -266,9 +276,7 @@ public:
 
     virtual const QMetaEnum columnMap() const { return QMetaEnum(); }
     Project *project() const { return m_project; }
-    virtual void setProject( Project *project );
     ScheduleManager *scheduleManager() const { return m_manager; }
-    virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     bool isReadWrite() { return m_readWrite; }
     void setReadOnly( int column, bool ro ) { m_columnROMap[ column ] = ro; }
     /// Returns true if @p column has been set to ReadOnly.
@@ -298,7 +306,9 @@ signals:
     void executeCommand( KUndo2Command* );
     
 public slots:
+    virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
+    virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     /// Reimplement if your model can be refreshed
     virtual void refresh() {}
 

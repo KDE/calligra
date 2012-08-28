@@ -21,9 +21,9 @@
 #include "KexiFieldListModel.h"
 #include "KexiFieldListModelItem.h"
 #include <KLocalizedString>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <kdebug.h>
 #include <drivers/xbase/xbaseexport.h>
 #include <QMimeData>
@@ -32,6 +32,7 @@ class KexiFieldListModel::Private
 {
 public:
     Private();
+    ~Private();
     KexiDB::TableOrQuerySchema* schema;
     KexiFieldListOptions options;
     KexiFieldListModelItem *allColumnsItem;
@@ -43,10 +44,15 @@ KexiFieldListModel::Private::Private() : schema(0), allColumnsItem(0)
 
 }
 
-KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions /*options*/): QAbstractTableModel(parent)
+KexiFieldListModel::Private::~Private()
+{
+    qDeleteAll(items);
+}
+
+KexiFieldListModel::KexiFieldListModel(QObject* parent, KexiFieldListOptions options): QAbstractTableModel(parent)
                                       , d(new Private())
 {
-
+    d->options = options;
 }
 
 KexiFieldListModel::~KexiFieldListModel()
@@ -64,6 +70,8 @@ void KexiFieldListModel::setSchema(KexiDB::TableOrQuerySchema* schema)
     if (!d->schema)
         return;
 
+    qDeleteAll(d->items);
+    d->items.clear();
     KexiFieldListModelItem *item = 0;
     KexiDB::QueryColumnInfo::Vector columns = d->schema->columns(true /*unique*/);
     const int count = columns.count();
@@ -92,7 +100,7 @@ QVariant KexiFieldListModel::data(const QModelIndex& index, int role) const
 {
     KexiFieldListModelItem *item = 0;
 
-    if (index.row() < d->items.count()) {
+    if (index.isValid() && index.row() < d->items.count()) {
         item = d->items[index.row()];
     }
 

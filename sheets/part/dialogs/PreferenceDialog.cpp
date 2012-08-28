@@ -28,6 +28,8 @@
 // Local
 #include "PreferenceDialog.h"
 
+#include <KoIcon.h>
+
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -36,10 +38,11 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
+
+#include <KoConfigAuthorPage.h>
 
 #include <kcolorbutton.h>
 #include <KPluginInfo>
@@ -95,6 +98,9 @@ public:
     // Spellchecker Options
     Sonnet::ConfigWidget* spellCheckPage;
 
+    // Author Options
+    KoConfigAuthorPage *authorPage;
+
 public:
     // Interface Options
     void applyInterfaceOptions();
@@ -135,10 +141,11 @@ void PreferenceDialog::Private::applyInterfaceOptions()
     }
 
     const int unitIndex = interfaceOptions.m_unit->currentIndex();
-    KoUnit unit((KoUnit::Unit)interfaceOptions.m_unit->itemData(unitIndex).toInt());
+    const KoUnit unit = KoUnit::fromListForUi(unitIndex, KoUnit::ListAll);
     if (unit != view->doc()->unit()) {
         view->doc()->setUnit(unit);
-        parameterGroup.writeEntry("Unit", unit.indexInList());
+        // TODO: this is never read, still needed?
+        parameterGroup.writeEntry("Unit", static_cast<int>(unit.type()));
         oldUnit = unit;
     }
 
@@ -231,7 +238,7 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     interfaceOptions.m_cursorMovement->setCurrentIndex(moveToIndex);
     const int functionIndex = interfaceOptions.m_statusBarFunction->findData(oldFunction);
     interfaceOptions.m_statusBarFunction->setCurrentIndex(functionIndex);
-    interfaceOptions.m_unit->setCurrentIndex(oldUnit.indexInList());
+    interfaceOptions.m_unit->setCurrentIndex(oldUnit.indexInListForUi(KoUnit::ListAll));
     interfaceOptions.m_indentationStep->changeValue(oldIndentationStep);
     interfaceOptions.m_captureAllArrowKeys->setChecked(oldCaptureAllArrowKeys);
     interfaceOptions.m_gridColor->setColor(oldGridColor);
@@ -312,7 +319,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     widget = new QWidget(this);
     d->interfaceOptions.setupUi(widget);
     page = new KPageWidgetItem(widget, i18n("Interface"));
-    page->setIcon(KIcon("preferences-desktop-theme"));
+    page->setIcon(koIcon("preferences-desktop-theme"));
     addPage(page);
     d->page2 = page;
 
@@ -332,14 +339,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     d->interfaceOptions.m_statusBarFunction->addItem(i18n("None"), NoneCalc);
 
     KComboBox* unitComboBox = d->interfaceOptions.m_unit;
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Millimeter)), KoUnit::Millimeter);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Point)), KoUnit::Point);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Inch)), KoUnit::Inch);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Centimeter)), KoUnit::Centimeter);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Decimeter)), KoUnit::Decimeter);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Pica)), KoUnit::Pica);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Cicero)), KoUnit::Cicero);
-    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Pixel)), KoUnit::Pixel);
+    unitComboBox->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
     connect(unitComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(unitChanged(int)));
     unitChanged(0);
@@ -352,7 +352,7 @@ PreferenceDialog::PreferenceDialog(View* view)
     widget = new QWidget(this);
     d->fileOptions.setupUi(widget);
     page = new KPageWidgetItem(widget, i18n("Open/Save"));
-    page->setIcon(KIcon("document-save"));
+    page->setIcon(koIcon("document-save"));
     addPage(page);
     d->page3 = page;
 
@@ -360,8 +360,8 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Plugin Options Widget
     d->pluginSelector = new KPluginSelector(this);
-    const QString serviceType = QLatin1String("KSpread/Plugin");
-    const QString query = QLatin1String("([X-KSpread-InterfaceVersion] == 0)");
+    const QString serviceType = QLatin1String("CalligraSheets/Plugin");
+    const QString query = QLatin1String("([X-CalligraSheets-InterfaceVersion] == 0)");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
@@ -370,7 +370,7 @@ PreferenceDialog::PreferenceDialog(View* view)
                                   i18n("Tools"), "Tool");
     d->pluginSelector->load();
     page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
-    page->setIcon(KIcon("preferences-plugin"));
+    page->setIcon(koIcon("preferences-plugin"));
     addPage(page);
     d->pluginPage = page;
 
@@ -378,10 +378,16 @@ PreferenceDialog::PreferenceDialog(View* view)
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
     d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
     page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
-    page->setIcon(KIcon("tools-check-spelling"));
+    page->setIcon(koIcon("tools-check-spelling"));
     page->setHeader(i18n("Spell Checker Behavior"));
     addPage(page);
     d->page4 = page;
+
+    d->authorPage = new KoConfigAuthorPage();
+    page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
+    page = addPage(d->authorPage, i18nc("@title:tab Author page", "Author"));
+    page->setHeader(i18n("Author"));
+    page->setIcon(koIcon("user-identity"));
 }
 
 PreferenceDialog::~PreferenceDialog()
@@ -411,6 +417,8 @@ void PreferenceDialog::slotApply()
     FunctionModuleRegistry::instance()->loadFunctionModules();
 
     d->spellCheckPage->save();
+
+    d->authorPage->apply();
 
     // The changes affect the document, not just a single view,
     // so all user interfaces have to be updated.
@@ -445,7 +453,7 @@ void PreferenceDialog::slotReset()
 
 void PreferenceDialog::unitChanged(int index)
 {
-    KoUnit unit((KoUnit::Unit)d->interfaceOptions.m_unit->itemData(index).toInt());
+    const KoUnit unit = KoUnit::fromListForUi(index, KoUnit::ListAll);
     d->interfaceOptions.m_indentationStep->setUnit(unit);
 }
 

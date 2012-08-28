@@ -19,8 +19,9 @@
 
 #include "kexicontextmenuutils.h"
 
+#include <KoIcon.h>
+
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kdebug.h>
@@ -69,7 +70,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
 
     d->actionCollection.addAction("insert",
                                   d->insertFromFileAction = new KAction(
-        KIcon("document-open"), i18n("Insert From &File..."), this));
+        koIcon("document-open"), i18n("Insert From &File..."), this));
     connect(d->insertFromFileAction, SIGNAL(triggered()),
             this, SLOT(insertFromFile()));
     addAction(d->insertFromFileAction);
@@ -85,7 +86,7 @@ KexiImageContextMenu::KexiImageContextMenu(QWidget* parent)
     addAction(d->pasteAction);
     d->actionCollection.addAction("delete",
                                   d->deleteAction = new KAction(
-        KIcon("edit-clear"), i18n("&Clear"), this));
+        koIcon("edit-clear"), i18n("&Clear"), this));
     connect(d->deleteAction, SIGNAL(triggered()),
             this, SLOT(clear()));
     addAction(d->deleteAction);
@@ -305,9 +306,7 @@ bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
     QList<QAction *> actions = menu->actions();
     if (actions.isEmpty())
         return false;
-    QWidgetAction * action = dynamic_cast<QWidgetAction*>(actions.first());
-    if (!action || !action->defaultWidget())
-        return false;
+    QAction * action = actions.first();
 
     /*! @todo look at makeFirstCharacterUpperCaseInCaptions setting [bool]
      (see doc/dev/settings.txt) */
@@ -316,7 +315,11 @@ bool KexiContextMenuUtils::updateTitle(KMenu *menu, const QString& objectName,
                             objectTypeName));
 
     menu->addTitle(KIcon(iconName), realTitle, action /*before old*/);
-    menu->removeAction(action);
+    if (dynamic_cast<QWidgetAction*>(action)
+        && dynamic_cast<QWidgetAction*>(action)->defaultWidget())
+    {
+        menu->removeAction(action);
+    }
     return true;
 }
 

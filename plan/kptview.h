@@ -26,11 +26,14 @@
 #include <KoView.h>
 
 #include "kptcontext.h"
+#include "kptviewbase.h"
 
 #include <QMenu>
 #include <QDockWidget>
 #include <QTimer>
 #include <QMap>
+#include <QPointer>
+#include <QPrintDialog>
 
 #include <KConfigDialog>
 
@@ -66,8 +69,10 @@ class ScheduleManager;
 class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
+class TaskModuleModel;
 class Calendar;
 class Part;
+class PartPart;
 class Node;
 class Project;
 class Task;
@@ -80,8 +85,11 @@ class Context;
 class ViewAdaptor;
 class HtmlView;
 class ReportView;
+class ReportWidget;
 
 class ReportDesignDialog;
+
+class DockWidget;
 
 class ConfigDialog : public KConfigDialog
 {
@@ -136,10 +144,12 @@ class KPLATO_EXPORT View : public KoView
     Q_OBJECT
 
 public:
-    explicit View( Part* part, QWidget* parent = 0 );
+    explicit View(KoPart *part, Part *doc, QWidget *parent = 0);
     ~View();
 
     Part *getPart() const;
+
+    KoPart *getKoPart() const;
 
     Project& getProject() const;
 
@@ -152,6 +162,8 @@ public:
     bool loadWorkPackage( Project &project, const KUrl &url );
 
     QWidget *canvas() const;
+
+    KoPageLayout pageLayout() const;
 
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
@@ -186,6 +198,7 @@ public:
     ViewBase *createReportView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
 
     KoPrintJob * createPrintJob();
+    QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);
 
     virtual KoZoomController *zoomController() const {
         return 0;
@@ -283,10 +296,11 @@ protected slots:
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
-    void slotEditReportDesign( ReportView *view );
-    void slotCreateReport();
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
+
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
 
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
@@ -303,7 +317,7 @@ protected:
     void updateView( QWidget *widget );
 
     ViewBase *currentView() const;
-    
+
     ViewBase *createWelcomeView();
 
 private slots:
@@ -369,7 +383,7 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    // if multiple changes occure, only issue the last change
+    // if multiple changes occur, only issue the last change
     bool m_trigged;
     ScheduleManager *m_nextScheduleManager;
 
@@ -377,6 +391,8 @@ private:
     QList<KUndo2Command*> m_undocommands;
 
     bool m_readWrite;
+
+    QList<DockWidget*> m_dockers;
 
     // ------ File
     QAction *actionCreateTemplate;
@@ -399,7 +415,6 @@ private:
     KAction *actionInsertFile;
     KAction *actionCurrencyConfig;
 
-    KAction *actionCreateReport;
     KAction *actionOpenReportFile;
 
     // ------ Settings
@@ -426,7 +441,10 @@ private:
     KAction *actNoInformation;
 
     QMap<ViewListItem*, QAction*> m_reportActionMap;
+
+    KoPart *m_partpart;
 };
+
 
 } //Kplato namespace
 
