@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kisqpaintercanvaswidgetfactory.h"
+#include "kis_qpainter_canvas_widget_factory.h"
 #include "kis_qpainter_canvas.h"
 
 KisCanvasWidgetBase* KisQPainterCanvasWidgetFactory::create(KisCanvas2* canvas, KisCoordinatesConverter* converter, QWidget* parent)

@@ -48,7 +48,7 @@
 #include "kis_config_notifier.h"
 #include "kis_qpainter_canvas.h"
 #include "kis_abstract_canvas_widget_factory.h"
-#include "kisqpaintercanvaswidgetfactory.h"
+#include "kis_qpainter_canvas_widget_factory.h"
 #include "kis_group_layer.h"
 #include "flake/kis_shape_controller.h"
 #include "kis_node_manager.h"
