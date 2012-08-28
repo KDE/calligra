@@ -51,7 +51,9 @@ Allow user to add a book cover image
 Create a generic HTML export filter
  * Refactor some things
     - Add OEBPS/ as a configurable parameter instead of hardcoded.
-    - Make staring a new html file and ending another functions
+    - Make staring a new html file and ending another functions         [Done]
+    - Remove parameter imagesSrcList                                    [Done]
+    - Remove parameter styles
 
 
 

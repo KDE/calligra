@@ -48,7 +48,7 @@
 
 StyleInfo::StyleInfo()
     : isDefaultStyle(false)
-    , hasBreakBefore(false)
+    , shouldBreakChapter(false)
     , inUse(false)
 {
 }
@@ -165,13 +165,13 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
             styleInfo->attributes.insert("width", "auto");
         }
 
-        styleInfo->hasBreakBefore = false;
+        styleInfo->shouldBreakChapter = false;
         KoXmlElement propertiesElement;
         forEachElement (propertiesElement, styleElement) {
             //Check for fo:break-before
             if (propertiesElement.attribute("break-before") == "page") {
                 //kDebug(30517) << "Found break-before=page in style" << styleName;
-                styleInfo->hasBreakBefore = true;
+                styleInfo->shouldBreakChapter = true;
             }
             collectStyleAttributes(propertiesElement, styleInfo);
         }
@@ -181,7 +181,7 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
                       << styleInfo->parent
                       << styleInfo->family
                       << styleInfo->isDefaultStyle
-                      << styleInfo->hasBreakBefore
+                      << styleInfo->shouldBreakChapter
                       << styleInfo->attributes;
 #endif
         styles.insert(styleName, styleInfo);
@@ -383,7 +383,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
             // A fo:break-before="page" in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
             StyleInfo *style = styles.value(nodeElement.attribute("style-name"));
-            if (style && style->hasBreakBefore) {
+            if (style && style->shouldBreakChapter) {
                 //kDebug(30517) << "Found paragraph with style with break-before -- breaking new chapter";
 
                 // Write out any footnotes
@@ -720,18 +720,18 @@ void OdtHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWr
                                   QHash<QString, StyleInfo *> &styles)
 {
     htmlWriter->startElement("a");
-    QString refrence = nodeElement.attribute("href");
-    QString chapter = m_linksInfo.value(refrence);
+    QString reference = nodeElement.attribute("href");
+    QString chapter = m_linksInfo.value(reference);
     if (!chapter.isEmpty()) {
         // This is internal link.
-        refrence = refrence.remove("|");
-        refrence = refrence.remove(" ");// remove spaces
-        refrence = chapter+refrence;
-        htmlWriter->addAttribute("href", refrence);
+        reference = reference.remove("|");
+        reference = reference.remove(" ");// remove spaces
+        reference = chapter+reference;
+        htmlWriter->addAttribute("href", reference);
     }
     else {
         // This is external link.
-        htmlWriter->addAttribute("href", refrence);
+        htmlWriter->addAttribute("href", reference);
     }
 
     handleInsideElementsTag(nodeElement, htmlWriter, styles);
@@ -836,7 +836,7 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
                 QString noteChpater = "chapter" + QString::number(m_currentChapter) + ".xhtml";
                 m_endNotes.insert(noteChpater + "/" + id, noteElements);
                 // we insert this: m_currentChapter/id
-                // to can add refrence for text in end note
+                // to can add reference for text in end note
             }
         }
     }
@@ -933,7 +933,7 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement,
             // A break-before in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
             StyleInfo *style = styles.value(nodeElement.attribute("style-name"));
-            if (style && style->hasBreakBefore) {
+            if (style && style->shouldBreakChapter) {
                 chapter++;
             }
         }
@@ -964,7 +964,7 @@ void OdtHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter, QHash<QString, St
         htmlWriter->addAttribute("id", id + "n");
 
         htmlWriter->startElement("a");
-        htmlWriter->addAttribute("href", "#" + id + "t"); // refrence to text
+        htmlWriter->addAttribute("href", "#" + id + "t"); // reference to text
         htmlWriter->addTextNode("[" + QString::number(noteCounts) + "]");
         htmlWriter->endElement();
 

@@ -113,7 +113,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
                       << styles.value(name)->parent
                       << styles.value(name)->family
                       << styles.value(name)->isDefaultStyle
-                      << styles.value(name)->hasBreakBefore
+                      << styles.value(name)->shouldBreakChapter
                       << styles.value(name)->attributes
             ;
     }
@@ -197,7 +197,7 @@ KoFilter::ConversionStatus ExportEpub2::parseMetadata(KoStore *odfStore)
 void ExportEpub2::fixStyleTree(QHash<QString, StyleInfo*> &styles)
 {
     // For all styles:
-    //    Propagate the hasBreakBefore bool upwards in the inheritance tree.
+    //    Propagate the shouldBreakChapter bool upwards in the inheritance tree.
     foreach (const QString &styleName, styles.keys()) {
         QVector<StyleInfo *> styleStack(styles.size());
 
@@ -211,7 +211,7 @@ void ExportEpub2::fixStyleTree(QHash<QString, StyleInfo*> &styles)
             styleStack[index++] = style;
 
             // Quit when we are at the bottom or found a break-before.
-            if (style->hasBreakBefore || style->parent.isEmpty()) {
+            if (style->shouldBreakChapter || style->parent.isEmpty()) {
                 break;
             }
 
@@ -219,9 +219,9 @@ void ExportEpub2::fixStyleTree(QHash<QString, StyleInfo*> &styles)
         }
 
         // If the bottom most has a break, then all the ones in the list should inherit it.
-        if (styleStack[index - 1]->hasBreakBefore) {
+        if (styleStack[index - 1]->shouldBreakChapter) {
             for (int i = 0; i < index - 1; ++i) {
-                styleStack[i]->hasBreakBefore = true;
+                styleStack[i]->shouldBreakChapter = true;
             }
         }
     }
