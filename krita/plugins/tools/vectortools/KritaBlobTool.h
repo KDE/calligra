@@ -27,6 +27,7 @@ class KoPathShape;
 class KoShapeStroke;
 class KoPathPoint;
 class QPainterPath;
+class KoShapeBackground;
 
 class KritaBlobTool : public KoToolBase
 {
@@ -54,9 +55,11 @@ protected:
     QWidget *createOptionWidget();
     
 private:
+    void addDab(const QPointF &pos);
     KoPathShape *m_shape;
     QPainterPath *m_qshape;
     KoShapeStroke *m_stroke;
+    KoShapeBackground *m_bg;
     bool m_simplified;
 };
 

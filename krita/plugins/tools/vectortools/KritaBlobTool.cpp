@@ -20,7 +20,6 @@
 #include "KritaBlobTool.h"
 
 #include <KoPathShape.h>
-#include <KoParameterShape.h>
 #include <KoShapeStroke.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
@@ -29,14 +28,14 @@
 #include <KoSelection.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColor.h>
+#include <KoColorBackground.h>
 #include <KoPathPoint.h>
 #include <KoPathPointData.h>
 #include <KoPathPointMergeCommand.h>
 #include <KoShapePaintingContext.h>
-
+#include <KoShapeBackground.h>
 #include <knuminput.h>
 #include <klocale.h>
-#include <kcombobox.h>
 
 #include <QStackedWidget>
 #include <QCheckBox>
@@ -54,6 +53,7 @@ KritaBlobTool::KritaBlobTool(KoCanvasBase *canvas)
     m_qshape = 0;
     m_stroke = new KoShapeStroke(canvas->resourceManager()->activeStroke());
     m_stroke->setColor(canvas->resourceManager()->foregroundColor().toQColor());
+    m_bg = new KoColorBackground(QColor(0, 0, 0));
 }
 
 KritaBlobTool::~KritaBlobTool()
@@ -62,17 +62,19 @@ KritaBlobTool::~KritaBlobTool()
 
 void KritaBlobTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_qshape) {
+    if (m_shape) {
         painter.save();
-        m_shape = KoPathShape::createShapeFromPainterPath(*m_qshape);
-        m_shape->setShapeId(KoPathShapeId);
         painter.setTransform(m_shape->absoluteTransformation(&converter) * painter.transform());
+        painter.save();
         KoShapePaintingContext paintContext;
+        m_shape->paint(painter, converter, paintContext);
+        painter.restore();/*
         if (m_shape->stroke()) {
             painter.save();
             m_shape->stroke()->paint(m_shape, painter, converter);
             painter.restore();
-        }
+        }*/
+        painter.restore();
     }
 }
 
@@ -84,15 +86,11 @@ void KritaBlobTool::repaintDecorations()
 
 void KritaBlobTool::mousePressEvent(KoPointerEvent *event)
 {
-    QPointF center = event->point;
-    center.setX(center.x() - 10);
-    center.setY(center.y() - 10);
-    QRectF area = QRectF(center, QSizeF(20, 20));
-    if (!m_qshape) {
-        m_qshape = new QPainterPath;
-        m_qshape->addEllipse(area);
+    qDebug() << "Mouse pressed at " << event->pos();
+    
+    if (event->buttons() & Qt::LeftButton) {
+        addDab(event->point);
     }
-    //canvas()->updateCanvas(m_qshape->boundingRect());
 }
 
 void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
@@ -100,16 +98,9 @@ void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
     qDebug() << "Mouse moved to ";
     qDebug() << event->pos();
     
-    QPointF center = event->point;
-    center.setX(center.x() - 10);
-    center.setY(center.y() - 10);
-    if (m_qshape) {
-        QRectF area = QRectF(center, QSizeF(20, 20));
-        QPainterPath elli;
-        elli.addEllipse(area);
-        *m_qshape = m_qshape->united(elli);
+    if (event->buttons() & Qt::LeftButton) {
+        addDab(event->point);
     }
-    //canvas()->updateCanvas(m_qshape->boundingRect());
 }
 
 void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -172,6 +163,29 @@ void KritaBlobTool::slotSetSimplified(int simplified)
     } else {
         m_simplified = false;
     }
+}
+
+void KritaBlobTool::addDab(const QPointF &pos)
+{
+    QPointF center;
+    center.setX(pos.x() - 10);
+    center.setY(pos.y() - 10);
+    QRectF area = QRectF(center, QSizeF(20, 20));
+    
+    if (!m_qshape) {
+        m_qshape = new QPainterPath;
+        m_qshape->addEllipse(area);
+    }
+    else {
+        QPainterPath elli;
+        elli.addEllipse(area);
+        *m_qshape = m_qshape->united(elli);
+    }
+    m_shape = KoPathShape::createShapeFromPainterPath(*m_qshape);
+    m_shape->setShapeId(KoPathShapeId);
+    m_shape->setStroke(m_stroke);
+    m_shape->setBackground(m_bg);
+    canvas()->updateCanvas(m_shape->boundingRect());
 }
 
 QWidget *KritaBlobTool::createOptionWidget()
