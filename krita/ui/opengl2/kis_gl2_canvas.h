@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisGL2Canvas : public QGLWidget, public KisCanvasWidgetBase
 {
     Q_OBJECT
 public:
-    KisGL2Canvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, KisImageWSP image, QWidget *parent);
+    KisGL2Canvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent);
     virtual ~KisGL2Canvas();
 
     virtual bool callFocusNextPrevChild(bool next);

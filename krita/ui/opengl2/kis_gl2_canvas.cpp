@@ -63,10 +63,10 @@ public:
 
 QGLWidget *KisGL2Canvas::Private::shareWidget = 0;
 
-KisGL2Canvas::KisGL2Canvas(KisCanvas2* canvas, KisCoordinatesConverter* coordinatesConverter, KisImageWSP image, QWidget* parent)
+KisGL2Canvas::KisGL2Canvas(KisCanvas2* canvas, KisCoordinatesConverter* coordinatesConverter, QWidget* parent)
     : QGLWidget(parent, KisGL2Canvas::shareWidget()), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
 {
-    d->image = image;
+    d->image = canvas->view()->image();
 }
 
 KisGL2Canvas::~KisGL2Canvas()
@@ -89,7 +89,7 @@ bool KisGL2Canvas::callFocusNextPrevChild(bool next)
 
 void KisGL2Canvas::initializeGL()
 {
-    d->renderer = new KisGL2RenderThread(width(), height(), this, d->image);
+    d->renderer = new KisGL2RenderThread(width(), height(), canvas(), d->image);
     d->renderer->start();
     d->renderer->moveToThread(d->renderer);
     connect(d->renderer, SIGNAL(renderFinished()), this, SLOT(update()), Qt::QueuedConnection);
@@ -148,7 +148,7 @@ void KisGL2Canvas::resizeGL(int w, int h)
     d->renderer->wait();
     delete d->renderer;
 
-    d->renderer = new KisGL2RenderThread(w, h, this, d->image);
+    d->renderer = new KisGL2RenderThread(w, h, canvas(), d->image);
     d->renderer->start();
     d->renderer->moveToThread(d->renderer);
     connect(d->renderer, SIGNAL(renderFinished()), this, SLOT(update()), Qt::QueuedConnection);

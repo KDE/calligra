@@ -23,15 +23,16 @@
 
 #include <QThread>
 #include <kis_types.h>
+#include <krita_export.h>
 
 class QRect;
-class KisGL2Canvas;
+class KisCanvas2;
 
-class KisGL2RenderThread : public QThread
+class KRITAUI_EXPORT KisGL2RenderThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit KisGL2RenderThread(int width, int height, KisGL2Canvas* canvas, KisImageWSP image);
+    explicit KisGL2RenderThread(int width, int height, KisCanvas2* canvas, KisImageWSP image);
     virtual ~KisGL2RenderThread();
 
     void initialize();

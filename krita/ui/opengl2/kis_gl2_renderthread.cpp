@@ -35,6 +35,7 @@
 #include <kis_image.h>
 #include <kis_config.h>
 #include <kis_config_notifier.h>
+#include <kis_canvas2.h>
 
 #include "kis_gl2_canvas.h"
 #include "kis_gl2_texture_updater.h"
@@ -56,7 +57,7 @@ public:
     void createShader();
     void createMesh();
 
-    KisGL2Canvas *canvas;
+    KisCanvas2 *canvas;
     KisImageWSP image;
     KisGL2TextureUpdater *updater;
 
@@ -87,7 +88,7 @@ public:
     GLuint texture;
 };
 
-KisGL2RenderThread::KisGL2RenderThread(int width, int height, KisGL2Canvas* canvas, KisImageWSP image)
+KisGL2RenderThread::KisGL2RenderThread(int width, int height, KisCanvas2* canvas, KisImageWSP image)
     : QThread(), d(new Private)
 {
     d->canvas = canvas;
@@ -144,13 +145,15 @@ void KisGL2RenderThread::render()
 
     //Set view/projection matrices
     QMatrix4x4 view;
-    view.translate(-d->canvas->translation().x(), d->canvas->translation().y());
-    view.rotate(d->canvas->rotation(), 0.f, 0.f, -1.f);
-    view.scale(d->canvas->scaling(), d->canvas->scaling());
+    QPointF translation = d->canvas->documentOffset();
+    view.translate(-translation.x(), translation.y());
+    view.rotate(d->canvas->rotationAngle(), 0.f, 0.f, -1.f);
+    qreal scale = d->canvas->coordinatesConverter()->zoom();
+    view.scale(scale, scale);
     d->shader->setUniformValue(d->viewMatrixLocation, view.transposed());
 
     QMatrix4x4 proj;
-    proj.ortho(0, d->canvas->width(), -d->canvas->height(), 0, -10, 10);
+    proj.ortho(0, d->canvas->canvasWidget()->width(), -d->canvas->canvasWidget()->height(), 0, -10, 10);
     d->shader->setUniformValue(d->projectionMatrixLocation, proj.transposed());
 
     //Setup the geometry for rendering
@@ -177,7 +180,7 @@ void KisGL2RenderThread::render()
     d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
     glBindTexture(GL_TEXTURE_2D, d->imageTexture);
 
-    if(d->canvas->scaling() > 2.0f) {
+    if(scale > 2.0f) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     } else {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
