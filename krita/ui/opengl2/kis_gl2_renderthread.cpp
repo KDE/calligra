@@ -120,6 +120,7 @@ void KisGL2RenderThread::initialize()
     d->updater->start();
     d->updater->moveToThread(d->updater);
     connect(d->image, SIGNAL(sigImageUpdated(QRect)), d->updater, SLOT(imageChanged(QRect)), Qt::QueuedConnection);
+    connect(d->image, SIGNAL(sigImageUpdated(QRect)), this, SLOT(update()));
 
     d->createShader();
     d->createMesh();
@@ -197,6 +198,8 @@ void KisGL2RenderThread::render()
     d->vertexBuffer->release();
     d->shader->release();
 
+//    d->pbuffer->updateDynamicTexture(d->);
+
     emit renderFinished();
 }
 
@@ -221,6 +224,11 @@ void KisGL2RenderThread::configChanged()
     d->createCheckerTexture(cfg.checkSize(), cfg.checkersColor());
 }
 
+void KisGL2RenderThread::update()
+{
+    d->pbuffer->updateDynamicTexture(d->texture);
+}
+
 void KisGL2RenderThread::run()
 {
     initialize();
@@ -233,7 +241,7 @@ void KisGL2RenderThread::run()
     forever {
         d->eventLoop->processEvents();
         render();
-        d->pbuffer->updateDynamicTexture(d->texture);
+        //d->pbuffer->updateDynamicTexture(d->texture);
 
         if(d->stop)
             break;

@@ -41,6 +41,7 @@ public:
 
 public Q_SLOTS:
     void render();
+    void update();
 //     void resize(int width, int height);
     void stop();
     void configChanged();
