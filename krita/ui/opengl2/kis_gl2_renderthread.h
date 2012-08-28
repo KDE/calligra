@@ -31,7 +31,7 @@ class KisGL2RenderThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit KisGL2RenderThread(KisGL2Canvas *canvas, KisImageWSP image);
+    explicit KisGL2RenderThread(int width, int height, KisGL2Canvas* canvas, KisImageWSP image);
     virtual ~KisGL2RenderThread();
 
     void initialize();
@@ -40,7 +40,7 @@ public:
 
 public Q_SLOTS:
     void render();
-    void resize(int width, int height);
+//     void resize(int width, int height);
     void stop();
     void configChanged();
 

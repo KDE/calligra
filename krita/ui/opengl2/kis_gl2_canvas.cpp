@@ -89,7 +89,7 @@ bool KisGL2Canvas::callFocusNextPrevChild(bool next)
 
 void KisGL2Canvas::initializeGL()
 {
-    d->renderer = new KisGL2RenderThread(this, d->image);
+    d->renderer = new KisGL2RenderThread(width(), height(), this, d->image);
     d->renderer->start();
     d->renderer->moveToThread(d->renderer);
     connect(d->renderer, SIGNAL(renderFinished()), this, SLOT(update()), Qt::QueuedConnection);
@@ -142,7 +142,16 @@ void KisGL2Canvas::paintGL()
 void KisGL2Canvas::resizeGL(int w, int h)
 {
     glViewport(0, 0, w, h);
-    d->renderer->resize(w, h);
+    //d->renderer->resize(w, h);
+
+    d->renderer->stop();
+    d->renderer->wait();
+    delete d->renderer;
+
+    d->renderer = new KisGL2RenderThread(w, h, this, d->image);
+    d->renderer->start();
+    d->renderer->moveToThread(d->renderer);
+    connect(d->renderer, SIGNAL(renderFinished()), this, SLOT(update()), Qt::QueuedConnection);
 }
 
 QPoint KisGL2Canvas::translation() const
