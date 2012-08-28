@@ -170,7 +170,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 }
 
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
             }
@@ -185,7 +185,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 }
 
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
             }
@@ -199,7 +199,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 }
 
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
             }
@@ -212,7 +212,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             {
                 kDebug(30517) << "Other file";
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          m_manifest.value(imgSrc).toUtf8(), imgContent);
                 break;
             }

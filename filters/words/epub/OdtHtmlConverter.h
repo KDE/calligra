@@ -116,6 +116,8 @@ class OdtHtmlConverter
 
 
  private:
+    EpubFile    *m_epub;
+
     // Some variables used while creating the HTML contents.
     QByteArray   m_htmlContent;
     QBuffer     *m_outBuf;
