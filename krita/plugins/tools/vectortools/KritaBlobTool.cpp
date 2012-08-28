@@ -37,6 +37,8 @@
 #include <knuminput.h>
 #include <klocale.h>
 
+#include <widgets/kis_slider_spin_box.h>
+
 #include <QStackedWidget>
 #include <QCheckBox>
 #include <QVBoxLayout>
@@ -86,8 +88,6 @@ void KritaBlobTool::repaintDecorations()
 
 void KritaBlobTool::mousePressEvent(KoPointerEvent *event)
 {
-    qDebug() << "Mouse pressed at " << event->pos();
-    
     if (event->buttons() & Qt::LeftButton) {
         addDab(event->point);
     }
@@ -95,15 +95,12 @@ void KritaBlobTool::mousePressEvent(KoPointerEvent *event)
 
 void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    qDebug() << "Mouse moved to ";
-    qDebug() << event->pos();
-    
     if (event->buttons() & Qt::LeftButton) {
         addDab(event->point);
     }
 }
 
-void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
+void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *)
 {
     qDebug() << "Mouse has been released";
     
@@ -113,9 +110,8 @@ void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
         for (qreal t = 0; t <= 1; t += 0.005) {
             heuristicPointList.append(m_qshape->pointAtPercent(t));
         }   
-    //heuristicPointList.append(m_qshape->pointAtPercent(0));
-    float hardcodedError = 2;
-    path = bezierFit(heuristicPointList, hardcodedError);
+    heuristicPointList.append(m_qshape->pointAtPercent(0));
+    path = bezierFit(heuristicPointList, m_error);
     path->close();
     path->normalize();
     }
@@ -138,10 +134,11 @@ void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
         delete path;
     }
 }
-
+/*
 void KritaBlobTool::keyPressEvent(QKeyEvent *event)
 {
 }
+*/
 
 void KritaBlobTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
@@ -165,12 +162,23 @@ void KritaBlobTool::slotSetSimplified(int simplified)
     }
 }
 
+void KritaBlobTool::slotSetDiameter(double diameter)
+{
+    m_diameter = diameter;
+}
+
+void KritaBlobTool::slotSetOptimization(double error)
+{
+    m_error = error;
+}
+
+
 void KritaBlobTool::addDab(const QPointF &pos)
 {
     QPointF center;
-    center.setX(pos.x() - 10);
-    center.setY(pos.y() - 10);
-    QRectF area = QRectF(center, QSizeF(20, 20));
+    center.setX(pos.x() - m_diameter/2);
+    center.setY(pos.y() - m_diameter/2);
+    QRectF area = QRectF(center, QSizeF(m_diameter, m_diameter));
     
     if (!m_qshape) {
         m_qshape = new QPainterPath;
@@ -188,21 +196,53 @@ void KritaBlobTool::addDab(const QPointF &pos)
     canvas()->updateCanvas(m_shape->boundingRect());
 }
 
+
+void KritaBlobTool::combineBlob()
+{
+    /*
+    This function is left blank until we correct our shape styling inconsistencies.
+    The blob tool depends on proper shape styling to work, since it will only fuse with shapes sharing the same stroke/background.
+    */
+}
+
 QWidget *KritaBlobTool::createOptionWidget()
 {
-    QWidget *optionWidget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout(optionWidget);
+    QWidget         *optionWidget   = new QWidget();
+    QVBoxLayout     *layout         = new QVBoxLayout(optionWidget);
 
-    QHBoxLayout *modeLayout = new QHBoxLayout;
-    QLabel *modeLabel = new QLabel(i18n("Simplified: "), optionWidget);
-    QCheckBox *simplified = new QCheckBox();
-    modeLayout->addWidget(modeLabel);
-    modeLayout->addWidget(simplified);
-    layout->addLayout(modeLayout);
+    QHBoxLayout     *line1          = new QHBoxLayout;
+    QLabel          *labelDiameter  = new QLabel(i18n("Diameter: "), optionWidget);
+    KDoubleNumInput *diameterSlider = new KDoubleNumInput(1, 1000, 20, optionWidget, 10, 1);
+    diameterSlider->setSliderEnabled(true);
+    diameterSlider->setExponentRatio(2);
+    
+    
+    line1->addWidget(labelDiameter);
+    line1->addWidget(diameterSlider);
+    
+    QLabel          *optimiLabel    = new QLabel(i18n("Simplification (higher for less control points): "), optionWidget);
+    
+    QHBoxLayout     *line2          = new QHBoxLayout;
+    QCheckBox       *simplified     = new QCheckBox("Simplify", optionWidget);
+    KDoubleNumInput *simplifySlider = new KDoubleNumInput(1, 20, 2, optionWidget, 1, 2);
+    simplifySlider->setSliderEnabled(true);
+    line2->addWidget(simplified);
+    line2->addWidget(simplifySlider);
+    
+    layout->addLayout(line1);
+    layout->addWidget(optimiLabel);
+    layout->addLayout(line2);
+    layout->addStretch(1);
 
-    connect(simplified, SIGNAL(stateChanged(int)), this, SLOT(slotSetSimplified(int)));
+    connect(simplified,     SIGNAL(stateChanged(int)),    this          , SLOT(slotSetSimplified(int))      );
+    connect(simplified,     SIGNAL(clicked(bool)),        simplifySlider, SLOT(setEnabled(bool))            );
+    connect(simplifySlider, SIGNAL(valueChanged(double)), this          , SLOT(slotSetOptimization(double)) );
+    connect(diameterSlider, SIGNAL(valueChanged(double)), this          , SLOT(slotSetDiameter(double))     );
     
     simplified->setCheckState(Qt::Checked);
+    
+    m_diameter = diameterSlider->value();
+    m_error    = simplifySlider->value();
     return optionWidget;
 }
 

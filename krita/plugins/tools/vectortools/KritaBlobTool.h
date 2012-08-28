@@ -29,6 +29,10 @@ class KoPathPoint;
 class QPainterPath;
 class KoShapeBackground;
 
+/**
+  The purpose of this tool is to create blotch-shaped vector shapes that fuse with any other
+  shape on the canvas sharing the same attributes of stroke and background
+*/
 class KritaBlobTool : public KoToolBase
 {
     Q_OBJECT
@@ -43,23 +47,31 @@ public:
     void mousePressEvent(KoPointerEvent *event) ;
     void mouseMoveEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
-    void keyPressEvent(QKeyEvent *event);
+    //void keyPressEvent(QKeyEvent *event);
 
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
 public slots:
     void slotSetSimplified(int simplified);
+    void slotSetDiameter(double diameter);
+    void slotSetOptimization(double error);
     
 protected:
     QWidget *createOptionWidget();
     
 private:
     void addDab(const QPointF &pos);
+    void combineBlob();
+    
     KoPathShape *m_shape;
     QPainterPath *m_qshape;
     KoShapeStroke *m_stroke;
     KoShapeBackground *m_bg;
+    
+    qreal m_diameter;
+    /// if simplified is activated, then the higher m_error is, the less control points in the final blob 
+    qreal m_error;
     bool m_simplified;
 };
 
