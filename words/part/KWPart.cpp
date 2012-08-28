@@ -55,9 +55,20 @@ void KWPart::setDocument(KWDocument *document)
     m_document = document;
 }
 
+KWDocument *KWPart::document() const
+{
+    return m_document;
+}
+
 KoView *KWPart::createViewInstance(QWidget *parent)
 {
     KWView *view = new KWView(this, m_document, parent);
+    setupViewInstance(view);
+    return view;
+}
+
+void KWPart::setupViewInstance(KWView *view)
+{
     connect(m_document, SIGNAL(shapeAdded(KoShape *)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *)));
     connect(m_document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
 
@@ -81,7 +92,6 @@ KoView *KWPart::createViewInstance(QWidget *parent)
     }
     if (!switchToolCalled)
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-    return view;
 }
 
 QGraphicsItem *KWPart::createCanvasItem()

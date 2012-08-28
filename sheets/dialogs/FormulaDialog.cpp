@@ -90,8 +90,6 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     setMainWidget(page);
 
     QGridLayout *grid1 = new QGridLayout(page);
-    grid1->setMargin(KDialog::marginHint());
-    grid1->setSpacing(KDialog::spacingHint());
 
     searchFunct = new KLineEdit(page);
     searchFunct->setClearButtonShown(true);
@@ -152,8 +150,6 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     m_input = new QWidget(m_tabwidget);
     QVBoxLayout *grid2 = new QVBoxLayout(m_input);
-    grid2->setMargin(KDialog::marginHint());
-    grid2->setSpacing(KDialog::spacingHint());
 
     // grid2->setResizeMode (QLayout::Minimum);
 

@@ -72,6 +72,9 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // Open the infile and return an error if it fails.
     KoStore *odfStore = KoStore::createStore(m_chain->inputFile(), KoStore::Read,
                                              "", KoStore::Auto);
+    // If we don't call disallowNameExpansion(), then filenames that
+    // begin with numbers will not be opened. Embedded images often
+    // have names like this.
     odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
         kError(30517) << "Unable to open input file!" << endl;
@@ -102,26 +105,30 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         delete odfStore;
         return status;
     }
-    // Propagate some inherited stuff.
-    fixStyleTree(styles);
 
 #if 0 // Debug
     kDebug(30517) << "======== >> Styles";
     foreach(const QString &name, styles.keys()) {
-        kDebug(30517) << name << styles.value(name)->parent
+        kDebug(30517) << "==" << name << ":\t"
+                      << styles.value(name)->parent
+                      << styles.value(name)->family
+                      << styles.value(name)->isDefaultStyle
                       << styles.value(name)->hasBreakBefore
-                      << styles.value(name)->attributes;
+                      << styles.value(name)->attributes
+            ;
     }
     kDebug(30517) << "======== << Styles";
 #endif
 
-    // ----------------------------------------------------------------
+    // Propagate style inheritance.
+    fixStyleTree(styles);
 
+    // ----------------------------------------------------------------
     // Create content files.
 
     // Create html contents.
     // Note that this also sets the inUse flag for the styles thare are used.
-    
+    // m_imagesSrcList is an output parameter from the conversion.    
     status = converter.convertContent(odfStore, m_meta, &epub, styles, m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;
@@ -129,13 +136,11 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     }
 
     // Extract images
-
-    // Check for the pictures directory in the odf store.
-        status = extractImages(odfStore, &epub);
-        if (status != KoFilter::OK) {
-            delete odfStore;
-            return status;
-        }
+    status = extractImages(odfStore, &epub);
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
 
     // Create CSS contents and store it in the epub file.
     QByteArray  cssContent;
@@ -310,7 +315,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     }
 
 
-    // Extract images and add them to epubFile one bye one
+    // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
     foreach (const QString imgSrc, m_imagesSrcList.keys()) {
@@ -357,7 +362,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
         case ExportEpub2::VectorTypeWmf:
             {
                 kDebug(30517) << "WMF file";
-                QByteArray output;
+                 QByteArray output;
                 if (!convertWmf(imgContent, output, qSize)) {
                     kDebug(30517) << "WMF Parse error";
                     return KoFilter::ParsingError;

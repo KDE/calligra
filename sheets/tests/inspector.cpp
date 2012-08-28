@@ -194,8 +194,6 @@ Inspector::Inspector(const Cell& cell)
     QFrame* cellPage = new QFrame();
     addPage(cellPage, QString("Cell"));
     QVBoxLayout* cellLayout = new QVBoxLayout(cellPage);
-    cellLayout->setMargin(KDialog::marginHint());
-    cellLayout->setSpacing(KDialog::spacingHint());
     d->cellView = new QTreeWidget(cellPage);
     cellLayout->addWidget(d->cellView);
     d->cellView->setHeaderLabels(QStringList() << "Key" << "Value");
@@ -210,8 +208,6 @@ Inspector::Inspector(const Cell& cell)
     QFrame* sheetPage = new QFrame();
     addPage(sheetPage,  QString("Sheet"));
     QVBoxLayout* sheetLayout = new QVBoxLayout(sheetPage);
-    sheetLayout->setMargin(KDialog::marginHint());
-    sheetLayout->setSpacing(KDialog::spacingHint());
     d->sheetView = new QTreeWidget(sheetPage);
     sheetLayout->addWidget(d->sheetView);
     d->sheetView->setHeaderLabels(QStringList() << "Key" << "Value");
@@ -219,8 +215,6 @@ Inspector::Inspector(const Cell& cell)
     QFrame* depPage = new QFrame();
     addPage(depPage,  QString("Dependencies"));
     QVBoxLayout* depLayout = new QVBoxLayout(depPage);
-    depLayout->setMargin(KDialog::marginHint());
-    depLayout->setSpacing(KDialog::spacingHint());
     d->depView = new QTreeWidget(depPage);
     depLayout->addWidget(d->depView);
     d->depView->setHeaderLabels(QStringList() << "Cell" << "Content");
