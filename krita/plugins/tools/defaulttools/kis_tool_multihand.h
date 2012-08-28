@@ -27,7 +27,7 @@ class QCheckBox;
 class QComboBox;
 class QStackedWidget;
 class KisSliderSpinBox;
-class KisToolMultihandHelper;
+class KisToolFreehandHelper;
 
 
 class KisToolMultihand : public KisToolBrush
@@ -59,7 +59,7 @@ private slots:
     void slotSetTranslateRadius(int radius);
 
 private:
-    KisToolMultihandHelper *m_helper;
+    KisToolFreehandHelper *m_helper;
 
     enum enumTransforModes { SYMMETRY, MIRROR, TRANSLATE };
     enumTransforModes m_transformMode;

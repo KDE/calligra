@@ -50,26 +50,34 @@ void KisPaintingInformationBuilder::updateSettings()
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
 }
 
-KisPaintInformation
-KisPaintingInformationBuilder::startStroke(KoPointerEvent *event,
-                                           int timeElapsed)
+KisPaintInformation KisPaintingInformationBuilder::startStroke(KoPointerEvent *event, int timeElapsed, int touchPoint)
 {
-    m_startPoint = event->point;
-    return createPaintingInformation(event, QPointF(), timeElapsed);
+    if (event->touchPoints.size() < touchPoint) {
+        return createPaintingInformation(event, QPointF(), event->touchPoints[touchPoint].point, timeElapsed);
+    }
+    else {
+        return createPaintingInformation(event, QPointF(), event->point, timeElapsed);
+    }
 
 }
 
-KisPaintInformation
-KisPaintingInformationBuilder::continueStroke(KoPointerEvent *event,
-                                              const QPointF &prevImagePoint,
-                                              int timeElapsed)
+KisPaintInformation KisPaintingInformationBuilder::continueStroke(KoPointerEvent *event,
+                                                                  const QPointF &prevImagePoint,
+                                                                  const QPointF &startPoint,
+                                                                  int timeElapsed,
+                                                                  int touchPoint)
 {
-
-    QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
+    QPointF adjusted;
+    if (event->touchPoints.size() < touchPoint) {
+        adjusted = adjustDocumentPoint(event->point, startPoint);
+    }
+    else {
+        adjusted = adjustDocumentPoint(event->point, startPoint);
+    }
     QPointF imagePoint = documentToImage(adjusted);
     QPointF dragVector = imagePoint - prevImagePoint;
 
-    return createPaintingInformation(event, dragVector, timeElapsed);
+    return createPaintingInformation(event, dragVector, startPoint, timeElapsed);
 }
 
 QPointF KisPaintingInformationBuilder::adjustDocumentPoint(const QPointF &point, const QPointF &/*startPoint*/)
@@ -90,11 +98,12 @@ qreal KisPaintingInformationBuilder::calculatePerspective(const QPointF &documen
 
 
 KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoPointerEvent *event,
-                                              const QPointF &dragVector,
-                                              int timeElapsed)
+                                                                             const QPointF &dragVector,
+                                                                             const QPointF &startPoint,
+                                                                             int timeElapsed)
 {
 
-    QPointF adjusted = adjustDocumentPoint(event->point, m_startPoint);
+    QPointF adjusted = adjustDocumentPoint(event->point, startPoint);
     QPointF imagePoint = documentToImage(adjusted);
     qreal perspective = calculatePerspective(adjusted);
 

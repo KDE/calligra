@@ -50,6 +50,7 @@ public:
     ~KisToolFreehandHelper();
 
     void setSmoothness(bool smooth, qreal smoothness);
+    void setupTransformations(const QVector<QTransform> &transformations);
 
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,
@@ -62,40 +63,30 @@ public:
 
     const KisPaintOp* currentPaintOp() const;
 
-protected:
-    virtual void createPainters(QVector<PainterInfo*> &painterInfos);
+private:
 
-    virtual void paintAt(const QVector<PainterInfo*> &painterInfos,
-                         const KisPaintInformation &pi);
+    QVector<PainterInfo*> createPainters(KoPointerEvent *event);
 
-    virtual void paintLine(const QVector<PainterInfo*> &painterInfos,
-                           const KisPaintInformation &pi1,
-                           const KisPaintInformation &pi2);
+    void paintAt(int painterInfoIndex, const KisPaintInformation &pi);
 
-    virtual void paintBezierCurve(const QVector<PainterInfo*> &painterInfos,
-                                  const KisPaintInformation &pi1,
-                                  const QPointF &control1,
-                                  const QPointF &control2,
-                                  const KisPaintInformation &pi2);
-
-protected:
-    void paintAt(PainterInfo *painterInfo, const KisPaintInformation &pi);
-
-    void paintLine(PainterInfo *painterInfo,
+    void paintLine(int painterInfoIndex,
                    const KisPaintInformation &pi1,
                    const KisPaintInformation &pi2);
 
-    void paintBezierCurve(PainterInfo *painterInfo,
+    void paintBezierCurve(int painterInfoIndex,
                           const KisPaintInformation &pi1,
                           const QPointF &control1,
                           const QPointF &control2,
                           const KisPaintInformation &pi2);
 
 private slots:
+
     void finishStroke();
+
     void doAirbrushing();
 
 private:
+
     struct Private;
     Private * const m_d;
 };

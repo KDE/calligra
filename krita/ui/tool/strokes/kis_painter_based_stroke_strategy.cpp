@@ -30,7 +30,8 @@
 
 
 KisPainterBasedStrokeStrategy::PainterInfo::PainterInfo(KisPainter *_painter, KisDistanceInformation *_dragDistance)
-    : painter(_painter), dragDistance(_dragDistance)
+    : painter(_painter)
+    , dragDistance(_dragDistance)
 {
 }
 

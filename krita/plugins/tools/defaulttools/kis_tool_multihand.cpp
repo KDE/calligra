@@ -30,7 +30,7 @@
 #include "kis_canvas2.h"
 #include "kis_cursor.h"
 
-#include "kis_tool_multihand_helper.h"
+#include "kis_tool_freehand_helper.h"
 
 static const int MAXIMUM_BRUSHES = 50;
 
@@ -44,9 +44,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
       m_translateRadius(100),
       m_setupAxisFlag(false)
 {
-    m_helper =
-        new KisToolMultihandHelper(paintingInformationBuilder(),
-                                   recordingAdapter());
+    m_helper = new KisToolFreehandHelper(paintingInformationBuilder(), recordingAdapter());
     resetHelper(m_helper);
 
     m_axisPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());

@@ -20,12 +20,21 @@
 #define _KIS_DISTANCE_INFORMATION_H_
 
 /**
- * This function is used as return of paintLine to contains information that need
+ * This class is used as return of paintLine to contains information that need
  * to be passed for the next call.
  */
 struct KisDistanceInformation {
-    KisDistanceInformation() : distance(0), spacing(0) {}
-    KisDistanceInformation(double _distance, double _spacing) : distance(_distance), spacing(_spacing) {}
+
+    KisDistanceInformation()
+        : distance(0)
+        , spacing(0)
+    {}
+
+    KisDistanceInformation(double _distance, double _spacing)
+        : distance(_distance)
+        , spacing(_spacing)
+    {}
+
     void clear() { distance = 0; spacing = 0;}
     double distance;
     double spacing;
