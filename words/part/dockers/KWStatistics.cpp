@@ -59,6 +59,7 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     widgetDocker.preferences->setMenu(m_menu);
     widgetDocker.preferences->setPopupMode(QToolButton::InstantPopup);
 
+
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
     connect(widgetDocker.preferences, SIGNAL(clicked()), widgetDocker.preferences, SLOT(showMenu()));
     connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
@@ -72,36 +73,63 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
 
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     bool visible = cfgGroup.readEntry("WordsVisible", true);
+    
     widgetDocker.Words->setVisible(visible);
     widgetDocker.count_words->setVisible(visible);
-
+    if(visible){
+	m_menu->w->check_words->setCheckState(Qt::Checked);
+    }
+    
     visible = cfgGroup.readEntry("SentencesVisible", true);
     widgetDocker.Sentences->setVisible(visible);
     widgetDocker.count_sentences->setVisible(visible);
+    if(visible){
+	m_menu->w->check_sentences->setCheckState(Qt::Checked);
+    }
 
     visible = cfgGroup.readEntry("SyllablesVisible", true);
     widgetDocker.Syllables->setVisible(visible);
     widgetDocker.count_syllables->setVisible(visible);
+    if(visible){
+	m_menu->w->check_syllables->setCheckState(Qt::Checked);
+    }
 
     visible = cfgGroup.readEntry("LinesVisible", true);
     widgetDocker.Lines->setVisible(visible);
     widgetDocker.count_lines->setVisible(visible);
+    if(visible){
+	m_menu->w->check_lines->setCheckState(Qt::Checked);
+    }
 
     visible = cfgGroup.readEntry("EastAsianCharactersVisible", true);
     widgetDocker.Cjkchars->setVisible(visible);
     widgetDocker.count_cjkchars->setVisible(visible);
+    if(visible){
+	m_menu->w->check_east->setCheckState(Qt::Checked);
+    }
 
     visible = cfgGroup.readEntry("FleschVisible", true);
     widgetDocker.Flesch->setVisible(visible);
     widgetDocker.count_flesch->setVisible(visible);
+    if(visible){
+	m_menu->w->check_flesch->setCheckState(Qt::Checked);
+    }
 
     visible = cfgGroup.readEntry("CharspacesVisible", true);
     widgetDocker.spaces->setVisible(visible);
     widgetDocker.count_spaces->setVisible(visible);
+    if(visible){
+	m_menu->w->check_charspace->setCheckState(Qt::Checked);
+    }
 
     visible = cfgGroup.readEntry("CharnospacesVisible", true);
     widgetDocker.nospaces->setVisible(visible);
     widgetDocker.count_nospaces->setVisible(visible);
+    if(visible){
+	m_menu->w->check_charnospace->setCheckState(Qt::Checked);
+    }
+
+  
 }
 
 KWStatistics::~KWStatistics()
