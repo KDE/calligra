@@ -48,9 +48,14 @@ QModelIndex ChartItemModel::parent( const QModelIndex &index ) const
     return QModelIndex();
 }
 
+const QMetaEnum ChartItemModel::columnMap() const
+{
+    return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
+}
+
 int ChartItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return 10;
+    return columnMap().keyCount();
 }
 
 int ChartItemModel::rowCount( const QModelIndex &/*parent */) const
@@ -151,16 +156,16 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         } else {
             KLocale *l = project() ? project()->locale() : KGlobal::locale();
             switch ( index.column() ) {
-            case 0: result = l->formatMoney( bcwsCost( index.row() ), 0 ); break;
-            case 1: result = l->formatMoney( bcwpCost( index.row() ), 0 ); break;
-            case 2: result = l->formatMoney( acwpCost( index.row() ), 0 ); break;
-            case 3: result = l->formatNumber( bcwsEffort( index.row() ), 0 ); break;
-            case 4: result = l->formatNumber( bcwpEffort( index.row() ), 0 ); break;
-            case 5: result = l->formatNumber( acwpEffort( index.row() ), 0 ); break;
-            case 6: result = l->formatNumber( spiCost( index.row() ), 2 ); break;
-            case 7: result = l->formatNumber( cpiCost( index.row() ), 2 ); break;
-            case 8: result = l->formatNumber( spiEffort( index.row() ), 2 ); break;
-            case 9: result = l->formatNumber( cpiEffort( index.row() ), 2 ); break;
+            case BCWSCost: result = l->formatMoney( bcwsCost( index.row() ), 0 ); break;
+            case BCWPCost: result = l->formatMoney( bcwpCost( index.row() ), 0 ); break;
+            case ACWPCost: result = l->formatMoney( acwpCost( index.row() ), 0 ); break;
+            case BCWSEffort: result = l->formatNumber( bcwsEffort( index.row() ), 0 ); break;
+            case BCWPEffort: result = l->formatNumber( bcwpEffort( index.row() ), 0 ); break;
+            case ACWPEffort: result = l->formatNumber( acwpEffort( index.row() ), 0 ); break;
+            case SPICost: result = l->formatNumber( spiCost( index.row() ), 2 ); break;
+            case CPICost: result = l->formatNumber( cpiCost( index.row() ), 2 ); break;
+            case SPIEffort: result = l->formatNumber( spiEffort( index.row() ), 2 ); break;
+            case CPIEffort: result = l->formatNumber( cpiEffort( index.row() ), 2 ); break;
             default: break;
             }
         }
@@ -168,16 +173,16 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
         return result;
     } else if ( role == Qt::EditRole ) {
         switch ( index.column() ) {
-        case 0: result = bcwsCost( index.row() ); break;
-        case 1: result = bcwpCost( index.row() ); break;
-        case 2: result = acwpCost( index.row() ); break;
-        case 3: result = bcwsEffort( index.row() ); break;
-        case 4: result = bcwpEffort( index.row() ); break;
-        case 5: result = acwpEffort( index.row() ); break;
-        case 6: result = spiCost( index.row() ); break;
-        case 7: result = cpiCost( index.row() ); break;
-        case 8: result = spiEffort( index.row() ); break;
-        case 9: result = cpiEffort( index.row() ); break;
+        case BCWSCost: result = bcwsCost( index.row() ); break;
+        case BCWPCost: result = bcwpCost( index.row() ); break;
+        case ACWPCost: result = acwpCost( index.row() ); break;
+        case BCWSEffort: result = bcwsEffort( index.row() ); break;
+        case BCWPEffort: result = bcwpEffort( index.row() ); break;
+        case ACWPEffort: result = acwpEffort( index.row() ); break;
+        case SPICost: result = spiCost( index.row() ); break;
+        case CPICost: result = cpiCost( index.row() ); break;
+        case SPIEffort: result = spiEffort( index.row() ); break;
+        case CPIEffort: result = cpiEffort( index.row() ); break;
         default: break;
         }
         //kDebug(planDbg())<<index<<role<<result;
@@ -185,10 +190,10 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
     } else if ( role == Qt::ForegroundRole ) {
         double v = 0.0;
         switch ( index.column() ) {
-        case 6: v = spiCost( index.row() ); break;
-        case 7: v = cpiCost( index.row() ); break;
-        case 8: v = spiEffort( index.row() ); break;
-        case 9: v = cpiEffort( index.row() ); break;
+        case SPICost: v = spiCost( index.row() ); break;
+        case CPICost: v = cpiCost( index.row() ); break;
+        case SPIEffort: v = spiEffort( index.row() ); break;
+        case CPIEffort: v = cpiEffort( index.row() ); break;
         default: break;
         }
         if ( v > 0.0 && v < 1.0 ) {
@@ -211,16 +216,16 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
     if ( role == Qt::DisplayRole ) {
         if ( orientation == Qt::Horizontal ) {
             switch ( section ) {
-                case 0: return i18nc( "Cost based Budgeted Cost of Work Scheduled", "BCWS Cost" );
-                case 1: return i18nc( "Cost based Budgeted Cost of Work Performed", "BCWP Cost" );
-                case 2: return i18nc( "Cost based Actual Cost of Work Performed", "ACWP Cost" );
-                case 3: return i18nc( "Effort based Budgeted Cost of Work Scheduled", "BCWS Effort" );
-                case 4: return i18nc( "Effort based Budgeted Cost of Work Performed", "BCWP Effort" );
-                case 5: return i18nc( "Effort based Actual Cost of Work Performed", "ACWP Effort" );
-                case 6: return i18nc( "Cost based Schedule Performance Index", "SPI Cost" );
-                case 7: return i18nc( "Cost based Cost Performance Index", "CPI Cost" );
-                case 8: return i18nc( "Effort based Schedule Performance Index", "SPI Effort" );
-                case 9: return i18nc( "Effort based Cost Performance Index", "CPI Effort" );
+                case BCWSCost: return i18nc( "Cost based Budgeted Cost of Work Scheduled", "BCWS Cost" );
+                case BCWPCost: return i18nc( "Cost based Budgeted Cost of Work Performed", "BCWP Cost" );
+                case ACWPCost: return i18nc( "Cost based Actual Cost of Work Performed", "ACWP Cost" );
+                case BCWSEffort: return i18nc( "Effort based Budgeted Cost of Work Scheduled", "BCWS Effort" );
+                case BCWPEffort: return i18nc( "Effort based Budgeted Cost of Work Performed", "BCWP Effort" );
+                case ACWPEffort: return i18nc( "Effort based Actual Cost of Work Performed", "ACWP Effort" );
+                case SPICost: return i18nc( "Cost based Schedule Performance Index", "SPI Cost" );
+                case CPICost: return i18nc( "Cost based Cost Performance Index", "CPI Cost" );
+                case SPIEffort: return i18nc( "Effort based Schedule Performance Index", "SPI Effort" );
+                case CPIEffort: return i18nc( "Effort based Cost Performance Index", "CPI Effort" );
                 default: return QVariant();
             }
         } else {
@@ -229,16 +234,16 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
     } else if ( role == Qt::ToolTipRole ) {
         if ( orientation == Qt::Horizontal ) {
             switch ( section ) {
-                case 0: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Scheduled" );
-                case 1: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Performed" );
-                case 2: return i18nc( "@info:tooltip", "Cost based Actual Cost of Work Performed" );
-                case 3: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Scheduled" );
-                case 4: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Performed" );
-                case 5: return i18nc( "@info:tooltip", "Effort based Actual Cost of Work Performed" );
-                case 6: return i18nc( "@info:tooltip", "Cost based Schedule Performance Index (BCWP/BCWS)" );
-                case 7: return i18nc( "@info:tooltip", "Cost based Cost Performance Index (BCWP/ACWS)" );
-                case 8: return i18nc( "@info:tooltip", "Effort based Schedule Performance Index (BCWP/BCWS)" );
-                case 9: return i18nc( "@info:tooltip", "Effort based Cost Performance Index (BCWP/ACWS)" );
+                case BCWSCost: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Scheduled" );
+                case BCWPCost: return i18nc( "@info:tooltip", "Cost based Budgeted Cost of Work Performed" );
+                case ACWPCost: return i18nc( "@info:tooltip", "Cost based Actual Cost of Work Performed" );
+                case BCWSEffort: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Scheduled" );
+                case BCWPEffort: return i18nc( "@info:tooltip", "Effort based Budgeted Cost of Work Performed" );
+                case ACWPEffort: return i18nc( "@info:tooltip", "Effort based Actual Cost of Work Performed" );
+                case SPICost: return i18nc( "@info:tooltip", "Cost based Schedule Performance Index (BCWP/BCWS)" );
+                case CPICost: return i18nc( "@info:tooltip", "Cost based Cost Performance Index (BCWP/ACWS)" );
+                case SPIEffort: return i18nc( "@info:tooltip", "Effort based Schedule Performance Index (BCWP/BCWS)" );
+                case CPIEffort: return i18nc( "@info:tooltip", "Effort based Cost Performance Index (BCWP/ACWS)" );
                 default: return QVariant();
             }
         } else {
@@ -247,16 +252,16 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
     } else if ( role == Qt::EditRole ) {
         if ( orientation == Qt::Horizontal ) {
             switch ( section ) {
-                case 0: return "BCWS Cost";
-                case 1: return "BCWP Cost";
-                case 2: return "ACWP Cost";
-                case 3: return "BCWS Effort";
-                case 4: return "BCWP Effort";
-                case 5: return "ACWP Effort";
-                case 6: return "SPI Cost";
-                case 7: return "CPI Cost";
-                case 8: return "SPI Effort";
-                case 9: return "CPI Effort";
+                case BCWSCost: return "BCWS Cost";
+                case BCWPCost: return "BCWP Cost";
+                case ACWPCost: return "ACWP Cost";
+                case BCWSEffort: return "BCWS Effort";
+                case BCWPEffort: return "BCWP Effort";
+                case ACWPEffort: return "ACWP Effort";
+                case SPICost: return "SPI Cost";
+                case CPICost: return "CPI Cost";
+                case SPIEffort: return "SPI Effort";
+                case CPIEffort: return "CPI Effort";
                 default: return QVariant();
             }
         } else {
@@ -506,11 +511,11 @@ QModelIndex PerformanceDataCurrentDateModel::mapIndex( const QModelIndex &idx ) 
     }
     int column = -1;
     switch ( idx.column() ) {
-        case 0: column = idx.row() == 0 ? 0 : 3; break; // BCWS
-        case 1: column = idx.row() == 0 ? 1 : 4; break; // BCWP
-        case 2: column = idx.row() == 0 ? 2 : 5; break; // ACWP
-        case 3: column = idx.row() == 0 ? 6 : 8; break; // SPI
-        case 4: column = idx.row() == 0 ? 7 : 9; break; // CPI
+        case 0: column = idx.row() == 0 ? BCWSCost : BCWSEffort; break; // BCWS
+        case 1: column = idx.row() == 0 ? BCWPCost : BCWPEffort; break; // BCWP
+        case 2: column = idx.row() == 0 ? ACWPCost : ACWPEffort; break; // ACWP
+        case 3: column = idx.row() == 0 ? SPICost : SPIEffort; break; // SPI
+        case 4: column = idx.row() == 0 ? CPICost : CPIEffort; break; // CPI
         default: break;
     }
     if ( column < 0 ) {

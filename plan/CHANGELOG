@@ -2,6 +2,10 @@
 Calligra Plan current:
 ----------------------
 
+* Performance charts:
+  Show both effort- and cost based performance index values.
+  Add charting of perfomance indeces
+
 * Enable dropping Plan project files into the Task Editor.
 
 * Task Editor: Add a Task Module docker to ease project creation.

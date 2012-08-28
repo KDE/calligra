@@ -657,6 +657,16 @@ void PerformanceStatusBase::createBarChart()
 
     m_barchart.effortdiagram = effortdiagram;
     m_barchart.costdiagram = costdiagram;
+
+    m_barchart.piplane = new CartesianCoordinatePlane( ui_chart );
+    m_barchart.piplane->setObjectName( "Performance Indeces" );
+    BarDiagram *pidiagram = new BarDiagram( ui_chart, m_barchart.piplane );
+    pidiagram->setObjectName( "PI diagram" );
+    m_barchart.piaxis = new CartesianAxis( pidiagram );
+    pidiagram->addAxis( m_barchart.piaxis );
+    m_barchart.piplane->addDiagram( pidiagram );
+    m_barchart.piproxy.setSourceModel( &m_chartmodel );
+    pidiagram->setModel( &( m_barchart.piproxy ) );
 }
 
 void PerformanceStatusBase::createLineChart()
@@ -708,6 +718,17 @@ void PerformanceStatusBase::createLineChart()
 
     m_linechart.effortdiagram = effortdiagram;
     m_linechart.costdiagram = costdiagram;
+
+    m_linechart.piplane = new CartesianCoordinatePlane( ui_chart );
+    m_linechart.piplane->setObjectName( "Performance Indeces" );
+    m_linechart.piplane->setRubberBandZoomingEnabled( true );
+    LineDiagram *pidiagram = new LineDiagram( ui_chart, m_linechart.piplane );
+    pidiagram->setObjectName( "PI diagram" );
+    m_linechart.piaxis = new CartesianAxis( pidiagram );
+    pidiagram->addAxis( m_linechart.piaxis );
+    m_linechart.piplane->addDiagram( pidiagram );
+    m_linechart.piproxy.setSourceModel( &m_chartmodel );
+    pidiagram->setModel( &( m_linechart.piproxy ) );
 }
 
 void PerformanceStatusBase::setupChart()
@@ -737,17 +758,18 @@ void PerformanceStatusBase::setupChart()
         ga.setGridVisible( p->referenceCoordinatePlane() == 0 );
         p->setGlobalGridAttributes( ga );
     }
-    m_legend->setDatasetHidden( 0, ! ( m_chartinfo.showCost && m_chartinfo.showBCWSCost ) );
-    m_legend->setDatasetHidden( 1, ! ( m_chartinfo.showCost && m_chartinfo.showBCWPCost ) );
-    m_legend->setDatasetHidden( 2, ! ( m_chartinfo.showCost && m_chartinfo.showACWPCost ) );
-    m_legend->setDatasetHidden( 3, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWSEffort ) );
-    m_legend->setDatasetHidden( 4, ! ( m_chartinfo.showEffort && m_chartinfo.showBCWPEffort ) );
-    m_legend->setDatasetHidden( 5, ! ( m_chartinfo.showEffort && m_chartinfo.showACWPEffort ) );
-    // hide spi/cpi
-    m_legend->setDatasetHidden( 6, true );
-    m_legend->setDatasetHidden( 7, true );
-    m_legend->setDatasetHidden( 8, true );
-    m_legend->setDatasetHidden( 9, true );
+    m_legend->setDatasetHidden( 0, ! ( m_chartinfo.showBaseValues && m_chartinfo.showCost && m_chartinfo.showBCWSCost ) );
+    m_legend->setDatasetHidden( 1, ! ( m_chartinfo.showBaseValues && m_chartinfo.showCost && m_chartinfo.showBCWPCost ) );
+    m_legend->setDatasetHidden( 2, ! ( m_chartinfo.showBaseValues && m_chartinfo.showCost && m_chartinfo.showACWPCost ) );
+    m_legend->setDatasetHidden( 3, ! ( m_chartinfo.showBaseValues && m_chartinfo.showEffort && m_chartinfo.showBCWSEffort ) );
+    m_legend->setDatasetHidden( 4, ! ( m_chartinfo.showBaseValues && m_chartinfo.showEffort && m_chartinfo.showBCWPEffort ) );
+    m_legend->setDatasetHidden( 5, ! ( m_chartinfo.showBaseValues && m_chartinfo.showEffort && m_chartinfo.showACWPEffort ) );
+    // spi/cpi
+    m_legend->setDatasetHidden( 6, ! ( m_chartinfo.showIndeces && m_chartinfo.showSpiCost ) );
+    m_legend->setDatasetHidden( 7, ! ( m_chartinfo.showIndeces && m_chartinfo.showCpiCost ) );
+    m_legend->setDatasetHidden( 8, ! ( m_chartinfo.showIndeces && m_chartinfo.showSpiEffort ) );
+    m_legend->setDatasetHidden( 9, ! ( m_chartinfo.showIndeces && m_chartinfo.showCpiEffort ) );
+
     setEffortValuesVisible( m_chartinfo.showEffort );
     setCostValuesVisible( m_chartinfo.showCost );
     refreshChart();
@@ -784,63 +806,94 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
     kDebug(planDbg())<<"cost="<<info.showCost<<"effort="<<info.showEffort;
     static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->takeAxis( cc.dateaxis );
     static_cast<AbstractCartesianDiagram*>( cc.costplane->diagram() )->takeAxis( cc.dateaxis );
+    static_cast<AbstractCartesianDiagram*>( cc.piplane->diagram() )->takeAxis( cc.dateaxis );
     cc.costplane->setReferenceCoordinatePlane( 0 );
-    if ( info.showEffort ) {
-        // filter cost columns if cost is *not* shown, else hide them and zero out
-        if ( ! info.showCost ) {
-            erc << 0 << 1 << 2;
-            effort_start_column = 0;
-        } else {
-            ezc << 0 << 1 << 2;
-            cc.effortplane->diagram()->setHidden( 0, true );
-            cc.effortplane->diagram()->setHidden( 1, true );
-            cc.effortplane->diagram()->setHidden( 2, true );
+    if ( info.showBaseValues ) {
+        if ( info.showEffort ) {
+            // filter cost columns if cost is *not* shown, else hide them and zero out
+            if ( ! info.showCost ) {
+                erc << 0 << 1 << 2;
+                effort_start_column = 0; // no cost, so effort start at 0
+            } else {
+                ezc << 0 << 1 << 2;
+                cc.effortplane->diagram()->setHidden( 0, true );
+                cc.effortplane->diagram()->setHidden( 1, true );
+                cc.effortplane->diagram()->setHidden( 2, true );
+            }
+            // always disable spi/cpi
+            erc << 6 << 7 << 8 << 9;
+            ezc << 6 << 7 << 8 << 9;
+            // if cost is shown don't return a cost value or else it goes into the effort axis scale calculation
+            //cc.effortproxy.setZeroColumns( info.showCost ? QList<int>() << 0 << 1 << 2 : QList<int>() << 3 << 4 << 5  );
+            cc.effortaxis->setPosition( info.showCost ? CartesianAxis::Right : CartesianAxis::Left );
+            ui_chart->addCoordinatePlane( cc.effortplane );
+
+            static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->addAxis( cc.dateaxis );
+            cc.effortplane->setGridNeedsRecalculate();
         }
-        // if cost is shown don't return a cost value or else it goes into the effort axis scale calculation
-        //cc.effortproxy.setZeroColumns( info.showCost ? QList<int>() << 0 << 1 << 2 : QList<int>() << 3 << 4 << 5  );
-        cc.effortaxis->setPosition( info.showCost ? CartesianAxis::Right : CartesianAxis::Left );
-        ui_chart->addCoordinatePlane( cc.effortplane );
+        if ( info.showCost ) {
+            // Should never get any effort values in cost diagram
+            czc << 3 << 4 << 5;
+            // remove effort columns from cost if no effort is shown, else hide them
+            if ( ! info.showEffort ) {
+                crc << 3 << 4 << 5;
+            } else {
+                cc.costplane->diagram()->setHidden( 3, true );
+                cc.costplane->diagram()->setHidden( 4, true );
+                cc.costplane->diagram()->setHidden( 5, true );
+            }
+            // always disable spi/cpi
+            erc << 6 << 7 << 8 << 9;
+            ezc << 6 << 7 << 8 << 9;
 
-        static_cast<AbstractCartesianDiagram*>( cc.effortplane->diagram() )->addAxis( cc.dateaxis );
-        cc.effortplane->setGridNeedsRecalculate();
-    }
-    if ( info.showCost ) {
-        // Should never get any effort values in cost diagram
-        czc << 3 << 4 << 5;
-        // remove effort columns from cost if no effort is shown, else hide them
-        if ( ! info.showEffort ) {
-            crc << 3 << 4 << 5;
-        } else {
-            cc.costplane->diagram()->setHidden( 3, true );
-            cc.costplane->diagram()->setHidden( 4, true );
-            cc.costplane->diagram()->setHidden( 5, true );
+            cc.costplane->setReferenceCoordinatePlane( info.showEffort ? cc.effortplane : 0 );
+            ui_chart->addCoordinatePlane( cc.costplane );
+
+            static_cast<AbstractCartesianDiagram*>( cc.costplane->diagram() )->addAxis( cc.dateaxis );
+            cc.costplane->setGridNeedsRecalculate();
+
+            cc.costplane->diagram()->setHidden( 0, ! info.showBCWSCost );
+            cc.costplane->diagram()->setHidden( 1, ! info.showBCWPCost );
+            cc.costplane->diagram()->setHidden( 2, ! info.showACWPCost );
         }
 
-        cc.costplane->setReferenceCoordinatePlane( info.showEffort ? cc.effortplane : 0 );
-        ui_chart->addCoordinatePlane( cc.costplane );
+        if ( info.showEffort ) {
+            cc.effortplane->diagram()->setHidden( effort_start_column, ! info.showBCWSEffort );
+            cc.effortplane->diagram()->setHidden( effort_start_column+1, ! info.showBCWPEffort );
+            cc.effortplane->diagram()->setHidden( effort_start_column+2, ! info.showACWPEffort );
+            cc.effortaxis->setCachedSizeDirty();
+            cc.effortproxy.reset();
+            cc.effortproxy.setZeroColumns( ezc );
+            cc.effortproxy.setRejectColumns( erc );
+        }
+        if ( info.showCost ) {
+            cc.costaxis->setCachedSizeDirty();
+            cc.costproxy.reset();
+            cc.costproxy.setZeroColumns( czc );
+            cc.costproxy.setRejectColumns( crc );
+        }
+    } else if ( info.showIndeces ) {
+        cc.piaxis->setPosition( CartesianAxis::Left );
+        ui_chart->addCoordinatePlane( cc.piplane );
+        static_cast<AbstractCartesianDiagram*>( cc.piplane->diagram() )->addAxis( cc.dateaxis );
+        cc.piplane->setGridNeedsRecalculate();
+        cc.piaxis->setCachedSizeDirty();
 
-        static_cast<AbstractCartesianDiagram*>( cc.costplane->diagram() )->addAxis( cc.dateaxis );
-        cc.costplane->setGridNeedsRecalculate();
-
-        cc.costplane->diagram()->setHidden( 0, ! info.showBCWSCost );
-        cc.costplane->diagram()->setHidden( 1, ! info.showBCWPCost );
-        cc.costplane->diagram()->setHidden( 2, ! info.showACWPCost );
-    }
-    
-    if ( info.showEffort ) {
-        cc.effortplane->diagram()->setHidden( effort_start_column, ! info.showBCWSEffort );
-        cc.effortplane->diagram()->setHidden( effort_start_column+1, ! info.showBCWPEffort );
-        cc.effortplane->diagram()->setHidden( effort_start_column+2, ! info.showACWPEffort );
-        cc.effortaxis->setCachedSizeDirty();
-        cc.effortproxy.reset();
-        cc.effortproxy.setZeroColumns( ezc );
-        cc.effortproxy.setRejectColumns( erc );
-    }
-    if ( info.showCost ) {
-        cc.costaxis->setCachedSizeDirty();
-        cc.costproxy.reset();
-        cc.costproxy.setZeroColumns( czc );
-        cc.costproxy.setRejectColumns( crc );
+        cc.piproxy.reset();
+        QList<int> reject; reject << 0 << 1 << 2 << 3 << 4 << 5;
+        if ( ! info.showSpiCost ) {
+            reject << ChartItemModel::SPICost;
+        }
+        if ( ! info.showCpiCost ) {
+            reject << ChartItemModel::CPICost;
+        }
+        if ( ! info.showSpiEffort ) {
+            reject <<  ChartItemModel::SPIEffort;
+        }
+        if ( ! info.showSpiEffort ) {
+            reject <<  ChartItemModel::CPIEffort;
+        }
+        cc.piproxy.setRejectColumns( reject );
     }
 #if 0
     kDebug(planDbg())<<"Effort:"<<info.showEffort;
@@ -932,6 +985,9 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     m_chartinfo.showLineChart = context.attribute( "show-line-chart", "1" ).toInt();
     m_chartinfo.showTableView = context.attribute( "show-table-view", "0" ).toInt();
 
+    m_chartinfo.showBaseValues = context.attribute( "show-base-values", "1" ).toInt();
+    m_chartinfo.showIndeces = context.attribute( "show-indeces", "0" ).toInt();
+
     m_chartinfo.showCost = context.attribute( "show-cost", "1" ).toInt();
     m_chartinfo.showBCWSCost = context.attribute( "show-bcws-cost", "1" ).toInt();
     m_chartinfo.showBCWPCost = context.attribute( "show-bcwp-cost", "1" ).toInt();
@@ -941,6 +997,12 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     m_chartinfo.showBCWSEffort = context.attribute( "show-bcws-effort", "1" ).toInt();
     m_chartinfo.showBCWPEffort = context.attribute( "show-bcwp-effort", "1" ).toInt();
     m_chartinfo.showACWPEffort = context.attribute( "show-acwp-effort", "1" ).toInt();
+
+    m_chartinfo.showSpiCost = context.attribute( "show-spi-cost", "1" ).toInt();
+    m_chartinfo.showCpiCost = context.attribute( "show-cpi-cost", "1" ).toInt();
+    m_chartinfo.showSpiEffort = context.attribute( "show-spi-effort", "1" ).toInt();
+    m_chartinfo.showSpiEffort = context.attribute( "show-cpi-effort", "1" ).toInt();
+
     kDebug(planDbg())<<"Cost:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
     kDebug(planDbg())<<"Effort:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
     setupChart();
@@ -953,6 +1015,9 @@ void PerformanceStatusBase::saveContext( QDomElement &context ) const
     context.setAttribute( "show-line-chart", m_chartinfo.showLineChart );
     context.setAttribute( "show-table-view", m_chartinfo.showTableView );
 
+    context.setAttribute( "show-base-values", m_chartinfo.showBaseValues );
+    context.setAttribute( "show-indeces", m_chartinfo.showIndeces );
+
     context.setAttribute( "show-cost", m_chartinfo.showCost );
     context.setAttribute( "show-bcws-cost", m_chartinfo.showBCWSCost );
     context.setAttribute( "show-bcwp-cost", m_chartinfo.showBCWPCost );
@@ -962,6 +1027,11 @@ void PerformanceStatusBase::saveContext( QDomElement &context ) const
     context.setAttribute( "show-bcws-effort", m_chartinfo.showBCWSEffort );
     context.setAttribute( "show-bcwp-effort", m_chartinfo.showBCWPEffort );
     context.setAttribute( "show-acwp-effort", m_chartinfo.showACWPEffort );
+
+    context.setAttribute( "show-spi-cost", m_chartinfo.showSpiCost );
+    context.setAttribute( "show-cpi-cost", m_chartinfo.showCpiCost );
+    context.setAttribute( "show-spi-effort", m_chartinfo.showSpiEffort );
+    context.setAttribute( "show-cpi-effort", m_chartinfo.showCpiEffort );
 }
 
 KoPrintJob *PerformanceStatusBase::createPrintJob( ViewBase *parent )
@@ -1219,6 +1289,19 @@ PerformanceStatusViewSettingsPanel::PerformanceStatusViewSettingsPanel( Performa
     ui_bcwpEffort->setCheckState( info.showBCWPEffort ? Qt::Checked : Qt::Unchecked );
     ui_acwpEffort->setCheckState( info.showACWPEffort ? Qt::Checked : Qt::Unchecked );
     ui_effort->setChecked( info.showEffort );
+
+    ui_showbasevalues->setChecked( info.showBaseValues );
+    ui_showindeces->setChecked( info.showIndeces );
+
+    ui_spicost->setCheckState( info.showSpiCost ? Qt::Checked : Qt::Unchecked );
+    ui_cpicost->setCheckState( info.showCpiCost ? Qt::Checked : Qt::Unchecked );
+    ui_spieffort->setCheckState( info.showSpiEffort ? Qt::Checked : Qt::Unchecked );
+    ui_cpieffort->setCheckState( info.showCpiEffort ? Qt::Checked : Qt::Unchecked );
+
+    connect(ui_showbasevalues, SIGNAL(toggled(bool)), SLOT(switchStackWidget()));
+    connect(ui_showindeces, SIGNAL(toggled(bool)), SLOT(switchStackWidget()));
+
+    switchStackWidget();
 }
 
 void PerformanceStatusViewSettingsPanel::slotOk()
@@ -1227,6 +1310,9 @@ void PerformanceStatusViewSettingsPanel::slotOk()
     info.showLineChart = ui_linechart->isChecked();
     info.showBarChart = ui_barchart->isChecked();
     info.showTableView = ui_table->isChecked();
+
+    info.showBaseValues = ui_showbasevalues->isChecked();
+    info.showIndeces = ui_showindeces->isChecked();
 
     info.showBCWSCost = ui_bcwsCost->checkState() == Qt::Unchecked ? false : true;
     info.showBCWPCost = ui_bcwpCost->checkState() == Qt::Unchecked ? false : true;
@@ -1237,6 +1323,12 @@ void PerformanceStatusViewSettingsPanel::slotOk()
     info.showBCWPEffort = ui_bcwpEffort->checkState() == Qt::Unchecked ? false : true;
     info.showACWPEffort = ui_acwpEffort->checkState() == Qt::Unchecked ? false : true;
     info.showEffort = ui_effort->isChecked();
+
+    info.showSpiCost = ui_spicost->isChecked();
+    info.showCpiCost = ui_cpicost->isChecked();
+    info.showSpiEffort = ui_spieffort->isChecked();
+    info.showCpiEffort = ui_cpieffort->isChecked();
+
     m_view->setChartInfo( info );
 }
 
@@ -1253,6 +1345,24 @@ void PerformanceStatusViewSettingsPanel::setDefault()
     ui_bcwpEffort->setCheckState( Qt::Checked );
     ui_acwpEffort->setCheckState( Qt::Checked );
     ui_effort->setChecked( Qt::Unchecked );
+
+    ui_showbasevalues->setChecked( true );
+    ui_showindeces->setChecked( false );
+
+    ui_spicost->setCheckState( Qt::Checked );
+    ui_cpicost->setCheckState( Qt::Checked );
+    ui_spieffort->setCheckState( Qt::Checked );
+    ui_cpieffort->setCheckState( Qt::Checked );
+}
+
+void PerformanceStatusViewSettingsPanel::switchStackWidget()
+{
+    if ( ui_showbasevalues->isChecked() ) {
+        ui_stackWidget->setCurrentIndex( 0 );
+    } else if ( ui_showindeces->isChecked() ) {
+        ui_stackWidget->setCurrentIndex( 1 );
+    }
+    //kDebug(planDbg())<<sender()<<ui_stackWidget->currentIndex();
 }
 
 //-----------------
