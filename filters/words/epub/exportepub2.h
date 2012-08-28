@@ -54,11 +54,6 @@ public:
 
 private:
     KoFilter::ConversionStatus parseMetadata(KoStore *odfStore);
-    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo*> &styles2,
-                                         QByteArray &cssContent);
-    void flattenStyles(QHash<QString, StyleInfo*> &styles2);
-    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles2,
-                      QSet<QString> &doneStyles);
 
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
     KoFilter::ConversionStatus parseMetaInfImagesData(KoStore *odfStore,
@@ -73,9 +68,6 @@ private:
     bool isWmf(QByteArray &content);
 
 public slots:
-
-private:
-    void fixStyleTree(QHash<QString, StyleInfo*> &styles);
 
 
 private:

@@ -57,273 +57,13 @@ StyleInfo::StyleInfo()
 OdtHtmlConverter::OdtHtmlConverter()
     : m_currentChapter(1)
 {
+    qDeleteAll(m_styles);
 }
 
 OdtHtmlConverter::~OdtHtmlConverter()
 
 {
 }
-
-KoFilter::ConversionStatus OdtHtmlConverter::convertStyles(KoStore *odfStore,
-                                                           QHash<QString, StyleInfo*> &styles)
-{
-    //kDebug(30517) << "parse content.xml styles";
-    if (!odfStore->open("content.xml")) {
-        kError(30517) << "Unable to open input file! content.xml" << endl;
-        return KoFilter::FileNotFound;
-    }
-
-    // Try to set content.xml as a KoXmlDocument. Return if it failed.
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing styles.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return KoFilter::ParsingError;
-    }
-
-    // Get the node that contains the styles.
-    KoXmlNode stylesNode = doc.documentElement();
-    stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "automatic-styles");
-
-    // Collect info about the styles.
-    collectStyles(stylesNode, styles);
-
-    odfStore->close(); // end of parsing styles in content.xml
-
-    // ----------------------------------------------------------------
-
-    // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
-    //kDebug(30517) << "************ parse styles.xml styles **********************";
-    if (!odfStore->open("styles.xml")) {
-        kError(30517) << "Unable to open input file! style.xml" << endl;
-        return KoFilter::FileNotFound;
-    }
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing styles.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return KoFilter::ParsingError;
-    }
-
-    // Parse properties of the named styles referred by the automatic
-    // styles. Only those styles that are actually used in the
-    // document are converted.
-    stylesNode = doc.documentElement();
-    stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "styles");
-
-    // Collect info about the styles.
-    collectStyles(stylesNode, styles);
-
-    odfStore->close();
-    return KoFilter::OK;
-}
-
-void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
-{
-    KoXmlElement styleElement;
-    forEachElement (styleElement, stylesNode) {
-
-        // FIXME: Handle text:outline-style also.
-        QString tagName = styleElement.tagName();
-        if (tagName != "style" && tagName != "default-style")
-            continue;
-
-        StyleInfo *styleInfo = new StyleInfo;
-
-        // Get the style name. Default styles don't have a name so
-        // give them a constructed name by combining "default" and the
-        // style family in a way that should not collide with any real
-        // style name.
-        QString styleName = styleElement.attribute("name");
-        if (tagName == "default-style") {
-            // This name should not collide with any real name.
-            styleName = QString("default%") + styleElement.attribute("family");
-            styleInfo->isDefaultStyle = true;
-        }
-
-        styleInfo->family = styleElement.attribute("family");
-
-        // Every style should have a parent. If the style has no
-        // parent, then use the appropriate default style.
-        QString parentName = styleElement.attribute("parent-style-name");
-        if (!styleInfo->isDefaultStyle && parentName.isEmpty()) {
-            parentName = QString("default%") + styleInfo->family;
-        }
-        styleInfo->parent = parentName;
-
-        // Limit picture size to 99% of the page size whatever that may be.
-        if (styleElement.attribute("family") == "graphic") {
-            styleInfo->attributes.insert("max-height", "99%");
-            styleInfo->attributes.insert("max-width", "99%");
-            styleInfo->attributes.insert("height", "auto");
-            styleInfo->attributes.insert("width", "auto");
-        }
-
-        styleInfo->shouldBreakChapter = false;
-        KoXmlElement propertiesElement;
-        forEachElement (propertiesElement, styleElement) {
-            //Check for fo:break-before
-            if (propertiesElement.attribute("break-before") == "page") {
-                //kDebug(30517) << "Found break-before=page in style" << styleName;
-                styleInfo->shouldBreakChapter = true;
-            }
-            collectStyleAttributes(propertiesElement, styleInfo);
-        }
-
-#if 0 // debug
-        kDebug(30517) << "==" << styleName << ":\t"
-                      << styleInfo->parent
-                      << styleInfo->family
-                      << styleInfo->isDefaultStyle
-                      << styleInfo->shouldBreakChapter
-                      << styleInfo->attributes;
-#endif
-        styles.insert(styleName, styleInfo);
-    }
-}
-
-void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo)
-{
-    // font properties
-    QString attribute = propertiesElement.attribute("font-family");
-    if (!attribute.isEmpty()) {
-        attribute = '"' + attribute + '"';
-        styleInfo->attributes.insert("font-family", attribute);
-    }
-
-    QStringList attributes;
-    attributes
-        // font
-        << "font-style" << "font-variant" << "font-weight" << "font-size"
-        // text
-        << "text-indent" << "text-align" << "text-decoration" << "white-space"
-        // color
-        << "color" << "background-color"
-        // visual formatting
-        << "width" << "min-width" << "max-width"
-        << "height" << "min-height" << "max-height" << "line-height" << "vertical-align"
-        // border
-        << "border-top-width" << "border-bottom-width"
-        << "border-left-width" << "border-right-width" << "border-width"
-        // border
-        << "border-top-color" << "border-bottom-color"
-        << "border-left-color" << "border-right-color" << "border-color"
-        // border
-        << "border-top-style" << "border-bottom-style"
-        << "border-left-style" << "border-right-style" << "border-style"
-        << "border-top" << "border-bottom" << "border-left" << "border-right" << "border"
-        // padding
-        << "padding-top" << "padding-bottom" << "padding-left" << "padding-right" << "padding"
-        << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" //<< "margin"
-        << "auto";
-
-    // Handle all general text formatting attributes
-    foreach(const QString &attrName, attributes) {
-        QString attrVal = propertiesElement.attribute(attrName);
-
-        if (!attrVal.isEmpty()) {
-            styleInfo->attributes.insert(attrName, attrVal);
-        }
-    }
-
-    // Text Decorations
-    attribute = propertiesElement.attribute("text-underline-style");
-    if (!attribute.isEmpty() && attribute != "none") {
-        styleInfo->attributes.insert("text-decoration", "underline");
-    }
-    attribute = propertiesElement.attribute("text-overline-style");
-    if (!attribute.isEmpty() && attribute != "none") {
-        styleInfo->attributes.insert("text-decoration", "overline");
-    }
-    attribute = propertiesElement.attribute("text-line-through-style");
-    if (!attribute.isEmpty() && attribute != "none") {
-        styleInfo->attributes.insert("text-decoration", "line-through");
-    }
-
-    // Visual Display Model
-    attribute = propertiesElement.attribute("writing-mode");
-    if (!attribute.isEmpty()) {
-        if (attribute == "rl")
-            attribute = "rtl";
-        else if (attribute == "lr")
-            attribute = "ltr";
-        else
-            attribute = "inherited";
-        styleInfo->attributes.insert("direction", attribute);
-    }
-
-    // Image align
-    attribute = propertiesElement.attribute("horizontal-pos");
-    if (!attribute.isEmpty()) {
-        kDebug(30517) << "horisontal pos attribute" << attribute;
-        if (attribute == "right" || attribute == "from-left") {
-            styleInfo->attributes.insert("float", "right");
-            styleInfo->attributes.insert("margin", "5px 0 5px 15px");
-        }
-        // Center doesnt show very well.
-//        else if (attribute == "center") {
-//            styleInfo->attributes.insert("display", "block");
-//            styleInfo->attributes.insert("margin", "10px auto");
-//        }
-        else if (attribute == "left") {
-            styleInfo->attributes.insert("display", "inline");
-            styleInfo->attributes.insert("float", "left");
-            styleInfo->attributes.insert("margin","5px 15px 5px 0");
-        }
-    }
-
-    // Lists and numbering
-    if (propertiesElement.hasAttribute("num-format")) {
-        attribute = propertiesElement.attribute("num-format");
-        if (!attribute.isEmpty()) {
-            if (attribute == "1")
-                attribute = "decimal";
-            else if (attribute == "i")
-                attribute = "lower-roman";
-            else if (attribute == "I")
-                attribute = "upper-roman";
-            else if (attribute == "a")
-                attribute = "lower-alpha";
-            else if (attribute == "A")
-                attribute = "upper-alpha";
-            else
-                attribute = "decimal";
-        }
-        styleInfo->attributes.insert("list-style-type:", attribute);
-        styleInfo->attributes.insert("list-style-position:", "outside");
-    }
-    else if (propertiesElement.hasAttribute("bullet-char")) {
-        attribute = propertiesElement.attribute("bullet-char");
-        if (!attribute.isEmpty()) {
-            switch (attribute[0].unicode()) {
-            case 0x2022:
-                attribute = "disc";
-                break;
-            case 0x25CF:
-                attribute = "disc";
-                break;
-            case 0x25CB:
-                attribute = "circle";
-                break;
-            case 0x25A0:
-                attribute = "square";
-                break;
-            default:
-                attribute = "disc";
-                break;
-            }
-        }
-        styleInfo->attributes.insert("list-style-type:", attribute);
-        styleInfo->attributes.insert("list-style-position:", "outside");
-    }
-}
-
 
 // ================================================================
 //                         HTML conversion
@@ -332,10 +72,33 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
 KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
                                                             QHash<QString, QString> &metaData,
                                                             EpubFile *epub,
-                                                            QHash<QString, StyleInfo*> &styles,
                                                             // Out parameters:
                                                             QHash<QString, QSizeF> &images)
 {
+    // 1. Parse styles
+
+    KoFilter::ConversionStatus  status = collectStyles(odfStore, m_styles);
+    if (status != KoFilter::OK) {
+        return status;
+    }
+
+#if 0 // Debug
+    kDebug(30517) << "======== >> Styles";
+    foreach(const QString &name, m_styles.keys()) {
+        kDebug(30517) << "==" << name << ":\t"
+                      << m_styles.value(name)->parent
+                      << m_styles.value(name)->family
+                      << m_styles.value(name)->isDefaultStyle
+                      << m_styles.value(name)->shouldBreakChapter
+                      << m_styles.value(name)->attributes
+            ;
+    }
+    kDebug(30517) << "======== << Styles";
+#endif
+
+    // Propagate style inheritance.
+    fixStyleTree(m_styles);
+
     if (!odfStore->open("content.xml")) {
         kDebug(30517) << "Can not open content.xml .";
         return KoFilter::FileNotFound;
@@ -362,10 +125,12 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "body");
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "text");
 
-    // Collect information about internal links.
+    // 2. Collect information about internal links.
     KoXmlElement element = currentNode.toElement(); // node for passing it to collectInter...()
     int chapter = 1;
-    collectInternalLinksInfo(element, styles, chapter);
+    collectInternalLinksInfo(element, m_styles, chapter);
+
+    // 3. Start the actual conversion.
 
     // Write the beginning of the output.
     beginHtmlFile(metaData);
@@ -382,13 +147,13 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
 
             // A fo:break-before="page" in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
-            StyleInfo *style = styles.value(nodeElement.attribute("style-name"));
+            StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
             if (style && style->shouldBreakChapter) {
                 //kDebug(30517) << "Found paragraph with style with break-before -- breaking new chapter";
 
                 // Write out any footnotes
                 if (!m_footNotes.isEmpty()) {
-                    writeFootNotes(m_htmlWriter, styles);
+                    writeFootNotes(m_htmlWriter, m_styles);
                 }
 
                 // And finally close all tags.
@@ -406,45 +171,45 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
 
             // Actually handle the contents.
             if (nodeElement.localName() == "p")
-                handleTagP(nodeElement, m_htmlWriter, styles);
+                handleTagP(nodeElement, m_htmlWriter, m_styles);
             else
-                handleTagH(nodeElement, m_htmlWriter, styles);
+                handleTagH(nodeElement, m_htmlWriter, m_styles);
         }
         else if (nodeElement.localName() == "span" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagSpan(nodeElement, m_htmlWriter, styles);
+            handleTagSpan(nodeElement, m_htmlWriter, m_styles);
         }
         else if (nodeElement.localName() == "table" && nodeElement.namespaceURI() == KoXmlNS::table) {
             // Handle table
-            handleTagTable(nodeElement, m_htmlWriter, styles);
+            handleTagTable(nodeElement, m_htmlWriter, m_styles);
         }
         else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
             // Handle frame
             m_htmlWriter->startElement("div");
-            handleTagFrame(nodeElement, m_htmlWriter, styles);
+            handleTagFrame(nodeElement, m_htmlWriter, m_styles);
             m_htmlWriter->endElement(); // end div
         }
         else if (nodeElement.localName() == "soft-page-break" &&
                  nodeElement.namespaceURI() == KoXmlNS::text) {
 
-            handleTagPageBreak(nodeElement, m_htmlWriter, styles);
+            handleTagPageBreak(nodeElement, m_htmlWriter, m_styles);
         }
         else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagList(nodeElement, m_htmlWriter, styles);
+            handleTagList(nodeElement, m_htmlWriter, m_styles);
         }
         else if (nodeElement.localName() == "a" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagA(nodeElement, m_htmlWriter, styles);
+            handleTagA(nodeElement, m_htmlWriter, m_styles);
         }
         else if (nodeElement.localName() == "table-of-content" &&
                  nodeElement.namespaceURI() == KoXmlNS::text) {
 
-            handleTagTableOfContent(nodeElement, m_htmlWriter, styles);
+            handleTagTableOfContent(nodeElement, m_htmlWriter, m_styles);
         }
         else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
             handleTagLineBreak(m_htmlWriter);
         }
         else {
             m_htmlWriter->startElement("div");
-            handleUnknownTags(nodeElement, m_htmlWriter, styles);
+            handleUnknownTags(nodeElement, m_htmlWriter, m_styles);
             m_htmlWriter->endElement();
         }
     }
@@ -456,12 +221,14 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     QString fileName = "OEBPS/" + fileId + ".xhtml";
     epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
-    // if we had end notes, make a new chapter for end notes
+    // 4. Write any data that we have collected on the way.
+
+    // If we had end notes, make a new chapter for end notes
     if (!m_endNotes.isEmpty()) {
 
         // Write the beginning of the output for the next file.
         beginHtmlFile(metaData);
-        writeEndNotes(m_htmlWriter, styles);
+        writeEndNotes(m_htmlWriter, m_styles);
         endHtmlFile();
 
         QString fileId = "chapter-endnotes";
@@ -470,6 +237,15 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     }
 
     odfStore->close();
+
+    // 5. Create CSS contents and store it in the epub file.
+    QByteArray  cssContent;
+    status = createCSS(m_styles, cssContent);
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    epub->addContentFile("stylesheet", "OEBPS/styles.css", "text/css", cssContent);
 
     // Return the list of images.
     images = m_images;
@@ -922,6 +698,10 @@ void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlW
     }
 }
 
+
+// ----------------------------------------------------------------
+
+
 void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement,
                                                 QHash<QString, StyleInfo *> &styles, int &chapter)
 {
@@ -1005,3 +785,385 @@ void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter, QHash<QString, Sty
     }
     htmlWriter->endElement();
 }
+
+
+// ================================================================
+//                         Style handling
+
+
+KoFilter::ConversionStatus OdtHtmlConverter::collectStyles(KoStore *odfStore,
+                                                           QHash<QString, StyleInfo*> &styles)
+{
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+
+    // ----------------------------------------------------------------
+    // Get style info from content.xml.
+
+    // Try to open content.xml. Return if it failed.
+    //kDebug(30517) << "parse content.xml styles";
+    if (!odfStore->open("content.xml")) {
+        kError(30517) << "Unable to open input file! content.xml" << endl;
+        return KoFilter::FileNotFound;
+    }
+
+    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug() << "Error occurred while parsing styles.xml "
+                 << errorMsg << " in Line: " << errorLine
+                 << " Column: " << errorColumn;
+        odfStore->close();
+        return KoFilter::ParsingError;
+    }
+
+    // Get the xml node that contains the styles.
+    KoXmlNode stylesNode = doc.documentElement();
+    stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "automatic-styles");
+
+    // Collect info about the styles.
+    collectStyleSet(stylesNode, styles);
+
+    odfStore->close(); // end of parsing styles in content.xml
+
+    // ----------------------------------------------------------------
+    // Get style info from styles.xml.
+
+    // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
+    if (!odfStore->open("styles.xml")) {
+        kError(30517) << "Unable to open input file! style.xml" << endl;
+        return KoFilter::FileNotFound;
+    }
+    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug() << "Error occurred while parsing styles.xml "
+                 << errorMsg << " in Line: " << errorLine
+                 << " Column: " << errorColumn;
+        odfStore->close();
+        return KoFilter::ParsingError;
+    }
+
+    // Parse properties of the named styles referred by the automatic
+    // styles. Only those styles that are actually used in the
+    // document are converted.
+    stylesNode = doc.documentElement();
+    stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "styles");
+
+    // Collect info about the styles.
+    collectStyleSet(stylesNode, styles);
+
+    odfStore->close();
+    return KoFilter::OK;
+}
+
+void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
+{
+    KoXmlElement styleElement;
+    forEachElement (styleElement, stylesNode) {
+
+        // FIXME: Handle text:outline-style also.
+        QString tagName = styleElement.tagName();
+        if (tagName != "style" && tagName != "default-style")
+            continue;
+
+        StyleInfo *styleInfo = new StyleInfo;
+
+        // Get the style name. Default styles don't have a name so
+        // give them a constructed name by combining "default" and the
+        // style family in a way that should not collide with any real
+        // style name.
+        QString styleName = styleElement.attribute("name");
+        if (tagName == "default-style") {
+            // This name should not collide with any real name.
+            styleName = QString("default%") + styleElement.attribute("family");
+            styleInfo->isDefaultStyle = true;
+        }
+
+        styleInfo->family = styleElement.attribute("family");
+
+        // Every style should have a parent. If the style has no
+        // parent, then use the appropriate default style.
+        QString parentName = styleElement.attribute("parent-style-name");
+        if (!styleInfo->isDefaultStyle && parentName.isEmpty()) {
+            parentName = QString("default%") + styleInfo->family;
+        }
+        styleInfo->parent = parentName;
+
+        // Limit picture size to 99% of the page size whatever that may be.
+        // NOTE: This only makes sense when we convert to HTML.
+        if (styleElement.attribute("family") == "graphic") {
+            styleInfo->attributes.insert("max-height", "99%");
+            styleInfo->attributes.insert("max-width", "99%");
+            styleInfo->attributes.insert("height", "auto");
+            styleInfo->attributes.insert("width", "auto");
+        }
+
+        styleInfo->shouldBreakChapter = false;
+        KoXmlElement propertiesElement;
+        forEachElement (propertiesElement, styleElement) {
+            //Check for fo:break-before
+            if (propertiesElement.attribute("break-before") == "page") {
+                //kDebug(30517) << "Found break-before=page in style" << styleName;
+                styleInfo->shouldBreakChapter = true;
+            }
+            collectStyleAttributes(propertiesElement, styleInfo);
+        }
+
+#if 0 // debug
+        kDebug(30517) << "==" << styleName << ":\t"
+                      << styleInfo->parent
+                      << styleInfo->family
+                      << styleInfo->isDefaultStyle
+                      << styleInfo->shouldBreakChapter
+                      << styleInfo->attributes;
+#endif
+        styles.insert(styleName, styleInfo);
+    }
+}
+
+void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo)
+{
+    // font properties
+    QString attribute = propertiesElement.attribute("font-family");
+    if (!attribute.isEmpty()) {
+        attribute = '"' + attribute + '"';
+        styleInfo->attributes.insert("font-family", attribute);
+    }
+
+    QStringList attributes;
+    attributes
+        // font
+        << "font-style" << "font-variant" << "font-weight" << "font-size"
+        // text
+        << "text-indent" << "text-align" << "text-decoration" << "white-space"
+        // color
+        << "color" << "background-color"
+        // visual formatting
+        << "width" << "min-width" << "max-width"
+        << "height" << "min-height" << "max-height" << "line-height" << "vertical-align"
+        // border
+        << "border-top-width" << "border-bottom-width"
+        << "border-left-width" << "border-right-width" << "border-width"
+        // border
+        << "border-top-color" << "border-bottom-color"
+        << "border-left-color" << "border-right-color" << "border-color"
+        // border
+        << "border-top-style" << "border-bottom-style"
+        << "border-left-style" << "border-right-style" << "border-style"
+        << "border-top" << "border-bottom" << "border-left" << "border-right" << "border"
+        // padding
+        << "padding-top" << "padding-bottom" << "padding-left" << "padding-right" << "padding"
+        << "margin-top" << "margin-bottom" << "margin-left" << "margin-right" //<< "margin"
+        << "auto";
+
+    // Handle all general text formatting attributes
+    foreach(const QString &attrName, attributes) {
+        QString attrVal = propertiesElement.attribute(attrName);
+
+        if (!attrVal.isEmpty()) {
+            styleInfo->attributes.insert(attrName, attrVal);
+        }
+    }
+
+    // Text Decorations
+    attribute = propertiesElement.attribute("text-underline-style");
+    if (!attribute.isEmpty() && attribute != "none") {
+        styleInfo->attributes.insert("text-decoration", "underline");
+    }
+    attribute = propertiesElement.attribute("text-overline-style");
+    if (!attribute.isEmpty() && attribute != "none") {
+        styleInfo->attributes.insert("text-decoration", "overline");
+    }
+    attribute = propertiesElement.attribute("text-line-through-style");
+    if (!attribute.isEmpty() && attribute != "none") {
+        styleInfo->attributes.insert("text-decoration", "line-through");
+    }
+
+    // Visual Display Model
+    attribute = propertiesElement.attribute("writing-mode");
+    if (!attribute.isEmpty()) {
+        if (attribute == "rl")
+            attribute = "rtl";
+        else if (attribute == "lr")
+            attribute = "ltr";
+        else
+            attribute = "inherited";
+        styleInfo->attributes.insert("direction", attribute);
+    }
+
+    // Image align
+    attribute = propertiesElement.attribute("horizontal-pos");
+    if (!attribute.isEmpty()) {
+        //kDebug(30517) << "horisontal pos attribute" << attribute;
+        if (attribute == "right" || attribute == "from-left") {
+            styleInfo->attributes.insert("float", "right");
+            styleInfo->attributes.insert("margin", "5px 0 5px 15px");
+        }
+        // Center doesn't show very well.
+//        else if (attribute == "center") {
+//            styleInfo->attributes.insert("display", "block");
+//            styleInfo->attributes.insert("margin", "10px auto");
+//        }
+        else if (attribute == "left") {
+            styleInfo->attributes.insert("display", "inline");
+            styleInfo->attributes.insert("float", "left");
+            styleInfo->attributes.insert("margin","5px 15px 5px 0");
+        }
+    }
+
+    // Lists and numbering
+    if (propertiesElement.hasAttribute("num-format")) {
+        attribute = propertiesElement.attribute("num-format");
+        if (!attribute.isEmpty()) {
+            if (attribute == "1")
+                attribute = "decimal";
+            else if (attribute == "i")
+                attribute = "lower-roman";
+            else if (attribute == "I")
+                attribute = "upper-roman";
+            else if (attribute == "a")
+                attribute = "lower-alpha";
+            else if (attribute == "A")
+                attribute = "upper-alpha";
+            else
+                attribute = "decimal";
+        }
+        styleInfo->attributes.insert("list-style-type:", attribute);
+        styleInfo->attributes.insert("list-style-position:", "outside");
+    }
+    else if (propertiesElement.hasAttribute("bullet-char")) {
+        attribute = propertiesElement.attribute("bullet-char");
+        if (!attribute.isEmpty()) {
+            switch (attribute[0].unicode()) {
+            case 0x2022:
+                attribute = "disc";
+                break;
+            case 0x25CF:
+                attribute = "disc";
+                break;
+            case 0x25CB:
+                attribute = "circle";
+                break;
+            case 0x25A0:
+                attribute = "square";
+                break;
+            default:
+                attribute = "disc";
+                break;
+            }
+        }
+        styleInfo->attributes.insert("list-style-type:", attribute);
+        styleInfo->attributes.insert("list-style-position:", "outside");
+    }
+}
+
+void OdtHtmlConverter::fixStyleTree(QHash<QString, StyleInfo*> &styles)
+{
+    // For all styles:
+    //    Propagate the shouldBreakChapter bool upwards in the inheritance tree.
+    foreach (const QString &styleName, styles.keys()) {
+        QVector<StyleInfo *> styleStack(styles.size());
+
+        // Create a stack of styles that we have to check.
+        //
+        // After this, styleStack will contain a list of styles to
+        // check with the deepest one last in the list.
+        StyleInfo *style = styles[styleName];
+        int index = 0;
+        while (style) {
+            styleStack[index++] = style;
+
+            // Quit when we are at the bottom or found a break-before.
+            if (style->shouldBreakChapter || style->parent.isEmpty()) {
+                break;
+            }
+
+            style = styles[style->parent];
+        }
+
+        // If the bottom most has a break, then all the ones in the list should inherit it.
+        if (styleStack[index - 1]->shouldBreakChapter) {
+            for (int i = 0; i < index - 1; ++i) {
+                styleStack[i]->shouldBreakChapter = true;
+            }
+        }
+    }
+}
+
+
+
+KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*> &styles,
+                                                       QByteArray &cssContent)
+{
+    // There is no equivalent to the ODF style inheritance using
+    // parent-style-name in CSS. This means that to simulate the same
+    // behaviour we have to "flatten" the style tree, i.e. we have to
+    // transfer all the inherited attributes from a style's parent
+    // into itself.
+    flattenStyles(styles);
+
+    QByteArray begin("{\n");
+    QByteArray end("}\n");
+    foreach (QString styleName, styles.keys()) {
+        QByteArray head;
+        QByteArray attributeList;
+
+        StyleInfo *styleInfo = styles.value(styleName);
+        if (!styleInfo || !styleInfo->inUse)
+            continue;
+
+        // The style name
+        head = QString("." + styleName).toUtf8();
+        cssContent.append(head);
+        cssContent.append(begin);
+
+        foreach (const QString &propName, styleInfo->attributes.keys()) {
+            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
+        }
+
+        cssContent.append(attributeList);
+        cssContent.append(end);
+    }
+
+    return KoFilter::OK;
+}
+
+void OdtHtmlConverter::flattenStyles(QHash<QString, StyleInfo*> &styles)
+{
+    QSet<QString> doneStyles;
+    foreach (const QString &styleName, styles.keys()) {
+        if (!doneStyles.contains(styleName)) {
+            flattenStyle(styleName, styles, doneStyles);
+        }
+    }
+}
+
+void OdtHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
+                                    QSet<QString> &doneStyles)
+{
+    StyleInfo *styleInfo = styles.value(styleName);
+    if (!styleInfo) {
+        return;
+    }
+
+    QString parentName = styleInfo->parent;
+    if (parentName.isEmpty())
+        return;
+
+    flattenStyle(styleInfo->parent, styles, doneStyles);
+
+    // Copy all attributes from the parent that is not alreayd in
+    // this style into this style.
+    StyleInfo *parentInfo = styles.value(parentName);
+    if (!parentInfo)
+        return;
+
+    foreach(const QString &paramName, parentInfo->attributes.keys()) {
+        if (styleInfo->attributes.value(paramName).isEmpty()) {
+            styleInfo->attributes.insert(paramName, parentInfo->attributes.value(paramName));
+        }
+    }
+
+    doneStyles.insert(styleName);
+}
+
+

@@ -56,34 +56,12 @@ class OdtHtmlConverter
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
-    /** Parse all styles in the store, convert them to CSS styles and return info about them.
-     *
-     * This function opens contents.xml and styles.xml and parses the
-     * character and paragraph properties of them. It also records the
-     * parent name, wether it has the fo:break-before="page" attribute and
-     * wether it is in use in the contents.
-     *
-     * @param odfStore the store where content.xml and styles.xml can be found.
-     * @param styles the out parameter where the styles are returned. This
-     * is a QHash with the style internal style name as index (not the
-     * printed name) and a StyleInfo pointer as value
-     *
-     * @return KoFilter::OK if the parsing was successful
-     * @return other if the parsing was not successful
-     */
- 
-    KoFilter::ConversionStatus convertStyles(KoStore *odfStore,
-                                             QHash<QString, StyleInfo*> &styles);
     KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
-                                              EpubFile *epub, QHash<QString, StyleInfo*> &styles,
+                                              EpubFile *epub,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images);
 
  private:
-
-    // Handle a collection of styles from either content.xml or styles.xml
-    void collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
-    void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
 
     // Helper functions to create the html contents.
     void beginHtmlFile(QHash<QString, QString> &metaData);
@@ -152,11 +130,44 @@ class OdtHtmlConverter
     void collectInternalLinksInfo(KoXmlElement &currentElement,
                                   QHash<QString, StyleInfo*> &styles, int &chapter);
 
+    // ----------------------------------------------------------------
+    //                         Handle styles
+
+    /** Parse all styles in the store, convert them to CSS styles and return info about them.
+     *
+     * This function opens contents.xml and styles.xml and parses the
+     * character and paragraph properties of them. It also records the
+     * parent name, wether it has the fo:break-before="page" attribute and
+     * wether it is in use in the contents.
+     *
+     * @param odfStore the store where content.xml and styles.xml can be found.
+     * @param styles the out parameter where the styles are returned. This
+     * is a QHash with the style internal style name as index (not the
+     * printed name) and a StyleInfo pointer as value
+     *
+     * @return KoFilter::OK if the parsing was successful
+     * @return other if the parsing was not successful
+     */
+    KoFilter::ConversionStatus collectStyles(KoStore *odfStore, QHash<QString, StyleInfo*> &styles);
+    void collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
+    void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
+
+    void fixStyleTree(QHash<QString, StyleInfo*> &styles);
+
+    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo*> &styles,
+                                         QByteArray &cssContent);
+    void flattenStyles(QHash<QString, StyleInfo*> &styles);
+    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
+                      QSet<QString> &doneStyles);
+
+
  private:
     // Some variables used while creating the HTML contents.
     QByteArray   m_htmlContent;
     QBuffer     *m_outBuf;
     KoXmlWriter *m_htmlWriter;
+
+    QHash<QString, StyleInfo*> m_styles;
 
     // The number of the current chapter during the conversion.
     int m_currentChapter;
