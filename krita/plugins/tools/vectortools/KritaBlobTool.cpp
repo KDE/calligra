@@ -22,7 +22,6 @@
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
 #include <KoShapeStroke.h>
-#include <KoShapeBackground.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
@@ -46,6 +45,7 @@
 #include <QLabel>
 #include <QPainterPath>
 
+#include "../../../../karbon/plugins/tools/KarbonCurveFit.cpp"
 
 KritaBlobTool::KritaBlobTool(KoCanvasBase *canvas)
               : KoToolBase(canvas)
@@ -80,9 +80,14 @@ void KritaBlobTool::repaintDecorations()
 {
 }
 
+#include <KoCanvasController.h>
+
 void KritaBlobTool::mousePressEvent(KoPointerEvent *event)
 {
-    QRectF area = QRectF(event->point, QSizeF(5, 5));
+    QPointF center = event->point;
+    center.setX(center.x() - 10);
+    center.setY(center.y() - 10);
+    QRectF area = QRectF(center, QSizeF(20, 20));
     if (!m_qshape) {
         m_qshape = new QPainterPath;
         m_qshape->addEllipse(area);
@@ -95,8 +100,11 @@ void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
     qDebug() << "Mouse moved to ";
     qDebug() << event->pos();
     
+    QPointF center = event->point;
+    center.setX(center.x() - 10);
+    center.setY(center.y() - 10);
     if (m_qshape) {
-        QRectF area = QRectF(event->point, QSizeF(5, 5));
+        QRectF area = QRectF(center, QSizeF(20, 20));
         QPainterPath elli;
         elli.addEllipse(area);
         *m_qshape = m_qshape->united(elli);
@@ -107,8 +115,22 @@ void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
 void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     qDebug() << "Mouse has been released";
-
-    KoPathShape *path = KoPathShape::createShapeFromPainterPath(*m_qshape);
+    
+    KoPathShape *path = 0;
+    if (m_simplified) {
+        QList<QPointF> heuristicPointList;
+        for (qreal t = 0; t <= 1; t += 0.005) {
+            heuristicPointList.append(m_qshape->pointAtPercent(t));
+        }   
+    //heuristicPointList.append(m_qshape->pointAtPercent(0));
+    float hardcodedError = 2;
+    path = bezierFit(heuristicPointList, hardcodedError);
+    path->close();
+    path->normalize();
+    }
+    else {  //loads of control points
+        path = KoPathShape::createShapeFromPainterPath(*m_qshape);
+    }
     path->setShapeId(KoPathShapeId);
     path->setStroke(m_stroke);
     KUndo2Command *cmd = canvas()->shapeController()->addShape(path);
@@ -143,17 +165,30 @@ void KritaBlobTool::deactivate()
     m_qshape = 0;
 }
 
+void KritaBlobTool::slotSetSimplified(int simplified)
+{
+    if (simplified == Qt::Checked) {
+        m_simplified = true;
+    } else {
+        m_simplified = false;
+    }
+}
+
 QWidget *KritaBlobTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(optionWidget);
 
     QHBoxLayout *modeLayout = new QHBoxLayout;
-    modeLayout->setSpacing(3);
-    QLabel *modeLabel = new QLabel(i18n("THIS WILL BE A CONFIG WIDGET"), optionWidget);
+    QLabel *modeLabel = new QLabel(i18n("Simplified: "), optionWidget);
+    QCheckBox *simplified = new QCheckBox();
     modeLayout->addWidget(modeLabel);
+    modeLayout->addWidget(simplified);
     layout->addLayout(modeLayout);
 
+    connect(simplified, SIGNAL(stateChanged(int)), this, SLOT(slotSetSimplified(int)));
+    
+    simplified->setCheckState(Qt::Checked);
     return optionWidget;
 }
 

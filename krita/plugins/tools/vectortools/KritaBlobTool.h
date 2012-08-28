@@ -25,7 +25,6 @@
 
 class KoPathShape;
 class KoShapeStroke;
-class KoShapeBackground;
 class KoPathPoint;
 class QPainterPath;
 
@@ -48,6 +47,9 @@ public:
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 
+public slots:
+    void slotSetSimplified(int simplified);
+    
 protected:
     QWidget *createOptionWidget();
     
@@ -55,7 +57,7 @@ private:
     KoPathShape *m_shape;
     QPainterPath *m_qshape;
     KoShapeStroke *m_stroke;
-    
+    bool m_simplified;
 };
 
 #endif // _KRITABLOBTOOL_H_
