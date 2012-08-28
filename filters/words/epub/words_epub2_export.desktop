@@ -1,10 +1,15 @@
 [Desktop Entry]
 Type=Service
 Name=ODT to Epub2 Export Filter
+Name[nl]=ODT naar Epub2 exportfilter
+Name[pt]=Filtro de Exportação de ODT para EPub
+Name[pt_BR]=Filtro de exportação de ODT para o Epub2
+Name[uk]=Фільтр експорту ODT до Epub2
+Name[x-test]=xxODT to Epub2 Export Filterxx
 
 X-KDE-Export=application/epub+zip
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Weight=1
 X-KDE-Library=exportepub2
 X-KDE-ServiceTypes=CalligraFilter
- 
+

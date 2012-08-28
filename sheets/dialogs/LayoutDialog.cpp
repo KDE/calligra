@@ -170,7 +170,7 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     groupBoxLayout->setAlignment(Qt::AlignTop);
 
     QLabel * label1 = new QLabel(groupBox);
-    label1->setText(i18n("Name:"));
+    label1->setText(i18nc("Name of the style", "Name:"));
     groupBoxLayout->addWidget(label1, 0, 0);
 
     m_nameEdit = new KLineEdit(groupBox);
