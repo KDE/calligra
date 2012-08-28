@@ -56,7 +56,7 @@ Create a generic HTML export filter
     + Move handling of styles and creation of CSS to OdtHtmlConverter   [Done]
     + Make staring a new html file and ending another functions         [Done]
     + Remove parameter imagesSrcList from handleTag*()                  [Done]
-    + Remove parameter styles from handleTag*()
+    + Remove parameter styles from handleTag*()                         [Done]
     + Move generic ODF parsing from exportepub2                         [Done]
        - New class: OdfParser                                             [done]
        - Move parsing of metadata to OdfParser                            [done]
