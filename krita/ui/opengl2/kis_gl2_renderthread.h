@@ -36,7 +36,7 @@ public:
 
     void initialize();
 
-    uint framebufferTexture() const;
+    uint texture() const;
 
 public Q_SLOTS:
     void render();

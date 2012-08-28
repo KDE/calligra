@@ -84,6 +84,8 @@ public:
 
     volatile uint newWidth;
     volatile uint newHeight;
+
+    GLuint texture;
 };
 
 KisGL2RenderThread::KisGL2RenderThread(KisGL2Canvas *canvas, KisImageWSP image)
@@ -100,13 +102,15 @@ KisGL2RenderThread::~KisGL2RenderThread()
 
 void KisGL2RenderThread::initialize()
 {
-    d->pbuffer = new QGLPixelBuffer(1, 1, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
+    d->pbuffer = new QGLPixelBuffer(1024, 1024, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
     d->pbuffer->makeCurrent();
+
+    d->texture = d->pbuffer->generateDynamicTexture();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    d->framebuffer = new QGLFramebufferObject(d->canvas->width(), d->canvas->height());
+//    d->framebuffer = new QGLFramebufferObject(d->canvas->width(), d->canvas->height());
 
     d->createImageTexture();
 
@@ -122,19 +126,15 @@ void KisGL2RenderThread::initialize()
     configChanged();
 }
 
-uint KisGL2RenderThread::framebufferTexture() const
+uint KisGL2RenderThread::texture() const
 {
-    if(d->framebuffer) {
-        return d->framebuffer->texture();
-    }
-
-    return 0;
+    return d->texture;
 }
 
 void KisGL2RenderThread::render()
 {
     //Bind the framebuffer
-    d->framebuffer->bind();
+    //d->framebuffer->bind();
 
     //Clear it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -184,7 +184,7 @@ void KisGL2RenderThread::render()
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    d->framebuffer->release();
+    //d->framebuffer->release();
 
     d->shader->disableAttributeArray(d->uv0Location);
     d->shader->disableAttributeArray(d->vertexLocation);
@@ -229,13 +229,21 @@ void KisGL2RenderThread::run()
     forever {
         d->eventLoop->processEvents();
         render();
+        d->pbuffer->updateDynamicTexture(d->texture);
 
         if(d->stop)
             break;
 
         if(d->newWidth != 0 && d->newHeight != 0) {
-            delete d->framebuffer;
-            d->framebuffer = new QGLFramebufferObject(d->newWidth, d->newHeight);
+//            delete d->framebuffer;
+//            d->framebuffer = new QGLFramebufferObject(d->newWidth, d->newHeight);
+            glDeleteTextures(1, &d->texture);
+            d->pbuffer->doneCurrent();
+            delete d->pbuffer;
+            d->pbuffer = new QGLPixelBuffer(d->newWidth, d->newHeight, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
+            d->pbuffer->makeCurrent();
+            d->texture = d->pbuffer->generateDynamicTexture();
+
             d->newWidth = 0;
             d->newHeight = 0;
         }

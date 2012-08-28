@@ -124,7 +124,7 @@ void KisGL2Canvas::paintGL()
     d->shader->setAttributeBuffer(d->uv0Location, GL_FLOAT, 12 * sizeof(float), 2);
     d->shader->enableAttributeArray(d->uv0Location);
 
-    glBindTexture(GL_TEXTURE_2D, d->renderer->framebufferTexture());
+    glBindTexture(GL_TEXTURE_2D, d->renderer->texture());
     d->shader->setUniformValue(d->texture0Location, 0);
 
     d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
