@@ -53,8 +53,7 @@ public:
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
-    KoFilter::ConversionStatus parseMetaInfImagesData(KoStore *odfStore,
-                                                      QHash<QString, QString> &imagesData);
+
     ExportEpub2::VectorType vectorType(QByteArray &content);
     bool convertSvm(QByteArray &input, QByteArray &output, QSize size);
     bool convertEmf(QByteArray &input, QByteArray &output, QSize size);
@@ -69,7 +68,8 @@ public slots:
 
 private:
     QHash<QString, QString> m_metadata;
-    QHash<QString, QSizeF> m_imagesSrcList;
+    QHash<QString, QString> m_manifest;
+    QHash<QString, QSizeF>  m_imagesSrcList;
 };
 
 #endif // EXPORTEPUB2_H

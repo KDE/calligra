@@ -106,12 +106,20 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         return status;
     }
 
+    // Parse manifest
+    status = odfParser.parseManifest(odfStore, m_manifest);
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+
     // ----------------------------------------------------------------
     // Create content files.
 
     // Create html contents.
     // m_imagesSrcList is an output parameter from the conversion.    
-    status = converter.convertContent(odfStore, m_metadata, &epub, m_imagesSrcList);
+    status = converter.convertContent(odfStore, m_metadata, &epub,
+                                      m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -137,14 +145,6 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
 KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFile *epubFile)
 {
-    QHash <QString, QString> metaImagesData; // hash <filename, mimetype>
-
-    KoFilter::ConversionStatus status;
-    status = parseMetaInfImagesData(odfStore, metaImagesData);
-    if (status != KoFilter::OK) {
-        return status;
-    }
-
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
@@ -213,7 +213,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 kDebug(30517) << "Other file";
                 epubFile->addContentFile(("image" + QString::number(imgId)),
                                          ("OEBPS/" + imgSrc.section('/', -1)),
-                                         metaImagesData.value(imgSrc).toUtf8(), imgContent);
+                                         m_manifest.value(imgSrc).toUtf8(), imgContent);
                 break;
             }
 
@@ -224,39 +224,6 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus ExportEpub2::parseMetaInfImagesData(KoStore *odfStore,
-                                                               QHash<QString, QString> &imagesData)
-{
-    if (!odfStore->open("META-INF/manifest.xml")) {
-        kDebug(30517) << "Cannot to open manifest.xml.";
-        return KoFilter::FileNotFound;
-    }
-
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine, errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing meta.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        return KoFilter::ParsingError;
-    }
-
-    KoXmlNode childNode = doc.documentElement();
-    KoXmlElement nodeElement;
-    forEachElement (nodeElement, childNode) {
-        QString type = nodeElement.attribute("media-type");
-        QString path = nodeElement.attribute("full-path");
-
-        // We need just images
-        if (type.contains("image")) {
-            imagesData.insert(path, type);
-        }
-    }
-
-    odfStore->close();
-    return KoFilter::OK;
-}
 
 bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
 {

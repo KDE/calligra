@@ -96,10 +96,9 @@ KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore *odfStore,
     return KoFilter::OK;
 }
 
-#if 0
 
-KoFilter::ConversionStatus OdfParser::parseMetaInfImagesData(KoStore *odfStore,
-                                                               QHash<QString, QString> &imagesData)
+KoFilter::ConversionStatus OdfParser::parseManifest(KoStore *odfStore,
+                                                    QHash<QString, QString> &manifest)
 {
     if (!odfStore->open("META-INF/manifest.xml")) {
         kDebug(30517) << "Cannot to open manifest.xml.";
@@ -119,19 +118,12 @@ KoFilter::ConversionStatus OdfParser::parseMetaInfImagesData(KoStore *odfStore,
     KoXmlNode childNode = doc.documentElement();
     KoXmlElement nodeElement;
     forEachElement (nodeElement, childNode) {
-        QString type = nodeElement.attribute("media-type");
         QString path = nodeElement.attribute("full-path");
+        QString type = nodeElement.attribute("media-type");
 
-        // We need just images
-        if (type.contains("image")) {
-            imagesData.insert(path, type);
-        }
+        manifest.insert(path, type);
     }
 
     odfStore->close();
     return KoFilter::OK;
 }
-
-
-
-#endif

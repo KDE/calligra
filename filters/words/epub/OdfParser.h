@@ -52,10 +52,15 @@ public:
 
     KoFilter::ConversionStatus parseMetadata(KoStore *odfStore,
                                              QHash<QString, QString> &metadata);
-#if 0
-    KoFilter::ConversionStatus parseMetaInfImagesData(KoStore *odfStore,
-                                                      QHash<QString, QString> &imagesData);
-#endif
+    // Parse manifest
+    //
+    // Format is QHash<path, type>
+    // where
+    //   path  is the full path of the file stored in the manifest
+    //   type  is the mimetype of the file.
+    //
+    KoFilter::ConversionStatus parseManifest(KoStore *odfStore,
+                                             QHash<QString, QString> &manifest);
 
 private:
 };
