@@ -34,6 +34,7 @@
 #include "kis_ui_types.h"
 #include "kis_coordinates_converter.h"
 
+class KisAbstractCanvasWidgetFactory;
 class KisInputManager;
 class KoToolProxy;
 class KoColorProfile;
@@ -51,6 +52,7 @@ enum KisCanvasType {
 
 class KisCoordinatesConverter;
 class KoViewConverter;
+class KisCanvasWidgetBase;
 
 /**
  * KisCanvas2 is not an actual widget class, but rather an adapter for
@@ -75,7 +77,7 @@ public:
 
     virtual ~KisCanvas2();
 
-    void setCanvasWidget(QWidget * widget);
+    void setCanvasWidget(KisCanvasWidgetBase * widget);
 
     void notifyZoomChanged();
 
@@ -156,6 +158,8 @@ public: // KisCanvas2 methods
     KisCanvasDecoration* decoration(const QString& id);
 
     KisInputManager *inputManager() const;
+
+    static void setCanvasWidgetFactory(KisAbstractCanvasWidgetFactory *factory);
 
 signals:
 
@@ -249,8 +253,8 @@ private:
 
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);
-    void createQPainterCanvas();
-    void createOpenGLCanvas();
+//     void createQPainterCanvas();
+//     void createOpenGLCanvas();
 
 private:
 

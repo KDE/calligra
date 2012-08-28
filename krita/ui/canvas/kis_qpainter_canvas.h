@@ -53,7 +53,7 @@ public:
 
     virtual ~KisQPainterCanvas();
 
-    void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
+//     void setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection);
 
     void setSmoothingEnabled(bool smooth);
 
@@ -73,7 +73,19 @@ public: // QWidget
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
-public:
+    virtual void setImage(KisImageWSP image);
+    virtual void setDisplayFilter(KisDisplayFilter* filter);
+    virtual void setMonitorProfile(KoColorProfile* profile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags flags);
+
+    virtual void imageSizeChanged(int w, int h);
+    virtual void preScale();
+    virtual void viewportMoved(const QPointF& offset);
+    virtual void notifyZoomChanged();
+
+    virtual KisUpdateInfoSP updateCache(const QRect& rect);
+    virtual void recalculateCache(KisUpdateInfoSP info);
+
+    virtual QSize size();
 
     QWidget * widget() {
         return this;

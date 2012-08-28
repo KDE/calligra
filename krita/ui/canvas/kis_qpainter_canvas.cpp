@@ -88,6 +88,9 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
+
+    m_d->prescaledProjection = new KisPrescaledProjection();
+    m_d->prescaledProjection->setCoordinatesConverter(coordinatesConverter);
 }
 
 KisQPainterCanvas::~KisQPainterCanvas()
@@ -95,10 +98,10 @@ KisQPainterCanvas::~KisQPainterCanvas()
     delete m_d;
 }
 
-void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection)
-{
-    m_d->prescaledProjection = prescaledProjection;
-}
+// void KisQPainterCanvas::setPrescaledProjection(KisPrescaledProjectionSP prescaledProjection)
+// {
+//     m_d->prescaledProjection = prescaledProjection;
+// }
 
 void KisQPainterCanvas::setSmoothingEnabled(bool smooth)
 {
@@ -212,6 +215,56 @@ void KisQPainterCanvas::slotConfigChanged()
 bool KisQPainterCanvas::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);
+}
+
+void KisQPainterCanvas::setImage(KisImageWSP image)
+{
+    m_d->prescaledProjection->setImage(image);
+}
+
+void KisQPainterCanvas::setMonitorProfile(KoColorProfile* profile, KoColorConversionTransformation::Intent intent, KoColorConversionTransformation::ConversionFlags flags)
+{
+    m_d->prescaledProjection->setMonitorProfile(profile, intent, flags);
+}
+
+void KisQPainterCanvas::setDisplayFilter(KisDisplayFilter* filter)
+{
+    m_d->prescaledProjection->setDisplayFilter(filter);
+}
+
+void KisQPainterCanvas::preScale()
+{
+    m_d->prescaledProjection->preScale();
+}
+
+void KisQPainterCanvas::notifyZoomChanged()
+{
+    m_d->prescaledProjection->notifyZoomChanged();
+}
+
+void KisQPainterCanvas::imageSizeChanged(int w, int h)
+{
+    m_d->prescaledProjection->slotImageSizeChanged(w, h);
+}
+
+void KisQPainterCanvas::viewportMoved(const QPointF& offset)
+{
+    m_d->prescaledProjection->viewportMoved(offset);
+}
+
+KisUpdateInfoSP KisQPainterCanvas::updateCache(const QRect& rect)
+{
+    return m_d->prescaledProjection->updateCache(rect);
+}
+
+void KisQPainterCanvas::recalculateCache(KisUpdateInfoSP info)
+{
+    m_d->prescaledProjection->recalculateCache(info);
+}
+
+QSize KisQPainterCanvas::size()
+{
+    return QWidget::size();
 }
 
 #include "kis_qpainter_canvas.moc"
