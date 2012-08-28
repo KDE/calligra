@@ -19,6 +19,8 @@ set(kritasketch_SRCS
     IconImageProvider.cpp
     ProgressProxy.cpp
     ColorSelectorItem.cpp
+    KisSketchCanvas.cpp
+    KisSketchCanvasFactory.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS

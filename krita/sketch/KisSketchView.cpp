@@ -44,6 +44,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "ProgressProxy.h"
+#include "KisSketchCanvasFactory.h"
 
 #include "kis_doc2.h"
 #include "kis_canvas2.h"
@@ -53,6 +54,8 @@
 #include <opengl2/kis_gl2_canvas.h>
 #include <input/kis_input_manager.h>
 #include <kis_canvas_resource_provider.h>
+
+#include "KisSketchCanvas.h"
 
 class KisSketchView::Private
 {
@@ -76,7 +79,7 @@ public:
     KisView2* view;
     KisCanvas2* canvas;
 
-    KisGL2Canvas* glCanvas;
+    KisSketchCanvas *canvasWidget;
 
     QGLShaderProgram *shader;
     QGLBuffer *vertexBuffer;
@@ -134,13 +137,14 @@ void KisSketchView::createDocument()
     d->doc = static_cast<KisDoc2*>(factory->create(this, "KritaPart"));
     d->doc->newImage("test", 1000, 1000, KoColorSpaceRegistry::instance()->rgb8());
 
+    KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
+
     d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
     emit viewChanged();
     d->view->hide();
     d->view->setGeometry(x(), y(), width(), height());
     d->canvas = d->view->canvasBase();
     d->canvas->setCanvasItem(this);
-    connect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(update()));
 
     setCanvas(d->canvas);
     connect(d->canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
@@ -149,7 +153,9 @@ void KisSketchView::createDocument()
 
     KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
-    d->glCanvas = qobject_cast<KisGL2Canvas*>(d->canvas->canvasWidget());
+    d->canvasWidget = qobject_cast<KisSketchCanvas*>(d->canvas->canvasWidget());
+    d->canvasWidget->initialize();
+    connect(d->canvasWidget, SIGNAL(renderFinished()), SLOT(update()));
 }
 
 void KisSketchView::loadDocument()
@@ -197,12 +203,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    if(!d->glCanvas)
-        return;
-
-    d->glCanvas->paintGL();
-
-    const_cast<QGLContext*>(qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->context())->makeCurrent();
+    qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
     d->shader->bind();
     d->vertexBuffer->bind();
@@ -219,7 +220,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     projection.ortho(0, 1, 0, 1, -1, 1);
     d->shader->setUniformValue(d->projectionMatrixLocation, projection.transposed());
 
-    //glBindTexture(GL_TEXTURE_2D, d->glCanvas->framebufferTexture());
+    glBindTexture(GL_TEXTURE_2D, d->canvasWidget->texture());
     d->shader->setUniformValue(d->texture0Location, 0);
 
     d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
@@ -294,6 +295,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
     if(d->canvas) {
         switch(event->type()) {
             case QEvent::GraphicsSceneMousePress: {
+                qDebug() << event;
                 QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
                 QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
                 d->canvas->inputManager()->eventFilter(d->canvas, mevent);
@@ -325,9 +327,11 @@ bool KisSketchView::sceneEvent(QEvent* event)
 
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    if(d->glCanvas) {
-        d->glCanvas->setGeometry(newGeometry.toRect());
-        d->glCanvas->resizeGL(newGeometry.width(), newGeometry.height());
+    if(d->canvasWidget)
+    {
+        qDebug() << "Resizing canvas to" << newGeometry;
+        d->canvasWidget->setGeometry(newGeometry.toRect());
+        d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
     }
 }
 
