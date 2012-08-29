@@ -42,11 +42,14 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+#include "KisSketchView.h"
+
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
 // storing recent files is compatible.
 class RecentImagesModel::Private {
 public:
     Private()
+        : view(0)
     {
         KConfigGroup grp(KGlobal::config(), "RecentFiles");
         maxItems = grp.readEntry("maxRecentFileItems", 100);
@@ -119,6 +122,7 @@ public:
     int maxItems;
     QStringList recentFilesIndex;
     QStringList recentFiles;
+    KisSketchView *view;
 };
 
 RecentImagesModel::RecentImagesModel(QObject *parent)
@@ -210,6 +214,19 @@ QVariant RecentImagesModel::headerData(int section, Qt::Orientation orientation,
     return result;
 }
 
+QObject* RecentImagesModel::view() const
+{
+    return d->view;
+}
+
+void RecentImagesModel::setView(QObject* newView)
+{
+    d->view = qobject_cast<KisSketchView*>( newView );
+    emit viewChanged();
+}
+
+
+
 void RecentImagesModel::addRecent(const KUrl &url)
 {
     if (d->recentFiles.size() > d->maxItems) {
@@ -218,6 +235,14 @@ void RecentImagesModel::addRecent(const KUrl &url)
     }
     d->recentFiles.insert(0, QDir::toNativeSeparators(url.toLocalFile()));
     d->recentFilesIndex.insert(0, QFile(url.toLocalFile()).fileName());
+}
+
+void RecentImagesModel::openRecent(QModelIndex &index)
+{
+    if (index.isValid() && index.row() < d->recentFiles.size()) {
+        d->view->loadDocument(d->recentFiles.at(index.row()));
+    }
+
 }
 
 #include "RecentImagesModel.moc"

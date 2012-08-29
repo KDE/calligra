@@ -43,7 +43,7 @@ public Q_SLOTS:
 
     /// XXX: add parameter options... Or how does QML interact with a class like this?
     void createDocument();
-    void loadDocument();
+    void loadDocument(const QString &fileName);
 
 Q_SIGNALS:
     void viewChanged();

@@ -26,6 +26,7 @@ class KUrl;
 class RecentImagesModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
 public:
     enum PresetRoles
     {
@@ -43,10 +44,17 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+    QObject* view() const;
+    void setView(QObject* newView);
+
+Q_SIGNALS:
+    void viewChanged();
+
 
 public Q_SLOTS:
 
     void addRecent(const KUrl&url);
+    void openRecent(QModelIndex &index);
 
 private:
     class Private;

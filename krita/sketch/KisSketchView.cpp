@@ -158,17 +158,18 @@ void KisSketchView::createDocument()
     connect(d->canvasWidget, SIGNAL(renderFinished()), SLOT(update()));
 }
 
-void KisSketchView::loadDocument()
+void KisSketchView::loadDocument(const QString &fileName)
 {
-/*
-    emit progress(1);
+//    emit progress(1);
 
     KisDoc2* doc = new KisDoc2();
     d->doc = doc;
 
-    ProgressProxy *proxy = new ProgressProxy(this);
-    doc->setProgressProxy(proxy);
-    connect(proxy, SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
+    setFile(fileName);
+
+//    ProgressProxy *proxy = new ProgressProxy(this);
+//    doc->setProgressProxy(proxy);
+//    connect(proxy, SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
 
     KMimeType::Ptr type = KMimeType::findByPath(file());
     QString path = file();
@@ -183,18 +184,11 @@ void KisSketchView::loadDocument()
     doc->openUrl(KUrl(path));
 
     setMargin(10);
-    d->updateCanvas();
+//    d->updateCanvas();
 
-    QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(d->canvas->shapeManager()->shapes(), texts);
+//    emit progress(100);
+//    emit completed();
 
-    d->find = new KoFindText(texts, this);
-    connect(d->find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(matchFound(KoFindMatch)));
-    connect(d->find, SIGNAL(updateCanvas()), this, SLOT(update()));
-
-    emit progress(100);
-    emit completed();
-*/
 }
 
 void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
