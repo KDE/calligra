@@ -31,6 +31,8 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/PaletteModel.cpp
     models/PresetImageProvider.cpp
     models/PresetModel.cpp
+    models/RecentImagesModel.cpp
+    models/RecentImageImageProvider.cpp
 )
 
 

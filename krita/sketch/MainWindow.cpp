@@ -54,6 +54,7 @@
 #include "PaletteModel.h"
 #include "PresetModel.h"
 #include "PresetImageProvider.h"
+#include "RecentImageImageProvider.h"
 
 #include "Constants.h"
 #include "Settings.h"
@@ -91,7 +92,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     d->view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     d->view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);
-    //d->view->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
+    d->view->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
     d->view->engine()->addImageProvider("icon", new IconImageProvider);
 
     d->view->rootContext()->setContextProperty("Constants", d->constants);

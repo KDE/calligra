@@ -25,9 +25,7 @@ Item {
 
     RecentImagesModel {
         id: recentImagesModel;
-        view: sketchView.view;
     }
-
 
     ListView {
         anchors.left: parent.left;
@@ -100,7 +98,7 @@ Item {
                     leftMargin: Constants.GridWidth * 0.25;
                 }
 
-                text: model.date;
+                text: model.text;
                 color: Constants.Theme.SecondaryTextColor;
                 font.pixelSize: Constants.SmallFontSize;
                 verticalAlignment: Text.AlignBottom;
