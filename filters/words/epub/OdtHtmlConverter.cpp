@@ -246,7 +246,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         delete odfStore;
         return status;
     }
-    m_collector->addContentFile("stylesheet", m_collector->pathPrefix() + "styles.css", "text/css", cssContent);
+    m_collector->addContentFile("stylesheet", m_collector->filePrefix() + "styles.css", "text/css", cssContent);
 
     // Return the list of images.
     images = m_images;
@@ -312,7 +312,7 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
 
     // Refer to the stylesheet.
     writer->startElement("link");
-    writer->addAttribute("href", "styles.css");
+    writer->addAttribute("href", m_collector->filePrefix() + "styles.css");
     writer->addAttribute("type", "text/css");
     writer->addAttribute("rel", "stylesheet");
     writer->endElement(); // link
@@ -404,7 +404,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     forEachElement (imgElement, nodeElement) {
         if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
             QString imgSrc = imgElement.attribute("href").section('/', -1);
-            htmlWriter->addAttribute("src", imgSrc);
+            htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
 
             m_images.insert(imgElement.attribute("href"), size);
         }

@@ -63,11 +63,10 @@ Create a generic HTML export filter
        - Move parsing of metadata to OdfParser                            [done]
        - Move parsing of manifest to OdfParser                            [done]
     + Move conversion of images into its own file??
- * Create the HTML backend instead of the Epub one.
+ * Create the HTML backend instead of the Epub one.                     [DONE]
     + Create a base class FileCollector.                                [Done]
     + Move general code from EpubFile to FileCollector                  [Done]
-    + Create the class HtmlBackend
-       - Rename EpubFile to EpubBackend?
+    + Create the class HtmlFile                                         [Done]
  * Create the actual filter
 
 

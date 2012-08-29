@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef EPUBFILE_H
-#define EPUBFILE_H
+#ifndef HTMLFILE_H
+#define HTMLFILE_H
 
 #include <QHash>
 
@@ -33,27 +33,21 @@ class QByteArray;
 class KoStore;
 
 
-class EpubFile : public FileCollector
+class HtmlFile : public FileCollector
 {
 public:
-    EpubFile();
-    ~EpubFile();
+    HtmlFile();
+    ~HtmlFile();
 
     // When you have created all the content and added it using
     // addContentFile(), call this function once and it will write the
-    // epub to the disk.
-    KoFilter::ConversionStatus  writeEpub(const QString &fileName,
-                                          const QByteArray &appIdentification,
-                                          QHash<QString, QString> metadata);
+    // html to the disk.
+    KoFilter::ConversionStatus  writeHtml(const QString &fileName);
 
 private:
-    KoFilter::ConversionStatus  writeMetaInf(KoStore *epubStore);
-    KoFilter::ConversionStatus  writeOpf(KoStore *epubStore,
-                                         QHash<QString, QString> &metadata);
-    KoFilter::ConversionStatus  writeNcx(KoStore *epubStore,
-                                         QHash<QString, QString> &metadata);
+    KoFilter::ConversionStatus  writeMetaInf(KoStore *htmlStore);
 
 private:
 };
 
-#endif // EPUBFILE_H
+#endif // HTMLFILE_H
