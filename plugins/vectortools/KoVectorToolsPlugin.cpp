@@ -17,18 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KRITABLOBTOOLFACTORY_H_
-#define _KRITABLOBTOOLFACTORY_H_
+// KDE
+#include <kpluginfactory.h>
 
-#include <KoToolFactoryBase.h>
+// Own
+#include "KoVectorToolsPlugin.h"
 
-class KritaBlobToolFactory : public KoToolFactoryBase
+// Tools
+#include "KoBlobToolFactory.h"
+
+// Calligra
+#include <KoToolRegistry.h>
+
+
+K_PLUGIN_FACTORY(KoVectorToolsPluginFactory, registerPlugin<KoVectorToolsPlugin>();)
+K_EXPORT_PLUGIN(KoVectorToolsPluginFactory("CalligraVectorTools"))
+
+KoVectorToolsPlugin::KoVectorToolsPlugin(QObject *parent, const QVariantList&)
+        : QObject(parent)
 {
-public:
-    KritaBlobToolFactory();
-    ~KritaBlobToolFactory();
+    KoToolRegistry::instance()->add(new KoBlobToolFactory());
+}
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
-};
-
-#endif // _KRITABLOBTOOLFACTORY_H_
+#include "KoVectorToolsPlugin.moc"

@@ -17,20 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KRITAVECTORTOOLSPLUGIN_H_
-#define _KRITAVECTORTOOLSPLUGIN_H_
+#ifndef _KOVECTORTOOLSPLUGIN_H_
+#define _KOVECTORTOOLSPLUGIN_H_
 
 #include <QObject>
 #include <QVariant>
 
-class KritaVectorToolsPlugin : public QObject
+class KoVectorToolsPlugin : public QObject
 {
     Q_OBJECT
 
 public:
-    KritaVectorToolsPlugin(QObject *parent,  const QVariantList&);
-    ~KritaVectorToolsPlugin() {}
+    KoVectorToolsPlugin(QObject *parent,  const QVariantList&);
+    ~KoVectorToolsPlugin() {}
 
 };
 
-#endif // _KRITAVECTORTOOLSPLUGIN_H_
+#endif // _KOVECTORTOOLSPLUGIN_H_

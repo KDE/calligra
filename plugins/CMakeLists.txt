@@ -11,6 +11,7 @@ include_directories(
 
 IF (NOT TINY)
     macro_optional_add_subdirectory( colorengines )
+    macro_optional_add_subdirectory( vectortools )
 
     IF (NOT CREATIVEONLY)
         macro_optional_add_subdirectory( musicshape )

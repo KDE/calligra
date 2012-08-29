@@ -17,31 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KritaBlobToolFactory.h"
-#include "KritaBlobTool.h"
+#ifndef _KOBLOBTOOLFACTORY_H_
+#define _KOBLOBTOOLFACTORY_H_
 
-#include <KoToolRegistry.h>
+#include <KoToolFactoryBase.h>
 
-#include <KoIcon.h>
-#include <klocale.h>
-#include <kdebug.h>
-
-KritaBlobToolFactory::KritaBlobToolFactory()
-        : KoToolFactoryBase("KritaBlobTool")
+class KoBlobToolFactory : public KoToolFactoryBase
 {
-    setToolTip(i18n("Blob Tool"));
-    setToolType("krita");
-    setIconName(koIconNameCStr("blob_tool"));
-    setPriority(2);
-    setActivationShapeId("flake/edit");
-}
+public:
+    KoBlobToolFactory();
+    ~KoBlobToolFactory();
 
-KritaBlobToolFactory::~KritaBlobToolFactory()
-{
-}
+    KoToolBase *createTool(KoCanvasBase *canvas);
+};
 
-KoToolBase * KritaBlobToolFactory::createTool(KoCanvasBase *canvas)
-{
-    return new KritaBlobTool(canvas);
-}
-
+#endif // _KOBLOBTOOLFACTORY_H_

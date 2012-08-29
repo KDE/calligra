@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KRITABLOBTOOL_H_
-#define _KRITABLOBTOOL_H_
+#ifndef _KOBLOBTOOL_H_
+#define _KOBLOBTOOL_H_
 
 #include <KoToolBase.h>
 #include <QRectF>
@@ -33,13 +33,13 @@ class KoShapeBackground;
   The purpose of this tool is to create blotch-shaped vector shapes that fuse with any other
   shape on the canvas sharing the same attributes of stroke and background
 */
-class KritaBlobTool : public KoToolBase
+class KoBlobTool : public KoToolBase
 {
     Q_OBJECT
     
 public:
-    explicit KritaBlobTool(KoCanvasBase *canvas);
-    ~KritaBlobTool();
+    explicit KoBlobTool(KoCanvasBase *canvas);
+    ~KoBlobTool();
 
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaintDecorations();
@@ -75,4 +75,4 @@ private:
     bool m_simplified;
 };
 
-#endif // _KRITABLOBTOOL_H_
+#endif // _KOBLOBTOOL_H_

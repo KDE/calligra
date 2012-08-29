@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KritaBlobTool.h"
+#include "KoBlobTool.h"
 
 #include <KoPathShape.h>
 #include <KoShapeStroke.h>
@@ -37,8 +37,6 @@
 #include <knuminput.h>
 #include <klocale.h>
 
-#include <widgets/kis_slider_spin_box.h>
-
 #include <QStackedWidget>
 #include <QCheckBox>
 #include <QVBoxLayout>
@@ -46,9 +44,9 @@
 #include <QLabel>
 #include <QPainterPath>
 
-#include "../../../../karbon/plugins/tools/KarbonCurveFit.cpp"
+#include "../../karbon/plugins/tools/KarbonCurveFit.cpp"
 
-KritaBlobTool::KritaBlobTool(KoCanvasBase *canvas)
+KoBlobTool::KoBlobTool(KoCanvasBase *canvas)
               : KoToolBase(canvas)
 {
     m_shape = 0;
@@ -58,11 +56,11 @@ KritaBlobTool::KritaBlobTool(KoCanvasBase *canvas)
     m_bg = new KoColorBackground(QColor(0, 0, 0));
 }
 
-KritaBlobTool::~KritaBlobTool()
+KoBlobTool::~KoBlobTool()
 {
 }
 
-void KritaBlobTool::paint(QPainter &painter, const KoViewConverter &converter)
+void KoBlobTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (m_shape) {
         painter.save();
@@ -80,27 +78,27 @@ void KritaBlobTool::paint(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void KritaBlobTool::repaintDecorations()
+void KoBlobTool::repaintDecorations()
 {
 }
 
 #include <KoCanvasController.h>
 
-void KritaBlobTool::mousePressEvent(KoPointerEvent *event)
+void KoBlobTool::mousePressEvent(KoPointerEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
         addDab(event->point);
     }
 }
 
-void KritaBlobTool::mouseMoveEvent(KoPointerEvent *event)
+void KoBlobTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
         addDab(event->point);
     }
 }
 
-void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *)
+void KoBlobTool::mouseReleaseEvent(KoPointerEvent *)
 {
     qDebug() << "Mouse has been released";
     
@@ -135,17 +133,17 @@ void KritaBlobTool::mouseReleaseEvent(KoPointerEvent *)
     }
 }
 /*
-void KritaBlobTool::keyPressEvent(QKeyEvent *event)
+void KoBlobTool::keyPressEvent(QKeyEvent *event)
 {
 }
 */
 
-void KritaBlobTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoBlobTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     useCursor(Qt::ArrowCursor);
 }
 
-void KritaBlobTool::deactivate()
+void KoBlobTool::deactivate()
 {
     delete m_shape;
     delete m_qshape;
@@ -153,7 +151,7 @@ void KritaBlobTool::deactivate()
     m_qshape = 0;
 }
 
-void KritaBlobTool::slotSetSimplified(int simplified)
+void KoBlobTool::slotSetSimplified(int simplified)
 {
     if (simplified == Qt::Checked) {
         m_simplified = true;
@@ -162,18 +160,18 @@ void KritaBlobTool::slotSetSimplified(int simplified)
     }
 }
 
-void KritaBlobTool::slotSetDiameter(double diameter)
+void KoBlobTool::slotSetDiameter(double diameter)
 {
     m_diameter = diameter;
 }
 
-void KritaBlobTool::slotSetOptimization(double error)
+void KoBlobTool::slotSetOptimization(double error)
 {
     m_error = error;
 }
 
 
-void KritaBlobTool::addDab(const QPointF &pos)
+void KoBlobTool::addDab(const QPointF &pos)
 {
     QPointF center;
     center.setX(pos.x() - m_diameter/2);
@@ -197,7 +195,7 @@ void KritaBlobTool::addDab(const QPointF &pos)
 }
 
 
-void KritaBlobTool::combineBlob()
+void KoBlobTool::combineBlob()
 {
     /*
     This function is left blank until we correct our shape styling inconsistencies.
@@ -205,7 +203,7 @@ void KritaBlobTool::combineBlob()
     */
 }
 
-QWidget *KritaBlobTool::createOptionWidget()
+QWidget *KoBlobTool::createOptionWidget()
 {
     QWidget         *optionWidget   = new QWidget();
     QVBoxLayout     *layout         = new QVBoxLayout(optionWidget);
@@ -247,4 +245,4 @@ QWidget *KritaBlobTool::createOptionWidget()
 }
 
 
-#include "KritaBlobTool.moc"
+#include "KoBlobTool.moc"

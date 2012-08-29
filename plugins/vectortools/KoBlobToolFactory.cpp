@@ -17,21 +17,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KritaVectorToolsPlugin.h"
-#include "KritaBlobToolFactory.h"
+#include "KoBlobToolFactory.h"
+#include "KoBlobTool.h"
 
 #include <KoToolRegistry.h>
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <KoIcon.h>
+#include <klocale.h>
+#include <kdebug.h>
 
-K_PLUGIN_FACTORY(KritaVectorToolsPluginFactory, registerPlugin<KritaVectorToolsPlugin>();)
-K_EXPORT_PLUGIN(KritaVectorToolsPluginFactory("KritaTools"))
-
-KritaVectorToolsPlugin::KritaVectorToolsPlugin(QObject *parent, const QVariantList&)
-        : QObject(parent)
+KoBlobToolFactory::KoBlobToolFactory()
+        : KoToolFactoryBase("KoBlobTool")
 {
-    KoToolRegistry::instance()->add(new KritaBlobToolFactory());
+    setToolTip(i18n("Blob Tool"));
+    setToolType("krita, karbon");
+    setIconName(koIconNameCStr("blob_tool"));
+    setPriority(2);
+    setActivationShapeId("flake/edit");
 }
 
-#include "KritaVectorToolsPlugin.moc"
+KoBlobToolFactory::~KoBlobToolFactory()
+{
+}
+
+KoToolBase * KoBlobToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new KoBlobTool(canvas);
+}
+
