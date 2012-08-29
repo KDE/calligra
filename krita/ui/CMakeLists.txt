@@ -213,6 +213,7 @@ if(HAVE_OPENGL)
             opengl2/kis_gl2_canvas.cpp
             opengl2/kis_gl2_renderthread.cpp
             opengl2/kis_gl2_texture_updater.cpp
+            opengl2/kis_gl2_canvas_widget_factory.cpp
             )
     endif(HAVE_GLEW)
     set(kritaui_LIB_SRCS

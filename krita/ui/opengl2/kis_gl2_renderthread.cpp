@@ -226,7 +226,7 @@ void KisGL2RenderThread::configChanged()
 
 void KisGL2RenderThread::update()
 {
-    d->pbuffer->updateDynamicTexture(d->texture);
+//     d->pbuffer->updateDynamicTexture(d->texture);
 }
 
 void KisGL2RenderThread::run()
@@ -241,7 +241,7 @@ void KisGL2RenderThread::run()
     forever {
         d->eventLoop->processEvents();
         render();
-        //d->pbuffer->updateDynamicTexture(d->texture);
+        d->pbuffer->updateDynamicTexture(d->texture);
 
         if(d->stop)
             break;
