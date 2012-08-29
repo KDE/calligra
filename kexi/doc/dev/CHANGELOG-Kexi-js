@@ -3435,7 +3435,7 @@ Main Window
 2006-08-09
 KoProperty
 = "3rdState" option added for BoolEdit - i18n'd QString, if not empty, 
-  the the editor's button accept third "null" state with name equal to this string. 
+  the editor's button accept third "null" state with name equal to this string. 
   When this value is selected, Widget::value() returns null QVariant. 
   This option is used for example in the "defaultValue" property for a field 
   of type boolean (in Kexi Table Designer). Third, "null" value of the property 

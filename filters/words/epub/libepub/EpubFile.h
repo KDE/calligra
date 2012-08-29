@@ -37,6 +37,9 @@ public:
     EpubFile();
     ~EpubFile();
 
+    QString filePrefix();
+    QString pathPrefix();
+
     void addContentFile(QString id, QString fileName,
                         QByteArray mimetype, QByteArray fileContents);
 

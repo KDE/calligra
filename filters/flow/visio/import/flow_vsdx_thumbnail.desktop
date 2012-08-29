@@ -1,6 +1,11 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Visio Documents
+Name[nl]=Documenten van Microsoft Visio
+Name[pt]=Documentos do Microsoft Visio
+Name[pt_BR]=Documentos do Microsoft Visio
+Name[uk]=Документи Microsoft Visio
+Name[x-test]=xxMicrosoft Visio Documentsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.visio;

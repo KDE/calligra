@@ -120,16 +120,7 @@ KoFilter::ConversionStatus HTMLOdfExport::convert(const QByteArray &from, const 
         return error;
     }
 
-    QString stylesheet = filenameWithoutExtension+"/style.css";
-    QFile css(stylesheet);
-    if (!css.open(QIODevice::WriteOnly)) {
-        kError(30501) << "Unable to open stylesheet!";
-        css.close();
-        return KoFilter::FileNotFound;
-    }
-
     out.close();
-    css.close();
 
    return KoFilter::OK;
 }
