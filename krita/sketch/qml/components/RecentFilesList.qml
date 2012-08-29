@@ -75,7 +75,6 @@ Item {
                 x: Constants.GridWidth * 0.375
                 y: Constants.GridHeight * 0.5
                 Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
             }
 
             Label {
@@ -86,7 +85,7 @@ Item {
                     leftMargin: Constants.GridWidth * 0.25;
                 }
 
-                text: model.name;
+                text: model.date;
                 verticalAlignment: Text.AlignTop;
             }
 

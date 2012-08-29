@@ -31,7 +31,9 @@ public:
     {
         ImageRole = Qt::UserRole + 1,
         TextRole,
-        UrlRole
+        UrlRole,
+        NameRole,
+        DateRole
     };
 
     explicit RecentImagesModel(QObject *parent = 0);

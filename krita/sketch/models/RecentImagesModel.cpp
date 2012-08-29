@@ -28,6 +28,7 @@
 #include "RecentImagesModel.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QDir>
 
 #include <KoResourceServerAdapter.h>
@@ -128,6 +129,8 @@ RecentImagesModel::RecentImagesModel(QObject *parent)
     roles[ImageRole] = "image";
     roles[TextRole] = "text";
     roles[UrlRole] = "url";
+    roles[NameRole] = "name";
+    roles[DateRole] = "date";
     setRoleNames(roles);
 }
 
@@ -164,6 +167,16 @@ QVariant RecentImagesModel::data(const QModelIndex &index, int role) const
         case UrlRole:
             result = value;
             break;
+        case NameRole:
+            result = key;
+        case DateRole:
+        {
+            QFile f(value);
+            if (f.exists()) {
+                QFileInfo fi(value);
+                result = fi.lastModified().toString("dd-mm-yyyy (hh:mm)");
+            }
+        }
         default:
             result = "";
             break;
@@ -187,6 +200,8 @@ QVariant RecentImagesModel::headerData(int section, Qt::Orientation orientation,
             result = QString("Name");
             break;
         case UrlRole:
+        case NameRole:
+        case DateRole:
         default:
             result = "";
             break;

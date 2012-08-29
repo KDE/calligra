@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2012 Dan Leinir Turthra Jensen <admin@leinir.dk>
+ * Copyright (C) 2012 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,6 +18,14 @@
 
 #include "RecentImageImageProvider.h"
 #include <QDebug>
+#include <QFile>
+#include <QImage>
+#include <QImageReader>
+
+#include <KoStore.h>
+#include <KoDocument.h>
+#include <KMimeTypeTrader>
+#include <KMimeType>
 
 RecentImageImageProvider::RecentImageImageProvider()
     : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
@@ -33,12 +41,38 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
         *size = QSize(width, height);
     }
 
-    QImage image(requestedSize.width() > 0 ? requestedSize.width() : width,
-                 requestedSize.height() > 0 ? requestedSize.height() : height,
-                 QImage::Format_ARGB32_Premultiplied);
+    QSize sz(requestedSize.width() > 0 ? requestedSize.width() : width,
+             requestedSize.height() > 0 ? requestedSize.height() : height);
 
 
-    qDebug() << id;
+    qDebug() << "thumbing" << id;
+    QFile f(id);
+    QImage thumbnail;
 
-    return image;
+    if (f.exists()) {
+        if (f.fileName().endsWith(".kra")) {
+            // try to use any embedded thumbnail
+            KoStore *store = KoStore::createStore(id, KoStore::Read);
+
+            if (store &&
+                    (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||
+                     store->open(QLatin1String("preview.png")))) {
+                // Hooray! No long delay for the user...
+                const QByteArray thumbnailData = store->read(store->size());
+
+                if (thumbnail.loadFromData(thumbnailData) &&
+                        thumbnail.width() >= width && thumbnail.height() >= height) {
+                    thumbnail = thumbnail.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                }
+            }
+            delete store;
+
+        }
+        else {
+            QImageReader imageReader(id);
+            imageReader.setScaledSize(sz);
+            return imageReader.read();
+        }
+    }
+    return thumbnail;
 }
