@@ -33,7 +33,7 @@ class QSizeF;
 class QStringList;
 class KoXmlWriter;
 class KoStore;
-class EpubFile;
+class FileCollector;
 
 
 struct StyleInfo {
@@ -57,7 +57,7 @@ class OdtHtmlConverter
     ~OdtHtmlConverter();
 
     KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
-                                              EpubFile *epub,
+                                              FileCollector *collector,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images);
 
@@ -116,7 +116,7 @@ class OdtHtmlConverter
 
 
  private:
-    EpubFile    *m_epub;
+    FileCollector *m_collector;
 
     // Some variables used while creating the HTML contents.
     QByteArray   m_htmlContent;

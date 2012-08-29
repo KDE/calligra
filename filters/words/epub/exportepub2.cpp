@@ -44,7 +44,7 @@
 // This plugin
 #include "OdfParser.h"
 #include "OdtHtmlConverter.h"
-#include "libepub/EpubFile.h"
+#include "EpubFile.h"
 
 #include "WmfPainterBackend.h"
 

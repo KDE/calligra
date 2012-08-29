@@ -14,7 +14,8 @@ set(exportepub2_PART_SRCS
     OdfParser.cpp
     OdtHtmlConverter.cpp
 
-    libepub/EpubFile.cpp
+    FileCollector.cpp
+    EpubFile.cpp
     
     ${CMAKE_SOURCE_DIR}/plugins/vectorshape/libsvm/SvmStructs.cpp
     ${CMAKE_SOURCE_DIR}/plugins/vectorshape/libsvm/SvmGraphicsContext.cpp

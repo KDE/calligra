@@ -37,7 +37,7 @@
 #include <KoXmlNS.h>
 
 // EPUB filter
-#include "libepub/EpubFile.h"
+#include "FileCollector.h"
 
 
 
@@ -71,11 +71,11 @@ OdtHtmlConverter::~OdtHtmlConverter()
 
 KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
                                                             QHash<QString, QString> &metaData,
-                                                            EpubFile *epub,
+                                                            FileCollector *collector,
                                                             // Out parameters:
                                                             QHash<QString, QSizeF> &images)
 {
-    m_epub = epub;
+    m_collector = collector;
 
     // 1. Parse styles
 
@@ -160,10 +160,10 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
                 // And finally close all tags.
                 endHtmlFile(); 
 
-                // Write the result to the epub object.
-                QString fileId = m_epub->filePrefix() + QString::number(m_currentChapter);
-                QString fileName = m_epub->pathPrefix() + fileId + ".xhtml";
-                m_epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+                // Write the result to the file collector object.
+                QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
+                QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+                m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
                 // And begin a new chapter.
                 beginHtmlFile(metaData);
@@ -217,10 +217,10 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
 
     endHtmlFile();
 
-    // Write output of the last file to the epub object.
-    QString fileId = m_epub->filePrefix() + QString::number(m_currentChapter);
-    QString fileName = m_epub->pathPrefix() + fileId + ".xhtml";
-    m_epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+    // Write output of the last file to the file collector object.
+    QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
+    QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+    m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
     // 4. Write any data that we have collected on the way.
 
@@ -233,20 +233,20 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         endHtmlFile();
 
         QString fileId = "chapter-endnotes";
-        QString fileName = m_epub->pathPrefix() + fileId + ".xhtml";
-        m_epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+        QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
     }
 
     odfStore->close();
 
-    // 5. Create CSS contents and store it in the epub file.
+    // 5. Create CSS contents and store it in the file collector.
     QByteArray  cssContent;
     status = createCSS(m_styles, cssContent);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
     }
-    m_epub->addContentFile("stylesheet", m_epub->pathPrefix() + "styles.css", "text/css", cssContent);
+    m_collector->addContentFile("stylesheet", m_collector->pathPrefix() + "styles.css", "text/css", cssContent);
 
     // Return the list of images.
     images = m_images;
@@ -595,7 +595,7 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
             if (noteClass == "footnote")
                 m_footNotes.insert(id, noteElements);
             else {
-                QString noteChapter = m_epub->filePrefix() + QString::number(m_currentChapter) + ".xhtml";
+                QString noteChapter = m_collector->filePrefix() + QString::number(m_currentChapter) + ".xhtml";
                 m_endNotes.insert(noteChapter + "/" + id, noteElements);
                 // we insert this: m_currentChapter/id
                 // to can add reference for text in end note
@@ -704,7 +704,7 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
         else if ((nodeElement.localName() == "bookmark-start" || nodeElement.localName() == "bookmark")
                   && nodeElement.namespaceURI() == KoXmlNS::text) {
             QString key = "#" + nodeElement.attribute("name");
-            QString value = m_epub->filePrefix() + QString::number(chapter) + ".xhtml";
+            QString value = m_collector->filePrefix() + QString::number(chapter) + ".xhtml";
             m_linksInfo.insert(key, value);
             continue;
         }

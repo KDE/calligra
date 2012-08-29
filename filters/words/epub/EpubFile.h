@@ -21,7 +21,10 @@
 #define EPUBFILE_H
 
 #include <QHash>
+
 #include <KoFilter.h>
+
+#include "FileCollector.h"
 
 
 class QString;
@@ -31,17 +34,11 @@ class KoStore;
 
 class EpubFilePrivate;
 
-class EpubFile
+class EpubFile : public FileCollector
 {
 public:
     EpubFile();
     ~EpubFile();
-
-    QString filePrefix();
-    QString pathPrefix();
-
-    void addContentFile(QString id, QString fileName,
-                        QByteArray mimetype, QByteArray fileContents);
 
     // When you have created all the content and added it using
     // addContentFile(), call this function once and it will write the
@@ -58,7 +55,7 @@ private:
                                          QHash<QString, QString> &metadata);
 
 private:
-    EpubFilePrivate * const d;
+    //EpubFilePrivate * const d;
 };
 
 #endif // EPUBFILE_H
