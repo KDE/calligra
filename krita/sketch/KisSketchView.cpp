@@ -292,7 +292,7 @@ void KisSketchView::componentComplete()
 
 bool KisSketchView::sceneEvent(QEvent* event)
 {
-    if(d->canvas) {
+    if (d->canvas) {
         switch(event->type()) {
             case QEvent::GraphicsSceneMousePress: {
                 qDebug() << event;
@@ -327,7 +327,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
 
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    if(d->canvasWidget)
+    if (d->canvasWidget)
     {
         qDebug() << "Resizing canvas to" << newGeometry;
         d->canvasWidget->setGeometry(newGeometry.toRect());

@@ -28,20 +28,20 @@ QPixmap ColorImageProvider::requestPixmap(const QString &id, QSize *size, const 
     int width = 100;
     int height = 50;
 
-    if( size )
+    if ( size )
         *size = QSize(width, height);
     QPixmap pixmap(requestedSize.width() > 0 ? requestedSize.width() : width,
                    requestedSize.height() > 0 ? requestedSize.height() : height);
-    if(QColor::isValidColor(id))
+    if (QColor::isValidColor(id))
     {
         pixmap.fill(QColor(id).rgba());
     }
     else
     {
         QList<QString> elements = id.split(",");
-        if(elements.count() == 4)
+        if (elements.count() == 4)
             pixmap.fill(QColor::fromRgbF(elements.at(0).toFloat(), elements.at(1).toFloat(), elements.at(2).toFloat(), elements.at(3).toFloat()));
-        if(elements.count() == 3)
+        if (elements.count() == 3)
             pixmap.fill(QColor::fromRgbF(elements.at(0).toFloat(), elements.at(1).toFloat(), elements.at(2).toFloat()));
     }
     return pixmap;

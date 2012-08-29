@@ -17,10 +17,17 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
 Item {
     id: base;
     signal clicked();
+
+    RecentImagesModel {
+        id: recentImagesModel;
+        view: sketchView.view;
+    }
+
 
     ListView {
         anchors.left: parent.left;
@@ -100,13 +107,7 @@ Item {
             }
         }
 
-        model: ListModel {
-            ListElement { name: "Recent Image 00"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 01"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 02"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 03"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-            ListElement { name: "Recent Image 04"; date: "18-07-2012 18:00"; image: "../images/image-x-generic.png" }
-        }
+        model: recentImagesModel;
     }
 
     Item {

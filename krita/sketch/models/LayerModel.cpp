@@ -55,7 +55,7 @@ public:
             return 0;
 
         int count = 0;
-        if(index.isValid())
+        if (index.isValid())
             count++;
         for(int i = 0; i < q->sourceModel()->rowCount(index); ++i)
         {
@@ -67,7 +67,7 @@ public:
 
     QModelIndex sourceIndexFromProxyRow(int searchRow, int& rowsRemaining, QModelIndex searchParent)
     {
-        if(rowsRemaining <= 0)
+        if (rowsRemaining <= 0)
         {
             qDebug() << "This will not do! Fail :P";
             return QModelIndex();
@@ -79,16 +79,16 @@ public:
         {
             --rowsRemaining;
             QModelIndex test = q->sourceModel()->index(i, 0, searchParent);
-            if(rowsRemaining == 0)
+            if (rowsRemaining == 0)
             {
                 qDebug() << "located index!";
                 foundIt = test;
                 break;
             }
-            if(q->sourceModel()->rowCount(test) > 0)
+            if (q->sourceModel()->rowCount(test) > 0)
             {
                 foundIt = sourceIndexFromProxyRow(searchRow, rowsRemaining, test);
-                if(foundIt.isValid())
+                if (foundIt.isValid())
                     break;
             }
         }
@@ -111,14 +111,14 @@ public:
         {
             ++currentRow;
             QModelIndex test = q->sourceModel()->index(i, 0, currentSearchParent);
-            if(test == index)
+            if (test == index)
             {
                 found = true;
                 break;
             }
-            if(q->sourceModel()->rowCount(test) > 0)
+            if (q->sourceModel()->rowCount(test) > 0)
             {
-                if(proxyRowFromSourceIndexActual(index, currentRow, test))
+                if (proxyRowFromSourceIndexActual(index, currentRow, test))
                 {
                     found = true;
                     break;
@@ -188,7 +188,7 @@ void LayerModel::setView(QObject *newView)
     }
 
     d->view = view;
-    if(!d->view)
+    if (!d->view)
     {
         qDebug() << "view is fail!";
         d->canvas = 0;
@@ -232,13 +232,13 @@ void LayerModel::setView(QObject *newView)
 
 void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
 {
-    if(d->activeNode)
+    if (d->activeNode)
     {
         QModelIndex oldIndex = d->nodeModel->indexFromNode(d->activeNode);
         source_dataChanged(oldIndex, oldIndex);
     }
     d->activeNode = newActiveNode;
-    if(d->activeNode)
+    if (d->activeNode)
     {
         QModelIndex oldIndex = d->nodeModel->indexFromNode(d->activeNode);
         source_dataChanged(oldIndex, oldIndex);
@@ -248,7 +248,7 @@ void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
 QVariant LayerModel::data(const QModelIndex& index, int role) const
 {
     QVariant data;
-    if(index.isValid())
+    if (index.isValid())
     {
         qDebug() << "index is valid...";
         index.internalPointer();
@@ -307,7 +307,7 @@ QModelIndex LayerModel::mapFromSource(const QModelIndex & source) const
 
 QModelIndex LayerModel::mapToSource(const QModelIndex & proxy) const
 {
-    if( !sourceModel() )
+    if ( !sourceModel() )
         return QModelIndex();
 
     int remainingRows = proxy.row();
@@ -326,9 +326,9 @@ QModelIndex LayerModel::index(int row, int column, const QModelIndex &) const
 
 int LayerModel::rowCount(const QModelIndex& parent) const
 {
-    if( parent.isValid() )
+    if ( parent.isValid() )
         return 0;
-    if( !sourceModel() )
+    if ( !sourceModel() )
         return 0;
 
     return d->source_deepRowCount();
@@ -336,16 +336,16 @@ int LayerModel::rowCount(const QModelIndex& parent) const
 
 int LayerModel::columnCount(const QModelIndex & p) const
 {
-    if( p.isValid() )
+    if ( p.isValid() )
         return 0;
-    if( !sourceModel() )
+    if ( !sourceModel() )
         return 0;
     return 1;
 }
 
 void LayerModel::source_rowsAboutToBeInserted(QModelIndex p, int from, int to)
 {
-    if( !p.isValid() )
+    if ( !p.isValid() )
         return;
 
     int f = d->proxyRowFromSourceIndex(p);
@@ -355,7 +355,7 @@ void LayerModel::source_rowsAboutToBeInserted(QModelIndex p, int from, int to)
 
 void LayerModel::source_rowsInserted(QModelIndex p, int, int)
 {
-    if( !p.isValid() )
+    if ( !p.isValid() )
         return;
 
     endInsertRows();

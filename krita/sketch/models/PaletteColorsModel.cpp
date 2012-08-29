@@ -50,9 +50,9 @@ PaletteColorsModel::~PaletteColorsModel()
 
 int PaletteColorsModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid())
         return 0;
-    if(!d->colorSet)
+    if (!d->colorSet)
         return 0;
     return d->colorSet->nColors();
 }
@@ -61,7 +61,7 @@ QVariant PaletteColorsModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
     QColor color;
-    if(index.isValid() && d->colorSet)
+    if (index.isValid() && d->colorSet)
     {
         switch(role)
         {
@@ -83,7 +83,7 @@ QVariant PaletteColorsModel::headerData(int section, Qt::Orientation orientation
 {
     Q_UNUSED(orientation);
     QVariant result;
-    if(section == 0)
+    if (section == 0)
     {
         switch(role)
         {
@@ -126,12 +126,12 @@ void PaletteColorsModel::setView(QObject* newView)
 
 void PaletteColorsModel::activateColor(int index, bool setBackgroundColor)
 {
-    if( !d->view )
+    if ( !d->view )
         return;
 
-    if(index >= 0 && index < d->colorSet->nColors())
+    if (index >= 0 && index < d->colorSet->nColors())
     {
-        if(setBackgroundColor)
+        if (setBackgroundColor)
             d->view->resourceProvider()->setBGColor( d->colorSet->getColor( index ).color );
         else
             d->view->resourceProvider()->setFGColor( d->colorSet->getColor( index ).color );

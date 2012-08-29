@@ -53,7 +53,7 @@ PresetModel::~PresetModel()
 
 int PresetModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid())
         return 0;
     return d->rserver->resources().count();
 }
@@ -61,7 +61,7 @@ int PresetModel::rowCount(const QModelIndex &parent) const
 QVariant PresetModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
-    if(index.isValid())
+    if (index.isValid())
     {
         switch(role)
         {
@@ -83,7 +83,7 @@ QVariant PresetModel::headerData(int section, Qt::Orientation orientation, int r
 {
     Q_UNUSED(orientation);
     QVariant result;
-    if(section == 0)
+    if (section == 0)
     {
         switch(role)
         {
@@ -114,11 +114,11 @@ void PresetModel::setView(QObject* newView)
 
 void PresetModel::activatePreset(int index)
 {
-    if( !d->view )
+    if ( !d->view )
         return;
 
     QList<KisPaintOpPreset*> resources = d->rserver->resources();
-    if(index >= 0 && index < resources.count())
+    if (index >= 0 && index < resources.count())
     {
         d->view->resourceProvider()->setPaintOpPreset( resources.at( index ) );
     }

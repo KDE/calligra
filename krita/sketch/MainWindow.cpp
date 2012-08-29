@@ -50,6 +50,7 @@
 #include "LayerModel.h"
 #include "LayerCompositeDetails.h"
 #include "PaletteColorsModel.h"
+#include "RecentImagesModel.h"
 #include "PaletteModel.h"
 #include "PresetModel.h"
 #include "PresetImageProvider.h"
@@ -82,6 +83,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<PresetModel>("org.krita.sketch", 1, 0, "PresetModel");
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
     qmlRegisterType<LayerModel>("org.krita.sketch", 1, 0, "LayerModel");
+    qmlRegisterType<RecentImagesModel>("org.krita.sketch", 1, 0, "RecentImagesModel");
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
     d->view = new QDeclarativeView();
@@ -89,6 +91,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     d->view->engine()->addImageProvider(QLatin1String("presetthumb"), new PresetImageProvider);
     d->view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);
+    //d->view->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
+    d->view->engine()->addImageProvider("icon", new IconImageProvider);
+
     d->view->rootContext()->setContextProperty("Constants", d->constants);
     d->view->rootContext()->setContextProperty("Settings", d->settings);
 
@@ -97,7 +102,6 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
     d->view->setViewport(glWidget);
 
-    d->view->engine()->addImageProvider("icon", new IconImageProvider);
     QStringList dataPaths = KGlobal::dirs()->findDirs("appdata", "qml");
     foreach(const QString& path, dataPaths) {
         d->view->engine()->addImportPath(path);
@@ -106,7 +110,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->setSource(QUrl::fromLocalFile(KStandardDirs::locate("appdata", "qml/main.qml")));
     d->view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
-//     if(d->view->errors().count() > 0) {
+//     if (d->view->errors().count() > 0) {
 //         foreach(const QDeclarativeError &error, d->view->errors()) {
 //             qDebug() << error.toString();
 //         }

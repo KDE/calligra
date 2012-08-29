@@ -172,7 +172,7 @@ void CanvasControllerDeclarative::updateDocumentSize(const QSize& sz, bool recal
 void CanvasControllerDeclarative::resetDocumentOffset(const QPoint& offset)
 {
     QPoint o;
-    if(!offset.isNull()) {
+    if (!offset.isNull()) {
         o = offset;
     } else {
         o = QPoint(d->minX, d->maxY);
@@ -246,7 +246,7 @@ void CanvasControllerDeclarative::zoomBy(const QPoint& center, qreal zoom)
 
 int CanvasControllerDeclarative::zoomLevel() const
 {
-    if(!d->zoomHandler)
+    if (!d->zoomHandler)
         return 100;
     return d->zoomHandler->zoomInPercent();
 }
@@ -276,7 +276,7 @@ void CanvasControllerDeclarative::setZoomLevel(int zoomPercentage)
 
 void CanvasControllerDeclarative::zoomOut(const QPoint& center)
 {
-    if(center.isNull()) {
+    if (center.isNull()) {
         zoomBy(QPoint(width()/ 2, height() / 2), sqrt(0.5));
     } else {
         zoomBy(center, sqrt(0.5));
@@ -285,7 +285,7 @@ void CanvasControllerDeclarative::zoomOut(const QPoint& center)
 
 void CanvasControllerDeclarative::zoomIn(const QPoint& center)
 {
-    if(center.isNull()) {
+    if (center.isNull()) {
         zoomBy(QPoint(width()/ 2, height() / 2), sqrt(2.0));
     } else {
         zoomBy(center, sqrt(2.0));
@@ -315,30 +315,30 @@ void CanvasControllerDeclarative::ensureVisible(const QRectF& rect, bool smooth)
     target.rx() -= width() / 2;
     target.ry() -= height() / 2;
 
-    if(!isnan(d->maxX)) {
-        if(-target.x() < d->minX) {
+    if (!isnan(d->maxX)) {
+        if (-target.x() < d->minX) {
             target.setX(-d->minX);
         }
-        if(-target.x() > d->maxX) {
+        if (-target.x() > d->maxX) {
             target.setX(-d->maxX);
         }
     } else {
         target.setX(-d->minX);
     }
 
-    if(!isnan(d->maxY)) {
-        if(-target.y() < d->minY) {
+    if (!isnan(d->maxY)) {
+        if (-target.y() < d->minY) {
             target.setY(-d->minY);
         }
 
-        if(-target.y() > d->maxY) {
+        if (-target.y() > d->maxY) {
             target.setY(-d->maxY);
         }
     } else {
         target.setY(-d->minY);
     }
 
-    if(!smooth) {
+    if (!smooth) {
         resetDocumentOffset(target.toPoint());
     } else {
         QVector2D diff = QVector2D(target) - QVector2D(documentOffset());
@@ -416,15 +416,15 @@ QSize CanvasControllerDeclarative::viewportSize() const
 
 void CanvasControllerDeclarative::scrollContentsBy(int dx, int dy)
 {
-    if(d->minX == d->maxX || d->minY == d->maxY)
+    if (d->minX == d->maxX || d->minY == d->maxY)
         d->updateMinMax();
 
 
     QPoint offset = documentOffset();
-    if(!isnan(d->maxX)) {
+    if (!isnan(d->maxX)) {
         offset.setX(offset.x() + dx);
     }
-    if(!isnan(d->maxY)) {
+    if (!isnan(d->maxY)) {
         offset.setY(offset.y() + dy);
     }
 
@@ -488,8 +488,8 @@ KoZoomHandler* CanvasControllerDeclarative::zoomHandler() const
 
 bool CanvasControllerDeclarative::eventFilter(QObject* target , QEvent* event )
 {
-    if(target == this || target == d->canvas->canvasItem()) {
-        if(event->type() == QEvent::GraphicsSceneMousePress) {
+    if (target == this || target == d->canvas->canvasItem()) {
+        if (event->type() == QEvent::GraphicsSceneMousePress) {
             d->velocity = QVector2D();
             d->timer->stop();
         }
@@ -499,14 +499,14 @@ bool CanvasControllerDeclarative::eventFilter(QObject* target , QEvent* event )
 
 KoZoomController* CanvasControllerDeclarative::zoomController(KoViewConverter* viewConverter, bool recreate)
 {
-    if(recreate) {
+    if (recreate) {
         delete d->zoomController;
         d->zoomController = 0;
     }
 
-    if(!d->zoomController) {
+    if (!d->zoomController) {
         d->zoomHandler = dynamic_cast<KoZoomHandler*>(viewConverter);
-        if(!d->zoomHandler)
+        if (!d->zoomHandler)
             d->zoomHandler = new KoZoomHandler();
 
         KActionCollection collection(this);
@@ -523,13 +523,13 @@ void CanvasControllerDeclarative::setMargin(int margin)
 
 void CanvasControllerDeclarative::Private::updateMinMax()
 {
-    if(q->canvasMode() != KoCanvasController::Infinite ) {
+    if (q->canvasMode() != KoCanvasController::Infinite ) {
         int halfWindowWidth = q->width() / 2;
         int halfDocWidth = q->documentSize().width() / 2;
         int margin = q->margin();
 
         minX = halfWindowWidth - (halfDocWidth + margin) + qMin(0, halfWindowWidth - halfDocWidth);
-        if(q->width() < q->documentSize().width()) {
+        if (q->width() < q->documentSize().width()) {
             maxX = minX + ( qMax(0, -(halfWindowWidth - halfDocWidth)) + margin) * 2;
         } else {
             maxX = std::numeric_limits<qreal>::quiet_NaN();
@@ -540,7 +540,7 @@ void CanvasControllerDeclarative::Private::updateMinMax()
         int halfDocHeight = (docHeight / 2);
 
         minY = halfWindowHeight - (halfDocHeight + margin) + qMin(0, halfWindowHeight - halfDocHeight);
-        if(q->height() < (docHeight + (margin * 2))) {
+        if (q->height() < (docHeight + (margin * 2))) {
             maxY = minY + ( qMax(0, -(halfWindowHeight - halfDocHeight)) + margin) * 2;
         } else {
             maxY = std::numeric_limits<qreal>::quiet_NaN();
@@ -586,20 +586,20 @@ void CanvasControllerDeclarative::Private::timerUpdate()
 
     bool positionValid = true;
 
-    if(!isnan(maxX)) {
-        if(-position.x() < minX) {
+    if (!isnan(maxX)) {
+        if (-position.x() < minX) {
             float diff = (position.x() + minX) * springCoeff;
             position.setX(-minX + diff);
-            if(qAbs(diff) > moveThreshold) {
+            if (qAbs(diff) > moveThreshold) {
                 positionValid = false;
             } else {
                 position.setX(-minX);
             }
         }
-        if(-position.x() > maxX) {
+        if (-position.x() > maxX) {
             float diff = (position.x() + maxX) * springCoeff;
             position.setX(-maxX + diff);
-            if(qAbs(diff) > moveThreshold) {
+            if (qAbs(diff) > moveThreshold) {
                 positionValid = false;
             } else {
                 position.setX(-maxX);
@@ -609,20 +609,20 @@ void CanvasControllerDeclarative::Private::timerUpdate()
         position.setX(-minX);
     }
 
-    if(!isnan(maxY)) {
-        if(-position.y() < minY) {
+    if (!isnan(maxY)) {
+        if (-position.y() < minY) {
             float diff = (position.y() + minY) * springCoeff;
             position.setY(-minY + diff);
-            if(qAbs(diff) > moveThreshold) {
+            if (qAbs(diff) > moveThreshold) {
                 positionValid = false;
             } else {
                 position.setY(-minY);
             }
         }
-        if(-position.y() > maxY) {
+        if (-position.y() > maxY) {
             float diff = (position.y() + maxY) * springCoeff;
             position.setY(-maxY + diff);
-            if(qAbs(diff) > moveThreshold) {
+            if (qAbs(diff) > moveThreshold) {
                 positionValid = false;
             } else {
                 position.setY(-maxY);
@@ -636,7 +636,7 @@ void CanvasControllerDeclarative::Private::timerUpdate()
 
     q->resetDocumentOffset(QPoint(position.x(), position.y()));
 
-    if(qAbs(velocity.x()) < moveThreshold && qAbs(velocity.y()) < moveThreshold && positionValid) {
+    if (qAbs(velocity.x()) < moveThreshold && qAbs(velocity.y()) < moveThreshold && positionValid) {
         timer->stop();
         emit q->hideHorizontalScrollHandle();
         emit q->hideVerticalScrollHandle();
@@ -645,9 +645,9 @@ void CanvasControllerDeclarative::Private::timerUpdate()
 
 void CanvasControllerDeclarative::Private::updateScrollHandles()
 {
-    if(horizontalScrollHandle) {
+    if (horizontalScrollHandle) {
         qreal docWidthPerc = q->width() / q->documentSize().width();
-        if(docWidthPerc < 1.0) {
+        if (docWidthPerc < 1.0) {
             horizontalScrollHandle->setWidth(q->width() * docWidthPerc);
             emit q->showHorizontalScrollHandle();
         } else {
@@ -660,9 +660,9 @@ void CanvasControllerDeclarative::Private::updateScrollHandles()
         horizontalScrollHandle->setX(pos);
     }
 
-    if(verticalScrollHandle) {
+    if (verticalScrollHandle) {
         qreal docHeightPerc = q->height() / q->documentSize().height();
-        if(docHeightPerc < 1.0) {
+        if (docHeightPerc < 1.0) {
             verticalScrollHandle->setHeight(q->height() * docHeightPerc);
             emit q->showVerticalScrollHandle();
         } else {

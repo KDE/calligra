@@ -53,7 +53,7 @@ PaletteModel::~PaletteModel()
 
 int PaletteModel::rowCount(const QModelIndex &parent) const
 {
-    if(parent.isValid())
+    if (parent.isValid())
         return 0;
     return d->serverAdaptor->resources().count();
 }
@@ -61,7 +61,7 @@ int PaletteModel::rowCount(const QModelIndex &parent) const
 QVariant PaletteModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
-    if(index.isValid())
+    if (index.isValid())
     {
         switch(role)
         {
@@ -82,7 +82,7 @@ QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int 
 {
     Q_UNUSED(orientation);
     QVariant result;
-    if(section == 0)
+    if (section == 0)
     {
         switch(role)
         {
@@ -102,7 +102,7 @@ QVariant PaletteModel::headerData(int section, Qt::Orientation orientation, int 
 void PaletteModel::itemActivated(int index)
 {
     QList<KoResource*> resources = d->serverAdaptor->resources();
-    if(index >= 0 && index < resources.count())
+    if (index >= 0 && index < resources.count())
     {
         d->currentSet = dynamic_cast<KoColorSet*>(resources.at(index));
         emit colorSetChanged();

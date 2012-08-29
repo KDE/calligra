@@ -120,10 +120,10 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     Q_UNUSED(option)
     Q_UNUSED(widget)
     QRectF bounds = boundingRect();
-    if(d->selector->configuration().subType==KisColorSelector::Ring)
+    if (d->selector->configuration().subType==KisColorSelector::Ring)
     {
         d->ring->setGeometry(bounds.x(),bounds.y(),bounds.width(), bounds.height());
-        if(d->selector->configuration().mainType==KisColorSelector::Triangle)
+        if (d->selector->configuration().mainType==KisColorSelector::Triangle)
         {
             d->triangle->setGeometry(bounds.width()/2 - d->ring->innerRadius(),
                                      bounds.height()/2 - d->ring->innerRadius(),
@@ -142,14 +142,14 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     else
     {
         // type wheel and square
-        if(d->selector->configuration().mainType==KisColorSelector::Wheel)
+        if (d->selector->configuration().mainType==KisColorSelector::Wheel)
         {
             d->main->setGeometry(bounds.x(), bounds.y() + height()*0.1, bounds.width(), bounds.height()*0.9);
             d->sub->setGeometry( bounds.x(), bounds.y(),                bounds.width(), bounds.height()*0.1);
         }
         else
         {
-            if(bounds.height()>bounds.width())
+            if (bounds.height()>bounds.width())
             {
                 d->main->setGeometry(bounds.x(), bounds.y() + bounds.height()*0.1, bounds.width(), bounds.height()*0.9);
                 d->sub->setGeometry( bounds.x(), bounds.y(),                       bounds.width(), bounds.height()*0.1);
@@ -161,7 +161,7 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
             }
         }
     }
-    if(d->view)
+    if (d->view)
     {
         if (d->colorRole == KisColorSelectorBase::Foreground)
             d->selector->setColor(d->view->resourceProvider()->resourceManager()->foregroundColor().toQColor());
@@ -175,13 +175,13 @@ void ColorSelectorItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void ColorSelectorItem::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
-    if(event->button() == Qt::LeftButton && d->changeBackground != true)
+    if (event->button() == Qt::LeftButton && d->changeBackground != true)
         d->colorRole=KisColorSelectorBase::Foreground;
     else
         d->colorRole=KisColorSelectorBase::Background;
-    if(d->main->wantsGrab(event->pos().x(), event->pos().y()))
+    if (d->main->wantsGrab(event->pos().x(), event->pos().y()))
         d->grabbingComponent=d->main;
-    else if(d->sub->wantsGrab(event->pos().x(), event->pos().y()))
+    else if (d->sub->wantsGrab(event->pos().x(), event->pos().y()))
         d->grabbingComponent=d->sub;
     mouseEvent(event);
 }
@@ -198,7 +198,7 @@ void ColorSelectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
 void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
 {
-    if(d->grabbingComponent && (event->buttons()&Qt::LeftButton || event->buttons()&Qt::RightButton))
+    if (d->grabbingComponent && (event->buttons()&Qt::LeftButton || event->buttons()&Qt::RightButton))
     {
         d->grabbingComponent->mouseEvent(event->pos().x(), event->pos().y());
 
@@ -217,7 +217,7 @@ QObject* ColorSelectorItem::view() const
 void ColorSelectorItem::setView(QObject* newView)
 {
     d->view = qobject_cast<KisView2*>( newView );
-    if(d->view) {
+    if (d->view) {
         connect(d->view->resourceProvider(), SIGNAL(sigFGColorChanged(KoColor)),
                 this, SLOT(fgColorChanged(KoColor)));
         connect(d->view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)),
@@ -243,7 +243,7 @@ void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
     if (d->colorRole == KisColorSelectorBase::Foreground )
     {
         QColor c = d->selector->findGeneratingColor(newColor);
-        if(d->colorUpdateAllowed==false)
+        if (d->colorUpdateAllowed==false)
             return;
         d->main->setColor(c);
         d->sub->setColor(c);
@@ -255,7 +255,7 @@ void ColorSelectorItem::bgColorChanged(const KoColor& newColor)
     if (d->colorRole == KisColorSelectorBase::Background )
     {
         QColor c = d->selector->findGeneratingColor(newColor);
-        if(d->colorUpdateAllowed==false)
+        if (d->colorUpdateAllowed==false)
             return;
         d->main->setColor(c);
         d->sub->setColor(c);

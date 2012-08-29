@@ -74,7 +74,7 @@ DocumentListModel::~DocumentListModel()
 
 void DocumentListModel::addDocument(const DocumentInfo &info)
 {
-    if(d->allDocumentInfos.contains(info))
+    if (d->allDocumentInfos.contains(info))
     {
         return;
     }
@@ -145,7 +145,7 @@ void DocumentListModel::setFilter( DocumentListModel::DocumentType newFilter)
 
 DocumentListModel::DocumentType DocumentListModel::typeForFile ( const QString& file )
 {
-    if(sm_extensions.isEmpty()) {
+    if (sm_extensions.isEmpty()) {
         sm_extensions["odt"] = TextDocumentType;
         sm_extensions["fodt"] = TextDocumentType;
         sm_extensions["doc"] = TextDocumentType;
@@ -163,7 +163,7 @@ DocumentListModel::DocumentType DocumentListModel::typeForFile ( const QString& 
     }
 
     QString ext = file.split('.').last().toLower();
-    if(sm_extensions.contains(ext)) {
+    if (sm_extensions.contains(ext)) {
         return sm_extensions.value(ext);
     }
 
@@ -176,8 +176,8 @@ void DocumentListModel::Private::relayout()
 
     QList<DocumentInfo> newList;
     foreach(const DocumentInfo &docInfo, allDocumentInfos) {
-        if(filter == UnknownType || docInfo.docType == filter) {
-            if(searchPattern.isEmpty() || docInfo.fileName.contains(searchPattern, Qt::CaseInsensitive)) {
+        if (filter == UnknownType || docInfo.docType == filter) {
+            if (searchPattern.isEmpty() || docInfo.fileName.contains(searchPattern, Qt::CaseInsensitive)) {
                 newList.append(docInfo);
             }
         }
