@@ -61,7 +61,8 @@ public:
     KisImageWSP image;
     KisGL2TextureUpdater *updater;
 
-    QGLPixelBuffer *pbuffer;
+    QGLPixelBuffer *frontBuffer;
+    QGLPixelBuffer *backBuffer;
 //     QGLFramebufferObject *framebuffer;
     QGLShaderProgram *shader;
     QGLBuffer *vertexBuffer;
@@ -104,15 +105,19 @@ KisGL2RenderThread::~KisGL2RenderThread()
 
 void KisGL2RenderThread::initialize()
 {
-    d->pbuffer = new QGLPixelBuffer(d->width, d->height, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
-    d->pbuffer->makeCurrent();
-
-    d->texture = d->pbuffer->generateDynamicTexture();
+    d->frontBuffer = new QGLPixelBuffer(d->width, d->height, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
+    d->frontBuffer->makeCurrent();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-//    d->framebuffer = new QGLFramebufferObject(d->canvas->width(), d->canvas->height());
+    d->backBuffer = new QGLPixelBuffer(d->width, d->height, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
+    d->backBuffer->makeCurrent();
+
+    d->texture = d->backBuffer->generateDynamicTexture();
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     d->createImageTexture();
 
@@ -120,7 +125,6 @@ void KisGL2RenderThread::initialize()
     d->updater->start();
     d->updater->moveToThread(d->updater);
     connect(d->image, SIGNAL(sigImageUpdated(QRect)), d->updater, SLOT(imageChanged(QRect)), Qt::QueuedConnection);
-    connect(d->image, SIGNAL(sigImageUpdated(QRect)), this, SLOT(update()));
 
     d->createShader();
     d->createMesh();
@@ -136,8 +140,7 @@ uint KisGL2RenderThread::texture() const
 
 void KisGL2RenderThread::render()
 {
-    //Bind the framebuffer
-    //d->framebuffer->bind();
+    d->backBuffer->makeCurrent();
 
     //Clear it
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -197,17 +200,13 @@ void KisGL2RenderThread::render()
     d->indexBuffer->release();
     d->vertexBuffer->release();
     d->shader->release();
+\
+    glFinish();
 
-//    d->pbuffer->updateDynamicTexture(d->);
+    qSwap(d->frontBuffer, d->backBuffer);
 
     emit renderFinished();
 }
-
-// void KisGL2RenderThread::resize(int width, int height)
-// {
-//     d->newWidth = width;
-//     d->height = height;
-// }
 
 void KisGL2RenderThread::stop()
 {
@@ -219,14 +218,13 @@ void KisGL2RenderThread::configChanged()
     const KisConfig cfg;
 
     QColor clearColor = cfg.canvasBorderColor();
+
+    d->frontBuffer->makeCurrent();
+    glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), 1.0);
+    d->backBuffer->makeCurrent();
     glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), 1.0);
 
     d->createCheckerTexture(cfg.checkSize(), cfg.checkersColor());
-}
-
-void KisGL2RenderThread::update()
-{
-//     d->pbuffer->updateDynamicTexture(d->texture);
 }
 
 void KisGL2RenderThread::run()
@@ -235,13 +233,13 @@ void KisGL2RenderThread::run()
 
     d->eventLoop = new QEventLoop();
 
-    int timePerFrame = 1000 / 60;
+    int timePerFrame = 1000 / 25;
     int remainder = 0;
     d->frameTimer.start();
     forever {
+        d->frontBuffer->updateDynamicTexture(d->texture);
         d->eventLoop->processEvents();
         render();
-        d->pbuffer->updateDynamicTexture(d->texture);
 
         if(d->stop)
             break;
@@ -275,6 +273,7 @@ void KisGL2RenderThread::run()
     delete d->updater;
 
     //Clean up all the resources once we're done.
+    glDeleteTextures(1, &d->texture);
     glDeleteTextures(1, &d->imageTexture);
     glDeleteTextures(1, &d->checkerTexture);
 
@@ -282,7 +281,8 @@ void KisGL2RenderThread::run()
     delete d->indexBuffer;
     delete d->shader;
 
-    delete d->pbuffer;
+    delete d->backBuffer;
+    delete d->frontBuffer;
 }
 
 void KisGL2RenderThread::Private::createImageTexture()
@@ -327,7 +327,7 @@ void KisGL2RenderThread::Private::createCheckerTexture(int size, const QColor& c
     painter.drawRect(halfSize, halfSize, halfSize, halfSize);
     painter.end();
 
-    checkerTexture = pbuffer->bindTexture(checkers);
+    checkerTexture = backBuffer->bindTexture(checkers);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glBindTexture(GL_TEXTURE_2D, 0);
