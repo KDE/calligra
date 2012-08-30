@@ -156,6 +156,9 @@ void KisSketchView::createDocument()
     d->canvasWidget = qobject_cast<KisSketchCanvas*>(d->canvas->canvasWidget());
     d->canvasWidget->initialize();
     connect(d->canvasWidget, SIGNAL(renderFinished()), SLOT(update()));
+
+    zoomHandler()->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
+    d->canvas->adjustOrigin();
 }
 
 void KisSketchView::loadDocument(const QString &fileName)
@@ -323,9 +326,9 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& old
 {
     if (d->canvasWidget)
     {
-        qDebug() << "Resizing canvas to" << newGeometry;
         d->canvasWidget->setGeometry(newGeometry.toRect());
         d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
+        d->canvas->adjustOrigin();
     }
 }
 

@@ -105,7 +105,6 @@ uint KisSketchCanvas::texture() const
 void KisSketchCanvas::resizeImpl()
 {
     if (d->renderer) {
-        qDebug() << "Resizing canvas to" << d->newWidth << d->newHeight;
         d->renderer->stop();
         d->renderer->wait();
         delete d->renderer;
