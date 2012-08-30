@@ -32,7 +32,7 @@ Page {
             width: parent.width;
             onWidthChanged: console.log("new width %1".arg(width));
             height: parent.height;
-
+            file: Settings.currentFile;
             Component.onCompleted: createDocument();
         }
 

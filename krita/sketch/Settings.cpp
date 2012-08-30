@@ -22,30 +22,17 @@
 class Settings::Private
 {
 public:
-    QString currentPreset;
     QString currentFile;
 };
 
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
-    d->currentPreset = QString( "images/red.png" );
 }
 
 Settings::~Settings()
 {
     delete d;
-}
-
-QString Settings::currentPreset() const
-{
-    return d->currentPreset;
-}
-
-void Settings::setCurrentPreset(const QString& preset)
-{
-    d->currentPreset = preset;
-    emit currentPresetChanged();
 }
 
 

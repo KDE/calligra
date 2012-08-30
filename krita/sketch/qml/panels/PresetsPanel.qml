@@ -160,7 +160,6 @@ Panel {
             onClicked: {
                 presetsModel.activatePreset(index);
                 GridView.view.currentIndex = index;
-                Settings.currentPreset = model.image;
             }
         }
     }

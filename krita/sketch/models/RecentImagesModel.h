@@ -48,7 +48,6 @@ public:
 public Q_SLOTS:
 
     void addRecent(const KUrl&url);
-    void openRecent(QModelIndex &index);
 
 private:
     class Private;

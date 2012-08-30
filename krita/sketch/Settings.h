@@ -27,7 +27,6 @@ class Settings : public QObject
 {
 
     Q_OBJECT
-    Q_PROPERTY( QString currentPreset READ currentPreset WRITE setCurrentPreset NOTIFY currentPresetChanged )
     Q_PROPERTY( QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged )
 
 public:
@@ -36,14 +35,10 @@ public:
 
 public Q_SLOTS:
 
-    QString currentPreset() const;
-    void setCurrentPreset( const QString& preset );
-
     QString currentFile() const;
     void setCurrentFile(const QString &fileName);
 
 Q_SIGNALS:
-    void currentPresetChanged();
     void currentFileChanged();
 
 private:

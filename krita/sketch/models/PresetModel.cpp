@@ -117,9 +117,10 @@ void PresetModel::activatePreset(int index)
     if ( !d->view )
         return;
 
+    qDebug() << "index" << index;
+
     QList<KisPaintOpPreset*> resources = d->rserver->resources();
-    if (index >= 0 && index < resources.count())
-    {
+    if (index >= 0 && index < resources.count())  {
         d->view->resourceProvider()->setPaintOpPreset( resources.at( index ) );
     }
 }

@@ -62,7 +62,10 @@ Item {
 
             MouseArea {
                 anchors.fill: parent;
-                onClicked: base.clicked();
+                onClicked: {
+                    Settings.currentFile = model.url;
+                    base.clicked();
+                }
             }
 
             /*Button {

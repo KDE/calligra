@@ -221,12 +221,5 @@ void RecentImagesModel::addRecent(const KUrl &url)
     d->recentFilesIndex.insert(0, QFile(url.toLocalFile()).fileName());
 }
 
-void RecentImagesModel::openRecent(QModelIndex &index)
-{
-    if (index.isValid() && index.row() < d->recentFiles.size()) {
-        // Set a property somehow;
-    }
-
-}
 
 #include "RecentImagesModel.moc"
