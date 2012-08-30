@@ -134,6 +134,27 @@ TODO:
 
 ===================== Kexi 2.5  =====================
 
+~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
+
+2012-08-30
+Startup
+*Fetch startup UI from x.y.0 URL for any x.y.z version, not from x.y.z URL
+
+2012-08-26
+Query Designer
+*Make string concatenation operator || work
+BUG:305793
+REVIEW:106199
+
+2012-08-23
+KexiDB
+*Make it possible to disable db drivers even if the libs are present and
+*found
+**renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config
+**flag (by jstaniek)
+BUG:305683
+REVIEW:106152
+
 ~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
 
 2012-08-23
