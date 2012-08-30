@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=ODT to HTML Export Filter
-Name[x-test]=xxODT to HTML Export Filterxx
 
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=text/html
