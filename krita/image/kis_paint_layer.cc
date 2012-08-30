@@ -134,7 +134,6 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 void KisPaintLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 
