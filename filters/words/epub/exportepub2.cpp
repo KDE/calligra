@@ -20,11 +20,20 @@
 */
 
 
+// Own
 #include "exportepub2.h"
 
+// Qt
+#include <QSvgGenerator>
+#include <QBuffer>
+#include <QPainter>
+
+// KDE
 #include <kdebug.h>
-#include <KoFilterChain.h>
 #include <kpluginfactory.h>
+
+// Calligra
+#include <KoFilterChain.h>
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 #include <KoXmlWriter.h>
@@ -32,12 +41,10 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+// This plugin
+#include "OdfParser.h"
 #include "OdtHtmlConverter.h"
 #include "libepub/EpubFile.h"
-
-#include <QSvgGenerator>
-#include <QBuffer>
-#include <QPainter>
 
 #include "WmfPainterBackend.h"
 
@@ -85,51 +92,34 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Start the conversion
     OdtHtmlConverter converter;
-    EpubFile  epub;
+    OdfParser        odfParser;
+    EpubFile         epub;
     KoFilter::ConversionStatus  status;
 
     // ----------------------------------------------------------------
     // Parse input files
 
-    // Parse meta.xml
-    status = parseMetadata(odfStore);
+    // Parse meta.xml into m_metadata
+    status = odfParser.parseMetadata(odfStore, m_metadata);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
     }
 
-    // Parse styles
-    QHash<QString, StyleInfo*> styles;
-    status = converter.convertStyles(odfStore, styles);
+    // Parse manifest
+    status = odfParser.parseManifest(odfStore, m_manifest);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
     }
-
-#if 0 // Debug
-    kDebug(30517) << "======== >> Styles";
-    foreach(const QString &name, styles.keys()) {
-        kDebug(30517) << "==" << name << ":\t"
-                      << styles.value(name)->parent
-                      << styles.value(name)->family
-                      << styles.value(name)->isDefaultStyle
-                      << styles.value(name)->hasBreakBefore
-                      << styles.value(name)->attributes
-            ;
-    }
-    kDebug(30517) << "======== << Styles";
-#endif
-
-    // Propagate style inheritance.
-    fixStyleTree(styles);
 
     // ----------------------------------------------------------------
     // Create content files.
 
     // Create html contents.
-    // Note that this also sets the inUse flag for the styles thare are used.
     // m_imagesSrcList is an output parameter from the conversion.    
-    status = converter.convertContent(odfStore, m_meta, &epub, styles, m_imagesSrcList);
+    status = converter.convertContent(odfStore, m_metadata, &epub,
+                                      m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -142,179 +132,19 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         return status;
     }
 
-    // Create CSS contents and store it in the epub file.
-    QByteArray  cssContent;
-    status = createCSS(styles, cssContent);
-    if (status != KoFilter::OK) {
-        delete odfStore;
-        return status;
-    }
-    epub.addContentFile("stylesheet", "OEBPS/styles.css", "text/css", cssContent);
-
     // ----------------------------------------------------------------
     // Write the finished epub file to disk
 
-    epub.writeEpub(m_chain->outputFile(), to, m_meta);
+    epub.writeEpub(m_chain->outputFile(), to, m_metadata);
 
     delete odfStore;
-    qDeleteAll(styles);
 
     return KoFilter::OK;
-}
-
-
-KoFilter::ConversionStatus ExportEpub2::parseMetadata(KoStore *odfStore)
-{
-    if (!odfStore->open("meta.xml")) {
-        kDebug(30517) << "Cannot open meta.xml";
-        return KoFilter::FileNotFound;
-    }
-
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing meta.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return KoFilter::ParsingError;
-    }
-
-    KoXmlNode childNode = doc.documentElement();
-    childNode = KoXml::namedItemNS(childNode, KoXmlNS::office, "meta");
-    KoXmlElement element;
-    forEachElement (element, childNode) {
-        m_meta.insert(element.tagName(), element.text());
-    }
-
-    odfStore->close();
-    return KoFilter::OK;
-}
-
-
-void ExportEpub2::fixStyleTree(QHash<QString, StyleInfo*> &styles)
-{
-    // For all styles:
-    //    Propagate the hasBreakBefore bool upwards in the inheritance tree.
-    foreach (const QString &styleName, styles.keys()) {
-        QVector<StyleInfo *> styleStack(styles.size());
-
-        // Create a stack of styles that we have to check.
-        //
-        // After this, styleStack will contain a list of styles to
-        // check with the deepest one last in the list.
-        StyleInfo *style = styles[styleName];
-        int index = 0;
-        while (style) {
-            styleStack[index++] = style;
-
-            // Quit when we are at the bottom or found a break-before.
-            if (style->hasBreakBefore || style->parent.isEmpty()) {
-                break;
-            }
-
-            style = styles[style->parent];
-        }
-
-        // If the bottom most has a break, then all the ones in the list should inherit it.
-        if (styleStack[index - 1]->hasBreakBefore) {
-            for (int i = 0; i < index - 1; ++i) {
-                styleStack[i]->hasBreakBefore = true;
-            }
-        }
-    }
-}
-
-
-KoFilter::ConversionStatus ExportEpub2::createCSS(QHash<QString, StyleInfo*> &styles,
-                                                  QByteArray &cssContent)
-{
-    // There is no equivalent to the ODF style inheritance using
-    // parent-style-name in CSS. This means that to simulate the same
-    // behaviour we have to "flatten" the style tree, i.e. we have to
-    // transfer all the inherited attributes from a style's parent
-    // into itself.
-    flattenStyles(styles);
-
-    QByteArray begin("{\n");
-    QByteArray end("}\n");
-    foreach (QString styleName, styles.keys()) {
-        QByteArray head;
-        QByteArray attributeList;
-
-        StyleInfo *styleInfo = styles.value(styleName);
-        if (!styleInfo || !styleInfo->inUse)
-            continue;
-
-        // The style name
-        head = QString("." + styleName).toUtf8();
-        cssContent.append(head);
-        cssContent.append(begin);
-
-        foreach (const QString &propName, styleInfo->attributes.keys()) {
-            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
-        }
-
-        cssContent.append(attributeList);
-        cssContent.append(end);
-    }
-
-    return KoFilter::OK;
-}
-
-void ExportEpub2::flattenStyles(QHash<QString, StyleInfo*> &styles)
-{
-    QSet<QString> doneStyles;
-    foreach (const QString &styleName, styles.keys()) {
-        if (!doneStyles.contains(styleName)) {
-            flattenStyle(styleName, styles, doneStyles);
-        }
-    }
-}
-
-void ExportEpub2::flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
-                               QSet<QString> &doneStyles)
-{
-    StyleInfo *styleInfo = styles.value(styleName);
-    if (!styleInfo) {
-        return;
-    }
-
-    QString parentName = styleInfo->parent;
-    if (parentName.isEmpty())
-        return;
-
-    flattenStyle(styleInfo->parent, styles, doneStyles);
-
-    // Copy all attributes from the parent that is not alreayd in
-    // this style into this style.
-    StyleInfo *parentInfo = styles.value(parentName);
-    if (!parentInfo)
-        return;
-
-    foreach(const QString &paramName, parentInfo->attributes.keys()) {
-        if (styleInfo->attributes.value(paramName).isEmpty()) {
-            styleInfo->attributes.insert(paramName, parentInfo->attributes.value(paramName));
-        }
-    }
-
-    doneStyles.insert(styleName);
 }
 
 
 KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFile *epubFile)
 {
-    QHash <QString, QString> metaImagesData; // hash <filename, mimetype>
-
-    KoFilter::ConversionStatus status;
-    status = parseMetaInfImagesData(odfStore, metaImagesData);
-    if (status != KoFilter::OK) {
-        return status;
-    }
-
-
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
@@ -340,7 +170,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 }
 
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
             }
@@ -355,7 +185,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 }
 
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
             }
@@ -369,7 +199,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                 }
 
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
                                          "image/svg+xml", output);
                 break;
             }
@@ -382,8 +212,8 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             {
                 kDebug(30517) << "Other file";
                 epubFile->addContentFile(("image" + QString::number(imgId)),
-                                         ("OEBPS/" + imgSrc.section('/', -1)),
-                                         metaImagesData.value(imgSrc).toUtf8(), imgContent);
+                                         (epubFile->pathPrefix() + imgSrc.section('/', -1)),
+                                         m_manifest.value(imgSrc).toUtf8(), imgContent);
                 break;
             }
 
@@ -394,39 +224,6 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     return KoFilter::OK;
 }
 
-KoFilter::ConversionStatus ExportEpub2::parseMetaInfImagesData(KoStore *odfStore,
-                                                               QHash<QString, QString> &imagesData)
-{
-    if (!odfStore->open("META-INF/manifest.xml")) {
-        kDebug(30517) << "Cannot to open manifest.xml.";
-        return KoFilter::FileNotFound;
-    }
-
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine, errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug() << "Error occurred while parsing meta.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        return KoFilter::ParsingError;
-    }
-
-    KoXmlNode childNode = doc.documentElement();
-    KoXmlElement nodeElement;
-    forEachElement (nodeElement, childNode) {
-        QString type = nodeElement.attribute("media-type");
-        QString path = nodeElement.attribute("full-path");
-
-        // We need just images
-        if (type.contains("image")) {
-            imagesData.insert(path, type);
-        }
-    }
-
-    odfStore->close();
-    return KoFilter::OK;
-}
 
 bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
 {

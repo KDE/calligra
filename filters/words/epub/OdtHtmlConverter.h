@@ -35,14 +35,17 @@ class KoXmlWriter;
 class KoStore;
 class EpubFile;
 
+
 struct StyleInfo {
     StyleInfo();
 
     QString family;
     QString parent;
     bool isDefaultStyle;
-    bool hasBreakBefore;
+
+    bool shouldBreakChapter;
     bool inUse;
+
     QHash<QString, QString> attributes;
 };
 
@@ -53,34 +56,12 @@ class OdtHtmlConverter
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
-    /** Parse all styles in the store, convert them to CSS styles and return info about them.
-     *
-     * This function opens contents.xml and styles.xml and parses the
-     * character and paragraph properties of them. It also records the
-     * parent name, wether it has the fo:break-before="page" attribute and
-     * wether it is in use in the contents.
-     *
-     * @param odfStore the store where content.xml and styles.xml can be found.
-     * @param styles the out parameter where the styles are returned. This
-     * is a QHash with the style internal style name as index (not the
-     * printed name) and a StyleInfo pointer as value
-     *
-     * @return KoFilter::OK if the parsing was successful
-     * @return other if the parsing was not successful
-     */
- 
-    KoFilter::ConversionStatus convertStyles(KoStore *odfStore,
-                                             QHash<QString, StyleInfo*> &styles);
     KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
-                                              EpubFile *epub, QHash<QString, StyleInfo*> &styles,
+                                              EpubFile *epub,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images);
 
  private:
-
-    // Handle a collection of styles from either content.xml or styles.xml
-    void collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
-    void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
 
     // Helper functions to create the html contents.
     void beginHtmlFile(QHash<QString, QString> &metaData);
@@ -89,71 +70,60 @@ class OdtHtmlConverter
 
 
     // All handleTag*() are named after the tag in the ODF that they handle.
-    void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                 QHash<QString, StyleInfo*> &styles);
-    void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles);
-    void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles);
-    void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                       QHash<QString, StyleInfo*> &styles);
-    void handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWriter,
-                             QHash<QString, StyleInfo*> &styles);
+    void handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWriter);
 
-    void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                        QHash<QString, StyleInfo*> &styles);
+    void handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
-    void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                    QHash<QString, StyleInfo*> &styles);
+    void handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
-    void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                        QHash<QString, StyleInfo*> &styles);
+    void handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
-    void handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                            QHash<QString, StyleInfo*> &styles);
-
-    void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                       QHash<QString, StyleInfo*> &styles);
+    void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
     void handleTagTab(KoXmlWriter *htmlWriter);
-    void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                 QHash<QString, StyleInfo*> &styles);
-
-    void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                     QHash<QString, StyleInfo*> &styles);
+    void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
     void handleTagLineBreak(KoXmlWriter *htmlWriter);
     void handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
     void handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
     void handleTagBookMarkEnd(KoXmlWriter *htmlWriter);
 
-
-    void handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                           QHash<QString, StyleInfo*> &styles);
-
+    void handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
     void handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
-    void writeFootNotes(KoXmlWriter *htmlWriter,
-                        QHash<QString, StyleInfo*> &styles);
+    void collectInternalLinksInfo(KoXmlElement &currentElement, int &chapter);
 
-    void writeEndNotes(KoXmlWriter *htmlWriter, QHash<QString, StyleInfo*> &styles);
+    void writeFootNotes(KoXmlWriter *htmlWriter);
+    void writeEndNotes(KoXmlWriter *htmlWriter);
 
-    /** Before start parsing go inside content.xml and collect links id from
-     * book-mark-start tag and save its id in hash as key for its value save
-     * the current chapter (as we are looking forbook-mark-start tag, we identify
-     * page break before too, and we have an id that goes up when i see page break
-     * so we now we are in which file or chapter and this id is the value of hash
-     * and at the end when we want to write html file, when we see an id, find it in hash
-     * and set it instead < a  href = hash.value(key) + #key />
-     */
-    void collectInternalLinksInfo(KoXmlElement &currentElement,
-                                  QHash<QString, StyleInfo*> &styles, int &chapter);
+    KoFilter::ConversionStatus collectStyles(KoStore *odfStore, QHash<QString, StyleInfo*> &styles);
+    void collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles);
+    void collectStyleAttributes(KoXmlElement &propertiesElement, StyleInfo *styleInfo);
+
+    void fixStyleTree(QHash<QString, StyleInfo*> &styles);
+
+    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo*> &styles,
+                                         QByteArray &cssContent);
+    void flattenStyles(QHash<QString, StyleInfo*> &styles);
+    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
+                      QSet<QString> &doneStyles);
+
 
  private:
+    EpubFile    *m_epub;
+
     // Some variables used while creating the HTML contents.
     QByteArray   m_htmlContent;
     QBuffer     *m_outBuf;
     KoXmlWriter *m_htmlWriter;
+
+    QHash<QString, StyleInfo*> m_styles;
 
     // The number of the current chapter during the conversion.
     int m_currentChapter;
