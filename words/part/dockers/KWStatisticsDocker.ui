@@ -2,40 +2,54 @@
 <ui version="4.0">
  <class>KWStatisticsDocker</class>
  <widget class="QWidget" name="KWStatisticsDocker">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>332</width>
-    <height>332</height>
-   </rect>
+  <property name="enabled">
+   <bool>true</bool>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="1">
-    <widget class="QToolButton" name="preferences">
-     <property name="text">
-      <string>Preferences</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <layout class="QHBoxLayout" name="bottomLayout"/>
-   </item>
-   <item row="0" column="0" colspan="2">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string/>
-     </property>
-     <widget class="QWidget" name="verticalLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>5</y>
-        <width>201</width>
-        <height>291</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="namelayout">
+  <property name="minimumSize">
+   <size>
+    <width>712</width>
+    <height>458</height>
+   </size>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>110</y>
+     <width>321</width>
+     <height>271</height>
+    </rect>
+   </property>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>301</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <layout class="QVBoxLayout" name="valuelayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>2</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
        <item>
         <widget class="QLabel" name="Words">
          <property name="text">
@@ -117,26 +131,18 @@
         </widget>
        </item>
       </layout>
-     </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_2">
-      <property name="geometry">
-       <rect>
-        <x>220</x>
-        <y>0</y>
-        <width>101</width>
-        <height>291</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="valuelayout">
+     </item>
+     <item row="0" column="1">
+      <layout class="QVBoxLayout" name="namelayout">
        <item>
-        <widget class="QLabel" name="count_sentences">
+        <widget class="QLabel" name="count_words">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="count_words">
+        <widget class="QLabel" name="count_sentences">
          <property name="text">
           <string/>
          </property>
@@ -185,10 +191,40 @@
         </widget>
        </item>
       </layout>
-     </widget>
-    </widget>
-   </item>
-  </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>400</y>
+     <width>421</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+  </widget>
+  <widget class="QToolButton" name="preferences">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>410</y>
+     <width>85</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+  </widget>
+  <zorder>Words</zorder>
+  <zorder>count_flesch</zorder>
+  <zorder>count_spaces</zorder>
+  <zorder>widget</zorder>
+  <zorder>horizontalLayoutWidget</zorder>
+  <zorder>preferences</zorder>
  </widget>
  <resources/>
  <connections/>

@@ -35,6 +35,7 @@ class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWStatisticsDocker();
     ~KWStatisticsDocker();
+    void updateDockerUi();
     void updateHorizontalUi();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);

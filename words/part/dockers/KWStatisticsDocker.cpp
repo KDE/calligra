@@ -32,12 +32,53 @@
 
 KWStatisticsDocker::KWStatisticsDocker()
 {
+    statisticsDock->setSizePolicy(QSizePolicy::Expanding);
     m_canvasReset = false;
     setWindowTitle(i18n("Statistics"));
 }
 
 KWStatisticsDocker::~KWStatisticsDocker()
 {
+}
+
+void KWStatisticsDocker::updateDockerUi()
+{
+  /*
+  QVBoxLayout * vnamelayout = new QVBoxLayout;
+  vnamelayout->addWidget(new QLabel("Words"));
+  vnamelayout->addWidget(new QLabel("Sentences"));
+  vnamelayout->addWidget(new QLabel("Syllables"));
+  vnamelayout->addWidget(new QLabel("Lines"));
+  vnamelayout->addWidget(new QLabel("Flesch Reading Ease"));
+  vnamelayout->addWidget(new QLabel("Characters (excluding spaces)"));
+  vnamelayout->addWidget(new QLabel("Characters (including spaces)"));
+  vnamelayout->addWidget(new QLabel("East Asian Characters"));
+  
+  QLabel * count_words  = new QLabel;
+  QLabel * count_sentences  = new QLabel;
+  QLabel * count_syllables = new QLabel;
+  QLabel * count_lines  = new QLabel;
+  QLabel * count_flesch  = new QLabel;
+  QLabel * count_charnospaces = new QLabel;
+  QLabel * count_charspaces  = new QLabel;
+  QLabel * count_cjkchars = new QLabel;
+
+  QVBoxLayout * valuelayout = new QVBoxLayout;
+  valuelayout->addWidget(count_words);
+  valuelayout->addWidget(count_sentences);
+  valuelayout->addWidget(count_syllables);
+  valuelayout->addWidget(count_lines);
+  valuelayout->addWidget(count_flesch);
+  valuelayout->addWidget(count_charnospaces);
+  valuelayout->addWidget(count_charspaces);
+  valuelayout->addWidget(count_cjkchars);
+  QWidget * mainwidget =  new QWidget;
+  QGridLayout *gridlayout = new QGridLayout;
+  gridlayout.addLayout(vnamelayout,0,0);
+  gridlayout.addLayout(valuelayout,0,1);
+  mainwidget->setLayout(gridlayout);
+ */ 
+  
 }
 
 void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
@@ -72,36 +113,38 @@ void KWStatisticsDocker::unsetCanvas()
 void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 {
     if(newArea == 8) {
-	updateHorizontalUi();
+      qDebug()<< "The docker is in bottom area";
+      updateHorizontalUi();
     }
 }
 
 void KWStatisticsDocker::updateHorizontalUi()
 {
-  statisticsDock->widgetDocker.groupBox->hide();
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Words);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Words);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_words);
 
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Sentences);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_sentences);
   
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Syllables);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_syllables);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.Words);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_words);
 
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Lines);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_lines);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.Sentences);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_sentences);
+  
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.Syllables);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_syllables);
 
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.spaces);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_spaces);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.Lines);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_lines);
 
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.nospaces);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_nospaces);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Cjkchars);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_cjkchars);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.spaces);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_spaces);
 
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.Flesch);
-  statisticsDock->widgetDocker.bottomLayout->addWidget(statisticsDock->widgetDocker.count_flesch);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.nospaces);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_nospaces);
+
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.Cjkchars);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_cjkchars);
+
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.Flesch);
+  statisticsDock->widgetDocker.horizontalLayout_3->addWidget(statisticsDock->widgetDocker.count_flesch);
 
 }
 
