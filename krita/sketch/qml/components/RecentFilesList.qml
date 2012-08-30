@@ -63,6 +63,7 @@ Item {
             MouseArea {
                 anchors.fill: parent;
                 onClicked: {
+                    recentImagesModel.addRecent(model.url);
                     Settings.currentFile = model.url;
                     base.clicked();
                 }

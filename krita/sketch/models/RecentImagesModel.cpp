@@ -52,7 +52,7 @@ public:
         KConfigGroup grp(KGlobal::config(), "RecentFiles");
         maxItems = grp.readEntry("maxRecentFileItems", 100);
 
-        loadEntries(KConfigGroup(KGlobal::config(), "RecentFiles"));
+        loadEntries(grp);
     }
 
     void loadEntries(const KConfigGroup &grp)
@@ -121,6 +121,7 @@ public:
     QStringList recentFilesIndex;
     QStringList recentFiles;
 };
+
 
 RecentImagesModel::RecentImagesModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -211,14 +212,29 @@ QVariant RecentImagesModel::headerData(int section, Qt::Orientation orientation,
     return result;
 }
 
-void RecentImagesModel::addRecent(const KUrl &url)
+void RecentImagesModel::addRecent(const QString &_url)
 {
+
     if (d->recentFiles.size() > d->maxItems) {
         d->recentFiles.removeLast();
         d->recentFilesIndex.removeLast();
     }
-    d->recentFiles.insert(0, QDir::toNativeSeparators(url.toLocalFile()));
-    d->recentFilesIndex.insert(0, QFile(url.toLocalFile()).fileName());
+
+    QString localFile = QDir::toNativeSeparators(_url);
+    QString fileName  = QFileInfo(_url).fileName();
+
+    if (d->recentFiles.contains(localFile)) {
+        d->recentFiles.removeAll(localFile);
+    }
+
+    if (d->recentFilesIndex.contains(fileName)) {
+        d->recentFilesIndex.removeAll(fileName);
+    }
+
+    d->recentFiles.insert(0, localFile);
+    d->recentFilesIndex.insert(0, fileName);
+
+    d->saveEntries(KConfigGroup(KGlobal::config(), "RecentFiles"));
 }
 
 

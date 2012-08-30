@@ -21,8 +21,6 @@
 #include <QAbstractListModel>
 
 
-class KUrl;
-
 class RecentImagesModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -47,7 +45,7 @@ public:
 
 public Q_SLOTS:
 
-    void addRecent(const KUrl&url);
+    void addRecent(const QString &fileName);
 
 private:
     class Private;
