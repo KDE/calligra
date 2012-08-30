@@ -30,8 +30,8 @@ KoBlobToolFactory::KoBlobToolFactory()
         : KoToolFactoryBase("KoBlobTool")
 {
     setToolTip(i18n("Blob Tool"));
-    setToolType("krita, karbon");
-    setIconName(koIconNameCStr("blob_tool"));
+    setToolType("karbon, krita");
+    setIconName(koIconNameCStr("blob-tool"));
     setPriority(2);
     setActivationShapeId("flake/edit");
 }

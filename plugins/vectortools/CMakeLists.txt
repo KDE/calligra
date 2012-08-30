@@ -20,14 +20,14 @@ kde4_add_ui_files(calligravectortools_PART_SRCS
 
 kde4_add_plugin(calligravectortools ${calligravectortools_PART_SRCS})
 
-target_link_libraries(calligravectortools)
+target_link_libraries(calligravectortools komain)
 
 install(TARGETS calligravectortools DESTINATION ${PLUGIN_INSTALL_DIR})
 
-kde4_install_icons( ${DATA_INSTALL_DIR}/icons  )
+kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons  )
 
 ########### install files ###############
 
-install( FILES       blob_tool.png
-         DESTINATION ${DATA_INSTALL_DIR}/pics  )
+install( FILES       hi22-action-blob-tool.png
+         DESTINATION ${DATA_INSTALL_DIR}/calligra/icons )
 install( FILES calligravectortools.desktop  DESTINATION ${SERVICES_INSTALL_DIR} )
