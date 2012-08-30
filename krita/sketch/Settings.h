@@ -21,25 +21,34 @@
 #define SETTINGS_H
 
 #include <QObject>
+#include <QString>
 
 class Settings : public QObject
 {
+
     Q_OBJECT
     Q_PROPERTY( QString currentPreset READ currentPreset WRITE setCurrentPreset NOTIFY currentPresetChanged )
+    Q_PROPERTY( QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged )
 
-    public:
-        explicit Settings( QObject* parent = 0 );
-        virtual ~Settings();
+public:
+    explicit Settings( QObject* parent = 0 );
+    virtual ~Settings();
 
-        QString currentPreset() const;
-        void setCurrentPreset( const QString& preset );
+public Q_SLOTS:
 
-    Q_SIGNALS:
-        void currentPresetChanged();
+    QString currentPreset() const;
+    void setCurrentPreset( const QString& preset );
 
-    private:
-        class Private;
-        Private* const d;
+    QString currentFile() const;
+    void setCurrentFile(const QString &fileName);
+
+Q_SIGNALS:
+    void currentPresetChanged();
+    void currentFileChanged();
+
+private:
+    class Private;
+    Private* const d;
 };
 
 #endif // SETTINGS_H

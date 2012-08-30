@@ -25,6 +25,7 @@ class KisSketchView : public CanvasControllerDeclarative
 {
     Q_OBJECT
     Q_PROPERTY(QObject* document READ doc)
+    Q_PROPERTY(QString document WRITE loadDocument)
     Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
 
 public:

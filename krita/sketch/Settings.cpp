@@ -21,8 +21,9 @@
 
 class Settings::Private
 {
-    public:
-        QString currentPreset;
+public:
+    QString currentPreset;
+    QString currentFile;
 };
 
 Settings::Settings( QObject* parent )
@@ -46,5 +47,18 @@ void Settings::setCurrentPreset(const QString& preset)
     d->currentPreset = preset;
     emit currentPresetChanged();
 }
+
+
+QString Settings::currentFile() const
+{
+    return d->currentFile;
+}
+
+void Settings::setCurrentFile(const QString& fileName)
+{
+    d->currentFile = fileName;
+    emit currentFileChanged();
+}
+
 
 #include "Settings.moc"
