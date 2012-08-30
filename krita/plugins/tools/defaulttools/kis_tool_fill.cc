@@ -151,7 +151,7 @@ bool KisToolFill::flood(int startX, int startY)
         fillPainter.beginTransaction("");
 
         fillPainter.setSizemod(m_sizemod);
-        fillPainter.setFeather(m_feather);
+        //fillPainter.setFeather(m_feather);
         fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(m_opacity);
         fillPainter.setFillThreshold(m_threshold);
