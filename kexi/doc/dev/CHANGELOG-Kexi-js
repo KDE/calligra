@@ -132,7 +132,62 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
+===================== Kexi 2.6  =====================
+
+~~~~~~~~~~~~~~~~ 2.6 Alpha 1 ~~~~~~~~~~~~~~~~
+
+TODO:
+Table Designer
+*Changing Length property does not trigger data removal
+BUG:301262
+
+TODO:
+KexiDB
+*MySQL Driver
+**add config option for the length limit
+
+TODO: make
+*See also http://blog.mclaughlinsoftware.com/2009/03/09/sql-concatenation-blues/
+
+2012-08-13..23
+Core
+*Add support for user data storage
+FEATURE:305074
+Table View
+*Remember column widths in tabular data view
+FEATURE:230994
+
+2012-08-14
+KexiDB
+*Added unit test for creating .kexi database file with KexiDB::Connection and test data
+
+2012-08-11
+Main Window
+*Declare 'full screen' as global action for use in user commands or scripts
+
+2012-08-14
+*Added unit test for creating .kexi database file with KexiDB::Connection and adding test data
+
 ===================== Kexi 2.5  =====================
+
+~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
+
+2012-08-30
+Startup
+*Fetch startup UI from x.y.0 URL for any x.y.z version, not from x.y.z URL
+
+2012-08-26
+Query Designer
+*Make string concatenation operator || work
+BUG:305793
+REVIEW:106199
+
+2012-08-23
+KexiDB
+*Make it possible to disable db drivers even if the libs are present and found
+**renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config flag (by jstaniek)
+BUG:305683
+REVIEW:106152
 
 ~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
 
@@ -145,7 +200,13 @@ REVIEW:106023
 *Missing table kexi__parts is no longer a critical error in Kexi
 **This enables opening databases created without KexiProject but with pure KexiDB::Connection
 **Useful e.g. for Bibliography storage implementation
-*Added unit test for creating .kexi database file with KexiDB::Connection and adding test data
+REVIEW:106027
+
+2012-08-13
+Main Window
+*Workaround for visual glitch of Oxygen style for menu widget
+BUG:305051
+REVIEW:105996
 
 2012-08-09
 CSV Import
@@ -188,16 +249,6 @@ REVIEW:105843
 ~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
 
 ~~~~~~~~~~~~~~~~ 2.5 Beta 1 (2.4.91) ~~~~~~~~~~~~~~~~
-
-TODO:
-Table Designer
-*Changing Length property does not trigger data removal
-BUG:301262
-
-TODO:
-KexiDB
-*MySQL Driver
-**add config option for the length limit
 
 2012-06-07
 KexiDB
