@@ -23,7 +23,7 @@
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <kexidb/drivers/mySQL/mysqlconnection_p.h>
+#include <kexidb/drivers/mysql/mysqlconnection_p.h>
 
 namespace KexiMigration
 {
