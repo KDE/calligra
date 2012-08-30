@@ -38,54 +38,14 @@
 
 
 // ================================================================
-//                     class EpubFilePrivate
-
-
-// Struct FileInfo holds the information about a file inside the EPUB store.
-
-struct FileInfo
-{
-    FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents)
-        : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents)
-    {}
-
-    QString     m_id;
-    QString     m_fileName;
-    QByteArray  m_mimetype;
-    QByteArray  m_fileContents;
-};
-
-
-struct EpubFilePrivate
-{
-public:
-    EpubFilePrivate() {}
-    ~EpubFilePrivate() {}
-
-    QList<FileInfo*>  m_files;  // Embedded files
-};
-
-
-// ================================================================
 //                         class EpubFile
 
 EpubFile::EpubFile()
-    : d(new EpubFilePrivate)
 {
 }
 
 EpubFile::~EpubFile()
 {
-    qDeleteAll(d->m_files);
-
-    delete d;
-}
-
-void EpubFile::addContentFile(QString id, QString fileName,
-                              QByteArray mimetype, QByteArray fileContents)
-{
-    FileInfo *newFile = new FileInfo(id, fileName, mimetype, fileContents);
-    d->m_files.append(newFile);
 }
 
 
@@ -112,26 +72,22 @@ KoFilter::ConversionStatus EpubFile::writeEpub(const QString &fileName,
         return status;
     }
 
-    // Write contents of added files.
-    foreach(FileInfo *file, d->m_files) {
-        if (!epubStore->open(file->m_fileName)) {
-            kDebug(30517) << "Can not create" << file->m_fileName;
-            delete epubStore;
-            return KoFilter::CreationError;
-        }
-        epubStore->write(file->m_fileContents);
-        epubStore->close();
-    }
-
     // Write content.opf
-    status =  writeOpf(epubStore, metadata);
+    status = writeOpf(epubStore, metadata);
     if (status != KoFilter::OK) {
         delete epubStore;
         return status;
     }
 
     // Write toc.ncx
-    status =  writeNcx(epubStore, metadata);
+    status = writeNcx(epubStore, metadata);
+    if (status != KoFilter::OK) {
+        delete epubStore;
+        return status;
+    }
+
+    // Write contents of added files.
+    status = FileCollector::writeFiles(epubStore);
 
     delete epubStore;
     return status;
@@ -160,7 +116,7 @@ KoFilter::ConversionStatus EpubFile::writeMetaInf(KoStore *epubStore)
     writer.startElement("rootfiles");
 
     writer.startElement("rootfile");
-    writer.addAttribute("full-path", "OEBPS/content.opf");
+    writer.addAttribute("full-path", pathPrefix() + "content.opf");
     writer.addAttribute("media-type", "application/oebps-package+xml");
     writer.endElement(); // rootfile
 
@@ -174,7 +130,7 @@ KoFilter::ConversionStatus EpubFile::writeMetaInf(KoStore *epubStore)
 KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
                                               QHash<QString, QString> &metadata)
 {
-    if (!epubStore->open("OEBPS/content.opf")) {
+    if (!epubStore->open(pathPrefix() + "content.opf")) {
         kDebug(30517) << "Can not create content.opf .";
         return KoFilter::CreationError;
     }
@@ -209,7 +165,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.addAttribute("id", "BookId");
     writer.addAttribute("opf:scheme", "ISBN");
     writer.addTextNode("123456789X");  // FIXME: Where to get this?
-    writer.endElement(); // dc:language
+    writer.endElement(); // dc:identifier
 
     // FIXME: dc:creator and many more (optional)
 
@@ -219,12 +175,13 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.startElement("manifest");
 
     // Write manifest entry for each embedded file.
-    foreach(FileInfo *file, d->m_files) {
+    foreach(FileInfo *file, files()) {
         // Since paths are relative from where this file is, remove
         // the common prefix from the reference.
         QString relativeFilename = file->m_fileName;
-        if (relativeFilename.startsWith("OEBPS/"))
-            relativeFilename = relativeFilename.right(relativeFilename.size() - 6);
+        if (relativeFilename.startsWith(pathPrefix()))
+            relativeFilename = relativeFilename.right(relativeFilename.size()
+                                                      - pathPrefix().size());
 
         writer.startElement("item");
         writer.addAttribute("id", file->m_id);
@@ -233,26 +190,28 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
         writer.endElement(); // item
     }
 
-    // toc.ncx
+    // toc.ncx 
     writer.startElement("item");
     writer.addAttribute("id", "ncx");
     writer.addAttribute("href", "toc.ncx");
     writer.addAttribute("media-type", "application/x-dtbncx+xml");
     writer.endElement(); // item
 
-    writer.endElement(); // metadata
+    writer.endElement(); // manifest
 
     // ==== spine ==== 
     writer.startElement("spine");
     writer.addAttribute("toc", "ncx");
 
-    foreach(FileInfo *file, d->m_files) {
+    foreach(FileInfo *file, files()) {
         // Since paths are relative from where this file is, remove
         // the common prefix from the reference.
         QString relativeFilename = file->m_fileName;
-        if (relativeFilename.contains("chapter")) {
-            if (relativeFilename.startsWith("OEBPS/"))
-                relativeFilename = relativeFilename.right(relativeFilename.size() - 6);
+        if (relativeFilename.contains(filePrefix())) {
+            if (relativeFilename.startsWith(pathPrefix())) {
+                relativeFilename = relativeFilename.right(relativeFilename.size() 
+                                                          - pathPrefix().size());
+            }
             writer.startElement("itemref");
             writer.addAttribute("idref", file->m_id);
             writer.endElement(); // itemref
@@ -270,7 +229,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
 KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
                                               QHash<QString, QString> &metadata)
 {
-    if (!epubStore->open("OEBPS/toc.ncx")) {
+    if (!epubStore->open(pathPrefix() + "toc.ncx")) {
         kDebug(30517) << "Can not create toc.ncx.";
         return KoFilter::CreationError;
     }
@@ -336,13 +295,14 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
     writer.startElement("navMap");
 
     int playOrder = 1;
-    foreach(FileInfo *file, d->m_files) {
+    foreach(FileInfo *file, files()) {
         // Since paths are relative from where this file is, remove
         // the common prefix from the reference.
         QString relativeFilename = file->m_fileName;
-        if (relativeFilename.contains("chapter")) {
-            if (relativeFilename.startsWith("OEBPS/"))
-                relativeFilename = relativeFilename.right(relativeFilename.size() - 6);
+        if (relativeFilename.contains(filePrefix())) {
+            if (relativeFilename.startsWith(pathPrefix()))
+                relativeFilename = relativeFilename.right(relativeFilename.size()
+                                                          - pathPrefix().size());
 
             writer.startElement("navPoint");
             writer.addAttribute("id", "navpoint-" + QString::number(playOrder));

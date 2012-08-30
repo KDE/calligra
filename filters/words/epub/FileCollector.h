@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef EPUBFILE_H
-#define EPUBFILE_H
+#ifndef FILECOLLECTOR_H
+#define FILECOLLECTOR_H
 
 #include <QHash>
 #include <KoFilter.h>
@@ -29,33 +29,47 @@ class QByteArray;
 
 class KoStore;
 
-class EpubFilePrivate;
+class FileCollectorPrivate;
 
-class EpubFile
+class FileCollector
 {
 public:
-    EpubFile();
-    ~EpubFile();
+    struct FileInfo 
+    {
+        FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents)
+            : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents)
+        {}
+
+        QString     m_id;
+        QString     m_fileName;
+        QByteArray  m_mimetype;
+        QByteArray  m_fileContents;
+    };
+
+    FileCollector();
+    virtual ~FileCollector();
+
+    void setFilePrefix(QString prefix);
+    QString filePrefix() const;
+    void setPathPrefix(QString prefix);
+    QString pathPrefix() const;
 
     void addContentFile(QString id, QString fileName,
                         QByteArray mimetype, QByteArray fileContents);
 
+    QList<FileInfo*>  files() const;   // Embedded files
+
+    
+protected:
+
     // When you have created all the content and added it using
-    // addContentFile(), call this function once and it will write the
-    // epub to the disk.
-    KoFilter::ConversionStatus  writeEpub(const QString &fileName,
-                                          const QByteArray &appIdentification,
-                                          QHash<QString, QString> metadata);
+    // addContentFile(), call this function once and it will write
+    // them into the result file or directory depending on which type
+    // of KoStore that is used.
+    virtual KoFilter::ConversionStatus  writeFiles(KoStore *store);
 
 private:
-    KoFilter::ConversionStatus  writeMetaInf(KoStore *epubStore);
-    KoFilter::ConversionStatus  writeOpf(KoStore *epubStore,
-                                         QHash<QString, QString> &metadata);
-    KoFilter::ConversionStatus  writeNcx(KoStore *epubStore,
-                                         QHash<QString, QString> &metadata);
-
-private:
-    EpubFilePrivate * const d;
+    FileCollectorPrivate * const d;
 };
 
-#endif // EPUBFILE_H
+#endif // FILECOLLECTOR_H

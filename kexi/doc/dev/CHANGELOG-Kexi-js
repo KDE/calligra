@@ -136,6 +136,22 @@ TODO:
 
 ~~~~~~~~~~~~~~~~ 2.6 Alpha 1 ~~~~~~~~~~~~~~~~
 
+<<<<<<< HEAD
+=======
+TODO:
+Table Designer
+*Changing Length property does not trigger data removal
+BUG:301262
+
+TODO:
+KexiDB
+*MySQL Driver
+**add config option for the length limit
+
+TODO: make
+*See also http://blog.mclaughlinsoftware.com/2009/03/09/sql-concatenation-blues/
+
+>>>>>>> master
 2012-08-13..23
 Core
 *Add support for user data storage
@@ -159,13 +175,15 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
 
+2012-08-30
+Startup
+*Fetch startup UI from x.y.0 URL for any x.y.z version, not from x.y.z URL
+
 2012-08-26
 Query Designer
 *Make string concatenation operator || work
 BUG:305793
 REVIEW:106199
-
-~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
 
 2012-08-23
 KexiDB
@@ -173,6 +191,8 @@ KexiDB
 **renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config flag (by jstaniek)
 BUG:305683
 REVIEW:106152
+
+~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
 
 2012-08-14
 KexiDB
@@ -232,16 +252,6 @@ REVIEW:105843
 ~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
 
 ~~~~~~~~~~~~~~~~ 2.5 Beta 1 (2.4.91) ~~~~~~~~~~~~~~~~
-
-TODO:
-Table Designer
-*Changing Length property does not trigger data removal
-BUG:301262
-
-TODO:
-KexiDB
-*MySQL Driver
-**add config option for the length limit
 
 2012-06-07
 KexiDB
