@@ -133,9 +133,41 @@ QObject* KisSketchView::view() const
 
 void KisSketchView::createDocument()
 {
-    KPluginFactory* factory = KLibLoader::self()->factory("kritapart");
-    d->doc = static_cast<KisDoc2*>(factory->create(this, "KritaPart"));
-    d->doc->newImage("test", 1000, 1000, KoColorSpaceRegistry::instance()->rgb8());
+    KisDoc2* doc = new KisDoc2();
+    d->doc = doc;
+
+    // create an empty document
+    if (file().isEmpty()) {
+
+        d->doc->newImage("test", 1000, 1000, KoColorSpaceRegistry::instance()->rgb8());
+    }
+    else {
+        //    emit progress(1);
+
+        KisDoc2* doc = new KisDoc2();
+        d->doc = doc;
+
+        //    ProgressProxy *proxy = new ProgressProxy(this);
+        //    doc->setProgressProxy(proxy);
+        //    connect(proxy, SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
+
+        KMimeType::Ptr type = KMimeType::findByPath(file());
+        QString path = file();
+
+        if (type->name() != doc->nativeFormatMimeType()) {
+            KoFilterManager *manager = new KoFilterManager(doc,  doc->progressUpdater());
+            //manager->setBatchMode(true);
+            KoFilter::ConversionStatus status;
+            path = manager->importDocument(KUrl(file()).toLocalFile(), type->name(), status);
+        }
+
+        doc->openUrl(KUrl(path));
+
+        setMargin(10);
+        //    emit progress(100);
+        //    emit completed();
+
+    }
 
     KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
 
@@ -159,39 +191,6 @@ void KisSketchView::createDocument()
 
     zoomHandler()->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
     d->canvas->adjustOrigin();
-}
-
-void KisSketchView::loadDocument(const QString &fileName)
-{
-//    emit progress(1);
-
-    KisDoc2* doc = new KisDoc2();
-    d->doc = doc;
-
-    setFile(fileName);
-
-//    ProgressProxy *proxy = new ProgressProxy(this);
-//    doc->setProgressProxy(proxy);
-//    connect(proxy, SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
-
-    KMimeType::Ptr type = KMimeType::findByPath(file());
-    QString path = file();
-
-    if (type->name() != doc->nativeFormatMimeType()) {
-        KoFilterManager *manager = new KoFilterManager(doc,  doc->progressUpdater());
-        //manager->setBatchMode(true);
-        KoFilter::ConversionStatus status;
-        path = manager->importDocument(KUrl(file()).toLocalFile(), type->name(), status);
-    }
-
-    doc->openUrl(KUrl(path));
-
-    setMargin(10);
-//    d->updateCanvas();
-
-//    emit progress(100);
-//    emit completed();
-
 }
 
 void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -291,32 +290,32 @@ bool KisSketchView::sceneEvent(QEvent* event)
 {
     if (d->canvas) {
         switch(event->type()) {
-            case QEvent::GraphicsSceneMousePress: {
-                qDebug() << event;
-                QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-                QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-                d->canvas->inputManager()->eventFilter(d->canvas, mevent);
-                return true;
-            }
-            case QEvent::GraphicsSceneMouseMove: {
-                QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-                QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-                d->canvas->inputManager()->eventFilter(d->canvas, mevent);
-                return true;
-            }
-            case QEvent::GraphicsSceneMouseRelease: {
-                QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-                QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-                d->canvas->inputManager()->eventFilter(d->canvas, mevent);
-                return true;
-            }
-            case QEvent::GraphicsSceneWheel: {
-                QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
-                QWheelEvent *wevent = new QWheelEvent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
-                d->canvas->inputManager()->eventFilter(d->canvas, wevent);
-            }
-            default:
-                break;
+        case QEvent::GraphicsSceneMousePress: {
+            qDebug() << event;
+            QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+            QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+            return true;
+        }
+        case QEvent::GraphicsSceneMouseMove: {
+            QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+            QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+            return true;
+        }
+        case QEvent::GraphicsSceneMouseRelease: {
+            QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
+            QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+            return true;
+        }
+        case QEvent::GraphicsSceneWheel: {
+            QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
+            QWheelEvent *wevent = new QWheelEvent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
+            d->canvas->inputManager()->eventFilter(d->canvas, wevent);
+        }
+        default:
+            break;
         }
     }
     return QDeclarativeItem::sceneEvent(event);
@@ -355,13 +354,13 @@ void KisSketchView::onLongTapEnd(const QPointF &location)
 
 QPointF KisSketchView::documentToView(const QPointF& point)
 {
-//    return d->canvas->viewMode()->documentToView(point, d->canvas->viewConverter());
+    //    return d->canvas->viewMode()->documentToView(point, d->canvas->viewConverter());
     return QPointF();
 }
 
 QPointF KisSketchView::viewToDocument(const QPointF& point)
 {
-//    return d->canvas->viewMode()->viewToDocument(point, d->canvas->viewConverter());
+    //    return d->canvas->viewMode()->viewToDocument(point, d->canvas->viewConverter());
     return QPointF();
 }
 
