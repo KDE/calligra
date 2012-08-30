@@ -121,5 +121,26 @@
         <file>images/svg/icon-filter_save-yellow.svg</file>
         <file>images/svg/icon-visible_off.svg</file>
         <file>images/svg/icon-visible_on.svg</file>
+        <file>images/svg/icon-erase.svg</file>
+        <file>images/svg/icon-crop-blue.svg</file>
+        <file>images/svg/icon-crop.svg</file>
+        <file>images/svg/icon-cancel-blue.svg</file>
+        <file>images/svg/icon-cancel.svg</file>
+        <file>images/svg/icon-fill-blue.svg</file>
+        <file>images/svg/icon-fill.svg</file>
+        <file>images/svg/icon-gradient-blue.svg</file>
+        <file>images/svg/icon-gradient.svg</file>
+        <file>images/svg/icon-locked_off-blue.svg</file>
+        <file>images/svg/icon-locked_on-blue.svg</file>
+        <file>images/svg/icon-mirror_c-blue.svg</file>
+        <file>images/svg/icon-mirror_h-blue.svg</file>
+        <file>images/svg/icon-mirror_v-blue.svg</file>
+        <file>images/svg/icon-move-blue.svg</file>
+        <file>images/svg/icon-move.svg</file>
+        <file>images/svg/icon-paint-blue.svg</file>
+        <file>images/svg/icon-paint.svg</file>
+        <file>images/svg/icon-transform-blue.svg</file>
+        <file>images/svg/icon-transform.svg</file>
+        <file>images/svg/icon-apply-blue.svg</file>
     </qresource>
 </RCC>
