@@ -41,10 +41,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-// This directory
-#include "OdtHtmlConverter.h"
-#include "libepub/EpubFile.h"
-
 // Other.  (Will be moved to a library)
 #include "WmfPainterBackend.h"
 

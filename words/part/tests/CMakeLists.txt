@@ -8,8 +8,8 @@ include_directories(${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
         ${CMAKE_SOURCE_DIR}/words/part
 )
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
-add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}/\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}/")
 
 ########### next target ###############
 

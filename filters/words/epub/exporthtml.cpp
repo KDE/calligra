@@ -21,7 +21,7 @@
 
 
 // Own
-#include "exportepub2.h"
+#include "exporthtml.h"
 
 // Qt
 #include <QSvgGenerator>
@@ -44,7 +44,7 @@
 // This plugin
 #include "OdfParser.h"
 #include "OdtHtmlConverter.h"
-#include "EpubFile.h"
+#include "HtmlFile.h"
 
 #include "WmfPainterBackend.h"
 
@@ -55,24 +55,24 @@
 #include "SvmPainterBackend.h"
 
 
-K_PLUGIN_FACTORY(ExportEpub2Factory, registerPlugin<ExportEpub2>();)
-K_EXPORT_PLUGIN(ExportEpub2Factory("calligrafilters"))
+K_PLUGIN_FACTORY(ExportHtmlFactory, registerPlugin<ExportHtml>();)
+K_EXPORT_PLUGIN(ExportHtmlFactory("calligrafilters"))
 
 
-ExportEpub2::ExportEpub2(QObject *parent, const QVariantList&)
+ExportHtml::ExportHtml(QObject *parent, const QVariantList&)
     : KoFilter(parent)
 {
 }
 
-ExportEpub2::~ExportEpub2()
+ExportHtml::~ExportHtml()
 {
 }
 
 
-KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QByteArray &to)
+KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QByteArray &to)
 {
     // Check mimetypes
-    if (from != "application/vnd.oasis.opendocument.text" || to != "application/epub+zip") {
+    if (from != "application/vnd.oasis.opendocument.text" || to != "text/html") {
         return KoFilter::NotImplemented;
     }
 
@@ -91,13 +91,12 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     odfStore->close();
 
     // Start the conversion
-    OdtHtmlConverter converter;
-    OdfParser        odfParser;
-    EpubFile         epub;
     KoFilter::ConversionStatus  status;
 
     // ----------------------------------------------------------------
     // Parse input files
+
+    OdfParser        odfParser;
 
     // Parse meta.xml into m_metadata
     status = odfParser.parseMetadata(odfStore, m_metadata);
@@ -118,7 +117,11 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Create html contents.
     // m_imagesSrcList is an output parameter from the conversion.    
-    status = converter.convertContent(odfStore, m_metadata, &epub,
+    HtmlFile html;
+    html.setPathPrefix("./");
+    html.setFilePrefix(m_chain->outputFile().section('/', -1).section('.', 0, 0));
+    OdtHtmlConverter converter;
+    status = converter.convertContent(odfStore, m_metadata, &html,
                                       m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;
@@ -126,16 +129,16 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     }
 
     // Extract images
-    status = extractImages(odfStore, &epub);
+    status = extractImages(odfStore, &html);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
     }
 
     // ----------------------------------------------------------------
-    // Write the finished epub file to disk
+    // Write the finished html file to disk
 
-    epub.writeEpub(m_chain->outputFile(), to, m_metadata);
+    html.writeHtml(m_chain->outputFile());
 
     delete odfStore;
 
@@ -143,9 +146,9 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 }
 
 
-KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFile *epubFile)
+KoFilter::ConversionStatus ExportHtml::extractImages(KoStore *odfStore, HtmlFile *htmlFile)
 {
-    // Extract images and add them to epubFile one by one
+    // Extract images and add them to htmlFile one by one
     QByteArray imgContent;
     int imgId = 1;
     foreach (const QString imgSrc, m_imagesSrcList.keys()) {
@@ -155,11 +158,17 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             return KoFilter::FileNotFound;
         }
 
+#if 1
+        htmlFile->addContentFile(("image" + QString::number(imgId)), // id
+                                 (htmlFile->filePrefix() + imgSrc.section('/', -1)), // filename
+                                 m_manifest.value(imgSrc).toUtf8(), imgContent);
+#else
+
         VectorType type = vectorType(imgContent);
         QSizeF qSize = m_imagesSrcList.value(imgSrc);
         switch (type) {
 
-        case ExportEpub2::VectorTypeSvm:
+        case ExportHtml::VectorTypeSvm:
             {
                 kDebug(30517) << "Svm file";
                 QSize size(qSize.width(), qSize.height());
@@ -174,7 +183,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                                          "image/svg+xml", output);
                 break;
             }
-        case ExportEpub2::VectorTypeEmf:
+        case ExportHtml::VectorTypeEmf:
             {
                 kDebug(30517) << "EMF file";
                 QSize size(qSize.width(), qSize.height());
@@ -189,7 +198,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
                                          "image/svg+xml", output);
                 break;
             }
-        case ExportEpub2::VectorTypeWmf:
+        case ExportHtml::VectorTypeWmf:
             {
                 kDebug(30517) << "WMF file";
                  QByteArray output;
@@ -208,7 +217,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
             // assume that the image can be used as it is. The user
             // will find out soon anyway when s/he tries to look at
             // the image.
-        case ExportEpub2::VectorTypeOther:
+        case ExportHtml::VectorTypeOther:
             {
                 kDebug(30517) << "Other file";
                 epubFile->addContentFile(("image" + QString::number(imgId)),
@@ -220,12 +229,14 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
         default:
             kDebug(30517) << "";
         }
+#endif
     }
     return KoFilter::OK;
 }
 
+#if 0
 
-bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
+bool ExportHtml::convertSvm(QByteArray &input, QByteArray &output, QSize size)
 {
 
     QBuffer *outBuf = new QBuffer(&output);
@@ -256,7 +267,7 @@ bool ExportEpub2::convertSvm(QByteArray &input, QByteArray &output, QSize size)
     return true;
 }
 
-bool ExportEpub2::convertEmf(QByteArray &input, QByteArray &output, QSize size)
+bool ExportHtml::convertEmf(QByteArray &input, QByteArray &output, QSize size)
 {
     QBuffer *outBuf = new QBuffer(&output);
     QSvgGenerator generator;
@@ -286,7 +297,7 @@ bool ExportEpub2::convertEmf(QByteArray &input, QByteArray &output, QSize size)
     return true;
 }
 
-bool ExportEpub2::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
+bool ExportHtml::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
 {
     QBuffer *outBuf = new QBuffer(&output);
     QSvgGenerator generator;
@@ -321,26 +332,26 @@ bool ExportEpub2::convertWmf(QByteArray &input, QByteArray &output, QSizeF size)
 // ----------------------------------------------------------------
 // These functions were taken from the vector shape.
 
-ExportEpub2::VectorType  ExportEpub2::vectorType(QByteArray &content)
+ExportHtml::VectorType  ExportHtml::vectorType(QByteArray &content)
 {
     if (isSvm(content))
-        return ExportEpub2::VectorTypeSvm;
+        return ExportHtml::VectorTypeSvm;
     if (isEmf(content))
-        return ExportEpub2::VectorTypeEmf;
+        return ExportHtml::VectorTypeEmf;
     if (isWmf(content))
-        return ExportEpub2::VectorTypeWmf;
+        return ExportHtml::VectorTypeWmf;
 
-    return ExportEpub2::VectorTypeOther;
+    return ExportHtml::VectorTypeOther;
 }
 
-bool ExportEpub2::isSvm(QByteArray &content)
+bool ExportHtml::isSvm(QByteArray &content)
 {
     if (content.startsWith("VCLMTF"))
         return true;
     return false;
 }
 
-bool ExportEpub2::isEmf(QByteArray &content)
+bool ExportHtml::isEmf(QByteArray &content)
 {
     const char *data = content.constData();
     const int   size = content.count();
@@ -366,7 +377,7 @@ bool ExportEpub2::isEmf(QByteArray &content)
     return false;
 }
 
-bool ExportEpub2::isWmf(QByteArray &content)
+bool ExportHtml::isWmf(QByteArray &content)
 {
     const char *data = content.constData();
     const int   size = content.count();
@@ -389,3 +400,5 @@ bool ExportEpub2::isWmf(QByteArray &content)
 
     return false;
 }
+
+#endif
