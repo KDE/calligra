@@ -21,11 +21,14 @@
 
 #include "CanvasControllerDeclarative.h"
 
+
+
 class KisSketchView : public CanvasControllerDeclarative
 {
     Q_OBJECT
     Q_PROPERTY(QObject* document READ doc)
     Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
+    Q_PROPERTY(QObject* settings READ settings WRITE setSettings)
 
 public:
     KisSketchView(QDeclarativeItem* parent = 0);
@@ -43,6 +46,9 @@ public Q_SLOTS:
 
     /// XXX: add parameter options... Or how does QML interact with a class like this?
     void createDocument();
+
+    QObject *settings();
+    void setSettings(QObject  *settings);
 
 Q_SIGNALS:
     void viewChanged();

@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-
+#include <QClipboard>
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 
@@ -42,20 +42,26 @@
 #include <KoFilterManager.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoUnit.h>
 
 #include "ProgressProxy.h"
 #include "KisSketchCanvasFactory.h"
 
+#include "kis_painter.h"
+#include "kis_layer.h"
+#include "kis_paint_device.h"
 #include "kis_doc2.h"
 #include "kis_canvas2.h"
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "kis_image.h"
+#include "kis_clipboard.h"
 #include <opengl2/kis_gl2_canvas.h>
 #include <input/kis_input_manager.h>
 #include <kis_canvas_resource_provider.h>
 
 #include "KisSketchCanvas.h"
+#include "Settings.h"
 
 class KisSketchView::Private
 {
@@ -79,6 +85,7 @@ public:
     KisView2* view;
     KisCanvas2* canvas;
 
+    Settings *settings;
     KisSketchCanvas *canvasWidget;
 
     QGLShaderProgram *shader;
@@ -137,11 +144,38 @@ void KisSketchView::createDocument()
     d->doc = doc;
 
     // create an empty document
-    if (file().isEmpty()) {
 
-        d->doc->newImage("test", 1000, 1000, KoColorSpaceRegistry::instance()->rgb8());
+    if (d->settings->useClipBoard() && KisClipboard::instance()->hasClip()) {
+
+        KisConfig cfg;
+        cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
+
+        QSize sz = KisClipboard::instance()->clipSize();
+        KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QPoint(0,0));
+
+        d->doc->newImage("From Clipboard", sz.width(), sz.height(), clipDevice->colorSpace());
+
+        KisImageWSP image = d->doc->image();
+        if (image && image->root() && image->root()->firstChild()) {
+            KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
+            Q_ASSERT(layer);
+            layer->setOpacity(OPACITY_OPAQUE_U8);
+            QRect r = clipDevice->exactBounds();
+            KisPainter painter;
+            painter.begin(layer->paintDevice());
+            painter.setCompositeOp(COMPOSITE_COPY);
+            painter.bitBlt(QPoint(0, 0), clipDevice, r);
+            layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
+        }
     }
-    else {
+    else if (d->settings->useWebCam()) {
+
+    }
+    else if (file().isEmpty()) {
+        d->doc->newImage("test", d->settings->imageWidth(), d->settings->imageHeight(), KoColorSpaceRegistry::instance()->rgb8());
+        d->doc->image()->setResolution(d->settings->imageResolution() / 72.0, d->settings->imageResolution() / 72.0);
+    }
+    else if (!file().isEmpty()){
         //    emit progress(1);
 
         KisDoc2* doc = new KisDoc2();
@@ -191,6 +225,16 @@ void KisSketchView::createDocument()
 
     zoomHandler()->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
     d->canvas->adjustOrigin();
+}
+
+QObject *KisSketchView::settings()
+{
+    return d->settings;
+}
+
+void KisSketchView::setSettings(QObject *settings)
+{
+    d->settings = qobject_cast<Settings*>(settings);
 }
 
 void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)

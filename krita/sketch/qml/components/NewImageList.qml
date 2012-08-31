@@ -61,7 +61,33 @@ PageStack {
 
                     image: model.image;
 
-                    onClicked: pageStack.push( createNewPage );
+                    enabled: model.name === "clip" ? KisClipBoard.clip : true;
+
+                    onClicked: {
+                        if (model.bnrole === "a4p") {
+                            Settings.imageWidth = 2408;
+                            Settings.imageHeight = 3509;
+                            Settings.imageResolution = 300;
+                            onClicked: base.clicked();
+                        }
+                        else if (model.bnrole === "a4l") {
+                            Settings.imageWidth = 3509;
+                            Settings.imageHeight = 2408;
+                            Settings.imageResolution = 300;
+                            onClicked: base.clicked();
+                        }
+                        else if (model.bnrole === "custom") {
+                           pageStack.push( createNewPage );
+                        }
+                        else if (model.bnrole === "clip") {
+                            Settings.useClipBoard = true;
+                            onClicked: base.clicked();
+                        }
+                        else if (model.bnrole === "webcam") {
+                            Settings.useWebCam = true;
+                            onClicked: base.clicked();
+                        }
+                    }
                 }
 
                 Label {
@@ -75,12 +101,13 @@ PageStack {
                 }
             }
 
+
             model: ListModel {
-                ListElement { name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-filenew-green.svg" }
-                ListElement { name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-filenew-green.svg" }
-                ListElement { name: "Custom Size"; image: "../images/svg/icon-filenew-green.svg" }
-                ListElement { name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
-                ListElement { name: "From Camera"; image: "../images/svg/icon-camera-green.svg" }
+                ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-A4portrait-green.svg" }
+                ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-A4landscape-green.svg" }
+                ListElement { bnrole: "custom"; name: "Custom Size"; image: "../images/svg/icon-filenew-green.svg" }
+                ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
+                ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-green.svg" }
             }
         }
     } }

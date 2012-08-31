@@ -39,7 +39,7 @@
 
 #include "kis_doc2.h"
 #include "kis_view2.h"
-#include "klibloader.h"
+#include "kis_clipboard.h"
 
 #include "ColorSelectorItem.h"
 #include "IconImageProvider.h"
@@ -101,6 +101,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->rootContext()->setContextProperty("Constants", d->constants);
     d->view->rootContext()->setContextProperty("Settings", d->settings);
     d->view->rootContext()->setContextProperty("RecentFileManager", d->recentFileManager);
+    d->view->rootContext()->setContextProperty("KisClipBoard", KisClipboard::instance());
 
     // This is needed because OpenGL viewport doesn't support partial updates.
     d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

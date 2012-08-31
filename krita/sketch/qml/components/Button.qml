@@ -32,6 +32,7 @@ Item {
     property alias textColor: label.color;
     property alias textSize: label.font.pixelSize;
     property bool shadow: true;
+    property bool enabled: true; // XXX: visualize disabledness
 
     property bool highlight: true;
     property color highlightColor: color;
@@ -69,13 +70,14 @@ Item {
         id: mouse;
         anchors.fill: parent;
         onClicked: {
-            base.clicked();
-            if( base.checkable ) {
-                base.checked = !base.checked;
+            if (enabled) {
+                base.clicked();
+                if( base.checkable ) {
+                    base.checked = !base.checked;
+                }
             }
         }
     }
-
 
     states: State {
         name: "pressed";
