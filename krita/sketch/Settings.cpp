@@ -22,7 +22,22 @@
 class Settings::Private
 {
 public:
+
+    Private()
+        : imageWidth(1024)
+        , imageHeight(768)
+        , imageResolution(300)
+        , useClipBoard(false)
+        , useWebCam(false)
+    {}
+
+
     QString currentFile;
+    int imageWidth;
+    int imageHeight;
+    int imageResolution;
+    bool useClipBoard;
+    bool useWebCam;
 };
 
 Settings::Settings( QObject* parent )
@@ -45,6 +60,59 @@ void Settings::setCurrentFile(const QString& fileName)
 {
     d->currentFile = fileName;
     emit currentFileChanged();
+}
+
+int Settings::imageWidth() const
+{
+    return d->imageWidth;
+}
+
+void Settings::setImageWidth(int imageWidth)
+{
+    d->imageWidth = imageWidth;
+}
+
+
+int Settings::imageHeight() const
+{
+    return d->imageHeight;
+}
+
+void Settings::setImageHeight(int imageHeight)
+{
+    d->imageHeight = imageHeight;
+}
+
+int Settings::imageResolution() const
+{
+    return d->imageResolution;
+}
+
+void Settings::setImageResolution(int imageResolution)
+{
+    d->imageResolution = imageResolution;
+}
+
+
+bool Settings::useClipBoard() const
+{
+    return d->useClipBoard;
+}
+
+void Settings::setUseClipBoard(bool useClipBoard)
+{
+    d->useClipBoard = useClipBoard;
+}
+
+
+bool Settings::useWebCam() const
+{
+    return d->useWebCam;
+}
+
+void Settings::setUseWebCam(bool useWebCam)
+{
+    d->useWebCam = useWebCam;
 }
 
 

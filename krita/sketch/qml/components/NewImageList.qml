@@ -53,12 +53,6 @@ PageStack {
                     }
                 }
 
-
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: pageStack.push( createNewPage );
-                }
-
                 Button {
                     id: thumbnail;
 
@@ -82,8 +76,8 @@ PageStack {
             }
 
             model: ListModel {
-                ListElement { name: "Blank Image (A4)"; image: "../images/svg/icon-filenew-green.svg" }
-                ListElement { name: "Blank Image (A3)"; image: "../images/svg/icon-filenew-green.svg" }
+                ListElement { name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-filenew-green.svg" }
+                ListElement { name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-filenew-green.svg" }
                 ListElement { name: "Custom Size"; image: "../images/svg/icon-filenew-green.svg" }
                 ListElement { name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
                 ListElement { name: "From Camera"; image: "../images/svg/icon-camera-green.svg" }

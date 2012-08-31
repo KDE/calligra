@@ -27,7 +27,13 @@ class Settings : public QObject
 {
 
     Q_OBJECT
-    Q_PROPERTY( QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged )
+    Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
+
+    Q_PROPERTY(int imageWidth READ imageWidth WRITE setImageWidth)
+    Q_PROPERTY(int imageHeight READ imageHeight WRITE setImageHeight)
+    Q_PROPERTY(int imageResolution READ imageResolution WRITE setImageResolution)
+    Q_PROPERTY(bool useClipBoard READ useClipBoard WRITE setUseClipBoard)
+    Q_PROPERTY(bool useWebCam READ useWebCam WRITE setUseWebCam)
 
 public:
     explicit Settings( QObject* parent = 0 );
@@ -35,11 +41,26 @@ public:
 
 public Q_SLOTS:
 
-
     QString currentFile() const;
     void setCurrentFile(const QString &fileName);
 
+    int imageWidth() const;
+    void setImageWidth(int imageWidth);
+
+    int imageHeight() const;
+    void setImageHeight(int imageHeight);
+
+    int imageResolution() const;
+    void setImageResolution(int imageResolution);
+
+    bool useClipBoard() const;
+    void setUseClipBoard(bool useClipBoard);
+
+    bool useWebCam() const;
+    void setUseWebCam(bool useWebCam);
+
 Q_SIGNALS:
+
     void currentFileChanged();
 
 private:
