@@ -49,7 +49,7 @@ Page {
                 height: Constants.GridHeight;
                 text: "^ Up";
                 textColor: "white";
-                onClicked: view.model.rootPath = view.model.parentFolder;
+                onClicked: view.model.path = view.model.parentFolder;
             }
         }
     }
@@ -82,7 +82,7 @@ Page {
 
             onClicked: {
                 if( model.fileType == "inode/directory" ) {
-                    GridView.view.model.rootPath = model.path;
+                    GridView.view.model.path = model.path;
                 } else {
                     Settings.currentFile = model.path;
                     RecentFileManager.addRecent( model.path );

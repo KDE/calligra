@@ -26,13 +26,14 @@
 #include <QtDeclarative/QDeclarativeParserStatus>
 #include <QtDeclarative/QtDeclarative>
 
-#include <KDE/KDirSortFilterProxyModel>
+#include <QAbstractListModel>
 
-class FileSystemModel : public KDirSortFilterProxyModel, public QDeclarativeParserStatus
+class FileSystemModel : public QAbstractListModel, public QDeclarativeParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
-    Q_PROPERTY(QString rootPath READ rootPath WRITE setRootPath)
+
+    Q_PROPERTY(QString path READ path WRITE setPath)
     Q_PROPERTY(QString parentFolder READ parentFolder)
     Q_PROPERTY(QString filter READ filter WRITE setFilter)
 
@@ -43,19 +44,19 @@ public:
         FilePathRole,
         FileIconRole,
         FileTypeRole,
-        FileThumbnailRole,
     };
 
     explicit FileSystemModel(QObject* parent = 0);
     virtual ~FileSystemModel();
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
     virtual void classBegin();
     virtual void componentComplete();
 
-    virtual QString rootPath();
-    virtual void setRootPath(const QString& path);
+    virtual QString path();
+    virtual void setPath(const QString& path);
 
     virtual QString parentFolder();
 

@@ -27,22 +27,20 @@
 class FileSystemModel::Private
 {
 public:
-    KDirModel* dirModel;
+    QDir dir;
+    QFileInfoList list;
 };
 
 FileSystemModel::FileSystemModel(QObject* parent)
-    : KDirSortFilterProxyModel(parent), d(new Private)
+    : QAbstractListModel(parent), d(new Private)
 {
-    d->dirModel = new KDirModel(this);
-    setSourceModel(d->dirModel);
-    setSortFoldersFirst(true);
+    d->dir.setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
 
     QHash<int, QByteArray> roles;
     roles.insert(FileNameRole, "fileName");
     roles.insert(FilePathRole, "path");
     roles.insert(FileIconRole, "icon");
     roles.insert(FileTypeRole, "fileType");
-    roles.insert(FileThumbnailRole, "thumbnail");
     setRoleNames(roles);
 }
 
@@ -54,17 +52,17 @@ FileSystemModel::~FileSystemModel()
 QVariant FileSystemModel::data(const QModelIndex& index, int role) const
 {
     if(index.isValid()) {
-        KFileItem item = d->dirModel->itemForIndex(mapToSource(index));
+        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, d->list.at(index.row()).absoluteFilePath(), false);
         if(!item.isNull()) {
             switch(role) {
                 case FileNameRole:
-                    return item.text();
+                    return item.name();
                     break;
                 case FilePathRole:
-                    return item.url().toLocalFile();
+                    return item.mostLocalUrl().toLocalFile();
                     break;
                 case FileIconRole:
-                    return item.mimetype() == "inode/directory" ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(item.url().toLocalFile());
+                     return item.mimetype() == "inode/directory" ? "image://icon/inode-directory" : QString("image://recentimage/%1").arg(item.url().toLocalFile());
                     break;
                 case FileTypeRole:
                     return item.mimetype();
@@ -72,7 +70,12 @@ QVariant FileSystemModel::data(const QModelIndex& index, int role) const
             }
         }
     }
-    return KDirSortFilterProxyModel::data(index, role);
+    return QVariant();
+}
+
+int FileSystemModel::rowCount(const QModelIndex& parent) const
+{
+    return d->list.count();
 }
 
 void FileSystemModel::classBegin()
@@ -82,34 +85,36 @@ void FileSystemModel::classBegin()
 
 void FileSystemModel::componentComplete()
 {
-    setRootPath(QDir::homePath());
+    setPath(QDir::homePath());
 }
 
-QString FileSystemModel::rootPath()
+QString FileSystemModel::path()
 {
-    return d->dirModel->dirLister()->url().toLocalFile();
+    return d->dir.absolutePath();
 }
 
-void FileSystemModel::setRootPath(const QString& path)
+void FileSystemModel::setPath(const QString& path)
 {
-    d->dirModel->dirLister()->openUrl(KUrl::fromPath(path));
+    emit beginResetModel();
+    d->dir.setPath(path);
+    d->list = d->dir.entryInfoList();
+    emit endResetModel();
 }
 
 QString FileSystemModel::parentFolder()
 {
-    KUrl root = d->dirModel->dirLister()->url();
+    KUrl root = QUrl::fromLocalFile(path());
     root.cd("..");
     return root.toLocalFile();
 }
 
 QString FileSystemModel::filter()
 {
-    return d->dirModel->dirLister()->nameFilter();
+    return d->dir.nameFilters().join(" ");
 }
 
 void FileSystemModel::setFilter(const QString& filter)
 {
-    d->dirModel->dirLister()->setNameFilter(filter);
-    d->dirModel->dirLister()->emitChanges();
+    d->dir.setNameFilters(filter.split(" "));
 }
 
