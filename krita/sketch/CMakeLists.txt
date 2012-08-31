@@ -9,7 +9,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 add_subdirectory(draganddrop)
 
 set(kritasketch_SRCS
-    CanvasControllerDeclarative.cpp
     ColorSelectorItem.cpp
     Constants.cpp
     DocumentListModel.cpp
