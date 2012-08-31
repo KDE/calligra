@@ -29,6 +29,7 @@ Item {
     }
 
     ListView {
+        id: view;
         anchors.left: parent.left;
         anchors.right: parent.right;
         anchors.top: parent.top;
@@ -110,7 +111,7 @@ Item {
     }
 
     Item {
-        anchors.bottom: parent.bottom;
+        anchors.top: view.bottom;
         width: parent.width;
         height: Constants.GridHeight * 1.75;
 
