@@ -61,7 +61,7 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
                 const QByteArray thumbnailData = store->read(store->size());
 
                 if (thumbnail.loadFromData(thumbnailData) &&
-                        thumbnail.width() >= width && thumbnail.height() >= height) {
+                        (thumbnail.width() >= width || thumbnail.height() >= height)) {
                     thumbnail = thumbnail.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
                 }
             }
@@ -69,9 +69,10 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
 
         }
         else {
-            QImageReader imageReader(id);
-            imageReader.setScaledSize(sz);
-            return imageReader.read();
+            QImage img(id);
+            if (img.width() >= width || img.height() >= height) {
+                thumbnail = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            }
         }
     }
     return thumbnail;
