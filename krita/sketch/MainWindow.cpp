@@ -63,11 +63,11 @@
 
 class MainWindow::Private
 {
-    public:
-        QDeclarativeView* view;
-        Constants* constants;
-        QObject* settings;
-        RecentFileManager *recentFileManager;
+public:
+    QDeclarativeView* view;
+    Constants* constants;
+    QObject* settings;
+    RecentFileManager *recentFileManager;
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
@@ -127,15 +127,15 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->setSource(QUrl::fromLocalFile(KStandardDirs::locate("appdata", "qml/main.qml")));
     d->view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
-//     if (d->view->errors().count() > 0) {
-//         foreach(const QDeclarativeError &error, d->view->errors()) {
-//             qDebug() << error.toString();
-//         }
-//     }
+    //     if (d->view->errors().count() > 0) {
+    //         foreach(const QDeclarativeError &error, d->view->errors()) {
+    //             qDebug() << error.toString();
+    //         }
+    //     }
 
 
 
-//    d->view->setViewport(kisView->canvas());
+    //    d->view->setViewport(kisView->canvas());
 
     setCentralWidget( d->view );
 }
