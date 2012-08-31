@@ -22,6 +22,7 @@ set(kritasketch_SRCS
     ProgressProxy.cpp
     RecentFileManager.cpp
     Settings.cpp
+    NetworkAccessManager.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
@@ -34,6 +35,7 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/PresetModel.cpp
     models/RecentImageImageProvider.cpp
     models/RecentImagesModel.cpp
+    models/MultiFeedRSSModel.cpp
 )
 
 
