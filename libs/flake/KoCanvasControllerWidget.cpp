@@ -391,11 +391,9 @@ void KoCanvasControllerWidget::updateCanvasOffsetX()
     proxyObject->emitCanvasOffsetXChanged(canvasOffsetX());
     if (d->ignoreScrollSignals)
         return;
-    if (horizontalScrollBar()->isVisible())
-        setPreferredCenterFractionX((horizontalScrollBar()->value()
-                                     + horizontalScrollBar()->pageStep() / 2.0) / documentSize().width());
-    else
-        setPreferredCenterFractionX(0);
+
+    setPreferredCenterFractionX((horizontalScrollBar()->value()
+                                 + horizontalScrollBar()->pageStep() / 2.0) / documentSize().width());
 }
 
 void KoCanvasControllerWidget::updateCanvasOffsetY()
@@ -403,11 +401,9 @@ void KoCanvasControllerWidget::updateCanvasOffsetY()
     proxyObject->emitCanvasOffsetYChanged(canvasOffsetY());
     if (d->ignoreScrollSignals)
         return;
-    if (verticalScrollBar()->isVisible())
-        setPreferredCenterFractionY((verticalScrollBar()->value()
-                                     + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
-    else
-        setPreferredCenterFractionY(0);
+
+    setPreferredCenterFractionY((verticalScrollBar()->value()
+                                 + verticalScrollBar()->pageStep() / 2.0) / documentSize().height());
 }
 
 bool KoCanvasControllerWidget::eventFilter(QObject *watched, QEvent *event)
@@ -666,10 +662,10 @@ QPoint KoCanvasControllerWidget::scrollBarValue() const
     QScrollBar * hBar = horizontalScrollBar();
     QScrollBar * vBar = verticalScrollBar();
     QPoint value;
-    if (hBar && !hBar->isHidden()) {
+    if (hBar) {// && !hBar->isHidden()) {
         value.setX(hBar->value());
     }
-    if (vBar && !vBar->isHidden()) {
+    if (vBar) {// && !vBar->isHidden()) {
         value.setY(vBar->value());
     }
 
@@ -680,10 +676,10 @@ void KoCanvasControllerWidget::setScrollBarValue(const QPoint &value)
 {
     QScrollBar * hBar = horizontalScrollBar();
     QScrollBar * vBar = verticalScrollBar();
-    if (hBar && !hBar->isHidden()) {
+    if (hBar) {
         hBar->setValue(value.x());
     }
-    if (vBar && !vBar->isHidden()) {
+    if (vBar) {
         vBar->setValue(value.y());
     }
 }
