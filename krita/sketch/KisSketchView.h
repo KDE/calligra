@@ -19,16 +19,15 @@
 #ifndef KRITA_SKETCH_VIEW_H
 #define KRITA_SKETCH_VIEW_H
 
-#include "CanvasControllerDeclarative.h"
+#include <QDeclarativeItem>
 
-
-
-class KisSketchView : public CanvasControllerDeclarative
+class KisSketchView : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QObject* document READ doc)
     Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
     Q_PROPERTY(QObject* settings READ settings WRITE setSettings)
+    Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
 
 public:
     KisSketchView(QDeclarativeItem* parent = 0);
@@ -36,23 +35,27 @@ public:
 
     QObject* doc() const;
     QObject* view() const;
+    QString file() const;
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
     virtual void componentComplete();
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
 
+    void setFile(const QString &file);
+
 public Q_SLOTS:
 
     /// XXX: add parameter options... Or how does QML interact with a class like this?
     void createDocument();
+    void resetDocumentPosition();
 
     QObject *settings();
     void setSettings(QObject  *settings);
 
 Q_SIGNALS:
     void viewChanged();
-    void doubleTapped();
+    void fileChanged();
 
 protected:
     virtual bool sceneEvent(QEvent* event);
@@ -62,15 +65,6 @@ private:
     Private * const d;
 
     Q_PRIVATE_SLOT(d, void update())
-
-    QPointF documentToView(const QPointF &point);
-    QPointF viewToDocument(const QPointF &point);
-
-private Q_SLOTS:
-    virtual void onSingleTap(const QPointF &location);
-    virtual void onDoubleTap(const QPointF& location);
-    virtual void onLongTap(const QPointF& location);
-    virtual void onLongTapEnd(const QPointF& location);
 };
 
 #endif // KRITA_SKETCH_CANVAS_H

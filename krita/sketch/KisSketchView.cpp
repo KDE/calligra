@@ -27,6 +27,7 @@
 #include <QClipboard>
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
+#include <QScrollBar>
 
 #include <QGLShaderProgram>
 #include <QGLBuffer>
@@ -39,6 +40,7 @@
 #include <KoZoomController.h>
 #include <KoProgressUpdater.h>
 #include <KoToolProxy.h>
+#include <KoCanvasController.h>
 #include <KoFilterManager.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -52,6 +54,7 @@
 #include "kis_paint_device.h"
 #include "kis_doc2.h"
 #include "kis_canvas2.h"
+#include <kis_canvas_controller.h>
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "kis_image.h"
@@ -59,6 +62,7 @@
 #include <opengl2/kis_gl2_canvas.h>
 #include <input/kis_input_manager.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_zoom_manager.h>
 
 #include "KisSketchCanvas.h"
 #include "Settings.h"
@@ -88,6 +92,8 @@ public:
     Settings *settings;
     KisSketchCanvas *canvasWidget;
 
+    QString file;
+
     QGLShaderProgram *shader;
     QGLBuffer *vertexBuffer;
     QGLBuffer *indexBuffer;
@@ -99,6 +105,8 @@ public:
     int textureScaleLocation;
     int vertexAttributeLocation;
     int uv0AttributeLocation;
+
+    QTimer *timer;
 };
 
 void KisSketchView::Private::update()
@@ -107,7 +115,7 @@ void KisSketchView::Private::update()
 }
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
-    : CanvasControllerDeclarative(parent)
+    : QDeclarativeItem(parent)
     , d(new Private(this))
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
@@ -136,6 +144,19 @@ QObject* KisSketchView::doc() const
 QObject* KisSketchView::view() const
 {
     return d->view;
+}
+
+QString KisSketchView::file() const
+{
+    return d->file;
+}
+
+void KisSketchView::setFile(const QString& file)
+{
+    if (file != d->file) {
+        d->file = file;
+        emit fileChanged();
+    }
 }
 
 void KisSketchView::createDocument()
@@ -169,13 +190,12 @@ void KisSketchView::createDocument()
         }
     }
     else if (d->settings->useWebCam()) {
-
     }
-    else if (file().isEmpty()) {
+    else if (d->file.isEmpty()) {
         d->doc->newImage("test", d->settings->imageWidth(), d->settings->imageHeight(), KoColorSpaceRegistry::instance()->rgb8());
         d->doc->image()->setResolution(d->settings->imageResolution() / 72.0, d->settings->imageResolution() / 72.0);
     }
-    else if (!file().isEmpty()){
+    else if (!d->file.isEmpty()){
         //    emit progress(1);
 
         KisDoc2* doc = new KisDoc2();
@@ -185,19 +205,18 @@ void KisSketchView::createDocument()
         //    doc->setProgressProxy(proxy);
         //    connect(proxy, SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
 
-        KMimeType::Ptr type = KMimeType::findByPath(file());
-        QString path = file();
+        KMimeType::Ptr type = KMimeType::findByPath(d->file);
+        QString path = d->file;
 
         if (type->name() != doc->nativeFormatMimeType()) {
             KoFilterManager *manager = new KoFilterManager(doc,  doc->progressUpdater());
             //manager->setBatchMode(true);
             KoFilter::ConversionStatus status;
-            path = manager->importDocument(KUrl(file()).toLocalFile(), type->name(), status);
+            path = manager->importDocument(KUrl(d->file).toLocalFile(), type->name(), status);
         }
 
         doc->openUrl(KUrl(path));
 
-        setMargin(10);
         //    emit progress(100);
         //    emit completed();
 
@@ -207,15 +226,9 @@ void KisSketchView::createDocument()
 
     d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
     emit viewChanged();
+    d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
     d->view->hide();
-    d->view->setGeometry(x(), y(), width(), height());
     d->canvas = d->view->canvasBase();
-    d->canvas->setCanvasItem(this);
-
-    setCanvas(d->canvas);
-    connect(d->canvas, SIGNAL(documentSize(QSizeF)), zoomController(), SLOT(setDocumentSize(QSizeF)));
-    resetDocumentOffset();
-    d->canvas->updateCanvas(QRectF(0, 0, width(), height()));
 
     KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
@@ -223,8 +236,13 @@ void KisSketchView::createDocument()
     d->canvasWidget->initialize();
     connect(d->canvasWidget, SIGNAL(renderFinished()), SLOT(update()));
 
-    zoomHandler()->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
-    d->canvas->adjustOrigin();
+    static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
+    d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
+
+    d->timer = new QTimer(this);
+    d->timer->setSingleShot(true);
+    connect(d->timer, SIGNAL(timeout()), this, SLOT(resetDocumentPosition()));
 }
 
 QObject *KisSketchView::settings()
@@ -282,7 +300,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 
 void KisSketchView::componentComplete()
 {
-    const_cast<QGLContext*>(qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->context())->makeCurrent();
+    qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
     d->shader = new QGLShaderProgram(this);
     d->shader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
@@ -335,7 +353,6 @@ bool KisSketchView::sceneEvent(QEvent* event)
     if (d->canvas) {
         switch(event->type()) {
         case QEvent::GraphicsSceneMousePress: {
-            qDebug() << event;
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
             d->canvas->inputManager()->eventFilter(d->canvas, mevent);
@@ -370,42 +387,27 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& old
     if (d->canvasWidget)
     {
         d->canvasWidget->setGeometry(newGeometry.toRect());
+        d->view->canvasControllerWidget()->setGeometry(newGeometry.toRect());
         d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
-        d->canvas->adjustOrigin();
+
+        d->timer->start(100);
     }
 }
 
-void KisSketchView::onSingleTap( const QPointF& location)
+void KisSketchView::resetDocumentPosition()
 {
-    Q_UNUSED(location);
+    d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+
+    QPoint pos;
+    QScrollBar *sb = d->view->canvasControllerWidget()->horizontalScrollBar();
+
+    pos.rx() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
+
+    sb = d->view->canvasControllerWidget()->verticalScrollBar();
+    pos.ry() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
+
+    d->view->canvasControllerWidget()->setScrollBarValue(pos);
 }
 
-void KisSketchView::onDoubleTap ( const QPointF& location)
-{
-    Q_UNUSED(location);
-    emit doubleTapped();
-}
-
-void KisSketchView::onLongTap ( const QPointF& location)
-{
-    Q_UNUSED(location);
-}
-
-void KisSketchView::onLongTapEnd(const QPointF &location)
-{
-    Q_UNUSED(location);
-}
-
-QPointF KisSketchView::documentToView(const QPointF& point)
-{
-    //    return d->canvas->viewMode()->documentToView(point, d->canvas->viewConverter());
-    return QPointF();
-}
-
-QPointF KisSketchView::viewToDocument(const QPointF& point)
-{
-    //    return d->canvas->viewMode()->viewToDocument(point, d->canvas->viewConverter());
-    return QPointF();
-}
 
 #include "KisSketchView.moc"
