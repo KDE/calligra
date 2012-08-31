@@ -590,6 +590,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
 
     QPointF moveOffset = offsetAfter - offsetBefore;
 
+    qDebug() << Q_FUNC_INFO << moveOffset;
+
     m_d->canvasWidget->viewportMoved(moveOffset);
 
     updateCanvas();

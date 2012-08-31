@@ -55,6 +55,7 @@ Item {
             anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
+            asynchronous: true;
 
             sourceSize.width: width > height ? height : width;
             sourceSize.height: width > height ? height : width;
@@ -63,6 +64,9 @@ Item {
         Label {
             id: label;
             anchors.centerIn: parent;
+            width: parent.width;
+            horizontalAlignment: Text.AlignHCenter;
+            elide: Text.ElideMiddle;
         }
     }
 

@@ -35,6 +35,7 @@ set(kritasketch_kritaintegrationmodels_SRCS
     models/RecentImageImageProvider.cpp
     models/RecentImagesModel.cpp
     models/MultiFeedRSSModel.cpp
+    models/FileSystemModel.cpp
 )
 
 
@@ -68,6 +69,7 @@ target_link_libraries(kritasketch
     kritaui
     kowidgets
     ${GLEW_LIBRARY}
+    ${KDE4_KFILE_LIBRARY}
 )
 
 install(TARGETS kritasketch ${INSTALL_TARGETS_DEFAULT_ARGS})

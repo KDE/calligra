@@ -21,7 +21,7 @@ import org.krita.sketch 1.0
 
 Item {
     id: base;
-    signal clicked();
+    signal clicked(string button);
 
     RecentImagesModel {
         id: recentImagesModel;
@@ -142,8 +142,7 @@ Item {
         Button {
             id: icon;
             onClicked: {
-                FilePicker: picker;
-                pageStack.push(picker);
+                base.clicked("open");
             }
 
             image: "../images/svg/icon-fileopen-red.svg";
