@@ -43,7 +43,6 @@
 
 #include "ColorSelectorItem.h"
 #include "IconImageProvider.h"
-#include "CanvasControllerDeclarative.h"
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "ColorImageProvider.h"
