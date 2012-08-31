@@ -89,7 +89,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
     qmlRegisterType<LayerModel>("org.krita.sketch", 1, 0, "LayerModel");
     qmlRegisterType<RecentImagesModel>("org.krita.sketch", 1, 0, "RecentImagesModel");
-//    qmlRegisterType<Welcome::MultiFeedRssModel>("org.krita.sketch", 1, 0, "RecentNewsModel");
+
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
     d->view = new QDeclarativeView();
