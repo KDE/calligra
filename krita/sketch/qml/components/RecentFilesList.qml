@@ -25,6 +25,7 @@ Item {
 
     RecentImagesModel {
         id: recentImagesModel;
+        recentFileManager: RecentFileManager;
     }
 
     ListView {

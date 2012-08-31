@@ -35,6 +35,7 @@ public:
 
 public Q_SLOTS:
 
+
     QString currentFile() const;
     void setCurrentFile(const QString &fileName);
 

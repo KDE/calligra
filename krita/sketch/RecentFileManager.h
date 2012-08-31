@@ -15,46 +15,51 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef RECENTIMAGESMODEL_H
-#define RECENTIMAGESMODEL_H
+#ifndef RECENTFILEMANAGER_H
+#define RECENTFILEMANAGER_H
 
-#include <QAbstractListModel>
+#include <QObject>
 
-
-class RecentImagesModel : public QAbstractListModel
+/**
+ * @brief The RecentFileManager class keeps track of recent files
+ */
+class RecentFileManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* recentFileManager READ recentFileManager WRITE setRecentFileManager NOTIFY recentFilesListChanged)
 public:
-    enum PresetRoles
-    {
-        ImageRole = Qt::UserRole + 1,
-        TextRole,
-        UrlRole,
-        NameRole,
-        DateRole
-    };
+    explicit RecentFileManager(QObject *parent = 0);
+    ~RecentFileManager();
 
-    explicit RecentImagesModel(QObject *parent = 0);
-    virtual ~RecentImagesModel();
+    /// @return the size of the recent files list
+    int size();
 
-    virtual int rowCount(const QModelIndex &parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    /// @return the recent file at position index or an empty string
+    QString recentFile(int index) const;
 
-    QObject* recentFileManager() const;
-    void setRecentFileManager(QObject* recentFileManager);
+    /// @return the recent filename at position index or an empty string
+    QString recentFileName(int index) const;
+
+    /// @return the list of filenames without their paths
+    QStringList recentFileNames() const;
+
+    /// @return the list of recent files with their paths
+    QStringList recentFiles() const;
+
 
 Q_SIGNALS:
+    
     void recentFilesListChanged();
 
 public Q_SLOTS:
+    
 
-    void addRecent(const QString &fileName);
+    /// add the given filename to the front of the list of recent filenames
+    void addRecent(const QString &_url);
 
 private:
     class Private;
     Private* d;
+
 };
 
-#endif // RECENTIMAGESMODEL_H
+#endif // FILEMANAGER_H

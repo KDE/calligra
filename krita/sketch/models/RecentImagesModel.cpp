@@ -1,15 +1,5 @@
 /* This file is part of the KDE project
  * Copyright (C) 2012 Boudewijn Rempt <boud@kogmbh.com>
- *           (C) 1999 Reginald Stadlbauer <reggie@kde.org>
- *           (C) 1999 Simon Hausmann <hausmann@kde.org>
- *           (C) 2000 Nicolas Hadacek <haadcek@kde.org>
- *           (C) 2000 Kurt Granroth <granroth@kde.org>
- *           (C) 2000 Michael Koch <koch@kde.org>
- *           (C) 2001 Holger Freyther <freyther@kde.org>
- *           (C) 2002 Ellis Whitehead <ellis@kde.org>
- *           (C) 2002 Joseph Wenninger <jowenn@kde.org>
- *           (C) 2003 Andras Mantia <amantia@kde.org>
- *           (C) 2005-2006 Hamish Rodda <rodda@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,99 +17,17 @@
  */
 #include "RecentImagesModel.h"
 
+#include "RecentFileManager.h"
+
 #include <QFile>
 #include <QFileInfo>
-#include <QDir>
-
-#include <KoResourceServerAdapter.h>
-
-#include <kis_view2.h>
-
-#include <kurl.h>
-#include <kglobal.h>
-#include <kconfiggroup.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <QDateTime>
 
 
-// Much of this is a gui-less clone of KRecentFilesAction, so the format of
-// storing recent files is compatible.
 class RecentImagesModel::Private {
 public:
-    Private()
-    {
-        KConfigGroup grp(KGlobal::config(), "RecentFiles");
-        maxItems = grp.readEntry("maxRecentFileItems", 100);
 
-        loadEntries(grp);
-    }
-
-    void loadEntries(const KConfigGroup &grp)
-    {
-        recentFiles.clear();
-        recentFilesIndex.clear();
-
-        QString value;
-        QString nameValue;
-        KUrl url;
-
-        KConfigGroup cg = grp;
-
-        if ( cg.name().isEmpty()) {
-            cg = KConfigGroup(cg.config(),"RecentFiles");
-        }
-
-        // read file list
-        for (int i = 1; i <= maxItems; i++) {
-
-            value = cg.readPathEntry(QString("File%1").arg(i), QString());
-            if (value.isEmpty()) continue;
-            url = KUrl(value);
-
-            // krita sketch only handles local files
-            if (!url.isLocalFile())
-                continue;
-
-            // Don't restore if file doesn't exist anymore
-            if (!QFile::exists(url.toLocalFile()))
-                continue;
-
-            value = QDir::toNativeSeparators( value );
-
-            // Don't restore where the url is already known (eg. broken config)
-            if (recentFiles.contains(value))
-                continue;
-
-            nameValue = cg.readPathEntry(QString("Name%1").arg(i), url.fileName());
-
-            if (!value.isNull())  {
-                recentFilesIndex << nameValue;
-                recentFiles << value;
-           }
-        }
-    }
-
-    void saveEntries( const KConfigGroup &grp)
-    {
-        KConfigGroup cg = grp;
-
-        if (cg.name().isEmpty()) {
-            cg = KConfigGroup(cg.config(),"RecentFiles");
-        }
-        cg.deleteGroup();
-
-        // write file list
-        for (int i = 1; i <= recentFilesIndex.size(); ++i) {
-            // i - 1 because we started from 1
-            cg.writePathEntry(QString("File%1").arg(i), recentFiles[i - 1]);
-            cg.writePathEntry(QString("Name%1").arg(i), recentFilesIndex[i - 1]);
-        }
-    }
-
-    int maxItems;
-    QStringList recentFilesIndex;
-    QStringList recentFiles;
+    RecentFileManager *recentFileManager;
 };
 
 
@@ -127,6 +35,8 @@ RecentImagesModel::RecentImagesModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private())
 {
+    d->recentFileManager = 0;
+
     QHash<int, QByteArray> roles;
     roles[ImageRole] = "image";
     roles[TextRole] = "text";
@@ -138,25 +48,27 @@ RecentImagesModel::RecentImagesModel(QObject *parent)
 
 RecentImagesModel::~RecentImagesModel()
 {
-    KConfigGroup grp(KGlobal::config(), "RecentFiles");
-    grp.writeEntry("maxRecentFileItems", d->maxItems);
     delete d;
 }
 
 int RecentImagesModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return d->recentFiles.size();
+    if (d->recentFileManager)
+       return d->recentFileManager->size();
+    else
+        return 0;
 }
 
 QVariant RecentImagesModel::data(const QModelIndex &index, int role) const
 {
     QVariant result;
+    if (!d->recentFileManager) return result;
     if (index.isValid())
     {
-        Q_ASSERT(index.row() < d->recentFiles.size());
+        Q_ASSERT(index.row() < d->recentFileManager->size());
 
-        QString key = d->recentFilesIndex.at(index.row());
-        QString value = d->recentFiles.at(index.row());
+        QString key = d->recentFileManager->recentFileName(index.row());
+        QString value = d->recentFileManager->recentFile(index.row());
 
         switch(role)
         {
@@ -212,29 +124,22 @@ QVariant RecentImagesModel::headerData(int section, Qt::Orientation orientation,
     return result;
 }
 
+QObject *RecentImagesModel::recentFileManager() const
+{
+    return d->recentFileManager;
+}
+
+void RecentImagesModel::setRecentFileManager(QObject *recentFileManager)
+{
+    disconnect(d->recentFileManager);
+    d->recentFileManager = qobject_cast<RecentFileManager*>(recentFileManager);
+    connect(d->recentFileManager, SIGNAL(recentFilesListChanged()), SIGNAL(recentFilesListChanged()));
+}
+
 void RecentImagesModel::addRecent(const QString &_url)
 {
-
-    if (d->recentFiles.size() > d->maxItems) {
-        d->recentFiles.removeLast();
-        d->recentFilesIndex.removeLast();
-    }
-
-    QString localFile = QDir::toNativeSeparators(_url);
-    QString fileName  = QFileInfo(_url).fileName();
-
-    if (d->recentFiles.contains(localFile)) {
-        d->recentFiles.removeAll(localFile);
-    }
-
-    if (d->recentFilesIndex.contains(fileName)) {
-        d->recentFilesIndex.removeAll(fileName);
-    }
-
-    d->recentFiles.insert(0, localFile);
-    d->recentFilesIndex.insert(0, fileName);
-
-    d->saveEntries(KConfigGroup(KGlobal::config(), "RecentFiles"));
+    if (d->recentFileManager)
+        d->recentFileManager->addRecent(_url);
 }
 
 

@@ -9,30 +9,31 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 add_subdirectory(draganddrop)
 
 set(kritasketch_SRCS
-    Constants.cpp
-    Settings.cpp
-    main.cpp
-    MainWindow.cpp
-    KisSketchView.cpp
     CanvasControllerDeclarative.cpp
+    ColorSelectorItem.cpp
+    Constants.cpp
     DocumentListModel.cpp
     IconImageProvider.cpp
-    ProgressProxy.cpp
-    ColorSelectorItem.cpp
     KisSketchCanvas.cpp
     KisSketchCanvasFactory.cpp
+    KisSketchView.cpp
+    main.cpp
+    MainWindow.cpp
+    ProgressProxy.cpp
+    RecentFileManager.cpp
+    Settings.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
     models/ColorImageProvider.cpp
-    models/LayerModel.cpp
     models/LayerCompositeDetails.cpp
+    models/LayerModel.cpp
     models/PaletteColorsModel.cpp
     models/PaletteModel.cpp
     models/PresetImageProvider.cpp
     models/PresetModel.cpp
-    models/RecentImagesModel.cpp
     models/RecentImageImageProvider.cpp
+    models/RecentImagesModel.cpp
 )
 
 
