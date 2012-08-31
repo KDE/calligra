@@ -79,7 +79,7 @@ int main( int argc, char** argv )
     QApplication::setFont( db.font( "Source Sans Pro", "Regular", 12 ) );
 
     MainWindow window(fileNames);
-    window.showMaximized();
+    window.showFullScreen();
 
     return app.exec();
 }
