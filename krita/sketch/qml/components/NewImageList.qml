@@ -133,9 +133,21 @@ PageStack {
                     font.pixelSize: Constants.LargeFontSize;
                 }
             }
-            TextField { placeholder: "Width" }
-            TextField { placeholder: "Height" }
-            TextField { placeholder: "Resolution" }
+            TextField {
+                id: width;
+                placeholder: "Width";
+                validator: IntValidator{bottom: 0; top: 10000;}
+            }
+            TextField {
+                id: height;
+                placeholder: "Height"
+                validator: IntValidator{bottom: 0; top: 10000;}
+            }
+            TextField {
+                id: resolution;
+                placeholder: "Resolution"
+                validator: IntValidator{bottom: 0; top: 600;}
+            }
             Item { width: parent.width; height: Constants.GridHeight; }
             Row {
                 width: parent.width;
@@ -151,7 +163,12 @@ PageStack {
                     color: Constants.Theme.PositiveColor;
                     text: "Create";
                     textColor: "white";
-                    onClicked: base.clicked();
+                    onClicked: {
+                        Settings.imageWidth = width.text;
+                        Settings.imageHeight = height.text;
+                        Settings.imageResolution = resolution.text;
+                        base.clicked();
+                    }
                 }
             }
         }

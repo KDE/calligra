@@ -24,6 +24,7 @@ Item {
 
     property alias text: input.text;
     property alias placeholder: placeholder.text;
+    property alias validator: input.validator;
 
     DropShadow {
         anchors.fill: parent;
