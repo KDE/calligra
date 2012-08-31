@@ -28,6 +28,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QScrollBar>
+#include <QDebug>
 
 #include <QGLShaderProgram>
 #include <QGLBuffer>

@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDateTime>
-
+#include <QDebug>
 
 class RecentImagesModel::Private {
 public:
@@ -42,7 +42,7 @@ RecentImagesModel::RecentImagesModel(QObject *parent)
     roles[TextRole] = "text";
     roles[UrlRole] = "url";
     roles[NameRole] = "name";
-    roles[DateRole] = "date";
+    roles[DateRole] = "filedate";
     setRoleNames(roles);
 }
 
@@ -76,7 +76,7 @@ QVariant RecentImagesModel::data(const QModelIndex &index, int role) const
             result = QString("image://recentimage/%1").arg(value);
             break;
         case TextRole:
-            result = key;
+            result = QFileInfo(value).completeBaseName();
             break;
         case UrlRole:
             result = value;

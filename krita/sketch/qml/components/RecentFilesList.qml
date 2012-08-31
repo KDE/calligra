@@ -87,7 +87,7 @@ Item {
                     leftMargin: Constants.GridWidth * 0.25;
                 }
 
-                text: model.date;
+                text: model.text;
                 verticalAlignment: Text.AlignTop;
             }
 
@@ -99,7 +99,7 @@ Item {
                     leftMargin: Constants.GridWidth * 0.25;
                 }
 
-                text: model.text;
+                text: model.url;
                 color: Constants.Theme.SecondaryTextColor;
                 font.pixelSize: Constants.SmallFontSize;
                 verticalAlignment: Text.AlignBottom;
