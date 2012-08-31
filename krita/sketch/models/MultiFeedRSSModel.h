@@ -70,7 +70,7 @@ class MultiFeedRssModel : public QAbstractListModel {
     Q_OBJECT
     Q_PROPERTY(int articleCount READ articleCount WRITE setArticleCount NOTIFY articleCountChanged)
 public:
-    explicit MultiFeedRssModel(QObject *parent);
+    explicit MultiFeedRssModel(QObject *parent = 0);
     ~MultiFeedRssModel();
     void addFeed(const QString& feed);
     void removeFeed(const QString& feed);

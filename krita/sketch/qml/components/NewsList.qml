@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
 PageStack {
     id: base;
@@ -25,9 +26,16 @@ PageStack {
     initialPage: Page {
         ListView {
             anchors.fill: parent;
-
+            id: listView;
             delegate: delegate;
-            model: model;
+            model: {
+                if (aggregatedFeedsModel.articleCount > 0)
+                    return aggregatedFeedsModel
+                else {
+                    return fallbackNewsModel
+                }
+            }
+
         }
     }
 
@@ -38,7 +46,7 @@ PageStack {
             width: parent.width;
             height: Constants.GridHeight * 1.75;
 
-            Rectangle{
+            Rectangle {
                 x: Constants.GridWidth / 4;
                 y: Constants.GridHeight * 0.25
                 width: parent.width - (Constants.GridWidth / 2);
@@ -56,7 +64,6 @@ PageStack {
                     }
                 }
             }
-
 
             color: mouse.pressed ? Constants.Theme.HighlightColor : "transparent";
 
@@ -80,7 +87,7 @@ PageStack {
                     leftMargin: Constants.GridWidth * 0.5;
                 }
 
-                text: model.date;
+                text: model.pubDate;
                 font.pixelSize: Constants.SmallFontSize;
                 color: Constants.Theme.SecondaryTextColor;
                 verticalAlignment: Text.AlignBottom;
@@ -97,86 +104,102 @@ PageStack {
 
             MouseArea {
                 id: mouse;
-
                 anchors.fill: parent;
-
-                onClicked: base.push( detailsPage );
+                onClicked: {
+                    base.push( detailsPage,
+                              { title: model.title,
+                                description: model.description,
+                                pubDate: model.pubDate});
+                }
             }
         }
     }
 
     ListModel {
-        id: model;
-
-        ListElement { title: "Krita Sketch Released"; date: "12-10-2012 13:45"; }
-        ListElement { title: "Krita 2.6 Released"; date: "08-09-2012 18:24"; }
+        id: fallbackNewsModel;
+        ListElement {
+            title: "Welcome to Krita Sketch 1.0";
+            blogName: "The Krita Team";
+            description: "<div>Krita Sketch: Painting for Pro's on the Go</div> <p>With Krita Sketch you have all the power of Krita Desktop under your fingers. Paint with a stylus, rub with your fingers, zoom, pan, erase, select, filter and add layers. Sketch, speedpaint, polish and publish! Have fun and share!</p>";
+            link: "";
+            pubDate: "Today!";
+        }
     }
+    Component {
+        id: detailsPage;
 
-    Component { id: detailsPage; Page {
-        Flickable {
-            anchors.fill: parent;
-            anchors.leftMargin: Constants.DefaultMargin;
-            anchors.rightMargin: Constants.DefaultMargin;
-            anchors.bottomMargin: Constants.DefaultMargin;
+        Page {
 
-            contentWidth: width;
-            contentHeight: contents.height;
+            property string title;
+            property string pubDate;
+            property string description;
 
-            Column {
-                id: contents;
-                width: parent.width;
+            Flickable {
+                anchors.fill: parent;
+                anchors.leftMargin: Constants.DefaultMargin;
+                anchors.rightMargin: Constants.DefaultMargin;
+                anchors.bottomMargin: Constants.DefaultMargin;
 
-                Item {
+                contentWidth: width;
+                contentHeight: contents.height;
+
+                Column {
+                    id: contents;
                     width: parent.width;
-                    height: Constants.GridHeight;
 
-                    Label {
-                        anchors {
-                            top: parent.top;
-                            topMargin: Constants.DefaultMargin;
+                    Item {
+                        width: parent.width;
+                        height: Constants.GridHeight;
+
+                        Label {
+                            anchors {
+                                top: parent.top;
+                                topMargin: Constants.DefaultMargin;
+                            }
+
+                            text: title
+                            verticalAlignment: Text.AlignTop;
                         }
 
-                        text: "Krita Sketch Released"
-                        verticalAlignment: Text.AlignTop;
+                        Label {
+                            anchors {
+                                bottom: parent.bottom;
+                                bottomMargin: Constants.DefaultMargin;
+                            }
+
+                            text: pubDate;
+                            font.pixelSize: Constants.SmallFontSize;
+                            color: Constants.Theme.SecondaryTextColor;
+                            verticalAlignment: Text.AlignBottom;
+                        }
+
+
                     }
 
                     Label {
-                        anchors {
-                            bottom: parent.bottom;
-                            bottomMargin: Constants.DefaultMargin;
-                        }
+                        width: parent.width;
+                        height: paintedHeight;
 
-                        text: "12-10-2012 13:45";
+                        elide: Text.ElideNone;
+                        wrapMode: Text.WordWrap;
+                        horizontalAlignment: Text.AlignJustify;
+
+                        text: description;
+                    }
+
+                    Label {
+                        text: "< Back";
                         font.pixelSize: Constants.SmallFontSize;
                         color: Constants.Theme.SecondaryTextColor;
-                        verticalAlignment: Text.AlignBottom;
                     }
-
-
                 }
 
-                Label {
-                    width: parent.width;
-                    height: paintedHeight;
-
-                    elide: Text.ElideNone;
-                    wrapMode: Text.WordWrap;
-                    horizontalAlignment: Text.AlignJustify;
-
-                    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id nisi eget diam viverra dictum sed vel lacus. Donec sollicitudin mollis libero, quis cursus dolor volutpat ac. Sed sagittis varius dolor, vitae bibendum nibh malesuada sed. Praesent imperdiet mi ac dui fermentum tempor. Vivamus porta risus ac felis iaculis mattis. Mauris molestie lacus a nisl elementum porttitor. Quisque placerat euismod sodales. Nunc non tristique nulla. Fusce nec neque mattis orci faucibus placerat at ut metus. Donec blandit purus sit amet quam bibendum a laoreet leo ullamcorper. Etiam eget congue ante."
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: pageStack.pop();
                 }
-
-                Label {
-                    text: "< Back";
-                    font.pixelSize: Constants.SmallFontSize;
-                    color: Constants.Theme.SecondaryTextColor;
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: pageStack.pop();
             }
         }
-    } }
+    }
+
 }

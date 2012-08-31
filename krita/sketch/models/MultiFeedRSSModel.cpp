@@ -80,7 +80,7 @@ public:
                     item.pubDate = QDateTime::fromString(dateStr, "ddd, dd MMM yyyy HH:mm:ss");
                 }
                 else if (streamReader.name() == QLatin1String("description"))
-                    item.description = shortenHtml(streamReader.readElementText());
+                    item.description = streamReader.readElementText(); //shortenHtml(streamReader.readElementText());
                 break;
             case QXmlStreamReader::EndElement:
                 if (streamReader.name() == QLatin1String("item"))
@@ -113,6 +113,7 @@ public:
                     QUrl favIconUrl(favIconString);
                     favIconUrl.setPath(QLatin1String("favicon.ico"));
                     blogIcon = favIconUrl.toString();
+                    blogIcon = QString(); // XXX: fix the favicon on krita.org!
                 }
                 break;
             default:
@@ -201,7 +202,7 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
     case DescriptionRole:
         return item.description;
     case PubDateRole:
-        return item.pubDate;
+        return item.pubDate.toString("dd-MM-yyyy hh:mm");
     case LinkRole:
         return item.link;
     case BlogNameRole:

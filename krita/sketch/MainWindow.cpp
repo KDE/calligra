@@ -56,6 +56,7 @@
 #include "PresetImageProvider.h"
 #include "RecentImageImageProvider.h"
 #include "RecentFileManager.h"
+#include "MultiFeedRSSModel.h"
 
 #include "Constants.h"
 #include "Settings.h"
@@ -88,6 +89,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
     qmlRegisterType<LayerModel>("org.krita.sketch", 1, 0, "LayerModel");
     qmlRegisterType<RecentImagesModel>("org.krita.sketch", 1, 0, "RecentImagesModel");
+//    qmlRegisterType<Welcome::MultiFeedRssModel>("org.krita.sketch", 1, 0, "RecentNewsModel");
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
     d->view = new QDeclarativeView();
@@ -102,6 +104,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->rootContext()->setContextProperty("Settings", d->settings);
     d->view->rootContext()->setContextProperty("RecentFileManager", d->recentFileManager);
     d->view->rootContext()->setContextProperty("KisClipBoard", KisClipboard::instance());
+
+    Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel(this);
+    rssModel->addFeed(QLatin1String("http://feeds.feedburner.com/krita/news"));
+    d->view->rootContext()->setContextProperty("aggregatedFeedsModel", rssModel);
+
 
     // This is needed because OpenGL viewport doesn't support partial updates.
     d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

@@ -131,7 +131,7 @@ void NetworkAccessManager::getUrl(const QUrl &url)
 
 QNetworkReply* NetworkAccessManager::createRequest(Operation op, const QNetworkRequest &request, QIODevice *outgoingData)
 {
-    QString agentStr = QString::fromLatin1("Calligra/%1 (QNetworkAccessManager %2; %3; %4; %5 bit)")
+    QString agentStr = QString::fromLatin1("KritaSketch/%1 (QNetworkAccessManager %2; %3; %4; %5 bit)")
                     .arg("XXX")
                     .arg(getOsString()).arg(QLocale::system().name())
                     .arg(QSysInfo::WordSize);
