@@ -70,10 +70,7 @@ Item {
                 }
             }
 
-            /*Button {
-                id: thumbnail;
-                onClicked: base.clicked();
-                image: model.image; */
+
             Image {
                 id: thumbnail
                 source: model.image;
@@ -144,7 +141,11 @@ Item {
 
         Button {
             id: icon;
-            onClicked: base.clicked();
+            onClicked: {
+                FilePicker: picker;
+                pageStack.push(picker);
+            }
+
             image: "../images/svg/icon-fileopen-red.svg";
             x: Constants.GridWidth * 0.125;
             y: Constants.GridHeight * 0.375;
@@ -153,7 +154,6 @@ Item {
         Label {
             anchors {
                 left: icon.right;
-                //leftMargin: Constants.GridWidth * 0.125;
 
                }
 

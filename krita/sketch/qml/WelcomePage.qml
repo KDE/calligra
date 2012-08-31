@@ -204,4 +204,5 @@ Page {
 
     Component { id: main; MainPage { } }
     Component { id: help; HelpPage { } }
+    Component { id: filePicker; FilePicker {} }
 }

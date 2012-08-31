@@ -125,6 +125,7 @@ PageStack {
             pubDate: "Today!";
         }
     }
+
     Component {
         id: detailsPage;
 
