@@ -254,6 +254,8 @@ void KPrViewModePresentation::deactivate()
         m_presenterViewWidget = 0;
         m_presenterViewCanvas = 0;
     }
+    // make sure the page does not have an offset after finishing a presentation
+    m_baseCanvas->setDocumentOffset(QPoint(0, 0));
 }
 
 void KPrViewModePresentation::updateActivePage( KoPAPageBase *page )
