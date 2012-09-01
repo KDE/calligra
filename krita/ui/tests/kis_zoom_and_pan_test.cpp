@@ -109,8 +109,8 @@ private:
 template<class P, class T>
 inline bool compareWithRounding(const P &pt0, const P &pt1, T tolerance)
 {
-    return qAbs(pt0.x() - pt1.x()) < tolerance &&
-        qAbs(pt0.y() - pt1.y()) < tolerance;
+    return qAbs(pt0.x() - pt1.x()) <= tolerance &&
+        qAbs(pt0.y() - pt1.y()) <= tolerance;
 }
 
 bool verifyOffset(ZoomAndPanTester &t, const QPoint &offset) {
@@ -191,12 +191,19 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
                                         const QPoint &newOffset,
                                         const QPointF &newPreferredCenter,
                                         qreal newZoom,
-                                        QPointF newTopLeft)
+                                        const QPointF &newTopLeft,
+                                        const QSize &oldDocumentSize)
 {
     qreal k = newZoom / oldZoom;
 
     QPoint expectedOffset = oldOffset + ((k - 1) * baseFlakePoint).toPoint();
     QPointF expectedPreferredCenter = oldPreferredCenter + (k - 1) * baseFlakePoint;
+
+    qreal oldPreferredCenterFractionX = 1.0 * oldPreferredCenter.x() / oldDocumentSize.width();
+    qreal oldPreferredCenterFractionY = 1.0 * oldPreferredCenter.y() / oldDocumentSize.height();
+
+    qreal roundingTolerance =
+        qMax(1.0, qMax(oldPreferredCenterFractionX, oldPreferredCenterFractionY) / k);
 
     /**
      * In the computation of the offset two roundings happen:
@@ -205,7 +212,7 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
      * should equal 2.
      */
     bool offsetAsExpected =
-        compareWithRounding(expectedOffset, newOffset, 2);
+        compareWithRounding(expectedOffset, newOffset, roundingTolerance);
 
     /**
      * Rounding for the preferred center happens due to the rounding
@@ -214,7 +221,7 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
      */
     bool preferredCenterAsExpected =
         compareWithRounding(expectedPreferredCenter, newPreferredCenter,
-                            qMax(1.0, k));
+                            roundingTolerance);
 
     bool topLeftAsExpected = newTopLeft.toPoint() == -newOffset;
 
@@ -240,9 +247,12 @@ bool KisZoomAndPanTest::checkInvariants(const QPointF &baseFlakePoint,
         qDebug() << ppVar(expectedPreferredCenter);
         qDebug() << ppVar(oldOffset) << ppVar(newOffset);
         qDebug() << ppVar(oldPreferredCenter) << ppVar(newPreferredCenter);
+        qDebug() << ppVar(oldPreferredCenterFractionX);
+        qDebug() << ppVar(oldPreferredCenterFractionY);
         qDebug() << ppVar(oldZoom) << ppVar(newZoom);
         qDebug() << ppVar(baseFlakePoint);
         qDebug() << ppVar(newTopLeft);
+        qDebug() << ppVar(roundingTolerance);
         qDebug() << "***************************";
     }
 
@@ -254,6 +264,7 @@ bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom)
     QPoint oldOffset = t.coordinatesConverter()->documentOffset();
     QPointF oldPrefCenter = t.canvasController()->preferredCenter();
     qreal oldZoom = t.zoomController()->zoomAction()->effectiveZoom();
+    QSize oldDocumentSize = t.canvasController()->documentSize();
 
     t.zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, newZoom);
 
@@ -266,7 +277,8 @@ bool KisZoomAndPanTest::checkZoomWithAction(ZoomAndPanTester &t, qreal newZoom)
                            t.coordinatesConverter()->documentOffset(),
                            t.canvasController()->preferredCenter(),
                            newZoom,
-                           newTopLeft);
+                           newTopLeft,
+                           oldDocumentSize);
 }
 
 bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &widgetPoint, qreal zoomCoeff)
@@ -274,6 +286,7 @@ bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &wi
     QPoint oldOffset = t.coordinatesConverter()->documentOffset();
     QPointF oldPrefCenter = t.canvasController()->preferredCenter();
     qreal oldZoom = t.zoomController()->zoomAction()->effectiveZoom();
+    QSize oldDocumentSize = t.canvasController()->documentSize();
 
     t.canvasController()->zoomRelativeToPoint(widgetPoint, zoomCoeff);
 
@@ -286,7 +299,8 @@ bool KisZoomAndPanTest::checkZoomWithWheel(ZoomAndPanTester &t, const QPoint &wi
                            t.coordinatesConverter()->documentOffset(),
                            t.canvasController()->preferredCenter(),
                            zoomCoeff * oldZoom,
-                           newTopLeft);
+                           newTopLeft,
+                           oldDocumentSize);
 }
 
 void KisZoomAndPanTest::testZoom100ChangingWidgetSize()
