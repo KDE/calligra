@@ -169,6 +169,12 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
 
+2012-09-01
+Query Designer
+*Fix bug SQL Editor's history is not functional (by hiding it in 2.5 and completely removing in 2.6)
+BUG:306145
+REVIEW:106309
+
 2012-08-30
 Startup
 *Fetch startup UI from x.y.0 URL for any x.y.z version, not from x.y.z URL
