@@ -32,7 +32,6 @@
 #include <QHash>
 #include <QList>
 
-#include "OdtHtmlConverter.h"
 
 class EpubFile;
 
@@ -41,7 +40,7 @@ class ExportEpub2 : public KoFilter
     Q_OBJECT
 public:
     enum VectorType {
-        VectorTypeOther,         // Uninitialized
+        VectorTypeOther,        // Uninitialized
         VectorTypeWmf,          // Windows MetaFile
         VectorTypeEmf,          // Extended MetaFile
         VectorTypeSvm           // StarView Metafile
@@ -53,16 +52,8 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 private:
-    KoFilter::ConversionStatus parseMetadata(KoStore *odfStore);
-    KoFilter::ConversionStatus createCSS(QHash<QString, StyleInfo*> &styles2,
-                                         QByteArray &cssContent);
-    void flattenStyles(QHash<QString, StyleInfo*> &styles2);
-    void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles2,
-                      QSet<QString> &doneStyles);
-
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);
-    KoFilter::ConversionStatus parseMetaInfImagesData(KoStore *odfStore,
-                                                      QHash<QString, QString> &imagesData);
+
     ExportEpub2::VectorType vectorType(QByteArray &content);
     bool convertSvm(QByteArray &input, QByteArray &output, QSize size);
     bool convertEmf(QByteArray &input, QByteArray &output, QSize size);
@@ -74,13 +65,11 @@ private:
 
 public slots:
 
-private:
-    void fixStyleTree(QHash<QString, StyleInfo*> &styles);
-
 
 private:
-    QHash<QString, QString> m_meta;
-    QHash<QString, QSizeF> m_imagesSrcList;
+    QHash<QString, QString> m_metadata;
+    QHash<QString, QString> m_manifest;
+    QHash<QString, QSizeF>  m_imagesSrcList;
 };
 
 #endif // EXPORTEPUB2_H

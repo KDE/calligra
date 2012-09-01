@@ -52,17 +52,26 @@ Word count in the status bar
 
 Distraction free writing mode (DFM)
  * Design the feature
+<<<<<<< HEAD
     + Write feature description                                         [ingwa]
+=======
+    + Write feature description                                         [Done]
+>>>>>>> master
     + Start a discussion on the forum                                   [ingwa]
  * GUI
     + Decide if QML is ok (should only be affected by Qt version)
     + Investigate full-screen mode and/or presentation mode
+<<<<<<< HEAD
+=======
+        --> Only a property on the main window
+>>>>>>> master
     + Special status bar that slides / fades in.
        - word count
        - Exit DFM
     + Keyboard shortcuts (10?) to allow simple styling with keyboard
       only interaction.
        - GUI for configuration (is this needed?)
+<<<<<<< HEAD
  * Class KoTextDocument(?) with exact same API as QTextDocument
     + Store several QTextDocuments in it to allow different 
     + Actions / commands are duplicated to all of them.
@@ -70,6 +79,16 @@ Distraction free writing mode (DFM)
 Annotations
  * Design the feature
     + Write feature description                                         [ingwa]
+=======
+ * Implementation
+    + Class KoTextDocument(?) with exact same API as QTextDocument
+       - Store several QTextDocuments in it to allow different styling
+       - Actions / commands are duplicated to all of them.
+
+Annotations
+ * Design the feature
+    + Write feature description                                         [Done]
+>>>>>>> master
     + Start a discussion on the forum                                   [ingwa]
  * Engine
     + Load / Save notes

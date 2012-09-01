@@ -37,7 +37,7 @@
 #include <KoXmlNS.h>
 
 // EPUB filter
-#include "libepub/EpubFile.h"
+#include "FileCollector.h"
 
 
 
@@ -48,7 +48,7 @@
 
 StyleInfo::StyleInfo()
     : isDefaultStyle(false)
-    , hasBreakBefore(false)
+    , shouldBreakChapter(false)
     , inUse(false)
 {
 }
@@ -57,6 +57,7 @@ StyleInfo::StyleInfo()
 OdtHtmlConverter::OdtHtmlConverter()
     : m_currentChapter(1)
 {
+    qDeleteAll(m_styles);
 }
 
 OdtHtmlConverter::~OdtHtmlConverter()
@@ -64,20 +65,734 @@ OdtHtmlConverter::~OdtHtmlConverter()
 {
 }
 
-KoFilter::ConversionStatus OdtHtmlConverter::convertStyles(KoStore *odfStore,
+// ================================================================
+//                         HTML conversion
+
+
+KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
+                                                            QHash<QString, QString> &metaData,
+                                                            FileCollector *collector,
+                                                            // Out parameters:
+                                                            QHash<QString, QSizeF> &images)
+{
+    m_collector = collector;
+
+    // 1. Parse styles
+
+    KoFilter::ConversionStatus  status = collectStyles(odfStore, m_styles);
+    if (status != KoFilter::OK) {
+        return status;
+    }
+
+#if 0 // Debug
+    kDebug(30517) << "======== >> Styles";
+    foreach(const QString &name, m_styles.keys()) {
+        kDebug(30517) << "==" << name << ":\t"
+                      << m_styles.value(name)->parent
+                      << m_styles.value(name)->family
+                      << m_styles.value(name)->isDefaultStyle
+                      << m_styles.value(name)->shouldBreakChapter
+                      << m_styles.value(name)->attributes
+            ;
+    }
+    kDebug(30517) << "======== << Styles";
+#endif
+
+    // Propagate style inheritance.
+    fixStyleTree(m_styles);
+
+    if (!odfStore->open("content.xml")) {
+        kDebug(30517) << "Can not open content.xml .";
+        return KoFilter::FileNotFound;
+    }
+
+    // ----------------------------------------------------------------
+    // Parse body from content.xml
+
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug(30517) << "Error occurred while parsing content.xml "
+                      << errorMsg << " in Line: " << errorLine
+                      << " Column: " << errorColumn;
+        odfStore->close();
+        return KoFilter::ParsingError;
+    }
+
+    KoXmlNode currentNode = doc.documentElement();
+    KoXmlElement nodeElement;    // currentNode as Element
+
+    currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "body");
+    currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "text");
+
+    // 2. Collect information about internal links.
+    KoXmlElement element = currentNode.toElement(); // node for passing it to collectInter...()
+    int chapter = 1; // Only necessary for the recursion.
+    collectInternalLinksInfo(element, chapter);
+
+    // 3. Start the actual conversion.
+
+    // Write the beginning of the output.
+    beginHtmlFile(metaData);
+
+    m_currentChapter = 1;       // Number of current output chapter.
+    forEachElement (nodeElement, currentNode) {
+
+        // text:h and text:p are treated special since they can have
+        // styling that makes us start on a new html file,
+        // a.k.a. chapter.
+        if (nodeElement.namespaceURI() == KoXmlNS::text && (nodeElement.localName() == "p"
+                                                            || nodeElement.localName() == "h")) {
+
+            // A fo:break-before="page" in the style means create a new chapter here,
+            // but only if it is a top-level paragraph and not at the very first node.
+            StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
+            if (style && style->shouldBreakChapter) {
+                //kDebug(30517) << "Found paragraph with style with break-before -- breaking new chapter";
+
+                // Write out any footnotes
+                if (!m_footNotes.isEmpty()) {
+                    writeFootNotes(m_htmlWriter);
+                }
+
+                // And finally close all tags.
+                endHtmlFile(); 
+
+                // Write the result to the file collector object.
+                QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
+                QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+                m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+
+                // And begin a new chapter.
+                beginHtmlFile(metaData);
+                m_currentChapter++;
+            }
+
+            // Actually handle the contents.
+            if (nodeElement.localName() == "p")
+                handleTagP(nodeElement, m_htmlWriter);
+            else
+                handleTagH(nodeElement, m_htmlWriter);
+        }
+        else if (nodeElement.localName() == "span" && nodeElement.namespaceURI() == KoXmlNS::text) {
+            handleTagSpan(nodeElement, m_htmlWriter);
+        }
+        else if (nodeElement.localName() == "table" && nodeElement.namespaceURI() == KoXmlNS::table) {
+            // Handle table
+            handleTagTable(nodeElement, m_htmlWriter);
+        }
+        else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
+            // Handle frame
+            m_htmlWriter->startElement("div");
+            handleTagFrame(nodeElement, m_htmlWriter);
+            m_htmlWriter->endElement(); // end div
+        }
+        else if (nodeElement.localName() == "soft-page-break" &&
+                 nodeElement.namespaceURI() == KoXmlNS::text) {
+
+            handleTagPageBreak(nodeElement, m_htmlWriter);
+        }
+        else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
+            handleTagList(nodeElement, m_htmlWriter);
+        }
+        else if (nodeElement.localName() == "a" && nodeElement.namespaceURI() == KoXmlNS::text) {
+            handleTagA(nodeElement, m_htmlWriter);
+        }
+        else if (nodeElement.localName() == "table-of-content" &&
+                 nodeElement.namespaceURI() == KoXmlNS::text) {
+
+            handleTagTableOfContent(nodeElement, m_htmlWriter);
+        }
+        else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
+            handleTagLineBreak(m_htmlWriter);
+        }
+        else {
+            m_htmlWriter->startElement("div");
+            handleUnknownTags(nodeElement, m_htmlWriter);
+            m_htmlWriter->endElement();
+        }
+    }
+
+    endHtmlFile();
+
+    // Write output of the last file to the file collector object.
+    QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
+    QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+    m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+
+    // 4. Write any data that we have collected on the way.
+
+    // If we had end notes, make a new chapter for end notes
+    if (!m_endNotes.isEmpty()) {
+
+        // Write the beginning of the output for the next file.
+        beginHtmlFile(metaData);
+        writeEndNotes(m_htmlWriter);
+        endHtmlFile();
+
+        QString fileId = "chapter-endnotes";
+        QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+    }
+
+    odfStore->close();
+
+    // 5. Create CSS contents and store it in the file collector.
+    QByteArray  cssContent;
+    status = createCSS(m_styles, cssContent);
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    m_collector->addContentFile("stylesheet", m_collector->filePrefix() + "styles.css", "text/css", cssContent);
+
+    // Return the list of images.
+    images = m_images;
+
+    return KoFilter::OK;
+}
+
+void OdtHtmlConverter::beginHtmlFile(QHash<QString, QString> &metaData)
+{
+    m_htmlContent.clear();
+    m_outBuf = new QBuffer(&m_htmlContent);
+    m_htmlWriter = new KoXmlWriter(m_outBuf);
+
+    m_htmlWriter->startElement("html");
+    m_htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+    createHtmlHead(m_htmlWriter, metaData);
+    m_htmlWriter->startElement("body");
+
+    // NOTE: At this point we have two open tags: <html> and <body>.
+}
+
+void OdtHtmlConverter::endHtmlFile()
+{
+    // NOTE: At this point we have two open tags: <html> and <body>.
+
+    // Close the two tags opened by beginHtmlFile().
+    m_htmlWriter->endElement();
+    m_htmlWriter->endElement();
+
+    // Prepare for the next file.
+    delete m_htmlWriter;
+    delete m_outBuf;
+}
+
+
+
+void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)
+{
+    writer->startElement("head");
+
+    writer->startElement("title");
+    writer->addTextNode(metaData.value("title"));
+    writer->endElement(); // title
+
+    writer->startElement("meta");
+    writer->addAttribute("http-equiv", "Content-Type");
+    writer->addAttribute("content", "text/html; charset=utf-8");
+    writer->endElement(); // meta
+
+    // write meta tag
+    // m-meta <Tagname, Text>
+    // <meta name = "Tagname" content = "Text" />
+    foreach (const QString &name, metaData.keys()) {
+        // Title is handled above.
+        if (name == "title")
+            continue;
+
+        writer->startElement("meta");
+        writer->addAttribute("name", name);
+        writer->addAttribute("content", metaData.value(name));
+        writer->endElement(); // meta
+    }
+
+    // Refer to the stylesheet.
+    writer->startElement("link");
+    writer->addAttribute("href", m_collector->filePrefix() + "styles.css");
+    writer->addAttribute("type", "text/css");
+    writer->addAttribute("rel", "stylesheet");
+    writer->endElement(); // link
+
+    writer->endElement(); // head
+}
+
+
+// ----------------------------------------------------------------
+//                 Traversal of the XML contents
+
+
+void OdtHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString styleName = nodeElement.attribute("style-name");
+    StyleInfo *styleInfo = m_styles.value(styleName);
+    htmlWriter->startElement("table");
+    if (styleInfo) {
+        styleInfo->inUse = true;
+        htmlWriter->addAttribute("class", styleName);
+    }
+    htmlWriter->addAttribute("border", "1");
+
+    //===== table-row ======
+    KoXmlElement tableElement;
+    forEachElement (tableElement, nodeElement) {
+        if (tableElement.localName() != "table-column" && tableElement.namespaceURI() == KoXmlNS::table) {
+            htmlWriter->startElement("tr");
+
+            // ===== table-cell ======
+            KoXmlElement cellElement;
+            forEachElement (cellElement, tableElement) {
+                QString styleName = cellElement.attribute("style-name");
+                StyleInfo *styleInfo = m_styles.value(styleName);
+                htmlWriter->startElement("td");
+                if (styleInfo) {
+                    styleInfo->inUse = true;
+                    htmlWriter->addAttribute("class", styleName);
+                }
+
+                // ==== cell text ====
+                // FIXME: This is wrong. A cell element can contain
+                //        the same tags as the full contents, not just
+                //        what is inside a paragraph. (Beside, this
+                //        function has a strange name.)
+                handleInsideElementsTag(cellElement, htmlWriter);
+                // ===================
+                htmlWriter->endElement(); // td
+            } // end for write tag cell
+
+            htmlWriter->endElement(); // tr
+        } // end while write tag row
+    }
+
+    htmlWriter->endElement();
+}
+
+void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString styleName = nodeElement.attribute("style-name");
+    StyleInfo *styleInfo = m_styles.value(styleName);
+    htmlWriter->startElement("img");
+    if (styleInfo) {
+        styleInfo->inUse = true;
+        htmlWriter->addAttribute("class", styleName);
+    }
+    htmlWriter->addAttribute("alt", "(No Description)");
+
+    // Find height and width
+    QString height = nodeElement.attribute("height");
+    QString width  = nodeElement.attribute("width");
+
+    // Remove characters "in" or "pt" from their end.
+    //
+    // FIXME: This is WRONG!  
+    //        First, there is no way to tell if the unit is 2 chars
+    //        Second, it is not sure that there *is* a unit.
+    //        Instead, use some function in KoUnit that converts the size.  /IW
+    height = height.left(height.length()-2);
+    width  = width.left(width.length()-2);
+
+    // Convert them to real.
+    qreal qHeight = height.toFloat();
+    qreal qWidth = width.toFloat();
+    QSizeF size(qWidth, qHeight);
+
+    // Check image tag to find image source
+    KoXmlElement imgElement;
+    forEachElement (imgElement, nodeElement) {
+        if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
+            QString imgSrc = imgElement.attribute("href").section('/', -1);
+            htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
+
+            m_images.insert(imgElement.attribute("href"), size);
+        }
+    }
+    htmlWriter->endElement(); // end img
+}
+
+void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString styleName = nodeElement.attribute("style-name");
+    StyleInfo *styleInfo = m_styles.value(styleName);
+    htmlWriter->startElement("p");
+    if (styleInfo) {
+        styleInfo->inUse = true;
+        htmlWriter->addAttribute("class", styleName);
+    }
+    handleInsideElementsTag(nodeElement, htmlWriter);
+    htmlWriter->endElement();
+}
+
+void OdtHtmlConverter::handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWriter)
+{
+    KoXmlText charData = node.toText();
+    htmlWriter->addTextNode(charData.data());
+}
+
+void OdtHtmlConverter::handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString styleName = nodeElement.attribute("style-name");
+    StyleInfo *styleInfo = m_styles.value(styleName);
+    htmlWriter->startElement("span");
+    if (styleInfo) {
+        styleInfo->inUse = true;
+        htmlWriter->addAttribute("class", styleName);
+    }
+    handleInsideElementsTag(nodeElement, htmlWriter);
+    htmlWriter->endElement(); // span
+}
+
+void OdtHtmlConverter::handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    htmlWriter->addTextNode(nodeElement.text().toUtf8());
+}
+
+void OdtHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString styleName = nodeElement.attribute("style-name");
+    StyleInfo *styleInfo = m_styles.value(styleName);
+    htmlWriter->startElement("h1");
+    if (styleInfo) {
+        styleInfo->inUse = true;
+        htmlWriter->addAttribute("class", styleName);
+    }
+    handleInsideElementsTag(nodeElement, htmlWriter);
+    htmlWriter->endElement();
+}
+
+void OdtHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString styleName = nodeElement.attribute("style-name");
+    StyleInfo *styleInfo = m_styles.value(styleName);
+    htmlWriter->startElement("ul");
+    if (styleInfo) {
+        styleInfo->inUse = true;
+        htmlWriter->addAttribute("class", styleName);
+    }
+
+    KoXmlElement listItem;
+    forEachElement (listItem, nodeElement) {
+        htmlWriter->startElement("li");
+        handleInsideElementsTag(listItem, htmlWriter);
+        htmlWriter->endElement();
+    }
+    htmlWriter->endElement();
+}
+
+void OdtHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    htmlWriter->startElement("a");
+    QString reference = nodeElement.attribute("href");
+    QString chapter = m_linksInfo.value(reference);
+    if (!chapter.isEmpty()) {
+        // This is internal link.
+        reference = reference.remove("|");
+        reference = reference.remove(" ");// remove spaces
+        reference = chapter+reference;
+        htmlWriter->addAttribute("href", reference);
+    }
+    else {
+        // This is external link.
+        htmlWriter->addAttribute("href", reference);
+    }
+
+    handleInsideElementsTag(nodeElement, htmlWriter);
+    htmlWriter->endElement();
+}
+
+void OdtHtmlConverter::handleTagTab (KoXmlWriter *htmlWriter)
+{
+    for (int i = 0; i <10; ++i)
+        htmlWriter->addTextNode("\u00a0");
+}
+
+void OdtHtmlConverter::handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    KoXmlNode indexBody = KoXml::namedItemNS(nodeElement, KoXmlNS::text, "index-body");
+    KoXmlElement  element;
+    forEachElement (element, indexBody) {
+        if (element.localName() == "index-title" && element.namespaceURI() == KoXmlNS::text) {
+            handleInsideElementsTag(element, htmlWriter);
+        }
+        else
+            handleTagTableOfContentBody(element, htmlWriter);
+    }
+}
+
+void OdtHtmlConverter::handleTagTableOfContentBody(KoXmlElement &nodeElement,
+                                                   KoXmlWriter *htmlWriter)
+{
+    if (nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text) {
+        handleTagP(nodeElement, htmlWriter);
+    }
+}
+
+void OdtHtmlConverter::handleTagLineBreak(KoXmlWriter *htmlWriter)
+{
+    htmlWriter->startElement("br");
+    htmlWriter->endElement();
+}
+
+void OdtHtmlConverter::handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString anchor = nodeElement.attribute("name");
+    // This is haed codevalidator gets error for characters "|" and spaces
+    // FIXME : we should handle ids better after move file to class
+    anchor = anchor.remove("|");
+    anchor = anchor.remove(" ");//remove spaces
+    htmlWriter->startElement("a");
+    htmlWriter->addAttribute("id", anchor);
+}
+
+void OdtHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString anchor = nodeElement.attribute("name");
+    htmlWriter->startElement("a");
+    htmlWriter->addAttribute("id", anchor);
+}
+
+void OdtHtmlConverter::handleTagBookMarkEnd(KoXmlWriter *htmlWriter)
+{
+    htmlWriter->endElement();
+}
+
+void OdtHtmlConverter::handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    // Just go deeper to find known tags.
+    handleInsideElementsTag(nodeElement, htmlWriter);
+}
+
+
+void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    QString noteClass = nodeElement.attribute("note-class");
+    if (noteClass != "footnote" && noteClass != "endnote") {
+        return;
+    }
+
+    QString id = nodeElement.attribute("id");
+    KoXmlElement noteElements;
+    forEachElement(noteElements, nodeElement) {
+        if (noteElements.localName() == "note-citation" && noteElements.namespaceURI() == KoXmlNS::text) {
+            htmlWriter->startElement("sup");
+
+            htmlWriter->startElement("a");
+            if (noteClass == "footnote")
+                htmlWriter->addAttribute("href", "#" + id + "n"); // n rerence to note foot-note or end-note
+            else { // endnote
+                QString endRef = "chapter-endnotes.xhtml#" + id + "n";
+                htmlWriter->addAttribute("href", endRef);
+            }
+            htmlWriter->addAttribute("id", id + "t"); // t is for text
+            htmlWriter->addTextNode(noteElements.text());
+            htmlWriter->endElement();
+
+            htmlWriter->endElement();
+        }
+        else if (noteElements.localName() == "note-body" && noteElements.namespaceURI() == KoXmlNS::text) {
+            if (noteClass == "footnote")
+                m_footNotes.insert(id, noteElements);
+            else {
+                QString noteChapter = m_collector->filePrefix() + QString::number(m_currentChapter) + ".xhtml";
+                m_endNotes.insert(noteChapter + "/" + id, noteElements);
+                // we insert this: m_currentChapter/id
+                // to can add reference for text in end note
+            }
+        }
+    }
+}
+
+void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
+{
+    KoXmlNode node = nodeElement.firstChild();
+    KoXmlElement element = node.toElement();
+
+    // We should end tag "a" after text for bookmark-start we can
+    // handle it with tag bookmark-end but for bookmark there is no
+    // bookmark-end so i use this flag to close the tag "a" that i
+    // have opened it in handleTagBookMark()
+    bool bookMarkFlag = false;
+
+    // We have characterData or image or span or s  or soft-page break in a tag p
+    // FIXME: we should add if there are more tags.
+    while (!node.isNull()) {
+
+        if (node.isText()) {
+            handleCharacterData(node, htmlWriter);
+            if (bookMarkFlag) {
+                htmlWriter->endElement(); // end tag "a"
+                bookMarkFlag = false;
+            }
+        }
+        else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagP(element, htmlWriter);
+        }
+        else if (element.localName() == "h" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagH(element, htmlWriter);
+        }
+        else if (element.localName() == "table" && element.namespaceURI() == KoXmlNS::table) {
+            handleTagTable(element, htmlWriter);
+        }
+        else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagSpan(element, htmlWriter);
+        }
+        else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw) {
+            handleTagFrame(element, htmlWriter);
+        }
+        else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
+            handleTagList(nodeElement, htmlWriter);
+        }
+        else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagPageBreak(element, htmlWriter);
+        }
+        else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagA(element, htmlWriter);
+        }
+        else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
+            htmlWriter->addTextNode("\u00a0");
+        }
+        else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagLineBreak(htmlWriter);
+        }
+        else if (element.localName() == "tab" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagTab(htmlWriter);
+        }
+        else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagBookMark(element, htmlWriter);
+            bookMarkFlag = true;
+        }
+        else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagBookMarkStart(element, htmlWriter);
+        }
+        else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagBookMarkEnd(htmlWriter);
+        }
+        else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
+            handleTagNote(element, htmlWriter);
+        }
+        else {
+            // FIXME: The same code in convertContent() inserts <div>
+            //        around this call.
+            handleUnknownTags(element, htmlWriter);
+        }
+
+        node = node.nextSibling();
+        element = node.toElement();
+    }
+}
+
+
+// ----------------------------------------------------------------
+
+
+void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, int &chapter)
+{
+    KoXmlElement nodeElement;
+    forEachElement (nodeElement, currentElement) {
+        if ( (nodeElement.localName() == "p" || nodeElement.localName() == "h") 
+             && nodeElement.namespaceURI() == KoXmlNS::text)
+        {
+            // A break-before in the style means create a new chapter here,
+            // but only if it is a top-level paragraph and not at the very first node.
+            StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
+            if (style && style->shouldBreakChapter) {
+                chapter++;
+            }
+        }
+        else if ((nodeElement.localName() == "bookmark-start" || nodeElement.localName() == "bookmark")
+                  && nodeElement.namespaceURI() == KoXmlNS::text) {
+            QString key = "#" + nodeElement.attribute("name");
+            QString value = m_collector->filePrefix() + QString::number(chapter) + ".xhtml";
+            m_linksInfo.insert(key, value);
+            continue;
+        }
+
+        // Check for links recursively also inside this element.
+        collectInternalLinksInfo(nodeElement, chapter);
+    }
+}
+
+void OdtHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
+{
+    htmlWriter->startElement("p");
+    handleTagLineBreak(htmlWriter);
+    htmlWriter->addTextNode("___________________________________________");
+    htmlWriter->endElement();
+
+    htmlWriter->startElement("ul");
+    int noteCounts = 1;
+    foreach(QString id, m_footNotes.keys()) {
+        htmlWriter->startElement("li");
+        htmlWriter->addAttribute("id", id + "n");
+
+        htmlWriter->startElement("a");
+        htmlWriter->addAttribute("href", "#" + id + "t"); // reference to text
+        htmlWriter->addTextNode("[" + QString::number(noteCounts) + "]");
+        htmlWriter->endElement();
+
+        KoXmlElement bodyElement = m_footNotes.value(id);
+        handleInsideElementsTag(bodyElement, htmlWriter);
+
+        htmlWriter->endElement();
+        noteCounts++;
+    }
+    htmlWriter->endElement();
+    m_footNotes.clear(); // clear for next chapter
+}
+
+void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
+{
+    htmlWriter->startElement("h1");
+    htmlWriter->addTextNode("End Notes");
+    handleTagLineBreak(htmlWriter);
+    htmlWriter->endElement();
+
+    htmlWriter->startElement("ul");
+    int noteCounts = 1;
+    foreach(QString id, m_endNotes.keys()) {
+        htmlWriter->startElement("li");
+        htmlWriter->addAttribute("id", id.section("/", 1) + "n");
+
+        htmlWriter->startElement("a");
+        // id = chapter-endnotes.xhtml/endnoteId
+        htmlWriter->addAttribute("href",id.section("/", 0, 0) + "#" + id.section("/", 1) + "t");
+        htmlWriter->addTextNode("["+QString::number(noteCounts)+"]");
+        htmlWriter->endElement();
+
+        KoXmlElement bodyElement = m_endNotes.value(id);
+        handleInsideElementsTag(bodyElement, htmlWriter);
+
+        htmlWriter->endElement();
+        noteCounts++;
+    }
+    htmlWriter->endElement();
+}
+
+
+// ================================================================
+//                         Style handling
+
+
+KoFilter::ConversionStatus OdtHtmlConverter::collectStyles(KoStore *odfStore,
                                                            QHash<QString, StyleInfo*> &styles)
 {
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+
+    // ----------------------------------------------------------------
+    // Get style info from content.xml.
+
+    // Try to open content.xml. Return if it failed.
     //kDebug(30517) << "parse content.xml styles";
     if (!odfStore->open("content.xml")) {
         kError(30517) << "Unable to open input file! content.xml" << endl;
         return KoFilter::FileNotFound;
     }
 
-    // Try to set content.xml as a KoXmlDocument. Return if it failed.
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
         kDebug() << "Error occurred while parsing styles.xml "
                  << errorMsg << " in Line: " << errorLine
@@ -86,19 +801,19 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertStyles(KoStore *odfStore,
         return KoFilter::ParsingError;
     }
 
-    // Get the node that contains the styles.
+    // Get the xml node that contains the styles.
     KoXmlNode stylesNode = doc.documentElement();
     stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "automatic-styles");
 
     // Collect info about the styles.
-    collectStyles(stylesNode, styles);
+    collectStyleSet(stylesNode, styles);
 
     odfStore->close(); // end of parsing styles in content.xml
 
     // ----------------------------------------------------------------
+    // Get style info from styles.xml.
 
     // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
-    //kDebug(30517) << "************ parse styles.xml styles **********************";
     if (!odfStore->open("styles.xml")) {
         kError(30517) << "Unable to open input file! style.xml" << endl;
         return KoFilter::FileNotFound;
@@ -118,13 +833,13 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertStyles(KoStore *odfStore,
     stylesNode = KoXml::namedItemNS(stylesNode, KoXmlNS::office, "styles");
 
     // Collect info about the styles.
-    collectStyles(stylesNode, styles);
+    collectStyleSet(stylesNode, styles);
 
     odfStore->close();
     return KoFilter::OK;
 }
 
-void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
+void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, StyleInfo*> &styles)
 {
     KoXmlElement styleElement;
     forEachElement (styleElement, stylesNode) {
@@ -158,6 +873,7 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
         styleInfo->parent = parentName;
 
         // Limit picture size to 99% of the page size whatever that may be.
+        // NOTE: This only makes sense when we convert to HTML.
         if (styleElement.attribute("family") == "graphic") {
             styleInfo->attributes.insert("max-height", "99%");
             styleInfo->attributes.insert("max-width", "99%");
@@ -165,13 +881,13 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
             styleInfo->attributes.insert("width", "auto");
         }
 
-        styleInfo->hasBreakBefore = false;
+        styleInfo->shouldBreakChapter = false;
         KoXmlElement propertiesElement;
         forEachElement (propertiesElement, styleElement) {
             //Check for fo:break-before
             if (propertiesElement.attribute("break-before") == "page") {
                 //kDebug(30517) << "Found break-before=page in style" << styleName;
-                styleInfo->hasBreakBefore = true;
+                styleInfo->shouldBreakChapter = true;
             }
             collectStyleAttributes(propertiesElement, styleInfo);
         }
@@ -181,7 +897,7 @@ void OdtHtmlConverter::collectStyles(KoXmlNode &stylesNode, QHash<QString, Style
                       << styleInfo->parent
                       << styleInfo->family
                       << styleInfo->isDefaultStyle
-                      << styleInfo->hasBreakBefore
+                      << styleInfo->shouldBreakChapter
                       << styleInfo->attributes;
 #endif
         styles.insert(styleName, styleInfo);
@@ -261,12 +977,12 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
     // Image align
     attribute = propertiesElement.attribute("horizontal-pos");
     if (!attribute.isEmpty()) {
-        kDebug(30517) << "horisontal pos attribute" << attribute;
+        //kDebug(30517) << "horisontal pos attribute" << attribute;
         if (attribute == "right" || attribute == "from-left") {
             styleInfo->attributes.insert("float", "right");
             styleInfo->attributes.insert("margin", "5px 0 5px 15px");
         }
-        // Center doesnt show very well.
+        // Center doesn't show very well.
 //        else if (attribute == "center") {
 //            styleInfo->attributes.insert("display", "block");
 //            styleInfo->attributes.insert("margin", "10px auto");
@@ -324,682 +1040,114 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
     }
 }
 
-
-// ================================================================
-//                         HTML conversion
-
-
-KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
-                                                            QHash<QString, QString> &metaData,
-                                                            EpubFile *epub,
-                                                            QHash<QString, StyleInfo*> &styles,
-                                                            QHash<QString, QSizeF> &imagesSrcList)
+void OdtHtmlConverter::fixStyleTree(QHash<QString, StyleInfo*> &styles)
 {
-    if (!odfStore->open("content.xml")) {
-        kDebug(30517) << "Can not open content.xml .";
-        return KoFilter::FileNotFound;
-    }
+    // For all styles:
+    //    Propagate the shouldBreakChapter bool upwards in the inheritance tree.
+    foreach (const QString &styleName, styles.keys()) {
+        QVector<StyleInfo *> styleStack(styles.size());
 
-    QByteArray htmlContent;
-    QBuffer *outBuf = new QBuffer(&htmlContent);
-    KoXmlWriter *htmlWriter = new KoXmlWriter(outBuf);
+        // Create a stack of styles that we have to check.
+        //
+        // After this, styleStack will contain a list of styles to
+        // check with the deepest one last in the list.
+        StyleInfo *style = styles[styleName];
+        int index = 0;
+        while (style) {
+            styleStack[index++] = style;
 
-    // ----------------------------------------------------------------
-    // Parse body from content.xml
-
-    KoXmlDocument doc;
-    QString errorMsg;
-    int errorLine;
-    int errorColumn;
-    if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug(30517) << "Error occurred while parsing content.xml "
-                 << errorMsg << " in Line: " << errorLine
-                 << " Column: " << errorColumn;
-        odfStore->close();
-        return KoFilter::ParsingError;
-    }
-
-    KoXmlNode currentNode = doc.documentElement();
-    KoXmlElement nodeElement;    // currentNode as Element
-
-    currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "body");
-    currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "text");
-
-    // Write the beginning of the output.
-    htmlWriter->startElement("html");
-    htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-    createHtmlHead(htmlWriter, metaData);
-    htmlWriter->startElement("body");
-
-    // Collect information about internal links.
-    KoXmlElement element = currentNode.toElement(); // node for passing it to collectInter...()
-    int chapter = 1;
-    collectInternalLinksInfo(element, styles, chapter);
-
-    QString prefix = "chapter"; // Prefix of chapter names.
-    m_currentChapter = 1;       // Number of current output chapter.
-    forEachElement (nodeElement, currentNode) {
-
-        //kDebug(30517) << nodeElement.tagName() <<pFlag;
-        if ((nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text)
-                || (nodeElement.localName() == "h" && nodeElement.namespaceURI() == KoXmlNS::text)) {
-
-            // A fo:break-before="page" in the style means create a new chapter here,
-            // but only if it is a top-level paragraph and not at the very first node.
-            StyleInfo *style = styles.value(nodeElement.attribute("style-name"));
-            if (style && style->hasBreakBefore) {
-                //kDebug(30517) << "Found paragraph with style with break-before -- breaking new chapter";
-
-                // Write out any footnotes
-                if (!m_footNotes.isEmpty()) {
-                    writeFootNotes(htmlWriter, styles, imagesSrcList);
-                }
-                // This paragraph is at top level so we should close
-                // the html file and start on the next file.
-                htmlWriter->endElement();
-                htmlWriter->endElement();
-
-                // Write output file to the epub object.
-                QString fileId = prefix + QString::number(m_currentChapter);
-                QString fileName = "OEBPS/" + fileId + ".xhtml";
-                epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
-
-                // Prepare for the next file.
-                htmlContent.clear();
-                delete htmlWriter;
-                delete outBuf;
-                outBuf = new QBuffer(&htmlContent);
-                htmlWriter = new KoXmlWriter(outBuf);
-                m_currentChapter++;
-
-                // Write the beginning of the output for the next file.
-                htmlWriter->startElement("html");
-                htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-                createHtmlHead(htmlWriter, metaData);
-                htmlWriter->startElement("body");
+            // Quit when we are at the bottom or found a break-before.
+            if (style->shouldBreakChapter || style->parent.isEmpty()) {
+                break;
             }
 
-            // Actually handle the contents.
-            if (nodeElement.localName() == "p")
-                handleTagP(nodeElement, htmlWriter, styles, imagesSrcList);
-            else
-                handleTagH(nodeElement, htmlWriter, styles, imagesSrcList);
+            style = styles[style->parent];
         }
-        else if (nodeElement.localName() == "span" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagSpan(nodeElement, htmlWriter, styles, imagesSrcList);
-        }
-        else if (nodeElement.localName() == "table" && nodeElement.namespaceURI() == KoXmlNS::table) {
-            // Handle table
-            handleTagTable(nodeElement, htmlWriter, styles, imagesSrcList);
-        }
-        else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
-            // Handle frame
-            htmlWriter->startElement("div");
-            handleTagFrame(nodeElement, htmlWriter, styles, imagesSrcList);
-            htmlWriter->endElement(); // end div
-        }
-        else if (nodeElement.localName() == "soft-page-break" &&
-                 nodeElement.namespaceURI() == KoXmlNS::text) {
 
-            handleTagPageBreak(nodeElement, htmlWriter, styles);
-        }
-        else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagList(nodeElement, htmlWriter, styles, imagesSrcList);
-        }
-        else if (nodeElement.localName() == "a" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagA(nodeElement, htmlWriter, styles, imagesSrcList);
-        }
-        else if (nodeElement.localName() == "table-of-content" &&
-                 nodeElement.namespaceURI() == KoXmlNS::text) {
-
-            handleTagTableOfContent(nodeElement, htmlWriter, styles, imagesSrcList);
-        }
-        else if (nodeElement.localName() == "line-break" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagLineBreak(htmlWriter);
-        }
-        else {
-            htmlWriter->startElement("div");
-            handleUnknownTags(nodeElement, htmlWriter, styles, imagesSrcList);
-            htmlWriter->endElement();
+        // If the bottom most has a break, then all the ones in the list should inherit it.
+        if (styleStack[index - 1]->shouldBreakChapter) {
+            for (int i = 0; i < index - 1; ++i) {
+                styleStack[i]->shouldBreakChapter = true;
+            }
         }
     }
+}
 
-    htmlWriter->endElement(); // body
-    htmlWriter->endElement(); // html
 
-    // Write output of the last file to the epub object.
-    QString fileId = prefix + QString::number(m_currentChapter);
-    QString fileName = "OEBPS/" + fileId + ".xhtml";
-    epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
 
-    // if we had end notes, make a new chapter for end notes
-    if (!m_endNotes.isEmpty()) {
+KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*> &styles,
+                                                       QByteArray &cssContent)
+{
+    // There is no equivalent to the ODF style inheritance using
+    // parent-style-name in CSS. This means that to simulate the same
+    // behaviour we have to "flatten" the style tree, i.e. we have to
+    // transfer all the inherited attributes from a style's parent
+    // into itself.
+    flattenStyles(styles);
 
-        htmlContent.clear();
-        delete htmlWriter;
-        delete outBuf;
-        outBuf = new QBuffer(&htmlContent);
-        htmlWriter = new KoXmlWriter(outBuf);
+    QByteArray begin("{\n");
+    QByteArray end("}\n");
+    foreach (QString styleName, styles.keys()) {
+        QByteArray head;
+        QByteArray attributeList;
 
-        // Write the beginning of the output for the next file.
-        htmlWriter->startElement("html");
-        htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
-        createHtmlHead(htmlWriter, metaData);
-        htmlWriter->startElement("body");
+        StyleInfo *styleInfo = styles.value(styleName);
+        if (!styleInfo || !styleInfo->inUse)
+            continue;
 
-        writeEndNotes(htmlWriter, styles, imagesSrcList);
+        // The style name
+        head = QString("." + styleName).toUtf8();
+        cssContent.append(head);
+        cssContent.append(begin);
 
-        htmlWriter->endElement(); // body
-        htmlWriter->endElement(); // html
+        foreach (const QString &propName, styleInfo->attributes.keys()) {
+            attributeList += (propName + ':' + styleInfo->attributes.value(propName)).toUtf8() + ";\n";
+        }
 
-        QString fileId = "chapter-endnotes";
-        QString fileName = "OEBPS/" + fileId + ".xhtml";
-        epub->addContentFile(fileId, fileName, "application/xhtml+xml", htmlContent);
-
+        cssContent.append(attributeList);
+        cssContent.append(end);
     }
 
-    delete htmlWriter;
-    delete outBuf;
-
-    odfStore->close();
     return KoFilter::OK;
 }
 
-
-void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)
+void OdtHtmlConverter::flattenStyles(QHash<QString, StyleInfo*> &styles)
 {
-    writer->startElement("head");
-
-    writer->startElement("title");
-    writer->addTextNode(metaData.value("title"));
-    writer->endElement(); // title
-
-    writer->startElement("meta");
-    writer->addAttribute("http-equiv", "Content-Type");
-    writer->addAttribute("content", "text/html; charset=utf-8");
-    writer->endElement(); // meta
-
-    // write meta tag
-    // m-meta <Tagname, Text>
-    // <meta name = "Tagname" content = "Text" />
-    foreach (const QString &name, metaData.keys()) {
-        // Title is handled above.
-        if (name == "title")
-            continue;
-
-        writer->startElement("meta");
-        writer->addAttribute("name", name);
-        writer->addAttribute("content", metaData.value(name));
-        writer->endElement(); // meta
-    }
-
-    writer->startElement("link");
-    writer->addAttribute("href", "styles.css");
-    writer->addAttribute("type", "text/css");
-    writer->addAttribute("rel", "stylesheet");
-    writer->endElement(); // link
-
-    writer->endElement(); // head
-}
-
-
-void OdtHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                      QHash<QString, StyleInfo *> &styles,
-                                      QHash<QString, QSizeF> &imagesSrcList)
-{
-    QString styleName = nodeElement.attribute("style-name");
-    StyleInfo *styleInfo = styles.value(styleName);
-    htmlWriter->startElement("table");
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    htmlWriter->addAttribute("border", "1");
-
-    //===== table-row ======
-    KoXmlElement tableElement;
-    forEachElement (tableElement, nodeElement) {
-        if (tableElement.localName() != "table-column" && tableElement.namespaceURI() == KoXmlNS::table) {
-            htmlWriter->startElement("tr");
-
-            // ===== table-cell ======
-            KoXmlElement cellElement;
-            forEachElement (cellElement, tableElement) {
-                QString styleName = cellElement.attribute("style-name");
-                StyleInfo *styleInfo = styles.value(styleName);
-                htmlWriter->startElement("td");
-                if (styleInfo) {
-                    styleInfo->inUse = true;
-                    htmlWriter->addAttribute("class", styleName);
-                }
-
-                // ==== cell text ====
-                // FIXME: This is wrong. A cell element can contain
-                //        the same tags as the full contents, not just
-                //        what is inside a paragraph. (Beside, this
-                //        function has a strange name.)
-                handleInsideElementsTag(cellElement, htmlWriter, styles, imagesSrcList);
-                // ===================
-                htmlWriter->endElement(); // td
-            } // end for write tag cell
-
-            htmlWriter->endElement(); // tr
-        } // end while write tag row
-    }
-
-    htmlWriter->endElement();
-}
-
-void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                      QHash<QString, StyleInfo*> &styles,
-                                      QHash<QString, QSizeF> &imagesSrcList)
-{
-    QString styleName = nodeElement.attribute("style-name");
-    StyleInfo *styleInfo = styles.value(styleName);
-    htmlWriter->startElement("img");
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    htmlWriter->addAttribute("alt", "(No Description)");
-
-    // Find height and width
-    QString height = nodeElement.attribute("height");
-    QString width  = nodeElement.attribute("width");
-    // remove characters "in" or "pt" from their end
-    height = height.left(height.length()-2);
-    width  = width.left(width.length()-2);
-    // Convert them to real
-    qreal qHeight = height.toFloat();
-    qreal qWidth = width.toFloat();
-    QSizeF size(qWidth, qHeight);
-
-    // Check image tag to find image source
-    KoXmlElement imgElement;
-    forEachElement (imgElement, nodeElement) {
-        if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
-            QString imgSrc = imgElement.attribute("href").section('/', -1);
-            htmlWriter->addAttribute("src", imgSrc);
-
-            imagesSrcList.insert(imgElement.attribute("href"), size);
+    QSet<QString> doneStyles;
+    foreach (const QString &styleName, styles.keys()) {
+        if (!doneStyles.contains(styleName)) {
+            flattenStyle(styleName, styles, doneStyles);
         }
     }
-    htmlWriter->endElement(); // end img
 }
 
-void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement,
-                                  KoXmlWriter *htmlWriter, QHash<QString, StyleInfo *> &styles,
-                                  QHash<QString, QSizeF> &imagesSrcList)
+void OdtHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
+                                    QSet<QString> &doneStyles)
 {
-    QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = styles.value(styleName);
-    htmlWriter->startElement("p");
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    handleInsideElementsTag(nodeElement, htmlWriter, styles, imagesSrcList);
-    htmlWriter->endElement();
-}
-
-void OdtHtmlConverter::handleCharacterData(KoXmlNode &node, KoXmlWriter *htmlWriter,
-                                           QHash<QString, StyleInfo*> &styles)
-{
-    Q_UNUSED(styles);
-
-    KoXmlText charData = node.toText();
-    htmlWriter->addTextNode(charData.data());
-}
-
-void OdtHtmlConverter::handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                     QHash<QString, StyleInfo *> &styles,
-                                     QHash<QString, QSizeF> &imagesSrcList)
-{
-    QString styleName = nodeElement.attribute("style-name");
-    StyleInfo *styleInfo = styles.value(styleName);
-    htmlWriter->startElement("span");
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    handleInsideElementsTag(nodeElement, htmlWriter, styles, imagesSrcList);
-    htmlWriter->endElement(); // span
-}
-
-void OdtHtmlConverter::handleTagPageBreak(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                          QHash<QString, StyleInfo*> &styles)
-{
-    Q_UNUSED(styles);
-
-    htmlWriter->addTextNode(nodeElement.text().toUtf8());
-}
-
-void OdtHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                  QHash<QString, StyleInfo *> &styles,
-                                  QHash<QString, QSizeF> &imagesSrcList)
-{
-    QString styleName = nodeElement.attribute("style-name");
-    StyleInfo *styleInfo = styles.value(styleName);
-    htmlWriter->startElement("h1");
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    handleInsideElementsTag(nodeElement, htmlWriter, styles, imagesSrcList);
-    htmlWriter->endElement();
-}
-
-void OdtHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                     QHash<QString, StyleInfo *> &styles,
-                                     QHash<QString, QSizeF> &imagesSrcList)
-{
-    QString styleName = nodeElement.attribute("style-name");
-    StyleInfo *styleInfo = styles.value(styleName);
-    htmlWriter->startElement("ul");
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-
-    KoXmlElement listItem;
-    forEachElement (listItem, nodeElement) {
-        htmlWriter->startElement("li");
-        handleInsideElementsTag(listItem, htmlWriter, styles, imagesSrcList);
-        htmlWriter->endElement();
-    }
-    htmlWriter->endElement();
-}
-
-void OdtHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                  QHash<QString, StyleInfo *> &styles,
-                                  QHash<QString, QSizeF> &imagesSrcList)
-{
-    htmlWriter->startElement("a");
-    QString refrence = nodeElement.attribute("href");
-    QString chapter = m_linksInfo.value(refrence);
-    if (!chapter.isEmpty()) {
-        // This is internal link.
-        refrence = refrence.remove("|");
-        refrence = refrence.remove(" ");// remove spaces
-        refrence = chapter+refrence;
-        htmlWriter->addAttribute("href", refrence);
-    }
-    else {
-        // This is external link.
-        htmlWriter->addAttribute("href", refrence);
-    }
-
-    handleInsideElementsTag(nodeElement, htmlWriter, styles, imagesSrcList);
-    htmlWriter->endElement();
-}
-
-void OdtHtmlConverter::handleTagTab (KoXmlWriter *htmlWriter)
-{
-    for (int i = 0; i <10; ++i)
-        htmlWriter->addTextNode("\u00a0");
-}
-
-void OdtHtmlConverter::handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                               QHash<QString, StyleInfo *> &styles,
-                                               QHash<QString, QSizeF> &imagesSrcList)
-{
-    KoXmlNode indexBody = KoXml::namedItemNS(nodeElement, KoXmlNS::text, "index-body");
-    KoXmlElement  element;
-    forEachElement (element, indexBody) {
-        if (element.localName() == "index-title" && element.namespaceURI() == KoXmlNS::text) {
-            handleInsideElementsTag(element, htmlWriter, styles, imagesSrcList);
-        }
-        else
-            handleTagTableOfContentBody(element, htmlWriter, styles, imagesSrcList);
-    }
-}
-
-void OdtHtmlConverter::handleTagTableOfContentBody(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                                   QHash<QString, StyleInfo *> &styles,
-                                                   QHash<QString, QSizeF> &imagesSrcList)
-{
-    if (nodeElement.localName() == "p" && nodeElement.namespaceURI() == KoXmlNS::text) {
-        handleTagP(nodeElement, htmlWriter, styles, imagesSrcList);
-    }
-}
-
-void OdtHtmlConverter::handleTagLineBreak(KoXmlWriter *htmlWriter)
-{
-    htmlWriter->startElement("br");
-    htmlWriter->endElement();
-}
-
-void OdtHtmlConverter::handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
-{
-    QString anchor = nodeElement.attribute("name");
-    // This is haed codevalidator gets error for characters "|" and spaces
-    // FIXME : we should handle ids better after move file to class
-    anchor = anchor.remove("|");
-    anchor = anchor.remove(" ");//remove spaces
-    htmlWriter->startElement("a");
-    htmlWriter->addAttribute("id", anchor);
-}
-
-void OdtHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
-{
-    QString anchor = nodeElement.attribute("name");
-    htmlWriter->startElement("a");
-    htmlWriter->addAttribute("id", anchor);
-}
-
-void OdtHtmlConverter::handleTagBookMarkEnd(KoXmlWriter *htmlWriter)
-{
-    htmlWriter->endElement();
-}
-
-void OdtHtmlConverter::handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                         QHash<QString, StyleInfo *> &styles,
-                                         QHash<QString, QSizeF> &imagesSrcList)
-{
-    //just go dipper to find known tags
-    handleInsideElementsTag(nodeElement, htmlWriter, styles, imagesSrcList);
-}
-
-
-void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
-{
-    QString noteClass = nodeElement.attribute("note-class");
-    if (noteClass != "footnote" && noteClass != "endnote") {
+    if (!styleInfo) {
         return;
     }
 
-    QString id = nodeElement.attribute("id");
-    KoXmlElement noteElements;
-    forEachElement(noteElements, nodeElement) {
-        if (noteElements.localName() == "note-citation" && noteElements.namespaceURI() == KoXmlNS::text) {
-            htmlWriter->startElement("sup");
+    QString parentName = styleInfo->parent;
+    if (parentName.isEmpty())
+        return;
 
-            htmlWriter->startElement("a");
-            if (noteClass == "footnote")
-                htmlWriter->addAttribute("href", "#" + id + "n"); // n rerence to note foot-note or end-note
-            else { // endnote
-                QString endRef = "chapter-endnotes.xhtml#" + id + "n";
-                htmlWriter->addAttribute("href", endRef);
-            }
-            htmlWriter->addAttribute("id", id + "t"); // t is for text
-            htmlWriter->addTextNode(noteElements.text());
-            htmlWriter->endElement();
+    flattenStyle(styleInfo->parent, styles, doneStyles);
 
-            htmlWriter->endElement();
-        }
-        else if (noteElements.localName() == "note-body" && noteElements.namespaceURI() == KoXmlNS::text) {
-            if (noteClass == "footnote")
-                m_footNotes.insert(id, noteElements);
-            else {
-                QString noteChpater = "chapter" + QString::number(m_currentChapter) + ".xhtml";
-                m_endNotes.insert(noteChpater + "/" + id, noteElements);
-                // we insert this: m_currentChapter/id
-                // to can add refrence for text in end note
-            }
+    // Copy all attributes from the parent that is not alreayd in
+    // this style into this style.
+    StyleInfo *parentInfo = styles.value(parentName);
+    if (!parentInfo)
+        return;
+
+    foreach(const QString &paramName, parentInfo->attributes.keys()) {
+        if (styleInfo->attributes.value(paramName).isEmpty()) {
+            styleInfo->attributes.insert(paramName, parentInfo->attributes.value(paramName));
         }
     }
+
+    doneStyles.insert(styleName);
 }
 
-void OdtHtmlConverter::handleInsideElementsTag(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter,
-                                               QHash<QString, StyleInfo *> &styles,
-                                               QHash<QString, QSizeF> &imagesSrcList)
-{
-    KoXmlNode node = nodeElement.firstChild();
-    KoXmlElement element = node.toElement();
 
-    // We should end tag "a" after text for bookmark-start we can
-    // handle it with tag bookmark-end but for bookmark there is no
-    // bookmark-end so i use this flag to close the tag "a" that i
-    // have opened it in handleTagBookMark()
-    bool bookMarkFlag = false;
-
-    // We have characterData or image or span or s  or soft-page break in a tag p
-    // FIXME: we should add if there are more tags.
-    while (!node.isNull()) {
-
-        if (node.isText()) {
-            handleCharacterData(node, htmlWriter, styles);
-            if (bookMarkFlag) {
-                htmlWriter->endElement(); // end tag "a"
-                bookMarkFlag = false;
-            }
-        }
-        else if (element.localName() == "p" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagP(element, htmlWriter, styles, imagesSrcList);
-        }
-        else if (element.localName() == "h" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagH(element, htmlWriter, styles, imagesSrcList);
-        }
-        else if (element.localName() == "table" && element.namespaceURI() == KoXmlNS::table) {
-            handleTagH(element, htmlWriter, styles, imagesSrcList);
-        }
-        else if (element.localName() == "span" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagSpan(element, htmlWriter, styles, imagesSrcList);
-        }
-        else if (element.localName() == "frame" && element.namespaceURI() == KoXmlNS::draw) {
-            handleTagFrame(element, htmlWriter, styles, imagesSrcList);
-        }
-        else if (nodeElement.localName() == "list" && nodeElement.namespaceURI() == KoXmlNS::text) {
-            handleTagList(nodeElement, htmlWriter, styles, imagesSrcList);
-        }
-        else if (element.localName() == "soft-page-break" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagPageBreak(element, htmlWriter, styles);
-        }
-        else if (element.localName() == "a" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagA(element, htmlWriter, styles, imagesSrcList);
-        }
-        else if (element.localName() == "s" && element.namespaceURI() == KoXmlNS::text) {
-            htmlWriter->addTextNode("\u00a0");
-        }
-        else if (element.localName() == "line-break" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagLineBreak(htmlWriter);
-        }
-        else if (element.localName() == "tab" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagTab(htmlWriter);
-        }
-        else if (element.localName() == "bookmark" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagBookMark(element, htmlWriter);
-            bookMarkFlag = true;
-        }
-        else if (element.localName() == "bookmark-start" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagBookMarkStart(element, htmlWriter);
-        }
-        else if (element.localName() == "bookmark-end" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagBookMarkEnd(htmlWriter);
-        }
-        else if (element.localName() == "note" && element.namespaceURI() == KoXmlNS::text) {
-            handleTagNote(element, htmlWriter);
-        }
-        else
-            handleUnknownTags(element, htmlWriter, styles, imagesSrcList);
-
-        node = node.nextSibling();
-        element = node.toElement();
-    }
-}
-
-void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement,
-                                                QHash<QString, StyleInfo *> &styles, int &chapter)
-{
-    KoXmlElement nodeElement;
-    forEachElement (nodeElement, currentElement) {
-        if ( (nodeElement.localName() == "p" || nodeElement.localName() == "h") 
-             && nodeElement.namespaceURI() == KoXmlNS::text)
-        {
-            // A break-before in the style means create a new chapter here,
-            // but only if it is a top-level paragraph and not at the very first node.
-            StyleInfo *style = styles.value(nodeElement.attribute("style-name"));
-            if (style && style->hasBreakBefore) {
-                chapter++;
-            }
-        }
-        else if ((nodeElement.localName() == "bookmark-start" || nodeElement.localName() == "bookmark")
-                  && nodeElement.namespaceURI() == KoXmlNS::text) {
-            QString key = "#" + nodeElement.attribute("name");
-            QString value = "chapter" + QString::number(chapter) + ".xhtml";
-            m_linksInfo.insert(key, value);
-            continue;
-        }
-
-        // Check for links recursively also inside this element.
-        collectInternalLinksInfo(nodeElement, styles, chapter);
-    }
-}
-
-void OdtHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter, QHash<QString, StyleInfo *> &styles,
-                                      QHash<QString, QSizeF> &imagesSrcList)
-{
-    htmlWriter->startElement("p");
-    handleTagLineBreak(htmlWriter);
-    htmlWriter->addTextNode("___________________________________________");
-    htmlWriter->endElement();
-
-    htmlWriter->startElement("ul");
-    int noteCounts = 1;
-    foreach(QString id, m_footNotes.keys()) {
-        htmlWriter->startElement("li");
-        htmlWriter->addAttribute("id", id + "n");
-
-        htmlWriter->startElement("a");
-        htmlWriter->addAttribute("href", "#" + id + "t"); // refrence to text
-        htmlWriter->addTextNode("[" + QString::number(noteCounts) + "]");
-        htmlWriter->endElement();
-
-        KoXmlElement bodyElement = m_footNotes.value(id);
-        handleInsideElementsTag(bodyElement, htmlWriter, styles, imagesSrcList);
-
-        htmlWriter->endElement();
-        noteCounts++;
-    }
-    htmlWriter->endElement();
-    m_footNotes.clear(); // clear for next chapter
-}
-
-void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter, QHash<QString, StyleInfo *> &styles,
-                                     QHash<QString, QSizeF> &imagesSrcList)
-{
-    htmlWriter->startElement("h1");
-    htmlWriter->addTextNode("End Notes");
-    handleTagLineBreak(htmlWriter);
-    htmlWriter->endElement();
-
-    htmlWriter->startElement("ul");
-    int noteCounts = 1;
-    foreach(QString id, m_endNotes.keys()) {
-        htmlWriter->startElement("li");
-        htmlWriter->addAttribute("id", id.section("/", 1) + "n");
-
-        htmlWriter->startElement("a");
-        // id = chapter-endnotes.xhtml/endnoteId
-        htmlWriter->addAttribute("href",id.section("/", 0, 0) + "#" + id.section("/", 1) + "t");
-        htmlWriter->addTextNode("["+QString::number(noteCounts)+"]");
-        htmlWriter->endElement();
-
-        KoXmlElement bodyElement = m_endNotes.value(id);
-        handleInsideElementsTag(bodyElement, htmlWriter, styles, imagesSrcList);
-
-        htmlWriter->endElement();
-        noteCounts++;
-    }
-    htmlWriter->endElement();
-}

@@ -1012,6 +1012,18 @@ void KexiWindow::sendAttachedStateToCurrentView()
         v->windowAttached();
 }
 
+bool KexiWindow::saveSettings()
+{
+    bool result = true;
+    for (int i = 0; i < d->stack->count(); ++i) {
+        KexiView *view = qobject_cast<KexiView*>(d->stack->widget(i));
+        if (!view->saveSettings()) {
+            result = false;
+        }
+    }
+    return result;
+}
+
 Kexi::ViewMode KexiWindow::creatingViewsMode() const
 {
     return d->creatingViewsMode;

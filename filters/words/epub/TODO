@@ -22,7 +22,6 @@ Legend
 Next Milestone: EPUB 2.0.1 filter done
 
 
-
 ================================================================
                         Issues
 
@@ -45,6 +44,30 @@ Medium term issues
 
 Time frame: (weeks / months)
 
+Allow user to add a book cover image
+ * Send parameter (filename) to the filter
+ * UI to find / edit the filename
+
+Create a generic HTML export filter
+ * Refactor some things to prepare for the HTML filter.
+    + Generalize some concepts                                          [Done]
+       - Add "OEBPS/" as a configurable parameter.                        [done]
+       - Add "chapter" as a configurable prefix to names of files.        [done]
+       - Generalize the criterium for chapter break
+    + Move handling of styles and creation of CSS to OdtHtmlConverter   [Done]
+    + Make staring a new html file and ending another functions         [Done]
+    + Remove parameter imagesSrcList from handleTag*()                  [Done]
+    + Remove parameter styles from handleTag*()                         [Done]
+    + Move generic ODF parsing from exportepub2                         [Done]
+       - New class: OdfParser                                             [done]
+       - Move parsing of metadata to OdfParser                            [done]
+       - Move parsing of manifest to OdfParser                            [done]
+    + Move conversion of images into its own file??
+ * Create the HTML backend instead of the Epub one.                     [DONE]
+    + Create a base class FileCollector.                                [Done]
+    + Move general code from EpubFile to FileCollector                  [Done]
+    + Create the class HtmlFile                                         [Done]
+ * Create the actual filter
 
 
 
