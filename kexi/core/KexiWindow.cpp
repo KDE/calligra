@@ -353,6 +353,8 @@ void KexiWindow::removeView(Kexi::ViewMode mode)
     if (view)
         d->stack->removeWidget(view);
 
+    d->setIndexForView(mode, -1);
+
     d->openedViewModes |= mode;
     d->openedViewModes ^= mode;
 }
