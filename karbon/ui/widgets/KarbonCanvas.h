@@ -111,6 +111,9 @@ public:
     /// @return the offset of the document in canvas position.
     const QPoint &documentOffset() const;
 
+    /// @return the document used by the canvas.
+    KarbonKoDocument *document() const;
+
 public slots:
 
     /**
