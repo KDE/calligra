@@ -165,9 +165,6 @@ KexiDB
 Main Window
 *Declare 'full screen' as global action for use in user commands or scripts
 
-2012-08-14
-*Added unit test for creating .kexi database file with KexiDB::Connection and adding test data
-
 ===================== Kexi 2.5  =====================
 
 ~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
@@ -179,6 +176,7 @@ Startup
 2012-08-26
 Query Designer
 *Make string concatenation operator || work
+**Ported to Predicate
 BUG:305793
 REVIEW:106199
 
@@ -186,6 +184,7 @@ REVIEW:106199
 KexiDB
 *Make it possible to disable db drivers even if the libs are present and found
 **renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config flag (by jstaniek)
+**Ported to Predicate
 BUG:305683
 REVIEW:106152
 
