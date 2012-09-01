@@ -67,7 +67,7 @@ Item {
                 onClicked: {
                     recentImagesModel.addRecent(model.url);
                     Settings.currentFile = model.url;
-                    base.clicked();
+                    base.clicked("");
                 }
             }
 
