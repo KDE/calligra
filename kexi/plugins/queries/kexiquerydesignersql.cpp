@@ -207,8 +207,9 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     a->setWhatsThis(i18n("Checks query for validity."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotCheckQuery()));
 
-    viewActions << (d->action_toggle_history = new KAction(
-        KIcon("view-history"), i18n("Show SQL History"), this));
+    /*viewActions <<*/
+    d->action_toggle_history = new KAction(
+        KIcon("view-history"), i18n("Show SQL History"), this);
     a = d->action_toggle_history;
     a->setCheckable(true);
     a->setObjectName("querypart_view_toggle_history");
@@ -220,12 +221,14 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     // - setup history pane
     d->historyHead = new KexiSectionHeader(i18n("SQL Query History"),
                                            Qt::Vertical, d->bottomPane);
+    d->historyHead->setVisible(false);
     bottomPaneLyr->addWidget(d->historyHead);
 // d->historyHead->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
 // d->historyHead->setMinimumHeight(40);
 // statusMainWidgetLyr->addWidget( d->historyHead );
 // d->historyHead->installEventFilter(this);
     d->history = new KexiQueryDesignerSQLHistory(d->historyHead);
+    d->history->setVisible(false);
     d->historyHead->setWidget(d->history);
     d->history->setObjectName("sql_history");
 
