@@ -86,7 +86,7 @@ Page {
                 } else {
                     Settings.currentFile = model.path;
                     RecentFileManager.addRecent( model.path );
-                    pageStack.replace( main );
+                    pageStack.push( main );
                 }
             }
         }

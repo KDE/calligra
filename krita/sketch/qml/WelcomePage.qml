@@ -183,7 +183,7 @@ Page {
             width: parent.width / 3 - 4;
             height: Constants.GridHeight * 9;
 
-            onClicked: button == "open" ? pageStack.push( openImage ) : pageStack.replace( main );
+            onClicked: button == "open" ? pageStack.push( openImage ) : pageStack.push( main );
         }
 
         Divider { height: Constants.GridHeight * 9; }
@@ -191,7 +191,7 @@ Page {
         NewImageList {
             width: parent.width / 3 - 8;
             height: Constants.GridHeight * 9;
-            onClicked: pageStack.replace( main );
+            onClicked: pageStack.push( main );
         }
 
         Divider { height: Constants.GridHeight * 9; }
