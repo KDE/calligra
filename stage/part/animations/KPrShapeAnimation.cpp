@@ -30,9 +30,9 @@
 #include "KoTextBlockData.h"
 #include "KPrTextBlockPaintStrategy.h"
 
-KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
+KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockUserData)
 : m_shape(shape)
-, m_textBlockData(textBlockData)
+, m_textBlockData(textBlockUserData)
 , m_class(KPrShapeAnimation::None)
 , m_step(0)
 , m_subStep(0)
@@ -43,7 +43,7 @@ KPrShapeAnimation::KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockD
     // this is needed so we save the xml id's on saving and therefor are able to
     // save animation back even when they have not yet run.
     if (m_textBlockData) {
-        m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());
+        KoTextBlockData(m_textBlockData).setPaintStrategy(new KoTextBlockPaintStrategyBase());
     }
 }
 
@@ -101,7 +101,7 @@ KoShape * KPrShapeAnimation::shape() const
     return m_shape;
 }
 
-KoTextBlockData * KPrShapeAnimation::textBlockData() const
+QTextBlockUserData *KPrShapeAnimation::textBlockUserData() const
 {
     return m_textBlockData;
 }
@@ -109,7 +109,7 @@ KoTextBlockData * KPrShapeAnimation::textBlockData() const
 void KPrShapeAnimation::init(KPrAnimationCache *animationCache, int step)
 {
     if (m_textBlockData) {
-        m_textBlockData->setPaintStrategy(new KPrTextBlockPaintStrategy(m_textBlockData, animationCache));
+        KoTextBlockData(m_textBlockData).setPaintStrategy(new KPrTextBlockPaintStrategy(m_textBlockData, animationCache));
     }
     for (int i = 0; i < this->animationCount(); ++i) {
         QAbstractAnimation *animation = this->animationAt(i);
@@ -191,18 +191,18 @@ void KPrShapeAnimation::setGlobalDuration(int timeMS)
     emit timeChanged(timeRange().first, timeMS);
 }
 
-void KPrShapeAnimation::setKoTextBlockData(KoTextBlockData *textBlockData)
+void KPrShapeAnimation::setTextBlockUserData(QTextBlockUserData *textBlockUserData)
 {
-    if (textBlockData) {
-        m_textBlockData = textBlockData;
-        m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());
+    if (textBlockUserData) {
+        m_textBlockData = textBlockUserData;
+        KoTextBlockData(m_textBlockData).setPaintStrategy(new KoTextBlockPaintStrategyBase());
     }
 }
 
 void KPrShapeAnimation::deactivate()
 {
     if (m_textBlockData) {
-        m_textBlockData->setPaintStrategy(new KoTextBlockPaintStrategyBase());
+        KoTextBlockData(m_textBlockData).setPaintStrategy(new KoTextBlockPaintStrategyBase());
     }
 }
 

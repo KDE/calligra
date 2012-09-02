@@ -21,7 +21,6 @@
 #include "../KPrAnimationCache.h"
 #include "KoShape.h"
 #include "KPrShapeAnimations.h"
-#include "KoTextBlockData.h"
 #include "KoTextShapeData.h"
 #include <QTextDocument>
 #include <QTextLayout>
@@ -34,7 +33,7 @@ void KPrAttributeHeight::updateCache(KPrAnimationCache *cache, KPrShapeAnimation
 {
     qreal tx = 0.0, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
-    KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
+    QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
     QTransform transform;
     if (textBlockData) {
         if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
@@ -55,14 +54,14 @@ void KPrAttributeHeight::updateCache(KPrAnimationCache *cache, KPrShapeAnimation
         tx = shape->size().width() * cache->zoom() / 2;
         ty = shape->size().height() * cache->zoom() / 2;
     }    transform.translate(tx, ty).scale(1, value).translate(-tx, -ty);
-    cache->update(shape, shapeAnimation->textBlockData(), "transform", transform);
+    cache->update(shape, textBlockData, "transform", transform);
 }
 
 void KPrAttributeHeight::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
 {
     qreal v1 = 0.0, v2 = 0.0, tx = 0.0, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
-    KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
+    QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
 
     if (textBlockData) {
         if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
