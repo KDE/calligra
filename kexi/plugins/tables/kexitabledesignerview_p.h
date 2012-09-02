@@ -22,7 +22,7 @@
 
 #include "kexitabledesignerview.h"
 #include <QList>
-#include <K3Command>
+#include <kundo2command.h>
 #include <QByteArray>
 
 class KexiDataAwarePropertySet;
@@ -36,20 +36,23 @@ class KexiDataAwarePropertySet;
 /*! @internal
  Command group, reimplemented to get access to commands().
  We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
-class CommandGroup : public K3MacroCommand
+#if 0
+class CommandGroup : public KUndo2Command
 {
 public:
     CommandGroup(const QString & name)
-            : K3MacroCommand(name) {}
+    : KUndo2Command(name) {}
     virtual ~CommandGroup() {}
     const QList<K3Command*> commands() const {
-        return K3MacroCommand::commands();
+        return KUndo2Command::commands();
     }
 };
+#endif
 
 /*! @internal
  Command history, reimplemented to get access to commands().
  We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
+#if 0
 class CommandHistory : public K3CommandHistory
 {
     Q_OBJECT
@@ -71,6 +74,7 @@ public slots:
 protected:
     QList<K3Command*> m_commandsToUndo, m_commandsToRedo;
 };
+#endif
 
 //----------------------------------------------
 
@@ -102,14 +106,14 @@ public:
      addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
      */
     void setPropertyValueIfNeeded(const KoProperty::Set& set, const QByteArray& propertyName,
-                                  const QVariant& newValue, CommandGroup* commandGroup,
+                                  const QVariant& newValue, KUndo2Command* commandGroup,
                                   bool forceAddCommand = false, bool rememberOldValue = true,
                                   QStringList* const slist = 0, QStringList* const nlist = 0);
 
     /*! Like above but allows to specify \a oldValue. */
     void setPropertyValueIfNeeded(
         const KoProperty::Set& set, const QByteArray& propertyName,
-        const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup,
+        const QVariant& newValue, const QVariant& oldValue, KUndo2Command* commandGroup,
         bool forceAddCommand = false, bool rememberOldValue = true,
         QStringList* const slist = 0, QStringList* const nlist = 0);
 
@@ -119,10 +123,10 @@ public:
      otherwise sets changed to true and sets visibility of property \a prop to \a visible.
     */
     void setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
-                               bool visible, bool &changed, CommandGroup *commandGroup);
+                               bool visible, bool &changed, KUndo2Command *commandGroup);
 
     bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
-                                    CommandGroup *commandGroup = 0);
+                                    KUndo2Command *commandGroup = 0);
 
     /*! \return message used to ask user for accepting saving the design.
      \a emptyTable is set to true if the table designed contains no rows.
@@ -186,7 +190,7 @@ public:
     tristate recentResultOfStoreData;
 
     KActionCollection* historyActionCollection;
-    CommandHistory* history;
+    KUndo2Stack* history;
 
     //! A set used in KexiTableDesignerView::buildField() to quickly identify
     //! properties internal to the designer

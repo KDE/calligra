@@ -13,6 +13,10 @@ if (KdepimLibs_FOUND)
     add_definitions(-DPLAN_KDEPIMLIBS_FOUND)
 endif (KdepimLibs_FOUND)
 
+if (PLANCHARTDEBUG)
+    add_definitions(-DPLAN_CHART_DEBUG)
+endif (PLANCHARTDEBUG)
+
 set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models

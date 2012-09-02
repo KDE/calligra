@@ -520,7 +520,7 @@ public slots:
 
 signals:
     /// Emitted when anything in the project is changed (use with care)
-    void changed();
+    void projectChanged();
     /// Emitted when the WBS code definition has changed. This may change all nodes.
     void wbsDefinitionChanged();
     /// Emitted when a schedule has been calculated
@@ -638,8 +638,8 @@ protected:
 
 protected:
     friend class KPlatoXmlLoaderBase;
-
-    virtual void changed(Node *node);
+    using Node::changed;
+    virtual void changed(Node *node, int property = -1);
     
     Accounts m_accounts;
     QList<ResourceGroup*> m_resourceGroups;
