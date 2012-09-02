@@ -65,6 +65,9 @@ if(WIN32)
     endif(MSVC)
 endif(WIN32)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
+
+
 set(KRITA_INCLUDES
     # For config-*.h
     ${CMAKE_CURRENT_BINARY_DIR}

@@ -133,7 +133,165 @@ struct MaskProcessor
     KisMaskGenerator* m_shape;
 };
 
+struct SSEMaskProcessor
+{
+    SSEMaskProcessor(KisFixedPaintDeviceSP device, const KoColorSpace* cs, qreal randomness, qreal density,
+           double centerX, double centerY, double invScaleX, double invScaleY, double angle,
+           KisMaskGenerator* shape)
+    : m_device(device)
+    , m_cs(cs)
+    , m_randomness(randomness)
+    , m_density(density)
+    , m_pixelSize(cs->pixelSize())
+    , m_centerX(centerX)
+    , m_centerY(centerY)
+    , m_invScaleX(invScaleX)
+    , m_invScaleY(invScaleY)
+    , m_shape(shape)
+    {
 
+        m_cosa = cos(angle);
+        m_sina = sin(angle);
+    }
+
+    void operator()(QRect& rect)
+    {
+        process(rect);
+    }
+
+    void process(QRect& rect){
+        qreal random = 1.0;
+        quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
+        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
+        
+        float *buffer;
+        float *bufferPointer;
+        __m128 rCurrentIndices, increment;
+        __m128 rCenterX, rX_, rInvScaleX, rCosa, rSina, rXr, rYr, rCosaY_, rSinaY_, rXCoeff, rYCoeff, rNorm1,
+        rNorm2, rOne, r255, rFade, rN, rTransformedFadeX, rTransformedFadeY, rNormFade, rDividend, rCircleMask;
+
+        int width = rect.width();
+
+        buffer = (float*) _mm_malloc(width*sizeof(float),16);
+
+        float xCoeff = 2.0 / width;
+        float yCoeff = 2.0 / width * 2.0f;
+
+        float transformedFadeX = 0.004f;
+        float transformedFadeY = 0.004f;
+        
+        // this offset is needed when brush size is smaller then fixed device size
+        int offset = (m_device->bounds().width() - rect.width()) * m_pixelSize; 
+        for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
+            bufferPointer = buffer;
+            
+            float y_ = (y - m_centerY) * m_invScaleY;
+            float sinay_ = m_sina * y_;
+            float cosay_ = m_cosa * y_; 
+
+
+            rCurrentIndices = _mm_set_ps(3.0f, 2.0f, 1.0f, 0.0f);
+            increment = _mm_set1_ps(4.0f);
+            rCenterX = _mm_set1_ps(m_centerX);
+            rInvScaleX = _mm_set1_ps(m_invScaleX);
+            rCosa = _mm_set1_ps(m_cosa);
+            rSina = _mm_set1_ps(m_sina);
+            rCosaY_ = _mm_set1_ps(cosay_);
+            rSinaY_ = _mm_set1_ps(sinay_);
+            rXCoeff = _mm_set1_ps(xCoeff);
+            rYCoeff = _mm_set1_ps(yCoeff);
+            rOne = _mm_set1_ps(1.0f);
+            r255 = _mm_set1_ps(255.0f);
+            rTransformedFadeX = _mm_set1_ps(transformedFadeX);
+            rTransformedFadeY = _mm_set1_ps(transformedFadeY);
+            for (int i=0; i < width; i+=4){
+                rX_ = _mm_sub_ps(rCurrentIndices, rCenterX);
+                rX_ = _mm_mul_ps(rX_, rInvScaleX);
+
+                rXr = _mm_mul_ps(rX_, rCosa);
+                rXr = _mm_add_ps(rXr, rCosaY_);
+
+                rYr = _mm_mul_ps(rX_, rSina);
+                rYr = _mm_add_ps(rYr, rCosaY_);
+
+                // float n = norme(xr * d->xcoef, yr * d->ycoef);
+                rNorm1 = _mm_mul_ps(rXr, rXCoeff);
+                rNorm1 = _mm_mul_ps(rNorm1, rNorm1);
+                
+                rNorm2 = _mm_mul_ps(rYr, rYCoeff);
+                rNorm2 = _mm_mul_ps(rNorm2, rNorm2);
+
+                rN = _mm_add_ps(rNorm1, rNorm2);
+                
+                // normeFade = norme(xr * d->transformedFadeX, yr * d->transformedFadeY)
+                rNorm1 = _mm_mul_ps(rXr, rTransformedFadeX);
+                rNorm1 = _mm_mul_ps(rNorm1, rNorm1);
+                
+                rNorm2 = _mm_mul_ps(rYr, rTransformedFadeY);
+                rNorm2 = _mm_mul_ps(rNorm2, rNorm2);
+
+                rNormFade = _mm_add_ps(rNorm1, rNorm2);
+                
+                //255 * n * (normeFade - 1) / (normeFade - n)
+                rFade = _mm_sub_ps(rNormFade, rOne);
+                rFade = _mm_mul_ps(rFade, rN);
+                rFade = _mm_mul_ps(rFade, r255);
+                
+                rDividend = _mm_sub_ps(rNormFade, rN);
+                rFade = _mm_div_ps(rFade, rDividend);
+                rFade = _mm_min_ps(rFade, r255);
+                
+                // Mask out the inner circe of the mask
+                rCircleMask = _mm_cmpgt_ps(rNormFade, rOne);
+                rFade = _mm_and_ps(rFade, rCircleMask);
+
+                _mm_store_ps(bufferPointer,rFade);
+                _mm_store_ps(bufferPointer,rCurrentIndices);
+                
+                rCurrentIndices = _mm_add_ps(rCurrentIndices, increment);
+
+                bufferPointer += 4;
+            }
+            
+            for (int x = 0; x < width; x++) {
+
+                if (m_randomness!= 0.0){
+                    random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
+                }
+
+                alphaValue = quint8( (OPACITY_OPAQUE_U8 - buffer[x]) * random);
+
+                // avoid computation of random numbers if density is full
+                if (m_density != 1.0){
+                    // compute density only for visible pixels of the mask
+                    if (alphaValue != OPACITY_TRANSPARENT_U8){
+                        if ( !(m_density >= drand48()) ){
+                            alphaValue = OPACITY_TRANSPARENT_U8;
+                        }
+                    }
+                }
+
+                m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
+                dabPointer += m_pixelSize;
+            }//endfor x
+            dabPointer += offset;
+        }//endfor y
+        _mm_free(buffer);
+    }
+
+    KisFixedPaintDeviceSP m_device;
+    const KoColorSpace* m_cs;
+    qreal m_randomness;
+    qreal m_density;
+    quint32 m_pixelSize;
+    double m_centerX;
+    double m_centerY;
+    double m_invScaleX;
+    double m_invScaleY;
+    double m_cosa;
+    double m_sina;
+    KisMaskGenerator* m_shape;
+};
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
@@ -332,7 +490,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
              }
         }//endfor y
 
-        MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
+        SSEMaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
         int jobs = d->idealThreadCountCached;
         if(dstHeight > 100 && jobs >= 4) {
             int splitter = dstHeight/jobs;
