@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=QuickPix brush
+Name[x-test]=xxQuickPix brushxx
+X-KDE-ServiceTypes=Krita/Paintop
+Type=Service
+X-KDE-Library=kritaquickpixpaintop
+X-Krita-Version=5
