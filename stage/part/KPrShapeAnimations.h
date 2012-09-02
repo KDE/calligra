@@ -161,7 +161,7 @@ public:
      * @param index of the animation
      * @return the time in miliseconds of the animation end
      */
-    int animationEnd(const QModelIndex &index);
+    int animationEnd(const QModelIndex &index) const;
 
     /**
      * Get the scale begin time for the given animation
@@ -169,7 +169,7 @@ public:
      * @param index of the animation
      * @return the time in miliseconds where the scale begin (relative to the parent onclik animation)
      */
-    int animationStart(const QModelIndex &index);
+    int animationStart(const QModelIndex &index) const;
 
     /**
      * @brief Replace animation in the given index

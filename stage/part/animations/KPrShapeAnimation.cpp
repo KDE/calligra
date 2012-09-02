@@ -283,12 +283,12 @@ void KPrShapeAnimation::setSubStep(KPrAnimationSubStep *subStep)
     }
 }
 
-KPrAnimationStep *KPrShapeAnimation::step()
+KPrAnimationStep *KPrShapeAnimation::step() const
 {
     return m_step;
 }
 
-KPrAnimationSubStep *KPrShapeAnimation::subStep()
+KPrAnimationSubStep *KPrShapeAnimation::subStep() const
 {
     return m_subStep;
 }
@@ -308,17 +308,17 @@ void KPrShapeAnimation::setAnimIndex(int index)
     m_animIndex = index;
 }
 
-int KPrShapeAnimation::stepIndex()
+int KPrShapeAnimation::stepIndex() const
 {
     return m_stepIndex;
 }
 
-int KPrShapeAnimation::subStepIndex()
+int KPrShapeAnimation::subStepIndex() const
 {
     return m_subStepIndex;
 }
 
-int KPrShapeAnimation::animIndex()
+int KPrShapeAnimation::animIndex() const
 {
     return m_animIndex;
 }

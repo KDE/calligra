@@ -186,14 +186,14 @@ public:
      *
      * @return animation step
      */
-    KPrAnimationStep *step();
+    KPrAnimationStep *step() const;
 
     /**
      * @brief Returns the stored pointer of the animation substep
      *
      * @return animation substep
      */
-    KPrAnimationSubStep *subStep();
+    KPrAnimationSubStep *subStep() const;
 
     /// Store index for undo redo commands
     /// The indexes are used and updated with in the remove/move commands
@@ -201,9 +201,9 @@ public:
     void setStepIndex(int index);
     void setSubStepIndex(int index);
     void setAnimIndex(int index);
-    int stepIndex();
-    int subStepIndex();
-    int animIndex();
+    int stepIndex() const;
+    int subStepIndex() const;
+    int animIndex() const;
 
 signals:
     /// Notify if an animation stored property has been changed

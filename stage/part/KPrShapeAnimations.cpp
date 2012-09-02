@@ -441,7 +441,7 @@ void KPrShapeAnimations::setTimeRange(KPrShapeAnimation *item, const int begin, 
     }
 }
 
-int KPrShapeAnimations::animationEnd(const QModelIndex &index)
+int KPrShapeAnimations::animationEnd(const QModelIndex &index) const
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
@@ -463,7 +463,7 @@ int KPrShapeAnimations::animationEnd(const QModelIndex &index)
     return 0;
 }
 
-int KPrShapeAnimations::animationStart(const QModelIndex &index)
+int KPrShapeAnimations::animationStart(const QModelIndex &index) const
 {
     if (index.isValid()) {
         KPrShapeAnimation *previousAnimation = animationByRow(index.row());
