@@ -987,7 +987,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
                     i18n("Setting Autonumber Field"),
-                    KGuiItem(i18n("Create &Primary Key"), "key"), KStandardGuiItem::cancel())) {
+                    KGuiItem(i18n("Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel())) {
                 changePrimaryKey = true;
                 setPrimaryKey = true;
                 //switchPrimaryKey(set, true);
@@ -1040,7 +1040,7 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
             kDebug() << "INVALID " << property.value().toString();
 //   if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
 //    i18n("This field has promary key assigned. Setting autonumber field"),
-//    KGuiItem(i18n("Create &Primary Key"), "key"), KStandardGuiItem::cancel() ))
+//    KGuiItem(i18n("Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel() ))
 
         }
         KexiDB::Field::Type type = KexiDB::intToFieldType(set["type"].value().toInt());
@@ -1232,7 +1232,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                                          "<p>If you want to add a primary key by hand, press \"Cancel\" "
                                          "to cancel saving table design.</p>", schema.name()),
                                     QString(),
-                                    KGuiItem(i18n("&Add Primary Key"), "key"), KStandardGuiItem::no(),
+                                    KGuiItem(i18n("&Add Primary Key"), koIconName("key")), KStandardGuiItem::no(),
                                     KStandardGuiItem::cancel(),
                                     "autogeneratePrimaryKeysOnTableDesignSaving");
             if (questionRes == KMessageBox::Cancel) {

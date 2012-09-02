@@ -398,7 +398,7 @@ void KexiDBConnectionDialog::init(const KGuiItem& acceptButtonGuiItem)
     setButtons(KDialog::User1 | KDialog::Cancel | KDialog::Help);
     setButtonGuiItem(KDialog::User1,
                      acceptButtonGuiItem.text().isEmpty()
-                     ? KGuiItem(i18n("&Open"), "document-open", i18n("Open Database Connection"))
+                     ? KGuiItem(i18n("&Open"), koIconName("document-open"), i18n("Open Database Connection"))
                      : acceptButtonGuiItem
                     );
     setModal(true);

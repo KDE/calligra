@@ -1724,7 +1724,7 @@ void View::deleteSheet()
         return;
     }
     int ret = KMessageBox::warningContinueCancel(this, i18n("You are about to remove the active sheet.\nDo you want to continue?"),
-              i18n("Remove Sheet"), KGuiItem(i18n("&Delete"), "edit-delete"));
+              i18n("Remove Sheet"), KGuiItem(i18n("&Delete"), koIconName("edit-delete")));
 
     if (ret == KMessageBox::Continue) {
         selection()->emitCloseEditor(false); // discard changes

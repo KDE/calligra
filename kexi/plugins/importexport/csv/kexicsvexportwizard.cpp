@@ -153,7 +153,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
 //    exportOptionsLyr->addWidget(stretchWidget, 2, 0, 2, 2);
     exportOptionsLyr->setRowStretch(2, 1);
 
-    m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"));
+    m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), koIconName("configure")));
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(m_showOptionsButton, SIGNAL(clicked()), this, SLOT(slotShowOptionsButtonClicked()));
     exportOptionsLyr->addWidget(m_showOptionsButton, 3, 1);
