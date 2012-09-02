@@ -25,6 +25,7 @@
 
 #include <KoOdf.h>
 #include <QGraphicsItem>
+#include <KoPart.h>
 
 class KoView;
 
