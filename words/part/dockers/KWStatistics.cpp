@@ -28,6 +28,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
+#include <KoIcon.h>
 
 #include <QTextLayout>
 #include <QTextDocument>
@@ -57,7 +58,7 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     m_menu = new StatisticsPreferencesPopup(preferencesButton);
     preferencesButton->setMenu(m_menu);
     preferencesButton->setPopupMode(QToolButton::InstantPopup);
-    preferencesButton->setIcon(KIcon("configure"));
+    preferencesButton->setIcon(koIcon("configure"));
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
     connect(preferencesButton, SIGNAL(clicked()),preferencesButton, SLOT(showMenu()));
     connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
