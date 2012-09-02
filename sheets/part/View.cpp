@@ -396,7 +396,7 @@ void View::Private::initActions()
     connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT(firstSheet()));
 
     actions->lastSheet  = new KAction(koIcon("go-last"), i18n("Last Sheet"), view);
-    actions->lastSheet->setIconText(i18n("Last"));
+    actions->lastSheet->setIconText(i18nc("Move to the last sheet", "Last"));
     actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
     ac->addAction("go_last", actions->lastSheet);
     connect(actions->lastSheet, SIGNAL(triggered(bool)), view, SLOT(lastSheet()));
