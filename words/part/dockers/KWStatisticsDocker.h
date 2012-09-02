@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,11 +21,13 @@
 
 #ifndef KWSTATISTICSDOCKER_H
 #define KWSTATISTICSDOCKER_H
-
+#include <QBoxLayout>
+#include <QGridLayout>
 #include <QDockWidget>
 #include <dockers/KWStatistics.h>
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+
 class KoCanvasBase;
 class KWStatistics;
 
@@ -35,8 +38,7 @@ class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWStatisticsDocker();
     ~KWStatisticsDocker();
-    void updateHorizontalUi();
-    void updateVerticalUi();
+    void initLayout();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
@@ -44,7 +46,11 @@ public:
 private:
     bool m_canvasReset;
     KWStatistics *statisticsDock;
-
+    QBoxLayout *mainBox;
+    QHBoxLayout *wordsLayout,*sentencesLayout,*syllablesLayout,*spacesLayout;
+    QHBoxLayout *fleschLayout, *cjkcharsLayout,*nospacesLayout,*linesLayout;
+    int count;
+    
 public slots:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);
 };

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,11 +23,9 @@
 #include "ui_KWStatisticsDocker.h"
 #include "KWCanvas.h"
 #include <QDebug>
-
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
-
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -34,11 +33,13 @@ KWStatisticsDocker::KWStatisticsDocker()
 {
     m_canvasReset = false;
     setWindowTitle(i18n("Statistics"));
+    count = 0;
 }
 
 KWStatisticsDocker::~KWStatisticsDocker()
 {
 }
+
 void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
 {	
 
@@ -55,9 +56,10 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
                                                 canvas->document(),
                                                 canvas->shapeManager()->selection(),
                                                 this);
-
-    setWidget(statisticsDock);
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
+    setWidget(statisticsDock->statsWidget);
+    initLayout();
+    statisticsDock->statsWidget->setLayout(mainBox);
 
 }
 
@@ -72,62 +74,54 @@ void KWStatisticsDocker::unsetCanvas()
 void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 {
     if (newArea == 8 || newArea == 4)
-	updateHorizontalUi();
-    else
-	updateVerticalUi();
-      
-}
-void KWStatisticsDocker::updateVerticalUi()
-{
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_words);
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_sentences);
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_syllables);
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_lines);
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_spaces);
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_nospaces);
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_cjkchars);
-    statisticsDock->widgetDocker.countLayout->addWidget(statisticsDock->widgetDocker.count_flesch);
-
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.words);
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.sentences);
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.syllables);
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.lines);
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.spaces);
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.nospaces);
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.cjkchars);
-    statisticsDock->widgetDocker.labelLayout->addWidget(statisticsDock->widgetDocker.flesch); 
-    
+	mainBox->setDirection(QBoxLayout::LeftToRight);
+    else 
+	mainBox->setDirection(QBoxLayout::TopToBottom);
 }
 
-void KWStatisticsDocker::updateHorizontalUi()
+void KWStatisticsDocker::initLayout()
 {
-    QBoxLayout *hbox = new QBoxLayout(QBoxLayout::LeftToRight, statisticsDock);
-    statisticsDock->setLayout(hbox);
-    statisticsDock->updateGeometry();
-    hbox->addWidget(statisticsDock->widgetDocker.words);
-    hbox->addWidget(statisticsDock->widgetDocker.count_words);
+    mainBox = new QBoxLayout(QBoxLayout::LeftToRight,statisticsDock->statsWidget);
+    wordsLayout = new QHBoxLayout();
+    mainBox->addLayout(wordsLayout);
+    wordsLayout->addWidget(statisticsDock->words);
+    wordsLayout->addWidget(statisticsDock->count_words);
 
-    hbox->addWidget(statisticsDock->widgetDocker.sentences);
-    hbox->addWidget(statisticsDock->widgetDocker.count_sentences);
-  
-    hbox->addWidget(statisticsDock->widgetDocker.syllables);
-    hbox->addWidget(statisticsDock->widgetDocker.count_syllables);
+    sentencesLayout = new QHBoxLayout();
+    mainBox->addLayout(sentencesLayout);
+    sentencesLayout->addWidget(statisticsDock->sentences);
+    sentencesLayout->addWidget(statisticsDock->count_sentences);
 
-    hbox->addWidget(statisticsDock->widgetDocker.lines);
-    hbox->addWidget(statisticsDock->widgetDocker.count_lines);
+    syllablesLayout = new QHBoxLayout();
+    mainBox->addLayout(syllablesLayout);
+    syllablesLayout->addWidget(statisticsDock->syllables);
+    syllablesLayout->addWidget(statisticsDock->count_syllables);
 
-    hbox->addWidget(statisticsDock->widgetDocker.spaces);
-    hbox->addWidget(statisticsDock->widgetDocker.count_spaces);
+    cjkcharsLayout = new QHBoxLayout();
+    mainBox->addLayout(cjkcharsLayout);
+    cjkcharsLayout->addWidget(statisticsDock->cjkchars);
+    cjkcharsLayout->addWidget(statisticsDock->count_cjkchars);
+ 
+    spacesLayout = new QHBoxLayout();
+    mainBox->addLayout(spacesLayout);
+    spacesLayout->addWidget(statisticsDock->spaces);
+    spacesLayout->addWidget(statisticsDock->count_spaces);
 
-    hbox->addWidget(statisticsDock->widgetDocker.nospaces);
-    hbox->addWidget(statisticsDock->widgetDocker.count_nospaces);	
+    nospacesLayout = new QHBoxLayout();
+    mainBox->addLayout(nospacesLayout);
+    nospacesLayout->addWidget(statisticsDock->nospaces);
+    nospacesLayout->addWidget(statisticsDock->count_nospaces);
 
-    hbox->addWidget(statisticsDock->widgetDocker.cjkchars);
-    hbox->addWidget(statisticsDock->widgetDocker.count_cjkchars);
+    fleschLayout = new QHBoxLayout();
+    mainBox->addLayout(fleschLayout);
+    fleschLayout->addWidget(statisticsDock->flesch);
+    fleschLayout->addWidget(statisticsDock->count_flesch);
 
-    hbox->addWidget(statisticsDock->widgetDocker.flesch);
-    hbox->addWidget(statisticsDock->widgetDocker.count_flesch);
-    hbox->addWidget(statisticsDock->widgetDocker.preferences);
+    linesLayout = new QHBoxLayout();
+    mainBox->addLayout(linesLayout);
+    linesLayout->addWidget(statisticsDock->lines);
+    linesLayout->addWidget(statisticsDock->count_lines);
+    mainBox->addWidget(statisticsDock->preferencesButton);
 }
 
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
