@@ -37,13 +37,11 @@ class KRITAUI_EXPORT KisPaintingInformationBuilder : public QObject
 public:
     KisPaintingInformationBuilder();
 
-    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed, int touchPoint = -1);
+    KisPaintInformation startStroke(KoPointerEvent *event, int timeElapsed);
 
     KisPaintInformation continueStroke(KoPointerEvent *event,
                                        const QPointF &prevImagePoint,
-                                       const QPointF &startPoint,
-                                       int timeElapsed,
-                                       int touchPoint = -1);
+                                       int timeElapsed);
 protected slots:
     void updateSettings();
 
@@ -56,7 +54,6 @@ private:
 
     KisPaintInformation createPaintingInformation(KoPointerEvent *event,
                                                   const QPointF &dragVector,
-                                                  const QPointF &startPoint,
                                                   int timeElapsed);
 
     /**
@@ -68,6 +65,7 @@ private:
 
 private:
     QVector<qreal> m_pressureSamples;
+    QPointF m_startPoint;
 };
 
 
