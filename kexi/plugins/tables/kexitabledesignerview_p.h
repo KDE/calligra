@@ -38,51 +38,6 @@ class Command;
 #define COLUMN_ID_TYPE 2
 #define COLUMN_ID_DESC 3
 
-/*! @internal
- Command group, reimplemented to get access to commands().
- We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
-#if 0
-class CommandGroup : public KUndo2Command
-{
-public:
-    CommandGroup(const QString & name)
-    : KUndo2Command(name) {}
-    virtual ~CommandGroup() {}
-    const QList<K3Command*> commands() const {
-        return KUndo2Command::commands();
-    }
-};
-#endif
-
-/*! @internal
- Command history, reimplemented to get access to commands().
- We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
-#if 0
-class CommandHistory : public K3CommandHistory
-{
-    Q_OBJECT
-public:
-    CommandHistory(KActionCollection *actionCollection, bool withMenus = true);
-
-    const QList<K3Command*>& commands() const {
-        return m_commandsToUndo;
-    }
-
-    void addCommand(K3Command *command, bool execute = true);
-
-    void clear();
-
-public slots:
-    virtual void undo();
-    virtual void redo();
-
-protected:
-    QList<K3Command*> m_commandsToUndo, m_commandsToRedo;
-};
-#endif
-
-//----------------------------------------------
-
 //! @internal
 class KexiTableDesignerViewPrivate
 {
