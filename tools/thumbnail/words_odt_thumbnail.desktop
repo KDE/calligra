@@ -1,10 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Texts
+Name[el]=OpenDocument κείμενα
+Name[fr]=Textes OpenDocument
 Name[it]=Testi OpenDocument
 Name[nl]=OpenDocument teksten
 Name[pt]=Textos em OpenDocument
 Name[pt_BR]=Textos OpenDocument
+Name[sv]=OpenDocument-texter
 Name[uk]=Тексти OpenDocument (ODT)
 Name[x-test]=xxOpenDocument Textsxx
 

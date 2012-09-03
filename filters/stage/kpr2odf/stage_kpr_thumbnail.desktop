@@ -1,10 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=KPresenter Presentations
+Name[el]=Παρουσιάσεις KPresenter
+Name[fr]=Présentation KPresenter
 Name[it]=Presentazioni KPresenter
 Name[nl]=KPresenter-presentatie
 Name[pt]=Apresentações do KPresenter
 Name[pt_BR]=Apresentações do KPresenter
+Name[sv]=Kpresenter-presentationer
 Name[uk]=Презентації KPresenter
 Name[x-test]=xxKPresenter Presentationsxx
 
