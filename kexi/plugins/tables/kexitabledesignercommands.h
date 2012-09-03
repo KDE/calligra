@@ -48,7 +48,7 @@ public:
         return 0;
     }
 
-    virtual QString debugString() {
+    virtual QString debugString() const {
         return text();
     }
 
@@ -87,7 +87,7 @@ public:
     virtual void redoInternal();
     virtual void undoInternal();
     virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
-    virtual QString debugString();
+    virtual QString debugString() const;
 
 protected:
     KexiDB::AlterTableHandler::ChangeFieldPropertyAction m_alterTableAction;
@@ -111,7 +111,7 @@ public:
     virtual void undoInternal();
     virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
 
-    virtual QString debugString();
+    virtual QString debugString() const;
 
 protected:
     KexiDB::AlterTableHandler::RemoveFieldAction m_alterTableAction;
@@ -131,10 +131,7 @@ public:
     virtual void undoInternal();
     virtual KexiDB::AlterTableHandler::ActionBase* createAction() const;
 
-    virtual QString debugString() {
-        return text() + "\nAT ROW " + QString::number(m_alterTableAction->index()) //m_alterTableAction.index())
-               + ", FIELD: " + m_set["caption"].value().toString(); //m_alterTableAction.field().debugString();
-    }
+    virtual QString debugString() const;
 
 protected:
     KexiDB::AlterTableHandler::InsertFieldAction *m_alterTableAction;

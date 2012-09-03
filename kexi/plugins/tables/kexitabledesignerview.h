@@ -239,7 +239,7 @@ protected:
     void updateUndoRedoActions();
 
 #ifdef KEXI_DEBUG_GUI
-    void debugCommand(KUndo2Command* command, int nestingLevel);
+    void debugCommand(const KUndo2Command* command, int nestingLevel);
 #endif
 
     /*! Inserts a new \a field for \a row.

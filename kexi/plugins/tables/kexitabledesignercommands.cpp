@@ -109,7 +109,7 @@ ChangeFieldPropertyCommand::~ChangeFieldPropertyCommand()
     delete m_listData;
 }
 
-QString ChangeFieldPropertyCommand::debugString()
+QString ChangeFieldPropertyCommand::debugString() const
 {
     QString s(text());
     if (m_oldListData || m_listData)
@@ -183,7 +183,7 @@ void RemoveFieldCommand::undoInternal()
         m_view->insertField(m_fieldIndex, *m_set);
 }
 
-QString RemoveFieldCommand::debugString()
+QString RemoveFieldCommand::debugString() const
 {
     if (!m_set)
         return text();
@@ -234,6 +234,12 @@ void InsertFieldCommand::undoInternal()
 KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction() const
 {
     return new KexiDB::AlterTableHandler::InsertFieldAction(*m_alterTableAction);
+}
+
+QString InsertFieldCommand::debugString() const
+{
+    return text() + "\nAT ROW " + QString::number(m_alterTableAction->index()) //m_alterTableAction.index())
+           + ", FIELD: " + m_set["caption"].value().toString(); //m_alterTableAction.field().debugString();
 }
 
 //--------------------------------------------------------
