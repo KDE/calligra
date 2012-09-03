@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,11 @@
 #include <QByteArray>
 
 class KexiDataAwarePropertySet;
+
+namespace KexiTableDesignerCommands
+{
+class Command;
+}
 
 //! @internal indices for table columns
 #define COLUMN_ID_ICON 0
@@ -106,14 +111,14 @@ public:
      addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
      */
     void setPropertyValueIfNeeded(const KoProperty::Set& set, const QByteArray& propertyName,
-                                  const QVariant& newValue, KUndo2Command* commandGroup,
+                                  const QVariant& newValue, KexiTableDesignerCommands::Command* commandGroup,
                                   bool forceAddCommand = false, bool rememberOldValue = true,
                                   QStringList* const slist = 0, QStringList* const nlist = 0);
 
     /*! Like above but allows to specify \a oldValue. */
     void setPropertyValueIfNeeded(
         const KoProperty::Set& set, const QByteArray& propertyName,
-        const QVariant& newValue, const QVariant& oldValue, KUndo2Command* commandGroup,
+        const QVariant& newValue, const QVariant& oldValue, KexiTableDesignerCommands::Command* commandGroup,
         bool forceAddCommand = false, bool rememberOldValue = true,
         QStringList* const slist = 0, QStringList* const nlist = 0);
 
@@ -123,10 +128,10 @@ public:
      otherwise sets changed to true and sets visibility of property \a prop to \a visible.
     */
     void setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
-                               bool visible, bool &changed, KUndo2Command *commandGroup);
+                               bool visible, bool &changed, KexiTableDesignerCommands::Command *commandGroup);
 
     bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
-                                    KUndo2Command *commandGroup = 0);
+                                    KexiTableDesignerCommands::Command *commandGroup = 0);
 
     /*! \return message used to ask user for accepting saving the design.
      \a emptyTable is set to true if the table designed contains no rows.
@@ -180,7 +185,7 @@ public:
     bool slotBeforeCellChanged_enabled : 1;
 
 //! @todo temp; remove this:
-    //! Temporary flag, used for testingu the Alter Table machinery. Affects storeData()
+    //! Temporary flag, used for testing the Alter Table machinery. Affects storeData()
     //! Used in slotExecuteRealAlterTable() to switch on real alter table for a while.
     bool tempStoreDataUsingRealAlterTable : 1;
 
