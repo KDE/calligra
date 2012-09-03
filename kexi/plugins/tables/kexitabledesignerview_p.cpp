@@ -49,49 +49,6 @@
 
 using namespace KexiTableDesignerCommands;
 
-//----------------------------------------------
-#if 0
-CommandHistory::CommandHistory(KActionCollection *actionCollection, bool withMenus)
-        : K3CommandHistory(actionCollection, withMenus)
-{
-    // We need ALL the commands because we'll collect reuse their
-    // data before performing alter table, so set that to the maximum,
-    // as K3CommandHistory has default = 50.
-    setUndoLimit(INT_MAX);
-    setRedoLimit(INT_MAX);
-}
-
-void CommandHistory::addCommand(K3Command *command, bool execute)
-{
-    K3CommandHistory::addCommand(command, execute);
-    m_commandsToUndo.append(command);
-}
-
-void CommandHistory::undo()
-{
-    if (!m_commandsToUndo.isEmpty()) {
-        K3Command * cmd = m_commandsToUndo.takeAt(m_commandsToUndo.count() - 1);
-        m_commandsToRedo.append(cmd);
-    }
-    K3CommandHistory::undo();
-}
-
-void CommandHistory::redo()
-{
-    if (!m_commandsToRedo.isEmpty()) {
-        K3Command * cmd = m_commandsToRedo.takeAt(m_commandsToRedo.count() - 1);
-        m_commandsToUndo.append(cmd);
-    }
-    K3CommandHistory::redo();
-}
-
-void CommandHistory::clear()
-{
-    K3CommandHistory::clear(); m_commandsToUndo.clear();
-}
-#endif
-//----------------------------------------------
-
 KexiTableDesignerViewPrivate::KexiTableDesignerViewPrivate(
     KexiTableDesignerView* aDesignerView)
         : designerView(aDesignerView)
@@ -292,4 +249,3 @@ void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &recor
     view->data()->saveRowChanges(record, true);
 }
 
-#include "kexitabledesignerview_p.moc"

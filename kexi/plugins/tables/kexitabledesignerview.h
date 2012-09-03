@@ -97,10 +97,6 @@ public:
      and by RemoveFieldCommand to remove a field. */
     virtual void deleteRow(int row, bool addCommand = false);
 
-    /*! Deletes a field for \a row. Property set is also deleted.
-     Used by RemoveFieldCommand to remove a field. */
-//  virtual void deleteField( int row );
-
     /*! Changes property \a propertyName to \a newValue for a field at row \a row.
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
@@ -153,7 +149,6 @@ protected slots:
 
     //! Called before row inserting in tableview.
     void slotRowInserted();
-//  void slotAboutToInsertRow(KexiDB::RecordData* record, KexiDB::ResultInfo* result, bool repaint);
 
     //! Called before row deleting in tableview.
     void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
@@ -194,8 +189,6 @@ protected:
     /*! \return property set associated with currently selected row (i.e. field)
      or 0 if current row is empty. */
     virtual KoProperty::Set *propertySet();
-
-//  void removeCurrentPropertySet();
 
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
