@@ -250,9 +250,11 @@ void KexiTableDesignerView::initData()
                 d->primaryKeyExists = true;
             } else {
                 KexiDB::LookupFieldSchema *lookupFieldSchema
-                = field->table() ? field->table()->lookupFieldSchema(*field) : 0;
-                if (lookupFieldSchema && lookupFieldSchema->rowSource().type() != KexiDB::LookupFieldSchema::RowSource::NoType
-                        && !lookupFieldSchema->rowSource().name().isEmpty()) {
+                    = field->table() ? field->table()->lookupFieldSchema(*field) : 0;
+                if (lookupFieldSchema
+                    && lookupFieldSchema->rowSource().type() != KexiDB::LookupFieldSchema::RowSource::NoType
+                    && !lookupFieldSchema->rowSource().name().isEmpty())
+                {
                     (*record)[COLUMN_ID_ICON] = "combo";
                 }
             }
@@ -348,13 +350,11 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
     prop->setVisible(false);
 
     //name
-    set->addProperty(prop
-                     = new KoProperty::Property("name", QVariant(field.name()), i18n("Name"),
-                                                QString(), KexiCustomPropertyFactory::Identifier));
-
+    set->addProperty(prop = new KoProperty::Property(
+                                    "name", QVariant(field.name()), i18n("Name"),
+                                    QString(), KexiCustomPropertyFactory::Identifier));
     //type
-    set->addProperty(prop
-                     = new KoProperty::Property("type", QVariant(field.type()), i18n("Type")));
+    set->addProperty(prop = new KoProperty::Property("type", QVariant(field.type()), i18n("Type")));
 #ifndef KexiTableDesignerView_DEBUG
     prop->setVisible(false);//always hidden
 #endif
@@ -387,78 +387,73 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
             objectTypeStringList, objectTypeNameList, objectTypeValue,
             i18n("Subtype")/*todo other i18n string?*/));
 
-    set->addProperty(prop
-                     = new KoProperty::Property("caption", QVariant(field.caption()), i18n("Caption")));
+    set->addProperty(prop = new KoProperty::Property("caption", QVariant(field.caption()),
+                                                     i18n("Caption")));
     prop->setVisible(false);//always hidden
 
-    set->addProperty(prop
-                     = new KoProperty::Property("description", QVariant(field.description())));
+    set->addProperty(prop = new KoProperty::Property("description", QVariant(field.description())));
     prop->setVisible(false);//always hidden
 
-    set->addProperty(prop
-                     = new KoProperty::Property("unsigned", QVariant(field.isUnsigned()), i18n("Unsigned Number")));
+    set->addProperty(prop = new KoProperty::Property("unsigned", QVariant(field.isUnsigned()),
+                                                     i18n("Unsigned Number")));
 
-    set->addProperty(prop
-                     = new KoProperty::Property("maxLength", (uint)field.maxLength(), i18n("Max Length")));
+    set->addProperty(prop = new KoProperty::Property("maxLength", (uint)field.maxLength(),
+                                                     i18n("Max Length")));
     
-    set->addProperty(prop 
-                      = new KoProperty::Property("maxLengthIsDefault", field.maxLengthStrategy() == KexiDB::Field::DefaultMaxLength));  
-    prop->setVisible(false);//always hidden
+    set->addProperty(prop  = new KoProperty::Property("maxLengthIsDefault",
+                               field.maxLengthStrategy() == KexiDB::Field::DefaultMaxLength));
+    prop->setVisible(false); //always hidden
 
-    set->addProperty(prop
-                     = new KoProperty::Property("precision", (int)field.precision()/*200?*/, i18n("Precision")));
+    set->addProperty(prop = new KoProperty::Property("precision", (int)field.precision()/*200?*/,
+                                                     i18n("Precision")));
 #ifdef KEXI_NO_UNFINISHED
     prop->setVisible(false);
 #endif
-    set->addProperty(prop
-                     = new KoProperty::Property("visibleDecimalPlaces", field.visibleDecimalPlaces(),
-                                                i18n("Visible Decimal Places")));
+    set->addProperty(prop = new KoProperty::Property("visibleDecimalPlaces",
+                                    field.visibleDecimalPlaces(), i18n("Visible Decimal Places")));
     prop->setOption("min", -1);
     prop->setOption("minValueText", i18nc("Auto Decimal Places", "Auto"));
 
 //! @todo set reasonable default for column width
-    set->addProperty(prop
-                     = new KoProperty::Property("width", QVariant(0) /*field.width()*//*200?*/, i18n("Column Width")));
+    set->addProperty(prop = new KoProperty::Property("width", QVariant(0) /*field.width()*//*200?*/,
+                                                     i18n("Column Width")));
 #ifdef KEXI_NO_UNFINISHED
     prop->setVisible(false);
 #endif
 
-    set->addProperty(prop
-                     = new KoProperty::Property("defaultValue", field.defaultValue(), i18n("Default Value"),
-                                                QString(),
+    set->addProperty(prop = new KoProperty::Property("defaultValue", field.defaultValue(),
+                                                     i18n("Default Value"), QString(),
 //! @todo use "Variant" type here when supported by KoProperty
                                                 (KoProperty::PropertyType)field.variantType()));
     prop->setOption("3rdState", i18n("None"));
 // prop->setVisible(false);
 
-    set->addProperty(prop
-                     = new KoProperty::Property("primaryKey", QVariant(field.isPrimaryKey()), i18n("Primary Key")));
+    set->addProperty(prop = new KoProperty::Property("primaryKey", QVariant(field.isPrimaryKey()),
+                                                     i18n("Primary Key")));
     prop->setIcon("key");
 
-    set->addProperty(prop
-                     = new KoProperty::Property("unique", QVariant(field.isUniqueKey()), i18n("Unique")));
+    set->addProperty(prop = new KoProperty::Property("unique", QVariant(field.isUniqueKey()),
+                                                     i18n("Unique")));
 
-    set->addProperty(prop
-                     = new KoProperty::Property("notNull", QVariant(field.isNotNull()), i18n("Required")));
+    set->addProperty(prop = new KoProperty::Property("notNull", QVariant(field.isNotNull()),
+                                                     i18n("Required")));
 
-    set->addProperty(prop
-                     = new KoProperty::Property("allowEmpty", QVariant(!field.isNotEmpty()),
+    set->addProperty(prop = new KoProperty::Property("allowEmpty", QVariant(!field.isNotEmpty()),
                                                 i18n("Allow Zero\nSize")));
 
-    set->addProperty(prop
-                     = new KoProperty::Property("autoIncrement", QVariant(field.isAutoIncrement()),
-                                                i18n("Autonumber")));
+    set->addProperty(prop = new KoProperty::Property("autoIncrement", QVariant(field.isAutoIncrement()),
+                                                     i18n("Autonumber")));
     prop->setIcon("autonumber");
 
-    set->addProperty(prop
-                     = new KoProperty::Property("indexed", QVariant(field.isIndexed()), i18n("Indexed")));
+    set->addProperty(prop = new KoProperty::Property("indexed", QVariant(field.isIndexed()),
+                                                     i18n("Indexed")));
 
     //- properties related to lookup columns (used and set by the "lookup column"
     //  tab in the property pane)
     KexiDB::LookupFieldSchema *lookupFieldSchema
-    = field.table() ? field.table()->lookupFieldSchema(field) : 0;
+        = field.table() ? field.table()->lookupFieldSchema(field) : 0;
     set->addProperty(prop = new KoProperty::Property("rowSource",
-            lookupFieldSchema ? lookupFieldSchema->rowSource().name() : QString(), i18n("Record Source")));
+        lookupFieldSchema ? lookupFieldSchema->rowSource().name() : QString(), i18n("Record Source")));
     prop->setVisible(false);
 
     set->addProperty(prop = new KoProperty::Property("rowSourceType",
@@ -466,9 +461,8 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
             i18n("Record Source\nType")));
     prop->setVisible(false);
 
-    set->addProperty(prop
-                     = new KoProperty::Property("boundColumn",
-                                                lookupFieldSchema ? lookupFieldSchema->boundColumn() : -1, i18n("Bound Column")));
+    set->addProperty(prop = new KoProperty::Property("boundColumn",
+            lookupFieldSchema ? lookupFieldSchema->boundColumn() : -1, i18n("Bound Column")));
     prop->setVisible(false);
 
 //! @todo this is backward-compatible code for "single visible column" implementation
@@ -477,8 +471,8 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
     int visibleColumn = -1;
     if (lookupFieldSchema && !lookupFieldSchema->visibleColumns().isEmpty())
         visibleColumn = lookupFieldSchema->visibleColumns().first();
-    set->addProperty(prop
-                     = new KoProperty::Property("visibleColumn", visibleColumn, i18n("Visible Column")));
+    set->addProperty(prop = new KoProperty::Property("visibleColumn", visibleColumn,
+                                                     i18n("Visible Column")));
     prop->setVisible(false);
 
 //! @todo support columnWidths(), columnHeadersVisible(), maximumListRows(), limitToList(), displayWidget()
@@ -565,8 +559,11 @@ void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
         const int count = (int)d->sets->size();
         for (i = 0; i < count; i++) {
             s = d->sets->at(i);
-            if (s && s != &propertySet && (*s)["primaryKey"].value().toBool() && i != d->view->currentRow())
+            if (   s && s != &propertySet && (*s)["primaryKey"].value().toBool()
+                && i != d->view->currentRow())
+            {
                 break;
+            }
         }
         if (i < count) {//remove
             //(*s)["autoIncrement"] = QVariant(false, 0);
@@ -634,13 +631,13 @@ tristate KexiTableDesignerView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontSt
 //   KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
             bool emptyTable;
             int r = KMessageBox::warningYesNoCancel(this,
-                                                    i18n("Saving changes for existing table design is now required.")
-                                                    + "\n"
-                                                    + d->messageForSavingChanges(emptyTable, /*skip warning?*/!isPhysicalAlteringNeeded()),
-                                                    QString(),
-                                                    KStandardGuiItem::save(), KStandardGuiItem::discard(), KStandardGuiItem::cancel(),
-                                                    QString(),
-                                                    KMessageBox::Notify | KMessageBox::Dangerous);
+                i18n("Saving changes for existing table design is now required.")
+                + "\n"
+                + d->messageForSavingChanges(emptyTable, /*skip warning?*/!isPhysicalAlteringNeeded()),
+                QString(),
+                KStandardGuiItem::save(), KStandardGuiItem::discard(), KStandardGuiItem::cancel(),
+                QString(),
+                KMessageBox::Notify | KMessageBox::Dangerous);
             if (r == KMessageBox::Cancel)
                 res = cancelled;
             else
@@ -690,7 +687,8 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 
         KoProperty::Set *propertySetForRecord = d->sets->findPropertySetForItem(*record);
         if (propertySetForRecord) {
-            d->addHistoryCommand_in_slotPropertyChanged_enabled = false; //because we'll add the two changes as one KMacroCommand
+            d->addHistoryCommand_in_slotPropertyChanged_enabled = false; // because we'll add
+                                                                         // the two changes as one group
             QString oldName(propertySetForRecord->property("name").value().toString());
             QString oldCaption(propertySetForRecord->property("caption").value().toString());
 
@@ -704,19 +702,20 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             
             //we need to create the action now as set["name"] will be changed soon.
             //Child 1 is the caption
-            ChangeFieldPropertyCommand *changeCaptionCommand
-            = new ChangeFieldPropertyCommand(changeCaptionAndNameCommand, this, *propertySetForRecord, "caption",
-                                             oldCaption, newValue);
+            /*ChangeFieldPropertyCommand *changeCaptionCommand = */
+                (void)new ChangeFieldPropertyCommand(changeCaptionAndNameCommand, this,
+                          *propertySetForRecord, "caption", oldCaption, newValue);
             
             //update field caption and name
             propertySetForRecord->changeProperty("caption", newValue);
             propertySetForRecord->changeProperty("name",
                                                  KexiUtils::string2Identifier(newValue.toString()));
-            
 
             //Child 2 is the name
-            ChangeFieldPropertyCommand *changeNameCommand = new ChangeFieldPropertyCommand(changeCaptionAndNameCommand, this, *propertySetForRecord,
-                                               "name", oldName, propertySetForRecord->property("name").value().toString());
+            /*ChangeFieldPropertyCommand *changeNameCommand =*/
+            (void)new ChangeFieldPropertyCommand(
+                changeCaptionAndNameCommand, this, *propertySetForRecord,
+                "name", oldName, propertySetForRecord->property("name").value().toString());
             addHistoryCommand(changeCaptionAndNameCommand, false /* !execute */);
             d->addHistoryCommand_in_slotPropertyChanged_enabled = true;
         }
@@ -782,8 +781,8 @@ void KexiTableDesignerView::slotBeforeCellChanged(
 //kDebug() << "++++++++++" << slist << nlist;
 
         //update subtype list and value
-        const bool forcePropertySetReload
-        = KexiDB::Field::typeGroup(KexiDB::Field::typeForString(subTypeProperty->value().toString())) != fieldTypeGroup;   //<-- ?????
+        const bool forcePropertySetReload = KexiDB::Field::typeGroup(
+            KexiDB::Field::typeForString(subTypeProperty->value().toString())) != fieldTypeGroup;   //<-- ?????
 //  const bool forcePropertySetReload = set["type"].value().toInt() != (int)fieldTypeGroup;
         const bool useListData = slist.count() > 1; //disabled-> || fieldType==KexiDB::Field::BLOB;
 
@@ -977,17 +976,18 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
     KUndo2Command *toplevelCommand = 0;
     if (pname == "autoIncrement" && property.value().toBool() == true) {
         if (set["primaryKey"].value().toBool() == false) {//we need PKEY here!
-            QString msg = QString("<p>")
-                          + i18n("Setting autonumber requires primary key to be set for current field.") + "</p>";
+            QString msg = QLatin1String("<p>")
+              + i18n("Setting autonumber requires primary key to be set for current field.") + "</p>";
             if (d->primaryKeyExists)
-                msg += (QString("<p>") + i18n("Previous primary key will be removed.") + "</p>");
-            msg += (QString("<p>")
+                msg += (QLatin1String("<p>") + i18n("Previous primary key will be removed.") + "</p>");
+            msg += (QLatin1String("<p>")
                     + i18n("Do you want to create primary key for current field? "
                            "Click \"Cancel\" to cancel setting autonumber.") + "</p>");
 
             if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
-                    i18n("Setting Autonumber Field"),
-                    KGuiItem(i18n("Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel())) {
+                i18n("Setting Autonumber Field"),
+                KGuiItem(i18n("Create &Primary Key"), koIconName("key")), KStandardGuiItem::cancel()))
+            {
                 changePrimaryKey = true;
                 setPrimaryKey = true;
                 //switchPrimaryKey(set, true);
@@ -1036,7 +1036,8 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
     if (pname == "subType" && d->slotPropertyChanged_subType_enabled) {
         d->slotPropertyChanged_subType_enabled = false;
         if (set["primaryKey"].value().toBool() == true
-                && property.value().toString() != KexiDB::Field::typeString(KexiDB::Field::BigInteger)) {
+                && property.value().toString() != KexiDB::Field::typeString(KexiDB::Field::BigInteger))
+        {
             kDebug() << "INVALID " << property.value().toString();
 //   if (KMessageBox::Yes == KMessageBox::questionYesNo(this, msg,
 //    i18n("This field has promary key assigned. Setting autonumber field"),
@@ -1093,7 +1094,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //  return;
     }
     //!todo add command text
-    if (d->addHistoryCommand_in_slotPropertyChanged_enabled && !changePrimaryKey/*we'll add multiple commands for PK*/) {
+    if (   d->addHistoryCommand_in_slotPropertyChanged_enabled
+        && !changePrimaryKey/*we'll add multiple commands for PK*/)
+    {
         addHistoryCommand(new ChangeFieldPropertyCommand(0, this, set,
                           property.name(), property.oldValue() /* ??? */, property.value()),
                           false /* !execute */);
@@ -1200,7 +1203,10 @@ KexiDB::Field * KexiTableDesignerView::buildField(const KoProperty::Set &set) co
         const QByteArray propName(it.key());
         if (d->internalPropertyNames.contains(propName)
                 || propName.startsWith("this:")
-                || (/*sanity*/propName == "objectType" && KexiDB::Field::BLOB != KexiDB::intToFieldType(set["type"].value().toInt()))) {
+                || (/*sanity*/propName == "objectType"
+                    && KexiDB::Field::BLOB != KexiDB::intToFieldType(set["type"].value().toInt()))
+           )
+        {
             it.remove();
         }
     }
@@ -1225,19 +1231,20 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             kDebug() << "no primay key defined...";
         } else {
             const int questionRes = KMessageBox::questionYesNoCancel(this,
-                                    i18n("<p>Table \"%1\" has no <b>primary key</b> defined.</p>"
-                                         "<p>Although a primary key is not required, it is needed "
-                                         "for creating relations between database tables. "
-                                         "Do you want to add primary key automatically now?</p>"
-                                         "<p>If you want to add a primary key by hand, press \"Cancel\" "
-                                         "to cancel saving table design.</p>", schema.name()),
-                                    QString(),
-                                    KGuiItem(i18n("&Add Primary Key"), koIconName("key")), KStandardGuiItem::no(),
-                                    KStandardGuiItem::cancel(),
-                                    "autogeneratePrimaryKeysOnTableDesignSaving");
+                i18n("<p>Table \"%1\" has no <b>primary key</b> defined.</p>"
+                     "<p>Although a primary key is not required, it is needed "
+                     "for creating relations between database tables. "
+                     "Do you want to add primary key automatically now?</p>"
+                     "<p>If you want to add a primary key by hand, press \"Cancel\" "
+                     "to cancel saving table design.</p>", schema.name()),
+                QString(),
+                KGuiItem(i18n("&Add Primary Key"), koIconName("key")), KStandardGuiItem::no(),
+                KStandardGuiItem::cancel(),
+                "autogeneratePrimaryKeysOnTableDesignSaving");
             if (questionRes == KMessageBox::Cancel) {
                 return cancelled;
-            } else if (questionRes == KMessageBox::Yes) {
+            }
+            else if (questionRes == KMessageBox::Yes) {
                 //-find unique name, starting with, "id", "id2", ....
                 int i = 0;
                 int idIndex = 1; //means "id"
@@ -1246,8 +1253,11 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                 while (i < (int)d->sets->size()) {
                     KoProperty::Set *set = d->sets->at(i);
                     if (set) {
-                        if (   (*set)["name"].value().toString() == pkFieldName.arg(idIndex == 1 ? QString() : QString::number(idIndex))
-                            || (*set)["caption"].value().toString() == pkFieldCaption.subs(idIndex == 1 ? QString() : QString::number(idIndex)).toString())
+                        if (   (*set)["name"].value().toString()
+                               == pkFieldName.arg(idIndex == 1 ? QString() : QString::number(idIndex))
+                            || (*set)["caption"].value().toString()
+                               == pkFieldCaption.subs(idIndex == 1 ? QString() : QString::number(idIndex)).toString()
+                           )
                         {
                             //try next id index
                             i = 0;
@@ -1262,10 +1272,10 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                 d->view->insertEmptyRow(0);
                 d->view->setCursorPosition(0, COLUMN_ID_CAPTION);
                 d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_CAPTION,
-                                                        pkFieldCaption.subs(idIndex == 1 ? QString() : QString::number(idIndex)).toString()
+                    pkFieldCaption.subs(idIndex == 1 ? QString() : QString::number(idIndex)).toString()
                                                     );
                 d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
-                                                     QVariant(KexiDB::Field::IntegerGroup - 1/*counting from 0*/));
+                    QVariant(KexiDB::Field::IntegerGroup - 1/*counting from 0*/));
                 if (!d->view->data()->saveRowChanges(*d->view->selectedItem(), true)) {
                     return cancelled;
                 }
@@ -1306,7 +1316,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             kWarning() << "no field defined...";
         } else {
             KMessageBox::sorry(this,
-                               i18n("You have added no fields.\nEvery table should have at least one field."));
+                i18n("You have added no fields.\nEvery table should have at least one field."));
         }
         res = cancelled;
     }
@@ -1319,10 +1329,10 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             d->view->startEditCurrentCell();
 //! @todo for "names hidden" mode we won't get this error because user is unable to change names
             KMessageBox::sorry(this,
-                               i18n(
-                                   "You have added \"%1\" field name twice.\nField names cannot be repeated. "
-                                   "Correct name of the field.",
-                                   (*b)["name"].value().toString()));
+            i18n(
+               "You have added \"%1\" field name twice.\nField names cannot be repeated. "
+               "Correct name of the field.",
+               (*b)["name"].value().toString()));
         }
         res = cancelled;
     }
@@ -1336,7 +1346,9 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
             if (!f)
                 continue; //hmm?
             schema.addField(f);
-            if (!(*s)["rowSource"].value().toString().isEmpty() && !(*s)["rowSourceType"].value().toString().isEmpty()) {
+            if (   !(*s)["rowSource"].value().toString().isEmpty()
+                && !(*s)["rowSourceType"].value().toString().isEmpty())
+            {
                 //add lookup column
                 KexiDB::LookupFieldSchema *lookupFieldSchema = new KexiDB::LookupFieldSchema();
                 lookupFieldSchema->rowSource().setTypeByName((*s)["rowSourceType"].value().toString());
@@ -1389,11 +1401,7 @@ tristate KexiTableDesignerView::buildAlterTableActions(
     kDebug()
         << d->history->count()
         << " top-level command(s) to process...";
-#if 0
-    foreach(K3Command* c, d->history->commands()) {
-        copyAlterTableActions(c, actions);
-    }
-#endif
+
     for (int i = 0; i < d->history->count(); ++i) {
       copyAlterTableActions(d->history->command(i), actions);
     }
@@ -1461,8 +1469,9 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
             args.onlyComputeRequirements = true;
             (void)alterTableHandler->execute(tempData()->table->name(), args);
             res = args.result;
-            if (res == true
-                    && 0 == (args.requirements & (0xffff ^ KexiDB::AlterTableHandler::SchemaAlteringRequired))) {
+            if (   res == true
+                && 0 == (args.requirements & (0xffff ^ KexiDB::AlterTableHandler::SchemaAlteringRequired)))
+            {
                 realAlterTableCanBeUsed = true;
             }
         }
@@ -1499,7 +1508,7 @@ tristate KexiTableDesignerView::storeData(bool dontAsk)
             newTable = new KexiDB::TableSchema();
             // copy the schema data
             static_cast<KexiDB::SchemaData&>(*newTable)
-            = static_cast<KexiDB::SchemaData&>(*tempData()->table);
+                = static_cast<KexiDB::SchemaData&>(*tempData()->table);
             res = buildSchema(*newTable);
             kDebug() << "BUILD SCHEMA:";
             newTable->debug();
@@ -1557,9 +1566,11 @@ tristate KexiTableDesignerView::simulateAlterTableExecution(QString *debugTarget
     (void)alterTableHandler.execute(tempData()->table->name(), args);
     return args.result;
 # else
+    Q_UNUSED(debugTarget);
     return false;
 # endif
 #else
+    Q_UNUSED(debugTarget);
     return false;
 #endif
 }
@@ -1755,13 +1766,13 @@ void KexiTableDesignerView::insertFieldInternal(int row, KoProperty::Set* set, /
         d->slotBeforeCellChanged_enabled = false;
     }
     d->view->data()->updateRowEditBuffer(record, COLUMN_ID_CAPTION,
-                                         set ? (*set)["caption"].value() : QVariant(caption));//field.caption());
+                         set ? (*set)["caption"].value() : QVariant(caption));//field.caption());
     d->view->data()->updateRowEditBuffer(record, COLUMN_ID_TYPE,
-                                         set ? (int)KexiDB::Field::typeGroup((*set)["type"].value().toInt()) - 1/*counting from 0*/
-                                         : (((int)KexiDB::Field::TextGroup) - 1)/*default type, counting from 0*/
-                                        );
+                         set ? (int)KexiDB::Field::typeGroup((*set)["type"].value().toInt()) - 1/*counting from 0*/
+                         : (((int)KexiDB::Field::TextGroup) - 1)/*default type, counting from 0*/
+                        );
     d->view->data()->updateRowEditBuffer(record, COLUMN_ID_DESC,
-                                         set ? (*set)["description"].value() : QVariant());//field.description());
+                         set ? (*set)["description"].value() : QVariant());//field.description());
     if (!addCommand) {
         d->slotBeforeCellChanged_enabled = true;
     }
@@ -1953,8 +1964,11 @@ bool KexiTableDesignerView::isPhysicalAlteringNeeded()
     (void)alterTableHandler->execute(tempData()->table->name(), args);
     res = args.result;
     delete alterTableHandler;
-    if (res == true && 0 == (args.requirements & (0xffff ^ KexiDB::AlterTableHandler::SchemaAlteringRequired)))
+    if (   res == true
+        && 0 == (args.requirements & (0xffff ^ KexiDB::AlterTableHandler::SchemaAlteringRequired)))
+    {
         return false;
+    }
     return true;
 }
 
