@@ -22,6 +22,9 @@
 #include <QFile>
 #include <QStringList>
 #include <QString>
+#include <QDesktopServices>
+#include <QProcessEnvironment>
+#include <QDir>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -36,6 +39,8 @@
 
 int main( int argc, char** argv )
 {
+
+
     KAboutData aboutData("kritasketch",
                          0,
                          ki18n("Krita Sketch"),
@@ -67,6 +72,15 @@ int main( int argc, char** argv )
 
     QApplication::setAttribute(Qt::AA_X11InitThreads);
     KApplication app;
+
+    #ifdef Q_OS_WIN
+        QProcessEnvironment *env = QProcessEnvironment::systemEnvironment();
+        env->insert("KDEDIR", app.applicationDirPath());
+        env->insert("KDEDIRS", app.applicationDirPath());
+        env->insert("XDG_DATA_DIRS", app.applicationDirPath() + QDir::separator() +  "/share");
+        env->insert("XDG_DATA_HOME", app.applicationDirPath() + QDir::separator() + "/share");
+        env->insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QDir::separator() + "kritasketch");
+    #endif
 
     QApplication::setStyle("plastique");
 
