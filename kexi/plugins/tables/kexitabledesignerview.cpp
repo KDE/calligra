@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -533,7 +533,7 @@ void KexiTableDesignerView::slotTogglePrimaryKey()
 }
 
 void KexiTableDesignerView::switchPrimaryKey(KoProperty::Set &propertySet,
-                                             bool set, bool aWasPKey, KUndo2Command* commandGroup)
+                                             bool set, bool aWasPKey, Command* commandGroup)
 {
     const bool was_pkey = aWasPKey || propertySet["primaryKey"].value().toBool();
 // propertySet["primaryKey"] = QVariant(set);
@@ -693,12 +693,13 @@ void KexiTableDesignerView::slotBeforeCellChanged(
             QString oldCaption(propertySetForRecord->property("caption").value().toString());
 
             //remember this action containing 2 subactions
-            //Parent command is a KUndo2Command containing 2 child commands
-            KUndo2Command *changeCaptionAndNameCommand = new KUndo2Command(
+            //Parent command is a Command containing 2 child commands
+            Command *changeCaptionAndNameCommand = new Command(
                 i18n(
                     "Change \"%1\" field's name to \"%2\" and caption from \"%3\" to \"%4\"",
                     oldName, propertySetForRecord->property("name").value().toString(),
-                    oldCaption, newValue.toString()));
+                    oldCaption, newValue.toString()), 0, this
+            );
             
             //we need to create the action now as set["name"] will be changed soon.
             //Child 1 is the caption
@@ -774,9 +775,9 @@ void KexiTableDesignerView::slotBeforeCellChanged(
         kDebug() << subTypeProperty->value();
 
         // *** this action contains subactions ***
-        KUndo2Command *changeDataTypeCommand = new KUndo2Command(
+        Command *changeDataTypeCommand = new Command(
             i18n("Change data type for field \"%1\" to \"%2\"",
-                 set["name"].value().toString(), KexiDB::Field::typeName(fieldType)));
+                 set["name"].value().toString(), KexiDB::Field::typeName(fieldType)), 0, this);
 
 //kDebug() << "++++++++++" << slist << nlist;
 
@@ -972,8 +973,8 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
     }
 
     //setting autonumber requires setting PK as well
-    KUndo2Command *setAutonumberCommand = 0;
-    KUndo2Command *toplevelCommand = 0;
+    Command *setAutonumberCommand = 0;
+    Command *toplevelCommand = 0;
     if (pname == "autoIncrement" && property.value().toBool() == true) {
         if (set["primaryKey"].value().toBool() == false) {//we need PKEY here!
             QString msg = QLatin1String("<p>")
@@ -992,13 +993,14 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
                 setPrimaryKey = true;
                 //switchPrimaryKey(set, true);
                 // this will be toplevel command
-                setAutonumberCommand = new KUndo2Command(
-                    i18n("Assign autonumber for field \"%1\"", set["name"].value().toString()));
+                setAutonumberCommand = new Command(
+                    i18n("Assign autonumber for field \"%1\"", set["name"].value().toString()), 0, this);
                 toplevelCommand = setAutonumberCommand;
                 d->setPropertyValueIfNeeded(set, "autoIncrement", QVariant(true), setAutonumberCommand);
             } else {
-                setAutonumberCommand = new KUndo2Command(
-                    i18n("Remove autonumber from field \"%1\"", set["name"].value().toString()));
+                setAutonumberCommand = new Command(
+                    i18n("Remove autonumber from field \"%1\"", set["name"].value().toString()),
+                    0, this);
                 //d->slotPropertyChanged_enabled = false;
 //     set["autoIncrement"].setValue( QVariant(false), false/*don't save old*/);
 //     d->slotPropertyChanged_enabled = true;
@@ -1017,9 +1019,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
         changePrimaryKey = true;
         setPrimaryKey = false;
         // this will be toplevel command
-        KUndo2Command *unsetIndexedOrUniquOrNotNullCommand = new KUndo2Command(
+        Command *unsetIndexedOrUniquOrNotNullCommand = new Command(
             i18n("Set \"%1\" property for field \"%2\"",
-                 property.caption(), set["name"].value().toString()));
+                 property.caption(), set["name"].value().toString()), 0, this);
         toplevelCommand = unsetIndexedOrUniquOrNotNullCommand;
         d->setPropertyValueIfNeeded(set, pname, QVariant(false), unsetIndexedOrUniquOrNotNullCommand);
         if (pname == "notNull") {
@@ -1063,10 +1065,10 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //  kDebug() << property.value().toString();
 //  kDebug() << set["type"].value();
 //  if (KexiDB::Field::typeGroup( set["type"].value().toInt() ) == (int)KexiDB::Field::TextGroup) {
-        KUndo2Command* changeFieldTypeCommand = new KUndo2Command(
+        Command* changeFieldTypeCommand = new Command(
             i18n(
                 "Change type for field \"%1\" to \"%2\"",
-                set["name"].value().toString(), typeName));
+                set["name"].value().toString(), typeName), 0, this);
         d->setPropertyValueIfNeeded(set, "subType", property.value(), property.oldValue(),
                                     changeFieldTypeCommand);
 
@@ -1110,9 +1112,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //   d->addHistoryCommand_in_slotPropertyChanged_enabled = false;
 
             //this action contains subactions
-            KUndo2Command * setPrimaryKeyCommand = new KUndo2Command(
+            Command * setPrimaryKeyCommand = new Command(
                 i18n("Set primary key for field \"%1\"",
-                     set["name"].value().toString()), toplevelCommand);
+                     set["name"].value().toString()), toplevelCommand, this);
             if (!toplevelCommand) {
                  toplevelCommand = setPrimaryKeyCommand;
             }
@@ -1135,9 +1137,9 @@ void KexiTableDesignerView::slotPropertyChanged(KoProperty::Set& set, KoProperty
 //down   addHistoryCommand( toplevelCommand, false /* !execute */ );
         } else {//! set PK to false
             //remember this action containing 2 subactions
-            KUndo2Command *setPrimaryKeyCommand = new KUndo2Command(
+            Command *setPrimaryKeyCommand = new Command(
                 i18n("Unset primary key for field \"%1\"",
-                     set["name"].value().toString()), toplevelCommand);
+                     set["name"].value().toString()), toplevelCommand, this);
             if (!toplevelCommand) {
                 toplevelCommand = setPrimaryKeyCommand;
             }
@@ -1616,7 +1618,7 @@ KexiTablePart::TempData* KexiTableDesignerView::tempData() const
 }*/
 
 #ifdef KEXI_DEBUG_GUI
-void KexiTableDesignerView::debugCommand(K3Command* command, int nestingLevel)
+void KexiTableDesignerView::debugCommand(KUndo2Command* command, int nestingLevel)
 {
     if (dynamic_cast<Command*>(command)) {
         KexiUtils::addAlterTableActionDebug(
@@ -1633,14 +1635,20 @@ void KexiTableDesignerView::debugCommand(K3Command* command, int nestingLevel)
 }
 #endif
 
-void KexiTableDesignerView::addHistoryCommand(KUndo2Command* command, bool execute)
+void KexiTableDesignerView::addHistoryCommand(KexiTableDesignerCommands::Command* command, bool execute)
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 # ifdef KEXI_DEBUG_GUI
     debugCommand(command, 0);
 # endif
 //!qundo    d->history->addCommand(command, execute);
+    if (!execute) {
+        command->setRedoEnabled(false);
+    }
     d->history->push(command);
+    if (!execute) {
+        command->setRedoEnabled(true);
+    }
     updateUndoRedoActions();
 #endif
 }
@@ -1672,13 +1680,6 @@ void KexiTableDesignerView::slotRedo()
 # endif
     d->history->redo();
     updateUndoRedoActions();
-#endif
-}
-
-void KexiTableDesignerView::slotCommandExecuted(KUndo2Command *command)
-{
-#ifdef KEXI_DEBUG_GUI
-    debugCommand(command, 1);
 #endif
 }
 

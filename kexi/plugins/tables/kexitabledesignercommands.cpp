@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,9 +35,17 @@
 using namespace KexiTableDesignerCommands;
 
 
-Command::Command(KUndo2Command* parent, KexiTableDesignerView* view)
+Command::Command(const QString &text, Command *parent, KexiTableDesignerView* view)
+        : KUndo2Command(text, parent)
+        , m_view(view)
+        , m_redoEnabled(true)
+{
+}
+
+Command::Command(Command* parent, KexiTableDesignerView* view)
         : KUndo2Command(QString(), parent)
         , m_view(view)
+        , m_redoEnabled(true)
 {
 }
 
@@ -45,10 +53,35 @@ Command::~Command()
 {
 }
 
+void Command::setRedoEnabled(bool enabled)
+{
+    m_redoEnabled = enabled;
+}
+
+void Command::redo()
+{
+    if (m_redoEnabled) {
+        redoInternal();
+    }
+}
+
+void Command::undo()
+{
+    undoInternal();
+}
+
+void Command::redoInternal()
+{
+}
+
+void Command::undoInternal()
+{
+}
+
 //--------------------------------------------------------
 
 ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
-    KUndo2Command* parent, KexiTableDesignerView* view,
+    Command* parent, KexiTableDesignerView* view,
     const KoProperty::Set& set, const QByteArray& propertyName,
     const QVariant& oldValue, const QVariant& newValue,
     KoProperty::Property::ListData* const oldListData,
@@ -92,7 +125,7 @@ QString ChangeFieldPropertyCommand::debugString()
     return s + QString(" (UID=%1)").arg(m_alterTableAction.uid());
 }
 
-void ChangeFieldPropertyCommand::redo()
+void ChangeFieldPropertyCommand::redoInternal()
 {
     m_view->changeFieldProperty(
         m_alterTableAction.uid(),
@@ -100,7 +133,7 @@ void ChangeFieldPropertyCommand::redo()
         m_alterTableAction.newValue(), m_listData);
 }
 
-void ChangeFieldPropertyCommand::undo()
+void ChangeFieldPropertyCommand::undoInternal()
 {
     m_view->changeFieldProperty(
         m_alterTableAction.uid(),
@@ -118,7 +151,7 @@ KexiDB::AlterTableHandler::ActionBase* ChangeFieldPropertyCommand::createAction(
 
 //--------------------------------------------------------
 
-RemoveFieldCommand::RemoveFieldCommand(KUndo2Command* parent, KexiTableDesignerView* view, int fieldIndex,
+RemoveFieldCommand::RemoveFieldCommand(Command* parent, KexiTableDesignerView* view, int fieldIndex,
                                        const KoProperty::Set* set)
         : Command(parent, view)
         , m_alterTableAction(set ? (*set)["name"].value().toString() : QString(),
@@ -137,13 +170,13 @@ RemoveFieldCommand::~RemoveFieldCommand()
     delete m_set;
 }
 
-void RemoveFieldCommand::redo()
+void RemoveFieldCommand::redoInternal()
 {
 // m_view->deleteField( m_fieldIndex );
     m_view->deleteRow(m_fieldIndex);
 }
 
-void RemoveFieldCommand::undo()
+void RemoveFieldCommand::undoInternal()
 {
     m_view->insertEmptyRow(m_fieldIndex);
     if (m_set)
@@ -167,7 +200,7 @@ KexiDB::AlterTableHandler::ActionBase* RemoveFieldCommand::createAction() const
 
 //--------------------------------------------------------
 
-InsertFieldCommand::InsertFieldCommand(KUndo2Command* parent, KexiTableDesignerView* view,
+InsertFieldCommand::InsertFieldCommand(Command* parent, KexiTableDesignerView* view,
                                        int fieldIndex/*, const KexiDB::Field& field*/, const KoProperty::Set& set)
         : Command(parent, view)
         , m_alterTableAction(0) //fieldIndex, new KexiDB::Field(field) /*deep copy*/)
@@ -188,12 +221,12 @@ InsertFieldCommand::~InsertFieldCommand()
     delete m_alterTableAction;
 }
 
-void InsertFieldCommand::redo()
+void InsertFieldCommand::redoInternal()
 {
     m_view->insertField(m_alterTableAction->index(), /*m_alterTableAction.field(),*/ m_set);
 }
 
-void InsertFieldCommand::undo()
+void InsertFieldCommand::undoInternal()
 {
     m_view->clearRow(m_alterTableAction->index());  //m_alterTableAction.index() );
 }
@@ -205,7 +238,7 @@ KexiDB::AlterTableHandler::ActionBase* InsertFieldCommand::createAction() const
 
 //--------------------------------------------------------
 
-ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(KUndo2Command* parent, KexiTableDesignerView* view,
+ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(Command* parent, KexiTableDesignerView* view,
         const KoProperty::Set& set, const QByteArray& propertyName, bool visible)
         : Command(parent, view)
         , m_alterTableAction(set.property("name").value().toString(), propertyName, visible, set["uid"].value().toInt())
@@ -224,7 +257,7 @@ ChangePropertyVisibilityCommand::~ChangePropertyVisibilityCommand()
 {
 }
 
-void ChangePropertyVisibilityCommand::redo()
+void ChangePropertyVisibilityCommand::redoInternal()
 {
     m_view->changePropertyVisibility(
         m_alterTableAction.uid(),
@@ -232,7 +265,7 @@ void ChangePropertyVisibilityCommand::redo()
         m_alterTableAction.newValue().toBool());
 }
 
-void ChangePropertyVisibilityCommand::undo()
+void ChangePropertyVisibilityCommand::undoInternal()
 {
     m_view->changePropertyVisibility(
         m_alterTableAction.uid(),
@@ -242,7 +275,7 @@ void ChangePropertyVisibilityCommand::undo()
 
 //--------------------------------------------------------
 
-InsertEmptyRowCommand::InsertEmptyRowCommand(KUndo2Command* parent, KexiTableDesignerView* view, int row)
+InsertEmptyRowCommand::InsertEmptyRowCommand(Command* parent, KexiTableDesignerView* view, int row)
         : Command(parent, view)
         , m_alterTableAction(true) //unused, null action
         , m_row(row)
@@ -254,12 +287,12 @@ InsertEmptyRowCommand::~InsertEmptyRowCommand()
 {
 }
 
-void InsertEmptyRowCommand::redo()
+void InsertEmptyRowCommand::redoInternal()
 {
     m_view->insertEmptyRow(m_row);
 }
 
-void InsertEmptyRowCommand::undo()
+void InsertEmptyRowCommand::undoInternal()
 {
     // let's assume the row is empty...
     m_view->deleteRow(m_row);

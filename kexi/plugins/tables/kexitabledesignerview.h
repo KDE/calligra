@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,6 +37,11 @@ class KUndo2Command;
 namespace KoProperty
 {
 class Set;
+}
+
+namespace KexiTableDesignerCommands
+{
+class Command;
 }
 
 //! Design view of the Table Designer
@@ -167,9 +172,6 @@ protected slots:
     /*! Redoes the recently undoed action. */
     void slotRedo();
 
-    /*! Reaction on command execution from the command history */
-    void slotCommandExecuted(KUndo2Command *command);
-
     /*! Simulates real execution of the Alter Table. For debugging. */
     void slotSimulateAlterTableExecution();
 
@@ -223,7 +225,7 @@ protected:
      \a aWasPKey is internal.
      If \a commandGroup is not 0, it is used as parent group for storing actions' history. */
     void switchPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false,
-                          KUndo2Command* commandGroup = 0);
+                          KexiTableDesignerCommands::Command* commandGroup = 0);
 
     //! Gets subtype strings and names for type \a fieldType.
     void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup,
@@ -231,7 +233,7 @@ protected:
 
     /*! Adds history command \a command to the undo/redo buffer.
      If \a execute is true, the command is executed afterwards. */
-    void addHistoryCommand(KUndo2Command* command, bool execute);
+    void addHistoryCommand(KexiTableDesignerCommands::Command* command, bool execute);
 
     //! Updates undo/redo shared actions availability by looking at command history's action
     void updateUndoRedoActions();

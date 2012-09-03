@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -133,7 +133,7 @@ int KexiTableDesignerViewPrivate::generateUniqueId()
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, const QVariant& oldValue, KUndo2Command* commandGroup,
+    const QVariant& newValue, const QVariant& oldValue, Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
@@ -171,7 +171,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 
 void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
     const KoProperty::Set& set, const QByteArray& propertyName,
-    const QVariant& newValue, KUndo2Command* commandGroup,
+    const QVariant& newValue, Command* commandGroup,
     bool forceAddCommand, bool rememberOldValue,
     QStringList* const slist, QStringList* const nlist)
 {
@@ -182,7 +182,7 @@ void KexiTableDesignerViewPrivate::setPropertyValueIfNeeded(
 }
 
 void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
-        bool visible, bool &changed, KUndo2Command *commandGroup)
+        bool visible, bool &changed, Command *commandGroup)
 {
     if (prop->isVisible() != visible) {
         if (commandGroup) {
@@ -194,7 +194,7 @@ void KexiTableDesignerViewPrivate::setVisibilityIfNeeded(const KoProperty::Set& 
 }
 
 bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
-        KUndo2Command *commandGroup)
+        Command *commandGroup)
 {
     bool changed = false;
     KoProperty::Property *prop;
