@@ -215,7 +215,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 #endif
 
 #ifdef KEXI_DEBUG_GUI
-    KexiUtils::addAlterTableActionDebug(QString()); //to create the tab
+    KexiDB::alterTableActionDebugGUI(QString()); //to create the tab
     KexiUtils::connectPushButtonActionForDebugWindow(
         "simulateAlterTableExecution", this, SLOT(slotSimulateAlterTableExecution()));
     KexiUtils::connectPushButtonActionForDebugWindow(
@@ -1588,19 +1588,18 @@ KexiTablePart::TempData* KexiTableDesignerView::tempData() const
 }
 
 #ifdef KEXI_DEBUG_GUI
-void KexiTableDesignerView::debugCommand(KUndo2Command* command, int nestingLevel)
+void KexiTableDesignerView::debugCommand(const KUndo2Command* command, int nestingLevel)
 {
-    if (dynamic_cast<Command*>(command)) {
-        KexiUtils::addAlterTableActionDebug(
-            dynamic_cast<Command*>(command)->debugString(), nestingLevel);
-    } else {
-        KexiUtils::addAlterTableActionDebug(command->name(), nestingLevel);
+    if (dynamic_cast<const Command*>(command)) {
+        KexiDB::alterTableActionDebugGUI(
+            dynamic_cast<const Command*>(command)->debugString(), nestingLevel);
+    }
+    else {
+        KexiDB::alterTableActionDebugGUI(command->text(), nestingLevel);
     }
     //show subcommands
-    if (dynamic_cast<CommandGroup*>(command)) {
-        foreach(K3Command *c, dynamic_cast<CommandGroup*>(command)->commands()) {
-            debugCommand(c, nestingLevel + 1);
-        }
+    for (int i = 0; i < command->childCount(); ++i) {
+        debugCommand(command->child(i), nestingLevel + 1);
     }
 }
 #endif
@@ -1634,7 +1633,7 @@ void KexiTableDesignerView::slotUndo()
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 # ifdef KEXI_DEBUG_GUI
-    KexiUtils::addAlterTableActionDebug(QString("UNDO:"));
+    KexiDB::alterTableActionDebugGUI(QString("UNDO:"));
 # endif
     d->history->undo();
     updateUndoRedoActions();
@@ -1645,7 +1644,7 @@ void KexiTableDesignerView::slotRedo()
 {
 #ifndef KEXI_NO_UNDOREDO_ALTERTABLE
 # ifdef KEXI_DEBUG_GUI
-    KexiUtils::addAlterTableActionDebug(QString("REDO:"));
+    KexiDB::alterTableActionDebugGUI(QString("REDO:"));
 # endif
     d->history->redo();
     updateUndoRedoActions();
@@ -1796,8 +1795,9 @@ void KexiTableDesignerView::changeFieldPropertyForRow(int row,
         KoProperty::Property::ListData* const listData, bool addCommand)
 {
 #ifdef KEXI_DEBUG_GUI
-    KexiUtils::addAlterTableActionDebug(QString("** changeFieldProperty: \"")
-                                        + QString(propertyName) + "\" to \"" + newValue.toString() + "\"", 2/*nestingLevel*/);
+    KexiDB::alterTableActionDebugGUI(QString("** changeFieldProperty: \"")
+                                     + QString(propertyName) + "\" to \""
+                                     + newValue.toString() + "\"", 2/*nestingLevel*/);
 #endif
     if (!d->view->acceptRowEdit())
         return;
@@ -1880,8 +1880,9 @@ void KexiTableDesignerView::changePropertyVisibility(
     int fieldUID, const QByteArray& propertyName, bool visible)
 {
 #ifdef KEXI_DEBUG_GUI
-    KexiUtils::addAlterTableActionDebug(QString("** changePropertyVisibility: \"")
-                                        + QString(propertyName) + "\" to \"" + (visible ? "true" : "false") + "\"", 2/*nestingLevel*/);
+    KexiDB::alterTableActionDebugGUI(QString("** changePropertyVisibility: \"")
+                                     + QString(propertyName) + "\" to \""
+                                     + (visible ? "true" : "false") + "\"", 2/*nestingLevel*/);
 #endif
     if (!d->view->acceptRowEdit())
         return;
