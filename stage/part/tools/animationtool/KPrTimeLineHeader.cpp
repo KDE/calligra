@@ -32,6 +32,8 @@
 #include <QStyle>
 #include <QStyleOptionHeader>
 
+#include <KLocale>
+
 //Default height of the header
 const int HEADER_HEIGHT = 20;
 
@@ -67,7 +69,7 @@ void KPrTimeLineHeader::paintHeader(QPainter *painter, const int RowHeight)
     if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - minimumSize)) {
         //Seconds Header
         QRect rect(0, 0, m_mainView->totalWidth() - m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);
-        paintHeaderItem(painter, rect, QString("seconds"));
+        paintHeaderItem(painter, rect, i18n("seconds"));
     } else if (scroll < (m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime)) - 2) {
         QRect rect(0, 0, m_mainView->totalWidth()-m_mainView->widthOfColumn(KPrShapeAnimations::StartTime) - scroll, RowHeight);
         paintHeaderItem(painter, rect, QString(""));
