@@ -1453,11 +1453,12 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
     }
     Node *oldParent = node->parentNode();
     const Node *before = newParent->childNode( newPos );
-    emit nodeToBeMoved( node );
-    takeTask( node, false );
+// FIXME: item models need more info to handle moves correctly
+//    emit nodeToBeMoved( node );
+    takeTask( node, true );
     int i = before == 0 ? newParent->numChildren() : newPos;
-    addSubTask( node, i, newParent, false );
-    emit nodeMoved( node );
+    addSubTask( node, i, newParent, true );
+//    emit nodeMoved( node );
     if ( oldParent != this && oldParent->numChildren() == 0 ) {
         emit nodeChanged( oldParent );
     }
