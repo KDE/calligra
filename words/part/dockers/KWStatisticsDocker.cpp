@@ -20,7 +20,7 @@
  */
 
 #include "KWStatisticsDocker.h"
-#include "ui_KWStatisticsDocker.h"
+//#include "ui_KWStatisticsDocker.h"
 #include "KWCanvas.h"
 #include <QDebug>
 #include <KoToolManager.h>
