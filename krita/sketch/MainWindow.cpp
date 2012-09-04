@@ -29,6 +29,9 @@
 #include <QDeclarativeEngine>
 #include <QDir>
 #include <QGLWidget>
+#include <QFile>
+#include <QMessageBox>
+#include <QFileInfo>
 
 #include <kcmdlineargs.h>
 #include <kurl.h>
@@ -119,12 +122,20 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
     d->view->setViewport(glWidget);
 
-    QStringList dataPaths = KGlobal::dirs()->findDirs("appdata", "qml");
-    foreach(const QString& path, dataPaths) {
-        d->view->engine()->addImportPath(path);
-    }
+    QDir appdir(qApp->applicationDirPath());
+    // for now, the app in bin/ and we still use the env.bat script
+    appdir.cdUp();
 
-    d->view->setSource(QUrl::fromLocalFile(KStandardDirs::locate("appdata", "qml/main.qml")));
+    d->view->engine()->addImportPath(appdir.canonicalPath() + "/share/apps/kritasketch/qml");
+    QString mainqml = appdir.canonicalPath() + "/share/apps/kritasketch/qml/main.qml";
+
+    Q_ASSERT(QFile::exists(mainqml));
+    if (!QFile::exists(mainqml)) {
+        QMessageBox::warning(0, "No QML found", mainqml + " doesn't exist.");
+    }
+    QFileInfo fi(mainqml);
+
+    d->view->setSource(QUrl::fromLocalFile(fi.canonicalFilePath()));
     d->view->setResizeMode( QDeclarativeView::SizeRootObjectToView );
 
     //     if (d->view->errors().count() > 0) {
