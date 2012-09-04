@@ -73,16 +73,22 @@ int main( int argc, char** argv )
     QApplication::setAttribute(Qt::AA_X11InitThreads);
     KApplication app;
 
-    #ifdef Q_OS_WIN
-        QProcessEnvironment *env = QProcessEnvironment::systemEnvironment();
-        env->insert("KDEDIR", app.applicationDirPath());
-        env->insert("KDEDIRS", app.applicationDirPath());
-        env->insert("XDG_DATA_DIRS", app.applicationDirPath() + QDir::separator() +  "/share");
-        env->insert("XDG_DATA_HOME", app.applicationDirPath() + QDir::separator() + "/share");
-        env->insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QDir::separator() + "kritasketch");
-    #endif
+//#ifdef Q_OS_WIN
+//    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//    QDir appdir(app.applicationDirPath());
+//    appdir.cdUp();
+//    env.insert("KDEDIR", appdir.currentPath() + "..");
+//    env.insert("KDEDIRS", appdir.currentPath() );
+//    env.insert("XDG_DATA_DIRS", appdir.currentPath() + QDir::separator() +  "/share");
+//    env.insert("XDG_DATA_HOME", appdir.currentPath() + QDir::separator() + "/share");
+//    env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QDir::separator() + "AppData" + QDir::separator() + "Roaming" + QDir::separator() + "kritasketch");
+//    app.addLibraryPath(appdir.currentPath());
+//    app.addLibraryPath(appdir.currentPath() + "/bin");
+//    app.addLibraryPath(appdir.currentPath() + "/lib");
+//    app.addLibraryPath(appdir.currentPath() + "/lib/kde4");
+//#endif
 
-    QApplication::setStyle("plastique");
+//    QApplication::setStyle("plastique");
 
     QStringList fonts = KGlobal::dirs()->findAllResources( "appdata", "fonts/*.otf" );
     foreach( const QString &font, fonts ) {
