@@ -770,31 +770,21 @@ void PerformanceStatusBase::setupChart()
     m_legend->setDatasetHidden( 8, ! ( m_chartinfo.showIndeces && m_chartinfo.showSpiEffort ) );
     m_legend->setDatasetHidden( 9, ! ( m_chartinfo.showIndeces && m_chartinfo.showCpiEffort ) );
 
-    setEffortValuesVisible( m_chartinfo.showEffort );
-    setCostValuesVisible( m_chartinfo.showCost );
+    setEffortValuesVisible( m_chartinfo.effortShown() );
+    setCostValuesVisible( m_chartinfo.costShown() );
     refreshChart();
 }
 
 void PerformanceStatusBase::setEffortValuesVisible( bool visible )
 {
     ui_performancetable->verticalHeader()->setSectionHidden( 1, ! visible );
-/*    labelEffort->setVisible( visible );
-    bcwsEffort->setVisible( visible );
-    bcwpEffort->setVisible( visible );
-    acwpEffort->setVisible( visible );
-    spiEffort->setVisible( visible );
-    cpiEffort->setVisible( visible );*/
+    ui_performancetable->setMaximumHeight( ui_performancetable->sizeHint().height() );
 }
 
 void PerformanceStatusBase::setCostValuesVisible( bool visible )
 {
     ui_performancetable->verticalHeader()->setSectionHidden( 0, ! visible );
-/*    labelCost->setVisible( visible );
-    bcwsCost->setVisible( visible );
-    bcwpCost->setVisible( visible );
-    acwpCost->setVisible( visible );
-    spiCost->setVisible( visible );
-    cpiCost->setVisible( visible );*/
+    ui_performancetable->setMaximumHeight( ui_performancetable->sizeHint().height() );
 }
 
 void PerformanceStatusBase::setupChart( ChartContents &cc )
@@ -890,7 +880,7 @@ void PerformanceStatusBase::setupChart( ChartContents &cc )
         if ( ! info.showSpiEffort ) {
             reject <<  ChartItemModel::SPIEffort;
         }
-        if ( ! info.showSpiEffort ) {
+        if ( ! info.showCpiEffort ) {
             reject <<  ChartItemModel::CPIEffort;
         }
         cc.piproxy.setRejectColumns( reject );
@@ -1001,7 +991,7 @@ bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
     m_chartinfo.showSpiCost = context.attribute( "show-spi-cost", "1" ).toInt();
     m_chartinfo.showCpiCost = context.attribute( "show-cpi-cost", "1" ).toInt();
     m_chartinfo.showSpiEffort = context.attribute( "show-spi-effort", "1" ).toInt();
-    m_chartinfo.showSpiEffort = context.attribute( "show-cpi-effort", "1" ).toInt();
+    m_chartinfo.showCpiEffort = context.attribute( "show-cpi-effort", "1" ).toInt();
 
     kDebug(planDbg())<<"Cost:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;
     kDebug(planDbg())<<"Effort:"<<m_chartinfo.showCost<<"bcws="<<m_chartinfo.showBCWSCost<<"bcwp="<<m_chartinfo.showBCWPCost<<"acwp="<<m_chartinfo.showACWPCost;

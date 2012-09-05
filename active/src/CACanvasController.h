@@ -54,8 +54,8 @@ public:
     virtual void setScrollBarValue (const QPoint& value);
     virtual QPoint scrollBarValue() const;
     virtual void pan (const QPoint& distance);
-    virtual QPoint preferredCenter() const;
-    virtual void setPreferredCenter (const QPoint& viewPoint);
+    virtual QPointF preferredCenter() const;
+    virtual void setPreferredCenter (const QPointF& viewPoint);
     virtual void recenterPreferred();
     virtual void zoomTo (const QRect& rect);
     virtual void zoomBy (const QPoint& center, qreal zoom);

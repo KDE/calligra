@@ -36,6 +36,8 @@ class KoShape;
 class KoCanvasBase;
 class KoView;
 
+class ZoomAndPanTester;
+
 /**
  * KoCanvasController implementation for QWidget based canvases
  */
@@ -113,10 +115,10 @@ public:
 
     virtual void recenterPreferred();
 
-    virtual void setPreferredCenter(const QPoint &viewPoint);
+    virtual void setPreferredCenter(const QPointF &viewPoint);
 
     /// Returns the currently set preferred center point in view coordinates (pixels)
-    virtual QPoint preferredCenter() const;
+    virtual QPointF preferredCenter() const;
 
     virtual void pan(const QPoint &distance);
 
@@ -158,18 +160,23 @@ private slots:
     void updateCanvasOffsetY();
 
 protected:
+    friend class KisZoomAndPanTest;
 
     /**
-     * Moves scroll bars to ensure \p center is in the center
-     * of the viewport
+     * Used by KisCanvasController to correct the scrollbars position
+     * after the rotation.
+     *
+     * The difference from the usual setScrollBarValue() is that it
+     * blocks the updates of preferredCenterFraction, in the slot
+     * of the scroll bars.
      */
-    virtual void scrollToCenterPoint(const QPoint &center);
+    void setScrollBarValueSilent(const QPoint &value);
 
     /**
      * Zoom document keeping point \p widgetPoint unchanged
      * \param widgetPoint sticky point in widget pixels
      */
-    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel);
+    virtual void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomCoeff);
 
     /// reimplemented from QWidget
     virtual void paintEvent(QPaintEvent *event);

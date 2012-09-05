@@ -203,6 +203,12 @@ struct PerformanceChartInfo
     bool showSpiEffort;
     bool showCpiEffort;
 
+    bool effortShown() const {
+        return ( showBaseValues && showEffort ) || ( showIndeces && ( showSpiEffort || showCpiEffort ) );
+    }
+    bool costShown() const {
+        return ( showBaseValues && showCost ) || ( showIndeces && ( showSpiCost || showCpiCost ) );
+    }
     bool bcwsCost() const { return showBaseValues && showCost && showBCWSCost; }
     bool bcwpCost() const { return showBaseValues && showCost && showBCWPCost; }
     bool acwpCost() const { return showBaseValues && showCost && showACWPCost; }
@@ -220,6 +226,7 @@ struct PerformanceChartInfo
         showBaseValues = true; showIndeces = false;
         showCost = showBCWSCost = showBCWPCost = showACWPCost = true;
         showEffort = showBCWSEffort = showBCWPEffort = showACWPEffort = true;
+        showSpiCost = showCost = showSpiEffort = showCpiEffort = true;
     }
     bool operator!=( const PerformanceChartInfo &o ) const { return ! operator==( o ); }
     bool operator==( const PerformanceChartInfo &o ) const {
