@@ -249,4 +249,3 @@ void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &recor
     view->data()->saveRowChanges(record, true);
 }
 
-#include "kexitabledesignerview_p.moc"
