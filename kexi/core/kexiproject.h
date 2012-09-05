@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -295,6 +295,25 @@ public:
 
     //! Closes connection. @return true on success.
     bool closeConnection();
+
+    /*! Loads current user's data block, referenced by \a objectID and \a dataID
+     and puts it to \a dataString.
+     \return true on success, false on failure and cancelled when there is no such data block
+     \sa storeUserDataBlock(). */
+    tristate loadUserDataBlock(int objectID, const QString& dataID, QString *dataString);
+
+    /*! Stores current user's data block \a dataString, referenced by \a objectID and \a dataID.
+     The block will be stored in "kexi__userdata" table
+     If there is already such record in the table, it's simply overwritten.
+     \return true on success
+     \sa loadUserDataBlock(). */
+    bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString);
+
+    /*! Removes current user's data block referenced by \a objectID and \a dataID.
+     \return true on success. Does not fail if the block does not exist.
+     Note that if \a dataID is not specified, all data blocks for this user and object will be removed.
+     \sa loadUserDataBlock() storeUserDataBlock(). */
+    bool removeUserDataBlock(int objectID, const QString& dataID = QString());
 
 protected:
     /*! Creates connection using project data.

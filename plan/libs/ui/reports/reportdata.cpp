@@ -382,7 +382,7 @@ void TaskReportData::createModels()
     sf->setDynamicSortFilter( true );
     FlatProxyModel *fm = new FlatProxyModel( sf );
     sf->setSourceModel( fm );
-    GeneralNodeItemModel *m = new GeneralNodeItemModel( fm );
+    NodeItemModel *m = new NodeItemModel( fm );
     fm->setSourceModel( m );
 }
 

@@ -43,7 +43,6 @@
 #include <KexiWindow.h>
 
 #include "kexiquerydesignersqleditor.h"
-#include "kexiquerydesignersqlhistory.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerypart.h"
 
@@ -63,40 +62,29 @@ class KexiQueryDesignerSQLView::Private
 {
 public:
     Private() :
-            history(0)
-            , historyHead(0)
-            , statusPixmapOk(koDesktopIcon("dialog-ok"))
+            statusPixmapOk(koDesktopIcon("dialog-ok"))
             , statusPixmapErr(koDesktopIcon("dialog-error"))
             , statusPixmapInfo(koDesktopIcon("dialog-information"))
             , parsedQuery(0)
             , heightForStatusMode(-1)
-            , heightForHistoryMode(-1)
-//   , eventFilterForSplitterEnabled(true)
             , justSwitchedFromNoViewMode(false)
             , slotTextChangedEnabled(true) {
     }
     KexiQueryDesignerSQLEditor *editor;
-    KexiQueryDesignerSQLHistory *history;
     QLabel *pixmapStatus, *lblStatus;
-//  KTitleWidget *statusWidget;
     QHBoxLayout *statusHLyr;
     QFrame *statusMainWidget;
-    KexiSectionHeader *head, *historyHead;
+    KexiSectionHeader *head;
     QWidget *bottomPane;
     QPixmap statusPixmapOk, statusPixmapErr, statusPixmapInfo;
     QSplitter *splitter;
-    KAction *action_toggle_history;
     //! For internal use, this pointer is usually copied to TempData structure,
     //! when switching out of this view (then it's cleared).
     KexiDB::QuerySchema *parsedQuery;
     //! For internal use, statement passed in switching to this view
     QString origStatement;
     //! needed to remember height for both modes, between switching
-    int heightForStatusMode, heightForHistoryMode;
-    //! helper for slotUpdateMode()
-    bool action_toggle_history_was_checked : 1;
-    //! helper for eventFilter()
-//  bool eventFilterForSplitterEnabled : 1;
+    int heightForStatusMode;
     //! helper for beforeSwitchTo()
     bool justSwitchedFromNoViewMode : 1;
     //! helper for slotTextChanged()
@@ -109,10 +97,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
         : KexiView(parent)
         , d(new Private())
 {
-// QHBoxLayout *mainHBoxLyr = new QHBoxLayout(this);
-
     d->splitter = new QSplitter(this);
-// mainHBoxLyr->addWidget(d->splitter);
     d->splitter->setOrientation(Qt::Vertical);
     d->head = new KexiSectionHeader(i18n("SQL Query Text"), Qt::Vertical, d->splitter);
     d->splitter->addWidget(d->head);
@@ -121,10 +106,9 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     d->editor = new KexiQueryDesignerSQLEditor(d->head);
     d->editor->setObjectName("sqleditor");
     d->head->setWidget(d->editor);
-// d->editor->installEventFilter(this);//for keys
     connect(d->editor, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 
-    // -- bottom pane (history+status)
+    // -- bottom pane (status)
     d->bottomPane = new QWidget(d->splitter);
     QVBoxLayout *bottomPaneLyr = new QVBoxLayout(d->bottomPane);
     d->splitter->addWidget(d->bottomPane);
@@ -134,7 +118,6 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     // -- status pane
     d->statusMainWidget = new QFrame(d->bottomPane);
     bottomPaneLyr->addWidget(d->statusMainWidget);
-// d->splitter->addWidget(d->statusMainWidget);
     d->statusMainWidget->setAutoFillBackground(true);
     d->statusMainWidget->setFrameShape(QFrame::StyledPanel);
     d->statusMainWidget->setFrameShadow(QFrame::Plain);
@@ -143,25 +126,8 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     pal.setBrush(QPalette::Base, QToolTip::palette().brush(QPalette::Button));
     d->statusMainWidget->setPalette(pal);
 
-// d->splitter->setStretchFactor(
-    // d->splitter->indexOf(d->statusMainWidget), 1/*stretch*/);
-// d->statusMainWidget->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
-// d->statusMainWidget->installEventFilter(this);
     d->splitter->setCollapsible(1, false);
-    //QVBoxLayout *statusMainWidgetLyr = new QVBoxLayout( d->statusMainWidget );
-
-    /* d->statusWidget = new KTitleWidget(d->statusMainWidget);
-      d->statusWidget->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
-      QList<QLabel*> allStatusWidgetLabels( d->statusWidget->findChildren<QLabel*>() );
-      foreach( QLabel* lbl, allStatusWidgetLabels )
-        lbl->setTextInteractionFlags( Qt::TextBrowserInteraction );
-
-      statusMainWidgetLyr->addWidget( d->statusWidget );*/
-
     d->statusHLyr = new QHBoxLayout(d->statusMainWidget);
-// statusMainWidgetLyr->addLayout( d->statusHLyr );
-// d->splitter->setStretchFactor(
-//  d->splitter->indexOf(d->statusMainWidget), 0/*KeepSize*/);
     d->statusHLyr->setContentsMargins(0, KDialog::marginHint() / 2, 0, KDialog::marginHint() / 2);
     d->statusHLyr->setSpacing(0);
 
@@ -169,31 +135,16 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     d->statusHLyr->addWidget(d->pixmapStatus);
     d->pixmapStatus->setFixedWidth(d->statusPixmapOk.width()*3 / 2);
     d->pixmapStatus->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-//Qt3?? d->pixmapStatus->setMargin(d->statusPixmapOk.width()/4);
-// Qt3: d->pixmapStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
     d->pixmapStatus->setAutoFillBackground(true);
-    /*Qt3? QPalette pal(d->pixmapStatus->palette());
-      pal.setBrush(QPalette::Active, QPalette::Background,
-        pal.brush(QPalette::Active, QPalette::Base));
-      d->pixmapStatus->setPalette(pal);*/
 
     d->lblStatus = new QLabel(d->statusMainWidget);
     d->statusHLyr->addWidget(d->lblStatus);
     d->lblStatus->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->lblStatus->setWordWrap(true);
-//Qt3?? d->lblStatus->setMargin(d->statusPixmapOk.width()/4);
-//Qt3?? d->lblStatus->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Expanding );
-// d->lblStatus->setPalette( QToolTip::palette() );
     d->lblStatus->setTextInteractionFlags(Qt::TextBrowserInteraction);
     d->lblStatus->setMinimumHeight(d->statusPixmapOk.width());
-// Qt3: d->lblStatus->setPaletteBackgroundColor( palette().active().color(QColorGroup::Base) );
-    /*Qt3 pal = d->lblStatus->palette();
-      pal.setBrush(QPalette::Active, QPalette::Background,
-        pal.brush(QPalette::Active, QPalette::Base));
-      d->lblStatus->setPalette(pal);*/
 
     addChildView(d->editor);
-// setViewWidget(d->editor);
     setViewWidget(d->splitter, false/* no focus proxy*/);
     d->splitter->setFocusProxy(d->editor);
     setFocusProxy(d->editor);
@@ -208,41 +159,8 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
     a->setWhatsThis(i18n("Checks query for validity."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotCheckQuery()));
 
-    viewActions << (d->action_toggle_history = new KAction(
-        koIcon("view-history"), i18n("Show SQL History"), this));
-    a = d->action_toggle_history;
-    a->setCheckable(true);
-    a->setObjectName("querypart_view_toggle_history");
-    a->setWhatsThis(i18n("Shows or hides SQL editor's history."));
-    connect(a, SIGNAL(toggled(bool)), this, SLOT(slotUpdateMode()));
-
     setViewActions(viewActions);
 
-    // - setup history pane
-    d->historyHead = new KexiSectionHeader(i18n("SQL Query History"),
-                                           Qt::Vertical, d->bottomPane);
-    bottomPaneLyr->addWidget(d->historyHead);
-// d->historyHead->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum );
-// d->historyHead->setMinimumHeight(40);
-// statusMainWidgetLyr->addWidget( d->historyHead );
-// d->historyHead->installEventFilter(this);
-    d->history = new KexiQueryDesignerSQLHistory(d->historyHead);
-    d->historyHead->setWidget(d->history);
-    d->history->setObjectName("sql_history");
-
-    const QString msg_back(i18n("Back to Selected Query"));
-    const QString msg_clear(i18n("Clear History"));
-    d->historyHead->addButton(koIcon("go-jump"), msg_back, this, SLOT(slotSelectQuery()));
-    d->historyHead->addButton(koIcon("edit-clear-locationbar-rtl"), msg_clear, d->history, SLOT(clear()));
-    d->history->popupMenu()->addAction(koIcon("go-jump"), msg_back,
-                                       this, SLOT(slotSelectQuery()));
-    d->history->popupMenu()->addAction(koIcon("edit-clear-locationbar-rtl"), msg_clear,
-                                       d->history, SLOT(clear()));
-    connect(d->history, SIGNAL(currentItemDoubleClicked()), this, SLOT(slotSelectQuery()));
-
-    d->heightForHistoryMode = -1; //height() / 2;
-    //d->historyHead->hide();
-    d->action_toggle_history_was_checked = !d->action_toggle_history->isChecked(); //to force update
     slotUpdateMode();
     slotCheckQuery();
     updateGeometry();
@@ -262,44 +180,24 @@ void KexiQueryDesignerSQLView::setStatusOk()
 {
     d->pixmapStatus->setPixmap(d->statusPixmapOk);
     setStatusText("<h3>" + i18n("The query is correct") + "</h3>");
-// d->statusWidget->setPixmap(d->statusPixmapOk, KTitleWidget::ImageLeft);
-    d->history->addEvent(d->editor->text().trimmed(), true, QString());
 }
 
 void KexiQueryDesignerSQLView::setStatusError(const QString& msg)
 {
-//Qt4 d->statusWidget->setPixmap(d->statusPixmapErr, KTitleWidget::ImageLeft);
     d->pixmapStatus->setPixmap(d->statusPixmapErr);
     setStatusText("<h3>" + i18n("The query is incorrect") + "</h3><p>" + msg + "</p>");
-    d->history->addEvent(d->editor->text().trimmed(), false, msg);
 }
 
 void KexiQueryDesignerSQLView::setStatusEmpty()
 {
-//Qt4 d->statusWidget->setPixmap(d->statusPixmapInfo, KTitleWidget::ImageLeft);
     d->pixmapStatus->setPixmap(d->statusPixmapInfo);
     setStatusText(
         i18n("Please enter your query and execute \"Check query\" function to verify it."));
-// d->statusWidget->setPixmap(KTitleWidget::InfoMessage, KTitleWidget::ImageLeft);
 }
 
 void KexiQueryDesignerSQLView::setStatusText(const QString& text)
 {
-    if (!d->action_toggle_history->isChecked()) {
-        /*  Q3SimpleRichText rt(text, d->lblStatus->font());
-            rt.setWidth(d->lblStatus->width());
-            QList<int> sz( d->splitter->sizes() );
-            const int newHeight = rt.height()+d->lblStatus->margin()*2;
-            if (sz[1]<newHeight) {
-              sz[1] = newHeight;
-              d->splitter->setSizes(sz);
-            }*/
-        d->lblStatus->setText(text);
-//  d->statusWidget->setText(text);
-//  d->statusWidget->setComment("aa");
-//  d->statusWidget->setPixmap(type, KTitleWidget::ImageLeft);
-//  d->statusWidget->setFixedHeight( d->statusWidget->sizeHint().height()*3 );
-    }
+    d->lblStatus->setText(text);
 }
 
 tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
@@ -352,24 +250,6 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
         }
     }
 
-    //TODO
-    /*
-    if (d->doc) {
-      KexiDB::Parser *parser = new KexiDB::Parser(KexiMainWindowIface::global()->project()->dbConnection());
-      parser->parse(getQuery());
-      d->doc->setSchema(parser->select());
-
-      if(parser->operation() == KexiDB::Parser::OP_Error)
-      {
-        d->history->addEvent(getQuery(), false, parser->error().error());
-        kDebug() << "KexiQueryDesignerSQLView::beforeSwitchTo(): syntax error!";
-        return false;
-      }
-      delete parser;
-    }
-
-    setDirty(true);*/
-// if (window()->hasFocus())
     d->editor->setFocus();
     return true;
 }
@@ -434,8 +314,7 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
         return true;
     }
 
-    kDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()";
-    //KexiQueryPart::TempData * temp = tempData();
+    kDebug();
     KexiDB::Parser *parser = KexiMainWindowIface::global()->project()->sqlParser();
     const bool ok = parser->parse(sqlText);
     delete d->parsedQuery;
@@ -455,39 +334,6 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
 
 void KexiQueryDesignerSQLView::slotUpdateMode()
 {
-    if (d->action_toggle_history->isChecked() == d->action_toggle_history_was_checked)
-        return;
-
-// d->eventFilterForSplitterEnabled = false;
-
-    QList<int> sz = d->splitter->sizes();
-    d->action_toggle_history_was_checked = d->action_toggle_history->isChecked();
-    int heightToSet = -1;
-    if (d->action_toggle_history->isChecked()) {
-        d->statusMainWidget->hide();
-        d->historyHead->show();
-        if (d->heightForHistoryMode == -1)
-            d->heightForHistoryMode = window()->height() / 2;
-        heightToSet = d->heightForHistoryMode;
-        d->heightForStatusMode = sz[1]; //remember
-    } else {
-        if (d->historyHead)
-            d->historyHead->hide();
-        d->statusMainWidget->show();
-        if (d->heightForStatusMode >= 0) {
-            heightToSet = d->heightForStatusMode;
-        } else {
-            d->heightForStatusMode = d->statusMainWidget->height();
-        }
-        if (d->heightForHistoryMode >= 0)
-            d->heightForHistoryMode = sz[1];
-    }
-
-    if (heightToSet >= 0) {
-        sz[1] = heightToSet;
-//  d->splitter->setSizes(sz);
-    }
-// d->eventFilterForSplitterEnabled = true;
     slotCheckQuery();
 }
 
@@ -498,19 +344,6 @@ void KexiQueryDesignerSQLView::slotTextChanged()
     setDirty(true);
     setStatusEmpty();
 }
-/*
-bool KexiQueryDesignerSQLView::eventFilter( QObject *o, QEvent *e )
-{
-  if (d->eventFilterForSplitterEnabled) {
-    if (e->type()==QEvent::Resize && o && o==d->historyHead && d->historyHead->isVisible()) {
-      d->heightForHistoryMode = d->historyHead->height();
-    }
-    else if (e->type()==QEvent::Resize && o && o==d->statusMainWidget && d->statusMainWidget->isVisible()) {
-      d->heightForStatusMode = d->statusMainWidget->height();
-    }
-  }
-  return KexiView::eventFilter(o, e);
-}*/
 
 void KexiQueryDesignerSQLView::updateActions(bool activated)
 {
@@ -518,16 +351,7 @@ void KexiQueryDesignerSQLView::updateActions(bool activated)
         slotUpdateMode();
     }
     setAvailable("querypart_check_query", true);
-    setAvailable("querypart_view_toggle_history", true);
     KexiView::updateActions(activated);
-}
-
-void KexiQueryDesignerSQLView::slotSelectQuery()
-{
-    QString sql = d->history->selectedStatement();
-    if (!sql.isEmpty()) {
-        d->editor->setText(sql);
-    }
 }
 
 KexiQueryPart::TempData *
@@ -616,15 +440,5 @@ tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
         setDirty(true);
     return res;
 }
-
-/*void KexiQueryDesignerSQLView::slotHistoryHeaderButtonClicked(const QString& buttonIdentifier)
-{
-  if (buttonIdentifier=="select_query") {
-    slotSelectQuery();
-  }
-  else if (buttonIdentifier=="clear_history") {
-    d->history->clear();
-  }
-}*/
 
 #include "kexiquerydesignersql.moc"

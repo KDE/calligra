@@ -165,12 +165,15 @@ KexiDB
 Main Window
 *Declare 'full screen' as global action for use in user commands or scripts
 
-2012-08-14
-*Added unit test for creating .kexi database file with KexiDB::Connection and adding test data
-
 ===================== Kexi 2.5  =====================
 
 ~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
+
+2012-09-01
+Query Designer
+*Fix bug SQL Editor's history is not functional (by hiding it in 2.5 and completely removing in 2.6)
+BUG:306145
+REVIEW:106309
 
 2012-08-30
 Startup
@@ -179,6 +182,7 @@ Startup
 2012-08-26
 Query Designer
 *Make string concatenation operator || work
+**Ported to Predicate
 BUG:305793
 REVIEW:106199
 
@@ -186,6 +190,7 @@ REVIEW:106199
 KexiDB
 *Make it possible to disable db drivers even if the libs are present and found
 **renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config flag (by jstaniek)
+**Ported to Predicate
 BUG:305683
 REVIEW:106152
 
@@ -258,8 +263,8 @@ CCBUG:301277
 *Added DefaultMaxLengthForTextFields config in Tables group
 **specifies default maximum length for fields of type Text
 **0 (the default) means unlimited or up to engine's limit
+**Ported to Predicate
 CCBUG:301277
-TODO: Port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.90) ~~~~~~~~~~~~~~~~
 
@@ -286,8 +291,8 @@ REVIEW:105182
 KexiDB
 *Remove limits for Text data type, leave as option
 **By default there are no limits in Text data type
+**Ported to Predicate
 BUG:301277
-TODO: Port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
 
@@ -307,7 +312,7 @@ BUG:278296
 KexiDB
 *SQLite Driver
 **Fixed error when attempting to compact database opened from Open view
-TODO: port to Predicate
+**Ported to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
@@ -385,17 +390,17 @@ KexiDB
 *SQLite Driver
 **Fixed crashes when compacting database fails
 **Fixed error when attempting to compact database opened from recent lists
-TODO: port to Predicate
+**Ported to Predicate
 *MySQL Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
 CCBUG:254068
-TODO: port to Predicate
 *PostgreSQL Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
 CCBUG:254068
-TODO: port to Predicate
 Reports
 *Fix crash in assigning data source that uses reserved words as field names
 **Tables/queries with reserved words still do not work in reports though
@@ -420,8 +425,8 @@ Main Window
 KexiDB
 *SQLite Driver
 **Ported database compacting code to the new Kexi that uses system SQLite version
+**Ported to Predicate
 BUG:293548
-TODO: port to Predicate
 
 TODO: after db creating and opening the main menu is invisible
 
@@ -433,8 +438,8 @@ CSV Import
 KexiDB
 *SQLite Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
-TODO: port to Predicate
 CSV Import
 *Fixed bug: crash while importing CSV rows that start with empty cells (only delimiters)
 **Example row: ,,,"a"
@@ -535,8 +540,8 @@ TODO 2.5: change standard "Open" btn to "Open Imported Table"
 2012-01-01
 KexiDB
 *Query SQL generated in the Query Designer should be of KEXISQL type
+**Ported to Predicate
 BUG:290354
-TODO: port to Predicate
 
 2011-12-26..28
 Forms
@@ -556,8 +561,8 @@ TODO: add effect property to the Image Box, see QGraphicsEffects
 2011-12-16..20
 KexiDB
 *Use ICU (http://icu-project.org) for high quality collating in unicode text columns using SQLite extension.
+**Ported to Predicate
 BUG:278411
-TODO: port to Predicate
 
 2011-12-14
 General
@@ -567,7 +572,7 @@ Core
 *remove memory leak in code opening project
 KexiDB
 *avoid 'invalid read' in code for inserting records into tables
-TODO: port to Predicate
+**Ported to Predicate
 
 2011-12-10..11
 General
@@ -1327,8 +1332,8 @@ KexiDB
 *MySQL Driver: Fix "DB created but cannot open" error appearing on creating a new database for mysql backend.
  See http://dev.mysql.com/doc/refman/5.0/en/identifier-case-sensitivity.html (complex!) for logic of otherwise simple thing.
  The solution is to execute SHOW VARIABLES LIKE 'lower_case_table_name' to get the flag and make the table and database names lowercase if needed.
+**Ported to Predicate
 BUG:235507
-*******TODO: port to Predicate
 
 2010-04-25
 KexiDB
