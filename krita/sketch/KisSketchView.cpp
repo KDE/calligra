@@ -36,6 +36,8 @@
 #include <kdebug.h>
 #include <kmimetype.h>
 #include <kstandarddirs.h>
+#include <kactioncollection.h>
+#include <kaction.h>
 
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
@@ -46,6 +48,11 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoUnit.h>
+#include <KoShapeController.h>
+#include <KoDocumentResourceManager.h>
+#include <KoCanvasResourceManager.h>
+
+#include <kundo2stack.h>
 
 #include "ProgressProxy.h"
 #include "KisSketchCanvasFactory.h"
@@ -64,6 +71,8 @@
 #include <input/kis_input_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_zoom_manager.h>
+#include <kis_paint_device.h>
+#include <kis_layer.h>
 
 #include "KisSketchCanvas.h"
 #include "Settings.h"
@@ -89,6 +98,7 @@ public:
     KisDoc2* doc;
     KisView2* view;
     KisCanvas2* canvas;
+    KUndo2Stack* undoStack;
 
     Settings *settings;
     KisSketchCanvas *canvasWidget;
@@ -230,6 +240,8 @@ void KisSketchView::createDocument()
     d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
     d->view->hide();
     d->canvas = d->view->canvasBase();
+
+    d->undoStack = d->doc->undoStack();
 
     KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
@@ -408,6 +420,20 @@ void KisSketchView::resetDocumentPosition()
     pos.ry() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
 
     d->view->canvasControllerWidget()->setScrollBarValue(pos);
+}
+
+void KisSketchView::undo()
+{
+    qDebug() << "undo stack size" << d->undoStack->count() << "current index" << d->undoStack->index();
+    d->view->actionCollection()->action("edit_undo")->trigger();
+    qDebug() << "\t" << d->undoStack->index();
+}
+
+void KisSketchView::redo()
+{
+    qDebug() << "redo stack size" << d->undoStack->count() << "current index" << d->undoStack->index();
+    d->view->actionCollection()->action("edit_redo")->trigger();
+    qDebug() << "\t" << d->undoStack->index();
 }
 
 

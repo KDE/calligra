@@ -83,6 +83,10 @@ Page {
                         pageStack.push( sharePage );
                     case "help":
                         pageStack.push( helpPage );
+                    case "undo":
+                        sketchView.undo();
+                    case "redo":
+                        sketchView.redo();
                 }
             }
         }

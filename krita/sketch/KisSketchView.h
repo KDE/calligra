@@ -50,6 +50,9 @@ public Q_SLOTS:
     void createDocument();
     void resetDocumentPosition();
 
+    void undo();
+    void redo();
+
     QObject *settings();
     void setSettings(QObject  *settings);
 
