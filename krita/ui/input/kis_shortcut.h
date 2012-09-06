@@ -96,6 +96,8 @@ public:
      * Set the wheel state to use for this shortcut.
      */
     void setWheel(WheelState state);
+
+    void setGesture(Qt::GestureType gesture);
     /**
      * Returns how well this shortcut matches recent input.
      */

@@ -22,17 +22,21 @@
 #include <QEvent>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QGestureEvent>
+#include <QGesture>
 
 class KisShortcut::Private
 {
 public:
-    Private() : wheelState(WheelUndefined), currentWheelState(WheelUndefined), action(0), shortcutIndex(0) { }
+    Private() : wheelState(WheelUndefined), currentWheelState(WheelUndefined), gesture(0), currentGesture(0), action(0), shortcutIndex(0) { }
     QList<Qt::Key> keys;
     QList<Qt::Key> keyState;
     QList<Qt::MouseButton> buttons;
     QList<Qt::MouseButton> buttonState;
     WheelState wheelState;
     WheelState currentWheelState;
+    Qt::GestureType gesture;
+    Qt::GestureType currentGesture;
 
     KisAbstractInputAction *action;
     int shortcutIndex;
@@ -89,9 +93,17 @@ void KisShortcut::setWheel(KisShortcut::WheelState state)
     d->wheelState = state;
 }
 
+void KisShortcut::setGesture(Qt::GestureType gesture)
+{
+    d->gesture = gesture;
+}
+
 KisShortcut::MatchLevel KisShortcut::matchLevel()
 {
-    if (d->keys.count() == d->keyState.count() && d->buttons.count() == d->buttonState.count() && (d->wheelState == WheelUndefined || d->currentWheelState == d->wheelState)) {
+    if (d->keys.count() == d->keyState.count()
+        && d->buttons.count() == d->buttonState.count()
+        && (d->wheelState == WheelUndefined || d->currentWheelState == d->wheelState)
+        && (d->gesture == 0 || d->currentGesture == d->gesture)) {
         return CompleteMatch;
     } else if (d->keyState.count() > 0 || d->buttonState.count() > 0) {
         return PartialMatch;
@@ -148,6 +160,12 @@ void KisShortcut::match(QEvent* event)
                 d->currentWheelState = WheelDown;
             }
             break;
+        }
+        case QEvent::Gesture: {
+            QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
+            if(gevent->activeGestures().count() > 0) {
+                d->gesture = gevent->activeGestures().at(0)->gestureType();
+            }
         }
         default:
             break;

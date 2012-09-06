@@ -88,7 +88,6 @@ public:
 
 void KisInputManager::Private::match(QEvent* event)
 {
-    kDebug() << "fixed " << fixedAction;
     if (fixedAction) {
         return;
     }
@@ -171,6 +170,9 @@ void KisInputManager::Private::setupActions()
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
 #endif
 
+    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
+    shortcut->setGesture(Qt::PanGesture);
+
     shortcut = createShortcut(action, KisPanAction::PanLeftShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Left);
     shortcut = createShortcut(action, KisPanAction::PanRightShortcut);
@@ -216,6 +218,9 @@ void KisInputManager::Private::setupActions()
 #else
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
 #endif
+
+    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
+    shortcut->setGesture(Qt::PinchGesture);
 
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setWheel(KisShortcut::WheelUp);
@@ -349,6 +354,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
             }
         }
         //Intentional fall through
+    case QEvent::Gesture:
     case QEvent::TouchEnd:
     case QEvent::MouseButtonRelease:
         if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.

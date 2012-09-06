@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QGesture>
 
 #include <KLocalizedString>
 
@@ -105,6 +106,13 @@ void KisPanAction::inputEvent(QEvent *event)
                 QApplication::changeOverrideCursor(Qt::OpenHandCursor);
             }
             break;
+        }
+        case QEvent::Gesture: {
+            QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
+            if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
+                QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
+                inputManager()->canvas()->canvasController()->pan(pan->delta().toPoint());
+            }
         }
         default:
             break;

@@ -67,6 +67,10 @@ KisGL2Canvas::KisGL2Canvas(KisCanvas2* canvas, KisCoordinatesConverter* coordina
     : QGLWidget(parent, KisGL2Canvas::shareWidget()), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
 {
     d->image = canvas->view()->image();
+
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
 }
 
 KisGL2Canvas::~KisGL2Canvas()
