@@ -25,7 +25,10 @@
 #include <kis_doc2.h>
 #include <kis_node.h>
 #include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_group_layer.h>
 #include <KoShapeBasedDocumentBase.h>
+#include <KoProperties.h>
 
 class LayerModel::Private {
 public:
@@ -40,6 +43,7 @@ public:
     {}
 
     LayerModel* q;
+    QList<KisNodeSP> layers;
     KisNodeModel* nodeModel;
     bool aboutToRemoveRoots;
     KisView2* view;
@@ -48,89 +52,43 @@ public:
     KisImageWSP image;
     KisNodeSP activeNode;
 
-    int source_deepRowCount(QModelIndex index = QModelIndex(), int rowDepth = 0)
+    static QStringList layerClassNames()
     {
-        qDebug() << "counting at depth" << rowDepth;
-        if (!q->sourceModel())
-            return 0;
-
-        int count = 0;
-        if (index.isValid())
-            count++;
-        for(int i = 0; i < q->sourceModel()->rowCount(index); ++i)
-        {
-            count += source_deepRowCount(q->sourceModel()->index(i, 0, index), rowDepth + 1);
-            qDebug() << "Current count:" << count;
-        }
-        return count;
+        QStringList list;
+        list << "KisGroupLayer";
+        list << "KisLayer";
+        return list;
     }
 
-    QModelIndex sourceIndexFromProxyRow(int searchRow, int& rowsRemaining, QModelIndex searchParent)
+    int deepChildCount(KisNodeSP layer)
     {
-        if (rowsRemaining <= 0)
-        {
-            qDebug() << "This will not do! Fail :P";
-            return QModelIndex();
-        }
-        qDebug() << "locating index, rows remainins:" << rowsRemaining;
-        QModelIndex foundIt;
-
-        for(int i = 0; q->sourceModel()->rowCount(searchParent); ++i)
-        {
-            --rowsRemaining;
-            QModelIndex test = q->sourceModel()->index(i, 0, searchParent);
-            if (rowsRemaining == 0)
-            {
-                qDebug() << "located index!";
-                foundIt = test;
-                break;
-            }
-            if (q->sourceModel()->rowCount(test) > 0)
-            {
-                foundIt = sourceIndexFromProxyRow(searchRow, rowsRemaining, test);
-                if (foundIt.isValid())
-                    break;
-            }
-        }
-
-        return foundIt;
+        quint32 childCount = layer->childCount();
+        QList<KisNodeSP> children = layer->childNodes(layerClassNames(), KoProperties());
+        for(quint32 i = 0; i < childCount; ++i)
+            childCount += deepChildCount(children.at(i));
+        return childCount;
     }
 
-    int proxyRowFromSourceIndex(QModelIndex index)
+    void rebuildLayerList(KisNodeSP layer = 0)
     {
-        int currentRow = -1;
-        QModelIndex currentSearchParent;
-        proxyRowFromSourceIndexActual(index, currentRow, currentSearchParent);
-        return currentRow;
-    }
-
-    bool proxyRowFromSourceIndexActual(QModelIndex index, int currentRow, QModelIndex currentSearchParent)
-    {
-        bool found = false;
-        for(int i = 0; i < q->sourceModel()->rowCount(currentSearchParent); ++i)
+        if(layer == 0)
         {
-            ++currentRow;
-            QModelIndex test = q->sourceModel()->index(i, 0, currentSearchParent);
-            if (test == index)
-            {
-                found = true;
-                break;
-            }
-            if (q->sourceModel()->rowCount(test) > 0)
-            {
-                if (proxyRowFromSourceIndexActual(index, currentRow, test))
-                {
-                    found = true;
-                    break;
-                }
-            }
+            layers.clear();
+            layer = image->rootLayer();
         }
-        return found;
+        // implementation node: The root node is not a visible node, and so
+        // is never added to the list of layers
+        QList<KisNodeSP> children = layer->childNodes(layerClassNames(), KoProperties());
+        for(quint32 i = 0; i < layer->childCount(); ++i)
+        {
+            layers << children.at(i);
+            rebuildLayerList(children.at(i));
+        }
     }
 };
 
 LayerModel::LayerModel(QObject* parent)
-    : QAbstractProxyModel(parent)
+    : QAbstractListModel(parent)
     , d(new Private(this))
 {
     QHash<int, QByteArray> roles;
@@ -143,26 +101,28 @@ LayerModel::LayerModel(QObject* parent)
     roles[LockedRole] = "locked";
     roles[CompositeDetailsRole] = "compositeDetails";
     roles[FilterRole] = "filter";
+    roles[ChildCountRole] = "childCount";
+    roles[DeepChildCountRole] = "deepChildCount";
+    roles[DepthRole] = "depth";
     setRoleNames(roles);
     
-    setSourceModel(d->nodeModel);
-    connect(sourceModel(), SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), 
             this, SLOT(source_rowsAboutToBeInserted(QModelIndex, int, int)));
-    connect(sourceModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex, int, int)), 
             this, SLOT(source_rowsInserted(QModelIndex, int, int)));
 
-    connect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)), 
             this, SLOT(source_rowsAboutToBeRemoved(QModelIndex, int, int)));
-    connect(sourceModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex, int, int)), 
             this, SLOT(source_rowsRemoved(QModelIndex, int, int)));
 
-    connect(sourceModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
+    connect(d->nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
             this, SLOT(source_dataChanged(QModelIndex,QModelIndex)));
-    connect(sourceModel(), SIGNAL(modelReset()), 
+    connect(d->nodeModel, SIGNAL(modelReset()), 
             this, SLOT(source_modelReset()));
 
-    connect(sourceModel(), SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
-    connect(sourceModel(), SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
+    connect(d->nodeModel, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
+    connect(d->nodeModel, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
 }
 
 LayerModel::~LayerModel()
@@ -190,17 +150,15 @@ void LayerModel::setView(QObject *newView)
     d->view = view;
     if (!d->view)
     {
-        qDebug() << "view is fail!";
+        qDebug() << "The view is not a view, on attempting to set the view on the layer model!";
         d->canvas = 0;
         d->image = 0;
         d->nodeManager = 0;
         return;
     }
-    qDebug() << "view exists, continuing";
 
     d->canvas = view->canvasBase();
     if (d->canvas) {
-        qDebug() << "canvas exists";
         d->image = d->canvas->view()->image();
         d->nodeManager = d->canvas->view()->nodeManager();
 
@@ -225,9 +183,9 @@ void LayerModel::setView(QObject *newView)
                 d->nodeManager, SLOT(addNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
         connect(d->nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, KisNodeSP)),
                 d->nodeManager, SLOT(moveNodeDirect(KisNodeSP, KisNodeSP, KisNodeSP)));
+        d->rebuildLayerList();
         reset();
     }
-    qDebug() << "new view was set successfully and stuff!" << rowCount(QModelIndex());
 }
 
 void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
@@ -250,14 +208,15 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
     QVariant data;
     if (index.isValid())
     {
-        qDebug() << "index is valid...";
         index.internalPointer();
-        KisNodeSP node = d->nodeModel->nodeFromIndex(mapToSource(index));
-        
+        KisNodeSP node = d->layers.at(index.row());
+        KisNodeSP parent;
+        int depth = -1;
         switch(role)
         {
         case IconRole:
             // node->createThumbnail will be useful here...
+            data = "image://color/0.9,0.9,0.9,1.0";
             break;
         case NameRole:
             data = node->name();
@@ -279,8 +238,24 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             break;
         case CompositeDetailsRole:
             // composite op goes here...
+            data = node->compositeOp()->description();
             break;
         case FilterRole:
+            break;
+        case ChildCountRole:
+            data = node->childCount();
+            break;
+        case DeepChildCountRole:
+            data = d->deepChildCount(d->layers.at(index.row()));
+            break;
+        case DepthRole:
+            parent = node;
+            while(parent)
+            {
+                ++depth;
+                parent = parent->parent();
+            }
+            data = depth;
             break;
         default:
             break;
@@ -294,95 +269,77 @@ QVariant LayerModel::headerData(int section, Qt::Orientation orientation, int ro
     return QAbstractItemModel::headerData(section, orientation, role);
 }
 
-QModelIndex LayerModel::mapFromSource(const QModelIndex & source) const
-{
-    if (!sourceModel())
-        return QModelIndex();
-
-    if (!source.parent().isValid())
-        return QModelIndex();
-
-    return index(d->proxyRowFromSourceIndex(source), 0, QModelIndex());
-}
-
-QModelIndex LayerModel::mapToSource(const QModelIndex & proxy) const
-{
-    if ( !sourceModel() )
-        return QModelIndex();
-
-    int remainingRows = proxy.row();
-    return d->sourceIndexFromProxyRow(remainingRows, remainingRows, QModelIndex());
-}
-
-QModelIndex LayerModel::parent(const QModelIndex &) const
-{
-    return QModelIndex();
-}
-
-QModelIndex LayerModel::index(int row, int column, const QModelIndex &) const
-{
-    return createIndex(row, column);
-}
-
 int LayerModel::rowCount(const QModelIndex& parent) const
 {
     if ( parent.isValid() )
         return 0;
-    if ( !sourceModel() )
-        return 0;
 
-    return d->source_deepRowCount();
+    return d->layers.count();
 }
 
-int LayerModel::columnCount(const QModelIndex & p) const
+void LayerModel::source_rowsAboutToBeInserted(QModelIndex /*p*/, int /*from*/, int /*to*/)
 {
-    if ( p.isValid() )
-        return 0;
-    if ( !sourceModel() )
-        return 0;
-    return 1;
+    qDebug() << Q_FUNC_INFO;
+//     if ( !p.isValid() )
+//         return;
+// 
+//     int f = d->proxyRowFromSourceIndex(p);
+//     int t = f + (from-to);
+//     beginInsertRows(QModelIndex(), f, t);
+    beginResetModel();
 }
 
-void LayerModel::source_rowsAboutToBeInserted(QModelIndex p, int from, int to)
+void LayerModel::source_rowsInserted(QModelIndex /*p*/, int, int)
 {
-    if ( !p.isValid() )
-        return;
-
-    int f = d->proxyRowFromSourceIndex(p);
-    int t = f + (from-to);
-    beginInsertRows(QModelIndex(), f, t);
+    qDebug() << Q_FUNC_INFO;
+//     if ( !p.isValid() )
+//         return;
+// 
+//     endInsertRows();
+    d->rebuildLayerList();
+    endResetModel();
 }
 
-void LayerModel::source_rowsInserted(QModelIndex p, int, int)
+void LayerModel::source_rowsAboutToBeRemoved(QModelIndex /*p*/, int /*from*/, int /*to*/)
 {
-    if ( !p.isValid() )
-        return;
-
-    endInsertRows();
-}
-
-void LayerModel::source_rowsAboutToBeRemoved(QModelIndex p, int from, int to)
-{
-    int f = d->proxyRowFromSourceIndex(p);
-    int t = f + (from-to);
-    beginRemoveRows(QModelIndex(), f, t);
+    qDebug() << Q_FUNC_INFO;
+//     int f = d->proxyRowFromSourceIndex(p);
+//     int t = f + (from-to);
+//     beginRemoveRows(QModelIndex(), f, t);
+    beginResetModel();
 }
 
 void LayerModel::source_rowsRemoved(QModelIndex, int, int)
 {
-    endRemoveRows();
+    qDebug() << Q_FUNC_INFO;
+//     endRemoveRows();
+    d->rebuildLayerList();
+    endResetModel();
 }
 
-void LayerModel::source_dataChanged(QModelIndex tl, QModelIndex br)
+void LayerModel::source_dataChanged(QModelIndex /*tl*/, QModelIndex /*br*/)
 {
-    QModelIndex p_tl = mapFromSource(tl);
-    QModelIndex p_br = mapFromSource(br);
-    emit dataChanged(p_tl, p_br);
+    qDebug() << Q_FUNC_INFO;
+//     QModelIndex p_tl = mapFromSource(tl);
+//     QModelIndex p_br = mapFromSource(br);
+//     emit dataChanged(p_tl, p_br);
+    beginResetModel();
+    d->rebuildLayerList();
+    endResetModel();
 }
 
 void LayerModel::source_modelReset()
 {
-    reset();
+    qDebug() << Q_FUNC_INFO;
+    beginResetModel();
+    d->rebuildLayerList();
+    endResetModel();
+}
+
+void LayerModel::notifyImageDeleted()
+{
+    qDebug() << Q_FUNC_INFO;
+    setView(d->view);
 }
 
 #include "LayerModel.moc"

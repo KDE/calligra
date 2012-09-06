@@ -19,10 +19,10 @@
 #ifndef LAYERMODEL_H
 #define LAYERMODEL_H
 
-#include <QAbstractProxyModel>
+#include <QAbstractListModel>
 #include <kis_types.h>
 
-class LayerModel : public QAbstractProxyModel
+class LayerModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
@@ -36,7 +36,10 @@ public:
         VisibleRole,
         LockedRole,
         CompositeDetailsRole,
-        FilterRole
+        FilterRole,
+        ChildCountRole,
+        DeepChildCountRole,
+        DepthRole
     };
     explicit LayerModel(QObject* parent = 0);
     virtual ~LayerModel();
@@ -46,14 +49,7 @@ public:
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex & p = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
-    virtual QModelIndex mapFromSource(const QModelIndex &) const;
-    virtual QModelIndex mapToSource(const QModelIndex &) const;
-
-    virtual QModelIndex parent(const QModelIndex &) const;
-    virtual QModelIndex index(int, int, const QModelIndex & p = QModelIndex()) const;
 
 Q_SIGNALS:
     void viewChanged();
@@ -66,6 +62,7 @@ private slots:
     void source_dataChanged(QModelIndex, QModelIndex);
     void source_modelReset();
     void currentNodeChanged(KisNodeSP newActiveNode);
+    void notifyImageDeleted();
 
 private:
     class Private;
