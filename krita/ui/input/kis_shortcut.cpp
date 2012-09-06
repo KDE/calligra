@@ -28,7 +28,7 @@
 class KisShortcut::Private
 {
 public:
-    Private() : wheelState(WheelUndefined), currentWheelState(WheelUndefined), gesture(0), currentGesture(0), action(0), shortcutIndex(0) { }
+    Private() : wheelState(WheelUndefined), currentWheelState(WheelUndefined), gesture(Qt::LastGestureType), currentGesture(Qt::LastGestureType), action(0), shortcutIndex(0) { }
     QList<Qt::Key> keys;
     QList<Qt::Key> keyState;
     QList<Qt::MouseButton> buttons;
@@ -103,7 +103,7 @@ KisShortcut::MatchLevel KisShortcut::matchLevel()
     if (d->keys.count() == d->keyState.count()
         && d->buttons.count() == d->buttonState.count()
         && (d->wheelState == WheelUndefined || d->currentWheelState == d->wheelState)
-        && (d->gesture == 0 || d->currentGesture == d->gesture)) {
+        && (d->gesture == Qt::LastGestureType || d->currentGesture == d->gesture)) {
         return CompleteMatch;
     } else if (d->keyState.count() > 0 || d->buttonState.count() > 0) {
         return PartialMatch;
