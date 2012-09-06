@@ -20,75 +20,69 @@ import QtQuick 1.1
 
 Item {
     id: base
-    property alias labelText: label.text;
     property alias model: listView.model;
     property alias currentIndex: listView.currentIndex;
-    height: topPart.height;
 
-    Item {
-        id: topPart;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-            margins: Constants.DefaultMargin;
-        }
-        height: topButton.height + (topButton.border.width * 2) + Constants.DefaultMargin;
-        Label {
-            id: label
-            anchors {
-                baseline: buttonText.baseline;
-                left: parent.left;
-            }
-        }
-        Rectangle {
-            id: topButton
-            border {
-                width: 2;
-                color: "silver";
-            }
+    Rectangle {
+        id: topButton
+        border {
+            width: 1;
             color: "white";
-            opacity: 0.2;
-            anchors {
-                top: parent.top;
-                right: parent.right;
-                left: label.right;
-            }
-            height: Constants.SmallFontSize + (Constants.DefaultMargin * 2);
-            radius: height / 2;
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    if(base.state === "expanded") {
-                        base.state = "";
-                    }
-                    else {
-                        base.state = "expanded";
-                    }
+        }
+        radius: Constants.GridHeight / 4;
+        anchors {
+            top: parent.top ;
+            right: parent.right;
+            left: parent.left;
+        }
+        width: (Constants.GridWidth * 2) - 8 ;
+        height: Constants.GridHeight / 2;
+        color: "#63ffffff"
+        z: 10;
+
+
+        Image {
+            id: arrowsList
+            width: Constants.GridWidth / 4
+            height: Constants.GridHeight / 2
+            source: ":/images/svg/combo-arrows-white.svg"
+            x: (Constants.GridWidth * 1.75) - 8
+            y: Constants.GridHeight / 64
+            smooth: true
+        }
+
+        Label {
+            id: buttonText;
+            text: listView.currentItem.text;
+            width: (Constants.GridWidth * 1.7) - 8;
+            height: Constants.GridHeight / 2;
+            color: "#96000000"
+            x: 8;
+
+        }
+
+        MouseArea {
+            anchors.fill: parent;
+            onClicked: {
+                if(base.state === "expanded") {
+                    base.state = "";
+                }
+                else {
+                    base.state = "expanded";
                 }
             }
         }
-        Label {
-            id: buttonText;
-            anchors {
-                top: topButton.top;
-                right: topButton.right;
-                bottom: topButton.bottom;
-                left: topButton.left;
-                leftMargin: topButton.height / 2;
-            }
-            text: listView.currentItem.text;
-            font.pixelSize: Constants.SmallFontSize;
-        }
+
+
     }
 
     ListView {
         id: listView;
         clip: true;
         anchors {
-            top: topPart.bottom;
-            left: topPart.left;
-            right: topPart.right;
+            top: topButton.bottom;
+            left: parent.left;
+            right: parent.right;
             bottom: parent.bottom;
         }
         opacity: 0;
@@ -96,15 +90,14 @@ Item {
             property alias text: delegateLabel.text
             anchors {
                 left: parent.left;
-                leftMargin: Constants.DefaultMargin;
                 right: parent.right;
-                rightMargin: Constants.DefaultMargin;
             }
             height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
             Label {
                 id: delegateLabel
                 anchors.fill: parent
                 text: model.text;
+                color: "#96000000"
             }
             MouseArea {
                 anchors.fill: parent;
@@ -115,6 +108,7 @@ Item {
             }
         }
     }
+
 
     states: [
         State {
