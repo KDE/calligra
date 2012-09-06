@@ -20,14 +20,21 @@
 
 #include "imageshare.h"
 
+#include <QUrl>
+#include <QDesktopServices>
+
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kis_debug.h>
 #include <kpluginfactory.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
+
+#include <kis_debug.h>
+#include <kis_view2.h>
+
+#include "o2deviantart.h"
 
 K_PLUGIN_FACTORY(ImageShareFactory, registerPlugin<ImageShare>();)
 K_EXPORT_PLUGIN(ImageShareFactory("krita"))
@@ -42,6 +49,7 @@ ImageShare::ImageShare(QObject *parent, const QVariantList &)
         actionCollection()->addAction("imageshare", action);
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageShare()));
 
+        m_view = qobject_cast<KisView2*>(parent);
     }
 }
 
@@ -52,6 +60,18 @@ ImageShare::~ImageShare()
 
 void ImageShare::slotImageShare()
 {
+    m_deviantArt = new O2DeviantART(this);
+    m_deviantArt->setClientId("272");
+    m_deviantArt->setClientSecret("a8464938f858f68661c4246347f09b62");
+
+    connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SLOT(openBrowser(QUrl)));
+
+    m_deviantArt->link();
+}
+
+void ImageShare::openBrowser(const QUrl &url)
+{
+    QDesktopServices::openUrl(url);
 }
 
 #include "imageshare.moc"

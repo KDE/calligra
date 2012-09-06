@@ -23,11 +23,14 @@
 #include <QVariant>
 
 #include <kparts/plugin.h>
-
 #include "kis_types.h"
+
+class QUrl;
 
 class KisView2;
 class KisPainter;
+
+class O2DeviantART;
 
 class ImageShare : public KParts::Plugin
 {
@@ -39,10 +42,12 @@ public:
 private slots:
 
     void slotImageShare();
+    void openBrowser(const QUrl &url);
 
 private:
 
-    KisView2 * m_view;
+    KisView2 *m_view;
+    O2DeviantART *m_deviantArt;
 };
 
 #endif // IMAGESHARE_H

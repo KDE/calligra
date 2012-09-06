@@ -2,7 +2,7 @@
 <kpartgui library="kritaimageshare" version="7">
 <MenuBar>
     <Menu name="Image"><text>Image</text>
-	<Action name="imageshare""/>
+	<Action name="imageshare"/>
     </Menu>
 </MenuBar>
 </kpartgui>

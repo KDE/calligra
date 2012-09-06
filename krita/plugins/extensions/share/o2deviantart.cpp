@@ -32,8 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "o2deviantart.h"
 
-static const char *FbEndpoint = "https://graph.deviantart.com/oauth/authorize?display=touch";
-static const char *FbTokenUrl = "https://graph.deviantart.com/oauth/access_token";
+static const char *FbEndpoint = "https://www.deviantart.com/oauth2/draft15/authorize";
+static const char *FbTokenUrl = "https://www.deviantart.com/oauth2/draft15/token";
 static const quint16 FbLocalPort = 1965;
 
 O2DeviantART::O2DeviantART(QObject *parent): O2(parent) {
