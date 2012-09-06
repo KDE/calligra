@@ -3069,18 +3069,17 @@ void NodeItemModel::slotNodeRemoved( Node *node )
     m_node = 0;
 }
 
-void NodeItemModel::slotNodeToBeMoved( Node *node )
+void NodeItemModel::slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos )
 {
-    kDebug(planDbg());
-    slotNodeToBeRemoved( node );
+    //kDebug(planDbg())<<node->parentNode()->name()<<pos<<":"<<newParent->name()<<newPos;
+    beginMoveRows( index( node->parentNode() ), pos, pos, index( newParent ), newPos );
 }
 
 void NodeItemModel::slotNodeMoved( Node *node )
 {
-    kDebug(planDbg());
-    slotNodeRemoved( node );
-    slotNodeToBeInserted( node->parentNode(), node->parentNode()->indexOf( node ) );
-    slotNodeInserted( node );
+    Q_UNUSED( node );
+    //kDebug(planDbg())<<node->parentNode()->name()<<node->parentNode()->indexOf( node );
+    endMoveRows();
 }
 
 void NodeItemModel::slotLayoutChanged()
@@ -3088,6 +3087,14 @@ void NodeItemModel::slotLayoutChanged()
     //kDebug(planDbg())<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
+}
+
+void NodeItemModel::slotProjectCalulated(ScheduleManager *sm)
+{
+    kDebug(planDbg())<<m_manager<<sm;
+    if ( sm && sm == m_manager ) {
+        slotLayoutChanged();
+    }
 }
 
 void NodeItemModel::slotWbsDefinitionChanged()
@@ -3117,12 +3124,12 @@ void NodeItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotNodeToBeMoved( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeMoved( Node*, int, Node*, int ) ), this, SLOT( slotNodeToBeMoved( Node*, int, Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        //disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL( projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
     }
     m_project = project;
     kDebug(planDbg())<<this<<m_project<<"->"<<project;
@@ -3134,12 +3141,12 @@ void NodeItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotNodeToBeMoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeToBeMoved( Node*, int, Node*, int ) ), this, SLOT( slotNodeToBeMoved( Node*, int, Node*, int ) ) );
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        //connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
     }
     reset();
 }
@@ -3149,6 +3156,7 @@ void NodeItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
     kDebug(planDbg())<<this<<sm;
@@ -4019,6 +4027,9 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
                 if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
                 // append nodes if dropped *on* another node, insert if dropped *after*
                 int pos = row == -1 ? -1 : row + offset;
+                if ( pos >= 0 && n->parentNode() == par && par->indexOf( n ) < pos ) {
+                    --pos;
+                }
                 cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
                 offset++;
             }
@@ -4349,6 +4360,20 @@ void MilestoneItemModel::slotLayoutChanged()
     emit layoutChanged();
 }
 
+void MilestoneItemModel::slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos )
+{
+    Q_UNUSED( node );
+    Q_UNUSED( pos );
+    Q_UNUSED( newParent );
+    Q_UNUSED( newPos );
+}
+
+void MilestoneItemModel::slotNodeMoved( Node *node )
+{
+    Q_UNUSED( node );
+    resetModel();
+}
+
 void MilestoneItemModel::setProject( Project *project )
 {
     if ( m_project ) {
@@ -4358,8 +4383,8 @@ void MilestoneItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT(  slotNodeToBeInserted( Node *, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+        disconnect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
@@ -4374,8 +4399,8 @@ void MilestoneItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted( Node *, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+        connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
@@ -4388,6 +4413,7 @@ void MilestoneItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
     //kDebug(planDbg())<<sm;
