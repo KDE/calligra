@@ -85,7 +85,7 @@ void FileSystemModel::classBegin()
 
 void FileSystemModel::componentComplete()
 {
-    setPath(QDir::homePath());
+    setPath(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation));
 }
 
 QString FileSystemModel::path()
