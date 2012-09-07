@@ -121,6 +121,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     // This is needed because OpenGL viewport doesn't support partial updates.
     d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
+    glWidget->grabGesture(Qt::PanGesture);
     d->view->setViewport(glWidget);
 
     QDir appdir(qApp->applicationDirPath());

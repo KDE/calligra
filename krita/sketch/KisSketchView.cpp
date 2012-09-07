@@ -130,7 +130,10 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     , d(new Private(this))
 {
     setFlag(QGraphicsItem::ItemHasNoContents, false);
+    setAcceptTouchEvents(true);
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
+
+    grabGesture(Qt::PanGesture);
 
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
@@ -387,6 +390,13 @@ bool KisSketchView::sceneEvent(QEvent* event)
             QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
             QWheelEvent *wevent = new QWheelEvent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
             d->canvas->inputManager()->eventFilter(d->canvas, wevent);
+        }
+        case QEvent::Gesture: {
+            d->canvas->inputManager()->eventFilter(d->canvas, event);
+        }
+        case QEvent::TouchBegin: {
+            event->accept();
+            return true;
         }
         default:
             break;
