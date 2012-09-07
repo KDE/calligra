@@ -22,6 +22,7 @@ Item {
     id: base
     property alias model: listView.model;
     property alias currentIndex: listView.currentIndex;
+    height: topButton.height;
 
     Rectangle {
         id: topButton
