@@ -75,6 +75,8 @@ Item {
                 anchors.top: header.bottom;
                 width: parent.width;
                 height: Constants.GridHeight * 9;
+
+                onClicked: pageStack.push( main );
             }
         }
     }
