@@ -111,6 +111,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->rootContext()->setContextProperty("Settings", d->settings);
     d->view->rootContext()->setContextProperty("RecentFileManager", d->recentFileManager);
     d->view->rootContext()->setContextProperty("KisClipBoard", KisClipboard::instance());
+    d->view->rootContext()->setContextProperty("QMLEngine", d->view->engine());
 
     Welcome::MultiFeedRssModel *rssModel = new Welcome::MultiFeedRssModel(this);
     rssModel->addFeed(QLatin1String("http://feeds.feedburner.com/krita/news"));
