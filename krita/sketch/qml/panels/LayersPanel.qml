@@ -26,6 +26,9 @@ Panel {
 
     LayerModel {
         id: layerModel;
+        // Notice - the model needs to know about the engine before the view, hence it is set first
+        // This could be rectified, but for now know that the order here is important.
+        engine: QMLEngine;
         view: sketchView.view;
     }
 
@@ -54,7 +57,7 @@ Panel {
                 }
                 height: Constants.GridHeight;
                 radius: 8
-                opacity: 0.2;
+                opacity: model.activeLayer ? 0.5 : 0.2;
                 color: "white";
             }
             Rectangle {
@@ -71,9 +74,12 @@ Panel {
                     color: "transparent";
                     Image {
                         anchors.centerIn: parent;
+                        cache: false;
                         source: model.icon;
+                        smooth: true;
                         width: parent.width * 0.8;
                         height: parent.height * 0.8;
+                        fillMode: Image.PreserveAspectFit;
                     }
                 }
                 Text {
@@ -96,6 +102,47 @@ Panel {
                     }
                     text: "Mode: " + model.compositeDetails + ", " + model.percentOpacity + "%";
                     font.pixelSize: Constants.SmallFontSize;
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: layerModel.setActive(model.index);
+                }
+                Row {
+                    anchors {
+                        left: layerThumbContainer.right;
+                        bottom: parent.bottom;
+                    }
+                    height: childrenRect.height;
+                    Rectangle {
+                        width: Constants.DefaultFontSize;
+                        height: width;
+                        color: model.visible ? "silver" : "gray";
+                        Text {
+                            anchors.centerIn: parent;
+                            font.pixelSize: Constants.SmallFontSize;
+                            color: model.visible ? "black" : "white";
+                            text: "V"
+                        }
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: layerModel.setVisible(model.index, !model.visible);
+                        }
+                    }
+                    Rectangle {
+                        width: Constants.DefaultFontSize;
+                        height: width;
+                        color: model.locked ? "silver" : "gray";
+                        Text {
+                            anchors.centerIn: parent;
+                            font.pixelSize: Constants.SmallFontSize;
+                            color: model.locked ? "black" : "white";
+                            text: "L"
+                        }
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: layerModel.setLocked(model.index, !model.locked);
+                        }
+                    }
                 }
             }
             Rectangle {

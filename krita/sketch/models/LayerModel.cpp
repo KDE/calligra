@@ -17,6 +17,7 @@
  */
 
 #include "LayerModel.h"
+#include "LayerThumbProvider.h"
 #include <kis_node_model.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
@@ -27,8 +28,10 @@
 #include <kis_image.h>
 #include <kis_layer.h>
 #include <kis_group_layer.h>
+#include <kis_paint_layer.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoProperties.h>
+#include <QDeclarativeEngine>
 
 class LayerModel::Private {
 public:
@@ -40,6 +43,8 @@ public:
         , nodeManager(0)
         , image(0)
         , activeNode(0)
+        , declarativeEngine(0)
+        , thumbProvider(0)
     {}
 
     LayerModel* q;
@@ -51,7 +56,15 @@ public:
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
     KisNodeSP activeNode;
+    QDeclarativeEngine* declarativeEngine;
+    LayerThumbProvider* thumbProvider;
 
+    static int counter()
+    {
+        static int count = 0;
+        return count++;
+    }
+    
     static QStringList layerClassNames()
     {
         QStringList list;
@@ -104,8 +117,10 @@ LayerModel::LayerModel(QObject* parent)
     roles[ChildCountRole] = "childCount";
     roles[DeepChildCountRole] = "deepChildCount";
     roles[DepthRole] = "depth";
+    roles[PreviousItemDepthRole] = "previousItemDepth";
+    roles[NextItemDepthRole] = "nextItemDepth";
     setRoleNames(roles);
-    
+
     connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), 
             this, SLOT(source_rowsAboutToBeInserted(QModelIndex, int, int)));
     connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex, int, int)), 
@@ -158,6 +173,11 @@ void LayerModel::setView(QObject *newView)
     }
 
     d->canvas = view->canvasBase();
+    d->thumbProvider = new LayerThumbProvider();
+    d->thumbProvider->setLayerModel(this);
+    d->thumbProvider->setLayerID(Private::counter());
+    d->declarativeEngine->addImageProvider(QString("layerthumb%1").arg(d->thumbProvider->layerID()), d->thumbProvider);
+
     if (d->canvas) {
         d->image = d->canvas->view()->image();
         d->nodeManager = d->canvas->view()->nodeManager();
@@ -188,6 +208,18 @@ void LayerModel::setView(QObject *newView)
     }
 }
 
+QObject* LayerModel::engine() const
+{
+    return d->declarativeEngine;
+}
+
+void LayerModel::setEngine(QObject* newEngine)
+{
+    d->declarativeEngine = qobject_cast<QDeclarativeEngine*>(newEngine);
+    qDebug() << "New declarativeEngine set to" << d->declarativeEngine;
+    emit engineChanged();
+}
+
 void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
 {
     if (d->activeNode)
@@ -215,8 +247,13 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         switch(role)
         {
         case IconRole:
-            // node->createThumbnail will be useful here...
-            data = "image://color/0.9,0.9,0.9,1.0";
+            if(dynamic_cast<const KisGroupLayer*>(node.constData()))
+                data = QLatin1String("../images/svg/icon-layer_group-red.svg");
+            else if(!dynamic_cast<const KisPaintLayer*>(node.constData()))
+                data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
+            else
+                data = QString("image://layerthumb%1/%2").arg(d->thumbProvider->layerID()).arg(index.row());
+            //data = "image://color/0.9,0.9,0.9,1.0";
             break;
         case NameRole:
             data = node->name();
@@ -257,16 +294,39 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             }
             data = depth;
             break;
+        case PreviousItemDepthRole:
+            if(index.row() == 0)
+                data = -1;
+            else
+            {
+                parent = d->layers.at(index.row() - 1);
+                while(parent)
+                {
+                    ++depth;
+                    parent = parent->parent();
+                }
+                data = depth;
+            }
+            break;
+        case NextItemDepthRole:
+            if(index.row() == d->layers.count() - 1)
+                data = -1;
+            else
+            {
+                parent = d->layers.at(index.row() + 1);
+                while(parent)
+                {
+                    ++depth;
+                    parent = parent->parent();
+                }
+                data = depth;
+            }
+            break;
         default:
             break;
         }
     }
     return data;
-}
-
-QVariant LayerModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    return QAbstractItemModel::headerData(section, orientation, role);
 }
 
 int LayerModel::rowCount(const QModelIndex& parent) const
@@ -277,9 +337,65 @@ int LayerModel::rowCount(const QModelIndex& parent) const
     return d->layers.count();
 }
 
+QVariant LayerModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    return QAbstractItemModel::headerData(section, orientation, role);
+}
+
+void LayerModel::setActive(int index)
+{
+    if(index > -1 && index < d->layers.count())
+    {
+        KisNodeSP newNode = d->layers.at(index);
+        d->nodeManager->slotUiActivatedNode(newNode);
+        currentNodeChanged(newNode);
+    }
+}
+
+void LayerModel::setLocked(int index, bool newLocked)
+{
+    if(index > -1 && index < d->layers.count())
+    {
+        d->layers[index]->setUserLocked(newLocked);
+        QModelIndex idx = createIndex(index, 0);
+        dataChanged(idx, idx);
+    }
+}
+
+void LayerModel::setOpacity(int index, float newOpacity)
+{
+    if(index > -1 && index < d->layers.count())
+    {
+        d->layers[index]->setOpacity(newOpacity);
+        QModelIndex idx = createIndex(index, 0);
+        dataChanged(idx, idx);
+    }
+}
+
+void LayerModel::setVisible(int index, bool newVisible)
+{
+    if(index > -1 && index < d->layers.count())
+    {
+        d->layers[index]->setVisible(newVisible);
+        QModelIndex idx = createIndex(index, 0);
+        dataChanged(idx, idx);
+    }
+}
+
+QImage LayerModel::layerThumbnail(QString layerID) const
+{
+    int index = layerID.toInt();
+    QImage thumb;
+    if(index > -1 && index < d->layers.count())
+    {
+        if(d->thumbProvider)
+            thumb = d->layers[index]->createThumbnail(120, 120);
+    }
+    return thumb;
+}
+
 void LayerModel::source_rowsAboutToBeInserted(QModelIndex /*p*/, int /*from*/, int /*to*/)
 {
-    qDebug() << Q_FUNC_INFO;
 //     if ( !p.isValid() )
 //         return;
 // 
@@ -291,7 +407,6 @@ void LayerModel::source_rowsAboutToBeInserted(QModelIndex /*p*/, int /*from*/, i
 
 void LayerModel::source_rowsInserted(QModelIndex /*p*/, int, int)
 {
-    qDebug() << Q_FUNC_INFO;
 //     if ( !p.isValid() )
 //         return;
 // 
@@ -302,7 +417,6 @@ void LayerModel::source_rowsInserted(QModelIndex /*p*/, int, int)
 
 void LayerModel::source_rowsAboutToBeRemoved(QModelIndex /*p*/, int /*from*/, int /*to*/)
 {
-    qDebug() << Q_FUNC_INFO;
 //     int f = d->proxyRowFromSourceIndex(p);
 //     int t = f + (from-to);
 //     beginRemoveRows(QModelIndex(), f, t);
@@ -311,7 +425,6 @@ void LayerModel::source_rowsAboutToBeRemoved(QModelIndex /*p*/, int /*from*/, in
 
 void LayerModel::source_rowsRemoved(QModelIndex, int, int)
 {
-    qDebug() << Q_FUNC_INFO;
 //     endRemoveRows();
     d->rebuildLayerList();
     endResetModel();
@@ -319,7 +432,6 @@ void LayerModel::source_rowsRemoved(QModelIndex, int, int)
 
 void LayerModel::source_dataChanged(QModelIndex /*tl*/, QModelIndex /*br*/)
 {
-    qDebug() << Q_FUNC_INFO;
 //     QModelIndex p_tl = mapFromSource(tl);
 //     QModelIndex p_br = mapFromSource(br);
 //     emit dataChanged(p_tl, p_br);
@@ -330,7 +442,6 @@ void LayerModel::source_dataChanged(QModelIndex /*tl*/, QModelIndex /*br*/)
 
 void LayerModel::source_modelReset()
 {
-    qDebug() << Q_FUNC_INFO;
     beginResetModel();
     d->rebuildLayerList();
     endResetModel();
@@ -338,7 +449,6 @@ void LayerModel::source_modelReset()
 
 void LayerModel::notifyImageDeleted()
 {
-    qDebug() << Q_FUNC_INFO;
     setView(d->view);
 }
 

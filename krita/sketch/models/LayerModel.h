@@ -20,12 +20,14 @@
 #define LAYERMODEL_H
 
 #include <QAbstractListModel>
+#include <QImage>
 #include <kis_types.h>
 
 class LayerModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(QObject* engine READ engine WRITE setEngine NOTIFY engineChanged)
 public:
     enum LayerRoles {
         IconRole = Qt::UserRole + 1,
@@ -39,20 +41,31 @@ public:
         FilterRole,
         ChildCountRole,
         DeepChildCountRole,
-        DepthRole
+        DepthRole,
+        PreviousItemDepthRole,
+        NextItemDepthRole
     };
     explicit LayerModel(QObject* parent = 0);
     virtual ~LayerModel();
 
     QObject* view() const;
     void setView(QObject* newView);
+    QObject* engine() const;
+    void setEngine(QObject* newEngine);
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
+    Q_INVOKABLE void setActive(int index);
+    Q_INVOKABLE void setOpacity(int index, float newOpacity);
+    Q_INVOKABLE void setVisible(int index, bool newVisible);
+    Q_INVOKABLE void setLocked(int index, bool newLocked);
+    QImage layerThumbnail(QString layerID) const;
+
 Q_SIGNALS:
     void viewChanged();
+    void engineChanged();
 
 private slots:
     void source_rowsAboutToBeInserted(QModelIndex, int, int);
