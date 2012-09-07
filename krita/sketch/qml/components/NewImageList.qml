@@ -65,12 +65,14 @@ PageStack {
 
                     onClicked: {
                         if (model.bnrole === "a4p") {
+                            Settings.currentFile = "";
                             Settings.imageWidth = 2408;
                             Settings.imageHeight = 3509;
                             Settings.imageResolution = 300;
                             onClicked: base.clicked();
                         }
                         else if (model.bnrole === "a4l") {
+                            Settings.currentFile = "";
                             Settings.imageWidth = 3509;
                             Settings.imageHeight = 2408;
                             Settings.imageResolution = 300;
@@ -80,10 +82,12 @@ PageStack {
                            pageStack.push( createNewPage );
                         }
                         else if (model.bnrole === "clip") {
+                            Settings.currentFile = "";
                             Settings.useClipBoard = true;
                             onClicked: base.clicked();
                         }
                         else if (model.bnrole === "webcam") {
+                            Settings.currentFile = "";
                             Settings.useWebCam = true;
                             onClicked: base.clicked();
                         }
@@ -164,6 +168,7 @@ PageStack {
                     text: "Create";
                     textColor: "white";
                     onClicked: {
+                        Settings.currentFile = "";
                         Settings.imageWidth = width.text;
                         Settings.imageHeight = height.text;
                         Settings.imageResolution = resolution.text;
