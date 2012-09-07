@@ -63,11 +63,12 @@ Item {
 
         Label {
             id: label;
-            anchors.centerIn: parent;
+            anchors.bottom: parent.bottom;
             width: parent.width;
             horizontalAlignment: Text.AlignHCenter;
             elide: Text.ElideMiddle;
         }
+
     }
 
     MouseArea {
