@@ -822,7 +822,8 @@ void KexiWindow::updateCaption()
 {
     if (!d->item || !d->part)
         return;
-    QString fullCapt(d->item->captionOrName());
+    //! @todo use d->item->captionOrName() if defined in settings
+    QString fullCapt(d->item->name());
     setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
 
