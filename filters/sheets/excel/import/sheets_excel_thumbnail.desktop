@@ -2,6 +2,7 @@
 Type=Service
 Name=Microsoft Excel Spreadsheets
 Name[el]=Φύλλα εργασίας Microsoft Excel
+Name[fi]=MIcrosoft Excel laskentataulukot
 Name[fr]=Tableurs Microsoft Excel
 Name[it]=Fogli di calcolo Microsoft Excel
 Name[nl]=Microsoft Excel-spreadsheets
