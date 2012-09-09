@@ -95,13 +95,21 @@ QString KexiUtils::identifierExpectedMessage(const QString &valueName, const QVa
 
 //--------------------------------------------------------------------------------
 
+class IdentifierValidator::Private
+{
+public:
+    Private() : isLowerCaseForced(false) {}
+    bool isLowerCaseForced;
+};
+
 IdentifierValidator::IdentifierValidator(QObject * parent)
-        : Validator(parent)
+: Validator(parent), d(new Private)
 {
 }
 
 IdentifierValidator::~IdentifierValidator()
 {
+    delete d;
 }
 
 QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
@@ -113,7 +121,7 @@ QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
     if ((int)i < input.length() && input.at(i) >= '0' && input.at(i) <= '9')
         pos++; //_ will be added at the beginning
     bool addspace = (input.right(1) == " ");
-    input = string2Identifier(input);
+    input = d->isLowerCaseForced ? string2Identifier(input).toLower() : string2Identifier(input);
     if (addspace)
         input += "_";
     if (pos > input.length())
@@ -131,3 +139,12 @@ Validator::Result IdentifierValidator::internalCheck(
     return Validator::Error;
 }
 
+bool IdentifierValidator::isLowerCaseForced() const
+{
+    return d->isLowerCaseForced;
+}
+
+void IdentifierValidator::setLowerCaseForced(bool set)
+{
+    d->isLowerCaseForced = set;
+}

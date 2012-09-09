@@ -93,7 +93,8 @@ void KexiNameWidget::init(
     QSizePolicy le_nameSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
     le_name->setSizePolicy(le_captionSizePolicy);
-    Validator *idValidator = new IdentifierValidator(0);
+    IdentifierValidator *idValidator = new IdentifierValidator(0);
+    idValidator->setLowerCaseForced(true);
     le_name->setValidator(m_validator = new MultiValidator(idValidator, this));
     lyr->addWidget(le_name, 2, 1);
 
