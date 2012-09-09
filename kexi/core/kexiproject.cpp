@@ -670,7 +670,11 @@ bool KexiProject::retrieveItems()
             d->itemDicts.insert(partClass, dict);
         }
         int ident = cursor->value(0).toInt(&ok);
-        QString objName(cursor->value(1).toString());
+        QString objName(cursor->value(1).toString().toLower()); /* .toLower() fixes support
+                                                                   for objects renamed
+                                                                   to not-all-lowercase
+                                                                   in Kexi <= 2.5.2
+                                                                   (bug 306523) */
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
                 && KexiDB::isIdentifier(objName))
         {
