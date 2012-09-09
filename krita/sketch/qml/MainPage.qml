@@ -30,7 +30,6 @@ Page {
             id: sketchView;
             //anchors.fill: parent;
             width: parent.width;
-            onWidthChanged: console.log("new width %1".arg(width));
             height: parent.height;
             file: Settings.currentFile;
             settings: Settings;
