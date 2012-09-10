@@ -546,7 +546,7 @@ signals:
     /// This signal is emitted when the node has been removed from the project.
     void nodeRemoved( Node* );
     /// This signal is emitted when the node is to be moved up, moved down, indented or unindented.
-    void nodeToBeMoved( Node* );
+    void nodeToBeMoved( Node* node, int pos, Node* newParent, int newPos );
     /// This signal is emitted when the node has been moved up, moved down, indented or unindented.
     void nodeMoved( Node* );
 

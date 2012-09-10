@@ -951,8 +951,15 @@ QPixmap KPrShapeAnimations::getAnimationShapeThumbnail(KPrShapeAnimation *animat
         //TODO: Draw image file to load when shape thumbnail can't be created
        QPixmap thumbnail = koIcon("stage").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium);
 
-        if (thumbnail.convertFromImage(createThumbnail(animation->shape(),
-                                                       QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))) {
+        if (
+#if QT_VERSION >= 0x040700
+            thumbnail.convertFromImage(createThumbnail(animation->shape(),
+                                                       QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))
+#else
+            !(thumbnail = QPixmap::fromImage(createThumbnail(animation->shape(),
+                                                            QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium)))).isNull()
+#endif
+        ) {
             thumbnail.scaled(QSize(KIconLoader::SizeMedium, KIconLoader::SizeMedium), Qt::KeepAspectRatio);
         }
         return thumbnail;
@@ -996,7 +1003,13 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
                                 Qt::FlatCap, Qt::MiterJoin));
             painter.drawPath(m_path);
             QPixmap iconPixmap;
-            if (iconPixmap.convertFromImage(thumb)) {
+            if (
+#if QT_VERSION >= 0x040700
+                iconPixmap.convertFromImage(thumb)
+#else
+                !(iconPixmap = QPixmap::fromImage(thumb)).isNull()
+#endif
+            ) {
                 return iconPixmap;
             }
         }

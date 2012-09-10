@@ -135,28 +135,24 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         profileProductName = element.attribute(PROFILE);
-
         // A hack for an old colorspacename
         if (colorspacename  == "Grayscale + Alpha") {
             colorspacename  = "GRAYA";
-            profileProductName = QString();
+            profileProductName = QString::null;
         }
         if (colorspacename == "RgbAF32") {
             colorspacename = "RGBAF32";
-            colorspacename  = "GRAYA";
-            profileProductName = QString();
+            profileProductName = QString::null;
         }
         if (colorspacename == "RgbAF16") {
             colorspacename = "RGBAF32";
-            colorspacename  = "GRAYA";
-            profileProductName = QString();
+            profileProductName = QString::null;
         }
-
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
         QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(colorspacename).id();
 
         if (profileProductName.isNull()) {
-            // no mention of profile so get default profile
+            // no mention of profile so get default profile";
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         } else {
             cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, profileProductName);
@@ -200,9 +196,16 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         QByteArray data; data.resize(store->size());
         store->read(data.data(), store->size());
         store->close();
-        image->assignImageProfile(KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data));
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(image->colorSpace()->colorModelId().id(), image->colorSpace()->colorDepthId().id(), data);
+        if (profile->valid()) {
+            image->assignImageProfile(profile);
+        }
+        else {
+            profile = KoColorSpaceRegistry::instance()->profileByName(KoColorSpaceRegistry::instance()->colorSpaceFactory(image->colorSpace()->id())->defaultProfile());
+            Q_ASSERT(profile && profile->valid());
+            image->assignImageProfile(profile);
+        }
     }
-
 
     // Load the layers data: if there is a profile associated with a layer it will be set now.
     KisKraLoadVisitor visitor(image, store, m_d->layerFilenames, m_d->imageName, m_d->syntaxVersion);
@@ -211,8 +214,6 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
         visitor.setExternalUri(uri);
 
     image->rootLayer()->accept(visitor);
-
-
 
     // annotations
     // exif

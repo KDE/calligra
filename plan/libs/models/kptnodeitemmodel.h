@@ -343,10 +343,11 @@ protected slots:
     virtual void slotNodeToBeRemoved( Node *node );
     virtual void slotNodeRemoved( Node *node );
 
-    virtual void slotNodeToBeMoved( Node *node );
+    virtual void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
     virtual void slotNodeMoved( Node *node );
 
     virtual void slotLayoutChanged();
+    virtual void slotProjectCalulated( ScheduleManager *sm );
 
 protected:
     virtual bool setType( Node *node, const QVariant &value, int role );
@@ -447,6 +448,8 @@ protected slots:
     void slotNodeInserted( Node *node );
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
+    void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
+    void slotNodeMoved( Node *node );
 
     void slotLayoutChanged();
     void slotWbsDefinitionChanged();

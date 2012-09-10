@@ -1,5 +1,6 @@
 # Generate parsers for some Word structures.
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0)
+cmake_policy(SET CMP0017 NEW)
 
 SET( scanner_word95
 	${CMAKE_CURRENT_BINARY_DIR}/word95_generated.h
