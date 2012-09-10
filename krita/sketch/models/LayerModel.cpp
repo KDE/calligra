@@ -92,10 +92,12 @@ public:
         // implementation node: The root node is not a visible node, and so
         // is never added to the list of layers
         QList<KisNodeSP> children = layer->childNodes(layerClassNames(), KoProperties());
-        for(quint32 i = 0; i < layer->childCount(); ++i)
+        if(layer->childCount() == 0)
+            return;
+        for(quint32 i = layer->childCount(); i > 0; --i)
         {
-            layers << children.at(i);
-            rebuildLayerList(children.at(i));
+            layers << children.at(i-1);
+            rebuildLayerList(children.at(i-1));
         }
     }
 };
@@ -216,7 +218,6 @@ QObject* LayerModel::engine() const
 void LayerModel::setEngine(QObject* newEngine)
 {
     d->declarativeEngine = qobject_cast<QDeclarativeEngine*>(newEngine);
-    qDebug() << "New declarativeEngine set to" << d->declarativeEngine;
     emit engineChanged();
 }
 
@@ -432,12 +433,9 @@ void LayerModel::source_rowsRemoved(QModelIndex, int, int)
 
 void LayerModel::source_dataChanged(QModelIndex /*tl*/, QModelIndex /*br*/)
 {
-//     QModelIndex p_tl = mapFromSource(tl);
-//     QModelIndex p_br = mapFromSource(br);
-//     emit dataChanged(p_tl, p_br);
-    beginResetModel();
-    d->rebuildLayerList();
-    endResetModel();
+    QModelIndex top = createIndex(0, 0);
+    QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
+    dataChanged(top, bottom);
 }
 
 void LayerModel::source_modelReset()
