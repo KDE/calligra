@@ -44,6 +44,7 @@
 #include "kis_zoom_action.h"
 #include "kis_show_palette_action.h"
 #include "kis_change_primary_setting_action.h"
+#include "kis_gesture_action.h"
 
 class KisInputManager::Private
 {
@@ -170,9 +171,6 @@ void KisInputManager::Private::setupActions()
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
 #endif
 
-    shortcut = createShortcut(action, KisPanAction::PanToggleShortcut);
-    shortcut->setGesture(Qt::PanGesture);
-
     shortcut = createShortcut(action, KisPanAction::PanLeftShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Left);
     shortcut = createShortcut(action, KisPanAction::PanRightShortcut);
@@ -219,9 +217,6 @@ void KisInputManager::Private::setupActions()
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
 #endif
 
-    shortcut = createShortcut(action, KisZoomAction::ZoomToggleShortcut);
-    shortcut->setGesture(Qt::PinchGesture);
-
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setWheel(KisShortcut::WheelUp);
 
@@ -248,6 +243,12 @@ void KisInputManager::Private::setupActions()
 
     shortcut = createShortcut(action, 0);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
+
+    action = new KisGestureAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setGesture(true);
 }
 
 KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)

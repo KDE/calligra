@@ -199,6 +199,7 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
+    input/kis_gesture_action.cpp
 )
 
 if(HAVE_OPENGL)

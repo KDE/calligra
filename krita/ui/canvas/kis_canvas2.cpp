@@ -128,7 +128,7 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
     if(!KisCanvas2Private::widgetFactory)
-        KisCanvas2Private::widgetFactory = new KisGL2CanvasWidgetFactory();
+        KisCanvas2Private::widgetFactory = new KisQPainterCanvasWidgetFactory();//new KisGL2CanvasWidgetFactory();
 
     m_d->vastScrolling = cfg.vastScrolling();
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();

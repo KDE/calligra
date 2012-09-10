@@ -28,15 +28,15 @@
 class KisShortcut::Private
 {
 public:
-    Private() : wheelState(WheelUndefined), currentWheelState(WheelUndefined), gesture(Qt::LastGestureType), currentGesture(Qt::LastGestureType), action(0), shortcutIndex(0) { }
+    Private() : wheelState(WheelUndefined), currentWheelState(WheelUndefined), wantsGesture(false), hasGesture(false), action(0), shortcutIndex(0) { }
     QList<Qt::Key> keys;
     QList<Qt::Key> keyState;
     QList<Qt::MouseButton> buttons;
     QList<Qt::MouseButton> buttonState;
     WheelState wheelState;
     WheelState currentWheelState;
-    Qt::GestureType gesture;
-    Qt::GestureType currentGesture;
+    bool wantsGesture;
+    bool hasGesture;
 
     KisAbstractInputAction *action;
     int shortcutIndex;
@@ -93,9 +93,9 @@ void KisShortcut::setWheel(KisShortcut::WheelState state)
     d->wheelState = state;
 }
 
-void KisShortcut::setGesture(Qt::GestureType gesture)
+void KisShortcut::setGesture(bool wantsGesture)
 {
-    d->gesture = gesture;
+    d->wantsGesture = wantsGesture;
 }
 
 KisShortcut::MatchLevel KisShortcut::matchLevel()
@@ -103,7 +103,7 @@ KisShortcut::MatchLevel KisShortcut::matchLevel()
     if (d->keys.count() == d->keyState.count()
         && d->buttons.count() == d->buttonState.count()
         && (d->wheelState == WheelUndefined || d->currentWheelState == d->wheelState)
-        && (d->gesture == Qt::LastGestureType || d->currentGesture == d->gesture)) {
+        && (!d->wantsGesture || (d->wantsGesture && d->hasGesture))) {
         return CompleteMatch;
     } else if (d->keyState.count() > 0 || d->buttonState.count() > 0) {
         return PartialMatch;
@@ -164,12 +164,9 @@ void KisShortcut::match(QEvent* event)
         case QEvent::Gesture: {
             QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
             if(gevent->activeGestures().count() > 0) {
-                QGesture *activeGesture = gevent->activeGestures().at(0);
-                if(activeGesture->state() == Qt::GestureStarted || activeGesture->state() == Qt::GestureUpdated) {
-                    d->currentGesture = activeGesture->gestureType();
-                } else {
-                    d->currentGesture = Qt::LastGestureType;
-                }
+                d->hasGesture = true;
+            } else {
+                d->hasGesture = false;
             }
         }
         default:
@@ -182,4 +179,5 @@ void KisShortcut::clear()
     d->buttonState.clear();
     d->keyState.clear();
     d->currentWheelState = WheelUndefined;
+    d->hasGesture = false;
 }
