@@ -76,12 +76,12 @@ void CACanvasController::pan (const QPoint& distance)
     //kDebug() << distance;
 }
 
-QPoint CACanvasController::preferredCenter() const
+QPointF CACanvasController::preferredCenter() const
 {
     return QPoint();
 }
 
-void CACanvasController::setPreferredCenter (const QPoint& viewPoint)
+void CACanvasController::setPreferredCenter (const QPointF& viewPoint)
 {
     //kDebug() << viewPoint;
 }

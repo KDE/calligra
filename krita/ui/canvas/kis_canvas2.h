@@ -149,10 +149,6 @@ public: // KisCanvas2 methods
     KisCanvasDecoration* decoration(const QString& id);
 
 signals:
-
-    void documentOriginChanged();
-    void scrollAreaSizeChanged();
-
     void imageChanged(KisImageWSP image);
 
     void canvasDestroyed(QWidget *);
@@ -185,18 +181,8 @@ public slots:
     void startResizingImage(qint32 w, qint32 h);
     void finishResizingImage(qint32 w, qint32 h);
 
-    /// adjust the origin of the document
-    void adjustOrigin();
-
-    /// slot for setting the mirroring
-    void mirrorCanvas(bool mirror);
     /// canvas rotation in degrees
     qreal rotationAngle() const;
-    void rotateCanvas(qreal angle, bool updateOffset=true);
-    void rotateCanvasRight15();
-    void rotateCanvasLeft15();
-    void resetCanvasTransformations();
-
     void setSmoothingEnabled(bool smooth);
 
 private slots:

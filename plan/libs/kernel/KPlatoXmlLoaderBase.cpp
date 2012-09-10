@@ -1222,7 +1222,7 @@ bool KPlatoXmlLoaderBase::loadWpLog( WorkPackage *wp, KoXmlElement& element, XML
 {
     kDebug(kplatoXmlDebugArea())<<"wplog";
     wp->setOwnerName( element.attribute( "owner" ) );
-    wp->setOwnerName( element.attribute( "owner-id" ) );
+    wp->setOwnerId( element.attribute( "owner-id" ) );
     wp->setTransmitionStatus( wp->transmitionStatusFromString( element.attribute( "status" ) ) );
     wp->setTransmitionTime( DateTime( KDateTime::fromString( element.attribute( "time" ) ) ) );
     return load( wp->completion(), element, status );

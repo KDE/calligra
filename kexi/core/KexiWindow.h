@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -230,6 +230,10 @@ public slots:
      (by default KexiView::parentDialogAttached() does nothing, you can
      reimplement it). */
     void sendAttachedStateToCurrentView();
+
+    /*! Saves settings for this window, for all views.
+        @see KexiView::saveSettings() */
+    bool saveSettings();
 
 signals:
     void updateContextHelp();

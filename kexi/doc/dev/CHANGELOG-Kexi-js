@@ -132,7 +132,67 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
+===================== Kexi 2.6  =====================
+
+~~~~~~~~~~~~~~~~ 2.6 Alpha 1 ~~~~~~~~~~~~~~~~
+
+TODO:
+Table Designer
+*Changing Length property does not trigger data removal
+BUG:301262
+
+TODO:
+KexiDB
+*MySQL Driver
+**add config option for the length limit
+
+TODO: make
+*See also http://blog.mclaughlinsoftware.com/2009/03/09/sql-concatenation-blues/
+
+2012-08-13..23
+Core
+*Add support for user data storage
+FEATURE:305074
+Table View
+*Remember column widths in tabular data view
+FEATURE:230994
+
+2012-08-14
+KexiDB
+*Added unit test for creating .kexi database file with KexiDB::Connection and test data
+
+2012-08-11
+Main Window
+*Declare 'full screen' as global action for use in user commands or scripts
+
 ===================== Kexi 2.5  =====================
+
+~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
+
+2012-09-01
+Query Designer
+*Fix bug SQL Editor's history is not functional (by hiding it in 2.5 and completely removing in 2.6)
+BUG:306145
+REVIEW:106309
+
+2012-08-30
+Startup
+*Fetch startup UI from x.y.0 URL for any x.y.z version, not from x.y.z URL
+
+2012-08-26
+Query Designer
+*Make string concatenation operator || work
+**Ported to Predicate
+BUG:305793
+REVIEW:106199
+
+2012-08-23
+KexiDB
+*Make it possible to disable db drivers even if the libs are present and found
+**renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config flag (by jstaniek)
+**Ported to Predicate
+BUG:305683
+REVIEW:106152
 
 ~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
 
@@ -145,7 +205,13 @@ REVIEW:106023
 *Missing table kexi__parts is no longer a critical error in Kexi
 **This enables opening databases created without KexiProject but with pure KexiDB::Connection
 **Useful e.g. for Bibliography storage implementation
-*Added unit test for creating .kexi database file with KexiDB::Connection and adding test data
+REVIEW:106027
+
+2012-08-13
+Main Window
+*Workaround for visual glitch of Oxygen style for menu widget
+BUG:305051
+REVIEW:105996
 
 2012-08-09
 CSV Import
@@ -189,16 +255,6 @@ REVIEW:105843
 
 ~~~~~~~~~~~~~~~~ 2.5 Beta 1 (2.4.91) ~~~~~~~~~~~~~~~~
 
-TODO:
-Table Designer
-*Changing Length property does not trigger data removal
-BUG:301262
-
-TODO:
-KexiDB
-*MySQL Driver
-**add config option for the length limit
-
 2012-06-07
 KexiDB
 *Added maxLengthIsDefault property of table field for Text types to extended schema
@@ -207,8 +263,8 @@ CCBUG:301277
 *Added DefaultMaxLengthForTextFields config in Tables group
 **specifies default maximum length for fields of type Text
 **0 (the default) means unlimited or up to engine's limit
+**Ported to Predicate
 CCBUG:301277
-TODO: Port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.90) ~~~~~~~~~~~~~~~~
 
@@ -235,8 +291,8 @@ REVIEW:105182
 KexiDB
 *Remove limits for Text data type, leave as option
 **By default there are no limits in Text data type
+**Ported to Predicate
 BUG:301277
-TODO: Port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
 
@@ -256,7 +312,7 @@ BUG:278296
 KexiDB
 *SQLite Driver
 **Fixed error when attempting to compact database opened from Open view
-TODO: port to Predicate
+**Ported to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
@@ -334,17 +390,17 @@ KexiDB
 *SQLite Driver
 **Fixed crashes when compacting database fails
 **Fixed error when attempting to compact database opened from recent lists
-TODO: port to Predicate
+**Ported to Predicate
 *MySQL Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
 CCBUG:254068
-TODO: port to Predicate
 *PostgreSQL Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
 CCBUG:254068
-TODO: port to Predicate
 Reports
 *Fix crash in assigning data source that uses reserved words as field names
 **Tables/queries with reserved words still do not work in reports though
@@ -369,8 +425,8 @@ Main Window
 KexiDB
 *SQLite Driver
 **Ported database compacting code to the new Kexi that uses system SQLite version
+**Ported to Predicate
 BUG:293548
-TODO: port to Predicate
 
 TODO: after db creating and opening the main menu is invisible
 
@@ -382,8 +438,8 @@ CSV Import
 KexiDB
 *SQLite Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
-TODO: port to Predicate
 CSV Import
 *Fixed bug: crash while importing CSV rows that start with empty cells (only delimiters)
 **Example row: ,,,"a"
@@ -484,8 +540,8 @@ TODO 2.5: change standard "Open" btn to "Open Imported Table"
 2012-01-01
 KexiDB
 *Query SQL generated in the Query Designer should be of KEXISQL type
+**Ported to Predicate
 BUG:290354
-TODO: port to Predicate
 
 2011-12-26..28
 Forms
@@ -505,8 +561,8 @@ TODO: add effect property to the Image Box, see QGraphicsEffects
 2011-12-16..20
 KexiDB
 *Use ICU (http://icu-project.org) for high quality collating in unicode text columns using SQLite extension.
+**Ported to Predicate
 BUG:278411
-TODO: port to Predicate
 
 2011-12-14
 General
@@ -516,7 +572,7 @@ Core
 *remove memory leak in code opening project
 KexiDB
 *avoid 'invalid read' in code for inserting records into tables
-TODO: port to Predicate
+**Ported to Predicate
 
 2011-12-10..11
 General
@@ -1276,8 +1332,8 @@ KexiDB
 *MySQL Driver: Fix "DB created but cannot open" error appearing on creating a new database for mysql backend.
  See http://dev.mysql.com/doc/refman/5.0/en/identifier-case-sensitivity.html (complex!) for logic of otherwise simple thing.
  The solution is to execute SHOW VARIABLES LIKE 'lower_case_table_name' to get the flag and make the table and database names lowercase if needed.
+**Ported to Predicate
 BUG:235507
-*******TODO: port to Predicate
 
 2010-04-25
 KexiDB
@@ -3435,7 +3491,7 @@ Main Window
 2006-08-09
 KoProperty
 = "3rdState" option added for BoolEdit - i18n'd QString, if not empty, 
-  the the editor's button accept third "null" state with name equal to this string. 
+  the editor's button accept third "null" state with name equal to this string. 
   When this value is selected, Widget::value() returns null QVariant. 
   This option is used for example in the "defaultValue" property for a field 
   of type boolean (in Kexi Table Designer). Third, "null" value of the property 

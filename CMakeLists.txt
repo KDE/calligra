@@ -2,6 +2,7 @@ project(calligra)
 
 cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
 cmake_policy(SET CMP0002 OLD)
+cmake_policy(SET CMP0017 NEW)
 
  ############
 #############
@@ -480,7 +481,8 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 # calligradb
 SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs)  # TODO remove when Predicate lib arrives
+set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                        ${CMAKE_BINARY_DIR}/libs/db)
 
  #############################################
 ##############################################
