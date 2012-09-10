@@ -31,6 +31,79 @@ Panel {
         engine: QMLEngine;
         view: sketchView.view;
     }
+    
+    peekContents: ListView {
+        anchors.fill: parent;
+        model: layerModel;
+        delegate: Rectangle {
+            width: parent.width - Constants.DefaultMargin;
+            height: childrenRect.height;
+            color: "transparent";
+            clip: true;Rectangle {
+                id: topSpacer;
+                height: model.childCount == 0 ? 0 : Constants.DefaultMargin;
+                color: "transparent";
+            }
+            Rectangle {
+                id: layerBgRect
+                anchors {
+                    top: topSpacer.bottom;
+                    left: parent.left;
+                    right: parent.right;
+                    leftMargin: 8 * model.depth;
+                }
+                height: Constants.DefaultFontSize + 2*Constants.DefaultMargin;
+                radius: 8
+                opacity: model.activeLayer ? 0.5 : 0.2;
+                color: "white";
+            }
+            Rectangle {
+                anchors.fill: layerBgRect
+                color: "transparent";
+                Rectangle {
+                    id: layerThumbContainer;
+                    anchors {
+                        verticalCenter: parent.verticalCenter;
+                        left: parent.left;
+                    }
+                    height: Constants.DefaultFontSize + 2*Constants.DefaultMargin;
+                    width: height;
+                    color: "transparent";
+                    Image {
+                        anchors.centerIn: parent;
+                        cache: false;
+                        source: model.icon;
+                        smooth: true;
+                        width: parent.width * 0.8;
+                        height: parent.height * 0.8;
+                        fillMode: Image.PreserveAspectFit;
+                    }
+                }
+                Text {
+                    id: layerNameLbl
+                    anchors {
+                        top: parent.top;
+                        left: layerThumbContainer.right;
+                        right: parent.right;
+                    }
+                    text: model.name;
+                    color: "black";
+                    font.pixelSize: Constants.DefaultFontSize;
+                    elide: Text.ElideRight;
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: layerModel.setActive(model.index);
+                }
+            }
+            Rectangle {
+                id: bottomSpacer;
+                anchors.top: layerBgRect.bottom;
+                height: Constants.DefaultMargin;
+                color: "transparent";
+            }
+        }
+    }
 
     fullContents: ListView {
         anchors.fill: parent;
