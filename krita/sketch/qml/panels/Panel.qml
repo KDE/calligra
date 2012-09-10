@@ -37,6 +37,7 @@ Item {
 
     signal collapsed();
     signal peek();
+    signal full();
     signal dragStarted();
     signal drop(int action);
 
@@ -53,6 +54,13 @@ Item {
             anchors.fill: parent;
             color: "transparent";// base.panelColor;
             clip: true;
+            MouseArea {
+                // This mouse area blocks any mouse click from passing through the panel. We need this to ensure we don't accidentally pass
+                // any clicks to the collapsing area, or to the canvas, by accident.
+                anchors.fill: parent;
+                // This will always work, and never do anything - but we need some kind of processed thing in here to activate the mouse area
+                onClicked: undefined;
+            }
 
             Rectangle {
                 id: background;
@@ -268,18 +276,21 @@ Item {
             reversible: true;
 
             NumberAnimation { properties: "height,width,opacity"; duration: 0; }
+            ScriptAction { script: base.full(); }
         },
         Transition {
             from: "collapsed";
             to: "full";
 
             NumberAnimation { properties: "height,width,opacity"; duration: 0; }
+            ScriptAction { script: base.full(); }
         },
         Transition {
             from: "full";
             to: "collapsed";
 
             NumberAnimation { properties: "height,width,opacity"; duration: 0; }
+                ScriptAction { script: base.collapsed(); }
         },
         Transition {
             from: "full"

@@ -37,6 +37,7 @@ Item {
         height: base.height;
         onPeek: beginPeek( presetsPanel );
         onCollapsed: endPeek( presetsPanel );
+        onFull: endPeek( presetsPanel );
         onDragStarted: beginDrag( presetsPanel );
         onDrop: endDrag( presetsPanel, action );
     }
@@ -47,6 +48,7 @@ Item {
         height: base.height;
         onPeek: beginPeek( layersPanel );
         onCollapsed: endPeek( layersPanel );
+        onFull: endPeek( layersPanel );
         onDragStarted: beginDrag( layersPanel );
         onDrop: endDrag( layersPanel, action );
     }
@@ -57,6 +59,7 @@ Item {
         height: base.height;
         onPeek: beginPeek( filterPanel );
         onCollapsed: endPeek( filterPanel );
+        onFull: endPeek( filterPanel );
         onDragStarted: beginDrag( filterPanel );
         onDrop: endDrag( filterPanel, action );
     }
@@ -67,6 +70,7 @@ Item {
         height: base.height;
         onPeek: beginPeek( selectPanel );
         onCollapsed: endPeek( selectPanel );
+        onFull: endPeek( selectPanel );
         onDragStarted: beginDrag( selectPanel );
         onDrop: endDrag( selectPanel, action );
     }
@@ -77,6 +81,7 @@ Item {
         height: base.height;
         onPeek: beginPeek( toolPanel );
         onCollapsed: endPeek( toolPanel );
+        onFull: endPeek( toolPanel );
         onDragStarted: beginDrag( toolPanel );
         onDrop: endDrag( toolPanel, action );
     }
@@ -87,6 +92,7 @@ Item {
         height: base.height;
         onPeek: beginPeek( colorPanel );
         onCollapsed: endPeek( colorPanel );
+        onFull: endPeek( colorPanel );
         onDragStarted: beginDrag( colorPanel );
         onDrop: endDrag( colorPanel, action );
     }
@@ -242,22 +248,25 @@ Item {
     }
 
     function beginPeek( item ) {
-        d.peeking = item;
-        item.parent.z = 11;
-        peekCapture.enabled = true;
-
         for( var i in d.panels ) {
             var obj = d.panels[i];
             if( obj.state == "peek" && obj.objectName != item.objectName ) {
                 obj.state = "collapsed";
             }
         }
+
+        d.peeking = item;
+        item.parent.z = 11;
+        peekCapture.enabled = true;
     }
 
     function endPeek( item ) {
-        d.peeking = null;
+        if(d.peeking == item)
+        {
+            d.peeking = null;
+            peekCapture.enabled = false;
+        }
         item.parent.z = 0;
-        peekCapture.enabled = false;
     }
 
     function beginDrag( item ) {
