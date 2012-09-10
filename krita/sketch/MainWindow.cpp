@@ -122,6 +122,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
     glWidget->grabGesture(Qt::PanGesture);
+    glWidget->grabGesture(Qt::PinchGesture);
     d->view->setViewport(glWidget);
 
     QDir appdir(qApp->applicationDirPath());

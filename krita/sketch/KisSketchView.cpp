@@ -134,6 +134,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
 
     grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
 
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
