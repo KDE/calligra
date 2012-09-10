@@ -169,6 +169,12 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.5.3 ~~~~~~~~~~~~~~~~
 
+2012-09-11
+Query Designer
+*Fix: Missing "*" (All Columns) item in Query Designer, it was present in Kexi 2.2 and ealier.
+**regression introduced in commit 414b0464208001
+BUG:306577
+
 2012-09-10
 General
 *Force lower case letters for object identifiers (except for widget names)
