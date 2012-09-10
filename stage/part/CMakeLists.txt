@@ -16,12 +16,14 @@ set( calligrastageprivate_LIB_SRCS
      KPrFactory.cpp
      KPrDocument.cpp
      KPrDeclarations.cpp
+     KPrPart.cpp
      KPrView.cpp
      KPrViewAdaptor.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
      KPrViewModeSlidesSorter.cpp
      KPrViewModePreviewPageEffect.cpp
+     KPrViewModePreviewShapeAnimations.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp
      KPrShapeAnimations.cpp
@@ -73,6 +75,7 @@ set( calligrastageprivate_LIB_SRCS
      KPrSlidesSorterItemDelegate.cpp
 
      commands/KPrAnimationCreateCommand.cpp
+     commands/KPrAnimationRemoveCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
      commands/KPrEditCustomSlideShowsCommand.cpp
@@ -80,6 +83,10 @@ set( calligrastageprivate_LIB_SRCS
      commands/KPrDelCustomSlideShowCommand.cpp
      commands/KPrRenameCustomSlideShowCommand.cpp
      commands/KPrDeleteSlidesCommand.cpp
+     commands/KPrEditAnimationTimeLineCommand.cpp
+     commands/KPrAnimationEditNodeTypeCommand.cpp
+     commands/KPrReorderAnimationCommand.cpp
+     commands/KPrReplaceAnimationCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
@@ -108,7 +115,7 @@ set( calligrastageprivate_LIB_SRCS
      animations/KPrAnimationData.cpp
 
      animations/strategy/KPrAnimationValue.cpp
-     animations/strategy/KPrValueParser.cpp
+     animations/strategy/KPrFormulaParser.cpp
      animations/strategy/KPrAnimationAttribute.cpp
      animations/strategy/KPrSmilValues.cpp
      animations/strategy/KPrAttributeX.cpp
@@ -187,8 +194,13 @@ install( FILES stage.rc stage_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/stage)
 
 install( FILES stagerc DESTINATION ${CONFIG_INSTALL_DIR} )
 
+### Predefined Animations ###
+install(FILES
+        animations/animations.xml
+        DESTINATION ${DATA_INSTALL_DIR}/stage/animations)
+
 ### Include files ###
-install( FILES 
+install( FILES
         stage_export.h
         KPrAnimationDirector.h
         KPrCustomSlideShows.h

@@ -24,7 +24,7 @@
 
 #include <kowidgets_export.h>
 
-#include <QtCore/QThread>
+#include <QThread>
 
 #include <kdebug.h>
 
@@ -49,7 +49,7 @@ public:
 
     /**
      * Checks whether the thread has finished loading and waits
-     * until it is finished if nessesary
+     * until it is finished if necessary
      */
     void barrier();
 
@@ -81,6 +81,7 @@ public:
     KoResourceServer<KoPattern>* patternServer();
     KoResourceServer<KoAbstractGradient>* gradientServer();
     KoResourceServer<KoColorSet>* paletteServer();
+
 private:
     KoResourceServerProvider();
     KoResourceServerProvider(const KoResourceServerProvider&);

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #define KEXICSVOPTIONSDIALOG_H
 
 #include <kdialog.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 class KexiCharacterEncodingComboBox;
 class QComboBox;

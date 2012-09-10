@@ -2,7 +2,7 @@
  *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
- *  Copyright (C) 2009-2010 Casper Boemann <casper.boemann@kogmbh.com>
+ *  Copyright (C) 2009-2010 C. Boemann <cbo@kogmbh.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@ void TestDocumentLayout::setupTest(const QString &initText)
 
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
 
-    m_styleManager = new KoStyleManager();
+    m_styleManager = new KoStyleManager(0);
     KoTextDocument(m_doc).setStyleManager(m_styleManager);
 
     m_layout = new KoTextDocumentLayout(m_doc, provider);

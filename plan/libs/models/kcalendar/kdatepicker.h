@@ -24,8 +24,8 @@
 
 #include "kdatetable.h"
 
-#include <QtCore/QDateTime>
-#include <QtGui/QFrame>
+#include <QDateTime>
+#include <QFrame>
 
 class QLineEdit;
 class QToolButton;

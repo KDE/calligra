@@ -24,11 +24,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define NAMESPACE KexiDB
 #endif
 
-#include <qstringlist.h>
-#include <qfile.h>
+#include <QStringList>
+#include <QFile>
 #include <kdebug.h>
 #include "oracleconnection_p.h"
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <string>
 
 using namespace NAMESPACE;

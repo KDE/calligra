@@ -53,7 +53,8 @@ class AlterSchemaWidget : public QWidget
         QTableView *m_table;
         QComboBox *m_columnType;
         QCheckBox *m_columnPKey;
-
+        QLineEdit *m_tableName;
+        
         QStringList m_types;
 
         AlterSchemaTableModel *m_model;
@@ -61,16 +62,25 @@ class AlterSchemaWidget : public QWidget
         QLabel *m_columnNumLabel;
         QLabel *m_columnTypeLabel;
         QLabel *m_columnPKeyLabel;
-
+        QLabel *m_tableNameLabel;
+        QLabel *m_nameUsedLabel;
+        
         KexiDB::TableSchema *m_originalSchema;
         KexiDB::TableSchema *m_newSchema;
 
         int m_selectedColumn;
 
+        //!TODO Something like this could go in kexi utils/project?
+        QString suggestedItemName(const QString& baseName);
+        
+        bool nameExists(const QString& tableName);
+        
     private slots:
         void tableClicked(const QModelIndex& idx);
         void typeActivated(int typ);
         void pkeyClicked(bool pkey);
+        void nameChanged(const QString& tableName);
+        
 };
 }
 #endif // ALTERSCHEMAWIDGET_H

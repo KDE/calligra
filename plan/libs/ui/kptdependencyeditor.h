@@ -39,6 +39,10 @@
 
 #include "KoView.h"
 
+#include <KPageDialog>
+
+class KoPageLayoutWidget;
+
 class QModelIndex;
 
 class KAction;
@@ -438,7 +442,9 @@ public:
 
     DependencyScene *itemScene() const { return static_cast<DependencyScene*>( scene() ); }
     void setItemScene(DependencyScene *scene );
-    
+
+    void setActive( bool activate );
+
 signals:
     void selectionChanged();
     void selectionChanged( QGraphicsItem * );
@@ -474,9 +480,26 @@ private slots:
 
 private:
     Project *m_project;
+    bool m_dirty;
+    bool m_active;
 
     QPoint m_cursorPos;
     QTimer m_autoScrollTimer;
+};
+
+//--------------------
+class DependencyeditorConfigDialog : public KPageDialog {
+    Q_OBJECT
+public:
+    DependencyeditorConfigDialog( ViewBase *view, QWidget *parent );
+
+public slots:
+    void slotOk();
+
+private:
+    ViewBase *m_view;
+    KoPageLayoutWidget *m_pagelayout;
+    PrintingHeaderFooter *m_headerfooter;
 };
 
 //------------------------------
@@ -484,7 +507,7 @@ class KPLATOUI_EXPORT DependencyEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    DependencyEditor( KoDocument *part, QWidget *parent );
+    DependencyEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -522,6 +545,9 @@ public slots:
     virtual void setGuiActive( bool activate );
     void slotCreateRelation( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void setScheduleManager( ScheduleManager *sm );
+
+protected slots:
+    virtual void slotOptions();
 
 protected:
     void updateActionsEnabled( bool on );

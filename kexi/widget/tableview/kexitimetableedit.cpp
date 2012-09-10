@@ -19,20 +19,19 @@
 
 #include "kexitimetableedit.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qvariant.h>
-#include <qrect.h>
-#include <qpalette.h>
-#include <qcolor.h>
-#include <qfontmetrics.h>
-#include <qdatetime.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qtoolbutton.h>
-#include <q3datetimeedit.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QPainter>
+#include <QVariant>
+#include <QRect>
+#include <QPalette>
+#include <QColor>
+#include <QFontMetrics>
+#include <QDateTime>
+#include <QCursor>
+#include <QPoint>
+#include <QLayout>
+#include <QToolButton>
+#include <QClipboard>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -127,6 +126,12 @@ bool KexiTimeTableEdit::valueIsValid()
     if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is valid
         return true;
     return m_formatter.fromString(m_lineedit->text()).isValid();
+}
+
+bool KexiTimeTableEdit::valueChanged()
+{
+    kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    return m_origValue != m_lineedit->text();
 }
 
 void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

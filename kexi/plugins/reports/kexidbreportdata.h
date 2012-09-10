@@ -22,9 +22,8 @@
 #include <QString>
 #include <QStringList>
 
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
-#include <kexidb/parser/parser.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 
 #include <KoReportData.h>
 
@@ -40,7 +39,6 @@ private:
     KexiDB::Connection *m_connection;
     KexiDB::QuerySchema *m_originalSchema;
     KexiDB::QuerySchema *m_copySchema;
-    KexiDB::Parser *m_parser;
     
     bool getSchema();
 
@@ -53,7 +51,7 @@ public:
     virtual void addExpression(const QString &field, const QVariant &value, int relation = '=');
 
     virtual QString sourceName() const;
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
     virtual QVariant value(unsigned int) const;
     virtual QVariant value(const QString &field) const;
 

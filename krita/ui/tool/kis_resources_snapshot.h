@@ -23,6 +23,7 @@
 #include "kis_shared_ptr.h"
 #include "kis_types.h"
 #include "krita_export.h"
+#include "kis_painter.h"
 
 
 class KoCanvasResourceManager;
@@ -44,7 +45,11 @@ public:
 
     KisPostExecutionUndoAdapter* postExecutionUndoAdapter() const;
     void setCurrentNode(KisNodeSP node);
+    void setStrokeStyle(KisPainter::StrokeStyle strokeStyle);
+    void setFillStyle(KisPainter::FillStyle fillStyle);
+
     KisNodeSP currentNode() const;
+    KisImageWSP image() const;
     bool needsIndirectPainting() const;
 
     bool needsAirbrushing() const;

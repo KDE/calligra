@@ -21,7 +21,7 @@ struct rcps_problem {
 	int *modes_max;
 	int genome_alternatives;
 	int *alternatives_max;
-	/* fitness calulation mode */
+	/* fitness calculation mode */
 	int fitness_mode;
 	/* weight callback */
 	int (*weight_callback)(int starttime, int duration, struct rcps_fitness *nominal_weight, void *arg, void *fitness_arg);

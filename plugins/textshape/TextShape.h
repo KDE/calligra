@@ -38,6 +38,7 @@ class KoPageProvider;
 class KoImageCollection;
 class KoTextDocument;
 class TextShape;
+class KoTextDocumentLayout;
 
 /**
  * A text shape.
@@ -59,10 +60,18 @@ public:
     QPointF convertScreenPos(const QPointF &point) const;
 
     /// reimplemented
+    QPainterPath outline() const;
+
+    /// reimplemented
     QRectF outlineRect() const;
+
+    ///reimplemented
+    ChildZOrderPolicy childZOrderPolicy() {return KoShape::ChildZPassThrough;}
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
+
+    KoImageCollection *imageCollection();
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -87,6 +96,8 @@ public:
     KoTextShapeData *textShapeData() {
         return m_textShapeData;
     }
+
+    void updateDocumentData();
 
     virtual void update() const;
     virtual void update(const QRectF &shape) const;
@@ -113,6 +124,9 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
+    KoParagraphStyle * m_paragraphStyle;
+    bool m_clip;
+    KoTextDocumentLayout *m_layout;
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include <kis_tool.h>
 #include <KoToolFactoryBase.h>
+#include <KoIcon.h>
 
 class KisCanvas2;
 
@@ -23,7 +24,6 @@ public:
 
 // Uncomment if you have a configuration widget
 //     QWidget* createOptionWidget();
-//     virtual QWidget* optionWidget();
 
 public slots:
     virtual void activate(bool temp = false);
@@ -46,7 +46,7 @@ public:
         {
             setToolTip( i18n( "%{APPNAME}" ) );
             setToolType( TOOL_TYPE_VIEW );
-            setIcon( "tool_%{APPNAMELC}" );
+            setIconName(koIconNameCStr("tool_%{APPNAMELC}"));
             setPriority( 0 );
         };
 

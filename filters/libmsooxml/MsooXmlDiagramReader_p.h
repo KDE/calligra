@@ -27,13 +27,13 @@
 #define MSOOXMLXMLDIAGRAMREADER_P_H
 
 #include <cmath>
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QVector>
-#include <QtCore/QMap>
-#include <QtCore/QPair>
-#include <QtCore/QRect>
-#include <QtCore/QExplicitlySharedDataPointer>
+#include <QString>
+#include <QList>
+#include <QVector>
+#include <QMap>
+#include <QPair>
+#include <QRect>
+#include <QExplicitlySharedDataPointer>
 
 extern QVariant val;
 namespace MSOOXML {
@@ -77,7 +77,7 @@ class AlgorithmAtom;
 class AbstractAlgorithm;
 class ShapeAtom;
 
-/// The evaluation context that is passed around and contains all kind of state-informations.
+/// The evaluation context that is passed around and contains all kind of state-information.
 class Context
 {
     public:

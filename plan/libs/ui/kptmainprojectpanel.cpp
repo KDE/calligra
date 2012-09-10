@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007, 2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004-2007, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,20 +27,23 @@
 #include <kdatewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include "kptdebug.h"
 
 #include <kdeversion.h>
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #include <akonadi/contact/emailaddressselectionwidget.h>
 #include <akonadi/contact/emailaddressselection.h>
 #endif
+#endif
 
-#include <kdebug.h>
 
 #include "kptproject.h"
 #include "kptcommand.h"
 #include "kptschedule.h"
 #include "kpttaskdescriptiondialog.h"
+
 
 namespace KPlato
 {
@@ -50,6 +53,10 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent)
       project(p)
 {
     setupUi(this);
+
+#ifndef PLAN_KDEPIMLIBS_FOUND
+    chooseLeader->hide();
+#endif
 #if ! KDE_IS_VERSION( 4, 5, 0 )
     chooseLeader->hide();
 #endif
@@ -132,6 +139,7 @@ void MainProjectPanel::slotCheckAllFieldsFilled()
 
 void MainProjectPanel::slotChooseLeader()
 {
+#ifdef PLAN_KDEPIMLIBS_FOUND
 #if KDE_IS_VERSION( 4, 5, 0 )
     QPointer<Akonadi::EmailAddressSelectionDialog> dlg = new Akonadi::EmailAddressSelectionDialog( this );
     if ( dlg->exec() && dlg ) {
@@ -157,6 +165,7 @@ void MainProjectPanel::slotChooseLeader()
         }
     }
 #endif
+#endif
 }
 
 
@@ -175,7 +184,7 @@ void MainProjectPanel::slotEndDateClicked()
 
 void MainProjectPanel::enableDateTime()
 {
-    kDebug();
+    kDebug(planDbg());
     startTime->setEnabled(true);
     startDate->setEnabled(true);
     endTime->setEnabled(true);

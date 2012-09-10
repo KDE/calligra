@@ -26,6 +26,7 @@
 #include "kis_undo_store.h"
 #include "kis_factory2.h"
 #include <KoDocumentEntry.h>
+#include "kis_part2.h"
 #include <KoMainWindow.h>
 
 class KisCommandHistoryListenerFake : public KisCommandHistoryListener
@@ -87,7 +88,10 @@ public:
 
 void KisDoc2Test::testUndoRedoNotify()
 {
-    KisDoc2 doc;
+    KisPart2 *p = new KisPart2();
+    KisDoc2 doc(p);
+    p->setDocument(&doc);
+
     doc.initEmpty();
 
     KUndo2Command *testCommand1 = new TestCommand();
@@ -154,12 +158,15 @@ void KisDoc2Test::testUndoRedoNotify()
 void KisDoc2Test::testOpenImageTwiceInSameDoc()
 {
     QString fname2 = QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra";
-    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+    QString fname = QString(FILES_DATA_DIR) + QDir::separator() + "load_test2.kra";
 
 
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
-    KisDoc2 doc;
+    KisPart2 *p = new KisPart2();
+    KisDoc2 doc(p);
+    p->setDocument(&doc);
+
     doc.loadNativeFormat(fname);
     doc.loadNativeFormat(fname2);
 }

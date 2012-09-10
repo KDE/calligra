@@ -20,10 +20,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <qdom.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDomDocument>
+#include <QDir>
+#include <QFile>
+#include <QRegExp>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -33,8 +33,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <kexidb/connectiondata.h>
-#include <kexidb/drivermanager.h>
+#include <db/connectiondata.h>
+#include <db/drivermanager.h>
 #include "kexiprojectconnectiondata.h"
 
 KexiProjectConnectionData::KexiProjectConnectionData(): KexiDB::ConnectionData()

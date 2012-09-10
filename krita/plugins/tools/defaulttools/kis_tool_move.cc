@@ -46,29 +46,6 @@
 #include <commands/kis_deselect_global_selection_command.h>
 #include "strokes/move_stroke_strategy.h"
 
-/**
- * Deferred activation of a node. After it is actually added to the
- * layer stack. In the future it might be shared with the methods of
- * KisNodeManager which are not ported to strokes yet.
- */
-class ActivateNodeCommand : public KUndo2Command
-{
-public:
-    ActivateNodeCommand(KisView2 *view, KisNodeSP node)
-        : m_view(view), m_node(node)
-    {}
-
-    void redo() {
-        m_view->nodeManager()->activateNode(m_node);
-    }
-
-    void undo() {}
-
-private:
-    KisView2 *m_view;
-    KisNodeSP m_node;
-};
-
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
@@ -194,6 +171,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             }
         }
 
+        if (!nodeEditable()) {
+            return;
+        }
+
         /**
          * NOTE: we use deferred initialization of the node of
          * the stroke here. First, we set the node to null in
@@ -212,16 +193,10 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             !node->inherits("KisGroupLayer") &&
             node->paintDevice() &&
             selection &&
-            !selection->isDeselected() &&
             !selection->isTotallyUnselected(image->bounds())) {
 
             KisLayerSP oldLayer = dynamic_cast<KisLayer*>(node.data());
             KisLayerSP newLayer = createSelectionCopy(oldLayer, selection, image, m_strokeId);
-
-            KisView2 *view = dynamic_cast<KisCanvas2*>(canvas())->view();
-            image->addJob(m_strokeId,
-                          new KisStrokeStrategyUndoCommandBased::Data(
-                              new ActivateNodeCommand(view, newLayer)));
 
             node = newLayer;
         }
@@ -247,14 +222,7 @@ void KisToolMove::mouseMoveEvent(KoPointerEvent *event)
         }
 
         QPoint pos = convertToPixelCoord(event).toPoint();
-        if ((event->modifiers() & Qt::AltModifier) ||
-            (event->modifiers() & Qt::ControlModifier)) {
-
-            if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y()))
-                pos.setY(m_dragStart.y());
-            else
-                pos.setX(m_dragStart.x());
-        }
+        pos = applyModifiers(event->modifiers(), pos);
         drag(pos);
 
         notifyModified();
@@ -275,6 +243,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
         }
 
         QPoint pos = convertToPixelCoord(event).toPoint();
+        pos = applyModifiers(event->modifiers(), pos);
         drag(pos);
 
         KisImageWSP image = currentImage();
@@ -306,11 +275,15 @@ QWidget* KisToolMove::createOptionWidget()
     return m_optionsWidget;
 }
 
-
-QWidget* KisToolMove::optionWidget()
+QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
 {
-    return m_optionsWidget;
+    QPoint adjustedPos = pos;
+    if (modifiers & Qt::AltModifier || modifiers & Qt::ControlModifier) {
+
+        if (qAbs(pos.x() - m_dragStart.x()) > qAbs(pos.y() - m_dragStart.y()))
+            adjustedPos.setY(m_dragStart.y());
+        else
+            adjustedPos.setX(m_dragStart.x());
+    }
+    return adjustedPos;
 }
-
-
-#include "kis_tool_move.moc"

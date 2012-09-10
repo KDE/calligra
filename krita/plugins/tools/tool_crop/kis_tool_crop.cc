@@ -49,6 +49,8 @@
 #include <kis_canvas2.h>
 #include <kis_view2.h>
 #include <KoZoomController.h>
+#include <kis_floating_message.h>
+#include <kis_group_layer.h>
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
@@ -81,7 +83,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setEnabled(false);
     }
@@ -93,6 +95,8 @@ void KisToolCrop::deactivate()
     m_rectCrop = QRect(0, 0, 0, 0);
     updateWidgetValues();
     updateCanvasPixelRect(image()->bounds());
+
+    KisTool::deactivate();
 }
 
 void KisToolCrop::resourceChanged(int key, const QVariant &res)
@@ -104,7 +108,7 @@ void KisToolCrop::resourceChanged(int key, const QVariant &res)
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setCurrentIndex(1);
         m_optWidget->cmbType->setEnabled(false);
@@ -436,7 +440,12 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
 void KisToolCrop::crop()
 {
-    // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
+    if (m_optWidget->cmbType->currentIndex() == 0) {
+        //Cropping layer
+        if (!nodeEditable()) {
+            return;
+        }
+    }
 
     m_haveCropSelection = false;
     useCursor(cursor());
@@ -633,11 +642,6 @@ QWidget* KisToolCrop::createOptionWidget()
 
     m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
 
-    return m_optWidget;
-}
-
-QWidget* KisToolCrop::optionWidget()
-{
     return m_optWidget;
 }
 

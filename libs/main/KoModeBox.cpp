@@ -46,11 +46,13 @@ class KoModeBox::Private
 public:
     Private(KoCanvasController *c)
         : canvas(c->canvas())
+        , canvasReset(false)
         , activeId(-1)
     {
     }
 
     KoCanvasBase *canvas;
+    bool canvasReset;
     QList<KoToolButton> buttons; // buttons maintained by toolmanager
     QList<KoToolButton> addedButtons; //buttons in the order added to QToolBox
     QMap<int, QWidget *> addedWidgets;
@@ -58,14 +60,16 @@ public:
     int activeId;
 };
 
+QString KoModeBox::applicationName;
+
 static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 {
     if (b1.section == b2.section) {
         return b1.priority < b2.priority;
     } else {
-        if (b1.section.contains(qApp->applicationName())) {
+        if (b1.section.contains(KoModeBox::applicationName)) {
             return true;
-        } else if (b2.section.contains(qApp->applicationName())) {
+        } else if (b2.section.contains(KoModeBox::applicationName)) {
             return false;
         }
 
@@ -79,10 +83,12 @@ static bool compareButton(const KoToolButton &b1, const KoToolButton &b2)
 }
 
 
-KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas)
+KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     : QToolBox()
     , d(new Private(canvas))
 {
+    applicationName = appName;
+
     foreach(const KoToolButton & button,
             KoToolManager::instance()->createToolList(canvas->canvas())) {
         addButton(button);
@@ -153,6 +159,7 @@ void KoModeBox::addItem(const KoToolButton button)
     }
     widget = new QWidget();
     widget->setLayout(layout);
+    layout->setContentsMargins(0,0,0,0);
     d->addedWidgets[button.buttonGroupId] = widget;
 
     QToolBox::addItem(widget, button.button->icon(), button.button->toolTip());
@@ -176,11 +183,10 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
     int newIndex = -1;
     foreach (const KoToolButton button, d->buttons) {
         QString code = button.visibilityCode;
-
         if (button.buttonGroupId == d->activeId) {
             newIndex = d->addedButtons.length();
         }
-        if (button.section.contains(qApp->applicationName())) {
+        if (button.section.contains(applicationName)) {
             addItem(button);
             continue;
         } else if (!button.section.contains("dynamic")
@@ -195,10 +201,13 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 
         if (code.endsWith( QLatin1String( "/always"))) {
             addItem(button);
+            continue;
         } else if (code.isEmpty() && codes.count() != 0) {
             addItem(button);
+            continue;
         } else if (codes.contains(code)) {
             addItem(button);
+            continue;
         }
     }
     if (newIndex != -1) {
@@ -210,6 +219,13 @@ void KoModeBox::updateShownTools(const KoCanvasController *canvas, const QList<Q
 void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
 {
     if (! d->addedWidgets.contains(d->activeId)) return;
+
+    // For some reason we need to set some attr on our placeholder widget here
+    // eventhough these settings should be default
+    // Otherwise Sheets' celltool's optionwidget looks ugly
+    d->addedWidgets[d->activeId]->setAutoFillBackground(false);
+    d->addedWidgets[d->activeId]->setBackgroundRole(QPalette::NoRole);
+
     qDeleteAll(d->currentAuxWidgets);
     d->currentAuxWidgets.clear();
 
@@ -217,7 +233,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
     QGridLayout *layout = (QGridLayout *)d->addedWidgets[d->activeId]->layout();
     // need to unstretch row that have previously been stretched
     layout->setRowStretch(layout->rowCount()-1, 0);
-    layout->setColumnMinimumWidth(0, 16);
+    layout->setColumnMinimumWidth(0, 0); // used to be indent
     layout->setColumnStretch(1, 1);
     layout->setColumnStretch(2, 2);
     layout->setColumnStretch(3, 1);
@@ -248,7 +264,7 @@ void KoModeBox::setOptionWidgets(const QList<QWidget *> &optionWidgetList)
         if (widget != optionWidgetList.last()) {
             QFrame *s;
             layout->addWidget(s = new QFrame(), cnt++, 2, 1, 1);
-            s->setFrameShape(QFrame::HLine);
+            s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
             d->currentAuxWidgets.insert(s);
         }
     }
@@ -274,6 +290,8 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
                     this, SLOT(setOptionWidgets(const QList<QWidget *> &)));
     }
 
+    d->canvasReset = d->canvas != 0;
+
     d->canvas = canvas;
 
     ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
@@ -284,7 +302,9 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
 void KoModeBox::unsetCanvas()
 {
-    d->canvas = 0;
+    if (!d->canvasReset) {
+        d->canvas = 0;
+    }
 }
 
 void KoModeBox::toolAdded(const KoToolButton &button, KoCanvasController *canvas)

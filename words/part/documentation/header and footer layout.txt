@@ -1,0 +1,47 @@
+If the text is less than it tkaes to fill the min-height minus bottom-margin, then the header occupies the space anyway like this:
+
+            ----------------------------                |-------------------------------|
+            |                                           |HEADER TEXT                    |
+            |                                           |                               |
+min-height  |                   -----                   |-------------------------------|
+            |                   |
+            |                   | bottom-margin
+            ----------------------------                |-------------------------------|
+                                                        |BODY TEXT        BODY TEXT     |
+                                                        |BODY TEXT        BODY TEXT     |                                                        |BODY TEXT        BODY TEXT     |
+
+
+
+
+If the header text takes up more space and NO dynamic spacing, then it pushes everything down and maintains the margin to the body:
+
+            ----------------------------                |-------------------------------|
+            |                                           |HEADER TEXT  HEADER TEXT       |
+            |                                           |HEADER TEXT  HEADER TEXT       |
+min-height  |                                           |HEADER TEXT  HEADER TEXT       |
+            |                                           |HEADER TEXT  HEADER TEXT       |
+            |                   ----------------        |-------------------------------|
+            --------------------|
+                                | bottom-margin
+                                ----------------        |-------------------------------|
+                                                        |BODY TEXT        BODY TEXT     |
+                                                        |BODY TEXT        BODY TEXT     |
+                                                        |BODY TEXT        BODY TEXT     |
+
+
+
+And if the header text takes up more space than minimum AND dynamic spacing, then the effective
+margin crimps until there is nothing left. Here is an example where only the slightest of effective distance remains:
+
+            ----------------------------                |-------------------------------|
+            |                                           |HEADER TEXT  HEADER TEXT       |
+            |                                           |HEADER TEXT  HEADER TEXT       |
+min-height  |                   -----                   |HEADER TEXT  HEADER TEXT       |
+            |                   |                       |HEADER TEXT  HEADER TEXT       |
+            |                   | bottom-margin         |-------------------------------|
+            -------------------------                   |-------------------------------|
+                                                        |BODY TEXT        BODY TEXT     |
+                                                        |BODY TEXT        BODY TEXT     |
+                                                        |BODY TEXT        BODY TEXT     |
+
+

@@ -36,6 +36,9 @@ SvgShapeFactory::SvgShapeFactory()
 {
     setLoadingPriority(10);
     setXmlElementNames(QString(KoXmlNS::draw), QStringList("image"));
+    // hide from add shapes docker as the shape is not able to be dragged onto 
+    // the canvas as createDefaultShape returns 0.
+    setHidden(true);
 }
 
 SvgShapeFactory::~SvgShapeFactory()
@@ -62,7 +65,8 @@ bool SvgShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContex
         if (href.startsWith("./")) {
             href.remove(0,2);
         }
-        const QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+
+        QString mimetype = context.odfLoadingContext().mimeTypeForPath(href, true);
         return (mimetype == "image/svg+xml");
     }
 

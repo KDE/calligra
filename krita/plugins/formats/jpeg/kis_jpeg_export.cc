@@ -21,10 +21,14 @@
 
 #include <QCheckBox>
 #include <QSlider>
+#include <QColor>
+#include <QString>
+#include <QStringList>
 
 #include <kapplication.h>
 #include <kdialog.h>
 #include <kpluginfactory.h>
+#include <kcolorbutton.h>
 
 #include <KoFilterManager.h>
 #include <KoFilterChain.h>
@@ -35,7 +39,8 @@
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
-
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_filter_registry_model.h>
 #include <kis_exif_info_visitor.h>
@@ -71,11 +76,33 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     Ui::WdgOptionsJPEG wdgUi;
-//     = new Ui::WdgOptionsJPEG(kdb);
     QWidget* wdg = new QWidget(kdb);
     wdgUi.setupUi(wdg);
     KisMetaData::FilterRegistryModel frm;
     wdgUi.metaDataFilters->setModel(&frm);
+
+    // until we've got an actual quality preview here!
+    wdgUi.chkPreview->setVisible(false);
+
+    QString filterConfig = KisConfig().exportConfiguration("JPEG");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    wdgUi.progressive->setChecked(cfg.getBool("progressive", false));
+    wdgUi.qualityLevel->setValue(cfg.getInt("quality", 80));
+    wdgUi.optimize->setChecked(cfg.getBool("optimize", true));
+    wdgUi.smoothLevel->setValue(cfg.getInt("smoothing", 0));
+    wdgUi.baseLineJPEG->setChecked(cfg.getBool("baseline", true));
+    wdgUi.subsampling->setCurrentIndex(cfg.getInt("subsampling", 0));
+    wdgUi.exif->setChecked(cfg.getBool("exif", true));
+    wdgUi.iptc->setChecked(cfg.getBool("iptc", true));
+    wdgUi.xmp->setChecked(cfg.getBool("xmp", true));
+
+    QStringList rgb = cfg.getString("transparencyFillcolor", "255,255,255").split(",");
+    wdgUi.bnTransparencyFillColor->setDefaultColor(Qt::white);
+    wdgUi.bnTransparencyFillColor->setColor(QColor(rgb[0].toInt(), rgb[1].toInt(), rgb[2].toInt()));
+
+    frm.setEnabledFilters(cfg.getString("filters").split(","));
 
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
@@ -88,17 +115,47 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     
     KisJPEGOptions options;
     options.progressive = wdgUi.progressive->isChecked();
+    cfg.setProperty("progressive", options.progressive);
+
     options.quality = wdgUi.qualityLevel->value();
+    cfg.setProperty("quality", options.quality);
+
     // Advanced
     options.optimize = wdgUi.optimize->isChecked();
+    cfg.setProperty("optimize", options.optimize);
+
     options.smooth = wdgUi.smoothLevel->value();
+    cfg.setProperty("smoothing", options.smooth);
+
     options.baseLineJPEG = wdgUi.baseLineJPEG->isChecked();
+    cfg.setProperty("baseline", options.baseLineJPEG);
+
     options.subsampling = wdgUi.subsampling->currentIndex();
+    cfg.setProperty("subsampling", options.subsampling);
     // Jpeg
     options.exif = wdgUi.exif->isChecked();
+    cfg.setProperty("exif", options.exif);
+
     options.iptc = wdgUi.iptc->isChecked();
+    cfg.setProperty("iptc", options.iptc);
+
     options.xmp = wdgUi.xmp->isChecked();
+    cfg.setProperty("xmp", options.xmp);
+
+    QColor c = wdgUi.bnTransparencyFillColor->color();
+    options.transparencyFillColor = c;
+    cfg.setProperty("transparencyFillcolor", QString("%1,%2,%3").arg(c.red()).arg(c.green()).arg(c.blue()));
+
     options.filters = frm.enabledFilters();
+    QString enabledFilters;
+    foreach(const KisMetaData::Filter* filter, options.filters) {
+        enabledFilters = enabledFilters + filter->id() + ",";
+    }
+
+    cfg.setProperty("filters", enabledFilters);
+
+
+    KisConfig().setExportConfiguration("JPEG", cfg);
 
     delete kdb;
     // XXX: Add dialog about flattening layers here

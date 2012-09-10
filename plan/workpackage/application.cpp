@@ -30,7 +30,6 @@
 #include <QLabel>
 
 #include <assert.h>
-#include <kicon.h>
 
 #include <KoApplicationAdaptor.h>
 #include <KoDocument.h>
@@ -54,7 +53,6 @@
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kiconloader.h>
-#include <kiconloader.h>
 #include <klibloader.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -68,6 +66,8 @@
 #include <ktemporaryfile.h>
 #include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
+
+#include "debugarea.h"
 
 KPlatoWork_Application::KPlatoWork_Application()
     : KUniqueApplication(),
@@ -89,15 +89,15 @@ KPlatoWork_Application::~KPlatoWork_Application()
 
 int KPlatoWork_Application::newInstance()
 {
-    kDebug()<<"starting------------------------";
+    kDebug(planworkDbg())<<"starting------------------------";
     int status = KUniqueApplication::newInstance(); // bring up window (if any)
     if ( status != 0 ) {
         return status;
     }
     QList<KMainWindow*> lst = KMainWindow::memberList();
-    kDebug()<<"windows"<<lst.count();
+    kDebug(planworkDbg())<<"windows"<<lst.count();
     if ( lst.count() > 1 ) {
-        kDebug()<<"windows"<<lst.count();
+        kDebug(planworkDbg())<<"windows"<<lst.count();
         return 1; // should never happen
     }
     if ( lst.isEmpty() ) {
@@ -121,7 +121,7 @@ int KPlatoWork_Application::newInstance()
     }
     args->clear();
     // not calling this before since the program will quit there.
-    kDebug()<<"started------------------------";
+    kDebug(planworkDbg())<<"started------------------------";
     return 0;
 }
 

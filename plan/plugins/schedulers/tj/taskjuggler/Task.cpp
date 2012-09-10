@@ -1153,7 +1153,7 @@ Task::getSchedulingText() const
         }
         return text;
     }
-    return QString::null;
+    return QString();
 }
 
 QString
@@ -1534,7 +1534,7 @@ Task::xRef(QMap<QString, Task*>& hash)
                     t->followers.append(this);
                 }
                 if (DEBUGPF(11))
-                    qDebug()<<"Registering dependency:"<<this<<"preceedes"<<t;
+                    qDebug()<<"Registering dependency:"<<this<<"precedes"<<t;
             }
         }
     }
@@ -1784,7 +1784,7 @@ Task::loopDetection(LDIList& list, LDIList& chkedTaskList, bool atEnd,
      * depends points us. Parent/Child relationships also specify a
      * dependency. The scheduling mode of the child determines the direction
      * of the flow. With help of the 'caller' parameter we make sure that we
-     * only visit childs if we were referred to the task by a non-parent-child
+     * only visit children if we were referred to the task by a non-parent-child
      * relationship. */
     if (!atEnd)
     {
@@ -1950,7 +1950,7 @@ Task::checkPathForLoops(LDIList& list, bool atEnd) const
     {
         QString loopChain;
         LoopDetectorInfo* it;
-        /* Find the first occurence of this task in the list. This is the
+        /* Find the first occurrence of this task in the list. This is the
          * start of the loop. */
         for (it = list.first(); *it != *thisTask; it = it->next())
             ;
@@ -2698,7 +2698,7 @@ NOT USED ATM
     if (!schedulingDone)
     {
         warningMessage(i18nc("info/plain", "Task has not been marked completed.\n"
-                          "It is scheduled to last from %2 to %3.\n"
+                          "It is scheduled to last from %1 to %2.\n"
                           "This might be a bug in the scheduler.",
                      formatTime(start), formatTime(end + 1)));
         return false;
@@ -3848,7 +3848,7 @@ QDomElement Task::xmlElement( QDomDocument& doc, bool /* absId */ )
     *  With the following code, the task in XML contains simply a list of all Allocations
     *  wiht the ResourceID for which resource the allocation is. After that, there comes
     *  a list of all Resources, again having the Resource Id as key. That could be put
-    *  in a hirarchy like
+    *  in a hierarchy like
     *  <Resource Id="dev2" >Larry Bono
     *       <Income>1000</Income>
     *       <Allocation>
@@ -3871,7 +3871,7 @@ QDomElement Task::xmlElement( QDomDocument& doc, bool /* absId */ )
       }
    }
 
-   // booked Ressources 
+   // booked Resources 
    if( bookedResources.count() > 0 )
    {
        for (ResourceListIterator rli(bookedResources); *rli != 0; ++rli)

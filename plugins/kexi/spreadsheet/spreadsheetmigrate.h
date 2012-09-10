@@ -22,13 +22,14 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <migration/keximigrate.h>
 #include <migration/keximigrate_p.h>
-#include <tables/part/Doc.h>
-#include <tables/Map.h>
-#include <tables/Sheet.h>
+#include <sheets/part/Doc.h>
+#include <sheets/Map.h>
+#include <sheets/Sheet.h>
 #include <KoStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoDocument.h>
+#include <KoPart.h>
 
 namespace KexiMigration
 {
@@ -80,9 +81,9 @@ public:
 
   private:
     QString m_FileName;
-    Calligra::Tables::Sheet *m_CurSheet;
+    Calligra::Sheets::Sheet *m_CurSheet;
     
-    Calligra::Tables::Doc *m_KSDoc;
+    Calligra::Sheets::Doc *m_KSDoc;
 
     QStringList m_FieldNames;
 

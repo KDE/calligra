@@ -30,7 +30,6 @@
 #include <QRect>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -70,8 +69,6 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ImageSizeFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesize.rc"), true);
 
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);
@@ -214,7 +211,7 @@ void ImageSize::slotSelectionScale()
 
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(selection->mergedPixelSelection(),
+        KisTransformWorker worker(selection->getOrCreatePixelSelection(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
                                   0, 0, 0.0, 0.0, 0.0, 0, 0, u,
@@ -237,7 +234,7 @@ void ImageSize::slotNodeChanged(const KisNodeSP node)
 
 void ImageSize::slotSelectionChanged()
 {
-    m_scaleSelectionAction->setEnabled(m_view->selectionManager()->havePixelsSelected());
+    m_scaleSelectionAction->setEnabled(m_view->selectionEditable() && m_view->selectionManager()->havePixelsSelected());
 }
 
 #include "imagesize.moc"

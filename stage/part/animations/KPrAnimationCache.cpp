@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2010 Casper Boemann <cbo@boemannn.dk>
+ * Copyright ( C ) 2010 C. Boemann <cbo@boemannn.dk>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -188,10 +188,10 @@ void KPrAnimationCache::startStep(int step)
 
 void KPrAnimationCache::endStep(int step)
 {
-    if (m_shapeValuesStack.size() > step) {
+    if (m_shapeValuesStack.size() > step+1) {
         m_currentShapeValues = m_shapeValuesStack[step+1];
     }
-    if (m_textBlockDataValuesStack.size() > step) {
+    if (m_textBlockDataValuesStack.size() > step+1) {
         m_currentTextBlockDataValues = m_textBlockDataValuesStack[step+1];
     }
 }

@@ -61,9 +61,15 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
     if(m_setupAxisFlag) {
         setMode(KisTool::OTHER);
         m_axisPoint = convertToPixelCoord(e->point);
+        requestUpdateOutline(e->point);
         updateCanvas();
+        e->accept();
     }
     else {
+        if (!nodeEditable()) {
+            return;
+        }
+
         initTransformations();
         KisToolFreehand::mousePressEvent(e);
     }
@@ -72,9 +78,10 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
 void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
 {
     if(mode() == KisTool::OTHER) {
-        updateOutlineDocPoint(e->point);
         m_axisPoint = convertToPixelCoord(e->point);
+        requestUpdateOutline(e->point);
         updateCanvas();
+        e->accept();
     }
     else {
         KisToolFreehand::mouseMoveEvent(e);
@@ -100,7 +107,9 @@ void KisToolMultihand::mouseReleaseEvent(KoPointerEvent* e)
 {
     if(mode() == KisTool::OTHER) {
         setMode(KisTool::HOVER_MODE);
+        requestUpdateOutline(e->point);
         finishAxisSetup();
+        e->accept();
     }
     else {
         KisToolFreehand::mouseReleaseEvent(e);

@@ -21,19 +21,19 @@
 
 #include "kexidatetimetableedit.h"
 
-#include <qapplication.h>
-#include <qpainter.h>
-#include <qvariant.h>
-#include <qrect.h>
-#include <qpalette.h>
-#include <qcolor.h>
-#include <qfontmetrics.h>
-#include <qdatetime.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qlayout.h>
-#include <qtoolbutton.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QPainter>
+#include <QVariant>
+#include <QRect>
+#include <QPalette>
+#include <QColor>
+#include <QFontMetrics>
+#include <QDateTime>
+#include <QCursor>
+#include <QPoint>
+#include <QLayout>
+#include <QToolButton>
+#include <QClipboard>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -123,6 +123,12 @@ QVariant KexiDateTimeTableEdit::value()
 bool KexiDateTimeTableEdit::valueIsValid()
 {
     return KexiDateTimeFormatter::isValid(m_dateFormatter, m_timeFormatter, m_lineedit->text());
+}
+
+bool KexiDateTimeTableEdit::valueChanged()
+{
+    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    return m_origValue != m_lineedit->text();
 }
 
 bool KexiDateTimeTableEdit::textIsEmpty() const

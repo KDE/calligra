@@ -29,6 +29,8 @@
 #undef MSOOXML_CURRENT_NS
 #define MSOOXML_CURRENT_NS "v"
 
+//#define VMLREADER_DEBUG
+
 //! Used by read_rect() to parse CSS2.
 //! See ECMA-376 Part 4, 14.1.2.16, p.465.
 //! @todo reuse KHTML parser?
@@ -48,8 +50,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
         if (value.startsWith("'") && value.endsWith("'")) {
             value = value.mid(1, value.length() - 2); // strip ' '
         }
-        m_currentVMLProperties.vmlStyle.insert(name, value);
+#ifdef VMLREADER_DEBUG
         kDebug() << "name:" << name << "value:" << value;
+#endif
+        m_currentVMLProperties.vmlStyle.insert(name, value);
     }
     return KoFilter::OK;
 }
@@ -143,71 +147,106 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     qreal widthValue = 0;
     qreal heightValue = 0;
 
-    if (!x_mar.isEmpty()) {
-        if (m_currentVMLProperties.insideGroup) {
+    /* NOTE: The default value of props. in {height, left, margin-*,
+     * mso-wrp-distance-*, rotation, top, width, z-index} is 0. */
+    QString *p_str = 0;
+
+    //horizontal position
+    if (m_currentVMLProperties.insideGroup) {
+        if (!x_mar.isEmpty()) {
             x_position = (x_mar.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
-                m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
+                         m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
             x_pos_string = QString("%1pt").arg(x_position);
-        } else {
-            x_position = x_mar.left(x_mar.length() - 2).toDouble(); // removing the unit
-            x_pos_string = x_mar;
         }
-    }
-    else if (!leftPos.isEmpty()) {
-        if (m_currentVMLProperties.insideGroup) {
+        else if (!leftPos.isEmpty()) {
             x_position = (leftPos.toInt() - m_currentVMLProperties.groupX) * m_currentVMLProperties.real_groupWidth /
-                m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
+                         m_currentVMLProperties.groupWidth + m_currentVMLProperties.groupXOffset;
             x_pos_string = QString("%1pt").arg(x_position);
         } else {
-            x_position = leftPos.left(leftPos.length() - 2).toDouble();
-            x_pos_string = leftPos;
-        }
-    }
-    else {
-        if (m_currentVMLProperties.insideGroup) {
             x_pos_string = QString("%1pt").arg(m_currentVMLProperties.groupXOffset);
         }
+
+    } else {
+        if (!x_mar.isEmpty()) {
+            p_str = &x_mar;
+        }
+        else if (!leftPos.isEmpty()) {
+            p_str = &leftPos;
+        }
+        //TODO: Add support for auto and percentage values.
+        if (p_str && !(*p_str == "auto" || p_str->endsWith("%"))) {
+            if (*p_str == "0") {
+                p_str->append("in");
+            }
+            x_position = p_str->left(p_str->length() - 2).toDouble();
+            x_pos_string = *p_str;
+            p_str = 0;
+        }
     }
-    if (!y_mar.isEmpty()) {
-        if (m_currentVMLProperties.insideGroup) {
+
+    //vertical position
+    if (m_currentVMLProperties.insideGroup) {
+        if (!y_mar.isEmpty()) {
             y_position = (y_mar.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
             y_pos_string = QString("%1pt").arg(y_position);
-        } else {
-            y_position = y_mar.left(y_mar.length() -2).toDouble();
-            y_pos_string = y_mar;
         }
-    }
-    else if (!topPos.isEmpty()) {
-        if (m_currentVMLProperties.insideGroup) {
+        else if (!topPos.isEmpty()) {
             y_position = (topPos.toInt() - m_currentVMLProperties.groupY) * m_currentVMLProperties.real_groupHeight /
                 m_currentVMLProperties.groupHeight + m_currentVMLProperties.groupYOffset;
             y_pos_string = QString("%1pt").arg(y_position);
         } else {
-            y_position = topPos.left(topPos.length() - 2).toDouble();
-            y_pos_string = topPos;
-        }
-    }
-    else {
-        if (m_currentVMLProperties.insideGroup) {
             y_pos_string = QString("%1pt").arg(m_currentVMLProperties.groupYOffset);
         }
+    } else {
+        if (!y_mar.isEmpty()) {
+            p_str = &y_mar;
+        }
+        else if (!topPos.isEmpty()) {
+            p_str = &topPos;
+        }
+        //TODO: Add support for auto and percentage values.
+        if (p_str && !(*p_str == "auto" || p_str->endsWith("%"))) {
+            if (*p_str == "0") {
+                p_str->append("in");
+            }
+            y_position = p_str->left(p_str->length() - 2).toDouble();
+            y_pos_string = *p_str;
+            p_str = 0;
+        }
     }
-    if (!width.isEmpty()) {
-        if (m_currentVMLProperties.insideGroup) {
-            widthValue = width.toInt() * m_currentVMLProperties.real_groupWidth / m_currentVMLProperties.groupWidth;
+
+    //width
+    if (m_currentVMLProperties.insideGroup) {
+        if (!width.isEmpty()) {
+            widthValue = width.toInt() * m_currentVMLProperties.real_groupWidth /
+                         m_currentVMLProperties.groupWidth;
             widthString = QString("%1pt").arg(widthValue);
-        } else {
+        }
+    } else {
+        if (width.isEmpty() || width == "0") {
+            width = "0in";
+        }
+        //TODO: Add support for auto and percentage values.
+        if (!(width == "auto" || width.endsWith("%"))) {
             widthValue = width.left(width.length() - 2).toDouble();
             widthString = width;
         }
     }
-    if (!height.isEmpty()) {
-        if (m_currentVMLProperties.insideGroup) {
-            heightValue = height.toInt() * m_currentVMLProperties.real_groupHeight / m_currentVMLProperties.groupHeight;
+
+    //height
+    if (m_currentVMLProperties.insideGroup) {
+        if (!height.isEmpty()) {
+            heightValue = height.toInt() * m_currentVMLProperties.real_groupHeight /
+                          m_currentVMLProperties.groupHeight;
             heightString = QString("%1pt").arg(heightValue);
         }
-        else {
+    } else {
+        if (height.isEmpty() || height == "0") {
+            height = "0in";
+        }
+        //TODO: Add support for auto and percentage values.
+        if (!(height == "auto" || height.endsWith("%"))) {
             heightValue = height.left(height.length() - 2).toDouble();
             heightString = height;
         }
@@ -216,7 +255,8 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     if (startType == LineStart) {
         QString flip(m_currentVMLProperties.vmlStyle.value("flip"));
         QString y1 = y_pos_string;
-        QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2)); // right(2) takes the unit
+        // right(2) takes the unit
+        QString x2 = QString("%1%2").arg(x_position + widthValue).arg(widthString.right(2));
         QString x1 = x_pos_string;
         QString y2 = QString("%1%2").arg(y_position + heightValue).arg(heightString.right(2));
         if (flip.contains("x")) {
@@ -264,8 +304,17 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
 
-    if (!z_index.isEmpty()) {
-        body->addAttribute("draw:z-index", z_index);
+    //TODO: VML allows negative numbers, ODF does NOT!  Using
+    //automatic ordering in case of negative numbers temporary.
+    if (!z_index.isEmpty() && z_index != "auto") {
+        bool ok;
+        const int n = z_index.toInt(&ok);;
+        if (!ok) {
+            kDebug() << "error converting" << z_index << "to int (attribute z-index)";
+        }
+        else if (n >= 0) {
+            body->addAttribute("draw:z-index", n);
+        }
     }
 
     bool asChar = false;
@@ -302,7 +351,8 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
                 m_currentDrawStyle->addProperty("style:vertical-rel", "page-content");
             }
         }
-        else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" || ver_pos_rel == "outer-margin-area") {
+        else if (ver_pos_rel == "top-margin-area" || ver_pos_rel == "inner-margin-area" ||
+                 ver_pos_rel == "outer-margin-area") {
             if (m_headerActive || m_footerActive) {
                 m_currentDrawStyle->addProperty("style:vertical-rel", "frame");
             } else {
@@ -356,7 +406,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
     }
     else {
-        body->addAttribute("text:anchor-type", m_currentVMLProperties.anchorType);
+        body->addAttribute("text:anchor-type", m_currentVMLProperties.anchorType.isEmpty() ? "char": m_currentVMLProperties.anchorType);
     }
     if (!asChar) {
         if (hor_pos.isEmpty() || hor_pos == "absolute") {
@@ -437,8 +487,37 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:shadow", "hidden");
     }
     m_currentDrawStyle->addProperty("draw:shadow-color", m_currentVMLProperties.shadowColor);
-    m_currentDrawStyle->addProperty("draw:shadow-offset-x", m_currentVMLProperties.shadowXOffset);
-    m_currentDrawStyle->addProperty("draw:shadow-offset-y", m_currentVMLProperties.shadowYOffset);
+
+    // ------------------------------
+    // shadow offset
+    // ------------------------------
+    QString offset = m_currentVMLProperties.shadowXOffset;
+    if (offset.endsWith('%')) {
+        offset.chop(1);
+        bool ok;
+        int p = offset.toInt(&ok);
+        if (!ok) {
+            kDebug() << "error converting" << offset << "to int (shadow x-offset)";
+        } else {
+            offset = QString::number(p * widthValue / 100.0,'f').append(widthString.right(2));
+        }
+    }
+    m_currentDrawStyle->addProperty("draw:shadow-offset-x", offset);
+
+    offset = m_currentVMLProperties.shadowYOffset;
+    if (offset.endsWith("%")) {
+        offset.chop(1);
+        bool ok;
+        int p = offset.toInt(&ok);
+        if (!ok) {
+            kDebug() << "error converting" << offset << "to int (shadow y-offset)";
+        } else {
+            offset = QString::number(p * heightValue / 100.0,'f').append(heightString.right(2));
+        }
+    }
+    m_currentDrawStyle->addProperty("draw:shadow-offset-y", offset);
+    // ------------------------------
+
     if (m_currentVMLProperties.shadowOpacity > 0) {
         m_currentDrawStyle->addProperty("draw:shadow-opacity", QString("%1%").
             arg(m_currentVMLProperties.shadowOpacity));
@@ -464,10 +543,51 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         m_currentDrawStyle->addProperty("draw:auto-grow-width", "true");
     }
 
-    m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.leftMargin);
-    m_currentDrawStyle->addProperty("fo:margin-right", m_currentVMLProperties.rightMargin);
-    m_currentDrawStyle->addProperty("fo:margin-top", m_currentVMLProperties.topMargin);
-    m_currentDrawStyle->addProperty("fo:margin-bottom", m_currentVMLProperties.bottomMargin);
+    // --------------------
+    // padding
+    // --------------------
+#ifdef VMLREADER_DEBUG
+    kDebug() << this << "padding-left:" << m_currentVMLProperties.internalMarginLeft;
+    kDebug() << this << "padding-top:" << m_currentVMLProperties.internalMarginTop;
+    kDebug() << this << "padding-right:" << m_currentVMLProperties.internalMarginRight;
+    kDebug() << this << "padding-bottom:" << m_currentVMLProperties.internalMarginBottom;
+#endif
+    m_currentDrawStyle->addProperty("fo:padding-left", m_currentVMLProperties.internalMarginLeft);
+    m_currentDrawStyle->addProperty("fo:padding-right", m_currentVMLProperties.internalMarginRight);
+    m_currentDrawStyle->addProperty("fo:padding-top", m_currentVMLProperties.internalMarginTop);
+    m_currentDrawStyle->addProperty("fo:padding-bottom", m_currentVMLProperties.internalMarginBottom);
+
+    // --------------------
+    // margins
+    // --------------------
+    QString *p_margin = &m_currentVMLProperties.marginLeft;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-left")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-left");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginTop;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-top")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-top");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginRight;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-right")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-right");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    p_margin = &m_currentVMLProperties.marginBottom;
+    if (m_currentVMLProperties.vmlStyle.contains("mso-wrap-distance-bottom")) {
+        *p_margin = m_currentVMLProperties.vmlStyle.value("mso-wrap-distance-bottom");
+        doPrependCheck(*p_margin);
+        changeToPoints(*p_margin);
+    }
+    m_currentDrawStyle->addProperty("fo:margin-left", m_currentVMLProperties.marginLeft);
+    m_currentDrawStyle->addProperty("fo:margin-top", m_currentVMLProperties.marginTop);
+    m_currentDrawStyle->addProperty("fo:margin-right", m_currentVMLProperties.marginRight);
+    m_currentDrawStyle->addProperty("fo:margin-bottom", m_currentVMLProperties.marginBottom);
 
     if (!m_currentDrawStyle->isEmpty()) {
         const QString drawStyleName(mainStyles->insert(*m_currentDrawStyle, "gr"));
@@ -497,10 +617,16 @@ void MSOOXML_CURRENT_CLASS::takeDefaultValues()
     m_currentVMLProperties.shadowXOffset = "2pt"; // default
     m_currentVMLProperties.shadowYOffset = "2pt"; //default
     m_currentVMLProperties.imagedataPath = QString();
-    m_currentVMLProperties.leftMargin = "0.1in"; // default
-    m_currentVMLProperties.rightMargin = "0.1in"; // default
-    m_currentVMLProperties.topMargin = "0.05in"; //default
-    m_currentVMLProperties.bottomMargin = "0.05in"; //default
+    // default internal margins
+    m_currentVMLProperties.internalMarginLeft = "0.1in";
+    m_currentVMLProperties.internalMarginRight = "0.1in";
+    m_currentVMLProperties.internalMarginTop = "0.05in";
+    m_currentVMLProperties.internalMarginBottom = "0.05in";
+    // default margins (according to MS Word UI NOT MS-ODRAW defaults)
+    m_currentVMLProperties.marginLeft = "0.13in";
+    m_currentVMLProperties.marginRight = "0.13in";
+    m_currentVMLProperties.marginTop = "0in";
+    m_currentVMLProperties.marginBottom = "0in";
     m_currentVMLProperties.fitTextToShape = false;
     m_currentVMLProperties.fitShapeToText = false;
 }
@@ -522,7 +648,8 @@ QString MSOOXML_CURRENT_CLASS::rgbColor(QString color)
 
     QString newColor;
     if (color.startsWith("#")) {
-        newColor = color;
+        QColor c(color); // use QColor parser to validate and/or correct color
+        newColor = c.name();
     }
     else if (color == "red") {
         newColor = "#ff0000";
@@ -910,7 +1037,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_rect()
 #undef CURRENT_EL
 #define CURRENT_EL shadow
 //! Shadow handler
-/*
+/*! ECMA-376 Part 4, 19.1.2.18, p.587.
+
  Parent elements:
  - arc (§14.1.2.1);
  - background (Part 1, §17.2.1);
@@ -952,8 +1080,15 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shadow()
     TRY_READ_ATTR_WITHOUT_NS(offset)
     int index = offset.indexOf(',');
     if (index > 0) {
-        m_currentVMLProperties.shadowXOffset = offset.left(index);
-        m_currentVMLProperties.shadowYOffset = offset.mid(index + 1);
+        if (offset.left(index) != "0") {
+            m_currentVMLProperties.shadowXOffset = offset.left(index);
+        }
+        if (offset.mid(index + 1) != "0") {
+            m_currentVMLProperties.shadowYOffset = offset.mid(index + 1);
+        }
+    }
+    else if (offset == "0") {
+        m_currentVMLProperties.shadowed = false;
     }
 
     TRY_READ_ATTR_WITHOUT_NS(opacity)
@@ -2328,8 +2463,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
             m_currentVMLProperties.real_groupWidth = _real_groupWidth;
             m_currentVMLProperties.real_groupHeight = _real_groupHeight;
         }
-    }
-    else {
+    } else {
         takeDefaultValues();
     }
 
@@ -2371,6 +2505,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_shape()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isStartElement()) {
             TRY_READ_IF(imagedata)
+            //TODO: represent as draw:frame/draw:text-box
             ELSE_TRY_READ_IF(textbox)
             ELSE_TRY_READ_IF(stroke)
             ELSE_TRY_READ_IF(fill)
@@ -2539,31 +2674,68 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_textbox()
         oldProperties.fitTextToShape = true;
     }
 
-    // In below code, the else clauses are needed for cases that not all insets are defined
+    // In below code, the else clauses are needed for cases that not
+    // all insets are defined
     TRY_READ_ATTR_WITHOUT_NS(inset)
     if (!inset.isEmpty()) {
         doPrependCheck(inset);
-        inset.replace(",,", ",0,");
+        inset.replace(",,", ",d,"); //Default
         int index = inset.indexOf(',');
         if (index > 0) {
-            oldProperties.leftMargin = inset.left(index);
+            QString str = inset.left(index);
+            if (str != "d") {
+                if (str == "0") {
+                    str.append("in");
+                }
+                oldProperties.internalMarginLeft = str;
+            }
             inset = inset.mid(index + 1);
             doPrependCheck(inset);
             index = inset.indexOf(',');
             if (index > 0) {
-                oldProperties.topMargin = inset.left(index);
+                str = inset.left(index);
+                if (str != "d") {
+                    if (str == "0") {
+                        str.append("in");
+                    }
+                    oldProperties.internalMarginTop = str;
+                }
                 inset = inset.mid(index + 1);
                 doPrependCheck(inset);
                 index = inset.indexOf(',');
                 if (index > 0) {
-                    oldProperties.rightMargin = inset.left(index);
-                    oldProperties.bottomMargin = inset.mid(index + 1);
-                    doPrependCheck(oldProperties.bottomMargin);
+                    str = inset.left(index);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginRight = str;
+                    }
+                    str = inset.mid(index + 1);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginBottom = str;
+                        doPrependCheck(oldProperties.internalMarginBottom);
+                    }
                 } else {
-                    oldProperties.rightMargin = inset.left(index);
+                    str = inset.left(index);
+                    if (str != "d") {
+                        if (str == "0") {
+                            str.append("in");
+                        }
+                        oldProperties.internalMarginRight = str;
+                    }
                 }
             } else {
-                oldProperties.topMargin = inset.left(index);
+                str = inset.left(index);
+                if (str != "d") {
+                    if (str == "0") {
+                        str.append("in");
+                    }
+                    oldProperties.internalMarginTop = str;
+                }
             }
         }
     }
@@ -2696,12 +2868,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
     }
     else if (type == "through" || type == "square" || type == "tight") {
         if (type == "square" || type == "tight") {
-            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "outside");
-            m_currentDrawStyle->addProperty("style:wrap-countour", "false");
+            m_currentDrawStyle->addProperty("style:wrap-contour-mode", "outside");
+            m_currentDrawStyle->addProperty("style:wrap-contour", "false");
         }
         else {
-            m_currentDrawStyle->addProperty("style:wrap-countour-mode", "full");
-            m_currentDrawStyle->addProperty("style:wrap-countour", "true");
+            m_currentDrawStyle->addProperty("style:wrap-contour-mode", "full");
+            m_currentDrawStyle->addProperty("style:wrap-contour", "true");
         }
         if (side.isEmpty()) {
             m_currentDrawStyle->addProperty("style:wrap", "parallel");

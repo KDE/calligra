@@ -62,8 +62,6 @@ private slots:
      */
     void maskToLayer();
 
-    void changeActivity(KisSelectionMask *mask,bool active);
-
 private:
     
     friend class KisNodeManager;
@@ -128,16 +126,6 @@ private:
      * layer
      */
     void maskToBottom();
-
-    /**
-     * Mirror the mask around the X axis
-     */
-    void mirrorMaskX();
-
-    /**
-     * Mirror the mask around the Y axis
-     */
-    void mirrorMaskY();
 
     /**
      * Show the mask properties dialog

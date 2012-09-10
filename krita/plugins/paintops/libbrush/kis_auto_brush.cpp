@@ -74,7 +74,6 @@ struct MaskProcessor
     }
 
     void process(QRect& rect){
-//         kDebug() << "rect " << rect;
         qreal random = 1.0;
         quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;
@@ -218,9 +217,6 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
             color = const_cast<quint8*>(coloringInformation->color());
         }
-    } else {
-        // Mask everything out
-        cs->setOpacity(dst->data(), OPACITY_TRANSPARENT_U8, dst->bounds().width() * dst->bounds().height());
     }
 
     int rowWidth = dst->bounds().width();
@@ -381,7 +377,7 @@ QImage KisAutoBrush::createBrushPreview()
     fdev->initialize();
 
     mask(fdev,KoColor(Qt::black, fdev->colorSpace()),1.0, 1.0, 0.0, info);
-    return fdev->convertToQImage();
+    return fdev->convertToQImage(0);
 }
 
 

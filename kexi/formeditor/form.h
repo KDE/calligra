@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 
 #include <QMetaProperty>
 #include <QList>
-#include <kexi_export.h>
+#include <kexi_global.h>
 #include "widgetlibrary.h"
 
 class QWidget;
@@ -792,10 +792,6 @@ protected:
     /*! Saves the "layout" property and changes the Container 's layout,
         using Container::setLayoutType().*/
     void saveLayoutProperty(const QString &property, const QVariant &value);
-
-    /*! Saves 'enabled' property, and takes care of updating widget's palette. */
-//! @todo make it support undo
-    void saveEnabledProperty(bool value);
 
     /*! Function called by the "Lay out in..." menu items. It creates a layout from the
       currently selected widgets (that must have the same parent).

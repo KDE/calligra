@@ -52,7 +52,7 @@ QObject *Scripting::Account::childAt( int index )
 
 QVariant Scripting::Account::plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule )
 {
-    //kDebug()<<start<<end<<schedule;
+    //kDebug(planDbg())<<start<<end<<schedule;
     QVariantMap map;
     QDate s = start.toDate();
     QDate e = end.toDate();
@@ -76,7 +76,7 @@ QVariant Scripting::Account::plannedEffortCostPrDay( const QVariant &start, cons
 
 QVariant Scripting::Account::actualEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule )
 {
-    //kDebug()<<start<<end<<schedule;
+    //kDebug(planDbg())<<start<<end<<schedule;
     QVariantMap map;
     QDate s = start.toDate();
     QDate e = end.toDate();
@@ -100,7 +100,7 @@ QVariant Scripting::Account::actualEffortCostPrDay( const QVariant &start, const
 
 QVariant Scripting::Account::plannedEffortCostPrDay( const QVariant &schedule )
 {
-    //kDebug()<<start<<end<<schedule;
+    //kDebug(planDbg())<<start<<end<<schedule;
     QVariantMap map;
     KPlato::EffortCostMap ec = m_account->plannedCost( schedule.toLongLong() );
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
@@ -112,7 +112,7 @@ QVariant Scripting::Account::plannedEffortCostPrDay( const QVariant &schedule )
 
 QVariant Scripting::Account::actualEffortCostPrDay( const QVariant &schedule )
 {
-    //kDebug()<<start<<end<<schedule;
+    //kDebug(planDbg())<<start<<end<<schedule;
     QVariantMap map;
     KPlato::EffortCostMap ec = m_account->actualCost( schedule.toLongLong() );
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();

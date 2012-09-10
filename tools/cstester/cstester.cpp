@@ -23,8 +23,8 @@
 #include <KoDocument.h>
 #include <KoPADocument.h>
 #include <KWDocument.h>
-#include <tables/part/Doc.h>
-
+#include <sheets/part/Doc.h>
+#include <KoPart.h>
 #include <KMimeType>
 #include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
@@ -35,7 +35,7 @@
 #include <QBuffer>
 #include <QDir>
 #include <QFileInfo>
-#include <QPixmap>
+#include <QImage>
 #include <QTimer>
 
 #include "CSThumbProviderStage.h"
@@ -46,6 +46,7 @@
 
 #ifdef BUILD_KARBON
 #include <KarbonPart.h>
+#include <KarbonKoDocument.h>
 #include "CSThumbProviderKarbon.h"
 #endif
 
@@ -54,14 +55,16 @@ KoDocument* openFile(const QString &filename)
     const QString mimetype = KMimeType::findByPath(filename)->name();
 
     QString error;
-    KoDocument *document = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>(
-                               mimetype, 0, 0, QString(),
+    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
+                               mimetype, QLatin1String("CalligraPart"), 0, QString(),
                                QVariantList(), &error );
 
     if (!error.isEmpty()) {
-        qWarning() << "Error cerating document" << mimetype << error;
+        qWarning() << "Error creating document" << mimetype << error;
         return 0;
     }
+
+    KoDocument *document = part->document();
 
     if (0 != document) {
         KUrl url;
@@ -104,37 +107,37 @@ QString saveFile(KoDocument *document, const QString &filename, const QString &o
     KUrl url;
     url.setPath(saveAs);
     document->setOutputMimeType(mimetype, 0);
-    document->saveAs(url);
+    document->documentPart()->saveAs(url);
     kDebug(31000) << "save done";
     return saveAs;
 }
 
-QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
+QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
 {
     CSThumbProvider *tp = 0;
 
     if (KoPADocument *doc = qobject_cast<KoPADocument*>(document)) {
         tp = new CSThumbProviderStage(doc);
     }
-    else if (Calligra::Tables::Doc *doc = qobject_cast<Calligra::Tables::Doc*>(document)) {
+    else if (Calligra::Sheets::Doc *doc = qobject_cast<Calligra::Sheets::Doc*>(document)) {
         tp = new CSThumbProviderTables(doc);
     }
     else if (KWDocument *doc = qobject_cast<KWDocument*>(document)) {
         tp = new CSThumbProviderWords(doc);
     }
 #ifdef BUILD_KARBON
-    else if (KarbonPart *doc = qobject_cast<KarbonPart*>(document)) {
+    else if (KarbonKoDocument *doc = qobject_cast<KarbonKoDocument *>(document)) {
         tp = new CSThumbProviderKarbon(doc);
     }
 #endif
 
-    return tp ? tp->createThumbnails(thumbSize) : QList<QPixmap>();
+    return tp ? tp->createThumbnails(thumbSize) : QList<QImage>();
 }
 
-void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
+void saveThumbnails(const QList<QImage> &thumbnails, const QString &dir)
 {
     int i = 0;
-    for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         // it is not possible to use QString("%1/thumb_%2.png").arg(dir).arg(++i);
         // as dir can contain % values which then might or might not be overwritten by the second arg
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
@@ -142,7 +145,7 @@ void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
     }
 }
 
-void saveThumbnails(const QFileInfo &file, const QList<QPixmap> &thumbnails, const QString &outdir)
+void saveThumbnails(const QFileInfo &file, const QList<QImage> &thumbnails, const QString &outdir)
 {
     QDir dir(outdir);
     QString checkSubDir(file.fileName() + ".check");
@@ -150,11 +153,11 @@ void saveThumbnails(const QFileInfo &file, const QList<QPixmap> &thumbnails, con
     saveThumbnails(thumbnails, outdir + '/' + checkSubDir);
 }
 
-bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool verbose)
+bool checkThumbnails(const QList<QImage> &thumbnails, const QString &dir, bool verbose)
 {
     bool success = true;
     int i = 0;
-    for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
 
         QByteArray ba;
@@ -179,7 +182,7 @@ bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool 
     return success;
 }
 
-bool checkThumbnails(const QList<QPixmap> &thumbnails, const QList<QPixmap> &others, bool verbose)
+bool checkThumbnails(const QList<QImage> &thumbnails, const QList<QImage> &others, bool verbose)
 {
     bool success = true;
     if (thumbnails.size() != others.size()) {
@@ -187,8 +190,8 @@ bool checkThumbnails(const QList<QPixmap> &thumbnails, const QList<QPixmap> &oth
         return false;
     }
     int i = 1;
-    QList<QPixmap>::const_iterator it(thumbnails.constBegin());
-    QList<QPixmap>::const_iterator oIt(others.constBegin());
+    QList<QImage>::const_iterator it(thumbnails.constBegin());
+    QList<QImage>::const_iterator oIt(others.constBegin());
 
     for (; it != thumbnails.constEnd(); ++it, ++oIt, ++i) {
         QByteArray ba;
@@ -309,7 +312,7 @@ int main(int argc, char *argv[])
             exit(2);
         }
 
-        QList<QPixmap> thumbnails(createThumbnails(document, QSize(800,800)));
+        QList<QImage> thumbnails(createThumbnails(document, QSize(800,800)));
 
         qDebug() << "created" << thumbnails.size() << "thumbnails";
         if (create) {
@@ -333,7 +336,7 @@ int main(int argc, char *argv[])
             QFileInfo rFile(rFilename);
             qDebug() << roundtrip << "rFilename" << rFilename << rFile.absoluteFilePath();
             document = openFile(rFile.absoluteFilePath());
-            QList<QPixmap> others(createThumbnails(document, QSize(800,800)));
+            QList<QImage> others(createThumbnails(document, QSize(800,800)));
             if (args->isSet("outdir")) {
                 saveThumbnails(file, others, outDir);
                 saveThumbnails(file, thumbnails, outDir + "/before");

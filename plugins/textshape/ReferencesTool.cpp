@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
+#include <KoIcon.h>
 
 #include <kdebug.h>
 
@@ -53,9 +54,14 @@ LabeledNoteWidget::LabeledNoteWidget(KAction *action)
 {
     setMouseTracking(true);
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(new QLabel(i18n("Insert with label:")));
+    QLabel *l = new QLabel(i18n("Insert with label:"));
+    l->setIndent(l->style()->pixelMetric(QStyle::PM_SmallIconSize)
+        + l->style()->pixelMetric(QStyle::PM_MenuPanelWidth)
+        + 4);
+    layout->addWidget(l);
     m_lineEdit = new QLineEdit();
     layout->addWidget(m_lineEdit);
+    layout->setMargin(0);
     setLayout(layout);
 
     connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
@@ -90,7 +96,7 @@ void ReferencesTool::createActions()
     addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
 
-    action = new KAction(i18n("Insert Custom ..."), this);
+    action = new KAction(i18n("Insert Custom..."), this);
     addAction("insert_configure_tableofcontents", action);
     action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
@@ -99,30 +105,33 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
-    action = new KAction(i18n("Insert with auto number"),this);
+    action = new KAction(i18n("Insert footnote with auto number"),this);
     addAction("insert_autofootnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
-    action = new KAction(this);
+    action = new KAction(i18n("Insert Labeled Footnote"), this);
     QWidget *w = new LabeledNoteWidget(action);
     action->setDefaultWidget(w);
     addAction("insert_labeledfootnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
 
-    action = new KAction(i18n("Insert with auto number"),this);
+    action = new KAction(i18n("Insert endnote with auto number"),this);
     addAction("insert_autoendnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
-    action = new KAction(this);
+    action = new KAction(i18n("Insert Labeled Endnote"), this);
     w = new LabeledNoteWidget(action);
     action->setDefaultWidget(w);
     addAction("insert_labeledendnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
-    action = new KAction(this);
-    addAction("format_notes",action);
-    action->setToolTip(i18n("Configure"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showNotesConfigureDialog()));
+    action = new KAction(koIcon("configure"), i18n("Settings..."), this);
+    addAction("format_footnotes",action);
+    connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
+
+    action = new KAction(koIcon("configure"), i18n("Settings..."), this);
+    addAction("format_endnotes",action);
+    connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 
     action = new KAction(i18n("Insert Citation"),this);
     addAction("insert_citation",action);
@@ -132,8 +141,10 @@ void ReferencesTool::createActions()
     action = new KAction(i18n("Insert Bibliography"),this);
     addAction("insert_bibliography",action);
     action->setToolTip(i18n("Insert a bibliography into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertBibliography()));
 
+    action = new KAction(i18n("Insert Custom Bibliography"), this);
+    addAction("insert_custom_bibliography", action);
+    action->setToolTip(i18n("Insert a custom Bibliography into the document."));
     action = new KAction(i18n("Configure"),this);
     addAction("configure_bibliography",action);
     action->setToolTip(i18n("Configure the bibliography"));
@@ -171,7 +182,7 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
     m_stocw->setWindowTitle(i18n("Table of Contents"));
     widgets.append(m_stocw);
 
-    m_sfenw->setWindowTitle(i18n("Footnotes & Endnotes"));
+    m_sfenw->setWindowTitle(i18n("Footnotes and Endnotes"));
     widgets.append(m_sfenw);
 
     m_scbw->setWindowTitle(i18n("Citations and Bibliography"));
@@ -183,20 +194,18 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 
 void ReferencesTool::insertCitation()
 {
-    CitationInsertionDialog *dialog = new CitationInsertionDialog(textEditor(), m_scbw);
-    dialog->show();
+    new CitationInsertionDialog(textEditor(), m_scbw);
 }
 
-void ReferencesTool::insertBibliography()
+void ReferencesTool::insertCustomBibliography(KoBibliographyInfo *defaultTemplate)
 {
-    InsertBibliographyDialog *dialog = new InsertBibliographyDialog(textEditor(), m_scbw);
-    dialog->show();
+    Q_UNUSED(defaultTemplate);
+    new InsertBibliographyDialog(textEditor(), m_scbw);
 }
 
 void ReferencesTool::configureBibliography()
 {
-    BibliographyConfigureDialog *dialog = new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
-    dialog->show();
+    new BibliographyConfigureDialog(textEditor()->document(), m_scbw);
 }
 
 void ReferencesTool::formatTableOfContents()
@@ -270,9 +279,15 @@ void ReferencesTool::insertLabeledEndNote(QString label)
     m_note->setLabel(label);
 }
 
-void ReferencesTool::showNotesConfigureDialog()
+void ReferencesTool::showFootnotesConfigureDialog()
 {
-    NotesConfigurationDialog *dialog = new NotesConfigurationDialog((QTextDocument *)textEditor()->document(),0);
+    NotesConfigurationDialog *dialog = new NotesConfigurationDialog((QTextDocument *)textEditor()->document(), true);
+    dialog->exec();
+}
+
+void ReferencesTool::showEndnotesConfigureDialog()
+{
+    NotesConfigurationDialog *dialog = new NotesConfigurationDialog((QTextDocument *)textEditor()->document(), false);
     dialog->exec();
 }
 

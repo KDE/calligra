@@ -27,6 +27,7 @@
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoFilterManager.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -34,9 +35,6 @@ typedef QPointer<KoUpdater> KoUpdaterPtr;
 
 #include <kis_types.h>
 #include <kis_image.h>
-#include <kis_filter_strategy.h>
-#include <kis_shear_visitor.h>
-#include <kis_transform_worker.h>
 #include <kis_paint_device.h>
 
 #include "kis_layer_manager.h"
@@ -59,7 +57,7 @@ void KisImageManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("insert_image_as_layer", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotInsertImageAsLayer()));
 
-    action  = new KAction(KIcon("document-properties"), i18n("Properties..."), this);
+    action  = new KAction(koIcon("document-properties"), i18n("Properties..."), this);
     actionCollection->addAction("image_properties", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotImageProperties()));
 }
@@ -123,22 +121,13 @@ void KisImageManager::scaleCurrentImage(const QSize &size, qreal xres, qreal yre
 void KisImageManager::rotateCurrentImage(double radians)
 {
     if (!m_view->image()) return;
-
-    m_view->image()->rotate(radians);
+    m_view->image()->rotateImage(radians);
 }
 
 void KisImageManager::shearCurrentImage(double angleX, double angleY)
 {
     if (!m_view->image()) return;
-
-    KoProgressUpdater* updater = m_view->statusBar()->progress()->createUpdater();
-    updater->start(100, "Shear Image");
-    KoUpdaterPtr up = updater->startSubtask();
-
-    m_view->image()->shear(angleX, angleY, up);
-
-    m_view->statusBar()->progress()->detachUpdater(updater);
-    updater->deleteLater();
+    m_view->image()->shear(angleX, angleY);
 }
 
 

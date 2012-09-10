@@ -27,10 +27,12 @@
 #include <QDate>
 #include <QMetaEnum>
 #include <QSortFilterProxyModel>
+#include <qstandarditemmodel.h>
 
 class KUndo2Command;
 class QMimeData;
 class QModelIndex;
+class QMimeData;
 
 namespace KPlato
 {
@@ -283,7 +285,6 @@ public:
     /// Returns a column number/- name map for this model
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
-    virtual void setProject( Project *project );
     ScheduleManager *manager() const { return m_nodemodel.manager(); }
     long id() const { return m_nodemodel.id(); }
 
@@ -314,6 +315,7 @@ public:
     QModelIndex insertSubtask( Node *node, Node *parent );
     
     QList<Node*> nodeList( QDataStream &stream );
+    QList<Resource*> resourceList( QDataStream &stream );
     static QList<Node*> removeChildNodes( const QList<Node*> nodes );
     bool dropAllowed( Node *on, const QMimeData *data );
     
@@ -321,11 +323,15 @@ public:
     
     bool projectShown() const { return m_projectshown; }
 
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int column ) const;
+
 signals:
     void nodeInserted( Node *node );
     void projectShownChanged( bool );
 
 public slots:
+    virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
     void setShowProject( bool on );
 
@@ -337,72 +343,28 @@ protected slots:
     virtual void slotNodeToBeRemoved( Node *node );
     virtual void slotNodeRemoved( Node *node );
 
-    void slotLayoutChanged();
+    virtual void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
+    virtual void slotNodeMoved( Node *node );
+
+    virtual void slotLayoutChanged();
+    virtual void slotProjectCalulated( ScheduleManager *sm );
 
 protected:
     virtual bool setType( Node *node, const QVariant &value, int role );
     bool setCompletion( Node *node, const QVariant &value, int role );
     bool setAllocation( Node *node, const QVariant &value, int role );
 
+    bool dropResourceMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    bool dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    KUndo2Command *createAllocationCommand( Task &task, const QList<Resource*> &lst );
+    bool dropUrlMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    bool importProjectFile( const KUrl &url, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+
 protected:
     Node *m_node; // for sanety check
     NodeModel m_nodemodel;
     bool m_projectshown;
 };
-
-//--------------------------------------
-class KPLATOMODELS_EXPORT GeneralNodeItemModel : public NodeItemModel
-{
-    Q_OBJECT
-public:
-    class Object;
-
-    enum Mode { WBS = 1, Flat = 2, WorkPackage = 4 };
-
-    explicit GeneralNodeItemModel( QObject *parent = 0 );
-    ~GeneralNodeItemModel();
-    
-    void setProject( Project *project );
-    void setModus( int modus );
-
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex index( const Node *node, int column = 0 ) const;
-    
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
-    
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-
-    Node *node( const QModelIndex &index ) const;
-    QAbstractItemDelegate *createDelegate( int column, QWidget *parent ) const;
-
-protected slots:
-    virtual void slotWbsDefinitionChanged();
-    virtual void slotNodeChanged( Node* );
-    virtual void slotNodeToBeInserted( Node *node, int row );
-    virtual void slotNodeInserted( Node *node );
-    virtual void slotNodeToBeRemoved( Node *node );
-    virtual void slotNodeRemoved( Node *node );
-
-    void slotWorkPackageToBeAdded( Node *node, int row );
-    void slotWorkPackageAdded( Node *node );
-    void slotWorkPackageToBeRemoved( Node *node, int row );
-
-protected:
-    Object *findNodeObject( const Node *node ) const;
-    Object *findWPObject( int row, Object *par ) const;
-    QList<Object*> nodeObjects() const;
-    QList<int> workPackagePositions( Object *parent ) const;
-
-private:
-    WorkPackageModel m_wpmodel;
-    int m_modus; // WBS | Flat | WorkPackage (0 == NodeItemModel)
-    QList<Object*> m_objects;
-};
-
 
 //--------------------------------------
 class KPLATOMODELS_EXPORT GanttItemModel : public NodeItemModel
@@ -439,7 +401,6 @@ public:
     /// Returns a column number/- name map for this model
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
 
-    virtual void setProject( Project *project );
     ScheduleManager *manager() const { return m_nodemodel.manager(); }
     long id() const { return m_nodemodel.id(); }
 
@@ -478,6 +439,7 @@ public:
     QList<Node*> mileStones() const;
     
 public slots:
+    virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
 
 protected slots:
@@ -486,6 +448,8 @@ protected slots:
     void slotNodeInserted( Node *node );
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
+    void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
+    void slotNodeMoved( Node *node );
 
     void slotLayoutChanged();
     void slotWbsDefinitionChanged();
@@ -515,6 +479,42 @@ protected:
 private:
     NodeItemModel *m_model;
     bool m_filterUnscheduled;
+};
+
+class KPLATOMODELS_EXPORT TaskModuleModel : public QAbstractItemModel
+{
+    Q_OBJECT
+public:
+    TaskModuleModel( QObject *parent = 0 );
+
+    void addTaskModule( Project *project );
+
+    Qt::ItemFlags flags( const QModelIndex &idx ) const;
+    int columnCount( const QModelIndex &idx = QModelIndex() ) const;
+    int rowCount( const QModelIndex &idx = QModelIndex() ) const;
+    QVariant data( const QModelIndex &idx, int role = Qt::DisplayRole ) const;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    QModelIndex parent( const QModelIndex &idx ) const;
+    QModelIndex index( int row, int column, const QModelIndex &parent ) const;
+    QStringList mimeTypes() const;
+    bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    QMimeData *mimeData( const QModelIndexList &idx ) const;
+
+    bool importProject( const KUrl &url, bool emitsignal = true );
+
+public slots:
+    void loadTaskModules( const QStringList &files );
+
+signals:
+    void executeCommand( KUndo2Command *cmd );
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
+
+protected:
+    void stripProject( Project *project ) const;
+
+private:
+    QList<Project*> m_modules;
 };
 
 } //namespace KPlato

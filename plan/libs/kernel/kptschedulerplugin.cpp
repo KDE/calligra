@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009, 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -22,10 +22,12 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptxmlloaderobject.h"
+#include "kptdebug.h"
 
 #include "KoXmlReader.h"
 
 #include <QDomDocument>
+
 
 namespace KPlato
 {
@@ -94,7 +96,7 @@ void SchedulerPlugin::stopCalculation( ScheduleManager *sm )
 
 void SchedulerPlugin::haltCalculation( ScheduleManager *sm )
 {
-    qDebug()<<"SchedulerPlugin::haltCalculation:"<<sm;
+    kDebug(planDbg())<<"SchedulerPlugin::haltCalculation:"<<sm;
     foreach ( SchedulerThread *j, m_jobs ) {
         if ( sm == j->mainManager() ) {
             haltCalculation( j );
@@ -112,11 +114,11 @@ void SchedulerPlugin::stopCalculation( SchedulerThread *job )
 
 void SchedulerPlugin::haltCalculation( SchedulerThread *job )
 {
-    qDebug()<<"SchedulerPlugin::haltCalculation:"<<job<<m_jobs.contains( job );
+    kDebug(planDbg())<<"SchedulerPlugin::haltCalculation:"<<job<<m_jobs.contains( job );
     disconnect(this, 0, job, 0 );
     job->haltScheduling();
     if ( m_jobs.contains( job ) ) {
-        qDebug()<<"SchedulerPlugin::haltCalculation: remove"<<job;
+        kDebug(planDbg())<<"SchedulerPlugin::haltCalculation: remove"<<job;
         m_jobs.removeAt( m_jobs.indexOf( job ) );
     }
 }
@@ -197,7 +199,7 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
     Q_CHECK_PTR( tm );
     Q_CHECK_PTR( mp );
     Q_CHECK_PTR( sm );
-    //qDebug()<<"SchedulerPlugin::updateProject:"<<tp<<tp->name()<<"->"<<mp<<mp->name()<<sm;
+    //kDebug(planDbg())<<"SchedulerPlugin::updateProject:"<<tp<<tp->name()<<"->"<<mp<<mp->name()<<sm;
     Q_ASSERT( tp != mp && tm != sm );
     long sid = tm->scheduleId();
     Q_ASSERT( sid == sm->scheduleId() );
@@ -228,7 +230,7 @@ void SchedulerPlugin::updateProject( const Project *tp, const ScheduleManager *t
 
 void SchedulerPlugin::updateNode( const Node *tn, Node *mn, long sid, XMLLoaderObject &status ) const
 {
-    //qDebug()<<"SchedulerPlugin::updateNode:"<<tn<<tn->name()<<"->"<<mn<<mn->name();
+    //kDebug(planDbg())<<"SchedulerPlugin::updateNode:"<<tn<<tn->name()<<"->"<<mn<<mn->name();
     NodeSchedule *s = static_cast<NodeSchedule*>( tn->schedule( sid ) );
     if ( s == 0 ) {
         kWarning()<<"SchedulerPlugin::updateNode:"<<"Task:"<<tn->name()<<"could not find schedule with id:"<<sid;
@@ -274,7 +276,7 @@ void SchedulerPlugin::updateResource( const Resource *tr, Resource *r, XMLLoader
     if ( cr == 0 || c == 0 ) {
         return;
     }
-    kDebug()<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
+    kDebug(planDbg())<<"cr:"<<cr->cacheVersion()<<"c"<<c->cacheVersion();
     c->setCacheVersion( cr->cacheVersion() );
 }
 
@@ -334,7 +336,7 @@ SchedulerThread::SchedulerThread( Project *project, ScheduleManager *manager, QO
 
 SchedulerThread::~SchedulerThread()
 {
-    qDebug()<<"SchedulerThread::~SchedulerThread:"<<QThread::currentThreadId();
+    kDebug(planDbg())<<"SchedulerThread::~SchedulerThread:"<<QThread::currentThreadId();
     delete m_project;
     m_project = 0;
     KGlobal::deref();
@@ -370,7 +372,7 @@ int SchedulerThread::progress() const
 
 void SchedulerThread::slotAddLog( KPlato::Schedule::Log log )
 {
-//     kDebug()<<log;
+//     kDebug(planDbg())<<log;
     QMutexLocker m( &m_logMutex );
     m_logs << log;
 }
@@ -425,13 +427,13 @@ Project *SchedulerThread::project() const
 
 void SchedulerThread::stopScheduling()
 {
-    qDebug()<<"SchedulerThread::stopScheduling:";
+    kDebug(planDbg())<<"SchedulerThread::stopScheduling:";
     m_stopScheduling = true;
 }
 
 void SchedulerThread::haltScheduling()
 {
-    qDebug()<<"SchedulerThread::haltScheduling:";
+    kDebug(planDbg())<<"SchedulerThread::haltScheduling:";
     m_haltScheduling = true;
 }
 

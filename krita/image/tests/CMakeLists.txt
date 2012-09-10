@@ -32,15 +32,15 @@ target_link_libraries(KisNodeFacadeTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTE
 
 ########### next target ###############
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
-add_definitions(-DFILES_OUTPUT_DIR="\\"${CMAKE_CURRENT_BINARY_DIR}\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 set(kis_paint_device_test_SRCS kis_paint_device_test.cpp )
 kde4_add_unit_test(KisPaintDeviceTest TESTNAME krita-image-KisPaintDeviceTest ${kis_paint_device_test_SRCS})
 target_link_libraries(KisPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 set(kis_fixed_paint_device_test_SRCS kis_fixed_paint_device_test.cpp )
 kde4_add_unit_test(KisFixedPaintDeviceTest TESTNAME krita-image-KisFixedPaintDeviceTest ${kis_fixed_paint_device_test_SRCS})
 target_link_libraries(KisFixedPaintDeviceTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -298,12 +298,6 @@ target_link_libraries(KisImageSignalRouterTest  ${KDE4_KDEUI_LIBS} kritaimage ${
 
 ########### next target ###############
 
-set(kis_iterators_pixel_test_SRCS kis_iterators_pixel_test.cpp )
-kde4_add_unit_test(KisIteratorsPixelTest TESTNAME krita-image-KisIteratorsPixelTest ${kis_iterators_pixel_test_SRCS})
-target_link_libraries(KisIteratorsPixelTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(kis_iterators_ng_test_SRCS kis_iterators_ng_test.cpp )
 kde4_add_unit_test(KisIteratorsNGTest TESTNAME krita-image-KisIteratorsNGTest ${kis_iterators_ng_test_SRCS})
 target_link_libraries(KisIteratorsNGTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
@@ -494,12 +488,6 @@ target_link_libraries(KisSharedPtrTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTES
 set(kis_shared_ptr_vector_test_SRCS kis_shared_ptr_vector_test.cpp )
 kde4_add_unit_test(KisSharedPtrVectorTest TESTNAME krita-image-KisSharedPtrVectorTest ${kis_shared_ptr_vector_test_SRCS})
 target_link_libraries(KisSharedPtrVectorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(kis_shear_visitor_test_SRCS kis_shear_visitor_test.cpp )
-kde4_add_unit_test(KisShearVisitorTest TESTNAME krita-image-KisShearVisitorTest ${kis_shear_visitor_test_SRCS})
-target_link_libraries(KisShearVisitorTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

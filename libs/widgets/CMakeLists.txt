@@ -2,6 +2,9 @@ add_subdirectory( tests )
 add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
+if (LIBATTICA_FOUND)
+    include_directories(${LIBATTICA_INCLUDE_DIR})
+endif (LIBATTICA_FOUND)
 
 if(NEPOMUK)
     include(SopranoAddOntology)
@@ -56,8 +59,8 @@ set(kowidgets_LIB_SRCS
     KoMarkerSelector.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
-    KoSelectionManager.cpp
-    KoSelectionToggle.cpp
+    KoViewItemContextBar.cpp
+    KoContextBarButton.cpp
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS

@@ -19,7 +19,6 @@
 
 
 #include "MapBrowserWidget.h"
-#include <MarbleWidget.h>
 #include <QPointF>
 #include <KDebug>
 
@@ -30,7 +29,9 @@ MapBrowserWidget::MapBrowserWidget(QWidget *parent)
     m_slotMapChanged_enabled(true),
     m_internalReadOnly(false)
 {
+#ifndef Q_CC_MSVC
 #warning this id could be invalid; try to use Marble::MapThemeManager::mapThemes() and get proper Marble::GeoSceneDocument::head()->mapThemeId()
+#endif
   //Marble::GeoSceneDocument::head()->mapThemeId()
   setMapThemeId("earth/srtm/srtm.dgml");
   connect( this, SIGNAL(visibleLatLonAltBoxChanged(const GeoDataLatLonAltBox &)), this , SLOT(slotMapChanged()));

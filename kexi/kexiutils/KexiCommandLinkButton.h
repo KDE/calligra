@@ -21,9 +21,9 @@
 #ifndef KEXICOMMANDLINKBUTTON_H
 #define KEXICOMMANDLINKBUTTON_H
 
-#include <kexiutils_export.h>
+#include <kexiutils/kexiutils_export.h>
 
-#include <QtGui/qpushbutton.h>
+#include <QPushButton>
 
 class KexiCommandLinkButtonPrivate;
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #ifndef KDBWIDGETS_UTILS_H
 #define KDBWIDGETS_UTILS_H
 
-#include <QMenu>
+#include <KMenu>
 #include <core/kexidataiteminterface.h>
 
 //! Form-related utilities
@@ -47,12 +47,14 @@ public:
     KexiDBWidgetContextMenuExtender(QObject* parent, KexiDataItemInterface* iface);
     ~KexiDBWidgetContextMenuExtender();
 
-    //! Creates title for context menu \a menu
-    void createTitle(QMenu *menu);
+    //! Perform context menu exec() for @a globalPos. KMenu is used
+    void exec(QMenu *menu, const QPoint &globalPos);
 
-    //! Enables or disables context menu actions that can modify the value.
-    //! The menu has to be previously provided by createTitle().
-    void updatePopupMenuActions();
+    //! Creates title for context menu \a menu
+    void createTitle(KMenu *menu);
+
+    //! Enables or disables context menu actions for @a menu that can modify the value.
+    void updatePopupMenuActions(QMenu *menu);
 
     /*! Updates title for context menu based on data item \a iface caption or name
      Used in createTitle(QMenu *menu) and KexiDBImageBox.

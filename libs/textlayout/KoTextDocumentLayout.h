@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006, 2011 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -70,6 +70,7 @@ public:
             , imageCollection(0)
             , showFormattingCharacters(false)
             , showSpellChecking(false)
+            , showSelections(true)
             , background(Qt::white)
         {
         }
@@ -83,6 +84,7 @@ public:
         bool showFormattingCharacters;
         bool showTableBorders;
         bool showSpellChecking;
+        bool showSelections;
         QColor background;
     };
 
@@ -95,12 +97,15 @@ public:
 
     /// return the currently set manager, or 0 if none is set.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
+    void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
     /// return the currently set changeTracker, or 0 if none is set.
     KoChangeTracker *changeTracker() const;
+    void setChangeTracker(KoChangeTracker *tracker);
 
     /// return the currently set styleManager, or 0 if none is set.
     KoStyleManager *styleManager() const;
+    void setStyleManager(KoStyleManager *manager);
 
     /// Returns the bounding rectangle of block.
     QRectF blockBoundingRect(const QTextBlock & block) const;
@@ -172,6 +177,10 @@ public:
     /// positionInlineObject()
     void setAnchoringParagraphRect(const QRectF &paragraphRect);
 
+    /// Sets the paragraph content rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringParagraphContentRect(const QRectF &paragraphContentRect);
+
     /// Sets the layoutEnvironment rect that will be applied to anchorStrategies being created in
     /// positionInlineObject()
     void setAnchoringLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect);
@@ -201,6 +210,9 @@ public:
      */
     KoTextLayoutRootArea *rootAreaForPosition(int position) const;
 
+
+    KoTextLayoutRootArea *rootAreaForPoint(const QPointF &point) const;
+
     /**
      * Remove the root-areas \p rootArea from the list of \a rootAreas() .
      * \param rootArea root-area to remove. If NULL then all root-areas are removed.
@@ -209,6 +221,8 @@ public:
 
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
+
+    void setContinuationObstruction(KoTextLayoutObstruction *continuationObstruction);
 
     /// Return a list of obstructions intersecting current root area (during layout)
     QList<KoTextLayoutObstruction *> currentObstructions();
@@ -222,6 +236,10 @@ public:
     /// Set \a layout() to be blocked (no layouting will happen)
     void setBlockLayout(bool block);
     bool layoutBlocked() const;
+
+    /// Set \a documentChanged() to be blocked (changes will not result in root-areas being marked dirty)
+    void setBlockChanges(bool block);
+    bool changesBlocked() const;
 
     KoTextDocumentLayout* referencedLayout() const;
     void setReferencedLayout(KoTextDocumentLayout *layout);

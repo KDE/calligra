@@ -20,8 +20,8 @@
 #include "KexiStartupFileHandler.h"
 #include <kexi_global.h>
 
-#include <kexidb/driver.h>
-#include <kexidb/utils.h>
+#include <db/driver.h>
+#include <db/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiContextMessage.h>
@@ -62,8 +62,10 @@ public:
     }
     ~Private() {
         if (messageWidgetLoop) {
-        //    messageWidgetLoop->exit(0);
-            messageWidgetLoop->deleteLater();
+            messageWidgetLoop->exit(0);
+            messageWidgetLoop->processEvents(); // for safe exit
+            messageWidgetLoop->exit(0);
+            delete messageWidgetLoop;
         }
     }
 
@@ -478,7 +480,6 @@ void KexiStartupFileHandler::messageWidgetActionNoTriggered()
     d->messageWidgetLoop->exit(0);
 }
 
-//static
 bool KexiStartupFileHandler::askForOverwriting(const QString& filePath)
 {
     QFileInfo fi(filePath);

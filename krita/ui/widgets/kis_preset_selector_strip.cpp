@@ -23,12 +23,14 @@
 #include "KoResourceItemChooser.h"
 #include "kis_paintop_registry.h"
 
-#include <QtGui/QAbstractScrollArea>
-#include <QtGui/QMouseEvent>
-#include <QtCore/QTimer>
+#include <KoIcon.h>
+
+#include <QAbstractScrollArea>
+#include <QMouseEvent>
+#include <QTimer>
 
 KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
-                      : QWidget(parent)
+    : QWidget(parent)
 {
     setupUi(this);
     smallPresetChooser->showButtons(false);
@@ -44,11 +46,10 @@ KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
      * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
     smallPresetChooser->setPresetFilter(KoID(PIXEL_BRUSH_ID));
-    
-    const QString TRASH_ICON = "trash-empty";
-    deletePresetBtn->setIcon(SmallIcon(TRASH_ICON, KIconLoader::SizeSmall));
+
+    deletePresetBtn->setIcon(koIcon("trash-empty"));
     deletePresetBtn->setVisible(true);
-    
+
     connect(smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(prepareDeleteButton()));
     connect(smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),

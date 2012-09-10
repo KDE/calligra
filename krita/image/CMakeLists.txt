@@ -19,14 +19,9 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_pooler.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledrectiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledvlineiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledhlineiterator.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_hline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_vline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_rect_iterator.cpp
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_abstract_compression.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_lzf_compression.cpp
@@ -41,7 +36,7 @@ set(libkritatile_SRCS
 add_subdirectory( tiles3 )
 endif(USE_TILESYSTEM EQUAL 3)
 
-option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" ON)
+option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" OFF)
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
@@ -118,6 +113,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_painter.cc
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
+   kis_default_bounds_base.cpp
    kis_effect_mask.cc
    kis_fast_math.cpp
    kis_fill_painter.cc
@@ -143,10 +139,10 @@ set(kritaimage_LIB_SRCS
    kis_count_visitor.cpp
    kis_histogram.cc
    kis_image_interfaces.cpp
+   kis_node_graph_listener.cpp
    kis_image.cc
    kis_image_signal_router.cpp
    kis_image_config.cpp
-   kis_iterator.cc
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc
@@ -155,6 +151,7 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
+   kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
@@ -173,11 +170,9 @@ set(kritaimage_LIB_SRCS
    kis_pixel_selection.cpp
    kis_processing_information.cpp
    kis_properties_configuration.cc
-   kis_random_accessor.cpp
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_shear_visitor.cpp
    kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp
@@ -200,6 +195,7 @@ set(kritaimage_LIB_SRCS
    kis_processing_applicator.cpp
    krita_utils.cpp
    kis_outline_generator.cpp
+   kis_layer_composition.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc
@@ -284,9 +280,6 @@ install( FILES
     kis_generic_colorspace.h
     kis_global.h
     kis_image.h
-    kis_iterator.h
-    kis_iterators_pixel.h
-    kis_iterator_pixel_trait.h
     kis_mask.h
     kis_node.h
     kis_node_facade.h
@@ -295,8 +288,6 @@ install( FILES
     kis_paint_device.h
     kis_properties_configuration.h
     kis_processing_information.h
-    kis_random_accessor.h
-    kis_iterators_pixel.h
     kis_transform_worker.h
     kis_perspectivetransform_worker.h
     kis_warptransform_worker.h

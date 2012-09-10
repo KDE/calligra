@@ -21,6 +21,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 
+#include <KoIcon.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
@@ -35,6 +36,7 @@
 #include <kis_image.h>
 
 #include "canvas/kis_canvas2.h"
+#include "kis_shape_controller.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_view2.h"
 #include "kis_doc2.h"
@@ -43,6 +45,7 @@
 #include "kis_layer_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_node_commands_adapter.h"
+#include "kis_mirror_visitor.h"
 
 struct KisNodeManager::Private {
 
@@ -58,16 +61,9 @@ struct KisNodeManager::Private {
     KisNodeSP activeNode;
     KisNodeManager* self;
     KisNodeCommandsAdapter* commandsAdapter;
-    KisNodeSP activeNodeBeforeMove;
-    
-    void slotLayersChanged(KisGroupLayerSP);
+
     bool activateNodeImpl(KisNodeSP node);
 };
-
-void KisNodeManager::Private::slotLayersChanged(KisGroupLayerSP layer)
-{
-    self->activateNode(layer->at(0));
-}
 
 bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 {
@@ -94,16 +90,14 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     } else {
 
         KoShape * shape = view->document()->shapeForNode(node);
-        if (!shape) {
-            shape = view->document()->addShape(node);
-        }
+        Q_ASSERT(shape);
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
 
         Q_ASSERT(shapeLayer);
-        shapeLayer->setGeometryProtected(node->userLocked());
-        shapeLayer->setVisible(node->visible());
+//         shapeLayer->setGeometryProtected(node->userLocked());
+//         shapeLayer->setVisible(node->visible());
         selection->setActiveLayer(shapeLayer);
 
 
@@ -131,9 +125,12 @@ KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
     m_d->maskManager = new KisMaskManager(view);
     m_d->self = this;
     m_d->commandsAdapter = new KisNodeCommandsAdapter(view);
-    connect(m_d->view->image(), SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged(KisGroupLayerSP)));
-    connect(m_d->view->image(), SIGNAL(sigAboutToMoveNode(KisNode*,int,int)), SLOT(aboutToMoveNode()));
-    connect(m_d->view->image(), SIGNAL(sigNodeHasBeenMoved(KisNode*,int,int)), SLOT(nodeHasBeenMoved()));
+
+    KisShapeController *shapeController =
+        dynamic_cast<KisShapeController*>(doc->shapeController());
+    Q_ASSERT(shapeController);
+
+    connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
     connect(m_d->layerManager, SIGNAL(sigLayerActivated(KisLayerSP)), SIGNAL(sigLayerActivated(KisLayerSP)));
 }
 
@@ -148,11 +145,11 @@ void KisNodeManager::setup(KActionCollection * actionCollection)
     m_d->layerManager->setup(actionCollection);
     m_d->maskManager->setup(actionCollection);
 
-    KAction * action  = new KAction(KIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
+    KAction * action  = new KAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     actionCollection->addAction("mirrorX", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeX()));
 
-    action  = new KAction(KIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
+    action  = new KAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection->addAction("mirrorY", action);
     connect(action, SIGNAL(triggered()), this, SLOT(mirrorNodeY()));
 }
@@ -259,40 +256,6 @@ void KisNodeManager::getNewNodeLocation(const QString & nodeType, KisNodeSP &par
     above = parent->firstChild();
 }
 
-void KisNodeManager::addNode(KisNodeSP node, KisNodeSP activeNode)
-{
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation(node, parent, above, activeNode);
-    m_d->commandsAdapter->addNode(node, parent, above);
-    node->setDirty(node->extent());
-}
-
-void KisNodeManager::insertNode(KisNodeSP node, KisNodeSP parent, int index)
-{
-    if (allowAsChild(parent->metaObject()->className(), node->metaObject()->className())) {
-        m_d->commandsAdapter->addNode(node, parent, index);
-    }
-}
-
-void KisNodeManager::moveNode(KisNodeSP node, KisNodeSP activeNode)
-{
-    KisNodeSP parent;
-    KisNodeSP above;
-
-    getNewNodeLocation(node, parent, above, activeNode);
-    if (node->inherits("KisSelectionMask") && parent->inherits("KisLayer")) {
-        KisSelectionMask *m = dynamic_cast<KisSelectionMask*>(node.data());
-        KisLayer *l = dynamic_cast<KisLayer*>(parent.data());
-        KisSelectionMaskSP selMask = l->selectionMask();
-        if (m && m->active() && l && l->selectionMask())
-            selMask->setActive(false);
-    }
-    m_d->commandsAdapter->moveNode(node, parent, above);
-    node->setDirty(node->extent());
-}
-
 void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
     if (parent->allowAsChild(node)) {
@@ -305,6 +268,18 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
         }
         m_d->commandsAdapter->moveNode(node, parent, index);
     }
+}
+
+void KisNodeManager::addNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    Q_ASSERT(parent->allowAsChild(node));
+    m_d->commandsAdapter->addNode(node, parent, aboveThis);
+}
+
+void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+{
+    Q_ASSERT(parent->allowAsChild(node));
+    m_d->commandsAdapter->moveNode(node, parent, aboveThis);
 }
 
 void KisNodeManager::createNode(const QString & nodeType)
@@ -340,7 +315,7 @@ void KisNodeManager::createNode(const QString & nodeType)
 
 }
 
-void KisNodeManager::activateNode(KisNodeSP node)
+void KisNodeManager::slotNonUiActivatedNode(KisNodeSP node)
 {
     if(m_d->activateNodeImpl(node)) {
         emit sigUiNeedChangeActiveNode(node);
@@ -495,47 +470,37 @@ void KisNodeManager::nodeToBottom()
 
 void KisNodeManager::removeNode(KisNodeSP node)
 {
-//     QRect bounds = node->exactBounds();
-
     //do not delete root layer
     if(node->parent()==0)
         return;
 
     m_d->commandsAdapter->removeNode(node);
-//     m_image->rootLayer()->setDirty(bounds);
 }
 
 void KisNodeManager::mirrorNodeX()
 {
     KisNodeSP node = activeNode();
+
+    QString commandName;
     if (node->inherits("KisLayer")) {
-        m_d->layerManager->mirrorLayerX();
+        commandName = i18n("Mirror Layer X");
     } else if (node->inherits("KisMask")) {
-        m_d->maskManager->mirrorMaskX();
+        commandName = i18n("Mirror Mask X");
     }
+    mirrorNode(node, commandName, Qt::Horizontal);
 }
 
 void KisNodeManager::mirrorNodeY()
 {
     KisNodeSP node = activeNode();
+
+    QString commandName;
     if (node->inherits("KisLayer")) {
-        m_d->layerManager->mirrorLayerY();
+        commandName = i18n("Mirror Layer Y");
     } else if (node->inherits("KisMask")) {
-        m_d->maskManager->mirrorMaskY();
+        commandName = i18n("Mirror Mask Y");
     }
-}
-
-void KisNodeManager::aboutToMoveNode()
-{
-    m_d->activeNodeBeforeMove = activeNode();
-}
-
-void KisNodeManager::nodeHasBeenMoved()
-{
-    if (m_d->activeNodeBeforeMove) {
-        activateNode(m_d->activeNodeBeforeMove);
-        m_d->activeNodeBeforeMove = 0;
-    }
+    mirrorNode(node, commandName, Qt::Vertical);
 }
 
 void KisNodeManager::mergeLayerDown()
@@ -576,6 +541,24 @@ void KisNodeManager::scale(double sx, double sy, KisFilterStrategy *filterStrate
 {
     // XXX: implement scale for masks as well
     m_d->layerManager->scaleLayer(sx, sy, filterStrategy);
+}
+
+void KisNodeManager::mirrorNode(KisNodeSP node, const QString& commandName, Qt::Orientation orientation)
+{
+    m_d->view->image()->undoAdapter()->beginMacro(commandName);
+
+    KisMirrorVisitor visitor(m_d->view->image(), orientation);
+    node->accept(visitor);
+
+    m_d->view->image()->undoAdapter()->endMacro();
+    m_d->doc->setModified(true);
+
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager->layersUpdated();
+    } else if (node->inherits("KisMask")) {
+        m_d->maskManager->masksUpdated();
+    }
+    m_d->view->canvas()->update();
 }
 
 #include "kis_node_manager.moc"

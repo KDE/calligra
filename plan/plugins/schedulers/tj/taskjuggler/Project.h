@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -16,7 +17,7 @@
 
 #include "kplatotj_export.h"
 
-#include <qobject.h>
+#include <QObject>
 #include <QMap>
 
 #include "VacationList.h"
@@ -69,7 +70,7 @@ public:
     void setProgressBar(int i, int of);
     /**
      * Projects have at least one ID, but can have multiple IDs. This usually
-     * happens when projects are composed of serveral sub-projects. Each sub
+     * happens when projects are composed of several sub-projects. Each sub
      * projects brings its own unique ID. Each ID must be registered with the
      * project by calling addId(). The most recently added ID is also the
      * current ID. All subsequently added tasks are associtated with this
@@ -83,7 +84,7 @@ public:
      */
     QString getId() const
     {
-        return projectIDs.isEmpty() ? QString::null : projectIDs.first();
+        return projectIDs.isEmpty() ? QString() : projectIDs.first();
     }
     /**
      * Returns the current project ID. If the project ID list is empty
@@ -389,7 +390,7 @@ public:
      * Returns the name of the first vacation that the given date falls into.
      * If no vacation is found QString::Null is returned.
      */
-    const QString& vacationName(time_t vd) const
+    QString vacationName(time_t vd) const
     {
         return vacationList.vacationName(vd);
     }

@@ -1,14 +1,23 @@
 [Desktop Entry]
 Name=beaker
+Name[ca]=vasmesurat
+Name[ca@valencia]=vasmesurat
 Name[cs]=kádinka
-Name[et]=keeduklaas
+Name[de]=Becherglas
+Name[el]=beaker
+Name[es]=vaso
+Name[et]=Keeduklaas
+Name[fr]=coupe
+Name[gl]=Vaso de precipitados
 Name[it]=bicchiere
+Name[kk]=Мензурка
 Name[nb]=beger
 Name[nl]=beker
 Name[pl]=zlewka
 Name[pt]=bico
 Name[pt_BR]=bico
 Name[ru]=Мензурка
+Name[sk]=beaker
 Name[sv]=bägare
 Name[uk]=Мензурка
 Name[x-test]=xxbeakerxx

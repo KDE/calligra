@@ -20,7 +20,7 @@
 #include <KoReportASyncItemBase.h>
 #include <QRect>
 #include <QPainter>
-#include <qdom.h>
+#include <QDomDocument>
 #include "krpos.h"
 #include "krsize.h"
 #include <koproperty/Property.h>
@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <MarbleWidget.h>
+#include <marble/MarbleWidget.h>
 #include <RdfForward.h>
 #include <QMap>
 

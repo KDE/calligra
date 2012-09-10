@@ -18,15 +18,15 @@
 #ifndef _KIS_BASE_NODE_H
 #define _KIS_BASE_NODE_H
 
+#include <QObject>
 #include <QIcon>
-#include <kicon.h>
-
-#include "kis_types.h"
-#include "kis_shared.h"
-#include "krita_export.h"
-#include "KoDocumentSectionModel.h"
 #include <QUuid>
+#include <QString>
 
+#include "KoDocumentSectionModel.h"
+
+#include "kis_shared.h"
+#include "kis_paint_device.h"
 #include "kis_processing_visitor.h" // included, not forward declared for msvc
 
 class KoProperties;
@@ -34,6 +34,8 @@ class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
 class KisUndoAdapter;
+
+#include "krita_export.h"
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -49,8 +51,6 @@ class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
     Q_OBJECT
 
 public:
-
-    enum { Visible = 1, Hidden = 2, UserLocked = 4, UserUnlocked = 8, Linked = 16, Unlinked = 32 };
 
     /**
      * Create a new, empty base node. The node is unnamed, unlocked
@@ -91,7 +91,7 @@ public:
      */
     virtual KisPaintDeviceSP projection() const;
 
-    virtual const KoColorSpace * colorSpace() const = 0;
+    virtual const KoColorSpace *colorSpace() const = 0;
 
     /**
      * Return the opacity of this layer, scaled to a range between 0
@@ -126,7 +126,7 @@ public:
     /**
      * Return the composite op associated with this layer.
      */
-    virtual const KoCompositeOp * compositeOp() const = 0;
+    virtual const KoCompositeOp *compositeOp() const = 0;
     const QString& compositeOpId() const;
 
     /**
@@ -161,6 +161,7 @@ public:
      */
     void setName(const QString& name) {
         setObjectName(name);
+        baseNodeChangedCallback();
     }
 
     /**
@@ -366,6 +367,16 @@ public:
         return QRect();
     }
 
+    /**
+     * Sets the state of the node to the value of @param collapsed
+     */
+    void setCollapsed(bool collapsed);
+
+    /**
+     * returns the collapsed state of this node
+     */
+    bool collapsed() const;
+
 protected:
 
     /**
@@ -378,7 +389,19 @@ protected:
         return 0;
     }
 
+    /**
+     * This callback is called when some meta state of the base node
+     * that can be interesting to the UI has changed. E.g. visibility,
+     * lockness, opacity, compositeOp and etc. This signal is
+     * forwarded by the KisNode and KisNodeGraphListener to the model
+     * in KisLayerBox, so it can update its controls when information
+     * changes.
+     */
+    virtual void baseNodeChangedCallback() {
+    }
+
 signals:
+
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.
      */

@@ -22,21 +22,20 @@
 #include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
 #include <kexiutils/identifier.h>
-#include <kexidb/msghandler.h>
+#include <db/msghandler.h>
+#include <KoIcon.h>
 
-#include <qtimer.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpixmapcache.h>
-#include <qcolor.h>
-#include <qfileinfo.h>
+#include <QTimer>
+#include <QImage>
+#include <QPixmap>
+#include <QPixmapCache>
+#include <QColor>
+#include <QFileInfo>
 #include <QLabel>
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <kiconloader.h>
-#include <kiconeffect.h>
 #include <ksharedptr.h>
 #include <kglobalsettings.h>
 
@@ -136,13 +135,13 @@ QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 //--------------------------------------------------------------------------------
 QString Kexi::iconNameForViewMode(ViewMode mode)
 {
-    if (mode == DataViewMode)
-        return i18n("state_data");
-    else if (mode == DesignViewMode)
-        return i18n("state_edit");
-    else if (mode == TextViewMode)
-        return i18n("state_sql");
-    return QString();
+    const char *const id =
+        (mode == DataViewMode) ? koIconNameCStr("state_data") :
+        (mode == DesignViewMode) ? koIconNameCStr("state_edit") :
+        (mode == TextViewMode) ? koIconNameCStr("state_sql"): 
+        0;
+
+    return QLatin1String(id);
 }
 
 //--------------------------------------------------------------------------------

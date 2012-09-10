@@ -18,10 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qlayout.h>
-#include <qstyle.h>
-#include <qwindowsstyle.h>
-#include <qpainter.h>
+#include <QLayout>
+#include <QStyle>
+#include <QWindowsStyle>
+#include <QPainter>
 
 #include <kexi_global.h>
 #include "kexicomboboxbase.h"
@@ -203,6 +203,7 @@ KexiDB::RecordData* KexiComboBoxBase::selectItemForEnteredValueInLookupTable(con
 QString KexiComboBoxBase::valueForString(const QString& str, int* row,
         uint lookInColumn, uint returnFromColumn, bool allowNulls)
 {
+    Q_UNUSED(returnFromColumn);
     KexiTableViewData *relData = column() ? column()->relatedData() : 0;
     if (!relData)
         return QString(); //safety

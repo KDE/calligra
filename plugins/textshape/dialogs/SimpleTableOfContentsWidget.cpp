@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -113,7 +113,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
             QPixmap pmm(QSize(200,120));
             pmm.fill(Qt::white);
             widget.addToC->addItem(pmm, index);
-        }        
+        }
     }
     if (widget.addToC->isFirstTimeMenuShown()) {
         widget.addToC->addSeparator();

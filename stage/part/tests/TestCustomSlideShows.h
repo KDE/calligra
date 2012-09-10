@@ -20,7 +20,7 @@
 #ifndef TESTCUSTOMSLIDESHOWS_H
 #define TESTCUSTOMSLIDESHOWS_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 class MockDocument;
 class KoPAPageBase;
 

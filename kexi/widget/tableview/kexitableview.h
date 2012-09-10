@@ -44,7 +44,7 @@
 
 #include <widget/dataviewcommon/kexitableviewdata.h>
 #include "kexitableedit.h"
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
@@ -688,6 +688,8 @@ protected:
 
     /*! Implementation for KexiDataItemChangesListener. */
     virtual bool cursorAtNewRow() const;
+
+    virtual int horizontalHeaderHeight() const;
 
     QWidget* navPanelWidget() const;
     

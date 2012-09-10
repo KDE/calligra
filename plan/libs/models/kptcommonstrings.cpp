@@ -165,7 +165,7 @@ namespace KPlato
     QString ToolTip::documentUrl() { return i18nc( "@info:tooltip", "The url of the document" ); }
     QString ToolTip::documentType() { return i18nc( "@info:tooltip", "The type of the document" ); }
     QString ToolTip::documentStatus() { return i18nc( "@info:tooltip", "The status of the document" ); }
-    QString ToolTip::documentSendAs() { return i18nc( "@info:tooltip", "Defines how this document is send" ); }
+    QString ToolTip::documentSendAs() { return i18nc( "@info:tooltip", "Defines how this document is sent" ); }
 
     QString ToolTip::calendarName() { return i18nc( "@info:tooltip", "The name of the calendar" ); }
     QString ToolTip::calendarTimeZone() { return i18nc( "@info:tooltip", "The timezone of the calendar" ); }

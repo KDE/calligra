@@ -22,6 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
+#include "KarbonKoDocument.h"
 #include "KarbonFactory.h"
 
 #include <KoUnitDoubleSpinBox.h>
@@ -36,10 +37,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KNumInput>
 #include <KColorButton>
 
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QGridLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QFormLayout>
 
 KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* name)
 {
@@ -66,37 +67,31 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
         m_oldCanvasColor = interfaceGroup.readEntry("CanvasColor", m_oldCanvasColor);
     }
 
-    QGridLayout *grpLayout = new QGridLayout(tmpQGroupBox);
+    QFormLayout *interfaceLayout = new QFormLayout(tmpQGroupBox);
 
-    grpLayout->addWidget(new QLabel(i18n("Show status bar:"), tmpQGroupBox), 0, 0);
-    m_showStatusBar = new QCheckBox("", tmpQGroupBox);
+    m_showStatusBar = new QCheckBox(tmpQGroupBox);
     m_showStatusBar->setChecked(oldShowStatusBar);
-    grpLayout->addWidget(m_showStatusBar, 0, 1);
+    interfaceLayout->addRow(i18n("Show status bar:"), m_showStatusBar);
 
-    grpLayout->addWidget(new QLabel(i18n("Number of recent files:"), tmpQGroupBox), 1, 0);
     m_recentFiles = new KIntNumInput(tmpQGroupBox);
     m_recentFiles->setRange(1, 20, 1);
     m_recentFiles->setValue(m_oldRecentFiles);
-    grpLayout->addWidget(m_recentFiles, 1, 1);
+    interfaceLayout->addRow(i18n("Number of recent files:"), m_recentFiles);
 
-    grpLayout->addWidget(new QLabel(i18n("Palette font size:"), tmpQGroupBox), 2, 0);
     m_dockerFontSize = new KIntNumInput(tmpQGroupBox);
     m_dockerFontSize->setRange(5, 20, 1);
     m_dockerFontSize->setValue(m_oldDockerFontSize);
-    grpLayout->addWidget(m_dockerFontSize, 2, 1);
+    interfaceLayout->addRow(i18n("Palette font size:"), m_dockerFontSize);
 
-    grpLayout->addWidget(new QLabel(i18n("Canvas color:"), tmpQGroupBox), 3, 0);
     m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
-    grpLayout->addWidget(m_canvasColor, 3, 1);
-
-    grpLayout->setRowStretch(4, 1);
+    interfaceLayout->addRow(i18n("Canvas color:"), m_canvasColor);
 }
 
 void KarbonConfigInterfacePage::apply()
 {
     bool showStatusBar = m_showStatusBar->isChecked();
 
-    KarbonPart* part = m_view->part();
+    KarbonKoDocument* part = m_view->part();
 
     KConfigGroup interfaceGroup = m_config->group("Interface");
 

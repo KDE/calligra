@@ -33,7 +33,9 @@
 
 #include "KoDocument.h"
 
-#include <qfileinfo.h>
+#include <QFileInfo>
+
+#include <KDialog>
 
 class KoView;
 
@@ -56,9 +58,7 @@ class KPLATO_EXPORT Part : public KoDocument
     Q_OBJECT
 
 public:
-    explicit Part( QWidget *parentWidget = 0,
-          QObject* parent = 0,
-          bool singleViewMode = false );
+    explicit Part(KoPart *part = 0);
     ~Part();
 
     void setReadWrite( bool rw );
@@ -93,7 +93,6 @@ public:
 
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
 
-    void activate( QWidget *w = 0 );
     DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
 
     bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id, Resource *resource = 0 );
@@ -101,6 +100,7 @@ public:
     bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id, Resource *resource = 0  );
     void mergeWorkPackages();
     void mergeWorkPackage( const Package *package );
+    void terminateWorkPackage( const Package *package );
 
     /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
@@ -115,6 +115,8 @@ public:
     bool extractFiles( KoStore *store, Package *package );
     bool extractFile( KoStore *store, Package *package, const Document *doc );
 
+    void registerView( View *view );
+
 public slots:
     /// Inserts an item into all other views than @p view
     void insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index );
@@ -122,15 +124,20 @@ public slots:
     void removeViewListItem( View *view, const ViewListItem *item );
     /// View selector has been modified
     void viewlistModified();
+    /// Check for workpackages
+    /// If @p keep is true, packages that has been refused will not be checked for again
+    void checkForWorkPackages( bool keep = false );
+
+    void setLoadingTemplate( bool );
 
 signals:
     void changed();
     void workPackageLoaded();
     void viewlistModified( bool );
+    void viewListItemAdded(const ViewListItem *item, const ViewListItem *parent, int index);
+    void viewListItemRemoved(const ViewListItem *item);
 
 protected:
-    virtual KoView* createViewInstance( QWidget* parent );
-
     /// Load kplato specific files
     virtual bool completeLoading( KoStore* store );
     /// Save kplato specific files
@@ -148,16 +155,17 @@ protected:
 
 protected slots:
     void slotViewDestroyed();
-    virtual void openTemplate( const KUrl& url );
     void addSchedulerPlugin( const QString&, SchedulerPlugin *plugin );
 
-    void checkForWorkPackages();
+    void autoCheckForWorkPackages();
     void checkForWorkPackage();
 
     void slotModified( bool );
 
     void insertFileCompleted();
     void insertFileCancelled( const QString& );
+
+    void workPackageMergeDialogFinished( int result );
 
 private:
     bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
@@ -184,7 +192,9 @@ private:
     QDomDocument m_reports;
 
     bool m_viewlistModified;
+    bool m_checkingForWorkPackages;
 
+    QList<QPointer<View> > m_views;
 };
 
 

@@ -24,8 +24,8 @@
 
 #include "keximigratedata.h"
 
-#include <kexidb/tableschema.h>
-#include <kexidb/connection.h>
+#include <db/tableschema.h>
+#include <db/connection.h>
 
 #include <QVariantList>
 #include <QByteArray>

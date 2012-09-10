@@ -19,7 +19,7 @@
 
 #include "kexiframe.h"
 
-#include <qpainter.h>
+#include <QPainter>
 #include <qdrawutil.h>
 #include <kexiutils/utils.h>
 #include <formeditor/utils.h>

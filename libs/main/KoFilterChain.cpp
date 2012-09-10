@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoDocument.h"
+#include "KoPart.h"
 
 #include "PriorityQueue_p.h"
 #include "KoFilterGraph.h"
@@ -160,11 +161,6 @@ QString KoFilterChain::outputFile()
 
 KoStoreDevice* KoFilterChain::storageFile(const QString& name, KoStore::Mode mode)
 {
-    // ###### CHECK: This works only for import filters. Do we want something like
-    // that for export filters too?
-    if (m_outputQueried == Nil && mode == KoStore::Write && filterManagerParentChain())
-        return storageInitEmbedding(name);
-
     // Plain normal use case
     if (m_inputQueried == Storage && mode == KoStore::Read &&
             m_inputStorage && m_inputStorage->mode() == KoStore::Read)
@@ -253,23 +249,6 @@ void KoFilterChain::prependChainLink(KoFilterEntry::Ptr filterEntry, const QByte
     m_chainLinks.prepend(new ChainLink(this, filterEntry, from, to));
 }
 
-void KoFilterChain::enterDirectory(const QString& directory)
-{
-    // Only a little bit of checking as we (have to :} ) trust KoEmbeddingFilter
-    // If the output storage isn't initialized yet, we perform that step(s) on init.
-    if (m_outputStorage)
-        m_outputStorage->enterDirectory(directory);
-    m_internalEmbeddingDirectories.append(directory);
-}
-
-void KoFilterChain::leaveDirectory()
-{
-    if (m_outputStorage)
-        m_outputStorage->leaveDirectory();
-    if (!m_internalEmbeddingDirectories.isEmpty())
-        m_internalEmbeddingDirectories.pop_back();
-}
-
 QString KoFilterChain::filterManagerImportFile() const
 {
     return m_manager->importFile();
@@ -312,6 +291,15 @@ void KoFilterChain::manageIO()
     m_inputFile.clear();
 
     if (!m_outputFile.isEmpty()) {
+        if (m_outputTempFile == 0) {
+            m_inputTempFile = new KTemporaryFile;
+            m_inputTempFile->setAutoRemove(true);
+            m_inputTempFile->setFileName(m_outputFile);
+        }
+        else {
+            m_inputTempFile = m_outputTempFile;
+            m_outputTempFile = 0;
+        }
         m_inputFile = m_outputFile;
         m_outputFile.clear();
         m_inputTempFile = m_outputTempFile;
@@ -390,6 +378,16 @@ void KoFilterChain::outputFileHelper(bool autoDelete)
         m_outputFile.clear();
     } else
         m_outputFile = m_outputTempFile->fileName();
+
+    // We will recreate this file, not re-use it later on,
+    // so on windows it cannot exist, we just need the temporary
+    // name.
+#ifdef Q_OS_WIN
+    m_outputTempFile->close();
+    m_outputTempFile->setAutoRemove(true);
+    delete m_outputTempFile;
+    m_outputTempFile = 0;
+#endif
 }
 
 KoStoreDevice* KoFilterChain::storageNewStreamHelper(KoStore** storage, KoStoreDevice** device,
@@ -425,7 +423,7 @@ KoStoreDevice* KoFilterChain::storageHelper(const QString& file, const QString& 
         return storageCleanupHelper(storage);
 
     // Seems that we got a valid storage, at least. Even if we can't open
-    // the stream the "user" asked us to open, we nontheless change the
+    // the stream the "user" asked us to open, we nonetheless change the
     // IOState from File to Storage, as it might be possible to open other streams
     if (mode == KoStore::Read)
         m_inputQueried = Storage;
@@ -450,59 +448,9 @@ void KoFilterChain::storageInit(const QString& file, KoStore::Mode mode, KoStore
     *storage = KoStore::createStore(file, mode, appIdentification);
 }
 
-KoStoreDevice* KoFilterChain::storageInitEmbedding(const QString& name)
-{
-    if (m_outputStorage) {
-        kWarning(30500) << "Ooops! Something's really screwed here.";
-        return 0;
-    }
-
-    m_outputStorage = filterManagerParentChain()->m_outputStorage;
-
-    if (!m_outputStorage) {
-        // If the storage of the parent hasn't been initialized yet,
-        // we have to do that here. Quite nasty...
-        storageInit(filterManagerParentChain()->outputFile(), KoStore::Write, &m_outputStorage);
-
-        // transfer the ownership
-        filterManagerParentChain()->m_outputStorage = m_outputStorage;
-        filterManagerParentChain()->m_outputQueried = Storage;
-    }
-
-    if (m_outputStorage->isOpen())
-        m_outputStorage->close();  // to be on the safe side, should never happen
-    if (m_outputStorage->bad())
-        return storageCleanupHelper(&m_outputStorage);
-
-    m_outputQueried = Storage;
-
-    // Now that we have a storage we have to change the directory
-    // and remember it for later!
-    const int lruPartIndex = filterManagerParentChain()->m_chainLinks.current()->lruPartIndex();
-    if (lruPartIndex == -1) {
-        kError(30500) << "Huh! You want to use embedding features w/o inheriting KoEmbeddingFilter?" << endl;
-        return storageCleanupHelper(&m_outputStorage);
-    }
-
-    if (!m_outputStorage->enterDirectory(QString("part%1").arg(lruPartIndex)))
-        return storageCleanupHelper(&m_outputStorage);
-
-    return storageCreateFirstStream(name, &m_outputStorage, &m_outputStorageDevice);
-}
-
 KoStoreDevice* KoFilterChain::storageCreateFirstStream(const QString& streamName, KoStore** storage,
         KoStoreDevice** device)
 {
-    // Before we go and create the first stream in this storage we
-    // have to perform a little hack in case we're used by any ole-style
-    // filter which utilizes internal embedding. Ugly, but well...
-    if (!m_internalEmbeddingDirectories.isEmpty()) {
-        QStringList::ConstIterator it = m_internalEmbeddingDirectories.constBegin();
-        QStringList::ConstIterator end = m_internalEmbeddingDirectories.constEnd();
-        while (it != end && (*storage)->enterDirectory(*it))
-            ++it;
-    }
-
     if (!(*storage)->open(streamName))
         return 0;
 
@@ -554,12 +502,12 @@ KoDocument* KoFilterChain::createDocument(const QByteArray& mimeType)
     }
 
     QString errorMsg;
-    KoDocument* doc = entry.createDoc(&errorMsg);   /*entries.first().createDoc();*/
-    if (!doc) {
+    KoPart *part = entry.createKoPart(&errorMsg);
+    if (!part) {
         kError(30500) << "Couldn't create the document: " << errorMsg << endl;
         return 0;
     }
-    return doc;
+    return part->document();
 }
 
 int KoFilterChain::weight() const

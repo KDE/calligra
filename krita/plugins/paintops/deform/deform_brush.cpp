@@ -28,6 +28,7 @@
 
 #include <kis_types.h>
 #include <kis_random_sub_accessor.h>
+#include <kis_iterator_ng.h>
 
 #include <cmath>
 #include <ctime>
@@ -63,13 +64,11 @@ inline void DeformBrush::movePixel(qreal newX, qreal newY, quint8 *dst)
     } else {
         m_srcAcc->sampledRawData(dst);
     }
-
 }
 
 void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF pos)
 {
-    KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
-    m_srcAcc = &srcAcc;
+    m_srcAcc = layer->createRandomSubAccessor();
     m_pixelSize = layer->pixelSize();
 
     if (!setupAction(DeformModes(m_properties->action-1),pos)){ return; }
@@ -88,10 +87,11 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
     qreal m_majorAxis = 2.0/radius;
     qreal m_minorAxis = 2.0/radius;
 
-    KisRectIterator m_srcIt = dab->createRectIterator(left, top, w , h);
-    for (; !m_srcIt.isDone(); ++m_srcIt) {
-        maskX = m_srcIt.x() - curXi;
-        maskY = m_srcIt.y() - curYi;
+    KisRectIteratorSP m_srcIt = dab->createRectIteratorNG(left, top, w , h);
+
+    do {
+        maskX = m_srcIt->x() - curXi;
+        maskY = m_srcIt->y() - curYi;
 
         distance = norme(maskX * m_majorAxis, maskY * m_minorAxis);
         if (distance > 1.0){ continue; }
@@ -101,8 +101,9 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
         maskX += curXi;
         maskY += curYi;
 
-        movePixel(maskX, maskY, m_srcIt.rawData());
-    }
+        movePixel(maskX, maskY, m_srcIt->rawData());
+    } while (m_srcIt->nextPixel());
+
     m_counter++;
 }
 
@@ -110,7 +111,7 @@ void DeformBrush::oldDeform(KisPaintDeviceSP dab,KisPaintDeviceSP layer,QPointF 
 void DeformBrush::initDeformAction()
 {
     DeformModes mode = DeformModes(m_properties->action-1);
-    
+
     switch(mode){
         case GROW:
         case SHRINK:
@@ -217,15 +218,15 @@ bool DeformBrush::setupAction(DeformModes mode,const QPointF& pos)
     return true;
 }
 
-KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab, 
-                                             KisPaintDeviceSP layer, 
-                                             qreal scale, 
-                                             qreal rotation, 
+KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
+                                             KisPaintDeviceSP layer,
+                                             qreal scale,
+                                             qreal rotation,
                                              QPointF pos, qreal subPixelX, qreal subPixelY, int dabX, int dabY)
 {
     KisFixedPaintDeviceSP mask = new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-    KisRandomSubAccessorPixel srcAcc = layer->createRandomSubAccessor();
-    m_srcAcc = &srcAcc;
+    m_srcAcc = layer->createRandomSubAccessor();
+
     m_pixelSize = layer->colorSpace()->pixelSize();
 
     qreal fWidth = maskWidth(scale);
@@ -271,13 +272,13 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
     qreal bcosa = cos(rotation);
     qreal bsina = sin(rotation);
 
-    
+
     mask->setRect(dab->bounds());
     mask->initialize();
     quint8* maskPointer = mask->data();
     qint8 maskPixelSize = mask->pixelSize();
     KoColor pixel(dab->colorSpace());
-    
+
     for (int y = 0; y <  dstHeight; y++){
         for (int x = 0; x < dstWidth; x++){
             maskX = x - m_centerX;
@@ -290,7 +291,7 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
             if (distance > 1.0){
                 // leave there OPACITY TRANSPARENT pixel (default pixel)
                 m_srcAcc->moveTo(x + dabX, y + dabY);
-                m_srcAcc->sampledRawData(dabPointer);
+                m_srcAcc->sampledOldRawData(dabPointer);
                 dabPointer += m_pixelSize;
 
                 *maskPointer = OPACITY_TRANSPARENT_U8;
@@ -317,10 +318,10 @@ KisFixedPaintDeviceSP DeformBrush::paintMask(KisFixedPaintDeviceSP dab,
 
             movePixel(maskX, maskY, dabPointer);
             dabPointer += m_pixelSize;
-            
+
             *maskPointer = OPACITY_OPAQUE_U8;
             maskPointer += maskPixelSize;
-            
+
         }
     }
     m_counter++;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -21,13 +21,15 @@
 #include "kptitemviewsettup.h"
 #include "kptitemmodelbase.h"
 #include "kptviewbase.h"
+#include "kptdebug.h"
+
+#include "KoPageLayoutWidget.h"
 
 #include <QCheckBox>
 #include <QHeaderView>
 
 #include <kactionselector.h>
 #include <kpushbutton.h>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -62,7 +64,7 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
 
     QMap<int, Item*> map;
     int c = includeColumn0 ? 0 : 1;
-    kDebug()<<includeColumn0<<c;
+    kDebug(planDbg())<<includeColumn0<<c;
     for ( ; c < model->columnCount(); ++c ) {
         Item *item = new Item( c, model->headerData( c, Qt::Horizontal ).toString() );
         item->setToolTip( model->headerData( c, Qt::Horizontal, Qt::ToolTipRole ).toString() );
@@ -92,7 +94,7 @@ void ItemViewSettup::slotChanged()
 
 void ItemViewSettup::slotOk()
 {
-    kDebug();
+    kDebug(planDbg());
     QListWidget *lst = selector->availableListWidget();
     for ( int r = 0; r < lst->count(); ++r ) {
         int c = static_cast<Item*>( lst->item( r ) )->column();
@@ -109,7 +111,7 @@ void ItemViewSettup::slotOk()
 
 void ItemViewSettup::setDefault()
 {
-    kDebug();
+    kDebug(planDbg());
     selector->availableListWidget()->clear();
     selector->selectedListWidget()->clear();
     QAbstractItemModel *model = m_view->model();
@@ -131,26 +133,43 @@ void ItemViewSettup::setDefault()
 
 
 //---------------------------
-ItemViewSettupDialog::ItemViewSettupDialog( TreeViewBase *view, bool includeColumn0, QWidget *parent )
-    : KPageDialog( parent )
+ItemViewSettupDialog::ItemViewSettupDialog( ViewBase *view, TreeViewBase *treeview, bool includeColumn0, QWidget *parent )
+    : KPageDialog( parent ),
+    m_view( view ),
+    m_treeview( treeview ),
+    m_pagelayout( 0 ),
+    m_headerfooter( 0 )
 {
     setCaption( i18n("View Settings") );
     setButtons( Ok|Cancel|Default );
     setDefaultButton( Ok );
     showButtonSeparator( true );
 
-    button( Default )->setEnabled( ! view->defaultColumns().isEmpty() );
+    button( Default )->setEnabled( ! treeview->defaultColumns().isEmpty() );
     
-    m_panel = new ItemViewSettup( view, includeColumn0 );
+    m_panel = new ItemViewSettup( treeview, includeColumn0 );
     KPageWidgetItem *page = new KPageWidgetItem( m_panel, i18n( "Tree View" ) );
     page->setHeader( i18n( "Tree View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
     
-    //connect( m_panel, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
-    
-    connect( this, SIGNAL( okClicked() ), m_panel, SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), m_panel, SLOT( setDefault() ) );
+    connect(this, SIGNAL(okClicked()), this, SLOT( slotOk()));
+    connect(this, SIGNAL(okClicked()), m_panel, SLOT( slotOk()));
+    connect(this, SIGNAL(defaultClicked()), m_panel, SLOT(setDefault()));
+}
+
+void ItemViewSettupDialog::slotOk()
+{
+    kDebug(planDbg())<<m_view<<m_pagelayout<<m_headerfooter;
+    if ( ! m_view ) {
+        return;
+    }
+    if ( m_pagelayout ) {
+        m_view->setPageLayout( m_pagelayout->pageLayout() );
+    }
+    if ( m_headerfooter ) {
+        m_view->setPrintingOptions( m_headerfooter->options() );
+    }
 }
 
 KPageWidgetItem *ItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
@@ -168,37 +187,69 @@ KPageWidgetItem *ItemViewSettupDialog::insertWidget( int index, QWidget *widget,
     return page;
 }
 
+void ItemViewSettupDialog::addPrintingOptions()
+{
+    if ( ! m_view ) {
+        return;
+    }
+    QTabWidget *tab = new QTabWidget();
+    QWidget *w = ViewBase::createPageLayoutWidget( m_view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( m_view );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+
+    insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
+}
+
 //-------------------------------
-SplitItemViewSettupDialog::SplitItemViewSettupDialog( DoubleTreeViewBase *view, QWidget *parent )
-    : KPageDialog( parent )
+SplitItemViewSettupDialog::SplitItemViewSettupDialog( ViewBase *view, DoubleTreeViewBase *treeview, QWidget *parent )
+    : KPageDialog( parent ),
+    m_view( view ),
+    m_treeview( treeview ),
+    m_pagelayout( 0 ),
+    m_headerfooter( 0 )
 {
     setCaption( i18n("View Settings") );
     setButtons( Ok|Cancel|Default );
     setDefaultButton( Ok );
     showButtonSeparator( true );
 
-    bool nodef = view->masterView()->defaultColumns().isEmpty() || view->slaveView()->defaultColumns().isEmpty();
+    bool nodef = treeview->masterView()->defaultColumns().isEmpty() || treeview->slaveView()->defaultColumns().isEmpty();
     button( Default )->setEnabled( ! nodef );
-    
-    m_page1 = new ItemViewSettup( view->masterView(), true );
+
+    m_page1 = new ItemViewSettup( treeview->masterView(), true );
     KPageWidgetItem *page = new KPageWidgetItem( m_page1, i18n( "Main View" ) );
     page->setHeader( i18n( "Main View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
-    
-    m_page2 = new ItemViewSettup( view->slaveView(), true );
+
+    m_page2 = new ItemViewSettup( treeview->slaveView(), true );
     page = new KPageWidgetItem( m_page2, i18n( "Auxiliary View" ) );
     page->setHeader( i18n( "Auxiliary View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
-    
+
     //connect( m_page1, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
     //connect( m_page2, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
-    
+
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( this, SIGNAL( okClicked() ), m_page1, SLOT( slotOk() ) );
     connect( this, SIGNAL( okClicked() ), m_page2, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), m_page1, SLOT( setDefault() ) );
     connect( this, SIGNAL( defaultClicked() ), m_page2, SLOT( setDefault() ) );
+}
+
+void SplitItemViewSettupDialog::slotOk()
+{
+    kDebug(planDbg());
+    if ( ! m_view ) {
+        return;
+    }
+    m_view->setPageLayout( m_pagelayout->pageLayout() );
+    m_view->setPrintingOptions( m_headerfooter->options() );
 }
 
 KPageWidgetItem *SplitItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
@@ -214,6 +265,25 @@ KPageWidgetItem *SplitItemViewSettupDialog::insertWidget( int index, QWidget *wi
         m_pageList.append( page );
     }
     return page;
+}
+
+void SplitItemViewSettupDialog::addPrintingOptions()
+{
+    if ( ! m_view ) {
+        return;
+    }
+    QTabWidget *tab = new QTabWidget();
+    QWidget *w = ViewBase::createPageLayoutWidget( m_view );
+    tab->addTab( w, w->windowTitle() );
+    m_pagelayout = w->findChild<KoPageLayoutWidget*>();
+    Q_ASSERT( m_pagelayout );
+    m_pagelayout->setPageLayout( m_view->pageLayout() );
+
+    m_headerfooter = ViewBase::createHeaderFooterWidget( m_view );
+    tab->addTab( m_headerfooter, m_headerfooter->windowTitle() );
+    m_headerfooter->setOptions( m_view->printingOptions() );
+
+    insertWidget( -1, tab, i18n( "Printing" ), i18n( "Printing Options" ) );
 }
 
 } //namespace KPlato

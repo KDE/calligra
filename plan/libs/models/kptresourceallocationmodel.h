@@ -100,7 +100,6 @@ public:
     virtual const QMetaEnum columnMap() const { return m_model.columnMap(); }
 
     virtual void setProject( Project *project );
-    void setTask( Task *task );
     Task *task() const { return m_model.task(); }
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
@@ -129,7 +128,10 @@ public:
     Resource *resource( const QModelIndex &idx ) const;
     void setRequired( const QModelIndex &idx, const QList<Resource*> &lst );
     QList<Resource*> required( const QModelIndex &idx ) const;
-    
+
+public slots:
+    void setTask( Task *task );
+
 protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
@@ -152,9 +154,15 @@ protected:
     bool setAllocation( ResourceGroup *res, const QVariant &value, int role );
     bool setAllocation( Resource *res, const QVariant &value, int role );
 
+    QVariant maximum( const ResourceGroup *res, int role ) const;
+
     bool setRequired( const QModelIndex &idx, const QVariant &value, int role );
     QVariant required( const QModelIndex &idx, int role ) const;
-    
+
+private:
+    int requestedResources( const ResourceGroup *res ) const;
+    bool hasMaterialResources() const;
+
 private:
     ResourceAllocationModel m_model;
 

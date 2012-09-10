@@ -17,11 +17,11 @@
 
 #include "TextDocumentRtfOutput.h"
 
-#include <QtGui/QTextCursor>
-#include <QtGui/QTextDocument>
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
-#include <QtCore/QUuid>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QDebug>
+#include <QUrl>
+#include <QUuid>
 
 namespace RtfReader
 {

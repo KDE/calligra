@@ -19,8 +19,8 @@
 */
 
 #include "kexidbdateedit.h"
-#include <qlayout.h>
-#include <qtoolbutton.h>
+#include <QLayout>
+#include <QToolButton>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QEvent>
@@ -29,7 +29,7 @@
 #include <kdatetable.h>
 
 #include <kexiutils/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent)
         : QWidget(parent), KexiFormDataItemInterface()

@@ -24,6 +24,8 @@
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
 
+#include <KoIcon.h>
+
 #include <QToolButton>
 #include <KAction>
 #include <KToggleAction>
@@ -161,7 +163,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     }
     else {
         d->dragConnectionAction = new KToggleAction(
-            KIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
+            koIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
 //        d->widgetActionGroup->addAction(d->dragConnectionAction);
         connect(d->dragConnectionAction, SIGNAL(triggered()),
@@ -171,7 +173,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #endif
 
     d->pointerAction = new KToggleAction(
-        KIcon("mouse_pointer"), i18n("Pointer"), d->collection);
+        koIcon("mouse_pointer"), i18n("Pointer"), d->collection);
     d->pointerAction->setObjectName("edit_pointer");
     d->widgetActionGroup->addAction(d->pointerAction);
     connect(d->pointerAction, SIGNAL(triggered()),
@@ -216,7 +218,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef KEXI_DEBUG_GUI
     KConfigGroup generalGroup(KGlobal::config()->group("General"));
     if (generalGroup.readEntry("ShowInternalDebugger", false)) {
-        KAction *a = new KAction(KIcon("run-build-file"), i18n("Show Form UI Code"), this);
+        KAction *a = new KAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
         d->collection->addAction("show_form_ui", a);
         a->setShortcut(Qt::CTRL + Qt::Key_U);
         connect(a, SIGNAL(triggered()), this, SLOT(showFormUICode()));
@@ -260,6 +262,10 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef CAN_USE_MARBLE
             << "library_widget_MapBrowserWidget"
 #endif
+            << "library_widget_KexiDBSlider"
+            << "library_widget_KexiDBProgressBar"
+            << "library_widget_KexiDBCommandLinkButton"
+            << "library_widget_KexiDBDatePicker"
             << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();

@@ -43,7 +43,7 @@ class KPlatoScriptingPart : public KoScriptingPart
 {
         Q_OBJECT
     public:
-        KPlatoScriptingPart(QObject* parent, const QStringList& args=QStringList());
+        explicit KPlatoScriptingPart(QObject* parent, const QStringList& args=QStringList());
         virtual ~KPlatoScriptingPart();
     private:
         /// \internal d-pointer class.

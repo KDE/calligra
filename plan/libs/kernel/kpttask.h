@@ -214,7 +214,7 @@ public:
     UsedEffort *usedEffort( const Resource *r ) const { return m_usedEffort.value( const_cast<Resource*>( r ) ); }
     const ResourceUsedEffortMap &usedEffortMap() const { return m_usedEffort; }
     
-    void changed();
+    void changed( int propert = -1 );
     Node *node() const { return m_node; }
     void setNode( Node *node ) { m_node = node; }
     
@@ -415,12 +415,18 @@ public:
      */
     virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
+    /// Returns the total planned effort for @p reosurce on this task (or subtasks)
+    virtual Duration plannedEffort( const Resource *resource, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this task (or subtasks) on date
     virtual Duration plannedEffort(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    /// Returns the total planned effort for @p resource on this task (or subtasks) on date
+    virtual Duration plannedEffort( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo(const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
+    /// Returns the planned effort for @p resource up to and including date
+    virtual Duration plannedEffortTo( const Resource *resource, const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort() const;
@@ -453,21 +459,24 @@ public:
     /// Returns the cost planned to be used to reach the actual percent finished
     virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    using Node::bcwsPrDay;
     /// Return map of Budgeted Cost of Work Scheduled pr day
-    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
+    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     
     /// Budgeted Cost of Work Scheduled
     virtual double bcws( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    using Node::bcwpPrDay;
     /// Return map of Budgeted Cost of Work Performed pr day (also includes bcwsPrDay)
-    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
+    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    using Node::acwp;
     /// Map of Actual Cost of Work Performed
-    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All ) const;
+    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE, EffortCostCalculationType type = ECCT_All );
     /// Actual Cost of Work Performed up to dat
     virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
@@ -734,13 +743,6 @@ private:
 
     WorkPackage m_workPackage;
     QList<WorkPackage*> m_packageLog;
-
-#ifndef NDEBUG
-public:
-    void printDebug(bool children, const QByteArray& indent);
-    EffortCost n(long int arg1, QDate arg2);
-#endif
-
 };
 
 }  //KPlato namespace

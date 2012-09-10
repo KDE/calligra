@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2010 Casper Boemann <cbo@boemannn.dk>
+ * Copyright ( C ) 2010 C. Boemann <cbo@boemannn.dk>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -136,14 +136,14 @@ public:
     // initialize step with values that will be there at the end of the step
     // step 0 is the value the object has before any animation is started
     // step n is the value of the object after the animation, only needed when there is a change to the real value of the object
-    // e.g. the object has been moved to its original position, one the animation is done the value is removed
+    // e.g. the object has been moved to its original position, once the animation is done the value is removed
     void init(int step, KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value);
 
     // update step value by values
     // will do different things depending on type of QVariant
     // e.g. for QTransform it will add the value to the matrix
     // the default action when there is no special handling is to copy the value over
-    // if QVariant is emty it will remove the id from the step
+    // if QVariant is empty it will remove the id from the step
     // the step in update must match the step of startStep
     // this will update the values used for the animation.
     // maybe have an internal method to also use it for updating the stack while init

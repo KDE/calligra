@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -79,7 +79,12 @@ public:
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
 protected:
+    KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;
+
+private:
+    bool checkCloneLayer(KisCloneLayerSP clone) const;
+    bool checkNodeRecursively(KisNodeSP node) const;
 
 private:
     struct Private;

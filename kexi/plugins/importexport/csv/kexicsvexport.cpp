@@ -19,8 +19,8 @@
 
 #include "kexicsvexport.h"
 #include "kexicsvwidgets.h"
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -30,12 +30,11 @@
 #include <widget/kexicharencodingcombobox.h>
 
 #include <QTextStream>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qclipboard.h>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QClipboard>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kpushbutton.h>
 #include <kapplication.h>
 #include <kdebug.h>

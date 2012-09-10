@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 - 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2009, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -26,14 +26,19 @@
 #include "kptproject.h"
 #include "kptnode.h"
 #include "kpttaskcompletedelegate.h"
+#include "kptxmlloaderobject.h"
+#include "kptdebug.h"
+
+#include "KoStore.h"
+#include <KoIcon.h>
 
 #include <QAbstractItemModel>
 #include <QMimeData>
 #include <QModelIndex>
 #include <QWidget>
 #include <QPair>
+#include <QByteArray>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -44,10 +49,11 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 #include <KRichTextWidget>
+#include <KMimeType>
 
 #include <kdganttglobal.h>
-#include <QtGui>
 #include <math.h>
+
 
 namespace KPlato
 {
@@ -70,13 +76,13 @@ const QMetaEnum NodeModel::columnMap() const
 
 void NodeModel::setProject( Project *project )
 {
-    kDebug()<<m_project<<"->"<<project;
+    kDebug(planDbg())<<m_project<<"->"<<project;
     m_project = project;
 }
 
 void NodeModel::setManager( ScheduleManager *sm )
 {
-    kDebug()<<m_manager<<"->"<<sm;
+    kDebug(planDbg())<<m_manager<<"->"<<sm;
     m_manager = sm;
 }
 
@@ -92,7 +98,7 @@ QVariant NodeModel::name( const Node *node, int role ) const
             return QVariant();
         case Qt::DecorationRole:
             if ( node->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
             }
             break;
         case Role::Foreground: {
@@ -184,6 +190,11 @@ QVariant NodeModel::description( const Node *node, int role ) const
             return s;
         }
         case Qt::ToolTipRole: {
+            KRichTextWidget w( node->description(), 0 );
+            w.switchToPlainText();
+            if ( w.textOrHtml().isEmpty() ) {
+                return QVariant();
+            }
             return node->description();
         }
         case Qt::EditRole:
@@ -197,7 +208,7 @@ QVariant NodeModel::description( const Node *node, int role ) const
 
 QVariant NodeModel::type( const Node *node, int role ) const
 {
-    //kDebug()<<node->name()<<", "<<role;
+    //kDebug(planDbg())<<node->name()<<", "<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -205,7 +216,7 @@ QVariant NodeModel::type( const Node *node, int role ) const
         case Qt::EditRole:
             return node->type();
         case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
+            return (int)(Qt::AlignLeft|Qt::AlignVCenter);
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -645,14 +656,14 @@ QVariant NodeModel::startupAccount( const Node *node, int role ) const
         case Qt::DisplayRole:
             if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Account *a = node->startupAccount();
-                //kDebug()<<node->name()<<": "<<a;
+                //kDebug(planDbg())<<node->name()<<": "<<a;
                 return a == 0 ? i18n( "None" ) : a->name();
             }
             break;
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task  || node->type() == Node::Type_Milestone ) {
                 Account *a = node->startupAccount();
-                //kDebug()<<node->name()<<": "<<a;
+                //kDebug(planDbg())<<node->name()<<": "<<a;
                 return a ? i18nc( "@info:tooltip", "Account for task startup cost: %1", a->name() )
                          : i18nc( "@info:tooltip", "Account for task startup cost" );
             }
@@ -751,7 +762,7 @@ QVariant NodeModel::startTime( const Node *node, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( node->startTime( id() ) );
         case Qt::ToolTipRole:
-            //kDebug()<<node->name()<<", "<<role;
+            //kDebug(planDbg())<<node->name()<<", "<<role;
             return i18nc( "@info:tooltip", "Scheduled start: %1", KGlobal::locale()->formatDateTime( node->startTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
             return node->startTime( id() );
@@ -768,7 +779,7 @@ QVariant NodeModel::endTime( const Node *node, int role ) const
         case Qt::DisplayRole:
             return KGlobal::locale()->formatDateTime( node->endTime( id() ) );
         case Qt::ToolTipRole:
-            //kDebug()<<node->name()<<", "<<role;
+            //kDebug(planDbg())<<node->name()<<", "<<role;
             return i18nc( "@info:tooltip", "Scheduled finish: %1", KGlobal::locale()->formatDateTime( node->endTime( id() ), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::EditRole:
             return node->endTime( id() );
@@ -853,7 +864,7 @@ QVariant NodeModel::varianceEstimate( const Estimate *est, int role ) const
             }
             Duration::Unit unit = est->unit();
             double v = est->variance( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return KGlobal::locale()->formatNumber( v );
         }
         case Qt::EditRole: {
@@ -888,7 +899,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+                //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
@@ -909,7 +920,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return i18nc( "@info:tooltip", "PERT optimistic duration: %1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
@@ -995,7 +1006,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
@@ -1015,7 +1026,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
             d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
             Duration::Unit unit = node->estimate()->unit();
             double v = d.toDouble( unit );
-            //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
+            //kDebug(planDbg())<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
             return i18nc( "@info:tooltip", "PERT pessimistic duration: %1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
             break;
         }
@@ -1523,7 +1534,7 @@ QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
         case Qt::DisplayRole:
             return node->actualEffortTo( m_now ).format();
         case Qt::ToolTipRole:
-            //kDebug()<<m_now<<node;
+            //kDebug(planDbg())<<m_now<<node;
             return i18nc( "@info:tooltip", "Actual effort used up to %1: %2", l->formatDate( m_now ), node->actualEffortTo( m_now ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->actualEffortTo( m_now ).toDouble( Duration::Unit_h );
@@ -2202,7 +2213,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case WPTransmitionTime: result = wpTransmitionTime( n, role ); break;
 
         default:
-            //kDebug()<<"Invalid property number: "<<property;;
+            //kDebug(planDbg())<<"Invalid property number: "<<property;;
             return result;
     }
     return result;
@@ -2621,7 +2632,7 @@ KUndo2Command *NodeModel::setConstraint( Node *node, const QVariant &value, int 
             } else {
                 v = Node::ConstraintType( value.toInt() );
             }
-            //kDebug()<<v;
+            //kDebug(planDbg())<<v;
             if ( v != node->constraint() ) {
                 return new NodeModifyConstraintCmd( *node, v, i18nc( "(qtundo-format)", "Modify constraint type" ) );
             }
@@ -2738,7 +2749,7 @@ KUndo2Command *NodeModel::setEstimate( Node *node, const QVariant &value, int ro
             } else {
                 return 0;
             }
-            //kDebug()<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
+            //kDebug(planDbg())<<d<<","<<unit<<" ->"<<value.toList()[1].toInt();
             MacroCommand *cmd = 0;
             if ( d != node->estimate()->expectedEstimate() ) {
                 if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify estimate" ) );
@@ -2822,7 +2833,7 @@ KUndo2Command *NodeModel::setRunningAccount( Node *node, const QVariant &value, 
 {
     switch ( role ) {
         case Qt::EditRole: {
-            //kDebug()<<node->name();
+            //kDebug(planDbg())<<node->name();
             QStringList lst = runningAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() < lst.count() ) {
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
@@ -2843,12 +2854,12 @@ KUndo2Command *NodeModel::setStartupAccount( Node *node, const QVariant &value, 
 {
     switch ( role ) {
         case Qt::EditRole: {
-            //kDebug()<<node->name();
+            //kDebug(planDbg())<<node->name();
             QStringList lst = startupAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() < lst.count() ) {
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
                 Account *old = node->startupAccount();
-                //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
+                //kDebug(planDbg())<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
                 if ( old != a ) {
                     return new NodeModifyStartupAccountCmd( *node, old, a, i18nc( "(qtundo-format)", "Modify startup account" ) );
                 }
@@ -2881,7 +2892,7 @@ KUndo2Command *NodeModel::setShutdownAccount( Node *node, const QVariant &value,
 {
     switch ( role ) {
         case Qt::EditRole: {
-            //kDebug()<<node->name();
+            //kDebug(planDbg())<<node->name();
             QStringList lst = shutdownAccount( node, Role::EnumList ).toStringList();
             if ( value.toInt() < lst.count() ) {
                 Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
@@ -3023,7 +3034,7 @@ void NodeItemModel::setShowProject( bool on )
 
 void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 {
-    //kDebug()<<parent->name()<<"; "<<row;
+    //kDebug(planDbg())<<parent->name()<<"; "<<row;
     Q_ASSERT( m_node == 0 );
     m_node = parent;
     beginInsertRows( index( parent ), row, row );
@@ -3031,7 +3042,7 @@ void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 
 void NodeItemModel::slotNodeInserted( Node *node )
 {
-    //kDebug()<<node->parentNode()->name()<<"-->"<<node->name();
+    //kDebug(planDbg())<<node->parentNode()->name()<<"-->"<<node->name();
     Q_ASSERT( node->parentNode() == m_node );
     endInsertRows();
     m_node = 0;
@@ -3040,7 +3051,7 @@ void NodeItemModel::slotNodeInserted( Node *node )
 
 void NodeItemModel::slotNodeToBeRemoved( Node *node )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     Q_ASSERT( m_node == 0 );
     m_node = node;
     int row = index( node ).row();
@@ -3049,7 +3060,7 @@ void NodeItemModel::slotNodeToBeRemoved( Node *node )
 
 void NodeItemModel::slotNodeRemoved( Node *node )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     Q_ASSERT( node == m_node );
 #ifdef NDEBUG
     Q_UNUSED(node)
@@ -3058,16 +3069,37 @@ void NodeItemModel::slotNodeRemoved( Node *node )
     m_node = 0;
 }
 
+void NodeItemModel::slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos )
+{
+    //kDebug(planDbg())<<node->parentNode()->name()<<pos<<":"<<newParent->name()<<newPos;
+    beginMoveRows( index( node->parentNode() ), pos, pos, index( newParent ), newPos );
+}
+
+void NodeItemModel::slotNodeMoved( Node *node )
+{
+    Q_UNUSED( node );
+    //kDebug(planDbg())<<node->parentNode()->name()<<node->parentNode()->indexOf( node );
+    endMoveRows();
+}
+
 void NodeItemModel::slotLayoutChanged()
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
 }
 
+void NodeItemModel::slotProjectCalulated(ScheduleManager *sm)
+{
+    kDebug(planDbg())<<m_manager<<sm;
+    if ( sm && sm == m_manager ) {
+        slotLayoutChanged();
+    }
+}
+
 void NodeItemModel::slotWbsDefinitionChanged()
 {
-    kDebug();
+    kDebug(planDbg());
     if ( m_project == 0 ) {
         return;
     }
@@ -3092,15 +3124,15 @@ void NodeItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL( nodeToBeMoved( Node*, int, Node*, int ) ), this, SLOT( slotNodeToBeMoved( Node*, int, Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        //disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect( m_project, SIGNAL( projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
     }
     m_project = project;
-    kDebug()<<this<<m_project<<"->"<<project;
+    kDebug(planDbg())<<this<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
@@ -3109,12 +3141,12 @@ void NodeItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( nodeToBeMoved( Node*, int, Node*, int ) ), this, SLOT( slotNodeToBeMoved( Node*, int, Node*, int ) ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
 
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
-        //connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( projectCalculated(ScheduleManager*)), this, SLOT(slotProjectCalulated(ScheduleManager*)));
     }
     reset();
 }
@@ -3124,9 +3156,10 @@ void NodeItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
-    kDebug()<<this<<sm;
+    kDebug(planDbg())<<this<<sm;
     reset();
 }
 
@@ -3140,7 +3173,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
         return flags;
     }
     if ( isColumnReadOnly( index.column() ) ) {
-        //kDebug()<<"Column is readonly:"<<index.column();
+        //kDebug(planDbg())<<"Column is readonly:"<<index.column();
         return flags;
     }
     Node *n = node( index );
@@ -3310,9 +3343,9 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     if ( parent.isValid() ) {
         Q_ASSERT( parent.model() == this );
     }
-    //kDebug()<<parent<<row<<column;
+    //kDebug(planDbg())<<parent<<row<<column;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
-        //kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
+        //kDebug(planDbg())<<m_project<<parent<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
     if ( m_projectshown && ! parent.isValid() ) {
@@ -3326,7 +3359,7 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     // now get the internal pointer for the index
     Node *n = p->childNode( row );
     QModelIndex idx = createIndex(row, column, n);
-    //kDebug()<<idx;
+    //kDebug(planDbg())<<idx;
     return idx;
 }
 
@@ -3337,13 +3370,13 @@ QModelIndex NodeItemModel::index( const Node *node, int column ) const
     }
     Node *par = node->parentNode();
     if ( par ) {
-        //kDebug()<<par<<"-->"<<node;
+        //kDebug(planDbg())<<par<<"-->"<<node;
         return createIndex( par->indexOf( node ), column, const_cast<Node*>(node) );
     }
     if ( m_projectshown && node == m_project ) {
         return createIndex( 0, column, m_project );
     }
-    //kDebug()<<node;
+    //kDebug(planDbg())<<node;
     return QModelIndex();
 }
 
@@ -3380,12 +3413,12 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
                     cmd->addCommand( new AddResourceGroupCmd( m_project, pargr ) );
-                    //kDebug()<<"add group:"<<pargr->name();
+                    //kDebug(planDbg())<<"add group:"<<pargr->name();
                 }
                 r = new Resource();
                 r->setName( s.trimmed() );
                 cmd->addCommand( new AddResourceCmd( pargr, r ) );
-                //kDebug()<<"add resource:"<<r->name();
+                //kDebug(planDbg())<<"add resource:"<<r->name();
                 emit executeCommand( cmd );
                 cmd = 0;
             }
@@ -3399,7 +3432,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     ResourceRequest *r = node->resourceRequest( s );
                     if ( r ) {
                         if ( cmd == 0 ) cmd = new MacroCommand( c );
-                        //kDebug()<<"delete request:"<<r->resource()->name()<<" group:"<<r->parent()->group()->name();
+                        //kDebug(planDbg())<<"delete request:"<<r->resource()->name()<<" group:"<<r->parent()->group()->name();
                         cmd->addCommand( new RemoveResourceRequestCmd( r->parent(), r ) );
                     }
                 }
@@ -3418,17 +3451,17 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                             pargr = new ResourceGroup();
                             pargr->setName( i18n( "Resources" ) );
                             cmd->addCommand( new AddResourceGroupCmd( m_project, pargr ) );
-                            //kDebug()<<"add group:"<<pargr->name();
+                            //kDebug(planDbg())<<"add group:"<<pargr->name();
                         }
                         r = new Resource();
                         r->setName( s );
                         cmd->addCommand( new AddResourceCmd( pargr, r ) );
-                        //kDebug()<<"add resource:"<<r->name();
+                        //kDebug(planDbg())<<"add resource:"<<r->name();
                         emit executeCommand( cmd );
                         cmd = 0;
                     } else {
                         pargr = r->parentGroup();
-                        //kDebug()<<"add '"<<r->name()<<"' to group:"<<pargr;
+                        //kDebug(planDbg())<<"add '"<<r->name()<<"' to group:"<<pargr;
                     }
                     // add request
                     ResourceGroupRequest *g = node->resourceGroupRequest( pargr );
@@ -3441,11 +3474,11 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                         g = new ResourceGroupRequest( pargr );
                         cmd->addCommand( new AddResourceGroupRequestCmd( *task, g ) );
                         groupmap.insert( pargr, g );
-                        //kDebug()<<"add group request:"<<g;
+                        //kDebug(planDbg())<<"add group request:"<<g;
                     }
                     if ( cmd == 0 ) cmd = new MacroCommand( c );
                     cmd->addCommand( new AddResourceRequestCmd( g, new ResourceRequest( r, r->units() ) ) );
-                    //kDebug()<<"add request:"<<r->name()<<" group:"<<g;
+                    //kDebug(planDbg())<<"add request:"<<r->name()<<" group:"<<g;
                 }
             }
             if ( cmd ) {
@@ -3459,7 +3492,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
 
 bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
 {
-    kDebug()<<node->name()<<value<<role;
+    kDebug(planDbg())<<node->name()<<value<<role;
     if ( role != Qt::EditRole ) {
         return 0;
     }
@@ -3481,7 +3514,7 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
         if ( c.entrymode() == Completion::EnterCompleted ) {
             Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
             Duration actual = ( planned * value.toInt() ) / 100;
-            kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
+            kDebug(planDbg())<<planned.toString()<<value.toInt()<<actual.toString();
             NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
             cmd->execute();
             m->addCommand( cmd );
@@ -3512,14 +3545,17 @@ bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
 
 QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 {
-    QVariant result;
     if ( role == Qt::TextAlignmentRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }
     Node *n = node( index );
+    if ( role == Role::Object ) {
+        return n ? QVariant::fromValue( static_cast<QObject*>( n ) ) : QVariant();
+    }
+    QVariant result;
     if ( n != 0 ) {
         result = m_nodemodel.data( n, index.column(), role );
-        //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<result;
+        //kDebug(planDbg())<<n->name()<<": "<<index.column()<<", "<<role<<result;
     }
     if ( role == Qt::EditRole ) {
         switch ( index.column() ) {
@@ -3626,7 +3662,10 @@ Qt::DropActions NodeItemModel::supportedDropActions() const
 
 QStringList NodeItemModel::mimeTypes() const
 {
-    return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal";
+    return QStringList() << "application/x-vnd.kde.plan.nodeitemmodel.internal"
+                        << "application/x-vnd.kde.plan.resourceitemmodel.internal"
+                        << "application/x-vnd.kde.plan.project"
+                        << "text/uri-list";
 }
 
 QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
@@ -3637,7 +3676,7 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug()<<index.row();
+            //kDebug(planDbg())<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -3651,52 +3690,91 @@ QMimeData *NodeItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-    //kDebug();
+    kDebug(planDbg());
     if ( m_projectshown && ! index.isValid() ) {
         return false;
     }
     Node *dn = node( index ); // returns project if ! index.isValid()
     if ( dn == 0 ) {
-        kError()<<"no node to drop on!";
+        kError()<<"no node (or project) to drop on!";
         return false; // hmmm
     }
-    switch ( dropIndicatorPosition ) {
-        case ItemModelBase::AboveItem:
-        case ItemModelBase::BelowItem:
-            // dn == sibling, if not project
-            if ( dn == m_project ) {
+    if ( data->hasFormat("application/x-vnd.kde.plan.resourceitemmodel.internal") ) {
+        switch ( dropIndicatorPosition ) {
+            case ItemModelBase::OnItem:
+                if ( index.column() == NodeModel::NodeAllocation ) {
+                    kDebug(planDbg())<<"resource:"<<index<<(dn->type() == Node::Type_Task);
+                    return dn->type() == Node::Type_Task;
+                } else if ( index.column() == NodeModel::NodeResponsible ) {
+                    kDebug(planDbg())<<"resource:"<<index<<true;
+                    return true;
+                }
+                break;
+            default:
+                break;
+        }
+    } else if ( data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal")
+                || data->hasFormat( "application/x-vnd.kde.plan.project" )
+                || data->hasUrls() )
+    {
+        switch ( dropIndicatorPosition ) {
+            case ItemModelBase::AboveItem:
+            case ItemModelBase::BelowItem:
+                // dn == sibling, if not project
+                if ( dn == m_project ) {
+                    return dropAllowed( dn, data );
+                }
+                return dropAllowed( dn->parentNode(), data );
+            case ItemModelBase::OnItem:
+                // dn == new parent
                 return dropAllowed( dn, data );
-            }
-            return dropAllowed( dn->parentNode(), data );
-        case ItemModelBase::OnItem:
-            // dn == new parent
-            return dropAllowed( dn, data );
-        default:
-            break;
+            default:
+                break;
+        }
+    } else {
+        kDebug(planDbg())<<"Unknown mimetype";
     }
     return false;
 }
 
+QList<Resource*> NodeItemModel::resourceList( QDataStream &stream )
+{
+    QList<Resource*> lst;
+    while (!stream.atEnd()) {
+        QString id;
+        stream >> id;
+        kDebug(planDbg())<<"id"<<id;
+        Resource *r = m_project->findResource( id );
+        if ( r ) {
+            lst << r;
+        }
+    }
+    kDebug(planDbg())<<lst;
+    return lst;
+}
+
 bool NodeItemModel::dropAllowed( Node *on, const QMimeData *data )
 {
-    if ( !data->hasFormat("application/x-vnd.kde.plan.nodeitemmodel.internal") ) {
-        return false;
-    }
     if ( ! m_projectshown && on == m_project ) {
         return true;
     }
-    QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
-    QDataStream stream(&encodedData, QIODevice::ReadOnly);
-    QList<Node*> lst = nodeList( stream );
-    foreach ( Node *n, lst ) {
-        if ( n->type() == Node::Type_Project || on == n || on->isChildOf( n ) ) {
-            return false;
-        }
+    if ( on->isBaselined() && on->type() != Node::Type_Summarytask ) {
+        return false;
     }
-    lst = removeChildNodes( lst );
-    foreach ( Node *n, lst ) {
-        if ( ! m_project->canMoveTask( n, on ) ) {
-            return false;
+    if ( data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
+        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        QList<Node*> lst = nodeList( stream );
+        foreach ( Node *n, lst ) {
+            if ( n->type() == Node::Type_Project || on == n || on->isChildOf( n ) ) {
+                return false;
+            }
+        }
+        lst = removeChildNodes( lst );
+        foreach ( Node *n, lst ) {
+            if ( ! m_project->canMoveTask( n, on ) ) {
+                return false;
+            }
         }
     }
     return true;
@@ -3723,13 +3801,13 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
         bool ins = true;
         foreach ( Node *n, lst ) {
             if ( node->isChildOf( n ) ) {
-                //kDebug()<<node->name()<<" is child of"<<n->name();
+                //kDebug(planDbg())<<node->name()<<" is child of"<<n->name();
                 ins = false;
                 break;
             }
         }
         if ( ins ) {
-            //kDebug()<<" insert"<<node->name();
+            //kDebug(planDbg())<<" insert"<<node->name();
             lst << node;
         }
     }
@@ -3738,7 +3816,7 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
     foreach ( Node *node, nl ) {
         foreach ( Node *n, nlst ) {
             if ( n->isChildOf( node ) ) {
-                //kDebug()<<n->name()<<" is child of"<<node->name();
+                //kDebug(planDbg())<<n->name()<<" is child of"<<node->name();
                 int i = nodes.indexOf( n );
                 lst.removeAt( i );
             }
@@ -3747,48 +3825,228 @@ QList<Node*> NodeItemModel::removeChildNodes( QList<Node*> nodes )
     return lst;
 }
 
-bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
+bool NodeItemModel::dropResourceMimeData( const QMimeData *data, Qt::DropAction action, int /*row*/, int /*column*/, const QModelIndex &parent )
 {
-    //kDebug()<<action;
-    if (action == Qt::IgnoreAction) {
+    QByteArray encodedData = data->data( "application/x-vnd.kde.plan.resourceitemmodel.internal" );
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    Node *n = node( parent );
+    kDebug(planDbg())<<n<<parent;
+    if ( n == 0 ) {
         return true;
     }
-    if ( !data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
-        return false;
-    }
-    if ( action == Qt::MoveAction ) {
-        //kDebug()<<"MoveAction";
-
-        QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
-        QDataStream stream(&encodedData, QIODevice::ReadOnly);
-        Node *par = 0;
-        if ( parent.isValid() ) {
-            par = node( parent );
-        } else {
-            par = m_project;
+    kDebug(planDbg())<<n->name();
+    if ( parent.column() == NodeModel::NodeResponsible ) {
+        QString s;
+        foreach ( Resource *r, resourceList( stream ) ) {
+            s += r->name();
         }
-        QList<Node*> lst = nodeList( stream );
-        QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
-        foreach ( Node *n, nodes ) {
-            if ( ! m_project->canMoveTask( n, par ) ) {
-                //kDebug()<<"Can't move task:"<<n->name();
-                return false;
+        if ( ! s.isEmpty() ) {
+            if ( action == Qt::CopyAction && ! n->leader().isEmpty() ) {
+                s += ',' + n->leader();
             }
+            KUndo2Command *cmd = m_nodemodel.setLeader( n, s, Qt::EditRole );
+            if ( cmd ) {
+                emit executeCommand( cmd );
+            }
+            kDebug(planDbg())<<s;
         }
-        int offset = 0;
-        MacroCommand *cmd = 0;
-        foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
-            // append nodes if dropped *on* another node, insert if dropped *after*
-            int pos = row == -1 ? -1 : row + offset;
-            cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
-            offset++;
+        return true;
+    }
+    if ( n->type() == Node::Type_Task ) {
+        QList<Resource*> lst = resourceList( stream );
+        if ( action == Qt::CopyAction ) {
+            lst += static_cast<Task*>( n )->requestedResources();
         }
+        KUndo2Command *cmd = createAllocationCommand( static_cast<Task&>( *n ), lst );
         if ( cmd ) {
             emit executeCommand( cmd );
         }
-        //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
         return true;
+    }
+    return true;
+}
+
+bool NodeItemModel::dropProjectMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
+{
+    Node *n = node( parent );
+    kDebug(planDbg())<<n<<parent;
+    if ( n == 0 ) {
+        n = m_project;
+    }
+    kDebug(planDbg())<<n->name()<<action<<row<<parent;
+
+    KoXmlDocument doc;
+    doc.setContent( data->data( "application/x-vnd.kde.plan.project" ) );
+    KoXmlElement element = doc.documentElement().namedItem( "project" ).toElement();
+    Project project;
+    XMLLoaderObject status;
+    status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
+    status.setProject( &project );
+    if ( ! project.load( element, status ) ) {
+        kDebug(planDbg())<<"Failed to load project";
+        return false;
+    }
+    project.generateUniqueNodeIds();
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo) 1=project or task name", "Insert %1", project.name() ) );
+    emit executeCommand( cmd );
+    return true;
+}
+
+bool NodeItemModel::dropUrlMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    if ( data->hasUrls() ) {
+        QList<QUrl> urls = data->urls();
+        kDebug(planDbg())<<urls;
+        foreach ( const QUrl &url, urls ) {
+            KMimeType::Ptr mime = KMimeType::findByUrl( url );
+            kDebug(planDbg())<<url<<mime->name();
+            if ( mime->is( "application/x-vnd.kde.plan" ) ) {
+                importProjectFile( url, action, row, column, parent );
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::importProjectFile( const KUrl &url, Qt::DropAction /*action*/, int row, int /*column*/, const QModelIndex &parent )
+{
+    if ( ! url.isLocalFile() ) {
+        kDebug(planDbg())<<"TODO: download if url not local";
+        return false;
+    }
+    KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
+    if ( store->bad() ) {
+        //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
+        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        delete store;
+        //        QApplication::restoreOverrideCursor();
+        return false;
+    }
+    if ( ! store->open( "root" ) ) { // maindoc.xml
+        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        delete store;
+        return false;
+    }
+    KoXmlDocument doc;
+    doc.setContent( store->device() );
+    KoXmlElement element = doc.documentElement().namedItem( "project" ).toElement();
+    Project project;
+    XMLLoaderObject status;
+    status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
+    status.setProject( &project );
+    if ( ! project.load( element, status ) ) {
+        kDebug(planDbg())<<"Failed to load project from:"<<url;
+        return false;
+    }
+    project.generateUniqueNodeIds();
+    Node *n = node( parent );
+    kDebug(planDbg())<<n<<parent;
+    if ( n == 0 ) {
+        n = m_project;
+    }
+    KUndo2Command *cmd = new InsertProjectCmd( project, n, n->childNode( row - 1 ), i18nc( "(qtundo)", "Insert %1", url.fileName() ) );
+    emit executeCommand( cmd );
+    return true;
+}
+
+KUndo2Command *NodeItemModel::createAllocationCommand( Task &task, const QList<Resource*> &lst )
+{
+    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Modify resource allocations" ) );
+    QMap<ResourceGroup*, ResourceGroupRequest*> groups;
+    foreach ( Resource *r, lst ) {
+        if ( ! groups.contains( r->parentGroup() ) && task.resourceGroupRequest( r->parentGroup() ) == 0 ) {
+            ResourceGroupRequest *gr = new ResourceGroupRequest( r->parentGroup() );
+            groups[ r->parentGroup() ] = gr;
+            cmd->addCommand( new AddResourceGroupRequestCmd( task, gr ) );
+        }
+    }
+    QList<Resource*> resources = task.requestedResources();
+    foreach ( Resource *r, lst ) {
+        if ( resources.contains( r ) ) {
+            continue;
+        }
+        ResourceGroupRequest *gr = groups.value( r->parentGroup() );
+        if ( gr == 0 ) {
+            gr = task.resourceGroupRequest( r->parentGroup() );
+        }
+        if ( gr == 0 ) {
+            kError()<<"No group request found, cannot add resource request:"<<r->name();
+            continue;
+        }
+        cmd->addCommand( new AddResourceRequestCmd( gr, new ResourceRequest( r, 100 ) ) );
+    }
+    foreach ( Resource *r, resources ) {
+        if ( ! lst.contains( r ) ) {
+            ResourceGroupRequest *gr = task.resourceGroupRequest( r->parentGroup() );
+            ResourceRequest *rr = task.requests().find( r );
+            if ( gr && rr ) {
+                cmd->addCommand( new RemoveResourceRequestCmd( gr, rr ) );
+            }
+        }
+    }
+    if ( cmd->isEmpty() ) {
+        delete cmd;
+        return 0;
+    }
+    return cmd;
+}
+
+bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
+{
+    kDebug(planDbg())<<action;
+    if (action == Qt::IgnoreAction) {
+        return true;
+    }
+    if ( data->hasFormat( "application/x-vnd.kde.plan.resourceitemmodel.internal" ) ) {
+        return dropResourceMimeData( data, action, row, column, parent );
+    }
+    if ( data->hasFormat( "application/x-vnd.kde.plan.nodeitemmodel.internal" ) ) {
+        if ( action == Qt::MoveAction ) {
+            //kDebug(planDbg())<<"MoveAction";
+
+            QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
+            QDataStream stream(&encodedData, QIODevice::ReadOnly);
+            Node *par = 0;
+            if ( parent.isValid() ) {
+                par = node( parent );
+            } else {
+                par = m_project;
+            }
+            QList<Node*> lst = nodeList( stream );
+            QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
+            foreach ( Node *n, nodes ) {
+                if ( ! m_project->canMoveTask( n, par ) ) {
+                    //kDebug(planDbg())<<"Can't move task:"<<n->name();
+                    return false;
+                }
+            }
+            int offset = 0;
+            MacroCommand *cmd = 0;
+            foreach ( Node *n, nodes ) {
+                if ( cmd == 0 ) cmd = new MacroCommand( i18nc( "(qtundo-format)", "Move tasks" ) );
+                // append nodes if dropped *on* another node, insert if dropped *after*
+                int pos = row == -1 ? -1 : row + offset;
+                if ( pos >= 0 && n->parentNode() == par && par->indexOf( n ) < pos ) {
+                    --pos;
+                }
+                cmd->addCommand( new NodeMoveCmd( m_project, n, par, pos ) );
+                offset++;
+            }
+            if ( cmd ) {
+                emit executeCommand( cmd );
+            }
+            //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+            return true;
+        }
+    }
+    if ( data->hasFormat( "application/x-vnd.kde.plan.project" ) ) {
+        kDebug(planDbg());
+        return dropProjectMimeData( data, action, row, column, parent );
+
+    }
+    if ( data->hasUrls() ) {
+        return dropUrlMimeData( data, action, row, column, parent );
     }
     return false;
 }
@@ -3797,7 +4055,7 @@ Node *NodeItemModel::node( const QModelIndex &index ) const
 {
     Node *n = m_project;
     if ( index.isValid() ) {
-        //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+        //kDebug(planDbg())<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
         n = static_cast<Node*>( index.internalPointer() );
         Q_ASSERT( n );
     }
@@ -3820,16 +4078,30 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
-    emit executeCommand( new TaskAddCmd( m_project, node, after, i18nc( "(qtundo-format)", "Add task" ) ) );
+    MacroCommand *cmd = new MacroCommand( i18nc( "(qtundo-format)", "Add task" ) );
+    cmd->addCommand( new TaskAddCmd( m_project, node, after ) );
+    if ( m_project && node->type() == Node::Type_Task ) {
+        QMap<ResourceGroup*, ResourceGroupRequest*> groups;
+        foreach ( Resource *r, m_project->autoAllocateResources() ) {
+            if ( ! groups.contains( r->parentGroup() ) ) {
+                ResourceGroupRequest *gr = new ResourceGroupRequest( r->parentGroup() );
+                cmd->addCommand( new AddResourceGroupRequestCmd( static_cast<Task&>(*node), gr ) );
+                groups[ r->parentGroup() ] = gr;
+            }
+            ResourceRequest *rr = new ResourceRequest( r, 100 );
+            cmd->addCommand( new AddResourceRequestCmd( groups[ r->parentGroup() ], rr ) );
+        }
+    }
+    emit executeCommand( cmd );
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
-        //kDebug()<<"Inserted: "<<node->name()<<"; "<<row;
+        //kDebug(planDbg())<<"Inserted: "<<node->name()<<"; "<<row;
         return createIndex( row, 0, node );
     }
-    //kDebug()<<"Can't find "<<node->name();
+    //kDebug(planDbg())<<"Can't find "<<node->name();
     return QModelIndex();
 }
 
@@ -3841,383 +4113,31 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
         row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
-        //kDebug()<<node->parentNode()<<" inserted: "<<node->name()<<"; "<<row;
+        //kDebug(planDbg())<<node->parentNode()<<" inserted: "<<node->name()<<"; "<<row;
         return createIndex( row, 0, node );
     }
-    //kDebug()<<"Can't find "<<node->name();
+    //kDebug(planDbg())<<"Can't find "<<node->name();
     return QModelIndex();
 }
 
-
-//----------------------------
-class GeneralNodeItemModel::Object
+int NodeItemModel::sortRole( int column ) const
 {
-public:
-    enum Type { Type_Node, Type_WorkPackage };
-    Object( Node *n, Type typ = Type_Node, int r = -1 )
-    : node( n ), type( typ ), row( r )
-    {}
-
-    bool isNode() const { return type == Type_Node; }
-    bool isWorkPackage() const { return type == Type_WorkPackage; }
-
-    Node *node;
-    int type;
-    int row; // if isWorkPackage()
-};
-
-//----------------------------
-GeneralNodeItemModel::GeneralNodeItemModel( QObject *parent )
-    : NodeItemModel( parent ),
-    m_modus( 0 )
-{
-}
-
-GeneralNodeItemModel::~GeneralNodeItemModel()
-{
-    qDeleteAll( m_objects );
-}
-
-void GeneralNodeItemModel::setModus( int modus )
-{
-    if ( m_modus & WorkPackage ) {
-        foreach ( Object *o, nodeObjects() ) {
-            disconnect( o->node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-            disconnect( o->node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
-            disconnect( o->node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-        }
+    switch ( column ) {
+        case NodeModel::NodeStartTime:
+        case NodeModel::NodeEndTime:
+        case NodeModel::NodeActualStart:
+        case NodeModel::NodeActualFinish:
+        case NodeModel::NodeEarlyStart:
+        case NodeModel::NodeEarlyFinish:
+        case NodeModel::NodeLateStart:
+        case NodeModel::NodeLateFinish:
+        case NodeModel::NodeConstraintStart:
+        case NodeModel::NodeConstraintEnd:
+            return Qt::EditRole;
+        default:
+            break;
     }
-    qDeleteAll( m_objects );
-    m_objects.clear();
-    m_modus = modus;
-    if ( m_project == 0 ) {
-        return;
-    }
-    foreach ( Node *n, m_project->allNodes() ) {
-        m_objects << new Object( n );
-        if ( m_modus & WorkPackage ) {
-            connect( n, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-            connect( n, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
-            connect( n, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-            for ( int i = 0; i < static_cast<Task*>( n )->workPackageLogCount(); ++i ) {
-                m_objects << new Object( n, Object::Type_WorkPackage, i );
-            }
-        }
-    }
-}
-
-void GeneralNodeItemModel::setProject( Project *project )
-{
-    NodeItemModel::setProject( project );
-    setModus( m_modus );
-    reset();
-}
-
-void GeneralNodeItemModel::slotNodeToBeInserted( Node *parent, int row )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeToBeInserted( parent, row );
-    }
-    if ( m_modus & Flat ) {
-        int pos = nodeObjects().count();
-        beginInsertRows( QModelIndex(), pos, pos );
-        return;
-    }
-    beginInsertRows( index( parent ), row, row );
-}
-
-void GeneralNodeItemModel::slotNodeInserted( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeInserted( node );
-    }
-    m_objects << new Object( node );
-    connect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-    connect( node, SIGNAL( workPackageAdded( Node* ) ), SLOT( slotWorkPackageAdded( Node* ) ) );
-    connect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-
-    endInsertRows();
-}
-
-void GeneralNodeItemModel::slotNodeToBeRemoved( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeToBeRemoved( node );
-    }
-    Object *obj = findNodeObject( node );
-    int row = m_objects.indexOf( obj );
-    if ( row >= 0 ) {
-        if ( m_modus & WorkPackage ) {
-            disconnect( node, SIGNAL( workPackageToBeAdded( Node*, int ) ), this, SLOT( slotWorkPackageToBeAdded( Node*, int ) ) );
-            disconnect( node, SIGNAL( workPackageAdded( Node* ) ), this, SLOT( slotWorkPackageAdded( Node* ) ) );
-            disconnect( node, SIGNAL( workPackageToBeRemoved( Node*, int ) ), this, SLOT( slotWorkPackageToBeRemoved( Node*, int ) ) );
-        }
-        QModelIndex idx = index( node );
-        beginRemoveRows( parent( idx ), idx.row(), idx.row() );
-        m_objects.removeAt( row );
-        QList<int> rows = workPackagePositions( obj );
-        while ( ! rows.isEmpty() ) {
-            delete m_objects.takeAt( rows.takeLast() );
-        }
-        delete obj;
-        endRemoveRows();
-    }
-}
-
-void GeneralNodeItemModel::slotWorkPackageToBeAdded( Node *node, int row )
-{
-    beginInsertRows( index( node ), row, row );
-    m_objects << new Object( node, Object::Type_WorkPackage, row );
-}
-
-void GeneralNodeItemModel::slotWorkPackageAdded( Node *node )
-{
-    Q_UNUSED(node);
-    endInsertRows();
-}
-
-void GeneralNodeItemModel::slotWorkPackageToBeRemoved( Node *node, int row )
-{
-    Object *parent = findNodeObject( node );
-    if ( parent == 0 ) {
-        kError()<<"No node object for node:"<<parent;
-    } else {
-        Object *o = findWPObject( row, parent );
-        if ( o ) {
-            beginRemoveRows( index( node ), row, row );
-            kDebug()<<node->name()<<row<<m_objects.at( row )->isWorkPackage();
-            m_objects.removeAt( m_objects.indexOf( o ) );
-            delete o;
-            endRemoveRows();
-        }
-    }
-}
-
-void GeneralNodeItemModel::slotNodeRemoved( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeRemoved( node );
-    }
-    // Do nothing!!
-}
-
-void GeneralNodeItemModel::slotWbsDefinitionChanged()
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotWbsDefinitionChanged();
-    }
-    //TODO
-}
-
-Qt::ItemFlags GeneralNodeItemModel::flags( const QModelIndex &index ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::flags( index );
-    }
-    return QAbstractItemModel::flags( index ); //TODO
-}
-
-
-QModelIndex GeneralNodeItemModel::parent( const QModelIndex &index ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::parent( index );
-    }
-    Object *obj = static_cast<Object*>( index.internalPointer() );
-    if ( obj == 0 ) {
-        return QModelIndex();
-    }
-    if ( obj->isWorkPackage() ) {
-        return this->index( obj->node );
-    }
-    if ( m_modus & WBS ) {
-        if ( obj->isNode() ) {
-            return this->index( obj->node->parentNode() );
-        }
-    }
-    return QModelIndex();
-}
-
-QModelIndex GeneralNodeItemModel::index( int row, int column, const QModelIndex &parent ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::index( row, column, parent );
-    }
-    Object *par = static_cast<Object*>( parent.internalPointer() );
-    if ( m_modus & WBS ) {
-        if ( ! parent.isValid() ) {
-            return createIndex( row, column, findNodeObject( m_project->childNode( row ) ) );
-        }
-        if ( par && par->isNode() ) {
-            if ( par->node->type() == Node::Type_Summarytask ) {
-                return createIndex( row, column, findNodeObject( par->node->childNode( row ) ) );
-            }
-            return createIndex( row, column, findWPObject( row, par ) );
-        }
-        return QModelIndex();
-    }
-    if ( m_modus & Flat  ) {
-        if ( ! parent.isValid() ) {
-            return createIndex( row, column, nodeObjects().value( row ) );
-        }
-        if ( par && par->isNode() ) {
-            return createIndex( row, column, findWPObject( row, par ) );
-        }
-        return QModelIndex();
-    }
-    return QModelIndex();
-}
-
-QModelIndex GeneralNodeItemModel::index( const Node *node, int column ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::index( node, column );
-    }
-    Object *obj = findNodeObject( node );
-    if ( obj ) {
-        return createIndex( nodeObjects().indexOf( obj ), column, obj );
-    }
-    return QModelIndex();
-}
-
-QVariant GeneralNodeItemModel::data( const QModelIndex &index, int role ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::data( index, role );
-    }
-    QVariant result;
-    Object *obj = static_cast<Object*>( index.internalPointer() );
-    if ( obj && obj->isNode() ) {
-        return m_nodemodel.data( obj->node, index.column(), role );
-    }
-    if ( obj && obj->isWorkPackage() ) {
-        int col = -1;
-        // map NodeModel columns to WorkPackageModel columns
-        switch ( index.column() ) {
-            case NodeModel::NodeName:
-            case NodeModel::WPOwnerName:
-                col = WorkPackageModel::WPOwnerName; break;
-            case NodeModel::NodeStatus:
-            case NodeModel::WPTransmitionStatus:
-                col = WorkPackageModel::WPTransmitionStatus; break;
-                col = WorkPackageModel::WPTransmitionStatus; break;
-            case NodeModel::WPTransmitionTime:
-                col = WorkPackageModel:: WPTransmitionTime; break;
-            default: break;
-        }
-        if ( col >= 0 ) {
-            return m_wpmodel.data( static_cast<const Task*>( obj->node )->workPackageAt( index.row() ), col, role );
-        }
-    }
-    return result;
-}
-
-bool GeneralNodeItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::setData( index, value, role );
-    }
-    return false;
-}
-
-QAbstractItemDelegate *GeneralNodeItemModel::createDelegate( int column, QWidget *parent ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::createDelegate( column, parent );
-    }
-    return 0; //TODO
-}
-
-int GeneralNodeItemModel::rowCount( const QModelIndex &parent ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::rowCount( parent );
-    }
-    Object *par = static_cast<Object*>( parent.internalPointer() );
-    if ( m_modus & WBS ) {
-        if ( ! parent.isValid() ) {
-            return m_project->numChildren();
-        }
-        if ( par && par->isNode() && par->node->type() == Node::Type_Summarytask ) {
-            return par->node->numChildren();
-        }
-    }
-    if ( m_modus & Flat ) {
-        if ( ! parent.isValid() ) {
-            return nodeObjects().count();
-        }
-    }
-    if ( ( m_modus & WorkPackage ) && par && par->isNode() ) {
-        return static_cast<const Task*>( par->node )->workPackageLogCount();
-    }
-    return 0;
-}
-
-Node *GeneralNodeItemModel::node( const QModelIndex &index ) const
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::node( index );
-    }
-    Object *obj = static_cast<Object*>( index.internalPointer() );
-    if ( obj && obj->isNode() ) {
-        return obj->node;
-    }
-    return 0;
-}
-
-void GeneralNodeItemModel::slotNodeChanged( Node *node )
-{
-    if ( m_modus == 0 ) {
-        return NodeItemModel::slotNodeChanged( node );
-    }
-    Object *obj = findNodeObject( node );
-    if ( obj && obj->isNode() ) {
-        QModelIndex i = index( node );
-        emit dataChanged( i, createIndex( i.row(), columnCount()-1, obj ) );
-    }
-}
-
-GeneralNodeItemModel::Object *GeneralNodeItemModel::findNodeObject( const Node *node ) const
-{
-    foreach ( Object *o, m_objects ) {
-        if ( o->node == node && o->isNode() ) {
-            return o;
-        }
-    }
-    return 0;
-}
-
-GeneralNodeItemModel::Object *GeneralNodeItemModel::findWPObject( int row, GeneralNodeItemModel::Object *parent ) const
-{
-    foreach ( Object *o, m_objects ) {
-        if ( o->isWorkPackage() && o->node == parent->node && o->row == row ) {
-            return o;
-        }
-    }
-    return 0;
-}
-
-QList<GeneralNodeItemModel::Object*> GeneralNodeItemModel::nodeObjects() const
-{
-    QList<Object*> lst;
-    foreach ( Object *o, m_objects ) {
-        if ( o->isNode() ) {
-            lst << o;
-        }
-    }
-    return lst;
-}
-
-QList<int> GeneralNodeItemModel::workPackagePositions( GeneralNodeItemModel::Object *parent ) const
-{
-    QList<int> rows;
-    for ( int i = 0; i < m_objects.count(); ++i ) {
-        Object *o = m_objects.at( i );
-        if ( o->node == parent->node && o->isWorkPackage() ) {
-            rows << i;
-        }
-    }
-    return rows;
+    return Qt::DisplayRole;
 }
 
 //------------------------------------------------
@@ -4415,7 +4335,7 @@ void MilestoneItemModel::slotNodeInserted( Node *node )
 void MilestoneItemModel::slotNodeToBeRemoved( Node *node )
 {
     Q_UNUSED(node);
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
 /*    int row = m_nodemap.values().indexOf( node );
     if ( row != -1 ) {
         Q_ASSERT( m_nodemap.contains( node->wbsCode() ) );
@@ -4435,9 +4355,23 @@ void MilestoneItemModel::slotNodeRemoved( Node *node )
 
 void MilestoneItemModel::slotLayoutChanged()
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     emit layoutAboutToBeChanged();
     emit layoutChanged();
+}
+
+void MilestoneItemModel::slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos )
+{
+    Q_UNUSED( node );
+    Q_UNUSED( pos );
+    Q_UNUSED( newParent );
+    Q_UNUSED( newPos );
+}
+
+void MilestoneItemModel::slotNodeMoved( Node *node )
+{
+    Q_UNUSED( node );
+    resetModel();
 }
 
 void MilestoneItemModel::setProject( Project *project )
@@ -4449,14 +4383,14 @@ void MilestoneItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT(  slotNodeToBeInserted( Node *, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        disconnect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+        disconnect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     m_project = project;
-    //kDebug()<<m_project<<"->"<<project;
+    //kDebug(planDbg())<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( localeChanged() ), this, SLOT( slotLayoutChanged() ) );
@@ -4465,8 +4399,8 @@ void MilestoneItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted( Node *, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
-        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect(m_project, SIGNAL(nodeToBeMoved(Node*,int,Node*,int)), this, SLOT(slotNodeToBeMoved(Node*,int,Node*,int)));
+        connect(m_project, SIGNAL(nodeMoved(Node*)), this, SLOT(slotNodeMoved(Node*)));
 
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
@@ -4479,9 +4413,10 @@ void MilestoneItemModel::setScheduleManager( ScheduleManager *sm )
     if ( m_nodemodel.manager() ) {
     }
     m_nodemodel.setManager( sm );
+    ItemModelBase::setScheduleManager( sm );
     if ( sm ) {
     }
-    //kDebug()<<sm;
+    //kDebug(planDbg())<<sm;
     resetModel();
 }
 
@@ -4572,13 +4507,13 @@ QModelIndex MilestoneItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex MilestoneItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug()<<parent<<row<<", "<<m_nodemap.count();
+    //kDebug(planDbg())<<parent<<row<<", "<<m_nodemap.count();
     if ( m_project == 0 || row < 0 || column < 0 ) {
-        //kDebug()<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
+        //kDebug(planDbg())<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
     if ( parent.isValid() || row >= m_nodemap.count() ) {
-        //kDebug()<<"No index for"<<parent<<row<<","<<column;
+        //kDebug(planDbg())<<"No index for"<<parent<<row<<","<<column;
         return QModelIndex();
     }
     return createIndex( row, column, m_nodemap.values().at( row ) );
@@ -4674,11 +4609,11 @@ int MilestoneItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 
 int MilestoneItemModel::rowCount( const QModelIndex &parent ) const
 {
-    //kDebug()<<parent;
+    //kDebug(planDbg())<<parent;
     if ( parent.isValid() ) {
         return 0;
     }
-    //kDebug()<<m_nodemap.count();
+    //kDebug(planDbg())<<m_nodemap.count();
     return m_nodemap.count();
 }
 
@@ -4701,7 +4636,7 @@ QMimeData *MilestoneItemModel::mimeData( const QModelIndexList & indexes ) const
     QList<int> rows;
     foreach (const QModelIndex &index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            //kDebug()<<index.row();
+            //kDebug(planDbg())<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -4715,7 +4650,7 @@ QMimeData *MilestoneItemModel::mimeData( const QModelIndexList & indexes ) const
 
 bool MilestoneItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
 {
-    //kDebug();
+    //kDebug(planDbg());
     Node *dn = node( index );
     if ( dn == 0 ) {
         kError()<<"no node to drop on!";
@@ -4781,13 +4716,13 @@ QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
         bool ins = true;
         foreach ( Node *n, lst ) {
             if ( node->isChildOf( n ) ) {
-                //kDebug()<<node->name()<<" is child of"<<n->name();
+                //kDebug(planDbg())<<node->name()<<" is child of"<<n->name();
                 ins = false;
                 break;
             }
         }
         if ( ins ) {
-            //kDebug()<<" insert"<<node->name();
+            //kDebug(planDbg())<<" insert"<<node->name();
             lst << node;
         }
     }
@@ -4796,7 +4731,7 @@ QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
     foreach ( Node *node, nl ) {
         foreach ( Node *n, nlst ) {
             if ( n->isChildOf( node ) ) {
-                //kDebug()<<n->name()<<" is child of"<<node->name();
+                //kDebug(planDbg())<<n->name()<<" is child of"<<node->name();
                 int i = nodes.indexOf( n );
                 lst.removeAt( i );
             }
@@ -4807,7 +4742,7 @@ QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
 
 bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
 {
-    //kDebug()<<action;
+    //kDebug(planDbg())<<action;
     if (action == Qt::IgnoreAction) {
         return true;
     }
@@ -4815,7 +4750,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         return false;
     }
     if ( action == Qt::MoveAction ) {
-        //kDebug()<<"MoveAction";
+        //kDebug(planDbg())<<"MoveAction";
 
         QByteArray encodedData = data->data( "application/x-vnd.kde.plan.nodeitemmodel.internal" );
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
@@ -4829,7 +4764,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
         foreach ( Node *n, nodes ) {
             if ( ! m_project->canMoveTask( n, par ) ) {
-                //kDebug()<<"Can't move task:"<<n->name();
+                //kDebug(planDbg())<<"Can't move task:"<<n->name();
                 return false;
             }
         }
@@ -4845,7 +4780,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
         if ( cmd ) {
             emit executeCommand( cmd );
         }
-        //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+        //kDebug(planDbg())<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
         return true;
     }
     return false;
@@ -4855,7 +4790,7 @@ Node *MilestoneItemModel::node( const QModelIndex &index ) const
 {
     Node *n = 0;
     if ( index.isValid() ) {
-        //kDebug()<<index;
+        //kDebug(planDbg())<<index;
         n = static_cast<Node*>( index.internalPointer() );
     }
     return n;
@@ -4863,7 +4798,7 @@ Node *MilestoneItemModel::node( const QModelIndex &index ) const
 
 void MilestoneItemModel::slotNodeChanged( Node *node )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     if ( node == 0 ) {
         return;
     }
@@ -4877,13 +4812,13 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
         return;
 /*    }
     int row = m_nodemap.values().indexOf( node );
-    kDebug()<<node->name()<<": "<<node->typeToString()<<row;
+    kDebug(planDbg())<<node->name()<<": "<<node->typeToString()<<row;
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );*/
 }
 
 void MilestoneItemModel::slotWbsDefinitionChanged()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_project == 0 ) {
         return;
     }
@@ -4915,22 +4850,188 @@ void NodeSortFilterProxyModel::setFilterUnscheduled( bool on ) {
 
 bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & parent ) const
 {
-    //kDebug()<<sourceModel()<<row<<parent;
+    //kDebug(planDbg())<<sourceModel()<<row<<parent;
     if ( itemModel()->project() == 0 ) {
-        //kDebug()<<itemModel()->project();
+        //kDebug(planDbg())<<itemModel()->project();
         return false;
     }
     if ( m_filterUnscheduled ) {
         QString s = sourceModel()->data( sourceModel()->index( row, NodeModel::NodeNotScheduled, parent ), Qt::EditRole ).toString();
         if ( s == "true" ) {
-            //kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
+            //kDebug(planDbg())<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
             return false;
         }
     }
     bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
-    //kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
+    //kDebug(planDbg())<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
     return accepted;
 }
+
+//------------------
+TaskModuleModel::TaskModuleModel( QObject *parent )
+    : QAbstractItemModel( parent )
+{
+}
+
+void TaskModuleModel::addTaskModule( Project *project )
+{
+    beginInsertRows( QModelIndex(), m_modules.count(), m_modules.count() );
+    m_modules << project;
+    endInsertRows();
+}
+
+Qt::ItemFlags TaskModuleModel::flags( const QModelIndex &idx ) const
+{
+    Qt::ItemFlags f = QAbstractItemModel::flags( idx ) | Qt::ItemIsDropEnabled;
+    if ( idx.isValid() ) {
+        f |=  Qt::ItemIsDragEnabled;
+    }
+    return f;
+}
+
+int TaskModuleModel::columnCount (const QModelIndex &/*idx*/ ) const
+{
+    return 1;
+}
+
+int TaskModuleModel::rowCount( const QModelIndex &idx ) const
+{
+    return idx.isValid() ? 0 : m_modules.count();
+}
+
+QVariant TaskModuleModel::data( const QModelIndex& idx, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole: return m_modules.value( idx.row() )->name();
+        case Qt::ToolTipRole: return m_modules.value( idx.row() )->description();
+        case Qt::WhatsThisRole: return m_modules.value( idx.row() )->description();
+        default: break;
+    }
+    return QVariant();
+}
+
+QVariant TaskModuleModel::headerData( int /*section*/, Qt::Orientation orientation , int role ) const
+{
+    if ( orientation == Qt::Horizontal ) {
+        switch ( role ) {
+            case Qt::DisplayRole: return i18nc( "@title:column", "Name" );
+            default: break;
+        }
+    }
+    return QVariant();
+}
+
+QModelIndex TaskModuleModel::parent( const QModelIndex& /*idx*/ ) const
+{
+    return QModelIndex();
+}
+
+QModelIndex TaskModuleModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( parent.isValid() ) {
+        return QModelIndex();
+    }
+    return createIndex( row, column, m_modules.value( row ) );
+}
+
+QStringList TaskModuleModel::mimeTypes() const
+{
+    return QStringList() << "application/x-vnd.kde.plan" << "text/uri-list";
+}
+
+bool TaskModuleModel::dropMimeData( const QMimeData *data, Qt::DropAction /*action*/, int /*row*/, int /*column*/, const QModelIndex &/*parent*/ )
+{
+    if ( data->hasUrls() ) {
+        QList<QUrl> urls = data->urls();
+        kDebug(planDbg())<<urls;
+        foreach ( const QUrl &url, urls ) {
+            KMimeType::Ptr mime = KMimeType::findByUrl( url );
+            kDebug(planDbg())<<url<<mime->name();
+            if ( mime->is( "application/x-vnd.kde.plan" ) || mime->is( "application/xml" ) ) {
+                importProject( url );
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool TaskModuleModel::importProject( const KUrl &url, bool emitsignal )
+{
+    if ( ! url.isLocalFile() ) {
+        kDebug(planDbg())<<"TODO: download if url not local";
+        return false;
+    }
+    KoStore *store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
+    if ( store->bad() ) {
+        //        d->lastErrorMessage = i18n( "Not a valid Calligra file: %1", file );
+        kDebug(planDbg())<<"bad store"<<url.prettyUrl();
+        delete store;
+        //        QApplication::restoreOverrideCursor();
+        return false;
+    }
+    if ( ! store->open( "root" ) ) { // maindoc.xml
+        kDebug(planDbg())<<"No root"<<url.prettyUrl();
+        delete store;
+        return false;
+    }
+    KoXmlDocument doc;
+    doc.setContent( store->device() );
+    KoXmlElement element = doc.documentElement().namedItem( "project" ).toElement();
+    Project *project = new Project();
+    XMLLoaderObject status;
+    status.setVersion( doc.documentElement().attribute( "version", PLAN_FILE_SYNTAX_VERSION ) );
+    status.setProject( project );
+    if ( project->load( element, status ) ) {
+        stripProject( project );
+        addTaskModule( project );
+        if ( emitsignal ) {
+            emit saveTaskModule( url, project );
+        }
+    } else {
+        kDebug(planDbg())<<"Failed to load project from:"<<url;
+        delete project;
+        return false;
+    }
+    return true;
+}
+
+QMimeData* TaskModuleModel::mimeData( const QModelIndexList &lst ) const
+{
+    QMimeData *mime = new QMimeData();
+    if ( lst.count() == 1 ) {
+        QModelIndex idx = lst.at( 0 );
+        if ( idx.isValid() ) {
+            Project *project = m_modules.value( idx.row() );
+            QDomDocument document( "plan" );
+            document.appendChild( document.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+            QDomElement doc = document.createElement( "plan" );
+            doc.setAttribute( "editor", "Plan" );
+            doc.setAttribute( "mime", "application/x-vnd.kde.plan" );
+            doc.setAttribute( "version", PLAN_FILE_SYNTAX_VERSION );
+            document.appendChild( doc );
+            project->save( doc );
+            mime->setData( "application/x-vnd.kde.plan.project", document.toByteArray() );
+        }
+    }
+    return mime;
+}
+
+void TaskModuleModel::stripProject( Project *project ) const
+{
+    foreach ( ScheduleManager *sm, project->scheduleManagers() ) {
+        DeleteScheduleManagerCmd c( *project, sm );
+    }
+}
+
+void TaskModuleModel::loadTaskModules( const QStringList &files )
+{
+    kDebug(planDbg())<<files;
+    foreach ( const QString &file, files ) {
+        importProject( KUrl( file ), false );
+    }
+}
+
 
 } //namespace KPlato
 

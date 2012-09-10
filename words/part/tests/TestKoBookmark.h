@@ -19,8 +19,8 @@
 #ifndef TEST_KO_BOOKMARK_H
 #define TEST_KO_BOOKMARK_H
 
-#include <QtCore/QObject>
-#include <QtTest/QtTest>
+#include <QObject>
+#include <QtTest>
 #include <qtest_kde.h>
 
 class TestKoBookmark: public QObject

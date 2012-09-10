@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -59,7 +59,6 @@ private:
     KoPAViewBase *m_view;
     KPrSoundCollection *m_soundCollection;
     KoCanvasBase *m_canvas;
-    QComboBox *m_cbPlaySound; // TODO remove when the embedded widgets are ok
     QMap<QString, QWidget *> m_eventActionWidgets;
 };
 

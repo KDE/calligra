@@ -19,7 +19,7 @@
 #ifndef COMBINEDVIEW_H
 #define COMBINEDVIEW_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class SlideView;
 class DirSlideLoader;

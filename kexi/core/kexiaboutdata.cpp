@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,23 +33,27 @@ KexiAboutData::KexiAboutData()
  : KAboutData(
         "kexi", 0,
         ki18n(KEXI_APP_NAME),
-        KEXI_VERSION_STRING " (Calligra " CALLIGRA_VERSION_STRING ")",
+        KEXI_VERSION_STRING,
         ki18n(description),
         KAboutData::License_LGPL_V2,
-        ki18n("(c) 2002-2011, Kexi Team"),
+        ki18n("© 2002-2012, The Kexi Team"),
         ki18n("This software is developed by Kexi Team - an international group\n"
               "of independent developers."),
         "http://www.calligra.org/kexi",
         "submit@bugs.kde.org"
     )
 {
-    // authors sorted by last nontrivial contribution date
+    // authors sorted by last nontrivial contribution date * size
     addAuthor(
         ki18n("Jarosław Staniek"), ki18n("Project maintainer & developer, design, KexiDB, commercially supported version, MS Windows version"), "staniek@kde.org");
     addAuthor(
         ki18n("OpenOffice Polska LLC"), ki18n("Sponsoring and support (employer of Jarosław Staniek in 2003-2007)"), "it@openoffice.com.pl");
     addAuthor(
         ki18n("Adam Pigg"), ki18n("PostgreSQL database driver, Migration and Reporting modules"), "adam@piggz.co.uk");
+    addAuthor(
+        ki18n("Dimitrios T. Tanis"), ki18n("Users Manual for Kexi 2, main window improvements, numerous bug repors"),  "dimitrios.tanis@kdemail.net");
+    addAuthor(
+        ki18n("Oleg Kukharchuk"), ki18n("Several form widgets, porting to Qt 4, stabilization"), "oleg.kuh@gmail.com");
     addAuthor(
         ki18n("Radosław Wicik"), ki18n("Map elements for forms and reports, map flake shape"), "radoslaw@wicik.pl");
     addAuthor(
@@ -77,8 +81,6 @@ KexiAboutData::KexiAboutData()
     addAuthor(
         ki18n("Till Busch"), ki18n("Bugfixes, original Table Widget"), "till@bux.at");
 
-    addCredit(
-        ki18n("Dimitrios T. Tanis"), ki18n("Documentation for Kexi 2"),  "jtanis@tanisfood.gr");
     addCredit(
         ki18n("Daniel Molkentin"), ki18n("Initial design improvements"),  "molkentin@kde.org");
     addCredit(

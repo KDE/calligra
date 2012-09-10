@@ -27,6 +27,7 @@
 #include <KoID.h>
 
 #include <KoConfig.h>
+#include <KoIcon.h>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
@@ -58,15 +59,15 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 
-    d->colorSpaceSelector->bnInstallProfile->setIcon( SmallIcon("document-open") );
+    d->colorSpaceSelector->bnInstallProfile->setIcon(koIcon("document-open"));
     d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
 
-    d->colorSpaceSelector->bnDownloadProfile->setIcon( SmallIcon("download") );
+    d->colorSpaceSelector->bnDownloadProfile->setIcon(koIcon("download"));
     d->colorSpaceSelector->bnDownloadProfile->setToolTip( i18n("Download Color Profile") );
     d->colorSpaceSelector->bnDownloadProfile->setEnabled( true );
     d->colorSpaceSelector->bnDownloadProfile->hide();
 
-    d->colorSpaceSelector->bnUploadProfile->setIcon( SmallIcon("go-up") );
+    d->colorSpaceSelector->bnUploadProfile->setIcon(koIcon("go-up"));
     d->colorSpaceSelector->bnUploadProfile->setToolTip( i18n("Share Color Profile") );
     d->colorSpaceSelector->bnUploadProfile->setEnabled( false );
     d->colorSpaceSelector->bnUploadProfile->hide();
@@ -184,8 +185,12 @@ void KisColorSpaceSelector::installProfile()
 
     foreach (QString profileName, profileNames) {
         KUrl file(profileName);
-        KIO::copy(file, saveLocation);
+        if (!QFile::copy(profileName, saveLocation + file.fileName())) {
+            kWarning() << "Could not install profile!";
+            return;
+        }
         iccEngine->addProfile(saveLocation + file.fileName());
+
     }
 
     fillCmbProfiles();
@@ -193,6 +198,7 @@ void KisColorSpaceSelector::installProfile()
 
 void KisColorSpaceSelector::downloadProfile()
 {
+#ifdef GHNS
     KNS3::DownloadDialog dialog( "kritaiccprofiles.knsrc", this);
     dialog.exec();
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
@@ -208,16 +214,19 @@ void KisColorSpaceSelector::downloadProfile()
         }
     }
     fillCmbProfiles();
+#endif
 }
 
 void KisColorSpaceSelector::uploadProfile()
 {
+#ifdef GHNS
     KNS3::UploadDialog dialog("kritaiccprofiles.knsrc", this);
     const KoColorProfile *  profile = KoColorSpaceRegistry::instance()->profileByName(d->colorSpaceSelector->cmbProfile->currentText());
     if(!profile)  return;
     dialog.setUploadFile(KUrl::fromLocalFile(profile->fileName()));
     dialog.setUploadName(profile->name());
     dialog.exec();
+#endif
 }
 
 void KisColorSpaceSelector::buttonUpdate()

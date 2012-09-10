@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2009, 2011 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2009, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -28,24 +28,20 @@
 
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <khtmlview.h>
 
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
-
-#include <kdebug.h>
+#include "kptdebug.h"
 
 namespace KPlato
 {
 
 //-----------------------------------
-HtmlView::HtmlView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+HtmlView::HtmlView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     m_htmlPart = new KHTMLPart( this );
     m_htmlPart->view()->setFrameStyle( QFrame::StyledPanel );
@@ -80,12 +76,12 @@ void HtmlView::updateReadWrite( bool /*readwrite */)
 
 void HtmlView::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
 }
 
 void HtmlView::slotContextMenuRequested( QModelIndex /*index*/, const QPoint& /*pos */)
 {
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
 }
 
 void HtmlView::slotEnableActions( bool on )

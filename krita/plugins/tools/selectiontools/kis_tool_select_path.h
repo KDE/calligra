@@ -23,29 +23,47 @@
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 
+#include <KoPointerEvent.h>
+#include <KoIcon.h>
+
 class KoCanvasBase;
-class KoLineBorder;
+class KoShapeStroke;
+
+#define REDIRECT_EVENT_0P(name)              \
+    void name() {                            \
+        m_localTool->name();                 \
+        KisToolSelectBase::name();           \
+    }
+
+#define REDIRECT_EVENT_1P(name, P1)          \
+    void name(P1 p1) {                       \
+        m_localTool->name(p1);               \
+        KisToolSelectBase::name(p1);         \
+    }
+
+#define REDIRECT_EVENT_2P(name, P1, P2)      \
+    void name(P1 p1, P2 p2) {                \
+        m_localTool->name(p1, p2);           \
+        KisToolSelectBase::name(p1, p2);     \
+    }
 
 class KisToolSelectPath : public KisToolSelectBase
 {
-
     Q_OBJECT
 
 public:
     KisToolSelectPath(KoCanvasBase * canvas);
     virtual ~KisToolSelectPath();
 
-    virtual QWidget * createOptionWidget();
+    void paint(QPainter& gc, const KoViewConverter &converter) {m_localTool->paint(gc, converter);}
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
-    void mousePressEvent(KoPointerEvent *event);
-    void mouseDoubleClickEvent(KoPointerEvent *event);
-    void mouseMoveEvent(KoPointerEvent *event);
-    void mouseReleaseEvent(KoPointerEvent *event);
-
-public slots:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+    void mousePressEvent(KoPointerEvent* event);
+    REDIRECT_EVENT_1P(mouseMoveEvent, KoPointerEvent*);
+    REDIRECT_EVENT_1P(mouseReleaseEvent, KoPointerEvent*);
+    REDIRECT_EVENT_1P(keyPressEvent, QKeyEvent*);
+    REDIRECT_EVENT_1P(keyReleaseEvent, QKeyEvent*);
+    REDIRECT_EVENT_2P(activate, ToolActivation, const QSet<KoShape*>&);
+    REDIRECT_EVENT_0P(deactivate);
 
 private:
     /// reimplemented
@@ -58,8 +76,8 @@ private:
         virtual void paintPath(KoPathShape &path, QPainter &painter, const KoViewConverter &converter);
         virtual void addPathShape(KoPathShape* pathShape);
     private:
-        KisToolSelectPath* const m_selectingTool;
-        KoLineBorder* m_borderBackup;
+        KisToolSelectPath* const m_selectionTool;
+        KoShapeStroke* m_borderBackup;
     };
     LocalTool* const m_localTool;
 
@@ -74,7 +92,7 @@ public:
         setToolTip(i18n("Select an area of the image with path."));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("tool_path_selection");
+        setIconName(koIconNameCStr("tool_path_selection"));
         setPriority(58);
     }
 

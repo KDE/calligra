@@ -169,6 +169,10 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
                 if (inlineRdf->loadOdf(element)) {
                     setInlineRdf(inlineRdf);
                 }
+                else {
+                    delete inlineRdf;
+                    inlineRdf = 0;
+                }
             }
         }
         else if (localName == "bookmark-end") {
@@ -201,7 +205,7 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context)
         nodeName = "text:bookmark-end";
     }
     writer->startElement(nodeName.toLatin1(), false);
-    writer->addAttribute("text:name", d->name.toLatin1());
+    writer->addAttribute("text:name", d->name.toUtf8());
 
     if (d->type == StartBookmark && inlineRdf()) {
         inlineRdf()->saveOdf(context, writer);

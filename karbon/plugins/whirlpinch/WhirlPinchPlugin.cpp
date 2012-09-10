@@ -40,17 +40,17 @@
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
 #include <KoSelection.h>
+#include <KoIcon.h>
 
 #include <kpluginfactory.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <klocale.h>
 
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QGridLayout>
 
 
 K_PLUGIN_FACTORY(WhirlPinchPluginFactory, registerPlugin<WhirlPinchPlugin>();)
@@ -59,7 +59,7 @@ K_EXPORT_PLUGIN(WhirlPinchPluginFactory("karbonwhirlpinchplugin"))
 WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
         : Plugin(parent)
 {
-    QAction *a = new KAction(KIcon("14_whirl"), i18n("&Whirl/Pinch..."), this);
+    QAction *a = new KAction(koIcon("effect_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
     connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));
 

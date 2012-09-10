@@ -19,13 +19,12 @@
 
 #include "KPrPresenterViewWidget.h"
 
-#include <QtGui/QBoxLayout>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QStackedLayout>
+#include <QBoxLayout>
+#include <QKeyEvent>
+#include <QStackedLayout>
 
 #include <KDebug>
 #include <KLocale>
-#include <KIcon>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>

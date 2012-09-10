@@ -26,12 +26,12 @@
 
 #include <kdebug.h>
 
-#include <QtGui/QImage>
-#include <QtGui/QMatrix>
-#include <QtCore/QDataStream>
-#include <QtCore/QByteArray>
-#include <QtCore/QBuffer>
-#include <QtGui/QPolygon>
+#include <QImage>
+#include <QMatrix>
+#include <QDataStream>
+#include <QByteArray>
+#include <QBuffer>
+#include <QPolygon>
 
 #include <math.h>
 
@@ -1457,7 +1457,7 @@ void WmfParser::createBoundingBox(QDataStream &stream)
         case 34: // bitBlt
         case 36: // polygon
         case 37: // polyline
-        //case 38: // escape  FIXME: is this a drawing commmand?
+        //case 38: // escape  FIXME: is this a drawing command?
         case 40: // fillRegion
         case 41:
         case 42:

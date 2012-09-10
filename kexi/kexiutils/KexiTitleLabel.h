@@ -20,7 +20,7 @@
 #ifndef KEXITITLELABEL_H
 #define KEXITITLELABEL_H
 
-#include <QtGui/QLabel>
+#include <QLabel>
 
 #include "kexiutils_export.h"
 

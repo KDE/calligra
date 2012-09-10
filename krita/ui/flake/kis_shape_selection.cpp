@@ -27,7 +27,7 @@
 
 #include <ktemporaryfile.h>
 
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
 #include <KoCompositeOp.h>
@@ -49,15 +49,19 @@
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoShapeTransformCommand.h>
+#include <KoElementReference.h>
 
-#include "kis_painter.h"
-#include "kis_paint_device.h"
+#include <kis_painter.h>
+#include <kis_paint_device.h>
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
+#include <kis_selection.h>
+
 #include "kis_shape_selection_model.h"
-#include "kis_image.h"
-#include "kis_selection.h"
 #include "kis_shape_selection_canvas.h"
 #include "kis_shape_layer_paste.h"
 #include "kis_image_view_converter.h"
+
 
 #include <kis_debug.h>
 
@@ -102,7 +106,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
     if (!success) {
-        warnUI << "Could not paste shape layer";
+        warnUI << "Could not paste vector layer";
     }
 }
 
@@ -159,7 +163,10 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
-    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+
+    KoElementReference elementRef;
+    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
+
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     saveOdf(shapeContext);
@@ -268,7 +275,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     KoXmlElement layerElement;
     forEachElement(layerElement, context.stylesReader().layerSet()) {
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return false;
         }
     }
@@ -307,7 +314,7 @@ void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter&
     Q_UNUSED(converter);
 }
 
-void KisShapeSelection::renderToProjection(KisPixelSelection* projection)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -318,13 +325,13 @@ void KisShapeSelection::renderToProjection(KisPixelSelection* projection)
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
-void KisShapeSelection::renderToProjection(KisPixelSelection* projection, const QRect& r)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisPixelSelection* projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -357,12 +364,11 @@ void KisShapeSelection::renderSelection(KisPixelSelection* projection, const QRe
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(r.y() + r.height() - y, MASK_IMAGE_HEIGHT);
 
-            KisRectIterator rectIt = tmpMask->createRectIterator(x, y, rectWidth, rectHeight);
+            KisRectIteratorSP rectIt = tmpMask->createRectIteratorNG(x, y, rectWidth, rectHeight);
 
-            while (!rectIt.isDone()) {
-                (*rectIt.rawData()) = qRed(polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
-                ++rectIt;
-            }
+            do {
+                (*rectIt->rawData()) = qRed(polygonMaskImage.pixel(rectIt->x() - x, rectIt->y() - y));
+            } while (rectIt->nextPixel());
         }
     }
     KisPainter painter(projection);
@@ -407,7 +413,7 @@ void KisShapeSelection::moveY(qint32 y)
     }
 }
 
-// TODO same code as in shape layer, refactor!
+// TODO same code as in vector layer, refactor!
 KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapes();
     if(shapes.isEmpty()) return 0;

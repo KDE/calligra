@@ -53,6 +53,7 @@ target_link_libraries(kexicore
   ${KDE4_KDEUI_LIBS}
   kexiutils
   kexidb
+  ${CALLIGRADB_LIBS}
   ${KOPROPERTY_LIBS}
 )
 target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils kexidb ${KOPROPERTY_LIBS})

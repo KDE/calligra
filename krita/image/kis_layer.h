@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
@@ -75,6 +75,8 @@ public:
 
     /// returns the image's colorSpace or null, if there is no image
     virtual const KoColorSpace * colorSpace() const;
+
+    /// returns the layer's composite op for the colorspace of the layer's parent.
     const KoCompositeOp * compositeOp() const;
 
     /**
@@ -115,12 +117,12 @@ public:
 
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
-    
+
     /**
      * set/unset the channel flag for the alpha channel of this layer
      */
     void disableAlphaChannel(bool disable);
-    
+
     /**
      * returns true if the channel flag for the alpha channel
      * of this layer is not set.
@@ -163,7 +165,7 @@ public:
     /**
      * Set the image this layer belongs to.
      */
-    void setImage(KisImageWSP image);
+    virtual void setImage(KisImageWSP image);
 
     /**
      * Clones should be informed about updates of the original

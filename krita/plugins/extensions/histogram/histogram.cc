@@ -29,7 +29,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -58,9 +57,6 @@ Histogram::Histogram(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-
-        setComponentData(HistogramFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/histogram.rc"),
                    true);
 
@@ -69,12 +65,14 @@ Histogram::Histogram(QObject *parent, const QVariantList &)
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView2*) parent;
-        if (KisImageWSP image = m_view->image()) {
-            connect(image.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
-            connect(image.data(), SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotLayersChanged()));
+        m_image = m_view->image();
+
+        if (m_image) {
+            connect(m_image, SIGNAL(sigLayersChangedAsync()), SLOT(slotLayersChanged()));
+            connect(m_image, SIGNAL(sigNodeAddedAsync(KisNodeSP)), SLOT(slotLayersChanged()));
+            connect(m_image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(slotLayersChanged()));
+
             connect(m_view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
-            connect(image.data(), SIGNAL(sigNodeHasBeenRemoved(KisNode *, int)), SLOT(slotLayersChanged()));
-            m_image = image.data();
         }
     }
 }

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qglobal.h>
+#include <QtGlobal>
 #ifdef Q_WS_WIN
 # define KDEWIN_FCNTL_H // avoid redef.
 # define KDEWIN_SYS_STAT_H // avoid redef.
@@ -29,13 +29,13 @@
 #endif
 
 #include "mysqlmigrate.h"
-#include <kexidb/drivers/mySQL/mysqldriver_global.h>
+#include <kexidb/drivers/mysql/mysqldriver_global.h>
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qlist.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QList>
 #include <kdebug.h>
 
 #ifdef Q_WS_WIN
@@ -46,11 +46,11 @@
 #define BOOL bool
 
 #include <migration/keximigratedata.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
-#include <kexidb/drivers/mySQL/mysqlconnection_p.cpp>
-#include <kexidb/drivermanager.h>
+#include <db/cursor.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
+#include <kexidb/drivers/mysql/mysqlconnection_p.cpp>
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;

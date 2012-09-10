@@ -23,7 +23,8 @@
 #include <QLineEdit>
 
 #include <kdebug.h>
-#include <kiconloader.h>
+
+#include <KoIcon.h>
 
 #include <kexi.h>
 #include <kexiproject.h>
@@ -32,7 +33,7 @@
 #include <kexipartinfo.h>
 #include <kexipartitem.h>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 #define ADD_DEFINEQUERY_ROW
@@ -60,7 +61,7 @@ public:
     }
 
     QPointer<KexiProject> prj;
-    QPixmap tableIcon, queryIcon;
+    QIcon tableIcon, queryIcon;
     int tablesCount;
     int prevIndex; //!< Used in slotActivated()
     bool showTables;
@@ -81,8 +82,8 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent)
             this, SLOT(slotReturnPressed(const QString &)));
     connect(lineEdit(), SIGNAL(clearButtonClicked()), this, SLOT(slotClearButtonClicked()));
 
-    d->tableIcon = SmallIcon("table");
-    d->queryIcon = SmallIcon("query");
+    d->tableIcon = koIcon("table");
+    d->queryIcon = koIcon("query");
 }
 
 KexiDataSourceComboBox::~KexiDataSourceComboBox()

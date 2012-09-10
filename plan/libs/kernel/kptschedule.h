@@ -51,6 +51,14 @@ class XMLLoaderObject;
 class SchedulerPlugin;
 class KPlatoXmlLoaderBase;
 
+/// Caches effortcost data (bcws, bcwp, acwp)
+class EffortCostCache {
+public:
+    EffortCostCache() : cached( false ) {}
+    bool cached;
+    EffortCostMap effortcostmap;
+};
+
 /**
  * The Schedule class holds data calculated during project
  * calculation and scheduling, eg start- and end-times and
@@ -65,7 +73,7 @@ class KPLATOKERNEL_EXPORT Schedule
 {
 public:
     //NOTE: Must match Effort::Use atm.
-    enum Type { Expected = 0,   //Effort::Use_Expected
+    enum Type { Expected = 0   //Effort::Use_Expected
               };
 
     Schedule();
@@ -97,7 +105,7 @@ public:
     virtual bool usePert() const;
     
     enum OBState { OBS_Parent, OBS_Allow, OBS_Deny };
-    /// Sets wether overbooking resources is allowed locally for this schedule
+    /// Sets whether overbooking resources is allowed locally for this schedule
     /// If @p state is OBS_Parent, the parent is checked when allowOverbooking() is called
     virtual void setAllowOverbookingState( OBState state );
     OBState allowOverbookingState() const;
@@ -153,17 +161,24 @@ public:
     virtual QList<Resource*> resources() const;
     /// Return the resource names that has appointments to this schedule
     virtual QStringList resourceNameList() const;
-    
+
+    virtual EffortCostMap bcwsPrDay( EffortCostCalculationType type = ECCT_All );
     virtual EffortCostMap bcwsPrDay( EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     
+    /// Returns the total planned effort for @p resource this schedule
+    virtual Duration plannedEffort( const Resource *resource, EffortCostCalculationType type = ECCT_All) const;
     /// Returns the total planned effort for this schedule
     virtual Duration plannedEffort( EffortCostCalculationType type = ECCT_All) const;
     /// Returns the total planned effort for this schedule on date
     virtual Duration plannedEffort( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    /// Returns the planned effort for @p resource on the @p date date
+    virtual Duration plannedEffort( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo( const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
+    /// Returns the planned effort for @p resource up to and including date
+    virtual Duration plannedEffortTo( const Resource *resource, const QDate &date, EffortCostCalculationType type = ECCT_All ) const;
 
     /**
      * Planned cost is the sum total of all resources and other costs
@@ -218,7 +233,7 @@ public:
 
     virtual ScheduleManager *manager() const { return 0; }
     
-    class Log {
+    class KPLATOKERNEL_EXPORT Log {
         public:
             enum Type { Type_Debug = 0, Type_Info, Type_Warning, Type_Error };
             Log() 
@@ -243,6 +258,8 @@ public:
     virtual void logDebug( const QString &, int = -1 ) {}
     
     virtual void incProgress() { if ( m_parent ) m_parent->incProgress(); }
+
+    void clearPerformanceCache();
 
 protected:
     virtual void changed( Schedule * /*sch*/ ) {}
@@ -329,10 +346,18 @@ protected:
     Duration negativeFloat;
     Duration freeFloat;
 
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
+    EffortCostCache &bcwsPrDayCache( int type ) {
+        return m_bcwsPrDay[ type ];
+    }
+    EffortCostCache &bcwpPrDayCache( int type ) {
+        return m_bcwpPrDay[ type ];
+    }
+    EffortCostCache &acwpCache( int type ) {
+        return m_acwp[ type ];
+    }
+    QMap<int, EffortCostCache> m_bcwsPrDay;
+    QMap<int, EffortCostCache> m_bcwpPrDay;
+    QMap<int, EffortCostCache> m_acwp;
 };
 
 /**
@@ -376,11 +401,6 @@ protected:
 
 private:
     Node *m_node;
-
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
 };
 
 /**
@@ -421,11 +441,6 @@ private:
     Resource *m_resource;
     Schedule *m_parent;
     const Schedule *m_nodeSchedule; // used during scheduling
-    
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
 };
 
 /**
@@ -531,11 +546,6 @@ private:
     
     QList<Schedule::Log> m_log;
     QMap<int, QString> m_logPhase;
-    
-#ifndef NDEBUG
-public:
-    virtual void printDebug( const QString& ident );
-#endif
 };
 
 /**
@@ -646,7 +656,7 @@ public:
     int maxProgress() const { return m_maxprogress; }
 
     /// Log added by MainSchedule
-    /// Emits sigLogAdded() to enable syncronization between schedules
+    /// Emits sigLogAdded() to enable synchronization between schedules
     void logAdded( Schedule::Log &log );
 
     /// Create and load a MainSchedule

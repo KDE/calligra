@@ -25,7 +25,9 @@
 
 #include <klocale.h>
 #include <kaction.h>
+#include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
@@ -45,10 +47,6 @@
 #include <opengl/kis_opengl_canvas2.h>
 #endif
 
-#include "kis_node_shape.h"
-#include "kis_layer_container_shape.h"
-#include "kis_shape_layer.h"
-
 #include <kis_view2.h>
 #include <kis_selection.h>
 #include <kis_image.h>
@@ -62,6 +60,7 @@
 #include <kis_pattern.h>
 #include <kis_transaction.h>
 #include <kis_selection.h>
+#include <kis_floating_message.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
@@ -71,6 +70,7 @@
 #include "kis_config_notifier.h"
 #include "kis_cursor.h"
 #include <recorder/kis_recorded_paint_action.h>
+#include <kis_selection_mask.h>
 
 struct KisTool::Private {
     Private()
@@ -93,9 +93,6 @@ struct KisTool::Private {
     KisFilterConfiguration * currentGenerator;
     QWidget* optionWidget;
 
-    KAction* toggleFgBg;
-    KAction* resetFgBg;
-
     bool spacePressed;
     QPointF lastDocumentPoint;
     QPointF initialGestureDocPoint;
@@ -111,15 +108,22 @@ KisTool::KisTool(KoCanvasBase * canvas, const QCursor & cursor)
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(resetCursorStyle()));
 
-    d->toggleFgBg = new KAction(i18n("Swap Foreground and Background Color"), this);
-    d->toggleFgBg->setShortcut(QKeySequence(Qt::Key_X));
-    connect(d->toggleFgBg, SIGNAL(triggered()), this, SLOT(slotToggleFgBg()));
-    addAction("toggle_fg_bg", d->toggleFgBg);
+    KActionCollection *collection = this->canvas()->canvasController()->actionCollection();
 
-    d->resetFgBg = new KAction(i18n("Reset Foreground and Background Color"), this);
-    d->resetFgBg->setShortcut(QKeySequence(Qt::Key_D));
-    connect(d->resetFgBg, SIGNAL(triggered()), this, SLOT(slotResetFgBg()));
-    addAction("reset_fg_bg", d->resetFgBg);
+    if (!collection->action("toggle_fg_bg")) {
+        KAction *toggleFgBg = new KAction(i18n("Swap Foreground and Background Color"), collection);
+        toggleFgBg->setShortcut(QKeySequence(Qt::Key_X));
+        collection->addAction("toggle_fg_bg", toggleFgBg);
+    }
+
+    if (!collection->action("reset_fg_bg")) {
+        KAction *resetFgBg = new KAction(i18n("Reset Foreground and Background Color"), collection);
+        resetFgBg->setShortcut(QKeySequence(Qt::Key_D));
+        collection->addAction("reset_fg_bg", resetFgBg);
+    }
+
+    addAction("toggle_fg_bg", dynamic_cast<KAction*>(collection->action("toggle_fg_bg")));
+    addAction("reset_fg_bg", dynamic_cast<KAction*>(collection->action("reset_fg_bg")));
 
     setMode(HOVER_MODE);
 }
@@ -154,10 +158,15 @@ void KisTool::activate(ToolActivation, const QSet<KoShape*> &)
                                             resource(KisCanvasResourceProvider::HdrExposure).toDouble());
     d->currentGenerator = static_cast<KisFilterConfiguration*>(canvas()->resourceManager()->
                           resource(KisCanvasResourceProvider::CurrentGeneratorConfiguration).value<void *>());
+
+    connect(actions().value("toggle_fg_bg"), SIGNAL(triggered()), SLOT(slotToggleFgBg()), Qt::UniqueConnection);
+    connect(actions().value("reset_fg_bg"), SIGNAL(triggered()), SLOT(slotResetFgBg()), Qt::UniqueConnection);
 }
 
 void KisTool::deactivate()
 {
+    disconnect(actions().value("toggle_fg_bg"), 0, this, 0);
+    disconnect(actions().value("reset_fg_bg"), 0, this, 0);
 }
 
 void KisTool::resourceChanged(int key, const QVariant & v)
@@ -394,23 +403,20 @@ void KisTool::setMode(ToolMode mode) {
     m_mode = mode;
 }
 
-KisTool::ToolMode KisTool::mode() {
+KisTool::ToolMode KisTool::mode() const {
     return m_mode;
 }
 
 void KisTool::mousePressEvent(KoPointerEvent *event)
 {
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (kisCanvas) {
+        kisCanvas->setSmoothingEnabled(false);
+    }
+
     KisConfig cfg;
 
     if (mode() == KisTool::HOVER_MODE &&
-        ((event->button() == Qt::MidButton &&
-          event->modifiers() == Qt::NoModifier) ||
-         (d->spacePressed && !cfg.clicklessSpacePan()))) {
-
-        initPan(event->point);
-        event->accept();
-    }
-    else if (mode() == KisTool::HOVER_MODE &&
              (event->button() == Qt::LeftButton &&
               event->modifiers() == Qt::ShiftModifier)) {
 
@@ -424,11 +430,7 @@ void KisTool::mousePressEvent(KoPointerEvent *event)
 
 void KisTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    if(mode() == PAN_MODE) {
-        pan(event->point);
-        event->accept();
-    }
-    else if (mode() == GESTURE_MODE) {
+    if (mode() == GESTURE_MODE) {
         processGesture(event->point);
         event->accept();
     }
@@ -438,17 +440,14 @@ void KisTool::mouseMoveEvent(KoPointerEvent *event)
 
 void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 {
+
+    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (kisCanvas) {
+        kisCanvas->setSmoothingEnabled(true);
+    }
     KisConfig cfg;
 
-    if(mode() == PAN_MODE) {
-        if (event->button() == Qt::MidButton ||
-            (event->button() == Qt::LeftButton && !cfg.clicklessSpacePan())) {
-
-            endPan();
-            event->accept();
-        }
-    }
-    else if (mode() == GESTURE_MODE) {
+    if (mode() == GESTURE_MODE) {
         if (event->button() == Qt::LeftButton) {
             endGesture();
             event->accept();
@@ -460,65 +459,20 @@ void KisTool::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisTool::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Space) {
-
-        KisConfig cfg;
-        if(cfg.clicklessSpacePan()) {
-            initPan(d->lastDocumentPoint);
-        }
-        else {
-            d->spacePressed = true;
-        }
-
+    if (mode() == GESTURE_MODE) {
         event->accept();
-        return;
+    } else {
+        event->ignore();
     }
-
-    event->ignore();
 }
 
 void KisTool::keyReleaseEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Space) {
-
-        KisConfig cfg;
-        if(cfg.clicklessSpacePan()) {
-            endPan();
-        }
-        else {
-            d->spacePressed = false;
-        }
-
+    if (mode() == GESTURE_MODE) {
         event->accept();
-        return;
+    } else {
+        event->ignore();
     }
-
-    event->ignore();
-}
-
-void KisTool::initPan(const QPointF &docPoint)
-{
-    setMode(PAN_MODE);
-    m_lastPosition = convertDocumentToWidget(docPoint);
-    useCursor(QCursor(Qt::ClosedHandCursor));
-}
-
-void KisTool::pan(const QPointF &docPoint)
-{
-    Q_ASSERT(canvas());
-    Q_ASSERT(canvas()->canvasController());
-
-    QPointF actualPosition = convertDocumentToWidget(docPoint);
-    QPointF distance(m_lastPosition - actualPosition);
-    canvas()->canvasController()->pan(distance.toPoint());
-
-    m_lastPosition = actualPosition;
-}
-
-void KisTool::endPan()
-{
-    setMode(HOVER_MODE);
-    resetCursorStyle();
 }
 
 void KisTool::initGesture(const QPointF &docPoint)
@@ -585,23 +539,6 @@ void KisTool::deleteSelection()
     }
 }
 
-void KisTool::setupPainter(KisPainter* painter)
-{
-    Q_ASSERT(currentImage());
-    if (!currentImage()) return;
-
-    painter->setBounds(currentImage()->bounds());
-    painter->setPaintColor(currentFgColor());
-    painter->setBackgroundColor(currentBgColor());
-    painter->setGenerator(currentGenerator());
-    painter->setPattern(currentPattern());
-    painter->setGradient(currentGradient());
-    painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
-
-    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data()))
-        painter->setChannelFlags(l->channelLockFlags());
-}
-
 void KisTool::setupPaintAction(KisRecordedPaintAction* action)
 {
     action->setPaintColor(currentFgColor());
@@ -614,12 +551,6 @@ QWidget* KisTool::createOptionWidget()
     d->optionWidget->setObjectName(toolId() + " Option Widget");
     return d->optionWidget;
 }
-
-QWidget* KisTool::optionWidget()
-{
-    return d->optionWidget;
-}
-
 
 void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
 {
@@ -761,6 +692,43 @@ void KisTool::setCurrentNodeLocked(bool locked)
         currentNode()->setSystemLocked(locked, false);
     }
 }
+
+bool KisTool::nodeEditable()
+{
+    KisNodeSP node = currentNode();
+    if (!node) {
+        return false;
+    }
+    if (!node->isEditable()) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        QString message;
+        if (!node->visible() && node->userLocked()) {
+            message = i18n("Layer is locked and invisible.");
+        } else if (node->userLocked()) {
+            message = i18n("Layer is locked.");
+        } else if(!node->visible()) {
+            message = i18n("Layer is invisible.");
+        } else {
+            message = i18n("Group not editable.");
+        }
+        kiscanvas->view()->showFloatingMessage(message, koIcon("object-locked"));
+    }
+    return node->isEditable();
+}
+
+bool KisTool::selectionEditable()
+{
+    KisCanvas2 * kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisView2 * view = kisCanvas->view();
+
+    bool editable = view->selectionEditable();
+    if (!editable) {
+        KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
+        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
+    }
+    return editable;
+}
+
 
 #include "kis_tool.moc"
 

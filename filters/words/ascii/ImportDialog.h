@@ -21,8 +21,8 @@
 #ifndef _IMPORT_DIALOG_H
 #define _IMPORT_DIALOG_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QButtonGroup>
+#include <QWidget>
+#include <QButtonGroup>
 
 #include <kdialog.h>
 #include <ui_ImportDialogUI.h>

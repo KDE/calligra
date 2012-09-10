@@ -17,6 +17,8 @@ set(kotext_LIB_SRCS
     KoTextPaste.cpp
     KoTextDocument.cpp
     KoTextEditor.cpp
+    KoTextEditor_undo.cpp
+    KoTextEditor_format.cpp
     KoList.cpp
 
     KoTextEditingRegistry.cpp
@@ -56,13 +58,12 @@ set(kotext_LIB_SRCS
     KoTableColumnAndRowStyleManager.cpp
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
+    KoTextTableTemplate.cpp
 
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
     BibliographyGenerator.cpp
-
-    KoTextLayoutScheduler.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -91,14 +92,21 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
 
+    commands/ChangeAnchorPropertiesCommand.cpp
     commands/ChangeListCommand.cpp
+    commands/ChangeStylesCommand.cpp
+    commands/ChangeStylesMacroCommand.cpp
     commands/ChangeTrackedDeleteCommand.cpp
+    commands/DeleteAnchorsCommand.cpp
     commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
     commands/DeleteTableRowCommand.cpp
     commands/InsertDeleteChangesCommand.cpp
+    commands/InsertNoteCommand.cpp
     commands/InsertTableColumnCommand.cpp
     commands/InsertTableRowCommand.cpp
+    commands/ResizeTableCommand.cpp
+    commands/InsertInlineObjectCommand.cpp
     commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
@@ -170,6 +178,7 @@ install(
     KoTextSoftPageBreak.cpp
     KoSection.h
     KoTextCommandBase.h
+    KoTextTableTemplate.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

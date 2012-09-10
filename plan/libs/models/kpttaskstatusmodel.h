@@ -90,6 +90,9 @@ public:
     void setWeekday( int day ) { m_weekday = day; }
     int weekday() const { return m_weekday; }
     
+    /// Return the sortorder to be used for @p column
+    virtual int sortRole( int column ) const;
+
 public slots:
     virtual void setScheduleManager( ScheduleManager *sm );
     virtual void refresh();
@@ -103,6 +106,8 @@ protected slots:
     void slotNodeInserted( Node *node );
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
+    void slotNodeToBeMoved( Node *node, int pos, Node *newParent, int newPos );
+    void slotNodeMoved( Node *node );
 
     void slotWbsDefinitionChanged();
     void slotLayoutChanged();

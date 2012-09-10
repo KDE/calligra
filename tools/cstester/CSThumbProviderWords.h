@@ -33,7 +33,7 @@ public:
     CSThumbProviderWords(KWDocument *doc);
     virtual ~CSThumbProviderWords();
 
-    virtual QList<QPixmap> createThumbnails(const QSize &thumbSize);
+    virtual QList<QImage> createThumbnails(const QSize &thumbSize);
 
 private:
     KWDocument *m_doc;

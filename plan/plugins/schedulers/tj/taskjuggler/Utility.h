@@ -14,8 +14,8 @@
 #define _Utility_h_
 
 #include <time.h>
-#include <qstring.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QDateTime>
 
 namespace TJ
 {

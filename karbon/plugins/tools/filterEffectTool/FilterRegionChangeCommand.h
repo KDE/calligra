@@ -21,7 +21,7 @@
 #define FILTERREGIONCHANGECOMMAND_H
 
 #include <kundo2command.h>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 class KoShape;
 class KoFilterEffect;

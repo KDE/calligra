@@ -23,6 +23,8 @@
 
 #include "CSThumbProviderWords.h"
 
+#include <KoPart.h>
+
 #include <KWDocument.h>
 #include <KWPage.h>
 #include <KWCanvasItem.h>
@@ -49,9 +51,9 @@ CSThumbProviderWords::~CSThumbProviderWords()
 {
 }
 
-QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
+QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
-    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->canvasItem());
+    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem());
     KoZoomHandler zoomHandler;
 
     while (!m_doc->layoutFinishedAtleastOnce()) {
@@ -64,7 +66,7 @@ QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
     KWPageManager *pageManager = m_doc->pageManager();
     KoShapeManager *shapeManager = canvasItem->shapeManager();
 
-    QList<QPixmap> thumbnails;
+    QList<QImage> thumbnails;
 
     foreach(KWPage page, pageManager->pages()) {
 
@@ -76,8 +78,8 @@ QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
         KoPAUtil::setZoom(layout, thumbSize, zoomHandler);
         QRect pageRect = KoPAUtil::pageRect(layout, thumbSize, zoomHandler);
 
-        QPixmap thumbnail(thumbSize);
-        thumbnail.fill(Qt::white);
+        QImage thumbnail(thumbSize, QImage::Format_RGB32);
+        thumbnail.fill(QColor(Qt::white).rgb());
         QPainter p(&thumbnail);
 
         QImage img = page.thumbnail(pageRect.size(), shapeManager);

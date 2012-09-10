@@ -21,17 +21,17 @@
 #include "pqxxmigrate.h"
 #include "pg_type.h"
 
-#include <qstring.h>
+#include <QString>
 #include <kdebug.h>
-#include <qstringlist.h>
+#include <QStringList>
 
 //I maybe should not use stl?
 #include <string>
 #include <vector>
 
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
-#include <kexidb/drivermanager.h>
+#include <db/cursor.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
 #include <kexiutils/identifier.h>
 #include <kexidb/drivers/pqxx/pqxxcursor.h> //for pgsqlCStrToVariant()
 
@@ -217,7 +217,7 @@ bool PqxxMigrate::drv_connect()
         m_conn = new pqxx::connection(conninfo.toLatin1().constData());
         return true;
     } catch (const std::exception &e) {
-        //kDebug() << "PqxxMigrate::drv_connect:exception - " << e.what();
+        kDebug() << "PqxxMigrate::drv_connect:exception - " << e.what();
     } catch (...) {
         kDebug() << "PqxxMigrate::drv_connect:exception(...)??";
     }

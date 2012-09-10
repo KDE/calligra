@@ -30,7 +30,6 @@
 
 //KDE headers
 #include "KLocalizedString"
-#include "KIcon"
 
 //Qt headers
 #include <QIcon>

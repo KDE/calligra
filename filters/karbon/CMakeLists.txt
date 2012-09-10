@@ -25,7 +25,7 @@ if( POPPLER_FOUND AND NOT POPPLER_XPDF_HEADERS )
 endif( POPPLER_FOUND AND NOT POPPLER_XPDF_HEADERS )
 macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Poppler Qt4 interface library, with XPDF headers" "http://poppler.freedesktop.org" FALSE "" "Required by the Karbon PDF import filter")
 
-add_subdirectory( png )
+add_subdirectory( image )
 add_subdirectory( svg )
 if (WPD_FOUND AND LIBWPG_FOUND)
   add_subdirectory( wpg )
@@ -38,16 +38,5 @@ endif (QT3SUPPORT)
 if (POPPLER_FOUND AND NOT WIN32)
     add_subdirectory( pdf )
 endif (POPPLER_FOUND AND NOT WIN32)
-
-# enable again when these filters are ported
-message(STATUS "Karbon: still need to port: applixgraphics, ai, kontour, xcf, xaml, xfig, msod and oodraw filters")
-
-if(FALSE)
-add_subdirectory( ai )
-add_subdirectory( kontour )
-add_subdirectory( xcf )
-add_subdirectory( msod )
-add_subdirectory( oodraw )
-endif(FALSE)
-
+add_subdirectory( xfig )
 

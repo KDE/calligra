@@ -132,20 +132,13 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
 
     int id = obj->id();
 
-    QTextCursor cursor = doc.find(QString(QChar::ObjectReplacementCharacter), 0);
-    Q_ASSERT(cursor.position() == 1);
-
-    manager.removeInlineObject(cursor);
+    manager.removeInlineObject(obj);
 
     KoInlineObject *obj2 = manager.inlineTextObject(id);
     Q_ASSERT(obj2 == 0);
 
-    // we cannot find the inline char anymore
-    cursor = doc.find(QString(QChar::ObjectReplacementCharacter), 0);
-    Q_ASSERT(cursor.position() == -1);
-
     // this should not crash, even though we were a listener
-    manager.setProperty(KoInlineObject::User, "bla");
+    manager.setProperty(KoInlineObject::UserGet, "bla");
 
     // now insert a bookmark and remove it. It should also be gone from the bookmark manager
     KoBookmark *bm = new KoBookmark(&doc);
@@ -156,7 +149,6 @@ void TestKoInlineTextObjectManager::testRemoveInlineObject()
     manager.removeInlineObject(bm);
     Q_ASSERT(!manager.bookmarkManager()->bookmarkNameList().contains("single!"));
     Q_ASSERT(!manager.bookmarkManager()->retrieveBookmark("single!"));
-
 }
 
 void TestKoInlineTextObjectManager::testListenToProperties()
@@ -166,11 +158,16 @@ void TestKoInlineTextObjectManager::testListenToProperties()
     KoTextDocument textDoc(&doc);
     textDoc.setInlineTextObjectManager(&manager);
     KoTextEditor editor(&doc);
-    DummyInlineObject *obj = new DummyInlineObject(true);
-    manager.insertInlineObject(*editor.cursor(), obj);
-    manager.setProperty(KoInlineObject::User, "bla");
-    Q_ASSERT(obj->m_property.toString() == "bla");
 
+    DummyInlineObject *obj1 = new DummyInlineObject(true);
+    manager.insertInlineObject(*editor.cursor(), obj1);
+    manager.setProperty(KoInlineObject::UserGet, "bla1");
+    Q_ASSERT(obj1->m_property.toString() == "bla1");
+
+    DummyInlineObject *obj2 = new DummyInlineObject(true);
+    manager.insertInlineObject(*editor.cursor(), obj2);
+    manager.setProperty(KoInlineObject::UserInput, "bla2");
+    Q_ASSERT(obj2->m_property.toString() == "bla2");
 }
 
 

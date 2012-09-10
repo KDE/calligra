@@ -20,15 +20,15 @@
 #include "KexiFileWidget.h"
 #include <kexi_global.h>
 
-#include <kexidb/driver.h>
-#include <kexidb/utils.h>
+#include <db/driver.h>
+#include <db/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 
-#include <qlayout.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
+#include <QLayout>
+#include <QObject>
+#include <QPushButton>
+#include <QApplication>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QAction>

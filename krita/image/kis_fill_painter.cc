@@ -25,15 +25,13 @@
 #include <cfloat>
 #include <stack>
 
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 
@@ -58,12 +56,12 @@
 
 #include "kis_pixel_selection.h"
 
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
-#include "kis_iterator.h"
 #include "KoColor.h"
 #include "kis_selection.h"
-#include "kis_random_accessor_ng.h"
+
+#include "kis_selection_manager_p.h"
 
 KisFillPainter::KisFillPainter()
         : KisPainter()
@@ -89,6 +87,8 @@ void KisFillPainter::initFillPainter()
     m_sampleMerged = false;
     m_careForSelection = false;
     m_fuzzy = false;
+    m_sizemod = 0;
+    m_feather = 0;
 }
 
 // 'regular' filling
@@ -327,8 +327,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
         Q_ASSERT(x < m_width);
         Q_ASSERT(y >= 0);
         Q_ASSERT(y < m_height);
-        /* We need an iterator that is valid in the range (0,y) - (width,y). Therefore,
-        it is needed to start the iterator at the first position, and then skip to (x,y). */
+
         pixelIt->moveTo(x,y);
         quint8 diff;
         if (canOptimizeDifferences) {
@@ -350,7 +349,6 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
             continue;
         }
 
-        // Here as well: start the iterator at (0,y)
         KisRandomAccessorSP selIt = pSel->createRandomAccessorNG(x, y);
 
         if (m_fuzzy) {
@@ -521,6 +519,19 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     delete[] map;
     delete[] source;
 
+    if (m_sizemod > 0) {
+        KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
+        biggy.process(selection->pixelSelection(), selection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+    }
+    else if (m_sizemod < 0) {
+        KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
+        tiny.process(selection->pixelSelection(), selection->selectedRect());
+    }
+    if (m_feather > 0) {
+        KisFeatherSelectionFilter feathery(m_feather);
+        feathery.process(selection->pixelSelection(), selection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+    }
+    
     selection->updateProjection();
 
     return selection;

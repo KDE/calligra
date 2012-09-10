@@ -19,7 +19,7 @@
 
 #include "widgetwithsubpropertiesinterface.h"
 
-#include <qmetaobject.h>
+#include <QMetaObject>
 
 #include <kexiutils/utils.h>
 #include <kdebug.h>

@@ -49,7 +49,7 @@ public:
     QString instanceCaption;
     QString groupName;
 //    QString mimeType;
-    QString itemIcon;
+    QString itemIconName;
     QString objectName;
     
     QString partClass;

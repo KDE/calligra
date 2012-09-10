@@ -23,7 +23,6 @@
 
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
-#include <KoLineBorder.h>
 #include <KoPointerEvent.h>
 #include <KoPathPoint.h>
 #include <KoCanvasBase.h>
@@ -39,7 +38,7 @@
 #include <KAction>
 #include <KDebug>
 #include <KLocale>
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include <cmath>
 

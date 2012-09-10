@@ -36,6 +36,7 @@ target_link_libraries(
     kexiguiutils
     ${KOPROPERTY_LIBS}
     kexidb
+    ${CALLIGRADB_LIBS}
     ${KDE4_KIO_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
 )

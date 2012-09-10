@@ -27,13 +27,9 @@
 #include "FlowView.h"
 #include "FlowFactory.h"
 
-#include <KoPACanvasItem.h>
-
-FlowDocument::FlowDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode)
-  : KoPADocument(parentWidget, parent, singleViewMode)
+FlowDocument::FlowDocument(KoPart *part)
+  : KoPADocument(part)
 {
-    setComponentData(FlowFactory::componentData(), false);
-    setTemplateType("flow_template");
 }
 
 FlowDocument::~FlowDocument()
@@ -45,17 +41,7 @@ KoOdf::DocumentType FlowDocument::documentType() const
     return KoOdf::Graphics;
 }
 
-KoView* FlowDocument::createViewInstance(QWidget* parent)
-{
-    return new FlowView(this, parent);
-}
-
-QGraphicsItem *FlowDocument::createCanvasItem()
-{
-    return new KoPACanvasItem(this);
-}
-
-const char * FlowDocument::odfTagName( bool withNamespace )
+const char * FlowDocument::odfTagName(bool withNamespace)
 {
     return withNamespace ? "office:drawing": "drawing";
 }

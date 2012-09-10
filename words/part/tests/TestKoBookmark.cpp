@@ -19,13 +19,14 @@
 
 #include "TestKoBookmark.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QDebug>
 #include <QString>
 #include <QTextDocument>
 #include <QTextTable>
 #include <QList>
 
+#include <KoPart.h>
 #include <KoBookmark.h>
 #include <KoStore.h>
 #include <KoTextDocument.h>
@@ -60,6 +61,7 @@ void TestKoBookmark::testInsertion()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText("1bla bla bla");
@@ -122,7 +124,7 @@ void TestKoBookmark::testRoundtrip()
                 );
     {
         // Get the words part and create a document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         doc->initEmpty();
@@ -166,7 +168,7 @@ void TestKoBookmark::testRoundtrip()
 
         // Save the document
         KUrl url(QString(FILES_OUTPUT_DIR) + "/bookmark_roundtrip.odt");
-        doc->saveAs(url);
+        doc->documentPart()->saveAs(url);
 
         // check the number of bookmark characters
         KoInlineTextObjectManager *inlineObjectManager = koTextDocument.inlineTextObjectManager();
@@ -189,7 +191,7 @@ void TestKoBookmark::testRoundtrip()
     }
     {
         // Load the document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         KUrl url(QString(FILES_OUTPUT_DIR) + "/bookmark_roundtrip.odt");

@@ -30,6 +30,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoGenStyles.h>
 #include <KoStyleManager.h>
+#include <KoElementReference.h>
 #include <KDebug>
 
 #include <QTextDocument>
@@ -52,9 +53,9 @@ public:
     {
     }
 
+    QTextDocument *document;
     QTextFrame *textFrame;
     QString label;
-    QString id;
     QString author;
     QDateTime date;
     bool autoNumbering;
@@ -81,6 +82,7 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
     QTextFrameFormat format;
     format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
     d->textFrame = cursor.insertFrame(format);
+    d->document = motherFrame->document();
 }
 
 void KoInlineNote::setLabel(const QString &text)
@@ -93,17 +95,12 @@ void KoInlineNote::setAutoNumber(int autoNumber)
     if (d->autoNumbering) {
         KoOdfNotesConfiguration *notesConfig = 0;
         if (d->type == KoInlineNote::Footnote) {
-            notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
+            notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Footnote);
         } else if (d->type == KoInlineNote::Endnote) {
-            notesConfig = KoTextDocument(d->textFrame->document()).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
+            notesConfig = KoTextDocument(d->document).styleManager()->notesConfiguration(KoOdfNotesConfiguration::Endnote);
         }
         d->label = notesConfig->numberFormat().formattedNumber(autoNumber + notesConfig->startValue());
     }
-}
-
-void KoInlineNote::setId(const QString &id)
-{
-    d->id = id;
 }
 
 QTextFrame *KoInlineNote::textFrame() const
@@ -111,14 +108,14 @@ QTextFrame *KoInlineNote::textFrame() const
     return d->textFrame;
 }
 
+void KoInlineNote::setTextFrame(QTextFrame *textFrame)
+{
+    d->textFrame = textFrame;
+}
+
 QString KoInlineNote::label() const
 {
     return d->label;
-}
-
-QString KoInlineNote::id() const
-{
-    return d->id;
 }
 
 bool KoInlineNote::autoNumbering() const
@@ -140,6 +137,9 @@ void KoInlineNote::updatePosition(const QTextDocument *document, int posInDocume
 {
     Q_UNUSED(document);
     Q_UNUSED(format);
+    if (d->posInDocument == -1) {
+        qDebug() << "undo";
+    }
     d->posInDocument = posInDocument;
 }
 
@@ -207,7 +207,6 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             return false;
         }
 
-        d->id = element.attributeNS(KoXmlNS::text, "id");
         for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
             KoXmlElement ts = node.toElement();
             if (ts.namespaceURI() != KoXmlNS::text)
@@ -246,7 +245,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         } else {
             writer->addAttribute("text:note-class", "endnote");
         }
-        writer->addAttribute("text:id", d->id);
+
         writer->startElement("text:note-citation", false);
         if (!autoNumbering()) {
             writer->addAttribute("text:label", d->label);
@@ -256,7 +255,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 
         writer->startElement("text:note-body", false);
         KoTextWriter textWriter(context);
-        textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(), d->textFrame->lastPosition());
+        textWriter.write(d->document, d->textFrame->firstPosition(), d->textFrame->lastPosition());
         writer->endElement();
 
         writer->endElement();
@@ -275,7 +274,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         }
 
         KoTextWriter textWriter(context);
-        textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(),d->textFrame->lastPosition());
+        textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
 
         writer->endElement();
     }

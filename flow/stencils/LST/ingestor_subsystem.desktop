@@ -1,12 +1,20 @@
 [Desktop Entry]
 Name=Ingestor
+Name[ca]=Ingestor
+Name[ca@valencia]=Ingestor
+Name[el]=Ingestor
 Name[es]=Ingestor
+Name[et]=Sissetooja
+Name[fr]=Ingestor
+Name[gl]=Inxestor
 Name[it]=Ingestor
+Name[kk]=Жұтқыш
 Name[nb]=Inntak
 Name[nl]=Ingestor
 Name[pl]=Trawienie
 Name[pt]=Ingestão
 Name[pt_BR]=Ingestão
+Name[sk]=Ingestor
 Name[sv]=Intag
 Name[uk]=Підсистема харчування
 Name[x-test]=xxIngestorxx

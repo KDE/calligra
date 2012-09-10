@@ -16,15 +16,16 @@ Table Of Contents
 -----------------
 1. Kexi
 1.1. Kexi database and migration drivers to package separately
-1.2. Kexi default database driver: SQLite
-1.4. Other Kexi plugins to package separately
-1.4. Kexi development files
-1.5. Quick command-line tests of Kexi installation
+1.2. Other Kexi plugins to package separately
+1.3. Kexi development files
+1.4. Quick command-line tests of Kexi installation
 2. Krita
 2.1. Krita development files
 3. Debug information
 4. Calligra plugins
 5. Calligra libraries
+5.1. Calligra default database driver: SQLite
+6. WARNING against qt 4.8.0 and 4.8.1
 
 1. Kexi
 =======
@@ -92,7 +93,7 @@ The following matrix lists the packages and dependencies.
                            Translation File:
                                keximigrate_spreadsheet.mo
                            Dependencies:
-                               tables (Calligra Tables)
+                               sheets (Calligra Sheets)
  ------------------------------------------------------------------------
 
 
@@ -105,24 +106,8 @@ Notes:
 TODOs:
 * Add minimal versions of dependencies.
 
-1.2. Kexi default database driver: SQLite
------------------------------------------
 
-In contrast to the other database drivers, SQLite 3 driver SHOULD BE PART
-of the main Kexi package, so it SOULD NOT be in optional.
-Thus, Kexi main package should depend on SQLite 3 package.
-
-Recommended version of SQLite package is defined in the source code and can
-be obtained by executing this command in calligra/ directory:
- % grep SQLITE_RECOMMENDED_VERSION CMakeLists.txt
-
-Minimal version of SQLite package is defined in the source code and can
-be obtained by executing this command in calligra/ directory:
- % grep CalligraSqlite CMakeLists.txt
-Without SQLite in at least this version Kexi will not compile and run.
-
-
-1.3. Other Kexi plugins to package separately
+1.2. Other Kexi plugins to package separately
 ---------------------------------------------
 
 Kexi provides less a number of plugin types that are optional either because 
@@ -172,13 +157,13 @@ The following matrix lists the packages and dependencies.
                                libmarble4-kde4 or marble
                                                       (provides libmarblewidget)
 
-1.4. Kexi development files
+1.3. Kexi development files
 ---------------------------
 
 Kexi ships no development files at the moment, so -devel packages are not needed.
 
 
-1.5. Quick command-line tests of Kexi installation
+1.4. Quick command-line tests of Kexi installation
 --------------------------------------------------
 
 If you don't want to click through Kexi interface but still want
@@ -258,3 +243,28 @@ main
 odf
 pigment
 widgets
+
+
+5.1. Calligra default database driver: SQLite
+---------------------------------------------
+
+In contrast to the all other Kexi database drivers, SQLite 3 driver SHOULD BE PART
+of the Calligra libraries package nor Kexi package, and it SOULD NOT be in optional.
+Thus, the Calligra libraries package should depend on SQLite 3 package.
+
+The SQLite 3 driver depends on the calligradb library, and not on Kexi itself.
+
+Recommended version of SQLite package is defined in the source code and can
+be obtained by executing this command in calligra/ directory:
+ % grep SQLITE_RECOMMENDED_VERSION CMakeLists.txt
+
+Minimal version of SQLite package is defined in the source code and can
+be obtained by executing this command in calligra/ directory:
+ % grep CalligraSqlite CMakeLists.txt
+
+Without SQLite in at least this version Calligra will not compile.
+
+
+6. WARNING against qt 4.8.0 and 4.8.1
+====================
+Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch in this directory

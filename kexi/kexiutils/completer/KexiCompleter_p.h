@@ -56,10 +56,10 @@
 
 #ifndef QT_NO_COMPLETER
 
-#include <QtGui/QTreeView>
-#include <QtGui/QItemDelegate>
-#include <QtGui/QAbstractProxyModel>
-#include <QtGui/QPainter>
+#include <QTreeView>
+#include <QItemDelegate>
+#include <QAbstractProxyModel>
+#include <QPainter>
 #include "KexiCompleter.h"
 #include "private/KexiAbstractItemModel_p.h"
 

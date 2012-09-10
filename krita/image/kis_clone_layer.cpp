@@ -21,6 +21,8 @@
 #include <kis_debug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
+
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
 
@@ -30,6 +32,7 @@
 #include "kis_node_visitor.h"
 #include "kis_processing_visitor.h"
 #include "kis_clone_info.h"
+#include "kis_paint_layer.h"
 
 
 struct KisCloneLayer::Private
@@ -76,6 +79,18 @@ KisCloneLayer::~KisCloneLayer()
         m_d->copyFrom->unregisterClone(this);
     }
     delete m_d;
+}
+
+KisLayerSP KisCloneLayer::reincarnateAsPaintLayer() const
+{
+    KisPaintDeviceSP newOriginal = new KisPaintDevice(*original());
+    KisPaintLayerSP newLayer = new KisPaintLayer(image(), name(), opacity(), newOriginal);
+    newLayer->setX(x());
+    newLayer->setY(y());
+    newLayer->setCompositeOp(compositeOpId());
+    newLayer->mergeNodeProperties(nodeProperties());
+
+    return newLayer;
 }
 
 bool KisCloneLayer::allowAsChild(KisNodeSP node) const
@@ -227,7 +242,7 @@ void KisCloneLayer::setCopyFromInfo(KisCloneInfo info)
 
 QIcon KisCloneLayer::icon() const
 {
-    return KIcon("edit-copy");
+    return koIcon("edit-copy");
 }
 
 KoDocumentSectionModel::PropertyList KisCloneLayer::sectionModelProperties() const

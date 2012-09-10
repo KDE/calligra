@@ -20,7 +20,7 @@
 #ifndef WMFEXPORT_H
 #define WMFEXPORT_H
 
-#include <QtGui/QPen>
+#include <QPen>
 #include <KoFilter.h>
 #include <QVariantList>
 
@@ -28,7 +28,7 @@
 
 class KarbonDocument;
 class KoShape;
-class KoShapeBorderModel;
+class KoShapeStrokeModel;
 class QPainterPath;
 
 class WmfExport : public KoFilter
@@ -45,7 +45,7 @@ private:
     void paintDocument(KarbonDocument& document);
     void paintShape(KoShape * shape);
 
-    QPen getPen(const KoShapeBorderModel *stroke);
+    QPen getPen(const KoShapeStrokeModel *stroke);
 
     // coordinate transformation
     // scale to wmf size

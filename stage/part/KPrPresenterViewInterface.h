@@ -22,7 +22,7 @@
 
 #include "KPrPresenterViewBaseInterface.h"
 
-#include <QtGui/QFrame>
+#include <QFrame>
 
 class QLabel;
 class QTextEdit;

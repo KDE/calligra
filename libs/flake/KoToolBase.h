@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 #include "flake_export.h"
 
@@ -43,6 +43,9 @@ class QKeyEvent;
 class QWidget;
 class QPainter;
 class QInputMethodEvent;
+class QDragMoveEvent;
+class QDragLeaveEvent;
+class QDropEvent;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -132,6 +135,14 @@ public:
      * @param event state and reason of this mouse or stylus press
      */
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+
+    /**
+     * Called when (one of) the mouse or stylus buttons is triple clicked.
+     * Implementors should call event->ignore() if they do not actually use the event.
+     * Default implementation ignores this event.
+     * @param event state and reason of this mouse or stylus press
+     */
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
 
     /**
      * Called when the mouse or stylus moved over the canvas.
@@ -278,6 +289,31 @@ public:
     virtual QStringList supportedPasteMimeTypes() const;
 
     /**
+     * Handle the dragMoveEvent
+     * A tool typically has one or more shapes selected and dropping into should do
+     * something meaningful for this specific shape and tool combination. For example
+     * dropping text in a text tool.
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+
+    /**
+     * Handle the dragLeaveEvent
+     * Basically just a noticification that the drag is no long relevant
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dragLeaveEvent(QDragLeaveEvent *event);
+
+    /**
+     * Handle the dropEvent
+     * A tool typically has one or more shapes selected and dropping into should do
+     * something meaningful for this specific shape and tool combination. For example
+     * dropping text in a text tool.
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dropEvent(QDropEvent *event, const QPointF &point);
+
+    /**
      * @return A list of actions to be used for a popup.
      */
     QList<QAction*> popupActionList() const;
@@ -329,6 +365,13 @@ public slots:
      * changes. An example is currently selected foreground color.
      */
     virtual void resourceChanged(int key, const QVariant &res);
+
+    /**
+     * This method is called whenever a property in the resource
+     * provider associated with the document this tool belongs to
+     * changes. An example is the handle radius
+     */
+    virtual void documentResourceChanged(int key, const QVariant &res);
 
     /**
      * This method just relays the given text via the tools statusTextChanged signal.

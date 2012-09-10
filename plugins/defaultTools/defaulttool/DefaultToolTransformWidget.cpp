@@ -2,7 +2,7 @@
  * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,8 +33,8 @@
 #include "SelectionDecorator.h"
 
 #include <QSize>
-#include <QtGui/QRadioButton>
-#include <QtGui/QLabel>
+#include <QRadioButton>
+#include <QLabel>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QList>

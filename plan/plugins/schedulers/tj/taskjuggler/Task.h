@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -20,7 +21,7 @@
 
 #include <stdarg.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include "debug.h"
 #include "TaskList.h"
@@ -529,7 +530,7 @@ private:
     /// Effort (in man days) needed to complete the task
     double effort;
 
-    /// Duration in calender days
+    /// Duration in calendar days
     double duration;
 
     /// The already completed effort in a scheduler run.
@@ -548,14 +549,14 @@ private:
 
     /**
      * Since the full time slot might not be available we need to
-     * store the tentative start of a task in a seperate
+     * store the tentative start of a task in a separate
      * variable. Storing the information in 'start' would mark the
      * task as fully scheduled which might not yet be the case. */
     time_t tentativeStart;
 
     /**
      * Since the full time slot might not be available we need to
-     * store the tentative end of a task in a seperate
+     * store the tentative end of a task in a separate
      * variable. Storing the information in 'end' would mark the task
      * as fully scheduled which might not yet be the case. */
     time_t tentativeEnd;
@@ -565,7 +566,7 @@ private:
      * from one end the other in a continuous way. No timeslot may be
      * scheduled twice. This variable stores information about the last
      * allocation, so we can make sure the next slot is exactly adjacent
-     * the the previous one. */
+     * the previous one. */
     time_t lastSlot;
 
     /// This variable is set to true when the task has been scheduled.

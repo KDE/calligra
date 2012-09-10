@@ -22,9 +22,11 @@
 #include <KoPanTool.h>
 #include <KoToolFactoryBase.h>
 #include <kis_tool.h>
+#include <KoIcon.h>
 
 class KoCanvasBase;
 class KisCanvas2;
+class KisCanvasController;
 
 class KisToolPan : public KisTool
 {
@@ -47,14 +49,12 @@ public:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
-//    virtual QWidget* createOptionWidget();
-//    virtual QWidget* optionWidget();
-
 private:
     void adjustCursor();
     bool isInCheckerArea(QPointF pt);
     qreal calculateAngle(QPointF oldPoint, QPointF newPoint);
     KisCanvas2* kritaCanvas() const;
+    KisCanvasController* kritaCanvasController() const;
 
 private:
     static const qreal m_checkerRadius;
@@ -75,7 +75,7 @@ public:
         setToolType(navigationToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
         setPriority(5);
-        setIcon("krita_tool_pan");
+        setIconName(koIconNameCStr("krita_tool_pan"));
         //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
     }
 

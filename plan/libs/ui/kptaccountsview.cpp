@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2005 - 2006 Dag Andersen danders@get2net>
+  Copyright (C) 2005 - 2006, 2012 Dag Andersen danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,19 +24,20 @@
 #include "kptproject.h"
 #include "kpteffortcostmap.h"
 #include "kptaccountsmodel.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
 
 #include <QApplication>
 #include <QLabel>
 #include <QPainter>
-#include <qpalette.h>
+#include <QPalette>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QPrinter>
+#include <QPrintDialog>
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QMenu>
@@ -46,7 +47,6 @@
 #include <klocale.h>
 #include <kaction.h>
 
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -54,7 +54,7 @@ namespace KPlato
 AccountsTreeView::AccountsTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
-    kDebug()<<"---------------"<<this<<"------------------";
+    kDebug(planDbg())<<"---------------"<<this<<"------------------";
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     CostBreakdownItemModel *m = new CostBreakdownItemModel( this );
@@ -79,7 +79,7 @@ void AccountsTreeView::slotModelReset()
 {
     hideColumns( m_leftview, QList<int>() << 3 << -1 );
     QHeaderView *v = m_leftview->header();
-    kDebug()<<v->sectionSize(2)<<v->sectionSizeHint(2)<<v->defaultSectionSize()<<v->minimumSectionSize();
+    kDebug(planDbg())<<v->sectionSize(2)<<v->sectionSizeHint(2)<<v->defaultSectionSize()<<v->minimumSectionSize();
 
     hideColumns( m_rightview, QList<int>() << 0 << 1 << 2 );
 }
@@ -159,8 +159,8 @@ void AccountsTreeView::setShowMode( int show )
 }
 
 //------------------------
-AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+AccountsView::AccountsView(KoPart *part, Project *project, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
         m_project(project),
         m_manager( 0 )
 {
@@ -193,13 +193,13 @@ void AccountsView::setupGui()
 
 void AccountsView::slotContextMenuRequested( QModelIndex, const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     slotHeaderContextMenuRequested( pos );
 }
 
 void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -208,8 +208,8 @@ void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void AccountsView::slotOptions()
 {
-    kDebug();
-    AccountsviewConfigDialog *dlg = new AccountsviewConfigDialog( m_view, this );
+    kDebug(planDbg());
+    AccountsviewConfigDialog *dlg = new AccountsviewConfigDialog( this, m_view, this );
     connect(dlg, SIGNAL(finished(int)), SLOT(slotOptionsFinished(int)));
     dlg->show();
     dlg->raise();
@@ -237,19 +237,19 @@ CostBreakdownItemModel *AccountsView::model() const
 #if 0
 void AccountsView::print( QPrinter &printer, QPrintDialog &printDialog )
 {
-    //kDebug();
+    //kDebug(planDbg());
     uint top, left, bottom, right;
     printer.margins( &top, &left, &bottom, &right );
-    //kDebug()<<m.width()<<"x"<<m.height()<<" :"<<top<<","<<left<<","<<bottom<<","<<right<<" :"<<size();
+    //kDebug(planDbg())<<m.width()<<"x"<<m.height()<<" :"<<top<<","<<left<<","<<bottom<<","<<right<<" :"<<size();
     QPainter p;
     p.begin( &printer );
     p.setViewport( left, top, printer.width() - left - right, printer.height() - top - bottom );
     p.setClipRect( left, top, printer.width() - left - right, printer.height() - top - bottom );
     QRect preg = p.clipRegion().boundingRect();
-    //kDebug()<<"p="<<preg;
+    //kDebug(planDbg())<<"p="<<preg;
     //p.drawRect(preg.x(), preg.y(), preg.width()-1, preg.height()-1);
     double scale = qMin( ( double ) preg.width() / ( double ) size().width(), ( double ) preg.height() / ( double ) ( size().height() ) );
-    //kDebug()<<"scale="<<scale;
+    //kDebug(planDbg())<<"scale="<<scale;
     if ( scale < 1.0 ) {
         p.scale( scale, scale );
 }
@@ -263,7 +263,9 @@ void AccountsView::print( QPrinter &printer, QPrintDialog &printDialog )
 
 bool AccountsView::loadContext( const KoXmlElement &context )
 {
-    //kDebug();
+    //kDebug(planDbg());
+    ViewBase::loadContext( context );
+
     m_view->setShowMode( context.attribute( "show-mode" ).toInt() );
     m_view->setCumulative( (bool)( context.attribute( "cumulative" ).toInt() ) );
     m_view->setPeriodType( context.attribute( "period-type", "0" ).toInt() );
@@ -272,13 +274,15 @@ bool AccountsView::loadContext( const KoXmlElement &context )
     m_view->setEndDate( QDate::fromString( context.attribute( "end-date", "" ), Qt::ISODate ) );
     m_view->setEndMode( context.attribute( "end-mode", "0" ).toInt() );
     
-    //kDebug()<<m_view->startMode()<<m_view->startDate()<<m_view->endMode()<<m_view->endDate();
+    //kDebug(planDbg())<<m_view->startMode()<<m_view->startDate()<<m_view->endMode()<<m_view->endDate();
     return true;
 }
 
 void AccountsView::saveContext( QDomElement &context ) const
 {
-    //kDebug();
+    //kDebug(planDbg());
+    ViewBase::saveContext( context );
+
     context.setAttribute( "show-mode", m_view->showMode() );
     context.setAttribute( "cumulative", m_view->cumulative() );
     context.setAttribute( "period-type", m_view->periodType() );
@@ -286,7 +290,6 @@ void AccountsView::saveContext( QDomElement &context ) const
     context.setAttribute( "start-date", m_view->startDate().toString( Qt::ISODate ) );
     context.setAttribute( "end-mode", m_view->endMode() );
     context.setAttribute( "end-date", m_view->endDate().toString( Qt::ISODate ) );
-    
 }
 
 KoPrintJob *AccountsView::createPrintJob()

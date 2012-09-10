@@ -25,11 +25,17 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoShape.h>
+#include <KoToolManager.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
+
+#include "kis_canvas2.h"
 
 #include "kis_cursor.h"
 
+
 KisToolText::KisToolText(KoCanvasBase * canvas)
-        : KisToolRectangleBase(canvas, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
+        : KisToolRectangleBase(canvas, KisToolRectangleBase::PAINT, KisCursor::load("tool_rectangle_cursor.png", 6, 6))
 {
     setObjectName("tool_text");
 }
@@ -49,8 +55,18 @@ void KisToolText::finishRect(const QRectF &rect)
     if (textFactory) {
         KoShape* shape = textFactory->createDefaultShape(canvas()->shapeController()->resourceManager());
         shape->setSize(r.size());
-        shape->setPosition(r.topLeft());
+        qreal x = r.x() + r.width() / 2;
+        qreal y = r.y() + r.height() / 2;
+        shape->setPosition(QPointF(x,y));
         addShape(shape);
+
+        KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
+        kiscanvas->shapeManager()->selection()->deselectAll();
+        kiscanvas->shapeManager()->selection()->select(shape);
+
+        // Selection uses QTimer singleShot to activate the default tool
+        // Here we have to use it too, to switch to the text tool after the other switch is done
+        QTimer::singleShot(0, this, SLOT(slotActivateTextTool()));
     }
 }
 
@@ -67,6 +83,13 @@ KisPainter::FillStyle KisToolText::fillStyle()
     if(m_optionWidget->mode() == KisTextToolOptionWidget::MODE_MULTILINE)
         return KisPainter::FillStyleNone;
     return m_optionWidget->style();
+}
+
+void KisToolText::slotActivateTextTool()
+{
+    KisCanvas2* kiscanvas = dynamic_cast<KisCanvas2 *>(canvas());
+    QString tool = KoToolManager::instance()->preferredToolForSelection(kiscanvas->shapeManager()->selection()->selectedShapes());
+    KoToolManager::instance()->switchToolRequested(tool);
 }
 
 

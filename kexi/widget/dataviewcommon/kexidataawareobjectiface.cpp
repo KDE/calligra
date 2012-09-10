@@ -34,12 +34,14 @@
 
 #include <kmessagebox.h>
 
+#include <KoIcon.h>
+
 #include <kexi.h>
 #include <kexi_global.h>
 #include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexirecordmarker.h>
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 
 //#include "kexitableviewheader.h"
 
@@ -141,11 +143,11 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
     clearColumnsInternal(false);
     if (m_data) {
         int i = -1;
-        foreach(KexiTableViewColumn *col, m_data->columns()) {
+        foreach(KexiTableViewColumn *col, *m_data->columns()) {
             i++;
             KexiDB::Field *f = col->field();
             if (col->isVisible()) {
-                int wid = f->width();
+                int wid = col->width();
                 if (wid == 0)
                     wid = KEXI_DEFAULT_DATA_COLUMN_WIDTH;//default col width in pixels
 //! @todo add col width configuration and storage
@@ -203,7 +205,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
         if (!m_insertItem) {//first setData() call - add 'insert' item
             m_insertItem = m_data->createItem();
         } else {//just reinit
-            m_insertItem->init(m_data->columns().count());
+            m_insertItem->init(m_data->columnsCount());
         }
     }
 
@@ -561,7 +563,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
             }
         }
         if (m_errorMessagePopup) {
-            m_errorMessagePopup->close();
+            m_errorMessagePopup->animatedHide();
         }
 
         if ((m_curRow != newrow || forceSet) && m_navPanel)  {//update current row info
@@ -920,7 +922,7 @@ void KexiDataAwareObjectInterface::removeEditor()
 bool KexiDataAwareObjectInterface::cancelEditor()
 {
     if (m_errorMessagePopup) {
-        m_errorMessagePopup->close();
+        m_errorMessagePopup->animatedHide();
     }
     if (!m_editor)
         return true;
@@ -961,14 +963,26 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             if (par && edit) {
 //! @todo allow displaying user-defined warning
 //! @todo also use for other error messages
+                delete m_errorMessagePopup;
+                m_errorMessagePopup = 0;
                 if (!m_errorMessagePopup) {
-//     m_errorMessagePopup->close();
-                    m_errorMessagePopup = new KexiArrowTip(
-                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
-                        dynamic_cast<QWidget*>(this));
-                    m_errorMessagePopup->move(
-                        par->mapToGlobal(edit->pos()) + QPoint(6, edit->height() + 0));
-                    m_errorMessagePopup->show();
+                    KexiContextMessage msg(
+                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()));
+                    m_errorMessagePopup = new KexiContextMessageWidget(dynamic_cast<QWidget*>(this), 0, 0, msg);
+                    QPoint arrowPos =
+                        par->mapToGlobal(edit->pos()) + QPoint(12, edit->height() + 6);
+                    if (m_verticalHeader) {
+                        arrowPos += QPoint(m_verticalHeader->width(), horizontalHeaderHeight());
+                    }
+                    m_errorMessagePopup->setMessageType(KMessageWidget::Error);
+                    m_errorMessagePopup->setCalloutPointerDirection(KMessageWidget::Up);
+                    m_errorMessagePopup->setCalloutPointerPosition(arrowPos);
+                    m_errorMessagePopup->setWordWrap(false);
+                    m_errorMessagePopup->setClickClosesMessage(true);
+                    m_errorMessagePopup->resizeToContents();
+                    m_errorMessagePopup->animatedShow();
+                    QObject::connect(m_errorMessagePopup, SIGNAL(animatedHideFinished()),
+                                     dynamic_cast<QWidget*>(m_editor), SLOT(setFocus()));
                 }
                 m_editor->setFocus();
             }
@@ -1219,7 +1233,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
                     dynamic_cast<QWidget*>(this),
                     i18n("Do you want to delete selected record?"), QString(),
-                    KGuiItem(i18n("&Delete Record"), "edit-delete"), KStandardGuiItem::cancel(),
+                    KGuiItem(i18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
                     "dontAskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
         {
@@ -1463,7 +1477,7 @@ int KexiDataAwareObjectInterface::dataColumns() const
 {
     if (!hasData())
         return 0;
-    return m_data->columns().count();
+    return m_data->columnsCount();
 }
 
 QVariant KexiDataAwareObjectInterface::columnDefaultValue(int /*col*/) const
@@ -2151,4 +2165,9 @@ void KexiDataAwareObjectInterface::setRowEditing(bool set)
         emit rowEditStarted(m_curRow);
     else
         emit rowEditTerminated(m_curRow);
+}
+
+int KexiDataAwareObjectInterface::horizontalHeaderHeight() const
+{
+    return 0;
 }

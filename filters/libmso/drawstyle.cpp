@@ -191,6 +191,9 @@ GETTER(quint32,                LineStartArrowhead,   lineStartArrowhead,   0)   
 GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)              // 2.3.8.21
 GETTER(quint32,                LineStartArrowWidth,  lineStartArrowWidth,  1)              // 2.3.8.22
 GETTER(quint32,                LineEndArrowWidth,    lineEndArrowWidth,    1)              // 2.3.8.24
+GETTER(quint32,                LineEndArrowLength,   lineEndArrowLength,   1)              // 2.3.8.25
+GETTER(quint32,                LineJoinStyle,        lineJoinStyle,        2)              // 2.3.8.26
+GETTER(quint32,                LineEndCapStyle,      lineEndCapStyle,      2)              // 2.3.8.27
 GETTER(quint32,                ShadowType,           shadowType,           0)              // 2.3.13.1
 GETTER(MSO::OfficeArtCOLORREF, ShadowColor,          shadowColor,          gray())         // 2.3.13.2
 GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one())          // 2.3.13.5

@@ -19,11 +19,11 @@
 
 #include "kexibooltableedit.h"
 
-#include <kexidb/field.h>
+#include <db/field.h>
 
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 
 #include <kglobal.h>
 #include <klocale.h>

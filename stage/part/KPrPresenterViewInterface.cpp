@@ -19,17 +19,16 @@
 
 #include "KPrPresenterViewInterface.h"
 
-#include <QtGui/QBoxLayout>
-#include <QtGui/QFrame>
-#include <QtGui/QLabel>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QTextEdit>
-#include <QtGui/QToolButton>
+#include <QBoxLayout>
+#include <QFrame>
+#include <QLabel>
+#include <QKeyEvent>
+#include <QPainter>
+#include <QTextEdit>
+#include <QToolButton>
 
 #include <KDebug>
 #include <KLocale>
-#include <KIcon>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>

@@ -25,6 +25,7 @@
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
 #include <kis_config.h>
+#include <KoIcon.h>
 #include <QCompleter>
 
 struct KisPaintOpPresetsChooserPopup::Private
@@ -40,28 +41,28 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 {
     m_d->uiWdgPaintOpPresets.setupUi(this);
     KMenu* menu = new KMenu(this);
-    
+
     QActionGroup *actionGroup = new QActionGroup(this);
 
     KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)KisConfig().presetChooserViewMode();
-    
-    
-    QAction* action = menu->addAction(KIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
+    bool showAll = KisConfig().presetShowAllMode();
+
+    QAction* action = menu->addAction(koIcon("view-preview"), i18n("Thumbnails"), this, SLOT(slotThumbnailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::THUMBNAIL);
     action->setActionGroup(actionGroup);
 
-    action = menu->addAction(KIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
+    action = menu->addAction(koIcon("view-list-details"), i18n("Details"), this, SLOT(slotDetailMode()));
     action->setCheckable(true);
     action->setChecked(mode == KisPresetChooser::DETAIL);
     action->setActionGroup(actionGroup);
-    
-    m_d->uiWdgPaintOpPresets.viewModeButton->setIcon(KIcon("view-choose"));
+
+    m_d->uiWdgPaintOpPresets.viewModeButton->setIcon(koIcon("view-choose"));
     m_d->uiWdgPaintOpPresets.viewModeButton->setMenu(menu);
     m_d->uiWdgPaintOpPresets.viewModeButton->setPopupMode(QToolButton::InstantPopup);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(mode);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->showTaggingBar(false,true);
-    
+
     connect(m_d->uiWdgPaintOpPresets.wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
 
@@ -77,10 +78,13 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     connect(m_d->uiWdgPaintOpPresets.showAllCheckBox, SIGNAL(toggled(bool)),
             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setShowAll(bool)));
     m_d->firstShown = true;
+
+    m_d->uiWdgPaintOpPresets.showAllCheckBox->setChecked(showAll);
 }
 
 KisPaintOpPresetsChooserPopup::~KisPaintOpPresetsChooserPopup()
 {
+    KisConfig().setPresetShowAllMode(m_d->uiWdgPaintOpPresets.showAllCheckBox->isChecked());
     delete m_d;
 }
 
@@ -104,7 +108,7 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
 void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
 {
     QWidget::paintEvent(event);
-    //Workaround to get the colum and row size right
+    //Workaround to get the column and row size right
     if(m_d->firstShown) {
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
         m_d->firstShown = false;

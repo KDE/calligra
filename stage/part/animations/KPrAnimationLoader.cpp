@@ -24,6 +24,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoTextBlockData.h>
+#include <KoShape.h>
 
 #include <QVariant>
 #include <QDomDocument>
@@ -36,6 +37,7 @@
 #include "KPrAnimationFactory.h"
 #include "KPrAnimationStep.h"
 #include "KPrAnimationSubStep.h"
+#include "KPrShapeApplicationData.h"
 
 KPrAnimationLoader::KPrAnimationLoader()
 {
@@ -50,7 +52,8 @@ void debugXml(const QString & pos, const KoXmlElement &element)
     QByteArray array;
     QDomDocument doc;
     QTextStream st(&array);
-    st << element.asQDomNode(doc);
+    KoXml::asQDomElement( doc, element);
+    st << doc.documentElement();
     kDebug() << pos << array;
 }
 
@@ -127,11 +130,10 @@ void KPrAnimationLoader::debug(QAbstractAnimation *animation, int level)
 bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     QString nodeType = element.attributeNS(KoXmlNS::presentation, "node-type", "with-previous");
-
     kDebug() << "nodeType:" << nodeType;
     KPrAnimationSubStep *subStep = 0;
     if (nodeType == "on-click") {
-        // if there is allready an aniation create a new step
+        // if there is already an animation create a new step
         if ((*animationStep)->animationCount() != 0 || m_animations.isEmpty()) {
             m_animations.append(*animationStep);
             *animationStep = new KPrAnimationStep();
@@ -162,6 +164,9 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
         // add par to current par
     }
 
+    // load preset and id
+    //TODO: ole-action, media-call are not supported
+
     KPrShapeAnimation *shapeAnimation = 0;
     // The shape info and create a KPrShapeAnimation. If there is
     KoXmlElement e;
@@ -177,12 +182,10 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
                     QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
                     shape = pair.first;
                     textBlockData = pair.second.value<KoTextBlockData *>();
-                    kDebug() << "subitem text" << textBlockData;
                 }
                 else {
                     shape = context.shapeById(targetElement);
                 }
-                kDebug() << "shape:" << shape << "textBlockData" << textBlockData;
 
                 if (shape) {
                     shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
@@ -194,7 +197,6 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
                 }
             }
         }
-
         KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));
         if (shapeAnimation && animation) {
             shapeAnimation->addAnimation(animation);
@@ -202,7 +204,51 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
     }
 
     if (shapeAnimation) {
+        QString presetClass = element.attributeNS(KoXmlNS::presentation, "preset-class");
+        QString animationId = element.attributeNS(KoXmlNS::presentation, "preset-id");
+        QString presetSubType = element.attributeNS(KoXmlNS::presentation, "preset-sub-type");
         subStep->addAnimation(shapeAnimation);
+        shapeAnimation->setSubStep(subStep);
+        shapeAnimation->setStep((*animationStep));
+        if (presetClass == "custom") {
+            shapeAnimation->setPresetClass(KPrShapeAnimation::Custom);
+        }
+        if (presetClass == "entrance") {
+            shapeAnimation->setPresetClass(KPrShapeAnimation::Entrance);
+        }
+        else if (presetClass == "exit") {
+            shapeAnimation->setPresetClass(KPrShapeAnimation::Exit);
+        }
+        else if (presetClass == "emphasis") {
+            shapeAnimation->setPresetClass(KPrShapeAnimation::Emphasis);
+        }
+        else if (presetClass == "motion-path") {
+            shapeAnimation->setPresetClass(KPrShapeAnimation::MotionPath);
+        }
+        else if (presetClass == "ole-action") {
+            shapeAnimation->setPresetClass(KPrShapeAnimation::OleAction);
+        }
+        else if (presetClass == "media-call") {
+            shapeAnimation->setPresetClass(KPrShapeAnimation::MediaCall);
+        }
+        else{
+            shapeAnimation->setPresetClass(KPrShapeAnimation::None);
+        }
+        if (!animationId.isEmpty()) {
+            shapeAnimation->setId(animationId);
+        }
+        if (!presetSubType.isEmpty()) {
+            shapeAnimation->setPresetSubType(presetSubType);
+        }
+        // Register animation in shape
+        if (shapeAnimation->shape()) {
+            KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>(shapeAnimation->shape()->applicationData());
+            if (applicationData == 0) {
+                applicationData = new KPrShapeApplicationData();
+                shapeAnimation->shape()->setApplicationData(applicationData);
+            }
+            applicationData->animations().insert(shapeAnimation);
+        }
     }
     return true;
 }

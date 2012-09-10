@@ -8,7 +8,6 @@ set(kexiguiutils_LIB_SRCS
    kexirecordmarker.cpp 
    kexidisplayutils.cpp 
    kexitooltip.cpp
-   kexiarrowtip.cpp
    kexicontextmenuutils.cpp
    kexidropdownbutton.cpp
    kexicomboboxdropdownbutton.cpp
@@ -23,9 +22,6 @@ ELSE (KEXI_MOBILE)
         kexirecordnavigator.cpp 
     )
 ENDIF (KEXI_MOBILE)
-
-# todo: use new Qt4's painting engine: kexigradientwidget.cpp 
-
 
 kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 

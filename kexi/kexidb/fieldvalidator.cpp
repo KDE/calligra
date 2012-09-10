@@ -18,11 +18,11 @@
 */
 
 #include "fieldvalidator.h"
-#include "field.h"
+#include <db/field.h>
 
 #include <kexiutils/longlongvalidator.h>
 #include <knumvalidator.h>
-#include <qwidget.h>
+#include <QWidget>
 
 using namespace KexiDB;
 

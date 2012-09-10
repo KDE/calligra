@@ -20,7 +20,7 @@
 #ifndef KPRPRESENTERVIEWBASEINTERFACE
 #define KPRPRESENTERVIEWBASEINTERFACE
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class KoPAPageBase;
 

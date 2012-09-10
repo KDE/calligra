@@ -103,6 +103,9 @@ protected:
     KoFilter::ConversionStatus read_endnotePr();
     KoFilter::ConversionStatus read_lnNumType();
     KoFilter::ConversionStatus read_numFmt();
+    KoFilter::ConversionStatus read_numRestart();
+    KoFilter::ConversionStatus read_numStart();
+    KoFilter::ConversionStatus read_pos();
     KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
     KoFilter::ConversionStatus read_del();
@@ -158,6 +161,7 @@ protected:
     KoFilter::ConversionStatus read_bdr();
     KoFilter::ConversionStatus read_tbl();
     KoFilter::ConversionStatus read_tblPr();
+    KoFilter::ConversionStatus read_tblPrEx();
     KoFilter::ConversionStatus read_tblGrid();
     KoFilter::ConversionStatus read_gridCol();
     KoFilter::ConversionStatus read_tr();
@@ -190,12 +194,9 @@ protected:
         align_positionV
     };
     KoFilter::ConversionStatus read_align(alignCaller caller);
-
     KoFilter::ConversionStatus read_pict();
-
     KoFilter::ConversionStatus read_sdt();
     KoFilter::ConversionStatus read_sdtContent();
-
     KoFilter::ConversionStatus read_inline();
     KoFilter::ConversionStatus read_extent();
     KoFilter::ConversionStatus read_docPr();
@@ -203,9 +204,13 @@ protected:
     KoFilter::ConversionStatus read_positionH();
     KoFilter::ConversionStatus read_positionV();
     KoFilter::ConversionStatus read_posOffset(posOffsetCaller caller);
+    KoFilter::ConversionStatus read_wrapPolygon();
     KoFilter::ConversionStatus read_wrapSquare();
     KoFilter::ConversionStatus read_wrapTight();
     KoFilter::ConversionStatus read_wrapThrough();
+
+    //! Read wrapping related attributes.
+    void readWrapAttrs();
 
     bool m_createSectionStyle;
     QString m_currentSectionStyleName;
@@ -251,14 +256,13 @@ protected:
     QMap<BorderSide, qreal> m_textBorderPaddings;
 
     KoTable* m_table;
-    QString m_currentTableStyle;
+    QString m_currentTableStyleName;
     KoTblStyle::Ptr m_tableMainStyle;
 
     MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
-    MSOOXML::TableStyleProperties* m_currentStyleProperties;
+    MSOOXML::TableStyleProperties* m_currentTableStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
-    QString m_currentTableStyleBase;
 
     //! Name of the KoGenStyle style of type GraphicAutoStyle prepared for the
     //! parent <draw:frame> element containing the <table:table> element
@@ -268,6 +272,10 @@ protected:
     //! The complete XML snippet representing a floating table, which MUST be
     //! inserted into the following paragraph.
     QString m_floatingTable;
+
+    //! The complete XML snippet representing a bookmark-start or
+    //! bookmark-end, which MUST be inserted into the following paragraph.
+    QString m_bookmarkSnippet;
 
     QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
 
@@ -353,6 +361,7 @@ private:
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
+    bool m_insideParagraph;
 
     QString m_currentNumId;
 

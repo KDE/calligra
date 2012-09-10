@@ -85,6 +85,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
+    store->disallowNameExpansion();
 
     // Layer data
     if (store->open("layerdata")) {
@@ -133,8 +134,6 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
     delete store;
 
-
-
     QMimeData *mimeData = new QMimeData;
     Q_CHECK_PTR(mimeData);
 
@@ -142,31 +141,13 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
         mimeData->setData(mimeType, buffer.buffer());
     }
 
-    QRect rc = dev->exactBounds();
-    // warn if the clip is over ten megapixels
-    bool makeExchangeClip = true;
-    if (rc.width() * rc.height() > 10 * 1024 * 1024) {
-        makeExchangeClip =
-                (KMessageBox::Continue ==
-                 KMessageBox::warningContinueCancel(0,
-                                                    i18n("You are putting more than 10 megapixels on the clipboard."
-                                                         " Do you want to make this data available to other applications as well?"),
-                                                    i18n("Krita"),
-                                                    KStandardGuiItem::cont(),
-                                                    KStandardGuiItem::cancel(),
-                                                    "krita_big_clip_on_clipboard"));
-    }
-
     // We also create a QImage so we can interchange with other applications
-    if (makeExchangeClip) {
-        QImage qimage;
-        KisConfig cfg;
-        const KoColorProfile *monitorProfile = cfg.displayProfile();
-        qimage = dev->convertToQImage(monitorProfile);
-        if (!qimage.isNull() && mimeData) {
-            mimeData->setImageData(qimage);
-        }
-
+    QImage qimage;
+    KisConfig cfg;
+    const KoColorProfile *monitorProfile = cfg.displayProfile();
+    qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    if (!qimage.isNull() && mimeData) {
+        mimeData->setImageData(qimage);
     }
 
     if (mimeData) {
@@ -193,6 +174,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
         KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+        store->disallowNameExpansion();
         const KoColorProfile *profile = 0;
 
         QString csDepth, csModel;

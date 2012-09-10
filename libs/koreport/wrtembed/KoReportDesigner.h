@@ -20,10 +20,10 @@
 #ifndef REPORTDESIGNER_H
 #define REPORTDESIGNER_H
 
-#include <qwidget.h>
-#include <qstring.h>
-#include <qcolor.h>
-#include <qmap.h>
+#include <QWidget>
+#include <QString>
+#include <QColor>
+#include <QMap>
 #include <QVBoxLayout>
 #include <QCloseEvent>
 
@@ -215,7 +215,7 @@ public:
     void sectionMouseReleaseEvent(ReportSceneView *, QMouseEvent * e);
 
     /**
-    @brief Sets the property set for the currenty selected item
+    @brief Sets the property set for the currently selected item
     @param set Property set of item
     */
     void changeSet(KoProperty::Set *);
@@ -291,12 +291,6 @@ private:
     bool m_modified; // true if this document has been modified, false otherwise
 
     KoReportData *m_kordata;
-
-    /**
-    @brief Return a list of supported page formats
-    @return A QStringList of page formats
-    */
-    QStringList pageFormats() const;
 
     /**
     @brief Sets the detail section to the given section

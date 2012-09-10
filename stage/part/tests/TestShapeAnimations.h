@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright ( C ) 2012 Paul Mendez <paulestebanms@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,10 +21,11 @@
 #ifndef TESTPAPAGEDELETECOMMAND_H
 #define TESTPAPAGEDELETECOMMAND_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
-class MockAppearAnimation;
-class MockDisappearAnimation;
+class MockShapeAnimation;
+class KPrShapeAnimations;
+class MockShape;
 
 class TestShapeAnimations : public QObject
 {
@@ -31,16 +33,19 @@ class TestShapeAnimations : public QObject
 private slots:
     void initTestCase();
     void addRemove();
-    void animations();
-    void steps();
+    void replaceSwap();
+    void helperMethods();
+    void getTriggerEvent();
+    void setTriggerEvent();
+    void timeHelperMethods();
     void cleanupTestCase();
 
-private:    
-    MockAppearAnimation * m_animation1_2;
-    MockAppearAnimation * m_animation2_0;
-    MockDisappearAnimation * m_animation2_2;
-    MockAppearAnimation * m_animation2_4;
-    MockDisappearAnimation * m_animation3_3;
+private:
+    void createAnimationTree(KPrShapeAnimations *animations);
+    void cleanStepSubStepData();
+    void checkOrder(KPrShapeAnimations *animations);
+    QList<MockShapeAnimation *> m_animation;
+    QList<MockShape *> shapes;
 };
 
 #endif // TESTPAPAGEDELETECOMMAND_H

@@ -27,7 +27,7 @@
 #include "xbasecursor.h"
 #include "xbaseconnection.h"
 #include "xbaseconnection_p.h"
-#include <kexidb/error.h>
+#include <db/error.h>
 
 
 using namespace KexiDB;

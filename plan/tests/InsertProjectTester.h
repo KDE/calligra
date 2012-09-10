@@ -20,13 +20,14 @@
 #ifndef KPlato_InsertProjectTester_h
 #define KPlato_InsertProjectTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 namespace KPlato
 {
 
 class Part;
 class Account;
+class ResourceGroup;
 class Resource;
 class Task;
 class Relation;
@@ -41,17 +42,25 @@ private slots:
     void testDefaultCalendar();
     void testResourceGroup();
     void testResource();
+    void testTeamResource();
     void testResourceAccount();
+    void testResourceCalendar();
     void testTask();
     void testGroupRequest();
     void testResourceRequest();
+    void testTeamResourceRequest();
     void testDependencies();
+    void testExistingResourceAccount();
+    void testExistingResourceCalendar();
+    void testExistingResourceRequest();
+    void testExistingRequiredResourceRequest();
+    void testExistingTeamResourceRequest();
 
 private:
     Account *addAccount( Part &part, Account *parent = 0 );
     Calendar *addCalendar( Part &part );
-    void addResourceGroup( Part &part );
-    Resource *addResource( Part &part );
+    ResourceGroup *addResourceGroup( Part &part );
+    Resource *addResource( Part &part, ResourceGroup *g = 0 );
     Task *addTask( Part &part );
     void addGroupRequest( Part &part );
     void addResourceRequest( Part &part );

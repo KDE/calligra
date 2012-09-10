@@ -19,7 +19,7 @@
  */
 #include "rdf_test.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>
@@ -69,14 +69,14 @@ QString RdfTest::insertSemItem(KoTextEditor &editor,
     editor.movePosition(QTextCursor::PreviousCharacter);
     editor.insertInlineObject(startmark);
 
-    TestSemanticItem *testItem = new TestSemanticItem(&parent, &rdfDoc);
+    hTestSemanticItem testItem(new TestSemanticItem(0, &rdfDoc));
     testItem->setName(name);
     Soprano::Statement st(
                 testItem->linkingSubject(), // subject
                 Soprano::Node::createResourceNode(QUrl("http://docs.oasis-open.org/opendocument/meta/package/common#idref")), // predicate
                 Soprano::Node::createLiteralNode(newId), // object
                 rdfDoc.manifestRdfNode()); // manifest datastore
-    const_cast<Soprano::Model*>(rdfDoc.model())->addStatement(st);
+    rdfDoc.model()->addStatement(st);
     rdfDoc.rememberNewInlineRdfObject(inlineRdf);
 
     Q_ASSERT(rdfDoc.model()->statementCount() > 0);
@@ -109,6 +109,7 @@ void RdfTest::testCreateMarkers()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -158,6 +159,7 @@ void RdfTest::testFindMarkers()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -170,10 +172,10 @@ void RdfTest::testFindMarkers()
     editor.setPosition(0);
 
     // now use soprano to find the tables
-    QList<TestSemanticItem*> semItems = TestSemanticItem::allObjects(&rdfDoc);
+    QList<hTestSemanticItem> semItems = TestSemanticItem::allObjects(&rdfDoc);
     Q_ASSERT(semItems.length() == 1);
 
-    foreach(TestSemanticItem *semItem, semItems) {
+    foreach(hTestSemanticItem semItem, semItems) {
         QStringList xmlidlist = semItem->xmlIdList();
 
         Q_ASSERT(xmlidlist.length() == 1);
@@ -252,6 +254,7 @@ void RdfTest::testFindByName()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -265,7 +268,7 @@ void RdfTest::testFindByName()
            << insertSemItem(editor, rdfDoc, parent, "test item4");
 
 
-    QList<TestSemanticItem*> results = TestSemanticItem::findItemsByName("test item1",
+    QList<hTestSemanticItem> results = TestSemanticItem::findItemsByName("test item1",
                                                                          &rdfDoc);
     Q_ASSERT(results.size() == 1);
     QStringList xmlids = results[0]->xmlIdList();
@@ -289,6 +292,7 @@ void RdfTest::testEditAndFindMarkers()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -317,6 +321,7 @@ void RdfTest::testRemoveMarkers()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -333,7 +338,7 @@ void RdfTest::testRemoveMarkers()
     idList << insertSemItem(editor, rdfDoc, parent, "test item4");
     editor.insertText(lorem);
 
-    QList<TestSemanticItem*> results = TestSemanticItem::findItemsByName("test item3", &rdfDoc);
+    QList<hTestSemanticItem> results = TestSemanticItem::findItemsByName("test item3", &rdfDoc);
     Q_ASSERT(results.size() == 1);
     QStringList xmlids = results[0]->xmlIdList();
     Q_ASSERT(xmlids.size() == 1);
@@ -348,7 +353,7 @@ void RdfTest::testRemoveMarkers()
     Q_ASSERT(editor.hasSelection());
 
     // remove the table + the markers from the document
-    editor.removeSelectedText();
+    editor.deleteChar();
 
     results = TestSemanticItem::allObjects(&rdfDoc);
 
@@ -363,7 +368,7 @@ void RdfTest::testRemoveMarkers()
     results = TestSemanticItem::allObjects(&rdfDoc);
 
     qDebug() << "we have" << results.count() << "items";
-    foreach(TestSemanticItem* item, results) {
+    foreach(hTestSemanticItem item, results) {
         Q_ASSERT(item->xmlIdList().length() == 1);
         QPair<int,int> pos = rdfDoc.findExtent(item->xmlIdList().first());
         qDebug() << item->name() << "pos:" << pos;

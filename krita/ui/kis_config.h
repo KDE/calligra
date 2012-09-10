@@ -20,12 +20,14 @@
 
 #include <QString>
 #include <QStringList>
+#include <QList>
 #include <QColor>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
 #include "kis_global.h"
+#include "kis_properties_configuration.h"
 #include "krita_export.h"
 
 class KoColorProfile;
@@ -86,7 +88,7 @@ public:
     void setCursorStyle(enumCursorStyle style);
 
     QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile);
+    void setMonitorProfile(const QString & monitorProfile, bool override = false);
     static const KoColorProfile* getScreenProfile(int screen = -1);
     const KoColorProfile *displayProfile(int screen = -1);
 
@@ -105,6 +107,10 @@ public:
     bool useBlackPointCompensation() const;
     void setUseBlackPointCompensation(bool useBlackPointCompensation);
 
+    bool allowLCMSOptimization() const;
+    void setAllowLCMSOptimization(bool allowLCMSOptimization);
+
+
     bool showRulers() const;
     void setShowRulers(bool rulers);
 
@@ -122,6 +128,9 @@ public:
 
     bool useOpenGLToolOutlineWorkaround() const;
     void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
+
+    bool useOpenGLTrilinearFiltering() const;
+    void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering);
 
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
@@ -221,6 +230,9 @@ public:
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);
 
+    bool presetShowAllMode() const;
+    void setPresetShowAllMode(bool showAll);
+
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
 
@@ -253,6 +265,47 @@ public:
 
     QStringList favoriteCompositeOps() const;
     void setFavoriteCompositeOps(const QStringList& compositeOps);
+
+    QString exportConfiguration(const QString &filterId) const;
+    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
+
+    bool useOcio();
+    void setUseOcio(bool useOCIO);
+
+    bool useOcioEnvironmentVariable();
+    void setUseOcioEnvironmentVariable(bool useOCIO);
+
+    QString ocioConfigurationPath();
+    void setOcioConfigurationPath(const QString &path);
+
+    QString ocioLutPath();
+    void setOcioLutPath(const QString &path);
+
+    bool useSystemMonitorProfile() const;
+    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);
+
+    QString defaultPalette();
+    void setDefaultPalette(const QString& name);
+
+    template<class T>
+    void writeEntry(const QString& name, const T& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    void writeList(const QString& name, const QList<T>& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    T readEntry(const QString& name, const T& defaultValue=T()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
+
+    template<class T>
+    QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
 
 private:
     KisConfig(const KisConfig&);

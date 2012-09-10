@@ -19,27 +19,26 @@
 
 #include "KexiFieldListView.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qapplication.h>
-#include <qbitmap.h>
-#include <qstyle.h>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QCursor>
+#include <QPoint>
+#include <QApplication>
+#include <QBitmap>
+#include <QStyle>
 //Added by qt3to4:
 #include <QPixmap>
 
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include <kconfig.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/utils.h>
 #include <kexidragobjects.h>
 #include <kexiutils/utils.h>
 

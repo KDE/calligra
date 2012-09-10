@@ -1,6 +1,6 @@
 if (NOT WIN32)
     add_subdirectory(tests)
-endif (NOT WIN32)	
+endif (NOT WIN32)
 
 set(kritadefaulttools_PART_SRCS
     default_tools.cc
@@ -15,7 +15,6 @@ set(kritadefaulttools_PART_SRCS
     kis_tool_path.cc
     kis_tool_move.cc
     strokes/move_stroke_strategy.cpp
-    kis_tool_pan.cpp
     kis_tool_multihand.cpp
     )
 
@@ -27,6 +26,9 @@ target_link_libraries(kritadefaulttools kritaui)
 if (HAVE_OPENGL)
   target_link_libraries(kritadefaulttools ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} )
 endif (HAVE_OPENGL)
+if (HAVE_GLEW)
+  target_link_libraries(kritadefaulttools ${GLEW_LIBRARIES} )
+endif (HAVE_GLEW)
 
 install(TARGETS kritadefaulttools  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -41,7 +43,6 @@ install( FILES
     krita_tool_line.png
     krita_tool_rectangle.png
     krita_tool_ellipse.png
-    krita_tool_pan.png
     krita_tool_freehand.png
     krita_tool_multihand.png
     krita_tool_measure.png

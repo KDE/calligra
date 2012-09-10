@@ -28,7 +28,6 @@
 #include <kmessagebox.h>
 #include <kdesktopfile.h>
 #include <kstandarddirs.h>
-#include <kiconloader.h>
 #include <kdebug.h>
 
 #include <QtDBus/QtDBus>
@@ -42,7 +41,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineArgs::addCmdLineOptions( options );
 
     if (!KUniqueApplication::start()) {
-       fprintf(stderr, "KPlatoWork is already running!\n");
+       fprintf(stderr, "PlanWork is already running!\n");
        return 0;
     }
 

@@ -17,7 +17,7 @@
 
 #include "Destination.h"
 
-#include <QtCore/QStack>
+#include <QStack>
 
 namespace RtfReader
 {

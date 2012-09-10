@@ -34,18 +34,18 @@
 #include <kurl.h>
 #include <KNumInput>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QPointF>
-#include <QtGui/QLabel>
-#include <QtGui/QPainter>
-#include <QtGui/QLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QToolButton>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QGridLayout>
-#include <QtGui/QRadialGradient>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QConicalGradient>
+#include <QFileInfo>
+#include <QPointF>
+#include <QLabel>
+#include <QPainter>
+#include <QLayout>
+#include <QPushButton>
+#include <QToolButton>
+#include <QPaintEvent>
+#include <QGridLayout>
+#include <QRadialGradient>
+#include <QLinearGradient>
+#include <QConicalGradient>
 
 #include <math.h>
 
@@ -215,8 +215,8 @@ void KarbonGradientEditWidget::setupConnections()
     connect(m_gradientRepeat, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_gradientTarget, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_addToPredefs, SIGNAL(clicked()), this, SLOT(addGradientToPredefs()));
-    connect(m_opacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT(opacityChanged(qreal, bool)));
-    connect(m_actionStopColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(stopChanged()));
+    connect(m_opacity, SIGNAL(valueChanged(qreal,bool)), this, SLOT(opacityChanged(qreal,bool)));
+    connect(m_actionStopColor, SIGNAL(colorChanged(KoColor)), this, SLOT(stopChanged()));
     connect(m_stopPosition, SIGNAL(valueChanged(double)), this, SLOT(stopChanged()));
 }
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2011-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,21 +20,21 @@
 #include "KexiWelcomeAssistant.h"
 
 #include "KexiRecentProjectsModel.h"
+#include "KexiWelcomeStatusBar.h"
 
 #include <core/kexi.h>
 #include <core/KexiRecentProjects.h>
 #include <core/kexiprojectdata.h>
 #include <core/kexiguimsghandler.h>
 #include <core/kexitextmsghandler.h>
-#include <kexidb/utils.h>
-#include <kexidb/object.h>
+#include <db/utils.h>
+#include <db/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
 
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -66,7 +66,16 @@ KexiMainWelcomePage::KexiMainWelcomePage(
 {
     connect(this, SIGNAL(openProject(KexiProjectData,QString,bool*)),
             assistant, SIGNAL(openProject(KexiProjectData,QString,bool*)));
+    QWidget* contents = new QWidget;
+    QHBoxLayout* contentsLyr = new QHBoxLayout(contents);
+    
     m_recentProjects = new KexiCategorizedView;
+    // do not alter background palette
+    QPalette pal(m_recentProjects->palette());
+    pal.setColor(QPalette::Disabled, QPalette::Base,
+                    pal.color(QPalette::Normal, QPalette::Base));
+    m_recentProjects->setPalette(pal);
+    contentsLyr->addWidget(m_recentProjects, 1);
     //m_recentProjects->setItemDelegate(new KFileItemDelegate(this));
     setFocusWidget(m_recentProjects);
     m_recentProjects->setFrameShape(QFrame::NoFrame);
@@ -77,7 +86,11 @@ KexiMainWelcomePage::KexiMainWelcomePage(
     m_recentProjects->setSpacing(margin);
     m_recentProjects->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     connect(m_recentProjects, SIGNAL(clicked(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
-    setContents(m_recentProjects);
+    
+    m_statusBar = new KexiWelcomeStatusBar;
+    contentsLyr->addWidget(m_statusBar);
+    
+    setContents(contents);
 
     QTimer::singleShot(100, this, SLOT(loadProjects()));
 }
@@ -222,7 +235,7 @@ void KexiWelcomeAssistant::showErrorMessage(
     //! @todo + _details
     if (!d->messageWidgetActionTryAgain) {
         d->messageWidgetActionTryAgain = new QAction(
-            KIcon("view-refresh"), i18n("Try Again"), this);
+            koIcon("view-refresh"), i18n("Try Again"), this);
         connect(d->messageWidgetActionTryAgain, SIGNAL(triggered()),
                 this, SLOT(tryAgainActionTriggered()));
     }
@@ -254,5 +267,16 @@ KexiRecentProjects* KexiWelcomeAssistant::projects()
 {
     return d->projects;
 }
+
+// void KexiWelcomeAssistant::mousePressEvent(QMouseEvent* e)
+// {
+//     if (e->buttons() == Qt::LeftButton) {
+//         QWidget *w = QApplication::widgetAt(e->globalPos());
+//         if (w) {
+//             emit widgetClicked(w);
+//         }
+//     }
+//     KexiAssistantWidget::mousePressEvent(e);
+// }
 
 #include "KexiWelcomeAssistant.moc"

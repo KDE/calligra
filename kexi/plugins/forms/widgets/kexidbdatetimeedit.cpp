@@ -20,8 +20,8 @@
 
 #include "kexidbdatetimeedit.h"
 
-#include <qtoolbutton.h>
-#include <qlayout.h>
+#include <QToolButton>
+#include <QLayout>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QHBoxLayout>

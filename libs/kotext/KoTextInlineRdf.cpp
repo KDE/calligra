@@ -24,6 +24,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoElementReference.h>
+
 #include "KoBookmark.h"
 #include "KoTextMeta.h"
 #include "KoTextEditor.h"
@@ -159,12 +161,16 @@ bool KoTextInlineRdf::loadOdf(const KoXmlElement &e)
     return true;
 }
 
-bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer)
+bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer, KoElementReference id)
 {
-    kDebug(30015) << " this:" << (void*)this << " xmlid:" << d->id;
+    kDebug(30015) << " this:" << (void*)this << " xmlid:" << d->id << "passed id" << id.toString();
     QString oldID = d->id;
-    //KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
-    QString newID = createXmlId();
+
+    if (!id.isValid()) {
+        id = KoElementReference();
+    }
+
+    QString newID = id.toString();
     if (KoTextSharedSavingData *sharedData =
             dynamic_cast<KoTextSharedSavingData *>(context.sharedData(KOTEXT_SHARED_SAVING_ID))) {
         sharedData->addRdfIdMapping(oldID, newID);
@@ -189,12 +195,8 @@ bool KoTextInlineRdf::saveOdf(KoShapeSavingContext &context, KoXmlWriter *writer
 
 QString KoTextInlineRdf::createXmlId()
 {
-    QString uuid = QUuid::createUuid().toString();
-    uuid.remove('{');
-    uuid.remove('}');
-    QString ret = "rdfid-" + uuid;
-    kDebug(30015) << "createXmlId() ret:" << ret;
-    return ret;
+    KoElementReference ref;
+    return ref.toString();
 }
 
 QString KoTextInlineRdf::subject()
@@ -212,7 +214,8 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
     if (d->bookmark && d->document) {
         KoBookmark *e = d->bookmark.data()->endBookmark();
         if (e) {
-          return QPair<int, int>(d->bookmark.data()->position(), e->position());
+            // kDebug(30015) << "(Semantic)bmark... start:" << d->bookmark.data()->position() << " end:" << e->position();
+            return QPair<int, int>(d->bookmark.data()->position(), e->position());
         }
     }
     if (d->kotextmeta && d->document) {
@@ -220,6 +223,7 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
         if (!e) {
             return QPair<int, int>(0, 0);
         }
+        // kDebug(30015) << "(Semantic)meta... start:" << d->kotextmeta.data()->position() << " end:" << e->position();
         return QPair<int, int>(d->kotextmeta.data()->position(), e->position());
     }
     if (d->cell.isValid() && d->document) {

@@ -29,8 +29,8 @@
 #include "kexipartinfo.h"
 #include "kexiproject.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
@@ -42,7 +42,6 @@
 
 #include <KDebug>
 #include <KApplication>
-#include <KIconLoader>
 #include <KToolBar>
 #include <KActionCollection>
 #include <KDialog>
@@ -257,7 +256,7 @@ void KexiWindow::createSubwidgets()
     */
     /*TODO
     // "data_execute"
-      a = new KAction(KIcon("media-playback-start"), i18n("&Execute"), this);
+      a = new KAction(koIcon("system-run"), i18n("&Execute"), this);
       //a->setToolTip(i18n("")); //TODO
       //a->setWhatsThis(i18n("")); //TODO */
 
@@ -353,6 +352,8 @@ void KexiWindow::removeView(Kexi::ViewMode mode)
     KexiView *view = viewForMode(mode);
     if (view)
         d->stack->removeWidget(view);
+
+    d->setIndexForView(mode, -1);
 
     d->openedViewModes |= mode;
     d->openedViewModes ^= mode;
@@ -510,7 +511,7 @@ void KexiWindow::setDirty(bool dirty)
     dirtyChanged(d->viewThatRecentlySetDirtyFlag); //update
 }
 
-QString KexiWindow::itemIcon()
+QString KexiWindow::itemIconName()
 {
     if (!d->part || !d->part->info()) {
         KexiView *v = selectedView();
@@ -519,7 +520,7 @@ QString KexiWindow::itemIcon()
         }
         return QString();
     }
-    return d->part->info()->itemIcon();
+    return d->part->info()->itemIconName();
 }
 
 KexiPart::GUIClient* KexiWindow::guiClient() const
@@ -821,7 +822,8 @@ void KexiWindow::updateCaption()
 {
     if (!d->item || !d->part)
         return;
-    QString fullCapt(d->item->captionOrName());
+    //! @todo use d->item->captionOrName() if defined in settings
+    QString fullCapt(d->item->name());
     setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
 
@@ -1011,6 +1013,18 @@ void KexiWindow::sendAttachedStateToCurrentView()
     KexiView *v = selectedView();
     if (v)
         v->windowAttached();
+}
+
+bool KexiWindow::saveSettings()
+{
+    bool result = true;
+    for (int i = 0; i < d->stack->count(); ++i) {
+        KexiView *view = qobject_cast<KexiView*>(d->stack->widget(i));
+        if (!view->saveSettings()) {
+            result = false;
+        }
+    }
+    return result;
 }
 
 Kexi::ViewMode KexiWindow::creatingViewsMode() const

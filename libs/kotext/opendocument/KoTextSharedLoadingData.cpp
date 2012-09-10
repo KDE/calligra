@@ -34,6 +34,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoOdfWorkaround.h>
 
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
@@ -47,6 +48,7 @@
 #include "styles/KoSectionStyle.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfBibliographyConfiguration.h"
+#include "KoTextTableTemplate.h"
 
 class KoTextSharedLoadingData::Private
 {
@@ -64,6 +66,7 @@ public:
         qDeleteAll(tableColumnStylesToDelete);
         qDeleteAll(tableRowStylesToDelete);
         qDeleteAll(sectionStylesToDelete);
+        qDeleteAll(tableTemplatesToDelete);
     }
 
     // It is possible that automatic-styles in content.xml and styles.xml have the same name
@@ -87,6 +90,7 @@ public:
     QHash<QString, KoTableRowStyle *>      tableRowStylesDotXmlStyles;
     QHash<QString, KoTableCellStyle *>      tableCellStylesDotXmlStyles;
     QHash<QString, KoSectionStyle *>      sectionStylesDotXmlStyles;
+    QHash<QString, KoTextTableTemplate *> tableTemplates;
 
     QList<KoParagraphStyle *> paragraphStylesToDelete;
     QList<KoCharacterStyle *> characterStylesToDelete;
@@ -96,6 +100,7 @@ public:
     QList<KoTableColumnStyle *> tableColumnStylesToDelete;
     QList<KoTableRowStyle *> tableRowStylesToDelete;
     QList<KoSectionStyle *> sectionStylesToDelete;
+    QList<KoTextTableTemplate *> tableTemplatesToDelete;
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
     KoOdfNotesConfiguration footnotesConfiguration;
     KoOdfNotesConfiguration endnotesConfiguration;
@@ -188,6 +193,8 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext,
 
     addNotesConfiguration(shapeContext);
 
+    addTableTemplate(shapeContext, styleManager);
+
     kDebug(32500) << "content.xml: paragraph styles" << d->paragraphContentDotXmlStyles.count() << "character styles" << d->characterContentDotXmlStyles.count();
     kDebug(32500) << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
 }
@@ -249,6 +256,7 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
     }
 
     // second pass; resolve all the 'next-style's and parent-style's.
+    // TODO iterate via values
     foreach (KoParagraphStyle *style, nextStyles.keys()) {
         KoParagraphStyle *next = d->namedParagraphStyles.value(nextStyles.value(style));
         if (next && next->styleId() >= 0)
@@ -661,3 +669,34 @@ void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext
             context.odfLoadingContext().stylesReader().globalBibliographyConfiguration();
 }
 
+void KoTextSharedLoadingData::addTableTemplate(KoShapeLoadingContext &context, KoStyleManager *styleManager)
+{
+    QList<QPair<QString, KoTextTableTemplate *> > tableTemplates(loadTableTemplates(context));
+
+    QList<QPair<QString, KoTextTableTemplate *> >::iterator it(tableTemplates.begin());
+    for (; it != tableTemplates.end(); ++it) {
+        d->tableTemplates.insert(it->first, it->second);
+
+        // in case templates are not added to the style manager they have to be deleted after loading to avoid leaking memeory
+        if (styleManager) {
+            styleManager->add(it->second);
+        } else {
+            d->tableTemplatesToDelete.append(it->second);
+        }
+    }
+}
+
+QList<QPair<QString, KoTextTableTemplate *> > KoTextSharedLoadingData::loadTableTemplates(KoShapeLoadingContext &context)
+{
+    QList<QPair<QString, KoTextTableTemplate *> > tableTemplates;
+
+    foreach(KoXmlElement *styleElem, context.odfLoadingContext().stylesReader().tableTemplates()) {
+        Q_ASSERT(styleElem);
+        Q_ASSERT(!styleElem->isNull());
+
+        KoTextTableTemplate *tableTemplate = new KoTextTableTemplate();
+        tableTemplate->loadOdf(styleElem, context);
+        tableTemplates.append(QPair<QString, KoTextTableTemplate *>(tableTemplate->name(), tableTemplate));
+    }
+    return tableTemplates;
+}

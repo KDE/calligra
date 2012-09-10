@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 - 2009 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2007 - 2009, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -29,26 +29,16 @@
 #include "kptitemviewsettup.h"
 #include "planworksettings.h"
 
-#include <KoDocument.h>
+#include <KoIcon.h>
 
 #include <QDragMoveEvent>
 #include <QMenu>
 #include <QModelIndex>
-#include <QVBoxLayout>
 #include <QWidget>
-#include <QTextBrowser>
-#include <QTextCursor>
-#include <QTextTableFormat>
-#include <QTextLength>
-#include <QTextTable>
-#include <QTextFrame>
-#include <QTextFrameFormat>
-#include <QTextCharFormat>
-#include <QTextTableCell>
-#include <QLineEdit>
-#include <QItemSelection>
+#include <QSortFilterProxyModel>
+#include <QHeaderView>
+#include <QPointer>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -59,6 +49,7 @@
 #include <kaccelgen.h>
 #include <kactioncollection.h>
 
+#include "debugarea.h"
 
 using namespace KPlato;
 
@@ -70,16 +61,23 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
-    TaskWorkPackageModel *m = new TaskWorkPackageModel( part, this );
-    setModel( m );
+    masterView()->header()->setSortIndicatorShown( true );
+    masterView()->header()->setClickable( true );
+    slaveView()->header()->setSortIndicatorShown( true );
+    slaveView()->header()->setClickable( true );
+
+    QSortFilterProxyModel *sf = new QSortFilterProxyModel( this );
+    TaskWorkPackageModel *m = new TaskWorkPackageModel( part, sf );
+    sf->setSourceModel( m );
+    setModel( sf );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionMode( QAbstractItemView::SingleSelection );
     setStretchLastSection( false );
 
     createItemDelegates( m );
 
-    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
-    masterView()->setDefaultColumns( QList<int>() << 0 );
+    QList<int> lst1; lst1 << 2 << -1; // display column 0 and 1 (NodeName and NodeType ) in left view
+    masterView()->setDefaultColumns( QList<int>() << 0 << 1 );
     QList<int> show;
     show << TaskWorkPackageModel::NodeCompleted
             << TaskWorkPackageModel::NodeActualEffort
@@ -102,24 +100,66 @@ TaskWorkPackageTreeView::TaskWorkPackageTreeView( Part *part, QWidget *parent )
     slaveView()->setDefaultColumns( show );
     masterView()->setFocus();
 
-    kDebug()<<PlanWorkSettings::self()->taskWorkPackageView();
+    kDebug(planworkDbg())<<PlanWorkSettings::self()->taskWorkPackageView();
+    masterView()->header()->setClickable( true );
+    slaveView()->header()->setSortIndicatorShown( true );
+
+    connect(masterView()->header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), SLOT(setSortOrder(int, Qt::SortOrder)));
+    connect(slaveView()->header(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), SLOT(setSortOrder(int, Qt::SortOrder)));
+
+    masterView()->header()->setSortIndicator( TaskWorkPackageModel::NodeType, Qt::AscendingOrder );
+
+    connect(masterView()->header(), SIGNAL(sectionMoved(int, int, int)), SIGNAL(sectionsMoved()));
+    connect(slaveView()->header(), SIGNAL(sectionMoved(int, int, int)), SIGNAL(sectionsMoved()));
 }
 
-TaskWorkPackageModel *TaskWorkPackageTreeView::model() const
+void TaskWorkPackageTreeView::setSortOrder( int col, Qt::SortOrder order )
 {
-    return static_cast<TaskWorkPackageModel*>( DoubleTreeViewBase::model() );
+    model()->sort( col, order );
+}
+
+TaskWorkPackageModel *TaskWorkPackageTreeView::itemModel() const
+{
+    return static_cast<TaskWorkPackageModel*>( static_cast<QSortFilterProxyModel*>( model() )->sourceModel() );
 }
 
 Project *TaskWorkPackageTreeView::project() const
 {
-    return model()->project();
+    return itemModel()->project();
+}
+
+Document *TaskWorkPackageTreeView::currentDocument() const
+{
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return 0;
+    }
+    return itemModel()->documentForIndex( sf->mapToSource(  selectionModel()->currentIndex() ) );
+}
+
+Node *TaskWorkPackageTreeView::currentNode() const
+{
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return 0;
+    }
+    return itemModel()->nodeForIndex( sf->mapToSource(  selectionModel()->currentIndex() ) );
 }
 
 QList<Node*> TaskWorkPackageTreeView::selectedNodes() const
 {
     QList<Node*> lst;
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return lst;
+    }
     foreach( const QModelIndex &idx, selectionModel()->selectedIndexes() ) {
-        Node *n = model()->nodeForIndex( idx );
+        QModelIndex i = sf->mapToSource( idx );
+        Q_ASSERT( i.isValid() && i.model() == itemModel() );
+        Node *n = itemModel()->nodeForIndex( i );
         if ( n && ! lst.contains( n ) ) {
             lst << n;
         }
@@ -129,12 +169,12 @@ QList<Node*> TaskWorkPackageTreeView::selectedNodes() const
 
 void TaskWorkPackageTreeView::setProject( Project *project )
 {
-    model()->setProject( project );
+    itemModel()->setProject( project );
 }
 
 void TaskWorkPackageTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<index.column();
+    kDebug(planworkDbg())<<index.column();
 }
 
 void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
@@ -183,14 +223,14 @@ void TaskWorkPackageTreeView::dragMoveEvent(QDragMoveEvent */*event*/)
 TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     : QWidget( parent )
 {
-    kDebug()<<"-------------------- creating TaskWorkPackageView -------------------";
+    kDebug(planworkDbg())<<"-------------------- creating TaskWorkPackageView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskWorkPackageTreeView( part, this );
     l->addWidget( m_view );
     setupGui();
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( itemModel(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 
@@ -199,6 +239,8 @@ TaskWorkPackageView::TaskWorkPackageView( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), SLOT( slotSelectionChanged( const QModelIndexList ) ) );
 
     loadContext();
+
+    connect(m_view, SIGNAL(sectionsMoved()), SLOT(sectionsMoved()));
 }
 
 void TaskWorkPackageView::updateReadWrite( bool rw )
@@ -218,18 +260,18 @@ QList<Node*> TaskWorkPackageView::selectedNodes() const
 
 Node *TaskWorkPackageView::currentNode() const
 {
-    return m_view->model()->nodeForIndex( m_view->selectionModel()->currentIndex() );
+    return m_view->currentNode();
 }
 
 Document *TaskWorkPackageView::currentDocument() const
 {
-    return m_view->model()->documentForIndex( m_view->selectionModel()->currentIndex() );
+    return m_view->currentDocument();
 }
 
 
 void TaskWorkPackageView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planworkDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos, lst.first() );
@@ -238,16 +280,27 @@ void TaskWorkPackageView::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug()<<index<<pos;
+    kDebug(planworkDbg())<<index<<pos;
     if ( ! index.isValid() ) {
         slotHeaderContextMenuRequested( pos );
         return;
     }
-    Node *node = m_view->model()->nodeForIndex( index );
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( m_view->model() );
+    Q_ASSERT( sf );
+    if ( sf == 0 ) {
+        return;
+    }
+    QModelIndex idx = sf->mapToSource( index );
+    if ( ! idx.isValid() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+
+    Node *node = itemModel()->nodeForIndex( idx );
     if ( node ) {
         return slotContextMenuRequested( node, pos );
     }
-    Document *doc = m_view->model()->documentForIndex( index );
+    Document *doc = itemModel()->documentForIndex( idx );
     if ( doc ) {
         return slotContextMenuRequested( doc, pos );
     }
@@ -256,7 +309,7 @@ void TaskWorkPackageView::slotContextMenuRequested( const QModelIndex &index, co
 
 void TaskWorkPackageView::slotContextMenuRequested( Node *node, const QPoint& pos )
 {
-    kDebug()<<node->name()<<" :"<<pos;
+    kDebug(planworkDbg())<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -271,7 +324,7 @@ void TaskWorkPackageView::slotContextMenuRequested( Node *node, const QPoint& po
         default:
             break;
     }
-    kDebug()<<name;
+    kDebug(planworkDbg())<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -281,7 +334,7 @@ void TaskWorkPackageView::slotContextMenuRequested( Node *node, const QPoint& po
 
 void TaskWorkPackageView::slotContextMenuRequested( Document *doc, const QPoint& pos )
 {
-    kDebug()<<doc->url()<<" :"<<pos;
+    kDebug(planworkDbg())<<doc->url()<<" :"<<pos;
     QString name;
     switch ( doc->type() ) {
         case Document::Type_Product:
@@ -291,7 +344,7 @@ void TaskWorkPackageView::slotContextMenuRequested( Document *doc, const QPoint&
             name = "viewdocument_popup";
             break;
     }
-    kDebug()<<name;
+    kDebug(planworkDbg())<<name;
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -305,24 +358,30 @@ void TaskWorkPackageView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
+    actionOptions = new KAction(koIcon("configure"), i18n("Configure View..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
 
 void TaskWorkPackageView::slotSplitView()
 {
-    kDebug();
+    kDebug(planworkDbg());
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
+    saveContext();
 }
 
 
 void TaskWorkPackageView::slotOptions()
 {
-    kDebug();
-    SplitItemViewSettupDialog *dlg = new SplitItemViewSettupDialog( m_view, this );
+    kDebug(planworkDbg());
+    QPointer<SplitItemViewSettupDialog> dlg = new SplitItemViewSettupDialog( 0, m_view, this );
     dlg->exec();
     delete dlg;
+    saveContext();
+}
+
+void TaskWorkPackageView::sectionsMoved()
+{
     saveContext();
 }
 
@@ -332,10 +391,10 @@ bool TaskWorkPackageView::loadContext()
     doc.setContent( PlanWorkSettings::self()->taskWorkPackageView() );
     KoXmlElement context = doc.namedItem( "TaskWorkPackageViewSettings" ).toElement();
     if ( context.isNull() ) {
-        kDebug()<<"No settings";
+        kDebug(planworkDbg())<<"No settings";
         return false;
     }
-    return m_view->loadContext( model()->columnMap(), context );
+    return m_view->loadContext( itemModel()->columnMap(), context );
 }
 
 void TaskWorkPackageView::saveContext()
@@ -343,9 +402,10 @@ void TaskWorkPackageView::saveContext()
     QDomDocument doc ( "TaskWorkPackageView" );
     QDomElement context = doc.createElement( "TaskWorkPackageViewSettings" );
     doc.appendChild( context );
-    m_view->saveContext( model()->columnMap(), context );
+    m_view->saveContext( itemModel()->columnMap(), context );
     PlanWorkSettings::self()->setTaskWorkPackageView( doc.toString() );
     PlanWorkSettings::self()->writeConfig();
+    kDebug(planworkDbg())<<endl<<doc.toString();
 }
 
 KoPrintJob *TaskWorkPackageView::createPrintJob()

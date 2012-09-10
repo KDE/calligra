@@ -29,6 +29,7 @@
 #include <KoPageLayout.h>
 #include <KoShapeManager.h>
 #include <KoShapeManagerPaintingStrategy.h>
+#include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
 #include <KoPAViewMode.h>
 #include <KoPACanvas.h>
@@ -367,8 +368,14 @@ void KPrAnimationDirector::updateZoom( const QSize & size )
 
 void KPrAnimationDirector::paintStep( QPainter & painter )
 {
+    if (m_pageRect != m_canvas->rect()) {
+        painter.setClipping(false);
+        painter.fillRect(m_canvas->rect(), Qt::black);
+        painter.setClipping(true);
+    }
     painter.translate( m_pageRect.topLeft() );
-    m_view->activePage()->paintBackground( painter, m_zoomHandler );
+    KoShapePaintingContext context;
+    m_view->activePage()->paintBackground( painter, m_zoomHandler, context );
 
     if ( m_view->activePage()->displayMasterShapes() ) {
         foreach ( KoShape *shape, m_canvas->masterShapeManager()->shapes() ) {

@@ -68,7 +68,6 @@ public:
     virtual void unsetCanvas();
 private slots:
 
-    void setImage(KisImageWSP image);
     void notifyImageDeleted();
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
@@ -107,6 +106,9 @@ private slots:
     void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
     void slotOpacitySliderMoved(qreal opacity);
+
+    void slotCollapsed(const QModelIndex &index);
+    void slotExpanded(const QModelIndex &index);
 
 private:
 

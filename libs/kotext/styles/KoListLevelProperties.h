@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
+ * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -111,6 +112,9 @@ public:
     qreal height() const;
     /// set the bullet image key (as from the KoImageData)
     void setBulletImage(KoImageData *imageData);
+    /// return the bullet image that is used in the list(as KoImageData)
+    KoImageData *bulletImage() const;
+
     /// set the listId used by all list-styles that together make 1 user defined list in an ODF file.
     void setListId(KoListStyle::ListIdType listId);
     /// return the listId used by all list-styles that together make 1 user defined list in an ODF file.
@@ -143,7 +147,7 @@ public:
     /// returns the margin of the list
     qreal margin() const;
 
-    /// sets the text indent of the the list item
+    /// sets the text indent of the list item
     void setTextIndent(qreal value);
     /// returns the text indent of the list item
     qreal textIndent() const;
@@ -206,6 +210,7 @@ private:
     qreal propertyDouble(int key) const;
     QString propertyString(int key) const;
     QColor propertyColor(int key) const;
+    QVariant property(int key) const;
 
     class Private;
     Private * const d;

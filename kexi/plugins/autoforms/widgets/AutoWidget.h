@@ -21,7 +21,7 @@
 #ifndef AUTOWIDGETBASE_H
 #define AUTOWIDGETBASE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QVariant>
 #include <dataviewcommon/kexiformdataiteminterface.h>
 

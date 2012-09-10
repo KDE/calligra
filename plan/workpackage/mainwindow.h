@@ -32,7 +32,7 @@
 #include <ktabwidget.h>
 
 #include <QMap>
-#include <qtoolbutton.h>
+#include <QToolButton>
 #include <QLabel>
 
 #include <kmimetype.h>
@@ -40,9 +40,6 @@
 #include <kservice.h>
 #include <KoDocumentEntry.h>
 #include <kparts/mainwindow.h>
-
-namespace std { }
-using namespace std;
 
 namespace KParts {
     class PartManager;

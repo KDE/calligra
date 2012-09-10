@@ -28,11 +28,11 @@
 #include <QFile>
 #include <QDataStream>
 #include <QPolygon>
-#include <QtGui/QPen>
-#include <QtGui/QBrush>
-#include <QtGui/QColor>
-#include <QtGui/QFont>
-#include <QtGui/QRegion>
+#include <QPen>
+#include <QBrush>
+#include <QColor>
+#include <QFont>
+#include <QRegion>
 
 #include <math.h>
 

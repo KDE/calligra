@@ -25,6 +25,7 @@
 #include <QSize>
 #include <QString>
 
+#include <KoColorSpace.h>
 #include <KoCanvasBase.h>
 #include <krita_export.h>
 #include <kis_types.h>
@@ -40,6 +41,7 @@ class KisCanvasDecoration;
 class KisView2;
 class KisPaintopBox;
 class KoFavoriteResourceManager;
+class KisDisplayFilter;
 
 enum KisCanvasType {
     QPAINTER,
@@ -96,7 +98,7 @@ public: // KoCanvasBase implementation
 
     /**
      * Return the right shape manager for the current layer. That is
-     * to say, if the current layer is a shape layer, return the shape
+     * to say, if the current layer is a vector layer, return the shape
      * layer's canvas' shapemanager, else the shapemanager associated
      * with the global krita canvas.
      */
@@ -147,10 +149,6 @@ public: // KisCanvas2 methods
     KisCanvasDecoration* decoration(const QString& id);
 
 signals:
-
-    void documentOriginChanged();
-    void scrollAreaSizeChanged();
-
     void imageChanged(KisImageWSP image);
 
     void canvasDestroyed(QWidget *);
@@ -158,6 +156,7 @@ signals:
     void favoritePaletteCalled(const QPoint&);
 
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
+    void sigContinueResizeImage(qint32 w, qint32 h);
 
 public slots:
 
@@ -167,20 +166,24 @@ public slots:
     /// The image projection has changed, now start an update
     /// of the canvas representation.
     void startUpdateCanvasProjection(const QRect & rc);
-
     void updateCanvasProjection(KisUpdateInfoSP info);
 
-    void setImageSize(qint32 w, qint32 h);
+    void startUpdateInPatches(QRect imageRect);
 
-    /// adjust the origin of the document
-    void adjustOrigin();
+    void setMonitorProfile(KoColorProfile* monitorProfile,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
-    /// slot for setting the mirroring
-    void mirrorCanvas(bool mirror);
-    void rotateCanvas(qreal angle, bool updateOffset=true);
-    void rotateCanvasRight15();
-    void rotateCanvasLeft15();
-    void resetCanvasTransformations();
+
+
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
+
+    void startResizingImage(qint32 w, qint32 h);
+    void finishResizingImage(qint32 w, qint32 h);
+
+    /// canvas rotation in degrees
+    qreal rotationAngle() const;
+    void setSmoothingEnabled(bool smooth);
 
 private slots:
 
@@ -219,7 +222,7 @@ public:
     bool handlePopupPaletteIsVisible();
 
 private:
-    Q_DISABLE_COPY(KisCanvas2);
+    Q_DISABLE_COPY(KisCanvas2)
 
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);

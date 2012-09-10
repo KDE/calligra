@@ -114,6 +114,8 @@ bool ToCGenerator::generate()
     if (!m_ToCInfo)
         return true;
 
+    m_preservePagebreak = m_ToCDocument->begin().blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak;
+
     m_success = true;
 
     QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
@@ -138,6 +140,12 @@ bool ToCGenerator::generate()
         titleStyle->applyStyle(titleTextBlock);
 
         cursor.insertText(m_ToCInfo->m_indexTitleTemplate.text);
+        if (m_preservePagebreak) {
+            QTextBlockFormat blockFormat;
+            blockFormat.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
+            cursor.mergeBlockFormat(blockFormat);
+            m_preservePagebreak = false;
+        }
         cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
 
@@ -197,7 +205,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
-    // some headings contain tabs, replace all occurences with spaces
+    // some headings contain tabs, replace all occurrences with spaces
     tocEntryText.replace('\t',' ').remove(0x200B);
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
@@ -221,7 +229,12 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                 tocTemplateStyle = styleManager->defaultTableOfContentsEntryStyle(outlineLevel);
             }
 
-            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+            QTextBlockFormat blockFormat;
+            if (m_preservePagebreak) {
+                blockFormat.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
+                m_preservePagebreak = false;
+            }
+            cursor.insertBlock(blockFormat, QTextCharFormat());
 
             QTextBlock tocEntryTextBlock = cursor.block();
             tocTemplateStyle->applyStyle( tocEntryTextBlock );
@@ -254,6 +267,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             // copy it to alter subset of properties
                             QTextCharFormat linkCf(savedCharFormat);
                             linkCf.setAnchor(true);
+                            linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
                             linkCf.setAnchorHref('#'+ target);
 
                             QBrush foreground = linkCf.foreground();

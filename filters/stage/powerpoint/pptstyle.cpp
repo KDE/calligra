@@ -23,18 +23,6 @@
 
 using namespace MSO;
 
-// NOTE: Deprecated !!!
-template <class Style>
-void addStyle(const Style** list, const Style* style)
-{
-    if (style) {
-        while (*list) ++list;
-        *list = style;
-        *list++;
-        *list = 0;
-    }
-}
-
 const TextMasterStyleAtom*
 getTextMasterStyleAtom(const MasterOrSlideContainer* m, quint16 textType)
 {
@@ -530,7 +518,6 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d)
 {
     //check DocumentContainer/DocumentTextInfoContainer/textPFDefaultsAtom
     pfs.append(getDefaultPF(d));
-    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
 }
 
 PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
@@ -547,9 +534,9 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
     if (level) {
         pfs.append(&level->pf);
     }
-    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
+
     if (level9) {
-        addStyle(pf9s, &level9->pf9);
+        pf9s.append(&level9->pf9);
     }
     processPFDefaults(d);
 }
@@ -583,12 +570,10 @@ PptTextPFRun::PptTextPFRun(const DocumentContainer* d,
 
     //TODO: test documents required to construct correct pf9s based on the full
     //masters hierarchy.
-
-    memset(pf9s, 0, 6 * sizeof(TextPFException9*));
-    addStyle(pf9s, getPF9(d, texts, pcd, tc, start));
-    addStyle(pf9s, getLevelPF9(m, tc, m_level));
-    addStyle(pf9s, getDefaultLevelPF9(d, tc, m_level));
-    addStyle(pf9s, getDefaultPF9(d));
+    pf9s.append(getPF9(d, texts, pcd, tc, start));
+    pf9s.append(getLevelPF9(m, tc, m_level));
+    pf9s.append(getDefaultLevelPF9(d, tc, m_level));
+    pf9s.append(getDefaultPF9(d));
 
     // the level reported by PptPFRun is 0 when not bullets, i.e. no list is
     // active, 1 is lowest list level, 5 is the highest list level
@@ -790,49 +775,26 @@ GETTER(qint16,           ,  bulletSize,      bulletSize,  fBulletHasSize,  0)
 GETTER(ColorIndexStruct, *, bulletColor,     bulletColor, fBulletHasColor, ColorIndexStruct())
 #undef GETTER
 
-qint32 PptTextPFRun::bulletBlipRef() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletBlip) {
-            return (*p)->bulletBlipRef;
-        }
-        ++p;
-    }
-    return 65535;
-}
-qint16 PptTextPFRun::fBulletHasAutoNumber() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletHasScheme) {
-            return (*p)->fBulletHasAutoNumber;
-        }
-        ++p;
-    }
-    return 0;
+#define ANM_Default 3
+#define GETTER(TYPE, NAME, PARENT, TEST, DEFAULT)	\
+TYPE PptTextPFRun::NAME() const \
+{ \
+    for (int i = 0; i < pf9s.size(); i++) { \
+        if (pf9s[i]) { \
+            if (pf9s[i]->masks.TEST) { \
+                return pf9s[i]->PARENT NAME; \
+            } \
+        } \
+    } \
+    return DEFAULT; \
 }
 
-#define ANM_Default 3
-quint16 PptTextPFRun::scheme() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletScheme) {
-            return (*p)->bulletAutoNumberScheme->scheme;
-        }
-        ++p;
-    }
-    
-    return ANM_Default;
-}
-qint16 PptTextPFRun::startNum() const {
-    const MSO::TextPFException9* const * p = pf9s;
-    while (*p) {
-        if ((*p)->masks.bulletScheme) {
-            return (*p)->bulletAutoNumberScheme->startNum;
-        }
-        ++p;
-    }
-    return 1;
-}
+//     TYPE       NAME                    PARENT                    TEST              DEFAULT
+GETTER(qint32,    bulletBlipRef,          ,                         bulletBlip,       65535)
+GETTER(qint16,    fBulletHasAutoNumber,   ,                         bulletHasScheme,  0)
+GETTER(quint16,   scheme,                 bulletAutoNumberScheme->, bulletScheme,     ANM_Default)
+GETTER(qint16,    startNum,               bulletAutoNumberScheme->, bulletScheme,     1)
+#undef GETTER
 
 
 //FIXME: Looks like only Tx_TYPE_OTHER is not stored in lists.  Test files are
@@ -866,20 +828,20 @@ TYPE PptTextCFRun::NAME() const \
     return DEFAULT; \
 }
 
-//     TYPE             PARENT     PRE NAME           TEST              DEFAULT
-GETTER(bool,            fontStyle->,,  bold,          masks.bold,        false)
-GETTER(bool,            fontStyle->,,  italic,        masks.italic,      false)
-GETTER(bool,            fontStyle->,,  underline,     masks.underline,   false)
-GETTER(bool,            fontStyle->,,  shadow,        masks.shadow,      false)
-GETTER(bool,            fontStyle->,,  fehint,        masks.fehint,      false)
-GETTER(bool,            fontStyle->,,  kumi,          masks.kumi,        false)
-GETTER(bool,            fontStyle->,,  emboss,        masks.emboss,      false)
-GETTER(quint8,          fontStyle->,,  pp9rt,         fontStyle,             0)
-GETTER(quint16,         ,           ,  fontRef,       masks.typeface,        0)
-GETTER(quint16,         ,           ,  oldEAFontRef,  masks.oldEATypeface,   0)
-GETTER(quint16,         ,           ,  ansiFontRef,   masks.ansiTypeface,    0)
-GETTER(quint16,         ,           ,  symbolFontRef, masks.symbolTypeface,  0)
-GETTER(quint16,         ,           ,  fontSize,      masks.size,            0)
-GETTER(ColorIndexStruct,,           *, color,   masks.color, ColorIndexStruct())
-GETTER(qint16,          ,           ,  position,      masks.position,        0)
+//     TYPE             PARENT      PRE NAME           TEST              DEFAULT
+GETTER(bool,            fontStyle->, ,  bold,          masks.bold,        false)
+GETTER(bool,            fontStyle->, ,  italic,        masks.italic,      false)
+GETTER(bool,            fontStyle->, ,  underline,     masks.underline,   false)
+GETTER(bool,            fontStyle->, ,  shadow,        masks.shadow,      false)
+GETTER(bool,            fontStyle->, ,  fehint,        masks.fehint,      false)
+GETTER(bool,            fontStyle->, ,  kumi,          masks.kumi,        false)
+GETTER(bool,            fontStyle->, ,  emboss,        masks.emboss,      false)
+GETTER(quint8,          fontStyle->, ,  pp9rt,         fontStyle,             0)
+GETTER(quint16,         ,            ,  fontRef,       masks.typeface,        0)
+GETTER(quint16,         ,            ,  oldEAFontRef,  masks.oldEATypeface,   0)
+GETTER(quint16,         ,            ,  ansiFontRef,   masks.ansiTypeface,    0)
+GETTER(quint16,         ,            ,  symbolFontRef, masks.symbolTypeface,  0)
+GETTER(quint16,         ,            ,  fontSize,      masks.size,            0)
+GETTER(ColorIndexStruct,,            *, color,         masks.color,           ColorIndexStruct())
+GETTER(qint16,          ,            ,  position,      masks.position,        0)
 #undef GETTER

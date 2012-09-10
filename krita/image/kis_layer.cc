@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,9 +21,7 @@
 #include "kis_layer.h"
 
 
-#include <kicon.h>
 #include <klocale.h>
-#include <QIcon>
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
@@ -150,7 +148,7 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    if (m_d->image.isValid())
+    if (m_d->image)
         return m_d->image->colorSpace();
     return 0;
 }
@@ -189,17 +187,17 @@ void KisLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyL
 void KisLayer::disableAlphaChannel(bool disable)
 {
     if(m_d->channelFlags.isEmpty())
-        m_d->channelFlags = colorSpace()->channelFlags(true, true, true, true);
-    
+        m_d->channelFlags = colorSpace()->channelFlags(true, true);
+
     if(disable)
-        m_d->channelFlags &= colorSpace()->channelFlags(true, false, true, true);
+        m_d->channelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->channelFlags |= colorSpace()->channelFlags(false, true, false, false);
+        m_d->channelFlags |= colorSpace()->channelFlags(false, true);
 }
 
 bool KisLayer::alphaChannelDisabled() const
 {
-    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->channelFlags;
+    QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->channelFlags;
     return flags.count(true) == 0 && !m_d->channelFlags.isEmpty();
 }
 
@@ -275,20 +273,23 @@ KisSelectionMaskSP KisLayer::selectionMask() const
 
     //finds the active selection mask
     if (masks.size() == 1) {
-        KisSelectionMaskSP selection = dynamic_cast<KisSelectionMask*>(masks[0].data());
-        return selection;
+        KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(masks[0].data());
+        return selectionMask;
     }
     return 0;
 }
 
 KisSelectionSP KisLayer::selection() const
 {
-    if (selectionMask())
+    if (selectionMask()) {
         return selectionMask()->selection();
-    else if (m_d->image.isValid())
+    }
+    else if (m_d->image) {
         return m_d->image->globalSelection();
-    else
+    }
+    else {
         return 0;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -518,7 +519,7 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) : QImage();
 }
 
 qint32 KisLayer::x() const

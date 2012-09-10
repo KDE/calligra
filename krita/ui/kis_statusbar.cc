@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 
@@ -52,7 +53,7 @@ KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
     m_selectionStatusLabel = new QLabel(view);
-    m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
+    m_selectionStatusLabel->setPixmap(koIcon("tool_rect_selection").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
     view->addStatusBarItem(m_selectionStatusLabel);
 
@@ -125,7 +126,7 @@ void KisStatusBar::setSelection(KisImageWSP image)
     Q_UNUSED(image);
 
     KisSelectionSP selection = m_view->selection();
-    if (selection && !selection->isDeselected()) {
+    if (selection) {
         m_selectionStatusLabel->setEnabled(true);
 
         QRect r = selection->selectedExactRect();

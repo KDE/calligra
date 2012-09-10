@@ -25,6 +25,7 @@
 
 #include <kis_tool_rectangle_base.h>
 #include "kis_text_tool_option_widget.h"
+#include <KoIcon.h>
 
 class KisToolText : public KisToolRectangleBase
 {
@@ -33,10 +34,13 @@ class KisToolText : public KisToolRectangleBase
 public:
     KisToolText(KoCanvasBase * canvas);
     virtual ~KisToolText();
-    
+
     virtual QList< QWidget* > createOptionWidgets();
 
     virtual KisPainter::FillStyle fillStyle();
+
+private slots:
+    void slotActivateTextTool();
 
 protected:
     virtual void finishRect(const QRectF& rect);
@@ -53,9 +57,8 @@ public:
 
         setToolType(mainToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("draw-text");
+        setIconName(koIconNameCStr("draw-text"));
         setPriority(2);
-        setInputDeviceAgnostic(false);
     }
 
     virtual ~KisToolTextFactory() {}

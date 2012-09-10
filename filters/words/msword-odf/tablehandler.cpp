@@ -181,7 +181,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
             align = QString("right");
             break;
         }
-    } 
+    }
     tableStyle.addProperty("table:align", align);
 
     int width = table->m_cellEdges[table->m_cellEdges.size() - 1] - table->m_cellEdges[0];
@@ -278,9 +278,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
         m_margin[i] = QString::number(brc.dptSpace) + "pt";
     }
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
-
-    qreal rowHeightPt = Conversion::twipsToPt(qAbs(tap->dyaRowHeight));         // convert twips to Pts
-    QString rowHeightString = QString::number(rowHeightPt).append("pt");        // make height string from number
+    QString rowHeightString = QString::number(twipsToPt(qAbs(tap->dyaRowHeight)), 'f').append("pt");
 
     if (tap->dyaRowHeight > 0) {
         rowStyle.addProperty("style:min-row-height", rowHeightString);
@@ -289,7 +287,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     }
 
     if (tap->fCantSplit) {
-        rowStyle.addProperty("style:keep-together", "always");
+        rowStyle.addProperty("fo:keep-together", "always");
     }
 
     QString rowStyleName = m_mainStyles->insert(rowStyle, QLatin1String("row"));
@@ -576,7 +574,7 @@ void WordsTableHandler::tableCellStart()
     //    cellStyle.addProperty("style:direction", "ttb");
     //}
 
-    //process vertical alignment information 
+    //process vertical alignment information
     QString align;
     switch (tc.vertAlign) {
     case vAlignTop:
@@ -676,7 +674,7 @@ void WordsTableHandler::tableCellEnd()
         m_cellStyleName.clear();
 
         //add the current background-color to stack
-//         document()->addBgColor(color);
+//         document()->pushBgColor(color);
     }
 }
 

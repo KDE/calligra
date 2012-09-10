@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
-  Copyright (C) 2007 Dag Andersen <danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen <danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -22,23 +22,27 @@
 #include "kptperteditor.h"
 #include "kptproject.h"
 #include "kptrelationeditor.h"
+#include "kptdebug.h"
 
 #include <KoDocument.h>
+#include <KoPart.h>
+#include <KoIcon.h>
 
 #include <kglobal.h>
 #include <klocale.h>
 
 #include <QModelIndex>
 
+
 namespace KPlato
 {
 
 //-----------------------------------
-PertEditor::PertEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+PertEditor::PertEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_project( 0 )
 {
-    kDebug() <<" ---------------- KPlato: Creating PertEditor ----------------";
+    kDebug(planDbg()) <<" ---------------- KPlato: Creating PertEditor ----------------";
     widget.setupUi(this);
 
     m_tasktree = widget.taskList;
@@ -50,11 +54,11 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     m_requiredList = widget.required;
     m_requiredList->hideColumn( 1 ); // child node name
     m_requiredList->setEditTriggers( QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed );
-    connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
-    updateReadWrite( part->isReadWrite() && ! part->isEmbedded() );
+    connect( m_requiredList->model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
+    updateReadWrite( part->isReadWrite() );
 
-    widget.addBtn->setIcon( KIcon( "arrow-right" ) );
-    widget.removeBtn->setIcon( KIcon( "arrow-left" ) );
+    widget.addBtn->setIcon(koIcon("arrow-right"));
+    widget.removeBtn->setIcon(koIcon("arrow-left"));
     slotAvailableChanged( 0 );
     slotRequiredChanged( QModelIndex() );
 
@@ -65,12 +69,12 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     connect( widget.addBtn, SIGNAL(clicked()), this, SLOT(slotAddClicked() ) );
     connect( widget.removeBtn, SIGNAL(clicked() ), this, SLOT(slotRemoveClicked() ) );
 
-    connect( this, SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( this, SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 }
 
 void PertEditor::slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem *prev )
 {
-    //kDebug()<<curr<<prev;
+    //kDebug(planDbg())<<curr<<prev;
     if ( curr == 0 ) {
         m_availableList->clear();
         loadRequiredTasksList( 0 );
@@ -85,7 +89,7 @@ void PertEditor::slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem 
 
 void PertEditor::slotAvailableChanged( QTreeWidgetItem *item )
 {
-    //kDebug()<<(item?item->text(0):"nil")<<(item?item->data( 0, EnabledRole ).toBool():false);
+    //kDebug(planDbg())<<(item?item->text(0):"nil")<<(item?item->data( 0, EnabledRole ).toBool():false);
     if ( item == 0 || item == m_availableList->currentItem() ) {
         widget.addBtn->setEnabled( item != 0 && item->data( 0, EnabledRole ).toBool() );
     }
@@ -93,7 +97,7 @@ void PertEditor::slotAvailableChanged( QTreeWidgetItem *item )
 
 void PertEditor::slotRequiredChanged( const QModelIndex &item )
 {
-    //kDebug()<<item;
+    //kDebug(planDbg())<<item;
     widget.removeBtn->setEnabled( item.isValid() );
 }
 
@@ -103,14 +107,14 @@ void PertEditor::slotAddClicked()
         return;
     }
     QTreeWidgetItem *item = m_availableList->currentItem();
-    //kDebug()<<item;
+    //kDebug(planDbg())<<item;
     addTaskInRequiredList( item );
     updateAvailableTasks( item );
 }
 
 void PertEditor::addTaskInRequiredList(QTreeWidgetItem * currentItem)
 {
-    //kDebug()<<currentItem;
+    //kDebug(planDbg())<<currentItem;
     if ( currentItem == 0 ) {
         return;
     }
@@ -150,7 +154,7 @@ void PertEditor::slotRemoveClicked()
 
 void PertEditor::removeTaskFromRequiredList()
 {
-    //kDebug();
+    //kDebug(planDbg());
     Relation *r = m_requiredList->currentRelation();
     if ( r == 0 ) {
         return;
@@ -184,7 +188,7 @@ void PertEditor::setProject( Project *project )
 
 void PertEditor::slotRelationAdded( Relation *rel )
 {
-    kDebug()<<rel;
+    kDebug(planDbg())<<rel;
     if ( rel->child() == itemToNode( m_tasktree->currentItem() ) ) {
         QTreeWidgetItem *item = findNodeItem( rel->parent(), m_availableList->invisibleRootItem() );
         updateAvailableTasks( item );
@@ -193,7 +197,7 @@ void PertEditor::slotRelationAdded( Relation *rel )
 
 void PertEditor::slotRelationRemoved( Relation *rel )
 {
-    kDebug()<<rel;
+    kDebug(planDbg())<<rel;
     if ( rel->child() == itemToNode( m_tasktree->currentItem() ) ) {
         QTreeWidgetItem *item = findNodeItem( rel->parent(), m_availableList->invisibleRootItem() );
         updateAvailableTasks( item );
@@ -202,7 +206,7 @@ void PertEditor::slotRelationRemoved( Relation *rel )
 
 void PertEditor::slotNodeAdded( Node *node )
 {
-    kDebug()<<node->name()<<node->childNodeIterator();
+    kDebug(planDbg())<<node->name()<<node->childNodeIterator();
     Node *parent = node->parentNode();
     int index = parent->indexOf( node );
     QTreeWidgetItem *pitem = findNodeItem( parent, m_tasktree->invisibleRootItem() );
@@ -228,7 +232,7 @@ void PertEditor::slotNodeAdded( Node *node )
 
 void PertEditor::slotNodeRemoved( Node *node )
 {
-    //kDebug();
+    //kDebug(planDbg());
     QTreeWidgetItem *item = findNodeItem( node, m_tasktree->invisibleRootItem() );
     if ( item ) {
         QTreeWidgetItem *parent = item->parent();
@@ -253,7 +257,7 @@ void PertEditor::slotNodeRemoved( Node *node )
 
 void PertEditor::slotNodeMoved( Node */*node */)
 {
-    //kDebug();
+    //kDebug(planDbg());
     draw();
 }
 
@@ -290,7 +294,7 @@ void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
         QTreeWidgetItem * item = new QTreeWidgetItem( parent );
         item->setText( 0, currentChild->name());
         item->setData( 0, NodeRole, currentChild->id() );
-        //kDebug()<<"Added task"<<currentChild->name()<<"parent"<<currentChild->parent();
+        //kDebug(planDbg())<<"Added task"<<currentChild->name()<<"parent"<<currentChild->parent();
         drawSubTasksName( item, currentChild);
     }
 }
@@ -327,7 +331,7 @@ void PertEditor::dispAvailableTasks( Node *parent, Node *selectedTask )
     }
     foreach(Node * currentNode, parent->childNodeIterator() )
     {
-        //kDebug()<<currentNode->name()<<"level="<<currentNode->level();
+        //kDebug(planDbg())<<currentNode->name()<<"level="<<currentNode->level();
         QTreeWidgetItem *item = new QTreeWidgetItem( QStringList()<<currentNode->name() );
         item->setData( 0, NodeRole, currentNode->id() );
         pitem->addChild(item);
@@ -353,7 +357,7 @@ void PertEditor::dispAvailableTasks()
 
 void PertEditor::updateAvailableTasks( QTreeWidgetItem *item )
 {
-    //kDebug()<<m_project<<item;
+    //kDebug(planDbg())<<m_project<<item;
     if ( m_project == 0 ) {
         return;
     }
@@ -369,7 +373,7 @@ void PertEditor::updateAvailableTasks( QTreeWidgetItem *item )
 
 void PertEditor::setAvailableItemEnabled( QTreeWidgetItem *item )
 {
-    //kDebug()<<item;
+    //kDebug(planDbg())<<item;
     Node *node = itemToNode( item );
     if ( node == 0 ) {
         return;
@@ -377,13 +381,13 @@ void PertEditor::setAvailableItemEnabled( QTreeWidgetItem *item )
 
     Node *selected = itemToNode( m_tasktree->currentItem() );
     if ( selected == 0 || ! m_project->legalToLink( node, selected ) ) {
-        //kDebug()<<"Disable:"<<node->name();
+        //kDebug(planDbg())<<"Disable:"<<node->name();
         item->setData( 0, EnabledRole, false );
         QFont f = item->font( 0 );
         f.setItalic( true );
         item->setFont( 0, f );
     } else {
-        //kDebug()<<"Enable:"<<node->name();
+        //kDebug(planDbg())<<"Enable:"<<node->name();
         item->setData( 0, EnabledRole, true );
         QFont f = item->font( 0 );
         f.setItalic( false );
@@ -394,7 +398,7 @@ void PertEditor::setAvailableItemEnabled( QTreeWidgetItem *item )
 
 void PertEditor::setAvailableItemEnabled( Node *node )
 {
-    //kDebug()<<node->name();
+    //kDebug(planDbg())<<node->name();
     setAvailableItemEnabled( nodeToItem( node, m_availableList->invisibleRootItem() ) );
 }
 

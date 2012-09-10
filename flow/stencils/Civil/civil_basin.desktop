@@ -1,9 +1,16 @@
 [Desktop Entry]
 Name=Basin
 Name[bg]=Резервоар
+Name[ca]=Pica
+Name[ca@valencia]=Pica
 Name[de]=Becken
+Name[el]=Basin
+Name[es]=Lavabo
 Name[et]=Bassein
+Name[fr]=bassine
+Name[gl]=Colector
 Name[it]=Bacino
+Name[kk]=Резервуар
 Name[nb]=Basseng
 Name[nds]=Wann
 Name[nl]=Bassin
@@ -11,6 +18,7 @@ Name[pl]=Osadnik końcowy
 Name[pt]=Canal
 Name[pt_BR]=Canal
 Name[ru]=Резервуар
+Name[sk]=Povodie
 Name[sv]=Bassäng
 Name[uk]=Резервуар
 Name[x-test]=xxBasinxx

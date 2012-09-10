@@ -39,11 +39,14 @@ public:
     explicit KWRunAroundProperties(FrameConfigSharedState *state);
 
     /// load all info from the argument frames into this widget
-    void open(const QList<KWFrame*> &frames);
+    /// returns true if at least one frame was accepted
+    bool open(const QList<KWFrame*> &frames);
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
     void save();
+    /// save but add to undo command if command != 0
+    void save(KUndo2Command *command);
 
     /// reimplemented
     virtual bool showOnShapeCreate() {
@@ -57,7 +60,9 @@ private:
     Ui::KWRunAroundProperties widget;
     FrameConfigSharedState *m_state;
 
-    QButtonGroup *m_runAroundSide, *m_runAround;
+    QButtonGroup *m_runAroundSide;
+    QButtonGroup *m_runAround;
+    QButtonGroup *m_runAroundContour;
     QList<KWFrame*> m_frames;
     KoShape *m_shape;
 };

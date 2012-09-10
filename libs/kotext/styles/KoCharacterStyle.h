@@ -97,11 +97,11 @@ public:
         HyphenationPushCharCount,   ///< int
         HyphenationRemainCharCount, ///< int
         FontLetterSpacing,          ///< qreal, not the same format as the FontLetterSpacing in QTextFormat
-        FontPitch,                  ///< FontPitchMode
         PercentageFontSize, //font-size can be in % and this stores that value
         AdditionalFontSize, //font-size-rel can specify an addition to the parent value
         UseWindowFontColor, //boolean, same as odf
         Blink,
+        AnchorType, //valid only if QTextCharFormat::isAnchor() is true
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontYStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
@@ -178,9 +178,9 @@ public:
         LineHeight
     };
 
-    enum FontPitchMode {
-        FixedWidth,
-        VariableWidth
+    enum AnchorTypes {
+        Bookmark,
+        Anchor // corresponds to text:a ODF element
     };
 
     /**
@@ -255,7 +255,7 @@ public:
     QFont::Capitalization fontCapitalization() const;
     /// Set font Y stretch
     void setFontYStretch(qreal stretch);
-    /// Return font Y stretch (value relevant for MS compatability)
+    /// Return font Y stretch (value relevant for MS compatibility)
     qreal fontYStretch() const;
 
 
@@ -374,25 +374,22 @@ public:
 
     TextCombineType textCombine() const;
     void setTextCombine(TextCombineType type);
-    
+
     QChar textCombineStartChar() const;
     void setTextCombineStartChar(const QChar &character);
-    
+
     QChar textCombineEndChar() const;
     void setTextCombineEndChar(const QChar &character);
-    
-    
+
+
     ReliefType fontRelief() const;
     void setFontRelief(ReliefType relief);
-    
+
     EmphasisStyle textEmphasizeStyle() const;
     void setTextEmphasizeStyle(EmphasisStyle emphasis);
-    
+
     EmphasisPosition textEmphasizePosition() const;
     void setTextEmphasizePosition(EmphasisPosition position);
-
-    FontPitchMode fontPitch() const;
-    void setFontPitch(FontPitchMode mode);
 
     /// Set the country
     void setCountry(const QString &country);
@@ -420,11 +417,16 @@ public:
 
     void setAdditionalFontSize(qreal percent);
     qreal additionalFontSize() const;
+
+    /// set the anchor type, valid only if QTextCharFormat::isAnchor() is true
+    void setAnchorType(AnchorTypes anchorType);
+    /// returns the anchor type, valid only if QTextCharFormat::isAnchor() is true
+    AnchorTypes anchorType() const;
  
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);
 
-    KoCharacterStyle *clone(QObject *parent = 0);
+    KoCharacterStyle *clone(QObject *parent = 0) const;
 
     /// return the name of the style.
     QString name() const;
@@ -475,6 +477,8 @@ public:
     bool compareCharacterProperties(const KoCharacterStyle &other) const;
 
     bool operator==(const KoCharacterStyle &other) const;
+
+    bool operator!=(const KoCharacterStyle &other) const;
 
     /**
      * Removes properties from this style that have the same value in other style.

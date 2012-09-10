@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
+ * Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,8 +17,8 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "krscriptfunctions.h"
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 #include <kdebug.h>
 
 KRScriptFunctions::KRScriptFunctions(const KoReportData* kodata, KexiDB::Connection* conn)
@@ -96,6 +97,10 @@ QVariant KRScriptFunctions::value(const QString &field)
     QStringList fields = m_cursor->fieldNames();
 
     val = m_cursor->value(fields.indexOf(field));
+    if (val.type() == QVariant::String) {
+        // UTF-8 values are expected so convert this
+        return val.toString().toUtf8();
+    }
 
     return val;
 }

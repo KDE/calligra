@@ -19,13 +19,13 @@
 
 #include "kexidataprovider.h"
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "kexitableviewdata.h"
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 

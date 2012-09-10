@@ -3,7 +3,7 @@
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
    Copyright (C) 2005, 2006 Sven Lüppken <sven@kde.org>
-   Copyright (C) 2008 - 2009 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2008 - 2009, 2012 Dag Andersen <danders@get2net.dk>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -34,7 +34,6 @@
 #include <kundo2qstack.h>
 
 #include <assert.h>
-#include <kicon.h>
 //#include "koshellsettings.h"
 
 #include <KoApplicationAdaptor.h>
@@ -52,7 +51,6 @@
 #include <kfileitem.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kshortcutsdialog.h>
 #include <kstandarddirs.h>
 #include <klibloader.h>
@@ -68,7 +66,6 @@
 #include <kaboutdata.h>
 #include <kxmlguifactory.h>
 #include <kcomponentdata.h>
-#include <kiconloader.h>
 #include <ktoolinvocation.h>
 #include <kservice.h>
 #include <kio/netaccess.h>
@@ -79,18 +76,20 @@
 #include <KoView.h>
 #include <KoFilterManager.h>
 
+#include "debugarea.h"
+
 KPlatoWork_MainWindow::KPlatoWork_MainWindow()
     : KParts::MainWindow()
 {
-    kDebug()<<this;
+    kDebug(planworkDbg())<<this;
 
     m_part = new KPlatoWork::Part( this, this );
 
     KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
  
     KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
-    
-    KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
+
+//     KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
 
     QAction *a = KStandardAction::undo(m_part->undoStack(), SLOT(undo()), actionCollection());
     a->setEnabled( false );
@@ -110,7 +109,7 @@ KPlatoWork_MainWindow::KPlatoWork_MainWindow()
 
 KPlatoWork_MainWindow::~KPlatoWork_MainWindow()
 {
-    kDebug();
+    kDebug(planworkDbg());
 }
 
 void KPlatoWork_MainWindow::setCaption( const QString & )
@@ -143,7 +142,7 @@ QString KPlatoWork_MainWindow::configFile() const
 //called from slotFileSave(), slotFileSaveAs(), queryClose(), slotEmailFile()
 bool KPlatoWork_MainWindow::saveDocument( bool saveas, bool silent )
 {
-    kDebug()<<saveas<<silent;
+    kDebug(planworkDbg())<<saveas<<silent;
     KPlatoWork::Part *doc = rootDocument();
     if ( doc == 0 ) {
         return true;
