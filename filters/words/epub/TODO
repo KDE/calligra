@@ -48,6 +48,9 @@ Allow user to add a book cover image
  * Send parameter (filename) to the filter
  * UI to find / edit the filename
 
+Configuration of the conversion process
+ * Use breaks (bool)                                                    [Done]
+
 Create a generic HTML export filter
  * Refactor some things to prepare for the HTML filter.
     + Generalize some concepts                                          [Done]

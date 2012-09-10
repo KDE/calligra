@@ -120,6 +120,7 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     HtmlFile html;
     html.setPathPrefix("./");
     html.setFilePrefix(m_chain->outputFile().section('/', -1).section('.', 0, 0));
+    html.setBreakIntoChapters(false);
     OdtHtmlConverter converter;
     status = converter.convertContent(odfStore, m_metadata, &html,
                                       m_imagesSrcList);

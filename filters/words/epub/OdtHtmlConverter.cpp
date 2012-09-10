@@ -146,11 +146,14 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         if (nodeElement.namespaceURI() == KoXmlNS::text && (nodeElement.localName() == "p"
                                                             || nodeElement.localName() == "h")) {
 
-            // A fo:break-before="page" in the style means create a new chapter here,
-            // but only if it is a top-level paragraph and not at the very first node.
+            // The styles come into this function preprocessed. If the
+            // style should break the outfile into chapters (first
+            // implementaiton uses fo:break-before="page") then create
+            // a new chapter here, but only if it is a top-level
+            // paragraph and not at the very first node.
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
-            if (style && style->shouldBreakChapter) {
-                //kDebug(30517) << "Found paragraph with style with break-before -- breaking new chapter";
+            if (m_collector->breakIntoChapters() && style && style->shouldBreakChapter) {
+                //kDebug(30517) << "Found paragraph which breaks into new chapter";
 
                 // Write out any footnotes
                 if (!m_footNotes.isEmpty()) {
@@ -161,7 +164,9 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
                 endHtmlFile(); 
 
                 // Write the result to the file collector object.
-                QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
+                QString fileId = m_collector->filePrefix();
+                if (m_collector->breakIntoChapters())
+                    fileId += QString::number(m_currentChapter);
                 QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
                 m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
@@ -215,10 +220,17 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         }
     }
 
+    // Write out any footnotes
+    if (!m_footNotes.isEmpty()) {
+        writeFootNotes(m_htmlWriter);
+    }
+
     endHtmlFile();
 
     // Write output of the last file to the file collector object.
-    QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
+    QString fileId = m_collector->filePrefix();
+    if (m_collector->breakIntoChapters())
+        fileId += QString::number(m_currentChapter);
     QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
     m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
@@ -595,7 +607,9 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
             if (noteClass == "footnote")
                 m_footNotes.insert(id, noteElements);
             else {
-                QString noteChapter = m_collector->filePrefix() + QString::number(m_currentChapter) + ".xhtml";
+                QString noteChapter = m_collector->filePrefix();
+                if (m_collector->breakIntoChapters())
+                    noteChapter += QString::number(m_currentChapter);
                 m_endNotes.insert(noteChapter + "/" + id, noteElements);
                 // we insert this: m_currentChapter/id
                 // to can add reference for text in end note
@@ -697,14 +711,17 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
             // A break-before in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
-            if (style && style->shouldBreakChapter) {
+            if (m_collector->breakIntoChapters() && style && style->shouldBreakChapter) {
                 chapter++;
             }
         }
         else if ((nodeElement.localName() == "bookmark-start" || nodeElement.localName() == "bookmark")
                   && nodeElement.namespaceURI() == KoXmlNS::text) {
             QString key = "#" + nodeElement.attribute("name");
-            QString value = m_collector->filePrefix() + QString::number(chapter) + ".xhtml";
+            QString value = m_collector->filePrefix();
+            if (m_collector->breakIntoChapters())
+                value += QString::number(chapter);
+            value += ".xhtml";
             m_linksInfo.insert(key, value);
             continue;
         }
