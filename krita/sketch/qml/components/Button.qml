@@ -28,6 +28,8 @@ Item {
 
     property alias image: icon.source;
     property alias color: fill.color;
+    property alias border: fill.border;
+    property alias radius: fill.radius;
     property alias text: label.text;
     property alias textColor: label.color;
     property alias textSize: label.font.pixelSize;
@@ -43,8 +45,8 @@ Item {
 
     Rectangle {
         id: fill;
-        x: 5
-        y: 5
+        //x: 5
+        //y: 5
         anchors.fill: parent;
         anchors.margins: 0;
         color: "transparent";
@@ -63,7 +65,8 @@ Item {
 
         Label {
             id: label;
-            anchors.bottom: parent.bottom;
+            anchors.verticalCenter: parent.verticalCenter;
+            height: font.pixelSize;
             width: parent.width;
             horizontalAlignment: Text.AlignHCenter;
             elide: Text.ElideMiddle;
