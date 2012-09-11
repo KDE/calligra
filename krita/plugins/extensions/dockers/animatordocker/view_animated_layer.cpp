@@ -48,12 +48,12 @@ bool ViewAnimatedLayer::hasPreview() const
     return true;
 }
 
-QString ViewAnimatedLayer::aName() const
+QString ViewAnimatedLayer::animationName() const
 {
     return name().mid(9);
 }
 
-void ViewAnimatedLayer::setAName(const QString& name)
+void ViewAnimatedLayer::setAnimationName(const QString& name)
 {
     setName("_aniview_"+name);
 }
@@ -121,7 +121,7 @@ QImage ViewAnimatedLayer::getThumbnail(int fnum, int size)
 
 
 // Not supported yet
-FrameLayer* ViewAnimatedLayer::getCachedFrame(int num) const
+FrameLayer* ViewAnimatedLayer::getCachedFrame(int num)
 {
     return 0;
 }

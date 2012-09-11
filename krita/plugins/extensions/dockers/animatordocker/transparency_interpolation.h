@@ -1,5 +1,4 @@
 /*
- *  Interpolation method for layers with changing transparency
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -23,14 +22,17 @@
 
 #include "abstract_interpolation.h"
 
+/**
+ *  Interpolation method for layers with changing transparency
+ */
 class TransparencyInterpolation : public AbstractInterpolation
 {
 public:
     TransparencyInterpolation(){}
     virtual ~TransparencyInterpolation(){}
-    
+
 public:
-    virtual void changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position);
+    virtual void changeLayer(KisCloneLayerSP layer, KisNodeSP from, KisCloneLayerSP to, double position);
 };
 
 #endif // TRANSPARENCY_INTERPOLATION_H

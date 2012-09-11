@@ -19,6 +19,8 @@
 
 #include "animator_frame_manager.h"
 #include "animator_switcher.h"
+#include "frame_layer.h"
+#include "simple_frame_layer.h"
 #include <cstdlib>
 
 
@@ -62,14 +64,12 @@ void AnimatorFrameManager::clearRange(int from, int n)
 {
     if (n == 0)
         return;
-    
-    QList<AnimatedLayer*> layers = m_manager->layers();
-    AnimatedLayer* layer;
-    foreach (layer, layers)
-    {
-        FramedAnimatedLayer* flayer = qobject_cast<FramedAnimatedLayer*>(layer);
-        if (flayer)
-        {
+
+    QList<AnimatedLayerSP> layers = m_manager->layers();
+    AnimatedLayerSP layer;
+    foreach (layer, layers) {
+        FramedAnimatedLayerSP flayer = qobject_cast<FramedAnimatedLayer*>(layer.data());
+        if (flayer) {
             clearRange(flayer, from, n);
         }
     }
@@ -77,24 +77,25 @@ void AnimatorFrameManager::clearRange(int from, int n)
 
 void AnimatorFrameManager::clearRangeActive(int n)
 {
-    clearRange(qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer()),
+    clearRange(qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer().data()),
                m_manager->getSwitcher()->currentFrame(),
                n
-    );
+               );
 }
 
-void AnimatorFrameManager::clearRange(FramedAnimatedLayer* layer, int from, int n)
+void AnimatorFrameManager::clearRange(FramedAnimatedLayerSP layer, int from, int n)
 {
     if (!layer)
         return;
-    
+
     int end;
-    if (n < 0)
+    if (n < 0) {
         end = layer->dataEnd();
-    else
-        end = from+n;
-    for (int i = from; i < end; ++i)
-    {
+    }
+    else {
+        end = from + n;
+    }
+    for (int i = from; i < end; ++i) {
         layer->clearFrame(i);
     }
 }
@@ -109,14 +110,12 @@ void AnimatorFrameManager::moveRange(int from, int n, int dist)
 {
     if (dist == 0 || n == 0)
         return;
-    
-    QList<AnimatedLayer*> layers = m_manager->layers();
-    AnimatedLayer* layer;
-    foreach (layer, layers)
-    {
-        FramedAnimatedLayer* flayer = qobject_cast<FramedAnimatedLayer*>(layer);
-        if (flayer)
-        {
+
+    QList<AnimatedLayerSP> layers = m_manager->layers();
+    AnimatedLayerSP layer;
+    foreach (layer, layers) {
+        FramedAnimatedLayerSP flayer = qobject_cast<FramedAnimatedLayer*>(layer.data());
+        if (flayer) {
             moveRange(flayer, from, n, dist);
         }
     }
@@ -125,23 +124,23 @@ void AnimatorFrameManager::moveRange(int from, int n, int dist)
 void AnimatorFrameManager::moveRangeActive(int n, int dist)
 {
     int cur = m_manager->getSwitcher()->currentFrame();
-    moveRange(qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer()), cur, n, dist);
-    m_manager->getSwitcher()->goFrame(cur+dist);          // for easy moving many times
+    moveRange(qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer().data()), cur, n, dist);
+    m_manager->getSwitcher()->goFrame(cur + dist);          // for easy moving many times
 }
 
-void AnimatorFrameManager::moveRange(FramedAnimatedLayer* layer, int from, int n, int dist)
+void AnimatorFrameManager::moveRange(FramedAnimatedLayerSP layer, int from, int n, int dist)
 {
     if (layer == 0 || dist == 0)
         return;
-    
+
     if (n < 0)
         n = layer->dataEnd()-from;
-    
+
     if (n <= 0)
         return;
-    
+
     warnKrita << layer << from << n << dist;
-    
+
     if (dist > 0)
     {
         for (int i = from+n-1; i >= from; --i)
@@ -160,7 +159,7 @@ void AnimatorFrameManager::moveRange(FramedAnimatedLayer* layer, int from, int n
 
 void AnimatorFrameManager::copyPreviousKey()
 {
-    FramedAnimatedLayer *flayer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer());
+    FramedAnimatedLayer *flayer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer().data());
     if (flayer) {
         int fnum = m_manager->getSwitcher()->currentFrame();
         copyFrame(flayer, flayer->getPreviousKey(fnum), fnum);
@@ -169,7 +168,7 @@ void AnimatorFrameManager::copyPreviousKey()
 
 void AnimatorFrameManager::copyNextKey()
 {
-    FramedAnimatedLayer *flayer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer());
+    FramedAnimatedLayer *flayer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer().data());
     if (flayer) {
         int fnum = m_manager->getSwitcher()->currentFrame();
         copyFrame(flayer, flayer->getNextKey(fnum), fnum);
@@ -180,28 +179,30 @@ void AnimatorFrameManager::copyFrame(FramedAnimatedLayer *layer, int from, int t
 {
     if (!layer || !layer->frameAt(from) || layer->frameAt(to))
         return;
-    
-    KisNode *content = qobject_cast<SimpleFrameLayer*>(layer->frameAt(from))->getContent();
-    if (!content)
+
+    FrameLayer *frameLayer = layer->frameAt(from);
+    SimpleFrameLayer *simpleFrameLayer= dynamic_cast<SimpleFrameLayer*>(frameLayer);
+    KisNodeSP node = simpleFrameLayer->getContent();
+
+    if (!node) {
         return;
-    
+    }
+    simpleFrameLayer = qobject_cast<SimpleFrameLayer*>(node.data());
     layer->createFrame(to, true);
-    qobject_cast<SimpleFrameLayer*>(layer->frameAt(to))->setContent(content->clone().data());
+    qobject_cast<SimpleFrameLayer*>(layer->frameAt(to))->setContent(simpleFrameLayer->clone());
 }
 
 
-void AnimatorFrameManager::moveTo(FramedAnimatedLayer* source, int sourceFrame, int targetFrame)
+void AnimatorFrameManager::moveTo(FramedAnimatedLayerSP source, int sourceFrame, int targetFrame)
 {
     source->moveFrame(sourceFrame, targetFrame);
 }
 
-void AnimatorFrameManager::moveTo(FramedAnimatedLayer* source, int sourceFrame, FramedAnimatedLayer* target, int targetFrame)
+void AnimatorFrameManager::moveTo(FramedAnimatedLayerSP source, int sourceFrame, FramedAnimatedLayerSP target, int targetFrame)
 {
-    if (source == target)
-    {
+    if (source == target) {
         moveTo(source, sourceFrame, targetFrame);
-    } else
-    {
+    } else  {
         warnKrita << "moving frames across layers is not supported yet";
     }
 }

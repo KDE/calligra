@@ -1,5 +1,4 @@
 /*
- *  Light table model
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -24,6 +23,9 @@
 #include <QList>
 #include <QObject>
 
+/**
+ *  Light table model
+ */
 class AnimatorLT : public QObject
 {
     Q_OBJECT

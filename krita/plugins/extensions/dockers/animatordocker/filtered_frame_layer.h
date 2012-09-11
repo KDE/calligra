@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -25,15 +24,17 @@
 class FilteredFrameLayer : public SimpleFrameLayer
 {
     Q_OBJECT
-    
+
 public:
     FilteredFrameLayer(const KisGroupLayer& source);
     FilteredFrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
     virtual ~FilteredFrameLayer();
-    
+
 public:
     void setFilter(KisAdjustmentLayerSP filter);
     KisAdjustmentLayerSP filter() const;
 };
+
+typedef KisSharedPtr<FilteredFrameLayer> FilteredFrameLayerSP;
 
 #endif // FILTERED_FRAME_LAYER_H

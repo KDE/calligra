@@ -1,5 +1,4 @@
 /*
- *  Exporter
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -30,6 +29,9 @@
 
 #include "animator_manager.h"
 
+/**
+ *  Exporter 
+ */
 class AnimatorExporter : public QObject, KoCanvasObserverBase
 {
     Q_OBJECT

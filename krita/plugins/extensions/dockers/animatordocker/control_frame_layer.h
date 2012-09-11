@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -31,37 +30,37 @@ public:
     ControlFrameLayer(const KisGroupLayer& source);
     ControlFrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
     virtual ~ControlFrameLayer();
-    
+
 public:
-    virtual void setContent(KisNode* c);
-    virtual KisNode* getContent();
-    virtual bool isKeyFrame();
-    
+    virtual void setContent(KisNodeSP c);
+    virtual KisNodeSP getContent() const;
+    virtual bool isKeyFrame() const;
+
 public:
     virtual void load();
     virtual void save();
-    
+
 public:
     virtual int target();
     virtual void setTarget(int fnum);
-    
+
 public:
     virtual int repeat();
     virtual int remaining();
     virtual void setRepeat(int num);
     virtual bool pass();
     virtual void reset();
-    
+
 public:
     virtual void setEnabled(bool val);
     virtual bool enabled();
-    
+
 private:
     bool m_enabled;
-    
+
     int m_target;
     int m_repeatNumber;
-    
+
     int m_remaining;
 };
 

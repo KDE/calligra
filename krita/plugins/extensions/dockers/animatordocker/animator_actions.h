@@ -1,5 +1,4 @@
 /*
- *  Contains all GUI actions and provide access for them
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -28,6 +27,9 @@
 
 #include "animator_config.h"
 
+/**
+ *  Contains all GUI actions and provide access for them
+ */
 class AnimatorActions : public QObject
 {
     Q_OBJECT
@@ -35,24 +37,24 @@ class AnimatorActions : public QObject
 public:
     AnimatorActions(QObject* parent = 0);
     virtual ~AnimatorActions();
-    
+
 public:
     virtual void setManager(AnimatorManager* manager);
-    
+
 public:
     virtual QList<QAction*> actions() const;
     virtual QList<QAction*> actions(const QString& category) const;
-    
+
 signals:
     void frameActionsChanges();
-    
+
 protected:
     virtual void addAction(const QString& category, QAction* action);
     virtual void initActions();
-    
+
 protected slots:
-    virtual void setupFrameActions(AnimatedLayer* layer);
-    
+    virtual void setupFrameActions(KisNodeSP layer);
+
 protected slots:
 #if !LOAD_ON_START
     virtual void loadLayers();
@@ -60,61 +62,61 @@ protected slots:
     virtual void makeAnimated();
     virtual void exportFrames();
     virtual void importFrames();
-    
+
     virtual void playPause(bool v);
     virtual void toggleLooping(bool v);
-    
+
     virtual void createNormalLayer();
     virtual void createControlLayer();
     virtual void convertToViewLayer();
     virtual void doConvertToViewLayer();
     virtual void setConvertFrom(int from);
     virtual void setConvertTo(int to);
-    
+
     virtual void removeLayer();
-    
+
     virtual void renameLayer();
     virtual void doRenameLayer();
     virtual void setRenameString(const QString& string);
-    
+
     virtual void calculateLayer();
-    
-    
+
+
     virtual void createPaintFrame();
     virtual void createShapeFrame();
     virtual void createGroupFrame();
     virtual void interpolate();
-    
+
     virtual void createLoop();
     virtual void doCreateLoop();
     virtual void setLoopTarget(int target);
     virtual void setLoopRepeat(int repeat);
-    
+
     virtual void clearFrame();
     virtual void copyPrevious();
     virtual void copyNext();
-    
+
     virtual void moveLeft();
     virtual void moveRight();
     virtual void insertFrame();
     virtual void removeFrame();
-    
+
     virtual void enableLT(bool v);
-    
+
 public slots:
     virtual void setFps(int number);
-    
+
 private:
     QMap< QString, QList<QAction*> > m_actions;
     QString m_frameActionsType;
     AnimatorManager* m_manager;
-    
+
 private:
     QString m_renameString;
-    
+
     int m_loopTarget;
     int m_loopRepeat;
-    
+
     int m_convertFrom;
     int m_convertTo;
 };

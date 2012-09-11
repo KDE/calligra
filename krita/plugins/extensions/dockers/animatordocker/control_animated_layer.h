@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,7 +25,7 @@
 class ControlAnimatedLayer : public FramedAnimatedLayer
 {
     Q_OBJECT
-    
+
 public:
     ControlAnimatedLayer(const KisGroupLayer& source);
     ControlAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
@@ -35,18 +34,21 @@ public:
 public:
     virtual bool displayable() const;
     virtual bool hasPreview() const;
-    virtual QString aName() const;
-    virtual void setAName(const QString& name);
+    virtual QString animationName() const;
+    virtual void setAnimationName(const QString& name);
     virtual bool isKeyFrame(int num) const;
     virtual FrameLayer* emptyFrame();
-    
+
 public:
     // Player interface
     virtual void reset();
     virtual int nextFrame(int fnum);
-    
+
     // Control interface
     virtual void setLoop(int from, int to, int number);
 };
+
+typedef KisSharedPtr<ControlAnimatedLayer> ControlAnimatedLayerSP;
+
 
 #endif // CONTROL_ANIMATED_LAYER_H

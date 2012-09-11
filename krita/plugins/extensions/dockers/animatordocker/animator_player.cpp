@@ -24,7 +24,7 @@
 AnimatorPlayer::AnimatorPlayer(AnimatorManager* manager): QObject(manager)
 {
     m_manager = manager;
-    
+
     m_timer = new QTimer(this);
     setFps(12);
     connect(m_timer, SIGNAL(timeout()), SLOT(tick()));
@@ -93,25 +93,24 @@ void AnimatorPlayer::tick()
 int AnimatorPlayer::nextFrame(int frame)
 {
     int nxt = frame + 1;
-    
-    QList<AnimatedLayer*> layers = m_manager->layers();
-    AnimatedLayer* al;
-    foreach (al, layers)
-    {
-        ControlAnimatedLayer* clayer = qobject_cast<ControlAnimatedLayer*>(al);
-        if (clayer)
-        {
+
+    QList<AnimatedLayerSP> layers = m_manager->layers();
+    AnimatedLayerSP al;
+    foreach (al, layers) {
+        ControlAnimatedLayerSP clayer = qobject_cast<ControlAnimatedLayer*>(al.data());
+        if (clayer) {
             nxt = clayer->nextFrame(frame);
         }
     }
-    
-    if (nxt < 0 || nxt >= m_manager->framesNumber())
-    {
-        if (looped())
+
+    if (nxt < 0 || nxt >= m_manager->framesNumber()) {
+        if (looped()) {
             return 0;
-        else
+        }
+        else {
             return -1;
+        }
     }
-    
+
     return nxt;
 }

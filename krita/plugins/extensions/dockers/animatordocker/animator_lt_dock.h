@@ -1,5 +1,4 @@
 /*
- *  Light table docker
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -29,6 +28,9 @@
 #include "animator_lt_view.h"
 #include "animator_manager.h"
 
+/**
+ *  Light table docker
+ */
 class AnimatorLTDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT

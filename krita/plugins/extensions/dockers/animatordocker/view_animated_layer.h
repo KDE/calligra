@@ -27,41 +27,43 @@
 class ViewAnimatedLayer : public AnimatedLayer
 {
     Q_OBJECT
-    
+
 public:
     ViewAnimatedLayer(const KisGroupLayer& source);
     ViewAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
     virtual ~ViewAnimatedLayer();
-    
+
 public:
-    virtual QString aName() const;
-    virtual void setAName(const QString& name);
-    
+    virtual QString animationName() const;
+    virtual void setAnimationName(const QString& name);
+
     virtual bool displayable() const;
     virtual bool hasPreview() const;
-    
-    virtual FrameLayer* getCachedFrame(int num) const;
-    
+
+    virtual FrameLayer* getCachedFrame(int num);
+
     virtual int dataStart() const;
     virtual int dataEnd() const;
-    
+
     virtual void setStart(int st);
     virtual void setEnd(int end);
-    
+
 public:
     virtual void save();
     virtual void load();
-    
+
 public:
     virtual QImage getThumbnail(int fnum, int size);
-    
+
 private:
     QImage m_fullImage;
     int m_cached;
-    
+
     int m_start;
     int m_end;
-    KisNode* m_content;
+    KisNodeSP m_content;
 };
+
+typedef KisSharedPtr<ViewAnimatedLayer> ViewAnimatedLayerSP;
 
 #endif  // VIEW_ANIMATED_LAYER

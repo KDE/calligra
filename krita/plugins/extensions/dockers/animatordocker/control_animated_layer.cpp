@@ -42,12 +42,12 @@ bool ControlAnimatedLayer::hasPreview() const
     return false;
 }
 
-QString ControlAnimatedLayer::aName() const
+QString ControlAnimatedLayer::animationName() const
 {
     return name().mid(12);
 }
 
-void ControlAnimatedLayer::setAName(const QString& name)
+void ControlAnimatedLayer::setAnimationName(const QString& name)
 {
     setName("_anicontrol_"+name);
 }

@@ -1,7 +1,7 @@
 /*
  *  Simple animated layer -- just group layer with frames as it was in old
  *  AnimatorModel before splitting.
- *  
+ *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -40,12 +40,12 @@ FramedAnimatedLayer::FramedAnimatedLayer(const KisGroupLayer& source) : Animated
 }
 
 
-QString FramedAnimatedLayer::aName() const
+QString FramedAnimatedLayer::animationName() const
 {
     return name().mid(5);
 }
 
-void FramedAnimatedLayer::setAName(const QString& name)
+void FramedAnimatedLayer::setAnimationName(const QString& name)
 {
     setName("_ani_"+name);
 }
@@ -63,8 +63,9 @@ bool FramedAnimatedLayer::hasPreview() const
 
 FrameLayer* FramedAnimatedLayer::frameAt(int num) const
 {
-    if (num >= dataStart() && num < dataEnd())
+    if (num >= dataStart() && num < dataEnd()) {
         return m_frames[num];
+    }
     return 0;
 }
 
@@ -78,7 +79,7 @@ void FramedAnimatedLayer::setFrameAt(int fnum, FrameLayer *frame)
         Q_ASSERT(m_frames[fnum] == 0);
         m_frames[fnum] = frame;
     }
-    
+
     if (frame) {
         bool isKey;
         getFrameFromName(frame->name(), isKey);
@@ -90,7 +91,7 @@ void FramedAnimatedLayer::insertFrame(FrameLayer* frame)
 {
     AnimatorManager* manager = AnimatorManagerFactory::instance()->getManager(image().data());
     manager->putNodeAt(frame, this, 0);
-    
+
     bool isKey;
     int fnum = getFrameFromName(frame->name(), isKey);
     if (fnum < 0)
@@ -98,7 +99,7 @@ void FramedAnimatedLayer::insertFrame(FrameLayer* frame)
         return;
     }
     setFrameAt(fnum, frame);
-    
+
     manager->layerFramesNumberChange(this, dataEnd());
 }
 
@@ -135,7 +136,7 @@ void FramedAnimatedLayer::moveFrame(int from, int to)
 {
     if (!frameAt(from))
         return;
-    
+
     bool iskey;
     getFrameFromName(frameAt(from)->name(), iskey);
     if (!iskey)
@@ -143,7 +144,7 @@ void FramedAnimatedLayer::moveFrame(int from, int to)
         warnKrita << "moving non-key frames? don't think it's useful";
         return;
     }
-    
+
     Q_ASSERT(frameAt(to));
     setFrameAt(to, frameAt(from));
     setFrameAt(from, 0);
@@ -160,7 +161,7 @@ void FramedAnimatedLayer::swapFrames(int first, int second)
 }
 
 
-FrameLayer* FramedAnimatedLayer::getKeyFrame(int num) const
+FrameLayer* FramedAnimatedLayer::getKeyFrame(int num)
 {
     if (isKeyFrame(num))
     {
@@ -170,7 +171,7 @@ FrameLayer* FramedAnimatedLayer::getKeyFrame(int num) const
     return 0;
 }
 
-FrameLayer* FramedAnimatedLayer::getCachedFrame(int num) const
+FrameLayer* FramedAnimatedLayer::getCachedFrame(int num)
 {
     FrameLayer* frame = frameAt(num);
     if (frame)
@@ -211,7 +212,9 @@ int FramedAnimatedLayer::getPreviousKey(int num) const
 
 bool FramedAnimatedLayer::isKeyFrame(int num) const
 {
-    return frameAt(num) && qobject_cast<SimpleFrameLayer*>(frameAt(num))->isKeyFrame();
+    const SimpleFrameLayer* simpleFrameLayer = qobject_cast<const SimpleFrameLayer*>(frameAt(num));
+    SimpleFrameLayer *sfl = const_cast<SimpleFrameLayer*>(simpleFrameLayer);
+    return (frameAt(num) && sfl->isKeyFrame());
 }
 
 int FramedAnimatedLayer::dataStart() const
@@ -233,7 +236,7 @@ QString FramedAnimatedLayer::getNameForFrame(int num, bool iskey) const
         ns << "_";
     std::string s;
     ns >> s;
-    
+
     QString* t = new QString(s.c_str());
     return *t;
 }
@@ -243,7 +246,7 @@ int FramedAnimatedLayer::getFrameFromName(const QString& name, bool& iskey) cons
     if (name.startsWith("_frame_"))
     {
         iskey = !name.endsWith("_");
-        
+
         std::stringstream ns;
         ns << (name.mid(7).toAscii().data());
         int fnum;

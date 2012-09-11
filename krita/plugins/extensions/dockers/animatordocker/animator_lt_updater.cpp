@@ -37,41 +37,37 @@ AnimatorLTUpdater::~AnimatorLTUpdater()
 {
 }
 
-void AnimatorLTUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
+void AnimatorLTUpdater::updateLayer(AnimatedLayerSP layer, int oldFrame, int newFrame)
 {
     if (! layer->displayable())
         return;
-    
-    if (mode() == AnimatorLTUpdater::Disabled)
-    {
+
+    if (mode() == AnimatorLTUpdater::Disabled) {
         AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
         return;
     }
-    
-    if (mode() == AnimatorLTUpdater::KeyFramed)
-    {
+
+    if (mode() == AnimatorLTUpdater::KeyFramed) {
         warnKrita << "KeyFramed mode is not supported yet";
         AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
         return;
     }
-    
-    if (playerMode())
-    {
+
+    if (playerMode()) {
         AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
         return;
     }
-    
-    FramedAnimatedLayer* framedLayer = qobject_cast<FramedAnimatedLayer*>(layer);
-    if (!framedLayer)
-    {
+
+    FramedAnimatedLayerSP framedLayer = qobject_cast<FramedAnimatedLayer*>(layer.data());
+    if (!framedLayer) {
         AnimatorUpdater::updateLayer(layer, oldFrame, newFrame);
         return;
     }
-    
+
     for (int i = -getLT()->getNear(); i <= getLT()->getNear(); ++i) {
         frameUnvisible(framedLayer->frameAt(i+oldFrame));
     }
-    
+
     for (int i = -getLT()->getNear(); i <= getLT()->getNear(); ++i) {
         if (getLT()->getVisibility(i)) {
             setupFilter(framedLayer->frameAt(i+newFrame), i);
@@ -91,17 +87,17 @@ void AnimatorLTUpdater::updateRelFrame(int relFrame)
 {
     if (mode() == AnimatorLTUpdater::Disabled)
         return;
-    
+
     if (mode() == AnimatorLTUpdater::KeyFramed) {
         warnKrita << "KeyFramed mode is not supported yet";
         return;
     }
-    
+
     int cFrame = m_manager->getSwitcher()->currentFrame();
-    QList<AnimatedLayer*> layers = m_manager->layers();
-    AnimatedLayer* layer;
+    QList<AnimatedLayerSP> layers = m_manager->layers();
+    AnimatedLayerSP layer;
     foreach (layer, layers) {
-        FramedAnimatedLayer* framedLayer = qobject_cast<FramedAnimatedLayer*>(layer);
+        FramedAnimatedLayerSP framedLayer = qobject_cast<FramedAnimatedLayer*>(layer.data());
         if (framedLayer) {
             SimpleFrameLayer *frame = qobject_cast<SimpleFrameLayer*>(framedLayer->frameAt(cFrame+relFrame));
             if (frame) {
@@ -138,7 +134,7 @@ AnimatorLTUpdater::LTUpdaterMode AnimatorLTUpdater::mode() const
 void AnimatorLTUpdater::setMode(AnimatorLTUpdater::LTUpdaterMode mode)
 {
     m_mode = mode;
-    
+
     // TODO: don't do full update
     fullUpdate();
     int frame = m_manager->getSwitcher()->currentFrame();

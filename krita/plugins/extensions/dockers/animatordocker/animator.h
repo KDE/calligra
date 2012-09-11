@@ -1,5 +1,4 @@
 /*
- *  Main file of animator plugin: dock factories, etc
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,6 +25,9 @@
 
 class KisView2;
 
+/**
+ *  Main file of animator plugin: dock factories, etc
+ */
 class AnimatorPlugin : public KParts::Plugin
 {
     Q_OBJECT

@@ -20,13 +20,13 @@
 
 #include "moving_interpolation.h"
 
-void MovingInterpolation::changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position)
+void MovingInterpolation::changeLayer(KisCloneLayerSP layer, KisNodeSP from, KisCloneLayerSP to, double position)
 {
     double x = from->x()*(1.0-position)+to->x()*position;
     double y = from->y()*(1.0-position)+to->y()*position;
     qint32 ix = x;
     qint32 iy = y;
-    
+
     layer->setX(ix);
     layer->setY(iy);
 }

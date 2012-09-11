@@ -25,17 +25,19 @@
 class SimpleFrameLayer : public FrameLayer
 {
     Q_OBJECT
-    
+
 public:
     SimpleFrameLayer(KisImageWSP image, const QString& name, quint8 opacity);
     SimpleFrameLayer(const KisGroupLayer& source);
-    
+
 public:
-    virtual KisNode* getContent();
-    virtual void setContent(KisNode* c);
-    
+    virtual KisNodeSP getContent() const;
+    virtual void setContent(KisNodeSP c);
+
 public:
-    virtual bool isKeyFrame();
+    virtual bool isKeyFrame() const;
 };
+
+typedef KisSharedPtr<SimpleFrameLayer> SimpleFrameLayerSP;
 
 #endif // SIMPLE_FRAME_LAYER_H

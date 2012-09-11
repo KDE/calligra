@@ -1,5 +1,5 @@
 /*
- *  
+ *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@
 AnimatorDock::AnimatorDock( ) : QDockWidget(i18n("Animator"))
 {
     m_mainModel = 0;
-    
+
     setupUI();
 }
 
@@ -50,14 +50,14 @@ void AnimatorDock::setupUI()
 {
     QWidget* mainWidget = new QWidget(this);
     QVBoxLayout* mLayout = new QVBoxLayout(mainWidget);
-    
+
     m_view = new AnimatorView;
     mLayout->addWidget(m_view);
-    
+
     QHBoxLayout* downLayout = new QHBoxLayout(mainWidget);
-    
+
     downLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    
+
     QSlider* columnWidthSlider = new QSlider(Qt::Horizontal, mainWidget);
     columnWidthSlider->setRange(8, 64);
     columnWidthSlider->setValue(10);
@@ -65,36 +65,36 @@ void AnimatorDock::setupUI()
     columnWidthSlider->setMaximumWidth(128);
     connect(columnWidthSlider, SIGNAL(valueChanged(int)), SLOT(setFrameWidth(int)));
     downLayout->addWidget(columnWidthSlider);
-    
+
     QAction* showThumbs = new QAction(SmallIcon("view-preview"), i18n("Show frame thumbnails"), mainWidget);
     showThumbs->setCheckable(true);
     showThumbs->setChecked(false);
     connect(showThumbs, SIGNAL(triggered(bool)), SLOT(setShowThumbs(bool)));
-    
+
     QToolButton* showThumbsButton = new QToolButton(this);
     showThumbsButton->setDefaultAction(showThumbs);
     showThumbsButton->setAutoRaise(true);
-    
+
     downLayout->addWidget(showThumbsButton);
-    
+
     mLayout->addLayout(downLayout);
-    
+
     mainWidget->setLayout(mLayout);
-    
+
     setWidget(mainWidget);
 }
 
 void AnimatorDock::setCanvas(KoCanvasBase* canvas)
 {
     KisCanvas2* kcanvas = dynamic_cast<KisCanvas2*>(canvas);
-    KisImage* image = kcanvas->image().data();
-    
+    KisImageSP image = kcanvas->image();
+
     m_manager = AnimatorManagerFactory::instance()->getManager(image, kcanvas);
-    
+
     m_mainModel = new AnimatorModel(image);
     m_mainModel->setFrameWidth(10);
     connect(m_manager->getSwitcher(), SIGNAL(frameChanged(int,int)), m_mainModel, SLOT(dataChangedSlot(int,int)));
-    
+
     m_view->setModel(m_mainModel);
 }
 

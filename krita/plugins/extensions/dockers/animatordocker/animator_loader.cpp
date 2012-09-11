@@ -1,5 +1,5 @@
 /*
- *  
+ *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -40,18 +40,18 @@ void AnimatorLoader::loadAll()
         warnKrita << "trying to load layers before AnimatorManager is ready";
         return;
     }
-    KisImage* image = m_manager->image();
+    KisImageWSP image = m_manager->image();
     KisNodeSP rootNode = image->root();
-    
+
     // first, check signature
     AnimatorMetaInfo* kra_info = m_manager->kraMetaInfo();
     AnimatorMetaInfo* plugin_info = m_manager->metaInfo();
-    
+
     int kmajor = kra_info->getMajor();
     int pmajor = plugin_info->getMajor();
-    
+
     bool needLoading = true;
-    
+
     if (kmajor < pmajor)
     {
         warnKrita << "trying to import from older format";
@@ -63,13 +63,13 @@ void AnimatorLoader::loadAll()
         warnKrita << "this file was created by newer version of plugin, please update it";
         return;
     }
-    
+
     if (!needLoading)
         return;
-    
+
     int kminor = kra_info->getMinor();
     int pminor = plugin_info->getMinor();
-    
+
     if (kminor < pminor)
     {
         m_manager->setKraMetaInfo();
@@ -77,7 +77,7 @@ void AnimatorLoader::loadAll()
     {
         warnKrita << "this file can use some features of newer version of animator";
     }
-    
+
     loadLayers(rootNode);
 }
 
@@ -85,18 +85,16 @@ void AnimatorLoader::loadLayers(KisNodeSP rootNode)
 {
     if (rootNode->inherits("AnimatedLayer"))
         return;
-    
+
     if (! rootNode->inherits("KisGroupLayer"))
         return;
-    
-    if (rootNode->name().startsWith("_ani"))
-    {
+
+    if (rootNode->name().startsWith("_ani")) {
         loadLayer(rootNode);
         return;
     }
-    
-    for (int i = 0; i < rootNode->childCount(); ++i)
-    {
+
+    for (quint32 i = 0; i < rootNode->childCount(); ++i) {
         KisNodeSP child = rootNode->at(i);
         loadLayers(child);
     }
@@ -104,25 +102,28 @@ void AnimatorLoader::loadLayers(KisNodeSP rootNode)
 
 void AnimatorLoader::loadLayer(KisNodeSP node)
 {
-    AnimatedLayer *layer = 0;
-    KisLayer *sourceLayer = qobject_cast<KisLayer*>(node.data());
+    AnimatedLayerSP layer = 0;
+    KisLayerSP sourceLayer = qobject_cast<KisLayer*>(node.data());
 
     if (node->name().startsWith("_ani_")) {
         layer = loadFramedLayer<NormalAnimatedLayer, FilteredFrameLayer>(node);
-    } else if (node->name().startsWith("_anicontrol_")) {
-        ControlAnimatedLayer* clayer = loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
+    }
+    else if (node->name().startsWith("_anicontrol_")) {
+        ControlAnimatedLayerSP clayer = loadFramedLayer<ControlAnimatedLayer, ControlFrameLayer>(node);
         clayer->reset();
-	layer = clayer;
-    } else if (node->name().startsWith("_aniview_")) {
+        layer = clayer;
+    }
+    else if (node->name().startsWith("_aniview_")) {
         KisGroupLayer* gl = qobject_cast<KisGroupLayer*>(node.data());
         if (!gl || !gl->at(0))
             return;
-        ViewAnimatedLayer* vlayer = new ViewAnimatedLayer(*gl);
+        ViewAnimatedLayerSP vlayer = new ViewAnimatedLayer(*gl);
         KisNodeSP parent = gl->parent();
         m_manager->insertLayer(vlayer, parent, parent->index(gl));
         m_manager->putNodeAt(gl->at(0), vlayer, 0);
         vlayer->load();
-    } else {
+    }
+    else {
         warnKrita << "only normal framed and control layers are implemented";
     }
 
@@ -134,7 +135,7 @@ void AnimatorLoader::loadLayer(KisNodeSP node)
             clone->setCopyFrom(layer);
         }
     }
-    
+
     if (layer) {
         m_manager->removeLayer(node.data());
     }
@@ -183,11 +184,10 @@ bool AnimatorLoader::convertAll()
 bool AnimatorLoader::convertLayers(KisNodeSP rootNode)
 {
     bool isAnimated = false;
-    for (int i = 0; i < rootNode->childCount(); ++i)
+    for (quint32 i = 0; i < rootNode->childCount(); ++i)
     {
         KisNodeSP node = rootNode->at(i);
-        if (node->name().startsWith("_ani_"))
-        {
+        if (node->name().startsWith("_ani_")) {
             isAnimated = true;
             convertLayer(node);
         }
@@ -197,17 +197,16 @@ bool AnimatorLoader::convertLayers(KisNodeSP rootNode)
 
 void AnimatorLoader::convertLayer(KisNodeSP node)
 {
-    for (int i = 0; i < node->childCount(); ++i)
-    {
-        KisNode* fr = node->at(i).data();
+    for (quint32 i = 0; i < node->childCount(); ++i) {
+        KisNodeSP fr = node->at(i).data();
         fr->setVisible(true);
         fr->setOpacity(255);
-        
+
         m_manager->createGroupLayer(node);
-        KisGroupLayer* nf = dynamic_cast<KisGroupLayer*>(m_manager->activeLayer());
-        
+        KisGroupLayer* nf = dynamic_cast<KisGroupLayer*>(m_manager->activeLayer().data());
+
         m_manager->putNodeAt(fr, nf, 0);                       // This is VERY slow
-        
+
         nf->setName(fr->name());
         fr->setName("_");
     }

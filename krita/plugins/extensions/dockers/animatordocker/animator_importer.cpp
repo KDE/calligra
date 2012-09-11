@@ -50,11 +50,11 @@ void AnimatorImporter::importUser()
 {
     KisNodeSP from;
     KisNodeSP to;
-    
+
     from = m_manager->createLayerAt("KisPaintLayer", m_manager->image()->root(), 0);
     to = m_manager->createLayerAt("KisPaintLayer", m_manager->image()->root(), 1);
     m_manager->activate(-1, from.data());
-    
+
     m_imageManager->importImage();
     importBetween(from, to);
 }
@@ -63,21 +63,21 @@ void AnimatorImporter::importBetween(KisNodeSP from, KisNodeSP to)
 {
     m_manager->activate(-1, to.data());
     m_manager->createAnimatedLayer<NormalAnimatedLayer>();
-    FramedAnimatedLayer *layer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer());
-    
+    FramedAnimatedLayer *layer = qobject_cast<FramedAnimatedLayer*>(m_manager->activeLayer().data());
+
     KisNodeSP node = from->nextSibling();
     int frameNumber = 0;
     while (node != to) {
         warnKrita << frameNumber << node;
-        
+
         KisNodeSP nextNode = node->nextSibling();
-        
+
         layer->createFrame(frameNumber, true, node);
-        
+
         ++frameNumber;
         node = nextNode;
     }
-    
+
     m_manager->removeLayer(from.data());
     m_manager->removeLayer(to.data());
 }

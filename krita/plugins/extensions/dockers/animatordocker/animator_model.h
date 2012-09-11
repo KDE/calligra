@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -28,56 +27,55 @@
 class AnimatorModel : public QAbstractItemModel
 {
     Q_OBJECT
-    
+
 public:
-    AnimatorModel(KisImage* image);
+    AnimatorModel(KisImageWSP image);
     virtual ~AnimatorModel();
-    
+
 public slots:
     virtual void removeThis();
-    
+
     virtual void layoutChangedSlot();
-    virtual void dataChangedSlot(KisNode* node);
     virtual void dataChangedSlot(KisNodeSP node);
     virtual void dataChangedSlot(int from, int to);
-    
+
 public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    
+
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    
+
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex& child) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
-    
+
 public:
     virtual int frameWidth() const;
     virtual void setFrameWidth(int width);
-    
+
     virtual bool showThumbs() const;
     virtual void setShowThumbs(bool val);
-    
+
 public:
-    virtual KisImage* image() const;
-    
+    virtual KisImageWSP image() const;
+
 public:
     virtual int frameNumber(const QModelIndex& index) const;
     virtual int frameNumber(int column) const;
-    
-    virtual KisNode* nodeFromIndex(const QModelIndex& index) const;
-    
+
+    virtual KisNodeSP nodeFromIndex(const QModelIndex& index) const;
+
 protected:
-    virtual QModelIndex indexFromNode(const KisNode* node) const;
-    
+    virtual QModelIndex indexFromNode(const KisNodeSP node) const;
+
 private:
     int m_frameWidth;
     bool m_showThumbs;
-    
+
 private:
-    KisImage* m_image;
+    KisImageWSP m_image;
 };
 
 #endif // ANIMATOR_MODEL_H

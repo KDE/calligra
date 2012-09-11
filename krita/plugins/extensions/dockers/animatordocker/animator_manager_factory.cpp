@@ -41,16 +41,16 @@ AnimatorManagerFactory* AnimatorManagerFactory::instance()
     return s_instance;
 }
 
-AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image, KisCanvas2* canvas)
+AnimatorManager* AnimatorManagerFactory::getManager(KisImageWSP image, KisCanvas2* canvas)
 {
     AnimatorManager* manager = getManager(image);
     if (canvas)
         manager->setCanvas(canvas);
     else
         manager->unsetCanvas();
-    
+
     return manager;
-    
+
 }
 
 AnimatorManager* AnimatorManagerFactory::getManager(KisCanvas2* canvas)
@@ -58,7 +58,7 @@ AnimatorManager* AnimatorManagerFactory::getManager(KisCanvas2* canvas)
     return getManager(canvas->image().data(), canvas);
 }
 
-AnimatorManager* AnimatorManagerFactory::getManager(KisImage* image)
+AnimatorManager* AnimatorManagerFactory::getManager(KisImageWSP image)
 {
     if (! m_instances[image])
     {

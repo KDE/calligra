@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -34,9 +33,9 @@ public:
     
 public slots:
     virtual void fullUpdate();
-    virtual void fullUpdateLayer(AnimatedLayer* layer);
+    virtual void fullUpdateLayer(AnimatedLayerSP layer);
     virtual void update(int oldFrame, int newFrame);
-    virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
+    virtual void updateLayer(AnimatedLayerSP layer, int oldFrame, int newFrame);
     
 public:
     virtual void playerModeOff();
@@ -44,9 +43,9 @@ public:
     virtual bool playerMode();
     
 protected:
-    virtual void frameVisible(KisNode* frame, bool visible, int opacity);
-    virtual void frameVisible(KisNode* frame, int opacity);
-    virtual void frameUnvisible(KisNode* frame);
+    virtual void frameVisible(KisNodeSP frame, bool visible, int opacity);
+    virtual void frameVisible(KisNodeSP frame, int opacity);
+    virtual void frameUnvisible(KisNodeSP frame);
     
 protected:
     AnimatorManager* m_manager;

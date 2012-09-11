@@ -20,12 +20,12 @@
 
 #include "abstract_interpolation.h"
 
-KisCloneLayer* AbstractInterpolation::makeLayer(KisNode* from, KisCloneLayer* to, double position)
+KisCloneLayerSP AbstractInterpolation::makeLayer(KisNodeSP from, KisCloneLayerSP to, double position)
 {
-    KisCloneLayer* result = new KisCloneLayer(*to);
+    KisCloneLayerSP result = new KisCloneLayer(*to);
     if (!result)
         return 0;
-    
+
     changeLayer(result, from, to, position);
     return result;
 }

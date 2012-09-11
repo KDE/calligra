@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -40,7 +39,7 @@ public:
     virtual ~AnimatorLTUpdater();
     
 public:
-    virtual void updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame);
+    virtual void updateLayer(AnimatedLayerSP layer, int oldFrame, int newFrame);
     
 public:
     virtual void setMode(LTUpdaterMode mode);

@@ -1,5 +1,4 @@
 /*
- *
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -34,20 +33,20 @@ class AnimatorManagerFactory : public QObject
 public:
     AnimatorManagerFactory();
     virtual ~AnimatorManagerFactory();
-    
+
 public:
     static AnimatorManagerFactory* instance();
-    
+
 public:
-    AnimatorManager* getManager(KisImage* image, KisCanvas2* canvas);
+    AnimatorManager* getManager(KisImageWSP image, KisCanvas2* canvas);
     AnimatorManager* getManager(KisCanvas2* canvas);
-    AnimatorManager* getManager(KisImage* image);
-    
+    AnimatorManager* getManager(KisImageWSP image);
+
 private:
     void init();
-    
+
 private:
-    QMap<KisImage*,AnimatorManager*> m_instances;
+    QMap<KisImageWSP,AnimatorManager*> m_instances;
 };
 
 #endif // ANIMATOR_MODEL_FACTORY_H

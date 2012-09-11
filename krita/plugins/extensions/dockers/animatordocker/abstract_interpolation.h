@@ -1,5 +1,4 @@
 /*
- *  Abstract class for interpolation methods
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -24,15 +23,18 @@
 #include "kis_node.h"
 #include "kis_clone_layer.h"
 
+/**
+ *  Abstract class for interpolation methods
+ */
 class AbstractInterpolation
 {
 public:
     AbstractInterpolation(){}
     virtual ~AbstractInterpolation(){}
-    
+
 public:
-    virtual KisCloneLayer* makeLayer(KisNode* from, KisCloneLayer* to, double position);
-    virtual void changeLayer(KisCloneLayer* layer, KisNode* from, KisCloneLayer* to, double position) = 0;
+    virtual KisCloneLayerSP makeLayer(KisNodeSP from, KisCloneLayerSP to, double position);
+    virtual void changeLayer(KisCloneLayerSP layer, KisNodeSP from, KisCloneLayerSP to, double position) = 0;
 };
 
 #endif // ABSTRACT_INTERPOLATION_H

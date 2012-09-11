@@ -1,5 +1,4 @@
 /*
- *  Interpolated layer: allows several ways of interpolating
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,24 +25,29 @@
 
 #include "framed_animated_layer.h"
 
+/**
+ *  Interpolated layer: allows several ways of interpolating
+ */
 class InterpolatedAnimatedLayer : public FramedAnimatedLayer
 {
     Q_OBJECT
-    
+
 public:
     InterpolatedAnimatedLayer(const KisGroupLayer& source);
     InterpolatedAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
-    
+
 protected:
     virtual void updateFrame(int num);
 
 protected:
-    virtual KisCloneLayer* interpolate(KisNode* from, KisCloneLayer* to, double position) = 0;
-    
+    virtual KisCloneLayerSP interpolate(KisNodeSP from, KisCloneLayerSP to, double position) = 0;
+
     virtual QString getNameForFrame(int num, bool iskey) const;
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
-    
+
 private:
 };
+
+typedef KisSharedPtr<InterpolatedAnimatedLayer> InterpolatedAnimatedLayerSP;
 
 #endif // INTERPOLATED_ANIMATED_LAYER_H

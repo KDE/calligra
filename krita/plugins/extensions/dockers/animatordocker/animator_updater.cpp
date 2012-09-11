@@ -33,15 +33,15 @@ AnimatorUpdater::~AnimatorUpdater()
 
 void AnimatorUpdater::fullUpdate()
 {
-    QList<AnimatedLayer*> layers = m_manager->layers();
-    AnimatedLayer* layer;
+    QList<AnimatedLayerSP> layers = m_manager->layers();
+    AnimatedLayerSP layer;
     foreach (layer, layers)
     {
         fullUpdateLayer(layer);
     }
 }
 
-void AnimatorUpdater::fullUpdateLayer(AnimatedLayer* layer)
+void AnimatorUpdater::fullUpdateLayer(AnimatedLayerSP layer)
 {
     for (int i = layer->dataStart(); i < layer->dataEnd(); ++i)
     {
@@ -56,15 +56,15 @@ void AnimatorUpdater::fullUpdateLayer(AnimatedLayer* layer)
 
 void AnimatorUpdater::update(int oldFrame, int newFrame)
 {
-    QList<AnimatedLayer*> layers = m_manager->layers();
-    AnimatedLayer* layer;
+    QList<AnimatedLayerSP> layers = m_manager->layers();
+    AnimatedLayerSP layer;
     foreach (layer, layers)
     {
         updateLayer(layer, oldFrame, newFrame);
     }
 }
 
-void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFrame)
+void AnimatorUpdater::updateLayer(AnimatedLayerSP layer, int oldFrame, int newFrame)
 {
     if (! layer->displayable())
         return;
@@ -83,7 +83,7 @@ void AnimatorUpdater::updateLayer(AnimatedLayer* layer, int oldFrame, int newFra
     frameVisible(newf, 255);
 }
 
-void AnimatorUpdater::frameVisible(KisNode* frame, bool visible, int opacity)
+void AnimatorUpdater::frameVisible(KisNodeSP frame, bool visible, int opacity)
 {
     if (visible)
         frameVisible(frame, opacity);
@@ -91,7 +91,7 @@ void AnimatorUpdater::frameVisible(KisNode* frame, bool visible, int opacity)
         frameUnvisible(frame);
 }
 
-void AnimatorUpdater::frameUnvisible(KisNode* frame)
+void AnimatorUpdater::frameUnvisible(KisNodeSP frame)
 {
     if (!frame)
         return;
@@ -101,7 +101,7 @@ void AnimatorUpdater::frameUnvisible(KisNode* frame)
     frame->setDirty(frame->exactBounds());
 }
 
-void AnimatorUpdater::frameVisible(KisNode* frame, int opacity)
+void AnimatorUpdater::frameVisible(KisNodeSP frame, int opacity)
 {
     if (!frame)
         return;

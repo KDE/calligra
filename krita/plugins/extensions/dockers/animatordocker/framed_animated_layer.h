@@ -1,7 +1,4 @@
 /*
- *  Simple animated layer -- just group layer with frames as it was in old
- *  AnimatorModel before splitting.
- *  
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,21 +23,25 @@
 #include "animated_layer.h"
 #include "simple_frame_layer.h"
 
+/**
+ *  Simple animated layer -- just group layer with frames as it was in old
+ *  AnimatorModel before splitting.
+ */
 class FramedAnimatedLayer : public AnimatedLayer
 {
     Q_OBJECT
-    
+
 public:
     FramedAnimatedLayer(KisImageWSP image, const QString& name, quint8 opacity);
     FramedAnimatedLayer(const KisGroupLayer& source);
 
 public:
-    virtual QString aName() const;
-    virtual void setAName(const QString& name);
-    
+    virtual QString animationName() const;
+    virtual void setAnimationName(const QString& name);
+
 public:
     virtual FrameLayer* emptyFrame();
-    
+
     virtual FrameLayer* frameAt(int num) const;
     virtual void insertFrame(FrameLayer* frame);
     virtual void createFrame(int num, bool isKey);
@@ -50,13 +51,13 @@ public:
     virtual void swapFrames(int first, int second);
 
 public:
-    virtual FrameLayer* getCachedFrame(int num) const;
-    virtual FrameLayer* getKeyFrame(int num) const;
+    virtual FrameLayer* getCachedFrame(int num);
+    virtual FrameLayer* getKeyFrame(int num);
 
 public:
     virtual bool displayable() const;
     virtual bool hasPreview() const;
-    
+
 public:
     virtual bool isKeyFrame(int num) const;
 
@@ -66,22 +67,24 @@ public:
 public:
     virtual int dataStart() const;
     virtual int dataEnd() const;
-    
+
 public:
     virtual QString getNameForFrame(int num, bool iskey) const;
-    
+
 // protected:
     virtual int getFrameFromName(const QString& name, bool& iskey) const;
-    
+
 protected:
     virtual void setFrameAt(int fnum, FrameLayer* frame);
-    
+
     virtual QList<FrameLayer*> frames();
-    
+
 private:
     int m_firstFrame;
 
     QList< FrameLayer* > m_frames;
 };
+
+typedef KisSharedPtr<FramedAnimatedLayer> FramedAnimatedLayerSP;
 
 #endif // SIMPLE_ANIMATED_LAYER_H

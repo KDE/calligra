@@ -1,5 +1,4 @@
 /*
- *  Control docker
  *  Copyright (C) 2011 Torio Mlshi <mlshi@lavabit.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -31,6 +30,9 @@
 #include "animator_manager.h"
 #include "animator_actions.h"
 
+/**
+ *  Control docker
+ */
 class AnimatorControlDock : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
