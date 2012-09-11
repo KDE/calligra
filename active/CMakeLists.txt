@@ -8,6 +8,7 @@ find_package(KDE4 REQUIRED)
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories(${QT_INCLUDES}
                     ${KDE4_INCLUDES}
+                    ${KDECLARATIVE_INCLUDE_DIRS}
                     ${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -44,7 +45,7 @@ add_executable(calligraactive ${calligra-active_SRCS})
 target_link_libraries(calligraactive
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_LIBRARIES}
-    kdeclarative
+    ${KDECLARATIVE_LIBRARIES}
     komain
     wordsprivate
     calligrasheetscommon
