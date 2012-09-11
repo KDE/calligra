@@ -161,6 +161,18 @@ void KisShortcut::match(QEvent* event)
             }
             break;
         }
+        case QEvent::TouchUpdate: {
+            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+            if (tevent->touchPoints().count() == 1) {
+                d->buttonState.append(Qt::LeftButton);
+            } else {
+                d->buttonState.clear();
+            }
+            break;
+        }
+        case QEvent::TouchEnd:
+            d->buttonState.clear();
+            break;
         case QEvent::Gesture: {
             QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
             foreach(QGesture *gesture, gevent->gestures()) {

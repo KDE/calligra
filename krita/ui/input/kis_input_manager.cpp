@@ -109,7 +109,10 @@ void KisInputManager::Private::match(QEvent* event)
         return;
     }
 
-    if (potentialShortcuts.count() == 1 || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
+    if (potentialShortcuts.count() == 1
+            || event->type() == QEvent::MouseButtonPress
+            || event->type() == QEvent::MouseButtonDblClick
+            || event->type() == QEvent::TouchUpdate) {
         //Either we have only one possible match or we reached the queue threshold.
         KisShortcut* completedShortcut = 0;
         foreach (KisShortcut* shortcut, potentialShortcuts) {
@@ -448,16 +451,26 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
                                                 touchEvent->touchPointStates(),
                                                 touchEvent->touchPoints());
         d->touchEvent = newEvent;
-        event->ignore();
+        //event->ignore();
+        d->mousePosition = touchEvent->touchPoints().at(0).pos();
+
         break;
     }
     case QEvent::TouchUpdate:
-        if (!d->currentAction) {
-            QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
-            // Update the current tool so things like the brush outline gets updated.
-            d->toolProxy->touchEvent(touchEvent, d->canvas->viewConverter(), d->canvas->documentOffset());
-        } else {
+        if (d->currentAction) {
+            d->currentShortcut->match(event);
+
+            if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
+                d->clearState();
+                break;
+            }
+
             d->currentAction->inputEvent(event);
+        } else {
+            QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+            d->toolProxy->touchEvent(touchEvent, d->canvas->viewConverter(), d->canvas->documentOffset());
+
+            d->match(event);
         }
         return true;
     default:
