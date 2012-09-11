@@ -30,7 +30,7 @@ Item {
             width: 1;
             color: "white";
         }
-        radius: Constants.GridHeight / 4;
+        radius: (Constants.GridHeight / 4) - 2;
         anchors {
             top: parent.top ;
             right: parent.right;
@@ -44,22 +44,28 @@ Item {
 
         Image {
             id: arrowsList
-            width: Constants.GridWidth / 4
-            height: Constants.GridHeight / 2
-            source: ":/images/svg/combo-arrows-white.svg"
-            x: (Constants.GridWidth * 1.75) - 8
-            y: Constants.GridHeight / 64
+            anchors {
+                right: parent.right;
+                top: parent.top;
+                topMargin: 1;
+            }
+            height: parent.height;
+            width: height;
+            source: "../images/svg/combo-arrows-white.svg"
             smooth: true
         }
 
         Label {
             id: buttonText;
-            text: listView.currentItem.text;
-            width: (Constants.GridWidth * 1.7) - 8;
-            height: Constants.GridHeight / 2;
+            anchors {
+                verticalCenter: parent.verticalCenter;
+                left: parent.left;
+                leftMargin: parent.radius;
+                right: arrowsList.left;
+            }
+            text: listView.currentItem ? listView.currentItem.text : "(tap to select)";
             color: "#96000000"
-            x: 8;
-
+            font.pixelSize: parent.height - 4;
         }
 
         MouseArea {
@@ -73,38 +79,43 @@ Item {
                 }
             }
         }
-
-
     }
 
-    ListView {
-        id: listView;
-        clip: true;
+    Rectangle {
+        id: listContainer
         anchors {
             top: topButton.bottom;
             left: parent.left;
             right: parent.right;
             bottom: parent.bottom;
+            leftMargin: topButton.radius;
+            rightMargin: topButton.radius;
         }
+        clip: true;
         opacity: 0;
-        delegate: Item {
-            property alias text: delegateLabel.text
-            anchors {
-                left: parent.left;
-                right: parent.right;
-            }
-            height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
-            Label {
-                id: delegateLabel
-                anchors.fill: parent
-                text: model.text;
-                color: "#96000000"
-            }
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    listView.currentIndex = index;
-                    base.state = "";
+        color: "#63ffffff";
+        ListView {
+            id: listView;
+            anchors.fill: parent;
+            delegate: Item {
+                property alias text: delegateLabel.text
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                }
+                height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
+                Label {
+                    id: delegateLabel
+                    anchors.fill: parent
+                    text: model.text;
+                    color: "#96000000"
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: {
+                        listView.currentIndex = index;
+                        base.state = "";
+                    }
                 }
             }
         }
@@ -119,7 +130,7 @@ Item {
                 height: base.parent.height - base.y - (Constants.GridHeight / 2);
             }
             PropertyChanges {
-                target: listView;
+                target: listContainer;
                 opacity: 1;
             }
         }

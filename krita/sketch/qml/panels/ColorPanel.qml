@@ -70,8 +70,8 @@ Panel {
         anchors.fill: parent;
         model: paletteColorsModel;
         delegate: delegate;
-        cellWidth: Constants.GridWidth - 8;
-        cellHeight: Constants.GridHeight - 8;
+        cellWidth: width / 2;
+        cellHeight: Constants.GridHeight;
     }
 
     fullContents: Item {
@@ -105,6 +105,8 @@ Panel {
                 top: colorSelector.bottom;
                 left: parent.left;
                 right: parent.right;
+                leftMargin: Constants.DefaultMargin;
+                rightMargin: Constants.DefaultMargin;
             }
             model: paletteModel
             onCurrentIndexChanged: {
@@ -117,37 +119,37 @@ Panel {
                 top: fullPaletteList.bottom;
                 left: parent.left;
                 right: parent.right;
+                rightMargin: Constants.DefaultMargin;
                 bottom: parent.bottom;
             }
             model: paletteColorsModel;
             delegate: delegate;
             clip: true;
-            cellWidth: Constants.GridWidth - 8;
-            cellHeight: Constants.GridHeight - 8;
+            cellWidth: width / 2;
+            cellHeight: Constants.GridHeight;
         }
     }
 
     Component {
         id: delegate;
 
-        Button {
+        Item {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-
-            checked: GridView.isCurrentItem;
-
-            color: "transparent";
-            text: model.text;
-            shadow: false
-            textSize: 10;
-            image: model.image;
-
-            highlightColor: Constants.Theme.HighlightColor;
-
-            onClicked: {
-                GridView.view.currentIndex = index;
-                //Settings.currentColor = model.color;
-                paletteColorsModel.activateColor(index, swatch.chooseBG);
+            Image {
+                anchors {
+                    fill: parent;
+                    margins: Constants.DefaultMargin;
+                }
+                source: model.image;
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: {
+                        //GridView.view.currentIndex = index;
+                        //Settings.currentColor = model.color;
+                        paletteColorsModel.activateColor(index, swatch.chooseBG);
+                    }
+                }
             }
         }
     }
