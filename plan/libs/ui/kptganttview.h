@@ -157,7 +157,7 @@ protected:
     GanttPrintingOptionsWidget *m_options;
 };
 
-class GanttTreeView : public TreeViewBase
+class KPLATOUI_EXPORT GanttTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
@@ -165,7 +165,7 @@ public:
 
 };
 
-class GanttViewBase : public KDGantt::View
+class KPLATOUI_EXPORT GanttViewBase : public KDGantt::View
 {
     Q_OBJECT
 public:
