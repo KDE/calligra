@@ -32,11 +32,10 @@ AnimatorModel::AnimatorModel(KisImage* image): QAbstractItemModel(0)
 {
     m_image = image;
     
-    connect(m_image, SIGNAL(sigNodeHasBeenAdded(KisNode*,int)), SLOT(layoutChangedSlot()));
-    connect(m_image, SIGNAL(sigNodeHasBeenMoved(KisNode*,int,int)), SLOT(layoutChangedSlot()));
-    connect(m_image, SIGNAL(sigNodeHasBeenRemoved(KisNode*,int)), SLOT(layoutChangedSlot()));
-
-    connect(m_image, SIGNAL(sigNodeChanged(KisNode*)), SLOT(dataChangedSlot(KisNode*)));
+    connect(m_image, SIGNAL(sigNodeAddedAsync(KisNodeSP)), SLOT(layoutChangedSlot()));
+    connect(m_image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(layoutChangedSlot()));
+    
+    connect(m_image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(dataChangedSlot(KisNodeSP)));
     
     connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(removeThis()));
     
@@ -61,6 +60,11 @@ void AnimatorModel::removeThis()
 void AnimatorModel::dataChangedSlot(KisNode* node)
 {
     emit dataChanged(indexFromNode(node), indexFromNode(node));
+}
+
+void AnimatorModel::dataChangedSlot(KisNodeSP node)
+{
+    dataChangedSlot(node.data());
 }
 
 void AnimatorModel::dataChangedSlot(int from, int to)

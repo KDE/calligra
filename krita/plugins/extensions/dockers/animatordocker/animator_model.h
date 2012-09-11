@@ -38,6 +38,7 @@ public slots:
     
     virtual void layoutChangedSlot();
     virtual void dataChangedSlot(KisNode* node);
+    virtual void dataChangedSlot(KisNodeSP node);
     virtual void dataChangedSlot(int from, int to);
     
 public:

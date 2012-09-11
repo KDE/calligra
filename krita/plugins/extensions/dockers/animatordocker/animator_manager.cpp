@@ -207,8 +207,10 @@ void AnimatorManager::putNodeAt(KisNodeSP node, KisNodeSP parent, int index)
 {
     if (node->parent())
         m_nodeManager->moveNodeAt(node, parent, index);
-    else
-        m_nodeManager->insertNode(node, parent, index);
+    else {
+        m_nodeManager->addNodeDirect(node, parent, NULL);
+        m_nodeManager->moveNodeAt(node, parent, index);
+    }
 }
 
 void AnimatorManager::removeNode(KisNodeSP node)
@@ -237,13 +239,13 @@ void AnimatorManager::removeLayer(KisNode *layer)
     }
     
     m_nodeManager->removeNode(layer);
-    m_nodeManager->activateNode(newActive);
+    m_nodeManager->slotNonUiActivatedNode(newActive);
     layerRemoved(dynamic_cast<AnimatedLayer*>(layer));
 }
 
 void AnimatorManager::createGroupLayer(KisNodeSP parent)
 {
-    m_nodeManager->activateNode(parent);
+    m_nodeManager->slotNonUiActivatedNode(parent);
     m_nodeManager->createNode("KisGroupLayer");
 }
 
@@ -305,7 +307,7 @@ void AnimatorManager::activate(int frameNumber, KisNode* node)
         SimpleFrameLayer* frame = qobject_cast<SimpleFrameLayer*>(node);
         if (frame)
             node = frame->getContent();
-        m_nodeManager->activateNode(node);
+        m_nodeManager->slotNonUiActivatedNode(node);
     }
     
     AnimatedLayer* alayer = qobject_cast<AnimatedLayer*>(activeLayer());
@@ -382,14 +384,15 @@ void AnimatorManager::createAnimatedLayer()
     
     if (alayer) {
         KisNode *parent = alayer->parent().data();
-        m_nodeManager->insertNode(newLayer, parent, parent->index(alayer));
+        m_nodeManager->addNodeDirect(newLayer, parent, NULL);
+        m_nodeManager->moveNodeAt(newLayer, parent, parent->index(alayer));
     } else {
-        m_nodeManager->insertNode(newLayer, image()->root(), 0);
-        m_nodeManager->moveNode(newLayer, activeNode);
+        m_nodeManager->addNodeDirect(newLayer, image()->root(), 0);
+        m_nodeManager->moveNodeAt(newLayer, image()->root(), 0);
     }
     
     layerAdded(newLayer);
-    m_nodeManager->activateNode(newLayer);
+    m_nodeManager->slotNonUiActivatedNode(newLayer);
 }
 
 void AnimatorManager::createNormalLayer()
