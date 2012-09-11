@@ -117,6 +117,7 @@ Panel {
         GridView {
             anchors {
                 top: fullPaletteList.bottom;
+                topMargin: Constants.DefaultMargin;
                 left: parent.left;
                 right: parent.right;
                 rightMargin: Constants.DefaultMargin;
@@ -145,7 +146,6 @@ Panel {
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {
-                        //GridView.view.currentIndex = index;
                         //Settings.currentColor = model.color;
                         paletteColorsModel.activateColor(index, swatch.chooseBG);
                     }
