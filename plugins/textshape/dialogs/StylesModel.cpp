@@ -478,6 +478,9 @@ void StylesModel::updateName(int styleId)
 
 QModelIndex StylesModel::firstStyleIndex()
 {
+    if (!m_styleList.count()) {
+        return QModelIndex();
+    }
     return createIndex(m_styleList.indexOf(m_styleList.at(0)), 0, m_styleList.at(0));
 }
 
@@ -505,15 +508,9 @@ void StylesModel::addDraftParagraphStyle(KoParagraphStyle *style)
 
 void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
 {
-    kDebug() << "starting to add the draft in the model";
-//    if (m_draftCharStyleList.count() == 0) // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
-        style->setStyleId(-(m_draftCharStyleList.count()+2)); //we have a virtual characterStyle with style id -1, so we need to skip it
-//    else
-//        style->setStyleId(-(m_draftCharStyleList.count()+1));
+    style->setStyleId(-(m_draftCharStyleList.count()+2)); //we have a virtual characterStyle with style id -1, so we need to skip it
     m_draftCharStyleList.insert(style->styleId(), style);
-    kDebug() << "style inserted in the draft list";
     addCharacterStyle(style);
-    kDebug() << "draft added to the model";
 }
 
 void StylesModel::clearDraftStyles()

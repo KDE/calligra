@@ -45,7 +45,6 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
         m_styleManager(0),
         m_thumbnail(new KoStyleThumbnailer()),
         m_characterStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
-//        , m_characterInheritedStyleModel(new StylesModel(0, StylesModel::CharacterStyle))
 {
     widget.setupUi(this);
     // we don't have next style for character styles
@@ -59,8 +58,6 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.inheritStyle->showEditIcon(false);
     widget.inheritStyle->setStyleIsOriginal(true);
     //for character General
-//    m_characterInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
-//    m_validParentStylesModel->setStyleThumbnailer(m_thumbnail);
     m_validParentStylesModel->setStylesModel(m_characterStyleModel);
     widget.inheritStyle->setStylesModel(m_validParentStylesModel);
 
@@ -95,23 +92,22 @@ void CharacterGeneral::setStyle(KoCharacterStyle *style)
     blockSignals(true);
 
     m_validParentStylesModel->setCurrentChildStyleId(style->styleId());
-//    if(!m_style->parentStyle())
-//        widget.inheritStyle->setCurrentIndex(-1);
+    if(!m_style->parentStyle()) {
+        widget.inheritStyle->setCurrentIndex(-1);
+    }
 
-    kDebug() << "CharacterGeneral setStyle, m_nameHidden: " << m_nameHidden << " style name: " << style->name();
     if (!m_nameHidden)
         widget.name->setText(style->name());
 
     m_characterHighlighting->setDisplay(style);
     //m_languageTab->setDisplay(style);
 
-    kDebug() << "first place style: " << style;
     widget.preview->setCharacterStyle(style);
 
     if (m_styleManager) {
         KoCharacterStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
-//            widget.inheritStyle->setCurrentIndex(m_validParentStylesModel->indexForCharacterStyle(*parentStyle).row());
+            widget.inheritStyle->setCurrentIndex(m_validParentStylesModel->indexForCharacterStyle(*parentStyle).row());
         }
     }
 
@@ -133,11 +129,13 @@ void CharacterGeneral::save(KoCharacterStyle *style)
     m_characterHighlighting->save(savingStyle);
     //m_languageTab->save(savingStyle);
     savingStyle->setName(widget.name->text());
-/*    if (widget.inheritStyle->currentIndex() != -1) {
+    if (widget.inheritStyle->currentIndex() != -1) {
         KoCharacterStyle *parent = m_styleManager->characterStyle(m_validParentStylesModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
-        savingStyle->setParentStyle(parent);
+        if (parent) {
+            savingStyle->setParentStyle(parent);
+        }
     }
-*/
+
     if (m_style == savingStyle) {
         emit styleAltered(savingStyle);
     }
@@ -160,7 +158,6 @@ void CharacterGeneral::setPreviewCharacterStyle()
     KoCharacterStyle *charStyle = new KoCharacterStyle();
     save(charStyle);
     if (charStyle) {
-        kDebug() << "second place" << charStyle;
         widget.preview->setCharacterStyle(charStyle);
     }
 

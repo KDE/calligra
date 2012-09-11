@@ -493,7 +493,7 @@ void TextTool::createActions()
 
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_P);
     addAction("detailed_debug_paragraphs", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
     action = new KAction("Styles Debug", this); // do NOT add i18n!

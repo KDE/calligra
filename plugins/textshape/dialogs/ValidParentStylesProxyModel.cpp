@@ -46,9 +46,10 @@ QModelIndex ValidParentStylesProxyModel::index(int row, int column, const QModel
         return QModelIndex();
 
     if (!parent.isValid()) {
-        if (row >= m_proxyToSource.count())
+        if (row >= m_proxyToSource.count()) {
             return QModelIndex();
-        return createIndex(row, column, -1);
+        }
+        return createIndex(row, column, int(m_sourceModel->index(m_proxyToSource.at(row), 0, QModelIndex()).internalId()));
     }
     return QModelIndex();
 }
@@ -260,7 +261,7 @@ void ValidParentStylesProxyModel::createMapping()
             }
         }
     }
-    m_sourceToProxy.fill(-1, m_proxyToSource.count());
+    m_sourceToProxy.fill(-1, m_sourceModel->rowCount(QModelIndex()));
     for(int i = 0; i < m_proxyToSource.count(); ++i) {
         m_sourceToProxy[m_proxyToSource.at(i)] = i;
     }

@@ -127,7 +127,6 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level)
         KoParagraphStyle *parentStyle = style->parentStyle();
         if (parentStyle) {
             widget.inheritStyle->setCurrentIndex(m_paragraphValidParentStylesModel->indexForParagraphStyle(*parentStyle).row());
-//            widget.inheritStyle->setCurrentIndex(m_paragraphStyleModel->indexForParagraphStyle(*parentStyle).row());
         }
     }
 
@@ -170,12 +169,13 @@ void ParagraphGeneral::save(KoParagraphStyle *style)
     savingStyle->setName(widget.name->text());
 
     if (int nextStyleId = CharacterGeneral::nextStyleId()) {
-        savingStyle->setNextStyle(CharacterGeneral::nextStyleId());
+        savingStyle->setNextStyle(nextStyleId);
     }
     if (widget.inheritStyle->currentIndex() != -1) {
         KoParagraphStyle *parent = m_styleManager->paragraphStyle(m_paragraphValidParentStylesModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
-//        KoParagraphStyle *parent = m_styleManager->paragraphStyle(m_paragraphStyleModel->index(widget.inheritStyle->currentIndex(), 0, QModelIndex()).internalId());
-        savingStyle->setParentStyle(parent);
+        if (parent) {
+            savingStyle->setParentStyle(parent);
+        }
     }
 
     if (m_style == savingStyle) {
