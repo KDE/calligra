@@ -58,13 +58,17 @@ void KisGestureAction::inputEvent(QEvent* event)
         switch(gesture->gestureType()) {
             case Qt::PanGesture: {
                 QPanGesture *pgesture = static_cast<QPanGesture*>(gesture);
-                inputManager()->canvas()->canvasController()->pan(pgesture->delta().toPoint());
+                inputManager()->canvas()->canvasController()->pan(-pgesture->delta().toPoint());
                 break;
             }
             case Qt::PinchGesture: {
                 QPinchGesture *pgesture = static_cast<QPinchGesture*>(gesture);
-                inputManager()->canvas()->canvasController()->zoomBy(pgesture->centerPoint().toPoint(), pgesture->scaleFactor() - 1.0);
-                break;
+                qreal diff = pgesture->scaleFactor() - 1.0f;
+                if(qAbs(diff) > 0.01f) {
+                    float zoom = inputManager()->canvas()->view()->zoomController()->zoomAction()->effectiveZoom() + diff;
+                    inputManager()->canvas()->view()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
+                    break;
+                }
             }
         }
     }

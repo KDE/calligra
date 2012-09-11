@@ -163,11 +163,13 @@ void KisShortcut::match(QEvent* event)
         }
         case QEvent::Gesture: {
             QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
-            if(gevent->activeGestures().count() > 0) {
-                d->hasGesture = true;
-            } else {
-                d->hasGesture = false;
+            foreach(QGesture *gesture, gevent->gestures()) {
+                if(gesture->state() == Qt::GestureStarted || gesture->state() == Qt::GestureUpdated) {
+                    d->hasGesture = true;
+                    return;
+                }
             }
+            d->hasGesture = false;
         }
         default:
             break;
