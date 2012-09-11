@@ -35,6 +35,7 @@
 #include <QRect>
 #include <QString>
 #include <QStringList>
+#include <QtConcurrentMap>
 #include <kundo2command.h>
 
 #include <kis_debug.h>
@@ -68,6 +69,43 @@
 // Maximum distance from a Bezier control point to the line through the start
 // and end points for the curve to be considered flat.
 #define BEZIER_FLATNESS_THRESHOLD 0.5
+
+struct BltFixedProcessor
+{
+    BltFixedProcessor(const KoColorSpace* cs, const KoColorSpace* srcSpace,
+                         const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op,
+                          KoColorConversionTransformation::Intent renderingIntent,
+                          KoColorConversionTransformation::ConversionFlags conversionFlags)
+        : m_cs(cs)
+        , m_srcSpace(srcSpace)
+        , m_params(params)
+        , m_op(op)
+        , m_renderingIntent(renderingIntent)
+        , m_conversionFlags(conversionFlags)
+    {
+    }
+
+    void operator()(QRect& rect)
+    {
+        process(rect);
+    }
+
+    void process(QRect& rect){
+        KoCompositeOp::ParameterInfo paramInfo(m_params);
+        paramInfo.dstRowStart = m_params.dstRowStart + rect.y() * m_params.cols * m_cs->pixelSize();
+        paramInfo.srcRowStart = m_params.srcRowStart + rect.y() * m_params.cols * m_srcSpace->pixelSize();
+        paramInfo.rows = rect.height();
+        m_cs->bitBlt(m_srcSpace, paramInfo, m_op, m_renderingIntent, m_conversionFlags);
+
+    }
+
+    const KoColorSpace* m_cs;
+    const KoColorSpace* m_srcSpace;
+    const KoCompositeOp::ParameterInfo& m_params;
+    const KoCompositeOp* m_op;
+    KoColorConversionTransformation::Intent m_renderingIntent;
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+};
 
 struct KisPainter::Private {
     KisPaintDeviceSP            device;
@@ -106,6 +144,7 @@ struct KisPainter::Private {
     KoCompositeOp::ParameterInfo paramInfo;
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
+    int idealThreadCountCached;
 };
 
 KisPainter::KisPainter()
@@ -154,6 +193,7 @@ void KisPainter::init()
     d->paramInfo.flow = 1.0f;
     d->renderingIntent = KoColorConversionTransformation::IntentPerceptual;
     d->conversionFlags = KoColorConversionTransformation::Empty;
+    d->idealThreadCountCached = QThread::idealThreadCount();
 }
 
 KisPainter::~KisPainter()
@@ -760,7 +800,21 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     }
 
     // ...and then blit.
-    d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+    //d->colorSpace->bitBlt(srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+    BltFixedProcessor processor(d->colorSpace, srcCs, d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+    int jobs = d->idealThreadCountCached;
+    if(srcHeight > 100 && jobs >= 4) {
+        int splitter = srcHeight/jobs;
+        QVector<QRect> rects;
+        for(int i = 0; i < jobs - 1; i++) {
+            rects << QRect(0, i*splitter, srcWidth, splitter);
+        }
+        rects << QRect(0, (jobs - 1)*splitter, srcWidth, srcHeight - (jobs - 1)*splitter);
+        QtConcurrent::blockingMap(rects, processor);
+    } else {
+        QRect rect(0, 0, srcWidth, srcHeight);
+        processor.process(rect);
+    }
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     delete[] d->paramInfo.maskRowStart;
