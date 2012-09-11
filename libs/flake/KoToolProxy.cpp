@@ -156,7 +156,7 @@ void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter,
     QList<KoTouchPoint> touchPoints;
 
     foreach(QTouchEvent::TouchPoint p, event->touchPoints()) {
-        QPointF docPoint = viewConverter->viewToDocument(p.normalizedPos()) + documentOffset;
+        QPointF docPoint = viewConverter->viewToDocument(p.screenPos() + documentOffset);
         if (p.isPrimary()) {
             point = docPoint;
         }
