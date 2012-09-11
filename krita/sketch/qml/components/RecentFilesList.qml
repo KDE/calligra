@@ -77,6 +77,7 @@ Item {
                 source: model.image;
                 x: Constants.GridWidth * 0.375
                 y: Constants.GridHeight * 0.5
+		asynchronous: true;
                 Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
             }
 

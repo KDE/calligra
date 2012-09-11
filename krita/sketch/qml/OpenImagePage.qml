@@ -79,6 +79,7 @@ Page {
 
             image: model.icon;
             text: model.fileName;
+	    asynchronous: true;
 
             onClicked: {
                 if( model.fileType == "inode/directory" ) {

@@ -33,6 +33,7 @@ Item {
     property alias textSize: label.font.pixelSize;
     property bool shadow: true;
     property bool enabled: true; // XXX: visualize disabledness
+    property alias asynchronous: icon.asynchronous;
 
     property bool highlight: true;
     property color highlightColor: color;
@@ -55,7 +56,6 @@ Item {
             anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
-            asynchronous: true;
 
             sourceSize.width: width > height ? height : width;
             sourceSize.height: width > height ? height : width;

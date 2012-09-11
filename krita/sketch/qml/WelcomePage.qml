@@ -37,7 +37,7 @@ Page {
             //text: "Krita Sketch";
             Image { anchors.fill: parent; source: "./images/header_krita_sketch.png" }
             Label { text: "KRITA SKETCH"; font.bold: true; font.pixelSize: Constants.HugeFontSize; anchors.centerIn: parent; color: "white";}
-            Image { anchors.fill: parent; source: "./images/header_krita_sketch_light.png" }
+            Image { anchors.fill: parent; source: "./images/header_krita_sketch_light.png"; smooth: true; }
 
             //leftArea:
 
