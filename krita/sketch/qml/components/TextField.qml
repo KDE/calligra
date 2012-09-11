@@ -26,11 +26,21 @@ Item {
     property alias placeholder: placeholder.text;
     property alias validator: input.validator;
 
-    DropShadow {
+    property alias background: fill.color;
+    property alias border: fill.border;
+    property alias radius: fill.radius;
+    property alias shadow: dropShadow.visible;
+    
+    Item {
         anchors.fill: parent;
         anchors.margins: Constants.DefaultMargin;
 
+        DropShadow {
+            id: dropShadow;
+            anchors.fill: parent;
+        }
         Rectangle {
+            id: fill;
             anchors.fill: parent;
 
             Label {
