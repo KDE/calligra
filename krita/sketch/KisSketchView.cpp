@@ -392,14 +392,13 @@ bool KisSketchView::sceneEvent(QEvent* event)
             QWheelEvent *wevent = new QWheelEvent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
             d->canvas->inputManager()->eventFilter(d->canvas, wevent);
         }
-        case QEvent::Gesture: {
-            d->canvas->inputManager()->eventFilter(d->canvas, event);
-        }
         case QEvent::TouchBegin: {
+            d->canvas->inputManager()->eventFilter(d->canvas, event);
             event->accept();
             return true;
         }
         default:
+            d->canvas->inputManager()->eventFilter(d->canvas, event);
             break;
         }
     }
