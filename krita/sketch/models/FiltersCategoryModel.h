@@ -27,6 +27,10 @@ class FiltersCategoryModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QObject* filterModel READ filterModel NOTIFY filterModelChanged);
 public:
+    enum FiltersCategoryModelRoles
+    {
+        TextRole = Qt::UserRole + 1
+    };
     explicit FiltersCategoryModel(QObject* parent = 0);
     virtual ~FiltersCategoryModel();
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
