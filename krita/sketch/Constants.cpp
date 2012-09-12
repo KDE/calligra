@@ -45,12 +45,12 @@ QColor Theme::secondaryColor() const
 
 QColor Theme::tertiaryColor() const
 {
-    return QColor( 0, 128, 0 );
+    return QColor( 219, 160, 0 );
 }
 
 QColor Theme::quaternaryColor() const
 {
-    return QColor( 255, 128, 0 );
+    return QColor( 0, 130, 30 );
 }
 
 QColor Theme::textColor() const

@@ -21,11 +21,11 @@ import "../components"
 
 Panel {
     name: "Tool";
-    panelColor: "#660066";
+    panelColor: "#0078B4";
 
     dragDelegate: Component {
         Rectangle {
-            color: "#660066";
+            color: "#0078B4";
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
             radius: 8;
