@@ -19,10 +19,10 @@
 import QtQuick 1.1
 
 TextField {
-    height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
+    height: Constants.DefaultFontSize + Constants.DefaultMargin * 4;
     shadow: false;
     border.width: 1;
     border.color: "silver";
     background: "#63ffffff";
-    radius: Constants.DefaultFontSize / 2;
+    radius: height / 2;
 }

@@ -418,8 +418,9 @@ Panel {
             spacing: Constants.DefaultMargin;
             Item {
                 width: fullItem.width;
-                height: Constants.DefaultFontSize;
+                height: featherTxt.height;
                 PanelTextField {
+                    id: featherTxt;
                     anchors {
                         left: parent.left;
                         right: featherImg.left;
@@ -432,10 +433,9 @@ Panel {
                     anchors {
                         right: parent.right;
                         rightMargin: Constants.DefaultMargin;
-                        top: parent.top;
-                        topMargin: Constants.DefaultMargin;
+                        verticalCenter: featherTxt.verticalCenter;
                     }
-                    height: parent.height;
+                    height: parent.height - (Constants.DefaultMargin * 2);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
@@ -443,8 +443,9 @@ Panel {
             }
             Item {
                 width: fullItem.width;
-                height: Constants.DefaultFontSize;
+                height: growTxt.height;
                 PanelTextField {
+                    id: growTxt;
                     anchors {
                         left: parent.left;
                         right: growImg.left;
@@ -457,10 +458,9 @@ Panel {
                     anchors {
                         right: parent.right;
                         rightMargin: Constants.DefaultMargin;
-                        top: parent.top;
-                        topMargin: Constants.DefaultMargin;
+                        verticalCenter: growTxt.verticalCenter;
                     }
-                    height: parent.height;
+                    height: parent.height - (Constants.DefaultMargin * 2);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
@@ -468,8 +468,9 @@ Panel {
             }
             Item {
                 width: fullItem.width;
-                height: Constants.DefaultFontSize;
+                height: borderTxt.height;
                 PanelTextField {
+                    id: borderTxt;
                     anchors {
                         left: parent.left;
                         right: borderImg.left;
@@ -482,10 +483,9 @@ Panel {
                     anchors {
                         right: parent.right;
                         rightMargin: Constants.DefaultMargin;
-                        top: parent.top;
-                        topMargin: Constants.DefaultMargin;
+                        verticalCenter: borderTxt.verticalCenter;
                     }
-                    height: parent.height;
+                    height: parent.height - (Constants.DefaultMargin * 2);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
@@ -493,8 +493,9 @@ Panel {
             }
             Item {
                 width: fullItem.width;
-                height: Constants.DefaultFontSize;
+                height: scaleTxt.height;
                 PanelTextField {
+                    id: scaleTxt;
                     anchors {
                         left: parent.left;
                         right: scaleImg.left;
@@ -507,10 +508,9 @@ Panel {
                     anchors {
                         right: parent.right;
                         rightMargin: Constants.DefaultMargin;
-                        top: parent.top;
-                        topMargin: Constants.DefaultMargin;
+                        verticalCenter: scaleTxt.verticalCenter;
                     }
-                    height: parent.height;
+                    height: parent.height - (Constants.DefaultMargin * 2);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
