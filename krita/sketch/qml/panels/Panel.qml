@@ -226,7 +226,7 @@ Item {
             name: "peek";
 
             PropertyChanges { target: base; width: Constants.GridWidth * 2; }
-            PropertyChanges { target: fill; height: Constants.GridHeight * 3; }
+            PropertyChanges { target: fill; height: Constants.GridHeight * 3.75; }
             PropertyChanges { target: handle; opacity: 1; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
