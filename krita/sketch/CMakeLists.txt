@@ -26,6 +26,8 @@ set(kritasketch_SRCS
 
 set(kritasketch_kritaintegrationmodels_SRCS
     models/ColorImageProvider.cpp
+    models/FiltersCategoryModel.cpp
+    models/FiltersModel.cpp
     models/LayerCompositeDetails.cpp
     models/LayerModel.cpp
     models/LayerThumbProvider.cpp
