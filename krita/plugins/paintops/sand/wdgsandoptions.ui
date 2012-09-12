@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>450</height>
+    <width>705</width>
+    <height>441</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -78,6 +78,66 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="bMassLayout">
+          <item>
+           <widget class="QLabel" name="bMassLabel">
+            <property name="text">
+             <string>mass</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="bMassDoubleSpinBox">
+            <property name="decimals">
+             <number>4</number>
+            </property>
+            <property name="minimum">
+             <double>0.050000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>5.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.050000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="bFrictionLayout">
+          <item>
+           <widget class="QLabel" name="bFrictionLabel">
+            <property name="text">
+             <string>friction</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="bFrictionDoubleSpinBox">
+            <property name="decimals">
+             <number>4</number>
+            </property>
+            <property name="minimum">
+             <double>0.050000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.050000000000000</double>
+            </property>
+            <property name="value">
+             <double>0.050000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="amountLayout">
           <item>
            <widget class="QLabel" name="amountLabel">
@@ -126,7 +186,7 @@
         <item>
          <layout class="QVBoxLayout" name="checkablesLayout">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
+           <layout class="QHBoxLayout" name="modeSetLayout">
             <item>
              <widget class="QCheckBox" name="sandDepletionCHBox">
               <property name="text">
@@ -270,13 +330,13 @@
              <double>0.000500000000000</double>
             </property>
             <property name="maximum">
-             <double>99.000000000000000</double>
+             <double>1.000000000000000</double>
             </property>
             <property name="singleStep">
              <double>0.005000000000000</double>
             </property>
             <property name="value">
-             <double>0.000500000000000</double>
+             <double>0.005000000000000</double>
             </property>
            </widget>
           </item>

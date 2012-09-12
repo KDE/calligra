@@ -77,7 +77,7 @@ public:
      * @param iiy y-position of the second grid cell
      * 
      */
-    bool is_valid_neighbor(int ix, int iy, int iix, int iiy);
+    bool isValidNeighbor(int ix, int iy, int iix, int iiy);
 
     /**
      * @brief Construct the neighborhood relations between particles to gain performance in
@@ -137,8 +137,14 @@ private:
     KisPressureOpacityOption m_opacityOption;
     SandProperties m_properties;
     
-    //Image to use in the grid's cell calculations
+    //Used to manipulate the KisAnnotations that hold the particles
     KisImageWSP m_image;
+
+    KisAnnotationSP m_annot;
+
+    //Image to use in the grid's cell calculations
+    uint m_imgWidth;
+    uint m_imgHeight;
 
     //Do mathematical operations of the brush
     SandBrush * m_sandBrush;
@@ -198,7 +204,7 @@ private:
      * QList< int> b_neighbors = grid[3][4]
      *
      */
-    QVector< QVector<QVector<int> > > grid;
+    QVector< QVector<QVector<int> > > m_grid;
 
     /**
      * Vector representing the neighborhood of the particles.
@@ -206,14 +212,14 @@ private:
      * This relation is built based on search of half of neighborhood space
      * of one grid cell.
      */  
-    QVector<QVector<QVector<QPair<int,int> > > > neighbors;
+    QVector<QVector<QVector<QPair<int,int> > > > m_neighbors;
 
 
     /// Number of grid cells in the horizontal direction
-    int g_numx;
+    int m_gridX;
 
     /// Number of grid cells in the vertical direction
-    int g_numy;
+    int m_gridY;
 
 };
 

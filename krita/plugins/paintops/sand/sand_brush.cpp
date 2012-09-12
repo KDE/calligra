@@ -59,8 +59,7 @@ SandBrush::SandBrush(const SandProperties* properties, KoColorTransformation* tr
     m_prevTime = 0;
     m_prevVel = QPointF(0,0);
 
-    //mouse pos/vel filter
-//     m_cursorFilter = new SandFilter();
+
     m_cursorFilter.setMass(5.0);
     m_cursorFilter.setDrag(0.5);
     
@@ -141,15 +140,16 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
 
             //Create a particle with the current settings in the widget
             Particle *p = new Particle ( true,
-                                float( m_properties->mass), //mass
-                                0.0,                        //force
-                                float( m_properties->size), //particle radius
-                                1000,                       //lifespan (not used for now)
-                                float( m_properties->friction), //friction (used in the force application
-                                0.5,                            //dissipation (not used for now)
-                                new QPoint(pixelX, pixelY), //position
-                                new QPointF(vel.x(), vel.y()),  //velocity 
-                                new QPointF(accel.x(), accel.y()) //acceleration
+                                float( m_properties->mass),         //mass
+                                0.0,                                //force
+                                float( m_properties->size),         //particle radius
+                                1000,                               //lifespan (not used for now)
+                                float( m_properties->friction),     //friction (used in the force application
+                                0.5,                                //dissipation (not used for now)
+                                new QPoint(pixelX, pixelY),         //position
+                                new QPointF(vel.x(), vel.y()),      //velocity 
+                                new QPointF(accel.x(), accel.y()),   //acceleration
+                                new KoColor(m_inkColor)             //color
                             );
             //to normalization
             p->setBounds(new QPoint(width, height));
@@ -168,11 +168,10 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
     //Update the velocity and time of the mouse
     m_prevVel = vel;
     m_prevTime = info.currentTime();
-//     qDebug() << "Amount added : " << m_gr4ains.size();
+
 }
 
-//I'm actually trying to do this function work properly
-void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_color,const KoColor &f_color, const KisPaintInformation& info, int width, int height)
+void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_color, const KoColor &f_color, const KisPaintInformation& info, int width, int height)
 {
 
     //(1) Retrieve the neighbor particles where the mouse is positioned (done in the KisSandPaintOp)
@@ -189,7 +188,6 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_
     if(info.currentTime() != m_prevTime){
         time = info.currentTime() - m_prevTime;
     }
-    
 
     if(!m_cursorFilter.applyFilter(x, y)){
         return;
@@ -203,7 +201,7 @@ void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_
         //(3.a) Verify which ones the mouse is really "colliding"
         //(3.b) and apply an impulse in the particles that the mouse touched (made in the applyForce method of Particle)
         m_grains.at(i)->applyForce(pos, vel, m_properties, width, height, time);
-
+        
         //(4) Animate the movements based on past forces
         if(m_grains.at(i)->force()){
             drawParticle(drawer, m_grains.at(i), true);
@@ -267,7 +265,5 @@ void SandBrush::setGrains(QList<Particle *> &g_copy){
     m_grains.clear();
     for(int i = 0; i < g_copy.size(); i++)
         m_grains.append(g_copy[i]);
-
-//     qDebug() << "set m_grains :" << m_grains.size();
 }
 

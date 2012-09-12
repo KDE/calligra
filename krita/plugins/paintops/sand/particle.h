@@ -42,6 +42,8 @@
 #include <iostream>
 #include <math.h>
 #include <QDebug>
+#include <KoColor.h>
+
 #include "sand_brush.h"
 
 using namespace std;
@@ -79,7 +81,8 @@ public:
               float dissipation = 0.0, //dissipation constant
               QPoint * position = 0,
               QPointF * velocity = 0,
-              QPointF * acceleration = 0
+              QPointF * acceleration = 0,
+              KoColor * color = 0
             );
 
     ///Copy constructor
@@ -127,13 +130,14 @@ public:
     int radius() const {return _radius;}
     float friction() const {return _friction;}
     float dissipation() const {return _dissipation;}
-    
+
     QPoint * pos() const {return _pos;}
     QPoint * old() const {return _old;} //old position
     QPointF * vel() const {return _vel;}
     QPointF * accel()const {return _accel;}
     QPoint * bounds() const {return _bounds;}
     QPointF * forceVec() const {return _forceVec;}
+    KoColor * color() const {return _color;}
 
     //Sets
     
@@ -149,6 +153,7 @@ public:
     void setAccel(QPointF * a){ _accel = a;}
     void setBounds(QPoint * b){ _bounds = b;}
     void setForceVec(QPointF * f){ _forceVec = f;}
+    void setColor(KoColor * c){ _color = c;}
 
 
     ///Operator overload to serialization of the Particle to use KisAnnotations
@@ -181,6 +186,9 @@ private:
 
     /// The A dissipative constant (should be tunned to proper behaviour)
     float _dissipation;
+
+    ///Particle color
+    KoColor * _color;
 
     ///Particle position on canvas
     QPoint  * _pos;

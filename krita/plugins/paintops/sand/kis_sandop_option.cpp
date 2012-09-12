@@ -39,7 +39,7 @@ KisSandOpOption::KisSandOpOption()
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->amountSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->sandDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-
+    connect(m_options->amountSpinBox, SLOT(setDisabled(bool)), m_options->sandDepletionCHBox, SIGNAL(clicked(bool)));
 
     connect(m_options->sizeSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->massDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
@@ -54,6 +54,28 @@ KisSandOpOption::KisSandOpOption()
 KisSandOpOption::~KisSandOpOption()
 {
     // delete m_options;
+}
+
+//Brush particle settings
+
+double KisSandOpOption::bFriction() const
+{
+    return m_options->bFrictionDoubleSpinBox->value();
+}
+
+void KisSandOpOption::setBfriction(double friction) const
+{
+    m_options->bFrictionDoubleSpinBox->setValue( friction );
+}
+
+double KisSandOpOption::bMass() const
+{
+    return m_options->bMassDoubleSpinBox->value();
+}
+
+void KisSandOpOption::setBmass(double mass) const
+{
+    m_options->bMassDoubleSpinBox->setValue( mass );
 }
 
 int KisSandOpOption::radius() const
@@ -92,9 +114,15 @@ bool KisSandOpOption::sandDepletion() const
 bool KisSandOpOption::mode() const
 {
     //if the combo box has selected "Pouring"
-    if(m_options->modeComboBox->currentText() == "Pouring")
-        return false;
+    if(m_options->modeComboBox->currentText() == "Pouring"){
+        m_options->bMassDoubleSpinBox->setDisabled(true);
+        m_options->bFrictionDoubleSpinBox->setDisabled(true);
 
+        return false;
+    }
+
+    m_options->bMassDoubleSpinBox->setEnabled(true);
+    m_options->bFrictionDoubleSpinBox->setEnabled(true);
     //if the combo box has selected "Spread"
     return true;
     
@@ -110,6 +138,8 @@ void KisSandOpOption::setSize(int size) const
 {
     m_options->sizeSpinBox->setValue( size );
 }
+
+//Particles settings
 
 double KisSandOpOption::friction() const
 {
@@ -131,6 +161,7 @@ void KisSandOpOption::setMass(double mass) const
     m_options->massDoubleSpinBox->setValue( mass );
 }
 
+
 // double KisSandOpOption::dissipation() const
 // {
 //     return m_options->dissipationSpinBox->value();
@@ -151,6 +182,9 @@ void KisSandOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
     setting->setProperty(SAND_MASS, mass());
     setting->setProperty(SAND_FRICTION, friction());
 
+    setting->setProperty(SAND_BMASS, bMass());
+    setting->setProperty(SAND_BFRICTION, bFriction());
+
 //Sand spread mode write settings
     setting->setProperty(SAND_MODE, mode());
 //     setting->setProperty(SAND_DISSIPATION, sandDissipation());
@@ -167,6 +201,9 @@ void KisSandOpOption::readOptionSetting(const KisPropertiesConfiguration* settin
     m_options->sizeSpinBox->setValue(setting->getInt(SAND_SIZE));
     m_options->massDoubleSpinBox->setValue(setting->getDouble(SAND_MASS));
     m_options->frictionDoubleSpinBox->setValue(setting->getDouble(SAND_FRICTION));
+
+    m_options->bMassDoubleSpinBox->setValue(setting->getDouble(SAND_BMASS));
+    m_options->bFrictionDoubleSpinBox->setValue(setting->getDouble(SAND_BFRICTION));
     
 //     m_options->modeCHBox->setChecked(setting->getBool(SAND_MODE));
     

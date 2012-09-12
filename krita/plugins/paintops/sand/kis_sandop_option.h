@@ -59,6 +59,12 @@ public:
     
     double mass () const;
     void setMass(double mass) const;
+
+    double bFriction () const;
+    void setBfriction(double friction) const;
+
+    double bMass () const;
+    void setBmass(double mass) const;
     
     bool sandDepletion() const;
     bool mode() const;
@@ -93,6 +99,12 @@ public:
     ///Particle friction
     double friction;
 
+    ///Brush "particle" mass
+    double b_mass;
+
+    ///Brush "particle" friction
+    double b_friction;
+
     ///Brush mode: pouring or spreading
     bool mode;
 
@@ -109,6 +121,8 @@ public:
         size = settings->getInt(SAND_SIZE);
         mass = settings->getFloat(SAND_MASS);
         friction = settings->getFloat(SAND_FRICTION);
+        b_mass = settings->getFloat(SAND_BMASS);
+        b_friction = settings->getFloat(SAND_BFRICTION);
         mode = settings->getBool(SAND_MODE); //??
 //         dissipation = settings->getFloat(SAND_DISSIPATION);
     }

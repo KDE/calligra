@@ -44,7 +44,8 @@ Particle::Particle( bool life,
                     float dissipation, //dissipation constant
                     QPoint * position,
                     QPointF * velocity,
-                    QPointF * acceleration
+                    QPointF * acceleration,
+                    KoColor * color
                   )
 {
     _life   = life;
@@ -59,6 +60,7 @@ Particle::Particle( bool life,
     _force = force;
     _forceVec = new QPointF(0.0,0.0);
     _old = new QPoint(0,0);
+    _color = color;
 }
 
 ///Copy constructor
@@ -76,6 +78,7 @@ Particle::Particle(const Particle & p)
     _vel = p.vel();
     _accel = p.accel();
     _forceVec = p.forceVec();
+    _color = p.color();
 }
 
 //Methods for particle dynamics
@@ -101,7 +104,6 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
 
     //No collision? Exit function
     if( xi <= 0){
-        qDebug() << "quit!";
         return;
     }
     
@@ -109,7 +111,7 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
      * normalized young modulus between the MOUSE (brush) particle and this particle
      */
     
-    float Y = float(_friction * properties->friction) / float(_friction + properties->friction);
+    float Y = float(_friction * properties->b_friction) / float(_friction + properties->b_friction);
     
     /*
      * dissipative constant: function of the material viscosity
