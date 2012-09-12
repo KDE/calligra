@@ -49,6 +49,7 @@
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "ColorImageProvider.h"
+#include "FiltersCategoryModel.h"
 #include "LayerModel.h"
 #include "LayerCompositeDetails.h"
 #include "PaletteColorsModel.h"
@@ -94,6 +95,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<PresetModel>("org.krita.sketch", 1, 0, "PresetModel");
     qmlRegisterType<KisSketchView>("org.krita.sketch", 1, 0, "SketchView");
     qmlRegisterType<LayerModel>("org.krita.sketch", 1, 0, "LayerModel");
+    qmlRegisterType<FiltersCategoryModel>("org.krita.sketch", 1, 0, "FiltersCategoryModel");
     qmlRegisterType<RecentImagesModel>("org.krita.sketch", 1, 0, "RecentImagesModel");
     qmlRegisterType<FileSystemModel>("org.krita.sketch", 1, 0, "FileSystemModel");
 
