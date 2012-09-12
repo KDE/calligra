@@ -17,11 +17,72 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../components"
 
 Panel {
     name: "Filter";
     panelColor: Constants.Theme.TertiaryColor;
+
+    actions: [
+        Button {
+            id: undoButton;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-undo.svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+        },
+        Button {
+            id: applyButton;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-apply.svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+        },
+        Item {
+            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
+            height: Constants.GridHeight;
+        },
+        Button {
+            id: toggleShowPreviewButton;
+            property bool showPreview: true;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: showPreview ? "../images/svg/icon-visible_on.svg" : "../images/svg/icon-visible_off.svg";
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            onClicked: showPreview = !showPreview;
+        }
+    ]
+
+    FiltersCategoryModel {
+        id: filtersCategoryModel;
+    }
+
+    peekContents: Column {
+        anchors {
+            fill: parent;
+            margins: Constants.DefaultMargin;
+        }
+        spacing: Constants.DefaultMargin;
+        ExpandingListView {
+            id: categoryList;
+            width: parent.width;
+            model: filtersCategoryModel;
+        }
+        ExpandingListView {
+            width: parent.width;
+            model: filtersCategoryModel.filterModel;
+        }
+    }
 
     dragDelegate: Component {
         Rectangle {
