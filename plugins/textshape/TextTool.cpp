@@ -2852,6 +2852,8 @@ void TextTool::debugTextStyles()
             }
             seenStyles << ls->styleId();
         }
+        kDebug(32500) << "---style parent: " << ((style->parentStyle())?style->parentStyle()->name():"None");
+        kDebug(32500) << "---style font: " << style->font();
     }
 
     bool first = true;
