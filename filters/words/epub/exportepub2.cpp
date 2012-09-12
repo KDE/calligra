@@ -118,7 +118,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Create html contents.
     // m_imagesSrcList is an output parameter from the conversion.    
-    status = converter.convertContent(odfStore, m_metadata, &epub,
+    status = converter.convertContent(odfStore, m_metadata, true, &epub,
                                       m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;

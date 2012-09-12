@@ -122,7 +122,7 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     html.setFilePrefix(m_chain->outputFile().section('/', -1).section('.', 0, 0));
     html.setBreakIntoChapters(false);
     OdtHtmlConverter converter;
-    status = converter.convertContent(odfStore, m_metadata, &html,
+    status = converter.convertContent(odfStore, m_metadata, false, &html,
                                       m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;

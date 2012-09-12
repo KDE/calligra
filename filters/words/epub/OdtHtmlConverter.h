@@ -57,6 +57,7 @@ class OdtHtmlConverter
     ~OdtHtmlConverter();
 
     KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
+                                              bool stylesInCssfile,
                                               FileCollector *collector,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images);
@@ -119,9 +120,15 @@ class OdtHtmlConverter
     FileCollector *m_collector;
 
     // Some variables used while creating the HTML contents.
+    QByteArray   m_cssContent;
     QByteArray   m_htmlContent;
     QBuffer     *m_outBuf;
     KoXmlWriter *m_htmlWriter;
+
+    // Options for the conversion process
+    // FIXME: This should go into an Options struct together with some
+    //        others from FileConversion.h.
+    bool m_stylesInCssfile;
 
     QHash<QString, StyleInfo*> m_styles;
 

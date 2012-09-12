@@ -71,10 +71,12 @@ OdtHtmlConverter::~OdtHtmlConverter()
 
 KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
                                                             QHash<QString, QString> &metaData,
+                                                            bool stylesInCssfile,
                                                             FileCollector *collector,
                                                             // Out parameters:
                                                             QHash<QString, QSizeF> &images)
 {
+    m_stylesInCssfile = stylesInCssfile;
     m_collector = collector;
 
     // 1. Parse styles
@@ -101,13 +103,26 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Propagate style inheritance.
     fixStyleTree(m_styles);
 
-    if (!odfStore->open("content.xml")) {
-        kDebug(30517) << "Can not open content.xml .";
-        return KoFilter::FileNotFound;
+    // 2. Create CSS contents and store it in the file collector.
+    status = createCSS(m_styles, m_cssContent);
+    kDebug(30517) << "Styles:" << m_styles;
+    kDebug(30517) << "CSS:" << m_cssContent;
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    if (stylesInCssfile) {
+        m_collector->addContentFile("stylesheet", m_collector->filePrefix() + "styles.css",
+                                    "text/css", m_cssContent);
     }
 
     // ----------------------------------------------------------------
     // Parse body from content.xml
+
+    if (!odfStore->open("content.xml")) {
+        kDebug(30517) << "Can not open content.xml .";
+        return KoFilter::FileNotFound;
+    }
 
     KoXmlDocument doc;
     QString errorMsg;
@@ -127,12 +142,12 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "body");
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "text");
 
-    // 2. Collect information about internal links.
+    // 3. Collect information about internal links.
     KoXmlElement element = currentNode.toElement(); // node for passing it to collectInter...()
     int chapter = 1; // Only necessary for the recursion.
     collectInternalLinksInfo(element, chapter);
 
-    // 3. Start the actual conversion.
+    // 4. Start the actual conversion.
 
     // Write the beginning of the output.
     beginHtmlFile(metaData);
@@ -234,7 +249,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
     m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
-    // 4. Write any data that we have collected on the way.
+    // 5. Write any data that we have collected on the way.
 
     // If we had end notes, make a new chapter for end notes
     if (!m_endNotes.isEmpty()) {
@@ -250,15 +265,6 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     }
 
     odfStore->close();
-
-    // 5. Create CSS contents and store it in the file collector.
-    QByteArray  cssContent;
-    status = createCSS(m_styles, cssContent);
-    if (status != KoFilter::OK) {
-        delete odfStore;
-        return status;
-    }
-    m_collector->addContentFile("stylesheet", m_collector->filePrefix() + "styles.css", "text/css", cssContent);
 
     // Return the list of images.
     images = m_images;
@@ -322,12 +328,19 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
         writer->endElement(); // meta
     }
 
-    // Refer to the stylesheet.
-    writer->startElement("link");
-    writer->addAttribute("href", m_collector->filePrefix() + "styles.css");
-    writer->addAttribute("type", "text/css");
-    writer->addAttribute("rel", "stylesheet");
-    writer->endElement(); // link
+    // Refer to the stylesheet or put the styles in the html file.
+    if (m_stylesInCssfile) {
+        writer->startElement("link");
+        writer->addAttribute("href", m_collector->filePrefix() + "styles.css");
+        writer->addAttribute("type", "text/css");
+        writer->addAttribute("rel", "stylesheet");
+        writer->endElement(); // link
+    }
+    else {
+        writer->startElement("style");
+        writer->addTextNode(m_cssContent);
+        writer->endElement(); // style
+    }
 
     writer->endElement(); // head
 }
@@ -1109,7 +1122,8 @@ KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*
         QByteArray attributeList;
 
         StyleInfo *styleInfo = styles.value(styleName);
-        if (!styleInfo || !styleInfo->inUse)
+        // Disable the test for inUse since we moved the call to before the traversal of the content.
+        if (!styleInfo/* || !styleInfo->inUse*/)
             continue;
 
         // The style name

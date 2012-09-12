@@ -49,6 +49,7 @@ Allow user to add a book cover image
  * UI to find / edit the filename
 
 Configuration of the conversion process
+ * Styles in css file (bool)                                            [Done]
  * Use breaks (bool)                                                    [Done]
 
 Create a generic HTML export filter
