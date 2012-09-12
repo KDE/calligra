@@ -16,7 +16,7 @@ target_link_libraries(
     kplatorcpsscheduler
     kplatokernel
     koodf
-    librcps_plan
+    rcps_plan
 #    ${LIBRCPS_LIBRARIES}
 )
 

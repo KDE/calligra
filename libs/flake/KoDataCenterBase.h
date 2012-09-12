@@ -2,7 +2,7 @@
 
    Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
-   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ class KoXmlWriter;
  * The data center is for now just a sort of void pointer.
  * The data centers can be stuff like image collection, or stylemanager.
  * This abstraction is done so that shapes can get access to any possible type of data center.
- * The KoShapeControllerBase has a method that returns a map of data centers
+ * The KoShapeBasedDocumentBase has a method that returns a map of data centers
  */
 class FLAKE_EXPORT KoDataCenterBase
 {

@@ -29,7 +29,8 @@
 #include <kdebug.h>
 
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)
-    : m_progressPercent(0)
+    : QObject(p),
+      m_progressPercent(0)
 {
     d = p;
     Q_ASSERT(p);
@@ -83,8 +84,8 @@ void KoUpdater::setValue( int value )
     if ( value < min ) value = min;
     if ( value > max ) value = max;
     // Go from range to percent
-    
-    setProgress( (100 * value ) / range + 1 );
+    if (range == 0) return;
+    setProgress( ((100 * value ) / range) + 1 );
 }
 
 void KoUpdater::setRange( int minimum, int maximum )

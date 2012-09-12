@@ -19,13 +19,13 @@
 
 #include "kexidataprovider.h"
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "kexitableviewdata.h"
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
@@ -88,7 +88,9 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 
 void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow)
 {
-    kDebug() << "cnt=" << record.count();
+    kDebug() << "record.count=" << record.count()
+             << "\nRECORD=";
+    record.debug();
     for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
             = m_fieldNumbersForDataItems.constBegin();
             it != m_fieldNumbersForDataItems.constEnd(); ++it) {

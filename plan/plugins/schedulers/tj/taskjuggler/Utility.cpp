@@ -2,6 +2,7 @@
  * Utility.cpp - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -19,7 +20,10 @@
 #include <string>
 #include <stdlib.h>
 
-#include <qmap.h>
+#include <KGlobal>
+#include <KLocale>
+
+#include <QMap>
 
 #include "TjMessageHandler.h"
 #include "tjlib-internal.h"
@@ -40,12 +44,15 @@ static QString UtilityError;
 /* localtime() calls are fairly expensive, so we implement a hashtable based
  * cache to avoid redundant calls for the same value. Changing the timezone
  * invalidates the cache though. */
-struct LtHashTabEntry
+class LtHashTabEntry
 {
+public:
+    LtHashTabEntry() : tms( 0 ), next( 0 ) {}
+    ~LtHashTabEntry() { /*qDebug()<<"~LtHashTabEntry";*/ delete tms; }
     time_t t;
     struct tm* tms;
     LtHashTabEntry* next;
-} ;
+};
 
 static long LTHASHTABSIZE;
 static LtHashTabEntry** LtHashTab = 0;
@@ -152,14 +159,16 @@ void initUtility(long dictSize)
 
 void exitUtility()
 {
+    qDebug()<<"exitUtility:"<<LtHashTab;
     if (!LtHashTab)
         return;
 
+    qDebug()<<"exitUtility:"<<LTHASHTABSIZE;
     for (long i = 0; i < LTHASHTABSIZE; ++i)
         for (LtHashTabEntry* htep = LtHashTab[i]; htep; )
         {
             LtHashTabEntry* tmp = htep->next;
-            delete htep->tms;
+            delete htep;
             htep = tmp;
         }
 
@@ -432,18 +441,30 @@ monthOfWeek(time_t t, bool beginOnMonday)
     if (tm_mday < 4)
     {
         if (dayOfWeek(t, beginOnMonday) - tm_mday >= 3)
+	{
             if (tm_mon == 0)
+	    {
                 return 12;
+	    }
             else
+	    {
                 return tm_mon;
+	    }
+	}
     }
     else if (tm_mday > lastDayOfMonth - 4)
     {
         if (tm_mday - dayOfWeek(t, beginOnMonday) > lastDayOfMonth - 4)
+	{
             if (tm_mon == 11)
+	    {
                 return 1;
+	    }
             else
+	    {
                 return tm_mon + 2;
+	    }
+	}
     }
     return tm_mon + 1;
 }
@@ -609,7 +630,7 @@ sameTimeNextDay(time_t t)
     tmc.tm_mday++;
     tmc.tm_isdst = -1;
     if (mktime(&tmc) == -1)
-        qFatal("Error at %s", time2ISO(t).latin1());
+        qFatal("Error at %s", time2ISO(t).toLatin1().constData());
     return mktime(&tmc);
 }
 
@@ -861,7 +882,7 @@ date2time(const QString& date)
         return 0;
     }
 
-#if defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1 };
 #else
     struct tm t = { sec, min, hour, d, m - 1, y - 1900, 0, 0, -1, 0, 0 };
@@ -882,6 +903,16 @@ date2time(const QString& date)
     return localTime;
 }
 
+QString
+formatTime(time_t t)
+{
+    KLocale *l = KGlobal::locale();
+    if ( l ) {
+        return l->formatDateTime( QDateTime::fromTime_t(t) );
+    }
+    return QDateTime::fromTime_t(t).toString();
+}
+
 QDate
 time2qdate(time_t t)
 {
@@ -891,7 +922,7 @@ time2qdate(time_t t)
 time_t
 qdate2time(const QDate& d)
 {
-#if defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
+#if defined(Q_WS_WIN) || defined(__CYGWIN__) || (defined(__SVR4) && defined(__sun))
     struct tm t = { 0, 0, 0, d.day(), d.month() - 1, d.year() - 1900,
                     0, 0, -1 };
 #else

@@ -45,12 +45,13 @@
 #include <KoXmlWriter.h>
 #include <KoShapePainter.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QTextStream>
-#include <QtCore/QBuffer>
-#include <QtGui/QPainter>
-#include <QtSvg/QSvgGenerator>
+//#include <QtCore/QBuffer>
+#include <QFile>
+#include <QString>
+#include <QTextStream>
+#include <QBuffer>
+#include <QPainter>
+#include <QSvgGenerator>
 #include "SvgCustomSavingContext.h"
 
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers, const QSizeF &pageSize)
@@ -96,6 +97,7 @@ bool SvgWriter::save(QIODevice &outputDevice)
         return false;
 
     QTextStream svgStream(&outputDevice);
+
     if(m_svgHeader.isEmpty()){
 	  // standard header:
 	  svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
@@ -219,14 +221,9 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {
     const QRectF bbox = shape->boundingRect();
 
-    // prepare a transparent image, make it twice as big as the original size
-    QImage image(2*bbox.size().toSize(), QImage::Format_ARGB32);
-    image.fill(0);
-
     // paint shape to the image
     KoShapePainter painter;
     painter.setShapes(QList<KoShape*>()<< shape);
-    painter.paint(image);
 
     // generate svg from shape
     QBuffer svgBuffer;
@@ -244,22 +241,28 @@ void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
         svgBuffer.buffer().remove(0, startOfContent);
     }
 
-    context.shapeWriter().startElement("switch");
+    // check if painting to svg produced any output
+    if (svgBuffer.buffer().isEmpty()) {
+        // prepare a transparent image, make it twice as big as the original size
+        QImage image(2*bbox.size().toSize(), QImage::Format_ARGB32);
+        image.fill(0);
+        painter.paint(image);
+
+        context.shapeWriter().startElement("image");
+        context.shapeWriter().addAttribute("id", context.getID(shape));
+        context.shapeWriter().addAttributePt("x", bbox.x());
+        context.shapeWriter().addAttributePt("y", bbox.y());
+        context.shapeWriter().addAttributePt("width", bbox.width());
+        context.shapeWriter().addAttributePt("height", bbox.height());
+        context.shapeWriter().addAttribute("xlink:href", context.saveImage(image));
+        context.shapeWriter().endElement(); // image
+
+    } else {
+        context.shapeWriter().addCompleteElement(&svgBuffer);
+    }
 
     // TODO: once we support saving single (flat) odf files
     // we can embed these here to have full support for generic shapes
-    context.shapeWriter().addCompleteElement(&svgBuffer);
-
-    context.shapeWriter().startElement("image");
-    context.shapeWriter().addAttribute("id", context.getID(shape));
-    context.shapeWriter().addAttributePt("x", bbox.x());
-    context.shapeWriter().addAttributePt("y", bbox.y());
-    context.shapeWriter().addAttributePt("width", bbox.width());
-    context.shapeWriter().addAttributePt("height", bbox.height());
-    context.shapeWriter().addAttribute("xlink:href", context.saveImage(image));
-    context.shapeWriter().endElement(); // image
-
-    context.shapeWriter().endElement(); // switch
 }
 
 void SvgWriter::setHeader(const QString &header)

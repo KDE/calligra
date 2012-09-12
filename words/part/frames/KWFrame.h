@@ -29,12 +29,13 @@
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeApplicationData.h>
+#include <KoTextAnchor.h>
 
-class KoTextAnchor;
 class KWFrameSet;
 class KoViewConverter;
 class KWOutlineShape;
 class KWPage;
+class KoTextAnchor;
 
 /**
  * This class represents a single frame.
@@ -50,10 +51,8 @@ public:
      * Constructor
      * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
-     * @param pageNumber the page number is normally -1, only set when loading page anchored frames to the
-     *      page where the frame should be positioned
      */
-    KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber = -1);
+    KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor = 0);
     virtual ~KWFrame();
 
     /**
@@ -128,7 +127,7 @@ public:
     */
 
     int anchoredPageNumber() const {
-        return m_anchoredPageNumber;
+        return m_anchor ? m_anchor->pageNumber() : -1;
     }
     qreal anchoredFrameOffset() const {
         return m_anchoredFrameOffset;
@@ -136,6 +135,16 @@ public:
     void setAnchoredFrameOffset(qreal offset) {
         m_anchoredFrameOffset = offset;
     }
+
+    KoTextAnchor::AnchorType anchorType() {
+        return m_anchor ? m_anchor->anchorType() : KoTextAnchor::AnchorPage;
+    }
+
+    void setAnchor(KoTextAnchor *anchor) {
+        m_anchor = anchor;
+    }
+
+    KoTextAnchor *anchor() const { return m_anchor; }
 
     /**
      * Returns the list of copy-shapes, see @a KWCopyShape , that
@@ -171,15 +180,11 @@ private:
     Words::FrameBehavior m_frameBehavior;
     bool m_copyToEverySheet;
     Words::NewFrameBehavior m_newFrameBehavior;
-    // The page number is only used during loading.
-    // It is set to the page number if the frame contains a page anchored frame.
-    // In all other cases it is set to -1.
-    int m_anchoredPageNumber;
     qreal m_anchoredFrameOffset;
-
     KWFrameSet *m_frameSet;
     qreal m_minimumFrameHeight;
     QList<KWFrame*> m_copyShapes;
+    KoTextAnchor *m_anchor;
 };
 
 #endif

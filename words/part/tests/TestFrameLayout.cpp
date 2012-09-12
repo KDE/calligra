@@ -267,7 +267,7 @@ void TestFrameLayout::testFrameCreation()
     QVERIFY(frameSets.evenFooters == 0);
 
     KoColumns columns = style.columns();
-    columns.columns = 2;
+    columns.count = 2;
     style.setColumns(columns);
 
     removeAllFrames();
@@ -368,8 +368,8 @@ void TestFrameLayout::testCreateNewFrameForPage()
     style4.setHasMainTextFrame(true);
     style4.setFooterPolicy(Words::HFTypeEvenOdd);
     KoColumns columns;
-    columns.columns = 2;
-    columns.columnSpacing = 4;
+    columns.count = 2;
+    columns.gapWidth = 4;
     style4.setColumns(columns);
     styles.insert(style4.name(), style4);
 
@@ -691,7 +691,7 @@ void TestFrameLayout::testPageStyle()
     QCOMPARE(fsets1.oddHeaders->frameCount(), 1);
     QCOMPARE(fsets2.oddHeaders->frameCount(), 3);
 }
-#include <qdebug.h>
+#include <QDebug>
 void TestFrameLayout::testPageBackground()
 {
     // creating a page with a pagestyle that has a background set should

@@ -92,7 +92,7 @@ public:
     KexiPart::Part* part() const;
 
     /*! \return preferred size hint, that can be used to resize the view.
-     It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size,
+     It is computed using maximum of (a) \a otherSize and (b) current dock area's size,
      so the view won't exceed this maximum size. The method is used e.g. in KexiWindow::sizeHint().
      If you reimplement this method, do not forget to return value of
      yoursize.boundedTo( KexiView::preferredSizeHint(otherSize) ). */
@@ -290,14 +290,14 @@ protected:
         QWidget::setFocus();
     }
 
-    /*! Allows to react on parent window's detaching (only for KMDI's ChildFrame mode)
-     - it is called by KexiWindow::youAreDetached().
+    /*! Allows to react on parent window's detaching.
+     @todo it should be called by KexiWindow::youAreDetached().
      Default implementation does nothing.
      Implement it if you want to perform some appropriate actions. */
     virtual void windowDetached() {}
 
-    /*! Allows to react on parent window's attaching (only for KMDI's ChildFrame mode)
-     - it is called by KexiWindow::youAreAttached().
+    /*! Allows to react on parent window's attaching.
+     @todo it should be called by KexiWindow::youAreAttached().
      Default implementation does nothing.
      Implement it if you want to perform some appropriate actions. */
     virtual void windowAttached() {}

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2009 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef LISTSTYLEBUTTON_H
-#define LISTSTYLEBUTTON_H
+#ifndef FORMATTINGBUTTON_H
+#define FORMATTINGBUTTON_H
 
 #include <KoListStyle.h>
 
@@ -35,24 +35,33 @@ class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    FormattingButton( QWidget *parent = 0 );
+    FormattingButton(QWidget *parent = 0 );
 
-    QString example(KoListStyle::Style type) const;
-    void addItem(QPixmap pm, int id);
+    void setNumColumns(int columns);
+    void setItemsBackground(const QColor &color);
+    void addItem(QPixmap pm, int id, QString toolTip= QString());
     void addAction(QAction *action);
+    void addBlanks(int n);
     void addSeparator();
+    bool hasItemId(int id);
+    bool isFirstTimeMenuShown();
 
 signals:
     void itemTriggered(int id);
+    void doneWithFocus();
+    void aboutToShowMenu();
 
 private slots:
     void itemSelected();
+    void menuShown();
 
 private:
     int m_lastId ;
     QMenu *m_menu;
-    QMap<QObject *, int > m_styleMap;
+    QMap<int, QObject *> m_styleMap;
     ItemChooserAction *m_styleAction;
+    int m_columns;
+    bool m_menuShownFirstTime;
 };
 
-#endif
+#endif  //FORMATTINGBUTTON_H

@@ -43,7 +43,7 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
-#include <kis_undo_adapter.h>
+#include "kis_iterator_ng.h"
 
 #include <metadata/kis_meta_data_entry.h>
 #include <metadata/kis_meta_data_schema.h>
@@ -51,10 +51,9 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_value.h>
 
-exrConverter::exrConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+exrConverter::exrConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -168,20 +167,20 @@ void decodeData1(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
         file.setFrameBuffer(frameBuffer);
         file.readPixels(ystart + y);
         _T_ *rgba = pixels.data();
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
-        while (!it.isDone()) {
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+        do {
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we
             // keep it premultiplied.
             _T_ unmultipliedRed = *rgba;
 
-            _T_* dst = reinterpret_cast<_T_*>(it.rawData());
+            _T_* dst = reinterpret_cast<_T_*>(it->rawData());
 
             *dst = unmultipliedRed;
 
-            ++it;
+
             ++rgba;
-        }
+        } while (it->nextPixel());
     }
 
 }
@@ -220,8 +219,8 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
         file.setFrameBuffer(frameBuffer);
         file.readPixels(ystart + y);
         Rgba *rgba = pixels.data();
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width);
-        while (!it.isDone()) {
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, y, width);
+        do {
 
             // XXX: For now unmultiply the alpha, though compositing will be faster if we
             // keep it premultiplied.
@@ -234,7 +233,7 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
                 unmultipliedGreen /= rgba -> a;
                 unmultipliedBlue /= rgba -> a;
             }
-            typename KoRgbTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoRgbTraits<_T_>::Pixel*>(it.rawData());
+            typename KoBgrTraits<_T_>::Pixel* dst = reinterpret_cast<typename KoBgrTraits<_T_>::Pixel*>(it->rawData());
 
             dst->red = unmultipliedRed;
             dst->green = unmultipliedGreen;
@@ -245,9 +244,9 @@ void decodeData4(Imf::InputFile& file, ExrPaintLayerInfo& info, KisPaintLayerSP 
                 dst->alpha = 1.0;
             }
 
-            ++it;
+
             ++rgba;
-        }
+        } while (it->nextPixel());
     }
 
 }
@@ -415,6 +414,7 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
                     newChannelMap["A"] = it.value();
                     info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(it.key(), "A"));
                 }
+
                 info.channelMap = newChannelMap;
             }
         }
@@ -436,12 +436,11 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
     }
 
     // Create the image
-    m_image = new KisImage(m_adapter, width, height, colorSpace, "");
+    m_image = new KisImage(m_doc->createUndoStore(), width, height, colorSpace, "");
 
     if (!m_image) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    m_image->lock();
 
     // Create group layers
     for (int i = 0; i < groups.size(); ++i) {
@@ -513,12 +512,10 @@ KisImageBuilder_Result exrConverter::decode(const KUrl& uri)
             // Add the layer
             KisGroupLayerSP groupLayerParent = (info.parent) ? info.parent->groupLayer : m_image->rootLayer();
             m_image->addNode(layer, groupLayerParent);
-            layer->setDirty();
         } else {
             dbgFile << "No decoding " << info.name << " with " << info.channelMap.size() << " channels, and lack of a color space";
         }
     }
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -606,10 +603,9 @@ template<typename _T_, int size, int alphaPos>
 void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
 {
     ExrPixel *rgba = pixels.data();
-    KisHLineIterator it = info->layer->paintDevice()->createHLineIterator(0, line, m_width);
-    while (!it.isDone()) {
-
-        const _T_* dst = reinterpret_cast < const _T_* >(it.oldRawData());
+    KisHLineIteratorSP it = info->layer->paintDevice()->createHLineIteratorNG(0, line, m_width);
+    do {
+        const _T_* dst = reinterpret_cast < const _T_* >(it->oldRawData());
 
         if (alphaPos == -1) {
             for (int i = 0; i < size; ++i) {
@@ -624,10 +620,8 @@ void EncoderImpl<_T_, size, alphaPos>::encodeData(int line)
             }
             rgba->data[alphaPos] = alpha;
         }
-
-        ++it;
         ++rgba;
-    }
+    } while (it->nextPixel());
 }
 
 Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int width)
@@ -711,7 +705,20 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisPaintLayerSP 
     qint32 width = image->width();
     Imf::Header header(width, height);
 
-    Imf::PixelType pixelType = (layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) ? Imf::HALF : Imf::FLOAT;
+    Imf::PixelType pixelType = Imf::NUM_PIXELTYPES;
+    
+    if(layer->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        pixelType = Imf::HALF;
+    } else if(layer->colorSpace()->colorDepthId() == Float32BitsColorDepthID)
+    {
+        pixelType = Imf::FLOAT;
+    }
+    
+    if(pixelType >= Imf::NUM_PIXELTYPES)
+    {
+      return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
+      
 
     header.channels().insert("R", Imf::Channel(pixelType));
     header.channels().insert("G", Imf::Channel(pixelType));
@@ -787,7 +794,14 @@ void recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveInfo>& informationObjects
             } else {
                 info.pixelType = Imf::NUM_PIXELTYPES;
             }
-            informationObjects.push_back(info);
+            
+            if(info.pixelType < Imf::NUM_PIXELTYPES)
+            {
+                informationObjects.push_back(info);
+            } else {
+                // TODO should probably inform that one of the layer cannot be saved.
+            }
+
         } else if (KisGroupLayerSP groupLayer = dynamic_cast<KisGroupLayer*>(node.data())) {
             recBuildPaintLayerSaveInfo(informationObjects, name + groupLayer->name() + '.', groupLayer);
         }
@@ -815,6 +829,11 @@ KisImageBuilder_Result exrConverter::buildFile(const KUrl& uri, KisGroupLayerSP 
 
     QList<ExrPaintLayerSaveInfo> informationObjects;
     recBuildPaintLayerSaveInfo(informationObjects, "", layer);
+    
+    if(informationObjects.isEmpty())
+    {
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
 
     dbgFile << informationObjects.size() << " layers to save";
 

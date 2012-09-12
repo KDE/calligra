@@ -24,7 +24,7 @@
 #include <poppler-qt4.h>
 
 // Qt's headers
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 // KDE's headers
 #include <kis_debug.h>
@@ -93,6 +93,7 @@ void KisPDFImportWidget::updateSelectionOfPages()
     for (int i = 0; i < m_pdfDoc->numPages(); i++) {
         if (listPages->item(i)->isSelected()) m_pages.push_back(i);
     }
+    updateMaxCanvasSize();
 }
 
 

@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006
  * by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -42,7 +43,7 @@ class KPLATOTJ_EXPORT Resource : public CoreAttributes
                                                CoreAttributes* c2, int level);
 public:
     Resource(Project* p, const QString& i, const QString& n, Resource* pr,
-             const QString& df = QString::null, uint dl = 0);
+             const QString& df = QString(), uint dl = 0);
     virtual ~Resource();
 
     static void deleteStaticData();
@@ -153,7 +154,7 @@ public:
         const;
 
     bool isAllocated(int sc, const Interval& i,
-                     const QString& prjId = QString::null) const;
+                     const QString& prjId = QString()) const;
 
     bool isAllocated(int sc, const Interval& i, const Task* t) const;
 

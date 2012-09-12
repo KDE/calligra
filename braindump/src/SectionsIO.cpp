@@ -270,7 +270,7 @@ void SectionsIO::save()
     foreach(SaveContext * saveContext, m_contextes) {
         if(m_sectionsToSave.contains(saveContext->section)) {
             if(saveContext->saveSection(this)) {
-                kDebug() << "Sucessfully loaded: " << saveContext->section->name();
+                kDebug() << "Successfully loaded: " << saveContext->section->name();
             } else {
                 kDebug() << "Saving failed"; // TODO: Report it
             }

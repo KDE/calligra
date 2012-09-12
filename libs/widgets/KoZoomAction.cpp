@@ -1,7 +1,7 @@
 /*  This file is part of the KDE libraries
     Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
     Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
-    Copyright (C) 2006-2007 Casper Boemann <cbr@boemann.dk>
+    Copyright (C) 2006-2007 C. Boemann <cbo@boemann.dk>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -81,7 +81,7 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QO
     for(int i = 1; i < steps; ++i) {
         d->sliderLookup[i] = pow(zoomStep, i - halfSteps);
     }
-    
+
     d->effectiveZoom = 1.0;
     regenerateItems(d->effectiveZoom, true);
 
@@ -274,7 +274,7 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     }
     if (d->specialButtons & ZoomToSelection) {
         QToolButton * zoomToSelectionButton = new QToolButton(group);
-        zoomToSelectionButton->setIcon(KIcon("zoom-selection").pixmap(22));
+        zoomToSelectionButton->setIcon(KIcon("zoom-select").pixmap(22));
         zoomToSelectionButton->setAutoRaise(true);
         zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
         connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
@@ -282,7 +282,7 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     }
     if (d->specialButtons & ZoomToAll) {
         QToolButton * zoomToAllButton = new QToolButton(group);
-        zoomToAllButton->setIcon(KIcon("zoom-all").pixmap(22));
+        zoomToAllButton->setIcon(KIcon("zoom-draw").pixmap(22));
         zoomToAllButton->setAutoRaise(true);
         zoomToAllButton->setToolTip(i18n("Zoom to All"));
         connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));

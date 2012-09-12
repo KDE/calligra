@@ -66,15 +66,6 @@ ToCGenerator::~ToCGenerator()
     delete m_ToCInfo;
 }
 
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
-    KoParagraphStyle *style = new KoParagraphStyle();
-    style->setName("Contents " + QString::number(outlineLevel));
-    style->setParent(styleManager->paragraphStyle("Standard"));
-    style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
-    styleManager->add(style);
-    return style;
-}
-
 void ToCGenerator::setBlock(const QTextBlock &block)
 {
     m_block = block;
@@ -123,6 +114,8 @@ bool ToCGenerator::generate()
     if (!m_ToCInfo)
         return true;
 
+    m_preservePagebreak = m_ToCDocument->begin().blockFormat().intProperty(KoParagraphStyle::BreakBefore) & KoText::PageBreak;
+
     m_success = true;
 
     QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
@@ -133,14 +126,26 @@ bool ToCGenerator::generate()
 
     if (!m_ToCInfo->m_indexTitleTemplate.text.isEmpty()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
+
+        // titleStyle == 0? then it might be in unused styles
         if (!titleStyle) {
-            titleStyle = styleManager->defaultParagraphStyle();
+            titleStyle = styleManager->unusedStyle(m_ToCInfo->m_indexTitleTemplate.styleId); // this should return true only for ToC template preview
+        }
+
+        if (!titleStyle) {
+            titleStyle = styleManager->defaultTableOfcontentsTitleStyle();
         }
 
         QTextBlock titleTextBlock = cursor.block();
         titleStyle->applyStyle(titleTextBlock);
 
         cursor.insertText(m_ToCInfo->m_indexTitleTemplate.text);
+        if (m_preservePagebreak) {
+            QTextBlockFormat blockFormat;
+            blockFormat.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
+            cursor.mergeBlockFormat(blockFormat);
+            m_preservePagebreak = false;
+        }
         cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
 
@@ -200,7 +205,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
-    // some headings contain tabs, replace all occurences with spaces
+    // some headings contain tabs, replace all occurrences with spaces
     tocEntryText.replace('\t',' ').remove(0x200B);
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
@@ -221,10 +226,15 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
             tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate->styleId);
             if (tocTemplateStyle == 0) {
-                tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
+                tocTemplateStyle = styleManager->defaultTableOfContentsEntryStyle(outlineLevel);
             }
 
-            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+            QTextBlockFormat blockFormat;
+            if (m_preservePagebreak) {
+                blockFormat.setProperty(KoParagraphStyle::BreakBefore, KoText::PageBreak);
+                m_preservePagebreak = false;
+            }
+            cursor.insertBlock(blockFormat, QTextCharFormat());
 
             QTextBlock tocEntryTextBlock = cursor.block();
             tocTemplateStyle->applyStyle( tocEntryTextBlock );
@@ -257,6 +267,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             // copy it to alter subset of properties
                             QTextCharFormat linkCf(savedCharFormat);
                             linkCf.setAnchor(true);
+                            linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
                             linkCf.setAnchorHref('#'+ target);
 
                             QBrush foreground = linkCf.foreground();

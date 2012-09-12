@@ -23,12 +23,11 @@
 #ifndef KEXIMENUWIDGET_H
 #define KEXIMENUWIDGET_H
 
-#include <kexi_export.h>
 #include <KStandardAction>
 #include <KAction>
-#include <QtGui/qwidget.h>
-#include <QtCore/qstring.h>
-#include <QtGui/qicon.h>
+#include <QWidget>
+#include <QString>
+#include <QIcon>
 
 class KexiMenuWidgetPrivate;
 class KexiMenuWidgetActionPrivate;
@@ -52,7 +51,7 @@ protected:
     KexiMenuWidgetActionPrivate * const d;
 };
 
-class KEXIMAIN_EXPORT KexiMenuWidget : public QWidget
+class KexiMenuWidget : public QWidget
 {
 private:
     Q_OBJECT
@@ -165,6 +164,7 @@ protected:
 #endif
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+    void showEvent(QShowEvent* event);
     void hideEvent(QHideEvent *);
     void paintEvent(QPaintEvent *);
     void actionEvent(QActionEvent *);

@@ -21,8 +21,8 @@
 
 #include <kexi.h>
 #include <kexiguimsghandler.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 #include "kexidbdrivercombobox.h"
 
 #include <kdebug.h>
@@ -62,7 +62,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
         , d(new Private())
 {
     setupUi(this);
-    setObjectName("KexiConnSelectorWidget");
+    setObjectName("KexiConnectionSelectorWidget");
     iconLabel->setPixmap(DesktopIcon(KEXI_ICON_DATABASE_SERVER));
 
     QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=okular
 Name=okular
 Name[bg]=okular
@@ -12,7 +11,10 @@ Name[el]=okular
 Name[en_GB]=okular
 Name[es]=okular
 Name[et]=Okular
+Name[fi]=okular
+Name[fr]=Okular
 Name[ga]=okular
+Name[hu]=Okular
 Name[it]=Okular
 Name[kk]=Okular
 Name[nb]=okular
@@ -22,6 +24,8 @@ Name[pl]=okular
 Name[pt]=okular
 Name[pt_BR]=Okular
 Name[ru]=Okular
+Name[sk]=okular
+Name[sl]=okular
 Name[sv]=okular
 Name[uk]=Okular
 Name[wa]=okular

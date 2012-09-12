@@ -1,12 +1,22 @@
 [Desktop Entry]
 Name=mixer
+Name[ca]=mesclador
+Name[ca@valencia]=mesclador
+Name[cs]=směšovač
+Name[de]=Mixer
 Name[el]=μείκτης
+Name[es]=mezclador
+Name[et]=Mikser
+Name[gl]=mesturador
+Name[it]=mixer
+Name[kk]=Араластырғыш
 Name[nb]=mikser
 Name[nl]=mixer
 Name[pl]=mikser
 Name[pt]=misturador
 Name[pt_BR]=misturador
 Name[ru]=Смеситель
+Name[sk]=mixér
 Name[sv]=mixer
 Name[uk]=Змішувач
 Name[x-test]=xxmixerxx

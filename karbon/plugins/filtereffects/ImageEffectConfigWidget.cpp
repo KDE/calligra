@@ -23,10 +23,10 @@
 #include <KNumInput>
 #include <KFileDialog>
 #include <KLocale>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QImageReader>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QImageReader>
 
 ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

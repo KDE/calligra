@@ -22,8 +22,8 @@
 
 #include "kexidbconnectionset.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
-#include <kexidb/connectiondata.h>
-#include <kexidb/msghandler.h>
+#include <db/connectiondata.h>
+#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
@@ -31,7 +31,7 @@
 class KTabWidget;
 class KexiProjectData;
 class KexiProjectSet;
-class KexiConnSelectorWidget;
+class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiOpenProjectAssistant;
 
@@ -44,8 +44,8 @@ public:
     ~KexiMainOpenProjectPage();
 
     KTabWidget* tabWidget;
-    KexiConnSelectorWidget* fileSelector;
-    KexiConnSelectorWidget* connSelector;
+    KexiConnectionSelectorWidget* fileSelector;
+    KexiConnectionSelectorWidget* connSelector;
 private slots:
     void init();
 private:

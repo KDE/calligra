@@ -38,7 +38,7 @@ public:
     virtual ~PluginShape();
 
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
@@ -55,7 +55,6 @@ private:
     QString m_xlinkhref;
     QString m_xlinkshow;
     QString m_xlinktype;
-    QString m_xmlid;
 };
 
 #endif

@@ -17,7 +17,11 @@
 #include "Project.h"
 
 #include <stdlib.h>
-#include <Qt>
+#include <QList>
+#include <QString>
+#include <QStringList>
+
+#include <KLocale>
 #include <KDebug>
 
 #include "TjMessageHandler.h"
@@ -147,8 +151,12 @@ Project::~Project()
     // Remove support for 1.0 XML reports for next major release. */
 //     delete xmlreport;
 
-    for (int i = 0; i < 7; ++i)
+    for (int i = 0; i < 7; ++i) {
+        while ( ! workingHours[i]->isEmpty() ) {
+            delete workingHours[i]->takeFirst();
+        }
         delete workingHours[i];
+    }
     exitUtility();
 
     qDebug()<<"~Project:"<<this;
@@ -477,7 +485,7 @@ Project::pass2(bool noDepCheck)
 
     if (taskList.isEmpty())
     {
-        TJMH.errorMessage(QString("The project does not contain any tasks."));
+        TJMH.errorMessage(i18nc("@info/plain", "The project does not contain any tasks."));
         return false;
     }
     qDebug()<<"pass2 task info:";
@@ -813,6 +821,116 @@ Project::finishScenario(int sc)
     }
 }
 
+TaskList Project::tasksReadyToBeScheduled(int sc, const TaskList& allLeafTasks)
+{
+    TaskList workItems;
+    foreach (CoreAttributes *t, allLeafTasks) {
+        if (static_cast<Task*>(t)->isReadyForScheduling())
+            workItems.append(static_cast<Task*>(t));
+    }
+    if ( workItems.isEmpty() ) {
+        foreach (CoreAttributes *t, allLeafTasks) {
+            if (!static_cast<Task*>(t)->isSchedulingDone() && !static_cast<Task*>(t)->isReadyForScheduling()) {
+                TJMH.debugMessage("Not ready to be scheduled", t);
+            }
+        }
+        foreach (CoreAttributes *c, allLeafTasks) {
+            Task *t = static_cast<Task*>(c);
+            if (!t->isSchedulingDone() /*&& !t->isRunaway()*/) {
+                if (t->getScheduling() == Task::ASAP) {
+                    time_t es = t->earliestStart(sc);
+                    //qDebug()<<"schedule rest: earliest start"<<time2ISO(es)<<time2ISO(time_t(1));
+                    if (es > 1) { // NOTE: es is 1 if predecessor is not scheduled!
+                        t->propagateStart(sc, es);
+                    } else if (t->hasAlapPredecessor()) {
+                        time_t le = t->latestEnd(sc);
+                        if (le > time_t(0) ) {
+                            t->setScheduling(Task::ALAP);
+                            t->propagateEnd(sc, le );
+                        }// else qDebug()<<"schedule rest: no end time"<<t;
+                    } //else qDebug()<<"schedule rest: no start time"<<t;
+                } else {
+                    time_t le = t->latestEnd(sc);
+                    if (le > time_t(0) ) {
+                        t->propagateEnd(sc, le );
+                    } else qDebug()<<"ALAP schedule rest: no end time"<<t;
+                }
+                if (t->isReadyForScheduling()) {
+                    workItems.append(t);
+                } else qDebug()<<"Schedule rest: not ready"<<t;
+            }
+            if (workItems.isEmpty()) {
+                TaskList lst;
+                foreach (CoreAttributes *c, allLeafTasks) {
+                    Task *t = static_cast<Task*>(c);
+                    if (!t->isSchedulingDone()) {
+                        lst << t;
+                    }
+                }
+                if (lst.isEmpty()) {
+                    return workItems; // finished
+                }
+                if (DEBUGPS(5)) {
+                    if (!lst.isEmpty()) {
+                        qDebug()<<"These tasks are still not ready to be scheduled:"<<allLeafTasks;
+                    }
+                }
+            }
+        }
+    }
+/*    if ( workItems.isEmpty() && getTask("TJ::StartJob")->getScheduling() == Task::ASAP) {
+        foreach (CoreAttributes *c, allLeafTasks) {
+        }
+    }                                                                                                                                                                                                                                                                                                                                                                                               */
+    if ( workItems.isEmpty() && getTask("TJ::StartJob")->getScheduling() == Task::ALAP) {
+        qDebug()<<"tasksReadyToSchedule:"<<"backward, try really hard";
+        foreach (CoreAttributes *c, allLeafTasks) {
+            Task *task = static_cast<Task*>(c);
+            if (!task->isSchedulingDone()) {
+                continue;
+            }
+            qDebug()<<"tasksReadyToSchedule:"<<"scheduled task:"<<task<<time2ISO(task->start)<<time2ISO(task->end);
+            Task *predecessor = 0;
+            long gapLength = 0;
+            long gapDuration = 0;
+            foreach (CoreAttributes *c, task->previous) {
+                Task *t = static_cast<Task*>(c);
+                if (t->isSchedulingDone()) {
+                    continue;
+                }
+                // get the dependency/longest gap
+                foreach (TaskDependency *d, t->precedes) {
+                    if (d->getTaskRef() == task) {
+                        predecessor = t;
+                        gapLength = qMax(gapLength, d->getGapLength(sc));
+                        gapDuration = qMax(gapDuration, d->getGapDuration(sc));
+                    }
+                }
+            }
+            if ( predecessor == 0 ) {
+                continue;
+            }
+            time_t potentialDate = task->start - 1;
+            time_t dateBeforeLengthGap;
+            for (dateBeforeLengthGap = potentialDate; gapLength > 0 && dateBeforeLengthGap >= start; dateBeforeLengthGap -= getScheduleGranularity()) {
+                if (isWorkingTime(dateBeforeLengthGap)) {
+                    gapLength -= getScheduleGranularity();
+                }
+                if (dateBeforeLengthGap < potentialDate - gapDuration) {
+                    potentialDate = dateBeforeLengthGap;
+                } else {
+                    potentialDate -= gapDuration;
+                }
+            }
+            qDebug()<<"tasksReadyToSchedule:"<<"schedule predecessor:"<<predecessor<<time2ISO(potentialDate);
+            predecessor->propagateEnd(sc, potentialDate);
+            workItems << predecessor;
+            break;
+        }
+    }
+    return workItems;
+}
+
 bool
 Project::schedule(int sc)
 {
@@ -824,8 +942,10 @@ Project::schedule(int sc)
     // we create a task list that only contains leaf tasks.
     TaskList allLeafTasks;
     foreach (CoreAttributes *t, taskList) {
-        if (!static_cast<Task*>(t)->hasSubs())
+        if (!static_cast<Task*>(t)->hasSubs()) {
             allLeafTasks.append(static_cast<Task*>(t));
+//             TJMH.debugMessage("Leaf task", t);
+        }
     }
 
     allLeafTasks.setSorting(CoreAttributesList::PrioDown, 0);
@@ -833,18 +953,16 @@ Project::schedule(int sc)
     allLeafTasks.setSorting(CoreAttributesList::SequenceUp, 2);
     allLeafTasks.sort();
     maxProgress = allLeafTasks.count();
+    int sortedTasks = 0;
+    foreach (CoreAttributes *t, allLeafTasks) {
+        if (static_cast<Task*>(t)->isSchedulingDone())
+            sortedTasks++;
+    }
     /* The workItems list contains all tasks that are ready to be scheduled at
      * any given iteration. When a tasks has been scheduled completely, this
      * list needs to be updated again as some tasks may now have become ready
      * to be scheduled. */
-    TaskList workItems;
-    int sortedTasks = 0;
-    foreach (CoreAttributes *t, allLeafTasks) {
-        if (static_cast<Task*>(t)->isReadyForScheduling())
-            workItems.append(static_cast<Task*>(t));
-        if (static_cast<Task*>(t)->isSchedulingDone())
-            sortedTasks++;
-    }
+    TaskList workItems = tasksReadyToBeScheduled(sc, allLeafTasks);
 
     bool done;
     /* While the scheduling process progresses, the list contains more and
@@ -869,13 +987,13 @@ Project::schedule(int sc)
          * will be scheduled during this run for all subsequent tasks as well.
          */
         foreach (CoreAttributes *t, workItems) {
-            TJMH.debugMessage(QString("'%1' schedule for slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
+//             TJMH.debugMessage(QString("'%1' schedule for slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
             if (slot == 0)
             {
                 /* No time slot has been set yet. Check if this task can be
                  * scheduled and provides a suggestion. */
                 slot = static_cast<Task*>(t)->nextSlot(scheduleGranularity);
-                TJMH.debugMessage(QString("'%1' first slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
+//                 TJMH.debugMessage(QString("'%1' first slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)), t);
                 /* If not, try the next task. */
                 if (slot == 0)
                     continue;
@@ -896,7 +1014,6 @@ Project::schedule(int sc)
                 {
                     static_cast<Task*>(t)->setRunaway();
                     runAwayFound = true;
-                    TJMH.warningMessage(QString("'%1' runaway slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
                     slot = 0;
                     continue;
                 }
@@ -904,7 +1021,7 @@ Project::schedule(int sc)
             done = false;
             /* Each task has a scheduling direction (forward or backward)
              * depending on it's constrains. The task with the highest
-             * priority/pathCriticalness determins the time slot and hence the
+             * priority/pathCriticalness determines the time slot and hence the
              * scheduling direction. Since tasks that have the other direction
              * cannot the scheduled then, we have to stop this run as soon as
              * we hit a task that runs in the other direction. If we would not
@@ -917,9 +1034,6 @@ Project::schedule(int sc)
                     qDebug()<<QString("Changing scheduling direction to %1 due to task '%2'")
                             .arg(static_cast<Task*>(t)->getScheduling())
                             .arg(static_cast<Task*>(t)->getName());
-                TJMH.debugMessage(QString("Changing scheduling direction to %1 due to task '%2'")
-                            .arg(static_cast<Task*>(t)->getScheduling())
-                            .arg(static_cast<Task*>(t)->getName()));
                 break;
             }
             /* We must avoid that lower priority tasks get resources even
@@ -934,13 +1048,10 @@ Project::schedule(int sc)
             // Schedule this task for the current time slot.
             if (static_cast<Task*>(t)->schedule(sc, slot, scheduleGranularity))
             {
-                TJMH.debugMessage(QString("'%1' schedule finished, slot: %2, (%3 -%4)").arg(static_cast<Task*>(t)->getName()).arg(time2ISO(slot)).arg(time2ISO(start)).arg(time2ISO(end)));
-                workItems.clear();
+                workItems = tasksReadyToBeScheduled(sc, allLeafTasks);
                 int oldSortedTasks = sortedTasks;
                 sortedTasks = 0;
                 foreach (CoreAttributes *t, allLeafTasks) {
-                    if (static_cast<Task*>(t)->isReadyForScheduling())
-                        workItems.append(static_cast<Task*>(t));
                     if (static_cast<Task*>(t)->isSchedulingDone())
                         sortedTasks++;
                 }
@@ -951,44 +1062,6 @@ Project::schedule(int sc)
                     setProgressInfo(QString("Scheduling scenario %1 at %2")
                          .arg(getScenarioId(sc)).arg(time2tjp(slot)));
                 }
-                // we may end up with non-scheduled tasks
-                if (workItems.isEmpty()) {
-                    allLeafTasks.clear();
-                    foreach (CoreAttributes *t, taskList) {
-                        if (!static_cast<Task*>(t)->hasSubs() && !static_cast<Task*>(t)->isSchedulingDone()) {
-                            allLeafTasks.append(static_cast<Task*>(t));
-                        }
-                    }
-                    foreach (CoreAttributes *c, allLeafTasks) {
-                        Task *t = static_cast<Task*>(c);
-                        if (!t->isSchedulingDone() /*&& !t->isRunaway()*/) {
-                            if (t->getScheduling() == Task::ASAP) {
-                                time_t es = t->earliestStart(sc);
-                                //qDebug()<<"schedule rest: earliest start"<<time2ISO(es)<<time2ISO(time_t(1));
-                                if (es > 1) { // NOTE: es is 1 if predecessor is not scheduled!
-                                    t->propagateStart(sc, es);
-                                } else if (t->hasAlapPredecessor()) {
-                                    time_t le = t->latestEnd(sc);
-                                    if (le > time_t(0) ) {
-                                        t->setScheduling(Task::ALAP);
-                                        t->propagateEnd(sc, le );
-                                    }// else qDebug()<<"schedule rest: no end time"<<t;
-                                } //else qDebug()<<"schedule rest: no start time"<<t;
-                            } else {
-                                time_t le = t->latestEnd(sc);
-                                if (le > time_t(0) ) {
-                                    t->propagateEnd(sc, le );
-                                }// else qDebug()<<"schedule rest: no end time"<<t;
-                            }
-                            if (t->isReadyForScheduling()) {
-                                workItems.append(t);
-                            }
-                        }
-                    }
-                    if (DEBUGPS(15) && !workItems.isEmpty()) {
-                        qDebug()<<"These tasks where not ready to be scheduled on last run:"<<workItems;
-                    }
-                }
             }
         }
     } while (!done && !breakFlag);
@@ -997,22 +1070,16 @@ Project::schedule(int sc)
     {
         setProgressInfo("");
         setProgressBar(0, 0);
-        TJMH.errorMessage(QString("Scheduling aborted on user request"));
+        TJMH.infoMessage(i18nc("@info/plain", "Scheduling aborted on user request"));
         return false;
     }
-
     if (runAwayFound) {
         foreach (CoreAttributes *t, taskList) {
             if (static_cast<Task*>(t)->isRunaway()) {
                 if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
-                    static_cast<Task*>(t)->errorMessage(QString("End of task '%1' does not fit into the "
-                              "project time frame. Try using a later project "
-                              "end date.")
-                         .arg(static_cast<Task*>(t)->getName()));
+                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projects target finish time. Try using a later project end date.", t->getName()));
                 } else {
-                    static_cast<Task*>(t)->errorMessage(QString("Start of task '%1' does not fit into the "
-                              "project time frame. Try using an earlier "
-                              "project start date.").arg(static_cast<Task*>(t)->getName()));
+                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()));
                 }
             }
         }
@@ -1046,9 +1113,7 @@ Project::checkSchedule(int sc) const
             static_cast<Task*>(t)->scheduleOk(sc);
         if (maxErrors > 0 && TJMH.getErrors() >= maxErrors)
         {
-            TJMH.errorMessage
-                (QString("Too many errors in %1 scenario. Giving up.")
-                 .arg(getScenarioId(sc)));
+            TJMH.errorMessage(i18nc("@info/plain", "Too many errors. Giving up."));
             return false;
         }
     }

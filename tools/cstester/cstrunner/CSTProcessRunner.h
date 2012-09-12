@@ -1,7 +1,7 @@
 /*
  * This file is part of Calligra
  *
- * Copyright (C) 2011 Thorsten Zachmann <thorsten.zachmann@kde.org>
+ * Copyright (C) 2011-2012 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -33,7 +33,7 @@ class CSTProcessRunner : public QObject
 {
     Q_OBJECT
 public:
-    CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses);
+    CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses, bool pickup);
     ~CSTProcessRunner();
 
 public slots:

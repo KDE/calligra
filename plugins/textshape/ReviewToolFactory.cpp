@@ -23,17 +23,17 @@
 
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
 #include <klocale.h>
 
 ReviewToolFactory::ReviewToolFactory()
         : KoToolFactoryBase("ReviewToolFactory_ID")
 {
-    setToolTip(i18n("Review tool"));
-    setToolType(dynamicToolType());
+    setToolTip(i18n("Review"));
+    setToolType(dynamicToolType()+",calligrawords");
     setIcon("tool-changetracking");
-    setPriority(3);
+    setPriority(30);
     setActivationShapeId(TextShape_SHAPEID);
 }
 

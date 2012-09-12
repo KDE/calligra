@@ -21,7 +21,7 @@
 #include "utils_p.h"
 
 #include <q3header.h>
-#include <qlayout.h>
+#include <QLayout>
 #include <QThread>
 
 #include <ktabwidget.h>
@@ -62,7 +62,7 @@ void KexiUtils::addKexiDBDebug(const QString& text)
         return;
     if (QThread::currentThread() != debugWindowTab->thread()) {
 //! @todo send debug using async. signal
-        kDebug() << "Debuging from different thread not supported.";
+        kDebug() << "Debugging from different thread not supported.";
         return;
     }
     if (!kexiDBDebugPage) {

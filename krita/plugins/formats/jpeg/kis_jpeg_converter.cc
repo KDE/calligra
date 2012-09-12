@@ -16,16 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
-#ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
-#define KDEWIN_STDINT_H
-#endif
-
 #include "kis_jpeg_converter.h"
 
 #include <stdio.h>
 #include <stdint.h>
-#include <lcms.h>
+
+#include <KoConfig.h>
+#ifdef HAVE_LCMS2
+#   include <lcms2.h>
+#else
+#   include <lcms.h>
+#endif
 
 extern "C" {
 #include <iccjpeg.h>
@@ -48,10 +49,11 @@ extern "C" {
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KoColor.h>
 
+#include <kis_painter.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
 #include <kis_group_layer.h>
@@ -63,6 +65,7 @@ extern "C" {
 #include <kis_transform_worker.h>
 #include <kis_jpeg_source.h>
 #include <kis_jpeg_destination.h>
+#include "kis_iterator_ng.h"
 
 #include <KoColorProfile.h>
 #include <KoColorModelStandardIds.h>
@@ -92,7 +95,7 @@ J_COLOR_SPACE getColorTypeforColorSpace(const KoColorSpace * cs)
     if (KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16")) {
         return JCS_CMYK;
     }
-    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+    KMessageBox::information(0, i18n("Cannot export images in %1.\nWill save as RGB.", cs->name())) ;
     return JCS_UNKNOWN;
 }
 
@@ -111,10 +114,9 @@ QString getColorSpaceModelForColorType(J_COLOR_SPACE color_type)
 
 }
 
-KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+KisJPEGConverter::KisJPEGConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -171,7 +173,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (read_icc_profile(&cinfo, &profile_data, &profile_len)) {
         profile_rawdata.resize(profile_len);
         memcpy(profile_rawdata.data(), profile_data, profile_len);
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
             profile = KoColorSpaceRegistry::instance()->createColorProfile(modelId, Integer8BitsColorDepthID.id(), profile_rawdata);
@@ -220,9 +222,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Creating the KisImageWSP
     if (! m_image) {
-        m_image = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_image);
-        m_image->lock();
     }
 
     // Set resolution
@@ -244,41 +245,41 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
 
     for (; cinfo.output_scanline < cinfo.image_height;) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width);
+        KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, cinfo.output_scanline, cinfo.image_width);
         jpeg_read_scanlines(&cinfo, &row_pointer, 1);
         quint8 *src = row_pointer;
         switch (cinfo.out_color_space) {
         case JCS_GRAYSCALE:
-            while (!it.isDone()) {
-                quint8 *d = it.rawData();
+            do {
+                quint8 *d = it->rawData();
                 d[0] = *(src++);
                 if (transform) transform->transform(d, d, 1);
                 d[1] = quint8_MAX;
-                ++it;
-            }
+
+            } while (it->nextPixel());
             break;
         case JCS_RGB:
-            while (!it.isDone()) {
-                quint8 *d = it.rawData();
+            do {
+                quint8 *d = it->rawData();
                 d[2] = *(src++);
                 d[1] = *(src++);
                 d[0] = *(src++);
                 if (transform) transform->transform(d, d, 1);
                 d[3] = quint8_MAX;
-                ++it;
-            }
+
+            } while (it->nextPixel());
             break;
         case JCS_CMYK:
-            while (!it.isDone()) {
-                quint8 *d = it.rawData();
+            do {
+                quint8 *d = it->rawData();
                 d[0] = quint8_MAX - *(src++);
                 d[1] = quint8_MAX - *(src++);
                 d[2] = quint8_MAX - *(src++);
                 d[3] = quint8_MAX - *(src++);
                 if (transform) transform->transform(d, d, 1);
                 d[4] = quint8_MAX;
-                ++it;
-            }
+
+            } while (it->nextPixel());
             break;
         default:
             return KisImageBuilder_RESULT_UNSUPPORTED;
@@ -286,7 +287,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     m_image->addNode(KisNodeSP(layer.data()), m_image->rootLayer().data());
-    layer->setDirty();
 
     // Read exif information
 
@@ -321,24 +321,24 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                     KisTransformWorker::mirrorY(layer->paintDevice());
                     break;
                 case 3:
-                    image()->rotate(M_PI, 0);
+                    image()->rotateImage(M_PI);
                     break;
                 case 4:
                     KisTransformWorker::mirrorX(layer->paintDevice());
                     break;
                 case 5:
-                    image()->rotate(M_PI / 2, 0);
+                    image()->rotateImage(M_PI / 2);
                     KisTransformWorker::mirrorY(layer->paintDevice());
                     break;
                 case 6:
-                    image()->rotate(M_PI / 2, 0);
+                    image()->rotateImage(M_PI / 2);
                     break;
                 case 7:
-                    image()->rotate(M_PI / 2, 0);
+                    image()->rotateImage(M_PI / 2);
                     KisTransformWorker::mirrorX(layer->paintDevice());
                     break;
                 case 8:
-                    image()->rotate(-M_PI / 2 + M_PI*2, 0);
+                    image()->rotateImage(-M_PI / 2 + M_PI*2);
                     break;
                 default:
                     break;
@@ -445,12 +445,12 @@ KisImageWSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it /*annotationsStart*/, vKisAnnotationSP_it /*annotationsEnd*/, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
-    KisImageWSP image = KisImageWSP(layer -> image());
+    KisImageWSP image = KisImageWSP(layer->image());
     if (!image)
         return KisImageBuilder_RESULT_EMPTY;
 
@@ -459,6 +459,14 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+
+    const KoColorSpace * cs = layer->colorSpace();
+    J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
+    if (color_type == JCS_UNKNOWN) {
+        KUndo2Command *tmp = layer->paintDevice()->convertTo(KoColorSpaceRegistry::instance()->rgb8());
+        delete tmp;
+        color_type = JCS_RGB;
+    }
 
     // Open file for writing
     QFile file(uri.toLocalFile());
@@ -477,16 +485,11 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Initialize output stream
     KisJPEGDestination::setDestination(&cinfo, &file);
 
-    const KoColorSpace * cs = image->colorSpace();
+
 
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
     cinfo.input_components = cs->colorChannelCount(); // number of color channels per pixel */
-    J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
-    if (color_type == JCS_UNKNOWN) {
-        (void)file.remove();
-        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
-    }
     cinfo.in_color_space = color_type;   // colorspace of input image
 
     // Set default compression parameters
@@ -614,6 +617,13 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     const KoColorProfile* colorProfile = layer->colorSpace()->profile();
     QByteArray colorProfileData = colorProfile->rawData();
 
+    KisPaintDeviceSP dev = new KisPaintDevice(layer->colorSpace());
+    KoColor c(options.transparencyFillColor, layer->colorSpace());
+    dev->fill(QRect(0, 0, width, height), c);
+    KisPainter gc(dev);
+    gc.bitBlt(QPoint(0, 0), layer->paintDevice(), QRect(0, 0, width, height));
+    gc.end();
+
     write_icc_profile(& cinfo, (uchar*) colorProfileData.data(), colorProfileData.size());
 
     // Write data information
@@ -622,65 +632,65 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
 
     for (; cinfo.next_scanline < height;) {
-        KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, cinfo.next_scanline, width);
+        KisHLineConstIteratorSP it = dev->createHLineConstIteratorNG(0, cinfo.next_scanline, width);
         quint8 *dst = row_pointer;
         switch (color_type) {
         case JCS_GRAYSCALE:
             if (color_nb_bits == 16) {
-                while (!it.isDone()) {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                    const quint8 *d = it.rawData();
+                do {
+                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = cs->scaleToU8(d, 0);//d[0] / quint8_MAX;
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    const quint8 *d = it.rawData();
+                do {
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = d[0];
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             }
             break;
         case JCS_RGB:
             if (color_nb_bits == 16) {
-                while (!it.isDone()) {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                    const quint8 *d = it.rawData();
+                do {
+                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = cs->scaleToU8(d, 2); //d[2] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 1); //d[1] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 0); //d[0] / quint8_MAX;
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    const quint8 *d = it.rawData();
+                do {
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = d[2];
                     *(dst++) = d[1];
                     *(dst++) = d[0];
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             }
             break;
         case JCS_CMYK:
             if (color_nb_bits == 16) {
-                while (!it.isDone()) {
-                    //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                    const quint8 *d = it.rawData();
+                do {
+                    //const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = cs->scaleToU8(d, 0);//quint8_MAX - d[0] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 1);//quint8_MAX - d[1] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 2);//quint8_MAX - d[2] / quint8_MAX;
                     *(dst++) = cs->scaleToU8(d, 3);//quint8_MAX - d[3] / quint8_MAX;
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             } else {
-                while (!it.isDone()) {
-                    const quint8 *d = it.rawData();
+                do {
+                    const quint8 *d = it->oldRawData();
                     *(dst++) = quint8_MAX - d[0];
                     *(dst++) = quint8_MAX - d[1];
                     *(dst++) = quint8_MAX - d[2];
                     *(dst++) = quint8_MAX - d[3];
-                    ++it;
-                }
+
+                } while (it->nextPixel());
             }
             break;
         default:

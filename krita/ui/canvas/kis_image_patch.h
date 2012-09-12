@@ -23,6 +23,8 @@
 #include <QImage>
 #include <kis_types.h>
 
+#define BORDER_SIZE(scale) (ceil(0.5/scale))
+
 
 class KisImagePatch
 {

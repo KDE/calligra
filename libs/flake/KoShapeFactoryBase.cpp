@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include "KoShapeFactoryBase.h"
 #include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
@@ -67,7 +67,7 @@ public:
     int loadingPriority;
     QList<QPair<QString, QStringList> > xmlElements; // xml name space -> xml element names
     bool hidden;
-    QList<KoResourceManager *> resourceManagers;
+    QList<KoDocumentResourceManager *> resourceManagers;
 };
 
 
@@ -179,18 +179,18 @@ void KoShapeFactoryBase::setHidden(bool hidden)
     d->hidden = hidden;
 }
 
-void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager) const
+void KoShapeFactoryBase::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     d->resourceManagers.append(manager);
     connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
 }
 
-QList<KoResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
+QList<KoDocumentResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
 {
     return d->resourceManagers;
 }
 
-KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *KoShapeFactoryBase::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
@@ -203,7 +203,7 @@ KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResou
 }
 
 KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
-                                         KoResourceManager *documentResources) const
+                                         KoDocumentResourceManager *documentResources) const
 {
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
@@ -242,18 +242,13 @@ void KoShapeFactoryBase::getDeferredPlugin()
     if (d->deferredFactory) return;
 
     const QString serviceType = "Calligra/Deferred";
-    QString query = QString::fromLatin1("(Type == 'Service') and (Name == '%1')").arg(d->deferredPluginName);
-    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, QString());
     Q_ASSERT(offers.size() > 0);
 
     foreach(KSharedPtr<KService> service, offers) {
-        QString error = 0;  // FIXME: From where does error get a value?
         KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
-        if (plugin) {
+        if (plugin && plugin->deferredPluginName() == d->deferredPluginName) {
             d->deferredFactory = plugin;
-        }
-        else {
-            kWarning(30003) << "loading plugin" << service->name() << "failed, " << error;
         }
     }
 
@@ -261,6 +256,6 @@ void KoShapeFactoryBase::getDeferredPlugin()
 
 void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)
 {
-    KoResourceManager *r = qobject_cast<KoResourceManager*>(obj);
+    KoDocumentResourceManager *r = qobject_cast<KoDocumentResourceManager*>(obj);
     d->resourceManagers.removeAll(r);
 }

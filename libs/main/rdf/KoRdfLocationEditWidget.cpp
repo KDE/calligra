@@ -23,6 +23,11 @@
 
 #include <kdebug.h>
 
+// Don't use this until we become a plugin.
+#ifdef CAN_USE_MARBLE
+#undef CAN_USE_MARBLE
+#endif
+
 // marble for geolocation
 #ifdef CAN_USE_MARBLE
 #include <marble/LatLonEdit.h>
@@ -56,7 +61,6 @@ KoRdfLocationEditWidget::~KoRdfLocationEditWidget()
 void KoRdfLocationEditWidget::mouseMoveGeoPosition(QString s)
 {
     kDebug(30015) << "KoRdfLocationEditWidget::mouseMoveGeoPosition() str:" << s;
-    
 #ifdef CAN_USE_MARBLE
     if(d->map)
     {

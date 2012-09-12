@@ -22,12 +22,13 @@
 #ifndef HTMLODFEXPORT_H
 #define HTMLODFEXPORT_H
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <KoFilter.h>
 #include <KoXmlWriter.h>
 #include <QByteArray>
 #include <QVariantList>
 
+class QFile;
 
 namespace Words
 {
@@ -41,8 +42,10 @@ class HTMLOdfExport : public KoFilter
 public:
     HTMLOdfExport(QObject* parent, const QVariantList&);
     virtual ~HTMLOdfExport();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray &from, const QByteArray &to);
 
+    KoFilter::ConversionStatus transformXml(const QString &inputFileName, QFile *outputFile, const QString &resourcesPath);
+    KoFilter::ConversionStatus extractImages(const QString &inputFile, const QString &outputRoot);
 
 private:
     ExportDialog *m_dialog;

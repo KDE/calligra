@@ -20,7 +20,7 @@
 #ifndef KPlato_AccountsTester_h
 #define KPlato_AccountsTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kptproject.h"
 

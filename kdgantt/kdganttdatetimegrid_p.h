@@ -32,7 +32,7 @@ namespace KDGantt {
     class DateTimeGrid::Private : public AbstractGrid::Private {
     public:
         Private() : startDateTime( QDateTime::currentDateTime().addDays( -3 ) ),
-                    dayWidth( 100. ), scale(ScaleAuto), weekStart( Qt::Monday ),
+                    dayWidth( 100. ), scale(ScaleAuto), hourFormat("hh"), weekStart( Qt::Monday ),
                     freeDays( QSet<Qt::DayOfWeek>() << Qt::Saturday << Qt::Sunday ),
                     rowSeparators( false ) {}
 
@@ -42,7 +42,8 @@ namespace KDGantt {
         QDateTime startDateTime;
         QDateTime endDateTime;
         qreal dayWidth;
-	Scale scale;
+        Scale scale;
+        QString hourFormat;
         Qt::DayOfWeek weekStart;
         QSet<Qt::DayOfWeek> freeDays;
         bool rowSeparators;

@@ -22,10 +22,11 @@
 
 #include "kptnode.h"
 
-#include <qevent.h>
-#include <qlineedit.h>
-#include <qlocale.h>
-#include <qvalidator.h>
+#include <QEvent>
+#include <QLineEdit>
+#include <QLocale>
+#include <QValidator>
+#include <QKeyEvent>
 
 #include <kdebug.h>
 #include <KDoubleValidator>
@@ -88,7 +89,7 @@ void DurationSpinBox::setMinimumUnit( Duration::Unit unit )
 
 void DurationSpinBox::stepUnitUp()
 {
-    //kDebug()<<m_unit<<">"<<m_maxunit;
+    //kDebug(planDbg())<<m_unit<<">"<<m_maxunit;
     if ( m_unit > m_maxunit ) {
         setUnit( static_cast<Duration::Unit>(m_unit - 1) );
         // line may change length, make sure cursor stays within unit
@@ -99,7 +100,7 @@ void DurationSpinBox::stepUnitUp()
 
 void DurationSpinBox::stepUnitDown()
 {
-    //kDebug()<<m_unit<<"<"<<m_minunit;
+    //kDebug(planDbg())<<m_unit<<"<"<<m_minunit;
     if ( m_unit < m_minunit ) {
         setUnit( static_cast<Duration::Unit>(m_unit + 1) );
         // line may change length, make sure cursor stays within unit
@@ -110,7 +111,7 @@ void DurationSpinBox::stepUnitDown()
 
 void DurationSpinBox::stepBy( int steps )
 {
-    //kDebug()<<steps;
+    //kDebug(planDbg())<<steps;
     int cpos = lineEdit()->cursorPosition();
     if ( isOnUnit() ) {
         // we are in unit
@@ -131,14 +132,14 @@ QAbstractSpinBox::StepEnabled DurationSpinBox::stepEnabled () const
 {
     if ( isOnUnit() ) {
         if ( m_unit >= m_minunit ) {
-            //kDebug()<<"inside unit, up"<<m_unit<<m_minunit<<m_maxunit;
+            //kDebug(planDbg())<<"inside unit, up"<<m_unit<<m_minunit<<m_maxunit;
             return QAbstractSpinBox::StepUpEnabled;
         }
         if ( m_unit <= m_maxunit ) {
-            //kDebug()<<"inside unit, down"<<m_unit<<m_minunit<<m_maxunit;
+            //kDebug(planDbg())<<"inside unit, down"<<m_unit<<m_minunit<<m_maxunit;
             return QAbstractSpinBox::StepDownEnabled;
         }
-        //kDebug()<<"inside unit, up|down"<<m_unit<<m_minunit<<m_maxunit;
+        //kDebug(planDbg())<<"inside unit, up|down"<<m_unit<<m_minunit<<m_maxunit;
         return QAbstractSpinBox::StepUpEnabled | QAbstractSpinBox::StepDownEnabled;
     }
     return QDoubleSpinBox::stepEnabled();
@@ -153,7 +154,7 @@ bool DurationSpinBox::isOnUnit() const
 
 void DurationSpinBox::keyPressEvent( QKeyEvent * event )
 {
-    //kDebug()<<lineEdit()->cursorPosition()<<","<<(text().size() - Duration::unitToString( m_unit, true ).size())<<""<<event->text().isEmpty();
+    //kDebug(planDbg())<<lineEdit()->cursorPosition()<<","<<(text().size() - Duration::unitToString( m_unit, true ).size())<<""<<event->text().isEmpty();
     if ( isOnUnit() ) {
         // we are in unit
         switch (event->key()) {
@@ -174,7 +175,7 @@ void DurationSpinBox::keyPressEvent( QKeyEvent * event )
 
 // handle unit, QDoubleSpinBox handles value, signals etc
 void DurationSpinBox::editorTextChanged( const QString &text ) {
-    //kDebug()<<text;
+    //kDebug(planDbg())<<text;
     QString s = text;
     int pos = lineEdit()->cursorPosition();
     if ( validate( s, pos ) == QValidator::Acceptable ) {
@@ -200,13 +201,13 @@ QString DurationSpinBox::textFromValue ( double value ) const
 {
     QString s = KGlobal::locale()->formatNumber( qMin( qMax( minimum(), value ), maximum() ), decimals() );
     s += Duration::unitToString( m_unit, true );
-    //kDebug()<<2<<value<<s;
+    //kDebug(planDbg())<<2<<value<<s;
     return s;
 }
 
 QValidator::State DurationSpinBox::validate ( QString & input, int & pos ) const
 {
-    //kDebug()<<input;
+    //kDebug(planDbg())<<input;
     KDoubleValidator validator( minimum(), maximum(), decimals(), 0 );
     if ( input.isEmpty() ) {
         return validator.validate ( input, pos );
@@ -226,7 +227,7 @@ QValidator::State DurationSpinBox::validate ( QString & input, int & pos ) const
 
 QString DurationSpinBox::extractUnit ( const QString &text ) const
 {
-    //kDebug()<<text;
+    //kDebug(planDbg())<<text;
     QString s;
     for ( int i = text.length() - 1; i >= 0; --i ) {
         QChar c = text[ i ];
@@ -243,7 +244,7 @@ QString DurationSpinBox::extractUnit ( const QString &text ) const
 
 QString DurationSpinBox::extractValue ( const QString &text ) const
 {
-    //kDebug()<<text;
+    //kDebug(planDbg())<<text;
     QString s = extractUnit( text );
     if ( Duration::unitList( true ).contains( s ) ) {
         return text.left( text.length() - s.length() );

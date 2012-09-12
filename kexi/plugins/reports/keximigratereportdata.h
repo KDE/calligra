@@ -22,7 +22,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>
 #include <KoReportData.h>
@@ -43,7 +43,7 @@ public:
 
     virtual ~KexiMigrateReportData();
 
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
     virtual QStringList fieldNames() const;
 
     virtual QVariant value(unsigned int) const;

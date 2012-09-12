@@ -32,7 +32,7 @@
 #include "kis_types.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
 #include <kis_fixed_paint_device.h>
 
@@ -105,6 +105,9 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         }
 
         qreal rotation = m_rotationOption.apply(info);
+
+        // Deform Brush is capable of working with zero scale,
+        // so no additional checks for 'zero'ness are needed
         qreal scale = m_sizeOption.apply(info);
 
         setCurrentRotation(rotation);

@@ -162,6 +162,21 @@ try:
     text = asserttext1.format(property, result, before)
     assert result == before, text
 
+    property = 'Constraint'
+    data = "ASAP"
+    res = project.setData(task, property, data)
+    text = asserttext2.format(property, data, res)
+    assert res == 'Success', text
+    result = project.data(task, property, 'EditRole')
+    text = asserttext1.format(property, result, data)
+    assert result == data, text
+
+    property = 'Type'
+    data = 'Task' # Some of the following tests fail if task is something else than a Task
+    result = project.data(task, property, 'EditRole')
+    text = asserttext1.format(property, result, data)
+    assert result == data, text
+
     property = 'OptimisticRatio'
     data = -20
     before = project.data(task, property)

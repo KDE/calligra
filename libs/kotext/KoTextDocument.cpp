@@ -26,6 +26,8 @@
 #include <QVariantList>
 
 #include <kdebug.h>
+#include <KoTextDebug.h>
+
 #include <kundo2stack.h>
 
 #include "KoTextDocument.h"
@@ -35,10 +37,13 @@
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
-#include "KoOdfNotesConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
+#include <KoShapeController.h>
 
 Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
+Q_DECLARE_METATYPE(QTextFrame*)
+Q_DECLARE_METATYPE(QTextCharFormat)
+Q_DECLARE_METATYPE(QTextBlockFormat)
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
@@ -46,19 +51,17 @@ const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObj
 const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
-const QUrl KoTextDocument::EndNotesConfigurationURL = QUrl("kotext://endnotesconfiguration");
-const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesconfiguration");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
-const QUrl KoTextDocument::EndNotesFrameURL = QUrl("kotext://endnotesframe");
-const QUrl KoTextDocument::FootNotesFrameURL = QUrl("kotext://footnotesframe");
+const QUrl KoTextDocument::AuxillaryFrameURL = QUrl("kotext://auxillaryframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
 const QUrl KoTextDocument::LayoutTextPageUrl = QUrl("kotext://layoutTextPage");
 const QUrl KoTextDocument::ParaTableSpacingAtStartUrl = QUrl("kotext://spacingAtStart");
 const QUrl KoTextDocument::IndexGeneratorManagerUrl = QUrl("kotext://indexGeneratorManager");
-
-Q_DECLARE_METATYPE(QTextFrame*)
+const QUrl KoTextDocument::FrameCharFormatUrl = QUrl("kotext://frameCharFormat");
+const QUrl KoTextDocument::FrameBlockFormatUrl = QUrl("kotext://frameBlockFormat");
+const QUrl KoTextDocument::ShapeControllerUrl = QUrl("kotext://shapeController");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -68,6 +71,12 @@ KoTextDocument::KoTextDocument(QTextDocument *document)
 
 KoTextDocument::KoTextDocument(const QTextDocument *document)
     : m_document(const_cast<QTextDocument *>(document))
+{
+    Q_ASSERT(m_document);
+}
+
+KoTextDocument::KoTextDocument(QWeakPointer<QTextDocument> document)
+    : m_document(document.data())
 {
     Q_ASSERT(m_document);
 }
@@ -83,6 +92,8 @@ QTextDocument *KoTextDocument::document() const
 
 void KoTextDocument::setTextEditor (KoTextEditor* textEditor)
 {
+    Q_ASSERT(textEditor->document() == m_document);
+
     QVariant v;
     v.setValue(textEditor);
     m_document->addResource(KoTextDocument::TextEditor, TextEditorURL, v);
@@ -134,28 +145,21 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     }
 }
 
-void KoTextDocument::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
+void KoTextDocument::setShapeController(KoShapeController *controller)
 {
-    notesConfiguration->setParent(m_document);
     QVariant v;
-    v.setValue(notesConfiguration);
-    if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Footnote) {
-        m_document->addResource(KoTextDocument::FootNotesConfiguration, FootNotesConfigurationURL, v);
-    }
-    else {
-        m_document->addResource(KoTextDocument::EndNotesConfiguration, EndNotesConfigurationURL, v);
-    }
+    v.setValue(controller);
+    m_document->addResource(KoTextDocument::ShapeController, ShapeControllerUrl, v);
 }
 
-KoOdfNotesConfiguration *KoTextDocument::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
+KoShapeController *KoTextDocument::shapeController() const
 {
-    if (noteClass == KoOdfNotesConfiguration::Endnote) {
-        return m_document->resource(KoTextDocument::EndNotesConfiguration, EndNotesConfigurationURL)
-                .value<KoOdfNotesConfiguration*>();
+    QVariant resource = m_document->resource(KoTextDocument::ShapeController, ShapeControllerUrl);
+    if (resource.isValid()) {
+        return resource.value<KoShapeController *>();
     }
     else {
-        return m_document->resource(KoTextDocument::FootNotesConfiguration, FootNotesConfigurationURL)
-                .value<KoOdfNotesConfiguration*>();
+        return 0;
     }
 }
 
@@ -191,6 +195,9 @@ void KoTextDocument::setUndoStack(KUndo2Stack *undoStack)
     QVariant v;
     v.setValue<void*>(undoStack);
     m_document->addResource(KoTextDocument::UndoStack, UndoStackURL, v);
+    if (styleManager()) {
+        styleManager()->setUndoStack(undoStack);
+    }
 }
 
 KUndo2Stack *KoTextDocument::undoStack() const
@@ -242,6 +249,9 @@ KoList *KoTextDocument::list(const QTextBlock &block) const
 
 KoList *KoTextDocument::list(QTextList *textList) const
 {
+    if (!textList) {
+        return 0;
+    }
     // FIXME: this is horrible.
     foreach(KoList *l, lists()) {
         if (l->textLists().contains(textList))
@@ -271,7 +281,7 @@ QVector< QAbstractTextDocumentLayout::Selection > KoTextDocument::selections() c
     QVariant resource = m_document->resource(KoTextDocument::Selections, SelectionsURL);
     QVariantList variants = resource.toList();
 
-    QVector<QAbstractTextDocumentLayout::Selection> selections(variants.size());
+    QVector<QAbstractTextDocumentLayout::Selection> selections;
     foreach(const QVariant &variant, variants) {
         selections.append(variant.value<QAbstractTextDocumentLayout::Selection>());
     }
@@ -296,44 +306,22 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
     return resource.value<KoInlineTextObjectManager *>();
 }
 
-QTextFrame *KoTextDocument::footNotesFrame()
+QTextFrame *KoTextDocument::auxillaryFrame()
 {
-    QVariant resource = m_document->resource(KoTextDocument::FootNotesFrame,
-            FootNotesFrameURL);
+    QVariant resource = m_document->resource(KoTextDocument::AuxillaryFrame,
+            AuxillaryFrameURL);
 
     QTextFrame *frame = resource.value<QTextFrame *>();
 
     if (frame == 0) {
         QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
-        format.setProperty(KoText::SubFrameType, KoText::FootNotesFrameType);
+        format.setProperty(KoText::SubFrameType, KoText::AuxillaryFrameType);
 
         frame = cursor.insertFrame(format);
 
         resource.setValue(frame);
-        m_document->addResource(KoTextDocument::FootNotesFrame, FootNotesFrameURL, resource);
-    }
-    return frame;
-}
-
-QTextFrame *KoTextDocument::endNotesFrame()
-{
-    QVariant resource = m_document->resource(KoTextDocument::EndNotesFrame,
-            EndNotesFrameURL);
-
-    QTextFrame *frame = resource.value<QTextFrame *>();
-
-    if (frame == 0) {
-        QTextFrame *fnFrame = footNotesFrame();
-        QTextCursor cursor(fnFrame->firstCursorPosition());
-        cursor.movePosition(QTextCursor::Left);
-        QTextFrameFormat format;
-        format.setProperty(KoText::SubFrameType, KoText::EndNotesFrameType);
-
-        frame = cursor.insertFrame(format);
-
-        resource.setValue(frame);
-        m_document->addResource(KoTextDocument::EndNotesFrame, EndNotesFrameURL, resource);
+        m_document->addResource(KoTextDocument::AuxillaryFrame, AuxillaryFrameURL, resource);
     }
     return frame;
 }
@@ -366,4 +354,32 @@ bool KoTextDocument::paraTableSpacingAtStart() const
         return resource.toBool();
     else
         return false;
+}
+
+QTextCharFormat KoTextDocument::frameCharFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextCharFormat>();
+    else
+        return QTextCharFormat();
+}
+
+void KoTextDocument::setFrameCharFormat(QTextCharFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameCharFormat, FrameCharFormatUrl, QVariant::fromValue(format));
+}
+
+QTextBlockFormat KoTextDocument::frameBlockFormat() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl);
+    if (resource.isValid())
+        return resource.value<QTextBlockFormat>();
+    else
+        return QTextBlockFormat();
+}
+
+void KoTextDocument::setFrameBlockFormat(QTextBlockFormat format)
+{
+    m_document->addResource(KoTextDocument::FrameBlockFormat, FrameBlockFormatUrl, QVariant::fromValue(format));
 }

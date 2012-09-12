@@ -26,7 +26,7 @@
 
 #include "kexinamewidget.h"
 
-class KEXIMAIN_EXPORT KexiNameDialog : public KDialog
+class KexiNameDialog : public KDialog
 {
     Q_OBJECT
 

@@ -55,7 +55,7 @@
 #include <kis_node_manager.h>
 #include <kis_transform_visitor.h>
 #include <widgets/kis_progress_widget.h>
-#include <commands/kis_image_set_resolution_command.h>
+#include <commands_new/kis_image_set_resolution_command.h>
 
 #include "dlg_imagesize.h"
 #include "dlg_canvassize.h"
@@ -70,8 +70,6 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ImageSizeFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesize.rc"), true);
 
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);
@@ -122,19 +120,7 @@ void ImageSize::slotImageSize()
         qint32 h = dlgImageSize->height();
         double res = dlgImageSize->resolution();
 
-        image->undoAdapter()->beginMacro(i18n("Scale Image"));
-        double oldRes = image->xRes();
-        image->undoAdapter()->addCommand(new KisImageSetResolutionCommand(image, res, res));
-
-        if (w != image->width() || h != image->height()) {
-            m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),
-                    (double)h / ((double)(image->height())), dlgImageSize->filterType());
-        } else {
-            //in case the resolution changes only the shape need to be scaled
-            m_view->imageManager()->scaleCurrentImage(oldRes/res, oldRes/res, dlgImageSize->filterType(), true);
-        }
-        image->rootLayer()->setDirty();
-        image->undoAdapter()->endMacro();
+        m_view->imageManager()->scaleCurrentImage(QSize(w, h), res, res, dlgImageSize->filterType());
     }
 
     delete dlgImageSize;
@@ -226,7 +212,7 @@ void ImageSize::slotSelectionScale()
 
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(selection->mergedPixelSelection(),
+        KisTransformWorker worker(selection->getOrCreatePixelSelection(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
                                   0, 0, 0.0, 0.0, 0.0, 0, 0, u,
@@ -249,7 +235,7 @@ void ImageSize::slotNodeChanged(const KisNodeSP node)
 
 void ImageSize::slotSelectionChanged()
 {
-    m_scaleSelectionAction->setEnabled(m_view->selectionManager()->havePixelsSelected());
+    m_scaleSelectionAction->setEnabled(m_view->selectionEditable() && m_view->selectionManager()->havePixelsSelected());
 }
 
 #include "imagesize.moc"

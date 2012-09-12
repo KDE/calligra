@@ -1,6 +1,6 @@
 project(pigmentcms)
 
-include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} )
+include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -33,6 +33,7 @@ set(pigmentcms_SRCS
     KoColorTransformationFactory.cpp
     KoColorTransformationFactoryRegistry.cpp
     KoCompositeOp.cpp
+    KoCompositeOpRegistry.cpp
     KoCopyColorConversionTransformation.cpp
     KoFallBackColorTransformation.cpp
     KoHistogramProducer.cpp
@@ -70,7 +71,13 @@ set(PIGMENT_INSTALL_FILES
         KoColorSpaceConstants.h
         KoColorSpaceMaths.h
         KoColorSpaceRegistry.h
+        KoCmykColorSpaceTraits.h
         KoColorSpaceTraits.h
+        KoGrayColorSpaceTraits.h
+        KoLabColorSpaceTraits.h
+        KoRgbColorSpaceTraits.h
+        KoXyzColorSpaceTraits.h
+        KoYcbcrColorSpaceTraits.h
         KoColorTransformation.h
         KoColorTransformationFactory.h
         KoColorTransformationFactoryRegistry.h

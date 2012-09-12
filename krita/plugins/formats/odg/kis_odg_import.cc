@@ -29,7 +29,6 @@
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_view2.h>
-#include <kis_layer_container_shape.h>
 #include <kis_shape_layer.h>
 
 #include <KoOdfReadStore.h>
@@ -39,7 +38,7 @@
 #include <KoShapeRegistry.h>
 
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoColorSpaceRegistry.h>
 
 K_PLUGIN_FACTORY(ODGImportFactory, registerPlugin<KisODGImport>();)
@@ -72,7 +71,8 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
         delete store;
         return KoFilter::BadConversionGraph;
     }
-    
+    store->disallowNameExpansion();
+
     doc -> prepareForImport();
 
     KoOdfReadStore odfStore(store);
@@ -131,22 +131,19 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
     KoShapeLoadingContext shapeContext(context, doc->shapeController()->resourceManager());
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
+    KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, "built image");
     doc->setCurrentImage(image);
-    image->lock();
-    
-    KisLayerContainerShape *container =
-        dynamic_cast<KisLayerContainerShape*>(doc->shapeForNode(image->rootLayer().data()));
-    
-    
+
+    KoShapeLayer *rootLayer = doc->shapeForNode(image->root());
+
     KoXmlElement layerElement;
     forEachElement(layerElement, KoXml::namedItemNS(page, KoXmlNS::draw, "layer-set")) {
 
-    KisShapeLayerSP shapeLayer = new KisShapeLayer(container, doc->shapeController(), image,
-                                        i18n("Flake shapes"),
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(rootLayer, doc->shapeController(), image,
+                                        i18n("Vector Layer"),
                                         OPACITY_OPAQUE_U8);
     if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return KoFilter::CreationError;
         }
         image->addNode(shapeLayer, image->rootLayer(), 0);
@@ -154,10 +151,9 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
 
     KoXmlElement child;
     forEachElement(child, page) {
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
+        /*KoShape * shape = */KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
     }
 
-    image->unlock();
     return KoFilter::OK;
 }
 

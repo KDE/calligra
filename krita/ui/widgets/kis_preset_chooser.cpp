@@ -27,6 +27,7 @@
 #include <QAbstractItemDelegate>
 #include <QStyleOptionViewItem>
 #include <QSortFilterProxyModel>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -42,6 +43,7 @@
 #include "kis_resource_server_provider.h"
 #include "kis_global.h"
 #include "kis_slider_spin_box.h"
+#include "kis_config.h"
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
@@ -72,8 +74,11 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(index.internalPointer());
 
     if (option.state & QStyle::State_Selected) {
-        painter->setPen(QPen(option.palette.highlight(), 2.0));
+        painter->setPen(QPen(option.palette.highlightedText(), 2.0));
         painter->fillRect(option.rect, option.palette.highlight());
+    } else {
+        painter->setPen(QPen(option.palette.text(), 2.0));
+
     }
 
     QImage preview = preset->image();
@@ -84,14 +89,13 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
     QRect paintRect = option.rect.adjusted(2, 2, -2, -2);
     if (!m_showText) {
-    painter->drawImage(paintRect.x(), paintRect.y(),
-                       preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio));
+        painter->drawImage(paintRect.x(), paintRect.y(),
+                           preview.scaled(paintRect.size(), Qt::IgnoreAspectRatio));
     } else {
         QSize pixSize(paintRect.height(), paintRect.height());
         painter->drawImage(paintRect.x(), paintRect.y(),
-                       preview.scaled(pixSize, Qt::KeepAspectRatio));
+                           preview.scaled(pixSize, Qt::KeepAspectRatio));
 
-        painter->setPen(Qt::black);
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
 
@@ -103,13 +107,17 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 {
-        static bool compareKoResources(const KoResource* a, const KoResource* b){
-                return a->name() < b->name();
-        }
+    static bool compareKoResources(const KoResource* a, const KoResource* b)
+    {
+        return a->name() < b->name();
+    }
 
 public:
     KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
-         : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false), m_filterNames(false){}
+        : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_filterNames(false)
+    {
+        m_showAll = KisConfig().presetShowAllMode();
+    }
     virtual ~KisPresetProxyAdapter() {}
 
     virtual QList< KoResource* > resources() {
@@ -156,7 +164,7 @@ public:
     {
         m_nameFilter = nameFilter;
     }
-    
+
     void setFilteredNames(const QStringList filteredNames)
     {
         m_filteredNames = filteredNames;
@@ -192,7 +200,7 @@ private:
 };
 
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
-        : QWidget(parent)
+    : QWidget(parent)
 {
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
@@ -300,7 +308,7 @@ void KisPresetChooser::updateViewSettings()
             }
             cols++;
         }
-        m_chooser->setRowHeight(floor(width/cols));
+        m_chooser->setRowHeight(floor((double)width/cols));
         m_chooser->setColumnCount(cols);
         m_delegate->setShowText(false);
     } else if (m_mode == DETAIL) {
@@ -312,7 +320,7 @@ void KisPresetChooser::updateViewSettings()
         m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
         m_delegate->setShowText(false);
     }
-    
+
 }
 
 KoResource* KisPresetChooser::currentResource()

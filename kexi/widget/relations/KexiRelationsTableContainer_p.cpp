@@ -19,14 +19,14 @@
 */
 
 #include <q3header.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qapplication.h>
-#include <qbitmap.h>
-#include <qstyle.h>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QCursor>
+#include <QPoint>
+#include <QApplication>
+#include <QBitmap>
+#include <QStyle>
 #include <QEvent>
 #include <QDropEvent>
 #include <QMouseEvent>
@@ -38,8 +38,8 @@
 #include <kconfig.h>
 #include <kglobalsettings.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/utils.h>
 #include <kexidragobjects.h>
 #include "KexiRelationsTableContainer_p.h"
 #include "KexiRelationsScrollArea.h"

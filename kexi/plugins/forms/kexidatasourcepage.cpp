@@ -30,13 +30,13 @@
 #include <KDebug>
 #include <KFadeWidgetEffect>
 
-#include <widget/KexiPropertyEditorView.h>
+#include <widget/properties/KexiPropertyEditorView.h>
 #include <widget/KexiObjectInfoLabel.h>
-#include <widget/kexidatasourcecombobox.h>
-#include <widget/kexifieldlistview.h>
-#include <widget/kexifieldcombobox.h>
+#include <widget/KexiDataSourceComboBox.h>
+#include <widget/fields/KexiFieldListView.h>
+#include <widget/fields/KexiFieldComboBox.h>
 #include <kexiutils/SmallToolButton.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <kexiproject.h>
 
 #include <formeditor/commands.h>
@@ -259,6 +259,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
 KexiDataSourcePage::~KexiDataSourcePage()
 {
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+    delete m_tableOrQuerySchema;
+#endif
 }
 
 void KexiDataSourcePage::setProject(KexiProject *prj)

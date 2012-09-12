@@ -156,7 +156,7 @@ void View::initGUI()
     connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(const QPoint&)),
             this, SLOT(updateMousePosition(const QPoint&)));
 
-    KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools"));
+    KoToolBoxFactory toolBoxFactory(m_canvasController);
     m_mainWindow->createDockWidget(&toolBoxFactory);
 
     connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QWidget*>)), m_mainWindow->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget*> &)));
@@ -189,7 +189,8 @@ void View::initActions()
     connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
 
     // Shapes menu
-    KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18nc("Duplicate selection", "&Duplicate"), this);
+    // TODO: get an icon "edit-duplicate"
+    KAction *actionDuplicate  = new KAction(i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("shapes_duplicate", actionDuplicate);
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
@@ -311,7 +312,7 @@ void View::setActiveSection(Section* page)
     m_sectionPropertiesDock->setSection(m_activeSection);
 }
 
-void View::updateMousePosition(const QPoint& position)
+void View::updateMousePosition(const QPoint& /*position*/)
 {
     QPoint canvasOffset(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY());
     // the offset is positive it the canvas is shown fully visible

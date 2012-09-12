@@ -39,12 +39,12 @@
 #include <QPainter>
 
 /*********************************** ODF Bug Work-around code **********************************************/
-const QString KoDeleteChangeMarker::RDFListName("http://www.calligra-suite.org/list#");
-const QString KoDeleteChangeMarker::RDFListItemName("http://www.calligra-suite.org/list-item#");
+const QString KoDeleteChangeMarker::RDFListName("http://www.calligra.org/list#");
+const QString KoDeleteChangeMarker::RDFListItemName("http://www.calligra.org/list-item#");
 const QString KoDeleteChangeMarker::RDFListValidity("http://www.kofficde.org/list-status#valid");
-const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.calligra-suite.org/list-item-status#valid");
-const QString KoDeleteChangeMarker::RDFListLevel("http://www.calligra-suite.org/list-status#level");
-const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.calligra-suite.org/deleteChangeMetadata");
+const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.calligra.org/list-item-status#valid");
+const QString KoDeleteChangeMarker::RDFListLevel("http://www.calligra.org/list-status#level");
+const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.calligra.org/deleteChangeMetadata");
 /***********************************************************************************************************/
 
 class KoDeleteChangeMarker::Private
@@ -132,7 +132,7 @@ void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, int pos
 {
     d->position = posInDocument;
     if (document != d->document)
-        d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualisation of deleted changes (ie inserting them in the doc), we can get rid of this.
+        d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualization of deleted changes (ie inserting them in the doc), we can get rid of this.
 
     Q_UNUSED(format);
 }

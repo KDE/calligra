@@ -20,9 +20,9 @@
 #ifndef WIDGETWITHSUBPROPERTIESINTERFACE_H
 #define WIDGETWITHSUBPROPERTIESINTERFACE_H
 
-#include <qwidget.h>
-#include <qpointer.h>
-#include <qvariant.h>
+#include <QWidget>
+#include <QPointer>
+#include <QVariant>
 #include <QSet>
 
 #include <kexi_export.h>

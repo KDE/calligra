@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen danders@get2net>
+  Copyright (C) 2007, 2012 Dag Andersen danders@get2net>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@
 #include "kptdocuments.h"
 #include "kptdatetime.h"
 #include "kptitemviewsettup.h"
+#include "kptdebug.h"
 
 #include <QMenu>
 #include <QList>
@@ -44,6 +45,7 @@
 
 #include <KoDocument.h>
 
+
 namespace KPlato
 {
 
@@ -53,7 +55,7 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
     : TreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setStretchLastSection( false );
+    setStretchLastSection( true );
     
     DocumentItemModel *m = new DocumentItemModel();
     setModel( m );
@@ -68,6 +70,8 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
     setDropIndicatorShown( true );
     
     connect( selectionModel(), SIGNAL( selectionChanged ( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
+
+    setColumnHidden( DocumentModel::Property_Status, true ); // not used atm
 }
 
 Document *DocumentTreeView::currentDocument() const
@@ -98,8 +102,8 @@ QList<Document*> DocumentTreeView::selectedDocuments() const
 }
 
 //-----------------------------------
-DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+DocumentsEditor::DocumentsEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     setupGui();
     
@@ -110,7 +114,7 @@ DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
@@ -124,7 +128,7 @@ DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
 
 void DocumentsEditor::updateReadWrite( bool readwrite )
 {
-    kDebug()<<isReadWrite()<<"->"<<readwrite;
+    kDebug(planDbg())<<isReadWrite()<<"->"<<readwrite;
     ViewBase::updateReadWrite( readwrite );
     m_view->setReadWrite( readwrite );
     updateActionsEnabled( readwrite );
@@ -141,7 +145,7 @@ void DocumentsEditor::draw()
 
 void DocumentsEditor::setGuiActive( bool activate )
 {
-    kDebug()<<activate;
+    kDebug(planDbg())<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -151,7 +155,7 @@ void DocumentsEditor::setGuiActive( bool activate )
 
 void DocumentsEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    //kDebug(planDbg())<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         Document *obj = m_view->model()->document( index );
@@ -164,7 +168,7 @@ void DocumentsEditor::slotContextMenuRequested( QModelIndex index, const QPoint&
 
 void DocumentsEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -178,13 +182,13 @@ Document *DocumentsEditor::currentDocument() const
 
 void DocumentsEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug(planDbg())<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
 void DocumentsEditor::slotSelectionChanged( const QModelIndexList list )
 {
-    kDebug()<<list.count();
+    kDebug(planDbg())<<list.count();
     updateActionsEnabled( true );
 }
 
@@ -234,8 +238,8 @@ void DocumentsEditor::setupGui()
 
 void DocumentsEditor::slotOptions()
 {
-    kDebug();
-    ItemViewSettupDialog dlg( m_view/*->masterView()*/ );
+    kDebug(planDbg());
+    ItemViewSettupDialog dlg( this, m_view/*->masterView()*/ );
     dlg.exec();
 }
 
@@ -245,7 +249,7 @@ void DocumentsEditor::slotEditDocument()
     if ( dl.isEmpty() ) {
         return;
     }
-    kDebug()<<dl;
+    kDebug(planDbg())<<dl;
     emit editDocument( dl.first() );
 }
 
@@ -255,13 +259,13 @@ void DocumentsEditor::slotViewDocument()
     if ( dl.isEmpty() ) {
         return;
     }
-    kDebug()<<dl;
+    kDebug(planDbg())<<dl;
     emit viewDocument( dl.first() );
 }
 
 void DocumentsEditor::slotAddDocument()
 {
-    //kDebug();
+    //kDebug(planDbg());
     QList<Document*> dl = m_view->selectedDocuments();
     Document *after = 0;
     if ( dl.count() > 0 ) {
@@ -278,7 +282,7 @@ void DocumentsEditor::slotAddDocument()
 void DocumentsEditor::slotDeleteSelection()
 {
     QList<Document*> lst = m_view->selectedDocuments();
-    //kDebug()<<lst.count()<<" objects";
+    //kDebug(planDbg())<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteDocumentList( lst );
     }

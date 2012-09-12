@@ -24,7 +24,7 @@
 #include <core/kexiprojectdata.h>
 
 /*! Helper class for displaying templates set with description. */
-class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public K3ListView
+class KexiStartupDialogTemplatesPage : public K3ListView
 {
     Q_OBJECT
 

@@ -22,9 +22,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef MYSQLCONNECTION_H
 #define MYSQLCONNECTION_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "mysqlcursor.h"
 
 namespace KexiDB

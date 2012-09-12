@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2010 Boudewijn Rempt
+   Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,7 +55,7 @@ public:
     /**
      * create a string representation of the specified number.
      */
-    QString formattedNumber(int number) const;
+    QString formattedNumber(int number, KoOdfNumberDefinition *defaultDefinition = 0) const;
 
     /**
      * The style:num-prefix and style:num-suffix attributes specify what to display before and
@@ -88,6 +89,19 @@ public:
         AlphabeticUpperCase,
         RomanLowerCase,
         RomanUpperCase,
+        ArabicAlphabet,
+        Thai,
+        Abjad,
+        AbjadMinor,
+        Tibetan,
+        Telugu,
+        Tamil,
+        Oriya,
+        Malayalam,
+        Kannada,
+        Gurumukhi,
+        Gujarati,
+        Bengali,
         Empty
     };
 

@@ -78,7 +78,7 @@ class KPLATOUI_EXPORT ScheduleEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    ScheduleEditor( KoDocument *part, QWidget *parent );
+    ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -174,6 +174,7 @@ public slots:
     void slotEditCopy();
 
 protected slots:
+    void contextMenuEvent ( QContextMenuEvent *e );
     void headerContextMenuRequested( const QPoint &pos );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
@@ -190,7 +191,7 @@ class KPLATOUI_EXPORT ScheduleLogView : public ViewBase
 {
     Q_OBJECT
 public:
-    ScheduleLogView( KoDocument *part, QWidget *parent );
+    ScheduleLogView(KoPart *part, KoDocument *doc, QWidget *parent);
 
     void setupGui();
     virtual void setProject( Project *project );
@@ -206,11 +207,16 @@ public:
     virtual bool loadContext( const KoXmlElement &/*context*/ );
     /// Save context info from this view.
     virtual void saveContext( QDomElement &/*context*/ ) const;
-    
+
+signals:
+    void editNode( Node *node );
+    void editResource( Resource *resource );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     void slotEditCopy();
+    void slotEdit();
 
 protected slots:
     virtual void slotOptions();
@@ -234,7 +240,7 @@ class KPLATOUI_EXPORT ScheduleHandlerView : public SplitterView
 {
     Q_OBJECT
 public:
-    ScheduleHandlerView( KoDocument *part, QWidget *parent );
+    ScheduleHandlerView(KoPart *part, KoDocument *doc, QWidget *parent);
     
     Project *project() const { return 0; }
 
@@ -248,6 +254,8 @@ public:
 
 signals:
     void currentScheduleManagerChanged( ScheduleManager* );
+    void editNode( Node *node );
+    void editResource( Resource *resource );
 
 public slots:
     /// Activate/deactivate the gui (also of subviews)

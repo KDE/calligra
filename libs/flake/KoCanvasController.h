@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2007-2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007-2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -41,7 +41,7 @@ class KoCanvasControllerProxyObject;
 
 /**
  * KoCanvasController is the base class for wrappers around your canvas
- * that provides scrolling and zoomming for your canvas.
+ * that provides scrolling and zooming for your canvas.
  *
  * Flake does not provide a canvas, the application will have to
  * implement a canvas themselves. You canvas can be QWidget-based, QGraphicsItem-based
@@ -49,7 +49,7 @@ class KoCanvasControllerProxyObject;
  * imlements KoCanvasController, tools, scrolling and zooming will work.
  *
  * A KoCanvasController implementation acts as a decorator around the canvas widget or
- * graphics item and provides a way to scroll the cavasn, allows the canvas to be centered
+ * graphics item and provides a way to scroll the canvas, allows the canvas to be centered
  * in the viewArea and manages tool activation.
  *
  * <p>The using application can instantiate this class and add its
@@ -294,8 +294,10 @@ public:
    /**
      * Returns the action collection for the canvas
      * @returns action collection for this canvas, can be 0
-     */    
+     */
     virtual KActionCollection* actionCollection() const;
+
+    QPoint documentOffset() const;
 
 protected:
     void setDocumentSize(const QSize &sz);
@@ -308,7 +310,7 @@ protected:
     qreal preferredCenterFractionY() const;
 
     void setDocumentOffset( QPoint &offset);
-    QPoint documentOffset() const;
+
 
 private:
     class Private;

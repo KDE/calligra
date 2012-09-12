@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@
 #include "filter/kis_filter.h"
 
 
-class KisSelectionBasedLayer::Private
+struct KisSelectionBasedLayer::Private
 {
 public:
     bool showSelection;
@@ -83,6 +83,7 @@ void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = new KisSelection();
     m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());
+    m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
 
@@ -189,6 +190,7 @@ void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
 {
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
+        m_d->selection->setParentNode(this);
         m_d->selection->updateProjection();
     } else
         m_d->selection = 0;
@@ -229,11 +231,17 @@ void KisSelectionBasedLayer::setY(qint32 y)
     }
 }
 
+void KisSelectionBasedLayer::setDirty(const QRect & rect)
+{
+    KisIndirectPaintingSupport::setDirty(rect);
+    KisLayer::setDirty(rect);
+}
+
 void KisSelectionBasedLayer::setDirty()
 {
     Q_ASSERT(image());
 
-    KisLayer::setDirty(image()->bounds());
+    setDirty(image()->bounds());
 }
 
 QRect KisSelectionBasedLayer::extent() const

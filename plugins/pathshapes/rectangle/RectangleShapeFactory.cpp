@@ -20,7 +20,7 @@
 #include "RectangleShapeFactory.h"
 #include "RectangleShape.h"
 #include "RectangleShapeConfigWidget.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoGradientBackground.h>
@@ -42,11 +42,11 @@ RectangleShapeFactory::RectangleShapeFactory()
     setXmlElements(elementNamesList);
 }
 
-KoShape *RectangleShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     RectangleShape *rect = new RectangleShape();
 
-    rect->setBorder(new KoLineBorder(1.0));
+    rect->setStroke(new KoShapeStroke(1.0));
     rect->setShapeId(KoPathShapeId);
 
     QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(1,1));

@@ -51,9 +51,7 @@ public:
     virtual ~TextShape();
 
     /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
@@ -61,10 +59,18 @@ public:
     QPointF convertScreenPos(const QPointF &point) const;
 
     /// reimplemented
+    QPainterPath outline() const;
+
+    /// reimplemented
     QRectF outlineRect() const;
+
+    ///reimplemented
+    ChildZOrderPolicy childZOrderPolicy() {return KoShape::ChildZPassThrough;}
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
+
+    KoImageCollection *imageCollection();
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -115,6 +121,8 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
+    KoParagraphStyle * m_paragraphStyle;
+    bool m_clip;
 };
 
 #endif

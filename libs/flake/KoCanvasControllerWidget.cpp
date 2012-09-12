@@ -4,7 +4,7 @@
  * Copyright (C) 2006 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2006, 2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007-2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2007 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2007 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -36,13 +36,13 @@
 #include <ksharedconfig.h>
 #include <KDebug>
 #include <kconfiggroup.h>
-#include <QtGui/QApplication>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QScrollBar>
-#include <QtCore/QEvent>
-#include <QtGui/QDockWidget>
-#include <QtCore/QTimer>
+#include <QApplication>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QScrollBar>
+#include <QEvent>
+#include <QDockWidget>
+#include <QTimer>
 
 #include <KoConfig.h>
 
@@ -551,11 +551,12 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalcul
     KoCanvasController::setDocumentSize(sz);
     d->viewportWidget->setDocumentSize(sz);
     d->resetScrollBars();
-    d->ignoreScrollSignals = oldIgnoreScrollSignals;
 
     // Always emit the new offset.
     updateCanvasOffsetX();
     updateCanvasOffsetY();
+
+    d->ignoreScrollSignals = oldIgnoreScrollSignals;
 }
 
 void KoCanvasControllerWidget::setZoomWithWheel(bool zoom)

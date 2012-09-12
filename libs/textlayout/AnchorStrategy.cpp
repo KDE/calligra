@@ -68,7 +68,7 @@ QRectF AnchorStrategy::pageContentRect()
     return m_pageContentRect;
 }
 
-void AnchorStrategy::setPageContentRect(QRectF &pageContentRect)
+void AnchorStrategy::setPageContentRect(const QRectF &pageContentRect)
 {
     m_pageContentRect = pageContentRect;
 }
@@ -81,6 +81,26 @@ QRectF AnchorStrategy::paragraphRect()
 void AnchorStrategy::setParagraphRect(const QRectF &paragraphRect)
 {
     m_paragraphRect = paragraphRect;
+}
+
+QRectF AnchorStrategy::paragraphContentRect()
+{
+    return m_paragraphContentRect;
+}
+
+void AnchorStrategy::setParagraphContentRect(const QRectF &paragraphContentRect)
+{
+    m_paragraphContentRect = paragraphContentRect;
+}
+
+QRectF AnchorStrategy::layoutEnvironmentRect()
+{
+    return m_layoutEnvironmentRect;
+}
+
+void AnchorStrategy::setLayoutEnvironmentRect(const QRectF &layoutEnvironmentRect)
+{
+    m_layoutEnvironmentRect = layoutEnvironmentRect;
 }
 
 int AnchorStrategy::pageNumber()

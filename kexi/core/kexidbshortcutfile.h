@@ -20,7 +20,7 @@
 #ifndef KEXIDBSHORTCUTFILE_H
 #define KEXIDBSHORTCUTFILE_H
 
-#include <qstring.h>
+#include <QString>
 
 #include <kexi_export.h>
 

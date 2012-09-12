@@ -20,15 +20,15 @@
 */
 
 
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QLabel>
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
 
-#include <kexidb/cursor.h>
+#include <db/cursor.h>
 
 #include "kexidatatableview.h"
 #include "kexidatatable.h"

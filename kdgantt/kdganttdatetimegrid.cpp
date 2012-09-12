@@ -144,6 +144,26 @@ DateTimeGrid::Scale DateTimeGrid::scale() const
         return d->scale;
 }
 
+/*! \returns The format used to paint the hours.
+ *
+ * The default is "hh".
+ */
+QString DateTimeGrid::hourFormat() const
+{
+    return d->hourFormat;
+}
+
+/*! Set the format used to paint the hours.
+ *
+ * If @p format is empty, it is not set.
+ */
+void DateTimeGrid::setHourFormat( const QString &format )
+{
+    if ( ! format.isEmpty() ) {
+        d->hourFormat = format;
+    }
+}
+
 /*! \param factor The zoom factor
  *
  */
@@ -643,7 +663,7 @@ void DateTimeGrid::paintHourScaleHeader( QPainter* painter,  const QRectF& heade
         QStyleOptionHeader opt;
         opt.init( widget );
         opt.rect = QRectF( x-offset, headerRect.top()+headerRect.height()/2., dayWidth()/24., headerRect.height()/2. ).toRect();
-        opt.text = dt.time().toString( QString::fromAscii( "hh" ) );
+        opt.text = dt.time().toString( d->hourFormat );
         opt.textAlignment = Qt::AlignCenter;
         // NOTE:CE_Header does not honor clipRegion(), so we do the CE_Header logic here
         style->drawControl( QStyle::CE_HeaderSection, &opt, painter, 0 ); //NOTE: using widget will loose background when printing

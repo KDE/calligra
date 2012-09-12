@@ -23,7 +23,7 @@
 #include <karboncommon_export.h>
 #include <kundo2command.h>
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoPathShape;
 class QPainterPath;
 
@@ -45,7 +45,7 @@ public:
      * @param operation the booelan operation to execute
      * @param parent the parent command used for macro commands
      */
-    explicit KarbonBooleanCommand(KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB,
+    explicit KarbonBooleanCommand(KoShapeBasedDocumentBase *controller, KoPathShape* pathA, KoPathShape * pathB,
                                   BooleanOperation operation, KUndo2Command *parent = 0);
     virtual ~KarbonBooleanCommand();
     /// redo the command

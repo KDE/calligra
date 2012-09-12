@@ -25,7 +25,6 @@
 
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
-#include <KoResourceManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>

@@ -146,7 +146,7 @@ public:
     bool isClipped(const KoShape *child) const;
 
     /**
-     * Return wheather the child has the effective state of being locked for user modifications.
+     * Return whether the child has the effective state of being locked for user modifications.
      * This method is deferred to the model, which should call the KoShape::isGeometryProtected() on the child.
      * @param child the shape that the user wants to move.
      */
@@ -183,7 +183,7 @@ public:
 
 
     /// reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     /**
      * @brief Paint the component
@@ -194,7 +194,7 @@ public:
      * @param converter to convert between internal and view coordinates.
      * @see applyConversion()
      */
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter) = 0;
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) = 0;
 
     using KoShape::update;
     /// reimplemented

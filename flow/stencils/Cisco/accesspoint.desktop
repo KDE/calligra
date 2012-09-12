@@ -1,15 +1,24 @@
 [Desktop Entry]
 Name=AccessPoint
+Name[ca]=PuntAccés
+Name[ca@valencia]=PuntAccés
 Name[cs]=Přístupový bod
 Name[de]=AccessPoint
 Name[el]=Σημείο πρόσβασης
+Name[es]=Punto de acceso
 Name[et]=Tugijaam
+Name[fi]=Tukiasema
+Name[it]=AccessPoint
+Name[ja]=アクセスポイント
+Name[kk]=Қатынау нүктесі
 Name[nb]=Aksesspunkt
 Name[nds]=Togrieppunkt
 Name[nl]=AccessPoint
 Name[pl]=Punkt dostępowy
 Name[pt]=Ponto de Acesso
 Name[pt_BR]=Ponto de acesso
+Name[ru]=Точка доступа
+Name[sk]=Prístupový bod
 Name[sv]=Anslutningspunkt
 Name[uk]=Точка доступу
 Name[x-test]=xxAccessPointxx

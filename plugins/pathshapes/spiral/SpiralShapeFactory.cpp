@@ -20,7 +20,7 @@
 #include "SpiralShapeFactory.h"
 #include "SpiralShape.h"
 #include "SpiralShapeConfigWidget.h"
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShapeLoadingContext.h>
 
 #include <klocale.h>
@@ -35,11 +35,11 @@ SpiralShapeFactory::SpiralShapeFactory()
     setLoadingPriority(1);
 }
 
-KoShape *SpiralShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *SpiralShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     SpiralShape *spiral = new SpiralShape();
 
-    spiral->setBorder(new KoLineBorder(1.0));
+    spiral->setStroke(new KoShapeStroke(1.0));
     spiral->setShapeId(KoPathShapeId);
 
     return spiral;

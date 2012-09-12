@@ -18,7 +18,7 @@
 
 #include "koChart.h"
 
-#include <qobject.h>
+#include <QObject>
 
 using namespace KoChart;
 
@@ -32,10 +32,8 @@ WizardExtension::~WizardExtension()
 {
 }
 
-Part::Part( QWidget *parentWidget,
-            QObject *parent,
-            bool singleViewMode )
-    : KoDocument( parentWidget, parent, singleViewMode )
+Part::Part(QObject *parent)
+    : KoPart(parent)
 {
 }
 

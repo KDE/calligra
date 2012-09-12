@@ -26,10 +26,11 @@
 
 #include "kis_canvas2.h"
 
-KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, const QCursor & cursor) :
+KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, KisToolEllipseBase::ToolType type, const QCursor & cursor) :
         KisToolShape(canvas, cursor),
         m_dragStart(0,0),
-        m_dragEnd(0,0)
+        m_dragEnd(0,0),
+        m_type(type)
 {
 }
 
@@ -48,6 +49,7 @@ void KisToolEllipseBase::paint(QPainter& gc, const KoViewConverter &converter)
 void KisToolEllipseBase::deactivate()
 {
     updateArea();
+    KisToolShape::deactivate();
 }
 
 
@@ -56,9 +58,15 @@ void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        if (nodePaintAbility() == NONE)
-            return;
-
+        if (m_type == PAINT) {
+            if (!nodeEditable() || nodePaintAbility() == NONE) {
+                return;
+            }
+        } else {
+            if (!selectionEditable()) {
+                return;
+            }
+        }
         setMode(KisTool::PAINT_MODE);
 
         QPointF pos = convertToPixelCoord(event);
@@ -66,7 +74,7 @@ void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
         event->accept();
     }
     else {
-        KisTool::mousePressEvent(event);
+        KisToolShape::mousePressEvent(event);
     }
 }
 
@@ -106,7 +114,7 @@ void KisToolEllipseBase::mouseMoveEvent(KoPointerEvent *event)
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
     else {
-        KisTool::mouseMoveEvent(event);
+        KisToolShape::mouseMoveEvent(event);
     }
 }
 
@@ -117,13 +125,11 @@ void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
 
         updateArea();
 
-        setCurrentNodeLocked(true);
         finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
-        setCurrentNodeLocked(false);
         event->accept();
     }
     else {
-        KisTool::mouseReleaseEvent(event);
+        KisToolShape::mouseReleaseEvent(event);
     }
 }
 
@@ -139,7 +145,7 @@ void KisToolEllipseBase::paintEllipse(QPainter& gc, const QRect&)
 
 void KisToolEllipseBase::updateArea()
 {
-    canvas()->updateCanvas(convertToPt(QRectF(m_dragStart, m_dragEnd).normalized()));
+    canvas()->updateCanvas(convertToPt(QRectF(m_dragStart, m_dragEnd).normalized().adjusted(-10, -10, 10, 10)));
 }
 
 #include "kis_tool_ellipse_base.moc"

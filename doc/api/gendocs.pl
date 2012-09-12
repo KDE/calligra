@@ -28,8 +28,8 @@ if($#ARGV >= 0) {
         }
         elsif($ARGV[$i] eq "--remote") {
             print "Using remote url for browing\n";
-            $remoteDocs_kdelibs="http://www.calligra-suite.org/developer/kdelibs-api/";
-            $remoteDocs_qt="http://www.calligra-suite.org/developer/qt-api/";
+            $remoteDocs_kdelibs="http://www.calligra.org/developer/kdelibs-api/";
+            $remoteDocs_qt="http://www.calligra.org/developer/qt-api/";
             $ok=1;
         } else {
             print "No Mainpage.dox found at '$rootdir/$ARGV[$i]' skipping..\n";

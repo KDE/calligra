@@ -20,13 +20,17 @@
 
 #include <QString>
 #include <QStringList>
+#include <QList>
 #include <QColor>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
 #include "kis_global.h"
+#include "kis_properties_configuration.h"
 #include "krita_export.h"
+
+class KoColorProfile;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -85,6 +89,8 @@ public:
 
     QString monitorProfile() const;
     void setMonitorProfile(const QString & monitorProfile);
+    static const KoColorProfile* getScreenProfile(int screen = -1);
+    const KoColorProfile *displayProfile(int screen = -1);
 
     QString workingColorSpace() const;
     void setWorkingColorSpace(const QString & workingColorSpace);
@@ -118,6 +124,9 @@ public:
 
     bool useOpenGLToolOutlineWorkaround() const;
     void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
+
+    bool useOpenGLTrilinearFiltering() const;
+    void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering);
 
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
@@ -217,6 +226,9 @@ public:
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);
 
+    bool presetShowAllMode() const;
+    void setPresetShowAllMode(bool showAll);
+
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
 
@@ -246,10 +258,39 @@ public:
 
     int hideToolbarFullscreen();
     void setHideToolbarFullscreen(const int value) const;
-	
-	QStringList favoriteCompositeOps() const;
-	void setFavoriteCompositeOps(const QStringList& compositeOps);
-	
+
+    QStringList favoriteCompositeOps() const;
+    void setFavoriteCompositeOps(const QStringList& compositeOps);
+
+    QString exportConfiguration(const QString &filterId) const;
+    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
+
+    bool useSystemMonitorProfile() const;
+    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);
+
+    QString defaultPalette();
+    void setDefaultPalette(const QString& name);
+
+    template<class T>
+    void writeEntry(const QString& name, const T& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    void writeList(const QString& name, const QList<T>& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    T readEntry(const QString& name, const T& defaultValue=T()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
+
+    template<class T>
+    QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

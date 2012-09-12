@@ -23,12 +23,25 @@
 #include <QByteArray>
 #include <QBitArray>
 
+#include <kis_types.h>
+#include <kis_paint_device.h>
+
+
 #include "psd.h"
 #include "psd_header.h"
 
 #include "compression.h"
 
 class QIODevice;
+
+struct ChannelInfo {
+    qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
+    Compression::CompressionType compressionType;
+    quint64 channelDataStart;
+    quint64 channelDataLength;
+    QVector<quint32> rleRowLengths;
+    int channelOffset;
+};
 
 class PSDLayerRecord
 {
@@ -47,20 +60,12 @@ public:
 
     QString error;
 
-    quint32 top;
-    quint32 left;
-    quint32 bottom;
-    quint32 right;
+    qint32 top;
+    qint32 left;
+    qint32 bottom;
+    qint32 right;
 
     quint16 nChannels;
-
-    struct ChannelInfo {
-        qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
-        Compression::CompressionType compressionType;
-        quint64 channelDataStart;
-        quint64 channelDataLength;
-        QVector<quint32> rleRowLengths;
-    };
 
     QVector<ChannelInfo*> channelInfoRecords;
 
@@ -73,10 +78,10 @@ public:
     bool   irrelevant;
 
     struct LayerMaskData {
-        quint32 top;
-        quint32 left;
-        quint32 bottom;
-        quint32 right;
+        qint32 top;
+        qint32 left;
+        qint32 bottom;
+        qint32 right;
         quint8 defaultColor;
         bool positionedRelativeToLayer;
         bool disabled;
@@ -105,12 +110,20 @@ public:
 
     QMap<QString, LayerInfoBlock*> infoBlocks;
 
-    QByteArray readChannelData(QIODevice* io, ChannelInfo *channel);
+    bool readChannels(QIODevice* io, KisPaintDeviceSP device);
+
+private:
+
+    bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
+    bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
 
     const PSDHeader m_header;
+
 };
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord& layer);
-QDebug operator<<(QDebug dbg, const PSDLayerRecord::ChannelInfo& layer);
+QDebug operator<<(QDebug dbg, const ChannelInfo& layer);
 
 #endif // PSD_LAYER_RECORD_H

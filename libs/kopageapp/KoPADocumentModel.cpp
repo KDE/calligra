@@ -25,12 +25,11 @@
 #include "KoPAPageProvider.h"
 #include <KoShapePainter.h>
 #include <KoShapeManager.h>
-#include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoSelection.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
@@ -47,8 +46,8 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QMimeData>
+#include <QAbstractItemModel>
+#include <QMimeData>
 #include <QApplication>
 #include <QClipboard>
 #include <QMenu>
@@ -313,7 +312,7 @@ KoDocumentSectionModel::PropertyList KoPADocumentModel::properties( KoShape* sha
         l << Property(i18n("Slide"), QString::number(m_document->pageIndex(page) + 1));
     }
 
-    l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
+    l << Property(i18n("Visible"), SmallIcon("layer-visible-on"), SmallIcon("layer-visible-off"), shape->isVisible());
     l << Property(i18n("Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isGeometryProtected());
     return l;
 }
@@ -370,14 +369,6 @@ QImage KoPADocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSiz
 KoShape * KoPADocumentModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
     return parent->shapes().at(row);
-
-    if( parent != m_lastContainer )
-    {
-        m_lastContainer = parent;
-        m_childs = parent->shapes();
-        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
-    }
-    return m_childs.at( row );
 }
 
 int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
@@ -386,14 +377,6 @@ int KoPADocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child 
         return 0;
 
     return parent->shapes().indexOf( child );
-
-    if( parent != m_lastContainer )
-    {
-        m_lastContainer = parent;
-        m_childs = parent->shapes();
-        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
-    }
-    return m_childs.indexOf( child );
 }
 
 Qt::DropActions KoPADocumentModel::supportedDropActions () const

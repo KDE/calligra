@@ -5,7 +5,7 @@ set(htmlodf_export_PART_SRCS
 htmlodfexport.cpp
 document.cpp
 exportdialog.cpp
-convert.cpp
+ManifestParser.cpp
 )
 
 kde4_add_ui_files(htmlodf_export_PART_SRCS exportwidget.ui )
@@ -16,7 +16,6 @@ kde4_add_plugin(htmlodf_export ${htmlodf_export_PART_SRCS})
 
 target_link_libraries(
     htmlodf_export
-    wordsexportfilters
     koodf
     komain
     ${QT_QTXMLPATTERNS_LIBRARY}

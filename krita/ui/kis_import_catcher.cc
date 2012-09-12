@@ -19,7 +19,6 @@
 #include "kis_import_catcher.h"
 #include <kis_debug.h>
 
-#include <kaboutdata.h>
 #include <kimageio.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -45,7 +44,7 @@
 #include "kis_group_layer.h"
 #include <QMessageBox>
 
-class KisImportCatcher::Private
+struct KisImportCatcher::Private
 {
 public:
     KisDoc2* doc;
@@ -60,9 +59,14 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     m_d->view = view;
     m_d->url = url;
     KoFilterManager manager(m_d->doc);
-    QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
-    KoFilter::ConversionStatus status;
-    QString s = manager.importDocument(url.pathOrUrl(), QString(), status);
+
+    if (KMimeType::findByUrl(url)->name() == "application/x-krita") {
+        m_d->doc->loadNativeFormat(url.toLocalFile());
+    }
+    else {
+        KoFilter::ConversionStatus status;
+        manager.importDocument(url.pathOrUrl(), QString(), status);
+    }
     KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {
@@ -103,8 +107,6 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
 
             KisNodeCommandsAdapter adapter(m_d->view);
             adapter.addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
-            m_d->view->nodeManager()->activateNode(importedImageLayer.data());
-            importedImageLayer->setDirty();
         }
     }
 

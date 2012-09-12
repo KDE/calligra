@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+ * Copyright (C) 2009, 2012 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +20,7 @@
 #include "KPlatoRCPSPlugin.h"
 
 #include "kptschedulerplugin_macros.h"
+#include "kptdebug.h"
 
 #include "KPlatoRCPSScheduler.h"
 
@@ -28,10 +29,11 @@
 
 #include <librcps.h>
 
-#include <KDebug>
 
 #include <QApplication>
 #include <KMessageBox>
+#include <kptschedulerplugin.h>
+
 
 KPLATO_SCHEDULERPLUGIN_EXPORT(KPlatoRCPSPlugin)
 
@@ -40,7 +42,7 @@ using namespace KPlato;
 KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     : KPlato::SchedulerPlugin(parent)
 {
-    kDebug()<<rcps_version();
+    kDebug(planDbg())<<rcps_version();
     KLocale *locale = KGlobal::locale();
     if ( locale ) {
         locale->insertCatalog( "planrcpsplugin" );
@@ -49,6 +51,22 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
 
 KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
 {
+}
+
+QString KPlatoRCPSPlugin::description() const
+{
+    return i18nc( "@info:whatsthis", "<title>RCPS Scheduler</title>"
+                    "<para>The Resource Constrained Project Scheduler (RCPS) focuses on scheduling"
+                    " the project to avoid overbooking resources."
+                    " It still respects task dependencies and also tries to fullfill time constraints."
+                    " However, time constraints can make it very difficult to find a good solution,"
+                    " so it may be preferable to use a different scheduler in these cases.</para>"
+                );
+}
+
+int KPlatoRCPSPlugin::capabilities() const
+{
+    return SchedulerPlugin::AvoidOverbooking | SchedulerPlugin::ScheduleForward | SchedulerPlugin::ScheduleBackward;
 }
 
 void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
@@ -105,7 +123,7 @@ void KPlatoRCPSPlugin::stopCalculation( SchedulerThread *sch )
 
 void KPlatoRCPSPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    qDebug()<<"KPlatoRCPSPlugin::slotStarted:";
+//    kDebug(planDbg())<<"KPlatoRCPSPlugin::slotStarted:";
 }
 
 void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
@@ -113,7 +131,7 @@ void KPlatoRCPSPlugin::slotFinished( SchedulerThread *j )
     KPlatoRCPSScheduler *job = static_cast<KPlatoRCPSScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //qDebug()<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //kDebug(planDbg())<<"KPlatoRCPSPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {

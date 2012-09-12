@@ -20,12 +20,17 @@
 
 
 KisMergeWalker::KisMergeWalker(QRect cropRect)
-    : KisBaseRectsWalker(cropRect)
 {
+    setCropRect(cropRect);
 }
 
 KisMergeWalker::~KisMergeWalker()
 {
+}
+
+KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
+{
+    return KisBaseRectsWalker::UPDATE;
 }
 
 void KisMergeWalker::startTrip(KisNodeSP startWith)
@@ -58,7 +63,7 @@ void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
         startTrip(parentLayer->parent());
 
     NodePosition positionToFilthy = N_FILTHY_PROJECTION |
-        (!nextNode ? N_TOPMOST : !prevNode ? N_BOTTOMMOST : N_NORMAL);
+        calculateNodePosition(parentLayer);
     registerNeedRect(parentLayer, positionToFilthy);
 
     if(prevNode)
@@ -67,13 +72,11 @@ void KisMergeWalker::startTripWithMask(KisNodeSP filthyMask)
 
 void KisMergeWalker::visitHigherNode(KisNodeSP node, NodePosition positionToFilthy)
 {
-    KisNodeSP nextNode = node->nextSibling();
-    KisNodeSP prevNode = node->prevSibling();
-    positionToFilthy |=
-        !nextNode ? N_TOPMOST : !prevNode ? N_BOTTOMMOST : N_NORMAL;
+    positionToFilthy |= calculateNodePosition(node);
 
     registerChangeRect(node, positionToFilthy);
 
+    KisNodeSP nextNode = node->nextSibling();
     if (nextNode)
         visitHigherNode(nextNode, N_ABOVE_FILTHY);
     else if (node->parent())
@@ -84,11 +87,11 @@ void KisMergeWalker::visitHigherNode(KisNodeSP node, NodePosition positionToFilt
 
 void KisMergeWalker::visitLowerNode(KisNodeSP node)
 {
-    KisNodeSP prevNode = node->prevSibling();
     NodePosition position =
-        N_BELOW_FILTHY | (prevNode ? N_NORMAL : N_BOTTOMMOST);
+        N_BELOW_FILTHY | calculateNodePosition(node);
     registerNeedRect(node, position);
 
+    KisNodeSP prevNode = node->prevSibling();
     if (prevNode)
         visitLowerNode(prevNode);
 }

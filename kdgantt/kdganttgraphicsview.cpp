@@ -36,6 +36,7 @@
 #include <QScrollBar>
 #include <QAbstractProxyModel>
 #include <QToolButton>
+#include <qmath.h>
 
 #include <cassert>
 
@@ -43,16 +44,24 @@
 #include "../evaldialog/evaldialog.h"
 #endif
 
+using namespace KDGantt;
+
 /*!\class KDGantt::HeaderWidget
  * \internal
  */
-
-using namespace KDGantt;
 
 HeaderWidget::HeaderWidget( GraphicsView* parent )
     : QWidget( parent ), m_offset( 0. )
 {
     assert( parent ); // Parent must be set
+
+    m_zoomwidget = new Slider( this );
+    m_zoomwidget->setEnableHideOnLeave( true );
+    m_zoomwidget->hide();
+    m_zoomwidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    m_zoomwidget->setGeometry( 0, 0, 200, m_zoomwidget->minimumSizeHint().height()  );
+
+    setMouseTracking( true );
 }
 
 HeaderWidget::~HeaderWidget()
@@ -93,6 +102,10 @@ bool HeaderWidget::event( QEvent* event )
 
 void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
 {
+    if ( m_zoomwidget && m_zoomwidget->isVisible() ) {
+        event->ignore();
+        return;
+    }
     QMenu contextMenu;
 
     DateTimeGrid* const grid = qobject_cast< DateTimeGrid* >( view()->grid() );
@@ -207,8 +220,7 @@ void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
     {
         assert( grid != 0 );
         TimeScaleZoomDialog dlg;
-        connect( dlg.zoomIn, SIGNAL( pressed() ), grid, SLOT( zoomIn() ) );
-        connect( dlg.zoomOut, SIGNAL( pressed() ), grid, SLOT( zoomOut() ) );
+        dlg.zoom->setGrid( grid );
         dlg.exec();
     }
     else if( action == actionZoomIn )
@@ -223,6 +235,18 @@ void HeaderWidget::contextMenuEvent( QContextMenuEvent* event )
     }
 
     event->accept();
+}
+
+void HeaderWidget::mouseMoveEvent( QMouseEvent *event )
+{
+    if ( event->pos().y() < height() / 2 && event->pos().x() < 200 ) {
+        DateTimeGrid* const grid = qobject_cast< DateTimeGrid* >( view()->grid() );
+        m_zoomwidget->setGrid( grid );
+        if ( grid ) {
+            m_zoomwidget->show();
+            m_zoomwidget->setFocus();
+        }
+    }
 }
 
 GraphicsView::Private::Private( GraphicsView* _q )

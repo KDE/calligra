@@ -1,5 +1,4 @@
 /*
- * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
  *
@@ -18,10 +17,10 @@
  */
 #ifndef KRIMAGEDATA_H
 #define KRIMAGEDATA_H
-#include <KoReportItemBase.h>
+#include <KoReportASyncItemBase.h>
 #include <QRect>
 #include <QPainter>
-#include <qdom.h>
+#include <QDomDocument>
 #include "krpos.h"
 #include "krsize.h"
 #include <koproperty/Property.h>
@@ -30,7 +29,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
-#include <MarbleWidget.h>
+#include <marble/MarbleWidget.h>
 #include <RdfForward.h>
 #include <QMap>
 
@@ -46,7 +45,7 @@ class Maps;
 /**
  @author
 */
-class KoReportItemMaps : public KoReportItemBase
+class KoReportItemMaps : public KoReportASyncItemBase
 {
     Q_OBJECT
 public:

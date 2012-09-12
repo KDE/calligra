@@ -24,7 +24,7 @@
 #include <QColor>
 #include <QFont>
 #include <QBrush>
-#include <QPixmap>
+#include <QImage>
 
 /**
    Namespace for Windows Metafile (WMF) classes
@@ -65,7 +65,7 @@ class KoWmfPatternBrushHandle: public KoWmfHandle
 public:
     virtual void apply(WmfDeviceContext *);
     QBrush brush;
-    QPixmap image;
+    QImage image;
 };
 
 class KoWmfFontHandle: public KoWmfHandle

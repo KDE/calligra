@@ -21,6 +21,7 @@
 
 #include "global.h"
 #include "wv2_export.h"
+#include "word97_generated.h"
 
 namespace wvWare
 {

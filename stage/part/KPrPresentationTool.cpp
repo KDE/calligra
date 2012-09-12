@@ -24,14 +24,14 @@
 
 #include "KPrPresentationTool.h"
 
-#include <QtGui/QWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QPainter>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QPainter>
 #include <QKeyEvent>
-#include <qabstracttextdocumentlayout.h>
-#include <qcursor.h>
-#include <qdesktopservices.h>
-#include <qurl.h>
+#include <QAbstractTextDocumentLayout>
+#include <QCursor>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>

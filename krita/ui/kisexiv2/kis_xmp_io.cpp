@@ -14,11 +14,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
-#ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
-#define KDEWIN_STDINT_H
-#endif
-
 #include "kis_xmp_io.h"
 
 #include <string>
@@ -118,7 +113,8 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                     tv.setXmpArrayType(Exiv2::XmpValue::xaAlt);
                     break;
                 default:
-                    qFatal("can't happen");
+                    // Cannot happen
+                    ;
                 }
                 xmpData_.add(key, &tv); // set the arrya type
                 const KisMetaData::TypeInfo* stuctureTypeInfo = typeInfo->embeddedPropertyType();
@@ -256,7 +252,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 KisMetaData::Value::ValueType vt = KisMetaData::Value::Invalid;
                 switch (xav->xmpArrayType()) {
                 case Exiv2::XmpValue::xaNone:
-                    qFatal("Unsupported array.");
+                    warnKrita << "KisXMPIO: Unsupported array";
                     break;
                 case Exiv2::XmpValue::xaAlt:
                     vt = KisMetaData::Value::AlternativeArray;

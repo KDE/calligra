@@ -19,14 +19,14 @@
  */
 
 #include "KoPathCombineCommand.h"
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 #include "KoShapeContainer.h"
 #include <klocale.h>
 
 class KoPathCombineCommand::Private
 {
 public:
-    Private(KoShapeControllerBase *c, const QList<KoPathShape*> &p)
+    Private(KoShapeBasedDocumentBase *c, const QList<KoPathShape*> &p)
         : controller(c), paths(p)
         , combinedPath(0), combinedPathParent(0)
         , isCombined(false)
@@ -42,7 +42,7 @@ public:
             delete combinedPath;
     }
 
-    KoShapeControllerBase *controller;
+    KoShapeBasedDocumentBase *controller;
     QList<KoPathShape*> paths;
     QList<KoShapeContainer*> oldParents;
     KoPathShape *combinedPath;
@@ -50,7 +50,7 @@ public:
     bool isCombined;
 };
 
-KoPathCombineCommand::KoPathCombineCommand(KoShapeControllerBase *controller,
+KoPathCombineCommand::KoPathCombineCommand(KoShapeBasedDocumentBase *controller,
         const QList<KoPathShape*> &paths, KUndo2Command *parent)
 : KUndo2Command(parent)
 , d(new Private(controller, paths))
@@ -58,7 +58,7 @@ KoPathCombineCommand::KoPathCombineCommand(KoShapeControllerBase *controller,
     setText(i18nc("(qtundo-format)", "Combine paths"));
 
     d->combinedPath = new KoPathShape();
-    d->combinedPath->setBorder(d->paths.first()->border());
+    d->combinedPath->setStroke(d->paths.first()->stroke());
     d->combinedPath->setShapeId(d->paths.first()->shapeId());
     // combine the paths
     foreach(KoPathShape* path, d->paths) {

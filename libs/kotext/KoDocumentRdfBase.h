@@ -22,14 +22,16 @@
 
 #include "kotext_export.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QMetaType>
+#include <QSharedPointer>
 
 #include <KoDataCenterBase.h>
 
 class KoCanvasBase;
-class KoResourceManager;
+class KoDocumentResourceManager;
 class QTextDocument;
 class KoStore;
 class KoXmlWriter;
@@ -53,30 +55,36 @@ class KOTEXT_EXPORT KoDocumentRdfBase : public QObject, public KoDataCenterBase
     Q_OBJECT
 
 public:
-    KoDocumentRdfBase(QObject *parent);
+    KoDocumentRdfBase(QObject *parent = 0);
 
     /**
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual const Soprano::Model *model() const;
-
-    /**
-     * Convenience method to get the KoDocumentRdf given a CanvasBase
-     * pointer. The resource manager is the canvas is used to get back
-     * the KoDoucmentRdf if there is one for the canvas.
-     *
-     * Note that this method can return either a valid KoDocumentRdf
-     * pointer or a NULL pointer if there is no Rdf for the canvas.
-     */
-    static KoDocumentRdfBase *fromResourceManager(KoCanvasBase *host);
-    virtual void linkToResourceManager(KoResourceManager *rm);
+    virtual QSharedPointer<Soprano::Model> model() const;
+    virtual void linkToResourceManager(KoDocumentResourceManager *rm);
 
     virtual void updateInlineRdfStatements(const QTextDocument *qdoc);
     virtual void updateXmlIdReferences(const QMap<QString, QString> &m);
+
+    /**
+     * idrefList queries soprano after loading and creates a list of all rdfid's that
+     * where found in the manifest.rdf document. This list is used to make sure we do not
+     * create more inline rdf objects than necessary
+     * @return a list of xml-id's
+     */
+    virtual QStringList idrefList() const;
+
+
     virtual bool loadOasis(KoStore *store);
     virtual bool saveOasis(KoStore *store, KoXmlWriter *manifestWriter);
+
+    // reimplemented in komain/rdf/KoDocumentRdf
+    virtual bool completeLoading(KoStore *store);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
 };
+
+Q_DECLARE_METATYPE(KoDocumentRdfBase*)
 
 #endif
 

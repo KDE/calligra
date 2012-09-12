@@ -164,11 +164,12 @@ void KexiDBField::setDescription(const QString& desc)
 
 uint KexiDBField::length()
 {
-    return m_field->length();
+    return m_field->maxLength();
 }
+
 void KexiDBField::setLength(uint length)
 {
-    m_field->setLength(length);
+    m_field->setMaxLength(length);
 }
 
 uint KexiDBField::precision()

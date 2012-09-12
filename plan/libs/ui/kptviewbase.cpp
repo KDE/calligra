@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 -2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006 -2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -20,20 +20,27 @@
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
 #include "kptproject.h"
+#include "kptdebug.h"
 
 #include <kaction.h>
+#include <ktoggleaction.h>
 #include <kicon.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
+#include <knotification.h>
 
+#include "calligraversion.h"
 #include <KoDocument.h>
+#include <KoPart.h>
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
+#include "KoUnit.h"
 
 #include <QAbstractItemModel>
 #include <QAbstractProxyModel>
+#include <QSortFilterProxyModel>
 #include <QHeaderView>
 #include <QPoint>
 #include <QScrollBar>
@@ -42,21 +49,142 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QMenu>
+#include <QPainter>
+#include <QMainWindow>
 
 namespace KPlato
 {
 
+
+DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &title )
+    : QDockWidget( v ),
+    view( v ),
+    id( identity ),
+    location( Qt::RightDockWidgetArea ),
+    editor( false ),
+    m_shown( true )
+{
+    setWindowTitle( title );
+    setObjectName( v->objectName() + '-' + identity );
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(setLocation(Qt::DockWidgetArea)));
+}
+
+void DockWidget::activate( QMainWindow *shell )
+{
+    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
+    setVisible( m_shown );
+    shell->addDockWidget( location, this );
+}
+
+void DockWidget::deactivate( QMainWindow *shell )
+{
+    disconnect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
+    shell->removeDockWidget( this );
+}
+
+void DockWidget::setShown( bool show )
+{
+    m_shown = show;
+    setVisible( show );
+}
+
+void DockWidget::setLocation( Qt::DockWidgetArea area )
+{
+    location = area;
+}
+
+bool DockWidget::saveXml( QDomElement &context ) const
+{
+    QDomElement e = context.ownerDocument().createElement( "docker" );
+    context.appendChild( e );
+    e.setAttribute( "id", id );
+    e.setAttribute( "location", location );
+    e.setAttribute( "floating", isFloating() );
+    e.setAttribute( "visible", m_shown );
+    return true;
+}
+
+void DockWidget::loadXml(const KoXmlElement& context)
+{
+    location = static_cast<Qt::DockWidgetArea>( context.attribute( "location", "0" ).toInt() );
+    setFloating( (bool) context.attribute( "floating", "0" ).toInt() );
+    m_shown = context.attribute( "visible", "1" ).toInt();
+}
+
+//------------------------
+bool PrintingOptions::loadXml( KoXmlElement &element )
+{
+    KoXmlElement e;
+    forEachElement( e, element ) {
+        if ( e.tagName() == "header" ) {
+            headerOptions.group = e.attribute( "group", "0" ).toInt();
+            headerOptions.project = static_cast<Qt::CheckState>( e.attribute( "project", "0" ).toInt() );
+            headerOptions.date = static_cast<Qt::CheckState>( e.attribute( "date", "0" ).toInt() );
+            headerOptions.manager = static_cast<Qt::CheckState>( e.attribute( "manager", "0" ).toInt() );
+            headerOptions.page = static_cast<Qt::CheckState>( e.attribute( "page", "0" ).toInt() );
+        } else if ( e.tagName() == "footer" ) {
+            footerOptions.group = e.attribute( "group", "0" ).toInt();
+            footerOptions.project = static_cast<Qt::CheckState>( e.attribute( "project", "0" ).toInt() );
+            footerOptions.date = static_cast<Qt::CheckState>( e.attribute( "date", "0" ).toInt() );
+            footerOptions.manager = static_cast<Qt::CheckState>( e.attribute( "manager", "0" ).toInt() );
+            footerOptions.page = static_cast<Qt::CheckState>( e.attribute( "page", "0" ).toInt() );
+        }
+    }
+    return true;
+}
+
+void PrintingOptions::saveXml( QDomElement &element ) const
+{
+    QDomElement me = element.ownerDocument().createElement( "printing-options" );
+    element.appendChild( me );
+
+    QDomElement h = me.ownerDocument().createElement( "header" );
+    me.appendChild( h );
+    h.setAttribute( "group", headerOptions.group );
+    h.setAttribute( "project", headerOptions.project );
+    h.setAttribute( "date", headerOptions.date );
+    h.setAttribute( "manager", headerOptions.manager );
+    h.setAttribute( "page", headerOptions.page );
+
+    QDomElement f = me.ownerDocument().createElement( "footer" );
+    me.appendChild( f );
+    f.setAttribute( "group", footerOptions.group );
+    f.setAttribute( "project", footerOptions.project );
+    f.setAttribute( "date", footerOptions.date );
+    f.setAttribute( "manager", footerOptions.manager );
+    f.setAttribute( "page", footerOptions.page );
+}
+
+//----------------------
 PrintingHeaderFooter::PrintingHeaderFooter( const PrintingOptions &opt, QWidget *parent )
     : QWidget( parent )
 {
     setupUi( this );
     setWindowTitle( i18n("Header and Footer" ));
     setOptions( opt );
+
+    connect(ui_header, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(ui_headerProject, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerPage, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerManager, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_headerDate, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+
+    connect(ui_footer, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(ui_footerProject, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerPage, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerManager, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
+    connect(ui_footerDate, SIGNAL(stateChanged(int)), SLOT(slotChanged()));
 }
 
 PrintingHeaderFooter::~PrintingHeaderFooter()
 {
-    //kDebug();
+    //kDebug(planDbg());
+}
+
+void PrintingHeaderFooter::slotChanged()
+{
+    kDebug(planDbg());
+    emit changed( options() );
 }
 
 void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
@@ -78,7 +206,7 @@ void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
 
 PrintingOptions PrintingHeaderFooter::options() const
 {
-    //kDebug();
+    //kDebug(planDbg());
     PrintingOptions opt;
     opt.headerOptions.group = ui_header->isChecked();
     opt.headerOptions.project = ui_headerProject->checkState();
@@ -99,7 +227,18 @@ PrintingDialog::PrintingDialog( ViewBase *view )
     m_view( view ),
     m_widget( 0 )
 {
-    setPrinterPageLayout();
+    setPrinterPageLayout( view->pageLayout() );
+    QImage px( 100, 600, QImage::Format_Mono );
+    int dpm = printer().resolution() * 40;
+    px.setDotsPerMeterX( dpm );
+    px.setDotsPerMeterY( dpm );
+    QPainter p( &px );
+    m_textheight = p.boundingRect( QRectF(), Qt::AlignTop, "Aj" ).height();
+    kDebug(planDbg())<<"textheight:"<<m_textheight;
+}
+
+PrintingDialog::~PrintingDialog()
+{
 }
 
 QAbstractPrintDialog::PrintDialogOptions PrintingDialog::printDialogOptions() const
@@ -117,64 +256,47 @@ PrintingOptions PrintingDialog::printingOptions() const
 
 void PrintingDialog::setPrintingOptions( const PrintingOptions &opt )
 {
-    return m_view->setPrintingOptions( opt );
+    kDebug(planDbg());
+    m_view->setPrintingOptions( opt );
+    emit changed( opt );
+    emit changed();
 }
 
-void PrintingDialog::setPrinterPageLayout()
+void PrintingDialog::setPrinterPageLayout( const KoPageLayout &pagelayout )
 {
     QPrinter &p = printer();
-    KoPageLayout l = m_view->pageLayout();
     QPrinter::Orientation o;
-    switch ( l.orientation ) {
+    switch ( pagelayout.orientation ) {
         case KoPageFormat::Portrait: o = QPrinter::Portrait; break;
         case KoPageFormat::Landscape: o = QPrinter::Landscape; break;
         default: o = QPrinter::Portrait; break;
     }
     p.setOrientation( o );
-    p.setPaperSize( KoPageFormat::printerPageSize( l.format ) );
-    p.setPageMargins( l.leftMargin, l.topMargin, l.rightMargin, l.bottomMargin, QPrinter::Point );
+    p.setPaperSize( KoPageFormat::printerPageSize( pagelayout.format ) );
+    p.setPageMargins( pagelayout.leftMargin, pagelayout.topMargin, pagelayout.rightMargin, pagelayout.bottomMargin, QPrinter::Point );
 }
 
 void PrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
-    PrintingOptions opt;
-    if ( m_widget ) {
-        opt = m_widget->options();
-    }
-    setPrintingOptions( opt );
-    setPrinterPageLayout();
+    setPrinterPageLayout( m_view->pageLayout() ); // FIXME: Something resets printer().paperSize() to A4 !
     KoPrintingDialog::startPrinting( removePolicy );
 }
 
 QWidget *PrintingDialog::createPageLayoutWidget() const
 {
-    QWidget *widget = new QWidget();
-    widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
-
-    QHBoxLayout *lay = new QHBoxLayout(widget);
-    lay->setMargin(0);
-    widget->setLayout(lay);
-
-    KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, m_view->pageLayout() );
-    w->showPageSpread( false );
-    w->layout()->setMargin( 0 );
-    lay->addWidget( w );
-
-    KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
-    prev->setPageLayout( m_view->pageLayout() );
-    lay->addWidget( prev );
-
-    connect(w, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
-
-    connect (w, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
-
-    return widget;
+    QWidget *w = ViewBase::createPageLayoutWidget( m_view );
+    KoPageLayoutWidget *pw = w->findChild<KoPageLayoutWidget*>();
+    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), m_view, SLOT(setPageLayout(const KoPageLayout&)));
+    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(setPrinterPageLayout(const KoPageLayout&)));
+    connect(pw, SIGNAL(layoutChanged(const KoPageLayout&)), this, SIGNAL(changed()));
+    return w;
 }
 
 QList<QWidget*> PrintingDialog::createOptionWidgets() const
 {
-    //kDebug();
+    //kDebug(planDbg());
     PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
+    connect(w, SIGNAL(changed(PrintingOptions)), this, SLOT(setPrintingOptions(const PrintingOptions&)));
     const_cast<PrintingDialog*>( this )->m_widget = w;
 
     return QList<QWidget*>() << w;
@@ -215,14 +337,14 @@ QRect PrintingDialog::footerRect() const
 
 int PrintingDialog::headerFooterHeight( const PrintingOptions::Data &options ) const
 {
-    int height = 0;
+    int height = 0.0;
     if ( options.page == Qt::Checked || options.project == Qt::Checked || options.manager == Qt::Checked || options.date == Qt::Checked ) {
-        height += painter().boundingRect( const_cast<PrintingDialog*>( this )->printer().pageRect(), Qt::AlignTop, "Aj" ).height();
-        height *= 1.5;
+        height += m_textheight * 1.5;
     }
     if (  options.project == Qt::Checked && options.manager == Qt::Checked && ( options.date == Qt::Checked || options.page == Qt::Checked ) ) {
-        height *= 2.0;
+       height *= 2.0;
     }
+    kDebug(planDbg())<<height;
     return height;
 }
 
@@ -342,8 +464,8 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
 }
 
 //--------------
-ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
-    : KoView( doc, parent ),
+ViewBase::ViewBase(KoPart *part, KoDocument *doc, QWidget *parent)
+    : KoView(part, doc, parent),
     m_readWrite( false ),
     m_proj( 0 ),
     m_schedulemanager( 0 )
@@ -358,9 +480,25 @@ ViewBase::~ViewBase()
     }
 }
 
+void ViewBase::setProject( Project *project )
+{
+    m_proj = project;
+    emit projectChanged( project );
+}
+
 KoDocument *ViewBase::part() const
 {
      return koDocument();
+}
+
+KoPageLayout ViewBase::pageLayout() const
+{
+    return m_pagelayout;
+}
+
+void ViewBase::setPageLayout( const KoPageLayout &layout )
+{
+    m_pagelayout = layout;
 }
 
 bool ViewBase::isActive() const
@@ -379,11 +517,12 @@ bool ViewBase::isActive() const
 void ViewBase::updateReadWrite( bool readwrite )
 {
     m_readWrite = readwrite;
+    emit readWriteChanged( readwrite );
 }
 
 void ViewBase::setGuiActive( bool active ) // virtual slot
 {
-    //kDebug()<<active;
+    //kDebug(planDbg())<<active;
     emit guiActivated( this, active );
 }
 
@@ -399,9 +538,40 @@ KoPrintJob *ViewBase::createPrintJob()
     return 0;
 }
 
+/*static*/
+QWidget *ViewBase::createPageLayoutWidget( ViewBase *view )
+{
+    QWidget *widget = new QWidget();
+    widget->setWindowTitle( i18nc( "@title:tab", "Page Layout" ) );
+
+    QHBoxLayout *lay = new QHBoxLayout(widget);
+
+    KoPageLayoutWidget *w = new KoPageLayoutWidget( widget, view->pageLayout() );
+    w->showPageSpread( false );
+    lay->addWidget( w, 1 );
+
+    KoPagePreviewWidget *prev = new KoPagePreviewWidget( widget );
+    prev->setPageLayout( view->pageLayout() );
+    lay->addWidget( prev, 1 );
+
+    connect (w, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
+
+    return widget;
+}
+
+/*static*/
+PrintingHeaderFooter *ViewBase::createHeaderFooterWidget( ViewBase *view )
+{
+    PrintingHeaderFooter *widget = new PrintingHeaderFooter( view->printingOptions() );
+    widget->setWindowTitle( i18nc( "@title:tab", "Header and Footer" ) );
+    widget->setOptions( view->printingOptions() );
+
+    return widget;
+}
+
 void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    kDebug(planDbg());
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos, lst.first() );
@@ -425,6 +595,79 @@ void ViewBase::slotOptionsFinished( int result )
     }
 }
 
+bool ViewBase::loadContext( const KoXmlElement &context )
+{
+    KoXmlElement me;
+    forEachElement( me, context ) {
+        if ( me.tagName() == "page-layout" ) {
+            m_pagelayout.format = KoPageFormat::formatFromString( me.attribute( "format" ) );
+            m_pagelayout.orientation = me.attribute( "orientation" ) == "landscape" ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+            m_pagelayout.width = me.attribute( "width", "0.0" ).toDouble();
+            m_pagelayout.height = me.attribute( "height", "0.0" ).toDouble();
+            m_pagelayout.leftMargin = me.attribute( "left-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.rightMargin = me.attribute( "right-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.topMargin = me.attribute( "top-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+            m_pagelayout.bottomMargin = me.attribute( "bottom-margin", QString::number( MM_TO_POINT( 20.0 ) ) ).toDouble();
+        } else if ( me.tagName() == "printing-options" ) {
+            m_printingOptions.loadXml( me );
+        } else if ( me.tagName() == "dockers" ) {
+            KoXmlElement e;
+            forEachElement ( e, me ) {
+                DockWidget *ds = findDocker( e.attribute( "id" ) );
+                if ( ds ) {
+                    ds->loadXml( e );
+                }
+            }
+        }
+    }
+    return true;
+}
+
+void ViewBase::saveContext( QDomElement &context ) const
+{
+    QDomElement me = context.ownerDocument().createElement( "page-layout" );
+    context.appendChild( me );
+    me.setAttribute( "format", KoPageFormat::formatString( m_pagelayout.format ) );
+    me.setAttribute( "orientation", m_pagelayout.orientation == KoPageFormat::Portrait ? "portrait" : "landscape" );
+    me.setAttribute( "width", m_pagelayout.width );
+    me.setAttribute( "height",m_pagelayout. height );
+    me.setAttribute( "left-margin", m_pagelayout.leftMargin );
+    me.setAttribute( "right-margin", m_pagelayout.rightMargin );
+    me.setAttribute( "top-margin", m_pagelayout.topMargin );
+    me.setAttribute( "bottom-margin", m_pagelayout.bottomMargin );
+
+    m_printingOptions.saveXml( context );
+
+    if ( ! m_dockers.isEmpty() ) {
+        QDomElement e = context.ownerDocument().createElement( "dockers" );
+        context.appendChild( e );
+        foreach ( const DockWidget *ds, m_dockers ) {
+            ds->saveXml( e );
+        }
+    }
+}
+
+void ViewBase::addDocker( DockWidget *ds )
+{
+    addAction( "view_docker_list", ds->toggleViewAction() );
+    m_dockers << ds;
+}
+
+QList<DockWidget*> ViewBase::dockers() const
+{
+    return m_dockers;
+}
+
+DockWidget* ViewBase::findDocker( const QString &id ) const
+{
+    foreach ( DockWidget *ds, m_dockers ) {
+        if ( ds->id == id ) {
+            return ds;
+        }
+    }
+    return 0;
+}
+
 //----------------------
 TreeViewPrintingDialog::TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview, Project *project )
     : PrintingDialog( view ),
@@ -432,12 +675,15 @@ TreeViewPrintingDialog::TreeViewPrintingDialog( ViewBase *view, TreeViewBase *tr
     m_project( project ),
     m_firstRow( -1 )
 {
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
 int TreeViewPrintingDialog::documentLastPage() const
 {
     int page = documentFirstPage();
-    while ( firstRow( page ) != -1 ) { ++page; }
+    while ( firstRow( page ) != -1 ) {
+        ++page;
+    }
     if ( page > documentFirstPage() ) {
         --page;
     }
@@ -446,7 +692,7 @@ int TreeViewPrintingDialog::documentLastPage() const
 
 int TreeViewPrintingDialog::firstRow( int page ) const
 {
-    kDebug()<<page;
+    kDebug(planDbg())<<page;
     int pageNumber = page - documentFirstPage();
     QHeaderView *mh = m_tree->header();
     int height = mh->height();
@@ -477,7 +723,7 @@ int TreeViewPrintingDialog::firstRow( int page ) const
         row = 0;
         while ( idx.isValid() ) {
             if ( row >= rowsPrPage * pageNumber ) {
-                kDebug()<<page<<pageNumber;
+                kDebug(planDbg())<<page<<pageNumber;
                 break;
             }
             ++row;
@@ -487,7 +733,7 @@ int TreeViewPrintingDialog::firstRow( int page ) const
             row = -1;
         }
     }
-    kDebug()<<row<<rowsPrPage;
+    kDebug(planDbg())<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
     return row;
 }
 
@@ -501,8 +747,6 @@ QList<QWidget*> TreeViewPrintingDialog::createOptionWidgets() const
 
 void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
-    painter.save();
-
     m_firstRow = firstRow( page );
 
     QHeaderView *mh = m_tree->header();
@@ -516,7 +760,7 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     QAbstractItemModel *model = m_tree->model();
 
-    kDebug()<<pageRect<<paperRect;
+    kDebug(planDbg())<<pageRect<<paperRect;
 
     painter.translate( pageRect.topLeft() );
 
@@ -555,19 +799,18 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
             QRect r( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height );
             painter.drawRect( r );
             painter.drawText( r, align, text );
-            //kDebug()<<text<<r<<r.left() * sx<<align;
+            //kDebug(planDbg())<<text<<r<<r.left() * sx<<align;
         }
-        //kDebug()<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
+        //kDebug(planDbg())<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
     }
     if ( m_firstRow == -1 ) {
-        kDebug()<<"No data";
-        painter.restore();
+        kDebug(planDbg())<<"No data";
         return;
     }
     painter.setBrush( QBrush() );
     QModelIndex idx = model->index( m_firstRow, 0, QModelIndex() );
     int numRows = 0;
-    //kDebug()<<page<<rowsPrPage;
+    //kDebug(planDbg())<<page<<rowsPrPage;
     while ( idx.isValid() && numRows < rowsPrPage ) {
         painter.translate( 0, height );
         h += height;
@@ -586,7 +829,6 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
         ++numRows;
         idx = m_tree->indexBelow( idx );
     }
-    painter.restore();
 }
 
 /**
@@ -603,6 +845,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
     m_readWrite( false )
 
 {
+    setDefaultDropAction( Qt::MoveAction );
     setItemDelegate( new ItemDelegate( this ) );
     setAlternatingRowColors ( true );
 
@@ -611,10 +854,16 @@ TreeViewBase::TreeViewBase( QWidget *parent )
     connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
+void TreeViewBase::dropEvent( QDropEvent *e )
+{
+    kDebug(planDbg());
+    QTreeView::dropEvent( e );
+}
+
 KoPrintJob * TreeViewBase::createPrintJob( ViewBase *parent )
 {
     TreeViewPrintingDialog *dia = new TreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator("KPlato 0.7");
+    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -639,13 +888,13 @@ void TreeViewBase::createItemDelegates( ItemModelBase *model )
 
 void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
 {
-    //kDebug();
+    //kDebug(planDbg());
     emit headerContextMenuRequested( header()->mapToGlobal( pos ) );
 }
 
 void TreeViewBase::setColumnsHidden( const QList<int> &lst )
 {
-    //kDebug()<<m_hideList;
+    //kDebug(planDbg())<<m_hideList;
     int prev = -1;
     QList<int> xlst;
     foreach ( int c, lst ) {
@@ -725,7 +974,7 @@ QModelIndex TreeViewBase::lastEditable( int row, const QModelIndex &parent )
 // Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
 void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
-    //kDebug()<<objectName()<<index<<hint;
+    //kDebug(planDbg())<<objectName()<<index<<hint;
     if ( ! hasFocus() ) {
         return;
     }
@@ -751,7 +1000,7 @@ void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 
 void TreeViewBase::focusInEvent(QFocusEvent *event)
 {
-    //kDebug()<<event->reason();
+    //kDebug(planDbg())<<event->reason();
     QAbstractScrollArea::focusInEvent(event); //NOTE: not QTreeView
     if ( event->reason() == Qt::MouseFocusReason ) {
         return;
@@ -776,7 +1025,7 @@ void TreeViewBase::focusInEvent(QFocusEvent *event)
  */
 void TreeViewBase::keyPressEvent(QKeyEvent *event)
 {
-    //kDebug()<<objectName()<<event->key()<<","<<m_arrowKeyNavigation;
+    //kDebug(planDbg())<<objectName()<<event->key()<<","<<m_arrowKeyNavigation;
     if ( !m_arrowKeyNavigation ) {
         QTreeView::keyPressEvent( event );
         return;
@@ -862,7 +1111,7 @@ void TreeViewBase::mousePressEvent(QMouseEvent *event)
     // If  the mouse is pressed outside any item, the current item should be/remain selected
     QPoint pos = event->pos();
     QModelIndex index = indexAt(pos);
-    kDebug()<<index<<event->pos();
+    kDebug(planDbg())<<index<<event->pos();
     if ( ! index.isValid() ) {
         index = selectionModel()->currentIndex();
         if ( index.isValid() && ! selectionModel()->isSelected( index ) ) {
@@ -870,7 +1119,7 @@ void TreeViewBase::mousePressEvent(QMouseEvent *event)
             QMouseEvent e( event->type(), pos, mapToGlobal( pos ), event->button(), event->buttons(), event->modifiers() );
             QTreeView::mousePressEvent( &e );
             event->setAccepted( e.isAccepted() );
-            kDebug()<<index<<e.pos();
+            kDebug(planDbg())<<index<<e.pos();
         }
         return;
     }
@@ -879,7 +1128,7 @@ void TreeViewBase::mousePressEvent(QMouseEvent *event)
 
 void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
 {
-    //kDebug()<<editor<<hint;
+    //kDebug(planDbg())<<editor<<hint;
     ItemDelegate *delegate = ::qobject_cast<ItemDelegate*>( sender() );
     if ( delegate == 0 ) {
         kWarning()<<"Not a KPlato::ItemDelegate, try standard treatment"<<editor<<hint;
@@ -906,12 +1155,12 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
             index = moveToEditable( currentIndex(), MoveUp );
             break;
         default:
-            //kDebug()<<"Standard treatment"<<editor<<hint;
+            //kDebug(planDbg())<<"Standard treatment"<<editor<<hint;
             return QTreeView::closeEditor( editor, hint ); // standard treatment
     }
     if (index.isValid()) {
         QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | selectionBehaviorFlags();
-        //kDebug()<<flags;
+        //kDebug(planDbg())<<flags;
         QPersistentModelIndex persistent(index);
         selectionModel()->setCurrentIndex(persistent, flags);
         // currentChanged signal would have already started editing
@@ -927,7 +1176,7 @@ QModelIndex TreeViewBase::moveToEditable( const QModelIndex &index, CursorAction
     do {
         ix = moveCursor( ix, cursorAction );
     } while ( ix.isValid() &&  ! ( model()->flags( ix ) & Qt::ItemIsEditable ) );
-    //kDebug()<<ix;
+    //kDebug(planDbg())<<ix;
     if ( ! ix.isValid() ) {
         switch ( cursorAction ) {
             case MovePrevious:
@@ -950,7 +1199,7 @@ QModelIndex TreeViewBase::moveToEditable( const QModelIndex &index, CursorAction
 QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers )
 {
     QModelIndex current = currentIndex();
-    //kDebug()<<cursorAction<<current;
+    //kDebug(planDbg())<<cursorAction<<current;
     if (!current.isValid()) {
         return QTreeView::moveCursor( cursorAction, modifiers );
     }
@@ -972,7 +1221,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
             // that has a column in current.column()
             ix = indexBelow( current );
             while ( ix.isValid() && col >= model()->columnCount(ix.parent()) ) {
-                //kDebug()<<col<<model()->columnCount(ix.parent())<<ix;
+                //kDebug(planDbg())<<col<<model()->columnCount(ix.parent())<<ix;
                 ix = indexBelow( ix );
             }
             if ( ix.isValid() ) {
@@ -1061,7 +1310,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
 
 void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
 {
-    //kDebug();
+    //kDebug(planDbg());
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
@@ -1112,10 +1361,10 @@ int TreeViewBase::section( int col ) const
 
 void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 {
-    //kDebug();
+    //kDebug(planDbg());
     if (dragDropMode() == InternalMove
         && (event->source() != this || !(event->possibleActions() & Qt::MoveAction))) {
-        //kDebug()<<"Internal:"<<event->isAccepted();
+        //kDebug(planDbg())<<"Internal:"<<event->isAccepted();
         return;
     }
     QTreeView::dragMoveEvent( event );
@@ -1123,17 +1372,24 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
         if ( ! m_acceptDropsOnView ) {
             event->ignore();
         }
-        //kDebug()<<"On viewport:"<<event->isAccepted();
-        return;
+        kDebug(planDbg())<<"On viewport:"<<event->isAccepted();
+    } else {
+        QModelIndex index = indexAt( event->pos() );
+        if ( index.isValid() ) {
+            emit dropAllowed( index, dropIndicatorPosition(), event );
+        } else {
+            event->ignore();
+            kDebug(planDbg())<<"Invalid index:"<<event->isAccepted();
+        }
     }
-    QModelIndex index = indexAt( event->pos() );
-    if ( ! index.isValid() ) {
-        event->ignore();
-        //kDebug()<<"Invalid index:"<<event->isAccepted();
-        return;
+    if ( event->isAccepted() ) {
+        if ( viewport()->cursor().shape() == Qt::ForbiddenCursor ) {
+            viewport()->unsetCursor();
+        }
+    } else if ( viewport()->cursor().shape() != Qt::ForbiddenCursor ) {
+        viewport()->setCursor( Qt::ForbiddenCursor );
     }
-    emit dropAllowed( index, dropIndicatorPosition(), event );
-    //kDebug()<<event->isAccepted();
+    kDebug(planDbg())<<event->isAccepted()<<viewport()->cursor().shape();
 }
 
 QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
@@ -1150,32 +1406,33 @@ QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
 
 bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
-    //kDebug()<<objectName();
+    //kDebug(planDbg())<<objectName();
+    header()->setStretchLastSection( (bool)( element.attribute( "stretch-last-column", "1" ).toInt() ) );
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
         if ( ! map.isValid() ) {
             // try numbers
-            kDebug()<<"invalid map";
+            kDebug(planDbg())<<"invalid map";
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
                 QString s = e.attribute( QString( "column-%1" ).arg( i ), "" );
                 if ( s == "hidden" ) {
                     hideColumn( i );
                 } else if ( s == "shown" ) {
                     showColumn( i );
-                } else kDebug()<<objectName()<<"Unknown column:"<<s;
+                } else kDebug(planDbg())<<objectName()<<"Unknown column:"<<s;
             }
         } else {
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
                 QString n = map.key( i );
-                //kDebug()<<i<<"="<<n;
+                //kDebug(planDbg())<<i<<"="<<n;
                 if ( ! n.isEmpty() ) {
                     QString s = e.attribute( n, "" );
                     if ( s == "hidden" ) {
                         hideColumn( i );
                     } else if ( s == "shown" ) {
                         showColumn( i );
-                    } else kDebug()<<objectName()<<"Unknown column:"<<s;
-                } else kDebug()<<"Column not in enum:"<<i;
+                    } else kDebug(planDbg())<<objectName()<<"Unknown column:"<<s;
+                } else kDebug(planDbg())<<"Column not in enum:"<<i;
             }
         }
     }
@@ -1194,14 +1451,21 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
                 }
             }
         } else {
+            QMap<int, int > m; // QMap<destination, column>
             for ( int i = 0; i < h->count(); ++i ) {
-                QString n = map.key( i );
-                if ( ! n.isEmpty() ) {
-                    int col = map.keyToValue( e.attribute( s.arg( i ), "" ).toUtf8() );
-                    if ( col >= 0 && col < h->count() ) {
-                        header()->moveSection( h->visualIndex( col ), i );
-                    }
+                QString n = e.attribute( s.arg( i ) );
+                if ( n.isEmpty() ) {
+                    continue;
                 }
+                int col = map.keyToValue( n.toUtf8() );
+                if ( col >= 0 && col < h->count() ) {
+                    m.insert( i, col );
+                }
+            }
+            for ( QMap<int, int>::const_iterator it = m.constBegin(); it != m.constEnd(); ++it ) {
+                QString n = e.attribute( s.arg( it.key() ) );
+                int current = h->visualIndex( it.value() );
+                header()->moveSection( current, it.key() );
             }
         }
     }
@@ -1210,17 +1474,18 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
 
 void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
-    //kDebug()<<objectName();
+    //kDebug(planDbg())<<objectName();
+    element.setAttribute( "stretch-last-column", header()->stretchLastSection() );
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {
         bool h = isColumnHidden( i );
         if ( ! map.isValid() ) {
-            kDebug()<<"invalid map";
+            kDebug(planDbg())<<"invalid map";
             e.setAttribute( QString( "column-%1" ).arg( i ), h ? "hidden" : "shown" );
         } else {
             QString n = map.key( i );
-            //kDebug()<<i<<"="<<n;
+            //kDebug(planDbg())<<i<<"="<<n;
             if ( ! n.isEmpty() ) {
                 e.setAttribute( n, h ? "hidden" : "shown" );
             }
@@ -1243,6 +1508,17 @@ void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) con
     }
 }
 
+ItemModelBase *TreeViewBase::itemModel() const
+{
+    QAbstractItemModel *m = model();
+    QAbstractProxyModel *p = qobject_cast<QAbstractProxyModel*>( m );
+    while ( p ) {
+        m = p->sourceModel();
+        p = qobject_cast<QAbstractProxyModel*>( m );
+    }
+    return qobject_cast<ItemModelBase*>( m );
+}
+
 //----------------------
 DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview, Project *project )
     : PrintingDialog( view ),
@@ -1250,12 +1526,16 @@ DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, Doub
     m_project( project ),
     m_firstRow( -1 )
 {
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
 int DoubleTreeViewPrintingDialog::documentLastPage() const
 {
+    kDebug(planDbg())<<KoPageFormat::formatString( m_view->pageLayout().format );
     int page = documentFirstPage();
-    while ( firstRow( page ) != -1 ) { ++page; }
+    while ( firstRow( page ) != -1 ) {
+        ++page;
+    }
     if ( page > documentFirstPage() ) {
         --page;
     }
@@ -1264,7 +1544,7 @@ int DoubleTreeViewPrintingDialog::documentLastPage() const
 
 int DoubleTreeViewPrintingDialog::firstRow( int page ) const
 {
-    kDebug()<<page;
+    kDebug(planDbg())<<page;
     int pageNumber = page - documentFirstPage();
     QHeaderView *mh = m_tree->masterView()->header();
     QHeaderView *sh = m_tree->slaveView()->header();
@@ -1283,6 +1563,9 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
     }
     int rowsPrPage = pageHeight / height;
 
+    kDebug(planDbg())<<"rowsPrPage"<<rowsPrPage;
+    Q_ASSERT( rowsPrPage > 0 );
+
     int rows = m_tree->model()->rowCount();
     int row = -1;
     for ( int i = 0; i < rows; ++i ) {
@@ -1296,7 +1579,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
         row = 0;
         while ( idx.isValid() ) {
             if ( row >= rowsPrPage * pageNumber ) {
-                kDebug()<<page<<pageNumber;
+                kDebug(planDbg())<<page<<pageNumber;
                 break;
             }
             ++row;
@@ -1306,7 +1589,7 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
             row = -1;
         }
     }
-    kDebug()<<row<<rowsPrPage;
+    kDebug(planDbg())<<"Page"<<page<<":"<<(row==-1?"empty":"first row=")<<row<<"("<<rowsPrPage<<")";
     return row;
 }
 
@@ -1320,6 +1603,10 @@ QList<QWidget*> DoubleTreeViewPrintingDialog::createOptionWidgets() const
 
 void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
+    kDebug(planDbg())<<page<<"paper size:"<<printer().paperSize()<<"---------------------------";
+    setPrinterPageLayout( m_view->pageLayout() );
+    qreal t, l, b, r; printer().getPageMargins( &l, &t, &r, &b, QPrinter::Point );
+    kDebug(planDbg())<<page<<"paper size:"<<printer().paperSize()<<printer().pageRect()<<l<<t<<r<<b;
     painter.save();
 
     m_firstRow = firstRow( page );
@@ -1336,7 +1623,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     QAbstractItemModel *model = m_tree->model();
     Q_ASSERT( model != 0 );
-    kDebug()<<pageRect<<paperRect;
+    kDebug(planDbg())<<pageRect<<paperRect;
 
     painter.translate( pageRect.topLeft() );
 
@@ -1380,18 +1667,23 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
             painter.drawRect( r );
             painter.drawText( r, align, text );
         }
-        //kDebug()<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
+        //kDebug(planDbg())<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
     }
-    if ( m_firstRow == -1 ) {
-        kDebug()<<"No data";
+    if ( m_firstRow == -1 || model->rowCount() == 0 ) {
+        kDebug(planDbg())<<"No data";
         painter.restore();
         return;
     }
     painter.setBrush( QBrush() );
-    QModelIndex idx = model->index( m_firstRow, 0, QModelIndex() );
+
+    QModelIndex idx = model->index( 0, 0 );
+    for ( int r = 0; r < m_firstRow && idx.isValid(); ++r ) {
+        idx = m_tree->masterView()->indexBelow( idx );
+    }
     int numRows = 0;
-    //kDebug()<<page<<rowsPrPage;
+    //kDebug(planDbg())<<page<<rowsPrPage;
     while ( idx.isValid() && numRows < rowsPrPage ) {
+        kDebug(planDbg())<<"print:"<<idx;
         painter.translate( 0, height );
         h += height;
         for ( int i = 0; i < mh->count(); ++i ) {
@@ -1451,7 +1743,7 @@ DoubleTreeViewBase::~DoubleTreeViewBase()
 KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
 {
     DoubleTreeViewPrintingDialog *dia = new DoubleTreeViewPrintingDialog( parent, this, parent->project() );
-    dia->printer().setCreator("KPlato 0.7");
+    dia->printer().setCreator( QString( "Plan %1" ).arg( CALLIGRA_VERSION_STRING ) );
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
@@ -1463,7 +1755,7 @@ void DoubleTreeViewBase::expandAll()
 
 void DoubleTreeViewBase::setParentsExpanded( const QModelIndex &idx, bool expanded )
 {
-    //kDebug()<<idx<<m_leftview->isExpanded( idx )<<m_rightview->isExpanded( idx );
+    //kDebug(planDbg())<<idx<<m_leftview->isExpanded( idx )<<m_rightview->isExpanded( idx );
     QModelIndex p = model()->parent( idx );
     QList<QModelIndex> lst;
     while ( p.isValid() ) {
@@ -1474,7 +1766,7 @@ void DoubleTreeViewBase::setParentsExpanded( const QModelIndex &idx, bool expand
         p = lst.takeLast();
         m_leftview->setExpanded( p, expanded );
         m_rightview->setExpanded( m_rightview->firstVisibleIndex( p ), expanded ); //HACK: qt can't handle that column 0 is hidden!
-        //kDebug()<<p<<m_leftview->isExpanded( p )<<m_rightview->isExpanded( p );
+        //kDebug(planDbg())<<p<<m_leftview->isExpanded( p )<<m_rightview->isExpanded( p );
     }
 }
 
@@ -1525,15 +1817,29 @@ void DoubleTreeViewBase::init()
     connect( m_rightview->header(), SIGNAL( sortIndicatorChanged( int, Qt::SortOrder ) ), SLOT( slotRightSortIndicatorChanged( int, Qt::SortOrder ) ) );
 }
 
-void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int /*logicalIndex*/, Qt::SortOrder /*order*/ )
+void DoubleTreeViewBase::slotLeftSortIndicatorChanged( int logicalIndex, Qt::SortOrder /*order*/ )
 {
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    if ( sf ) {
+        ItemModelBase *m = m_rightview->itemModel();
+        if ( m ) {
+            sf->setSortRole( m->sortRole( logicalIndex ) );
+        }
+    }
     m_leftview->header()->setSortIndicatorShown( true );
     // sorting controlled by left treeview, turn right off
     m_rightview->header()->setSortIndicatorShown( false );
 }
 
-void DoubleTreeViewBase::slotRightSortIndicatorChanged( int /*logicalIndex*/, Qt::SortOrder /*order*/ )
+void DoubleTreeViewBase::slotRightSortIndicatorChanged( int logicalIndex, Qt::SortOrder /*order*/ )
 {
+    QSortFilterProxyModel *sf = qobject_cast<QSortFilterProxyModel*>( model() );
+    if ( sf ) {
+        ItemModelBase *m = m_rightview->itemModel();
+        if ( m ) {
+            sf->setSortRole( m->sortRole( logicalIndex ) );
+        }
+    }
     m_rightview->header()->setSortIndicatorShown( true );
     // sorting controlled by right treeview, turn left off
     m_leftview->header()->setSortIndicatorShown( false );
@@ -1571,12 +1877,12 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, const QList<
         QList<int> lst;
         for ( int c = 0; c < model()->columnCount(); ++c ) {
             // only hide columns hidden in *both* views
-            //kDebug()<<c<<(mlst.indexOf( c ))<<(slst.indexOf( c ));
+            //kDebug(planDbg())<<c<<(mlst.indexOf( c ))<<(slst.indexOf( c ));
             if ( (mlst.indexOf( c ) >= 0) && (slst.indexOf( c ) >= 0) ) {
                 lst << c;
             }
         }
-        //kDebug()<<lst;
+        //kDebug(planDbg())<<lst;
         m_leftview->setColumnsHidden( lst );
     } else {
         setStretchFactors();
@@ -1585,7 +1891,7 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, const QList<
 
 void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 {
-    //kDebug()<<index.column();
+    //kDebug(planDbg())<<index.column();
     QModelIndex nxt = m_rightview->firstColumn( index.row(), model()->parent( index ) );
     m_rightview->setFocus();
     if ( nxt.isValid() ) {
@@ -1595,7 +1901,7 @@ void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 {
-    //kDebug()<<index.column();
+    //kDebug(planDbg())<<index.column();
     QModelIndex prv = m_leftview->lastColumn( index.row(), model()->parent( index ) );
     m_leftview->setFocus();
     if ( prv.isValid() ) {
@@ -1605,7 +1911,7 @@ void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotEditToRightView( const QModelIndex &index )
 {
-    //kDebug()<<index.column()<<endl;
+    //kDebug(planDbg())<<index.column()<<endl;
     if ( m_rightview->isHidden() ) {
         return;
     }
@@ -1621,7 +1927,7 @@ void DoubleTreeViewBase::slotEditToRightView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotEditToLeftView( const QModelIndex &index )
 {
-    //kDebug()<<index.column()<<endl;
+    //kDebug(planDbg())<<index.column()<<endl;
     if ( m_leftview->isHidden() ) {
         return;
     }
@@ -1641,6 +1947,12 @@ void DoubleTreeViewBase::setReadWrite( bool rw )
     m_readWrite = rw;
     m_leftview->setReadWrite( rw );
     m_rightview->setReadWrite( rw );
+}
+
+void DoubleTreeViewBase::closePersistentEditor( const QModelIndex &index )
+{
+    m_leftview->closePersistentEditor( index );
+    m_rightview->closePersistentEditor( index );
 }
 
 void DoubleTreeViewBase::setModel( QAbstractItemModel *model )
@@ -1733,38 +2045,55 @@ void DoubleTreeViewBase::edit( const QModelIndex &index )
 void DoubleTreeViewBase::setDragDropMode( QAbstractItemView::DragDropMode mode )
 {
     m_leftview->setDragDropMode( mode );
+    m_rightview->setDragDropMode( mode );
+}
+
+void DoubleTreeViewBase::setDragDropOverwriteMode( bool mode )
+{
+    m_leftview->setDragDropOverwriteMode( mode );
+    m_rightview->setDragDropOverwriteMode( mode );
 }
 
 void DoubleTreeViewBase::setDropIndicatorShown( bool mode )
 {
     m_leftview->setDropIndicatorShown( mode );
+    m_rightview->setDropIndicatorShown( mode );
 }
 
 void DoubleTreeViewBase::setDragEnabled ( bool mode )
 {
     m_leftview->setDragEnabled( mode );
+    m_rightview->setDragEnabled( mode );
 }
 
 void DoubleTreeViewBase::setAcceptDrops( bool mode )
 {
     m_leftview->setAcceptDrops( mode );
+    m_rightview->setAcceptDrops( mode );
 }
 
 void DoubleTreeViewBase::setAcceptDropsOnView( bool mode )
 {
     m_leftview->setAcceptDropsOnView( mode );
+    m_rightview->setAcceptDropsOnView( mode );
+}
+
+void DoubleTreeViewBase::setDefaultDropAction( Qt::DropAction action )
+{
+    m_leftview->setDefaultDropAction( action );
+    m_rightview->setDefaultDropAction( action );
 }
 
 void DoubleTreeViewBase::slotRightHeaderContextMenuRequested( const QPoint &pos )
 {
-    //kDebug();
+    //kDebug(planDbg());
     emit slaveHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
 
 void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
 {
-    //kDebug();
+    //kDebug(planDbg());
     emit masterHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
@@ -1774,33 +2103,33 @@ void DoubleTreeViewBase::setStretchFactors()
     int lc = m_leftview->header()->count() - m_leftview->header()->hiddenSectionCount();
     int rc = m_rightview->header()->count() - m_rightview->header()->hiddenSectionCount();
     setStretchFactor( indexOf( m_rightview ), qMax( 1, qMin( 4, rc / qMax( 1, lc ) ) ) );
-    //kDebug()<<this<<"set stretch factor="<<qMax( 1, qMin( 4, rc / lc ) );
+    //kDebug(planDbg())<<this<<"set stretch factor="<<qMax( 1, qMin( 4, rc / lc ) );
 }
 
 bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
-    //kDebug();
+    //kDebug(planDbg());
     QList<int> lst1;
     QList<int> lst2;
-    KoXmlElement e = element.namedItem( "master" ).toElement();
+    KoXmlElement e = element.namedItem( "slave" ).toElement();
     if ( ! e.isNull() ) {
-        m_leftview->loadContext( map, e );
-    }
-    e = element.namedItem( "slave" ).toElement();
-    if ( ! e.isNull() ) {
-        m_rightview->loadContext( map, e );
         if ( e.attribute( "hidden", "false" ) == "true" ) {
             setViewSplitMode( false );
         } else {
             setStretchFactors();
         }
+        m_rightview->loadContext( map, e );
+    }
+    e = element.namedItem( "master" ).toElement();
+    if ( ! e.isNull() ) {
+        m_leftview->loadContext( map, e );
     }
     return true;
 }
 
 void DoubleTreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
-    //kDebug()<<objectName();
+    //kDebug(planDbg())<<objectName();
     QDomElement e = element.ownerDocument().createElement( "master" );
     element.appendChild( e );
     m_leftview->saveContext( map, e );

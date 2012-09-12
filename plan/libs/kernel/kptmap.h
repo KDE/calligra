@@ -24,7 +24,7 @@
 #include "kptcalendar.h"
 
 #include <QMap>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <QString>
 #include <QPair>
 

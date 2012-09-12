@@ -176,13 +176,13 @@ GraphicsScene::GraphicsScene( QObject* parent )
     init();
 }
 
+#define d d_func()
 GraphicsScene::~GraphicsScene()
 {
     clearConstraintItems();
     clearItems();
+    delete d;
 }
-
-#define d d_func()
 
 void GraphicsScene::init()
 {

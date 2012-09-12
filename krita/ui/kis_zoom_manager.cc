@@ -39,6 +39,7 @@
 #include <KoGlobal.h>
 #include <KoRulerController.h>
 
+#include "kis_doc2.h"
 #include "kis_view2.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_coordinates_converter.h"
@@ -54,12 +55,8 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_horizontalRuler(0)
         , m_verticalRuler(0)
         , m_zoomAction(0)
-        , m_zoomIn(0)
-        , m_zoomOut(0)
-        , m_actualPixels(0)
-        , m_actualSize(0)
-        , m_fitToCanvas(0)
         , m_zoomActionWidget(0)
+        , m_100pct(0)
 {
 }
 
@@ -72,8 +69,8 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
-    KoZoomMode::setMinimumZoom(0.00391);
-    KoZoomMode::setMaximumZoom(256.0);
+    KoZoomMode::setMinimumZoom(0.125);
+    KoZoomMode::setMaximumZoom(64.0);
 
     KisConfig cfg;
     m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
@@ -96,6 +93,11 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
                                           "and can be used to position your mouse at the right place on the canvas. <p>Uncheck this to hide the rulers."));
     connect(m_showRulersAction, SIGNAL(toggled(bool)), SLOT(toggleShowRulers(bool)));
 
+    m_100pct = new KAction(i18n("Reset zoom"), this);
+    actionCollection->addAction("zoom_to_100pct", m_100pct);
+    m_100pct->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_0 ) );
+    connect(m_100pct, SIGNAL(triggered()), SLOT(zoomTo100()));
+
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout(m_view);
     layout->setSpacing(0);
@@ -114,6 +116,14 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     m_verticalRuler->setUnit(KoUnit(KoUnit::Point));
     m_verticalRuler->setVisible(show);
     m_showRulersAction->setChecked(show);
+
+    QList<QAction*> unitActions = m_view->createChangeUnitActions();
+    m_horizontalRuler->setPopupActionList(unitActions);
+    m_verticalRuler->setPopupActionList(unitActions);
+
+    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_horizontalRuler, SLOT(setUnit(const KoUnit&)));
+    connect(m_view->document(), SIGNAL(unitChanged(const KoUnit&)), m_verticalRuler, SLOT(setUnit(const KoUnit&)));
+
 
     layout->addWidget(m_horizontalRuler, 0, 1);
     layout->addWidget(m_verticalRuler, 1, 0);
@@ -187,6 +197,7 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
         m_zoomHandler->setResolutionToStandard();
 
     m_zoomController->setZoom(m_zoomHandler->zoomMode(), m_zoomHandler->zoom());
+    m_view->canvasBase()->notifyZoomChanged();
 }
 
 
@@ -194,6 +205,12 @@ void KisZoomManager::pageOffsetChanged()
 {
     m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x());
     m_verticalRuler->setOffset(m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y());
+}
+
+void KisZoomManager::zoomTo100()
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+    m_view->canvasBase()->notifyZoomChanged();
 }
 
 

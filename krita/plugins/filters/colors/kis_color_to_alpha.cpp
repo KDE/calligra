@@ -19,15 +19,14 @@
  */
 
 #include "kis_color_to_alpha.h"
-#include <qcheckbox.h>
-#include <qspinbox.h>
+#include <QCheckBox>
+#include <QSpinBox>
 
 #include <kcolorbutton.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
@@ -88,13 +87,12 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
 
     do {
         quint8 d = cs->difference(color, it->oldRawData());
-        qreal newOpacity; // = cs->opacityF(srcIt.rawData());
+        qreal newOpacity; // = cs->opacityF(srcIt->rawData());
         if (d >= threshold) {
             newOpacity = 1.0;
         } else {
             newOpacity = d / thresholdF;
         }
-        memcpy(it->rawData(), it->rawData(), pixelsize);
         if(newOpacity < cs->opacityF(it->rawData()))
         {
           cs->setOpacity(it->rawData(), newOpacity, 1);

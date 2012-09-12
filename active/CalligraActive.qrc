@@ -1,12 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/words.png</file>
-        <file>images/tables.png</file>
-        <file>images/stage.png</file>
-        <file>images/arrow-down.png</file>
-        <file>images/arrow-up.png</file>
-        <file>images/arrow-left.png</file>
-        <file>images/arrow-right.png</file>
-        <file>images/tab-detach.png</file>
+        <file>images/fabrictexture.png</file>
+        <file>images/calligra-logo.png</file>
     </qresource>
 </RCC>

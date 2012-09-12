@@ -20,9 +20,9 @@
 #ifndef KEXISHAREDACTIONHOST_H
 #define KEXISHAREDACTIONHOST_H
 
-#include <qpointer.h>
-#include <qobject.h>
-#include <qpair.h>
+#include <QPointer>
+#include <QObject>
+#include <QPair>
 
 #include <kstandardaction.h>
 #include <kaction.h>
@@ -82,8 +82,7 @@ public:
     /*! \return window widget that is currently focused (using QWidget::focusWidget())
      and matches acceptsSharedActions(). If focused widget does not match,
      it's parent, grandparent, and so on is checked. If all this fails,
-     or no widget has focus, NULL is returned.
-     Also works if currently focused window is detached (as in KMDI).
+     or no widget has focus, 0 is returned.
      */
     QWidget* focusWindow();
 

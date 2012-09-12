@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
-#include <KoResourceManager.h>
 #include <commands/KoShapeShearCommand.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeTransformCommand.h>

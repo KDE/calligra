@@ -45,7 +45,7 @@ public:
     
     /** Reimplemented methods */
     
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
 
     virtual void saveOdf(KoShapeSavingContext &context) const;
 

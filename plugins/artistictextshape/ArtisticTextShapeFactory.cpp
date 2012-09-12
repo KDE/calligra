@@ -29,12 +29,12 @@ ArtisticTextShapeFactory::ArtisticTextShapeFactory()
     : KoShapeFactoryBase(ArtisticTextShapeID, i18n("ArtisticTextShape"))
 {
     setToolTip(i18n("A shape which shows a single text line"));
-    setIcon( "text" );
+    setIcon( "x-shape-text-artistic" );
     setLoadingPriority( 5 );
     setXmlElementNames(KoXmlNS::svg, QStringList("text"));
 }
 
-KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *ArtisticTextShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     ArtisticTextShape * text = new ArtisticTextShape();
     text->setBackground( new KoColorBackground( QColor( Qt::black) ) );

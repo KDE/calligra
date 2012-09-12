@@ -19,6 +19,7 @@
 #include "kis_colorsmudgeop.h"
 
 #include <cmath>
+#include <memory>
 #include <QRect>
 
 #include <KoColorSpaceRegistry.h>
@@ -37,7 +38,8 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     KisBrushBasedPaintOp(settings, painter),
     m_firstRun(true), m_tempDev(0), m_image(image),
     m_smudgeRateOption("SmudgeRate"),
-    m_colorRateOption("ColorRate")
+    m_colorRateOption("ColorRate"),
+    m_smudgeAccessor(painter->device()->createRandomAccessorNG(0, 0))
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -73,19 +75,6 @@ KisColorSmudgeOp::~KisColorSmudgeOp()
 
 void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale, double rotation)
 {
-    /*
-    // Extract the brush mask (m_maskDab) from brush with the correct scaled size
-    if(m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
-        // This is for bitmap brushes
-        m_maskDab    = m_brush->paintDevice(painter()->device()->colorSpace(), scale, rotation, info, 0.0, 0.0);
-        m_maskBounds = m_maskDab->bounds();
-    } else {
-        // This is for parametric brushes, those created in the Autobrush popup config dialogue
-        m_maskDab = cachedDab();
-        m_brush->mask(m_maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
-        m_maskBounds = m_maskDab->bounds();
-    }//*/
-     
     // Extract the brush mask (m_maskDab) from brush with the correct scaled size
     if(m_brush->brushType() == IMAGE || m_brush->brushType() == PIPE_IMAGE) {
         // This is for bitmap brushes
@@ -132,7 +121,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
-    qreal diagonal = std::sqrt(brush->width()*brush->width() + brush->height()*brush->height());
+    qreal diagonal = std::sqrt((qreal)brush->width()*brush->width() + brush->height()*brush->height());
     
     // don't paint anything if the brush is too samll
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
@@ -162,9 +151,9 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         if(m_image && m_overlayModeOption.isChecked() && !m_colorRateOption.isChecked()) {
             painter()->setCompositeOp(COMPOSITE_COPY);
             painter()->setOpacity(OPACITY_OPAQUE_U8);
-            m_image->lock();
+            m_image->blockUpdates();
             painter()->bitBlt(x, y, m_image->projection(), x, y, m_maskBounds.width(), m_maskBounds.height());
-            m_image->unlock();
+            m_image->unblockUpdates();
         }
         
         // set opacity calculated by the rate option
@@ -184,9 +173,9 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     if(m_image && m_overlayModeOption.isChecked()) {
         m_tempPainter->setCompositeOp(COMPOSITE_COPY);
         m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
-        m_image->lock();
+        m_image->blockUpdates();
         m_tempPainter->bitBlt(0, 0, m_image->projection(), x, y, m_maskBounds.width(), m_maskBounds.height());
-        m_image->unlock();
+        m_image->unblockUpdates();
     }
     else {
         // IMPORTANT: clear the temporary painting device to color black with zero opacity
@@ -195,14 +184,26 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     
     // reset composite mode and opacity
-    // then cut out the area from the canvas under the brush
-    // and blit it to the temporary painting device
     m_tempPainter->setCompositeOp(COMPOSITE_OVER);
     m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
-    m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, m_maskBounds.width(), m_maskBounds.height());
+    
+    if(m_smudgeRateOption.getMode() == KisSmudgeOption::SMEARING_MODE) {
+        // cut out the area from the canvas under the brush
+        // and blit it to the temporary painting device
+        m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, m_maskBounds.width(), m_maskBounds.height());
+    }
+    else {
+        KoColorSpace* cs    = painter()->device()->colorSpace();
+        qint32        px    = x + m_maskBounds.width()  / 2;
+        qint32        py    = y + m_maskBounds.height() / 2;
+        // get the pixel on the canvas that lies beneath the center
+        // of the dab and fill  the temporary paint device with that color
+        m_smudgeAccessor->moveTo(px, py);
+        m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), KoColor(m_smudgeAccessor->rawData(), cs));
+    }
     
     // if the user selected the color smudge option
-    // we will mix some color into the temorary painting device (m_tempDev)
+    // we will mix some color into the temporary painting device (m_tempDev)
     if(m_colorRateOption.isChecked()) {
         // this will apply the opacy (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))

@@ -21,11 +21,12 @@
 #include "PresentationViewPortShape.h"
 
 #include <KoShapeFactoryBase.h>
-#include "KoLineBorder.h"
+//#include "KoLineBorder.h"
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
+#include <KoDocumentResourceManager.h>
 
 #include <klocale.h>
 
@@ -43,7 +44,7 @@ PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * par
 
 }
 
-KoShape *PresentationViewPortShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *PresentationViewPortShapeFactory::createDefaultShape( KoDocumentResourceManager* documentResources ) const
 {
     PresentationViewPortShape *viewport = new PresentationViewPortShape();
     viewport->setShapeId(PresentationViewPortShapeId);

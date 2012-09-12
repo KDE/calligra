@@ -30,7 +30,6 @@ target_link_libraries(
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 #kexicore
 #kexiguiutils
@@ -47,3 +46,4 @@ install(TARGETS kformdesigner_mapbrowser  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  kformdesigner_mapbrowser.desktop DESTINATION
         ${SERVICES_INSTALL_DIR}/kformdesigner)
 
+kde4_install_icons(${DATA_INSTALL_DIR}/kexi/icons)

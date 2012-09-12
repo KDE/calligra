@@ -1,8 +1,12 @@
 project(kexi)
 
+INCLUDE(CheckFunctionExists)
+
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
 option(KEXI_MOBILE "compile a mobile Kexi" OFF)
+
+check_function_exists("uname" HAVE_UNAME)
 
 IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
   INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
@@ -98,7 +102,6 @@ ELSE(KEXI_MOBILE)
   add_subdirectory( main )
   add_subdirectory( formeditor )
   add_subdirectory( migration )
-  add_subdirectory( shapes )
 ENDIF(KEXI_MOBILE)
 
 ########### next target ###############
@@ -111,7 +114,7 @@ ELSE(KEXI_MOBILE)
   kde4_add_executable(kexi ${kexi_SRCS})
   target_link_libraries(kexi 
     ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
-    kexidb
+    ${CALLIGRADB_LIBS}
     keximain
     kexicore
   )

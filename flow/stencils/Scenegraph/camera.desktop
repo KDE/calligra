@@ -1,13 +1,25 @@
 [Desktop Entry]
 Name=camera
 Name[bg]=камера
+Name[ca]=càmera
+Name[ca@valencia]=càmera
+Name[cs]=kamera
+Name[de]=Kamera
 Name[el]=κάμερα
-Name[et]=kaamera
+Name[es]=cámara
+Name[et]=Kaamera
+Name[hu]=kamera
+Name[it]=camera
+Name[kk]=камера
 Name[nb]=kamera
+Name[nds]=Kamera
 Name[nl]=camera
 Name[pl]=kamera
 Name[pt]=câmara
 Name[pt_BR]=câmera
+Name[ru]=Камера
+Name[sk]=kamera
+Name[sl]=kamera
 Name[sv]=kamera
 Name[uk]=Відеокамера
 Name[x-test]=xxcameraxx

@@ -20,9 +20,9 @@
 #ifndef PQXXCONNECTION_H
 #define PQXXCONNECTION_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "pqxxcursor.h"
 
 

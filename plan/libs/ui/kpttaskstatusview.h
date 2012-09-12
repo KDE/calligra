@@ -32,13 +32,17 @@
 #include "kptnodechartmodel.h"
 
 #include <QSplitter>
+#include <QTableWidget>
 
 #include "KDChartBarDiagram"
+
 
 class QTextBrowser;
 class QItemSelection;
 
 class KoDocument;
+class KoPageLayoutWidget;
+class PrintingHeaderFooter;
 
 class KAction;
 
@@ -100,7 +104,7 @@ class KPLATOUI_EXPORT TaskStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusView( KoDocument *part, QWidget *parent );
+    TaskStatusView(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     virtual void setProject( Project *project );
@@ -171,7 +175,7 @@ class TaskStatusViewSettingsDialog : public SplitItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent = 0 );
+    explicit TaskStatusViewSettingsDialog( ViewBase *view, TaskStatusTreeView *treeview, QWidget *parent = 0 );
 
 };
 
@@ -278,18 +282,21 @@ protected slots:
 private:
     struct ChartContents {
         ~ChartContents() {
+            delete effortplane;
+            delete costplane;
+            delete effortdiagram;
+            delete costdiagram;
             delete dateaxis;
-            if ( ! inuse ) {
-                delete effortplane;
-                delete costplane;
-            }
+            delete effortaxis;
+            delete costaxis;
         }
-        bool inuse;
         ChartProxyModel costproxy;
         ChartProxyModel effortproxy;
     
         KDChart::CartesianCoordinatePlane *effortplane;
         KDChart::CartesianCoordinatePlane *costplane;
+        KDChart::AbstractDiagram *effortdiagram;
+        KDChart::AbstractDiagram *costdiagram;
         KDChart::CartesianAxis *effortaxis;
         KDChart::CartesianAxis *costaxis;
         KDChart::CartesianAxis *dateaxis;
@@ -313,7 +320,7 @@ class KPLATOUI_EXPORT ProjectStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    ProjectStatusView( KoDocument *part, QWidget *parent );
+    ProjectStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
 
     void setupGui();
     Project *project() const { return m_project; }
@@ -367,7 +374,8 @@ public:
 
 protected slots:
     void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
-    
+    void resizeSplitters();
+
 private:
     TreeViewBase *m_tree;
     PerformanceStatusBase *m_chart;
@@ -379,7 +387,7 @@ class KPLATOUI_EXPORT PerformanceStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    PerformanceStatusView( KoDocument *part, QWidget *parent );
+    PerformanceStatusView(KoPart *part, KoDocument *doc, QWidget *parent );
 
     void setupGui();
     Project *project() const { return m_view->project(); }
@@ -437,7 +445,7 @@ class PerformanceStatusViewSettingsDialog : public ItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent = 0 );
+    explicit PerformanceStatusViewSettingsDialog( PerformanceStatusView *view, PerformanceStatusTreeView *treeview, QWidget *parent = 0 );
 
 };
 
@@ -445,8 +453,15 @@ class ProjectStatusViewSettingsDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent = 0 );
+    explicit ProjectStatusViewSettingsDialog( ViewBase *base, PerformanceStatusBase *view, QWidget *parent = 0 );
 
+protected slots:
+    void slotOk();
+
+private:
+    ViewBase *m_base;
+    KoPageLayoutWidget *m_pagelayout;
+    PrintingHeaderFooter *m_headerfooter;
 };
 
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,9 +28,10 @@
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 
 
-class KisAdjustmentLayer::Private
+struct KisAdjustmentLayer::Private
 {
 public:
     KisFilterConfiguration *filterConfig;
@@ -113,6 +114,11 @@ QRect KisAdjustmentLayer::needRect(const QRect& rect, PositionToFilthy pos) cons
 bool KisAdjustmentLayer::accept(KisNodeVisitor & v)
 {
     return v.visit(this);
+}
+
+void KisAdjustmentLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
 }
 
 QIcon KisAdjustmentLayer::icon() const

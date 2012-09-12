@@ -17,6 +17,7 @@ set(wordsprivate_LIB_SRCS
     KWDocument.cpp
     KWGui.cpp
     KWView.cpp
+    KWPart.cpp
     KWPage.cpp
     KWPageCacheManager.cpp
     KWPageManager.cpp
@@ -30,6 +31,11 @@ set(wordsprivate_LIB_SRCS
     KWOdfSharedLoadingData.cpp
     KWRootAreaProvider.cpp
 
+    pagetool/KWPageTool.cpp
+    pagetool/KWPageToolFactory.cpp
+    pagetool/SimpleSetupWidget.cpp
+    pagetool/SimpleHeaderFooterWidget.cpp
+
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
@@ -38,22 +44,22 @@ set(wordsprivate_LIB_SRCS
     frames/KWOutlineShape.cpp
 
     dialogs/KWFrameConnectSelector.cpp
-    dialogs/KWFrameGeometry.cpp
     dialogs/KWRunAroundProperties.cpp
     dialogs/KWGeneralFrameProperties.cpp
+    dialogs/KWAnchoringProperties.cpp
     dialogs/KWFrameDialog.cpp
     dialogs/KWShapeConfigFactory.cpp
     dialogs/KWDocumentColumns.cpp
     dialogs/KWStartupWidget.cpp
     dialogs/KWPageSettingsDialog.cpp
-    dialogs/KWStatistics.cpp
-    dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
-    dialogs/KWInsertPageDialog.cpp
-    dialogs/KWInsertInlineNoteDialog.cpp
+    dialogs/KWConfigureDialog.cpp
+
     dockers/KWStatisticsDocker.cpp
+    dockers/KWStatistics.cpp
+    dockers/StatisticsPreferencesPopup.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
@@ -61,9 +67,8 @@ set(wordsprivate_LIB_SRCS
     commands/KWNewPageStyleCommand.cpp
     commands/KWFrameDeleteCommand.cpp
     commands/KWFrameCreateCommand.cpp
-    commands/KWClipFrameCommand.cpp
-    commands/KWRemoveFrameClipCommand.cpp
     commands/KWChangePageStyleCommand.cpp
+    commands/KWShapeCreateCommand.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -75,18 +80,18 @@ endif( Soprano_FOUND )
 
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
-    dialogs/KWFrameGeometry.ui
     dialogs/KWRunAroundProperties.ui
     dialogs/KWGeneralFrameProperties.ui
+    dialogs/KWAnchoringProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui
-    dialogs/KWStatistics.ui
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
-    dialogs/KWInsertPageDialog.ui
-    dialogs/KWInsertInlineNoteDialog.ui
     dialogs/KWInsertImage.ui
     dockers/KWStatisticsDocker.ui
+    dockers/StatisticsPreferencesPopup.ui
+    pagetool/SimpleSetupWidget.ui
+    pagetool/SimpleHeaderFooterWidget.ui
 )
 if( Soprano_FOUND )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
@@ -126,7 +131,7 @@ install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(words_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(words_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/words.png")
+kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-words.png")
 
 kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 

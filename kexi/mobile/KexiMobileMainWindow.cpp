@@ -20,16 +20,16 @@
 
 #include "KexiMobileMainWindow.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QAction>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
 #include <QHBoxLayout>
 
 #include "KexiMobileWidget.h"
 #include "KexiMobileToolbar.h"
 #include "KexiMobileNavigator.h"
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 #include <kdebug.h>
 #include <KMimeType>
 #include <QFileDialog>

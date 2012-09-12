@@ -20,7 +20,7 @@
 #include "TableOfContentsStyleModel.h"
 
 #include "KoStyleManager.h"
-#include "KoStyleThumbnailer.h"
+#include <KoStyleThumbnailer.h>
 #include "KoParagraphStyle.h"
 #include "ToCBibGeneratorInfo.h"
 #include "KoTableOfContentsGeneratorInfo.h"
@@ -88,9 +88,6 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
         switch (role) {
         case Qt::DisplayRole: {
             return QVariant();
-            KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-            if (paragStyle)
-                return paragStyle->name();
         }
         case Qt::DecorationRole: {
             if (!m_styleThumbnailer) {
@@ -153,24 +150,12 @@ void TableOfContentsStyleModel::saveData()
 {
     int row = 0;
 
-    foreach (const IndexSourceStyles &indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
-        foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
-            qDebug()<<"before style id"<<indexStyle.styleId<<"    "<<indexStyle.styleName<<"   "<<indexSourceStyles.outlineLevel;
-        }
-    }
-
     foreach(const int styleId, m_styleList) {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(styleId);
         if (paragStyle) {
             setOutlineLevel(styleId, m_outlineLevel[row]);
         }
         row++;
-    }
-
-    foreach (IndexSourceStyles indexSourceStyles, m_tocInfo->m_indexSourceStyles) {
-        foreach (IndexSourceStyle indexStyle, indexSourceStyles.styles) {
-            qDebug()<<"after style id"<<indexStyle.styleId<<"    "<<indexStyle.styleName<<"   "<<indexSourceStyles.outlineLevel;
-        }
     }
 }
 
@@ -189,8 +174,6 @@ int TableOfContentsStyleModel::getOutlineLevel(int styleId)
 
 void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
 {
-    qDebug()<<Q_FUNC_INFO<<"style Id"<<styleId<<" outlineLevel "<<outLineLevel;
-
     //ignore changes to paragraph styles with KoParagraphStyle::OutlineLevel property set.
     //i.e. those considered by KoTableOfContentsGeneratorInfo::m_useOutlineLevel==true
     if (m_styleManager->paragraphStyle(styleId)->hasProperty(KoParagraphStyle::OutlineLevel)) {
@@ -228,8 +211,6 @@ void TableOfContentsStyleModel::setOutlineLevel(int styleId, int outLineLevel)
         indexStyleMoved.styleId = styleId;
         indexStyleMoved.styleName = m_styleManager->paragraphStyle(styleId)->name();
     }
-
-    qDebug()<<"style moved details "<<indexStyleMoved.styleId <<" "<<indexStyleMoved.styleName;
 
     //check if IndexSourceStyles are there for this outlineLevel, if not create it
     bool sourceStylePresent = false;

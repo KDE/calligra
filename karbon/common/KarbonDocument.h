@@ -8,7 +8,7 @@
    Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2006 Adriaan de Groot <groot@kde.org>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ class KoShapeLayer;
 class KoImageCollection;
 class KoStore;
 class KoDataCenterBase;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 /**
  * All non-visual, static doc info is in here.
@@ -178,11 +178,11 @@ public:
      * Fetch the current resourceManager.
      * See KoShapeController::resourceManager() for more details.
      */
-    KoResourceManager *resourceManager() const;
+    KoDocumentResourceManager *resourceManager() const;
     /**
      * Set a new resource manager.
      */
-    void setResourceManager(KoResourceManager *rm);
+    void setResourceManager(KoDocumentResourceManager *rm);
 
     /// Returns the united bounding rectangle of the documents content and the document page
     QRectF boundingRect() const;

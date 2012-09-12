@@ -22,6 +22,8 @@
 
 #include "KoMainWindow.h"
 #include "KoDocumentEntry.h"
+#include "KoServiceProvider.h"
+#include "KoPart.h"
 
 #include <QFile>
 #include <QGridLayout>
@@ -201,20 +203,21 @@ void KoVersionDialog::slotOpen()
     tmp.setPermissions(QFile::ReadUser);
     tmp.flush();
 
-    if (!m_doc->shells().isEmpty()) { //open the version in a new window if possible
-        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
+    if (!m_doc->documentPart()->shells().isEmpty()) { //open the version in a new window if possible
+        KoDocumentEntry entry = KoDocumentEntry(KoServiceProvider::readNativeService());
         QString errorMsg;
-        KoDocument* doc = entry.createDoc(&errorMsg);
-        if (!doc) {
+        KoPart *part= entry.createKoPart(&errorMsg);
+        if (!part) {
             if (!errorMsg.isEmpty())
                 KMessageBox::error(0, errorMsg);
             return;
         }
-        KoMainWindow *shell = new KoMainWindow(doc->componentData());
+        KoMainWindow *shell = new KoMainWindow(part->componentData());
         shell->openDocument(tmp.fileName());
         shell->show();
-    } else
+    } else {
         m_doc->openUrl(tmp.fileName());
+    }
 
     tmp.setAutoRemove(true);
     slotButtonClicked(Close);

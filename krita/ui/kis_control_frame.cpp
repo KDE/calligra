@@ -95,8 +95,8 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
     m_gradientWidget->setResourceAdapter(adapter);
 
-    /**** Temporary hack to test the KoDualColorButton ***/
     KoDualColorButton * dual = new KoDualColorButton(view->resourceProvider()->fgColor(), view->resourceProvider()->bgColor(), view, view);
+    dual->setPopDialog(false);
     action  = new KAction(i18n("&Color"), this);
     view->actionCollection()->addAction("dual", action);
     action->setDefaultWidget(dual);
@@ -105,8 +105,6 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor &)), dual, SLOT(setForegroundColor(const KoColor &)));
     connect(view->resourceProvider(), SIGNAL(sigBGColorChanged(const KoColor &)), dual, SLOT(setBackgroundColor(const KoColor &)));
     dual->setFixedSize(26, 26);
-    /*******/
-
 
     createPatternsChooser(m_view);
     createGradientsChooser(m_view);
@@ -124,6 +122,7 @@ KisControlFrame::KisControlFrame(KisView2 * view, const char* name)
 void KisControlFrame::slotSetPattern(KisPattern * pattern)
 {
     m_patternWidget->slotSetItem(pattern);
+    m_patternChooser->setCurrentPattern(pattern);
 }
 
 void KisControlFrame::slotSetGradient(KoAbstractGradient * gradient)
@@ -147,16 +146,16 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     m_patternsTab->setContentsMargins(1, 1, 1, 1);
     l2->addWidget(m_patternsTab);
 
-    KisPatternChooser * chooser = new KisPatternChooser(m_patternChooserPopup);
-    chooser->setFont(m_font);
-    m_patternsTab->addTab(chooser, i18n("Patterns"));
+    m_patternChooser = new KisPatternChooser(m_patternChooserPopup);
+    m_patternChooser->setFont(m_font);
+    m_patternsTab->addTab(m_patternChooser, i18n("Patterns"));
 
     KisCustomPattern* customPatterns = new KisCustomPattern(0, "custompatterns",
             i18n("Custom Pattern"), m_view);
     customPatterns->setFont(m_font);
     m_patternsTab->addTab(customPatterns, i18n("Custom Pattern"));
 
-    connect(chooser, SIGNAL(resourceSelected(KoResource*)),
+    connect(m_patternChooser, SIGNAL(resourceSelected(KoResource*)),
             view->resourceProvider(), SLOT(slotPatternActivated(KoResource*)));
 
     connect(customPatterns, SIGNAL(activatedResource(KoResource*)),
@@ -165,9 +164,9 @@ void KisControlFrame::createPatternsChooser(KisView2 * view)
     connect(view->resourceProvider(), SIGNAL(sigPatternChanged(KisPattern *)),
             this, SLOT(slotSetPattern(KisPattern *)));
 
-    chooser->setCurrentItem(0, 0);
-    if (chooser->currentResource())
-        view->resourceProvider()->slotPatternActivated(chooser->currentResource());
+    m_patternChooser->setCurrentItem(0, 0);
+    if (m_patternChooser->currentResource())
+        view->resourceProvider()->slotPatternActivated(m_patternChooser->currentResource());
 
 }
 

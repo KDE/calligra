@@ -21,11 +21,11 @@
 #ifndef KEXIPROJECT_H
 #define KEXIPROJECT_H
 
-#include <qobject.h>
-#include <qpointer.h>
+#include <QObject>
+#include <QPointer>
 
-#include <kexiutils/tristate.h>
-#include <kexidb/object.h>
+#include <db/tristate.h>
+#include <db/object.h>
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
 #include "kexi.h"

@@ -126,7 +126,7 @@ void PresentationViewPortShape::setRefId(const QString& refId)
     m_animationAttributes["refid"] = refId;
 }
 
-void PresentationViewPortShape::paint(QPainter& painter, const KoViewConverter& converter)
+void PresentationViewPortShape::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     applyConversion(painter, converter);
         

@@ -29,7 +29,7 @@ class QCheckBox;
 class QGroupBox;
 class QHBoxLayout;
 class KPushButton;
-class KexiStartupFileWidget;
+class KexiFileWidget;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
@@ -95,7 +95,7 @@ protected:
     KexiCSVExport::Options m_options;
 //  Mode m_mode;
 //  int m_itemId;
-    KexiStartupFileWidget* m_fileSavePage;
+    KexiFileWidget* m_fileSavePage;
     QWidget* m_exportOptionsPage;
     KPushButton *m_showOptionsButton;
     KPushButton *m_defaultsBtn;

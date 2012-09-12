@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 #ifndef MYSQLPREPAREDSTATEMENT_H
 #define MYSQLPREPAREDSTATEMENT_H
 
-#include <kexidb/preparedstatement.h>
+#include <db/preparedstatement.h>
 #include "mysqlconnection_p.h"
 
 //todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT

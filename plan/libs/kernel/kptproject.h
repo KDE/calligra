@@ -207,30 +207,17 @@ public:
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay(const Resource *resource, const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
+    using Node::plannedEffort;
     /// Returns the total planned effort for this project (or subproject)
     virtual Duration plannedEffort( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
     /// Returns the total planned effort for this project (or subproject) on date
     virtual Duration plannedEffort( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
+    using Node::plannedEffortTo;
     /// Returns the planned effort up to and including date
     virtual Duration plannedEffortTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
-    /// Returns the actual effort
-    virtual Duration actualEffort() const;
-    /// Returns the actual effort on @p date
-    virtual Duration actualEffort( const QDate &date ) const;
     /// Returns the actual effort up to and including @p date
     virtual Duration actualEffortTo( const QDate &date ) const;
-    /**
-     * Returns the total planned cost for this project
-     * @param id Identity of the schedule to be used
-     */
-    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
-    /**
-     * Planned cost on date
-     * @param date The cost is calulated for this date (only)
-     * @param id Identity of the schedule to be used
-     */
-    virtual double plannedCost( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
     /**
      * Planned cost up to and including date
      * @param date The cost is calculated from the start of the project upto including date.
@@ -239,20 +226,10 @@ public:
     virtual double plannedCostTo( const QDate &date, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All  ) const;
 
     /**
-     * Returns the actually reported cost for this project
-     */
-    virtual double actualCost() const;
-    /**
-     *  Actual cost on @p date
-     * @param date The cost is calulated for this date (only)
-     * @param id Identity of the schedule to be used
-     */
-    virtual double actualCost( const QDate &date ) const;
-    /**
      * Actual cost up to and including @p date
      * @param date The cost is calculated from the start of the project upto including date.
      */
-    virtual EffortCost actualCostTo( const QDate &date ) const;
+    virtual EffortCost actualCostTo(  long int id, const QDate &date ) const;
     
     virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = CURRENTSCHEDULE, EffortCostCalculationType = ECCT_All ) const;
 
@@ -359,6 +336,9 @@ public:
     bool setResourceGroupId( ResourceGroup *group);
     /// returns a unique resourcegroup id
     QString uniqueResourceGroupId() const;
+
+    /// Return a list of resources that will be allocated to new tasks
+    QList<Resource*> autoAllocateResources() const;
 
     Resource *findResource( const QString &id ) const
     {
@@ -526,6 +506,10 @@ public:
     /// return a <id, name> map of all external projects
     QMap<QString, QString> externalProjects() const;
 
+    void emitDocumentAdded( Node*, Document*, int index );
+    void emitDocumentRemoved( Node*, Document*, int index );
+    void emitDocumentChanged( Node*, Document*, int index );
+
 public slots:
     /// Sets m_progress to @p progress and emits signal sigProgress()
     /// If @p sm is not 0, progress is also set for the schedule manager
@@ -565,6 +549,13 @@ signals:
     void nodeToBeMoved( Node* );
     /// This signal is emitted when the node has been moved up, moved down, indented or unindented.
     void nodeMoved( Node* );
+
+    /// This signal is emitted when a document is added
+    void documentAdded( Node*, Document*, int index );
+    /// This signal is emitted when a document is removed
+    void documentRemoved( Node*, Document*, int index );
+    /// This signal is emitted when a document is changed
+    void documentChanged( Node*, Document*, int index );
     
     void resourceGroupChanged( ResourceGroup *group );
     void resourceGroupAdded( const ResourceGroup *group );
@@ -696,13 +687,6 @@ private:
     QList<Task*> m_softConstraints;
     QList<Task*> m_terminalNodes;
     
-#ifndef NDEBUG
-public:
-    void printDebug( bool children, const QByteArray& indent );
-    void printCalendarDebug( const QByteArray& indent = "" );
-
-	
-#endif
 };
 
 

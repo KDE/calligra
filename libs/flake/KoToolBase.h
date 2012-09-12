@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
-#include <QtCore/QRectF>
+#include <QRectF>
 
 #include "flake_export.h"
 
@@ -35,7 +35,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 class KAction;
 class QAction;
@@ -43,6 +43,9 @@ class QKeyEvent;
 class QWidget;
 class QPainter;
 class QInputMethodEvent;
+class QDragMoveEvent;
+class QDragLeaveEvent;
+class QDropEvent;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -75,7 +78,7 @@ public:
      *
      * @param shapeController the new shape controller
      */
-    void updateShapeController(KoShapeControllerBase *shapeController);
+    void updateShapeController(KoShapeBasedDocumentBase *shapeController);
 
     /**
      * request a repaint of the decorations to be made. This triggers
@@ -132,6 +135,14 @@ public:
      * @param event state and reason of this mouse or stylus press
      */
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+
+    /**
+     * Called when (one of) the mouse or stylus buttons is triple clicked.
+     * Implementors should call event->ignore() if they do not actually use the event.
+     * Default implementation ignores this event.
+     * @param event state and reason of this mouse or stylus press
+     */
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
 
     /**
      * Called when the mouse or stylus moved over the canvas.
@@ -276,6 +287,31 @@ public:
      * @return QStringList containing the mimetypes that's supported by paste()
      */
     virtual QStringList supportedPasteMimeTypes() const;
+
+    /**
+     * Handle the dragMoveEvent
+     * A tool typically has one or more shapes selected and dropping into should do
+     * something meaningful for this specific shape and tool combination. For example
+     * dropping text in a text tool.
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+
+    /**
+     * Handle the dragLeaveEvent
+     * Basically just a noticification that the drag is no long relevant
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dragLeaveEvent(QDragLeaveEvent *event);
+
+    /**
+     * Handle the dropEvent
+     * A tool typically has one or more shapes selected and dropping into should do
+     * something meaningful for this specific shape and tool combination. For example
+     * dropping text in a text tool.
+     * The tool should Accept the event if it is meaningful; Default implementation does not.
+     */
+    virtual void dropEvent(QDropEvent *event, const QPointF &point);
 
     /**
      * @return A list of actions to be used for a popup.

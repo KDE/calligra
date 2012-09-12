@@ -35,16 +35,21 @@
 #include <QSplitter>
 #include <QList>
 #include <QPointer>
+#include <QDockWidget>
 
 class KAction;
+class KToggleAction;
 
 class QWidget;
 class QMetaEnum;
 class QAbstractItemModel;
+class QDockWidget;
+class QMainWindow;
 
 class KoDocument;
 class KoPrintJob;
 class KoPageLayoutWidget;
+class KoPart;
 
 /// The main namespace
 namespace KPlato
@@ -62,6 +67,31 @@ class ViewBase;
 class TreeViewBase;
 class DoubleTreeViewBase;
 
+//------------------
+class KPLATOUI_EXPORT DockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    DockWidget( ViewBase *v, const QString &identity, const QString &title );
+
+    void activate( QMainWindow *shell );
+    void deactivate( QMainWindow *shell );
+
+    bool saveXml( QDomElement &context ) const;
+    void loadXml( const KoXmlElement &context );
+
+    const ViewBase *view;        /// The view this docker belongs to
+    QString id;                  /// Docker identity
+    Qt::DockWidgetArea location; /// The area the docker should go when visible
+    bool editor;                 /// Editor dockers will not be shown in read only mode
+
+public slots:
+    void setShown( bool show );
+    void setLocation( Qt::DockWidgetArea area );
+
+private:
+    bool m_shown;                /// The dockers visivbility when the view is active
+};
 
 //------------------
 class KPLATOUI_EXPORT PrintingOptions
@@ -81,6 +111,9 @@ public:
         footerOptions.page = Qt::Checked;
     }
     ~PrintingOptions() {}
+
+    bool loadXml( KoXmlElement &element );
+    void saveXml( QDomElement &element ) const;
 
     struct Data {
         bool group;
@@ -104,6 +137,12 @@ public:
     void setOptions( const PrintingOptions &options );
     PrintingOptions options() const;
 
+signals:
+    void changed(PrintingOptions);
+
+protected slots:
+    void slotChanged();
+
 private:
     PrintingOptions m_options;
 };
@@ -114,7 +153,7 @@ class KPLATOUI_EXPORT PrintingDialog : public KoPrintingDialog
     Q_OBJECT
 public:
     PrintingDialog(ViewBase *view);
-    ~PrintingDialog() {}
+    ~PrintingDialog();
 
     virtual QList<QWidget*> createOptionWidgets() const;
     virtual QList<KoShape*> shapesOnPage(int);
@@ -124,15 +163,17 @@ public:
     void paintHeaderFooter( QPainter &p, const PrintingOptions &options, int pageNumber, const Project &project );
     
     PrintingOptions printingOptions() const;
-    void setPrintingOptions( const PrintingOptions &opt);
     
     QWidget *createPageLayoutWidget() const;
     QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
 signals:
-    void changed ( const PrintingOptions &opt );
+    void changed( const PrintingOptions &opt );
+    void changed();
     
 public slots:
+    void setPrintingOptions( const PrintingOptions &opt);
+    void setPrinterPageLayout( const KoPageLayout &pagelayout );
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
@@ -140,11 +181,11 @@ protected:
     int headerFooterHeight( const PrintingOptions::Data &options ) const;
     void drawBottomRect( QPainter &p, const QRect &r );
 
-    void setPrinterPageLayout();
 
 protected:
     ViewBase *m_view;
     PrintingHeaderFooter *m_widget;
+    int m_textheight;
 };
 
 class KPLATOUI_EXPORT ViewActionLists
@@ -189,12 +230,15 @@ class KPLATOUI_EXPORT ViewBase : public KoView, public ViewActionLists
     Q_OBJECT
 public:
     /// Contructor
-    ViewBase(KoDocument *doc, QWidget *parent);
+    ViewBase(KoPart *part, KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~ViewBase();
     /// Return the part (document) this view handles
     KoDocument *part() const;
-    
+
+    /// Return the page layout used for printing this view
+    virtual KoPageLayout pageLayout() const;
+
     /// Return the type of view this is (class name)
     QString viewType() const { return metaObject()->className(); }
     
@@ -202,7 +246,7 @@ public:
     bool isActive() const;
     
     /// Set the project this view shall handle.
-    virtual void setProject( Project *project ) { m_proj = project; }
+    virtual void setProject( Project *project );
     /// Return the project
     virtual Project *project() const { return m_proj; }
     /// Draw data from current part / project
@@ -228,20 +272,24 @@ public:
     /// Reimplement if your view handles zoom
     virtual KoZoomController *zoomController() const { return 0; }
 
-    /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ ) { return false; }
-    /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const {}
+    /// Loads context info (printer settings) into this view.
+    virtual bool loadContext( const KoXmlElement &context );
+    /// Save context info (printer settings) from this view.
+    virtual void saveContext( QDomElement &context ) const;
 
     virtual KoPrintJob *createPrintJob();
     PrintingOptions printingOptions() const { return m_printingOptions; }
-    void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
-    
+    static QWidget *createPageLayoutWidget( ViewBase *view );
+    static PrintingHeaderFooter *createHeaderFooterWidget( ViewBase *view );
     void addAction( const QString list, QAction *action ) { ViewActionLists::addAction( list, action );  }
 
-    KoPageLayout pageLayout() const { return m_pagelayout; }
+    virtual void createDockers() {}
+    void addDocker( DockWidget *ds );
+    QList<DockWidget*> dockers() const;
+    DockWidget *findDocker( const QString &id ) const;
 
 public slots:
+    void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     virtual void setScheduleManager( ScheduleManager *sm ) { m_schedulemanager = sm; }
@@ -253,7 +301,7 @@ public slots:
     virtual void slotEditPaste() {}
     virtual void slotRefreshView() {}
     
-    void setPageLayout( const KoPageLayout &layout ) { m_pagelayout = layout; }
+    void setPageLayout( const KoPageLayout &layout );
 
 signals:
     /// Emitted when the gui has been activated or deactivated
@@ -263,6 +311,9 @@ signals:
     
     /// Emitted when options are modified
     void optionsModified();
+
+    void projectChanged( Project *project );
+    void readWriteChanged( bool );
 
 protected slots:
     virtual void slotOptions() {}
@@ -278,6 +329,8 @@ protected:
     ScheduleManager *m_schedulemanager;
     
     KoPageLayout m_pagelayout;
+
+    QList<DockWidget*> m_dockers;
 };
 
 //------------------
@@ -366,6 +419,8 @@ public:
     
     QModelIndex firstVisibleIndex( const QModelIndex &idx ) const;
 
+    ItemModelBase *itemModel() const;
+
 signals:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( QModelIndex, const QPoint &pos );
@@ -396,7 +451,7 @@ protected:
     void contextMenuEvent ( QContextMenuEvent * event );
 
     void dragMoveEvent(QDragMoveEvent *event);
-
+    void dropEvent( QDropEvent *e );
     void updateSelection( const QModelIndex &oldidx, const QModelIndex &newidx, QKeyEvent *event );
 
 protected slots:
@@ -460,6 +515,7 @@ public:
     ~DoubleTreeViewBase();
 
     void setReadWrite( bool rw );
+    void closePersistentEditor( const QModelIndex &index );
 
     void setModel( QAbstractItemModel *model );
     QAbstractItemModel *model() const;
@@ -480,7 +536,9 @@ public:
     void setAcceptDropsOnView( bool );
     void setDropIndicatorShown( bool );
     void setDragDropMode( QAbstractItemView::DragDropMode mode );
+    void setDragDropOverwriteMode( bool mode );
     void setDragEnabled ( bool mode );
+    void setDefaultDropAction( Qt::DropAction action );
 
     void setStretchLastSection( bool );
     
@@ -571,7 +629,7 @@ protected slots:
 protected:
     void init();
     QList<int> expandColumnList( const QList<int> lst ) const;
-    
+
 protected:
     TreeViewBase *m_leftview;
     TreeViewBase *m_rightview;

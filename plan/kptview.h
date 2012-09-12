@@ -26,13 +26,17 @@
 #include <KoView.h>
 
 #include "kptcontext.h"
+#include "kptviewbase.h"
 
 #include <QMenu>
 #include <QDockWidget>
 #include <QTimer>
 #include <QMap>
+#include <QPointer>
+#include <QPrintDialog>
 
-class QProgressBar;
+#include <KConfigDialog>
+
 class QStackedWidget;
 class QSplitter;
 class KUndo2Command;
@@ -40,6 +44,8 @@ class KUndo2Command;
 class KAction;
 class KToggleAction;
 class QLabel;
+class KConfigSkeleton;
+class KConfigSkeletonItem;
 
 class KoView;
 
@@ -63,8 +69,10 @@ class ScheduleManager;
 class CalculateScheduleCmd;
 class ResourceAssignmentView;
 class TaskStatusView;
+class TaskModuleModel;
 class Calendar;
 class Part;
+class PartPart;
 class Node;
 class Project;
 class Task;
@@ -77,8 +85,58 @@ class Context;
 class ViewAdaptor;
 class HtmlView;
 class ReportView;
+class ReportWidget;
 
 class ReportDesignDialog;
+
+class DockWidget;
+
+class ConfigDialog : public KConfigDialog
+{
+    Q_OBJECT
+public:
+    ConfigDialog( QWidget *parent, const QString &name, KConfigSkeleton *config );
+
+protected slots:
+    /// Return true if any widget has changed
+    virtual bool hasChanged();
+    /**
+    * Update the settings from the dialog.
+    * Virtual function for custom additions.
+    *
+    * Example use: User clicks Ok or Apply button in a configure dialog.
+    */
+    virtual void updateSettings();
+
+    /**
+    * Update the dialog based on the settings.
+    * Virtual function for custom additions.
+    *
+    * Example use: Initialisation of dialog.
+    * Example use: User clicks Reset button in a configure dialog.
+    */
+    virtual void updateWidgets();
+
+    /**
+    * Update the dialog based on the default settings.
+    * Virtual function for custom additions.
+    *
+    * Example use: User clicks Defaults button in a configure dialog.
+    */
+    virtual void updateWidgetsDefault();
+
+  /**
+   * Returns whether the current state of the dialog is
+   * the same as the default configuration.
+   */
+  virtual bool isDefault();
+
+private:
+    KConfigSkeleton *m_config;
+    QMap<QString, QByteArray> m_signalsmap;
+    QMap<QWidget*, KConfigSkeletonItem*> m_itemmap;
+    QMap<QString, QByteArray> m_propertymap;
+};
 
 //-------------
 class KPLATO_EXPORT View : public KoView
@@ -86,16 +144,16 @@ class KPLATO_EXPORT View : public KoView
     Q_OBJECT
 
 public:
-    explicit View( Part* part, QWidget* parent = 0 );
+    explicit View(KoPart *part, Part *doc, QWidget *parent = 0);
     ~View();
 
     Part *getPart() const;
 
+    KoPart *getKoPart() const;
+
     Project& getProject() const;
 
     QMenu *popupMenu( const QString& name );
-
-    virtual ViewAdaptor* dbusObject();
 
     virtual bool loadContext();
     virtual void saveContext( QDomElement &context ) const;
@@ -105,12 +163,16 @@ public:
 
     QWidget *canvas() const;
 
+    KoPageLayout pageLayout() const;
+
     ScheduleManager *currentScheduleManager() const;
     long activeScheduleId() const;
-    void setActiveSchedule( long id ) const;
+    void setActiveSchedule( long id );
 
     /// Returns the default view information like standard name and tooltip for view type @p type
     ViewInfo defaultViewInfo( const QString type ) const;
+    /// Returns the default category information like standard name and tooltip for category type @p type
+    ViewInfo defaultCategoryInfo( const QString type ) const;
 
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
     ViewBase *createResourceEditor( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
@@ -136,6 +198,7 @@ public:
     ViewBase *createReportView( ViewListItem *cat, const QString tag, const QString &name = QString(), const QString &tip = QString(), int index = -1 );
 
     KoPrintJob * createPrintJob();
+    QPrintDialog* createPrintDialog(KoPrintJob*, QWidget*);
 
     virtual KoZoomController *zoomController() const {
         return 0;
@@ -148,6 +211,7 @@ public slots:
     void slotUpdate();
     void slotCreateTemplate();
     void slotEditResource();
+    void slotEditResource( Resource *resource );
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -196,10 +260,7 @@ protected slots:
     void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
     void slotMoveScheduleManager( ScheduleManager *sm, ScheduleManager *parent, int index );
     void slotCalculateSchedule( Project*, ScheduleManager* );
-    void slotCalculationStarted( Project *project, ScheduleManager *sm );
-    void slotCalculationFinished( Project *project, ScheduleManager *sm );
     void slotBaselineSchedule( Project *project, ScheduleManager *sm );
-    void slotProgressChanged( int value );
 
     void slotProjectWorktime();
 
@@ -223,8 +284,6 @@ protected slots:
 
     void slotCurrentChanged( int );
 
-    void removeProgressBarItems();
-
     void slotInsertFile();
 
     void slotWorkPackageLoaded();
@@ -237,24 +296,11 @@ protected slots:
 
     void slotUpdateViewInfo( ViewListItem *itm );
 
-    void slotEditReportDesign( ReportView *view );
-    void slotCreateReport();
     void slotOpenReportFile();
     void slotModifyReportDefinition( KUndo2Command *cmd );
 
-#ifndef NDEBUG
-    void slotPrintDebug();
-    void slotPrintSelectedDebug();
-    void slotPrintCalendarDebug();
-    void slotPrintTestDebug();
-    void slotToggleDebugInfo();
-#else
-    static void slotPrintDebug() { };
-    static void slotPrintSelectedDebug() { };
-    static void slotPrintCalendarDebug() { };
-    static void slotPrintTestDebug() { };
-    static void slotToggleDebugInfo() { };
-#endif
+    void saveTaskModule( const KUrl &url, Project *project );
+    void removeTaskModule( const KUrl &url );
 
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
@@ -271,7 +317,7 @@ protected:
     void updateView( QWidget *widget );
 
     ViewBase *currentView() const;
-    
+
     ViewBase *createWelcomeView();
 
 private slots:
@@ -304,10 +350,9 @@ private slots:
 
     void slotRemoveCommands();
 
-    void slotMaxProgress( int p );
-    void slotSetProgress( int p );
-
     void hideToolDocker();
+    void initiateViews();
+    void slotViewScheduleManager();
 
 private:
     void createViews();
@@ -333,19 +378,21 @@ private:
     bool m_updatePertEditor;
 
     QLabel *m_estlabel;
-    QProgressBar *m_progress;
-    QLabel *m_text;
-    QTimer m_progressBarTimer;
 
     ViewAdaptor* m_dbus;
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
+    // if multiple changes occur, only issue the last change
+    bool m_trigged;
+    ScheduleManager *m_nextScheduleManager;
 
     QMultiMap<ScheduleManager*, CalculateScheduleCmd*> m_calculationcommands;
     QList<KUndo2Command*> m_undocommands;
 
     bool m_readWrite;
+
+    QList<DockWidget*> m_dockers;
 
     // ------ File
     QAction *actionCreateTemplate;
@@ -368,7 +415,6 @@ private:
     KAction *actionInsertFile;
     KAction *actionCurrencyConfig;
 
-    KAction *actionCreateReport;
     KAction *actionOpenReportFile;
 
     // ------ Settings
@@ -395,7 +441,10 @@ private:
     KAction *actNoInformation;
 
     QMap<ViewListItem*, QAction*> m_reportActionMap;
+
+    KoPart *m_partpart;
 };
+
 
 } //Kplato namespace
 

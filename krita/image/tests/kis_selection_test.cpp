@@ -31,6 +31,7 @@
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_mask.h"
+#include "kis_image.h"
 #include "kis_transparency_mask.h"
 #include "testutil.h"
 
@@ -126,6 +127,28 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 512, 512), MAX_SELECTED);
 }
 
+void KisSelectionTest::testInvertSelectionSemi()
+{
+    KisSelectionSP selection = new KisSelection();
+    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+    quint8 selectedness = 42;
+    pixelSelection->select(QRect(20, 20, 20, 20), selectedness);
+
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 30, 30), selectedness);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MIN_SELECTED);
+
+    pixelSelection->invert();
+
+    quint8 invertedSelectedness = MAX_SELECTED - selectedness;
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 30, 30), invertedSelectedness);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MAX_SELECTED);
+
+    selection->updateProjection();
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 30, 30), invertedSelectedness);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection->projection(), 0, 0), MAX_SELECTED);
+}
+
+
 void KisSelectionTest::testUpdateSelectionProjection()
 {
     KisSelectionSP selection = new KisSelection();
@@ -197,6 +220,48 @@ void KisSelectionTest::testSelectionExactBounds()
     selection->projection()->setDefaultPixel(&defaultPixel);
 
     QCOMPARE(selection->selectedExactRect(), referenceImageRect | referenceDeviceRect);
+}
+
+void KisSelectionTest::testSetParentNodeAfterCreation()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
+    KisSelectionSP selection = new KisSelection();
+    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+
+    QCOMPARE(selection->parentNode(), KisNodeWSP(0));
+    QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(0));
+
+    pixelSelection = new KisPixelSelection();
+    pixelSelection->setParentNode(image->root());
+    selection->setPixelSelection(pixelSelection);
+
+    QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(0));
+
+    selection->setParentNode(image->root());
+
+    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
+    QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
+}
+
+void KisSelectionTest::testSetParentNodeBeforeCreation()
+{
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
+    KisSelectionSP selection = new KisSelection();
+
+    selection->setParentNode(image->root());
+
+    KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+
+    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
+    QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
+
+    pixelSelection = new KisPixelSelection();
+    selection->setPixelSelection(pixelSelection);
+
+    QCOMPARE(selection->parentNode(), KisNodeWSP(image->root()));
+    QCOMPARE(selection->pixelSelection()->parentNode(), KisNodeWSP(image->root()));
 }
 
 QTEST_KDEMAIN(KisSelectionTest, NoGUI)

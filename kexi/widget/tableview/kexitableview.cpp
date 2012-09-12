@@ -59,7 +59,7 @@
 #include <KAction>
 
 #ifndef KEXI_NO_PRINT
-#include <QtGui/QPrinter>
+#include <QPrinter>
 #endif
 
 #include "kexitableview.h"
@@ -72,7 +72,7 @@
 #include "kexitableview_p.h"
 #include <widget/utils/kexirecordmarker.h>
 #include <widget/utils/kexidisplayutils.h>
-#include <kexidb/cursor.h>
+#include <db/cursor.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
         : alternateBackgroundColor(
@@ -82,8 +82,8 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
     //set defaults
     if (qApp) {
         baseColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color()/*QPalette::Base*/;
-        textColor = QPalette::Text;
-        borderColor = QColor(200, 200, 200);
+        textColor = KColorScheme(QPalette::Active, KColorScheme::View).foreground().color()/*QPalette::Base*/;
+        borderColor = KColorScheme(QPalette::Active, KColorScheme::View).shade(KColorScheme::LightShade);
         emptyAreaColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color()/*QPalette::Base*/;
         recordHighlightingColor = KexiUtils::blendedColors(QPalette::Highlight, baseColor, 33, 66);
         recordMouseOverHighlightingColor = KexiUtils::blendedColors(QPalette::Highlight, baseColor, 10, 90);

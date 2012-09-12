@@ -18,18 +18,26 @@
 #ifndef _KIS_BASE_NODE_H
 #define _KIS_BASE_NODE_H
 
+#include <QObject>
 #include <QIcon>
+#include <QUuid>
+#include <QString>
+
 #include <kicon.h>
 
-#include "kis_types.h"
-#include "kis_shared.h"
-#include "krita_export.h"
 #include "KoDocumentSectionModel.h"
+
+#include "kis_shared.h"
+#include "kis_paint_device.h"
+#include "kis_processing_visitor.h" // included, not forward declared for msvc
 
 class KoProperties;
 class KoColorSpace;
 class KoCompositeOp;
 class KisNodeVisitor;
+class KisUndoAdapter;
+
+#include "krita_export.h"
 
 /**
  * A KisBaseNode is the base class for all components of an image:
@@ -45,8 +53,6 @@ class KRITAIMAGE_EXPORT KisBaseNode : public QObject, public KisShared
     Q_OBJECT
 
 public:
-
-    enum { Visible = 1, Hidden = 2, UserLocked = 4, UserUnlocked = 8, Linked = 16, Unlinked = 32 };
 
     /**
      * Create a new, empty base node. The node is unnamed, unlocked
@@ -87,7 +93,7 @@ public:
      */
     virtual KisPaintDeviceSP projection() const;
 
-    virtual const KoColorSpace * colorSpace() const = 0;
+    virtual const KoColorSpace *colorSpace() const = 0;
 
     /**
      * Return the opacity of this layer, scaled to a range between 0
@@ -122,7 +128,7 @@ public:
     /**
      * Return the composite op associated with this layer.
      */
-    virtual const KoCompositeOp * compositeOp() const = 0;
+    virtual const KoCompositeOp *compositeOp() const = 0;
     const QString& compositeOpId() const;
 
     /**
@@ -130,6 +136,17 @@ public:
      * dirty.
      */
     void setCompositeOp(const QString& compositeOpId);
+
+    /**
+     * @return unique id, which is now used by clone layers.
+     */
+    QUuid uuid() const;
+
+    /**
+     * Set the uuid of node. This should only be used when loading
+     * existing node and in constructor.
+     */
+    void setUuid(const QUuid& id);
 
     /**
      * return the name of this node. This is the same as the
@@ -146,6 +163,7 @@ public:
      */
     void setName(const QString& name) {
         setObjectName(name);
+        baseNodeChangedCallback();
     }
 
     /**
@@ -214,6 +232,21 @@ public:
      */
     virtual bool accept(KisNodeVisitor &) {
         return false;
+    }
+
+    /**
+     * Accept the KisNodeVisitor (for the Visitor design pattern),
+     * should call the correct function on the KisProcessingVisitor
+     * for this node type, so you need to override it for all leaf
+     * classes in the node inheritance hierarchy.
+     *
+     * The processing visitor differs from node visitor in the way
+     * that it accepts undo adapter, that allows the processing to
+     * be multithreaded
+     */
+    virtual void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) {
+        Q_UNUSED(visitor);
+        Q_UNUSED(undoAdapter);
     }
 
     /**
@@ -336,6 +369,16 @@ public:
         return QRect();
     }
 
+    /**
+     * Sets the state of the node to the value of @param collapsed
+     */
+    void setCollapsed(bool collapsed);
+
+    /**
+     * returns the collapsed state of this node
+     */
+    bool collapsed() const;
+
 protected:
 
     /**
@@ -348,7 +391,19 @@ protected:
         return 0;
     }
 
+    /**
+     * This callback is called when some meta state of the base node
+     * that can be interesting to the UI has changed. E.g. visibility,
+     * lockness, opacity, compositeOp and etc. This signal is
+     * forwarded by the KisNode and KisNodeGraphListener to the model
+     * in KisLayerBox, so it can update its controls when information
+     * changes.
+     */
+    virtual void baseNodeChangedCallback() {
+    }
+
 signals:
+
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.
      */
@@ -364,7 +419,7 @@ signals:
     void systemLockingChanged(bool);
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

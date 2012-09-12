@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2006 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2009 Dmitry Kazakov <dimula73@gmail.com>
@@ -32,9 +32,10 @@
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_default_bounds.h"
 
-class KisPaintLayer::Private
+struct KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;
@@ -131,6 +132,12 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     unlockTemporaryTarget();
 }
 
+void KisPaintLayer::setDirty(const QRect & rect)
+{
+    KisIndirectPaintingSupport::setDirty(rect);
+    KisLayer::setDirty(rect);
+}
+
 QIcon KisPaintLayer::icon() const
 {
     return QIcon();
@@ -177,6 +184,11 @@ bool KisPaintLayer::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
+void KisPaintLayer::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
+}
+
 void KisPaintLayer::setChannelLockFlags(const QBitArray& channelFlags)
 {
     Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
@@ -202,19 +214,19 @@ QRect KisPaintLayer::exactBounds() const
 
 bool KisPaintLayer::alphaLocked() const
 {
-    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->paintChannelFlags;
+    QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->paintChannelFlags;
     return flags.count(true) == 0 && !m_d->paintChannelFlags.isEmpty();
 }
 
 void KisPaintLayer::setAlphaLocked(bool lock)
 {
     if(m_d->paintChannelFlags.isEmpty())
-        m_d->paintChannelFlags = colorSpace()->channelFlags(true, true, true, true);
+        m_d->paintChannelFlags = colorSpace()->channelFlags(true, true);
     
     if(lock)
-        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false, true, true);
+        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false);
     else
-        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true, false, false);
+        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true);
 }
 
 

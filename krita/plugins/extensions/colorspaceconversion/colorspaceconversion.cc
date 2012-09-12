@@ -69,9 +69,6 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &
 {
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
-
-        setComponentData(ColorSpaceConversionFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorspaceconversion.rc"),
                    true);
 
@@ -134,7 +131,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
 
         image->undoAdapter()->beginMacro(i18n("Convert Layer Type"));
 
-        KisColorSpaceConvertVisitor visitor(image, cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
+        KisColorSpaceConvertVisitor visitor(image, layer->colorSpace(), cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId());
         layer->accept(visitor);
 
         image->undoAdapter()->endMacro();

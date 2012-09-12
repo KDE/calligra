@@ -20,10 +20,6 @@
 #include "KexiNewProjectAssistant.h"
 
 #include "ui_KexiServerDBNamePage.h"
-#include "KexiConnSelector.h"
-#include "KexiDBTitlePage.h"
-#include "KexiProjectSelector.h"
-#include "KexiStartupFileWidget.h"
 #include "KexiTemplatesModel.h"
 #include "KexiStartupFileHandler.h"
 
@@ -32,12 +28,16 @@
 #include <kexiprojectdata.h>
 #include <kexiguimsghandler.h>
 #include <kexitextmsghandler.h>
-#include <kexidb/utils.h>
-#include <kexidb/object.h>
+#include <db/utils.h>
+#include <db/object.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiLinkWidget.h>
+#include <widget/KexiFileWidget.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiDBTitlePage.h>
+#include <widget/KexiProjectSelectorWidget.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -55,9 +55,9 @@
 #include <KAcceleratorManager>
 #include <KFileDialog>
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
+#include <QPushButton>
+#include <QLayout>
+#include <QCheckBox>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QProgressBar>
@@ -129,7 +129,7 @@ KexiTemplateSelectionPage::KexiTemplateSelectionPage(QWidget* parent)
     info.name = "movie";
     info.caption = i18n("Movie catalog");
     info.description = i18n("Database for collecting movies");
-    info.icon = KIcon("video-x-genenric");
+    info.icon = KIcon("video-x-generic");
     //info.enabled = false;
     templateCategory.addTemplate(info);
     templateCategories.append(templateCategory);
@@ -253,7 +253,7 @@ void KexiProjectTitleSelectionPage::titleTextChanged(const QString & text)
 void KexiProjectTitleSelectionPage::updateUrl()
 {
     KUrl url = contents->file_requester->url();
-    QString fn = KexiUtils::string2FileName(contents->le_title->text());
+    QString fn = KexiDB::string2FileName(contents->le_title->text());
     if (!fn.isEmpty() && !fn.endsWith(".kexi"))
         fn += ".kexi";
     url.setFileName(fn);
@@ -321,7 +321,7 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
     setNextButtonVisible(true);
 
     QVBoxLayout *lyr = new QVBoxLayout;
-    connSelector = new KexiConnSelectorWidget(
+    connSelector = new KexiConnectionSelectorWidget(
         Kexi::connset(),
         "kfiledialog:///OpenExistingOrCreateNewProject",
         KAbstractFileWidget::Saving);
@@ -488,6 +488,7 @@ bool KexiProjectDatabaseNameSelectionPage::isAcceptable()
             messageWidget = new KexiContextMessageWidget(
                 this, contents->formLayout,
                 contents->le_dbname, message);
+            messageWidget->setMessageType(KMessageWidget::Warning);
             messageWidget->setNextFocusWidget(contents->le_title);
             return false;
         }
@@ -650,6 +651,8 @@ void KexiNewProjectAssistant::cancelRequested(KexiAssistantPage* page)
 void KexiNewProjectAssistant::showErrorMessage(
     const QString &title, const QString &details)
 {
+    Q_UNUSED(title);
+    Q_UNUSED(details);
 }
 
 void KexiNewProjectAssistant::showErrorMessage(

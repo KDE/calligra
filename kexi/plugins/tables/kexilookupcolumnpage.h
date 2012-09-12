@@ -19,9 +19,9 @@
 #ifndef KEXILOOKUPCOLUMNPAGE_H
 #define KEXILOOKUPCOLUMNPAGE_H
 
-#include <widget/KexiPropertyPaneViewBase.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <widget/properties/KexiPropertyPaneViewBase.h>
+#include <db/field.h>
+#include <db/utils.h>
 #include <koproperty/Set.h>
 
 class KexiProject;

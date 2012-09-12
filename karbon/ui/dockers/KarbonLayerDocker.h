@@ -20,17 +20,17 @@
 #define KARBONLAYERDOCKER_H
 
 #include <QDockWidget>
-#include <QtCore/QTimer>
+#include <QTimer>
 #include <KoDockFactoryBase.h>
 #include <KoDocumentSectionView.h>
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoShape;
 class KoShapeLayer;
 class KoShapeGroup;
 class KarbonLayerModel;
 class KarbonLayerSortingModel;
-class KarbonPart;
+class KarbonKoDocument;
 class QModelIndex;
 
 namespace KParts
@@ -79,7 +79,7 @@ private:
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
     void selectLayers(QList<KoShapeLayer*> layers);
 
-    KarbonPart * m_part;
+    KarbonKoDocument * m_part;
     KarbonLayerModel * m_model;
     KarbonLayerSortingModel * m_sortModel;
     KoDocumentSectionView * m_layerView;

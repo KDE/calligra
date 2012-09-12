@@ -31,25 +31,25 @@
 #include <KPushButton>
 #include <KDebug>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/utils.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connectiondata.h>
+#include <db/utils.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
-#include <KexiConnSelector.h>
-#include <KexiProjectSelector.h>
-#include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
 #include <kexidbdrivercombobox.h>
 #include <kexitextmsghandler.h>
-#include <widget/kexicharencodingcombobox.h>
-#include <widget/kexiprjtypeselector.h>
-#include <main/startup/KexiStartupFileWidget.h>
 #include <kexipart.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
+#include <widget/kexicharencodingcombobox.h>
 #include <widget/kexiprjtypeselector.h>
+#include <widget/kexiprjtypeselector.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiDBTitlePage.h>
+#include <widget/KexiFileWidget.h>
 
 using namespace KexiMigration;
 
@@ -69,9 +69,11 @@ ImportTableWizard::ImportTableWizard ( KexiDB::Connection* curDB, QWidget* paren
     setupAlterTablePage();
     setupImportingPage();
     setupFinishPage();
+    setValid(m_srcConnPageItem, false);
     
     connect(this, SIGNAL(currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)), this, SLOT(slot_currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)));
-    
+    //! @todo Change this to message prompt when we move to non-dialog wizard.
+    connect(m_srcConnSel, SIGNAL(connectionSelected(bool)), this, SLOT(slotConnPageItemSelected(bool)));
 }
 
 
@@ -87,14 +89,25 @@ void ImportTableWizard::back() {
 }
 
 void ImportTableWizard::next() {
-    if (currentPage() == m_importingPageItem) {
+    if (currentPage() == m_srcConnPageItem) {
+      if (fileBasedSrcSelected()) {
+          setAppropriate(m_srcDBPageItem, false);
+      } else {  
+          setAppropriate(m_srcDBPageItem, true);
+      }
+    } else if (currentPage() == m_importingPageItem) {
         if (doImport()) {
             KAssistantDialog::next();
+            return;
         }
-    }
-    else {
-        KAssistantDialog::next();
-    }
+    } else if (currentPage() == m_alterTablePageItem) {
+      if (m_currentDatabase->objectNames().contains(m_alterSchemaWidget->newSchema()->name(),Qt::CaseInsensitive)) {
+            KMessageBox::information(this, i18n("An object with this name already exists, please change the table name to continue.", i18n("Object Name Exists")));
+            return;
+      }
+    }  
+        
+    KAssistantDialog::next();
 }
 
 void ImportTableWizard::accept() {
@@ -137,7 +150,7 @@ void ImportTableWizard::setupSrcConn()
     QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
     
-    m_srcConnSel = new KexiConnSelectorWidget(Kexi::connset(),
+    m_srcConnSel = new KexiConnectionSelectorWidget(Kexi::connset(),
                                            "kfiledialog:///ProjectMigrationSourceDir",
                                            KAbstractFileWidget::Opening, m_srcConnPageWidget);
                                            
@@ -180,6 +193,8 @@ void ImportTableWizard::setupTableSelectPage() {
 
     m_tableListWidget = new QListWidget(this);
     m_tableListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(m_tableListWidget, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotTableListWidgetSelectionChanged()));
     
     vbox->addWidget(m_tableListWidget);
     
@@ -313,17 +328,28 @@ void ImportTableWizard::arriveTableSelectPage()
 {
     Kexi::ObjectStatus result;
     KexiUtils::WaitCursor wait;
+    m_tableListWidget->clear();
     m_migrateDriver = prepareImport(result);
 
     if (m_migrateDriver) {
-        if (!m_migrateDriver->connectSource())
+        if (!m_migrateDriver->connectSource()) {
+            kDebug() << "unable to connect to database";
             return;
-
+        }
+        
         QStringList tableNames;
-        m_tableListWidget->clear();
         if (m_migrateDriver->tableNames(tableNames)) {
             m_tableListWidget->addItems(tableNames);
         }
+        if (m_tableListWidget->item(0)) {
+            m_tableListWidget->item(0)->setSelected(true);
+        }
+    } else {
+        kDebug() << "No driver for selected source";
+        QString errMessage =result.message.isEmpty() ? i18n("Unknown error") : result.message;
+        QString errDescription = result.description.isEmpty() ? errMessage : result.description;
+        KMessageBox::error(this, errMessage, errDescription);
+        setValid(m_tablesPageItem, false);
     }
     KexiUtils::removeWaitCursor();
 }
@@ -384,7 +410,7 @@ void ImportTableWizard::arriveImportingPage()
         //setNextEnabled(m_importingPageWidget, false);
         enableButton(KDialog::User2, false);
     }
-    #endif
+#endif
 
     QString txt;
 
@@ -430,7 +456,7 @@ void ImportTableWizard::arriveFinishPage()
 
 bool ImportTableWizard::fileBasedSrcSelected() const
 {
-    return m_srcConnSel->selectedConnectionType() == KexiConnSelectorWidget::FileBased;
+    return m_srcConnSel->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased;
 }
 
 KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
@@ -442,7 +468,7 @@ KexiMigrate* ImportTableWizard::prepareImport(Kexi::ObjectStatus& result)
     if (sourceDriverName.isEmpty())
         result.setStatus(i18n("No appropriate migration driver found."),
                             m_migrateManager->possibleProblemsInfoMsg());
-
+  
     
     // Get a source (migration) driver
     KexiMigrate* sourceDriver = 0;
@@ -574,4 +600,14 @@ bool ImportTableWizard::doImport()
     project->addStoredItem(part->info(), partItemForSavedTable);
     
     return true;
+}
+
+void ImportTableWizard::slotConnPageItemSelected(bool isSelected)
+{
+    setValid(m_srcConnPageItem, isSelected);
+}
+
+void ImportTableWizard::slotTableListWidgetSelectionChanged()
+{
+    setValid(m_tablesPageItem, !m_tableListWidget->selectedItems().isEmpty());
 }

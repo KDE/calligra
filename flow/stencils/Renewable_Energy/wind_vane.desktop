@@ -1,11 +1,22 @@
 [Desktop Entry]
 Name=Wind Vane
+Name[ca]=Anemòmetre
+Name[ca@valencia]=Anemòmetre
+Name[de]=Windfahne
 Name[el]=Ανεμοδείκτης
+Name[es]=Veleta
+Name[et]=Tuulelipp
+Name[hu]=Szélkakas
 Name[it]=Segnavento
+Name[kk]=Флюгер
 Name[nb]=Vindfløy
+Name[nl]=Windvaan
 Name[pl]=Wiatrowskaz
 Name[pt]=Pá Eólica
 Name[pt_BR]=Veio eólico
+Name[ru]=Флюгер
+Name[sk]=Veterník
 Name[sv]=Vindflöjel
 Name[uk]=Флюгер
 Name[x-test]=xxWind Vanexx
+Name[zh_TW]=風向標

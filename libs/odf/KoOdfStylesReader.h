@@ -21,7 +21,7 @@
 #ifndef KOOASISSTYLES_H
 #define KOOASISSTYLES_H
 
-#include <QtCore/QHash>
+#include <QHash>
 
 #include <KoXmlReader.h>
 
@@ -29,6 +29,7 @@
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfLineNumberingConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -138,7 +139,7 @@ public:
     DataFormatsMap dataFormats() const;
 
     /**
-     * Return the notes configration for the given note class (footnote or endnote).
+     * Return the notes configuration for the given note class (footnote or endnote).
      *
      * Note that ODF supports different notes configurations for sections, but we don't
      * support that yet.
@@ -150,6 +151,10 @@ public:
      */
     KoOdfLineNumberingConfiguration lineNumberingConfiguration() const;
 
+    /**
+     * return the bibliography configuration for this document.
+     */
+    KoOdfBibliographyConfiguration globalBibliographyConfiguration() const;
 
 private:
     enum TypeAndLocation {

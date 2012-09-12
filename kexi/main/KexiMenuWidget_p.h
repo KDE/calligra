@@ -9,7 +9,7 @@
    Copyright 2009-2010 Hugo Pereira Da Costa <hugo@oxygen-icons.org>
    Copyright 2008 Long Huynh Huu <long.upcase@googlemail.com>
    Copyright 2007 Matthew Woehlke <mw_triad@users.sourceforge.net>
-   Copyright 2007 Casper Boemann <cbr@boemann.dk>
+   Copyright 2007 C. Boemann <cbo@boemann.dk>
    Copyright 2007 Fredrik Höglund <fredrik@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -33,15 +33,29 @@
 
 #include <KComponentData>
 #include <KSharedConfig>
-#include "QtGui/qstyleoption.h"
-#include "QtCore/qdatetime.h"
-#include "QtCore/qmap.h"
-#include "QtCore/qhash.h"
-#include "QtCore/qbasictimer.h"
-#include "QtCore/qpointer.h"
-//#include "private/qwidget_p.h"
+#include <QStyleOption>
+#include <QDateTime>
+#include <QCache>
+#include <QMap>
+#include <QHash>
+#include <QBasicTimer>
+#include <QPointer>
+#include <QAbstractButton>
+#include "KexiMenuWidget.h"
 
 class QEventLoop;
+
+//! Used to define transparent clickable logo area
+class ClickableLogoArea : public QAbstractButton
+{
+    Q_OBJECT
+public:
+    ClickableLogoArea(QWidget *parent = 0);
+protected slots:
+    void slotClicked();
+protected:
+    virtual void paintEvent(QPaintEvent*);
+};
 
 //used to walk up the popup list
 struct KexiMenuWidgetCaused {
@@ -116,7 +130,7 @@ public:
                       currentAction(0),
                       scroll(0), eventLoop(0), /*tearoff(0),*/ /*tornoff(0),*/ /*tearoffHighlighted(0),*/
                       hasCheckableItems(0), sloppyAction(0), /* doChildEffects(false)*/
-                      hasFrame(true)
+                      hasFrame(true), clickableLogoArea(0)
     {
     }
     virtual ~KexiMenuWidgetPrivate()
@@ -254,6 +268,11 @@ public:
     //bool persistentSelectionsEnabled;
 
     OxygenHelper *oxygenHelper;
+
+    void updateLogo();
+    void updateLogoPixmap();
+    QPixmap calligraLogoPixmap;
+    ClickableLogoArea *clickableLogoArea;
 };
 
 #endif // KEXIMENUWIDGET_P_H

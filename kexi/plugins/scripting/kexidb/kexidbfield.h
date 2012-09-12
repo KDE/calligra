@@ -20,11 +20,11 @@
 #ifndef SCRIPTING_KEXIDBFIELD_H
 #define SCRIPTING_KEXIDBFIELD_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/field.h>
+#include <db/drivermanager.h>
+#include <db/field.h>
 
 namespace Scripting
 {

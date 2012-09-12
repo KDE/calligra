@@ -21,13 +21,12 @@
 #include "kexiinputtableedit.h"
 #include <kexi_global.h>
 
-#include <qregexp.h>
-#include <qevent.h>
-#include <qtimer.h>
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qtooltip.h>
+#include <QRegExp>
+#include <QEvent>
+#include <QTimer>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
 #include <QHBoxLayout>
 
 #include <kglobal.h>
@@ -38,7 +37,7 @@
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <kexidb/fieldvalidator.h>
 
 //! @internal
@@ -116,6 +115,9 @@ void KexiInputTableEdit::init()
         m_lineedit->setAlignment(Qt::AlignRight);
     }
 
+    if (field()->type() == KexiDB::Field::Text && field()->maxLength() > 0) {
+        m_lineedit->setMaxLength(field()->maxLength());
+    }
     setViewWidget(m_lineedit);
     m_calculatedCell = false;
 
@@ -131,7 +133,7 @@ void KexiInputTableEdit::init()
 
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-    QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+    QString text(m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString()));
     if (text.isEmpty()) {
         if (m_origValue.toString().isEmpty()) {
             //we have to set NULL initial value:
@@ -273,7 +275,7 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
     Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-    qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) );
+    qApp->clipboard()->setText(m_textFormatter.toString(value, QString()));
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -299,13 +301,13 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect,
         const QFontMetrics& fm, bool focused)
 {
-    QString text( value.type()==QVariant::String 
-        ? value.toString() : m_textFormatter.valueToText(value, QString()) );
+    QString text(value.type() == QVariant::String 
+        ? value.toString() : m_textFormatter.toString(value, QString()));
 
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
     internalRect.setWidth(internalRect.width() - rightMargin(focused) - 2*3);
-    kDebug() << rect << " " << internalRect << " " << fm.width(text);
+    kDebug() << rect << internalRect << fm.width(text);
     return fm.width(text) > internalRect.width();
 }
 

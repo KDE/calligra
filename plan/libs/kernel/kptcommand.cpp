@@ -27,13 +27,24 @@
 #include "kptrelation.h"
 #include "kptresource.h"
 #include "kptdocuments.h"
+#include <kptdebug.h>
 
-#include <kdebug.h>
 #include <klocale.h>
+#include <kdeversion.h>
 
 #include <QHash>
 #include <QMap>
 #include <QApplication>
+
+
+static int insertProjectCmdDba() {
+#if KDE_IS_VERSION( 4, 3, 80 )
+    static int s_area = KDebug::registerArea( "plan (InsertProjectCmd)" );
+#else
+    static int s_area = 0;
+#endif
+    return s_area;
+}
 
 namespace KPlato
 {
@@ -42,7 +53,7 @@ void NamedCommand::setSchScheduled()
 {
     QMap<Schedule*, bool>::Iterator it;
     for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        //kDebug() << it.key() ->name() <<":" << it.value();
+        //kDebug(planDbg()) << it.key() ->name() <<":" << it.value();
         it.key() ->setScheduled( it.value() );
     }
 }
@@ -50,13 +61,13 @@ void NamedCommand::setSchScheduled( bool state )
 {
     QMap<Schedule*, bool>::Iterator it;
     for ( it = m_schedules.begin(); it != m_schedules.end(); ++it ) {
-        //kDebug() << it.key() ->name() <<":" << state;
+        //kDebug(planDbg()) << it.key() ->name() <<":" << state;
         it.key() ->setScheduled( state );
     }
 }
 void NamedCommand::addSchScheduled( Schedule *sch )
 {
-    //kDebug() << sch->id() <<":" << sch->isScheduled();
+    //kDebug(planDbg()) << sch->id() <<":" << sch->isScheduled();
     m_schedules.insert( sch, sch->isScheduled() );
     foreach ( Appointment * a, sch->appointments() ) {
         if ( a->node() == sch ) {
@@ -103,7 +114,7 @@ CalendarAddCmd::CalendarAddCmd( Project *project, Calendar *cal, int pos, Calend
         m_parent( parent ),
         m_mine( true )
 {
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
     Q_ASSERT( project != 0 );
 }
 CalendarAddCmd::~CalendarAddCmd()
@@ -118,7 +129,7 @@ void CalendarAddCmd::execute()
         m_mine = false;
     }
 
-    //kDebug()<<m_cal->name()<<" added to:"<<m_project->name();
+    //kDebug(planDbg())<<m_cal->name()<<" added to:"<<m_project->name();
 }
 
 void CalendarAddCmd::unexecute()
@@ -128,7 +139,7 @@ void CalendarAddCmd::unexecute()
         m_mine = true;
     }
 
-    //kDebug()<<m_cal->name();
+    //kDebug(planDbg())<<m_cal->name();
 }
 
 CalendarRemoveCmd::CalendarRemoveCmd( Project *project, Calendar *cal, const QString& name )
@@ -186,7 +197,7 @@ CalendarMoveCmd::CalendarMoveCmd( Project *project, Calendar *cal, int position,
         m_newparent( parent ),
         m_oldparent( cal->parentCal() )
 {
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
     Q_ASSERT( project != 0 );
 
     m_oldpos = m_oldparent ? m_oldparent->indexOf( cal ) : project->indexOf( cal );
@@ -210,19 +221,19 @@ CalendarModifyNameCmd::CalendarModifyNameCmd( Calendar *cal, const QString& newv
 
     m_oldvalue = cal->name();
     m_newvalue = newvalue;
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
 }
 void CalendarModifyNameCmd::execute()
 {
     m_cal->setName( m_newvalue );
 
-    //kDebug()<<m_cal->name();
+    //kDebug(planDbg())<<m_cal->name();
 }
 void CalendarModifyNameCmd::unexecute()
 {
     m_cal->setName( m_oldvalue );
 
-    //kDebug()<<m_cal->name();
+    //kDebug(planDbg())<<m_cal->name();
 }
 
 CalendarModifyParentCmd::CalendarModifyParentCmd( Project *project, Calendar *cal, Calendar *newvalue, const QString& name )
@@ -240,7 +251,7 @@ CalendarModifyParentCmd::CalendarModifyParentCmd( Project *project, Calendar *ca
     if ( newvalue ) {
         m_cmd->addCommand( new CalendarModifyTimeZoneCmd( cal, newvalue->timeZone() ) );
     }
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
 }
 CalendarModifyParentCmd::~CalendarModifyParentCmd()
 {
@@ -269,7 +280,7 @@ CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Calendar *cal, const KTime
     foreach ( Calendar *c, cal->calendars() ) {
         m_cmd->addCommand( new CalendarModifyTimeZoneCmd( c, value ) );
     }
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
 }
 CalendarModifyTimeZoneCmd::~CalendarModifyTimeZoneCmd()
 {
@@ -293,23 +304,23 @@ CalendarAddDayCmd::CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, cons
 {
 
     m_newvalue = newvalue;
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
 }
 CalendarAddDayCmd::~CalendarAddDayCmd()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_mine )
         delete m_newvalue;
 }
 void CalendarAddDayCmd::execute()
 {
-    //kDebug()<<m_cal->name();
+    //kDebug(planDbg())<<m_cal->name();
     m_cal->addDay( m_newvalue );
     m_mine = false;
 }
 void CalendarAddDayCmd::unexecute()
 {
-    //kDebug()<<m_cal->name();
+    //kDebug(planDbg())<<m_cal->name();
     m_cal->takeDay( m_newvalue );
     m_mine = true;
 }
@@ -320,7 +331,7 @@ CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal,CalendarDay *day, cons
         m_value( day ),
         m_mine( false )
 {
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
     // TODO check if any resources uses this calendar
     init();
 }
@@ -331,7 +342,7 @@ CalendarRemoveDayCmd::CalendarRemoveDayCmd( Calendar *cal, const QDate &day, con
 {
 
     m_value = cal->findDay( day );
-    //kDebug()<<cal->name();
+    //kDebug(planDbg())<<cal->name();
     // TODO check if any resources uses this calendar
     init();
 }
@@ -340,13 +351,13 @@ void CalendarRemoveDayCmd::init()
 }
 void CalendarRemoveDayCmd::execute()
 {
-    //kDebug()<<m_cal->name();
+    //kDebug(planDbg())<<m_cal->name();
     m_cal->takeDay( m_value );
     m_mine = true;
 }
 void CalendarRemoveDayCmd::unexecute()
 {
-    //kDebug()<<m_cal->name();
+    //kDebug(planDbg())<<m_cal->name();
     m_cal->addDay( m_value );
     m_mine = false;
 }
@@ -359,11 +370,11 @@ CalendarModifyDayCmd::CalendarModifyDayCmd( Calendar *cal, CalendarDay *value, c
 
     m_newvalue = value;
     m_oldvalue = cal->findDay( value->date() );
-    //kDebug()<<cal->name()<<" old:("<<m_oldvalue<<") new:("<<m_newvalue<<")";
+    //kDebug(planDbg())<<cal->name()<<" old:("<<m_oldvalue<<") new:("<<m_newvalue<<")";
 }
 CalendarModifyDayCmd::~CalendarModifyDayCmd()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_mine ) {
         delete m_newvalue;
     } else {
@@ -372,7 +383,7 @@ CalendarModifyDayCmd::~CalendarModifyDayCmd()
 }
 void CalendarModifyDayCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_oldvalue ) {
         m_cal->takeDay( m_oldvalue );
     }
@@ -381,7 +392,7 @@ void CalendarModifyDayCmd::execute()
 }
 void CalendarModifyDayCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_cal->takeDay( m_newvalue );
     if ( m_oldvalue ) {
         m_cal->addDay( m_oldvalue );
@@ -410,14 +421,14 @@ CalendarModifyStateCmd::~CalendarModifyStateCmd()
 }
 void CalendarModifyStateCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_cmd->execute();
     m_calendar->setState( m_day, m_newvalue );
 
 }
 void CalendarModifyStateCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_calendar->setState( m_day, m_oldvalue );
     m_cmd->unexecute();
 
@@ -434,13 +445,13 @@ CalendarModifyTimeIntervalCmd::CalendarModifyTimeIntervalCmd( Calendar *calendar
 }
 void CalendarModifyTimeIntervalCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_calendar->setWorkInterval( m_value, m_newvalue );
 
 }
 void CalendarModifyTimeIntervalCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_calendar->setWorkInterval( m_value, m_oldvalue );
 
 }
@@ -460,14 +471,14 @@ CalendarAddTimeIntervalCmd::~CalendarAddTimeIntervalCmd()
 }
 void CalendarAddTimeIntervalCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_calendar->addWorkInterval( m_day, m_value );
     m_mine = false;
 
 }
 void CalendarAddTimeIntervalCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_calendar->takeWorkInterval( m_day, m_value );
     m_mine = true;
 
@@ -495,11 +506,11 @@ CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd( Calendar *cal, int weekday, 
         m_orig( *( cal->weekday( weekday ) ) )
 {
 
-    //kDebug() << cal->name() <<" (" << value <<")";
+    //kDebug(planDbg()) << cal->name() <<" (" << value <<")";
 }
 CalendarModifyWeekdayCmd::~CalendarModifyWeekdayCmd()
 {
-    //kDebug() << m_weekday <<":" << m_value;
+    //kDebug(planDbg()) << m_weekday <<":" << m_value;
     delete m_value;
 
 }
@@ -519,7 +530,7 @@ CalendarModifyDateCmd::CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, c
     m_newvalue( value ),
     m_oldvalue( day->date() )
 {
-    //kDebug() << cal->name() <<" (" << value <<")";
+    //kDebug(planDbg()) << cal->name() <<" (" << value <<")";
 }
 void CalendarModifyDateCmd::execute()
 {
@@ -536,7 +547,7 @@ ProjectModifyDefaultCalendarCmd::ProjectModifyDefaultCalendarCmd( Project *proje
     m_newvalue( cal ),
     m_oldvalue( project->defaultCalendar() )
 {
-    //kDebug() << cal->name() <<" (" << value <<")";
+    //kDebug(planDbg()) << cal->name() <<" (" << value <<")";
 }
 void ProjectModifyDefaultCalendarCmd::execute()
 {
@@ -571,12 +582,6 @@ NodeDeleteCmd::NodeDeleteCmd( Node *node, const QString& name )
         }
     }
     m_cmd = new MacroCommand( "" );
-    foreach ( Relation * r, node->dependChildNodes() ) {
-        m_cmd->addCommand( new DeleteRelationCmd( *m_project, r ) );
-    }
-    foreach ( Relation * r, node->dependParentNodes() ) {
-        m_cmd->addCommand( new DeleteRelationCmd( *m_project, r ) );
-    }
     QList<Node*> lst = node->childNodeIterator();
     for ( int i = lst.count(); i > 0; --i ) {
         m_cmd->addCommand( new NodeDeleteCmd( lst[ i - 1 ] ) );
@@ -604,7 +609,18 @@ void NodeDeleteCmd::execute()
 {
     if ( m_parent && m_project ) {
         m_index = m_parent->findChildNode( m_node );
-        //kDebug()<<m_node->name()<<""<<m_index;
+        //kDebug(planDbg())<<m_node->name()<<""<<m_index;
+        if ( m_relCmd.isEmpty() ) {
+            // Only add delete relation commands if we (still) have relations
+            // The other node might have deleted them...
+            foreach ( Relation * r, m_node->dependChildNodes() ) {
+                m_relCmd.addCommand( new DeleteRelationCmd( *m_project, r ) );
+            }
+            foreach ( Relation * r, m_node->dependParentNodes() ) {
+                m_relCmd.addCommand( new DeleteRelationCmd( *m_project, r ) );
+            }
+        }
+        m_relCmd.execute();
         if ( m_cmd ) {
             m_cmd->execute();
         }
@@ -616,11 +632,12 @@ void NodeDeleteCmd::execute()
 void NodeDeleteCmd::unexecute()
 {
     if ( m_parent && m_project ) {
-        //kDebug()<<m_node->name()<<""<<m_index;
+        //kDebug(planDbg())<<m_node->name()<<""<<m_index;
         m_project->addSubTask( m_node, m_index, m_parent );
         if ( m_cmd ) {
             m_cmd->unexecute();
         }
+        m_relCmd.unexecute();
         m_mine = false;
         setSchScheduled();
     }
@@ -659,7 +676,7 @@ TaskAddCmd::~TaskAddCmd()
 }
 void TaskAddCmd::execute()
 {
-    //kDebug()<<m_node->name();
+    //kDebug(planDbg())<<m_node->name();
     m_project->addTask( m_node, m_after );
     m_added = true;
 
@@ -1100,7 +1117,7 @@ AddRelationCmd::~AddRelationCmd()
 }
 void AddRelationCmd::execute()
 {
-    //kDebug()<<m_rel->parent()<<" to"<<m_rel->child();
+    //kDebug(planDbg())<<m_rel->parent()<<" to"<<m_rel->child();
     m_taken = false;
     m_project.addRelation( m_rel, false );
 }
@@ -1124,7 +1141,7 @@ DeleteRelationCmd::~DeleteRelationCmd()
 }
 void DeleteRelationCmd::execute()
 {
-    //kDebug()<<m_rel->parent()<<" to"<<m_rel->child();
+    //kDebug(planDbg())<<m_rel->parent()<<" to"<<m_rel->child();
     m_taken = true;
     m_project.takeRelation( m_rel );
 }
@@ -1193,13 +1210,13 @@ AddResourceRequestCmd::~AddResourceRequestCmd()
 }
 void AddResourceRequestCmd::execute()
 {
-    //kDebug()<<"group="<<m_group<<" req="<<m_request;
+    //kDebug(planDbg())<<"group="<<m_group<<" req="<<m_request;
     m_group->addResourceRequest( m_request );
     m_mine = false;
 }
 void AddResourceRequestCmd::unexecute()
 {
-    //kDebug()<<"group="<<m_group<<" req="<<m_request;
+    //kDebug(planDbg())<<"group="<<m_group<<" req="<<m_request;
     m_group->takeResourceRequest( m_request );
     m_mine = true;
 }
@@ -1211,7 +1228,7 @@ RemoveResourceRequestCmd::RemoveResourceRequestCmd( ResourceGroupRequest *group,
 {
 
     m_mine = false;
-    //kDebug()<<"group req="<<group<<" req="<<request<<" to gr="<<m_group->group();
+    //kDebug(planDbg())<<"group req="<<group<<" req="<<request<<" to gr="<<m_group->group();
 }
 RemoveResourceRequestCmd::~RemoveResourceRequestCmd()
 {
@@ -1283,6 +1300,8 @@ ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newval
     m_estimate( node.estimate() ),
     m_oldvalue( oldvalue ),
     m_newvalue( newvalue ),
+    m_optimistic( node.estimate()->optimisticRatio() ),
+    m_pessimistic( node.estimate()->pessimisticRatio() ),
     m_cmd( 0 )
 {
     if ( newvalue == 0.0 ) {
@@ -1299,26 +1318,21 @@ ModifyEstimateCmd::~ModifyEstimateCmd()
 }
 void ModifyEstimateCmd::execute()
 {
-    int pess = m_estimate->pessimisticRatio();
-    int opt = m_estimate->optimisticRatio();
     m_estimate->setExpectedEstimate( m_newvalue );
     if ( m_cmd ) {
         m_cmd->execute();
     }
-    m_estimate->setPessimisticRatio( pess );
-    m_estimate->setOptimisticRatio( opt );
-
+    m_estimate->setPessimisticRatio( m_pessimistic );
+    m_estimate->setOptimisticRatio( m_optimistic );
 }
 void ModifyEstimateCmd::unexecute()
 {
-    int pess = m_estimate->pessimisticRatio();
-    int opt = m_estimate->optimisticRatio();
     m_estimate->setExpectedEstimate( m_oldvalue );
     if ( m_cmd ) {
         m_cmd->unexecute();
     }
-    m_estimate->setPessimisticRatio( pess );
-    m_estimate->setOptimisticRatio( opt );
+    m_estimate->setPessimisticRatio( m_pessimistic );
+    m_estimate->setOptimisticRatio( m_optimistic );
 }
 
 EstimateModifyOptimisticRatioCmd::EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name )
@@ -1427,7 +1441,7 @@ AddResourceGroupRequestCmd::AddResourceGroupRequestCmd( Task &task, ResourceGrou
 }
 void AddResourceGroupRequestCmd::execute()
 {
-    //kDebug()<<"group="<<m_request;
+    //kDebug(planDbg())<<"group="<<m_request;
     m_task.addRequest( m_request );
     m_mine = false;
 
@@ -1435,7 +1449,7 @@ void AddResourceGroupRequestCmd::execute()
 }
 void AddResourceGroupRequestCmd::unexecute()
 {
-    //kDebug()<<"group="<<m_request;
+    //kDebug(planDbg())<<"group="<<m_request;
     m_task.takeRequest( m_request ); // group should now be empty of resourceRequests
     m_mine = true;
 
@@ -1461,7 +1475,7 @@ RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd( Task &task, Resour
 }
 void RemoveResourceGroupRequestCmd::execute()
 {
-    //kDebug()<<"group="<<m_request;
+    //kDebug(planDbg())<<"group="<<m_request;
     m_task.takeRequest( m_request ); // group should now be empty of resourceRequests
     m_mine = true;
 
@@ -1469,7 +1483,7 @@ void RemoveResourceGroupRequestCmd::execute()
 }
 void RemoveResourceGroupRequestCmd::unexecute()
 {
-    //kDebug()<<"group="<<m_request;
+    //kDebug(planDbg())<<"group="<<m_request;
     m_task.addRequest( m_request );
     m_mine = false;
 
@@ -1487,7 +1501,7 @@ AddResourceCmd::AddResourceCmd( ResourceGroup *group, Resource *resource, const 
 AddResourceCmd::~AddResourceCmd()
 {
     if ( m_mine ) {
-        //kDebug()<<"delete:"<<m_resource;
+        //kDebug(planDbg())<<"delete:"<<m_resource;
         delete m_resource;
     }
 }
@@ -1497,7 +1511,7 @@ void AddResourceCmd::execute()
     if ( m_group->project() ) {
         m_group->project()->addResource( m_group, m_resource, m_index );
         m_mine = false;
-        //kDebug()<<"added:"<<m_resource;
+        //kDebug(planDbg())<<"added:"<<m_resource;
     }
 
 }
@@ -1506,7 +1520,7 @@ void AddResourceCmd::unexecute()
     Q_ASSERT( m_group->project() );
     if ( m_group->project() ) {
         m_group->project()->takeResource( m_group, m_resource );
-        //kDebug()<<"removed:"<<m_resource;
+        //kDebug(planDbg())<<"removed:"<<m_resource;
         m_mine = true;
     }
 
@@ -1516,7 +1530,7 @@ void AddResourceCmd::unexecute()
 RemoveResourceCmd::RemoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name )
         : AddResourceCmd( group, resource, name )
 {
-    //kDebug()<<resource;
+    //kDebug(planDbg())<<resource;
     m_mine = false;
     m_requests = m_resource->requests();
 
@@ -1524,7 +1538,7 @@ RemoveResourceCmd::RemoveResourceCmd( ResourceGroup *group, Resource *resource, 
         foreach ( Schedule * s, group->project()->schedules() ) {
             Schedule *rs = resource->findSchedule( s->id() );
             if ( rs && ! rs->isDeleted() ) {
-                kDebug()<<s->name();
+                kDebug(planDbg())<<s->name();
                 addSchScheduled( s );
             }
         }
@@ -1542,7 +1556,7 @@ void RemoveResourceCmd::execute()
 {
     foreach ( ResourceRequest * r, m_requests ) {
         r->parent() ->takeResourceRequest( r );
-        //kDebug()<<"Remove request for"<<r->resource()->name();
+        //kDebug(planDbg())<<"Remove request for"<<r->resource()->name();
     }
     AddResourceCmd::unexecute();
     m_cmd.execute();
@@ -1552,7 +1566,7 @@ void RemoveResourceCmd::unexecute()
 {
     foreach ( ResourceRequest * r, m_requests ) {
         r->parent() ->addResourceRequest( r );
-        //kDebug()<<"Add request for"<<r->resource()->name();
+        //kDebug(planDbg())<<"Add request for"<<r->resource()->name();
     }
     m_cmd.unexecute();
     AddResourceCmd::execute();
@@ -1597,8 +1611,6 @@ void ModifyResourceNameCmd::execute()
 void ModifyResourceNameCmd::unexecute()
 {
     m_resource->setName( m_oldvalue );
-
-
 }
 ModifyResourceInitialsCmd::ModifyResourceInitialsCmd( Resource *resource, const QString& value, const QString& name )
         : NamedCommand( name ),
@@ -1629,14 +1641,25 @@ ModifyResourceEmailCmd::ModifyResourceEmailCmd( Resource *resource, const QStrin
 void ModifyResourceEmailCmd::execute()
 {
     m_resource->setEmail( m_newvalue );
-
-
 }
 void ModifyResourceEmailCmd::unexecute()
 {
     m_resource->setEmail( m_oldvalue );
-
-
+}
+ModifyResourceAutoAllocateCmd::ModifyResourceAutoAllocateCmd( Resource *resource,bool value, const QString& name )
+    : NamedCommand( name ),
+    m_resource( resource ),
+    m_newvalue( value )
+{
+    m_oldvalue = resource->autoAllocate();
+}
+void ModifyResourceAutoAllocateCmd::execute()
+{
+    m_resource->setAutoAllocate( m_newvalue );
+}
+void ModifyResourceAutoAllocateCmd::unexecute()
+{
+    m_resource->setAutoAllocate( m_oldvalue );
 }
 ModifyResourceTypeCmd::ModifyResourceTypeCmd( Resource *resource, int value, const QString& name )
         : NamedCommand( name ),
@@ -1758,23 +1781,23 @@ void ModifyResourceCalendarCmd::unexecute()
     m_resource->setCalendar( m_oldvalue );
 }
 
-ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name )
+ModifyRequiredResourcesCmd::ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name )
         : NamedCommand( name ),
         m_resource( resource ),
         m_newvalue( value )
 {
-    m_oldvalue = resource->requiredResources();
+    m_oldvalue = resource->requiredIds();
 }
 void ModifyRequiredResourcesCmd::execute()
 {
-    m_resource->setRequiredResources( m_newvalue );
+    m_resource->setRequiredIds( m_newvalue );
 }
 void ModifyRequiredResourcesCmd::unexecute()
 {
-    m_resource->setRequiredResources( m_oldvalue );
+    m_resource->setRequiredIds( m_oldvalue );
 }
 
-AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, const QString &member, const QString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1782,14 +1805,14 @@ AddResourceTeamCmd::AddResourceTeamCmd( Resource *team, Resource *member, const 
 }
 void AddResourceTeamCmd::execute()
 {
-    m_team->addTeamMember( m_member );
+    m_team->addTeamMemberId( m_member );
 }
 void AddResourceTeamCmd::unexecute()
 {
-    m_team->removeTeamMember( m_member );
+    m_team->removeTeamMemberId( m_member );
 }
 
-RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name )
+RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name )
     : NamedCommand( name ),
     m_team( team ),
     m_member( member )
@@ -1797,11 +1820,11 @@ RemoveResourceTeamCmd::RemoveResourceTeamCmd( Resource *team, Resource *member, 
 }
 void RemoveResourceTeamCmd::execute()
 {
-    m_team->removeTeamMember( m_member );
+    m_team->removeTeamMemberId( m_member );
 }
 void RemoveResourceTeamCmd::unexecute()
 {
-    m_team->addTeamMember( m_member );
+    m_team->addTeamMemberId( m_member );
 }
 
 RemoveResourceGroupCmd::RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name )
@@ -2123,12 +2146,15 @@ RemoveCompletionEntryCmd::RemoveCompletionEntryCmd( Completion &completion, cons
 }
 RemoveCompletionEntryCmd::~RemoveCompletionEntryCmd()
 {
+    kDebug(planDbg())<<m_mine<<value;
     if ( m_mine )
         delete value;
 }
 void RemoveCompletionEntryCmd::execute()
 {
-    Q_ASSERT( m_completion.entries().contains( m_date ) );
+    if ( ! m_completion.entries().contains( m_date ) ) {
+        kWarning()<<"Completion entries does not contain date:"<<m_date;
+    }
     if ( value ) {
         m_completion.takeEntry( m_date );
         m_mine = true;
@@ -2203,42 +2229,31 @@ void AddCompletionUsedEffortCmd::unexecute()
 
 }
 
-AddCompletionActualEffortCmd::AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name )
+AddCompletionActualEffortCmd::AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const QString& name )
         : NamedCommand( name ),
         m_usedEffort( ue ),
         m_date( date ),
-        newvalue( value ),
-        m_newmine( true ),
-        m_oldmine( false)
+        newvalue( value )
 {
     oldvalue = ue.effort( date );
 }
 AddCompletionActualEffortCmd::~AddCompletionActualEffortCmd()
 {
-    if ( m_oldmine )
-        delete oldvalue;
-    if ( m_newmine )
-        delete newvalue;
 }
 void AddCompletionActualEffortCmd::execute()
 {
-    if ( oldvalue ) {
-        m_usedEffort.takeEffort( m_date );
-        m_oldmine = true;
+    m_usedEffort.takeEffort( m_date );
+    if ( newvalue.effort() > 0 ) {
+        m_usedEffort.setEffort( m_date, newvalue );
     }
-    m_usedEffort.setEffort( m_date, newvalue );
-    m_newmine = false;
 
 }
 void AddCompletionActualEffortCmd::unexecute()
 {
     m_usedEffort.takeEffort( m_date );
-    if ( oldvalue ) {
+    if ( oldvalue.effort() > 0 ) {
         m_usedEffort.setEffort( m_date, oldvalue );
     }
-    m_newmine = true;
-    m_oldmine = false;
-
 }
 
 AddAccountCmd::AddAccountCmd( Project &project, Account *account, const QString& parent, int index, const QString& name )
@@ -2410,11 +2425,11 @@ NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd( Node &node, Account *o
 {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kDebug();
+    //kDebug(planDbg());
 }
 void NodeModifyRunningAccountCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_oldvalue ) {
         m_oldvalue->removeRunning( m_node );
     }
@@ -2425,7 +2440,7 @@ void NodeModifyRunningAccountCmd::execute()
 }
 void NodeModifyRunningAccountCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_newvalue ) {
         m_newvalue->removeRunning( m_node );
     }
@@ -2441,12 +2456,12 @@ NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd( Node &node, Account *o
 {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kDebug();
+    //kDebug(planDbg());
 }
 
 void NodeModifyStartupAccountCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_oldvalue ) {
         m_oldvalue->removeStartup( m_node );
     }
@@ -2457,7 +2472,7 @@ void NodeModifyStartupAccountCmd::execute()
 }
 void NodeModifyStartupAccountCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_newvalue ) {
         m_newvalue->removeStartup( m_node );
     }
@@ -2473,12 +2488,12 @@ NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd( Node &node, Account 
 {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kDebug();
+    //kDebug(planDbg());
 }
 
 void NodeModifyShutdownAccountCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_oldvalue ) {
         m_oldvalue->removeShutdown( m_node );
     }
@@ -2489,7 +2504,7 @@ void NodeModifyShutdownAccountCmd::execute()
 }
 void NodeModifyShutdownAccountCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_newvalue ) {
         m_newvalue->removeShutdown( m_node );
     }
@@ -2505,18 +2520,18 @@ ModifyDefaultAccountCmd::ModifyDefaultAccountCmd( Accounts &acc, Account *oldval
 {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kDebug();
+    //kDebug(planDbg());
 }
 
 void ModifyDefaultAccountCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_accounts.setDefaultAccount( m_newvalue );
 
 }
 void ModifyDefaultAccountCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     m_accounts.setDefaultAccount( m_oldvalue );
 
 }
@@ -2530,7 +2545,7 @@ ResourceModifyAccountCmd::ResourceModifyAccountCmd( Resource &resource,  Account
 }
 void ResourceModifyAccountCmd::execute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_oldvalue ) {
         m_oldvalue->removeRunning( m_resource );
     }
@@ -2540,7 +2555,7 @@ void ResourceModifyAccountCmd::execute()
 }
 void ResourceModifyAccountCmd::unexecute()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_newvalue ) {
         m_newvalue->removeRunning( m_resource );
     }
@@ -2609,8 +2624,6 @@ AddScheduleManagerCmd::AddScheduleManagerCmd( Project &node, ScheduleManager *sm
     m_sm( sm ),
     m_index( index ),
     m_exp( sm->expected() ),
-    m_opt( sm->optimistic() ),
-    m_pess( sm->pessimistic() ),
     m_mine( true)
 {
 }
@@ -2622,8 +2635,6 @@ AddScheduleManagerCmd::AddScheduleManagerCmd( ScheduleManager *parent, ScheduleM
     m_sm( sm ),
     m_index( index ),
     m_exp( sm->expected() ),
-    m_opt( sm->optimistic() ),
-    m_pess( sm->pessimistic() ),
     m_mine( true)
 {
 }
@@ -2640,8 +2651,6 @@ void AddScheduleManagerCmd::execute()
 {
     m_node.addScheduleManager( m_sm, m_parent, m_index );
     m_sm->setExpected( m_exp );
-    m_sm->setOptimistic( m_opt );
-    m_sm->setPessimistic( m_pess );
     m_mine = false;
 }
 
@@ -2649,8 +2658,6 @@ void AddScheduleManagerCmd::unexecute()
 {
     m_node.takeScheduleManager( m_sm );
     m_sm->setExpected( 0 );
-    m_sm->setOptimistic( 0 );
-    m_sm->setPessimistic( 0 );
     m_mine = true;
 }
 
@@ -2750,24 +2757,6 @@ void ModifyScheduleManagerDistributionCmd::unexecute()
     m_sm.setUsePert( oldvalue );
 }
 
-ModifyScheduleManagerCalculateAllCmd::ModifyScheduleManagerCalculateAllCmd( ScheduleManager &sm, bool value, const QString& name )
-    : NamedCommand( name ),
-    m_sm( sm ),
-    oldvalue( sm.calculateAll() ),
-    newvalue( value )
-{
-}
-
-void ModifyScheduleManagerCalculateAllCmd::execute()
-{
-    m_sm.setCalculateAll( newvalue );
-}
-
-void ModifyScheduleManagerCalculateAllCmd::unexecute()
-{
-    m_sm.setCalculateAll( oldvalue );
-}
-
 ModifyScheduleManagerSchedulingDirectionCmd::ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name )
     : NamedCommand( name ),
     m_sm( sm ),
@@ -2810,11 +2799,7 @@ CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, 
     m_sm( sm ),
     m_first( true ),
     m_oldexpected( m_sm->expected() ),
-    m_oldoptimistic( m_sm->optimistic() ),
-    m_oldpessimistic( m_sm->pessimistic() ),
-    m_newexpected( 0 ),
-    m_newoptimistic( 0 ),
-    m_newpessimistic( 0 )
+    m_newexpected( 0 )
 {
 }
 
@@ -2827,12 +2812,8 @@ void CalculateScheduleCmd::execute()
             m_first = false;
         }
         m_newexpected = m_sm->expected();
-        m_newoptimistic = m_sm->optimistic();
-        m_newpessimistic = m_sm->pessimistic();
     } else {
         m_sm->setExpected( m_newexpected );
-        m_sm->setOptimistic( m_newoptimistic );
-        m_sm->setPessimistic( m_newpessimistic );
     }
 }
 
@@ -2847,8 +2828,6 @@ void CalculateScheduleCmd::unexecute()
 
     }
     m_sm->setExpected( m_oldexpected );
-    m_sm->setOptimistic( m_oldoptimistic );
-    m_sm->setPessimistic( m_oldpessimistic );
 }
 
 //------------------------
@@ -2969,7 +2948,7 @@ DocumentAddCmd::DocumentAddCmd( Documents &docs, Document *value, const QString&
 }
 DocumentAddCmd::~DocumentAddCmd()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_mine )
         delete m_value;
 }
@@ -2995,7 +2974,7 @@ DocumentRemoveCmd::DocumentRemoveCmd( Documents &docs, Document *value, const QS
 }
 DocumentRemoveCmd::~DocumentRemoveCmd()
 {
-    //kDebug();
+    //kDebug(planDbg());
     if ( m_mine )
         delete m_value;
 }
@@ -3026,6 +3005,24 @@ void DocumentModifyUrlCmd::execute()
 void DocumentModifyUrlCmd::unexecute()
 {
     m_doc->setUrl( m_oldvalue );
+}
+
+//----------------
+DocumentModifyNameCmd::DocumentModifyNameCmd( Document *doc, const QString &value, const QString& name )
+    : NamedCommand( name ),
+    m_doc( doc )
+{
+    Q_ASSERT( doc );
+    m_value = value;
+    m_oldvalue = doc->name();
+}
+void DocumentModifyNameCmd::execute()
+{
+    m_doc->setName( m_value );
+}
+void DocumentModifyNameCmd::unexecute()
+{
+    m_doc->setName( m_oldvalue );
 }
 
 //----------------
@@ -3107,7 +3104,20 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
 {
     Q_ASSERT( &project != m_project );
 
-    // remove unhandled info in tasks
+    if ( m_project->defaultCalendar() ) {
+        project.setDefaultCalendar( 0 ); // or else m_project default calendar may be overwitten
+    }
+    QString defaultAccount;
+    if ( ! m_project->accounts().defaultAccount() && project.accounts().defaultAccount() ) {
+        defaultAccount = project.accounts().defaultAccount()->name();
+    }
+
+    QMap<Node*, QString> startupaccountmap;
+    QMap<Node*, QString> shutdownaccountmap;
+    QMap<Node*, QString> runningaccountmap;
+    QMap<Node*, QString> nodecalendarmap;
+
+    // remove unhandled info in tasks and get accounts and calendars
     foreach ( Node *n, project.allNodes() ) {
         if ( n->type() == Node::Type_Task ) {
             Task *t = static_cast<Task*>( n );
@@ -3118,16 +3128,53 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
                 delete wp;
             }
         }
-    }
-    QMap<Calendar*, Calendar*> unusedCalendars;
-    foreach ( Calendar *c, project.calendars() ) {
-        addCalendars( c, 0, unusedCalendars );
-    }
-    // fixup resources pointing to unused calendars
-    foreach ( Resource *r, project.resourceList() ) {
-        if ( unusedCalendars.contains( r->calendar() ) ) {
-            r->setCalendar( unusedCalendars[ r->calendar() ] );
+        if ( n->startupAccount() ) {
+            startupaccountmap.insert( n, n->startupAccount()->name() );
+            n->setStartupAccount( 0 );
         }
+        if ( n->shutdownAccount() ) {
+            shutdownaccountmap.insert( n, n->shutdownAccount()->name() );
+            n->setShutdownAccount( 0 );
+        }
+        if ( n->runningAccount() ) {
+            runningaccountmap.insert( n, n->runningAccount()->name() );
+            n->setRunningAccount( 0 );
+        }
+        if ( n->estimate()->calendar() ) {
+            nodecalendarmap.insert( n, n->estimate()->calendar()->id() );
+            n->estimate()->setCalendar( 0 );
+        }
+    }
+    // get resources pointing to calendars and accounts
+    QMap<Resource*, QString> resaccountmap;
+    QMap<Resource*, QString> rescalendarmap;
+    foreach ( Resource *r, project.resourceList() ) {
+        if ( r->account() ) {
+            resaccountmap.insert( r, r->account()->name() );
+            r->setAccount( 0 );
+        }
+        if ( r->calendar() ) {
+            rescalendarmap.insert( r, r->calendar()->id() );
+            r->setCalendar( 0 );
+        }
+    }
+    // create add account commands and keep track of used and unused accounts
+    QList<Account*> unusedAccounts;
+    QMap<QString, Account*> accountsmap;
+    foreach ( Account *a,  m_project->accounts().allAccounts() ) {
+        accountsmap.insert( a->name(), a );
+    }
+    foreach ( Account *a, project.accounts().accountList() ) {
+        addAccounts( a, 0, unusedAccounts, accountsmap );
+    }
+    // create add calendar commands and keep track of used and unused calendars
+    QList<Calendar*> unusedCalendars;
+    QMap<QString, Calendar*> calendarsmap;
+    foreach ( Calendar *c,  m_project->allCalendars() ) {
+        calendarsmap.insert( c->id(), c );
+    }
+    foreach ( Calendar *c, project.calendars() ) {
+        addCalendars( c, 0, unusedCalendars, calendarsmap );
     }
     // get all requests before resources are merged
     QMap<ResourceGroupRequest*, QPair<Node *, ResourceGroup*> > greqs;
@@ -3138,7 +3185,8 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             continue;
         }
         while ( ResourceGroupRequest *gr = n->requests().requests().value( 0 ) ) {
-            while ( ResourceRequest *rr = gr->resourceRequests().value( 0 ) ) {
+            while ( ResourceRequest *rr = gr->resourceRequests( false ).value( 0 ) ) {
+                kDebug(insertProjectCmdDba())<<"Get resource request:"<<rr;
                 rreqs.insertMulti( gr, QPair<ResourceRequest*, Resource*>( rr, rr->resource() ) );
                 // all resource requests shall be reinserted
                 rr->unregisterRequest();
@@ -3154,6 +3202,9 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
 #endif
         }
     }
+    QList<ResourceGroup*> allGroups;
+    QList<Resource*> allResources;
+    QList<Resource*> newResources;
     QMap<ResourceGroup*, ResourceGroup*> existingGroups;
     QMap<Resource*, Resource*> existingResources;
     foreach ( ResourceGroup *g, project.resourceGroups() ) {
@@ -3161,9 +3212,11 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         if ( gr == 0 ) {
             addCommand( new AddResourceGroupCmd( m_project, g, QString("ResourceGroup") ) );
             gr = g;
+            kDebug(insertProjectCmdDba())<<"AddResourceGroupCmd:"<<gr->name();
         } else {
             existingGroups[ gr ] = g;
         }
+        allGroups << gr;
         foreach ( Resource *r, g->resources() ) {
             while ( Schedule *s = r->schedules().values().value( 0 ) ) {
                 r->deleteSchedule( s ); // schedules not handled
@@ -3171,11 +3224,35 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
             Resource *res = m_project->findResource( r->id() );
             if ( res == 0 ) {
                 addCommand( new AddResourceCmd( gr, r, "Resource" ) );
+                allResources << r;
+                newResources << r;
+                kDebug(insertProjectCmdDba())<<"AddResourceCmd:"<<gr->name()<<r->name();
             } else {
                 existingResources[ res ] = r;
+                allResources << res;
             }
         }
     }
+    // Update resource account
+    {QMap<Resource*, QString>::const_iterator it = resaccountmap.constBegin();
+    QMap<Resource*, QString>::const_iterator end = resaccountmap.constEnd();
+    for ( ; it != end; ++it ) {
+        Resource *r = it.key();
+        if ( newResources.contains( r ) ) {
+            Q_ASSERT( allResources.contains( r ) );
+            addCommand( new ResourceModifyAccountCmd( *r, 0, accountsmap.value( it.value() ) ) );
+        }
+    }}
+    // Update resource calendar
+    {QMap<Resource*, QString>::const_iterator it = rescalendarmap.constBegin();
+    QMap<Resource*, QString>::const_iterator end = rescalendarmap.constEnd();
+    for ( ; it != end; ++it ) {
+        Resource *r = it.key();
+        if ( newResources.contains( r ) ) {
+            Q_ASSERT( allResources.contains( r ) );
+            addCommand( new ModifyResourceCalendarCmd( r, calendarsmap.value( it.value() ) ) );
+        }
+    }}
     // Requests: clean up requests to resources already in m_project
     int gi = 0;
     int ri = 0;
@@ -3184,18 +3261,39 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
         Node *n = pair.first;
         ResourceGroup *newGroup = pair.second;
         if ( existingGroups.values().contains( newGroup ) ) {
-            newGroup = existingGroups.keys().value( existingGroups.values().indexOf( newGroup ) );
+            newGroup = existingGroups.key( newGroup );
         }
+        Q_ASSERT( allGroups.contains( newGroup ) );
         gr->setGroup( newGroup );
         addCommand( new AddResourceGroupRequestCmd( static_cast<Task&>( *n ), gr, QString("Group %1").arg( ++gi ) ) );
-
+        kDebug(insertProjectCmdDba())<<"Add resource group request:"<<n->name()<<":"<<newGroup->name();
         QMap<ResourceGroupRequest*, QPair<ResourceRequest*, Resource*> >::const_iterator i = rreqs.constFind( gr );
         for ( ; i != rreqs.constEnd() && i.key() == gr; ++i ) {
             ResourceRequest *rr = i.value().first;
             Resource *newRes = i.value().second;
             if ( existingResources.values().contains( newRes ) ) {
-                newRes = existingResources.keys().value( existingResources.values().indexOf( newRes ) );
+                newRes = existingResources.key( newRes );
             }
+            kDebug(insertProjectCmdDba())<<"Add resource request:"<<n->name()<<":"<<newGroup->name()<<":"<<newRes->name();
+            if ( ! rr->requiredResources().isEmpty() ) {
+                // the resource request may have required resources that needs mapping
+                QList<Resource*> required;
+                foreach ( Resource *r, rr->requiredResources() ) {
+                    if ( newResources.contains( r ) ) {
+                        required << r;
+                        kDebug(insertProjectCmdDba())<<"Request: required (new)"<<r->name();
+                        continue;
+                    }
+                    Resource *r2 = existingResources.key( r );
+                    Q_ASSERT( allResources.contains( r2 ) );
+                    if ( r2 ) {
+                        kDebug(insertProjectCmdDba())<<"Request: required (existing)"<<r2->name();
+                        required << r2;
+                    }
+                }
+                rr->setRequiredResources( required );
+            }
+            Q_ASSERT( allResources.contains( newRes ) );
             // all resource requests shall be reinserted
             rr->setResource( newRes );
             addCommand( new AddResourceRequestCmd( gr, rr, QString("Resource %1").arg( ++ri ) ) );
@@ -3221,10 +3319,45 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     }
     // Dependencies:
     foreach ( Node *n, project.allNodes() ) {
-        foreach ( Relation *r, n->dependChildNodes() ) {
-            addCommand( new AddRelationCmd( *m_project, new Relation( r ) ) );
+        while ( n->numDependChildNodes() > 0 ) {
+            Relation *r = n->dependChildNodes().at( 0 );
+            n->takeDependChildNode( r );
+            r->child()->takeDependParentNode( r );
+            addCommand( new AddRelationCmd( *m_project, r ) );
         }
     }
+    // node calendar
+    {QMap<Node*, QString>::const_iterator it = nodecalendarmap.constBegin();
+    QMap<Node*, QString>::const_iterator end = nodecalendarmap.constEnd();
+    for ( ; it != end; ++it ) {
+        addCommand( new ModifyEstimateCalendarCmd( *(it.key()), 0, calendarsmap.value( it.value() ) ) );
+    }}
+    // node startup account
+    {QMap<Node*, QString>::const_iterator it = startupaccountmap.constBegin();
+    QMap<Node*, QString>::const_iterator end = startupaccountmap.constEnd();
+    for ( ; it != end; ++it ) {
+        addCommand( new NodeModifyStartupAccountCmd( *(it.key()), 0, accountsmap.value( it.value() ) ) );
+    }}
+    // node shutdown account
+    {QMap<Node*, QString>::const_iterator it = shutdownaccountmap.constBegin();
+    QMap<Node*, QString>::const_iterator end = shutdownaccountmap.constEnd();
+    for ( ; it != end; ++it ) {
+        addCommand( new NodeModifyShutdownAccountCmd( *(it.key()), 0, accountsmap.value( it.value() ) ) );
+    }}
+    // node running account
+    {QMap<Node*, QString>::const_iterator it = runningaccountmap.constBegin();
+    QMap<Node*, QString>::const_iterator end = runningaccountmap.constEnd();
+    for ( ; it != end; ++it ) {
+        addCommand( new NodeModifyRunningAccountCmd( *(it.key()), 0, accountsmap.value( it.value() ) ) );
+    }}
+
+    if ( ! defaultAccount.isEmpty() ) {
+        Account *a = accountsmap.value( defaultAccount );
+        if ( a && a->list() ) {
+            addCommand( new ModifyDefaultAccountCmd( m_project->accounts(), 0, a ) );
+        }
+    }
+    // Cleanup
     // Remove nodes from project so they are not deleted
     while ( Node *ch = project.childNode( 0 ) ) {
         project.takeChildNode( ch );
@@ -3237,7 +3370,13 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     while ( project.calendarCount() > 0 ) {
         project.takeCalendar( project.calendarAt( 0 ) );
     }
-    qDeleteAll( unusedCalendars.keys() );
+    qDeleteAll( unusedCalendars );
+
+    // Remove accounts from project
+    while ( project.accounts().accountCount() > 0 ) {
+        project.accounts().take( project.accounts().accountAt( 0 ) );
+    }
+    qDeleteAll( unusedAccounts );
 
     while ( project.numResourceGroups() > 0 ) {
         ResourceGroup *g = project.resourceGroupAt( 0 );
@@ -3250,22 +3389,47 @@ InsertProjectCmd::InsertProjectCmd( Project &project, Node *parent, Node *after,
     qDeleteAll( existingGroups ); // deletes unused resource groups
 }
 
-void InsertProjectCmd::addCalendars( Calendar *calendar, Calendar *parent, QMap<Calendar*, Calendar*> &map ) {
+void InsertProjectCmd::addCalendars( Calendar *calendar, Calendar *parent, QList<Calendar*> &unused, QMap<QString, Calendar*> &calendarsmap ) {
     Calendar *par = 0;
     if ( parent ) {
-        par = m_project->findCalendar( parent->id() );
+        par = calendarsmap.value( parent->id() );
     }
     if ( par == 0 ) {
         par = parent;
     }
-    Calendar *cal = m_project->findCalendar( calendar->id() );
+    Calendar *cal = calendarsmap.value( calendar->id() );
     if ( cal == 0 ) {
-        addCommand( new CalendarAddCmd( m_project, calendar, -1, par, "Calendar" ) );
+        calendarsmap.insert( calendar->id(), calendar );
+        addCommand( new CalendarAddCmd( m_project, calendar, -1, par ) );
     } else {
-        map[ calendar ] = cal;
+        unused << calendar;
     }
     foreach ( Calendar *c, calendar->calendars() ) {
-        addCalendars( c, calendar, map );
+        addCalendars( c, calendar, unused, calendarsmap );
+    }
+}
+
+void InsertProjectCmd::addAccounts( Account *account, Account *parent, QList<Account*>  &unused, QMap<QString, Account*>  &accountsmap ) {
+    Account *par = 0;
+    if ( parent ) {
+        par = accountsmap.value( parent->name() );
+    }
+    if ( par == 0 ) {
+        par = parent;
+    }
+    Account *acc = accountsmap.value( account->name() );
+    if ( acc == 0 ) {
+        kDebug(insertProjectCmdDba())<<"Move to new project:"<<account<<account->name();
+        accountsmap.insert( account->name(), account );
+        addCommand( new AddAccountCmd( *m_project, account, par, -1, QString( "Add account %1" ).arg( account->name() ) ) );
+    } else {
+        kDebug(insertProjectCmdDba())<<"Already exists:"<<account<<account->name();
+        unused << account;
+    }
+    while ( ! account->accountList().isEmpty() ) {
+        Account *a = account->accountList().first();
+        account->list()->take( a );
+        addAccounts( a, account, unused, accountsmap );
     }
 }
 
@@ -3362,16 +3526,28 @@ ModifyCurrencyFractionalDigitsCmd::ModifyCurrencyFractionalDigitsCmd(  KLocale *
     : NamedCommand( name ),
     m_locale( locale ),
     m_newvalue( value ),
+#if KDE_IS_VERSION(4,4,0)
+    m_oldvalue(locale->monetaryDecimalPlaces())
+#else
     m_oldvalue( locale->fracDigits() )
+#endif
 {
 };
 void ModifyCurrencyFractionalDigitsCmd::execute()
 {
+#if KDE_IS_VERSION(4,4,0)
+    m_locale->setMonetaryDecimalPlaces(m_newvalue);
+#else
     m_locale->setFracDigits( m_newvalue );
+#endif
 }
 void ModifyCurrencyFractionalDigitsCmd::unexecute()
 {
+#if KDE_IS_VERSION(4,4,0)
+    m_locale->setMonetaryDecimalPlaces(m_oldvalue);
+#else
     m_locale->setFracDigits( m_oldvalue );
+#endif
 }
 
 ModifyPositivePrefixCurrencySymolCmd::ModifyPositivePrefixCurrencySymolCmd(  KLocale *locale, bool value, const QString& name )
@@ -3478,13 +3654,13 @@ ClearExternalAppointmentCmd::~ClearExternalAppointmentCmd()
 
 void ClearExternalAppointmentCmd::execute()
 {
-//     kDebug()<<text()<<":"<<m_resource->name()<<m_pid;
+//     kDebug(planDbg())<<text()<<":"<<m_resource->name()<<m_pid;
     m_appointments = m_resource->takeExternalAppointment( m_pid );
 }
 
 void ClearExternalAppointmentCmd::unexecute()
 {
-//     kDebug()<<text()<<":"<<m_resource->name()<<m_pid;
+//     kDebug(planDbg())<<text()<<":"<<m_resource->name()<<m_pid;
     if ( m_appointments ) {
         m_resource->addExternalAppointment( m_pid, m_appointments );
     }

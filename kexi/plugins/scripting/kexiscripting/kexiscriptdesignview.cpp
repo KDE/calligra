@@ -28,11 +28,11 @@
 #include <kross/core/action.h>
 #include <kross/core/interpreter.h>
 
-#include <qlayout.h>
-#include <qsplitter.h>
-#include <qtimer.h>
-#include <qdatetime.h>
-#include <qdom.h>
+#include <QLayout>
+#include <QSplitter>
+#include <QTimer>
+#include <QDateTime>
+#include <QDomDocument>
 #include <q3stylesheet.h>
 #include <ktextbrowser.h>
 #include <kfiledialog.h>
@@ -42,7 +42,7 @@
 
 #include <KexiMainWindowIface.h>
 //#include <kexidialogbase.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <QTextDocument>
 
 /// @internal
@@ -156,7 +156,7 @@ KexiScriptDesignView::KexiScriptDesignView(
     }
     viewActions << menu;
     {
-        QAction* a = new KAction(KIcon("media-playback-start"), i18n("Execute"), this);
+        QAction* a = new KAction(KIcon("system-run"), i18n("Execute"), this);
         a->setObjectName("script_execute");
         a->setToolTip(i18n("Execute the scripting code"));
         a->setWhatsThis(i18n("Execute the scripting code"));
@@ -365,6 +365,7 @@ void KexiScriptDesignView::execute()
             d->editor->setLineNo(lineno);
     }
     else {
+        // xgettext: no-c-format
         d->statusbrowser->append(i18n("Successfully executed. Time elapsed: %1ms", time.elapsed()));
     }
 }

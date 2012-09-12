@@ -57,7 +57,7 @@ class KPLATOUI_EXPORT PertResult : public ViewBase
 {
     Q_OBJECT
 public:
-    explicit PertResult( KoDocument *part, QWidget *parent = 0 );
+    explicit PertResult(KoPart *part, KoDocument *doc, QWidget *parent = 0);
     
     void setupGui();
     void setProject( Project *project );
@@ -105,7 +105,7 @@ class KPLATOUI_EXPORT PertCpmView : public ViewBase
 {
     Q_OBJECT
 public:
-    explicit PertCpmView( KoDocument *part, QWidget *parent = 0 );
+    explicit PertCpmView(KoPart *part, KoDocument *doc, QWidget *parent = 0);
     
     void setupGui();
     void setProject( Project *project );

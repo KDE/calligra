@@ -27,7 +27,7 @@
 
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
-#include "KoShapeControllerBase.h"
+#include "KoShapeBasedDocumentBase.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -38,11 +38,11 @@ PluginShapeFactory::PluginShapeFactory()
     setToolTip(i18n("Plugin Placeholder, embedded or fullscreen"));
     //setIcon("video-x-generic");
     setXmlElementNames(KoXmlNS::draw, QStringList("plugin"));
-    setLoadingPriority(9);
+    setLoadingPriority(1);
     setHidden(true);
 }
 
-KoShape *PluginShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *PluginShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
     PluginShape *defaultShape = new PluginShape();

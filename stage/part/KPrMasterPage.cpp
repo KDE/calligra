@@ -21,7 +21,7 @@
 
 #include "pagelayout/KPrPageLayouts.h"
 #include <KoXmlNS.h>
-//#include <KoResourceManager.h>
+//#include <KoDocumentResourceManager.h>
 #include "KPresenter.h"
 #include <KoPALoadingContext.h>
 #include <KoOdfWorkaround.h>

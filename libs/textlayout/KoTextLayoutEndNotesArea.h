@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,6 +40,10 @@ public:
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the frame
     bool layout(FrameIterator *cursor);
+
+    KoPointedAt hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const;
+
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 

@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is part of the  KDE project
  * Copyright (C) 2011 Smit Patel <smitpatel24@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -28,7 +28,9 @@
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
 #include <KoText.h>
-
+#include <KoOdfBibliographyConfiguration.h>
+#include <KoGenStyles.h>
+#include <KoStyleManager.h>
 #include <KDebug>
 
 #include <QTextDocument>
@@ -38,6 +40,8 @@
 #include <QTextInlineObject>
 #include <QFontMetricsF>
 #include <QTextOption>
+#include <QBuffer>
+#include <QMap>
 //#include <QMessageBox>
 
 class KoInlineCite::Private
@@ -47,7 +51,11 @@ public:
         : type(t)
     {
     }
+
     KoInlineCite::Type type;
+    int posInDocument;
+    QString label;
+
     QString bibliographyType;
     QString identifier;
     QString address;
@@ -262,6 +270,11 @@ void KoInlineCite::setISSN(const QString &issn)
 void KoInlineCite::setJournal(const QString &journal)
 {
     d->journal = journal;
+}
+
+void KoInlineCite::setLabel(const QString &label)
+{
+    d->label = label;
 }
 
 void KoInlineCite::setMonth(const QString &month)
@@ -494,62 +507,69 @@ QString KoInlineCite::url() const
     return d->url;
 }
 
-bool KoInlineCite::hasSameData(KoInlineCite *cite) const
+int KoInlineCite::posInDocument() const
 {
-    return (d->address == cite->address() && d->annote == cite->annotation() && d->author == cite->author() &&
-            d->bibliographyType == cite->bibliographyType() && d->booktitle == cite->bookTitle() &&
-            d->chapter == cite->chapter() && d->custom1 == cite->custom1() && d->custom2 == cite->custom2() &&
-            d->custom3 == cite->custom3() && d->custom4 == cite->custom4() && d->custom5 == cite->custom5() &&
-            d->edition == cite->edition() && d->editor == cite->editor() && d->identifier == cite->identifier() &&
-            d->institution == cite->institution() && d->isbn == cite->isbn() && d->issn == cite->issn() &&
-            d->journal == cite->journal() && d->month == cite->month() && d->note == cite->note() &&
-            d->number == cite->number() && d->organisation == cite->organisations() && d->pages == cite->pages() &&
-            d->publicationType == cite->publicationType() && d->publisher == cite->publisher() &&
-            d->reportType == cite->reportType() && d->school == cite->school() && d->series == cite->series() &&
-            d->title == cite->title() && d->url == cite->url() && d->volume == cite->volume() && d->year == cite->year());
+    return d->posInDocument;
 }
 
-void KoInlineCite::copyFrom(KoInlineCite *cite)
+bool KoInlineCite::operator!= ( const KoInlineCite &cite ) const
 {
-    d->address = cite->address();
-    d->annote = cite->annotation();
-    d->author = cite->author();
-    d->bibliographyType = cite->bibliographyType();
-    d->booktitle = cite->bookTitle();
-    d->chapter = cite->chapter();
-    d->custom1 = cite->custom1();
-    d->custom2 = cite->custom2();
-    d->custom3 = cite->custom3();
-    d->custom4 = cite->custom4();
-    d->custom5 = cite->custom5();
-    d->edition = cite->edition();
-    d->editor = cite->editor();
-    d->identifier = cite->identifier();
-    d->institution = cite->institution();
-    d->isbn = cite->isbn();
-    d->issn = cite->issn();
-    d->journal = cite->journal();
-    d->month = cite->month();
-    d->note = cite->note();
-    d->number = cite->number();
-    d->organisation = cite->organisations();
-    d->pages = cite->pages();
-    d->publicationType = cite->publicationType();
-    d->publisher = cite->publisher();
-    d->reportType = cite->reportType();
-    d->school = cite->school();
-    d->series = cite->series();
-    d->title = cite->title();
-    d->url = cite->url();
-    d->volume = cite->volume();
-    d->year = cite->year();
+    return !(d->address == cite.address() && d->annote == cite.annotation() && d->author == cite.author() &&
+            d->bibliographyType == cite.bibliographyType() && d->booktitle == cite.bookTitle() &&
+            d->chapter == cite.chapter() && d->custom1 == cite.custom1() && d->custom2 == cite.custom2() &&
+            d->custom3 == cite.custom3() && d->custom4 == cite.custom4() && d->custom5 == cite.custom5() &&
+            d->edition == cite.edition() && d->editor == cite.editor() && d->identifier == cite.identifier() &&
+            d->institution == cite.institution() && d->isbn == cite.isbn() && d->issn == cite.issn() &&
+            d->journal == cite.journal() && d->month == cite.month() && d->note == cite.note() &&
+            d->number == cite.number() && d->organisation == cite.organisations() && d->pages == cite.pages() &&
+            d->publicationType == cite.publicationType() && d->publisher == cite.publisher() &&
+            d->reportType == cite.reportType() && d->school == cite.school() && d->series == cite.series() &&
+            d->title == cite.title() && d->url == cite.url() && d->volume == cite.volume() && d->year == cite.year());
+}
+
+KoInlineCite &KoInlineCite::operator =(const  KoInlineCite &cite)
+{
+    d->address = cite.address();
+    d->annote = cite.annotation();
+    d->author = cite.author();
+    d->bibliographyType = cite.bibliographyType();
+    d->booktitle = cite.bookTitle();
+    d->chapter = cite.chapter();
+    d->custom1 = cite.custom1();
+    d->custom2 = cite.custom2();
+    d->custom3 = cite.custom3();
+    d->custom4 = cite.custom4();
+    d->custom5 = cite.custom5();
+    d->edition = cite.edition();
+    d->editor = cite.editor();
+    d->identifier = cite.identifier();
+    d->institution = cite.institution();
+    d->isbn = cite.isbn();
+    d->issn = cite.issn();
+    d->journal = cite.journal();
+    d->month = cite.month();
+    d->note = cite.note();
+    d->number = cite.number();
+    d->organisation = cite.organisations();
+    d->pages = cite.pages();
+    d->publicationType = cite.publicationType();
+    d->publisher = cite.publisher();
+    d->reportType = cite.reportType();
+    d->school = cite.school();
+    d->series = cite.series();
+    d->title = cite.title();
+    d->url = cite.url();
+    d->volume = cite.volume();
+    d->year = cite.year();
+
+    return *this;
 }
 
 void KoInlineCite::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     Q_UNUSED(document);
-    Q_UNUSED(posInDocument);
     Q_UNUSED(format);
+    d->posInDocument = posInDocument;
 }
 
 void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -559,10 +579,21 @@ void KoInlineCite::resize(const QTextDocument *document, QTextInlineObject objec
     if (d->identifier.isEmpty())
         return;
 
-    QString citeLabel = QString("[%1]").arg(d->identifier);
+    KoOdfBibliographyConfiguration *bibConfiguration = KoTextDocument(document).styleManager()->bibliographyConfiguration();
+
+    if (!bibConfiguration->numberedEntries()) {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                                    .arg(d->identifier)
+                                    .arg(bibConfiguration->suffix());
+    } else {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                    .arg(QString::number(manager()->citationsSortedByPosition(true).indexOf(this) + 1))
+                    .arg(bibConfiguration->suffix());
+    }
+
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth(fm.width(citeLabel));
+    object.setWidth(fm.width(d->label));
     object.setAscent(fm.ascent());
     object.setDescent(fm.descent());
 }
@@ -576,20 +607,27 @@ void KoInlineCite::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     if (d->identifier.isEmpty())
         return;
 
-    QString citeLabel = QString("[%1]").arg(d->identifier);
+    KoOdfBibliographyConfiguration *bibConfiguration = KoTextDocument(document).styleManager()->bibliographyConfiguration();
+
+    if (!bibConfiguration->numberedEntries()) {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                                    .arg(d->identifier)
+                                    .arg(bibConfiguration->suffix());
+    } else {
+        d->label = QString("%1%2%3").arg(bibConfiguration->prefix())
+                    .arg(QString::number(manager()->citationsSortedByPosition(true, document->firstBlock()).indexOf(this) + 1))
+                    .arg(bibConfiguration->suffix());
+    }
 
     QFont font(format.font(), pd);
-    QTextLayout layout(citeLabel, font, pd);
+    QTextLayout layout(d->label, font, pd);
     layout.setCacheEnabled(true);
     QList<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
-    range.length = citeLabel.length();
+    range.length = d->label.length();
     range.format = format;
     range.format.setVerticalAlignment(QTextCharFormat::AlignNormal);
-    QBrush *brush = new QBrush(Qt::SolidPattern);
-    brush->setColor(Qt::lightGray);
-    range.format.setBackground(*brush);
     layouts.append(range);
     layout.setAdditionalFormats(layouts);
 
@@ -654,7 +692,6 @@ bool KoInlineCite::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 void KoInlineCite::saveOdf(KoShapeSavingContext &context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
-
     writer->startElement("text:bibliography-mark", false);
 
     if (!d->identifier.isEmpty())

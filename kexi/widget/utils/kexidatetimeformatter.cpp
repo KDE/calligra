@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,9 +39,9 @@ KexiDateFormatter::KexiDateFormatter()
         m_separator = "-";
     const int separatorLen = m_separator.length();
     QString yearMask("9999");
-    QString yearDateFormat("yyyy"),
-    monthDateFormat("MM"),
-    dayDateFormat("dd"); //for setting up m_dateFormat
+    QString yearDateFormat("yyyy");
+    QString monthDateFormat("MM");
+    QString dayDateFormat("dd"); //for setting up m_dateFormat
     bool ok = df.length() >= 8;
     int yearpos, monthpos, daypos; //result of df.find()
     if (ok) {//look at % variables
@@ -77,21 +77,21 @@ KexiDateFormatter::KexiDateFormatter()
             m_order = YDM;
 //! @todo use QRegExp (to replace %Y by %1, etc.) instead of hardcoded "%1%299%399"
 //!       because df may contain also other characters
-            m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
+            m_inputMask = yearMask + m_separator + QLatin1String("99") + m_separator + QLatin1String("99");
             m_qtFormat = yearDateFormat + m_separator + dayDateFormat + m_separator + monthDateFormat;
             m_yearpos = 0;
             m_daypos = yearMask.length() + separatorLen;
             m_monthpos = m_daypos + 2 + separatorLen;
         } else if (daypos < monthpos && monthpos < yearpos) {
             m_order = DMY;
-            m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
+            m_inputMask = QLatin1String("99") + m_separator + QLatin1String("99") + m_separator + yearMask;
             m_qtFormat = dayDateFormat + m_separator + monthDateFormat + m_separator + yearDateFormat;
             m_daypos = 0;
             m_monthpos = 2 + separatorLen;
             m_yearpos = m_monthpos + 2 + separatorLen;
         } else if (monthpos < daypos && daypos < yearpos) {
             m_order = MDY;
-            m_inputMask = QString("99%199%2%3").arg(m_separator).arg(m_separator).arg(yearMask);
+            m_inputMask = QLatin1String("99") + m_separator + QLatin1String("99") + m_separator + yearMask;
             m_qtFormat = monthDateFormat + m_separator + dayDateFormat + m_separator + yearDateFormat;
             m_monthpos = 0;
             m_daypos = 2 + separatorLen;
@@ -100,7 +100,7 @@ KexiDateFormatter::KexiDateFormatter()
             ok = false;
     }
     if (!ok || m_order == YMD) {//default: YMD
-        m_inputMask = QString("%1%299%399").arg(yearMask).arg(m_separator).arg(m_separator);
+        m_inputMask = yearMask + m_separator + QLatin1String("99") + m_separator + QLatin1String("99");
         m_qtFormat = yearDateFormat + m_separator + monthDateFormat + m_separator + dayDateFormat;
         m_yearpos = 0;
         m_monthpos = yearMask.length() + separatorLen;
@@ -113,7 +113,7 @@ KexiDateFormatter::~KexiDateFormatter()
 {
 }
 
-QDate KexiDateFormatter::stringToDate(const QString& str) const
+QDate KexiDateFormatter::fromString(const QString& str) const
 {
     bool ok = true;
     int year = str.mid(m_yearpos, m_longYear ? 4 : 2).toInt(&ok);
@@ -143,7 +143,7 @@ QVariant KexiDateFormatter::stringToVariant(const QString& str) const
 {
     if (isEmpty(str))
         return QVariant();
-    const QDate date(stringToDate(str));
+    const QDate date(fromString(str));
     if (date.isValid())
         return date;
     return QVariant();
@@ -155,7 +155,7 @@ bool KexiDateFormatter::isEmpty(const QString& str) const
     return s.remove(m_separator).trimmed().isEmpty();
 }
 
-QString KexiDateFormatter::dateToString(const QDate& date) const
+QString KexiDateFormatter::toString(const QDate& date) const
 {
     return date.toString(m_qtFormat);
 }
@@ -231,7 +231,7 @@ KexiTimeFormatter::~KexiTimeFormatter()
 {
 }
 
-QTime KexiTimeFormatter::stringToTime(const QString& str) const
+QTime KexiTimeFormatter::fromString(const QString& str) const
 {
     int hour, min, sec;
     bool pm = false;
@@ -266,7 +266,7 @@ QVariant KexiTimeFormatter::stringToVariant(const QString& str)
 {
     if (isEmpty(str))
         return QVariant();
-    const QTime time(stringToTime(str));
+    const QTime time(fromString(str));
     if (time.isValid())
         return time;
     return QVariant();
@@ -278,7 +278,7 @@ bool KexiTimeFormatter::isEmpty(const QString& str) const
     return s.remove(':').trimmed().isEmpty();
 }
 
-QString KexiTimeFormatter::timeToString(const QTime& time) const
+QString KexiTimeFormatter::toString(const QTime& time) const
 {
     if (!time.isValid())
         return QString();
@@ -306,15 +306,17 @@ QString KexiTimeFormatter::timeToString(const QTime& time) const
 
 //------------------------------------------------
 
-QString dateTimeInputMask(const KexiDateFormatter& dateFormatter, const KexiTimeFormatter& timeFormatter)
+QString KexiDateTimeFormatter::inputMask(const KexiDateFormatter& dateFormatter,
+                                       const KexiTimeFormatter& timeFormatter)
 {
     QString mask(dateFormatter.inputMask());
     mask.truncate(dateFormatter.inputMask().length() - 2);
     return mask + " " + timeFormatter.inputMask();
 }
 
-QDateTime stringToDateTime(
-    const KexiDateFormatter& dateFormatter, const KexiTimeFormatter& timeFormatter, const QString& str)
+QDateTime KexiDateTimeFormatter::fromString(
+    const KexiDateFormatter& dateFormatter,
+    const KexiTimeFormatter& timeFormatter, const QString& str)
 {
     QString s(str.trimmed());
     const int timepos = s.indexOf(" ");
@@ -323,19 +325,30 @@ QDateTime stringToDateTime(
         s = s.left(timepos);
     if (timepos > 0 && !emptyTime) {
         return QDateTime(
-                   dateFormatter.stringToDate(s.left(timepos)),
-                   timeFormatter.stringToTime(s.mid(timepos + 1))
+                   dateFormatter.fromString(s.left(timepos)),
+                   timeFormatter.fromString(s.mid(timepos + 1))
                );
     } else {
         return QDateTime(
-                   dateFormatter.stringToDate(s),
+                   dateFormatter.fromString(s),
                    QTime(0, 0, 0)
                );
     }
 }
 
-bool dateTimeIsEmpty(const KexiDateFormatter& dateFormatter, const KexiTimeFormatter& timeFormatter,
-                     const QString& str)
+QString KexiDateTimeFormatter::toString(const KexiDateFormatter &dateFormatter,
+                                        const KexiTimeFormatter &timeFormatter,
+                                        const QDateTime &value)
+{
+    if (value.isValid())
+        return dateFormatter.toString(value.date()) + ' '
+               + timeFormatter.toString(value.time());
+    return QString();
+}
+
+bool KexiDateTimeFormatter::isEmpty(const KexiDateFormatter& dateFormatter,
+                                    const KexiTimeFormatter& timeFormatter,
+                                    const QString& str)
 {
     int timepos = str.indexOf(" ");
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).replace(':',"").trimmed().isEmpty();
@@ -343,8 +356,8 @@ bool dateTimeIsEmpty(const KexiDateFormatter& dateFormatter, const KexiTimeForma
             && emptyTime);
 }
 
-bool dateTimeIsValid(const KexiDateFormatter& dateFormatter,
-                     const KexiTimeFormatter& timeFormatter, const QString& str)
+bool KexiDateTimeFormatter::isValid(const KexiDateFormatter& dateFormatter,
+                                    const KexiTimeFormatter& timeFormatter, const QString& str)
 {
     int timepos = str.indexOf(" ");
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).replace(':',"").trimmed().isEmpty();
@@ -352,6 +365,6 @@ bool dateTimeIsValid(const KexiDateFormatter& dateFormatter,
             && emptyTime)
         //empty date/time is valid
         return true;
-    return timepos >= 0 && dateFormatter.stringToDate(str.left(timepos)).isValid()
-           && (emptyTime /*date without time is also valid*/ || timeFormatter.stringToTime(str.mid(timepos + 1)).isValid());
+    return timepos >= 0 && dateFormatter.fromString(str.left(timepos)).isValid()
+           && (emptyTime /*date without time is also valid*/ || timeFormatter.fromString(str.mid(timepos + 1)).isValid());
 }

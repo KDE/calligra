@@ -25,7 +25,7 @@
 #define KPrPlaceholderShapeId "KPrPlaceholderShapeId"
 
 class KPrPlaceholderStrategy;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 /**
  * This shape is used as placeholder as long as the shape is not modified
@@ -37,13 +37,13 @@ public:
     KPrPlaceholderShape( const QString & presentationClass );
     virtual ~KPrPlaceholderShape();
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 
-    KoShape *createShape(KoResourceManager *documentResources);
+    KoShape *createShape(KoDocumentResourceManager *documentResources);
 
-    virtual void initStrategy(KoResourceManager *documentResources);
+    virtual void initStrategy(KoDocumentResourceManager *documentResources);
     KoShapeUserData * userData() const;
 private:
     KPrPlaceholderStrategy * m_strategy;

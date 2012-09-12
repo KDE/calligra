@@ -65,6 +65,7 @@ KexiCategorizedView::KexiCategorizedView(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
     setMouseTracking(true);
     setViewMode(QListView::IconMode);
+    setResizeMode(QListView::Adjust);
     KexiCategoryDrawer* categoryDrawer = new KexiCategoryDrawer;
     setCategoryDrawer(categoryDrawer);
 }

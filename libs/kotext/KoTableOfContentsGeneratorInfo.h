@@ -69,6 +69,5 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *);
-Q_DECLARE_METATYPE(QTextDocument *);
 
 #endif

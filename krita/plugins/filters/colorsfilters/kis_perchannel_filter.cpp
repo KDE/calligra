@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QComboBox>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QHBoxLayout>
 
 #include "KoChannelInfo.h"
@@ -44,7 +44,6 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 
-#include "kis_iterators_pixel.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
@@ -67,8 +66,14 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
             m_dev->colorSpace()->colorChannelCount());
 
+    QList<KoChannelInfo *> colorChannels;
+    foreach(KoChannelInfo *channel, dev->colorSpace()->channels()) {
+        if (channel->channelType() == KoChannelInfo::COLOR) {
+            colorChannels.append(channel);
+        }
+    }
     // fill in the channel chooser, in the display order, but store the pixel index as well.
-    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels());
+    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(colorChannels);
     foreach(KoChannelInfo *channel, sortedChannels) {
         QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
                                                                          KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));
@@ -97,6 +102,11 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_page->curveWidget->blockSignals(true);
     setActiveChannel(0);
     m_page->curveWidget->blockSignals(false);
+}
+
+KisPerChannelConfigWidget::~KisPerChannelConfigWidget()
+{
+    delete m_histogram;
 }
 
 inline QPixmap KisPerChannelConfigWidget::createGradient(Qt::Orientation orient /*, int invert (not used yet) */)

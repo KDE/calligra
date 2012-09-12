@@ -20,9 +20,9 @@
 #include "kodbcdriver.h"
 #include "odbcdriver.h"
 #include "kexidb/connection.h"
-#include <kexidb/field.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 
 #include <QVariant>
 #include <QFile>

@@ -122,12 +122,13 @@ signals:
 
 protected slots:
     void changed();
-    void categoryChanged( int index );
+    void categoryChanged();
     void fillAfter( ViewListItem *cat );
 
 private:
     ViewListItem *m_item;
     ViewListWidget &m_viewlist;
+    QMap<QString, ViewListItem*> m_categories;
 };
 
 class ViewListEditCategoryDialog : public KDialog

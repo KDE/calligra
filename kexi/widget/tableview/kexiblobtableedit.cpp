@@ -22,17 +22,17 @@
 
 #include <stdlib.h>
 
-#include <qdatastream.h>
-#include <qfile.h>
-#include <qlayout.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qbuffer.h>
+#include <QDataStream>
+#include <QFile>
+#include <QLayout>
+#include <QStatusBar>
+#include <QLabel>
+#include <QPixmap>
+#include <QImage>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
+#include <QBuffer>
 #include <QCache>
 
 #include <kdebug.h>

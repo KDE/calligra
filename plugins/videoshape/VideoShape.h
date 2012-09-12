@@ -20,9 +20,12 @@
 #ifndef VIDEOSHAPE_H
 #define VIDEOSHAPE_H
 
-#include <QPixmap>
 #include <KoShape.h>
 #include <KoFrameShape.h>
+
+#include <KIcon>
+
+#include <QPixmap>
 
 #define VIDEOSHAPEID "VideoShape"
 
@@ -36,7 +39,7 @@ public:
     virtual ~VideoShape();
 
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     // reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // reimplemented
@@ -57,6 +60,7 @@ protected:
 private:
     VideoCollection *m_videoCollection;
     VideoEventAction *m_videoEventAction;
+    KIcon m_icon;
 };
 
 #endif

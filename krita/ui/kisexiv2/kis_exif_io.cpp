@@ -15,10 +15,6 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
- #ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
-#define KDEWIN_STDINT_H
-#endif
-
 #include "kis_exif_io.h"
 
 #include <exiv2/exif.hpp>
@@ -124,7 +120,7 @@ inline T fixEndianess(T v, Exiv2::ByteOrder order)
     case Exiv2::bigEndian:
         return qFromBigEndian<T>(v);
     }
-    qFatal("Unknown byte order");
+    warnKrita << "KisExifIO: unknown byte order";
     return v;
 }
 
@@ -132,7 +128,7 @@ Exiv2::ByteOrder invertByteOrder(Exiv2::ByteOrder order)
 {
     switch (order) {
     case Exiv2::invalidByteOrder:
-        qFatal("Can't invert Exiv2::invalidByteOrder");
+        warnKrita << "KisExifIO: Can't invert Exiv2::invalidByteOrder";
     case Exiv2::littleEndian:
         return Exiv2::bigEndian;
     case Exiv2::bigEndian:
@@ -474,7 +470,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
 #endif
                 }
                 if (v && v->typeId() != Exiv2::invalidTypeId) {
-                    dbgFile << "Saving key" << exivKey; // << " of KMD value" << entry.value();
+                    dbgFile << "Saving key" << exivKey << " of KMD value" << entry.value();
                     exifData.add(exifKey, v);
                 } else {
                     dbgFile << "No exif value was created for" << entry.qualifiedName() << " as" << exivKey;// << " of KMD value" << entry.value();
@@ -592,7 +588,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 } else if (commentVar.type() == QVariant::ByteArray) {
                     comment = QString::fromLatin1(commentVar.toByteArray().data(), commentVar.toByteArray().size());
                 } else {
-                    qFatal("Unhandled UserComment value type.");
+                    warnKrita << "KisExifIO: Unhandled UserComment value type.";
                 }
                 KisMetaData::Value vcomment(comment);
                 vcomment.addPropertyQualifier("xml:lang", KisMetaData::Value("x-default"));

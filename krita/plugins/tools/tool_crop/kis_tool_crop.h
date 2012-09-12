@@ -67,7 +67,6 @@ public:
     virtual ~KisToolCrop();
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
@@ -105,7 +104,6 @@ private:
     QRectF rightHandleRect(QRectF cropBorderRect);
     QRectF upperHandleRect(QRectF cropBorderRect);
     QRectF leftHandleRect(QRectF cropBorderRect);
-
 private slots:
 
     void crop();

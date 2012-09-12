@@ -29,8 +29,8 @@
 #include <KDebug>
 
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
+#include <QString>
+#include <QFile>
 
 #include <libwpg/libwpg.h>
 #if LIBWPG_VERSION_MINOR<2

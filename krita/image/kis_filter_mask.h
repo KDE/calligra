@@ -52,6 +52,7 @@ public:
     }
 
     bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KisFilterMask(const KisFilterMask& rhs);
 
@@ -69,7 +70,7 @@ public:
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

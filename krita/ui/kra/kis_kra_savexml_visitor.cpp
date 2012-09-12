@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,6 +54,11 @@ KisSaveXmlVisitor::KisSaveXmlVisitor(QDomDocument doc, const QDomElement & eleme
     m_elem = element;
 }
 
+void KisSaveXmlVisitor::setSelectedNodes(vKisNodeSP selectedNodes)
+{
+    m_selectedNodes = selectedNodes;
+}
+
 bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
 {
     if (layer->inherits("KisShapeLayer")) {
@@ -103,6 +108,7 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
     Q_ASSERT(!layerElement.isNull());
     layerElement.appendChild(elem);
     KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+    visitor.setSelectedNodes(m_selectedNodes);
     m_count++;
     bool success = visitor.visitAllInverse(layer);
 
@@ -146,7 +152,8 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 {
     QDomElement layerElement = m_doc.createElement(LAYER);
     saveLayer(layerElement, CLONE_LAYER, layer);
-    layerElement.setAttribute(CLONE_FROM, layer->copyFromName());
+    layerElement.setAttribute(CLONE_FROM, layer->copyFromInfo().name());
+    layerElement.setAttribute(CLONE_FROM_UUID, layer->copyFromInfo().uuid().toString());
     layerElement.setAttribute(CLONE_TYPE, layer->copyType());
     m_elem.appendChild(layerElement);
 
@@ -205,6 +212,15 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(FILE_NAME, LAYER + QString::number(m_count));
     el.setAttribute(X, layer->x());
     el.setAttribute(Y, layer->y());
+    el.setAttribute(UUID, layer->uuid().toString());
+    el.setAttribute(COLLAPSED, layer->collapsed());
+
+    foreach (KisNodeSP node, m_selectedNodes) {
+        if (node.data() == layer) {
+            el.setAttribute("selected", "true");
+            break;
+        }
+    }
 
     m_nodeFileNames[layer] = LAYER + QString::number(m_count);
 
@@ -223,6 +239,11 @@ void KisSaveXmlVisitor::saveMask(QDomElement & el, const QString & maskType, con
     el.setAttribute(FILE_NAME, MASK + QString::number(m_count));
     el.setAttribute(X, mask->x());
     el.setAttribute(Y, mask->y());
+    el.setAttribute(UUID, mask->uuid().toString());
+
+    if (maskType == SELECTION_MASK) {
+        el.setAttribute(ACTIVE, mask->nodeProperties().boolProperty("visible"));
+    }
 
     m_nodeFileNames[mask] = MASK + QString::number(m_count);
 
@@ -239,6 +260,7 @@ bool KisSaveXmlVisitor::saveMasks(KisNode * node, QDomElement & layerElement)
         Q_ASSERT(!layerElement.isNull());
         layerElement.appendChild(elem);
         KisSaveXmlVisitor visitor(m_doc, elem, m_count);
+        visitor.setSelectedNodes(m_selectedNodes);
         bool success =  visitor.visitAllInverse(node);
 
         QMapIterator<const KisNode*, QString> i(visitor.nodeFileNames());

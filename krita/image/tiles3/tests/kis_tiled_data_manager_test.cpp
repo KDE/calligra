@@ -90,6 +90,98 @@ bool KisTiledDataManagerTest::checkTilesNotShared(KisTiledDataManager *srcDM,
     return true;
 }
 
+void KisTiledDataManagerTest::testUndoingNewTiles()
+{
+    // "growing extent bug"
+
+    const QRect nullRect(qint32_MAX,qint32_MAX,0,0);
+
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+
+    KisTileSP emptyTile = srcDM.getTile(0, 0, false);
+
+    QCOMPARE(srcDM.extent(), nullRect);
+
+    KisMementoSP memento0 = srcDM.getMemento();
+    KisTileSP createdTile = srcDM.getTile(0, 0, true);
+    srcDM.commit();
+
+    QCOMPARE(srcDM.extent(), QRect(0,0,64,64));
+
+    srcDM.rollback(memento0);
+    QCOMPARE(srcDM.extent(), nullRect);
+}
+
+void KisTiledDataManagerTest::testPurgedAndEmptyTransactions()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+
+    quint8 oddPixel1 = 128;
+
+    QRect rect(0,0,512,512);
+    QRect clearRect1(50,50,100,100);
+    QRect clearRect2(150,50,100,100);
+
+    quint8 *buffer = new quint8[rect.width()*rect.height()];
+
+    // purged transaction
+
+    KisMementoSP memento0 = srcDM.getMemento();
+    srcDM.clear(clearRect1, &oddPixel1);
+    srcDM.purgeHistory(memento0);
+    memento0 = 0;
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1,
+                      defaultPixel, rect));
+
+    // one more purged transaction
+
+    KisMementoSP memento1 = srcDM.getMemento();
+    srcDM.clear(clearRect2, &oddPixel1);
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+    srcDM.purgeHistory(memento1);
+    memento1 = 0;
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+    // empty one
+
+    KisMementoSP memento2 = srcDM.getMemento();
+    srcDM.commit();
+    srcDM.rollback(memento2);
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+
+    // now check that everything works still
+
+    KisMementoSP memento3 = srcDM.getMemento();
+    srcDM.setExtent(clearRect2);
+    srcDM.commit();
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect2,
+                      defaultPixel, rect));
+
+    srcDM.rollback(memento3);
+
+    srcDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, clearRect1 | clearRect2,
+                      defaultPixel, rect));
+
+
+}
 void KisTiledDataManagerTest::testUnversionedBitBlt()
 {
     quint8 defaultPixel = 0;
@@ -179,6 +271,42 @@ void KisTiledDataManagerTest::testVersionedBitBlt()
     QVERIFY(checkTilesNotShared(&srcDM1, &srcDM1, true, false, tilesRect));
 }
 
+void KisTiledDataManagerTest::testBitBltOldData()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager srcDM(1, &defaultPixel);
+    KisTiledDataManager dstDM(1, &defaultPixel);
+
+    quint8 oddPixel1 = 128;
+    quint8 oddPixel2 = 129;
+
+    QRect rect(0,0,512,512);
+    QRect cloneRect(81,80,250,250);
+    QRect tilesRect(2,2,3,3);
+
+    quint8 *buffer = new quint8[rect.width()*rect.height()];
+
+    KisMementoSP memento1 = srcDM.getMemento();
+    srcDM.clear(rect, &oddPixel1);
+    srcDM.commit();
+
+    dstDM.bitBltOldData(&srcDM, cloneRect);
+    dstDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, cloneRect,
+                      defaultPixel, rect));
+
+    KisMementoSP memento2 = srcDM.getMemento();
+    srcDM.clear(rect, &oddPixel2);
+    dstDM.bitBltOldData(&srcDM, cloneRect);
+    srcDM.commit();
+
+    dstDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, cloneRect,
+                      defaultPixel, rect));
+
+    delete[] buffer;
+}
+
 void KisTiledDataManagerTest::testBitBltRough()
 {
     quint8 defaultPixel = 0;
@@ -187,6 +315,7 @@ void KisTiledDataManagerTest::testBitBltRough()
 
     quint8 oddPixel1 = 128;
     quint8 oddPixel2 = 129;
+    quint8 oddPixel3 = 130;
 
     QRect rect(0,0,512,512);
     QRect cloneRect(81,80,250,250);
@@ -205,10 +334,19 @@ void KisTiledDataManagerTest::testBitBltRough()
     QVERIFY(checkHole(buffer, oddPixel1, actualCloneRect,
                       oddPixel2, rect));
 
-    delete[] buffer;
-
     // Test whether tiles became shared
     QVERIFY(checkTilesShared(&srcDM, &dstDM, false, false, tilesRect));
+
+    // check bitBltRoughOldData
+    KisMementoSP memento1 = srcDM.getMemento();
+    srcDM.clear(rect, &oddPixel3);
+    dstDM.bitBltRoughOldData(&srcDM, cloneRect);
+    srcDM.commit();
+    dstDM.readBytes(buffer, rect.x(), rect.y(), rect.width(), rect.height());
+    QVERIFY(checkHole(buffer, oddPixel1, actualCloneRect,
+                      oddPixel2, rect));
+
+    delete[] buffer;
 }
 
 void KisTiledDataManagerTest::testTransactions()
@@ -334,6 +472,71 @@ void KisTiledDataManagerTest::testPurgeHistory()
 
     dm.purgeHistory(memento3);
     dm.purgeHistory(memento4);
+}
+
+void KisTiledDataManagerTest::testUndoSetDefaultPixel()
+{
+    quint8 defaultPixel = 0;
+    KisTiledDataManager dm(1, &defaultPixel);
+
+    quint8 oddPixel1 = 128;
+    quint8 oddPixel2 = 129;
+
+    QRect fillRect(0,0,64,64);
+
+    KisTileSP tile00;
+    KisTileSP tile10;
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(defaultPixel, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    KisMementoSP memento1 = dm.getMemento();
+    dm.clear(fillRect, &oddPixel1);
+    dm.commit();
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    KisMementoSP memento2 = dm.getMemento();
+    dm.setDefaultPixel(&oddPixel2);
+    dm.commit();
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel2, tile10->data(), TILESIZE));
+
+    dm.rollback(memento2);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    dm.rollback(memento1);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(defaultPixel, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    dm.rollforward(memento1);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(defaultPixel, tile10->data(), TILESIZE));
+
+    dm.rollforward(memento2);
+
+    tile00 = dm.getTile(0, 0, false);
+    tile10 = dm.getTile(1, 0, false);
+    QVERIFY(memoryIsFilled(oddPixel1, tile00->data(), TILESIZE));
+    QVERIFY(memoryIsFilled(oddPixel2, tile10->data(), TILESIZE));
 }
 
 //#include <valgrind/callgrind.h>
@@ -511,6 +714,7 @@ public:
             case 3:
                 run_concurrent(lock,t) {
                     QRect newRect = dm.extent();
+		    Q_UNUSED(newRect);
                 }
                 break;
             case 4:

@@ -864,7 +864,7 @@ void KWmf::walk(
 
 KWmf::DrawContext::DrawContext()
 {
-    // TBD: initalise with proper values.
+    // TBD: initialise with proper values.
     m_brushColor = 0x808080;
     m_brushStyle = 1;
     m_penColor = 0x808080;

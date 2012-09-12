@@ -19,7 +19,7 @@
 
 #include "kexitemplateloader.h"
 #include "kexi.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -30,7 +30,7 @@
 #include <kiconloader.h>
 #include <kapplication.h>
 
-#include <qdir.h>
+#include <QDir>
 
 KexiTemplateCategoryInfo::KexiTemplateCategoryInfo()
   : enabled(true)

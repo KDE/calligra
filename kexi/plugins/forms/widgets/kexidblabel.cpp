@@ -20,11 +20,11 @@
 
 #include "kexidblabel.h"
 
-#include <qbitmap.h>
-#include <qpainter.h>
+#include <QBitmap>
+#include <QPainter>
 #include <qdrawutil.h>
-#include <qapplication.h>
-#include <qtimer.h>
+#include <QApplication>
+#include <QTimer>
 #include <QPaintEvent>
 #include <QLabel>
 #include <QShowEvent>
@@ -32,7 +32,7 @@
 
 #include <kdebug.h>
 
-#include <kexidb/field.h>
+#include <db/field.h>
 #include <kexiutils/utils.h>
 #include <formeditor/utils.h>
 

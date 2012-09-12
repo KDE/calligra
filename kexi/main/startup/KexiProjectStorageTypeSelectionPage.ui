@@ -24,6 +24,9 @@
        <property name="description">
         <string>New Project Stored in File</string>
        </property>
+       <property name="arrowVisible" stdset="0">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item row="1" column="0">
@@ -33,6 +36,9 @@
        </property>
        <property name="description">
         <string>New Project Stored on Database Server</string>
+       </property>
+       <property name="arrowVisible" stdset="0">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

@@ -27,7 +27,7 @@
 #include <KDebug>
 //#include <KLibLoader>
 #include <KLocale>
-#include <kexidb/msghandler.h>
+#include <db/msghandler.h>
 #include <kexi_global.h>
 
 //! @internal

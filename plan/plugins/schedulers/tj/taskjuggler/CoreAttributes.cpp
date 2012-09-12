@@ -2,6 +2,7 @@
  * CoreAttributes.h - TaskJuggler
  *
  * Copyright (c) 2001, 2002, 2003, 2004, 2005 by Chris Schlaeger <cs@kde.org>
+ * Copyright (c) 2011 by Dag Andersen <danders@get2net.dk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of version 2 of the GNU General Public License as
@@ -43,7 +44,7 @@ CoreAttributes::CoreAttributes(Project* p, const QString& i,
     if (parent_)
         parent_->sub->append(this);
     
-    qDebug()<<"CoreAttributes:"<<this;
+//     qDebug()<<"CoreAttributes:"<<this;
 }
 
 CoreAttributes::~CoreAttributes()
@@ -125,7 +126,7 @@ CoreAttributes::setHierarchIndex(uint no)
         return;
     }
 
-    /* Find the highest hierarchIndex of all childs of this CAs parent. */
+    /* Find the highest hierarchIndex of all children of this CAs parent. */
     uint max = 0;
     foreach (CoreAttributes *a, (*parent->sub)) {
         if (a->hierarchIndex > max)
@@ -159,7 +160,7 @@ CoreAttributes::getHierarchLevel() const
 void
 CoreAttributes::getFullName(QString& fullName) const
 {
-    fullName = QString::null;
+    fullName.clear();
     for (const CoreAttributes* c = this; c != 0; c = c->parent)
         fullName = c->name + "." + fullName;
     // Remove trailing dot.
@@ -277,7 +278,7 @@ QDebug operator<<( QDebug dbg, const TJ::CoreAttributes* t )
 QDebug operator<<( QDebug dbg, const TJ::CoreAttributes& t )
 {
     switch ( t.getType() ) {
-        case CA_Task: dbg << static_cast<const TJ::Task&>( t ); break;
+        case CA_Task: dbg << "Task[" << t.getName() << "]"; break;
         case CA_Resource: dbg << "Resource[" << t.getName() << "]"; break;
         case CA_Account: dbg << "Account[" << t.getName() << "]"; break;
         case CA_Shift: dbg << "Shift[" << t.getName() << "]"; break;

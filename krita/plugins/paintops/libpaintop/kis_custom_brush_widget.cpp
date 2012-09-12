@@ -44,6 +44,8 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include <kis_selection.h>
+#include <KoProperties.h>
+#include "kis_iterator_ng.h"
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
         : KisWdgCustomBrush(parent)
@@ -197,21 +199,17 @@ void KisCustomBrushWidget::createBrush()
             QRect r = selection->selectedExactRect();
             dev->crop(r);
 
-            KisHLineIterator pixelIt = dev->createHLineIterator(r.x(), r.top(), r.width());
-            KisHLineConstIterator maskIt = selection->projection()->createHLineIterator(r.x(), r.top(), r.width());
+            KisHLineIteratorSP pixelIt = dev->createHLineIteratorNG(r.x(), r.top(), r.width());
+            KisHLineConstIteratorSP maskIt = selection->projection()->createHLineIteratorNG(r.x(), r.top(), r.width());
 
             for (qint32 y = r.top(); y <= r.bottom(); ++y) {
 
-                while (!pixelIt.isDone()) {
-                    // XXX: Optimize by using stretches
+                do {
+                    dev->colorSpace()->applyAlphaU8Mask(pixelIt->rawData(), maskIt->oldRawData(), 1);
+                } while (pixelIt->nextPixel() && maskIt->nextPixel());
 
-                    dev->colorSpace()->applyAlphaU8Mask(pixelIt.rawData(), maskIt.rawData(), 1);
-
-                    ++pixelIt;
-                    ++maskIt;
-                }
-                pixelIt.nextRow();
-                maskIt.nextRow();
+                pixelIt->nextRow();
+                maskIt->nextRow();
             }
 
             QRect rc = dev->exactBounds();
@@ -225,15 +223,18 @@ void KisCustomBrushWidget::createBrush()
         int w = m_image->width();
         int h = m_image->height();
 
+        m_image->lock();
+
         // We only loop over the rootLayer. Since we actually should have a layer selection
         // list, no need to elaborate on that here and now
-        KisLayer* layer = dynamic_cast<KisLayer*>(m_image->rootLayer()->firstChild().data());
-        while (layer) {
-            KisPaintLayer* paint = 0;
-            if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
-                devices[0].push_back(paint->paintDevice().data());
-            layer = dynamic_cast<KisLayer*>(layer->nextSibling().data());
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> layers = m_image->root()->childNodes(QStringList("KisLayer"), properties);
+        KisNodeSP node;
+        foreach(KisNodeSP node, layers) {
+            devices[0].push_back(node->projection().data());
         }
+
         QVector<KisParasite::SelectionMode> modes;
 
         switch (comboBox2->currentIndex()) {
@@ -246,6 +247,7 @@ void KisCustomBrushWidget::createBrush()
         }
 
         m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
+        m_image->unlock();
     }
 
     static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( colorAsMask->isChecked() );

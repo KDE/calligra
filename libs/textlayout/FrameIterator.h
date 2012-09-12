@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann, KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 C. Boemann, KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +19,6 @@
 #ifndef FRAMEITERATOR_H
 #define FRAMEITERATOR_H
 
-
 #include <QTextFrame>
 #include <QTextLine>
 #include <QTextTableCell>
@@ -33,7 +32,7 @@ class FrameIterator
 {
 public:
     FrameIterator(QTextFrame *frame);
-    FrameIterator(QTextTableCell frame);
+    FrameIterator(const QTextTableCell &frame);
     FrameIterator(FrameIterator *other);
     ~FrameIterator();
 
@@ -53,6 +52,8 @@ public:
     TableIterator *currentTableIterator;  //useful if it is pointing to a table
 
     FrameIterator *currentSubFrameIterator;  //useful if it is pointing to a subFrame
+
+    int endNoteIndex;
 };
 
 #endif

@@ -9,7 +9,7 @@ set(ProjectTester_SRCS ProjectTester.cpp ../KPlatoRCPSScheduler.cpp ../KPlatoRCP
  
 kde4_add_unit_test(ProjectTester TESTNAME Plan-RCPSTester  ${ProjectTester_SRCS})
  
-target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} librcps_plan planprivate kplatokernel  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} rcps_plan planprivate kplatokernel  ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY})
  
 
 ########### next target ###############

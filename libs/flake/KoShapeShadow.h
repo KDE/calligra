@@ -22,8 +22,8 @@
 #define KOSHAPESHADOW_H
 
 #include "flake_export.h"
-#include <QtCore/QPointF>
-#include <QtGui/QColor>
+#include <QPointF>
+#include <QColor>
 
 class KoShape;
 class KoGenStyle;
@@ -77,7 +77,7 @@ public:
      * Sets the shadow blur radius of the shape
      * @param blur the shadow blur radius
      */
-    void setBlur(const qreal &blur);
+    void setBlur(qreal blur);
 
     /// Returns the shadow blur radius
     qreal blur() const;

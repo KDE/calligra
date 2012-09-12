@@ -22,11 +22,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
+#include "KarbonKoDocument.h"
 #include "KarbonConfigInterfacePage.h"
 
 #include <KoConfigGridPage.h>
 #include <KoConfigDocumentPage.h>
 #include <KoConfigMiscPage.h>
+#include <KoConfigAuthorPage.h>
 
 #include <KLocale>
 #include <KIcon>
@@ -61,6 +63,12 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setHeader(i18n("Document Settings"));
     item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
 
+    m_authorPage = new KoConfigAuthorPage();
+    item = addPage(m_authorPage, i18nc("@title:tab Author page", "Author" ));
+    item->setHeader(i18n("Author"));
+    item->setIcon(KIcon("user-identity"));
+
+
     connect(this, SIGNAL(okClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
     connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
@@ -72,6 +80,7 @@ void KarbonConfigureDialog::slotApply()
     m_miscPage->apply();
     m_defaultDocPage->apply();
     m_gridPage->apply();
+    m_authorPage->apply();
 }
 
 void KarbonConfigureDialog::slotDefault()

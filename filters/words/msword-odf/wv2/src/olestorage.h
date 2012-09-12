@@ -23,8 +23,20 @@
 #include <list>
 #include <deque>
 
-#include <gsf/gsf.h>
 #include "wv2_export.h"
+
+// Forward declarations
+namespace POLE {
+    class Storage;
+}
+
+// We have removed libgsf, and require a replacement for WV2SeekType
+typedef enum
+{
+  WV2_SEEK_CUR, //< From current position
+  WV2_SEEK_SET, //< Absolute position
+} WV2SeekType;
+
 
 namespace wvWare
 {
@@ -35,7 +47,6 @@ class OLEStreamWriter;
 
 class WV2_EXPORT OLEStorage
 {
-    friend class OLEStream;
 public:
     /**
      * The mode of the storage. libgsf doesn't support storages opened
@@ -52,34 +63,12 @@ public:
      * right now, call @see open() to do that
      */
     OLEStorage( const std::string& fileName );
-    /**
-     * Specify a buffer for the storage. The OLE storage will be read
-     * from that buffer. We don't take ownership of the buffer.
-     * Note: Only for ReadOnly mode!
-     */
-    OLEStorage( const unsigned char* buffer, size_t buflen );
+
     /**
      * Destroy the current storage. Open streams on it will
      * be synced and written back.
      */
     ~OLEStorage();
-
-    /**
-     * Specify a name for the storage (file)
-     * This is a no-op if a storage is already open!
-     */
-    void setName( const std::string& fileName );
-    /**
-     * Get the name of the OLE storage file
-     */
-    std::string name() const { return m_fileName; }
-
-    /**
-     * Specify a buffer for the storage. The OLE storage will be read
-     * from that buffer. We don't take ownership of the buffer.
-     * Note: Only for ReadOnly mode!
-     */
-    void setBuffer( const unsigned char* buffer, size_t buflen );
 
     /**
      * Open the specified storage for reading or writing.
@@ -101,36 +90,6 @@ public:
     bool isValid() const;
 
     /**
-     * Returns a list containing all the files and dirs at the
-     * current position in the VFS. The std::strings are UTF-8
-     * encoded.
-     * Only works in ReadOnly mode, gsf doesn't support reading
-     * the directory structure of WriteOnly storages.
-     */
-    std::list<std::string> listDirectory();
-
-    /**
-     * Enters a specific subdirectory. If the specified directory
-     * doesn't exist this method returns false. The passed string
-     * has to be UTF-8 encoded.
-     */
-    bool enterDirectory( const std::string& directory );
-    /**
-     * One level up (cd ..)
-     */
-    void leaveDirectory();
-
-    /**
-     * Manipulate the path directly. If the operation fails at some
-     * point the path will be set back to the previous location.
-     */
-    bool setPath( const std::string& path );
-    /**
-     * Get the current path (UTF-8 encoded)
-     */
-    std::string path() const;
-
-    /**
      * Opens the specified stream for reading and passes the
      * opened stream reader back. Returns 0 if it didn't work,
      * e.g. if the storage is opened in WriteOnly mode.
@@ -138,7 +97,7 @@ public:
      */
     OLEStreamReader* createStreamReader( const std::string& stream );
 
-    /**
+    /** TODO reimplement this
      * Opens a stream for writing (you get 0 if it failed, e.g. if
      * the storage is in ReadOnly mode).
      * Note: The ownership is transferred to you!
@@ -157,29 +116,11 @@ private:
     OLEStorage& operator=( const OLEStorage& rhs );
 
     /**
-     * This method is called from the stream's DTOR
+     *  Pointer to a Storage object which we are providing a Facade for.
      */
-    void streamDestroyed( OLEStream* stream );
-
-    // One of those members will be 0, we only use one of them,
-    // due to the libgsf design...
-    GsfInfile* m_inputFile;
-    GsfOutfile* m_outputFile;
+    POLE::Storage* m_storage;
 
     std::string m_fileName;
-
-    const unsigned char* m_buffer;
-    size_t m_buflen;
-
-    union Directory
-    {
-        Directory( GsfInfile* in ) : infile( in ) {}
-        Directory( GsfOutfile* out ) : outfile( out ) {}
-
-        GsfInfile* infile;
-        GsfOutfile* outfile;
-    };
-    std::deque<Directory> m_path;
 
     /**
      * We're not the owner, but we still keep track of all

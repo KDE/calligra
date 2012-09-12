@@ -14,8 +14,8 @@
 #define _Utility_h_
 
 #include <time.h>
-#include <qstring.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QDateTime>
 
 namespace TJ
 {
@@ -157,6 +157,8 @@ QString time2weekday(time_t t);
 time_t date2time( const QString& );
 
 time_t addTimeToDate(time_t day, time_t t);
+
+QString formatTime(time_t t);
 
 QDate time2qdate(time_t t);
 

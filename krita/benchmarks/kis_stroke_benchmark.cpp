@@ -32,7 +32,6 @@ inline double drand48()
 #include "kis_benchmark_values.h"
 
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -512,6 +511,7 @@ void KisStrokeBenchmark::benchmarkRand()
             j = rand() / (float)RAND_MAX;
         }
     }
+    Q_UNUSED(j);
 }
 
 

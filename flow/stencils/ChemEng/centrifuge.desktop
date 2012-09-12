@@ -1,8 +1,13 @@
 [Desktop Entry]
 Name=centrifuge
+Name[ca]=centrífuga
+Name[ca@valencia]=centrífuga
+Name[de]=Zentrifuge
 Name[el]=κεντρόφυγο
-Name[et]=tsentrifuug
+Name[es]=centrífuga
+Name[et]=Tsentrifuug
 Name[it]=centrifuga
+Name[kk]=Центрифуга
 Name[nb]=sentrifuge
 Name[nds]=Zentrifuug
 Name[nl]=centrifuge
@@ -10,6 +15,8 @@ Name[pl]=wirówka
 Name[pt]=centrífugo
 Name[pt_BR]=centrifuga
 Name[ru]=Центрифуга
+Name[sk]=centrifuge
+Name[sl]=centrifuga
 Name[sv]=centrifug
 Name[uk]=Центрифуга
 Name[x-test]=xxcentrifugexx

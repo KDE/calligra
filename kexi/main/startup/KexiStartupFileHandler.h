@@ -22,7 +22,6 @@
 
 #include <QSet>
 #include <QObject>
-#include <kexi_export.h>
 
 class QEvent;
 class KUrl;
@@ -34,7 +33,7 @@ class KexiContextMessage;
 /*! Make sure this object is destroyed before the handled file dialog
     or URL requester, otherwise recent dirs information will not be updated.
     Alternativelly you can call saveRecentDir(). */
-class KEXIMAIN_EXPORT KexiStartupFileHandler : public QObject
+class KexiStartupFileHandler : public QObject
 {
     Q_OBJECT
 

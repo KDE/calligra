@@ -65,7 +65,7 @@ QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 using namespace MSOOXML;
 
 MsooXmlReaderContext::MsooXmlReaderContext(MSOOXML::MsooXmlRelationships* _relationships)
-        : relationships(_relationships)
+        : relationships(_relationships), graphicObjectIsGroup(false)
 {
 }
 

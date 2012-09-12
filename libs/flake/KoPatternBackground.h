@@ -22,7 +22,7 @@
 
 #include "KoShapeBackground.h"
 #include "flake_export.h"
-#include <QtGui/QTransform>
+#include <QTransform>
 
 class KoImageCollection;
 class KoOdfLoadingContext;
@@ -109,7 +109,7 @@ public:
     KoPatternBackground& operator=(const KoPatternBackground &other);
 
     /// reimplemented from KoShapeBackground
-    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const;
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &context, const QPainterPath &fillPath) const;
     /// reimplemented from KoShapeBackground
     virtual void fillStyle(KoGenStyle &style, KoShapeSavingContext &context);
     /// reimplemented from KoShapeBackground

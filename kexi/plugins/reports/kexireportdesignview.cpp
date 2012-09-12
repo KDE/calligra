@@ -1,6 +1,7 @@
 /*
 * Kexi Report Plugin
-* Copyright (C) 2007-2009 by Adam Pigg (adam@piggz.co.uk)
+* Copyright (C) 2007-2009 by Adam Pigg <adam@piggz.co.uk>
+* Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -157,6 +158,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
         m_reportDesigner = new KoReportDesigner(this, tempData()->reportDefinition);
         m_sourceSelector->setConnectionData(tempData()->connectionDefinition);
     } 
+    connect(m_reportDesigner, SIGNAL(itemInserted(QString)), this, SIGNAL(itemInserted(QString)));
 
     m_scrollArea->setWidget(m_reportDesigner);
 

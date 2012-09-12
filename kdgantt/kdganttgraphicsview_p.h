@@ -29,7 +29,12 @@
 
 #include <QPointer>
 
+class QEvent;
+class QFocusEvent;
+
 namespace KDGantt {
+    class Slider;
+
     class HeaderWidget : public QWidget {
         Q_OBJECT
     public:
@@ -46,8 +51,11 @@ namespace KDGantt {
         /*reimp*/ bool event( QEvent* ev );
         /*reimp*/ void paintEvent( QPaintEvent* ev );
         /*reimp*/ void contextMenuEvent( QContextMenuEvent* ev );
+        /*reimp*/ void mouseMoveEvent( QMouseEvent* ev );
+
     private:
         qreal m_offset;
+        Slider *m_zoomwidget;
     };
 
     class GraphicsView::Private {

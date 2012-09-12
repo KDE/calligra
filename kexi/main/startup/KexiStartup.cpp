@@ -23,13 +23,13 @@
 #include "kexiprojectdata.h"
 #include "kexiprojectset.h"
 #include "kexiguimsghandler.h"
-
-#include <kexidb/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/drivermanager.h>
 #include "KexiStartupDialog.h"
-#include "KexiConnSelector.h"
-#include "KexiProjectSelector.h"
+
+#include <db/utils.h>
+#include <db/driver.h>
+#include <db/drivermanager.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiProjectSelectorWidget.h>
 #include <kexidbconnectionwidget.h>
 #include <kexidbshortcutfile.h>
 
@@ -45,8 +45,8 @@
 
 #include <unistd.h>
 
-#include <qapplication.h>
-#include <qlayout.h>
+#include <QApplication>
+#include <QLayout>
 
 //! @todo enable this when we need sqlite3-to-someting-newer migration
 // #define KEXI_SQLITE_MIGRATION
@@ -368,6 +368,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
     m_forcedDesignMode = args->isSet("design-mode");
     m_isProjectNavigatorVisible = args->isSet("show-navigator");
     m_isMainMenuVisible = !args->isSet("hide-menu");
+    m_forcedFullScreen = args->isSet("fullscreen");
     bool createDB = args->isSet("createdb");
     const bool alsoOpenDB = args->isSet("create-opendb");
     if (alsoOpenDB)
@@ -490,23 +491,25 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                         m_projectData = 0;
                         return false;
                     }
-                    d->connDialog = new KexiDBConnectionDialog(0,
-                            *m_projectData, d->shortcutFileName);
-                    connect(d->connDialog, SIGNAL(saveChanges()),
-                            this, SLOT(slotSaveShortcutFileChanges()));
-                    int res = d->connDialog->exec();
-                    if (res == QDialog::Accepted) {
-                        //get (possibly changed) prj data
-                        *m_projectData = d->connDialog->currentProjectData();
-                    }
+                    if (m_projectData->databaseName().isEmpty()) {
+                        d->connDialog = new KexiDBConnectionDialog(0,
+                                *m_projectData, d->shortcutFileName);
+                        connect(d->connDialog, SIGNAL(saveChanges()),
+                                this, SLOT(slotSaveShortcutFileChanges()));
+                        int res = d->connDialog->exec();
+                        if (res == QDialog::Accepted) {
+                            //get (possibly changed) prj data
+                            *m_projectData = d->connDialog->currentProjectData();
+                        }
 
-                    delete d->connDialog;
-                    d->connDialog = 0;
+                        delete d->connDialog;
+                        d->connDialog = 0;
 
-                    if (res == QDialog::Rejected) {
-                        delete m_projectData;
-                        m_projectData = 0;
-                        return cancelled;
+                        if (res == QDialog::Rejected) {
+                            delete m_projectData;
+                            m_projectData = 0;
+                            return cancelled;
+                        }
                     }
                 } else if (cdata.driverName == "connection") {
                     //get information for a connection file
@@ -598,7 +601,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         KMessageBox::information(0,
                                  i18n("You have specified a few database objects to be opened automatically, "
                                       "using startup options.\n"
-                                      "These options will be ignored because it is not available while creating "
+                                      "These options will be ignored because they are not available while creating "
                                       "or dropping projects."));
     }
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,10 +23,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <qdom.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDomDocument>
+#include <QDir>
+#include <QFile>
+#include <QRegExp>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
 
 //! @internal
 class KexiProjectDataPrivate
@@ -99,7 +99,7 @@ KexiProjectData::KexiProjectData(
 {
     setObjectName("KexiProjectData");
     d->connData = cdata;
-    setDatabaseName(dbname);
+    setDatabaseName(cdata.dbFileName().isEmpty() ? dbname : cdata.dbFileName());
     setCaption(caption);
 }
 
@@ -154,8 +154,8 @@ QString KexiProjectData::databaseName() const
 
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
-    kDebug() << dbName;
-    kDebug() << *this;
+    //kDebug() << dbName;
+    //kDebug() << *this;
     KexiDB::SchemaData::setName(dbName);
 }
 
@@ -227,7 +227,7 @@ bool KexiProjectData::isReadOnly() const
 */
 
 #include "kexiprojectdata.h"
-#include <kexidb/connectiondata.h>
+#include <db/connectiondata.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
@@ -306,9 +306,16 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     // verification OK, now applying the values:
     d->connData.driverName = driverName;
     formatVersion = _formatVersion;
-    d->connData.hostName = cg.readEntry("server"); //empty allowed
+    d->connData.hostName = cg.readEntry("server"); //empty allowed, means localhost
     if (isDatabaseShortcut) {
-        const bool fileBased = d->connData.hostName.isEmpty();
+        KexiDB::DriverManager driverManager;
+        const KexiDB::Driver::Info dinfo = driverManager.driverInfo(d->connData.driverName);
+        if (dinfo.name.isEmpty()) {
+            //ERR: "No valid driver for "engine" found
+            return false;
+        }
+        const bool fileBased = dinfo.fileBased
+                && QString::compare(dinfo.name, d->connData.driverName, Qt::CaseInsensitive) == 0;
         setCaption(cg.readEntry("caption"));
         setDescription(cg.readEntry("comment"));
         d->connData.description.clear();
@@ -325,7 +332,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
                     fn = home + fn.mid(homeVar.length());
                 }
                 d->connData.setFileName(fn);
-                setDatabaseName(fn);
+                setDatabaseName(d->connData.dbFileName());
             }
         }
         else {
@@ -344,7 +351,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     d->connData.localSocketFileName = cg.readEntry("localSocketFile");
     d->connData.savePassword = cg.hasKey("password") || cg.hasKey("encryptedPassword");
     if (formatVersion >= 2) {
-        kDebug() << cg.hasKey("encryptedPassword");
+        //kDebug() << cg.hasKey("encryptedPassword");
         d->connData.password = cg.readEntry("encryptedPassword");
         KexiUtils::simpleDecrypt(d->connData.password);
     }

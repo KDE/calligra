@@ -25,7 +25,7 @@
 
 #include <QList>
 
-class QPixmap;
+class QImage;
 class QSize;
 
 class CSThumbProvider
@@ -34,7 +34,7 @@ public:
     CSThumbProvider() {}
     virtual ~CSThumbProvider() {}
 
-    virtual QList<QPixmap> createThumbnails(const QSize &thumbSize) = 0;
+    virtual QList<QImage> createThumbnails(const QSize &thumbSize) = 0;
 };
 
 #endif /* CSTHUMBPROVIDER_H */

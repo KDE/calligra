@@ -48,6 +48,21 @@ PlanTJPlugin::~PlanTJPlugin()
 {
 }
 
+QString PlanTJPlugin::description() const
+{
+    return i18nc( "@info:whatsthis", "<title>TaskJuggler Scheduler</title>"
+                    "<para>This is a slightly modified version of the scheduler used in TaskJuggler."
+                    " It has been enhanced to handle resource units.</para>"
+                    "<para>Scheduling backwards is simulated by scheduling all tasks as late as possible.</para>"
+                    "<para><note>Plan does not utilize all of its functionality.</note></para>"
+                );
+}
+
+int PlanTJPlugin::capabilities() const
+{
+    return SchedulerPlugin::AvoidOverbooking | SchedulerPlugin::ScheduleForward | SchedulerPlugin::ScheduleBackward;
+}
+
 void PlanTJPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
 {
     foreach ( SchedulerThread *j, m_jobs ) {
@@ -102,7 +117,7 @@ void PlanTJPlugin::stopCalculation( SchedulerThread *sch )
 
 void PlanTJPlugin::slotStarted( SchedulerThread */*job*/ )
 {
-//    qDebug()<<"PlanTJPlugin::slotStarted:";
+//    kDebug(planDbg())<<"PlanTJPlugin::slotStarted:";
 }
 
 void PlanTJPlugin::slotFinished( SchedulerThread *j )
@@ -110,7 +125,7 @@ void PlanTJPlugin::slotFinished( SchedulerThread *j )
     PlanTJScheduler *job = static_cast<PlanTJScheduler*>( j );
     Project *mp = job->mainProject();
     ScheduleManager *sm = job->mainManager();
-    //qDebug()<<"PlanTJPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
+    //kDebug(planDbg())<<"PlanTJPlugin::slotFinished:"<<mp<<sm<<job->isStopped();
     if ( job->isStopped() ) {
         sm->setCalculationResult( ScheduleManager::CalculationCanceled );
     } else {

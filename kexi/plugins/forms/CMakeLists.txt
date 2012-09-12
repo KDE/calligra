@@ -32,6 +32,7 @@ target_link_libraries(
     kexiformutils
     ${KDE4_KDECORE_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
+    kexiextendedwidgets
     )
 
 install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -50,6 +51,7 @@ target_link_libraries(
     kformdesigner
     kexiformutils
     kexidb
+    ${CALLIGRADB_LIBS}
     kexicore
     kexiguiutils
     kexidataviewcommon
@@ -89,6 +91,10 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbcheckbox.cpp
   widgets/kexidbtextedit.cpp
   widgets/kexidbcombobox.cpp
+  widgets/kexidbcommandlinkbutton.cpp
+  widgets/kexidbslider.cpp
+  widgets/kexidbprogressbar.cpp
+  widgets/kexidbdatepicker.cpp
 )
 
 #obsolete	widgets/kexidbdoublespinbox.cpp
@@ -106,6 +112,7 @@ target_link_libraries(
     kexiextendedwidgets
     kformdesigner
     kexidb
+    ${CALLIGRADB_LIBS}
     kexiutils
     kexidataviewcommon
     kexidatatable

@@ -20,8 +20,8 @@
 #ifndef KPRPRESENTERVIEWTOOLWIDGET
 #define KPRPRESENTERVIEWTOOLWIDGET
 
-#include <QtCore/QTime>
-#include <QtGui/QFrame>
+#include <QTime>
+#include <QFrame>
 
 class QLabel;
 class QTimer;

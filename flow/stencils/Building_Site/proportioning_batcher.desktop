@@ -1,11 +1,20 @@
 [Desktop Entry]
 Name=Proportioning Batcher
+Name[ca]=Proporcionat Batcher
+Name[ca@valencia]=Proporcionat Batcher
+Name[el]=Συσκευή δοσολογίας
 Name[es]=Dosificador proporcional
+Name[et]=Dosaator
+Name[gl]=Porporcionado Batcher
+Name[it]=Dosatore proporzionale
+Name[kk]=Мөлшерлеуіш
 Name[nb]=Proporsjonerende blandeverk
+Name[nl]=Vulinstallatie
 Name[pl]=Proporcjonujący dozownik
 Name[pt]=Empilhador Proporcional
 Name[pt_BR]=Empilhador proporcional
 Name[ru]=Дозатор компонентов
+Name[sk]=Proporčný dávkovač
 Name[sv]=Proportionerande doseringsapparat
 Name[uk]=Дозатор компонентів
 Name[x-test]=xxProportioning Batcherxx

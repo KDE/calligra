@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -64,9 +64,6 @@ private:
     bool loadMetaData(KisNode* node);
     KisSelectionSP loadSelection(const QString& location);
     QString getLocation(KisNode* node, const QString& suffix = "");
-
-    static KisNodeSP findNodeByName(const QString &name,
-                                    KisNodeSP rootNode);
 
 private:
     KisImageWSP m_image;

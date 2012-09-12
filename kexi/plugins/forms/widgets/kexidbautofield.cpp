@@ -21,11 +21,11 @@
 
 #include "kexidbautofield.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpainter.h>
-#include <qmetaobject.h>
-#include <qapplication.h>
+#include <QLabel>
+#include <QLayout>
+#include <QPainter>
+#include <QMetaObject>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -40,7 +40,7 @@
 #include "kexidbform.h"
 
 #include <kexi_global.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <formeditor/utils.h>
 #include <kexiutils/utils.h>
 

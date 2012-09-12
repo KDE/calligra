@@ -30,6 +30,7 @@
 #include <KoCreateShapesTool.h>
 #include <KoShape.h>
 #include <KoZoomHandler.h>
+#include <KoShapePaintingContext.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -230,7 +231,7 @@ void ShapeCollectionDocker::loadDefaultShapes()
     int quickCount=0;
 
     QStringList quickShapes;
-    quickShapes << "TextShapeID" << "PictureShape" << "KoConnectionShape" << "ChartShape" << "ArtisticText";
+    quickShapes << "TextShapeID" << "PictureShape" << "ChartShape" << "ArtisticText";
     KConfigGroup cfg = KGlobal::config()->group("KoShapeCollection");
     quickShapes = cfg.readEntry("QuickShapes", quickShapes);
 
@@ -355,7 +356,7 @@ void ShapeCollectionDocker::activateShapeCreationTool(const QModelIndex& index)
         KoCreateShapesTool* tool = KoToolManager::instance()->shapeCreatorTool(canvasController->canvas());
         QString id = m_collectionView->model()->data(index, Qt::UserRole).toString();
         KoProperties* properties = static_cast<CollectionItemModel*>(m_collectionView->model())->properties(index);
-        
+
         tool->setShapeId(id);
         tool->setShapeProperties(properties);
         KoToolManager::instance()->switchToolRequested(KoCreateShapesTool_ID);
@@ -529,7 +530,8 @@ QIcon ShapeCollectionDocker::generateShapeIcon(KoShape* shape)
     QPainter painter(&pixmap);
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.translate(1, 1);
-    shape->paint(painter, converter);
+    KoShapePaintingContext paintContext; //FIXME
+    shape->paint(painter, converter, paintContext);
     painter.end();
 
     return QIcon(pixmap);

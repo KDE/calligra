@@ -29,6 +29,11 @@
 #include <kdebug.h>
 #include <kfiledialog.h>
 
+// Don't use this until we become a plugin.
+#ifdef CAN_USE_MARBLE
+#undef CAN_USE_MARBLE
+#endif
+
 // marble for geolocation
 #ifdef CAN_USE_MARBLE
 #include <marble/LatLonEdit.h>
@@ -57,6 +62,7 @@ KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf, Sopran
 
 KoRdfLocation::~KoRdfLocation()
 {
+    kDebug(30015) << "~KoRdfLocation() this:" << this << " name:" << name();
 }
 
 void KoRdfLocation::showInViewer()
@@ -122,7 +128,11 @@ QWidget *KoRdfLocation::createEditor(QWidget *parent)
     kDebug(30015) << "KoRdfLocation::createEditor()";
 #ifndef CAN_USE_MARBLE
     {
-        QWidget *ret = new QWidget(parent);
+        KoRdfLocationEditWidget* ret = new KoRdfLocationEditWidget(parent, &editWidget);
+
+        editWidget.setupUi(ret);
+        editWidget.name->setText(m_name);
+        
         return ret;
     }
 #else
@@ -164,7 +174,7 @@ void KoRdfLocation::updateFromEditorData()
             QString tmp = "";
             Node newV = createNewUUIDNode();
 
-            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
 
             m->addStatement(linkingSubject(), pred, newV,
@@ -209,14 +219,14 @@ void KoRdfLocation::updateFromEditorData()
 #endif
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 }
 
 KoRdfSemanticTreeWidgetItem *KoRdfLocation::createQTreeWidgetItem(QTreeWidgetItem *parent)
 {
     KoRdfLocationTreeWidgetItem *item =
-        new KoRdfLocationTreeWidgetItem(parent, this);
+        new KoRdfLocationTreeWidgetItem(parent, hKoRdfSemanticItem(this));
     return item;
 }
 
@@ -250,15 +260,17 @@ void KoRdfLocation::exportToMime(QMimeData *md) const
     md->setText(data);
 }
 
-QList<KoSemanticStylesheet*> KoRdfLocation::stylesheets() const
+QList<hKoSemanticStylesheet> KoRdfLocation::stylesheets() const
 {
-    QList<KoSemanticStylesheet*> stylesheets;
+    QList<hKoSemanticStylesheet> stylesheets;
     stylesheets.append(
-        new KoSemanticStylesheet("33314909-7439-4aa1-9a55-116bb67365f0", "name", "%NAME%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("33314909-7439-4aa1-9a55-116bb67365f0", "name", "%NAME%")));
     stylesheets.append(
-        new KoSemanticStylesheet("34584133-52b0-449f-8b7b-7f1ef5097b9a",
-                                 "name, digital latitude, digital longitude",
-                                 "%NAME%, %DLAT%, %DLONG%"));
+        hKoSemanticStylesheet(
+            new KoSemanticStylesheet("34584133-52b0-449f-8b7b-7f1ef5097b9a",
+                                     "name, digital latitude, digital longitude",
+                                     "%NAME%, %DLAT%, %DLONG%")));
     return stylesheets;
 }
 
@@ -305,7 +317,7 @@ void KoRdfLocation::setName(const QString &name)
             QString tmp = "";
             Node newV = createNewUUIDNode();
 
-            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
 
             m->addStatement(linkingSubject(), pred, newV,
@@ -329,7 +341,7 @@ void KoRdfLocation::setName(const QString &name)
         updateTriple(m_name, name, dcBase + "title");
     }
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }
@@ -346,7 +358,7 @@ void KoRdfLocation::setDlat(double dlat)
             QString tmp = "";
             Node newV = createNewUUIDNode();
 
-            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
 
             m->addStatement(linkingSubject(), pred, newV,
@@ -370,7 +382,7 @@ void KoRdfLocation::setDlat(double dlat)
     }
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }
@@ -386,7 +398,7 @@ void KoRdfLocation::setDlong(double dlong)
         if (!m_joiner.isValid()) {
             Node newV = createNewUUIDNode();
 
-            Soprano::Model* m = const_cast<Soprano::Model*>(m_rdf->model());
+            QSharedPointer<Soprano::Model> m = m_rdf->model();
             Node pred = Node::createResourceNode(QUrl(rdfBase + "rest"));
 
             m->addStatement(linkingSubject(), pred, newV, m_rdf->manifestRdfNode());
@@ -409,7 +421,7 @@ void KoRdfLocation::setDlong(double dlong)
     }
 
     if (documentRdf()) {
-        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
     }
 
 }

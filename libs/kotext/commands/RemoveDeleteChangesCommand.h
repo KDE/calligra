@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2011 Casper Boemann <cbo@boemann.dk>
+ *  Copyright (c) 2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,7 @@
 #define REMOVEDELETECHANGESCOMMAND_H
 
 #include <kundo2command.h>
+#include <QWeakPointer>
 
 class QTextDocument;
 
@@ -31,7 +32,7 @@ public:
     void redo();
 
 private:
-    QTextDocument *m_document;
+    QWeakPointer<QTextDocument> m_document;
     void removeDeleteChanges();
 };
 

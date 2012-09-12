@@ -25,6 +25,10 @@
 #include <QStringList>
 #include <QDir>
 
+#ifdef HAS_POPPLER
+#include <poppler-qt4.h>
+#endif
+
 class CompareView;
 class QLabel;
 
@@ -34,7 +38,7 @@ public:
     CSTCompareView(QWidget *parent = 0);
     virtual ~CSTCompareView();
 
-    bool open(const QString &inDir1, const QString &inDir2, const QString &resultFile);
+    bool open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile);
 
 protected:
     virtual void keyPressEvent(QKeyEvent * event);
@@ -42,6 +46,12 @@ protected:
 private:
     int updateResult(int index);
     void updateImage(int index);
+
+#ifdef HAS_POPPLER
+    bool m_showPdf;
+    int m_pdfDelta;
+    Poppler::Document *m_pdfDocument;
+#endif
 
     QStringList m_result;
     int m_currentIndex;
@@ -54,6 +64,7 @@ private:
 
     QDir m_dir1;
     QDir m_dir2;
+    QDir m_pdfDir;
 };
 
 #endif /* CSTCOMPAREVIEW_H */

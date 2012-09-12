@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plan>
-<kplato mime="application/x-vnd.kde.plan" version="0.6.5" editor="Plan" >
+<plan mime="application/x-vnd.kde.plan" version="0.6.5" editor="Plan" >
  <project id="0" scheduling="MustStartOn" >
   <standard-worktime day="8h0m" week="40h0m" month="176h0m" year="1760h0m" >
    <calendar id="-1" name="Base" >
@@ -24,4 +24,4 @@
    </calendar>
   </standard-worktime>
  </project>
-</kplato>
+</plan>

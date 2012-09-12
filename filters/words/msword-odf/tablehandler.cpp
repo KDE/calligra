@@ -84,7 +84,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
             style.setAutoStyleInStylesDotXml(true);
         }
 
-        //process wrapping information
+        //style:wrap
         if (tap->textWrap) {
             if (tap->dxaAbs == -8) {
                 style.addProperty("style:wrap", "left", gt);
@@ -101,8 +101,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
         } else {
             style.addProperty("style:wrap", "none", gt);
         }
-
-        //margin information is related to wrapping of text around the table
+        //fo:margin
         style.addPropertyPt("fo:margin-left", twipsToPt(tap->dxaFromText), gt);
         style.addPropertyPt("fo:margin-right", twipsToPt(tap->dxaFromTextRight), gt);
         style.addPropertyPt("fo:margin-top", twipsToPt(tap->dyaFromText), gt);
@@ -111,37 +110,32 @@ void WordsTableHandler::tableStart(Words::Table* table)
         int dxaAbs = 0;
         int dyaAbs = 0;
 
-        //horizontal position of the anchor
+        //style:horizontal-pos - horizontal position of the anchor
         QString pos = Conversion::getHorizontalPos(tap->dxaAbs);
         style.addProperty("style:horizontal-pos", pos, gt);
         if (pos == "from-left") {
-            if (tap->dxaAbs == 0) {
-                style.addPropertyPt("fo:margin-left", 0, gt);
-            }
             dxaAbs = tap->dxaAbs;
         }
-        else if (pos == "right") {
-            style.addPropertyPt("fo:margin-right", 0, gt);
-        }
-        //vertical position of the anchor
+        //style:vertical-pos - vertical position of the anchor
         pos = Conversion::getVerticalPos(tap->dyaAbs);
         style.addProperty("style:vertical-pos", pos, gt);
         if (pos == "from-top") {
             dyaAbs = tap->dyaAbs;
         }
-        //relative vertical position of the anchor
+        //style:vertical-rel - relative vertical position of the anchor
         pos = Conversion::getVerticalRel(tap->pcVert);
-	if (!pos.isEmpty()) {
+    if (!pos.isEmpty()) {
             style.addProperty("style:vertical-rel", pos, gt);
         }
-        //relative horizontal position of the anchor
+        //style:horizontal-rel - relative horizontal position of the anchor
         pos = Conversion::getHorizontalRel(tap->pcHorz);
         if (!pos.isEmpty()) {
             style.addProperty("style:horizontal-rel", pos, gt);
         }
+        //draw:auto-grow-height
+        style.addProperty("draw:auto-grow-height", "true", gt);
 
-        QString drawStyleName("fr");
-        drawStyleName = m_mainStyles->insert(style, drawStyleName);
+        const QString drawStyleName = m_mainStyles->insert(style);
 
         writer->startElement("draw:frame");
         writer->addAttribute("draw:style-name", drawStyleName.toUtf8());
@@ -187,7 +181,7 @@ void WordsTableHandler::tableStart(Words::Table* table)
             align = QString("right");
             break;
         }
-    } 
+    }
     tableStyle.addProperty("table:align", align);
 
     int width = table->m_cellEdges[table->m_cellEdges.size() - 1] - table->m_cellEdges[0];
@@ -284,9 +278,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
         m_margin[i] = QString::number(brc.dptSpace) + "pt";
     }
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
-
-    qreal rowHeightPt = Conversion::twipsToPt(qAbs(tap->dyaRowHeight));         // convert twips to Pts
-    QString rowHeightString = QString::number(rowHeightPt).append("pt");        // make height string from number
+    QString rowHeightString = QString::number(twipsToPt(qAbs(tap->dyaRowHeight)), 'f').append("pt");
 
     if (tap->dyaRowHeight > 0) {
         rowStyle.addProperty("style:min-row-height", rowHeightString);
@@ -295,7 +287,7 @@ void WordsTableHandler::tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TA
     }
 
     if (tap->fCantSplit) {
-        rowStyle.addProperty("style:keep-together", "always");
+        rowStyle.addProperty("fo:keep-together", "always");
     }
 
     QString rowStyleName = m_mainStyles->insert(rowStyle, QLatin1String("row"));
@@ -582,7 +574,7 @@ void WordsTableHandler::tableCellStart()
     //    cellStyle.addProperty("style:direction", "ttb");
     //}
 
-    //process vertical alignment information 
+    //process vertical alignment information
     QString align;
     switch (tc.vertAlign) {
     case vAlignTop:
@@ -682,7 +674,7 @@ void WordsTableHandler::tableCellEnd()
         m_cellStyleName.clear();
 
         //add the current background-color to stack
-//         document()->addBgColor(color);
+//         document()->pushBgColor(color);
     }
 }
 

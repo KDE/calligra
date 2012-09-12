@@ -20,19 +20,31 @@
 
 #include <limits.h>
 
-#include <kglobalsettings.h>
-#include <libs/main/KoDocument.h>
-#include <kglobal.h>
-#include <kis_debug.h>
-#include <kconfig.h>
+#ifdef Q_WS_X11
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <fixx11h.h>
+#include <QX11Info>
+#endif
+
 #include <QFont>
 #include <QThread>
 #include <QStringList>
 
-#include "kis_global.h"
+#include <kglobalsettings.h>
+#include <kglobal.h>
+#include <kconfig.h>
+
+#include <KoDocument.h>
+
 #include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 
+#include <kis_debug.h>
+
+#include "kis_canvas_resource_provider.h"
+#include "kis_global.h"
 
 namespace
 {
@@ -44,7 +56,7 @@ const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 }
 
 KisConfig::KisConfig()
-        : m_cfg(KGlobal::config()->group(""))
+    : m_cfg(KGlobal::config()->group(""))
 {
 }
 
@@ -170,6 +182,69 @@ void KisConfig::setMonitorProfile(const QString & monitorProfile)
     m_cfg.writeEntry("monitorProfile", monitorProfile);
 }
 
+const KoColorProfile *KisConfig::getScreenProfile(int screen)
+{
+#ifdef Q_WS_X11
+
+    Atom type;
+    int format;
+    unsigned long nitems;
+    unsigned long bytes_after;
+    quint8 * str;
+
+    static Atom icc_atom = XInternAtom(QX11Info::display(), "_ICC_PROFILE", True);
+
+    if (XGetWindowProperty(QX11Info::display(),
+                           QX11Info::appRootWindow(screen),
+                           icc_atom,
+                           0,
+                           INT_MAX,
+                           False,
+                           XA_CARDINAL,
+                           &type,
+                           &format,
+                           &nitems,
+                           &bytes_after,
+                           (unsigned char **) &str) == Success
+       ) {
+        QByteArray bytes(nitems, '\0');
+        bytes = QByteArray::fromRawData((char*)str, (quint32)nitems);
+        // XXX: this assumes the screen is 8 bits -- which might not be true
+        return KoColorSpaceRegistry::instance()->createColorProfile(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), bytes);
+    }
+    else {
+        return 0;
+    }
+#else
+    return 0;
+
+#endif
+}
+
+const KoColorProfile *KisConfig::displayProfile(int screen)
+{
+    // first try to get the screen profile set by the X11 _ICC_PROFILE atom (compatible with colord,
+    // but colord can set the atom to none, in which case we cannot create a suitable profile)
+    const KoColorProfile *profile = 0;
+    if (useSystemMonitorProfile()) {
+       profile = KisConfig::getScreenProfile(screen);
+    }
+
+    // if it fails. check the configuration
+    if (!profile || !profile->isSuitableForDisplay()) {
+        QString monitorProfileName = monitorProfile();
+        if (!monitorProfileName.isEmpty()) {
+            profile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+        }
+    }
+    // if we still don't have a profile, or the profile isn't suitable for display,
+    // we need to get a last-resort profile. the built-in sRGB is a good choice then.
+    if (!profile || !profile->isSuitableForDisplay()) {
+        profile = KoColorSpaceRegistry::instance()->profileByName("sRGB Built-in");
+    }
+
+    return profile;
+}
 
 QString KisConfig::workingColorSpace() const
 {
@@ -208,7 +283,7 @@ void KisConfig::setPrinterProfile(const QString & printerProfile)
 
 bool KisConfig::useBlackPointCompensation() const
 {
-    return m_cfg.readEntry("useBlackPointCompensation", false);
+    return m_cfg.readEntry("useBlackPointCompensation", true);
 }
 
 void KisConfig::setUseBlackPointCompensation(bool useBlackPointCompensation)
@@ -278,6 +353,16 @@ bool KisConfig::useOpenGLToolOutlineWorkaround() const
 void KisConfig::setUseOpenGLToolOutlineWorkaround(bool useWorkaround)
 {
     m_cfg.writeEntry("useOpenGLToolOutlineWorkaround", useWorkaround);
+}
+
+bool KisConfig::useOpenGLTrilinearFiltering() const
+{
+    return m_cfg.readEntry("useOpenGLTrilinearFiltering", true);
+}
+
+void KisConfig::setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering)
+{
+    m_cfg.writeEntry("useOpenGLTrilinearFiltering", useTrilinearFiltering);
 }
 
 qint32 KisConfig::maxNumberOfThreads()
@@ -469,7 +554,7 @@ void KisConfig::setCheckersColor(const QColor & v)
 
 bool KisConfig::antialiasCurves()
 {
-    return m_cfg.readEntry("antialiascurves", false);
+    return m_cfg.readEntry("antialiascurves", true);
 }
 
 void KisConfig::setAntialiasCurves(bool v)
@@ -512,7 +597,7 @@ bool KisConfig::backupFile()
 
 void KisConfig::setBackupFile(bool backupFile)
 {
-     m_cfg.writeEntry("CreateBackupFile", backupFile);
+    m_cfg.writeEntry("CreateBackupFile", backupFile);
 }
 
 bool KisConfig::showFilterGallery()
@@ -621,6 +706,17 @@ void KisConfig::setPresetChooserViewMode(const int mode)
     m_cfg.writeEntry("presetChooserViewMode", mode);
 }
 
+
+bool KisConfig::presetShowAllMode() const
+{
+    return m_cfg.readEntry("presetChooserShowAllPresets", true);
+}
+
+void KisConfig::setPresetShowAllMode(bool showAll)
+{
+    m_cfg.writeEntry("presetChooserShowAllPresets", showAll);
+}
+
 bool KisConfig::firstRun() const
 {
     return m_cfg.readEntry("firstRun", true);
@@ -725,10 +821,42 @@ void KisConfig::setHideToolbarFullscreen(const int value) const
 
 QStringList KisConfig::favoriteCompositeOps() const
 {
-	return m_cfg.readEntry("favoriteCompositeOps", QStringList());
+    return m_cfg.readEntry("favoriteCompositeOps", QStringList());
 }
 
 void KisConfig::setFavoriteCompositeOps(const QStringList& compositeOps)
 {
-	m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
+    m_cfg.writeEntry("favoriteCompositeOps", compositeOps);
+}
+
+QString KisConfig::exportConfiguration(const QString &filterId) const
+{
+    return m_cfg.readEntry("ExportConfiguration-" + filterId, QString());
+}
+
+void KisConfig::setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties)
+{
+    QString exportConfig = properties.toXML();
+    m_cfg.writeEntry("ExportConfiguration-" + filterId, exportConfig);
+
+}
+
+QString KisConfig::defaultPalette()
+{
+    return m_cfg.readEntry("defaultPalette", QString());
+}
+
+void KisConfig::setDefaultPalette(const QString& name)
+{
+    m_cfg.writeEntry("defaultPalette", name);
+}
+
+bool KisConfig::useSystemMonitorProfile() const
+{
+    return m_cfg.readEntry("ColorManagement/UseSystemMonitorProfile", false);
+}
+
+void KisConfig::setUseSystemMonitorProfile(bool _useSystemMonitorProfile)
+{
+    m_cfg.writeEntry("ColorManagement/UseSystemMonitorProfile", _useSystemMonitorProfile);
 }

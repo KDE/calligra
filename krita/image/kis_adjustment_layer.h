@@ -66,6 +66,7 @@ public:
     virtual ~KisAdjustmentLayer();
 
     bool accept(KisNodeVisitor &);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * clones this AdjustmentLayer into a KisNodeSP type.
@@ -123,7 +124,7 @@ public slots:
     }
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

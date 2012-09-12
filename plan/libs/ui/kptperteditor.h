@@ -32,9 +32,9 @@
 #include <QTableWidget>
 #include <QFont>
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
-#include <qwidget.h>
+#include <QWidget>
 
 #include <kactionselector.h>
 
@@ -73,7 +73,7 @@ public:
 
     enum Roles { NodeRole = Qt::UserRole + 1, EnabledRole };
     
-    PertEditor( KoDocument *part, QWidget *parent );
+    PertEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     virtual void updateReadWrite( bool readwrite );
     void setProject( Project *project );
     Project *project() const { return m_project; }

@@ -20,7 +20,7 @@
 #ifndef TEST_SEMANTIC_ITEM
 #define TEST_SEMANTIC_ITEM
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>
@@ -36,6 +36,9 @@
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
 
+class TestSemanticItem;
+typedef QExplicitlySharedDataPointer<TestSemanticItem> hTestSemanticItem;
+
 class TestSemanticItem : public KoRdfSemanticItem
 {
 public:
@@ -43,7 +46,7 @@ public:
 
     TestSemanticItem(QObject *parent, const KoDocumentRdf *rdf = 0)
         : KoRdfSemanticItem(const_cast<KoDocumentRdf*>(rdf), parent)
-        , PREDBASE("http://calligra-suite.org/testrdf/")
+        , PREDBASE("http://calligra.org/testrdf/")
         , m_uri(QUuid::createUuid().toString())
     {
         Q_ASSERT(!m_uri.isEmpty());
@@ -96,7 +99,7 @@ public:
     {
         updateTriple(m_name, name, PREDBASE + "name");
         if (documentRdf()) {
-            const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
+            const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(hKoRdfSemanticItem(this));
         }
     }
 
@@ -110,9 +113,9 @@ public:
         return "TestSemanticItem";
     }
 
-    virtual QList<KoSemanticStylesheet*> stylesheets() const
+    virtual QList<hKoSemanticStylesheet> stylesheets() const
     {
-        QList<KoSemanticStylesheet*> sheets;
+        QList<hKoSemanticStylesheet> sheets;
         return sheets;
     }
 
@@ -121,14 +124,14 @@ public:
         return m_linkingSubject;
     }
 
-    static QList<TestSemanticItem*> allObjects(KoDocumentRdf* rdf, Soprano::Model *model = 0)
+    static QList<hTestSemanticItem> allObjects(KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
-        QList<TestSemanticItem*> result;
-        const Soprano::Model* m = model ? model : rdf->model();
+        QList<hTestSemanticItem> result;
+        QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query =
                 "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
+                "prefix testrdf: <http://calligra.org/testrdf/> \n"
                 "select distinct ?name ?object ?payload \n"
                 "where { \n"
                 "    ?object rdf:type testrdf:testitem . \n"
@@ -141,20 +144,20 @@ public:
                                                           Soprano::Query::QueryLanguageSparql);
 
         while (it.next()) {
-            TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
+            hTestSemanticItem item(new TestSemanticItem(0, rdf, it));
             result << item;
         }
         return result;
     }
 
-    static QList<TestSemanticItem *> findItemsByName(const QString name, KoDocumentRdf* rdf, Soprano::Model *model = 0)
+    static QList<hTestSemanticItem> findItemsByName(const QString name, KoDocumentRdf* rdf, QSharedPointer<Soprano::Model> model = QSharedPointer<Soprano::Model>(0))
     {
-        QList<TestSemanticItem*> result;
-        const Soprano::Model* m = model ? model : rdf->model();
+        QList<hTestSemanticItem> result;
+        QSharedPointer<Soprano::Model> m = model ? model : rdf->model();
 
         QString query(
                     "prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n"
-                    "prefix testrdf: <http://calligra-suite.org/testrdf/> \n"
+                    "prefix testrdf: <http://calligra.org/testrdf/> \n"
                     "select distinct ?name ?object ?payload \n"
                     "where { \n"
                     "    ?object rdf:type testrdf:testitem . \n"
@@ -168,7 +171,7 @@ public:
                                                           Soprano::Query::QueryLanguageSparql);
 
         while (it.next()) {
-            TestSemanticItem *item = new TestSemanticItem(rdf, rdf, it);
+            hTestSemanticItem item(new TestSemanticItem(0, rdf, it));
             result << item;
         }
         return result;

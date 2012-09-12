@@ -25,14 +25,14 @@
 #include <kdebug.h>
 #include <kapplication.h>
 
-#include <qmetaobject.h>
-#include <qpainter.h>
-#include <qstyle.h>
+#include <QMetaObject>
+#include <QPainter>
+#include <QStyle>
 #include <qdrawutil.h>
-#include <qcursor.h>
+#include <QCursor>
 #include <QList>
 
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <widget/tableview/kexicomboboxpopup.h>
 #include <widget/tableview/kexicelleditorfactory.h>
 #include <kexiutils/utils.h>

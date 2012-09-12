@@ -36,7 +36,7 @@ class Project;
 class KPLATOUI_EXPORT LocaleConfigMoneyDialog : public KDialog {
     Q_OBJECT
 public:
-    LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);
+    explicit LocaleConfigMoneyDialog( KLocale *locale, QWidget *parent=0);
 
     KUndo2Command *buildCommand( Project &project );
 

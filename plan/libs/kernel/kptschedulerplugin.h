@@ -76,7 +76,18 @@ public:
     QString comment() const;
     /// Comment is normally set by the plugin loader, from Comment in the desktop file
     void setComment( const QString &name );
-
+    /// A more elaborate description suitable for use in what's this
+    virtual QString description() const { return QString(); }
+    /// The schedulers capabilities
+    enum Capabilities {
+        AvoidOverbooking = 1,
+        AllowOverbooking = 2,
+        ScheduleForward = 4,
+        ScheduleBackward = 8
+    };
+    /// Return the schedulers capabilities.
+    /// By default returns all capabilities
+    virtual int capabilities() const;
     /// Stop calculation of the schedule @p sm. Current result may be used.
     void stopCalculation( ScheduleManager *sm );
     /// Terminate calculation of the schedule @p sm. No results will be available.
@@ -124,7 +135,7 @@ private:
  fetch data from the private calculated project into the actual project.
  
  To track progress, the progress() method should be called from the ui thread with
- an apropriate interval to avoid overload of the ui thread.
+ an appropriate interval to avoid overload of the ui thread.
  The progressChanged() signal may also be used but note that async signal handling are very slow
  so it may affect the ui threads performance too much.
 */

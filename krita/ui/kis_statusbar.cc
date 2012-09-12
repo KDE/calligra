@@ -67,6 +67,9 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
 
+    m_progress = new KisProgressWidget(view);
+    view->addStatusBarItem(m_progress);
+
     m_imageSizeLabel = new QLabel(QString(), view);
     m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_imageSizeLabel->setMinimumWidth(100);
@@ -77,13 +80,6 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_pointerPositionLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
-
-    m_progress = new KisProgressWidget(view);
-    m_progress->setMaximumWidth(225);
-    m_progress->setMinimumWidth(225);
-    view->addStatusBarItem(m_progress, 2, true);
-
-    m_progress->hide();
 }
 
 KisStatusBar::~KisStatusBar()
@@ -129,7 +125,7 @@ void KisStatusBar::setSelection(KisImageWSP image)
     Q_UNUSED(image);
 
     KisSelectionSP selection = m_view->selection();
-    if (selection && !selection->isDeselected()) {
+    if (selection) {
         m_selectionStatusLabel->setEnabled(true);
 
         QRect r = selection->selectedExactRect();

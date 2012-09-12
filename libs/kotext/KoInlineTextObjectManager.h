@@ -24,9 +24,12 @@
 #include "KoVariableManager.h"
 #include "kotext_export.h"
 
+#include <KoOdfBibliographyConfiguration.h>
+
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
+#include <QTextBlock>
 
 class KoCanvasBase;
 class KoTextLocator;
@@ -57,7 +60,7 @@ public:
      * @param format the textCharFormat
      */
     KoInlineObject *inlineTextObject(const QTextCharFormat &format) const;
-    
+
     /**
      * Retrieve a formerly added inline object based on the cursor position.
      * @param cursor the cursor which position is used. The anchor is ignored.
@@ -84,23 +87,21 @@ public:
     void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
 
     /**
-     * Remove an inline object from this manager (as well as the document).
-     * This method will also remove the placeholder for the inline object.
-     * This method will try to smartly remove the bookmark from the bookmark manager if the object
-     * at the cursor position is a bookmark; the corresponding start or end bookmark will become
-     * a single bookmark.
-     * @param cursor the cursor which indicated the document and the position in that document
-     *      where the inline object will be deleted
-     * @return returns true if the inline object in the cursor position has been successfully
-     *      deleted
+     * Add inline object into the manager.
+     *
+     * This methods add the inline object into the manager. This is useful if you have a command
+     * that removes and adds a inline object to the manager. If the object already was inserted before
+     * (the object id is already set) it keeps the old id, otherwise a new id will be generated.
+     *
+     * @param object the inline object to insert.
      */
-    bool removeInlineObject(QTextCursor &cursor);
+    void addInlineObject(KoInlineObject* object);
 
     /**
      * Remove an inline object from this manager. The object will also be removed from
      * the bookmarkmanager if it is a bookmark. This is not done smart: you might end up
      * with dangling start or end bookmarks.
-     * XXX: what about variables?
+     * Should really only be called by KoTextEditor's delete commands
      * @param the object to be removed
      */
     void removeInlineObject(KoInlineObject *object);
@@ -155,18 +156,20 @@ public:
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
     QList<KoTextLocator*> textLocators() const;
+
     /**
-     * Note: once document sections are implemented, we need to be able
-     * to retrieve the endnotes for a particular section only.
-     *
-     * @return a list of all inline objects that are endnotes
-     */
+      * It returns a list of all end notes in the document
+      */
     QList<KoInlineNote*> endNotes() const;
 
     QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
 
+    QList<KoInlineCite*> citationsSortedByPosition(bool duplicatesEnabled = true,
+                                                           QTextBlock block = QTextBlock()) const;
+
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);
+    void activeAuthorUpdated(const QString &data);
 
 signals:
     /**
@@ -175,8 +178,10 @@ signals:
     void propertyChanged(int, const QVariant &variant);
 
 private:
+    void insertObject(KoInlineObject *object);
 
     QHash<int, KoInlineObject*> m_objects;
+    QHash<int, KoInlineObject*> m_deletedObjects;
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
     QHash<int, QVariant> m_properties;

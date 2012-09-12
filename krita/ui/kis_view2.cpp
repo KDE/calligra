@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 #include "kis_view2.h"
-#include <qprinter.h>
+#include <QPrinter>
 
 #include <QDesktopWidget>
 #include <QGridLayout>
@@ -48,6 +48,7 @@
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
+#include <kactionmenu.h>
 #include <klocale.h>
 #include <kmenu.h>
 #include <kparts/componentfactory.h>
@@ -60,7 +61,6 @@
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
-#include <ktemporaryfile.h>
 #include <kactioncollection.h>
 
 #include <KoStore.h>
@@ -78,42 +78,47 @@
 #include <KoTemplateCreateDia.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocumentEntry.h>
+#include <KoProperties.h>
 
 #include <kis_image.h>
 #include <kis_undo_adapter.h>
+#include "kis_composite_progress_proxy.h"
 #include <kis_layer.h>
 
-#include "kra/kis_kra_loader.h"
-#include "kis_config.h"
-#include "kis_config_notifier.h"
-#include "kis_statusbar.h"
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_canvas_controller.h"
+#include "canvas/kis_grid_manager.h"
+#include "canvas/kis_perspective_grid_manager.h"
+#include "dialogs/kis_dlg_preferences.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_config.h"
+#include "kis_config_notifier.h"
+#include "kis_control_frame.h"
 #include "kis_coordinates_converter.h"
+#include "kis_custom_palette.h"
 #include "kis_doc2.h"
 #include "kis_factory2.h"
 #include "kis_filter_manager.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_selection_manager.h"
-#include "kis_image_manager.h"
-#include "kis_control_frame.h"
-#include "kis_paintop_box.h"
-#include "kis_zoom_manager.h"
-#include "canvas/kis_grid_manager.h"
-#include "canvas/kis_perspective_grid_manager.h"
-#include "kis_mask_manager.h"
-#include "dialogs/kis_dlg_preferences.h"
 #include "kis_group_layer.h"
-#include "kis_custom_palette.h"
-#include "kis_resource_server_provider.h"
-#include "kis_projection.h"
+#include "kis_image_manager.h"
+#include "kis_mask_manager.h"
 #include "kis_node.h"
 #include "kis_node_manager.h"
-#include "kis_selection.h"
-#include "kis_print_job.h"
 #include "kis_painting_assistants_manager.h"
 #include <kis_paint_layer.h>
+#include "kis_paintop_box.h"
+#include "kis_part2.h"
+#include "kis_print_job.h"
 #include "kis_progress_widget.h"
+#include "kis_resource_server_provider.h"
+#include "kis_selection.h"
+#include "kis_selection_manager.h"
+#include "kis_shape_layer.h"
+#include "kis_statusbar.h"
+#include "kis_zoom_manager.h"
+#include "kra/kis_kra_loader.h"
+#include "widgets/kis_floating_message.h"
+
 
 #include <QDebug>
 #include <QPoint>
@@ -122,6 +127,8 @@
 #include <kis_paintop_preset.h>
 #include "ko_favorite_resource_manager.h"
 #include "kis_paintop_box.h"
+
+#include "thememanager.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -139,7 +146,7 @@ class BlockingUserInputEventFilter : public QObject
     }
 };
 
-class KisView2::KisView2Private
+struct KisView2::KisView2Private
 {
 
 public:
@@ -147,6 +154,7 @@ public:
     KisView2Private()
         : canvas(0)
         , doc(0)
+        , part(0)
         , viewConverter(0)
         , canvasController(0)
         , resourceProvider(0)
@@ -159,14 +167,17 @@ public:
         , imageManager(0)
         , gridManager(0)
         , perspectiveGridManager(0)
-        , paintingAssistantManager(0) {
-
+        , paintingAssistantManager(0)
+        , themeManager(0)
+    {
     }
 
     ~KisView2Private() {
         if (canvasController) {
             KoToolManager::instance()->removeCanvasController(canvasController);
         }
+
+        delete canvasController;
         delete canvas;
         delete filterManager;
         delete selectionManager;
@@ -184,6 +195,7 @@ public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
+    KisPart2 *part;
     KisCoordinatesConverter * viewConverter;
     KoCanvasController * canvasController;
     KisCanvasResourceProvider * resourceProvider;
@@ -193,6 +205,7 @@ public:
     KAction* mirrorCanvas;
     KAction* createTemplate;
     KAction *saveIncremental;
+    KAction *saveIncrementalBackup;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -203,29 +216,28 @@ public:
     KisPaintingAssistantsManager* paintingAssistantManager;
     KoFavoriteResourceManager* favoriteResourceManager;
     BlockingUserInputEventFilter blockingEventFilter;
+    Digikam::ThemeManager *themeManager;
 };
 
 
-KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
-    : KoView(doc, parent),
+KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
+    : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
+    setComponentData(KisFactory2::componentData());
+    setXMLFile("krita.rc");
+
+    // populate theme menu
+    m_d->themeManager = new Digikam::ThemeManager(this);
 
     setFocusPolicy(Qt::NoFocus);
-
-    setComponentData(KisFactory2::componentData(), false);
-
-    if (!doc->isReadWrite()) {
-        setXMLFile("krita_readonly.rc");
-    } else {
-        setXMLFile("krita.rc");
-    }
 
     if (mainWindow()) {
         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
     }
 
     m_d->doc = doc;
+    m_d->part = part;
     m_d->viewConverter = new KisCoordinatesConverter();
 
     KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
@@ -239,11 +251,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     m_d->canvasController = canvasController;
 
-
+    m_d->resourceProvider = new KisCanvasResourceProvider(this);
+    m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
+    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
+
     m_d->canvasController->setCanvas(m_d->canvas);
 
-    m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->setResourceManager(m_d->canvas->resourceManager());
 
     createManagers();
@@ -255,19 +269,23 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     KoToolManager::instance()->addController(m_d->canvasController);
     KoToolManager::instance()->registerTools(actionCollection(), m_d->canvasController);
 
-
-    connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
-
     // krita/krita.rc must also be modified to add actions to the menu entries
 
     m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
     m_d->saveIncremental->setShortcut(Qt::Key_F2);
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
+
+    m_d->saveIncrementalBackup = new KAction(i18n("Save Incremental Backup"), this);
+    m_d->saveIncrementalBackup->setShortcut(Qt::Key_F4);
+    actionCollection()->addAction("save_incremental_backup", m_d->saveIncrementalBackup);
+    connect(m_d->saveIncrementalBackup, SIGNAL(triggered()), this, SLOT(slotSaveIncrementalBackup()));
+
     connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
 
     if (koDocument()->localFilePath().isNull()) {
         m_d->saveIncremental->setEnabled(false);
+        m_d->saveIncrementalBackup->setEnabled(false);
     }
 
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
@@ -279,14 +297,10 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
-    actionCollection()->addAction("first_run", firstRun);
-    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
-
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
@@ -315,12 +329,11 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
     QList<QKeySequence> shortcuts;
-    shortcuts << QKeySequence("Ctrl+h");
+    shortcuts << QKeySequence(Qt::Key_Tab);
     tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
-
 
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
@@ -338,11 +351,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     if (shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
+        KoToolBoxFactory toolBoxFactory(m_d->canvasController);
         shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
                 shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
+
+        shell()->dockerManager()->setIcons(false);
     }
 
     m_d->statusBar = new KisStatusBar(this);
@@ -380,11 +395,18 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     setAcceptDrops(true);
 
+    KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+    foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+        collection->setConfigGroup("krita/shortcuts");
+        collection->readSettings(&group);
+    }
+
+
 #if 0
     //check for colliding shortcuts
     QSet<QKeySequence> existingShortcuts;
     foreach(QAction* action, actionCollection()->actions()) {
-        if(action->shortcut() == QKeySequence("")) {
+        if(action->shortcut() == QKeySequence(0)) {
             continue;
         }
         dbgUI << "shortcut " << action->text() << " " << action->shortcut();
@@ -397,6 +419,17 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 KisView2::~KisView2()
 {
+    {
+        KConfigGroup group(KGlobal::config(), "theme");
+        group.writeEntry("Theme", m_d->themeManager->currentThemeName());
+    }
+    {
+        KConfigGroup group(KGlobal::config(), "krita/shortcuts");
+        foreach(KActionCollection *collection, KActionCollection::allCollections()) {
+            collection->setConfigGroup("krita/shortcuts");
+            collection->writeSettings(&group);
+        }
+    }
     delete m_d;
 }
 
@@ -417,7 +450,8 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
 
 void KisView2::dropEvent(QDropEvent *event)
 {
-    KisImageWSP kisimage = image();
+    KisImageSP kisimage = image();
+
     QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
 
     if (event->mimeData()->hasFormat("application/x-krita-node") || event->mimeData()->hasImage())
@@ -428,28 +462,44 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisDoc2 tmpDoc;
-            tmpDoc.loadNativeFormatFromStore(ba);
+            KisDoc2 tempDoc;
+            tempDoc.loadNativeFormatFromStore(ba);
 
-            node = tmpDoc.image()->rootLayer()->firstChild();
-            node->setName(i18n("Pasted Layer"));
+            KisImageWSP tempImage = tempDoc.image();
+            node = tempImage->rootLayer()->firstChild();
+            tempImage->removeNode(node);
+
+            // layers store a link to the image, so update it
+            KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+            if (layer) {
+                layer->setImage(kisimage);
+            }
+            KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node.data());
+            if (shapeLayer) {
+                KoShapeContainer * parentContainer =
+                    dynamic_cast<KoShapeContainer*>(m_d->doc->shapeForNode(kisimage->rootLayer()));
+
+                KisShapeLayer *shapeLayer2 = new KisShapeLayer(parentContainer, m_d->doc->shapeController(), kisimage, node->name(), node->opacity());
+                QList<KoShape *> shapes = shapeLayer->shapes();
+                shapeLayer->removeAllShapes();
+                foreach(KoShape *shape, shapes) {
+                    shapeLayer2->addShape(shape);
+                }
+                node = shapeLayer2;
+            }
+
         }
         else if (event->mimeData()->hasImage()) {
             QImage qimage = qvariant_cast<QImage>(event->mimeData()->imageData());
 
             if (kisimage) {
                 KisPaintDeviceSP device = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-                device->convertFromQImage(qimage, "");
+                device->convertFromQImage(qimage, 0);
                 node = new KisPaintLayer(kisimage.data(), kisimage->nextLayerName(), OPACITY_OPAQUE_U8, device);
             }
         }
 
         if (node) {
-
-            // Set the image on layers before adding them, otherwise we get a crash
-            if (qobject_cast<KisLayer*>(node.data())) {
-                qobject_cast<KisLayer*>(node.data())->setImage(kisimage);
-            }
 
             node->setX(pos.x() - node->projection()->exactBounds().width());
             node->setY(pos.y() - node->projection()->exactBounds().height());
@@ -462,9 +512,6 @@ void KisView2::dropEvent(QDropEvent *event)
                                 m_d->nodeManager->activeLayer()->parent(),
                                 m_d->nodeManager->activeLayer());
             }
-            node->setDirty();
-            canvas()->update();
-            nodeManager()->activateNode(node);
         }
 
         return;
@@ -484,6 +531,8 @@ void KisView2::dropEvent(QDropEvent *event)
             QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
             QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
+            QAction *replaceCurrentDocument = new KAction(i18n("Replace Current Document"), &popup);
+
             QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
             if (urls.count() == 1) {
@@ -491,6 +540,7 @@ void KisView2::dropEvent(QDropEvent *event)
                     popup.addAction(insertAsNewLayer);
                 }
                 popup.addAction(openInNewDocument);
+                popup.addAction(replaceCurrentDocument);
             } else {
                 if (!image().isNull()) {
                     popup.addAction(insertAsNewLayers);
@@ -508,6 +558,15 @@ void KisView2::dropEvent(QDropEvent *event)
 
                     if (action == insertAsNewLayer || action == insertAsNewLayers) {
                         m_d->imageManager->importImage(KUrl(url));
+                    }
+                    else if (action == replaceCurrentDocument) {
+                        if (m_d->part->isModified()) {
+                            m_d->part->save();
+                        }
+                        if (shell() != 0) {
+                            shell()->openDocument(url);
+                        }
+                        shell()->close();
                     } else {
                         Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
@@ -622,10 +681,26 @@ KisSelectionSP KisView2::selection()
     return image()->globalSelection();
 }
 
+bool KisView2::selectionEditable()
+{
+    KisLayerSP layer = activeLayer();
+    if (layer) {
+        KoProperties properties;
+        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
+        if (masks.size() == 1) {
+            return masks[0]->isEditable();
+        }
+    }
+    // global selection is always editable
+    return true;
+}
 
 KisUndoAdapter * KisView2::undoAdapter()
 {
-    return m_d->doc->undoAdapter();
+    KisImageWSP image = m_d->doc->image();
+    Q_ASSERT(image);
+
+    return image->undoAdapter();
 }
 
 
@@ -654,8 +729,26 @@ void KisView2::slotLoadingFinished()
         image()->unlock();
     }
 
-    if (KisNodeSP node = image()->rootLayer()->firstChild()) {
-        m_d->nodeManager->activateNode(node);
+    KisNodeSP activeNode = m_d->doc->preActivatedNode();
+    m_d->doc->setPreActivatedNode(0); // to make sure that we don't keep a reference to a layer the user can later delete.
+
+    if (!activeNode) {
+        activeNode = image()->rootLayer()->firstChild();
+    }
+
+    while (activeNode && !activeNode->inherits("KisLayer")) {
+        activeNode = activeNode->nextSibling();
+    }
+
+    if (activeNode) {
+        m_d->nodeManager->slotNonUiActivatedNode(activeNode);
+    }
+
+
+    // get the assistants and push them to the manager
+    QList<KisPaintingAssistant*> paintingAssistants = m_d->doc->preLoadedAssistants();
+    foreach (KisPaintingAssistant* assistant, paintingAssistants) {
+        m_d->paintingAssistantManager->addAssistant(assistant);
     }
 
     /**
@@ -665,7 +758,12 @@ void KisView2::slotLoadingFinished()
         m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
     if (m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
-
+    if (m_d->paintingAssistantManager){
+        foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
+            m_d->paintingAssistantManager->addAssistant(assist);
+        }
+        m_d->paintingAssistantManager->setVisible(true);
+    }
     updateGUI();
 
     emit sigLoadingFinished();
@@ -679,7 +777,15 @@ void KisView2::createActions()
     KAction* action = new KAction(i18n("Edit Palette..."), this);
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
+
+    KConfigGroup group(KGlobal::config(), "theme");
+    m_d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    m_d->themeManager->registerThemeActions(actionCollection());
+    m_d->themeManager->setCurrentTheme(group.readEntry("Theme",
+                                                       m_d->themeManager->defaultThemeName()));
+
 }
+
 
 
 void KisView2::createManagers()
@@ -740,10 +846,24 @@ void KisView2::connectCurrentImage()
 
         }
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), m_d->resourceProvider, SLOT(slotImageSizeChanged()));
+
+        connect(image(), SIGNAL(sigResolutionChanged(double, double)),
+                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+        connect(zoomManager()->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+                m_d->resourceProvider, SLOT(slotOnScreenResolutionChanged()));
+
         connect(image(), SIGNAL(sigSizeChanged(qint32, qint32)), this, SLOT(slotImageSizeChanged()));
         connect(image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageSizeChanged()));
+        connect(image(), SIGNAL(sigNodeChanged(KisNodeSP)), this, SLOT(slotNodeChanged()));
         connect(image()->undoAdapter(), SIGNAL(selectionChanged()), selectionManager(), SLOT(selectionChanged()));
 
+        /**
+         * WARNING: Currently we access the global progress bar in two ways:
+         * connecting to composite progress proxy (strokes) and creating
+         * progress updaters. The latter way should be depracated in favour
+         * of displaying the status of the global strokes queue
+         */
+        //image()->compositeProgressProxy()->addProxy(m_d->statusBar->progress()->progressProxy());
     }
 
     m_d->canvas->connectCurrentImage();
@@ -772,7 +892,7 @@ void KisView2::slotPreferences()
 {
     if (KisDlgPreferences::editPreferences()) {
         KisConfigNotifier::instance()->notifyConfigChanged();
-        m_d->resourceProvider->resetDisplayProfile();
+        m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
         KisConfig cfg;
         static_cast<KoCanvasControllerWidget*>(m_d->canvasController)->setZoomWithWheel(cfg.zoomWithWheel());
 
@@ -815,13 +935,17 @@ void KisView2::slotImageSizeChanged()
     canvas()->update();
 }
 
+void KisView2::slotNodeChanged()
+{
+    updateGUI();
+}
 
 void KisView2::loadPlugins()
 {
     // Load all plugins
     KService::List offers = KServiceTypeTrader::self()->query(QString::fromLatin1("Krita/ViewPlugin"),
                                                               QString::fromLatin1("(Type == 'Service') and "
-                                                                                  "([X-Krita-Version] == 4)"));
+                                                                                  "([X-Krita-Version] == 5)"));
     KService::List::ConstIterator iter;
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;
@@ -876,31 +1000,14 @@ void KisView2::slotTotalRefresh()
 
 void KisView2::slotCreateTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = m_d->doc->generatePreview(QSize(width, height));
-
-    KTemporaryFile tempFile;
-    tempFile.setSuffix(".kra");
-
-    //Check that creation of temp file was successful
-    if (!tempFile.open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-
-    m_d->doc->saveNativeFormat(tempFile.fileName());
-
-    KoTemplateCreateDia::createTemplate("krita_template", KisFactory2::componentData(),
-                                        tempFile.fileName(), pix, this);
-
-    KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
-
+    KoTemplateCreateDia::createTemplate("krita_template", ".kra",
+                                        KisFactory2::componentData(), m_d->doc, this);
 }
 
 void KisView2::slotDocumentSaved()
 {
     m_d->saveIncremental->setEnabled(true);
+    m_d->saveIncrementalBackup->setEnabled(true);
 }
 
 void KisView2::slotSaveIncremental()
@@ -910,16 +1017,27 @@ void KisView2::slotSaveIncremental()
 
     bool foundVersion;
     bool fileAlreadyExists;
+    bool isBackup;
     QString version = "000";
     QString newVersion;
     QString letter;
     QString fileName = pDoc->localFilePath();
 
     // Find current version filenames
-    QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
+    // v v Regexp to find incremental versions in the filename, taking our backup scheme into account as well
+    // Considering our incremental version and backup scheme, format is filename_001~001.ext
+    QRegExp regex("_\\d{1,4}[.]|_\\d{1,4}[a-z][.]|_\\d{1,4}[~]|_\\d{1,4}[a-z][~]");
     regex.indexIn(fileName);     //  Perform the search
     QStringList matches = regex.capturedTexts();
     foundVersion = matches.at(0).isEmpty() ? false : true;
+
+    // Ensure compatibility with Save Incremental Backup
+    // If this regex is not kept separate, the entire algorithm needs modification;
+    // It's simpler to just add this.
+    QRegExp regexAux("_\\d{1,4}[~]|_\\d{1,4}[a-z][~]");
+    regexAux.indexIn(fileName);     //  Perform the search
+    QStringList matchesAux = regexAux.capturedTexts();
+    isBackup = matchesAux.at(0).isEmpty() ? false : true;
 
     // If the filename has a version, prepare it for incrementation
     if (foundVersion) {
@@ -956,7 +1074,11 @@ void KisView2::slotSaveIncremental()
         newVersion = baseNewVersion;
         newVersion.prepend("_");
         if (!letter.isNull()) newVersion.append(letter);
-        newVersion.append(".");
+        if (isBackup) {
+            newVersion.append("~");
+        } else {
+            newVersion.append(".");
+        }
         fileName.replace(regex, newVersion);
         fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
         if (fileAlreadyExists) {
@@ -971,13 +1093,123 @@ void KisView2::slotSaveIncremental()
     } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
 
     if (letter == "{") {
-        KMessageBox::error(this, "Alternative names exhausted, try saving with a higher number", "Couldn't save incremental version");
+        KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental version");
         return;
     }
-
-    pDoc->saveAs(fileName);
+    pDoc->setSaveInBatchMode(true);
+    m_d->part->saveAs(fileName);
+    pDoc->setSaveInBatchMode(false);
 
     shell()->updateCaption();
+}
+
+void KisView2::slotSaveIncrementalBackup()
+{
+    KoDocument* pDoc = koDocument();
+    if (!pDoc) return;
+
+    bool workingOnBackup;
+    bool fileAlreadyExists;
+    QString version = "000";
+    QString newVersion;
+    QString letter;
+    QString fileName = pDoc->localFilePath();
+
+    // First, discover if working on a backup file, or a normal file
+    QRegExp regex("~\\d{1,4}[.]|~\\d{1,4}[a-z][.]");
+    regex.indexIn(fileName);     //  Perform the search
+    QStringList matches = regex.capturedTexts();
+    workingOnBackup = matches.at(0).isEmpty() ? false : true;
+
+    if (workingOnBackup) {
+        // Try to save incremental version (of backup), use letter for alt versions
+        version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
+        if (version.contains(QRegExp("[a-z]"))) {
+            version.chop(1);             //  Trim "."
+            letter = version.right(1);   //  Save letter
+            version.chop(1);             //  Trim letter
+        } else {
+            version.chop(1);             //  Trim "."
+        }
+        version.remove(0, 1);            //  Trim "~"
+
+        // Prepare the base for new version filename
+        int intVersion = version.toInt(0);
+        ++intVersion;
+        QString baseNewVersion = QString::number(intVersion);
+        while (baseNewVersion.length() < version.length()) {
+            baseNewVersion.prepend("0");
+        }
+
+        // Check if the file exists under the new name and search until options are exhausted (test appending a to z)
+        do {
+            newVersion = baseNewVersion;
+            newVersion.prepend("~");
+            if (!letter.isNull()) newVersion.append(letter);
+            newVersion.append(".");
+            fileName.replace(regex, newVersion);
+            fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
+            if (fileAlreadyExists) {
+                if (!letter.isNull()) {
+                    char letterCh = letter.at(0).toLatin1();
+                    ++letterCh;
+                    letter = QString(QChar(letterCh));
+                } else {
+                    letter = "a";
+                }
+            }
+        } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
+
+        if (letter == "{") {
+            KMessageBox::error(this, "Alternative names exhausted, try manually saving with a higher number", "Couldn't save incremental backup");
+            return;
+        }
+        m_d->part->saveAs(fileName);
+
+        shell()->updateCaption();
+    }
+    else { // if NOT working on a backup...
+        // Navigate directory searching for latest backup version, ignore letters
+        const quint8 HARDCODED_DIGIT_COUNT = 3;
+        QString baseNewVersion = "000";
+        QString backupFileName = pDoc->localFilePath();
+        QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
+        regex2.indexIn(backupFileName);
+        QStringList matches2 = regex2.capturedTexts();
+        QString extensionPlusVersion = matches2.at(0);
+        extensionPlusVersion.prepend(baseNewVersion);
+        extensionPlusVersion.prepend("~");
+        backupFileName.replace(regex2, extensionPlusVersion);
+
+        // Save version with 1 number higher than the highest version found ignoring letters
+        do {
+            newVersion = baseNewVersion;
+            newVersion.prepend("~");
+            newVersion.append(".");
+            qDebug() << backupFileName << " version1";
+            backupFileName.replace(regex, newVersion);
+            qDebug() << backupFileName << " version2";
+            fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, this);
+            if (fileAlreadyExists) {
+                // Prepare the base for new version filename, increment by 1
+                int intVersion = baseNewVersion.toInt(0);
+                ++intVersion;
+                baseNewVersion = QString::number(intVersion);
+                while (baseNewVersion.length() < HARDCODED_DIGIT_COUNT) {
+                    baseNewVersion.prepend("0");
+                }
+            }
+            qDebug() << "idiot";
+        } while (fileAlreadyExists);
+
+        // Save both as backup and on current file for interapplication workflow
+        pDoc->setSaveInBatchMode(true);
+        m_d->part->saveAs(backupFileName);
+        m_d->part->saveAs(fileName);
+        pDoc->setSaveInBatchMode(false);
+
+        shell()->updateCaption();
+    }
 }
 
 void KisView2::disableControls()
@@ -998,26 +1230,6 @@ void KisView2::enableControls()
     foreach(QObject* child, m_d->controlFrame->paintopBox()->children()) {
         child->removeEventFilter(&m_d->blockingEventFilter);
     }
-}
-
-void KisView2::slotFirstRun()
-{
-    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
-    if (!fname.isEmpty()) {
-        KoDocumentEntry entry = KoDocumentEntry(KoDocument::readNativeService());
-        QString errorMsg;
-        KoDocument* doc = entry.createDoc(&errorMsg);
-        if (!doc) return;
-        KoMainWindow *shell = new KoMainWindow(doc->componentData());
-        shell->show();
-        QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-        // for initDoc to fill in the recent docs list
-        // and for KoDocument::slotStarted
-        doc->addShell(shell);
-        doc->showStartUpWidget(shell, true);
-        doc->openUrl(fname);
-    }
-
 }
 
 void KisView2::showStatusBar(bool toggled)
@@ -1077,6 +1289,21 @@ void KisView2::showJustTheCanvas(bool toggled)
             dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         }
     }
+
+    if (toggled) {
+        // show a fading heads-up display about the shortcut to go back
+        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
+                                                                          actionCollection()->action("view_show_just_the_canvas")->shortcut().toString()), this);
+        floatingMessage->showMessage();
+    }
+}
+
+void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
+{
+    KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, mainWindow()->centralWidget());
+    floatingMessage->setShowOverParent(true);
+    floatingMessage->setIcon(icon);
+    floatingMessage->showMessage();
 }
 
 #include "kis_view2.moc"

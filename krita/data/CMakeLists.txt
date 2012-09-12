@@ -10,6 +10,8 @@ add_subdirectory( images )
 add_subdirectory( backgrounds )
 add_subdirectory( cursors )
 add_subdirectory( workspaces )
+add_subdirectory( themes )
+add_subdirectory( predefined_image_sizes )
 ########### install files ###############
 
 install( FILES  
@@ -24,9 +26,9 @@ install( FILES
 
 install( FILES
     kritarc
-    krita.knsrc
     kritapresets.knsrc
     kritabrushes.knsrc
     kritapatterns.knsrc
     kritagradients.knsrc
+    kritaiccprofiles.knsrc
     DESTINATION ${CONFIG_INSTALL_DIR} )

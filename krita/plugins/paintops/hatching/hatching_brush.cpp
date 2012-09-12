@@ -26,7 +26,7 @@
 #include <QVariant>
 #include <QHash>
 
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include <cmath>
 #include <time.h>
 
@@ -294,7 +294,7 @@ double HatchingBrush::separationAsFunctionOfParameter(double parameter, double s
         if (currentinterval == (numintervals - 1))
             upperlimit = 1;
         if ((parameter >= lowerlimit) && (parameter <= upperlimit)) {
-            factor = pow(2, (basefactor - currentinterval));
+            factor = pow(2.0, (basefactor - currentinterval));
             //qDebug() << factor;
             return (separation * factor);
         }

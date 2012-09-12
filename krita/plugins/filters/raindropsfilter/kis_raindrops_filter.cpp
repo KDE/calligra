@@ -43,7 +43,6 @@
 #include "KoIntegerMaths.h"
 #include <KoUpdater.h>
 
-#include <kis_iterators_pixel.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
 #include <kis_global.h>
@@ -183,7 +182,7 @@ void KisRainDropsFilter::process(KisPaintDeviceSP device,
 
         for (i = -1 * halfSize ; (i < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); i++) {
             for (j = -1 * halfSize ; (j < NewSize - halfSize) && !(progressUpdater && progressUpdater->interrupted()); j++) {
-                r = sqrt(i * i + j * j);
+                r = sqrt((double)i * i + j * j);
                 a = atan2(static_cast<double>(i), static_cast<double>(j));
 
                 if (r <= Radius) {
@@ -284,7 +283,7 @@ void KisRainDropsFilter::process(KisPaintDeviceSP device,
             for (j = -1 * halfSize - BlurRadius;
                     ((j < NewSize - halfSize + BlurRadius) && !(progressUpdater && progressUpdater->interrupted()));
                     ++j) {
-                r = sqrt(i * i + j * j);
+                r = sqrt((double)i * i + j * j);
 
                 if (r <= Radius * 1.1) {
                     R = G = B = 0;

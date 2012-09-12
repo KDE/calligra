@@ -20,11 +20,11 @@
 
 #include "kexitableedit.h"
 #include <widget/dataviewcommon/kexidataawareobjectiface.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/utils.h>
 
-#include <qpalette.h>
-#include <qpainter.h>
+#include <QPalette>
+#include <QPainter>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>

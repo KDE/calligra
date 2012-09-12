@@ -480,7 +480,7 @@ void AppointmentIntervalTester::addAppointment()
     QCOMPARE( load, app1.intervals().map().values().first().load() );
 
     app1 += app2;
-    kDebug()<<load<<app1.intervals().map().values().first().load();
+    qDebug()<<load<<app1.intervals().map().values().first().load();
     QCOMPARE( dt1, app1.intervals().map().values().first().startTime() );
     QCOMPARE( dt2, app1.intervals().map().values().first().endTime() );
     QCOMPARE( load*2, app1.intervals().map().values().first().load() );

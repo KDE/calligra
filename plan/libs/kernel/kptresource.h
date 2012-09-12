@@ -30,7 +30,7 @@
 #include "kptappointment.h"
 #include "kptcalendar.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QHash>
 #include <QString>
 #include <QList>
@@ -253,11 +253,16 @@ public:
     void setEmail( const QString email );
     const QString &email() const { return m_email;}
 
+    /// Returns true if this resource will be allocated by default to new tasks
+    bool autoAllocate() const;
+    /// Set if this resource will be allocated by default to new tasks
+    void setAutoAllocate( bool on );
+
     void copy( Resource *resource );
     
     void setParentGroup( ResourceGroup *parent ) { m_parent = parent; }
     ResourceGroup *parentGroup() const { return m_parent; }
-    
+
     /// Set the time from when the resource is available to this project
     void setAvailableFrom( const QDateTime &af ) { m_availableFrom = af; changed();}
     /// Set the time from when the resource is available to this project
@@ -477,26 +482,27 @@ public:
     DateTime startTime( long id ) const;
     DateTime endTime( long id ) const;
 
-    /// Returns the list requiered resources.
+    /// Returns the list of requiered resources.
     /// Note: This list is used as default for allocation dialog, not for scheduling.
-    QList<Resource*> requiredResources() const { return m_required; }
-    /// Set the list of required resources.
-    void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
+    QList<Resource*> requiredResources() const;
+    /// Set the list of the required resources's ids so they can be resolved when used
+    /// A required resource may not exist in the project yet
+    void setRequiredIds( const QStringList &lst );
+    /// Add a resource id to the required ids list
+    void addRequiredId( const QString &id );
+    /// Returns the list of requiered resource ids.
+    QStringList requiredIds() const { return m_requiredIds; }
 
     /// Return the list of team members.
-    QList<Resource*> teamMembers() const { return m_teamMembers; }
+    QList<Resource*> teamMembers() const;
+    /// Return the list of team members.
+    QStringList teamMemberIds() const;
     /// Clear the list of team members.
     void clearTeamMembers() { m_teamMembers.clear(); }
-    /// Add @p resource to the list of team members.
-    void addTeamMember( Resource *resource );
-    /// Remove @p resource to the list of team members.
-    void removeTeamMember( Resource *resource );
-
-    /// Used by Project::load() after all resources have been loaded
-    /// to translate resource ids to resources
-    void resolveRequiredResources( Project &project );
-    /// @see resolveRequiredResources
-    void addRequiredId( const QString &id );
+    /// Add resource @p id to the list of team members.
+    void addTeamMemberId( const QString &id );
+    /// Remove resource @p id from the list of team members.
+    void removeTeamMemberId( const QString &id );
 
     /// Return the account
     Account *account() const { return cost.account; }
@@ -523,6 +529,7 @@ public:
         bool load( const KoXmlElement& element, KPlato::XMLLoaderObject& status );
         void save( QDomElement &element ) const;
     };
+    const WorkInfoCache &workInfoCache() const { return m_workinfocache; }
 
 signals:
     void externalAppointmentToBeAdded( Resource *r, int row );
@@ -544,6 +551,7 @@ private:
     QString m_name;
     QString m_initials;
     QString m_email;
+    bool m_autoAllocate;
     DateTime m_availableFrom;
     DateTime m_availableUntil;
     QMap<QString, Appointment*> m_externalAppointments;
@@ -563,10 +571,9 @@ private:
     
     Calendar *m_calendar;
     QList<ResourceRequest*> m_requests;
-    QList<Resource*> m_required;
     QStringList m_requiredIds;
     
-    QList<Resource*> m_teamMembers;
+    QStringList m_teamMembers;
 
     Schedule *m_currentSchedule;
 
@@ -680,6 +687,8 @@ public:
     /// Set the list of required resources that will be used in scheduling.
     void setRequiredResources( const QList<Resource*> &lst ) { m_required = lst; }
 
+private:
+    friend class ResourceGroupRequest;
     QList<ResourceRequest*> teamMembers() const;
 
 protected:
@@ -736,7 +745,7 @@ public:
     /// Team resources are included but *not* the team members.
     /// Any dynamically allocated resource is not included.
     QList<Resource*> requestedResources() const;
-    bool load( KoXmlElement &element, Project &project );
+    bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
 
     /// The number of requested resources
@@ -882,11 +891,6 @@ public:
 private:
     Task *m_task;
     QList<ResourceGroupRequest*> m_requests;
-
-#ifndef NDEBUG
-public:
-    void printDebug( const QString& ident );
-#endif
 };
 
 }  //KPlato namespace

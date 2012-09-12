@@ -24,6 +24,7 @@
 #include "kis_indirect_painting_support.h"
 
 #include <krita_export.h>
+#include "kis_clone_info.h"
 
 class KisNodeVisitor;
 class KoCompositeOp;
@@ -43,7 +44,7 @@ enum CopyLayerType {
  * changes too. The copy layer can be positioned differently from the
  * original layer.
  **/
-class KRITAIMAGE_EXPORT KisCloneLayer : public KisLayer, public KisIndirectPaintingSupport
+class KRITAIMAGE_EXPORT KisCloneLayer : public KisLayer
 {
 
     Q_OBJECT
@@ -57,6 +58,14 @@ public:
     KisNodeSP clone() const {
         return KisNodeSP(new KisCloneLayer(*this));
     }
+
+    /**
+     * When the source layer of the clone is removed from the stack
+     * we should substitute the clone with a usual paint layer,
+     * because the source might become unreachable quite soon. This
+     * method builds a paint layer representation of this clone.
+     */
+    KisLayerSP reincarnateAsPaintLayer() const;
 
     bool allowAsChild(KisNodeSP) const;
 
@@ -83,15 +92,18 @@ public:
     /// Returns the exact bounds of where the actual data resides in this layer
     QRect exactBounds() const;
 
+    QRect accessRect(const QRect &rect, PositionToFilthy pos) const;
+
     bool accept(KisNodeVisitor &);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     /**
      * Used when loading: loading is done in two passes, and the copy
      * from layer is set when all layers have been created, not during
      * loading.
      */
-    void setCopyFromName(const QString& layerName);
-    QString copyFromName() const;
+    void setCopyFromInfo(KisCloneInfo info);
+    KisCloneInfo copyFromInfo() const;
 
     void setCopyFrom(KisLayerSP layer);
     KisLayerSP copyFrom() const;
@@ -105,15 +117,9 @@ public:
      */
     void setDirtyOriginal(const QRect &rect);
 
-public slots:
-    // KisIndirectPaintingSupport
-    KisLayer* layer() {
-        return this;
-    }
-
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

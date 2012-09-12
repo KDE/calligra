@@ -18,11 +18,11 @@
  */
 
 #include "kexiprjtypeselector.h"
-#include <qlabel.h>
+#include <QLabel>
 #include <kiconloader.h>
 #include <kmimetype.h>
-#include <kexidb/driver.h>
-#include <kexidb/utils.h>
+#include <db/driver.h>
+#include <db/utils.h>
 #include <core/kexi.h>
 
 KexiPrjTypeSelector::KexiPrjTypeSelector(QWidget* parent)

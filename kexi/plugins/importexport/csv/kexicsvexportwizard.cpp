@@ -19,9 +19,8 @@
 
 #include "kexicsvexportwizard.h"
 #include "kexicsvwidgets.h"
-#include <main/startup/KexiStartupFileWidget.h>
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -29,10 +28,11 @@
 #include <core/kexiguimsghandler.h>
 #include <kexiutils/utils.h>
 #include <widget/kexicharencodingcombobox.h>
+#include <widget/KexiFileWidget.h>
 
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qclipboard.h>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QClipboard>
 #include <QTextStream>
 #include <QGridLayout>
 #include <QLabel>
@@ -101,9 +101,9 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
 
     // 1. File Save Page
     if (m_options.mode == KexiCSVExport::File) {
-        m_fileSavePage = new KexiStartupFileWidget(
+        m_fileSavePage = new KexiFileWidget(
             KUrl("kfiledialog:///CSVImportExport"), //startDir
-            KexiStartupFileWidget::Custom | KexiStartupFileWidget::SavingFileBasedDB,
+            KexiFileWidget::Custom | KexiFileWidget::SavingFileBasedDB,
             this);
         m_fileSavePage->setObjectName("m_fileSavePage");
         //m_fileSavePage->setMinimumHeight(kapp->desktop()->availableGeometry().height() / 2);

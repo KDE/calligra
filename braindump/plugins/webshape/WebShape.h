@@ -37,7 +37,7 @@ public:
 
     // absolutly necessary:
     void paint(QPainter &painter,
-               const KoViewConverter &converter);
+               const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     const KUrl& url();

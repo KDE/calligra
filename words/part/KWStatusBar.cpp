@@ -344,7 +344,7 @@ void KWStatusBar::updateMousePosition(const QPoint &pos)
 void KWStatusBar::resourceChanged(int key, const QVariant &value)
 {
     Q_UNUSED(value);
-    if (key ==  KoCanvasResource::CurrentPage) {
+    if (key ==  KoCanvasResourceManager::CurrentPage) {
         updatePageCount();
         updateCursorPosition();
         updatePageStyle();
@@ -401,7 +401,7 @@ void KWStatusBar::setCurrentView(KWView *view)
     if (m_currentView) {
         KoCanvasBase *const canvas =  m_currentView->canvasBase();
         Q_ASSERT(canvas);
-        KoResourceManager *resourceManager = canvas->resourceManager();
+        KoCanvasResourceManager *resourceManager = canvas->resourceManager();
         Q_ASSERT(resourceManager);
         disconnect(resourceManager, SIGNAL(resourceChanged(int, QVariant)),
             this, SLOT(resourceChanged(int, QVariant)));
@@ -437,12 +437,10 @@ void KWStatusBar::setCurrentView(KWView *view)
         connect(m_zoomAction, SIGNAL(toggled(bool)), this, SLOT(showZoom(bool)));
         zoomWidget->setVisible(m_currentView->kwdocument()->config().statusBarShowZoom());
     } else {
-        // do it delayed to avoid a race condition where this code
-        // is ran from the constructor of KWView before the zoomController is created.
-        QTimer::singleShot(0, this, SLOT(createZoomWidget()));
+        createZoomWidget();
     }
 
-    KoResourceManager *resourceManager = view->canvasBase()->resourceManager();
+    KoCanvasResourceManager *resourceManager = view->canvasBase()->resourceManager();
     Q_ASSERT(resourceManager);
     connect(resourceManager, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)), Qt::QueuedConnection);
 

@@ -29,7 +29,7 @@
 #include <QVariant>
 #include <QTimer>
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoToolBase.h>
 #include <KoAbstractGradient.h>
 
@@ -59,8 +59,7 @@ class KisSliderSpinBox;
 // wacom
 const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
-class KRITAUI_EXPORT KisToolPaint
-        : public KisTool
+class KRITAUI_EXPORT KisToolPaint : public KisTool
 {
 
     Q_OBJECT
@@ -95,6 +94,8 @@ protected:
 
 
 protected:
+    bool specialHoverModeActive() const;
+
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -110,9 +111,6 @@ protected:
     virtual QString quickHelp() const {
         return QString();
     }
-
-    /// Reimplemented
-    virtual void setupPainter(KisPainter* painter);
 
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
@@ -133,6 +131,7 @@ protected:
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void deactivate();
 
 private slots:
 
@@ -141,6 +140,9 @@ private slots:
 
     void makeColorLighter();
     void makeColorDarker();
+
+    void increaseOpacity();
+    void decreaseOpacity();
 
 protected slots:
     virtual void resetCursorStyle();
@@ -157,9 +159,11 @@ private:
                    bool toForegroundColor);
 
     void transformColor(int step);
+    void stepAlpha(float step);
 
 private:
 
+    bool m_specialHoverModifier;
     QGridLayout *m_optionWidgetLayout;
 
     bool m_supportOutline;
@@ -170,9 +174,6 @@ private:
     bool m_toForegroundColor;
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
-    KAction* m_lighterColor;
-    KAction* m_darkerColor;
-
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

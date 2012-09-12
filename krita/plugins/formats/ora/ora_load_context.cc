@@ -44,11 +44,14 @@ KisPaintDeviceSP OraLoadContext::loadDeviceData(const QString & filename)
             dbgFile << "Could not open for reading:" << filename;
             return 0;
         }
-        KisPNGConverter pngConv(0, 0);
+        KisPNGConverter pngConv(0);
         pngConv.buildImage(&io);
         io.close();
         m_store->close();
-        return pngConv.image()->projection();
+        KisPaintDeviceSP dev = pngConv.image()->projection();
+        delete pngConv.image().data();
+        return dev;
+
     }
     return 0;
 }

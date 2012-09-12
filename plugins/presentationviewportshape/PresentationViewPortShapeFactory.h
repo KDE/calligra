@@ -16,13 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef PRESENTATIONVIEWPORTSHAPEFACTORY_H
+#define PRESENTATIONVIEWPORTSHAPEFACTORY_H
+
 #include <KoShapeFactoryBase.h>
 
 class PresentationViewPortShapeFactory : public KoShapeFactoryBase 
 {
 public:
   PresentationViewPortShapeFactory(QObject* parent);
-
-  virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
-  bool supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const;
+  ~PresentationViewPortShapeFactory() {}
+  
+  virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+  virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const;
 };
+
+#endif

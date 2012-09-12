@@ -22,9 +22,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "mysqldriver_global.h"
 #include "mysqldriver.h"
 #include "mysqlconnection.h"
-#include <kexidb/field.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/field.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 
 #include <QVariant>
 #include <QFile>
@@ -67,6 +67,8 @@ MySqlDriver::MySqlDriver(QObject *parent, const QVariantList &args) :
     beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY = false;
     beh->USING_DATABASE_REQUIRED_TO_CONNECT = false;
     beh->QUOTATION_MARKS_FOR_IDENTIFIER = '`';
+    //! @todo add configuration option
+    beh->TEXT_TYPE_MAX_LENGTH = 255;
     initDriverSpecificKeywords(keywords);
 
     //predefined properties

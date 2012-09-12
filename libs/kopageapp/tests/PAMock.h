@@ -22,7 +22,8 @@
 
 #include "KoPADocument.h"
 
-#include <KoOdf.h>
+#include <KoOdf.h> 
+#include <QGraphicsItem>
 
 class KoView;
 
@@ -30,7 +31,7 @@ class MockDocument : public KoPADocument
 {
 public:
     MockDocument()
-    : KoPADocument( 0, 0 )
+    : KoPADocument( 0 )
     {}
     KoView *createViewInstance( QWidget * /* parent */ ) { return 0; }
     const char *odfTagName( bool b ) { return KoOdf::bodyContentElement( KoOdf::Presentation, b ); }

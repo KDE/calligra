@@ -37,13 +37,20 @@ public:
     void save(KoParagraphStyle *style);
 
 signals:
-    void horizontalAlignmentChanged(Qt::Alignment);
+    void parStyleChanged();
 
 private slots:
     void slotAlignChanged();
+    void breakAfterChanged();
+    void breakBeforeChanged();
+    void thresholdValueChanged();
 
 private:
     Ui::ParagraphLayout widget;
+    bool m_alignmentInherited;
+    bool m_breakAfterInherited;
+    bool m_breakBeforeInherited;
+    bool m_orphanThresholdInherited;
 };
 
 #endif

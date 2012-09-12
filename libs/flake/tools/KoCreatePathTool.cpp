@@ -24,15 +24,18 @@
 #include "KoShapeController.h"
 #include "KoPointerEvent.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoSelection.h"
 #include "commands/KoPathPointMergeCommand.h"
 #include "SnapGuideConfigWidget.h"
+#include "KoCanvasResourceManager.h"
+#include "KoDocumentResourceManager.h"
+#include "KoShapePaintingContext.h"
 
 #include <KNumInput>
 
-#include <QtGui/QPainter>
-#include <QtGui/QLabel>
+#include <QPainter>
+#include <QLabel>
 
 #include "KoCreatePathTool_p.h"
 
@@ -105,11 +108,13 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
     Q_D(KoCreatePathTool);
     painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
     painter.save();
-    pathShape.paint(painter, converter);
+
+    KoShapePaintingContext paintContext; //FIXME
+    pathShape.paint(painter, converter, paintContext);
     painter.restore();
-    if (pathShape.border()) {
+    if (pathShape.stroke()) {
         painter.save();
-        pathShape.border()->paint(d->shape, painter, converter);
+        pathShape.stroke()->paint(d->shape, painter, converter);
         painter.restore();
     }
 }
@@ -162,10 +167,10 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->shape=pathShape;
         pathShape->setShapeId(KoPathShapeId);
 
-        KoLineBorder *border = new KoLineBorder(canvas()->resourceManager()->activeBorder());
-        border->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
+        KoShapeStroke *stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
+        stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
 
-        pathShape->setBorder(border);
+        pathShape->setStroke(stroke);
         canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
         QPointF point = canvas()->snapGuide()->snap(event->point, event->modifiers());
 
@@ -316,7 +321,7 @@ void KoCreatePathTool::resourceChanged(int key, const QVariant & res)
     Q_D(KoCreatePathTool);
 
     switch (key) {
-    case KoDocumentResource::HandleRadius: {
+    case KoDocumentResourceManager::HandleRadius: {
         d->handleRadius = res.toUInt();
     }
     break;
@@ -372,12 +377,15 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");
     QGridLayout *layout = new QGridLayout(angleWidget);
-    layout->addWidget(new QLabel(i18n("Angle snapping delta"), angleWidget), 0, 0);
+    layout->addWidget(new QLabel(i18n("Angle snapping delta:"), angleWidget), 0, 0);
     KIntNumInput *angleEdit = new KIntNumInput(d->angleSnappingDelta, angleWidget);
     angleEdit->setRange(1, 360, 1);
     angleEdit->setSuffix(QChar(Qt::Key_degree));
     layout->addWidget(angleEdit, 0, 1);
-    widget->setWindowTitle(i18n("Angle Constraints"));
+    QWidget *specialSpacer =new QWidget();
+    specialSpacer->setObjectName("SpecialSpacer");
+    layout->addWidget(specialSpacer, 1, 1);
+    angleWidget->setWindowTitle(i18n("Angle Constraints"));
     list.append(angleWidget);
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));

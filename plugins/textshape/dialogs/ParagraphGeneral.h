@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,19 +21,23 @@
 #ifndef PARAGRAPHGENERAL_H
 #define PARAGRAPHGENERAL_H
 
-#include <ui_ParagraphGeneral.h>
+#include "CharacterGeneral.h"
 
-#include <QWidget>
 #include <QList>
 
 class KoParagraphStyle;
+class KoStyleThumbnailer;
+class KoStyleManager;
+class KoImageCollection;
 class KoUnit;
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
 class ParagraphDecorations;
+class ParagraphDropCaps;
+class StylesModel;
 
-class ParagraphGeneral : public QWidget
+class ParagraphGeneral : public CharacterGeneral
 {
     Q_OBJECT
 public:
@@ -44,32 +49,39 @@ public:
 
     void switchToGeneralTab();
     void hideStyleName(bool hide);
+    bool isStyleChanged();
+    QString styleName() const;
+    void selectName();
+
+    void setImageCollection(KoImageCollection *imageCollection);
+    KoImageCollection *imageCollection();
+    void setStyleManager(KoStyleManager *sm);
 
 public slots:
     void save(KoParagraphStyle *style = 0);
 
 signals:
     void nameChanged(const QString &name);
-    void styleAltered(const KoParagraphStyle *style);
+    void styleAltered(const KoParagraphStyle *style); /// when saving
 
 private slots:
-    void setName(const QString &name);
-    void backgroundColorChanged(const QColor&);
-    void horizontalAlignmentChanged(Qt::Alignment);
-    void bulletListItemChanged(const QString&);
+    void setPreviewParagraphStyle();
 
 private:
-    Ui::ParagraphGeneral widget;
-    bool m_blockSignals;
     bool m_nameHidden;
 
     ParagraphIndentSpacing *m_paragraphIndentSpacing;
     ParagraphLayout *m_paragraphLayout;
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
     ParagraphDecorations *m_paragraphDecorations;
+    ParagraphDropCaps *m_paragraphDropCaps;
 
     KoParagraphStyle *m_style;
     QList<KoParagraphStyle*> m_paragraphStyles;
+    KoStyleManager *m_styleManager;
+
+    KoStyleThumbnailer *m_thumbnail;
+    StylesModel *m_paragraphInheritedStyleModel;
 };
 
 #endif

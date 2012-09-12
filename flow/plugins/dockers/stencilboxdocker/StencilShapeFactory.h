@@ -20,10 +20,10 @@
 #define KOSTENCILSHAPEFACTORY_H
 
 #include <KoShapeFactoryBase.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoProperties.h>
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 class StencilShapeFactory : public KoShapeFactoryBase
 {
@@ -31,7 +31,7 @@ class StencilShapeFactory : public KoShapeFactoryBase
         StencilShapeFactory(const QString &id, const QString &name, const QString &source, KoProperties* props);
         ~StencilShapeFactory();
 
-        virtual KoShape *createDefaultShape(KoResourceManager *documentResources = new KoResourceManager()) const;
+        virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = new KoDocumentResourceManager()) const;
         virtual bool supports(const KoXmlElement &e, KoShapeLoadingContext &context) const;
 
     private:

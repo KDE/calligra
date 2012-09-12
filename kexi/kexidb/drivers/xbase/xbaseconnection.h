@@ -20,9 +20,9 @@
 #ifndef XBASECONNECTION_H
 #define XBASECONNECTION_H
 
-#include <qstringlist.h>
+#include <QStringList>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include "xbasecursor.h"
 
 namespace KexiDB {

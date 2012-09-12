@@ -51,6 +51,7 @@ public:
     BuiltinSchedulerPlugin(QObject *parent);
     virtual ~BuiltinSchedulerPlugin();
 
+    virtual QString description() const;
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );
 

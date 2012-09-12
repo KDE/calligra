@@ -21,7 +21,7 @@
 #define RDFTEST_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <qtest_kde.h>
 
 class TestRdf : public QObject
@@ -46,6 +46,7 @@ private slots:
     void removeStatementsIfTheyExist();
     void KoTextRdfCoreTripleFunctions();
     void createUserStylesheet();
+
     // test creating, saving and loading a words document with semantic data and markers in the text
     void testRoundtrip();
 };

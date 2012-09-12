@@ -27,8 +27,13 @@
 #include <QSortFilterProxyModel>
 #include <QMetaEnum>
 
+class QByteArray;
 class QPoint;
 
+namespace KIO {
+    class Job;
+}
+class KJob;
 
 namespace KPlato
 {
@@ -37,6 +42,8 @@ class Project;
 class Resource;
 class ResourceGroup;
 class Calendar;
+class Task;
+class Node;
 
 class KPLATOMODELS_EXPORT ResourceModel : public QObject
 {
@@ -122,9 +129,12 @@ public:
     QAbstractItemDelegate *createDelegate( int col, QWidget *parent ) const;
     
     QObject *object( const QModelIndex &index ) const;
+    ResourceGroup *group( const QModelIndex &index ) const;
     Resource *resource( const QModelIndex &index ) const;
     QModelIndex insertGroup( ResourceGroup *g );
     QModelIndex insertResource( ResourceGroup *g, Resource *r, Resource *after = 0 );
+
+    virtual int sortRole( int column ) const;
 
 protected slots:
     void slotResourceChanged( Resource* );
@@ -139,6 +149,9 @@ protected slots:
     void slotResourceRemoved( const Resource *resource );
     void slotCalendarChanged( Calendar* cal );
     void slotLayoutChanged();
+
+    void slotDataArrived( KIO::Job *job, const QByteArray &data  );
+    void slotJobFinished( KJob *job );
 
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
@@ -162,12 +175,22 @@ protected:
     bool setAccount( Resource *res, const QVariant &value, int role );
 
     QList<Resource*> resourceList( QDataStream &stream );
-    
+
+    bool createResources( ResourceGroup *group, const QByteArray &data );
+
 private:
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
     ResourceModel m_model;
 
+    struct DropData {
+        Qt::DropAction action;
+        int row;
+        int column;
+        QModelIndex parent;
+        QByteArray data;
+    } m_dropData;
+    QMap<KJob*, DropData> m_dropDataMap;
 };
 
 class KPLATOMODELS_EXPORT ResourceItemSFModel : public QSortFilterProxyModel
@@ -188,6 +211,46 @@ protected:
     bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const;
     
     QList<const Resource*> m_filteredResources;
+};
+
+class KPLATOMODELS_EXPORT AllocatedResourceItemModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    AllocatedResourceItemModel( QObject *parent = 0 );
+
+    int columnCount( const QModelIndex &idx ) const;
+
+    Project *project() const;
+    Task *task() const;
+    Resource *resource( const QModelIndex &index ) const;
+    using QAbstractProxyModel::index;
+    QModelIndex index( Resource *r ) const;
+
+    Qt::ItemFlags flags( const QModelIndex & index ) const;
+    QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    QVariant data( const QModelIndex &idx, int role ) const;
+
+public slots:
+    void setProject( Project *project );
+    void setTask( Task *task );
+
+signals:
+    void expandAll();
+    void resizeColumnToContents( int );
+
+protected slots:
+    void slotNodeChanged( Node *n );
+
+protected:
+    bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const;
+    void reset();
+    QObject *object( const QModelIndex &idx ) const;
+
+    QVariant allocation( const Resource *r, int role ) const;
+    QVariant allocation( const ResourceGroup *g, int role ) const;
+
+    Task *m_task;
 };
 
 }  //KPlato namespace

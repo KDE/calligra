@@ -17,6 +17,8 @@ set(kotext_LIB_SRCS
     KoTextPaste.cpp
     KoTextDocument.cpp
     KoTextEditor.cpp
+    KoTextEditor_undo.cpp
+    KoTextEditor_format.cpp
     KoList.cpp
 
     KoTextEditingRegistry.cpp
@@ -60,6 +62,7 @@ set(kotext_LIB_SRCS
     ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
     KoBibliographyInfo.cpp
+    BibliographyGenerator.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -87,14 +90,28 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedRowData.cpp
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
-    KoTextDrag.cpp
 
-    commands/DeleteTableRowCommand.cpp
+    commands/ChangeAnchorPropertiesCommand.cpp
+    commands/ChangeListCommand.cpp
+    commands/ChangeStylesCommand.cpp
+    commands/ChangeStylesMacroCommand.cpp
+    commands/ChangeTrackedDeleteCommand.cpp
+    commands/DeleteAnchorsCommand.cpp
+    commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
-    commands/InsertTableRowCommand.cpp
-    commands/InsertTableColumnCommand.cpp
+    commands/DeleteTableRowCommand.cpp
     commands/InsertDeleteChangesCommand.cpp
+    commands/InsertNoteCommand.cpp
+    commands/InsertTableColumnCommand.cpp
+    commands/InsertTableRowCommand.cpp
+    commands/ResizeTableCommand.cpp
+    commands/InsertInlineObjectCommand.cpp
+    commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
+    commands/TextPasteCommand.cpp
+
+    KoTextDrag.cpp
+    KoTextCommandBase.cpp
 )
 
 if( Soprano_FOUND )
@@ -159,6 +176,7 @@ install(
     KoTextMeta.h
     KoTextSoftPageBreak.cpp
     KoSection.h
+    KoTextCommandBase.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
@@ -175,7 +193,7 @@ install(
     styles/KoTableCellStyle.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
-    styles/KoTableBorderStyle.h
+    styles/KoTableStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )

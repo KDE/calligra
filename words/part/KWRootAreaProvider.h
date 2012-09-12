@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Sebastian Sauer <sebastian.sauer@kdab.com>
  *
  * This library is free software; you can redistribute it and/or

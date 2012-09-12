@@ -21,7 +21,7 @@
 
 #include "widgetlibrary.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 
 #include <kdebug.h>
 #include <klocale.h>

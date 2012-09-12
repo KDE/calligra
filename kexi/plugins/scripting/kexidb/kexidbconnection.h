@@ -20,11 +20,11 @@
 #ifndef SCRIPTING_KEXIDBCONNECTION_H
 #define SCRIPTING_KEXIDBCONNECTION_H
 
-#include <qstring.h>
-#include <qobject.h>
-#include <qpointer.h>
+#include <QString>
+#include <QObject>
+#include <QPointer>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 
 namespace Scripting
 {

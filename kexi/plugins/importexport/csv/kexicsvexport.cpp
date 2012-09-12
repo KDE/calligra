@@ -19,8 +19,8 @@
 
 #include "kexicsvexport.h"
 #include "kexicsvwidgets.h"
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 #include <core/KexiMainWindowIface.h>
 #include <core/kexiproject.h>
 #include <core/kexipartinfo.h>
@@ -30,9 +30,9 @@
 #include <widget/kexicharencodingcombobox.h>
 
 #include <QTextStream>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qclipboard.h>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QClipboard>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -155,8 +155,9 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 #define APPEND(what) \
     if (copyToClipboard) buffer.append(what); else (*stream) << (what)
 
-// line endings should be as in RFC 4180
-#define CSV_EOLN "\r\n"
+// use native line ending for copying, RFC 4180 one for saving to file
+#define APPEND_EOLN \
+    if (copyToClipboard) { APPEND('\n'); } else { APPEND("\r\n"); }
 
     kDebug() << 0 << "Columns: " << query->fieldsExpanded().count();
     // 0. Cache information
@@ -208,7 +209,7 @@ kDebug() << 1;
                 APPEND(fields[i]->captionOrAliasOrName());
             }
         }
-        APPEND(CSV_EOLN);
+        APPEND_EOLN
     }
 
     KexiGUIMessageHandler handler;
@@ -250,7 +251,7 @@ kDebug() << 1;
                 APPEND(cursor->value(real_i).toString());
             }
         }
-        APPEND(CSV_EOLN);
+        APPEND_EOLN
     }
 
     if (copyToClipboard)

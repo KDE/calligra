@@ -501,7 +501,7 @@ namespace wvWare
         if ( preservePos )
             reader->push();
         reader->push();
-        reader->seek( 511, G_SEEK_CUR );
+        reader->seek( 511, WV2_SEEK_CUR );
         m_crun = reader->readU8();
         reader->pop();
 
@@ -696,7 +696,7 @@ namespace wvWare
         }
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear()
         {
@@ -771,7 +771,7 @@ namespace wvWare
         bool write( OLEStreamWriter* stream, bool preservePos = false ) const;
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear();
 

@@ -89,7 +89,7 @@ QTextDocument *TestLoadStyle::documentFromOdt(const QString &odt)
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     KoXmlElement body = KoXml::namedItemNS(realBody, KoXmlNS::office, "text");
 
-    KoStyleManager *styleManager = new KoStyleManager;
+    KoStyleManager *styleManager = new KoStyleManager(0);
     KoChangeTracker *changeTracker = new KoChangeTracker;
 
     KoOdfLoadingContext odfLoadingContext(odfReadStore.styles(), odfReadStore.store(), *componentData);
@@ -121,7 +121,7 @@ void TestLoadStyle::testLoadStyle()
     QCOMPARE(block.text(), QString("The following is a word which uses the named character style MyStyle."));
 
     QTextCursor cursor(block);
-    QCOMPARE(cursor.blockFormat().property(KoParagraphStyle::StyleId).toInt(), 100);
+    QCOMPARE(cursor.blockFormat().property(KoParagraphStyle::StyleId).toInt(), 101);
     QCOMPARE(cursor.blockCharFormat().property(KoCharacterStyle::StyleId).toInt(), 101);
     QCOMPARE(cursor.charFormat().property(KoCharacterStyle::StyleId).toInt(), 101);
 

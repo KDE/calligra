@@ -19,8 +19,8 @@
 
 #include "ZigZagWipeStrategy.h"
 #include "ZigZagWipeEffectFactory.h"
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
+#include <QWidget>
+#include <QPainter>
 
 const int StepCount = 250;
 

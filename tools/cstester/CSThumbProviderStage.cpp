@@ -38,7 +38,7 @@ CSThumbProviderStage::~CSThumbProviderStage()
 {
 }
 
-QList<QPixmap> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
+QList<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 {
     // make sure all is rendered before painting
     int i = 100;
@@ -47,9 +47,9 @@ QList<QPixmap> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
-    QList<QPixmap> thumbnails;
+    QList<QImage> thumbnails;
     foreach(KoPAPageBase *page, m_doc->pages(false)) {
-        thumbnails.append(m_doc->pageThumbnail(page, thumbSize));
+        thumbnails.append(m_doc->pageThumbImage(page, thumbSize));
     }
 
     // make sure there are no events this fixes a crash on shutdown

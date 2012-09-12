@@ -1,7 +1,8 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (C) 2011 Shantanu Tushar <jhahoneyk@gmail.com>
+ * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
+ * Copyright (C) 2012 Sujith H <sujith.h@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,22 +22,22 @@
 
 import QtQuick 1.0
 import CalligraActive 1.0
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Rectangle {
+Image {
     id: homeScreen
 
     function openDocument(path) {
         doc.openDocument(path);
     }
 
-    gradient: Gradient {
-         GradientStop { position: 0.0; color: "#808080" }
-         GradientStop { position: 1.0; color: "#303030" }
-    }
+    source: "qrc:///images/fabrictexture.png"
+    fillMode: Image.Tile
 
     DocumentTypeSelector {
         id: docTypeSelector
 
+        visible: metadataInternalModel ? true : false
         buttonWidth: homeScreen.width/2.1; buttonHeight: 100;
         anchors.left: parent.left
         anchors.top: parent.top
@@ -48,6 +49,7 @@ Rectangle {
     RecentFiles {
         id: recentFiles
 
+        visible: metadataInternalModel ? true : false
         buttonWidth: homeScreen.width/2.1; buttonHeight: 100;
         anchors.left: parent.horizontalCenter
         anchors.top: parent.top
@@ -56,28 +58,44 @@ Rectangle {
         anchors.margins: 10
     }
 
-    Button {
+    PlasmaComponents.Button {
         id: openFileDialogButton
 
-        imageSource: "qrc:///images/words.png"
-	textPosition: "right"
-	text: "Open Document"
+        iconSource: "document-open"
+	text: "Open File"
         width: homeScreen.width/2.1;
 	height: 100;
+
+        anchors.left: parent.left
+        anchors.right: parent.horizontalCenter
+        anchors.bottom: aboutCalligraButton.top
+        anchors.margins: 10
+
+        onClicked: mainwindow.openFileDialog()
+    }
+
+    PlasmaComponents.Button {
+        id: aboutCalligraButton
+
+        iconSource: "active-about"
+        text: "About Calligra Active"
+        width: homeScreen.width/2.1;
+        height: 100;
 
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.bottom: progressBar.top
         anchors.margins: 10
 
-        onClicked: mainwindow.openFileDialog()
+        onClicked: homeScreen.state = "showing-about-screen"
     }
 
     Rectangle {
         id: progressBar
 
         color: "blue"
-        width: parent.width/100*doc.loadProgress; height: 32;
+        //DISABLED
+        //width: parent.width/100*doc.loadProgress; height: 32;
         anchors.bottom: parent.bottom
     }
 
@@ -91,6 +109,14 @@ Rectangle {
         onDocumentLoaded: {
             homeScreen.state = "doc"
         }
+    }
+
+    AboutCalligraActive {
+        id: aboutScreen
+
+        width: parent.width; height: parent.height;
+        anchors.left: parent.right
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     transitions: Transition {
@@ -115,18 +141,55 @@ Rectangle {
                 target: doc
                 anchors.left: parent.left
             }
+            AnchorChanges {
+                target: openFileDialogButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: aboutCalligraButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
         },
         State {
             name: "showTextDocs"
-            PropertyChanges { target: recentFiles; model: recentTextDocsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "PaginatedTextDocument"; }
         },
         State {
             name: "showSpreadsheets"
-            PropertyChanges { target: recentFiles; model: recentSpreadsheetsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "Spreadsheet"; }
         },
         State {
             name: "showPresentations"
-            PropertyChanges { target: recentFiles; model: recentPresentationsModel }
+            PropertyChanges { target: recentFiles; typeFilter: "Presentation"; }
+        },
+        State {
+            name: "showing-about-screen"
+            AnchorChanges {
+                target: docTypeSelector
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: recentFiles
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: aboutScreen
+                anchors.left: parent.left
+            }
+            AnchorChanges {
+                target: openFileDialogButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
+            AnchorChanges {
+                target: aboutCalligraButton
+                anchors.left: undefined
+                anchors.right: parent.left
+            }
         }
     ]
 }

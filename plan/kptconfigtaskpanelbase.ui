@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>324</width>
+    <width>410</width>
     <height>377</height>
    </rect>
   </property>
@@ -452,7 +452,7 @@ This is not limited to persons available in a resource group but can be anyone. 
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="widget">
       <attribute name="title">
        <string>Description</string>
       </attribute>
@@ -479,6 +479,11 @@ This is not limited to persons available in a resource group but can be anyone. 
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>KRichTextEdit</class>
+   <extends>KTextEdit</extends>
+   <header>krichtextedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
@@ -490,15 +495,20 @@ This is not limited to persons available in a resource group but can be anyone. 
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KRichTextWidget</class>
+   <extends>KRichTextEdit</extends>
+   <header>krichtextwidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>KToolBar</class>
    <extends>QWidget</extends>
    <header location="global">KToolBar</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KRichTextWidget</class>
-   <extends>QTextEdit</extends>
-   <header location="global">KRichTextWidget</header>
   </customwidget>
   <customwidget>
    <class>KPlato::DurationSpinBox</class>

@@ -15,12 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_image_pyramid.h"
+
+#include <KoCompositeOp.h>
+#include <KoColorSpaceRegistry.h>
+
 #include "kis_painter.h"
-#include "KoCompositeOp.h"
-#include "KoColorSpaceRegistry.h"
-#include "kis_iterators_pixel.h"
+#include "kis_iterator_ng.h"
 #include "kis_datamanager.h"
 
 #include "kis_debug.h"
@@ -117,8 +118,9 @@ void KisImagePyramid::rebuildPyramid()
 
 void KisImagePyramid::clearPyramid()
 {
-    for (qint32 i = 0; i < m_pyramidHeight; i++)
+    for (qint32 i = 0; i < m_pyramidHeight; i++) {
         m_pyramid[i]->clear();
+    }
 }
 
 void KisImagePyramid::setImage(KisImageWSP newImage)
@@ -140,9 +142,9 @@ void KisImagePyramid::setImageSize(qint32 w, qint32 h)
     /* nothing interesting */
 }
 
-void KisImagePyramid::updateCache(KisPPUpdateInfoSP info)
+void KisImagePyramid::updateCache(const QRect &dirtyImageRect)
 {
-    retrieveImageData(info->dirtyImageRect);
+    retrieveImageData(dirtyImageRect);
 }
 
 void KisImagePyramid::retrieveImageData(const QRect &rect)
@@ -195,30 +197,31 @@ QRect KisImagePyramid::downsampleByFactor2(const QRect& srcRect,
     qint32 dstWidth = srcWidth / 2;
     qint32 dstHeight = srcHeight / 2;
 
-    KisHLineConstIteratorPixel srcIt0 = src->createHLineConstIterator(srcX, srcY, srcWidth);
-    KisHLineConstIteratorPixel srcIt1 = src->createHLineConstIterator(srcX, srcY + 1, srcWidth);
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstX, dstY, dstWidth);
+    KisHLineConstIteratorSP srcIt0 = src->createHLineConstIteratorNG(srcX, srcY, srcWidth);
+    KisHLineConstIteratorSP srcIt1 = src->createHLineConstIteratorNG(srcX, srcY + 1, srcWidth);
+    KisHLineIteratorSP dstIt = dst->createHLineIteratorNG(dstX, dstY, dstWidth);
 
+    int conseqPixels = 0;
     for (int row = 0; row < dstHeight; ++row) {
-        while (!dstIt.isDone()) {
-            int srcItConseq = srcIt0.nConseqHPixels();
-            int dstItConseq = dstIt.nConseqHPixels();
-            int conseqPixels = qMin(srcItConseq, dstItConseq * 2);
+        do {
+            int srcItConseq = srcIt0->nConseqPixels();
+            int dstItConseq = dstIt->nConseqPixels();
+            conseqPixels = qMin(srcItConseq, dstItConseq * 2);
 
             Q_ASSERT(!isOdd(conseqPixels));
 
-            downsamplePixels(srcIt0.rawData(), srcIt1.rawData(),
-                             dstIt.rawData(), conseqPixels);
+            downsamplePixels(srcIt0->oldRawData(), srcIt1->oldRawData(),
+                             dstIt->rawData(), conseqPixels);
 
-            srcIt0 += conseqPixels;
-            srcIt1 += conseqPixels;
-            dstIt += conseqPixels / 2;
-        }
-        srcIt0.nextRow();
-        srcIt0.nextRow();
-        srcIt1.nextRow();
-        srcIt1.nextRow();
-        dstIt.nextRow();
+
+            srcIt1->nextPixels(conseqPixels);
+            dstIt->nextPixels(conseqPixels / 2);
+        } while (srcIt0->nextPixels(conseqPixels));
+        srcIt0->nextRow();
+        srcIt0->nextRow();
+        srcIt1->nextRow();
+        srcIt1->nextRow();
+        dstIt->nextRow();
     }
     return QRect(dstX, dstY, dstWidth, dstHeight);
 }

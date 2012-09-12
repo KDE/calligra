@@ -65,15 +65,18 @@ void KisMacroPlayer::run()
 {
     d->paused = false;
     QList<KisRecordedAction*> actions = d->macro->actions();
-    
+
+    if (actions.size() < 1) {
+        return;
+    }
+
     dbgImage << "Start playing macro with " << actions.size() << " actions";
     if (d->info.undoAdapter()) {
         d->info.undoAdapter()->beginMacro(i18n("Play macro"));
     }
 
     KoProgressUpdater* progressUpdater = 0;
-    if(d->updater)
-    {
+    if(d->updater) {
         progressUpdater = new KoProgressUpdater(d->updater);
         progressUpdater->start(actions.size());
     }
@@ -82,23 +85,23 @@ void KisMacroPlayer::run()
         if (*it) {
             dbgImage << "Play action : " << (*it)->name();
             KoUpdater* updater = 0;
-            if(progressUpdater) updater = progressUpdater->startSubtask();
+            if(progressUpdater) {
+                updater = progressUpdater->startSubtask();
+            }
             (*it)->play(d->info, updater);
         }
-        if(progressUpdater->interrupted())
-        {
+        if(progressUpdater && progressUpdater->interrupted()) {
             break;
         }
     }
 
     if (d->info.undoAdapter()) {
-        d->info.undoAdapter() ->endMacro();
-        if(progressUpdater->interrupted())
-        {
+        d->info.undoAdapter()->endMacro();
+        if(progressUpdater && progressUpdater->interrupted()) {
             d->info.undoAdapter()->undoLastCommand();
         }
     }
-    
+
 }
 
 #include "kis_macro_player.moc"

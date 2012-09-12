@@ -30,6 +30,12 @@
 #include "psd_header.h"
 #include "compression.h"
 
+#include <KoColorSpace.h>
+#include <KoColorSpaceMaths.h>
+#include <KoColorSpaceTraits.h>
+#include "kis_iterator_ng.h"
+
+// Just for pretty debug messages
 QString channelIdToChannelType(int channelId, PSDColorMode colormode)
 {
     switch(channelId) {
@@ -157,10 +163,10 @@ bool PSDLayerRecord::read(QIODevice* io)
     dbgFile << "Going to read layer record. Pos:" << io->pos();
 
     if (!psdread(io, &top)  ||
-        !psdread(io, &left) ||
-        !psdread(io, &bottom) ||
-        !psdread(io, &right) ||
-        !psdread(io, &nChannels)) {
+            !psdread(io, &left) ||
+            !psdread(io, &bottom) ||
+            !psdread(io, &right) ||
+            !psdread(io, &nChannels)) {
 
         error = "could not read layer record";
         return false;
@@ -210,7 +216,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
         if (!psdread(io, &info->channelId)) {
             error = "could not read channel id";
-	    delete info;
+            delete info;
             return false;
         }
         bool r;
@@ -224,11 +230,13 @@ bool PSDLayerRecord::read(QIODevice* io)
         }
         if (!r) {
             error = "Could not read length for channel data";
-	    delete info;
+            delete info;
             return false;
         }
 
-        dbgFile << "\tchannel" << i << "id" << channelIdToChannelType(info->channelId, m_header.colormode) << "length" << info->channelDataLength;
+        dbgFile << "\tchannel" << i << "id"
+                << channelIdToChannelType(info->channelId, m_header.colormode)
+                << "length" << info->channelDataLength;
         channelInfoRecords << info;
     }
 
@@ -273,7 +281,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
     dbgFile << "\ttransparency protected" << transparencyProtected;
 
-    visible = flags & 2 ? true : false;
+    visible = flags & 2 ? false : true;
 
     dbgFile << "\tvisible" << visible;
 
@@ -312,8 +320,8 @@ bool PSDLayerRecord::read(QIODevice* io)
 
         quint32 layerMaskLength = 1; // invalid...
         if (!psdread(io, &layerMaskLength) ||
-            io->bytesAvailable() < layerMaskLength ||
-            !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
+                io->bytesAvailable() < layerMaskLength ||
+                !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
             error = QString("Could not read layer mask length: %1").arg(layerMaskLength);
             return false;
         }
@@ -322,11 +330,11 @@ bool PSDLayerRecord::read(QIODevice* io)
 
         if (layerMaskLength == 20 || layerMaskLength == 36) {
             if (!psdread(io, &layerMask.top)  ||
-                !psdread(io, &layerMask.left) ||
-                !psdread(io, &layerMask.bottom) ||
-                !psdread(io, &layerMask.top) ||
-                !psdread(io, &layerMask.defaultColor) ||
-                !psdread(io, &flags)) {
+                    !psdread(io, &layerMask.left) ||
+                    !psdread(io, &layerMask.bottom) ||
+                    !psdread(io, &layerMask.top) ||
+                    !psdread(io, &layerMask.defaultColor) ||
+                    !psdread(io, &flags)) {
 
                 error = "could not read mask record";
                 return false;
@@ -343,11 +351,11 @@ bool PSDLayerRecord::read(QIODevice* io)
 
         if (layerMaskLength == 36 ) {
             if (!psdread(io, &flags) ||
-                !psdread(io, &layerMask.defaultColor) ||
-                !psdread(io, &layerMask.top)  ||
-                !psdread(io, &layerMask.left) ||
-                !psdread(io, &layerMask.bottom) ||
-                !psdread(io, &layerMask.top)) {
+                    !psdread(io, &layerMask.defaultColor) ||
+                    !psdread(io, &layerMask.top)  ||
+                    !psdread(io, &layerMask.left) ||
+                    !psdread(io, &layerMask.bottom) ||
+                    !psdread(io, &layerMask.top)) {
 
                 error = "could not read 'real' mask record";
                 return false;
@@ -368,7 +376,7 @@ bool PSDLayerRecord::read(QIODevice* io)
             return false;
         }
 
-        qDebug() << "blending block data length" << blendingDataLength << ", pos" << io->pos();
+        //qDebug() << "blending block data length" << blendingDataLength << ", pos" << io->pos();
 
         blendingRanges.data = io->read(blendingDataLength);
         if ((quint32)blendingRanges.data.size() != blendingDataLength) {
@@ -487,50 +495,350 @@ bool PSDLayerRecord::valid()
     return true;
 }
 
-QByteArray PSDLayerRecord::readChannelData(QIODevice* io, PSDLayerRecord::ChannelInfo *channelInfo)
+bool PSDLayerRecord::readChannels(QIODevice *io, KisPaintDeviceSP device)
 {
-    dbgFile << "Going to read channel data for channel " << channelInfo
-            << "from io with current pos" << io->pos();
-
-    QByteArray unCompressedBytes;
-    io->seek(channelInfo->channelDataStart);
-    switch(channelInfo->compressionType) {
-    case Compression::Uncompressed:
-        {
-            unCompressedBytes = io->read(channelInfo->channelDataLength);
-        }
+    switch (m_header.colormode) {
+    case Bitmap:
+        return false; // Not supported;
+    case Grayscale:
+        return doGrayscale(device, io);
+    case Indexed:
         break;
-    case Compression::RLE:
-        {
-            QByteArray compressedBytes;
-            QBuffer buf(&unCompressedBytes);
-            int uncompressedLength = (right - left) * (m_header.channelDepth / 8);
-            foreach(int rleRowLength, channelInfo->rleRowLengths) {
-                compressedBytes = io->read(rleRowLength);
-                if (compressedBytes.length() == 0) {
-                    error = QString("Could not read enough RLE bytes");
-                    return QByteArray();
-                }
-                buf.write(Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType));
-            }
-        }
-        break;
-    case Compression::ZIP:
-    case Compression::ZIPWithPrediction:
-        {
-            io->seek(channelInfo->channelDataStart);
-            int unCompressedLength = (right - left) * (bottom - top) * (m_header.channelDepth / 8);
-            QByteArray compressedBytes = io->read(channelInfo->channelDataLength);
-            unCompressedBytes = Compression::uncompress(unCompressedLength, compressedBytes, channelInfo->compressionType);
-        }
-        break;
+    case RGB:
+        return doRGB(device, io);
+    case CMYK:
+        return doCMYK(device,io);
+    case MultiChannel:
+        return false; // Not supported
+    case DuoTone:
+        return false; // Not supported
+    case Lab:
+        return doLAB(device, io);
+    case UNKNOWN:
     default:
-        error = QString("Unknown compression type: %1").arg(channelInfo->compressionType);
-        return QByteArray();
+        return false;
     }
-    return unCompressedBytes;
+
+    return false;
 }
 
+bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP /*dev*/, QIODevice */*io*/)
+{
+    return false;
+}
+
+bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
+{
+    quint64 oldPosition = io->pos();
+
+    quint64 width = right - left;
+    int channelSize = m_header.channelDepth / 8;
+    int uncompressedLength = width * channelSize;
+
+    if (channelInfoRecords.first()->compressionType == Compression::ZIP
+            || channelInfoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
+
+        // Zip needs to be implemented here.
+        return false;
+    }
+
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
+    for (int row = top ; row < bottom; row++)
+    {
+        QMap<quint16, QByteArray> channelBytes;
+
+        foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+
+            io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+
+            if (channelInfo->compressionType == Compression::Uncompressed) {
+                channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+                channelInfo->channelOffset += uncompressedLength;
+            }
+            else if (channelInfo->compressionType == Compression::RLE) {
+                int rleLength = channelInfo->rleRowLengths[row - top];
+                QByteArray compressedBytes = io->read(rleLength);
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+                channelBytes.insert(channelInfo->channelId, uncompressedBytes);
+                channelInfo->channelOffset += rleLength;
+
+            }
+        }
+
+        for (quint64 col = 0; col < width; col++){
+
+            if (channelSize == 1) {
+                quint8 opacity = OPACITY_OPAQUE_U8;
+                if (channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
+                }
+                KoBgrU8Traits::setOpacity(it->rawData(), opacity, 1);
+
+                quint8 red = channelBytes[0].constData()[col];
+                KoBgrU8Traits::setRed(it->rawData(), red);
+
+                quint8 green = channelBytes[1].constData()[col];
+                KoBgrU8Traits::setGreen(it->rawData(), green);
+
+                quint8 blue = channelBytes[2].constData()[col];
+                KoBgrU8Traits::setBlue(it->rawData(), blue);
+
+            }
+
+            else if (channelSize == 2) {
+
+                quint16 opacity = quint16_MAX;
+                if (channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
+                }
+                // We don't have a convenient setOpacity function :-(
+                memcpy(it->rawData() + KoBgrU16Traits::alpha_pos, &opacity, sizeof(quint16));
+
+                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
+                KoBgrU16Traits::setRed(it->rawData(), red);
+
+                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
+
+                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
+
+            }
+            else {
+                // Unsupported channel sizes for now
+                return false;
+            }
+            /*
+            // XXX see implementation Openexr
+            else if (channelSize == 4) {
+
+                quint16 red = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
+                KoBgrU16Traits::setRed(it->rawData(), red);
+
+                quint16 green = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
+                KoBgrU16Traits::setGreen(it->rawData(), green);
+
+                quint16 blue = ntohs(reinterpret_cast<const quint16 *>(channelBytes.constData())[col]);
+                KoBgrU16Traits::setBlue(it->rawData(), blue);
+            }
+*/
+            it->nextPixel();
+        }
+        it->nextRow();
+    }
+    // go back to the old position, because we've been seeking all over the place
+    io->seek(oldPosition);
+    return true;
+}
+
+bool PSDLayerRecord::doCMYK(KisPaintDeviceSP dev, QIODevice *io)
+{
+    qDebug() << "doCMYK for" << layerName << "channels:" << channelInfoRecords.size() << "compression" << channelInfoRecords.first()->compressionType;
+    qDebug() << "top" << top << "bottom" << bottom << "left" << left << "right" << right;
+    quint64 oldPosition = io->pos();
+
+    quint64 width = right - left;
+    int channelSize = m_header.channelDepth / 8;
+    int uncompressedLength = width * channelSize;
+
+
+    if (channelInfoRecords.first()->compressionType == Compression::ZIP
+            || channelInfoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
+        qDebug() << "zippedy-do-da!";
+        // Zip needs to be implemented here.
+        return false;
+    }
+
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
+    for (int row = top ; row < bottom; row++)
+    {
+
+        QMap<quint16, QByteArray> channelBytes;
+
+        foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+
+            io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+
+            if (channelInfo->compressionType == Compression::Uncompressed) {
+                channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+                channelInfo->channelOffset += uncompressedLength;
+            }
+            else if (channelInfo->compressionType == Compression::RLE) {
+                int rleLength = channelInfo->rleRowLengths[row - top];
+                QByteArray compressedBytes = io->read(rleLength);
+                QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+                channelBytes.insert(channelInfo->channelId, uncompressedBytes);
+                channelInfo->channelOffset += rleLength;
+
+            }
+        }
+
+        for (quint64 col = 0; col < width; col++){
+
+            if (channelSize == 1) {
+
+                quint8 opacity = OPACITY_OPAQUE_U8;
+                if (channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
+
+                }
+                quint8 *pixel = new quint8[5];
+                memset(pixel, 0, 5);
+                dev->colorSpace()->setOpacity(pixel, opacity, 1);
+
+                memset(pixel, 255 - channelBytes[0].constData()[col], 1);
+                memset(pixel + 1, 255 - channelBytes[1].constData()[col], 1);
+                memset(pixel + 2, 255 - channelBytes[2].constData()[col], 1);
+                memset(pixel + 3, 255 - channelBytes[3].constData()[col], 1);
+                //qDebug() << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
+                memcpy(it->rawData(), pixel, 5);
+            }
+
+            else if (channelSize == 2) {
+
+                quint16 opacity = quint16_MAX;
+                if (channelBytes.contains(-1)) {
+                    opacity = channelBytes[-1].constData()[col];
+                }
+
+                // We don't have a convenient setOpacity function :-(
+                memcpy(it->rawData() + KoCmykTraits<quint16>::alpha_pos, &opacity, sizeof(quint16));
+
+                quint16 C = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
+                KoCmykTraits<quint16>::setC(it->rawData(),C);
+
+                quint16 M = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
+                KoCmykTraits<quint16>::setM(it->rawData(),M);
+
+                quint16 Y = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
+                KoCmykTraits<quint16>::setY(it->rawData(),Y);
+
+                quint16 K = ntohs(reinterpret_cast<const quint16 *>(channelBytes[3].constData())[col]);
+                KoCmykTraits<quint16>::setK(it->rawData(),K);
+
+            }
+
+
+            // XXX see implementation Openexr
+            else if (channelSize == 4) {
+
+                quint32 C = ntohs(reinterpret_cast<const quint32 *>(channelBytes[0].constData())[col]);
+                KoCmykTraits<quint32>::setC(it->rawData(),C);
+
+                quint32 M = ntohs(reinterpret_cast<const quint32 *>(channelBytes[1].constData())[col]);
+                KoCmykTraits<quint32>::setM(it->rawData(),M);
+
+                quint32 Y = ntohs(reinterpret_cast<const quint32 *>(channelBytes[2].constData())[col]);
+                KoCmykTraits<quint32>::setY(it->rawData(),Y);
+
+                quint32 K = ntohs(reinterpret_cast<const quint32 *>(channelBytes[3].constData())[col]);
+                KoCmykTraits<quint32>::setK(it->rawData(),K);
+            }
+
+            else {
+                // Unsupported channel sizes for now
+                return false;
+            }
+            it->nextPixel();
+        }
+        it->nextRow();
+    }
+    // go back to the old position, because we've been seeking all over the place
+    io->seek(oldPosition);
+    return true;
+}
+
+bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
+{    quint64 oldPosition = io->pos();
+
+     quint64 width = right - left;
+     int channelSize = m_header.channelDepth / 8;
+     int uncompressedLength = width * channelSize;
+
+     if (channelInfoRecords.first()->compressionType == Compression::ZIP
+             || channelInfoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
+
+         // Zip needs to be implemented here.
+         return false;
+     }
+
+     KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
+     for (int row = top ; row < bottom; row++)
+     {
+
+         QMap<quint16, QByteArray> channelBytes;
+
+         foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+
+             io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+
+             if (channelInfo->compressionType == Compression::Uncompressed) {
+                 channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+                 channelInfo->channelOffset += uncompressedLength;
+             }
+             else if (channelInfo->compressionType == Compression::RLE) {
+                 int rleLength = channelInfo->rleRowLengths[row - top];
+                 QByteArray compressedBytes = io->read(rleLength);
+                 QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+                 channelBytes.insert(channelInfo->channelId, uncompressedBytes);
+                 channelInfo->channelOffset += rleLength;
+
+             }
+         }
+
+         for (quint64 col = 0; col < width; col++){
+
+             if (channelSize == 1) {
+                 quint8 opacity = OPACITY_OPAQUE_U8;
+                 if (channelBytes.contains(-1)) {
+                     opacity = channelBytes[-1].constData()[col];
+                 }
+                 KoLabTraits<quint8>::setOpacity(it->rawData(), opacity, 1);
+
+                 quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
+                 KoLabTraits<quint8>::setL(it->rawData(),L);
+
+                 quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
+                 KoLabTraits<quint8>::setA(it->rawData(),A);
+
+                 quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
+                 KoLabTraits<quint8>::setB(it->rawData(),B);
+
+
+             }
+
+             else if (channelSize == 2) {
+
+                 quint16 opacity = quint16_MAX;
+                 if (channelBytes.contains(-1)) {
+                     opacity = channelBytes[-1].constData()[col];
+                 }
+                 // We don't have a convenient setOpacity function :-(
+                 memcpy(it->rawData() + KoLabU16Traits::alpha_pos, &opacity, sizeof(quint16));
+                // KoLabTraits<quint16>::setOpacity(it->rawData(), opacity, 1);
+
+                 quint16 L = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
+                 KoLabTraits<quint16>::setL(it->rawData(),L);
+
+                 quint16 A = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
+                 KoLabTraits<quint16>::setA(it->rawData(),A);
+
+                 quint16 B = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
+                 KoLabTraits<quint16>::setB(it->rawData(),B);
+             }
+             else {
+                 // Unsupported channel sizes for now
+                 return false;
+             }
+
+             it->nextPixel();
+         }
+         it->nextRow();
+     }
+     // go back to the old position, because we've been seeking all over the place
+     io->seek(oldPosition);
+     return true;
+}
 
 
 QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
@@ -549,7 +857,7 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
     dbg.nospace() << ", transparency protected: " << layer.transparencyProtected;
     dbg.nospace() << ", visible: " << layer.visible;
     dbg.nospace() << ", irrelevant: " << layer.irrelevant << "\n";
-    foreach(const PSDLayerRecord::ChannelInfo* channel, layer.channelInfoRecords) {
+    foreach(const ChannelInfo* channel, layer.channelInfoRecords) {
         dbg.space() << channel;
     }
 #endif
@@ -557,12 +865,12 @@ QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer)
 }
 
 
-QDebug operator<<(QDebug dbg, const PSDLayerRecord::ChannelInfo &channel)
+QDebug operator<<(QDebug dbg, const ChannelInfo &channel)
 {
 #ifndef NODEBUG
     dbg.nospace() << "\tChannel type" << channel.channelId
-            << "size: " << channel.channelDataLength
-            << "compression type" << channel.compressionType << "\n";
+                  << "size: " << channel.channelDataLength
+                  << "compression type" << channel.compressionType << "\n";
 #endif
     return dbg.nospace();
 }

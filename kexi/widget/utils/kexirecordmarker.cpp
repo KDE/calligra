@@ -54,8 +54,10 @@ struct KexiRecordMarkerStatic {
     {
         // color-ify the icons to match the foreground color
         QColor fc(qApp->palette().color(QPalette::Foreground));
-        pen = KexiUtils::replaceColors( QPixmap(tableview_pen_xpm), fc);
-        plus = KexiUtils::replaceColors( QPixmap(tableview_plus_xpm), fc);
+        pen = QPixmap(tableview_pen_xpm);
+        KexiUtils::replaceColors(&pen, fc);
+        plus = QPixmap(tableview_plus_xpm);
+        KexiUtils::replaceColors(&plus, fc);
     }
     QPixmap pen, plus;
 };

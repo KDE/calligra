@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,6 @@
 #include <QLabel>
 #include <QPalette>
 #include <QToolTip>
-//Qt4#include <Q3SimpleRichText>
 
 #include <KDebug>
 #include <KMessageBox>
@@ -34,9 +33,9 @@
 #include <KDialog>
 
 #include <kexiutils/utils.h>
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/parser/parser.h>
+#include <db/driver.h>
+#include <db/connection.h>
+#include <db/parser/parser.h>
 
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
@@ -408,7 +407,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         KexiDB::Connection::SelectStatementOptions options;
         options.identifierEscaping = KexiDB::Driver::EscapeKexi;
         options.addVisibleLookupColumns = false;
-        d->origStatement = conn->selectStatement(*query, options).trimmed();
+        d->origStatement = KexiDB::selectStatement(0, *query, options).trimmed();
     }
 
     d->slotTextChangedEnabled = false;

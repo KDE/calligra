@@ -19,18 +19,25 @@
  */
 #include "TestKoTextEditor.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 #include <QUuid>
 #include <QString>
 #include <QTextDocument>
 #include <QTextTable>
 #include <QTextCharFormat>
+#include <QList>
 
+#include <KoShapeBasedDocumentBase.h>
+#include <KoShape.h>
+#include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoTextEditor.h>
 #include <KoBookmark.h>
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoShapeController.h>
+#include <KoDocumentResourceManager.h>
+#include <KoDocumentRdfBase.h>
 
 const QString lorem(
     "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor"
@@ -53,6 +60,7 @@ void TestKoTextEditor::testInsertInlineObject()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -85,6 +93,7 @@ void TestKoTextEditor::testRemoveSelectedText()
     textDoc.setInlineTextObjectManager(&inlineObjectManager);
 
     KoTextEditor editor(&doc);
+    textDoc.setTextEditor(&editor);
 
     // enter some lorem ipsum
     editor.insertText(lorem);
@@ -110,10 +119,72 @@ void TestKoTextEditor::testRemoveSelectedText()
     Q_ASSERT(editor.hasSelection());
 
     // remove the table + the markers from the document
-    editor.removeSelectedText();
+    editor.deleteChar();
 
     // check whether the bookmarks have gone.
     Q_ASSERT(inlineObjectManager.inlineTextObjects().length() == 0);
+}
+
+class TestDocument : public KoShapeBasedDocumentBase
+{
+public:
+
+    TestDocument()
+    {
+        m_document = new QTextDocument();
+
+        KoTextDocument textDoc(m_document);
+        KoTextEditor *editor = new KoTextEditor(m_document);
+
+        textDoc.setInlineTextObjectManager(&m_inlineObjectManager);
+        textDoc.setStyleManager(new KoStyleManager(0));
+        textDoc.setTextEditor(editor);
+
+    }
+
+    virtual ~TestDocument()
+    {
+        delete m_document;
+    }
+
+    virtual void addShape(KoShape *shape)
+    {
+        m_shapes << shape;
+    }
+
+    virtual void removeShape(KoShape *shape)
+    {
+        m_shapes.removeAll(shape);
+    }
+
+    KoTextEditor *textEditor()
+    {
+        return KoTextDocument(m_document).textEditor();
+    }
+
+    QList<KoShape *> m_shapes;
+
+    QTextDocument *m_document;
+    KoInlineTextObjectManager m_inlineObjectManager;
+    KoDocumentRdfBase m_rdfBase;
+};
+
+void TestKoTextEditor::testPaste()
+{
+    TestDocument *source = new TestDocument();
+    TestDocument *destination = new TestDocument();
+
+    Q_ASSERT(source->textEditor() != destination->textEditor());
+
+    KoShapeController shapeController(0, destination);
+
+    source->textEditor()->insertText("bla");
+
+    destination->textEditor()->paste(source->textEditor(), &shapeController);
+
+    Q_ASSERT(destination->m_document->toPlainText() == "bla");
+
+
 }
 
 QTEST_MAIN(TestKoTextEditor)

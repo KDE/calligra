@@ -120,7 +120,8 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
             dbgFile << "Read layer" << i << layerRecord->layerName << "blending mode"
-                    << layerRecord->blendModeKey << io->pos();
+                    << layerRecord->blendModeKey << io->pos()
+                    << "Number of channels:" <<  layerRecord->channelInfoRecords.size();
             layers << layerRecord;
         }
     }
@@ -152,7 +153,7 @@ bool PSDLayerSection::read(QIODevice* io)
                 return false;
             }
 
-            PSDLayerRecord::ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
+            ChannelInfo* channelInfo = layerRecord->channelInfoRecords.at(j);
 
             quint16 compressionType;
             if (!psdread(io, &compressionType)) {
@@ -183,7 +184,7 @@ bool PSDLayerSection::read(QIODevice* io)
                             return 0;
                         }
                     }
-                    //qDebug() << "rle byte count" << byteCount;
+                    ////qDebug() << "rle byte count" << byteCount;
                     channelInfo->rleRowLengths << byteCount;
                 }
             }

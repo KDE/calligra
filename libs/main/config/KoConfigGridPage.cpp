@@ -24,6 +24,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <KoGridData.h>
 #include <KoUnitDoubleSpinBox.h>
 #include <KoAspectButton.h>
+#include <KoPart.h>
 
 #include <kcolorbutton.h>
 #include <kdialog.h>
@@ -57,7 +58,7 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
 {
     setObjectName(name);
 
-    d->config = d->doc->componentData().config();
+    d->config = d->doc->documentPart()->componentData().config();
 
     KoUnit unit = d->doc->unit();
     KoGridData &gd = d->doc->gridData();
@@ -72,6 +73,9 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
     d->snapChBox->setChecked(gd.snapToGrid());
     QLabel* gridColorLbl = new QLabel(i18n("Grid color:"), generalGrp);
     d->gridColorBtn = new KColorButton(gd.gridColor(), generalGrp);
+#if KDE_IS_VERSION(4,5,0)
+    d->gridColorBtn->setAlphaChannelEnabled(true);
+#endif
     gridColorLbl->setBuddy(d->gridColorBtn);
     layoutGeneral->addWidget(showGridLabel, 0, 0);
     layoutGeneral->addWidget(d->gridChBox, 0, 1);
@@ -127,9 +131,8 @@ KoConfigGridPage::~KoConfigGridPage()
     delete d;
 }
 
-void KoConfigGridPage::slotUnitChanged(int u)
+void KoConfigGridPage::slotUnitChanged(const KoUnit &unit)
 {
-    KoUnit unit = KoUnit((KoUnit::Unit) u);
     d->spaceHorizUSpin->blockSignals(true);
     d->spaceVertUSpin->blockSignals(true);
     d->spaceHorizUSpin->setUnit(unit);

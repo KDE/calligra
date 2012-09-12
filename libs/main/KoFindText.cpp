@@ -21,19 +21,18 @@
 
 #include "KoFindText.h"
 
-#include <QtGui/QTextDocument>
-#include <QtGui/QTextCursor>
-#include <QtGui/QTextBlock>
-#include <QtGui/QTextLayout>
-#include <QtGui/QPalette>
-#include <QtGui/QStyle>
-#include <QtGui/QApplication>
-#include <QtGui/QAbstractTextDocumentLayout>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QPalette>
+#include <QStyle>
+#include <QApplication>
+#include <QAbstractTextDocumentLayout>
 
 #include <KDE/KDebug>
 #include <KDE/KLocalizedString>
 
-#include <KoResourceManager.h>
 #include <KoText.h>
 #include <KoTextDocument.h>
 #include <KoShape.h>
@@ -59,6 +58,7 @@ public:
 
     QList<QTextDocument*> documents;
 
+    QTextCursor currentCursor;
     QTextCursor selection;
     QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> > selections;
 
@@ -80,17 +80,15 @@ QTextCharFormat KoFindText::Private::currentSelectionFormat;
 QTextCharFormat KoFindText::Private::replacedFormat;
 bool KoFindText::Private::formatsInitialized = false;
 
-KoFindText::KoFindText(const QList< QTextDocument* >& documents, QObject* parent)
+KoFindText::KoFindText(QObject* parent)
     : KoFindBase(parent), d(new Private(this))
 {
-    d->documents = documents;
-    d->updateDocumentList();
-
     d->initializeFormats();
 
     KoFindOptionSet *options = new KoFindOptionSet();
     options->addOption("caseSensitive", i18n("Case Sensitive"), i18n("Match cases when searching"), QVariant::fromValue<bool>(false));
     options->addOption("wholeWords", i18n("Whole Words Only"), i18n("Match only whole words"), QVariant::fromValue<bool>(false));
+    options->addOption("fromCursor", i18n("Find from Cursor"), i18n("Start searching from the current cursor"), QVariant::fromValue<bool>(true));
     setOptions(options);
 }
 
@@ -119,12 +117,18 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
         return;
     }
 
+    bool before = opts->option("fromCursor")->value().toBool() && !d->currentCursor.isNull();
+    QList<KoFindMatch> matchBefore;
     foreach(QTextDocument* document, d->documents) {
         QTextCursor cursor = document->find(pattern, start, flags);
         QVector<QAbstractTextDocumentLayout::Selection> selections;
         while(!cursor.isNull()) {
             if(findInSelection && d->selectionEnd <= cursor.position()) {
                 break;
+            }
+
+            if (before && document == d->currentCursor.document() && d->currentCursor < cursor) {
+                before = false;
             }
 
             QAbstractTextDocumentLayout::Selection selection;
@@ -135,12 +139,21 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
             KoFindMatch match;
             match.setContainer(QVariant::fromValue(document));
             match.setLocation(QVariant::fromValue(cursor));
-            matchList.append(match);
+            if (before) {
+                matchBefore.append(match);
+            }
+            else {
+                matchList.append(match);
+            }
 
             cursor = document->find(pattern, cursor, flags);
         }
+        if (before && document == d->currentCursor.document()) {
+            before = false;
+        }
         d->selections.insert(document, selections);
     }
+    matchList.append(matchBefore);
 
     if (hasMatches()) {
         setCurrentMatch(0);
@@ -170,7 +183,7 @@ void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant 
 
     cursor.insertText(value.toString());
     cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, value.toString().length());
-    
+
     selections[index].cursor = cursor;
     selections[index].format = d->replacedFormat;
     d->selections.insert(match.container().value<QTextDocument*>(), selections);
@@ -192,6 +205,11 @@ void KoFindText::clearMatches()
 
     setCurrentMatch(0);
     d->currentMatch.first = 0;
+}
+
+QList< QTextDocument* > KoFindText::documents() const
+{
+    return d->documents;
 }
 
 void KoFindText::findNext()
@@ -216,9 +234,15 @@ void KoFindText::findPrevious()
     d->updateSelections();
 }
 
-void KoFindText::addDocuments(const QList<QTextDocument*> &documents)
+void KoFindText::setCurrentCursor(const QTextCursor &cursor)
 {
-    d->documents.append(documents);
+    d->currentCursor = cursor;
+}
+
+void KoFindText::setDocuments(const QList<QTextDocument*> &documents)
+{
+    clearMatches();
+    d->documents = documents;
     d->updateDocumentList();
 }
 

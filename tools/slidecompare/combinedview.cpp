@@ -22,9 +22,9 @@
 #include "slideview.h"
 #include "oothread.h"
 #include <PptToOdp.h>
-#include <QtGui/QGridLayout>
-#include <QtGui/QDragEnterEvent>
-#include <QtCore/QCoreApplication>
+#include <QGridLayout>
+#include <QDragEnterEvent>
+#include <QCoreApplication>
 #include <KDE/KMessageBox>
 #include <KDE/KMimeType>
 
@@ -90,7 +90,7 @@ koppttoodp(const QString& from) {
     QString to = dirpath + QDir::separator()
                  + QFileInfo(from).baseName() + ".odp";
     QFile::remove(to);
-    PptToOdp ppttoodp;
+    PptToOdp ppttoodp(0, 0);
     ppttoodp.convert(from, to, KoStore::Zip);
     return to;
 }

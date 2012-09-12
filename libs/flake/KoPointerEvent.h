@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann Rasmussen <cbo@boemann.dk>
    Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
    
    This library is free software; you can redistribute it and/or
@@ -225,6 +225,7 @@ public:
 
 protected:
     friend class KoToolProxy;
+    friend class KisScratchPadEventFilter;
     /// called by KoToolProxy to set which button was pressed.
     void setTabletButton(Qt::MouseButton button);
 private:

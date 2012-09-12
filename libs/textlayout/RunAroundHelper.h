@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010 Ko Gmbh <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,11 +32,11 @@ class RunAroundHelper
 {
 public:
     RunAroundHelper();
-    void setLine(KoTextLayoutArea *area, QTextLine l);
+    void setLine(KoTextLayoutArea *area, const QTextLine &l);
     void setObstructions(const QList<KoTextLayoutObstruction *> &obstructions);
     bool stayOnBaseline();
     void updateObstruction(KoTextLayoutObstruction *obstruction);
-    bool fit(bool resetHorizontalPosition, bool isRightToLeft, QPointF position);
+    bool fit(bool resetHorizontalPosition, bool isRightToLeft, const QPointF &position);
     QTextLine line;
 private:
     KoTextLayoutArea *m_area;

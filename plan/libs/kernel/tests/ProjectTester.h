@@ -20,10 +20,11 @@
 #ifndef KPlato_ProjectTester_h
 #define KPlato_ProjectTester_h
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kptproject.h"
 #include "kptdatetime.h"
+#include <KTempDir>
 
 namespace QTest
 {
@@ -53,6 +54,8 @@ private slots:
 
     void schedule();
     void scheduleFullday();
+    void scheduleFulldayDstSpring();
+    void scheduleFulldayDstFall();
 
     void scheduleWithExternalAppointments();
 
@@ -80,6 +83,7 @@ private:
     Project *m_project;
     Calendar *m_calendar;
     Task *m_task;
+    KTempDir m_tmp;
 };
 
 } //namespace KPlato

@@ -47,6 +47,7 @@ target_link_libraries(kexihandler_report
     ${QT_QTSCRIPT_LIBRARY}
     ${KDE4_KPARTS_LIBS}
     kexidb
+    ${CALLIGRADB_LIBS}
     kexicore
     ${KOPROPERTY_LIBS}
     kexiguiutils
@@ -59,7 +60,6 @@ else (KEXI_MOBILE)
     target_link_libraries (kexihandler_report
     keximain
     keximigrate
-    ${QT_QT3_SUPPORT_LIBRARY}
     )
 endif (KEXI_MOBILE)
 

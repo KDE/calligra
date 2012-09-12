@@ -37,7 +37,7 @@ WebShapeFactory::WebShapeFactory()
     setXmlElementNames("http://kde.org/braindump", QStringList("web"));
 }
 
-KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *WebShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
     WebShape* fooShape = new WebShape();
@@ -46,7 +46,7 @@ KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResource
     return fooShape;
 }
 
-KoShape *WebShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+KoShape *WebShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
     WebShape* fooShape = new WebShape();

@@ -40,11 +40,10 @@ class KoBookmarkManager;
  * @see KoBookmarkManager
  * If a text selection is bookmarked, we need two bookmark objects to mark the selection.
  * One is for start selection and the other one is for end selection.
- * A bookmark should know the specific text shape where it is located since a document may
- * contain more than one text shapes. This shape can be retrieved using KoBookmark::shape()
  */
 class KOTEXT_EXPORT KoBookmark : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// This enum determines the type of bookmark
     enum BookmarkType {

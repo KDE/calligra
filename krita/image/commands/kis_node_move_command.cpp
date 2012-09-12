@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,13 +61,10 @@ void KisNodeMoveCommand::moveTo(const QPoint& pos)
      * when the offset varies. When it is fixed, remove the locking.
      * see: KisIterator::stressTest(), KisToolMove::mousePressEvent()
      */
-    m_image->lock();
     m_node->setX(pos.x());
     m_node->setY(pos.y());
-    m_image->unlock();
-
     m_node->setDirty(m_updateRect);
-    
+
     if(m_image && m_node->inherits("KisSelectionMask")) {
         m_image->undoAdapter()->emitSelectionChanged();
     }

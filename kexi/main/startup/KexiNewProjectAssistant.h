@@ -22,8 +22,8 @@
 
 #include "kexidbconnectionset.h"
 #include "ui_KexiProjectStorageTypeSelectionPage.h"
-#include <kexidb/connectiondata.h>
-#include <kexidb/msghandler.h>
+#include <db/connectiondata.h>
+#include <db/msghandler.h>
 #include <kexiutils/KexiContextMessage.h>
 #include <kexiutils/KexiAssistantPage.h>
 #include <kexiutils/KexiAssistantWidget.h>
@@ -31,7 +31,7 @@
 
 #include <QPointer>
 
-class KexiConnSelectorWidget;
+class KexiConnectionSelectorWidget;
 class KexiProjectSelectorWidget;
 class KCategorizedView;
 
@@ -107,7 +107,7 @@ public:
     explicit KexiProjectConnectionSelectionPage(QWidget* parent = 0);
     virtual ~KexiProjectConnectionSelectionPage();
 
-    KexiConnSelectorWidget* connSelector;
+    KexiConnectionSelectorWidget* connSelector;
 };
 
 class KexiServerDBNamePage;

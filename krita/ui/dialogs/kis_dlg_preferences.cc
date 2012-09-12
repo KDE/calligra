@@ -29,7 +29,6 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-#include <QPixmap>
 #include <QPushButton>
 #include <QSlider>
 #include <QToolButton>
@@ -42,9 +41,13 @@
 #include <qgl.h>
 #endif
 
-#include <libs/main/KoDocument.h>
+#include <KoDocument.h>
 #include <KoColorProfile.h>
+#include <KoApplication.h>
+#include <KoConfigAuthorPage.h>
+#include <KoPart.h>
 
+#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kcolorbutton.h>
 #include <kcombobox.h>
@@ -88,6 +91,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg;
 
+    m_cmbCursorShape->addItem(i18n("Small Circle"));
 #if defined(HAVE_OPENGL)
     m_cmbCursorShape->addItem("3D Brush Model");
 #endif
@@ -199,6 +203,8 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     KisConfig cfg;
 
+    m_page->chkUseSystemMonitorProfile->setChecked(cfg.useSystemMonitorProfile());
+
     m_page->cmbWorkingColorSpace->setIDList(KoColorSpaceRegistry::instance()->listKeys());
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
 
@@ -230,11 +236,16 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
 
     m_page->cmbMonitorIntent->setCurrentIndex(cfg.renderIntent());
 
-    if (const KoColorProfile * profile = KisCanvasResourceProvider::getScreenProfile()) {
-        // We've got an X11 profile, don't allow to override
-        m_page->cmbMonitorProfile->hide();
-        m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
+    // XXX: this needs to be available per screen!
+    const KoColorProfile *profile = KisConfig::getScreenProfile();
+    if (profile && profile->isSuitableForDisplay()) {
+        if (cfg.useSystemMonitorProfile()) {
+            // We've got an X11 profile, don't allow to override
+            m_page->cmbMonitorProfile->hide();
+            m_page->lblMonitorProfile->setText(i18n("Monitor profile: ") + profile->name());
+        }
     } else {
+        m_page->chkUseSystemMonitorProfile->setEnabled(false);
         m_page->cmbMonitorProfile->show();
         m_page->lblMonitorProfile->setText(i18n("&Monitor profile: "));
     }
@@ -314,12 +325,18 @@ void TabletSettingsTab::setDefault()
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
 {
     setObjectName(name);
+
+    QGridLayout * l = new QGridLayout(this);
+    l->setSpacing(KDialog::spacingHint());
+    l->setMargin(0);
     m_page = new WdgTabletSettings(this);
+    l->addWidget(m_page, 0, 0);
 
     KisConfig cfg;
     KisCubicCurve curve;
     curve.fromString( cfg.pressureTabletCurve() );
 
+    m_page->pressureCurve->setMaximumSize(QSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX));
     m_page->pressureCurve->setCurve(curve);
 }
 
@@ -354,10 +371,13 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         cbUseOpenGL->setEnabled(false);
         cbUseOpenGLShaders->setEnabled(false);
         cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
+        cbUseOpenGLTrilinearFiltering->setEnabled(false);
     } else {
         cbUseOpenGL->setChecked(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setEnabled(cfg.useOpenGL());
         cbUseOpenGLToolOutlineWorkaround->setChecked(cfg.useOpenGLToolOutlineWorkaround());
+        cbUseOpenGLTrilinearFiltering->setEnabled(cfg.useOpenGL());
+        cbUseOpenGLTrilinearFiltering->setChecked(cfg.useOpenGLTrilinearFiltering());
 #ifdef HAVE_GLEW
         if (KisOpenGL::hasShadingLanguage()) {
             cbUseOpenGLShaders->setChecked(cfg.useOpenGLShaders());
@@ -399,6 +419,8 @@ void DisplaySettingsTab::setDefault()
     cbUseOpenGLShaders->setEnabled(false);
     cbUseOpenGLToolOutlineWorkaround->setChecked(false);
     cbUseOpenGLToolOutlineWorkaround->setEnabled(false);
+    cbUseOpenGLTrilinearFiltering->setEnabled(false);
+    cbUseOpenGLTrilinearFiltering->setChecked(true);
     chkMoving->setChecked(true);
     intCheckSize->setValue(32);
     colorChecks->setColor(QColor(220, 220, 220));
@@ -414,6 +436,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
     }
 #endif
     cbUseOpenGLToolOutlineWorkaround->setEnabled(isChecked);
+    cbUseOpenGLTrilinearFiltering->setEnabled(isChecked);
 #else
     Q_UNUSED(isChecked);
 #endif
@@ -599,10 +622,10 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     vbox = new KVBox();
     page = new KPageWidgetItem(vbox, i18n("Tablet settings"));
     page->setHeader(i18n("Tablet"));
-    page->setIcon(KIcon("preferences-system-performance"));
+    page->setIcon(KIcon("input-tablet"));
     addPage(page);
     m_tabletSettings = new TabletSettingsTab(vbox);
-    m_tabletSettings->m_page->pressureCurve->setMaximumSize(QSize(1000, 1000));
+
 
     // full-screen mode
     vbox = new KVBox();
@@ -611,6 +634,14 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
     page->setIcon(KIcon("preferences-system-performance"));
     addPage(page);
     m_fullscreenSettings = new FullscreenSettingsTab(vbox);
+
+
+    // author settings
+    vbox = new KVBox();
+    m_authorSettings = new KoConfigAuthorPage();
+    page = addPage(m_authorSettings, i18nc("@title:tab Author page", "Author"));
+    page->setHeader(i18n("Author"));
+    page->setIcon(KIcon("user-identity"));
 
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
@@ -666,7 +697,9 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setAutoSaveInterval(dialog->m_general->autoSaveInterval());
         cfg.setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
-        foreach(KoDocument* doc, *KoDocument::documentList()) {
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
+        foreach(KoPart* part, app->partList()) {
+            KoDocument *doc = part->document();
             doc->setAutoSave(dialog->m_general->autoSaveInterval());
             doc->setBackupFile(dialog->m_general->m_backupFileCheckBox->isChecked());
             doc->undoStack()->setUndoLimit(dialog->m_general->undoStackSize());
@@ -675,6 +708,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setZoomWithWheel(dialog->m_general->chkZoomWithWheel->isChecked());
 
         // Color settings
+        cfg.setUseSystemMonitorProfile(dialog->m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
         cfg.setMonitorProfile(dialog->m_colorSettings->m_page->cmbMonitorProfile->itemHighlighted());
         cfg.setWorkingColorSpace(dialog->m_colorSettings->m_page->cmbWorkingColorSpace->currentItem().id());
         cfg.setPrinterColorSpace(dialog->m_colorSettings->m_page->cmbPrintingColorSpace->currentItem().id());
@@ -709,6 +743,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGL(dialog->m_displaySettings->cbUseOpenGL->isChecked());
         cfg.setUseOpenGLShaders(dialog->m_displaySettings->cbUseOpenGLShaders->isChecked());
         cfg.setUseOpenGLToolOutlineWorkaround(dialog->m_displaySettings->cbUseOpenGLToolOutlineWorkaround->isChecked());
+        cfg.setUseOpenGLTrilinearFiltering(dialog->m_displaySettings->cbUseOpenGLTrilinearFiltering->isChecked());
 #else
         cfg.setUseOpenGLToolOutlineWorkaround(false);
 #endif
@@ -740,6 +775,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideTitlebarFullscreen(dialog->m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(dialog->m_fullscreenSettings->chkToolbar->checkState());
 
+        dialog->m_authorSettings->apply();
     }
     delete dialog;
     return baccept;

@@ -1,5 +1,4 @@
 /*
- * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  * Copyright (C) 2011 by Radoslaw Wicik (radoslaw@wicik.pl)
  *
@@ -26,8 +25,8 @@
 #include <QBuffer>
 #include <kcodecs.h>
 #include <renderobjects.h>
-#include <MarbleWidget.h>
-#include <MarbleModel.h>
+#include <marble/MarbleWidget.h>
+#include <marble/MarbleModel.h>
 #include <QImage>
 #include <QPixmap>
 #include <sys/socket.h>
@@ -236,7 +235,7 @@ int KoReportItemMaps::render(OROPage* page,
     oroIds.marbleWidget = marble;
     m_marbleImgs[marble->model()]=oroIds;
     
-    return 0; //Item doesnt stretch the section height
+    return 0; //Item doesn't stretch the section height
 }
 
 void KoReportItemMaps::requestRedraw()

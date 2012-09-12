@@ -179,7 +179,7 @@ throw(InvalidFormatException)
 
     if (stdfSize == StdfPost2000) {
         wvlog << "Warning: StdfPost2000OrNone present - skipping";
-        stream->seek( 8, G_SEEK_CUR );
+        stream->seek( 8, WV2_SEEK_CUR );
     }
 
     // read the name of the style.
@@ -193,7 +193,7 @@ throw(InvalidFormatException)
     // next even address
     U16 stdfSize_new = stdfSize;
     stdfSize_new += ( stdfSize & 0x0001 ) ? 1 : 0;
-    stream->seek( startOffset + stdfSize, G_SEEK_SET );
+    stream->seek( startOffset + stdfSize, WV2_SEEK_SET );
 #ifdef WV2_DEBUG_STYLESHEET
     wvlog << "new position: " << stream->tell() << endl;
     wvlog << "new stdfSize: " << stdfSize_new << endl;
@@ -210,7 +210,7 @@ throw(InvalidFormatException)
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << "Adjusting the position... from " << stream->tell() - startOffset;
 #endif
-        stream->seek( 1, G_SEEK_CUR );
+        stream->seek( 1, WV2_SEEK_CUR );
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << " to " << stream->tell() - startOffset << endl;
 #endif
@@ -243,11 +243,16 @@ throw(InvalidFormatException)
     int offset = 0;
     for ( U8 i = 0; i < cupx; ++i) {
         U16 cbUPX = stream->readU16();  // size of the next UPX
-        stream->seek( -2, G_SEEK_CUR ); // rewind the "lookahead"
+        stream->seek( -2, WV2_SEEK_CUR ); // rewind the "lookahead"
         cbUPX += 2;                     // ...and correct the size
 #ifdef WV2_DEBUG_STYLESHEET
         wvlog << "cbUPX: " << cbUPX << endl;
 #endif
+        // do not overflow the allocated buffer grupx
+        if (offset + cbUPX > grupxLen) {
+            wvlog << "====> Error: grupx would overflow!" << endl;
+            return false;
+        }
         for ( U16 j = 0; j < cbUPX; ++j ) {
             grupx[ offset + j ] = stream->readU8();  // read the whole UPX
 #ifdef WV2_DEBUG_STYLESHEET
@@ -260,7 +265,7 @@ throw(InvalidFormatException)
 #ifdef WV2_DEBUG_STYLESHEET
             wvlog << "Adjusting the UPX position... from " << stream->tell() - startOffset;
 #endif
-            stream->seek( 1, G_SEEK_CUR );
+            stream->seek( 1, WV2_SEEK_CUR );
 #ifdef WV2_DEBUG_STYLESHEET
             wvlog << " to " << stream->tell() - startOffset << endl;
 #endif
@@ -526,7 +531,7 @@ Style::Style( const U16 stdfSize, OLEStreamReader* tableStream, U16* ftc )
     if ( tableStream->tell() != offset + cbStd ) {
         wvlog << "Warning: Found a \"hole\"" << endl;
         // correct the offset
-        tableStream->seek( cbStd, G_SEEK_CUR );
+        tableStream->seek( cbStd, WV2_SEEK_CUR );
     }
 
     switch (m_std->sgc) {
@@ -591,7 +596,7 @@ void Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
     }
 
 #ifdef WV2_DEBUG_STYLESHEET
-    wvlog << "istdBase: 0x" << hex << m_std->istdBase << endl;
+    wvlog << "istd: 0x" << istd << "istdBase: 0x" << hex << m_std->istdBase << endl;
 #endif
 
     m_invalid = true;
@@ -613,24 +618,28 @@ void Style::validate(const U16 istd, const U16 rglpstd_cnt, const std::vector<St
         return;
     }
 
+    //The same repair approach is used by the MSWord2007 DOCX filter.
+    //Remember that stiNormal == istdNormal.
     if ((m_std->istdNext != 0x0fff) &&
         (m_std->istdNext >= rglpstd_cnt)) {
-        wvlog << "istdNext - invalid index into rglpstd!" << endl;
-        return;
+
+#ifdef WV2_DEBUG_STYLESHEET
+        wvlog << "Warning: istdNext - invalid index into rglpstd, setting to stiNormal!";
+#endif
+        m_std->istdNext = stiNormal;
     }
-    //TODO: Why did I disable this one ???
-//     if (m_std->istdNext == istd) {
-//         wvlog << "istdNext MUST NOT be same as istd!" << endl;
-//         return false;
-//     }
     if ((m_std->istdNext != 0x0fff) &&
         styles[m_std->istdNext]->isEmpty()) {
         wvlog << "istdNext - style definition EMPTY!" << endl;
         return;
     }
-    //Each style name, whether primary or alternate, MUST NOT be empty and MUST
-    //be unique within all names in the stylesheet.
+    //Each style name, whether primary or alternate, MUST NOT be empty
+    //and MUST be unique within all names in the stylesheet.
     if (m_std->xstzName.isEmpty()) {
+
+#ifdef WV2_DEBUG_STYLESHEET
+        wvlog << "Warning: Empty xstzName detected, preparing a custom name!";
+#endif
         //generate a name for a user define style
         if (m_std->sti == 0x0ffe) {
             m_std->xstzName = UString("User_Defined_");
@@ -940,7 +949,7 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
     WordVersion version = Word8;
 
     tableStream->push();
-    tableStream->seek( fcStshf, G_SEEK_SET );
+    tableStream->seek( fcStshf, WV2_SEEK_SET );
 
     const U16 cbStshi = tableStream->readU16();
 
@@ -986,7 +995,7 @@ StyleSheet::StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf 
     if ( tableStream->tell() != static_cast<int>( fcStshf + cbStshi + 2 ) ) {
         wvlog << "Warning: STSHI too big? New version?"
               << " Expected: " << cbStshi + 2 << " Read: " << tableStream->tell() - fcStshf << endl;
-        tableStream->seek( fcStshf + 2 + cbStshi, G_SEEK_SET );
+        tableStream->seek( fcStshf + 2 + cbStshi, WV2_SEEK_SET );
     }
     // ------------------------------------------------------------
     // STDs - read the array of LPStd structures containing STDs

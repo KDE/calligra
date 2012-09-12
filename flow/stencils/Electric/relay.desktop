@@ -1,12 +1,23 @@
 [Desktop Entry]
 Name=relay
 Name[bg]=реле
+Name[ca]=relé
+Name[ca@valencia]=relé
+Name[cs]=přenos
 Name[de]=Relais
+Name[el]=relay
+Name[es]=relé
+Name[et]=Relee
+Name[it]=relé
+Name[ja]=リレー
+Name[kk]=Реле
 Name[nb]=rele
 Name[nl]=Relais
 Name[pl]=przekaźnik
 Name[pt]=relé
 Name[pt_BR]=relé
+Name[ru]=Реле
+Name[sk]=relé
 Name[sv]=relä
 Name[uk]=реле
 Name[x-test]=xxrelayxx

@@ -38,12 +38,12 @@
 class QGraphicsWidget;
 class KUndo2Command;
 
-class KoResourceManager;
+class KoCanvasResourceManager;
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
 class KoShapeController;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
@@ -62,10 +62,10 @@ public:
 
     /**
      * The constructor.
-     * @param shapeControllerBase the implementation of the shapeController that the
+     * @param shapeBasedDocument the implementation of the shapeController that the
      *   application provides to allow shapes to be added in multiple views.
      */
-    explicit KoCanvasBase(KoShapeControllerBase *shapeControllerBase);
+    explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument);
     virtual ~KoCanvasBase();
 
 public:
@@ -137,6 +137,12 @@ public:
     virtual KoViewConverter *viewConverter() const = 0;
 
     /**
+     * Convert a coordinate in pixels to pt.
+     * @param viewPoint the point in the coordinate system of the widget, or window.
+     */
+    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
+
+    /**
      * Return the widget that will be added to the scrollArea.
      */
     virtual QWidget *canvasWidget() = 0;
@@ -206,7 +212,7 @@ public:
      * @endcode
      * @see KoShapeController::resourceManager()
      */
-    KoResourceManager *resourceManager() const;
+    KoCanvasResourceManager *resourceManager() const;
 
     /**
      * Return the shape controller for this canvas.
@@ -254,7 +260,7 @@ public:
     void setCanvasController(KoCanvasController *controller);
 
 private:
-    // we need a KoShapeControllerBase so that it can work
+    // we need a KoShapeBasedDocumentBase so that it can work
     KoCanvasBase();
 
     class Private;

@@ -147,7 +147,7 @@ private:
 
     //Hierarchies of exceptions.
     QList<const MSO::TextPFException*> pfs;
-    const MSO::TextPFException9* pf9s[6];
+    QList<const MSO::TextPFException9*> pf9s;
 };
 
 class PptTextCFRun {
@@ -196,6 +196,8 @@ public:
      * character formatting applies
      */
     int addCurrentCFRun(const MSO::TextContainer* tc, quint32 start, quint32& num);
+
+    void removeCurrentCFRun();
 
     bool bold() const;
     bool italic() const;

@@ -25,7 +25,7 @@
 #include <kdebug.h>
 const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
 {
-    KoGenStyle style(KoGenStyle::DrawingPageStyle, "drawing-page");
+    KoGenStyle style(KoGenStyle::DrawingPageAutoStyle, "drawing-page");
 
     bool useMasterBackground = false;
     if (page.nodeName() == "PAGE") {
@@ -33,7 +33,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
         if (!backMaster.isNull()) {
             style.addProperty("presentation:background-visible", backMaster.attribute("displayBackground", "1") == "1");
             style.addProperty("presentation:background-objects-visible", backMaster.attribute("displayMasterPageObject", "1") == "1");
-            useMasterBackground = backMaster.attribute("useMasterBackground", "0") == "1";
+            useMasterBackground = backMaster.attribute("useMasterBackground", "1") == "1"; // not set was the default and it means use the background from master
         } else {
             //if BACKMASTER is not found we assume it's true
             style.addProperty("presentation:background-visible", true);
@@ -263,6 +263,7 @@ const QString Filterkpr2odf::createPageStyle(const KoXmlElement& page)
             style.addChildElement("presentationSound", elementContents);
         }
     }//if pageEfect is null
+
     return m_styles.insert(style, "dp");
 }
 
@@ -702,7 +703,7 @@ const QString Filterkpr2odf::createMarkerStyle(int markerType)
         d = "m0 0h278 278 280v36 36 38h-278-278-280v-36-36z";
         break;
     case 6:
-        displayName = "Doble Arrow";
+        displayName = "Double Arrow";
         viewBox = "0 0 1131 1918";//FIXME: same as Double line arrow, not sure if it's ok, nothing in KPresenter1.6
         d = "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z";
         break;

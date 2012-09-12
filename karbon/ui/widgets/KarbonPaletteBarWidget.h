@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONCOLORBARWIDGET_H
-#define KARBONCOLORBARWIDGET_H
+#ifndef KARBONPALETTEBARWIDGET_H
+#define KARBONPALETTEBARWIDGET_H
 
 #include <KoColorSet.h>
 #include <KoResourceServerAdapter.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QToolButton;
 class KarbonPaletteWidget;
@@ -31,11 +31,14 @@ class KarbonPaletteBarWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KarbonPaletteBarWidget(Qt::Orientation orientation, QWidget *parent = 0);
+    explicit KarbonPaletteBarWidget(Qt::Orientation orientation, QWidget *parent = 0);
     virtual ~KarbonPaletteBarWidget();
 
     /// Sets the orientation of the color bar
     void setOrientation(Qt::Orientation orientation);
+
+public slots:
+    void updateDocumentColors();
 
 signals:
     /// Emitted whenever a color was clicked
@@ -53,7 +56,8 @@ private:
     QToolButton *m_choosePalette;
     KarbonPaletteWidget * m_colorBar;
 
+    KoColorSet m_documentColors;
     KoResourceServerAdapter<KoColorSet> m_palettes;
 };
 
-#endif // KARBONCOLORBARWIDGET_H
+#endif // KARBONPALETTEBARWIDGET_H

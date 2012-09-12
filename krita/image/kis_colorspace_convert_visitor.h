@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,10 @@
 class KRITAIMAGE_EXPORT KisColorSpaceConvertVisitor : public KisNodeVisitor
 {
 public:
-    KisColorSpaceConvertVisitor(KisImageWSP image, const KoColorSpace *dstColorSpace, KoColorConversionTransformation::Intent renderingIntent);
+    KisColorSpaceConvertVisitor(KisImageWSP image,
+                                const KoColorSpace *srcColorSpace,
+                                const KoColorSpace *dstColorSpace,
+                                KoColorConversionTransformation::Intent renderingIntent);
     virtual ~KisColorSpaceConvertVisitor();
 
 public:
@@ -66,6 +69,7 @@ private:
     bool convertPaintDevice(KisLayer* layer);
 
     KisImageWSP m_image;
+    const KoColorSpace *m_srcColorSpace;
     const KoColorSpace *m_dstColorSpace;
     KoColorConversionTransformation::Intent m_renderingIntent;
     QBitArray m_emptyChannelFlags;

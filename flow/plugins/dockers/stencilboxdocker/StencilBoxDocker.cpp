@@ -30,7 +30,6 @@
 #include <KoCreateShapesTool.h>
 #include <KoShape.h>
 #include <KoShapeGroup.h>
-#include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
 #include <KoProperties.h>
 

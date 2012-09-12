@@ -30,13 +30,13 @@
 #include "KoParameterChangeStrategy.h"
 #include "KoParameterShape.h"
 #include "KoCanvasBase.h"
-#include "KoResourceManager.h"
 #include "KoShapeManager.h"
+#include "KoDocumentResourceManager.h"
 #include "KoConnectionShape.h"
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
-#include <QtGui/QPainter>
+#include <QPainter>
 
 KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
         : m_tool(tool)

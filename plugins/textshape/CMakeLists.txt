@@ -35,34 +35,36 @@ SET ( textshape_SRCS
 
     dialogs/StylesWidget.cpp
     dialogs/SpecialButton.cpp
+    dialogs/StylesCombo.cpp
+    dialogs/StylesComboPreview.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
     dialogs/SimpleTableWidget.cpp
+    dialogs/SimpleInsertWidget.cpp
     dialogs/SimpleTableOfContentsWidget.cpp
-    dialogs/SimpleCitationWidget.cpp
+    dialogs/SimpleCitationBibliographyWidget.cpp
     dialogs/CitationInsertionDialog.cpp
     dialogs/InsertBibliographyDialog.cpp
     dialogs/SimpleFootEndNotesWidget.cpp
+    dialogs/NotesConfigurationDialog.cpp
     dialogs/SimpleCaptionsWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
     dialogs/ParagraphDecorations.cpp
     dialogs/ParagraphBulletsNumbers.cpp
     dialogs/ParagraphSettingsDialog.cpp
+    dialogs/ParagraphDropCaps.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
     dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
-    dialogs/NewStyleWidget.cpp
     dialogs/CharacterGeneral.cpp
     dialogs/CharacterHighlighting.cpp
     dialogs/InsertCharacter.cpp
     dialogs/FontDia.cpp
-    dialogs/FontLayoutTab.cpp
     dialogs/FontDecorations.cpp
-    dialogs/FontTab.cpp
     dialogs/LanguageTab.cpp
     dialogs/FormattingPreview.cpp
     dialogs/StyleManagerWelcome.cpp
@@ -73,22 +75,21 @@ SET ( textshape_SRCS
     dialogs/AcceptRejectChangeDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
-    dialogs/ChangeTrackingOptionsWidget.cpp
+    dialogs/BibliographyConfigureDialog.cpp
     dialogs/TableOfContentsConfigure.cpp
     dialogs/TableOfContentsStyleConfigure.cpp
     dialogs/TableOfContentsStyleModel.cpp
     dialogs/TableOfContentsStyleDelegate.cpp
     dialogs/TableOfContentsPreview.cpp
+    dialogs/TableOfContentsEntryDelegate.cpp
+    dialogs/TableOfContentsEntryModel.cpp
+    dialogs/TableOfContentsTemplate.cpp
+    dialogs/BibliographyTemplate.cpp
+    dialogs/BibliographyPreview.cpp
+    dialogs/ListLevelChooser.cpp
 
-    commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
-    commands/ListItemNumberingCommand.cpp
-    commands/TextCommandBase.cpp
-    commands/TextPasteCommand.cpp
-    commands/TextCutCommand.cpp
     commands/ShowChangesCommand.cpp
-    commands/ChangeTrackedDeleteCommand.cpp
-    commands/DeleteCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp
     commands/AutoResizeCommand.cpp
@@ -98,34 +99,34 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/SimpleCharacterWidget.ui
     dialogs/SimpleParagraphWidget.ui
     dialogs/SimpleTableWidget.ui
+    dialogs/SimpleInsertWidget.ui
     dialogs/SimpleTableOfContentsWidget.ui
-    dialogs/SimpleCitationWidget.ui
+    dialogs/SimpleCitationBibliographyWidget.ui
     dialogs/CitationInsertionDialog.ui
     dialogs/InsertBibliographyDialog.ui
     dialogs/SimpleFootEndNotesWidget.ui
+    dialogs/NotesConfigurationDialog.ui
     dialogs/SimpleCaptionsWidget.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui
     dialogs/ParagraphDecorations.ui
     dialogs/ParagraphBulletsNumbers.ui
+    dialogs/ParagraphDropCaps.ui   
     dialogs/StyleManager.ui
-    dialogs/ParagraphGeneral.ui
-    dialogs/NewStyleWidget.ui
     dialogs/CharacterGeneral.ui
     dialogs/CharacterHighlighting.ui
     dialogs/StyleManagerWelcome.ui
     dialogs/TableDialog.ui
+    dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
-    dialogs/TableOfContentsStyleConfigure.ui
+    dialogs/TableOfContentsStyleConfigure.ui 
 
     dialogs/FontDecorations.ui
-    dialogs/FontLayoutTab.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
     dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
-    dialogs/ChangeTrackingOptionsWidget.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

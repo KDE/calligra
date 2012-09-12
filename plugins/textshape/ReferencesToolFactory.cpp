@@ -28,10 +28,10 @@
 ReferencesToolFactory::ReferencesToolFactory()
         : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
-    setToolTip(i18n("References tool"));
-    setToolType(dynamicToolType());
+    setToolTip(i18n("References"));
+    setToolType("calligrawords");
     setIcon("tool-references");
-    setPriority(3);
+    setPriority(20);
     setActivationShapeId(TextShape_SHAPEID);
 }
 

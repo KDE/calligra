@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
- * Copyright (c) 2008 Dag Andersen <danders@get2net.dk>
+ * Copyright (c) 2008, 2012 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,15 +22,16 @@
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptresource.h"
+#include "kptdebug.h"
 
 #include <QPointF>
 #include <QVariant>
 #include <QColor>
 #include <QPen>
 
-#include <kdebug.h>
-
 #include "KDChartGlobal"
+
+
 
 namespace KPlato
 {
@@ -59,7 +60,7 @@ int ChartItemModel::rowCount( const QModelIndex &/*parent */) const
 QModelIndex ChartItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || row < 0 || column < 0 ) {
-        //kDebug()<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
+        //kDebug(planDbg())<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
     if ( parent.isValid() ) {
@@ -137,14 +138,14 @@ QVariant ChartItemModel::data( const QModelIndex &index, int role ) const
             case 5: result = acwpEffort( index.row() ); break;
             default: break;
         }
-        //kDebug()<<index<<r<<result;
+        //kDebug(planDbg())<<index<<r<<result;
         return result;
     }  else if ( role == KDChart::DatasetBrushRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }  else if ( role == KDChart::DatasetPenRole ) {
         return headerData( index.column(), Qt::Horizontal, role );
     }
-    //kDebug()<<index<<r<<result;
+    //kDebug(planDbg())<<index<<r<<result;
     return result;
 }
 
@@ -165,6 +166,20 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
         } else {
             return startDate().addDays( section ).toString( i18nc( "Date format used as chart axis labels. Must follow QDate specification.", "MM.dd" ) );
         }
+    } else if ( role == Qt::EditRole ) {
+        if ( orientation == Qt::Horizontal ) {
+            switch ( section ) {
+                case 0: return "BCWS Cost";
+                case 1: return "BCWP Cost";
+                case 2: return "ACWP Cost";
+                case 3: return "BCWS Effort";
+                case 4: return "BCWP Effort";
+                case 5: return "ACWP Effort";
+                default: return QVariant();
+            }
+        } else {
+            return startDate().addDays( section );
+        }
     }  else if ( role == KDChart::DatasetBrushRole ) {
         if ( orientation == Qt::Horizontal ) {
             switch ( section ) {
@@ -176,14 +191,14 @@ QVariant ChartItemModel::headerData( int section, Qt::Orientation orientation, i
                 case 5: result = QBrush( Qt::darkYellow ); break;
                 default: break;
             }
-            //kDebug()<<this<<orientation<<section<<"DatasetBrushRole"<<result;
+            //kDebug(planDbg())<<this<<orientation<<section<<"DatasetBrushRole"<<result;
             return result;
         }
     }  else if ( role == KDChart::DatasetPenRole ) {
         QPen p;
         p.setBrush( headerData( section, orientation, KDChart::DatasetBrushRole ).value<QBrush>() );
         result = p;
-        //kDebug()<<section<<"DatasetPenRole"<<result;
+        //kDebug(planDbg())<<section<<"DatasetPenRole"<<result;
         return result;
     }
     return ItemModelBase::headerData(section, orientation, role);
@@ -220,7 +235,7 @@ void ChartItemModel::setScheduleManager( ScheduleManager *sm )
 
 void ChartItemModel::setNodes( const QList<Node*> &nodes )
 {
-    kDebug()<<nodes;
+    kDebug(planDbg())<<nodes;
     m_nodes = nodes;
     calculate();
     reset();
@@ -296,7 +311,7 @@ QDate ChartItemModel::endDate() const
 
 void ChartItemModel::calculate()
 {
-    //kDebug()<<m_project<<m_manager<<m_nodes;
+    //kDebug(planDbg())<<m_project<<m_manager<<m_nodes;
     m_bcws.clear();
     m_acwp.clear();
     if ( m_manager ) {
@@ -316,8 +331,8 @@ void ChartItemModel::calculate()
             }
         }
     }
-    //kDebug()<<"bcwp"<<m_bcws;
-    //kDebug()<<"acwp"<<m_acwp;
+    //kDebug(planDbg())<<"bcwp"<<m_bcws;
+    //kDebug(planDbg())<<"acwp"<<m_acwp;
 }
 
 

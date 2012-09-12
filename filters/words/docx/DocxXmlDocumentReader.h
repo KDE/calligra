@@ -103,8 +103,14 @@ protected:
     KoFilter::ConversionStatus read_endnotePr();
     KoFilter::ConversionStatus read_lnNumType();
     KoFilter::ConversionStatus read_numFmt();
+    KoFilter::ConversionStatus read_numRestart();
+    KoFilter::ConversionStatus read_numStart();
+    KoFilter::ConversionStatus read_pos();
     KoFilter::ConversionStatus read_suppressLineNumbers();
     KoFilter::ConversionStatus read_hyperlink();
+    KoFilter::ConversionStatus read_del();
+    KoFilter::ConversionStatus read_ins();
+    KoFilter::ConversionStatus read_delText();
     KoFilter::ConversionStatus read_drawing();
     KoFilter::ConversionStatus read_ptab();
     KoFilter::ConversionStatus read_tabs();
@@ -131,6 +137,7 @@ protected:
     KoFilter::ConversionStatus read_rFonts();
     KoFilter::ConversionStatus read_pStyle();
     KoFilter::ConversionStatus read_rStyle();
+    KoFilter::ConversionStatus read_tblpPr();
     KoFilter::ConversionStatus read_tblStyle();
     KoFilter::ConversionStatus read_tblBorders();
     KoFilter::ConversionStatus read_tblCellMar();
@@ -154,6 +161,7 @@ protected:
     KoFilter::ConversionStatus read_bdr();
     KoFilter::ConversionStatus read_tbl();
     KoFilter::ConversionStatus read_tblPr();
+    KoFilter::ConversionStatus read_tblPrEx();
     KoFilter::ConversionStatus read_tblGrid();
     KoFilter::ConversionStatus read_gridCol();
     KoFilter::ConversionStatus read_tr();
@@ -186,12 +194,9 @@ protected:
         align_positionV
     };
     KoFilter::ConversionStatus read_align(alignCaller caller);
-
     KoFilter::ConversionStatus read_pict();
-
     KoFilter::ConversionStatus read_sdt();
     KoFilter::ConversionStatus read_sdtContent();
-
     KoFilter::ConversionStatus read_inline();
     KoFilter::ConversionStatus read_extent();
     KoFilter::ConversionStatus read_docPr();
@@ -199,9 +204,13 @@ protected:
     KoFilter::ConversionStatus read_positionH();
     KoFilter::ConversionStatus read_positionV();
     KoFilter::ConversionStatus read_posOffset(posOffsetCaller caller);
+    KoFilter::ConversionStatus read_wrapPolygon();
     KoFilter::ConversionStatus read_wrapSquare();
     KoFilter::ConversionStatus read_wrapTight();
     KoFilter::ConversionStatus read_wrapThrough();
+
+    //! Read wrapping related attributes.
+    void readWrapAttrs();
 
     bool m_createSectionStyle;
     QString m_currentSectionStyleName;
@@ -247,14 +256,26 @@ protected:
     QMap<BorderSide, qreal> m_textBorderPaddings;
 
     KoTable* m_table;
-    QString m_currentTableStyle;
+    QString m_currentTableStyleName;
     KoTblStyle::Ptr m_tableMainStyle;
 
     MSOOXML::LocalTableStyles* m_currentLocalTableStyles;
 
-    MSOOXML::TableStyleProperties* m_currentStyleProperties;
+    MSOOXML::TableStyleProperties* m_currentTableStyleProperties;
     MSOOXML::TableStyleProperties* m_currentDefaultCellStyle;
-    QString m_currentTableStyleBase;
+
+    //! Name of the KoGenStyle style of type GraphicAutoStyle prepared for the
+    //! parent <draw:frame> element containing the <table:table> element
+    //! of a floating table.
+    QString m_currentDrawStyleName;
+
+    //! The complete XML snippet representing a floating table, which MUST be
+    //! inserted into the following paragraph.
+    QString m_floatingTable;
+
+    //! The complete XML snippet representing a bookmark-start or
+    //! bookmark-end, which MUST be inserted into the following paragraph.
+    QString m_bookmarkSnippet;
 
     QList<MSOOXML::Utils::ParagraphBulletProperties> m_currentBulletList;
 
@@ -338,19 +359,49 @@ private:
     MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
 
     bool m_wasCaption; // bookkeeping to ensure next para is suppressed if a caption is encountered
-
     bool m_closeHyperlink; // should read_r close hyperlink
     bool m_listFound; // was there numPr element in ppr
-    QString m_currentListStyleName;
-    //! The list identifier of the previous list, used to restart numbering if the current ID is different
-    QString m_previousNumIdUsed;
+    bool m_insideParagraph;
 
-    //! Map of list styles encountered so far, we can used the same list style if we have used it before
-    // instead of creating a new one.
+    QString m_currentNumId;
+
+    //! Map of list styles encountered so far, reuse already created list style.
     QMap<QString, QString> m_usedListStyles;
+
+    //TODO: Merge with m_continueListNumbering defined in MsooXmlCommenReaderDrawingMLMethods.h
+    QMap<QString, QPair<int, bool> > m_continueListNum;
+
+    //! Map of numId.level keys and list-item num./last xml:id pairs.
+    QMap<QString, QPair<int, QString> > m_numIdXmlId;
 
     QMap<QString, QString> m_headers;
     QMap<QString, QString> m_footers;
+
+    //processing the ins/del element (Inserted/Deleted Run Content)
+    enum ChangeTrackingState { InsertedRunContent, DeletedRunContent };
+    QStack<ChangeTrackingState> m_changeTrackingState;
+
+    // ************************************************
+    //  State
+    // ************************************************
+    struct DocumentReaderState {
+        explicit DocumentReaderState(const QMap<QString, QString> &usedListStyles,
+                                     const QMap <QString, QPair<int, bool> > &continueListNum,
+                                     const QMap <QString, QPair<int, QString> > &numIdXmlId)
+        : usedListStyles(usedListStyles),
+          continueListNum(continueListNum),
+          numIdXmlId(numIdXmlId) {}
+
+        DocumentReaderState() {}
+
+        QMap<QString, QString> usedListStyles;
+        QMap<QString, QPair<int, bool> > continueListNum;
+        QMap<QString, QPair<int, QString> > numIdXmlId;
+    };
+
+    void saveState();
+    void restoreState();
+    QStack<DocumentReaderState> m_statesBkp;
 
 #include <MsooXmlCommonReaderMethods.h>
 #include <MsooXmlCommonReaderDrawingMLMethods.h>
@@ -376,15 +427,23 @@ public:
 
     MSOOXML::DrawingMLTheme* themes;
 
-    // Contains footnotes when read, the styles of footnotes are already put to correct files.
+    // Contains footnotes when read
     QMap<QString, QString> m_footnotes;
 
-    QMap<QString, QString> m_comments;
-
     QMap<QString, QString> m_endnotes;
+    QMap<QString, QString> m_comments;
     QMap<QString, MSOOXML::DrawingTableStyle*> m_tableStyles;
-
     QMap<QString, QList<MSOOXML::Utils::ParagraphBulletProperties> > m_bulletStyles;
+
+    // The map contains names of default styles applied to objects that do not
+    // explicitly declare a style.  The object type (family) is the key.
+    QMap<QString, QString> m_namedDefaultStyles;
+
+    // The map contains abstractNumId of the abstract numbering definition that
+    // is inherited by a numbering definition instance identified by numId (key).
+    QMap<QString, QString> m_abstractNumIDs;
+
+    QString m_defaultFontSizePt;
 
 private:
 };

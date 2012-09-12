@@ -21,7 +21,7 @@
 #define KEXITEXTFORMATTER_H
 
 #include <kexi_export.h>
-#include <kexidb/field.h>
+#include <db/field.h>
 
 //! @short Text formatter used to format QVariant values to text for displaying and back to QVariant
 /*! Used by KexiInputTableEdit, KexiDateTableEdit, KexiTimeTableEdit, KexiDateTimeTableEdit,
@@ -35,16 +35,16 @@ public:
     //! Assigns \a field to the formatter. This affects its behaviour.
     void setField(KexiDB::Field* field);
 
-    /*! \return text for \a value.
+    /*! \return string converted from \a value.
      A field schema set using setField() is used to perform the formatting.
      \a add is a text that should be added to the value if possible.
      Used in KexiInputTableEdit::setValueInternal(), by form widgets and for reporting/printing. */
-    QString valueToText(const QVariant& value, const QString& add) const;
+    QString toString(const QVariant& value, const QString& add) const;
 
-    /*! \return value cnverted from \a text
+    /*! \return variant value converted from \a text
      A field schema set using setField() is used to perform the formatting.
      Used in KexiInputTableEdit::setValueInternal(), by form widgets and for reporting/printing. */
-    QVariant textToValue(const QString& text) const;
+    QVariant fromString(const QString& text) const;
 
     /*! \return true if value formatted as \a text is empty.
      A field schema set using setField() is used to perform the calculation. */

@@ -1,4 +1,6 @@
-#include <malloc.h>
+#ifdef _WIN32
+# include <malloc.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>

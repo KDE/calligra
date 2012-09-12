@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -210,4 +210,10 @@ void KoTextBlockData::setPaintStrategy(KoTextBlockPaintStrategyBase *paintStrate
 KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
 {
     return d->paintStrategy;
+}
+
+bool KoTextBlockData::saveXmlID() const
+{
+    // as suggested by boemann, http://lists.kde.org/?l=calligra-devel&m=132396354701553&w=2
+    return d->paintStrategy != 0;
 }

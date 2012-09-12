@@ -74,40 +74,40 @@ namespace
         }
         // (0x0065)
         else if ( nFib == 101 ) {
-            wvlog << "Word 6 document found" << endl;
+            wvlog << "Word-6 document found" << endl;
             return new Parser95( storage, wordDocument );
         }
         // (0x0067, 0x0068)
         else if ( nFib == 103 || nFib == 104 ) {
-            wvlog << "Word 7 (aka Word 95) document found" << endl;
+            wvlog << "Word-7 (aka Word 95) document found" << endl;
             return new Parser95( storage, wordDocument );
         }
         // (0x00c1)
         else if ( (nFib == Word8nFib) || (nFib == 0x00c0) || (nFib == 0x00c2) )
         {
-            wvlog << "Word 8 (aka Word 97) document found" << endl;
+            wvlog << "Word-8 (aka Word 97) document found" << endl;
             return new Parser97( storage, wordDocument );
         }
         else {
             // (0x00d9)
             if ( nFib == 217 ) {
-                wvlog << "Looks like document was created with Word 9/Office 2000"
-                    << ", trying with the Word 8 parser." << endl;
+                wvlog << "Looks like a document created by Word-9/Office 2000,"
+                      << "trying with the Word-8 parser." << endl;
             }
             // (0x0101)
             else if ( nFib == 257 ) {
-                wvlog << "Looks like document was created with Word 10/Office XP"
-                    << ", trying with the Word 8 parser." << endl;
+                wvlog << "Looks like a document created by Word-10/Office XP,"
+                      << "trying with the Word-8 parser." << endl;
             }
             // (0x010c)
             else if ( nFib == 268 ) {
-                wvlog << "Looks like document was created with Word 11/Office 2003"
-                    << ", trying with the Word 8 parser." << endl;
+                wvlog << "Looks like a document created by Word-11/Office 2003,"
+                      << "trying with the Word-8 parser." << endl;
             }
-	    // (0x0112), ...
+            // (0x0112), ...
             else {
-                wvlog << "A document newer than Word 8 found"
-                    << ", trying with the Word 8 parser." << endl;
+                wvlog << "A document > Word-8 found,"
+                      << "trying with the Word-8 parser." << endl;
             }
             return new Parser97( storage, wordDocument );
         }
@@ -132,17 +132,5 @@ SharedPtr<Parser> ParserFactory::createParser( const std::string& fileName )
         return 0;
     }
 
-    return setupParser( storage );
-}
-
-SharedPtr<Parser> ParserFactory::createParser( const unsigned char* buffer, size_t buflen )
-{
-    OLEStorage* storage( new OLEStorage( buffer, buflen ) );
-    if ( !storage->open( OLEStorage::ReadOnly ) || !storage->isValid() ) {
-        delete storage;
-        if ( buflen >= 4 )
-            diagnose( buffer );
-        return 0;
-    }
     return setupParser( storage );
 }

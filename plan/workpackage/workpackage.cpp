@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- Copyright (C) 2009 Dag Andersen <danders@get2net.dk>
+ Copyright (C) 2009, 2012 Dag Andersen <danders@get2net.dk>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include "kptcommand.h"
 #include "kptxmlloaderobject.h"
 #include "kptconfigbase.h"
+#include "kptcommonstrings.h"
 
 #include <KoStore.h>
 #include <KoXmlReader.h>
@@ -49,6 +50,8 @@
 #include <KDateTime>
 
 #include <QDomDocument>
+
+#include "debugarea.h"
 
 using namespace KPlato;
 
@@ -99,7 +102,7 @@ void WorkPackage::setSettings( const WorkPackageSettings &settings )
 //TODO find a way to know when changes are undone
 void WorkPackage::projectChanged()
 {
-    kDebug();
+    kDebug(planworkDbg());
     setModified( true );
 }
 
@@ -125,15 +128,15 @@ bool WorkPackage::addChild( Part */*part*/, const Document *doc )
     if ( ! m_childdocs.contains( ch ) ) {
         m_childdocs.append( ch );
         connect( ch, SIGNAL( fileModified( bool ) ), this, SLOT( slotChildModified( bool ) ) );
-        kDebug()<<ch;
     }
     return true;
 }
 
 void WorkPackage::slotChildModified( bool mod )
 {
-    kDebug()<<mod;
+    kDebug(planworkDbg())<<mod;
     emit modified( isModified() );
+    emit saveWorkPackage( this );
 }
 
 void WorkPackage::removeChild( DocumentChild *child )
@@ -174,10 +177,10 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
             continue;
         }
         KoXmlElement e = n.toElement();
-        kDebug()<<e.tagName();
+        kDebug(planworkDbg())<<e.tagName();
         if ( e.tagName() == "project" ) {
             status.setProject( m_project );
-            kDebug()<<"loading new project";
+            kDebug(planworkDbg())<<"loading new project";
             if ( ! ( ok = m_project->load( e, status ) ) ) {
                 status.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 KMessageBox::error( 0, i18n( "Failed to load project: %1" , m_project->name() ) );
@@ -191,7 +194,7 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
                 continue;
             }
             KoXmlElement e = n.toElement();
-            kDebug()<<e.tagName();
+            kDebug(planworkDbg())<<e.tagName();
             if ( e.tagName() == "workpackage" ) {
                 Task *t = static_cast<Task*>( m_project->childNode( 0 ) );
                 t->workPackage().setOwnerName( e.attribute( "owner" ) );
@@ -199,16 +202,16 @@ bool WorkPackage::loadXML( const KoXmlElement &element, XMLLoaderObject &status 
 
                 Resource *r = m_project->findResource( t->workPackage().ownerId() );
                 if ( r == 0 ) {
-                    kDebug()<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
+                    kDebug(planworkDbg())<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
                 }
-                kDebug()<<"is this me?"<<t->workPackage().ownerName();
+                kDebug(planworkDbg())<<"is this me?"<<t->workPackage().ownerName();
                 KoXmlNode ch = e.firstChild();
                 for ( ; ! ch.isNull(); ch = ch.nextSibling() ) {
                     if ( ! ch.isElement() ) {
                         continue;
                     }
                     KoXmlElement el = ch.toElement();
-                    kDebug()<<el.tagName();
+                    kDebug(planworkDbg())<<el.tagName();
                     if ( el.tagName() == "settings" ) {
                         m_settings.loadXML( el );
                     }
@@ -232,11 +235,11 @@ bool WorkPackage::loadKPlatoXML( const KoXmlElement &element, XMLLoaderObject &s
             continue;
         }
         KoXmlElement e = n.toElement();
-        kDebug()<<e.tagName();
+        kDebug(planworkDbg())<<e.tagName();
         if ( e.tagName() == "project" ) {
             status.setProject( m_project );
             KPlatoXmlLoader loader( status, m_project );
-            kDebug()<<"loading new project";
+            kDebug(planworkDbg())<<"loading new project";
             if ( ! ( ok = loader.load( m_project, e, status ) ) ) {
                 status.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
                 KMessageBox::error( 0, i18n( "Failed to load project: %1" , m_project->name() ) );
@@ -250,7 +253,7 @@ bool WorkPackage::loadKPlatoXML( const KoXmlElement &element, XMLLoaderObject &s
                 continue;
             }
             KoXmlElement e = n.toElement();
-            kDebug()<<e.tagName();
+            kDebug(planworkDbg())<<e.tagName();
             if ( e.tagName() == "workpackage" ) {
                 Task *t = static_cast<Task*>( m_project->childNode( 0 ) );
                 t->workPackage().setOwnerName( e.attribute( "owner" ) );
@@ -258,16 +261,16 @@ bool WorkPackage::loadKPlatoXML( const KoXmlElement &element, XMLLoaderObject &s
 
                 Resource *r = m_project->findResource( t->workPackage().ownerId() );
                 if ( r == 0 ) {
-                    kDebug()<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
+                    kDebug(planworkDbg())<<"Cannot find resource id!!"<<t->workPackage().ownerId()<<t->workPackage().ownerName();
                 }
-                kDebug()<<"is this me?"<<t->workPackage().ownerName();
+                kDebug(planworkDbg())<<"is this me?"<<t->workPackage().ownerName();
                 KoXmlNode ch = e.firstChild();
                 for ( ; ! ch.isNull(); ch = ch.nextSibling() ) {
                     if ( ! ch.isElement() ) {
                         continue;
                     }
                     KoXmlElement el = ch.toElement();
-                    kDebug()<<el.tagName();
+                    kDebug(planworkDbg())<<el.tagName();
                     if ( el.tagName() == "settings" ) {
                         m_settings.loadXML( el );
                     }
@@ -300,7 +303,7 @@ bool WorkPackage::saveNativeFormat( Part */*part*/, const QString &path )
         KMessageBox::error( 0, i18n("Cannot save to empty filename") );
         return false;
     }
-    kDebug()<<node()->name()<<path;
+    kDebug(planworkDbg())<<node()->name()<<path;
     KoStore* store = KoStore::createStore(path, KoStore::Write, "application/x-vnd.kde.plan.work", KoStore::Auto );
     if (store->bad()) {
         KMessageBox::error( 0, i18n("Could not create the file for saving") );
@@ -310,7 +313,7 @@ bool WorkPackage::saveNativeFormat( Part */*part*/, const QString &path )
     if (store->open("root")) {
         KoStoreDevice dev(store);
         if ( ! saveToStream(&dev) || ! store->close() ) {
-            kDebug() << "saveToStream failed";
+            kDebug(planworkDbg()) << "saveToStream failed";
             delete store;
             return false;
         }
@@ -336,7 +339,7 @@ bool WorkPackage::saveNativeFormat( Part */*part*/, const QString &path )
 
 bool WorkPackage::completeSaving( KoStore *store )
 {
-    kDebug();
+    kDebug(planworkDbg());
     KoStore *oldstore = KoStore::createStore( filePath(), KoStore::Read, "", KoStore::Zip );
     if ( oldstore->bad() ) {
         KMessageBox::error( 0, i18n( "Failed to open store:\n %1", filePath() ) );
@@ -350,9 +353,17 @@ bool WorkPackage::completeSaving( KoStore *store )
     }
 
     // First get all open documents
-    kDebug()<<m_childdocs.count();
+    kDebug(planworkDbg())<<m_childdocs.count();
     foreach ( DocumentChild *cd, m_childdocs ) {
         if ( ! cd->saveToStore( store ) ) {
+        }
+    }
+    // Then get new files
+    foreach ( const Document *doc,  node()->documents().documents() ) {
+        if ( m_newdocs.contains( doc ) ) {
+            store->addLocalFile( m_newdocs[ doc ].path(), doc->url().fileName() );
+            m_newdocs.remove( doc );
+            // TODO remove temp file ??
         }
     }
     // Then get files from the old store copied to the new store
@@ -397,9 +408,9 @@ void WorkPackage::removeFile()
 
 void WorkPackage::saveToProjects( Part *part )
 {
-    kDebug();
+    kDebug(planworkDbg());
     QString path = fileName( part );
-    kDebug()<<node()->name();
+    kDebug(planworkDbg())<<node()->name();
     if ( saveNativeFormat( part, path ) ) {
         m_fromProjectStore = true;
         m_filePath = path;
@@ -434,6 +445,16 @@ Task *WorkPackage::task() const
     return task;
 }
 
+bool WorkPackage::removeDocument( Part *part, Document *doc )
+{
+    Node *n = node();
+    if ( n == 0 ) {
+        return false;
+    }
+    part->addCommand( new DocumentRemoveCmd( n->documents(), doc, UndoText::removeDocument() ) );
+    return true;
+}
+
 bool WorkPackage::copyFile( KoStore *from, KoStore *to, const QString &filename )
 {
     QByteArray data;
@@ -445,13 +466,13 @@ bool WorkPackage::copyFile( KoStore *from, KoStore *to, const QString &filename 
         KMessageBox::error( 0, i18n( "Failed write file:\n %1", filename ) );
         return false;
     }
-    kDebug()<<"Copied file:"<<filename;
+    kDebug(planworkDbg())<<"Copied file:"<<filename;
     return true;
 }
 
 QDomDocument WorkPackage::saveXML()
 {
-    kDebug();
+    kDebug(planworkDbg());
     QDomDocument document( "plan-workpackage" );
 
     document.appendChild( document.createProcessingInstruction(
@@ -479,23 +500,23 @@ QDomDocument WorkPackage::saveXML()
     return document;
 }
 
-void WorkPackage::merge( Part *part, const WorkPackage *wp )
+void WorkPackage::merge( Part *part, const WorkPackage *wp, KoStore *store )
 {
-    kDebug();
+    kDebug(planworkDbg());
     const Node *from = wp->node();
     Node *to = node();
 
-    MacroCommand *m = new MacroCommand( "Merge data" );
+    MacroCommand *m = new MacroCommand( i18nc( "(qtundo-format)", "Merge data" ) );
     if ( to->name() != from->name() ) {
         m->addCommand( new NodeModifyNameCmd( *to, from->name() ) );
     }
     if ( to->description() != from->description() ) {
         m->addCommand( new NodeModifyDescriptionCmd( *to, from->description() ) );
     }
-    if ( to->startTime() != from->startTime() ) {
+    if ( to->startTime() != from->startTime() && from->startTime().isValid() ) {
         m->addCommand( new NodeModifyStartTimeCmd( *to, from->startTime() ) );
     }
-    if ( to->endTime() != from->endTime() ) {
+    if ( to->endTime() != from->endTime() && from->endTime().isValid() ) {
         m->addCommand( new NodeModifyEndTimeCmd( *to, from->endTime() ) );
     }
     if ( to->leader() != from->leader() ) {
@@ -503,15 +524,45 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp )
     }
 
     if ( from->type() == Node::Type_Task && from->type() == Node::Type_Task ) {
-        if ( static_cast<Task*>( to )->completion().entrymode() != static_cast<const Task*>( from )->completion().entrymode() ) {
-            m->addCommand( new ModifyCompletionEntrymodeCmd( static_cast<Task*>( to )->completion(), static_cast<const Task*>( from )->completion().entrymode() ) );
-        }
         if ( static_cast<Task*>( to )->workPackage().ownerId() != static_cast<const Task*>( from )->workPackage().ownerId() ) {
-            kDebug()<<"merge:"<<"different owners"<<static_cast<const Task*>( from )->workPackage().ownerName()<<static_cast<Task*>( to )->workPackage().ownerName();
+            kDebug(planworkDbg())<<"merge:"<<"different owners"<<static_cast<const Task*>( from )->workPackage().ownerName()<<static_cast<Task*>( to )->workPackage().ownerName();
             if ( static_cast<Task*>( to )->workPackage().ownerId().isEmpty() ) {
                 //TODO cmd
                 static_cast<Task*>( to )->workPackage().setOwnerId( static_cast<const Task*>( from )->workPackage().ownerId() );
                 static_cast<Task*>( to )->workPackage().setOwnerName( static_cast<const Task*>( from )->workPackage().ownerName() );
+            }
+        }
+        foreach ( Document *doc,  from->documents().documents() ) {
+            Document *org = to->documents().findDocument( doc->url() );
+            if ( org ) {
+                // TODO: also handle modified type, sendas
+                // update ? what if open, modified ...
+                if ( doc->type() == Document::Type_Product ) {
+                    //### FIXME. user feedback
+                    kWarning()<<"We do not update existing deliverables (except name change)";
+                    if ( doc->name() != org->name() ) {
+                        m->addCommand( new DocumentModifyNameCmd( org, doc->name() ) );
+                    }
+                } else {
+                    if ( doc->name() != org->name() ) {
+                        m->addCommand( new DocumentModifyNameCmd( org, doc->name() ) );
+                    }
+                    if ( doc->sendAs() != org->sendAs() ) {
+                        m->addCommand( new DocumentModifySendAsCmd( org, doc->sendAs() ) );
+                    }
+                    if ( doc->sendAs() == Document::SendAs_Copy ) {
+                        kDebug(planworkDbg())<<"Update existing doc:"<<org->url();
+                        openNewDocument( org, store );
+                    }
+                }
+            } else {
+                kDebug(planworkDbg())<<"new document:"<<doc->typeToString(doc->type())<<doc->url();
+                Document *newdoc = new Document( *doc );
+                m->addCommand( new DocumentAddCmd( to->documents(), newdoc ) );
+                if ( doc->sendAs() == Document::SendAs_Copy ) {
+                    kDebug(planworkDbg())<<"Copy file";
+                    openNewDocument( newdoc, store );
+                }
             }
         }
     }
@@ -519,11 +570,27 @@ void WorkPackage::merge( Part *part, const WorkPackage *wp )
         delete m;
     } else {
         part->addCommand( m );
+        setModified( true ); // FIXME needs to follow redo/undo
     }
+}
+
+void WorkPackage::openNewDocument( const Document *doc, KoStore *store )
+{
+    KUrl url = extractFile( doc, store );
+    if ( url.url().isEmpty() ) {
+        KMessageBox::error( 0, i18n( "Could not extract document from storage:<br>%1", doc->url().pathOrUrl() ) );
+        return;
+    }
+    if ( ! url.isValid() ) {
+        KMessageBox::error( 0, i18n( "Invalid URL:<br>%1", url.pathOrUrl() ) );
+        return;
+    }
+    m_newdocs.insert( doc, url );
 }
 
 int WorkPackage::queryClose( Part *part )
 {
+    kDebug(planworkDbg())<<isModified();
     QString name = node()->name();
     QStringList lst;
     if ( ! m_childdocs.isEmpty() ) {
@@ -544,11 +611,11 @@ int WorkPackage::queryClose( Part *part )
 
         switch (result) {
             case KMessageBox::Continue: {
-                kDebug()<<"Continue";
+                kDebug(planworkDbg())<<"Continue";
                 break;
             }
             default: // case KMessageBox::Cancel :
-                kDebug()<<"Cancel";
+                kDebug(planworkDbg())<<"Cancel";
                 return KMessageBox::Cancel;
                 break;
         }
@@ -564,15 +631,15 @@ int WorkPackage::queryClose( Part *part )
 
     switch (res) {
         case KMessageBox::Yes: {
-            kDebug()<<"Yes";
+            kDebug(planworkDbg())<<"Yes";
             saveToProjects( part );
             break;
         }
         case KMessageBox::No:
-            kDebug()<<"No";
+            kDebug(planworkDbg())<<"No";
             break;
         default: // case KMessageBox::Cancel :
-            kDebug()<<"Cancel";
+            kDebug(planworkDbg())<<"Cancel";
             break;
     }
     return res;
@@ -587,16 +654,21 @@ KUrl WorkPackage::extractFile( const Document *doc )
         delete store;
         return KUrl();
     }
+    KUrl url = extractFile( doc, store );
+    delete store;
+    return url;
+}
+
+KUrl WorkPackage::extractFile( const Document *doc, KoStore *store )
+{
     //FIXME: should use a special tmp dir
     QString tmp = KStandardDirs::locateLocal( "tmp", QString(), false );
     KUrl url( tmp + doc->url().fileName() );
-    kDebug()<<"Extract: "<<doc->url().fileName()<<" -> "<<url.pathOrUrl();
+    kDebug(planworkDbg())<<"Extract: "<<doc->url().fileName()<<" -> "<<url.pathOrUrl();
     if ( ! store->extractFile( doc->url().fileName(), url.path() ) ) {
-        delete store;
         KMessageBox::error( 0, i18n( "<p>Work package <b>'%1'</b></p><p>Could not extract file:</p><p>%2</p>", node()->name(), doc->url().fileName() ) );
         return KUrl();
     }
-    delete store;
     return url;
 }
 

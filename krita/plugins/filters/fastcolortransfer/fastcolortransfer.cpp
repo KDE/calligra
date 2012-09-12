@@ -32,7 +32,6 @@
 
 #include <filter/kis_filter_registry.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <filter/kis_filter_configuration.h>
@@ -168,8 +167,8 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
                 labPixel[3] = data[3];
                 oldCS->fromLabA16(reinterpret_cast<const quint8*>(labPixel), dstIt->rawData(), 1);
                 if (progressUpdater) progressUpdater->setValue(++count);
-                srcLABIt->nextRow();
-            } while(!dstIt->nextPixel());
+                srcLABIt->nextPixel();
+            } while(dstIt->nextPixel());
             dstIt->nextRow();
             srcLABIt->nextRow();
         }

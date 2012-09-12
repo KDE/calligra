@@ -23,8 +23,8 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 
-#include <QtGui/QColor>
-#include <QtGui/QPainter>
+#include <QColor>
+#include <QPainter>
 
 class KoColorBackground::Private
 {
@@ -71,7 +71,7 @@ Qt::BrushStyle KoColorBackground::style() const
     return d->style;
 }
 
-void KoColorBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
+void KoColorBackground::paint(QPainter &painter, const KoViewConverter &/*converter*/, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
 {
     painter.setBrush(QBrush(d->color, d->style));
     painter.drawPath(fillPath);

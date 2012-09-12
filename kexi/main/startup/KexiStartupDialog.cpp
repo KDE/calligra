@@ -20,22 +20,21 @@
 #include "KexiStartupDialog.h"
 #include "KexiStartupDialogTemplatesPage.h"
 #include "kexi.h"
-#include "KexiProjectSelector.h"
-#include "KexiConnSelector.h"
-#include "KexiStartupFileWidget.h"
+#include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiFileWidget.h>
 #include <kexiutils/utils.h>
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <kexi_global.h>
 
-#include <qlayout.h>
-#include <qtabwidget.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qpoint.h>
-#include <qobject.h>
-#include <qapplication.h>
-#include <qtooltip.h>
-#include <q3widgetstack.h>
+#include <QLayout>
+#include <QTabWidget>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPoint>
+#include <QObject>
+#include <QApplication>
+
 #include <QPixmap>
 #include <QLabel>
 #include <QKeyEvent>
@@ -114,7 +113,6 @@ public:
     KPageWidget* templatesWidget;
     QListView *templatesWidget_IconListView;//helper
 
-    Q3WidgetStack *viewBlankTempl;
     KexiStartupDialogTemplatesPage *viewTemplates;
     //TemplatesPage *viewBusinessTempl;
 
@@ -127,8 +125,8 @@ public:
 
     //! used for "open existing"
     KexiDBConnectionSet *connSet;
-    KexiStartupFileWidget *openExistingFileWidget; //! embedded file widget
-    KexiConnSelectorWidget *openExistingConnWidget;
+    KexiFileWidget *openExistingFileWidget; //! embedded file widget
+    KexiConnectionSelectorWidget *openExistingConnWidget;
 // KUrl existingUrlToOpen; //! helper for returning a file name to open
     KexiDB::ConnectionData* selectedExistingConnection; //! helper for returning selected connection
 
@@ -269,7 +267,7 @@ void KexiStartupDialog::done(int r)
         } else if (currentPageWidgetItem == d->pageOpenExisting) {
             // return file or connection:
             if (d->openExistingConnWidget->selectedConnectionType()
-                    == KexiConnSelectorWidget::FileBased) {
+                    == KexiConnectionSelectorWidget::FileBased) {
                 if (!d->openExistingFileWidget->checkSelectedFile())
                     return;
 //kde4    d->existingFileToOpen = d->openExistingFileWidget->selectedFile();
@@ -291,7 +289,7 @@ void KexiStartupDialog::done(int r)
     KConfigGroup group = KGlobal::config()->group("Startup");
     if (d->openExistingConnWidget)
         group.writeEntry("OpenExistingType",
-                         (d->openExistingConnWidget->selectedConnectionType() == KexiConnSelectorWidget::FileBased)
+                         (d->openExistingConnWidget->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased)
                          ? "File" : "Server");
     if (d->chkDoNotShow)
         group.writeEntry("ShowStartupDialog", !d->chkDoNotShow->isChecked());
@@ -426,7 +424,7 @@ void KexiStartupDialog::setupPageTemplates()
                                             i18n("Import Existing Database"));
     d->templPageWidgetItem_ImportExisting->setHeader(
         i18n("Import Existing Database as New Database Project"));
-    d->templPageWidgetItem_ImportExisting->setIcon(KIcon("document-import-database"));
+    d->templPageWidgetItem_ImportExisting->setIcon(KIcon("document_import_database"));
     tmplyr = new QVBoxLayout(templPageWidget);
     tmplyr->setSpacing(KDialog::spacingHint());
     QLabel *lbl_import = new QLabel(
@@ -575,7 +573,7 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
     } else if (pageWidgetItem == d->pageOpenExisting) {
         kDebug() << "d->openExistingFileWidget->highlightedFile(): " << d->openExistingFileWidget->highlightedFile();
         enable =
-            (d->openExistingConnWidget->selectedConnectionType() == KexiConnSelectorWidget::FileBased)
+            (d->openExistingConnWidget->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased)
 //kde4   ? !d->openExistingFileWidget->selectedFile().isEmpty()
             ? !d->openExistingFileWidget->highlightedFile().isEmpty()
             : (bool)d->openExistingConnWidget->selectedConnectionData();
@@ -605,10 +603,10 @@ void KexiStartupDialog::setupPageOpenExisting()
                              recentDirClass);
     kDebug() << recentDirClass;
 
-    d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet,
+    d->openExistingConnWidget = new KexiConnectionSelectorWidget(*d->connSet,
             "kfiledialog:///OpenExistingOrCreateNewProject", KAbstractFileWidget::Opening,
             pageOpenExistingWidget);
-    d->openExistingConnWidget->setObjectName("KexiConnSelectorWidget");
+    d->openExistingConnWidget->setObjectName("KexiConnectionSelectorWidget");
     d->openExistingConnWidget->hideConnectonIcon();
     lyr->addWidget(d->openExistingConnWidget);
     KConfigGroup group = KGlobal::config()->group("Startup");

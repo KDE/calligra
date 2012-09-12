@@ -25,6 +25,7 @@
 #include "sharedptr.h"
 #include "functordata.h"
 #include "wv2_export.h"
+#include "word97_generated.h"
 
 namespace wvWare {
 
@@ -76,10 +77,10 @@ namespace wvWare {
     public:
         virtual ~SubDocumentHandler();
 
-        /**
-	 * Set the progress of WordDocument Stream processing.  All other
-	 * streams (Table, Data) are refered from this one.
-	 */
+    /**
+     * Set the progress of WordDocument Stream processing.  All other
+     * streams (Table, Data) are referred from this one.
+     */
         virtual void setProgress(const int percent);
 
         /**
@@ -215,17 +216,17 @@ namespace wvWare {
 
         virtual ~GraphicsHandler();
 
-        /**
-         * This method gets called when a floating object is found.
-	 * @param globalCP (character position)
-         */
+       /**
+        * This method gets called when a floating object is found.
+        * @param globalCP (character position)
+        */
         virtual void handleFloatingObject(unsigned int globalCP);
 
-	/**
-	 * This method gets called when an inline object is found.  @param data
-         * the picture properties and offset into data stream.
-	 */
-	virtual void handleInlineObject(const PictureData& data);
+       /**
+        * This method gets called when an inline object is found.  @param data
+        * the picture properties and offset into data stream.
+        */
+	virtual QString handleInlineObject(const PictureData& data, const bool isBulletPicture = false);
     };
 
 
@@ -312,18 +313,18 @@ namespace wvWare {
                                 DateM = 29, DateShort = 30, MonthShort = 33,
                                 YearLong = 34, YearShort = 35,
                                 AbbreviatedMonth = 36, MonthLong = 37,
-                                CurrentTimeHMS = 38, DateLong = 39 };
+                                CurrentTimeHMS = 38, DateLong = 39, Symbol = 40};
 
         /**
          * Very special characters (bad, bad name) are the ones which need additional
-         * information from the file (i.e. the plain "put the current date there" isn't sufficent).
+         * information from the file (i.e. the plain "put the current date there" isn't sufficient).
          */
         enum VerySpecialCharacter { Picture = 1, FootnoteAuto = 2, AnnotationRef = 5,
                                     DrawnObject = 8, FieldBegin = 19,
                                     FieldSeparator = 20, FieldEnd = 21, FieldEscapeChar = 92 };
 
         /**
-         * special charachters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
+         * special characters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
          */
         enum UnusedSpecialCharacter {FootnoteSeparator = 3, FootnodeContinuation = 4, HandAnnotationPic = 7,
                                  AbbrevDate = 10, MergeHelper = 41};

@@ -20,6 +20,7 @@
 
 //#include <KLibLoader>
 #include <KServiceTypeTrader>
+#include <KServiceType>
 #include <KDebug>
 #include <KConfig>
 #include <KConfigGroup>
@@ -31,8 +32,8 @@
 #include "kexistaticpart.h"
 #include "kexi_version.h"
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 
 using namespace KexiPart;
 
@@ -78,7 +79,7 @@ bool Manager::lookup()
     foreach(KService::Ptr ptr, tlist) {
         QString partClass = ptr->property("X-Kexi-Class", QVariant::String).toString();
         QString partName = ptr->property("X-Kexi-TypeName", QVariant::String).toString();
-        kDebug() << partName << partClass;
+        //kDebug() << partName << partClass;
         if (   partClass.isEmpty()
             || (!Kexi::tempShowMacros() && partClass == "org.kexi-project.macro")
             || (!Kexi::tempShowScripts() && partClass == "org.kexi-project.script")
@@ -103,7 +104,7 @@ bool Manager::lookup()
             // to avoid duplicates
             if (!info->partClass().isEmpty()) {
                 m_partsByClass.insert(info->partClass(), info);
-                kDebug() << "inserting info to" << info->partClass();
+                //kDebug() << "inserting info to" << info->partClass();
             }
             m_partlist.append(info);
         }

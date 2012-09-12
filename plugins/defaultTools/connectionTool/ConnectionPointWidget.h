@@ -22,7 +22,7 @@
 #define CONNECTIONPOINTWIDGET_H
 
 #include <ui_ConnectionPointWidget.h>
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class ConnectionTool;
 
@@ -32,8 +32,10 @@ class ConnectionPointWidget : public QWidget
 public:
     ConnectionPointWidget(ConnectionTool *tool, QWidget * parent = 0);
 
-private:
+private slots:
+    void toggleEditModeCheckbox(bool checked);
 
+private:
     Ui::ConnectionPointWidget widget;
     QButtonGroup * m_horzGroup;
     QButtonGroup * m_vertGroup;

@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qpixmap.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstringlist.h>
-#include <qtoolbutton.h>
-#include <qdom.h>
+#include <QPixmap>
+#include <QLayout>
+#include <QLabel>
+#include <QStringList>
+#include <QToolButton>
+#include <QDomDocument>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -244,7 +244,7 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
     connect(newItemPath, SIGNAL(clicked()), this, SLOT(newItemByPath()));
 
     QToolButton *newItemName = new QToolButton(frame);
-    newItemName->setIconSet(KIcon("icons"));
+    newItemName->setIconSet(KIcon("list-add"));
     newItemName->setTextLabel(i18n("&Add an Icon"), true);
     vlayout->addWidget(newItemName);
     m_buttons.insert(BNewItemName, newItemName);

@@ -98,10 +98,15 @@ public:
 protected:
     void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
     virtual void mousePressEvent ( QMouseEvent *event );
+    /// Setup drop enabled/disabled dependent on the selected item
+    virtual void startDrag( Qt::DropActions supportedActions );
+    /// If modified by the drop, emit modified
+    void dropEvent( QDropEvent *event );
 
 signals:
     void activated( QTreeWidgetItem* );
     void updateViewInfo( ViewListItem *itm );
+    void modified();
 
 private slots:
     void handleMousePress( QTreeWidgetItem *item );

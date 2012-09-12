@@ -35,7 +35,6 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <KoColorProfile.h>
 #include <kis_group_layer.h>
@@ -142,10 +141,9 @@ namespace
     }
 }
 
-KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
+KisTIFFConverter::KisTIFFConverter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -330,16 +328,14 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
     // Creating the KisImageWSP
     if (! m_image) {
-        m_image = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
+        m_image = new KisImage(m_doc->createUndoStore(), width, height, cs, "built image");
         m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
-        m_image->lock();
         Q_CHECK_PTR(m_image);
     } else {
-        m_image->lock();
         if (m_image->width() < (qint32)width || m_image->height() < (qint32)height) {
             quint32 newwidth = (m_image->width() < (qint32)width) ? width : m_image->width();
             quint32 newheight = (m_image->height() < (qint32)height) ? height : m_image->height();
-            m_image->resize(newwidth, newheight, false);
+            m_image->resizeImage(QRect(0,0,newwidth, newheight));
         }
     }
     KisPaintLayer* layer = new KisPaintLayer(m_image.data(), m_image -> nextLayerName(), quint8_MAX);
@@ -539,8 +535,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
-    layer->setDirty();
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

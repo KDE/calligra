@@ -24,8 +24,8 @@
 #include "kexiproject.h"
 #include <koproperty/Set.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
@@ -300,21 +300,6 @@ tristate KexiView::afterSwitchFrom(Kexi::ViewMode mode)
 
 QSize KexiView::preferredSizeHint(const QSize& otherSize)
 {
-#ifdef __GNUC__
-#warning KexiView::preferredSizeHint()
-#else
-#pragma WARNING( KexiView::preferredSizeHint() )
-#endif
-#if 0 //todo
-    KexiWindow* w = d->window;
-    if (dlg && dlg->mdiParent()) {
-        QRect r = dlg->mdiParent()->mdiAreaContentsRect();
-        return otherSize.boundedTo(QSize(
-                                       r.width() - 10,
-                                       r.height() - dlg->mdiParent()->captionHeight() - dlg->pos().y() - 10
-                                   ));
-    }
-#endif
     return otherSize;
 }
 

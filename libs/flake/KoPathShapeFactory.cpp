@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,9 +19,10 @@
  */
 #include "KoPathShapeFactory.h"
 #include "KoPathShape.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include "KoImageCollection.h"
-#include "KoResourceManager.h"
+#include "KoMarkerCollection.h"
+#include "KoDocumentResourceManager.h"
 #include "KoShapeLoadingContext.h"
 
 #include <klocale.h>
@@ -39,14 +41,14 @@ KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
     setLoadingPriority(0);
 }
 
-KoShape *KoPathShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *KoPathShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     KoPathShape* path = new KoPathShape();
     path->moveTo(QPointF(0, 50));
     path->curveTo(QPointF(0, 120), QPointF(50, 120), QPointF(50, 50));
     path->curveTo(QPointF(50, -20), QPointF(100, -20), QPointF(100, 50));
     path->normalize();
-    path->setBorder(new KoLineBorder(1.0));
+    path->setStroke(new KoShapeStroke(1.0));
     return path;
 }
 
@@ -67,7 +69,7 @@ bool KoPathShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
     return false;
 }
 
-void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager) const
+void KoPathShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     // as we need an image collection for the pattern background
     // we want to make sure that there is always an image collection
@@ -76,5 +78,10 @@ void KoPathShapeFactory::newDocumentResourceManager(KoResourceManager *manager) 
     if (manager->imageCollection() == 0) {
         KoImageCollection *imgCol = new KoImageCollection(manager);
         manager->setImageCollection(imgCol);
+    }
+    // we also need a MarkerCollection so add if it is not there yet
+    if (!manager->hasResource(KoDocumentResourceManager::MarkerCollection)) {
+        KoMarkerCollection *markerCollection = new KoMarkerCollection(manager);
+        manager->setResource(KoDocumentResourceManager::MarkerCollection, qVariantFromValue(markerCollection));
     }
 }

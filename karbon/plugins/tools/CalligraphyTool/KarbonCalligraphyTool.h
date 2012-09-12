@@ -22,7 +22,7 @@
 
 #include <KoToolBase.h>
 #include <KoPathShape.h>
-#include <QtCore/QPointer>
+#include <QPointer>
 
 class KoPathShape;
 class KoShapeGroup;

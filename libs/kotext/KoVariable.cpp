@@ -25,7 +25,6 @@
 #include <QPainter>
 #include <QFontMetricsF>
 #include <QTextDocument>
-#include <QAbstractTextDocumentLayout>
 #include <QTextInlineObject>
 #include <QDebug>
 
@@ -60,15 +59,6 @@ KoVariable::~KoVariable()
 {
 }
 
-class PublicLayout : public QAbstractTextDocumentLayout
-{
-public:
-    void publicDocumentChanged(int position, int charsRemoved, int charsAdded)
-    {
-        documentChanged(position, charsRemoved, charsAdded);
-    }
-};
-
 void KoVariable::setValue(const QString &value)
 {
     Q_D(KoVariable);
@@ -77,9 +67,7 @@ void KoVariable::setValue(const QString &value)
     d->value = value;
     d->modified = true;
     if (d->document) {
-        PublicLayout *lay = (PublicLayout *)d->document->documentLayout();
-        if (lay)
-            lay->publicDocumentChanged(d->lastPositionInDocument, 0, 0);
+        const_cast<QTextDocument *>(d->document)->markContentsDirty(d->lastPositionInDocument, 0);
     }
 }
 

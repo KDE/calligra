@@ -356,6 +356,7 @@ private:
     bool m_mine;
     QList<Appointment*> m_appointments;
     MacroCommand *m_cmd;
+    MacroCommand m_relCmd;
 };
 
 class KPLATOKERNEL_EXPORT TaskAddCmd : public NamedCommand
@@ -720,6 +721,7 @@ public:
 private:
     Estimate *m_estimate;
     double m_oldvalue, m_newvalue;
+    int m_optimistic, m_pessimistic;
     MacroCommand *m_cmd;
 
 };
@@ -910,6 +912,18 @@ private:
     QString m_newvalue;
     QString m_oldvalue;
 };
+class KPLATOKERNEL_EXPORT ModifyResourceAutoAllocateCmd : public NamedCommand
+{
+public:
+    ModifyResourceAutoAllocateCmd( Resource *resource, bool value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    bool m_newvalue;
+    bool m_oldvalue;
+};
 class KPLATOKERNEL_EXPORT ModifyResourceTypeCmd : public NamedCommand
 {
 public:
@@ -1002,14 +1016,14 @@ private:
 class KPLATOKERNEL_EXPORT ModifyRequiredResourcesCmd : public NamedCommand
 {
 public:
-    ModifyRequiredResourcesCmd( Resource *resource, const QList<Resource*> &value, const QString& name = QString() );
+    ModifyRequiredResourcesCmd( Resource *resource, const QStringList &value, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_resource;
-    QList<Resource*> m_newvalue;
-    QList<Resource*> m_oldvalue;
+    QStringList m_newvalue;
+    QStringList m_oldvalue;
 };
 class KPLATOKERNEL_EXPORT ModifyResourceAccountCmd : public NamedCommand
 {
@@ -1026,24 +1040,24 @@ private:
 class KPLATOKERNEL_EXPORT AddResourceTeamCmd : public NamedCommand
 {
 public:
-    AddResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    AddResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_team;
-    Resource *m_member;
+    QString m_member;
 };
 class KPLATOKERNEL_EXPORT RemoveResourceTeamCmd : public NamedCommand
 {
 public:
-    RemoveResourceTeamCmd( Resource *team, Resource *member, const QString& name = QString() );
+    RemoveResourceTeamCmd( Resource *team, const QString &member, const QString& name = QString() );
     void execute();
     void unexecute();
 
 private:
     Resource *m_team;
-    Resource *m_member;
+    QString m_member;
 };
 
 class KPLATOKERNEL_EXPORT RemoveResourceGroupCmd : public NamedCommand
@@ -1251,6 +1265,11 @@ private:
     MacroCommand cmd;
 };
 
+/**
+ * Add used effort for @p resource.
+ * Note that the used effort definition in @p value must contain entries for *all* dates.
+ * If used effort is already defined it will be replaced.
+ */
 class KPLATOKERNEL_EXPORT AddCompletionUsedEffortCmd : public NamedCommand
 {
 public:
@@ -1270,7 +1289,7 @@ private:
 class KPLATOKERNEL_EXPORT AddCompletionActualEffortCmd : public NamedCommand
 {
 public:
-    AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name = QString() );
+    AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, const Completion::UsedEffort::ActualEffort &value, const QString& name = QString() );
     ~AddCompletionActualEffortCmd();
     void execute();
     void unexecute();
@@ -1278,9 +1297,8 @@ public:
 private:
     Completion::UsedEffort &m_usedEffort;
     QDate m_date;
-    Completion::UsedEffort::ActualEffort *oldvalue;
-    Completion::UsedEffort::ActualEffort *newvalue;
-    bool m_newmine, m_oldmine;
+    Completion::UsedEffort::ActualEffort oldvalue;
+    Completion::UsedEffort::ActualEffort newvalue;
 };
 
 
@@ -1496,7 +1514,7 @@ protected:
     ScheduleManager *m_parent;
     ScheduleManager *m_sm;
     int m_index;
-    MainSchedule *m_exp, *m_opt, *m_pess;
+    MainSchedule *m_exp;
     bool m_mine;
 };
 
@@ -1563,18 +1581,6 @@ private:
     bool oldvalue, newvalue;
 };
 
-class KPLATOKERNEL_EXPORT ModifyScheduleManagerCalculateAllCmd : public NamedCommand
-{
-public:
-    ModifyScheduleManagerCalculateAllCmd( ScheduleManager &sm, bool value, const QString& name = QString() );
-    void execute();
-    void unexecute();
-
-private:
-    ScheduleManager &m_sm;
-    bool oldvalue, newvalue;
-};
-
 class KPLATOKERNEL_EXPORT CalculateScheduleCmd : public NamedCommand
 {
 public:
@@ -1587,11 +1593,7 @@ private:
     QPointer<ScheduleManager> m_sm;
     bool m_first;
     MainSchedule *m_oldexpected;
-    MainSchedule *m_oldoptimistic;
-    MainSchedule *m_oldpessimistic;
     MainSchedule *m_newexpected;
-    MainSchedule *m_newoptimistic;
-    MainSchedule *m_newpessimistic;
 };
 
 class KPLATOKERNEL_EXPORT BaselineScheduleCmd : public NamedCommand
@@ -1726,6 +1728,18 @@ private:
     KUrl m_oldvalue;
 };
 
+class KPLATOKERNEL_EXPORT DocumentModifyNameCmd : public NamedCommand
+{
+public:
+    DocumentModifyNameCmd( Document *doc, const QString &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    Document *m_doc;
+    QString m_value;
+    QString m_oldvalue;
+};
+
 class KPLATOKERNEL_EXPORT DocumentModifyTypeCmd : public NamedCommand
 {
 public:
@@ -1782,7 +1796,8 @@ public:
     void unexecute();
 
 protected:
-    void addCalendars( Calendar *calendar, Calendar *parent, QMap<Calendar*, Calendar*> &map );
+    void addAccounts( Account *account, Account *parent, QList<Account*> &unused, QMap<QString, Account*> &all );
+    void addCalendars( Calendar *calendar, Calendar *parent, QList<Calendar*> &unused, QMap<QString, Calendar*> &all );
     void addChildNodes( Node *node );
 
 private:
@@ -1928,7 +1943,7 @@ private:
 class  KPLATOKERNEL_EXPORT ClearAllExternalAppointmentsCmd : public NamedCommand
 {
 public:
-    ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
+    explicit ClearAllExternalAppointmentsCmd( Project *project, const QString& name = QString() );
     void execute();
     void unexecute();
 

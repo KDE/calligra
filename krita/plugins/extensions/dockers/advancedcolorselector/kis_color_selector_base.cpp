@@ -56,7 +56,18 @@ public:
     void updatePosition()
     {
         QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
-        setGeometry(parentPos.x() - 100, parentPos.y(), 100, 100);
+        QRect availRect = QApplication::desktop()->availableGeometry(this);
+        QPoint targetPos;
+        if ( parentPos.x() - 100 > availRect.x() ) {
+            targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
+        } else if ( parentPos.x() + m_parent->width() + 100 < availRect.right()) {
+            targetPos = m_parent->mapToGlobal(QPoint(m_parent->width(), 0));
+        } else if ( parentPos.y() - 100 > availRect.y() ) {
+            targetPos =  QPoint(parentPos.x(), parentPos.y() - 100);
+        } else {
+            targetPos =  QPoint(parentPos.x(), parentPos.y() + m_parent->height());
+        }
+        setGeometry(targetPos.x(), targetPos.y(), 100, 100);
     }
 
     void setColor(const QColor& color)
@@ -72,7 +83,7 @@ protected:
         p.fillRect(0,0, width(), width(), m_color);
     }
 
-    // these are hacks, as it seems, that at a time only one widget can be a Qt::Popup and therefore grab the mouse globaly
+    // these are hacks, as it seems, that at a time only one widget can be a Qt::Popup and therefore grab the mouse globally
     void mouseReleaseEvent(QMouseEvent *e) {
         QMouseEvent* newEvent = new QMouseEvent(e->type(),
                                              m_parent->mapFromGlobal(e->globalPos()),
@@ -159,8 +170,10 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
         m_canvas->disconnectCanvasObserver(this);
     }
     m_canvas = canvas;
-    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+    if (m_canvas) {
+        connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
+    }
 
     update();
 }
@@ -210,6 +223,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 
 void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
     Q_UNUSED(e);
+    hidePopup();
 }
 
 void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
@@ -444,7 +458,7 @@ void KisColorSelectorBase::updateColorPreview(const QColor& color)
 
 void KisColorSelectorBase::resourceChanged(int key, const QVariant &v)
 {
-    if (key == KoCanvasResource::ForegroundColor || key == KoCanvasResource::BackgroundColor) {
+    if (key == KoCanvasResourceManager::ForegroundColor || key == KoCanvasResourceManager::BackgroundColor) {
         QColor c = findGeneratingColor(v.value<KoColor>());
         updateColorPreview(c);
         if(m_colorUpdateAllowed==false)

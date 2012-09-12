@@ -29,7 +29,7 @@
 #include <QDropEvent>
 #include <k3listview.h>
 
-#include <widget/kexifieldlistview.h>
+#include <widget/fields/KexiFieldListView.h>
 
 class KexiRelationsScrollArea;
 class KexiRelationViewTable;

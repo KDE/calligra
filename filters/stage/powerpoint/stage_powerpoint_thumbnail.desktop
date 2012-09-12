@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Powerpoint Presentations
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.ms-powerpoint;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

@@ -34,7 +34,7 @@ StateShapeFactory::StateShapeFactory()
     setXmlElementNames("http://kde.org/braindump", QStringList("state"));
 }
 
-KoShape *StateShapeFactory::createDefaultShape(KoResourceManager */*documentResources*/) const
+KoShape *StateShapeFactory::createDefaultShape(KoDocumentResourceManager */*documentResources*/) const
 {
     StateShape* fooShape = new StateShape();
     fooShape->setShapeId(STATESHAPEID);
@@ -42,7 +42,7 @@ KoShape *StateShapeFactory::createDefaultShape(KoResourceManager */*documentReso
     return fooShape;
 }
 
-KoShape *StateShapeFactory::createShape(const KoProperties *params, KoResourceManager */*documentResources*/) const
+KoShape *StateShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager */*documentResources*/) const
 {
     Q_UNUSED(params);
     StateShape* fooShape = new StateShape();

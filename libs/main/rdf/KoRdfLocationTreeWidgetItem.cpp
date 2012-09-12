@@ -25,14 +25,31 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent, KoRdfLocation *semObj)
+// Don't use this until we become a plugin.
+#ifdef CAN_USE_MARBLE
+#undef CAN_USE_MARBLE
+#endif
+
+KoRdfLocationTreeWidgetItem::KoRdfLocationTreeWidgetItem(QTreeWidgetItem *parent,
+                                                         hKoRdfLocation semObj)
         : KoRdfSemanticTreeWidgetItem(parent, Type)
         , m_semanticObject(semObj)
 {
     setText(ColName, m_semanticObject->name());
 }
 
-KoRdfSemanticItem* KoRdfLocationTreeWidgetItem::semanticItem() const
+KoRdfLocationTreeWidgetItem::~KoRdfLocationTreeWidgetItem()
+{
+    kDebug(30015) << "DTOR()";
+    if( m_semanticObject )
+        kDebug(30015) << "semobj:" << m_semanticObject->name();
+    else
+        kDebug(30015) << "NO SEMOBJ";
+    kDebug(30015) << "DTOR(END)";
+}
+
+
+hKoRdfSemanticItem KoRdfLocationTreeWidgetItem::semanticItem() const
 {
     return m_semanticObject;
 }
@@ -68,7 +85,7 @@ QList<KAction *> KoRdfLocationTreeWidgetItem::actions(QWidget *parent, KoCanvasB
     return m_actions;
 }
 
-KoRdfLocation *KoRdfLocationTreeWidgetItem::semanticObject() const
+hKoRdfLocation KoRdfLocationTreeWidgetItem::semanticObject() const
 {
     return m_semanticObject;
 }

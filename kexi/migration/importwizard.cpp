@@ -23,10 +23,10 @@
 #include "keximigrate.h"
 #include "importoptionsdlg.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <QLabel>
+#include <QLayout>
+#include <QRadioButton>
+#include <QCheckBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QButtonGroup>
@@ -39,21 +39,21 @@
 #include <klineedit.h>
 #include <kiconloader.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/utils.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connectiondata.h>
+#include <db/utils.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
-#include <KexiConnSelector.h>
-#include <KexiProjectSelector.h>
-#include <KexiDBTitlePage.h>
 #include <kexiutils/utils.h>
 #include <kexidbdrivercombobox.h>
 #include <kexitextmsghandler.h>
 #include <widget/kexicharencodingcombobox.h>
 #include <widget/kexiprjtypeselector.h>
-#include <main/startup/KexiStartupFileWidget.h>
+#include <widget/KexiFileWidget.h>
+#include <widget/KexiConnectionSelectorWidget.h>
+#include <widget/KexiProjectSelectorWidget.h>
+#include <widget/KexiDBTitlePage.h>
 
 
 using namespace KexiMigration;
@@ -66,7 +66,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 {
     setModal(true);
     setWindowTitle(i18n("Import Database"));
-    setWindowIcon(KIcon("document-import-database"));
+    setWindowIcon(KIcon("document_import_database"));
     m_prjSet = 0;
     m_fileBasedDstWasPresented = false;
     m_setupFileBasedSrcNeeded = true;
@@ -202,9 +202,9 @@ void ImportWizard::setupSrcConn()
     QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    m_srcConn = new KexiConnSelectorWidget(Kexi::connset(),
-                                           "kfiledialog:///ProjectMigrationSourceDir",
-                                           KAbstractFileWidget::Opening, m_srcConnPageWidget);
+    m_srcConn = new KexiConnectionSelectorWidget(Kexi::connset(),
+                                                 "kfiledialog:///ProjectMigrationSourceDir",
+                                                 KAbstractFileWidget::Opening, m_srcConnPageWidget);
 
     m_srcConn->hideConnectonIcon();
     m_srcConn->showSimpleConn();
@@ -296,9 +296,9 @@ void ImportWizard::setupDst()
     QVBoxLayout *vbox = new QVBoxLayout(m_dstPageWidget);
     KexiUtils::setStandardMarginsAndSpacing(vbox);
 
-    m_dstConn = new KexiConnSelectorWidget(Kexi::connset(),
-                                           "kfiledialog:///ProjectMigrationDestinationDir",
-                                           KAbstractFileWidget::Saving, m_dstPageWidget);
+    m_dstConn = new KexiConnectionSelectorWidget(Kexi::connset(),
+                                                 "kfiledialog:///ProjectMigrationDestinationDir",
+                                                 KAbstractFileWidget::Saving, m_dstPageWidget);
     m_dstConn->hideHelpers();
 
     vbox->addWidget(m_dstConn);
@@ -308,7 +308,7 @@ void ImportWizard::setupDst()
 // m_dstConn->hideHelpers();
     m_dstConn->showSimpleConn();
     //anyway, db files will be _saved_
-    m_dstConn->fileWidget->setMode(KexiStartupFileWidget::SavingFileBasedDB);
+    m_dstConn->fileWidget->setMode(KexiFileWidget::SavingFileBasedDB);
 // m_dstConn->hideHelpers();
 // m_dstConn->m_file->btn_advanced->hide();
 // m_dstConn->m_file->label->hide();
@@ -453,7 +453,7 @@ void ImportWizard::arriveSrcConnPage()
 // checkIfSrcTypeFileBased(m_srcTypeCombo->currentText());
 // if (fileBasedSrcSelected()) {
 //moved  m_srcConn->showSimpleConn();
-    /*! @todo KexiStartupFileWidget needs "open file" and "open server" modes
+    /*! @todo KexiFileWidget needs "open file" and "open server" modes
     in addition to just "open" */
     if (m_setupFileBasedSrcNeeded) {
         m_setupFileBasedSrcNeeded = false;
@@ -463,7 +463,7 @@ void ImportWizard::arriveSrcConnPage()
         //! @todo tmp: hardcoded!
               additionalMimeTypes << "application/vnd.ms-access";
             }*/
-        m_srcConn->fileWidget->setMode(KexiStartupFileWidget::Opening);
+        m_srcConn->fileWidget->setMode(KexiFileWidget::Opening);
         m_srcConn->fileWidget->setAdditionalFilters(additionalMimeTypes);
 
     }
@@ -525,7 +525,7 @@ void ImportWizard::arriveDstPage()
 // checkIfDstTypeFileBased(m_dstTypeCombo->currentText());
     if (fileBasedDstSelected()) {
         m_dstConn->showSimpleConn();
-        m_dstConn->fileWidget->setMode(KexiStartupFileWidget::SavingFileBasedDB);
+        m_dstConn->fileWidget->setMode(KexiFileWidget::SavingFileBasedDB);
         if (!m_fileBasedDstWasPresented) {
             //without extension - it will be added automatically
             m_dstConn->fileWidget->setLocationText(m_dstNewDBNameLineEdit->text());
@@ -594,8 +594,8 @@ bool ImportWizard::fileBasedSrcSelected() const
     if (m_predefinedConnectionData)
         return false;
 
-// kDebug() << (m_srcConn->selectedConnectionType()==KexiConnSelectorWidget::FileBased);
-    return m_srcConn->selectedConnectionType() == KexiConnSelectorWidget::FileBased;
+// kDebug() << (m_srcConn->selectedConnectionType()==KexiConnectionSelectorWidget::FileBased);
+    return m_srcConn->selectedConnectionType() == KexiConnectionSelectorWidget::FileBased;
 }
 
 bool ImportWizard::fileBasedDstSelected() const
@@ -673,7 +673,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     }
 
     // Set up destination connection data
-    KexiDB::ConnectionData *cdata;
+    KexiDB::ConnectionData *cdata = 0;
     QString dbname;
     if (!result.error()) {
         if (m_dstConn->selectedConnectionData()) {
@@ -722,7 +722,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
     KexiUtils::removeWaitCursor();
 
     // Set up source (migration) data required for connection
-    if (sourceDriver && !result.error()) {
+    if (sourceDriver && !result.error() && cdata) {
         // Setup progress feedback for the GUI
         if (sourceDriver->progressSupported()) {
             m_progressBar->updateGeometry();

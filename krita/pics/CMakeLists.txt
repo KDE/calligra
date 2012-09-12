@@ -1,6 +1,10 @@
-
-
 install(FILES  
+    hi128-app-krita.png
+    hi16-app-krita.png
+    hi22-app-krita.png
+    hi32-app-krita.png
+    hi48-app-krita.png
+    hi64-app-krita.png
     deletelayer.png  	
     lowerlayer.png  	
     newlayer.png  	
@@ -37,6 +41,8 @@ install(FILES
     shear_vertical.png
     offset_horizontal.png
     offset_vertical.png
+    portrait.png
+    landscape.png
     DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2010 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2010, 2012 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -20,6 +20,10 @@
 #include "reportscripts.h"
 
 #include "reportdata.h"
+#include "kptdebug.h"
+
+#include <kglobal.h>
+
 
 namespace KPlato
 {
@@ -58,7 +62,8 @@ QVariant ProjectAccess::BCWS() const
 {
     if ( m_reportdata && m_reportdata->project() ) {
         long id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
-        return m_reportdata->project()->bcws( QDate::currentDate(), id );
+        double r = m_reportdata->project()->bcws( QDate::currentDate(), id );
+        return KGlobal::locale()->formatNumber( r, 2 );
     }
     return QString();
 }
@@ -67,8 +72,10 @@ QVariant ProjectAccess::BCWP() const
 {
     if ( m_reportdata && m_reportdata->project() ) {
         long id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
-        return m_reportdata->project()->bcwp( QDate::currentDate(), id );
+        double r = m_reportdata->project()->bcwp( QDate::currentDate(), id );
+        return KGlobal::locale()->formatNumber( r, 2 );
     }
+    kWarning()<<"No report data or project"<<m_reportdata;
     return QString();
 }
 
@@ -76,7 +83,8 @@ QVariant ProjectAccess::ACWP() const
 {
     if ( m_reportdata && m_reportdata->project() ) {
         long id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
-        return m_reportdata->project()->acwp( QDate::currentDate(), id ).cost();
+        double r = m_reportdata->project()->acwp( QDate::currentDate(), id ).cost();
+        return KGlobal::locale()->formatNumber( r, 2 );
     }
     return QString();
 }
@@ -91,17 +99,18 @@ QVariant ProjectAccess::CPI() const
         if ( a > 0 ) {
             r = b / a;
         }
-        return r;
+        return KGlobal::locale()->formatNumber( r, 2 );
     }
     return QVariant();
 }
 
 QVariant ProjectAccess::SPI() const
 {
-    qDebug()<<"ProjectAccess::SPI:";
+    kDebug(planDbg())<<"ProjectAccess::SPI:";
     if ( m_reportdata && m_reportdata->project() ) {
         int id = m_reportdata->scheduleManager() ? m_reportdata->scheduleManager()->scheduleId() : BASELINESCHEDULE;
-        return m_reportdata->project()->schedulePerformanceIndex( QDate::currentDate(), id );
+        double r = m_reportdata->project()->schedulePerformanceIndex( QDate::currentDate(), id );
+        return KGlobal::locale()->formatNumber( r, 2 );
     }
     return QVariant();
 }

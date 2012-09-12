@@ -18,10 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3scrollview.h>
-#include <qcursor.h>
-#include <qpainter.h>
-#include <qstyle.h>
+#include <QCursor>
+#include <QPainter>
+#include <QStyle>
 
 #include <KLocale>
 #include <KDebug>
@@ -39,10 +38,11 @@
 #include <core/kexi.h>
 #include <core/kexipart.h>
 #include <core/KexiMainWindowIface.h>
-#include <kexidb/utils.h>
-#include <kexidb/connection.h>
+#include <db/utils.h>
+#include <db/connection.h>
 #include <kexiutils/utils.h>
-#include <widget/kexicustompropertyfactory.h>
+#include <kexiutils/KexiCommandLinkButton.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
 #include <widget/utils/kexicontextmenuutils.h>
 #include <kexi_global.h>
 
@@ -59,6 +59,10 @@
 #include "widgets/kexidbcombobox.h"
 #include "widgets/kexipushbutton.h"
 #include "widgets/kexidbform.h"
+#include "widgets/kexidbcommandlinkbutton.h"
+#include "widgets/kexidbslider.h"
+#include "widgets/kexidbprogressbar.h"
+#include "widgets/kexidbdatepicker.h"
 #ifndef KEXI_NO_SUBFORM
 # include "widgets/kexidbsubform.h"
 #endif
@@ -67,7 +71,7 @@
 #include "kexidbfactory.h"
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
-
+#include <QFontMetrics>
 //////////////////////////////////////////
 
 KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
@@ -308,7 +312,67 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
         wi->setInheritedClassName("KPushButton");
         addClass(wi);
     }
+    {
+        KFormDesigner::WidgetInfo* wi = new KFormDesigner::WidgetInfo(this);
+        wi->setClassName("KexiDBCommandLinkButton");
+        wi->setPixmap("button");
+        wi->setName(i18n("Link Button"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "linkButton"));
+        wi->setDescription(i18n("A Link button for executing actions"));
+        addClass(wi);
+    }
+    {
+        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        wi->setPixmap("slider");
+        wi->setClassName("KexiDBSlider");
+        wi->setName(i18n("Slider"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "slider"));
+        wi->setDescription(i18n("A Slider widget"));
+        addClass(wi);
+    }
+    {
+        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        wi->setPixmap("progress");
+        wi->setClassName("KexiDBProgressBar");
+        wi->setName(i18n("Progress Bar"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "progressBar"));
+        wi->setDescription(i18n("A Progress Bar widget"));
+        addClass(wi);
+    }
+    {
+        KexiDataAwareWidgetInfo* wi = new KexiDataAwareWidgetInfo(this);
+        wi->setPixmap("dateedit");
+        wi->setClassName("KexiDBDatePicker");
+        wi->setName(i18n("Date Picker"));
+        wi->setNamePrefix(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "datePicker"));
+        wi->setDescription(i18n("A Date Picker widget"));
+        addClass(wi);
+    }
 
+    m_propDesc["invertedAppearance"] = i18n("Inverted");
+    m_propDesc["minimum"] = i18n("Minimum");
+    m_propDesc["maximum"] = i18n("Maximum");
+    m_propDesc["format"] = i18n("Format");
+    m_propDesc["orientation"] = i18n("Orientation");
+    m_propDesc["textDirection"] = i18n("Text Direction");
+    m_propDesc["textVisible"] = i18n("Text Visible");
+    m_propDesc["value"] = i18n("Value");
+    m_propDesc["date"] = i18n("Date");
+    m_propDesc["arrowVisible"] = i18n("Arrow Visible");
+    m_propDesc["description"] = i18n("Description");
+    m_propDesc["pageStep"] = i18n("Page Step");
+    m_propDesc["singleStep"] = i18n("Single Step");
+    m_propDesc["tickInterval"] = i18n("Tick Interval");
+    m_propDesc["tickPosition"] = i18n("Tick Position");
+    m_propDesc["showEditor"] = i18n("Show Editor");
     m_propDesc["formName"] = i18n("Form Name");
     m_propDesc["onClickAction"] = i18n("On Click");
     m_propDesc["onClickActionOption"] = i18n("On Click Option");
@@ -329,6 +393,13 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QVariantList &)
     m_propValDesc["MultiLineText"] = i18nc("AutoField editor's type", "Multiline Text");
     m_propValDesc["ComboBox"] = i18nc("AutoField editor's type", "Drop-Down List");
     m_propValDesc["Image"] = i18nc("AutoField editor's type", "Image");
+
+    m_propValDesc["NoTicks"] = i18n("No Ticks");
+    m_propValDesc["TicksAbove"] = i18n("Above");
+    m_propValDesc["TicksLeft"] = i18n("Left");
+    m_propValDesc["TicksBelow"] = i18n("Below");
+    m_propValDesc["TicksRight"] = i18n("Right");
+    m_propValDesc["TicksBothSides"] = i18n("Both Sides");
 
 // m_propDesc["labelCaption"] = i18n("Label Text");
     m_propDesc["autoCaption"] = i18n("Auto Label");
@@ -414,6 +485,14 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 #endif
     else if (c == "KexiDBCheckBox")
         w = new KexiDBCheckBox(text, p);
+    else if (c == "KexiDBSlider") {
+        w = new KexiDBSlider(p);
+    } else if (c == "KexiDBProgressBar") {
+        w = new KexiDBProgressBar(p);
+    } else if (c == "KexiDBDatePicker") {
+        w = new KexiDBDatePicker(p);
+    }
+
     else if (c == "KexiDBComboBox")
         w = new KexiDBComboBox(p);
     /* else if(c == "KexiDBTimeEdit")
@@ -428,6 +507,9 @@ KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
 //  w = new KexiDBDoubleSpinBox(p, n);
     else if (c == "KPushButton" || c == "KexiPushButton")
         w = new KexiPushButton(text, p);
+    else if (c == "KexiDBCommandLinkButton" || c == "KexiCommandLinkButton") {
+        w = new KexiDBCommandLinkButton(text, QString(), p);
+    }
 
     if (w)
         w->setObjectName(n);
@@ -517,6 +599,20 @@ KexiDBFactory::startInlineEditing(InlineEditorCreationArguments& args)
         ed->setHorizontalScrollBarPolicy(textedit->horizontalScrollBarPolicy());
         ed->setVerticalScrollBarPolicy(textedit->verticalScrollBarPolicy());
 #endif
+        return true;
+    }
+    // KexiDBCommandLinkButton
+    else if (args.classname == "KexiDBCommandLinkButton" ){
+        KexiDBCommandLinkButton *linkButton=static_cast<KexiDBCommandLinkButton*>(args.widget);
+        QStyleOption option;
+        option.initFrom(linkButton);
+        args.text = linkButton->text();
+        const QRect r(linkButton->style()->subElementRect(
+                        QStyle::SE_PushButtonContents, &option, linkButton));
+
+        QFontMetrics fm(linkButton->font());
+        args.geometry = QRect(linkButton->x() + linkButton->iconSize().width() + 6, linkButton->y() + r.y(), r.width()  - 6, fm.height()+14);
+
         return true;
     }
     else if (args.classname == "KexiDBLabel") {
@@ -633,7 +729,6 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
 {
     //general
     bool ok = true;
-
     if (classname == "KexiPushButton") {
         ok = property != "isDragEnabled"
 #ifdef KEXI_NO_UNFINISHED
@@ -644,7 +739,29 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "stdItem" /*! @todo reenable stdItem */
 #endif
              ;
-    } else if (classname == "KexiDBLineEdit")
+     } else if (classname == "KexiDBCommandLinkButton") {
+        ok = property != "isDragEnabled"
+             && property != "default"
+             && property != "checkable"
+             && property != "autoDefault"
+             && property != "autoRepeat"
+             && property != "autoRepeatDelay"
+             && property != "autoRepeatInterval"
+#ifdef KEXI_NO_UNFINISHED
+             && property != "onClickAction" /*! @todo reenable */
+             && property != "onClickActionOption" /*! @todo reenable */
+             && property != "iconSet" /*! @todo reenable */
+             && property != "iconSize" /*! @todo reenable */
+             && property != "stdItem" /*! @todo reenable stdItem */
+#endif
+             ;
+     } else if (classname == "KexiDBSlider") {
+        ok = property != "sliderPosition"
+             && property != "tracking";
+     } else if (classname == "KexiDBProgressBar") {
+        ok = property != "focusPolicy"
+             && property != "value";
+     } else if (classname == "KexiDBLineEdit")
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
              && property != "echoMode"
@@ -705,6 +822,11 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
             return false;
         ok = property != "autoRepeat";
     }
+    else if (classname == "KexiDBDatePicker") {
+        ok = property != "closeButton"
+             && property != "fontSize";
+    }
+
 
     return ok && KexiDBFactoryBase::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }
@@ -734,7 +856,12 @@ bool KexiDBFactory::changeInlineText(KFormDesigner::Form *form, QWidget *widget,
         oldText = widget->property("caption").toString();
         changeProperty(form, widget, "caption", text);
         return true;
+    } else if (n == "KexiDBCommandLinkButton") {
+        oldText = widget->property("text").toString();
+        changeProperty(form, widget, "text", text);
+        return true;
     }
+
 //! @todo check field's geometry
     return false;
 }

@@ -21,14 +21,24 @@
 
 #include <QString>
 #include <QPointF>
+#include <QRect>
+#include <QFile>
+#include <QObject>
+#include <QMessageBox>
+#include <QFileDialog>
 
+#include <kis_doc2.h>
 #include <krita_export.h>
 #include <kis_shared.h>
+#include <kio/job.h>
+#include <kfiledialog.h>
+#include <KoStore.h>
 
 class QPainter;
 class QRect;
 class QRectF;
 class KisCoordinatesConverter;
+class KisDoc2;
 
 #include <kis_shared_ptr.h>
 #include <KoGenericRegistry.h>
@@ -52,6 +62,7 @@ public:
     ~KisPaintingAssistantHandle();
     void mergeWith(KisPaintingAssistantHandleSP);
     QList<KisPaintingAssistantHandleSP> split();
+    void uncache();
     KisPaintingAssistantHandle& operator=(const QPointF&);
 private:
     void registerAssistant(KisPaintingAssistant*);
@@ -80,20 +91,28 @@ public:
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
     virtual void endStroke() { }
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter) = 0;
     virtual QPointF buttonPosition() const = 0;
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true);
+    void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
+    QByteArray saveXml( QMap<KisPaintingAssistantHandleSP, int> &handleMap);
+    void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
+    void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
+
 public:
     /**
      * This will paint a path using a white and black colors.
      */
     static void drawPath(QPainter& painter, const QPainterPath& path);
 protected:
+    virtual QRect boundingRect() const;
+    virtual void drawCache(QPainter& gc, const KisCoordinatesConverter *converter) = 0;
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
+    QList<KisPaintingAssistantHandleSP> m_handles;
 private:
     struct Private;
     Private* const d;
@@ -109,7 +128,8 @@ public:
     virtual ~KisPaintingAssistantFactory();
     virtual QString id() const = 0;
     virtual QString name() const = 0;
-    virtual KisPaintingAssistant* paintingAssistant( const QRectF& imageArea ) const = 0;
+    virtual KisPaintingAssistant* createPaintingAssistant() const = 0;
+
 };
 
 class KRITAUI_EXPORT KisPaintingAssistantFactoryRegistry : public KoGenericRegistry<KisPaintingAssistantFactory*>

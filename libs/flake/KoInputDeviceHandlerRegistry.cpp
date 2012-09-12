@@ -33,7 +33,7 @@ void KoInputDeviceHandlerRegistry::init()
     config.blacklist = "DevicePluginsDisabled";
     config.group = "calligra";
     KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Device"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"), config);
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"), config);
 
     foreach(const QString & id, keys()) {
         KoInputDeviceHandler * d = value(id);
@@ -53,7 +53,9 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
     foreach(QString id, keys()) {
         get(id)->deleteLater();
     }
-    qDeleteAll(doubleEntries());
+    // just leak on exit -- we get into trouble for explicitly
+    // deleting stuff from static objects, like registries
+    //qDeleteAll(doubleEntries());
 }
 
 KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()

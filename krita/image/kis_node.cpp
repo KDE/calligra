@@ -25,13 +25,13 @@
 #include <QRect>
 
 #include <ksharedconfig.h>
-#include <kconfiggroup.h>
 
 #include <KoProperties.h>
 
 #include "kis_global.h"
 #include "kis_node_graph_listener.h"
 #include "kis_node_visitor.h"
+#include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
 
 #include "kis_safe_read_list.h"
@@ -51,7 +51,7 @@ struct KisNodeSPStaticRegistrar {
 static KisNodeSPStaticRegistrar __registrar;
 
 
-class KisNode::Private
+struct KisNode::Private
 {
 public:
     Private()
@@ -78,7 +78,7 @@ KisNode::KisNode(const KisNode & rhs)
         , m_d(new Private())
 {
     m_d->parent = 0;
-    m_d->graphListener = rhs.m_d->graphListener;
+    m_d->graphListener = 0;
 
     KisSafeReadNodeList::const_iterator iter;
     FOREACH_SAFE(iter, rhs.m_d->nodes) {
@@ -86,7 +86,6 @@ KisNode::KisNode(const KisNode & rhs)
         child->createNodeProgressProxy();
         m_d->nodes.append(child);
         child->setParent(this);
-        child->setGraphListener(m_d->graphListener);
     }
 }
 
@@ -109,17 +108,25 @@ QRect KisNode::changeRect(const QRect &rect, PositionToFilthy pos) const
     return rect;
 }
 
-void KisNode::setSystemLocked(bool l, bool update)
+QRect KisNode::accessRect(const QRect &rect, PositionToFilthy pos) const
 {
-    KisBaseNode::setSystemLocked(l, update);
-    if (!l && m_d->graphListener) {
-        m_d->graphListener->nodeChanged(this);
-    }
+    Q_UNUSED(pos);
+    return rect;
 }
 
 bool KisNode::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+void KisNode::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
+{
+    return visitor.visit(this, undoAdapter);
+}
+
+int KisNode::graphSequenceNumber() const
+{
+    return m_d->graphListener ? m_d->graphListener->graphSequenceNumber() : -1;
 }
 
 KisNodeGraphListener *KisNode::graphListener() const
@@ -130,6 +137,12 @@ KisNodeGraphListener *KisNode::graphListener() const
 void KisNode::setGraphListener(KisNodeGraphListener *graphListener)
 {
     m_d->graphListener = graphListener;
+
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, m_d->nodes) {
+        KisNodeSP child = (*iter);
+        child->setGraphListener(graphListener);
+    }
 }
 
 KisNodeSP KisNode::parent() const
@@ -145,6 +158,13 @@ KisNodeSP KisNode::parent() const
 KisBaseNodeSP KisNode::parentCallback() const
 {
     return parent();
+}
+
+void KisNode::baseNodeChangedCallback()
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->nodeChanged(this);
+    }
 }
 
 void KisNode::setParent(KisNodeWSP parent)
@@ -329,12 +349,15 @@ void KisNode::setDirty(const QVector<QRect> &rects)
     }
 }
 
-void KisNode::setDirty(const QRegion & region)
+void KisNode::setDirty(const QRegion &region)
 {
-    if (region.isEmpty()) return;
+    setDirty(region.rects());
+}
 
-    foreach(const QRect &rc, region.rects()) {
-        setDirty(rc);
+void KisNode::setDirty(const QRect & rect)
+{
+    if(m_d->graphListener) {
+        m_d->graphListener->requestProjectionUpdate(this, rect);
     }
 }
 

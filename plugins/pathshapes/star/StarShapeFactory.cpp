@@ -22,7 +22,7 @@
 #include "star/StarShapeConfigWidget.h"
 
 #include <KoShapeFactoryBase.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
@@ -35,7 +35,7 @@ StarShapeFactory::StarShapeFactory()
     : KoShapeFactoryBase(StarShapeId, i18n("A star shape"))
 {
     setToolTip(i18n("A star"));
-    setIcon("star");
+    setIcon("star-shape");
     QStringList elementNames;
     elementNames << "regular-polygon" << "custom-shape";
     setXmlElementNames(KoXmlNS::draw, elementNames);
@@ -106,17 +106,17 @@ StarShapeFactory::StarShapeFactory()
     addTemplate(t);
 }
 
-KoShape *StarShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *StarShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     StarShape *star = new StarShape();
 
-    star->setBorder(new KoLineBorder(1.0));
+    star->setStroke(new KoShapeStroke(1.0));
     star->setShapeId(KoPathShapeId);
 
     return star;
 }
 
-KoShape *StarShapeFactory::createShape(const KoProperties *params, KoResourceManager *) const
+KoShape *StarShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *) const
 {
     StarShape *star = new StarShape();
     if (! star)
@@ -128,7 +128,7 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoResourceMan
     star->setTipRadius(params->doubleProperty("tipRadius", 50.0));
     star->setBaseRoundness(params->doubleProperty("baseRoundness", 0.0));
     star->setTipRoundness(params->doubleProperty("tipRoundness", 0.0));
-    star->setBorder(new KoLineBorder(1.0));
+    star->setStroke(new KoShapeStroke(1.0));
     star->setShapeId(KoPathShapeId);
     QVariant v;
     if (params->property("background", v))

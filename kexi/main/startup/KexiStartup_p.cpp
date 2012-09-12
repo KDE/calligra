@@ -25,9 +25,9 @@
 #include <klocale.h>
 #include <kde_file.h>
 
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qapplication.h>
+#include <QFileInfo>
+#include <QDir>
+#include <QApplication>
 
 SQLite2ToSQLite3Migration::SQLite2ToSQLite3Migration(const QString& filePath)
         : m_filePath(filePath)

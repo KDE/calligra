@@ -110,7 +110,7 @@ void Footnotes97::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
     if ( lcbRef == 0 )
         return;
 
-    tableStream->seek( fcRef, G_SEEK_SET );
+    tableStream->seek( fcRef, WV2_SEEK_SET );
     *ref = new PLCF<Word97::FRD>( lcbRef, tableStream );
     *refIt = new PLCFIterator<Word97::FRD>( **ref );
 
@@ -124,7 +124,7 @@ void Footnotes97::init( U32 fcRef, U32 lcbRef, U32 fcTxt, U32 lcbTxt, OLEStreamR
     else {
         if ( static_cast<U32>( tableStream->tell() ) != fcTxt ) {
             wvlog << "Warning: Found a hole in the table stream" << endl;
-            tableStream->seek( fcTxt, G_SEEK_SET );
+            tableStream->seek( fcTxt, WV2_SEEK_SET );
         }
         for ( U32 i = 0; i < lcbTxt; i += sizeof( U32 ) ) {
             txt.push_back( tableStream->readU32() );

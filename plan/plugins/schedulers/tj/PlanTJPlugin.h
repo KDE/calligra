@@ -38,13 +38,16 @@ namespace KPlato
 
 using namespace KPlato;
 
-class PlanTJPlugin : public SchedulerPlugin
+class KPLATOTJ_EXPORT PlanTJPlugin : public SchedulerPlugin
 {
     Q_OBJECT
 
 public:
     PlanTJPlugin( QObject * parent,  const QVariantList & );
     ~PlanTJPlugin();
+
+    virtual QString description() const;
+    virtual int capabilities() const;
 
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false );

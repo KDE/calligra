@@ -63,22 +63,20 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
 private:
-    void drag(const QPoint& pos);
-    void moveNode(KisNodeSP node, int x, int y);
-    
+    void drag(const QPoint& newPos);
+
+    QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
+
 private:
 
     MoveToolOptionsWidget* m_optionsWidget;
-    QRect m_deviceBounds;
+
     QPoint m_dragStart;
-    QPoint m_layerStart;
-    QPoint m_layerPosition;
-    KisNodeSP m_selectedNode;
-    KisNodeSP m_targetLayer;
-    KisSelectionSP m_selection;
+    QPoint m_lastDragPos;
+
+    KisStrokeId m_strokeId;
 };
 
 

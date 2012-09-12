@@ -195,14 +195,14 @@ void print( Task *t, bool full = true ) {
 			<<t->estimate()->typeToString()
             <<(t->estimate()->type() == Estimate::Type_Duration
                 ? (t->estimate()->calendar()?t->estimate()->calendar()->name():"Fixed")
-                : "");
+                : QString( "%1 h" ).arg( t->estimate()->expectedValue().toDouble( Duration::Unit_h ) ) );
     Schedule *s = t->currentSchedule();
     if ( s ) {
         foreach ( Appointment *a, s->appointments() ) {
-            qDebug()<<"Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( a->startTime() )<<QTest::toString( a->endTime() );
+            qDebug()<<"Resource:"<<a->resource()->resource()->name()<<"booked:"<<QTest::toString( a->startTime() )<<QTest::toString( a->endTime() )<<"effort:"<<a->effort( a->startTime(), a->endTime() ).toDouble( Duration::Unit_h )<<"h";
             if ( ! full ) { continue; }
             foreach( const AppointmentInterval &i, a->intervals().map() ) {
-                qDebug()<<"  "<<QTest::toString( i.startTime() )<<QTest::toString( i.endTime() )<<i.load();
+                qDebug()<<"  "<<QTest::toString( i.startTime() )<<QTest::toString( i.endTime() )<<i.load()<<"effort:"<<i.effort( i.startTime(), i.endTime() ).toDouble( Duration::Unit_h )<<"h";
             }
         }
     }

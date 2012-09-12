@@ -18,11 +18,12 @@
 */
 
 #include "KoDocumentRdfBase.h"
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoText.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
+#include <KoShapeController.h>
 
 #include <kdebug.h>
 
@@ -31,24 +32,15 @@ KoDocumentRdfBase::KoDocumentRdfBase(QObject *parent)
 {
 }
 
-const Soprano::Model *KoDocumentRdfBase::model() const
+QSharedPointer<Soprano::Model> KoDocumentRdfBase::model() const
 {
-    return 0;
+    return QSharedPointer<Soprano::Model>(0);
 }
 
-KoDocumentRdfBase *KoDocumentRdfBase::fromResourceManager(KoCanvasBase *host)
-{
-    KoResourceManager *rm = host->resourceManager();
-    if (!rm->hasResource(KoText::DocumentRdf)) {
-        return 0;
-    }
-    return static_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<void*>());
-}
-
-void KoDocumentRdfBase::linkToResourceManager(KoResourceManager *rm)
+void KoDocumentRdfBase::linkToResourceManager(KoDocumentResourceManager *rm)
 {
     QVariant variant;
-    variant.setValue<void*>(this);
+    variant.setValue<QObject*>(this);
     rm->setResource(KoText::DocumentRdf, variant);
 }
 
@@ -73,4 +65,19 @@ bool KoDocumentRdfBase::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
     Q_UNUSED(store);
     Q_UNUSED(manifestWriter);
     return true;
+}
+
+bool KoDocumentRdfBase::completeLoading(KoStore */*store*/)
+{
+    return false;
+}
+
+bool KoDocumentRdfBase::completeSaving(KoStore */*store*/, KoXmlWriter */*manifestWriter*/, KoShapeSavingContext */*context*/)
+{
+    return false;
+}
+
+QStringList KoDocumentRdfBase::idrefList() const
+{
+    return QStringList();
 }

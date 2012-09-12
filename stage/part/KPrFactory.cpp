@@ -21,6 +21,7 @@
 #include "KPrFactory.h"
 #include "KPrDocument.h"
 #include "KPrAboutData.h"
+#include "KPrPart.h"
 
 #include <kiconloader.h>
 #include <kcomponentdata.h>
@@ -45,19 +46,15 @@ KPrFactory::~KPrFactory()
     s_instance = 0;
 }
 
-QObject* KPrFactory::create( const char* iface, QWidget* parentWidget, QObject *parent,
+QObject* KPrFactory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
-    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
-
-    KPrDocument *doc = new KPrDocument( parentWidget, parent, !bWantKoDocument );
-
-    if ( !bWantKoDocument )
-        doc->setReadWrite( false );
-
-    return doc;
+    KPrPart *part = new KPrPart(parent);
+    KPrDocument *doc = new KPrDocument(part);
+    part->setDocument(doc);
+    return part;
 }
 
 KAboutData* KPrFactory::aboutData()

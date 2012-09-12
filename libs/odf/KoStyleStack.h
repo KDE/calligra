@@ -22,9 +22,9 @@
 #define KOSTYLESTACK_H
 
 
-#include <QtCore/QList>
-#include <QtCore/QStack>
-#include <QtCore/QPair>
+#include <QList>
+#include <QStack>
+#include <QPair>
 
 #include <kdemacros.h>
 
@@ -162,6 +162,13 @@ public:
      */
     void setTypeProperties(const char* typeProperties);
 
+    /**
+     * Overloaded method to also set backup properties to search in
+     *
+     * If the list is graphic, paragraph it will search first in graphic-properties and then in paragraph-properites
+     */
+    void setTypeProperties(const QList<QString> &typeProperties);
+
 private:
     bool isUserStyle(const KoXmlElement& e, const QString& family) const;
 
@@ -178,7 +185,7 @@ private:
      */
     QList<KoXmlElement> m_stack;
 
-    QString m_propertiesTagName;
+    QList<QString> m_propertiesTagNames;
 
     QString m_styleNSURI;
     QString m_foNSURI;

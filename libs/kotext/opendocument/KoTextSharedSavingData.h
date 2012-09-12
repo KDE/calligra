@@ -25,6 +25,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "kotext_export.h"
 
 #include <QMap>
+#include <QSharedPointer>
 
 #define KOTEXT_SHARED_SAVING_ID "KoTextSharedSavingId"
 
@@ -53,8 +54,24 @@ public:
      * and you need to ensure that it lives longer than this object
      * unless you reset the model to 0.
      */
-    void setRdfModel(const Soprano::Model *m);
-    const Soprano::Model* rdfModel() const;
+    void setRdfModel(QSharedPointer<Soprano::Model> m);
+    QSharedPointer<Soprano::Model> rdfModel() const;
+
+    /**
+     * Stores the name that written to the file for the style
+     *
+     * @param styleId the id of the style in KoStyleManger
+     * @param savedName the name that is written to the file
+     */
+    void setStyleName(int styleId, const QString &name);
+
+    /**
+     * Style name of the style
+     *
+     * @param styleId the id of the style in KoStyleManager
+     * @return the saved name of the style
+     */
+    QString styleName(int styleId);
 
 private:
 

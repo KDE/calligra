@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 
 #include "kis_canvas2.h"
@@ -34,7 +34,7 @@
 
 
 PresetDockerDock::PresetDockerDock( )
-    : QDockWidget(i18n("Preset docker"))
+    : QDockWidget(i18n("Brush Presets"))
     , m_canvas(0)
 {
     m_presetChooser = new KisPaintOpPresetsChooserPopup(this);
@@ -48,7 +48,7 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
         m_canvas->disconnectCanvasObserver(this);
         m_presetChooser->disconnect(m_canvas->view()->paintOpBox());
     }
-    
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(m_canvas);
     if (!m_canvas) return;

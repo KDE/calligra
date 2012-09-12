@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004-2011 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +20,14 @@
 
 #include "kptduration.h"
 #include "kptdatetime.h"
+#include "kptdebug.h"
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QRegExp>
 #include <QStringList>
+
 
 namespace KPlato
 {
@@ -76,7 +77,7 @@ void Duration::add(const Duration &delta) {
 void Duration::add(qint64 delta) {
     qint64 tmp = m_ms + delta;
     if (tmp < 0) {
-        kDebug()<<"Underflow"<<(long int)delta<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<(long int)delta<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -85,7 +86,7 @@ void Duration::add(qint64 delta) {
 
 void Duration::subtract(const Duration &delta) {
     if (m_ms < delta.m_ms) {
-        kDebug()<<"Underflow"<<delta.toString()<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<delta.toString()<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -95,7 +96,7 @@ void Duration::subtract(const Duration &delta) {
 Duration Duration::operator*(int value) const {
     Duration dur(*this);
     if (value < 0) {
-        kDebug()<<"Underflow"<<value<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms * value; //FIXME
@@ -106,7 +107,7 @@ Duration Duration::operator*(int value) const {
 Duration Duration::operator/(int value) const {
     Duration dur(*this);
     if (value <= 0) {
-        kDebug()<<"Underflow"<<value<<" from"<<this->toString();
+        kDebug(planDbg())<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms / value; //FIXME
@@ -128,7 +129,7 @@ Duration Duration::operator*(const Duration value) const {
 
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
-        kDebug()<<"Divide by zero:"<<this->toString();
+        kDebug(planDbg())<<"Divide by zero:"<<this->toString();
         return 0.0;
     }
     return (double)(m_ms) / (double)(d.m_ms);
@@ -188,7 +189,7 @@ QString Duration::toString(Format format) const {
             result = i18nc("<hours>h:<minutes>m", "%1h:%2m", hours, minutes);
             break;
         case Format_i18nDay:
-            result = KGlobal::locale()->formatNumber(toDouble(Unit_d), 2);
+            result = KGlobal::locale()->prettyFormatDuration( m_ms );
             break;
         case Format_i18nWeek:
             result = this->format( Unit_w, 2, KGlobal::locale() );
@@ -301,7 +302,7 @@ Duration::Unit Duration::unitFromString( const QString &u )
 
 bool Duration::valueFromString( const QString &value, double &rv, Unit &unit ) {
     QStringList lst = Duration::unitList();
-    foreach ( const QString s, lst ) {
+    foreach ( const QString &s, lst ) {
         int pos = value.lastIndexOf( s );
         if ( pos != -1 ) {
             unit = Duration::unitFromString( s );

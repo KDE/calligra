@@ -23,7 +23,7 @@ namespace RtfReader
     class RTFREADER_EXPORT RtfGroupState
     {
     public:
-	RtfGroupState() : endOfFile( false ), didChangeDestination( false )
+	RtfGroupState() : didChangeDestination( false ), endOfFile( false )
 	{}
 	bool didChangeDestination;
 	bool endOfFile;

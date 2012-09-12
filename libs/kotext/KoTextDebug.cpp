@@ -302,6 +302,8 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
             value = QString::number(properties[id].toInt());
             break;
         default:
+            key = "unknown"+QString::number(id);
+            value = QString::number(properties[id].toInt());
             break;
         }
         if (!key.isEmpty())
@@ -536,10 +538,6 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "display-level";
             value = QString::number(properties[id].toInt());
             break;
-        case KoListStyle::CharacterStyleId:
-            key = "charstyleid";
-            value = QString::number(properties[id].toInt());
-            break;
         case KoListStyle::Alignment:
             key = "alignment";
             value = QString::number(properties[id].toInt());
@@ -558,10 +556,6 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::StyleId:
             key = "styleid";
-            value = QString::number(properties[id].toInt());
-            break;
-        case KoListStyle::ContinueNumbering:
-            key = "continue-numbering";
             value = QString::number(properties[id].toInt());
             break;
         case KoListStyle::MinimumWidth:
@@ -594,7 +588,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             break;
         case KoListStyle::BulletImage:
             key = "bullet-image";
-            value = QString::number(long(properties[id].value<KoImageData*>()));
+            value = QString::number((quintptr)(properties[id].value<KoImageData*>()));
             break;
         case KoListStyle::Margin:
             key="margin-left";
@@ -860,294 +854,6 @@ QString KoTextDebug::tableCellAttributes(const QTextTableCellFormat &tableCellFo
             key = "right-padding";
             value = QString::number(properties[id].toDouble());
             break;
-        case KoTableBorderStyle::TopBorderOuterPen: {
-            key = "top-border-outer";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
-        case KoTableBorderStyle::TopBorderSpacing:
-            key = "top-border-spacing";
-            value = QString::number(properties[id].toDouble());
-            break;
-        case KoTableBorderStyle::TopBorderInnerPen: {
-            key = "top-border-inner";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
-        case KoTableBorderStyle::LeftBorderOuterPen: {
-            key = "left-border-outer";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
-        case KoTableBorderStyle::LeftBorderSpacing:
-            key = "left-border-spacing";
-            value = QString::number(properties[id].toDouble());
-            break;
-        case KoTableBorderStyle::LeftBorderInnerPen: {
-            key = "left-border-inner";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
-        case KoTableBorderStyle::BottomBorderOuterPen: {
-            key = "bottom-border-outer";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
-        case KoTableBorderStyle::BottomBorderSpacing:
-            key = "bottom-border-spacing";
-            value = QString::number(properties[id].toDouble());
-            break;
-        case KoTableBorderStyle::BottomBorderInnerPen: {
-            key = "bottom-border-inner";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
-        case KoTableBorderStyle::RightBorderOuterPen: {
-            key = "right-border-outer";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
-        case KoTableBorderStyle::RightBorderSpacing:
-            key = "right-border-spacing";
-            value = QString::number(properties[id].toDouble());
-            break;
-        case KoTableBorderStyle::RightBorderInnerPen: {
-            key = "right-border-inner";
-            QPen pen = qvariant_cast<QPen>(properties[id]);
-            if (pen.style() == Qt::NoPen) {
-                value = "none";
-            } else {
-                value = QString::number(pen.widthF()) + QString(" pt ");
-                switch (pen.style()) {
-                    case Qt::SolidLine:
-                        value += "solid";
-                        break;
-                    case Qt::DashLine:
-                        value += "dash";
-                        break;
-                    case Qt::DotLine:
-                        value += "dot";
-                        break;
-                    case Qt::DashDotLine:
-                        value += "dash-dot";
-                        break;
-                    case Qt::DashDotDotLine:
-                        value += "dash-dot-dot";
-                        break;
-                    case Qt::CustomDashLine:
-                        value += "custom-dash";
-                        break;
-                    default:
-                        value += "";
-                        break;
-                }
-                value += QString(" ") + qvariant_cast<QBrush>(pen).color().name(); // beware!
-            }
-            break;
-        }
         case KoTableCellStyle::MasterPageName:
             key = "master-page-name";
             value = properties[id].toString();

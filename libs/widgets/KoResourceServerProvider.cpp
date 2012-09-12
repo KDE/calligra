@@ -39,28 +39,37 @@ class GradientResourceServer : public KoResourceServer<KoAbstractGradient> {
 public:
 
     GradientResourceServer(const QString& type, const QString& extensions) :
-            KoResourceServer<KoAbstractGradient>(type, extensions)
+            KoResourceServer<KoAbstractGradient>(type, extensions) , m_foregroundToTransparent(0) , m_foregroundToBackground(0)
+    {
+        insertSpecialGradients();
+    }
+
+    void insertSpecialGradients()
     {
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        QList<KoGradientStop> stops;
+
         KoStopGradient* gradient = new KoStopGradient("");
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Background");
+        gradient->setName("Foreground to Transparent");
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
 
-        QList<KoGradientStop> stops;
-        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
         gradient->setStops(stops);
         gradient->setValid(true);
-        addResource(gradient, false);
+        addResource(gradient, false, true);
+        m_foregroundToTransparent = gradient;
 
         gradient = new KoStopGradient("");
         gradient->setType(QGradient::LinearGradient);
-        gradient->setName("Foreground to Transparent");
+        gradient->setName("Foreground to Background");
 
         stops.clear();
-        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(QColor(0, 0, 0, 0), cs));
+        stops << KoGradientStop(0.0, KoColor(Qt::black, cs)) << KoGradientStop(1.0, KoColor(Qt::white, cs));
+
         gradient->setStops(stops);
         gradient->setValid(true);
-        addResource(gradient, false);
+        addResource(gradient, false, true);
+        m_foregroundToBackground = gradient;
     }
 
 private:
@@ -81,6 +90,21 @@ private:
 
         return grad;
     }
+
+    virtual QList< KoAbstractGradient* > sortedResources() {
+        QList< KoAbstractGradient* > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
+        QList< KoAbstractGradient* > sorted;
+        if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {
+            sorted.append(resources.takeAt(resources.indexOf(m_foregroundToTransparent)));
+        }
+        if (m_foregroundToBackground && resources.contains(m_foregroundToBackground)) {
+            sorted.append(resources.takeAt(resources.indexOf(m_foregroundToBackground)));
+        }
+        return sorted + resources;
+    }
+
+    KoAbstractGradient* m_foregroundToTransparent;
+    KoAbstractGradient* m_foregroundToBackground;
 };
 
 KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
@@ -99,14 +123,21 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     }
 }
 
+KoResourceLoaderThread::~KoResourceLoaderThread()
+{
+    barrier();
+}
+
 void KoResourceLoaderThread::run()
 {
     m_server->loadResources(m_fileNames);
 }
 
-void KoResourceLoaderThread::cancel()
+void KoResourceLoaderThread::barrier()
 {
-    m_server->cancel();
+    if(isRunning()) {
+        wait();
+    }
 }
 
 QStringList KoResourceLoaderThread::getFileNames( const QString & extensions)
@@ -127,9 +158,9 @@ struct KoResourceServerProvider::Private
     KoResourceServer<KoAbstractGradient>* m_gradientServer;
     KoResourceServer<KoColorSet>* m_paletteServer;
 
-    QThread * paletteThread;
-    QThread * gradientThread;
-    QThread * patternThread;
+    KoResourceLoaderThread *paletteThread;
+    KoResourceLoaderThread *gradientThread;
+    KoResourceLoaderThread *patternThread;
 };
 
 KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
@@ -150,26 +181,28 @@ KoResourceServerProvider::KoResourceServerProvider() : d(new Private)
 
     d->m_patternServer = new KoResourceServer<KoPattern>("ko_patterns", "*.pat:*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp" );
     d->patternThread = new KoResourceLoaderThread(d->m_patternServer);
-    connect(d->patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
     d->patternThread->start();
 
     d->m_gradientServer = new GradientResourceServer("ko_gradients", "*.kgr:*.svg:*.ggr");
     d->gradientThread = new KoResourceLoaderThread(d->m_gradientServer);
-    connect(d->gradientThread, SIGNAL(finished()), this, SLOT(gradientThreadDone()));
     d->gradientThread->start();
 
     d->m_paletteServer = new KoResourceServer<KoColorSet>("ko_palettes", "*.gpl:*.pal:*.act");
     d->paletteThread = new KoResourceLoaderThread(d->m_paletteServer);
-    connect(d->paletteThread, SIGNAL(finished()), this, SLOT(paletteThreadDone()));
     d->paletteThread->start();
 
 }
 
 KoResourceServerProvider::~KoResourceServerProvider()
 {
+    delete d->patternThread;
+    delete d->gradientThread;
+    delete d->paletteThread;
+
     delete d->m_patternServer;
     delete d->m_gradientServer;
     delete d->m_paletteServer;
+
     delete d;
 }
 
@@ -181,34 +214,18 @@ KoResourceServerProvider* KoResourceServerProvider::instance()
 
 KoResourceServer<KoPattern>* KoResourceServerProvider::patternServer()
 {
+    d->patternThread->barrier();
     return d->m_patternServer;
 }
 
 KoResourceServer<KoAbstractGradient>* KoResourceServerProvider::gradientServer()
 {
+    d->patternThread->barrier();
     return d->m_gradientServer;
 }
 
 KoResourceServer<KoColorSet>* KoResourceServerProvider::paletteServer()
 {
+    d->patternThread->barrier();
     return d->m_paletteServer;
-}
-
-
-void KoResourceServerProvider::paletteThreadDone()
-{
-    delete d->paletteThread;
-    d->paletteThread = 0;
-}
-
-void KoResourceServerProvider::patternThreadDone()
-{
-    delete d->patternThread;
-    d->patternThread = 0;
-}
-
-void KoResourceServerProvider::gradientThreadDone()
-{
-    delete d->gradientThread;
-    d->gradientThread = 0;
 }

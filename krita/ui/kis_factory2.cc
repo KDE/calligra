@@ -18,16 +18,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
-#define KDEWIN_STDINT_H
-#endif
+//#ifdef _MSC_VER // this removes KDEWIN extensions to stdint.h: required by exiv2
+//#define KDEWIN_STDINT_H
+//#endif
 
 #include "kis_factory2.h"
 
 #include <QStringList>
 #include <QDir>
 
-#include <kis_debug.h>
 #include <kcomponentdata.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -42,6 +41,7 @@
 #include <KoPluginLoader.h>
 #include <KoShapeRegistry.h>
 
+#include <kis_debug.h>
 #include <metadata/kis_meta_data_io_backend.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -52,6 +52,7 @@
 #include "kis_aboutdata.h"
 #include "flake/kis_shape_selection.h"
 #include "kis_doc2.h"
+#include "kis_part2.h"
 
 #include "kisexiv2/kis_exiv2.h"
 
@@ -59,7 +60,7 @@ KAboutData* KisFactory2::s_aboutData = 0;
 KComponentData* KisFactory2::s_instance = 0;
 
 KisFactory2::KisFactory2(QObject* parent)
-        : KPluginFactory(*aboutData(), parent)
+    : KPluginFactory(*aboutData(), parent)
 {
     (void)componentData();
 }
@@ -75,20 +76,17 @@ KisFactory2::~KisFactory2()
 /**
  * Create the document
  */
-QObject* KisFactory2::create( const char* iface, QWidget* parentWidget, QObject *parent,
-                             const QVariantList& args, const QString& keyword )
+QObject* KisFactory2::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObject *parent,
+                              const QVariantList& args, const QString& keyword )
 {
     Q_UNUSED( args );
     Q_UNUSED( keyword );
-    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
 
-    KisDoc2 *doc = new KisDoc2(parentWidget, parent, !bWantKoDocument);
-    Q_CHECK_PTR(doc);
+    KisPart2 *part = new KisPart2(parent);
+    KisDoc2 *doc = new KisDoc2(part);
+    part->setDocument(doc);
 
-    if (!bWantKoDocument)
-        doc->setReadWrite(false);
-
-    return doc;
+    return part;
 }
 
 
@@ -121,14 +119,14 @@ const KComponentData &KisFactory2::componentData()
 
         // Load the krita-specific tools
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                         QString::fromLatin1("[X-Krita-Version] == 4"));
+                                         QString::fromLatin1("[X-Krita-Version] == 5"));
 
         // Load dockers
         KoPluginLoader::PluginsConfig config;
         config.blacklist = "DockerPluginsDisabled";
         config.group = "krita";
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 4"));
+                                         QString::fromLatin1("[X-Krita-Version] == 5"));
 
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 

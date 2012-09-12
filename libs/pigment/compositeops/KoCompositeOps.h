@@ -63,8 +63,8 @@ struct AddGeneralOps<Traits, true>
      static const qint32 alpha_pos = Traits::alpha_pos;
 
      template<CompositeFunc func>
-     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
-         cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func>(cs, id, description, category, userVisible));
+     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category) {
+         cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func>(cs, id, description, category));
      }
 
      static void add(KoColorSpace* cs) {
@@ -107,7 +107,7 @@ struct AddGeneralOps<Traits, true>
          add<&cfDifference<Arg>           >(cs, COMPOSITE_DIFF                 , i18n("Difference")           , KoCompositeOp::categoryNegative());
          add<&cfExclusion<Arg>            >(cs, COMPOSITE_EXCLUSION            , i18n("Exclusion")            , KoCompositeOp::categoryNegative());
          add<&cfEquivalence<Arg>          >(cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryNegative());
-         add<&cfAdditiveSubstractive<Arg> >(cs, COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive-Substractive"), KoCompositeOp::categoryNegative());
+         add<&cfAdditiveSubtractive<Arg> >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE, i18n("Additive-Subtractive"), KoCompositeOp::categoryNegative());
 
          cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
      }
@@ -129,8 +129,8 @@ struct AddRGBOps<Traits, true>
     static const qint32 blue_pos  = Traits::blue_pos;
     
     template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
-    static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
-        cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category, userVisible));
+    static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category) {
+        cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category));
     }
     
     static void add(KoColorSpace* cs) {
@@ -188,7 +188,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
     typedef typename _Traits_::channels_type channels_type;
     
     static const bool useGeneralOps = true;
-    static const bool useRGBOps     = boost::is_base_of<KoRgbTraits<channels_type>, _Traits_>::value;
+    static const bool useRGBOps     = boost::is_base_of<KoBgrTraits<channels_type>, _Traits_>::value;
     
     _Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
     _Private::AddRGBOps    <_Traits_, useRGBOps    >::add(cs);

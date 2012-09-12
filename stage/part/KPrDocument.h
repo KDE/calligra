@@ -33,7 +33,7 @@ class STAGE_EXPORT KPrDocument : public KoPADocument
 {
     Q_OBJECT
 public:
-    explicit KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
+    explicit KPrDocument(KoPart *part=0);
     ~KPrDocument();
 
     /// reimplemented
@@ -139,14 +139,6 @@ public:
      */
     KPrDeclarations * declarations() const;
 
-    /**
-     * Creates and shows the start up widget. Reimplemented from KoDocument.
-     *
-     * @param parent the KoMainWindow used as parent for the widget.
-     * @param alwaysShow always show the widget even if the user has configured it to not show.
-     */
-    void showStartUpWidget( KoMainWindow * parent, bool alwaysShow );
-
 public slots:
     virtual void initEmpty();
 
@@ -166,10 +158,6 @@ signals:
     void customSlideShowsModified();
 
 protected:
-    /// reimplemented
-    virtual KoView * createViewInstance( QWidget *parent );
-    /// reimplemented
-    virtual QGraphicsItem *createCanvasItem();
     /// reimplemented
     virtual const char *odfTagName( bool withNamespace );
 
@@ -203,16 +191,11 @@ protected:
 
     KPrCustomSlideShows *m_customSlideShows;
 
-protected slots:
-    /// Quits KPresenter with error message from m_errorMessage.
-    void showErrorAndDie();
-
 private:
     int m_presentationMonitor;
     bool m_presenterViewEnabled;
     QString m_activeCustomSlideShow;
     /// Message shown before KPresenter quits with an error if something is wrong
-    QString m_errorMessage;
     KPrDeclarations *m_declarations;
 };
 

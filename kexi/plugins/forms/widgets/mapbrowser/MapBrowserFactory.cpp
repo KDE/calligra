@@ -35,7 +35,7 @@ MapBrowserFactory::MapBrowserFactory(QObject* parent, const QVariantList& args)
 {
     Q_UNUSED(args);
     KFormDesigner::WidgetInfo *mapBrowser = new KFormDesigner::WidgetInfo(this);
-    mapBrowser->setPixmap("map-browser");
+    mapBrowser->setPixmap("map_browser");
     mapBrowser->setClassName("MapBrowserWidget");
     mapBrowser->setName(i18n("Map Browser"));
     mapBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "
@@ -93,3 +93,4 @@ bool MapBrowserFactory::previewWidget(const QByteArray &classname,
 K_EXPORT_KEXI_FORM_WIDGET_FACTORY_PLUGIN(MapBrowserFactory, mapbrowser)
 
 #include "MapBrowserFactory.moc"
+

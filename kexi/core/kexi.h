@@ -20,26 +20,26 @@
 #ifndef KEXI_H
 #define KEXI_H
 
-#include <qpointer.h>
+#include <QPointer>
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
 
 class QLabel;
-class KAboutData;
+class KexiAboutData;
 class KexiRecentProjects;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {

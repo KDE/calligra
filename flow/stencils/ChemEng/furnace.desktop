@@ -1,11 +1,22 @@
 [Desktop Entry]
 Name=furnace
 Name[bg]=пещ
+Name[ca]=forn
+Name[ca@valencia]=forn
+Name[de]=Schmelzofen
+Name[el]=furnace
+Name[es]=horno
+Name[et]=Põleti
+Name[gl]=forno
+Name[it]=forno
+Name[kk]=Пеш
 Name[nb]=ovn
 Name[nl]=oven
 Name[pl]=palenisko
 Name[pt]=fornalha
 Name[pt_BR]=fornalha
+Name[ru]=Печь
+Name[sk]=ohnisko
 Name[sv]=ugn
 Name[uk]=Піч
 Name[x-test]=xxfurnacexx

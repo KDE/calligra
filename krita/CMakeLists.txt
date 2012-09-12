@@ -1,9 +1,6 @@
 project(krita)
 
 
-# turn on QImage as buffer for QPainter based canvas
-add_definitions(-DINDEPENDENT_CANVAS)
-
 # 
 # The reason for this mode is that the Debug mode disable inlining
 #
@@ -11,8 +8,13 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_KRITADEVS "-O2 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+endif(MSVC)
+
 include(CheckFunctionExists)
 
+if (NOT WIN32)
 macro_optional_find_package(GLEW)
 macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
 configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
@@ -28,6 +30,7 @@ if(HAVE_OPENGL)
 else(HAVE_OPENGL)
     message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
 endif(HAVE_OPENGL)
+endif (NOT WIN32)
 
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
@@ -138,7 +141,7 @@ install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( PROGRAMS  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
+install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 
 
 
