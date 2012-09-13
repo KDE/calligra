@@ -35,6 +35,7 @@
 #include <kis_view2.h>
 
 #include "o2deviantart.h"
+#include "dlg_login.h"
 
 K_PLUGIN_FACTORY(ImageShareFactory, registerPlugin<ImageShare>();)
 K_EXPORT_PLUGIN(ImageShareFactory("krita"))
@@ -65,13 +66,21 @@ void ImageShare::slotImageShare()
     m_deviantArt->setClientSecret("a8464938f858f68661c4246347f09b62");
 
     connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SLOT(openBrowser(QUrl)));
-
+    connect(m_deviantArt, SIGNAL(closeBrowser()), SLOT(closeBrowser()));
     m_deviantArt->link();
 }
 
 void ImageShare::openBrowser(const QUrl &url)
 {
-    QDesktopServices::openUrl(url);
+    //QDesktopServices::openUrl(url);
+    DlgLogin dlgLogin;
+    dlgLogin.setLoginUrl(url);
+    dlgLogin.exec();
+}
+
+void ImageShare::closeBrowser()
+{
+    qDebug() << "close browser";
 }
 
 #include "imageshare.moc"

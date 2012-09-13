@@ -43,6 +43,7 @@ private slots:
 
     void slotImageShare();
     void openBrowser(const QUrl &url);
+    void closeBrowser();
 
 private:
 
