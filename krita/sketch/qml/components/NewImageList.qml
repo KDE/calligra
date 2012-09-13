@@ -62,7 +62,19 @@ PageStack {
                     image: model.image;
 
                     enabled: model.name === "clip" ? KisClipBoard.clip : true;
+                }
 
+                Label {
+                    anchors {
+                        left: thumbnail.right;
+                        leftMargin: Constants.DefaultMargin;
+                        verticalCenter: parent.verticalCenter;
+                    }
+
+                    text: model.name;
+                }
+                MouseArea {
+                    anchors.fill: parent;
                     onClicked: {
                         if (model.bnrole === "a4p") {
                             Settings.currentFile = "";
@@ -92,16 +104,6 @@ PageStack {
                             onClicked: base.clicked();
                         }
                     }
-                }
-
-                Label {
-                    anchors {
-                        left: thumbnail.right;
-                        leftMargin: Constants.DefaultMargin;
-                        verticalCenter: parent.verticalCenter;
-                    }
-
-                    text: model.name;
                 }
             }
 
