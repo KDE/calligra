@@ -34,11 +34,14 @@ public:
     virtual ~FiltersModel();
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    Q_INVOKABLE bool filterRequiresConfiguration(int index);
+    Q_INVOKABLE QString filterID(int index);
 
     QString categoryId;
     QString categoryName;
 
     void addFilter(KisFilterSP filter);
+
 private:
     class Private;
     Private* d;

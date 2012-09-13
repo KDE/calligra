@@ -64,6 +64,24 @@ int FiltersModel::rowCount(const QModelIndex& parent) const
     return d->filters.count();
 }
 
+bool FiltersModel::filterRequiresConfiguration(int index)
+{
+    if(index > -1 && index < d->filters.count())
+    {
+        return d->filters[index]->showConfigurationWidget();
+    }
+    return false;
+}
+
+QString FiltersModel::filterID(int index)
+{
+    if(index > -1 && index < d->filters.count())
+    {
+        return d->filters[index]->id();
+    }
+    return QLatin1String("");
+}
+
 void FiltersModel::addFilter(KisFilterSP filter)
 {
     if(!filter.isNull())
