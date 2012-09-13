@@ -18,7 +18,7 @@
 */
 
 #include "kexinamedialog.h"
-#include <QPixmap>
+#include <KIconLoader>
 #include <QGridLayout>
 #include <QLabel>
 
@@ -100,9 +100,9 @@ void KexiNameDialog::accept()
     KDialog::accept();
 }
 
-void KexiNameDialog::setDialogIcon(const QPixmap& icon)
+void KexiNameDialog::setDialogIcon(const QString &iconName)
 {
-    m_icon->setPixmap(icon);
+    m_icon->setPixmap(DesktopIcon(iconName, KIconLoader::SizeMedium));
 }
 
 void KexiNameDialog::showEvent(QShowEvent * event)

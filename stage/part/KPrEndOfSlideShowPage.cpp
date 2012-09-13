@@ -34,7 +34,7 @@
 #include <kdebug.h>
 
 KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocument * document )
-: KPrPage( new KPrMasterPage(), document )
+: KPrPage(new KPrMasterPage(document), document)
 {
     qreal ratio = screenRect.width() / screenRect.height();
     KoPageLayout pageLayout;

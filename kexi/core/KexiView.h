@@ -162,6 +162,10 @@ public slots:
      so property editor contents need to be completely replaced. */
     virtual void propertySetSwitched();
 
+    /*! Saves settings for the view. Default implementation does nothing and returns true.
+      Implement this if there are settings to save. */
+    virtual bool saveSettings();
+
     /*! Sets dirty flag on or off. It the flag changes,
      dirty(bool) signal is emitted by the parent window (KexiWindow),
      to inform the world about that. If this view has a parent view, setDirty()

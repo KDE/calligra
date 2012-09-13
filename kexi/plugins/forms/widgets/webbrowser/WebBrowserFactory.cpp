@@ -24,6 +24,8 @@
 #include "kexidataawarewidgetinfo.h"
 #include "WebBrowserWidget.h"
 
+#include <KoIcon.h>
+
 #include <QVariant>
 #include <QVariantList>
 #include <KDebug>
@@ -34,7 +36,7 @@ WebBrowserFactory::WebBrowserFactory(QObject* parent, const QVariantList& args)
   : KexiDBFactoryBase(parent, "webbrowser")
 {
     KexiDataAwareWidgetInfo* webBrowser = new KexiDataAwareWidgetInfo(this);
-    webBrowser->setPixmap("web_browser");
+    webBrowser->setIconName(koIconName("web_browser"));
     webBrowser->setClassName("WebBrowserWidget");
     webBrowser->setName(i18n("Web Browser"));
     webBrowser->setNamePrefix(i18nc("This string will be used to name widgets of this class. It must _not_ contain white "

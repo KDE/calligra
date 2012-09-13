@@ -233,8 +233,6 @@ void Schedule::initiateCalculation()
     effortNotMet = false;
     workStartTime = DateTime();
     workEndTime = DateTime();
-
-
 }
 
 void Schedule::calcResourceOverbooked()
@@ -518,15 +516,21 @@ void Schedule::copyAppointments( Schedule::CalculationMode from, Schedule::Calcu
     }
 }
 
-
 EffortCostMap Schedule::bcwsPrDay( EffortCostCalculationType type ) const
 {
+    return const_cast<Schedule*>( this )->bcwsPrDay( type );
+}
+
+EffortCostMap Schedule::bcwsPrDay( EffortCostCalculationType type )
+{
     //kDebug(planDbg())<<m_name<<m_appointments;
-    EffortCostMap ec;
-    foreach ( Appointment *a, m_appointments ) {
-        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date(), type );
+    EffortCostCache &ec = m_bcwsPrDay[ (int)type ];
+    if ( ! ec.cached ) {
+        foreach ( Appointment *a, m_appointments ) {
+            ec.effortcostmap += a->plannedPrDay( a->startTime().date(), a->endTime().date(), type );
+        }
     }
-    return ec;
+    return ec.effortcostmap;
 }
 
 EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type ) const
@@ -667,6 +671,13 @@ QString Schedule::Log::formatMsg() const
     s += resource ? QString( "%1 ").arg(resource->name(), -8 ) : "";
     s += message;
     return s;
+}
+
+void Schedule::clearPerformanceCache()
+{
+    m_bcwsPrDay.clear();
+    m_bcwpPrDay.clear();
+    m_acwp.clear();
 }
 
 //-------------------------------------------------

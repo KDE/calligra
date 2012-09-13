@@ -1,6 +1,13 @@
 project(calligra)
 
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+
+cmake_policy(SET CMP0002 OLD)
+
+#cmake_policy CMP0017 was introduced in version 2.8.4
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
+    cmake_policy(SET CMP0017 NEW)
+endif()
 
  ############
 #############
@@ -290,11 +297,13 @@ endif( MARBLE_FOUND )
 ## Test for lcms
 ##
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Will be used for color management and is necesary for Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+        set(HAVE_LCMS24 TRUE)
+    endif(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
-    set(HAVE_LCMS TRUE)
 endif(LCMS2_FOUND)
 
 ##
@@ -370,6 +379,14 @@ endif(QT_QTWEBKIT_FOUND)
 ##
 #macro_optional_find_package(QImageBlitz)
 #macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
+
+##
+## Test for KDeclarative
+##
+macro_optional_find_package(KDeclarative)
+if(NOT KDECLARATIVE_FOUND)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif(NOT KDECLARATIVE_FOUND)
 
 ##
 ## Test endianess
@@ -477,7 +494,8 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 # calligradb
 SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs)  # TODO remove when Predicate lib arrives
+set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                        ${CMAKE_BINARY_DIR}/libs/db)
 
  #############################################
 ##############################################

@@ -67,8 +67,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
         uint options,
         uint length, uint precision,
         QVariant defaultValue,
-        const QString& caption, const QString& description, uint width
-                                        )
+        const QString& caption, const QString& description)
         : m_columnInfo(0)
         , m_visibleLookupColumnInfo(0)
         , d(new Private)
@@ -79,7 +78,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
         options,
         length, precision,
         defaultValue,
-        caption, description, width);
+        caption, description);
 
     m_isDBAware = false;
     m_fieldOwned = true;
@@ -174,6 +173,7 @@ void KexiTableViewColumn::init()
     m_validator = 0;
     m_relatedDataEditable = false;
     m_headerTextVisible = true;
+    m_width = 0;
 }
 
 void KexiTableViewColumn::setValidator(KexiUtils::Validator* v)
@@ -200,9 +200,9 @@ void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
     if (!data)
         return;
     //find a primary key
-    const KexiTableViewColumn::List columns(data->columns());
+    const KexiTableViewColumn::List *columns = data->columns();
     int id = -1;
-    foreach(KexiTableViewColumn* col, columns) {
+    foreach(KexiTableViewColumn* col, *columns) {
         id++;
         if (col->field()->isPrimaryKey()) {
             //found, remember
@@ -245,3 +245,13 @@ bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
     }
     return true;
 }
+
+void KexiTableViewColumn::setWidth(uint w)
+{
+    m_width = w;
+}
+
+uint KexiTableViewColumn::width() const {
+    return m_width;
+}
+

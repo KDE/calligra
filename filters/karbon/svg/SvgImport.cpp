@@ -28,6 +28,7 @@
 
 #include <KarbonPart.h>
 #include <KarbonDocument.h>
+#include <KarbonKoDocument.h>
 
 #include <KoShape.h>
 #include <KoShapeLayer.h>
@@ -107,7 +108,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
         return KoFilter::ParsingError;
     }
 
-    KarbonPart * part = dynamic_cast<KarbonPart*>(m_chain->outputDocument());
+    KarbonKoDocument * part = dynamic_cast<KarbonKoDocument*>(m_chain->outputDocument());
     if (! part)
         return KoFilter::CreationError;
 

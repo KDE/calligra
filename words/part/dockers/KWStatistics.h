@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,13 +20,12 @@
 
 #ifndef KWSTATISTICS_H
 #define KWSTATISTICS_H
-
-
 #include<kglobal.h>
-
+#include "KWStatisticsDocker.h"
+#include "StatisticsPreferencesPopup.h"
 #include <QWidget>
-
-#include <ui_KWStatisticsDocker.h>
+#include <QToolButton>
+#include <QLabel>
 
 class QTimer;
 class QTextDocument;
@@ -34,6 +34,7 @@ class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
 class KConfigGroup;
+class QToolButton;
 
 class KWStatistics : public QWidget
 {
@@ -43,9 +44,11 @@ public:
                  KoSelection *selection = 0, QWidget *parent = 0);
 
     virtual ~KWStatistics();
-
     void updateDataUi();
-
+    void initUi();
+    friend class KWStatisticsDocker;
+    friend class StatisticsPreferencesPopup;
+    
 public slots:
     void wordsDisplayChanged(int);
     void sentencesDisplayChanged(int);
@@ -60,8 +63,12 @@ public slots:
 
 private:
     int countCJKChars(const QString &text);
-    Ui::KWStatisticsDocker widgetDocker;
-
+    QLabel *words,*sentences,*syllables,*spaces;
+    QLabel *flesch, *cjkchars,*nospaces,*lines;
+    QLabel *count_words,*count_sentences,*count_syllables,*count_spaces;
+    QLabel *count_flesch, *count_cjkchars,*count_nospaces,*count_lines;
+    QWidget *statsWidget;
+    QToolButton *preferencesButton;
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
     KWDocument *m_document;

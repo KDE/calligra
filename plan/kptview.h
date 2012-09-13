@@ -72,6 +72,7 @@ class TaskStatusView;
 class TaskModuleModel;
 class Calendar;
 class Part;
+class PartPart;
 class Node;
 class Project;
 class Task;
@@ -143,10 +144,12 @@ class KPLATO_EXPORT View : public KoView
     Q_OBJECT
 
 public:
-    explicit View( Part* part, QWidget* parent = 0 );
+    explicit View(KoPart *part, Part *doc, QWidget *parent = 0);
     ~View();
 
     Part *getPart() const;
+
+    KoPart *getKoPart() const;
 
     Project& getProject() const;
 
@@ -438,6 +441,8 @@ private:
     KAction *actNoInformation;
 
     QMap<ViewListItem*, QAction*> m_reportActionMap;
+
+    KoPart *m_partpart;
 };
 
 

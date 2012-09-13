@@ -145,7 +145,7 @@ class KPLATOUI_EXPORT CalendarEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    CalendarEditor( KoDocument *part, QWidget *parent );
+    CalendarEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     Project *project() const { return m_calendarview->project(); }

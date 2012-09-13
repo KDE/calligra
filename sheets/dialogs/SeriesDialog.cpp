@@ -61,11 +61,9 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
     setMainWidget(page);
 
     QVBoxLayout *grid1 = new QVBoxLayout(page);
-    grid1->setSpacing(spacingHint());
 
     QGroupBox* gb1 = new QGroupBox(i18n("Insert Values"), page);
     QHBoxLayout *gb1layout = new QHBoxLayout(gb1);
-    gb1layout->setSpacing(spacingHint());
     column = new QRadioButton(i18n("Vertical"), gb1);
     column->setWhatsThis(i18n("Insert the series vertically, one below the other"));
     row = new QRadioButton(i18n("Horizontal"), gb1);
@@ -77,7 +75,6 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
 
     QGroupBox* gb2 = new QGroupBox(i18n("Type"), page);
     QHBoxLayout *gb2layout = new QHBoxLayout(gb2);
-    gb2layout->setSpacing(spacingHint());
     linear = new QRadioButton(i18n("Linear (2,4,6,...)"), gb2);
     linear->setWhatsThis(i18n("Generate a series from 'start' to 'end' and for each step add "
                               "the value provided in step. This creates a series where each value "
@@ -94,7 +91,6 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
 
     QGroupBox* gb = new QGroupBox(i18n("Parameters"), page);
     QGridLayout *gb_layout = new QGridLayout(gb);
-    gb_layout->setSpacing(spacingHint());
 
     QLabel* label = new QLabel(i18n("Start value:"), gb);
     gb_layout->addWidget(label, 0, 0);

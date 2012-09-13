@@ -27,6 +27,8 @@
 #include <kiconloader.h>
 #include <kaboutdata.h>
 
+#include <KoIcon.h>
+
 #include <db/drivermanager.h>
 #include <db/driver.h>
 #include <db/connection.h>
@@ -163,7 +165,7 @@ int main(int argc, char** argv)
 
     if (gui) {
         app = new KApplication(true);
-        app->setWindowIcon(KIcon("table"));
+        app->setWindowIcon(koIcon("table"));
         instance = new KComponentData(KGlobal::mainComponent());
         KIconLoader::global()->addAppDir("kexi");
     } else {

@@ -22,6 +22,7 @@
 
 #include <KoToolRegistry.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -30,7 +31,7 @@ KarbonPatternToolFactory::KarbonPatternToolFactory()
 {
     setToolTip(i18n("Pattern Editing Tool"));
     setToolType("karbon,krita");
-    setIcon("pattern");
+    setIconName(koIconNameCStr("pattern"));
     setPriority(3);
 }
 

@@ -36,6 +36,7 @@
 #include <kdiroperator.h>
 #include <kurlcombobox.h>
 
+#include <KoIcon.h>
 #include <KoFilterManager.h>
 #include <KoDocument.h>
 #include <KoColorSpace.h>
@@ -68,6 +69,7 @@
 #include <metadata/kis_meta_data_store.h>
 #include <metadata/kis_meta_data_merge_strategy_registry.h>
 
+#include "kis_part2.h"
 #include "kis_config.h"
 #include "kis_cursor.h"
 #include "dialogs/kis_dlg_adj_layer_props.h"
@@ -173,9 +175,12 @@ public:
 
         }
         else if (layer->visible() || m_saveInvisible) {
+
             QRect r = m_image->bounds();
 
-            KisDoc2 d;
+            KisPart2 *p = new KisPart2();
+            KisDoc2 d(p);
+            p->setDocument(&d);
             d.prepareForImport();
 
             KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
@@ -291,11 +296,11 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
     connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
 
-    m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
+    m_layerSaveAs  = new KAction(koIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
 
-    m_groupLayersSave = new KAction(KIcon("document-save"), i18n("Save Group Layers..."), this);
+    m_groupLayersSave = new KAction(koIcon("document-save"), i18n("Save Group Layers..."), this);
     actionCollection->addAction("save_groups_as_images", m_groupLayersSave);
     connect(m_groupLayersSave, SIGNAL(triggered()), this, SLOT(saveGroupLayers()));
 
@@ -810,8 +815,10 @@ void KisLayerManager::mergeLayer()
     if (!layer) return;
 
     if (!layer->prevSibling()) return;
+    KisLayer *prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
+    if (!prevLayer) return;
 
-    if (layer->metaData()->isEmpty() && layer->prevSibling() && dynamic_cast<KisLayer*>(layer->prevSibling().data())->metaData()->isEmpty()) {
+    if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
         image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
     }
     else {
@@ -906,7 +913,10 @@ void KisLayerManager::saveLayerAsImage()
 
     QRect r = image->bounds();
 
-    KisDoc2 d;
+    KisPart2 *p = new KisPart2();
+    KisDoc2 d(p);
+    p->setDocument(&d);
+
     d.prepareForImport();
 
     KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), image->colorSpace(), l->name());

@@ -29,6 +29,7 @@
 #include <kexiutils/utils.h>
 #include <widget/kexicharencodingcombobox.h>
 #include <widget/KexiFileWidget.h>
+#include <KoIcon.h>
 
 #include <QCheckBox>
 #include <QGroupBox>
@@ -40,7 +41,6 @@
 #include <QDesktopWidget>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kpushbutton.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -134,7 +134,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     KexiPart::Info *partInfo = Kexi::partManager().infoForClass(
             QString("org.kexi-project.%1").arg(m_tableOrQuery->table() ? "table" : "query"));
     if (partInfo)
-        m_infoLblFrom->setIcon(partInfo->itemIcon());
+        m_infoLblFrom->setIcon(partInfo->itemIconName());
     m_infoLblFrom->separator()->hide();
     m_infoLblFrom->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_infoLblFrom, 0, 0, 1, 2);
@@ -144,7 +144,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         m_exportOptionsPage, true/*showFnameLine*/);
 
     if (m_options.mode == KexiCSVExport::Clipboard)
-        m_infoLblTo->setIcon("edit-paste");
+        m_infoLblTo->setIcon(koIconName("edit-paste"));
 
     m_infoLblTo->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     exportOptionsLyr->addWidget(m_infoLblTo, 1, 0, 1, 2);
@@ -153,7 +153,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
 //    exportOptionsLyr->addWidget(stretchWidget, 2, 0, 2, 2);
     exportOptionsLyr->setRowStretch(2, 1);
 
-    m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"));
+    m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), koIconName("configure")));
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     connect(m_showOptionsButton, SIGNAL(clicked()), this, SLOT(slotShowOptionsButtonClicked()));
     exportOptionsLyr->addWidget(m_showOptionsButton, 3, 1);

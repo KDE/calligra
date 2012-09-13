@@ -471,10 +471,10 @@
 #include <KDebug>
 #include <KLocale>
 
-#include <kexidb/connection.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/field.h>
-#include <kexidb/tableschema.h>
+#include <db/connection.h>
+#include <db/queryschema.h>
+#include <db/field.h>
+#include <db/tableschema.h>
 
 #include "parser.h"
 #include "parser_p.h"
@@ -971,6 +971,10 @@ aExpr8 '+' aExpr7
 {
 	$$ = new BinaryExpr(KexiDBExpr_Arithm, $1, '+', $3);
 	$$->debug();
+}
+| aExpr8 CONCATENATION aExpr7
+{
+    $$ = new BinaryExpr(KexiDBExpr_Arithm, $1, CONCATENATION, $3);
 }
 | aExpr8 '-' %prec UMINUS aExpr7
 {

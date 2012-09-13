@@ -36,7 +36,6 @@
 #include <KCursor>
 #include <KApplication>
 #include <KIconEffect>
-#include <KIconLoader>
 #include <KGlobalSettings>
 #include <KAction>
 #include <KDialog>

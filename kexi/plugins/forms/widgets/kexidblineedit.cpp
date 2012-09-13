@@ -24,7 +24,6 @@
 #include <KDebug>
 #include <KNumInput>
 #include <KDateTable>
-#include <KIconEffect>
 
 #include <QMenu>
 #include <QPainter>

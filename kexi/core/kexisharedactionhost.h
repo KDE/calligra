@@ -135,7 +135,7 @@ protected:
      Pass desired KAction subclass with \a subclassName (e.g. "KToggleAction") to have
      that subclass allocated instead just KAction (what is the default).
      Created action's data is owned by the main window. */
-    KAction* createSharedAction(const QString &text, const QString &pix_name,
+    KAction* createSharedAction(const QString &text, const QString &iconName,
                                 const KShortcut &cut, const char *name, KActionCollection* col = 0,
                                 const char *subclassName = 0);
 

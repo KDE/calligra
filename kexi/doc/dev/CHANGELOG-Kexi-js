@@ -25,7 +25,7 @@ TODO KoProperty:
 
 TODO:
 - crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
-  http://websvn.kde.org/trunk/calligra/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
+  http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 - general: use KPluginInfo for any kind of plugins, what would allow for creating main window
@@ -132,9 +132,9 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
-~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
+===================== Kexi 2.6  =====================
 
-~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.71) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.6 Alpha 1 ~~~~~~~~~~~~~~~~
 
 TODO:
 Table Designer
@@ -146,6 +146,137 @@ KexiDB
 *MySQL Driver
 **add config option for the length limit
 
+TODO: make
+*See also http://blog.mclaughlinsoftware.com/2009/03/09/sql-concatenation-blues/
+
+2012-08-13..23
+Core
+*Add support for user data storage
+FEATURE:305074
+Table View
+*Remember column widths in tabular data view
+FEATURE:230994
+
+2012-08-14
+KexiDB
+*Added unit test for creating .kexi database file with KexiDB::Connection and test data
+
+2012-08-11
+Main Window
+*Declare 'full screen' as global action for use in user commands or scripts
+
+===================== Kexi 2.5  =====================
+
+~~~~~~~~~~~~~~~~ 2.5.3 ~~~~~~~~~~~~~~~~
+
+2012-09-11
+Query Designer
+*Fix: Missing "*" (All Columns) item in Query Designer, it was present in Kexi 2.2 and ealier.
+**regression introduced in commit 414b0464208001
+BUG:306577
+
+2012-09-10
+General
+*Force lower case letters for object identifiers (except for widget names)
+**This adds consstency and fixes issue with
+**Also fix support for objects renamed to not-all-lowercase in earlier version of Kexi.
+BUG:306523
+REVIEW:106411
+TODO: Port to Predicate
+
+2012-09-07
+Main Window
+*for consistency, display names in tab bars, not captions
+**(names are displayed in the Project Navigator too)
+
+~~~~~~~~~~~~~~~~ 2.5.2 ~~~~~~~~~~~~~~~~
+
+2012-09-01
+Query Designer
+*Fix bug SQL Editor's history is not functional (by hiding it in 2.5 and completely removing in 2.6)
+BUG:306145
+REVIEW:106309
+
+2012-08-30
+Startup
+*Fetch startup UI from x.y.0 URL for any x.y.z version, not from x.y.z URL
+
+2012-08-26
+Query Designer
+*Make string concatenation operator || work
+**Ported to Predicate
+BUG:305793
+REVIEW:106199
+
+2012-08-23
+KexiDB
+*Make it possible to disable db drivers even if the libs are present and found
+**renamed drivers/mySQL to drivers/mysql to have single BUILD_mysql config flag (by jstaniek)
+**Ported to Predicate
+BUG:305683
+REVIEW:106152
+
+~~~~~~~~~~~~~~~~ 2.5.1 ~~~~~~~~~~~~~~~~
+
+2012-08-14
+KexiDB
+*Fixed bug: New Kexi project file is created in current directory instead of the selected one
+**Ported to Predicate
+BUG:305163
+REVIEW:106023
+*Missing table kexi__parts is no longer a critical error in Kexi
+**This enables opening databases created without KexiProject but with pure KexiDB::Connection
+**Useful e.g. for Bibliography storage implementation
+REVIEW:106027
+
+2012-08-13
+Main Window
+*Workaround for visual glitch of Oxygen style for menu widget
+BUG:305051
+REVIEW:105996
+
+2012-08-09
+CSV Import
+*Use KexiDB data types in implementation
+REVIEW:105947
+*'Format for column N' now properly updates to current type
+BUG:304859
+*Fix uniqueness detection for integer column
+BUG:304883
+REVIEW:105949
+*Import last line even if it is only ""
+BUG:304891
+REVIEW:105950
+
+2012-08-06
+Table View
+*Fixed misplaced 'Date/Time data error' validation popup in tableview
+BUG:282295
+*Show warning when invalid date values in tables and forms are rejected
+BUG:299867
+*Clicking validation popup editor is focus again allowing to correct the value
+*Use new message widget for validation popups
+REVIEW:105906
+
+2012-08-05
+KexiDB
+*Display cmake warning if libpqxx is not in version 3.x
+**move checks for pgsql, mysql, tds, xbase dependencies to global area
+BUG:300871
+REVIEW:105874
+2012-08-03
+CSV Import
+*Fix crash on importing CSV files with more than 1024 columns
+BUG:304405
+REVIEW:105844
+Fix crash on importing CSV files with Mac line endings
+BUG:304329
+REVIEW:105843
+
+~~~~~~~~~~~~~~~~ 2.5.0 ~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~ 2.5 Beta 1 (2.4.91) ~~~~~~~~~~~~~~~~
+
 2012-06-07
 KexiDB
 *Added maxLengthIsDefault property of table field for Text types to extended schema
@@ -154,10 +285,10 @@ CCBUG:301277
 *Added DefaultMaxLengthForTextFields config in Tables group
 **specifies default maximum length for fields of type Text
 **0 (the default) means unlimited or up to engine's limit
+**Ported to Predicate
 CCBUG:301277
-TODO: Port to Predicate
 
-~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.91) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.5 Alpha 1 (2.4.90) ~~~~~~~~~~~~~~~~
 
 2012-03-03
 Main Window
@@ -182,8 +313,8 @@ REVIEW:105182
 KexiDB
 *Remove limits for Text data type, leave as option
 **By default there are no limits in Text data type
+**Ported to Predicate
 BUG:301277
-TODO: Port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.4.2 ~~~~~~~~~~~~~~~~
 
@@ -203,7 +334,7 @@ BUG:278296
 KexiDB
 *SQLite Driver
 **Fixed error when attempting to compact database opened from Open view
-TODO: port to Predicate
+**Ported to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.4.0 ~~~~~~~~~~~~~~~~
 
@@ -281,17 +412,17 @@ KexiDB
 *SQLite Driver
 **Fixed crashes when compacting database fails
 **Fixed error when attempting to compact database opened from recent lists
-TODO: port to Predicate
+**Ported to Predicate
 *MySQL Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
 CCBUG:254068
-TODO: port to Predicate
 *PostgreSQL Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
 CCBUG:254068
-TODO: port to Predicate
 Reports
 *Fix crash in assigning data source that uses reserved words as field names
 **Tables/queries with reserved words still do not work in reports though
@@ -316,8 +447,8 @@ Main Window
 KexiDB
 *SQLite Driver
 **Ported database compacting code to the new Kexi that uses system SQLite version
+**Ported to Predicate
 BUG:293548
-TODO: port to Predicate
 
 TODO: after db creating and opening the main menu is invisible
 
@@ -329,8 +460,8 @@ CSV Import
 KexiDB
 *SQLite Driver
 **fixed crash in prepared statement execution for inserting data when number of items to insert is smaller than expected; this case could be found when importing CSV data in Kexi with fewer columns specified than expected
+**Ported to Predicate
 CCBUG:279980
-TODO: port to Predicate
 CSV Import
 *Fixed bug: crash while importing CSV rows that start with empty cells (only delimiters)
 **Example row: ,,,"a"
@@ -431,8 +562,8 @@ TODO 2.5: change standard "Open" btn to "Open Imported Table"
 2012-01-01
 KexiDB
 *Query SQL generated in the Query Designer should be of KEXISQL type
+**Ported to Predicate
 BUG:290354
-TODO: port to Predicate
 
 2011-12-26..28
 Forms
@@ -452,8 +583,8 @@ TODO: add effect property to the Image Box, see QGraphicsEffects
 2011-12-16..20
 KexiDB
 *Use ICU (http://icu-project.org) for high quality collating in unicode text columns using SQLite extension.
+**Ported to Predicate
 BUG:278411
-TODO: port to Predicate
 
 2011-12-14
 General
@@ -463,7 +594,7 @@ Core
 *remove memory leak in code opening project
 KexiDB
 *avoid 'invalid read' in code for inserting records into tables
-TODO: port to Predicate
+**Ported to Predicate
 
 2011-12-10..11
 General
@@ -1223,8 +1354,8 @@ KexiDB
 *MySQL Driver: Fix "DB created but cannot open" error appearing on creating a new database for mysql backend.
  See http://dev.mysql.com/doc/refman/5.0/en/identifier-case-sensitivity.html (complex!) for logic of otherwise simple thing.
  The solution is to execute SHOW VARIABLES LIKE 'lower_case_table_name' to get the flag and make the table and database names lowercase if needed.
+**Ported to Predicate
 BUG:235507
-*******TODO: port to Predicate
 
 2010-04-25
 KexiDB
@@ -1309,7 +1440,7 @@ TODO: fix sqlite includes and libs lookup for Windows
 
 2010-02-25
 KoProperty
-*moved to Calligra libs
+*moved to KOffice libs
 
 2010-02-20
 Reports
@@ -1523,7 +1654,7 @@ Forms
 
 2009-10-27
 General
-*versioning in par with calligra again
+*versioning in par with koffice again
 
 2009-10-05..07
 Forms
@@ -2059,7 +2190,7 @@ Forms
 --added static self()
 --is initialized by KexiFormPart
 -See Also:
- http://wiki.calligra.org/index.php?title=Kexi/Porting#Forms_Refactoring
+ http://wiki.koffice.org/index.php?title=Kexi/Porting#Forms_Refactoring
 
 2009-01-11
 KexiDB
@@ -2548,7 +2679,7 @@ Kexi 2.0
   More info at http://kexi-project.org/wiki/wikiview/index.php@Porting%20to%20Qt4.html
 - mimetype icons moved to KDE4-compatible hicolor
 
-~~~~~~~~~~~~~~~~ 1.1.3 bugfix release (with Calligra 1.6.3)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.1.3 bugfix release (with KOffice 1.6.3)  ~~~~~~~~~~~~~~~~
 
 2007-05-29
 Core
@@ -2694,7 +2825,7 @@ Main Window
   context-dependent tool window.
 2.0: merged
 
-~~~~~~~~~~~~~~~~ 1.1.2 bugfix release (with Calligra 1.6.2)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.1.2 bugfix release (with KOffice 1.6.2)  ~~~~~~~~~~~~~~~~
 
 2007-02-09
 Table View
@@ -2925,7 +3056,7 @@ KexiDB
  LEFT OUTER JOIN persons AS persons2 ON service.service_man=persons2.id;
 2.0: merged
 
-~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with Calligra 1.6.1)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.1.1 bugfix release (with KOffice 1.6.1)  ~~~~~~~~~~~~~~~~
 Query Designer
 - propery initialize newly appended rows
 2.0: merged
@@ -3091,7 +3222,7 @@ Query Designer
 - SQL view's section header now provides an accelerator
 2.0: merged
 
-~~~~~~~~~~~~~~~~ 1.1 stable (with Calligra 1.6)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.1 stable (with KOffice 1.6)  ~~~~~~~~~~~~~~~~
 
 2006-10-06
 KexiDB
@@ -3191,7 +3322,7 @@ KexiDB
 = fixed retrieving autonumber data
 2.0: merged
 
-~~~~~~~~~~~~ 1.1 RC1 release (with Calligra 1.6 RC1)  ~~~~~~~~~~~~
+~~~~~~~~~~~~ 1.1 RC1 release (with KOffice 1.6 RC1)  ~~~~~~~~~~~~
 
 2006-09-14
 KoProperty
@@ -3280,7 +3411,7 @@ i18n
 Forms
 - hide QRadioButton widget - current implementation is no-op
 
-~~~~~~~~~~~~ 1.1 beta 1 release (with Calligra 1.6 beta 1)  ~~~~~~~~~~~~
+~~~~~~~~~~~~ 1.1 beta 1 release (with KOffice 1.6 beta 1)  ~~~~~~~~~~~~
 
 2006-09-01
 Forms
@@ -3382,7 +3513,7 @@ Main Window
 2006-08-09
 KoProperty
 = "3rdState" option added for BoolEdit - i18n'd QString, if not empty, 
-  the the editor's button accept third "null" state with name equal to this string. 
+  the editor's button accept third "null" state with name equal to this string. 
   When this value is selected, Widget::value() returns null QVariant. 
   This option is used for example in the "defaultValue" property for a field 
   of type boolean (in Kexi Table Designer). Third, "null" value of the property 
@@ -3445,7 +3576,7 @@ Table Designer
 = A test suite added for table altering
 2.0: merged
 
-~~~~~~~~~~~~ 1.1 alpha 1 release (with Calligra 1.6 alpha 1)  ~~~~~~~~~~~~
+~~~~~~~~~~~~ 1.1 alpha 1 release (with KOffice 1.6 alpha 1)  ~~~~~~~~~~~~
 
 2006-07-31
 KexiDB
@@ -3536,7 +3667,7 @@ Table View
 - added drop down button as image cell editor
 2.0: merged
 
-~~~~~~~~~~~~~~~~ 1.0.2 bugfix release (with Calligra 1.5.2)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0.2 bugfix release (with KOffice 1.5.2)  ~~~~~~~~~~~~~~~~
 ~ Now, as 1.0.x is closed for changes, all the changes are merged into 2.0 only ~~
 
 2006-07-06
@@ -3778,7 +3909,7 @@ Forms
   (fixed by setting StrongFocus policy as default)
 1.0/2.0: ported
 
-~~~~~~~~~~~~~~~~ 1.0.1 bugfix release (with Calligra 1.5.1)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0.1 bugfix release (with KOffice 1.5.1)  ~~~~~~~~~~~~~~~~
 
 2006-05-17
 Main Window
@@ -3999,8 +4130,8 @@ TableView
 
 TODO: merge trunk with revision 523723
 
-~~~~~~~~~~~~~~~~ 1.0 stable (with Calligra 1.5)  ~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~ 1.0 rc1 (with Calligra 1.5 rc1) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0 stable (with KOffice 1.5)  ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0 rc1 (with KOffice 1.5 rc1) ~~~~~~~~~~~~~~~~
 
 2006-03-20
 KexiDB
@@ -4013,7 +4144,7 @@ KexiDB
 Startup
 - ask for password (without storing it) for connection data without stored password
 
-~~~~~~~~~~~~~~~~ 1.0 beta 2 (with Calligra 1.5) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0 beta 2 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
 
 2006-02-28, 03-03
 PostgreSQL driver
@@ -4138,7 +4269,7 @@ Table View
 - small passive warning box is displayed when entered value is invalid
   (currently for date, time and date/time types)
 
-~~~~~~~~~~~~~~~~ 1.0 beta 1 (with Calligra 1.5) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 1.0 beta 1 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
 
 Main Window
 - 'single click opens' is mode is off by default, can be turned on
@@ -4558,7 +4689,7 @@ General
 - description in 'about data' mentions whether it is a standalone or 'bundled' 
   Kexi version
 - .po files are now prefixed with "standalone_" for standalone versions
-  to avoid conflicts with Calligra installations
+  to avoid conflicts with KOffice installations
 - yes, 1.0 is marked as standalone version
 - custom defines cleaned up
 
@@ -4913,7 +5044,7 @@ Main Window
 - 'close all' works well if there are more than one yes/no/cancel dialogs required to show
 
 ~~~~~~~~~~~~~~~~ 0.9 ~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~ 0.8 (excluding updated i18n; with Calligra 1.4) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 0.8 (excluding updated i18n; with KOffice 1.4) ~~~~~~~~~~~~~~~~
 
 2005-05-10
 Project Migration
@@ -4982,7 +5113,7 @@ Form Designer
 - looking for i18n'd property description or enum value description: 
   on failure, we're also asking parent widget factory for this, if one exists
 
-~~~~~~~~~~~~~~~~ 0.8 beta 1 (with Calligra 1.4) ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 0.8 beta 1 (with KOffice 1.4) ~~~~~~~~~~~~~~~~
 
 2005-04-27
 Form Designer
@@ -7374,7 +7505,7 @@ e.g. for KexiDialogBase.
 
 - KexiPart items are now removable! (both from GUI and db backend)
 - Kexi Browser is items are removed if required
-- KexiDialog: now has itemIcon() possible for reimpl. and Kexi Relation View reimpl this, since 
+- KexiDialog: now has itemIconName() possible for reimpl. and Kexi Relation View reimpl this, since 
   it has no KexiPart
 - Kexi Relation View: small crash fixed
 
@@ -7693,7 +7824,7 @@ TODO: keep ownership properly in KexiPart namespace!!!!!!
   -some const added
 
 2003-11-10
-- added global kexi version info, like in calligra
+- added global kexi version info, like in koffice
 - configure.in.in: added checking for qextmdi if required
 
 2003-11-07
@@ -7730,7 +7861,7 @@ TODO: update on lostfocus
 2003-10-30
 - KexiStartupDialog added. Now, although it is project-and-connection-oriented, 
    it is designed to be still consistent with conventional document-driver startup 
-   dialogs used for other Calligra apps.
+   dialogs used for other KOffice apps.
 - KexiProjectSelectorWidget introduced
 - KexiProjectData structure added
 - KexiProjectSet structure added
@@ -8239,7 +8370,7 @@ TODO: add default hint for columns widths, based on type of field
 - kexikugarhandlerui.rc moved to kexi/data/
 - 'Other Licenses' submenu made in 'Help' menu, 'Report Generator Licensing' 
 	entry moved here from Kugar Part's popup menu
-TODO: move this submenu after 'Error report' Entry (requires changes to calligra_shell.rc).
+TODO: move this submenu after 'Error report' Entry (requires changes to koffice_shell.rc).
 - kexirc added
 - added option for KexiBrowserItem to be sorted in FIFO order (top level items - by default,
 	others are sorted in alpha order). Visible Parts' order is now specified (by library name)
@@ -8262,7 +8393,7 @@ TODO: move this submenu after 'Error report' Entry (requires changes to calligra
 - menubar and popupmenu entries in Query Part merged using KexiPartItemAction (new KAction subclass);
   The same for Tables Part. KexiPartPopupMenu now collaborates with KexiPartItemAction to reuse its
 	action's information (avoid redundancy).
-TODO: add delete_item action icon (equal "button_cancel" in crystalsvg) to the calligra/actions icons
+TODO: add delete_item action icon (equal "button_cancel" in crystalsvg) to the koffice/actions icons
 TODO: like above, add "script" icon to kexi/actions ("moc_src" is used)
 
 2003-07-01
@@ -8291,13 +8422,13 @@ big picture moved to KexiCreateProjectPage superclass.
 
 2003-06-17
 ([JK] - fix proposed by Jakub Kubica)
-[JK]- (in calligracore): KoMainWindow::KoMainWindow: KStdAction::configureToolbars disabled:
+[JK]- (in kofficecore): KoMainWindow::KoMainWindow: KStdAction::configureToolbars disabled:
 TODO: enable this when configure window will work
 [JK]- "Settings>Configure Kexi" action temporary disabled for KEXI_NO_UNFINISHED option
 TODO: reenable this!
 [JK]- "Save password" in authorization page of the Project wizard removed for KEXI_NO_UNFINISHED option
 TODO: reenable this!
-- <ActionList name="toolbarlist"> line removed from calligra_shell.rc (this removed redundant actions)
+- <ActionList name="toolbarlist"> line removed from koffice_shell.rc (this removed redundant actions)
 [JK]- now, after failed db connection Project wizard do not allow moving to DB selection page
 - now it's not allowed to close alter table window for a table that do not contain fields
   (message box is displayed then). The same is when user try to delete table (without fields) 
@@ -8434,4 +8565,4 @@ dock windows visiblity fixed, simplified code
 
 2002-06-23, Sunday, 00:20:36 (Lucijan)
 - First Kexi commit, SVN revision #162554
-  details: http://websvn.kde.org/trunk/calligra/kexi/?rev=162554
+  details: http://websvn.kde.org/trunk/koffice/kexi/?rev=162554

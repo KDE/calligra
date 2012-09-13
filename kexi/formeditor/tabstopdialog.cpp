@@ -24,10 +24,11 @@
 #include <QGridLayout>
 #include <QFrame>
 
-#include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpushbutton.h>
+
+#include <KoIcon.h>
 
 #include "form.h"
 #include "WidgetTreeWidget.h"
@@ -74,12 +75,12 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
     QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
-    m_btnUp = new KPushButton(KIcon("arrow-up"), i18n("Move Up"), frame);
+    m_btnUp = new KPushButton(koIcon("arrow-up"), i18n("Move Up"), frame);
     m_btnUp->setToolTip(i18n("Move widget up"));
     vbox->addWidget(m_btnUp);
     connect(m_btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
-    m_btnDown = new KPushButton(KIcon("arrow-down"), i18n("Move Down"), frame);
+    m_btnDown = new KPushButton(koIcon("arrow-down"), i18n("Move Down"), frame);
     m_btnDown->setToolTip(i18n("Move widget down"));
     vbox->addWidget(m_btnDown);
     connect(m_btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));

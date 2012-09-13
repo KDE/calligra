@@ -25,7 +25,7 @@
 
 #include <QAbstractListModel>
 
-#include <KIcon>
+#include <QSize>
 
 class KoStyleThumbnailer;
 
@@ -35,7 +35,6 @@ class KoCharacterStyle;
 
 class QImage;
 class QSignalMapper;
-class QSize;
 
 /** This class is used to provide widgets (like the @class StylesCombo) the styles available to the document being worked on. The @class StylesModel can be of two types: character styles or paragraph styles type. This allows the widget to ignore the type of style it is handling.
   * Character styles in ODF can be specified in two ways. First, a named character style, specifying character formatting properties. It is meant to be used on a couple of individual characters. Secondely, a paragraph style also specifies character formatting properties, which are to be considered the default for that particular paragraph.
@@ -150,8 +149,6 @@ private:
     KoParagraphStyle *m_currentParagraphStyle;
     KoCharacterStyle *m_defaultCharacterStyle;
     Type m_modelType;
-
-    KIcon m_paragIcon, m_charIcon;
 
     QSignalMapper *m_styleMapper;
 

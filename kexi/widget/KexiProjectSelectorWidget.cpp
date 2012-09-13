@@ -23,9 +23,9 @@
 #include <db/connectiondata.h>
 #include <db/utils.h>
 #include <core/kexi.h>
+#include <KoIcon.h>
 
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kmimetype.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,7 +45,7 @@ public:
     Private() {
         selectable = true;
     }
-    QPixmap fileicon, dbicon;
+    QIcon fileicon, dbicon;
     bool showProjectNameColumn;
     bool showConnectionColumns;
     bool selectable;
@@ -111,10 +111,9 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     d->showConnectionColumns = showConnectionColumns;
     list()->installEventFilter(this);
 
-    const QString iconname(KexiDB::defaultFileBasedDriverIcon());
-    d->fileicon = KIconLoader::global()->loadMimeTypeIcon(iconname, KIconLoader::Desktop);
-    setWindowIcon(KIcon(iconname));
-    d->dbicon = SmallIcon("server-database");
+    d->fileicon = KIcon(KexiDB::defaultFileBasedDriverIconName());
+    setWindowIcon(d->fileicon);
+    d->dbicon = koIcon("server-database");
 // list->setHScrollBarMode( QScrollView::AlwaysOn );
 
     QTreeWidgetItem *headerItem = list()->headerItem();
@@ -306,7 +305,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
     KexiDB::ConnectionData _cdata(cdata);
     KexiProjectSet *prj_set = new KexiProjectSet(_cdata);
     init(prj_set, showProjectNameColumn, showConnectionColumns);
-    setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), "document-open",
+    setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), koIconName("document-open"),
                                   i18n("Open Database Connection")));
 
     m_sel->label()->setText(i18n("Select a project on <b>%1</b> database server to open:",

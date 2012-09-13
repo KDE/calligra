@@ -24,10 +24,11 @@
 #include <KoShapeApplicationData.h>
 
 #include <QSet>
+#include "stage_export.h"
 
 class KPrShapeAnimation;
 
-class KPrShapeApplicationData : public KoShapeApplicationData
+class STAGE_EXPORT KPrShapeApplicationData : public KoShapeApplicationData
 {
 public:
     KPrShapeApplicationData();
@@ -35,9 +36,12 @@ public:
 
     QSet<KPrShapeAnimation *> & animations();
 
+    void setDeleteAnimations(bool enabled);
+
 private:
     // stores the animations of a shape
     QSet<KPrShapeAnimation *> m_animations;
+    bool m_deleteAnimations;
 };
 
 

@@ -38,6 +38,8 @@
 #include <KTextEdit>
 #include <KLineEdit>
 
+#include <KoIcon.h>
+
 #include "WidgetInfo.h"
 #include "FormWidget.h"
 #include "resizehandle.h"
@@ -2258,7 +2260,7 @@ void Form::createPropertiesForWidget(QWidget *w)
         m_lib->setPropertyOptions(d->propertySet, *winfo, w);
         d->propertySet.addProperty(newProp = new KoProperty::Property("this:classString", winfo->name()));
         newProp->setVisible(false);
-        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->pixmap()));
+        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->iconName()));
         newProp->setVisible(false);
     }
     d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
@@ -2420,17 +2422,17 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QString titleText;
     if (!multiple) {
         if (w == container->form()->widget()) {
-            icon = SmallIcon("form");
+            icon = koIcon("form");
             titleText = i18n("%1 : Form", w->objectName());
         }
         else {
-            icon = SmallIcon(
+            icon = KIcon(
                        container->form()->library()->iconName(w->metaObject()->className()));
             titleText = QString(w->objectName()) + " : " + n;
         }
     }
     else {
-        icon = SmallIcon("multiple_obj");
+        icon = koIcon("multiple_obj");
         titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
 
