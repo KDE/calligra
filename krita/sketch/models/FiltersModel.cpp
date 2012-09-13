@@ -17,18 +17,22 @@
  */
 
 #include "FiltersModel.h"
+#include <filter/kis_filter.h>
 
 class FiltersModel::Private
 {
 public:
     Private() {};
+    QList<KisFilterSP> filters;
 };
 
 FiltersModel::FiltersModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
-
+    QHash<int, QByteArray> roles;
+    roles[TextRole] = "text";
+    setRoleNames(roles);
 }
 
 FiltersModel::~FiltersModel()
@@ -43,6 +47,9 @@ QVariant FiltersModel::data(const QModelIndex& index, int role) const
     {
         switch(role)
         {
+            case TextRole:
+                data = d->filters[index.row()]->name();
+                break;
             default:
                 break;
         }
@@ -54,7 +61,18 @@ int FiltersModel::rowCount(const QModelIndex& parent) const
 {
     if(parent.isValid())
         return 0;
-    return 0;
+    return d->filters.count();
+}
+
+void FiltersModel::addFilter(KisFilterSP filter)
+{
+    if(!filter.isNull())
+    {
+        int newRow = d->filters.count();
+        beginInsertRows(QModelIndex(), newRow, newRow);
+        d->filters << filter;
+        endInsertRows();
+    }
 }
 
 #include "FiltersModel.moc"

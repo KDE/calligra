@@ -20,11 +20,16 @@
 #define FILTERSMODEL_H
 
 #include <QtCore/QModelIndex>
+#include <kis_types.h>
 
 class FiltersModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
+    enum FiltersModelRoles
+    {
+        TextRole = Qt::UserRole + 1
+    };
     explicit FiltersModel(QObject* parent = 0);
     virtual ~FiltersModel();
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -32,6 +37,8 @@ public:
 
     QString categoryId;
     QString categoryName;
+
+    void addFilter(KisFilterSP filter);
 private:
     class Private;
     Private* d;

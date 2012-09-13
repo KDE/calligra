@@ -24,9 +24,25 @@
 class FiltersCategoryModel::Private
 {
 public:
-    Private() {}
+    Private()
+        : currentCategory(0)
+    {}
 
+    int currentCategory;
     QList<FiltersModel*> categories;
+    FiltersModel* categoryByName(const QString& name)
+    {
+        FiltersModel* category = 0;
+        for(int i = 0; i < categories.count(); ++i)
+        {
+            if(categories.at(i)->categoryId == name)
+            {
+                category = categories[i];
+                break;
+            }
+        }
+        return category;
+    }
 };
 
 bool categoryLessThan(const FiltersModel* s1, const FiltersModel* s2)
@@ -42,18 +58,17 @@ FiltersCategoryModel::FiltersCategoryModel(QObject* parent)
     QList<QString> tmpCategoryIDs;
     foreach(const KisFilterSP filter, filters) {
         Q_ASSERT(filter);
+        FiltersModel* cat = 0;
         if (!tmpCategoryIDs.contains(filter->menuCategory().id())) {
-            FiltersModel* cat = new FiltersModel(this);
+            cat = new FiltersModel(this);
             cat->categoryId = filter->menuCategory().id();
             cat->categoryName = filter->menuCategory().name();
             d->categories << cat;
             tmpCategoryIDs << filter->menuCategory().id();
         }
-        /*Private::Filter filt;
-        filt.id = filter->id();
-        filt.name = filter->name();
-        filt.filter = filter;
-        d->categories[ filter->menuCategory().id()].filters.append(filt);*/
+        else
+            cat = d->categoryByName(filter->menuCategory().id());
+        cat->addFilter(filter);
     }
     qSort(d->categories.begin(), d->categories.end(), categoryLessThan);
 
@@ -93,7 +108,7 @@ int FiltersCategoryModel::rowCount(const QModelIndex& parent) const
 
 QObject* FiltersCategoryModel::filterModel() const
 {
-    return 0;
+    return d->categories[d->currentCategory];
 }
 
 #include "FiltersCategoryModel.moc"
