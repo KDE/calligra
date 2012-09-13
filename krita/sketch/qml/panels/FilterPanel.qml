@@ -77,6 +77,7 @@ Panel {
             id: categoryList;
             width: parent.width;
             model: filtersCategoryModel;
+            onCurrentIndexChanged: model.activateItem(currentIndex);
         }
         ExpandingListView {
             width: parent.width;

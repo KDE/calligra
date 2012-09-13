@@ -111,4 +111,13 @@ QObject* FiltersCategoryModel::filterModel() const
     return d->categories[d->currentCategory];
 }
 
+void FiltersCategoryModel::activateItem(int index)
+{
+    if(index > 0 && index < d->categories.count())
+    {
+        d->currentCategory = index;
+        emit filterModelChanged();
+    }
+}
+
 #include "FiltersCategoryModel.moc"

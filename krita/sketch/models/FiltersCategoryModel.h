@@ -37,6 +37,7 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
 
     QObject* filterModel() const;
+    Q_INVOKABLE void activateItem(int index);
 
 Q_SIGNALS:
     void filterModelChanged();
