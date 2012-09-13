@@ -39,6 +39,8 @@ public:
     bool changeBackground() const;
     void setChangeBackground(bool newChangeBackground);
 
+    Q_INVOKABLE void setAlpha(int percentValue);
+
 Q_SIGNALS:
     void viewChanged();
     void changeBackgroundChanged();
