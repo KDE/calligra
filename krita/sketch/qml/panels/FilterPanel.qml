@@ -77,11 +77,62 @@ Panel {
             id: categoryList;
             width: parent.width;
             model: filtersCategoryModel;
-            onCurrentIndexChanged: model.activateItem(currentIndex);
+            onCurrentIndexChanged: {
+                fullCategoryList.currentIndex = currentIndex;
+                model.activateItem(currentIndex)
+            }
         }
         ExpandingListView {
             width: parent.width;
             model: filtersCategoryModel.filterModel;
+        }
+    }
+
+    fullContents: Column {
+        anchors {
+            fill: parent;
+            margins: Constants.DefaultMargin;
+        }
+        spacing: Constants.DefaultMargin;
+        ExpandingListView {
+            id: fullCategoryList;
+            width: parent.width;
+            model: filtersCategoryModel;
+            onCurrentIndexChanged: {
+                if(categoryList.currentIndex !== currentIndex) {
+                    categoryList.currentIndex = currentIndex;
+                }
+            }
+        }
+        ExpandingListView {
+            width: parent.width;
+            model: filtersCategoryModel.filterModel;
+            onCurrentIndexChanged: {
+                if(model.filterRequiresConfiguration(currentIndex)) {
+                    noConfigNeeded.visible = false;
+                    configNeeded.visible = true;
+                    configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
+                }
+                else {
+                    noConfigNeeded.visible = true;
+                    configNeeded.visible = false;
+                }
+            }
+        }
+        Label {
+            id: noConfigNeeded;
+            width: parent.width;
+            text: "This filter requires no configuration";
+        }
+        Item {
+            id: configNeeded;
+            width: parent.width;
+            height: childrenRect.height > 0 ? childrenRect.height : 1;
+            Loader {
+                id: configLoader;
+                width: parent.width;
+                height: item.height;
+            }
         }
     }
 
