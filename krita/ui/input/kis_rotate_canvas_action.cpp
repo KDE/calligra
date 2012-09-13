@@ -22,6 +22,8 @@
 
 #include <KLocalizedString>
 
+#include "kis_canvas_controller.h"
+
 #include <kis_canvas2.h>
 #include <kis_image.h>
 
@@ -54,6 +56,9 @@ KisRotateCanvasAction::~KisRotateCanvasAction()
 
 void KisRotateCanvasAction::begin(int shortcut)
 {
+    KisCanvasController *canvasController =
+        dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+
     switch(shortcut) {
         case RotateToggleShortcut:
             setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
@@ -61,13 +66,13 @@ void KisRotateCanvasAction::begin(int shortcut)
             d->active = true;
             break;
         case RotateLeftShortcut:
-            inputManager()->canvas()->rotateCanvasLeft15();
+            canvasController->rotateCanvasLeft15();
             break;
         case RotateRightShortcut:
-            inputManager()->canvas()->rotateCanvasRight15();
+            canvasController->rotateCanvasRight15();
             break;
         case RotateResetShortcut:
-            inputManager()->canvas()->resetCanvasTransformations();
+            canvasController->resetCanvasTransformations();
             break;
     }
 }
@@ -98,7 +103,9 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 
                 float angle = (180 / M_PI) * (newAngle - oldAngle);
 
-                inputManager()->canvas()->rotateCanvas(angle);
+                KisCanvasController *canvasController =
+                    dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+                canvasController->rotateCanvas(angle);
 
                 setMousePosition(mevent->posF());
                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);

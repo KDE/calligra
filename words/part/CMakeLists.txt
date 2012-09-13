@@ -93,7 +93,6 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertImage.ui
-    dockers/KWStatisticsDocker.ui
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui

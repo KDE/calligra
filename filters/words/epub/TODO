@@ -48,6 +48,10 @@ Allow user to add a book cover image
  * Send parameter (filename) to the filter
  * UI to find / edit the filename
 
+Configuration of the conversion process
+ * Styles in css file (bool)                                            [Done]
+ * Use breaks (bool)                                                    [Done]
+
 Create a generic HTML export filter
  * Refactor some things to prepare for the HTML filter.
     + Generalize some concepts                                          [Done]
@@ -63,11 +67,10 @@ Create a generic HTML export filter
        - Move parsing of metadata to OdfParser                            [done]
        - Move parsing of manifest to OdfParser                            [done]
     + Move conversion of images into its own file??
- * Create the HTML backend instead of the Epub one.
-    + Create a base class FileCollector.
-    + Move general code from EpubFile to FileCollector
-    + Create the class HtmlBackend
-       - Rename EpubFile to EpubBackend?
+ * Create the HTML backend instead of the Epub one.                     [DONE]
+    + Create a base class FileCollector.                                [Done]
+    + Move general code from EpubFile to FileCollector                  [Done]
+    + Create the class HtmlFile                                         [Done]
  * Create the actual filter
 
 

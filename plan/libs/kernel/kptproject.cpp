@@ -1452,10 +1452,15 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
         return false;
     }
     Node *oldParent = node->parentNode();
-    const Node *before = newParent->childNode( newPos );
-    emit nodeToBeMoved( node );
+    int oldPos = oldParent->indexOf( node );
+    int i = newPos < 0 ? newParent->numChildren() : newPos;
+    int newRow = i;
+    if ( oldParent == newParent && newPos > oldPos ) {
+        ++newRow; // itemmodels wants new row *before* node is removed from old position
+    }
+    kDebug(planDbg())<<node->name()<<"at"<<oldParent->indexOf( node )<<"to"<<newParent->name()<<i<<newRow<<"("<<newPos<<")";
+    emit nodeToBeMoved( node, oldPos, newParent, newRow );
     takeTask( node, false );
-    int i = before == 0 ? newParent->numChildren() : newPos;
     addSubTask( node, i, newParent, false );
     emit nodeMoved( node );
     if ( oldParent != this && oldParent->numChildren() == 0 ) {

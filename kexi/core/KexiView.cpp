@@ -678,4 +678,9 @@ void KexiView::setSortedProperties(bool set)
     d->sortedProperties = set;
 }
 
+bool KexiView::saveSettings()
+{
+    return true;
+}
+
 #include "KexiView.moc"

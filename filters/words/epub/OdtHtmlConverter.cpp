@@ -37,7 +37,7 @@
 #include <KoXmlNS.h>
 
 // EPUB filter
-#include "libepub/EpubFile.h"
+#include "FileCollector.h"
 
 
 
@@ -71,11 +71,13 @@ OdtHtmlConverter::~OdtHtmlConverter()
 
 KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
                                                             QHash<QString, QString> &metaData,
-                                                            EpubFile *epub,
+                                                            bool stylesInCssfile,
+                                                            FileCollector *collector,
                                                             // Out parameters:
                                                             QHash<QString, QSizeF> &images)
 {
-    m_epub = epub;
+    m_stylesInCssfile = stylesInCssfile;
+    m_collector = collector;
 
     // 1. Parse styles
 
@@ -101,13 +103,26 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Propagate style inheritance.
     fixStyleTree(m_styles);
 
-    if (!odfStore->open("content.xml")) {
-        kDebug(30517) << "Can not open content.xml .";
-        return KoFilter::FileNotFound;
+    // 2. Create CSS contents and store it in the file collector.
+    status = createCSS(m_styles, m_cssContent);
+    kDebug(30517) << "Styles:" << m_styles;
+    kDebug(30517) << "CSS:" << m_cssContent;
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    if (stylesInCssfile) {
+        m_collector->addContentFile("stylesheet", m_collector->filePrefix() + "styles.css",
+                                    "text/css", m_cssContent);
     }
 
     // ----------------------------------------------------------------
     // Parse body from content.xml
+
+    if (!odfStore->open("content.xml")) {
+        kDebug(30517) << "Can not open content.xml .";
+        return KoFilter::FileNotFound;
+    }
 
     KoXmlDocument doc;
     QString errorMsg;
@@ -127,12 +142,12 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "body");
     currentNode = KoXml::namedItemNS(currentNode, KoXmlNS::office, "text");
 
-    // 2. Collect information about internal links.
+    // 3. Collect information about internal links.
     KoXmlElement element = currentNode.toElement(); // node for passing it to collectInter...()
     int chapter = 1; // Only necessary for the recursion.
     collectInternalLinksInfo(element, chapter);
 
-    // 3. Start the actual conversion.
+    // 4. Start the actual conversion.
 
     // Write the beginning of the output.
     beginHtmlFile(metaData);
@@ -146,11 +161,14 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         if (nodeElement.namespaceURI() == KoXmlNS::text && (nodeElement.localName() == "p"
                                                             || nodeElement.localName() == "h")) {
 
-            // A fo:break-before="page" in the style means create a new chapter here,
-            // but only if it is a top-level paragraph and not at the very first node.
+            // The styles come into this function preprocessed. If the
+            // style should break the outfile into chapters (first
+            // implementaiton uses fo:break-before="page") then create
+            // a new chapter here, but only if it is a top-level
+            // paragraph and not at the very first node.
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
-            if (style && style->shouldBreakChapter) {
-                //kDebug(30517) << "Found paragraph with style with break-before -- breaking new chapter";
+            if (m_collector->breakIntoChapters() && style && style->shouldBreakChapter) {
+                //kDebug(30517) << "Found paragraph which breaks into new chapter";
 
                 // Write out any footnotes
                 if (!m_footNotes.isEmpty()) {
@@ -160,10 +178,12 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
                 // And finally close all tags.
                 endHtmlFile(); 
 
-                // Write the result to the epub object.
-                QString fileId = m_epub->filePrefix() + QString::number(m_currentChapter);
-                QString fileName = m_epub->pathPrefix() + fileId + ".xhtml";
-                m_epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+                // Write the result to the file collector object.
+                QString fileId = m_collector->filePrefix();
+                if (m_collector->breakIntoChapters())
+                    fileId += QString::number(m_currentChapter);
+                QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+                m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
                 // And begin a new chapter.
                 beginHtmlFile(metaData);
@@ -215,14 +235,21 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         }
     }
 
+    // Write out any footnotes
+    if (!m_footNotes.isEmpty()) {
+        writeFootNotes(m_htmlWriter);
+    }
+
     endHtmlFile();
 
-    // Write output of the last file to the epub object.
-    QString fileId = m_epub->filePrefix() + QString::number(m_currentChapter);
-    QString fileName = m_epub->pathPrefix() + fileId + ".xhtml";
-    m_epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+    // Write output of the last file to the file collector object.
+    QString fileId = m_collector->filePrefix();
+    if (m_collector->breakIntoChapters())
+        fileId += QString::number(m_currentChapter);
+    QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+    m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
 
-    // 4. Write any data that we have collected on the way.
+    // 5. Write any data that we have collected on the way.
 
     // If we had end notes, make a new chapter for end notes
     if (!m_endNotes.isEmpty()) {
@@ -233,20 +260,11 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         endHtmlFile();
 
         QString fileId = "chapter-endnotes";
-        QString fileName = m_epub->pathPrefix() + fileId + ".xhtml";
-        m_epub->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+        QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
     }
 
     odfStore->close();
-
-    // 5. Create CSS contents and store it in the epub file.
-    QByteArray  cssContent;
-    status = createCSS(m_styles, cssContent);
-    if (status != KoFilter::OK) {
-        delete odfStore;
-        return status;
-    }
-    m_epub->addContentFile("stylesheet", m_epub->pathPrefix() + "styles.css", "text/css", cssContent);
 
     // Return the list of images.
     images = m_images;
@@ -310,12 +328,19 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
         writer->endElement(); // meta
     }
 
-    // Refer to the stylesheet.
-    writer->startElement("link");
-    writer->addAttribute("href", "styles.css");
-    writer->addAttribute("type", "text/css");
-    writer->addAttribute("rel", "stylesheet");
-    writer->endElement(); // link
+    // Refer to the stylesheet or put the styles in the html file.
+    if (m_stylesInCssfile) {
+        writer->startElement("link");
+        writer->addAttribute("href", m_collector->filePrefix() + "styles.css");
+        writer->addAttribute("type", "text/css");
+        writer->addAttribute("rel", "stylesheet");
+        writer->endElement(); // link
+    }
+    else {
+        writer->startElement("style");
+        writer->addTextNode(m_cssContent);
+        writer->endElement(); // style
+    }
 
     writer->endElement(); // head
 }
@@ -404,7 +429,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     forEachElement (imgElement, nodeElement) {
         if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
             QString imgSrc = imgElement.attribute("href").section('/', -1);
-            htmlWriter->addAttribute("src", imgSrc);
+            htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
 
             m_images.insert(imgElement.attribute("href"), size);
         }
@@ -595,7 +620,9 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
             if (noteClass == "footnote")
                 m_footNotes.insert(id, noteElements);
             else {
-                QString noteChapter = m_epub->filePrefix() + QString::number(m_currentChapter) + ".xhtml";
+                QString noteChapter = m_collector->filePrefix();
+                if (m_collector->breakIntoChapters())
+                    noteChapter += QString::number(m_currentChapter);
                 m_endNotes.insert(noteChapter + "/" + id, noteElements);
                 // we insert this: m_currentChapter/id
                 // to can add reference for text in end note
@@ -697,14 +724,17 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
             // A break-before in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
-            if (style && style->shouldBreakChapter) {
+            if (m_collector->breakIntoChapters() && style && style->shouldBreakChapter) {
                 chapter++;
             }
         }
         else if ((nodeElement.localName() == "bookmark-start" || nodeElement.localName() == "bookmark")
                   && nodeElement.namespaceURI() == KoXmlNS::text) {
             QString key = "#" + nodeElement.attribute("name");
-            QString value = m_epub->filePrefix() + QString::number(chapter) + ".xhtml";
+            QString value = m_collector->filePrefix();
+            if (m_collector->breakIntoChapters())
+                value += QString::number(chapter);
+            value += ".xhtml";
             m_linksInfo.insert(key, value);
             continue;
         }
@@ -1092,7 +1122,8 @@ KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*
         QByteArray attributeList;
 
         StyleInfo *styleInfo = styles.value(styleName);
-        if (!styleInfo || !styleInfo->inUse)
+        // Disable the test for inUse since we moved the call to before the traversal of the content.
+        if (!styleInfo/* || !styleInfo->inUse*/)
             continue;
 
         // The style name

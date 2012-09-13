@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,9 +31,7 @@ class KexiQueryDesignerSQLEditor;
 
 //! The KexiQueryDesignerSQLView class for editing Queries in text mode.
 /*! It is a view containing SQL text editor
- and SQL history/status widget split vertically.
- Depending on user's will, the widget can be in "sql history"
- mode or in "sql status" mode. */
+ and SQL status widget split vertically. */
 class KexiQueryDesignerSQLView : public KexiView
 {
     Q_OBJECT
@@ -44,8 +42,6 @@ public:
 
     QString sqlText() const;
     KexiQueryDesignerSQLEditor *editor() const;
-
-//  virtual bool eventFilter ( QObject *o, QEvent *e );
 
 protected:
     KexiQueryPart::TempData * tempData() const;
@@ -68,8 +64,6 @@ protected slots:
     bool slotCheckQuery();
     void slotUpdateMode();
     void slotTextChanged();
-//  void slotHistoryHeaderButtonClicked(const QString& buttonIdentifier);
-    void slotSelectQuery();
 
 signals:
     void queryShortcut();

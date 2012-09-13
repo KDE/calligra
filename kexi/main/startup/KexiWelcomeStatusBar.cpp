@@ -59,9 +59,16 @@ static const int GUI_UPDATE_INTERVAL = 60; // update interval for GUI, in minute
 static const int UPDATE_FILES_LIST_SIZE_LIMIT = 1024 * 128;
 static const int UPDATE_FILES_COUNT_LIMIT = 128;
 
+// returns x.y.0
+static QString stableVersionStringDot0()
+{
+    return QString::number(Kexi::stableVersionMajor()) + '.'
+           + QString::number(Kexi::stableVersionMinor()) + ".0";
+}
+
 static QString basePath()
 {
-    return QString("kexi/status/") + Kexi::stableVersionString();
+    return QString("kexi/status/") + stableVersionStringDot0();
 }
 
 static QString findFilename(const QString &guiFileName)
@@ -99,7 +106,7 @@ KexiWelcomeStatusBarGuiUpdater::~KexiWelcomeStatusBarGuiUpdater()
 QString KexiWelcomeStatusBarGuiUpdater::uiPath(const QString &fname) const
 {
     KexiUserFeedbackAgent *f = KexiMainWindowIface::global()->userFeedbackAgent();
-    return f->serviceUrl() + QString("/ui/%1/").arg(Kexi::stableVersionString())
+    return f->serviceUrl() + QString("/ui/%1/").arg(stableVersionStringDot0())
         + fname;
 }
 
@@ -124,7 +131,7 @@ void KexiWelcomeStatusBarGuiUpdater::update()
 
 void KexiWelcomeStatusBarGuiUpdater::slotRedirectLoaded()
 {
-    QByteArray postData = Kexi::stableVersionString().toLatin1();
+    QByteArray postData = stableVersionStringDot0().toLatin1();
     KIO::Job* sendJob = KIO::storedHttpPost(postData,
                                             KUrl(uiPath(".list")),
                                             KIO::HideProgressInfo);

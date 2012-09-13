@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 
 #include "connection.h"
 #include "driver.h"
+#include "calligradb_global.h"
 
 class QDomNode;
 class QDomElement;
@@ -70,6 +71,18 @@ inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableNa
     return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
                            + keyname1 + "=" + conn.driver()->valueToSQL(keytype1, keyval1)
                            + " AND " + keyname2 + "=" + conn.driver()->valueToSQL(keytype2, keyval2));
+}
+
+/*! Delete record with three generic criterias. */
+inline CALLIGRADB_EXPORT bool deleteRow(Connection &conn, const QString &tableName,
+                                     const QString &keyname1, Field::Type keytype1, const QVariant& keyval1,
+                                     const QString &keyname2, Field::Type keytype2, const QVariant& keyval2,
+                                     const QString &keyname3, Field::Type keytype3, const QVariant& keyval3)
+{
+    return conn.executeSQL("DELETE FROM " + tableName + " WHERE "
+                           + keyname1 + "=" + conn.driver()->valueToSQL(keytype1, keyval1)
+                           + " AND " + keyname2 + "=" + conn.driver()->valueToSQL(keytype2, keyval2)
+                           + " AND " + keyname3 + "=" + conn.driver()->valueToSQL(keytype3, keyval3));
 }
 
 inline CALLIGRADB_EXPORT bool replaceRow(Connection &conn, TableSchema *table,
@@ -415,6 +428,29 @@ CALLIGRADB_EXPORT QString escapeBLOB(const QByteArray& array, BLOBEscapingType t
  This function is used by PostgreSQL KexiDB and migration drivers. */
 CALLIGRADB_EXPORT QByteArray pgsqlByteaToByteArray(const char* data, int length);
 
+/*! \return int list converted from string list.
+   If \a ok is not 0, *ok is set to result of the conversion.
+   */
+CALLIGRADB_EXPORT QList<int> stringListToIntList(const QStringList &list, bool *ok);
+
+/*! \return string converted from list \a list.
+   Separators are ',' characters, "," and "\\" are escaped.
+    @see deserializeList()
+  */
+CALLIGRADB_EXPORT QString serializeList(const QStringList &list);
+
+/*! \return string list converted from \a data which was built using serializeList().
+   Separators are ',' characters, escaping is assumed as "\\,".
+  */
+CALLIGRADB_EXPORT QStringList deserializeList(const QString &data);
+
+/*! \return int list converted from \a data which was built using serializeList().
+   Separators are ',' characters, escaping is assumed as "\\,".
+   If \a ok is not 0, *ok is set to result of the conversion.
+   @see KexiDB::stringListToIntList()
+  */
+CALLIGRADB_EXPORT QList<int> deserializeIntList(const QString &data, bool *ok);
+
 /*! \return string value serialized from a variant value \a v.
  This functions works like QVariant::toString() except the case when \a v is of type ByteArray.
  In this case KexiDB::escapeBLOB(v.toByteArray(), KexiDB::BLOBEscapeHex) is used.
@@ -514,6 +550,16 @@ inline CALLIGRADB_EXPORT QDateTime stringToHackedQTime(const QString& s)
     //  kDebug() << QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) ).toString(Qt::ISODate);
     return QDateTime(QDate(0, 1, 2), QTime::fromString(s, Qt::ISODate));
 }
+
+#ifdef CALLIGRADB_DEBUG_GUI
+typedef void(*DebugGUIHandler)(const QString&);
+CALLIGRADB_EXPORT void setDebugGUIHandler(DebugGUIHandler handler);
+CALLIGRADB_EXPORT void debugGUI(const QString& text);
+
+typedef void(*AlterTableActionDebugGUIHandler)(const QString&, int);
+CALLIGRADB_EXPORT void setAlterTableActionDebugHandler(AlterTableActionDebugGUIHandler handler);
+CALLIGRADB_EXPORT void alterTableActionDebugGUI(const QString& text, int nestingLevel = 0);
+#endif
 
 }
 

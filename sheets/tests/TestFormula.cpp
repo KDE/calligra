@@ -177,9 +177,13 @@ void TestFormula::testTokenizer()
     // invalid formulas, can't be parsed correctly
     CHECK_TOKENIZE("+1.23E", QString());
 
+    // incomplete formulas
+    CHECK_TOKENIZE("COMPARE(\"", "xo");
+    CHECK_TOKENIZE("SHEETS(Sheet2!", "");
+
     // empty parameter
     CHECK_TOKENIZE("IF(A1;A2;)", "xococoo");
-    CHECK_TOKENIZE("=OFFSET(Sheet2'!B7;0;0)", "");
+    CHECK_TOKENIZE("OFFSET(Sheet2'!B7;0;0)", "");
 
     // function cascade
     CHECK_TOKENIZE("SUM(ABS(-1);ABS(-1))", "xoxooiooxooioo");

@@ -410,7 +410,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     setButtons(KDialog::Ok | KDialog::Cancel);
     d->actionWidgetName = actionWidgetName;
     setButtonGuiItem(KDialog::Ok,
-                     KGuiItem(i18nc("Assign action", "&Assign"), "dialog-ok", i18n("Assign action")));
+                     KGuiItem(i18nc("Assign action", "&Assign"), koIconName("dialog-ok"), i18n("Assign action")));
 
     QWidget *mainWidget = new QWidget(this);
     mainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

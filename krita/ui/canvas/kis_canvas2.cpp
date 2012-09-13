@@ -116,12 +116,14 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
+
+
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
+    m_d->vastScrolling = cfg.vastScrolling();
 
     m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
-    m_d->vastScrolling = cfg.vastScrolling();
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     createCanvas(cfg.useOpenGL());
 
@@ -158,8 +160,6 @@ KisCanvas2::~KisCanvas2()
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
-    connect(widget, SIGNAL(needAdjustOrigin()), this, SLOT(adjustOrigin()), Qt::DirectConnection);
-
     KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     emit canvasDestroyed(widget);
@@ -200,52 +200,9 @@ bool KisCanvas2::snapToGrid() const
     return m_d->view->document()->gridData().snapToGrid();
 }
 
-void KisCanvas2::pan(QPoint shift)
-{
-    KoCanvasControllerWidget* controller =
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController());
-    controller->pan(shift);
-    updateCanvas();
-}
-
-void KisCanvas2::mirrorCanvas(bool enable)
-{
-    m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
-    notifyZoomChanged();
-    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
-}
-
 qreal KisCanvas2::rotationAngle() const
 {
     return m_d->coordinatesConverter->rotationAngle();
-}
-
-void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
-{
-    m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
-    notifyZoomChanged();
-
-    if(updateOffset)
-        pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
-    else
-        updateCanvas();
-}
-
-void KisCanvas2::rotateCanvasRight15()
-{
-    rotateCanvas(15.0);
-}
-
-void KisCanvas2::rotateCanvasLeft15()
-{
-    rotateCanvas(-15.0);
-}
-
-void KisCanvas2::resetCanvasTransformations()
-{
-    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
-    notifyZoomChanged();
-    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
 void KisCanvas2::setSmoothingEnabled(bool smooth)
@@ -637,13 +594,11 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
 
 void KisCanvas2::notifyZoomChanged()
 {
-    adjustOrigin();
-
     if (!m_d->currentCanvasIsOpenGL) {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->notifyZoomChanged();
     }
-    emit scrollAreaSizeChanged();
+
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
 }
 
@@ -743,30 +698,8 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 
 QPoint KisCanvas2::documentOrigin() const
 {
-    return m_d->coordinatesConverter->documentOrigin();
-}
-
-
-void KisCanvas2::adjustOrigin()
-{
-    QPoint newOrigin;
-
-    QSize documentSize = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect().size();
-    QSize widgetSize = m_d->canvasWidget->widget()->size();
-
-    if(!m_d->vastScrolling) {
-        int widthDiff = widgetSize.width() - documentSize.width();
-        int heightDiff = widgetSize.height() - documentSize.height();
-
-        if (widthDiff > 0)
-            newOrigin.rx() = qRound(0.5 * widthDiff);
-        if (heightDiff > 0)
-            newOrigin.ry() = qRound(0.5 * heightDiff);
-    }
-
-    m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
-
-    emit documentOriginChanged();
+    qWarning() << "Krita does not use documentOrigin() anymore. Please fix the code.";
+    return QPoint();
 }
 
 QPoint KisCanvas2::documentOffset() const

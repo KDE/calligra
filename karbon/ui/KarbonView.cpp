@@ -1417,15 +1417,12 @@ void KarbonView::createLayersTabDock()
     {
         KarbonLayerDockerFactory layerFactory;
         KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(shell()->createDockWidget(&layerFactory));
-        layerDocker->setPart(d->karbonPart);
+        layerDocker->setCanvas(d->canvas);
         connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
                 layerDocker, SLOT(updateView()));
         connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
-// XXX: reenable once we figure out what the this is for, and if it's still useful
-//        connect(shell()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
-//                layerDocker, SLOT(setPart(KParts::Part*)));
     }
 }
 

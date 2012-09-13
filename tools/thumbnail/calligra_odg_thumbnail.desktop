@@ -1,9 +1,14 @@
 [Desktop Entry]
 Type=Service
 Name=OpenDocument Drawings
+Name[el]=OpenDocument Σχέδια
+Name[fi]=OpenDocument-piirrokset
+Name[fr]=Graphiques OpenDocument
+Name[it]=Grafica OpenDocument
 Name[nl]=OpenDocument tekeningen
 Name[pt]=Desenhos em OpenDocument
 Name[pt_BR]=Desenhos OpenDocument
+Name[sv]=OpenDocument-teckningar
 Name[uk]=Малюнки OpenDocument (ODD)
 Name[x-test]=xxOpenDocument Drawingsxx
 
