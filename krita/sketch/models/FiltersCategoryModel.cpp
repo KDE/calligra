@@ -113,7 +113,7 @@ QObject* FiltersCategoryModel::filterModel() const
 
 void FiltersCategoryModel::activateItem(int index)
 {
-    if(index > 0 && index < d->categories.count())
+    if(index > -1 && index < d->categories.count())
     {
         d->currentCategory = index;
         emit filterModelChanged();
