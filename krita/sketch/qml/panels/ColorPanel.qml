@@ -86,6 +86,7 @@ Panel {
             }
             height: parent.width;
             ColorSelectorItem {
+                id: colorSelectorActual;
                 anchors.fill: parent;
                 view: sketchView.view;
                 changeBackground: swatch.chooseBG;
@@ -99,10 +100,23 @@ Panel {
                 }
             }
         }
+        Slider {
+            id: fullPaletteAlphaSlider;
+            anchors {
+                top: colorSelector.bottom;
+                left: parent.left;
+                right: parent.right;
+                leftMargin: Constants.DefaultMargin;
+                rightMargin: Constants.DefaultMargin;
+            }
+            value: 100;
+            onValueChanged: colorSelectorActual.setAlpha(value);
+        }
         ExpandingListView {
             id: fullPaletteList
             anchors {
-                top: colorSelector.bottom;
+                top: fullPaletteAlphaSlider.bottom;
+                topMargin: Constants.DefaultMargin;
                 left: parent.left;
                 right: parent.right;
                 leftMargin: Constants.DefaultMargin;
