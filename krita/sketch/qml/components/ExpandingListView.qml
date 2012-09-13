@@ -65,7 +65,7 @@ Item {
             }
             text: listView.currentItem ? listView.currentItem.text : "(tap to select)";
             color: "#96000000"
-            font.pixelSize: parent.height - 4;
+            font.pixelSize: Constants.DefaultFontSize;
         }
 
         MouseArea {
