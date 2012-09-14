@@ -20,8 +20,193 @@ import QtQuick 1.1
 import "../components"
 
 Panel {
+    id: base;
     name: "Tool";
     panelColor: "#0078B4";
+
+    ListModel {
+        id: paintingTools;
+        ListElement {
+            text: "Paint"
+            name: "paint"
+        }
+        ListElement {
+            text: "Fill"
+            name: "fill"
+        }
+        ListElement {
+            text: "Gradient"
+            name: "gradient"
+        }
+    }
+
+    ListModel {
+        id: adjustmentTools;
+        ListElement {
+            text: "Move"
+            name: "move"
+        }
+        ListElement {
+            text: "Transform"
+            name: "transform"
+        }
+        ListElement {
+            text: "Crop"
+            name: "crop"
+        }
+    }
+
+    function changeTool(toolName) {
+        toolOptionsPeek.source = "toolconfigpages/" + toolName + ".qml";
+        toolOptionsFull.source = "toolconfigpages/" + toolName + ".qml";
+    }
+
+    actions: [
+        Button {
+            id: firstTool;
+            property string toolName: "paint";
+            onToolNameChanged: changeTool(toolName);
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-" + toolName + ".svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            onClicked: {
+                fullContentsItem.state = "";
+                changeTool(toolName);
+            }
+        },
+        Button {
+            id: secondTool;
+            property string toolName: "move";
+            onToolNameChanged: changeTool(toolName);
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-" + toolName + ".svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            onClicked: {
+                fullContentsItem.state = "secondTool";
+                changeTool(toolName);
+            }
+        },
+        Item {
+            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
+            height: Constants.GridHeight;
+        },
+        Button {
+            id: eraserButton;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-erase.svg";
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+        }
+    ]
+
+    peekContents: Flickable {
+        anchors.fill: parent;
+        Loader {
+            id: toolOptionsPeek;
+            width: parent.width;
+            source: "toolconfigpages/paint.qml";
+        }
+    }
+
+    fullContents: Item {
+        id: fullContentsItem;
+        states: [
+            State {
+                name: "secondTool";
+                PropertyChanges { target: firstToolSelector; visible: false; }
+                PropertyChanges { target: secondToolSelector; visible: true; }
+            }
+        ]
+        anchors.fill: parent;
+        Item {
+            id: toolSelectorContainer;
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+            height: childrenRect.height;
+            Item {
+                id: firstToolSelector;
+                width: parent.width;
+                height: Constants.GridHeight;
+                Rectangle {
+                    anchors.fill: parent;
+                    opacity: 0.5;
+                }
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    width: childrenRect.width;
+                    spacing: Constants.DefaultMargin;
+                    Repeater {
+                        model: paintingTools;
+                        delegate: Button {
+                            width: height;
+                            height: Constants.GridHeight
+                            color: "transparent";
+                            image: "../images/svg/icon-" + model.name + "-blue.svg"
+                            textColor: "white";
+                            shadow: false;
+                            highlight: false;
+                            onClicked: firstTool.toolName = model.name;
+                        }
+                    }
+                }
+            }
+            Item {
+                id: secondToolSelector;
+                width: parent.width;
+                height: Constants.GridHeight;
+                visible: false;
+                Rectangle {
+                    anchors.fill: parent;
+                    opacity: 0.5;
+                }
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    width: childrenRect.width;
+                    spacing: Constants.DefaultMargin;
+                    Repeater {
+                        model: adjustmentTools;
+                        delegate: Button {
+                            width: height;
+                            height: Constants.GridHeight
+                            color: "transparent";
+                            image: "../images/svg/icon-" + model.name + "-blue.svg"
+                            textColor: "white";
+                            shadow: false;
+                            highlight: false;
+                            onClicked: secondTool.toolName = model.name;
+                        }
+                    }
+                }
+            }
+        }
+        Flickable {
+            anchors {
+                top: toolSelectorContainer.bottom;
+                left: parent.left;
+                right: parent.right;
+                bottom: parent.bottom;
+            }
+            Loader {
+                id: toolOptionsFull;
+                width: parent.width;
+                source: "toolconfigpages/paint.qml";
+            }
+        }
+    }
 
     dragDelegate: Component {
         Rectangle {
