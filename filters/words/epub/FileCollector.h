@@ -53,8 +53,6 @@ public:
     QString filePrefix() const;
     void setPathPrefix(QString prefix);
     QString pathPrefix() const;
-    void setBreakIntoChapters(bool doBreak);
-    bool breakIntoChapters() const;
 
     void addContentFile(QString id, QString fileName,
                         QByteArray mimetype, QByteArray fileContents);

@@ -53,11 +53,16 @@ struct StyleInfo {
 class OdtHtmlConverter
 {
  public:
+    struct ConversionOptions {
+        bool  stylesInCssFile;  // True if the css should go into a separate file
+        bool  doBreakIntoChapters; // True if the output should be broken into chapters.
+    };
+
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
     KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
-                                              bool stylesInCssfile,
+                                              ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images);
@@ -128,7 +133,7 @@ class OdtHtmlConverter
     // Options for the conversion process
     // FIXME: This should go into an Options struct together with some
     //        others from FileConversion.h.
-    bool m_stylesInCssfile;
+    ConversionOptions  *m_options;
 
     QHash<QString, StyleInfo*> m_styles;
 

@@ -64,7 +64,6 @@ public:
 
     QString  filePrefix;        // default: "chapter"
     QString  pathPrefix;        // default: "OEBPS/"
-    bool     breakIntoChapters; // default: true
 
     QList<FileCollector::FileInfo*>  m_files;  // Embedded files
 };
@@ -72,7 +71,6 @@ public:
 FileCollectorPrivate::FileCollectorPrivate()
     : filePrefix("chapter")
     , pathPrefix("OEBPS/")
-    , breakIntoChapters(true)
 {
 }
 
@@ -115,16 +113,6 @@ void FileCollector::setPathPrefix(QString prefix)
 QString FileCollector::pathPrefix() const
 {
     return d->pathPrefix;
-}
-
-void FileCollector::setBreakIntoChapters(bool doBreak)
-{
-    d->breakIntoChapters = doBreak;
-}
-
-bool FileCollector::breakIntoChapters() const
-{
-    return d->breakIntoChapters;
 }
 
 

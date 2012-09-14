@@ -69,14 +69,24 @@ OdtHtmlConverter::~OdtHtmlConverter()
 //                         HTML conversion
 
 
-KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
-                                                            QHash<QString, QString> &metaData,
-                                                            bool stylesInCssfile,
-                                                            FileCollector *collector,
-                                                            // Out parameters:
-                                                            QHash<QString, QSizeF> &images)
+OdtHtmlConverter::ConversionOptions defaultOptions = {
+    true,                       // Put styles into styles.css
+    true                        // Do break the output into chapters
+};
+
+
+KoFilter::ConversionStatus
+OdtHtmlConverter::convertContent(KoStore *odfStore,
+                                 QHash<QString, QString> &metaData,
+                                 OdtHtmlConverter::ConversionOptions *options,
+                                 FileCollector *collector,
+                                 // Out parameters:
+                                 QHash<QString, QSizeF> &images)
 {
-    m_stylesInCssfile = stylesInCssfile;
+    if (options)
+        m_options = options;
+    else
+        m_options = &defaultOptions;
     m_collector = collector;
 
     // 1. Parse styles
@@ -111,7 +121,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
         delete odfStore;
         return status;
     }
-    if (stylesInCssfile) {
+    if (m_options->stylesInCssFile) {
         m_collector->addContentFile("stylesheet",
                                     m_collector->pathPrefix() + "styles.css",
                                     "text/css", m_cssContent);
@@ -168,7 +178,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
             // a new chapter here, but only if it is a top-level
             // paragraph and not at the very first node.
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
-            if (m_collector->breakIntoChapters() && style && style->shouldBreakChapter) {
+            if (m_options->doBreakIntoChapters && style && style->shouldBreakChapter) {
                 //kDebug(30517) << "Found paragraph which breaks into new chapter";
 
                 // Write out any footnotes
@@ -181,7 +191,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
 
                 // Write the result to the file collector object.
                 QString fileId = m_collector->filePrefix();
-                if (m_collector->breakIntoChapters())
+                if (m_options->doBreakIntoChapters)
                     fileId += QString::number(m_currentChapter);
                 QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
                 m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
@@ -245,7 +255,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
 
     // Write output of the last file to the file collector object.
     QString fileId = m_collector->filePrefix();
-    if (m_collector->breakIntoChapters())
+    if (m_options->doBreakIntoChapters)
         fileId += QString::number(m_currentChapter);
     QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
     m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
@@ -330,7 +340,7 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
     }
 
     // Refer to the stylesheet or put the styles in the html file.
-    if (m_stylesInCssfile) {
+    if (m_options->stylesInCssFile) {
         writer->startElement("link");
         writer->addAttribute("href", "styles.css");
         writer->addAttribute("type", "text/css");
@@ -622,7 +632,7 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
                 m_footNotes.insert(id, noteElements);
             else {
                 QString noteChapter = m_collector->filePrefix();
-                if (m_collector->breakIntoChapters())
+                if (m_options->doBreakIntoChapters)
                     noteChapter += QString::number(m_currentChapter);
                 m_endNotes.insert(noteChapter + "/" + id, noteElements);
                 // we insert this: m_currentChapter/id
@@ -725,7 +735,7 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
             // A break-before in the style means create a new chapter here,
             // but only if it is a top-level paragraph and not at the very first node.
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
-            if (m_collector->breakIntoChapters() && style && style->shouldBreakChapter) {
+            if (m_options->doBreakIntoChapters && style && style->shouldBreakChapter) {
                 chapter++;
             }
         }
@@ -733,7 +743,7 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
                   && nodeElement.namespaceURI() == KoXmlNS::text) {
             QString key = "#" + nodeElement.attribute("name");
             QString value = m_collector->filePrefix();
-            if (m_collector->breakIntoChapters())
+            if (m_options->doBreakIntoChapters)
                 value += QString::number(chapter);
             value += ".xhtml";
             m_linksInfo.insert(key, value);
