@@ -64,6 +64,7 @@
 
 #include "Constants.h"
 #include "Settings.h"
+#include "SimpleTouchArea.h"
 
 class MainWindow::Private
 {
@@ -88,6 +89,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
         d->recentFileManager->addRecent(fileName);
     }
 
+    qmlRegisterType<SimpleTouchArea>("org.krita.sketch", 1, 0, "SimpleTouchArea");
     qmlRegisterType<ColorSelectorItem>("org.krita.sketch", 1, 0, "ColorSelectorItem");
     qmlRegisterType<DocumentListModel>("org.krita.sketch", 1, 0, "DocumentListModel");
     qmlRegisterType<PaletteModel>("org.krita.sketch", 1, 0, "PaletteModel");

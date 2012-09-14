@@ -21,6 +21,7 @@ set(kritasketch_SRCS
     ProgressProxy.cpp
     RecentFileManager.cpp
     Settings.cpp
+    SimpleTouchArea.cpp
     NetworkAccessManager.cpp
 )
 
