@@ -1,0 +1,70 @@
+/*
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) 2012  Dan Leinir Turthra Jensen <admin@leinir.dk>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+
+
+#include "ToolManager.h"
+#include <kis_view2.h>
+#include <kis_canvas2.h>
+#include <KoToolRegistry.h>
+#include <QToolButton>
+
+class ToolManager::Private
+{
+public:
+    Private()
+        : view(0)
+    {
+        toolManager = KoToolManager::instance();
+    };
+
+    KoToolManager* toolManager;
+    KisView2* view;
+};
+
+ToolManager::ToolManager(QDeclarativeItem* parent)
+    : QDeclarativeItem(parent)
+    , d(new Private)
+{
+}
+
+ToolManager::~ToolManager()
+{
+    delete d;
+}
+
+QObject* ToolManager::view() const
+{
+    return d->view;
+}
+
+void ToolManager::setView(QObject* newView)
+{
+    d->view = qobject_cast<KisView2*>( newView );
+    emit viewChanged();
+}
+
+void ToolManager::requestToolChange(QString toolID)
+{
+    if(d->view)
+    {
+        d->toolManager->switchToolRequested(toolID);
+    }
+}
+
+#include "ToolManager.moc"

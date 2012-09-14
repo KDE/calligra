@@ -16,6 +16,7 @@ set(kritasketch_SRCS
     KisSketchCanvas.cpp
     KisSketchCanvasFactory.cpp
     KisSketchView.cpp
+    ToolManager.cpp
     main.cpp
     MainWindow.cpp
     ProgressProxy.cpp
