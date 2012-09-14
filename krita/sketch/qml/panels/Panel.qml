@@ -213,6 +213,10 @@ Item {
                     anchors.fill: parent;
                     onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
                 }
+                SimpleTouchArea {
+                    anchors.fill: parent;
+                    onTouched: base.state = base.state == "peek" ? "collapsed" : "peek";
+                }
             }
         }
 

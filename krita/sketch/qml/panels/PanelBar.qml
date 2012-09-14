@@ -29,6 +29,11 @@ Item {
 
         onClicked: d.peeking.state = "collapsed";
     }
+    SimpleTouchArea {
+        anchors.fill: parent;
+        enabled: peekCapture.enabled;
+        onTouched: d.peeking.state = "collapsed";
+    }
 
     PresetsPanel {
         id: presetsPanel;
