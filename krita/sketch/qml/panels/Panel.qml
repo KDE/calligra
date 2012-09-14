@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import org.krita.draganddrop 1.0 as DnD
 import "../components"
 
@@ -60,6 +61,11 @@ Item {
                 anchors.fill: parent;
                 // This will always work, and never do anything - but we need some kind of processed thing in here to activate the mouse area
                 onClicked: undefined;
+            }
+            SimpleTouchArea {
+                // As above, but for touch events
+                anchors.fill: parent;
+                onTouched: undefined;
             }
 
             Rectangle {
