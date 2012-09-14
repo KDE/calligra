@@ -82,7 +82,8 @@ WorkPackage::WorkPackage( Project *project, bool fromProjectStore )
         // should be only one manager
         project->setCurrentSchedule( m_project->scheduleManagers().first()->scheduleId() );
     }
-    connect( project, SIGNAL( changed() ), this, SLOT( projectChanged() ) );
+    connect( project, SIGNAL( projectChanged() ), this, SLOT( projectChanged() ) );
+
 }
 
 WorkPackage::~WorkPackage()
