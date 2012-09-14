@@ -105,14 +105,15 @@ KoFilter::ConversionStatus OdtHtmlConverter::convertContent(KoStore *odfStore,
 
     // 2. Create CSS contents and store it in the file collector.
     status = createCSS(m_styles, m_cssContent);
-    kDebug(30517) << "Styles:" << m_styles;
-    kDebug(30517) << "CSS:" << m_cssContent;
+    //kDebug(30517) << "Styles:" << m_styles;
+    //kDebug(30517) << "CSS:" << m_cssContent;
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
     }
     if (stylesInCssfile) {
-        m_collector->addContentFile("stylesheet", m_collector->filePrefix() + "styles.css",
+        m_collector->addContentFile("stylesheet",
+                                    m_collector->pathPrefix() + "styles.css",
                                     "text/css", m_cssContent);
     }
 
@@ -331,7 +332,7 @@ void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QStrin
     // Refer to the stylesheet or put the styles in the html file.
     if (m_stylesInCssfile) {
         writer->startElement("link");
-        writer->addAttribute("href", m_collector->filePrefix() + "styles.css");
+        writer->addAttribute("href", "styles.css");
         writer->addAttribute("type", "text/css");
         writer->addAttribute("rel", "stylesheet");
         writer->endElement(); // link
