@@ -17,12 +17,18 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../components"
 
 Panel {
     id: base;
     name: "Tool";
     panelColor: "#0078B4";
+
+    ToolManager {
+        id: toolManager;
+        view: sketchView.view;
+    }
 
     ListModel {
         id: paintingTools;
@@ -56,9 +62,22 @@ Panel {
         }
     }
 
+    function toolNameToID(toolName) {
+        var names = {
+            "paint": "KritaShape/KisToolBrush",
+            "fill": "KritaFill/KisToolFill",
+            "gradient": "KritaFill/KisToolGradient",
+            "move": "KritaTransform/KisToolMove",
+            "transform": "KisToolTransform",
+            "crop": "KisToolCrop"
+        };
+        return names[toolName];
+    }
+
     function changeTool(toolName) {
         toolOptionsPeek.source = "toolconfigpages/" + toolName + ".qml";
         toolOptionsFull.source = "toolconfigpages/" + toolName + ".qml";
+        toolManager.requestToolChange(toolNameToID(toolName));
     }
 
     actions: [

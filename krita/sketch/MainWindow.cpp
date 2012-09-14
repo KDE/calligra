@@ -65,6 +65,7 @@
 #include "Constants.h"
 #include "Settings.h"
 #include "SimpleTouchArea.h"
+#include "ToolManager.h"
 
 class MainWindow::Private
 {
@@ -100,6 +101,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<FiltersCategoryModel>("org.krita.sketch", 1, 0, "FiltersCategoryModel");
     qmlRegisterType<RecentImagesModel>("org.krita.sketch", 1, 0, "RecentImagesModel");
     qmlRegisterType<FileSystemModel>("org.krita.sketch", 1, 0, "FileSystemModel");
+    qmlRegisterType<ToolManager>("org.krita.sketch", 1, 0, "ToolManager");
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
