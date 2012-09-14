@@ -174,8 +174,8 @@ public:
     GanttTreeView *treeView() const;
     GanttPrintingOptions printingOptions() const { return m_printOptions; }
 
-    bool loadContext( const KoXmlElement &settings );
-    void saveContext( QDomElement &settings ) const;
+    virtual bool loadContext( const KoXmlElement &settings );
+    virtual void saveContext( QDomElement &settings ) const;
 
 public slots:
     void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }

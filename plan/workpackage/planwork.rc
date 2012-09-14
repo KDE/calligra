@@ -1,13 +1,14 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="PlanWork" version="1">
+<kpartgui name="PlanWork" version="4">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
            <Action name="package_remove_current"/>
         </Menu>
-<!--        <Menu name="settings"><text>&amp;Settings</text>
-           <Action name="configure" group="settings_configure"/>
-        </Menu>-->
     </MenuBar>
+    <ToolBar name="view_selection" position="left"><text>View</text>
+        <Action name="view_list"/>
+        <Action name="view_gantt"/>
+    </ToolBar>
     <Menu name="taskstatus_popup">
         <Action name="task_progress"/>
         <Action name="task_description"/>

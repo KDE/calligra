@@ -2,6 +2,12 @@
 Calligra Plan current:
 ----------------------
 
+* PlanWork:
+  Add gantt chart
+  Update scheduling info when task has been rescheduled
+
+* Fix bug: Send work package schedule info also when schedule is not top level schedule
+
 * Performance charts:
   Show both effort- and cost based performance index values.
   Add charting of perfomance indices
