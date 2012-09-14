@@ -196,6 +196,26 @@ private:
     WorkPackageSettings m_value, m_oldvalue;
 };
 
+//-----------------------------
+class CopySchedulesCmd : public NamedCommand
+{
+public:
+    CopySchedulesCmd( const Project &fromProject, Project &toProject,  const QString &name = QString() );
+
+    void execute();
+    void unexecute();
+
+private:
+    void load( const QString &doc );
+    void clean( const QDomDocument &doc );
+    void clearSchedules();
+
+private:
+    Project &m_project;
+    QString m_olddoc;
+    QString m_newdoc;
+};
+
 }  //KPlatoWork namespace
 
 #endif
