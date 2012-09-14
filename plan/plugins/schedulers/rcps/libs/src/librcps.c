@@ -754,7 +754,7 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		daughter->genome.alternatives = (int*)malloc(p->genome_alternatives * sizeof(int));
 		// select father and mother
 		// XXX we want a configurable bias towards better individuals here
-		i = irand(s->pop_size);
+		i = irand(s->pop_size - 1);
 		j = 1 + irand(s->pop_size - 1);
 		j = (i + j) % s->pop_size;
 		father = (struct rcps_individual*)slist_node_getdata(
