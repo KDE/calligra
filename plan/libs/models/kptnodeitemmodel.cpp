@@ -1315,6 +1315,9 @@ QVariant NodeModel::status( const Node *node, int role ) const
                 return i18n( "Finished" );
             }
             if ( st & Node::State_Running ) {
+                if ( st & Node::State_Late ) {
+                    return i18n( "Running late" );
+                }
                 return i18n( "Running" );
             }
             if ( st & Node::State_Started ) {
@@ -1324,12 +1327,21 @@ QVariant NodeModel::status( const Node *node, int role ) const
                 if ( st & Node::State_StartedEarly ) {
                     return i18n( "Started early" );
                 }
+                if ( st & Node::State_Late ) {
+                    return i18n( "Running late" );
+                }
                 return i18n( "Started" );
             }
             if ( st & Node::State_ReadyToStart ) {
+                if ( st & Node::State_Late ) {
+                    return i18n( "Not started" );
+                }
                 return i18n( "Can start" );
             }
             if ( st & Node::State_NotReadyToStart ) {
+                if ( st & Node::State_Late ) {
+                    return i18n( "Deleayed" );
+                }
                 return i18n( "Cannot start" );
             }
             return i18n( "Not started" );
