@@ -79,6 +79,8 @@ public:
     GLuint checkerTexture;
     GLuint imageTexture;
 
+    qreal checkerSize;
+
     QElapsedTimer frameTimer;
     volatile bool stop;
     QEventLoop *eventLoop;
@@ -151,7 +153,6 @@ void KisGL2RenderThread::render()
     QMatrix4x4 view;
     QPointF translation = d->canvas->documentOffset();
     view.translate(-translation.x(), translation.y());
-    view.rotate(d->canvas->rotationAngle(), 0.f, 0.f, -1.f);
     qreal scale = d->canvas->coordinatesConverter()->zoom();
     view.scale(scale, scale);
     d->shader->setUniformValue(d->viewMatrixLocation, view.transposed());
@@ -170,12 +171,17 @@ void KisGL2RenderThread::render()
 
     d->shader->setUniformValue(d->texture0Location, 0);
 
+    QVector3D imageSize(d->image->width(), d->image->height(), 0.f);
+
     //Render the checker background
     QMatrix4x4 model;
-    model.scale(d->image->width(), d->image->height());
+    model.translate(imageSize.x() / 2, -imageSize.y() / 2);
+    model.rotate(d->canvas->rotationAngle(), 0.f, 0.f, -1.f);
+    model.translate(-imageSize.x() / 2, imageSize.y() / 2);
+    model.scale(imageSize);
     d->shader->setUniformValue(d->modelMatrixLocation, model.transposed());
 
-    d->shader->setUniformValue(d->textureScaleLocation, QVector2D(d->image->width() / 64, d->image->height() / 64));
+    d->shader->setUniformValue(d->textureScaleLocation, imageSize.x() / d->checkerSize, imageSize.y() / d->checkerSize);
     glBindTexture(GL_TEXTURE_2D, d->checkerTexture);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -331,6 +337,8 @@ void KisGL2RenderThread::Private::createCheckerTexture(int size, const QColor& c
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    checkerSize = size;
 }
 
 void KisGL2RenderThread::Private::createShader()
