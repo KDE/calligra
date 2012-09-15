@@ -1340,7 +1340,7 @@ QVariant NodeModel::status( const Node *node, int role ) const
             }
             if ( st & Node::State_NotReadyToStart ) {
                 if ( st & Node::State_Late ) {
-                    return i18n( "Deleayed" );
+                    return i18n( "Delayed" );
                 }
                 return i18n( "Cannot start" );
             }
