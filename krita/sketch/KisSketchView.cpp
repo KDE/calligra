@@ -372,33 +372,33 @@ bool KisSketchView::sceneEvent(QEvent* event)
         case QEvent::GraphicsSceneMousePress: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-            QApplication::sendEvent(d->canvasWidget, mevent);
+            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
             return true;
         }
         case QEvent::GraphicsSceneMouseMove: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-            QApplication::sendEvent(d->canvasWidget, mevent);
+            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
             return true;
         }
         case QEvent::GraphicsSceneMouseRelease: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-            QApplication::sendEvent(d->canvasWidget, mevent);
+            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
             return true;
         }
         case QEvent::GraphicsSceneWheel: {
             QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
             QWheelEvent *wevent = new QWheelEvent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
-            QApplication::sendEvent(d->canvasWidget, wevent);
+            d->canvas->inputManager()->eventFilter(d->canvas, wevent);
         }
         case QEvent::TouchBegin: {
-            QApplication::sendEvent(d->canvasWidget, event);
+            d->canvas->inputManager()->eventFilter(d->canvas, event);
             event->accept();
             return true;
         }
         default:
-            QApplication::sendEvent(d->canvasWidget, event);
+            d->canvas->inputManager()->eventFilter(d->canvas, event);
             break;
         }
     }
