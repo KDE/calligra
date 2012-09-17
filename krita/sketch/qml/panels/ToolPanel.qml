@@ -134,6 +134,7 @@ Panel {
         Loader {
             id: toolOptionsPeek;
             width: parent.width;
+            onSourceChanged: item.fullView = false;
             source: "toolconfigpages/paint.qml";
         }
     }
