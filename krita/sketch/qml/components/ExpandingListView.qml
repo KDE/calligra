@@ -104,10 +104,19 @@ Item {
                     right: parent.right;
                 }
                 height: Constants.DefaultFontSize + Constants.DefaultMargin * 2;
+                Rectangle {
+                    anchors.fill: parent;
+                    radius: height / 2;
+                    border.width: 1;
+                    border.color: "silver";
+                    color: "white";
+                    opacity: model.isCategory ? 0.3 : 0;
+                }
                 Label {
                     id: delegateLabel
                     anchors.fill: parent
-                    text: model.text;
+                    anchors.leftMargin: model.isCategory ? Constants.DefaultFontSize / 2 : 0;
+                    text: model.text ? model.text : index + " (no text field in model)";
                     color: "#96000000"
                 }
                 MouseArea {
@@ -121,13 +130,13 @@ Item {
         }
     }
 
-
+    property int expandedHeight: base.parent.height - base.y - (Constants.GridHeight / 2);
     states: [
         State {
             name: "expanded";
             PropertyChanges {
                 target: base;
-                height: base.parent.height - base.y - (Constants.GridHeight / 2);
+                height: expandedHeight > 0 ? expandedHeight : Constants.GridHeight * 2;
             }
             PropertyChanges {
                 target: listContainer;
