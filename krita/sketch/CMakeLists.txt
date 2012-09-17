@@ -28,6 +28,7 @@ set(kritasketch_SRCS
 
 set(kritasketch_kritaintegrationmodels_SRCS
     models/ColorImageProvider.cpp
+    models/CompositeOpModel.cpp
     models/FiltersCategoryModel.cpp
     models/FiltersModel.cpp
     models/LayerCompositeDetails.cpp
