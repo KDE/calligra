@@ -17,12 +17,107 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../../components"
 
 Item {
     id: base
-    Label {
-        width: parent.width;
-        text: "Paint tool options"
+    property bool fullView: true;
+    ExpandingListView {
+        id: compositeModeList
+        visible: fullView;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        onCurrentIndexChanged: model.activateItem(currentIndex);
+        model: CompositeOpModel {
+            view: sketchView.view;
+        }
+    }
+    Column {
+        anchors {
+            top: fullView ? compositeModeList.bottom : compositeModeList.top;
+            left: parent.left;
+            leftMargin: Constants.DefaultMargin;
+            right: parent.right;
+            rightMargin: Constants.DefaultMargin;
+        }
+
+        PanelTextField {
+            width: parent.width;
+            placeholder: "Size";
+            text: "5.00";
+        }
+        PanelTextField {
+            width: parent.width;
+            placeholder: "Opacity";
+            text: "1.00";
+        }
+        PanelTextField {
+            width: parent.width;
+            placeholder: "Flow";
+            text: "1.00";
+        }
+
+        PanelTextField {
+            visible: fullView;
+            width: parent.width;
+            placeholder: "Smoothness";
+            text: "100%";
+        }
+        PanelTextField {
+            visible: fullView;
+            width: parent.width;
+            placeholder: "Assistant";
+            text: "100%";
+        }
+    
+        Label {
+            visible: fullView;
+            width: parent.width;
+            horizontalAlignment: Text.AlignLeft;
+            font.pixelSize: Constants.LargeFontSize;
+            font.bold: true;
+            height: Constants.GridHeight / 2;
+            text: "Mirror:";
+        }
+
+        Item {
+            width: childrenRect.width;
+            height: childrenRect.height;
+            anchors.horizontalCenter: parent.horizontalCenter;
+            Button {
+                id: mirrorVertical;
+                image: "../../images/svg/icon-mirror_v-blue.svg"
+                width: Constants.GridWidth * 2 / 5;
+                height: width;
+                color: "transparent";
+                shadow: false;
+                highlight: false;
+            }
+            Button {
+                id: mirrorHorizontal;
+                anchors.left: mirrorVertical.right;
+                image: "../../images/svg/icon-mirror_h-blue.svg"
+                width: Constants.GridWidth * 2 / 5;
+                height: width;
+                color: "transparent";
+                shadow: false;
+                highlight: false;
+            }
+            Button {
+                id: mirrorCenter;
+                anchors.left: mirrorHorizontal.right;
+                image: "../../images/svg/icon-mirror_c-blue.svg"
+                width: Constants.GridWidth * 2 / 5;
+                height: width;
+                color: "transparent";
+                shadow: false;
+                highlight: false;
+            }
+        }
     }
 }
