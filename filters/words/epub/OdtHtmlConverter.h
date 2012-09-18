@@ -56,6 +56,9 @@ class OdtHtmlConverter
     struct ConversionOptions {
         bool  stylesInCssFile;  // True if the css should go into a separate file
         bool  doBreakIntoChapters; // True if the output should be broken into chapters.
+        bool  useMobiConventions; // True if Mobi is using the convention.
+                                  // to handle img tag and for handle indention
+                                   // and dont wriye meta and link tag in html head.
     };
 
     OdtHtmlConverter();
@@ -178,6 +181,22 @@ class OdtHtmlConverter
     //
     QHash<QString, KoXmlElement> m_footNotes;
     QHash<QString, KoXmlElement> m_endNotes;
+
+    // specifice valuse for mobi.
+
+    // The format is QHash<QString source, int index>
+    // In mobi we save images with index and as we can have repeated
+    // images we need a hash.
+    // e.g img tag format in mobi <img recindex="0004">
+    QHash<QString, int> m_imagesIndex;
+
+    int m_imgIndex;
+
+    // In mobi we dont need indentation.
+    bool m_doIndent;
+
+    //
+
 };
 
 #endif // ODTHTMLCONVERTER_H

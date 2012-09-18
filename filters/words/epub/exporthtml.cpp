@@ -123,7 +123,8 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     OdtHtmlConverter converter;
     OdtHtmlConverter::ConversionOptions options = {
         false,                   // don't put styles in css file
-        false                    // don't break into chapters
+        false,                    // don't break into chapters
+        false                     // It is not mobi.
     };
     status = converter.convertContent(odfStore, m_metadata, &options, &html,
                                       m_imagesSrcList);

@@ -71,7 +71,8 @@ OdtHtmlConverter::~OdtHtmlConverter()
 
 OdtHtmlConverter::ConversionOptions defaultOptions = {
     true,                       // Put styles into styles.css
-    true                        // Do break the output into chapters
+    true,                        // Do break the output into chapters
+    false                       // It doesn't use Mobi convention
 };
 
 
@@ -88,6 +89,9 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     else
         m_options = &defaultOptions;
     m_collector = collector;
+
+    m_doIndent = !m_options->useMobiConventions;
+    m_imgIndex = 1;
 
     // 1. Parse styles
 
@@ -216,7 +220,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
         }
         else if (nodeElement.localName() == "frame" && nodeElement.namespaceURI() == KoXmlNS::draw)  {
             // Handle frame
-            m_htmlWriter->startElement("div");
+            m_htmlWriter->startElement("div", m_doIndent);
             handleTagFrame(nodeElement, m_htmlWriter);
             m_htmlWriter->endElement(); // end div
         }
@@ -240,7 +244,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
             handleTagLineBreak(m_htmlWriter);
         }
         else {
-            m_htmlWriter->startElement("div");
+            m_htmlWriter->startElement("div", m_doIndent);
             handleUnknownTags(nodeElement, m_htmlWriter);
             m_htmlWriter->endElement();
         }
@@ -289,10 +293,11 @@ void OdtHtmlConverter::beginHtmlFile(QHash<QString, QString> &metaData)
     m_outBuf = new QBuffer(&m_htmlContent);
     m_htmlWriter = new KoXmlWriter(m_outBuf);
 
-    m_htmlWriter->startElement("html");
-    m_htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+    m_htmlWriter->startElement("html", m_doIndent);
+    if (!m_options->useMobiConventions)
+        m_htmlWriter->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
     createHtmlHead(m_htmlWriter, metaData);
-    m_htmlWriter->startElement("body");
+    m_htmlWriter->startElement("body", m_doIndent);
 
     // NOTE: At this point we have two open tags: <html> and <body>.
 }
@@ -314,41 +319,44 @@ void OdtHtmlConverter::endHtmlFile()
 
 void OdtHtmlConverter::createHtmlHead(KoXmlWriter *writer, QHash<QString, QString> &metaData)
 {
-    writer->startElement("head");
+    writer->startElement("head", m_doIndent);
 
-    writer->startElement("title");
-    writer->addTextNode(metaData.value("title"));
-    writer->endElement(); // title
+    // We don't have title and meta tags in Mobi.
+    if (!m_options->useMobiConventions) {
+        writer->startElement("title", m_doIndent);
+        writer->addTextNode(metaData.value("title"));
+        writer->endElement(); // title
 
-    writer->startElement("meta");
-    writer->addAttribute("http-equiv", "Content-Type");
-    writer->addAttribute("content", "text/html; charset=utf-8");
-    writer->endElement(); // meta
-
-    // write meta tag
-    // m-meta <Tagname, Text>
-    // <meta name = "Tagname" content = "Text" />
-    foreach (const QString &name, metaData.keys()) {
-        // Title is handled above.
-        if (name == "title")
-            continue;
-
-        writer->startElement("meta");
-        writer->addAttribute("name", name);
-        writer->addAttribute("content", metaData.value(name));
+        writer->startElement("meta", m_doIndent);
+        writer->addAttribute("http-equiv", "Content-Type");
+        writer->addAttribute("content", "text/html; charset=utf-8");
         writer->endElement(); // meta
+
+        // write meta tag
+        // m-meta <Tagname, Text>
+        // <meta name = "Tagname" content = "Text" />
+        foreach (const QString &name, metaData.keys()) {
+            // Title is handled above.
+            if (name == "title")
+                continue;
+
+            writer->startElement("meta", m_doIndent);
+            writer->addAttribute("name", name);
+            writer->addAttribute("content", metaData.value(name));
+            writer->endElement(); // meta
+        }
     }
 
     // Refer to the stylesheet or put the styles in the html file.
     if (m_options->stylesInCssFile) {
-        writer->startElement("link");
+        writer->startElement("link", m_doIndent);
         writer->addAttribute("href", "styles.css");
         writer->addAttribute("type", "text/css");
         writer->addAttribute("rel", "stylesheet");
         writer->endElement(); // link
     }
     else {
-        writer->startElement("style");
+        writer->startElement("style", m_doIndent);
         writer->addTextNode(m_cssContent);
         writer->endElement(); // style
     }
@@ -365,7 +373,7 @@ void OdtHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *ht
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("table");
+    htmlWriter->startElement("table", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
@@ -376,14 +384,14 @@ void OdtHtmlConverter::handleTagTable(KoXmlElement &nodeElement, KoXmlWriter *ht
     KoXmlElement tableElement;
     forEachElement (tableElement, nodeElement) {
         if (tableElement.localName() != "table-column" && tableElement.namespaceURI() == KoXmlNS::table) {
-            htmlWriter->startElement("tr");
+            htmlWriter->startElement("tr", m_doIndent);
 
             // ===== table-cell ======
             KoXmlElement cellElement;
             forEachElement (cellElement, tableElement) {
                 QString styleName = cellElement.attribute("style-name");
                 StyleInfo *styleInfo = m_styles.value(styleName);
-                htmlWriter->startElement("td");
+                htmlWriter->startElement("td", m_doIndent);
                 if (styleInfo) {
                     styleInfo->inUse = true;
                     htmlWriter->addAttribute("class", styleName);
@@ -410,7 +418,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("img");
+    htmlWriter->startElement("img", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
@@ -440,7 +448,22 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     forEachElement (imgElement, nodeElement) {
         if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
             QString imgSrc = imgElement.attribute("href").section('/', -1);
-            htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
+
+            if (m_options->useMobiConventions) {
+                // Mobi
+                // First check for repeated images.
+                if (m_imagesIndex.keys().contains(imgSrc)) {
+                    htmlWriter->addAttribute("recindex", QString::number(m_imagesIndex.value(imgSrc)));
+                }
+                else {
+                    htmlWriter->addAttribute("recindex", QString::number(m_imgIndex));
+                    m_imagesIndex.insert(imgSrc, m_imgIndex);
+                    m_imgIndex++;
+                }
+            }
+            else {
+                htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
+            }
 
             m_images.insert(imgElement.attribute("href"), size);
         }
@@ -452,7 +475,7 @@ void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWr
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("p");
+    htmlWriter->startElement("p", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
@@ -471,7 +494,7 @@ void OdtHtmlConverter::handleTagSpan(KoXmlElement &nodeElement, KoXmlWriter *htm
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("span");
+    htmlWriter->startElement("span", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
@@ -489,7 +512,7 @@ void OdtHtmlConverter::handleTagH(KoXmlElement &nodeElement, KoXmlWriter *htmlWr
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("h1");
+    htmlWriter->startElement("h1", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
@@ -502,7 +525,7 @@ void OdtHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htm
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("ul");
+    htmlWriter->startElement("ul", m_doIndent);
     if (styleInfo) {
         styleInfo->inUse = true;
         htmlWriter->addAttribute("class", styleName);
@@ -510,7 +533,7 @@ void OdtHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htm
 
     KoXmlElement listItem;
     forEachElement (listItem, nodeElement) {
-        htmlWriter->startElement("li");
+        htmlWriter->startElement("li", m_doIndent);
         handleInsideElementsTag(listItem, htmlWriter);
         htmlWriter->endElement();
     }
@@ -519,7 +542,7 @@ void OdtHtmlConverter::handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htm
 
 void OdtHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
-    htmlWriter->startElement("a");
+    htmlWriter->startElement("a", m_doIndent);
     QString reference = nodeElement.attribute("href");
     QString chapter = m_linksInfo.value(reference);
     if (!chapter.isEmpty()) {
@@ -567,7 +590,7 @@ void OdtHtmlConverter::handleTagTableOfContentBody(KoXmlElement &nodeElement,
 
 void OdtHtmlConverter::handleTagLineBreak(KoXmlWriter *htmlWriter)
 {
-    htmlWriter->startElement("br");
+    htmlWriter->startElement("br", m_doIndent);
     htmlWriter->endElement();
 }
 
@@ -578,14 +601,14 @@ void OdtHtmlConverter::handleTagBookMark(KoXmlElement &nodeElement, KoXmlWriter 
     // FIXME : we should handle ids better after move file to class
     anchor = anchor.remove("|");
     anchor = anchor.remove(" ");//remove spaces
-    htmlWriter->startElement("a");
+    htmlWriter->startElement("a", m_doIndent);
     htmlWriter->addAttribute("id", anchor);
 }
 
 void OdtHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {
     QString anchor = nodeElement.attribute("name");
-    htmlWriter->startElement("a");
+    htmlWriter->startElement("a", m_doIndent);
     htmlWriter->addAttribute("id", anchor);
 }
 
@@ -612,9 +635,9 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
     KoXmlElement noteElements;
     forEachElement(noteElements, nodeElement) {
         if (noteElements.localName() == "note-citation" && noteElements.namespaceURI() == KoXmlNS::text) {
-            htmlWriter->startElement("sup");
+            htmlWriter->startElement("sup", m_doIndent);
 
-            htmlWriter->startElement("a");
+            htmlWriter->startElement("a", m_doIndent);
             if (noteClass == "footnote")
                 htmlWriter->addAttribute("href", "#" + id + "n"); // n rerence to note foot-note or end-note
             else { // endnote
@@ -757,18 +780,18 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
 
 void OdtHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
 {
-    htmlWriter->startElement("p");
+    htmlWriter->startElement("p", m_doIndent);
     handleTagLineBreak(htmlWriter);
     htmlWriter->addTextNode("___________________________________________");
     htmlWriter->endElement();
 
-    htmlWriter->startElement("ul");
+    htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
     foreach(QString id, m_footNotes.keys()) {
-        htmlWriter->startElement("li");
+        htmlWriter->startElement("li", m_doIndent);
         htmlWriter->addAttribute("id", id + "n");
 
-        htmlWriter->startElement("a");
+        htmlWriter->startElement("a", m_doIndent);
         htmlWriter->addAttribute("href", "#" + id + "t"); // reference to text
         htmlWriter->addTextNode("[" + QString::number(noteCounts) + "]");
         htmlWriter->endElement();
@@ -785,18 +808,18 @@ void OdtHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
 
 void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 {
-    htmlWriter->startElement("h1");
+    htmlWriter->startElement("h1", m_doIndent);
     htmlWriter->addTextNode("End Notes");
     handleTagLineBreak(htmlWriter);
     htmlWriter->endElement();
 
-    htmlWriter->startElement("ul");
+    htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
     foreach(QString id, m_endNotes.keys()) {
-        htmlWriter->startElement("li");
+        htmlWriter->startElement("li", m_doIndent);
         htmlWriter->addAttribute("id", id.section("/", 1) + "n");
 
-        htmlWriter->startElement("a");
+        htmlWriter->startElement("a", m_doIndent);
         // id = chapter-endnotes.xhtml/endnoteId
         htmlWriter->addAttribute("href",id.section("/", 0, 0) + "#" + id.section("/", 1) + "t");
         htmlWriter->addTextNode("["+QString::number(noteCounts)+"]");

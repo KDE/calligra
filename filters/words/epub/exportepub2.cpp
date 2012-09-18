@@ -120,7 +120,8 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
     // m_imagesSrcList is an output parameter from the conversion.    
     OdtHtmlConverter::ConversionOptions options = {
         true,                   // do put styles in css file
-        true                    // do break into chapters
+        true,                    // do break into chapters
+        false                    // It is not mobi
     };
     status = converter.convertContent(odfStore, m_metadata, &options, &epub,
                                       m_imagesSrcList);
