@@ -51,6 +51,10 @@ public:
 KisSketchCanvas::KisSketchCanvas(KisCanvas2* canvas, KisCoordinatesConverter* coordinatesConverter, QWidget* parent)
     : QWidget(parent), KisCanvasWidgetBase(canvas, coordinatesConverter), d(new Private)
 {
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
+
     d->image = canvas->view()->image();
     d->resizeTimer = new QTimer(this);
     d->resizeTimer->setInterval(500);

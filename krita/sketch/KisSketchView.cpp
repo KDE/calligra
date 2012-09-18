@@ -392,43 +392,43 @@ bool KisSketchView::sceneEvent(QEvent* event)
         switch(event->type()) {
         case QEvent::GraphicsSceneMousePress: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-            QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+            QMouseEvent mevent(QMouseEvent::MouseButtonPress, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            QApplication::sendEvent(d->canvasWidget, &mevent);
             emit interactionStarted();
             return true;
         }
         case QEvent::GraphicsSceneMouseMove: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-            QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+            QMouseEvent mevent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            QApplication::sendEvent(d->canvasWidget, &mevent);
             emit interactionStarted();
             return true;
         }
         case QEvent::GraphicsSceneMouseRelease: {
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
-            QMouseEvent *mevent = new QMouseEvent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
-            d->canvas->inputManager()->eventFilter(d->canvas, mevent);
+            QMouseEvent mevent(QMouseEvent::MouseButtonRelease, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
+            QApplication::sendEvent(d->canvasWidget, &mevent);
             emit interactionStarted();
             return true;
         }
         case QEvent::GraphicsSceneWheel: {
             QGraphicsSceneWheelEvent *gswevent = static_cast<QGraphicsSceneWheelEvent*>(event);
-            QWheelEvent *wevent = new QWheelEvent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
-            d->canvas->inputManager()->eventFilter(d->canvas, wevent);
+            QWheelEvent wevent(gswevent->screenPos(), gswevent->delta(), gswevent->buttons(), gswevent->modifiers(), gswevent->orientation());
+            QApplication::sendEvent(d->canvasWidget, &wevent);
             emit interactionStarted();
             return true;
         }
         case QEvent::TouchBegin: {
-            d->canvas->inputManager()->eventFilter(d->canvas, event);
+            QApplication::sendEvent(d->canvasWidget, event);
             event->accept();
             emit interactionStarted();
             return true;
         }
         default:
-            if(d->canvas->inputManager()->eventFilter(d->canvas, event)) {
-                emit interactionStarted();
-            }
-            break;
+            if(QApplication::sendEvent(d->canvasWidget, event)) {
+	        emit interactionStarted();
+                return true;
+	    }
         }
     }
     return QDeclarativeItem::sceneEvent(event);
