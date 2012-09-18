@@ -28,6 +28,7 @@ class CompositeOpModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged);
+    Q_PROPERTY(bool eraserMode READ eraserMode WRITE setEraserMode NOTIFY eraserModeChanged);
 public:
     enum CompositeOpModelRoles
     {
@@ -43,8 +44,11 @@ public:
 
     QObject* view() const;
     void setView(QObject* newView);
+    bool eraserMode() const;
+    void setEraserMode(bool newEraserMode);
 Q_SIGNALS:
     void viewChanged();
+    void eraserModeChanged();
 private:
     class Private;
     Private* d;

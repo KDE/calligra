@@ -29,15 +29,19 @@
 class CompositeOpModel::Private
 {
 public:
-    Private()
-        : model(KisCompositeOpListModel::sharedInstance())
+    Private(CompositeOpModel* qq)
+        : q(qq)
+        , model(KisCompositeOpListModel::sharedInstance())
         , view(0)
+        , eraserMode(0)
     {};
 
+    CompositeOpModel* q;
     KisCompositeOpListModel* model;
     KisView2* view;
     QString currentCompositeOpID;
     QString prevCompositeOpID;
+    bool eraserMode;
 
     void updateCompositeOp(QString compositeOpID)
     {
@@ -46,16 +50,14 @@ public:
 
         KisNodeSP node = view->resourceProvider()->currentNode();
 
-        if(node && node->paintDevice()) {
+        if(node && node->paintDevice())
+        {
             if(!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID))
                 compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
-            
-            // erase mode button logic here...
-            //m_eraseModeButton->blockSignals(true);
-            //m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
-            //m_eraseModeButton->blockSignals(false);
-            
-            if(compositeOpID != currentCompositeOpID) {
+
+            if(compositeOpID != currentCompositeOpID)
+            {
+                q->setEraserMode(compositeOpID == COMPOSITE_ERASE);
                 //m_activePreset->settings()->setProperty("CompositeOp", compositeOpID);
                 //m_optionWidget->setConfiguration(m_activePreset->settings().data());
                 view->resourceProvider()->setCurrentCompositeOp(compositeOpID);
@@ -68,7 +70,7 @@ public:
 
 CompositeOpModel::CompositeOpModel(QObject* parent)
     : QAbstractListModel(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     QHash<int,QByteArray> roles;
     roles[TextRole] = "text";
@@ -129,6 +131,24 @@ void CompositeOpModel::setView(QObject* newView)
 {
     d->view = qobject_cast<KisView2*>( newView );
     emit viewChanged();
+}
+
+bool CompositeOpModel::eraserMode() const
+{
+    return d->eraserMode;
+}
+
+void CompositeOpModel::setEraserMode(bool newEraserMode)
+{
+    if(d->eraserMode != newEraserMode)
+    {
+        d->eraserMode = newEraserMode;
+        if(d->eraserMode)
+            d->updateCompositeOp(COMPOSITE_ERASE);
+        else
+            d->updateCompositeOp(d->prevCompositeOpID);
+        emit eraserModeChanged();
+    }
 }
 
 #include "CompositeOpModel.moc"

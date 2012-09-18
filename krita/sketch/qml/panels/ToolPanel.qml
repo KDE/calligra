@@ -30,6 +30,11 @@ Panel {
         view: sketchView.view;
     }
 
+    CompositeOpModel {
+        id: compositeOpModel;
+        view: sketchView.view;
+    }
+
     ListModel {
         id: paintingTools;
         ListElement {
@@ -126,6 +131,8 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            checked: compositeOpModel.eraserMode;
+            onClicked: compositeOpModel.eraserMode = !compositeOpModel.eraserMode;
         }
     ]
 

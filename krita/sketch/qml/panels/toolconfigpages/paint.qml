@@ -33,9 +33,7 @@ Item {
             margins: Constants.DefaultMargin;
         }
         onCurrentIndexChanged: model.activateItem(currentIndex);
-        model: CompositeOpModel {
-            view: sketchView.view;
-        }
+        model: compositeOpModel;
     }
     Column {
         anchors {
