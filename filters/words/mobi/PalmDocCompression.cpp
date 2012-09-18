@@ -90,6 +90,7 @@ void PalmDocCompression::compressContent(QByteArray input, QByteArray &output)
 
     startCompressing(input, out);
     outBuf->close();
+    delete outBuf;
 }
 void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out)
 {

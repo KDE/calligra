@@ -452,7 +452,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
             if (m_options->useMobiConventions) {
                 // Mobi
                 // First check for repeated images.
-                if (m_imagesIndex.keys().contains(imgSrc)) {
+                if (m_imagesIndex.contains(imgSrc)) {
                     htmlWriter->addAttribute("recindex", QString::number(m_imagesIndex.value(imgSrc)));
                 }
                 else {
