@@ -38,6 +38,7 @@ public:
         , selector(new KisColorSelector)
         , view(0)
         , colorRole(KisColorSelectorBase::Foreground)
+        , currentColor(0, 0, 0)
         , grabbingComponent(0)
         , colorUpdateAllowed(true)
         , changeBackground(false)
@@ -203,7 +204,6 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
         d->grabbingComponent->mouseEvent(event->pos().x(), event->pos().y());
 
         d->currentColor=d->main->currentColor();
-        KoColor kocolor(d->currentColor, d->view->resourceProvider()->resourceManager()->foregroundColor().colorSpace());
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
         update();
     }
@@ -242,7 +242,6 @@ void ColorSelectorItem::setAlpha(int percentValue)
 {
     qreal alpha = (float)percentValue / 100.0;
     d->currentColor.setAlphaF(alpha);
-    KoColor kocolor(d->currentColor, d->view->resourceProvider()->resourceManager()->foregroundColor().colorSpace());
     d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
 }
 
