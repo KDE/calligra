@@ -29,10 +29,12 @@ Item {
         anchors {
             right: base.right;
             bottom: base.bottom;
-            margins: Constants.DefaultMargin;
+            bottomMargin: Constants.DefaultMargin;
+            topMargin: Constants.DefaultMargin;
         }
         height: (base.height - Constants.DefaultMargin * 2) / 3 * 2;
         width: (base.width - Constants.DefaultMargin * 2) / 3 * 2;
+        color: "white";
         MouseArea {
             anchors.fill: parent;
             onClicked: base.state = "bgChoice";
@@ -43,10 +45,12 @@ Item {
         anchors {
             top: base.top;
             left: base.left;
-            margins: Constants.DefaultMargin;
+            topMargin: Constants.DefaultMargin;
+            leftMargin: Constants.DefaultMargin;
         }
-        height: (base.height - Constants.DefaultMargin * 2) / 3 * 2;
-        width: (base.width - Constants.DefaultMargin * 2) / 3 * 2;
+        height: bgColor.height;
+        width: bgColor.width;
+        color: "black";
         MouseArea {
             anchors.fill: parent;
             onClicked: base.state = "";
@@ -59,15 +63,18 @@ Item {
             left: bgColor.left;
             right: bgColor.right;
             bottom: bgColor.bottom;
-            margins: -1;
+            topMargin: -3;
+            leftMargin: -3;
+            bottomMargin: -2;
+            rightMargin: -2;
         }
         border {
-            width: 2;
+            width: 3;
             color: "black";
         }
         color: "transparent";
         opacity: 0;
-        radius: 2;
+        radius: 3;
     }
     Rectangle {
         id: chosingFG;
@@ -76,15 +83,18 @@ Item {
             left: fgColor.left;
             right: fgColor.right;
             bottom: fgColor.bottom;
-            margins: -1;
+            topMargin: -3;
+            leftMargin: -3;
+            bottomMargin: -2;
+            rightMargin: -2;
         }
         border {
-            width: 2;
+            width: 3;
             color: "black";
         }
         color: "transparent";
         opacity: 0.5;
-        radius: 2;
+        radius: 3;
     }
     
     Image {
