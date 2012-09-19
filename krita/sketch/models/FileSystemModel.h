@@ -44,6 +44,7 @@ public:
         FilePathRole,
         FileIconRole,
         FileTypeRole,
+        FileDateRole,
     };
 
     explicit FileSystemModel(QObject* parent = 0);
