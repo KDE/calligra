@@ -76,6 +76,10 @@ Page {
                         openPanel.collapsed = !openPanel.collapsed;
                         newPanel.collapsed = true;
                     }
+                    case "save":
+                        sketchView.save();
+                    case "saveAs":
+                        pageStack.push( saveAsPage, { view: sketchView } );
                     case "settings":
                         pageStack.push( settingsPage );
                     case "share":
@@ -94,4 +98,5 @@ Page {
     Component { id: sharePage; SharePage { } }
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
+    Component { id: saveAsPage; SaveImagePage { } }
 }

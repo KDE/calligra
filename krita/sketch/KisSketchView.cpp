@@ -446,5 +446,14 @@ void KisSketchView::redo()
     qDebug() << "\t" << d->undoStack->index();
 }
 
+void KisSketchView::save()
+{
+    d->doc->save();
+}
+
+void KisSketchView::saveAs(const QString& fileName)
+{
+    d->doc->saveAs(QUrl::fromLocalFile(fileName));
+}
 
 #include "KisSketchView.moc"

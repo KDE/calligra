@@ -56,6 +56,9 @@ public Q_SLOTS:
     QObject *settings();
     void setSettings(QObject  *settings);
 
+    void save();
+    void saveAs(const QString& fileName);
+
 Q_SIGNALS:
     void viewChanged();
     void fileChanged();
