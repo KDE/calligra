@@ -470,7 +470,7 @@ bool LookupFieldSchema::setProperty(
     } else if ("showColumnHeaders" == propertyName) {
         lookup.setColumnHeadersVisible(value.toBool());
     } else if ("listRows" == propertyName) {
-        const uint ival = value.toInt(&ok);
+        const uint ival = value.toUInt(&ok);
         if (!ok)
             return false;
         lookup.setMaximumListRows(ival);
