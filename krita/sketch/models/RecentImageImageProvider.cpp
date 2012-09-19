@@ -45,7 +45,6 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
              requestedSize.height() > 0 ? requestedSize.height() : height);
 
 
-    qDebug() << "thumbing" << id;
     QFile f(id);
     QImage thumbnail;
 
