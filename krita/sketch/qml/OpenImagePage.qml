@@ -36,17 +36,25 @@ Page {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
             highlightColor: Constants.Theme.HighlightColor;
-            text: "< Back";
-            textColor: "white";
+            image: "images/svg/icon-back.svg";
             onClicked: pageStack.pop();
         }
 
         rightArea: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
-            text: "^ Up";
-            textColor: "white";
+            image: "images/svg/icon-up.svg";
             onClicked: view.model.path = view.model.parentFolder;
+        }
+
+        Label {
+            id: location;
+
+            anchors.bottom: parent.bottom;
+            anchors.horizontalCenter: parent.horizontalCenter;
+
+            color: "white";
+            text: view.model.path;
         }
     }
 
