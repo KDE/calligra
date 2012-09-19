@@ -29,84 +29,48 @@ PageStack {
         ListView {
             anchors.fill: parent;
 
-            delegate: Rectangle {
-                width: parent.width;
-                height: Constants.GridHeight * 1.75;
+            delegate: ListItem {
+                width: ListView.view.width;
 
+                title: model.name;
+                image: model.image;
+                imageShadow: false;
 
-                Rectangle{
-                    x: Constants.GridWidth / 4;
-                    y: Constants.GridHeight * 0.25
-                    width: parent.width - (Constants.GridWidth / 2);
-                    height: parent.height - (Constants.GridHeight * 0.5);
-                    Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-                    gradient: Gradient {
-                        GradientStop {
-                            position: 0
-                            color: "#FAFCFD"
-                        }
+                gradient: Gradient {
+                    GradientStop { position: 0; color: "#FAFCFD"; }
+                    GradientStop { position: 0.4; color: "#F0F5FA"; }
+                }
 
-                        GradientStop {
-                            position: 0.4
-                            color: "#F0F5FA"
-                        }
+                onClicked: {
+                    if (model.bnrole === "a4p") {
+                        Settings.currentFile = "";
+                        Settings.imageWidth = 2408;
+                        Settings.imageHeight = 3509;
+                        Settings.imageResolution = 300;
+                        onClicked: base.clicked();
                     }
-                }
-
-                Button {
-                    id: thumbnail;
-
-                    x: Constants.GridWidth * 0.125;
-                    y: Constants.GridHeight * 0.375;
-
-                    image: model.image;
-
-                    enabled: model.name === "clip" ? KisClipBoard.clip : true;
-                }
-
-                Label {
-                    anchors {
-                        left: thumbnail.right;
-                        leftMargin: Constants.DefaultMargin;
-                        verticalCenter: parent.verticalCenter;
+                    else if (model.bnrole === "a4l") {
+                        Settings.currentFile = "";
+                        Settings.imageWidth = 3509;
+                        Settings.imageHeight = 2408;
+                        Settings.imageResolution = 300;
+                        onClicked: base.clicked();
                     }
-
-                    text: model.name;
-                }
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: {
-                        if (model.bnrole === "a4p") {
-                            Settings.currentFile = "";
-                            Settings.imageWidth = 2408;
-                            Settings.imageHeight = 3509;
-                            Settings.imageResolution = 300;
-                            onClicked: base.clicked();
-                        }
-                        else if (model.bnrole === "a4l") {
-                            Settings.currentFile = "";
-                            Settings.imageWidth = 3509;
-                            Settings.imageHeight = 2408;
-                            Settings.imageResolution = 300;
-                            onClicked: base.clicked();
-                        }
-                        else if (model.bnrole === "custom") {
-                           pageStack.push( createNewPage );
-                        }
-                        else if (model.bnrole === "clip") {
-                            Settings.currentFile = "";
-                            Settings.useClipBoard = true;
-                            onClicked: base.clicked();
-                        }
-                        else if (model.bnrole === "webcam") {
-                            Settings.currentFile = "";
-                            Settings.useWebCam = true;
-                            onClicked: base.clicked();
-                        }
+                    else if (model.bnrole === "custom") {
+                        pageStack.push( createNewPage );
+                    }
+                    else if (model.bnrole === "clip") {
+                        Settings.currentFile = "";
+                        Settings.useClipBoard = true;
+                        onClicked: base.clicked();
+                    }
+                    else if (model.bnrole === "webcam") {
+                        Settings.currentFile = "";
+                        Settings.useWebCam = true;
+                        onClicked: base.clicked();
                     }
                 }
             }
-
 
             model: ListModel {
                 ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-A4portrait-green.svg" }

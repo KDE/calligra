@@ -38,128 +38,32 @@ Item {
 
         clip: true;
 
-        delegate: Rectangle {
-            width: Constants.GridWidth * 4;
-            height: Constants.GridHeight * 1.75;
+        delegate: ListItem {
+            width: ListView.view.width;
 
-               Rectangle{
-                   x: Constants.GridWidth / 4;
-                   y: Constants.GridHeight * 0.25
-                   width: parent.width - (Constants.GridWidth / 2);
-                   height: parent.height - (Constants.GridHeight * 0.5);
-                   Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-                   gradient: Gradient {
-                       GradientStop {
-                           position: 0
-                           color: "#FBFBFD"
-                       }
+            title: model.text;
+            description: model.url;
+            image: model.image;
+            imageShadow: true;
+            imageSmooth: false;
+            imageFillMode: Image.PreserveAspectCrop;
 
-                       GradientStop {
-                           position: 0.4
-                           color: "#FAF0F5"
-                       }
-                   }
-               }
-
-
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    recentImagesModel.addRecent(model.url);
-                    Settings.currentFile = model.url;
-                    base.clicked("");
-                }
-            }
-
-
-            Image {
-                id: thumbnail
-                source: model.image;
-                x: Constants.GridWidth * 0.375
-                y: Constants.GridHeight * 0.5
-		asynchronous: true;
-                Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-            }
-
-            Label {
-                anchors {
-                    top: parent.top;
-                    topMargin: Constants.GridHeight * 0.5;
-                    left: thumbnail.right;
-                    leftMargin: Constants.GridWidth * 0.25;
-                }
-
-                text: model.text;
-                verticalAlignment: Text.AlignTop;
-            }
-
-            Label {
-                anchors {
-                    bottom: parent.bottom;
-                    bottomMargin:Constants.GridHeight * 0.5;
-                    left: thumbnail.right;
-                    leftMargin: Constants.GridWidth * 0.25;
-                }
-
-                text: model.url;
-                color: Constants.Theme.SecondaryTextColor;
-                font.pixelSize: Constants.SmallFontSize;
-                verticalAlignment: Text.AlignBottom;
+            onClicked: {
+                recentImagesModel.addRecent(model.url);
+                Settings.currentFile = model.url;
+                base.clicked("");
             }
         }
 
         model: recentImagesModel;
     }
 
-    Item {
+    ListItem {
         anchors.top: view.bottom;
-        width: parent.width;
-        height: Constants.GridHeight * 1.75;
 
-        Rectangle{
-            x: Constants.GridWidth / 4;
-            y: Constants.GridHeight * 0.25
-            width: parent.width - (Constants.GridWidth / 2);
-            height: parent.height - (Constants.GridHeight * 0.5);
-            Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: "#FBFBFD"
-                }
+        title: "Open Image";
+        image: "../images/svg/icon-fileopen-red.svg";
 
-                GradientStop {
-                    position: 0.4
-                    color: "#FAF0F5"
-                }
-            }
-        }
-
-
-        MouseArea {
-            anchors.fill: parent;
-            onClicked: base.clicked();
-        }
-
-        Button {
-            id: icon;
-            onClicked: {
-                base.clicked("open");
-            }
-
-            image: "../images/svg/icon-fileopen-red.svg";
-            x: Constants.GridWidth * 0.125;
-            y: Constants.GridHeight * 0.375;
-        }
-
-        Label {
-            anchors {
-                left: icon.right;
-
-               }
-
-            y: Constants.GridHeight * 0.25;
-            text: "Open Image";
-        }
+        onClicked: base.clicked("open");
     }
 }

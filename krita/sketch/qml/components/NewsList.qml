@@ -27,7 +27,30 @@ PageStack {
         ListView {
             anchors.fill: parent;
             id: listView;
-            delegate: delegate;
+
+            delegate: ListItem {
+                title: model.title;
+                description: model.pubDate;
+
+                onClicked: {
+                    base.push( detailsPage,
+                              { title: model.title,
+                                description: model.description,
+                                pubDate: model.pubDate});
+                }
+
+                Label {
+                    anchors.right: parent.right;
+                    anchors.rightMargin: Constants.GridWidth * 0.5;
+                    anchors.verticalCenter: parent.verticalCenter;
+
+                    text: "More >";
+                    color: Constants.Theme.SecondaryTextColor;
+
+                    font.italic: true;
+                }
+            }
+
             model: {
                 if (aggregatedFeedsModel.articleCount > 0)
                     return aggregatedFeedsModel
@@ -36,82 +59,6 @@ PageStack {
                 }
             }
 
-        }
-    }
-
-    Component {
-        id: delegate;
-
-        Rectangle {
-            width: parent.width;
-            height: Constants.GridHeight * 1.75;
-
-            Rectangle {
-                x: Constants.GridWidth / 4;
-                y: Constants.GridHeight * 0.25
-                width: parent.width - (Constants.GridWidth / 2);
-                height: parent.height - (Constants.GridHeight * 0.5);
-                Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0
-                        color: "#FDFBFA"
-                    }
-
-                    GradientStop {
-                        position: 0.4
-                        color: "#FAF5F0"
-                    }
-                }
-            }
-
-            color: mouse.pressed ? Constants.Theme.HighlightColor : "transparent";
-
-            Label {
-                anchors {
-                    top: parent.top;
-                    topMargin: Constants.GridHeight * 0.5;
-                    left: parent.left;
-                    leftMargin: Constants.GridWidth * 0.5;
-                }
-
-                text: model.title;
-                verticalAlignment: Text.AlignTop;
-            }
-
-            Label {
-                anchors {
-                    bottom: parent.bottom;
-                    bottomMargin: Constants.GridHeight * 0.5;
-                    left: parent.left;
-                    leftMargin: Constants.GridWidth * 0.5;
-                }
-
-                text: model.pubDate;
-                font.pixelSize: Constants.SmallFontSize;
-                color: Constants.Theme.SecondaryTextColor;
-                verticalAlignment: Text.AlignBottom;
-            }
-
-            Label {
-                anchors.right: parent.right;
-                anchors.rightMargin: Constants.GridWidth * 0.5;
-                y: Constants.GridHeight * 0.5;
-                text: "More >";
-                color: Constants.Theme.SecondaryTextColor;
-                font.pixelSize: Constants.SmallFontSize;
-            }
-
-            MouseArea {
-                id: mouse;
-                anchors.fill: parent;
-                onClicked: {
-                    base.push( detailsPage,
-                              { title: model.title,
-                                description: model.description,
-                                pubDate: model.pubDate});
-                }
-            }
         }
     }
 
