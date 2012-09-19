@@ -36,6 +36,9 @@ Calligra Plan current:
 
 Release 2.5:
 ------------
+* Disable calculate action when calculating to avoid potential crash
+
+* Fix bug 306734 - Crash when calculating schedule (in rcps_solver_solve)
 
 * Fix crash when two dependent tasks are deleted in one go
 
