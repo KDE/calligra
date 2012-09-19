@@ -136,13 +136,22 @@ Panel {
         }
     ]
 
-    peekContents: Flickable {
+    peekContents: Item {
         anchors.fill: parent;
-        Loader {
-            id: toolOptionsPeek;
-            width: parent.width;
-            onSourceChanged: item.fullView = false;
-            source: "toolconfigpages/paint.qml";
+        MouseArea {
+            anchors.fill: parent;
+            hoverEnabled: true;
+            onContainsMouseChanged: toolOptionsPeek.focus = containsMouse;
+        }
+        Flickable {
+            anchors.fill: parent;
+            Loader {
+                id: toolOptionsPeek;
+                width: parent.width;
+                height: item.height;
+                onSourceChanged: item.fullView = false;
+                source: "toolconfigpages/paint.qml";
+            }
         }
     }
 
@@ -227,9 +236,15 @@ Panel {
                 right: parent.right;
                 bottom: parent.bottom;
             }
+            MouseArea {
+                anchors.fill: parent;
+                hoverEnabled: true;
+                onContainsMouseChanged: toolOptionsFull.focus = containsMouse;
+            }
             Loader {
                 id: toolOptionsFull;
                 width: parent.width;
+                height: item.height;
                 source: "toolconfigpages/paint.qml";
             }
         }
