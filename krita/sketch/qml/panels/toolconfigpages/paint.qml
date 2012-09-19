@@ -43,34 +43,48 @@ Item {
             right: parent.right;
             rightMargin: Constants.DefaultMargin;
         }
+        height: childrenRect.height;
 
         PanelTextField {
             width: parent.width;
             placeholder: "Size";
-            text: "5.00";
+            text: compositeOpModel.size;
+            onFocusLost: compositeOpModel.changePaintopValue("size", text);
+            onAccepted: compositeOpModel.changePaintopValue("size", text);
+            enabled: compositeOpModel.sizeEnabled;
         }
         PanelTextField {
             width: parent.width;
             placeholder: "Opacity";
-            text: "1.00";
+            text: compositeOpModel.opacity;
+            onFocusLost: compositeOpModel.changePaintopValue("opacity", text);
+            onAccepted: compositeOpModel.changePaintopValue("opacity", text);
+            enabled: compositeOpModel.opacityEnabled;
         }
         PanelTextField {
             width: parent.width;
             placeholder: "Flow";
-            text: "1.00";
+            text: compositeOpModel.flow;
+            onFocusLost: compositeOpModel.changePaintopValue("flow", text);
+            onAccepted: compositeOpModel.changePaintopValue("flow", text);
+            enabled: compositeOpModel.flowEnabled;
         }
 
         PanelTextField {
             visible: fullView;
             width: parent.width;
             placeholder: "Smoothness";
-            text: "100%";
+            text: "1000";
+            onFocusLost: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothness(text);
+            onAccepted: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothness(text);
         }
         PanelTextField {
             visible: fullView;
             width: parent.width;
             placeholder: "Assistant";
-            text: "100%";
+            text: "1000";
+            onFocusLost: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(text);
+            onAccepted: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(text);
         }
     
         Label {
@@ -95,6 +109,8 @@ Item {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: compositeOpModel.mirrorVertically;
+                onClicked: compositeOpModel.mirrorVertically = !compositeOpModel.mirrorVertically;
             }
             Button {
                 id: mirrorHorizontal;
@@ -105,6 +121,8 @@ Item {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: compositeOpModel.mirrorHorizontally;
+                onClicked: compositeOpModel.mirrorHorizontally = !compositeOpModel.mirrorHorizontally;
             }
             Button {
                 id: mirrorCenter;
@@ -115,6 +133,8 @@ Item {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: compositeOpModel.mirrorCenter;
+                onClicked: compositeOpModel.mirrorCenter = !compositeOpModel.mirrorCenter;
             }
         }
     }
