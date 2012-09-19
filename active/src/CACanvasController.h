@@ -42,8 +42,6 @@ class CACanvasController : public QDeclarativeItem, public KoCanvasController
 {
     Q_OBJECT
 
-    Q_PROPERTY (qreal docHeight READ docHeight NOTIFY docHeightChanged)
-    Q_PROPERTY (qreal docWidth READ docWidth NOTIFY docWidthChanged)
     Q_PROPERTY (int cameraX READ cameraX WRITE setCameraX NOTIFY cameraXChanged)
     Q_PROPERTY (int cameraY READ cameraY WRITE setCameraY NOTIFY cameraYChanged)
     Q_PROPERTY (qreal zoom READ zoom WRITE setZoom NOTIFY zoomChanged)
@@ -79,8 +77,6 @@ public:
     QObject *caCanvasItem();
     void setCACanvasItem(QObject *caCanvas);
 
-    qreal docWidth() const;
-    qreal docHeight() const;
     int cameraX() const;
     int cameraY() const;
     void setCameraX (int cameraX);
@@ -114,12 +110,9 @@ protected:
     virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);
 
 signals:
-    void docHeightChanged();
-    void docWidthChanged();
     void cameraXChanged();
     void cameraYChanged();
     void needCanvasUpdate();
-    void needsCanvasResize(const QSizeF canvasSize);
     void zoomChanged();
     void caCanvasItemChanged();
 };

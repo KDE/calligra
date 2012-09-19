@@ -55,14 +55,9 @@ Item {
             CACanvasItem {
                 id: canvasItem
                 editable: false
-
-                Rectangle {
-                    color: "red"; opacity: 0.1; radius: 10; anchors.fill: parent; z: 2
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: docToolbars.toggle()
-                    }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: docToolbars.toggle()
                 }
             }
 
@@ -79,7 +74,13 @@ Item {
                     easing.type: Easing.OutExpo
                 }
             }
+
+            onContentYChanged: returnToBounds();
+            onContentXChanged: returnToBounds();
+            onContentWidthChanged: returnToBounds();
+            onContentHeightChanged: returnToBounds();
         }
+
     }
 
     Toolbars {

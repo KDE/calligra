@@ -145,6 +145,9 @@ void CAPAView::doUpdateActivePage (KoPAPageBase* page)
     m_paCanvas->setDocumentOrigin (QPointF (0, 0));
     // the page is in the center of the canvas
     m_paCanvas->resourceManager()->setResource (KoCanvasResourceManager::PageSize, pageSize);
+    zoomController()->setPageSize(pageSize);
+    zoomController()->setDocumentSize(pageSize);
+    zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1);
     QGraphicsItem* item = dynamic_cast<QGraphicsItem*> (m_paCanvas);
     item->update();
 

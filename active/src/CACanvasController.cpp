@@ -64,11 +64,6 @@ void CACanvasController::updateDocumentSize (const QSize& sz, bool recalculateCe
 {
     m_caCanvasItem->updateDocumentSize(sz, recalculateCenter);
     KoCanvasController::setDocumentSize(sz);
-
-    return;
-    m_documentSize = sz;
-    emit docHeightChanged();
-    emit docWidthChanged();
 }
 
 void CACanvasController::setScrollBarValue (const QPoint& value)
@@ -198,16 +193,6 @@ void CACanvasController::scrollContentsBy (int dx, int dy)
     //kDebug() << dx << dy;
 }
 
-qreal CACanvasController::docHeight() const
-{
-    return m_documentSize.height();
-}
-
-qreal CACanvasController::docWidth() const
-{
-    return m_documentSize.width();
-}
-
 int CACanvasController::cameraX() const
 {
     return m_currentPoint.x();
@@ -255,10 +240,6 @@ CACanvasController::~CACanvasController()
 
 void CACanvasController::zoomToFit()
 {
-    return;
-    emit needsCanvasResize(QSizeF(width(), height()));
-    emit docHeightChanged();
-    emit docWidthChanged();
 }
 
 void CACanvasController::updateCanvas()

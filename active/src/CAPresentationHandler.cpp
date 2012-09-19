@@ -40,8 +40,8 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 
-#include <QSize>
-#include <QTimer>
+#include <QtCore/QSize>
+#include <QtCore/QTimer>
 
 class CAPresentationHandler::Private
 {
@@ -128,7 +128,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     d->document;
 
     emit totalNumberOfSlidesChanged();
-    nextSlide();
+    QTimer::singleShot(0, this, SLOT(nextSlide()));
 
     return true;
 }
@@ -166,30 +166,8 @@ void CAPresentationHandler::previousSlide()
 
 void CAPresentationHandler::zoomToFit()
 {
-    documentController()->canvasController()->zoomController()->setPageSize(d->paView->activePage()->boundingRect().size());
-    documentController()->canvasController()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1);
-    canvas()->canvasItem()->setGeometry(QRectF(QPoint(0,0), documentController()->canvasController()->zoomHandler()->documentToView(d->paView->activePage()->boundingRect().size())));
+    KoZoomController *zoomController = documentController()->canvasController()->zoomController();
     updateCanvas();
-    return;
-    QSizeF canvasSize (documentController()->canvasController()->width(),
-                       documentController()->canvasController()->height());
-
-    QSizeF pageSize = d->paView->activePage()->boundingRect().size();
-    QGraphicsWidget* canvasItem = canvas()->canvasItem();
-    QSizeF newSize (pageSize);
-    newSize.scale (canvasSize, Qt::KeepAspectRatio);
-
-    KoZoomHandler* zoomHandler = documentController()->canvasController()->zoomHandler();
-
-    if (canvasSize.width() < canvasSize.height()) {
-        canvasItem->setGeometry (0, (canvasSize.height() - newSize.height()) / 2,
-                                 newSize.width(), newSize.height());
-        zoomHandler->setZoom (canvasSize.width() / pageSize.width() * 0.65);
-    } else {
-        canvasItem->setGeometry ( (canvasSize.width() - newSize.width()) / 2, 0,
-                                  newSize.width(), newSize.height());
-        zoomHandler->setZoom (canvasSize.height() / pageSize.height() * 0.65);
-    }
 }
 
 void CAPresentationHandler::tellZoomControllerToSetDocumentSize (const QSize& size)
