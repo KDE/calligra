@@ -23,12 +23,20 @@
 
 #include <QtCore/QModelIndex>
 
+class KoCanvasController;
 
 class CompositeOpModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged);
     Q_PROPERTY(bool eraserMode READ eraserMode WRITE setEraserMode NOTIFY eraserModeChanged);
+
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity NOTIFY opacityChanged);
+    Q_PROPERTY(bool opacityEnabled READ opacityEnabled WRITE setOpacityEnabled NOTIFY opacityEnabledChanged);
+    Q_PROPERTY(qreal flow READ flow WRITE setFlow NOTIFY flowChanged);
+    Q_PROPERTY(bool flowEnabled READ flowEnabled WRITE setFlowEnabled NOTIFY flowEnabledChanged);
+    Q_PROPERTY(qreal size READ size WRITE setSize NOTIFY sizeChanged);
+    Q_PROPERTY(bool sizeEnabled READ sizeEnabled WRITE setSizeEnabled NOTIFY sizeEnabledChanged);
 public:
     enum CompositeOpModelRoles
     {
@@ -46,9 +54,36 @@ public:
     void setView(QObject* newView);
     bool eraserMode() const;
     void setEraserMode(bool newEraserMode);
+    
+    qreal opacity() const;
+    void setOpacity(qreal newOpacity);
+    bool opacityEnabled() const;
+    void setOpacityEnabled(bool newOpacityEnabled);
+    
+    qreal flow() const;
+    void setFlow(qreal newFlow);
+    bool flowEnabled() const;
+    void setFlowEnabled(bool newFlowEnabled);
+
+    qreal size() const;
+    void setSize(qreal newSize);
+    bool sizeEnabled() const;
+    void setSizeEnabled(bool newSizeEnabled);
 Q_SIGNALS:
     void viewChanged();
     void eraserModeChanged();
+
+    void opacityChanged();
+    void opacityEnabledChanged();
+    void flowChanged();
+    void flowEnabledChanged();
+    void sizeChanged();
+    void sizeEnabledChanged();
+
+private Q_SLOTS:
+    void slotToolChanged(KoCanvasController* canvas, int toolId);
+    void resourceChanged(int key, const QVariant& v);
+
 private:
     class Private;
     Private* d;

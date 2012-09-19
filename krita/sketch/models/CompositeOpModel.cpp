@@ -22,7 +22,11 @@
 #include <kis_composite_ops_model.h>
 #include <kis_view2.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_tool.h>
+#include <kis_canvas2.h>
 #include <kis_node.h>
+#include <kis_paintop_preset.h>
+#include <kis_paintop_settings.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
@@ -34,6 +38,13 @@ public:
         , model(KisCompositeOpListModel::sharedInstance())
         , view(0)
         , eraserMode(0)
+        , opacity(0)
+        , opacityEnabled(false)
+        , flow(0)
+        , flowEnabled(false)
+        , size(0)
+        , sizeEnabled(false)
+        , presetsEnabled(true)
     {};
 
     CompositeOpModel* q;
@@ -42,6 +53,15 @@ public:
     QString currentCompositeOpID;
     QString prevCompositeOpID;
     bool eraserMode;
+
+    qreal opacity;
+    bool opacityEnabled;
+    qreal flow;
+    bool flowEnabled;
+    qreal size;
+    bool sizeEnabled;
+    bool presetsEnabled;
+    KisPaintOpPresetSP currentPreset;
 
     void updateCompositeOp(QString compositeOpID)
     {
@@ -58,12 +78,35 @@ public:
             if(compositeOpID != currentCompositeOpID)
             {
                 q->setEraserMode(compositeOpID == COMPOSITE_ERASE);
-                //m_activePreset->settings()->setProperty("CompositeOp", compositeOpID);
+                currentPreset->settings()->setProperty("CompositeOp", compositeOpID);
                 //m_optionWidget->setConfiguration(m_activePreset->settings().data());
                 view->resourceProvider()->setCurrentCompositeOp(compositeOpID);
                 prevCompositeOpID = currentCompositeOpID;
                 currentCompositeOpID = compositeOpID;
             }
+        }
+    }
+
+    void ofsChanged()
+    {
+        if(presetsEnabled && !currentPreset.isNull() && !currentPreset->settings().isNull())
+        {
+            // IMPORTANT: set the PaintOp size before setting the other properties
+            //            it wont work the other way
+            qreal sizeDiff = size - currentPreset->settings()->paintOpSize().width();
+            currentPreset->settings()->changePaintOpSize(sizeDiff, 0);
+
+            if(currentPreset->settings()->hasProperty("OpacityValue"))
+                currentPreset->settings()->setProperty("OpacityValue", opacity);
+
+            if(currentPreset->settings()->hasProperty("FlowValue"))
+                currentPreset->settings()->setProperty("FlowValue", flow);
+
+            //m_optionWidget->setConfiguration(d->currentPreset->settings().data());
+        }
+        else if(view)
+        {
+            view->resourceProvider()->setOpacity(opacity);
         }
     }
 };
@@ -72,6 +115,9 @@ CompositeOpModel::CompositeOpModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            this, SLOT(slotToolChanged(KoCanvasController*,int)));
+
     QHash<int,QByteArray> roles;
     roles[TextRole] = "text";
     roles[IsCategoryRole] = "isCategory";
@@ -129,7 +175,18 @@ QObject* CompositeOpModel::view() const
 
 void CompositeOpModel::setView(QObject* newView)
 {
+    if(d->view)
+    {
+        disconnect(d->view->canvasBase()->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT(resourceChanged(int, const QVariant&)));
+    }
     d->view = qobject_cast<KisView2*>( newView );
+    if(d->view)
+    {
+        connect(d->view->canvasBase()->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT(resourceChanged(int, const QVariant&)));
+        slotToolChanged(0, 0);
+    }
     emit viewChanged();
 }
 
@@ -148,6 +205,143 @@ void CompositeOpModel::setEraserMode(bool newEraserMode)
         else
             d->updateCompositeOp(d->prevCompositeOpID);
         emit eraserModeChanged();
+    }
+}
+
+qreal CompositeOpModel::flow() const
+{
+    return d->flow;
+}
+
+void CompositeOpModel::setFlow(qreal newFlow)
+{
+    d->flow = newFlow;
+    d->ofsChanged();
+    emit flowChanged();
+}
+
+bool CompositeOpModel::flowEnabled() const
+{
+    return d->flowEnabled;
+}
+
+void CompositeOpModel::setFlowEnabled(bool newFlowEnabled)
+{
+    d->flowEnabled = newFlowEnabled;
+    emit flowEnabledChanged();
+}
+
+qreal CompositeOpModel::opacity() const
+{
+    return d->opacity;
+}
+
+void CompositeOpModel::setOpacity(qreal newOpacity)
+{
+    d->opacity = newOpacity;
+    d->ofsChanged();
+    emit opacityChanged();
+}
+
+bool CompositeOpModel::opacityEnabled() const
+{
+    return d->opacityEnabled;
+}
+
+void CompositeOpModel::setOpacityEnabled(bool newOpacityEnabled)
+{
+    d->opacityEnabled = newOpacityEnabled;
+    emit opacityEnabledChanged();
+}
+
+qreal CompositeOpModel::size() const
+{
+    return d->size;
+}
+
+void CompositeOpModel::setSize(qreal newSize)
+{
+    d->size = newSize;
+    d->ofsChanged();
+    emit sizeChanged();
+}
+
+bool CompositeOpModel::sizeEnabled() const
+{
+    return d->sizeEnabled;
+}
+
+void CompositeOpModel::setSizeEnabled(bool newSizeEnabled)
+{
+    d->sizeEnabled = newSizeEnabled;
+    emit sizeEnabledChanged();
+}
+
+void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
+{
+    Q_UNUSED(canvas);
+    Q_UNUSED(toolId);
+
+    if(!d->view)
+        return;
+
+    QString  id   = KoToolManager::instance()->activeToolId();
+    KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(d->view->canvasBase(), id));
+
+    if(tool)
+    {
+        int flags = tool->flags();
+
+        if(flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP)
+        {
+            //setWidgetState(ENABLE_COMPOSITEOP|ENABLE_OPACITY);
+            d->opacityEnabled = true;
+        }
+        else
+        {
+            //setWidgetState(DISABLE_COMPOSITEOP|DISABLE_OPACITY);
+            d->opacityEnabled = false;
+        }
+
+        if(flags & KisTool::FLAG_USES_CUSTOM_PRESET)
+        {
+            d->flowEnabled = true;
+            d->sizeEnabled = true;
+            d->presetsEnabled = true;
+        }
+        else
+        {
+            d->flowEnabled = false;
+            d->sizeEnabled = false;
+            d->presetsEnabled = false;
+        }
+    }
+    else
+    {
+        d->opacityEnabled = false;
+        d->flowEnabled = false;
+        d->sizeEnabled = false;
+    }
+    emit opacityEnabledChanged();
+    emit flowEnabledChanged();
+    emit sizeEnabledChanged();
+}
+
+void CompositeOpModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
+{
+    if(d->view)
+    {
+        KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if(preset)
+        {
+            d->currentPreset = preset;
+            d->size = preset->settings()->paintOpSize().width();
+            emit sizeChanged();
+            d->opacity = preset->settings()->getProperty("OpacityValue").toReal();
+            emit opacityChanged();
+            d->flow = preset->settings()->getProperty("FlowValue").toReal();
+            emit flowChanged();
+        }
     }
 }
 
