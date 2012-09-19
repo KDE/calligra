@@ -18,23 +18,29 @@
 
 import QtQuick 1.1
 
-Rectangle {
+Image {
 
     property alias text: title.text;
     property alias leftArea: left.children;
     property alias rightArea: right.children;
 
-    height: Constants.GridHeight;
+    height: Constants.GridHeight * 2;
     width: parent.width;
 
-    color: Constants.Theme.MainColor;
+    source: "../images/header_krita_sketch.png"
+    smooth: true;
 
     Row {
         id: left;
 
-        anchors.left: parent.left;
-        anchors.top: parent.top;
-        anchors.bottom: parent.bottom;
+        anchors {
+            left: parent.left;
+            leftMargin: Constants.GridWidth * 0.5;
+            top: parent.top;
+            topMargin: Constants.GridHeight * 0.5;
+            bottom: parent.bottom;
+            bottomMargin: Constants.GridHeight * 0.5;
+        }
     }
 
     Label {
@@ -49,8 +55,13 @@ Rectangle {
     Row {
         id: right;
 
-        anchors.right: parent.right;
-        anchors.top: parent.top;
-        anchors.bottom: parent.bottom;
+        anchors {
+            right: parent.right;
+            rightMargin: Constants.GridWidth * 0.5;
+            top: parent.top;
+            topMargin: Constants.GridHeight * 0.5;
+            bottom: parent.bottom;
+            bottomMargin: Constants.GridHeight * 0.5;
+        }
     }
 }
