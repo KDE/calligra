@@ -19,6 +19,7 @@
 import QtQuick 1.1
 
 Item {
+    id: base;
     width: parent ? parent.width : 0;
     height: Constants.GridHeight;
 
@@ -30,7 +31,10 @@ Item {
     property alias border: fill.border;
     property alias radius: fill.radius;
     property alias shadow: dropShadow.visible;
-    
+
+    signal focusLost();
+    signal accepted();
+
     Item {
         anchors.fill: parent;
         anchors.margins: Constants.DefaultMargin;
@@ -58,6 +62,11 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.margins: Constants.DefaultMargin;
                 font.pixelSize: Constants.DefaultFontSize;
+                onFocusChanged: {
+                    if(focus === false)
+                        base.focusLost();
+                }
+                onAccepted: base.accepted();
             }
         }
     }
