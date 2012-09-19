@@ -32,7 +32,9 @@ Item {
         }
         radius: (Constants.GridHeight / 4) - 2;
         anchors {
-            top: parent.top ;
+            top: base.expandToTop ? undefined : parent.top;
+            bottom: base.expandToTop ? parent.bottom : undefined;
+            bottomMargin: 1;
             right: parent.right;
             left: parent.left;
         }
@@ -84,10 +86,10 @@ Item {
     Rectangle {
         id: listContainer
         anchors {
-            top: topButton.bottom;
+            top: base.expandToTop ? parent.top : topButton.bottom;
             left: parent.left;
             right: parent.right;
-            bottom: parent.bottom;
+            bottom: base.expandToTop ? topButton.top : parent.bottom;
             leftMargin: topButton.radius;
             rightMargin: topButton.radius;
         }
@@ -130,6 +132,7 @@ Item {
         }
     }
 
+    property bool expandToTop: false;
     property int expandedHeight: base.parent.height - base.y - (Constants.GridHeight / 2);
     states: [
         State {
