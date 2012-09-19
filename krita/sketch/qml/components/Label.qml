@@ -19,8 +19,6 @@
 import QtQuick 1.1
 
 Text {
-    height: Constants.GridHeight;
-
     verticalAlignment: Text.AlignVCenter;
 
     font.pixelSize: Constants.DefaultFontSize;
