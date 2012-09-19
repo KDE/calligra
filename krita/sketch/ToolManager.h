@@ -23,22 +23,29 @@
 
 #include <qdeclarativeitem.h>
 
+class KoCanvasController;
 
 class ToolManager : public QDeclarativeItem
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
+    Q_PROPERTY(QObject* currentTool READ currentTool NOTIFY currentToolChanged);
 public:
     ToolManager(QDeclarativeItem* parent = 0);
     virtual ~ToolManager();
 
     QObject* view() const;
     void setView(QObject* newView);
+    QObject* currentTool() const;
 
     Q_INVOKABLE void requestToolChange(QString toolID);
 
+public Q_SLOTS:
+    void slotToolChanged(KoCanvasController* canvas, int toolId);
+
 Q_SIGNALS:
     void viewChanged();
+    void currentToolChanged();
 
 private:
     class Private;
