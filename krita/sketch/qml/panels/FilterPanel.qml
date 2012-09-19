@@ -128,6 +128,11 @@ Panel {
             id: configNeeded;
             width: parent.width;
             height: childrenRect.height > 0 ? childrenRect.height : 1;
+            MouseArea {
+                anchors.fill: parent;
+                hoverEnabled: true;
+                onContainsMouseChanged: configLoader.focus = containsMouse;
+            }
             Loader {
                 id: configLoader;
                 width: parent.width;
