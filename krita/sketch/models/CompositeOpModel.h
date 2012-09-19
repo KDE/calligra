@@ -37,6 +37,10 @@ class CompositeOpModel : public QAbstractListModel
     Q_PROPERTY(bool flowEnabled READ flowEnabled WRITE setFlowEnabled NOTIFY flowEnabledChanged);
     Q_PROPERTY(qreal size READ size WRITE setSize NOTIFY sizeChanged);
     Q_PROPERTY(bool sizeEnabled READ sizeEnabled WRITE setSizeEnabled NOTIFY sizeEnabledChanged);
+
+    Q_PROPERTY(bool mirrorHorizontally READ mirrorHorizontally WRITE setMirrorHorizontally NOTIFY mirrorHorizontallyChanged);
+    Q_PROPERTY(bool mirrorVertically READ mirrorVertically WRITE setMirrorVertically NOTIFY mirrorVerticallyChanged);
+    Q_PROPERTY(bool mirrorCenter READ mirrorCenter WRITE setMirrorCenter NOTIFY mirrorCenterChanged);
 public:
     enum CompositeOpModelRoles
     {
@@ -54,12 +58,12 @@ public:
     void setView(QObject* newView);
     bool eraserMode() const;
     void setEraserMode(bool newEraserMode);
-    
+
     qreal opacity() const;
     void setOpacity(qreal newOpacity);
     bool opacityEnabled() const;
     void setOpacityEnabled(bool newOpacityEnabled);
-    
+
     qreal flow() const;
     void setFlow(qreal newFlow);
     bool flowEnabled() const;
@@ -69,6 +73,16 @@ public:
     void setSize(qreal newSize);
     bool sizeEnabled() const;
     void setSizeEnabled(bool newSizeEnabled);
+
+    bool mirrorHorizontally() const;
+    void setMirrorHorizontally(bool newMirrorHorizontally);
+    bool mirrorVertically() const;
+    void setMirrorVertically(bool newMirrorVertically);
+    bool mirrorCenter() const;
+    void setMirrorCenter(bool newMirrorCenter);
+
+    Q_INVOKABLE void changePaintopValue(QString propertyName, QVariant value);
+
 Q_SIGNALS:
     void viewChanged();
     void eraserModeChanged();
@@ -79,6 +93,10 @@ Q_SIGNALS:
     void flowEnabledChanged();
     void sizeChanged();
     void sizeEnabledChanged();
+
+    void mirrorHorizontallyChanged();
+    void mirrorVerticallyChanged();
+    void mirrorCenterChanged();
 
 private Q_SLOTS:
     void slotToolChanged(KoCanvasController* canvas, int toolId);

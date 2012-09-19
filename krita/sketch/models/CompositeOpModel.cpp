@@ -215,9 +215,12 @@ qreal CompositeOpModel::flow() const
 
 void CompositeOpModel::setFlow(qreal newFlow)
 {
-    d->flow = newFlow;
-    d->ofsChanged();
-    emit flowChanged();
+    if(d->flow != newFlow)
+    {
+        d->flow = newFlow;
+        d->ofsChanged();
+        emit flowChanged();
+    }
 }
 
 bool CompositeOpModel::flowEnabled() const
@@ -238,9 +241,12 @@ qreal CompositeOpModel::opacity() const
 
 void CompositeOpModel::setOpacity(qreal newOpacity)
 {
-    d->opacity = newOpacity;
-    d->ofsChanged();
-    emit opacityChanged();
+    if(d->opacity != newOpacity)
+    {
+        d->opacity = newOpacity;
+        d->ofsChanged();
+        emit opacityChanged();
+    }
 }
 
 bool CompositeOpModel::opacityEnabled() const
@@ -261,9 +267,12 @@ qreal CompositeOpModel::size() const
 
 void CompositeOpModel::setSize(qreal newSize)
 {
-    d->size = newSize;
-    d->ofsChanged();
-    emit sizeChanged();
+    if(d->size != newSize)
+    {
+        d->size = newSize;
+        d->ofsChanged();
+        emit sizeChanged();
+    }
 }
 
 bool CompositeOpModel::sizeEnabled() const
@@ -275,6 +284,67 @@ void CompositeOpModel::setSizeEnabled(bool newSizeEnabled)
 {
     d->sizeEnabled = newSizeEnabled;
     emit sizeEnabledChanged();
+}
+
+void CompositeOpModel::changePaintopValue(QString propertyName, QVariant value)
+{
+    if(propertyName == "size" && value.toReal() != d->size)
+        setSize(value.toReal());
+    else if(propertyName == "opacity" && value.toReal() != d->opacity)
+        setOpacity(value.toReal());
+    else if(propertyName == "flow" && value.toReal() != d->flow)
+        setFlow(value.toReal());
+}
+
+bool CompositeOpModel::mirrorHorizontally() const
+{
+    if(d->view)
+        return d->view->resourceProvider()->mirrorHorizontal();
+    return false;
+}
+
+void CompositeOpModel::setMirrorHorizontally(bool newMirrorHorizontally)
+{
+    if(d->view && d->view->resourceProvider()->mirrorHorizontal() != newMirrorHorizontally)
+    {
+        d->view->resourceProvider()->setMirrorHorizontal(newMirrorHorizontally);
+        emit mirrorHorizontallyChanged();
+        emit mirrorCenterChanged();
+    }
+}
+
+bool CompositeOpModel::mirrorVertically() const
+{
+    if(d->view)
+        return d->view->resourceProvider()->mirrorVertical();
+    return false;
+}
+
+void CompositeOpModel::setMirrorVertically(bool newMirrorVertically)
+{
+    if(d->view && d->view->resourceProvider()->mirrorVertical() != newMirrorVertically)
+    {
+        d->view->resourceProvider()->setMirrorVertical(newMirrorVertically);
+        emit mirrorVerticallyChanged();
+        emit mirrorCenterChanged();
+    }
+}
+
+bool CompositeOpModel::mirrorCenter() const
+{
+    return mirrorHorizontally() && mirrorVertically();
+}
+
+void CompositeOpModel::setMirrorCenter(bool newMirrorCenter)
+{
+    if(mirrorCenter() != newMirrorCenter)
+    {
+        d->view->resourceProvider()->setMirrorHorizontal(newMirrorCenter);
+        d->view->resourceProvider()->setMirrorVertical(newMirrorCenter);
+        emit mirrorHorizontallyChanged();
+        emit mirrorVerticallyChanged();
+        emit mirrorCenterChanged();
+    }
 }
 
 void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)
