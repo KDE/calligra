@@ -44,15 +44,17 @@ Item {
 
         Flickable {
             id: docFlickable
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: Math.min(contentWidth, parent.width)
+            height: Math.min(contentHeight, parent.height)
             contentWidth: canvasItem.width; contentHeight: canvasItem.height
-            contentX: Math.max(theCanvasController.cameraX - width/2, 0)
-            contentY: Math.max(theCanvasController.cameraY - height/2, 0)
+            flickableDirection: Flickable.HorizontalAndVerticalFlick
+            contentX: theCanvasController.cameraX
+            contentY: theCanvasController.cameraY
 
             CACanvasItem {
                 id: canvasItem
                 editable: false
-//                 width: docRootRect.width
 
                 Rectangle {
                     color: "red"; opacity: 0.1; radius: 10; anchors.fill: parent; z: 2

@@ -31,6 +31,8 @@
 
 #include <QDeclarativeItem>
 
+class CAAbstractDocumentHandler;
+class CADocumentController;
 class CACanvasItem;
 class KoCanvasBase;
 class KoZoomController;
@@ -90,6 +92,7 @@ public:
     KoZoomHandler* zoomHandler();
     KoZoomController* zoomController();
     void setZoomHandler (KoZoomHandler* zoomHandler);
+    void setDocumentHandler (CAAbstractDocumentHandler *documentHandler);
 
 public slots:
     void centerToCamera();
@@ -100,12 +103,12 @@ public slots:
 private:
     KoZoomHandler* m_zoomHandler;
     KoZoomController* m_zoomController;
-    KoCanvasBase* m_canvas;
     QPoint m_currentPoint;
     QSizeF m_documentSize;
     QList<CADocumentInfo*> m_recentFiles;
     qreal m_zoom;
     CACanvasItem *m_caCanvasItem;
+    CAAbstractDocumentHandler *m_caDocumentHandler;
 
 protected:
     virtual void geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry);

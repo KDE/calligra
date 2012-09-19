@@ -40,6 +40,7 @@ public:
     virtual bool openDocument (const QString& uri);
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
+    virtual KoZoomMode::Mode preferredZoomMode() const;
 
     virtual QString topToolbarSource() const;
     virtual QString rightToolbarSource() const;

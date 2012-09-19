@@ -46,7 +46,6 @@ signals:
     void editableChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
     virtual bool eventFilter(QObject* o, QEvent* e);
 
 private slots:

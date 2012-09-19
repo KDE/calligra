@@ -41,6 +41,7 @@ public:
     virtual bool openDocument (const QString& uri);
     virtual KoDocument* document();
     virtual QString documentTypeName();
+    virtual KoZoomMode::Mode preferredZoomMode() const;
 
     QString searchString() const;
     void setSearchString (const QString& searchString);

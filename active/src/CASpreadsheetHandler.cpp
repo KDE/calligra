@@ -56,6 +56,11 @@ CASpreadsheetHandler::CASpreadsheetHandler (CADocumentController* documentContro
 {
 }
 
+KoZoomMode::Mode CASpreadsheetHandler::preferredZoomMode() const
+{
+    return KoZoomMode::ZOOM_WIDTH;
+}
+
 CASpreadsheetHandler::~CASpreadsheetHandler()
 {
     delete d;

@@ -22,8 +22,9 @@
 #ifndef CAABSTRACTDOCUMENTHANDLER_H
 #define CAABSTRACTDOCUMENTHANDLER_H
 
-#include <QObject>
-#include <QStringList>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <KoZoomMode.h>
 
 class KoDocument;
 class QGraphicsItem;
@@ -46,6 +47,7 @@ public:
     virtual QStringList supportedMimetypes() = 0;
     virtual bool openDocument (const QString& uri) = 0;
     virtual QString documentTypeName() = 0;
+    virtual KoZoomMode::Mode preferredZoomMode() const = 0;
 
     bool canOpenDocument (const QString& uri);
     KoCanvasBase* canvas() const;

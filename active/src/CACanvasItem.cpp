@@ -56,16 +56,8 @@ void CACanvasItem::setKoCanvas(KoCanvasBase* koCanvas)
     m_koCanvasGraphicsWidget->setParentItem(this);
     m_koCanvasGraphicsWidget->installEventFilter(this);
     m_koCanvasGraphicsWidget->setVisible(true);
+    m_koCanvasGraphicsWidget->setGeometry(x(), y(), width(), height());
     connect(m_koCanvasGraphicsWidget, SIGNAL(geometryChanged()), SLOT(resizeToCanvas()));
-}
-
-void CACanvasItem::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
-{
-    if (!m_shouldIgnoreGeometryChange && m_koCanvasGraphicsWidget) {
-        m_koCanvasGraphicsWidget->setGeometry(newGeometry);
-        m_koCanvas->canvasController()->zoomBy(oldGeometry.center().toPoint(), newGeometry.width()/oldGeometry.width());
-    }
-    QDeclarativeItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 bool CACanvasItem::eventFilter(QObject* o, QEvent* e)
@@ -120,7 +112,9 @@ void CACanvasItem::updateDocumentSize(QSize sz, bool recalculateCenter)
     setHeight(sz.height());
     setWidth(sz.width());
 
-    m_koCanvasGraphicsWidget->setGeometry(x(), y(), width(), height());
+    if (m_koCanvasGraphicsWidget) {
+        m_koCanvasGraphicsWidget->setGeometry(x(), y(), width(), height());
+    }
 }
 
 CACanvasItem::~CACanvasItem()

@@ -80,6 +80,7 @@ void CADocumentController::loadDocument()
 {
     Q_FOREACH (CAAbstractDocumentHandler * handler, d->documentHandlers) {
         if (handler->canOpenDocument (documentUri())) {
+            d->canvasController->setDocumentHandler(handler);
             if (handler->openDocument (documentUri())) {
                 d->currentDocumentHandler = handler;
                 emit documentTypeNameChanged();

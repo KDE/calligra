@@ -80,6 +80,11 @@ QStringList CATextDocumentHandler::supportedMimetypes()
     return supportedTypes;
 }
 
+KoZoomMode::Mode CATextDocumentHandler::preferredZoomMode() const
+{
+    return KoZoomMode::ZOOM_WIDTH;
+}
+
 bool CATextDocumentHandler::openDocument (const QString& uri)
 {
     QString error;

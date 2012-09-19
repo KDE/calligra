@@ -25,6 +25,8 @@
 
 #include "CACanvasController.h"
 #include "CACanvasItem.h"
+#include "CADocumentController.h"
+#include "CAAbstractDocumentHandler.h"
 
 #include <KoCanvasBase.h>
 #include <KoShape.h>
@@ -34,13 +36,15 @@
 #include <KDE/KActionCollection>
 #include <KDebug>
 
-#include <QPoint>
-#include <QSize>
-#include <QGraphicsWidget>
+#include <QtCore/QPoint>
+#include <QtCore/QSize>
+#include <QtGui/QGraphicsWidget>
+
+#include <cmath>
 
 CACanvasController::CACanvasController (QDeclarativeItem* parent)
     : QDeclarativeItem (parent), KoCanvasController (0), m_zoomHandler (0), m_zoomController (0),
-      m_canvas (0), m_currentPoint (QPoint (0, 0)), m_documentSize (QSizeF (0, 0))
+      m_caDocumentHandler(0), m_currentPoint (QPoint (0, 0)), m_documentSize (QSizeF (0, 0))
 {
     setFlag (QGraphicsItem::ItemHasNoContents, false);
     setClip (true);
@@ -79,12 +83,14 @@ QPoint CACanvasController::scrollBarValue() const
 
 void CACanvasController::pan (const QPoint& distance)
 {
-    //kDebug() << distance;
+    setCameraX(cameraX() + distance.x());
+    setCameraY(cameraY() + distance.y());
 }
 
 QPointF CACanvasController::preferredCenter() const
 {
-    return QPoint();
+    //TODO: is this the correct value?
+    return QPointF(width()/2, height()/2);
 }
 
 void CACanvasController::setPreferredCenter (const QPointF& viewPoint)
@@ -103,7 +109,7 @@ void CACanvasController::zoomTo (const QRect& rect)
 
 void CACanvasController::zoomBy (const QPoint& center, qreal zoom)
 {
-    proxyObject->emitZoomBy(zoom);
+    proxyObject->emitZoomRelative(zoom, center);
     canvas()->canvasItem()->update();
 }
 
@@ -140,11 +146,13 @@ int CACanvasController::canvasOffsetX() const
 
 int CACanvasController::visibleWidth() const
 {
+    if (m_caCanvasItem) return m_caCanvasItem->width();
     return 0;
 }
 
 int CACanvasController::visibleHeight() const
 {
+    if (m_caCanvasItem) return m_caCanvasItem->height();
     return 0;
 }
 
@@ -170,17 +178,9 @@ void CACanvasController::setCACanvasItem(QObject* caCanvas)
 
 void CACanvasController::setCanvas (KoCanvasBase* canvas)
 {
-//     m_canvas = canvas;
     canvas->setCanvasController(this);
     m_caCanvasItem->setKoCanvas(canvas);
     emit caCanvasItemChanged();
-//     QGraphicsWidget* widget = canvas->canvasItem();
-//     widget->setParentItem (this);
-//     canvas->setCanvasController (this);
-//     widget->setVisible (true);
-//     m_canvas = canvas;
-// 
-//     zoomToFit();
 }
 
 void CACanvasController::setDrawShadow (bool drawShadow)
@@ -190,7 +190,7 @@ void CACanvasController::setDrawShadow (bool drawShadow)
 
 QSize CACanvasController::viewportSize() const
 {
-    return QSize();
+    return QSize(width(), height());
 }
 
 void CACanvasController::scrollContentsBy (int dx, int dy)
@@ -220,6 +220,10 @@ int CACanvasController::cameraY() const
 
 void CACanvasController::setCameraX (int cameraX)
 {
+    cameraX -= std::min(m_caCanvasItem->width()/2, width()/2);
+    if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_WIDTH) {
+        cameraX = 0;
+    }
     m_currentPoint.setX (cameraX);
     emit cameraXChanged();
     centerToCamera();
@@ -227,6 +231,10 @@ void CACanvasController::setCameraX (int cameraX)
 
 void CACanvasController::setCameraY (int cameraY)
 {
+    cameraY -= std::min(m_caCanvasItem->height()/2, height()/2);
+    if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_PAGE) {
+        cameraY = 0;
+    }
     m_currentPoint.setY (cameraY);
     emit cameraYChanged();
     centerToCamera();
@@ -255,22 +263,22 @@ void CACanvasController::zoomToFit()
 
 void CACanvasController::updateCanvas()
 {
-    return;
     emit needCanvasUpdate();
+}
+
+void CACanvasController::setDocumentHandler(CAAbstractDocumentHandler* documentHandler)
+{
+    m_caDocumentHandler = documentHandler;
 }
 
 void CACanvasController::geometryChanged (const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
-    return;
-    if (m_canvas) {
-        QGraphicsWidget* widget = m_canvas->canvasItem();
-        widget->setParentItem (this);
-        widget->setVisible (true);
-        widget->setGeometry (newGeometry);
-
-        zoomToFit();
+    if (m_caCanvasItem->koCanvas() && zoomController() && m_caDocumentHandler) {
+        zoomController()->setZoomMode(m_caDocumentHandler->preferredZoomMode());
+        emit proxyObject->emitSizeChanged(newGeometry.size().toSize());
+        updateCanvas();
     }
+    QDeclarativeItem::geometryChanged (newGeometry, oldGeometry);
 }
 
 KoZoomController* CACanvasController::zoomController()
@@ -288,13 +296,12 @@ void CACanvasController::setZoomHandler (KoZoomHandler* zoomHandler)
     if (!m_zoomController) {
         m_zoomHandler = zoomHandler;
         m_zoomController = new KoZoomController(this, zoomHandler, new KActionCollection(this));
+        zoomController()->setZoom(m_caDocumentHandler->preferredZoomMode(), 1);
     }
 }
 
 void CACanvasController::setZoom(qreal zoom)
 {
-    m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, zoom);
-    emit zoomChanged();
 }
 
 qreal CACanvasController::zoom() const

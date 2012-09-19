@@ -70,6 +70,11 @@ CAPresentationHandler::~CAPresentationHandler()
     delete d;
 }
 
+KoZoomMode::Mode CAPresentationHandler::preferredZoomMode() const
+{
+    return KoZoomMode::ZOOM_PAGE;
+}
+
 KoDocument* CAPresentationHandler::document()
 {
     return d->document;
@@ -103,15 +108,13 @@ bool CAPresentationHandler::openDocument (const QString& uri)
         paCanvasItem->setView (d->paView);
 
         documentController()->canvasController()->setZoomHandler (static_cast<KoZoomHandler*> (paCanvasItem->viewConverter()));
+        d->paView->connectToZoomController();
 
         // update the canvas whenever we scroll, the canvas controller must emit this signal on scrolling/panning
         connect (documentController()->canvasController()->canvasControllerProxyObject(),
                  SIGNAL (moveDocumentOffset (const QPoint&)), paCanvasItem, SLOT (slotSetDocumentOffset (QPoint)));
         // whenever the size of the document viewed in the canvas changes, inform the zoom controller
         connect (paCanvasItem, SIGNAL (documentSize (QSize)), this, SLOT (tellZoomControllerToSetDocumentSize (QSize)));
-        connect (paCanvasItem, SIGNAL (documentSize (QSize)),
-                 documentController()->canvasController()->canvasControllerProxyObject(),
-                 SLOT (updateDocumentSize (QSize)));
 
         paCanvasItem->update();
     }
@@ -163,6 +166,11 @@ void CAPresentationHandler::previousSlide()
 
 void CAPresentationHandler::zoomToFit()
 {
+    documentController()->canvasController()->zoomController()->setPageSize(d->paView->activePage()->boundingRect().size());
+    documentController()->canvasController()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1);
+    canvas()->canvasItem()->setGeometry(QRectF(QPoint(0,0), documentController()->canvasController()->zoomHandler()->documentToView(d->paView->activePage()->boundingRect().size())));
+    updateCanvas();
+    return;
     QSizeF canvasSize (documentController()->canvasController()->width(),
                        documentController()->canvasController()->height());
 
@@ -182,8 +190,6 @@ void CAPresentationHandler::zoomToFit()
                                   newSize.width(), newSize.height());
         zoomHandler->setZoom (canvasSize.height() / pageSize.height() * 0.65);
     }
-
-    updateCanvas();
 }
 
 void CAPresentationHandler::tellZoomControllerToSetDocumentSize (const QSize& size)
