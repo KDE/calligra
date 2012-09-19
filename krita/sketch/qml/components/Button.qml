@@ -71,7 +71,12 @@ Item {
             horizontalAlignment: Text.AlignHCenter;
             elide: Text.ElideMiddle;
         }
-
+        Rectangle {
+            id: enabledVisualiser;
+            opacity: enabled ? 0 : 0.7;
+            anchors.fill: parent;
+            color: "black";
+        }
     }
 
     MouseArea {
