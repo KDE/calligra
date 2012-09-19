@@ -72,12 +72,19 @@ bool CACanvasItem::eventFilter(QObject* o, QEvent* e)
             QResizeEvent *resizeEvent = static_cast<QResizeEvent*>(e);
             setWidth(resizeEvent->size().width());
             setHeight(resizeEvent->size().height());
-        } else if (!m_editable) {
+        } else if (m_editable) {
+            return false;
+        } else if (e->type() == QEvent::MouseButtonPress ||
+                   e->type() == QEvent::MouseButtonRelease ||
+                   e->type() == QEvent::MouseMove ||
+                   e->type() == QEvent::MouseTrackingChange)  {
             return true;
+        } else {
+            return false;
         }
     }
     QTimer::singleShot(0, this, SLOT(resetShouldIgnoreGeometryChange()));
-    return QObject::eventFilter(o, e);
+    return QDeclarativeItem::eventFilter(o, e);
 }
 
 void CACanvasItem::resetShouldIgnoreGeometryChange()
@@ -105,6 +112,7 @@ bool CACanvasItem::editable() const
 void CACanvasItem::setEditable(bool value)
 {
     m_editable = value;
+    emit editableChanged();
 }
 
 void CACanvasItem::updateDocumentSize(QSize sz, bool recalculateCenter)

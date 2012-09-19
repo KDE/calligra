@@ -51,14 +51,10 @@ Item {
             flickableDirection: Flickable.HorizontalAndVerticalFlick
             contentX: theCanvasController.cameraX
             contentY: theCanvasController.cameraY
+            interactive: !canvasItem.editable
 
             CACanvasItem {
                 id: canvasItem
-                editable: false
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: docToolbars.toggle()
-                }
             }
 
             Behavior on contentX {
@@ -75,8 +71,13 @@ Item {
                 }
             }
 
-            onContentYChanged: returnToBounds();
-            onContentXChanged: returnToBounds();
+            MouseArea {
+                anchors.fill: parent
+                visible: enabled
+                enabled: !canvasItem.editable
+                onClicked: docToolbars.toggle()
+            }
+
             onContentWidthChanged: returnToBounds();
             onContentHeightChanged: returnToBounds();
         }
@@ -97,6 +98,6 @@ Item {
     }
 
     function toggleEditing() {
-        docFlickable.visible = docFlickable.visible ? false : true
+        canvasItem.editable = !canvasItem.editable
     }
 }
