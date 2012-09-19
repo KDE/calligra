@@ -103,6 +103,7 @@ void FileSystemModel::setPath(const QString& path)
     d->dir.setPath(path);
     d->list = d->dir.entryInfoList();
     emit endResetModel();
+    emit pathChanged();
 }
 
 QString FileSystemModel::parentFolder()

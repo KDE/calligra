@@ -33,7 +33,7 @@ class FileSystemModel : public QAbstractListModel, public QDeclarativeParserStat
     Q_OBJECT
     Q_INTERFACES(QDeclarativeParserStatus)
 
-    Q_PROPERTY(QString path READ path WRITE setPath)
+    Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(QString parentFolder READ parentFolder)
     Q_PROPERTY(QString filter READ filter WRITE setFilter)
 
@@ -63,6 +63,9 @@ public:
 
     virtual QString filter();
     virtual void setFilter(const QString& filter);
+
+Q_SIGNALS:
+    void pathChanged();
 
 private:
     class Private;
