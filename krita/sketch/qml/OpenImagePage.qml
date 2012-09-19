@@ -21,37 +21,41 @@ import org.krita.sketch 1.0 as Krita
 import "components"
 
 Page {
-    DropShadow {
+    Header {
         id: header;
+
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
         }
 
-        height: Constants.GridHeight;
-        z: 10;
+        text: "Open Image";
 
-        Header {
-            text: "Open Image";
-
-            leftArea: Button {
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                highlightColor: Constants.Theme.HighlightColor;
-                text: "< Back";
-                textColor: "white";
-                onClicked: pageStack.pop();
-            }
-
-            rightArea: Button {
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                text: "^ Up";
-                textColor: "white";
-                onClicked: view.model.path = view.model.parentFolder;
-            }
+        leftArea: Button {
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
+            highlightColor: Constants.Theme.HighlightColor;
+            text: "< Back";
+            textColor: "white";
+            onClicked: pageStack.pop();
         }
+
+        rightArea: Button {
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
+            text: "^ Up";
+            textColor: "white";
+            onClicked: view.model.path = view.model.parentFolder;
+        }
+    }
+
+    Image {
+        anchors.top: header.bottom;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        source: "images/shadow-smooth.png";
+        z: 5;
     }
 
     GridView {
@@ -66,20 +70,25 @@ Page {
         model: Krita.FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.ora" }
         delegate: delegate;
 
-        cellWidth: Constants.GridWidth * 2;
-        cellHeight: Constants.GridHeight * 2;
+        cellWidth: Constants.GridWidth * 4;
+        cellHeight: Constants.GridHeight * 1.75;
+
+        clip: true;
     }
 
     Component {
         id: delegate;
 
-        Button {
+        ListItem {
             width: GridView.view.cellWidth;
-            height: GridView.view.cellHeight;
 
-            image: model.icon;
-            text: model.fileName;
-	    asynchronous: true;
+            image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
+            imageShadow: model.fileType != "inode/directory" ? true : false;
+            imageFillMode: model.fileType != "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
+            imageSmooth: model.fileType != "inode/directory" ? false : true;
+
+            title: model.fileName;
+            description: model.fileType != "inode/directory" ? model.date : "";
 
             onClicked: {
                 if( model.fileType == "inode/directory" ) {
