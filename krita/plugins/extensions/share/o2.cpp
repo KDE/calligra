@@ -28,7 +28,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QDebug>
 #include <QTcpServer>
 #include <QMap>
-#include <QSettings>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
@@ -36,6 +35,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QDateTime>
 #include <QCryptographicHash>
 #include <QTimer>
+
+#include <kglobal.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+#include <kconfig.h>
 
 #include "o2.h"
 #include "o2replyserver.h"
@@ -214,12 +218,15 @@ void O2::onVerificationReceived(const QMap<QString, QString> response) {
 
 QString O2::code() {
     QString key = QString("code.%1").arg(clientId_);
-    return crypt_->decryptToString(QSettings().value(key).toString());
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    QString code = grp.readEntry(key, "");
+    return crypt_->decryptToString(code);
 }
 
 void O2::setCode(const QString &c) {
     QString key = QString("code.%1").arg(clientId_);
-    QSettings().setValue(key, crypt_->encryptToString(c));
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    grp.writeEntry(key, crypt_->encryptToString(c));
 }
 
 void O2::onTokenReplyFinished() {
@@ -274,34 +281,40 @@ QByteArray O2::buildRequestBody(const QMap<QString, QString> &parameters) {
 
 QString O2::token() {
     QString key = QString("token.%1").arg(clientId_);
-    return crypt_->decryptToString(QSettings().value(key).toString());
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    return crypt_->decryptToString(grp.readEntry(key, ""));
 }
 
 void O2::setToken(const QString &v) {
     QString key = QString("token.%1").arg(clientId_);
-    QSettings().setValue(key, crypt_->encryptToString(v));
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    grp.writeEntry(key, crypt_->encryptToString(v));
 }
 
 int O2::expires() {
     QString key = QString("expires.%1").arg(clientId_);
-    return QSettings().value(key).toInt();
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    return grp.readEntry(key, 0);
 }
 
 void O2::setExpires(int v) {
     QString key = QString("expires.%1").arg(clientId_);
-    QSettings().setValue(key, v);
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    grp.writeEntry(key, v);
 }
 
 QString O2::refreshToken() {
     QString key = QString("refreshtoken.%1").arg(clientId_);
-    QString ret = crypt_->decryptToString(QSettings().value(key).toString());
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    QString ret = crypt_->decryptToString(grp.readEntry(key, ""));
     return ret;
 }
 
 void O2::setRefreshToken(const QString &v) {
     trace() << "O2::setRefreshToken" << v.left(4) << "...";
     QString key = QString("refreshtoken.%1").arg(clientId_);
-    QSettings().setValue(key, crypt_->encryptToString(v));
+    KConfigGroup grp = KGlobal::config()->group("deviantart");
+    grp.writeEntry(key, crypt_->encryptToString(v));
 }
 
 void O2::refresh() {

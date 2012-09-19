@@ -16,24 +16,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef STASH_H
+#define STASH_H
+
 #include <QNetworkAccessManager>
-#include <QNetworkReply
+#include <QNetworkReply>
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QMap>
+#include <QPointer>
 
 #include <kis_types.h>
 
 struct Submission {
-  
+
     QString id;
     bool isFolder;
     QString title;
     QString artist_comments;
     QStringList keywords;
     QString original_url;
-    QString category;
+    QString deviant_category;
     QString original;
     QString fullview;
     QString thumb150;
@@ -47,33 +51,77 @@ struct Submission {
 
 class Stash : public QObject {
 
-public:
-  
-  Stash(QObject *parent = 0);
-  
-  QList<Submission> submissions() const;
-  int bytesAvailable() const;
-  
-public slots:
-  
-  /// Upload the given image to deviantart as PNG)
-  bool submit(KisImageWSP image, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder);
-  
-  /// Update the given item
-  bool update(const QString &stashid, const QString &title, const QString comments const QStringList& keywords);
+    Q_OBJECT
 
-  /// Move the given stash to the specified folder
-  bool move(const QString &stashid, const QString folder);
-  
-  /// Rename the specified folder
-  bool renameFolder(const QString &folderId, const QString &folder);
-  
-  /// updates the available space variable
-  bool updateAvailableSpace();
-  
-  /// updates the list of folders and submissions
-  bool delta();
-  
-  /// fetches folder or submission data. This works both for folders and submissions
-  bool fetch(const QString &id);
+public:
+
+    Stash(QObject *parent = 0);
+    ~Stash();
+
+    QList<Submission> submissions() const;
+    int bytesAvailable() const;
+
+    enum Call {
+        None,
+        Placebo,
+        Submit,
+        Update,
+        Move,
+        RenameFolder,
+        UpdateAvailableSpace,
+        Delta,
+        Fetch
+    };
+
+
+public slots:
+
+    /// Do the placebo call to make sure the connection to deviant art works
+    void testCall();
+
+    /// Upload the given image to deviantart as PNG)
+    void submit(KisImageWSP image, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder);
+
+    /// Update the given item
+    void update(const QString &stashid, const QString &title, const QString comments, const QStringList& keywords);
+
+    /// Move the given stash to the specified folder
+    void move(const QString &stashid, const QString folder);
+
+    /// Rename the specified folder
+    void renameFolder(const QString &folderId, const QString &folder);
+
+    /// updates the available space variable
+    void updateAvailableSpace();
+
+    /// updates the list of folders and submissions
+    void delta();
+
+    /// fetches folder or submission data. This works both for folders and submissions
+    void fetch(const QString &id);
+
+
+private slots:
+
+    void slotReadyRead();
+    void slotError(QNetworkReply::NetworkError code);
+    void slotFinished();
+
+signals:
+
+    void callFinished(Stash::Call call, bool result);
+
+private:
+
+
+    Call m_currentCall;
+
+    QNetworkAccessManager m_networkAccessManager;
+    QPointer<QNetworkReply> m_currentReply;
+
+    QList<Submission> m_submissions;
+    int m_bytesAvailable;
 };
+
+
+#endif

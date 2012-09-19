@@ -36,6 +36,7 @@
 
 #include "o2deviantart.h"
 #include "dlg_login.h"
+#include "stash.h"
 
 K_PLUGIN_FACTORY(ImageShareFactory, registerPlugin<ImageShare>();)
 K_EXPORT_PLUGIN(ImageShareFactory("krita"))
@@ -67,12 +68,15 @@ void ImageShare::slotImageShare()
 
     connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SLOT(openBrowser(QUrl)));
     connect(m_deviantArt, SIGNAL(closeBrowser()), SLOT(closeBrowser()));
-    m_deviantArt->link();
+
+    if (!m_deviantArt->linked()) {
+        m_deviantArt->link();
+    }
+
 }
 
 void ImageShare::openBrowser(const QUrl &url)
 {
-    //QDesktopServices::openUrl(url);
     DlgLogin dlgLogin;
     dlgLogin.setLoginUrl(url);
     dlgLogin.exec();
@@ -80,7 +84,11 @@ void ImageShare::openBrowser(const QUrl &url)
 
 void ImageShare::closeBrowser()
 {
-    qDebug() << "close browser";
+    qDebug() << m_deviantArt->token();
+
+    Stash stash;
+    stash.testCall();
+
 }
 
 #include "imageshare.moc"

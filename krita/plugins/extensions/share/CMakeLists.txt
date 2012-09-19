@@ -7,6 +7,7 @@ set(kritaimageshare_PART_SRCS
     o2requestor.cpp
     simplecrypt.cpp
     dlg_login.cpp
+    stash.cpp
     )
 
 kde4_add_ui_files(kritaimageshare_PART_SRCS
