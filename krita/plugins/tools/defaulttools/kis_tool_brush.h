@@ -42,7 +42,7 @@ public:
 
     QWidget * createOptionWidget();
 
-private slots:
+public slots:
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
 
