@@ -35,6 +35,12 @@ Item {
         onCurrentIndexChanged: model.activateItem(currentIndex);
         model: compositeOpModel;
     }
+    Connections {
+        target: compositeOpModel;
+        onSizeChanged: sizeInput.value = compositeOpModel.size;
+        onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
+        onFlowChanged: flowInput.value = compositeOpModel.flow;
+    }
     Column {
         anchors {
             top: fullView ? compositeModeList.bottom : compositeModeList.top;
@@ -45,48 +51,51 @@ Item {
         }
         height: childrenRect.height;
 
-        PanelTextField {
+        RangeInput {
+            id: sizeInput;
             width: parent.width;
             placeholder: "Size";
-            text: compositeOpModel.size;
-            onFocusLost: compositeOpModel.changePaintopValue("size", text);
-            onAccepted: compositeOpModel.changePaintopValue("size", text);
+            min: 1; max: 100; decimals: 0;
+            value: compositeOpModel.size;
+            onValueChanged: compositeOpModel.changePaintopValue("size", value);
             enabled: compositeOpModel.sizeEnabled;
         }
-        PanelTextField {
+        RangeInput {
+            id: opacityInput;
             width: parent.width;
             placeholder: "Opacity";
-            text: compositeOpModel.opacity;
-            onFocusLost: compositeOpModel.changePaintopValue("opacity", text);
-            onAccepted: compositeOpModel.changePaintopValue("opacity", text);
+            min: 0; max: 1; decimals: 2;
+            value: compositeOpModel.opacity;
+            onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
             enabled: compositeOpModel.opacityEnabled;
         }
-        PanelTextField {
+        RangeInput {
+            id: flowInput;
             width: parent.width;
             placeholder: "Flow";
-            text: compositeOpModel.flow;
-            onFocusLost: compositeOpModel.changePaintopValue("flow", text);
-            onAccepted: compositeOpModel.changePaintopValue("flow", text);
+            min: 0; max: 1; decimals: 2;
+            value: compositeOpModel.flow;
+            onValueChanged: compositeOpModel.changePaintopValue("flow", value);
             enabled: compositeOpModel.flowEnabled;
         }
 
-        PanelTextField {
+        RangeInput {
             visible: fullView;
             width: parent.width;
             placeholder: "Smoothness";
-            text: "1000";
-            onFocusLost: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothness(text);
-            onAccepted: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothness(text);
+            min: 0; max: 1000; decimals: 0;
+            value: 1000;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothness(value);
         }
-        PanelTextField {
+        RangeInput {
             visible: fullView;
             width: parent.width;
             placeholder: "Assistant";
-            text: "1000";
-            onFocusLost: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(text);
-            onAccepted: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(text);
+            min: 0; max: 1000; decimals: 0;
+            value: 1000;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(value);
         }
-    
+
         Label {
             visible: fullView;
             width: parent.width;
