@@ -61,6 +61,7 @@ QObject* ToolManager::view() const
 void ToolManager::setView(QObject* newView)
 {
     d->view = qobject_cast<KisView2*>( newView );
+    slotToolChanged(0, 0);
     emit viewChanged();
 }
 
