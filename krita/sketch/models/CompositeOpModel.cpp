@@ -104,7 +104,7 @@ public:
 
             //m_optionWidget->setConfiguration(d->currentPreset->settings().data());
         }
-        else if(view)
+        if(view)
         {
             view->resourceProvider()->setOpacity(opacity);
         }
