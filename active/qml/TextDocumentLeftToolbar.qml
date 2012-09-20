@@ -28,7 +28,7 @@ Item
 {
     id: root
     property QtObject documentController
-    visible: false
+    visible: true
 
     onDocumentControllerChanged: {
       initializePageIcons();

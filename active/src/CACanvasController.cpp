@@ -125,8 +125,8 @@ void CACanvasController::ensureVisible (KoShape* shape)
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
-    setCameraX(rect.center().x());
-    setCameraY(rect.center().y());
+    setCameraX(rect.x());
+    setCameraY(rect.y());
 }
 
 int CACanvasController::canvasOffsetY() const
@@ -216,7 +216,7 @@ void CACanvasController::setCameraX (int cameraX)
 
 void CACanvasController::setCameraY (int cameraY)
 {
-    cameraY -= std::min(m_caCanvasItem->height()/2, height()/2);
+    //cameraY -= std::min(m_caCanvasItem->height()/2, height()/2);
     if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_PAGE) {
         cameraY = 0;
     }
