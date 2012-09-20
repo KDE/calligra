@@ -31,12 +31,14 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/calligra_active_global.h.in ${CMAKE_C
 
 set(calligra-active_SRCS
     src/CACanvasItem.cpp
+    src/CAImageProvider.cpp
     src/CAPresentationHandler.cpp
     src/CASpreadsheetHandler.cpp
     src/CATextDocumentHandler.cpp
     src/CAAbstractDocumentHandler.cpp
     src/CADocumentController.cpp
     src/CADocumentInfo.cpp
+    src/CAPADocumentModel.cpp
     src/CAPAView.cpp
     src/CACanvasController.cpp
     src/MainWindow.cpp

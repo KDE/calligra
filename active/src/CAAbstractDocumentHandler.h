@@ -48,6 +48,7 @@ public:
     virtual bool openDocument (const QString& uri) = 0;
     virtual QString documentTypeName() = 0;
     virtual KoZoomMode::Mode preferredZoomMode() const = 0;
+    virtual KoDocument* document() = 0;
 
     bool canOpenDocument (const QString& uri);
     KoCanvasBase* canvas() const;
@@ -61,7 +62,6 @@ protected:
     class Private;
     Private* const d;
 
-    virtual KoDocument* document() = 0;
     void setCanvas (KoCanvasBase* canvas);
     CADocumentController* documentController() const;
 };

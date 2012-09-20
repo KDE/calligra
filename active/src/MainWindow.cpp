@@ -24,6 +24,8 @@
 #include "CADocumentInfo.h"
 #include "CADocumentController.h"
 #include "CACanvasItem.h"
+#include "CAPADocumentModel.h"
+#include "CAImageProvider.h"
 #include "calligra_active_global.h"
 
 #include <libs/main/calligraversion.h>
@@ -46,6 +48,7 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
     qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
+    qmlRegisterType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
 
     m_view = new QDeclarativeView (this);
@@ -81,6 +84,7 @@ MainWindow::MainWindow (QWidget* parent)
 
     m_view->rootContext()->setContextProperty ("mainwindow", this);
     m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
+    m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::instance());
     loadMetadataModel();
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()

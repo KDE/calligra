@@ -44,11 +44,13 @@ Item {
 
         Flickable {
             id: docFlickable
+            property bool alreadyNotified: false
+
             anchors.centerIn: parent
             width: Math.min(contentWidth, parent.width)
             height: Math.min(contentHeight, parent.height)
             contentWidth: canvasItem.width; contentHeight: canvasItem.height
-            flickableDirection: Flickable.HorizontalAndVerticalFlick
+            flickableDirection: Flickable.HorizontalFlick
             contentX: theCanvasController.cameraX
             contentY: theCanvasController.cameraY
             interactive: !canvasItem.editable
@@ -78,8 +80,17 @@ Item {
                 onClicked: docToolbars.toggle()
             }
 
-            onContentWidthChanged: returnToBounds();
-            onContentHeightChanged: returnToBounds();
+//             onContentWidthChanged: returnToBounds()
+//             onContentHeightChanged: returnToBounds()
+            onFlickEnded: alreadyNotified = false
+            onAtXBeginningChanged: if (atXBeginning && flicking && !alreadyNotified && docDocumentController.documentHandler()) {
+                alreadyNotified = true;
+                docDocumentController.documentHandler().previousSlide();
+            }
+            onAtXEndChanged: if (atXEnd && flicking && !alreadyNotified && docDocumentController.documentHandler()) {
+                alreadyNotified = true;
+                docDocumentController.documentHandler().nextSlide();
+            }
         }
 
     }
