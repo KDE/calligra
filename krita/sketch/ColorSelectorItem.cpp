@@ -203,7 +203,9 @@ void ColorSelectorItem::mouseEvent(QGraphicsSceneMouseEvent* event)
     {
         d->grabbingComponent->mouseEvent(event->pos().x(), event->pos().y());
 
+        qreal alpha = d->currentColor.alphaF();
         d->currentColor=d->main->currentColor();
+        d->currentColor.setAlphaF(alpha);
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
         update();
     }
@@ -252,8 +254,8 @@ void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
         QColor c = d->selector->findGeneratingColor(newColor);
         if (d->colorUpdateAllowed==false)
             return;
-        d->main->setColor(c);
-        d->sub->setColor(c);
+        d->currentColor = c;
+        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
     }
 }
 
@@ -264,8 +266,8 @@ void ColorSelectorItem::bgColorChanged(const KoColor& newColor)
         QColor c = d->selector->findGeneratingColor(newColor);
         if (d->colorUpdateAllowed==false)
             return;
-        d->main->setColor(c);
-        d->sub->setColor(c);
+        d->currentColor = c;
+        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
     }
 }
 
