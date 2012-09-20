@@ -122,8 +122,8 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out)
             int index = lookahead;
             index++;
             if (QChar(input.at(index)).isLetter()
-                    && (QChar(input.at(index)).toAscii() != (qint8)0XE2)
-                    && (QChar(input.at(index)).toAscii() != (qint8)0XC2)) {
+                    && ((QChar(input.at(index)).toAscii() >= (qint8)0X09)
+                    && (QChar(input.at(index)).toAscii() <= (qint8)0X7f))) {
 
                 winIndex += 2;
                 lookahead += 2;
@@ -132,95 +132,62 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out)
             }
         }
 
-        if (QChar(input.at(lookahead)).toAscii() == (qint8)0XC2) {
+        // litterals ascii is between 0X09 - 0X7f
+        if (QChar(input.at(lookahead)).toAscii() < (qint8)0X09 ||
+               QChar(input.at(lookahead)).toAscii() > (qint8)0X7f ) {
+
+            // Chech the length of unknown characters.
+            int len = 1;
+            int index = lookahead + 1;
+            while (1) {
+                if (QChar(input.at(index)).toAscii() < (qint8)0X09 ||
+                        QChar(input.at(index)).toAscii() > (qint8)0X7f ) {
+                    index++;
+                }
+                else {
+                    break;
+                }
+            }
+
             int remain = m_maxBlockSize - (out.device()->size() % m_maxBlockSize);
+
             if (remain == 1) {
                 out << (qint8)0X20;
                 continue;
             }
-            if (remain == 2) {
-                out << (qint8)0X01;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
+
+            if (remain > len) {
+               out << (qint8)len;
+               for (int i = 0; i < len; i++) {
+                   out << (qint8)input.at(lookahead);
+                   lookahead++;
+               }
+               winIndex += len;
+               continue;
+            }
+            else {
+                int temp = remain - 1;
+                out << (qint8)temp;
+                for (int i = 0; i < temp; i++) {
+                    out << (qint8)input.at(lookahead);
+                    lookahead++;
+                }
                 // We are in next block.
                 input = input.right(input.size() - lookahead);
                 winIndex = -1;
                 lookahead = 0;
                 start = 0;
 
-                out << (qint8)0X01;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
-                winIndex += 1;
+                temp = len - temp;
+                if (temp != 0)
+                    out << (qint8)temp;
+                for (int i = 0; i < temp; i++) {
+                    out << (qint8)input.at(lookahead);
+                    lookahead++;
+                }
+                winIndex += temp;
                 continue;
             }
-            out << (qint8)0X02;
-            out << (qint8)input.at(lookahead);
-            lookahead ++;
-            out << (qint8)input.at(lookahead);
-
-            winIndex += 2;
-            lookahead++;
-            continue;
-        }
-        if (QChar(input.at(lookahead)).toAscii() == (qint8)0XE2) {
-
-            // check how many characters we have to reach to max block size.
-            int remain = m_maxBlockSize - (out.device()->size() % m_maxBlockSize);
-            // We have 1 character to reach max block size so i just write a space in output.
-            if (remain == 1) {
-                out << (qint8)0X20;
-                continue;
-            }
-            // We have 2 char to reach ...
-            if (remain == 2) {
-                out << (qint8)0X01;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
-                // We are in next block.
-                input = input.right(input.size() - lookahead);
-                winIndex = -1;
-                lookahead = 0;
-                start = 0;
-
-                out << (qint8)0X02;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
-                winIndex += 2;
-                continue;
-            }
-            if (remain == 3) {
-                out << (qint8)0X02;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
-
-                // We are in next block.
-                input = input.right(input.size() - lookahead);
-                winIndex = -1;
-                lookahead = 0;
-                start = 0;
-
-                out << (qint8)0X01;
-                out << (qint8)input.at(lookahead);
-                lookahead++;
-                winIndex += 1;
-                continue;
-            }
-
-            out << (qint8)0X03;
-            out << (qint8)input.at(lookahead);
-            lookahead ++;
-            out << (qint8)input.at(lookahead);
-            lookahead ++;
-            out << (qint8)input.at(lookahead);
-
-            winIndex += 3;
-            lookahead++;
-            continue;
         }
 
         for (int i = start; i <= winIndex; i++)

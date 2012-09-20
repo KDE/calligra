@@ -113,8 +113,6 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
         return status;
     }
 
-    // Start copression data.
-    PalmDocCompression palmCompression;
 
     // I need the text content in FileCollector
     QByteArray textContent;
@@ -125,6 +123,8 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
         }
     }
 
+    // Start copression data.
+    PalmDocCompression palmCompression;
     QByteArray compressContent;
 
     palmCompression.compressContent(textContent, compressContent);

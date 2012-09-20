@@ -545,7 +545,7 @@ void OdtHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *htmlWr
     htmlWriter->startElement("a", m_doIndent);
     QString reference = nodeElement.attribute("href");
     QString chapter = m_linksInfo.value(reference);
-    if (!chapter.isEmpty()) {
+    if (!chapter.isEmpty() && !m_options->stylesInCssFile) {
         // This is internal link.
         reference = reference.remove("|");
         reference = reference.remove(" ");// remove spaces
@@ -615,6 +615,7 @@ void OdtHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoXmlWr
 void OdtHtmlConverter::handleTagBookMarkEnd(KoXmlWriter *htmlWriter)
 {
     htmlWriter->endElement();
+
 }
 
 void OdtHtmlConverter::handleUnknownTags(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
@@ -1214,5 +1215,3 @@ void OdtHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, Sty
 
     doneStyles.insert(styleName);
 }
-
-
