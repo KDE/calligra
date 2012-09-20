@@ -24,6 +24,14 @@ Item {
     property bool chooseBG: false;
     property alias fgColor: fgColor.color;
     property alias bgColor: bgColor.color;
+    Image {
+        anchors.fill: bgColor;
+        source: "../images/svg/checker-small.svg";
+    }
+    Image {
+        anchors.fill: fgColor;
+        source: "../images/svg/checker-small.svg";
+    }
     Rectangle {
         id: bgColor;
         anchors {
