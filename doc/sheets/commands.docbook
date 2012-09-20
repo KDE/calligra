@@ -941,9 +941,9 @@ is protected.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guisubmenu>Execute Script File...</guisubmenu>
+<guimenuitem>Execute Script File...</guimenuitem>
 </menuchoice></term>
-<listitem><para>Here you can choose external script file to execute in &sheets;. &sheets; supports scripting in JavaScript, Python and Ruby. Default examples of the scripts can be found in the <menuchoice><guimenu>Tools</guimenu><guisubmenu>Scripts</guisubmenu></menuchoice> submenu.</para></listitem>
+<listitem><para>Execute the chosen external script in &sheets;. &sheets; supports scripting in JavaScript, Python and Ruby. Default examples of the scripts can be found in the <menuchoice><guimenu>Tools</guimenu><guisubmenu>Scripts</guisubmenu></menuchoice> submenu.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -951,7 +951,7 @@ is protected.</action>
 <guimenu>Tools</guimenu>
 <guisubmenu>Scripts</guisubmenu>
 </menuchoice></term>
-<listitem><para>Here you can execute the script to export or import data in various formats, save your &sheets; log into file, use <ulink url="https://live.gnome.org/Orca">Orca speech</ulink> for accessibility, debug Python and Ruby scripts or add additional functions to display stock or weather conditions values. You can even use some <ulink url="http://www.r-project.org/">R functions</ulink> (<ulink url="http://rpy.sourceforge.net/rpy.html">RPy module</ulink> should be installed).</para></listitem>
+<listitem><para>Here you can execute the script to export or import data in various formats, save your &sheets; log into file, use <ulink url="https://live.gnome.org/Orca">Orca speech</ulink> for accessibility, debug Python and Ruby scripts or add functions to display stock or weather condition values. You can even use some <ulink url="http://www.r-project.org/">R functions</ulink> (<ulink url="http://rpy.sourceforge.net/rpy.html">RPy module</ulink> should be installed).</para></listitem>
 </varlistentry>
 
 <varlistentry>
