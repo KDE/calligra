@@ -91,6 +91,7 @@ Panel {
                 view: sketchView.view;
                 changeBackground: swatch.chooseBG;
                 onColorChanged: {
+                    fullPaletteAlphaSlider.value = newAlpha * 100;
                     if(backgroundChanged) {
                         swatch.bgColor = newColor;
                     }

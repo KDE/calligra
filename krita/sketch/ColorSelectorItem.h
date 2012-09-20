@@ -44,7 +44,7 @@ public:
 Q_SIGNALS:
     void viewChanged();
     void changeBackgroundChanged();
-    void colorChanged(QColor newColor, bool backgroundChanged);
+    void colorChanged(QColor newColor, qreal newAlpha, bool backgroundChanged);
 
 protected:
     virtual void mouseMoveEvent( QGraphicsSceneMouseEvent* event );
