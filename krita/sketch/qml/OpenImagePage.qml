@@ -21,6 +21,8 @@ import org.krita.sketch 1.0 as Krita
 import "components"
 
 Page {
+    id: base;
+
     Header {
         id: header;
 
@@ -31,6 +33,8 @@ Page {
         }
 
         text: "Open Image";
+
+        background: "images/header_red.png";
 
         leftArea: Button {
             width: Constants.GridWidth;
@@ -88,6 +92,8 @@ Page {
         id: delegate;
 
         ListItem {
+            id: delegateBase;
+
             width: GridView.view.cellWidth;
 
             image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
@@ -106,6 +112,21 @@ Page {
                     RecentFileManager.addRecent( model.path );
                     pageStack.push( main );
                 }
+            }
+
+            GridView.onRemove: SequentialAnimation {
+                PropertyAction { target: delegateBase; property: "GridView.delayRemove"; value: true }
+                ParallelAnimation {
+                    NumberAnimation { target: delegateBase; property: "x"; to: delegateBase.x - base.width; duration: 250; }
+                    NumberAnimation { target: delegateBase; property: "opacity"; to: 0; duration: 250; }
+                }
+                PropertyAction { target: delegateBase; property: "GridView.delayRemove"; value: false }
+            }
+
+            GridView.onAdd: SequentialAnimation {
+                PropertyAction { target: delegateBase; property: "opacity"; value: 0; }
+                PauseAnimation { duration: 260; }
+                NumberAnimation { target: delegateBase; property: "opacity"; to: 1; duration: 250; }
             }
         }
     }

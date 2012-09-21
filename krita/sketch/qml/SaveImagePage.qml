@@ -39,6 +39,7 @@ Page {
         }
 
         text: "Save Image";
+        background: "images/header_red.png";
 
         leftArea: Button {
             width: Constants.GridWidth;
@@ -102,7 +103,7 @@ Page {
         }
 
         height: Constants.GridHeight;
-        color: "#1d3458"
+        color: "#622727"
 
         Row {
             anchors {
@@ -129,7 +130,7 @@ Page {
 
                 radius: Constants.GridHeight * 0.25;
 
-                color: "#1d3458"
+                color: "#622727"
 
                 ExpandingListView {
                     id: fileType;
@@ -161,7 +162,7 @@ Page {
 
                 onClicked: {
                     if( fileName.text != "" ) {
-                        var filePath = "%1/%2.%3".arg(view.model.path).arg(fileName.text).arg(fileType.model.get(fileType                        .currentIndex).type);
+                        var filePath = "%1/%2.%3".arg(view.model.path).arg(fileName.text).arg(fileType.model.get(fileType.currentIndex).type);
                         base.view.saveAs( filePath );
                         pageStack.pop();
                     }
@@ -174,6 +175,8 @@ Page {
         id: delegate;
 
         ListItem {
+            id: delegateBase;
+
             width: GridView.view.cellWidth;
 
             image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
@@ -188,6 +191,21 @@ Page {
                 if( model.fileType == "inode/directory" ) {
                     GridView.view.model.path = model.path;
                 }
+            }
+
+            GridView.onRemove: SequentialAnimation {
+                PropertyAction { target: delegateBase; property: "GridView.delayRemove"; value: true }
+                ParallelAnimation {
+                    NumberAnimation { target: delegateBase; property: "x"; to: delegateBase.x - base.width; duration: 250; }
+                    NumberAnimation { target: delegateBase; property: "opacity"; to: 0; duration: 250; }
+                }
+                PropertyAction { target: delegateBase; property: "GridView.delayRemove"; value: false }
+            }
+
+            GridView.onAdd: SequentialAnimation {
+                PropertyAction { target: delegateBase; property: "opacity"; value: 0; }
+                PauseAnimation { duration: 260; }
+                NumberAnimation { target: delegateBase; property: "opacity"; to: 1; duration: 250; }
             }
         }
     }
