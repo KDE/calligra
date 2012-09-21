@@ -103,8 +103,10 @@ public:
      */
     QPointF widgetToPixel(const QPointF &position);
 
-private Q_SLOTS:
+public Q_SLOTS:
     void setMirrorAxis();
+
+private Q_SLOTS:
     void slotToolChanged();
 
 private:
