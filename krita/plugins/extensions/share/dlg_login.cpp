@@ -4,9 +4,12 @@
 #include <QDebug>
 #include <QStringList>
 
-DlgLogin::DlgLogin(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DlgLogin)
+#include "o2deviantart.h"
+
+DlgLogin::DlgLogin(O2DeviantART *deviant, QWidget *parent)
+    : QDialog(parent)
+    , m_deviant(deviant)
+    , ui(new Ui::DlgLogin)
 {
     ui->setupUi(this);
     connect(ui->webView, SIGNAL(urlChanged(QUrl)), this, SLOT(urlChanged(QUrl)));
@@ -20,7 +23,7 @@ DlgLogin::~DlgLogin()
 
 void DlgLogin::urlChanged(const QUrl &url)
 {
-    qDebug() << "URL =" << url;
+    qDebug() << "URL =" << url << m_deviant->token() << "," << m_accessToken;
     QString str = url.toString();
 
     if (str.contains("access_token")) {
@@ -29,7 +32,7 @@ void DlgLogin::urlChanged(const QUrl &url)
         for (int i=0; i<lst.count(); i++ ) {
             QStringList pair = lst[i].split("=");
             if (pair[0] == "access_token") {
-                qDebug() << "AZccess token" << m_accessToken;
+                qDebug() << "Access token" << m_accessToken;
                 m_accessToken = pair[1];
                 emit accessTokenObtained();
                 QDialog::accept();
@@ -41,14 +44,8 @@ void DlgLogin::urlChanged(const QUrl &url)
     }
 }
 
-
-QString DlgLogin::accessToken()
-{
-    return m_accessToken;
-}
-
-
 void DlgLogin::setLoginUrl(const QUrl &url)
 {
-   ui->webView->setUrl(url);
+    qDebug() << "setLoginUrl" << url;
+    ui->webView->setUrl(url);
 }

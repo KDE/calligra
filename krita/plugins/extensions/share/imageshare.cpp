@@ -69,6 +69,8 @@ void ImageShare::slotImageShare()
     connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SLOT(openBrowser(QUrl)));
     connect(m_deviantArt, SIGNAL(closeBrowser()), SLOT(closeBrowser()));
 
+    qDebug() << "slotImageShare" << m_deviantArt->token() << m_deviantArt->linked();
+
     if (!m_deviantArt->linked()) {
         m_deviantArt->link();
     }
@@ -77,18 +79,15 @@ void ImageShare::slotImageShare()
 
 void ImageShare::openBrowser(const QUrl &url)
 {
-    DlgLogin dlgLogin;
+    qDebug() << "openBrowser" << url << m_deviantArt->token();
+    DlgLogin dlgLogin(m_deviantArt);
     dlgLogin.setLoginUrl(url);
     dlgLogin.exec();
 }
 
 void ImageShare::closeBrowser()
 {
-    qDebug() << m_deviantArt->token();
-
-    Stash stash;
-    stash.testCall();
-
+    qDebug() << "close browser" << m_deviantArt->token();
 }
 
 #include "imageshare.moc"

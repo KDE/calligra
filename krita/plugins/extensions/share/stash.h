@@ -29,6 +29,9 @@
 
 #include <kis_types.h>
 
+#include "o2requestor.h"
+#include "o2deviantart.h"
+
 struct Submission {
 
     QString id;
@@ -55,7 +58,7 @@ class Stash : public QObject {
 
 public:
 
-    Stash(QObject *parent = 0);
+    Stash(O2DeviantART *deviant, QObject *parent = 0);
     ~Stash();
 
     QList<Submission> submissions() const;
@@ -103,9 +106,7 @@ public slots:
 
 private slots:
 
-    void slotReadyRead();
-    void slotError(QNetworkReply::NetworkError code);
-    void slotFinished();
+    void slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data);
 
 signals:
 
@@ -117,8 +118,7 @@ private:
     Call m_currentCall;
 
     QNetworkAccessManager m_networkAccessManager;
-    QPointer<QNetworkReply> m_currentReply;
-
+    O2Requestor *m_requestor;
     QList<Submission> m_submissions;
     int m_bytesAvailable;
 };

@@ -20,10 +20,11 @@
 #include <QUrl>
 #include <kis_image.h>
 
-Stash::Stash(QObject *parent)
+Stash::Stash(O2DeviantART *deviant, QObject *parent)
     : QObject(parent)
 {
-
+    m_requestor = new O2Requestor(&m_networkAccessManager, deviant, this);
+    connect(m_requestor, SIGNAL(finished(int,QNetworkReply::NetworkError,QByteArray)), SLOT(slotFinished(int,QNetworkReply::NetworkError,QByteArray)));
 }
 
 Stash::~Stash()
@@ -45,15 +46,8 @@ void Stash::testCall()
 {
     qDebug() << "testCall";
 
-    Q_ASSERT(m_currentReply.isNull());
-    m_currentCall = Placebo;
-
     QUrl url("https://www.deviantart.com/api/draft15/placebo");
-    QNetworkRequest request(url);
-    m_currentReply = m_networkAccessManager.post(request, url.encodedQuery());
-    connect(m_currentReply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(slotError(QNetworkReply::NetworkError)));
-    connect(m_currentReply, SIGNAL(readyRead()), SLOT(slotReadyRead()));
-    connect(m_currentReply, SIGNAL(finished()), SLOT(slotFinished()));
+
 }
 
 void Stash::submit(KisImageWSP image, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder)
@@ -96,24 +90,8 @@ void Stash::fetch(const QString &id)
 
 }
 
-void Stash::slotReadyRead()
+void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data)
 {
-}
-
-void Stash::slotError(QNetworkReply::NetworkError code)
-{
-    qDebug() << "slotError" << code;
-    emit callFinished(m_currentCall, false);
-    m_currentCall = None;
-    m_currentReply->deleteLater();
-}
-
-void Stash::slotFinished()
-{
-    qDebug() << "slotFinished" << m_currentCall << m_currentReply->readAll();
-    emit callFinished(m_currentCall, true);
-    m_currentCall = None;
-    m_currentReply->deleteLater();
 }
 
 #include "stash.moc"

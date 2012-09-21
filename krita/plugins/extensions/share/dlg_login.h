@@ -5,6 +5,8 @@
 #include <QUrl>
 #include <QString>
 
+class O2DeviantART;
+
 namespace Ui {
 class DlgLogin;
 }
@@ -14,11 +16,11 @@ class DlgLogin : public QDialog
     Q_OBJECT
     
 public:
-    explicit DlgLogin(QWidget *parent = 0);
+    explicit DlgLogin(O2DeviantART *deviant, QWidget *parent = 0);
     ~DlgLogin();
 
     void setLoginUrl(const QUrl &url);
-    QString accessToken();
+
 signals:
 
     void accessTokenObtained();
@@ -27,6 +29,7 @@ private slots:
     void urlChanged(const QUrl &url);
 
 private:
+    O2DeviantART *m_deviant;
     Ui::DlgLogin *ui;
     QString m_accessToken;
 };
