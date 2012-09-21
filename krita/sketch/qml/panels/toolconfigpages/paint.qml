@@ -87,14 +87,15 @@ Item {
             value: 1000;
             onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothness(value);
         }
-        RangeInput {
-            visible: fullView;
-            width: parent.width;
-            placeholder: "Assistant";
-            min: 0; max: 1000; decimals: 0;
-            value: 1000;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(value);
-        }
+// No Assistant for the first release
+//         RangeInput {
+//             visible: fullView;
+//             width: parent.width;
+//             placeholder: "Assistant";
+//             min: 0; max: 1000; decimals: 0;
+//             value: 1000;
+//             onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetMagnetism(value);
+//         }
 
         Label {
             visible: fullView;
