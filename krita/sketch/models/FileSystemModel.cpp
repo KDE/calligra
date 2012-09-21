@@ -99,10 +99,12 @@ QString FileSystemModel::path()
 
 void FileSystemModel::setPath(const QString& path)
 {
-    emit beginResetModel();
+    beginRemoveRows(QModelIndex(), 0, d->list.count() - 1);
+    endRemoveRows();
     d->dir.setPath(path);
     d->list = d->dir.entryInfoList();
-    emit endResetModel();
+    beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
+    endInsertRows();
     emit pathChanged();
 }
 
