@@ -24,6 +24,7 @@
 #include <kis_canvas_resource_provider.h>
 #include <kis_tool.h>
 #include <kis_canvas2.h>
+#include <input/kis_input_manager.h>
 #include <kis_node.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
@@ -177,15 +178,17 @@ void CompositeOpModel::setView(QObject* newView)
 {
     if(d->view)
     {
-        disconnect(d->view->canvasBase()->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)));
+        d->view->canvasBase()->disconnect(this);
+        d->view->canvasBase()->inputManager()->disconnect(this);
     }
     d->view = qobject_cast<KisView2*>( newView );
     if(d->view)
     {
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-            this, SLOT(resourceChanged(int, const QVariant&)));
+                this, SLOT(resourceChanged(int, const QVariant&)));
         slotToolChanged(0, 0);
+        connect(this, SIGNAL(changeMirrorCenter()),
+                d->view->canvasBase()->inputManager(), SLOT(setMirrorAxis()));
     }
     emit viewChanged();
 }
@@ -309,7 +312,6 @@ void CompositeOpModel::setMirrorHorizontally(bool newMirrorHorizontally)
     {
         d->view->resourceProvider()->setMirrorHorizontal(newMirrorHorizontally);
         emit mirrorHorizontallyChanged();
-        emit mirrorCenterChanged();
     }
 }
 
@@ -326,25 +328,12 @@ void CompositeOpModel::setMirrorVertically(bool newMirrorVertically)
     {
         d->view->resourceProvider()->setMirrorVertical(newMirrorVertically);
         emit mirrorVerticallyChanged();
-        emit mirrorCenterChanged();
     }
 }
 
-bool CompositeOpModel::mirrorCenter() const
+void CompositeOpModel::setMirrorCenter()
 {
-    return mirrorHorizontally() && mirrorVertically();
-}
-
-void CompositeOpModel::setMirrorCenter(bool newMirrorCenter)
-{
-    if(mirrorCenter() != newMirrorCenter)
-    {
-        d->view->resourceProvider()->setMirrorHorizontal(newMirrorCenter);
-        d->view->resourceProvider()->setMirrorVertical(newMirrorCenter);
-        emit mirrorHorizontallyChanged();
-        emit mirrorVerticallyChanged();
-        emit mirrorCenterChanged();
-    }
+    emit changeMirrorCenter();
 }
 
 void CompositeOpModel::slotToolChanged(KoCanvasController* canvas, int toolId)

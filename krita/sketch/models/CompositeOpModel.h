@@ -40,7 +40,6 @@ class CompositeOpModel : public QAbstractListModel
 
     Q_PROPERTY(bool mirrorHorizontally READ mirrorHorizontally WRITE setMirrorHorizontally NOTIFY mirrorHorizontallyChanged);
     Q_PROPERTY(bool mirrorVertically READ mirrorVertically WRITE setMirrorVertically NOTIFY mirrorVerticallyChanged);
-    Q_PROPERTY(bool mirrorCenter READ mirrorCenter WRITE setMirrorCenter NOTIFY mirrorCenterChanged);
 public:
     enum CompositeOpModelRoles
     {
@@ -78,10 +77,11 @@ public:
     void setMirrorHorizontally(bool newMirrorHorizontally);
     bool mirrorVertically() const;
     void setMirrorVertically(bool newMirrorVertically);
-    bool mirrorCenter() const;
-    void setMirrorCenter(bool newMirrorCenter);
 
     Q_INVOKABLE void changePaintopValue(QString propertyName, QVariant value);
+
+public Q_SLOTS:
+    void setMirrorCenter();
 
 Q_SIGNALS:
     void viewChanged();
@@ -96,7 +96,7 @@ Q_SIGNALS:
 
     void mirrorHorizontallyChanged();
     void mirrorVerticallyChanged();
-    void mirrorCenterChanged();
+    void changeMirrorCenter();
 
 private Q_SLOTS:
     void slotToolChanged(KoCanvasController* canvas, int toolId);

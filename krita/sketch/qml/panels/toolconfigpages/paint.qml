@@ -143,8 +143,7 @@ Item {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
-                checked: compositeOpModel.mirrorCenter;
-                onClicked: compositeOpModel.mirrorCenter = !compositeOpModel.mirrorCenter;
+                onClicked: compositeOpModel.setMirrorCenter();
             }
         }
     }
