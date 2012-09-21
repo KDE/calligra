@@ -17,12 +17,79 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../../components"
 
 Item {
     id: base
-    Label {
-        width: parent.width;
-        text: "Fill tool options"
+    property bool fullView: true;
+    ExpandingListView {
+        id: compositeModeList
+        visible: fullView;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        onCurrentIndexChanged: model.activateItem(currentIndex);
+        model: compositeOpModel;
+    }
+    Connections {
+        target: compositeOpModel;
+        onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
+    }
+    Column {
+        anchors {
+            top: fullView ? compositeModeList.bottom : compositeModeList.top;
+            left: parent.left;
+            leftMargin: Constants.DefaultMargin;
+            right: parent.right;
+            rightMargin: Constants.DefaultMargin;
+        }
+        height: childrenRect.height;
+
+        RangeInput {
+            id: opacityInput;
+            width: parent.width;
+            placeholder: "Opacity";
+            min: 0; max: 1; decimals: 2;
+            value: compositeOpModel.opacity;
+            onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
+            enabled: compositeOpModel.opacityEnabled;
+        }
+
+        Item {
+            width: parent.width;
+            height: Constants.DefaultMargin;
+        }
+
+        RangeInput {
+            id: thresholdInput;
+            width: parent.width;
+            placeholder: "Threshold";
+            min: 0; max: 255; decimals: 0;
+            value: 255;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetThreshold(value);
+        }
+
+        CheckBox {
+            id: fillSelectionCheck;
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                margins: Constants.DefaultMargin;
+            }
+            text: "Fill Selection";
+        }
+        CheckBox {
+            id: limitToLayerCheck;
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                margins: Constants.DefaultMargin;
+            }
+            text: "Limit to Layer";
+        }
     }
 }
