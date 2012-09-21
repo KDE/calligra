@@ -235,12 +235,6 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-/*KexiMainWindow* KexiMainWindow::self()
-{
-  return kexiMainWindow;
-}*/
-
-//static
 int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutData)
 {
     Kexi::initCmdLineArgs(argc, argv, aboutData);
@@ -276,10 +270,6 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
             debugWindow->show();
         }
     }
-#endif
-
-#ifndef KEXI_MOBILE
-    //QApplication::setMainWidget(win);
 #endif
 
     if (true != win->startup()) {
@@ -363,6 +353,7 @@ KexiMainWindow::~KexiMainWindow()
     d->forceWindowClosing = true;
     closeProject();
     delete d;
+    Kexi::deleteGlobalObjects();
 }
 
 KexiProject *KexiMainWindow::project()
@@ -2122,6 +2113,7 @@ bool KexiMainWindow::queryClose()
         storeSettings();
 
     if (! ~res) {
+        Kexi::deleteGlobalObjects();
         qApp->quit();
     }
     return ! ~res;
