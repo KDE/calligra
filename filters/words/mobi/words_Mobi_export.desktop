@@ -1,6 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=ODT to Mobi Export Filter
+Name[cs]=Exportní filtr ODT do Mobi
+Name[nl]=ODT naar Mobi exportfilter
+Name[pt_BR]=Filtro de exportação de ODT para Mobi
+Name[sk]=Exportný filter ODT do Mobi
+Name[sv]=ODT-till-Mobi-exportfilter
+Name[uk]=Фільтр експорту ODT до Mobi
+Name[x-test]=xxODT to Mobi Export Filterxx
 
 X-KDE-Export=application/x-mobipocket-ebook
 X-KDE-Import=application/vnd.oasis.opendocument.text
