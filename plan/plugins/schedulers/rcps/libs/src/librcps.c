@@ -805,9 +805,6 @@ int run_alg(struct rcps_solver *s, struct rcps_problem *p) {
 		// check if we have a better individual, if yes reset count
 		f1 = ((struct rcps_individual*)slist_node_getdata(slist_first(
 			s->population->individuals)))->fitness;
-		// XXX f2 not used, what should it be used for? (da)
-		f2 = ((struct rcps_individual*)slist_node_getdata(slist_last(
-			s->population->individuals)))->fitness;
 		// get the best overuse count
 		best_overuse = son_overuse < daughter_overuse ?
 			son_overuse : daughter_overuse;
