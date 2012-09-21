@@ -40,6 +40,12 @@
 #include "kis_gl2_canvas.h"
 #include "kis_gl2_texture_updater.h"
 
+#ifdef Q_OS_WIN
+    #define FRAMES_PER_SECOND 25
+#else
+    #define FRAMES_PER_SECOND 60
+#endif
+
 class KisGL2RenderThread::Private
 {
 public:
@@ -239,7 +245,7 @@ void KisGL2RenderThread::run()
 
     d->eventLoop = new QEventLoop();
 
-    int timePerFrame = 1000 / 25;
+    int timePerFrame = 1000 / FRAMES_PER_SECOND;
     int remainder = 0;
     d->frameTimer.start();
     forever {
@@ -249,22 +255,6 @@ void KisGL2RenderThread::run()
 
         if(d->stop)
             break;
-/*
-        if(d->newWidth != 0 && d->height != 0) {
-//            delete d->framebuffer;
-//            d->framebuffer = new QGLFramebufferObject(d->newWidth, d->newHeight);
-            glDeleteTextures(1, &d->texture);
-            d->pbuffer->doneCurrent();
-            delete d->pbuffer;
-            d->pbuffer = new QGLPixelBuffer(d->newWidth, d->height, QGLFormat::defaultFormat(), KisGL2Canvas::shareWidget());
-            d->pbuffer->makeCurrent();
-            d->texture = d->pbuffer->generateDynamicTexture();
-
-            configChanged();
-
-            d->newWidth = 0;
-            d->height = 0;
-        }*/
 
         remainder = timePerFrame - d->frameTimer.elapsed();
         if(remainder > 0) {
