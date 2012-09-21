@@ -19,10 +19,13 @@
 import QtQuick 1.1
 
 Image {
+    id: base;
 
     property alias text: title.text;
     property alias leftArea: left.children;
     property alias rightArea: right.children;
+
+    property alias background: base.source;
 
     height: Constants.GridHeight * 2;
     width: parent.width;
