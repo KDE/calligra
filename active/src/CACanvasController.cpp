@@ -120,35 +120,83 @@ void CACanvasController::zoomIn (const QPoint& center)
 
 void CACanvasController::ensureVisible (KoShape* shape)
 {
-    ensureVisible(shape->boundingRect(), true);
+    ensureVisible(shape->boundingRect(), false);
 }
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
-    setCameraX(rect.x());
-    setCameraY(rect.y());
+    QRect currentVisible(canvasOffsetX(), canvasOffsetY(), visibleWidth(), visibleHeight());
+
+    QRect viewRect = rect.toRect();
+    viewRect.translate(m_caCanvasItem->koCanvas()->documentOrigin());
+    if (!viewRect.isValid() || currentVisible.contains(viewRect))
+        return; // its visible. Nothing to do.
+
+    // if we move, we move a little more so the amount of times we have to move is less.
+    int jumpWidth = smooth ? 0 : currentVisible.width() / 5;
+    int jumpHeight = smooth ? 0 : currentVisible.height() / 5;
+    if (!smooth && viewRect.width() + jumpWidth > currentVisible.width())
+        jumpWidth = 0;
+    if (!smooth && viewRect.height() + jumpHeight > currentVisible.height())
+        jumpHeight = 0;
+
+    int horizontalMove = 0;
+    if (currentVisible.width() <= viewRect.width())      // center view
+        horizontalMove = viewRect.center().x() - currentVisible.center().x();
+    else if (currentVisible.x() > viewRect.x())          // move left
+        horizontalMove = viewRect.x() - currentVisible.x() - jumpWidth;
+    else if (currentVisible.right() < viewRect.right())  // move right
+        horizontalMove = viewRect.right() - qMax(0, currentVisible.right() - jumpWidth);
+
+    int verticalMove = 0;
+    if (currentVisible.height() <= viewRect.height())       // center view
+        verticalMove = viewRect.center().y() - currentVisible.center().y();
+    if (currentVisible.y() > viewRect.y())               // move up
+        verticalMove = viewRect.y() - currentVisible.y() - jumpHeight;
+    else if (currentVisible.bottom() < viewRect.bottom()) // move down
+        verticalMove = viewRect.bottom() - qMax(0, currentVisible.bottom() - jumpHeight);
+
+    pan(QPoint(horizontalMove, verticalMove));
 }
 
 int CACanvasController::canvasOffsetY() const
 {
-    return 0;
+    return m_caCanvasItem ? cameraY() - height()/2 : 0;
 }
 
 int CACanvasController::canvasOffsetX() const
 {
-    return 0;
-}
-
-int CACanvasController::visibleWidth() const
-{
-    if (m_caCanvasItem) return m_caCanvasItem->width();
-    return 0;
+    return m_caCanvasItem ? cameraX() - width()/2 : 0;
 }
 
 int CACanvasController::visibleHeight() const
 {
-    if (m_caCanvasItem) return m_caCanvasItem->height();
-    return 0;
+    if (m_caCanvasItem == 0)
+        return 0;
+    QGraphicsWidget *canvasItem = m_caCanvasItem->koCanvas()->canvasItem();
+
+    int height1;
+    if (canvasItem == 0)
+        height1 = height();
+    else
+        height1 = qMin(height(), canvasItem->boundingRect().height());
+    int height2 = height();
+    return qMin(height1, height2);
+}
+
+int CACanvasController::visibleWidth() const
+{
+    if (m_caCanvasItem == 0)
+        return 0;
+    QGraphicsWidget *canvasItem = m_caCanvasItem->koCanvas()->canvasItem();
+
+    int width1;
+    if (canvasItem == 0)
+        width1 = width();
+    else
+        width1 = qMin(width(), canvasItem->boundingRect().width());
+    int width2 = width();
+    return qMin(width1, width2);
 }
 
 KoCanvasBase* CACanvasController::canvas() const
@@ -211,27 +259,28 @@ void CACanvasController::setCameraX (int cameraX)
     }
     m_currentPoint.setX (cameraX);
     emit cameraXChanged();
-    centerToCamera();
 }
 
 void CACanvasController::setCameraY (int cameraY)
 {
-    //cameraY -= std::min(m_caCanvasItem->height()/2, height()/2);
+    cameraY -= std::min(m_caCanvasItem->height()/2, height()/2);
     if (m_caDocumentHandler && m_caDocumentHandler->preferredZoomMode() == KoZoomMode::ZOOM_PAGE) {
         cameraY = 0;
     }
     m_currentPoint.setY (cameraY);
     emit cameraYChanged();
-    centerToCamera();
 }
 
-void CACanvasController::centerToCamera()
+void CACanvasController::alignLeftWith(int x)
 {
-    return;
-    if (proxyObject) {
-        proxyObject->emitMoveDocumentOffset (m_currentPoint);
-    }
-    updateCanvas();
+    m_currentPoint.setX(x);
+    emit cameraXChanged();
+}
+
+void CACanvasController::alignTopWith(int y)
+{
+    m_currentPoint.setY(y);
+    emit cameraYChanged();
 }
 
 CACanvasController::~CACanvasController()

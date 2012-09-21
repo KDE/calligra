@@ -26,6 +26,7 @@
 #include "CACanvasItem.h"
 #include "CAPADocumentModel.h"
 #include "CAImageProvider.h"
+#include "CAAbstractDocumentHandler.h"
 #include "calligra_active_global.h"
 
 #include <libs/main/calligraversion.h>
@@ -50,6 +51,7 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
     qmlRegisterType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
+    qmlRegisterUncreatableType<CAAbstractDocumentHandler>("CalligraActive", 1, 0, "CAAbstractDocumentHandler", "Not allowed");
 
     m_view = new QDeclarativeView (this);
 

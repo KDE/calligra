@@ -50,7 +50,6 @@ Item {
             width: Math.min(contentWidth, parent.width)
             height: Math.min(contentHeight, parent.height)
             contentWidth: canvasItem.width; contentHeight: canvasItem.height
-            flickableDirection: Flickable.HorizontalFlick
             contentX: theCanvasController.cameraX
             contentY: theCanvasController.cameraY
             interactive: !canvasItem.editable
@@ -80,16 +79,14 @@ Item {
                 onClicked: docToolbars.toggle()
             }
 
-//             onContentWidthChanged: returnToBounds()
-//             onContentHeightChanged: returnToBounds()
             onFlickEnded: alreadyNotified = false
-            onAtXBeginningChanged: if (atXBeginning && flicking && !alreadyNotified && docDocumentController.documentHandler()) {
+            onAtXBeginningChanged: if (atXBeginning && flicking && !alreadyNotified && docDocumentController.documentHandler) {
                 alreadyNotified = true;
-                docDocumentController.documentHandler().previousSlide();
+                docDocumentController.documentHandler.previousSlide();
             }
-            onAtXEndChanged: if (atXEnd && flicking && !alreadyNotified && docDocumentController.documentHandler()) {
+            onAtXEndChanged: if (atXEnd && flicking && !alreadyNotified && docDocumentController.documentHandler) {
                 alreadyNotified = true;
-                docDocumentController.documentHandler().nextSlide();
+                docDocumentController.documentHandler.nextSlide();
             }
         }
 

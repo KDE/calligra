@@ -153,6 +153,41 @@ Item {
         }
     }
 
+    Loader {
+        id: centerOverlayLoader
+        z: 1
+
+        anchors.top: parent.verticalCenter
+        anchors.right: parent.horizontalCenter
+        anchors.bottom: parent.verticalCenter
+        anchors.left: parent.horizontalCenter
+
+        onSourceChanged: {
+            if (source) {
+                item.documentController = root.documentController
+                item.docRootItem = root.docRootItem
+            }
+        }
+
+        states: State {
+            name: "shown"
+
+            AnchorChanges {
+                target: centerOverlayLoader
+                anchors.top: topToolbarLoader.bottom
+                anchors.right: rightToolbarLoader.left
+                anchors.bottom: bottomToolbarLoader.top
+                anchors.left: leftToolbarLoader.right
+            }
+        }
+
+        transitions: Transition {
+            AnchorAnimation { duration: root.animationDuration }
+        }
+
+        function toggle() { state = (state == "shown" ? "" : "shown") }
+    }
+
     states: [
         State {
             name: "shown"
@@ -171,11 +206,13 @@ Item {
     ]
 
     function toggle() { state = (state == "shown" ? "hidden" : "shown") }
+    function toggleOverlay() { centerOverlayLoader.toggle() }
 
     function initToolbars() {
-        topToolbarLoader.source = root.documentController.documentHandler().topToolbarSource
-        rightToolbarLoader.source = root.documentController.documentHandler().rightToolbarSource
-        bottomToolbarLoader.source = root.documentController.documentHandler().bottomToolbarSource
-        leftToolbarLoader.source = root.documentController.documentHandler().leftToolbarSource
+        topToolbarLoader.source = root.documentController.documentHandler.topToolbarSource
+        rightToolbarLoader.source = root.documentController.documentHandler.rightToolbarSource
+        bottomToolbarLoader.source = root.documentController.documentHandler.bottomToolbarSource
+        leftToolbarLoader.source = root.documentController.documentHandler.leftToolbarSource
+        centerOverlayLoader.source = root.documentController.documentHandler.centerOverlaySource
     }
 }

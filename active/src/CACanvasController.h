@@ -83,6 +83,8 @@ public:
     void setCameraY (int cameraY);
     qreal zoom() const;
     void setZoom(qreal zoom);
+    void alignTopWith(int y);
+    void alignLeftWith(int x);
 
     KoCanvasControllerProxyObject* canvasControllerProxyObject();
     KoZoomHandler* zoomHandler();
@@ -91,7 +93,6 @@ public:
     void setDocumentHandler (CAAbstractDocumentHandler *documentHandler);
 
 public slots:
-    void centerToCamera();
     void zoomToFit();
     void updateCanvas();
     void updateZoomValue(KoZoomMode::Mode mode, qreal zoom);

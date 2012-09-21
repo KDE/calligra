@@ -83,6 +83,7 @@ void CADocumentController::loadDocument()
             d->canvasController->setDocumentHandler(handler);
             if (handler->openDocument (documentUri())) {
                 d->currentDocumentHandler = handler;
+                emit documentHandlerChanged();
                 emit documentTypeNameChanged();
                 emit documentOpened();
                 return;
@@ -101,7 +102,7 @@ QString CADocumentController::documentTypeName() const
     return d->currentDocumentHandler->documentTypeName();
 }
 
-QObject* CADocumentController::documentHandler()
+CAAbstractDocumentHandler* CADocumentController::documentHandler()
 {
     return d->currentDocumentHandler;
 }

@@ -39,7 +39,7 @@ Item
     }
 
     function initializePageIcons() {
-        for ( i=1; i <= root.documentController.documentHandler().totalPages; i++ ) {
+        for ( i=1; i <= root.documentController.documentHandler.totalPages; i++ ) {
               displayText = i;
               viewModel.append({"name": displayText});
         }
@@ -61,7 +61,7 @@ Item
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: root.documentController.documentHandler().gotoPage(index+1)
+                onClicked: root.documentController.documentHandler.gotoPage(index+1)
             }
         }
     }

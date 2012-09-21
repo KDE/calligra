@@ -220,9 +220,11 @@ int CATextDocumentHandler::totalPages() const {
 
 void CATextDocumentHandler::gotoPage(int pageNumber)
 {
-     d->currentTextDocPage = d->document->pageManager()->page(pageNumber);
-     QRectF rect = documentController()->canvasController()->zoomHandler()->documentToView(d->currentTextDocPage.rect());
-     documentController()->canvasController()->ensureVisible(rect, true);
+    if (pageNumber == d->currentTextDocPage.pageNumber())
+        return;
+    d->currentTextDocPage = d->document->pageManager()->page(pageNumber);
+    QRectF rect = documentController()->canvasController()->zoomHandler()->documentToView(d->currentTextDocPage.rect());
+    documentController()->canvasController()->alignTopWith(rect.top());
 }
 
 void CATextDocumentHandler::findNoMatchFound()

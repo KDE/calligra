@@ -90,4 +90,9 @@ QString CAAbstractDocumentHandler::topToolbarSource() const
     return QString();
 }
 
+QString CAAbstractDocumentHandler::centerOverlaySource() const
+{
+    return QString();
+}
+
 #include "CAAbstractDocumentHandler.moc"

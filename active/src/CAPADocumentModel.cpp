@@ -30,33 +30,15 @@
 
 CAPADocumentModel::CAPADocumentModel(QObject* parent, KoPADocument* document)
     : KoPADocumentModel(parent, document)
-    , m_documentController(0)
     , m_document(document)
 {
     QHash<int, QByteArray> roles = roleNames();
     roles[BeginThumbnailRole] = "thumbnail";
     setRoleNames(roles);
-}
 
-CADocumentController* CAPADocumentModel::documentController() const
-{
-    return m_documentController;
-}
-
-void CAPADocumentModel::setDocumentController(CADocumentController* controller)
-{
-    if (m_documentController == controller) {
-        return;
+    if (document) {
+        setDocument(document);
     }
-    m_documentController = controller;
-    if (controller->documentHandler()) {
-        KoDocument *doc = qobject_cast<CAAbstractDocumentHandler*>(controller->documentHandler())->document();
-        if (doc) {
-            m_document = qobject_cast<KoPADocument*>(doc);
-            setDocument(m_document);
-        }
-    }
-    emit documentControllerChanged();
 }
 
 QVariant CAPADocumentModel::data(const QModelIndex& index, int role) const

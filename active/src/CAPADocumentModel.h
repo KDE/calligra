@@ -30,18 +30,14 @@ class CADocumentController;
 class CAPADocumentModel : public KoPADocumentModel
 {
     Q_OBJECT
-    Q_PROPERTY(CADocumentController* documentController READ documentController WRITE setDocumentController NOTIFY documentControllerChanged)
 public:
     explicit CAPADocumentModel(QObject* parent = 0, KoPADocument* document = 0);
-    CADocumentController *documentController() const;
-    void setDocumentController(CADocumentController* controller);
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
 signals:
     void documentControllerChanged();
 
 private:
-    CADocumentController *m_documentController;
     KoPADocument *m_document;
 };
 

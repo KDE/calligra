@@ -24,6 +24,7 @@
 
 #include "CAAbstractDocumentHandler.h"
 
+class CAPADocumentModel;
 class QSize;
 class QSizeF;
 
@@ -31,7 +32,7 @@ class CAPresentationHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
     Q_PROPERTY(int slideshowDelay READ slideshowDelay WRITE setSlideshowDelay NOTIFY slideshowDelayChanged)
-    Q_PROPERTY(int currentSlideNumber READ currentSlideNumber NOTIFY currentSlideNumChanged)
+    Q_PROPERTY(int currentSlideNumber READ currentSlideNumber WRITE setCurrentSlideNumber NOTIFY currentSlideNumberChanged)
     Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides NOTIFY totalNumberOfSlidesChanged)
 
 public:
@@ -45,12 +46,15 @@ public:
     virtual QString topToolbarSource() const;
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;
+    virtual QString centerOverlaySource() const;
 
     int slideshowDelay() const;
     void setSlideshowDelay(int delay);
 
     int currentSlideNumber() const;
     int totalNumberOfSlides() const;
+
+    Q_INVOKABLE CAPADocumentModel *paDocumentModel();
 
 public slots:
     void tellZoomControllerToSetDocumentSize(const QSize &size);
@@ -62,12 +66,13 @@ public slots:
     void resizeCanvas(const QSizeF &canvasSize);
     void startSlideshow();
     void stopSlideshow();
+    void setCurrentSlideNumber(int number);
 
 signals:
     void slideshowDelayChanged();
     void slideshowStarted();
     void slideshowStopped();
-    void currentSlideNumChanged();
+    void currentSlideNumberChanged();
     void totalNumberOfSlidesChanged();
 
 protected:
@@ -75,6 +80,7 @@ protected:
 
 private slots:
     void advanceSlideshow();
+    void gotoCurrentSlide();
 
 private:
     class Private;

@@ -23,6 +23,7 @@
 #include "CAPAView.h"
 #include "CADocumentController.h"
 #include "CACanvasController.h"
+#include "CAPADocumentModel.h"
 
 #include <stage/part/KPrDocument.h>
 
@@ -49,6 +50,7 @@ public:
     Private()
     {
         currentSlideNum = -1;
+        paDocumentModel = 0;
     }
 
     KPrDocument* document;
@@ -56,6 +58,7 @@ public:
     int currentSlideNum;
     QTimer slideshowTimer;
     QList<KoPAPageBase*> slideShow;
+    CAPADocumentModel *paDocumentModel;
 };
 
 CAPresentationHandler::CAPresentationHandler (CADocumentController* documentController)
@@ -125,8 +128,7 @@ bool CAPresentationHandler::openDocument (const QString& uri)
     connect(documentController()->canvasController(), SIGNAL(needsCanvasResize(QSizeF)), SLOT(resizeCanvas(QSizeF)));
     connect (documentController()->canvasController(), SIGNAL (needCanvasUpdate()), SLOT (updateCanvas()));
 
-    d->document;
-
+    d->paDocumentModel = new CAPADocumentModel(this, d->document);
     emit totalNumberOfSlidesChanged();
     QTimer::singleShot(0, this, SLOT(nextSlide()));
 
@@ -143,12 +145,12 @@ QStringList CAPresentationHandler::supportedMimetypes()
 void CAPresentationHandler::nextSlide()
 {
     d->currentSlideNum++;
-    emit currentSlideNumChanged();
+    emit currentSlideNumberChanged();
 
     if (d->currentSlideNum >= d->document->pageCount())
         d->currentSlideNum = d->document->pageCount() - 1;
-    emit currentSlideNumChanged();
-    d->paView->doUpdateActivePage (d->document->pageByIndex (d->currentSlideNum, false));
+    emit currentSlideNumberChanged();
+    gotoCurrentSlide();
     zoomToFit();
 }
 
@@ -157,11 +159,16 @@ void CAPresentationHandler::previousSlide()
     if (d->currentSlideNum > 0)
     {
         d->currentSlideNum--;
-        emit currentSlideNumChanged();
+        emit currentSlideNumberChanged();
     }
 
-    d->paView->doUpdateActivePage (d->document->pageByIndex (d->currentSlideNum, false));
+    gotoCurrentSlide();
     zoomToFit();
+}
+
+void CAPresentationHandler::gotoCurrentSlide()
+{
+    d->paView->doUpdateActivePage (d->document->pageByIndex (d->currentSlideNum, false));
 }
 
 void CAPresentationHandler::zoomToFit()
@@ -218,6 +225,11 @@ QString CAPresentationHandler::rightToolbarSource() const
     return "PresentationRightToolbar.qml";
 }
 
+QString CAPresentationHandler::centerOverlaySource() const
+{
+    return "PresentationCenterOverlay.qml";
+}
+
 void CAPresentationHandler::setSlideshowDelay(int delay)
 {
     d->slideshowTimer.setInterval(delay*1000);
@@ -261,6 +273,18 @@ int CAPresentationHandler::currentSlideNumber() const
 int CAPresentationHandler::totalNumberOfSlides() const
 {
     return d->document->pageCount();
+}
+
+CAPADocumentModel* CAPresentationHandler::paDocumentModel()
+{
+    return d->paDocumentModel;
+}
+
+void CAPresentationHandler::setCurrentSlideNumber(int number)
+{
+    d->currentSlideNum = number;
+    gotoCurrentSlide();
+    emit currentSlideNumberChanged();
 }
 
 #include "CAPresentationHandler.moc"

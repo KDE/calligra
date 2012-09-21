@@ -39,6 +39,7 @@ class CAAbstractDocumentHandler : public QObject
     Q_PROPERTY(QString rightToolbarSource READ rightToolbarSource CONSTANT)
     Q_PROPERTY(QString bottomToolbarSource READ bottomToolbarSource CONSTANT)
     Q_PROPERTY(QString leftToolbarSource READ leftToolbarSource CONSTANT)
+    Q_PROPERTY(QString centerOverlaySource READ centerOverlaySource CONSTANT)
 
 public:
     explicit CAAbstractDocumentHandler (CADocumentController* documentController);
@@ -57,6 +58,7 @@ public:
     virtual QString rightToolbarSource() const;
     virtual QString bottomToolbarSource() const;
     virtual QString leftToolbarSource() const;
+    virtual QString centerOverlaySource() const;
 
 protected:
     class Private;
