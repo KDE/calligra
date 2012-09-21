@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +21,7 @@
 #include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
+#include "KexiMainWindowIface.h"
 #include <kexiutils/identifier.h>
 #include <db/msghandler.h>
 #include <KoIcon.h>
@@ -46,6 +47,8 @@ using namespace Kexi;
 class KexiInternal
 {
 public:
+    static KexiInternal *_int;
+
     KexiInternal()
             : connset(0)
     {
@@ -53,7 +56,21 @@ public:
     ~KexiInternal() {
         delete connset;
     }
-    
+
+    static KexiInternal* self() {
+        static bool created = false;
+        if (!created) {
+            _int = new KexiInternal;
+            created = true;
+        }
+        return _int;
+    }
+
+    static void destroy() {
+        delete _int;
+        _int = 0;
+    }
+
     KexiDBConnectionSet* connset;
     KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
@@ -61,37 +78,37 @@ public:
     KexiPart::Manager partManager;
 };
 
-K_GLOBAL_STATIC(KexiInternal, _int)
+KexiInternal *KexiInternal::_int = 0;
 
 KexiDBConnectionSet& Kexi::connset()
 {
     //delayed
-    if (!_int->connset) {
+    if (!KexiInternal::self()->connset) {
         //load stored set data, OK?
-        _int->connset = new KexiDBConnectionSet();
-        _int->connset->load();
+        KexiInternal::self()->connset = new KexiDBConnectionSet();
+        KexiInternal::self()->connset->load();
     }
-    return *_int->connset;
+    return *KexiInternal::self()->connset;
 }
 
 KexiRecentProjects* Kexi::recentProjects()
 {
-    return &_int->recentProjects;
+    return &KexiInternal::self()->recentProjects;
 }
 
 KexiDB::DriverManager& Kexi::driverManager()
 {
-    return _int->driverManager;
+    return KexiInternal::self()->driverManager;
 }
 
 KexiPart::Manager& Kexi::partManager()
 {
-    return _int->partManager;
+    return KexiInternal::self()->partManager;
 }
 
 void Kexi::deleteGlobalObjects()
 {
-    delete _int;
+    KexiInternal::self()->destroy();
 }
 
 //temp
