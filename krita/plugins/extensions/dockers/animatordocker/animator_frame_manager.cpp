@@ -181,15 +181,18 @@ void AnimatorFrameManager::copyFrame(FramedAnimatedLayer *layer, int from, int t
         return;
 
     FrameLayer *frameLayer = layer->frameAt(from);
-    SimpleFrameLayer *simpleFrameLayer= dynamic_cast<SimpleFrameLayer*>(frameLayer);
+    SimpleFrameLayer *simpleFrameLayer= qobject_cast<SimpleFrameLayer*>(frameLayer);
     KisNodeSP node = simpleFrameLayer->getContent();
 
     if (!node) {
         return;
     }
-    simpleFrameLayer = qobject_cast<SimpleFrameLayer*>(node.data());
+    
+    // ??
+//     simpleFrameLayer = qobject_cast<SimpleFrameLayer*>(node.data());
+    
     layer->createFrame(to, true);
-    qobject_cast<SimpleFrameLayer*>(layer->frameAt(to))->setContent(simpleFrameLayer->clone());
+    qobject_cast<SimpleFrameLayer*>(layer->frameAt(to))->setContent(node->clone());
 }
 
 
