@@ -252,4 +252,9 @@ void CATextDocumentHandler::copy()
     document()->documentPart()->actionCollection()->action("edit_copy")->activate(QAction::Trigger);
 }
 
+CAAbstractDocumentHandler::FlickModes CATextDocumentHandler::flickMode() const
+{
+    return FlickVertically;
+}
+
 #include "CATextDocumentHandler.moc"

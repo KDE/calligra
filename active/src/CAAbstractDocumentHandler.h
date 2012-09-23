@@ -35,13 +35,23 @@ class CADocumentController;
 class CAAbstractDocumentHandler : public QObject
 {
     Q_OBJECT
+    Q_ENUMS (FlickModes)
     Q_PROPERTY(QString topToolbarSource READ topToolbarSource CONSTANT)
     Q_PROPERTY(QString rightToolbarSource READ rightToolbarSource CONSTANT)
     Q_PROPERTY(QString bottomToolbarSource READ bottomToolbarSource CONSTANT)
     Q_PROPERTY(QString leftToolbarSource READ leftToolbarSource CONSTANT)
     Q_PROPERTY(QString centerOverlaySource READ centerOverlaySource CONSTANT)
+    Q_PROPERTY(QString previousPageImage READ previousPageImage NOTIFY previousPageImageChanged)
+    Q_PROPERTY(QString nextPageImage READ nextPageImage NOTIFY nextPageImageChanged)
+    Q_PROPERTY(FlickModes flickMode READ flickMode CONSTANT)
 
 public:
+    enum FlickModes {
+        FlickAutomatically,
+        FlickHorizontally,
+        FlickVertically,
+        FlickBoth
+    };
     explicit CAAbstractDocumentHandler (CADocumentController* documentController);
     virtual ~CAAbstractDocumentHandler();
 
@@ -59,6 +69,17 @@ public:
     virtual QString bottomToolbarSource() const;
     virtual QString leftToolbarSource() const;
     virtual QString centerOverlaySource() const;
+    virtual QString previousPageImage() const;
+    virtual QString nextPageImage() const;
+    virtual FlickModes flickMode() const;
+
+public slots:
+    virtual void gotoPreviousPage();
+    virtual void gotoNextPage();
+
+signals:
+    void previousPageImageChanged();
+    void nextPageImageChanged();
 
 protected:
     class Private;

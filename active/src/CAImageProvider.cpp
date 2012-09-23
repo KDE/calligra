@@ -63,3 +63,8 @@ void CAImageProvider::addImage(const QString& id, const QImage& image)
 {
     m_images[id] = image;
 }
+
+bool CAImageProvider::containsId(const QString& id)
+{
+    return m_images.contains(id);
+}

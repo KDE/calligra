@@ -49,6 +49,7 @@ public:
     virtual QString bottomToolbarSource() const;
     virtual QString topToolbarSource() const;
     virtual QString leftToolbarSource() const;
+    virtual FlickModes flickMode() const;
 
     int totalPages() const;
 

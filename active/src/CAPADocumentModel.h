@@ -31,6 +31,9 @@ class CAPADocumentModel : public KoPADocumentModel
 {
     Q_OBJECT
 public:
+    enum DataRoles {
+        SlideImageRole = BeginThumbnailRole + 1
+    };
     explicit CAPADocumentModel(QObject* parent = 0, KoPADocument* document = 0);
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 

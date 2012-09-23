@@ -47,6 +47,12 @@ public:
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;
     virtual QString centerOverlaySource() const;
+    virtual QString previousPageImage() const;
+    virtual QString nextPageImage() const;
+    virtual FlickModes flickMode() const;
+
+    virtual void gotoNextPage();
+    virtual void gotoPreviousPage();
 
     int slideshowDelay() const;
     void setSlideshowDelay(int delay);
@@ -54,7 +60,7 @@ public:
     int currentSlideNumber() const;
     int totalNumberOfSlides() const;
 
-    Q_INVOKABLE CAPADocumentModel *paDocumentModel();
+    Q_INVOKABLE CAPADocumentModel *paDocumentModel() const;
 
 public slots:
     void tellZoomControllerToSetDocumentSize(const QSize &size);

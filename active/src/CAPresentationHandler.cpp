@@ -144,12 +144,11 @@ QStringList CAPresentationHandler::supportedMimetypes()
 
 void CAPresentationHandler::nextSlide()
 {
+    if (d->currentSlideNum == d->document->pageCount()-1)
+        return;
     d->currentSlideNum++;
     emit currentSlideNumberChanged();
 
-    if (d->currentSlideNum >= d->document->pageCount())
-        d->currentSlideNum = d->document->pageCount() - 1;
-    emit currentSlideNumberChanged();
     gotoCurrentSlide();
     zoomToFit();
 }
@@ -169,6 +168,8 @@ void CAPresentationHandler::previousSlide()
 void CAPresentationHandler::gotoCurrentSlide()
 {
     d->paView->doUpdateActivePage (d->document->pageByIndex (d->currentSlideNum, false));
+    emit previousPageImageChanged();
+    emit nextPageImageChanged();
 }
 
 void CAPresentationHandler::zoomToFit()
@@ -275,7 +276,7 @@ int CAPresentationHandler::totalNumberOfSlides() const
     return d->document->pageCount();
 }
 
-CAPADocumentModel* CAPresentationHandler::paDocumentModel()
+CAPADocumentModel* CAPresentationHandler::paDocumentModel() const
 {
     return d->paDocumentModel;
 }
@@ -285,6 +286,31 @@ void CAPresentationHandler::setCurrentSlideNumber(int number)
     d->currentSlideNum = number;
     gotoCurrentSlide();
     emit currentSlideNumberChanged();
+}
+
+QString CAPresentationHandler::nextPageImage() const
+{
+    return paDocumentModel()->data(paDocumentModel()->index(d->currentSlideNum+1, 0), CAPADocumentModel::SlideImageRole).toString();
+}
+
+QString CAPresentationHandler::previousPageImage() const
+{
+    return paDocumentModel()->data(paDocumentModel()->index(d->currentSlideNum-1, 0), CAPADocumentModel::SlideImageRole).toString();
+}
+
+void CAPresentationHandler::gotoNextPage()
+{
+    nextSlide();
+}
+
+void CAPresentationHandler::gotoPreviousPage()
+{
+    previousSlide();
+}
+
+CAAbstractDocumentHandler::FlickModes CAPresentationHandler::flickMode() const
+{
+    return FlickHorizontally;
 }
 
 #include "CAPresentationHandler.moc"

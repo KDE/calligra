@@ -34,6 +34,7 @@ CAPADocumentModel::CAPADocumentModel(QObject* parent, KoPADocument* document)
 {
     QHash<int, QByteArray> roles = roleNames();
     roles[BeginThumbnailRole] = "thumbnail";
+    roles[SlideImageRole] = "slideimage";
     setRoleNames(roles);
 
     if (document) {
@@ -43,10 +44,22 @@ CAPADocumentModel::CAPADocumentModel(QObject* parent, KoPADocument* document)
 
 QVariant CAPADocumentModel::data(const QModelIndex& index, int role) const
 {
-    if (role == BeginThumbnailRole && m_document) {
-        const QString id = m_document->caption() + "slide" + QString::number(index.row());
-        QImage image = KoPADocumentModel::data(index, BeginThumbnailRole + 256).value<QImage>();
-        CAImageProvider::instance()->addImage(id, image);
+    if (!m_document)
+        return QVariant();
+
+    if (role == BeginThumbnailRole) {
+        const QString id = m_document->caption() + "slidethumb" + QString::number(index.row());
+        if (!CAImageProvider::instance()->containsId(id)) {
+            QImage image = KoPADocumentModel::data(index, BeginThumbnailRole + 256).value<QImage>();
+            CAImageProvider::instance()->addImage(id, image);
+        }
+        return QString("image://") + QString(CAImageProvider::identificationString) + "/" + id;
+    } else if (role == SlideImageRole) {
+        const QString id = m_document->caption() + "slideimage" + QString::number(index.row());
+        if (!CAImageProvider::instance()->containsId(id)) {
+            QImage image = KoPADocumentModel::data(index, BeginThumbnailRole + 1024).value<QImage>();
+            CAImageProvider::instance()->addImage(id, image);
+        }
         return QString("image://") + QString(CAImageProvider::identificationString) + "/" + id;
     }
     return KoPADocumentModel::data(index, role);
