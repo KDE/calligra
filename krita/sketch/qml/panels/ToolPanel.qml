@@ -100,6 +100,8 @@ Panel {
             onClicked: {
                 fullContentsItem.state = "";
                 changeTool(toolName);
+                eraserButton.visible = true;
+                topApplyButton.visible = false;
             }
         },
         Button {
@@ -116,6 +118,8 @@ Panel {
             onClicked: {
                 fullContentsItem.state = "secondTool";
                 changeTool(toolName);
+                eraserButton.visible = false;
+                topApplyButton.visible = true;
             }
         },
         Item {
@@ -133,6 +137,18 @@ Panel {
             highlight: false;
             checked: compositeOpModel.eraserMode;
             onClicked: compositeOpModel.eraserMode = !compositeOpModel.eraserMode;
+        },
+        Button {
+            id: topApplyButton;
+            width: height;
+            height: Constants.GridHeight;
+            color: "transparent";
+            image: "../images/svg/icon-apply.svg";
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            visible: false;
+            onClicked: state === "peek" ? toolOptionsPeek.item.apply() : toolOptionsFull.item.apply();
         }
     ]
 
