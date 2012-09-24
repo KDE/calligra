@@ -30,32 +30,23 @@
 #include <QRadioButton>
 
 class KoCanvasBase;
-
-#include "ui_wdgmovetool.h"
-
-class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
-{
-    Q_OBJECT
-
-public:
-    MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
-
-
+class MoveToolOptionsWidget;
 class KisToolMove : public KisTool
 {
-
     Q_OBJECT
-
+    Q_ENUMS(MoveToolMode);
+    Q_PROPERTY(MoveToolMode moveToolMode READ moveToolMode WRITE setMoveToolMode NOTIFY moveToolModeChanged);
 public:
     KisToolMove(KoCanvasBase * canvas);
     virtual ~KisToolMove();
 
 
 public:
-
+    enum MoveToolMode {
+        MoveSelectedLayer,
+        MoveFirstLayer,
+        MoveGroup
+    };
     virtual void mousePressEvent(KoPointerEvent *event);
     virtual void mouseMoveEvent(KoPointerEvent *event);
     virtual void mouseReleaseEvent(KoPointerEvent *event);
@@ -63,6 +54,14 @@ public:
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
 
     virtual QWidget* createOptionWidget();
+
+    MoveToolMode moveToolMode() const;
+public Q_SLOTS:
+    void setMoveToolMode(MoveToolMode newMode);
+    void slotWidgetRadioToggled(bool checked);
+
+Q_SIGNALS:
+    void moveToolModeChanged();
 
 private:
     void drag(const QPoint& newPos);
@@ -77,6 +76,8 @@ private:
     QPoint m_lastDragPos;
 
     KisStrokeId m_strokeId;
+
+    MoveToolMode m_moveToolMode;
 };
 
 

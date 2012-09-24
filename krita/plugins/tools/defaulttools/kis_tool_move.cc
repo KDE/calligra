@@ -45,12 +45,14 @@
 #include <commands/kis_image_layer_add_command.h>
 #include <commands/kis_deselect_global_selection_command.h>
 #include "strokes/move_stroke_strategy.h"
+#include "kis_tool_movetooloptionswidget.h"
 
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
     setObjectName("tool_move");
     m_optionsWidget = 0;
+    m_moveToolMode = MoveSelectedLayer;
 }
 
 KisToolMove::~KisToolMove()
@@ -154,11 +156,11 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
         QPoint pos = convertToPixelCoord(event).toPoint();
         KisSelectionSP selection = currentSelection();
 
-        if(!m_optionsWidget->radioSelectedLayer->isChecked() &&
+        if(!m_moveToolMode == MoveSelectedLayer &&
            event->modifiers() != Qt::ControlModifier) {
 
             bool wholeGroup = !selection &&
-                (m_optionsWidget->radioGroup->isChecked() ||
+                (m_moveToolMode == MoveGroup ||
                  event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier));
 
             node = findNode(image->rootLayer(), pos, wholeGroup);
@@ -272,7 +274,35 @@ QWidget* KisToolMove::createOptionWidget()
 {
     m_optionsWidget = new MoveToolOptionsWidget(0);
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
+    connect(m_optionsWidget->radioSelectedLayer, SIGNAL(toggled(bool)),
+            this, SLOT(slotWidgetRadioToggled(bool)));
+    connect(m_optionsWidget->radioFirstLayer, SIGNAL(toggled(bool)),
+            this, SLOT(slotWidgetRadioToggled(bool)));
+    connect(m_optionsWidget->radioGroup, SIGNAL(toggled(bool)),
+            this, SLOT(slotWidgetRadioToggled(bool)));
     return m_optionsWidget;
+}
+
+void KisToolMove::setMoveToolMode(KisToolMove::MoveToolMode newMode)
+{
+    m_moveToolMode = newMode;
+}
+
+KisToolMove::MoveToolMode KisToolMove::moveToolMode() const
+{
+    return m_moveToolMode;
+}
+
+void KisToolMove::slotWidgetRadioToggled(bool checked)
+{
+    Q_UNUSED(checked);
+    QObject* from = sender();
+    if(from == m_optionsWidget->radioSelectedLayer)
+        setMoveToolMode(MoveSelectedLayer);
+    else if(from == m_optionsWidget->radioFirstLayer)
+        setMoveToolMode(MoveFirstLayer);
+    else if(from == m_optionsWidget->radioGroup)
+        setMoveToolMode(MoveGroup);
 }
 
 QPoint KisToolMove::applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos)
