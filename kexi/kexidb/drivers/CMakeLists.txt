@@ -4,17 +4,17 @@
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44001)
 
 IF (MYSQL_FOUND)
-   add_subdirectory( mySQL )
+   macro_optional_add_subdirectory(mysql)
 ENDIF (MYSQL_FOUND)
 
 IF (POSTGRESQL_FOUND AND PQXX_FOUND AND PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
-   add_subdirectory(pqxx)
+   macro_optional_add_subdirectory(pqxx)
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND AND PQXX_VERSION VERSION_GREATER PQXX_MIN_VERSION AND PQXX_VERSION VERSION_LESS PQXX_MAX_VERSION)
 
 IF (FREETDS_FOUND)
-   add_subdirectory(sybase)
+   macro_optional_add_subdirectory(sybase)
 ENDIF (FREETDS_FOUND)
 
 IF(XBASE_FOUND)
-   add_subdirectory(xbase)
+   macro_optional_add_subdirectory(xbase)
 ENDIF(XBASE_FOUND)

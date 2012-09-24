@@ -592,12 +592,12 @@ signals:
     void calendarRemoved( const Calendar *cal );
 
     /**
-     * Emitted when the the default calendar pointer has changed
+     * Emitted when the default calendar pointer has changed
      * @parem cal The new default calendar. May be 0.
      */
     void defaultCalendarChanged( Calendar *cal );
     /**
-     * Emitted when the the standard worktime has been changed.
+     * Emitted when the standard worktime has been changed.
      */
     void standardWorktimeChanged( StandardWorktime* );
     

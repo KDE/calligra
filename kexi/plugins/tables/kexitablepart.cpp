@@ -78,7 +78,7 @@ void KexiTablePart::initPartActions()
 
 void KexiTablePart::initInstanceActions()
 {
-//moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), "view-filter", 0, "tablepart_filter");
+//moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), koIconName("view-filter"), 0, "tablepart_filter");
     /*2.0 moved to createViewActions()
       KAction *a = createSharedToggleAction(
         Kexi::DesignViewMode, i18n("Primary Key"), "key", KShortcut(),

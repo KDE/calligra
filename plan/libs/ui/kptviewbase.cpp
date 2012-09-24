@@ -27,11 +27,15 @@
 #include <kxmlguifactory.h>
 #include <kmessagebox.h>
 #include <knotification.h>
+#include <kactioncollection.h>
+#include <kactionmenu.h>
+#include <kmenu.h>
 
 #include <KoIcon.h>
 #include "calligraversion.h"
 #include <KoDocument.h>
 #include <KoPart.h>
+#include <KoMainWindow.h>
 #include <KoShape.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
@@ -49,11 +53,9 @@
 #include <QPainter>
 #include <QMenu>
 #include <QPainter>
-#include <QMainWindow>
 
 namespace KPlato
 {
-
 
 DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &title )
     : QDockWidget( v ),
@@ -65,26 +67,47 @@ DockWidget::DockWidget( ViewBase *v, const QString &identity,  const QString &ti
 {
     setWindowTitle( title );
     setObjectName( v->objectName() + '-' + identity );
+    toggleViewAction()->setObjectName( objectName() );
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(setLocation(Qt::DockWidgetArea)));
 }
 
-void DockWidget::activate( QMainWindow *shell )
+void DockWidget::activate( KoMainWindow *shell )
 {
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
     setVisible( m_shown );
     shell->addDockWidget( location, this );
+
+    foreach(const KActionCollection *c, KActionCollection::allCollections()) {
+        KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
+        if ( a ) {
+            a->addAction( toggleViewAction() );
+            break;
+        }
+    }
 }
 
-void DockWidget::deactivate( QMainWindow *shell )
+void DockWidget::deactivate( KoMainWindow *shell )
 {
     disconnect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
     shell->removeDockWidget( this );
+    foreach(const KActionCollection *c, KActionCollection::allCollections()) {
+        KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
+        if ( a ) {
+            a->removeAction( toggleViewAction() );
+            break;
+        }
+    }
 }
 
 void DockWidget::setShown( bool show )
 {
     m_shown = show;
     setVisible( show );
+}
+
+bool KPlato::DockWidget::shown() const
+{
+    return m_shown;
 }
 
 void DockWidget::setLocation( Qt::DockWidgetArea area )
@@ -648,7 +671,7 @@ void ViewBase::saveContext( QDomElement &context ) const
 
 void ViewBase::addDocker( DockWidget *ds )
 {
-    addAction( "view_docker_list", ds->toggleViewAction() );
+    //addAction( "view_docker_list", ds->toggleViewAction() );
     m_dockers << ds;
 }
 

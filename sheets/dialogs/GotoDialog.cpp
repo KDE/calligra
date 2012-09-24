@@ -53,8 +53,6 @@ GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
     QWidget *page = new QWidget();
     setMainWidget(page);
     QVBoxLayout *lay1 = new QVBoxLayout(page);
-    lay1->setMargin(KDialog::marginHint());
-    lay1->setSpacing(KDialog::spacingHint());
 
     QLabel *label = new QLabel(i18n("Enter cell:"), page);
     lay1->addWidget(label);
