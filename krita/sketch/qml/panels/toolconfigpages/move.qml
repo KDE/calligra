@@ -21,8 +21,25 @@ import "../../components"
 
 Item {
     id: base
-    Label {
-        width: parent.width;
-        text: "Move tool options"
+    property bool fullView: true;
+    ExpandingListView {
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        model: ListModel {
+            ListElement {
+                text: "Current Layer";
+            }
+            ListElement {
+                text: "Touch content";
+            }
+            ListElement {
+                text: "Group";
+            }
+        }
+        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.setMoveToolMode) toolManager.currentTool.moveToolMode = currentIndex;
     }
 }
