@@ -25,7 +25,6 @@ Item {
     property bool fullView: true;
     ExpandingListView {
         id: compositeModeList
-        visible: fullView;
         anchors {
             top: parent.top;
             left: parent.left;
@@ -41,7 +40,7 @@ Item {
     }
     Column {
         anchors {
-            top: fullView ? compositeModeList.bottom : compositeModeList.top;
+            top: compositeModeList.bottom;
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
             right: parent.right;
@@ -62,6 +61,7 @@ Item {
         Item {
             width: parent.width;
             height: Constants.DefaultMargin;
+            visible: fullView;
         }
 
         RangeInput {
@@ -75,21 +75,39 @@ Item {
 
         CheckBox {
             id: fillSelectionCheck;
+            visible: fullView;
             anchors {
                 left: parent.left;
                 right: parent.right;
                 margins: Constants.DefaultMargin;
             }
             text: "Fill Selection";
+            checked: false;
+            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetFillSelection(checked);
         }
         CheckBox {
             id: limitToLayerCheck;
+            visible: fullView;
             anchors {
                 left: parent.left;
                 right: parent.right;
                 margins: Constants.DefaultMargin;
             }
             text: "Limit to Layer";
+            checked: false;
+            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSampleMerged(checked);
         }
+        /*CheckBox {
+            id: usePatternCheck;
+            visible: fullView;
+            anchors {
+                left: parent.left;
+                right: parent.right;
+                margins: Constants.DefaultMargin;
+            }
+            text: "Use Pattern";
+            checked: false;
+            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetUsePattern(checked);
+        }*/
     }
 }

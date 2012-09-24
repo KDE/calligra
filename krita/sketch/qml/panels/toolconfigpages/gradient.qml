@@ -21,8 +21,117 @@ import "../../components"
 
 Item {
     id: base
-    Label {
-        width: parent.width;
-        text: "Gradient tool options"
+    property bool fullView: true;
+    ExpandingListView {
+        id: compositeModeList
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        onCurrentIndexChanged: model.activateItem(currentIndex);
+        model: compositeOpModel;
+    }
+    Connections {
+        target: compositeOpModel;
+        onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
+    }
+
+    Column {
+        id: firstColumn
+        anchors {
+            top: compositeModeList.bottom;
+            left: parent.left;
+            leftMargin: Constants.DefaultMargin;
+            right: parent.right;
+            rightMargin: Constants.DefaultMargin;
+        }
+        height: childrenRect.height;
+        RangeInput {
+            id: opacityInput;
+            width: parent.width;
+            placeholder: "Opacity";
+            min: 0; max: 1; decimals: 2;
+            value: compositeOpModel.opacity;
+            onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
+            enabled: compositeOpModel.opacityEnabled;
+        }
+
+        Item {
+            width: parent.width;
+            height: Constants.DefaultMargin;
+        }
+    }
+
+    ExpandingListView {
+        id: shapeList;
+        anchors {
+            top: firstColumn.bottom;
+            left: parent.left;
+            leftMargin: Constants.DefaultMargin;
+            right: parent.right;
+            rightMargin: Constants.DefaultMargin;
+        }
+        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.slotSetShape) toolManager.currentTool.slotSetShape(currentIndex);
+        model: ListModel {
+            ListElement {
+                text: "Linear"
+            }
+            ListElement {
+                text: "Bi-Linear";
+            }
+            ListElement {
+                text: "Radial";
+            }
+            ListElement {
+                text: "Square";
+            }
+            ListElement {
+                text: "Conical";
+            }
+            ListElement {
+                text: "Conical Symmetric";
+            }
+        }
+    }
+
+    Column {
+        anchors {
+            top: shapeList.bottom;
+            left: parent.left;
+            leftMargin: Constants.DefaultMargin;
+            right: parent.right;
+            rightMargin: Constants.DefaultMargin;
+        }
+        height: childrenRect.height;
+        RangeInput {
+            width: parent.width;
+            placeholder: "Anti-alias";
+            min: 0; max: 1; decimals: 3;
+            value: 0.2;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetAntiAliasThreshold(value);
+        }
+
+        RangeInput {
+            width: parent.width;
+            placeholder: "Preview";
+            min: 0; max: 100; decimals: 0;
+            value: 75;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetPreviewOpacity(value);
+        }
+
+        CheckBox {
+            width: parent.width;
+            text: "Reverse";
+            checked: false;
+            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetReverse(checked);
+        }
+        CheckBox {
+            width: parent.width;
+            text: "Repeat";
+            checked: false;
+            onCheckedChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetRepeat(checked);
+        }
     }
 }
