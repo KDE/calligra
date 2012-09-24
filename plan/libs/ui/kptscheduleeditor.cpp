@@ -259,7 +259,7 @@ void ScheduleEditor::slotEnableActions()
     actionAddSchedule->setEnabled( true );
     actionAddSubSchedule->setEnabled( sm->isScheduled() );
     actionDeleteSelection->setEnabled( ! ( sm->isBaselined() || sm->isChildBaselined() ) );
-    actionCalculateSchedule->setEnabled( sm->childCount() == 0 && ! ( sm->isBaselined() || sm->isChildBaselined() ) );
+    actionCalculateSchedule->setEnabled( ! sm->scheduling() && sm->childCount() == 0 && ! ( sm->isBaselined() || sm->isChildBaselined() ) );
 
     const char *const actionBaselineScheduleIconName =
         sm->isBaselined() ? koIconNameCStr("view-time-schedule-baselined-remove") : koIconNameCStr("view-time-schedule-baselined-add");

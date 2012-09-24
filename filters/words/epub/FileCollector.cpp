@@ -115,6 +115,10 @@ QString FileCollector::pathPrefix() const
     return d->pathPrefix;
 }
 
+
+// ----------------------------------------------------------------
+
+
 void FileCollector::addContentFile(QString id, QString fileName,
                                    QByteArray mimetype, QByteArray fileContents)
 {

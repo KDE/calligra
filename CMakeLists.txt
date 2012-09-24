@@ -1,8 +1,13 @@
 project(calligra)
 
 cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+
 cmake_policy(SET CMP0002 OLD)
-cmake_policy(SET CMP0017 NEW)
+
+#cmake_policy CMP0017 was introduced in version 2.8.4
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
+    cmake_policy(SET CMP0017 NEW)
+endif()
 
  ############
 #############
@@ -374,6 +379,14 @@ endif(QT_QTWEBKIT_FOUND)
 ##
 #macro_optional_find_package(QImageBlitz)
 #macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
+
+##
+## Test for KDeclarative
+##
+macro_optional_find_package(KDeclarative)
+if(NOT KDECLARATIVE_FOUND)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif(NOT KDECLARATIVE_FOUND)
 
 ##
 ## Test endianess

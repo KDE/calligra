@@ -41,16 +41,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-// Other.  (Will be moved to a library)
-#include "WmfPainterBackend.h"
-
-#include "EmfParser.h"
-#include "EmfOutputPainterStrategy.h"
-#include "EmfOutputDebugStrategy.h"
-#include "SvmParser.h"
-#include "SvmPainterBackend.h"
-
-
 OdfParser::OdfParser()
 {
 }

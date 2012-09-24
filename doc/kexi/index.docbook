@@ -11,7 +11,7 @@
 <authorgroup>
 <author>
 <personname>
-      <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/Kexi/Handbook/Introduction">Kexi/Handbook</ulink> page at 2012-01-08.</firstname>
+      <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/Kexi/Handbook/Introduction">Kexi/Handbook</ulink> page at 2012-09-14.</firstname>
 <surname></surname>
 </personname>
       </author>
@@ -24,8 +24,8 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
       </authorgroup>
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2012-01-11</date>
-      <releaseinfo>2.4</releaseinfo>
+<date>2012-09-14</date>
+      <releaseinfo>2.5</releaseinfo>
 <abstract>
   <para>
     &kexi; is the application for creating databases and for data management
@@ -41,7 +41,7 @@
   <keyword>database</keyword>
 </keywordset>
 </bookinfo>
-<!--userbase <timestamp>2012-01-08T14:10:42Z</timestamp>-->
+<!--userbase <timestamp>2012-09-14T07:13:33Z</timestamp>-->
 
 <!--userbase-content-->
 <chapter id="introduction"><title>Introduction</title> 
@@ -115,7 +115,7 @@
     </textobject>
   </mediaobject>
 </screenshot></para></listitem>
-<listitem><para>On the <guilabel>Storage Method</guilabel> page, click <keycap>File</keycap>.
+<listitem><para>On the <guilabel>Storage Method</guilabel> page, click <guilabel>File</guilabel>.
 <screenshot>
 <screeninfo></screeninfo>
   <mediaobject>
@@ -163,7 +163,7 @@
 <variablelist>
   <varlistentry><term><emphasis role="bold">Tabbed Toolbar</emphasis></term>
     <listitem>
-    <para>Contains available commands for the application. You will find detailed description of any of the commands in the appendix.</para>
+    <para>Contains available commands for the application. You will find detailed description of any of the commands in <link linkend="command-reference">the appendix</link>.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Project Navigator pane</emphasis></term>
@@ -205,8 +205,12 @@
 <listitem><para>Create / Open / Close Kexi projects</para></listitem>
 <listitem><para>Create Database objects</para></listitem>
 <listitem><para>Import / Export Data</para></listitem>
-<listitem><para>Create widgets on your Forms</para></listitem>
-<listitem><para>Create widgets on your Reports</para></listitem>
+</itemizedlist>
+<para>Depending on the context, additional tabs can be visible:
+</para>
+<itemizedlist>
+<listitem><para><guilabel>Form Design</guilabel> tab is visible if the Form Designer is actually used.</para></listitem>
+<listitem><para><guilabel>Report Design</guilabel> tab is visible if the Report Designer is actually used.</para></listitem>
 </itemizedlist>
 </sect2>
 <sect2 id="project-navigator-pane"><title>Project Navigator pane</title> 
@@ -250,7 +254,7 @@
 </para>
 <para>Whenever you double click an object in the project navigator, it opens in the <guilabel>Opened database objects area</guilabel>. Each window has its own tab in &kexi;.
 </para>
-<para>You can rearrange the tabs by drag and drop and close them using the close tab button located at the far right of the tab strip.
+<para>You can rearrange the tabs by drag and drop and close them using the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-tab-close.png" format="PNG"/> </imageobject> </inlinemediaobject> button located at the far right of the tab strip.
 </para>
 <para><note><para>Sometime later on there will be an option to detach tabs, creating somewhat something similar to an MDI interface. That could be useful for custom solutions or multiple displays.</para></note>
 </para>
@@ -325,7 +329,7 @@
 <para><guilabel>Notes</guilabel>
 </para>
 <itemizedlist>
-<listitem><para>By default the <guilabel>Filter:</guilabel> drop down list has <guilabel>All Supported Files (*.kexi, *.kexic, *.kexis, *.mdb)</guilabel> selected. In case the file you are looking for has an other extension, you can change the selection of the <guilabel>Filter:</guilabel> drop down list to <guilabel>All Files</guilabel> to display all available files (regardless of an extension).</para></listitem>
+<listitem><para>By default the <guilabel>Filter:</guilabel> drop down list has <guilabel>All Supported Files (*.kexi, *.kexic, *.kexis, *.mdb)</guilabel> selected. In case the file you are looking for has another extension, you can change the selection of the <guilabel>Filter:</guilabel> drop down list to <guilabel>All Files</guilabel> to display all available files (regardless of an extension).</para></listitem>
 <listitem><para>If you have selected a file of an external type, like a <guilabel>MS Access</guilabel> <filename>.mdb</filename> file, &kexi; will provide you with the option to import the file.</para></listitem>
 <listitem><para>If you have selected a connection data file (with <filename>.kexic</filename> extension) or a shortcut to a project on database server file (with <filename>.kexis</filename> extension), &kexi; will display appropriate dialogs.</para></listitem>
 </itemizedlist>
@@ -336,7 +340,7 @@
 </itemizedlist>
 <para><guilabel>Notes</guilabel>
 </para>
-<para>Note about database files accessed remotely. You may want to open a database file that is located on a remote source (&eg; a web or FTP server or a MS Windows network share). K Desktop Environment allows you to open files from remote sources directly in applications and to save changes back to the source, but this is not the case with database files. By clicking on a database file located on a remote source, a copy of the file will be downloaded to a temporary directory on your computer and all your changes will be made to this local file. The remote original of the file will remain unchanged, so it's recommended to copy (download) the file to your computer first, then open the file and copy it back to the remote source if you want to make it up to date.
+<para>Note about database files accessed remotely. You may want to open a database file that is located on a remote source (&eg; a web or FTP server or a MS Windows network share). KDE allows you to open files from remote sources directly in applications and to save changes back to the source, but this is not the case with database files. By clicking on a database file located on a remote source, a copy of the file will be downloaded to a temporary directory on your computer and all your changes will be made to this local file. The remote original of the file will remain unchanged, so it's recommended to copy (download) the file to your computer first, then open the file and copy it back to the remote source if you want to make it up to date.
 </para>
 </sect2>
 </sect1>
@@ -346,12 +350,12 @@
 <variablelist>
   <varlistentry><term><emphasis role="bold">The Handbook in form of electronic document.</emphasis></term>
     <listitem>
-    <para>The Handbook is available by pressing <keycap>F1</keycap> key or selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>Kexi Handbook</guimenuitem></menuchoice> from the menubar.</para>
+    <para>The Handbook is available by pressing <keycap>F1</keycap> key or click <inlinemediaobject> <imageobject> <imagedata fileref="Icon-help-contents.png" format="PNG"/> </imageobject> </inlinemediaobject> in the menubar and select <guilabel>Kexi Handbook</guilabel>.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><emphasis>What's This?</emphasis> hints.</emphasis></term>
     <listitem>
-    <para>Select <menuchoice><guimenu>Help</guimenu><guimenuitem>What's This?</guimenuitem></menuchoice> from the menu bar and click on an area of the application to get hints about it.</para>
+    <para>Select <guilabel>What's This?</guilabel> from the menu that pops up when you click  <inlinemediaobject> <imageobject> <imagedata fileref="Icon-help-contents.png" format="PNG"/> </imageobject> </inlinemediaobject> and then click on an area of the application to get hints about it.</para>
      </listitem>
   </varlistentry>
 </variablelist>
@@ -359,7 +363,7 @@
 </chapter>
 <chapter id="building-simple-databases"><title>Building Simple Databases</title> 
 <itemizedlist>
-  <listitem><para><link linkend="introduction0">Introduction</link>&nbsp;</para></listitem>
+<listitem><para><link linkend="building-simple-databases">Introduction</link>&nbsp;</para></listitem>
 <listitem><para><link linkend="designing-database-tables">Designing Database Tables</link>&nbsp;<itemizedlist>
 <listitem><para><link linkend="the-table-designer-window">The Table Designer window</link>&nbsp;</para></listitem>
 </itemizedlist>
@@ -404,13 +408,13 @@
 <para>First, there will be two tables added to your database: <replaceable>Persons</replaceable> and <replaceable>Phones</replaceable>. These are exactly the same tables as described in chapter <link linkend="database-and-spreadsheet">Database and Spreadsheet</link>. A layout for <replaceable>Persons</replaceable> can be found in section <link linkend="data-integrity-and-validity">Data integrity and validity</link> in that chapter.
 </para>
 <orderedlist>
-<listitem><para>Select <guimenu>Table</guimenu> from the toolbar. You can also use the <guimenuitem>Create object: table</guimenuitem> in the context menu of the <guilabel>Tables</guilabel> item in the Project Navigator.</para></listitem>
-<listitem><para>The Table Designer's window will appear. Looking at the top of designer's window you will notice that &kexi; proposed you a generic name like <replaceable>Table1</replaceable> for the new table. The table design is not saved yet so you will be able to assign more proper name later. Moreover, because of the same reason, the table name is not yet visible in the <guilabel>Project Navigator</guilabel>.</para></listitem>
+<listitem><para>Select <guilabel>Table</guilabel> from the toolbar. You can also use <guilabel>Create object: table</guilabel> in the context menu of the <guilabel>Tables</guilabel> item in the Project Navigator.</para></listitem>
+<listitem><para>The Table Designer's window will appear. Looking at the top of designer's window you will notice that &kexi; proposed you a generic name like <guilabel>Table1</guilabel> for the new table. The table design is not saved yet so you will be able to assign more proper name later. Moreover, because of the same reason, the table name is not yet visible in the <guilabel>Project Navigator</guilabel>.</para></listitem>
 </orderedlist>
 <sect2 id="the-table-designer-window"><title>The Table Designer window</title> 
 <sect3 id="table-designer-window-consists-of-following-columns-"><title>Table Designer window consists of following columns:</title> 
 <itemizedlist>
-<listitem><para>Information icon - Additional Information about the field</para></listitem>
+<listitem><para><inlinemediaobject> <imageobject> <imagedata fileref="Icon-help-about-desaturated.png" format="PNG"/> </imageobject> </inlinemediaobject> - Additional Information about the field.</para></listitem>
 <listitem><para><guilabel>Field Caption</guilabel> - caption of the field which will be displayed during data entering.</para></listitem>
 <listitem><para><guilabel>Data Type</guilabel> - a combo box containing a list of data types, allowing to set a main rule for entered data for a given field. For example, when an integer number data type is set for a field, a database user will not able to enter letter characters into this field.</para></listitem>
 <listitem><para><guilabel>Comments</guilabel> - you can enter here any information useful for understanding what the given field is provided for. This additional text will be saved within the table design and only visible in design mode.</para></listitem>
@@ -418,8 +422,8 @@
 <para>In the Table designer window, every row corresponds to a single table field. You can recognize you are in design mode because the <guilabel>Design</guilabel> button is toggled on within the Table designer window toolbar.
 </para>
 </sect3>
-<sect3 id="procedure-3-3--designing-the-persons-table"><title>Designing the Persons table</title> 
-<para>In the first row click on the cell in the <guilabel>Field Caption</guilabel> column and enter <replaceable>Name</replaceable> as field caption.
+<sect3 id="designing-the-persons-table"><title>Designing the Persons table</title> 
+<para>In the first row click on the cell in the <guilabel>Field Caption</guilabel> column and enter <replaceable>Name</replaceable> as field caption. Filling the <guilabel>Field Caption</guilabel> field automatically fills the <guilabel>Name</guilabel> field as seen in the <guilabel>Property Editor</guilabel> pane.
 </para>
 <para>Notes about field names and captions
 </para>
@@ -442,20 +446,20 @@
 </para>
 <para>From now on, the <replaceable>house_number</replaceable> field only accepts numbers.
 </para>
-<para>Persons table design is ready. Click <guilabel>Data</guilabel> button on the toolbar to finish designing and switch to <guilabel>Data View</guilabel> for the table. This allows you entering data into the table.
+<para>Persons table design is ready. Click the <guilabel>Data</guilabel> button on the toolbar to finish designing and switch to <guilabel>Data View</guilabel> for the table. This allows you to enter data into the table.
 </para>
 <para>As the design is not yet saved in the database, the <guilabel>Save Object As</guilabel> dialog window appears. You need to specify the name for the new table.
 </para>
 <para>&kexi; offers a generic name like <guilabel>Table1</guilabel>. To change the name, enter <replaceable>Persons</replaceable> into the <guilabel>Caption</guilabel> field and press the &Enter; key or click the <keycap>OK</keycap> button. The <guilabel>Caption</guilabel> field will be used to display the table to database end-users, &eg; as a form. Unlike the name, the caption can contain any characters including spaces and special characters.
 </para>
-<para>Note that filling the <guilabel>Caption</guilabel> field automatically fills the Name field. For your convenience the rule for using only letters, numbers and the <quote>_</quote> character is kept. You can alter the contents of the Name field if you want to.
+<para>Note that filling the <guilabel>Caption</guilabel> field automatically fills the <guilabel>Name</guilabel> field. For your convenience the rule for using only letters, numbers and the <quote>_</quote> character is kept. You can alter the contents of the <guilabel>Name</guilabel> field if you want to.
 </para>
 <orderedlist>
 <listitem><para>You are asked about an agreement for automatic adding of primary key to the table. Click <guilabel>Add primary key</guilabel> button to continue.</para></listitem>
-<listitem><para>The <guilabel>Persons</guilabel> table has been created and opened in <guilabel>Data View</guilabel>. Its name appears in the <guilabel>Project Navigator</guilabel> pane.</para></listitem>
+<listitem><para>The <replaceable>Persons</replaceable> table has been created and opened in Data View. Its name appears in the <guilabel>Project Navigator</guilabel> pane.</para></listitem>
 <listitem><para>Create the <replaceable>phone</replaceable> table, in a similar way as <replaceable>Persons</replaceable> table.</para></listitem>
-<listitem><para>Create a person field of type <guilabel>Integer</guilabel> number and phone of type <guilabel>Text</guilabel>. Do not use a number type here because phone numbers can have many different forms and prefixes.</para></listitem>
-<listitem><para>Click <guilabel>Data</guilabel> button on the toolbar and enter <replaceable>Phones</replaceable> caption for the table. As for your previous table, allow &kexi; to automatically create a primary key.</para></listitem>
+<listitem><para>Create a <replaceable>person</replaceable> field of type <guilabel>Integer</guilabel> number and <replaceable>phone</replaceable> of type <guilabel>Text</guilabel>. Do not use a number type here because phone numbers can have many different forms and prefixes.</para></listitem>
+<listitem><para>Click the <guilabel>Data</guilabel> button on the toolbar and enter <replaceable>Phones</replaceable> caption for the table. As for your previous table, allow &kexi; to automatically create a primary key.</para></listitem>
 </orderedlist>
 </sect3>
 </sect2>
@@ -463,13 +467,13 @@
 <sect1 id="entering-data-into-tables"><title>Entering Data Into Tables</title> 
 <para>You have designed the two tables <replaceable>Persons</replaceable> and <replaceable>Phones</replaceable>. None of them contain any data yet. You can enter some, and in this chapter you will learn how to do this fast and effectively.
 </para>
-<para>Start with the <replaceable>Persons</replaceable> table. Open it in <guilabel>Data View</guilabel> using <guimenuitem>Open</guimenuitem> in the Project Navigator's context menu or the toolbar button. The current cell is marked with (usually black) thicker border, a cell cursor. The contents of the cell, if present, are highlighted with a different color. The current row, &ie; the one you have placed your rectangular cursor in, is marked on the left hand with an arrow symbol.
+<para>Start with the <replaceable>Persons</replaceable> table. Open it in Data View using <guilabel>Open</guilabel>  in the <guilabel>Project Navigator's</guilabel> context menu or the toolbar button. The current cell is marked with (usually black) thicker border, a cell cursor. The contents of the cell, if present, are highlighted with a different color. The current row, &ie; the one you have placed your rectangular cursor in, is marked on the left hand with an arrow symbol.
 </para>
 <para>You can navigate through table cells using the arrow keys, <keycap>Page Down</keycap>, <keycap>Page Down</keycap>, <keycap>Home</keycap>, <keycap>End</keycap> keys; you can also click with the mouse in a cell to select it.
 </para>
-<para>Initially, after opening the table <replaceable>Persons</replaceable>, the cursor is placed in the id column. The column has autonumber property defined, marked with blue (autonumber) text in the last row. It means you do not have to enter values there by hand when entering data for a new row because the cell will be filled automatically with successive numbers.
+<para>Initially, after opening the table <replaceable>Persons</replaceable>, the cursor is placed in the <replaceable>Id</replaceable> column. The column has autonumber property defined, marked with blue (autonumber) text in the last row. It means you do not have to enter values there by hand when entering data for a new row because the cell will be filled automatically with successive numbers.
 </para>
-<para>Inserting new rows and entering data for them in &kexi; is different from the way of doing this in spreadsheets. To enter data for a new row, you need to use the arrow keys or mouse, to move your cursor to the special empty last row marked with a plus sign. Place your cursor in the (second) name column and enter a person's name. Also enter surname, street, house number and city. When done, move the cell cursor to the last empty row either by using the <keycap>Down</keycap> key or by clicking in the last row with the mouse to append a new row.
+<para>Inserting new rows and entering data for them in &kexi; is different from the way of doing this in spreadsheets. To enter data for a new row, you need to use the arrow keys or mouse, to move your cursor to the special empty last row marked with a plus sign. Place your cursor in the (second) <replaceable>name</replaceable> column and enter a person's name. Also enter surname, street, house number and city. When done, move the cell cursor to the last empty row either by using the <keycap>Down</keycap> key or by clicking in the last row with the mouse to append a new row.
 </para>
 <sect2 id="details-about-actions-available-while-entering-data-into-tables"><title>Details About Actions Available While Entering Data Into Tables</title> 
 <itemizedlist>
@@ -479,7 +483,7 @@
 <listitem><para>Instead of pressing the &Esc; key, you can click the <guilabel>Cancel Record Changes</guilabel> toolbar button.</para></listitem>
 <listitem><para>Press the <keycombo>&Shift;&Enter;</keycombo> keys to accept changes made to all cells in the currently edited row.</para></listitem>
 </itemizedlist>
-<para>Fill the <replaceable>Phones</replaceable> table with data. In the persons column you need to provide a number of the person existing in the <replaceable>Persons</replaceable> table.
+<para>Fill the <replaceable>Phones</replaceable> table with data. In the <replaceable>person</replaceable> column you need to provide an <replaceable>Id</replaceable> number of the person existing in the <replaceable>Persons</replaceable> table.
 </para>
 </sect2>
 </sect1>
@@ -491,16 +495,12 @@
 <para>To see how queries work in practice you will create a contacts query joining data from two tables: <replaceable>Persons</replaceable> and <replaceable>Phones</replaceable> (designed <link linkend="designing-database-tables">here</link> and filled with data <link linkend="entering-data-into-tables">here</link>).
 </para>
 <orderedlist>
-<listitem><para>Create a new empty query by selecting <guibutton>Query</guibutton> from the toolbar. The design window will appear. The window is split into two areas: query relationships at the top and query columns below.</para></listitem>
-<listitem><para>Select the table <replaceable>Persons</replaceable> in the drop down list <guilabel>Table:</guilabel> located at the top of the window and click the <guilabel>Insert</guilabel> button. A graphical representation of the table will appear in the relations area. Do the same for the <replaceable>phone</replaceable> table to insert it too.</para></listitem>
-<listitem><para>Add query relationship using mouse drag &amp; drop technique: click the field id in the table persons table, drag it and drop into the person field of the <replaceable>phone</replaceable> table. This will join both fields by creating a new relationship.</para></listitem>
-<listitem><para>
-<!--FIXME Why have some field/table names in this sentence a replaceable markup, others not?
-Why have the same field/table names in this document different capitalisation?
-This happens at several other parts of this documentation as well-->
-Double-click the name field in the <replaceable>Persons</replaceable> table, to add the field as a query column. In a similar way, add <replaceable>surname</replaceable>, <replaceable>street</replaceable>, <replaceable>house_number</replaceable>, <replaceable>city</replaceable> fields from the <replaceable>Persons</replaceable> table and phone from the <replaceable>Phones</replaceable> table.</para></listitem>
-<listitem><para>Query design is now ready for testing. Click the <guilabel>Data<!--Switch to data view is the tooltip text--></guilabel> button on the toolbar, to switch from design to viewing the data provided as query results.</para></listitem>
-<listitem><para>Save the query design for later use by clicking the <guibutton>Save</guibutton> button on the toolbar. Because the query design has not been saved yet, you will be asked to specify a name for it. Enter <replaceable>Contacts</replaceable> text in the caption field and click the <guilabel>OK</guilabel> button.</para></listitem>
+<listitem><para>Create a new empty query by selecting <guilabel>Query</guilabel> from the toolbar. The design window will appear. The window is split into two areas: query relationships at the top and query columns below.</para></listitem>
+<listitem><para>Select the table <replaceable>Persons</replaceable> in the drop down list <guilabel>Table:</guilabel> located at the top of the window and click the <guilabel>Insert</guilabel> button. A graphical representation of the table will appear in the relations area. Do the same for the <replaceable>Phones</replaceable> table to insert it too.</para></listitem>
+<listitem><para>Add query relationship using mouse drag &amp; drop technique: click the field <replaceable>id</replaceable> in the <replaceable>persons</replaceable> table, drag it and drop into the <replaceable>person</replaceable> field of the <replaceable>phone</replaceable> table. This will join both fields by creating a new relationship.</para></listitem>
+<listitem><para>Double-click the <replaceable>name</replaceable> field in the <replaceable>Persons</replaceable> table, to add the field as a query column. In a similar way, add <replaceable>surname</replaceable>, <replaceable>street</replaceable>, <replaceable>house_number</replaceable>, <replaceable>city</replaceable> fields from the <replaceable>Persons</replaceable> table and phone from the <replaceable>Phones</replaceable> table.</para></listitem>
+<listitem><para>Query design is now ready for testing. Click the <guilabel>Data</guilabel> button on the toolbar, to switch from design to viewing the data provided as query results.</para></listitem>
+<listitem><para>Save the query design for later use by clicking the <guilabel>Save</guilabel> button on the toolbar. Because the query design has not been saved yet, you will be asked to specify a name for it. Enter <replaceable>Contacts</replaceable> text in the caption field and click the <guilabel>OK</guilabel> button.</para></listitem>
 </orderedlist>
 </sect1>
 <sect1 id="designing-forms"><title>Designing Forms</title> 
@@ -520,11 +520,6 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
 -->
 </itemizedlist>
 <sect2 id="most-important-terms"><title>Most important terms</title> 
-<itemizedlist>
-<listitem><para>Widgets displaying information, &eg; a text box or an image box. Each widget of this type can be bound to a data source field (a table or a query column). Therefore, such widgets are called in short form fields.</para></listitem>
-<listitem><para>Widgets able to perform a specified action, &eg; a push button that can close the current form. Within other applications this widget type is sometimes called form control because it can perform previously defined action of controlling your database application's behavior.</para></listitem>
-<listitem><para>Other widgets allowing to enrich a form's appearance, &eg; a “line widget” can visually separate two form areas.</para></listitem>
-</itemizedlist>
 <variablelist>
   <varlistentry><term><emphasis role="bold">Form</emphasis></term>
     <listitem>
@@ -549,6 +544,12 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
   <varlistentry><term><emphasis role="bold">Form widget</emphasis></term>
     <listitem>
     <para>Form's element. Main widget types are:</para>
+<itemizedlist>
+<listitem><para>Widgets displaying information, &eg; a text box or an image box. Each widget of this type can be bound to a data source field (a table or a query column). Therefore, such widgets are called in short form fields.</para></listitem>
+<listitem><para>Widgets able to perform a specified action, &eg; a push button that can close the current form. Within other applications this widget type is sometimes called form control because it can perform previously defined action of controlling your database application's behavior.</para></listitem>
+<listitem><para>Other widgets allowing to enrich a form's appearance, &eg; a “line widget” can visually separate two form areas.</para></listitem>
+</itemizedlist>
+
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold">Container widget</emphasis></term>
@@ -570,13 +571,13 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
 </para>
 </sect2>
 <sect2 id="working-with-form-design"><title>Working with form design</title> 
-<para>As with table or query design, you are able to use <guilabel>Data View</guilabel> and <guilabel>Design View</guilabel>. Form designing is performed in <guilabel>Design View</guilabel>. We will often refer to the form design window as to <guilabel>Form Designer</guilabel>.
+<para>As with table or query design, you are able to use Data View and Design View. Form designing is performed in Design View. We will often refer to the form design window as to <emphasis>Form Designer</emphasis>.
 </para>
 <orderedlist>
-<listitem><para>To create a new empty form, select <guibutton>Form</guibutton> from the toolbar. Optionally, you can use <guilabel>Create Object: Form</guilabel> command from the context menu of the Project Navigator.</para></listitem>
+<listitem><para>To create a new empty form, select <guilabel>Form</guilabel> from the toolbar. Optionally, you can use the <guilabel>Create Object: Form</guilabel> command from drop-down button on the Project Navigator's toolbar or <guilabel>Create Object: Form</guilabel> command from the context menu of the Project Navigator.</para></listitem>
 <listitem><para>A new frame will appear, you can resize the form by moving the borders. The form is covered with a grid which simplifies accurate positioning of the widgets.</para></listitem>
 </orderedlist>
-<para>As with table design, <guilabel>Form Designer</guilabel> provides <guilabel>Property Editor</guilabel> pane. To save some space on the screen, the pane has three tabs related to the currently selected form:
+<para>As with table design, Form Designer provides a <guilabel>Property Editor</guilabel> pane. To save some space on the screen, the pane has three tabs related to the currently selected form:
 </para>
 <variablelist>
   <varlistentry><term><emphasis role="bold">The Properties tab</emphasis></term>
@@ -584,12 +585,12 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
     <para>Contains a list of properties for the currently selected widget.</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold">The Data source tab</emphasis></term>
+  <varlistentry><term><emphasis role="bold">The Data source tab <inlinemediaobject> <imageobject> <imagedata fileref="Icon-server-database.png" format="PNG"/> </imageobject> </inlinemediaobject></emphasis></term>
     <listitem>
     <para>Contains properties related specifically to the data source of the currently selected widget or the form itself.</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold">The Widgets tab</emphasis></term>
+  <varlistentry><term><emphasis role="bold">The Widgets tab <inlinemediaobject> <imageobject> <imagedata fileref="Icon-action-widgets.png" format="PNG"/> </imageobject> </inlinemediaobject></emphasis></term>
     <listitem>
     <para>Contains a hierarchy of all widgets of the form. The list simplifies widgets lookup by name and navigation between them.</para>
      </listitem>
@@ -606,13 +607,13 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
 </itemizedlist>
 </sect2>
 <sect2 id="using-the-widgets-tab"><title>Using the Widgets tab</title> 
-<para>The <guilabel>Widgets</guilabel> tab in the <guilabel>Properties</guilabel> pane provides a list of form widgets and their hierarchy. Each widget is presented within the hierarchy beside other widgets being on the same level (the same parent container). Child widgets (inside containers) are presented using indented names.
+<para>The widgets tab <inlinemediaobject> <imageobject> <imagedata fileref="Icon-action-widgets.png" format="PNG"/> </imageobject> </inlinemediaobject> in the <guilabel>Properties</guilabel> pane provides a list of form widgets and their hierarchy. Each widget is presented within the hierarchy beside other widgets being on the same level (the same parent container). Child widgets (inside containers) are presented using indented names.
 </para>
 <para>Each widget has displayed its name and type. The type has also an icon displayed - the same as the one displayed on the toolbar used while form designing is performed.
 </para>
 <para><note>
 <itemizedlist>
-<listitem><para>Changing the current selection on the list causes appropriate selection on the designed form. This allows for easier widget lookup by name and easier navigation. For example, it is possible to select a widget by name, and then switch to the Properties tab to change the widget's properties.</para></listitem>
+<listitem><para>Changing the current selection on the list causes appropriate selection on the designed form. This allows for easier widget lookup by name and easier navigation. For example, it is possible to select a widget by name, and then switch to the <guilabel>Properties</guilabel> tab to change the widget's properties.</para></listitem>
 <listitem><para>Keeping the &Ctrl; key pressed while an item on the widgets list is being selected allows to select multiple widgets at a time. Keeping the &Shift; key pressed allows to select entire lists of widgets.</para></listitem>
 </itemizedlist>
 </note></para>
@@ -628,7 +629,7 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
 <listitem><para>Click <guilabel>Text Box</guilabel> button on the <guilabel>Widgets</guilabel> toolbar.</para></listitem>
 <listitem><para>Click on the form surface with the left mouse button. A new text box widget will be placed in the point where you clicked. Before you release you can drag your mouse to specify a desired size for the widget.</para></listitem>
 <listitem><para>If needed, move the inserted widget using drag &amp; drop to a desired position. You can resize the widget afterwards by dragging one of the small boxes appearing near its corners. Note that the boxes are only visible when the widget is selected. If you select another widget or the form surface, the boxes disappear.</para></listitem>
-<listitem><para>Click the <guilabel>Text Box</guilabel> toolbar button again and click on the form surface to insert another widget. Repeat this action once again until you get three text boxes inserted in your form. For sake of simplicity we will limit ourselves to three data fields.</para></listitem>
+<listitem><para>Click the <guilabel>Text Box</guilabel> toolbar button again and click on the form surface to insert another widget. Repeat this action once again until you get three more text boxes inserted in your form. For the sake of simplicity we will limit ourselves to five data fields.</para></listitem>
 </orderedlist>
 <para><note>
 <itemizedlist>
@@ -640,57 +641,54 @@ Double-click the name field in the <replaceable>Persons</replaceable> table, to 
 </note></para>
 </sect2>
 <sect2 id="assigning-data-sources"><title>Assigning data sources</title> 
-<para>The fields you inserted have no data source assigned yet, so these are not able to display information from the database. To assign data source, use the <guilabel>Data Source</guilabel> tab of the <guilabel>Property Editor</guilabel> pane.
+<para>The fields you inserted have no data source assigned yet, so these are not able to display information from the database. To assign data source, use the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-server-database.png" format="PNG"/> </imageobject> </inlinemediaobject> (Data Source) tab of the <guilabel>Property Editor</guilabel> pane.
 </para>
 <para>The very first step is to specify the form's data source, &ie; a place the displayed data will be fetched from. As mentioned above, you will use table <replaceable>Persons</replaceable> as a data source for your new form.
 </para>
 <orderedlist>
 <listitem><para>Click on the form's surface, as you will alter its properties.</para></listitem>
-<listitem><para>Switch to the <guilabel>Data Source</guilabel> tab and enter <replaceable>persons</replaceable> table name in the <guilabel>Form's data source</guilabel> drop down list. Alternatively, you can select this name from the drop down list.</para></listitem>
+<listitem><para>Switch to the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-server-database.png" format="PNG"/> </imageobject> </inlinemediaobject> (Data Source) tab and enter <replaceable>persons</replaceable> table name in the <guilabel>Form's data source</guilabel> drop down list. Alternatively, you can select this name from the drop down list.</para></listitem>
 </orderedlist>
 <para>You have assigned form's data source. Now you need to do specify widget's data source.
 </para>
 <orderedlist>
 <listitem><para>Click the first text field widget at the top of the form.</para></listitem>
-<listitem><para>In the <guilabel>Data Source</guilabel> tab of the property pane enter field name <replaceable>name</replaceable> in the <guilabel>Widget's data source</guilabel> drop down list. Alternatively, you can select this name from the drop down list.</para></listitem>
-<listitem><para>Click on next text field widget and enter surname as the data source.</para></listitem>
+<listitem><para>In the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-server-database.png" format="PNG"/> </imageobject> </inlinemediaobject> (Data Source) tab of the property pane enter field name <replaceable>name</replaceable> in the <guilabel>Widget's data source</guilabel> drop down list. Alternatively, you can select this name from the drop down list.</para></listitem>
+<listitem><para>Click on next text field widget and enter <replaceable>surname</replaceable> as the data source.</para></listitem>
 <listitem><para>Enter data sources for street, house_number and city text fields in a similar way.</para></listitem>
 </orderedlist>
-<para>You can now save the form's design (this is not mandatory to test the form in action). To save, click the <guibutton>Save</guibutton> toolbar button<!--FIXME no File menu nor shortcut in master/2.4.0 or use the <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> (<keycombo>&Ctrl;<keycap>S</keycap></keycombo>) menu command-->. Upon saving you will be asked for entering the form's name. Enter <replaceable>Persons</replaceable> as caption and click the <guilabel>OK</guilabel> button. The form's name will be filled automatically.
+<para>You can now save the form's design (this is not mandatory to test the form in action). To save, click the <guilabel>Save</guilabel> toolbar button. Upon saving you will be asked for entering the form's name. Enter <replaceable>Persons</replaceable> as caption and click the <guilabel>OK</guilabel> button. The form's name will be filled automatically.
 </para>
-<para>This is the right moment for testing your form. Click the <guilabel>Data</guilabel> toolbar button. Unless you made a mistake while entering data sources, you should see form's fields filled with data from the <replaceable>Persons</replaceable> table.
+<para>This is the right moment for testing your form. Click the <guilabel>Data</guilabel> toolbar button. Unless you made a mistake while entering data sources, you should see the form's fields filled with data from the <replaceable>Persons</replaceable> table.
 </para>
 <para><note>
 <itemizedlist>
-  <listitem><para>If you want to remove widget's data source assignment for a form widget, you can use the little black icon with a 
-white cross at the right in the <guilabel>Widget's data source</guilabel> box. Similarly, you can remove the form's data source assignment. <!--FIXME not in master/2.4 <guilabel>Clear widget's data source</guilabel> button near the <guilabel>Widget's data source</guilabel> drop down list. Similarly, you can use the <guilabel>Clear form's data source</guilabel> button near the <guilabel>Form's data source</guilabel> drop down list.--></para></listitem>
-<listitem><para>Use the <inlinemediaobject><imageobject><imagedata fileref="oxygen-22x22-actions-go-jump.png" format="PNG"/></imageobject>
-</inlinemediaobject> icon to the right of the <guilabel>Form's data source</guilabel> label to select appropriate table or query in the <guilabel>Project Navigator</guilabel>, so you can quickly open a table or query being the data source of the form.</para></listitem>
+<listitem><para>If you want to remove widget's data source assignment for a form widget, you can use the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-edit-clear-locationbar-rtl.png" format="PNG"/> </imageobject> </inlinemediaobject> button in the <guilabel>Widget's data source</guilabel> box.</para></listitem>
+<listitem><para>Use the <inlinemediaobject> <imageobject> <imagedata fileref="Icon-go-jump.png" format="PNG"/> </imageobject> </inlinemediaobject> (Go to selected form's data source) button to select appropriate table or query in the <guilabel>Project Navigator</guilabel>, so you can quickly open a table or query being the data source of the form.</para></listitem>
 </itemizedlist>
 </note></para>
 </sect2>
 <sect2 id="inserting-text-labels"><title>Inserting text labels</title> 
 <para>To make it easier for the form's user to identify the meaning of every field widget, these should have added text labels with appropriate titles. To create text labels the <guilabel>Label</guilabel> widget is used.
 </para>
-<para>Insert three text label widgets onto the form, placing them on the left side of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting a new label, a text cursor appears at the location where you can enter the desired title. Enter consecutively: <replaceable>Name</replaceable>, <replaceable>Surname</replaceable> and <replaceable>Street</replaceable>. Additionally, on the top of the form insert another label displaying name of the form, &ie; <replaceable>Persons</replaceable>. Enlarge this label's size and increase the font size using <guilabel>Font</guilabel> in the <guilabel>Properties</guilabel> tab.
+<para>Insert three text label widgets onto the form, placing them on the left side of the text fields (or on the right hand if your operating system uses right-to-left layout). On inserting a new label, a text cursor appears at the location where you can enter the desired title. Enter consecutively: <replaceable>Name</replaceable>, <replaceable>Surname</replaceable>, <replaceable>Street</replaceable>, <replaceable>House Number</replaceable> and <replaceable>City</replaceable>. Additionally, on the top of the form insert another label displaying name of the form, &ie; <replaceable>Persons</replaceable>. Enlarge this label's size and and increase the font size using <guilabel>Font</guilabel>  in the <guilabel>Properties</guilabel> tab.
 </para>
 </sect2>
 <sect2 id="actions"><title>Actions</title> 
 <para>An Action is a single activity isolated in the application, available for the user to execute. It can also be executed automatically as a reaction for a given event (&eg; after opening a form).
 </para>
-<para>Assigning actions to form buttons
-</para>
+<sect3 id="assigning-actions-to-form-buttons"><title>Assigning actions to form buttons</title> 
 <para>Many actions can be assigned to form button. The assigned action is executed after button is clicked.
 </para>
 <para>To assign action:
 </para>
 <orderedlist>
-<listitem><para>Switch to form's <guilabel>Design</guilabel> view if you have not done yet.</para></listitem>
+<listitem><para>Switch to form's Design view if you have not done yet.</para></listitem>
 <listitem><para>Select the existing button widget by clicking on it or put a new button widget onto the form. If you inserted a new button, enter its title and press &Enter; key.</para></listitem>
 <listitem><para>Click the button widget with the right mouse button to display the context menu.</para></listitem>
 <listitem><para>From the context menu select <guilabel>Assign action...</guilabel> command.</para></listitem>
 <listitem><para>An <guilabel>Assigning Action to Button</guilabel> dialog window will appear presenting a list of available actions. One of the actions is selected if the widget already has action assigned. Otherwise the <guilabel>Action category</guilabel> list has the <guilabel>No action</guilabel> item selected.</para></listitem>
-<listitem><para>From the <guilabel>Action type</guilabel> list select <guilabel>Application actions</guilabel> item. Available application-wide actions will be listed.</para></listitem>
+<listitem><para>From the <guilabel>Action category</guilabel> list select <guilabel>Application actions</guilabel> item. Available application-wide actions will be listed.</para></listitem>
 <listitem><para>Select one of the actions on the list (&eg; <guilabel>Delete Selected object</guilabel>).</para></listitem>
 <!--dialog closes immediately after clicking an action in the list-->
 </orderedlist>
@@ -698,12 +696,11 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </para>
 <para><note>
 <itemizedlist>
-<listitem><para>To remove an action assignment, select <guilabel>No action</guilabel> item from the <guilabel>Action category</guilabel> list of the <guilabel>Assigning Action to Button</guilabel> dialog window.</para></listitem>
-<listitem><para>Actions only work in the form's data view. Not every action's assignment is reasonable. For example, the
-  <!--FIXME in master/2.4 no Font action available???-->
-<guilabel>Font...</guilabel> action is available in data view, but only if you have a widget selected in the <guilabel>Design</guilabel> view. If you make changes to the font settings the changes are applied to the text of that selected widget.</para></listitem>
+<listitem><para>To remove an action assignment, select the <guilabel>No action</guilabel> item from the <guilabel>Action category</guilabel> list of the <guilabel>Assigning Action to Button</guilabel> dialog window.</para></listitem>
+<listitem><para>Actions only work in the form's data view. Not every action's assignment is reasonable. For example, the <guilabel>Font...</guilabel> action is available in data view, but only if you have a widget selected in the Design view. If you make changes to the font settings the changes are applied to the text of that selected widget.</para></listitem>
 </itemizedlist>
 </note></para>
+</sect3>
 </sect2>
 <sect2 id="widget-layouts"><title>Widget layouts</title> 
 <para>In most cases form widgets should be conveniently arranged and aligned. Positioning, aligning and resizing widgets by hand is not easy and these parameters are not adjusted when the user resizes the form. In fact the situation is even worse because you cannot assume a given form requires a given space because users have different font sizes and display resolutions.
@@ -716,7 +713,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <para>There are two methods to create widget layout.
 </para>
 <itemizedlist>
-  <listitem><para>Select two or more widgets that should be placed in a common layout, and select one of the layout types from the context menu item <guilabel>Layout Widgets</guilabel>.</para></listitem>
+<listitem><para>Select two or more widgets that should be placed in a common layout, and select one of the layout types from the context menu item <guilabel>Layout Widgets</guilabel>.</para></listitem>
 <listitem><para>Click a container widget (or a form surface itself), where widgets are inserted and select one of the layout types from the context menu item <guilabel>Layout Widgets</guilabel>. All widgets existing within the container or within the form, being on the same level will be put into a single common layout.</para></listitem>
 </itemizedlist>
 <para>In each of these cases you can also use <menuchoice><guimenu>Format</guimenu><guimenuitem>Layout Widgets</guimenuitem></menuchoice> menu.
@@ -737,7 +734,6 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
      </listitem>
   </varlistentry>
 </variablelist>
-
 <sect3 id="springs-in-widget-layouts"><title>Springs in widget layouts</title> 
 <para>A spring in widget layouts is a special, invisible element allowing to adjust widget's position and size within layouts. Such a spring stretches or squeezes a widget on the right, top, bottom or left hand, so it can have desired size and position.
 </para>
@@ -750,7 +746,6 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <para>To make springs work you need to create a global widget layout, &ie; a layout for the form itself. Then, springs can use edges of the form as a boundary for expanding.
 </para>
 </sect3>
-
 <sect3 id="removing-widget-layouts"><title>Removing widget layouts</title> 
 <para>To remove widget layout without removing widgets, perform one of these actions:
 </para>
@@ -765,7 +760,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <sect3 id="size-policies-for-widgets-within-a-layout"><title>Size policies for widgets within a layout</title> 
 <para>Instead of setting a fixed size for your widgets, in &kexi; you can choose between various widget's size policies. A size policy is a flexible strategy for controlling how a widget is stretched (or shrunk) depending on other neighbouring widgets and space available within the form.
 </para>
-<para>After putting widgets into a layout, typically each widget gets a proportional (<guilabel>Preferred</guilabel>) size policy. These widgets will be automatically resized with preferred settings, depending on their type and size of the entire layout itself. For example, three buttons put into the horizontal layout will be resized to fit their visible text.
+<para>After putting widgets into on a line will be resized to fit their visible text.
 </para>
 <para>For each widget inserted into the form, there are settings for size policy available in the <guilabel>Property Editor</guilabel>. The settings are presented as a group of properties called <guilabel>Size Policy</guilabel>.
 </para>
@@ -795,7 +790,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </variablelist>
 </sect3>
 <sect3 id="values-of-size-policies"><title>Values of size policies</title> 
-<para>The following values are available in the drop down list for <guilabel>Hor. Policy</guilabel> and <guilabel>Ver. Policy</guilabel> properties visible in the <guilabel>Property Editor</guilabel>:
+<para>The following values are available in the drop down list for <guilabel>Hor. Policy</guilabel> and <guilabel>Vert. Policy</guilabel> visible in the <guilabel>Property Editor</guilabel>:
 </para>
 <variablelist>
   <varlistentry><term><emphasis role="bold">Fixed</emphasis></term>
@@ -840,7 +835,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </para>
 </sect3>
 <sect3 id="vertical-and-horizontal-stretch"><title>Vertical and horizontal stretch</title> 
-<para>The <guilabel>Ver. Stretch</guilabel> and <guilabel>Hor. Stretch</guilabel> properties accept integer values greater than or equal to 0. These properties allow to fine-tune the behavior of size policies. The default value for the properties is 0. A higher value of the stretch means that the widget will be expanded more than widgets for which a lower stretch value is set.
+<para>The <guilabel>Vert. Stretch</guilabel> and <guilabel>Hor. Stretch</guilabel> properties accept integer values greater than or equal to 0. These properties allow to fine-tune the behavior of size policies. The default value for the properties is 0. A higher value of the stretch means that the widget will be expanded more than widgets for which a lower stretch value is set.
 </para>
 </sect3>
 </sect2>
@@ -944,7 +939,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <sect1 id="entering-data-using-forms"><title>Entering Data Using Forms</title> 
 <para>Data entering and editing is usually the task of the user of the database application. The designer of the database should check the form in terms of valid data entry, and see whether the form works as expected.
 </para>
-<para>To test your form, switch to its data view. A single database row (record) of data will be displayed and a text cursor will be set inside the first data field. You can move between fields using the left mouse button or the &Tab; and <keycombo>&Shift;&Tab;</keycombo> keys. While editing, there will be a pencil icon visible near the record navigator. After entering the row's (record) data you can press the <keycombo>&Shift;&Enter;</keycombo> keys or click the <guilabel>Save Record</guilabel> toolbar button to accept changes made to the current row. Clicking the <guilabel>Cancel Record Changes</guilabel> toolbar button discards changes made to the current row and restores the contents of the data fields. You can use the record navigator's button to move to a new row. All the navigator's functions are also available in a similar way as in the data table view.
+<para>To test your form, switch to its data view. A single database row (record) of data will be displayed . You can move between fields using the left mouse button or the &Tab; and <keycombo>&Shift;&Tab;</keycombo> keys. While editing, there will be a pencil icon visible near the record navigator. After entering the row's (record) data you can press the <keycombo>&Shift;&Enter;</keycombo> keys or click the <guilabel>Save Record</guilabel> toolbar button to accept changes made to the current row. Clicking the <guilabel>Cancel Record Changes</guilabel> toolbar button discards changes made to the current row and restores the contents of the data fields. You can use the record navigator's button to move to a new row. All the navigator's functions are also available in a similar way as in the data table view.
 </para>
 </sect1>
 </chapter>
@@ -1007,7 +1002,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Open</guilabel></emphasis></term>
     <listitem>
-    <para>Here you can select to open a &kexi; Project whether stored in a <guilabel>File</guilabel> or a <guilabel>Database Server</guilabel>.</para>
+    <para>Here you can select to open a &kexi; Project whether stored in a file or a database server.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Close</guilabel></emphasis></term>
@@ -1051,27 +1046,27 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <variablelist>
   <varlistentry><term><emphasis role="bold"><guilabel>Table</guilabel></emphasis></term>
     <listitem>
-    <para>Selecting <guilabel>Table</guilabel> will take you to the <guilabel>Table Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to add field definitions to your table.</para>
+    <para>Selecting <guilabel>Table</guilabel> will take you to the table designer at the design view to allow you to add field definitions to your table.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Query</guilabel></emphasis></term>
     <listitem>
-    <para>Selecting <guilabel>Query</guilabel> will take you to the <guilabel>Query Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to design a Query to get custom results from your tables in your Project.</para>
+    <para>Selecting <guilabel>Query</guilabel> will take you to the query designer at the design view to allow you to design a query to get custom results from your tables in your project.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Form</guilabel></emphasis></term>
     <listitem>
-    <para>Selecting <guilabel>Form</guilabel> will take you to the <guilabel>Form Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to add widgets to your Form.</para>
+    <para>Selecting <guilabel>Form</guilabel> will take you to the form designer at the design view to allow you to add widgets to your form.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Report</guilabel></emphasis></term>
     <listitem>
-    <para>Selecting <guilabel>Report</guilabel> will take you to the <guilabel>Report Designer</guilabel> at the <guilabel>Design View</guilabel> to allow you to add widgets to your Report.</para>
+    <para>Selecting <guilabel>Report</guilabel> will take you to the report designer at the design view to allow you to add widgets to your report.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Script</guilabel></emphasis></term>
     <listitem>
-    <para>Selecting <guilabel>Script</guilabel> will take you to the <guilabel>Script Editor</guilabel> to allow you to add custom code for your project and / or objects.</para>
+    <para>Selecting <guilabel>Script</guilabel> will take you to the script editor to allow you to add custom code for your project and / or objects.</para>
      </listitem>
   </varlistentry>
 </variablelist>
@@ -1105,7 +1100,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Paste</guilabel></emphasis></term>
     <listitem>
-    <para>Paste, places the data/widget found on the clipboard to the table/object accordingly.</para>
+    <para><guilabel>Paste</guilabel>, places the data/widget found on the clipboard to the table/object accordingly.</para>
      </listitem>
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Paste Special</guilabel></emphasis></term>
@@ -1115,7 +1110,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
   </varlistentry>
   <varlistentry><term><emphasis role="bold"><guilabel>Find</guilabel></emphasis></term>
     <listitem>
-    <para><guilabel>Find</guilabel>, opens the find dialog so as to search for specific text in the database data.</para>
+    <para><guilabel>Find</guilabel>, opens the <guilabel>Find</guilabel> dialog so as to search for specific text in the database data.</para>
      </listitem>
   </varlistentry>
 </variablelist>
@@ -1299,32 +1294,32 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <para>From the <guilabel>Report Design</guilabel> tab you can you select widgets to add to your report.
 </para>
 <variablelist>
-  <varlistentry><term><emphasis role="bold">Label</emphasis></term>
+  <varlistentry><term><emphasis role="bold"><guilabel>Label</guilabel></emphasis></term>
     <listitem>
     <para>A <guilabel>Label</guilabel> widget displays predefined information on a report. Usually it is used as a caption next to other data-aware widgets.</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold">Field</emphasis></term>
+  <varlistentry><term><emphasis role="bold"><guilabel>Field</guilabel></emphasis></term>
     <listitem>
     <para>A <guilabel>Field</guilabel> widget is a single line container for data contained in your table.</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold">Text</emphasis></term>
+  <varlistentry><term><emphasis role="bold"><guilabel>Text</guilabel></emphasis></term>
     <listitem>
     <para>A <guilabel>Text</guilabel> widget is a multi line container for data contained in your table.</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold">Image</emphasis></term>
+  <varlistentry><term><emphasis role="bold"><guilabel>Image</guilabel></emphasis></term>
     <listitem>
     <para>An <guilabel>Image</guilabel> widget holds an image, bound to a field in a table.</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold">Check</emphasis></term>
+  <varlistentry><term><emphasis role="bold"><guilabel>Check</guilabel></emphasis></term>
     <listitem>
-      <para>A <guilabel>Check</guilabel> widget holds two or three states of data (&eg; On/Off)</para>
+    <para>A <guilabel>Check</guilabel> widget holds two or three states of data (&eg; On/Off)</para>
      </listitem>
   </varlistentry>
-  <varlistentry><term><emphasis role="bold">Line</emphasis></term>
+  <varlistentry><term><emphasis role="bold"><guilabel>Line</guilabel></emphasis></term>
     <listitem>
     <para>A <guilabel>Line</guilabel> is used as a logical separator between different parts of a form.</para>
      </listitem>
@@ -1425,12 +1420,12 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </para>
 </sect1>
 <sect1 id="database-and-spreadsheet"><title>Database and Spreadsheet</title> 
-<para>It is very likely that you have already used spreadsheet applications like <application>Calligra Tables</application>, <application>LibreOffice Calc</application> or <application>&Microsoft; Excel</application>. If so, you will probably wonder: since both spreadsheets and databases have tables, why should I use the latter?
+<para>It is very likely that you have already used spreadsheet applications like <guilabel>Calligra Sheets</guilabel>, <guilabel>LibreOffice Calc</guilabel> or <application>&Microsoft; Excel</application>. If so, you will probably wonder: since both spreadsheets and databases have tables, why should I use the latter?
 </para>
 <para>While comparing spreadsheets and databases you may encounter the following issues which you will later see in greater detail.
 </para>
 <sect2 id="how-is-a-database-different-from-a-spreadsheet"><title>How Is a Database Different From a Spreadsheet?</title> 
-<para>Gradually exceeding the capacity of a mobile phone, expand your table <replaceable>Contacts</replaceable> adding a column (field) Address. Add more telephone numbers (office, home) for each person and add surnames to names. To make it simpler we assume the following:
+<para>Gradually exceeding the capacity of a mobile phone, expand your table <replaceable>Contacts</replaceable> adding a column (field) <replaceable>Address</replaceable>. Add more telephone numbers (office, home) for each person and add surnames to names. To make it simpler we assume the following:
 </para>
 <itemizedlist>
 <listitem><para>The table is limited to two people (obviously, there could be hundreds and thousands of them in a real database)</para></listitem>
@@ -1518,7 +1513,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <sect2 id="data-redundancy"><title>Data redundancy</title> 
 <para>This is directly connected to the previous problem. In fields Name and surname and Address the same data is entered many times. This is typical of a spreadsheets' ineffective way of storing data because the database grows unnecessarily, thus requiring more computer resources (larger size of data and slower access).
 </para>
-<para>How can you solve these problems with a database? You can split information into smaller chunks by creating an additional table <replaceable>Persons</replaceable> with only two columns: Name and surname and Address:
+<para>How can you solve these problems with a database? You can split information into smaller chunks by creating an additional table <replaceable>Persons</replaceable> with only two columns: <replaceable>Name and surname</replaceable> and <replaceable>Address</replaceable>:
 </para>
 <para>
 <table>
@@ -1554,15 +1549,15 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </para>
 </sect2>
 <sect2 id="data-integrity-and-validity"><title>Data integrity and validity</title> 
-<para>Note the way data is entered in the fields <guilabel>Name and surname</guilabel> and <guilabel>Address</guilabel>. People entering data can be fallible, sometimes even negligent. In our sample data we have both different sequence of entering name and surname (Joan Smith and Smith Joan; Adam and ADAM) and many more ways of entering the same address. Surely you can think of many other ways.
+<para>Note the way data is entered in the fields <replaceable>Name and surname</replaceable> and <replaceable>Address</replaceable>. People entering data can be fallible, sometimes even negligent. In our sample data we have both different sequence of entering name and surname (Joan Smith and Smith Joan; Adam and ADAM) and many more ways of entering the same address. Surely you can think of many other ways.
 </para>
-<para>The above problem shows that &eg; when searching the telephone number of a person whose address is <quote>Western Gate 1, Warsaw</quote> you will not get a full result. You will get only one row instead of three. Moreover You will also not find all the telephone numbers searching for the value <quote>Joan Smith</quote> in the field <guilabel>Name and surname</guilabel>, because <quote>Smith Joan</quote> will not fit to <quote>Joan Smith</quote>.
+<para>The above problem shows that &eg; when searching the telephone number of a person whose address is <quote>Western Gate 1, Warsaw</quote> you will not get a full result. You will get only one row instead of three. Moreover You will also not find all the telephone numbers searching for the value <quote>Joan Smith</quote> in the field <replaceable>Name and surname</replaceable>, because <quote>Smith Joan</quote> will not fit to <quote>Joan Smith</quote>.
 </para>
 <para>How can you solve these problems using a database? You can do this by changing the design of the table <replaceable>Persons</replaceable> by:
 </para>
 <orderedlist>
-<listitem><para>Dividing data in the field <guilabel>Name and surname</guilabel> into two separate fields: <guilabel>Name</guilabel> and <guilabel>Surname</guilabel>.</para></listitem>
-<listitem><para>Dividing data in the field <guilabel>Address</guilabel> into three separate fields: <guilabel>Street</guilabel>, <guilabel>House number</guilabel> and <guilabel>City</guilabel>.</para></listitem>
+<listitem><para>Dividing data in the field <guilabel>Name and surname</guilabel> into two separate fields: <replaceable>Name</replaceable> and <replaceable>Surname</replaceable>.</para></listitem>
+<listitem><para>Dividing data in the field <replaceable>Address</replaceable> into three separate fields: <replaceable>Street</replaceable>, <replaceable>House number</replaceable> and <replaceable>City</replaceable>.</para></listitem>
 <listitem><para>Guaranteeing data correctness: by ensuring that no fields are empty, &eg; you must always enter house number.</para></listitem>
 </orderedlist>
 <para>A modified table looks something like this:
@@ -1763,7 +1758,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </sect2>
 </sect1>
 <sect1 id="database-design"><title>Database Design</title> 
-<para>Database design needs careful planning. Note that <replaceable>Contacts</replaceable> table redesign proposed in section <link linkend="data-integrity-and-validity">Data integrity and validity</link> can generate problems when the table is filled with data. For example, renaming a field is a simple task, but splitting the <replaceable>Address</replaceable> field into separate fields requires careful and tedious work.
+<para>Database design needs careful planning. Note that <replaceable>Persons</replaceable> table redesign proposed in section <link linkend="data-integrity-and-validity">Data integrity and validity</link> can generate problems when the table is filled with data. For example, renaming a field is a simple task, but splitting the <replaceable>Address</replaceable> field into separate fields requires careful and tedious work.
 </para>
 <para>To avoid such situations, rethink your database project before you create it in your computer, and before you and others will start to use it. Thus, by investing some time initially, you will most probably save your time on everyday use.
 </para>
@@ -1800,7 +1795,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 <listitem><para><ulink url="http://msdn.microsoft.com/vfoxpro/">FoxPro</ulink> - an application similar to DBase (early 90s). After being taken over by Microsoft, graphic user interfaces were introduced and therefore it is used for creating databases on PCs. This product is still offered, though seems a bit obsolete.</para></listitem>
 <listitem><para><ulink url="http://office.microsoft.com/access/">Microsoft Access</ulink> - an application for databases (data and graphic interface design) with many simplifications, therefore suitable for beginners, designed in the late 80s, based on 16-Bit Architecture. This product is offered and widely used till today, especially by small companies, where efficiency and multiuser requirements are not very demanding.</para></listitem>
 <listitem><para><ulink url="http://www.filemaker.com">FileMaker</ulink> - popular application similar to MS Access in simplicity, operating on Windows and Macintosh platforms, offered since 1985.</para></listitem>
-<listitem><para><ulink url="http://www.calligra-suite.org/kexi">Kexi</ulink> - a multiplatform application (&UNIX;/&Linux;, Windows, &MacOS; X) designed in 2003, developed according to OpenSource principles, part of the global K Desktop Environment project, &ie; graphic environment for &UNIX;/&Linux; systems. A significant contributor to Kexi's development is the OpenOffice Poland company.</para></listitem>
+<listitem><para><ulink url="http://www.calligra-suite.org/kexi">Kexi</ulink> - a multiplatform application (&UNIX;/&Linux;, Windows, &MacOS; X) designed in 2003, developed according to OpenSource principles, part of the global KDE community, that among other things provide a graphic environment for &UNIX;/&Linux; systems. A significant contributor to Kexi's development is the OpenOffice Poland company.</para></listitem>
 </itemizedlist>
 </sect1>
 </chapter>
@@ -1917,7 +1912,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </para>
 </sect1>
 </chapter>
-<chapter id="reserved-words-for-sql"><title>Reserved words for SQL</title> 
+<chapter id="reserved-words-for-sql"><title>Appendix C. Reserved words for SQL</title> 
 <para>The following lists contain words that are used internally by &kexi; when dealing with data sources.
 </para>
 <para><warning><para>When designing your database you should do your best to avoid using these reserved words because otherwise you might end up having problems with your database file or even corrupt it.</para></warning>
@@ -3125,8 +3120,84 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </para>
 </sect1>
 </chapter>
+<chapter id="supported-file-formats"><title>Appendix D. Supported File Formats</title> 
+<sect1 id="comma-separated-values-format-csv"><title>Comma-separated values format (CSV)</title> 
+<para>&kexi; is capable of importing and exporting data from/to a variety of Comma-separated values formats (CSV files). Most spreadsheet and database applications can import and export in this format, making this an appropriate format to migrate textual data between different applications.
+</para>
+<para>&kexi; also supports a number of options that can be configured before performing import:
+</para>
+<itemizedlist>
+<listitem><para>data type for each column,</para></listitem>
+<listitem><para>other field delimiters such as tabs,</para></listitem>
+<listitem><para>different text quotes,</para></listitem>
+<listitem><para>given number of records can be skipped if needed,</para></listitem>
+<listitem><para>duplicated delimiters can be skipped,</para></listitem>
+<listitem><para>values from the first row can be used to set column names,</para></listitem>
+<listitem><para>text encoding (UTF-8 is the default),</para></listitem>
+<listitem><para>date format (defined by the operating system is the default),</para></listitem>
+<listitem><para>stripping leading and trailing blanks off of the text values.</para></listitem>
+</itemizedlist>
+<para>On importing &kexi; shows preview of imported data. Most suitable set of options is auto-detected by &kexi; based on provided CSV file.
+</para>
+</sect1>
+<sect1 id="microsoft-access-mdb-file-format"><title>Microsoft Access (MDB) file format</title> 
+<sect2 id="overview"><title>Overview</title> 
+<para>Support for importing <guilabel>Microsoft Access</guilabel> databases (2003 or older) is built into &kexi;. <guilabel>Access</guilabel> databases can be <emphasis>imported</emphasis> into a &kexi; database only. It cannot be used to edit the database, nor to export to an <guilabel>Access</guilabel> database. However, it should also be able to import databases created by other applications that use the JET database engine. Importing <filename>.accdb</filename> databases introduced in MS <guilabel>Access</guilabel> 2007 are not currently supported.
+</para>
+<para>To import a database:
+</para>
+<orderedlist>
+<listitem><para>In &kexi; menu select <guilabel>Import, Export or Send..</guilabel> command.</para></listitem>
+<listitem><para>Click <guilabel>Import Database</guilabel> button.</para></listitem>
+<listitem><para>Use the import wizard by selecting desired .mdb file.</para></listitem>
+</orderedlist>
+</sect2>
+<sect2 id="capabilities"><title>Capabilities</title> 
+<para>The import function has successfully been used to import <emphasis>Northwind</emphasis> database well known to MS <guilabel>Access</guilabel> users. Many other <guilabel>Access</guilabel> template databases can be also imported.
+</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kexi_northwind.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</sect2>
+<sect2 id="supported-features"><title>Supported features</title> 
+<para>Importing the following field types has been tested, and generally works well:
+</para>
+<itemizedlist>
+<listitem><para>Text fields</para></listitem>
+<listitem><para>Memo fields</para></listitem>
+<listitem><para>Date fields</para></listitem>
+<listitem><para>Numeric values</para></listitem>
+</itemizedlist>
+</sect2>
+<sect2 id="unsupported-features"><title>Unsupported features</title> 
+<para>Currently, only tables are imported. During import &kexi; skips the following objects:
+</para>
+<itemizedlist>
+<listitem><para>Queries</para></listitem>
+<listitem><para>Forms</para></listitem>
+<listitem><para>Scripts</para></listitem>
+<listitem><para>Reports</para></listitem>
+</itemizedlist>
+<para>The following are untested:
+</para>
+<itemizedlist>
+<listitem><para>Importing binary objects</para></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+</chapter>
 <chapter id="credits-and-license"><title>Credits and License</title> 
-<para>&kexi; Copyright 2002-2011 The Kexi Team
+<para>&kexi; Copyright 2002-2012 The Kexi Team
 </para>
 <para>Kexi Developers:
 </para>
@@ -3151,7 +3222,7 @@ white cross at the right in the <guilabel>Widget's data source</guilabel> box. S
 </para>
 
 <!--userbase-content-->
-<!-- TRANS:CREDIT_FOR_TRANSLATORS -->      
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->  
 &underFDL;
 </chapter>
 &documentation.index;

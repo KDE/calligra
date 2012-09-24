@@ -169,6 +169,7 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.5.3 ~~~~~~~~~~~~~~~~
 
+2012-09-11
 Query Designer
 *Fix: Missing "*" (All Columns) item in Query Designer, it was present in Kexi 2.2 and ealier.
 **regression introduced in commit 414b0464208001

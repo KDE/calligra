@@ -43,6 +43,7 @@ public:
     virtual QStringList supportedMimetypes();
     virtual QString documentTypeName();
     Q_INVOKABLE int sheetCount() const;
+    virtual KoZoomMode::Mode preferredZoomMode() const;
 
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;

@@ -53,7 +53,7 @@ Item
                 width: height
                 visible: editButton.checked
 
-                onClicked: documentController.documentHandler().copy()
+                onClicked: documentController.documentHandler.copy()
             }
         }
     }

@@ -30,37 +30,117 @@ Item {
 
     CADocumentController {
         id: docDocumentController
-        canvasController: canvas
+        canvasController: theCanvasController
         onDocumentOpened: {
             docRootRect.documentLoaded();
             docToolbars.initToolbars();
+            theCanvasController.updateFlickableDirection()
         }
     }
 
-    CanvasController {
-        id: canvas
-        anchors.fill: parent
-
-        cameraX: docFlickable.contentX
-        cameraY: docFlickable.contentY
-
-        Flickable {
-            id: docFlickable
-            anchors.fill: parent
-            z: 1
-
-            contentWidth: canvas.docWidth; contentHeight: canvas.docHeight;
-
-            MouseArea {
-                anchors.fill: parent
-                z: 1
-
-                onClicked: docToolbars.toggle()
+    Image {
+        id: previousPageImage
+        anchors {
+            top: parent.top; bottom: parent.bottom
+            right: parent.left
+        }
+        source: docDocumentController.documentHandler.previousPageImage
+        states: [
+            State {
+                name: "visible"
+                AnchorChanges {
+                    target: previousPageImage
+                    anchors.right: undefined
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        ]
+        transitions: Transition {
+            from: ""
+            SequentialAnimation {
+                AnchorAnimation { duration: 500 }
+                ScriptAction { script: theCanvasController.gotoPreviousPage() }
+                ScriptAction { script: docRootRect.restoreCanvasControllerToCenter() }
             }
         }
+    }
 
-        onCameraXChanged: if (docFlickable.contentX != cameraX) docFlickable.contentX = cameraX
-        onCameraYChanged: if (docFlickable.contentY != cameraY) docFlickable.contentY = cameraY
+    CanvasContainer {
+        id: theCanvasController
+        anchors {
+            top: parent.top; right: parent.right
+            bottom: parent.bottom; left: parent.left;
+        }
+
+        documentController: docDocumentController
+
+        onNeedToolbars: docToolbars.toggle()
+        onFlickedToRight: { updateImages(); state = "movedToRight" }
+        onFlickedToLeft: { updateImages(); state = "movedToLeft" }
+
+        states: [
+            State {
+                name: "movedToLeft"
+                AnchorChanges {
+                    target: theCanvasController
+                    anchors.left: undefined
+                    anchors.right: parent.left
+                }
+                PropertyChanges { target: nextPageImage; state: "visible" }
+            },
+            State {
+                name: "movedToRight"
+                AnchorChanges {
+                    target: theCanvasController
+                    anchors.right: undefined
+                    anchors.left: parent.right
+                }
+                PropertyChanges { target: previousPageImage; state: "visible" }
+            }
+        ]
+
+        onStateChanged: if (state == "") {
+            nextPageImage.state = ""
+            previousPageImage.state = ""
+        }
+
+        transitions: Transition {
+            from: ""
+            AnchorAnimation { duration: 500 }
+        }
+
+        function updateImages()
+        {
+            previousPageImage.width = caCanvasItem.width
+            nextPageImage.width = caCanvasItem.width
+        }
+    }
+
+    Image {
+        id: nextPageImage
+        anchors {
+            top: parent.top; bottom: parent.bottom
+            left: parent.right
+        }
+        source: docDocumentController.documentHandler.nextPageImage
+        states: [
+            State {
+                name: "visible"
+                AnchorChanges {
+                    target: nextPageImage
+                    anchors.left: undefined
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        ]
+        transitions: Transition {
+            from: ""
+            SequentialAnimation {
+                AnchorAnimation { duration: 500 }
+                ScriptAction { script: theCanvasController.gotoNextPage() }
+                ScriptAction { script: docRootRect.restoreCanvasControllerToCenter() }
+            }
+        }
     }
 
     Toolbars {
@@ -77,6 +157,10 @@ Item {
     }
 
     function toggleEditing() {
-        docFlickable.visible = docFlickable.visible ? false : true
+        theCanvasController.toggleEditing()
+    }
+
+    function restoreCanvasControllerToCenter() {
+        theCanvasController.state = ""
     }
 }
