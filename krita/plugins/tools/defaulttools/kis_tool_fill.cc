@@ -161,10 +161,14 @@ bool KisToolFill::flood(int startX, int startY)
         fillPainter.setWidth(currentImage()->width());
         fillPainter.setHeight(currentImage()->height());
 
+        currentImage()->lock();
+        currentImage()->refreshGraph();
+        currentImage()->unlock();
+
         if (m_usePattern)
-            fillPainter.fillPattern(startX, startY, currentImage()->mergedImage());
+            fillPainter.fillPattern(startX, startY, currentImage()->projection());
         else
-            fillPainter.fillColor(startX, startY, currentImage()->mergedImage());
+            fillPainter.fillColor(startX, startY, currentImage()->projection());
 
         fillPainter.endTransaction(image()->undoAdapter());
         dirty = fillPainter.takeDirtyRegion();
