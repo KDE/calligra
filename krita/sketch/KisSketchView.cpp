@@ -237,6 +237,8 @@ void KisSketchView::createDocument()
 
     }
 
+    d->doc->setSaveInBatchMode(true);
+
     KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
 
     d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
