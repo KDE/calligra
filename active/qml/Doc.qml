@@ -157,7 +157,7 @@ Item {
     }
 
     function toggleEditing() {
-        canvasItem.editable = !canvasItem.editable
+        theCanvasController.toggleEditing()
     }
 
     function restoreCanvasControllerToCenter() {

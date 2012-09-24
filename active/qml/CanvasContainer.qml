@@ -107,4 +107,8 @@ CanvasController {
                 docFlickable.flickableDirection = Flickable.HorizontalAndVerticalFlick
         }
     }
+
+    function toggleEditing() {
+        canvasItem.editable = !canvasItem.editable
+    }
 }
