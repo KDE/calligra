@@ -45,6 +45,7 @@ public:
 
 public Q_SLOTS:
     void resizeImpl();
+    void stopRendering();
 
 Q_SIGNALS:
     void renderFinished();

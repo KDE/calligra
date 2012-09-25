@@ -60,9 +60,11 @@ KisSketchCanvas::KisSketchCanvas(KisCanvas2* canvas, KisCoordinatesConverter* co
 
 KisSketchCanvas::~KisSketchCanvas()
 {
-    d->renderer->stop();
-    d->renderer->wait();
-    delete d->renderer;
+    if(d->renderer) {
+        d->renderer->stop();
+        d->renderer->wait();
+        delete d->renderer;
+    }
     delete d;
 }
 
@@ -116,5 +118,12 @@ void KisSketchCanvas::resizeImpl()
     }
 }
 
+void KisSketchCanvas::stopRendering()
+{
+    d->renderer->stop();
+    d->renderer->wait();
+    delete d->renderer;
+    d->renderer = 0;
+}
 
 #include "KisSketchCanvas.moc"
