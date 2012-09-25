@@ -119,7 +119,11 @@ Panel {
                 fullContentsItem.state = "secondTool";
                 changeTool(toolName);
                 eraserButton.visible = false;
-                topApplyButton.visible = true;
+                // Move tool doesn't have an apply function
+                if(toolName === "move")
+                    topApplyButton.visible = false;
+                else
+                    topApplyButton.visible = true;
             }
         },
         Item {
