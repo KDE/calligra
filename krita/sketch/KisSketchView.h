@@ -24,10 +24,9 @@
 class KisSketchView : public QDeclarativeItem
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* document READ doc)
     Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
-    Q_PROPERTY(QObject* settings READ settings WRITE setSettings)
     Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
+    Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
 
 public:
     KisSketchView(QDeclarativeItem* parent = 0);
@@ -36,32 +35,25 @@ public:
     QObject* doc() const;
     QObject* view() const;
     QString file() const;
+    bool isModified() const;
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
-
     virtual void componentComplete();
     virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
 
     void setFile(const QString &file);
 
 public Q_SLOTS:
-
-    /// XXX: add parameter options... Or how does QML interact with a class like this?
-    void createDocument();
-    void resetDocumentPosition();
-
     void undo();
     void redo();
 
-    QObject *settings();
-    void setSettings(QObject  *settings);
-
     void save();
-    void saveAs(const QString& fileName);
+    void saveAs(const QString& fileName, const QString& mimeType);
 
 Q_SIGNALS:
     void viewChanged();
     void fileChanged();
+    void modifiedChanged();
 
 protected:
     virtual bool sceneEvent(QEvent* event);
@@ -71,6 +63,7 @@ private:
     Private * const d;
 
     Q_PRIVATE_SLOT(d, void update())
+    Q_PRIVATE_SLOT(d, void resetDocumentPosition())
 };
 
 #endif // KRITA_SKETCH_CANVAS_H
