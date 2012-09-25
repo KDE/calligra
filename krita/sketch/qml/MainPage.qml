@@ -17,19 +17,16 @@
  */
 
 import QtQuick 1.1
-import org.krita.sketch 1.0 as Krita
+import org.krita.sketch 1.0
 import "components"
 import "panels"
 
 Page {
-    Krita.SketchView {
+    SketchView {
         id: sketchView;
-        //anchors.fill: parent;
+
         width: parent.width;
         height: parent.height;
-        file: Settings.currentFile;
-        settings: Settings;
-        Component.onCompleted: createDocument();
     }
 
     PanelBar { height: parent.height; width: parent.width; }
@@ -46,9 +43,13 @@ Page {
         anchors.left: parent.left;
         width: Constants.GridWidth * 4;
         height: parent.height;
+
+        onOpenClicked: pageStack.push(openImagePage);
     }
 
     MenuPanel {
+        id: menuPanel;
+
         anchors.bottom: parent.bottom;
 
         width: parent.width;
@@ -73,7 +74,11 @@ Page {
                     newPanel.collapsed = true;
                 }
                 case "save":
-                    sketchView.save();
+                    if(!Settings.temporaryFile) {
+                        sketchView.save();
+                    } else {
+                        pageStack.push( saveAsPage, { view: sketchView } );
+                    }
                 case "saveAs":
                     pageStack.push( saveAsPage, { view: sketchView } );
                 case "settings":
@@ -90,6 +95,25 @@ Page {
         }
     }
 
+    Connections {
+        target: Settings;
+
+        onCurrentFileChanged: {
+            if(sketchView.modified) {
+                //Show modified dialog
+            }
+
+            if(Settings.temporaryFile) {
+                Krita.ImageBuilder.discardImage(sketchView.file);
+            }
+            sketchView.file = Settings.currentFile;
+            menuPanel.collapsed = true;
+        }
+    }
+
+    onStatusChanged: if(status == 0) sketchView.file = Settings.currentFile;
+
+    Component { id: openImagePage; OpenImagePage { } }
     Component { id: sharePage; SharePage { } }
     Component { id: settingsPage; SettingsPage { } }
     Component { id: helpPage; HelpPage { } }
