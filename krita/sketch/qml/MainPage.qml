@@ -113,6 +113,27 @@ Page {
 
     onStatusChanged: if(status == 0) sketchView.file = Settings.currentFile;
 
+    Connections {
+        target: Krita.Window;
+
+        onCloseRequested: {
+            if(sketchView.modified) {
+                //Show modified dialog
+            }
+
+            if(Settings.temporaryFile) {
+                Krita.ImageBuilder.discardImage(Settings.currentFile);
+            }
+
+            Krita.Window.allowClose = true;
+            Krita.Window.closeWindow();
+        }
+    }
+
+    Component.onCompleted: {
+        Krita.Window.allowClose = false;
+    }
+
     Component { id: openImagePage; OpenImagePage { } }
     Component { id: sharePage; SharePage { } }
     Component { id: settingsPage; SettingsPage { } }
