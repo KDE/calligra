@@ -39,7 +39,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 option(GHNS "support Get Hot New Stuff" ON)
 option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
-option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+option(CREATIVEONLY "compile only Karbon and Krita" ON)
 option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
 
 IF (TINY)
