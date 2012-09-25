@@ -30,24 +30,7 @@
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
 
-#include "ui_wdg_tool_crop.h"
-
 class QRect;
-
-class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
-{
-    Q_OBJECT
-
-public:
-    WdgToolCrop(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-        boolHeight->setIcon(KIcon("height_icon"));
-        boolWidth->setIcon(KIcon("width_icon"));
-        boolRatio->setIcon(KIcon("ratio_icon"));
-        label_horizPos->setPixmap(KIcon("offset_horizontal").pixmap(16, 16));
-        label_vertiPos->setPixmap(KIcon("offset_vertical").pixmap(16, 16));
-    }
-};
 
 /**
  * Crop tool
@@ -60,9 +43,23 @@ class KisToolCrop : public KisTool
 {
 
     Q_OBJECT
+    Q_ENUMS(CropToolType);
+    Q_PROPERTY(CropToolType cropType READ cropType WRITE setCropType NOTIFY cropTypeChanged);
+    Q_PROPERTY(bool cropTypeSelectable READ cropTypeSelectable WRITE setCropTypeSelectable NOTIFY cropTypeSelectableChanged);
+    Q_PROPERTY(int cropX READ cropX WRITE setCropX NOTIFY cropXChanged);
+    Q_PROPERTY(int cropY READ cropY WRITE setCropY NOTIFY cropYChanged);
+    Q_PROPERTY(int cropWidth READ cropWidth WRITE setCropWidth NOTIFY cropWidthChanged);
+    Q_PROPERTY(bool forceWidth READ forceWidth WRITE setForceWidth NOTIFY forceWidthChanged);
+    Q_PROPERTY(int cropHeight READ cropHeight WRITE setCropHeight NOTIFY cropHeightChanged);
+    Q_PROPERTY(bool forceHeight READ forceHeight WRITE setForceHeight NOTIFY forceHeightCHanged);
+    Q_PROPERTY(double ratio READ ratio WRITE setRatio NOTIFY ratioChanged);
+    Q_PROPERTY(bool forceRatio READ forceRatio WRITE setForceRatio NOTIFY forceRatioChanged);
 
 public:
-
+    enum CropToolType {
+        ImageCropType,
+        LayerCropType
+    };
     KisToolCrop(KoCanvasBase * canvas);
     virtual ~KisToolCrop();
 
@@ -77,10 +74,47 @@ public:
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
+    CropToolType cropType() const;
+    bool cropTypeSelectable() const;
+    int cropX() const;
+    int cropY() const;
+    int cropWidth() const;
+    bool forceWidth() const;
+    int cropHeight() const;
+    bool forceHeight() const;
+    double ratio() const;
+    bool forceRatio() const;
+
+signals:
+    void cropTypeChanged();
+    void cropTypeSelectableChanged();
+    void cropXChanged();
+    void cropYChanged();
+    void cropWidthChanged();
+    void forceWidthChanged();
+    void cropHeightChanged();
+    void forceHeightCHanged();
+    void ratioChanged();
+    void forceRatioChanged();
+
 public slots:
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
+
+    void crop();
+
+    void setCropTypeLegacy(int cropType);
+    void setCropType(CropToolType cropType);
+    void setCropTypeSelectable(bool selectable);
+    void setCropX(int x);
+    void setCropY(int y);
+    void setCropWidth(int x);
+    void setForceWidth(bool force);
+    void setCropHeight(int y);
+    void setForceHeight(bool force);
+    void setRatio(double ratio);
+    void setForceRatio(bool force);
 
 private:
     QRectF boundingRect();
@@ -90,12 +124,7 @@ private:
     qint32 mouseOnHandle(const QPointF currentViewPoint);
     void setMoveResizeCursor(qint32 handle);
     void validateSelection(bool updateratio = true);
-    void setOptionWidgetX(qint32 x);
-    void setOptionWidgetY(qint32 y);
-    void setOptionWidgetWidth(qint32 x);
-    void setOptionWidgetHeight(qint32 y);
-    void setOptionWidgetRatio(double ratio);
-    void updateWidgetValues(bool updateratio = true);
+    void updateValues(bool updateratio = true);
     QRectF lowerRightHandleRect(QRectF cropBorderRect);
     QRectF upperRightHandleRect(QRectF cropBorderRect);
     QRectF lowerLeftHandleRect(QRectF cropBorderRect);
@@ -104,24 +133,25 @@ private:
     QRectF rightHandleRect(QRectF cropBorderRect);
     QRectF upperHandleRect(QRectF cropBorderRect);
     QRectF leftHandleRect(QRectF cropBorderRect);
-private slots:
-
-    void crop();
-    void setCropX(int x);
-    void setCropY(int y);
-    void setCropWidth(int x);
-    void setCropHeight(int y);
-    void setRatio(double ratio);
 
 private:
     QRect m_rectCrop; // Is the coordinate of the region to crop.
     QPoint m_dragStart;
 
-    WdgToolCrop* m_optWidget;
-
     qint32 m_handleSize;
     bool m_haveCropSelection;
     qint32 m_mouseOnHandleType;
+
+    CropToolType m_cropType;
+    bool m_cropTypeSelectable;
+    int m_cropX;
+    int m_cropY;
+    int m_cropWidth;
+    bool m_forceWidth;
+    int m_cropHeight;
+    bool m_forceHeight;
+    double m_ratio;
+    bool m_forceRatio;
 
     enum handleType {
         None = 0,
