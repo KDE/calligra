@@ -202,7 +202,7 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
     }
 }
 
-QPixmap KWDocument::generatePreview(const QSize &size)
+QPixmap KWDocument::generatePreview(const QSize &/*size*/)
 {
     // use first page as preview for all pages
     KWPage firstPage = pageManager()->begin();
