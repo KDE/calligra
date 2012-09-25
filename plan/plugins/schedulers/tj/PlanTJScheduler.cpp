@@ -285,17 +285,30 @@ AppointmentInterval PlanTJScheduler::fromTJInterval( const TJ::Interval &tji ) {
 }
 
 // static
-TJ::Interval PlanTJScheduler::toTJInterval( const QDateTime &start, const QDateTime &end ) {
-    TJ::Interval ti( start.toTime_t(), end.addSecs( - 1).toTime_t() );
+TJ::Interval PlanTJScheduler::toTJInterval( const QDateTime &start, const QDateTime &end, ulong granularity ) {
+    int secs = QTime( 0, 0, 0 ).secsTo( start.time() );
+    secs -= secs % granularity;
+    QDateTime s( start.date(), QTime( 0, 0, 0 ).addSecs( secs ) );
+    secs = QTime( 0, 0, 0 ).secsTo( end.time() );
+    secs -= secs % granularity;
+    QDateTime e( end.date(), QTime( 0, 0, 0 ).addSecs( secs ) );
+    TJ::Interval ti( s.toTime_t(), e.addSecs( -1 ).toTime_t() );
     return ti;
 }
 
 // static
-TJ::Interval PlanTJScheduler::toTJInterval( const QTime &start, const QTime &end ) {
-    time_t s = QTime( 0, 0, 0 ).secsTo( start );
-    time_t e = ( end == QTime( 0, 0, 0 ) ) ? 86399 : QTime( 0, 0, 0 ).secsTo( end );
+TJ::Interval PlanTJScheduler::toTJInterval( const QTime &start, const QTime &end, ulong granularity ) {
+    int secs = QTime( 0, 0, 0 ).secsTo( start );
+    time_t s =  secs - ( secs % granularity );
+    secs = ( end == QTime( 0, 0, 0 ) ) ? 86399 : QTime( 0, 0, 0 ).secsTo( end );
+    time_t e = secs - ( secs % granularity ) - 1;
     TJ::Interval ti( s, e );
     return ti;
+}
+
+ulong PlanTJScheduler::granularity() const
+{
+    return m_tjProject->getScheduleGranularity();
 }
 
 bool PlanTJScheduler::kplatoFromTJ()
@@ -510,24 +523,24 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
     }
     foreach ( CalendarDay *day, lst ) {
         if ( day->state() == CalendarDay::NonWorking ) {
-            res->addVacation( new TJ::Interval( toTJInterval( QDateTime( day->date() ), QDateTime( day->date().addDays( 1 ) ) ) ) );
+            res->addVacation( new TJ::Interval( toTJInterval( QDateTime( day->date() ), QDateTime( day->date().addDays( 1 ) ), granularity() ) ) );
         } else if ( day->state() == CalendarDay::Working ) {
             TJ::Shift *shift = new TJ::Shift( m_tjProject, r->id() + day->date().toString( Qt::ISODate ), r->name(), 0, QString(), 0 );
             foreach ( TimeInterval *ti, day->timeIntervals() ) {
                 QList<TJ::Interval*> ivs;
-                ivs << new TJ::Interval( toTJInterval( ti->startTime(), ti->endTime() ) );
+                ivs << new TJ::Interval( toTJInterval( ti->startTime(), ti->endTime(), granularity() ) );
                 shift->setWorkingHours( day->date().dayOfWeek() - 1, ivs );
             }
-            TJ::Interval period = toTJInterval( day->start(), day->end() );
+            TJ::Interval period = toTJInterval( day->start(), day->end(), granularity() );
             TJ::ShiftSelection *sl = new TJ::ShiftSelection( period, shift );
             res->addShift( sl );
         }
     }
     if ( m_project->startTime() < r->availableFrom() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( m_project->startTime(), r->availableFrom() ) ) );
+        res->addVacation( new TJ::Interval( toTJInterval( m_project->startTime(), r->availableFrom(), granularity() ) ) );
     }
     if ( m_project->endTime() > r->availableUntil() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->startTime() ) ) );
+        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->startTime(), granularity() ) ) );
     }
     m_resourcemap[res] = r;
 //     if ( locale() ) { logDebug( m_project, 0, "Added resource: " + r->name() ); }
@@ -668,12 +681,22 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
             logDebug( task, 0, QString( "FNL: set specified end: %1").arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) ) );
             break;
         }
-        case Node::FixedInterval:
+        case Node::FixedInterval: {
             job->setPriority( 700 );
-            job->setSpecifiedStart( 0, task->constraintStartTime().toTime_t() );
-            job->setSpecifiedEnd( 0, task->constraintEndTime().toTime_t() - 1 );
-            logDebug( task, 0, QString( "FI: set specified: %1 - %2").arg( TJ::time2ISO( task->constraintStartTime().toTime_t() ) ).arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) ) );
+            TJ::Interval i( toTJInterval( task->constraintStartTime(), task->constraintEndTime(), granularity() ) );
+            job->setSpecifiedPeriod( 0, i );
+            // estimate not allowed
+            job->setDuration( 0, 0.0 );
+            job->setLength( 0, 0.0 );
+            job->setEffort( 0, 0.0 );
+            logDebug( task, 0, QString( "FI: set specified: %1 - %2 -> %3 - %4 (%5)")
+                      .arg( TJ::time2ISO( task->constraintStartTime().toTime_t() ) )
+                      .arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) )
+                      .arg( TJ::time2ISO( i.getStart() ) )
+                      .arg( TJ::time2ISO( i.getEnd() ) )
+                      .arg( granularity() ) );
             break;
+        }
         default:
             if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "Unhandled time constraint type" ) );
             break;
@@ -697,23 +720,23 @@ void PlanTJScheduler::addRequest( TJ::Task *job, Task *task )
         job->setDuration( 0, 0.0 );
         return;
     }
-    if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() == 0 ) {
-        job->setDuration( 0, task->estimate()->value( Estimate::Use_Expected, m_usePert ).toDouble( Duration::Unit_d ) );
-        return;
-    }
-    if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() != 0 ) {
-        job->setLength( 0, task->estimate()->value( Estimate::Use_Expected, m_usePert ).toDouble( Duration::Unit_d ) );
-        return;
-    }
-    if ( task->constraint() == Node::FixedInterval ) {
-        job->setSpecifiedPeriod( 0, toTJInterval( task->constraintStartTime(), task->constraintEndTime() ) );
-    }
-    if ( m_recalculate && task->completion().isStarted() ) {
-        job->setEffort( 0, task->completion().remainingEffort().toDouble( Duration::Unit_d ) );
-    } else {
-        Estimate *estimate = task->estimate();
-        double e = estimate->scale( estimate->value( Estimate::Use_Expected, m_usePert ), Duration::Unit_d, estimate->scales() );
-        job->setEffort( 0, e );
+    // Note: FI tasks can never have an estimate set (duration, length or effort)
+    if ( task->constraint() != Node::FixedInterval ) {
+        if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() == 0 ) {
+            job->setDuration( 0, task->estimate()->value( Estimate::Use_Expected, m_usePert ).toDouble( Duration::Unit_d ) );
+            return;
+        }
+        if ( task->estimate()->type() == Estimate::Type_Duration && task->estimate()->calendar() != 0 ) {
+            job->setLength( 0, task->estimate()->value( Estimate::Use_Expected, m_usePert ).toDouble( Duration::Unit_d ) );
+            return;
+        }
+        if ( m_recalculate && task->completion().isStarted() ) {
+            job->setEffort( 0, task->completion().remainingEffort().toDouble( Duration::Unit_d ) );
+        } else {
+            Estimate *estimate = task->estimate();
+            double e = estimate->scale( estimate->value( Estimate::Use_Expected, m_usePert ), Duration::Unit_d, estimate->scales() );
+            job->setEffort( 0, e );
+        }
     }
     if ( task->requests().isEmpty() ) {
         return;

@@ -111,8 +111,10 @@ protected:
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
     static DateTime fromTime_t( time_t );
     AppointmentInterval fromTJInterval( const TJ::Interval &tji );
-    static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end );
-    static TJ::Interval toTJInterval( const QTime &start, const QTime &end );
+    static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end, ulong granularity );
+    static TJ::Interval toTJInterval( const QTime &start, const QTime &end, ulong granularity );
+
+    ulong granularity() const;
 
 private:
     KLocale *locale() const;
