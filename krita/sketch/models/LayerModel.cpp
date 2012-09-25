@@ -64,7 +64,7 @@ public:
         static int count = 0;
         return count++;
     }
-    
+
     static QStringList layerClassNames()
     {
         QStringList list;
@@ -123,19 +123,19 @@ LayerModel::LayerModel(QObject* parent)
     roles[NextItemDepthRole] = "nextItemDepth";
     setRoleNames(roles);
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
             this, SLOT(source_rowsAboutToBeInserted(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsInserted(QModelIndex, int, int)),
             this, SLOT(source_rowsInserted(QModelIndex, int, int)));
 
-    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)),
             this, SLOT(source_rowsAboutToBeRemoved(QModelIndex, int, int)));
-    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex, int, int)), 
+    connect(d->nodeModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
             this, SLOT(source_rowsRemoved(QModelIndex, int, int)));
 
-    connect(d->nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
+    connect(d->nodeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             this, SLOT(source_dataChanged(QModelIndex,QModelIndex)));
-    connect(d->nodeModel, SIGNAL(modelReset()), 
+    connect(d->nodeModel, SIGNAL(modelReset()),
             this, SLOT(source_modelReset()));
 
     connect(d->nodeModel, SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
@@ -171,6 +171,7 @@ void LayerModel::setView(QObject *newView)
         d->canvas = 0;
         d->image = 0;
         d->nodeManager = 0;
+        d->activeNode.clear();
         return;
     }
 
@@ -223,13 +224,13 @@ void LayerModel::setEngine(QObject* newEngine)
 
 void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
 {
-    if (d->activeNode)
+    if (!d->activeNode.isNull())
     {
         QModelIndex oldIndex = d->nodeModel->indexFromNode(d->activeNode);
         source_dataChanged(oldIndex, oldIndex);
     }
     d->activeNode = newActiveNode;
-    if (d->activeNode)
+    if (!d->activeNode.isNull())
     {
         QModelIndex oldIndex = d->nodeModel->indexFromNode(d->activeNode);
         source_dataChanged(oldIndex, oldIndex);
@@ -399,7 +400,7 @@ void LayerModel::source_rowsAboutToBeInserted(QModelIndex /*p*/, int /*from*/, i
 {
 //     if ( !p.isValid() )
 //         return;
-// 
+//
 //     int f = d->proxyRowFromSourceIndex(p);
 //     int t = f + (from-to);
 //     beginInsertRows(QModelIndex(), f, t);
@@ -410,7 +411,7 @@ void LayerModel::source_rowsInserted(QModelIndex /*p*/, int, int)
 {
 //     if ( !p.isValid() )
 //         return;
-// 
+//
 //     endInsertRows();
     d->rebuildLayerList();
     endResetModel();
@@ -447,7 +448,7 @@ void LayerModel::source_modelReset()
 
 void LayerModel::notifyImageDeleted()
 {
-    setView(d->view);
+    //setView(0);
 }
 
 #include "LayerModel.moc"
