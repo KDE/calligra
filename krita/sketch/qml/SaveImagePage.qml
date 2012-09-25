@@ -113,7 +113,7 @@ Page {
             }
 
             TextField {
-                id: fileName;
+                id: fileNameField;
 
                 height: parent.height;
                 width: Constants.GridWidth * 7.75;
@@ -145,11 +145,11 @@ Page {
                     expandToTop: true;
 
                     model: ListModel {
-                        ListElement { text: "Krita Image"; type: "kra"; }
-                        ListElement { text: "OpenRaster Image"; type: "ora"; }
-                        ListElement { text: "PNG Image"; type: "png"; }
-                        ListElement { text: "BMP Image"; type: "bmp"; }
-                        ListElement { text: "JPEG Image"; type: "jpeg"; }
+                        ListElement { text: "Krita Image"; type: "kra"; mime: "application/x-krita"; }
+                        ListElement { text: "OpenRaster Image"; type: "ora"; mime: "image/openraster"; }
+                        ListElement { text: "PNG Image"; type: "png"; mime: "image/png"; }
+                        ListElement { text: "BMP Image"; type: "bmp"; mime: "image/bmp"; }
+                        ListElement { text: "JPEG Image"; type: "jpeg"; mime: "image/jpeg"; }
                     }
                 }
             }
@@ -162,8 +162,8 @@ Page {
 
                 onClicked: {
                     if( fileName.text != "" ) {
-                        var filePath = "%1/%2.%3".arg(view.model.path).arg(fileName.text).arg(fileType.model.get(fileType.currentIndex).type);
-                        base.view.saveAs( filePath );
+                        var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
+                        base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
                         pageStack.pop();
                     }
                 }
@@ -190,6 +190,8 @@ Page {
             onClicked: {
                 if( model.fileType == "inode/directory" ) {
                     GridView.view.model.path = model.path;
+                } else {
+                    fileNameField.text = model.fileName.substring(0, model.fileName.lastIndexOf('.'));
                 }
             }
 
