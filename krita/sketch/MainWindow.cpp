@@ -67,14 +67,20 @@
 #include "Settings.h"
 #include "SimpleTouchArea.h"
 #include "ToolManager.h"
+#include "ImageBuilder.h"
+#include "KritaNamespace.h"
 
 class MainWindow::Private
 {
 public:
+    Private() : allowClose(true) { }
+
     QDeclarativeView* view;
     Constants* constants;
     QObject* settings;
     RecentFileManager *recentFileManager;
+
+    bool allowClose;
 };
 
 MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags flags )
@@ -114,6 +120,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->view->engine()->addImageProvider(QLatin1String("color"), new ColorImageProvider);
     d->view->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
     d->view->engine()->addImageProvider("icon", new IconImageProvider);
+
+    KritaNamespace *nameSpace = new KritaNamespace(this);
+    d->view->rootContext()->setContextProperty("Krita", nameSpace);
 
     d->view->rootContext()->setContextProperty("Constants", d->constants);
     d->view->rootContext()->setContextProperty("Settings", d->settings);
@@ -155,11 +164,24 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     //         }
     //     }
 
-
-
-    //    d->view->setViewport(kisView->canvas());
-
     setCentralWidget( d->view );
+}
+
+bool MainWindow::allowClose() const
+{
+    return d->allowClose;
+}
+
+void MainWindow::setAllowClose(bool allow)
+{
+    d->allowClose = allow;
+}
+
+void MainWindow::closeWindow()
+{
+    //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
+    //So instead just completely quit the application, since we are using a single window anyway.
+    QApplication::exit();
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
@@ -167,6 +189,16 @@ void MainWindow::resizeEvent(QResizeEvent* event)
     d->constants->setGridWidth( event->size().width() / d->constants->gridColumns() );
     d->constants->setGridHeight( event->size().height() / d->constants->gridRows() );
     QWidget::resizeEvent(event);
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    if(!d->allowClose) {
+        event->ignore();
+        emit closeRequested();
+    } else {
+        event->accept();
+    }
 }
 
 MainWindow::~MainWindow()

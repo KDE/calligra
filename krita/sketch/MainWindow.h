@@ -22,15 +22,26 @@
 
 #include <QMainWindow>
 
-
 class MainWindow : public QMainWindow
 {
 Q_OBJECT
+
+Q_PROPERTY(bool allowClose READ allowClose WRITE setAllowClose)
 public:
     explicit MainWindow(QStringList fileNames, QWidget* parent = 0, Qt::WindowFlags flags = 0);
     virtual ~MainWindow();
 
+    bool allowClose() const;
+    void setAllowClose(bool allow);
+
     virtual void resizeEvent( QResizeEvent* event );
+    virtual void closeEvent(QCloseEvent* event);
+
+public Q_SLOTS:
+    void closeWindow();
+
+Q_SIGNALS:
+    void closeRequested();
 
 private:
     class Private;
