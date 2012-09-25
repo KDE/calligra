@@ -21,8 +21,7 @@ import "../../components"
 
 Item {
     id: base
-    Label {
-        width: parent.width;
-        text: "Crop tool options"
+    property bool fullView: true;
+    ExpandingListView {
     }
 }
