@@ -667,6 +667,13 @@ public:
 
     QMap< int, QString > phaseNames() const;
 
+    /// Return a list of the supported granularities of the current scheduler
+    QList<long unsigned int> supportedGranularities() const;
+    /// Return current index of supported granularities of the selected scheduler
+    int granularity() const;
+    /// Set current index of supported granularities of the selected scheduler
+    void setGranularity( int duration );
+
 public slots:
     /// Set maximum progress. Emits signal maxProgressChanged
     void setMaxProgress( int value );

@@ -43,7 +43,8 @@ public:
 
 SchedulerPlugin::SchedulerPlugin(QObject *parent)
     : QObject(parent),
-    d( new SchedulerPlugin::Private() )
+      d( new SchedulerPlugin::Private() ),
+      m_granularity( 0 )
 {
     // register Schedule::Log so it can be used in queued connections
     qRegisterMetaType<Schedule::Log>("Schedule::Log");
@@ -121,6 +122,21 @@ void SchedulerPlugin::haltCalculation( SchedulerThread *job )
         kDebug(planDbg())<<"SchedulerPlugin::haltCalculation: remove"<<job;
         m_jobs.removeAt( m_jobs.indexOf( job ) );
     }
+}
+
+QList<long unsigned int> SchedulerPlugin::granularities() const
+{
+    return m_granularities;
+}
+
+int SchedulerPlugin::granularity() const
+{
+    return m_granularity;
+}
+
+void SchedulerPlugin::setGranularity( int index )
+{
+    m_granularity = qMin( index, m_granularities.count() - 1 );
 }
 
 void SchedulerPlugin::slotSyncData()
