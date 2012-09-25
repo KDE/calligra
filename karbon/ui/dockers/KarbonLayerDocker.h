@@ -23,6 +23,7 @@
 #include <QTimer>
 #include <KoDockFactoryBase.h>
 #include <KoDocumentSectionView.h>
+#include <KoCanvasObserverBase.h>
 
 class KoShapeBasedDocumentBase;
 class KoShape;
@@ -50,7 +51,7 @@ public:
     }
 };
 
-class KarbonLayerDocker : public QDockWidget
+class KarbonLayerDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
 
@@ -59,7 +60,8 @@ public:
     virtual ~KarbonLayerDocker();
 public slots:
     void updateView();
-    void setPart(KParts::Part * part);
+    virtual void setCanvas(KoCanvasBase* canvas);
+    virtual void unsetCanvas();
 private slots:
     void slotButtonClicked(int buttonId);
     void addLayer();
@@ -79,7 +81,7 @@ private:
     void setViewMode(KoDocumentSectionView::DisplayMode mode);
     void selectLayers(QList<KoShapeLayer*> layers);
 
-    KarbonKoDocument * m_part;
+    KarbonKoDocument * m_doc;
     KarbonLayerModel * m_model;
     KarbonLayerSortingModel * m_sortModel;
     KoDocumentSectionView * m_layerView;

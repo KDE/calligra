@@ -225,7 +225,6 @@ void KisQPainterCanvas::resizeEvent(QResizeEvent *e)
     if(canvas()->image() && canvas()->image()->isCanvasInfinite())
         coordinatesConverter()->setCanvasWidgetSize(coordinatesConverter()->imageRectInWidgetPixels().size().expandedTo(size).toSize());
     m_d->prescaledProjection->notifyCanvasSizeChanged(size);
-    emit needAdjustOrigin();
 }
 
 void KisQPainterCanvas::slotConfigChanged()

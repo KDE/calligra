@@ -56,6 +56,11 @@ CASpreadsheetHandler::CASpreadsheetHandler (CADocumentController* documentContro
 {
 }
 
+KoZoomMode::Mode CASpreadsheetHandler::preferredZoomMode() const
+{
+    return KoZoomMode::ZOOM_WIDTH;
+}
+
 CASpreadsheetHandler::~CASpreadsheetHandler()
 {
     delete d;
@@ -92,9 +97,7 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
 
     KoZoomHandler* zoomHandler = new KoZoomHandler();
     documentController()->canvasController()->setZoomHandler (zoomHandler);
-    KoZoomController* zoomController = new KoZoomController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()),
-            zoomHandler, part->actionCollection());
-    documentController()->canvasController()->setZoomController (zoomController);
+    KoZoomController* zoomController = documentController()->canvasController()->zoomController();
     zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, 1.0);
 
     documentController()->canvasController()->setCanvasMode (KoCanvasController::Spreadsheet);

@@ -21,6 +21,7 @@
 #define KEXIUTILS_UTILS_H
 
 #include "kexiutils_export.h"
+#include "kexi_global.h"
 
 #include <QPointer>
 #include <QObject>
@@ -304,10 +305,10 @@ KEXIUTILS_EXPORT void simpleDecrypt(QString& string);
 KEXIUTILS_EXPORT QWidget *createDebugWindow(QWidget *parent);
 
 //! Adds debug line for for KexiDB database
-KEXIUTILS_EXPORT void addKexiDBDebug(const QString& text);
+//KEXIUTILS_EXPORT void addKexiDBDebug(const QString& text);
 
 //! Adds debug line for for Table Designer (Alter Table actions)
-KEXIUTILS_EXPORT void addAlterTableActionDebug(const QString& text, int nestingLevel = 0);
+//KEXIUTILS_EXPORT void addAlterTableActionDebug(const QString& text, int nestingLevel = 0);
 
 //! Connects push button action to \a receiver and its \a slot. This allows to execute debug-related actions
 //! using buttons displayed in the debug window.

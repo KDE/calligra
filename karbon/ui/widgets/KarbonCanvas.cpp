@@ -374,6 +374,11 @@ const QPoint &KarbonCanvas::documentOffset() const
     return d->documentOffset;
 }
 
+KarbonKoDocument *KarbonCanvas::document() const
+{
+    return d->part;
+}
+
 void KarbonCanvas::enableOutlineMode(bool on)
 {
     if (on)

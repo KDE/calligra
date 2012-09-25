@@ -28,6 +28,7 @@ Item
 {
     id: root
     property QtObject documentController
+    visible: true
 
     onDocumentControllerChanged: {
       initializePageIcons();
@@ -38,7 +39,7 @@ Item
     }
 
     function initializePageIcons() {
-        for ( i=1; i <= root.documentController.documentHandler().totalPages; i++ ) {
+        for ( i=1; i <= root.documentController.documentHandler.totalPages; i++ ) {
               displayText = i;
               viewModel.append({"name": displayText});
         }
@@ -60,16 +61,26 @@ Item
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: root.documentController.documentHandler().gotoPage(index+1)
+                onClicked: {
+                     root.documentController.documentHandler.gotoPage(index+1)         
+                     view.currentIndex = index;
+                }
             }
         }
     }
 
     ListView {
+       id: view
        anchors.fill: parent
        model: viewModel
        delegate: customText
        focus: true
        spacing: 10
+       highlight: Rectangle {
+           radius: 10
+           color: "black"
+           opacity: 0.5
+       }
+       highlightFollowsCurrentItem: true
     }
 }

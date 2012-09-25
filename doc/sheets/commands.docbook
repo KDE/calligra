@@ -937,14 +937,21 @@ is protected.</action>
 </para></listitem>
 </varlistentry>
 -->
-  <!-- FIXME missing Execute Script File -->
+  
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Execute Script File...</guimenuitem>
+</menuchoice></term>
+<listitem><para>Execute the chosen external script in &sheets;. &sheets; supports scripting in JavaScript, Python and Ruby. Default examples of the scripts can be found in the <menuchoice><guimenu>Tools</guimenu><guisubmenu>Scripts</guisubmenu></menuchoice> submenu.</para></listitem>
+</varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
 <guisubmenu>Scripts</guisubmenu>
 </menuchoice></term>
-<listitem><para>Here you can execute the script <guilabel>Export to HTML File</guilabel> or start the <guilabel>Script Editor</guilabel>.
-</para></listitem>
+<listitem><para>Here you can execute the script to export or import data in various formats, save your &sheets; log into file, use <ulink url="https://live.gnome.org/Orca">Orca speech</ulink> for accessibility, debug Python and Ruby scripts or add functions to display stock or weather condition values. You can even use some <ulink url="http://www.r-project.org/">R functions</ulink> (<ulink url="http://rpy.sourceforge.net/rpy.html">RPy module</ulink> should be installed).</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -956,7 +963,8 @@ is protected.</action>
 </para></listitem>
 </varlistentry>
 
-</variablelist></para>
+  <!-- FIXME add Function Optimizer item when/if someone commits REVIEW: 106253 -->
+  </variablelist></para>
 </sect1>
 
 <sect1 id="settingsmenu">

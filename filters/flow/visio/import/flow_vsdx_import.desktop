@@ -1,12 +1,14 @@
 [Desktop Entry]
 Type=Service
 Name=Flow Visio Import Filter
+Name[ca]=Filtre d'exportació Visio del Flow
 Name[cs]=Importní filtr formátu Flow Visio
 Name[da]=Visio-importfilter til Flow
 Name[de]=Flow-Visio-Importfilter
 Name[el]=Φίλτρο εισαγωγής Flow Visio
 Name[es]=Filtro de Flow de importación de Visio
 Name[et]=Flow Visio impordifilter
+Name[fi]=Flow Visio -tuontisuodin
 Name[fr]=Filtre d'importation de Visio pour Flow
 Name[gl]=Filtro para Flow de importación de Visio
 Name[it]=Filtro di importazione Visio per Flow

@@ -353,6 +353,8 @@ void KexiWindow::removeView(Kexi::ViewMode mode)
     if (view)
         d->stack->removeWidget(view);
 
+    d->setIndexForView(mode, -1);
+
     d->openedViewModes |= mode;
     d->openedViewModes ^= mode;
 }
@@ -820,7 +822,8 @@ void KexiWindow::updateCaption()
 {
     if (!d->item || !d->part)
         return;
-    QString fullCapt(d->item->captionOrName());
+    //! @todo use d->item->captionOrName() if defined in settings
+    QString fullCapt(d->item->name());
     setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
 
@@ -1010,6 +1013,18 @@ void KexiWindow::sendAttachedStateToCurrentView()
     KexiView *v = selectedView();
     if (v)
         v->windowAttached();
+}
+
+bool KexiWindow::saveSettings()
+{
+    bool result = true;
+    for (int i = 0; i < d->stack->count(); ++i) {
+        KexiView *view = qobject_cast<KexiView*>(d->stack->widget(i));
+        if (!view->saveSettings()) {
+            result = false;
+        }
+    }
+    return result;
 }
 
 Kexi::ViewMode KexiWindow::creatingViewsMode() const

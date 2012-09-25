@@ -41,6 +41,7 @@ public:
     virtual bool openDocument (const QString& uri);
     virtual KoDocument* document();
     virtual QString documentTypeName();
+    virtual KoZoomMode::Mode preferredZoomMode() const;
 
     QString searchString() const;
     void setSearchString (const QString& searchString);
@@ -48,6 +49,7 @@ public:
     virtual QString bottomToolbarSource() const;
     virtual QString topToolbarSource() const;
     virtual QString leftToolbarSource() const;
+    virtual FlickModes flickMode() const;
 
     int totalPages() const;
 

@@ -134,12 +134,19 @@ public:
             , lyr(new QVBoxLayout(this)) {
         lyr->setContentsMargins(0, 0, 0, 0);
     }
+    ~KexiWindowContainer() {
+        //! @todo warning if saveSettings() failed?
+        if (window) {
+            window->saveSettings();
+            delete (KexiWindow*)window;
+        }
+    }
     void setWindow(KexiWindow* w) {
         window = w;
         if (w)
             lyr->addWidget(w);
     }
-    KexiWindow *window;
+    QPointer<KexiWindow> window;
 private:
     QVBoxLayout *lyr;
 };

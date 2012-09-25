@@ -48,3 +48,4 @@ KoToolBase* KWPageToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KWPageTool(canvas);
 }
+
