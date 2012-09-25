@@ -23,6 +23,8 @@ Item {
     id: base;
     property bool collapsed: true;
 
+    signal openClicked();
+
     DropShadow {
         id: panel;
 
@@ -75,7 +77,7 @@ Item {
                 width: parent.width;
                 height: Constants.GridHeight * 9;
 
-                onClicked: button == "open" ? pageStack.push( openImage ) : pageStack.push( main );
+                onOpenClicked: base.openClicked();
             }
         }
     }

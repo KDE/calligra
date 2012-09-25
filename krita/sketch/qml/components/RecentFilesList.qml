@@ -21,7 +21,7 @@ import org.krita.sketch 1.0
 
 Item {
     id: base;
-    signal clicked(string button);
+    signal openClicked();
 
     RecentImagesModel {
         id: recentImagesModel;
@@ -51,7 +51,6 @@ Item {
             onClicked: {
                 recentImagesModel.addRecent(model.url);
                 Settings.currentFile = model.url;
-                base.clicked("");
             }
         }
 
@@ -64,6 +63,6 @@ Item {
         title: "Open Image";
         image: "../images/svg/icon-fileopen-red.svg";
 
-        onClicked: base.clicked("open");
+        onClicked: base.openClicked();
     }
 }

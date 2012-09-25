@@ -166,7 +166,7 @@ Page {
             width: parent.width / 3 - 4;
             height: Constants.GridHeight * 9;
 
-            onClicked: button == "open" ? pageStack.push( openImage ) : pageStack.push( main );
+            onOpenClicked: pageStack.push( openImage );
         }
 
         Divider { height: Constants.GridHeight * 9; }
@@ -174,7 +174,6 @@ Page {
         NewImageList {
             width: parent.width / 3 - 8;
             height: Constants.GridHeight * 9;
-            onClicked: pageStack.push( main );
         }
 
         Divider { height: Constants.GridHeight * 9; }
@@ -182,6 +181,21 @@ Page {
         NewsList {
             width: parent.width / 3 - 4;
             height: Constants.GridHeight * 9;
+        }
+    }
+
+    QtObject {
+        id: d;
+
+        property bool mainPageActive: false;
+    }
+
+    Connections {
+        target: Settings;
+
+        onCurrentFileChanged: if(!d.mainPageActive) {
+            d.mainPageActive = true;
+            pageStack.push( main );
         }
     }
 

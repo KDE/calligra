@@ -23,6 +23,10 @@ import "components"
 Page {
     id: base;
 
+    Rectangle {
+        anchors.fill: parent;
+    }
+
     Header {
         id: header;
 
@@ -108,9 +112,10 @@ Page {
                 if( model.fileType == "inode/directory" ) {
                     GridView.view.model.path = model.path;
                 } else {
-                    Settings.currentFile = model.path;
+                    pageStack.pop();
+
                     RecentFileManager.addRecent( model.path );
-                    pageStack.push( main );
+                    Settings.currentFile = model.path;
                 }
             }
 
@@ -130,6 +135,4 @@ Page {
             }
         }
     }
-
-    Component { id: main; MainPage { } }
 }
