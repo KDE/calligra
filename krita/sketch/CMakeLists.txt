@@ -24,6 +24,8 @@ set(kritasketch_SRCS
     Settings.cpp
     SimpleTouchArea.cpp
     NetworkAccessManager.cpp
+    ImageBuilder.cpp
+    KritaNamespace.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
