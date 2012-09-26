@@ -22,6 +22,77 @@ import "../../components"
 Item {
     id: base
     property bool fullView: true;
+    function apply() {
+        toolManager.currentTool.crop();
+    }
     ExpandingListView {
+        id: cropTypeList;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        currentIndex: toolManager.currentTool.cropType !== undefined ? toolManager.currentTool.cropType : 0;
+        onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.cropType !== undefined) toolManager.currentTool.cropType = currentIndex;
+        model: ListModel {
+            ListElement {
+                text: "Layer";
+            }
+            ListElement {
+                text: "Image";
+            }
+        }
+    }
+    Column {
+        anchors {
+            top: cropTypeList.bottom;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        spacing: Constants.DefaultMargin;
+
+        RangeInput {
+            id: widthInput;
+            width: parent.width;
+            placeholder: "Width";
+            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
+            min: 0; max: 100000; decimals: 0;
+            value: toolManager.currentTool.cropWidth !== undefined ? toolManager.currentTool.cropWidth : 0;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropWidth = value;
+        }
+        RangeInput {
+            id: heightInput;
+            width: parent.width;
+            placeholder: "Height";
+            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
+            min: 0; max: 100000; decimals: 0;
+            value: toolManager.currentTool.cropHeight !== undefined ? toolManager.currentTool.cropHeight : 0;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropHeight = value;
+        }
+        RangeInput {
+            width: parent.width;
+            placeholder: "Ratio";
+            min: 0; max: 9999; decimals: 2;
+            value: toolManager.currentTool.ratio !== undefined ? toolManager.currentTool.ratio : 0;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.ratio = value;
+        }
+        RangeInput {
+            width: parent.width;
+            placeholder: "X";
+            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
+            min: 0; max: 100000; decimals: 0;
+            value: toolManager.currentTool.cropX !== undefined ? toolManager.currentTool.cropX : 0;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropX = value;
+        }
+        RangeInput {
+            width: parent.width;
+            placeholder: "Y";
+            //min: 0; max: sketchView.doc.image.width(); decimals: 0;
+            min: 0; max: 100000; decimals: 0;
+            value: toolManager.currentTool.cropY !== undefined ? toolManager.currentTool.cropY : 0;
+            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.cropY = value;
+        }
     }
 }
