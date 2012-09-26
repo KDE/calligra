@@ -80,9 +80,22 @@ Panel {
     }
 
     function changeTool(toolName) {
+        if(toolName === "paint" || toolName === "fill" || toolName === "gradient") {
+            eraserButton.visible = true;
+        }
+        else {
+            eraserButton.visible = false;
+        }
+        if(toolName === "transform" || toolName === "crop") {
+            topApplyButton.visible = true;
+        }
+        else {
+            // Move tool doesn't have an apply function
+            topApplyButton.visible = false;
+        }
+        toolManager.requestToolChange(toolNameToID(toolName));
         toolOptionsPeek.source = "toolconfigpages/" + toolName + ".qml";
         toolOptionsFull.source = "toolconfigpages/" + toolName + ".qml";
-        toolManager.requestToolChange(toolNameToID(toolName));
     }
 
     actions: [
@@ -100,8 +113,6 @@ Panel {
             onClicked: {
                 fullContentsItem.state = "";
                 changeTool(toolName);
-                eraserButton.visible = true;
-                topApplyButton.visible = false;
             }
         },
         Button {
@@ -118,12 +129,6 @@ Panel {
             onClicked: {
                 fullContentsItem.state = "secondTool";
                 changeTool(toolName);
-                eraserButton.visible = false;
-                // Move tool doesn't have an apply function
-                if(toolName === "move")
-                    topApplyButton.visible = false;
-                else
-                    topApplyButton.visible = true;
             }
         },
         Item {
