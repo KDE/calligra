@@ -316,14 +316,13 @@ void KisToolCrop::mouseMoveEvent(KoPointerEvent *event)
 void KisToolCrop::updateValues(bool updateratio)
 {
     QRect r = m_rectCrop.normalized();
-    qDebug() << r;
 
     setCropX(r.x());
     setCropY(r.y());
     setCropWidth(r.width());
     setCropHeight(r.height());
     if (updateratio && !m_forceRatio)
-        setRatio((double)r.width() / (double)r.height());
+        setRatio((double)r.width() / (double)r.height(), false);
 }
 
 void KisToolCrop::mouseReleaseEvent(KoPointerEvent *event)
@@ -585,7 +584,7 @@ void KisToolCrop::setCropWidth(int w)
     if (m_forceRatio) {
         m_rectCrop.setHeight((int)(w / m_ratio));
     } else {
-        setRatio((double)m_rectCrop.width() / (double)m_rectCrop.height());
+        setRatio((double)m_rectCrop.width() / (double)m_rectCrop.height(), false);
     }
 
     m_cropWidth = m_rectCrop.normalized().width();
@@ -632,7 +631,7 @@ void KisToolCrop::setCropHeight(int h)
     if (m_forceRatio) {
         m_rectCrop.setWidth((int)(h * m_ratio));
     } else {
-        setRatio((double)m_rectCrop.width() / (double)m_rectCrop.height());
+        setRatio((double)m_rectCrop.width() / (double)m_rectCrop.height(), false);
     }
 
     m_cropHeight = m_rectCrop.normalized().height();
@@ -663,10 +662,16 @@ bool KisToolCrop::forceHeight() const
     return m_forceHeight;
 }
 
-void KisToolCrop::setRatio(double ratio)
+void KisToolCrop::setRatio(double ratio, bool updateOthers)
 {
     if(ratio == m_ratio)
         return;
+
+    if(!updateOthers) {
+        m_ratio = ratio;
+        emit ratioChanged();
+        return;
+    }
 
     if (!(m_forceWidth && m_forceHeight)) {
         m_ratio = ratio;

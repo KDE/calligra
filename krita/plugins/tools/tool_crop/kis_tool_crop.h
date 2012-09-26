@@ -113,7 +113,7 @@ public slots:
     void setForceWidth(bool force);
     void setCropHeight(int y);
     void setForceHeight(bool force);
-    void setRatio(double ratio);
+    void setRatio(double ratio, bool updateOthers = true);
     void setForceRatio(bool force);
 
 private:
