@@ -55,13 +55,14 @@
 #define PROGRESS_MAX_VALUE 100
 
 
-PlanTJScheduler::PlanTJScheduler( Project *project, ScheduleManager *sm, QObject *parent )
+PlanTJScheduler::PlanTJScheduler( Project *project, ScheduleManager *sm, ulong granularity, QObject *parent )
     : SchedulerThread( project, sm, parent ),
     result( -1 ),
     m_schedule( 0 ),
     m_recalculate( false ),
     m_usePert( false ),
-    m_backward( false )
+    m_backward( false ),
+    m_granularity( granularity )
 {
     TJ::TJMH.reset();
     connect(&TJ::TJMH, SIGNAL(message(int, const QString&, TJ::CoreAttributes*)), this, SLOT(slotMessage(int, const QString&, TJ::CoreAttributes*)));
@@ -142,7 +143,7 @@ void PlanTJScheduler::run()
 
         m_schedule->setPhaseName( 0, i18nc( "@info/plain" , "Init" ) );
         if ( ! m_backward && locale() ) {
-            logDebug( m_project, 0, QString( "Schedule project using TJ Scheduler, starting at %1" ).arg( QDateTime::currentDateTime().toString() ), 0 );
+            logDebug( m_project, 0, QString( "Schedule project using TJ Scheduler, starting at %1, granularity %2" ).arg( QDateTime::currentDateTime().toString() ).arg( locale()->formatDuration( m_granularity ) ), 0 );
             if ( m_recalculate ) {
                 logInfo( m_project, 0, i18nc( "@info/plain" , "Re-calculate project from start time: %1", locale()->formatDateTime( m_project->constraintStartTime() ) ), 0 );
             } else {
@@ -151,7 +152,7 @@ void PlanTJScheduler::run()
             logInfo( m_project, 0, i18nc( "@info/plain" , "Project target finish time: %1", locale()->formatDateTime( m_project->constraintEndTime() ) ), 0 );
         }
         if ( m_backward && locale() ) {
-            logDebug( m_project, 0, QString( "Schedule project backward using TJ Scheduler, starting at %1" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ), 0 );
+            logDebug( m_project, 0, QString( "Schedule project backward using TJ Scheduler, starting at %1, granularity %2" ).arg( locale()->formatDateTime( QDateTime::currentDateTime() ) ).arg( locale()->formatDuration( m_granularity ) ), 0 );
             logInfo( m_project, 0, i18nc( "@info/plain" , "Schedule project from end time: %1", locale()->formatDateTime( m_project->constraintEndTime() ) ), 0 );
         }
 
@@ -209,7 +210,7 @@ bool PlanTJScheduler::solve()
         }
         return false;
     }
-    DebugCtrl.setDebugLevel(5);
+    DebugCtrl.setDebugLevel(0);
     DebugCtrl.setDebugMode(PSDEBUG+TSDEBUG);
 
     return m_tjProject->scheduleScenario( sc );
@@ -218,10 +219,10 @@ bool PlanTJScheduler::solve()
 bool PlanTJScheduler::kplatoToTJ()
 {
     m_tjProject = new TJ::Project();
+    m_tjProject->setScheduleGranularity( m_granularity / 1000 );
     m_tjProject->setNow( m_project->constraintStartTime().toTime_t() );
     m_tjProject->setStart( m_project->constraintStartTime().toTime_t() );
     m_tjProject->setEnd( m_project->constraintEndTime().toTime_t() );
-    m_tjProject->setScheduleGranularity( 300 ); //5 minutes
 
     addTasks();
     setConstraints();
@@ -306,7 +307,7 @@ TJ::Interval PlanTJScheduler::toTJInterval( const QTime &start, const QTime &end
     return ti;
 }
 
-ulong PlanTJScheduler::granularity() const
+ulong PlanTJScheduler::tjGranularity() const
 {
     return m_tjProject->getScheduleGranularity();
 }
@@ -523,24 +524,24 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
     }
     foreach ( CalendarDay *day, lst ) {
         if ( day->state() == CalendarDay::NonWorking ) {
-            res->addVacation( new TJ::Interval( toTJInterval( QDateTime( day->date() ), QDateTime( day->date().addDays( 1 ) ), granularity() ) ) );
+            res->addVacation( new TJ::Interval( toTJInterval( QDateTime( day->date() ), QDateTime( day->date().addDays( 1 ) ), tjGranularity() ) ) );
         } else if ( day->state() == CalendarDay::Working ) {
             TJ::Shift *shift = new TJ::Shift( m_tjProject, r->id() + day->date().toString( Qt::ISODate ), r->name(), 0, QString(), 0 );
             foreach ( TimeInterval *ti, day->timeIntervals() ) {
                 QList<TJ::Interval*> ivs;
-                ivs << new TJ::Interval( toTJInterval( ti->startTime(), ti->endTime(), granularity() ) );
+                ivs << new TJ::Interval( toTJInterval( ti->startTime(), ti->endTime(), tjGranularity() ) );
                 shift->setWorkingHours( day->date().dayOfWeek() - 1, ivs );
             }
-            TJ::Interval period = toTJInterval( day->start(), day->end(), granularity() );
+            TJ::Interval period = toTJInterval( day->start(), day->end(), tjGranularity() );
             TJ::ShiftSelection *sl = new TJ::ShiftSelection( period, shift );
             res->addShift( sl );
         }
     }
     if ( m_project->startTime() < r->availableFrom() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( m_project->startTime(), r->availableFrom(), granularity() ) ) );
+        res->addVacation( new TJ::Interval( toTJInterval( m_project->startTime(), r->availableFrom(), tjGranularity() ) ) );
     }
     if ( m_project->endTime() > r->availableUntil() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->startTime(), granularity() ) ) );
+        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->startTime(), tjGranularity() ) ) );
     }
     m_resourcemap[res] = r;
 //     if ( locale() ) { logDebug( m_project, 0, "Added resource: " + r->name() ); }
@@ -683,7 +684,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
         }
         case Node::FixedInterval: {
             job->setPriority( 700 );
-            TJ::Interval i( toTJInterval( task->constraintStartTime(), task->constraintEndTime(), granularity() ) );
+            TJ::Interval i( toTJInterval( task->constraintStartTime(), task->constraintEndTime(), tjGranularity() ) );
             job->setSpecifiedPeriod( 0, i );
             // estimate not allowed
             job->setDuration( 0, 0.0 );
@@ -694,7 +695,7 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
                       .arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) )
                       .arg( TJ::time2ISO( i.getStart() ) )
                       .arg( TJ::time2ISO( i.getEnd() ) )
-                      .arg( granularity() ) );
+                      .arg( tjGranularity() ) );
             break;
         }
         default:
