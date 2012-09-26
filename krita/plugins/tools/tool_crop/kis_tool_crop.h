@@ -57,8 +57,8 @@ class KisToolCrop : public KisTool
 
 public:
     enum CropToolType {
-        ImageCropType,
-        LayerCropType
+        LayerCropType,
+        ImageCropType
     };
     KisToolCrop(KoCanvasBase * canvas);
     virtual ~KisToolCrop();
