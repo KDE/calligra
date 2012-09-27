@@ -24,6 +24,7 @@
 #include <kis_node_manager.h>
 #include <kis_dummies_facade_base.h>
 #include <kis_doc2.h>
+#include <kis_composite_ops_model.h>
 #include <kis_node.h>
 #include <kis_image.h>
 #include <kis_layer.h>
@@ -230,6 +231,7 @@ void LayerModel::currentNodeChanged(KisNodeSP newActiveNode)
         source_dataChanged(oldIndex, oldIndex);
     }
     d->activeNode = newActiveNode;
+    emitActiveChanges();
     if (!d->activeNode.isNull())
     {
         QModelIndex oldIndex = d->nodeModel->indexFromNode(d->activeNode);
@@ -449,6 +451,252 @@ void LayerModel::source_modelReset()
 void LayerModel::notifyImageDeleted()
 {
     //setView(0);
+}
+
+void LayerModel::emitActiveChanges()
+{
+    emit activeNameChanged();
+    emit activeCompositeOpChanged();
+    emit activeOpacityChanged();
+    emit activeVisibleChanged();
+    emit activeLockedChanged();
+    emit activeRChannelActiveChanged();
+    emit activeGChannelActiveChanged();
+    emit activeBChannelActiveChanged();
+    emit activeAChannelActiveChanged();
+    emit activeRChannelLockedChanged();
+    emit activeGChannelLockedChanged();
+    emit activeBChannelLockedChanged();
+    emit activeAChannelLockedChanged();
+}
+
+QString LayerModel::activeName() const
+{
+    if(d->activeNode.isNull())
+        return QString();
+    return d->activeNode->name();
+}
+
+void LayerModel::setActiveName(QString newName)
+{
+    if(d->activeNode.isNull())
+        return;
+    d->activeNode->setName(newName);
+    emit activeNameChanged();
+}
+
+int LayerModel::activeCompositeOp() const
+{
+    if(d->activeNode.isNull())
+        return 0;
+    KoID entry(d->activeNode->compositeOp()->id());
+    QModelIndex idx = KisCompositeOpListModel::sharedInstance()->indexOf(entry);
+    if(idx.isValid())
+        return idx.row();
+    return 0;
+}
+
+void LayerModel::setActiveCompositeOp(int newOp)
+{
+    if(d->activeNode.isNull())
+        return;
+    KoID entry;
+    if(KisCompositeOpListModel::sharedInstance()->entryAt(entry, newOp))
+    {
+        d->activeNode->setCompositeOp(entry.id());
+        emit activeCompositeOpChanged();
+    }
+}
+
+int LayerModel::activeOpacity() const
+{
+    if(d->activeNode.isNull())
+        return 0;
+    return d->activeNode->opacity();
+}
+
+void LayerModel::setActiveOpacity(int newOpacity)
+{
+    d->activeNode->setOpacity(newOpacity);
+    emit activeOpacityChanged();
+}
+
+bool LayerModel::activeVisible() const
+{    if(d->activeNode.isNull())
+        return false;
+    return d->activeNode->visible();
+}
+
+void LayerModel::setActiveVisibile(bool newVisible)
+{
+    if(d->activeNode.isNull())
+        return;
+    d->activeNode->setVisible(newVisible);
+    emit activeVisibleChanged();
+}
+
+bool LayerModel::activeLocked() const
+{
+    if(d->activeNode.isNull())
+        return false;
+    return d->activeNode->userLocked();
+}
+
+void LayerModel::setActiveLocked(bool newLocked)
+{
+    if(d->activeNode.isNull())
+        return;
+    d->activeNode->setUserLocked(newLocked);
+    emit activeLockedChanged();
+}
+
+bool LayerModel::activeAChannelActive() const
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(d->activeNode.data());
+    bool state = false;
+    if(layer)
+        state = !layer->alphaChannelDisabled();
+    return state;
+}
+
+void LayerModel::setActiveAChannelActive(bool newActive)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(d->activeNode.data());
+    if(layer)
+    {
+        layer->disableAlphaChannel(!newActive);
+        emit activeAChannelActiveChanged();
+    }
+}
+
+bool LayerModel::activeAChannelLocked() const
+{
+    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(d->activeNode.data());
+    bool state = false;
+    if(layer)
+        state = layer->alphaLocked();
+    return state;
+}
+
+void LayerModel::setActiveAChannelLocked(bool newLocked)
+{
+    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(d->activeNode.data());
+    if(layer)
+    {
+        layer->setAlphaLocked(newLocked);
+        emit activeAChannelLockedChanged();
+    }
+}
+
+bool getActiveChannel(KisNodeSP node, int channelIndex)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(node.data());
+    bool flag = false;
+    if(layer)
+    {
+        QBitArray flags = layer->channelFlags();
+        flag = flags[channelIndex];
+    }
+    return flag;
+}
+
+bool getLockedChannel(KisNodeSP node, int channelIndex)
+{
+    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
+    bool flag = false;
+    if(layer)
+    {
+        QBitArray flags = layer->channelLockFlags();
+        flag = flags[channelIndex];
+    }
+    return flag;
+}
+
+void setChannelActive(KisNodeSP node, int channelIndex, bool newActive)
+{
+    KisLayer* layer = qobject_cast<KisLayer*>(node.data());
+    if(layer)
+    {
+        QBitArray flags = layer->channelFlags();
+        flags[channelIndex] = newActive;
+        layer->setChannelFlags(flags);
+    }
+}
+
+void setChannelLocked(KisNodeSP node, int channelIndex, bool newLocked)
+{
+    KisPaintLayer* layer = qobject_cast<KisPaintLayer*>(node.data());
+    if(layer)
+    {
+        QBitArray flags = layer->channelLockFlags();
+        flags[channelIndex] = newLocked;
+        layer->setChannelLockFlags(flags);
+    }
+}
+
+bool LayerModel::activeBChannelActive() const
+{
+    return getActiveChannel(d->activeNode, 2);
+}
+
+void LayerModel::setActiveBChannelActive(bool newActive)
+{
+    setChannelActive(d->activeNode, 2, newActive);
+    emit activeBChannelActiveChanged();
+}
+
+bool LayerModel::activeBChannelLocked() const
+{
+    return getActiveChannel(d->activeNode, 2);
+}
+
+void LayerModel::setActiveBChannelLocked(bool newLocked)
+{
+    setChannelLocked(d->activeNode, 2, newLocked);
+    emit activeBChannelLockedChanged();
+}
+
+bool LayerModel::activeGChannelActive() const
+{
+    return getActiveChannel(d->activeNode, 1);
+}
+
+void LayerModel::setActiveGChannelActive(bool newActive)
+{
+    setChannelActive(d->activeNode, 1, newActive);
+}
+
+bool LayerModel::activeGChannelLocked() const
+{
+    return getLockedChannel(d->activeNode, 1);
+}
+
+void LayerModel::setActiveGChannelLocked(bool newLocked)
+{
+    setChannelLocked(d->activeNode, 1, newLocked);
+    emit activeGChannelLockedChanged();
+}
+
+bool LayerModel::activeRChannelActive() const
+{
+    return getActiveChannel(d->activeNode, 0);
+}
+
+void LayerModel::setActiveRChannelActive(bool newActive)
+{
+    setChannelActive(d->activeNode, 0, newActive);
+    emit activeRChannelActiveChanged();
+}
+
+bool LayerModel::activeRChannelLocked() const
+{
+    return getLockedChannel(d->activeNode, 0);
+}
+
+void LayerModel::setActiveRChannelLocked(bool newLocked)
+{
+    setChannelLocked(d->activeNode, 0, newLocked);
+    emit activeRChannelLockedChanged();
 }
 
 #include "LayerModel.moc"

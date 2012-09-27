@@ -28,6 +28,20 @@ class LayerModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QObject* engine READ engine WRITE setEngine NOTIFY engineChanged)
+
+    Q_PROPERTY(QString activeName READ activeName WRITE setActiveName NOTIFY activeNameChanged);
+    Q_PROPERTY(int activeCompositeOp READ activeCompositeOp WRITE setActiveCompositeOp NOTIFY activeCompositeOpChanged);
+    Q_PROPERTY(int activeOpacity READ activeOpacity WRITE setActiveOpacity NOTIFY activeOpacityChanged);
+    Q_PROPERTY(bool activeVisible READ activeVisible WRITE setActiveVisibile NOTIFY activeVisibleChanged);
+    Q_PROPERTY(bool activeLocked READ activeLocked WRITE setActiveLocked NOTIFY activeLockedChanged);
+    Q_PROPERTY(bool activeRChannelActive READ activeRChannelActive WRITE setActiveRChannelActive NOTIFY activeRChannelActiveChanged);
+    Q_PROPERTY(bool activeGChannelActive READ activeGChannelActive WRITE setActiveGChannelActive NOTIFY activeGChannelActiveChanged);
+    Q_PROPERTY(bool activeBChannelActive READ activeBChannelActive WRITE setActiveBChannelActive NOTIFY activeBChannelActiveChanged);
+    Q_PROPERTY(bool activeAChannelActive READ activeAChannelActive WRITE setActiveAChannelActive NOTIFY activeAChannelActiveChanged);
+    Q_PROPERTY(bool activeRChannelLocked READ activeRChannelLocked WRITE setActiveRChannelLocked NOTIFY activeRChannelLockedChanged);
+    Q_PROPERTY(bool activeGChannelLocked READ activeGChannelLocked WRITE setActiveGChannelLocked NOTIFY activeGChannelLockedChanged);
+    Q_PROPERTY(bool activeBChannelLocked READ activeBChannelLocked WRITE setActiveBChannelLocked NOTIFY activeBChannelLockedChanged);
+    Q_PROPERTY(bool activeAChannelLocked READ activeAChannelLocked WRITE setActiveAChannelLocked NOTIFY activeAChannelLockedChanged);
 public:
     enum LayerRoles {
         IconRole = Qt::UserRole + 1,
@@ -58,14 +72,55 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     Q_INVOKABLE void setActive(int index);
+    void emitActiveChanges();
     Q_INVOKABLE void setOpacity(int index, float newOpacity);
     Q_INVOKABLE void setVisible(int index, bool newVisible);
     Q_INVOKABLE void setLocked(int index, bool newLocked);
     QImage layerThumbnail(QString layerID) const;
 
+    QString activeName() const;
+    void setActiveName(QString newName);
+    int activeCompositeOp() const;
+    void setActiveCompositeOp(int newOp);
+    int activeOpacity() const;
+    void setActiveOpacity(int newOpacity);
+    bool activeVisible() const;
+    void setActiveVisibile(bool newVisible);
+    bool activeLocked() const;
+    void setActiveLocked(bool newLocked);
+    bool activeRChannelActive() const;
+    void setActiveRChannelActive(bool newActive);
+    bool activeGChannelActive() const;
+    void setActiveGChannelActive(bool newActive);
+    bool activeBChannelActive() const;
+    void setActiveBChannelActive(bool newActive);
+    bool activeAChannelActive() const;
+    void setActiveAChannelActive(bool newActive);
+    bool activeRChannelLocked() const;
+    void setActiveRChannelLocked(bool newLocked);
+    bool activeGChannelLocked() const;
+    void setActiveGChannelLocked(bool newLocked);
+    bool activeBChannelLocked() const;
+    void setActiveBChannelLocked(bool newLocked);
+    bool activeAChannelLocked() const;
+    void setActiveAChannelLocked(bool newLocked);
 Q_SIGNALS:
     void viewChanged();
     void engineChanged();
+
+    void activeNameChanged();
+    void activeCompositeOpChanged();
+    void activeOpacityChanged();
+    void activeVisibleChanged();
+    void activeLockedChanged();
+    void activeRChannelActiveChanged();
+    void activeGChannelActiveChanged();
+    void activeBChannelActiveChanged();
+    void activeAChannelActiveChanged();
+    void activeRChannelLockedChanged();
+    void activeGChannelLockedChanged();
+    void activeBChannelLockedChanged();
+    void activeAChannelLockedChanged();
 
 private slots:
     void source_rowsAboutToBeInserted(QModelIndex, int, int);
