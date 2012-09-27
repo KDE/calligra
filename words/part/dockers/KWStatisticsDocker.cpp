@@ -41,17 +41,17 @@ KWStatisticsDocker::~KWStatisticsDocker()
 }
 
 void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
-{	
-
+{
     KWCanvas *canvas = dynamic_cast<KWCanvas*>(_canvas);
 
     QWidget *wdg = widget();
     if (wdg) {
         delete wdg;
         m_canvasReset = true;
-    } else
+    } else {
         m_canvasReset = false;
-
+    }
+ 
     statisticsDock = new KWStatistics(canvas->resourceManager(),
                                                 canvas->document(),
                                                 canvas->shapeManager()->selection(),
@@ -60,7 +60,6 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
     setWidget(statisticsDock->statsWidget);
     initLayout();
     statisticsDock->statsWidget->setLayout(mainBox);
-
 }
 
 void KWStatisticsDocker::unsetCanvas()
@@ -73,10 +72,11 @@ void KWStatisticsDocker::unsetCanvas()
 
 void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 {
-    if (newArea == 8 || newArea == 4)
-	mainBox->setDirection(QBoxLayout::LeftToRight);
-    else 
-	mainBox->setDirection(QBoxLayout::TopToBottom);
+    if (newArea == 8 || newArea == 4) {
+        mainBox->setDirection(QBoxLayout::LeftToRight);
+    } else {
+        mainBox->setDirection(QBoxLayout::TopToBottom);
+    }
 }
 
 void KWStatisticsDocker::initLayout()
@@ -101,7 +101,7 @@ void KWStatisticsDocker::initLayout()
     mainBox->addLayout(cjkcharsLayout);
     cjkcharsLayout->addWidget(statisticsDock->cjkchars);
     cjkcharsLayout->addWidget(statisticsDock->count_cjkchars);
- 
+
     spacesLayout = new QHBoxLayout();
     mainBox->addLayout(spacesLayout);
     spacesLayout->addWidget(statisticsDock->spaces);

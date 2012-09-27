@@ -75,84 +75,85 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     words->setVisible(visible);
     count_words->setVisible(visible);
     if (visible) {
-	m_menu->w->check_words->setCheckState(Qt::Checked);
+        m_menu->w->check_words->setCheckState(Qt::Checked);
     }
-    
+
     visible = cfgGroup.readEntry("SentencesVisible", true);
     sentences->setVisible(visible);
     count_sentences->setVisible(visible);
     if (visible) {
-	m_menu->w->check_sentences->setCheckState(Qt::Checked);
+        m_menu->w->check_sentences->setCheckState(Qt::Checked);
     }
 
     visible = cfgGroup.readEntry("SyllablesVisible", true);
     syllables->setVisible(visible);
     count_syllables->setVisible(visible);
     if (visible) {
-	m_menu->w->check_syllables->setCheckState(Qt::Checked);
+        m_menu->w->check_syllables->setCheckState(Qt::Checked);
     }
 
     visible = cfgGroup.readEntry("LinesVisible", true);
     lines->setVisible(visible);
     count_lines->setVisible(visible);
     if (visible) {
-	m_menu->w->check_lines->setCheckState(Qt::Checked);
+        m_menu->w->check_lines->setCheckState(Qt::Checked);
     }
 
     visible = cfgGroup.readEntry("EastAsianCharactersVisible", true);
     cjkchars->setVisible(visible);
     count_cjkchars->setVisible(visible);
     if (visible) {
-	m_menu->w->check_east->setCheckState(Qt::Checked);
+        m_menu->w->check_east->setCheckState(Qt::Checked);
     }
 
     visible = cfgGroup.readEntry("FleschVisible", true);
     flesch->setVisible(visible);
     count_flesch->setVisible(visible);
     if (visible) {
-	m_menu->w->check_flesch->setCheckState(Qt::Checked);
+        m_menu->w->check_flesch->setCheckState(Qt::Checked);
     }
 
     visible = cfgGroup.readEntry("CharspacesVisible", true);
     spaces->setVisible(visible);
     count_spaces->setVisible(visible);
     if (visible) {
-	m_menu->w->check_charspace->setCheckState(Qt::Checked);
+        m_menu->w->check_charspace->setCheckState(Qt::Checked);
     }
 
     visible = cfgGroup.readEntry("CharnospacesVisible", true);
     nospaces->setVisible(visible);
     count_nospaces->setVisible(visible);
     if (visible) {
-	m_menu->w->check_charnospace->setCheckState(Qt::Checked);
+        m_menu->w->check_charnospace->setCheckState(Qt::Checked);
     }
 }
 
 void KWStatistics::initUi()
-{	
+{
     statsWidget = new QWidget;
-    words = new QLabel("Words");
+    words = new QLabel(i18n("Words:"));
     count_words = new QLabel;
 
-    sentences = new QLabel("Sentences");
+    sentences = new QLabel(i18n("Sentences:"));
     count_sentences = new QLabel;
-    
-    syllables = new QLabel("Syllables");
+
+    syllables = new QLabel(i18n("Syllables:"));
     count_syllables = new QLabel;
-    
-    spaces = new QLabel("Characters(spaces)");
+
+    spaces = new QLabel(i18n("Characters (spaces):"));
     count_spaces = new QLabel;
-    
-    nospaces = new QLabel("Characters(nospaces)");
+
+    nospaces = new QLabel(i18n("Characters (no spaces):"));
     count_nospaces = new QLabel;
-    
-    lines = new QLabel("Lines");
+
+    lines = new QLabel(i18n("Lines:"));
     count_lines = new QLabel;
 
-    flesch = new QLabel("Flesch reading ease");
+    flesch = new QLabel(i18n("Readability:"));
     count_flesch = new QLabel;
-    
-    cjkchars = new QLabel("East asian characters");
+    flesch->setToolTip(i18n("Flesch reading ease"));
+
+    cjkchars = new QLabel(i18n("East asian characters:"));
     count_cjkchars = new QLabel;
     preferencesButton = new QToolButton;
 }
