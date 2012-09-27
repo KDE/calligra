@@ -237,7 +237,7 @@ void ThemeManager::populateThemeMenu()
 
     updateCurrentKDEdefaultThemePreview();
     setCurrentTheme(theme);
-
+#ifdef Q_WS_X11
     d->themeMenuAction->addSeparator();
     KAction* config = new KAction(i18n("Configuration..."), d->themeMenuAction);
     config->setIcon(KIcon("preferences-desktop-theme"));
@@ -245,6 +245,7 @@ void ThemeManager::populateThemeMenu()
 
     connect(config, SIGNAL(triggered()),
             this, SLOT(slotConfigColors()));
+#endif
 }
 
 void ThemeManager::slotConfigColors()
