@@ -18,6 +18,9 @@
 
 #include "ImageBuilder.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_doc2.h>
@@ -57,22 +60,29 @@ QString ImageBuilder::createImageFromClipboard()
     QSize sz = KisClipboard::instance()->clipSize();
     KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QPoint(0,0));
 
-    doc.newImage("From Clipboard", sz.width(), sz.height(), clipDevice->colorSpace());
+    if (clipDevice) {
 
-    KisImageWSP image = doc.image();
-    if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
-        Q_ASSERT(layer);
-        layer->setOpacity(OPACITY_OPAQUE_U8);
-        QRect r = clipDevice->exactBounds();
+        doc.newImage("From Clipboard", sz.width(), sz.height(), clipDevice->colorSpace());
 
-        KisPainter painter;
-        painter.begin(layer->paintDevice());
-        painter.setCompositeOp(COMPOSITE_COPY);
-        painter.bitBlt(QPoint(0, 0), clipDevice, r);
-        layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
+        KisImageWSP image = doc.image();
+        if (image && image->root() && image->root()->firstChild()) {
+            KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
+            Q_ASSERT(layer);
+            layer->setOpacity(OPACITY_OPAQUE_U8);
+            QRect r = clipDevice->exactBounds();
+
+            KisPainter painter;
+            painter.begin(layer->paintDevice());
+            painter.setCompositeOp(COMPOSITE_COPY);
+            painter.bitBlt(QPoint(0, 0), clipDevice, r);
+            layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
+        }
     }
+    else {
 
+        doc.newImage("Blank Image", qApp->desktop()->width(), qApp->desktop()->height(), KoColorSpaceRegistry::instance()->rgb8());
+        doc.image()->setResolution(1.0, 1.0);
+    }
     return saveDocument(doc);
 }
 
