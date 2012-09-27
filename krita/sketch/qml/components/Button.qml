@@ -33,6 +33,7 @@ Item {
     property alias text: label.text;
     property alias textColor: label.color;
     property alias textSize: label.font.pixelSize;
+    property alias bold: label.font.bold;
     property bool shadow: true;
     property bool enabled: true; // XXX: visualize disabledness
     property alias asynchronous: icon.asynchronous;
