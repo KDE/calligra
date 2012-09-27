@@ -398,6 +398,35 @@ QImage LayerModel::layerThumbnail(QString layerID) const
     return thumb;
 }
 
+void LayerModel::deleteCurrentLayer()
+{
+    d->nodeManager->removeNode(d->activeNode);
+}
+
+void LayerModel::deleteLayer(int index)
+{
+    if(index > -1 && index < d->layers.count())
+        d->nodeManager->removeNode(d->layers.at(index));
+}
+
+void LayerModel::addLayer(int layerType)
+{
+    switch(layerType)
+    {
+        case 0:
+            d->nodeManager->createNode("KisPaintLayer");
+            break;
+        case 1:
+            d->nodeManager->createNode("KisGroupLayer");
+            break;
+        case 2:
+            d->nodeManager->createNode("KisFilterMask");
+            break;
+        default:
+            break;
+    }
+}
+
 void LayerModel::source_rowsAboutToBeInserted(QModelIndex /*p*/, int /*from*/, int /*to*/)
 {
 //     if ( !p.isValid() )

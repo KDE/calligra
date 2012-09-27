@@ -78,6 +78,10 @@ public:
     Q_INVOKABLE void setLocked(int index, bool newLocked);
     QImage layerThumbnail(QString layerID) const;
 
+    Q_INVOKABLE void deleteCurrentLayer();
+    Q_INVOKABLE void deleteLayer(int index);
+    Q_INVOKABLE void addLayer(int layerType);
+
     QString activeName() const;
     void setActiveName(QString newName);
     int activeCompositeOp() const;
