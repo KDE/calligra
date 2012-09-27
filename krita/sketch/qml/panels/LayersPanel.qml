@@ -21,8 +21,49 @@ import "../components"
 import org.krita.sketch 1.0
 
 Panel {
+    id: base;
     name: "Layers";
     panelColor: Constants.Theme.SecondaryColor;
+
+    actions: [
+        Button {
+            id: addButton;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-add.svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            onClicked: fullViewStack.push(editLayerPage);
+        },
+        Button {
+            id: editButton;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-edit.svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            onClicked: fullViewStack.push(editLayerPage);
+        },
+        Item {
+            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
+            height: Constants.GridHeight;
+        },
+        Button {
+            id: removeButton;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-remove.svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            onClicked: undefined;
+        }
+    ]
 
     LayerModel {
         id: layerModel;
@@ -31,7 +72,7 @@ Panel {
         engine: QMLEngine;
         view: sketchView.view;
     }
-    
+
     peekContents: ListView {
         anchors.fill: parent;
         model: layerModel;
@@ -105,124 +146,127 @@ Panel {
         }
     }
 
-    fullContents: ListView {
+    fullContents: PageStack {
+        id: fullViewStack
         anchors.fill: parent;
-        model: layerModel;
-        
-        delegate: Rectangle {
-            width: parent.width - Constants.DefaultMargin;
-            height: childrenRect.height;
-            color: "transparent";
-            clip: true;
+        initialPage: ListView {
+            anchors.fill: parent;
+            model: layerModel;
+            delegate: Rectangle {
+                width: parent.width - Constants.DefaultMargin;
+                height: childrenRect.height;
+                color: "transparent";
+                clip: true;
 
-            Rectangle {
-                id: topSpacer;
-                height: model.childCount == 0 ? 0 : Constants.DefaultMargin;
-                color: "transparent";
-            }
-            Rectangle {
-                id: layerBgRect
-                anchors {
-                    top: topSpacer.bottom;
-                    left: parent.left;
-                    right: parent.right;
-                    leftMargin: 8 * model.depth;
-                }
-                height: Constants.GridHeight;
-                radius: 8
-                opacity: model.activeLayer ? 0.5 : 0.2;
-                color: "white";
-            }
-            Rectangle {
-                anchors.fill: layerBgRect
-                color: "transparent";
                 Rectangle {
-                    id: layerThumbContainer;
+                    id: topSpacer;
+                    height: model.childCount == 0 ? 0 : Constants.DefaultMargin;
+                    color: "transparent";
+                }
+                Rectangle {
+                    id: layerBgRect
                     anchors {
-                        verticalCenter: parent.verticalCenter;
+                        top: topSpacer.bottom;
                         left: parent.left;
+                        right: parent.right;
+                        leftMargin: 8 * model.depth;
                     }
                     height: Constants.GridHeight;
-                    width: height;
+                    radius: 8
+                    opacity: model.activeLayer ? 0.5 : 0.2;
+                    color: "white";
+                }
+                Rectangle {
+                    anchors.fill: layerBgRect
                     color: "transparent";
-                    Image {
-                        anchors.centerIn: parent;
-                        cache: false;
-                        source: model.icon;
-                        smooth: true;
-                        width: parent.width * 0.8;
-                        height: parent.height * 0.8;
-                        fillMode: Image.PreserveAspectFit;
-                    }
-                }
-                Text {
-                    id: layerNameLbl
-                    anchors {
-                        top: parent.top;
-                        left: layerThumbContainer.right;
-                        right: parent.right;
-                    }
-                    text: model.name;
-                    color: "black";
-                    font.pixelSize: Constants.DefaultFontSize;
-                    elide: Text.ElideRight;
-                }
-                Text {
-                    anchors {
-                        top: layerNameLbl.bottom;
-                        right: parent.right;
-                        rightMargin: Constants.DefaultMargin;
-                    }
-                    text: "Mode: " + model.compositeDetails + ", " + model.percentOpacity + "%";
-                    font.pixelSize: Constants.SmallFontSize;
-                }
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: layerModel.setActive(model.index);
-                }
-                Row {
-                    anchors {
-                        left: layerThumbContainer.right;
-                        bottom: parent.bottom;
-                    }
-                    height: childrenRect.height;
                     Rectangle {
-                        width: Constants.DefaultFontSize;
-                        height: width;
-                        color: model.visible ? "silver" : "gray";
-                        Text {
-                            anchors.centerIn: parent;
-                            font.pixelSize: Constants.SmallFontSize;
-                            color: model.visible ? "black" : "white";
-                            text: "V"
+                        id: layerThumbContainer;
+                        anchors {
+                            verticalCenter: parent.verticalCenter;
+                            left: parent.left;
                         }
-                        MouseArea {
-                            anchors.fill: parent;
-                            onClicked: layerModel.setVisible(model.index, !model.visible);
+                        height: Constants.GridHeight;
+                        width: height;
+                        color: "transparent";
+                        Image {
+                            anchors.centerIn: parent;
+                            cache: false;
+                            source: model.icon;
+                            smooth: true;
+                            width: parent.width * 0.8;
+                            height: parent.height * 0.8;
+                            fillMode: Image.PreserveAspectFit;
                         }
                     }
-                    Rectangle {
-                        width: Constants.DefaultFontSize;
-                        height: width;
-                        color: model.locked ? "silver" : "gray";
-                        Text {
-                            anchors.centerIn: parent;
-                            font.pixelSize: Constants.SmallFontSize;
-                            color: model.locked ? "black" : "white";
-                            text: "L"
+                    Text {
+                        id: layerNameLbl
+                        anchors {
+                            top: parent.top;
+                            left: layerThumbContainer.right;
+                            right: parent.right;
                         }
-                        MouseArea {
-                            anchors.fill: parent;
-                            onClicked: layerModel.setLocked(model.index, !model.locked);
+                        text: model.name;
+                        color: "black";
+                        font.pixelSize: Constants.DefaultFontSize;
+                        elide: Text.ElideRight;
+                    }
+                    Text {
+                        anchors {
+                            top: layerNameLbl.bottom;
+                            right: parent.right;
+                            rightMargin: Constants.DefaultMargin;
+                        }
+                        text: "Mode: " + model.compositeDetails + ", " + model.percentOpacity + "%";
+                        font.pixelSize: Constants.SmallFontSize;
+                    }
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: layerModel.setActive(model.index);
+                    }
+                    Row {
+                        anchors {
+                            left: layerThumbContainer.right;
+                            bottom: parent.bottom;
+                        }
+                        height: childrenRect.height;
+                        Rectangle {
+                            width: Constants.DefaultFontSize;
+                            height: width;
+                            color: model.visible ? "silver" : "gray";
+                            Text {
+                                anchors.centerIn: parent;
+                                font.pixelSize: Constants.SmallFontSize;
+                                color: model.visible ? "black" : "white";
+                                text: "V"
+                            }
+                            MouseArea {
+                                anchors.fill: parent;
+                                onClicked: layerModel.setVisible(model.index, !model.visible);
+                            }
+                        }
+                        Rectangle {
+                            width: Constants.DefaultFontSize;
+                            height: width;
+                            color: model.locked ? "silver" : "gray";
+                            Text {
+                                anchors.centerIn: parent;
+                                font.pixelSize: Constants.SmallFontSize;
+                                color: model.locked ? "black" : "white";
+                                text: "L"
+                            }
+                            MouseArea {
+                                anchors.fill: parent;
+                                onClicked: layerModel.setLocked(model.index, !model.locked);
+                            }
                         }
                     }
                 }
-            }
-            Rectangle {
-                id: bottomSpacer;
-                anchors.top: layerBgRect.bottom;
-                height: Constants.DefaultMargin;
-                color: "transparent";
+                Rectangle {
+                    id: bottomSpacer;
+                    anchors.top: layerBgRect.bottom;
+                    height: Constants.DefaultMargin;
+                    color: "transparent";
+                }
             }
         }
     }
@@ -244,4 +288,6 @@ Panel {
             }
         }
     }
+
+    Component { id: editLayerPage; EditLayerPage { layersModel: layerModel; } }
 }
