@@ -22,6 +22,7 @@ Item {
     id: base
     property alias model: listView.model;
     property alias currentIndex: listView.currentIndex;
+    signal newIndex(int index);
     height: topButton.height;
 
     Rectangle {
@@ -125,6 +126,7 @@ Item {
                     anchors.fill: parent;
                     onClicked: {
                         listView.currentIndex = index;
+                        base.newIndex(index);
                         base.state = "";
                     }
                 }
