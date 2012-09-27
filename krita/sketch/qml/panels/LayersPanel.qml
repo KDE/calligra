@@ -57,7 +57,7 @@ Panel {
             width: height;
             height: Constants.GridHeight
             color: "transparent";
-            image: "../images/svg/icon-remove.svg"
+            image: "../images/svg/icon-delete.svg"
             textColor: "white";
             shadow: false;
             highlight: false;
