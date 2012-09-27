@@ -210,14 +210,14 @@ void KisCanvas2::pan(QPoint shift)
     else
         updateCanvas();
 }
-
+/*
 void KisCanvas2::mirrorCanvas(bool enable)
 {
     m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
     notifyZoomChanged();
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
-
+*/
 qreal KisCanvas2::rotationAngle() const
 {
     return m_d->coordinatesConverter->rotationAngle();
@@ -716,10 +716,9 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
     return m_d->canvasWidget->decoration(id);
 }
 
-
+/*
 QPoint KisCanvas2::documentOrigin() const
 {
-<<<<<<< HEAD
     return m_d->coordinatesConverter->documentOrigin();
 }
 
@@ -745,16 +744,14 @@ void KisCanvas2::adjustOrigin()
         newOrigin = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect().topLeft();
 
     m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
-=======
     /**
      * In Krita we don't use document origin anymore.
      * All the centering when needed (vastScrolling < 0.5) is done
      * automatically by the KisCoordinatesConverter.
      */
->>>>>>> master
-
+/*
     return QPoint();
-}
+}*/
 
 QPoint KisCanvas2::documentOffset() const
 {
