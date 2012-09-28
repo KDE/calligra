@@ -110,47 +110,20 @@ Panel {
         id: presetsModel;
         view: sketchView.view;
     }
-    
+
     peekContents: GridView {
+        id: peekViewGrid;
         anchors.fill: parent;
         keyNavigationWraps: false
 
         model: presetsModel;
-        delegate: delegate;
-
-        cellWidth: Constants.GridWidth - 8
-        cellHeight: Constants.GridHeight - 8
-    }
-
-    fullContents: PageStack {
-        id: contentArea;
-        anchors.fill: parent;
-        initialPage: GridView {
-            anchors.fill: parent;
-
-            model: presetsModel;
-            delegate: delegate;
-
-            cellWidth: Constants.GridWidth - 8
-            cellHeight: Constants.GridHeight - 8
-        }
-    }
-
-    onStateChanged: if( state != "edit" && contentArea.depth > 1 ) {
-        contentArea.pop();
-    }
-
-    Component {
-        id: delegate;
-
-        Button {
+        delegate: Button {
             width: Constants.GridWidth;
             height: Constants.GridHeight;
 
             checked: GridView.isCurrentItem;
 
-            color: "transparent";
-            text: model.text;
+            color: (model.index === peekViewGrid.currentIndex) ? "#D2C8E5" : "transparent";
             shadow: false
             textSize: 10;
             image: model.image;
@@ -159,9 +132,73 @@ Panel {
 
             onClicked: {
                 presetsModel.activatePreset(index);
-                GridView.view.currentIndex = index;
+                peekViewGrid.currentIndex = index;
+                fullViewGrid.currentIndex = index;
             }
         }
+
+        cellWidth: Constants.GridWidth;
+        cellHeight: Constants.GridHeight;
+    }
+
+    fullContents: PageStack {
+        id: contentArea;
+        anchors.fill: parent;
+        initialPage: GridView {
+            id: fullViewGrid;
+            anchors.fill: parent;
+            model: presetsModel;
+            delegate: Item {
+                height: Constants.GridHeight;
+                width: contentArea.width;
+                Rectangle {
+                    anchors.fill: parent;
+                    color: (model.index === fullViewGrid.currentIndex) ? "#D2C8E5" : "transparent";
+                }
+                Rectangle {
+                    id: presetThumbContainer;
+                    anchors {
+                        verticalCenter: parent.verticalCenter;
+                        left: parent.left;
+                    }
+                    height: Constants.GridHeight;
+                    width: height;
+                    color: "transparent";
+                    Image {
+                        anchors.centerIn: parent;
+                        cache: false;
+                        source: model.image;
+                        smooth: true;
+                        width: parent.width * 0.8;
+                        height: parent.height * 0.8;
+                        fillMode: Image.PreserveAspectFit;
+                    }
+                }
+                Label {
+                    anchors {
+                        verticalCenter: parent.verticalCenter;
+                        left: presetThumbContainer.right;
+                        right: parent.right;
+                    }
+                    text: model.text;
+                }
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: {
+                        presetsModel.activatePreset(index);
+                        peekViewGrid.currentIndex = index;
+                        fullViewGrid.currentIndex = index;
+                    }
+                }
+            }
+
+            cellWidth: contentArea.width;
+            cellHeight: Constants.GridHeight;
+        }
+    }
+
+    onStateChanged: if( state != "edit" && contentArea.depth > 1 ) {
+        contentArea.pop();
     }
 
     function toggleEdit() {
