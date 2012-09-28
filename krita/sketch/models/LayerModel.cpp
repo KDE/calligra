@@ -401,12 +401,18 @@ QImage LayerModel::layerThumbnail(QString layerID) const
 void LayerModel::deleteCurrentLayer()
 {
     d->nodeManager->removeNode(d->activeNode);
+    d->rebuildLayerList();
+    reset();
 }
 
 void LayerModel::deleteLayer(int index)
 {
     if(index > -1 && index < d->layers.count())
+    {
         d->nodeManager->removeNode(d->layers.at(index));
+        d->rebuildLayerList();
+        reset();
+    }
 }
 
 void LayerModel::addLayer(int layerType)
