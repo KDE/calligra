@@ -27,6 +27,24 @@ Panel {
 
     actions: [
         Button {
+            id: backFromEditButton;
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: "../images/svg/icon-back.svg"
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            onClicked: {
+                fullViewStack.pop();
+                backFromEditButton.visible = false;
+                addButton.visible = true;
+                editButton.visible = true;
+                removeButton.visible = true;
+            }
+            visible: false;
+        },
+        Button {
             id: addButton;
             width: height;
             height: Constants.GridHeight
@@ -46,7 +64,13 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: fullViewStack.push(editLayerPage);
+            onClicked: {
+                fullViewStack.push(editLayerPage);
+                backFromEditButton.visible = true;
+                addButton.visible = false;
+                editButton.visible = false;
+                removeButton.visible = false;
+            }
         },
         Item {
             width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
