@@ -187,6 +187,7 @@ public:  // Krita specific interfaces
 signals:
 
     void sigLoadingFinished();
+    void floatingMessageRequested(QString message, QString iconName);
 
 private slots:
 
