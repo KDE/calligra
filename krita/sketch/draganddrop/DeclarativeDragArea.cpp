@@ -198,7 +198,7 @@ void DeclarativeDragArea::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    emit dragStarted();
+    emit dragStarted(event->scenePos().x(), event->scenePos().y());
 
     QDrag *drag = new QDrag(event->widget());
     DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
