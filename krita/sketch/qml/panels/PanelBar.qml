@@ -148,7 +148,7 @@ Item {
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
 
-            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea2.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
         }
 
         PanelDropArea {
@@ -159,7 +159,7 @@ Item {
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
 
-            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea1.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
         }
 
         PanelDropArea {
@@ -227,7 +227,7 @@ Item {
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
 
-            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea2.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
         }
 
         PanelDropArea {
@@ -238,7 +238,7 @@ Item {
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
 
-            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea1.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
         }
     }
 
