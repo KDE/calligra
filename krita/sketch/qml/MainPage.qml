@@ -24,9 +24,6 @@ import "panels"
 Page {
     SketchView {
         id: sketchView;
-        onFloatingMessageRequested: {
-            console.debug(message,iconName);
-        }
         width: parent.width;
         height: parent.height;
     }
@@ -94,6 +91,19 @@ Page {
                 case "redo":
                     sketchView.redo();
             }
+        }
+    }
+
+    MessageStack {
+        id: messageStack;
+        anchors {
+            horizontalCenter: parent.horizontalCenter;
+            bottom: menuPanel.top;
+            bottomMargin: Constants.GridHeight;
+        }
+        Connections {
+            target: sketchView;
+            onFloatingMessageRequested: messageStack.showMessage(message, iconName);
         }
     }
 
