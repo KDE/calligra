@@ -23,17 +23,12 @@ import org.krita.sketch 1.0
 Item {
     id: base;
 
-    MouseArea {
-        id: peekCapture;
-        anchors.fill: parent;
-        enabled: false;
-
-        onClicked: d.peeking.state = "collapsed";
-    }
-    SimpleTouchArea {
-        anchors.fill: parent;
-        enabled: peekCapture.enabled;
-        onTouched: d.peeking.state = "collapsed";
+    function collapse() {
+        if(d.peeking) {
+            d.peeking.state = "collapsed";
+            d.peeking.z = 0;
+            d.peeking = null;
+        }
     }
 
     PresetsPanel {
@@ -41,6 +36,7 @@ Item {
         objectName: "presets";
         width: Constants.GridWidth * 2;
         height: base.height;
+        page: base.parent;
         onPeek: beginPeek( presetsPanel );
         onCollapsed: endPeek( presetsPanel );
         onFull: endPeek( presetsPanel );
@@ -52,6 +48,7 @@ Item {
         objectName: "layers";
         width: Constants.GridWidth * 2;
         height: base.height;
+        page: base.parent;
         onPeek: beginPeek( layersPanel );
         onCollapsed: endPeek( layersPanel );
         onFull: endPeek( layersPanel );
@@ -63,6 +60,7 @@ Item {
         objectName: "filter";
         width: Constants.GridWidth * 2;
         height: base.height;
+        page: base.parent;
         onPeek: beginPeek( filterPanel );
         onCollapsed: endPeek( filterPanel );
         onFull: endPeek( filterPanel );
@@ -74,6 +72,7 @@ Item {
         objectName: "select";
         width: Constants.GridWidth * 2;
         height: base.height;
+        page: base.parent;
         onPeek: beginPeek( selectPanel );
         onCollapsed: endPeek( selectPanel );
         onFull: endPeek( selectPanel );
@@ -85,6 +84,7 @@ Item {
         objectName: "tool";
         width: Constants.GridWidth * 2;
         height: base.height;
+        page: base.parent;
         onPeek: beginPeek( toolPanel );
         onCollapsed: endPeek( toolPanel );
         onFull: endPeek( toolPanel );
@@ -96,6 +96,7 @@ Item {
         objectName: "color";
         width: Constants.GridWidth * 2;
         height: base.height;
+        page: base.parent;
         onPeek: beginPeek( colorPanel );
         onCollapsed: endPeek( colorPanel );
         onFull: endPeek( colorPanel );
@@ -104,14 +105,13 @@ Item {
     }
 
     Component.onCompleted: {
-        for( var i in d.panels ) {
-            d.panels[i].parent = centerTopArea.children[i];
-        }
+        panelConfiguration.restore();
     }
-
 
     PanelDropArea {
         id: leftArea;
+
+        objectName: "leftFull";
 
         anchors.bottom: parent.bottom;
         anchors.left: parent.left;
@@ -126,6 +126,8 @@ Item {
     PanelDropArea {
         id: rightArea;
 
+        objectName: "rightFull";
+
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
 
@@ -136,64 +138,108 @@ Item {
         state: "full";
     }
 
-    PanelDropArea {
-        id: leftTopArea1;
-
-        width: Constants.GridWidth;
-        height: Constants.GridHeight / 2;
-
-        onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
-    }
-
-    PanelDropArea {
-        id: leftTopArea2;
-
-        anchors.left: leftTopArea1.right;
-        anchors.leftMargin: 1;
-
-        width: Constants.GridWidth;
-        height: Constants.GridHeight / 2;
-
-        onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
-    }
-
     Row {
-        id: centerTopArea;
-        anchors.left: leftTopArea2.right;
-        anchors.leftMargin: 1;
+        id: topRow;
+        PanelDropArea {
+            id: leftTopArea1;
 
-        spacing: 1;
-        Repeater {
-            model: Constants.GridColumns - 4;
+            objectName: "leftTop1";
 
-            delegate: PanelDropArea {
-                width: Constants.GridWidth;
-                height: Constants.GridHeight / 2;
-            }
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
         }
-    }
 
-    PanelDropArea {
-        id: rightTopArea1;
+        PanelDropArea {
+            id: leftTopArea2;
 
-        anchors.right: rightTopArea2.left;
-        anchors.rightMargin: 1;
+            objectName: "leftTop2";
 
-        width: Constants.GridWidth;
-        height: Constants.GridHeight / 2;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
 
-        onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
-    }
+            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+        }
 
-    PanelDropArea {
-        id: rightTopArea2;
+        PanelDropArea {
+            id: centerTopArea1;
+            objectName: "centerTop1"
 
-        anchors.right: parent.right;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+        PanelDropArea {
+            id: centerTopArea2;
+            objectName: "centerTop2"
 
-        width: Constants.GridWidth;
-        height: Constants.GridHeight / 2;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+        PanelDropArea {
+            id: centerTopArea3;
+            objectName: "centerTop3"
 
-        onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+        PanelDropArea {
+            id: centerTopArea4;
+            objectName: "centerTop4"
+
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+        PanelDropArea {
+            id: centerTopArea5;
+            objectName: "centerTop5"
+
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+        PanelDropArea {
+            id: centerTopArea6;
+            objectName: "centerTop6"
+
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+        PanelDropArea {
+            id: centerTopArea7;
+            objectName: "centerTop7"
+
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+        PanelDropArea {
+            id: centerTopArea8;
+            objectName: "centerTop8"
+
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+        }
+
+        PanelDropArea {
+            id: rightTopArea1;
+
+            objectName: "rightTop1";
+
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea2.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+        }
+
+        PanelDropArea {
+            id: rightTopArea2;
+
+            objectName: "rightTop2";
+
+            width: Constants.GridWidth;
+            height: Constants.GridHeight / 2;
+
+            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea1.children.length == 0) ? parent.height : parent.height - Constants.GridHeight / 2;
+        }
     }
 
     Item {
@@ -203,45 +249,20 @@ Item {
         opacity: 0;
         Behavior on opacity { NumberAnimation { } }
 
-        Row {
-            id: dropRow;
-            spacing: 1;
-            Repeater {
-                model: Constants.GridColumns;
+        Repeater {
+            model: d.panelAreas.length;
 
-                delegate: Rectangle {
-                    width: Constants.GridWidth;
-                    height: Constants.GridHeight / 2;
+            delegate: Rectangle {
+                x: d.panelAreas[index].x;
+                y: d.panelAreas[index].y;
+                width: d.panelAreas[index].width;
+                height: d.panelAreas[index].height;
 
-                    color: "transparent";
+                color: "transparent";
 
-                    border.color: "white";
-                    border.width: 5;
-                }
+                border.color: "white";
+                border.width: 2;
             }
-        }
-
-        Rectangle {
-            width: Constants.GridWidth * 2;
-            anchors.top: dropRow.bottom;
-            anchors.bottom: parent.bottom;
-
-            color: "transparent";
-
-            border.color: "white";
-            border.width: 5;
-        }
-
-        Rectangle {
-            width: Constants.GridWidth * 2;
-            anchors.top: dropRow.bottom;
-            anchors.bottom: parent.bottom;
-            anchors.right: parent.right;
-
-            color: "transparent";
-
-            border.color: "white";
-            border.width: 5;
         }
     }
 
@@ -249,8 +270,30 @@ Item {
         id: d;
 
         property variant panels: [ presetsPanel, layersPanel, filterPanel, selectPanel, toolPanel, colorPanel ];
+        property variant panelAreas: [
+            leftTopArea1,
+            leftTopArea2,
+            centerTopArea1,
+            centerTopArea2,
+            centerTopArea3,
+            centerTopArea4,
+            centerTopArea5,
+            centerTopArea6,
+            centerTopArea7,
+            centerTopArea8,
+            rightTopArea1,
+            rightTopArea2,
+            leftArea,
+            rightArea ];
         property Item peeking: null;
         property Item dragParent: null;
+    }
+
+    PanelConfiguration {
+        id: panelConfiguration;
+
+        panels: d.panels;
+        panelAreas: d.panelAreas;
     }
 
     function beginPeek( item ) {
@@ -263,14 +306,12 @@ Item {
 
         d.peeking = item;
         item.parent.z = 11;
-        peekCapture.enabled = true;
     }
 
     function endPeek( item ) {
         if(d.peeking == item)
         {
             d.peeking = null;
-            peekCapture.enabled = false;
         }
         item.parent.z = 0;
     }
