@@ -34,7 +34,7 @@ Item {
 
     property real editWidth: Constants.GridWidth * 4;
 
-    property Component dragDelegate;
+    property Item page;
 
     signal collapsed();
     signal peek();
@@ -173,6 +173,9 @@ Item {
 
         anchors.top: fill.bottom;
 
+        Behavior on y { id: yHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
+        Behavior on x { id: xHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
+
         color: base.panelColor;
         radius: 0
 
@@ -181,46 +184,81 @@ Item {
 
         opacity: 0
 
+        function fixParent() {
+            if(!handleDragArea.dragging && !xHandleAnim.animation.running && !yHandleAnim.animation.running) {
+                xHandleAnim.enabled = false;
+                yHandleAnim.enabled = false;
+                handle.parent = base;
+                handle.anchors.top = fill.bottom;
+                handle.x = 0;
+            }
+        }
 
         Rectangle {
-            id: rectangle2
             anchors.top: parent.top;
 
             width: (Constants.GridWidth * 1) - 8
             height: Constants.GridHeight / 2
             color: base.panelColor
             radius: 8
-            clip: true
-            Label {
-                id: handleLabel;
-
-                text: base.name;
-                anchors.horizontalCenter: rectangle2.horizontalCenter
-                anchors.verticalCenter: rectangle2.verticalCenter
-                color: base.textColor;
-
-                font.pixelSize: Constants.DefaultFontSize;
-            }
-            DnD.DragArea {
-                anchors.fill: parent;
-                delegate: base.dragDelegate;
-                source: base;
-
-                onDragStarted: base.dragStarted();
-                onDrop: base.drop(action);
-
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
-                }
-                SimpleTouchArea {
-                    anchors.fill: parent;
-                    onTouched: base.state = base.state == "peek" ? "collapsed" : "peek";
-                }
-            }
         }
 
+        Label {
+            id: handleLabel;
 
+            anchors.verticalCenter: parent.bottom;
+            anchors.horizontalCenter: parent.horizontalCenter;
+
+            text: base.name;
+            color: base.textColor;
+
+            font.pixelSize: Constants.DefaultFontSize;
+        }
+
+        DnD.DragArea {
+            id: handleDragArea;
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+            height: Constants.GridHeight * 0.75;
+
+            source: base;
+
+            property bool dragging: false;
+
+            onDragStarted: {
+                base.dragStarted();
+
+                parent.anchors.top = undefined;
+                parent.parent = base.page;
+                Krita.MouseTracker.addItem(parent);
+                dragging = true;
+            }
+            onDrop: {
+                base.drop(action);
+
+                Krita.MouseTracker.removeItem(parent);
+
+                xHandleAnim.enabled = true;
+                yHandleAnim.enabled = true;
+                dragging = false;
+
+                var parentPos = base.mapToItem(base.page, 0, 0);
+                parent.x = parentPos.x;
+                parent.y = parentPos.y;
+            }
+
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: base.state = base.state == "peek" ? "collapsed" : "peek";
+            }
+            SimpleTouchArea {
+                anchors.fill: parent;
+                onTouched: base.state = base.state == "peek" ? "collapsed" : "peek";
+            }
+        }
     }
 
     states: [
@@ -266,7 +304,8 @@ Item {
                 ScriptAction { script: base.peek(); }
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
-                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,width,opacity"; duration: 250; }
+                PropertyAction { targets: [ base ]; properties: "width"; }
+                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: 150; }
             }
         },
         Transition {
@@ -274,8 +313,9 @@ Item {
             to: "collapsed";
 
             SequentialAnimation {
-                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,width,opacity"; duration: 250; }
+                NumberAnimation { targets: [ base, fill, handle, peek, full ]; properties: "height,opacity"; duration: 150; }
                 AnchorAnimation { targets: [ header ] ; duration: 0; }
+                PropertyAction { targets: [ base ]; properties: "width"; }
                 PropertyAction { targets: [ header, footer ]; properties: "height,width,opacity" }
                 ScriptAction { script: base.collapsed(); }
             }
@@ -292,14 +332,14 @@ Item {
             from: "collapsed";
             to: "full";
 
-            NumberAnimation { properties: "height,width,opacity"; duration: 0; }
+            NumberAnimation { properties: "opacity"; duration: 100; }
             ScriptAction { script: base.full(); }
         },
         Transition {
             from: "full";
             to: "collapsed";
 
-            NumberAnimation { properties: "height,width,opacity"; duration: 0; }
+            NumberAnimation { properties: "opacity"; duration: 100; }
                 ScriptAction { script: base.collapsed(); }
         },
         Transition {
