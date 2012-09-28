@@ -250,19 +250,43 @@ Item {
         Behavior on opacity { NumberAnimation { } }
 
         Repeater {
-            model: d.panelAreas.length;
+            model: 12;
 
             delegate: Rectangle {
-                x: d.panelAreas[index].x;
-                y: d.panelAreas[index].y;
-                width: d.panelAreas[index].width;
-                height: d.panelAreas[index].height;
+                x: Constants.GridWidth * index;
+                y: 0;
+                width: Constants.GridWidth;
+                height: Constants.GridHeight / 2;
 
                 color: "transparent";
 
                 border.color: "white";
                 border.width: 2;
             }
+        }
+
+        Rectangle {
+            x: 0;
+            y: Constants.GridHeight / 2;
+            width: Constants.GridWidth * 2;
+            height: parent.height - Constants.GridHeight / 2;
+
+            color: "transparent";
+
+            border.color: "white";
+            border.width: 2;
+        }
+
+        Rectangle {
+            x: Constants.GridWidth * 10;
+            y: Constants.GridHeight / 2;
+            width: Constants.GridWidth * 2;
+            height: parent.height - Constants.GridHeight / 2;
+
+            color: "transparent";
+
+            border.color: "white";
+            border.width: 2;
         }
     }
 
