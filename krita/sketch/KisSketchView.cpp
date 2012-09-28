@@ -181,6 +181,7 @@ void KisSketchView::setFile(const QString& file)
         if(d->doc) {
             d->canvasWidget->stopRendering();
             KisView2 *oldView = d->view;
+            disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
             d->view = 0;
             emit viewChanged();
 
@@ -224,6 +225,7 @@ void KisSketchView::setFile(const QString& file)
         connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
         d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
+        connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
         emit viewChanged();
         d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
         d->view->hide();

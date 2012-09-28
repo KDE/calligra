@@ -43,6 +43,7 @@ public:
 
     void setFile(const QString &file);
 
+    void showFloatingMessage(const QString message, const QIcon& icon);
 public Q_SLOTS:
     void undo();
     void redo();
@@ -54,6 +55,7 @@ Q_SIGNALS:
     void viewChanged();
     void fileChanged();
     void modifiedChanged();
+    void floatingMessageRequested(QString message, QString iconName);
 
 protected:
     virtual bool sceneEvent(QEvent* event);
