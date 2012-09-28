@@ -26,9 +26,11 @@ Page {
         id: sketchView;
         width: parent.width;
         height: parent.height;
+
+        onInteractionStarted: panelBar.collapse();
     }
 
-    PanelBar { height: parent.height; width: parent.width; }
+    PanelBar { id: panelBar; height: parent.height; width: parent.width; }
 
     NewImagePanel {
         id: newPanel;
