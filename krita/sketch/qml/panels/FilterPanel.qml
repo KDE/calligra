@@ -140,22 +140,4 @@ Panel {
             }
         }
     }
-
-    dragDelegate: Component {
-        Rectangle {
-            color: Constants.Theme.TertiaryColor;
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-            radius: 8;
-
-            Label {
-                anchors.centerIn: parent;
-
-                text: "Filter";
-                color: "white";
-
-                font.pixelSize: Constants.DefaultFontSize;
-            }
-        }
-    }
 }

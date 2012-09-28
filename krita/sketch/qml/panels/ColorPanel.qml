@@ -24,23 +24,6 @@ Panel {
     id: base;
     name: "Color";
     panelColor: "#d37300"
-    dragDelegate: Component {
-        Rectangle {
-            color: "#d37300";
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-            radius: 8
-
-            Label {
-                anchors.centerIn: parent;
-
-                text: "Color";
-                color: "white";
-
-                font.pixelSize: Constants.DefaultFontSize;
-            }
-        }
-    }
 
     actions: [
         ColorSwatch {

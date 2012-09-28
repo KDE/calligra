@@ -22,7 +22,7 @@ import "../components"
 Panel {
     name: "Select";
     panelColor: Constants.Theme.QuaternaryColor;
-    
+
     actions: [
         Button {
             id: deselectButton;
@@ -61,11 +61,11 @@ Panel {
             onClicked: showSelection = !showSelection;
         }
     ]
-    
+
     peekContents: Item {
         id: peekItem;
         anchors.fill: parent;
-        
+
         Item {
             width: childrenRect.width;
             height: peekItem.height / 3;
@@ -215,11 +215,11 @@ Panel {
             }
         }
     }
-    
+
     fullContents: Item {
         id: fullItem;
         anchors.fill: parent;
-        
+
         Item {
             id: fullTopRow;
             width: childrenRect.width;
@@ -515,24 +515,6 @@ Panel {
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
                 }
-            }
-        }
-    }
-
-    dragDelegate: Component {
-        Rectangle {
-            color: Constants.Theme.QuaternaryColor;
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-            radius: 8;
-
-            Label {
-                anchors.centerIn: parent;
-
-                text: "Select";
-                color: "white";
-
-                font.pixelSize: Constants.DefaultFontSize;
             }
         }
     }

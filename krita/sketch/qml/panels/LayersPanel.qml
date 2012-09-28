@@ -172,6 +172,7 @@ Panel {
 
     fullContents: Item {
         anchors.fill: parent;
+
         Rectangle {
             id: addLayerButtons
             function toggle() { addLayerButtons.state = (addLayerButtons.state === "shown") ? "" : "shown"; }
@@ -351,24 +352,6 @@ Panel {
                         color: "transparent";
                     }
                 }
-            }
-        }
-    }
-
-    dragDelegate: Component {
-        Rectangle {
-            color: Constants.Theme.SecondaryColor;
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-            radius: 8
-
-            Label {
-                anchors.centerIn: parent;
-
-                text: "Layers";
-                color: "white";
-
-                font.pixelSize: Constants.DefaultFontSize;
             }
         }
     }
