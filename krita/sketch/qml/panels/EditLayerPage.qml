@@ -41,6 +41,8 @@ Item {
         }
         placeholder: "Name";
         text: layersModel ? layersModel.activeName : "";
+        onAccepted: if(layersModel) layersModel.activeName = text;
+        onFocusLost: if(layersModel) layersModel.activeName = text;
     }
     ExpandingListView {
         id: compositeOpList;
