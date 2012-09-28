@@ -24,7 +24,9 @@ import "panels"
 Page {
     SketchView {
         id: sketchView;
-
+        onFloatingMessageRequested: {
+            console.debug(message,iconName);
+        }
         width: parent.width;
         height: parent.height;
     }
