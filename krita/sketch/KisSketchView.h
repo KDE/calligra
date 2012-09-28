@@ -56,6 +56,7 @@ Q_SIGNALS:
     void fileChanged();
     void modifiedChanged();
     void floatingMessageRequested(QString message, QString iconName);
+    void interactionStarted();
 
 protected:
     virtual bool sceneEvent(QEvent* event);
