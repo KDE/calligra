@@ -116,6 +116,8 @@ public:
     int uv0AttributeLocation;
 
     QTimer *timer;
+
+    QTimer *loadedTimer;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -137,6 +139,10 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
     connect(d->timer, SIGNAL(timeout()), this, SLOT(resetDocumentPosition()));
+
+    d->loadedTimer = new QTimer(this);
+    d->timer->setSingleShot(true);
+    connect(d->loadedTimer, SIGNAL(timeout()), SIGNAL(loadingFinished()));
 }
 
 KisSketchView::~KisSketchView()
@@ -247,6 +253,8 @@ void KisSketchView::setFile(const QString& file)
         //    emit completed();
 
         geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
+
+        d->loadedTimer->start(500);
     }
 }
 

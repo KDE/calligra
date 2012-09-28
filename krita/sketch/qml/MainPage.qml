@@ -28,6 +28,19 @@ Page {
         height: parent.height;
 
         onInteractionStarted: panelBar.collapse();
+        onLoadingFinished: loadingScreen.opacity = 0;
+    }
+
+    Rectangle {
+        id: loadingScreen;
+        anchors.fill: parent;
+
+        Behavior on opacity { NumberAnimation { } }
+
+        Label {
+            anchors.centerIn: parent;
+            text: "Loading...";
+        }
     }
 
     PanelBar { id: panelBar; height: parent.height; width: parent.width; }
@@ -116,7 +129,7 @@ Page {
             if(sketchView.modified) {
                 //Show modified dialog
             }
-
+            loadingScreen.opacity = 1;
             if(Settings.temporaryFile) {
                 Krita.ImageBuilder.discardImage(sketchView.file);
             }
