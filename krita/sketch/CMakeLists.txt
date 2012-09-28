@@ -26,6 +26,8 @@ set(kritasketch_SRCS
     NetworkAccessManager.cpp
     ImageBuilder.cpp
     KritaNamespace.cpp
+    MouseTracker.cpp
+    PanelConfiguration.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS

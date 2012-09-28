@@ -69,6 +69,7 @@
 #include "ToolManager.h"
 #include "ImageBuilder.h"
 #include "KritaNamespace.h"
+#include "PanelConfiguration.h"
 
 class MainWindow::Private
 {
@@ -110,6 +111,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<FileSystemModel>("org.krita.sketch", 1, 0, "FileSystemModel");
     qmlRegisterType<ToolManager>("org.krita.sketch", 1, 0, "ToolManager");
     qmlRegisterType<CompositeOpModel>("org.krita.sketch", 1, 0, "CompositeOpModel");
+    qmlRegisterType<PanelConfiguration>("org.krita.sketch", 1, 0, "PanelConfiguration");
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 

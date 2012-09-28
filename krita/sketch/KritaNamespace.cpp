@@ -19,17 +19,20 @@
 #include "KritaNamespace.h"
 
 #include "ImageBuilder.h"
+#include "MouseTracker.h"
 
 class KritaNamespace::Private
 {
 public:
     QObject *imageBuilder;
+    QObject *mouseTracker;
 };
 
 KritaNamespace::KritaNamespace(QObject* parent)
     : QObject(parent), d(new Private)
 {
     d->imageBuilder = new ImageBuilder(this);
+    d->mouseTracker = new MouseTracker(this);
 }
 
 KritaNamespace::~KritaNamespace()
@@ -40,6 +43,11 @@ KritaNamespace::~KritaNamespace()
 QObject* KritaNamespace::imageBuilder() const
 {
     return d->imageBuilder;
+}
+
+QObject* KritaNamespace::mouseTracker() const
+{
+    return d->mouseTracker;
 }
 
 QObject* KritaNamespace::window() const
