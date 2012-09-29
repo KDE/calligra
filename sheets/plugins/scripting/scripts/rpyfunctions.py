@@ -1,13 +1,13 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script that provides access to the R programming environment for
+Sheets python script that provides access to the R programming environment for
 data analysis and graphics ( http://www.r-project.org ) using the RPy python
 module ( http://rpy.sourceforge.net ).
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 This script is licensed under the BSD license.
 """
 

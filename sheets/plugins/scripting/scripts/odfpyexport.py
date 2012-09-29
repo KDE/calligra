@@ -6,9 +6,9 @@ an OpenDocument File using the ODFPY python module.
 
 The script could be used in two ways;
 
-    1. Embedded in KSpread by execution via the "Tools=>Scripts"
+    1. Embedded in Sheets by execution via the "Tools=>Scripts"
        menu or from the "Tools=>Script Manager". In that case
-       the document currently loaded and displayed by KSpread
+       the document currently loaded and displayed by Sheets
        will be exported.
 
     2. As standalone script by running;
@@ -26,7 +26,7 @@ The script could be used in two ways;
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 

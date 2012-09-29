@@ -2,11 +2,11 @@
 
 """
 Python script to import content from a Kexi Project stored
-within a KexiDB into KSpread.
+within a KexiDB into Sheets.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 

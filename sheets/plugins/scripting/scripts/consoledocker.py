@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 
 """
-Interactive Python Console Docker for KSpread.
+Interactive Python Console Docker for Sheets.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org

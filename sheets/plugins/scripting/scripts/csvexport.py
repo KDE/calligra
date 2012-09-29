@@ -1,12 +1,12 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script to export an ISO OpenDocument spreadsheet file to
+Sheets python script to export an ISO OpenDocument spreadsheet file to
 a comma-separated-value file.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 

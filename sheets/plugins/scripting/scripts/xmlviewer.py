@@ -6,7 +6,7 @@ import os, sys, traceback, tempfile, zipfile
 # import the kross module.
 import Kross
 
-CalligraAppName="KSpread"
+CalligraAppName="Sheets"
 CalligraAppExt="ods"
 
 try:
