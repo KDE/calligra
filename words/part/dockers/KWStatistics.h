@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -63,12 +64,28 @@ public slots:
 
 private:
     int countCJKChars(const QString &text);
-    QLabel *words,*sentences,*syllables,*spaces;
-    QLabel *flesch, *cjkchars,*nospaces,*lines;
-    QLabel *count_words,*count_sentences,*count_syllables,*count_spaces;
-    QLabel *count_flesch, *count_cjkchars,*count_nospaces,*count_lines;
-    QWidget *statsWidget;
-    QToolButton *preferencesButton;
+
+    QWidget *m_statsWidget;
+
+    QLabel *m_wordsLabel;
+    QLabel *m_sentencesLabel;
+    QLabel *m_syllablesLabel;
+    QLabel *m_spacesLabel;
+    QLabel *m_fleschLabel;
+    QLabel *m_cjkcharsLabel;
+    QLabel *m_nospacesLabel;
+    QLabel *m_linesLabel;
+
+    QLabel *m_countWords;
+    QLabel *m_countSentences;
+    QLabel *m_countSyllables;
+    QLabel *m_countSpaces;
+    QLabel *m_countFlesch;
+    QLabel *m_countCjkchars;
+    QLabel *m_countNospaces;
+    QLabel *m_countLines;
+
+    QToolButton *m_preferencesButton;
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
     KWDocument *m_document;
@@ -84,6 +101,7 @@ private:
     long m_syllables;
     long m_paragraphs;
     long m_cjkChars;
+
     bool m_showInDocker;
 };
 

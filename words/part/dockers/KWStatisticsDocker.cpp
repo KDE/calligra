@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,9 +58,9 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
                                                 canvas->shapeManager()->selection(),
                                                 this);
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
-    setWidget(statisticsDock->statsWidget);
+    setWidget(statisticsDock->m_statsWidget);
     initLayout();
-    statisticsDock->statsWidget->setLayout(mainBox);
+    statisticsDock->m_statsWidget->setLayout(mainBox);
 }
 
 void KWStatisticsDocker::unsetCanvas()
@@ -81,47 +82,47 @@ void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 
 void KWStatisticsDocker::initLayout()
 {
-    mainBox = new QBoxLayout(QBoxLayout::LeftToRight,statisticsDock->statsWidget);
+    mainBox = new QBoxLayout(QBoxLayout::LeftToRight, statisticsDock->m_statsWidget);
     wordsLayout = new QHBoxLayout();
     mainBox->addLayout(wordsLayout);
-    wordsLayout->addWidget(statisticsDock->words);
-    wordsLayout->addWidget(statisticsDock->count_words);
+    wordsLayout->addWidget(statisticsDock->m_wordsLabel);
+    wordsLayout->addWidget(statisticsDock->m_countWords);
 
     sentencesLayout = new QHBoxLayout();
     mainBox->addLayout(sentencesLayout);
-    sentencesLayout->addWidget(statisticsDock->sentences);
-    sentencesLayout->addWidget(statisticsDock->count_sentences);
+    sentencesLayout->addWidget(statisticsDock->m_sentencesLabel);
+    sentencesLayout->addWidget(statisticsDock->m_countSentences);
 
     syllablesLayout = new QHBoxLayout();
     mainBox->addLayout(syllablesLayout);
-    syllablesLayout->addWidget(statisticsDock->syllables);
-    syllablesLayout->addWidget(statisticsDock->count_syllables);
+    syllablesLayout->addWidget(statisticsDock->m_syllablesLabel);
+    syllablesLayout->addWidget(statisticsDock->m_countSyllables);
 
     cjkcharsLayout = new QHBoxLayout();
     mainBox->addLayout(cjkcharsLayout);
-    cjkcharsLayout->addWidget(statisticsDock->cjkchars);
-    cjkcharsLayout->addWidget(statisticsDock->count_cjkchars);
+    cjkcharsLayout->addWidget(statisticsDock->m_cjkcharsLabel);
+    cjkcharsLayout->addWidget(statisticsDock->m_countCjkchars);
 
     spacesLayout = new QHBoxLayout();
     mainBox->addLayout(spacesLayout);
-    spacesLayout->addWidget(statisticsDock->spaces);
-    spacesLayout->addWidget(statisticsDock->count_spaces);
+    spacesLayout->addWidget(statisticsDock->m_spacesLabel);
+    spacesLayout->addWidget(statisticsDock->m_countSpaces);
 
     nospacesLayout = new QHBoxLayout();
     mainBox->addLayout(nospacesLayout);
-    nospacesLayout->addWidget(statisticsDock->nospaces);
-    nospacesLayout->addWidget(statisticsDock->count_nospaces);
+    nospacesLayout->addWidget(statisticsDock->m_nospacesLabel);
+    nospacesLayout->addWidget(statisticsDock->m_countNospaces);
 
     fleschLayout = new QHBoxLayout();
     mainBox->addLayout(fleschLayout);
-    fleschLayout->addWidget(statisticsDock->flesch);
-    fleschLayout->addWidget(statisticsDock->count_flesch);
+    fleschLayout->addWidget(statisticsDock->m_fleschLabel);
+    fleschLayout->addWidget(statisticsDock->m_countFlesch);
 
     linesLayout = new QHBoxLayout();
     mainBox->addLayout(linesLayout);
-    linesLayout->addWidget(statisticsDock->lines);
-    linesLayout->addWidget(statisticsDock->count_lines);
-    mainBox->addWidget(statisticsDock->preferencesButton);
+    linesLayout->addWidget(statisticsDock->m_linesLabel);
+    linesLayout->addWidget(statisticsDock->m_countLines);
+    mainBox->addWidget(statisticsDock->m_preferencesButton);
 }
 
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
