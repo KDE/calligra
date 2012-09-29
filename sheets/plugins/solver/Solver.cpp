@@ -38,7 +38,7 @@ using namespace Calligra::Sheets::Plugins;
 
 // make the plugin available
 K_PLUGIN_FACTORY(SolverFactory, registerPlugin<Calligra::Sheets::Plugins::Solver>();)
-K_EXPORT_PLUGIN(SolverFactory("kspreadsolver"))
+K_EXPORT_PLUGIN(SolverFactory("sheetssolver"))
 
 Calligra::Sheets::View* s_view = 0;
 Calligra::Sheets::Formula* s_formula = 0;
@@ -65,7 +65,7 @@ Solver::Solver(QObject* parent, const QVariantList& args)
         return;
     }
 
-    QAction* solver = actionCollection()->addAction("kspreadsolver");
+    QAction* solver = actionCollection()->addAction("sheetssolver");
     solver->setText(i18n("Function Optimizer..."));
     connect(solver, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
