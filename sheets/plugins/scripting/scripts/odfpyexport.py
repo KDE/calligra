@@ -277,7 +277,7 @@ class OdfPyExport:
                 exportSheets.append( [sheetname, True] )
 
         if not writeOdfFile:
-            raise Exception, T.i18n("No OpenDocument file to write to defined.")
+            raise Exception, T.i18n("No OpenDocument file to write defined.")
 
         if not odfExporterClass:
             if len(self.exporterClasses) == 1:

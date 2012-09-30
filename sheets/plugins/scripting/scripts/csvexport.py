@@ -76,7 +76,7 @@ class CsvExporter:
 
         csvfilename = self.savewidget.selectedFile()
         if not csvfilename:
-            raise Exception, T.i18n("No CSV file choosen")
+            raise Exception, T.i18n("No CSV file chosen")
         if os.path.splitext(csvfilename)[1] == '':
             csvfilename += '.csv'
 

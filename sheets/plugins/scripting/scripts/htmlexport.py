@@ -375,7 +375,7 @@ class Dialog:
             self.savewidget.setMode("Saving")
             self.savewidget.setFilter("*.html *.htm *.xhtml|%(1)s\n*|%(2)s"  % { '1' : T.i18n("HTML Documents"), '2' : T.i18n("All Files") } )
 
-        infospage = self.dialog.addPage(T.i18n("Infos"),T.i18n("HTML Document Informations"),"document-properties")
+        infospage = self.dialog.addPage(T.i18n("Info"),T.i18n("HTML Document Information"),"document-properties")
         self.infoswidget = self.forms.createWidgetFromUIFile(infospage, os.path.join(self.exporter.currentpath, "htmlexportinfos.ui"))
         for i in self.exporter.reader.infos.keys():
             w = self.infoswidget[i]

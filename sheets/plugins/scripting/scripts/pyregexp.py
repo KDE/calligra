@@ -7,7 +7,7 @@ T = Kross.module("kdetranslation")
 func = KSpread.function("PYREGEXP")
 func.minparam = 3
 func.maxparam = 3
-func.comment = T.i18n("The PYREGEXP() function displays the current datetime.")
+func.comment = T.i18n("The PYREGEXP() function replaces substring in the input string with a given string using regular expression.")
 func.syntax = T.i18n("PYREGEXP(string)")
 func.addParameter("String", T.i18n("The input string."))
 func.addParameter("String", T.i18n("The regular expression."))

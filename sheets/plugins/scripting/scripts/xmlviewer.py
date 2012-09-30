@@ -54,7 +54,7 @@ class Dialog:
         # let's read the manifest file by using a KoScriptingOdfReader
         reader = self.store.open("META-INF/manifest.xml")
         if not reader:
-            raise Exception(T.i18n("Failed to read the mainfest"))
+            raise Exception(T.i18n("Failed to read the manifest"))
         # walk over all file-entry items the manifest does know about.
         for i in range( reader.count() ):
             # the typename, e.g. "text/xml"
