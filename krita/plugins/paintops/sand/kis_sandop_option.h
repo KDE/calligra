@@ -35,6 +35,9 @@ const QString SAND_FRICTION = "Sand/friction";
 const QString SAND_BMASS = "Sand/brushMass";
 const QString SAND_BFRICTION = "Sand/brushFriction";    
 const QString SAND_MODE = "Sand/mode";    //set the operation mode for this brush (pouring or spread)
+const QString SAND_GRID_X = "Sand/gridWidth";
+const QString SAND_GRID_Y = "Sand/gridHeight";
+const QString SAND_GRID_RESIZE = "Sand/gridAutoResize";
 
 class KisSandOpOptionsWidget;
 
@@ -65,9 +68,16 @@ public:
 
     double bMass () const;
     void setBmass(double mass) const;
+
+    int gridWidth() const;
+    void setGridWidth(int x) const;
+    
+    int gridHeight() const;
+    void setGridHeight(int y) const;
     
     bool sandDepletion() const;
     bool mode() const;
+    bool gridAutoResize() const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -108,6 +118,15 @@ public:
     ///Brush mode: pouring or spreading
     bool mode;
 
+    ///Grid width
+    int gridWidth;
+
+    ///Grid height
+    int gridHeight;
+
+    ///Grid Auto Resize
+    bool gridAutoResize;
+
     ///Energy dissipation of the particle (damping)
     //float dissipation;
 
@@ -123,7 +142,10 @@ public:
         friction = settings->getFloat(SAND_FRICTION);
         b_mass = settings->getFloat(SAND_BMASS);
         b_friction = settings->getFloat(SAND_BFRICTION);
-        mode = settings->getBool(SAND_MODE); //??
+        mode = settings->getBool(SAND_MODE); 
+        gridWidth = settings->getInt(SAND_GRID_X);
+        gridHeight = settings->getInt(SAND_GRID_Y);
+        gridAutoResize = settings->getBool(SAND_GRID_RESIZE);
 //         dissipation = settings->getFloat(SAND_DISSIPATION);
     }
 };

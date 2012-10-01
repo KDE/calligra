@@ -47,6 +47,10 @@ KisSandOpOption::KisSandOpOption()
 
     //OBS!!
     connect(m_options->modeComboBox, SIGNAL(currentIndexChanged(QString)), SIGNAL(sigSettingChanged()));
+    //OBS2!!
+    connect(m_options->gridAutoResizeCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->gridHeightSpinBox, SLOT(setDisabled(bool)), m_options->gridAutoResizeCHBox ,SIGNAL(clicked(bool)));
+    connect(m_options->gridWidthSpinBox, SLOT(setDisabled(bool)), m_options->gridAutoResizeCHBox ,SIGNAL(clicked(bool)));
 
     setConfigurationPage(m_options);
 }
@@ -162,13 +166,52 @@ void KisSandOpOption::setMass(double mass) const
 }
 
 
+int KisSandOpOption::gridWidth() const
+{
+    return m_options->gridWidthSpinBox->value();
+}
+
+void KisSandOpOption::setGridWidth(int x) const
+{
+    m_options->gridWidthSpinBox->setValue(x);
+}
+
+int KisSandOpOption::gridHeight() const
+{
+    return m_options->gridHeightSpinBox->value();
+}
+
+void KisSandOpOption::setGridHeight(int y) const
+{
+    m_options->gridHeightSpinBox->setValue(y);
+}
+
+bool KisSandOpOption::gridAutoResize() const
+{
+    qDebug() << "CAlled autorsize??" ;
+    if( m_options->gridAutoResizeCHBox->isChecked() ){
+        m_options->gridHeightSpinBox->setDisabled(true);
+        m_options->gridWidthSpinBox->setDisabled(true);
+        qDebug() << "Checked?" ;
+
+        return true;
+    }
+
+    qDebug() << "Not checked?" ;
+    m_options->gridHeightSpinBox->setEnabled(true);
+    m_options->gridWidthSpinBox->setEnabled(true);
+// 
+    return false;
+}
+
+
 // double KisSandOpOption::dissipation() const
 // {
 //     return m_options->dissipationSpinBox->value();
 // }
 
 // void KisSandOpOption::setDissipation(double dissipation) const
-// {
+// {xx
 //     m_options->dissipationSpinBox->setValue( dissipation );
 // }
 
@@ -187,6 +230,8 @@ void KisSandOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) co
 
 //Sand spread mode write settings
     setting->setProperty(SAND_MODE, mode());
+    setting->setProperty(SAND_GRID_X, gridWidth());
+    setting->setProperty(SAND_GRID_Y, gridHeight());
 //     setting->setProperty(SAND_DISSIPATION, sandDissipation());
 }
 

@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include <QColor>
-
+#include <QDebug>
 #include <QDomDocument>
 
 #include "DebugPigment.h"
@@ -247,6 +247,7 @@ const KoColorSpace * KoColor::colorSpace() const
 
 void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
 {
+    qDebug() << "To XML..." ;
     d->colorSpace->colorToXML(d->data, doc, colorElt);
 }
 

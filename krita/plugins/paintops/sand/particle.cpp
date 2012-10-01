@@ -139,10 +139,6 @@ void Particle::applyForce(QPointF &pos, QPointF &vel, const SandProperties * pro
     //Xi derivative (velocity based)
     float xidot = - (ex*dvx + ey*dvy);
 
-//     qDebug() << "| e ; "  << ex << ", " << ey
-//              << "| dv ; " << dvx << ", " << dvy
-//              << "| dist ; " << dist_x << ", " << dist_y;
-
     //NORMAL FORCE ON THIS PARTICLE
     float fn = sqrt(xi)*Y*sqrt(reff)*(xi+A*xidot); //this is the original formula with the dissipation constant
 
@@ -188,7 +184,7 @@ QPointF Particle::accel(const State &state, double t)
     const float k = 0.1; //put this as a property in the brush configuration
     const float b = _mass;
     
-    //inear momentum dumping (due to friction)
+    //linear momentum dumping (due to friction)
     QPointF result (qreal( -k*state.vel.x()/b ),
                     qreal( -k*state.vel.y()/b ) );
     return result;
@@ -220,8 +216,6 @@ void Particle::integrationStep(double dt, int width, int height)
 
     float newPos_x = _pos->x() + pos_x;
     float newPos_y = _pos->y() + pos_y;
-
-//     qDebug() << "nPos " << newPos_x << ", " << newPos_y;
     
     if( sqrt(newPos_x * newPos_x) < width && sqrt(newPos_y * newPos_y) < height ){
         _old->rx() = _pos->x();
@@ -235,11 +229,18 @@ void Particle::integrationStep(double dt, int width, int height)
 }
 
 /*
- * Serialization operation overload
+ * Serialization operation overload 
  */
 
 QDataStream &operator<<(QDataStream &out, const Particle &particle)
-{   
+{
+    //Oh no! Bottleneck!!!
+//     QDomDocument doc = QDomDocument("color");
+//     QDomElement root = doc.createElement("color");
+//     doc.appendChild(root);
+//     KoColor * clr = particle.color();
+//     clr->toXML(doc, root);
+
     out << particle.isAlive()
         << quint32(particle.lifespan())
         << particle.mass()
@@ -247,15 +248,17 @@ QDataStream &operator<<(QDataStream &out, const Particle &particle)
         << quint32(particle.radius())
         << particle.friction()
         << particle.dissipation()
-        << *particle.pos()
-        << *particle.vel()
-        << *particle.accel();
+        << * particle.pos()
+        << * particle.vel()
+        << * particle.accel();
+//         << doc.toString();
         
     return out;
 }
 
 QDataStream &operator>>(QDataStream &in, Particle &particle)
 {
+    //the color is saving, but it's really slow!!
     bool life;
     float mass;
     float force;
@@ -266,10 +269,18 @@ QDataStream &operator>>(QDataStream &in, Particle &particle)
     QPoint   pos;
     QPointF  vel;
     QPointF  accel;
+//     QString colorStr;
 
     in >> life >> lifespan >> mass
        >> force >> radius >> friction
-       >> dissipation >> pos >> vel >> accel;
+       >> dissipation >> pos >> vel >> accel ;//>> colorStr;
+
+    //Oh no! Bottleneck!!!
+//     QDomDocument doc = QDomDocument();
+//     doc.setContent(colorStr);
+//     QDomElement elt = doc.documentElement();
+//     KoColor * clr = new KoColor();
+//     clr->fromXML(elt, Integer16BitsColorDepthID.id(), QHash<QString, QString>());
     
     particle.setLife(life);
     particle.setMass(mass);
@@ -281,6 +292,7 @@ QDataStream &operator>>(QDataStream &in, Particle &particle)
     particle.setPos(new QPoint(pos));
     particle.setVel(new QPointF(vel));
     particle.setAccel(new QPointF(accel));
+//     particle.setColor(clr);
 
     return in;
 }

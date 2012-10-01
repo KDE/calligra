@@ -129,7 +129,10 @@ public:
      */
     void setGrains(QList<Particle *> &g_copy);
 
-
+    /**
+     * @brief Prepare the particle settings when the brush is in the spread mode
+     */
+    void setSpreadParticles();
 
 private:
     

@@ -37,12 +37,15 @@
 #include <QObject>
 #include <QPoint>
 #include <QPointF>
-#include <QColor>
 #include <QDataStream>
+#include <QByteArray>
 #include <iostream>
 #include <math.h>
 #include <QDebug>
 #include <KoColor.h>
+#include <QDomDocument>
+#include <QDomElement>
+#include <KoColorModelStandardIds.h> //obs
 
 #include "sand_brush.h"
 

@@ -125,6 +125,25 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
             store->close();
         }
     }
+
+    /*
+     * Sandbrush particles annotation:
+     * Questions:
+     * -> What the "external" boolean variable is representing?
+     * -> What the line " location += m_d->imageName + EXIF_PATH; " actually do?
+     * 
+     */
+    KisAnnotationSP partAnnon = image->annotation("particle");
+    if (partAnnon) {
+        location = external ? QString::null : uri;
+        location += m_d->imageName + PARTICLE;  //defined in KRA_TAGS as "/annotations/particles"
+        if (store->open(location)) {
+            store->write(partAnnon->annotation());
+            store->close();
+        }
+    }
+
+    
     if (image->profile()) {
         const KoColorProfile *profile = image->profile();
         KisAnnotationSP annotation;

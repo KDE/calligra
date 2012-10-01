@@ -98,6 +98,10 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
     QPointF pos = toQPointF(info.movement());
     QPointF vel(pos.x()/time, pos.y()/time);    //current velocity
     QPointF accel( (m_prevVel.x() - vel.x())/time, (m_prevVel.y() - vel.y())/time ); //current accel
+
+    if(!m_cursorFilter.applyFilter(x, y)){
+        return;
+    }
     
     m_counter++;
     qreal result = 0;
@@ -135,8 +139,14 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
              * vertical or horizontal direction (all particles are aligned and it draws
              * a line, instead of spreading the sand)
              */
-            pixelX = qRound(x + bx*vel.x()*10);
-            pixelY = qRound(y + by*vel.y()*10);
+//             pixelX = qRound(x + bx*vel.x()*10);
+//             pixelY = qRound(y + by*vel.y()*10);
+
+
+
+            pixelX = qRound(x + bx*5);
+            pixelY = qRound(y + by*5);
+
 
             //Create a particle with the current settings in the widget
             Particle *p = new Particle ( true,
@@ -153,7 +163,7 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
                             );
             //to normalization
             p->setBounds(new QPoint(width, height));
-
+            
             //Draw the particle on the canvas
             drawParticle(drawer, p, false);
 
@@ -173,6 +183,7 @@ void SandBrush::pouring(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &c
 
 void SandBrush::spread(KisPaintDeviceSP dev, qreal x, qreal y, const KoColor &b_color, const KoColor &f_color, const KisPaintInformation& info, int width, int height)
 {
+//     qDebug() << "Spreading..." ;
 
     //(1) Retrieve the neighbor particles where the mouse is positioned (done in the KisSandPaintOp)
     KisPainter drawer(dev);

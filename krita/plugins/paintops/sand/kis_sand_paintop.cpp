@@ -39,6 +39,8 @@
 
 #include <kis_pressure_opacity_option.h>
 
+//See bool KisKraSaver::saveBinaryData on how to save the particle annotation
+
 KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainter * painter, KisImageWSP image)
         : KisPaintOp(painter),
           m_imgWidth(1000),
@@ -47,11 +49,11 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
           m_gridY(100)
 {
     if(!image){
-    m_image = 0;
-//         return;
+        m_image = 0;    //this can be a problem...see a better way to handle this
+    //         return;
     }else{
         m_image = image;
-        m_annot = image->annotation("Particle");
+        m_annot = image->annotation("particle");    //get the annotation
     }
     
     
@@ -64,26 +66,17 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
     m_sandBrush = new SandBrush( &m_properties, transfo );
 
     //If there is an annotation with previouly added particles...
-    //OBS.: try to find a way to remove the KisImageWSP from this class
+    //OBS.: try to find a way to remove the KisImageWSP from this class (m_image)
     if(m_image){
         m_imgWidth = image->size().width();
         m_imgHeight = image->size().height();
     }
     
     if(m_annot){
-
-        //Retrieving particles from an annotation...
-        QList<Particle *> p;
-        retrieveParticles(p);
-        
-        //Set all the particles in the m_grains
-        setGrains(p);
-        
-        //BUild the grid structure with the actual particles positions
-        makeGrid();
-
-        //Create neighborhood
-        makeNeighbors();
+        qDebug() << "Loading particles..." ;
+        setSpreadParticles();
+    }else{
+        qDebug() << "No particles..." ;
     }
 }
 
@@ -107,7 +100,7 @@ KisSandPaintOp::~KisSandPaintOp()
         * Add particles to the "Particle" annotation
         */
         if(m_image){
-            m_image->addAnnotation(KisAnnotationSP(new KisAnnotation( "Particle",
+            m_image->addAnnotation(KisAnnotationSP(new KisAnnotation( "particle",
                                                                     "Set of grains created by the paintop",
                                                                     *b_array)
                                                 )
@@ -123,7 +116,7 @@ KisSandPaintOp::~KisSandPaintOp()
  */
 qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
 {
-
+    
     if (!painter())
         return 1.0;
 
@@ -161,6 +154,7 @@ qreal KisSandPaintOp::paintAt(const KisPaintInformation& info)
     if(m_properties.mode && m_grains.size()){
 
         QList<Particle *> parts;
+//         qDebug() << "Getting grains..." ;
         getGrains(parts);
         
         //Get the grid cell where the mouse is now
@@ -196,6 +190,7 @@ void KisSandPaintOp::retrieveParticles(QList<Particle *> &p)
         return;
     
 //     KisAnnotationSP annot = m_image->annotation("Particle");
+//     qDebug() << "Retrive particles..." ;
     QByteArray * array = &m_annot->annotation();
 
     QDataStream data( array , QIODevice::ReadWrite);
@@ -353,4 +348,21 @@ void KisSandPaintOp::setGrains(QList<Particle *> &g_copy)
 {
     for(int i = 0; i < g_copy.size(); i++)
         m_grains.append(g_copy[i]);
+}
+
+void KisSandPaintOp::setSpreadParticles(){
+    //Retrieving particles from an annotation...
+    QList<Particle *> p;
+    retrieveParticles(p);
+
+    //Set all the particles in the m_grains
+    setGrains(p);
+
+    //BUild the grid structure with the actual particles positions
+    makeGrid();
+
+    //Create neighborhood
+    makeNeighbors();
+
+    qDebug() << "Particles loaded..." ;
 }

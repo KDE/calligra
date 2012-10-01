@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>705</width>
-    <height>441</height>
+    <width>574</width>
+    <height>627</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -180,6 +180,66 @@
              <enum>QSlider::TicksBelow</enum>
             </property>
            </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="gridLayout">
+          <item>
+           <widget class="QCheckBox" name="gridAutoResizeCHBox">
+            <property name="text">
+             <string>Grid Auto-resize</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <layout class="QHBoxLayout" name="gWidthLayout">
+              <item>
+               <widget class="QLabel" name="gridWidthLabel">
+                <property name="text">
+                 <string>grid width</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="gridWidthSpinBox">
+                <property name="minimum">
+                 <number>100</number>
+                </property>
+                <property name="maximum">
+                 <number>9999</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="gHeightLayout">
+              <item>
+               <widget class="QLabel" name="gridHeightLabel">
+                <property name="text">
+                 <string>grid height</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="gridHeightSpinBox">
+                <property name="minimum">
+                 <number>100</number>
+                </property>
+                <property name="maximum">
+                 <number>9999</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
