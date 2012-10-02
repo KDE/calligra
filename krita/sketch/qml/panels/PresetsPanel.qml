@@ -25,7 +25,7 @@ Panel {
     name: "Presets";
     panelColor: "#1e0058";
 
-    actions: [
+    /*actions: [
         Button {
             id: addButton;
 
@@ -87,7 +87,7 @@ Panel {
                 }
             }
         }
-    ]
+    ]*/
 
     PresetModel {
         id: presetsModel;
