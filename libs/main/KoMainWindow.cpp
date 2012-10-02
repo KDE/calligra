@@ -327,6 +327,12 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     createShellGUI();
     d->mainWindowGuiIsBuilt = true;
 
+
+#ifdef Q_OS_WIN
+    KConfigGroup cfg(KGlobal::config(), "MainWindow");
+    restoreGeometry(cfg.readEntry("geometry", QByteArray()));
+    restoreState(cfg.readEntry("windowState", QByteArray()));
+#else
     // if the user didn's specify the geometry on the command line (does anyone do that still?),
     // we first figure out some good default size and restore the x,y position. See bug 285804Z.
     if (!initialGeometrySet()) {
@@ -368,6 +374,7 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     // way of doing things.
     KConfigGroup config(KGlobal::config(), "MainWindow");
     restoreWindowSize( config );
+#endif
 
     d->dockerManager = new KoDockerManager(this);
 }
@@ -375,9 +382,13 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
 KoMainWindow::~KoMainWindow()
 {
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
+#ifdef Q_OS_WIN
+    cfg.writeEntry("geometry", saveGeometry());
+    cfg.writeEntry("windowState", saveState());
+#else
     cfg.writeEntry("ko_x", frameGeometry().x());
     cfg.writeEntry("ko_y", frameGeometry().y());
-
+#endif
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
     d->dockerManager = 0;
@@ -1203,7 +1214,7 @@ void KoMainWindow::slotFileOpen()
 {
 #ifdef Q_WS_WIN
     // "kfiledialog:///OpenDialog" forces KDE style open dialog in Windows
-	// TODO provide support for "last visited" directory
+    // TODO provide support for "last visited" directory
     KFileDialog *dialog = new KFileDialog(KUrl(""), QString(), this);
 #else
     KFileDialog *dialog = new KFileDialog(KUrl("kfiledialog:///OpenDialog"), QString(), this);
