@@ -30,10 +30,17 @@
 class KisToolSelectRectangular : public KisToolRectangleBase
 {
     Q_OBJECT
-
+    Q_PROPERTY(int selectionAction READ selectionAction WRITE setSelectionAction NOTIFY selectionActionChanged);
 public:
     KisToolSelectRectangular(KoCanvasBase * canvas);
     QWidget* createOptionWidget();
+    SelectionAction selectionAction() const;
+
+public Q_SLOTS:
+    void setSelectionAction(int newSelectionAction);
+
+Q_SIGNALS:
+    void selectionActionChanged();
 
 private:
     void keyPressEvent(QKeyEvent *event);
@@ -41,6 +48,7 @@ private:
 
 private:
     KisSelectionToolConfigWidgetHelper m_widgetHelper;
+    SelectionAction m_selectionAction;
 };
 
 

@@ -41,6 +41,25 @@ KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase * canvas)
                            KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6)),
       m_widgetHelper(i18n("Rectangular Selection"))
 {
+    connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(setSelectionAction(int)));
+}
+
+SelectionAction KisToolSelectRectangular::selectionAction() const
+{
+    return m_selectionAction;
+}
+
+void KisToolSelectRectangular::setSelectionAction(int newSelectionAction)
+{
+    if(newSelectionAction >= SELECTION_REPLACE && newSelectionAction <= SELECTION_INTERSECT && m_selectionAction != newSelectionAction)
+    {
+        if(m_widgetHelper.optionWidget())
+        {
+            m_widgetHelper.slotSetAction(newSelectionAction);
+        }
+        m_selectionAction = (SelectionAction)newSelectionAction;
+        emit selectionActionChanged();
+    }
 }
 
 QWidget* KisToolSelectRectangular::createOptionWidget()
