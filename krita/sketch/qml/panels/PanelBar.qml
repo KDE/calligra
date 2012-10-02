@@ -113,12 +113,11 @@ Item {
 
         objectName: "leftFull";
 
+        anchors.top: parent.top;
         anchors.bottom: parent.bottom;
         anchors.left: parent.left;
 
-        height: parent.height;
-        onHeightChanged: if( children.length > 0 ) children[0].height = height;
-        Behavior on height { NumberAnimation { duration: 100; } }
+        onHeightChanged: if(children.length > 0) children[0].height = height;
         width: Constants.GridWidth * 2;
         state: "full";
     }
@@ -128,18 +127,17 @@ Item {
 
         objectName: "rightFull";
 
+        anchors.top: parent.top;
         anchors.bottom: parent.bottom;
         anchors.right: parent.right;
 
-        height: parent.height;
-        onHeightChanged: if( children.length > 0 ) children[0].height = height;
-        Behavior on height { NumberAnimation { duration: 100; } }
+        onHeightChanged: if(children.length > 0) children[0].height = height;
         width: Constants.GridWidth * 2;
         state: "full";
     }
 
     Row {
-        x: Constants.GridWidth * 2;
+        x: Constants.GridWidth * 2 + 4;
 
         PanelDropArea {
             id: centerTopArea1;

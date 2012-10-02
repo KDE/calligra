@@ -168,20 +168,19 @@ Item {
         }
     }
 
-    Rectangle {
+    Item {
         id: handle;
 
         anchors.top: fill.bottom;
+        anchors.topMargin: Constants.GridHeight / 4;
+        anchors.left: fill.left;
+        anchors.leftMargin: Constants.GridWidth / 2;
 
         Behavior on y { id: yHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
         Behavior on x { id: xHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
 
-        color: base.panelColor;
-        radius: 0
-
-        width: (Constants.GridWidth * 1) - 8
-        height: Constants.GridHeight / 4
-
+        width: 1;
+        height: 1;
         opacity: 0
 
         function fixParent() {
@@ -190,38 +189,46 @@ Item {
                 yHandleAnim.enabled = false;
                 handle.parent = base;
                 handle.anchors.top = fill.bottom;
-                handle.x = 0;
+                handle.anchors.left = fill.left;
             }
         }
 
         Rectangle {
-            anchors.top: parent.top;
+            anchors.bottom: parent.top;
+            anchors.horizontalCenter: parent.horizontalCenter;
+            color: base.panelColor;
+            radius: 0
+
+            width: (Constants.GridWidth * 1) - 8
+            height: Constants.GridHeight / 4
+        }
+
+        Rectangle {
+            anchors.verticalCenter: parent.verticalCenter;
+            anchors.horizontalCenter: parent.horizontalCenter;
 
             width: (Constants.GridWidth * 1) - 8
             height: Constants.GridHeight / 2
             color: base.panelColor
             radius: 8
-        }
 
-        Label {
-            id: handleLabel;
+            Label {
+                id: handleLabel;
 
-            anchors.verticalCenter: parent.bottom;
-            anchors.horizontalCenter: parent.horizontalCenter;
+                anchors.centerIn: parent;
 
-            text: base.name;
-            color: base.textColor;
+                text: base.name;
+                color: base.textColor;
 
-            font.pixelSize: Constants.DefaultFontSize;
+                font.pixelSize: Constants.DefaultFontSize;
+            }
         }
 
         DnD.DragArea {
             id: handleDragArea;
-            anchors {
-                top: parent.top;
-                left: parent.left;
-                right: parent.right;
-            }
+            anchors.centerIn: parent;
+
+            width: Constants.GridWidth - 8;
             height: Constants.GridHeight * 0.75;
 
             source: base;
@@ -232,6 +239,7 @@ Item {
                 base.dragStarted();
 
                 parent.anchors.top = undefined;
+                parent.anchors.left = undefined;
                 parent.parent = base.page;
                 Krita.MouseTracker.addItem(parent);
                 dragging = true;
@@ -246,8 +254,8 @@ Item {
                 dragging = false;
 
                 var parentPos = base.mapToItem(base.page, 0, 0);
-                parent.x = parentPos.x;
-                parent.y = parentPos.y;
+                parent.x = parentPos.x + Constants.GridWidth / 2;
+                parent.y = parentPos.y + Constants.GridHeight / 4;
             }
 
             MouseArea {
@@ -275,7 +283,7 @@ Item {
 
             PropertyChanges { target: base; width: Constants.GridWidth * 2; }
             PropertyChanges { target: fill; height: Constants.GridHeight * 3.75; }
-            PropertyChanges { target: handle; opacity: 1; }
+            PropertyChanges { target: handle; opacity: 1; anchors.leftMargin: Constants.GridWidth / 2 - 4; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
             AnchorChanges { target: header; anchors.bottom: parent.bottom }
