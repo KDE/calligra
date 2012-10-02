@@ -223,6 +223,8 @@ bool PlanTJScheduler::kplatoToTJ()
     m_tjProject->setEnd( m_project->constraintEndTime().toTime_t() );
     m_tjProject->setScheduleGranularity( 300 ); //5 minutes
 
+    m_tjProject->setDailyWorkingHours( m_project->standardWorktime()->day() );
+
     addTasks();
     setConstraints();
     addDependencies();
