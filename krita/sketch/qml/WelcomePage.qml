@@ -41,14 +41,14 @@ Page {
             sourceSize.width: width;
         }
 
-        rightArea: Image {
+        /*rightArea: Image {
             width: Constants.GridWidth * 0.5;
             height: parent.height;
             source: "./images/svg/icon-help.svg";
             fillMode: Image.PreserveAspectFit;
 
             sourceSize.width: width;
-        }
+        }*/
 
         Image {
             anchors.fill: parent;

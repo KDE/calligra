@@ -112,7 +112,7 @@ Item {
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "redo" );
             }
-            Item {
+            /*Item {
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
             }
@@ -135,7 +135,7 @@ Item {
                 image: "../images/svg/icon-settings.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "settings" );
-            }
+            }*/
         }
     }
 
