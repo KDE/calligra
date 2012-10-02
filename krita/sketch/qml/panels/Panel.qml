@@ -35,6 +35,7 @@ Item {
     property real editWidth: Constants.GridWidth * 4;
 
     property Item page;
+    property Item lastArea;
 
     signal collapsed();
     signal peek();
@@ -304,6 +305,7 @@ Item {
             source: base;
 
             onDragStarted: {
+                base.lastArea = base.parent;
                 handle.dragStarted();
             }
             onDrop: {
@@ -341,7 +343,7 @@ Item {
             AnchorChanges { target: header; anchors.bottom: rectangle3.bottom }
             PropertyChanges { target: footer; opacity: 0; }
             PropertyChanges { target: background; anchors.topMargin: 0; }
-            PropertyChanges { target: headerCornerFill; anchors.bottom: undefined; anchors.top: header.top; }
+            PropertyChanges { target: headerCornerFill; height: Constants.GridHeight; }
         },
         State {
             name: "full";
@@ -401,7 +403,7 @@ Item {
             to: "collapsed";
 
             NumberAnimation { properties: "opacity"; duration: 100; }
-                ScriptAction { script: base.collapsed(); }
+            ScriptAction { script: base.collapsed(); }
         },
         Transition {
             from: "full"

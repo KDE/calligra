@@ -25,15 +25,15 @@ DnD.DropArea {
     property string state: "collapsed";
 
     onDragEnter: {
-        if(children.length > 0) {
-            event.reject();
-        } else {
-            event.accept(Qt.MoveAction);
-        }
+        event.accept(Qt.MoveAction);
     }
 
     onDrop: {
         var item = event.mimeData.source;
+        if(children.length > 0) {
+            children[0].state = "collapse";
+            children[0].parent = item.lastArea;
+        }
         item.parent = base;
     }
 
