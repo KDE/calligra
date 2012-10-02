@@ -25,11 +25,6 @@ Panel {
     name: "Tool";
     panelColor: "#0078B4";
 
-    ToolManager {
-        id: toolManager;
-        view: sketchView.view;
-    }
-
     CompositeOpModel {
         id: compositeOpModel;
         view: sketchView.view;

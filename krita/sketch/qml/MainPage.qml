@@ -31,6 +31,11 @@ Page {
         onLoadingFinished: loadingScreen.opacity = 0;
     }
 
+    ToolManager {
+        id: toolManager;
+        view: sketchView.view;
+    }
+
     Rectangle {
         id: loadingScreen;
         anchors.fill: parent;
