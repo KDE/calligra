@@ -55,6 +55,7 @@ Item {
             anchors.fill: parent;
             color: "transparent";// base.panelColor;
             clip: true;
+
             MouseArea {
                 // This mouse area blocks any mouse click from passing through the panel. We need this to ensure we don't accidentally pass
                 // any clicks to the collapsing area, or to the canvas, by accident.
@@ -79,6 +80,7 @@ Item {
                     bottomMargin: Constants.DefaultMargin;
                 }
                 color: base.panelColor;
+                radius: Constants.DefaultMargin;
                 Rectangle {
                     id: rectangle4
                     anchors.fill: parent;
@@ -105,7 +107,7 @@ Item {
                 anchors.right: parent.right;
             }
 
-            DropShadow {
+            Item {
                 id: header;
 
                 anchors.left: parent.left
@@ -116,15 +118,33 @@ Item {
                     id: rectangle1
                     anchors.fill: parent;
                     color: base.panelColor;
+                    radius: Constants.DefaultMargin;
+                }
 
-                    Flow {
-                        id: actionsLayout;
-                        anchors.fill: parent;
-                    }
+                Rectangle {
+                    id: headerCornerFill;
+                    anchors.bottom: parent.bottom;
+                    anchors.left: parent.left;
+                    anchors.right: parent.right;
+                    height: Constants.DefaultMargin;
+                    color: base.panelColor;
+                }
+
+                Flow {
+                    id: actionsLayout;
+                    anchors.fill: parent;
                 }
             }
 
-            DropShadow {
+            Image {
+                anchors.top: header.bottom;
+                anchors.left: header.left;
+                anchors.right: header.right;
+
+                source: "../images/shadow-smooth.png";
+            }
+
+            Item {
                 id: footer;
 
                 anchors.bottom: parent.bottom;
@@ -164,6 +184,16 @@ Item {
                     onDragStarted: base.dragStarted();
                     onDrop: base.drop(action);
                 }
+            }
+
+            Image {
+                anchors.bottom: footer.top;
+                anchors.left: footer.left;
+                anchors.right: footer.right;
+
+                rotation: 180;
+
+                source: "../images/shadow-smooth.png";
             }
         }
     }
@@ -289,6 +319,7 @@ Item {
             AnchorChanges { target: header; anchors.bottom: parent.bottom }
             PropertyChanges { target: footer; opacity: 0; }
             PropertyChanges { target: background; anchors.topMargin: 0; }
+            PropertyChanges { target: headerCornerFill; anchors.bottom: undefined; anchors.top: parent.top; }
         },
         State {
             name: "full";
