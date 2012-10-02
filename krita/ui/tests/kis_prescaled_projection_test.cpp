@@ -177,7 +177,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-    projection.setMonitorProfile(0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
+    projection.setMonitorProfile(0);
     projection.setImage(image);
 
     // pixel-for-pixel, at 100% zoom
@@ -210,7 +210,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
     
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-    projection.setMonitorProfile(0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
+    projection.setMonitorProfile(0);
     projection.setImage(image);
 
     testProjectionScenario(projection, &converter, "120dpi");
@@ -240,7 +240,7 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
     KisCoordinatesConverter converter;
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-    projection.setMonitorProfile(0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
+    projection.setMonitorProfile(0);
     projection.setImage(image);
 
     // Emulate "Use same aspect as pixels"
@@ -295,7 +295,7 @@ public:
         converter.setDocumentOffset(QPoint(100,100));
 
         projection.setCoordinatesConverter(&converter);
-        projection.setMonitorProfile(0, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::Empty);
+        projection.setMonitorProfile(0);
         projection.setImage(image);
         projection.notifyCanvasSizeChanged(QSize(100,100));
         projection.notifyZoomChanged();
