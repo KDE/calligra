@@ -167,9 +167,9 @@ Item {
 
                     Label {
                         anchors.left: parent.left;
-                        anchors.leftMargin: Constants.DefaultMargin;
+                        anchors.leftMargin: 16;
                         anchors.baseline: parent.bottom;
-                        anchors.baselineOffset: -Constants.DefaultMargin;
+                        anchors.baselineOffset: -16;
 
                         text: base.name;
                         color: base.textColor;
@@ -181,8 +181,20 @@ Item {
                     delegate: base.dragDelegate;
                     source: base;
 
-                    onDragStarted: base.dragStarted();
-                    onDrop: base.drop(action);
+                    onDragStarted: {
+                        handle.opacity = 1;
+                        handle.dragStarted();
+                    }
+                    onDrop: {
+                        if(action == Qt.IgnoreAction) {
+                            handle.opacity = 0;
+                        }
+                        handle.drop(action);
+                    }
+
+                    MouseArea {
+
+                    }
                 }
             }
 
@@ -211,7 +223,9 @@ Item {
 
         width: 1;
         height: 1;
-        opacity: 0
+        opacity: 0;
+
+        property bool dragging: false;
 
         function fixParent() {
             if(!handleDragArea.dragging && !xHandleAnim.animation.running && !yHandleAnim.animation.running) {
@@ -221,6 +235,30 @@ Item {
                 handle.anchors.top = fill.bottom;
                 handle.anchors.left = fill.left;
             }
+        }
+
+        function dragStarted() {
+            base.dragStarted();
+
+            handle.anchors.top = undefined;
+            handle.anchors.left = undefined;
+            handle.parent = base.page;
+            Krita.MouseTracker.addItem(handle);
+            handle.dragging = true;
+        }
+
+        function drop(action) {
+            base.drop(action);
+
+            Krita.MouseTracker.removeItem(handle);
+
+            xHandleAnim.enabled = true;
+            yHandleAnim.enabled = true;
+            dragging = false;
+
+            var handlePos = base.mapToItem(base.page, 0, 0);
+            handle.x = handlePos.x + Constants.GridWidth / 2;
+            handle.y = handlePos.y + Constants.GridHeight / 4;
         }
 
         Rectangle {
@@ -265,29 +303,11 @@ Item {
 
             source: base;
 
-            property bool dragging: false;
-
             onDragStarted: {
-                base.dragStarted();
-
-                parent.anchors.top = undefined;
-                parent.anchors.left = undefined;
-                parent.parent = base.page;
-                Krita.MouseTracker.addItem(parent);
-                dragging = true;
+                handle.dragStarted();
             }
             onDrop: {
-                base.drop(action);
-
-                Krita.MouseTracker.removeItem(parent);
-
-                xHandleAnim.enabled = true;
-                yHandleAnim.enabled = true;
-                dragging = false;
-
-                var parentPos = base.mapToItem(base.page, 0, 0);
-                parent.x = parentPos.x + Constants.GridWidth / 2;
-                parent.y = parentPos.y + Constants.GridHeight / 4;
+                handle.drop(action);
             }
 
             MouseArea {
