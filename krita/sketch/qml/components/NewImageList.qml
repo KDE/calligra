@@ -73,7 +73,7 @@ PageStack {
                 ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-A4landscape-green.svg" }
                 ListElement { bnrole: "custom"; name: "Custom Size"; image: "../images/svg/icon-filenew-green.svg" }
                 ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
-                ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-green.svg" }
+                /* ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-green.svg" } */
             }
         }
     } }
