@@ -77,7 +77,7 @@ Item {
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "saveAs" );
             }
-            Button {
+            /*Button {
                 id: shareButton;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
@@ -86,7 +86,7 @@ Item {
                 image: "../images/svg/icon-fileshare.svg"
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "share" );
-            }
+            }*/
         }
 
         Row {
