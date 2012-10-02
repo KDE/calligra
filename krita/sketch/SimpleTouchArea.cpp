@@ -17,7 +17,9 @@
  */
 
 #include "SimpleTouchArea.h"
-#include <QEvent>
+#include <QTouchEvent>
+#include <QApplication>
+#include <QDebug>
 
 SimpleTouchArea::SimpleTouchArea(QDeclarativeItem* parent)
     : QDeclarativeItem(parent)
@@ -36,9 +38,8 @@ bool SimpleTouchArea::sceneEvent(QEvent* event)
     case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd:
-        emit touched();
+        event->accept();
         return true;
-        break;
     default:
         break;
     }

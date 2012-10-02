@@ -256,7 +256,9 @@ Item {
 
         DnD.DragArea {
             id: handleDragArea;
-            anchors.centerIn: parent;
+            anchors.horizontalCenter: parent.horizontalCenter;
+            anchors.top: parent.top;
+            anchors.topMargin: -Constants.GridHeight * 0.25;
 
             width: Constants.GridWidth - 8;
             height: Constants.GridHeight * 0.75;
@@ -316,10 +318,10 @@ Item {
             PropertyChanges { target: handle; opacity: 1; anchors.leftMargin: Constants.GridWidth / 2 - 4; }
             PropertyChanges { target: peek; opacity: 1; }
             PropertyChanges { target: full; opacity: 0; }
-            AnchorChanges { target: header; anchors.bottom: parent.bottom }
+            AnchorChanges { target: header; anchors.bottom: rectangle3.bottom }
             PropertyChanges { target: footer; opacity: 0; }
             PropertyChanges { target: background; anchors.topMargin: 0; }
-            PropertyChanges { target: headerCornerFill; anchors.bottom: undefined; anchors.top: parent.top; }
+            PropertyChanges { target: headerCornerFill; anchors.bottom: undefined; anchors.top: header.top; }
         },
         State {
             name: "full";
