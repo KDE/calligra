@@ -139,28 +139,7 @@ Item {
     }
 
     Row {
-        id: topRow;
-        PanelDropArea {
-            id: leftTopArea1;
-
-            objectName: "leftTop1";
-
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-
-            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea2.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
-        }
-
-        PanelDropArea {
-            id: leftTopArea2;
-
-            objectName: "leftTop2";
-
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-
-            onChildrenChanged: leftArea.height = (children.length == 0 && leftTopArea1.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
-        }
+        x: Constants.GridWidth * 2;
 
         PanelDropArea {
             id: centerTopArea1;
@@ -218,28 +197,6 @@ Item {
             width: Constants.GridWidth;
             height: Constants.GridHeight / 2;
         }
-
-        PanelDropArea {
-            id: rightTopArea1;
-
-            objectName: "rightTop1";
-
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-
-            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea2.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
-        }
-
-        PanelDropArea {
-            id: rightTopArea2;
-
-            objectName: "rightTop2";
-
-            width: Constants.GridWidth;
-            height: Constants.GridHeight / 2;
-
-            onChildrenChanged: rightArea.height = (children.length == 0 && rightTopArea1.children.length == 0) ? base.height : base.height - Constants.GridHeight / 2;
-        }
     }
 
     Item {
@@ -250,10 +207,10 @@ Item {
         Behavior on opacity { NumberAnimation { } }
 
         Repeater {
-            model: 12;
+            model: 8;
 
             delegate: Rectangle {
-                x: Constants.GridWidth * index;
+                x: Constants.GridWidth * (index + 2);
                 y: 0;
                 width: Constants.GridWidth;
                 height: Constants.GridHeight / 2;
@@ -267,9 +224,8 @@ Item {
 
         Rectangle {
             x: 0;
-            y: Constants.GridHeight / 2;
             width: Constants.GridWidth * 2;
-            height: parent.height - Constants.GridHeight / 2;
+            height: parent.height
 
             color: "transparent";
 
@@ -279,9 +235,8 @@ Item {
 
         Rectangle {
             x: Constants.GridWidth * 10;
-            y: Constants.GridHeight / 2;
             width: Constants.GridWidth * 2;
-            height: parent.height - Constants.GridHeight / 2;
+            height: parent.height;
 
             color: "transparent";
 
@@ -295,8 +250,6 @@ Item {
 
         property variant panels: [ presetsPanel, layersPanel, filterPanel, selectPanel, toolPanel, colorPanel ];
         property variant panelAreas: [
-            leftTopArea1,
-            leftTopArea2,
             centerTopArea1,
             centerTopArea2,
             centerTopArea3,
@@ -305,8 +258,6 @@ Item {
             centerTopArea6,
             centerTopArea7,
             centerTopArea8,
-            rightTopArea1,
-            rightTopArea2,
             leftArea,
             rightArea ];
         property Item peeking: null;
