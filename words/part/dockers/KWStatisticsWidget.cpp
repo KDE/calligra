@@ -52,9 +52,7 @@ KWStatisticsWidget::KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocu
         m_lines(0),
         m_syllables(0),
         m_paragraphs(0)
-
 {
-    m_showInDocker = true;
     m_timer = new QTimer(this);
     m_timer->start(2500);
     initUi();
@@ -64,6 +62,7 @@ KWStatisticsWidget::KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocu
     m_preferencesButton->setIcon(koIcon("configure"));
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
+
     connect(m_preferencesButton, SIGNAL(clicked()), m_preferencesButton, SLOT(showMenu()));
     connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
     connect(m_menu, SIGNAL(sentencesDisplayChange(int)), this, SLOT(sentencesDisplayChanged(int)));

@@ -118,8 +118,6 @@ private:
     long m_syllables;
     long m_paragraphs;
     long m_cjkChars;
-
-    bool m_showInDocker;
 };
 
 #endif // KWSTATISTICSWIDGET_H
