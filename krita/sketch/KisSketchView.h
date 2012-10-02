@@ -24,6 +24,7 @@
 class KisSketchView : public QDeclarativeItem
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* selectionManager READ selectionManager NOTIFY viewChanged)
     Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
     Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
     Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
@@ -32,6 +33,7 @@ public:
     KisSketchView(QDeclarativeItem* parent = 0);
     virtual ~KisSketchView();
 
+    QObject* selectionManager() const;
     QObject* doc() const;
     QObject* view() const;
     QString file() const;

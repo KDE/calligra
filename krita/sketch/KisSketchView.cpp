@@ -71,6 +71,7 @@
 #include <input/kis_input_manager.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_zoom_manager.h>
+#include <kis_selection_manager.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 
@@ -156,6 +157,13 @@ KisSketchView::~KisSketchView()
         delete d->view;
     }
     delete d;
+}
+
+QObject* KisSketchView::selectionManager() const
+{
+    if(!d->view)
+        return 0;
+    return d->view->selectionManager();
 }
 
 QObject* KisSketchView::doc() const
