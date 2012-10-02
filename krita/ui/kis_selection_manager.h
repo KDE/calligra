@@ -47,7 +47,7 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject
 {
 
     Q_OBJECT
-
+    Q_PROPERTY(bool displaySelection READ displaySelection NOTIFY displaySelectionChanged);
 public:
 
     KisSelectionManager(KisView2 * view, KisDoc2 * doc);
@@ -94,6 +94,7 @@ public slots:
 signals:
     void currentSelectionChanged();
     void signalUpdateGUI();
+    void displaySelectionChanged();
 
 public:
     bool havePixelsSelected();
@@ -104,10 +105,10 @@ public:
     /// Checks if the current selection is editabl and has some pixels selected in the pixel selection
     bool haveEditablePixelSelectionWithPixels();
 
-    void grow(qint32 xradius, qint32 yradius);
-    void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
-    void border(qint32 xradius, qint32 yradius);
-    void feather(qint32 radius);
+    Q_INVOKABLE void grow(qint32 xradius, qint32 yradius);
+    Q_INVOKABLE void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
+    Q_INVOKABLE void border(qint32 xradius, qint32 yradius);
+    Q_INVOKABLE void feather(qint32 radius);
     // the following functions are needed for the siox tool
     // they might be also useful on its own
     void erode();

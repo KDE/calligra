@@ -619,6 +619,7 @@ void KisSelectionManager::toggleDisplaySelection()
 {
     KisCanvasDecoration* decoration = m_view->canvasBase()->decoration("selection");
     if (decoration) decoration->toggleVisibility();
+    emit displaySelectionChanged();
 }
 
 bool KisSelectionManager::displaySelection()
