@@ -196,52 +196,9 @@ bool KisCanvas2::snapToGrid() const
     return m_d->view->document()->gridData().snapToGrid();
 }
 
-void KisCanvas2::pan(QPoint shift)
-{
-    KoCanvasControllerWidget* controller =
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController());
-    controller->pan(shift);
-    updateCanvas();
-}
-
-void KisCanvas2::mirrorCanvas(bool enable)
-{
-    m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
-    notifyZoomChanged();
-    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
-}
-
 qreal KisCanvas2::rotationAngle() const
 {
 	return m_d->coordinatesConverter->rotationAngle();
-}
-
-void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
-{
-    m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
-    notifyZoomChanged();
-
-    if(updateOffset)
-        pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
-    else
-        updateCanvas();
-}
-
-void KisCanvas2::rotateCanvasRight15()
-{
-    rotateCanvas(15.0);
-}
-
-void KisCanvas2::rotateCanvasLeft15()
-{
-    rotateCanvas(-15.0);
-}
-
-void KisCanvas2::resetCanvasTransformations()
-{
-    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
-    notifyZoomChanged();
-    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
 void KisCanvas2::setSmoothingEnabled(bool smooth)
@@ -580,7 +537,7 @@ void KisCanvas2::notifyZoomChanged()
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->notifyZoomChanged();
     }
-    emit scrollAreaSizeChanged();
+
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
 }
 
