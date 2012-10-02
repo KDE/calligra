@@ -32,17 +32,13 @@ Item {
         Item {
             id: message;
             property alias text: label.text;
-            NumberAnimation on opacity {
-                to: 0;
-                duration: 2000;
-                onRunningChanged: {
-                    if(!running) {
-                        message.destroy();
-                    }
-                }
+            SequentialAnimation on opacity {
+                PauseAnimation { duration: 500; }
+                NumberAnimation { to: 0; duration: 2000; }
+                ScriptAction { script: message.destroy(); }
             }
             height: Constants.GridHeight;
-            width: Constants.GridWidth * 3;
+            width: label.width + Constants.GridHeight / 2;
             Rectangle {
                 anchors.fill: parent;
                 color: "gray";
@@ -55,7 +51,8 @@ Item {
             }
             Text {
                 id: label;
-                anchors.centerIn: parent;
+                x: Constants.GridHeight / 4;
+                anchors.verticalCenter: parent.verticalCenter;
                 font.family: "Source Sans Pro"
                 color: "white";
                 font.bold: true;
