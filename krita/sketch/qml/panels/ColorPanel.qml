@@ -30,6 +30,23 @@ Panel {
             id: swatch;
             height: parent.height;
             width: height;
+        },
+        Item {
+            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 2);
+            height: Constants.GridHeight;
+        },
+        Button {
+            id: showPeekGrid;
+            visible: base.state === "peek";
+            width: height;
+            height: Constants.GridHeight
+            color: "transparent";
+            image: colorSelectorPeek.visible ? "../images/svg/icon-palette.svg" : "../images/svg/icon-color_wheel.svg";
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            checked: false;
+            onClicked: colorSelectorPeek.visible = !colorSelectorPeek.visible;
         }
     ]
 
@@ -49,12 +66,42 @@ Panel {
         id: paletteModel;
     }
 
-    peekContents: GridView {
+    peekContents: Item {
         anchors.fill: parent;
-        model: paletteColorsModel;
-        delegate: delegate;
-        cellWidth: width / 2;
-        cellHeight: Constants.GridHeight;
+        Item {
+            id: colorSelectorPeek;
+            anchors {
+                fill: parent;
+                margins: Constants.DefaultMargin;
+            }
+            //height: parent.height;
+            ColorSelectorItem {
+                id: colorSelectorActualPeek;
+                anchors.fill: parent;
+                view: sketchView.view;
+                changeBackground: swatch.chooseBG;
+                onColorChanged: {
+                    fullPaletteAlphaSlider.value = newAlpha * 100;
+                    if(backgroundChanged) {
+                        swatch.bgColor = newColor;
+                    }
+                    else {
+                        swatch.fgColor = newColor;
+                    }
+                }
+            }
+        }
+        GridView {
+            anchors {
+                fill: parent
+                margins: Constants.DefaultMargin;
+            }
+            model: paletteColorsModel;
+            delegate: delegate;
+            cellWidth: width / 2;
+            cellHeight: Constants.GridHeight;
+            visible: !colorSelectorPeek.visible;
+        }
     }
 
     fullContents: Item {
@@ -94,7 +141,10 @@ Panel {
                 rightMargin: Constants.DefaultMargin;
             }
             value: 100;
-            onValueChanged: colorSelectorActual.setAlpha(value);
+            onValueChanged: {
+                colorSelectorActual.setAlpha(value);
+                colorSelectorActualPeek.setAlpha(value);
+            }
         }
         ExpandingListView {
             id: fullPaletteList
@@ -124,7 +174,7 @@ Panel {
             model: paletteColorsModel;
             delegate: delegate;
             clip: true;
-            cellWidth: width / 2;
+            cellWidth: (width / 2) - 1;
             cellHeight: Constants.GridHeight;
         }
     }
@@ -133,7 +183,7 @@ Panel {
         id: delegate;
 
         Item {
-            width: Constants.GridWidth;
+            width: Constants.GridWidth - Constants.DefaultMargin;
             height: Constants.GridHeight;
             Image {
                 anchors {
