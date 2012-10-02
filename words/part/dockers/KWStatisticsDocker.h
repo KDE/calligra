@@ -45,9 +45,14 @@ public:
 
 private:
     bool m_canvasReset;
-    KWStatistics *m_statisticsDock;
+
+    // The statistics widget
+    KWStatistics *m_statisticsWidget;
+
+    // The main layout
     QBoxLayout *m_mainBox;
 
+    // The layouts for the label/value QLabel pairs.
     QHBoxLayout *m_wordsLayout;
     QHBoxLayout *m_sentencesLayout;
     QHBoxLayout *m_syllablesLayout;

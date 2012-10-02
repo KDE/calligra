@@ -134,6 +134,7 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
 void KWStatistics::initUi()
 {
     m_statsWidget = new QWidget;
+
     m_wordsLabel = new QLabel(i18n("Words:"));
     m_countWords = new QLabel;
 
@@ -166,6 +167,7 @@ KWStatistics::~KWStatistics()
 {
     m_timer->stop();
 }
+
 void KWStatistics::updateData()
 {
     if (!isVisible()) {
@@ -334,7 +336,6 @@ void KWStatistics::selectionChanged()
         if (m_textDocument)
             disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
         m_textDocument = fs->document();
-
     }
 }
 
@@ -363,19 +364,22 @@ int KWStatistics::countCJKChars(const QString &text)
     return count;
 }
 
+// ----------------------------------------------------------------
+
 void KWStatistics::wordsDisplayChanged(int state)
-{   KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
+{
+    KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
     case Qt::Checked:
         m_wordsLabel->show();
         m_countWords->show();
-        cfgGroup.writeEntry("WordsVisible",true);
+        cfgGroup.writeEntry("WordsVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_wordsLabel->hide();
         m_countWords->hide();
-        cfgGroup.writeEntry("WordsVisible",false);
+        cfgGroup.writeEntry("WordsVisible", false);
         cfgGroup.sync();
         break;
     default:
@@ -390,13 +394,13 @@ void KWStatistics::sentencesDisplayChanged(int state)
     case Qt::Checked:
         m_sentencesLabel->show();
         m_countSentences->show();
-        cfgGroup.writeEntry("SentencesVisible",true);
+        cfgGroup.writeEntry("SentencesVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_sentencesLabel->hide();
         m_countSentences->hide();
-        cfgGroup.writeEntry("SentencesVisible",false);
+        cfgGroup.writeEntry("SentencesVisible", false);
         cfgGroup.sync();
         break;
     default:
@@ -411,19 +415,20 @@ void KWStatistics::linesDisplayChanged(int state)
     case Qt::Checked:
         m_linesLabel->show();
         m_countLines->show();
-        cfgGroup.writeEntry("LinesVisible",true);
+        cfgGroup.writeEntry("LinesVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_linesLabel->hide();
         m_countLines->hide();
-        cfgGroup.writeEntry("LinesVisible",false);
+        cfgGroup.writeEntry("LinesVisible", false);
         cfgGroup.sync();
         break;
     default:
         break;
     }
 }
+
 void KWStatistics::syllablesDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
@@ -431,19 +436,20 @@ void KWStatistics::syllablesDisplayChanged(int state)
     case Qt::Checked:
         m_syllablesLabel->show();
         m_countSyllables->show();
-        cfgGroup.writeEntry("SyllablesVisible",true);
+        cfgGroup.writeEntry("SyllablesVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_syllablesLabel->hide();
         m_countSyllables->hide();
-        cfgGroup.writeEntry("SyllablesVisible",false);
+        cfgGroup.writeEntry("SyllablesVisible", false);
         cfgGroup.sync();
         break;
     default:
         break;
     }
 }
+
 void KWStatistics::charspaceDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
@@ -451,13 +457,13 @@ void KWStatistics::charspaceDisplayChanged(int state)
     case Qt::Checked:
         m_spacesLabel->show();
         m_countSpaces->show();
-        cfgGroup.writeEntry("CharspacesVisible",true);
+        cfgGroup.writeEntry("CharspacesVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_spacesLabel->hide();
         m_countSpaces->hide();
-        cfgGroup.writeEntry("CharspacesVisible",false);
+        cfgGroup.writeEntry("CharspacesVisible", false);
         cfgGroup.sync();
         break;
     default:
@@ -472,19 +478,20 @@ void KWStatistics::charnospaceDisplayChanged(int state)
     case Qt::Checked:
         m_nospacesLabel->show();
         m_countNospaces->show();
-        cfgGroup.writeEntry("CharnospacesVisible",true);
+        cfgGroup.writeEntry("CharnospacesVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_nospacesLabel->hide();
         m_countNospaces->hide();
-        cfgGroup.writeEntry("CharnospacesVisible",false);
+        cfgGroup.writeEntry("CharnospacesVisible", false);
         cfgGroup.sync();
         break;
     default:
         break;
     }
 }
+
 void KWStatistics::eastDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
@@ -492,19 +499,20 @@ void KWStatistics::eastDisplayChanged(int state)
     case Qt::Checked:
         m_cjkcharsLabel->show();
         m_countCjkchars->show();
-        cfgGroup.writeEntry("EastAsianCharactersVisible",true);
+        cfgGroup.writeEntry("EastAsianCharactersVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_cjkcharsLabel->hide();
         m_countCjkchars->hide();
-        cfgGroup.writeEntry("EastAsianCharactersVisible",false);
+        cfgGroup.writeEntry("EastAsianCharactersVisible", false);
         cfgGroup.sync();
         break;
     default:
         break;
     }
 }
+
 void KWStatistics::fleschDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
@@ -512,18 +520,16 @@ void KWStatistics::fleschDisplayChanged(int state)
     case Qt::Checked:
         m_fleschLabel->show();
         m_countFlesch->show();
-        cfgGroup.writeEntry("FleschVisible",true);
+        cfgGroup.writeEntry("FleschVisible", true);
         cfgGroup.sync();
         break;
     case Qt::Unchecked:
         m_fleschLabel->hide();
         m_countFlesch->hide();
-        cfgGroup.writeEntry("FleschVisible",false);
+        cfgGroup.writeEntry("FleschVisible", false);
         cfgGroup.sync();
         break;
     default:
         break;
     }
 }
-
-
