@@ -39,7 +39,6 @@ Panel {
                 fullViewStack.pop();
                 backFromEditButton.visible = false;
                 addButton.visible = true;
-                editButton.visible = true;
                 removeButton.visible = true;
             }
             visible: false;
@@ -53,7 +52,18 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: addLayerButtons.toggle();
+            onClicked: {
+                if(base.state === "full") {
+                    addLayerButtons.toggle();
+                }
+                else {
+                    layerModel.addLayer(0);
+                }
+            }
+        },
+        Item {
+            width: editButton.visible ? 0 : editButton.width;
+            height: Constants.GridHeight;
         },
         Button {
             id: editButton;
@@ -64,11 +74,11 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            visible: (base.state === "full" && backFromEditButton.visible === false);
             onClicked: {
                 fullViewStack.push(editLayerPage);
                 backFromEditButton.visible = true;
                 addButton.visible = false;
-                editButton.visible = false;
                 removeButton.visible = false;
             }
         },
