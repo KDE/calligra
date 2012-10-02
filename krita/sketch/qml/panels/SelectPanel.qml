@@ -33,6 +33,7 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            onClicked: if(sketchView.selectionManager) sketchView.selectionManager.deselect();
         },
         Button {
             id: reselectButton;
@@ -43,6 +44,7 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            onClicked: sketchView.selectionManager.reselect();
         },
         Item {
             width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
@@ -50,7 +52,7 @@ Panel {
         },
         Button {
             id: toggleShowSelectionButton;
-            property bool showSelection: true;
+            property bool showSelection: sketchView.selectionManager ? sketchView.selectionManager.displaySelection : false;
             width: height;
             height: Constants.GridHeight
             color: "transparent";
@@ -58,7 +60,7 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: showSelection = !showSelection;
+            onClicked: sketchView.selectionManager.toggleDisplaySelection();
         }
     ]
 
@@ -83,6 +85,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
             }
             Button {
                 id: selectPolygon;
@@ -95,6 +98,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
             }
             Button {
                 id: selectArea;
@@ -107,6 +111,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
             }
             Button {
                 id: selectColor;
@@ -119,6 +124,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
             }
         }
         Item {
@@ -133,6 +139,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 0) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
             }
             Button {
                 id: selectIntersect;
@@ -143,6 +151,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 3) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
             }
             Button {
                 id: selectAdd;
@@ -153,6 +163,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 1) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
             }
             Button {
                 id: selectSub;
@@ -163,6 +175,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 2) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
             }
         }
         Item {
@@ -183,7 +197,8 @@ Panel {
                 border.color: "silver";
                 radius: Constants.DefaultMargin;
                 width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
-                height: textSize + Constants.DefaultMargin * 2
+                height: textSize + Constants.DefaultMargin * 2;
+                onClicked: sketchView.selectionManager.selectAll();
             }
             Button {
                 id: selectInvert;
@@ -198,8 +213,9 @@ Panel {
                 radius: Constants.DefaultMargin;
                 width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
+                onClicked: sketchView.selectionManager.invert();
             }
-            Button {
+            /*Button {
                 id: selectOpaque;
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectInvert.right;
@@ -212,7 +228,7 @@ Panel {
                 radius: Constants.DefaultMargin;
                 width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
-            }
+            }*/
         }
     }
 
@@ -238,6 +254,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
             }
             Button {
                 id: selectPolygonFull;
@@ -250,6 +267,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
             }
             Button {
                 id: selectAreaFull;
@@ -262,6 +280,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
             }
             Button {
                 id: selectColorFull;
@@ -274,6 +293,7 @@ Panel {
                 textColor: "white";
                 shadow: false;
                 highlight: false;
+                onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
             }
         }
         Label {
@@ -303,6 +323,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 0) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 0;
             }
             Button {
                 id: selectIntersectFull;
@@ -313,6 +335,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 3) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 3;
             }
             Button {
                 id: selectAddFull;
@@ -323,6 +347,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 1) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 1;
             }
             Button {
                 id: selectSubFull;
@@ -333,6 +359,8 @@ Panel {
                 color: "transparent";
                 shadow: false;
                 highlight: false;
+                checked: (toolManager.currentTool && toolManager.currentTool.selectionAction === 2) ? true : false;
+                onClicked: if(toolManager.currentTool && toolManager.currentTool.selectionAction !== undefined) toolManager.currentTool.selectionAction = 2;
             }
         }
         Label {
@@ -367,6 +395,7 @@ Panel {
                 radius: Constants.DefaultMargin;
                 width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
+                onClicked: sketchView.selectionManager.selectAll();
             }
             Button {
                 id: selectInvertFull;
@@ -381,8 +410,9 @@ Panel {
                 radius: Constants.DefaultMargin;
                 width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
+                onClicked: sketchView.selectionManager.invert();
             }
-            Button {
+            /*Button {
                 id: selectOpaqueFull;
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectInvertFull.right;
@@ -395,9 +425,9 @@ Panel {
                 radius: Constants.DefaultMargin;
                 width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
-            }
+            }*/
         }
-        Label {
+        /*Label {
             id: fullEditingLabel;
             anchors {
                 left: parent.left;
@@ -426,7 +456,7 @@ Panel {
                         right: featherImg.left;
                     }
                     placeholder: "Feather";
-                    text: "0.0"
+                    text: "0"
                 }
                 Image {
                     id: featherImg;
@@ -439,6 +469,10 @@ Panel {
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: sketchView.selectionManager.feather(featherTxt.text);
+                    }
                 }
             }
             Item {
@@ -451,7 +485,7 @@ Panel {
                         right: growImg.left;
                     }
                     placeholder: "Grow";
-                    text: "0.0"
+                    text: "0"
                 }
                 Image {
                     id: growImg;
@@ -464,6 +498,10 @@ Panel {
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: sketchView.selectionManager.grow(growTxt.text, growTxt.text);
+                    }
                 }
             }
             Item {
@@ -476,7 +514,7 @@ Panel {
                         right: borderImg.left;
                     }
                     placeholder: "Border";
-                    text: "0.0"
+                    text: "0"
                 }
                 Image {
                     id: borderImg;
@@ -489,33 +527,41 @@ Panel {
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: sketchView.selectionManager.border(borderTxt.text, borderTxt.text);
+                    }
                 }
             }
             Item {
                 width: fullItem.width;
-                height: scaleTxt.height;
+                height: shrinkTxt.height;
                 PanelTextField {
-                    id: scaleTxt;
+                    id: shrinkTxt;
                     anchors {
                         left: parent.left;
-                        right: scaleImg.left;
+                        right: shrinkImg.left;
                     }
-                    placeholder: "Scale";
-                    text: "0.0"
+                    placeholder: "Shrink";
+                    text: "0"
                 }
                 Image {
-                    id: scaleImg;
+                    id: shrinkImg;
                     anchors {
                         right: parent.right;
                         rightMargin: Constants.DefaultMargin;
-                        verticalCenter: scaleTxt.verticalCenter;
+                        verticalCenter: shrinkTxt.verticalCenter;
                     }
                     height: parent.height - (Constants.DefaultMargin * 2);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: sketchView.selectionManager.shrink(shrinkTxt.text, shrinkTxt.text, false);
+                    }
                 }
             }
-        }
+        }*/
     }
 }
