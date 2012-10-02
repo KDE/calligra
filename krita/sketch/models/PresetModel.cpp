@@ -69,7 +69,7 @@ QVariant PresetModel::data(const QModelIndex &index, int role) const
             result = QString("image://presetthumb/%1").arg(index.row());
             break;
         case TextRole:
-            result = d->rserver->resources().at(index.row())->name();
+            result = d->rserver->resources().at(index.row())->name().replace(QLatin1String("_"), QLatin1String(" "));
             break;
         default:
             result = "";
