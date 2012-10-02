@@ -62,6 +62,13 @@ KisSandPaintOp::KisSandPaintOp(const KisSandPaintOpSettings *settings, KisPainte
 
     //Read the particle settings in the settings widget
     m_properties.readOptionSetting(settings);
+
+    if(!m_properties.gridAutoResize){
+        m_gridX = m_properties.gridWidth;
+        m_gridY = m_properties.gridHeight;
+    }
+    qDebug() << "GRID : " << m_gridX << " x " << m_gridY ;
+    
     KoColorTransformation* transfo = 0;   
     m_sandBrush = new SandBrush( &m_properties, transfo );
 
@@ -97,7 +104,7 @@ KisSandPaintOp::~KisSandPaintOp()
         }
 
         /*
-        * Add particles to the "Particle" annotation
+        * Add particles to the "particle" annotation
         */
         if(m_image){
             m_image->addAnnotation(KisAnnotationSP(new KisAnnotation( "particle",

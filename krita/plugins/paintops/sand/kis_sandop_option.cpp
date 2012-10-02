@@ -35,23 +35,25 @@ KisSandOpOption::KisSandOpOption()
     m_checkable = false; //??
     m_options = new KisSandOpOptionsWidget();
     m_options->hide();
+
+    //Settings values signals and slots
     
     connect(m_options->radiusSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->amountSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
-    connect(m_options->sandDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->amountSpinBox, SLOT(setDisabled(bool)), m_options->sandDepletionCHBox, SIGNAL(clicked(bool)));
-
+    connect(m_options->gridWidthSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
+    connect(m_options->gridHeightSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->sizeSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigSettingChanged()));
     connect(m_options->massDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
     connect(m_options->frictionDoubleSpinBox, SIGNAL(valueChanged(double)), SIGNAL(sigSettingChanged()));
 
-    //OBS!!
+    //User friendly GUI signals and slots
+    connect(m_options->amountSpinBox, SLOT(setDisabled(bool)), m_options->sandDepletionCHBox, SIGNAL(clicked(bool)));
+    connect(m_options->sandDepletionCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->modeComboBox, SIGNAL(currentIndexChanged(QString)), SIGNAL(sigSettingChanged()));
-    //OBS2!!
     connect(m_options->gridAutoResizeCHBox, SIGNAL(clicked(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->gridHeightSpinBox, SLOT(setDisabled(bool)), m_options->gridAutoResizeCHBox ,SIGNAL(clicked(bool)));
-    connect(m_options->gridWidthSpinBox, SLOT(setDisabled(bool)), m_options->gridAutoResizeCHBox ,SIGNAL(clicked(bool)));
-
+    connect(m_options->gridAutoResizeCHBox ,SIGNAL(clicked(bool)), m_options->gridHeightSpinBox, SLOT(setDisabled(bool)));
+    connect(m_options->gridAutoResizeCHBox ,SIGNAL(clicked(bool)), m_options->gridWidthSpinBox, SLOT(setDisabled(bool)));
+    
     setConfigurationPage(m_options);
 }
 
@@ -188,20 +190,8 @@ void KisSandOpOption::setGridHeight(int y) const
 
 bool KisSandOpOption::gridAutoResize() const
 {
-    qDebug() << "CAlled autorsize??" ;
-    if( m_options->gridAutoResizeCHBox->isChecked() ){
-        m_options->gridHeightSpinBox->setDisabled(true);
-        m_options->gridWidthSpinBox->setDisabled(true);
-        qDebug() << "Checked?" ;
 
-        return true;
-    }
-
-    qDebug() << "Not checked?" ;
-    m_options->gridHeightSpinBox->setEnabled(true);
-    m_options->gridWidthSpinBox->setEnabled(true);
-// 
-    return false;
+    return m_options->gridAutoResizeCHBox->isChecked();
 }
 
 

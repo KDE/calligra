@@ -131,7 +131,6 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
      * Questions:
      * -> What the "external" boolean variable is representing?
      * -> What the line " location += m_d->imageName + EXIF_PATH; " actually do?
-     * 
      */
     KisAnnotationSP partAnnon = image->annotation("particle");
     if (partAnnon) {
