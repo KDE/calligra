@@ -45,11 +45,17 @@ public:
 
 private:
     bool m_canvasReset;
-    KWStatistics *statisticsDock;
-    QBoxLayout *mainBox;
-    QHBoxLayout *wordsLayout,*sentencesLayout,*syllablesLayout,*spacesLayout;
-    QHBoxLayout *fleschLayout, *cjkcharsLayout,*nospacesLayout,*linesLayout;
-    int count;
+    KWStatistics *m_statisticsDock;
+    QBoxLayout *m_mainBox;
+
+    QHBoxLayout *m_wordsLayout;
+    QHBoxLayout *m_sentencesLayout;
+    QHBoxLayout *m_syllablesLayout;
+    QHBoxLayout *m_spacesLayout;
+    QHBoxLayout *m_fleschLayout;
+    QHBoxLayout *m_cjkcharsLayout;
+    QHBoxLayout *m_nospacesLayout;
+    QHBoxLayout *m_linesLayout;
     
 public slots:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);

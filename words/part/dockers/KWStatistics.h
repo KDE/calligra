@@ -21,21 +21,24 @@
 
 #ifndef KWSTATISTICS_H
 #define KWSTATISTICS_H
-#include<kglobal.h>
-#include "KWStatisticsDocker.h"
-#include "StatisticsPreferencesPopup.h"
+
 #include <QWidget>
 #include <QToolButton>
 #include <QLabel>
 
+#include <kglobal.h>
+
+#include "KWStatisticsDocker.h"
+#include "StatisticsPreferencesPopup.h"
+
 class QTimer;
 class QTextDocument;
+class QToolButton;
+class KConfigGroup;
 class KoCanvasResourceManager;
 class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
-class KConfigGroup;
-class QToolButton;
 
 class KWStatistics : public QWidget
 {
