@@ -57,10 +57,10 @@ Panel {
             text: "Move"
             name: "move"
         }
-        ListElement {
+        /*ListElement {
             text: "Transform"
             name: "transform"
-        }
+        }*/
         ListElement {
             text: "Crop"
             name: "crop"
