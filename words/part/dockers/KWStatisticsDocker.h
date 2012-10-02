@@ -21,15 +21,23 @@
 
 #ifndef KWSTATISTICSDOCKER_H
 #define KWSTATISTICSDOCKER_H
-#include <QBoxLayout>
-#include <QGridLayout>
+
+// Base classes
 #include <QDockWidget>
-#include <dockers/KWStatistics.h>
-#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
+// Qt
+#include <QBoxLayout>
+#include <QGridLayout>
+
+// Calligra
+#include <KoDockFactoryBase.h>
+
+// Local
+#include <dockers/KWStatisticsWidget.h>
+
 class KoCanvasBase;
-class KWStatistics;
+
 
 class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -47,7 +55,7 @@ private:
     bool m_canvasReset;
 
     // The statistics widget
-    KWStatistics *m_statisticsWidget;
+    KWStatisticsWidget *m_statisticsWidget;
 
     // The main layout
     QBoxLayout *m_mainBox;

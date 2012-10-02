@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWSTATISTICS_H
-#define KWSTATISTICS_H
+#ifndef KWSTATISTICSWIDGET_H
+#define KWSTATISTICSWIDGET_H
 
 #include <QWidget>
 #include <QToolButton>
@@ -28,7 +28,8 @@
 
 #include <kglobal.h>
 
-#include "KWStatisticsDocker.h"
+// FIXME: Don't cross include
+//#include "KWStatisticsDocker.h"
 #include "StatisticsPreferencesPopup.h"
 
 class QTimer;
@@ -40,14 +41,24 @@ class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
 
-class KWStatistics : public QWidget
+/** KWStatisticswidget shows text statistics about a text document.
+ *
+ * In addition to being a widget, it also contains the statistics data
+ * itself and functions to update this data.
+ *
+ * FIXME: The pure statistics part should be separated from the
+ *        widget, e.g. to a QAbstractListModel so that it could also
+ *        be used from a QML based interface.
+ */ 
+
+class KWStatisticsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KWStatistics(KoCanvasResourceManager *provider, KWDocument *m_document,
-                 KoSelection *selection = 0, QWidget *parent = 0);
+    KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocument *m_document,
+                       KoSelection *selection = 0, QWidget *parent = 0);
 
-    virtual ~KWStatistics();
+    virtual ~KWStatisticsWidget();
     void updateDataUi();
     void initUi();
     friend class KWStatisticsDocker;
@@ -62,14 +73,14 @@ public slots:
     void charnospaceDisplayChanged(int);
     void eastDisplayChanged(int);
     void fleschDisplayChanged(int);
+
     void updateData();
     void selectionChanged();
 
 private:
     int countCJKChars(const QString &text);
 
-    QWidget *m_statsWidget;
-
+    // Labels, e.g. "Words:"
     QLabel *m_wordsLabel;
     QLabel *m_sentencesLabel;
     QLabel *m_syllablesLabel;
@@ -79,6 +90,7 @@ private:
     QLabel *m_nospacesLabel;
     QLabel *m_linesLabel;
 
+    // The values.
     QLabel *m_countWords;
     QLabel *m_countSentences;
     QLabel *m_countSyllables;
@@ -88,14 +100,16 @@ private:
     QLabel *m_countNospaces;
     QLabel *m_countLines;
 
-    QToolButton *m_preferencesButton;
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
     KWDocument *m_document;
     QTextDocument *m_textDocument;
     QTimer *m_timer;
+
+    QToolButton *m_preferencesButton;
     StatisticsPreferencesPopup *m_menu;
 
+    // The actual data.
     long m_charsWithSpace;
     long m_charsWithoutSpace;
     long m_words;
@@ -108,4 +122,4 @@ private:
     bool m_showInDocker;
 };
 
-#endif
+#endif // KWSTATISTICSWIDGET_H

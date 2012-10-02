@@ -52,15 +52,15 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
         m_canvasReset = false;
     }
  
-    m_statisticsWidget = new KWStatistics(canvas->resourceManager(),
-                                          canvas->document(),
-                                          canvas->shapeManager()->selection(),
-                                          this);
+    m_statisticsWidget = new KWStatisticsWidget(canvas->resourceManager(),
+                                                canvas->document(),
+                                                canvas->shapeManager()->selection(),
+                                                this);
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
-    setWidget(m_statisticsWidget->m_statsWidget);
+    setWidget(m_statisticsWidget);
     initLayout();
-    m_statisticsWidget->m_statsWidget->setLayout(m_mainBox);
+    m_statisticsWidget->setLayout(m_mainBox);
 }
 
 void KWStatisticsDocker::unsetCanvas()
@@ -82,7 +82,7 @@ void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 
 void KWStatisticsDocker::initLayout()
 {
-    m_mainBox = new QBoxLayout(QBoxLayout::LeftToRight, m_statisticsWidget->m_statsWidget);
+    m_mainBox = new QBoxLayout(QBoxLayout::LeftToRight, m_statisticsWidget);
 
     m_wordsLayout = new QHBoxLayout();
     m_mainBox->addLayout(m_wordsLayout);

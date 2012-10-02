@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWStatistics.h"
+#include "KWStatisticsWidget.h"
 
 #include "Words.h"
 #include "KWDocument.h"
@@ -37,7 +37,8 @@
 #include <QTextBlock>
 #include <QTimer>
 
-KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *document, KoSelection *selection, QWidget *parent)
+KWStatisticsWidget::KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocument *document,
+                                       KoSelection *selection, QWidget *parent)
         : QWidget(parent),
         m_resourceManager(provider),
         m_selection(selection),
@@ -131,10 +132,8 @@ KWStatistics::KWStatistics(KoCanvasResourceManager *provider, KWDocument *docume
     }
 }
 
-void KWStatistics::initUi()
+void KWStatisticsWidget::initUi()
 {
-    m_statsWidget = new QWidget;
-
     m_wordsLabel = new QLabel(i18n("Words:"));
     m_countWords = new QLabel;
 
@@ -163,12 +162,12 @@ void KWStatistics::initUi()
     m_preferencesButton = new QToolButton;
 }
 
-KWStatistics::~KWStatistics()
+KWStatisticsWidget::~KWStatisticsWidget()
 {
     m_timer->stop();
 }
 
-void KWStatistics::updateData()
+void KWStatisticsWidget::updateData()
 {
     if (!isVisible()) {
         return;
@@ -288,7 +287,7 @@ void KWStatistics::updateData()
     updateDataUi();
 }
 
-void KWStatistics::updateDataUi()
+void KWStatisticsWidget::updateDataUi()
 {
     // calculate Flesch reading ease score:
     float flesch_score = 0;
@@ -322,7 +321,7 @@ void KWStatistics::updateDataUi()
 }
 
 
-void KWStatistics::selectionChanged()
+void KWStatisticsWidget::selectionChanged()
 {
     if (m_selection->count() != 1)
         return;
@@ -339,7 +338,7 @@ void KWStatistics::selectionChanged()
     }
 }
 
-int KWStatistics::countCJKChars(const QString &text)
+int KWStatisticsWidget::countCJKChars(const QString &text)
 {
     int count = 0;
 
@@ -366,7 +365,7 @@ int KWStatistics::countCJKChars(const QString &text)
 
 // ----------------------------------------------------------------
 
-void KWStatistics::wordsDisplayChanged(int state)
+void KWStatisticsWidget::wordsDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
@@ -387,7 +386,7 @@ void KWStatistics::wordsDisplayChanged(int state)
     }
 }
 
-void KWStatistics::sentencesDisplayChanged(int state)
+void KWStatisticsWidget::sentencesDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
@@ -408,7 +407,7 @@ void KWStatistics::sentencesDisplayChanged(int state)
     }
 }
 
-void KWStatistics::linesDisplayChanged(int state)
+void KWStatisticsWidget::linesDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
@@ -429,7 +428,7 @@ void KWStatistics::linesDisplayChanged(int state)
     }
 }
 
-void KWStatistics::syllablesDisplayChanged(int state)
+void KWStatisticsWidget::syllablesDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
@@ -450,7 +449,7 @@ void KWStatistics::syllablesDisplayChanged(int state)
     }
 }
 
-void KWStatistics::charspaceDisplayChanged(int state)
+void KWStatisticsWidget::charspaceDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
@@ -471,7 +470,7 @@ void KWStatistics::charspaceDisplayChanged(int state)
     }
 }
 
-void KWStatistics::charnospaceDisplayChanged(int state)
+void KWStatisticsWidget::charnospaceDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
@@ -492,7 +491,7 @@ void KWStatistics::charnospaceDisplayChanged(int state)
     }
 }
 
-void KWStatistics::eastDisplayChanged(int state)
+void KWStatisticsWidget::eastDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
@@ -513,7 +512,7 @@ void KWStatistics::eastDisplayChanged(int state)
     }
 }
 
-void KWStatistics::fleschDisplayChanged(int state)
+void KWStatisticsWidget::fleschDisplayChanged(int state)
 {
     KConfigGroup cfgGroup = KGlobal::config()->group("Statistics");
     switch (state) {
