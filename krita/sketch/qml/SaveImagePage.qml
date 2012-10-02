@@ -112,10 +112,12 @@ Page {
                 rightMargin: Constants.GridWidth * 0.25;
             }
 
-            TextField {
+            PanelTextField {
                 id: fileNameField;
 
-                height: parent.height;
+                anchors.verticalCenter: parent.verticalCenter;
+
+                height: Constants.GridHeight * 0.75;
                 width: Constants.GridWidth * 7.75;
 
                 placeholder: "File Name";
@@ -155,13 +157,14 @@ Page {
             }
 
             Button {
-                height: parent.height;
+                anchors.verticalCenter: parent.verticalCenter;
+                height: Constants.GridHeight * 0.75;
                 width: Constants.GridWidth * 0.5;
 
                 image: "images/svg/icon-filesave.svg";
 
                 onClicked: {
-                    if( fileName.text != "" ) {
+                    if( fileNameField.text != "" ) {
                         var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
                         base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
                         pageStack.pop();

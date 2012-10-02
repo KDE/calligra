@@ -368,12 +368,14 @@ void KisSketchView::redo()
 void KisSketchView::save()
 {
     d->doc->save();
+    emit floatingMessageRequested("Saved", "file-save");
 }
 
 void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
 {
-    d->doc->setMimeType(mimeType.toAscii());
-    d->doc->saveAs(QUrl::fromLocalFile(fileName));
+    d->doc->setOutputMimeType(mimeType.toAscii());
+    d->doc->saveAs(fileName);
+    emit floatingMessageRequested(QString("Saved to %1").arg(fileName), "file-save");
 }
 
 bool KisSketchView::sceneEvent(QEvent* event)
