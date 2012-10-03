@@ -105,16 +105,30 @@ void KoBlobTool::mouseReleaseEvent(KoPointerEvent *)
     KoPathShape *path = 0;
     if (m_simplified) {
         QList<QPointF> heuristicPointList;
+        heuristicPointList = m_qshape->toFillPolygons().at(0).toList();
+        /*
         for (qreal t = 0; t <= 1; t += 0.005) {
             heuristicPointList.append(m_qshape->pointAtPercent(t));
+            qDebug() << m_qshape->pointAtPercent(t);
         }   
-    heuristicPointList.append(m_qshape->pointAtPercent(0));
-    path = bezierFit(heuristicPointList, m_error);
-    path->close();
-    path->normalize();
+        heuristicPointList.append(m_qshape->pointAtPercent(0));
+        */
+        path = bezierFit(heuristicPointList, m_error);
+        path->close();
+        path->normalize();
+        path = bezierMultipathFit(*m_qshape, m_error);
     }
     else {  //loads of control points
-        path = KoPathShape::createShapeFromPainterPath(*m_qshape);
+        KoPathShape * shape = new KoPathShape();
+
+        QPolygonF poly = m_qshape->toFillPolygons().at(0);
+        for (int i = 0; i < poly.count(); i++) {
+            shape->lineTo(poly.at(i));
+        }
+        shape->normalize();
+        path = shape;
+        qDebug() << "FIRE!";
+        //path = KoPathShape::createShapeFromPainterPath(*m_qshape);
     }
     path->setShapeId(KoPathShapeId);
     path->setStroke(m_stroke);

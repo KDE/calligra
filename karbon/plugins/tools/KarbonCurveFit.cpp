@@ -575,3 +575,58 @@ KoPathShape * bezierFit(const QList<QPointF> &points, float error)
     return path;
 }
 
+
+/**
+   This function simplifies an input QPainterPath and gives an 
+   output KoPathShape. Temporary solution to not change the main API.
+*/
+
+KoPathShape *bezierMultipathFit(const QPainterPath &path, float error)
+{
+    //KoPathShape *shape = new KoPathShape();
+
+    QList<QPolygonF> toCloseShapes;
+    QPolygonF *nerf = 0;
+    nerf = new QPolygonF();
+    toCloseShapes.append(*nerf);
+    int index = 0;
+    int elementCount = path.elementCount();
+
+    for (int i = 0; i < elementCount; i++) {
+        QPainterPath::Element element = path.elementAt(i);
+        switch (element.type) {
+        case QPainterPath::MoveToElement:
+            //shape->moveTo(QPointF(element.x, element.y));
+            nerf = new QPolygonF();
+            toCloseShapes.append(*nerf);
+            index++;
+            break;
+        case QPainterPath::LineToElement:
+            toCloseShapes[index].append(QPointF(element.x, element.y));
+            break;
+        case QPainterPath::CurveToElement:
+            toCloseShapes[index].append(QPointF(element.x, element.y));
+            break;
+        default:
+            continue;
+        }
+    }
+    
+    return bezierFit(toCloseShapes.at(index).toList(), error);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
