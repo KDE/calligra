@@ -25,6 +25,7 @@
 #include "CADocumentController.h"
 #include "CACanvasItem.h"
 #include "CAPADocumentModel.h"
+#include "CATextDocumentModel.h"
 #include "CAImageProvider.h"
 #include "CAAbstractDocumentHandler.h"
 #include "calligra_active_global.h"
@@ -49,7 +50,8 @@ MainWindow::MainWindow (QWidget* parent)
     qmlRegisterType<CADocumentInfo> ("CalligraActive", 1, 0, "CADocumentInfo");
     qmlRegisterType<CADocumentController> ("CalligraActive", 1, 0, "CADocumentController");
     qmlRegisterType<CACanvasItem> ("CalligraActive", 1, 0, "CACanvasItem");
-    qmlRegisterType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel");
+    qmlRegisterUncreatableType<CAPADocumentModel> ("CalligraActive", 1, 0, "CAPADocumentModel", "Not allowed");
+    qmlRegisterUncreatableType<CATextDocumentModel> ("CalligraActive", 1, 0, "CATextDocumentModel", "Not allowed");
     qmlRegisterInterface<KoCanvasController> ("KoCanvasController");
     qmlRegisterUncreatableType<CAAbstractDocumentHandler>("CalligraActive", 1, 0, "CAAbstractDocumentHandler", "Not allowed");
 

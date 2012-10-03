@@ -24,6 +24,7 @@
 
 #include "CAAbstractDocumentHandler.h"
 
+class CATextDocumentModel;
 class QSizeF;
 class KoFindMatch;
 
@@ -49,9 +50,12 @@ public:
     virtual QString bottomToolbarSource() const;
     virtual QString topToolbarSource() const;
     virtual QString leftToolbarSource() const;
+    virtual QString centerOverlaySource() const;
     virtual FlickModes flickMode() const;
 
     int totalPages() const;
+
+    Q_INVOKABLE CATextDocumentModel *paTextDocumentModel() const;
 
 public slots:
     void updateCanvas();
