@@ -22,6 +22,7 @@
 #include "CATextDocumentHandler.h"
 #include "CADocumentController.h"
 #include "CACanvasController.h"
+#include "CATextDocumentModel.h"
 
 #include <KWDocument.h>
 #include <KWCanvasItem.h>
@@ -50,11 +51,13 @@ public:
     Private() {
         document = 0;
         findText = 0;
+        taTextDocumentModel = 0;
     }
     KWDocument* document;
     KWPage currentTextDocPage;
     QString searchString;
     KoFindText* findText;
+    CATextDocumentModel *taTextDocumentModel;
 };
 
 CATextDocumentHandler::CATextDocumentHandler (CADocumentController* documentController)
@@ -151,6 +154,8 @@ bool CATextDocumentHandler::openDocument (const QString& uri)
     KAction *action = part->actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(canvas(), action);
 
+    d->taTextDocumentModel = new CATextDocumentModel(this, d->document, canvas()->shapeManager());
+
     return true;
 }
 
@@ -245,6 +250,15 @@ QString CATextDocumentHandler::topToolbarSource() const
 QString CATextDocumentHandler::leftToolbarSource() const
 {
     return "TextDocumentLeftToolbar.qml";
+}
+
+QString CATextDocumentHandler::centerOverlaySource() const
+{
+    return "TextDocumentCenterOverlay.qml";
+}
+
+CATextDocumentModel* CATextDocumentHandler::paTextDocumentModel() const {
+    return d->taTextDocumentModel;
 }
 
 void CATextDocumentHandler::copy()

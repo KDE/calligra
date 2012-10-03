@@ -39,6 +39,7 @@ set(calligra-active_SRCS
     src/CADocumentController.cpp
     src/CADocumentInfo.cpp
     src/CAPADocumentModel.cpp
+    src/CATextDocumentModel.cpp
     src/CAPAView.cpp
     src/CACanvasController.cpp
     src/MainWindow.cpp
