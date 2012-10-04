@@ -14,9 +14,9 @@ The script could be used in two ways;
     2. Run Sheets with;
 
             # make the script executable
-            chmod 755 `kde4-config --install data`/kspread/scripts/functions/functions.py
+            chmod 755 `kde4-config --install data`/sheets/scripts/functions/functions.py
             # run KSpread
-            kspread --scriptfile `kde4-config --install data`/kspread/scripts/functions/functions.py
+            kspread --scriptfile `kde4-config --install data`/sheets/scripts/functions/functions.py
 
 (C)2006 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
@@ -25,8 +25,8 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 class Functions:
-    """ The Functions class adds some KSpread formula functions on
-    the fly and provides them to KSpread. """
+    """ The Functions class adds some Calligra Sheets formula functions on
+    the fly and provides them to Calligra Sheets. """
 
     def __init__(self, scriptaction):
         """ Some initial work like the import of the Kross and KSpread functionality
@@ -52,7 +52,7 @@ class Functions:
                 import Kross
                 self.kspread = Kross.module("kspread")
             except ImportError:
-                raise "Failed to import the KSpread Kross module. Please run this script with \"kross thisscriptfile.py\""
+                raise "Failed to import the Sheets Kross module. Please run this script with \"kross thisscriptfile.py\""
 
         self.addTestFunctions()
 

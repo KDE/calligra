@@ -370,7 +370,7 @@ class Dialog:
             self.openwidget.setFilter("*.ods|%(1)s\n*|%(2)s"  % { '1' : T.i18n("OpenDocument Spreadsheet Files"), '2' : T.i18n("All Files") } )
 
         if not self.exporter.writer.hasFile():
-            savepage = self.dialog.addPage(T.i18n("Save"),T.i18n("Save to HTML File"),"document-save")
+            savepage = self.dialog.addPage(T.i18nc("Options page name", "Save"),T.i18n("Save to HTML File"),"document-save")
             self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadhtmlexportsave")
             self.savewidget.setMode("Saving")
             self.savewidget.setFilter("*.html *.htm *.xhtml|%(1)s\n*|%(2)s"  % { '1' : T.i18n("HTML Documents"), '2' : T.i18n("All Files") } )

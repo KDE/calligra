@@ -5,7 +5,7 @@ Interactive Python Console Docker for Sheets.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
@@ -60,16 +60,16 @@ class _ConsoleDocker(Qt.QWidget):
             layout.addWidget(self.edit)
             self.status = Qt.QLabel('', self)
             layout.addWidget(self.status)
-            menu = Qt.QMenu(T.i18n("File").decode('utf-8'), menubar)
+            menu = Qt.QMenu(T.i18nc("Menu", "File").decode('utf-8'), menubar)
             menubar.addMenu(menu)
             self.addAction(menu, T.i18n("New").decode('utf-8'), self.newClicked)
             self.addAction(menu, T.i18n("Open...").decode('utf-8'), self.openClicked)
             self.addAction(menu, T.i18n("Save").decode('utf-8'), self.saveClicked)
             self.addAction(menu, T.i18n("Save As...").decode('utf-8'), self.saveAsClicked)
             self.editmenu = self.edit.createStandardContextMenu()
-            self.editmenu.setTitle(T.i18n("Edit").decode('utf-8'))
+            self.editmenu.setTitle(T.i18nc("Menu", "Edit").decode('utf-8'))
             menubar.addMenu(self.editmenu)
-            menu = Qt.QMenu(T.i18n("Build").decode('utf-8'), menubar)
+            menu = Qt.QMenu(T.i18nc("Menu", "Build").decode('utf-8'), menubar)
             menubar.addMenu(menu)
             self.addAction(menu, T.i18n("Compile").decode('utf-8'), self.compileClicked)
             self.addAction(menu, T.i18n("Execute").decode('utf-8'), self.executeClicked)

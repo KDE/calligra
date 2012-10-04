@@ -19,7 +19,7 @@ class Logger:
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
 
-        savepage = self.dialog.addPage(T.i18n("Save"),T.i18n("Save to Log File"),"document-save")
+        savepage = self.dialog.addPage(T.i18nc("Options page name", "Save"),T.i18n("Save to Log File"),"document-save")
         self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadlogger")
         self.savewidget.setMode("Saving")
         self.savewidget.setFilter("*.txt *.log|%(1)s\n*|%(2)s" % { '1' : T.i18n("Log File"), '2' : T.i18n("All Files") } )

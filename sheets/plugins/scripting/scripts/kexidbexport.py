@@ -92,12 +92,12 @@ class KexiExport:
         dialog.setButtons("Ok|Cancel")
         dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        savepage = dialog.addPage(T.i18n("Save"), T.i18n("Export to Kexi Project File"),"document-save")
+        savepage = dialog.addPage(T.i18nc("Options page name", "Save"), T.i18n("Export to Kexi Project File"),"document-save")
         savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadkexidbexport")
         savewidget.setMode("Saving")
         savewidget.setFilter("*.kexi *.kexis *kexic|%(1)s\n*|%(2)s" % { '1' : T.i18n("Kexi Project Files"), '2' : T.i18n("All Files") } )
 
-        datapage = dialog.addPage(T.i18n("Export"), T.i18n("Export sheets and ranges"),"document-export")
+        datapage = dialog.addPage(T.i18nc("Options page name", "Export"), T.i18n("Export sheets and ranges"),"document-export")
         sheetslistview = KSpread.createSheetsListView(datapage)
         sheetslistview.setSelectionType("MultiSelect")
         sheetslistview.setEditorType("Range")

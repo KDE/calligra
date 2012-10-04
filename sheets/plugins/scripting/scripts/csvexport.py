@@ -26,12 +26,12 @@ class CsvExporter:
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        savepage = self.dialog.addPage(T.i18n("Save"),T.i18n("Export to CSV File"),"document-save")
+        savepage = self.dialog.addPage(T.i18nc("Options page name", "Save"),T.i18n("Export to CSV File"),"document-save")
         self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadcsvexportsave")
         self.savewidget.setMode("Saving")
         self.savewidget.setFilter("*.csv *.txt|%(1)s\n*|%(2)s" % { '1' : T.i18n("Comma-Separated-Value Files"), '2' : T.i18n("All Files") } )
 
-        datapage = self.dialog.addPage(T.i18n("Export"),T.i18n("Export Sheets and ranges"),"document-export")
+        datapage = self.dialog.addPage(T.i18nc("Options page name", "Export"),T.i18n("Export Sheets and ranges"),"document-export")
         self.sheetslistview = KSpread.createSheetsListView(datapage)
         self.sheetslistview.setSelectionType("MultiSelect")
         self.sheetslistview.setEditorType("Range")
