@@ -25,6 +25,7 @@
 class FiltersCategoryModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QObject* filterModel READ filterModel NOTIFY filterModelChanged);
 public:
     enum FiltersCategoryModelRoles
@@ -39,7 +40,11 @@ public:
     QObject* filterModel() const;
     Q_INVOKABLE void activateItem(int index);
 
+    QObject* view() const;
+    void setView(QObject* newView);
+
 Q_SIGNALS:
+    void viewChanged();
     void filterModelChanged();
 
 private:

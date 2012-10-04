@@ -20,15 +20,25 @@
 #include "FiltersModel.h"
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
+#include <kis_view2.h>
+
+bool categoryLessThan(const FiltersModel* s1, const FiltersModel* s2)
+{
+    return s1->categoryName.toLower() < s2->categoryName.toLower();
+}
 
 class FiltersCategoryModel::Private
 {
 public:
-    Private()
-        : currentCategory(0)
+    Private(FiltersCategoryModel* qq)
+        : q(qq)
+        , currentCategory(-1)
+        , view(0)
     {}
 
+    FiltersCategoryModel* q;
     int currentCategory;
+    KisView2* view;
     QList<FiltersModel*> categories;
     FiltersModel* categoryByName(const QString& name)
     {
@@ -43,35 +53,36 @@ public:
         }
         return category;
     }
-};
 
-bool categoryLessThan(const FiltersModel* s1, const FiltersModel* s2)
-{
-    return s1->categoryName.toLower() < s2->categoryName.toLower();
-}
+    void refreshContents()
+    {
+        q->reset();
+        QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
+        QList<QString> tmpCategoryIDs;
+        foreach(const KisFilterSP filter, filters) {
+            Q_ASSERT(filter);
+            FiltersModel* cat = 0;
+            if (!tmpCategoryIDs.contains(filter->menuCategory().id())) {
+                cat = new FiltersModel(q);
+                cat->categoryId = filter->menuCategory().id();
+                cat->categoryName = filter->menuCategory().name();
+                cat->setView(view);
+                categories << cat;
+                tmpCategoryIDs << filter->menuCategory().id();
+            }
+            else
+                cat = categoryByName(filter->menuCategory().id());
+            cat->addFilter(filter);
+        }
+        qSort(categories.begin(), categories.end(), categoryLessThan);
+        q->reset();
+    }
+};
 
 FiltersCategoryModel::FiltersCategoryModel(QObject* parent)
     : QAbstractListModel(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
-    QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
-    QList<QString> tmpCategoryIDs;
-    foreach(const KisFilterSP filter, filters) {
-        Q_ASSERT(filter);
-        FiltersModel* cat = 0;
-        if (!tmpCategoryIDs.contains(filter->menuCategory().id())) {
-            cat = new FiltersModel(this);
-            cat->categoryId = filter->menuCategory().id();
-            cat->categoryName = filter->menuCategory().name();
-            d->categories << cat;
-            tmpCategoryIDs << filter->menuCategory().id();
-        }
-        else
-            cat = d->categoryByName(filter->menuCategory().id());
-        cat->addFilter(filter);
-    }
-    qSort(d->categories.begin(), d->categories.end(), categoryLessThan);
-
     QHash<int, QByteArray> roles;
     roles[TextRole] = "text";
     setRoleNames(roles);
@@ -108,6 +119,8 @@ int FiltersCategoryModel::rowCount(const QModelIndex& parent) const
 
 QObject* FiltersCategoryModel::filterModel() const
 {
+    if(d->currentCategory == -1)
+        return 0;
     return d->categories[d->currentCategory];
 }
 
@@ -118,6 +131,19 @@ void FiltersCategoryModel::activateItem(int index)
         d->currentCategory = index;
         emit filterModelChanged();
     }
+}
+
+QObject* FiltersCategoryModel::view() const
+{
+    return d->view;
+}
+
+void FiltersCategoryModel::setView(QObject* newView)
+{
+    d->view = qobject_cast<KisView2*>( newView );
+    if(d->view)
+        d->refreshContents();
+    emit viewChanged();
 }
 
 #include "FiltersCategoryModel.moc"

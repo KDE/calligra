@@ -25,6 +25,7 @@
 class FiltersModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
 public:
     enum FiltersModelRoles
     {
@@ -36,11 +37,18 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     Q_INVOKABLE bool filterRequiresConfiguration(int index);
     Q_INVOKABLE QString filterID(int index);
+    Q_INVOKABLE void activateFilter(int index);
 
     QString categoryId;
     QString categoryName;
 
     void addFilter(KisFilterSP filter);
+
+    QObject* view() const;
+    void setView(QObject* newView);
+
+Q_SIGNALS:
+    void viewChanged();
 
 private:
     class Private;

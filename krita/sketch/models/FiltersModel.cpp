@@ -18,12 +18,18 @@
 
 #include "FiltersModel.h"
 #include <filter/kis_filter.h>
+#include <kis_filter_handler.h>
+#include <kis_view2.h>
 
 class FiltersModel::Private
 {
 public:
-    Private() {};
+    Private()
+        : view(0)
+    {};
+    KisView2* view;
     QList<KisFilterSP> filters;
+    QList<KisFilterHandler*> handlers;
 };
 
 FiltersModel::FiltersModel(QObject* parent)
@@ -82,6 +88,15 @@ QString FiltersModel::filterID(int index)
     return QLatin1String("");
 }
 
+void FiltersModel::activateFilter(int index)
+{
+    if(index > -1 && index < d->filters.count())
+    {
+        // TODO This should of course take configuration if available - see KisFilterHandler::showDialog()
+        d->handlers[index]->apply(d->view->activeNode(), d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
+    }
+}
+
 void FiltersModel::addFilter(KisFilterSP filter)
 {
     if(!filter.isNull())
@@ -89,8 +104,27 @@ void FiltersModel::addFilter(KisFilterSP filter)
         int newRow = d->filters.count();
         beginInsertRows(QModelIndex(), newRow, newRow);
         d->filters << filter;
+        KisFilterManager* man = 0;
+        if(d->view)
+            man = d->view->filterManager();
+        d->handlers << new KisFilterHandler(man, filter, d->view);
         endInsertRows();
     }
+}
+
+QObject* FiltersModel::view() const
+{
+    return d->view;
+}
+
+void FiltersModel::setView(QObject* newView)
+{
+    d->view = qobject_cast<KisView2*>( newView );
+    foreach(KisFilterHandler* handler, d->handlers)
+    {
+        handler->setView(d->view);
+    }
+    emit viewChanged();
 }
 
 #include "FiltersModel.moc"
