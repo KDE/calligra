@@ -501,7 +501,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
     // User data storage
     KexiDB::InternalTableSchema *t_userdata = new KexiDB::InternalTableSchema("kexi__userdata");
     t_userdata->addField(new KexiDB::Field("d_user", KexiDB::Field::Text, KexiDB::Field::NotNull))
-        .addField(new KexiDB::Field("o_id", KexiDB::Field::Integer, KexiDB::Field::Unsigned | KexiDB::Field::NotNull))
+        .addField(new KexiDB::Field("o_id", KexiDB::Field::Integer, KexiDB::Field::NotNull, KexiDB::Field::Unsigned))
         .addField(new KexiDB::Field("d_sub_id", KexiDB::Field::Text, KexiDB::Field::NotNull | KexiDB::Field::NotEmpty))
         .addField(new KexiDB::Field("d_data", KexiDB::Field::LongText));
 
