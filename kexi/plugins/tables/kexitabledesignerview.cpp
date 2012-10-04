@@ -196,7 +196,6 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     a->setToolTip(i18n("Sets or removes primary key"));
     a->setWhatsThis(i18n("Sets or removes primary key for currently selected field."));
     connect(a, SIGNAL(triggered()), this, SLOT(slotTogglePrimaryKey()));
-    setViewActions(viewActions);
 
     d->view->contextMenu()->insertAction(
         d->view->contextMenu()->actions()[1], d->action_toggle_pkey); //add at the beginning as 2nd
@@ -209,10 +208,13 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
     plugSharedAction("edit_redo", this, SLOT(slotRedo()));
     setAvailable("edit_undo", false);
     setAvailable("edit_redo", false);
+    viewActions << sharedAction("edit_undo");
+    viewActions << sharedAction("edit_redo");
    //!todo qundo
     connect(d->history, SIGNAL(commandExecuted(K3Command*)),
             this, SLOT(slotCommandExecuted(K3Command*)));
 #endif
+    setViewActions(viewActions);
 
 #ifdef KEXI_DEBUG_GUI
     KexiDB::alterTableActionDebugGUI(QString()); //to create the tab
