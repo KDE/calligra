@@ -138,11 +138,13 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 
     // This is needed because OpenGL viewport doesn't support partial updates.
+#ifdef KRITASKETCH_USE_OPENGL
     d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
-    glWidget->grabGesture(Qt::PanGesture);
-    glWidget->grabGesture(Qt::PinchGesture);
     d->view->setViewport(glWidget);
+#endif
+    d->view->viewport()->grabGesture(Qt::PanGesture);
+    d->view->viewport()->grabGesture(Qt::PinchGesture);
 
     QDir appdir(qApp->applicationDirPath());
     // for now, the app in bin/ and we still use the env.bat script

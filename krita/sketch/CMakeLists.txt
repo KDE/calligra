@@ -1,5 +1,7 @@
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
+option(KRITASKETCH_USE_OPENGL "Use the OpenGL2 Canvas for Krita Sketch" OFF)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/models
@@ -13,8 +15,6 @@ set(kritasketch_SRCS
     Constants.cpp
     DocumentListModel.cpp
     IconImageProvider.cpp
-    KisSketchCanvas.cpp
-    KisSketchCanvasFactory.cpp
     KisSketchView.cpp
     ToolManager.cpp
     main.cpp
@@ -69,6 +69,16 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_wheel.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
 )
+
+if(KRITASKETCH_USE_OPENGL)
+    add_definitions(-DKRITASKETCH_USE_OPENGL)
+
+    set(kritasketch_SRCS
+        ${kritasketch_SRCS}
+        KisSketchCanvas.cpp
+        KisSketchCanvasFactory.cpp
+    )
+endif(KRITASKETCH_USE_OPENGL)
 
 kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 

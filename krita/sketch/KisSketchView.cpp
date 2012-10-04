@@ -63,6 +63,7 @@
 #include "kis_doc2.h"
 #include "kis_canvas2.h"
 #include <kis_canvas_controller.h>
+#include <kis_qpainter_canvas.h>
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "kis_image.h"
@@ -74,6 +75,7 @@
 #include <kis_selection_manager.h>
 #include <kis_paint_device.h>
 #include <kis_layer.h>
+#include <kis_qpainter_canvas.h>
 
 #include "KisSketchCanvas.h"
 #include "Settings.h"
@@ -100,7 +102,8 @@ public:
     KisCanvas2* canvas;
     KUndo2Stack* undoStack;
 
-    KisSketchCanvas *canvasWidget;
+    //KisSketchCanvas *canvasWidget;
+    KisQPainterCanvas *canvasWidget;
 
     QString file;
 
@@ -135,7 +138,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
 
+#ifdef KRITASKETCH_USE_OPENGL
     KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
+#endif
 
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
@@ -149,7 +154,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 KisSketchView::~KisSketchView()
 {
     if(d->doc) {
+#ifdef KRITASKETCH_USE_OPENGL
         d->canvasWidget->stopRendering();
+#endif
 
         d->doc->closeUrl(false);
         delete d->doc;
@@ -193,7 +200,9 @@ void KisSketchView::setFile(const QString& file)
         emit fileChanged();
 
         if(d->doc) {
+#ifdef KRITASKETCH_USE_OPENGL
             d->canvasWidget->stopRendering();
+#endif
             KisView2 *oldView = d->view;
             disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
             d->view = 0;
@@ -249,20 +258,27 @@ void KisSketchView::setFile(const QString& file)
 
         KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
+#ifdef KRITASKETCH_USE_OPENGL
         d->canvasWidget = qobject_cast<KisSketchCanvas*>(d->canvas->canvasWidget());
         d->canvasWidget->initialize();
         connect(d->canvasWidget, SIGNAL(renderFinished()), SLOT(update()));
+#else
+        d->canvasWidget = qobject_cast<KisQPainterCanvas*>(d->canvas->canvasWidget());
+        connect(d->canvasWidget, SIGNAL(updated()), SLOT(update()));
+#endif
 
         static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
         d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
         d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
+        d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
         //    emit progress(100);
         //    emit completed();
 
         geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
 
-        d->loadedTimer->start(500);
+        d->loadedTimer->start(100);
     }
 }
 
@@ -276,6 +292,14 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         return;
     }
 
+    if(d->view->canvasControllerWidget()->geometry() != QRect(x(), y(), width(), height())) {
+        geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
+    }
+
+    QRegion widgetRegion(0, 0, d->canvasWidget->width(), d->canvasWidget->height());
+    d->canvasWidget->render(painter, QPoint(), widgetRegion);
+
+#ifdef KRITASKETCH_USE_OPENGL
     qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
     d->shader->bind();
@@ -311,10 +335,12 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     d->indexBuffer->release();
     d->vertexBuffer->release();
     d->shader->release();
+#endif
 }
 
 void KisSketchView::componentComplete()
 {
+#ifdef KRITASKETCH_USE_OPENGL
     qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
     d->shader = new QGLShaderProgram(this);
@@ -361,6 +387,7 @@ void KisSketchView::componentComplete()
     indices << 0 << 1 << 2 << 0 << 2 << 3;
     d->indexBuffer->allocate(reinterpret_cast<void*>(indices.data()), indices.size() * sizeof(uint));
     d->indexBuffer->release();
+#endif
 }
 
 void KisSketchView::undo()
@@ -438,9 +465,11 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
 {
     if (d->canvasWidget && !newGeometry.isEmpty())
     {
-        d->canvasWidget->setGeometry(newGeometry.toRect());
         d->view->canvasControllerWidget()->setGeometry(newGeometry.toRect());
+#ifdef KRITASKETCH_USE_OPENGL
+        d->canvasWidget->setGeometry(newGeometry.toRect());
         d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
+#endif
 
         d->timer->start(100);
     }
