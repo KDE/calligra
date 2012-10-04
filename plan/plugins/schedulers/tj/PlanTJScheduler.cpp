@@ -526,10 +526,10 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
         }
     }
     if ( m_project->constraintStartTime() < r->availableFrom() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( m_project->constraintStartTime(), r->availableFrom(), tjGranularity() ) ) );
+        res->addVacation( new TJ::Interval( toTJInterval( m_project->constraintStartTime(), r->availableFrom() ) ) );
     }
     if ( r->availableUntil().isValid() && m_project->constraintEndTime() > r->availableUntil() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->constraintEndTime(), tjGranularity() ) ) );
+        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->constraintEndTime() ) ) );
     }
     m_resourcemap[res] = r;
 //     if ( locale() ) { logDebug( m_project, 0, "Added resource: " + r->name() ); }
