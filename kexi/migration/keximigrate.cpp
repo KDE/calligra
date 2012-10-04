@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -180,20 +180,23 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             // prepend KexiDB-compatible tables to 'tables' list, so we'll copy KexiDB-compatible tables first,
             // to make sure existing IDs will not be in conflict with IDs newly generated for non-KexiDB tables
             kexiDBTables.sort();
-            foreach(const QString& tableName, kexiDBTables)
-            tables.removeAt(tables.indexOf(tableName));
+            foreach(const QString& tableName, kexiDBTables) {
+                tables.removeAt(tables.indexOf(tableName));
+            }
 //kDebug() << "KexiDB-compat tables: " << kexiDBTables;
 //kDebug() << "non-KexiDB tables: " << tables;
         }
     }
 
     // -- read table schemas and create them in memory (only for non-KexiDB-compat tables)
+    QMap<QString, QString> nativeNames;
     foreach(const QString& tableCaption, tables) {
         if (destDriver->isSystemObjectName(tableCaption)   //"kexi__objects", etc.
                 || tableCaption.toLower().startsWith("kexi__")) //tables at KexiProject level, e.g. "kexi__blobs"
             continue;
         // this is a non-KexiDB table: generate schema from native data source
-        const QString tableIdentifier(KexiUtils::string2Identifier(tableCaption));
+        const QString tableIdentifier(KexiUtils::string2Identifier(tableCaption.toLower()));
+        nativeNames.insert(tableIdentifier, tableCaption);
         KexiDB::TableSchema *tableSchema = new KexiDB::TableSchema(tableIdentifier);
         tableSchema->setCaption(tableCaption);   //caption is equal to the original name
 
@@ -253,9 +256,10 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
             if (true == drv_fetchRecordFromSQL(
                         QString::fromLatin1(
                             "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects "
-                            "WHERE o_name='%1' AND o_type=%1").arg(tableName).arg((int)KexiDB::TableObjectType),
+                            "WHERE o_name='%1' AND o_type=%2").arg(tableName).arg((int)KexiDB::TableObjectType),
                         data, firstRecord)
-                    && destConn->setupObjectSchemaData(data, *t)) {
+                    && destConn->setupObjectSchemaData(data, *t))
+            {
 //! @todo to reuse Connection::setupTableSchema()'s statement somehow...
                 //load schema for every field and add it
                 firstRecord = true;
@@ -356,32 +360,30 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
         foreach(KexiDB::TableSchema *ts, m_tableSchemas) {
             if (!ok)
                 break;
-            const QString tname(ts->name().toLower());
-            if (destConn->driver()->isSystemObjectName(tname)
+            if (destConn->driver()->isSystemObjectName(ts->name())
 //! @todo what if these two tables are not compatible with tables created in destination db
 //!       because newer db format was used?
-                    && tname != "kexi__objectdata" //copy this too
-                    && tname != "kexi__blobs" //copy this too
-                    && tname != "kexi__fields" //copy this too
-               ) {
-                kDebug() << "Do not copy data for system table: " << tname;
+                    && ts->name() != "kexi__objectdata" //copy this too
+                    && ts->name() != "kexi__blobs" //copy this too
+                    && ts->name() != "kexi__fields" //copy this too
+                    && ts->name() != "kexi__userdata" //copy this too
+               )
+            {
+                kDebug() << "Won't copy data to system table" << ts->name();
 //! @todo copy kexi__db contents!
                 continue;
             }
-            kDebug() << "Copying data for table: " << tname;
-            QString originalTableName;
-            
-            //if (kexiDBTables.contains(tname))
-                //caption is equal to the original name
-                originalTableName = ts->caption().isEmpty() ? tname : ts->caption();
-            //else
-            //    originalTableName = tname;
-            ok = drv_copyTable(originalTableName, destConn, ts);
+            QString tsName = nativeNames.value(ts->name());
+            kDebug() << "Copying data for table: " << tsName;
+            if (tsName.isEmpty()) {
+                tsName = ts->name();
+            }
+            ok = drv_copyTable(tsName, destConn, ts);
             if (!ok) {
-                kDebug() << "Failed to copy table " << tname;
+                kDebug() << "Failed to copy table " << tsName;
                 if (result)
                     result->setStatus(destConn,
-                                      i18n("Could not copy table \"%1\" to destination database.", tname));
+                                      i18n("Could not copy table \"%1\" to destination database.", tsName));
                 break;
             }
         }//for
