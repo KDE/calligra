@@ -1107,7 +1107,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
 {
     if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0,
             i18n("Do you want to drop the project \"%1\"?",
-                 static_cast<const KexiDB::SchemaData*>(&data)->objectName()) + "\n" + i18n(warningNoUndo)))
+                 static_cast<const KexiDB::SchemaData*>(&data)->name()) + "\n" + i18n(warningNoUndo)))
         return cancelled;
 
     KexiProject prj(data, handler);
