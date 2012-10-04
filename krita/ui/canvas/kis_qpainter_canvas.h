@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+#include "krita_export.h"
+
 #include "kis_canvas_widget_base.h"
 #include "kis_prescaled_projection.h"
 
@@ -42,7 +44,7 @@ class KoToolProxy;
  *
  * @author Boudewijn Rempt <boud@valdyas.org>
 */
-class KisQPainterCanvas : public QWidget, public KisCanvasWidgetBase
+class KRITAUI_EXPORT KisQPainterCanvas : public QWidget, public KisCanvasWidgetBase
 {
 
     Q_OBJECT
@@ -97,6 +99,7 @@ protected: // KisCanvasWidgetBase
 
 signals:
     void needAdjustOrigin();
+    void updated();
 
 private slots:
     void slotConfigChanged();
