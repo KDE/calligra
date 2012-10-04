@@ -29,7 +29,7 @@
 #include "stage_export.h"
 
 class KoShape;
-class KoTextBlockData;
+class QTextBlockUserData;
 class KoXmlElement;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
@@ -62,14 +62,14 @@ public:
         MediaCall
     };
 
-    KPrShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData);
+    KPrShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockData);
     virtual ~KPrShapeAnimation();
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const;
 
     KoShape *shape() const;
-    KoTextBlockData *textBlockData() const;
+    QTextBlockUserData *textBlockUserData() const;
 
     virtual void init(KPrAnimationCache *animationCache, int step);
 
@@ -117,7 +117,7 @@ public:
      *
      * @param textBlockData
      */
-    void setKoTextBlockData(KoTextBlockData *textBlockData);
+    void setTextBlockUserData(QTextBlockUserData *textBlockUserData);
 
     /// The following data are just for quick access
     /// to different params of the animation
@@ -211,7 +211,7 @@ signals:
 
 private:
     KoShape *m_shape;
-    KoTextBlockData *m_textBlockData;
+    QTextBlockUserData *m_textBlockData;
     PresetClass m_class;
     QString m_id;
     QString m_presetSubType;

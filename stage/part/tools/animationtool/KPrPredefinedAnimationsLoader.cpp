@@ -366,7 +366,7 @@ KPrShapeAnimation *KPrPredefinedAnimationsLoader::loadOdfShapeAnimation(const Ko
     forEachElement(e, element) {
         if (shapeAnimation == 0) {
             KoShape *shape = animShape;
-            KoTextBlockData *textBlockData = 0;
+            QTextBlockUserData *textBlockData = 0;
             shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
         }
         KPrAnimationBase *animation(KPrAnimationFactory::createAnimationFromOdf(e, context, shapeAnimation));

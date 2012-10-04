@@ -21,15 +21,23 @@
 
 #ifndef KWSTATISTICSDOCKER_H
 #define KWSTATISTICSDOCKER_H
-#include <QBoxLayout>
-#include <QGridLayout>
+
+// Base classes
 #include <QDockWidget>
-#include <dockers/KWStatistics.h>
-#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
+// Qt
+#include <QBoxLayout>
+#include <QGridLayout>
+
+// Calligra
+#include <KoDockFactoryBase.h>
+
+// Local
+#include <dockers/KWStatisticsWidget.h>
+
 class KoCanvasBase;
-class KWStatistics;
+
 
 class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -45,11 +53,22 @@ public:
 
 private:
     bool m_canvasReset;
-    KWStatistics *statisticsDock;
-    QBoxLayout *mainBox;
-    QHBoxLayout *wordsLayout,*sentencesLayout,*syllablesLayout,*spacesLayout;
-    QHBoxLayout *fleschLayout, *cjkcharsLayout,*nospacesLayout,*linesLayout;
-    int count;
+
+    // The statistics widget
+    KWStatisticsWidget *m_statisticsWidget;
+
+    // The main layout
+    QBoxLayout *m_mainBox;
+
+    // The layouts for the label/value QLabel pairs.
+    QHBoxLayout *m_wordsLayout;
+    QHBoxLayout *m_sentencesLayout;
+    QHBoxLayout *m_syllablesLayout;
+    QHBoxLayout *m_spacesLayout;
+    QHBoxLayout *m_fleschLayout;
+    QHBoxLayout *m_cjkcharsLayout;
+    QHBoxLayout *m_nospacesLayout;
+    QHBoxLayout *m_linesLayout;
     
 public slots:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);

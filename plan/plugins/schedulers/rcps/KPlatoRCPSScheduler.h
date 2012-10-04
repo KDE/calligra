@@ -85,7 +85,7 @@ private:
     };
 
 public:
-    KPlatoRCPSScheduler( Project *project, ScheduleManager *sm, QObject *parent = 0 );
+    KPlatoRCPSScheduler( Project *project, ScheduleManager *sm, ulong granularity, QObject *parent = 0 );
     ~KPlatoRCPSScheduler();
 
     int check();

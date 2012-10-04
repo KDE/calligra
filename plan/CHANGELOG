@@ -2,6 +2,14 @@
 Calligra Plan current:
 ----------------------
 
+* Fix bug 307450 - Calligra Plan crash when adding subtask
+
+* Always check appointments to avoid overbooking resources
+
+* Fix bug 307450 - Crash when calculating schedule (in rcps_solver_solve)
+
+* Add scheduling granularity
+
 * PlanWork:
   Add gantt chart
   Update scheduling info when task has been rescheduled
