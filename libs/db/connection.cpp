@@ -141,7 +141,7 @@ public:
 
     inline void insertTable(TableSchema& tableSchema) {
         tables.insert(tableSchema.id(), &tableSchema);
-        tables_byname.insert(tableSchema.name().toLower(), &tableSchema);
+        tables_byname.insert(tableSchema.name(), &tableSchema);
     }
 
     /*! @internal. Inserts internal table to Connection's structures, so it can be found by name.
@@ -1672,7 +1672,7 @@ bool Connection::createTable(KexiDB::TableSchema* tableSchema, bool replaceExist
     }
     const bool internalTable = dynamic_cast<InternalTableSchema*>(tableSchema);
 
-    const QString tableName = tableSchema->name().toLower();
+    const QString tableName = tableSchema->name();
 
     if (!internalTable) {
         if (m_driver->isSystemObjectName(tableName)) {
@@ -1927,8 +1927,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
         return false;
     }
     const QString oldTableName = tableSchema.name();
-    const QString newTableName = newName.toLower().trimmed();
-    if (oldTableName.toLower().trimmed() == newTableName) {
+    const QString newTableName = newName.trimmed();
+    if (oldTableName.trimmed() == newTableName) {
         setError(ERR_OBJECT_THE_SAME, i18n("Could not rename table \"%1\" using the same name.",
                                            newTableName));
         return false;
@@ -3005,7 +3005,7 @@ KexiDB::TableSchema* Connection::setupTableSchema(const RecordData &data)
 
 TableSchema* Connection::tableSchema(const QString& tableName)
 {
-    TableSchema *t = d->table(tableName.toLower());
+    TableSchema *t = d->table(tableName);
     if (t)
         return t;
     //not found: retrieve schema
