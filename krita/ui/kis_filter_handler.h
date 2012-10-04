@@ -22,6 +22,7 @@
 #include <QObject>
 
 #include <kis_types.h>
+#include <krita_export.h>
 
 class KisFilterConfiguration;
 class KisFilterManager;
@@ -32,7 +33,7 @@ class QRect;
 /**
  * XXX: this class is way too confusing.
  */
-class KisFilterHandler : public QObject
+class KRITAUI_EXPORT KisFilterHandler : public QObject
 {
 
     Q_OBJECT
@@ -44,6 +45,7 @@ public:
 
     const KisFilterSP filter() const;
 
+    void setView(KisView2* view);
 public slots:
 
     void showDialog();

@@ -231,4 +231,10 @@ void KisFilterHandler::filterDone(bool interrupted)
     QApplication::restoreOverrideCursor();
 
 }
+
+void KisFilterHandler::setView(KisView2* view)
+{
+    m_d->view = view;
+}
+
 #include "kis_filter_handler.moc"
