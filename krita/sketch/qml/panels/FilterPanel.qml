@@ -21,6 +21,7 @@ import org.krita.sketch 1.0
 import "../components"
 
 Panel {
+    id: base;
     name: "Filter";
     panelColor: Constants.Theme.TertiaryColor;
 
@@ -44,6 +45,14 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            onClicked: {
+                if(base.state === "full") {
+                    fullFilters.model.activateFilter(fullFilters.currentIndex);
+                }
+                else if(base.state === "peek") {
+                    peekFilters.model.activateFilter(peekFilters.currentIndex);
+                }
+            }
         },
         Item {
             width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
@@ -65,6 +74,7 @@ Panel {
 
     FiltersCategoryModel {
         id: filtersCategoryModel;
+        view: sketchView.view;
     }
 
     peekContents: Column {
@@ -77,12 +87,14 @@ Panel {
             id: categoryList;
             width: parent.width;
             model: filtersCategoryModel;
+            onModelChanged: currentIndex = 0;
             onCurrentIndexChanged: {
                 fullCategoryList.currentIndex = currentIndex;
                 model.activateItem(currentIndex)
             }
         }
         ExpandingListView {
+            id: peekFilters;
             width: parent.width;
             model: filtersCategoryModel.filterModel;
         }
@@ -105,8 +117,10 @@ Panel {
             }
         }
         ExpandingListView {
+            id: fullFilters;
             width: parent.width;
             model: filtersCategoryModel.filterModel;
+            onModelChanged: currentIndex = 0;
             onCurrentIndexChanged: {
                 if(model.filterRequiresConfiguration(currentIndex)) {
                     noConfigNeeded.visible = false;
@@ -119,10 +133,41 @@ Panel {
                 }
             }
         }
-        Label {
+        Item {
             id: noConfigNeeded;
             width: parent.width;
-            text: "This filter requires no configuration";
+            height: parent.width;
+            Column {
+                anchors.fill: parent;
+                Item {
+                    width: parent.width;
+                    height: Constants.GridHeight;
+                }
+                Text {
+                    width: parent.width;
+                    font.pixelSize: Constants.DefaultFontSize;
+                    color: Constants.Theme.TextColor;
+                    font.family: "Source Sans Pro"
+                    wrapMode: Text.WordWrap;
+                    horizontalAlignment: Text.AlignHCenter;
+                    text: "This filter requires no configuration. Click below to apply it.";
+                }
+                Item {
+                    width: parent.width;
+                    height: Constants.GridHeight / 2;
+                }
+                Button {
+                    width: height;
+                    height: Constants.GridHeight
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    color: "transparent";
+                    image: "../images/svg/icon-apply.svg"
+                    textColor: "white";
+                    shadow: false;
+                    highlight: false;
+                    onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+                }
+            }
         }
         Item {
             id: configNeeded;
@@ -136,7 +181,7 @@ Panel {
             Loader {
                 id: configLoader;
                 width: parent.width;
-                height: item.height;
+                height: item ? item.height : 1;
             }
         }
     }
