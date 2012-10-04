@@ -73,7 +73,7 @@ void KWStatisticsDocker::unsetCanvas()
 
 void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 {
-    if (newArea == 8 || newArea == 4) {
+    if (newArea == Qt::TopDockWidgetArea || newArea == Qt::BottomDockWidgetArea) {
         m_mainBox->setDirection(QBoxLayout::LeftToRight);
     } else {
         m_mainBox->setDirection(QBoxLayout::TopToBottom);
