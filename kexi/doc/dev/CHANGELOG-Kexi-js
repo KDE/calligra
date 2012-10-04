@@ -169,6 +169,33 @@ Main Window
 
 ~~~~~~~~~~~~~~~~ 2.5.3 ~~~~~~~~~~~~~~~~
 
+2012-10-04
+KexiDB
+*A fix for the lowercase fix: keep table names in original format but compare them in case-insensitive way when needed
+**This way importing from databases with tables upper-case characters works
+Migration
+*Fix invalid SQL generation for database import
+*Fix importing from databases with tables upper-case characters
+BUG:307479
+BUG:306523
+TODO: Port to Predicate
+
+2012-09-21
+Main Window
+*Fix crashes on Kexi closing
+BUG:299484
+
+2012-09-19
+KexiDB
+*fix loading maximumListRows property of lookup field schema
+**(noncritical because it is not yet used)
+**Ported to Predicate
+
+2012-09-12
+Tables
+*Fix possible crash when saving changes to design of table used elsewhere
+BUG:306672
+
 2012-09-11
 Query Designer
 *Fix: Missing "*" (All Columns) item in Query Designer, it was present in Kexi 2.2 and ealier.
@@ -178,7 +205,7 @@ BUG:306577
 2012-09-10
 General
 *Force lower case letters for object identifiers (except for widget names)
-**This adds consstency and fixes issue with
+**This adds consistency
 **Also fix support for objects renamed to not-all-lowercase in earlier version of Kexi.
 BUG:306523
 REVIEW:106411
