@@ -45,10 +45,10 @@ public:
     ~KoBookmarkManager();
 
     /// @return a bookmark with the specified name, or 0 if there is none
-    KoBookmark *retrieveBookmark(const QString &name);
+    KoBookmark *retrieveBookmark(const QString &name) const;
 
     /// @return a list of QString containing all bookmark names
-    QList<QString> bookmarkNameList();
+    QList<QString> bookmarkNameList() const;
 
 public slots:
     /**

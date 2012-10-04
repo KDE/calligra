@@ -65,7 +65,6 @@ private:
     KoShapeController *m_shapeController;
 
     QSet<KoInlineObject *> m_invalidInlineObjects;
-    QList<KoBookmark *>m_unmatchedBookmarks;
     QSet<KoInlineObject *> m_bookmarksToRemove;
     bool m_first;
     bool m_undone;
@@ -77,7 +76,6 @@ private:
 
     void doDelete();
     void deleteBookmark(KoInlineObject *object);
-    void restoreUnmatchedBookmarks(KoTextEditor *editor);
     void deleteTextAnchor(KoInlineObject *object);
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();

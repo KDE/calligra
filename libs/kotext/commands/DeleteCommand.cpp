@@ -29,6 +29,7 @@
 #include "KoTextEditor_p.h"
 #include <KoTextDocument.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include "KoBookmark.h"
 #include <KoTextAnchor.h>
 #include <KoCanvasBase.h>
@@ -151,6 +152,8 @@ void DeleteCommand::doDelete()
         inlineObjectManager->removeInlineObject(object); // doesn't remove the character
     }
 
+    KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
+
     if (textEditor->hasComplexSelection()) {
         m_mergePossible = false;
     }
@@ -164,13 +167,11 @@ void DeleteCommand::doDelete()
 
     caret->deleteChar();
 
-    restoreUnmatchedBookmarks(textEditor);
-
     caret->setCharFormat(charFormat);
 }
 
 void DeleteCommand::deleteBookmark(KoInlineObject *object)
-{
+{/*FIXME
     KoBookmark *bookmark = dynamic_cast<KoBookmark*>(object);
     if (bookmark) {
         KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(m_document).inlineTextObjectManager();
@@ -202,28 +203,7 @@ void DeleteCommand::deleteBookmark(KoInlineObject *object)
         // for future use. Also, start bookmarks might still have a reference to the end bookmark
         // that is being removed.
     }
-}
-
-void DeleteCommand::restoreUnmatchedBookmarks(KoTextEditor *editor)
-{
-    QTextCursor *caret = editor->cursor();
-    int currentPosition = caret->position();
-
-    // now restore the bookmarks that spanned beyond the selection we removed
-    foreach(KoBookmark *bookmark, m_unmatchedBookmarks) {
-
-        QTextCharFormat oldCf = editor->charFormat();
-        // create a new format out of the old so that the current formatting is
-        // also used for the inserted object.  KoVariables render text too ;)
-        QTextCharFormat cf(oldCf);
-        cf.setObjectType(QTextFormat::UserObject + 1);
-        cf.setProperty(KoInlineTextObjectManager::InlineInstanceId, bookmark->id());
-        caret->insertText(QString(QChar::ObjectReplacementCharacter), cf);
-        // reset to use old format so that the InlineInstanceId is no longer set.
-        caret->setCharFormat(oldCf);
-    }
-
-    editor->updateInlineObjectPosition(currentPosition);
+    */
 }
 
 void DeleteCommand::deleteTextAnchor(KoInlineObject *object)

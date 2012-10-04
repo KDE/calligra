@@ -35,6 +35,7 @@
 #include <KoBookmarkManager.h>
 #include <KoInlineNote.h>
 #include <KoInlineCite.h>
+#include <KoTextRangeManager.h>
 #include <KoInlineTextObjectManager.h>
 #include "KoList.h"
 #include <KoOdfLoadingContext.h>
@@ -1899,18 +1900,26 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         }
         // text:bookmark, text:bookmark-start and text:bookmark-end
         else if (isTextNS && (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end")) {
+            KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
-            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+            if (localName == "bookmark-end") {
+                KoBookmark *bookmark = textRangeManager->bookmarkManager()->retrieveBookmark(KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
+                if (bookmark) {
+                    bookmark->cursor().setPosition(bookmark->cursor().position());
+                    bookmark->cursor().setPosition(cursor.position(), QTextCursor::KeepAnchor);
+                }
+            } else {
+                KoBookmark *bookmark = new KoBookmark(cursor);
+                bookmark->setManager(textRangeManager);
+                if (textRangeManager && bookmark->loadOdf(ts, d->context)) {
+                    textRangeManager->insert(bookmark);
+                }
+                else {
+                    kWarning(32500) << "Could not load bookmark";
+                    delete bookmark;
+                }
+            }
 
-            KoBookmark *bookmark = new KoBookmark(cursor.block().document());
-            bookmark->setManager(textObjectManager);
-            if (textObjectManager && bookmark->loadOdf(ts, d->context)) {
-                textObjectManager->insertInlineObject(cursor, bookmark);
-            }
-            else {
-                kWarning(32500) << "Could not load bookmark";
-                delete bookmark;
-            }
 
         } else if (isTextNS && localName == "bookmark-ref") {
             QString bookmarkName = ts.attribute("ref-name");

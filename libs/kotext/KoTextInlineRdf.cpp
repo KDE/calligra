@@ -212,11 +212,7 @@ QString KoTextInlineRdf::predicate()
 QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
-        KoBookmark *e = d->bookmark.data()->endBookmark();
-        if (e) {
-            // kDebug(30015) << "(Semantic)bmark... start:" << d->bookmark.data()->position() << " end:" << e->position();
-            return QPair<int, int>(d->bookmark.data()->position(), e->position());
-        }
+        return QPair<int, int>(d->bookmark.data()->selectionStart(), d->bookmark.data()->selectionEnd());
     }
     if (d->kotextmeta && d->document) {
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
@@ -241,15 +237,9 @@ QString KoTextInlineRdf::object()
     }
 
     KoTextDocument textDocument(d->document.data());
-    KoTextEditor *editor = textDocument.textEditor();
 
     if (d->bookmark && d->document) {
-        KoBookmark *e = d->bookmark.data()->endBookmark();
-
-        editor->setPosition(d->bookmark.data()->position(), QTextCursor::MoveAnchor);
-        editor->setPosition(e->position(), QTextCursor::KeepAnchor);
-
-        QString ret = editor->selectedText();
+        QString ret  = d->bookmark.data()->cursor().selectedText();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
     else if (d->kotextmeta && d->document) {
@@ -258,6 +248,7 @@ QString KoTextInlineRdf::object()
             kDebug(30015) << "Broken KoTextMeta, no end tag found!";
             return QString();
         } else {
+            KoTextEditor *editor = textDocument.textEditor();
             editor->setPosition(d->kotextmeta.data()->position(), QTextCursor::MoveAnchor);
             editor->setPosition(e->position(), QTextCursor::KeepAnchor);
             QString ret = editor->selectedText();
@@ -266,10 +257,8 @@ QString KoTextInlineRdf::object()
     }
     else if (d->cell.isValid() && d->document) {
         QTextCursor b = d->cell.firstCursorPosition();
-        QTextCursor e = d->cell.lastCursorPosition();
-        editor->setPosition(b.position(), QTextCursor::MoveAnchor);
-        editor->setPosition(e.position(),  QTextCursor::KeepAnchor);
-        QString ret = editor->selectedText();
+        b.setPosition(d->cell.lastCursorPosition().position(), QTextCursor::KeepAnchor);
+        QString ret = b.selectedText();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
 
