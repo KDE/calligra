@@ -173,11 +173,14 @@ Main Window
 KexiDB
 *A fix for the lowercase fix: keep table names in original format but compare them in case-insensitive way when needed
 **This way importing from databases with tables upper-case characters works
+*SQLite Driver
+**Fix possible data loss of compacted file when process tools crash of fail for any reason
 Migration
 *Fix invalid SQL generation for database import
 *Fix importing from databases with tables upper-case characters
 BUG:307479
 BUG:306523
+REVIEW:106726
 TODO: Port to Predicate
 
 2012-09-21
