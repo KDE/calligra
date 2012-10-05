@@ -37,7 +37,7 @@ Image {
     DocumentTypeSelector {
         id: docTypeSelector
 
-        visible: metadataInternalModel ? true : false
+        visible: false
         buttonWidth: homeScreen.width/2.1; buttonHeight: 100;
         anchors.left: parent.left
         anchors.top: parent.top
@@ -49,7 +49,7 @@ Image {
     RecentFiles {
         id: recentFiles
 
-        visible: metadataInternalModel ? true : false
+        visible: false
         buttonWidth: homeScreen.width/2.1; buttonHeight: 100;
         anchors.left: parent.horizontalCenter
         anchors.top: parent.top

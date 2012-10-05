@@ -125,6 +125,7 @@ void CACanvasController::ensureVisible (KoShape* shape)
 
 void CACanvasController::ensureVisible (const QRectF& rect, bool smooth)
 {
+    if (m_caCanvasItem->editable()) return;
     QRect currentVisible(canvasOffsetX(), canvasOffsetY(), visibleWidth(), visibleHeight());
 
     QRect viewRect = rect.toRect();

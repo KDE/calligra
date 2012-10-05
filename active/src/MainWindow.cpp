@@ -93,10 +93,6 @@ MainWindow::MainWindow (QWidget* parent)
                                             + "/share/calligraactive/qml/HomeScreen.qml"));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
 
-    setCentralWidget (m_view);
-    connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
-    resize (1024, 768);
-
     QTimer::singleShot(0, this, SLOT(checkForAndOpenDocument()));
 }
 
@@ -147,6 +143,10 @@ void MainWindow::checkForAndOpenDocument()
         QObject* object = m_view->rootObject();
         QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
     }
+
+    connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
+    resize (1024, 768);
+    setCentralWidget (m_view);
 }
 
 #include "MainWindow.moc"
