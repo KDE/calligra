@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -131,7 +131,7 @@ struct KexiDB_AlterTableHandlerStatic {
         I2("unsigned", PhysicalAlteringRequired, DataConversionRequired); // always?
         I2("maxLength", PhysicalAlteringRequired, DataConversionRequired); // always?
         I2("precision", PhysicalAlteringRequired, DataConversionRequired); // always?
-        I("width", MainSchemaAlteringRequired);
+        I("defaultWidth", ExtendedSchemaAlteringRequired);
         // defaultValue: depends on backend, for mysql it can only by a constant or now()...
         // -- should we look at Driver here?
 #ifdef KEXI_NO_UNFINISHED
