@@ -75,14 +75,6 @@ public:
             delete schemaData;
     }
 
-    inline int indexForView(int mode) const {
-        return indicesForViews.contains(mode) ? indicesForViews.value(mode) : -1;
-    }
-
-    inline void setIndexForView(Kexi::ViewMode mode, int idx) {
-        indicesForViews.insert((int)mode, idx);
-    }
-
     QVBoxLayout* mainLyr;
     QStackedWidget* stack;
 //  KToolBar* topBar;
@@ -123,9 +115,7 @@ public:
     bool isRegistered;
     bool dirtyChangedEnabled; //!< used in setDirty(), affects dirtyChanged()
     bool switchToViewModeEnabled; //!< used internally switchToViewMode() to avoid infinite loop
-
-protected:
-    QHash<int, int> indicesForViews;
+    QMap<Kexi::ViewMode, KexiView*> views;
 };
 
 //----------------------------------------------------------
@@ -308,7 +298,7 @@ KexiView *KexiWindow::selectedView() const
 
 KexiView *KexiWindow::viewForMode(Kexi::ViewMode mode) const
 {
-    return static_cast<KexiView*>(d->stack->widget(d->indexForView(mode)));
+    return d->views.value(mode);
 }
 
 void KexiWindow::addView(KexiView *view)
@@ -319,7 +309,7 @@ void KexiWindow::addView(KexiView *view)
 void KexiWindow::addView(KexiView *view, Kexi::ViewMode mode)
 {
     const int idx = d->stack->addWidget(view);
-    d->setIndexForView(mode, idx);
+    d->views.insert(mode, view);
 
     //set focus proxy inside this view
     QWidget *ch = KexiUtils::findFirstChild<QWidget*>(view, "QWidget");
@@ -350,11 +340,10 @@ void KexiWindow::initViewActions(KexiView* view, Kexi::ViewMode mode)
 void KexiWindow::removeView(Kexi::ViewMode mode)
 {
     KexiView *view = viewForMode(mode);
-    if (view)
+    if (view) {
         d->stack->removeWidget(view);
-
-    d->setIndexForView(mode, -1);
-
+        d->views.remove(mode);
+    }
     d->openedViewModes |= mode;
     d->openedViewModes ^= mode;
 }
@@ -484,11 +473,14 @@ bool KexiWindow::tryClose(bool dontSaveChanges)
 bool KexiWindow::isDirty() const
 {
     //look for "dirty" flag
-    int m = d->openedViewModes, mode = 1;
+    int m = d->openedViewModes;
+    int mode = 1;
     while (m > 0) {
         if (m & 1) {
-            if (static_cast<KexiView*>(d->stack->widget(d->indexForView(mode)))->isDirty())
+            KexiView *view = viewForMode(static_cast<Kexi::ViewMode>(mode));
+            if (view && view->isDirty()) {
                 return true;
+            }
         }
         m >>= 1;
         mode <<= 1;
@@ -499,10 +491,14 @@ bool KexiWindow::isDirty() const
 void KexiWindow::setDirty(bool dirty)
 {
     d->dirtyChangedEnabled = false;
-    int m = d->openedViewModes, mode = 1;
+    int m = d->openedViewModes;
+    int mode = 1;
     while (m > 0) {
         if (m & 1) {
-            static_cast<KexiView*>(d->stack->widget(d->indexForView(mode)))->setDirty(dirty);
+            KexiView *view = viewForMode(static_cast<Kexi::ViewMode>(mode));
+            if (view) {
+                view->setDirty(dirty);
+            }
         }
         m >>= 1;
         mode <<= 1;
@@ -617,10 +613,10 @@ tristate KexiWindow::switchToViewMode(
     }
 
     //get view for viewMode
-    KexiView *newView
-    = (d->stack->widget(d->indexForView(newViewMode))
-       && d->stack->widget(d->indexForView(newViewMode))->inherits("KexiView"))
-      ? static_cast<KexiView*>(d->stack->widget(d->indexForView(newViewMode))) : 0;
+    KexiView *newView = viewForMode(newViewMode);
+    if (newView && !newView->inherits("KexiView")) {
+        newView = 0;
+    }
     if (!newView) {
         KexiUtils::setWaitCursor();
         //ask the part to create view for the new mode
@@ -688,7 +684,7 @@ tristate KexiWindow::switchToViewMode(
         //view->toggleViewModeButtonBack();
     }
     addActionProxyChild(newView);   //new proxy child
-    d->stack->setCurrentWidget(newView);   //d->indexForView(newViewMode) );
+    d->stack->setCurrentWidget(newView);
     newView->propertySetSwitched();
     KexiMainWindowIface::global()->invalidateSharedActions(newView);
     newView->setFocus();
