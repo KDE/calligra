@@ -22,18 +22,60 @@
 #include <ui/kis_resource_server_provider.h>
 #include <kis_view2.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_canvas2.h>
+#include <kis_paintop_box.h>
+#include <kis_factory2.h>
 #include <image/brushengine/kis_paintop_preset.h>
+#include <kis_paintop_factory.h>
+#include <kis_paintop_registry.h>
+#include <kis_node.h>
+#include <kis_image.h>
 
 class PresetModel::Private {
 public:
     Private()
-        : view(0)
+        : currentPreset(0)
+        , view(0)
     {
         rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     }
 
     KoResourceServer<KisPaintOpPreset> * rserver;
+    int currentPreset;
     KisView2* view;
+
+    KisPaintOpPresetSP defaultPreset(const KoID& paintOp)
+    {
+        QString defaultName = paintOp.id() + ".kpp";
+        QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
+
+        KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
+
+        if (!preset->load())
+            preset = KisPaintOpRegistry::instance()->defaultPreset(paintOp, view->image());
+
+        Q_ASSERT(preset);
+        Q_ASSERT(preset->valid());
+
+        return preset;
+    }
+
+    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
+    {
+        preset = (!preset) ? defaultPreset(paintop) : preset;
+
+        Q_ASSERT(preset && preset->settings());
+
+        // handle the settings and expose it through a a simple QObject property
+        //m_optionWidget->setConfiguration(preset->settings());
+
+        preset->settings()->setNode(view->resourceProvider()->currentNode());
+
+        KisPaintOpFactory* paintOp     = KisPaintOpRegistry::instance()->get(paintop.id());
+        QString            pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+
+        view->resourceProvider()->setPaintOpPreset(preset);
+    }
 };
 
 PresetModel::PresetModel(QObject *parent)
@@ -119,7 +161,8 @@ void PresetModel::activatePreset(int index)
 
     QList<KisPaintOpPreset*> resources = d->rserver->resources();
     if (index >= 0 && index < resources.count())  {
-        d->view->resourceProvider()->setPaintOpPreset( resources.at( index ) );
+        KisPaintOpPreset* preset = resources.at( index );
+        d->setCurrentPaintop(preset->paintOp(), preset->clone());
     }
 }
 
