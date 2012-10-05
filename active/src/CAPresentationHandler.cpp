@@ -174,7 +174,6 @@ void CAPresentationHandler::gotoCurrentSlide()
 
 void CAPresentationHandler::zoomToFit()
 {
-    KoZoomController *zoomController = documentController()->canvasController()->zoomController();
     updateCanvas();
 }
 
