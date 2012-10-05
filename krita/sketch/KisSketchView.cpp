@@ -296,8 +296,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
     }
 
-    QRegion widgetRegion(0, 0, d->canvasWidget->width(), d->canvasWidget->height());
-    d->canvasWidget->render(painter, QPoint(), widgetRegion);
+    d->canvasWidget->render(painter);
 
 #ifdef KRITASKETCH_USE_OPENGL
     qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
