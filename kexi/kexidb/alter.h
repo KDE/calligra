@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -127,12 +127,12 @@ public:
          values to string after changing column type from integer to text. */
         DataConversionRequired = 2,
 
-        /* Changes to the main table schema (in kexi__fields) required,
+        /*! Changes to the main table schema (in kexi__fields) required,
          this does not require physical changes for the table;
          e.g. changing value of the "caption" or "description" property. */
         MainSchemaAlteringRequired = 4,
 
-        /* Only changes to extended table schema required,
+        /*! Only changes to extended table schema required,
          this does not require physical changes for the table;
          e.g. changing value of the "visibleDecimalPlaces" property
          or any of the custom properties. */
