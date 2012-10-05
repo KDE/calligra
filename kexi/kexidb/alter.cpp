@@ -622,7 +622,7 @@ void AlterTableHandler::InsertFieldAction::simplifyActions(ActionDictDict &field
     }
     if (actionsForThisField) {
         //collect property values that have to be changed in this field
-        QHash<QByteArray, QVariant> values;
+        QMap<QByteArray, QVariant> values;
         ActionDict *newActionsForThisField = new ActionDict(); // this will replace actionsForThisField after the loop
         QSet<ActionBase*> actionsToDelete; // used to collect actions taht we soon delete but cannot delete in the loop below
         for (ActionDictConstIterator it(actionsForThisField->constBegin()); it != actionsForThisField->constEnd();++it) {

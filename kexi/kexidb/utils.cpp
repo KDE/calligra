@@ -688,9 +688,9 @@ bool KexiDB::isBuiltinTableFieldProperty(const QByteArray& propertyName)
     return KexiDB_builtinFieldProperties->set.contains(propertyName);
 }
 
-bool KexiDB::setFieldProperties(Field& field, const QHash<QByteArray, QVariant>& values)
+bool KexiDB::setFieldProperties(Field& field, const QMap<QByteArray, QVariant>& values)
 {
-    QHash<QByteArray, QVariant>::ConstIterator it;
+    QMap<QByteArray, QVariant>::ConstIterator it;
     if ((it = values.find("type")) != values.constEnd()) {
         if (!setIntToFieldType(field, *it))
             return false;

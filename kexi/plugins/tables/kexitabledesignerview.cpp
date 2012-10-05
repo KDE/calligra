@@ -1193,11 +1193,11 @@ KexiDB::Field * KexiTableDesignerView::buildField(const KoProperty::Set &set) co
 {
     //create a map of property values
     kDebug() << set["type"].value();
-    QHash<QByteArray, QVariant> values(KoProperty::propertyValues(set));
+    QMap<QByteArray, QVariant> values(KoProperty::propertyValues(set));
     //remove internal values, to avoid creating custom field's properties
     KexiDB::Field *field = new KexiDB::Field();
 
-    for (QMutableHashIterator<QByteArray, QVariant> it(values); it.hasNext();) {
+    for (QMutableMapIterator<QByteArray, QVariant> it(values); it.hasNext();) {
         it.next();
         const QByteArray propName(it.key());
         if (d->internalPropertyNames.contains(propName)
@@ -1929,7 +1929,7 @@ void KexiTableDesignerView::changePropertyVisibility(
 void KexiTableDesignerView::propertySetSwitched()
 {
     KexiDataTable::propertySetSwitched();
-    KexiLookupColumnPage *page = static_cast<KexiTablePart*>(window()->part())->lookupColumnPage();
+    KexiLookupColumnPage *page = qobject_cast<KexiTablePart*>(window()->part())->lookupColumnPage();
     if (page)
         page->assignPropertySet(propertySet());
 }

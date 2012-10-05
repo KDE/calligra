@@ -332,7 +332,7 @@ KEXI_DB_EXPORT Field::Type intToFieldType(int type);
  Properties coming from extended schema are also supported.
  This function is used e.g. by AlterTableHandler when property information comes in form of text.
  */
-KEXI_DB_EXPORT bool setFieldProperties(Field& field, const QHash<QByteArray, QVariant>& values);
+KEXI_DB_EXPORT bool setFieldProperties(Field& field, const QMap<QByteArray, QVariant>& values);
 
 /*! Sets property value for \a field. \return true if the property has been found and
  the value is valid for this property. On failure contents of \a field is undefined.
