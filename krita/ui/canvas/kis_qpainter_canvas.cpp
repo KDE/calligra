@@ -86,6 +86,10 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_OpaquePaintEvent);
 
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
+
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     slotConfigChanged();
 
