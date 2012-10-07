@@ -94,9 +94,17 @@ KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
     actionCollection()->action("page_deletepage")->setWhatsThis(i18n("Delete the current slide"));
     actionCollection()->action("format_masterpage")->setText(i18n("Master Slide..."));
     actionCollection()->action("page_previous")->setText(i18n("Previous Slide"));
+    actionCollection()->action("page_previous")->setToolTip(i18n("Go to previous slide"));
+    actionCollection()->action("page_previous")->setWhatsThis(i18n("Go to previous slide"));
     actionCollection()->action("page_next")->setText(i18n("Next Slide"));
+    actionCollection()->action("page_next")->setToolTip(i18n("Go to next slide"));
+    actionCollection()->action("page_next")->setWhatsThis(i18n("Go to next slide"));
     actionCollection()->action("page_first")->setText(i18n("First Slide"));
+    actionCollection()->action("page_first")->setToolTip(i18n("Go to first slide"));
+    actionCollection()->action("page_first")->setWhatsThis(i18n("Go to first slide"));
     actionCollection()->action("page_last")->setText(i18n("Last Slide"));
+    actionCollection()->action("page_last")->setToolTip(i18n("Go to last slide"));
+    actionCollection()->action("page_last")->setWhatsThis(i18n("Go to last slide"));
     actionCollection()->action("configure")->setText(i18n("Configure Stage..."));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
