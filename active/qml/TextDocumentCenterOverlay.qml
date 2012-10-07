@@ -49,6 +49,12 @@ Item {
                   Image {
                       anchors { fill: parent; margins: 10 }
                       source: decoration
+                      Text {
+                          text: "Page " + (index + 1)
+                          font.pointSize: 10
+                          anchors.bottom: parent.bottom
+                          anchors.horizontalCenter: parent.horizontalCenter
+                      }
 
                       MouseArea {
                           anchors.fill: parent
