@@ -44,6 +44,8 @@ LayerThumbProvider::~LayerThumbProvider()
 
 QImage LayerThumbProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
+    Q_UNUSED(size);
+    Q_UNUSED(requestedSize);
     return d->layerModel->layerThumbnail(id);
 }
 
