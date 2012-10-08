@@ -110,11 +110,10 @@ Panel {
     peekContents: ListView {
         anchors.fill: parent;
         model: layerModel;
-        delegate: Rectangle {
+        delegate: Item {
             width: parent.width - Constants.DefaultMargin;
             height: childrenRect.height;
-            color: "transparent";
-            clip: true;Rectangle {
+            Rectangle {
                 id: topSpacer;
                 height: model.childCount == 0 ? 0 : Constants.DefaultMargin;
                 color: "transparent";
@@ -246,11 +245,10 @@ Panel {
             initialPage: ListView {
                 anchors.fill: parent;
                 model: layerModel;
-                delegate: Rectangle {
+                delegate: Item {
+                    id: viewBase;
                     width: parent.width - Constants.DefaultMargin;
                     height: childrenRect.height;
-                    color: "transparent";
-                    clip: true;
 
                     Rectangle {
                         id: topSpacer;
@@ -353,6 +351,74 @@ Panel {
                                     onClicked: layerModel.setLocked(model.index, !model.locked);
                                 }
                             }
+                        }
+                    }
+                    Image {
+                        id: moveUpButton;
+                        anchors {
+                            horizontalCenter: layerBgRect.left;
+                            top: layerBgRect.top;
+                        }
+                        height: Constants.GridHeight / 3;
+                        width: height;
+                        visible: model.canMoveUp;
+                        fillMode: Image.PreserveAspectFit;
+                        smooth: true;
+                        source: "../images/svg/icon-up.svg";
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: layerModel.moveUp();
+                        }
+                    }
+                    Image {
+                        id: moveDownButton;
+                        anchors {
+                            horizontalCenter: layerBgRect.left;
+                            bottom: layerBgRect.bottom;
+                        }
+                        height: Constants.GridHeight / 3;
+                        width: height;
+                        visible: model.canMoveDown;
+                        fillMode: Image.PreserveAspectFit;
+                        smooth: true;
+                        source: "../images/svg/icon-down.svg";
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: layerModel.moveDown();
+                        }
+                    }
+                    Image {
+                        id: moveLeftButton;
+                        anchors {
+                            right: layerBgRect.left;
+                            verticalCenter: layerBgRect.verticalCenter;
+                        }
+                        height: Constants.GridHeight / 3;
+                        width: height;
+                        visible: model.canMoveLeft;
+                        fillMode: Image.PreserveAspectFit;
+                        smooth: true;
+                        source: "../images/svg/icon-back.svg";
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: layerModel.moveLeft();
+                        }
+                    }
+                    Image {
+                        id: moveRightButton;
+                        anchors {
+                            left: layerBgRect.left;
+                            verticalCenter: layerBgRect.verticalCenter;
+                        }
+                        height: Constants.GridHeight / 3;
+                        width: height;
+                        visible: model.canMoveRight;
+                        fillMode: Image.PreserveAspectFit;
+                        smooth: true;
+                        source: "../images/svg/icon-forward.svg";
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: layerModel.moveRight();
                         }
                     }
                     Rectangle {
