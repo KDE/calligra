@@ -161,6 +161,7 @@ void LayerModel::setView(QObject *newView)
 {
     KisView2* view = qobject_cast<KisView2*>(newView);
     if (d->canvas) {
+        d->canvas->disconnectCanvasObserver(this);
         d->nodeModel->setDummiesFacade(0, 0);
 
         disconnect(d->image, 0, this, 0);
@@ -172,7 +173,9 @@ void LayerModel::setView(QObject *newView)
     d->view = view;
     if (!d->view)
     {
-        qDebug() << "The view is not a view, on attempting to set the view on the layer model!";
+        if(newView) {
+            qDebug() << "The view is not a view, on attempting to set the view on the layer model!";
+        }
         d->canvas = 0;
         d->image = 0;
         d->nodeManager = 0;
@@ -251,7 +254,7 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         index.internalPointer();
         KisNodeSP node = d->layers.at(index.row());
         KisNodeSP parent;
-        int depth = -1; int depth2 = -1;
+        int depth = -1;
         switch(role)
         {
         case IconRole:
