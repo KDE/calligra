@@ -57,7 +57,11 @@ public:
         DeepChildCountRole,
         DepthRole,
         PreviousItemDepthRole,
-        NextItemDepthRole
+        NextItemDepthRole,
+        CanMoveLeftRole,
+        CanMoveRightRole,
+        CanMoveUpRole,
+        CanMoveDownRole
     };
     explicit LayerModel(QObject* parent = 0);
     virtual ~LayerModel();
@@ -72,6 +76,10 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     Q_INVOKABLE void setActive(int index);
+    Q_INVOKABLE void moveUp();
+    Q_INVOKABLE void moveDown();
+    Q_INVOKABLE void moveLeft();
+    Q_INVOKABLE void moveRight();
     void emitActiveChanges();
     Q_INVOKABLE void setOpacity(int index, float newOpacity);
     Q_INVOKABLE void setVisible(int index, bool newVisible);

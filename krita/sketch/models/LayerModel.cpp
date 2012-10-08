@@ -122,6 +122,10 @@ LayerModel::LayerModel(QObject* parent)
     roles[DepthRole] = "depth";
     roles[PreviousItemDepthRole] = "previousItemDepth";
     roles[NextItemDepthRole] = "nextItemDepth";
+    roles[CanMoveDownRole] = "canMoveDown";
+    roles[CanMoveLeftRole] = "canMoveLeft";
+    roles[CanMoveRightRole] = "canMoveRight";
+    roles[CanMoveUpRole] = "canMoveUp";
     setRoleNames(roles);
 
     connect(d->nodeModel, SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)),
@@ -247,7 +251,7 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         index.internalPointer();
         KisNodeSP node = d->layers.at(index.row());
         KisNodeSP parent;
-        int depth = -1;
+        int depth = -1; int depth2 = -1;
         switch(role)
         {
         case IconRole:
@@ -326,6 +330,37 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
                 data = depth;
             }
             break;
+        case CanMoveDownRole:
+            data = (node == d->activeNode) && node && (node->prevSibling() || (node->parent() && node->parent() != d->image->root()));
+            break;
+        case CanMoveLeftRole:
+            data = false;
+            if(node == d->activeNode)
+            {
+                parent = node;
+                while(parent)
+                {
+                    ++depth;
+                    parent = parent->parent();
+                    if(depth > 1)
+                        break;
+                }
+                data = (depth > 1);
+            }
+            break;
+        case CanMoveRightRole:
+            data = false;
+            if(node == d->activeNode)
+            {
+                if(node->nextSibling() && node->nextSibling()->childCount() > 0)
+                    data = true;
+                else if(node->prevSibling() && node->prevSibling()->childCount() > 0)
+                    data = true;
+            }
+            break;
+        case CanMoveUpRole:
+            data = (node == d->activeNode) && node && (node->nextSibling() || (node->parent() && node->parent() != d->image->root()));
+            break;
         default:
             break;
         }
@@ -353,6 +388,101 @@ void LayerModel::setActive(int index)
         KisNodeSP newNode = d->layers.at(index);
         d->nodeManager->slotUiActivatedNode(newNode);
         currentNodeChanged(newNode);
+    }
+}
+
+void LayerModel::moveUp()
+{
+    KisNodeSP node = d->nodeManager->activeNode();
+    KisNodeSP parent = node->parent();
+    KisNodeSP grandParent = parent->parent();
+
+    if (!d->nodeManager->activeNode()->nextSibling())
+    {
+        qDebug() << "Active node apparently has no next sibling, however that has happened...";
+        if (!grandParent)
+            return;  
+        qDebug() << "Node has grandparent";
+        if (!grandParent->parent() && node->inherits("KisMask"))
+            return;
+        qDebug() << "Node isn't a mask";
+        d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    }
+    else
+    {
+        qDebug() << "Move node directly";
+        d->nodeManager->lowerNode();
+    }
+}
+
+void LayerModel::moveDown()
+{
+    KisNodeSP node = d->nodeManager->activeNode();
+    KisNodeSP parent = node->parent();
+    KisNodeSP grandParent = parent->parent();
+
+    if (!d->nodeManager->activeNode()->prevSibling())
+    {
+        qDebug() << "Active node apparently has no next sibling, however that has happened...";
+        if (!grandParent)
+            return;  
+        qDebug() << "Node has grandparent";
+        if (!grandParent->parent() && node->inherits("KisMask"))
+            return;
+        qDebug() << "Node isn't a mask";
+        d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
+    }
+    else
+    {
+        qDebug() << "Move node directly";
+        d->nodeManager->raiseNode();
+    }
+}
+
+void LayerModel::moveLeft()
+{
+    KisNodeSP node = d->nodeManager->activeNode();
+    KisNodeSP parent = node->parent();
+    KisNodeSP grandParent = parent->parent();
+    quint16 nodeIndex = parent->index(node);
+
+    if (!grandParent)
+        return;  
+    if (!grandParent->parent() && node->inherits("KisMask"))
+        return;
+
+    if (nodeIndex <= parent->childCount() / 2)
+    {
+        d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
+    }
+    else
+    {
+        d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
+    }
+}
+
+void LayerModel::moveRight()
+{
+    KisNodeSP node = d->nodeManager->activeNode();
+    KisNodeSP parent = d->nodeManager->activeNode()->parent();
+    KisNodeSP newParent;
+    int nodeIndex = parent->index(node);
+    int indexAbove = nodeIndex + 1;
+    int indexBelow = nodeIndex - 1;
+
+    if (parent->at(indexBelow) && parent->at(indexBelow)->allowAsChild(node))
+    {
+        newParent = parent->at(indexBelow);
+        d->nodeManager->moveNodeAt(node, newParent, newParent->childCount());
+    }
+    else if (parent->at(indexAbove) && parent->at(indexAbove)->allowAsChild(node))
+    {
+        newParent = parent->at(indexAbove);
+        d->nodeManager->moveNodeAt(node, newParent, 0);
+    }
+    else
+    {
+        return;
     }
 }
 
