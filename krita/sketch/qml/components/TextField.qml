@@ -30,7 +30,6 @@ Item {
     property alias background: fill.color;
     property alias border: fill.border;
     property alias radius: fill.radius;
-    property alias shadow: dropShadow.visible;
 
     signal focusLost();
     signal accepted();
@@ -39,28 +38,36 @@ Item {
         anchors.fill: parent;
         anchors.margins: Constants.DefaultMargin;
 
-        DropShadow {
-            id: dropShadow;
-            anchors.fill: parent;
-        }
         Rectangle {
             id: fill;
             anchors.fill: parent;
 
+            border.width: 2;
+            border.color: "silver";
+            color: "#63ffffff";
+
+            radius: height / 2;
+
             Label {
                 id: placeholder;
-                anchors.left: parent.left;
-                anchors.verticalCenter: parent.verticalCenter;
-                anchors.margins: Constants.DefaultMargin;
+                anchors {
+                    left: parent.left;
+                    leftMargin: base.height / 4;
+                    rightMargin: base.height / 4;
+                    verticalCenter: parent.verticalCenter;
+                }
                 color: Constants.Theme.SecondaryTextColor;
             }
 
             TextInput {
                 id: input;
-                anchors.left: parent.left;
-                anchors.right: parent.right;
-                anchors.verticalCenter: parent.verticalCenter;
-                anchors.margins: Constants.DefaultMargin;
+                anchors {
+                    left: parent.left;
+                    leftMargin: base.height / 4;
+                    right: parent.right;
+                    rightMargin: base.height / 4;
+                    verticalCenter: parent.verticalCenter;
+                }
                 font.pixelSize: Constants.DefaultFontSize;
                 onFocusChanged: {
                     if(focus === false)
