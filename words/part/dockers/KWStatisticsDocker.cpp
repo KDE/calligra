@@ -59,8 +59,6 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
     setWidget(m_statisticsWidget);
-    initLayout();
-    m_statisticsWidget->setLayout(m_mainBox);
 }
 
 void KWStatisticsDocker::unsetCanvas()
@@ -74,59 +72,12 @@ void KWStatisticsDocker::unsetCanvas()
 void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 {
     if (newArea == Qt::TopDockWidgetArea || newArea == Qt::BottomDockWidgetArea) {
-        m_mainBox->setDirection(QBoxLayout::LeftToRight);
+        m_statisticsWidget->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
     } else {
-        m_mainBox->setDirection(QBoxLayout::TopToBottom);
+        m_statisticsWidget->setLayoutDirection(KWStatisticsWidget::LayoutVertical);
     }
 }
 
-void KWStatisticsDocker::initLayout()
-{
-    m_mainBox = new QBoxLayout(QBoxLayout::LeftToRight, m_statisticsWidget);
-
-    m_wordsLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_wordsLayout);
-    m_wordsLayout->addWidget(m_statisticsWidget->m_wordsLabel);
-    m_wordsLayout->addWidget(m_statisticsWidget->m_countWords);
-
-    m_sentencesLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_sentencesLayout);
-    m_sentencesLayout->addWidget(m_statisticsWidget->m_sentencesLabel);
-    m_sentencesLayout->addWidget(m_statisticsWidget->m_countSentences);
-
-    m_syllablesLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_syllablesLayout);
-    m_syllablesLayout->addWidget(m_statisticsWidget->m_syllablesLabel);
-    m_syllablesLayout->addWidget(m_statisticsWidget->m_countSyllables);
-
-    m_cjkcharsLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_cjkcharsLayout);
-    m_cjkcharsLayout->addWidget(m_statisticsWidget->m_cjkcharsLabel);
-    m_cjkcharsLayout->addWidget(m_statisticsWidget->m_countCjkchars);
-
-    m_spacesLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_spacesLayout);
-    m_spacesLayout->addWidget(m_statisticsWidget->m_spacesLabel);
-    m_spacesLayout->addWidget(m_statisticsWidget->m_countSpaces);
-
-    m_nospacesLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_nospacesLayout);
-    m_nospacesLayout->addWidget(m_statisticsWidget->m_nospacesLabel);
-    m_nospacesLayout->addWidget(m_statisticsWidget->m_countNospaces);
-
-    m_fleschLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_fleschLayout);
-    m_fleschLayout->addWidget(m_statisticsWidget->m_fleschLabel);
-    m_fleschLayout->addWidget(m_statisticsWidget->m_countFlesch);
-
-    m_linesLayout = new QHBoxLayout();
-    m_mainBox->addLayout(m_linesLayout);
-    m_linesLayout->addWidget(m_statisticsWidget->m_linesLabel);
-    m_linesLayout->addWidget(m_statisticsWidget->m_countLines);
-
-    // The button that opens the preferences dialog.
-    m_mainBox->addWidget(m_statisticsWidget->m_preferencesButton);
-}
 
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
 {

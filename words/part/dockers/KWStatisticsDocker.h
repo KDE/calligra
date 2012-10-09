@@ -46,7 +46,6 @@ class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWStatisticsDocker();
     ~KWStatisticsDocker();
-    void initLayout();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
@@ -57,18 +56,6 @@ private:
     // The statistics widget
     KWStatisticsWidget *m_statisticsWidget;
 
-    // The main layout
-    QBoxLayout *m_mainBox;
-
-    // The layouts for the label/value QLabel pairs.
-    QHBoxLayout *m_wordsLayout;
-    QHBoxLayout *m_sentencesLayout;
-    QHBoxLayout *m_syllablesLayout;
-    QHBoxLayout *m_spacesLayout;
-    QHBoxLayout *m_fleschLayout;
-    QHBoxLayout *m_cjkcharsLayout;
-    QHBoxLayout *m_nospacesLayout;
-    QHBoxLayout *m_linesLayout;
     
 public slots:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);
