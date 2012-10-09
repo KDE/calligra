@@ -21,11 +21,11 @@ import QtQuick 1.1
 TextField {
     property bool enabled: true;
     height: Constants.DefaultFontSize + Constants.DefaultMargin * 4;
-    shadow: false;
-    border.width: 1;
+    //shadow: false;
+    /*border.width: 1;
     border.color: "silver";
     background: "#63ffffff";
-    radius: height / 2;
+    radius: height / 2;*/
     Rectangle {
         id: enabledVisualiser;
         opacity: enabled ? 0 : 0.7;
