@@ -427,7 +427,7 @@ Panel {
                 height: textSize + Constants.DefaultMargin * 2
             }*/
         }
-        /*Label {
+        Label {
             id: fullEditingLabel;
             anchors {
                 left: parent.left;
@@ -562,6 +562,6 @@ Panel {
                     }
                 }
             }
-        }*/
+        }
     }
 }
