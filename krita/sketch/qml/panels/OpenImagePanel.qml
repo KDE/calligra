@@ -25,60 +25,63 @@ Item {
 
     signal openClicked();
 
-    DropShadow {
+    Rectangle {
         id: panel;
-
         width: parent.width;
         height: parent.height;
+        color: "white";
+        clip: true;
+        radius: Constants.DefaultMargin;
+
         Rectangle {
-            anchors.fill: parent;
-            color: "white";
-            clip: true;
+            id: header;
+            height: Constants.GridHeight;
+            width: parent.width;
+            z: 2;
+            radius: Constants.DefaultMargin;
 
-            DropShadow {
-                id: header;
-                height: Constants.GridHeight;
-                width: parent.width;
-                z: 2;
-
-                Rectangle {
-                    anchors.fill: parent;
-
-                    gradient: Gradient {
-                        GradientStop {
-                            position: 0
-                            color: "#994747"
-                        }
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#994747"
+                }
 
 
-                        GradientStop {
-                            position: 1
-                            color: "#862525"
-                        }
-                    }
-
-                    Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
-
-                    Label {
-                        anchors {
-                            left: parent.left;
-                            leftMargin: Constants.DefaultMargin;
-                            verticalCenter: parent.verticalCenter;
-                        }
-                        text: "Open Image";
-                        font.pixelSize: Constants.LargeFontSize;
-                        color: "white";
-                    }
+                GradientStop {
+                    position: 1
+                    color: "#862525"
                 }
             }
 
-            RecentFilesList {
-                anchors.top: header.bottom;
-                width: parent.width;
-                height: Constants.GridHeight * 9;
-
-                onOpenClicked: base.openClicked();
+            Rectangle {
+                anchors.bottom: parent.bottom;
+                anchors.left: parent.left;
+                anchors.right: parent.right;
+                height: Constants.DefaultMargin;
+                color: "#862525";
             }
+
+            Image { source: "../images/shadow-smooth.png"; width: parent.width; height: Constants.GridHeight / 8; anchors.top: parent.bottom;}
+
+            Label {
+                anchors {
+                    left: parent.left;
+                    leftMargin: Constants.DefaultMargin;
+                    verticalCenter: parent.verticalCenter;
+                }
+                text: "Open Image";
+                font.pixelSize: Constants.LargeFontSize;
+                color: "white";
+            }
+        }
+
+        RecentFilesList {
+            anchors.top: header.bottom;
+            anchors.topMargin: -Constants.GridHeight * 0.25;
+            width: parent.width;
+            height: Constants.GridHeight * 10.5 + 8;
+
+            onOpenClicked: base.openClicked();
         }
     }
 
