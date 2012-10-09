@@ -49,7 +49,6 @@ public:
 
     virtual QString bottomToolbarSource() const;
     virtual QString topToolbarSource() const;
-    virtual QString leftToolbarSource() const;
     virtual QString centerOverlaySource() const;
     virtual FlickModes flickMode() const;
 
