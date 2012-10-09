@@ -28,6 +28,7 @@ set(kritasketch_SRCS
     KritaNamespace.cpp
     MouseTracker.cpp
     PanelConfiguration.cpp
+    PropertyContainer.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
