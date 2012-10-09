@@ -17,7 +17,9 @@
  */
 
 #include "FiltersModel.h"
+#include <PropertyContainer.h>
 #include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
 #include <kis_filter_handler.h>
 #include <kis_view2.h>
 
@@ -30,6 +32,7 @@ public:
     KisView2* view;
     QList<KisFilterSP> filters;
     QList<KisFilterHandler*> handlers;
+    QList<KisFilterConfiguration*> configurations;
 };
 
 FiltersModel::FiltersModel(QObject* parent)
@@ -108,6 +111,7 @@ void FiltersModel::addFilter(KisFilterSP filter)
         if(d->view)
             man = d->view->filterManager();
         d->handlers << new KisFilterHandler(man, filter, d->view);
+        d->configurations << 0;
         endInsertRows();
     }
 }
@@ -125,6 +129,39 @@ void FiltersModel::setView(QObject* newView)
         handler->setView(d->view);
     }
     emit viewChanged();
+}
+
+QObject* FiltersModel::configuration(int index)
+{
+    qDebug() << "Getting configuration for" << index;
+    QObject* config = new PropertyContainer(this);
+    // If index is out of bounds, return /something/ for the object work on at least.
+    if(index < 0 || index > d->configurations.count() - 1)
+        return config;
+    // If we've not got one already, assign the default configuration to the cache
+    if(!d->configurations[index])
+        d->configurations[index] = d->filters[index]->defaultConfiguration(d->view->activeNode()->original());
+    QMap<QString, QVariant> props = d->configurations[index]->getProperties();
+    QMap<QString, QVariant>::const_iterator i;
+    for(i = props.constBegin(); i != props.constEnd(); ++i)
+    {
+        qDebug() << i.key() << ":" << i.value();
+        config->setProperty(i.key().toAscii(), i.value());
+    }
+    return config;
+}
+
+void FiltersModel::setConfiguration(int index, QObject* configuration)
+{
+    if(configuration && index > -1 && index < d->configurations.count() - 1)
+    {
+        KisFilterConfiguration* config = d->configurations[index];
+        foreach(const QByteArray& propName, configuration->dynamicPropertyNames())
+        {
+            config->setProperty(QString(propName), configuration->property(propName));
+        }
+        d->configurations[index] = config;
+    }
 }
 
 #include "FiltersModel.moc"

@@ -47,6 +47,9 @@ public:
     QObject* view() const;
     void setView(QObject* newView);
 
+    Q_INVOKABLE QObject* configuration(int index);
+    Q_INVOKABLE void setConfiguration(int index, QObject* configuration);
+
 Q_SIGNALS:
     void viewChanged();
 
