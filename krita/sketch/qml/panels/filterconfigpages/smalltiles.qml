@@ -21,35 +21,25 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    onConfigurationChanged: {
+        numberOfTiles.value = configuration.readProperty("numberOfTiles");
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: numberOfTiles;
             width: parent.width;
-            height: Constants.GridHeight;
-        }
-        Text {
-            width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
-        }
-        Item {
-            width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            placeholder: "Number of tiles";
+            min: 0; max: 100; decimals: 0;
+            value: 0;
+            onValueChanged: {
+                configuration.writeProperty("numberOfTiles", value);
+                base.applyConfigurationChanges();
+            }
         }
     }
 }

@@ -21,35 +21,49 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    onConfigurationChanged: {
+        amount.value = configuration.readProperty("amount");
+        halfSize.value = configuration.readProperty("halfSize");
+        threshold.value = configuration.readProperty("threshold");
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: amount;
             width: parent.width;
-            height: Constants.GridHeight;
+            placeholder: "Amount";
+            min: 0; max: 1; decimals: 2;
+            value: 0;
+            onValueChanged: {
+                configuration.writeProperty("amount", value);
+                base.applyConfigurationChanges();
+            }
         }
-        Text {
+        RangeInput {
+            id: halfSize;
             width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
+            placeholder: "Size";
+            min: 0; max: 100; decimals: 0;
+            value: 0;
+            onValueChanged: {
+                configuration.writeProperty("halfSize", value);
+                base.applyConfigurationChanges();
+            }
         }
-        Item {
+        RangeInput {
+            id: threshold;
             width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            placeholder: "Threshold";
+            min: 0; max: 255; decimals: 0;
+            value: 0;
+            onValueChanged: {
+                configuration.writeProperty("threshold", value);
+                base.applyConfigurationChanges();
+            }
         }
     }
 }
