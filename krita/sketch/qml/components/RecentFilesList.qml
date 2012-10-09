@@ -34,7 +34,7 @@ Item {
         anchors.right: parent.right;
         anchors.top: parent.top;
 
-        height: Constants.GridHeight * 7;
+        height: parent.height - Constants.GridHeight * 2;
 
         clip: true;
 
