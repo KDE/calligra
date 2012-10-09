@@ -54,13 +54,19 @@ class StatisticsPreferencesPopup;
 class KWStatisticsWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocument *m_document,
                        KoSelection *selection = 0, QWidget *parent = 0);
-
     virtual ~KWStatisticsWidget();
-    void updateDataUi();
-    void initUi();
+
+    enum LayoutDirection {
+        LayoutVertical,
+        LayoutHorizontal
+    };
+
+    void setLayoutDirection(LayoutDirection direction);
+
     friend class KWStatisticsDocker;
     friend class StatisticsPreferencesPopup;
     
@@ -78,27 +84,46 @@ public slots:
     void selectionChanged();
 
 private:
+    void initUi();
+    void initLayout();
+
+    void updateDataUi();
     int countCJKChars(const QString &text);
 
+private:
     // Labels, e.g. "Words:"
     QLabel *m_wordsLabel;
     QLabel *m_sentencesLabel;
     QLabel *m_syllablesLabel;
-    QLabel *m_spacesLabel;
-    QLabel *m_fleschLabel;
     QLabel *m_cjkcharsLabel;
+    QLabel *m_spacesLabel;
     QLabel *m_nospacesLabel;
+    QLabel *m_fleschLabel;
     QLabel *m_linesLabel;
+    //QLabel *m_paragraphsLabel;
 
     // The values.
     QLabel *m_countWords;
     QLabel *m_countSentences;
     QLabel *m_countSyllables;
-    QLabel *m_countSpaces;
-    QLabel *m_countFlesch;
     QLabel *m_countCjkchars;
+    QLabel *m_countSpaces;
     QLabel *m_countNospaces;
+    QLabel *m_countFlesch;
     QLabel *m_countLines;
+
+    // The main layout
+    QBoxLayout *m_mainBox;
+
+    // The layouts for the label/value QLabel pairs.
+    QHBoxLayout *m_wordsLayout;
+    QHBoxLayout *m_sentencesLayout;
+    QHBoxLayout *m_syllablesLayout;
+    QHBoxLayout *m_cjkcharsLayout;
+    QHBoxLayout *m_spacesLayout;
+    QHBoxLayout *m_nospacesLayout;
+    QHBoxLayout *m_fleschLayout;
+    QHBoxLayout *m_linesLayout;
 
     KoCanvasResourceManager *m_resourceManager;
     KoSelection *m_selection;
@@ -110,14 +135,14 @@ private:
     StatisticsPreferencesPopup *m_menu;
 
     // The actual data.
-    long m_charsWithSpace;
-    long m_charsWithoutSpace;
     long m_words;
     long m_sentences;
-    long m_lines;
     long m_syllables;
-    long m_paragraphs;
     long m_cjkChars;
+    long m_charsWithSpace;
+    long m_charsWithoutSpace;
+    long m_lines;
+    long m_paragraphs;
 };
 
 #endif // KWSTATISTICSWIDGET_H

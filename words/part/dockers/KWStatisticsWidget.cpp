@@ -40,22 +40,24 @@
 KWStatisticsWidget::KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocument *document,
                                        KoSelection *selection, QWidget *parent)
         : QWidget(parent),
-        m_resourceManager(provider),
-        m_selection(selection),
-        m_document(document),
-        m_textDocument(0),
-        m_timer(0),
-        m_charsWithSpace(0),
-        m_charsWithoutSpace(0),
-        m_words(0),
-        m_sentences(0),
-        m_lines(0),
-        m_syllables(0),
-        m_paragraphs(0)
+          m_resourceManager(provider),
+          m_selection(selection),
+          m_document(document),
+          m_textDocument(0),
+          m_timer(0),
+          m_words(0),
+          m_sentences(0),
+          m_syllables(0),
+          m_cjkChars(0),
+          m_charsWithSpace(0),
+          m_charsWithoutSpace(0),
+          m_lines(0),
+          m_paragraphs(0)
 {
     m_timer = new QTimer(this);
     m_timer->start(2500);
     initUi();
+    initLayout();
     m_menu = new StatisticsPreferencesPopup(m_preferencesButton);
     m_preferencesButton->setMenu(m_menu);
     m_preferencesButton->setPopupMode(QToolButton::InstantPopup);
@@ -131,6 +133,12 @@ KWStatisticsWidget::KWStatisticsWidget(KoCanvasResourceManager *provider, KWDocu
     }
 }
 
+KWStatisticsWidget::~KWStatisticsWidget()
+{
+    m_timer->stop();
+}
+
+
 void KWStatisticsWidget::initUi()
 {
     m_wordsLabel = new QLabel(i18n("Words:"));
@@ -161,9 +169,54 @@ void KWStatisticsWidget::initUi()
     m_preferencesButton = new QToolButton;
 }
 
-KWStatisticsWidget::~KWStatisticsWidget()
+void KWStatisticsWidget::initLayout()
 {
-    m_timer->stop();
+    m_mainBox = new QBoxLayout(QBoxLayout::LeftToRight, this);
+
+    m_wordsLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_wordsLayout);
+    m_wordsLayout->addWidget(m_wordsLabel);
+    m_wordsLayout->addWidget(m_countWords);
+
+    m_sentencesLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_sentencesLayout);
+    m_sentencesLayout->addWidget(m_sentencesLabel);
+    m_sentencesLayout->addWidget(m_countSentences);
+
+    m_syllablesLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_syllablesLayout);
+    m_syllablesLayout->addWidget(m_syllablesLabel);
+    m_syllablesLayout->addWidget(m_countSyllables);
+
+    m_cjkcharsLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_cjkcharsLayout);
+    m_cjkcharsLayout->addWidget(m_cjkcharsLabel);
+    m_cjkcharsLayout->addWidget(m_countCjkchars);
+
+    m_spacesLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_spacesLayout);
+    m_spacesLayout->addWidget(m_spacesLabel);
+    m_spacesLayout->addWidget(m_countSpaces);
+
+    m_nospacesLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_nospacesLayout);
+    m_nospacesLayout->addWidget(m_nospacesLabel);
+    m_nospacesLayout->addWidget(m_countNospaces);
+
+    m_fleschLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_fleschLayout);
+    m_fleschLayout->addWidget(m_fleschLabel);
+    m_fleschLayout->addWidget(m_countFlesch);
+
+    m_linesLayout = new QHBoxLayout();
+    m_mainBox->addLayout(m_linesLayout);
+    m_linesLayout->addWidget(m_linesLabel);
+    m_linesLayout->addWidget(m_countLines);
+
+    // The button that opens the preferences dialog.
+    m_mainBox->addWidget(m_preferencesButton);
+
+    setLayout(m_mainBox); // FIXME: Is this necessary?
 }
 
 void KWStatisticsWidget::updateData()
@@ -284,6 +337,15 @@ void KWStatisticsWidget::updateData()
         }
     }
     updateDataUi();
+}
+
+void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection direction)
+{
+    if (direction == KWStatisticsWidget::LayoutHorizontal) {
+        m_mainBox->setDirection(QBoxLayout::LeftToRight);
+    } else {
+        m_mainBox->setDirection(QBoxLayout::TopToBottom);
+    }
 }
 
 void KWStatisticsWidget::updateDataUi()
