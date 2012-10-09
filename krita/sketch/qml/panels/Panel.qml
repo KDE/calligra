@@ -81,7 +81,6 @@ Item {
                     bottomMargin: Constants.DefaultMargin;
                 }
                 color: base.panelColor;
-                radius: Constants.DefaultMargin;
                 Rectangle {
                     id: rectangle4
                     anchors.fill: parent;
