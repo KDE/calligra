@@ -126,6 +126,9 @@ Panel {
                     noConfigNeeded.visible = false;
                     configNeeded.visible = true;
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
+                    if(typeof(configLoader.item.configuration) !== 'undefined') {
+                        configLoader.item.configuration = model.configuration(currentIndex);
+                    }
                 }
                 else {
                     noConfigNeeded.visible = true;
