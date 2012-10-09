@@ -86,14 +86,18 @@ MainWindow::MainWindow (QWidget* parent)
         m_view->engine()->addImportPath (importPath);
     }
 
-    m_view->rootContext()->setContextProperty ("mainwindow", this);
+    m_view->rootContext()->setContextProperty("mainwindow", this);
     m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
     m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::instance());
     loadMetadataModel();
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
-                                            + "/share/calligraactive/qml/HomeScreen.qml"));
+                                            + "/share/calligraactive/qml/Doc.qml"));
     m_view->setResizeMode (QDeclarativeView::SizeRootObjectToView);
+
+    connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
+    resize (1024, 768);
+    setCentralWidget (m_view);
 
     QTimer::singleShot(0, this, SLOT(checkForAndOpenDocument()));
 }
@@ -101,6 +105,10 @@ MainWindow::MainWindow (QWidget* parent)
 void MainWindow::openFile (const QString& path)
 {
     documentPath = path;
+    QObject* object = m_view->rootObject();
+    if (object) {
+        QMetaObject::invokeMethod (object, "hideOpenButton");
+    }
 }
 
 void MainWindow::adjustWindowSize (QSize size)
@@ -145,10 +153,6 @@ void MainWindow::checkForAndOpenDocument()
         QObject* object = m_view->rootObject();
         QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (documentPath)));
     }
-
-    connect (m_view, SIGNAL (sceneResized (QSize)), SLOT (adjustWindowSize (QSize)));
-    resize (1024, 768);
-    setCentralWidget (m_view);
 }
 
 #include "MainWindow.moc"
