@@ -247,11 +247,6 @@ QString CATextDocumentHandler::topToolbarSource() const
     return "TextDocumentEditingToolbar.qml";
 }
 
-QString CATextDocumentHandler::leftToolbarSource() const
-{
-    return "TextDocumentLeftToolbar.qml";
-}
-
 QString CATextDocumentHandler::centerOverlaySource() const
 {
     return "TextDocumentCenterOverlay.qml";
