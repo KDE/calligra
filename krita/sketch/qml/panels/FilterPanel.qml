@@ -120,6 +120,9 @@ Panel {
             id: fullFilters;
             width: parent.width;
             model: filtersCategoryModel.filterModel;
+            function applyConfiguration(configuration) {
+                model.setConfiguration(fullFilters.currentIndex, configuration);
+            }
             onModelChanged: currentIndex = 0;
             onCurrentIndexChanged: {
                 if(model.filterRequiresConfiguration(currentIndex)) {
