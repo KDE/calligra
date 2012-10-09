@@ -95,8 +95,14 @@ void FiltersModel::activateFilter(int index)
 {
     if(index > -1 && index < d->filters.count())
     {
-        // TODO This should of course take configuration if available - see KisFilterHandler::showDialog()
-        d->handlers[index]->apply(d->view->activeNode(), d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
+        if(d->configurations[index])
+        {
+            d->handlers[index]->apply(d->view->activeNode(), d->configurations[index]);
+        }
+        else
+        {
+            d->handlers[index]->apply(d->view->activeNode(), d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
+        }
     }
 }
 
@@ -133,7 +139,6 @@ void FiltersModel::setView(QObject* newView)
 
 QObject* FiltersModel::configuration(int index)
 {
-    qDebug() << "Getting configuration for" << index;
     QObject* config = new PropertyContainer(this);
     // If index is out of bounds, return /something/ for the object work on at least.
     if(index < 0 || index > d->configurations.count() - 1)
@@ -145,7 +150,6 @@ QObject* FiltersModel::configuration(int index)
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i)
     {
-        qDebug() << i.key() << ":" << i.value();
         config->setProperty(i.key().toAscii(), i.value());
     }
     return config;
