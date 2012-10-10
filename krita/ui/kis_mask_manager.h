@@ -145,7 +145,13 @@ private:
     void activateMask(KisMaskSP mask);
 
     void createSelectionMask(KisNodeSP parent, KisNodeSP above);
-    void createFilterMask(KisNodeSP parent, KisNodeSP above);
+    /**
+     * Create a new filter mask, optionally asking for the type of
+     * filter to use. Defaults to opening a dialogue asking for the
+     * filter on creation, but can be told not to ask by setting
+     * quiet to true
+     */
+    void createFilterMask(KisNodeSP parent, KisNodeSP above, bool quiet = false);
     void createTransparencyMask(KisNodeSP parent, KisNodeSP above);
 
     KisView2 * m_view;

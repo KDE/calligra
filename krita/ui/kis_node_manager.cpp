@@ -304,7 +304,7 @@ void KisNodeManager::moveNodeDirect(KisNodeSP node, KisNodeSP parent, KisNodeSP 
     m_d->commandsAdapter->moveNode(node, parent, aboveThis);
 }
 
-void KisNodeManager::createNode(const QString & nodeType)
+void KisNodeManager::createNode(const QString & nodeType, bool quiet)
 {
 
     KisNodeSP parent;
@@ -330,7 +330,7 @@ void KisNodeManager::createNode(const QString & nodeType)
     } else if (nodeType == "KisTransparencyMask") {
         m_d->maskManager->createTransparencyMask(parent, above);
     } else if (nodeType == "KisFilterMask") {
-        m_d->maskManager->createFilterMask(parent, above);
+        m_d->maskManager->createFilterMask(parent, above, quiet);
     } else if (nodeType == "KisSelectionMask") {
         m_d->maskManager->createSelectionMask(parent, above);
     }

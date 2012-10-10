@@ -27,6 +27,8 @@
 
 #include <kis_transaction.h>
 #include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_registry.h>
+#include <filter/kis_filter.h>
 #include <commands/kis_node_commands.h>
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
@@ -158,7 +160,7 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
     masksUpdated();
 }
 
-void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
+void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above, bool quiet)
 {
     KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
     KisFilterMask *mask = new KisFilterMask();
@@ -175,20 +177,36 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
     KisPaintDeviceSP originalDevice = layer->original();
 
 
-    KisDlgAdjustmentLayer dialog(mask, mask, originalDevice, m_view->image(),
-                                 mask->name(), i18n("New Filter Mask"),
-                                 m_view, "dlgfiltermask");
-
-    if (dialog.exec() == QDialog::Accepted) {
-        KisFilterConfiguration *filter = dialog.filterConfiguration();
-        if (filter) {
-            QString name = dialog.layerName();
-            mask->setFilter(filter);
-            mask->setName(name);
-            activateMask(mask);
+    if (quiet) {
+        if(KisFilterRegistry::instance()->count() > 0) {
+            KisFilterConfiguration *filter = KisFilterRegistry::instance()->values().at(0)->defaultConfiguration(activeDevice());
+            if (filter) {
+                QString name = i18n("New Filter Layer");
+                mask->setFilter(filter);
+                mask->setName(name);
+                activateMask(mask);
+            } else {
+                m_commandsAdapter->undoLastCommand();
+            }
+        } else {
+            m_commandsAdapter->undoLastCommand();
         }
     } else {
-        m_commandsAdapter->undoLastCommand();
+        KisDlgAdjustmentLayer dialog(mask, mask, originalDevice, m_view->image(),
+                                    mask->name(), i18n("New Filter Mask"),
+                                    m_view, "dlgfiltermask");
+
+        if (dialog.exec() == QDialog::Accepted) {
+            KisFilterConfiguration *filter = dialog.filterConfiguration();
+            if (filter) {
+                QString name = dialog.layerName();
+                mask->setFilter(filter);
+                mask->setName(name);
+                activateMask(mask);
+            }
+        } else {
+            m_commandsAdapter->undoLastCommand();
+        }
     }
     masksUpdated();
 }
