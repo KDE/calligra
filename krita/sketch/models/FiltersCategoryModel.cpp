@@ -56,7 +56,9 @@ public:
 
     void refreshContents()
     {
-        q->reset();
+        q->beginResetModel();
+        qDeleteAll(categories);
+        categories.clear();
         QList<KisFilterSP> filters = KisFilterRegistry::instance()->values();
         QList<QString> tmpCategoryIDs;
         foreach(const KisFilterSP filter, filters) {
@@ -75,7 +77,7 @@ public:
             cat->addFilter(filter);
         }
         qSort(categories.begin(), categories.end(), categoryLessThan);
-        q->reset();
+        q->endResetModel();
     }
 };
 
