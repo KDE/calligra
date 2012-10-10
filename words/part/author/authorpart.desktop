@@ -2,6 +2,7 @@
 Type=Service
 Name=Calligra Author Component
 Name[el]=Calligra Author Component
+Name[et]=Calligra Authori komponent
 Name[fi]=Calligra Author -osa
 Name[fr]=Composant Auteur de Calligra
 Name[it]=Componente di Calligra Author
@@ -20,6 +21,7 @@ MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocum
 X-KDE-ServiceTypes=CalligraPart
 GenericName=Author tool
 GenericName[el]=Εργαλείο Author
+GenericName[et]=Autoritööriist
 GenericName[fr]=Outil Auteur
 GenericName[it]=Strumento di Author
 GenericName[nl]=Author hulpmiddel
