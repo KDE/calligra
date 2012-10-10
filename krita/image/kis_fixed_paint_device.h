@@ -43,9 +43,14 @@ public:
     virtual ~KisFixedPaintDevice();
 
     /**
-     * Deep copy the the fixed paint device, including the data.
+     * Deep copy the fixed paint device, including the data.
      */
     KisFixedPaintDevice(const KisFixedPaintDevice& rhs);
+
+    /**
+     * Deep copy the fixed paint device, including the data.
+     */
+    KisFixedPaintDevice& operator=(const KisFixedPaintDevice& rhs);
 
     /**
      * setRect sets the rect of the fixed paint device to rect.
@@ -168,8 +173,6 @@ public:
     void mirror( bool horizontal = false, bool vertical = true );
 
 private:
-
-    KisFixedPaintDevice& operator=(const KisFixedPaintDevice& rhs);
 
     const KoColorSpace* m_colorSpace;
     QRect m_bounds;

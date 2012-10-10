@@ -533,7 +533,7 @@ QImage LayerModel::layerThumbnail(QString layerID) const
 
 void LayerModel::deleteCurrentLayer()
 {
-    d->nodeManager->removeNode(d->activeNode);
+    d->nodeManager->removeNode();
     d->activeNode.clear();
     d->rebuildLayerList();
     reset();
@@ -545,7 +545,8 @@ void LayerModel::deleteLayer(int index)
     {
         if(d->activeNode == d->layers.at(index))
             d->activeNode.clear();
-        d->nodeManager->removeNode(d->layers.at(index));
+        d->nodeManager->slotUiActivatedNode(d->layers.at(index));
+        d->nodeManager->removeNode();
         d->rebuildLayerList();
         reset();
     }

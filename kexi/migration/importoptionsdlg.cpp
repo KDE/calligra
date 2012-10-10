@@ -20,6 +20,8 @@
 #include "importoptionsdlg.h"
 #include <widget/kexicharencodingcombobox.h>
 
+#include <KoIcon.h>
+
 #include <QDir>
 #include <QLabel>
 #include <QTextCodec>
@@ -32,7 +34,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcharsets.h>
-#include <kiconloader.h>
 
 using namespace KexiMigration;
 
@@ -45,7 +46,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
     setWindowTitle(i18n("Advanced Import Options"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
-    setWindowIcon(KIcon("configure"));
+    setWindowIcon(koIcon("configure"));
 
     QWidget *plainPage = new QWidget(this);
     setMainWidget(plainPage);

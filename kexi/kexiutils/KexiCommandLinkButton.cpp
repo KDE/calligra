@@ -321,19 +321,19 @@ void KexiCommandLinkButton::paintEvent(QPaintEvent *)
         d->currentColor = d->mergedColors(textColor, d->currentColor, 60);
         option.palette.setColor(QPalette::ButtonText, d->currentColor);
     }
-
+    int arrowWidth = d->isArrowVisible ? 12 : 0;
     int textflags = Qt::TextShowMnemonic;
     if (!style()->styleHint(QStyle::SH_UnderlineShortcut, &option, this))
         textflags |= Qt::TextHideMnemonic;
 
     p.setFont(d->titleFont());
-    p.drawItemText(d->titleRect().translated(hOffset, vOffset),
+    p.drawItemText(d->titleRect().adjusted(0, 0, -arrowWidth, 0).translated(hOffset, vOffset),
                     textflags, option.palette, isEnabled(), text(), QPalette::ButtonText);
 
     //Draw description
     textflags |= Qt::TextWordWrap | Qt::ElideRight;
     p.setFont(d->descriptionFont());
-    p.drawItemText(d->descriptionRect().translated(hOffset, vOffset), textflags,
+    p.drawItemText(d->descriptionRect().adjusted(0, 0, -arrowWidth, 0).translated(hOffset, vOffset), textflags,
                     option.palette, isEnabled(), description(), QPalette::ButtonText);
 
     //Optional arrow

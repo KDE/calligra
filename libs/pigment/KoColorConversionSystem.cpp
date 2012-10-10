@@ -65,8 +65,8 @@ void KoColorConversionSystem::connectToEngine(Node* _node, Node* _engine)
     Vertex* v2 = createVertex(_engine, _node);
     v1->conserveColorInformation = !_node->isGray;
     v2->conserveColorInformation = !_node->isGray;
-    v1->conserveDynamicRange = !_node->isHdr;
-    v2->conserveDynamicRange = !_node->isHdr;
+    v1->conserveDynamicRange = _engine->isHdr;
+    v2->conserveDynamicRange = _engine->isHdr;
 }
 
 KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoColorSpaceEngine* engine)
@@ -522,11 +522,7 @@ inline KoColorConversionSystem::Path* KoColorConversionSystem::findBestPathImpl(
 {
     Q_ASSERT(srcNode);
     Q_ASSERT(dstNode);
-    if (srcNode->isGray || dstNode->isGray) {
-        return findBestPathImpl2(srcNode, dstNode, ignoreHdr, true);
-    } else {
-        return findBestPathImpl2(srcNode, dstNode, ignoreHdr, false);
-    }
+    return findBestPathImpl2(srcNode, dstNode, ignoreHdr, (srcNode->isGray || dstNode->isGray));
 }
 
 KoColorConversionSystem::Path* KoColorConversionSystem::findBestPath(const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const

@@ -51,8 +51,6 @@ CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
     QWidget *page = new QWidget();
     setMainWidget(page);
     QVBoxLayout *lay1 = new QVBoxLayout(page);
-    lay1->setMargin(KDialog::marginHint());
-    lay1->setSpacing(KDialog::spacingHint());
 
     multiLine = new KTextEdit(page);
     lay1->addWidget(multiLine);

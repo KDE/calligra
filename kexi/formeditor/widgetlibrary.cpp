@@ -28,11 +28,11 @@
 //#include <klibloader.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kiconloader.h>
 #include <kmenu.h>
 #include <kactioncollection.h>
 //2.0 #include <KXMLGUIClient>
 
+#include <KoIcon.h>
 #include "WidgetInfo.h"
 #include "widgetfactory.h"
 #include "libactionwidget.h"
@@ -155,8 +155,8 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
             }
             //ok: inherit properties:
             w->setInheritedClass( inheritedClass );
-            if (w->pixmap().isEmpty())
-                w->setPixmap(inheritedClass->pixmap());
+            if (w->iconName().isEmpty())
+                w->setIconName(inheritedClass->iconName());
             //ok?
             foreach(const QByteArray& alternateName, inheritedClass->alternateClassNames()) {
                 w->addAlternateClassName(
@@ -572,9 +572,9 @@ WidgetLibrary::iconName(const QByteArray &classname)
     loadFactories();
     WidgetInfo *wi = d->widgets.value(classname);
     if (wi)
-        return wi->pixmap();
+        return wi->iconName();
 
-    return QLatin1String("unknown_widget");
+    return koIconName("unknown_widget");
 }
 
 bool
@@ -751,18 +751,18 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
         return WidgetFactory::AnyOrientation;
 
     //get custom icons and strings
-    QPixmap iconHorizontal, iconVertical;
+    KIcon iconHorizontal, iconVertical;
     QString iconName(wclass->internalProperty("orientationSelectionPopup:horizontalIcon").toString());
     if (iconName.isEmpty() && wclass->inheritedClass())
         iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:horizontalIcon").toString();
     if (!iconName.isEmpty())
-        iconHorizontal = SmallIcon(iconName);
+        iconHorizontal = KIcon(iconName);
 
     iconName = wclass->internalProperty("orientationSelectionPopup:verticalIcon").toString();
     if (iconName.isEmpty() && wclass->inheritedClass())
         iconName = wclass->inheritedClass()->internalProperty("orientationSelectionPopup:verticalIcon").toString();
     if (!iconName.isEmpty())
-        iconVertical = SmallIcon(iconName);
+        iconVertical = KIcon(iconName);
 
     QString textHorizontal = wclass->internalProperty("orientationSelectionPopup:horizontalText").toString();
     if (textHorizontal.isEmpty() && wclass->inheritedClass())
@@ -778,11 +778,11 @@ WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
 
     KMenu popup(parent);
     popup.setObjectName("orientationSelectionPopup");
-    popup.addTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1", wclass->name()));
+    popup.addTitle(KIcon(wclass->iconName()), i18n("Insert Widget: %1", wclass->name()));
     QAction* horizAction = popup.addAction(iconHorizontal, textHorizontal);
     QAction* vertAction = popup.addAction(iconVertical, textVertical);
     popup.addSeparator();
-    popup.addAction(SmallIcon("dialog-cancel"), i18n("Cancel"));
+    popup.addAction(koIcon("dialog-cancel"), i18n("Cancel"));
     QAction *a = popup.exec(pos);
     if (a == horizAction)
         return WidgetFactory::HorizontalOrientation;

@@ -60,7 +60,7 @@ class KPLATOUI_EXPORT SplitterView : public ViewBase
     Q_OBJECT
 public:
     /// Contructor
-    SplitterView(KoDocument *doc, QWidget *parent);
+    SplitterView(KoPart *part, KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~SplitterView() {}
 

@@ -36,8 +36,8 @@ class KisPanAction::Private
 public:
     Private() : active(false), panDistance(10) { }
 
-    const int panDistance;
     bool active;
+    const int panDistance;
 };
 
 KisPanAction::KisPanAction(KisInputManager *manager)

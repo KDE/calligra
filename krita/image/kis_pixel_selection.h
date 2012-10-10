@@ -21,8 +21,6 @@
 #include <QRect>
 #include <QPainterPath>
 
-#include <kicon.h>
-
 #include "kis_types.h"
 #include "kis_paint_device.h"
 #include "kis_selection_component.h"
@@ -84,7 +82,7 @@ public:
      */
     void applySelection(KisPixelSelectionSP selection, SelectionAction action);
 
-    /// Tests if the the rect is totally outside the selection
+    /// Tests if the rect is totally outside the selection
     bool isTotallyUnselected(const QRect & r) const;
 
     /**

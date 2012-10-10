@@ -44,7 +44,6 @@
 #include <QHeaderView>
 #include <QTabWidget>
 
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -179,8 +178,8 @@ QModelIndex ResourceAppointmentsTreeView::currentIndex() const
 
 //-----------------------------------
 
-ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceAppointmentsView::ResourceAppointmentsView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     kDebug(planDbg())<<"------------------- ResourceAppointmentsView -----------------------";
 
@@ -193,7 +192,7 @@ ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *p
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 

@@ -34,6 +34,8 @@
 #include <KoFilterManager.h>
 
 #include <kis_doc2.h>
+#include <kis_part2.h>
+#include <KoPart.h>
 #include <kis_image.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -63,7 +65,10 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisDoc2 doc;
+            KisPart2 *p = new KisPart2();
+            KisDoc2 doc(p);
+            p->setDocument(&doc);
+
             KoFilterManager manager(&doc);
             manager.setBatchMode(true);
             QByteArray nativeFormat = doc.nativeFormatMimeType();
@@ -89,7 +94,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             tmpFile.open();
             doc.setBackupFile(false);
             doc.setOutputMimeType("image/png");
-            doc.saveAs("file://" + tmpFile.fileName());
+            doc.documentPart()->saveAs("file://" + tmpFile.fileName());
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
             resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);

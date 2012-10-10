@@ -31,6 +31,7 @@
 #include <KoCanvasController.h>
 #include <KoShape.h>
 #include <KoSelection.h>
+#include <KoShapePaintingContext.h>
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
@@ -113,6 +114,24 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         }
     }
     gc.restore();
+
+    // Draw text shape over canvas while editing it, that's needs to show the text selection correctly
+    QString toolId = KoToolManager::instance()->activeToolId();
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+        gc.save();
+        gc.setPen(Qt::NoPen);
+        gc.setBrush(Qt::NoBrush);
+        foreach (KoShape *shape, canvas()->shapeManager()->selection()->selectedShapes()) {
+            if (shape->shapeId() == "ArtisticText" || shape->shapeId() == "TextShapeID") {
+                KoShapePaintingContext  paintContext(canvas(), false);
+                gc.save();
+                gc.setTransform(shape->absoluteTransformation(m_d->viewConverter) * gc.transform());
+                canvas()->shapeManager()->paintShape(shape, gc, *m_d->viewConverter, paintContext);
+                gc.restore();
+            }
+        }
+        gc.restore();
+    }
 
     // - some tools do not restore gc, but that is not important here
     // - we need to disable clipping to draw handles properly
@@ -201,10 +220,8 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy()
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (query == Qt::ImMicroFocus) {
-        QRectF rect = (m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF()).toRect();
-        QPointF scroll(m_d->canvas->view()->canvasController()->scrollBarValue());
-        rect.translate(m_d->canvas->documentOrigin() - scroll);
-        return rect.toRect();
+        QRectF rect = m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF();
+        return m_d->coordinatesConverter->flakeToWidget(rect);
     }
     return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
 }

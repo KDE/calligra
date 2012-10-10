@@ -69,6 +69,9 @@ ENDIF( NOT TINY )
 add_subdirectory( ascii )
 add_subdirectory( rtf )
 
+add_subdirectory( epub )
+add_subdirectory( mobi )
+
 add_subdirectory(msword-odf)
 
 add_subdirectory( docx )

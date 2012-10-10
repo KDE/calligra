@@ -1,4 +1,5 @@
 build
+qtcreator-build
 *.kdev4
 *~
 .kateconfig
@@ -16,4 +17,4 @@ CMakeLists.txt.user*
 *.creator.user
 *.files
 *.includes
-
+.DS_Store

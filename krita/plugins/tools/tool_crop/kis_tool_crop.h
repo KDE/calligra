@@ -24,13 +24,29 @@
 #include <QPoint>
 #include <QPainterPath>
 
-#include <KIcon>
+#include <KoIcon.h>
 
 #include <KoToolFactoryBase.h>
 #include "kis_tool.h"
 #include "flake/kis_node_shape.h"
+#include "ui_wdg_tool_crop.h"
 
 class QRect;
+
+class WdgToolCrop : public QWidget, public Ui::WdgToolCrop
+{
+    Q_OBJECT
+
+public:
+    WdgToolCrop(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+        boolHeight->setIcon(koIcon("height_icon"));
+        boolWidth->setIcon(koIcon("width_icon"));
+        boolRatio->setIcon(koIcon("ratio_icon"));
+        label_horizPos->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
+        label_vertiPos->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
+    }
+};
 
 /**
  * Crop tool
@@ -177,7 +193,7 @@ public:
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(10);
-        setIcon("tool_crop");
+        setIconName(koIconNameCStr("tool_crop"));
     }
 
     virtual ~KisToolCropFactory() {}

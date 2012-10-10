@@ -29,6 +29,7 @@
 #include <sheets/part/CanvasItem.h>
 #include <sheets/part/Doc.h>
 
+#include <KoPart.h>
 #include <KoToolManager.h>
 #include <KoZoomHandler.h>
 #include <KoZoomController.h>
@@ -55,6 +56,11 @@ CASpreadsheetHandler::CASpreadsheetHandler (CADocumentController* documentContro
 {
 }
 
+KoZoomMode::Mode CASpreadsheetHandler::preferredZoomMode() const
+{
+    return KoZoomMode::ZOOM_WIDTH;
+}
+
 CASpreadsheetHandler::~CASpreadsheetHandler()
 {
     delete d;
@@ -69,18 +75,18 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
 {
     QString error;
     QString mimetype = KMimeType::findByPath (uri)->name();
-    KoDocument* doc = KMimeTypeTrader::createInstanceFromQuery<KoDocument> (mimetype, QLatin1String("CalligraPart"), 0, QString(),
-                      QVariantList(), &error);
+    KoPart *part = KMimeTypeTrader::createInstanceFromQuery<KoPart>(mimetype,
+                      QLatin1String("CalligraPart"), 0, QString(), QVariantList(), &error);
 
-    if (!doc) {
+    if (!part) {
         kDebug() << "Doc can't be openend" << error;
         return false;
     }
 
-    d->document = static_cast<Calligra::Sheets::Doc*> (doc);
+    d->document = static_cast<Calligra::Sheets::Doc*> (part->document());
     d->document->openUrl (KUrl (uri));
 
-    setCanvas (dynamic_cast<KoCanvasBase*> (doc->canvasItem()));
+    setCanvas (dynamic_cast<KoCanvasBase*> (part->canvasItem()));
     KoToolManager::instance()->addController (documentController()->canvasController());
     Calligra::Sheets::CanvasItem* canvasItem = dynamic_cast<Calligra::Sheets::CanvasItem*> (canvas());
 
@@ -91,9 +97,7 @@ bool CASpreadsheetHandler::openDocument (const QString& uri)
 
     KoZoomHandler* zoomHandler = new KoZoomHandler();
     documentController()->canvasController()->setZoomHandler (zoomHandler);
-    KoZoomController* zoomController = new KoZoomController (dynamic_cast<KoCanvasController*> (documentController()->canvasController()),
-            zoomHandler, d->document->actionCollection());
-    documentController()->canvasController()->setZoomController (zoomController);
+    KoZoomController* zoomController = documentController()->canvasController()->zoomController();
     zoomController->setZoom (KoZoomMode::ZOOM_CONSTANT, 1.0);
 
     documentController()->canvasController()->setCanvasMode (KoCanvasController::Spreadsheet);

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -99,6 +99,16 @@ public:
             classNames.insert(id, partClass);
         }
 //! @todo what to do with extra ids for the same part or extra class name for the same ID?
+    }
+
+    //! @return user name for the current project
+    //! @todo the name is taken from connection but it also can be specified otherwise
+    //!       if the same connection data is shared by multiple users. This will be especially
+    //!       true for 3-tier architectures.
+    QString userName() const
+    {
+        QString name = connection->data()->userName;
+        return name.isNull() ? "" : name;
     }
 
     QPointer<KexiDB::Connection> connection;
@@ -488,6 +498,24 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
         return false;
     }
 
+    // User data storage
+    KexiDB::InternalTableSchema *t_userdata = new KexiDB::InternalTableSchema("kexi__userdata");
+    t_userdata->addField(new KexiDB::Field("d_user", KexiDB::Field::Text, KexiDB::Field::NotNull))
+        .addField(new KexiDB::Field("o_id", KexiDB::Field::Integer, KexiDB::Field::NotNull, KexiDB::Field::Unsigned))
+        .addField(new KexiDB::Field("d_sub_id", KexiDB::Field::Text, KexiDB::Field::NotNull | KexiDB::Field::NotEmpty))
+        .addField(new KexiDB::Field("d_data", KexiDB::Field::LongText));
+
+    bool containsKexi__userdataTable = d->connection->drv_containsTable("kexi__userdata");
+    if (containsKexi__userdataTable) {
+        d->connection->insertInternalTable(*t_userdata);
+    }
+    else if (!d->connection->isReadOnly()) {
+        if (!d->connection->createTable(t_userdata, true/*replaceExisting*/)) {
+            delete t_userdata;
+            return false;
+        }
+    }
+
     if (insideTransaction) {
         if (tg.transaction().active() && !tg.commit())
             return false;
@@ -717,9 +745,8 @@ KexiProject::itemForClass(const QString &partClass, const QString &name)
         kWarning() << "no part class=" << partClass;
         return 0;
     }
-    const QString nameToLower(name.toLower());
     foreach(KexiPart::Item *item, *dict) {
-        if (item->name().toLower() == nameToLower)
+        if (item->name() == name)
             return item;
     }
     kWarning() << "no name=" << name;
@@ -732,9 +759,8 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
     KexiPart::ItemDict *dict = items(i);
     if (!dict)
         return 0;
-    const QString l_name = name.toLower();
     foreach(KexiPart::Item* item, *dict) {
-        if (item->name().toLower() == l_name)
+        if (item->name() == name)
             return item;
     }
     return 0;
@@ -867,6 +893,10 @@ bool KexiProject::removeObject(KexiPart::Item& item)
             setError(d->connection);
             return false;
         }
+        if (!removeUserDataBlock(item.identifier())) {
+            setError(ERR_DELETE_SERVER_ERROR, i18n("Could not remove object's user data."));
+            return false;
+        }
         if (!tg.commit()) {
             setError(d->connection);
             return false;
@@ -956,12 +986,12 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
     }
     QSet<QString> storedItemNames;
     foreach(KexiPart::Item* item, *dict) {
-        storedItemNames.insert(item->name().toLower());
+        storedItemNames.insert(item->name());
     }
 
     QSet<QString> unstoredItemNames;
     foreach(KexiPart::Item* item, d->unstoredItems) {
-        unstoredItemNames.insert(item->name().toLower());
+        unstoredItemNames.insert(item->name());
     }
 
     //find new, unique default name for this item
@@ -1071,7 +1101,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
 {
     if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0,
             i18n("Do you want to drop the project \"%1\"?",
-                 static_cast<const KexiDB::SchemaData*>(&data)->objectName()) + "\n" + i18n(warningNoUndo)))
+                 static_cast<const KexiDB::SchemaData*>(&data)->name()) + "\n" + i18n(warningNoUndo)))
         return cancelled;
 
     KexiProject prj(data, handler);
@@ -1097,45 +1127,48 @@ bool KexiProject::checkProject(const QString& singlePartClass)
         setError(d->connection);
         return false;
     }
-    QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
-    if (!singlePartClass.isEmpty()) {
-        sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
-    }
-    KexiDB::Cursor *cursor = d->connection->executeQuery(sql);
-    if (!cursor) {
-        setError(d->connection);
-        return false;
-    }
+    bool containsKexi__partsTable = d->connection->drv_containsTable("kexi__parts");
+    if (containsKexi__partsTable) { // check if kexi__parts exists, if missing, createInternalStructures() will create it
+        QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts ORDER BY p_id");
+        if (!singlePartClass.isEmpty()) {
+            sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
+        }
+        KexiDB::Cursor *cursor = d->connection->executeQuery(sql);
+        if (!cursor) {
+            setError(d->connection);
+            return false;
+        }
 
-    bool saved = false;
-    for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
-        const QString partMime( cursor->value(2).toString() );
-        QString partClass( cursor->value(3).toString() );
-        partClass = realPartClass(partClass, partMime);
-        if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
-            partClass = QLatin1String("org.kexi-project.report");
+        bool saved = false;
+        for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
+            const QString partMime( cursor->value(2).toString() );
+            QString partClass( cursor->value(3).toString() );
+            partClass = realPartClass(partClass, partMime);
+            if (partClass == QLatin1String("uk.co.piggz.report")) { // compatibility
+                partClass = QLatin1String("org.kexi-project.report");
+            }
+            KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
+            bool ok;
+            const int classId = cursor->value(0).toInt(&ok);
+            if (!ok || classId <= 0) {
+                kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
+            }
+            if (info && ok && classId > 0) {
+                d->saveClassId(partClass, classId);
+                saved = true;
+            }
+            else {
+                KexiPart::MissingPart m;
+                m.name = cursor->value(1).toString();
+                m.className = partClass;
+                d->missingParts.append(m);
+            }
         }
-        KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
-        bool ok;
-        const int classId = cursor->value(0).toInt(&ok);
-        if (!ok || classId <= 0) {
-            kWarning() << "Invalid class Id" << classId << "; part" << partClass << "will not be used";
-        }
-        if (info && ok && classId > 0) {
-            d->saveClassId(partClass, classId);
-            saved = true;
-        }
-        else {
-            KexiPart::MissingPart m;
-            m.name = cursor->value(1).toString();
-            m.className = partClass;
-            d->missingParts.append(m);
-        }
-    }
 
-    d->connection->deleteCursor(cursor);
-    if (!saved && !singlePartClass.isEmpty()) {
-        return false; // failure is single part class was not found
+        d->connection->deleteCursor(cursor);
+        if (!saved && !singlePartClass.isEmpty()) {
+            return false; // failure is single part class was not found
+        }
     }
     return true;
 }
@@ -1206,6 +1239,72 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
 KexiPart::MissingPartsList KexiProject::missingParts() const
 {
     return d->missingParts;
+}
+
+static bool checkObjectId(const char* method, int objectID)
+{
+    if (objectID <= 0) {
+        kWarning() << method <<  ": Invalid objectID" << objectID;
+        return false;
+    }
+    return true;
+}
+
+tristate KexiProject::loadUserDataBlock(int objectID, const QString& dataID, QString *dataString)
+{
+    if (!checkObjectId("loadUserDataBlock", objectID)) {
+        return false;
+    }
+    return d->connection->querySingleString(
+               QString::fromLatin1("SELECT d_data FROM kexi__userdata WHERE o_id=") + QString::number(objectID)
+                + " AND " + KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_user", d->userName())
+                + " AND " + KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_sub_id", dataID),
+               *dataString);
+}
+
+bool KexiProject::storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString)
+{
+    if (!checkObjectId("storeUserDataBlock", objectID)) {
+        return false;
+    }
+    QString sql(QString::fromLatin1(
+                    "SELECT kexi__userdata.o_id FROM kexi__userdata WHERE o_id=%1").arg(objectID));
+    QString sql_sub(
+        KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_user", d->userName())
+        + " AND " + KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_sub_id", dataID));
+
+    bool ok;
+    bool exists = d->connection->resultExists(sql + " AND " + sql_sub, ok);
+    if (!ok)
+        return false;
+    if (exists) {
+        return d->connection->executeSQL("UPDATE kexi__userdata SET d_data="
+                          + d->connection->driver()->valueToSQL(KexiDB::Field::LongText, dataString)
+                          + " WHERE o_id=" + QString::number(objectID) + " AND " + sql_sub);
+    }
+    return d->connection->executeSQL(
+               QString::fromLatin1("INSERT INTO kexi__userdata (d_user, o_id, d_sub_id, d_data) VALUES (")
+               + d->connection->driver()->valueToSQL(KexiDB::Field::Text, d->userName())
+               + ", " + QString::number(objectID)
+               + ", " + d->connection->driver()->valueToSQL(KexiDB::Field::Text, dataID)
+               + ", " + d->connection->driver()->valueToSQL(KexiDB::Field::LongText, dataString)
+               + ")");
+}
+
+bool KexiProject::removeUserDataBlock(int objectID, const QString& dataID)
+{
+    if (!checkObjectId("removeUserDataBlock", objectID)) {
+        return false;
+    }
+    if (dataID.isEmpty())
+        return KexiDB::deleteRow(*d->connection, "kexi__userdata",
+                                 "o_id", KexiDB::Field::Integer, objectID,
+                                 "d_user", KexiDB::Field::Text, d->userName());
+    else
+        return KexiDB::deleteRow(*d->connection, "kexi__userdata",
+                                 "o_id", KexiDB::Field::Integer, objectID,
+                                 "d_user", KexiDB::Field::Text, d->userName(),
+                                 "d_sub_id", KexiDB::Field::Text, dataID);
 }
 
 #include "kexiproject.moc"

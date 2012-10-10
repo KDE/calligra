@@ -98,6 +98,11 @@ public slots:
     void sourceRowsRemoved(const QModelIndex &source_parent,
                               int start, int end);
 
+    void sourceRowsAboutToBeMoved( const QModelIndex &source_parent,
+                                  int start, int end, const QModelIndex &destParent, int destStart );
+    void sourceRowsMoved( const QModelIndex &source_parent,
+                                  int start, int end, const QModelIndex &destParent, int destStart );
+
 protected:
     int mapFromSourceRow( const QModelIndex & sourceIndex ) const;
     int mapToSourceRow( const  QModelIndex & sourceIndex ) const;
@@ -111,8 +116,6 @@ private:
     QList<QPersistentModelIndex> m_sourceIndexList;
     /// Map of sourceIndexes (parent, index)
     QMultiMap<QPersistentModelIndex, QPersistentModelIndex> m_sourceIndexMap;
-
-    QStandardItemModel m_privatemodel;
 };
 
 } //namespace KPlato

@@ -30,6 +30,7 @@
 
 #include "calligraversion.h"
 #include "KoPageLayoutWidget.h"
+#include <KoIcon.h>
 
 #include <QGraphicsSceneMouseEvent>
 #include <QItemSelectionModel>
@@ -43,7 +44,6 @@
 #include <QKeyEvent>
 
 #include <kmenu.h>
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -927,7 +927,9 @@ void DependencyNodeItem::setTreeIndicator( bool on )
 {
     paintTreeIndicator( on );
     foreach ( DependencyNodeItem *i, m_children ) {
-        i->setTreeIndicator( on );
+        if ( i->isVisible() ) {
+            i->setTreeIndicator( on );
+        }
     }
 }
 
@@ -1996,8 +1998,8 @@ void DependencyeditorConfigDialog::slotOk()
 }
 
 //--------------------
-DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
+DependencyEditor::DependencyEditor(KoPart *part, KoDocument *doc, QWidget *parent )
+    : ViewBase(part, doc, parent),
     m_currentnode( 0 ),
     m_manager( 0 )
 {
@@ -2195,12 +2197,12 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             KMenu menu;;
             foreach ( DependencyLinkItem *i, c->predecessorItems() ) {
                 items << i;
-                actions << menu.addAction( KIcon( "document-properties" ), i->predItem->text() );
+                actions << menu.addAction(koIcon("document-properties"), i->predItem->text());
             }
             menu.addSeparator();
             foreach ( DependencyLinkItem *i, c->successorItems() ) {
                 items << i;
-                actions << menu.addAction( KIcon( "document-properties" ), i->succItem->text() );
+                actions << menu.addAction(koIcon("document-properties"), i->succItem->text());
             }
             if ( ! actions.isEmpty() ) {
                 QAction *action = menu.exec( pos );
@@ -2304,7 +2306,7 @@ void DependencyEditor::setupGui()
 
     QString name = "taskeditor_add_list";
 
-    menuAddTask = new KActionMenu( KIcon( "view-task-add" ), i18n( "Add Task" ), this );
+    menuAddTask = new KActionMenu(koIcon("view-task-add"), i18n("Add Task"), this);
     coll->addAction("add_task", menuAddTask );
     connect( menuAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, menuAddTask );
@@ -2320,7 +2322,7 @@ void DependencyEditor::setupGui()
     menuAddTask->addAction( actionAddMilestone );
 
 
-    menuAddSubTask = new KActionMenu( KIcon( "view-task-child-add" ), i18n( "Add Sub-Task" ), this );
+    menuAddSubTask = new KActionMenu(koIcon("view-task-child-add"), i18n("Add Sub-Task"), this);
     coll->addAction("add_subtask", menuAddTask );
     connect( menuAddSubTask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, menuAddSubTask );
@@ -2335,7 +2337,7 @@ void DependencyEditor::setupGui()
     connect( actionAddSubMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddSubMilestone() ) );
     menuAddSubTask->addAction( actionAddSubMilestone );
 
-    actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete"), this);
+    actionDeleteTask  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     coll->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );

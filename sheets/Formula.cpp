@@ -656,7 +656,8 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     tokens.reserve(50);
 
     ++data;
-    const QChar *start = data;
+    const QChar * const start = data;
+    const QChar * const end = start + expr.length();
     const QChar *tokenStart = data;
     const QChar *cellStart = data;
 
@@ -667,9 +668,9 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     QString token(length, QChar());
     token.reserve(length); // needed to not realloc at the resize at the end
     QChar * out = token.data();
-    QChar * outStart = token.data();
+    QChar * const outStart = token.data();
 
-    while (state != Finish) {
+    while (state != Finish && data < end) {
         switch (state) {
         case Start:
             tokenStart = data;
@@ -1060,7 +1061,7 @@ Tokens Formula::scan(const QString &expr, const KLocale* locale) const
     }
 
     // parse error if any text remains
-    if (!data->isNull())  {
+    if (data+1 < end)  {
         tokens.append(Token(Token::Unknown, expr.mid(tokenStart - start), tokenStart - start));
         parseError = true;
     }

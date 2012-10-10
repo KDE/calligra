@@ -152,7 +152,6 @@ public: // KisCanvas2 methods
     KisImageWSP image();
     KisView2* view();
 
-    bool usingHDRExposureProgram();
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     void addDecoration(KisCanvasDecoration* deco);
     KisCanvasDecoration* decoration(const QString& id);
@@ -162,10 +161,6 @@ public: // KisCanvas2 methods
     static void setCanvasWidgetFactory(KisAbstractCanvasWidgetFactory *factory);
 
 signals:
-
-    void documentOriginChanged();
-    void scrollAreaSizeChanged();
-
     void imageChanged(KisImageWSP image);
 
     void canvasDestroyed(QWidget *);
@@ -198,18 +193,8 @@ public slots:
     void startResizingImage(qint32 w, qint32 h);
     void finishResizingImage(qint32 w, qint32 h);
 
-    /// adjust the origin of the document
-    void adjustOrigin();
-
-    /// slot for setting the mirroring
-    void mirrorCanvas(bool mirror);
     /// canvas rotation in degrees
     qreal rotationAngle() const;
-    void rotateCanvas(qreal angle, bool updateOffset=true);
-    void rotateCanvasRight15();
-    void rotateCanvasLeft15();
-    void resetCanvasTransformations();
-
     void setSmoothingEnabled(bool smooth);
 
 private slots:
@@ -249,7 +234,7 @@ public:
     bool handlePopupPaletteIsVisible();
 
 private:
-    Q_DISABLE_COPY(KisCanvas2);
+    Q_DISABLE_COPY(KisCanvas2)
 
     void pan(QPoint shift);
     void createCanvas(bool useOpenGL);

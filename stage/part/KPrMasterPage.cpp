@@ -27,7 +27,8 @@
 #include <KoOdfWorkaround.h>
 #include <kdebug.h>
 
-KPrMasterPage::KPrMasterPage()
+KPrMasterPage::KPrMasterPage(KPrDocument *document)
+    : KPrPageData(document)
 {
 }
 

@@ -21,10 +21,11 @@
 
 #include "kexitablepart.h"
 
+#include <KoIcon.h>
+
 #include <KDebug>
 #include <KMessageBox>
 #include <KTabWidget>
-#include <KIconLoader>
 #include <KPluginFactory>
 
 #include <KexiMainWindowIface.h>
@@ -77,7 +78,7 @@ void KexiTablePart::initPartActions()
 
 void KexiTablePart::initInstanceActions()
 {
-//moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), "view-filter", 0, "tablepart_filter");
+//moved to main window createSharedAction(Kexi::DataViewMode, i18n("Filter"), koIconName("view-filter"), 0, "tablepart_filter");
     /*2.0 moved to createViewActions()
       KAction *a = createSharedToggleAction(
         Kexi::DesignViewMode, i18n("Primary Key"), "key", KShortcut(),
@@ -186,7 +187,7 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
     int r = KMessageBox::questionYesNo(parent,
                                        "<p>" + msg + "</p><p>" + openedObjectsStr + "</p><p>"
                                        + i18n("Do you want to close all windows for these objects?"),
-                                       QString(), KGuiItem(i18n("Close windows"), "window-close"), KStandardGuiItem::cancel());
+                                       QString(), KGuiItem(i18n("Close windows"), koIconName("window-close")), KStandardGuiItem::cancel());
     tristate res;
     if (r == KMessageBox::Yes) {
         //try to close every window
@@ -240,7 +241,7 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     d->lookupColumnPage->setProject(prj);
 
 //! @todo add lookup field icon
-    tab->addTab(d->lookupColumnPage, KIcon("combo"), "");
+    tab->addTab(d->lookupColumnPage, koIcon("combo"), QString());
     tab->setTabToolTip(tab->indexOf(d->lookupColumnPage), i18n("Lookup column"));
 }
 

@@ -28,7 +28,7 @@
 #include <QSizeF>
 
 class KoShape;
-class KoTextBlockData;
+class QTextBlockUserData;
 
 /**
  * This class represents a snapshot of the current state of animations.
@@ -64,11 +64,11 @@ public:
      * The purpose of this method is to help the AnimationFramework populate the
      * cache initially. Everyone else should just ask with @value for the value they want.
      *
-     * @param textBlockData The KoTextBlockData which the value is set on
+     * @param textBlockData The QTextBlockUserData which the value is set on
      * @param id The id of the value we are asking if is set
      * @return true if the value is already set.
      */
-    bool hasValue(int step, KoTextBlockData *textBlockData, const QString &id);
+    bool hasValue(int step, QTextBlockUserData *textBlockUserData, const QString &id);
 
     /**
      * Sets a value, either initially or updating it
@@ -88,11 +88,11 @@ public:
      * The purpose of this method is to help the AnimationFramework set or update
      * values initially. Everyone else should just ask with @value for the value they want.
      *
-     * @param textBlockData The KoTextBlockData which the value is set on
+     * @param textBlockData The QTextBlockUserData which the value is set on
      * @param id The id of the value
      * @param value The value is should have
      */
-    void setValue(int step, KoTextBlockData *textBlockData, const QString &id, const QVariant &value);
+    void setValue(int step, QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &value);
 
     /**
      * The value
@@ -110,11 +110,11 @@ public:
      *
      * Everyone can use this method to query a value.
      *
-     * @param textBlockData The KoTextBlockData which the value is set on
+     * @param textBlockData The QTextBlockUserData which the value is set on
      * @param id The id of the value we are asking if is set
      * @return the value as a QVariant
      */
-    QVariant value(KoTextBlockData *textBlockData, const QString &id, const QVariant &defaultValue);
+    QVariant value(QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &defaultValue);
 
     // 1. Init cache with values that take effect even before the animation is started
     //    This information should be kept in the first stack entry
@@ -137,7 +137,7 @@ public:
     // step 0 is the value the object has before any animation is started
     // step n is the value of the object after the animation, only needed when there is a change to the real value of the object
     // e.g. the object has been moved to its original position, once the animation is done the value is removed
-    void init(int step, KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value);
+    void init(int step, KoShape *shape, QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &value);
 
     // update step value by values
     // will do different things depending on type of QVariant
@@ -147,7 +147,7 @@ public:
     // the step in update must match the step of startStep
     // this will update the values used for the animation.
     // maybe have an internal method to also use it for updating the stack while init
-    void update(KoShape *shape, KoTextBlockData * textBlockData, const QString &id, const QVariant &value);
+    void update(KoShape *shape, QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &value);
 
     // trigger copying of data from the last step to the current one
     // these values will be updated by update.
@@ -168,9 +168,9 @@ public:
     void clear();
 private:
     QList<QMap<KoShape *, QMap<QString, QVariant> > > m_shapeValuesStack;
-    QList<QMap<KoTextBlockData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
+    QList<QMap<QTextBlockUserData *, QMap<QString, QVariant> > > m_textBlockDataValuesStack;
     QMap<KoShape *, QMap<QString, QVariant> > m_currentShapeValues;
-    QMap<KoTextBlockData *, QMap<QString, QVariant> > m_currentTextBlockDataValues;
+    QMap<QTextBlockUserData *, QMap<QString, QVariant> > m_currentTextBlockDataValues;
     int m_step;
     bool m_next;
     QSizeF m_pageSize;

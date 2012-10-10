@@ -23,6 +23,7 @@
 
 #include <KoColorSpaceRegistry.h>
 
+#include <kis_part2.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_config.h>
@@ -42,7 +43,9 @@ ImageBuilder::~ImageBuilder()
 
 QString ImageBuilder::createBlankImage(int width, int height, int resolution)
 {
-    KisDoc2 doc;
+    KisPart2 part;
+    KisDoc2 doc(&part);
+    part.setDocument(&doc);
 
     doc.newImage("Blank Image", width, height, KoColorSpaceRegistry::instance()->rgb8());
     doc.image()->setResolution(resolution / 72.0, resolution / 72.0);
@@ -52,7 +55,9 @@ QString ImageBuilder::createBlankImage(int width, int height, int resolution)
 
 QString ImageBuilder::createImageFromClipboard()
 {
-    KisDoc2 doc;
+    KisPart2 part;
+    KisDoc2 doc(&part);
+    part.setDocument(&doc);
 
     KisConfig cfg;
     cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
@@ -100,7 +105,7 @@ QString ImageBuilder::saveDocument(KisDoc2 &doc)
 {
     QString path = QString("%1/kritasketch/%2.kra").arg(QDir::tempPath()).arg(QDateTime::currentDateTime().toMSecsSinceEpoch());
     QDir::temp().mkpath("kritasketch");
-    if(doc.saveAs(KUrl(path))) {
+    if(doc.documentPart()->saveAs(KUrl(path))) {
         return path;
     }
 

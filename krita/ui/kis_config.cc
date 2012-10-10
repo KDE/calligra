@@ -54,7 +54,7 @@ namespace
 const double IMAGE_DEFAULT_RESOLUTION = 100.0; // dpi
 const qint32 IMAGE_DEFAULT_WIDTH = 1600;
 const qint32 IMAGE_DEFAULT_HEIGHT = 1200;
-const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_TOOLICON;
+const enumCursorStyle DEFAULT_CURSOR_STYLE = CURSOR_STYLE_OUTLINE;
 const qint32 DEFAULT_MAX_TILES_MEM = 5000;
 }
 
@@ -865,7 +865,7 @@ void KisConfig::setExportConfiguration(const QString &filterId, const KisPropert
 bool KisConfig::useOcio() const
 {
 #ifdef HAVE_OCIO
-    return m_cfg.readEntry("Krita/Ocio/UseOcio", true);
+    return m_cfg.readEntry("Krita/Ocio/UseOcio", false);
 #else
     return false;
 #endif
@@ -878,7 +878,7 @@ void KisConfig::setUseOcio(bool useOCIO) const
 
 bool KisConfig::useOcioEnvironmentVariable() const
 {
-    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", true);
+    return m_cfg.readEntry("Krita/Ocio/UseEnvironment", false);
 }
 
 void KisConfig::setUseOcioEnvironmentVariable(bool useOCIO) const

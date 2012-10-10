@@ -97,7 +97,7 @@ protected:
     void notifyCommandExecuted(const KUndo2Command *command);
 
 private:
-    Q_DISABLE_COPY(KisUndoStore);
+    Q_DISABLE_COPY(KisUndoStore)
     QVector<KisCommandHistoryListener*> m_undoListeners;
 };
 

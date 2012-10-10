@@ -101,6 +101,14 @@ public:
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false ) = 0;
 
+    /// Return the list of supported granularities
+    /// An empty list means granularity is not supported (the default)
+    QList<long unsigned int> granularities() const;
+    /// Return current index of supported granularities
+    int granularity() const;
+    /// Set current index of supported granularities
+    void setGranularity( int index );
+
 protected slots:
     virtual void slotSyncData();
 
@@ -117,6 +125,9 @@ protected:
 protected:
     QTimer m_synctimer;
     QList<SchedulerThread*> m_jobs;
+
+    int m_granularity;
+    QList<long unsigned int> m_granularities;
 
 private:
     class Private;

@@ -33,6 +33,7 @@
 #include <QTabBar>
 
 #include <KoServiceProvider.h>
+#include <KoIcon.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -85,14 +86,12 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
 #include <kparts/event.h>
-#include <kparts/partmanager.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 
@@ -161,9 +160,9 @@ public:
 
 
 
-KoPAView::KoPAView( KoPADocument *document, QWidget *parent )
-: KoView( document, parent )
-, d( new Private( document ) )
+KoPAView::KoPAView(KoPart *part, KoPADocument *document, QWidget *parent)
+: KoView(part, document, parent)
+, d( new Private(document))
 {
     initGUI();
     initActions();
@@ -242,6 +241,15 @@ void KoPAView::initGUI()
 
     d->canvas = new KoPACanvas( this, d->doc, this );
     KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
+
+    if (shell()) {
+        // this needs to be done before KoCanvasControllerWidget::setCanvas is called
+        KoPADocumentStructureDockerFactory structureDockerFactory(KoDocumentSectionView::ThumbnailMode, d->doc->pageType());
+        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(shell()->createDockWidget(&structureDockerFactory));
+        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
+        connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
+    }
+
     d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );
@@ -324,13 +332,6 @@ void KoPAView::initGUI()
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(updateCanvasSize()));
 
     if (shell()) {
-        KoPADocumentStructureDockerFactory structureDockerFactory( KoDocumentSectionView::ThumbnailMode, d->doc->pageType() );
-        d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>( shell()->createDockWidget( &structureDockerFactory ) );
-        connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * ) ),
-                d->documentStructureDocker, SLOT( setPart( KParts::Part * ) ) );
-        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
-        connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
-
         KoToolManager::instance()->requestToolActivation( d->canvasController );
     }
     if (d->doc->inlineTextObjectManager()) {
@@ -352,7 +353,7 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    d->deleteSelectionAction = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    d->deleteSelectionAction = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction );
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     d->deleteSelectionAction->setEnabled(false);
@@ -383,7 +384,7 @@ void KoPAView::initActions()
     connect(d->viewRulers, SIGNAL(triggered(bool)), proxyObject, SLOT(setShowRulers(bool)));
     setShowRulers(d->doc->rulersVisible());
 
-    d->actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
+    d->actionInsertPage = new KAction(koIcon("document-new"), i18n("Insert Page"), this);
     actionCollection()->addAction( "page_insertpage", d->actionInsertPage );
     d->actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     d->actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
@@ -425,7 +426,7 @@ void KoPAView::initActions()
     actionCollection()->addAction("import_document", am);
     connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    d->actionConfigure = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    d->actionConfigure = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", d->actionConfigure);
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
@@ -841,11 +842,8 @@ void KoPAView::pageOffsetChanged()
 
 void KoPAView::updateMousePosition(const QPoint& position)
 {
-    QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
-    // the offset is positive it the canvas is shown fully visible
-    canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
-    canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
-    QPoint viewPos = position - canvasOffset;
+    const QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
+    const QPoint viewPos = position - d->canvas->documentOrigin() - canvasOffset;
 
     d->horizontalRuler->updateMouseCoordinate(viewPos.x());
     d->verticalRuler->updateMouseCoordinate(viewPos.y());

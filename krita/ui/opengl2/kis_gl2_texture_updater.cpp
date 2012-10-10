@@ -87,7 +87,7 @@ void KisGL2TextureUpdater::update()
     }
 
     int pixelCount = d->changedRect.width() * d->changedRect.height();
-    KoColorSpace *projectionColorSpace = d->image->projection()->colorSpace();
+    const KoColorSpace *projectionColorSpace = d->image->projection()->colorSpace();
 
     quint8 *buffer = projectionColorSpace->allocPixelBuffer(pixelCount);
     d->image->projection()->readBytes(buffer, d->changedRect);

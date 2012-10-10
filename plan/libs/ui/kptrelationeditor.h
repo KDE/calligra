@@ -67,7 +67,7 @@ class KPLATOUI_EXPORT RelationEditor : public ViewBase
     Q_OBJECT
 public:
     /// Create a relation editor
-    RelationEditor( KoDocument *part, QWidget *parent );
+    RelationEditor(KoPart *part, KoDocument *doc, QWidget *parent);
     
     void setupGui();
     virtual void draw( Project &project );

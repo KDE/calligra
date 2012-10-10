@@ -76,6 +76,7 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_qpainter_canvas.h>
+#include <kis_part2.h>
 
 #include "KisSketchCanvas.h"
 #include "Settings.h"
@@ -85,6 +86,7 @@ class KisSketchView::Private
 public:
     Private( KisSketchView* qq)
         : q(qq)
+        , part(0)
         , doc(0)
         , view(0)
         , canvas(0)
@@ -97,6 +99,7 @@ public:
 
     KisSketchView* q;
 
+    KisPart2* part;
     KisDoc2* doc;
     KisView2* view;
     KisCanvas2* canvas;
@@ -158,7 +161,7 @@ KisSketchView::~KisSketchView()
         d->canvasWidget->stopRendering();
 #endif
 
-        d->doc->closeUrl(false);
+        d->part->closeUrl(false);
         delete d->doc;
 
         delete d->view;
@@ -210,16 +213,18 @@ void KisSketchView::setFile(const QString& file)
 
             delete oldView;
 
-            d->doc->closeUrl(false);
+            d->part->closeUrl(false);
             delete d->doc;
             d->doc = 0;
+            d->part = 0;
 
             d->canvas = 0;
             d->canvasWidget = 0;
         }
 
-        d->doc = new KisDoc2();
-
+        d->part = new KisPart2();
+        d->doc = new KisDoc2(d->part);
+        d->part->setDocument(d->doc);
         //    ProgressProxy *proxy = new ProgressProxy(this);
         //    doc->setProgressProxy(proxy);
         //    connect(proxy, SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
@@ -247,7 +252,7 @@ void KisSketchView::setFile(const QString& file)
 
         connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
 
-        d->view = qobject_cast<KisView2*>(d->doc->createView(QApplication::activeWindow()));
+        d->view = qobject_cast<KisView2*>(d->part->createView(QApplication::activeWindow()));
         connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
         emit viewChanged();
         d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
@@ -401,14 +406,14 @@ void KisSketchView::redo()
 
 void KisSketchView::save()
 {
-    d->doc->save();
+    d->part->save();
     emit floatingMessageRequested("Saved", "file-save");
 }
 
 void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
 {
     d->doc->setOutputMimeType(mimeType.toAscii());
-    d->doc->saveAs(fileName);
+    d->part->saveAs(fileName);
     emit floatingMessageRequested(QString("Saved to %1").arg(fileName), "file-save");
 }
 

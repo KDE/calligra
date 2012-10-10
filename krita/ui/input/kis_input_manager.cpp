@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
@@ -220,12 +219,22 @@ void KisInputManager::Private::setupActions()
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
 #endif
 
-    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
-    shortcut->setWheel(KisShortcut::WheelUp);
-
-    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
-    shortcut->setWheel(KisShortcut::WheelDown);
-
+    /**
+     * FIXME: Zooming with Wheel is implemented on a level of
+     * KoCanvasControllerWidget and is done in a bit different way than
+     * usual zoom-in/out actions, because it tries to zoom around
+     * the mouse pointer. If you want to implement it in
+     * KisInputManager, please implement additional action that
+     * takes mouse position into account.
+     *
+     * Don't forget to disable wheel-zooming in KoCanvasControllerWidget
+     * before activation of this shortcut.
+     */
+    // shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    // shortcut->setWheel(KisShortcut::WheelUp);
+    // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    // shortcut->setWheel(KisShortcut::WheelDown);
+    
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
     shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
@@ -364,7 +373,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
             d->currentShortcut->match(event);
 
-            if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
+            if (d->currentShortcut->matchLevel() == KisShortcut::PartialMatch || d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
                 d->clearState();
                 break;
             }
@@ -516,6 +525,11 @@ void KisInputManager::slotToolChanged()
     QString toolId = KoToolManager::instance()->activeToolId();
     if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
         d->fixedAction = true;
+        if (!d->currentAction) {
+            d->currentShortcut = d->shortcuts.at(0);
+            d->currentAction = d->currentShortcut->action();
+            d->currentAction->begin(d->currentShortcut->shortcutIndex());
+        }
     } else {
         d->fixedAction = false;
     }

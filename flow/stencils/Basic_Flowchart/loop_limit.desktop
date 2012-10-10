@@ -1,8 +1,16 @@
 [Desktop Entry]
 Name=Loop Limit
+Name[ca]=Límit de bucle
+Name[de]=Schleifenbegrenzung
 Name[el]=Όριο βρόχου
+Name[es]=Límite de bucle
 Name[et]=Silmuse piirang
+Name[fi]=Toiston rajoitus
+Name[fr]=Limites de boucle
 Name[gl]=Límite de ciclo
+Name[hu]=Cikluskorlát
+Name[it]=Limite del ciclo
+Name[kk]=Қайталаудың шегі
 Name[nl]=Luslimiet
 Name[pl]=Ograniczenie pętli
 Name[pt]=Limite do Ciclo

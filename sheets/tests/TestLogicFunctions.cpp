@@ -20,6 +20,7 @@
 
 #include "TestKspreadCommon.h"
 
+#include <KoPart.h>
 #include <part/Doc.h>
 #include <Map.h>
 #include <Sheet.h>
@@ -28,7 +29,7 @@ using namespace Calligra::Sheets;
 
 void TestLogicFunctions::init()
 {
-    m_doc = new Doc();
+    m_doc = new Doc(new MockPart);
     m_doc->map()->addNewSheet();
     m_sheet = m_doc->map()->sheet(0);
 }

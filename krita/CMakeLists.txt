@@ -5,12 +5,31 @@ project(krita)
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_KRITADEVS "-O2 -g" CACHE STRING "" FORCE)
+    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif(MSVC)
+
+set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+
+macro_optional_find_package(Vc)
+macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
+macro_bool_to_01(Vc_FOUND HAVE_VC)
+configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+
+if(HAVE_VC)
+    message(STATUS "Vc found!")
+
+    SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
+    include (OptimizeForArchitecture)
+    OptimizeForArchitecture()
+endif(HAVE_VC)
+
+set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
+
 
 include(CheckFunctionExists)
 
@@ -39,7 +58,6 @@ macro_optional_find_package(OIIO)
 macro_log_feature(OIIO_FOUND "OIIO" "The OpenImageIO Lbirary" "https://sites.google.com/site/openimageio/" FALSE "" "Required by the OIIO file import/export filter")
 macro_bool_to_01(OIIO_FOUND HAVE_OIIO)
 configure_file(config-oiio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-oiio.h )
-
 
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
@@ -150,7 +168,7 @@ install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( PROGRAMS  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
+install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 
 add_subdirectory(sketch)
 

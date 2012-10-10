@@ -381,8 +381,8 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
 {
     if (!dataAwareObject() || !dataAwareObject()->data())
         return false;
-    const KexiTableViewColumn::List columns(dataAwareObject()->data()->columns());
-    foreach(KexiTableViewColumn *col, columns) {
+    const KexiTableViewColumn::List *columns = dataAwareObject()->data()->columns();
+    foreach(KexiTableViewColumn *col, *columns) {
         if (!col->isVisible())
             continue;
         columnNames.append(col->field()->name());
@@ -391,8 +391,8 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
 
     //update "look in" selection if there was any
     const int currentColumnNumber = dataAwareObject()->currentColumn();
-    if (currentColumnNumber >= 0 && currentColumnNumber < columns.count()) {
-        KexiTableViewColumn *col = columns.at(currentColumnNumber);
+    if (currentColumnNumber >= 0 && currentColumnNumber < columns->count()) {
+        KexiTableViewColumn *col = columns->at(currentColumnNumber);
         if (col && col->field())
             currentColumnName = col->field()->name();
     }

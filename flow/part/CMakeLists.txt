@@ -5,6 +5,7 @@ include_directories( ${KOPAGEAPP_INCLUDES})
 ### flowprivate ###
 set(flowprivate_LIB_SRCS
   FlowFactory.cpp
+  FlowPart.cpp
   FlowDocument.cpp
   FlowView.cpp
   #FlowCanvas.cpp
