@@ -37,6 +37,10 @@
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 
+#ifdef Q_OS_WIN
+    #include "SketchInputContext.h"
+#endif
+
 int main( int argc, char** argv )
 {
 
@@ -99,7 +103,9 @@ int main( int argc, char** argv )
     QApplication::setFont( db.font( "Source Sans Pro", "Regular", 12 ) );
 
     MainWindow window(fileNames);
+
 #ifdef Q_OS_WIN
+    app.setInputContext(new SketchInputContext(app));
     window.showFullScreen();
 #else
     window.show();
