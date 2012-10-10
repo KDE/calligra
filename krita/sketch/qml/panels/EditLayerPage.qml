@@ -52,6 +52,8 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
+        visible: layersModel ? (layersModel.activeType === "KisPaintLayer") : false;
+        height: visible ? Constants.GridHeight / 2 : 0;
         model: compositeOpModel; // composite ops list
         currentIndex: layersModel ? layersModel.activeCompositeOp : 0;
         onNewIndex: if(layersModel) layersModel.activeCompositeOp = currentIndex;
@@ -108,10 +110,11 @@ Item {
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
         }
+        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
         horizontalAlignment: Text.AlignLeft;
         font.pixelSize: Constants.LargeFontSize;
         font.bold: true;
-        height: Constants.GridHeight / 2;
+        height: visible ? Constants.GridHeight / 2 : 0;
         text: "Active Channels:";
     }
     Row {
@@ -121,7 +124,8 @@ Item {
             horizontalCenter: parent.horizontalCenter;
             margins: Constants.DefaultMargin;
         }
-        height: childrenRect.height;
+        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
+        height: visible ? childrenRect.height : 0;
         width: childrenRect.width;
         spacing: Constants.DefaultMargin;
         Button {
@@ -180,10 +184,11 @@ Item {
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
         }
+        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
         horizontalAlignment: Text.AlignLeft;
         font.pixelSize: Constants.LargeFontSize;
         font.bold: true;
-        height: Constants.GridHeight / 2;
+        height: visible ? Constants.GridHeight / 2 : 0;
         text: "Active Channels:";
     }
     Row {
@@ -193,7 +198,8 @@ Item {
             horizontalCenter: parent.horizontalCenter;
             margins: Constants.DefaultMargin;
         }
-        height: childrenRect.height;
+        visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
+        height: visible ? childrenRect.height : 0;
         width: childrenRect.width;
         spacing: Constants.DefaultMargin;
         Button {
