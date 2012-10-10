@@ -1,4 +1,5 @@
 install(FILES  
+    icon-kritasketch-256.png
     hi128-app-krita.png
     hi16-app-krita.png
     hi22-app-krita.png

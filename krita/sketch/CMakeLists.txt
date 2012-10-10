@@ -82,6 +82,8 @@ if(KRITASKETCH_USE_OPENGL)
 endif(KRITASKETCH_USE_OPENGL)
 
 kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
+kde4_add_app_icon(KRITA_INCLUDES "../pics/kritasketch.png")
+
 
 target_link_libraries(kritasketch
     ${QT_QTDECLARATIVE_LIBRARY}
