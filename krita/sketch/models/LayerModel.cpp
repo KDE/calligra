@@ -30,6 +30,8 @@
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
+#include <kis_filter_mask.h>
+#include <kis_adjustment_layer.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoProperties.h>
 #include <QDeclarativeEngine>
@@ -70,7 +72,9 @@ public:
     {
         QStringList list;
         list << "KisGroupLayer";
-        list << "KisLayer";
+        list << "KisPaintLayer";
+        list << "KisFilterMask";
+        list << "KisAdjustmentLayer";
         return list;
     }
 
@@ -93,9 +97,13 @@ public:
         // implementation node: The root node is not a visible node, and so
         // is never added to the list of layers
         QList<KisNodeSP> children = layer->childNodes(layerClassNames(), KoProperties());
-        if(layer->childCount() == 0)
+        QList<KisNodeSP> allchildren = layer->childNodes(QStringList(), KoProperties());
+        for(quint32 i = allchildren.count(); i > 0; --i) {
+            qDebug() << allchildren.at(i-1)->metaObject()->className();
+        }
+        if(children.count() == 0)
             return;
-        for(quint32 i = layer->childCount(); i > 0; --i)
+        for(quint32 i = children.count(); i > 0; --i)
         {
             layers << children.at(i-1);
             rebuildLayerList(children.at(i-1));
@@ -260,7 +268,9 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         case IconRole:
             if(dynamic_cast<const KisGroupLayer*>(node.constData()))
                 data = QLatin1String("../images/svg/icon-layer_group-red.svg");
-            else if(!dynamic_cast<const KisPaintLayer*>(node.constData()))
+            else if(dynamic_cast<const KisFilterMask*>(node.constData()))
+                data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
+            else if(dynamic_cast<const KisAdjustmentLayer*>(node.constData()))
                 data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
             else
                 data = QString("image://layerthumb%1/%2").arg(d->thumbProvider->layerID()).arg(index.row());
@@ -291,7 +301,7 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         case FilterRole:
             break;
         case ChildCountRole:
-            data = node->childCount();
+            data = node->childNodes(d->layerClassNames(), KoProperties()).count();
             break;
         case DeepChildCountRole:
             data = d->deepChildCount(d->layers.at(index.row()));
