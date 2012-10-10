@@ -97,10 +97,6 @@ public:
         // implementation node: The root node is not a visible node, and so
         // is never added to the list of layers
         QList<KisNodeSP> children = layer->childNodes(layerClassNames(), KoProperties());
-        QList<KisNodeSP> allchildren = layer->childNodes(QStringList(), KoProperties());
-        for(quint32 i = allchildren.count(); i > 0; --i) {
-            qDebug() << allchildren.at(i-1)->metaObject()->className();
-        }
         if(children.count() == 0)
             return;
         for(quint32 i = children.count(); i > 0; --i)
@@ -638,6 +634,7 @@ void LayerModel::notifyImageDeleted()
 void LayerModel::emitActiveChanges()
 {
     emit activeNameChanged();
+    emit activeTypeChanged();
     emit activeCompositeOpChanged();
     emit activeOpacityChanged();
     emit activeVisibleChanged();
@@ -665,6 +662,11 @@ void LayerModel::setActiveName(QString newName)
         return;
     d->activeNode->setName(newName);
     emit activeNameChanged();
+}
+
+QString LayerModel::activeType() const
+{
+    return d->activeNode->metaObject()->className();
 }
 
 int LayerModel::activeCompositeOp() const

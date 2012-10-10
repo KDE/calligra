@@ -30,6 +30,7 @@ class LayerModel : public QAbstractListModel
     Q_PROPERTY(QObject* engine READ engine WRITE setEngine NOTIFY engineChanged)
 
     Q_PROPERTY(QString activeName READ activeName WRITE setActiveName NOTIFY activeNameChanged);
+    Q_PROPERTY(QString activeType READ activeType NOTIFY activeTypeChanged);
     Q_PROPERTY(int activeCompositeOp READ activeCompositeOp WRITE setActiveCompositeOp NOTIFY activeCompositeOpChanged);
     Q_PROPERTY(int activeOpacity READ activeOpacity WRITE setActiveOpacity NOTIFY activeOpacityChanged);
     Q_PROPERTY(bool activeVisible READ activeVisible WRITE setActiveVisibile NOTIFY activeVisibleChanged);
@@ -92,6 +93,7 @@ public:
 
     QString activeName() const;
     void setActiveName(QString newName);
+    QString activeType() const;
     int activeCompositeOp() const;
     void setActiveCompositeOp(int newOp);
     int activeOpacity() const;
@@ -121,6 +123,7 @@ Q_SIGNALS:
     void engineChanged();
 
     void activeNameChanged();
+    void activeTypeChanged();
     void activeCompositeOpChanged();
     void activeOpacityChanged();
     void activeVisibleChanged();
