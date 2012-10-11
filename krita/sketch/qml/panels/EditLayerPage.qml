@@ -78,7 +78,7 @@ Item {
         onCurrentIndexChanged: model.activateItem(currentIndex)
     }
     ExpandingListView {
-        id: filtersList;
+        id: fullFilters;
         anchors {
             top: filtersCategoryList.bottom;
             left: parent.left;
@@ -88,14 +88,30 @@ Item {
         visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
         height: visible ? Constants.GridHeight / 2 : 0;
         model: filtersCategoryModel.filterModel;
+        function applyConfiguration(configuration) {
+            layersModel.activeFilterConfig = configuration;
+        }
         onCurrentIndexChanged: {
             layersModel.activeFilterConfig = model.configuration(currentIndex);
+            if(model.filterRequiresConfiguration(currentIndex)) {
+                noConfigNeeded.visible = false;
+                configNeeded.visible = true;
+                configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
+                if(configLoader.item && typeof(configLoader.item.configuration) !== 'undefined') {
+                    configLoader.item.configuration = layersModel.activeFilterConfig;
+                }
+            }
+            else {
+                noConfigNeeded.visible = true;
+                configNeeded.visible = false;
+            }
+            filtersCategoryModel.filterSelected(currentIndex);
         }
     }
     RangeInput {
         id: opacitySlider;
         anchors {
-            top: filtersList.bottom;
+            top: fullFilters.bottom;
             left: parent.left;
             right: parent.right;
             margins: Constants.DefaultMargin;
@@ -283,6 +299,65 @@ Item {
             radius: Constants.DefaultMargin;
             color: (layersModel && layersModel.activeAChannelLocked) ? "#F0E4E7" : "transparent";
             onClicked: if(layersModel) layersModel.activeAChannelLocked = !layersModel.activeAChannelLocked;
+        }
+    }
+    Item {
+        id: noConfigNeeded;
+        anchors {
+           top: lockedChannelsRow.bottom;
+           left: parent.left;
+           right: parent.right;
+           bottom: parent.bottom;
+        }
+        Column {
+            anchors.fill: parent;
+            Item {
+                width: parent.width;
+                height: Constants.GridHeight;
+            }
+            Text {
+                width: parent.width;
+                font.pixelSize: Constants.DefaultFontSize;
+                color: Constants.Theme.TextColor;
+                font.family: "Source Sans Pro"
+                wrapMode: Text.WordWrap;
+                horizontalAlignment: Text.AlignHCenter;
+                text: "This filter requires no configuration. Click below to apply it.";
+            }
+            Item {
+                width: parent.width;
+                height: Constants.GridHeight / 2;
+            }
+            Button {
+                width: height;
+                height: Constants.GridHeight
+                anchors.horizontalCenter: parent.horizontalCenter;
+                color: "transparent";
+                image: "../images/svg/icon-apply.svg"
+                textColor: "white";
+                shadow: false;
+                highlight: false;
+                onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            }
+        }
+    }
+    Flickable {
+        id: configNeeded;
+        anchors {
+           top: lockedChannelsRow.bottom;
+           left: parent.left;
+           right: parent.right;
+           bottom: parent.bottom;
+        }
+        MouseArea {
+            anchors.fill: parent;
+            hoverEnabled: true;
+            onContainsMouseChanged: configLoader.focus = containsMouse;
+        }
+        Loader {
+            id: configLoader;
+            width: parent.width;
+            height: item ? item.height : 1;
         }
     }
 }
