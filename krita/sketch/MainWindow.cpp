@@ -43,6 +43,7 @@
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include "kis_clipboard.h"
+#include "kis_config.h"
 
 #include "ColorSelectorItem.h"
 #include "IconImageProvider.h"
@@ -90,6 +91,9 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qApp->setActiveWindow( this );
 
     setWindowTitle(i18n("Krita Sketch"));
+
+    KisConfig cfg;
+    cfg.setCursorStyle(CURSOR_STYLE_NO_CURSOR);
 
     d->constants = new Constants( this );
     d->settings = new Settings( this );
