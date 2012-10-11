@@ -105,7 +105,7 @@ int main( int argc, char** argv )
     MainWindow window(fileNames);
 
 #ifdef Q_OS_WIN
-    app.setInputContext(new SketchInputContext(app));
+    app.setInputContext(new SketchInputContext(&app));
     window.showFullScreen();
 #else
     window.show();
