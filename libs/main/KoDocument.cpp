@@ -60,8 +60,6 @@
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 
