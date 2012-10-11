@@ -18,10 +18,13 @@
 
 #include "SketchInputContext.h"
 #include <QProcess>
+#include <QDebug>
+#include <QDir>
 
 SketchInputContext::SketchInputContext(QObject* parent): QInputContext(parent)
 {
     m_keyboardApplication = new QProcess(this);
+    m_keyboardApplication->setWorkingDirectory("C:\\Program Files\\Common Files\\Microsoft Shared\\ink");
 }
 
 SketchInputContext::~SketchInputContext()
@@ -52,8 +55,9 @@ QString SketchInputContext::identifierName()
 bool SketchInputContext::filterEvent(const QEvent* event)
 {
     if(event->type() == QEvent::RequestSoftwareInputPanel) {
-        m_keyboardApplication->start("C:\Program Files\Common Files\Microsoft Shared\ink\TabTip.exe");
+        QString prog("cmd /c \"C:\\Program Files\\Common Files\\Microsoft Shared\\ink\\TabTip.exe\"");
+        m_keyboardApplication->start(prog, QIODevice::NotOpen);
         return true;
-    } //else if(event->type() == QEvent::
+    } 
     return false;
 }
