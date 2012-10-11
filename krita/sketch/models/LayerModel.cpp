@@ -18,6 +18,7 @@
 
 #include "LayerModel.h"
 #include "LayerThumbProvider.h"
+#include <PropertyContainer.h>
 #include <kis_node_model.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
@@ -32,6 +33,9 @@
 #include <kis_paint_layer.h>
 #include <kis_filter_mask.h>
 #include <kis_adjustment_layer.h>
+#include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
+#include <filter/kis_filter_registry.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoProperties.h>
 #include <QDeclarativeEngine>
@@ -881,6 +885,60 @@ void LayerModel::setActiveRChannelLocked(bool newLocked)
 {
     setChannelLocked(d->activeNode, 0, newLocked);
     emit activeRChannelLockedChanged();
+}
+
+QObject* LayerModel::activeFilterConfig() const
+{
+    KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
+    PropertyContainer* config = new PropertyContainer();
+    QMap<QString, QVariant> props;
+    if(filterMask)
+        props = filterMask->filter()->getProperties();
+    else
+    {
+        KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
+        if(adjustmentLayer)
+            props = adjustmentLayer->filter()->getProperties();
+    }
+    QMap<QString, QVariant>::const_iterator i;
+    for(i = props.constBegin(); i != props.constEnd(); ++i)
+    {
+        config->setProperty(i.key().toAscii(), i.value());
+    }
+    return config;
+}
+
+void LayerModel::setActiveFilterConfig(QObject* newConfig)
+{
+    if(d->activeNode.isNull())
+        return;
+    PropertyContainer* config = qobject_cast<PropertyContainer*>(newConfig);
+    if(!config)
+        return;
+
+    KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
+    if(filterMask)
+    {
+        KisFilterConfiguration* realConfig = KisFilterRegistry::instance()->cloneConfiguration(filterMask->filter());
+        foreach(const QByteArray& propName, config->dynamicPropertyNames())
+        {
+            realConfig->setProperty(QString(propName), config->property(propName));
+        }
+        filterMask->setFilter(realConfig);
+    }
+    else
+    {
+        KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
+        if(adjustmentLayer)
+        {
+            KisFilterConfiguration* realConfig = KisFilterRegistry::instance()->cloneConfiguration(adjustmentLayer->filter());
+            foreach(const QByteArray& propName, config->dynamicPropertyNames())
+            {
+                realConfig->setProperty(QString(propName), config->property(propName));
+            }
+            adjustmentLayer->setFilter(realConfig);
+        }
+    }
 }
 
 #include "LayerModel.moc"

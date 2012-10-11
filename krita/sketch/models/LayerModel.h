@@ -43,6 +43,7 @@ class LayerModel : public QAbstractListModel
     Q_PROPERTY(bool activeGChannelLocked READ activeGChannelLocked WRITE setActiveGChannelLocked NOTIFY activeGChannelLockedChanged);
     Q_PROPERTY(bool activeBChannelLocked READ activeBChannelLocked WRITE setActiveBChannelLocked NOTIFY activeBChannelLockedChanged);
     Q_PROPERTY(bool activeAChannelLocked READ activeAChannelLocked WRITE setActiveAChannelLocked NOTIFY activeAChannelLockedChanged);
+    Q_PROPERTY(QObject* activeFilterConfig READ activeFilterConfig WRITE setActiveFilterConfig NOTIFY activeFilterConfigChanged);
 public:
     enum LayerRoles {
         IconRole = Qt::UserRole + 1,
@@ -118,6 +119,8 @@ public:
     void setActiveBChannelLocked(bool newLocked);
     bool activeAChannelLocked() const;
     void setActiveAChannelLocked(bool newLocked);
+    QObject* activeFilterConfig() const;
+    void setActiveFilterConfig(QObject* newConfig);
 Q_SIGNALS:
     void viewChanged();
     void engineChanged();
@@ -136,6 +139,7 @@ Q_SIGNALS:
     void activeGChannelLockedChanged();
     void activeBChannelLockedChanged();
     void activeAChannelLockedChanged();
+    void activeFilterConfigChanged();
 
 private slots:
     void source_rowsAboutToBeInserted(QModelIndex, int, int);
