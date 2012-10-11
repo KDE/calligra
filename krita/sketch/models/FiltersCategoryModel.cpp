@@ -20,7 +20,14 @@
 #include "FiltersModel.h"
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
+#include <filter/kis_filter_configuration.h>
+#include <kis_filter_mask.h>
+#include <kis_layer.h>
+#include <kis_selection.h>
 #include <kis_view2.h>
+#include <kis_node_manager.h>
+#include <kis_selection_manager.h>
+#include <kis_canvas2.h>
 
 bool categoryLessThan(const FiltersModel* s1, const FiltersModel* s2)
 {
@@ -34,6 +41,8 @@ public:
         : q(qq)
         , currentCategory(-1)
         , view(0)
+        , previewEnabled(false)
+        , previewFilterID(-1)
     {}
 
     FiltersCategoryModel* q;
@@ -71,6 +80,8 @@ public:
                 cat->setView(view);
                 categories << cat;
                 tmpCategoryIDs << filter->menuCategory().id();
+                connect(cat, SIGNAL(configurationChanged(int)), q, SLOT(filterConfigurationChanged(int)));
+                connect(cat, SIGNAL(filterActivated(int)), q, SLOT(filterActivated(int)));
             }
             else
                 cat = categoryByName(filter->menuCategory().id());
@@ -78,6 +89,22 @@ public:
         }
         qSort(categories.begin(), categories.end(), categoryLessThan);
         q->endResetModel();
+    }
+
+    bool previewEnabled;
+    KisFilterMaskSP mask;
+    KisNodeSP node;
+    int previewFilterID;
+    void updatePreview()
+    {
+        if (!previewFilterID < 0)
+            return;
+
+        if(previewEnabled)
+        {
+            mask->setDirty();
+            node->setDirty(node->extent());
+        }
     }
 };
 
@@ -142,10 +169,95 @@ QObject* FiltersCategoryModel::view() const
 
 void FiltersCategoryModel::setView(QObject* newView)
 {
+    if(d->view)
+    {
+        setPreviewEnabled(false);
+        d->view->nodeManager()->disconnect(this);
+        d->view->selectionManager()->disconnect(this);
+    }
     d->view = qobject_cast<KisView2*>( newView );
     if(d->view)
+    {
         d->refreshContents();
+        connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(activeLayerChanged(KisLayerSP)));
+        connect(d->view->selectionManager(), SIGNAL(currentSelectionChanged()), this, SLOT(activeSelectionChanged()));
+    }
     emit viewChanged();
+}
+
+void FiltersCategoryModel::activeLayerChanged(KisLayerSP layer)
+{
+    Q_UNUSED(layer);
+    setPreviewEnabled(false);
+}
+
+void FiltersCategoryModel::activeSelectionChanged()
+{
+    setPreviewEnabled(false);
+}
+
+void FiltersCategoryModel::filterActivated(int index)
+{
+    Q_UNUSED(index);
+    setPreviewEnabled(false);
+}
+
+void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* model)
+{
+    d->previewFilterID = index;
+    if(d->previewEnabled && index > -1)
+    {
+        if(!model)
+            model = qobject_cast<FiltersModel*>(sender());
+        if(!model)
+        {
+            qDebug() << "How is the model null now?! Oh, someone forgot to send it along";
+            return;
+        }
+        KisFilterConfiguration* config = KisFilterRegistry::instance()->cloneConfiguration(model->filter(index)->defaultConfiguration(d->view->activeNode()->original()));
+        QObject* configuration = d->categories[d->currentCategory]->configuration(index);
+        foreach(const QByteArray& propName, configuration->dynamicPropertyNames())
+        {
+            config->setProperty(QString(propName), configuration->property(propName));
+        }
+        configuration->deleteLater();
+        d->mask->setFilter(config);
+        d->updatePreview();
+    }
+}
+
+bool FiltersCategoryModel::previewEnabled() const
+{
+    return d->previewEnabled;
+}
+
+void FiltersCategoryModel::filterSelected(int index)
+{
+    filterConfigurationChanged(index, d->categories[d->currentCategory]);
+}
+
+void FiltersCategoryModel::setPreviewEnabled(bool enabled)
+{
+    if(d->previewEnabled != enabled)
+    {
+        d->previewEnabled = enabled;
+        emit previewEnabledChanged();
+        if(enabled)
+        {
+            d->node = d->view->nodeManager()->activeLayer();
+            d->mask = new KisFilterMask();
+            d->mask->initSelection(d->view->selection(), qobject_cast<KisLayer*>(d->node.data()));
+            qobject_cast<KisLayer*>(d->node.data())->setPreviewMask(d->mask);
+            d->node->setDirty(d->node->extent());
+            filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);
+        }
+        else
+        {
+            qobject_cast<KisLayer*>(d->node.data())->removePreviewMask();
+            d->node->setDirty(d->node->extent());
+            d->node.clear();
+        }
+    }
 }
 
 #include "FiltersCategoryModel.moc"

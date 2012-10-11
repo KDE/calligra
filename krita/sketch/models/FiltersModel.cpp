@@ -103,7 +103,17 @@ void FiltersModel::activateFilter(int index)
         {
             d->handlers[index]->apply(d->view->activeNode(), d->filters[index]->defaultConfiguration(d->view->activeNode()->original()));
         }
+        emit filterActivated(index);
     }
+}
+
+KisFilter* FiltersModel::filter(int index)
+{
+    if(index > -1 && index < d->filters.count())
+    {
+        return d->filters[index].data();
+    }
+    return 0;
 }
 
 void FiltersModel::addFilter(KisFilterSP filter)
@@ -165,6 +175,7 @@ void FiltersModel::setConfiguration(int index, QObject* configuration)
             config->setProperty(QString(propName), configuration->property(propName));
         }
         d->configurations[index] = config;
+        emit configurationChanged(index);
     }
 }
 

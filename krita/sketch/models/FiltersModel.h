@@ -38,6 +38,7 @@ public:
     Q_INVOKABLE bool filterRequiresConfiguration(int index);
     Q_INVOKABLE QString filterID(int index);
     Q_INVOKABLE void activateFilter(int index);
+    KisFilter* filter(int index);
 
     QString categoryId;
     QString categoryName;
@@ -52,6 +53,8 @@ public:
 
 Q_SIGNALS:
     void viewChanged();
+    void configurationChanged(int index);
+    void filterActivated(int index);
 
 private:
     class Private;

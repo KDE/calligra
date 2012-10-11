@@ -20,13 +20,16 @@
 #define FILTERSCATEGORYMODEL_H
 
 #include <QtCore/QModelIndex>
+#include <kis_types.h>
 
+class FiltersModel;
 
 class FiltersCategoryModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QObject* filterModel READ filterModel NOTIFY filterModelChanged);
+    Q_PROPERTY(bool previewEnabled READ previewEnabled WRITE setPreviewEnabled NOTIFY previewEnabledChanged);
 public:
     enum FiltersCategoryModelRoles
     {
@@ -43,9 +46,20 @@ public:
     QObject* view() const;
     void setView(QObject* newView);
 
+    bool previewEnabled() const;
+    void setPreviewEnabled(bool enabled);
+    Q_INVOKABLE void filterSelected(int index);
+
 Q_SIGNALS:
     void viewChanged();
     void filterModelChanged();
+    void previewEnabledChanged();
+
+private Q_SLOTS:
+    void activeLayerChanged(KisLayerSP layer);
+    void activeSelectionChanged();
+    void filterConfigurationChanged(int index, FiltersModel* model = 0);
+    void filterActivated(int index);
 
 private:
     class Private;

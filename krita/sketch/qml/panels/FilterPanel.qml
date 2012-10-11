@@ -60,15 +60,14 @@ Panel {
         },
         Button {
             id: toggleShowPreviewButton;
-            property bool showPreview: true;
             width: height;
             height: Constants.GridHeight
             color: "transparent";
-            image: showPreview ? "../images/svg/icon-visible_on.svg" : "../images/svg/icon-visible_off.svg";
+            image: filtersCategoryModel.previewEnabled ? "../images/svg/icon-visible_on.svg" : "../images/svg/icon-visible_off.svg";
             textColor: "white";
             shadow: false;
             highlight: false;
-            onClicked: showPreview = !showPreview;
+            onClicked: filtersCategoryModel.previewEnabled = !filtersCategoryModel.previewEnabled;
         }
     ]
 
@@ -97,6 +96,9 @@ Panel {
             id: peekFilters;
             width: parent.width;
             model: filtersCategoryModel.filterModel;
+            onCurrentIndexChanged: {
+                filtersCategoryModel.filterSelected(currentIndex);
+            }
         }
     }
 
@@ -137,6 +139,7 @@ Panel {
                     noConfigNeeded.visible = true;
                     configNeeded.visible = false;
                 }
+                filtersCategoryModel.filterSelected(currentIndex);
             }
         }
         Item {
