@@ -58,10 +58,44 @@ Item {
         currentIndex: layersModel ? layersModel.activeCompositeOp : 0;
         onNewIndex: if(layersModel) layersModel.activeCompositeOp = currentIndex;
     }
+
+    FiltersCategoryModel {
+        id: filtersCategoryModel;
+        view: sketchView.view;
+    }
+    ExpandingListView {
+        id: filtersCategoryList;
+        anchors {
+            top: compositeOpList.bottom;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
+        height: visible ? Constants.GridHeight / 2 : 0;
+        model: filtersCategoryModel;
+        onModelChanged: currentIndex = 0;
+        onCurrentIndexChanged: model.activateItem(currentIndex)
+    }
+    ExpandingListView {
+        id: filtersList;
+        anchors {
+            top: filtersCategoryList.bottom;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
+        height: visible ? Constants.GridHeight / 2 : 0;
+        model: filtersCategoryModel.filterModel;
+        onCurrentIndexChanged: {
+            layersModel.activeFilterConfig = model.configuration(currentIndex);
+        }
+    }
     RangeInput {
         id: opacitySlider;
         anchors {
-            top: compositeOpList.bottom;
+            top: filtersList.bottom;
             left: parent.left;
             right: parent.right;
             margins: Constants.DefaultMargin;
