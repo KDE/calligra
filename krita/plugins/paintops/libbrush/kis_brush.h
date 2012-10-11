@@ -26,8 +26,6 @@
 
 #include <kis_types.h>
 #include <kis_shared.h>
-#include <kis_paint_information.h>
-#include <kis_fixed_paint_device.h>
 #include <krita_export.h>
 
 class KisQImagemask;
@@ -40,6 +38,7 @@ class QIODevice;
 class KoColor;
 class KoColorSpace;
 
+class KisPaintInformation;
 class KisBoundary;
 class KisQImageSP;
 class KisScaledBrush;
@@ -228,7 +227,7 @@ public:
      */
     void mask(KisFixedPaintDeviceSP dst,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info = KisPaintInformation(),
+              const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
@@ -237,7 +236,7 @@ public:
     void mask(KisFixedPaintDeviceSP dst,
               const KoColor& color,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info = KisPaintInformation(),
+              const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
     /**
@@ -246,7 +245,7 @@ public:
     void mask(KisFixedPaintDeviceSP dst,
               const KisPaintDeviceSP src,
               double scaleX, double scaleY, double angle,
-              const KisPaintInformation& info = KisPaintInformation(),
+              const KisPaintInformation& info,
               double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
@@ -275,7 +274,7 @@ public:
     virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                                                      ColoringInformation* coloringInfo,
                                                      double scaleX, double scaleY, double angle,
-                                                     const KisPaintInformation& info = KisPaintInformation(),
+                                                     const KisPaintInformation& info,
                                                      double subPixelX = 0, double subPixelY = 0,qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
 
