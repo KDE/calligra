@@ -29,6 +29,8 @@ set(kritasketch_SRCS
     MouseTracker.cpp
     PanelConfiguration.cpp
     PropertyContainer.cpp
+    SketchInputContext.cpp
+    VirtualKeyboardController.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
@@ -70,13 +72,6 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_wheel.cpp
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
 )
-
-if(WIN32)
-    set(kritasketch_SRCS
-        ${kritasketch_SRCS}
-        SketchInputContext.cpp
-    )
-endif(WIN32)
 
 if(KRITASKETCH_USE_OPENGL)
     add_definitions(-DKRITASKETCH_USE_OPENGL)

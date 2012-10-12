@@ -19,9 +19,7 @@
 #ifndef SKETCHINPUTCONTEXT_H
 #define SKETCHINPUTCONTEXT_H
 
-#include <qinputcontext.h>
-
-class QProcess;
+#include <QInputContext>
 
 class SketchInputContext : public QInputContext
 {
@@ -34,9 +32,6 @@ public:
     virtual QString language();
     virtual QString identifierName();
     virtual bool filterEvent(const QEvent* event);
-
-private:
-    QProcess *m_keyboardApplication;
 };
 
 #endif // SKETCHINPUTCONTEXT_H
