@@ -20,6 +20,7 @@
 
 #include "ImageBuilder.h"
 #include "MouseTracker.h"
+#include "VirtualKeyboardController.h"
 
 class KritaNamespace::Private
 {
@@ -55,3 +56,7 @@ QObject* KritaNamespace::window() const
     return parent();
 }
 
+QObject* KritaNamespace::virtualKeyboardController() const
+{
+    return VirtualKeyboardController::instance();
+}

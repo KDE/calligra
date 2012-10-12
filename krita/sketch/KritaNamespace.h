@@ -29,6 +29,7 @@ Q_OBJECT
 Q_PROPERTY(QObject* ImageBuilder READ imageBuilder CONSTANT)
 Q_PROPERTY(QObject* Window READ window CONSTANT)
 Q_PROPERTY(QObject* MouseTracker READ mouseTracker CONSTANT)
+Q_PROPERTY(QObject* VirtualKeyboardController READ virtualKeyboardController CONSTANT)
 
 public:
     explicit KritaNamespace(QObject* parent = 0);
@@ -37,6 +38,7 @@ public:
     QObject *imageBuilder() const;
     QObject *window() const;
     QObject *mouseTracker() const;
+    QObject *virtualKeyboardController() const;
 
 private:
     class Private;
