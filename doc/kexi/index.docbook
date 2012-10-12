@@ -5,8 +5,8 @@
   <!ENTITY calligra "Calligra">
   <!ENTITY ged.vertaald           '<othercredit role="translator"><firstname>Dit document is nog maar gedeeltelijk vertaald.</firstname> <surname>Wilt u meehelpen, stuur een bericht naar:</surname><affiliation><address> <email>kde-i18n-nl@kde.org</email></address></affiliation> <contrib>Nieuwe vertaler</contrib></othercredit>'>
 ]>
-<book lang="&language;">
-<bookinfo>
+<book id="kexi" lang="&language;">
+<book id="kexi"info>
 <title>The &kexi; Handbook</title>
 <authorgroup>
 <author>
