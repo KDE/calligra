@@ -234,7 +234,6 @@ void KisInputManager::Private::setupActions()
     // shortcut->setWheel(KisShortcut::WheelUp);
     // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
     // shortcut->setWheel(KisShortcut::WheelDown);
-    
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
     shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
@@ -296,7 +295,6 @@ void KisInputManager::Private::clearState()
         shortcut->clear();
     }
 }
-
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
     : QObject(canvas), d(new Private(this))
