@@ -38,19 +38,17 @@ Item {
     property bool enabled: true; // XXX: visualize disabledness
     property alias asynchronous: icon.asynchronous;
 
-    property bool highlight: true;
-    property color highlightColor: color;
+    property bool highlight: false;
+    property color highlightColor: "transparent";
 
     width: Constants.GridWidth;
     height: Constants.GridHeight;
 
     Rectangle {
         id: fill;
-        //x: 5
-        //y: 5
         anchors.fill: parent;
         anchors.margins: 0;
-        color: "transparent";
+        color: base.highlight && mouse.pressed ? base.highlightColor : "transparent";
         visible: true
 
         Image {
@@ -112,6 +110,7 @@ Item {
     transitions: Transition {
         ParallelAnimation {
             NumberAnimation { properties: "size"; duration: 50; }
+            ColorAnimation { duration: 50; }
         }
     }
 }
