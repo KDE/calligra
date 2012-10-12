@@ -45,14 +45,15 @@
 
 struct FileInfo
 {
-    FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents)
-        : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents)
+    FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents, QString label)
+        : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents), m_label(label)
     {}
 
     QString     m_id;
     QString     m_fileName;
     QByteArray  m_mimetype;
     QByteArray  m_fileContents;
+    QString     m_label;
 };
 
 
@@ -118,11 +119,16 @@ QString FileCollector::pathPrefix() const
 
 // ----------------------------------------------------------------
 
-
 void FileCollector::addContentFile(QString id, QString fileName,
                                    QByteArray mimetype, QByteArray fileContents)
 {
-    FileInfo *newFile = new FileInfo(id, fileName, mimetype, fileContents);
+    addContentFile(id, fileName, mimetype, fileContents, "");
+}
+
+void FileCollector::addContentFile(QString id, QString fileName,
+                                   QByteArray mimetype, QByteArray fileContents, QString label)
+{
+    FileInfo *newFile = new FileInfo(id, fileName, mimetype, fileContents, label);
     d->m_files.append(newFile);
 }
 
