@@ -235,7 +235,7 @@ void KisSketchView::setFile(const QString& file)
 
         if (type->name() != d->doc->nativeFormatMimeType()) {
             KoFilterManager *manager = new KoFilterManager(d->doc,  d->doc->progressUpdater());
-            //manager->setBatchMode(true);
+            manager->setBatchMode(true);
             path = manager->importDocument(KUrl(d->file).toLocalFile(), type->name(), status);
 
             if(status != KoFilter::OK) {
