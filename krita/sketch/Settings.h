@@ -30,6 +30,7 @@ class Settings : public QObject
     Q_OBJECT
     Q_PROPERTY(QString currentFile READ currentFile WRITE setCurrentFile NOTIFY currentFileChanged)
     Q_PROPERTY(bool temporaryFile READ isTemporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
+    Q_PROPERTY(QDeclarativeItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
 
 public:
     explicit Settings( QObject* parent = 0 );
@@ -44,10 +45,13 @@ public Q_SLOTS:
     bool isTemporaryFile() const;
     void setTemporaryFile(bool temp);
 
+    QDeclarativeItem *focusItem();
+    void setFocusItem(QDeclarativeItem *item);
+
 Q_SIGNALS:
     void currentFileChanged();
     void temporaryFileChanged();
-
+    void focusItemChanged();
 
 private:
     class Private;

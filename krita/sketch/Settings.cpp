@@ -23,10 +23,11 @@
 class Settings::Private
 {
 public:
-    Private() : temporaryFile(false) { }
+    Private() : temporaryFile(false), focusItem(0) { }
 
     QString currentFile;
     bool temporaryFile;
+    QDeclarativeItem *focusItem;
 };
 
 Settings::Settings( QObject* parent )
@@ -66,5 +67,17 @@ void Settings::setTemporaryFile(bool temp)
     }
 }
 
+QDeclarativeItem* Settings::focusItem()
+{
+    return d->focusItem;
+}
+
+void Settings::setFocusItem(QDeclarativeItem* item)
+{
+    if(item != d->focusItem) {
+        d->focusItem = item;
+        emit focusItemChanged();
+    }
+}
 
 #include "Settings.moc"
