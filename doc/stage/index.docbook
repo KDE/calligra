@@ -24,7 +24,7 @@
 ]>
 
 <book id="stage" lang="&language;">
-<book id="stage"info>
+<bookinfo>
 <title>The &stage; Handbook</title>
 
 <authorgroup>

@@ -16,7 +16,7 @@
 <!-- maintained by raphael.langerhorst@kdemail.net -->
 
 <book id="calligra" lang="&language;">
-<book id="calligra"info>
+<bookinfo>
 <title>&calligra;</title>
 <subtitle>A General Introduction</subtitle>
 <authorgroup>
