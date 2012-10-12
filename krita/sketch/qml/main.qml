@@ -19,13 +19,60 @@
 import QtQuick 1.1
 import "components"
 
-PageStack {
-    width: 1024;
-    height: 600;
+Item {
+    id: base;
+    width: 1280;
+    height: 768;
 
-    initialPage: welcomePage;
+    Flickable {
+        id: screenScroller;
+        boundsBehavior: Flickable.StopAtBounds;
 
-    transitionDuration: 500;
+        anchors {
+            top: parent.top;
+            left: parent.left;
+            right: parent.right;
+            bottom: keyboard.top;
+        }
 
-    Component { id: welcomePage; WelcomePage { } }
+        contentWidth: base.width;
+        contentHeight: base.height;
+
+        PageStack {
+            width: base.width;
+            height: base.height;
+
+            initialPage: welcomePage;
+
+            transitionDuration: 500;
+
+            Component { id: welcomePage; WelcomePage { } }
+
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: parent.focus = true;
+            }
+        }
+
+        function ensureVisible(item) {
+            if(item !== undefined && item !== null) {
+                var targetPosition = item.mapToItem(screenScroller, item.x, item.y);
+                if(targetPosition.y > base.height * 0.66) {
+                    screenScroller.contentY = targetPosition.y - base.height / 2;
+                    screenScroller.returnToBounds();
+                }
+            }
+        }
+    }
+
+    VirtualKeyboard {
+        id: keyboard;
+        onKeyboardVisibleChanged: if(keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
+    }
+
+    Connections {
+        target: Settings;
+
+        onFocusItemChanged: if(keyboard.keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);
+    }
 }
