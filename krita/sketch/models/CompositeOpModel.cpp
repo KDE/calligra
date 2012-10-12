@@ -28,6 +28,8 @@
 #include <kis_node.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
+#include <kis_paintop_registry.h>
+#include <kis_paintop_settings_widget.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorSpace.h>
 
@@ -54,6 +56,7 @@ public:
     QString currentCompositeOpID;
     QString prevCompositeOpID;
     bool eraserMode;
+    QMap<KisPaintOpPreset*, KisPaintOpSettingsWidget*> settingsWidgets;
 
     qreal opacity;
     bool opacityEnabled;
@@ -391,15 +394,44 @@ void CompositeOpModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
     if(d->view)
     {
         KisPaintOpPresetSP preset = d->view->canvasBase()->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-        if(preset)
+        if(preset && d->currentPreset.data() != preset.data())
         {
             d->currentPreset = preset;
+            if(!d->settingsWidgets.contains(preset.data()))
+            {
+                d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createSettingsWidget(0);
+                d->settingsWidgets[preset.data()]->setImage(d->view->image());
+                d->settingsWidgets[preset.data()]->setConfiguration(preset->settings());
+            }
+            if(d->settingsWidgets[preset.data()])
+                preset->settings()->setOptionsWidget(d->settingsWidgets[preset.data()]);
             d->size = preset->settings()->paintOpSize().width();
             emit sizeChanged();
-            d->opacity = preset->settings()->getProperty("OpacityValue").toReal();
+            if(preset->settings()->hasProperty("OpacityValue"))
+            {
+                d->opacityEnabled = true;
+                d->opacity = preset->settings()->getProperty("OpacityValue").toReal();
+            }
+            else
+            {
+                d->opacityEnabled = false;
+                d->opacity = 1;
+            }
+            d->view->resourceProvider()->setOpacity(d->opacity);
             emit opacityChanged();
-            d->flow = preset->settings()->getProperty("FlowValue").toReal();
+            emit opacityEnabledChanged();
+            if(preset->settings()->hasProperty("FlowValue"))
+            {
+                d->flowEnabled = true;
+                d->flow = preset->settings()->getProperty("FlowValue").toReal();
+            }
+            else
+            {
+                d->flowEnabled = false;
+                d->flow = 1;
+            }
             emit flowChanged();
+            emit flowEnabledChanged();
         }
     }
 }
