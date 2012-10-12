@@ -19,7 +19,7 @@
 
 <book id="sheets" lang="&language;">
 
-<book id="sheets"info>
+<bookinfo>
 <title>The &sheets; Handbook</title>
 
 <!-- MAINTAINED BY raphael.langerhorst@kdemail.net -->
