@@ -17,7 +17,7 @@
   <!ENTITY functions SYSTEM "functions.docbook">
 ]>
 
-<book id="sheets" lang="&language;">
+<book lang="&language;">
 
 <bookinfo>
 <title>The &sheets; Handbook</title>
