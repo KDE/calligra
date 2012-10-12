@@ -54,20 +54,20 @@ Item {
         RangeInput {
             id: sizeInput;
             width: parent.width;
+            visible: compositeOpModel.sizeEnabled;
             placeholder: "Size";
-            min: 1; max: 100; decimals: 0;
+            min: 1; max: 1000; decimals: 0;
             value: compositeOpModel.size;
             onValueChanged: compositeOpModel.changePaintopValue("size", value);
-            enabled: compositeOpModel.sizeEnabled;
         }
         RangeInput {
             id: opacityInput;
             width: parent.width;
+            visible: compositeOpModel.opacityEnabled;
             placeholder: "Opacity";
             min: 0; max: 1; decimals: 2;
             value: compositeOpModel.opacity;
             onValueChanged: compositeOpModel.changePaintopValue("opacity", value);
-            enabled: compositeOpModel.opacityEnabled;
         }
         RangeInput {
             id: flowInput;
@@ -76,11 +76,11 @@ Item {
             min: 0; max: 1; decimals: 2;
             value: compositeOpModel.flow;
             onValueChanged: compositeOpModel.changePaintopValue("flow", value);
-            enabled: compositeOpModel.flowEnabled;
+            visible: compositeOpModel.flowEnabled;
         }
 
         RangeInput {
-            visible: fullView;
+            visible: fullView && toolManager.currentTool !== null && toolManager.currentTool.slotSetSmoothness !== undefined;
             width: parent.width;
             placeholder: "Smoothness";
             min: 0; max: 1000; decimals: 0;
