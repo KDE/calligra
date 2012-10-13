@@ -4095,7 +4095,7 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
         return false; //error msg has been shown by KexiInternalPart
     int result = dlg->exec();
     delete dlg;
-    return result == QDialog::Rejected ? cancelled : true;
+    return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
 }
 
 bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
@@ -4310,7 +4310,7 @@ tristate KexiMainWindow::copyItemToClipboardAsDataTable(KexiPart::Item* item)
         return false; //error msg has been shown by KexiInternalPart
     const int result = dlg->exec();
     delete dlg;
-    return result == QDialog::Rejected ? cancelled : true;
+    return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
 }
 
 void KexiMainWindow::slotEditPasteSpecialDataTable()
