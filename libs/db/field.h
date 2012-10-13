@@ -55,7 +55,7 @@ class BaseExpr;
  - defaultValue
  - caption (user readable name that can be e.g. translated)
  - description (user readable name additional text, can be useful for developers)
- - width (a hint for displaying in tabular mode or as text box)
+ - defaultWidth (a hint for displaying in tabular mode or as text box)
 
  Field can also have assigned expression (see KexiDB::BaseExpr class,
  and expression() method).
@@ -631,7 +631,7 @@ public:
     virtual QString debugString() const;
 
     /*! Shows debug information about this field. */
-    void debug();
+    void debug() const;
 
     /*! \return KexiDB::BaseExpr object if the field value is an
      expression.  Unless the expression is set with setExpression(), it is null.

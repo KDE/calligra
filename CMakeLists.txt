@@ -1,7 +1,13 @@
 project(calligra)
 
 cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+
 cmake_policy(SET CMP0002 OLD)
+
+#cmake_policy CMP0017 was introduced in version 2.8.4
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
+    cmake_policy(SET CMP0017 NEW)
+endif()
 
  ############
 #############
@@ -86,7 +92,7 @@ ELSE()
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
-    set(SHOULD_BUILD_ACTIVE TRUE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ENDIF()
 
 if(KDE4_BUILD_TESTS)
@@ -172,7 +178,7 @@ endif (APPLE)
 ## Test for sqlite
 ##
 set(SQLITE_MIN_VERSION 3.6.16)
-set(SQLITE_RECOMMENDED_VERSION 3.7.12)
+set(SQLITE_RECOMMENDED_VERSION 3.7.14)
 set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
 macro_optional_find_package(CalligraSqlite 3.6.16)
 macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
@@ -190,7 +196,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
 		    "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR 
+## Check for OpenEXR
 ##
 
 macro_optional_find_package(OpenEXR)
@@ -312,6 +318,15 @@ if(NEPOMUK)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
 
+##
+## Test for KActivities
+##
+macro_optional_find_package(KActivities 6.1.0)
+macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" FALSE "" "Required for Activities integration.")
+if(KActivities_FOUND)
+    set(HAVE_KACTIVITIES TRUE)
+endif(KActivities_FOUND)
+
 #Set the build of TextShape changetraker
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
@@ -353,13 +368,13 @@ if(!WIN32)
     macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
 endif(!WIN32)
 
-if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
 else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-  
+
 ##
 ## Test for Qt Webkit
 ##
@@ -373,6 +388,14 @@ endif(QT_QTWEBKIT_FOUND)
 ##
 #macro_optional_find_package(QImageBlitz)
 #macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
+
+##
+## Test for KDeclarative
+##
+macro_optional_find_package(KDeclarative)
+if(NOT KDECLARATIVE_FOUND)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif(NOT KDECLARATIVE_FOUND)
 
 ##
 ## Test endianess
@@ -479,8 +502,16 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
 
 # calligradb
-SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs)  # TODO remove when Predicate lib arrives
+# TODO: remove when Predicate lib arrives
+if (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
+   set(SHOULD_BUILD_CALLIGRADB TRUE)
+   set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+   set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                           ${CMAKE_BINARY_DIR}/libs/db)
+else (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
+   set(SHOULD_BUILD_CALLIGRADB FALSE)
+   set(SHOULD_BUILD_KEXI FALSE)
+endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
 
  #############################################
 ##############################################
@@ -511,7 +542,7 @@ if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 endif (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 
 
-### Active: only build with Qt 4.7.0 or better 
+### Active: only build with Qt 4.7.0 or better
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

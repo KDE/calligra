@@ -2,31 +2,31 @@
 
 """
 Python script that provides additional formula-functions
-to KSpread.
+to Sheets.
 
 The script could be used in two ways;
 
-    1. Embedded in KSpread by execution via the "Tools=>Scripts"
+    1. Embedded in Sheets by execution via the "Tools=>Scripts"
        menu or from the "Tools=>Script Manager". The functions.py
        script may not be visible if not installed. So, for testing
        better use the second way;
 
-    2. Run KSpread with;
+    2. Run Sheets with;
 
             # make the script executable
-            chmod 755 `kde4-config --install data`/kspread/scripts/functions/functions.py
+            chmod 755 `kde4-config --install data`/sheets/scripts/functions/functions.py
             # run KSpread
-            kspread --scriptfile `kde4-config --install data`/kspread/scripts/functions/functions.py
+            kspread --scriptfile `kde4-config --install data`/sheets/scripts/functions/functions.py
 
 (C)2006 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 class Functions:
-    """ The Functions class adds some KSpread formula functions on
-    the fly and provides them to KSpread. """
+    """ The Functions class adds some Calligra Sheets formula functions on
+    the fly and provides them to Calligra Sheets. """
 
     def __init__(self, scriptaction):
         """ Some initial work like the import of the Kross and KSpread functionality
@@ -52,7 +52,7 @@ class Functions:
                 import Kross
                 self.kspread = Kross.module("kspread")
             except ImportError:
-                raise "Failed to import the KSpread Kross module. Please run this script with \"kross thisscriptfile.py\""
+                raise "Failed to import the Sheets Kross module. Please run this script with \"kross thisscriptfile.py\""
 
         self.addTestFunctions()
 

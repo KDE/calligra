@@ -39,7 +39,7 @@
 #include <kross/core/manager.h>
 
 K_PLUGIN_FACTORY(KSpreadScriptingFactory, registerPlugin< ScriptingPart >();)
-K_EXPORT_PLUGIN(KSpreadScriptingFactory("krossmodulekspread"))
+K_EXPORT_PLUGIN(KSpreadScriptingFactory("krossmodulesheets"))
 
 /// \internal d-pointer class.
 class ScriptingPart::Private
@@ -53,7 +53,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QVariantList& argList)
 {
     Q_UNUSED(argList);
     setComponentData(ScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data", "kspread/kpartplugins/scripting.rc"), true);
+    setXMLFile(KStandardDirs::locate("data", "sheets/kpartplugins/scripting.rc"), true);
     kDebug() << "Scripting plugin. Class:" << metaObject()->className() << ", Parent:" << parent->metaObject()->className();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

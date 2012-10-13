@@ -494,6 +494,11 @@ void KexiView::addChildView(KexiView* childView)
     childView->installEventFilter(this);
 }
 
+void KexiView::removeView(Kexi::ViewMode mode)
+{
+    window()->removeView(mode);
+}
+
 void KexiView::setFocus()
 {
     if (!d->lastFocusedChildBeforeFocusOut.isNull()) {

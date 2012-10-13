@@ -45,9 +45,9 @@ public:
     };
 protected:
     SmilCalcMode m_calcMode;
-    KPrAnimationCache * m_cache;
-    KoShape * m_shape;
-    KoTextBlockData * m_textBlockData;
+    KPrAnimationCache *m_cache;
+    KoShape *m_shape;
+    QTextBlockUserData *m_textBlockData;
 };
 
 #endif // KPRANIMATIONVALUE_H

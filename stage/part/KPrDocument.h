@@ -60,6 +60,8 @@ public:
      */
     void removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData = true );
 
+    void replaceAnimation(KPrShapeAnimation *oldAnimation, KPrShapeAnimation *newAnimation);
+
     /**
      * @brief get the slideShows defined for this document
      */

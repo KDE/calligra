@@ -1559,7 +1559,7 @@ void KexiCSVImportDialog::accept()
                      "Should it be automatically defined on import (recommended)?\n\n"
                      "Note: An imported table without a Primary Key may not be editable (depending on database type)."),
                 QString(),
-                KGuiItem(i18nc("Add Database Primary Key to a Table", "Add Primary Key"), "key"),
+                KGuiItem(i18nc("Add Database Primary Key to a Table", "Add Primary Key"), koIconName("key")),
                 KGuiItem(i18nc("Do Not Add Database Primary Key to a Table", "Do Not Add")))))
     {
         if (msgboxResult == KMessageBox::Cancel) {

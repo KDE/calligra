@@ -34,6 +34,8 @@
 
 #include <kmessagebox.h>
 
+#include <KoIcon.h>
+
 #include <kexi.h>
 #include <kexi_global.h>
 #include <kexiutils/validator.h>
@@ -1231,7 +1233,7 @@ void KexiDataAwareObjectInterface::deleteCurrentRow()
         if (KMessageBox::Cancel == KMessageBox::warningContinueCancel(
                     dynamic_cast<QWidget*>(this),
                     i18n("Do you want to delete selected record?"), QString(),
-                    KGuiItem(i18n("&Delete Record"), "edit-delete"), KStandardGuiItem::cancel(),
+                    KGuiItem(i18n("&Delete Record"), koIconName("edit-delete")), KStandardGuiItem::cancel(),
                     "dontAskBeforeDeleteRow"/*config entry*/,
                     KMessageBox::Notify | KMessageBox::Dangerous))
         {

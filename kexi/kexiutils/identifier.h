@@ -46,9 +46,18 @@ public:
     virtual ~IdentifierValidator();
     virtual State validate(QString & input, int & pos) const;
 
+    //! @return true if lower case letters are forced.
+    //! By default letters are not forced to lowercase.
+    bool isLowerCaseForced() const;
+
+    //! Sets or unsets lower case forcing.
+    void setLowerCaseForced(bool set);
+
 protected:
     virtual Validator::Result internalCheck(const QString &valueName, const QVariant& v,
                                             QString &message, QString &details);
+    class Private;
+    Private * const d;
 };
 }
 

@@ -760,14 +760,16 @@ EffortCostMap Task::bcwsPrDay( long int id, EffortCostCalculationType typ )
     EffortCostCache &cache = s->bcwsPrDayCache( typ );
     if ( ! cache.cached ) {
         EffortCostMap ec = s->bcwsPrDay( typ );
-        if ( m_startupCost > 0.0 ) {
-            ec.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
+        if ( typ != ECCT_Work ) {
+            if ( m_startupCost > 0.0 ) {
+                ec.add( s->startTime.date(), Duration::zeroDuration, m_startupCost );
+            }
+            if ( m_shutdownCost > 0.0 ) {
+                ec.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
+            }
+            cache.effortcostmap = ec;
+            cache.cached = true;
         }
-        if ( m_shutdownCost > 0.0 ) {
-            ec.add( s->endTime.date(), Duration::zeroDuration, m_shutdownCost );
-        }
-        cache.effortcostmap = ec;
-        cache.cached = true;
     }
     return cache.effortcostmap;
 }
@@ -784,7 +786,8 @@ EffortCostMap Task::bcwpPrDay( long int id, EffortCostCalculationType typ )
     }
     EffortCostCache cache = s->bcwpPrDayCache( typ );
     if ( ! cache.cached ) {
-        EffortCostMap e = bcwsPrDay( id, typ );
+        // do not use bcws cache, it includes startup/shutdown cost
+        EffortCostMap e = s->plannedEffortCostPrDay( s->appointmentStartTime().date(), s->appointmentEndTime().date(), typ );
         if ( completion().isStarted() && ! e.isEmpty() ) {
             // calculate bcwp on bases of bcws *without* startup/shutdown cost
             double totEff = e.totalEffort().toDouble( Duration::Unit_h );
@@ -2800,6 +2803,13 @@ uint Task::state( long id ) const
         }
         if ( completion().percentFinished() > 0 ) {
             st |= State_Running;
+        }
+        if ( endTime( id ) < QDateTime::currentDateTime() ) {
+            st |= State_Late;
+        }
+    } else if ( isScheduled( id ) ) {
+        if ( startTime( id ) < QDateTime::currentDateTime() ) {
+            st |= State_Late;
         }
     }
     st |= State_ReadyToStart;

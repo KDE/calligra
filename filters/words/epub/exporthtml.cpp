@@ -121,7 +121,12 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
     html.setPathPrefix("./");
     html.setFilePrefix(m_chain->outputFile().section('/', -1).section('.', 0, 0));
     OdtHtmlConverter converter;
-    status = converter.convertContent(odfStore, m_metadata, &html,
+    OdtHtmlConverter::ConversionOptions options = {
+        false,                   // don't put styles in css file
+        false,                    // don't break into chapters
+        false                     // It is not mobi.
+    };
+    status = converter.convertContent(odfStore, m_metadata, &options, &html,
                                       m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;

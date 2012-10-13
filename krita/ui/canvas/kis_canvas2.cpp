@@ -80,7 +80,6 @@ public:
         , shapeManager(new KoShapeManager(parent))
         , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
-        , currentCanvasUsesOpenGLShaders(false)
         , toolProxy(new KisToolProxy(parent))
         , favoriteResourceManager(0)
         , vastScrolling(true) {
@@ -100,7 +99,6 @@ public:
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
-    bool currentCanvasUsesOpenGLShaders;
     KoToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
@@ -116,12 +114,14 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view,
     : KoCanvasBase(sc)
     , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
+
+
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
+    m_d->vastScrolling = cfg.vastScrolling();
 
     m_d->inputManager = new KisInputManager(this, m_d->toolProxy);
 
-    m_d->vastScrolling = cfg.vastScrolling();
     m_d->renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     createCanvas(cfg.useOpenGL());
 
@@ -158,8 +158,6 @@ KisCanvas2::~KisCanvas2()
 
 void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
-    connect(widget, SIGNAL(needAdjustOrigin()), this, SLOT(adjustOrigin()), Qt::DirectConnection);
-
     KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     emit canvasDestroyed(widget);
@@ -200,52 +198,9 @@ bool KisCanvas2::snapToGrid() const
     return m_d->view->document()->gridData().snapToGrid();
 }
 
-void KisCanvas2::pan(QPoint shift)
-{
-    KoCanvasControllerWidget* controller =
-            dynamic_cast<KoCanvasControllerWidget*>(canvasController());
-    controller->pan(shift);
-    updateCanvas();
-}
-
-void KisCanvas2::mirrorCanvas(bool enable)
-{
-    m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
-    notifyZoomChanged();
-    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
-}
-
 qreal KisCanvas2::rotationAngle() const
 {
     return m_d->coordinatesConverter->rotationAngle();
-}
-
-void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
-{
-    m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
-    notifyZoomChanged();
-
-    if(updateOffset)
-        pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
-    else
-        updateCanvas();
-}
-
-void KisCanvas2::rotateCanvasRight15()
-{
-    rotateCanvas(15.0);
-}
-
-void KisCanvas2::rotateCanvasLeft15()
-{
-    rotateCanvas(-15.0);
-}
-
-void KisCanvas2::resetCanvasTransformations()
-{
-    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
-    notifyZoomChanged();
-    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
 void KisCanvas2::setSmoothingEnabled(bool smooth)
@@ -351,8 +306,7 @@ void KisCanvas2::createOpenGLCanvas()
 
     // XXX: The image isn't done loading here!
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
-    KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
-    m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
+    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
     setCanvasWidget(canvasWidget);
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
@@ -451,10 +405,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 #ifdef HAVE_OPENGL
     KisConfig cfg;
 
-    if (   (useOpenGL != m_d->currentCanvasIsOpenGL)
-           || (   m_d->currentCanvasIsOpenGL
-                  && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
-
+    if (useOpenGL != m_d->currentCanvasIsOpenGL) {
         disconnectCurrentImage();
         createCanvas(useOpenGL);
         connectCurrentImage();
@@ -637,13 +588,11 @@ void KisCanvas2::disconnectCanvasObserver(QObject *object)
 
 void KisCanvas2::notifyZoomChanged()
 {
-    adjustOrigin();
-
     if (!m_d->currentCanvasIsOpenGL) {
         Q_ASSERT(m_d->prescaledProjection);
         m_d->prescaledProjection->notifyZoomChanged();
     }
-    emit scrollAreaSizeChanged();
+
     updateCanvas(); // update the canvas, because that isn't done when zooming using KoZoomAction
 }
 
@@ -690,19 +639,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
     updateCanvas();
 }
 
-bool KisCanvas2::usingHDRExposureProgram()
-{
-#ifdef HAVE_OPENGL
-    if (m_d->currentCanvasIsOpenGL) {
-        return m_d->openGLImageTextures->usingHDRExposureProgram();
-    }
-#endif
-    return false;
-}
-
 void KisCanvas2::slotConfigChanged()
 {
-    qDebug() << "slotConfigChanged";
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
 
@@ -719,7 +657,6 @@ void KisCanvas2::slotConfigChanged()
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
 {
-    qDebug() << "slotSetDisplayProfile";
     KisConfig cfg;
     KoColorConversionTransformation::Intent renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
@@ -743,30 +680,13 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 
 QPoint KisCanvas2::documentOrigin() const
 {
-    return m_d->coordinatesConverter->documentOrigin();
-}
+    /**
+     * In Krita we don't use document origin anymore.
+     * All the centering when needed (vastScrolling < 0.5) is done
+     * automatically by the KisCoordinatesConverter.
+     */
 
-
-void KisCanvas2::adjustOrigin()
-{
-    QPoint newOrigin;
-
-    QSize documentSize = m_d->coordinatesConverter->imageRectInWidgetPixels().toAlignedRect().size();
-    QSize widgetSize = m_d->canvasWidget->widget()->size();
-
-    if(!m_d->vastScrolling) {
-        int widthDiff = widgetSize.width() - documentSize.width();
-        int heightDiff = widgetSize.height() - documentSize.height();
-
-        if (widthDiff > 0)
-            newOrigin.rx() = qRound(0.5 * widthDiff);
-        if (heightDiff > 0)
-            newOrigin.ry() = qRound(0.5 * heightDiff);
-    }
-
-    m_d->coordinatesConverter->setDocumentOrigin(newOrigin);
-
-    emit documentOriginChanged();
+    return QPoint();
 }
 
 QPoint KisCanvas2::documentOffset() const

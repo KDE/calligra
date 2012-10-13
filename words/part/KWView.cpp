@@ -451,7 +451,7 @@ void KWView::pasteRequested()
 
 void KWView::editFrameProperties()
 {
-    KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
+    QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
     frameDialog->exec();
     delete frameDialog;
 }
@@ -496,7 +496,7 @@ void KWView::addBookmark()
         suggestedName = editor->selectedText();
     }
 
-    KWCreateBookmarkDialog *dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
+    QPointer<KWCreateBookmarkDialog> dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
     if (dia->exec() == QDialog::Accepted) {
         name = dia->newBookmarkName();
     }
@@ -514,7 +514,7 @@ void KWView::selectBookmark()
     QString name;
     KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
 
-    KWSelectBookmarkDialog *dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
+    QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
     connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
             manager, SLOT(rename(const QString &, const QString &)));
     connect(dia, SIGNAL(bookmarkDeleted(const QString &)),

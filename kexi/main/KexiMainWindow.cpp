@@ -237,12 +237,6 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-/*KexiMainWindow* KexiMainWindow::self()
-{
-  return kexiMainWindow;
-}*/
-
-//static
 int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutData)
 {
     Kexi::initCmdLineArgs(argc, argv, aboutData);
@@ -278,10 +272,6 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
             debugWindow->show();
         }
     }
-#endif
-
-#ifndef KEXI_MOBILE
-    //QApplication::setMainWidget(win);
 #endif
 
     if (true != win->startup()) {
@@ -366,6 +356,7 @@ KexiMainWindow::~KexiMainWindow()
     d->forceWindowClosing = true;
     closeProject();
     delete d;
+    Kexi::deleteGlobalObjects();
 }
 
 KexiProject *KexiMainWindow::project()
@@ -1394,7 +1385,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
                     i18n("Database project %1 does not appear to have been created using Kexi."
                          "<p>Do you want to import it as a new Kexi project?",
                          projectData.infoString()),
-                    0, KGuiItem(i18nc("Import Database", "&Import..."), "database_import"),
+                    0, KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
             {
                 const bool anotherProjectAlreadyOpened = d->prj;
@@ -2127,6 +2118,7 @@ bool KexiMainWindow::queryClose()
         storeSettings();
 
     if (! ~res) {
+        Kexi::deleteGlobalObjects();
         qApp->quit();
     }
     return ! ~res;
@@ -2986,7 +2978,7 @@ tristate KexiMainWindow::getNewObjectInfo(
                           .subs(d->nameDialog->widget()->nameText()).toString()
                           + "</p><p>" + i18n("Do you want to replace it?") + "</p>",
                           QString(),
-                          KGuiItem(i18n("&Replace"), "button_yes"),
+                          KGuiItem(i18n("&Replace"), koIconName("button_yes")),
                           KGuiItem(i18n("&Choose Other Name...")),
                           KStandardGuiItem::cancel(),
                           QString(),
@@ -3554,7 +3546,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
                              "%1\n"
                              "If you click \"Delete\", you will not be able to undo the deletion.",
                              "</p><p>" + part->info()->instanceCaption() + " \"" + item->name() + "\"?</p>"),
-                0, KGuiItem(i18n("Delete"), "edit-delete"), KStandardGuiItem::no())) {
+                0, KGuiItem(i18n("Delete"), koIconName("edit-delete")), KStandardGuiItem::no())) {
             return cancelled;
         }
     }
@@ -4103,7 +4095,7 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
         return false; //error msg has been shown by KexiInternalPart
     int result = dlg->exec();
     delete dlg;
-    return result == QDialog::Rejected ? cancelled : true;
+    return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
 }
 
 bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
@@ -4318,7 +4310,7 @@ tristate KexiMainWindow::copyItemToClipboardAsDataTable(KexiPart::Item* item)
         return false; //error msg has been shown by KexiInternalPart
     const int result = dlg->exec();
     delete dlg;
-    return result == QDialog::Rejected ? cancelled : true;
+    return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
 }
 
 void KexiMainWindow::slotEditPasteSpecialDataTable()

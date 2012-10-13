@@ -128,7 +128,7 @@ bool MySQLMigrate::drv_readTableSchema(
 
     for (unsigned int i = 0; i < numFlds; i++) {
         QString fldName(fields[i].name);
-        QString fldID(KexiUtils::string2Identifier(fldName));
+        QString fldID(KexiUtils::string2Identifier(fldName.toLower()));
 
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(originalName, &fields[i]));
@@ -251,7 +251,8 @@ tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
 bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
                                  KexiDB::TableSchema* dstTable)
 {
-    if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(srcTable)) + '`')
+    kDebug() << drv_escapeIdentifier(srcTable);
+    if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(srcTable) + '`'))
         return false;
     MYSQL_RES *res = mysql_use_result(d->mysql);
     if (!res) {
@@ -287,7 +288,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 
 bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size)
 {
-    if (!d->executeSQL("SELECT COUNT(*) FROM `" + drv_escapeIdentifier(table)) + '`')
+    if (!d->executeSQL("SELECT COUNT(*) FROM `" + drv_escapeIdentifier(table) + '`'))
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {

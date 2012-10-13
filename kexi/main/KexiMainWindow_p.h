@@ -136,15 +136,17 @@ public:
     }
     ~KexiWindowContainer() {
         //! @todo warning if saveSettings() failed?
-        window->saveSettings();
-        delete window;
+        if (window) {
+            window->saveSettings();
+            delete (KexiWindow*)window;
+        }
     }
     void setWindow(KexiWindow* w) {
         window = w;
         if (w)
             lyr->addWidget(w);
     }
-    KexiWindow *window;
+    QPointer<KexiWindow> window;
 private:
     QVBoxLayout *lyr;
 };

@@ -1,17 +1,19 @@
 #!/usr/bin/env kross
 
 """
-Interactive Python Console Docker for KSpread.
+Interactive Python Console Docker for Sheets.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import Kross, KoDocker, KSpread
 import PyQt4.Qt as Qt
 import sip #wrapinstance, unwrapinstance
+
+T = Kross.module("kdetranslation")
 
 def _getHome():
     """ Return the homedirectory. """
@@ -58,19 +60,19 @@ class _ConsoleDocker(Qt.QWidget):
             layout.addWidget(self.edit)
             self.status = Qt.QLabel('', self)
             layout.addWidget(self.status)
-            menu = Qt.QMenu("File", menubar)
+            menu = Qt.QMenu(T.i18nc("Menu", "File").decode('utf-8'), menubar)
             menubar.addMenu(menu)
-            self.addAction(menu, "New", self.newClicked)
-            self.addAction(menu, "Open...", self.openClicked)
-            self.addAction(menu, "Save", self.saveClicked)
-            self.addAction(menu, "Save As...", self.saveAsClicked)
+            self.addAction(menu, T.i18n("New").decode('utf-8'), self.newClicked)
+            self.addAction(menu, T.i18n("Open...").decode('utf-8'), self.openClicked)
+            self.addAction(menu, T.i18n("Save").decode('utf-8'), self.saveClicked)
+            self.addAction(menu, T.i18n("Save As...").decode('utf-8'), self.saveAsClicked)
             self.editmenu = self.edit.createStandardContextMenu()
-            self.editmenu.setTitle("Edit")
+            self.editmenu.setTitle(T.i18nc("Menu", "Edit").decode('utf-8'))
             menubar.addMenu(self.editmenu)
-            menu = Qt.QMenu("Build", menubar)
+            menu = Qt.QMenu(T.i18nc("Menu", "Build").decode('utf-8'), menubar)
             menubar.addMenu(menu)
-            self.addAction(menu, "Compile", self.compileClicked)
-            self.addAction(menu, "Execute", self.executeClicked)
+            self.addAction(menu, T.i18n("Compile").decode('utf-8'), self.compileClicked)
+            self.addAction(menu, T.i18n("Execute").decode('utf-8'), self.executeClicked)
         def addAction(self, menu, text, func):
             action = Qt.QAction(text, self)
             Qt.QObject.connect(action, Qt.SIGNAL("triggered(bool)"), func)
@@ -85,7 +87,7 @@ class _ConsoleDocker(Qt.QWidget):
                 filename = self.filename
             else:
                 filename = _getHome()
-            filename = Qt.QFileDialog.getOpenFileName(self, "Open File", filename, "*.py;;*")
+            filename = Qt.QFileDialog.getOpenFileName(self, T.i18n("Open File").decode('utf-8'), filename, "*.py;;*")
             if filename:
                 try:
                     f = open(filename, "r")
@@ -93,7 +95,7 @@ class _ConsoleDocker(Qt.QWidget):
                     f.close()
                     self.filename = filename
                 except IOError, (errno, strerror):
-                    Qt.QMessageBox.critical(self, "Error", "<qt>Failed to open file \"%s\"<br><br>%s</qt>" % (filename,strerror))
+                    Qt.QMessageBox.critical(self, T.i18n("Error").decode('utf-8'), T.i18n("<qt>Failed to open file \"%1\"<br><br>%2</qt>", [filename], [strerror]).decode('utf-8'))
         def saveClicked(self, *args):
             if not self.filename:
                 self.saveAsClicked()
@@ -103,13 +105,13 @@ class _ConsoleDocker(Qt.QWidget):
                 f.write( "%s" % self.edit.toPlainText() )
                 f.close()
             except IOError, (errno, strerror):
-                qt.QMessageBox.critical(self, "Error", "<qt>Failed to save file \"%s\"<br><br>%s</qt>" % (self.filename,strerror))
+                qt.QMessageBox.critical(self, T.i18n("Error").decode('utf-8'), T.i18n("<qt>Failed to save file \"%1\"<br><br>%2</qt>", [self.filename], [strerror]).decode('utf-8'))
         def saveAsClicked(self, *args):
             if self.filename:
                 filename = self.filename
             else:
                 filename = _getHome()
-            filename = Qt.QFileDialog.getSaveFileName(self, "Save File", filename, "*.py;;*")
+            filename = Qt.QFileDialog.getSaveFileName(self, T.i18n("Save File").decode('utf-8'), filename, "*.py;;*")
             if filename:
                 self.filename = filename
                 self.saveClicked()
@@ -118,7 +120,7 @@ class _ConsoleDocker(Qt.QWidget):
             text = "%s" % self.edit.toPlainText()
             try:
                 compile(text, '', 'exec')
-                self.status.setText("Compiled! %s" % time.strftime('%H:%M.%S'))
+                self.status.setText(T.i18n("Compiled! %1", [time.strftime('%H:%M.%S')]).decode('utf-8'))
             except Exception, e:
                 self.status.setText("%s" % e)
                 traceback.print_exc(file=sys.stderr)
@@ -126,7 +128,7 @@ class _ConsoleDocker(Qt.QWidget):
             import time
             err = self.docker.execute("%s" % self.edit.toPlainText())
             if not err:
-                self.status.setText("Executed! %s" % time.strftime('%H:%M.%S'))
+                self.status.setText(T.i18n("Executed! %1", [time.strftime('%H:%M.%S')]).decode('utf-8'))
             else:
                 self.status.setText("%s" % err)
 
@@ -224,9 +226,9 @@ class _ConsoleDocker(Qt.QWidget):
         def headerData(self, section, orientation, role = 0):
             if role == Qt.Qt.DisplayRole:
                 if section == 0:
-                    return Qt.QVariant("Name")
+                    return Qt.QVariant(T.i18n("Name").decode('utf-8'))
                 if section == 1:
-                    return Qt.QVariant("Type")
+                    return Qt.QVariant(T.i18n("Type").decode('utf-8'))
             return Qt.QVariant()
 
     def __init__(self):
@@ -244,7 +246,7 @@ class _ConsoleDocker(Qt.QWidget):
         consoleLayout.setMargin(0)
         consoleLayout.setSpacing(0)
         consoleWidget.setLayout(consoleLayout)
-        self.pages.addTab(consoleWidget, "Console")
+        self.pages.addTab(consoleWidget, T.i18n("Console").decode('utf-8'))
 
         self.browser = Qt.QTextBrowser(consoleWidget)
         self.browser.setFrameShape(Qt.QFrame.NoFrame)
@@ -257,14 +259,14 @@ class _ConsoleDocker(Qt.QWidget):
         Qt.QObject.connect(self.edit.lineEdit(), Qt.SIGNAL("returnPressed()"), self.returnPressed)
         consoleLayout.addWidget(self.edit)
 
-        self.pages.addTab(_ConsoleDocker.Editor(self), "Editor")
+        self.pages.addTab(_ConsoleDocker.Editor(self), T.i18n("Editor").decode('utf-8'))
 
         inspWidget = Qt.QWidget(self)
         inspLayout = Qt.QVBoxLayout()
         inspLayout.setMargin(0)
         inspLayout.setSpacing(0)
         inspWidget.setLayout(inspLayout)
-        self.pages.addTab(inspWidget, "Inspect")
+        self.pages.addTab(inspWidget, T.i18n("Inspect").decode('utf-8'))
 
         self.treeFilter = Qt.QLineEdit(inspWidget)
         inspLayout.addWidget(self.treeFilter)

@@ -1,11 +1,13 @@
 [Desktop Entry]
 Type=Service
 Name=MS Project Import Filter
+Name[ca]=Filtre d'importació de MS Project
 Name[da]=MS Project-importfilter
 Name[de]=MS-Projekt-Importfilter
 Name[el]=Φίλτρο εισαγωγής MS Project
 Name[es]=Filtro de importación de MS Project
 Name[et]=MS Projecti impordifilter
+Name[fi]=MS Project -tuontisuodin
 Name[fr]=Filtre d'importation MS Project
 Name[gl]=Filtro de importación de MS Project
 Name[hu]=MS Projekt importszűrő

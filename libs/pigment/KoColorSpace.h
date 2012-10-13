@@ -257,16 +257,13 @@ public:
     virtual bool hasHighDynamicRange() const = 0;
 
 
-    //========== Display profiles =============================================//
+//========== Display profiles =============================================//
 
     /**
      * Return the profile of this color space.
      */
     virtual const KoColorProfile * profile() const = 0;
-    /**
-     * Return the profile of this color space.
-     */
-    virtual KoColorProfile * profile() = 0;
+
 
 //================= Conversion functions ==================================//
 
@@ -422,6 +419,18 @@ public:
      * are assumed to be 8-bits.
      */
     virtual void applyInverseAlphaU8Mask(quint8 * pixels, const quint8 * alpha, qint32 nPixels) const = 0;
+
+    /**
+     * Applies the specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyAlphaNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
+
+    /**
+     * Applies the inverted specified float alpha mask to the pixels. We assume that there are just
+     * as many alpha values as pixels but we do not check this; alpha values have to be between 0.0 and 1.0
+     */
+    virtual void applyInverseNormedFloatMask(quint8 * pixels, const float * alpha, qint32 nPixels) const = 0;
 
     /**
      * Create an adjustment object for adjusting the brightness and contrast

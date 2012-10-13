@@ -30,6 +30,7 @@
 #include "transaction.h"
 #include "cursor.h"
 #include "global.h"
+#include "calligradb_global.h"
 #include "roweditbuffer.h"
 #include "utils.h"
 #include "dbproperties.h"
@@ -140,7 +141,7 @@ public:
 
     inline void insertTable(TableSchema& tableSchema) {
         tables.insert(tableSchema.id(), &tableSchema);
-        tables_byname.insert(tableSchema.name().toLower(), &tableSchema);
+        tables_byname.insert(tableSchema.name(), &tableSchema);
     }
 
     /*! @internal. Inserts internal table to Connection's structures, so it can be found by name.
@@ -169,7 +170,7 @@ public:
 
     inline void renameTable(TableSchema& tableSchema, const QString& newName) {
         tables_byname.take(tableSchema.name());
-        tableSchema.setName(newName.toLower());
+        tableSchema.setName(newName);
         tables_byname.insert(tableSchema.name(), &tableSchema);
     }
 
@@ -1671,7 +1672,7 @@ bool Connection::createTable(KexiDB::TableSchema* tableSchema, bool replaceExist
     }
     const bool internalTable = dynamic_cast<InternalTableSchema*>(tableSchema);
 
-    const QString tableName = tableSchema->name().toLower();
+    const QString tableName = tableSchema->name();
 
     if (!internalTable) {
         if (m_driver->isSystemObjectName(tableName)) {
@@ -1926,8 +1927,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
         return false;
     }
     const QString oldTableName = tableSchema.name();
-    const QString newTableName = newName.toLower().trimmed();
-    if (oldTableName.toLower().trimmed() == newTableName) {
+    const QString newTableName = newName.trimmed();
+    if (oldTableName.trimmed() == newTableName) {
         setError(ERR_OBJECT_THE_SAME, i18n("Could not rename table \"%1\" using the same name.",
                                            newTableName));
         return false;
@@ -2393,6 +2394,10 @@ bool Connection::setupObjectSchemaData(const RecordData &data, SchemaData &sdata
     //deleteCursor(cursor);
     //return 0;
 // }
+    if (data.count() < 5) {
+        KexiDBWarn << "Aborting, schema data should have 5 elements, found" << data.count();
+        return false;
+    }
     bool ok;
     sdata.m_id = data[0].toInt(&ok);
     if (!ok) {
@@ -2425,7 +2430,7 @@ tristate Connection::loadObjectSchemaData(int objectType, const QString& objectN
     RecordData data;
     if (true != querySingleRecord(QString::fromLatin1("SELECT o_id, o_type, o_name, o_caption, o_desc "
                                   "FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
-                                  .arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName.toLower())), data))
+                                  .arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName)), data))
         return cancelled;
     return setupObjectSchemaData(data, sdata);
 }
@@ -2499,7 +2504,7 @@ tristate Connection::querySingleRecordInternal(RecordData &data, const QString* 
     if (!cursor->moveFirst()
             || cursor->eof()
             || !cursor->storeCurrentRow(data)) {
-        const tristate result = cursor->error() ? false : cancelled;
+        const tristate result = cursor->error() ? tristate(false) : tristate(cancelled);
         KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() || cursor->storeCurrentRow(data) m_sql=" << m_sql;
         setError(cursor);
         deleteCursor(cursor);
@@ -2536,7 +2541,7 @@ tristate Connection::querySingleString(const QString& sql, QString &value, uint 
         return false;
     }
     if (!cursor->moveFirst() || cursor->eof()) {
-        const tristate result = cursor->error() ? false : cancelled;
+        const tristate result = cursor->error() ? tristate(false) : tristate(cancelled);
         KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() " << m_sql;
         deleteCursor(cursor);
         return result;
@@ -2742,12 +2747,14 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
                 extendedTableSchemaMainEl, extendedTableSchemaFieldEl, extendedTableSchemaStringIsEmpty,
                 /*custom*/true);
         }
+
         // save lookup table specification, if present
         LookupFieldSchema *lookupFieldSchema = tableSchema.lookupFieldSchema(*f);
         if (lookupFieldSchema) {
             createExtendedTableSchemaFieldElementIfNeeded(
-                doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl, false/* !append */);
-            LookupFieldSchema::saveToDom(*lookupFieldSchema, doc, extendedTableSchemaFieldEl);
+                doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl,
+                false/* !append */);
+            lookupFieldSchema->saveToDom(&doc, &extendedTableSchemaFieldEl);
 
             if (extendedTableSchemaFieldEl.hasChildNodes()) {
                 // this element provides the definition, so let's append it now
@@ -2756,18 +2763,19 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
                 extendedTableSchemaMainEl.appendChild(extendedTableSchemaFieldEl);
             }
         }
+        //KexiDBDbg << doc.toString(1);
     }
 
     // Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
     if (extendedTableSchemaStringIsEmpty) {
-#ifdef KEXI_DEBUG_GUI
-        KexiDB::addAlterTableActionDebug(QString("** Extended table schema REMOVED."));
+#ifdef CALLIGRADB_DEBUG_GUI
+        KexiDB::alterTableActionDebugGUI(QString("** Extended table schema REMOVED."));
 #endif
         if (!removeDataBlock(tableSchema.id(), "extended_schema"))
             return false;
     } else {
-#ifdef KEXI_DEBUG_GUI
-        KexiDB::addAlterTableActionDebug(QString("** Extended table schema set to:\n") + doc.toString(4));
+#ifdef CALLIGRADB_DEBUG_GUI
+        KexiDB::alterTableActionDebugGUI(QString("** Extended table schema set to:\n") + doc.toString(4));
 #endif
         if (!storeDataBlock(tableSchema.id(), doc.toString(1), "extended_schema"))
             return false;
@@ -2869,7 +2877,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
                     } else if (propEl.tagName() == "lookup-column") {
                         LookupFieldSchema *lookupFieldSchema = LookupFieldSchema::loadFromDom(propEl);
                         if (lookupFieldSchema) {
-                            lookupFieldSchema->debug();
+                            lookupFieldSchema->debug(f->name());
                             tableSchema.setLookupFieldSchema(f->name(), lookupFieldSchema);
                         }
                     }
@@ -2912,7 +2920,8 @@ KexiDB::Field* Connection::setupField(const RecordData &data)
     if (!ok)
         return 0;
 
-    if (!KexiDB::isIdentifier(data.at(2).toString())) {
+    QString name(data.at(2).toString().toLower());
+    if (!KexiDB::isIdentifier(name)) {
         setError(ERR_INVALID_IDENTIFIER, i18n("Invalid object name \"%1\"",
                                               data.at(2).toString()));
         ok = false;
@@ -3676,9 +3685,10 @@ tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema
 //Qt4??? QSet<Connection::TableSchemaChangeListenerInterface*>::ConstIterator tmpListeners(*listeners); //safer copy
     tristate res = true;
     //try to close every window
-    for (QSet<Connection::TableSchemaChangeListenerInterface*>::ConstIterator it(listeners->constBegin());
-            it != listeners->constEnd() && res == true; ++it) {
-        res = (*it)->closeListener();
+    QList<Connection::TableSchemaChangeListenerInterface*> list(listeners->toList());
+    KexiDBDbg << list.count();
+    foreach (Connection::TableSchemaChangeListenerInterface* listener, list) {
+        res = listener->closeListener();
     }
     return res;
 }

@@ -501,7 +501,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
     // User data storage
     KexiDB::InternalTableSchema *t_userdata = new KexiDB::InternalTableSchema("kexi__userdata");
     t_userdata->addField(new KexiDB::Field("d_user", KexiDB::Field::Text, KexiDB::Field::NotNull))
-        .addField(new KexiDB::Field("o_id", KexiDB::Field::Integer, KexiDB::Field::Unsigned | KexiDB::Field::NotNull))
+        .addField(new KexiDB::Field("o_id", KexiDB::Field::Integer, KexiDB::Field::NotNull, KexiDB::Field::Unsigned))
         .addField(new KexiDB::Field("d_sub_id", KexiDB::Field::Text, KexiDB::Field::NotNull | KexiDB::Field::NotEmpty))
         .addField(new KexiDB::Field("d_data", KexiDB::Field::LongText));
 
@@ -745,9 +745,8 @@ KexiProject::itemForClass(const QString &partClass, const QString &name)
         kWarning() << "no part class=" << partClass;
         return 0;
     }
-    const QString nameToLower(name.toLower());
     foreach(KexiPart::Item *item, *dict) {
-        if (item->name().toLower() == nameToLower)
+        if (item->name() == name)
             return item;
     }
     kWarning() << "no name=" << name;
@@ -760,9 +759,8 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
     KexiPart::ItemDict *dict = items(i);
     if (!dict)
         return 0;
-    const QString l_name = name.toLower();
     foreach(KexiPart::Item* item, *dict) {
-        if (item->name().toLower() == l_name)
+        if (item->name() == name)
             return item;
     }
     return 0;
@@ -988,12 +986,12 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
     }
     QSet<QString> storedItemNames;
     foreach(KexiPart::Item* item, *dict) {
-        storedItemNames.insert(item->name().toLower());
+        storedItemNames.insert(item->name());
     }
 
     QSet<QString> unstoredItemNames;
     foreach(KexiPart::Item* item, d->unstoredItems) {
-        unstoredItemNames.insert(item->name().toLower());
+        unstoredItemNames.insert(item->name());
     }
 
     //find new, unique default name for this item
@@ -1103,7 +1101,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
 {
     if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0,
             i18n("Do you want to drop the project \"%1\"?",
-                 static_cast<const KexiDB::SchemaData*>(&data)->objectName()) + "\n" + i18n(warningNoUndo)))
+                 static_cast<const KexiDB::SchemaData*>(&data)->name()) + "\n" + i18n(warningNoUndo)))
         return cancelled;
 
     KexiProject prj(data, handler);

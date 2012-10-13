@@ -58,7 +58,7 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWConfigureDialog.cpp
 
     dockers/KWStatisticsDocker.cpp
-    dockers/KWStatistics.cpp
+    dockers/KWStatisticsWidget.cpp
     dockers/StatisticsPreferencesPopup.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
@@ -93,7 +93,6 @@ kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
     dialogs/KWInsertImage.ui
-    dockers/KWStatisticsDocker.ui
     dockers/StatisticsPreferencesPopup.ui
     pagetool/SimpleSetupWidget.ui
     pagetool/SimpleHeaderFooterWidget.ui

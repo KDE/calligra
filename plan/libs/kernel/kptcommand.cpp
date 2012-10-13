@@ -2793,6 +2793,24 @@ void ModifyScheduleManagerSchedulerCmd::unexecute()
     m_sm.setSchedulerPlugin( oldvalue );
 }
 
+ModifyScheduleManagerSchedulingGranularityCmd::ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    oldvalue( sm.granularity() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerSchedulingGranularityCmd::execute()
+{
+    m_sm.setGranularity( newvalue );
+}
+
+void ModifyScheduleManagerSchedulingGranularityCmd::unexecute()
+{
+    m_sm.setGranularity( oldvalue );
+}
+
 CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager *sm, const QString& name )
     : NamedCommand( name ),
     m_node( node ),

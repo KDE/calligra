@@ -43,6 +43,7 @@ struct StyleInfo {
     QString parent;
     bool isDefaultStyle;
 
+    int  defaultOutlineLevel;
     bool shouldBreakChapter;
     bool inUse;
 
@@ -53,10 +54,19 @@ struct StyleInfo {
 class OdtHtmlConverter
 {
  public:
+    struct ConversionOptions {
+        bool  stylesInCssFile;  // True if the css should go into a separate file
+        bool  doBreakIntoChapters; // True if the output should be broken into chapters.
+        bool  useMobiConventions;  // True if Mobi is using the convention.
+                                   // to handle img tag and for handle indention
+                                   // and dont write meta and link tag in html head.
+    };
+
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
     KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
+                                              ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
                                               QHash<QString, QSizeF> &images);
@@ -119,9 +129,15 @@ class OdtHtmlConverter
     FileCollector *m_collector;
 
     // Some variables used while creating the HTML contents.
+    QByteArray   m_cssContent;
     QByteArray   m_htmlContent;
     QBuffer     *m_outBuf;
     KoXmlWriter *m_htmlWriter;
+
+    // Options for the conversion process
+    // FIXME: This should go into an Options struct together with some
+    //        others from FileConversion.h.
+    ConversionOptions  *m_options;
 
     QHash<QString, StyleInfo*> m_styles;
 
@@ -166,6 +182,25 @@ class OdtHtmlConverter
     //
     QHash<QString, KoXmlElement> m_footNotes;
     QHash<QString, KoXmlElement> m_endNotes;
+
+    // specifice valuse for mobi.
+
+    // The format is QHash<QString source, int index>
+    // In mobi we save images with index and as we can have repeated
+    // images we need a hash.
+    // e.g img tag format in mobi <img recindex="0004">
+    QHash<QString, int> m_imagesIndex;
+
+    int m_imgIndex;
+
+    // In mobi we dont need indentation.
+    bool m_doIndent;
+
+    // Format: QHash<Qstring anchor, qint64 anchor position>
+    QHash<QString, qint64> m_mobiInternalLinks;
+
+    //
+
 };
 
 #endif // ODTHTMLCONVERTER_H
