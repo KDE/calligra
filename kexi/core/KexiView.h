@@ -102,6 +102,8 @@ public:
 
     void addChildView(KexiView* childView);
 
+    void removeView(Kexi::ViewMode mode);
+
     /*! True if contents (data) of the view is dirty and need to be saved
      This may or not be used, depending if changes in the window
      are saved immediately (e.g. like in datatableview) or saved by hand (by user)
