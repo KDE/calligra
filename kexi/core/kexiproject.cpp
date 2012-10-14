@@ -732,6 +732,13 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
     KexiPart::ItemDict *dict = items(info);
     item->setNeverSaved(false);
     d->unstoredItems.remove(item); //no longer unstored
+
+    // are we replacing previous item?
+    KexiPart::Item *prevItem = dict->take(item->identifier());
+    if (prevItem) {
+        emit itemRemoved(*prevItem);
+    }
+
     dict->insert(item->identifier(), item);
     //let's update e.g. navigator
     emit newItemStored(*item);

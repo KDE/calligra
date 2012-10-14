@@ -80,7 +80,9 @@ public:
      * \return The matching \a KexiDB::SchemaData instance or NULL
      *        if storing failed.
      */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
     /**
      * Try to store the modified data in the already opened and

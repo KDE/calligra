@@ -60,6 +60,8 @@ ELSE (KEXI_MOBILE)
     kexiprjtypeselector.cpp
     KexiConnectionSelectorWidget.cpp
     KexiFileWidget.cpp
+    KexiNameWidget.cpp
+    KexiNameDialog.cpp
   )
   kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
     KexiConnectionSelector.ui

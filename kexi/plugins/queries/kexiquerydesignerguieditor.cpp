@@ -702,7 +702,9 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 
 
 KexiDB::SchemaData*
-KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata,
+                                         KexiView::StoreNewDataOptions options,
+                                         bool &cancel)
 {
     if (!d->dataTable->dataAwareObject()->acceptRowEdit()) {
         cancel = true;
@@ -722,6 +724,9 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 
     bool ok = d->conn->storeObjectSchemaData(
                   *temp->query(), true /*newObject*/);
+    if (ok) {
+        ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(temp->query()->id()); // for sanity
+    }
     window()->setId(temp->query()->id());
 
     if (ok)

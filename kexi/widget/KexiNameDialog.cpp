@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexinamedialog.h"
+#include "KexiNameDialog.h"
+#include "KexiNameWidget.h"
+#include <core/kexipartinfo.h>
+#include <db/connection.h>
+#include <kexi_global.h>
+
 #include <KIconLoader>
+#include <KMessageBox>
+#include <KDebug>
+
 #include <QGridLayout>
 #include <QLabel>
 
@@ -49,6 +57,8 @@ KexiNameDialog::~KexiNameDialog()
 
 void KexiNameDialog::init()
 {
+    m_checkIfObjectExists = false;
+    m_allowOverwriting = false;
     setButtons(Ok | Cancel | Help);
     QGridLayout *lyr = new QGridLayout(mainWidget());
     m_icon = new QLabel(mainWidget());
@@ -93,10 +103,57 @@ void KexiNameDialog::slotTextChanged()
     enableButtonOk(enable);
 }
 
+bool KexiNameDialog::canOverwrite()
+{
+    KexiDB::SchemaData tmp_sdata;
+    tristate result = m_project->dbConnection()->loadObjectSchemaData(
+                          m_project->idForClass(m_part->info()->partClass()),
+                          widget()->nameText(), tmp_sdata);
+    kDebug() << (result == cancelled) << (result == 2) << (result == false) << (result == true) << ~result;
+    if (result == cancelled) {
+        return true;
+    }
+    if (result == false) {
+        kWarning() << "Cannot load object schema data for" << widget()->nameText();
+        return false;
+    }
+    if (!m_allowOverwriting) {
+        KMessageBox::information(this,
+                                 "<p>" + m_part->i18nMessage("Object \"%1\" already exists.", 0)
+                                             .subs(widget()->nameText()).toString()
+                                 + "</p><p>" + i18n("Please choose other name.") + "</p>");
+        return false;
+    }
+
+    QString msg =
+        "<p>" + m_part->i18nMessage("Object \"%1\" already exists.", 0)
+                    .subs(widget()->nameText()).toString()
+        + "</p><p>" + i18n("Do you want to replace it?") + "</p>";
+    KGuiItem yesItem(KStandardGuiItem::yes());
+    yesItem.setText(i18n("&Replace"));
+    yesItem.setToolTip(i18n("Replace object"));
+    int res = KMessageBox::warningYesNo(
+                  this, msg, QString(),
+                  yesItem, KGuiItem(i18n("&Choose Other Name...")),
+                  QString(),
+                  KMessageBox::Notify | KMessageBox::Dangerous);
+    if (m_overwriteNeeded && res == KMessageBox::Yes) {
+        *m_overwriteNeeded = true;
+    }
+    return res == KMessageBox::Yes;
+}
+
 void KexiNameDialog::accept()
 {
     if (!m_widget->checkValidity())
         return;
+
+    if (m_checkIfObjectExists && m_project) {
+        if (!canOverwrite()) {
+            return;
+        }
+    }
+
     KDialog::accept();
 }
 
@@ -112,4 +169,33 @@ void KexiNameDialog::showEvent(QShowEvent * event)
     KDialog::showEvent(event);
 }
 
-#include "kexinamedialog.moc"
+KexiNameWidget* KexiNameDialog::widget() const
+{
+    return m_widget;
+}
+
+int KexiNameDialog::execAndCheckIfObjectExists(const KexiProject &project,
+                                               const KexiPart::Part &part,
+                                               bool *overwriteNeeded)
+{
+    m_project = &project;
+    m_part = &part;
+    m_checkIfObjectExists = true;
+    m_overwriteNeeded = overwriteNeeded;
+    if (m_overwriteNeeded) {
+        *m_overwriteNeeded = false;
+    }
+    int res = exec();
+    m_project = 0;
+    m_part = 0;
+    m_checkIfObjectExists = false;
+    m_overwriteNeeded = 0;
+    return res;
+}
+
+void KexiNameDialog::setAllowOverwriting(bool set)
+{
+    m_allowOverwriting = set;
+}
+
+#include "KexiNameDialog.moc"
