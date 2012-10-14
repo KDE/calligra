@@ -193,7 +193,9 @@ protected:
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
     */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
     /*! Reimplemented from KexiView, because table storage is more complex.
      Table schema altering may be required, so just buildSchema() is used to create a new schema.

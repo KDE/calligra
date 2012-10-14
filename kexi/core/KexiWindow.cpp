@@ -308,7 +308,7 @@ void KexiWindow::addView(KexiView *view)
 
 void KexiWindow::addView(KexiView *view, Kexi::ViewMode mode)
 {
-    const int idx = d->stack->addWidget(view);
+    d->stack->addWidget(view);
     d->views.insert(mode, view);
 
     //set focus proxy inside this view
@@ -828,7 +828,7 @@ bool KexiWindow::neverSaved() const
     return d->item ? d->item->neverSaved() : true;
 }
 
-tristate KexiWindow::storeNewData()
+tristate KexiWindow::storeNewData(KexiView::StoreNewDataOptions options)
 {
     if (!neverSaved())
         return false;
@@ -846,8 +846,17 @@ tristate KexiWindow::storeNewData()
     sdata.setCaption(d->item->caption());
     sdata.setDescription(d->item->description());
 
+    KexiPart::Item* existingItem = project->item(part()->info(), sdata.name());
+    if (existingItem && !(options & KexiView::OverwriteExistingObject)) {
+        KMessageBox::information(this,
+                                 i18n("Could not create new object.")
+                                 + part()->i18nMessage("Object \"%1\" already exists.", this)
+                                   .subs(sdata.name()).toString());
+        return false;
+    }
+
     bool cancel = false;
-    d->schemaData = v->storeNewData(sdata, cancel);
+    d->schemaData = v->storeNewData(sdata, options, cancel);
     if (cancel)
         return cancelled;
     if (!d->schemaData) {

@@ -216,7 +216,7 @@ public slots:
      form part item. On success, part item's ID is updated to new value,
      and schema data is set. \sa schemaData().
      \return true on success, false on failure and cancelled when storing has been cancelled. */
-    tristate storeNewData();
+    tristate storeNewData(KexiView::StoreNewDataOptions options = 0);
 
     /*! Reimplemented - we're informing the current view about performed
      detaching by calling KexiView::parentDialogDetached(), so the view
@@ -324,4 +324,3 @@ private:
 };
 
 #endif
-

@@ -281,7 +281,8 @@ public slots:
 
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part,
-                                      bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
+                                      bool allowOverwriting, bool *overwriteNeeded,
+                                      const QString& messageWhenAskingForName = QString());
 
     /*! Implemented for KexiMainWindow */
     virtual void highlightObject(const QString& partClass, const QString& name);

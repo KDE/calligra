@@ -359,13 +359,20 @@ void KexiView::setDirty(bool set)
   return true;
 }*/
 
-KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata, bool & /*cancel*/)
+KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
+                                           KexiView::StoreNewDataOptions options,
+                                           bool &cancel)
 {
+    Q_UNUSED(options)
+    Q_UNUSED(cancel)
     KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
     *new_schema = sdata;
 
     if (!KexiMainWindowIface::global()->project()->dbConnection()
-            ->storeObjectSchemaData(*new_schema, true)) {
+            ->storeObjectSchemaData(*new_schema, true)
+        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
+       )
+    {
         delete new_schema;
         new_schema = 0;
     }

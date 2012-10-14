@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexinamewidget.h"
+#include "KexiNameWidget.h"
 
 #include <QLabel>
 #include <QGridLayout>
@@ -190,7 +190,7 @@ QString KexiNameWidget::captionText() const
 
 QString KexiNameWidget::nameText() const
 {
-    return le_name->text().toLower();
+    return le_name->text();
 }
 
 bool KexiNameWidget::checkValidity()
@@ -246,5 +246,4 @@ void KexiNameWidget::addNameSubvalidator(Validator* validator, bool owned)
   return false;
 }*/
 
-#include "kexinamewidget.moc"
-
+#include "KexiNameWidget.moc"

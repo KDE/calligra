@@ -23,7 +23,9 @@
 #include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-#include <klineedit.h>
+#include <KLineEdit>
+
+#include <kexi_export.h>
 
 namespace KexiUtils
 {
@@ -31,7 +33,7 @@ class Validator;
 class MultiValidator;
 }
 
-class KexiNameWidget : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiNameWidget : public QWidget
 {
     Q_OBJECT
 

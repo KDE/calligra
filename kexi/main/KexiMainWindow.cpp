@@ -103,6 +103,8 @@
 #include <widget/navigator/KexiProjectNavigator.h>
 #include <widget/navigator/KexiProjectModel.h>
 #include <widget/KexiFileWidget.h>
+#include <widget/KexiNameDialog.h>
+#include <widget/KexiNameWidget.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -112,7 +114,6 @@
 #include "startup/KexiWelcomeAssistant.h"
 #include "startup/KexiImportExportAssistant.h"
 #include "startup/KexiStartupDialog.h"
-#include "kexinamedialog.h"
 
 #include <KoIcon.h>
 
@@ -2940,7 +2941,7 @@ void KexiMainWindow::slotViewTextMode()
 
 tristate KexiMainWindow::getNewObjectInfo(
     KexiPart::Item *partItem, KexiPart::Part *part,
-    bool& allowOverwriting, const QString& messageWhenAskingForName)
+    bool allowOverwriting, bool *overwriteNeeded, const QString& messageWhenAskingForName)
 {
     //data was never saved in the past -we need to create a new object at the backend
     KexiPart::Info *info = part->info();
@@ -2957,53 +2958,13 @@ tristate KexiMainWindow::getNewObjectInfo(
     d->nameDialog->widget()->setNameText(partItem->name());
     d->nameDialog->setWindowTitle(i18n("Save Object As"));
     d->nameDialog->setDialogIcon(info->itemIconName());
-    allowOverwriting = false;
-    bool found;
-    do {
-        if (d->nameDialog->exec() != QDialog::Accepted)
-            return cancelled;
-        //check if that name already exists
-        KexiDB::SchemaData tmp_sdata;
-        tristate result = project()->dbConnection()->loadObjectSchemaData(
-                              project()->idForClass(info->partClass()),
-                              d->nameDialog->widget()->nameText(), tmp_sdata);
-        if (!result)
-            return false;
-        found = result == true;
-        if (found) {
-            if (allowOverwriting) {
-                int res = KMessageBox::warningYesNoCancel(this,
-                          "<p>"
-                          + part->i18nMessage("Object \"%1\" already exists.", 0)
-                          .subs(d->nameDialog->widget()->nameText()).toString()
-                          + "</p><p>" + i18n("Do you want to replace it?") + "</p>",
-                          QString(),
-                          KGuiItem(i18n("&Replace"), koIconName("button_yes")),
-                          KGuiItem(i18n("&Choose Other Name...")),
-                          KStandardGuiItem::cancel(),
-                          QString(),
-                          KMessageBox::Notify | KMessageBox::Dangerous);
-                if (res == KMessageBox::No)
-                    continue;
-                else if (res == KMessageBox::Cancel)
-                    return cancelled;
-                else {//yes
-                    allowOverwriting = true;
-                    break;
-                }
-            } else {
-                KMessageBox::information(this,
-                                         "<p>"
-                                         + part->i18nMessage("Object \"%1\" already exists.", 0)
-                                         .subs(d->nameDialog->widget()->nameText()).toString()
-                                         + "</p><p>" + i18n("Please choose other name.") + "</p>");
-//    " For example: Table \"my_table\" already exists" ,
-//    "%1 \"%2\" already exists.\nPlease choose other name.")
-//    .arg(dlg->part().componentName()).arg(d->nameDialog->widget()->nameText()));
-                continue;
-            }
-        }
-    } while (found);
+    d->nameDialog->setAllowOverwriting(allowOverwriting);
+
+    if (d->nameDialog->execAndCheckIfObjectExists(*project(), *part, overwriteNeeded)
+        != QDialog::Accepted)
+    {
+        return cancelled;
+    }
 
     //update name and caption
     partItem->setName(d->nameDialog->widget()->nameText());
@@ -3026,13 +2987,17 @@ tristate KexiMainWindow::saveObject(KexiWindow *window, const QString& messageWh
 
     const int oldItemID = window->partItem()->identifier();
 
-    bool allowOverwriting = false;
-    res = getNewObjectInfo(window->partItem(), window->part(), allowOverwriting,
-                           messageWhenAskingForName);
+    bool overwriteNeeded;
+    res = getNewObjectInfo(window->partItem(), window->part(), true /*allowOverwriting*/,
+                           &overwriteNeeded, messageWhenAskingForName);
     if (res != true)
         return res;
 
-    res = window->storeNewData();
+    KexiView::StoreNewDataOptions storeNewDataOptions;
+    if (overwriteNeeded) {
+        storeNewDataOptions |= KexiView::OverwriteExistingObject;
+    }
+    res = window->storeNewData(storeNewDataOptions);
     if (~res)
         return cancelled;
     if (!res) {
