@@ -18,6 +18,7 @@
 
 #include "FiltersCategoryModel.h"
 #include "FiltersModel.h"
+#include <PropertyContainer.h>
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -258,6 +259,46 @@ void FiltersCategoryModel::setPreviewEnabled(bool enabled)
             d->node.clear();
         }
     }
+}
+
+int FiltersCategoryModel::categoryIndexForConfig(QObject* config)
+{
+    PropertyContainer* configuration = qobject_cast<PropertyContainer*>(config);
+    if(!configuration)
+        return -1;
+    FiltersModel* model = 0;
+    int i = 0;
+    while(model == 0 && i < d->categories.count())
+    {
+        FiltersModel* cat = d->categories.at(i);
+        // i know there's no check here - but a category is not created unless there
+        // is something to put in it
+        for(int j = 0; j < cat->rowCount(); ++j)
+        {
+            if(cat->filter(j)->id() == configuration->name())
+                return i;
+        }
+        ++i;
+    }
+    return -1;
+}
+
+int FiltersCategoryModel::filterIndexForConfig(int categoryIndex, QObject* filterConfig)
+{
+    PropertyContainer* configuration = qobject_cast<PropertyContainer*>(filterConfig);
+    if(!configuration)
+        return -1;
+    if(categoryIndex < 0 || categoryIndex > d->categories.count() - 1)
+        return -1;
+    FiltersModel* cat = d->categories.at(categoryIndex);
+    // i know there's no check here - but a category is not created unless there
+    // is something to put in it
+    for(int j = 0; j < cat->rowCount(); ++j)
+    {
+        if(cat->filter(j)->id() == configuration->name())
+            return j;
+    }
+    return -1;
 }
 
 #include "FiltersCategoryModel.moc"

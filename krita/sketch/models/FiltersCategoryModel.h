@@ -50,6 +50,9 @@ public:
     void setPreviewEnabled(bool enabled);
     Q_INVOKABLE void filterSelected(int index);
 
+    Q_INVOKABLE int categoryIndexForConfig(QObject* config);
+    Q_INVOKABLE int filterIndexForConfig(int categoryIndex, QObject* filterConfig);
+
 Q_SIGNALS:
     void viewChanged();
     void filterModelChanged();
