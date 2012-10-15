@@ -24,6 +24,17 @@ Item {
     id: base;
     anchors.fill: parent;
     property QtObject layersModel: undefined;
+    property bool isInitialised: false;
+    onLayersModelChanged: {
+        var filterConfig = layersModel.activeFilterConfig;
+        if(filterConfig !== null) {
+            var categoryIndex = filtersCategoryModel.categoryIndexForConfig(filterConfig);
+            var filterIndex = filtersCategoryModel.filterIndexForConfig(categoryIndex, filterConfig);
+            filtersCategoryList.currentIndex = categoryIndex;
+            fullFilters.currentIndex = filterIndex;
+            base.isInitialised = true;
+        }
+    }
     // tile goes here
 
     CompositeOpModel {
@@ -92,20 +103,24 @@ Item {
             layersModel.activeFilterConfig = configuration;
         }
         onCurrentIndexChanged: {
-            layersModel.activeFilterConfig = model.configuration(currentIndex);
-            if(model.filterRequiresConfiguration(currentIndex)) {
-                noConfigNeeded.visible = false;
-                configNeeded.visible = true;
-                configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
-                if(configLoader.item && typeof(configLoader.item.configuration) !== 'undefined') {
-                    configLoader.item.configuration = layersModel.activeFilterConfig;
+            if(layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") {
+                if(base.isInitialised) {
+                    layersModel.activeFilterConfig = model.configuration(currentIndex);
                 }
+                if(model.filterRequiresConfiguration(currentIndex)) {
+                    noConfigNeeded.visible = false;
+                    configNeeded.visible = true;
+                    configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
+                    if(configLoader.item && typeof(configLoader.item.configuration) !== 'undefined') {
+                        configLoader.item.configuration = layersModel.activeFilterConfig;
+                    }
+                }
+                else {
+                    noConfigNeeded.visible = true;
+                    configNeeded.visible = false;
+                }
+                filtersCategoryModel.filterSelected(currentIndex);
             }
-            else {
-                noConfigNeeded.visible = true;
-                configNeeded.visible = false;
-            }
-            filtersCategoryModel.filterSelected(currentIndex);
         }
     }
     RangeInput {
@@ -303,6 +318,7 @@ Item {
     }
     Item {
         id: noConfigNeeded;
+        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
         anchors {
            top: lockedChannelsRow.bottom;
            left: parent.left;
@@ -343,6 +359,7 @@ Item {
     }
     Flickable {
         id: configNeeded;
+        visible: layersModel ? (layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") : false;
         anchors {
            top: lockedChannelsRow.bottom;
            left: parent.left;
