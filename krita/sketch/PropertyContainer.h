@@ -32,13 +32,17 @@ class PropertyContainer : public QObject
 {
     Q_OBJECT
 public:
-    PropertyContainer(QObject* parent = 0);
+    PropertyContainer(QString name, QObject* parent = 0);
     virtual ~PropertyContainer();
 
     // As QObject already as setProperty and property() functions, we must
     // name ours differently
     Q_INVOKABLE void writeProperty(QString name, QVariant value);
     Q_INVOKABLE QVariant readProperty(QString name);
+
+    Q_INVOKABLE QString name();
+private:
+    QString m_name;
 };
 
 #endif // PROPERTYCONTAINER_H

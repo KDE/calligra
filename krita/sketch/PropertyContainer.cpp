@@ -18,8 +18,9 @@
 
 #include "PropertyContainer.h"
 
-PropertyContainer::PropertyContainer(QObject* parent)
-    : QObject(parent)
+PropertyContainer::PropertyContainer(QString name, QObject* parent)
+    : m_name(name)
+    , QObject(parent)
 {
 }
 
@@ -35,4 +36,9 @@ void PropertyContainer::writeProperty(QString name, QVariant value)
 QVariant PropertyContainer::readProperty(QString name)
 {
     return property(name.toAscii());
+}
+
+QString PropertyContainer::name()
+{
+    return m_name;
 }
