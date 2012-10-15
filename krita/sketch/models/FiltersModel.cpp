@@ -149,10 +149,10 @@ void FiltersModel::setView(QObject* newView)
 
 QObject* FiltersModel::configuration(int index)
 {
-    QObject* config = new PropertyContainer(this);
     // If index is out of bounds, return /something/ for the object work on at least.
     if(index < 0 || index > d->configurations.count() - 1)
-        return config;
+        return new PropertyContainer("", this);
+    QObject* config = new PropertyContainer(d->filters[index]->id(), this);
     // If we've not got one already, assign the default configuration to the cache
     if(!d->configurations[index])
         d->configurations[index] = d->filters[index]->defaultConfiguration(d->view->activeNode()->original());
