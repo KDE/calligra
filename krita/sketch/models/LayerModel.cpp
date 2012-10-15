@@ -637,6 +637,7 @@ void LayerModel::notifyImageDeleted()
 
 void LayerModel::emitActiveChanges()
 {
+    emit activeFilterConfigChanged();
     emit activeNameChanged();
     emit activeTypeChanged();
     emit activeCompositeOpChanged();
@@ -889,17 +890,24 @@ void LayerModel::setActiveRChannelLocked(bool newLocked)
 
 QObject* LayerModel::activeFilterConfig() const
 {
-    KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
-    PropertyContainer* config = new PropertyContainer();
     QMap<QString, QVariant> props;
+    QString filterId;
+    KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
     if(filterMask)
+    {
         props = filterMask->filter()->getProperties();
+        filterId = filterMask->filter()->name();
+    }
     else
     {
         KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
         if(adjustmentLayer)
+        {
             props = adjustmentLayer->filter()->getProperties();
+            filterId = adjustmentLayer->filter()->name();
+        }
     }
+    PropertyContainer* config = new PropertyContainer(filterId, 0);
     QMap<QString, QVariant>::const_iterator i;
     for(i = props.constBegin(); i != props.constEnd(); ++i)
     {
