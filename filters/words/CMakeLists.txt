@@ -57,7 +57,6 @@ IF( NOT TINY )
     macro_log_feature(LIBWPS_FOUND "LibWPS" "Microsoft Works Document Library" "http://libwps.sourceforge.net/" FALSE "" "Required by the Words WPS import filter")
 
     add_subdirectory( applixword )
-    add_subdirectory( html-odf )
     if(WPD_FOUND AND WPG_FOUND)
         add_subdirectory( wordperfect )
     endif(WPD_FOUND AND WPG_FOUND)
