@@ -118,6 +118,8 @@ PageStack {
                 placeholder: "Width";
                 text: base.parent.width;
                 validator: IntValidator{bottom: 0; top: 10000;}
+                numeric: true;
+                nextFocus: height;
             }
             TextField {
                 id: height;
@@ -125,6 +127,8 @@ PageStack {
                 placeholder: "Height"
                 text: base.parent.height;
                 validator: IntValidator{bottom: 0; top: 10000;}
+                numeric: true;
+                nextFocus: resolution;
             }
             TextField {
                 id: resolution;
@@ -132,6 +136,7 @@ PageStack {
                 placeholder: "Resolution"
                 text: "72";
                 validator: IntValidator{bottom: 0; top: 600;}
+                numeric: true;
             }
             //Item { width: parent.width; height: Constants.GridHeight; }
             Row {
@@ -147,7 +152,7 @@ PageStack {
                     color: "transparent";
                     image: "../images/svg/icon-apply-green.svg";
                     onClicked: {
-                        if(width.text != "" && height.text != "" && resolution.text != "") {
+                        if(width.acceptableInput && height.acceptableInput && resolution.acceptableInput) {
                             Settings.currentFile = Krita.ImageBuilder.createBlankImage(parseInt(width.text), parseInt(height.text), parseInt(resolution.text));
                             Settings.temporaryFile = true;
                             base.clicked();
