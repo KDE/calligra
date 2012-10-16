@@ -26,10 +26,15 @@ Item {
     property alias text: input.text;
     property alias placeholder: placeholder.text;
     property alias validator: input.validator;
+    property alias inputMask: input.inputMask;
+    property alias acceptableInput: input.acceptableInput;
 
     property alias background: fill.color;
     property alias border: fill.border;
     property alias radius: fill.radius;
+
+    property alias numeric: input.numeric;
+    property alias nextFocus: input.nextFocus;
 
     signal focusLost();
     signal accepted();
@@ -43,7 +48,7 @@ Item {
             anchors.fill: parent;
 
             border.width: 2;
-            border.color: "silver";
+            border.color: input.acceptableInput ? "silver" : "red";
             color: "#63ffffff";
 
             radius: height / 2;
@@ -61,6 +66,10 @@ Item {
 
             TextInput {
                 id: input;
+
+                property bool numeric: false;
+                property Item nextFocus: null;
+
                 anchors {
                     left: parent.left;
                     leftMargin: base.height / 4;
