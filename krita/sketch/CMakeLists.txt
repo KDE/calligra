@@ -34,6 +34,7 @@ set(kritasketch_SRCS
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
+    models/KeyboardModel.cpp
     models/ColorImageProvider.cpp
     models/CompositeOpModel.cpp
     models/FiltersCategoryModel.cpp
