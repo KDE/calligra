@@ -23,6 +23,7 @@ Rectangle {
     id: base;
 
     property bool keyboardVisible: false;
+    onKeyboardVisibleChanged: if(!keyboardVisible) keys.mode = KeyboardModel.NormalMode;
 
     anchors.left: parent.left;
     anchors.right: parent.right;
@@ -30,6 +31,15 @@ Rectangle {
     y: parent.height;
     height: parent.height * 0.33;
     color: "black";
+
+    MouseArea {
+        anchors.fill: parent;
+        onClicked: { }
+    }
+    SimpleTouchArea {
+        anchors.fill: parent;
+        onTouched: { }
+    }
 
     Flow {
         anchors.fill: parent;
@@ -60,92 +70,94 @@ Rectangle {
     Connections {
         target: Krita.VirtualKeyboardController;
 
-        onShowKeyboard: base.state = "visible";
+        onShowKeyboard: {
+            base.state = "visible";
+        }
         onHideKeyboard: base.state = "";
     }
 
-    ListModel {
+    Connections {
+        target: Settings;
+
+        onFocusItemChanged: {
+            if(Settings.focusItem != null && Settings.focusItem != undefined) {
+                if(Settings.focusItem.text == "") {
+                    keys.mode = KeyboardModel.CapitalMode;
+                }
+                if(Settings.focusItem.numeric != undefined && Settings.focusItem.numeric === true) {
+                    keys.mode = KeyboardModel.NumericMode;
+                }
+            }
+        }
+    }
+
+    KeyboardModel {
         id: keys;
-
-        ListElement { text: "q" }
-        ListElement { text: "w" }
-        ListElement { text: "e" }
-        ListElement { text: "r" }
-        ListElement { text: "t" }
-        ListElement { text: "y" }
-        ListElement { text: "u" }
-        ListElement { text: "i" }
-        ListElement { text: "o" }
-        ListElement { text: "p" }
-        ListElement { text: "⇐"; width: 2; special: true; script: "Settings.focusItem.text = Settings.focusItem.text.substring(0, Settings.focusItem.text.length - 1);" }
-
-        ListElement { spacer: true; width: 0.5; }
-        ListElement { text: "a" }
-        ListElement { text: "s" }
-        ListElement { text: "d" }
-        ListElement { text: "f" }
-        ListElement { text: "g" }
-        ListElement { text: "h" }
-        ListElement { text: "j" }
-        ListElement { text: "k" }
-        ListElement { text: "l" }
-        ListElement { text: "'" }
-        ListElement { text: "Enter"; width: 1.5; special: true; script: "base.state = \"\""; }
-
-        ListElement { text: "⇑"; special: true; script: ""; }
-        ListElement { text: "z" }
-        ListElement { text: "x" }
-        ListElement { text: "c" }
-        ListElement { text: "v" }
-        ListElement { text: "b" }
-        ListElement { text: "n" }
-        ListElement { text: "m" }
-        ListElement { text: "," }
-        ListElement { text: "." }
-        ListElement { text: "?" }
-        ListElement { text: "⇑"; special: true; script: ""; }
-
-        ListElement { text: "&123"; special: true; script: ""; }
-        ListElement { text: "Ctrl"; enabled: false; }
-        ListElement { text: "Smi"; enabled: false; }
-        ListElement { text: " "; width: 6; }
-        ListElement { text: "←"; special: true; script: "Settings.focusItem.cursorPosition = Settings.focusItem.cursorPosition - 1;" }
-        ListElement { text: "→"; special: true; script: "Settings.focusItem.cursorPosition = Settings.focusItem.cursorPosition + 1;" }
-        ListElement { text: "Kbd"; enabled: false; }
     }
 
     Component {
         id: keyDelegate;
 
         Item {
-            width: (Constants.GridWidth * 0.75) * (model.width !== undefined ? model.width : 1);
+            width: (Constants.GridWidth * 0.75) * model.width;
             height: (base.height - 8) / 4;
-            property bool enabled: model.enabled !== undefined ? model.enabled : true;
 
             Button {
-                anchors.fill: parent;
-                anchors.margins: 4;
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                    top: parent.top;
+                    margins: 4;
+                }
 
-                border.width: model.spacer ? 0 : 2;
-                border.color: parent.enabled ? "white" : "#333333";
+                height: model.keyType == KeyboardModel.EnterKey && keys.mode == KeyboardModel.NumericMode ? parent.height * 2 - 4: parent.height - 4;
+
+                border.width: model.keyType == KeyboardModel.SpacerKey ? 0 : 2;
+                border.color: "white";
                 radius: 8;
 
-                text: model.spacer ? "" : model.text;
-                textColor: parent.enabled ? "white" : "#333333";
+                color: {
+                    if(model.keyType == KeyboardModel.ShiftKey && keys.mode == KeyboardModel.CapitalMode) {
+                        return "#666666";
+                    } else if(model.keyType == KeyboardModel.NumericModeKey && keys.mode == KeyboardModel.NumericMode) {
+                        return "#666666";
+                    } else {
+                        return "transparent";
+                    }
+                }
 
-                highlight: true;
+                text: model.text;
+                textColor: model.keyType != KeyboardModel.SpacerKey ? "white" : "#333333";
+
+                highlight: model.keyType != KeyboardModel.SpacerKey ? true : false;
                 highlightColor: "#666666";
 
                 onClicked: {
-                    if(model.spacer || !parent.enabled)
-                        return;
-
-                    if(model.special) {
-                        eval(model.script);
-                        return;
+                    switch(model.keyType) {
+                        case KeyboardModel.BackspaceKey:
+                            Settings.focusItem.text = Settings.focusItem.text.substring(0, Settings.focusItem.text.length - 1);
+                        case KeyboardModel.EnterKey:
+                            base.state = "";
+                        case KeyboardModel.ShiftKey:
+                            keys.mode = keys.mode != KeyboardModel.CapitalMode ? KeyboardModel.CapitalMode : KeyboardModel.NormalMode;
+                        case KeyboardModel.LeftArrowKey:
+                            Settings.focusItem.cursorPosition -= 1;
+                        case KeyboardModel.RightArrowKey:
+                            Settings.focusItem.cursorPosition += 1;
+                        case KeyboardModel.NumericModeKey:
+                            keys.mode = keys.mode != KeyboardModel.NumericMode ? KeyboardModel.NumericMode : KeyboardModel.NormalMode;
+                        case KeyboardModel.NormalKey: {
+                            Settings.focusItem.text += model.text;
+                            if(keys.mode == KeyboardModel.CapitalMode) {
+                                keys.mode = KeyboardModel.NormalMode;
+                            }
+                            return;
+                        }
+                        case KeyboardModel.CloseKey:
+                            base.state = "";
+                        default:
+                            return;
                     }
-
-                    Settings.focusItem.text += model.text;
                 }
             }
         }
