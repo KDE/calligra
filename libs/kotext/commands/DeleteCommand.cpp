@@ -130,7 +130,6 @@ void DeleteCommand::doDelete()
     Q_ASSERT(textEditor);
     QTextCursor *caret = textEditor->cursor();
     QTextCharFormat charFormat = caret->charFormat();
-    KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(m_document).inlineTextObjectManager();
 
     if (!textEditor->hasSelection()) {
         if (m_mode == PreviousChar) {
@@ -146,13 +145,15 @@ void DeleteCommand::doDelete()
 
     foreach (KoInlineObject *object, m_invalidInlineObjects) {
         deleteTextAnchor(object);
-        deleteBookmark(object);
-    }
-    foreach (KoInlineObject *object, m_bookmarksToRemove) {
-        inlineObjectManager->removeInlineObject(object); // doesn't remove the character
     }
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
+
+    QHash<int, KoTextRange *> m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
+
+    foreach (KoTextRange *range, m_rangesToRemove) {
+        rangeManager->remove(range);
+    }
 
     if (textEditor->hasComplexSelection()) {
         m_mergePossible = false;

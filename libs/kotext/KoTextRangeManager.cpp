@@ -61,6 +61,11 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
         return;
     }
 
+    KoBookmark *bookmark = dynamic_cast<KoBookmark *>(textRange);
+    if (bookmark) {
+        m_bookmarkManager.remove(bookmark->name());
+    }
+
     int id = textRange->id();
     m_textRanges.remove(id);
     m_deletedTextRanges[id] = textRange;

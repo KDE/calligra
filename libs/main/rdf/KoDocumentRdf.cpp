@@ -43,6 +43,7 @@
 #include <KoInlineObject.h>
 #include <KoTextInlineRdf.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include "KoRdfFoaF.h"
@@ -928,7 +929,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
     Q_ASSERT(mgr);
     QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(handler->selectionStart(), handler->selectionEnd(), 0, -1);
     foreach (const KoTextRange *range, textRanges) {
-        return QPair<int,int>(bookmark->selectionStart(), endmark->selectionEnd());
+        return QPair<int,int>(range->selectionStart(), range->selectionEnd());
     }
 
     // find the text:meta inline objects
@@ -974,7 +975,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
     Q_ASSERT(mgr);
     QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(handler->selectionStart(), handler->selectionEnd(), 0, -1);
     foreach (const KoTextRange *range, textRanges) {
-        inlineRdf = metamark->inlineRdf();
+        inlineRdf = range->inlineRdf();
         if (inlineRdf) {
             return inlineRdf->xmlId();
         }
