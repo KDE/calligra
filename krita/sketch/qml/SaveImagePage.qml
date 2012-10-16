@@ -167,6 +167,8 @@ Page {
                     if( fileNameField.text != "" ) {
                         var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
                         base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
+                        Settings.currentFile = filePath;
+                        Settings.temporaryFile = false;
                         pageStack.pop();
                     }
                 }
