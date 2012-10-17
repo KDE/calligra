@@ -71,7 +71,6 @@ public:
     bool matchFound;
     QList<QTextDocument*> texts;
     KoFindText* findText;
-    KoFindBase *finder;
     QTimer slideshowTimer;
     QList<KoPAPageBase*> slideShow;
     CAPADocumentModel *paDocumentModel;
