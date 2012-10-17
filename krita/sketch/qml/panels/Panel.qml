@@ -62,12 +62,12 @@ Item {
                 // any clicks to the collapsing area, or to the canvas, by accident.
                 anchors.fill: parent;
                 // This will always work, and never do anything - but we need some kind of processed thing in here to activate the mouse area
-                onClicked: undefined;
+                onClicked: parent.focus = true;
             }
             SimpleTouchArea {
                 // As above, but for touch events
                 anchors.fill: parent;
-                onTouched: undefined;
+                onTouched: parent.focus = true;
             }
 
             Rectangle {
