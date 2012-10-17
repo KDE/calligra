@@ -1,4 +1,6 @@
 [calligra]
+ColorSpaceExtensionsPluginsDisabled=krita_colorspaces_extensions
+ColorSpacePluginsDisabled=kolcmsengine,kritakscolorspacesplugin,krita_ctlcs_plugin
 TextInlinePluginsDisabled=kprvariables
 ToolPluginsDisabled=calligrastagetoolanimation,kopabackgroundtool,treeshape
 FlakePluginsDisabled=treeshape
