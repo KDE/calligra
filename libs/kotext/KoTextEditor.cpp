@@ -891,7 +891,7 @@ void KoTextEditor::deletePreviousChar()
     emit cursorPositionChanged();
 }
 
-const QTextDocument *KoTextEditor::document() const
+QTextDocument *KoTextEditor::document() const
 {
     return d->caret.document();
 }
