@@ -29,7 +29,11 @@ class FileSystemModel::Private
 public:
     QDir dir;
     QFileInfoList list;
+
+    static const QString drivesPath;
 };
+
+const QString FileSystemModel::Private::drivesPath("special://drives");
 
 FileSystemModel::FileSystemModel(QObject* parent)
     : QAbstractListModel(parent), d(new Private)
@@ -94,25 +98,53 @@ void FileSystemModel::componentComplete()
 
 QString FileSystemModel::path()
 {
-    return d->dir.absolutePath();
+    QString path = d->dir.absolutePath();
+    if(path.isEmpty()) {
+        return Private::drivesPath;
+    } else {
+        return d->dir.absolutePath();
+    }
 }
 
 void FileSystemModel::setPath(const QString& path)
 {
-    beginRemoveRows(QModelIndex(), 0, d->list.count() - 1);
-    endRemoveRows();
-    d->dir.setPath(path);
-    d->list = d->dir.entryInfoList();
-    beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
-    endInsertRows();
-    emit pathChanged();
+    if(path != d->dir.path()) {
+        if(d->list.count() > 0) {
+            beginRemoveRows(QModelIndex(), 0, d->list.count() - 1);
+            endRemoveRows();
+        }
+
+        if(path != Private::drivesPath) {
+            d->dir.setPath(path);
+            d->list = d->dir.entryInfoList();
+            if(d->list.count() > 0) {
+                beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
+                endInsertRows();
+            }
+        } else {
+            d->dir.setPath("");
+            d->list = QDir::drives();
+
+            beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
+            endInsertRows();
+        }
+        emit pathChanged();
+    }
 }
 
 QString FileSystemModel::parentFolder()
 {
-    KUrl root = QUrl::fromLocalFile(path());
-    root.cd("..");
-    return root.toLocalFile();
+    if(path() != Private::drivesPath) {
+        KUrl root = QUrl::fromLocalFile(path());
+        if(QRegExp("^[A-Z]{1,3}:/$").exactMatch(root.toLocalFile())) {
+            return Private::drivesPath;
+        } else {
+            root.cd("..");
+            return root.toLocalFile();
+        }
+    } else {
+        return Private::drivesPath;
+    }
 }
 
 QString FileSystemModel::filter()
