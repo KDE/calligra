@@ -20,36 +20,58 @@ import QtQuick 1.1
 import "../../components"
 
 Item {
-    id: base
+    id: base;
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    onConfigurationChanged: {
+        horizRadius.value = configuration.readProperty("horizRadius");
+        vertRadius.value = configuration.readProperty("vertRadius");
+        lockAspect.checked = configuration.readProperty("lockAspect");
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: horizRadius;
             width: parent.width;
-            height: Constants.GridHeight;
+            placeholder: "Horizontal Radius";
+            min: 0; max: 1000; decimals: 0;
+            value: 0;
+            onValueChanged: {
+                if(lockAspect.checked && vertRadius.value != value) {
+                    vertRadius.value = value;
+                }
+                configuration.writeProperty("horizRadius", value);
+                base.applyConfigurationChanges();
+            }
         }
-        Text {
+        RangeInput {
+            id: vertRadius;
             width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
+            placeholder: "Vertical Radius";
+            min: 0; max: 1000; decimals: 0;
+            value: 0;
+            onValueChanged: {
+                if(lockAspect.checked && horizRadius.value != value) {
+                    horizRadius.value = value;
+                }
+                configuration.writeProperty("vertRadius", value);
+                base.applyConfigurationChanges();
+            }
         }
-        Item {
+        CheckBox {
+            id: lockAspect
             width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            text: "Lock aspect ratio";
+            checked: false;
+            onCheckedChanged: {
+                if(checked && vertRadius.value != horizRadius.value) {
+                    vertRadius.value = horizRadius.value;
+                }
+                configuration.writeProperty("lockAspect", checked);
+                base.applyConfigurationChanges();
+            }
         }
     }
 }
