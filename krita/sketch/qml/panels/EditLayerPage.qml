@@ -32,6 +32,11 @@ Item {
             var filterIndex = filtersCategoryModel.filterIndexForConfig(categoryIndex, filterConfig);
             filtersCategoryList.currentIndex = categoryIndex;
             fullFilters.currentIndex = filterIndex;
+            if(configLoader.item && typeof(configLoader.item.configuration) !== "undefined") {
+                configLoader.item.configuration = filterConfig;
+            }
+        }
+        if(layersModel) {
             base.isInitialised = true;
         }
     }
@@ -86,7 +91,12 @@ Item {
         height: visible ? Constants.GridHeight / 2 : 0;
         model: filtersCategoryModel;
         onModelChanged: currentIndex = 0;
-        onCurrentIndexChanged: model.activateItem(currentIndex)
+        onCurrentIndexChanged: {
+            model.activateItem(currentIndex)
+            if(base.isInitialised) {
+                fullFilters.currentIndex = 0;
+            }
+        }
     }
     ExpandingListView {
         id: fullFilters;
@@ -104,22 +114,20 @@ Item {
         }
         onCurrentIndexChanged: {
             if(layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") {
+                filtersCategoryModel.filterSelected(currentIndex);
                 if(base.isInitialised) {
+                    console.debug("Setting new configuration...");
                     layersModel.activeFilterConfig = model.configuration(currentIndex);
                 }
                 if(model.filterRequiresConfiguration(currentIndex)) {
                     noConfigNeeded.visible = false;
                     configNeeded.visible = true;
                     configLoader.source = "filterconfigpages/" + model.filterID(currentIndex) + ".qml";
-                    if(configLoader.item && typeof(configLoader.item.configuration) !== 'undefined') {
-                        configLoader.item.configuration = layersModel.activeFilterConfig;
-                    }
                 }
                 else {
                     noConfigNeeded.visible = true;
                     configNeeded.visible = false;
                 }
-                filtersCategoryModel.filterSelected(currentIndex);
             }
         }
     }
@@ -375,6 +383,11 @@ Item {
             id: configLoader;
             width: parent.width;
             height: item ? item.height : 1;
+            onItemChanged: {
+                if(item && typeof(item.configuration) !== 'undefined') {
+                    item.configuration = layersModel.activeFilterConfig;
+                }
+            }
         }
     }
 }
