@@ -199,21 +199,6 @@ Page {
                     fileNameField.text = model.fileName.substring(0, model.fileName.lastIndexOf('.'));
                 }
             }
-
-            GridView.onRemove: SequentialAnimation {
-                PropertyAction { target: delegateBase; property: "GridView.delayRemove"; value: true }
-                ParallelAnimation {
-                    NumberAnimation { target: delegateBase; property: "x"; to: delegateBase.x - base.width; duration: 250; }
-                    NumberAnimation { target: delegateBase; property: "opacity"; to: 0; duration: 250; }
-                }
-                PropertyAction { target: delegateBase; property: "GridView.delayRemove"; value: false }
-            }
-
-            GridView.onAdd: SequentialAnimation {
-                PropertyAction { target: delegateBase; property: "opacity"; value: 0; }
-                PauseAnimation { duration: 260; }
-                NumberAnimation { target: delegateBase; property: "opacity"; to: 1; duration: 250; }
-            }
         }
     }
 }
