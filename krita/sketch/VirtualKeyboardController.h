@@ -25,8 +25,8 @@ class VirtualKeyboardController : public QObject
 {
 Q_OBJECT
 public:
-    void requestShowKeyboard();
-    void requestHideKeyboard();
+    Q_INVOKABLE void requestShowKeyboard();
+    Q_INVOKABLE void requestHideKeyboard();
 
     static VirtualKeyboardController* instance();
 
