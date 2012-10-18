@@ -63,6 +63,7 @@ private Q_SLOTS:
     void activeSelectionChanged();
     void filterConfigurationChanged(int index, FiltersModel* model = 0);
     void filterActivated(int index);
+    void updatePreview();
 
 private:
     class Private;

@@ -96,17 +96,7 @@ public:
     KisFilterMaskSP mask;
     KisNodeSP node;
     int previewFilterID;
-    void updatePreview()
-    {
-        if (!previewFilterID < 0)
-            return;
-
-        if(previewEnabled)
-        {
-            mask->setDirty();
-            node->setDirty(node->extent());
-        }
-    }
+    KisFilterConfiguration* newConfig;
 };
 
 FiltersCategoryModel::FiltersCategoryModel(QObject* parent)
@@ -222,8 +212,24 @@ void FiltersCategoryModel::filterConfigurationChanged(int index, FiltersModel* m
             config->setProperty(QString(propName), configuration->property(propName));
         }
         configuration->deleteLater();
-        d->mask->setFilter(config);
-        d->updatePreview();
+        d->newConfig = config;
+        QTimer::singleShot(0, this, SLOT(updatePreview()));
+    }
+}
+
+void FiltersCategoryModel::updatePreview()
+{
+    if(d->mask->filter() == d->newConfig)
+        return;
+    d->mask->setFilter(d->newConfig);
+
+    if (!d->previewFilterID < 0)
+            return;
+
+    if(d->previewEnabled)
+    {
+        d->mask->setDirty();
+        d->node->setDirty(d->node->extent());
     }
 }
 
