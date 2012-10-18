@@ -1,0 +1,171 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+import QtQuick 1.1
+import org.krita.sketch 1.0
+
+Item {
+    id: base;
+
+    property alias title: dialogTitle.text;
+    property alias message: dialogText.text;
+    property variant buttons: null;
+    property alias modalBackgroundColor: modalFill.color;
+    property alias textAlign: dialogText.horizontalAlignment;
+
+    signal buttonClicked(int button);
+    signal canceled();
+
+    function show() {
+        base.opacity = 1;
+    }
+
+    function hide() {
+        base.opacity = 0;
+    }
+
+    anchors.fill: parent;
+    z: 99; //Just to make sure we're always on top.
+    opacity: 0;
+    Behavior on opacity { NumberAnimation { } }
+
+    MouseArea {
+        anchors.fill: parent;
+        onClicked: { base.canceled(); base.hide(); }
+    }
+    SimpleTouchArea {
+        anchors.fill: parent;
+        onTouched: { base.canceled(); base.hide(); }
+    }
+
+    Rectangle {
+        id: modalFill;
+
+        anchors.fill: parent;
+        color: "#80000000";
+    }
+
+    Rectangle {
+        id: dialogBackground;
+
+        anchors.centerIn: parent;
+
+        width: parent.width / 2;
+        height: Constants.GridHeight * 2 + dialogText.height + 32;
+
+        radius: 8;
+
+        gradient: Gradient {
+            GradientStop { position: 0; color: "#F7F8FC"; }
+            GradientStop { position: 0.4; color: "#F0F0FA"; }
+        }
+
+        Rectangle {
+            id: dialogHeader;
+
+            anchors {
+                top: parent.top;
+                left: parent.left;
+                right: parent.right;
+            }
+
+            height: Constants.GridHeight;
+            color: "#9AA1B2";
+            radius: 8;
+
+            Rectangle {
+                anchors {
+                    left: parent.left;
+                    right: parent.right;
+                    bottom: parent.bottom;
+                }
+                height: 8;
+                color: "#9AA1B2";
+            }
+
+            Label {
+                id: dialogTitle;
+                anchors.centerIn: parent;
+                color: "white";
+                font.pixelSize: Constants.LargeFontSize;
+            }
+
+            Image {
+                anchors.left: parent.left;
+                anchors.right: parent.right;
+                anchors.top: parent.bottom;
+
+                source: "../images/shadow-smooth.png";
+            }
+        }
+
+        Label {
+            id: dialogText;
+
+            anchors {
+                left: parent.left;
+                leftMargin: 8;
+                right: parent.right;
+                rightMargin: 8;
+            }
+
+            y: dialogHeader.height + 16;
+            elide: Text.ElideNone;
+            wrapMode: Text.Wrap;
+        }
+
+        Row {
+            id: buttonRow;
+
+            anchors {
+                left: parent.left;
+                leftMargin: 8;
+                right: parent.right;
+                bottom: parent.bottom;
+                bottomMargin: 8;
+            }
+
+            height: Constants.GridHeight;
+            spacing: 8;
+
+            Repeater {
+                model: base.buttons;
+
+                delegate: Button {
+                    width: (parent.width / base.buttons.length) - 8;
+                    height: parent.height;
+                    radius: 8;
+
+                    text: modelData;
+                    color: "#9AA1B2";
+                    textColor: "white";
+
+                    onClicked: { base.buttonClicked(index); base.hide(); }
+                }
+            }
+        }
+    }
+
+    Image {
+        anchors.left: dialogBackground.left;
+        anchors.right: dialogBackground.right;
+        anchors.top: dialogBackground.bottom;
+
+        source: "../images/shadow-smooth.png";
+    }
+}
