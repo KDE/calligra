@@ -77,6 +77,7 @@ Item {
             leftMargin: Constants.DefaultMargin;
             rightMargin: Constants.DefaultMargin;
         }
+        highPrecision: true;
         onValueChanged: base.value = base.min + ((value / 100) * (base.max - base.min));
     }
 }
