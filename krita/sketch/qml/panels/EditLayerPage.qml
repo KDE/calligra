@@ -35,9 +35,9 @@ Item {
             if(configLoader.item && typeof(configLoader.item.configuration) !== "undefined") {
                 configLoader.item.configuration = filterConfig;
             }
-        }
-        if(layersModel) {
-            base.isInitialised = true;
+            if(layersModel) {
+                base.isInitialised = true;
+            }
         }
     }
     // tile goes here
@@ -110,7 +110,9 @@ Item {
         height: visible ? Constants.GridHeight / 2 : 0;
         model: filtersCategoryModel.filterModel;
         function applyConfiguration(configuration) {
-            layersModel.activeFilterConfig = configuration;
+            if(base.isInitialised) {
+                layersModel.activeFilterConfig = configuration;
+            }
         }
         onCurrentIndexChanged: {
             if(layersModel.activeType === "KisFilterMask" || layersModel.activeType === "KisAdjustmentLayer") {
