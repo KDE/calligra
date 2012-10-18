@@ -25,6 +25,12 @@ Item {
     function applyConfigurationChanges() {
         fullFilters.applyConfiguration(configuration);
     }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
     onConfigurationChanged: {
         amount.value = configuration.readProperty("amount");
         halfSize.value = configuration.readProperty("halfSize");
@@ -39,8 +45,7 @@ Item {
             min: 0; max: 1; decimals: 2;
             value: 0;
             onValueChanged: {
-                configuration.writeProperty("amount", value);
-                base.applyConfigurationChanges();
+                setProp("amount", value);
             }
         }
         RangeInput {
@@ -50,8 +55,7 @@ Item {
             min: 0; max: 100; decimals: 0;
             value: 0;
             onValueChanged: {
-                configuration.writeProperty("halfSize", value);
-                base.applyConfigurationChanges();
+                setProp("halfSize", value);
             }
         }
         RangeInput {
@@ -61,8 +65,7 @@ Item {
             min: 0; max: 255; decimals: 0;
             value: 0;
             onValueChanged: {
-                configuration.writeProperty("threshold", value);
-                base.applyConfigurationChanges();
+                setProp("threshold", value);
             }
         }
     }

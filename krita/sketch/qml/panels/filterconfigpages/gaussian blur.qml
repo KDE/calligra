@@ -25,6 +25,12 @@ Item {
     function applyConfigurationChanges() {
         fullFilters.applyConfiguration(configuration);
     }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
     onConfigurationChanged: {
         horizRadius.value = configuration.readProperty("horizRadius");
         vertRadius.value = configuration.readProperty("vertRadius");
@@ -36,28 +42,26 @@ Item {
             id: horizRadius;
             width: parent.width;
             placeholder: "Horizontal Radius";
-            min: 0; max: 1000; decimals: 0;
-            value: 0;
+            min: 1; max: 100; decimals: 0;
+            value: 1;
             onValueChanged: {
                 if(lockAspect.checked && vertRadius.value != value) {
                     vertRadius.value = value;
                 }
-                configuration.writeProperty("horizRadius", value);
-                base.applyConfigurationChanges();
+                setProp("horizRadius", value);
             }
         }
         RangeInput {
             id: vertRadius;
             width: parent.width;
             placeholder: "Vertical Radius";
-            min: 0; max: 1000; decimals: 0;
-            value: 0;
+            min: 1; max: 100; decimals: 0;
+            value: 1;
             onValueChanged: {
                 if(lockAspect.checked && horizRadius.value != value) {
                     horizRadius.value = value;
                 }
-                configuration.writeProperty("vertRadius", value);
-                base.applyConfigurationChanges();
+                setProp("vertRadius", value);
             }
         }
         CheckBox {
@@ -69,8 +73,7 @@ Item {
                 if(checked && vertRadius.value != horizRadius.value) {
                     vertRadius.value = horizRadius.value;
                 }
-                configuration.writeProperty("lockAspect", checked);
-                base.applyConfigurationChanges();
+                setProp("lockAspect", checked);
             }
         }
     }

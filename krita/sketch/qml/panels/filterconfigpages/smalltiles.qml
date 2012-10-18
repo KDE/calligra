@@ -25,6 +25,12 @@ Item {
     function applyConfigurationChanges() {
         fullFilters.applyConfiguration(configuration);
     }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
     onConfigurationChanged: {
         numberOfTiles.value = configuration.readProperty("numberOfTiles");
     }
@@ -34,11 +40,10 @@ Item {
             id: numberOfTiles;
             width: parent.width;
             placeholder: "Number of tiles";
-            min: 0; max: 100; decimals: 0;
-            value: 0;
+            min: 1; max: 100; decimals: 0;
+            value: 1;
             onValueChanged: {
-                configuration.writeProperty("numberOfTiles", value);
-                base.applyConfigurationChanges();
+                setProp("numberOfTiles", value);
             }
         }
     }
