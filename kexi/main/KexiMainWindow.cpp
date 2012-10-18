@@ -1386,7 +1386,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
                     i18n("Database project %1 does not appear to have been created using Kexi."
                          "<p>Do you want to import it as a new Kexi project?",
                          projectData.infoString()),
-                    0, KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
+                    QString(), KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
             {
                 const bool anotherProjectAlreadyOpened = d->prj;
@@ -1973,6 +1973,8 @@ void KexiMainWindow::setupProjectNavigator()
                 this, SLOT(removeObject(KexiPart::Item*)));
         connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
                 this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
+        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*, const QString&, bool&)),
+                this, SLOT(setObjectCaption(KexiPart::Item*, const QString&, bool&)));
         connect(d->navigator, SIGNAL(executeItem(KexiPart::Item*)),
                 this, SLOT(executeItem(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
@@ -3511,7 +3513,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
                              "%1\n"
                              "If you click \"Delete\", you will not be able to undo the deletion.",
                              "</p><p>" + part->info()->instanceCaption() + " \"" + item->name() + "\"?</p>"),
-                0, KGuiItem(i18n("Delete"), koIconName("edit-delete")), KStandardGuiItem::no())) {
+                QString(), KGuiItem(i18n("Delete"), koIconName("edit-delete")), KStandardGuiItem::no())) {
             return cancelled;
         }
     }
@@ -3583,11 +3585,42 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
         success = false;
         return;
     }
+
+    KexiWindow *window = d->openedWindowFor(item);
+    if (window) {
+        QString msg = i18n("<para>Before renaming object <resource>%1</resource> it should be closed.</para>"
+                           "<para>Do you want to close it?</para>")
+                      .arg(item->name());
+        int r = KMessageBox::questionYesNo(this, msg, QString(),
+                                           KGuiItem(i18n("Close window"), koIconName("window-close")),
+                                           KStandardGuiItem::cancel());
+        if (r != KMessageBox::Yes) {
+            success = false;
+            return;
+        }
+    }
     enableMessages(false); //to avoid double messages
     const bool res = d->prj->renameObject(*item, newName);
     enableMessages(true);
     if (!res) {
         showErrorMessage(d->prj, i18n("Renaming object \"%1\" failed.", newName));
+        success = false;
+        return;
+    }
+}
+
+void KexiMainWindow::setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool &success)
+{
+    if (d->userMode) {
+        success = false;
+        return;
+    }
+    QString newCaption = _newCaption.trimmed();
+    enableMessages(false); //to avoid double messages
+    const bool res = d->prj->setObjectCaption(*item, newCaption);
+    enableMessages(true);
+    if (!res) {
+        showErrorMessage(d->prj, i18n("Setting caption for object \"%1\" failed.", newCaption));
         success = false;
         return;
     }

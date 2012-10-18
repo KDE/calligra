@@ -69,6 +69,7 @@ void KexiNameWidget::init(
     lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     lbl_message->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     lbl_message->setWordWrap(true);
+    lbl_message->setTextInteractionFlags(Qt::TextBrowserInteraction);
     lyr->addWidget(lbl_message, 0, 0, 1, 2);
 
     lbl_caption = new QLabel(captionLabel.isEmpty() ? i18n("Caption:") : captionLabel,
@@ -81,15 +82,17 @@ void KexiNameWidget::init(
     lbl_name->setObjectName("lbl_name");
     lyr->addWidget(lbl_name, 2, 0);
 
-    le_caption = new KLineEdit(nameText, this);
+    le_caption = new KLineEdit(this);
     le_caption->setObjectName("le_caption");
+    setCaptionText(nameText);
     QSizePolicy le_captionSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
     le_caption->setSizePolicy(le_captionSizePolicy);
     lyr->addWidget(le_caption, 1, 1);
 
-    le_name = new KLineEdit(nameText, this);
+    le_name = new KLineEdit(this);
     le_name->setObjectName("le_name");
+    setNameText(nameText);
     QSizePolicy le_nameSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     le_captionSizePolicy.setHorizontalStretch(1);
     le_name->setSizePolicy(le_captionSizePolicy);
@@ -168,6 +171,7 @@ void KexiNameWidget::setCaptionText(const QString& capt)
 void KexiNameWidget::setNameText(const QString& name)
 {
     le_name->setText(name);
+    m_originalNameText = name;
     m_le_name_autofill = true;
 }
 
@@ -185,13 +189,19 @@ void KexiNameWidget::setMessageText(const QString& msg)
 
 QString KexiNameWidget::captionText() const
 {
-    return le_caption->text();
+    return le_caption->text().trimmed();
 }
 
 QString KexiNameWidget::nameText() const
 {
-    return le_name->text();
+    return le_name->text().trimmed();
 }
+
+QString KexiNameWidget::originalNameText() const
+{
+    return m_originalNameText;
+}
+
 
 bool KexiNameWidget::checkValidity()
 {
