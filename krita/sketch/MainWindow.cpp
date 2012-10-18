@@ -187,6 +187,11 @@ void MainWindow::setAllowClose(bool allow)
     d->allowClose = allow;
 }
 
+void MainWindow::minimize()
+{
+    setWindowState(windowState() ^ Qt::WindowMinimized);
+}
+
 void MainWindow::closeWindow()
 {
     //For some reason, close() does not work even if setAllowClose(true) was called just before this method.

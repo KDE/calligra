@@ -38,6 +38,7 @@ public:
     virtual void closeEvent(QCloseEvent* event);
 
 public Q_SLOTS:
+    void minimize();
     void closeWindow();
 
 Q_SIGNALS:
