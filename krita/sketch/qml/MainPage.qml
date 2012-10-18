@@ -28,24 +28,12 @@ Page {
         height: parent.height;
 
         onInteractionStarted: { panelBar.collapse(); Krita.VirtualKeyboardController.requestHideKeyboard(); }
-        onLoadingFinished: loadingScreen.opacity = 0;
+        onLoadingFinished: loadingDialog.hide();
     }
 
     ToolManager {
         id: toolManager;
         view: sketchView.view;
-    }
-
-    Rectangle {
-        id: loadingScreen;
-        anchors.fill: parent;
-
-        Behavior on opacity { NumberAnimation { } }
-
-        Label {
-            anchors.centerIn: parent;
-            text: "Loading...";
-        }
     }
 
     PanelBar { id: panelBar; height: parent.height; width: parent.width; }
@@ -110,6 +98,10 @@ Page {
                     sketchView.undo();
                 case "redo":
                     sketchView.redo();
+                case "minimize":
+                    Krita.Window.minimize();
+                case "close":
+                    Krita.Window.close();
             }
         }
     }
@@ -127,32 +119,129 @@ Page {
         }
     }
 
+    Dialog {
+        id: loadingDialog;
+        title: "Loading";
+        message: "Please wait...";
+        textAlign: Text.AlignHCenter;
+
+        modalBackgroundColor: "#ffffff";
+    }
+
+    Dialog {
+        id: modifiedDialog;
+        title: "Image was modified";
+        message: "The image was modified. Do you want to save your changes?";
+
+        buttons: [ "Save", "Discard", "Cancel" ];
+
+        onButtonClicked: {
+            switch(button) {
+                case 0: {
+                    if(Settings.temporaryFile) {
+                        pageStack.push( saveAsPage, { view: sketchView, updateCurrentFile: false } );
+                    } else {
+                        sketchView.save();
+
+                        if(d.closeRequested) {
+                            d.closeWindow();
+                        } else {
+                            d.loadNewFile();
+                        }
+                    }
+                }
+                case 1: {
+                    if(d.closeRequested) {
+                        d.closeWindow();
+                    } else {
+                        d.loadNewFile();
+                    }
+                }
+                default: {
+                    d.saveRequested = false;
+                    d.closeRequested = false;
+                }
+            }
+        }
+
+        onCanceled: {
+            d.saveRequested = false;
+            d.closeRequested = false;
+        }
+    }
+
     Connections {
         target: Settings;
 
         onCurrentFileChanged: {
             if(sketchView.modified) {
-                //Show modified dialog
+                d.saveRequested = true;
+                modifiedDialog.show();
+            } else {
+                d.loadNewFile();
             }
-            loadingScreen.opacity = 1;
-            if(Settings.temporaryFile) {
-                Krita.ImageBuilder.discardImage(sketchView.file);
-            }
-            sketchView.file = Settings.currentFile;
-            menuPanel.collapsed = true;
         }
     }
 
-    onStatusChanged: if(status == 0) sketchView.file = Settings.currentFile;
+    onStatusChanged: {
+        if(status == 0) {
+            if(d.saveRequested) {
+                d.loadNewFile();
+                return;
+            }
+
+            if(d.closeRequested) {
+                d.closeWindow();
+                return;
+            }
+
+            sketchView.file = Settings.currentFile;
+        }
+    }
 
     Connections {
         target: Krita.Window;
 
         onCloseRequested: {
             if(sketchView.modified) {
-                //Show modified dialog
+                d.closeRequested = true;
+                modifiedDialog.show();
+            } else {
+                d.closeWindow();
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        Krita.Window.allowClose = false;
+        loadingDialog.show();
+    }
+
+    Component { id: openImagePage; OpenImagePage { } }
+    Component { id: sharePage; SharePage { } }
+    Component { id: settingsPage; SettingsPage { } }
+    Component { id: helpPage; HelpPage { } }
+    Component { id: saveAsPage; SaveImagePage { } }
+
+    QtObject {
+        id: d;
+
+        property bool closeRequested;
+        property bool saveRequested;
+
+        function loadNewFile() {
+            d.saveRequested = false;
+            loadingDialog.show();
+
+            if(Settings.temporaryFile) {
+                Krita.ImageBuilder.discardImage(sketchView.file);
             }
 
+            sketchView.file = Settings.currentFile;
+            menuPanel.collapsed = true;
+        }
+
+        function closeWindow() {
             if(Settings.temporaryFile) {
                 Krita.ImageBuilder.discardImage(Settings.currentFile);
             }
@@ -161,14 +250,4 @@ Page {
             Krita.Window.closeWindow();
         }
     }
-
-    Component.onCompleted: {
-        Krita.Window.allowClose = false;
-    }
-
-    Component { id: openImagePage; OpenImagePage { } }
-    Component { id: sharePage; SharePage { } }
-    Component { id: settingsPage; SettingsPage { } }
-    Component { id: helpPage; HelpPage { } }
-    Component { id: saveAsPage; SaveImagePage { } }
 }
