@@ -112,6 +112,30 @@ Item {
                 highlightColor: Constants.Theme.HighlightColor;
                 onClicked: base.buttonClicked( "redo" );
             }
+            Item {
+                width: Constants.GridWidth;
+                height: Constants.GridHeight;
+            }
+            Button {
+                id: minimizeButton;
+                width: Constants.GridWidth;
+                height: Constants.GridHeight;
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-minimize.svg"
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: base.buttonClicked( "minimize" );
+            }
+            Button {
+                id: closeButton;
+                width: Constants.GridWidth;
+                height: Constants.GridHeight;
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-close.svg"
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: base.buttonClicked( "close" );
+            }
             /*Item {
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
