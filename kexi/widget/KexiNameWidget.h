@@ -74,6 +74,8 @@ public:
 
     QString nameText() const;
 
+    QString originalNameText() const;
+
     void setNameText(const QString& name);
 
     /*! Sets i18n'ed warning message displayed when user leaves 'name' field
@@ -152,6 +154,7 @@ protected:
     QGridLayout* lyr;
     KexiUtils::MultiValidator *m_validator;
     QString m_nameWarning, m_captionWarning;
+    QString m_originalNameText;
 
     bool m_le_name_txtchanged_disable;
     bool m_le_name_autofill;

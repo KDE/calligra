@@ -109,13 +109,15 @@ bool KexiNameDialog::canOverwrite()
     tristate result = m_project->dbConnection()->loadObjectSchemaData(
                           m_project->idForClass(m_part->info()->partClass()),
                           widget()->nameText(), tmp_sdata);
-    kDebug() << (result == cancelled) << (result == 2) << (result == false) << (result == true) << ~result;
     if (result == cancelled) {
         return true;
     }
     if (result == false) {
         kWarning() << "Cannot load object schema data for" << widget()->nameText();
         return false;
+    }
+    if (widget()->originalNameText() == tmp_sdata.name()) {
+        return true;
     }
     if (!m_allowOverwriting) {
         KMessageBox::information(this,

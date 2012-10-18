@@ -118,7 +118,7 @@ public:
 
      Default implementation just removes object from kexi__* system structures
      at the database backend using KexiDB::Connection::removeObject(). */
-    virtual bool remove(KexiPart::Item & item);
+    virtual tristate remove(KexiPart::Item & item);
 
     /*! Renames stored data pointed by \a item to \a newName
      (example: table name is altered in the database).
