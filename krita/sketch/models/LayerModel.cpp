@@ -52,7 +52,17 @@ public:
         , activeNode(0)
         , declarativeEngine(0)
         , thumbProvider(0)
-    {}
+        , updateActiveLayerWithNewFilterConfigTimer(new QTimer(qq))
+    {
+        QList<KisFilterSP> tmpFilters = KisFilterRegistry::instance()->values();
+        foreach(const KisFilterSP& filter, tmpFilters)
+        {
+            filters[filter.data()->id()] = filter.data();
+        }
+        updateActiveLayerWithNewFilterConfigTimer->setInterval(0);
+        updateActiveLayerWithNewFilterConfigTimer->setSingleShot(true);
+        connect(updateActiveLayerWithNewFilterConfigTimer, SIGNAL(timeout()), qq, SLOT(updateActiveLayerWithNewFilterConfig()));
+    }
 
     LayerModel* q;
     QList<KisNodeSP> layers;
@@ -65,6 +75,10 @@ public:
     KisNodeSP activeNode;
     QDeclarativeEngine* declarativeEngine;
     LayerThumbProvider* thumbProvider;
+    QHash<QString, const KisFilter*> filters;
+
+    KisFilterConfiguration* newConfig;
+    QTimer* updateActiveLayerWithNewFilterConfigTimer;
 
     static int counter()
     {
@@ -924,25 +938,34 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
     if(!config)
         return;
 
-    KisFilterConfiguration* realConfig = KisFilterRegistry::instance()->get(config->name())->defaultConfiguration(d->activeNode->original());
+    KisFilterConfiguration* realConfig = d->filters.value(config->name())->factoryConfiguration(d->activeNode->original());
     QMap<QString, QVariant>::const_iterator i;
     for(i = realConfig->getProperties().constBegin(); i != realConfig->getProperties().constEnd(); ++i)
     {
         realConfig->setProperty(QString(i.key()), config->property(i.key().toAscii()));
     }
+    delete(d->newConfig);
+    d->newConfig = realConfig;
+    d->updateActiveLayerWithNewFilterConfigTimer->start();
+}
+
+void LayerModel::updateActiveLayerWithNewFilterConfig()
+{
     KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
     if(filterMask)
     {
-        filterMask->setFilter(realConfig);
+        filterMask->setFilter(d->newConfig);
     }
     else
     {
         KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
         if(adjustmentLayer)
         {
-            adjustmentLayer->setFilter(realConfig);
+            adjustmentLayer->setFilter(d->newConfig);
         }
     }
+    d->activeNode->setDirty(d->activeNode->extent());
+    emit activeFilterConfigChanged();
 }
 
 #include "LayerModel.moc"
