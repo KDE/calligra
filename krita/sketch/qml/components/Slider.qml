@@ -22,7 +22,8 @@ import org.krita.sketch 1.0
 Item {
     id: base;
     height: Constants.DefaultFontSize;
-    property int value: 0;
+    property double value: 0;
+    property bool highPrecision: false;
     onValueChanged: handle.resetHandle();
     Rectangle {
         id: fill;
@@ -46,11 +47,16 @@ Item {
         y: 2
         x: 2
         onXChanged: {
-            base.value = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
+            if(highPrecision) {
+                base.value = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
+            }
+            else {
+                base.value = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
+            }
         }
         height: parent.height - 4;
         width: height;
-        radius: height / 2;
+        radius: (height / 2) + 1;
         color: "silver"
         MouseArea {
             id: mouseArea;
