@@ -93,6 +93,9 @@ public:
         return pageManager()->pageCount();
     }
 
+    bool isMasterDocument() const;
+    void setIsMasterDocument(bool isMasterDocument);
+
     // others
     /**
      * Return the pageManager used in this document.
@@ -261,6 +264,7 @@ private:
     void saveConfig();
 
 private:
+    bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
