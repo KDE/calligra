@@ -32,8 +32,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <klineedit.h>
-#include <kicon.h>
 
+#include <KoIcon.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>
@@ -100,7 +100,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     if (!preset->settings() || !preset->settings()->isValid()) {
-        KIcon icon("edit-delete");
+        const KIcon icon(koIconName("broken-preset"));
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
 }
@@ -331,6 +331,11 @@ KoResource* KisPresetChooser::currentResource()
 void KisPresetChooser::showTaggingBar( bool showSearchBar, bool showOpBar )
 {
     m_chooser->showTaggingBar(showSearchBar,showOpBar);
+}
+
+KoResourceItemChooser *KisPresetChooser::itemChooser()
+{
+    return m_chooser;
 }
 
 #include "kis_preset_chooser.moc"

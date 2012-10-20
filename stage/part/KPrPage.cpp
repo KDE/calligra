@@ -70,6 +70,7 @@ public:
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
 : KoPAPage( masterPage )
+, KPrPageData(document)
 , d( new Private( this, document ) )
 {
     setApplicationData( new KPrPageApplicationData() );

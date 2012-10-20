@@ -27,7 +27,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kapplication.h>
 
 #include <QDir>
@@ -133,7 +132,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     if (!iconFileName.isEmpty())
         info.icon = KIcon(QPixmap(directory + '/' + iconFileName));
     if (info.icon.isNull())
-        info.icon = KIcon(DesktopIcon(KexiDB::defaultFileBasedDriverIcon()));
+        info.icon = KIcon(KexiDB::defaultFileBasedDriverIconName());
     QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
     foreach(QString autoopenObjectString, autoopenObjectsString) {
         KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();

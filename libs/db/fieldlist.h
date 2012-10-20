@@ -72,11 +72,22 @@ public:
     /*! Removes field from the field list. Use with care.
 
      Note: You can reimplement this method but you should still call
-     this implementation in your subclass. */
-    virtual void removeField(KexiDB::Field *field);
+     this implementation in your subclass.
+     \return false if this field does not belong to this list. */
+    virtual bool removeField(KexiDB::Field *field);
+
+    /*! Moves fiels \a field from its current position to new position \a newIndex.
+     If \a newIndex value is greater than fieldCount()-1, it is appended.
+     \return false if this field does not belong to this list. */
+    virtual bool moveField(KexiDB::Field *field, uint newIndex);
 
     /*! \return field id or NULL if there is no such a field. */
     inline Field* field(uint id) {
+        return m_fields.value(id);
+    }
+
+    /*! \return field id or NULL if there is no such a field. */
+    inline const Field* field(uint id) const {
         return m_fields.value(id);
     }
 
@@ -120,7 +131,7 @@ public:
     virtual void clear();
 
     /*! \return String for debugging purposes. */
-    virtual QString debugString();
+    virtual QString debugString() const;
 
     /*! Shows debug information about all fields in the list. */
     void debug();

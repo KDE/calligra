@@ -85,6 +85,7 @@
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoIcon.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -92,7 +93,6 @@
 #include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <kdialog.h>
 #include <KToggleAction>
 #include <kactioncollection.h>
@@ -230,14 +230,14 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
+    m_actionAddBookmark = new KAction(koIcon("bookmark-new"), i18n("Bookmark..."), this);
     m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
     action->setIconText(i18n("Bookmark"));
-    action->setIcon(KIcon("bookmarks"));
+    action->setIcon(koIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
@@ -265,7 +265,7 @@ void KWView::setupActions()
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
 
-    action = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
+    action = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
@@ -352,7 +352,7 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
 
     // -------------- Settings menu
-    action = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
 
@@ -451,7 +451,7 @@ void KWView::pasteRequested()
 
 void KWView::editFrameProperties()
 {
-    KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
+    QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
     frameDialog->exec();
     delete frameDialog;
 }
@@ -496,7 +496,7 @@ void KWView::addBookmark()
         suggestedName = editor->selectedText();
     }
 
-    KWCreateBookmarkDialog *dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
+    QPointer<KWCreateBookmarkDialog> dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
     if (dia->exec() == QDialog::Accepted) {
         name = dia->newBookmarkName();
     }
@@ -514,7 +514,7 @@ void KWView::selectBookmark()
     QString name;
     KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
 
-    KWSelectBookmarkDialog *dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
+    QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
     connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
             manager, SLOT(rename(const QString &, const QString &)));
     connect(dia, SIGNAL(bookmarkDeleted(const QString &)),

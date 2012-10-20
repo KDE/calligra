@@ -848,11 +848,11 @@ void Selection::endReferenceSelection(bool saveChanges)
     if (d->formerSelection.isEmpty()) {
         return;
     }
-    d->referenceMode = false;
-    d->multipleOccurences = false;
     if (originSheet() != activeSheet()) {
         emit visibleSheetRequested(originSheet());
     }
+    d->referenceMode = false;
+    d->multipleOccurences = false;
     // While entering a formula the choose mode is turned on and off.
     // Clear the choice. Otherwise, cell references will stay highlighted.
     if (!isEmpty()) {

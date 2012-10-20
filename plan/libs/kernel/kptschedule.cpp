@@ -233,8 +233,6 @@ void Schedule::initiateCalculation()
     effortNotMet = false;
     workStartTime = DateTime();
     workEndTime = DateTime();
-
-
 }
 
 void Schedule::calcResourceOverbooked()
@@ -518,15 +516,21 @@ void Schedule::copyAppointments( Schedule::CalculationMode from, Schedule::Calcu
     }
 }
 
-
 EffortCostMap Schedule::bcwsPrDay( EffortCostCalculationType type ) const
 {
+    return const_cast<Schedule*>( this )->bcwsPrDay( type );
+}
+
+EffortCostMap Schedule::bcwsPrDay( EffortCostCalculationType type )
+{
     //kDebug(planDbg())<<m_name<<m_appointments;
-    EffortCostMap ec;
-    foreach ( Appointment *a, m_appointments ) {
-        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date(), type );
+    EffortCostCache &ec = m_bcwsPrDay[ (int)type ];
+    if ( ! ec.cached ) {
+        foreach ( Appointment *a, m_appointments ) {
+            ec.effortcostmap += a->plannedPrDay( a->startTime().date(), a->endTime().date(), type );
+        }
     }
-    return ec;
+    return ec.effortcostmap;
 }
 
 EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type ) const
@@ -667,6 +671,13 @@ QString Schedule::Log::formatMsg() const
     s += resource ? QString( "%1 ").arg(resource->name(), -8 ) : "";
     s += message;
     return s;
+}
+
+void Schedule::clearPerformanceCache()
+{
+    m_bcwsPrDay.clear();
+    m_bcwpPrDay.clear();
+    m_acwp.clear();
 }
 
 //-------------------------------------------------
@@ -1804,6 +1815,31 @@ QStringList ScheduleManager::state() const
     return lst;
 }
 
+QList<long unsigned int> ScheduleManager::supportedGranularities() const
+{
+    QList<long unsigned int> lst;
+    if ( schedulerPlugin() ) {
+        lst = schedulerPlugin()->granularities();
+    }
+    return lst;
+}
+
+int ScheduleManager::granularity() const
+{
+    if ( schedulerPlugin() ) {
+        return schedulerPlugin()->granularity();
+    }
+    return 0;
+}
+
+void ScheduleManager::setGranularity( int duration )
+{
+    if ( schedulerPlugin() ) {
+        schedulerPlugin()->setGranularity( duration );
+    }
+    m_project.changed( this );;
+}
+
 void ScheduleManager::incProgress()
 {
     m_project.incProgress();
@@ -1866,6 +1902,11 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     m_schedulingDirection = (bool)(element.attribute( "scheduling-direction" ).toInt());
     m_baselined = (bool)(element.attribute( "baselined" ).toInt());
     m_schedulerPluginId = element.attribute( "scheduler-plugin-id" );
+    if ( status.project().schedulerPlugins().contains( m_schedulerPluginId ) ) {
+        // atm we only load for current plugin
+        int g = element.attribute( "granularity", "0" ).toInt();
+        status.project().schedulerPlugins().value( m_schedulerPluginId )->setGranularity( g );
+    }
     m_recalculate = (bool)(element.attribute( "recalculate" ).toInt());
     m_recalculateFrom = DateTime::fromString( element.attribute( "recalculate-from" ), status.projectSpec() );
     KoXmlNode n = element.firstChild();
@@ -1938,6 +1979,10 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
     el.setAttribute( "baselined", m_baselined );
     el.setAttribute( "scheduler-plugin-id", m_schedulerPluginId );
+    if ( schedulerPlugin() ) {
+        // atm we only save for current plugin
+        el.setAttribute( "granularity", schedulerPlugin()->granularity() );
+    }
     el.setAttribute( "recalculate", m_recalculate );
     el.setAttribute( "recalculate-from", m_recalculateFrom.toString( Qt::ISODate ) );
     if ( m_expected && ! m_expected->isDeleted() ) {

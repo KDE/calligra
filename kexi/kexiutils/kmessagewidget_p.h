@@ -23,6 +23,8 @@
 
 #include "kmessagewidget.h"
 
+#include <QLabel>
+
 class KMessageWidgetFrame : public QFrame
 {
     Q_OBJECT
@@ -57,6 +59,18 @@ private:
     QPoint m_calloutPointerGlobalPosition;
     QPolygonF m_polyline;
     QPolygonF m_polygon;
+};
+
+class ClickableLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit ClickableLabel(QWidget *parent = 0);
+    virtual ~ClickableLabel();
+    virtual void mousePressEvent(QMouseEvent *ev);
+
+signals:
+    void clicked();
 };
 
 #endif /* KMESSAGEWIDGET_P_H */

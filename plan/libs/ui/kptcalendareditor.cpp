@@ -33,6 +33,8 @@
 #include "kptintervaledit.h"
 #include "kptdebug.h"
 
+#include <KoIcon.h>
+
 #include <QDragMoveEvent>
 #include <QList>
 #include <QSplitter>
@@ -40,7 +42,6 @@
 #include <QHeaderView>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
@@ -616,17 +617,17 @@ void CalendarEditor::setupGui()
     KActionCollection *coll = actionCollection();
     QString name = "calendareditor_calendar_list";
 
-    actionAddCalendar   = new KAction(KIcon( "resource-calendar-insert" ), i18n("Add Calendar"), this);
+    actionAddCalendar   = new KAction(koIcon("resource-calendar-insert"), i18n("Add Calendar"), this);
     coll->addAction("add_calendar", actionAddCalendar  );
     actionAddCalendar ->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     connect( actionAddCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddCalendar () ) );
 
-    actionAddSubCalendar   = new KAction(KIcon( "resource-calendar-child-insert" ), i18n("Add Subcalendar"), this);
+    actionAddSubCalendar   = new KAction(koIcon("resource-calendar-child-insert"), i18n("Add Subcalendar"), this);
     coll->addAction("add_subcalendar", actionAddSubCalendar  );
     actionAddSubCalendar ->setShortcut( KShortcut( Qt::SHIFT + Qt::CTRL + Qt::Key_I ) );
     connect( actionAddSubCalendar , SIGNAL( triggered( bool ) ), SLOT( slotAddSubCalendar () ) );
 
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18nc( "@action", "Delete" ), this );
+    actionDeleteSelection  = new KAction(koIcon("edit-delete"), i18nc("@action", "Delete"), this);
     coll->addAction("delete_calendar_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteCalendar() ) );

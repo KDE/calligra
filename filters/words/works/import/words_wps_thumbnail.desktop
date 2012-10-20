@@ -1,6 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Works Document
+Name[el]=Έγγραφο Microsoft Works
+Name[et]=Microsoft Worksi dokument
+Name[fi]=Microsoft Works -asiakirja
+Name[fr]=Document Microsoft Works
+Name[hu]=Microsoft Works dokumentumok
+Name[it]=Documenti Microsoft Works
+Name[nl]=Microsoft Works-document
+Name[pt]=Documento do Microsoft Works
+Name[pt_BR]=Documentos do Microsoft Works
+Name[sk]=Dokument Microsoft Works
+Name[sv]=Microsoft Works-dokument
+Name[uk]=Документ Microsoft Works
+Name[x-test]=xxMicrosoft Works Documentxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.ms-works;

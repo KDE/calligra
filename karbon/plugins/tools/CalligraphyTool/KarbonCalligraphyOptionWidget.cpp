@@ -19,13 +19,14 @@
 
 #include "KarbonCalligraphyOptionWidget.h"
 
+#include <KoIcon.h>
+
 #include <KLocale>
 #include <KComboBox>
 #include <KGlobal>
 #include <KConfigGroup>
 #include <KDebug>
 #include <KMessageBox>
-#include <KIcon>
 #include <KInputDialog>
 
 #include <QSpinBox>
@@ -65,12 +66,12 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
     m_saveButton = new QToolButton(this);
     m_saveButton->setToolTip(i18n("Save profile as..."));
-    m_saveButton->setIcon(KIcon("document-save-as"));
+    m_saveButton->setIcon(koIcon("document-save-as"));
     layout->addWidget(m_saveButton, 0, 1);
 
     m_removeButton = new QToolButton(this);
     m_removeButton->setToolTip(i18n("Remove profile"));
-    m_removeButton->setIcon(KIcon("list-remove"));
+    m_removeButton->setIcon(koIcon("list-remove"));
     layout->addWidget(m_removeButton, 0, 2);
 
     QGridLayout *detailsLayout = new QGridLayout();

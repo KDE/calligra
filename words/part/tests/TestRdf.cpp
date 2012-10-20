@@ -835,7 +835,7 @@ void TestRdf::testRoundtrip()
     {
 
         // Get the words part and create a document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
         doc->initEmpty();
@@ -945,7 +945,7 @@ void TestRdf::testRoundtrip()
     }
     {
         // Load the document
-        KWDocument *doc = new KWDocument();
+        KWDocument *doc = new KWDocument(new MockPart);
         Q_ASSERT(doc);
         doc->setAutoSave(0);
 

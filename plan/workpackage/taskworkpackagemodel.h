@@ -87,6 +87,7 @@ public:
         NodeStarted,
         NodeActualFinish,
         NodeFinished,
+        NodeStatus,
         NodeStatusNote,
 
         ProjectName,
@@ -163,6 +164,8 @@ protected:
     QVariant actualStart( Node *n, int role ) const;
     QVariant actualFinish( Node *n, int role ) const;
     QVariant plannedEffort( Node *n, int role ) const;
+
+    QVariant status( Node *n, int role ) const;
 
 private:
     NodeModel m_nodemodel;

@@ -20,7 +20,6 @@
 #include <kdebug.h>
 #include <kapplication.h>
 #include <kglobal.h>
-#include <kiconloader.h>
 
 #include <tableview/kexitableview.h>
 

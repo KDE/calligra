@@ -1,6 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=Microsoft Powerpoint Presentations
+Name[el]=Παρουσιάσεις Microsoft PowerPoint
+Name[et]=Microsoft PowerPointi esitlused
+Name[fi]=Microsoft Powerpoint -esitykset
+Name[fr]=Présentations Microsoft PowerPoint
+Name[hu]=Microsoft Powerpoint bemutatók
+Name[it]=Presentazioni Microsoft PowerPoint
+Name[nl]=Microsoft Powerpoint-presentaties
+Name[pt]=Apresentações do Microsoft PowerPoint
+Name[pt_BR]=Apresentações do Microsoft Powerpoint
+Name[sk]=Prezentácie Microsoft Powerpoint
+Name[sv]=Microsoft Powerpoint-presentationer
+Name[uk]=Презентації Microsoft Powerpoint
+Name[x-test]=xxMicrosoft Powerpoint Presentationsxx
 
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/vnd.ms-powerpoint;

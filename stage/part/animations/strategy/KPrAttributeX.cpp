@@ -36,7 +36,7 @@ void KPrAttributeX::updateCache(KPrAnimationCache *cache, KPrShapeAnimation *sha
     value = value - shape->position().x();
     value = value * cache->zoom();
     transform.translate(value, 0);
-    cache->update(shape, shapeAnimation->textBlockData(), "transform", transform);
+    cache->update(shape, shapeAnimation->textBlockUserData(), "transform", transform);
 }
 
 void KPrAttributeX::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
@@ -44,6 +44,6 @@ void KPrAttributeX::initCache(KPrAnimationCache *animationCache, int step, KPrSh
     KoShape* shape = shapeAnimation->shape();
     qreal v1 = startValue * animationCache->pageSize().width() - shape->position().x();
     qreal v2 = endValue * animationCache->pageSize().width() - shape->position().x();
-    animationCache->init(step, shape, shapeAnimation->textBlockData(), "transform", QTransform().translate(v1, 0));
-    animationCache->init(step + 1, shape, shapeAnimation->textBlockData(), "transform", QTransform().translate(v2, 0));
+    animationCache->init(step, shape, shapeAnimation->textBlockUserData(), "transform", QTransform().translate(v1, 0));
+    animationCache->init(step + 1, shape, shapeAnimation->textBlockUserData(), "transform", QTransform().translate(v2, 0));
 }

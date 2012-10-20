@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,10 +22,22 @@
 #ifndef KWSTATISTICSDOCKER_H
 #define KWSTATISTICSDOCKER_H
 
+// Base classes
 #include <QDockWidget>
-#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
+
+// Qt
+#include <QBoxLayout>
+#include <QGridLayout>
+
+// Calligra
+#include <KoDockFactoryBase.h>
+
+// Local
+#include <dockers/KWStatisticsWidget.h>
+
 class KoCanvasBase;
+
 
 class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -33,20 +46,25 @@ class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWStatisticsDocker();
     ~KWStatisticsDocker();
-
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
 private:
     bool m_canvasReset;
+
+    // The statistics widget
+    KWStatisticsWidget *m_statisticsWidget;
+
+    
+public slots:
+    void ondockLocationChanged(Qt::DockWidgetArea newArea);
 };
 
 class KWStatisticsDockerFactory : public KoDockFactoryBase
 {
 public:
     KWStatisticsDockerFactory();
-
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
     DockPosition defaultDockPosition() const {

@@ -37,6 +37,7 @@
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
 #include <KoTextDocumentLayout.h>
+#include <KoIcon.h>
 
 #include <kdebug.h>
 
@@ -95,7 +96,7 @@ void ReferencesTool::createActions()
     addAction("insert_tableofcontents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
 
-    action = new KAction(i18n("Insert Custom ..."), this);
+    action = new KAction(i18n("Insert Custom..."), this);
     addAction("insert_configure_tableofcontents", action);
     action->setToolTip(i18n("Insert a custom Table of Contents into the document."));
 
@@ -104,7 +105,7 @@ void ReferencesTool::createActions()
     action->setToolTip(i18n("Configure the Table of Contents"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
 
-    action = new KAction(i18n("Insert with auto number"),this);
+    action = new KAction(i18n("Insert footnote with auto number"),this);
     addAction("insert_autofootnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
 
@@ -114,7 +115,7 @@ void ReferencesTool::createActions()
     addAction("insert_labeledfootnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
 
-    action = new KAction(i18n("Insert with auto number"),this);
+    action = new KAction(i18n("Insert endnote with auto number"),this);
     addAction("insert_autoendnote",action);
     connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
 
@@ -124,11 +125,11 @@ void ReferencesTool::createActions()
     addAction("insert_labeledendnote", action);
     connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
 
-    action = new KAction(KIcon("configure"), i18n("Settings..."), this);
+    action = new KAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_footnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
 
-    action = new KAction(KIcon("configure"), i18n("Settings..."), this);
+    action = new KAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_endnotes",action);
     connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
 

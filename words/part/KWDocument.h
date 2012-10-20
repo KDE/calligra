@@ -64,7 +64,7 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(KoPart *part = 0);
+    explicit KWDocument(KoPart *part);
     ~KWDocument();
 
     // KoShapeBasedDocumentBase interface
@@ -92,6 +92,9 @@ public:
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+
+    bool isMasterDocument() const;
+    void setIsMasterDocument(bool isMasterDocument);
 
     // others
     /**
@@ -261,6 +264,7 @@ private:
     void saveConfig();
 
 private:
+    bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;

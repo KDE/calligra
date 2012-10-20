@@ -24,6 +24,7 @@
 #include "kis_shared_ptr.h"
 #include "kis_image.h"
 #include "kis_doc2.h"
+#include "kis_part2.h"
 
 #include <KoStore.h>
 #include <KoColorProfile.h>
@@ -68,7 +69,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     Q_ASSERT(m_node);
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg;
-        return m_node->projection()->convertToQImage(cfg.displayProfile());
+        return m_node->projection()->convertToQImage(cfg.displayProfile(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     }
     else if (mimetype == "application/x-krita-node"
              || mimetype == "application/zip") {
@@ -81,7 +82,9 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
         Q_ASSERT(!store->bad());
         store->disallowNameExpansion();
 
-        KisDoc2 doc;
+        KisPart2 *p = new KisPart2();
+        KisDoc2 doc(p);
+        p->setDocument(&doc);
 
         QRect rc = node->exactBounds();
 

@@ -28,7 +28,6 @@
 #include "KoDocument.h"
 #include "KoPart.h"
 #include "KoServiceProvider.h"
-#include "KoPartAdaptor.h"
 #include "KoGlobal.h"
 #include "KoEmbeddedDocumentSaver.h"
 #include "KoFilterManager.h"
@@ -56,7 +55,6 @@
 #include <kparts/partmanager.h>
 #include <ksavefile.h>
 #include <kxmlguifactory.h>
-#include <KIconLoader>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
@@ -840,6 +838,9 @@ bool KoDocument::saveOasisPreview(KoStore *store, KoXmlWriter *manifestWriter)
     const QPixmap pix = generatePreview(QSize(128, 128));
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
 
+    if (preview.isNull())
+        return true; //no thumbnail to save, but the process as a whole worked
+
     // ### TODO: freedesktop.org Thumbnail specification (date...)
     KoStoreDevice io(store);
     if (!io.open(QIODevice::WriteOnly))
@@ -1000,9 +1001,8 @@ bool KoDocument::openUrl(const KUrl & _url)
         QFile::remove(url.toLocalFile()); // and remove the autosave file
     }
     else {
-        if (d->parentPart) {
-            d->parentPart->addRecentURLToAllShells(_url);
-        }
+        d->parentPart->addRecentURLToAllShells(_url);
+
         if (ret) {
             // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
             KFileItem file(url, mimeType(), KFileItem::Unknown);
@@ -2085,7 +2085,6 @@ void KoDocument::initEmpty()
     setEmpty();
     setModified(false);
 }
-
 
 QList<KoVersionInfo> & KoDocument::versionList()
 {

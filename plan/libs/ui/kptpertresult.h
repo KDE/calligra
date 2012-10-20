@@ -38,7 +38,6 @@
 class KoDocument;
 
 class KAction;
-class KIcon;
 
 /// The main namespace
 namespace KPlato

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,12 +32,16 @@ namespace KexiDB
 class RecordData;
 }
 class KexiTableDesignerViewPrivate;
-class K3Command;
-class CommandGroup;
+class KUndo2Command;
 
 namespace KoProperty
 {
 class Set;
+}
+
+namespace KexiTableDesignerCommands
+{
+class Command;
 }
 
 //! Design view of the Table Designer
@@ -93,10 +97,6 @@ public:
      and by RemoveFieldCommand to remove a field. */
     virtual void deleteRow(int row, bool addCommand = false);
 
-    /*! Deletes a field for \a row. Property set is also deleted.
-     Used by RemoveFieldCommand to remove a field. */
-//  virtual void deleteField( int row );
-
     /*! Changes property \a propertyName to \a newValue for a field at row \a row.
      If \a listData is not NULL and not empty, a deep copy of it is passed to Property::setListData().
      If \a listData \a nlist if not NULL but empty, Property::setListData(0) is called. */
@@ -149,7 +149,6 @@ protected slots:
 
     //! Called before row inserting in tableview.
     void slotRowInserted();
-//  void slotAboutToInsertRow(KexiDB::RecordData* record, KexiDB::ResultInfo* result, bool repaint);
 
     //! Called before row deleting in tableview.
     void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
@@ -167,9 +166,6 @@ protected slots:
 
     /*! Redoes the recently undoed action. */
     void slotRedo();
-
-    /*! Reaction on command execution from the command history */
-    void slotCommandExecuted(K3Command *command);
 
     /*! Simulates real execution of the Alter Table. For debugging. */
     void slotSimulateAlterTableExecution();
@@ -194,12 +190,12 @@ protected:
      or 0 if current row is empty. */
     virtual KoProperty::Set *propertySet();
 
-//  void removeCurrentPropertySet();
-
     /*! Reimplemented from KexiView, because tables creation is more complex.
      No table schema altering is required, so just buildSchema() is used to create a new schema.
     */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
     /*! Reimplemented from KexiView, because table storage is more complex.
      Table schema altering may be required, so just buildSchema() is used to create a new schema.
@@ -224,7 +220,7 @@ protected:
      \a aWasPKey is internal.
      If \a commandGroup is not 0, it is used as parent group for storing actions' history. */
     void switchPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false,
-                          CommandGroup* commandGroup = 0);
+                          KexiTableDesignerCommands::Command* commandGroup = 0);
 
     //! Gets subtype strings and names for type \a fieldType.
     void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup,
@@ -232,13 +228,13 @@ protected:
 
     /*! Adds history command \a command to the undo/redo buffer.
      If \a execute is true, the command is executed afterwards. */
-    void addHistoryCommand(K3Command* command, bool execute);
+    void addHistoryCommand(KexiTableDesignerCommands::Command* command, bool execute);
 
     //! Updates undo/redo shared actions availability by looking at command history's action
     void updateUndoRedoActions();
 
 #ifdef KEXI_DEBUG_GUI
-    void debugCommand(K3Command* command, int nestingLevel);
+    void debugCommand(const KUndo2Command* command, int nestingLevel);
 #endif
 
     /*! Inserts a new \a field for \a row.

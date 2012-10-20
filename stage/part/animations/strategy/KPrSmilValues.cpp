@@ -28,7 +28,11 @@ KPrSmilValues::KPrSmilValues(KPrShapeAnimation *shapeAnimation)
     : KPrAnimationValue(shapeAnimation)
     , m_formulaParser(0)
 {
+}
 
+KPrSmilValues::~KPrSmilValues()
+{
+    delete m_formulaParser;
 }
 
 qreal KPrSmilValues::value(qreal time) const

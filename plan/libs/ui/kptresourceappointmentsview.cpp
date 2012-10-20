@@ -44,7 +44,6 @@
 #include <QHeaderView>
 #include <QTabWidget>
 
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>

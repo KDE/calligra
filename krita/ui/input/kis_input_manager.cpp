@@ -1,4 +1,3 @@
-
 /* This file is part of the KDE project
  * Copyright (C) 2012 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
@@ -83,211 +82,6 @@ public:
     bool setMirrorMode;
     bool fixedAction;
 };
-
-KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
-    : QObject(canvas), d(new Private(this))
-{
-    d->canvas = canvas;
-    d->toolProxy = proxy;
-
-    d->setupActions();
-
-    d->potentialShortcuts = d->shortcuts;
-
-    /*
-     * Temporary solution so we can still set the mirror axis.
-     *
-     * TODO: Create a proper interface for this.
-     * There really should be a better way to handle this, one that neither
-     * relies on "hidden" mouse interaction or shortcuts.
-     */
-    KAction *setMirrorAxis = new KAction(i18n("Set Mirror Axis"), this);
-    d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
-    setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
-    connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));
-
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            SLOT(slotToolChanged()));
-}
-
-KisInputManager::~KisInputManager()
-{
-    qDeleteAll(d->shortcuts);
-    qDeleteAll(d->actions);
-    delete d;
-}
-
-bool KisInputManager::eventFilter(QObject* object, QEvent* event)
-{
-    Q_UNUSED(object)
-    switch (event->type()) {
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonDblClick: {
-            d->mousePosition = widgetToPixel(static_cast<QMouseEvent*>(event)->posF());
-
-            //If the palette is visible, then hide it and eat the event.
-            if (canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
-                canvas()->favoriteResourceManager()->slotShowPopupPalette();
-                return true;
-            }
-
-            if (d->setMirrorMode) {
-                d->canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, d->canvas->image()->documentToPixel(d->mousePosition));
-                QApplication::restoreOverrideCursor();
-                d->setMirrorMode = false;
-                return true;
-            }
-        } //Intentional fall through
-        case QEvent::KeyPress:
-        case QEvent::KeyRelease:
-            if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
-                QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
-                if (kevent->isAutoRepeat()) {
-                    if (d->currentAction) {
-                        if (d->currentAction->isBlockingAutoRepeat()) {
-                            return true; //Ignore auto repeat key events if the action is asking for it.
-                        }
-                    } else {
-                        return true; //Always ignore auto repeat key events when we do not have a current action.
-                    }
-                }
-            }
-            //Intentional fall through
-        case QEvent::MouseButtonRelease:
-            if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
-                d->currentShortcut->match(event);
-
-                if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
-                    d->clearState();
-                    break;
-                }
-
-                d->currentAction->inputEvent(event);
-            } else { //Try to find a matching shortcut.
-                d->match(event);
-            }
-            return true;
-        case QEvent::MouseMove:
-            if (!d->currentAction) {
-                QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-                //Update the current tool so things like the brush outline gets updated.
-                d->toolProxy->mouseMoveEvent(mevent, widgetToPixel(mevent->posF()));
-            } else {
-                d->currentAction->inputEvent(event);
-            }
-            return true;
-        case QEvent::Wheel:
-            if (d->currentAction) {
-                d->currentAction->inputEvent(event);
-            } else {
-                d->match(event);
-                if (d->currentAction) {
-                    d->clearState();
-                }
-            }
-            break;
-        case QEvent::Enter:
-            //Ensure we have focus so we get key events.
-            d->canvas->canvasWidget()->setFocus();
-            return true;
-        case QEvent::Leave:
-            //Clear all state so we don't have half-matched shortcuts dangling around.
-            d->clearState();
-            return true;
-        case QEvent::TabletPress: {
-            //We want both the tablet information and the mouse button state.
-            //Since QTabletEvent only provides the tablet information, we save that
-            //and then ignore the event so it will generate a mouse event.
-            QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
-
-            //Since events get deleted once they are processed we need to clone the event
-            //to save it.
-            QTabletEvent* newEvent = new QTabletEvent(QEvent::TabletPress,
-                tevent->pos(),
-                tevent->globalPos(),
-                tevent->hiResGlobalPos(),
-                tevent->device(),
-                tevent->pointerType(),
-                tevent->pressure(),
-                tevent->xTilt(),
-                tevent->yTilt(),
-                tevent->tangentialPressure(),
-                tevent->rotation(),
-                tevent->z(),
-                tevent->modifiers(),
-                tevent->uniqueId()
-            );
-            d->tabletPressEvent = newEvent;
-            event->ignore();
-            break;
-        }
-        case QEvent::TabletMove:
-            //Only process tablet move events if the current action has special code for it.
-            //In all other cases, we simply ignore it so it will generate a mouse event
-            //instead.
-            if (d->currentAction && d->currentAction->handleTablet()) {
-                d->currentAction->inputEvent(event);
-                return true;
-            } else {
-                event->ignore();
-            }
-            break;
-        case QEvent::TabletRelease:
-            //Always ignore tablet release events and have them generate mouse events instead.
-            event->ignore();
-        default:
-            break;
-    }
-
-    return false;
-}
-
-KisCanvas2* KisInputManager::canvas() const
-{
-    return d->canvas;
-}
-
-KoToolProxy* KisInputManager::toolProxy() const
-{
-    return d->toolProxy;
-}
-
-QPointF KisInputManager::mousePosition() const
-{
-    return d->mousePosition;
-}
-
-QTabletEvent* KisInputManager::tabletPressEvent() const
-{
-    return d->tabletPressEvent;
-}
-
-void KisInputManager::setMirrorAxis()
-{
-    d->setMirrorMode = true;
-    QApplication::setOverrideCursor(Qt::CrossCursor);
-}
-
-void KisInputManager::slotToolChanged()
-{
-    QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
-        d->fixedAction = true;
-        if (!d->currentAction) {
-            d->currentShortcut = d->shortcuts.at(0);
-            d->currentAction = d->currentShortcut->action();
-            d->currentAction->begin(d->currentShortcut->shortcutIndex());
-        }
-    } else {
-        d->fixedAction = false;
-    }
-}
-
-QPointF KisInputManager::widgetToPixel(const QPointF& position)
-{
-    QPointF pixel = QPointF(position.x() + 0.5f, position.y() + 0.5f);
-    return d->canvas->coordinatesConverter()->widgetToDocument(pixel);
-}
 
 void KisInputManager::Private::match(QEvent* event)
 {
@@ -419,11 +213,21 @@ void KisInputManager::Private::setupActions()
     shortcut->setButtons(QList<Qt::MouseButton>() << Qt::MidButton);
 #endif
 
-    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
-    shortcut->setWheel(KisShortcut::WheelUp);
-
-    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
-    shortcut->setWheel(KisShortcut::WheelDown);
+    /**
+     * FIXME: Zooming with Wheel is implemented on a level of
+     * KoCanvasControllerWidget and is done in a bit different way than
+     * usual zoom-in/out actions, because it tries to zoom around
+     * the mouse pointer. If you want to implement it in
+     * KisInputManager, please implement additional action that
+     * takes mouse position into account.
+     *
+     * Don't forget to disable wheel-zooming in KoCanvasControllerWidget
+     * before activation of this shortcut.
+     */
+    // shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    // shortcut->setWheel(KisShortcut::WheelUp);
+    // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    // shortcut->setWheel(KisShortcut::WheelDown);
 
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
@@ -477,3 +281,210 @@ void KisInputManager::Private::clearState()
         shortcut->clear();
     }
 }
+
+KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
+    : QObject(canvas), d(new Private(this))
+{
+    d->canvas = canvas;
+    d->toolProxy = proxy;
+
+    d->setupActions();
+
+    d->potentialShortcuts = d->shortcuts;
+
+    /*
+     * Temporary solution so we can still set the mirror axis.
+     *
+     * TODO: Create a proper interface for this.
+     * There really should be a better way to handle this, one that neither
+     * relies on "hidden" mouse interaction or shortcuts.
+     */
+    KAction *setMirrorAxis = new KAction(i18n("Set Mirror Axis"), this);
+    d->canvas->view()->actionCollection()->addAction("set_mirror_axis", setMirrorAxis);
+    setMirrorAxis->setShortcut(QKeySequence("Shift+r"));
+    connect(setMirrorAxis, SIGNAL(triggered(bool)), SLOT(setMirrorAxis()));
+
+    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
+            SLOT(slotToolChanged()));
+}
+
+KisInputManager::~KisInputManager()
+{
+    qDeleteAll(d->shortcuts);
+    qDeleteAll(d->actions);
+    delete d;
+}
+
+bool KisInputManager::eventFilter(QObject* object, QEvent* event)
+{
+    Q_UNUSED(object)
+    switch (event->type()) {
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonDblClick: {
+        d->mousePosition = widgetToPixel(static_cast<QMouseEvent*>(event)->posF());
+
+        //If the palette is visible, then hide it and eat the event.
+        if (canvas()->favoriteResourceManager()->isPopupPaletteVisible()) {
+            canvas()->favoriteResourceManager()->slotShowPopupPalette();
+            return true;
+        }
+
+        if (d->setMirrorMode) {
+            d->canvas->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, d->canvas->image()->documentToPixel(d->mousePosition));
+            QApplication::restoreOverrideCursor();
+            d->setMirrorMode = false;
+            return true;
+        }
+    } //Intentional fall through
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease:
+        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+            QKeyEvent *kevent = static_cast<QKeyEvent*>(event);
+            if (kevent->isAutoRepeat()) {
+                if (d->currentAction) {
+                    if (d->currentAction->isBlockingAutoRepeat()) {
+                        return true; //Ignore auto repeat key events if the action is asking for it.
+                    }
+                } else {
+                    return true; //Always ignore auto repeat key events when we do not have a current action.
+                }
+            }
+        }
+        //Intentional fall through
+    case QEvent::MouseButtonRelease:
+        if (d->currentAction) { //If we are currently performing an action, we only update the state of that action and shortcut.
+            d->currentShortcut->match(event);
+
+            if ((d->currentShortcut->matchLevel() == KisShortcut::PartialMatch || d->currentShortcut->matchLevel() == KisShortcut::NoMatch)
+                && !d->fixedAction) {
+                d->clearState();
+                break;
+            }
+
+            d->currentAction->inputEvent(event);
+        } else { //Try to find a matching shortcut.
+            d->match(event);
+        }
+        return true;
+    case QEvent::MouseMove:
+        if (!d->currentAction) {
+            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+            //Update the current tool so things like the brush outline gets updated.
+            d->toolProxy->mouseMoveEvent(mevent, widgetToPixel(mevent->posF()));
+        } else {
+            d->currentAction->inputEvent(event);
+        }
+        return true;
+    case QEvent::Wheel:
+        if (d->currentAction) {
+            d->currentAction->inputEvent(event);
+        } else {
+            d->match(event);
+            if (d->currentAction) {
+                d->clearState();
+            }
+        }
+        break;
+    case QEvent::Enter:
+        //Ensure we have focus so we get key events.
+        d->canvas->canvasWidget()->setFocus();
+        return true;
+    case QEvent::Leave:
+        //Clear all state so we don't have half-matched shortcuts dangling around.
+        d->clearState();
+        return true;
+    case QEvent::TabletPress: {
+        //We want both the tablet information and the mouse button state.
+        //Since QTabletEvent only provides the tablet information, we save that
+        //and then ignore the event so it will generate a mouse event.
+        QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
+
+        //Since events get deleted once they are processed we need to clone the event
+        //to save it.
+        QTabletEvent* newEvent = new QTabletEvent(QEvent::TabletPress,
+                                                  tevent->pos(),
+                                                  tevent->globalPos(),
+                                                  tevent->hiResGlobalPos(),
+                                                  tevent->device(),
+                                                  tevent->pointerType(),
+                                                  tevent->pressure(),
+                                                  tevent->xTilt(),
+                                                  tevent->yTilt(),
+                                                  tevent->tangentialPressure(),
+                                                  tevent->rotation(),
+                                                  tevent->z(),
+                                                  tevent->modifiers(),
+                                                  tevent->uniqueId()
+                                                  );
+        d->tabletPressEvent = newEvent;
+        event->ignore();
+        break;
+    }
+    case QEvent::TabletMove:
+        //Only process tablet move events if the current action has special code for it.
+        //In all other cases, we simply ignore it so it will generate a mouse event
+        //instead.
+        if (d->currentAction && d->currentAction->handleTablet()) {
+            d->currentAction->inputEvent(event);
+            return true;
+        } else {
+            event->ignore();
+        }
+        break;
+    case QEvent::TabletRelease:
+        //Always ignore tablet release events and have them generate mouse events instead.
+        event->ignore();
+    default:
+        break;
+    }
+
+    return false;
+}
+
+KisCanvas2* KisInputManager::canvas() const
+{
+    return d->canvas;
+}
+
+KoToolProxy* KisInputManager::toolProxy() const
+{
+    return d->toolProxy;
+}
+
+QPointF KisInputManager::mousePosition() const
+{
+    return d->mousePosition;
+}
+
+QTabletEvent* KisInputManager::tabletPressEvent() const
+{
+    return d->tabletPressEvent;
+}
+
+void KisInputManager::setMirrorAxis()
+{
+    d->setMirrorMode = true;
+    QApplication::setOverrideCursor(Qt::CrossCursor);
+}
+
+void KisInputManager::slotToolChanged()
+{
+    QString toolId = KoToolManager::instance()->activeToolId();
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+        d->fixedAction = true;
+        if (!d->currentAction) {
+            d->currentShortcut = d->shortcuts.at(0);
+            d->currentAction = d->currentShortcut->action();
+            d->currentAction->begin(d->currentShortcut->shortcutIndex());
+        }
+    } else {
+        d->fixedAction = false;
+    }
+}
+
+QPointF KisInputManager::widgetToPixel(const QPointF& position)
+{
+    QPointF pixel = QPointF(position.x() + 0.5f, position.y() + 0.5f);
+    return d->canvas->coordinatesConverter()->widgetToDocument(pixel);
+}
+

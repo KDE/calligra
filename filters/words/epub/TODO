@@ -19,8 +19,7 @@ Legend
 ================================================================
                         Milestones
 
-Next Milestone: <not decided>
-
+Next Milestone: EPUB 2.0.1 filter done
 
 
 ================================================================
@@ -35,22 +34,8 @@ Time frame: (days / weeks)
 [These issues are picked from the medium and long term issues and
 assigned to a person.]
 
+
 Fix known bugs / misfeatures
- * break-before in inherited styles don't break chapters.       [Done]
- * Collect images in a list while doing the conversion to
-   html and go through them afterwards and save them.
- * Make it look at namespaced tags                              [moji]
- * Get the document title and put it into OPF file              [Done]
- * Get the book ID somewhere from. We may have to add this      [ingwa]
-   to metadata as well. Same for language.
-
-Conform to standards
- * Name the chapters chapterNN.xhtml instead of bodyN.html      [ingwa]
- * Name the style sheet styles.css instead                      [Done]
-
-Features
- * Support for internal links                                   [moji]
-
 
 
 Medium term issues
@@ -58,29 +43,18 @@ Medium term issues
 
 Time frame: (weeks / months)
 
-Handle pictures raster pictures and SVG
- * Copy to the epub store                                       [Done]
-    + convert to supported formats (see below)
- * Links in the xhtml files.                                    [Done]
- * Add to manifest                                              [Done]
+Allow user to add a book cover image
+ * Send parameter (filename) to the filter
+ * UI to find / edit the filename
 
-Conversions to supported formats inside the EPUB
- * bitmaps to jpg or png.
- * wmf/emf/svm to svg
+Configuration of the conversion process
+ * Styles in css file (bool)                                            [Done]
+ * Use breaks (bool)                                                    [Done]
 
-Frames
- * Different anchor and text run-around cases
- * Get replacement images from content shapes that we
-   don't recognize.
+Create a generic HTML export filter                                     DONE
 
-Conversions to supported formats inside the EPUB
- * Convert wmf to svg
- * Convert emf to svg
- * Convert svm to svg
-
-More formatting
- * Space before/after a paragraph
-
+Misfeatures
+ * Styles in css should go back to only those that are used.
 
 
 Long term issues

@@ -33,6 +33,7 @@
 #include <QTabBar>
 
 #include <KoServiceProvider.h>
+#include <KoIcon.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
@@ -85,7 +86,6 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <ktoggleaction.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
@@ -353,7 +353,7 @@ void KoPAView::initActions()
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
-    d->deleteSelectionAction = new KAction(KIcon("edit-delete"), i18n("D&elete"), this);
+    d->deleteSelectionAction = new KAction(koIcon("edit-delete"), i18n("D&elete"), this);
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction );
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     d->deleteSelectionAction->setEnabled(false);
@@ -384,7 +384,7 @@ void KoPAView::initActions()
     connect(d->viewRulers, SIGNAL(triggered(bool)), proxyObject, SLOT(setShowRulers(bool)));
     setShowRulers(d->doc->rulersVisible());
 
-    d->actionInsertPage = new KAction( KIcon("document-new"), i18n( "Insert Page" ), this );
+    d->actionInsertPage = new KAction(koIcon("document-new"), i18n("Insert Page"), this);
     actionCollection()->addAction( "page_insertpage", d->actionInsertPage );
     d->actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     d->actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
@@ -426,7 +426,7 @@ void KoPAView::initActions()
     actionCollection()->addAction("import_document", am);
     connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    d->actionConfigure = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    d->actionConfigure = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", d->actionConfigure);
     connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
 
@@ -842,11 +842,8 @@ void KoPAView::pageOffsetChanged()
 
 void KoPAView::updateMousePosition(const QPoint& position)
 {
-    QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
-    // the offset is positive it the canvas is shown fully visible
-    canvasOffset.setX(canvasOffset.x() < 0 ? canvasOffset.x(): 0);
-    canvasOffset.setY(canvasOffset.y() < 0 ? canvasOffset.y(): 0);
-    QPoint viewPos = position - canvasOffset;
+    const QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
+    const QPoint viewPos = position - d->canvas->documentOrigin() - canvasOffset;
 
     d->horizontalRuler->updateMouseCoordinate(viewPos.x());
     d->verticalRuler->updateMouseCoordinate(viewPos.y());

@@ -20,30 +20,30 @@
 // NOTE: This is copied from kmessagebox.cpp
 
 #include "kmessagebox.h"
-#include <kiconloader.h>
+#include <KoIcon.h>
 
 static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
 {
-    QString icon_name;
+    const char *icon_name = 0;
 
     switch (icon) {
     case QMessageBox::NoIcon:
         return QIcon();
         break;
     case QMessageBox::Information:
-        icon_name = "dialog-information";
+        icon_name = koIconNameCStr("dialog-information");
         break;
     case QMessageBox::Warning:
-        icon_name = "dialog-warning";
+        icon_name = koIconNameCStr("dialog-warning");
         break;
     case QMessageBox::Critical:
-        icon_name = "dialog-error";
+        icon_name = koIconNameCStr("dialog-error");
         break;
     default:
         break;
     }
 
-   QIcon ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeHuge, KIconLoader::DefaultState, QStringList(), 0, true);
+   QIcon ret = KIconLoader::global()->loadIcon(QLatin1String(icon_name), KIconLoader::NoGroup, KIconLoader::SizeHuge, KIconLoader::DefaultState, QStringList(), 0, true);
 
    if (ret.isNull()) {
        return QMessageBox::standardIcon(icon);

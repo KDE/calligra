@@ -197,7 +197,7 @@ public:
     KisDoc2 *doc;
     KisPart2 *part;
     KisCoordinatesConverter * viewConverter;
-    KoCanvasController * canvasController;
+    KisCanvasController * canvasController;
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
     KisStatusBar * statusBar;
@@ -240,7 +240,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     m_d->part = part;
     m_d->viewConverter = new KisCoordinatesConverter();
 
-    KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
+    KisCanvasController *canvasController = new KisCanvasController(this, actionCollection());
     canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
@@ -301,22 +301,22 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
-    connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
+    connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvasController, SLOT(mirrorCanvas(bool)));
 
     KAction *rotateCanvasRight = new KAction(i18n("Rotate Canvas Right"), this);
     actionCollection()->addAction("rotate_canvas_right", rotateCanvasRight);
     rotateCanvasRight->setShortcut(QKeySequence("Ctrl+]"));
-    connect(rotateCanvasRight, SIGNAL(triggered()),m_d->canvas, SLOT(rotateCanvasRight15()));
+    connect(rotateCanvasRight, SIGNAL(triggered()),m_d->canvasController, SLOT(rotateCanvasRight15()));
 
     KAction *rotateCanvasLeft = new KAction(i18n("Rotate Canvas Left"), this);
     actionCollection()->addAction("rotate_canvas_left", rotateCanvasLeft);
     rotateCanvasLeft->setShortcut(QKeySequence("Ctrl+["));
-    connect(rotateCanvasLeft, SIGNAL(triggered()),m_d->canvas, SLOT(rotateCanvasLeft15()));
+    connect(rotateCanvasLeft, SIGNAL(triggered()),m_d->canvasController, SLOT(rotateCanvasLeft15()));
 
     KAction *resetCanvasTransformations = new KAction(i18n("Reset Canvas Transformations"), this);
     actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
-    connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
+    connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvasController, SLOT(resetCanvasTransformations()));
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
@@ -389,9 +389,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
         slotLoadingFinished();
     }
 
-    // canvas sends signal that origin is changed
-    connect(m_d->canvas, SIGNAL(documentOriginChanged()), m_d->zoomManager, SLOT(pageOffsetChanged()));
-    connect(m_d->canvas, SIGNAL(scrollAreaSizeChanged()), m_d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
+    connect(m_d->canvasController, SIGNAL(documentSizeChanged()), m_d->zoomManager, SLOT(slotScrollAreaSizeChanged()));
 
     setAcceptDrops(true);
 
@@ -452,7 +450,7 @@ void KisView2::dropEvent(QDropEvent *event)
 {
     KisImageSP kisimage = image();
 
-    QPointF pos = kisimage->documentToIntPixel(m_d->viewConverter->viewToDocument(event->pos() + m_d->canvas->documentOffset() - m_d->canvas->documentOrigin()));
+    QPointF pos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos());
 
     if (event->mimeData()->hasFormat("application/x-krita-node") || event->mimeData()->hasImage())
     {
@@ -462,7 +460,10 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisDoc2 tempDoc;
+            KisPart2 *p = new KisPart2();
+            KisDoc2 tempDoc(p);
+            p->setDocument(&tempDoc);
+
             tempDoc.loadNativeFormatFromStore(ba);
 
             KisImageWSP tempImage = tempDoc.image();
@@ -754,10 +755,10 @@ void KisView2::slotLoadingFinished()
     /**
      * Dirty hack alert
      */
-    if (m_d->viewConverter)
-        m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
     if (m_d->zoomManager && m_d->zoomManager->zoomController())
         m_d->zoomManager->zoomController()->setAspectMode(true);
+    if (m_d->viewConverter)
+        m_d->viewConverter->setZoomMode(KoZoomMode::ZOOM_PAGE);
     if (m_d->paintingAssistantManager){
         foreach(KisPaintingAssistant* assist, m_d->doc->preLoadedAssistants()){
             m_d->paintingAssistantManager->addAssistant(assist);
@@ -1186,9 +1187,7 @@ void KisView2::slotSaveIncrementalBackup()
             newVersion = baseNewVersion;
             newVersion.prepend("~");
             newVersion.append(".");
-            qDebug() << backupFileName << " version1";
             backupFileName.replace(regex, newVersion);
-            qDebug() << backupFileName << " version2";
             fileAlreadyExists = KIO::NetAccess::exists(backupFileName, KIO::NetAccess::DestinationSide, this);
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1
@@ -1199,7 +1198,6 @@ void KisView2::slotSaveIncrementalBackup()
                     baseNewVersion.prepend("0");
                 }
             }
-            qDebug() << "idiot";
         } while (fileAlreadyExists);
 
         // Save both as backup and on current file for interapplication workflow

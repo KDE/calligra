@@ -31,7 +31,6 @@
 #include <QAbstractItemView>
 #include <QMenu>
 
-#include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <klocale.h>

@@ -51,6 +51,14 @@ class XMLLoaderObject;
 class SchedulerPlugin;
 class KPlatoXmlLoaderBase;
 
+/// Caches effortcost data (bcws, bcwp, acwp)
+class EffortCostCache {
+public:
+    EffortCostCache() : cached( false ) {}
+    bool cached;
+    EffortCostMap effortcostmap;
+};
+
 /**
  * The Schedule class holds data calculated during project
  * calculation and scheduling, eg start- and end-times and
@@ -153,7 +161,8 @@ public:
     virtual QList<Resource*> resources() const;
     /// Return the resource names that has appointments to this schedule
     virtual QStringList resourceNameList() const;
-    
+
+    virtual EffortCostMap bcwsPrDay( EffortCostCalculationType type = ECCT_All );
     virtual EffortCostMap bcwsPrDay( EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
     virtual EffortCostMap plannedEffortCostPrDay( const Resource *resource, const QDate &start, const QDate &end, EffortCostCalculationType type = ECCT_All ) const;
@@ -250,6 +259,8 @@ public:
     
     virtual void incProgress() { if ( m_parent ) m_parent->incProgress(); }
 
+    void clearPerformanceCache();
+
 protected:
     virtual void changed( Schedule * /*sch*/ ) {}
     
@@ -334,6 +345,19 @@ protected:
     Duration positiveFloat;
     Duration negativeFloat;
     Duration freeFloat;
+
+    EffortCostCache &bcwsPrDayCache( int type ) {
+        return m_bcwsPrDay[ type ];
+    }
+    EffortCostCache &bcwpPrDayCache( int type ) {
+        return m_bcwpPrDay[ type ];
+    }
+    EffortCostCache &acwpCache( int type ) {
+        return m_acwp[ type ];
+    }
+    QMap<int, EffortCostCache> m_bcwsPrDay;
+    QMap<int, EffortCostCache> m_bcwpPrDay;
+    QMap<int, EffortCostCache> m_acwp;
 };
 
 /**
@@ -642,6 +666,13 @@ public:
     bool loadMainSchedule( MainSchedule *schedule, KoXmlElement &element, XMLLoaderObject &status );
 
     QMap< int, QString > phaseNames() const;
+
+    /// Return a list of the supported granularities of the current scheduler
+    QList<long unsigned int> supportedGranularities() const;
+    /// Return current index of supported granularities of the selected scheduler
+    int granularity() const;
+    /// Set current index of supported granularities of the selected scheduler
+    void setGranularity( int duration );
 
 public slots:
     /// Set maximum progress. Emits signal maxProgressChanged

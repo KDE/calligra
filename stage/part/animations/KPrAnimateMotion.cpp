@@ -28,14 +28,20 @@
 #include <KoXmlNS.h>
 #include <KoPathShape.h>
 #include <KoPathShapeLoader.h>
+#include <QDebug>
 
 KPrAnimateMotion::KPrAnimateMotion(KPrShapeAnimation *shapeAnimation)
 : KPrAnimationBase(shapeAnimation)
+, m_motionPath(new KoPathShape())
+, m_currentZoom(1.0)
+, m_currentPageSize(QSizeF(1.0, 1.0))
+, m_currentPosition(QPointF(0.0, 0.0))
 {
 }
 
 KPrAnimateMotion::~KPrAnimateMotion()
 {
+    delete m_motionPath;
 }
 
 bool KPrAnimateMotion::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -43,11 +49,8 @@ bool KPrAnimateMotion::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
     //<anim:animateMotion smil:dur="3s" smil:fill="hold" smil:targetElement="id1" svg:path="m0.0 0.0 1.0 0.5-1 0.5 1-1"/>
     QString path = element.attributeNS(KoXmlNS::svg, "path");
     if (!path.isEmpty()) {
-        KoPathShape pathShape;
-        KoPathShapeLoader loader(&pathShape);
+        KoPathShapeLoader loader(m_motionPath);
         loader.parseSvg(path, true);
-        m_path = pathShape.outline();
-        qDebug() << Q_FUNC_INFO << m_path << path;
     }
     KPrAnimationBase::loadOdf(element, context);
 
@@ -61,13 +64,8 @@ bool KPrAnimateMotion::saveOdf(KoPASavingContext & paContext) const
     writer.startElement("anim:animateMotion");
     saveAttribute(paContext);
 
-    KoPathShape *path = KoPathShape::createShapeFromPainterPath(m_path);
-    // KoPathShape::createShapeFromPainterPath normalizes the path. Therefore we need to transform the string by the offset of the path
-    QPointF offset = path->position();
-    QTransform transform;
-    transform.translate(offset.x(), offset.y());
-    writer.addAttribute("svg:path", path->toString(transform));
-    delete path;
+    KoPathShape *path = getPath(1.0, QSizeF(1, 1), false);
+    writer.addAttribute("svg:path", path->toString());
     writer.endElement();
     return true;
 }
@@ -75,25 +73,73 @@ bool KPrAnimateMotion::saveOdf(KoPASavingContext & paContext) const
 
 void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
 {
+    QPainterPath path = m_motionPath->outline();
     if (m_fill == FillHold) {
         KoShape *shape = m_shapeAnimation->shape();
         m_animationCache = animationCache;
         QSizeF pageSize = m_animationCache->pageSize();
-        QPointF endPoint = m_path.pointAtPercent(1);
-        animationCache->init(step + 1, shape, m_shapeAnimation->textBlockData(), "transform", QTransform().translate(endPoint.x() * pageSize.width() * animationCache->zoom(), endPoint.y() * pageSize.height() * animationCache->zoom()));
+        QPointF endPoint = path.pointAtPercent(1);
+        animationCache->init(step + 1, shape, m_shapeAnimation->textBlockUserData(), "transform", QTransform().translate(endPoint.x() * pageSize.width() * animationCache->zoom(), endPoint.y() * pageSize.height() * animationCache->zoom()));
     }
+}
+
+QPainterPath KPrAnimateMotion::pathOutline()
+{
+    QPainterPath path = m_motionPath->outline();
+    return path;
+}
+
+KoPathShape *KPrAnimateMotion::path()
+{
+    return m_motionPath;
+}
+
+KoPathShape *KPrAnimateMotion::getPath(qreal zoom, QSizeF pageSize, bool absolutePosition) const
+{
+    QPointF point = m_motionPath->position();
+    qreal xCorrection = pageSize.width() * zoom / (m_currentZoom * m_currentPageSize.width());
+    qreal yCorrection = pageSize.height() * zoom / (m_currentZoom * m_currentPageSize.height());
+
+    QPointF offset((point.x() - m_currentPosition.x()) * xCorrection,
+                   (point.y() - m_currentPosition.y()) * yCorrection);
+
+    if (absolutePosition) {
+            m_motionPath->setPosition(QPointF(m_shapeAnimation->shape()->position().x() + m_shapeAnimation->shape()->size().width() / 2 + offset.x(),
+                                          m_shapeAnimation->shape()->position().y() + m_shapeAnimation->shape()->size().height() / 2 + offset.y()));
+            m_currentPosition = QPointF(m_shapeAnimation->shape()->position().x() + m_shapeAnimation->shape()->size().width() / 2,
+                                        m_shapeAnimation->shape()->position().y() + m_shapeAnimation->shape()->size().height() / 2);
+    }
+    else {
+        m_motionPath->setPosition(QPointF(offset.x(), offset.y()));
+        m_currentPosition = QPointF(0, 0);
+    }
+
+    m_motionPath->setSize(QSizeF(m_motionPath->size().width() * xCorrection, m_motionPath->size().height() * yCorrection));
+    m_currentZoom = zoom;
+    m_currentPageSize = pageSize;
+    return m_motionPath;
+}
+
+QSizeF KPrAnimateMotion::currentPageSize()
+{
+    return m_currentPageSize;
+}
+
+qreal KPrAnimateMotion::currentZoom()
+{
+    return m_currentZoom;
 }
 
 void KPrAnimateMotion::next(int currentTime)
 {
     Q_ASSERT(m_animationCache);
+    QPainterPath path = getPath(1.0, QSizeF(1, 1), false)->outline();
     QSizeF pageSize = m_animationCache->pageSize();
-    QPointF point = m_path.pointAtPercent(qreal(currentTime)/qreal(animationDuration()));
+    QPointF point = path.pointAtPercent(qreal(currentTime)/qreal(animationDuration()));
     QPointF offset(point.x() * pageSize.width(), point.y() * pageSize.height());
-    qDebug() << Q_FUNC_INFO << currentTime << point << offset;
 
     KoShape *shape = m_shapeAnimation->shape();
     QTransform transform;
     transform.translate(offset.x() * m_animationCache->zoom(), offset.y() * m_animationCache->zoom());
-    m_animationCache->update(shape, m_shapeAnimation->textBlockData(), "transform", transform);
+    m_animationCache->update(shape, m_shapeAnimation->textBlockUserData(), "transform", transform);
 }

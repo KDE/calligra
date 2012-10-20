@@ -197,7 +197,7 @@ void Node::takeChildNode( Node *node) {
     }
     node->setParentNode(0);
     if ( t != type() ) {
-//        changed(); Note: handled by project
+        changed( Type );
     }
 }
 
@@ -211,7 +211,7 @@ void Node::takeChildNode( int number ) {
         }
     }
     if ( t != type() ) {
-//        changed(); Note: handled by project
+        changed( Type );
     }
 }
 
@@ -223,7 +223,7 @@ void Node::insertChildNode( int index, Node *node ) {
         m_nodes.insert(index,node);
     node->setParentNode( this );
     if ( t != type() ) {
-//        changed(); Note: handled by project
+        changed( Type );
     }
 }
 
@@ -234,14 +234,14 @@ void Node::addChildNode( Node *node, Node *after) {
         m_nodes.append(node);
         node->setParentNode( this );
         if ( t != type() ) {
-//        changed(); Note: handled by project
+            changed( Type );
         }
         return;
     }
     m_nodes.insert(index+1, node);
     node->setParentNode(this);
     if ( t != type() ) {
-//        changed(); Note: handled by project
+        changed( Type );
     }
 }
 
@@ -1187,7 +1187,7 @@ void Node::setCurrentSchedule(long id) {
 void Node::setStartupCost(double cost)
 {
     m_startupCost = cost;
-    changed();
+    changed(StartupCost);
 }
 
 void Node::setStartupAccount(Account *acc)
@@ -1203,7 +1203,7 @@ void Node::setStartupAccount(Account *acc)
 void Node::setShutdownCost(double cost)
 {
     m_shutdownCost = cost;
-    changed();
+    changed(ShutdownCost);
 }
 
 void Node::setShutdownAccount(Account *acc)
@@ -1226,9 +1226,28 @@ void Node::setRunningAccount(Account *acc)
     changed();
 }
 
-void Node::changed(Node *node) {
-    if (m_parent)
-        m_parent->changed(node);
+void Node::changed(Node *node, int property) {
+    switch ( property) {
+        case Type:
+        case StartupCost:
+        case ShutdownCost:
+        case CompletionEntry:
+        case CompletionStarted:
+        case CompletionFinished:
+        case CompletionStartTime:
+        case CompletionFinishTime:
+        case CompletionPercentage:
+        case CompletionRemainingEffort:
+        case CompletionActualEffort:
+            foreach ( Schedule *s, m_schedules ) {
+                s->clearPerformanceCache();
+            }
+        break;
+        default: break;
+    }
+    if (m_parent) {
+        m_parent->changed(node, property);
+    }
 }
 
 Duration Node::plannedEffort( const Resource *resource, long id, EffortCostCalculationType type ) const
@@ -1267,31 +1286,70 @@ EffortCost Node::plannedCost( long id, EffortCostCalculationType type ) const
     return ec;
 }
 
-EffortCostMap Node::bcwsPrDay( long int id, KPlato::EffortCostCalculationType type ) const
+EffortCostMap Node::bcwsPrDay( long int id, EffortCostCalculationType type ) const
 {
-    EffortCostMap ec;
-    foreach ( Node *n, m_nodes ) {
-        ec += n->bcwsPrDay( id, type );
-    }
-    return ec;
+    return const_cast<Node*>( this )->bcwsPrDay( id, type );
 }
 
-EffortCostMap Node::bcwpPrDay( long int id, KPlato::EffortCostCalculationType type ) const
+EffortCostMap Node::bcwsPrDay( long int id, EffortCostCalculationType type )
 {
-    EffortCostMap ec;
-    foreach ( Node *n, m_nodes ) {
-        ec += n->bcwpPrDay( id, type );
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return EffortCostMap();
     }
-    return ec;
+    EffortCostCache &ec = s->bcwsPrDayCache( type );
+    if ( ! ec.cached ) {
+        ec.effortcostmap = EffortCostMap();
+        foreach ( Node *n, m_nodes ) {
+            ec.effortcostmap += n->bcwsPrDay( id, type );
+        }
+        ec.cached = true;
+    }
+    return ec.effortcostmap;
+}
+
+EffortCostMap Node::bcwpPrDay( long int id, EffortCostCalculationType type ) const
+{
+    return const_cast<Node*>( this )->bcwpPrDay( id, type);
+}
+
+EffortCostMap Node::bcwpPrDay( long int id, EffortCostCalculationType type )
+{
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return EffortCostMap();
+    }
+    EffortCostCache &ec = s->bcwpPrDayCache( type );
+    if ( ! ec.cached ) {
+        ec.effortcostmap = EffortCostMap();
+        foreach ( Node *n, m_nodes ) {
+            ec.effortcostmap += n->bcwpPrDay( id, type );
+        }
+        ec.cached = true;
+    }
+    return ec.effortcostmap;
 }
 
 EffortCostMap Node::acwp( long id, EffortCostCalculationType type ) const
 {
-    EffortCostMap ec;
-    foreach ( Node *n, m_nodes ) {
-        ec += n->acwp( id, type );
+    return const_cast<Node*>( this )->acwp( id, type );
+}
+
+EffortCostMap Node::acwp( long id, EffortCostCalculationType type )
+{
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return EffortCostMap();
     }
-    return ec;
+    EffortCostCache &ec = s->acwpCache( type );
+    if ( ! ec.cached ) {
+        ec.effortcostmap = EffortCostMap();
+        foreach ( Node *n, m_nodes ) {
+            ec.effortcostmap += n->acwp( id, type );
+        }
+        ec.cached = true;
+    }
+    return ec.effortcostmap;
 }
 
 EffortCost Node::acwp( const QDate &date, long id ) const

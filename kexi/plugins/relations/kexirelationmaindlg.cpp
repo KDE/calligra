@@ -21,11 +21,12 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include <QVBoxLayout>
 
 #include <db/connection.h>
+
+#include <KoIcon.h>
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
@@ -35,8 +36,8 @@ KexiRelationMainDlg::KexiRelationMainDlg(QWidget *parent)
         : KexiView(parent)
 {
     kDebug() << "KexiRelationMainDlg()";
-// setIcon(SmallIcon("relation"));
-    m_defaultIconName = "relation";
+// setIcon(koIcon("relation"));
+    m_defaultIconName = koIconName("relation");
     setWindowTitle(i18n("Relationships"));
 // setDocID( win->generatePrivateDocID() );
 
@@ -71,9 +72,9 @@ KexiRelationMainDlg::mainWidget()
     return m_rel;
 }
 
-QString KexiRelationMainDlg::itemIcon()
+QString KexiRelationMainDlg::itemIconName()
 {
-    return "relation";
+    return koIconName("relation");
 }
 
 #include "kexirelationmaindlg.moc"

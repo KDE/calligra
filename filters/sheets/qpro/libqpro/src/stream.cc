@@ -125,7 +125,7 @@ QpIStream::operator void*()
     if (cIn == 0)
         return 0;
     else
-        return *cIn;
+       return *cIn ? reinterpret_cast<void*>(&cIn) : 0;
 }
 
 int
