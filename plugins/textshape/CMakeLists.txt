@@ -57,6 +57,7 @@ SET ( textshape_SRCS
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
     dialogs/AbstractStylesModel.cpp
+    dialogs/StylesFilteredModelBase.cpp
     dialogs/ValidParentStylesProxyModel.cpp
     dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp

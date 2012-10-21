@@ -20,7 +20,7 @@
 #ifndef ABSTRACTSTYLESMODEL_H
 #define ABSTRACTSTYLESMODEL_H
 
-#include <QAbstractListModel>
+#include <QAbstractItemModel>
 #include <QSize>
 
 class KoStyleThumbnailer;
@@ -46,21 +46,30 @@ class QImage;
  * - there is no header in the AbstractStylesModel derived model
 */
 
-class AbstractStylesModel : public QAbstractListModel
+class AbstractStylesModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
+    enum Type {
+        CharacterStyle,
+        ParagraphStyle
+    };
+
+    enum AdditionalRoles {
+        CharacterStylePointer = Qt::UserRole + 1,
+        ParagraphStylePointer,
+        isModifiedStyle,
+        isTitleRole,
+        TitleString
+    };
+
     explicit AbstractStylesModel(QObject *parent = 0);
 
-    /** Re-implement from QAbstractItemModel. */
-
-    virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const = 0;
-
-    virtual int rowCount(const QModelIndex &parent) const = 0;
-
-    virtual QVariant data(const QModelIndex &index, int role) const = 0;
-
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const = 0;
+    /** Re-implement from QAbstractItemModel.
+     *
+     * No methods are reimplemented there. Subclasses need to reimplement all of QAbstractItemModel's virtual methods.
+     *
+     */
 
     /** Specific methods of the AbstractStylesModel */
 
@@ -78,8 +87,12 @@ public:
     */
     virtual QImage stylePreview(int row, QSize size = QSize()) = 0;
 
-private:
+    /** Returns the type of styles in the model */
+    virtual AbstractStylesModel::Type stylesType() = 0;
+
+protected:
     KoStyleThumbnailer *m_styleThumbnailer;
+    Type m_modelType;
 };
 
 #endif // ABSTRACTSTYLESMODEL_H

@@ -20,6 +20,7 @@
 #include "AbstractStylesModel.h"
 
 AbstractStylesModel::AbstractStylesModel(QObject *parent) :
-    QAbstractListModel(parent)
+    QAbstractItemModel(parent),
+    m_styleThumbnailer(0)
 {
 }

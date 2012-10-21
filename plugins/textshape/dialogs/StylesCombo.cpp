@@ -62,7 +62,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
     setItemDelegate(delegate);
 
-    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
+//    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
 
     QComboBox::setEditable(true);
     setIconSize(QSize(0,0));
@@ -140,7 +140,7 @@ void StylesCombo::slotSelectionChanged(int index)
 
 void StylesCombo::slotItemClicked(QModelIndex index)
 {
-    //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, wher we also emit the selectionChanged signal from the slot above.
+    //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the selectionChanged signal from the slot above.
     m_selectedItem = index.row();
     m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
     update();
