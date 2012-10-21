@@ -127,7 +127,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     if (!cs) {
         if (colorSpaceId.first.contains("LABA") && colorSpaceId.second.contains("U8"))
         {
-            qDebug()<<"Krita Has Got LAB with 8 Bit Depth, which doesnt seem to be in kolospacemath so i upscale to 16 bit";
+            qDebug()<<"Krita Has Got LAB with 8 Bit Depth, which does not seem to be in kolospacemath so i upscale to 16 bit";
             cs = KoColorSpaceRegistry::instance()->colorSpace("LABA",  "U16", profile);
         }
         else{
@@ -138,6 +138,13 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, "built image");
     Q_CHECK_PTR(m_image);
     m_image->lock();
+
+    // set the correct resolution
+    RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
+    if (resInfo) {
+        m_image->setResolution(resInfo->hRes, resInfo->vRes);
+        // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+    }
 
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {

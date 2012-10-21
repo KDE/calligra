@@ -37,12 +37,13 @@
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <klineedit.h>
-#include <kiconloader.h>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/utils.h>
+#include <KoIcon.h>
+
+#include <db/drivermanager.h>
+#include <db/driver.h>
+#include <db/connectiondata.h>
+#include <db/utils.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
@@ -66,7 +67,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString, QString>* args)
 {
     setModal(true);
     setWindowTitle(i18n("Import Database"));
-    setWindowIcon(KIcon("document_import_database"));
+    setWindowIcon(koIcon("document_import_database"));
     m_prjSet = 0;
     m_fileBasedDstWasPresented = false;
     m_setupFileBasedSrcNeeded = true;
@@ -379,7 +380,7 @@ void ImportWizard::setupImporting()
     options_vbox->setSpacing(KDialog::spacingHint());
     QHBoxLayout *importOptionsButtonLyr = new QHBoxLayout;
     options_vbox->addLayout(importOptionsButtonLyr);
-    m_importOptionsButton = new KPushButton(KIcon("configure"),
+    m_importOptionsButton = new KPushButton(koIcon("configure"),
                                             i18n("Advanced Options"), options_widget);
     connect(m_importOptionsButton, SIGNAL(clicked()),
             this, SLOT(slotOptionsButtonClicked()));

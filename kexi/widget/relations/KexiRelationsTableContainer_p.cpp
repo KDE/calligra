@@ -38,8 +38,8 @@
 #include <kconfig.h>
 #include <kglobalsettings.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/utils.h>
 #include <kexidragobjects.h>
 #include "KexiRelationsTableContainer_p.h"
 #include "KexiRelationsScrollArea.h"
@@ -159,7 +159,7 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev)
 KexiRelationsTableFieldList::KexiRelationsTableFieldList(
     KexiDB::TableOrQuerySchema* tableOrQuerySchema,
     KexiRelationsScrollArea *scrollArea, QWidget *parent)
-        : KexiFieldListView(parent, 0)
+        : KexiFieldListView(parent, ShowAsterisk)
         , m_scrollArea(scrollArea)
 {
     setSchema(tableOrQuerySchema);

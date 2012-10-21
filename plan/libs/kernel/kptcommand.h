@@ -356,6 +356,7 @@ private:
     bool m_mine;
     QList<Appointment*> m_appointments;
     MacroCommand *m_cmd;
+    MacroCommand m_relCmd;
 };
 
 class KPLATOKERNEL_EXPORT TaskAddCmd : public NamedCommand
@@ -910,6 +911,18 @@ private:
     Resource *m_resource;
     QString m_newvalue;
     QString m_oldvalue;
+};
+class KPLATOKERNEL_EXPORT ModifyResourceAutoAllocateCmd : public NamedCommand
+{
+public:
+    ModifyResourceAutoAllocateCmd( Resource *resource, bool value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    bool m_newvalue;
+    bool m_oldvalue;
 };
 class KPLATOKERNEL_EXPORT ModifyResourceTypeCmd : public NamedCommand
 {
@@ -1621,6 +1634,18 @@ class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulerCmd : public NamedComman
 {
 public:
     ModifyScheduleManagerSchedulerCmd( ScheduleManager &sm, int value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    int oldvalue, newvalue;
+};
+
+class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulingGranularityCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const QString& name = QString() );
     void execute();
     void unexecute();
 

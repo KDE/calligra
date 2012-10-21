@@ -24,8 +24,8 @@
 #include "kexiproject.h"
 #include <koproperty/Set.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
@@ -359,13 +359,20 @@ void KexiView::setDirty(bool set)
   return true;
 }*/
 
-KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata, bool & /*cancel*/)
+KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
+                                           KexiView::StoreNewDataOptions options,
+                                           bool &cancel)
 {
+    Q_UNUSED(options)
+    Q_UNUSED(cancel)
     KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
     *new_schema = sdata;
 
     if (!KexiMainWindowIface::global()->project()->dbConnection()
-            ->storeObjectSchemaData(*new_schema, true)) {
+            ->storeObjectSchemaData(*new_schema, true)
+        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
+       )
+    {
         delete new_schema;
         new_schema = 0;
     }
@@ -492,6 +499,11 @@ void KexiView::addChildView(KexiView* childView)
 // if (d->parentView)
 //  childView->installEventFilter(d->parentView);
     childView->installEventFilter(this);
+}
+
+void KexiView::removeView(Kexi::ViewMode mode)
+{
+    window()->removeView(mode);
 }
 
 void KexiView::setFocus()
@@ -676,6 +688,11 @@ void KexiView::initViewActions()
 void KexiView::setSortedProperties(bool set)
 {
     d->sortedProperties = set;
+}
+
+bool KexiView::saveSettings()
+{
+    return true;
 }
 
 #include "KexiView.moc"

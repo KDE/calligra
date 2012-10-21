@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Service
+Name=RTF Documents
+Name[cs]=Dokumenty RTF
+Name[el]=Έγγραφα RTF
+Name[et]=RTF-dokumendid
+Name[fi]=RTF-asiakirjat
+Name[fr]=Documents RTF
+Name[hu]=RTF dokumentumok
+Name[it]=Documenti RTF
+Name[nl]=RTF-documenten
+Name[pt]=Documentos RTF
+Name[pt_BR]=Documentos RTF
+Name[sk]=RTF dokumenty
+Name[sv]=RTF-dokument
+Name[uk]=Документи RTF
+Name[x-test]=xxRTF Documentsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/rtf;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

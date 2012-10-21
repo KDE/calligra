@@ -65,10 +65,10 @@ KisPixelSelection::~KisPixelSelection()
     delete m_d;
 }
 
-KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
+KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, QRect rect) const
 {
     KisPaintDeviceSP dev =
-        KisPaintDevice::createThumbnailDevice(w, h, selection, rect);
+        KisPaintDevice::createThumbnailDevice(w, h, rect);
 
     QRect bounds = dev->exactBounds();
     KisHLineIteratorSP it = dev->createHLineIteratorNG(bounds.x(), bounds.y(), bounds.width());
@@ -237,6 +237,16 @@ QVector<QPolygon> KisPixelSelection::outline() const
     qint32 height = selectionExtent.height();
 
     KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
+    // If the selection is small using a buffer is much fast
+    if (width*height < 5000000) {
+        quint8* buffer = new quint8[width*height];
+        readBytes(buffer, xOffset, yOffset, width, height);
+
+        QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
+
+        delete[] buffer;
+        return paths;
+    }
     return generator.outline(this, xOffset, yOffset, width, height);
 }
 

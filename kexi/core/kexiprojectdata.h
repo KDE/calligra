@@ -22,8 +22,8 @@
 #define KEXIPROJECTDATA_H
 
 #include <kexi_export.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/schemadata.h>
+#include <db/connectiondata.h>
+#include <db/schemadata.h>
 
 #include <QDateTime>
 #include <QList>
@@ -98,11 +98,7 @@ public:
     KexiProjectData& operator=(const KexiProjectData& pdata);
 
     QString name() const {
-        return KexiDB::SchemaData::objectName();
-    }
-    /*! The same as name(). Added to avoid conflict with QObject::name() */
-    QString objectName() const {
-        return KexiDB::SchemaData::objectName();
+        return KexiDB::SchemaData::name();
     }
 
     /*! \return true if there is the User Mode set in internal

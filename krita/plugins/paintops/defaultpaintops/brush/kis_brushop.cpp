@@ -40,9 +40,10 @@
 #include <kis_color_source.h>
 #include <kis_pressure_sharpness_option.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_fixed_paint_device.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
+    : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -86,6 +87,10 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
+
+    m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
+    m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
+    m_dabCache->setTexturePostprocessing(&m_textureProperties);
 }
 
 KisBrushOp::~KisBrushOp()
@@ -117,7 +122,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF hotSpot = brush->hotSpot(scale, scale, rotation);
+    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
     // return info.pos() if sensor is not enabled
     QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale);
     QPointF pt = pos - hotSpot;
@@ -146,39 +151,19 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
-
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
-    }
-    else {
-        if (m_colorSource->isUniformColor()) {
-            KoColor color = m_colorSource->uniformColor();
-            color.convertTo(dab->colorSpace());
-            brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        }
-        else {
-            if (!m_colorSourceDevice) {
-                m_colorSourceDevice = new KisPaintDevice(dab->colorSpace());
-            }
-            else {
-                m_colorSourceDevice->clear();
-            }
-            m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
-            brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        }
-    }
-
-    MirrorProperties mirrors = m_mirrorOption.apply(info);
-    dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
-
-    m_sharpnessOption.applyTreshold( dab );
-
-    // after everything, apply the texturing
-    m_textureProperties.apply(dab, info.pos().toPoint());
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->colorSpace(),
+                                                    m_colorSource,
+                                                    scale, scale,
+                                                    rotation,
+                                                    info,
+                                                    xFraction, yFraction,
+                                                    m_softnessOption.apply(info));
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
-    painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
+
+    painter()->renderMirrorMaskSafe(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),
+                                    dab,
+                                    !m_dabCache->needSeparateOriginal());
     painter()->setOpacity(origOpacity);
     painter()->setFlow(origFlow);
 

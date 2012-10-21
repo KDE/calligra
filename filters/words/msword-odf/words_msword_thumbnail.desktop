@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Word Documents
+Name[el]=Έγγραφα Microsoft Word
+Name[et]=Microsoft Wordi dokumendid
+Name[fi]=Microsoft Word -asiakirjat
+Name[fr]=Documents Microsoft Word
+Name[hu]=Microsoft Word dokumentumok
+Name[it]=Documenti Microsoft Word
+Name[nl]=Microsoft Word-documenten
+Name[pt]=Documentos do Microsoft Word
+Name[pt_BR]=Documentos do Microsoft Word
+Name[sk]=Dokumenty Microsoft Word
+Name[sv]=Microsoft Word-dokument
+Name[uk]=Документи Microsoft Word
+Name[x-test]=xxMicrosoft Word Documentsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/msword;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

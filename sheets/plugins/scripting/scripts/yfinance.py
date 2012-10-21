@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script that provides the Yahoo! Finance formula function.
+Sheets python script that provides the Yahoo! Finance formula function.
 
 Yahoo! Terms of Use
 The feeds are provided free of charge for use by individuals and non-profit
@@ -18,12 +18,14 @@ feeds at any time for any reason.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 This script is licensed under the BSD license.
 """
 
 import re, urllib
 import Kross, KSpread
+
+T = Kross.module("kdetranslation")
 
 class Yfinance:
     def __init__(self, scriptaction):
@@ -34,15 +36,14 @@ class Yfinance:
         func.minparam = 3
         func.maxparam = 3
         func.comment = (
-            "The YFINANCE() function uses the Yahoo! Finance Web Service "
-            "to display stock values of a defined ticker symbol. "
+            T.i18n("The YFINANCE() function uses the Yahoo! Finance Web Service to display stock values of a defined ticker symbol.")
         )
-        func.syntax = "YFINANCE(string,string,string)"
-        func.addParameter("String", "The ticker symbol.")
-        func.addParameter("String", "The date.")
-        func.addParameter("String", "The type: Date, Open, High, Low, Close, Volume or AdjClose.")
-        func.addExample("YFINANCE(\"YHOO\";\"20060119\";\"Open\")")
-        func.addExample("YFINANCE(\"=C14\";\"=C15\";\"=C16\")")
+        func.syntax = T.i18n("YFINANCE(string,string,string)")
+        func.addParameter("String", T.i18n("The ticker symbol."))
+        func.addParameter("String", T.i18n("The date."))
+        func.addParameter("String", T.i18n("The type: Date, Open, High, Low, Close, Volume or AdjClose."))
+        func.addExample(T.i18n("YFINANCE(\"YHOO\";\"20060119\";\"Open\")"))
+        func.addExample(T.i18n("YFINANCE(\"=C14\";\"=C15\";\"=C16\")"))
 
         def update(argument):
             print "Yfinance.update !"
@@ -61,11 +62,11 @@ class Yfinance:
             typename = typename.lower()
 
             if not re.compile('^[a-zA-Z0-9]+$').match(ticker):
-                func.error = "Invalid symbol"
+                func.error = T.i18n("Invalid symbol")
                 return
 
             if len(todate) != 8 or not re.compile('^[0-9]+$').match(todate):
-                func.error = "Invalid date"
+                func.error = T.i18n("Invalid date")
                 return
 
             typenr = None
@@ -77,7 +78,7 @@ class Yfinance:
             elif typename == "volume": typenr = 5
             elif typename == "adjclose": typenr = 6
             else:
-                func.error = "Invalid type"
+                func.error = T.i18n("Invalid type")
                 return
 
             quote = dict()
@@ -95,7 +96,7 @@ class Yfinance:
             try:
                 f = urllib.urlopen(url)
             except:
-                func.error = "Web services request failed"
+                func.error = T.i18n("Web services request failed")
                 return
             result = f.read().split("\n")
             resultlist = []
@@ -106,10 +107,10 @@ class Yfinance:
                     break
 
             if len(resultlist) < 1:
-                func.error = "No stock"
+                func.error = T.i18n("No stock")
                 return
             if len(resultlist) < 7:
-                func.error = "Invalid stock"
+                func.error = T.i18n("Invalid stock")
                 return
 
             v = resultlist[typenr]

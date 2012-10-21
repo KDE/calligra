@@ -35,7 +35,7 @@ void KPrAttributeRotate::updateCache(KPrAnimationCache *cache, KPrShapeAnimation
 {
     qreal tx = 0.0, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
-    KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
+    QTextBlockUserData *textBlockData = shapeAnimation->textBlockUserData();
     QTransform transform;
     if (textBlockData) {
         if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
@@ -55,14 +55,14 @@ void KPrAttributeRotate::updateCache(KPrAnimationCache *cache, KPrShapeAnimation
         ty = shape->size().height() * cache->zoom() / 2;
     }
     transform.translate(tx, ty).rotate(value).translate(-tx, -ty);
-    cache->update(shape, shapeAnimation->textBlockData(),"transform", transform);
+    cache->update(shape, textBlockData,"transform", transform);
 }
 
 void KPrAttributeRotate::initCache(KPrAnimationCache *animationCache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue)
 {
     qreal tx = 0.0, ty = 0.0;
     KoShape * shape = shapeAnimation->shape();
-    KoTextBlockData * textBlockData = shapeAnimation->textBlockData();
+    QTextBlockUserData * textBlockData = shapeAnimation->textBlockUserData();
     if (textBlockData) {
         if (KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData())) {
             QTextDocument *textDocument = textShapeData->document();

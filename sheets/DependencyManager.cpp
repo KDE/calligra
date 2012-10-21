@@ -610,8 +610,8 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
                     Sheet* sheet = region.firstSheet();
 
                     // create consumer tree, if not existing yet
-                    QHash<Sheet*, RTree<Cell>*>::ConstIterator it = consumers.constFind(sheet);
-                    if (it == consumers.constEnd()) {
+                    QHash<Sheet*, RTree<Cell>*>::iterator it = consumers.find(sheet);
+                    if (it == consumers.end()) {
                         it = consumers.insert(sheet, new RTree<Cell>());
                     }
                     // add cell as consumer of the range

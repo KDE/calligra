@@ -23,20 +23,24 @@
 
 #include "kplatoui_export.h"
 
+#include "ui_reportgroupsectionswidget.h"
+
 #include "KoReportDesigner.h"
 
 #include <QSplitter>
 #include <QStandardItemModel>
+#include <QStandardItem>
 #include <QMap>
 #include <QAction>
 
 class KoReportData;
 class ORPreRender;
 class ORODocument;
+class ReportSectionDetailGroup;
 class ReportViewPageSelect;
 class RecordNavigator;
 class ScriptAdaptor;
-class ReportDesigner;
+class KoReportDesigner;
 
 class KToolBar;
 
@@ -47,6 +51,7 @@ class QActionGroup;
 namespace KPlato
 {
 
+class ReportData;
 
 class ReportDesignPanel : public QWidget
 {
@@ -54,13 +59,12 @@ class ReportDesignPanel : public QWidget
 public:
     explicit ReportDesignPanel( QWidget *parent = 0 );
 
-    ReportDesignPanel( Project *project, ScheduleManager *manager, const QDomElement &element, const QMap<QString, QAbstractItemModel*> &models, QWidget *parent );
+    ReportDesignPanel( const QDomElement &element, const QList<ReportData*> &models, QWidget *parent = 0 );
     
     QDomDocument document() const;
     
     KoReportDesigner *m_designer;
     KoProperty::EditorView *m_propertyeditor;
-    QMap<QString, QAbstractItemModel*> m_modelmap;
     ReportSourceEditor *m_sourceeditor;
     bool m_modified;
     QActionGroup *m_actionGroup;
@@ -75,7 +79,6 @@ public slots:
     void slotInsertAction();
     
     void setReportData( const QString &tag );
-    void createReportData( const QString &type, ReportData *rd );
     
     void setModified() { m_modified = true; }
     void slotItemInserted(const QString &item);
@@ -85,7 +88,77 @@ protected:
     void populateToolbar( KToolBar *tb );
 
 private:
-    
+    QList<ReportData*> m_reportdatamodels;
+};
+
+class GroupSectionEditor : public QObject
+{
+    Q_OBJECT
+public:
+    GroupSectionEditor( QObject *parent );
+
+    void setupUi( QWidget *widget );
+    void clear();
+    void setData( KoReportDesigner *designer, ReportData *rd );
+
+protected slots:
+    void slotSelectionChanged(const QItemSelection &sel );
+    void slotAddRow();
+    void slotRemoveRows();
+    void slotMoveRowUp();
+    void slotMoveRowDown();
+
+private:
+    Ui::ReportGroupSectionsWidget gsw;
+    KoReportDesigner *designer;
+    ReportData *reportdata;
+    QStandardItemModel model;
+
+    class Item : public QStandardItem
+    {
+    public:
+        Item( ReportSectionDetailGroup *g ) : QStandardItem(), group( g ) {}
+        ReportSectionDetailGroup *group;
+
+        QStringList names;
+        QStringList keys;
+    };
+
+    class ColumnItem : public Item
+    {
+    public:
+        ColumnItem( ReportSectionDetailGroup *g );
+        QVariant data( int role = Qt::DisplayRole ) const;
+        void setData( const QVariant &value, int role = Qt::EditRole );
+    };
+    class SortItem : public Item
+    {
+    public:
+        SortItem( ReportSectionDetailGroup *g );
+        QVariant data( int role = Qt::DisplayRole ) const;
+        void setData( const QVariant &value, int role = Qt::EditRole );
+    };
+    class HeaderItem : public Item
+    {
+    public:
+        HeaderItem( ReportSectionDetailGroup *g );
+        QVariant data( int role = Qt::DisplayRole ) const;
+        void setData( const QVariant &value, int role = Qt::EditRole );
+    };
+    class FooterItem : public Item
+    {
+    public:
+        FooterItem( ReportSectionDetailGroup *g );
+        QVariant data( int role = Qt::DisplayRole ) const;
+        void setData( const QVariant &value, int role = Qt::EditRole );
+    };
+    class PageBreakItem : public Item
+    {
+    public:
+        PageBreakItem( ReportSectionDetailGroup *g );
+        QVariant data( int role = Qt::DisplayRole ) const;
+        void setData( const QVariant &value, int role = Qt::EditRole );
+    };
 };
 
 

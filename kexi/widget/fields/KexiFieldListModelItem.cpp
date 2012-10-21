@@ -19,17 +19,18 @@
 
 
 #include "KexiFieldListModelItem.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
+#include <kexiutils/utils.h>
+#include <KoIcon.h>
 #include <klocalizedstring.h>
 
 KexiFieldListModelItem::KexiFieldListModelItem(const QString &fname, const QString &dtype, bool pkey) : m_fieldName(fname), m_dateType(dtype)
 {
     if (pkey) {
-        m_icon = SmallIcon("key");
+        m_icon = koIcon("key");
     } else {
         m_icon = KexiUtils::emptyIcon(KIconLoader::Small);
     }
-    
 }
 
 KexiFieldListModelItem::~KexiFieldListModelItem()
@@ -46,7 +47,7 @@ QVariant KexiFieldListModelItem::data(int column) const
     }
 }
 
-QPixmap KexiFieldListModelItem::icon() const
+QIcon KexiFieldListModelItem::icon() const
 {
     return m_icon;
 }

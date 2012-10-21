@@ -42,12 +42,12 @@
 #include <kexi.h>
 #include <kexi_global.h>
 #include <kexidragobjects.h>
-#include <kexidb/field.h>
-#include <kexidb/fieldlist.h>
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
-#include <kexidb/preparedstatement.h>
+#include <db/field.h>
+#include <db/fieldlist.h>
+#include <db/connection.h>
+#include <db/cursor.h>
+#include <db/utils.h>
+#include <db/preparedstatement.h>
 #include <dataviewcommon/kexitableviewdata.h>
 #include <widget/kexiqueryparameters.h>
 #include <kexiutils/utils.h>
@@ -839,10 +839,11 @@ void KexiFormView::slotModified()
     KexiView::setDirty(form()->isModified());
 }
 
-KexiDB::SchemaData*
-KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiFormView::storeNewData(const KexiDB::SchemaData& sdata,
+                                               KexiView::StoreNewDataOptions options,
+                                               bool &cancel)
 {
-    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
+    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, options, cancel);
     kDebug() << "new id:" << s->id();
 
     if (!s || cancel) {

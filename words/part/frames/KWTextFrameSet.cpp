@@ -148,6 +148,8 @@ void KWTextFrameSet::setPageStyle(const KWPageStyle &style)
 {
     kDebug(32001) << "frameSet=" << this << "frameSetType=" << Words::frameSetTypeName(textFrameSetType()) << "pageStyleName=" << style.name() << "pageStyleIsValid=" << style.isValid();
     m_pageStyle = style;
+    // TODO: check if this is really needed here, when KWFrameLayout::layoutFramesOnPage() also
+    // ensures the background is set. Especially as the separator data is only set there to the text background shape
     if (style.isValid()) {
         foreach(KWFrame* frame, frames()) {
             if (frame->shape()) {

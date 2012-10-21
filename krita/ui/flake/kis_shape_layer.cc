@@ -26,7 +26,6 @@
 #include <QRect>
 #include <QDomElement>
 #include <QDomDocument>
-#include <QIcon>
 #include <QString>
 #include <QList>
 #include <QMap>
@@ -35,9 +34,9 @@
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
-#include <kicon.h>
 #include <kdebug.h>
 
+#include <KoIcon.h>
 #include <KoElementReference.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -144,6 +143,9 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
+    // Make sure our new layer is visible otherwise the shapes cannot be painted.
+    setVisible(true);
+
     KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
@@ -210,7 +212,7 @@ void KisShapeLayer::setImage(KisImageWSP _image)
 
 QIcon KisShapeLayer::icon() const
 {
-    return KIcon("bookmark-new");
+    return koIcon("bookmark-new");
 }
 
 KisPaintDeviceSP KisShapeLayer::original() const

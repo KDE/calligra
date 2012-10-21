@@ -22,8 +22,8 @@
 #include <QString>
 #include <QStringList>
 
-#include <kexidb/cursor.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/utils.h>
 
 #include <KoReportData.h>
 

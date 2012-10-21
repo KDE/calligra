@@ -30,8 +30,9 @@ install(TARGETS pptximport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES 
+install( FILES
   kpresenter_pptx_import.desktop
 #  kpresenter_pptx_export.desktop
+  stage_pptx_thumbnail.desktop
   DESTINATION ${SERVICES_INSTALL_DIR}
 )

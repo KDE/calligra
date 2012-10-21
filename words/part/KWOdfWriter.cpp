@@ -246,11 +246,10 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
-
-    // Save user defined variable declarations
-    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
-        variableManager->saveOdf(bodyWriter);
+    if (m_document->isMasterDocument()) {
+        bodyWriter->addAttribute("text:global", "true");
     }
+    // FIXME: text:use-soft-page-breaks
 
     calculateZindexOffsets();
 
@@ -302,14 +301,6 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
-                KWPageManager *pm = m_document->pageManager();
-                if (pm->pageCount()) { // make the first page refer to our page master
-                    QTextCursor cursor(shapeData->document());
-                    QTextBlockFormat tbf;
-                    KWPageStyle style = pm->pages().first().pageStyle();
-                    tbf.setProperty(KoParagraphStyle::MasterPageName, m_masterPages.value(style));
-                    cursor.mergeBlockFormat(tbf);
-                }
                 shapeData->saveOdf(context, m_document->documentRdfBase());
             }
         }
@@ -333,6 +324,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     tmpChangeFile.close();
 
     bodyWriter->addCompleteElement(&tmpChangeFile);
+
+    // Save user defined variable declarations
+    if (KoVariableManager *variableManager = m_document->inlineTextObjectManager()->variableManager()) {
+        variableManager->saveOdf(bodyWriter);
+    }
 
     // Do not write out text:page-sequence, if there is a maintTextFrame
     // The ODF specification does not allow text:page-sequence in office:text

@@ -32,12 +32,13 @@
 #include "kptdatetime.h"
 #include "kptdebug.h"
 
+#include <KoIcon.h>
+
 #include <QMimeData>
 #include <QObject>
 #include <QStringList>
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -88,16 +89,22 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
+            return res->name();
         case Qt::ToolTipRole:
+            if ( res->autoAllocate() ) {
+                return i18nc( "@info:tooltip", "%1:<nl/>This resource will be automatically allocated to new tasks", res->name() );
+            }
             return res->name();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
         case Qt::DecorationRole:
             if ( res->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
              }
              break;
+        case Qt::CheckStateRole:
+            return res->autoAllocate() ? Qt::Checked : Qt::Unchecked;
         default:
             break;
     }
@@ -662,7 +669,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
         flags |= Qt::ItemIsDragEnabled;
         switch ( index.column() ) {
             case ResourceModel::ResourceName:
-                flags |= Qt::ItemIsEditable;
+                flags |= Qt::ItemIsEditable | Qt::ItemIsUserCheckable;
                 break;
             case ResourceModel::ResourceType:
                 if ( ! r->isBaselined() ) {
@@ -795,7 +802,6 @@ QVariant ResourceItemModel::name( const  ResourceGroup *res, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->name();
-            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -811,6 +817,9 @@ bool ResourceItemModel::setName( Resource *res, const QVariant &value, int role 
                 return false;
             }
             emit executeCommand( new ModifyResourceNameCmd( res, value.toString(), i18nc( "(qtundo-format)", "Modify resource name" ) ) );
+            return true;
+        case Qt::CheckStateRole:
+            emit executeCommand( new ModifyResourceAutoAllocateCmd( res, value.toBool(), i18nc( "(qtundo-format)", "Modify resource auto allocate" ) ) );
             return true;
     }
     return false;
@@ -1076,7 +1085,7 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 ||  ! ( role == Qt::EditRole || role == Qt::CheckStateRole ) ) {
         return false;
     }
     QObject *obj = object( index );
@@ -1147,6 +1156,11 @@ QObject *ResourceItemModel::object( const QModelIndex &index ) const
         Q_ASSERT( o );
     }
     return o;
+}
+
+ResourceGroup *ResourceItemModel::group( const QModelIndex &index ) const
+{
+    return qobject_cast<ResourceGroup*>( object( index ) );
 }
 
 Resource *ResourceItemModel::resource( const QModelIndex &index ) const
@@ -1499,6 +1513,217 @@ bool ResourceItemSFModel::filterAcceptsRow( int source_row, const QModelIndex & 
     }
     QModelIndex idx = m->index( source_row, 0, source_parent );
     return ! m_filteredResources.contains( m->resource( idx ) );
+}
+
+//-----------------------
+AllocatedResourceItemModel::AllocatedResourceItemModel( QObject *parent )
+    : QSortFilterProxyModel( parent ),
+    m_task( 0 )
+{
+    setDynamicSortFilter( true );
+    setSourceModel( new ResourceItemModel( this ) );
+}
+
+int AllocatedResourceItemModel::columnCount( const QModelIndex &idx ) const
+{
+    return 2;
+}
+
+Project *AllocatedResourceItemModel::project() const
+{
+    return static_cast<ResourceItemModel*>( sourceModel() )->project();
+}
+
+void AllocatedResourceItemModel::setProject( Project *project )
+{
+    kDebug(planDbg())<<this->project()<<"="<<project;
+    Project *p =this->project();
+    if ( p ) {
+        disconnect(p, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)));
+    }
+    static_cast<ResourceItemModel*>( sourceModel() )->setProject( project );
+    if ( project ) {
+        connect(project, SIGNAL(nodeChanged(Node*)), this, SLOT(slotNodeChanged(Node*)));
+    }
+    kDebug(planDbg())<<rowCount()<<":"<<sourceModel()->rowCount();
+}
+
+void AllocatedResourceItemModel::reset()
+{
+    QSortFilterProxyModel::reset();
+    emit expandAll();
+    emit resizeColumnToContents( 0 );
+}
+
+void AllocatedResourceItemModel::slotNodeChanged( Node *n )
+{
+    kDebug(planDbg())<<(n==m_task)<<n<<n->name();
+    if ( n != m_task ) {
+        return;
+    }
+    reset();
+}
+
+Task *AllocatedResourceItemModel::task() const
+{
+    return m_task;
+}
+
+void AllocatedResourceItemModel::setTask( Task *task )
+{
+    kDebug(planDbg())<<m_task<<"="<<task<<(task?task->name():"");
+    m_task = task;
+    reset();
+    kDebug(planDbg())<<rowCount()<<":"<<sourceModel()->rowCount();
+}
+
+QObject* AllocatedResourceItemModel::object(const QModelIndex& idx) const
+{
+    return static_cast<ResourceItemModel*>( sourceModel() )->object( mapToSource( idx ) );
+}
+
+Resource *AllocatedResourceItemModel::resource( const QModelIndex &idx ) const
+{
+    return qobject_cast<Resource*>( object( idx ) );
+}
+
+QModelIndex AllocatedResourceItemModel::index( Resource *r ) const
+{
+    return mapFromSource( static_cast<ResourceItemModel*>( sourceModel() )->index( r ) );
+}
+
+Qt::ItemFlags AllocatedResourceItemModel::flags( const QModelIndex & index ) const
+{
+    Qt::ItemFlags f = QSortFilterProxyModel::flags( index );
+    f &= ~Qt::ItemIsUserCheckable;
+    return f;
+}
+
+QVariant AllocatedResourceItemModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if ( section == 1 ) {
+        if ( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
+            return i18nc( "@title:column", "Allocation" );
+        }
+        return QVariant();
+    }
+    return QSortFilterProxyModel::headerData( section, orientation, role );
+}
+
+QVariant AllocatedResourceItemModel::allocation( const Resource *res, int role ) const
+{
+    ResourceRequest *rr = m_task->requests().find( res );
+    ResourceGroupRequest *gr = m_task->requests().find( res->parentGroup() );
+    if ( rr == 0 || gr == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::DisplayRole: {
+        case Qt::EditRole:
+            // xgettext: no-c-format
+            return i18nc( "<value>%", "%1%",rr->units() );
+        }
+        case Qt::ToolTipRole: {
+            if ( rr->units() == 0 ) {
+                return i18nc( "@info:tooltip", "Not allocated" );
+            }
+            return i18nc( "@info:tooltip", "%1 allocated out of %2 available", gr->count(), res->parentGroup()->numResources() );
+        }
+        default:
+            break;
+    }
+    return QVariant();
+}
+
+QVariant AllocatedResourceItemModel::allocation( const ResourceGroup *res, int role ) const
+{
+    ResourceGroupRequest *gr = m_task->requests().find( res );
+    if ( gr == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            return QString( "%1 (%2)" ).arg( gr->units() ).arg( gr->count() );
+        case Qt::ToolTipRole: {
+            QString s1 = i18ncp( "@info:tooltip",
+                                 "%1 resource requested for dynamic allocation",
+                                 "%1 resources requested for dynamic allocation",
+                                 gr->units() );
+            QString s2 = i18ncp( "@info:tooltip",
+                                 "%1 resource allocated",
+                                 "%1 resources allocated",
+                                 gr->count() );
+
+            return i18nc( "@info:tooltip", "%1<nl/>%2", s1, s2 );
+        }
+        case Qt::WhatsThisRole: {
+            return i18nc( "@info:whatsthis",
+                          "<title>Group allocations</title>"
+                          "<para>You can allocate a number of resources from a group and let"
+                          " the scheduler select from the available resources at the time of scheduling.</para>"
+                          " These dynamically allocated resources will be in addition to any resource you have allocated specifically." );
+        }
+        case Role::Minimum: {
+            return 0;
+        }
+        case Role::Maximum: {
+            return res->numResources() - gr->units();
+        }
+        default:
+            break;
+    }
+    return QVariant();
+}
+
+QVariant AllocatedResourceItemModel::data(const QModelIndex& idx, int role) const
+{
+    if ( m_task == 0 || role == Qt::CheckStateRole || role == Qt::DecorationRole ) {
+        return QVariant();
+    }
+    if ( idx.column() == 1 ) {
+        switch ( role ) {
+            case Qt::TextAlignmentRole:
+                return Qt::AlignLeft;
+            default: {
+                QObject *o = object( idx );
+                Resource *r = qobject_cast<Resource*>( o );
+                if ( r ) {
+                    return allocation( r, role );
+                }
+                ResourceGroup *g = qobject_cast<ResourceGroup*>( o );
+                if ( g ) {
+                    return allocation( g, role );
+                }
+                break;
+            }
+            return QVariant();
+        }
+    }
+    return QSortFilterProxyModel::data( idx, role );
+}
+
+bool AllocatedResourceItemModel::filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const
+{
+    if ( m_task == 0 ) {
+        return false;
+    }
+    QModelIndex idx = sourceModel()->index( source_row, 0, source_parent );
+    if ( ! idx.isValid() ) {
+        return false;
+    }
+    bool result = false;
+    const ResourceRequestCollection &req = m_task->requests();
+    if ( source_parent.isValid() ) {
+        const Resource *r = static_cast<ResourceItemModel*>( sourceModel() )->resource( idx );
+        result = (bool) req.find( r );
+    } else {
+        const ResourceGroup *g = static_cast<ResourceItemModel*>( sourceModel() )->group( idx );
+        ResourceGroupRequest *gr = req.find( g );
+        result = (bool) gr && ( gr->units() > 0 || gr->count() > 0 );
+    }
+    kDebug(planDbg())<<result<<":"<<source_parent<<idx;
+    return result;
 }
 
 } // namespace KPlato

@@ -31,11 +31,11 @@
 #include "KPrAnimationCache.h"
 #include "KPrShapeAnimation.h"
 
-
 KPrAnimationBase::KPrAnimationBase(KPrShapeAnimation *shapeAnimation)
 : m_shapeAnimation(shapeAnimation)
 , m_begin(0)
-,m_duration(1)
+, m_duration(1)
+, m_fill(FillAuto)
 {
 }
 
@@ -45,7 +45,22 @@ KPrAnimationBase::~KPrAnimationBase()
 
 int KPrAnimationBase::duration() const
 {
-    return m_duration;
+    return m_duration + m_begin;
+}
+
+int KPrAnimationBase::begin() const
+{
+    return m_begin;
+}
+
+void KPrAnimationBase::setBegin(int value)
+{
+    m_begin = value;
+}
+
+void KPrAnimationBase::setDuration(int value)
+{
+    m_duration = value;
 }
 
 bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -60,12 +75,35 @@ bool KPrAnimationBase::loadOdf(const KoXmlElement &element, KoShapeLoadingContex
         m_duration = 1;
     }
     m_duration += m_begin;
+
+    QString fill = element.attributeNS(KoXmlNS::smil, "fill");
+    if (!fill.isEmpty()) {
+        if (fill == "remove") {
+            m_fill = FillRemove;
+        }
+        if (fill == "freeze") {
+            m_fill = FillFreeze;
+        }
+        if (fill == "hold") {
+            m_fill = FillHold;
+        }
+        if (fill == "transition") {
+            m_fill = FillTransition;
+        }
+        if (fill == "auto") {
+            m_fill = FillAuto;
+        }
+        if (fill == "default") {
+            m_fill = FillDefault;
+        }
+    }
+
     return true;
 }
 
 void KPrAnimationBase::updateCache(const QString &id, const QVariant &value)
 {
-    m_animationCache->update(m_shapeAnimation->shape(), m_shapeAnimation->textBlockData(), id, value);
+    m_animationCache->update(m_shapeAnimation->shape(), m_shapeAnimation->textBlockUserData(), id, value);
 }
 
 void KPrAnimationBase::updateCurrentTime(int currentTime)
@@ -85,12 +123,39 @@ bool KPrAnimationBase::saveAttribute(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     writer.addAttribute("smil:begin", KPrDurationParser::msToString(m_begin));
     writer.addAttribute("smil:dur", KPrDurationParser::msToString(m_duration));
-    if (m_shapeAnimation->textBlockData()) {
-        writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->textBlockData()).toString());
+    if (m_shapeAnimation->textBlockUserData()) {
+        writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->textBlockUserData()).toString());
         writer.addAttribute("anim:sub-item", "text");
     }
     else {
         writer.addAttribute("smil:targetElement", paContext.existingXmlid(m_shapeAnimation->shape()).toString());
     }
+
+    QString fill;
+    switch (m_fill) {
+    case FillRemove:
+        fill = "remove";
+        break;
+    case FillFreeze:
+        fill = "freeze";
+        break;
+    case FillHold:
+        fill = "hold";
+        break;
+    case FillTransition:
+        fill = "transition";
+        break;
+    case FillAuto:
+        fill = "auto";
+        break;
+    case FillDefault:
+        fill = "default";
+        break;
+    }
+
+    if (!fill.isEmpty()) {
+        writer.addAttribute("smil:fill", fill);
+    }
+
     return true;
 }

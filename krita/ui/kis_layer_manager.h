@@ -89,15 +89,12 @@ private slots:
     void actLayerVisChanged(int show);
     void layerProperties();
 
-    void layerRemove();
     void layerDuplicate();
     void layerRaise();
     void layerLower();
     void layerFront();
     void layerBack();
 
-    void mirrorLayerX();
-    void mirrorLayerY();
     void flattenImage();
     
     void flattenLayer();
@@ -106,6 +103,7 @@ private slots:
     void layersUpdated();
 
     void saveLayerAsImage();
+    void saveGroupLayers();
     bool activeLayerHasSelection();
 
     void layerAdd();
@@ -137,11 +135,11 @@ private:
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
     KAction *m_layerSaveAs;
+    KAction *m_groupLayersSave;
     bool m_actLayerVis;
     KAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KAction *m_rasterizeLayer;
-    KAction *m_duplicateLayer;
     KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;

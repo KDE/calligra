@@ -20,7 +20,15 @@
 
 #include "KoPADocument.h"
 
-#include <QPainter>
+#include "KoPACanvas.h"
+#include "KoPAView.h"
+#include "KoPAPage.h"
+#include "KoPAMasterPage.h"
+#include "KoPASavingContext.h"
+#include "KoPALoadingContext.h"
+#include "KoPAViewMode.h"
+#include "KoPAPageProvider.h"
+#include "commands/KoPAPageDeleteCommand.h"
 
 #include <KoStore.h>
 #include <KoDocumentResourceManager.h>
@@ -46,20 +54,14 @@
 #include <KoUpdater.h>
 #include <KoDocumentInfo.h>
 #include <KoVariableManager.h>
-
-#include "KoPACanvas.h"
-#include "KoPAView.h"
-#include "KoPAPage.h"
-#include "KoPAMasterPage.h"
-#include "KoPASavingContext.h"
-#include "KoPALoadingContext.h"
-#include "KoPAViewMode.h"
-#include "KoPAPageProvider.h"
-#include "commands/KoPAPageDeleteCommand.h"
+#include <KoPart.h>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+
+#include <QPainter>
 
 #include <typeinfo>
 
@@ -76,8 +78,8 @@ public:
     QPointer<KoUpdater> odfPageProgressUpdater;
 };
 
-KoPADocument::KoPADocument(QObject* parent)
-    : KoDocument(parent),
+KoPADocument::KoPADocument(KoPart *part)
+    : KoDocument(part),
     d(new Private())
 {
     d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
@@ -102,6 +104,14 @@ KoPADocument::~KoPADocument()
     qDeleteAll( d->masterPages );
     delete d->pageProvider;
     delete d;
+}
+
+QPixmap KoPADocument::generatePreview(const QSize& size)
+{
+    // use first page as preview for all pages
+    KoPAPageBase *page = pageByIndex(0, false);
+    Q_ASSERT( page );
+    return pageThumbnail(page, size);
 }
 
 void KoPADocument::paintContent( QPainter &painter, const QRect &rect)
@@ -137,7 +147,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
     if (d->odfProgressUpdater) {
         d->odfProgressUpdater->setProgress(0);
     }
-    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), componentData() );
+    KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), KGlobal::mainComponent());
     KoPALoadingContext paContext(loadingContext, resourceManager());
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -186,7 +196,7 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
     loadOdfDocumentStyles( paContext );
 
     if ( d->pages.size() > 1 ) {
-        setActionEnabled( KoPAView::ActionDeletePage, false );
+        emit actionsPossible(KoPAView::ActionDeletePage, false);
     }
 
     updatePageCount();
@@ -525,15 +535,9 @@ void KoPADocument::addShape( KoShape * shape )
         return;
 
     // the KoShapeController sets the active layer as parent
-    KoPAPageBase * page( pageByShape( shape ) );
+    KoPAPageBase *page(pageByShape(shape));
 
-    foreach( KoView *view, views() )
-    {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
-        kopaView->viewMode()->addShape( shape );
-    }
-
-    emit shapeAdded( shape );
+    emit shapeAdded(shape);
 
     // it can happen in kpresenter notes view that there is no page
     if ( page ) {
@@ -548,23 +552,17 @@ void KoPADocument::postAddShape( KoPAPageBase * page, KoShape * shape )
     Q_UNUSED( shape );
 }
 
-void KoPADocument::removeShape( KoShape *shape )
+void KoPADocument::removeShape(KoShape *shape)
 {
-    if(!shape)
+    if (!shape)
         return;
 
-    KoPAPageBase * page( pageByShape( shape ) );
+    KoPAPageBase *page(pageByShape(shape));
 
-    foreach( KoView *view, views() )
-    {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
-        kopaView->viewMode()->removeShape( shape );
-    }
+    emit shapeRemoved(shape);
 
-    emit shapeRemoved( shape );
-
-    page->shapeRemoved( shape );
-    postRemoveShape( page, shape );
+    page->shapeRemoved(shape);
+    postRemoveShape(page, shape);
 }
 
 void KoPADocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
@@ -604,6 +602,8 @@ KoPAPageBase * KoPADocument::pageByShape( KoShape * shape ) const
     return page;
 }
 
+//F)XME
+/*
 void KoPADocument::updateViews(KoPAPageBase *page)
 {
     if (!page) return;
@@ -622,7 +622,7 @@ void KoPADocument::updateViews(KoPAPageBase *page)
         }
     }
 }
-
+*/
 KoPageApp::PageType KoPADocument::pageType() const
 {
     return KoPageApp::Page;
@@ -653,15 +653,6 @@ void KoPADocument::initEmpty()
     KoDocument::initEmpty();
 }
 
-void KoPADocument::setActionEnabled( int actions, bool enable )
-{
-    foreach( KoView *view, views() )
-    {
-        KoPAView * kopaView = static_cast<KoPAView*>( view );
-        kopaView->setActionEnabled( actions, enable );
-    }
-}
-
 void KoPADocument::insertPage( KoPAPageBase* page, int index )
 {
     if ( !page )
@@ -677,9 +668,9 @@ void KoPADocument::insertPage( KoPAPageBase* page, int index )
     pages.insert( index, page );
     updatePageCount();
 
-    setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
+    emit actionsPossible(KoPAView::ActionDeletePage, pages.size() > 1);
 
-    emit pageAdded( page );
+    emit pageAdded(page);
 }
 
 void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
@@ -703,7 +694,7 @@ void KoPADocument::insertPage( KoPAPageBase* page, KoPAPageBase* after )
     pages.insert( index, page );
     updatePageCount();
 
-    setActionEnabled( KoPAView::ActionDeletePage, pages.size() > 1 );
+    emit actionsPossible(KoPAView::ActionDeletePage, pages.size() > 1);
 
     emit pageAdded( page );
 }
@@ -725,21 +716,17 @@ int KoPADocument::takePage( KoPAPageBase *page )
         // change to previous page when the page is the active one if the first one is delete go to the next one
         int newIndex = index == 0 ? 0 : index - 1;
         KoPAPageBase * newActivePage = pages.at( newIndex );
-        foreach( KoView *view, views() )
-        {
-            KoPAView * kopaView = static_cast<KoPAView*>( view );
-            if ( page == kopaView->activePage() ) {
-                kopaView->viewMode()->updateActivePage( newActivePage );
-            }
-        }
+
         updatePageCount();
+
+        emit replaceActivePage(page, newActivePage);
+        emit pageRemoved(page);
     }
 
     if ( pages.size() == 1 ) {
-        setActionEnabled( KoPAView::ActionDeletePage, false );
+        emit actionsPossible(KoPAView::ActionDeletePage, false);
     }
 
-    emit pageRemoved( page );
 
     return index;
 }
@@ -767,7 +754,7 @@ KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const
 
 void KoPADocument::loadConfig()
 {
-    KSharedConfigPtr config = componentData().config();
+    KSharedConfigPtr config = KGlobal::mainComponent().config();
 
     if( config->hasGroup( "Grid" ) )
     {
@@ -796,7 +783,7 @@ void KoPADocument::loadConfig()
 
 void KoPADocument::saveConfig()
 {
-    KSharedConfigPtr config = componentData().config();
+    KSharedConfigPtr config = KGlobal::mainComponent().config();
     KConfigGroup configGroup = config->group( "Grid" );
     KoGridData defGrid;
 

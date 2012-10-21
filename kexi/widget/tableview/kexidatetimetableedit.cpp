@@ -125,6 +125,12 @@ bool KexiDateTimeTableEdit::valueIsValid()
     return KexiDateTimeFormatter::isValid(m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
+bool KexiDateTimeTableEdit::valueChanged()
+{
+    //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
+    return m_origValue != m_lineedit->text();
+}
+
 bool KexiDateTimeTableEdit::textIsEmpty() const
 {
     return KexiDateTimeFormatter::isEmpty(m_dateFormatter, m_timeFormatter, m_lineedit->text());

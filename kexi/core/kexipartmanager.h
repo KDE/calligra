@@ -25,7 +25,7 @@
 
 #include <kservice.h>
 
-#include <kexidb/object.h>
+#include <db/object.h>
 #include <kexi_export.h>
 
 namespace KexiDB

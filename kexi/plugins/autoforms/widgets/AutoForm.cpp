@@ -21,8 +21,8 @@
 #include "AutoForm.h"
 #include <QGridLayout>
 #include "AutoLineEdit.h"
-#include <kexidb/cursor.h>
-#include <kexidb/RecordData.h>
+#include <db/cursor.h>
+#include <db/RecordData.h>
 
 AutoForm::AutoForm(QWidget* parent, KexiRecordNavigatorIface *nav): QWidget(parent), m_previousRecord(0)
 {

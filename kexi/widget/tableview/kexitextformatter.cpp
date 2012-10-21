@@ -22,7 +22,7 @@
 
 #include "kexitextformatter.h"
 #include <widget/utils/kexidatetimeformatter.h>
-#include <kexidb/utils.h>
+#include <db/utils.h>
 
 //! @internal
 class KexiTextFormatter::Private

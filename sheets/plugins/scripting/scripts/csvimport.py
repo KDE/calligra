@@ -2,16 +2,18 @@
 
 """
 Python script to import content from a comma-separated-value
-file to KSpread.
+file to Sheets.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
-http://www.calligra.org/kspread
+http://www.calligra.org/sheets
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import os, datetime, sys, traceback, csv
 import Kross, KSpread
+
+T = Kross.module("kdetranslation")
 
 class CsvImport:
 
@@ -20,27 +22,27 @@ class CsvImport:
         self.currentpath = self.scriptaction.currentPath()
 
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("CSV Import")
+        self.dialog = self.forms.createDialog(T.i18n("CSV Import"))
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        openpage = self.dialog.addPage("Open","Import from CSV File","document-open")
+        openpage = self.dialog.addPage(T.i18n("Open"),T.i18n("Import from CSV File"),"document-open")
         self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kspreadcsvimportopen")
         self.openwidget.setMode("Opening")
-        self.openwidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
+        self.openwidget.setFilter("*.csv *.txt|%(1)s\n*|%(2)s" % { '1' : T.i18n("Comma-Separated-Value Files"), '2' : T.i18n("All Files") } )
 
-        datapage = self.dialog.addPage("Import","Import to sheet beginning at cell","document-import")
+        datapage = self.dialog.addPage(T.i18n("Import"),T.i18n("Import to sheet beginning at cell"),"document-import")
         self.sheetslistview = KSpread.createSheetsListView(datapage)
         self.sheetslistview.setEditorType("Cell")
 
-        optionspage = self.dialog.addPage("Options","Comma Separated Value Options","configure")
+        optionspage = self.dialog.addPage(T.i18n("Options"),T.i18n("Comma Separated Value Options"),"configure")
         self.optionswidget = self.forms.createWidgetFromUIFile(optionspage, os.path.join(self.currentpath, "csvoptions.ui"))
 
         if self.dialog.exec_loop():
             try:
                 self.doImport()
             except:
-                self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
+                self.forms.showMessageBox("Error", T.i18n("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def getCustomDialect(self):
         class CustomDialect(csv.excel): pass
@@ -67,19 +69,19 @@ class CsvImport:
     def doImport(self):
         currentSheet = self.sheetslistview.sheet()
         if not currentSheet:
-            raise "No current sheet."
+            raise Exception, T.i18n("No current sheet.")
 
         writer = KSpread.writer()
         if not writer.setSheet(currentSheet):
-            raise "Invalid sheet \"%s\" defined." % currentSheet
+            self.forms.showMessageBox("Sorry", T.i18n("Invalid sheet \"%1\" defined.", [currentSheet]))
 
         cell = self.sheetslistview.editor()
         if not writer.setCell(cell):
-            raise "Invalid cell \"%s\" defined." % cell
+            self.forms.showMessageBox("Sorry", T.i18n("Invalid cell \"%1\" defined.", [cell]))
 
         csvfilename = self.openwidget.selectedFile()
         if not os.path.isfile(csvfilename):
-            raise "File '%s' not found." % csvfilename
+            self.forms.showMessageBox("Sorry", T.i18n("File '%1' not found.", [csvfilename]))
 
         #writer.connect("valueChanged()",writer.next)
 

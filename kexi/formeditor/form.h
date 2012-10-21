@@ -24,7 +24,7 @@
 
 #include <QMetaProperty>
 #include <QList>
-#include <kexi_export.h>
+#include <kexi_global.h>
 #include "widgetlibrary.h"
 
 class QWidget;

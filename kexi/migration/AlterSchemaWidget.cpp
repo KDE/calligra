@@ -25,12 +25,14 @@
 #include <QLabel>
 #include <QLineEdit>
 
-#include <kexidb/tableschema.h>
+#include <db/tableschema.h>
+#include <KoIcon.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <KexiWindow.h>
 
 using namespace KexiMigration;
@@ -171,11 +173,9 @@ QString AlterSchemaWidget::suggestedItemName(const QString& base_name)
 
 void AlterSchemaWidget::nameChanged(const QString& tableName)
 {
-    if (nameExists(tableName)) {
-        m_nameUsedLabel->setPixmap(KIconLoader::global()->loadIcon("dialog-cancel", KIconLoader::Dialog, 24));
-    } else {
-        m_nameUsedLabel->setPixmap(KIconLoader::global()->loadIcon("dialog-ok", KIconLoader::Dialog, 24));
-    }
+    const char *const iconName =
+        (nameExists(tableName) ? koIconNameCStr("dialog-cancel") : koIconNameCStr("dialog-ok"));
+    m_nameUsedLabel->setPixmap(KIconLoader::global()->loadIcon(QLatin1String(iconName), KIconLoader::Dialog, 24));
 }
 
 bool AlterSchemaWidget::nameExists(const QString& baseName)

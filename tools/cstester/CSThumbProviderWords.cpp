@@ -23,6 +23,8 @@
 
 #include "CSThumbProviderWords.h"
 
+#include <KoPart.h>
+
 #include <KWDocument.h>
 #include <KWPage.h>
 #include <KWCanvasItem.h>
@@ -51,7 +53,7 @@ CSThumbProviderWords::~CSThumbProviderWords()
 
 QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
-    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->canvasItem());
+    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem());
     KoZoomHandler zoomHandler;
 
     while (!m_doc->layoutFinishedAtleastOnce()) {

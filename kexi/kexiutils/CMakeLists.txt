@@ -33,14 +33,16 @@ set(kexiutils_LIB_SRCS
 IF (KEXI_MOBILE)
 
 ELSE (KEXI_MOBILE)
-  LIST(APPEND kexiutils_LIB_SRCS
-    debuggui.cpp 
-  )
+  IF (KEXI_DEBUG_GUI)
+    LIST(APPEND kexiutils_LIB_SRCS
+      debuggui.cpp
+    )
+  ENDIF (KEXI_DEBUG_GUI)
 ENDIF (KEXI_MOBILE)
 
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 
-target_link_libraries(kexiutils  ${KDE4_KIO_LIBS} )
+target_link_libraries(kexiutils  ${CALLIGRADB_LIBS} ${KDE4_KIO_LIBS} )
 target_link_libraries(kexiutils  LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS})
 
 IF (KEXI_MOBILE)
@@ -64,3 +66,5 @@ if(FALSE) # TODO: install when we move to independent place
     KexiAssistantWidget.h KexiAnimatedLayout.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 endif(FALSE)
+
+add_subdirectory(tests)

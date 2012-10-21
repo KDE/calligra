@@ -997,6 +997,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case EQ:
         kDebug(30513) << "processing field... EQ (Combined Characters)";
         break;
+    case REF:
     case CREATEDATE:
     case DATE:
     case HYPERLINK:
@@ -1005,7 +1006,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case TIME:
     case TOC:
         kDebug(30513) << "Processing only a subset of field instructions!";
-        kDebug(30513) << "Processing field result!";
+        kDebug(30513) << "Processing field result.";
         break;
     case LAST_REVISED_BY:
     case NUMPAGES:
@@ -1028,7 +1029,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
     case SEQ:
     case SHAPE:
         kWarning(30513) << "Warning: field instructions not supported!";
-        kWarning(30513) << "Warning: processing field result!";
+        kWarning(30513) << "Warning: processing only field result!";
         break;
     case UNSUPPORTED:
         kWarning(30513) << "Warning: Fld data missing, ignoring!";
@@ -1070,7 +1071,7 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         //
         // Field Value: None
         //
-        // TODO:
+        // TODO: add support for all switches
         //
         // \o field-argument - Text in this switch's field-argument specifies
         // the ScreenTip text for the hyperlink.  field-argument which
@@ -1086,9 +1087,10 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         //
         // \m - Appends coordinates to a hyperlink for a server-side image map.
         // \n - Causes the destination site to be opened in a new window.
-
+        //
         // \l field-argument - Text in this switch's field-argument specifies a
         // location in the file, such as a bookmark, where to jump.
+        //
         QRegExp rx("\\s\\\\l\\s\"(\\S+)\"");
         if (rx.indexIn(*inst) >= 0) {
             // prevent invalid URI
@@ -1096,13 +1098,32 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
                 m_fld->m_hyperLinkUrl = rx.cap(1).prepend("#");
             }
         }
-
         rx = QRegExp("HYPERLINK\\s\"(\\S+)\"");
         if (rx.indexIn(*inst) >= 0) {
             m_fld->m_hyperLinkUrl.prepend(rx.cap(1));
         }
 
         m_fld->m_hyperLinkActive = true;
+        break;
+    }
+    case REF:
+    {
+        // Syntax: REF Bookmark [ switches ]
+        //
+        // TODO: add support for all switches
+        //
+        // \h - Creates a hyperlink to the bookmarked paragraph.
+        //
+        QRegExp rx("REF\\s(\\S+)");
+        if (rx.indexIn(*inst) >= 0) {
+            m_fld->m_hyperLinkUrl = rx.cap(1);
+        }
+        rx = QRegExp("\\s\\\\h\\s");
+        if (rx.indexIn(*inst) >= 0) {
+            m_fld->m_hyperLinkActive = true;
+            m_fld->m_hyperLinkUrl.prepend("#");
+        }
+        m_fld->m_refFormat = "text";
         break;
     }
     case PAGEREF:
@@ -1114,15 +1135,16 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
         //
         // Field Value: The number of the page containing the bookmark.
         //
-        // TODO:
+        // TODO: add support for all switches
         //
         // \p - Causes the field to display its position relative to the source
         // bookmark.  If the PAGEREF field is on the same page as the bookmark,
         // it omits "on page #" and returns "above" or "below" only.  If the
         // PAGEREF field is not on the same page as the bookmark, the string
         // "on page #" is used.
-
+        //
         // \h - Creates a hyperlink to the bookmarked paragraph.
+        //
         QRegExp rx("PAGEREF\\s(\\S+)");
         if (rx.indexIn(*inst) >= 0) {
             m_fld->m_hyperLinkUrl = rx.cap(1);
@@ -1132,13 +1154,16 @@ void WordsTextHandler::fieldSeparator(const wvWare::FLD* /*fld*/, wvWare::Shared
             m_fld->m_hyperLinkActive = true;
             m_fld->m_hyperLinkUrl.prepend("#");
         }
+        m_fld->m_refFormat = "page";
         break;
     }
     case TIME:
-    case DATE: {
+    case DATE:
+    {
         // Extract the interesting format-string. That means we translate
         // something like 'TIME \@ "MMMM d, yyyy"' into 'MMMM d, yyyy' cause
         // the NumberFormatParser doesn't handle it correct else.
+        //
         QRegExp rx(".*\"(.*)\".*");
         if (rx.indexIn(*inst) >= 0)
             m_fld->m_instructions = rx.cap(1);
@@ -1236,6 +1261,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
         writer.addAttribute("text:select-page", "current");
         writer.endElement();
         break;
+    case REF:
     case PAGEREF:
     {
         if (m_fld->m_hyperLinkActive) {
@@ -1246,7 +1272,7 @@ void WordsTextHandler::fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const 
             writer.endElement(); //text:a
         } else {
             writer.startElement("text:bookmark-ref");
-            writer.addAttribute("text:reference-format", "page");
+            writer.addAttribute("text:reference-format", m_fld->m_refFormat);
             writer.addAttribute("text:ref-name", QUrl(m_fld->m_hyperLinkUrl).toEncoded());
             writer.addCompleteElement(m_fld->m_buffer);
             writer.endElement(); //text:bookmark-ref
@@ -1677,6 +1703,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         if (!m_fld->m_afterSeparator) {
             switch (m_fld->m_type) {
             case EQ:
+            case REF:
             case HYPERLINK:
             case MACROBUTTON:
             case PAGEREF:
@@ -1698,6 +1725,7 @@ void WordsTextHandler::runOfText(const wvWare::UString& text, wvWare::SharedPtr<
         else {
             KoXmlWriter* writer = m_fld->m_writer;
             switch (m_fld->m_type) {
+            case REF:
             case CREATEDATE:
             case SAVEDATE:
             case DATE:

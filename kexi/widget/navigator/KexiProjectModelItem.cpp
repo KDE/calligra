@@ -23,9 +23,9 @@
 
 
 #include <core/kexipartinfo.h>
+#include <KIcon>
 #include <QtAlgorithms>
 #include <kdebug.h>
-#include <kiconloader.h>
 
 KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p)
     : m_parentItem(p), m_dirty(false), m_info(0), m_item(0)
@@ -36,14 +36,14 @@ KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelIte
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
     : m_parentItem(p), m_dirty(false), m_info(&i), m_item(0)
 {
-    m_icon = SmallIcon(i.itemIcon());
+    m_icon = KIcon(i.itemIconName());
     m_fifoSorting = 1; //because this is top level item
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
     : m_parentItem(p), m_dirty(false), m_info(&i), m_item(&item)
 {
-    m_icon = SmallIcon(i.itemIcon());
+    m_icon = KIcon(i.itemIconName());
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()

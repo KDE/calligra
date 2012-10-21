@@ -29,7 +29,10 @@
 #include "KexiMobileToolbar.h"
 #include "KexiMobileNavigator.h"
 
-#include <kexidb/drivermanager.h>
+#include <db/drivermanager.h>
+
+#include <KoIcon.h>
+
 #include <kdebug.h>
 #include <KMimeType>
 #include <QFileDialog>
@@ -46,7 +49,7 @@ KexiMobileMainWindow::KexiMobileMainWindow()
     m_toolbar = new KexiMobileToolbar(this);
     m_layout = new QHBoxLayout(this);
     
-    m_openFileAction = new QAction(KIcon("document-open"), "Open", this);
+    m_openFileAction = new QAction(koIcon("document-open"), "Open", this);
     connect(m_openFileAction, SIGNAL(triggered(bool)), this, SLOT(slotOpenDatabase()));
     menuBar()->addAction(m_openFileAction);
     

@@ -41,7 +41,6 @@
 
 
 #include <kaction.h>
-#include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -73,8 +72,8 @@ QObject *ResourceAllocationTreeView::currentObject() const
 }
 
 //-----------------------------------
-ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+ResourceAllocationEditor::ResourceAllocationEditor(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -95,7 +94,7 @@ ResourceAllocationEditor::ResourceAllocationEditor( KoDocument *part, QWidget *p
     }
     m_view->slaveView()->setDefaultColumns( show );
 
-    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), part, SLOT( addCommand( KUndo2Command* ) ) );
+    connect( model(), SIGNAL( executeCommand( KUndo2Command* ) ), doc, SLOT( addCommand( KUndo2Command* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 

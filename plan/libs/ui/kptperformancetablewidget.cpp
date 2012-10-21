@@ -49,6 +49,32 @@ QSize PerformanceTableWidget::minimumSizeHint() const
     return sizeHint();
 }
 
+//---------
+PerformanceTableView::PerformanceTableView( QWidget *parent )
+    : QTableView( parent )
+{
+    horizontalHeader()->setResizeMode( QHeaderView::Stretch );
+    verticalHeader()->setResizeMode( QHeaderView::Fixed );
+}
+
+QSize PerformanceTableView::sizeHint() const
+{
+    QSize s = QTableView::sizeHint();
+    int h = horizontalHeader()->height();
+    for ( int r = 0; r < verticalHeader()->count(); ++r ) {
+        if ( ! verticalHeader()->isSectionHidden( r ) ) {
+            h += verticalHeader()->sectionSize( r );
+        }
+    }
+    s.setHeight( h + frameWidth() * 2 );
+    return s;
+}
+
+QSize PerformanceTableView::minimumSizeHint() const
+{
+    return sizeHint();
+}
+
 } // namespace KPlato
 
 #include "kptperformancetablewidget.moc"

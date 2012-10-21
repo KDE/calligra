@@ -23,8 +23,8 @@
 #include <QString>
 #include <QObject>
 
-#include <kexidb/cursor.h>
-#include <kexidb/roweditbuffer.h>
+#include <db/cursor.h>
+#include <db/roweditbuffer.h>
 
 namespace Scripting
 {

@@ -34,6 +34,7 @@
 #include <KMessageBox>
 #include <KComboBox>
 
+#include <KoIcon.h>
 #include "KoDocument.h"
 
 #include "kptviewbase.h"
@@ -464,13 +465,13 @@ QString ViewListWidget::uniqueTag( const QString &seed ) const
     return tag;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString &tag, const QString& name, ViewBase *view, KoDocument *doc, const QString& icon, int index )
+ViewListItem *ViewListWidget::addView(QTreeWidgetItem *category, const QString &tag, const QString &name, ViewBase *view, KoDocument *doc, const QString &iconName, int index)
 {
     ViewListItem * item = new ViewListItem( uniqueTag( tag ), QStringList( name ), ViewListItem::ItemType_SubView );
     item->setView( view );
     item->setDocument( doc );
-    if ( !icon.isEmpty() ) {
-        item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
+    if (! iconName.isEmpty()) {
+        item->setData(0, Qt::DecorationRole, KIcon(iconName));
     }
     item->setFlags( ( item->flags() | Qt::ItemIsEditable ) & ~Qt::ItemIsDropEnabled );
     insertViewListItem( item, category, index );
@@ -729,15 +730,15 @@ void ViewListWidget::setupContextMenus()
     // NOTE: can't use xml file as there may not be a factory()
     QAction *action;
     // view actions
-    action = new QAction( KIcon( "edit-rename" ), i18nc( "@action:inmenu rename view", "Rename" ), this );
+    action = new QAction(koIcon("edit-rename"), i18nc("@action:inmenu rename view", "Rename"), this);
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditViewTitle() ) );
     m_viewactions.append( action );
 
-    action = new QAction( KIcon( "configure" ), i18nc( "@action:inmenu configure view", "Configure..." ), this );
+    action = new QAction(koIcon("configure"), i18nc("@action:inmenu configure view", "Configure..."), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_viewactions.append( action );
 
-    action = new QAction( KIcon( "list-remove" ), i18nc( "@action:inmenu remove view", "Remove" ), this );
+    action = new QAction(koIcon("list-remove"), i18nc("@action:inmenu remove view", "Remove"), this);
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveView() ) );
     m_viewactions.append( action );
 
@@ -746,15 +747,15 @@ void ViewListWidget::setupContextMenus()
     m_viewactions.append( action );
 
     // Category actions
-    action = new QAction( KIcon( "edit-rename" ), i18nc( "@action:inmenu rename view category", "Rename" ), this );
+    action = new QAction(koIcon("edit-rename"), i18nc("@action:inmenu rename view category", "Rename"), this);
     connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );
     m_categoryactions.append( action );
 
-    action = new QAction( KIcon( "configure" ), i18nc( "@action:inmenu configure view category", "Configure..." ), this );
+    action = new QAction(koIcon("configure"), i18nc("@action:inmenu configure view category", "Configure..."), this);
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_categoryactions.append( action );
 
-    action = new QAction( KIcon( "list-remove" ), i18nc( "@action:inmenu Remove view category", "Remove" ), this );
+    action = new QAction(koIcon("list-remove"), i18nc("@action:inmenu Remove view category", "Remove"),this);
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveCategory() ) );
     m_categoryactions.append( action );
 
@@ -763,7 +764,7 @@ void ViewListWidget::setupContextMenus()
     m_categoryactions.append( action );
 
     // list actions
-    action = new QAction( KIcon( "list-add" ), i18nc( "@action:inmenu Insert View", "Insert..." ), this );
+    action = new QAction(koIcon("list-add"), i18nc("@action:inmenu Insert View", "Insert..."), this);
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
     m_listactions.append( action );
 }

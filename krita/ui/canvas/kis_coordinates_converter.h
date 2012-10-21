@@ -54,16 +54,14 @@ public:
 
     void setCanvasWidgetSize(QSize size);
     void setImage(KisImageWSP image);
-    void setDocumentOrigin(const QPoint &origin);
     void setDocumentOffset(const QPoint &offset);
 
-    QPoint documentOrigin() const;
     QPoint documentOffset() const;
     qreal rotationAngle() const;
     
-    void rotate(QPointF center, qreal angle);
-    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
-    void resetRotation(QPointF center);
+    QPoint rotate(QPointF center, qreal angle);
+    QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
+    QPoint resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);
     
@@ -119,14 +117,18 @@ public:
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
 
-    QPoint updateOffsetAfterTransform() const;
     QPointF flakeCenterPoint() const;
     QPointF widgetCenterPoint() const;
 
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 
 private:
-    void recalculateTransformations() const;
+    friend class KisZoomAndPanTest;
+
+    QPointF centeringCorrection() const;
+    void correctOffsetToTransformation();
+    void correctTransformationToOffset();
+    void recalculateTransformations();
 
 private:
     struct Private;

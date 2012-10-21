@@ -33,12 +33,12 @@
 
 // KDE
 #include <KLocale>
-#include <KIconLoader>
 #include <KDebug>
 #include <KMessageBox>
 
 // Calligra
 #include <interfaces/KoChartModel.h>
+#include <KoIcon.h>
 
 // KDChart
 #include <KDChartChart>
@@ -50,6 +50,7 @@
 #include <KDChartLegend>
 #include <KDChartDataValueAttributes>
 #include <KDChartTextAttributes>
+#include <KDChartMarkerAttributes>
 #include <KDChartMeasure>
 
 // KChart
@@ -156,6 +157,27 @@ public:
     QAction  *dataSetSurfaceChartAction;
     QAction  *dataSetGanttChartAction;
 
+    // marker selection actions for datasets
+    QAction *dataSetNoMarkerAction;
+    QAction *dataSetAutomaticMarkerAction;
+    QAction *dataSetMarkerCircleAction;
+    QAction *dataSetMarkerSquareAction;
+    QAction *dataSetMarkerDiamondAction;
+    QAction *dataSetMarkerRingAction;
+    QAction *dataSetMarkerCrossAction;
+    QAction *dataSetMarkerFastCrossAction;
+    QAction *dataSetMarkerArrowDownAction;
+    QAction *dataSetMarkerArrowUpAction;
+    QAction *dataSetMarkerArrowRightAction;
+    QAction *dataSetMarkerArrowLeftAction;
+    QAction *dataSetMarkerBowTieAction;
+    QAction *dataSetMarkerHourGlassAction;
+    QAction *dataSetMarkerStarAction;
+    QAction *dataSetMarkerXAction;
+    QAction *dataSetMarkerAsteriskAction;
+    QAction *dataSetMarkerHorizontalBarAction;
+    QAction *dataSetMarkerVerticalBarAction;
+
     // Table Editor (a.k.a. the data editor)
     TableEditorDialog    *tableEditorDialog;
     // Source containing all tables the chart uses (name/model pairs)
@@ -255,52 +277,52 @@ ChartConfigWidget::Private::~Private()
  * Returns, if existent, the name of the icon representing
  * a given chart type, following the KDE4 icon naming convention.
  */
-static QString chartTypeIcon(ChartType type, ChartSubtype subtype)
+static const char * chartTypeIconName(ChartType type, ChartSubtype subtype)
 {
     switch(type) {
     case BarChartType:
         switch(subtype) {
         case NormalChartSubtype:
-            return "office-chart-bar";
+            return koIconNameCStr("office-chart-bar");
         case StackedChartSubtype:
-            return "office-chart-bar-stacked";
+            return koIconNameCStr("office-chart-bar-stacked");
         case PercentChartSubtype:
-            return "office-chart-bar-percentage";
+            return koIconNameCStr("office-chart-bar-percentage");
         default:
             Q_ASSERT("Invalid bar chart subtype!");
         }
     case LineChartType:
         switch(subtype) {
         case NormalChartSubtype:
-            return "office-chart-line";
+            return koIconNameCStr("office-chart-line");
         case StackedChartSubtype:
-            return "office-chart-line-stacked";
+            return koIconNameCStr("office-chart-line-stacked");
         case PercentChartSubtype:
-            return "office-chart-line-percentage";
+            return koIconNameCStr("office-chart-line-percentage");
         default:
             Q_ASSERT("Invalid line chart subtype!");
         }
     case AreaChartType:
         switch(subtype) {
         case NormalChartSubtype:
-            return "office-chart-area";
+            return koIconNameCStr("office-chart-area");
         case StackedChartSubtype:
-            return "office-chart-area-stacked";
+            return koIconNameCStr("office-chart-area-stacked");
         case PercentChartSubtype:
-            return "office-chart-area-percentage";
+            return koIconNameCStr("office-chart-area-percentage");
         default:
             Q_ASSERT("Invalid area chart subtype!");
         }
     case CircleChartType:
-        return "office-chart-pie";
+        return koIconNameCStr("office-chart-pie");
     case RingChartType:
-        return "office-chart-ring";
+        return koIconNameCStr("office-chart-ring");
     case RadarChartType:
-        return "office-chart-polar";
+        return koIconNameCStr("office-chart-polar");
     case FilledRadarChartType:
-        return "office-chart-polar-filled";
+        return koIconNameCStr("office-chart-polar-filled");
     case ScatterChartType:
-        return "office-chart-scatter";
+        return koIconNameCStr("office-chart-scatter");
     default:
         return "";
     }
@@ -316,43 +338,43 @@ ChartConfigWidget::ChartConfigWidget()
 
     // Chart type button with its associated menu
     QMenu *chartTypeMenu = new QMenu(this);
-    chartTypeMenu->setIcon(KIcon("office-chart-bar"));
+    chartTypeMenu->setIcon(koIcon("office-chart-bar"));
 
     // Bar charts
-    QMenu *barChartMenu = chartTypeMenu->addMenu(KIcon("office-chart-bar"), i18n("Bar Chart"));
-    d->normalBarChartAction  = barChartMenu->addAction(KIcon("office-chart-bar"), i18n("Normal"));
-    d->stackedBarChartAction = barChartMenu->addAction(KIcon("office-chart-bar-stacked"), i18n("Stacked"));
-    d->percentBarChartAction = barChartMenu->addAction(KIcon("office-chart-bar-percentage"), i18n("Percent"));
+    QMenu *barChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-bar"), i18n("Bar Chart"));
+    d->normalBarChartAction  = barChartMenu->addAction(koIcon("office-chart-bar"), i18n("Normal"));
+    d->stackedBarChartAction = barChartMenu->addAction(koIcon("office-chart-bar-stacked"), i18n("Stacked"));
+    d->percentBarChartAction = barChartMenu->addAction(koIcon("office-chart-bar-percentage"), i18n("Percent"));
 
     // Line charts
-    QMenu *lineChartMenu = chartTypeMenu->addMenu(KIcon("office-chart-line"), i18n("Line Chart"));
-    d->normalLineChartAction  = lineChartMenu->addAction(KIcon("office-chart-line"), i18n("Normal"));
-    d->stackedLineChartAction = lineChartMenu->addAction(KIcon("office-chart-line-stacked"), i18n("Stacked"));
-    d->percentLineChartAction = lineChartMenu->addAction(KIcon("office-chart-line-percentage"), i18n("Percent"));
+    QMenu *lineChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-line"), i18n("Line Chart"));
+    d->normalLineChartAction  = lineChartMenu->addAction(koIcon("office-chart-line"), i18n("Normal"));
+    d->stackedLineChartAction = lineChartMenu->addAction(koIcon("office-chart-line-stacked"), i18n("Stacked"));
+    d->percentLineChartAction = lineChartMenu->addAction(koIcon("office-chart-line-percentage"), i18n("Percent"));
 
     // Area charts
-    QMenu *areaChartMenu = chartTypeMenu->addMenu(KIcon("office-chart-area"), i18n("Area Chart"));
-    d->normalAreaChartAction  = areaChartMenu->addAction(KIcon("office-chart-area"), i18n("Normal"));
-    d->stackedAreaChartAction = areaChartMenu->addAction(KIcon("office-chart-area-stacked"), i18n("Stacked"));
-    d->percentAreaChartAction = areaChartMenu->addAction(KIcon("office-chart-area-percentage"), i18n("Percent"));
+    QMenu *areaChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-area"), i18n("Area Chart"));
+    d->normalAreaChartAction  = areaChartMenu->addAction(koIcon("office-chart-area"), i18n("Normal"));
+    d->stackedAreaChartAction = areaChartMenu->addAction(koIcon("office-chart-area-stacked"), i18n("Stacked"));
+    d->percentAreaChartAction = areaChartMenu->addAction(koIcon("office-chart-area-percentage"), i18n("Percent"));
 
     chartTypeMenu->addSeparator();
 
     // Circular charts: pie and ring
-    d->circleChartAction = chartTypeMenu->addAction(KIcon("office-chart-pie"), i18n("Pie Chart"));
-    d->ringChartAction = chartTypeMenu->addAction(KIcon("office-chart-ring"), i18n("Ring Chart"));
+    d->circleChartAction = chartTypeMenu->addAction(koIcon("office-chart-pie"), i18n("Pie Chart"));
+    d->ringChartAction = chartTypeMenu->addAction(koIcon("office-chart-ring"), i18n("Ring Chart"));
 
     chartTypeMenu->addSeparator();
 
     // Polar charts: radar
-    QMenu *radarChartMenu = chartTypeMenu->addMenu(KIcon("office-chart-polar"), i18n("Polar Chart"));
-    d->radarChartAction = radarChartMenu->addAction(KIcon("office-chart-polar"), i18n("Normal"));
-    d->filledRadarChartAction = radarChartMenu->addAction(KIcon("office-chart-polar-filled"), i18n("Filled"));
+    QMenu *radarChartMenu = chartTypeMenu->addMenu(koIcon("office-chart-polar"), i18n("Polar Chart"));
+    d->radarChartAction = radarChartMenu->addAction(koIcon("office-chart-polar"), i18n("Normal"));
+    d->filledRadarChartAction = radarChartMenu->addAction(koIcon("office-chart-polar-filled"), i18n("Filled"));
 
     chartTypeMenu->addSeparator();
 
     // X/Y charts: scatter and bubble
-    d->scatterChartAction = chartTypeMenu->addAction(KIcon("office-chart-scatter"), i18n("Scatter Chart"));
+    d->scatterChartAction = chartTypeMenu->addAction(koIcon("office-chart-scatter"), i18n("Scatter Chart"));
     d->bubbleChartAction = chartTypeMenu->addAction(i18n("Bubble Chart"));
 
     chartTypeMenu->addSeparator();
@@ -381,30 +403,30 @@ ChartConfigWidget::ChartConfigWidget()
     QMenu *dataSetChartTypeMenu = new QMenu(this);
 
     // Default chart type is a bar chart
-    dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar"));
+    dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar"));
 
 
-    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu(KIcon("office-chart-bar"), "Bar Chart");
-    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction(KIcon("office-chart-bar"), i18n("Normal"));
-    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction(KIcon("office-chart-bar-stacked"), i18n("Stacked"));
-    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction(KIcon("office-chart-bar-percentage"), i18n("Percent"));
+    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-bar"), "Bar Chart");
+    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction(koIcon("office-chart-bar"), i18n("Normal"));
+    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction(koIcon("office-chart-bar-stacked"), i18n("Stacked"));
+    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction(koIcon("office-chart-bar-percentage"), i18n("Percent"));
 
-    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu(KIcon("office-chart-line"), "Line Chart");
-    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction(KIcon("office-chart-line"), i18n("Normal"));
-    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction(KIcon("office-chart-line-stacked"), i18n("Stacked"));
-    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction(KIcon("office-chart-line-percentage"), i18n("Percent"));
+    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-line"), "Line Chart");
+    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction(koIcon("office-chart-line"), i18n("Normal"));
+    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction(koIcon("office-chart-line-stacked"), i18n("Stacked"));
+    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction(koIcon("office-chart-line-percentage"), i18n("Percent"));
 
-    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu(KIcon("office-chart-area"), "Area Chart");
-    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction(KIcon("office-chart-area"), i18n("Normal"));
-    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction(KIcon("office-chart-area-stacked"), i18n("Stacked"));
-    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction(KIcon("office-chart-area-percentage"), i18n("Percent"));
+    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-area"), "Area Chart");
+    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction(koIcon("office-chart-area"), i18n("Normal"));
+    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction(koIcon("office-chart-area-stacked"), i18n("Stacked"));
+    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction(koIcon("office-chart-area-percentage"), i18n("Percent"));
 
-    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction(KIcon("office-chart-pie"), i18n("Pie Chart"));
-    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction(KIcon("office-chart-ring"), i18n("Ring Chart"));
+    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction(koIcon("office-chart-pie"), i18n("Pie Chart"));
+    d->dataSetRingChartAction = dataSetChartTypeMenu->addAction(koIcon("office-chart-ring"), i18n("Ring Chart"));
 
-    d->dataSetRadarChartMenu = dataSetChartTypeMenu->addMenu(KIcon("office-chart-polar"), "Polar Chart");
-    d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar"), i18n("Normal"));
-    d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction(KIcon("office-chart-polar-filled"), i18n("Filled"));
+    d->dataSetRadarChartMenu = dataSetChartTypeMenu->addMenu(koIcon("office-chart-polar"), "Polar Chart");
+    d->dataSetRadarChartAction = d->dataSetRadarChartMenu->addAction(koIcon("office-chart-polar"), i18n("Normal"));
+    d->dataSetFilledRadarChartAction = d->dataSetRadarChartMenu->addAction(koIcon("office-chart-polar-filled"), i18n("Filled"));
 
     d->dataSetStockChartMenu = dataSetChartTypeMenu->addMenu("Stock Chart");
     d->dataSetHLCStockChartAction = d->dataSetStockChartMenu->addAction(i18n("HighLowClose"));
@@ -413,7 +435,7 @@ ChartConfigWidget::ChartConfigWidget()
 
     d->dataSetBubbleChartAction = dataSetChartTypeMenu->addAction(i18n("Bubble Chart"));
 
-    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction(KIcon("office-chart-scatter"), i18n("Scatter Chart"));
+    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction(koIcon("office-chart-scatter"), i18n("Scatter Chart"));
 
     d->ui.dataSetChartTypeMenu->setMenu(dataSetChartTypeMenu);
 
@@ -422,6 +444,38 @@ ChartConfigWidget::ChartConfigWidget()
 
     connect(d->ui.dataSetHasChartType, SIGNAL(toggled(bool)),
             this,                      SLOT(ui_dataSetHasChartTypeChanged(bool)));
+
+    // Setup marker menu
+    QMenu *datasetMarkerMenu = new QMenu(this);
+
+    // Default marker is Automatic
+    datasetMarkerMenu->setIcon(QIcon());
+
+    d->dataSetNoMarkerAction = datasetMarkerMenu->addAction(i18n("None"));
+    d->dataSetAutomaticMarkerAction = datasetMarkerMenu->addAction(i18n("Automatic"));
+
+    QMenu *datasetSelectMarkerMenu = datasetMarkerMenu->addMenu(i18n("Select"));
+    d->dataSetMarkerSquareAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerDiamondAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowDownAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowUpAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowRightAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerArrowLeftAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerBowTieAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerHourGlassAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerCircleAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerStarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerXAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerAsteriskAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerHorizontalBarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerVerticalBarAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerRingAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+    d->dataSetMarkerFastCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
+
+    d->ui.datasetMarkerMenu->setMenu(datasetMarkerMenu);
+    connect(datasetMarkerMenu, SIGNAL(triggered(QAction*)),
+            this,              SLOT(datasetMarkerSelected(QAction*)));
 
     // Insert error bar button
     d->ui.formatErrorBar->setEnabled(false);
@@ -471,8 +525,8 @@ ChartConfigWidget::ChartConfigWidget()
 
     // Second part of "Plot Area" tab.
     // FIXME: Is there any particular reason it's separated from the Labels?
-    d->ui.addAxis->setIcon(KIcon("list-add"));
-    d->ui.removeAxis->setIcon(KIcon("list-remove"));
+    d->ui.addAxis->setIcon(koIcon("list-add"));
+    d->ui.removeAxis->setIcon(koIcon("list-remove"));
 
     connect(d->ui.axisTitle, SIGNAL(textChanged(const QString&)),
             this, SLOT(ui_axisTitleChanged(const QString&)));
@@ -612,6 +666,48 @@ KAction* ChartConfigWidget::createAction()
     return 0;
 }
 
+void ChartConfigWidget::updateMarkers()
+{
+    DataSet *dataSet = d->dataSets[d->selectedDataSet];
+
+    d->dataSetMarkerCircleAction->setIcon(dataSet->markerIcon(MarkerCircle));
+    d->dataSetMarkerSquareAction->setIcon(dataSet->markerIcon(MarkerSquare));
+    d->dataSetMarkerDiamondAction->setIcon(dataSet->markerIcon(MarkerDiamond));
+    d->dataSetMarkerRingAction->setIcon(dataSet->markerIcon(MarkerRing));
+    d->dataSetMarkerCrossAction->setIcon(dataSet->markerIcon(MarkerCross));
+    d->dataSetMarkerFastCrossAction->setIcon(dataSet->markerIcon(MarkerFastCross));
+    d->dataSetMarkerArrowDownAction->setIcon(dataSet->markerIcon(MarkerArrowDown));
+    d->dataSetMarkerArrowUpAction->setIcon(dataSet->markerIcon(MarkerArrowUp));
+    d->dataSetMarkerArrowRightAction->setIcon(dataSet->markerIcon(MarkerArrowRight));
+    d->dataSetMarkerArrowLeftAction->setIcon(dataSet->markerIcon(MarkerArrowLeft));
+    d->dataSetMarkerBowTieAction->setIcon(dataSet->markerIcon(MarkerBowTie));
+    d->dataSetMarkerHourGlassAction->setIcon(dataSet->markerIcon(MarkerHourGlass));
+    d->dataSetMarkerStarAction->setIcon(dataSet->markerIcon(MarkerStar));
+    d->dataSetMarkerXAction->setIcon(dataSet->markerIcon(MarkerX));
+    d->dataSetMarkerAsteriskAction->setIcon(dataSet->markerIcon(MarkerAsterisk));
+    d->dataSetMarkerHorizontalBarAction->setIcon(dataSet->markerIcon(MarkerHorizontalBar));
+    d->dataSetMarkerVerticalBarAction->setIcon(dataSet->markerIcon(MarkerVerticalBar));
+
+    Q_ASSERT(dataSet);
+    if (!dataSet)
+        return;
+
+    OdfMarkerStyle style = dataSet->markerStyle();
+    QIcon icon = dataSet->markerIcon(style);
+    if (!icon.isNull()) {
+        if (dataSet->markerAutoSet()) {
+            d->ui.datasetMarkerMenu->setText("Auto");
+            d->ui.datasetMarkerMenu->setIcon(QIcon());
+        } else {
+            d->ui.datasetMarkerMenu->setIcon(icon);
+            d->ui.datasetMarkerMenu->setText("");
+        }
+    } else {
+        d->ui.datasetMarkerMenu->setText("None");
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+    }
+}
+
 void ChartConfigWidget::chartTypeSelected(QAction *action)
 {
     ChartType     type = LastChartType;
@@ -710,34 +806,7 @@ void ChartConfigWidget::chartTypeSelected(QAction *action)
     }
 
 
-    // o Make sure polar and cartesian plots can't conflict and
-    //   don't allow the user to mix these two types
-    // o Hide axis configuration options for polar plots
-    if (isPolar(type)) {
-        setPolarChartTypesEnabled(true);
-        setCartesianChartTypesEnabled(false);
-
-        // Pie charts and ring charts have no axes but radar charts do.
-        // Disable choosing of attached axis if there is none.
-        bool hasAxes = !(type == CircleChartType || type == RingChartType);
-        d->ui.axisConfiguration->setEnabled(hasAxes);
-        d->ui.dataSetAxes->setEnabled(hasAxes);
-        d->ui.dataSetHasChartType->setEnabled(hasAxes);
-        d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
-    } else {
-        setPolarChartTypesEnabled(false);
-        setCartesianChartTypesEnabled(true);
-
-        // All the cartesian chart types have axes.
-        d->ui.axisConfiguration->setEnabled(true);
-        d->ui.dataSetAxes->setEnabled(true);
-        d->ui.dataSetHasChartType->setEnabled(true);
-        d->ui.dataSetChartTypeMenu->setEnabled(true);
-    }
-
-    emit chartTypeChanged(type);
-    emit chartSubTypeChanged(subtype);
-
+    emit chartTypeChanged(type, subtype);
     update();
 }
 
@@ -886,7 +955,7 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
     if (!dataSet)
         return;
 
-    QString iconName = chartTypeIcon(type, subtype);
+    const QString iconName = QLatin1String(chartTypeIconName(type, subtype));
     if (!iconName.isEmpty())
         d->ui.dataSetChartTypeMenu->setIcon(KIcon(iconName));
 
@@ -896,10 +965,74 @@ void ChartConfigWidget::dataSetChartTypeSelected(QAction *action)
     update();
 }
 
-void ChartConfigWidget::chartSubTypeSelected(int type)
+void ChartConfigWidget::datasetMarkerSelected(QAction *action)
 {
-    d->subtype = (ChartSubtype) type;
-    emit chartSubTypeChanged(d->subtype);
+    if (d->selectedDataSet < 0)
+        return;
+
+    const int numDefaultMarkerTypes = 15;
+    bool isAuto = false;
+    OdfMarkerStyle style = MarkerSquare;
+    QString type = QString("");
+    if (action == d->dataSetNoMarkerAction) {
+        style = NoMarker;
+        type = "None";
+    } else if (action == d->dataSetAutomaticMarkerAction) {
+        style = (OdfMarkerStyle) (d->selectedDataSet % numDefaultMarkerTypes);
+        type = "Auto";
+        isAuto = true;
+    } else if (action == d->dataSetMarkerCircleAction) {
+        style = MarkerCircle;
+    } else if (action == d->dataSetMarkerSquareAction) {
+        style = MarkerSquare;
+    } else if (action == d->dataSetMarkerDiamondAction) {
+        style = MarkerDiamond;
+    } else if (action == d->dataSetMarkerRingAction) {
+        style = MarkerRing;
+    } else if (action == d->dataSetMarkerCrossAction) {
+        style = MarkerCross;
+    } else if (action == d->dataSetMarkerFastCrossAction) {
+        style = MarkerFastCross;
+    } else if (action == d->dataSetMarkerArrowDownAction) {
+        style = MarkerArrowDown;
+    } else if (action == d->dataSetMarkerArrowUpAction) {
+        style = MarkerArrowUp;
+    } else if (action == d->dataSetMarkerArrowRightAction) {
+        style = MarkerArrowRight;
+    } else if (action == d->dataSetMarkerArrowLeftAction) {
+        style = MarkerArrowLeft;
+    } else if (action == d->dataSetMarkerBowTieAction) {
+        style = MarkerBowTie;
+    } else if (action == d->dataSetMarkerHourGlassAction) {
+        style = MarkerHourGlass;
+    } else if (action == d->dataSetMarkerStarAction) {
+        style = MarkerStar;
+    } else if (action == d->dataSetMarkerXAction) {
+        style = MarkerX;
+    } else if (action == d->dataSetMarkerAsteriskAction) {
+        style = MarkerAsterisk;
+    } else if (action == d->dataSetMarkerHorizontalBarAction) {
+        style = MarkerHorizontalBar;
+    } else if (action == d->dataSetMarkerVerticalBarAction) {
+        style = MarkerVerticalBar;
+    }
+
+    DataSet *dataSet = d->dataSets[d->selectedDataSet];
+    Q_ASSERT(dataSet);
+    if (!dataSet)
+        return;
+
+    dataSet->setAutoMarker(isAuto);
+    if (type.isEmpty()) {
+        d->ui.datasetMarkerMenu->setIcon(dataSet->markerIcon(style));
+        d->ui.datasetMarkerMenu->setText("");
+    } else {
+        d->ui.datasetMarkerMenu->setText(type);
+        d->ui.datasetMarkerMenu->setIcon(QIcon());
+    }
+    emit dataSetMarkerChanged(dataSet, style);
+
+    update();
 }
 
 void ChartConfigWidget::datasetBrushSelected(const QColor& color)
@@ -908,6 +1041,7 @@ void ChartConfigWidget::datasetBrushSelected(const QColor& color)
         return;
 
     emit datasetBrushChanged(d->dataSets[d->selectedDataSet], color);
+    updateMarkers();
 }
 
 void ChartConfigWidget::datasetPenSelected(const QColor& color)
@@ -916,6 +1050,7 @@ void ChartConfigWidget::datasetPenSelected(const QColor& color)
         return;
 
     emit datasetPenChanged(d->dataSets[d->selectedDataSet], color);
+    updateMarkers();
 }
 
 void ChartConfigWidget::setThreeDMode(bool threeD)
@@ -1010,6 +1145,9 @@ void ChartConfigWidget::update()
     d->ui.showSubTitle->setChecked(d->shape->subTitle()->isVisible());
     d->ui.showFooter->setChecked(d->shape->footer()->isVisible());
 
+    // Update properties in "Data Sets" tab
+    ui_dataSetSelectionChanged(d->selectedDataSet);
+
     // Update "Bar Properties" in "Data Sets" tab
     d->ui.gapBetweenBars->setValue(d->shape->plotArea()->gapBetweenBars());
     d->ui.gapBetweenSets->setValue(d->shape->plotArea()->gapBetweenSets());
@@ -1046,7 +1184,7 @@ void ChartConfigWidget::update()
         d->ui.propertiesSeparator->setVisible(needPropertiesSeparator);
 
         // Set the chart type icon in the chart type button.
-        QString iconName = chartTypeIcon(d->shape->chartType(), d->shape->chartSubType());
+        const QString iconName = QLatin1String(chartTypeIconName(d->shape->chartType(), d->shape->chartSubType()));
         if (!iconName.isEmpty())
             d->ui.chartTypeMenu->setIcon(KIcon(iconName));
 
@@ -1054,9 +1192,23 @@ void ChartConfigWidget::update()
         if (isPolar(d->shape->chartType())) {
             setPolarChartTypesEnabled(true);
             setCartesianChartTypesEnabled(false);
+
+            // Pie charts and ring charts have no axes but radar charts do.
+            // Disable choosing of attached axis if there is none.
+            bool hasAxes = !(d->shape->chartType() == CircleChartType || d->shape->chartType() == RingChartType);
+            d->ui.axisConfiguration->setEnabled(hasAxes);
+            d->ui.dataSetAxes->setEnabled(hasAxes);
+            d->ui.dataSetHasChartType->setEnabled(hasAxes);
+            d->ui.dataSetChartTypeMenu->setEnabled(hasAxes);
         } else {
             setPolarChartTypesEnabled(false);
             setCartesianChartTypesEnabled(true);
+
+            // All the cartesian chart types have axes.
+            d->ui.axisConfiguration->setEnabled(true);
+            d->ui.dataSetAxes->setEnabled(true);
+            d->ui.dataSetHasChartType->setEnabled(true);
+            d->ui.dataSetChartTypeMenu->setEnabled(true);
         }
 
         // ...and finally save the new chart type and subtype.
@@ -1091,14 +1243,27 @@ void ChartConfigWidget::update()
 
     if (d->shape->legend()) {
         d->ui.legendTitle->blockSignals(true);
+        d->ui.showLegend->setChecked(d->shape->legend()->isVisible());
+        d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
         d->ui.legendTitle->setText(d->shape->legend()->title());
         d->ui.legendTitle->blockSignals(false);
+
+        d->ui.legendTitle->blockSignals(true);
+        d->ui.legendShowFrame->setChecked(d->shape->legend()->showFrame());
+        d->ui.legendTitle->blockSignals(false);
+
+        if (d->shape->legend()->expansion() == HighLegendExpansion) {
+            d->ui.legendOrientationIsVertical->setChecked(true);
+        } else {
+            d->ui.legendOrientationIsHorizontal->setChecked(true);
+        }
     }
 
-    // "Fill" property of data set doesn't make sense for 2D line
-    // charts, there's nothing to fill.
-    bool enableFill = d->type != LineChartType || d->threeDMode;
-    d->ui.datasetBrush->setEnabled(enableFill);
+    bool enableMarkers = !(d->type == BarChartType || d->type == StockChartType || d->type == CircleChartType
+                           || d->type == RingChartType || d->type == BubbleChartType);
+    d->ui.datasetMarkerMenu->setEnabled(enableMarkers);
 
     blockSignals(false);
 }
@@ -1492,65 +1657,65 @@ void ChartConfigWidget::ui_dataSetSelectionChanged(int index)
         case BarChartType:
             switch (dataSet->chartSubType()) {
             case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar-stacked"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar-stacked"));
                 break;
             case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar-percentage"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar-percentage"));
                 break;
             default:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-bar"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-bar"));
             }
             break;
         case LineChartType:
             switch (dataSet->chartSubType()) {
             case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-line-stacked"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-line-stacked"));
                 break;
             case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-line-percentage"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-line-percentage"));
                 break;
             default:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-line"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-line"));
             }
             break;
         case AreaChartType:
             switch (dataSet->chartSubType()) {
             case StackedChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-area-stacked"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-area-stacked"));
                 break;
             case PercentChartSubtype:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-area-percentage"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-area-percentage"));
                 break;
             default:
-                d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-area"));
+                d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-area"));
             }
             break;
         case CircleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-pie"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-pie"));
             break;
         case RingChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-ring"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-ring"));
             break;
         case ScatterChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-scatter"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-scatter"));
             break;
         case RadarChartType:
-            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar"));
+            d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-polar"));
             break;
         case FilledRadarChartType:
-            d->ui.dataSetChartTypeMenu->setIcon(KIcon("office-chart-polar-filled"));
+            d->ui.dataSetChartTypeMenu->setIcon(koIcon("office-chart-polar-filled"));
             break;
         case StockChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-stock"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-stock"));
             break;
         case BubbleChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-bubble"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-bubble"));
             break;
         case SurfaceChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-surface"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-surface"));
             break;
         case GanttChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon(KIcon("office-chart-gantt"));
+            d->ui.dataSetChartTypeMenu->menu()->setIcon(koIcon("office-chart-gantt"));
             break;
 
             // Fixes a warning that LastChartType isn't handled.
@@ -1560,6 +1725,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged(int index)
     }
 
     d->selectedDataSet = index;
+    updateMarkers();
 }
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged(int index)
@@ -1614,15 +1780,15 @@ void ChartConfigWidget::ui_axisLabelsFontChanged()
 {
     QFont font = d->axisFontEditorDialog.fontChooser->font();
     Axis *axis = d->axes[d->ui.axes->currentIndex()];
-    axis->setFont(font);
-    axis->setFontSize(font.pointSizeF());
+
+    emit axisLabelsFontChanged(axis, font);
 }
 
 void ChartConfigWidget::ui_legendFontChanged()
 {
     QFont font = d->legendFontEditorDialog.fontChooser->font();
-    d->shape->legend()->setFont(font);
-    d->shape->legend()->setFontSize(font.pointSizeF());
+
+    emit legendFontChanged(font);
 }
 
 void ChartConfigWidget::ui_axisAdded()

@@ -27,10 +27,11 @@
 #include <kdebug.h>
 #include <kaction.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/cursor.h>
+#include <db/connection.h>
+#include <db/cursor.h>
 
 #include "kexidatatableview.h"
+#include "kexidatatable.h"
 
 
 KexiDataTableView::KexiDataTableView(QWidget *parent)
@@ -104,6 +105,10 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
     }
 
     KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
+    KexiDataTable* dataTable = qobject_cast<KexiDataTable*>(parentWidget());
+    if (dataTable) {
+        dataTable->loadTableViewSettings(tv_data);
+    }
 
     QString windowTitle(m_cursor->query()->caption());
     if (windowTitle.isEmpty())

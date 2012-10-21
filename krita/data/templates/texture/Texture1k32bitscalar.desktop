@@ -1,0 +1,18 @@
+[Desktop Entry]
+Icon=template_texture
+Name=Texture 1k 32bit scalar
+Name[el]=Texture 1k 32bit βαθμωτό
+Name[et]=Tekstuur 1k 32bit skalaar
+Name[fr]=Texture 1k 32bit scalaire
+Name[hu]=Textúra 1k 32bit skalár
+Name[it]=Trama 1k 32bit scalare
+Name[nl]=Textuur 1k 32bit scalar
+Name[pt]=Textura 1k 32-bits escalar
+Name[pt_BR]=Textura 1k 32bit escalar
+Name[sk]=Textúra 1k 32bit skalár
+Name[sv]=Struktur 1k 32-bitar skalär
+Name[uk]=Текстура 1k, 32-бітова, скалярна
+Name[x-test]=xxTexture 1k 32bit scalarxx
+Type=Link
+URL[$e]=.source/Texture1k32bitscalar.kra
+X-KDE-Hidden=false

@@ -18,19 +18,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include <KIcon>
-#include <KActionCollection>
+#include "widgetfactory.h"
 
 #include "WidgetInfo.h"
 #include "libactionwidget.h"
-#include "widgetfactory.h"
+
+#include <KoIcon.h>
+
+#include <kdebug.h>
+#include <KActionCollection>
+
 //unused #include "formmanager.h"
 
 using namespace KFormDesigner;
 
 LibActionWidget::LibActionWidget(ActionGroup *group, WidgetInfo *w)
-        : KToggleAction(KIcon(w->pixmap()), w->name(), group)
+        : KToggleAction(KIcon(w->iconName()), w->name(), group)
 {
     setObjectName(QLatin1String("library_widget_") + w->className());
     group->addAction(this);

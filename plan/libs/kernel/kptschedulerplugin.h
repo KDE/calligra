@@ -86,7 +86,7 @@ public:
         ScheduleBackward = 8
     };
     /// Return the schedulers capabilities.
-    /// By default returns all capabilites
+    /// By default returns all capabilities
     virtual int capabilities() const;
     /// Stop calculation of the schedule @p sm. Current result may be used.
     void stopCalculation( ScheduleManager *sm );
@@ -100,6 +100,14 @@ public:
     
     /// Calculate the project
     virtual void calculate( Project &project, ScheduleManager *sm, bool nothread = false ) = 0;
+
+    /// Return the list of supported granularities
+    /// An empty list means granularity is not supported (the default)
+    QList<long unsigned int> granularities() const;
+    /// Return current index of supported granularities
+    int granularity() const;
+    /// Set current index of supported granularities
+    void setGranularity( int index );
 
 protected slots:
     virtual void slotSyncData();
@@ -118,6 +126,9 @@ protected:
     QTimer m_synctimer;
     QList<SchedulerThread*> m_jobs;
 
+    int m_granularity;
+    QList<long unsigned int> m_granularities;
+
 private:
     class Private;
     Private *d;
@@ -135,7 +146,7 @@ private:
  fetch data from the private calculated project into the actual project.
  
  To track progress, the progress() method should be called from the ui thread with
- an apropriate interval to avoid overload of the ui thread.
+ an appropriate interval to avoid overload of the ui thread.
  The progressChanged() signal may also be used but note that async signal handling are very slow
  so it may affect the ui threads performance too much.
 */

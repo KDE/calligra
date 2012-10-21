@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=Service
+Name=Microsoft Excel Spreadsheets
+Name[el]=Φύλλα εργασίας Microsoft Excel
+Name[et]=Microsoft Exceli arvutustabelid
+Name[fi]=MIcrosoft Excel laskentataulukot
+Name[fr]=Tableurs Microsoft Excel
+Name[hu]=Microsoft Excel táblázatok
+Name[it]=Fogli di calcolo Microsoft Excel
+Name[nl]=Microsoft Excel-spreadsheets
+Name[pt]=Folhas de Cálculo do Microsoft Excel
+Name[pt_BR]=Planilhas do Microsoft Excel
+Name[sk]=Zošity Microsoft Excel
+Name[sv]=Microsoft Excel-kalkylark
+Name[uk]=Електронні таблиці Microsoft Excel
+Name[x-test]=xxMicrosoft Excel Spreadsheetsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.ms-excel;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

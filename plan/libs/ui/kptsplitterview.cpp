@@ -32,8 +32,8 @@
 namespace KPlato
 {
 
-SplitterView::SplitterView(KoDocument *doc, QWidget *parent)
-    : ViewBase( doc, parent ),
+SplitterView::SplitterView(KoPart *part, KoDocument *doc, QWidget *parent)
+    : ViewBase(part, doc, parent),
     m_activeview( 0 )
 {
     QVBoxLayout *b = new QVBoxLayout( this );

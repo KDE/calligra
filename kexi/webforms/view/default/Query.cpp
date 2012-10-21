@@ -24,7 +24,7 @@
 
 #include <KDebug>
 
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 

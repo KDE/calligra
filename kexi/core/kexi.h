@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,8 +27,8 @@
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -138,7 +138,7 @@ KEXICORE_EXPORT QString msgYouCanImproveData();
 }//namespace Kexi
 
 //! Icon name for database servers
-#define KEXI_ICON_DATABASE_SERVER "network-server-database"
+#define KEXI_DATABASE_SERVER_ICON_NAME (koIconName("network-server-database"))
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 

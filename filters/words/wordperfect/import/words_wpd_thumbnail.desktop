@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=Service
+Name=WordPerfect Documents
+Name[el]=Έγγραφα WordPerfect
+Name[et]=WordPerfecti dokumendid
+Name[fi]=WordPerfect-asiakirjat
+Name[fr]=Documents WordPerfect
+Name[hu]=WordPerfect dokumentumok
+Name[it]=Documenti WordPerfect
+Name[nl]=WordPerfect-documenten
+Name[pt]=Documentos do WordPerfect
+Name[pt_BR]=Documentos do WordPerfect
+Name[sk]=Dokumenty WordPerfect
+Name[sv]=WordPerfect-dokument
+Name[uk]=Документи WordPerfect
+Name[x-test]=xxWordPerfect Documentsxx
+
+X-KDE-ServiceTypes=ThumbCreator
+MimeType=application/vnd.wordperfect;
+
+X-KDE-Library=calligrathumbnail
+CacheThumbnail=true

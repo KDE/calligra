@@ -32,8 +32,8 @@
 #include <QList>
 
 #include <kdebug.h>
-#include <widget/utils/kexiarrowtip.h>
 #include <core/kexisearchandreplaceiface.h>
+#include <kexiutils/KexiContextMessage.h>
 #include "kexitableviewdata.h"
 
 class QObject;
@@ -758,6 +758,9 @@ protected:
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
+    /*! @return height of horizontal header, if there is any. By default returns 0. */
+    virtual int horizontalHeaderHeight() const;
+
     /*! Changes 'row editing' flag, true if currently selected row is edited.
      * Can be reimplemented with calling superclass setRowEditing()
      * Sends rowEditStarted(int) signal.
@@ -923,7 +926,7 @@ protected:
     int m_rowWillBeDeleted;
 
     /*! Displays passive error popup label used when invalid data has been entered. */
-    QPointer<KexiArrowTip> m_errorMessagePopup;
+    QPointer<KexiContextMessageWidget> m_errorMessagePopup;
 
     /*! Used to enable/disable execution of vScrollBarValueChanged()
      when users navigate through rows using keyboard, so vscrollbar tooltips are not visible. */

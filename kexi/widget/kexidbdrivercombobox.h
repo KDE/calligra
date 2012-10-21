@@ -24,7 +24,7 @@
 #include <KComboBox>
 
 #include <kexi_export.h>
-#include <kexidb/driver.h>
+#include <db/driver.h>
 
 //! \brief Combo box widget for selecting a database driver
 /*! This widget provides a combobox for selecting a database driver.

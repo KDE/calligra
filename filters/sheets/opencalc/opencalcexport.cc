@@ -281,7 +281,7 @@ bool OpenCalcExport::exportSettings(KoStore * store, const Doc * ksdoc)
     attribute.setAttribute("config:name", "ActiveTable");
     attribute.setAttribute("config:type", "string");
 
-    View * view = ksdoc->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->views().first());
+    View *view = const_cast<Doc*>(ksdoc)->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(const_cast<Doc*>(ksdoc)->documentPart()->views().first());
     QString activeTable;
     if (view) { // no view if embedded document
         Canvas * canvas = view->canvasWidget();
@@ -753,7 +753,11 @@ void OpenCalcExport::exportDefaultCellStyle(QDomDocument & doc, QDomElement & of
     QDomElement style = doc.createElement("style:properties");
     style.setAttribute("style:font-name", font.family());
     style.setAttribute("fo:font-size", QString("%1pt").arg(font.pointSize()));
+#if KDE_IS_VERSION(4,4,0)
+    style.setAttribute("style:decimal-places", QString::number(locale->decimalPlaces()));
+#else
     style.setAttribute("style:decimal-places", QString::number(locale->fracDigits()));
+#endif
     style.setAttribute("fo:language", language);
     style.setAttribute("fo:country", country);
     style.setAttribute("style:font-name-asian", "HG Mincho Light J");
