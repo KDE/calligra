@@ -45,7 +45,7 @@ Item {
                 onClicked: findToolbarSearchString.forceActiveFocus()
             }
 
-            onTextChanged: findToolbarRootItem.documentController.documentHandler().searchString = text
+            onTextChanged: findToolbarRootItem.documentController.documentHandler.searchString = text
         }
 
         PlasmaComponents.Button {
@@ -54,7 +54,7 @@ Item {
             width: 128
             text: "Find Previous"
 
-            onClicked: findToolbarRootItem.documentController.documentHandler().findPrevious()
+            onClicked: findToolbarRootItem.documentController.documentHandler.findPrevious()
         }
 
         PlasmaComponents.Button {
@@ -63,7 +63,7 @@ Item {
             width: 128
             text: "Find Next"
 
-            onClicked: findToolbarRootItem.documentController.documentHandler().findNext()
+            onClicked: findToolbarRootItem.documentController.documentHandler.findNext()
         }
     }
 }

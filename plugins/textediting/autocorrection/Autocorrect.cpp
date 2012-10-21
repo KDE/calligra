@@ -116,11 +116,11 @@ void Autocorrect::finishedParagraph(QTextDocument * /*document*/, int /*cursorPo
     // TODO
 }
 
-void Autocorrect::setUpperCaseExceptions(QSet<QString> exceptions) { m_upperCaseExceptions = exceptions; }
-void Autocorrect::setTwoUpperLetterExceptions(QSet<QString> exceptions) { m_twoUpperLetterExceptions = exceptions; }
-void Autocorrect::setAutocorrectEntries(QHash<QString, QString> entries) { m_autocorrectEntries = entries; }
+void Autocorrect::setUpperCaseExceptions(const QSet<QString> &exceptions) { m_upperCaseExceptions = exceptions; }
+void Autocorrect::setTwoUpperLetterExceptions(const QSet<QString> &exceptions) { m_twoUpperLetterExceptions = exceptions; }
+void Autocorrect::setAutocorrectEntries(const QHash<QString, QString> &entries) { m_autocorrectEntries = entries; }
 
-Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes()
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes() const
 {
     Autocorrect::TypographicQuotes quote;
     quote.begin = QChar(0x2018);
@@ -128,7 +128,7 @@ Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes()
     return quote;
 }
 
-Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes()
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes() const
 {
     Autocorrect::TypographicQuotes quote;
     quote.begin = QChar(0x201c);
@@ -136,9 +136,9 @@ Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes()
     return quote;
 }
 
-QSet<QString> Autocorrect::getUpperCaseExceptions() { return m_upperCaseExceptions; }
-QSet<QString> Autocorrect::getTwoUpperLetterExceptions() { return m_twoUpperLetterExceptions; }
-QHash<QString, QString> Autocorrect::getAutocorrectEntries() { return m_autocorrectEntries; }
+QSet<QString> Autocorrect::getUpperCaseExceptions() const { return m_upperCaseExceptions; }
+QSet<QString> Autocorrect::getTwoUpperLetterExceptions() const { return m_twoUpperLetterExceptions; }
+QHash<QString, QString> Autocorrect::getAutocorrectEntries() const { return m_autocorrectEntries; }
 
 void Autocorrect::configureAutocorrect()
 {
@@ -674,6 +674,7 @@ void Autocorrect::writeConfig()
     interface.writeEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
 
     interface.writeEntry("formatLanguage", m_autocorrectLang);
+    writeAutocorrectXmlEntry();
 }
 
 void Autocorrect::readAutocorrectXmlEntry()
@@ -683,18 +684,26 @@ void Autocorrect::readAutocorrectXmlEntry()
     QString kdelang = locale->languageList().first();
     kdelang.remove(QRegExp("@.*"));
 
+    QStringList folders;
+    folders<<QLatin1String("/")<<QLatin1String("calligra/");
     QString fname;
-    if (!m_autocorrectLang.isEmpty())
-        fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + m_autocorrectLang + ".xml");
-    if (m_autocorrectLang != "all_languages") {
-        if (fname.isEmpty() && !kdelang.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + kdelang + ".xml");
-        if (fname.isEmpty() && kdelang.contains("_")) {
-            kdelang.remove( QRegExp( "_.*" ) );
-            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/" + kdelang + ".xml");
+    Q_FOREACH(const QString& path, folders)
+    {
+        if (!m_autocorrectLang.isEmpty())
+            fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
+        if (m_autocorrectLang != "all_languages") {
+            if (fname.isEmpty() && !kdelang.isEmpty())
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+            if (fname.isEmpty() && kdelang.contains("_")) {
+                kdelang.remove( QRegExp( "_.*" ) );
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+            }
+            if (fname.isEmpty())
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/autocorrect.xml");
         }
-        if (fname.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "calligra/autocorrect/autocorrect.xml");
+        if(!fname.isEmpty()) {
+            break;
+        }
     }
     if (m_autocorrectLang.isEmpty())
         m_autocorrectLang = kdelang;
@@ -769,5 +778,92 @@ void Autocorrect::readAutocorrectXmlEntry()
             m_autocorrectEntries.insert(find, replace);
         }
     }
+    QDomElement doubleQuote = de.namedItem(QLatin1String("DoubleQuote")).toElement();
+    if(doubleQuote.isNull()) {
+      QDomNodeList nl = doubleQuote.childNodes();
+      if(nl.count()==1) {
+        QDomElement element = nl.item(0).toElement();
+        m_typographicDoubleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+        m_typographicDoubleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+      }
+    }
+
+    QDomElement singleQuote = de.namedItem(QLatin1String("SimpleQuote")).toElement();
+    if(singleQuote.isNull()) {
+      QDomNodeList nl = singleQuote.childNodes();
+      if(nl.count()==1) {
+        QDomElement element = nl.item(0).toElement();
+        m_typographicSingleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+        m_typographicSingleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+      }
+    }
+
 }
 
+
+void Autocorrect::writeAutocorrectXmlEntry()
+{
+    const QString fname = KGlobal::dirs()->locateLocal("data", QLatin1String("autocorrect/autocorrect.xml"));
+    QFile file(fname);
+    if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
+        qDebug()<<"We can't save in file :"<<fname;
+        return;
+    }
+    QDomDocument root(QLatin1String("autocorrection"));
+
+    QDomElement word = root.createElement(QLatin1String( "Word" ));
+    root.appendChild(word);
+    QDomElement items = root.createElement(QLatin1String( "items" ));
+
+    QHashIterator<QString, QString> i(m_autocorrectEntries);
+    while (i.hasNext()) {
+        i.next();
+        QDomElement item = root.createElement(QLatin1String( "item" ));
+        item.setAttribute(QLatin1String("find"),i.key());
+        item.setAttribute(QLatin1String("replace"),i.value());
+        items.appendChild(item);
+    }
+    word.appendChild(items);
+
+
+    QDomElement upperCaseExceptions = root.createElement(QLatin1String( "UpperCaseExceptions" ));
+    QSet<QString>::const_iterator upper = m_upperCaseExceptions.constBegin();
+    while (upper != m_upperCaseExceptions.constEnd()) {
+        QDomElement item = root.createElement(QLatin1String( "word" ));
+        item.setAttribute(QLatin1String("exception"),*upper);
+        upperCaseExceptions.appendChild(item);
+        ++upper;
+    }
+    word.appendChild(upperCaseExceptions);
+
+    QDomElement twoUpperLetterExceptions = root.createElement(QLatin1String( "TwoUpperLetterExceptions" ));
+    QSet<QString>::const_iterator twoUpper = m_twoUpperLetterExceptions.constBegin();
+    while (twoUpper != m_twoUpperLetterExceptions.constEnd()) {
+        QDomElement item = root.createElement(QLatin1String( "word" ));
+        item.setAttribute(QLatin1String("exception"),*twoUpper);
+        upperCaseExceptions.appendChild(item);
+        ++twoUpper;
+    }
+    word.appendChild(twoUpperLetterExceptions);
+
+
+    QDomElement doubleQuote = root.createElement(QLatin1String( "DoubleQuote" ));
+    QDomElement item = root.createElement(QLatin1String( "doublequote" ));
+    item.setAttribute(QLatin1String("begin"),m_typographicDoubleQuotes.begin);
+    item.setAttribute(QLatin1String("end"),m_typographicDoubleQuotes.end);
+    doubleQuote.appendChild(item);
+    word.appendChild(doubleQuote);
+
+    QDomElement singleQuote = root.createElement(QLatin1String( "SimpleQuote" ));
+    item = root.createElement(QLatin1String( "simplequote" ));
+    item.setAttribute(QLatin1String("begin"),m_typographicSingleQuotes.begin);
+    item.setAttribute(QLatin1String("end"),m_typographicSingleQuotes.end);
+    singleQuote.appendChild(item);
+    word.appendChild(singleQuote);
+
+
+    QTextStream ts( &file );
+    ts << root.toString();
+    file.close();
+
+}

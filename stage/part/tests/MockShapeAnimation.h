@@ -25,8 +25,8 @@
 class MockShapeAnimation : public KPrShapeAnimation
 {
 public:
-    MockShapeAnimation(KoShape *shape, KoTextBlockData *textBlockData)
-        : KPrShapeAnimation(shape, textBlockData)
+     MockShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockUserData)
+        : KPrShapeAnimation(shape, textBlockUserData)
         , m_beginTime(0)
         , m_duration(1)
     {}

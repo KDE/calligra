@@ -1237,11 +1237,13 @@ void Project::saveWorkPackageXML( QDomElement &element, const Node *node, long i
     }
     node->saveWorkPackageXML( me, id );
 
-    ScheduleManager *sm = scheduleManager( id );
-    if ( sm ) {
-        QDomElement el = me.ownerDocument().createElement( "schedules" );
-        me.appendChild( el );
-        sm->saveWorkPackageXML( el, *node );
+    foreach ( ScheduleManager *sm, m_managerIdMap ) {
+        if ( sm->scheduleId() == id ) {
+            QDomElement el = me.ownerDocument().createElement( "schedules" );
+            me.appendChild( el );
+            sm->saveWorkPackageXML( el, *node );
+            break;
+        }
     }
 }
 

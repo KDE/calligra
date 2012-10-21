@@ -58,7 +58,7 @@ set(wordsprivate_LIB_SRCS
     dialogs/KWConfigureDialog.cpp
 
     dockers/KWStatisticsDocker.cpp
-    dockers/KWStatistics.cpp
+    dockers/KWStatisticsWidget.cpp
     dockers/StatisticsPreferencesPopup.cpp
 
     commands/KWPageStylePropertiesCommand.cpp

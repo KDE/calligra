@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Database
+Name[ca]=Base de dades
 Name[cs]=Databáze
 Name[de]=Datenbank
 Name[el]=Βάση δεδομένων
@@ -9,6 +10,7 @@ Name[fi]=Tietokanta
 Name[fr]=Base de données
 Name[gl]=Base de datos
 Name[hu]=Adatbázis
+Name[ia]=Base de Datos
 Name[it]=Database
 Name[ja]=データベース
 Name[kk]=Деректер қоры

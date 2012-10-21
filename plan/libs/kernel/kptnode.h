@@ -81,7 +81,8 @@ public:
         State_RunningEarly = 256,
         State_ReadyToStart = 512, // all precceeding tasks finished (if any)
         State_NotReadyToStart = 1024, // all precceeding tasks not finished (must be one or more)
-        State_NotScheduled = 2048
+        State_NotScheduled = 2048,
+        State_Late = 4096
     };
 
     enum Properties {

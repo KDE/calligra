@@ -131,7 +131,7 @@ QIcon KexiProjectModelItem::icon() const
 Qt::ItemFlags KexiProjectModelItem::flags() const
 {
     if (m_item) {
-        return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+        return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     } else {
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     }

@@ -80,7 +80,6 @@ public:
         , shapeManager(new KoShapeManager(parent))
         , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
-        , currentCanvasUsesOpenGLShaders(false)
         , toolProxy(new KisToolProxy(parent))
         , favoriteResourceManager(0)
         , vastScrolling(true) {
@@ -100,7 +99,6 @@ public:
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
     bool currentCanvasIsOpenGL;
-    bool currentCanvasUsesOpenGLShaders;
     KoToolProxy *toolProxy;
     KoFavoriteResourceManager *favoriteResourceManager;
 #ifdef HAVE_OPENGL
@@ -308,8 +306,7 @@ void KisCanvas2::createOpenGLCanvas()
 
     // XXX: The image isn't done loading here!
     m_d->openGLImageTextures = KisOpenGLImageTextures::getImageTextures(m_d->view->image(), m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
-    KisOpenGLCanvas2 * canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
-    m_d->currentCanvasUsesOpenGLShaders = m_d->openGLImageTextures->usingHDRExposureProgram();
+    KisOpenGLCanvas2 *canvasWidget = new KisOpenGLCanvas2(this, m_d->coordinatesConverter, m_d->view, m_d->openGLImageTextures);
     setCanvasWidget(canvasWidget);
 #else
     qFatal("Bad use of createOpenGLCanvas(). It shouldn't have happened =(");
@@ -408,10 +405,7 @@ void KisCanvas2::resetCanvas(bool useOpenGL)
 #ifdef HAVE_OPENGL
     KisConfig cfg;
 
-    if (   (useOpenGL != m_d->currentCanvasIsOpenGL)
-           || (   m_d->currentCanvasIsOpenGL
-                  && (cfg.useOpenGLShaders() != m_d->currentCanvasUsesOpenGLShaders))) {
-
+    if (useOpenGL != m_d->currentCanvasIsOpenGL) {
         disconnectCurrentImage();
         createCanvas(useOpenGL);
         connectCurrentImage();
@@ -645,19 +639,8 @@ void KisCanvas2::documentOffsetMoved(const QPoint &documentOffset)
     updateCanvas();
 }
 
-bool KisCanvas2::usingHDRExposureProgram()
-{
-#ifdef HAVE_OPENGL
-    if (m_d->currentCanvasIsOpenGL) {
-        return m_d->openGLImageTextures->usingHDRExposureProgram();
-    }
-#endif
-    return false;
-}
-
 void KisCanvas2::slotConfigChanged()
 {
-    qDebug() << "slotConfigChanged";
     KisConfig cfg;
     m_d->vastScrolling = cfg.vastScrolling();
 
@@ -674,7 +657,6 @@ void KisCanvas2::slotConfigChanged()
 
 void KisCanvas2::slotSetDisplayProfile(const KoColorProfile * profile)
 {
-    qDebug() << "slotSetDisplayProfile";
     KisConfig cfg;
     KoColorConversionTransformation::Intent renderingIntent = (KoColorConversionTransformation::Intent)cfg.renderIntent();
     KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
@@ -698,7 +680,12 @@ KisCanvasDecoration* KisCanvas2::decoration(const QString& id)
 
 QPoint KisCanvas2::documentOrigin() const
 {
-    qWarning() << "Krita does not use documentOrigin() anymore. Please fix the code.";
+    /**
+     * In Krita we don't use document origin anymore.
+     * All the centering when needed (vastScrolling < 0.5) is done
+     * automatically by the KisCoordinatesConverter.
+     */
+
     return QPoint();
 }
 

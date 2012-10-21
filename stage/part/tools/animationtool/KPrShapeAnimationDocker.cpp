@@ -424,7 +424,7 @@ void KPrShapeAnimationDocker::previewAnimation(KPrShapeAnimation *animation)
     KPrShapeAnimation *currentAnimation = m_animationsModel->animationByRow(index.row());
 
     if (currentAnimation && (currentAnimation->shape() == animation->shape())) {
-        animation->setKoTextBlockData(currentAnimation->textBlockData());
+        animation->setTextBlockUserData(currentAnimation->textBlockUserData());
     }
 
     if (!previewMode()) {

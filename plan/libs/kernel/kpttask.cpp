@@ -2804,6 +2804,13 @@ uint Task::state( long id ) const
         if ( completion().percentFinished() > 0 ) {
             st |= State_Running;
         }
+        if ( endTime( id ) < QDateTime::currentDateTime() ) {
+            st |= State_Late;
+        }
+    } else if ( isScheduled( id ) ) {
+        if ( startTime( id ) < QDateTime::currentDateTime() ) {
+            st |= State_Late;
+        }
     }
     st |= State_ReadyToStart;
     //TODO: check proxy relations
