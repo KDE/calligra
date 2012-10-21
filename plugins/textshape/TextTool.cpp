@@ -905,7 +905,8 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             m_clickWithinSelection = true;
             m_draggingOrigin = event->pos(); //we store the pixel pos
         } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection())) {
-            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);                useCursor(Qt::IBeamCursor);
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            useCursor(Qt::IBeamCursor);
         }
         m_tableDragInfo.tableHit = KoPointedAt::None;
         if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
@@ -2075,6 +2076,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     if (m_textEditor.data()) {
+        connect(m_textEditor.data(), SIGNAL(paragraphStyleApplied(KoParagraphStyle*)), spw, SLOT(slotParagraphStyleApplied(KoParagraphStyle*)));
+        connect(m_textEditor.data(), SIGNAL(characterStyleApplied(KoCharacterStyle*)), scw, SLOT(slotCharacterStyleApplied(KoCharacterStyle*)));
         //initialise the char- and par- widgets with the current block and formats.
         scw->setCurrentBlockFormat(m_textEditor.data()->blockFormat());
         scw->setCurrentFormat(m_textEditor.data()->charFormat(), m_textEditor.data()-> blockCharFormat());
