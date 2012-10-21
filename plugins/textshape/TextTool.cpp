@@ -34,6 +34,9 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/SimpleTableWidget.h"
+
+#include "dialogs/StylesManager.h"
+
 #include "commands/AutoResizeCommand.h"
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
@@ -961,9 +964,11 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         repaintCaret();
 
     updateSelectionHandler();
+    kDebug() << "mousePress will update style manager";
     updateStyleManager();
-
+    kDebug() << "stylemanage updated";
     updateActions();
+    kDebug() << "action updated";
 
     //activate context-menu for spelling-suggestions
     if (event->button() == Qt::RightButton) {
@@ -984,6 +989,7 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             editingPluginEvents();
         }
     }
+    kDebug() << "press button finished";
 }
 
 void TextTool::setShapeData(KoTextShapeData *data)
@@ -2493,7 +2499,9 @@ void TextTool::showStyleManager(int styleId)
     Q_ASSERT(styleManager);
     if (!styleManager)
         return;  //don't crash
-    StyleManagerDialog *dia = new StyleManagerDialog(canvas()->canvasWidget());
+    StylesManager *dia = new StylesManager(styleManager);
+    dia->setStyleManager(styleManager);
+/*    StyleManagerDialog *dia = new StyleManagerDialog(canvas()->canvasWidget());
     dia->setStyleManager(styleManager);
     dia->setUnit(canvas()->unit());
 
@@ -2505,7 +2513,9 @@ void TextTool::showStyleManager(int styleId)
     if (characterStyle) {
         dia->setCharacterStyle(characterStyle);
     }
+   */
     dia->show();
+    kDebug() << "shown";
 }
 
 void TextTool::startTextEditingPlugin(const QString &pluginId)

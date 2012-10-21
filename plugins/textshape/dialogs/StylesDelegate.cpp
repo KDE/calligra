@@ -47,8 +47,7 @@ StylesDelegate::StylesDelegate()
     m_buttonDistance = 2;
 }
 
-void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optionV1,
-                            const QModelIndex &index) const
+void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optionV1, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 option = optionV1;
     initStyleOption(&option, index);

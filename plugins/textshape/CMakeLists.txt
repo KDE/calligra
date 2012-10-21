@@ -62,6 +62,14 @@ SET ( textshape_SRCS
     dialogs/ValidParentStylesProxyModel.cpp
     dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp
+
+    dialogs/StylesManager.cpp
+    dialogs/StylesGeneralTab.cpp
+    dialogs/StylesManagerStylesModel.cpp
+    dialogs/StylesManagerStylesListModel.cpp
+    dialogs/StylesManagerStylesListItemDelegate.cpp
+    dialogs/StylesModelV1.cpp
+
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
     dialogs/CharacterGeneral.cpp
@@ -116,7 +124,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ParagraphIndentSpacing.ui
     dialogs/ParagraphDecorations.ui
     dialogs/ParagraphBulletsNumbers.ui
-    dialogs/ParagraphDropCaps.ui   
+    dialogs/ParagraphDropCaps.ui
     dialogs/StyleManager.ui
     dialogs/CharacterGeneral.ui
     dialogs/CharacterHighlighting.ui
@@ -124,7 +132,10 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableDialog.ui
     dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
-    dialogs/TableOfContentsStyleConfigure.ui 
+    dialogs/TableOfContentsStyleConfigure.ui
+
+    dialogs/StylesManager.ui
+    dialogs/StylesGeneralTab.ui
 
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui
