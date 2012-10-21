@@ -50,7 +50,9 @@ KoTextRange::KoTextRange(const QTextCursor &cursor)
     : d_ptr(new KoTextRangePrivate)
 {
     d_ptr->cursor = cursor;
+#if QT_VERSION >= 0x040700
     d_ptr->cursor.setKeepPositionOnInsert(true);
+#endif
 }
 
 KoTextRangePrivate::~KoTextRangePrivate()

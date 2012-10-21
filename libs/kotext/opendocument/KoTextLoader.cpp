@@ -12,6 +12,7 @@
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,6 +34,8 @@
 #include <KoTextMeta.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
+#include <KoAnnotation.h>
+#include <KoAnnotationManager.h>
 #include <KoInlineNote.h>
 #include <KoInlineCite.h>
 #include <KoTextRangeManager.h>
@@ -818,6 +821,13 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         d->processDeleteChange(cursor);
     }
     cursor.endEditBlock();
+
+    KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
+    kDebug(32500) << "text ranges::";
+    foreach(KoTextRange *range, textRangeManager->textRanges()) {
+        kDebug(32500) << range->id();
+    }
+
 }
 
 KoXmlNode KoTextLoader::loadDeleteMerges(const KoXmlElement& elem, QString *generatedXmlString)
@@ -1722,7 +1732,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
         const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
-        //        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
+        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
+
+        //if (isOfficeNS)
+        kDebug(32500) << "office:"<<isOfficeNS << localName;
 
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500) << "load" << localName << *stripLeadingSpace << node.toText().data();
@@ -1888,7 +1901,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         delete inlineRdf;
                         inlineRdf = 0;
                     }
-
                 }
 
                 loadSpan(ts, cursor, stripLeadingSpace);   // recurse
@@ -1919,8 +1931,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     delete bookmark;
                 }
             }
-
-
         } else if (isTextNS && localName == "bookmark-ref") {
             QString bookmarkName = ts.attribute("ref-name");
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
@@ -1936,7 +1946,35 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             // TODO add support for loading text:reference-format
             loadSpan(ts, cursor, stripLeadingSpace);   // recurse
             cursor.setCharFormat(cf);   // restore the cursor char format
-        } else if (isTextNS && localName == "number") { // text:number
+        }
+        // text:annotation and text:annotation-end
+        else if (isOfficeNS && (localName == "annotation" || localName == "annotation-end")) {
+            kDebug(32500) << "------> annotation found" << localName;
+
+            KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
+
+            if (localName == "annotation-end") {
+                // Find the annotation with the same name and change it to a range.
+                KoAnnotation *annotation = textRangeManager->annotationManager()->retrieveAnnotation(KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
+                if (annotation) {
+                    annotation->setPositionOnlyMode(false);
+
+                    annotation->cursor().setPosition(annotation->cursor().position());
+                    annotation->cursor().setPosition(cursor.position(), QTextCursor::KeepAnchor);
+                }
+            } else {
+                KoAnnotation *annotation = new KoAnnotation(cursor);
+                annotation->setManager(textRangeManager);
+                if (textRangeManager && annotation->loadOdf(ts, d->context)) {
+                    textRangeManager->insert(annotation);
+                }
+                else {
+                    kWarning(32500) << "Could not load annotation";
+                    delete annotation;
+                }
+            }
+        } 
+        else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
             If a heading has a numbering applied, the text of the formatted number can be included in a
             <text:number> element. This text can be used by applications that do not support numbering of

@@ -21,6 +21,7 @@
 
 #include "KoTextRange.h"
 #include "KoBookmarkManager.h"
+#include "KoAnnotationManager.h"
 #include "kotext_export.h"
 
 // Qt + kde
@@ -54,9 +55,14 @@ public:
     void remove(KoTextRange *object);
 
     /**
-     * Return the variableManager.
+     * Return the bookmark manager.
      */
     const KoBookmarkManager *bookmarkManager() const;
+
+    /**
+     * Return the annotation manager.
+     */
+    const KoAnnotationManager *annotationManager() const;
 
     /**
      * Return a multi hash of KoTextRange that have start or end points between first and last
@@ -72,6 +78,7 @@ private:
     int m_lastObjectId;
 
     KoBookmarkManager m_bookmarkManager;
+    KoAnnotationManager m_annotationManager;
 };
 
 Q_DECLARE_METATYPE(KoTextRangeManager *)

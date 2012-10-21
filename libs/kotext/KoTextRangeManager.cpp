@@ -20,6 +20,10 @@
 #include "KoTextDocument.h"
 #include "KoBookmark.h"
 #include "KoBookmarkManager.h"
+#include "KoAnnotation.h"
+#include "KoAnnotationManager.h"
+#include "KoAnnotation.h"
+#include "KoAnnotationManager.h"
 
 #include <QTextCursor>
 
@@ -52,6 +56,12 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
     if (bookmark) {
         m_bookmarkManager.insert(bookmark->name(), bookmark);
     }
+    else {
+        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
+        if (annotation) {
+            m_annotationManager.insert(annotation->name(), annotation);
+        }
+    }
     m_textRanges.insert(textRange->id(), textRange);
 }
 
@@ -65,6 +75,12 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
     if (bookmark) {
         m_bookmarkManager.remove(bookmark->name());
     }
+    else {
+        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
+        if (annotation) {
+            m_annotationManager.remove(annotation->name());
+        }
+    }
 
     int id = textRange->id();
     m_textRanges.remove(id);
@@ -74,6 +90,11 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
 const KoBookmarkManager *KoTextRangeManager::bookmarkManager() const
 {
     return &m_bookmarkManager;
+}
+
+const KoAnnotationManager *KoTextRangeManager::annotationManager() const
+{
+    return &m_annotationManager;
 }
 
 QList<KoTextRange *> KoTextRangeManager::textRanges() const
