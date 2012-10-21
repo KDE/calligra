@@ -478,6 +478,8 @@ public slots:
 signals:
     void cursorPositionChanged();
     void textFormatChanged();
+    void characterStyleApplied(KoCharacterStyle *style);
+    void paragraphStyleApplied(KoParagraphStyle *style);
 
 protected:
     void recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisitor &visitor) const;
