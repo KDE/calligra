@@ -2,8 +2,10 @@
 Type=Service
 Name=OpenDocument Texts
 Name[el]=OpenDocument κείμενα
+Name[et]=OpenDocument-tekstid
 Name[fi]=OpenDocument-tekstit
 Name[fr]=Textes OpenDocument
+Name[hu]=OpenDocument szövegek
 Name[it]=Testi OpenDocument
 Name[nl]=OpenDocument teksten
 Name[pt]=Textos em OpenDocument

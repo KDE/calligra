@@ -31,7 +31,7 @@ class SimpleSetupWidget : public QWidget
     Q_OBJECT
 public:
 
-    SimpleSetupWidget(KWView *view, QWidget *parent = 0);
+    explicit SimpleSetupWidget(KWView *view, QWidget *parent = 0);
     ~SimpleSetupWidget();
 
 private:

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010-2011 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,7 @@ public:
                                            //!< completion is highlighted
     };
     
+    KexiProject* project() const;
     void setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages);
     QString itemsPartClass() const;
     
@@ -50,7 +51,6 @@ public:
     virtual QModelIndex parent(const QModelIndex& child) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
     void updateItemName(KexiPart::Item& item, bool dirty);
@@ -84,12 +84,16 @@ public:
 
     QPersistentModelIndex itemWithSearchHighlight() const;
 
+    bool renameItem(KexiPart::Item *item, const QString& newName);
+    bool setItemCaption(KexiPart::Item *item, const QString& newCaption);
+
 public slots:
     void slotAddItem(KexiPart::Item& item);
     void slotRemoveItem(const KexiPart::Item &item);
 
 signals:
-    void renameItem(KexiPart::Item *item, const QString& _newName, bool &succes);
+    void renameItem(KexiPart::Item *item, const QString& newName, bool &succes);
+    void changeItemCaption(KexiPart::Item *item, const QString& newCaption, bool &succes);
     void highlightSearchedItem(const QModelIndex &index);
     void activateSearchedItem(const QModelIndex &index);
 

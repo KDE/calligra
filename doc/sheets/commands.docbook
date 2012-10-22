@@ -963,7 +963,14 @@ is protected.</action>
 </para></listitem>
 </varlistentry>
 
-  <!-- FIXME add Function Optimizer item when/if someone commits REVIEW: 106253 -->
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Function Optimizer...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens</action> the <guilabel>Function Optimizer</guilabel> dialog where you can choose an objective function cell, optimization target (<guilabel>Maximize</guilabel>, <guilabel>Minimize</guilabel> or enter the <guilabel>Value</guilabel>) and a set of decision parameter cells.
+</para></listitem>
+</varlistentry>
   </variablelist></para>
 </sect1>
 

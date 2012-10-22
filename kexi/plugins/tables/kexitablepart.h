@@ -39,7 +39,7 @@ public:
     KexiTablePart(QObject *parent, const QVariantList &);
     virtual ~KexiTablePart();
 
-    virtual bool remove(KexiPart::Item &item);
+    virtual tristate remove(KexiPart::Item &item);
 
     virtual tristate rename(KexiPart::Item &item,
                             const QString& newName);

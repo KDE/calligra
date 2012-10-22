@@ -2,6 +2,7 @@
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2012 Shreya Pandit <shreya@shreyapandit.com>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,20 +21,19 @@
  */
 
 #include "KWStatisticsDocker.h"
-//#include "ui_KWStatisticsDocker.h"
-#include "KWCanvas.h"
+
 #include <QDebug>
+#include <klocale.h>
+#include <kdebug.h>
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include "KWCanvas.h"
 
 KWStatisticsDocker::KWStatisticsDocker()
 {
     m_canvasReset = false;
     setWindowTitle(i18n("Statistics"));
-    count = 0;
 }
 
 KWStatisticsDocker::~KWStatisticsDocker()
@@ -52,14 +52,13 @@ void KWStatisticsDocker::setCanvas(KoCanvasBase *_canvas)
         m_canvasReset = false;
     }
  
-    statisticsDock = new KWStatistics(canvas->resourceManager(),
+    m_statisticsWidget = new KWStatisticsWidget(canvas->resourceManager(),
                                                 canvas->document(),
                                                 canvas->shapeManager()->selection(),
                                                 this);
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
-    setWidget(statisticsDock->statsWidget);
-    initLayout();
-    statisticsDock->statsWidget->setLayout(mainBox);
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
+    setWidget(m_statisticsWidget);
 }
 
 void KWStatisticsDocker::unsetCanvas()
@@ -72,57 +71,13 @@ void KWStatisticsDocker::unsetCanvas()
 
 void KWStatisticsDocker::ondockLocationChanged(Qt::DockWidgetArea newArea)
 {
-    if (newArea == 8 || newArea == 4) {
-        mainBox->setDirection(QBoxLayout::LeftToRight);
+    if (newArea == Qt::TopDockWidgetArea || newArea == Qt::BottomDockWidgetArea) {
+        m_statisticsWidget->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
     } else {
-        mainBox->setDirection(QBoxLayout::TopToBottom);
+        m_statisticsWidget->setLayoutDirection(KWStatisticsWidget::LayoutVertical);
     }
 }
 
-void KWStatisticsDocker::initLayout()
-{
-    mainBox = new QBoxLayout(QBoxLayout::LeftToRight,statisticsDock->statsWidget);
-    wordsLayout = new QHBoxLayout();
-    mainBox->addLayout(wordsLayout);
-    wordsLayout->addWidget(statisticsDock->words);
-    wordsLayout->addWidget(statisticsDock->count_words);
-
-    sentencesLayout = new QHBoxLayout();
-    mainBox->addLayout(sentencesLayout);
-    sentencesLayout->addWidget(statisticsDock->sentences);
-    sentencesLayout->addWidget(statisticsDock->count_sentences);
-
-    syllablesLayout = new QHBoxLayout();
-    mainBox->addLayout(syllablesLayout);
-    syllablesLayout->addWidget(statisticsDock->syllables);
-    syllablesLayout->addWidget(statisticsDock->count_syllables);
-
-    cjkcharsLayout = new QHBoxLayout();
-    mainBox->addLayout(cjkcharsLayout);
-    cjkcharsLayout->addWidget(statisticsDock->cjkchars);
-    cjkcharsLayout->addWidget(statisticsDock->count_cjkchars);
-
-    spacesLayout = new QHBoxLayout();
-    mainBox->addLayout(spacesLayout);
-    spacesLayout->addWidget(statisticsDock->spaces);
-    spacesLayout->addWidget(statisticsDock->count_spaces);
-
-    nospacesLayout = new QHBoxLayout();
-    mainBox->addLayout(nospacesLayout);
-    nospacesLayout->addWidget(statisticsDock->nospaces);
-    nospacesLayout->addWidget(statisticsDock->count_nospaces);
-
-    fleschLayout = new QHBoxLayout();
-    mainBox->addLayout(fleschLayout);
-    fleschLayout->addWidget(statisticsDock->flesch);
-    fleschLayout->addWidget(statisticsDock->count_flesch);
-
-    linesLayout = new QHBoxLayout();
-    mainBox->addLayout(linesLayout);
-    linesLayout->addWidget(statisticsDock->lines);
-    linesLayout->addWidget(statisticsDock->count_lines);
-    mainBox->addWidget(statisticsDock->preferencesButton);
-}
 
 KWStatisticsDockerFactory::KWStatisticsDockerFactory()
 {

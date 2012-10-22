@@ -2,8 +2,10 @@
 Type=Service
 Name=OpenDocument Spreadsheets
 Name[el]=OpenDocument φύλλα εργασίας
+Name[et]=OpenDocument-arvutustabelid
 Name[fi]=OpenDocument-laskentataulukot
 Name[fr]=Tableurs OpenDocument
+Name[hu]=OpenDocument munkafüzetek
 Name[it]=Fogli di calcolo OpenDocument
 Name[nl]=OpenDocument spreadsheets
 Name[pt]=Folhas de Cálculo em OpenDocument

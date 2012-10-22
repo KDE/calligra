@@ -2476,6 +2476,28 @@ void KisPainter::setColorConversionFlags(KoColorConversionTransformation::Conver
     d->conversionFlags = conversionFlags;
 }
 
+void KisPainter::renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab)
+{
+    if (!d->mirrorHorizontaly && !d->mirrorVerticaly) return;
+
+    KisFixedPaintDeviceSP dabToProcess = dab;
+    if (preserveDab) {
+        dabToProcess = new KisFixedPaintDevice(*dab);
+    }
+    renderMirrorMask(rc, dabToProcess);
+}
+
+void KisPainter::renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask)
+{
+    if (!d->mirrorHorizontaly && !d->mirrorVerticaly) return;
+
+    KisFixedPaintDeviceSP maskToProcess = mask;
+    if (preserveMask) {
+        maskToProcess = new KisFixedPaintDevice(*mask);
+    }
+    renderMirrorMask(rc, dab, sx, sy, maskToProcess);
+}
+
 void KisPainter::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
 {
     int x = rc.topLeft().x();
@@ -2582,17 +2604,6 @@ void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
         dab->readBytes(mirrorDab->data(),rc);
 
         renderMirrorMask( QRect(rc.topLeft(),dabRc.size()), mirrorDab);
-    }
-}
-
-void KisPainter::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask){
-    if (d->mirrorHorizontaly || d->mirrorVerticaly){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(device()->colorSpace());
-        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
-        mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
-        dab->readBytes(mirrorDab->data(),rc);
-        renderMirrorMask(rc, mirrorDab, mask);
     }
 }
 

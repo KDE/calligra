@@ -55,6 +55,15 @@ Item
 
                 onClicked: documentController.documentHandler.copy()
             }
+
+            PlasmaComponents.ToolButton {
+                id: showOverlayButton
+                iconSource: "page-2sides"
+                height: parent.height
+                width: parent.height
+
+                onClicked: root.parent.parent.toggleOverlay()
+            }
         }
     }
 }

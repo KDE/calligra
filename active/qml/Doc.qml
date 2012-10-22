@@ -22,11 +22,12 @@
 import QtQuick 1.1
 import CalligraActive 1.0
 
-Item {
+Rectangle {
     id: docRootRect
     signal documentLoaded
 
     clip: true
+    color: "white"
 
     CADocumentController {
         id: docDocumentController
@@ -151,6 +152,13 @@ Item {
         docRootItem: docRootRect
     }
 
+    HomeScreen {
+        id: homescreen
+        anchors.fill: parent
+    }
+
+    onDocumentLoaded: homescreen.visible = false
+
     function openDocument(path) {
         docDocumentController.documentUri = path;
         docDocumentController.loadDocument();
@@ -162,5 +170,10 @@ Item {
 
     function restoreCanvasControllerToCenter() {
         theCanvasController.state = ""
+    }
+
+    function hideOpenButton()
+    {
+        homescreen.hideOpenButton()
     }
 }

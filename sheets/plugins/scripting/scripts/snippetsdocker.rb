@@ -79,7 +79,7 @@ class Snippets
 
     class Snippet_Informations < Base
         def initialize(parent)
-            super(parent, "Informations", "Environment Details")
+            super(parent, "Information", "Environment Details")
 
             ObjectSpace.define_finalizer(self,
                                      self.class.method(:finalize).to_proc)

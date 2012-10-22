@@ -224,6 +224,8 @@ bool PlanTJScheduler::kplatoToTJ()
     m_tjProject->setStart( m_project->constraintStartTime().toTime_t() );
     m_tjProject->setEnd( m_project->constraintEndTime().toTime_t() );
 
+    m_tjProject->setDailyWorkingHours( m_project->standardWorktime()->day() );
+
     addTasks();
     setConstraints();
     addDependencies();
