@@ -68,6 +68,7 @@
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
 #include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoTextAnchor.h>
@@ -82,6 +83,9 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+
+#include <KoAnnotationSideBar.h>
+
 #include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
@@ -115,9 +119,9 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     layout->setMargin(0);
-    layout->addWidget(m_gui);
+    layout->addWidget(m_gui,0,0);
 
     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
@@ -165,6 +169,13 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     if (m_document->inlineTextObjectManager()) {
         connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
            m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
+    }
+
+    if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
+        if (textRangeManager->annotationManager()) {
+            KoAnnotationSideBar *annotationBar = new KoAnnotationSideBar(textRangeManager->annotationManager());
+            layout->addWidget(annotationBar, 0, 1);
+        }
     }
 }
 

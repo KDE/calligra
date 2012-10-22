@@ -78,6 +78,10 @@ public:
     /// @return the name of this annotation
     QString name() const;
 
+    QString creator() const;
+
+    QString date() const;
+
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /**

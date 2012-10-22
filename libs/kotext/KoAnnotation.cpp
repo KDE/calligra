@@ -198,3 +198,13 @@ QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
     return ret;
 }
 
+QString KoAnnotation::creator() const
+{
+    return d->creator;
+}
+
+QString KoAnnotation::date() const
+{
+    return d->date;
+}
+
