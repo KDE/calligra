@@ -33,6 +33,7 @@ class KoParagraphStyle;
 class KoStyleThumbnailer;
 
 class StylesModel;
+class DockerStylesComboModel;
 class StylesDelegate;
 
 class QSignalMapper;
@@ -49,6 +50,7 @@ public slots:
     void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
     void slotShowStyleManager(int index);
+    void slotParagraphStyleApplied(KoParagraphStyle *style);
 
 signals:
     void doneWithFocus();
@@ -84,6 +86,7 @@ private:
     QSignalMapper *m_mapper;
 
     StylesModel *m_stylesModel;
+    DockerStylesComboModel *m_sortedStylesModel;
     StylesDelegate *m_stylesDelegate;
 };
 

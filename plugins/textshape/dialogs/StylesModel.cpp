@@ -528,3 +528,8 @@ void StylesModel::clearDraftStyles()
     }
     m_draftCharStyleList.clear();
 }
+
+StylesModel::Type StylesModel::stylesType()
+{
+    return m_modelType;
+}
