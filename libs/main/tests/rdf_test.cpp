@@ -57,15 +57,17 @@ QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
     const QTextTable *table = editor.currentTable();
 
     QTextCursor cur(editor.document());
+    cur.setPosition(table->firstPosition());
     KoBookmark *bookmark = new KoBookmark(cur);
     bookmark->setPositionOnlyMode(false); // we want it to be several chars long
-
+ 
     KoTextInlineRdf *inlineRdf(new KoTextInlineRdf(editor.document(), bookmark));
     QString newId = inlineRdf->createXmlId();
     inlineRdf->setXmlId(newId);
 
     bookmark->setName(newId);
     bookmark->setInlineRdf(inlineRdf);
+    KoTextDocument(editor.document()).textRangeManager()->insert(bookmark);
 
     editor.setPosition(table->firstPosition());
     editor.movePosition(QTextCursor::PreviousCharacter);
@@ -82,8 +84,7 @@ QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
 
     Q_ASSERT(rdfDoc.model()->statementCount() > 0);
 
-    bookmark->cursor().setPosition(bookmark->cursor().position());
-    bookmark->cursor().setPosition(editor.position(), QTextCursor::KeepAnchor);
+    bookmark->cursor().setPosition(table->lastPosition() , QTextCursor::KeepAnchor);
 
     return newId;
 }
@@ -111,16 +112,17 @@ void RdfTest::testCreateMarkers()
     // insert a table and set a bookmark on it with semantics
     QString newId = insertTableWithSemItem(editor, rdfDoc, "test item1");
 
-    // insert some more lorem
+    // insert some more lorem before the table
     editor.insertText(lorem);
 
     // verify that the bookmark marks the table and only that
     QPair<int,int> position = rdfDoc.findExtent(newId);
-    QCOMPARE(position.first, lorem.length()+1);
-    QCOMPARE(position.second, lorem.length()+1+TABLESIZE);
+    QCOMPARE(position.first, 2*(lorem.length()+1));
+    QCOMPARE(position.second, 2*(lorem.length()+1)+TABLESIZE-1);
 
     editor.setPosition(position.first + 1);
     QPair<int,int> position2 = rdfDoc.findExtent(&editor);
+    qDebug()<<position<<position2;
     QCOMPARE(position, position2);
 
     // check that the id is like we expext
@@ -167,7 +169,7 @@ void RdfTest::testFindMarkers()
             QPair<int, int> position = rdfDoc.findExtent(xmlid);
 
             QCOMPARE(position.first, lorem.length() + 1);
-            QCOMPARE(position.second, lorem.length() + 1 + TABLESIZE);
+            QCOMPARE(position.second, lorem.length() + 1 + TABLESIZE - 1);
 
             editor.setPosition(position.first + 2);
             const QTextTable *table = editor.currentTable();

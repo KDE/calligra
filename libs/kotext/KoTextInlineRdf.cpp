@@ -212,6 +212,7 @@ QString KoTextInlineRdf::predicate()
 QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
+        qDebug()<<"findExtent of bookmark based KoTextInlineRdf"<<d->bookmark.data()->selectionStart() << d->bookmark.data()->selectionEnd();
         return QPair<int, int>(d->bookmark.data()->selectionStart(), d->bookmark.data()->selectionEnd());
     }
     if (d->kotextmeta && d->document) {
