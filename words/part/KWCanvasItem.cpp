@@ -46,6 +46,7 @@
 #include <QStyleOptionGraphicsItem>
 
 
+
 KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
         : QGraphicsWidget(0),
         KWCanvasBase(document, this)

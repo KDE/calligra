@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Steven Kakoczky <steven.kakoczky@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,21 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEST_KO_BOOKMARK_MANAGER_H
-#define TEST_KO_BOOKMARK_MANAGER_H
+#include "KoBalloon.h"
 
-#include <QObject>
-
-class TestKoBookmarkManager : public QObject
+KoBalloon::KoBalloon(int position, QWidget *parent) :
+    QWidget(parent), m_y(position)
 {
-    Q_OBJECT
+}
 
-private slots:
-
-    void testCreation();
-    void testInsertAndRetrieve();
-    void testRemove();
-    void testRename();
-};
-
-#endif // TEST_KO_BOOKMARK_MANAGER_H
+void KoBalloon::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+    QPainter painter(this);
+    QBrush brush(Qt::green);
+    painter.setBackgroundMode(Qt::OpaqueMode);
+    painter.setBackground(brush);
+} 

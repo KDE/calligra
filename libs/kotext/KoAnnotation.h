@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOBOOKMARK_H
-#define KOBOOKMARK_H
+#ifndef KOANNOTATION_H
+#define KOANNOTATION_H
 
 #include "KoTextRange.h"
 #include "kotext_export.h"
@@ -28,31 +29,35 @@ class KoShape;
 class QTextDocument;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
-class KoBookmarkManager;
+class KoAnnotationManager;
 
 /**
- * A document can store a set of cursor positions/selected cursor locations which can be
- * retrieved again later to go to those locations from any location in the document.
- * The bookmark location will be automatically updated if user alters the text in the document.
- * A bookmark is identified by it's name, and all bookmarks are managed by KoBookmarkManager. A
- * bookmark can be retrieved from the bookmark manager by using name as identifier.
- * @see KoBookmarkManager
+ * An annotation is a note made by the user regarding a part of the
+ * text. The annotation refers to either a position or a range of
+ * text. The annotation location will be automatically updated if user
+ * alters the text in the document.
+
+ * An annotation is identified by it's name, and all annotations are
+ * managed by KoAnnotationManager. An annotation can be retrieved from
+ * the annotation manager by using name as identifier.
+ *
+ * @see KoAnnotationManager
  */
-class KOTEXT_EXPORT KoBookmark : public KoTextRange
+class KOTEXT_EXPORT KoAnnotation : public KoTextRange
 {
     Q_OBJECT
 public:
     /**
      * Constructor.
      *
-     * By default a bookmark has the SinglePosition type and an empty name.
-     * The name is set when the book is inserted into the bookmark manager.
+     * By default an annotation has the SinglePosition type and an empty name.
+     * The name is set when the annotation is inserted into the annotation manager.
      *
-     * @param document the text document where this bookmark is located
+     * @param document the text document where this annotation is located
      */
-    KoBookmark(const QTextCursor &);
+    KoAnnotation(const QTextCursor &);
 
-    virtual ~KoBookmark();
+    virtual ~KoAnnotation();
 
     /// reimplemented from super
     void saveOdf(KoShapeSavingContext &context, int position) const;
@@ -65,21 +70,26 @@ public:
                        const QRectF &rect);
 
     /**
-     * Set the new name for this bookmark
-     * @param name the new name of the bookmark
+     * Set the new name for this annotation
+     * @param name the new name of the annotation
      */
     void setName(const QString &name);
 
-    /// @return the name of this bookmark
+    /// @return the name of this annotation
     QString name() const;
+
+    QString creator() const;
+
+    QString date() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /**
-     * This is called to allow Cut and Paste of bookmarks. This
+     * This is called to allow Cut and Paste of annotations. This
      * method gives a correct, unique, name
      */
-    static QString createUniqueBookmarkName(const KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker);
+    static QString createUniqueAnnotationName(const KoAnnotationManager* kam,
+                                              QString annotationName, bool isEndMarker);
 private:
 
     class Private;

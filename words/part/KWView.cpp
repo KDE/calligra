@@ -67,6 +67,8 @@
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
+#include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoTextAnchor.h>
@@ -81,6 +83,9 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+
+#include <KoAnnotationSideBar.h>
+
 #include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
@@ -114,9 +119,9 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     layout->setMargin(0);
-    layout->addWidget(m_gui);
+    layout->addWidget(m_gui,0,0);
 
     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
@@ -164,6 +169,13 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     if (m_document->inlineTextObjectManager()) {
         connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
            m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
+    }
+
+    if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
+        if (textRangeManager->annotationManager()) {
+            KoAnnotationSideBar *annotationBar = new KoAnnotationSideBar(textRangeManager->annotationManager());
+            layout->addWidget(annotationBar, 0, 1);
+        }
     }
 }
 
@@ -491,7 +503,7 @@ void KWView::addBookmark()
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     Q_ASSERT(editor);
 
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
     if (editor->hasSelection()) {
         suggestedName = editor->selectedText();
     }
@@ -512,7 +524,7 @@ void KWView::addBookmark()
 void KWView::selectBookmark()
 {
     QString name;
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
 
     QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
     connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
@@ -526,8 +538,8 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
-#if 0
     KoBookmark *bookmark = manager->retrieveBookmark(name);
+#if 0
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
     selection->deselectAll();
@@ -535,20 +547,24 @@ void KWView::selectBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-
-    KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    if (bookmark->hasSelection()) {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
-        rm->clearResource(KoText::SelectedTextPosition);
-        rm->clearResource(KoText::SelectedTextAnchor);
-    } else
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
 #else
 #ifdef __GNUC__
     #warning FIXME: port to textlayout-rework
 #endif
 #endif
+
+    KoCanvasResourceManager *rm = m_canvas->resourceManager();
+    if ((bookmark->positionOnlyMode() == false) && bookmark->cursor().hasSelection()) {
+        rm->clearResource(KoText::SelectedTextPosition);
+        rm->clearResource(KoText::SelectedTextAnchor);
+    }
+    if (bookmark->positionOnlyMode()) {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->cursor().position());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->cursor().position());
+    } else {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->cursor().selectionStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->cursor().selectionEnd());
+    }
 }
 
 void KWView::deleteBookmark(const QString &name)
