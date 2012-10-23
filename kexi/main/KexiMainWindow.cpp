@@ -103,6 +103,8 @@
 #include <widget/navigator/KexiProjectNavigator.h>
 #include <widget/navigator/KexiProjectModel.h>
 #include <widget/KexiFileWidget.h>
+#include <widget/KexiNameDialog.h>
+#include <widget/KexiNameWidget.h>
 #include <koproperty/EditorView.h>
 #include <koproperty/Set.h>
 
@@ -112,7 +114,6 @@
 #include "startup/KexiWelcomeAssistant.h"
 #include "startup/KexiImportExportAssistant.h"
 #include "startup/KexiStartupDialog.h"
-#include "kexinamedialog.h"
 
 #include <KoIcon.h>
 
@@ -1385,7 +1386,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
                     i18n("Database project %1 does not appear to have been created using Kexi."
                          "<p>Do you want to import it as a new Kexi project?",
                          projectData.infoString()),
-                    0, KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
+                    QString(), KGuiItem(i18nc("Import Database", "&Import..."), koIconName("database_import")),
                     KStandardGuiItem::cancel()))
             {
                 const bool anotherProjectAlreadyOpened = d->prj;
@@ -1972,6 +1973,8 @@ void KexiMainWindow::setupProjectNavigator()
                 this, SLOT(removeObject(KexiPart::Item*)));
         connect(d->navigator->model(), SIGNAL(renameItem(KexiPart::Item*, const QString&, bool&)),
                 this, SLOT(renameObject(KexiPart::Item*, const QString&, bool&)));
+        connect(d->navigator->model(), SIGNAL(changeItemCaption(KexiPart::Item*, const QString&, bool&)),
+                this, SLOT(setObjectCaption(KexiPart::Item*, const QString&, bool&)));
         connect(d->navigator, SIGNAL(executeItem(KexiPart::Item*)),
                 this, SLOT(executeItem(KexiPart::Item*)));
         connect(d->navigator, SIGNAL(exportItemToClipboardAsDataTable(KexiPart::Item*)),
@@ -2940,7 +2943,7 @@ void KexiMainWindow::slotViewTextMode()
 
 tristate KexiMainWindow::getNewObjectInfo(
     KexiPart::Item *partItem, KexiPart::Part *part,
-    bool& allowOverwriting, const QString& messageWhenAskingForName)
+    bool allowOverwriting, bool *overwriteNeeded, const QString& messageWhenAskingForName)
 {
     //data was never saved in the past -we need to create a new object at the backend
     KexiPart::Info *info = part->info();
@@ -2957,53 +2960,13 @@ tristate KexiMainWindow::getNewObjectInfo(
     d->nameDialog->widget()->setNameText(partItem->name());
     d->nameDialog->setWindowTitle(i18n("Save Object As"));
     d->nameDialog->setDialogIcon(info->itemIconName());
-    allowOverwriting = false;
-    bool found;
-    do {
-        if (d->nameDialog->exec() != QDialog::Accepted)
-            return cancelled;
-        //check if that name already exists
-        KexiDB::SchemaData tmp_sdata;
-        tristate result = project()->dbConnection()->loadObjectSchemaData(
-                              project()->idForClass(info->partClass()),
-                              d->nameDialog->widget()->nameText(), tmp_sdata);
-        if (!result)
-            return false;
-        found = result == true;
-        if (found) {
-            if (allowOverwriting) {
-                int res = KMessageBox::warningYesNoCancel(this,
-                          "<p>"
-                          + part->i18nMessage("Object \"%1\" already exists.", 0)
-                          .subs(d->nameDialog->widget()->nameText()).toString()
-                          + "</p><p>" + i18n("Do you want to replace it?") + "</p>",
-                          QString(),
-                          KGuiItem(i18n("&Replace"), koIconName("button_yes")),
-                          KGuiItem(i18n("&Choose Other Name...")),
-                          KStandardGuiItem::cancel(),
-                          QString(),
-                          KMessageBox::Notify | KMessageBox::Dangerous);
-                if (res == KMessageBox::No)
-                    continue;
-                else if (res == KMessageBox::Cancel)
-                    return cancelled;
-                else {//yes
-                    allowOverwriting = true;
-                    break;
-                }
-            } else {
-                KMessageBox::information(this,
-                                         "<p>"
-                                         + part->i18nMessage("Object \"%1\" already exists.", 0)
-                                         .subs(d->nameDialog->widget()->nameText()).toString()
-                                         + "</p><p>" + i18n("Please choose other name.") + "</p>");
-//    " For example: Table \"my_table\" already exists" ,
-//    "%1 \"%2\" already exists.\nPlease choose other name.")
-//    .arg(dlg->part().componentName()).arg(d->nameDialog->widget()->nameText()));
-                continue;
-            }
-        }
-    } while (found);
+    d->nameDialog->setAllowOverwriting(allowOverwriting);
+
+    if (d->nameDialog->execAndCheckIfObjectExists(*project(), *part, overwriteNeeded)
+        != QDialog::Accepted)
+    {
+        return cancelled;
+    }
 
     //update name and caption
     partItem->setName(d->nameDialog->widget()->nameText());
@@ -3026,13 +2989,17 @@ tristate KexiMainWindow::saveObject(KexiWindow *window, const QString& messageWh
 
     const int oldItemID = window->partItem()->identifier();
 
-    bool allowOverwriting = false;
-    res = getNewObjectInfo(window->partItem(), window->part(), allowOverwriting,
-                           messageWhenAskingForName);
+    bool overwriteNeeded;
+    res = getNewObjectInfo(window->partItem(), window->part(), true /*allowOverwriting*/,
+                           &overwriteNeeded, messageWhenAskingForName);
     if (res != true)
         return res;
 
-    res = window->storeNewData();
+    KexiView::StoreNewDataOptions storeNewDataOptions;
+    if (overwriteNeeded) {
+        storeNewDataOptions |= KexiView::OverwriteExistingObject;
+    }
+    res = window->storeNewData(storeNewDataOptions);
     if (~res)
         return cancelled;
     if (!res) {
@@ -3546,7 +3513,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
                              "%1\n"
                              "If you click \"Delete\", you will not be able to undo the deletion.",
                              "</p><p>" + part->info()->instanceCaption() + " \"" + item->name() + "\"?</p>"),
-                0, KGuiItem(i18n("Delete"), koIconName("edit-delete")), KStandardGuiItem::no())) {
+                QString(), KGuiItem(i18n("Delete"), koIconName("edit-delete")), KStandardGuiItem::no())) {
             return cancelled;
         }
     }
@@ -3618,11 +3585,42 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
         success = false;
         return;
     }
+
+    KexiWindow *window = d->openedWindowFor(item);
+    if (window) {
+        QString msg = i18n("<para>Before renaming object <resource>%1</resource> it should be closed.</para>"
+                           "<para>Do you want to close it?</para>")
+                      .arg(item->name());
+        int r = KMessageBox::questionYesNo(this, msg, QString(),
+                                           KGuiItem(i18n("Close window"), koIconName("window-close")),
+                                           KStandardGuiItem::cancel());
+        if (r != KMessageBox::Yes) {
+            success = false;
+            return;
+        }
+    }
     enableMessages(false); //to avoid double messages
     const bool res = d->prj->renameObject(*item, newName);
     enableMessages(true);
     if (!res) {
         showErrorMessage(d->prj, i18n("Renaming object \"%1\" failed.", newName));
+        success = false;
+        return;
+    }
+}
+
+void KexiMainWindow::setObjectCaption(KexiPart::Item *item, const QString& _newCaption, bool &success)
+{
+    if (d->userMode) {
+        success = false;
+        return;
+    }
+    QString newCaption = _newCaption.trimmed();
+    enableMessages(false); //to avoid double messages
+    const bool res = d->prj->setObjectCaption(*item, newCaption);
+    enableMessages(true);
+    if (!res) {
+        showErrorMessage(d->prj, i18n("Setting caption for object \"%1\" failed.", newCaption));
         success = false;
         return;
     }
@@ -4095,7 +4093,7 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
         return false; //error msg has been shown by KexiInternalPart
     int result = dlg->exec();
     delete dlg;
-    return result == QDialog::Rejected ? cancelled : true;
+    return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
 }
 
 bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
@@ -4310,7 +4308,7 @@ tristate KexiMainWindow::copyItemToClipboardAsDataTable(KexiPart::Item* item)
         return false; //error msg has been shown by KexiInternalPart
     const int result = dlg->exec();
     delete dlg;
-    return result == QDialog::Rejected ? cancelled : true;
+    return result == QDialog::Rejected ? tristate(cancelled) : tristate(true);
 }
 
 void KexiMainWindow::slotEditPasteSpecialDataTable()

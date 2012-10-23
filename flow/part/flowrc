@@ -8,3 +8,8 @@ PaintGridInBackground=true
 
 [KoPageApp/DocumentStructureDocker]
 ViewMode=Detailed
+
+[calligra]
+FlakePluginsDisabled=kexirelationdesignshape
+TextInlinePluginsDisabled=kprvariables
+ToolPluginsDisabled=calligrastagetoolanimation

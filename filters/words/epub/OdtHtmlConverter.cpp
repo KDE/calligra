@@ -29,6 +29,7 @@
 
 // KDE
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoStore.h>
@@ -168,6 +169,8 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
+    QString currentChapterTitle = "";
+
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
 
@@ -208,7 +211,14 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
                 QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
                 QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
                 m_collector->addContentFile(fileId, fileName,
-                                            "application/xhtml+xml", m_htmlContent);
+                                            "application/xhtml+xml", m_htmlContent, currentChapterTitle);
+
+
+                if (nodeElement.localName() == "h") {
+                    currentChapterTitle = nodeElement.text();
+                } else {
+                    currentChapterTitle = "";
+                }
 
                 // And begin a new chapter.
                 beginHtmlFile(metaData);
@@ -272,7 +282,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     if (m_options->doBreakIntoChapters)
         fileId += QString::number(m_currentChapter);
     QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
-    m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+    m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, currentChapterTitle);
 
     // 5. Write any data that we have collected on the way.
 
@@ -286,7 +296,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
 
         QString fileId = "chapter-endnotes";
         QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
-        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, i18n("End notes"));
     }
 
     odfStore->close();

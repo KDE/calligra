@@ -130,13 +130,15 @@ tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
-KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiQueryView::storeNewData(const KexiDB::SchemaData& sdata,
+                                                KexiView::StoreNewDataOptions options,
+                                                bool &cancel)
 {
     KexiView * view = window()->viewThatRecentlySetDirtyFlag();
     if (dynamic_cast<KexiQueryDesignerGuiEditor*>(view))
-        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, cancel);
+        return dynamic_cast<KexiQueryDesignerGuiEditor*>(view)->storeNewData(sdata, options, cancel);
     if (dynamic_cast<KexiQueryDesignerSQLView*>(view))
-        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, cancel);
+        return dynamic_cast<KexiQueryDesignerSQLView*>(view)->storeNewData(sdata, options, cancel);
     return 0;
 }
 

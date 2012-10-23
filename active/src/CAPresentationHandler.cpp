@@ -29,6 +29,8 @@
 
 #include <KoPACanvasItem.h>
 #include <KoPAPageBase.h>
+#include <KoCanvasController.h>
+#include <KoSelection.h>
 
 #include <KoPart.h>
 #include <KoToolManager.h>
@@ -36,6 +38,8 @@
 #include <KoZoomController.h>
 #include <KoFindText.h>
 #include <KoCanvasBase.h>
+#include <KoShapeManager.h>
+#include <KoFindBase.h>
 
 #include <KDebug>
 #include <KMimeType>
@@ -43,6 +47,7 @@
 
 #include <QtCore/QSize>
 #include <QtCore/QTimer>
+#include <QTextDocument>
 
 class CAPresentationHandler::Private
 {
@@ -51,11 +56,21 @@ public:
     {
         currentSlideNum = -1;
         paDocumentModel = 0;
+        findText = 0;
+        countMatchesPerSlide = 0;
+        searchSlideNumber = 0;
+        matchFound = false;
     }
 
+    QString searchString;
     KPrDocument* document;
     CAPAView* paView;
     int currentSlideNum;
+    int countMatchesPerSlide;
+    int searchSlideNumber;
+    bool matchFound;
+    QList<QTextDocument*> texts;
+    KoFindText* findText;
     QTimer slideshowTimer;
     QList<KoPAPageBase*> slideShow;
     CAPADocumentModel *paDocumentModel;
@@ -65,7 +80,12 @@ CAPresentationHandler::CAPresentationHandler (CADocumentController* documentCont
     : CAAbstractDocumentHandler (documentController)
     , d (new Private())
 {
+    QList<QTextDocument*> texts;
+    d->findText = new KoFindText(this);
     connect(&d->slideshowTimer, SIGNAL(timeout()), SLOT(advanceSlideshow()));
+    connect (d->findText, SIGNAL (updateCanvas()), SLOT (updateCanvas()));
+    connect (d->findText, SIGNAL (matchFound (KoFindMatch)), SLOT (findMatchFound (KoFindMatch)));
+    connect (d->findText, SIGNAL (noMatchFound()), SLOT (findNoMatchFound()));
 }
 
 CAPresentationHandler::~CAPresentationHandler()
@@ -172,9 +192,16 @@ void CAPresentationHandler::gotoCurrentSlide()
     emit nextPageImageChanged();
 }
 
+void CAPresentationHandler::setTextData(int slideNumber) {
+    d->texts.clear();
+    KoFindText::findTextInShapes(d->document->pageByIndex(slideNumber,false)->shapes(), d->texts);
+    d->findText->setDocuments(d->texts);
+}
+
 void CAPresentationHandler::zoomToFit()
 {
     updateCanvas();
+    setTextData(d->currentSlideNum);
 }
 
 void CAPresentationHandler::tellZoomControllerToSetDocumentSize (const QSize& size)
@@ -210,6 +237,84 @@ void CAPresentationHandler::resizeCanvas (const QSizeF& canvasSize)
     }
 }
 
+QString CAPresentationHandler::searchString() const
+{
+    return d->searchString;
+}
+
+void CAPresentationHandler::setSearchString (const QString& searchString)
+{
+    d->searchString = searchString;
+    d->findText->find(searchString);
+
+    emit searchStringChanged();
+}
+
+void CAPresentationHandler::searchOtherSlides(SearchDirection direction) {
+    //Reset the count
+    d->countMatchesPerSlide = 0;
+    if( direction == SearchForward) {
+        d->searchSlideNumber = d->currentSlideNum + 1;
+    } else if ( direction == SearchBackwards) {
+        if( d->currentSlideNum != 0) {
+            d->searchSlideNumber = d->currentSlideNum - 1;
+        } else {
+           return;
+        }
+    }
+    while ((d->searchSlideNumber < totalNumberOfSlides()) && (d->searchSlideNumber >= 0)) {
+        setTextData(d->searchSlideNumber);
+        setSearchString(d->searchString);
+        if(d->matchFound == true) {
+            d->currentSlideNum = d->searchSlideNumber;
+            setCurrentSlideNumber(d->currentSlideNum);
+            setSearchString(d->searchString);
+            if(direction == SearchBackwards) {
+               d->countMatchesPerSlide = d->findText->matches().count() - 1;
+               d->findText->findPrevious();
+            }
+            break;
+        }
+        if(direction == SearchForward) {
+           d->searchSlideNumber++;
+        } else if(direction == SearchBackwards) {
+           d->searchSlideNumber--;
+        }
+    }
+}
+
+void CAPresentationHandler::findNext() {
+    d->countMatchesPerSlide++;
+    d->findText->findNext();
+    if((d->countMatchesPerSlide >= d->findText->matches().count()) or (d->findText->matches().count() == 0)) {
+      searchOtherSlides(SearchForward);
+    }
+}
+
+void CAPresentationHandler::findPrevious() {
+    d->countMatchesPerSlide--;
+    d->findText->findPrevious();
+    if( d->countMatchesPerSlide < 0) {
+       searchOtherSlides(SearchBackwards);
+    }
+}
+
+void CAPresentationHandler::findMatchFound (const KoFindMatch& match)
+{
+    QTextCursor cursor = match.location().value<QTextCursor>();
+    updateCanvas();
+
+    canvas()->resourceManager()->setResource (KoText::CurrentTextAnchor, cursor.anchor());
+    canvas()->resourceManager()->setResource (KoText::CurrentTextPosition, cursor.position());
+    d->matchFound = true;
+}
+
+void CAPresentationHandler::findNoMatchFound()
+{
+    d->matchFound = false;
+    kDebug() << "Match for " << searchString() << " not found";
+}
+
 QString CAPresentationHandler::topToolbarSource() const
 {
     return "PresentationTopToolbar.qml";
@@ -228,6 +333,11 @@ QString CAPresentationHandler::rightToolbarSource() const
 QString CAPresentationHandler::centerOverlaySource() const
 {
     return "PresentationCenterOverlay.qml";
+}
+
+QString CAPresentationHandler::bottomToolbarSource() const
+{
+    return "PresentationFindToolbar.qml";
 }
 
 void CAPresentationHandler::setSlideshowDelay(int delay)
