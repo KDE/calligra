@@ -73,10 +73,11 @@ bool Sphere::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
     Object3D::loadOdf(objectElement, context);
 
+    // These strange default values come from the default values in OOo and LO.
     QString dummy;
     dummy = objectElement.attributeNS(KoXmlNS::dr3d, "center", "(0 0 0)");
     m_center = odfToVector3D(dummy);
-    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "size", "(1 1 1)");
+    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "size", "(5000.0 5000.0 5000.0)");
     m_size = odfToVector3D(dummy);
 
     kDebug(31000) << "Sphere:" << m_center << m_size;
@@ -136,10 +137,11 @@ bool Cube::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &con
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
     Object3D::loadOdf(objectElement, context);
 
+    // These strange default values come from the default values in OOo and LO.
     QString dummy;
-    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "min-edge", "(0 0 0)");
+    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "min-edge", "(-2500.0 -2500.0 -2500.0)");
     m_minEdge = odfToVector3D(dummy);
-    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "max-edge", "(1 1 1)");
+    dummy = objectElement.attributeNS(KoXmlNS::dr3d, "max-edge", "(2500.0 2500.0 2500.0)");
     m_maxEdge = odfToVector3D(dummy);
 
     kDebug(31000) << "Cube:" << m_minEdge << m_maxEdge;
