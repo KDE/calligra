@@ -93,6 +93,14 @@ Panel {
         id: presetsModel;
         view: sketchView.view;
     }
+    Connections {
+        target: sketchView;
+        onLoadingFinished: {
+            presetsModel.activatePreset(0);
+            peekViewGrid.currentIndex = 0;
+            fullViewGrid.currentIndex = 0;
+        }
+    }
 
     peekContents: GridView {
         id: peekViewGrid;
