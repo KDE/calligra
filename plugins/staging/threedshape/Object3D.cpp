@@ -72,7 +72,7 @@ bool Object3D::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext 
 {
     Q_UNUSED(context);
 
-    m_transform3D = objectElement.attributeNS(KoXmlNS::dr3d, "name", "");
+    m_transform3D = objectElement.attributeNS(KoXmlNS::dr3d, "transform", "");
 
     return true;
 }
