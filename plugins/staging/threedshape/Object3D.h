@@ -78,10 +78,14 @@ class KoXmlWriter;
 //       object, thus reimplementing some of the features of
 //       KoShapeContainer.
 //
-// For now we have chosen option 2.
+// During different times in the implementation process we have
+// implemented both options. At this time, option 1 is activated. See
+// the #define just below.
 //
 
-class Object3D : public KoShape
+#define IMPLEMENT_AS_SHAPECONTAINER 1
+
+class Object3D // : public KoShape
 {
 public:
     explicit Object3D(Object3D *parent);
@@ -91,9 +95,11 @@ public:
     Object3D *parent();
     QString transform();
 
+#if 0
     // reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter,
                        KoShapePaintingContext &context);
+#endif
     virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext &context) const;
 
@@ -102,7 +108,7 @@ public:
 
 protected:
     Object3D *m_parent;
-    QString   m_transform3D;
+    QString   m_transform3D;    // Must be a real matrix when we implement drawing.
 };
 
 

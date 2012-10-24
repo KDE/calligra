@@ -50,6 +50,7 @@
 
 Sphere::Sphere(Object3D *parent)
     : Object3D(parent)
+    , KoShape()
 {
 }
 
@@ -112,6 +113,7 @@ void Sphere::saveObjectOdf(KoShapeSavingContext &context) const
 
 Cube::Cube(Object3D *parent)
     : Object3D(parent)
+    , KoShape()
 {
 }
 
@@ -174,6 +176,7 @@ void Cube::saveObjectOdf(KoShapeSavingContext &context) const
 
 Extrude::Extrude(Object3D *parent)
     : Object3D(parent)
+    , KoShape()
     , m_path()
     , m_depth(1.0)
     , m_closeFront(true)
@@ -289,6 +292,7 @@ QString Extrude::saveStyle(KoGenStyle& style, KoShapeSavingContext& context) con
 
 Rotate::Rotate(Object3D *parent)
     : Object3D(parent)
+    , KoShape()
     , m_path()
     , m_horizontalSegments(-1)
     , m_verticalSegments(-1)

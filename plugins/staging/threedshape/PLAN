@@ -19,13 +19,6 @@
     + All level objects should have layer               Done
     + Separate Objects into their own files.
 
-    Actually not problems with this shape:
-    + losing precision when saving coordinates
-      (this problem is in Ko3DScene in libs/odf)
-    + load/store/save 3D transforms in all objects
-       - Including chart:plot-area
-
-
  * Integrate with the apps
     + Karbon: Fix the layer bug                         Done
     + Words:  Inline text manager thingie               Done

@@ -32,6 +32,7 @@
 
 // Calligra
 #include <KoXmlNS.h>
+#include <KoIcon.h>
 //#include "KoShapeBasedDocumentBase.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
@@ -47,7 +48,8 @@ ThreedShapeFactory::ThreedShapeFactory()
     : KoShapeFactoryBase(THREEDSHAPEID, i18n("3D Scene"))
 {
     setToolTip(i18n("Shape that displays a simple 3D scene."));
-    setIcon("x-shape-3d");
+    //KIconLoader::global()->addAppDir("kchart");
+    setIconName(koIconNameCStr("x-shape-3d"));
     setLoadingPriority(1);
 
     // Tell the shape loader which tag we can store
@@ -70,6 +72,8 @@ bool ThreedShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &
 KoShape *ThreedShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     Q_UNUSED(documentResources);
+
+    kDebug(31000) << "Creating a 3d shape";
 
     SceneObject *defaultShape = new SceneObject(0, true);
     defaultShape->setShapeId(THREEDSHAPEID);

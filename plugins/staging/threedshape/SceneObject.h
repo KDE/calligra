@@ -36,10 +36,13 @@
 #define THREEDSHAPEID "ThreedShape"
 
 
-class SceneObject : public QObject, public Object3D//, public KoShapeContainer
+class SceneObject : public Object3D //, public QObject
+#if IMPLEMENT_AS_SHAPECONTAINER
+    , public KoShapeContainer
+#else
+    , public KoShape
+#endif
 {
-    Q_OBJECT
-
 public:
     // Constructor
 
@@ -48,6 +51,10 @@ public:
     // view parameters from the element.
     SceneObject(Object3D *parent, bool topLevel = false);
     virtual ~SceneObject();
+
+    /// reimplemented from KoShapeContainer
+    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter,
+                                KoShapePaintingContext &paintcontext);
 
     // reimplemented from KoShape
     virtual void paint(QPainter &painter, const KoViewConverter &converter,

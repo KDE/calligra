@@ -50,7 +50,9 @@
 
 SceneObject::SceneObject(Object3D *parent, bool topLevel)
     : Object3D(parent)
-      //, KoShapeContainer()
+#if IMPLEMENT_AS_SHAPECONTAINER
+    , KoShapeContainer()
+#endif
     , m_topLevel(topLevel)
     , m_threeDParams(0)
 {
@@ -62,9 +64,21 @@ SceneObject::~SceneObject()
     qDeleteAll(m_objects);
 }
 
+/// reimplemented from KoShapeContainer
+void SceneObject::paintComponent(QPainter &painter, const KoViewConverter &converter,
+                                 KoShapePaintingContext &paintcontext)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
+    Q_UNUSED(paintcontext);
+}
+
+
 void SceneObject::paint(QPainter &painter, const KoViewConverter &converter,
                         KoShapePaintingContext &context)
 {
+    Q_UNUSED(context);
+
     //painter.setPen(QPen(QColor(172, 196, 206)));
     painter.setPen(QPen(QColor(0, 0, 0)));
 
@@ -130,9 +144,11 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
 {
     // Load style information.
     if (m_topLevel) {
-        loadOdfAttributes(sceneElement, context, (OdfAdditionalAttributes | OdfMandatories | OdfGeometry));
+        loadOdfAttributes(sceneElement, context,
+                          (OdfAdditionalAttributes | OdfMandatories | OdfGeometry));
     } else {
-        loadOdfAttributes(sceneElement, context, (OdfAdditionalAttributes | OdfMandatories));
+        loadOdfAttributes(sceneElement, context,
+                          (OdfAdditionalAttributes | OdfMandatories));
     }
     Object3D::loadOdf(sceneElement, context);
 
@@ -165,30 +181,49 @@ bool SceneObject::loadOdf(const KoXmlElement &sceneElement, KoShapeLoadingContex
             SceneObject  *scene = new SceneObject(this, false);
             scene->loadOdf(elem, context);
             m_objects.append(scene);
+#if IMPLEMENT_AS_SHAPECONTAINER
+            addShape(scene);
+#endif
+
         }
         else if (elem.localName() == "sphere" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Sphere  *sphere = new Sphere(this);
             sphere->loadOdf(elem, context);
             m_objects.append(sphere);
+#if IMPLEMENT_AS_SHAPECONTAINER
+            addShape(sphere);
+#endif
         }
         else if (elem.localName() == "cube" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Cube  *cube = new Cube(this);
             cube->loadOdf(elem, context);
             m_objects.append(cube);
+#if IMPLEMENT_AS_SHAPECONTAINER
+            addShape(cube);
+#endif
         }
         else if (elem.localName() == "extrude" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Extrude  *extrude = new Extrude(this);
             extrude->loadOdf(elem, context);
             m_objects.append(extrude);
+#if IMPLEMENT_AS_SHAPECONTAINER
+            addShape(extrude);
+#endif
         }
         else if (elem.localName() == "rotate" && elem.namespaceURI() == KoXmlNS::dr3d) {
             Rotate  *rotate = new Rotate(this);
             rotate->loadOdf(elem, context);
             m_objects.append(rotate);
+#if IMPLEMENT_AS_SHAPECONTAINER
+            addShape(rotate);
+#endif
         }
     }
 
     kDebug(31000) << "Objects:" << m_objects.size();
+#if IMPLEMENT_AS_SHAPECONTAINER
+    kDebug(31000) << "Objects in shape container:" << shapeCount();
+#endif
 
     return true;
 }

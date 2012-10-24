@@ -48,8 +48,7 @@
 
 
 Object3D::Object3D(Object3D *parent)
-    : KoShape()
-    , m_parent(parent)
+    : m_parent(parent)
 {
 }
 
@@ -68,14 +67,6 @@ Object3D *Object3D::parent()
     return m_parent;
 }
 
-
-void Object3D::paint(QPainter &painter, const KoViewConverter &converter,
-                     KoShapePaintingContext &context)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-    Q_UNUSED(context);
-}
 
 bool Object3D::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context)
 {

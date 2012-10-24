@@ -34,7 +34,7 @@ class KoXmlElement;
 class KoXmlWriter;
 
 
-class Sphere : public Object3D
+class Sphere : public Object3D, public KoShape
 {
 public:
     explicit Sphere(Object3D *parent);
@@ -57,7 +57,7 @@ private:
     QVector3D  m_size;
 };
 
-class Cube : public Object3D
+class Cube : public Object3D, public KoShape
 {
 public:
     explicit Cube(Object3D *parent);
@@ -80,7 +80,7 @@ private:
     QVector3D  m_maxEdge;
 };
 
-class Extrude : public Object3D
+class Extrude : public Object3D, public KoShape
 {
 public:
     explicit Extrude(Object3D *parent);
@@ -114,12 +114,13 @@ private:
     qreal    m_backScale;
 };
 
-class Rotate : public Object3D
+class Rotate : public Object3D, public KoShape
 {
 public:
     explicit Rotate(Object3D *parent);
     virtual ~Rotate();
 
+    // reimplemented from KoShape
     virtual void paint(QPainter &painter, const KoViewConverter &converter,
                        KoShapePaintingContext &context);
     virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
