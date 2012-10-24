@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 
 // Qt + kde
 #include <QHash>
+#include <QSet>
 #include <QTextBlock>
 
 
@@ -43,18 +44,18 @@ public:
 
     /**
      * Insert a new text range into the manager.
-     * @param object the inline object to insert.
+     * @param object the text range to be inserted.
      */
     void insert(KoTextRange *object);
 
     /**
      * Remove a text range from this manager.
-     * @param the text rage to be removed
+     * @param range the text range to be removed
      */
-    void remove(KoTextRange *object);
+    void remove(KoTextRange *range);
 
     /**
-     * Return the variableManager.
+     * Return the bookmark manager.
      */
     const KoBookmarkManager *bookmarkManager() const;
 
@@ -67,9 +68,8 @@ public:
     QHash<int, KoTextRange *> textRangesChangingWithin(int first, int last, int matchFirst, int matchLast) const;
 
 private:
-    QHash<int, KoTextRange *> m_textRanges;
-    QHash<int, KoTextRange *> m_deletedTextRanges;
-    int m_lastObjectId;
+    QSet<KoTextRange *> m_textRanges;
+    QSet<KoTextRange *> m_deletedTextRanges; // kept around for undo purposes
 
     KoBookmarkManager m_bookmarkManager;
 };

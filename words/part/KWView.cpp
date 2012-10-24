@@ -527,7 +527,7 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
-    KoBookmark *bookmark = manager->retrieveBookmark(name);
+    KoBookmark *bookmark = manager->bookmark(name);
 #if 0
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
@@ -543,16 +543,16 @@ void KWView::selectBookmark()
 #endif
 
     KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    if ((bookmark->positionOnlyMode() == false) && bookmark->cursor().hasSelection()) {
+    if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {
         rm->clearResource(KoText::SelectedTextPosition);
         rm->clearResource(KoText::SelectedTextAnchor);
     }
     if (bookmark->positionOnlyMode()) {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->cursor().position());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->cursor().position());
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeStart());
     } else {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->cursor().selectionStart());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->cursor().selectionEnd());
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeEnd());
     }
 }
 
@@ -561,7 +561,7 @@ void KWView::deleteBookmark(const QString &name)
     Q_UNUSED(name);
 #if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-    KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
+    KoBookmark *bookmark = manager->bookmarkManager()->bookmark(name);
     if (!bookmark || !bookmark->shape())
         return;
 

@@ -929,7 +929,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
     Q_ASSERT(mgr);
     QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(0, handler->selectionEnd(), handler->selectionStart(), -1);
     foreach (const KoTextRange *range, textRanges) {
-        return QPair<int,int>(range->selectionStart(), range->selectionEnd());
+        return QPair<int,int>(range->rangeStart(), range->rangeEnd());
     }
 /*
     // find the text:meta inline objects

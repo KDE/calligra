@@ -90,8 +90,7 @@ void TestKoBookmark::testRoundtrip()
         Q_ASSERT(table);
 
         editor->setPosition(table->lastPosition());
-        mark->cursor().setPosition(mark->cursor().position());
-        mark->cursor().setPosition(editor->position(), QTextCursor::KeepAnchor);
+        mark->setRangeEnd(editor->position());
 
         editor->insertText(lorem);
 

@@ -890,12 +890,11 @@ void TestRdf::testRoundtrip()
         rdfDoc->rememberNewInlineRdfObject(inlineRdf);
 
         Q_ASSERT(rdfDoc->model()->statementCount() > 0);
-        QCOMPARE(mark->selectionStart(), lorem.length() + 1);
+        QCOMPARE(mark->rangeStart(), lorem.length() + 1);
 
         editor->setPosition(table->lastPosition());
         editor->movePosition(QTextCursor::NextCharacter);
-        mark->cursor().setPosition(mark->cursor().position());
-        mark->cursor().setPosition(editor->position(), QTextCursor::KeepAnchor);
+        mark->setRangeEnd(editor->position());
 
         // Check the position of the bookmark
         Q_ASSERT(location->xmlIdList().length() == 1);

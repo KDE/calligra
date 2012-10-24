@@ -84,7 +84,7 @@ QString RdfTest::insertTableWithSemItem(KoTextEditor &editor,
 
     Q_ASSERT(rdfDoc.model()->statementCount() > 0);
 
-    bookmark->cursor().setPosition(table->lastPosition() , QTextCursor::KeepAnchor);
+    bookmark->setRangeEnd(table->lastPosition());
 
     return newId;
 }

@@ -212,8 +212,7 @@ QString KoTextInlineRdf::predicate()
 QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
-        qDebug()<<"findExtent of bookmark based KoTextInlineRdf"<<d->bookmark.data()->selectionStart() << d->bookmark.data()->selectionEnd();
-        return QPair<int, int>(d->bookmark.data()->selectionStart(), d->bookmark.data()->selectionEnd());
+        return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
     }
     if (d->kotextmeta && d->document) {
         KoTextMeta *e = d->kotextmeta.data()->endBookmark();
@@ -240,7 +239,7 @@ QString KoTextInlineRdf::object()
     KoTextDocument textDocument(d->document.data());
 
     if (d->bookmark && d->document) {
-        QString ret  = d->bookmark.data()->cursor().selectedText();
+        QString ret  = d->bookmark.data()->text();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
     else if (d->kotextmeta && d->document) {

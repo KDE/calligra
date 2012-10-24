@@ -73,7 +73,7 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
     }
 }
 
-KoBookmark *KoBookmarkManager::retrieveBookmark(const QString &name) const
+KoBookmark *KoBookmarkManager::bookmark(const QString &name) const
 {
     KoBookmark *bookmark = d->bookmarkHash.value(name);
     return bookmark;

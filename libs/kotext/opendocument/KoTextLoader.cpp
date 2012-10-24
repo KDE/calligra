@@ -1903,10 +1903,9 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
             if (localName == "bookmark-end") {
-                KoBookmark *bookmark = textRangeManager->bookmarkManager()->retrieveBookmark(KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
+                KoBookmark *bookmark = textRangeManager->bookmarkManager()->bookmark(KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
                 if (bookmark) {
-                    bookmark->cursor().setPosition(bookmark->cursor().position());
-                    bookmark->cursor().setPosition(cursor.position(), QTextCursor::KeepAnchor);
+                    bookmark->setRangeEnd(cursor.position());
                 }
             } else {
                 KoBookmark *bookmark = new KoBookmark(cursor);

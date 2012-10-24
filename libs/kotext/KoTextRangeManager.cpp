@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2012 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,8 +25,7 @@
 #include <QTextCursor>
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)
-        : QObject(parent),
-        m_lastObjectId(0)
+        : QObject(parent)
 {
 }
 
@@ -39,20 +39,22 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
         return;
     }
 
-    int id = textRange->id();
-    if (id == -1) {
-        textRange->setId(++m_lastObjectId);
-        textRange->setManager(this);
+
+    if (m_textRanges.contains(textRange)) {
+        return;
     }
-    else {
-        m_deletedTextRanges.remove(id);
+
+    if (m_deletedTextRanges.contains(textRange)) {
+        m_deletedTextRanges.remove(textRange);
+    } else {
+        textRange->setManager(this);
     }
 
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(textRange);
     if (bookmark) {
         m_bookmarkManager.insert(bookmark->name(), bookmark);
     }
-    m_textRanges.insert(textRange->id(), textRange);
+    m_textRanges.insert(textRange);
 }
 
 void KoTextRangeManager::remove(KoTextRange *textRange)
@@ -66,9 +68,8 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
         m_bookmarkManager.remove(bookmark->name());
     }
 
-    int id = textRange->id();
-    m_textRanges.remove(id);
-    m_deletedTextRanges[id] = textRange;
+    m_textRanges.remove(textRange);
+    m_deletedTextRanges.insert(textRange);
 }
 
 const KoBookmarkManager *KoTextRangeManager::bookmarkManager() const
@@ -86,19 +87,19 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(int first
 {
     QHash<int, KoTextRange *> ranges;
     foreach (KoTextRange *range, m_textRanges) {
-        if (!range->hasSelection()) {
-            if (range->cursor().position() >= first && range->cursor().position() <= last) {
-                ranges.insertMulti(range->cursor().position(), range);
+        if (!range->hasRange()) {
+            if (range->rangeStart() >= first && range->rangeStart() <= last) {
+                ranges.insertMulti(range->rangeStart(), range);
             }
         } else {
-            if (range->cursor().selectionStart() >= first && range->cursor().selectionStart() <= last) {
-                if (matchLast == -1 || range->cursor().selectionEnd() <= matchLast) {
-                    ranges.insertMulti(range->cursor().selectionStart(), range);
+            if (range->rangeStart() >= first && range->rangeStart() <= last) {
+                if (matchLast == -1 || range->rangeEnd() <= matchLast) {
+                    ranges.insertMulti(range->rangeStart(), range);
                 }
             }
-            if (range->cursor().selectionEnd() >= first && range->cursor().selectionEnd() <= last) {
-                if (matchFirst == -1 || range->cursor().selectionStart() >= matchFirst) {
-                    ranges.insertMulti(range->cursor().selectionEnd(), range);
+            if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
+                if (matchFirst == -1 || range->rangeStart() >= matchFirst) {
+                    ranges.insertMulti(range->rangeEnd(), range);
                 }
             }
         }

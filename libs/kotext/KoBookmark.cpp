@@ -39,10 +39,10 @@ class KoBookmark::Private
 {
 public:
     Private(const QTextDocument *doc)
-        : document(doc),
-          posInDocument(0) { }
+        : document(doc)
+    {
+    }
     const QTextDocument *document;
-    int posInDocument;
     QString name;
 };
 
@@ -55,18 +55,6 @@ KoBookmark::KoBookmark(const QTextCursor &cursor)
 KoBookmark::~KoBookmark()
 {
     delete d;
-}
-
-void KoBookmark::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
-{
-    Q_UNUSED(format);
-    d->document = document;
-    d->posInDocument = posInDocument;
-}
-
-void KoBookmark::paint(QPainter &, QPaintDevice *, const QTextDocument *, const QRectF &)
-{
-    // nothing to paint.
 }
 
 void KoBookmark::setName(const QString &name)
@@ -109,7 +97,8 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
             }
         }
         else {
-            // something pretty weird going on...
+            // NOTE: "bookmark-end" is handled in KoTextLoader
+            // if we ever come here then something pretty weird is going on...
             return false;
         }
         return true;
@@ -121,18 +110,18 @@ void KoBookmark::saveOdf(KoShapeSavingContext &context, int position) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
-    if (!hasSelection()) {
+    if (!hasRange()) {
         writer->startElement("text:bookmark", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();
-    } else if (position == selectionStart()) {
+    } else if (position == rangeStart()) {
         writer->startElement("text:bookmark-start", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         if (inlineRdf()) {
             inlineRdf()->saveOdf(context, writer);
         }
         writer->endElement();
-    } else if (position == selectionEnd()) {
+    } else if (position == rangeEnd()) {
         writer->startElement("text:bookmark-end", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();
@@ -146,7 +135,7 @@ QString KoBookmark::createUniqueBookmarkName(const KoBookmarkManager* bmm, QStri
     int uniqID = 0;
 
     while (true) {
-        if (bmm->retrieveBookmark(ret)) {
+        if (bmm->bookmark(ret)) {
             ret = QString("%1_%2").arg(bookmarkName).arg(++uniqID);
         } else {
             if (isEndMarker) {

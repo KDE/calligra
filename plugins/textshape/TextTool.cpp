@@ -1508,7 +1508,7 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     // Is there an anchor here ?
     if ((event->modifiers() & Qt::ControlModifier) && !m_textEditor.data()->hasSelection()) {
         if (pointedAt.bookmark) {
-            m_textEditor.data()->setPosition(pointedAt.bookmark->cursor().position());
+            m_textEditor.data()->setPosition(pointedAt.bookmark->rangeStart());
             ensureCursorVisible();
             event->accept();
             return;

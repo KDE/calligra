@@ -70,50 +70,25 @@ public:
 
     /**
      * Save the part of this text range corresponding to position as ODF
+     * This may save a beginning tag, ending tag, or nothing at all
      * @param context the context for saving.
      * @param position a position in the qtextdocument we are currently saving for.
      */
     virtual void saveOdf(KoShapeSavingContext &context, int position) const = 0;
 
-    /**
-     * Update position of the inline object.
-     * This is called each time the paragraph this inline object is in is re-layouted giving you the opportunity
-     * to reposition your object based on the new information.
-     * @param document the text document this inline object is operating on.
-     * @param posInDocument the character position in the document (param document) this inline object is at.
-     * @param format the character format for the inline object.
-     */
-    virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) = 0;
-
-    /**
-     * Paint the inline-object-base using the provided painter within the rectangle specified by rect.
-     * @param painter the painting object to paint on.  Note that unline many places in calligra painting
-     * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
-     * @param document the text document this inline object is operating on.
-     * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
-     *    will give varous problems with regards to repainting issues.
-     */
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect) = 0;
-
-
-    QTextCursor &cursor();
-
     bool positionOnlyMode() const;
     void setPositionOnlyMode(bool m);
 
-    bool hasSelection() const;
-    int selectionStart() const;
-    int selectionEnd() const;
+    bool hasRange() const;
+    int rangeStart() const;
+    int rangeEnd() const;
 
-    /// return the inline-object Id that is assigned for this object.
-    int id() const;
+    void setRangeEnd(int position);
 
-    /// Set the inline-object Id that is assigned for this object by the KoTextRangeManager.
-    void setId(int id);
+    QString text() const;
 
     /**
-     * An text range might have some Rdf metadata associated with it
+     * A text range might have some Rdf metadata associated with it
      * in content.xml
      * Ownership of the rdf object is taken by the text range, and you should not
      * delete it.
