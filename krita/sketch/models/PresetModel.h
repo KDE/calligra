@@ -42,6 +42,8 @@ public:
     QObject* view() const;
     void setView(QObject* newView);
 
+    Q_INVOKABLE int nameToIndex(QString presetName) const;
+
 Q_SIGNALS:
     void viewChanged();
 

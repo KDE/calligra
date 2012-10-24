@@ -154,6 +154,21 @@ void PresetModel::setView(QObject* newView)
     emit viewChanged();
 }
 
+int PresetModel::nameToIndex(QString presetName) const
+{
+    int index = 0;
+    QList<KisPaintOpPreset*> resources = d->rserver->resources();
+    for(int i = 0; i < resources.count(); ++i)
+    {
+        if(resources.at(i)->name() == presetName || resources.at(i)->name().replace(QLatin1String("_"), QLatin1String(" ")) == presetName)
+        {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
 void PresetModel::activatePreset(int index)
 {
     if ( !d->view )
