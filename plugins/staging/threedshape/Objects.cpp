@@ -368,7 +368,7 @@ void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& conte
         bool ok;
         int hs = dummy.toInt(&ok);
         if (ok) {
-            m_verticalSegments = hs;
+            m_horizontalSegments = hs;
         }
     }
     if (styleStack.hasProperty(KoXmlNS::dr3d, "vertical-segments")) {
@@ -398,6 +398,7 @@ void Rotate::loadStyle(const KoXmlElement& element, KoShapeLoadingContext& conte
         m_closeBack = (dummy == "true");
     }
 
+    // FIXME: Note that this can be a percentage (our test file has "80%").
     if (styleStack.hasProperty(KoXmlNS::dr3d, "back-scale")) {
         dummy = styleStack.property(KoXmlNS::dr3d, "back-scale");
         bool ok;
