@@ -60,7 +60,7 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
     m_rectCrop = QRect(0, 0, 0, 0);
     m_handleSize = 13;
     m_haveCropSelection = false;
-
+    m_cropTypeSelectable = false;
     m_cropType = ImageCropType;
     m_cropX = 0;
     m_cropY = 0;
