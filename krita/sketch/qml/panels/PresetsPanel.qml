@@ -96,9 +96,11 @@ Panel {
     Connections {
         target: sketchView;
         onLoadingFinished: {
-            presetsModel.activatePreset(0);
-            peekViewGrid.currentIndex = 0;
-            fullViewGrid.currentIndex = 0;
+            var index = presetsModel.nameToIndex("Basic_ink_10");
+            console.debug("New preset: " + index);
+            presetsModel.activatePreset(index);
+            peekViewGrid.currentIndex = index;
+            fullViewGrid.currentIndex = index;
         }
     }
 
