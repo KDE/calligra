@@ -150,7 +150,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     connect(d->timer, SIGNAL(timeout()), this, SLOT(resetDocumentPosition()));
 
     d->loadedTimer = new QTimer(this);
-    d->timer->setSingleShot(true);
+    d->loadedTimer->setSingleShot(true);
     connect(d->loadedTimer, SIGNAL(timeout()), SIGNAL(loadingFinished()));
 }
 
