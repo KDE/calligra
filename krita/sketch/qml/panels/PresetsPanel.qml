@@ -96,8 +96,7 @@ Panel {
     Connections {
         target: sketchView;
         onLoadingFinished: {
-            var index = presetsModel.nameToIndex("Basic_ink_10");
-            console.debug("New preset: " + index);
+            var index = presetsModel.nameToIndex("Pencil_HB");
             presetsModel.activatePreset(index);
             peekViewGrid.currentIndex = index;
             fullViewGrid.currentIndex = index;
