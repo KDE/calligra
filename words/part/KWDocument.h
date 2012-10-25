@@ -44,6 +44,7 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoTextAnchor;
@@ -161,6 +162,9 @@ public:
 
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
+
+    /// return the textRangeManager for this document.
+    KoTextRangeManager *textRangeManager() const;
 
     KWApplicationConfig &config() {
         return m_config;
