@@ -246,20 +246,23 @@ void KisInputManager::Private::setupActions()
     shortcut = createShortcut(action, KisZoomAction::ZoomToWidthShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_3);
 
-    action = new KisShowPaletteAction(q);
-    actions.append(action);
 
-    shortcut = createShortcut(action, 0);
-    shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
+    if (qApp->applicationName() == "krita") {
+        action = new KisShowPaletteAction(q);
+        actions.append(action);
 
-    shortcut = createShortcut(action, 0);
-    shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
+        shortcut = createShortcut(action, 0);
+        shortcut->setButtons(QList<Qt::MouseButton>() << Qt::RightButton);
 
-    action = new KisGestureAction(q);
-    actions.append(action);
+        shortcut = createShortcut(action, 0);
+        shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
 
-    shortcut = createShortcut(action, 0);
-    shortcut->setGesture(true);
+        action = new KisGestureAction(q);
+        actions.append(action);
+
+        shortcut = createShortcut(action, 0);
+        shortcut->setGesture(true);
+    }
 }
 
 KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)
