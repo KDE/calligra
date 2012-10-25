@@ -219,6 +219,8 @@ void LayerModel::setView(QObject *newView)
         d->nodeModel->setDummiesFacade(kritaDummiesFacade, d->image);
 
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
+        connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));
+        connect(d->image, SIGNAL(sigImageUpdated(QRect)), SLOT(imageChanged()));
 
         // cold start
         currentNodeChanged(d->nodeManager->activeNode());
@@ -287,8 +289,9 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             else if(dynamic_cast<const KisAdjustmentLayer*>(node.constData()))
                 data = QLatin1String("../images/svg/icon-layer_filter-red.svg");
             else
-                data = QString("image://layerthumb%1/%2").arg(d->thumbProvider->layerID()).arg(index.row());
-            //data = "image://color/0.9,0.9,0.9,1.0";
+                // We add the currentMSecsSinceEpoch to ensure we force an update (even with cache turned
+                // off, we still apparently get some caching behaviour on delegates in QML)
+                data = QString("image://layerthumb%1/%2/%3").arg(d->thumbProvider->layerID()).arg(index.row()).arg(QDateTime::currentMSecsSinceEpoch());
             break;
         case NameRole:
             data = node->name();
@@ -549,7 +552,10 @@ void LayerModel::setVisible(int index, bool newVisible)
 
 QImage LayerModel::layerThumbnail(QString layerID) const
 {
-    int index = layerID.toInt();
+    // So, yeah, this is a complete cheatery hack. However, it ensures
+    // we actually get updates when we want them (every time the image is supposed
+    // to be changed). Had hoped we could avoid it, but apparently not.
+    int index = layerID.section(QChar('/'), 0, 1).toInt();
     QImage thumb;
     if(index > -1 && index < d->layers.count())
     {
@@ -651,6 +657,25 @@ void LayerModel::source_modelReset()
 void LayerModel::notifyImageDeleted()
 {
     //setView(0);
+}
+
+void LayerModel::nodeChanged(KisNodeSP node)
+{
+    QModelIndex index = createIndex(d->layers.indexOf(node), 0);
+    dataChanged(index, index);
+}
+
+void LayerModel::imageChanged()
+{
+    // This is needed to avoid an off-by-one timing issue
+    QTimer::singleShot(0, this, SLOT(imageHasChanged()));
+}
+
+void LayerModel::imageHasChanged()
+{
+    QModelIndex top = createIndex(0, 0);
+    QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
+    dataChanged(top, bottom);
 }
 
 void LayerModel::emitActiveChanges()

@@ -150,6 +150,9 @@ private slots:
     void source_modelReset();
     void currentNodeChanged(KisNodeSP newActiveNode);
     void notifyImageDeleted();
+    void nodeChanged(KisNodeSP node);
+    void imageChanged();
+    void imageHasChanged();
     void updateActiveLayerWithNewFilterConfig();
 
 private:
