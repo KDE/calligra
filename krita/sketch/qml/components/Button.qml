@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
 Item {
     id: base;
@@ -78,6 +79,17 @@ Item {
         }
     }
 
+    SimpleTouchArea {
+        anchors.fill: parent;
+        onTouched: {
+            if (enabled) {
+                base.clicked();
+                if( base.checkable ) {
+                    base.checked = !base.checked;
+                }
+            }
+        }
+    }
     MouseArea {
         id: mouse;
         anchors.fill: parent;
