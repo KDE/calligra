@@ -85,6 +85,7 @@ if(KRITASKETCH_USE_OPENGL)
 endif(KRITASKETCH_USE_OPENGL)
 
 #kde4_add_app_icon(kritasketch_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/kritasketch.png")
+kde4_add_app_icon(krita_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
 kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 
