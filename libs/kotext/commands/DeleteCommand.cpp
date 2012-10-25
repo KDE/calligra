@@ -171,42 +171,6 @@ void DeleteCommand::doDelete()
     caret->setCharFormat(charFormat);
 }
 
-void DeleteCommand::deleteBookmark(KoInlineObject *object)
-{/*FIXME
-    KoBookmark *bookmark = dynamic_cast<KoBookmark*>(object);
-    if (bookmark) {
-        KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(m_document).inlineTextObjectManager();
-        KoBookmarkManager *bookmarkManager = inlineObjectManager->bookmarkManager();
-
-        KoBookmark::BookmarkType type = bookmark->type();
-        if (type == KoBookmark::StartBookmark) {
-            KoBookmark *endmark = bookmark->endBookmark();
-            Q_ASSERT(endmark);
-            if (endmark && !m_invalidInlineObjects.contains(endmark)) {
-                m_unmatchedBookmarks << bookmark;
-            } else {
-                //don't remove it yet as we need to find it below
-                m_bookmarksToRemove << bookmark;
-            }
-        } else if (type == KoBookmark::EndBookmark) {
-            KoBookmark *startmark = bookmarkManager->retrieveBookmark(bookmark->name());
-            Q_ASSERT(startmark);
-            if (startmark && !m_invalidInlineObjects.contains(startmark)) {
-                m_unmatchedBookmarks << bookmark;
-            } else {
-                inlineObjectManager->removeInlineObject(object); // doesn't remove the character
-            }
-        } else {
-            // single bookmark - can be removed right away
-            inlineObjectManager->removeInlineObject(object); // doesn't remove the character
-        }
-        // Note: Don't delete the object. Removed objects are stored by the bookmark manager
-        // for future use. Also, start bookmarks might still have a reference to the end bookmark
-        // that is being removed.
-    }
-    */
-}
-
 void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
 {
     if (object) {

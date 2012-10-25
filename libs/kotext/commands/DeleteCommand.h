@@ -65,7 +65,6 @@ private:
     KoShapeController *m_shapeController;
 
     QSet<KoInlineObject *> m_invalidInlineObjects;
-    QSet<KoInlineObject *> m_bookmarksToRemove;
     bool m_first;
     bool m_undone;
     DeleteMode m_mode;
@@ -75,7 +74,6 @@ private:
     bool m_mergePossible;
 
     void doDelete();
-    void deleteBookmark(KoInlineObject *object);
     void deleteTextAnchor(KoInlineObject *object);
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();
