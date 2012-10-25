@@ -130,6 +130,28 @@ Item {
                     color: base.panelColor;
                 }
 
+                DnD.DragArea {
+                    anchors.fill: parent;
+                    delegate: base.dragDelegate;
+                    source: base;
+                    enabled: base.state === "full";
+
+                    onDragStarted: {
+                        handle.opacity = 1;
+                        handle.dragStarted();
+                    }
+                    onDrop: {
+                        if(action == Qt.IgnoreAction) {
+                            handle.opacity = 0;
+                        }
+                        handle.drop(action);
+                    }
+
+                    MouseArea {
+
+                    }
+                }
+
                 Flow {
                     id: actionsLayout;
                     anchors.fill: parent;
