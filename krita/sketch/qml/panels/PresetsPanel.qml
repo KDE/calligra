@@ -168,10 +168,13 @@ Panel {
                 }
                 Label {
                     anchors {
-                        verticalCenter: parent.verticalCenter;
+                        top: parent.top;
                         left: presetThumbContainer.right;
                         right: parent.right;
+                        bottom: parent.bottom;
                     }
+                    wrapMode: Text.Wrap;
+                    elide: Text.ElideNone;
                     text: model.text;
                 }
                 MouseArea {
