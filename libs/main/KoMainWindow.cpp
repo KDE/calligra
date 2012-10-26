@@ -87,6 +87,8 @@
 #include <QDesktopWidget>
 #include <QPrintPreviewDialog>
 
+#include "thememanager.h"
+
 #include "calligraversion.h"
 
 class KoPartManager : public KParts::PartManager
@@ -144,6 +146,7 @@ public:
 #ifdef HAVE_KACTIVITIES
         activityResource = 0;
 #endif
+        themeManager = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -228,6 +231,8 @@ public:
 #ifdef HAVE_KACTIVITIES
     KActivities::ResourceInstance *activityResource;
 #endif
+
+    Digikam::ThemeManager *themeManager;
 
 };
 
@@ -315,6 +320,14 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->sendFileAction->setEnabled(false);
     d->exportPdf->setEnabled(false);
     d->closeFile->setEnabled(false);
+
+    // populate theme menu
+    d->themeManager = new Digikam::ThemeManager(this);
+    KConfigGroup group(KGlobal::config(), "theme");
+    d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    d->themeManager->registerThemeActions(actionCollection());
+    d->themeManager->setCurrentTheme(group.readEntry("Theme",
+                                                     d->themeManager->defaultThemeName()));
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
@@ -404,6 +417,11 @@ KoMainWindow::~KoMainWindow()
     cfg.writeEntry("ko_x", frameGeometry().x());
     cfg.writeEntry("ko_y", frameGeometry().y());
 #endif
+    {
+        KConfigGroup group(KGlobal::config(), "theme");
+        group.writeEntry("Theme", d->themeManager->currentThemeName());
+    }
+
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
     d->dockerManager = 0;

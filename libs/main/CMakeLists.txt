@@ -92,6 +92,8 @@ set(komain_LIB_SRCS
     KoFindStyle.cpp
 
     KoPart.cpp
+
+    thememanager.cpp
 )
 
 if (QT_QTDBUS_FOUND)
