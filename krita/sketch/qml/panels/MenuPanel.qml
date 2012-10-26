@@ -114,6 +114,7 @@ Item {
                 shadow: false
                 image: "../images/svg/icon-undo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
+                enabled: sketchView.canUndo;
                 onClicked: base.buttonClicked( "undo" );
             }
             Button {
@@ -124,6 +125,7 @@ Item {
                 shadow: false
                 image: "../images/svg/icon-redo.svg"
                 highlightColor: Constants.Theme.HighlightColor;
+                enabled: sketchView.canRedo;
                 onClicked: base.buttonClicked( "redo" );
             }
             Item {
