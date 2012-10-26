@@ -531,6 +531,7 @@ void LayerModel::setOpacity(int index, float newOpacity)
     if(index > -1 && index < d->layers.count())
     {
         d->layers[index]->setOpacity(newOpacity);
+        d->layers[index]->setDirty();
         QModelIndex idx = createIndex(index, 0);
         dataChanged(idx, idx);
     }
@@ -750,6 +751,7 @@ int LayerModel::activeOpacity() const
 void LayerModel::setActiveOpacity(int newOpacity)
 {
     d->activeNode->setOpacity(newOpacity);
+    d->activeNode->setDirty();
     emit activeOpacityChanged();
 }
 
@@ -797,6 +799,7 @@ void LayerModel::setActiveAChannelActive(bool newActive)
     if(layer)
     {
         layer->disableAlphaChannel(!newActive);
+        layer->setDirty();
         emit activeAChannelActiveChanged();
     }
 }
@@ -839,6 +842,7 @@ bool getLockedChannel(KisNodeSP node, int channelIndex)
     if(layer)
     {
         QBitArray flags = layer->channelLockFlags();
+        flags = flags.isEmpty() ? layer->colorSpace()->channelFlags(true, true) : flags;
         flag = flags[channelIndex];
     }
     return flag;
@@ -850,8 +854,9 @@ void setChannelActive(KisNodeSP node, int channelIndex, bool newActive)
     if(layer)
     {
         QBitArray flags = layer->channelFlags();
-        flags[channelIndex] = newActive;
+        flags.setBit(channelIndex, newActive);
         layer->setChannelFlags(flags);
+        layer->setDirty();
     }
 }
 
@@ -861,7 +866,8 @@ void setChannelLocked(KisNodeSP node, int channelIndex, bool newLocked)
     if(layer)
     {
         QBitArray flags = layer->channelLockFlags();
-        flags[channelIndex] = newLocked;
+        flags = flags.isEmpty() ? layer->colorSpace()->channelFlags(true, true) : flags;
+        flags.setBit(channelIndex, newLocked);
         layer->setChannelLockFlags(flags);
     }
 }
@@ -879,7 +885,7 @@ void LayerModel::setActiveBChannelActive(bool newActive)
 
 bool LayerModel::activeBChannelLocked() const
 {
-    return getActiveChannel(d->activeNode, 2);
+    return getLockedChannel(d->activeNode, 2);
 }
 
 void LayerModel::setActiveBChannelLocked(bool newLocked)
@@ -896,6 +902,7 @@ bool LayerModel::activeGChannelActive() const
 void LayerModel::setActiveGChannelActive(bool newActive)
 {
     setChannelActive(d->activeNode, 1, newActive);
+    emit activeGChannelActiveChanged();
 }
 
 bool LayerModel::activeGChannelLocked() const
