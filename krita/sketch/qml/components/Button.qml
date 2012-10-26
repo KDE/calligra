@@ -49,7 +49,7 @@ Item {
         id: fill;
         anchors.fill: parent;
         anchors.margins: 0;
-        color: base.highlight && mouse.pressed ? base.highlightColor : "transparent";
+        color: base.highlight && mouse.pressed && base.enabled ? base.highlightColor : "transparent";
         visible: true
 
         Image {
@@ -58,6 +58,7 @@ Item {
             anchors.margins: 8;
             fillMode: Image.PreserveAspectFit;
             smooth: true;
+            opacity: base.enabled ? 1 : 0.7;
 
             sourceSize.width: width > height ? height : width;
             sourceSize.height: width > height ? height : width;
@@ -70,19 +71,20 @@ Item {
             width: parent.width;
             horizontalAlignment: Text.AlignHCenter;
             elide: Text.ElideMiddle;
+            opacity: base.enabled ? 1 : 0.7;
         }
-        Rectangle {
-            id: enabledVisualiser;
-            opacity: enabled ? 0 : 0.7;
-            anchors.fill: parent;
-            color: "black";
-        }
+//         Rectangle {
+//             id: enabledVisualiser;
+//             opacity: base.enabled ? 0 : 0.7;
+//             anchors.fill: parent;
+//             color: "black";
+//         }
     }
 
     SimpleTouchArea {
         anchors.fill: parent;
         onTouched: {
-            if (enabled) {
+            if (base.enabled) {
                 base.clicked();
                 if( base.checkable ) {
                     base.checked = !base.checked;
@@ -94,7 +96,7 @@ Item {
         id: mouse;
         anchors.fill: parent;
         onClicked: {
-            if (enabled) {
+            if (base.enabled) {
                 base.clicked();
                 if( base.checkable ) {
                     base.checked = !base.checked;
@@ -105,7 +107,7 @@ Item {
 
     states: State {
         name: "pressed";
-        when: mouse.pressed || base.checked;
+        when: (mouse.pressed || base.checked) && enabled;
 
 
         PropertyChanges {
