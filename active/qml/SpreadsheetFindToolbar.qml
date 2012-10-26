@@ -50,7 +50,7 @@ Item {
             id: findPreviousButton
             height: parent.height
             width: 128
-            text: "Find Previous"
+            text: i18n("Find Previous")
 
             onClicked: findToolbarRootItem.documentController.documentHandler.findPrevious()
         }
@@ -59,7 +59,7 @@ Item {
             id: findNextButton
             height: parent.height
             width: 128
-            text: "Find Next"
+            text: i18n("Find Next")
 
             onClicked: findToolbarRootItem.documentController.documentHandler.findNext()
         }
