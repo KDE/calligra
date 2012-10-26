@@ -29,6 +29,9 @@ class KisSketchView : public QDeclarativeItem
     Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
     Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
 
+    Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged);
+    Q_PROPERTY(bool canRedo READ canRedo NOTIFY canRedoChanged);
+
 public:
     KisSketchView(QDeclarativeItem* parent = 0);
     virtual ~KisSketchView();
@@ -46,6 +49,9 @@ public:
     void setFile(const QString &file);
 
     void showFloatingMessage(const QString message, const QIcon& icon);
+
+    bool canUndo() const;
+    bool canRedo() const;
 public Q_SLOTS:
     void undo();
     void redo();
@@ -60,6 +66,8 @@ Q_SIGNALS:
     void floatingMessageRequested(QString message, QString iconName);
     void interactionStarted();
     void loadingFinished();
+    void canUndoChanged();
+    void canRedoChanged();
 
 protected:
     virtual bool sceneEvent(QEvent* event);

@@ -91,6 +91,8 @@ public:
         , view(0)
         , canvas(0)
         , canvasWidget(0)
+        , undoAction(0)
+        , redoAction(0)
     { }
     ~Private() { }
 
@@ -125,6 +127,9 @@ public:
     QTimer *timer;
 
     QTimer *loadedTimer;
+
+    QAction* undoAction;
+    QAction* redoAction;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -260,6 +265,14 @@ void KisSketchView::setFile(const QString& file)
         d->canvas = d->view->canvasBase();
 
         d->undoStack = d->doc->undoStack();
+        if(d->undoAction)
+            d->undoAction->disconnect(this);
+        d->undoAction = d->view->actionCollection()->action("edit_undo");
+        connect(d->undoAction, SIGNAL(changed()), this, SIGNAL(canUndoChanged()));
+        if(d->redoAction)
+            d->redoAction->disconnect(this);
+        d->redoAction = d->view->actionCollection()->action("edit_redo");
+        connect(d->redoAction, SIGNAL(changed()), this, SIGNAL(canRedoChanged()));
 
         KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
@@ -394,14 +407,28 @@ void KisSketchView::componentComplete()
 #endif
 }
 
+bool KisSketchView::canUndo() const
+{
+    if(d->undoAction)
+        return d->undoAction->isEnabled();
+    return false;
+}
+
+bool KisSketchView::canRedo() const
+{
+    if(d->redoAction)
+        return d->redoAction->isEnabled();
+    return false;
+}
+
 void KisSketchView::undo()
 {
-    d->view->actionCollection()->action("edit_undo")->trigger();
+    d->undoAction->trigger();
 }
 
 void KisSketchView::redo()
 {
-    d->view->actionCollection()->action("edit_redo")->trigger();
+    d->redoAction->trigger();
 }
 
 void KisSketchView::save()
