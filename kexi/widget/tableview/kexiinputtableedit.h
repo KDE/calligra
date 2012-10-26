@@ -109,7 +109,6 @@ protected:
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
     QString m_decsym; //! decimal symbol
-    QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
     KLineEdit *m_lineedit;
 
 signals:

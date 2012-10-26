@@ -689,6 +689,9 @@ protected:
     /*! Implementation for KexiDataItemChangesListener. */
     virtual bool cursorAtNewRow() const;
 
+    /*! Implementation for KexiDataItemChangesListener. */
+    virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
+
     virtual int horizontalHeaderHeight() const;
 
     QWidget* navPanelWidget() const;

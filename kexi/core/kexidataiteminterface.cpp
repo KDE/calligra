@@ -38,6 +38,7 @@ KexiDataItemInterface::KexiDataItemInterface()
         , m_hasFocusableWidget(true)
         , m_disable_signalValueChanged(false)
         , m_acceptEditorAfterDeleteContents(false)
+        , m_lengthExceededEmittedAtPreviousChange(false)
 {
 }
 
@@ -79,6 +80,25 @@ void KexiDataItemInterface::signalValueChanged()
     if (m_listener) {
         beforeSignalValueChanged();
         m_listener->valueChanged(this);
+    }
+}
+
+void KexiDataItemInterface::signalLengthExceeded(bool lengthExceeded)
+{
+    if (m_listener) {
+        m_listener->lengthExceeded(this, lengthExceeded);
+    }
+}
+
+void KexiDataItemInterface::emitLengthExceededIfNeeded(bool lengthExceeded)
+{
+    if (lengthExceeded && !m_lengthExceededEmittedAtPreviousChange) {
+        m_lengthExceededEmittedAtPreviousChange = true;
+        signalLengthExceeded(true);
+    }
+    else if (!lengthExceeded && m_lengthExceededEmittedAtPreviousChange) {
+        m_lengthExceededEmittedAtPreviousChange = false;
+        signalLengthExceeded(false);
     }
 }
 

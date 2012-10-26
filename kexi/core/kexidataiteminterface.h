@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,6 +48,9 @@ public:
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const = 0;
+
+    /*! Implement this to react when length of data has been exceeded. */
+    virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded) = 0;
 };
 
 //! An interface for declaring widgets to be data-aware.
@@ -256,6 +259,12 @@ protected:
      Used in KexiDBComboBox. */
     virtual void beforeSignalValueChanged() {}
 
+    /*! Used to indicate that length of data has been exceeded. */
+    virtual void signalLengthExceeded(bool lengthExceeded);
+
+    /*! Emits request for showing or hiding the "Length exceeded" warning, if needed. */
+    void emitLengthExceededIfNeeded(bool lengthExceeded);
+
     KexiDataItemChangesListener* listener();
 
 //moved to KexiFormDataItemInterface: QString m_dataSource;
@@ -269,6 +278,7 @@ protected:
     bool m_hasFocusableWidget;
     bool m_disable_signalValueChanged;
     bool m_acceptEditorAfterDeleteContents;
+    bool m_lengthExceededEmittedAtPreviousChange;
 };
 
 #endif

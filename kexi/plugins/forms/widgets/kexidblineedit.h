@@ -100,7 +100,7 @@ public:
 
     /*! Handles action having standard name \a actionName.
      Action could be: "edit_copy", "edit_paste", etc.
-     Reimplemented after KexiDataItemChangesListener. */
+     Reimplemented after KexiDataItemInterface. */
     virtual void handleAction(const QString& actionName);
 
     /*! Called by top-level form on key press event to consume widget-specific shortcuts. */
@@ -133,6 +133,8 @@ public slots:
 
 protected slots:
     void slotTextChanged(const QString&);
+
+    void slotTextEdited(const QString& text);
 
     void slotCursorPositionChanged(int oldPos, int newPos);
 
