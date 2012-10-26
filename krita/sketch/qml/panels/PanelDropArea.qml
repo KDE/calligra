@@ -31,7 +31,7 @@ DnD.DropArea {
     onDrop: {
         var item = event.mimeData.source;
         if(children.length > 0) {
-            children[0].state = "collapse";
+            children[0].state = "collapsed";
             children[0].parent = item.lastArea;
         }
         item.parent = base;
@@ -41,6 +41,7 @@ DnD.DropArea {
         if(children.length > 0) {
             var item = children[0];
             item.state = base.state;
+            item.lastArea = base;
             item.x = 0;
             item.y = 0;
             item.width = width;
