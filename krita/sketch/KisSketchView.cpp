@@ -80,6 +80,7 @@
 
 #include "KisSketchCanvas.h"
 #include "Settings.h"
+#include "cpuid.h"
 
 class KisSketchView::Private
 {
@@ -93,6 +94,7 @@ public:
         , canvasWidget(0)
         , undoAction(0)
         , redoAction(0)
+        , useOpenGL(isUltraBook())
     { }
     ~Private() { }
 
@@ -107,8 +109,7 @@ public:
     KisCanvas2* canvas;
     KUndo2Stack* undoStack;
 
-    //KisSketchCanvas *canvasWidget;
-    KisQPainterCanvas *canvasWidget;
+    QWidget *canvasWidget;
 
     QString file;
 
@@ -127,9 +128,10 @@ public:
     QTimer *timer;
 
     QTimer *loadedTimer;
-
     QAction* undoAction;
     QAction* redoAction;
+    bool useOpenGL;
+
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -146,9 +148,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     KoZoomMode::setMinimumZoom(0.1);
     KoZoomMode::setMaximumZoom(16.0);
 
-#ifdef KRITASKETCH_USE_OPENGL
-    KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
-#endif
+    if (d->useOpenGL) {
+        KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
+    }
 
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
@@ -162,9 +164,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 KisSketchView::~KisSketchView()
 {
     if(d->doc) {
-#ifdef KRITASKETCH_USE_OPENGL
-        d->canvasWidget->stopRendering();
-#endif
+        if (d->useOpenGL) {
+            qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
+        }
 
         d->part->closeUrl(false);
         delete d->doc;
@@ -208,9 +210,10 @@ void KisSketchView::setFile(const QString& file)
         emit fileChanged();
 
         if(d->doc) {
-#ifdef KRITASKETCH_USE_OPENGL
-            d->canvasWidget->stopRendering();
-#endif
+            if (d->useOpenGL) {
+                qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
+            }
+
             KisView2 *oldView = d->view;
             disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
             d->view = 0;
@@ -276,14 +279,15 @@ void KisSketchView::setFile(const QString& file)
 
         KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
 
-#ifdef KRITASKETCH_USE_OPENGL
-        d->canvasWidget = qobject_cast<KisSketchCanvas*>(d->canvas->canvasWidget());
-        d->canvasWidget->initialize();
-        connect(d->canvasWidget, SIGNAL(renderFinished()), SLOT(update()));
-#else
-        d->canvasWidget = qobject_cast<KisQPainterCanvas*>(d->canvas->canvasWidget());
-        connect(d->canvasWidget, SIGNAL(updated()), SLOT(update()));
-#endif
+        if (d->useOpenGL) {
+            d->canvasWidget = d->canvas->canvasWidget();
+            qobject_cast<KisSketchCanvas*>(d->canvasWidget)->initialize();
+            connect(qobject_cast<KisSketchCanvas*>(d->canvasWidget), SIGNAL(renderFinished()), SLOT(update()));
+        }
+        else {
+            d->canvasWidget = d->canvas->canvasWidget();
+            connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
+        }
 
         static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
         d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
@@ -314,97 +318,98 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
     }
 
-    d->canvasWidget->render(painter);
+    if (d->useOpenGL) {
+        qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
-#ifdef KRITASKETCH_USE_OPENGL
-    qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
+        d->shader->bind();
+        d->vertexBuffer->bind();
+        d->indexBuffer->bind();
 
-    d->shader->bind();
-    d->vertexBuffer->bind();
-    d->indexBuffer->bind();
+        QMatrix4x4 model;
+        model.scale(1.0f, -1.0f);
+        d->shader->setUniformValue(d->modelMatrixLocation, model);
 
-    QMatrix4x4 model;
-    model.scale(1.0f, -1.0f);
-    d->shader->setUniformValue(d->modelMatrixLocation, model);
+        QMatrix4x4 view;
+        d->shader->setUniformValue(d->viewMatrixLocation, view);
 
-    QMatrix4x4 view;
-    d->shader->setUniformValue(d->viewMatrixLocation, view);
+        QMatrix4x4 projection;
+        projection.ortho(0, 1, 0, 1, -1, 1);
+        d->shader->setUniformValue(d->projectionMatrixLocation, projection.transposed());
 
-    QMatrix4x4 projection;
-    projection.ortho(0, 1, 0, 1, -1, 1);
-    d->shader->setUniformValue(d->projectionMatrixLocation, projection.transposed());
+        glBindTexture(GL_TEXTURE_2D, qobject_cast<KisSketchCanvas*>(d->canvasWidget)->texture());
+        d->shader->setUniformValue(d->texture0Location, 0);
 
-    glBindTexture(GL_TEXTURE_2D, d->canvasWidget->texture());
-    d->shader->setUniformValue(d->texture0Location, 0);
+        d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
 
-    d->shader->setUniformValue(d->textureScaleLocation, QVector2D(1.0f, 1.0f));
+        d->shader->setAttributeBuffer(d->vertexAttributeLocation, GL_FLOAT, 0, 3);
+        d->shader->enableAttributeArray(d->vertexAttributeLocation);
+        d->shader->setAttributeBuffer(d->uv0AttributeLocation, GL_FLOAT, 12 * sizeof(float), 2);
+        d->shader->enableAttributeArray(d->uv0AttributeLocation);
 
-    d->shader->setAttributeBuffer(d->vertexAttributeLocation, GL_FLOAT, 0, 3);
-    d->shader->enableAttributeArray(d->vertexAttributeLocation);
-    d->shader->setAttributeBuffer(d->uv0AttributeLocation, GL_FLOAT, 12 * sizeof(float), 2);
-    d->shader->enableAttributeArray(d->uv0AttributeLocation);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        d->shader->disableAttributeArray(d->uv0AttributeLocation);
+        d->shader->disableAttributeArray(d->vertexAttributeLocation);
 
-    d->shader->disableAttributeArray(d->uv0AttributeLocation);
-    d->shader->disableAttributeArray(d->vertexAttributeLocation);
-
-    d->indexBuffer->release();
-    d->vertexBuffer->release();
-    d->shader->release();
-#endif
+        d->indexBuffer->release();
+        d->vertexBuffer->release();
+        d->shader->release();
+    }
+    else {
+        d->canvasWidget->render(painter);
+    }
 }
 
 void KisSketchView::componentComplete()
 {
-#ifdef KRITASKETCH_USE_OPENGL
-    qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
+    if (d->useOpenGL) {
+        qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
-    d->shader = new QGLShaderProgram(this);
-    d->shader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
-    d->shader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.frag"));
-    d->shader->link();
+        d->shader = new QGLShaderProgram(this);
+        d->shader->addShaderFromSourceFile(QGLShader::Vertex, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.vert"));
+        d->shader->addShaderFromSourceFile(QGLShader::Fragment, KGlobal::dirs()->findResource("data", "krita/shaders/gl2.frag"));
+        d->shader->link();
 
-    d->modelMatrixLocation = d->shader->uniformLocation("modelMatrix");
-    d->viewMatrixLocation = d->shader->uniformLocation("viewMatrix");
-    d->projectionMatrixLocation = d->shader->uniformLocation("projectionMatrix");
-    d->texture0Location = d->shader->uniformLocation("texture0");
-    d->textureScaleLocation = d->shader->uniformLocation("textureScale");
-    d->vertexAttributeLocation = d->shader->attributeLocation("vertex");
-    d->uv0AttributeLocation = d->shader->attributeLocation("uv0");
+        d->modelMatrixLocation = d->shader->uniformLocation("modelMatrix");
+        d->viewMatrixLocation = d->shader->uniformLocation("viewMatrix");
+        d->projectionMatrixLocation = d->shader->uniformLocation("projectionMatrix");
+        d->texture0Location = d->shader->uniformLocation("texture0");
+        d->textureScaleLocation = d->shader->uniformLocation("textureScale");
+        d->vertexAttributeLocation = d->shader->attributeLocation("vertex");
+        d->uv0AttributeLocation = d->shader->attributeLocation("uv0");
 
-    d->vertexBuffer = new QGLBuffer(QGLBuffer::VertexBuffer);
-    d->vertexBuffer->create();
-    d->vertexBuffer->bind();
+        d->vertexBuffer = new QGLBuffer(QGLBuffer::VertexBuffer);
+        d->vertexBuffer->create();
+        d->vertexBuffer->bind();
 
-    QVector<float> vertices;
-    vertices << 0.0f <<  0.0f << 0.0f;
-    vertices << 1.0f <<  0.0f << 0.0f;
-    vertices << 1.0f << -1.0f << 0.0f;
-    vertices << 0.0f << -1.0f << 0.0f;
-    int vertSize = sizeof(float) * vertices.count();
+        QVector<float> vertices;
+        vertices << 0.0f <<  0.0f << 0.0f;
+        vertices << 1.0f <<  0.0f << 0.0f;
+        vertices << 1.0f << -1.0f << 0.0f;
+        vertices << 0.0f << -1.0f << 0.0f;
+        int vertSize = sizeof(float) * vertices.count();
 
-    QVector<float> uvs;
-    uvs << 0.f << 0.f;
-    uvs << 1.f << 0.f;
-    uvs << 1.f << 1.f;
-    uvs << 0.f << 1.f;
-    int uvSize = sizeof(float) * uvs.count();
+        QVector<float> uvs;
+        uvs << 0.f << 0.f;
+        uvs << 1.f << 0.f;
+        uvs << 1.f << 1.f;
+        uvs << 0.f << 1.f;
+        int uvSize = sizeof(float) * uvs.count();
 
-    d->vertexBuffer->allocate(vertSize + uvSize);
-    d->vertexBuffer->write(0, reinterpret_cast<void*>(vertices.data()), vertSize);
-    d->vertexBuffer->write(vertSize, reinterpret_cast<void*>(uvs.data()), uvSize);
-    d->vertexBuffer->release();
+        d->vertexBuffer->allocate(vertSize + uvSize);
+        d->vertexBuffer->write(0, reinterpret_cast<void*>(vertices.data()), vertSize);
+        d->vertexBuffer->write(vertSize, reinterpret_cast<void*>(uvs.data()), uvSize);
+        d->vertexBuffer->release();
 
-    d->indexBuffer = new QGLBuffer(QGLBuffer::IndexBuffer);
-    d->indexBuffer->create();
-    d->indexBuffer->bind();
+        d->indexBuffer = new QGLBuffer(QGLBuffer::IndexBuffer);
+        d->indexBuffer->create();
+        d->indexBuffer->bind();
 
-    QVector<uint> indices;
-    indices << 0 << 1 << 2 << 0 << 2 << 3;
-    d->indexBuffer->allocate(reinterpret_cast<void*>(indices.data()), indices.size() * sizeof(uint));
-    d->indexBuffer->release();
-#endif
+        QVector<uint> indices;
+        indices << 0 << 1 << 2 << 0 << 2 << 3;
+        d->indexBuffer->allocate(reinterpret_cast<void*>(indices.data()), indices.size() * sizeof(uint));
+        d->indexBuffer->release();
+    }
 }
 
 bool KisSketchView::canUndo() const
@@ -484,9 +489,9 @@ bool KisSketchView::sceneEvent(QEvent* event)
         }
         default:
             if(QApplication::sendEvent(d->canvasWidget, event)) {
-	        emit interactionStarted();
+            emit interactionStarted();
                 return true;
-	    }
+        }
         }
     }
     return QDeclarativeItem::sceneEvent(event);
@@ -494,14 +499,12 @@ bool KisSketchView::sceneEvent(QEvent* event)
 
 void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*oldGeometry*/)
 {
-    if (d->canvasWidget && !newGeometry.isEmpty())
-    {
+    if (d->canvasWidget && !newGeometry.isEmpty()) {
         d->view->canvasControllerWidget()->setGeometry(newGeometry.toRect());
-#ifdef KRITASKETCH_USE_OPENGL
-        d->canvasWidget->setGeometry(newGeometry.toRect());
-        d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
-#endif
-
+        if (d->useOpenGL) {
+            d->canvasWidget->setGeometry(newGeometry.toRect());
+            d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
+        }
         d->timer->start(100);
     }
 }

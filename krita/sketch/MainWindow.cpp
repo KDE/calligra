@@ -72,6 +72,7 @@
 #include "ImageBuilder.h"
 #include "KritaNamespace.h"
 #include "PanelConfiguration.h"
+#include "cpuid.h"
 
 class MainWindow::Private
 {
@@ -144,11 +145,12 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 
     // This is needed because OpenGL viewport doesn't support partial updates.
-#ifdef KRITASKETCH_USE_OPENGL
-    d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-    QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
-    d->view->setViewport(glWidget);
-#endif
+    if (isUltraBook()) {
+        d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+        QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
+        d->view->setViewport(glWidget);
+    }
+
     d->view->viewport()->grabGesture(Qt::PanGesture);
     d->view->viewport()->grabGesture(Qt::PinchGesture);
 

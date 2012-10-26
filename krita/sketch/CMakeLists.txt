@@ -1,7 +1,5 @@
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-option(KRITASKETCH_USE_OPENGL "Use the OpenGL2 Canvas for Krita Sketch" OFF)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/models
@@ -12,6 +10,7 @@ add_subdirectory(draganddrop)
 add_subdirectory(paintoppresets)
 
 set(kritasketch_SRCS
+    cpuid.c
     ColorSelectorItem.cpp
     Constants.cpp
     DocumentListModel.cpp
@@ -32,6 +31,8 @@ set(kritasketch_SRCS
     PropertyContainer.cpp
     SketchInputContext.cpp
     VirtualKeyboardController.cpp
+    KisSketchCanvas.cpp
+    KisSketchCanvasFactory.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
@@ -75,15 +76,6 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 ../plugins/extensions/dockers/advancedcolorselector/kis_color_selector_combo_box.cpp
 )
 
-if(KRITASKETCH_USE_OPENGL)
-    add_definitions(-DKRITASKETCH_USE_OPENGL)
-
-    set(kritasketch_SRCS
-        ${kritasketch_SRCS}
-        KisSketchCanvas.cpp
-        KisSketchCanvasFactory.cpp
-    )
-endif(KRITASKETCH_USE_OPENGL)
 
 #kde4_add_app_icon(kritasketch_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/kritasketch.png")
 kde4_add_app_icon(krita_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")

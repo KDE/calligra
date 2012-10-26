@@ -37,6 +37,8 @@
 #include "DocumentListModel.h"
 #include "KisSketchView.h"
 #include "SketchInputContext.h"
+#include "cpuid.h"
+
 
 int main( int argc, char** argv )
 {
@@ -100,7 +102,10 @@ int main( int argc, char** argv )
     QApplication::setFont( db.font( "Source Sans Pro", "Regular", 12 ) );
 
     MainWindow window(fileNames);
-    app.setInputContext(new SketchInputContext(&app));
+
+    if (!isUltraBook()) {
+        app.setInputContext(new SketchInputContext(&app));
+    }
 
 #ifdef Q_OS_WIN
     window.showFullScreen();
