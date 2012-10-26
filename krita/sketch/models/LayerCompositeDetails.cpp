@@ -19,13 +19,12 @@
 #include "LayerCompositeDetails.h"
 
 LayerCompositeDetails::LayerCompositeDetails(QObject* parent)
+    : QObject(parent)
 {
-
 }
 
 LayerCompositeDetails::~LayerCompositeDetails()
 {
-
 }
 
 #include "LayerCompositeDetails.moc"

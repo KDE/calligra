@@ -19,8 +19,8 @@
 #include "PropertyContainer.h"
 
 PropertyContainer::PropertyContainer(QString name, QObject* parent)
-    : m_name(name)
-    , QObject(parent)
+    : QObject(parent)
+    , m_name(name)
 {
 }
 
