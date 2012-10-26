@@ -50,11 +50,11 @@ namespace Scripting {
     *
     * Python example that prints the documents Url and some other information;
     * \code
-    * import KPlato
-    * print KPlato.document().url()
-    * print KPlato.document().documentInfoTitle()
-    * print KPlato.document().documentInfoAuthorName()
-    * print KPlato.project().name()
+    * import Plan
+    * print Plan.document().url()
+    * print Plan.document().documentInfoTitle()
+    * print Plan.document().documentInfoAuthorName()
+    * print Plan.project().name()
     * \endcode
     */
     class KPLATOSCRIPTING_TEST_EXPORT Module : public KoScriptingModule
@@ -70,7 +70,9 @@ namespace Scripting {
 
         public Q_SLOTS:
 
-            /// Open another KPlato document
+            /// Open Plan document in this module
+            void openUrl( const QString &url );
+            /// Open another Plan document in a sub-module with name @p tag
             QObject *openDocument( const QString tag, const QString &url );
             /// Start a command with @p name
             void beginCommand( const QString &name );
