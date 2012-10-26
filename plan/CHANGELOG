@@ -2,6 +2,8 @@
 Calligra Plan current:
 ----------------------
 
+* Fix bug 308855 -  Gantt chart: No tree structure in printed version
+
 * Fix bug 307450 - Calligra Plan crash when adding subtask
 
 * Always check appointments to avoid overbooking resources
