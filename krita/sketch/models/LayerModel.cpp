@@ -429,18 +429,18 @@ void LayerModel::moveUp()
 
     if (!d->nodeManager->activeNode()->nextSibling())
     {
-        qDebug() << "Active node apparently has no next sibling, however that has happened...";
+        //qDebug() << "Active node apparently has no next sibling, however that has happened...";
         if (!grandParent)
             return;  
-        qDebug() << "Node has grandparent";
+        //qDebug() << "Node has grandparent";
         if (!grandParent->parent() && node->inherits("KisMask"))
             return;
-        qDebug() << "Node isn't a mask";
+        //qDebug() << "Node isn't a mask";
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent) + 1);
     }
     else
     {
-        qDebug() << "Move node directly";
+        //qDebug() << "Move node directly";
         d->nodeManager->lowerNode();
     }
 }
@@ -453,18 +453,18 @@ void LayerModel::moveDown()
 
     if (!d->nodeManager->activeNode()->prevSibling())
     {
-        qDebug() << "Active node apparently has no next sibling, however that has happened...";
+        //qDebug() << "Active node apparently has no previous sibling, however that has happened...";
         if (!grandParent)
             return;  
-        qDebug() << "Node has grandparent";
+        //qDebug() << "Node has grandparent";
         if (!grandParent->parent() && node->inherits("KisMask"))
             return;
-        qDebug() << "Node isn't a mask";
+        //qDebug() << "Node isn't a mask";
         d->nodeManager->moveNodeAt(node, grandParent, grandParent->index(parent));
     }
     else
     {
-        qDebug() << "Move node directly";
+        //qDebug() << "Move node directly";
         d->nodeManager->raiseNode();
     }
 }
@@ -641,11 +641,20 @@ void LayerModel::source_rowsRemoved(QModelIndex, int, int)
     endResetModel();
 }
 
-void LayerModel::source_dataChanged(QModelIndex /*tl*/, QModelIndex /*br*/)
+void LayerModel::source_dataChanged(QModelIndex tl, QModelIndex br)
 {
-    QModelIndex top = createIndex(0, 0);
-    QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
-    dataChanged(top, bottom);
+    if(tl == br)
+    {
+        int row = d->layers.indexOf(d->nodeModel->nodeFromIndex(tl));
+        QModelIndex index = createIndex(row, 0);
+        dataChanged(index, index);
+    }
+    else
+    {
+        QModelIndex top = createIndex(0, 0);
+        QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
+        dataChanged(top, bottom);
+    }
 }
 
 void LayerModel::source_modelReset()
