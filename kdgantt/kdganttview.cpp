@@ -441,6 +441,12 @@ void View::print( QPainter* painter, const QRectF& target, const QRectF& source,
     d->gfxview.print( painter, targetRect, source, drawRowLabels, drawHeader);
 }
 
+/*! Return the bounding rect needed to paint the GanttView.
+ */
+QRectF View::printRect(bool drawRowLabels, bool drawHeader)
+{
+    return d->gfxview.printRect( drawRowLabels, drawHeader );
+}
 
 #include "moc_kdganttview.cpp"
 
