@@ -264,7 +264,7 @@ Item {
         font.pixelSize: Constants.LargeFontSize;
         font.bold: true;
         height: visible ? Constants.GridHeight / 2 : 0;
-        text: "Active Channels:";
+        text: "Locked Channels:";
     }
     Row {
         id: lockedChannelsRow;
