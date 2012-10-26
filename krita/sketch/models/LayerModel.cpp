@@ -555,7 +555,7 @@ QImage LayerModel::layerThumbnail(QString layerID) const
     // So, yeah, this is a complete cheatery hack. However, it ensures
     // we actually get updates when we want them (every time the image is supposed
     // to be changed). Had hoped we could avoid it, but apparently not.
-    int index = layerID.section(QChar('/'), 0, 1).toInt();
+    int index = layerID.section(QChar('/'), 0, 0).toInt();
     QImage thumb;
     if(index > -1 && index < d->layers.count())
     {
