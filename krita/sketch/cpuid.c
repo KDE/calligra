@@ -381,7 +381,7 @@ int isUltraBook()
         return 0;
     }
 #else
-    // XXX: figure out how to do this on linux, of course.
+    /* XXX: figure out how to do this on linux, of course. */
 #endif
     return 1;
 }
