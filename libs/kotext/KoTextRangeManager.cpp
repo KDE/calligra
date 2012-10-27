@@ -24,23 +24,13 @@
 #include "KoTextDocument.h"
 #include "KoBookmark.h"
 #include "KoBookmarkManager.h"
-<<<<<<< HEAD
 #include "KoAnnotation.h"
 #include "KoAnnotationManager.h"
-#include "KoAnnotation.h"
-#include "KoAnnotationManager.h"
-=======
->>>>>>> master
 
 #include <QTextCursor>
 
 KoTextRangeManager::KoTextRangeManager(QObject *parent)
-<<<<<<< HEAD
-        : QObject(parent),
-        m_lastObjectId(0)
-=======
-        : QObject(parent)
->>>>>>> master
+    : QObject(parent)
 {
 }
 
@@ -54,15 +44,6 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
         return;
     }
 
-<<<<<<< HEAD
-    int id = textRange->id();
-    if (id == -1) {
-        textRange->setId(++m_lastObjectId);
-        textRange->setManager(this);
-    }
-    else {
-        m_deletedTextRanges.remove(id);
-=======
 
     if (m_textRanges.contains(textRange)) {
         return;
@@ -72,24 +53,19 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
         m_deletedTextRanges.remove(textRange);
     } else {
         textRange->setManager(this);
->>>>>>> master
     }
 
     KoBookmark *bookmark = dynamic_cast<KoBookmark *>(textRange);
     if (bookmark) {
         m_bookmarkManager.insert(bookmark->name(), bookmark);
     }
-<<<<<<< HEAD
     else {
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
         if (annotation) {
             m_annotationManager.insert(annotation->name(), annotation);
         }
     }
-    m_textRanges.insert(textRange->id(), textRange);
-=======
     m_textRanges.insert(textRange);
->>>>>>> master
 }
 
 void KoTextRangeManager::remove(KoTextRange *textRange)
@@ -102,7 +78,6 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
     if (bookmark) {
         m_bookmarkManager.remove(bookmark->name());
     }
-<<<<<<< HEAD
     else {
         KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(textRange);
         if (annotation) {
@@ -110,14 +85,8 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
         }
     }
 
-    int id = textRange->id();
-    m_textRanges.remove(id);
-    m_deletedTextRanges[id] = textRange;
-=======
-
     m_textRanges.remove(textRange);
     m_deletedTextRanges.insert(textRange);
->>>>>>> master
 }
 
 const KoBookmarkManager *KoTextRangeManager::bookmarkManager() const
@@ -125,14 +94,11 @@ const KoBookmarkManager *KoTextRangeManager::bookmarkManager() const
     return &m_bookmarkManager;
 }
 
-<<<<<<< HEAD
 const KoAnnotationManager *KoTextRangeManager::annotationManager() const
 {
     return &m_annotationManager;
 }
 
-=======
->>>>>>> master
 QList<KoTextRange *> KoTextRangeManager::textRanges() const
 {
     return m_textRanges.values();
@@ -143,21 +109,6 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(int first
 {
     QHash<int, KoTextRange *> ranges;
     foreach (KoTextRange *range, m_textRanges) {
-<<<<<<< HEAD
-        if (!range->hasSelection()) {
-            if (range->cursor().position() >= first && range->cursor().position() <= last) {
-                ranges.insertMulti(range->cursor().position(), range);
-            }
-        } else {
-            if (range->cursor().selectionStart() >= first && range->cursor().selectionStart() <= last) {
-                if (matchLast == -1 || range->cursor().selectionEnd() <= matchLast) {
-                    ranges.insertMulti(range->cursor().selectionStart(), range);
-                }
-            }
-            if (range->cursor().selectionEnd() >= first && range->cursor().selectionEnd() <= last) {
-                if (matchFirst == -1 || range->cursor().selectionStart() >= matchFirst) {
-                    ranges.insertMulti(range->cursor().selectionEnd(), range);
-=======
         if (!range->hasRange()) {
             if (range->rangeStart() >= first && range->rangeStart() <= last) {
                 ranges.insertMulti(range->rangeStart(), range);
@@ -171,7 +122,6 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(int first
             if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
                 if (matchFirst == -1 || range->rangeStart() >= matchFirst) {
                     ranges.insertMulti(range->rangeEnd(), range);
->>>>>>> master
                 }
             }
         }

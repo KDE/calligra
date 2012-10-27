@@ -29,7 +29,7 @@ KoAnnotationSideBar::KoAnnotationSideBar(const KoAnnotationManager *manager, QWi
 	annotations = new QList<KoAnnotationBalloon*>();
 	QVBoxLayout *layout = new QVBoxLayout(this);
 	KUser user(KUser::UseRealUserID);
-    KoAnnotation *note = manager->retrieveAnnotation(manager->annotationNameList().first());
+    KoAnnotation *note = manager->annotation(manager->annotationNameList().first());
 	KoAnnotationBalloon *balloon = new KoAnnotationBalloon(0, note, this);
 	layout->addWidget(balloon, Qt::AlignTop);
 	setLayout(layout);

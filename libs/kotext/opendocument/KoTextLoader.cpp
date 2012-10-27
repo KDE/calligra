@@ -12,11 +12,8 @@
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
-<<<<<<< HEAD
  * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
-=======
  * Copyright (C) 2009-2012 C. Boemann <cbo@boemann.dk>
->>>>>>> master
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -831,7 +828,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
     kDebug(32500) << "text ranges::";
     foreach(KoTextRange *range, textRangeManager->textRanges()) {
-        kDebug(32500) << range->id();
+        //kDebug(32500) << range->id();
     }
 
 }
@@ -1922,16 +1919,9 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
             if (localName == "bookmark-end") {
-<<<<<<< HEAD
-                KoBookmark *bookmark = textRangeManager->bookmarkManager()->retrieveBookmark(KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
-                if (bookmark) {
-                    bookmark->cursor().setPosition(bookmark->cursor().position());
-                    bookmark->cursor().setPosition(cursor.position(), QTextCursor::KeepAnchor);
-=======
                 KoBookmark *bookmark = textRangeManager->bookmarkManager()->bookmark(KoBookmark::createUniqueBookmarkName(textRangeManager->bookmarkManager(), ts.attribute("name"), true));
                 if (bookmark) {
                     bookmark->setRangeEnd(cursor.position());
->>>>>>> master
                 }
             } else {
                 KoBookmark *bookmark = new KoBookmark(cursor);
@@ -1944,11 +1934,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     delete bookmark;
                 }
             }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> master
         } else if (isTextNS && localName == "bookmark-ref") {
             QString bookmarkName = ts.attribute("ref-name");
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
@@ -1972,18 +1957,13 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 
             if (localName == "annotation-end") {
-                // Find the annotation with the same name and change it to a range.
-                KoAnnotation *annotation = textRangeManager->annotationManager()->retrieveAnnotation(KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
+                KoAnnotation *annotation = textRangeManager->annotationManager()->annotation(KoAnnotation::createUniqueAnnotationName(textRangeManager->annotationManager(), ts.attribute("name"), true));
                 if (annotation) {
-                    annotation->setPositionOnlyMode(false);
-
-                    annotation->cursor().setPosition(annotation->cursor().position());
-                    annotation->cursor().setPosition(cursor.position(), QTextCursor::KeepAnchor);
+                    annotation->setRangeEnd(cursor.position());
                 }
             } else {
                 KoAnnotation *annotation = new KoAnnotation(cursor);
                 annotation->setManager(textRangeManager);
-                annotation->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
                 if (textRangeManager && annotation->loadOdf(ts, d->context)) {
                     textRangeManager->insert(annotation);
                 }

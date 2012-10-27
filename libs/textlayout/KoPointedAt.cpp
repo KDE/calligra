@@ -72,11 +72,7 @@ void KoPointedAt::fillInLinks(const QTextCursor &cursor, KoInlineTextObjectManag
             href = href.right(href.size() - 1);
 
             if (!href.isEmpty()) {
-<<<<<<< HEAD
-                bookmark = rangeManager->bookmarkManager()->retrieveBookmark(href);
-=======
                 bookmark = rangeManager->bookmarkManager()->bookmark(href);
->>>>>>> master
             }
             return;
         } else {

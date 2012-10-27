@@ -68,10 +68,7 @@
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
 #include <KoTextRangeManager.h>
-<<<<<<< HEAD
 #include <KoAnnotationManager.h>
-=======
->>>>>>> master
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoTextAnchor.h>
@@ -549,11 +546,7 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
-<<<<<<< HEAD
-    KoBookmark *bookmark = manager->retrieveBookmark(name);
-=======
     KoBookmark *bookmark = manager->bookmark(name);
->>>>>>> master
 #if 0
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
@@ -569,28 +562,16 @@ void KWView::selectBookmark()
 #endif
 
     KoCanvasResourceManager *rm = m_canvas->resourceManager();
-<<<<<<< HEAD
-    if ((bookmark->positionOnlyMode() == false) && bookmark->cursor().hasSelection()) {
-=======
     if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {
->>>>>>> master
         rm->clearResource(KoText::SelectedTextPosition);
         rm->clearResource(KoText::SelectedTextAnchor);
     }
     if (bookmark->positionOnlyMode()) {
-<<<<<<< HEAD
-        rm->setResource(KoText::CurrentTextPosition, bookmark->cursor().position());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->cursor().position());
-    } else {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->cursor().selectionStart());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->cursor().selectionEnd());
-=======
         rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
         rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeStart());
     } else {
         rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
         rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeEnd());
->>>>>>> master
     }
 }
 

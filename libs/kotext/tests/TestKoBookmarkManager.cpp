@@ -58,11 +58,7 @@ void TestKoBookmarkManager::testInsertAndRetrieve()
     manager.insert("another1", new KoBookmark(cursor));
     manager.insert("another2", new KoBookmark(cursor));
 
-<<<<<<< HEAD
-    KoBookmark *bm = manager.retrieveBookmark("start!");
-=======
     KoBookmark *bm = manager.bookmark("start!");
->>>>>>> master
     Q_ASSERT(bm == mark);
 }
 

@@ -46,7 +46,7 @@ public:
     ~KoAnnotationManager();
 
     /// @return an annotation with the specified name, or 0 if there is none
-    KoAnnotation *retrieveAnnotation(const QString &name) const;
+    KoAnnotation *annotation(const QString &name) const;
 
     /// @return a list of QString containing all annotation names
     QList<QString> annotationNameList() const;

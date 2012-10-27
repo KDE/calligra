@@ -74,7 +74,7 @@ void KoAnnotationManager::rename(const QString &oldName, const QString &newName)
     }
 }
 
-KoAnnotation *KoAnnotationManager::retrieveAnnotation(const QString &name) const
+KoAnnotation *KoAnnotationManager::annotation(const QString &name) const
 {
     KoAnnotation *annotation = d->annotationHash.value(name);
     return annotation;

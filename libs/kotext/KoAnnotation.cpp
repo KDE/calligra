@@ -173,7 +173,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
-    if (position == selectionStart()) {
+    if (position == rangeStart()) {
         writer->startElement("office:annotation", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         if (inlineRdf()) {
@@ -191,7 +191,7 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position) const
         textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
 
         writer->endElement(); //office:annotation
-    } else if (position == selectionEnd()) {
+    } else if (position == rangeEnd()) {
         writer->startElement("text:annotation-end", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();
@@ -206,7 +206,7 @@ QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
     int uniqID = 0;
 
     while (true) {
-        if (kam->retrieveAnnotation(ret)) {
+        if (kam->annotation(ret)) {
             ret = QString("%1_%2").arg(annotationName).arg(++uniqID);
         } else {
             if (isEndMarker) {

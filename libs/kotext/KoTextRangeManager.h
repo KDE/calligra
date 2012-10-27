@@ -1,9 +1,6 @@
 /* This file is part of the KDE project
-<<<<<<< HEAD
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
-=======
  * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
->>>>>>> master
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,18 +22,12 @@
 
 #include "KoTextRange.h"
 #include "KoBookmarkManager.h"
-<<<<<<< HEAD
 #include "KoAnnotationManager.h"
-=======
->>>>>>> master
 #include "kotext_export.h"
 
 // Qt + kde
 #include <QHash>
-<<<<<<< HEAD
-=======
 #include <QSet>
->>>>>>> master
 #include <QTextBlock>
 
 
@@ -55,25 +46,15 @@ public:
 
     /**
      * Insert a new text range into the manager.
-<<<<<<< HEAD
-     * @param object the inline object to insert.
-=======
      * @param object the text range to be inserted.
->>>>>>> master
      */
     void insert(KoTextRange *object);
 
     /**
      * Remove a text range from this manager.
-<<<<<<< HEAD
-     * @param the text rage to be removed
-     */
-    void remove(KoTextRange *object);
-=======
      * @param range the text range to be removed
      */
     void remove(KoTextRange *range);
->>>>>>> master
 
     /**
      * Return the bookmark manager.
@@ -81,14 +62,11 @@ public:
     const KoBookmarkManager *bookmarkManager() const;
 
     /**
-<<<<<<< HEAD
      * Return the annotation manager.
      */
     const KoAnnotationManager *annotationManager() const;
 
     /**
-=======
->>>>>>> master
      * Return a multi hash of KoTextRange that have start or end points between first and last
      * If the text range is a selection then the opposite end has to be within matchFirst and
      * matchLast.
@@ -97,19 +75,11 @@ public:
     QHash<int, KoTextRange *> textRangesChangingWithin(int first, int last, int matchFirst, int matchLast) const;
 
 private:
-<<<<<<< HEAD
-    QHash<int, KoTextRange *> m_textRanges;
-    QHash<int, KoTextRange *> m_deletedTextRanges;
-    int m_lastObjectId;
-
-    KoBookmarkManager m_bookmarkManager;
-    KoAnnotationManager m_annotationManager;
-=======
     QSet<KoTextRange *> m_textRanges;
     QSet<KoTextRange *> m_deletedTextRanges; // kept around for undo purposes
 
     KoBookmarkManager m_bookmarkManager;
->>>>>>> master
+    KoAnnotationManager m_annotationManager;
 };
 
 Q_DECLARE_METATYPE(KoTextRangeManager *)

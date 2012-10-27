@@ -232,7 +232,7 @@ QPair<int, int>  KoTextInlineRdf::findExtent()
         return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
     }
     if (d->annotation && d->document) {
-        return QPair<int, int>(d->annotation.data()->selectionStart(), d->annotation.data()->selectionEnd());
+        return QPair<int, int>(d->annotation.data()->rangeStart(), d->annotation.data()->rangeEnd());
     }
     // FIXME: We probably have to do something with endAnnotation()
     //        too, but I don't know exactly what...
