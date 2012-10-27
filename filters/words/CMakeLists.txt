@@ -73,4 +73,6 @@ add_subdirectory( mobi )
 
 add_subdirectory(msword-odf)
 
-add_subdirectory( docx )
+if(SHOULD_BUILD_OOXML_FILTERS)
+    add_subdirectory( docx )
+endif(SHOULD_BUILD_OOXML_FILTERS)
