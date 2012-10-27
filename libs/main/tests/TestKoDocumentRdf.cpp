@@ -60,7 +60,6 @@ void TestKoDocumentRdf::testRememberNewInlineRdfObject()
     QTextCursor cur(&doc);
     KoBookmark bm(cur);
     bm.setName("test");
-    bm.setId(1);
 
     KoTextInlineRdf inlineRdf(&doc, &bm);
     inlineRdf.setXmlId(inlineRdf.createXmlId());

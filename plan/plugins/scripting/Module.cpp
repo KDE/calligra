@@ -109,6 +109,11 @@ KoDocument* Module::doc()
     return part();
 }
 
+void Module::openUrl( const QString &url )
+{
+    doc()->openUrl( url );
+}
+
 QObject *Module::openDocument( const QString tag, const QString &url )
 {
     Module *m = d->modules[ tag ];

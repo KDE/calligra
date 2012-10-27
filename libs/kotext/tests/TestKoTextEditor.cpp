@@ -108,11 +108,18 @@ void TestKoTextEditor::testRemoveSelectedText()
 
     editor.insertText(lorem);
 
+<<<<<<< HEAD
     bookmark->cursor().setPosition(bookmark->cursor().position());
     bookmark->cursor().setPosition(editor.position(), QTextCursor::KeepAnchor);
 
     QCOMPARE(bookmark->selectionStart(), lorem.length());
     QCOMPARE(bookmark->selectionEnd(), lorem.length() * 2);
+=======
+    bookmark->setRangeEnd(editor.position());
+
+    QCOMPARE(bookmark->rangeStart(), lorem.length());
+    QCOMPARE(bookmark->rangeEnd(), lorem.length() * 2);
+>>>>>>> master
     Q_ASSERT(rangeManager.textRanges().length() == 1);
 
     // select all text

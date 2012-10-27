@@ -70,11 +70,16 @@ public:
 
     /**
      * Save the part of this text range corresponding to position as ODF
+<<<<<<< HEAD
+=======
+     * This may save a beginning tag, ending tag, or nothing at all
+>>>>>>> master
      * @param context the context for saving.
      * @param position a position in the qtextdocument we are currently saving for.
      */
     virtual void saveOdf(KoShapeSavingContext &context, int position) const = 0;
 
+<<<<<<< HEAD
     /**
      * Update position of the inline object.
      * This is called each time the paragraph this inline object is in is re-layouted giving you the opportunity
@@ -114,6 +119,21 @@ public:
 
     /**
      * An text range might have some Rdf metadata associated with it
+=======
+    bool positionOnlyMode() const;
+    void setPositionOnlyMode(bool m);
+
+    bool hasRange() const;
+    int rangeStart() const;
+    int rangeEnd() const;
+
+    void setRangeEnd(int position);
+
+    QString text() const;
+
+    /**
+     * A text range might have some Rdf metadata associated with it
+>>>>>>> master
      * in content.xml
      * Ownership of the rdf object is taken by the text range, and you should not
      * delete it.

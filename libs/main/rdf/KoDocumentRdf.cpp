@@ -927,11 +927,19 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
     // first check for bookmarks
     KoTextRangeManager *mgr = KoTextDocument(document).textRangeManager();
     Q_ASSERT(mgr);
+<<<<<<< HEAD
     QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(handler->selectionStart(), handler->selectionEnd(), 0, -1);
     foreach (const KoTextRange *range, textRanges) {
         return QPair<int,int>(range->selectionStart(), range->selectionEnd());
     }
 
+=======
+    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(0, handler->selectionEnd(), handler->selectionStart(), -1);
+    foreach (const KoTextRange *range, textRanges) {
+        return QPair<int,int>(range->rangeStart(), range->rangeEnd());
+    }
+/*
+>>>>>>> master
     // find the text:meta inline objects
     int startPosition = handler->position();
     KoInlineTextObjectManager *inlineObjectManager
@@ -959,6 +967,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
                                 cursor.position(),
                                 QTextDocument::FindBackward);
     }
+    */
     return QPair<int, int>(0, 0);
 }
 
@@ -973,7 +982,11 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
     // first check for bookmarks
     KoTextRangeManager *mgr = KoTextDocument(document).textRangeManager();
     Q_ASSERT(mgr);
+<<<<<<< HEAD
     QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(handler->selectionStart(), handler->selectionEnd(), 0, -1);
+=======
+    QHash<int, KoTextRange *> textRanges = mgr->textRangesChangingWithin(0, handler->selectionEnd(), handler->selectionStart(), -1);
+>>>>>>> master
     foreach (const KoTextRange *range, textRanges) {
         inlineRdf = range->inlineRdf();
         if (inlineRdf) {
@@ -981,6 +994,10 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
         }
     }
 
+<<<<<<< HEAD
+=======
+/*
+>>>>>>> master
     // find the text:meta inline objects
     KoInlineTextObjectManager *inlineObjectManager
                 = KoTextDocument(document).inlineTextObjectManager();
@@ -1005,11 +1022,14 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
                 }
             }
         }
+<<<<<<< HEAD
         /* else if (obj) { // FIXME this is wrong as it needs to be in the selection and not before
             // maybe we got another inline object that has rdf...
             inlineRdf = obj->inlineRdf();
         }
         */
+=======
+>>>>>>> master
 
         // if we've got inline rdf, we've found the nearest xmlid wrapping our current position
         if (inlineRdf) {
@@ -1024,7 +1044,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
                                 cursor.position()-1,
                                 QTextDocument::FindBackward);
     }
-
+*/
     // we couldn't find inline rdf object... So try to see whether there's
     // inlineRdf in the charformat for the current cursor position. It's
     // unlikely, of course. Maybe this should be the first check, though?

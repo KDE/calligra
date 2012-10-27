@@ -57,6 +57,10 @@ void DeleteCommand::undo()
     UndoRedoFinalizer finalizer(this);
     updateListChanges();
     m_undone = true;
+    KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
+    foreach (KoTextRange *range, m_rangesToRemove) {
+        rangeManager->insert(range);
+    }
 }
 
 void DeleteCommand::redo()
@@ -65,6 +69,10 @@ void DeleteCommand::redo()
     if (!m_first) {
         KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
+        KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
+        foreach (KoTextRange *range, m_rangesToRemove) {
+            rangeManager->remove(range);
+        }
     } else {
         m_first = false;
         if (m_document) {
@@ -149,7 +157,11 @@ void DeleteCommand::doDelete()
 
     KoTextRangeManager *rangeManager = KoTextDocument(m_document).textRangeManager();
 
+<<<<<<< HEAD
     QHash<int, KoTextRange *> m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
+=======
+    m_rangesToRemove = rangeManager->textRangesChangingWithin(textEditor->selectionStart(), textEditor->selectionEnd(), textEditor->selectionStart(), textEditor->selectionEnd());
+>>>>>>> master
 
     foreach (KoTextRange *range, m_rangesToRemove) {
         rangeManager->remove(range);
@@ -171,6 +183,7 @@ void DeleteCommand::doDelete()
     caret->setCharFormat(charFormat);
 }
 
+<<<<<<< HEAD
 void DeleteCommand::deleteBookmark(KoInlineObject *object)
 {/*FIXME
     KoBookmark *bookmark = dynamic_cast<KoBookmark*>(object);
@@ -207,6 +220,8 @@ void DeleteCommand::deleteBookmark(KoInlineObject *object)
     */
 }
 
+=======
+>>>>>>> master
 void DeleteCommand::deleteTextAnchor(KoInlineObject *object)
 {
     if (object) {

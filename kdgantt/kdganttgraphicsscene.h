@@ -32,6 +32,7 @@
 
 class QAbstractProxyModel;
 class QItemSelectionModel;
+class QStyleOptionViewItem;
 
 namespace KDGantt {
     class AbstractGrid;
@@ -112,6 +113,9 @@ namespace KDGantt {
     protected:
         /*reimp*/ void helpEvent( QGraphicsSceneHelpEvent *helpEvent );
         /*reimp*/ void drawBackground( QPainter* painter, const QRectF& rect );
+
+        void drawTreeIndication( QPainter *painter, const QModelIndex &idx, const QRect &rect, int indent, bool drawRoot=false );
+        int level( const QModelIndex &idx ) const;
 
     public Q_SLOTS:
         void setModel( QAbstractItemModel* );

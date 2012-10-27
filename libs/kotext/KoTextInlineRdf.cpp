@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -228,7 +229,7 @@ QString KoTextInlineRdf::predicate()
 QPair<int, int>  KoTextInlineRdf::findExtent()
 {
     if (d->bookmark && d->document) {
-        return QPair<int, int>(d->bookmark.data()->selectionStart(), d->bookmark.data()->selectionEnd());
+        return QPair<int, int>(d->bookmark.data()->rangeStart(), d->bookmark.data()->rangeEnd());
     }
     if (d->annotation && d->document) {
         return QPair<int, int>(d->annotation.data()->selectionStart(), d->annotation.data()->selectionEnd());
@@ -260,11 +261,7 @@ QString KoTextInlineRdf::object()
     KoTextDocument textDocument(d->document.data());
 
     if (d->bookmark && d->document) {
-        QString ret  = d->bookmark.data()->cursor().selectedText();
-        return ret.remove(QChar::ObjectReplacementCharacter);
-    }
-    else if (d->annotation && d->document) {
-        QString ret  = d->annotation.data()->cursor().selectedText();
+        QString ret  = d->bookmark.data()->text();
         return ret.remove(QChar::ObjectReplacementCharacter);
     }
     else if (d->kotextmeta && d->document) {

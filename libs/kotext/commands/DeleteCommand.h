@@ -26,7 +26,7 @@
 #include "KoTextCommandBase.h"
 
 #include <QTextCharFormat>
-#include <QList>
+#include <QHash>
 #include <QSet>
 #include <QWeakPointer>
 
@@ -38,7 +38,7 @@ class KoShape;
 class QTextCursor;
 
 class DeleteVisitor;
-class KoBookmark;
+class KoTextRange;
 class KoTextEditor;
 
 class DeleteCommand : public KoTextCommandBase
@@ -65,7 +65,11 @@ private:
     KoShapeController *m_shapeController;
 
     QSet<KoInlineObject *> m_invalidInlineObjects;
+<<<<<<< HEAD
     QSet<KoInlineObject *> m_bookmarksToRemove;
+=======
+    QHash<int, KoTextRange *> m_rangesToRemove;
+>>>>>>> master
     bool m_first;
     bool m_undone;
     DeleteMode m_mode;
@@ -75,7 +79,10 @@ private:
     bool m_mergePossible;
 
     void doDelete();
+<<<<<<< HEAD
     void deleteBookmark(KoInlineObject *object);
+=======
+>>>>>>> master
     void deleteTextAnchor(KoInlineObject *object);
     bool checkMerge(const KUndo2Command *command);
     void updateListChanges();
