@@ -521,6 +521,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
     cursor.beginEditBlock();
 
+
+
     if (! d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();
         QTextBlockFormat format = block.blockFormat();
@@ -1663,6 +1665,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     }
 }
 
+
 void KoTextLoader::loadCite(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
@@ -1965,6 +1968,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             } else {
                 KoAnnotation *annotation = new KoAnnotation(cursor);
                 annotation->setManager(textRangeManager);
+                annotation->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
                 if (textRangeManager && annotation->loadOdf(ts, d->context)) {
                     textRangeManager->insert(annotation);
                 }

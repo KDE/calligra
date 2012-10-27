@@ -27,9 +27,14 @@
 #include <KoXmlReader.h>
 #include <KoTextInlineRdf.h>
 #include <KoTextRangeManager.h>
+#include <KoTextLoader.h>
 #include <KoXmlNS.h>
+#include <KoTextWriter.h>
+
+#include "KoTextDocument.h"
 
 #include <QTextDocument>
+#include <QTextFrameFormat>
 #include <QTextList>
 #include <QTextBlock>
 #include <QTextCursor>
@@ -44,6 +49,7 @@ public:
           posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
+    QTextFrame *textFrame;
 
     // Name of this annotation. It is used to tie together the annotation and annotation-end tags
     QString name;
@@ -87,11 +93,29 @@ QString KoAnnotation::name() const
     return d->name;
 }
 
+QTextFrame *KoAnnotation::textFrame() const
+{
+    return d->textFrame;
+}
+
+
+void KoAnnotation::setMotherFrame(QTextFrame *frame)
+{
+    QTextCursor cursor(frame->lastCursorPosition());
+    QTextFrameFormat format;
+    format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
+    d->textFrame = cursor.insertFrame(format);
+    d->document = frame->document();
+}
+
 bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(context);
+    kDebug(32500) << "****** Start Load odf ******";
+    KoTextLoader textLoader(context);
+    QTextCursor cursor(d->textFrame);
 
     QString annotationName = element.attribute("name");
+
     const QString localName(element.localName());
 
     if (manager()) {
@@ -130,13 +154,10 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
                 else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
                     // FIXME: What to do here?
                 }
-                else if (el.localName() == "p" && el.namespaceURI() == KoXmlNS::text) {
-                    // FIXME
-                }
-                else if (el.localName() == "list" && el.namespaceURI() == KoXmlNS::text) {
-                    // FIXME
-                }
-            }
+          }
+            textLoader.loadBody(element, cursor);
+
+            kDebug(32500) << "****** End Load ******";
             kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
         }
         else {
@@ -165,6 +186,9 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position) const
         writer->startElement("dc:date", false);
         writer->addTextNode(d->date);
         writer->endElement(); // dc:date
+
+        KoTextWriter textWriter(context);
+        textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
 
         writer->endElement(); //office:annotation
     } else if (position == selectionEnd()) {
@@ -200,11 +224,15 @@ QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
 
 QString KoAnnotation::creator() const
 {
-    return d->creator;
+    // FIXME: I don't know but it was the result crash
+    //return d->creator;
+    return "creator";
 }
 
 QString KoAnnotation::date() const
 {
-    return d->date;
+    // FIXME: I don't know but it was the result crash
+    //return d->date;
+    return "data";
 }
 
