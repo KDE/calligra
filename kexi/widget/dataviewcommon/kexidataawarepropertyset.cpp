@@ -23,7 +23,7 @@
 
 #include <kexi_global.h>
 #include <koproperty/Property.h>
-#include <KexiView.h>
+#include <core/KexiView.h>
 
 KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
         KexiDataAwareObjectInterface* dataObject)
@@ -33,14 +33,8 @@ KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
         , m_row(-99)
 {
     setObjectName(view->objectName() + "_KexiDataAwarePropertySet");
-
-// connect(m_dataObject, SIGNAL(dataSet(KexiTableViewData*)),
-//  this, SLOT(slotDataSet(KexiTableViewData*)));
     m_dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiTableViewData*)));
-// connect(m_dataObject, SIGNAL(cellSelected(int,int)),
-//  this, SLOT(slotCellSelected(int,int)));
     m_dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int, int)));
-//
     slotDataSet(m_dataObject->data());
     const bool wasDirty = view->isDirty();
     clear();
@@ -167,18 +161,6 @@ uint KexiDataAwarePropertySet::currentRow() const
 void KexiDataAwarePropertySet::slotRowDeleted()
 {
     m_view->setDirty();
-
-    /* Qt4 : not needed
-      removeCurrentPropertySet();
-
-      //let's move up all property sets that are below that deleted
-      const int r = m_dataObject->currentRow();
-      const int size = int(m_sets.size()) - 1;
-      for (int i = r; i<size; i++)
-        m_sets[ i ] = m_sets.at(i+1);
-      m_sets[ size ] = 0;*/
-
-    // It's simplified in Qt4:
     enlargeToFitRow(m_dataObject->currentRow());
     m_sets.remove(m_dataObject->currentRow());
 
@@ -207,45 +189,14 @@ void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &_rows)
 //   kDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2;
             int i = prev_r;
             KoProperty::Set *set = m_sets.at(i + num_removed);
-//Qt4   if (set)
             m_sets.remove(i + num_removed);
             kDebug() << "property set " << i + num_removed << " deleted";
             delete set;
             num_removed++;
-            /* Qt4 : not needed
-                  for (; (i+num_removed)<cur_r; i++) {
-                    m_sets[ i ] = m_sets.at(i+num_removed);
-                    kDebug() << i << " <- " << i+num_removed;
-                  }*/
         }
         prev_r = cur_r - num_removed;
     }
-    /* Qt4 : not needed
-      //move remaining buffers up
-      if (cur_r>=0) {
-        KoProperty::Set *set = m_sets.at(cur_r);
-        if (set)
-          m_sets.remove(cur_r);
-        kDebug() << "property set " << cur_r << " deleted";
-        delete set;
-        num_removed++;
-        for (int i=prev_r; (i+num_removed)<orig_size; i++) {
-          m_sets[ i ] = m_sets.at(i+num_removed);
-          kDebug() << i << " <- " << i+num_removed;
-        }
-      }
-      */
-    /* Qt4 : not needed
-      //finally: clear last rows
-      for (int i=orig_size-num_removed; i<orig_size; i++) {
-        kDebug() << i << " <- zero";
-        m_sets[ i ] = 0;
-      }
-      for (int i=orig_size-num_removed; i<orig_size; i++) {
-        kDebug() << i << " <- zero";
-        m_sets[ i ] = 0;
-      }*/
-    //(Qt4) finally: add empty rows
+    //finally: add empty rows
     m_sets.insert(size(), num_removed, 0);
 
     if (num_removed > 0)
@@ -256,16 +207,6 @@ void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &_rows)
 void KexiDataAwarePropertySet::slotRowInserted(KexiDB::RecordData*, uint pos, bool /*repaint*/)
 {
     m_view->setDirty();
-
-    //let's move down all property set that are below
-// const int r = m_dataObject->currentRow();
-    /* Qt4 : not needed
-      m_sets.resize(m_sets.size()+1);
-      for (int i=int(m_sets.size())-1; i>(int)row; i--)
-        m_sets[i] = m_sets.at(i-1);
-      m_sets[row] = 0;*/
-
-    // It's simplified in Qt4:
     if (pos > 0) {
         enlargeToFitRow(pos - 1);
     }
