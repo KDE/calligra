@@ -119,9 +119,15 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
+#ifdef SHOW_ANNOTATIONS
     QGridLayout *layout = new QGridLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui,0,0);
+#else
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    layout->addWidget(m_gui);
+#endif
 
     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
@@ -171,12 +177,14 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
            m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
 
+#ifdef SHOW_ANNOTATIONS
     if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
         if (textRangeManager->annotationManager()) {
             KoAnnotationSideBar *annotationBar = new KoAnnotationSideBar(textRangeManager->annotationManager());
             layout->addWidget(annotationBar, 0, 1);
         }
     }
+#endif
 }
 
 KWView::~KWView()

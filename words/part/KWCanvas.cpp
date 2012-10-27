@@ -173,6 +173,7 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.eraseRect(ev->rect());
+#ifdef SHOW_ANNOTATIONS
     QRect adjRect(ev->rect());
     adjRect.adjust(0, 0, -200, 0);
     paint(painter, adjRect);
@@ -180,6 +181,9 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
         QRect annotationRect(adjRect.right(), adjRect.top(), 200, adjRect.height());
         qDebug()<<"annotation rect "<<annotationRect;
         //painter.fillRect(annotationRect, QBrush(color));
+#else
+        paint(painter, ev->rect());
+#endif
     painter.end();
 }
 
