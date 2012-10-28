@@ -1964,6 +1964,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             } else {
                 KoAnnotation *annotation = new KoAnnotation(cursor);
                 annotation->setManager(textRangeManager);
+                annotation->setMotherFrame(KoTextDocument(cursor.block().document()).auxillaryFrame());
                 if (textRangeManager && annotation->loadOdf(ts, d->context)) {
                     textRangeManager->insert(annotation);
                 }
