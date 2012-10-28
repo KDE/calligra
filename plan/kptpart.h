@@ -32,14 +32,14 @@ namespace KPlato
 {
 class MainDocument;
 
-class KPLATO_EXPORT PartPart : public KoPart
+class KPLATO_EXPORT Part : public KoPart
 {
     Q_OBJECT
 
 public:
-    PartPart(QObject *parent);
+    Part(QObject *parent);
 
-    virtual ~PartPart();
+    virtual ~Part();
 
     void setDocument(KPlato::MainDocument *document);
 

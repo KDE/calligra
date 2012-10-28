@@ -72,7 +72,7 @@ class TaskStatusView;
 class TaskModuleModel;
 class Calendar;
 class MainDocument;
-class PartPart;
+class Part;
 class Node;
 class Project;
 class Task;
