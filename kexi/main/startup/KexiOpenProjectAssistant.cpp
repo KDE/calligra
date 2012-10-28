@@ -70,6 +70,7 @@ KexiMainOpenProjectPage::KexiMainOpenProjectPage(QWidget* parent)
     setFocusWidget(tabWidget);
     setContents(tabWidget);
     
+    connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     // delayed opening:
     QTimer::singleShot(500, this, SLOT(init()));
 }
@@ -82,27 +83,58 @@ void KexiMainOpenProjectPage::init()
     fileSelectorLayout->addWidget(fileSelector);
     fileSelector->show();
                       
-    // server-based:
-    QVBoxLayout* connSelectorLayout = new QVBoxLayout(m_connSelectorWidget);
-    connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
-    QLabel* connSelectorLabel = new QLabel(
-        i18n("Select database server's connection with project you wish to open. "
-            "<p>Here you may also add, edit or remove connections "
-            "from the list."));
-    connSelectorLayout->addWidget(connSelectorLabel);
-    connSelectorLayout->addSpacing(KDialog::marginHint());
-    connSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
-        "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Opening);
-    connSelectorLayout->addWidget(connSelector);
-    
-    connSelector->showAdvancedConn();
-    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    connSelector->hideHelpers();
-    connSelector->hideDescription();
-    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
-            this, SLOT(next()));
+}
+
+void KexiMainOpenProjectPage::tabChanged(int index)
+{
+	if (index == 1){
+        if (!((Kexi::driverManager().driverNames().length() > 1) && Kexi::driverManager().driverNames().contains("sqlite3"))) {
+			setNextButtonVisible(false);
+			setDescription(QString());
+
+			KexiContextMessage msg(
+					i18nc("Warning", "No database server drivers found.\n"
+					"In order to connect to a database server please check that you have at least one database driver installed.\n"
+					"\n"
+					"Search and install packages named like \"calligra-kexi-xxxx-driver\".\n"
+					"Please note that your package names could vary slightly according to the distribution you use."
+					));
+			m_errorMessagePopup = new KexiContextMessageWidget(m_connSelectorWidget, 0, 0, msg);
+			m_errorMessagePopup->setMessageType(KMessageWidget::Warning);
+			m_errorMessagePopup->setCalloutPointerDirection(KMessageWidget::NoPointer);
+			m_errorMessagePopup->setWordWrap(true);
+			m_errorMessagePopup->setClickClosesMessage(false);
+			m_errorMessagePopup->KexiContextMessageWidget::setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+			setContents(m_errorMessagePopup);
+			m_errorMessagePopup->animatedShow();
+		} else {
+			// server-based:
+			QVBoxLayout* connSelectorLayout = new QVBoxLayout(m_connSelectorWidget);
+			connSelectorLayout->setContentsMargins(0, KDialog::marginHint() * 2, 0, 0);
+			QLabel* connSelectorLabel = new QLabel(
+				i18n("Select database server's connection with project you wish to open. "
+					"<p>Here you may also add, edit or remove connections "
+					"from the list."));
+			connSelectorLayout->addWidget(connSelectorLabel);
+			connSelectorLayout->addSpacing(KDialog::marginHint());
+			connSelector = new KexiConnectionSelectorWidget(
+				Kexi::connset(),
+				"kfiledialog:///OpenExistingOrCreateNewProject",
+				KAbstractFileWidget::Opening);
+			connSelectorLayout->addWidget(connSelector);
+			
+			connSelector->showAdvancedConn();
+			connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+			connSelector->hideHelpers();
+			connSelector->hideDescription();
+			connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+					this, SLOT(next()));
+		}
+	} else {
+		if (m_errorMessagePopup) {
+			m_errorMessagePopup->close();
+		}
+	}
 }
 
 KexiMainOpenProjectPage::~KexiMainOpenProjectPage()

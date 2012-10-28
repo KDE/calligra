@@ -22,6 +22,7 @@
 
 #include <kexidbconnectionset.h>
 #include <db/driver.h>
+#include <kexiutils/KexiContextMessage.h>
 
 #include <KDialog>
 #include <kabstractfilewidget.h>
@@ -144,6 +145,7 @@ protected slots:
 private:
     ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
+    QPointer<KexiContextMessageWidget> m_errorMessagePopup;
     
     class Private;
     Private * const d;

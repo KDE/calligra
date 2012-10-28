@@ -108,6 +108,8 @@ public:
     virtual ~KexiProjectConnectionSelectionPage();
 
     KexiConnectionSelectorWidget* connSelector;
+private:
+	QPointer<KexiContextMessageWidget> m_errorMessagePopup;
 };
 
 class KexiServerDBNamePage;

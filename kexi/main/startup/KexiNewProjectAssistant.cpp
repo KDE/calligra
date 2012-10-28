@@ -321,21 +321,42 @@ KexiProjectConnectionSelectionPage::KexiProjectConnectionSelectionPage(QWidget* 
 {
     setBackButtonVisible(true);
     setNextButtonVisible(true);
+	if (!((Kexi::driverManager().driverNames().length() > 1) && Kexi::driverManager().driverNames().contains("sqlite3"))) {
+		setDescription(QString());
+		setNextButtonVisible(false);
 
-    QVBoxLayout *lyr = new QVBoxLayout;
-    connSelector = new KexiConnectionSelectorWidget(
-        Kexi::connset(),
-        "kfiledialog:///OpenExistingOrCreateNewProject",
-        KAbstractFileWidget::Saving);
-    lyr->addWidget(connSelector);
-    connSelector->showAdvancedConn();
-    connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
-            this, SLOT(next()));
-    connSelector->layout()->setContentsMargins(0, 0, 0, 0);
-    connSelector->hideHelpers();
-    connSelector->hideDescription();
-    setContents(lyr);
-    setFocusWidget(connSelector->connectionsList());
+		KexiContextMessage msg(
+				i18nc("Warning", "No database server drivers found.\n"
+				"In order to connect to a database server please check that you have at least one database driver installed.\n"
+				"\n"
+				"Search and install packages named like \"calligra-kexi-xxxx-driver\".\n"
+				"Please note that your package names could vary slightly according to the distribution you use."
+				));
+		m_errorMessagePopup = new KexiContextMessageWidget(this, 0, 0, msg);
+		m_errorMessagePopup->setMessageType(KMessageWidget::Warning);
+		m_errorMessagePopup->setCalloutPointerDirection(KMessageWidget::NoPointer);
+		m_errorMessagePopup->setWordWrap(true);
+		m_errorMessagePopup->setClickClosesMessage(false);
+	// 			m_errorMessagePopup->resizeToContents();
+		m_errorMessagePopup->KexiContextMessageWidget::setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+		setContents(m_errorMessagePopup);
+		m_errorMessagePopup->animatedShow();
+	} else {
+		QVBoxLayout *lyr = new QVBoxLayout;
+		connSelector = new KexiConnectionSelectorWidget(
+			Kexi::connset(),
+			"kfiledialog:///OpenExistingOrCreateNewProject",
+			KAbstractFileWidget::Saving);
+		lyr->addWidget(connSelector);
+		connSelector->showAdvancedConn();
+		connect(connSelector, SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
+				this, SLOT(next()));
+		connSelector->layout()->setContentsMargins(0, 0, 0, 0);
+		connSelector->hideHelpers();
+		connSelector->hideDescription();
+		setContents(lyr);
+		setFocusWidget(connSelector->connectionsList());
+	}
 }
 
 KexiProjectConnectionSelectionPage::~KexiProjectConnectionSelectionPage()

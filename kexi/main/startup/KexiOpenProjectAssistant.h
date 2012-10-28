@@ -48,9 +48,11 @@ public:
     KexiConnectionSelectorWidget* connSelector;
 private slots:
     void init();
+	void tabChanged(int index);
 private:
     QWidget* m_fileSelectorWidget;
     QWidget* m_connSelectorWidget;
+	QPointer<KexiContextMessageWidget> m_errorMessagePopup;
 };
 
 //! A page for selecting existing server database project

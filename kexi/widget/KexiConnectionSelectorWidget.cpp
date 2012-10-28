@@ -204,25 +204,43 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(int id)
     if (id == 1) {//file-based prj type
         showSimpleConn();
     } else if (id == 2) {//server-based prj type
-        if (!d->conn_sel_shown) {
-            d->conn_sel_shown = true;
-
-            //show connections (on demand):
-            foreach(KexiDB::ConnectionData* connData, d->conn_set->list()) {
-                addConnectionData(connData);
-                //   else {
-                //this error should be more verbose:
-                //    kWarning() << "no driver found for '" << it.current()->driverName << "'!";
-                //   }
-            }
-            if (d->remote->list->topLevelItemCount() > 0) {
-                d->remote->list->topLevelItem(0)->setSelected(true);
-            }
-            d->remote->descGroupBox->layout()->setMargin(2);
-            d->remote->list->setFocus();
-            slotConnectionSelectionChanged();
-        }
-        d->stack->setCurrentWidget(d->remote);
+        if (!((Kexi::driverManager().driverNames().length() > 1) && Kexi::driverManager().driverNames().contains("sqlite3"))) {
+			KexiContextMessage msg(
+					i18nc("Warning", "No database server drivers found.\n"
+					"In order to connect to a database server please check that you have at least one database driver installed.\n"
+					"\n"
+					"Search and install packages named like \"calligra-kexi-xxxx-driver\".\n"
+					"Please note that your package names could vary slightly according to the distribution you use."
+					));
+			m_errorMessagePopup = new KexiContextMessageWidget(d->stack, 0, 0, msg);
+			m_errorMessagePopup->setMessageType(KMessageWidget::Warning);
+			m_errorMessagePopup->setCalloutPointerDirection(KMessageWidget::NoPointer);
+			m_errorMessagePopup->setWordWrap(true);
+			m_errorMessagePopup->setClickClosesMessage(false);
+			m_errorMessagePopup->KexiContextMessageWidget::setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+			d->stack->addWidget(m_errorMessagePopup);
+			d->stack->setCurrentWidget(m_errorMessagePopup);
+			m_errorMessagePopup->animatedShow();
+		} else {
+			if (!d->conn_sel_shown) {
+				d->conn_sel_shown = true;
+				//show connections (on demand):
+				foreach(KexiDB::ConnectionData* connData, d->conn_set->list()) {
+					addConnectionData(connData);
+					//   else {
+					//this error should be more verbose:
+					//    kWarning() << "no driver found for '" << it.current()->driverName << "'!";
+					//   }
+				}
+				if (d->remote->list->topLevelItemCount() > 0) {
+					d->remote->list->topLevelItem(0)->setSelected(true);
+				}
+				d->remote->descGroupBox->layout()->setMargin(2);
+				d->remote->list->setFocus();
+				slotConnectionSelectionChanged();
+			}
+			d->stack->setCurrentWidget(d->remote);
+		}
     }
 }
 
