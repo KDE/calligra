@@ -83,7 +83,7 @@
 #include "kptmilestoneprogressdialog.h"
 #include "kpttaskdescriptiondialog.h"
 #include "kptnode.h"
-#include "kptpart.h"
+#include "kptmaindocument.h"
 #include "kptproject.h"
 #include "kptmainprojectdialog.h"
 #include "kpttask.h"
@@ -208,7 +208,7 @@ bool ConfigDialog::isDefault()
 }
 
 //------------------------------------
-View::View(KoPart *part, Part *doc, QWidget *parent)
+View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         : KoView(part, doc, parent),
         m_currentEstimateType( Estimate::Use_Expected ),
         m_scheduleActionGroup( new QActionGroup( this ) ),
@@ -2516,9 +2516,9 @@ void View::updateReadWrite( bool readwrite )
     m_viewlist->setReadWrite( readwrite );
 }
 
-Part *View::getPart() const
+MainDocument *View::getPart() const
 {
-    return ( Part * ) koDocument();
+    return ( MainDocument * ) koDocument();
 }
 
 KoPart *View::getKoPart() const
@@ -3009,7 +3009,7 @@ void View::saveTaskModule( const KUrl &url, Project *project )
     QString dir = Factory::global().dirs()->saveLocation( "plan_taskmodules" );
     kDebug(planDbg())<<"dir="<<dir;
     if ( ! dir.isEmpty() ) {
-        Part part;
+        MainDocument part;
         part.insertProject( *project, 0, 0 );
         part.getProject().setName( project->name() );
         part.getProject().setLeader( project->leader() );

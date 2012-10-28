@@ -20,7 +20,7 @@
 * Boston, MA 02110-1301, USA.
 */
 
-#include "kptpart.h"
+#include "kptmaindocument.h"
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
@@ -70,7 +70,7 @@
 namespace KPlato
 {
 
-Part::Part(KoPart *part)
+MainDocument::MainDocument(KoPart *part)
         : KoDocument(part),
         m_project( 0 ),
         m_context( 0 ), m_xmlLoader(),
@@ -104,7 +104,7 @@ Part::Part(KoPart *part)
 }
 
 
-Part::~Part()
+MainDocument::~MainDocument()
 {
     qDeleteAll( m_schedulerPlugins );
     if ( m_project ) {
@@ -114,13 +114,13 @@ Part::~Part()
     delete m_context;
 }
 
-void Part::setReadWrite( bool rw )
+void MainDocument::setReadWrite( bool rw )
 {
     m_config.setReadWrite( rw );
     KoDocument::setReadWrite( rw );
 }
 
-void Part::loadSchedulerPlugins()
+void MainDocument::loadSchedulerPlugins()
 {
     // Add built-in scheduler
     addSchedulerPlugin( "Built-in", new BuiltinSchedulerPlugin( this ) );
@@ -131,18 +131,18 @@ void Part::loadSchedulerPlugins()
     loader->loadAllPlugins();
 }
 
-void Part::addSchedulerPlugin( const QString &key, SchedulerPlugin *plugin)
+void MainDocument::addSchedulerPlugin( const QString &key, SchedulerPlugin *plugin)
 {
     kDebug(planDbg())<<plugin;
     m_schedulerPlugins[key] = plugin;
 }
 
-void Part::configChanged()
+void MainDocument::configChanged()
 {
     //m_project->setConfig( m_config );
 }
 
-void Part::setProject( Project *project )
+void MainDocument::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( projectChanged() ), this, SIGNAL( changed() ) );
@@ -158,13 +158,13 @@ void Part::setProject( Project *project )
     emit changed();
 }
 
-bool Part::loadOdf( KoOdfReadStore &odfStore )
+bool MainDocument::loadOdf( KoOdfReadStore &odfStore )
 {
     kWarning()<< "OpenDocument not supported, let's try native xml format";
     return loadXML( odfStore.contentDoc(), 0 ); // We have only one format, so try to load that!
 }
 
-bool Part::loadXML( const KoXmlDocument &document, KoStore* )
+bool MainDocument::loadXML( const KoXmlDocument &document, KoStore* )
 {
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
@@ -272,7 +272,7 @@ This test does not work any longer. KoXml adds a couple of elements not present 
     return true;
 }
 
-QDomDocument Part::saveXML()
+QDomDocument MainDocument::saveXML()
 {
     kDebug(planDbg());
     QDomDocument document( "plan" );
@@ -293,7 +293,7 @@ QDomDocument Part::saveXML()
     return document;
 }
 
-QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *resource )
+QDomDocument MainDocument::saveWorkPackageXML( const Node *node, long id, Resource *resource )
 {
     kDebug(planDbg());
     QDomDocument document( "plan" );
@@ -324,7 +324,7 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id, Resource *reso
     return document;
 }
 
-bool Part::saveWorkPackageToStream( QIODevice *dev, const Node *node, long id, Resource *resource )
+bool MainDocument::saveWorkPackageToStream( QIODevice *dev, const Node *node, long id, Resource *resource )
 {
     QDomDocument doc = saveWorkPackageXML( node, id, resource );
     // Save to buffer
@@ -337,7 +337,7 @@ bool Part::saveWorkPackageToStream( QIODevice *dev, const Node *node, long id, R
     return nwritten == (int)s.size();
 }
 
-bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource  )
+bool MainDocument::saveWorkPackageFormat( const QString &file, const Node *node, long id, Resource *resource  )
 {
     kDebug(planDbg()) <<"Saving to store";
 
@@ -388,7 +388,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
     return true;
 }
 
-bool Part::saveWorkPackageUrl( const KUrl &_url, const Node *node, long id, Resource *resource )
+bool MainDocument::saveWorkPackageUrl( const KUrl &_url, const Node *node, long id, Resource *resource )
 {
     //kDebug(planDbg())<<_url;
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -400,7 +400,7 @@ bool Part::saveWorkPackageUrl( const KUrl &_url, const Node *node, long id, Reso
     return ret;
 }
 
-bool Part::loadWorkPackage( Project &project, const KUrl &url )
+bool MainDocument::loadWorkPackage( Project &project, const KUrl &url )
 {
     kDebug(planDbg())<<url;
     if ( ! url.isLocalFile() ) {
@@ -454,7 +454,7 @@ bool Part::loadWorkPackage( Project &project, const KUrl &url )
     return true;
 }
 
-Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &/*url*/ )
+Package *MainDocument::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document, const KUrl &/*url*/ )
 {
     QString value;
     bool ok = true;
@@ -566,7 +566,7 @@ Package *Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDoc
     return package;
 }
 
-bool Part::extractFiles( KoStore *store, Package *package )
+bool MainDocument::extractFiles( KoStore *store, Package *package )
 {
     if ( package->task == 0 ) {
         kError()<<"No task!";
@@ -583,7 +583,7 @@ bool Part::extractFiles( KoStore *store, Package *package )
     return true;
 }
 
-bool Part::extractFile( KoStore *store, Package *package, const Document *doc )
+bool MainDocument::extractFile( KoStore *store, Package *package, const Document *doc )
 {
     KTemporaryFile tmpfile;
     if ( ! tmpfile.open() ) {
@@ -600,7 +600,7 @@ bool Part::extractFile( KoStore *store, Package *package, const Document *doc )
     return true;
 }
 
-void Part::autoCheckForWorkPackages()
+void MainDocument::autoCheckForWorkPackages()
 {
     if ( m_config.checkForWorkPackages() ) {
         checkForWorkPackages( true );
@@ -608,7 +608,7 @@ void Part::autoCheckForWorkPackages()
     QTimer::singleShot ( 10000, this, SLOT( autoCheckForWorkPackages() ) );
 }
 
-void Part::checkForWorkPackages( bool keep )
+void MainDocument::checkForWorkPackages( bool keep )
 {
     if ( m_checkingForWorkPackages || m_config.retrieveUrl().isEmpty() || m_project == 0 || m_project->numChildren() == 0 ) {
         return;
@@ -624,7 +624,7 @@ void Part::checkForWorkPackages( bool keep )
     return;
 }
 
-void Part::checkForWorkPackage()
+void MainDocument::checkForWorkPackage()
 {
     if ( ! m_infoList.isEmpty() ) {
         loadWorkPackage( *m_project, KUrl( m_infoList.takeLast().absoluteFilePath() ) );
@@ -655,7 +655,7 @@ void Part::checkForWorkPackage()
     }
 }
 
-void Part::workPackageMergeDialogFinished( int result )
+void MainDocument::workPackageMergeDialogFinished( int result )
 {
     WorkPackageMergeDialog *dlg = qobject_cast<WorkPackageMergeDialog*>( sender() );
     if ( dlg == 0 ) {
@@ -677,14 +677,14 @@ void Part::workPackageMergeDialogFinished( int result )
     dlg->deleteLater();
 }
 
-void Part::mergeWorkPackages()
+void MainDocument::mergeWorkPackages()
 {
     foreach ( Package *package, m_workpackages ) {
         mergeWorkPackage( package );
     }
 }
 
-void Part::terminateWorkPackage( const Package *package )
+void MainDocument::terminateWorkPackage( const Package *package )
 {
     QFile file( package->url.path() );
     if ( ! file.exists() ) {
@@ -724,7 +724,7 @@ void Part::terminateWorkPackage( const Package *package )
     }
 }
 
-void Part::mergeWorkPackage( const Package *package )
+void MainDocument::mergeWorkPackage( const Package *package )
 {
     const Project &proj = *(package->project);
     if ( proj.id() == m_project->id() && proj.childNode( 0 ) ) {
@@ -736,7 +736,7 @@ void Part::mergeWorkPackage( const Package *package )
     }
 }
 
-void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package )
+void MainDocument::mergeWorkPackage( Task *to, const Task *from, const Package *package )
 {
     Resource *resource = m_project->findResource( package->ownerId );
     if ( resource == 0 ) {
@@ -819,21 +819,21 @@ void Part::mergeWorkPackage( Task *to, const Task *from, const Package *package 
     addCommand( cmd );
 }
 
-void Part::paintContent( QPainter &, const QRect &)
+void MainDocument::paintContent( QPainter &, const QRect &)
 {
     // Don't embed this app!!!
 }
 
-void Part::slotViewDestroyed()
+void MainDocument::slotViewDestroyed()
 {
 }
 
-void Part::setLoadingTemplate(bool loading)
+void MainDocument::setLoadingTemplate(bool loading)
 {
     m_loadingTemplate = loading;
 }
 
-bool Part::completeLoading( KoStore *store )
+bool MainDocument::completeLoading( KoStore *store )
 {
     // If we get here the new project is loaded and set
     if ( m_loadingTemplate ) {
@@ -868,14 +868,14 @@ bool Part::completeLoading( KoStore *store )
 // Due to splitting of KoDocument into a document and a part,
 // we simmulate the old behaviour by registering all views in the document.
 // Find a better solution!
-void Part::registerView( View* view )
+void MainDocument::registerView( View* view )
 {
     if ( view && ! m_views.contains( view ) ) {
         m_views << QPointer<View>( view );
     }
 }
 
-bool Part::completeSaving( KoStore *store )
+bool MainDocument::completeSaving( KoStore *store )
 {
     foreach ( View *view, m_views ) {
         if ( view ) {
@@ -897,7 +897,7 @@ bool Part::completeSaving( KoStore *store )
     return true;
 }
 
-bool Part::loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc)
+bool MainDocument::loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &doc)
 {
     //kDebug(planDbg()) << "oldLoadAndParse: Trying to open " << filename;
 
@@ -927,9 +927,9 @@ bool Part::loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &
     return true;
 }
 
-void Part::insertFile( const QString &filename, Node *parent, Node *after )
+void MainDocument::insertFile( const QString &filename, Node *parent, Node *after )
 {
-    Part *part = new Part();
+    MainDocument *part = new MainDocument();
     part->disconnect(); // part shall not handle feedback from openUrl()
     part->setAutoSave( 0 ); //disable
     part->m_insertFileInfo.url = filename;
@@ -942,9 +942,9 @@ void Part::insertFile( const QString &filename, Node *parent, Node *after )
     part->openUrl( KUrl( filename ) );
 }
 
-void Part::insertFileCompleted()
+void MainDocument::insertFileCompleted()
 {
-    Part *part = qobject_cast<Part*>( sender() );
+    MainDocument *part = qobject_cast<MainDocument*>( sender() );
     if ( part ) {
         Project &p = part->getProject();
         insertProject( p, part->m_insertFileInfo.parent, part->m_insertFileInfo.after );
@@ -952,18 +952,18 @@ void Part::insertFileCompleted()
     }
 }
 
-void Part::insertFileCancelled( const QString &error )
+void MainDocument::insertFileCancelled( const QString &error )
 {
     if ( ! error.isEmpty() ) {
         KMessageBox::error( 0, error );
     }
-    Part *part = qobject_cast<Part*>( sender() );
+    MainDocument *part = qobject_cast<MainDocument*>( sender() );
     if ( part ) {
         part->deleteLater();
     }
 }
 
-bool Part::insertProject( Project &project, Node *parent, Node *after )
+bool MainDocument::insertProject( Project &project, Node *parent, Node *after )
 {
     // make sure node ids in new project is unique also in old project
     QList<QString> existingIds = m_project->nodeDict().keys();
@@ -982,7 +982,7 @@ bool Part::insertProject( Project &project, Node *parent, Node *after )
     return true;
 }
 
-void Part::insertViewListItem( View */*view*/, const ViewListItem *item, const ViewListItem *parent, int index )
+void MainDocument::insertViewListItem( View */*view*/, const ViewListItem *item, const ViewListItem *parent, int index )
 {
     // FIXME callers should take care that they now get a signal even if originating from themselves
     emit viewListItemAdded(item, parent, index);
@@ -990,7 +990,7 @@ void Part::insertViewListItem( View */*view*/, const ViewListItem *item, const V
     m_viewlistModified = true;
 }
 
-void Part::removeViewListItem( View */*view*/, const ViewListItem *item )
+void MainDocument::removeViewListItem( View */*view*/, const ViewListItem *item )
 {
     // FIXME callers should take care that they now get a signal even if originating from themselves
     emit viewListItemRemoved(item);
@@ -998,14 +998,14 @@ void Part::removeViewListItem( View */*view*/, const ViewListItem *item )
     m_viewlistModified = true;
 }
 
-void Part::slotModified( bool mod )
+void MainDocument::slotModified( bool mod )
 {
     if ( ! mod && m_viewlistModified ) {
         setModified( true );
     }
 }
 
-void Part::viewlistModified()
+void MainDocument::viewlistModified()
 {
     if ( ! m_viewlistModified ) {
         m_viewlistModified = true;
@@ -1015,4 +1015,4 @@ void Part::viewlistModified()
 
 }  //KPlato namespace
 
-#include "kptpart.moc"
+#include "kptmaindocument.moc"

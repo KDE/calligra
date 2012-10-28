@@ -18,7 +18,7 @@
 */
 
 #include "kptfactory.h"
-#include "kptpart.h"
+#include "kptmaindocument.h"
 #include "kptpartpart.h"
 #include "kptaboutdata.h"
 #include <kcomponentdata.h>
@@ -54,7 +54,7 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
     Q_UNUSED( keyword );
 
     PartPart *part = new PartPart(parent);
-    Part *doc = new Part(part);
+    MainDocument *doc = new MainDocument(part);
     part->setDocument(doc);
 
     return part;

@@ -30,7 +30,7 @@ class QWidget;
 /// The main namespace.
 namespace KPlato
 {
-class Part;
+class MainDocument;
 
 class KPLATO_EXPORT PartPart : public KoPart
 {
@@ -41,7 +41,7 @@ public:
 
     virtual ~PartPart();
 
-    void setDocument(KPlato::Part *document);
+    void setDocument(KPlato::MainDocument *document);
 
     /// reimplemented
     virtual KoView *createViewInstance(QWidget *parent);
@@ -49,7 +49,7 @@ public:
 protected:
     virtual void openTemplate( const KUrl& url );
 
-    KPlato::Part *m_document;
+    KPlato::MainDocument *m_document;
 };
 
 }  //KPlato namespace

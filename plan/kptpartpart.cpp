@@ -20,7 +20,7 @@
 #include "kptpartpart.h"
 
 #include "kptview.h"
-#include "kptpart.h"
+#include "kptmaindocument.h"
 #include "kptfactory.h"
 
 #include <kglobal.h>
@@ -36,7 +36,7 @@ PartPart::~PartPart()
 {
 }
 
-void PartPart::setDocument(KPlato::Part *document)
+void PartPart::setDocument(KPlato::MainDocument *document)
 {
     KoPart::setDocument(document);
     m_document = document;
