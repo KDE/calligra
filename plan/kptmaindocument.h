@@ -53,13 +53,13 @@ class View;
 
 class Package;
 
-class KPLATO_EXPORT Part : public KoDocument
+class KPLATO_EXPORT MainDocument : public KoDocument
 {
     Q_OBJECT
 
 public:
-    explicit Part(KoPart *part = 0);
-    ~Part();
+    explicit MainDocument(KoPart *part = 0);
+    ~MainDocument();
 
     void setReadWrite( bool rw );
     void configChanged();

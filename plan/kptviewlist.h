@@ -41,7 +41,7 @@ class ViewBase;
 class ViewListItem;
 class ViewListWidget;
 
-class Part;
+class MainDocument;
 class Context;
 class ScheduleManager;
 
@@ -116,7 +116,7 @@ class KPLATO_EXPORT ViewListWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ViewListWidget( Part *part, QWidget *parent );//QString name, KXmlGuiWindow *parent );
+    ViewListWidget( MainDocument *part, QWidget *parent );//QString name, KXmlGuiWindow *parent );
     ~ViewListWidget();
 
     /// Set read/write permission on all views.
@@ -201,7 +201,7 @@ private:
     void setupContextMenus();
 
 private:
-    Part *m_part;
+    MainDocument *m_part;
     ViewListTreeWidget *m_viewlist;
     QComboBox *m_currentSchedule;
     ScheduleSortFilterModel m_sfModel;
