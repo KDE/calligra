@@ -93,7 +93,7 @@ public: // KoCanvasBase implementation
     virtual void startMacro(const QString &title);
     virtual void stopMacro();
 
-    virtual QPoint documentOrigin() const;
+    //virtual QPoint documentOrigin() const;
     QPoint documentOffset() const;
 
     /**

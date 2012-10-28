@@ -257,8 +257,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     canvasController->setZoomWithWheel(cfg.zoomWithWheel());
     canvasController->setVastScrolling(cfg.vastScrolling());
 
-    m_d->canvasController = canvasController;
-
     m_d->resourceProvider = new KisCanvasResourceProvider(this);
     m_d->resourceProvider->resetDisplayProfile(QApplication::desktop()->screenNumber(this));
     m_d->canvas = new KisCanvas2(m_d->viewConverter, this, doc->shapeController());
