@@ -37,7 +37,7 @@
 #include <kdebug.h>
 // plan
 #include "kptmaindocument.h"
-#include "kptpartpart.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptproject.h"
 #include "kptnode.h"
@@ -96,7 +96,7 @@ KPlato::MainDocument* Module::part()
             d->doc = v->getPart();
         }
         if( ! d->doc ) {
-            KPlato::PartPart *part = new KPlato::PartPart(this);
+            KPlato::Part *part = new KPlato::Part(this);
             d->doc = new KPlato::MainDocument(part);
             part->setDocument(d->doc);
         }

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptpartpart.h"
+#include "kptpart.h"
 
 #include "kptview.h"
 #include "kptmaindocument.h"
@@ -25,24 +25,24 @@
 
 #include <kglobal.h>
 
-PartPart::PartPart(QObject *parent)
+Part::Part(QObject *parent)
     : KoPart(parent)
 {
     setComponentData( Factory::global(), false ); // Do not load plugins now (the view will load them)
     setTemplateType( "plan_template" );
 }
 
-PartPart::~PartPart()
+Part::~Part()
 {
 }
 
-void PartPart::setDocument(KPlato::MainDocument *document)
+void Part::setDocument(KPlato::MainDocument *document)
 {
     KoPart::setDocument(document);
     m_document = document;
 }
 
-KoView *PartPart::createViewInstance(QWidget *parent)
+KoView *Part::createViewInstance(QWidget *parent)
 {
     // synchronize view selector
     View *view = dynamic_cast<View*>(views().value(0));
@@ -58,7 +58,7 @@ KoView *PartPart::createViewInstance(QWidget *parent)
     return view;
 }
 
-void PartPart::openTemplate(const KUrl &url)
+void Part::openTemplate(const KUrl &url)
 {
     m_document->setLoadingTemplate(true);
     KoPart::openTemplate(url);
