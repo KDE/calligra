@@ -57,7 +57,7 @@ Item {
         function ensureVisible(item) {
             if(item !== undefined && item !== null) {
                 var targetPosition = item.mapToItem(screenScroller, item.x, item.y);
-                if(targetPosition.y > base.height * 0.66) {
+                if(targetPosition.y > base.height * 0.5) {
                     screenScroller.contentY = targetPosition.y - base.height / 2;
                     screenScroller.returnToBounds();
                 }
