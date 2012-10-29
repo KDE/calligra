@@ -214,6 +214,12 @@ void KisSketchView::setFile(const QString& file)
                 qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
             }
 
+            if(d->undoAction)
+                d->undoAction->disconnect(this);
+
+            if(d->redoAction)
+                d->redoAction->disconnect(this);
+
             KisView2 *oldView = d->view;
             disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
             d->view = 0;
@@ -268,12 +274,9 @@ void KisSketchView::setFile(const QString& file)
         d->canvas = d->view->canvasBase();
 
         d->undoStack = d->doc->undoStack();
-        if(d->undoAction)
-            d->undoAction->disconnect(this);
         d->undoAction = d->view->actionCollection()->action("edit_undo");
         connect(d->undoAction, SIGNAL(changed()), this, SIGNAL(canUndoChanged()));
-        if(d->redoAction)
-            d->redoAction->disconnect(this);
+
         d->redoAction = d->view->actionCollection()->action("edit_redo");
         connect(d->redoAction, SIGNAL(changed()), this, SIGNAL(canRedoChanged()));
 
