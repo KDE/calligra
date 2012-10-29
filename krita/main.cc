@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QDesktopServices>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
@@ -58,6 +59,32 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // first create the application so we can create a  pixmap
     KoApplication app;
 
+#ifdef Q_OS_WIN
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QDir appdir(app.applicationDirPath());
+    qDebug() << appdir;
+    appdir.cdUp();
+    qDebug() << appdir.currentPath();
+    env.insert("KDEDIR", appdir.currentPath());
+    env.insert("KDEDIR", appdir.currentPath());
+    env.insert("KDEDIRS", appdir.currentPath());
+    env.insert("XDG_DATA_DIRS", appdir.currentPath() + QDir::separator() +  "share");
+    env.insert("XDG_DATA_HOME", appdir.currentPath() + QDir::separator() + "share");
+    env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QDir::separator() + "AppData" + QDir::separator() + "Roaming" + QDir::separator() + "krita");
+    QString currentPath = env.value("PATH");
+    qDebug() << currentPath;
+    env.insert("PATH", appdir.currentPath() + QDir::separator() + "bin" + ";"
+               + appdir.currentPath() + QDir::separator() + "lib" + ";"
+               + appdir.currentPath() + QDir::separator() + "lib"  + QDir::separator() + "kde4" + ";"
+               + currentPath);
+    app.addLibraryPath(appdir.currentPath());
+    app.addLibraryPath(appdir.currentPath() + "/bin");
+    app.addLibraryPath(appdir.currentPath() + "/lib");
+    app.addLibraryPath(appdir.currentPath() + "/lib/kde4");
+    qDebug() << app.libraryPaths();
+#endif
+
+
     // then create the pixmap from an xpm: we cannot get the
     // location of our datadir before we've started our components,
     // so use an xpm.
@@ -78,8 +105,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     delete aboutData;
 
 #ifdef Q_OS_WIN
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QDir appdir(app.applicationDirPath());
     //const QString path = KStandardDirs::findExe( QLatin1String("kdeinit4" ) );
     Q_ASSERT(QFile(appdir.canonicalPath() + "kdeinit4.exe").exists());
     QProcess::startDetached(appdir.canonicalPath() + "kdeinit4 --terminate");
