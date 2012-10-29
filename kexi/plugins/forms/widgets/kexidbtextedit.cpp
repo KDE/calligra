@@ -106,19 +106,28 @@ void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
 //! @todo how about rich text?
     if (m_columnInfo && m_columnInfo->field->type() == KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!
-        KTextEdit::setPlainText(add.toBool() ? "1" : "0");
+        KTextEdit::setHtml(add.toBool() ? "1" : "0");
     } else {
-        if (removeOld)
-            KTextEdit::setPlainText(add.toString());
-        else
-            KTextEdit::setPlainText(m_origValue.toString() + add.toString());
+        QString t;
+        if (removeOld) {
+            t = add.toString();
+        }
+        else {
+            t = m_origValue.toString() + add.toString();
+        }
+
+        if (acceptRichText()) {
+            KTextEdit::setHtml(t);
+        }
+        else {
+            KTextEdit::setPlainText(t);
+        }
     }
 }
 
 QVariant KexiDBTextEdit::value()
 {
-//! @todo how about rich text?
-    return toPlainText();
+    return acceptRichText() ? toHtml() : toPlainText();
 }
 
 void KexiDBTextEdit::slotTextChanged()
@@ -127,8 +136,22 @@ void KexiDBTextEdit::slotTextChanged()
         return;
 
     if (m_length > 0) {
-        if (toPlainText().length() > (int)m_length) {
-            setPlainText(toPlainText().left(m_length));
+        QString t;
+        if (acceptRichText()) {
+            t = toHtml();
+        }
+        else {
+            t = toPlainText();
+        }
+        if (t.length() > (int)m_length) {
+            m_slotTextChanged_enabled = false;
+            if (acceptRichText()) {
+#warning todo setHtml(t.left(m_length));
+            }
+            else {
+                setPlainText(t.left(m_length));
+            }
+            m_slotTextChanged_enabled = true;
             moveCursorToEnd();
         }
     }
@@ -138,12 +161,12 @@ void KexiDBTextEdit::slotTextChanged()
 
 bool KexiDBTextEdit::valueIsNull()
 {
-    return toPlainText().isNull();
+    return (acceptRichText() ? toHtml() : toPlainText()).isNull();
 }
 
 bool KexiDBTextEdit::valueIsEmpty()
 {
-    return toPlainText().isEmpty();
+    return (acceptRichText() ? toHtml() : toPlainText()).isEmpty();
 }
 
 bool KexiDBTextEdit::isReadOnly() const
@@ -204,7 +227,7 @@ void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
         return;
     }
 
-    if (cinfo->field->isTextType()) {
+    if (cinfo->field->type() == KexiDB::Field::Text) {
         if (!designMode()) {
             if (cinfo->field->maxLength() > 0) {
                 m_length = cinfo->field->maxLength();
@@ -219,6 +242,7 @@ void KexiDBTextEdit::paintEvent(QPaintEvent *pe)
 {
     KTextEdit::paintEvent(pe);
     QPainter p(viewport());
+    //! @todo how about rich text?
     KexiDBTextWidgetInterface::paint(this, &p, toPlainText().isEmpty(), alignment(), hasFocus());
 }
 
