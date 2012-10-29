@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=XFig Images
+Name[de]=XFig-Bilder
 Name[el]=Εικόνες XFig
 Name[et]=XFig-pildid
 Name[fr]=Images XFig
@@ -10,6 +11,7 @@ Name[nl]=XFig-afbeeldingen
 Name[pt]=Imagens do XFig
 Name[pt_BR]=Imagens XFig
 Name[sk]=XFig obrázky
+Name[sl]=Slike XFig
 Name[sv]=XFig-bilder
 Name[uk]=Зображення XFig
 Name[x-test]=xxXFig Imagesxx

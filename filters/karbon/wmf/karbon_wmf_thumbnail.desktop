@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=WMF Images
+Name[de]=WMF-Bilder
 Name[el]=Εικόνες WMF
 Name[et]=WMF-pildid
 Name[fr]=Images WMF
@@ -10,6 +11,7 @@ Name[nl]=WMF-afbeeldingen
 Name[pt]=Imagens WMF
 Name[pt_BR]=Imagens WMF
 Name[sk]=WMF obrázky
+Name[sl]=Slike WMF
 Name[sv]=WMF-bilder
 Name[uk]=Зображення WMF
 Name[x-test]=xxWMF Imagesxx
