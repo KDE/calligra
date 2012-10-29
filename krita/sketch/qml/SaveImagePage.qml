@@ -92,6 +92,11 @@ Page {
         cellHeight: Constants.GridHeight * 1.75;
 
         clip: true;
+
+        MouseArea {
+            anchors.fill: parent;
+            onPressed: { parent.focus = true; mouse.accepted = false; }
+        }
     }
 
     Rectangle {
@@ -187,6 +192,7 @@ Page {
             id: delegateBase;
 
             width: GridView.view.cellWidth;
+            z: 10;
 
             image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
             imageShadow: model.fileType != "inode/directory" ? true : false;
