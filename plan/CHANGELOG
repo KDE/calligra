@@ -2,6 +2,10 @@
 Calligra Plan current:
 ----------------------
 
+* Add export to csv and ods
+
+Release 2.6
+-----------
 * Fix bug 308855 -  Gantt chart: No tree structure in printed version
 
 * Fix bug 307450 - Calligra Plan crash when adding subtask
