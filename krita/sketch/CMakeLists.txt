@@ -77,8 +77,12 @@ set(KRITA_COLORSELECTORNG_PART_SRCS
 )
 
 
-#kde4_add_app_icon(kritasketch_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/kritasketch.png")
-kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
+if (WIN32)
+    set(kritasketch_SRCS ${kritasketch_SRCS} KritaSketch.rc)
+else (WIN32)
+    kde4_add_app_icon(kritasketch_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kritasketch.png")
+endif (WIN32)
+
 kde4_add_executable(kritasketch ${kritasketch_SRCS} ${kritasketch_kritaintegrationmodels_SRCS} ${KRITA_COLORSELECTORNG_PART_SRCS})
 
 
