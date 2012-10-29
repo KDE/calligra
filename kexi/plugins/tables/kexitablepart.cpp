@@ -121,7 +121,7 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
     return 0;
 }
 
-bool KexiTablePart::remove(KexiPart::Item &item)
+tristate KexiTablePart::remove(KexiPart::Item &item)
 {
     KexiProject *project = KexiMainWindowIface::global()->project();
     if (!project || !project->dbConnection())
@@ -131,25 +131,32 @@ bool KexiTablePart::remove(KexiPart::Item &item)
     KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
 
     if (sch) {
-        KexiTablePart::askForClosingObjectsUsingTableSchema(
-                           KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
-                           i18n(
-                               "You are about to remove table \"%1\" but following objects using this table are opened:",
-                               sch->name()));
-        return true == conn->dropTable(sch);
+        tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
+            KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
+            i18n("You are about to remove table <resource>%1</resource> but following objects using this table are opened:",
+                 sch->name()));
+        if (res != true) {
+            return res;
+        }
+        return conn->dropTable(sch);
     }
     //last chance: just remove item
     return conn->removeObject(item.identifier());
 }
 
-tristate KexiTablePart::rename(KexiPart::Item & item,
-                               const QString& newName)
+tristate KexiTablePart::rename(KexiPart::Item & item, const QString& newName)
 {
-//TODO: what about objects (queries/forms) that use old name?
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
     if (!sch)
         return false;
+    tristate res = KexiTablePart::askForClosingObjectsUsingTableSchema(
+        KexiMainWindowIface::global()->thisWidget(), *conn, *sch,
+        i18n("You are about to rename table <resource>%1</resource> but following objects using this table are opened:",
+             sch->name()));
+    if (res != true) {
+        return res;
+    }
     return conn->alterTableName(*sch, newName);
 }
 
@@ -179,14 +186,15 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
     if (!listeners || listeners->isEmpty())
         return true;
 
-    QString openedObjectsStr = "<ul>";
+    QString openedObjectsStr = "<list>";
     foreach(KexiDB::Connection::TableSchemaChangeListenerInterface* iface, *listeners) {
-        openedObjectsStr += QString("<li>%1</li>").arg(iface->listenerInfoString);
+        openedObjectsStr += QString("<item>%1</item>").arg(iface->listenerInfoString);
     }
-    openedObjectsStr += "</ul>";
+    openedObjectsStr += "</list>";
     int r = KMessageBox::questionYesNo(parent,
-                                       "<p>" + msg + "</p><p>" + openedObjectsStr + "</p><p>"
-                                       + i18n("Do you want to close all windows for these objects?"),
+                                       "<para>" + msg + "</para><para>" + openedObjectsStr + "</para><para>"
+                                       + i18n("Do you want to close all windows for these objects?")
+                                       + "</para>",
                                        QString(), KGuiItem(i18n("Close windows"), koIconName("window-close")), KStandardGuiItem::cancel());
     tristate res;
     if (r == KMessageBox::Yes) {

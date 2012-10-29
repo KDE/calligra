@@ -92,7 +92,7 @@ ELSE()
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
-    set(SHOULD_BUILD_ACTIVE TRUE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ENDIF()
 
 if(KDE4_BUILD_TESTS)
@@ -196,7 +196,7 @@ macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Li
 		    "Required by Calligra's default database handler for Kexi and Words.")
 
 ##
-## Check for OpenEXR 
+## Check for OpenEXR
 ##
 
 macro_optional_find_package(OpenEXR)
@@ -206,7 +206,6 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
-if (NOT WIN32)
 macro_optional_find_package(OpenGL)
 
 if(OPENGL_FOUND)
@@ -222,7 +221,6 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
-endif (NOT WIN32)
 
 ##
 ## Test for kdepimlibs
@@ -283,13 +281,15 @@ if( MARBLE_FOUND )
     ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
     ## with commit ea177ca. This is for compatibility with older versions.
     ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
     if( MARBLECONTROLBOX_H )
     file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
     string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
+    else( MARBLECONTROLBOX_H )
+        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
@@ -317,6 +317,15 @@ if(NEPOMUK)
     add_definitions(-DDISABLE_NEPOMUK_LEGACY)
     macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
 endif(NEPOMUK)
+
+##
+## Test for KActivities
+##
+macro_optional_find_package(KActivities 6.1.0)
+macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" FALSE "" "Required for Activities integration.")
+if(KActivities_FOUND)
+    set(HAVE_KACTIVITIES TRUE)
+endif(KActivities_FOUND)
 
 #Set the build of TextShape changetraker
 
@@ -359,13 +368,13 @@ if(!WIN32)
     macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
 endif(!WIN32)
 
-if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
 else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-  
+
 ##
 ## Test for Qt Webkit
 ##
@@ -393,6 +402,13 @@ endif(NOT KDECLARATIVE_FOUND)
 ##
 include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
+
+##
+## Test SharedMimeInfo
+##
+macro_optional_find_package(SharedMimeInfo)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
+
 
 ##
 ## Generate a file for prefix information
@@ -493,9 +509,16 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
 
 # calligradb
-SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
-                        ${CMAKE_BINARY_DIR}/libs/db)
+# TODO: remove when Predicate lib arrives
+if (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
+   set(SHOULD_BUILD_CALLIGRADB TRUE)
+   set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+   set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                           ${CMAKE_BINARY_DIR}/libs/db)
+else (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
+   set(SHOULD_BUILD_CALLIGRADB FALSE)
+   set(SHOULD_BUILD_KEXI FALSE)
+endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
 
  #############################################
 ##############################################
@@ -515,10 +538,10 @@ if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)
 
-### Krita: pigment, eigen2, exiv2
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+### Krita: pigment, eigen2, exiv2, sharedmimeinfo
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 ### Active needs sheets, stage and words
 if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
@@ -526,7 +549,7 @@ if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 endif (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
 
 
-### Active: only build with Qt 4.7.0 or better 
+### Active: only build with Qt 4.7.0 or better
 if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
     set(SHOULD_BUILD_ACTIVE FALSE)
 endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)

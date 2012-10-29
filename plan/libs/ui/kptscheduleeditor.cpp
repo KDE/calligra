@@ -142,6 +142,7 @@ ScheduleEditor::ScheduleEditor(KoPart *part, KoDocument *doc, QWidget *parent)
         << ScheduleModel::SchedulePlannedStart
         << ScheduleModel::SchedulePlannedFinish
         << ScheduleModel::ScheduleScheduler
+        << ScheduleModel::ScheduleGranularity
         ;
 
     QList<int> lst;

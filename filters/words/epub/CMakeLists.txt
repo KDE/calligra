@@ -82,5 +82,5 @@ target_link_libraries(exporthtml komain)
 install(TARGETS exportepub2  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  words_epub2_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-#install(TARGETS exporthtml  DESTINATION ${PLUGIN_INSTALL_DIR})
-#install( FILES  words_html_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS exporthtml  DESTINATION ${PLUGIN_INSTALL_DIR})
+install( FILES  words_html_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

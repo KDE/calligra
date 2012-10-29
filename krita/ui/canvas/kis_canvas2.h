@@ -143,7 +143,6 @@ public: // KisCanvas2 methods
     KisImageWSP image();
     KisView2* view();
 
-    bool usingHDRExposureProgram();
     /// @return true if the canvas image should be displayed in vertically mirrored mode
     bool isCanvasInfinite();
     /// @return true if the image in question has infinite canvas enabled
@@ -165,19 +164,6 @@ public slots:
     /// Update the entire canvas area
     void updateCanvas();
 
-    /// The image projection has changed, now start an update
-    /// of the canvas representation.
-    void startUpdateCanvasProjection(const QRect & rc);
-    void updateCanvasProjection(KisUpdateInfoSP info);
-
-    void startUpdateInPatches(QRect imageRect);
-
-    void setMonitorProfile(KoColorProfile* monitorProfile,
-                           KoColorConversionTransformation::Intent renderingIntent,
-                           KoColorConversionTransformation::ConversionFlags conversionFlags);
-
-
-
     void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     void startResizingImage(qint32 w, qint32 h);
@@ -188,6 +174,17 @@ public slots:
     void setSmoothingEnabled(bool smooth);
 
 private slots:
+
+    /// The image projection has changed, now start an update
+    /// of the canvas representation.
+    void startUpdateCanvasProjection(const QRect & rc);
+    void updateCanvasProjection(KisUpdateInfoSP info);
+
+    void startUpdateInPatches(QRect imageRect);
+
+    void setMonitorProfile(KoColorProfile* monitorProfile,
+                           KoColorConversionTransformation::Intent renderingIntent,
+                           KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
      * Called whenever the view widget needs to show a different part of
@@ -212,7 +209,6 @@ private slots:
     void setCursor(const QCursor &cursor);
 
 public:
-//    friend class KisView2;
 
     // interface for KisView2 only
     void connectCurrentImage();

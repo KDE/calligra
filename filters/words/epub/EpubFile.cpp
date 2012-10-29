@@ -296,6 +296,11 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
 
     int playOrder = 1;
     foreach(FileInfo *file, files()) {
+
+        if (file->m_label.isEmpty()) {
+            continue;
+        }
+
         // Since paths are relative from where this file is, remove
         // the common prefix from the reference.
         QString relativeFilename = file->m_fileName;
@@ -311,7 +316,7 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
             writer.startElement("navLabel");
 
             writer.startElement("text");
-            writer.addTextNode("Label"); // FIXME; What should i write in this place.
+            writer.addTextNode(file->m_label);
             writer.endElement();
 
             writer.endElement(); // navLabel

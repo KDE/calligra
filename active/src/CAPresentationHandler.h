@@ -27,6 +27,7 @@
 class CAPADocumentModel;
 class QSize;
 class QSizeF;
+class KoFindMatch;
 
 class CAPresentationHandler : public CAAbstractDocumentHandler
 {
@@ -34,6 +35,7 @@ class CAPresentationHandler : public CAAbstractDocumentHandler
     Q_PROPERTY(int slideshowDelay READ slideshowDelay WRITE setSlideshowDelay NOTIFY slideshowDelayChanged)
     Q_PROPERTY(int currentSlideNumber READ currentSlideNumber WRITE setCurrentSlideNumber NOTIFY currentSlideNumberChanged)
     Q_PROPERTY(int totalNumberOfSlides READ totalNumberOfSlides NOTIFY totalNumberOfSlidesChanged)
+    Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
 
 public:
     explicit CAPresentationHandler (CADocumentController* documentController);
@@ -47,6 +49,7 @@ public:
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;
     virtual QString centerOverlaySource() const;
+    virtual QString bottomToolbarSource() const;
     virtual QString previousPageImage() const;
     virtual QString nextPageImage() const;
     virtual FlickModes flickMode() const;
@@ -59,6 +62,14 @@ public:
 
     int currentSlideNumber() const;
     int totalNumberOfSlides() const;
+    QString searchString() const;
+    void setSearchString (const QString& searchString);
+    void setTextData(int slideNumber);
+    enum SearchDirection {
+         SearchForward,
+         SearchBackwards
+    };
+    void searchOtherSlides(SearchDirection direction);
 
     Q_INVOKABLE CAPADocumentModel *paDocumentModel() const;
 
@@ -73,6 +84,8 @@ public slots:
     void startSlideshow();
     void stopSlideshow();
     void setCurrentSlideNumber(int number);
+    void findNext();
+    void findPrevious();
 
 signals:
     void slideshowDelayChanged();
@@ -80,6 +93,7 @@ signals:
     void slideshowStopped();
     void currentSlideNumberChanged();
     void totalNumberOfSlidesChanged();
+    void searchStringChanged();
 
 protected:
     virtual KoDocument* document();
@@ -87,6 +101,8 @@ protected:
 private slots:
     void advanceSlideshow();
     void gotoCurrentSlide();
+    void findMatchFound(const KoFindMatch& match);
+    void findNoMatchFound();
 
 private:
     class Private;

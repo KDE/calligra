@@ -35,12 +35,12 @@ const int ANIMATIONS_COUNT = 9;
 void TestShapeAnimations::initTestCase()
 {
     //Initialize Animations
-    KoTextBlockData *textBlockData = 0;
+    QTextBlockUserData *textBlockUserData = 0;
     for (int i = 0; i < 9; i++) {
         MockShape *shape = new MockShape();
         shape->setSize(QSizeF(100, 100));
         shapes.append(shape);
-        MockShapeAnimation *animation = new MockShapeAnimation(shape, textBlockData);
+        MockShapeAnimation *animation = new MockShapeAnimation(shape, textBlockUserData);
         animation->setPresetClass(KPrShapeAnimation::Entrance);
         m_animation.append(animation);
     }

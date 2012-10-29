@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2010-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2010-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@ public:
     QString itemsPartClass;
     KexiProjectModelItem *rootItem;
     QPersistentModelIndex searchHighlight;
+    QPointer<KexiProject> project;
 };
 
 KexiProjectModel::Private::Private() : rootItem(0)
@@ -57,8 +58,14 @@ KexiProjectModel::KexiProjectModel(QObject* parent): QAbstractItemModel(parent) 
     d->rootItem = new KexiProjectModelItem(QString());
 }
 
+KexiProject* KexiProjectModel::project() const
+{
+    return d->project;
+}
+
 void KexiProjectModel::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages)
 {
+    d->project = prj;
     //kDebug() << itemsPartClass << ".";
     clear();
     d->itemsPartClass = itemsPartClass;
@@ -147,7 +154,6 @@ QVariant KexiProjectModel::data(const QModelIndex& index, int role) const
         return QVariant();
     switch (role) {
     case Qt::DisplayRole:
-    case Qt::EditRole:
     case Qt::WhatsThisRole:
         return item->data(index.column());
     case Qt::DecorationRole:
@@ -227,27 +233,35 @@ bool KexiProjectModel::hasChildren(const QModelIndex& parent) const
     return QAbstractItemModel::hasChildren(parent);
 }
 
-bool KexiProjectModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool KexiProjectModel::renameItem(KexiPart::Item *item, const QString& newName)
 {
-//    if (!(m_features & Writable))
-//        return;
-    if (role == Qt::EditRole) {
-        KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(index.internalPointer());
-        if (!it)
-            return false;
-        
-        QString txt = value.toString().trimmed();
-        bool ok = QString::compare(it->partItem()->name(), txt, Qt::CaseInsensitive); //make sure the new name is different
-        if (ok) {
-            emit renameItem(it->partItem(), txt, ok);
-        }
-
-        if (ok) {
-            emit dataChanged(index, index);
-        }
-        return ok;
+    if (item->name() == newName) { //make sure the new name is different
+        return false;
     }
-    return QAbstractItemModel::setData(index, value, role);
+    KexiProjectModelItem *i = modelItemFromItem(*item);
+    if (!i) {
+        return false;
+    }
+    QModelIndex origIndex = indexFromItem(i);
+    bool ok = true;
+    emit renameItem(item, newName, ok);
+    if (ok) {
+        emit layoutAboutToBeChanged();
+        i->parent()->sortChildren();
+        changePersistentIndex(origIndex, indexFromItem(i));
+        emit layoutChanged();
+    }
+    return ok;
+}
+
+bool KexiProjectModel::setItemCaption(KexiPart::Item *item, const QString& newCaption)
+{
+    if (item->caption() == newCaption) { //make sure the new caption is different
+        return false;
+    }
+    bool ok = true;
+    emit changeItemCaption(item, newCaption, ok);
+    return ok;
 }
 
 Qt::ItemFlags KexiProjectModel::flags(const QModelIndex& index) const

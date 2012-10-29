@@ -404,7 +404,7 @@ void Part::initInstanceActions()
 {
 }
 
-bool Part::remove(KexiPart::Item &item)
+tristate Part::remove(KexiPart::Item &item)
 {
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     if (!conn)

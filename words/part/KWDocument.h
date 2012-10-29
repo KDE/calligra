@@ -44,6 +44,7 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoTextAnchor;
@@ -92,6 +93,9 @@ public:
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+
+    bool isMasterDocument() const;
+    void setIsMasterDocument(bool isMasterDocument);
 
     // others
     /**
@@ -158,6 +162,9 @@ public:
 
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
+
+    /// return the textRangeManager for this document.
+    KoTextRangeManager *textRangeManager() const;
 
     KWApplicationConfig &config() {
         return m_config;
@@ -261,6 +268,7 @@ private:
     void saveConfig();
 
 private:
+    bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;

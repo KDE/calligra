@@ -66,7 +66,7 @@ class PlanTJScheduler : public KPlato::SchedulerThread
 private:
 
 public:
-    PlanTJScheduler( Project *project, ScheduleManager *sm, QObject *parent = 0 );
+    PlanTJScheduler( Project *project, ScheduleManager *sm, ulong granularity, QObject *parent = 0 );
     ~PlanTJScheduler();
 
     bool check();
@@ -111,11 +111,13 @@ protected:
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
     static DateTime fromTime_t( time_t );
     AppointmentInterval fromTJInterval( const TJ::Interval &tji );
-    static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end );
-    static TJ::Interval toTJInterval( const QTime &start, const QTime &end );
+    static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end, ulong tjGranularity );
+    static TJ::Interval toTJInterval( const QTime &start, const QTime &end, ulong tjGranularity );
+
 
 private:
     KLocale *locale() const;
+    ulong tjGranularity() const;
 
 private:
     MainSchedule *m_schedule;
@@ -127,7 +129,8 @@ private:
 
     QMap<TJ::Task*, Task*> m_taskmap;
     QMap<TJ::Resource*, Resource*> m_resourcemap;
-    
+
+    ulong m_granularity;
 };
 
 #endif // PLANTJPSCHEDULER_H

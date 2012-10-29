@@ -176,19 +176,19 @@ bool KPrAnimationLoader::loadOdfAnimation(KPrAnimationStep **animationStep, cons
             QString targetElement(e.attributeNS(KoXmlNS::smil, "targetElement", QString()));
             if (!targetElement.isEmpty()) {
                 KoShape *shape = 0;
-                KoTextBlockData *textBlockData = 0;
+                QTextBlockUserData *quData = 0;
 
                 if (e.attributeNS(KoXmlNS::anim, "sub-item", "whole") == "text") {
                     QPair<KoShape *, QVariant> pair = context.shapeSubItemById(targetElement);
                     shape = pair.first;
-                    textBlockData = pair.second.value<KoTextBlockData *>();
+                    quData = pair.second.value<QTextBlockUserData *>();
                 }
                 else {
                     shape = context.shapeById(targetElement);
                 }
 
                 if (shape) {
-                    shapeAnimation = new KPrShapeAnimation(shape, textBlockData);
+                    shapeAnimation = new KPrShapeAnimation(shape, quData);
                 }
                 else {
                     // shape animation not created

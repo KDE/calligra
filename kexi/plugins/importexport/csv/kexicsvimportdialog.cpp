@@ -1529,16 +1529,16 @@ void KexiCSVImportDialog::accept()
 
     //-ask for table name/title
     // (THIS IS FROM KexiMainWindow::saveObject())
-    bool allowOverwriting = true;
+    bool overwriteNeeded;
     tristate res = KexiMainWindowIface::global()->getNewObjectInfo(
-                       partItemForSavedTable, part, allowOverwriting);
+                       partItemForSavedTable, part, true /*allowOverwriting*/, &overwriteNeeded);
     if (~res || !res) {
 //! @todo error
         raiseErrorInAccept(project, partItemForSavedTable);
         return;
     }
-    //(allowOverwriting is now set to true, if user accepts overwriting,
-    // and overwriting will be needed)
+    //(overwriteNeeded is now set to true, if user accepts overwriting,
+    // and overwriting is needed)
 
 // KexiDB::SchemaData sdata(part->info()->projectPartID());
 // sdata.setName( partItem->name() );
@@ -1646,7 +1646,7 @@ void KexiCSVImportDialog::accept()
     KexiDB::TransactionGuard tg(transaction);
 
     //-create physical table
-    if (!m_conn->createTable(m_destinationTableSchema, allowOverwriting)) {
+    if (!m_conn->createTable(m_destinationTableSchema, overwriteNeeded)) {
         msg.showErrorMessage(m_conn);
         raiseErrorInAccept(project, partItemForSavedTable);
         return;

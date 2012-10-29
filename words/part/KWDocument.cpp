@@ -57,6 +57,7 @@
 #include <KoStyleManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
+#include <KoTextRangeManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
@@ -90,6 +91,7 @@
 
 KWDocument::KWDocument(KoPart *part)
         : KoDocument(part),
+        m_isMasterDocument(false),
         m_frameLayout(&m_pageManager, m_frameSets),
         m_mainFramesetEverFinished(false)
 {
@@ -132,6 +134,18 @@ KWDocument::~KWDocument()
     saveConfig();
     qDeleteAll(m_frameSets);
 }
+
+bool KWDocument::isMasterDocument() const
+{
+    return m_isMasterDocument;
+}
+
+void KWDocument::setIsMasterDocument(bool isMasterDocument)
+{
+    m_isMasterDocument = isMasterDocument;
+}
+
+
 
 // Words adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
 // will call addFrameSet.  Which will itself call addFrame()
@@ -457,6 +471,12 @@ KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
     QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
     return var.value<KoInlineTextObjectManager*>();
+}
+
+KoTextRangeManager *KWDocument::textRangeManager() const
+{
+    QVariant var = resourceManager()->resource(KoText::TextRangeManager);
+    return var.value<KoTextRangeManager*>();
 }
 
 QString KWDocument::uniqueFrameSetName(const QString &suggestion)

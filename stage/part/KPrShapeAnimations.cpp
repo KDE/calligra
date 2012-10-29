@@ -401,7 +401,7 @@ void KPrShapeAnimations::replaceAnimation(KPrShapeAnimation *oldAnimation, KPrSh
     int currentAnimationIndex = subStep->indexOfAnimation(oldAnimation);
     newAnimation->setStep(oldAnimation->step());
     newAnimation->setSubStep(oldAnimation->subStep());
-    newAnimation->setKoTextBlockData(oldAnimation->textBlockData());
+    newAnimation->setTextBlockUserData(oldAnimation->textBlockUserData());
     subStep->insertAnimation(currentAnimationIndex, newAnimation);
     subStep->removeAnimation(oldAnimation);
     QModelIndex indexModified = indexByAnimation(newAnimation);

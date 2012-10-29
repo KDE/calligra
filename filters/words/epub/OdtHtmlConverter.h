@@ -43,6 +43,7 @@ struct StyleInfo {
     QString parent;
     bool isDefaultStyle;
 
+    int  defaultOutlineLevel;
     bool shouldBreakChapter;
     bool inUse;
 

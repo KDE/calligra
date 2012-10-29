@@ -25,6 +25,7 @@ set(kotext_LIB_SRCS
     KoTextEditingFactory.cpp
     KoTextEditingPlugin.cpp
 
+    KoTextRangeManager.cpp
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactoryBase.cpp
     KoInlineObjectRegistry.cpp
@@ -34,6 +35,7 @@ set(kotext_LIB_SRCS
     InsertTextReferenceAction.cpp
     InsertTextLocator.cpp
     KoInlineObject.cpp
+    KoTextRange.cpp
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
@@ -42,6 +44,8 @@ set(kotext_LIB_SRCS
     KoTextReference.cpp
     KoTextAnchor.cpp
     KoTextShapeSavingContext.cpp
+    KoAnnotation.cpp
+    KoAnnotationManager.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
@@ -166,6 +170,8 @@ install(
     KoTextBlockData.h
     KoTextDocument.h
     KoText.h
+    KoTextRange.h
+    KoTextRangeManager.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h

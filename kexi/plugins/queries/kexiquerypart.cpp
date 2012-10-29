@@ -59,8 +59,9 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
-    data->listenerInfoString = window->part()->info()->instanceCaption() + " \""
-                               + window->partItem()->name() + "\"";
+    data->listenerInfoString = i18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>")
+                               .arg(window->part()->info()->instanceCaption())
+                               .arg(window->partItem()->name());
     return data;
 }
 
@@ -97,7 +98,7 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
     return view;
 }
 
-bool KexiQueryPart::remove(KexiPart::Item &item)
+tristate KexiQueryPart::remove(KexiPart::Item &item)
 {
     if (!KexiMainWindowIface::global()->project()
             || !KexiMainWindowIface::global()->project()->dbConnection())

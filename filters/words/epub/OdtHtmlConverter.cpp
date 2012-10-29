@@ -29,6 +29,7 @@
 
 // KDE
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 // Calligra
 #include <KoStore.h>
@@ -48,6 +49,7 @@
 
 StyleInfo::StyleInfo()
     : isDefaultStyle(false)
+    , defaultOutlineLevel(-1)
     , shouldBreakChapter(false)
     , inUse(false)
 {
@@ -167,6 +169,8 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Write the beginning of the output.
     beginHtmlFile(metaData);
 
+    QString currentChapterTitle = "";
+
     m_currentChapter = 1;       // Number of current output chapter.
     forEachElement (nodeElement, currentNode) {
 
@@ -176,13 +180,23 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
         if (nodeElement.namespaceURI() == KoXmlNS::text && (nodeElement.localName() == "p"
                                                             || nodeElement.localName() == "h")) {
 
-            // The styles come into this function preprocessed. If the
-            // style should break the outfile into chapters (first
-            // implementaiton uses fo:break-before="page") then create
-            // a new chapter here, but only if it is a top-level
+            // Check if this paragraph should break the text into a new chapter. 
+            //
+            // This should happen either if the paragraph has
+            // outline-level = 1 or if the style indicates that the
+            // break should happen. The styles come into this function
+            // preprocessed.
+            //
+            // Only create a new chapter if it is a top-level
             // paragraph and not at the very first node.
+            //
             StyleInfo *style = m_styles.value(nodeElement.attribute("style-name"));
-            if (m_options->doBreakIntoChapters && style && style->shouldBreakChapter) {
+            bool  hasOutlineLevel1 = (nodeElement.attribute("outline-level") == "1"
+                                      || (nodeElement.attribute("outline-level").isEmpty()
+                                          && style && style->defaultOutlineLevel == 1));
+            if (m_options->doBreakIntoChapters
+                && (hasOutlineLevel1 || (style && style->shouldBreakChapter)))
+            {
                 //kDebug(30517) << "Found paragraph which breaks into new chapter";
 
                 // Write out any footnotes
@@ -194,11 +208,17 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
                 endHtmlFile(); 
 
                 // Write the result to the file collector object.
-                QString fileId = m_collector->filePrefix();
-                if (m_options->doBreakIntoChapters)
-                    fileId += QString::number(m_currentChapter);
+                QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
                 QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
-                m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+                m_collector->addContentFile(fileId, fileName,
+                                            "application/xhtml+xml", m_htmlContent, currentChapterTitle);
+
+
+                if (nodeElement.localName() == "h") {
+                    currentChapterTitle = nodeElement.text();
+                } else {
+                    currentChapterTitle = "";
+                }
 
                 // And begin a new chapter.
                 beginHtmlFile(metaData);
@@ -262,7 +282,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     if (m_options->doBreakIntoChapters)
         fileId += QString::number(m_currentChapter);
     QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
-    m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+    m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, currentChapterTitle);
 
     // 5. Write any data that we have collected on the way.
 
@@ -276,7 +296,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
 
         QString fileId = "chapter-endnotes";
         QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
-        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent);
+        m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, i18n("End notes"));
     }
 
     odfStore->close();
@@ -946,14 +966,30 @@ void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, Sty
             styleInfo->attributes.insert("width", "auto");
         }
 
+        // Collect default outline level separately because it's used
+        // to determine chapter breaks.
+        QString dummy = styleElement.attribute("default-outline-level");
+        bool  ok;
+        styleInfo->defaultOutlineLevel = dummy.toInt(&ok);
+        if (!ok)
+            styleInfo->defaultOutlineLevel = -1;
+
+        // Go through all property lists (like text-properties,
+        // paragraph-properties, etc) and collect the relevant
+        // attributes from them.
         styleInfo->shouldBreakChapter = false;
         KoXmlElement propertiesElement;
         forEachElement (propertiesElement, styleElement) {
-            //Check for fo:break-before
+#if 0 // Disable - use outline-level = 1 instead.
+            // Check for fo:break-before
             if (propertiesElement.attribute("break-before") == "page") {
                 //kDebug(30517) << "Found break-before=page in style" << styleName;
                 styleInfo->shouldBreakChapter = true;
             }
+#endif
+
+            // Collect general formatting attributes that we can
+            // translate to CSS.
             collectStyleAttributes(propertiesElement, styleInfo);
         }
 
@@ -1195,13 +1231,16 @@ void OdtHtmlConverter::flattenStyle(const QString &styleName, QHash<QString, Sty
         return;
     }
 
+    // FIXME: Should we also handle styleInfo->defaultOutlineLevel and
+    //        styleInfo->shouldBreakChapter?
+
     QString parentName = styleInfo->parent;
     if (parentName.isEmpty())
         return;
 
     flattenStyle(styleInfo->parent, styles, doneStyles);
 
-    // Copy all attributes from the parent that is not alreayd in
+    // Copy all attributes from the parent that is not already in
     // this style into this style.
     StyleInfo *parentInfo = styles.value(parentName);
     if (!parentInfo)
