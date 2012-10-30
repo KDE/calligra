@@ -179,37 +179,25 @@ Item {
         }
     }
 
-    Item {
+    Rectangle {
         anchors.bottom: parent.top;
+        anchors.bottomMargin: -8;
         anchors.horizontalCenter: parent.horizontalCenter;
 
-        width: Constants.GridWidth * 1.5
-        height: Constants.GridHeight /2
+        width: Constants.GridWidth * 1.5;
+        height: Constants.GridHeight / 2 + 8;
 
-        BorderImage {
-            id: border_image1
-            x: 0
-            y: 0
-            width: Constants.GridWidth * 1.5
-            height: Constants.GridHeight /2
-            border.top: 8
-            border.right: 8
-            border.left: 8
-            source: "../images/handle-menu.png"
-        }
+        color: "#1d3458"
+        radius: 8;
 
         Label {
-            x: 176
-            y: -17
-            height: Constants.GridHeight
             text: "Menu";
-            font.pixelSize: Constants.DefaultFontSize
-            anchors.verticalCenterOffset: 0
-            anchors.horizontalCenterOffset: 0
-            anchors.horizontalCenter: mousearea1.horizontalCenter
-            anchors.verticalCenter: mousearea1.verticalCenter
+
+            anchors.centerIn: parent;
+            anchors.verticalCenterOffset: -4;
+
             font.bold: true
-            font.family: "Source Sans Pro"
+            font.pixelSize: Constants.DefaultFontSize
             color: "white";
         }
 
@@ -218,14 +206,6 @@ Item {
             anchors.fill: parent;
 
             property real start: NaN;
-            x: 0
-            y: 0
-            width: 300
-            height: 25
-            anchors.bottomMargin: 0
-            anchors.leftMargin: 0
-            anchors.rightMargin: 0
-            anchors.topMargin: 0
 
             onClicked: base.collapsed = !base.collapsed;
             onPositionChanged: {
@@ -245,7 +225,6 @@ Item {
         when: base.collapsed;
 
         PropertyChanges { target: base; height: 0 }
-        //PropertyChanges { target: background; opacity: 0 }
     }
 
     transitions: Transition {
