@@ -13,3 +13,6 @@ install( FILES import/zoom-width.png import/zoom-page.png import/zoom-pixels.png
 
 ### desktop files ###
 install( FILES braindump.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+### config files ###
+install( FILES braindumprc DESTINATION ${CONFIG_INSTALL_DIR} )

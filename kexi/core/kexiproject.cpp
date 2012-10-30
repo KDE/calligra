@@ -642,11 +642,7 @@ bool KexiProject::retrieveItems()
             d->itemDicts.insert(partClass, dict);
         }
         int ident = cursor->value(0).toInt(&ok);
-        QString objName(cursor->value(1).toString().toLower()); /* .toLower() fixes support
-                                                                   for objects renamed
-                                                                   to not-all-lowercase
-                                                                   in Kexi <= 2.5.2
-                                                                   (bug 306523) */
+        QString objName(cursor->value(1).toString());
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
                 && KexiUtils::isIdentifier(objName))
         {
@@ -721,9 +717,8 @@ KexiProject::itemForClass(const QString &partClass, const QString &name)
         kWarning() << "no part class=" << partClass;
         return 0;
     }
-    const QString nameToLower(name.toLower());
     foreach(KexiPart::Item *item, *dict) {
-        if (item->name().toLower() == nameToLower)
+        if (item->name() == name)
             return item;
     }
     kWarning() << "no name=" << name;
@@ -736,9 +731,8 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
     KexiPart::ItemDict *dict = items(i);
     if (!dict)
         return 0;
-    const QString l_name = name.toLower();
     foreach(KexiPart::Item* item, *dict) {
-        if (item->name().toLower() == l_name)
+        if (item->name() == name)
             return item;
     }
     return 0;
@@ -960,12 +954,12 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
     }
     QSet<QString> storedItemNames;
     foreach(KexiPart::Item* item, *dict) {
-        storedItemNames.insert(item->name().toLower());
+        storedItemNames.insert(item->name());
     }
 
     QSet<QString> unstoredItemNames;
     foreach(KexiPart::Item* item, d->unstoredItems) {
-        unstoredItemNames.insert(item->name().toLower());
+        unstoredItemNames.insert(item->name());
     }
 
     //find new, unique default name for this item
@@ -1075,7 +1069,7 @@ tristate KexiProject::dropProject(const KexiProjectData& data,
 {
     if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0,
             i18n("Do you want to drop the project \"%1\"?",
-                 static_cast<const KexiDB::SchemaData*>(&data)->objectName()) + "\n" + i18n(warningNoUndo)))
+                 static_cast<const KexiDB::SchemaData*>(&data)->name()) + "\n" + i18n(warningNoUndo)))
         return cancelled;
 
     KexiProject prj(data, handler);

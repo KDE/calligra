@@ -90,9 +90,17 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     actionCollection()->action("page_deletepage")->setWhatsThis(i18n("Delete the current slide"));
     actionCollection()->action("format_masterpage")->setText(i18n("Master Slide..."));
     actionCollection()->action("page_previous")->setText(i18n("Previous Slide"));
+    actionCollection()->action("page_previous")->setToolTip(QString());
+    actionCollection()->action("page_previous")->setWhatsThis(QString());
     actionCollection()->action("page_next")->setText(i18n("Next Slide"));
+    actionCollection()->action("page_next")->setToolTip(QString());
+    actionCollection()->action("page_next")->setWhatsThis(QString());
     actionCollection()->action("page_first")->setText(i18n("First Slide"));
+    actionCollection()->action("page_first")->setToolTip(QString());
+    actionCollection()->action("page_first")->setWhatsThis(QString());
     actionCollection()->action("page_last")->setText(i18n("Last Slide"));
+    actionCollection()->action("page_last")->setToolTip(QString());
+    actionCollection()->action("page_last")->setWhatsThis(QString());
     actionCollection()->action("configure")->setText(i18n("Configure Stage..."));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),

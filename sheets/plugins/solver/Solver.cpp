@@ -42,7 +42,7 @@ K_EXPORT_PLUGIN(SolverFactory("kspreadsolver"))
 
 Calligra::Sheets::View* s_view = 0;
 Calligra::Sheets::Formula* s_formula = 0;
-double function(const gsl_vector* vector, void *params);
+double _function(const gsl_vector* vector, void *params);
 
 
 class Solver::Private
@@ -144,7 +144,7 @@ void Solver::optimize()
 
     /* Initialize method and iterate */
     gsl_multimin_function functionInfo;
-    functionInfo.f = &function;
+    functionInfo.f = &_function;
     functionInfo.n = dimension;
     functionInfo.params = static_cast<void*>(parameters);
 
@@ -194,7 +194,7 @@ double Solver::evaluate(const gsl_vector* vector, void *parameters)
     return 0.0;
 }
 
-double function(const gsl_vector* vector, void *params)
+double _function(const gsl_vector* vector, void *params)
 {
     Solver::Parameters* parameters = static_cast<Solver::Parameters*>(params);
 

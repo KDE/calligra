@@ -42,7 +42,7 @@ private slots:
     void timeZone();
 
 private:
-    KTempDir m_tmp;
+    void removeDir(const QString &dir);
 };
 
 } //namespace KPlato

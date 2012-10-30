@@ -919,7 +919,9 @@ void DependencyNodeItem::setTreeIndicator( bool on )
 {
     paintTreeIndicator( on );
     foreach ( DependencyNodeItem *i, m_children ) {
-        i->setTreeIndicator( on );
+        if ( i->isVisible() ) {
+            i->setTreeIndicator( on );
+        }
     }
 }
 

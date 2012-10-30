@@ -223,6 +223,8 @@ bool PlanTJScheduler::kplatoToTJ()
     m_tjProject->setEnd( m_project->constraintEndTime().toTime_t() );
     m_tjProject->setScheduleGranularity( 300 ); //5 minutes
 
+    m_tjProject->setDailyWorkingHours( m_project->standardWorktime()->day() );
+
     addTasks();
     setConstraints();
     addDependencies();
@@ -523,11 +525,11 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
             res->addShift( sl );
         }
     }
-    if ( m_project->startTime() < r->availableFrom() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( m_project->startTime(), r->availableFrom() ) ) );
+    if ( m_project->constraintStartTime() < r->availableFrom() ) {
+        res->addVacation( new TJ::Interval( toTJInterval( m_project->constraintStartTime(), r->availableFrom() ) ) );
     }
-    if ( m_project->endTime() > r->availableUntil() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->startTime() ) ) );
+    if ( r->availableUntil().isValid() && m_project->constraintEndTime() > r->availableUntil() ) {
+        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->constraintEndTime() ) ) );
     }
     m_resourcemap[res] = r;
 //     if ( locale() ) { logDebug( m_project, 0, "Added resource: " + r->name() ); }
