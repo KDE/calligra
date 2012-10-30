@@ -30,7 +30,8 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcomponentdata.h>
-#include <KStandardDirs>
+#include <kstandarddirs.h>
+#include <kglobal.h>
 
 #include "MainWindow.h"
 
@@ -42,8 +43,6 @@
 
 int main( int argc, char** argv )
 {
-
-
     KAboutData aboutData("kritasketch",
                          0,
                          ki18n("Krita Sketch"),
@@ -55,10 +54,9 @@ int main( int argc, char** argv )
                          "http://www.krita.org",
                          "submit@bugs.kde.org");
 
-
     KCmdLineArgs::init (argc, argv, &aboutData);
-    KCmdLineOptions options;
 
+    KCmdLineOptions options;
     options.add( "+[files]", ki18n( "Images to open" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 
@@ -73,33 +71,38 @@ int main( int argc, char** argv )
         }
     }
 
-    QApplication::setAttribute(Qt::AA_X11InitThreads);
     KApplication app;
+    QDir appdir(app.applicationDirPath());
+    appdir.cdUp();
 
 #ifdef Q_OS_WIN
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QDir appdir(app.applicationDirPath());
-    qDebug() << appdir;
-    appdir.cdUp();
-    qDebug() << appdir.currentPath();
-    env.insert("KDEDIR", appdir.currentPath());
-    env.insert("KDEDIR", appdir.currentPath());
-    env.insert("KDEDIRS", appdir.currentPath());
-    env.insert("XDG_DATA_DIRS", appdir.currentPath() + QDir::separator() +  "share");
-    env.insert("XDG_DATA_HOME", appdir.currentPath() + QDir::separator() + "share");
-    env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QDir::separator() + "AppData" + QDir::separator() + "Roaming" + QDir::separator() + "kritasketch");
-    QString currentPath = env.value("PATH");
-    qDebug() << currentPath;
-    env.insert("PATH", appdir.currentPath() + QDir::separator() + "bin" + ";"
-               + appdir.currentPath() + QDir::separator() + "lib" + ";"
-               + appdir.currentPath() + QDir::separator() + "lib"  + QDir::separator() + "kde4" + ";"
-               + currentPath);
+    // If there's no kdehome, set it and restart the process.
+    if (!env.contains("KDEHOME")) {
+        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QDir::separator() + "AppData" + QDir::separator() + "Roaming" + QDir::separator() + ".kritasketch");
+        env.insert("KDEDIR", appdir.currentPath());
+        env.insert("KDEDIRS", appdir.currentPath());
+        QString currentPath = env.value("PATH");
+        env.insert("PATH", appdir.currentPath() + QDir::separator() + "bin" + ";"
+                   + appdir.currentPath() + QDir::separator() + "lib" + ";"
+                   + appdir.currentPath() + QDir::separator() + "lib"  + QDir::separator() + "kde4" + ";"
+                   + currentPath);
+
+        QProcess *p = new QProcess();
+        p->setProcessEnvironment(env);
+        p->start(app.applicationFilePath(), app.arguments());
+        // the process doesn't get deleted -- we leak it, but that's fine.
+        exit(0);
+    }
+#endif
+
     app.addLibraryPath(appdir.currentPath());
     app.addLibraryPath(appdir.currentPath() + "/bin");
     app.addLibraryPath(appdir.currentPath() + "/lib");
     app.addLibraryPath(appdir.currentPath() + "/lib/kde4");
-    qDebug() << app.libraryPaths();
-#endif
+
+    QApplication::setAttribute(Qt::AA_X11InitThreads);
+
 
 //    QApplication::setStyle("plastique");
 
