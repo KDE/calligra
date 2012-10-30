@@ -1,7 +1,11 @@
 
-Calligra Plan current:
+Release 2.6:
 ----------------------
 
+* Fix bug: Do not add/remove views twice
+
+2.5.91:
+-------
 * Fix bug 308855 -  Gantt chart: No tree structure in printed version
 
 * Fix bug 307450 - Calligra Plan crash when adding subtask
