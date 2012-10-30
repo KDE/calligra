@@ -41,14 +41,30 @@ Page {
             sourceSize.width: width;
         }
 
-        /*rightArea: Image {
-            width: Constants.GridWidth * 0.5;
-            height: parent.height;
-            source: "./images/svg/icon-help.svg";
-            fillMode: Image.PreserveAspectFit;
+        rightArea: [
+            Button {
+                id: minimizeButton;
 
-            sourceSize.width: width;
-        }*/
+                anchors.verticalCenter: parent.verticalCenter;
+                width: Constants.GridWidth * 0.75;
+                height: Constants.GridHeight * 0.75;
+
+                image: "images/svg/icon-minimize.svg"
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: Krita.Window.minimize();
+            },
+            Button {
+                id: closeButton;
+
+                anchors.verticalCenter: parent.verticalCenter;
+                width: Constants.GridWidth * 0.75;
+                height: Constants.GridHeight * 0.75;
+
+                image: "images/svg/icon-close.svg"
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: Krita.Window.close();
+            }
+        ]
 
         Image {
             anchors.fill: parent;
