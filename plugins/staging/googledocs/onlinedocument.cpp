@@ -1,4 +1,4 @@
-/W/*
+/*
  *  Copyright (c) 2010 Mani Chandrasekar <maninc@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
