@@ -91,11 +91,15 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelec
 
     if (role==KisColorSelectorBase::Foreground)
     {
+        if(view->resourceProvider()->fgColor() == color)
+            return;
         view->resourceProvider()->setFGColor(color);
         emit q->colorChanged(color.toQColor(), color.toQColor().alphaF(), false);
     }
     else
     {
+        if(view->resourceProvider()->bgColor() == color)
+            return;
         view->resourceProvider()->setBGColor(color);
         emit q->colorChanged(color.toQColor(), color.toQColor().alphaF(), true);
     }
