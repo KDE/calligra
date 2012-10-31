@@ -44,4 +44,4 @@ Texture_paint_floor.kpp
 Texture_paint_noisy_big.kpp
 Texture_paint_noisy_cells.kpp
 pixel1.kpp
-DESTINATION  ${DATA_INSTALL_DIR}/kritasketch/paintoppresets)
+DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)

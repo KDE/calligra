@@ -10,7 +10,7 @@ add_subdirectory(draganddrop)
 add_subdirectory(paintoppresets)
 
 set(kritasketch_SRCS
-    cpuid.c
+    cpuid.cpp
     ColorSelectorItem.cpp
     Constants.cpp
     DocumentListModel.cpp
