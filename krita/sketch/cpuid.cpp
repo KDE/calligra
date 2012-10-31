@@ -1,7 +1,8 @@
+#include <QDebug>
+#include "cpuid.h"
+
 #ifdef Q_OS_WIN
 #include <windows.h>
-
-#include "cpuid.h"
 
 
 // These are the bit flags that get set on calling cpuid
@@ -370,18 +371,21 @@ notamd:
 
 #endif
 
-int isUltraBook()
+bool isUltraBook()
 {
-#ifdef Q_OS_WINDOWS
+
+#ifdef Q_OS_WIN
     _p_info info;
     _cpuid(&info);
 
+    qDebug() << "CPU" << "Model:" << info.model << "family" << info.family;
     if (((info.model==12) || (info.model==5)  || (info.model==6)  || (info.model==28)) && (info.family==6)) {
         qDebug() << "This is an Atom";
-        return 0;
+        return false;
     }
+    qDebug() << "This isn't an atom";
 #else
     /* XXX: figure out how to do this on linux, of course. */
 #endif
-    return 1;
+    return true;
 }

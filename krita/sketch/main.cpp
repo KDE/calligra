@@ -25,6 +25,7 @@
 #include <QDesktopServices>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QMessageBox>
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -78,8 +79,14 @@ int main( int argc, char** argv )
 #ifdef Q_OS_WIN
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
-    if (!env.contains("KDEHOME")) {
-        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation) + QDir::separator() + "AppData" + QDir::separator() + "Roaming" + QDir::separator() + ".kritasketch");
+    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
+    if (!env.contains("KDEHOME") ) {
+        //QMessageBox::information(0, "sketch: data env", QDesktopServices::storageLocation(QDesktopServices::DataLocation));
+        //QMessageBox::information(0, "sketch: home env", QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation)
+                   + QDir::separator() + "AppData"
+                   + QDir::separator() + "Roaming"
+                   + QDir::separator() + ".kritasketch");
         env.insert("KDEDIR", appdir.currentPath());
         env.insert("KDEDIRS", appdir.currentPath());
         QString currentPath = env.value("PATH");
@@ -90,7 +97,8 @@ int main( int argc, char** argv )
 
         QProcess *p = new QProcess();
         p->setProcessEnvironment(env);
-        p->start(app.applicationFilePath(), app.arguments());
+        QMessageBox::information(0, "Arguments", fileNames.join(", "));
+        p->start(app.applicationFilePath(), fileNames);
         // the process doesn't get deleted -- we leak it, but that's fine.
         exit(0);
     }

@@ -27,15 +27,11 @@ typedef struct _processor_info {
                                         // and os_support fields
 } _p_info;
 
-#ifdef __cplusplus
-extern "C"
-#endif
-
-#ifdef Q_OS_WINDOWS
+#ifdef Q_OS_WIN
 int _cpuid (_p_info *);
 #endif
 
-int isUltraBook();
+bool isUltraBook();
 
 #endif
 
