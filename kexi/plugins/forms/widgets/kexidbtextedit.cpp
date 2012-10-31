@@ -85,6 +85,7 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
 //hmm disabled again because this makes the widget disappear entirely
 //    setAutoFillBackground(true); // otherwise we get transparent background...
 //    installEventFilter(this);
+    setBackgroundRole(QPalette::Base);
 }
 
 KexiDBTextEdit::~KexiDBTextEdit()
