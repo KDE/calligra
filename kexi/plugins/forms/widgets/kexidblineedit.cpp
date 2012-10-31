@@ -62,12 +62,14 @@ public:
     KexiDBLineEditStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle), indent(0)
     {
     }
+    virtual ~KexiDBLineEditStyle() {
+    }
 
     void setIndent(int indent) {
         this->indent = indent;
     }
 
-    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget) const
+    QRect subElementRect(SubElement element, const QStyleOption *option, const QWidget *widget = 0) const
     {
         const KFormDesigner::FormWidgetInterface *formWidget = dynamic_cast<const KFormDesigner::FormWidgetInterface*>(widget);
         if (formWidget->designMode()) {
@@ -98,6 +100,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
         , m_internalReadOnly(false)
         , m_slotTextChanged_enabled(true)
         , m_paletteChangeEvent_enabled(true)
+        , m_inStyleChangeEvent(false)
 {
     QFont tmpFont;
     tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
@@ -108,10 +111,12 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
-    KexiDBLineEditStyle *ks = new KexiDBLineEditStyle(style());
-    ks->setParent(this);
-    ks->setIndent(KexiFormUtils::dataSourceTagIcon().width());
-    setStyle( ks );
+    m_internalStyle = new KexiDBLineEditStyle(style());
+    m_internalStyle->setParent(this);
+    m_internalStyle->setIndent(KexiFormUtils::dataSourceTagIcon().width());
+    m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
+    setStyle(m_internalStyle);
+    m_inStyleChangeEvent = false;
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
@@ -342,8 +347,25 @@ void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 
 bool KexiDBLineEdit::event(QEvent * e)
 {
+    if (e->type() == QEvent::StyleChange) {
+        if (m_inStyleChangeEvent) {
+            return true;
+        }
+        // let the KLineEdit set its KLineEditStyle
+        if (!KLineEdit::event(e)) {
+            return false;
+        }
+        // move the KLineEditStyle inside our internal style as parent
+        m_internalStyle->setParent(style());
+        m_inStyleChangeEvent = true; // avoid recursion
+        setStyle(m_internalStyle);
+        m_inStyleChangeEvent = false;
+        return true;
+    }
+
     const bool ret = KLineEdit::event(e);
     KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
+
     if (e->type() == QEvent::FocusOut) {
         QFocusEvent *fe = static_cast<QFocusEvent *>(e);
         if (fe->reason() == Qt::TabFocusReason || fe->reason() == Qt::BacktabFocusReason) {

@@ -35,6 +35,7 @@
 #include <formeditor/FormWidgetInterface.h>
 
 class KexiDBWidgetContextMenuExtender;
+class KexiDBLineEditStyle;
 
 //! @short Line edit widget for Kexi forms
 /*! Handles many data types. User input is validated by using validators
@@ -177,6 +178,8 @@ protected:
     int m_cursorPosition;
     QPalette m_originalPalette; //!< Used for read-only case
     bool m_paletteChangeEvent_enabled;
+    bool m_inStyleChangeEvent;
+    QPointer<KexiDBLineEditStyle> m_internalStyle;
 };
 
 #endif
