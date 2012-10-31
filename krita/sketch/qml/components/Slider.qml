@@ -35,24 +35,35 @@ Item {
     }
     Rectangle {
         id: handle;
+        property bool settingSelf: false;
         function resetHandle()
         {
-            // This is required as width is not set if we are not done initialising yet.
-            if(base.width === 0)
-                return;
-            var newX = base.value / 100 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX;
-            if(newX !== handle.x)
-                handle.x = newX;
+            if(!settingSelf) {
+                // This is required as width is not set if we are not done initialising yet.
+                if(base.width === 0)
+                    return;
+                var newX = Math.round(base.value / 100 * (mouseArea.drag.maximumX - mouseArea.drag.minimumX) + mouseArea.drag.minimumX);
+                if(newX !== handle.x)
+                    handle.x = newX;
+            }
         }
         y: 2
         x: 2
         onXChanged: {
+            settingSelf = true;
             if(highPrecision) {
-                base.value = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
+                var newValue = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
+                if(base.value != newValue) {
+                    base.value = newValue;
+                }
             }
             else {
-                base.value = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
+                var newValue = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
+                if(base.value != newValue) {
+                    base.value = newValue;
+                }
             }
+            settingSelf = false;
         }
         height: parent.height - 4;
         width: height;
