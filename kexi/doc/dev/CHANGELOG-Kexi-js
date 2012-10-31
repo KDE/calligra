@@ -132,10 +132,6 @@ TODO:
 [01:02] <diggy> but I'm too tired to look into it now
 [01:02] <diggy> It seems some problem in d pointer destructor
 
-===================== Kexi 2.6  =====================
-
-~~~~~~~~~~~~~~~~ 2.6 Alpha 1 ~~~~~~~~~~~~~~~~
-
 TODO:
 Table Designer
 *Changing Length property does not trigger data removal
@@ -149,6 +145,79 @@ KexiDB
 TODO: make
 *See also http://blog.mclaughlinsoftware.com/2009/03/09/sql-concatenation-blues/
 
+
+TODO: add Field.defaultWidth, add storing/loading extended schema for it
+
+TODO: DriverManager::~DriverManager() should not delete internal driver manager before application close
+
+TODO: ask for closing table (and other depending objects) before table renaming
+
+TODO: Table View
+- fix support for storing/displaying rich text
+
+===================== Kexi 2.7  =====================
+
+
+
+===================== Kexi 2.6  =====================
+
+~~~~~~~~~~~~~~~~ 2.6 RC (2.4.92) ~~~~~~~~~~~~~~~~
+
+2012-10-29
+KexiDB
+*Fix for Text Editor stripping out rich text formatting in Kexi Forms
+BUG:309174
+REVIEW:107120
+
+2012-10-27
+Tables
+*Remove limit of 101 fields in Table Designer
+BUG:309116
+REVIEW:107085
+
+2012-10-21..26
+Tables
+*Show indication that edited or pasted text is trimmed
+BUG:301136
+REVIEW:107068
+DIGEST:Kexi shows indication that edited or pasted text is trimmed, more at http://blogs.kde.org/2012/10/27/kexi-26-text-trimming
+
+~~~~~~~~~~~~~~~~ 2.6 Beta (2.4.91) ~~~~~~~~~~~~~~~~
+
+2012-10-17..18
+General
+*"Rename" action in Project Navigator can be also used to change object's caption
+**Before renaming any object, close window containing it
+**Renaming object updates its position on sorted list in Project Navigator
+BUG:308617
+REVIEW:106943
+
+2012-10-14
+General
+*Overwriting object with the same name is now possible
+BUG:308461
+REVIEW:106903
+TODO: Port to Predicate
+
+2012-10-06
+KexiDB
+*[code] Initialize random numbers generator in driver manager, needed for temp tables
+TODO: Port to Predicate
+*[code] Utils: added methods for sqlite's .sql file importing, etc.
+TODO: Port to Predicate
+*[code] Table/Index/Query/FieldList: make methods const
+TODO: Port to Predicate
+*[code] TableSchema: copy ctor copies lookup too
+TODO: Port to Predicate
+
+2012-10-05
+KexiDB
+*LookupFieldSchema: improve debug and API, add copy ctor, support properties get/set by name
+REVIEW:106752
+TODO: Port to Predicate
+
+~~~~~~~~~~~~~~~~ 2.6 Alpha (2.5.90) ~~~~~~~~~~~~~~~~
+
 2012-08-13..23
 Core
 *Add support for user data storage
@@ -156,6 +225,7 @@ FEATURE:305074
 Table View
 *Remember column widths in tabular data view
 FEATURE:230994
+TODO: Port to Predicate
 
 2012-08-14
 KexiDB
@@ -163,9 +233,40 @@ KexiDB
 
 2012-08-11
 Main Window
-*Declare 'full screen' as global action for use in user commands or scripts
+*'Full screen' action can be assigned to form buttons
 
 ===================== Kexi 2.5  =====================
+
+~~~~~~~~~~~~~~~~ 2.5.4 ~~~~~~~~~~~~~~~~
+
+2012-10-31
+Forms
+*Make palette background color property in text editor work
+BUG:309274
+*Fix "data source tag" for text box (regression because of changes in KDE libraries' line editor)
+REVIEW:107159
+
+2012-10-29
+KexiDB
+*Fix for Text Editor stripping out rich text formatting in Kexi Forms
+BUG:309174
+REVIEW:107120
+
+2012-10-27
+Tables
+*Remove limit of 101 fields in Table Designer
+BUG:309116
+REVIEW:107085
+
+2012-10-10
+General
+*[code] tristate class:
+**comparison to 'cancelled' value fixed
+**more methods made inline
+**added more assignment and comparison operators
+**added qDebug() operators
+REVIEW:106828
+TODO: Port to Predicate
 
 ~~~~~~~~~~~~~~~~ 2.5.3 ~~~~~~~~~~~~~~~~
 
@@ -173,8 +274,10 @@ Main Window
 KexiDB
 *A fix for the lowercase fix: keep table names in original format but compare them in case-insensitive way when needed
 **This way importing from databases with tables upper-case characters works
+REVIEW:106726
 *SQLite Driver
 **Fix possible data loss of compacted file when process tools crash of fail for any reason
+REVIEW:106728
 Migration
 *Fix invalid SQL generation for database import
 *Fix importing from databases with tables upper-case characters
