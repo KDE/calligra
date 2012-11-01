@@ -746,6 +746,7 @@ void LayerModel::setActiveCompositeOp(int newOp)
     if(KisCompositeOpListModel::sharedInstance()->entryAt(entry, newOp))
     {
         d->activeNode->setCompositeOp(entry.id());
+        d->activeNode->setDirty();
         emit activeCompositeOpChanged();
     }
 }
