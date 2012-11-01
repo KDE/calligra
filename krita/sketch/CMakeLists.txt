@@ -16,6 +16,7 @@ set(kritasketch_SRCS
     DocumentListModel.cpp
     IconImageProvider.cpp
     KisSketchView.cpp
+    KisSketchPart.cpp
     ToolManager.cpp
     main.cpp
     MainWindow.cpp
