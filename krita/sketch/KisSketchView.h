@@ -63,6 +63,10 @@ public Q_SLOTS:
     void documentChanged();
 
 Q_SIGNALS:
+    // This is directly forwarded from the document, which means that
+    // value 0-100 means in progress
+    // value -1 means completed
+    void progress(int value);
     void viewChanged();
     void fileChanged();
     void modifiedChanged();

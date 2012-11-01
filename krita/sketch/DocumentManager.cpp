@@ -17,6 +17,8 @@
  */
 
 #include "DocumentManager.h"
+#include "KisSketchPart.h"
+#include "ProgressProxy.h"
 
 #include <KoColorSpaceRegistry.h>
 
@@ -27,8 +29,9 @@ class DocumentManager::Private
 {
 public:
     Private() : document(0) { }
+    ProgressProxy* proxy;
     KisDoc2 *document;
-    KisPart2 *part;
+    KisSketchPart *part;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
@@ -38,7 +41,7 @@ KisDoc2* DocumentManager::document()
     return d->document;
 }
 
-KisPart2* DocumentManager::part()
+KisSketchPart* DocumentManager::part()
 {
     return d->part;
 }
@@ -48,6 +51,7 @@ void DocumentManager::newDocument(int width, int height, float resolution)
     closeDocument();
 
     d->document = new KisDoc2(d->part);
+    d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
     d->part->setDocument(d->document);
     d->document->newImage("New Image", width, height, KoColorSpaceRegistry::instance()->rgb8());
@@ -61,6 +65,7 @@ void DocumentManager::openDocument(const QString& document)
     closeDocument();
 
     d->document = new KisDoc2(d->part);
+    d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
     d->part->setDocument(d->document);
 
@@ -74,7 +79,8 @@ void DocumentManager::closeDocument()
     if(d->document) {
         emit aboutToDeleteDocument();
         d->part->closeUrl(false);
-        delete d->document;
+        d->document->deleteLater();
+        d->document = 0;
     }
 }
 
@@ -90,7 +96,8 @@ DocumentManager* DocumentManager::instance()
 DocumentManager::DocumentManager(QObject* parent)
     : QObject(parent), d(new Private)
 {
-    d->part = new KisPart2(this);
+    d->part = new KisSketchPart(this);
+    d->proxy = new ProgressProxy(this);
 }
 
 DocumentManager::~DocumentManager()

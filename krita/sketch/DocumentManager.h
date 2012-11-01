@@ -21,14 +21,16 @@
 
 #include <QObject>
 
+class ProgressProxy;
 class KisDoc2;
-class KisPart2;
+class KisSketchPart;
 class DocumentManager : public QObject
 {
 Q_OBJECT
 public:
     KisDoc2* document();
-    KisPart2* part();
+    KisSketchPart* part();
+    ProgressProxy* progressProxy();
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);

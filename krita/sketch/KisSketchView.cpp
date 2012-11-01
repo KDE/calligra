@@ -79,6 +79,7 @@
 #include <kis_part2.h>
 
 #include "KisSketchCanvas.h"
+#include "KisSketchPart.h"
 #include "Settings.h"
 #include "cpuid.h"
 #include "DocumentManager.h"
@@ -104,7 +105,7 @@ public:
 
     KisSketchView* q;
 
-    KisPart2* part;
+    KisSketchPart* part;
     KisDoc2* doc;
     KisView2* view;
     KisCanvas2* canvas;
@@ -163,6 +164,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 
     connect(DocumentManager::instance(), SIGNAL(aboutToDeleteDocument()), SLOT(documentAboutToBeDeleted()));
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
+    connect(DocumentManager::instance()->progressProxy(), SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
 
     if(DocumentManager::instance()->document())
         documentChanged();
