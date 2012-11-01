@@ -641,20 +641,20 @@ void LayerModel::source_rowsRemoved(QModelIndex, int, int)
     endResetModel();
 }
 
-void LayerModel::source_dataChanged(QModelIndex tl, QModelIndex br)
+void LayerModel::source_dataChanged(QModelIndex /*tl*/, QModelIndex /*br*/)
 {
-    if(tl == br)
-    {
-        int row = d->layers.indexOf(d->nodeModel->nodeFromIndex(tl));
-        QModelIndex index = createIndex(row, 0);
-        dataChanged(index, index);
-    }
-    else
-    {
+//    if(tl == br)
+//     {
+//         int row = d->layers.indexOf(d->nodeModel->nodeFromIndex(tl));
+//         QModelIndex index = createIndex(row, 0);
+//         dataChanged(index, index);
+//     }
+//     else
+//     {
         QModelIndex top = createIndex(0, 0);
         QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
         dataChanged(top, bottom);
-    }
+//    }
 }
 
 void LayerModel::source_modelReset()
