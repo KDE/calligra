@@ -27,6 +27,7 @@ Item {
     property variant buttons: null;
     property alias modalBackgroundColor: modalFill.color;
     property alias textAlign: dialogText.horizontalAlignment;
+    property int progress: -1;
 
     signal buttonClicked(int button);
     signal canceled();
@@ -127,6 +128,37 @@ Item {
             y: dialogHeader.height + 16;
             elide: Text.ElideNone;
             wrapMode: Text.Wrap;
+        }
+
+        Rectangle {
+            id: progressBase;
+            opacity: (progress > -1) ? 1 : 0;
+            anchors {
+                top: dialogText.bottom;
+                horizontalCenter: parent.horizontalCenter;
+                margins: 8;
+            }
+            height: Constants.LargeFontSize + 4;
+            width: 208;
+            radius: height / 2;
+            border {
+                width: 1;
+                color: "silver";
+            }
+            color: "white";
+            Rectangle {
+                id: progressBar;
+                anchors {
+                    top: parent.top;
+                    left: parent.left;
+                    margins: 4;
+                }
+                radius: height / 2;
+                width: progress >= 0 ? (progress * 2) + 1: 0;
+                height: parent.height - 7;
+                Behavior on width { PropertyAnimation { duration: 100; } }
+                color: "gray";
+            }
         }
 
         Row {
