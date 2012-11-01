@@ -49,15 +49,29 @@ Item {
     anchors.fill: parent;
     z: 99; //Just to make sure we're always on top.
     opacity: 0;
-    Behavior on opacity { NumberAnimation { } }
+    Behavior on opacity { NumberAnimation { duration: 500; } }
 
     MouseArea {
         anchors.fill: parent;
-        onClicked: { base.canceled(); base.hide(); }
+        onClicked: {
+            // Don't allow people to click away a progress bar...
+            // horrible things could happen if they do so (inconsistent states and what not)
+            if(progress !== -1)
+                return;
+            base.canceled();
+            base.hide();
+        }
     }
     SimpleTouchArea {
         anchors.fill: parent;
-        onTouched: { base.canceled(); base.hide(); }
+        onTouched: {
+            // Don't allow people to click away a progress bar...
+            // horrible things could happen if they do so (inconsistent states and what not)
+            if(progress !== -1)
+                return;
+            base.canceled();
+            base.hide();
+        }
     }
 
     Rectangle {
@@ -139,6 +153,7 @@ Item {
         Rectangle {
             id: progressBase;
             opacity: (progress > -1) ? 1 : 0;
+            Behavior on opacity { NumberAnimation { duration: 500; } }
             anchors {
                 top: dialogText.bottom;
                 horizontalCenter: parent.horizontalCenter;
@@ -160,7 +175,7 @@ Item {
                     margins: 4;
                 }
                 radius: height / 2;
-                width: progress >= 0 ? (progress * 2) + 1: 0;
+                width: progress >= 0 ? (progress * 2) + 1: 100;
                 height: parent.height - 7;
                 Behavior on width { PropertyAnimation { duration: 100; } }
                 color: "gray";
