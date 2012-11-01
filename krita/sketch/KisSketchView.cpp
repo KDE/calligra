@@ -132,6 +132,9 @@ public:
     QAction* redoAction;
     bool useOpenGL;
 
+    QString saveAsFilename;
+    void delayedSaveAs();
+
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -158,11 +161,13 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
 
     d->loadedTimer = new QTimer(this);
     d->loadedTimer->setSingleShot(true);
+    d->loadedTimer->setInterval(100);
     connect(d->loadedTimer, SIGNAL(timeout()), SIGNAL(loadingFinished()));
 
     connect(DocumentManager::instance(), SIGNAL(aboutToDeleteDocument()), SLOT(documentAboutToBeDeleted()));
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
     connect(DocumentManager::instance()->progressProxy(), SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
+    connect(DocumentManager::instance()->part(), SIGNAL(completed()), d->loadedTimer, SLOT(start()));
 
     if(DocumentManager::instance()->document())
         documentChanged();
@@ -354,14 +359,22 @@ void KisSketchView::redo()
 void KisSketchView::save()
 {
     DocumentManager::instance()->part()->save();
-    emit floatingMessageRequested("Saved", "file-save");
 }
 
 void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
 {
     DocumentManager::instance()->document()->setOutputMimeType(mimeType.toAscii());
-    DocumentManager::instance()->part()->saveAs(fileName);
-    emit floatingMessageRequested(QString("Saved to %1").arg(fileName), "file-save");
+    d->saveAsFilename = fileName;
+    // Yes. This is a massive hack. Basically, we need to wait a little while, to ensure
+    // the save call happens late enough for a variety of UI things to happen first.
+    // A second seems like a long time, but well, we do have file system interaction here,
+    // so for now, we can get away with it.
+    QTimer::singleShot(1000, this, SLOT(delayedSaveAs()));
+}
+
+void KisSketchView::Private::delayedSaveAs()
+{
+    DocumentManager::instance()->part()->saveAs(saveAsFilename);
 }
 
 void KisSketchView::documentAboutToBeDeleted()
