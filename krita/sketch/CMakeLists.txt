@@ -33,6 +33,7 @@ set(kritasketch_SRCS
     VirtualKeyboardController.cpp
     KisSketchCanvas.cpp
     KisSketchCanvasFactory.cpp
+    DocumentManager.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS

@@ -17,6 +17,7 @@
  */
 
 #include "ImageBuilder.h"
+#include "DocumentManager.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -43,22 +44,12 @@ ImageBuilder::~ImageBuilder()
 
 QString ImageBuilder::createBlankImage(int width, int height, int resolution)
 {
-    KisPart2 part;
-    KisDoc2 doc(&part);
-    part.setDocument(&doc);
-
-    doc.newImage("Blank Image", width, height, KoColorSpaceRegistry::instance()->rgb8());
-    doc.image()->setResolution(resolution / 72.0, resolution / 72.0);
-
-    return saveDocument(doc);
+    DocumentManager::instance()->newDocument(width, height, resolution / 72.0f);
+    return QString("temp://%1x%2").arg(width).arg(height);
 }
 
 QString ImageBuilder::createImageFromClipboard()
 {
-    KisPart2 part;
-    KisDoc2 doc(&part);
-    part.setDocument(&doc);
-
     KisConfig cfg;
     cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
 
@@ -66,10 +57,9 @@ QString ImageBuilder::createImageFromClipboard()
     KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QPoint(0,0));
 
     if (clipDevice) {
+        DocumentManager::instance()->newDocument(sz.width(), sz.height(), 1.0);
 
-        doc.newImage("From Clipboard", sz.width(), sz.height(), clipDevice->colorSpace());
-
-        KisImageWSP image = doc.image();
+        KisImageWSP image = DocumentManager::instance()->document()->image();
         if (image && image->root() && image->root()->firstChild()) {
             KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
             Q_ASSERT(layer);
@@ -84,32 +74,12 @@ QString ImageBuilder::createImageFromClipboard()
         }
     }
     else {
-
-        doc.newImage("Blank Image", qApp->desktop()->width(), qApp->desktop()->height(), KoColorSpaceRegistry::instance()->rgb8());
-        doc.image()->setResolution(1.0, 1.0);
+        DocumentManager::instance()->newDocument(qApp->desktop()->width(), qApp->desktop()->height(), 1.0f);
     }
-    return saveDocument(doc);
+    return QString("temp://%1x%2").arg(DocumentManager::instance()->document()->image()->width()).arg(DocumentManager::instance()->document()->image()->height());
 }
 
 QString ImageBuilder::createImageFromWebcam(int width, int height, int resolution)
 {
     return QString();
 }
-
-void ImageBuilder::discardImage(const QString& path)
-{
-    QFile::remove(path);
-}
-
-QString ImageBuilder::saveDocument(KisDoc2 &doc)
-{
-    QString path = QString("%1/kritasketch/%2.kra").arg(QDir::tempPath()).arg(QDateTime::currentDateTime().toMSecsSinceEpoch());
-    QDir::temp().mkpath("kritasketch");
-    if(doc.documentPart()->saveAs(KUrl(path))) {
-        return path;
-    }
-
-    qWarning() << "Could not create temporary image! Disk full?";
-    return QString();
-}
-

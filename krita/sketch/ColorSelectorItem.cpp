@@ -58,7 +58,7 @@ public:
         main->setConfiguration(selector->configuration().mainTypeParameter, selector->configuration().mainType);
         sub->setConfiguration(selector->configuration().subTypeParameter, selector->configuration().subType);
     }
-    
+
     ColorSelectorItem* q;
 
     KisColorSelector* selector;
@@ -228,6 +228,8 @@ void ColorSelectorItem::setView(QObject* newView)
                 this, SLOT(fgColorChanged(KoColor)));
         connect(d->view->resourceProvider(), SIGNAL(sigBGColorChanged(KoColor)),
                 this, SLOT(bgColorChanged(KoColor)));
+
+        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
     }
     emit viewChanged();
 }
@@ -248,7 +250,9 @@ void ColorSelectorItem::setAlpha(int percentValue)
 {
     qreal alpha = (float)percentValue / 100.0;
     d->currentColor.setAlphaF(alpha);
-    d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+    if(d->view) {
+        d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+    }
 }
 
 void ColorSelectorItem::fgColorChanged(const KoColor& newColor)

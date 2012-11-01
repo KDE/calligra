@@ -16,22 +16,39 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef IMAGEBUILDER_H
-#define IMAGEBUILDER_H
+#ifndef DOCUMENTMANAGER_H
+#define DOCUMENTMANAGER_H
 
 #include <QObject>
 
 class KisDoc2;
-class ImageBuilder : public QObject
+class KisPart2;
+class DocumentManager : public QObject
 {
 Q_OBJECT
 public:
-    explicit ImageBuilder(QObject* parent = 0);
-    virtual ~ImageBuilder();
+    KisDoc2* document();
+    KisPart2* part();
 
-    Q_INVOKABLE QString createBlankImage(int width, int height, int resolution);
-    Q_INVOKABLE QString createImageFromClipboard();
-    Q_INVOKABLE QString createImageFromWebcam(int width, int height, int resolution);
+public Q_SLOTS:
+    void newDocument(int width, int height, float resolution);
+    void openDocument(const QString &document);
+    void closeDocument();
+
+    static DocumentManager* instance();
+
+Q_SIGNALS:
+    void documentChanged();
+    void aboutToDeleteDocument();
+
+private:
+    explicit DocumentManager(QObject *parent = 0);
+    virtual ~DocumentManager();
+
+    class Private;
+    Private * const d;
+
+    static DocumentManager *sm_instance;
 };
 
-#endif // IMAGEBUILDER_H
+#endif // DOCUMENTMANAGER_H

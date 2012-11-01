@@ -59,6 +59,9 @@ public Q_SLOTS:
     void save();
     void saveAs(const QString& fileName, const QString& mimeType);
 
+    void documentAboutToBeDeleted();
+    void documentChanged();
+
 Q_SIGNALS:
     void viewChanged();
     void fileChanged();

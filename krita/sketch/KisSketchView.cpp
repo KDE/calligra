@@ -81,6 +81,7 @@
 #include "KisSketchCanvas.h"
 #include "Settings.h"
 #include "cpuid.h"
+#include "DocumentManager.h"
 
 class KisSketchView::Private
 {
@@ -94,7 +95,7 @@ public:
         , canvasWidget(0)
         , undoAction(0)
         , redoAction(0)
-        , useOpenGL(isUltraBook())
+        , useOpenGL(false)
     { }
     ~Private() { }
 
@@ -159,6 +160,12 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     d->loadedTimer = new QTimer(this);
     d->loadedTimer->setSingleShot(true);
     connect(d->loadedTimer, SIGNAL(timeout()), SIGNAL(loadingFinished()));
+
+    connect(DocumentManager::instance(), SIGNAL(aboutToDeleteDocument()), SLOT(documentAboutToBeDeleted()));
+    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
+
+    if(DocumentManager::instance()->document())
+        documentChanged();
 }
 
 KisSketchView::~KisSketchView()
@@ -168,10 +175,7 @@ KisSketchView::~KisSketchView()
             qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
         }
 
-        d->part->closeUrl(false);
-        delete d->doc;
-
-        delete d->view;
+        DocumentManager::instance()->closeDocument();
     }
     delete d;
 }
@@ -209,101 +213,9 @@ void KisSketchView::setFile(const QString& file)
         d->file = file;
         emit fileChanged();
 
-        if(d->doc) {
-            if (d->useOpenGL) {
-                qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
-            }
-
-            if(d->undoAction)
-                d->undoAction->disconnect(this);
-
-            if(d->redoAction)
-                d->redoAction->disconnect(this);
-
-            KisView2 *oldView = d->view;
-            disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
-            d->view = 0;
-            emit viewChanged();
-
-            delete oldView;
-
-            d->part->closeUrl(false);
-            delete d->doc;
-            d->doc = 0;
-            d->part = 0;
-
-            d->canvas = 0;
-            d->canvasWidget = 0;
+        if(!file.startsWith("temp://")) {
+            DocumentManager::instance()->openDocument(file);
         }
-
-        d->part = new KisPart2();
-        d->doc = new KisDoc2(d->part);
-        d->part->setDocument(d->doc);
-        //    ProgressProxy *proxy = new ProgressProxy(this);
-        //    doc->setProgressProxy(proxy);
-        //    connect(proxy, SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
-
-        KMimeType::Ptr type = KMimeType::findByPath(d->file);
-        QString path = d->file;
-        KoFilter::ConversionStatus status = KoFilter::OK;
-
-        if (type->name() != d->doc->nativeFormatMimeType()) {
-            KoFilterManager *manager = new KoFilterManager(d->doc,  d->doc->progressUpdater());
-            manager->setBatchMode(true);
-            path = manager->importDocument(KUrl(d->file).toLocalFile(), type->name(), status);
-
-            if(status != KoFilter::OK) {
-                qWarning() << "Error on import:" << status;
-            }
-        }
-
-        if(status == KoFilter::OK && !path.isEmpty()) {
-            if(!d->doc->openUrl(KUrl(path))) {
-                qWarning() << "Could not open file" << path;
-            }
-        }
-        d->doc->setSaveInBatchMode(true);
-
-        connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
-
-        d->view = qobject_cast<KisView2*>(d->part->createView(QApplication::activeWindow()));
-        connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
-        emit viewChanged();
-        d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
-        d->view->hide();
-        d->canvas = d->view->canvasBase();
-
-        d->undoStack = d->doc->undoStack();
-        d->undoAction = d->view->actionCollection()->action("edit_undo");
-        connect(d->undoAction, SIGNAL(changed()), this, SIGNAL(canUndoChanged()));
-
-        d->redoAction = d->view->actionCollection()->action("edit_redo");
-        connect(d->redoAction, SIGNAL(changed()), this, SIGNAL(canRedoChanged()));
-
-        KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
-
-        if (d->useOpenGL) {
-            d->canvasWidget = d->canvas->canvasWidget();
-            qobject_cast<KisSketchCanvas*>(d->canvasWidget)->initialize();
-            connect(qobject_cast<KisSketchCanvas*>(d->canvasWidget), SIGNAL(renderFinished()), SLOT(update()));
-        }
-        else {
-            d->canvasWidget = d->canvas->canvasWidget();
-            connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
-        }
-
-        static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
-        d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
-        d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
-        d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-        //    emit progress(100);
-        //    emit completed();
-
-        geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
-
-        d->loadedTimer->start(100);
     }
 }
 
@@ -450,6 +362,75 @@ void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
     d->doc->setOutputMimeType(mimeType.toAscii());
     d->part->saveAs(fileName);
     emit floatingMessageRequested(QString("Saved to %1").arg(fileName), "file-save");
+}
+
+void KisSketchView::documentAboutToBeDeleted()
+{
+    if (d->useOpenGL) {
+        qobject_cast<KisSketchCanvas*>(d->canvasWidget)->stopRendering();
+    }
+
+    if(d->undoAction)
+        d->undoAction->disconnect(this);
+
+    if(d->redoAction)
+        d->redoAction->disconnect(this);
+
+    KisView2 *oldView = d->view;
+    disconnect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
+    d->view = 0;
+    emit viewChanged();
+
+    delete oldView;
+
+    d->canvas = 0;
+    d->canvasWidget = 0;
+}
+
+void KisSketchView::documentChanged()
+{
+    d->doc = DocumentManager::instance()->document();
+
+    connect(d->doc, SIGNAL(modified(bool)), SIGNAL(modifiedChanged()));
+
+    d->view = qobject_cast<KisView2*>(DocumentManager::instance()->part()->createView(QApplication::activeWindow()));
+    connect(d->view, SIGNAL(floatingMessageRequested(QString,QString)), this, SIGNAL(floatingMessageRequested(QString,QString)));
+    emit viewChanged();
+    d->view->canvasControllerWidget()->setGeometry(x(), y(), width(), height());
+    d->view->hide();
+    d->canvas = d->view->canvasBase();
+
+    d->undoStack = d->doc->undoStack();
+    d->undoAction = d->view->actionCollection()->action("edit_undo");
+    connect(d->undoAction, SIGNAL(changed()), this, SIGNAL(canUndoChanged()));
+
+    d->redoAction = d->view->actionCollection()->action("edit_redo");
+    connect(d->redoAction, SIGNAL(changed()), this, SIGNAL(canRedoChanged()));
+
+    KoToolManager::instance()->switchToolRequested( "KritaShape/KisToolBrush" );
+
+    if (d->useOpenGL) {
+        d->canvasWidget = d->canvas->canvasWidget();
+        qobject_cast<KisSketchCanvas*>(d->canvasWidget)->initialize();
+        connect(qobject_cast<KisSketchCanvas*>(d->canvasWidget), SIGNAL(renderFinished()), SLOT(update()));
+    }
+    else {
+        d->canvasWidget = d->canvas->canvasWidget();
+        connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
+    }
+
+    static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
+    d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
+    d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    //    emit progress(100);
+    //    emit completed();
+
+    geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
+
+    d->loadedTimer->start(100);
 }
 
 bool KisSketchView::sceneEvent(QEvent* event)
