@@ -76,33 +76,33 @@ int main( int argc, char** argv )
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
-#ifdef Q_OS_WIN
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    // If there's no kdehome, set it and restart the process.
-    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
-    if (!env.contains("KDEHOME") ) {
-        //QMessageBox::information(0, "sketch: data env", QDesktopServices::storageLocation(QDesktopServices::DataLocation));
-        //QMessageBox::information(0, "sketch: home env", QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation)
-                   + QDir::separator() + "AppData"
-                   + QDir::separator() + "Roaming"
-                   + QDir::separator() + ".kritasketch");
-        env.insert("KDEDIR", appdir.currentPath());
-        env.insert("KDEDIRS", appdir.currentPath());
-        QString currentPath = env.value("PATH");
-        env.insert("PATH", appdir.currentPath() + QDir::separator() + "bin" + ";"
-                   + appdir.currentPath() + QDir::separator() + "lib" + ";"
-                   + appdir.currentPath() + QDir::separator() + "lib"  + QDir::separator() + "kde4" + ";"
-                   + currentPath);
+//#ifdef Q_OS_WIN
+//    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+//    // If there's no kdehome, set it and restart the process.
+//    //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
+//    if (!env.contains("KDEHOME") ) {
+//        //QMessageBox::information(0, "sketch: data env", QDesktopServices::storageLocation(QDesktopServices::DataLocation));
+//        //QMessageBox::information(0, "sketch: home env", QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+//        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation)
+//                   + QDir::separator() + "AppData"
+//                   + QDir::separator() + "Roaming"
+//                   + QDir::separator() + ".kde");
+//        env.insert("KDEDIR", appdir.currentPath());
+//        env.insert("KDEDIRS", appdir.currentPath());
+//        QString currentPath = env.value("PATH");
+//        env.insert("PATH", appdir.currentPath() + QDir::separator() + "bin" + ";"
+//                   + appdir.currentPath() + QDir::separator() + "lib" + ";"
+//                   + appdir.currentPath() + QDir::separator() + "lib"  + QDir::separator() + "kde4" + ";"
+//                   + currentPath);
 
-        QProcess *p = new QProcess();
-        p->setProcessEnvironment(env);
-        QMessageBox::information(0, "Arguments", fileNames.join(", "));
-        p->start(app.applicationFilePath(), fileNames);
-        // the process doesn't get deleted -- we leak it, but that's fine.
-        exit(0);
-    }
-#endif
+//        QProcess *p = new QProcess();
+//        p->setProcessEnvironment(env);
+//        //QMessageBox::information(0, "Arguments", fileNames.join(", "));
+//        p->start(app.applicationFilePath(), fileNames);
+//        // the process doesn't get deleted -- we leak it, but that's fine.
+//        exit(0);
+//    }
+//#endif
 
     app.addLibraryPath(appdir.currentPath());
     app.addLibraryPath(appdir.currentPath() + "/bin");

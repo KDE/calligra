@@ -373,7 +373,7 @@ notamd:
 
 bool isUltraBook()
 {
-
+    return true;
 #ifdef Q_OS_WIN
     _p_info info;
     _cpuid(&info);
