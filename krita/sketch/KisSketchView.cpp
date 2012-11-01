@@ -89,7 +89,6 @@ class KisSketchView::Private
 public:
     Private( KisSketchView* qq)
         : q(qq)
-        , part(0)
         , doc(0)
         , view(0)
         , canvas(0)
@@ -105,7 +104,6 @@ public:
 
     KisSketchView* q;
 
-    KisSketchPart* part;
     KisDoc2* doc;
     KisView2* view;
     KisCanvas2* canvas;
@@ -355,14 +353,14 @@ void KisSketchView::redo()
 
 void KisSketchView::save()
 {
-    d->part->save();
+    DocumentManager::instance()->part()->save();
     emit floatingMessageRequested("Saved", "file-save");
 }
 
 void KisSketchView::saveAs(const QString& fileName, const QString& mimeType)
 {
-    d->doc->setOutputMimeType(mimeType.toAscii());
-    d->part->saveAs(fileName);
+    DocumentManager::instance()->document()->setOutputMimeType(mimeType.toAscii());
+    DocumentManager::instance()->part()->saveAs(fileName);
     emit floatingMessageRequested(QString("Saved to %1").arg(fileName), "file-save");
 }
 
