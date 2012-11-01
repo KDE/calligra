@@ -329,13 +329,14 @@ bool KoDocument::saveFile()
     }
 
     emit statusBarMessage(i18n("Saving..."));
+    qApp->processEvents();
     bool ret = false;
     bool suppressErrorDialog = false;
     if (!isNativeFormat(outputMimeType, ForExport)) {
         kDebug(30003) << "Saving to format" << outputMimeType << "in" << d->parentPart->localFilePath();
         // Not native format : save using export filter
         if (!d->filterManager)
-            d->filterManager = new KoFilterManager(this);
+            d->filterManager = new KoFilterManager(this, d->progressUpdater);
 
         KoFilter::ConversionStatus status = d->filterManager->exportDocument(d->parentPart->localFilePath(), outputMimeType);
         ret = status == KoFilter::OK;
