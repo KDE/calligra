@@ -20,6 +20,13 @@
 #include "KisSketchPart.h"
 #include <KoDocument.h>
 
+KisSketchPart::KisSketchPart(QObject* parent)
+    : KisPart2(parent)
+{ }
+
+KisSketchPart::~KisSketchPart()
+{ }
+
 bool KisSketchPart::openFile()
 {
     return document()->openFile();

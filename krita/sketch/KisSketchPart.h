@@ -26,8 +26,10 @@
 // we set on the document when saving...
 class KisSketchPart : public KisPart2
 {
-
 public:
+    KisSketchPart(QObject *parent = 0);
+    virtual ~KisSketchPart();
+
     virtual bool openFile();
     virtual bool saveFile();
 };
