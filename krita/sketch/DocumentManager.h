@@ -36,6 +36,8 @@ public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
     void openDocument(const QString &document);
     void closeDocument();
+    void save();
+    void saveAs(const QString &filename, const QString &mimetype);
 
     static DocumentManager* instance();
 
@@ -51,6 +53,9 @@ private:
     Private * const d;
 
     static DocumentManager *sm_instance;
+
+private Q_SLOTS:
+    void delayedSaveAs();
 };
 
 #endif // DOCUMENTMANAGER_H

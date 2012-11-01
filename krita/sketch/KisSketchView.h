@@ -85,7 +85,6 @@ private:
 
     Q_PRIVATE_SLOT(d, void update())
     Q_PRIVATE_SLOT(d, void resetDocumentPosition())
-    Q_PRIVATE_SLOT(d, void delayedSaveAs())
 };
 
 #endif // KRITA_SKETCH_CANVAS_H
