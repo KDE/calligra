@@ -28,7 +28,18 @@ Page {
         height: parent.height;
 
         onInteractionStarted: { panelBar.collapse(); Krita.VirtualKeyboardController.requestHideKeyboard(); }
-        onLoadingFinished: loadingDialog.hide();
+        onLoadingFinished: {
+            loadingDialog.hide("Done!");
+            savingDialog.hide("Done!");
+        }
+        onProgress: {
+            if(value === -1 || value === 100) {
+                loadingDialog.hide("Done!");
+                savingDialog.hide("Done!");
+            }
+            loadingDialog.progress = value;
+            savingDialog.progress = value;
+        }
     }
 
     ToolManager {
@@ -82,6 +93,7 @@ Page {
                 }
                 case "save":
                     if(!Settings.temporaryFile) {
+                        savingDialog.show("Saving file...");
                         sketchView.save();
                     } else {
                         pageStack.push( saveAsPage, { view: sketchView } );
@@ -122,6 +134,15 @@ Page {
     Dialog {
         id: loadingDialog;
         title: "Loading";
+        message: "Please wait...";
+        textAlign: Text.AlignHCenter;
+
+        modalBackgroundColor: "#ffffff";
+    }
+
+    Dialog {
+        id: savingDialog;
+        title: "Saving";
         message: "Please wait...";
         textAlign: Text.AlignHCenter;
 
@@ -214,7 +235,7 @@ Page {
 
     Component.onCompleted: {
         Krita.Window.allowClose = false;
-        loadingDialog.show();
+        loadingDialog.show("Please wait...");
     }
 
     Component { id: openImagePage; OpenImagePage { } }
@@ -231,20 +252,13 @@ Page {
 
         function loadNewFile() {
             d.saveRequested = false;
-            loadingDialog.show();
-
-            if(Settings.temporaryFile) {
-                Krita.ImageBuilder.discardImage(sketchView.file);
-            }
+            loadingDialog.show("Loading " + Settings.currentFile);
 
             sketchView.file = Settings.currentFile;
             menuPanel.collapsed = true;
         }
 
         function closeWindow() {
-            if(Settings.temporaryFile) {
-                Krita.ImageBuilder.discardImage(Settings.currentFile);
-            }
 
             Krita.Window.allowClose = true;
             Krita.Window.closeWindow();
