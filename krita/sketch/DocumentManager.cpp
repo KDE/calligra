@@ -28,7 +28,11 @@
 class DocumentManager::Private
 {
 public:
-    Private() : document(0) { }
+    Private()
+        : proxy(0)
+        , document(0)
+        , part(0)
+    { }
     ProgressProxy* proxy;
     KisDoc2 *document;
     KisSketchPart *part;
@@ -44,6 +48,11 @@ KisDoc2* DocumentManager::document()
 KisSketchPart* DocumentManager::part()
 {
     return d->part;
+}
+
+ProgressProxy* DocumentManager::progressProxy()
+{
+    return d->proxy;
 }
 
 void DocumentManager::newDocument(int width, int height, float resolution)
