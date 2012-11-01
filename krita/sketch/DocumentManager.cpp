@@ -78,6 +78,17 @@ void DocumentManager::closeDocument()
     }
 }
 
+void DocumentManager::save()
+{
+    d->part->save();
+}
+
+void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
+{
+    d->document->setOutputMimeType(mimetype.toAscii());
+    d->part->saveAs(filename);
+}
+
 DocumentManager* DocumentManager::instance()
 {
     if(!sm_instance) {
