@@ -32,11 +32,17 @@ Item {
     signal buttonClicked(int button);
     signal canceled();
 
-    function show() {
+    function show(message) {
+        if(message) {
+            base.message = message;
+        }
         base.opacity = 1;
     }
 
-    function hide() {
+    function hide(message) {
+        if(message) {
+            base.message = message;
+        }
         base.opacity = 0;
     }
 
