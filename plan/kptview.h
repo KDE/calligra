@@ -210,6 +210,7 @@ signals:
 public slots:
     void slotUpdate();
     void slotCreateTemplate();
+    void slotCreateNewProject();
     void slotEditResource();
     void slotEditResource( Resource *resource );
     void slotEditCut();
@@ -396,6 +397,7 @@ private:
 
     // ------ File
     QAction *actionCreateTemplate;
+    QAction *actionCreateNewProject;
 
     // ------ Edit
     QAction *actionCut;

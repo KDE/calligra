@@ -44,6 +44,7 @@
 #include <KoOdfReadStore.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
+#include <KoDocumentInfo.h>
 
 #include <QApplication>
 #include <QPainter>
@@ -1010,6 +1011,53 @@ void MainDocument::viewlistModified()
     if ( ! m_viewlistModified ) {
         m_viewlistModified = true;
         setModified( true );
+    }
+}
+
+void MainDocument::createNewProject()
+{
+    setEmpty();
+    clearUndoHistory();
+    setModified( false );
+    resetURL();
+    KoDocumentInfo *info = documentInfo();
+    info->resetMetaData();
+    info->setProperty( "title", "" );
+    setTitleModified();
+
+    m_project->generateUniqueIds();
+    Duration dur = m_project->constraintEndTime() - m_project->constraintStartTime();
+    m_project->setConstraintStartTime( KDateTime( KDateTime::currentLocalDateTime().date(), QTime( 0, 0, 0 ) ) );
+    m_project->setConstraintEndTime( m_project->constraintStartTime() +  dur );
+
+    while ( m_project->numScheduleManagers() > 0 ) {
+        foreach ( ScheduleManager *sm, m_project->allScheduleManagers() ) {
+            if ( sm->childCount() > 0 ) {
+                continue;
+            }
+            if ( sm->expected() ) {
+                sm->expected()->setDeleted( true );
+                sm->setExpected( 0 );
+            }
+            m_project->takeScheduleManager( sm );
+            delete sm;
+        }
+    }
+    foreach ( Schedule *s, m_project->schedules() ) {
+        m_project->takeSchedule( s );
+        delete s;
+    }
+    foreach ( Node *n, m_project->allNodes() ) {
+        foreach ( Schedule *s, n->schedules() ) {
+            n->takeSchedule( s );
+            delete s;
+        }
+    }
+    foreach ( Resource *r, m_project->resourceList() ) {
+        foreach ( Schedule *s, r->schedules().values() ) {
+            r->takeSchedule( s );
+            delete s;
+        }
     }
 }
 

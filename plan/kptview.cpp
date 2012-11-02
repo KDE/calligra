@@ -273,6 +273,10 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     actionCollection()->addAction("file_createtemplate", actionCreateTemplate );
     connect( actionCreateTemplate, SIGNAL( triggered( bool ) ), SLOT( slotCreateTemplate() ) );
 
+    actionCreateNewProject = new KAction( i18n( "&Create New Project..." ), this );
+    actionCollection()->addAction("file_createnewproject", actionCreateNewProject );
+    connect( actionCreateNewProject, SIGNAL( triggered( bool ) ), SLOT( slotCreateNewProject() ) );
+
     // ------ Edit
     actionCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
     actionCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
@@ -454,6 +458,23 @@ void View::slotCreateTemplate()
 {
     KoTemplateCreateDia::createTemplate("plan_template", ".plant",
                                         Factory::global(), getPart(), this);
+}
+
+void View::slotCreateNewProject()
+{
+    kDebug(planDbg());
+    if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( this,
+                      i18nc( "@info",
+                             "<note>This action cannot be undone.</note><nl/><nl/>"
+                             "Create a new Project from the current project >"
+                             "with new project- and task identities.<nl/>"
+                             "Resource- and calendar identities are not changed.<nl/>"
+                             "All scheduling information is removed.<nl/>"
+                             "<nl/>Do you want to continue?" ) ) )
+    {
+        getPart()->createNewProject();
+        slotOpenNode( &getProject() );
+    }
 }
 
 void View::createViews()
@@ -1578,12 +1599,13 @@ void View::slotViewSchedule( QAction *act )
         Schedule *sch = m_scheduleActions.value( act, 0 );
         sm = sch->manager();
     }
+    emit currentScheduleManagerChanged( 0 );
+    setLabel( 0 );
     m_nextScheduleManager = sm;
     // Performance is very dependent on schedule manager change since a lot is recalculated
     // In case of multiple changes, only issue the last change
     if ( ! m_trigged ) {
         m_trigged = true;
-        setLabel( 0 );
         emit currentScheduleManagerChanged( 0 );
         QTimer::singleShot( 0, this, SLOT(slotViewScheduleManager()) );
     }

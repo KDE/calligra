@@ -117,6 +117,11 @@ public:
 
     void registerView( View *view );
 
+    /// Create a new project from this project
+    /// Generates new project id and task ids
+    /// Keeps resource- and calendar ids
+    void createNewProject();
+
 public slots:
     /// Inserts an item into all other views than @p view
     void insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index );
