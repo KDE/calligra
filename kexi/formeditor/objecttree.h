@@ -151,7 +151,7 @@ public:
     //! In most cases it is equal to this item but e.g. for pages of QTabWidget,
     //! item for the widget itself is returned.
     //! Used when user clicks on widget tree item or when parent of the current
-    //! widget should to be selected. Defaults can be overriden by widget factories.
+    //! widget should to be selected. Defaults can be overridden by widget factories.
     ObjectTreeItem* selectableItem();
 #endif
 protected:

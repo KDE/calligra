@@ -2,6 +2,8 @@
 
 import urllib, Kross, KSpread
 
+T = Kross.module("kdetranslation")
+
 class MyConfig:
 
     def __init__(self):
@@ -81,7 +83,7 @@ class MyKSpread:
 
         self._listener = KSpread.createListener(self.sheetName, self.config.sheetRange)
         if not self._listener:
-            raise "Failed to create listener"
+            raise Exception, T.i18n("Failed to create listener")
         def cellChanged(column, row):
             text = self.sheet.text(column, row)
             if text:
@@ -91,15 +93,15 @@ class MyKSpread:
         self._listener.connect("cellChanged(int,int)", cellChanged)
 
         def sheetNameChanged(*args):
-            self.myorca.speak("Sheet name changed")
+            self.myorca.speak(T.i18n("Sheet name changed"))
         self.sheet.connect("nameChanged()", sheetNameChanged)
 
         def sheetShowChanged(*args):
-            self.myorca.speak("Show sheet %s" % self.sheetName)
+            self.myorca.speak(T.i18n("Show sheet %1", [self.sheetName]))
         self.sheet.connect("showChanged()", sheetShowChanged)
 
         def sheetHideChanged(*args):
-            self.myorca.speak("Hide sheet %s" % self.sheetName)
+            self.myorca.speak(T.i18n("Hide sheet %1"), [self.sheetName])
         self.sheet.connect("hideChanged()", sheetHideChanged)
 
     def speakCellName(self):
@@ -125,41 +127,41 @@ class MyDialog:
         self.config = mykspread.config
 
         forms = Kross.module("forms")
-        self.dialog = forms.createDialog("Orca Screen Reader")
+        self.dialog = forms.createDialog(T.i18n("Orca Screen Reader"))
         self.dialog.setButtons("None")
         self.dialog.setFaceType("Tabbed") #Auto Plain List Tree Tabbed
         #self.dialog.minimumWidth = 300
         self.dialog.minimumHeight = 40
 
-        page = self.dialog.addPage("Action","")
+        page = self.dialog.addPage(T.i18n("Action"),"")
 
         self.cellNameBtn = forms.createWidget(page, "QPushButton")
-        self.cellNameBtn.text = "Cell Name"
+        self.cellNameBtn.text = T.i18n("Cell Name")
         #self.cellNameBtn.shortcut = "Ctrl+S"
         self.cellNameBtn.connect("clicked()", self.cellNameBtnClicked)
 
         self.cellValueBtn = forms.createWidget(page, "QPushButton")
-        self.cellValueBtn.text = "Cell Value"
+        self.cellValueBtn.text = T.i18n("Cell Value")
         self.cellValueBtn.connect("clicked()", self.cellValueBtnClicked)
 
         self.sheetNameBtn = forms.createWidget(page, "QPushButton")
-        self.sheetNameBtn.text = "Sheet Name"
+        self.sheetNameBtn.text = T.i18n("Sheet Name")
         self.sheetNameBtn.connect("clicked()", self.sheetNameBtnClicked)
 
         page = self.dialog.addPage("Option","")
 
         self.cellNameCheckbox = forms.createWidget(page, "QCheckBox")
-        self.cellNameCheckbox.text = "Cell Name if selection changed"
+        self.cellNameCheckbox.text = T.i18n("Cell Name if selection changed")
         self.cellNameCheckbox.checked = self.config.cellNameOnSelectionChanged
         self.cellNameCheckbox.connect("stateChanged(int)", self.optionChanged)
 
         self.cellValueCheckbox = forms.createWidget(page, "QCheckBox")
-        self.cellValueCheckbox.text = "Cell Value if selection changed"
+        self.cellValueCheckbox.text = T.i18n("Cell Value if selection changed")
         self.cellValueCheckbox.checked = self.config.cellValueOnSelectionChanged
         self.cellValueCheckbox.connect("stateChanged(int)", self.optionChanged)
 
         self.sheetNameChanged = forms.createWidget(page, "QCheckBox")
-        self.sheetNameChanged.text = "Sheet Name if sheet changed"
+        self.sheetNameChanged.text = T.i18n("Sheet Name if sheet changed")
         self.sheetNameChanged.checked = self.config.sheetNameOnSheetChanged
         self.sheetNameChanged.connect("stateChanged(int)", self.optionChanged)
 
@@ -183,20 +185,20 @@ class MyDialog:
 def start(action, myconfig, myorca):
     while True:
         try:
-            myorca.speak("Calligra Spreadsheet")
+            myorca.speak(T.i18n("Calligra Spreadsheet"))
             break
         except IOError:
             forms = Kross.module("forms")
-            dialog = forms.createDialog("Orca Screen Reader")
+            dialog = forms.createDialog(T.i18n("Orca Screen Reader"))
             dialog.minimumWidth = 400
             dialog.minimumHeight = 40
             dialog.setButtons("Ok|Cancel")
             page = dialog.addPage("","")
             label = forms.createWidget(page, "QLabel")
-            label.text = "Failed to connect with the Orca HTTP-Server."
+            label.text = T.i18n("Failed to connect with the Orca HTTP-Server.")
             widget = forms.createWidget(page, "QWidget")
             layout = forms.createLayout(widget, "QHBoxLayout")
-            forms.createWidget(widget, "QLabel").text = "Url:"
+            forms.createWidget(widget, "QLabel").text = T.i18n("Url:")
             urlEdit = forms.createWidget(widget, "QLineEdit")
             urlEdit.text = myconfig.url
             if not dialog.exec_loop():

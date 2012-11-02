@@ -41,7 +41,8 @@
 #include <QTextDocument>
 #include <KDebug>
 #include <KoBookmark.h>
-#include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
+//#include <KoInlineTextObjectManager.h>
 
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
@@ -73,27 +74,16 @@ void ToCGenerator::setBlock(const QTextBlock &block)
     m_document = m_documentLayout->document();
 }
 
-QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager* inlineTextObjectManager)
+QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoTextRangeManager *textRangeManager)
 {
-    QTextBlock::iterator it;
-    for (it = block.begin(); !(it.atEnd()); ++it) {
-        QTextFragment currentFragment = it.fragment();
-        if (!currentFragment.isValid())
-            continue;
-        QString s = currentFragment.text();
-        if (s.isEmpty())
-            continue;
-        // most possibly inline object
-        if (s[0].unicode() == QChar::ObjectReplacementCharacter) {
-            KoInlineObject *inlineObject = inlineTextObjectManager->inlineTextObject( currentFragment.charFormat() );
-            KoBookmark *bookmark = dynamic_cast<KoBookmark*>(inlineObject);
-            if (bookmark) {
-                return bookmark->name();
-                break;
-            }
+    QHash<int, KoTextRange *> ranges = textRangeManager->textRangesChangingWithin(block.position(), block.position() + block.length(), block.position(), block.position() + block.length());
+
+    foreach (KoTextRange *range, ranges) {
+        KoBookmark *bookmark = dynamic_cast<KoBookmark *>(range);
+        if (bookmark) {
+            return bookmark->name();
         }
     }
-
     return QString();
 }
 
@@ -205,7 +195,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
 
     QString tocEntryText = block.text();
     tocEntryText.remove(QChar::ObjectReplacementCharacter);
-    // some headings contain tabs, replace all occurences with spaces
+    // some headings contain tabs, replace all occurrences with spaces
     tocEntryText.replace('\t',' ').remove(0x200B);
     tocEntryText = removeWhitespacePrefix(tocEntryText);
 
@@ -248,7 +238,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                     case IndexEntry::LINK_START: {
                         //IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);
 
-                        QString target = fetchBookmarkRef(block, m_documentLayout->inlineTextObjectManager());
+                        QString target = fetchBookmarkRef(block, m_documentLayout->textRangeManager());
 
                         if (target.isNull()) {
                             // generate unique name for the bookmark
@@ -256,17 +246,17 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             blockId++;
 
                             // insert new KoBookmark
-                            KoBookmark *bookmark = new KoBookmark(block.document());
-                            bookmark->setName(target);
-                            bookmark->setType(KoBookmark::SinglePosition);
                             QTextCursor blockCursor(block);
-                            m_documentLayout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
+                            KoBookmark *bookmark = new KoBookmark(blockCursor);
+                            bookmark->setName(target);
+                            m_documentLayout->textRangeManager()->insert(bookmark);
                         }
 
                         if (!target.isNull()) {
                             // copy it to alter subset of properties
                             QTextCharFormat linkCf(savedCharFormat);
                             linkCf.setAnchor(true);
+                            linkCf.setProperty(KoCharacterStyle::AnchorType, KoCharacterStyle::Anchor);
                             linkCf.setAnchorHref('#'+ target);
 
                             QBrush foreground = linkCf.foreground();

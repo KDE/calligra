@@ -26,6 +26,7 @@
 #include <kpluginfactory.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
@@ -50,7 +51,7 @@ TableShapeFactory::TableShapeFactory()
     : KoShapeFactoryBase(TableShapeId, i18n("Spreadsheet"), "spreadsheetshape-deferred")
 {
     setToolTip(i18n("Spreadsheet Shape"));
-    setIcon("spreadsheetshape");
+    setIconName(koIconNameCStr("spreadsheetshape"));
     setXmlElementNames(KoXmlNS::table, QStringList() << "table");
 }
 

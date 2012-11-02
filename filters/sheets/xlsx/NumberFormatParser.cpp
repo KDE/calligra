@@ -386,7 +386,7 @@ KoGenStyle NumberFormatParser::parse(const QString& numberFormat, KoGenStyles* s
                         xmlWriter.addAttribute("number:style", "long");
                     xmlWriter.endElement();
                 } else {
-                    // on the next iteration, we might see wheter there're seconds or something else
+                    // on the next iteration, we might see whether there're seconds or something else
                     bool minutes = true; // let's just default to minutes, if there's nothing more...
                     // so let's look ahead:
                     for (int j = i + 1; j < numberFormat.length(); ++j) {
@@ -691,7 +691,7 @@ bool NumberFormatParser::isDateFormat(const QString& numberFormat)
                 if (justHadHours) {
                     //SET_TYPE_OR_RETURN(KoGenStyle::NumericTimeStyle)
                 } else {
-                    // on the next iteration, we might see wheter there're seconds or something else
+                    // on the next iteration, we might see whether there're seconds or something else
                     bool minutes = true; // let's just default to minutes, if there's nothing more...
                     // so let's look ahead:
                     for (int j = i + 1; j < numberFormat.length(); ++j) {

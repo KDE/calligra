@@ -42,6 +42,7 @@ set(kexiextendedwidgets_LIB_SRCS
     kexicharencodingcombobox.cpp
     KexiDBTitlePage.cpp
     KexiProjectSelectorWidget.cpp
+    kexislider.cpp
   )
 
 IF (KEXI_MOBILE)
@@ -59,6 +60,8 @@ ELSE (KEXI_MOBILE)
     kexiprjtypeselector.cpp
     KexiConnectionSelectorWidget.cpp
     KexiFileWidget.cpp
+    KexiNameWidget.cpp
+    KexiNameDialog.cpp
   )
   kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
     KexiConnectionSelector.ui

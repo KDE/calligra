@@ -27,6 +27,7 @@
 #include <QVector>
 
 #include <KoColorSpaceConstants.h>
+#include <KoColorConversionTransformation.h>
 
 #include "kis_distance_information.h"
 #include "kis_global.h"
@@ -359,8 +360,31 @@ public:
     void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
     void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
-    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
     void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
+
+    /**
+     * Convinience method for renderMirrorMask(), allows to choose whether
+     * we need to preserve out dab or do the transformations in-place.
+     *
+     * @param rc rectangle area covered by dab
+     * @param dab the device to render
+     * @param preserveDab states whether a temporary device should be
+     *                    created to do the transformations
+     */
+    void renderMirrorMaskSafe(QRect rc, KisFixedPaintDeviceSP dab, bool preserveDab);
+
+    /**
+     * Convinience method for renderMirrorMask(), allows to choose whether
+     * we need to preserve our fixed mask or do the transformations in-place.
+     *
+     * @param rc rectangle area covered by dab
+     * @param dab the device to render
+     * @param mask mask to use for rendering
+     * @param preserveMask states whether a temporary device should be
+     *                    created to do the transformations
+     */
+    void renderMirrorMaskSafe(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask, bool preserveMask);
+
 
     /**
      * Special method for some paintop that needs to know which areas where covered by the dab
@@ -693,6 +717,17 @@ public:
      */
     void setLockAlpha(bool protect);
     bool alphaLocked() const;
+
+
+    /**
+     * set the rendering intent in case pixels need to be converted before painting
+     */
+    void setRenderingIntent(KoColorConversionTransformation::Intent intent);
+
+    /**
+     * set the conversion flags in case pixels need to be converted before painting
+     */
+    void setColorConversionFlags(KoColorConversionTransformation::ConversionFlags conversionFlags);
 
 protected:
     /// Initialize, set everything to '0' or defaults

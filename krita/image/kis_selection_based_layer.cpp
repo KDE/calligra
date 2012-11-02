@@ -233,7 +233,6 @@ void KisSelectionBasedLayer::setY(qint32 y)
 
 void KisSelectionBasedLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 
@@ -266,7 +265,7 @@ QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?
-           originalDevice->createThumbnail(w, h, originalSelection) :
+           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) :
            QImage();
 }
 

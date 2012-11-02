@@ -18,14 +18,13 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #include "kexidbslider.h"
-
 #include <knumvalidator.h>
 
 KexiDBSlider::KexiDBSlider(QWidget *parent)
-        :QSlider(parent) , KexiFormDataItemInterface()
+    : KexiSlider(parent) , KexiFormDataItemInterface()
 {
+    setOrientation(Qt::Horizontal);
     connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged()));
 }
 
@@ -35,13 +34,14 @@ KexiDBSlider::~KexiDBSlider()
 
 void KexiDBSlider::setInvalidState(const QString& displayText)
 {
+    Q_UNUSED(displayText);
     m_invalidState = true;
     setEnabled(false);
     setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
     if (focusPolicy() & Qt::TabFocus)
         setFocusPolicy(Qt::ClickFocus);
-    QSlider::setValue(minimum());
+    KexiSlider::setValue(minimum());
 }
 
 void
@@ -50,18 +50,18 @@ KexiDBSlider::setEnabled(bool enabled)
     // prevent the user from reenabling the widget when it is in invalid state
     if (enabled && m_invalidState)
         return;
-    QSlider::setEnabled(enabled);
+    KexiSlider::setEnabled(enabled);
 }
 
 void KexiDBSlider::setValueInternal(const QVariant&, bool)
 {
-    QSlider::setValue(m_origValue.toInt());
+    KexiSlider::setValue(m_origValue.toInt());
 }
 
 QVariant
 KexiDBSlider::value()
 {
-    return QSlider::value();
+    return KexiSlider::value();
 }
 
 void KexiDBSlider::slotValueChanged()
@@ -107,7 +107,7 @@ bool KexiDBSlider::cursorAtEnd()
 
 void KexiDBSlider::clear()
 {
-    QSlider::setValue(minimum());
+    KexiSlider::setValue(minimum());
 }
 
 #include "kexidbslider.moc"

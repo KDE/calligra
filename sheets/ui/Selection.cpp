@@ -409,7 +409,7 @@ void Selection::update(const QPoint& point)
     QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft));
 
     // If the updated range is bigger, it may cover already existing ranges.
-    // These get removed, if multiple occurences are not allowed. Store the old
+    // These get removed, if multiple occurrences are not allowed. Store the old
     // amount of ranges, to figure out how many ranges have been removed later.
     const int count = cells().count();
     // The update may have shrunk the range, which would be containend in
@@ -848,11 +848,11 @@ void Selection::endReferenceSelection(bool saveChanges)
     if (d->formerSelection.isEmpty()) {
         return;
     }
-    d->referenceMode = false;
-    d->multipleOccurences = false;
     if (originSheet() != activeSheet()) {
         emit visibleSheetRequested(originSheet());
     }
+    d->referenceMode = false;
+    d->multipleOccurences = false;
     // While entering a formula the choose mode is turned on and off.
     // Clear the choice. Otherwise, cell references will stay highlighted.
     if (!isEmpty()) {

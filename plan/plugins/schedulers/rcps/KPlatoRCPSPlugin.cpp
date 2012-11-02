@@ -47,6 +47,10 @@ KPlatoRCPSPlugin::KPlatoRCPSPlugin( QObject * parent, const QVariantList & )
     if ( locale ) {
         locale->insertCatalog( "planrcpsplugin" );
     }
+    m_granularities << (long unsigned int) 1 * 60 * 1000
+                    << (long unsigned int) 15 * 60 * 1000
+                    << (long unsigned int) 30 * 60 * 1000
+                    << (long unsigned int) 60 * 60 * 1000;
 }
 
 KPlatoRCPSPlugin::~KPlatoRCPSPlugin()
@@ -69,6 +73,12 @@ int KPlatoRCPSPlugin::capabilities() const
     return SchedulerPlugin::AvoidOverbooking | SchedulerPlugin::ScheduleForward | SchedulerPlugin::ScheduleBackward;
 }
 
+ulong KPlatoRCPSPlugin::currentGranularity() const
+{
+    ulong v = m_granularities.value( m_granularity );
+    return qMax( v, (ulong)60000 ); // minimum 1 min
+}
+
 void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleManager *sm, bool nothread )
 {
     foreach ( SchedulerThread *j, m_jobs ) {
@@ -78,7 +88,7 @@ void KPlatoRCPSPlugin::calculate( KPlato::Project &project, KPlato::ScheduleMana
     }
     sm->setScheduling( true );
 
-    KPlatoRCPSScheduler *job = new KPlatoRCPSScheduler( &project, sm );
+    KPlatoRCPSScheduler *job = new KPlatoRCPSScheduler( &project, sm, currentGranularity() );
     m_jobs << job;
     connect(job, SIGNAL(jobFinished(SchedulerThread*)), SLOT(slotFinished(SchedulerThread*)));
 

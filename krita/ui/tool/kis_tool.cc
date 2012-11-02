@@ -27,6 +27,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 
+#include <KoIcon.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColor.h>
 #include <KoCanvasBase.h>
@@ -710,10 +711,7 @@ bool KisTool::nodeEditable()
         } else {
             message = i18n("Group not editable.");
         }
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(message, kiscanvas->canvasWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(KIcon("object-locked"));
-        floatingMessage->showMessage();
+        kiscanvas->view()->showFloatingMessage(message, koIcon("object-locked"));
     }
     return node->isEditable();
 }
@@ -726,11 +724,7 @@ bool KisTool::selectionEditable()
     bool editable = view->selectionEditable();
     if (!editable) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-        KisFloatingMessage *floatingMessage = new KisFloatingMessage(i18n("Local selection is locked."),
-                                                                    kiscanvas->canvasWidget());
-        floatingMessage->setShowOverParent(true);
-        floatingMessage->setIcon(KIcon("object-locked"));
-        floatingMessage->showMessage();
+        kiscanvas->view()->showFloatingMessage(i18n("Local selection is locked."), koIcon("object-locked"));
     }
     return editable;
 }

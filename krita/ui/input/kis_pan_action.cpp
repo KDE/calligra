@@ -35,8 +35,8 @@ class KisPanAction::Private
 public:
     Private() : active(false), panDistance(10) { }
 
-    const int panDistance;
     bool active;
+    const int panDistance;
 };
 
 KisPanAction::KisPanAction(KisInputManager *manager)
@@ -73,10 +73,10 @@ void KisPanAction::begin(int shortcut)
             inputManager()->canvas()->canvasController()->pan(QPoint(-d->panDistance, 0));
             break;
         case PanUpShortcut:
-            inputManager()->canvas()->canvasController()->pan(QPoint(0, -d->panDistance));
+            inputManager()->canvas()->canvasController()->pan(QPoint(0, d->panDistance));
             break;
         case PanDownShortcut:
-            inputManager()->canvas()->canvasController()->pan(QPoint(0, d->panDistance));
+            inputManager()->canvas()->canvasController()->pan(QPoint(0, -d->panDistance));
             break;
     }
 }

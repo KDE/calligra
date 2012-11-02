@@ -1,20 +1,29 @@
 
-set( QUICK_PRINT_SERVICES kchart_konqi.desktop karbon_konqi.desktop
-kspread_konqi.desktop  kpresenter_konqi.desktop
-words_konqi.desktop krita_konqi.desktop flow_konqi.desktop )
-
-if( BUILD_kformula )
-set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} kformula_konqi.desktop )
-endif( BUILD_kformula )
-
-# TODO unsupported for now
-# if( BUILD_kexi )
-# set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} kexi_konqi.desktop )
-# endif( BUILD_kexi )
+set( QUICK_PRINT_SERVICES
+)
 
 if( BUILD_flow )
-set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} flow_konqi.desktop )
+    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} flow_print.desktop )
 endif( BUILD_flow )
 
-install( FILES ${QUICK_PRINT_SERVICES} DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)
+if( BUILD_karbon )
+    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} karbon_print.desktop )
+endif( BUILD_karbon )
 
+if( BUILD_krita )
+    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} krita_print.desktop )
+endif( BUILD_krita )
+
+if( BUILD_sheets )
+    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} sheets_print.desktop )
+endif( BUILD_sheets )
+
+if( BUILD_stage )
+    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} stage_print.desktop )
+endif( BUILD_stage )
+
+if( BUILD_words )
+    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} words_print.desktop )
+endif( BUILD_words )
+
+install( FILES ${QUICK_PRINT_SERVICES} DESTINATION ${SERVICES_INSTALL_DIR}/ServiceMenus)

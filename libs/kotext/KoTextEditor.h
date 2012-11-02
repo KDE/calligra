@@ -46,6 +46,7 @@ class KoCanvasBase;
 class KoTableOfContentsGeneratorInfo;
 class KoShapeController;
 class KoTextAnchor;
+class KoBookmark;
 
 class QTextBlock;
 class QTextCharFormat;
@@ -158,7 +159,7 @@ public slots:
     ///
     /// Note: Be aware that many KoTextEditor methods start their own commands thus terminating
     /// the recording of this \ref command. Only use QTextCursor manipulation (with all the issues
-    /// that brings) or only use KoTextEditor methods that don't start their own commmand.
+    /// that brings) or only use KoTextEditor methods that don't start their own command.
     ///
     /// The recording is automatically terminated when another command is added, which as mentioned
     /// can happen by executing some of the KoTextEditor methods.
@@ -230,7 +231,7 @@ public slots:
     /**
      * Remove the KoTextAnchor objects from the document.
      *
-     * NOTE: Call this method only when the the shapes belonging to the anchors have been deleted.
+     * NOTE: Call this method only when the shapes belonging to the anchors have been deleted.
      */
     void removeAnchors(const QList<KoTextAnchor*> &anchors, KUndo2Command *parent);
 
@@ -242,7 +243,7 @@ public slots:
     KoInlineObject *insertIndexMarker();
 
     /// add a bookmark on current cursor location or current selection
-    void addBookmark(const QString &name);
+    KoBookmark *addBookmark(const QString &name);
 
     /**
      * Insert a frame break at the cursor position, moving the rest of the text to the next frame.
@@ -316,7 +317,7 @@ public slots:
 
     void deletePreviousChar();
 
-    const QTextDocument *document() const;
+    QTextDocument *document() const;
 
     /// Same as Qt, only to be used inside KUndo2Commands
     KUndo2Command *beginEditBlock(QString title = QString());

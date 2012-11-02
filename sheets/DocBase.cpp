@@ -44,6 +44,7 @@
 #include <KoUpdater.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoPart.h>
 
 #include "calligra_sheets_limits.h"
 #include "BindingModel.h"
@@ -60,8 +61,8 @@ int DocBase::Private::s_docId = 0;
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
-DocBase::DocBase(QObject* parent)
-    : KoDocument(parent)
+DocBase::DocBase(KoPart *part)
+    : KoDocument(part)
     , d(new Private)
 {
     d->resourceManager = new KoDocumentResourceManager();
@@ -328,11 +329,6 @@ void DocBase::paintContent(QPainter &, const QRect &)
 bool DocBase::loadXML(const KoXmlDocument &, KoStore *)
 {
     return false;
-}
-
-KoView* DocBase::createViewInstance(QWidget *)
-{
-    return 0;
 }
 
 void DocBase::saveOdfViewSettings(KoXmlWriter&)

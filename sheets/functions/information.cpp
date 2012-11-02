@@ -187,10 +187,10 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (type == "release")
         return Value(QString(CALLIGRA_VERSION_STRING));
-
+/*FIXME
     if (type == "numfile")
         return Value(KoDocument::documentList() ? KoDocument::documentList()->count() : 0);
-
+*/
     if (type == "recalc") {
         QString result;
         if (!calc->settings()->isAutoCalculationEnabled())

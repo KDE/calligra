@@ -67,6 +67,8 @@
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
+#include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoTextAnchor.h>
@@ -81,10 +83,14 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+
+#include <KoAnnotationSideBar.h>
+
 #include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoIcon.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -92,34 +98,36 @@
 #include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kicon.h>
 #include <kdialog.h>
 #include <KToggleAction>
-#include <KStandardDirs>
-#include <KTemporaryFile>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
-#include <kmessagebox.h>
 #include <KParts/PartManager>
 
-KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
-        : KoView(document, parent)
+KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
+        : KoView(part, document, parent)
         , m_canvas(0)
 {
     setAcceptDrops(true);
 
     m_document = document;
     m_snapToGrid = m_document->gridData().snapToGrid();
-    m_gui = new KWGui(viewMode, this);
+    m_gui = new KWGui(QString(), this);
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
+#ifdef SHOW_ANNOTATIONS
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setMargin(0);
+    layout->addWidget(m_gui,0,0);
+#else
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
+#endif
 
     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
@@ -132,10 +140,6 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
 
     QList<QTextDocument*> texts;
     KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-    KoMainWindow *win = qobject_cast<KoMainWindow*>(window());
-    if(win) {
-        connect(win->partManager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(loadingCompleted()));
-    }
 
     m_find = new KoFindText(this);
     m_find->setDocuments(texts);
@@ -172,6 +176,15 @@ KWView::KWView(const QString &viewMode, KWDocument *document, QWidget *parent)
         connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
            m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
+
+#ifdef SHOW_ANNOTATIONS
+    if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
+        if (textRangeManager->annotationManager()) {
+            KoAnnotationSideBar *annotationBar = new KoAnnotationSideBar(textRangeManager->annotationManager());
+            layout->addWidget(annotationBar, 0, 1);
+        }
+    }
+#endif
 }
 
 KWView::~KWView()
@@ -237,14 +250,14 @@ void KWView::setupActions()
     m_actionFormatFrameSet->setEnabled(false);
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
+    m_actionAddBookmark = new KAction(koIcon("bookmark-new"), i18n("Bookmark..."), this);
     m_actionAddBookmark->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_G);
     actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
     KAction *action = new KAction(i18n("Select Bookmark..."), this);
     action->setIconText(i18n("Bookmark"));
-    action->setIcon(KIcon("bookmarks"));
+    action->setIcon(koIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
@@ -272,7 +285,7 @@ void KWView::setupActions()
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
 
-    action = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
+    action = new KAction(koIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
     connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
     connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
@@ -359,7 +372,7 @@ void KWView::setupActions()
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
 
     // -------------- Settings menu
-    action = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    action = new KAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
     connect(action, SIGNAL(triggered()), this, SLOT(configure()));
 
@@ -458,7 +471,7 @@ void KWView::pasteRequested()
 
 void KWView::editFrameProperties()
 {
-    KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
+    QPointer<KWFrameDialog> frameDialog = new KWFrameDialog(selectedFrames(), m_document, m_canvas);
     frameDialog->exec();
     delete frameDialog;
 }
@@ -475,31 +488,8 @@ KoPrintJob *KWView::createPrintJob()
 
 void KWView::createTemplate()
 {
-    int width = 60;
-    int height = 60;
-    QPixmap pix = m_document->generatePreview(QSize(width, height));
-
-    KTemporaryFile *tempFile = new KTemporaryFile();
-    tempFile->setSuffix(".ott");
-    //Check that creation of temp file was successful
-    if (!tempFile->open()) {
-        qWarning("Creation of temporary file to store template failed.");
-        return;
-    }
-    QString fileName = tempFile->fileName();
-    tempFile->close();
-    delete tempFile;
-
-    m_document->saveNativeFormat(fileName);
-
-    KoTemplateCreateDia::createTemplate("words_template", KWFactory::componentData(),
-                                        fileName, pix, this);
-
-    KWFactory::componentData().dirs()->addResourceType("words_template",
-            "data", "words/templates/");
-
-    QDir d;
-    d.remove(fileName);
+    KoTemplateCreateDia::createTemplate("words_template", ".ott",
+                                        KWFactory::componentData(), m_document, this);
 }
 
 void KWView::addBookmark()
@@ -521,12 +511,12 @@ void KWView::addBookmark()
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     Q_ASSERT(editor);
 
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
     if (editor->hasSelection()) {
         suggestedName = editor->selectedText();
     }
 
-    KWCreateBookmarkDialog *dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
+    QPointer<KWCreateBookmarkDialog> dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
     if (dia->exec() == QDialog::Accepted) {
         name = dia->newBookmarkName();
     }
@@ -542,9 +532,9 @@ void KWView::addBookmark()
 void KWView::selectBookmark()
 {
     QString name;
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
 
-    KWSelectBookmarkDialog *dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
+    QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
     connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
             manager, SLOT(rename(const QString &, const QString &)));
     connect(dia, SIGNAL(bookmarkDeleted(const QString &)),
@@ -556,8 +546,8 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
+    KoBookmark *bookmark = manager->bookmark(name);
 #if 0
-    KoBookmark *bookmark = manager->retrieveBookmark(name);
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
     selection->deselectAll();
@@ -565,20 +555,24 @@ void KWView::selectBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-
-    KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    if (bookmark->hasSelection()) {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
-        rm->clearResource(KoText::SelectedTextPosition);
-        rm->clearResource(KoText::SelectedTextAnchor);
-    } else
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
 #else
 #ifdef __GNUC__
     #warning FIXME: port to textlayout-rework
 #endif
 #endif
+
+    KoCanvasResourceManager *rm = m_canvas->resourceManager();
+    if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {
+        rm->clearResource(KoText::SelectedTextPosition);
+        rm->clearResource(KoText::SelectedTextAnchor);
+    }
+    if (bookmark->positionOnlyMode()) {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeStart());
+    } else {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeEnd());
+    }
 }
 
 void KWView::deleteBookmark(const QString &name)
@@ -586,7 +580,7 @@ void KWView::deleteBookmark(const QString &name)
     Q_UNUSED(name);
 #if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-    KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
+    KoBookmark *bookmark = manager->bookmarkManager()->bookmark(name);
     if (!bookmark || !bookmark->shape())
         return;
 

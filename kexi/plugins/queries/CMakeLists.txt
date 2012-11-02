@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 set(kexihandler_query_PART_SRCS 
    kexiquerypart.cpp 
    kexiquerydesignersql.cpp 
-   kexiquerydesignersqlhistory.cpp 
    kexiquerydesignerguieditor.cpp 
    kexiqueryview.cpp )
 

@@ -49,7 +49,7 @@ GenericName[fi]=Kaavioiden piirtäminen
 GenericName[fr]=Conception de diagrammes et de tableaux
 GenericName[fy]=Bewurkje fan (stroom)diagrammen
 GenericName[ga]=Eagarthóireacht Sreabhchairteacha agus Léaráidí
-GenericName[gl]=Creación e Edición de Diagramas de Fluxo
+GenericName[gl]=Editor de diagramas
 GenericName[he]=עריכת תרשימי זרימה ודיאגרמות
 GenericName[hi]=फ्लोचार्ट व डायग्राम संपादन
 GenericName[hne]=फ्लोचार्ट अउ डायग्राम संपादन
@@ -90,7 +90,7 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 # application/vnd.oasis.opendocument.graphics is not on this list because Karbon has the default;
 # Flow will be used only in absence of Karbon
 X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.graphics;application/vnd.visio;
-X-DocPath=http://userbase.kde.org/Flow
+X-DocPath=http://userbase.kde.org/Special:MyLanguage/Flow
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.calligra.flow

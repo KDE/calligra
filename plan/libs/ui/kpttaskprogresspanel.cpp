@@ -20,6 +20,8 @@
 #include "kpttaskprogresspanel.h"
 #include "kptusedefforteditor.h"
 
+#include <KoIcon.h>
+
 #include <QCheckBox>
 #include <QDate>
 #include <QTableWidget>
@@ -31,7 +33,6 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <KIcon>
 
 #include "kpttask.h"
 #include "kptcommand.h"
@@ -235,8 +236,8 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
 {
     setupUi(this);
 
-    addEntryBtn->setIcon( KIcon( "list-add" ) );
-    removeEntryBtn->setIcon( KIcon( "list-remove" ) );
+    addEntryBtn->setIcon(koIcon("list-add"));
+    removeEntryBtn->setIcon(koIcon("list-remove"));
 
     connect(entryTable, SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
     removeEntryBtn->setEnabled( false );

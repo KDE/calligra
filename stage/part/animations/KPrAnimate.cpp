@@ -98,15 +98,15 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         smilCalcMode = KPrAnimationValue::linear;
     } else if (calcMode == "discrete") {
         smilCalcMode = KPrAnimationValue::discrete;
-        kWarning(33003) << "calcMode discrete not yes supported";
+        kWarning(33003) << "calcMode discrete not yet supported";
         retval = false;
     } else if (calcMode == "paced") {
         smilCalcMode = KPrAnimationValue::paced;
-        kWarning(33003) << "calcMode paced not yes supported";
+        kWarning(33003) << "calcMode paced not yet supported";
         retval = false;
     } else if (calcMode == "spline") {
         smilCalcMode = KPrAnimationValue::spline;
-        kWarning(33003) << "calcMode spline not yes supported";
+        kWarning(33003) << "calcMode spline not yet supported";
         retval = false;
     }
 

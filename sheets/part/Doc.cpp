@@ -76,6 +76,7 @@
 #include <KoProgressUpdater.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
+#include <KoView.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -144,8 +145,8 @@ static const char * CURRENT_DTD_VERSION = "1.2";
 QList<Doc*> Doc::Private::s_docs;
 int Doc::Private::s_docId = 0;
 
-Doc::Doc(QObject* parent)
-        : DocBase(parent)
+Doc::Doc(KoPart *part)
+        : DocBase(part)
         , dd(new Private)
 {
     connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
@@ -163,9 +164,6 @@ Doc::Doc(QObject* parent)
     connect(d->map, SIGNAL(commandAdded(KUndo2Command *)),
             this, SLOT(addCommand(KUndo2Command *)));
 
-    setComponentData(Factory::global(), false);
-    setTemplateType("sheets_template");
-
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();
 }
@@ -173,18 +171,9 @@ Doc::Doc(QObject* parent)
 Doc::~Doc()
 {
     //don't save config when words is embedded into konqueror
-    if (isReadWrite())
-        saveConfig();
+    saveConfig();
 
     delete dd;
-}
-
-void Doc::openTemplate(const KUrl& url)
-{
-    map()->loadingInfo()->setLoadTemplate(true);
-    KoDocument::openTemplate(url);
-    map()->deleteLoadingInfo();
-    initConfig();
 }
 
 void Doc::initEmpty()
@@ -204,34 +193,12 @@ void Doc::initEmpty()
 
 void Doc::saveConfig()
 {
-    if (!isReadWrite())
-        return;
     KSharedConfigPtr config = Factory::global().config();
     Q_UNUSED(config);
 }
 
 void Doc::initConfig()
 {
-}
-
-KoView* Doc::createViewInstance(QWidget* parent)
-{
-    View *view = new View(parent, this);
-    // If we don't have this here, the next call will die horribly
-    KoToolManager::instance()->addController(view->canvasController());
-    // explicit switch tool to be sure that the list of option-widgets (CellToolOptionWidget
-    // as returned by KoToolBase::optionWidgets) is updated to prevent crashes like bug 278896.
-    KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-    // We need to set the active sheet, otherwise we will break various other bits of the API
-    // which expect your view to actually be ready for interaction after being created (e.g.
-    // printing)
-    view->setActiveSheet(map()->sheet(0));
-    return view;
-}
-
-QGraphicsItem *Doc::createCanvasItem()
-{
-    return new CanvasItem(this);
 }
 
 int Doc::supportedSpecialFormats() const
@@ -250,9 +217,11 @@ QDomDocument Doc::saveXML()
 {
     /* don't pull focus away from the editor if this is just a background
        autosave */
-    if (!isAutosaving()) {
+    if (!isAutosaving()) {/* FIXME
         foreach(KoView* view, views())
         static_cast<View *>(view)->selection()->emitCloseEditor(true);
+        */
+        emit closeEditor(true);
     }
 
     QDomDocument doc = KoDocument::createDomDocument("tables", "spreadsheet", CURRENT_DTD_VERSION);
@@ -280,7 +249,7 @@ QDomDocument Doc::saveXML()
     }
 
     QDomElement e = map()->save(doc);
-    if (!views().isEmpty()) { // no view if embedded document
+/*FIXME
         // Save visual info for the first view, such as active sheet and active cell
         // It looks like a hack, but reopening a document creates only one view anyway (David)
         View *const view = static_cast<View*>(views().first());
@@ -290,7 +259,7 @@ QDomDocument Doc::saveXML()
         e.setAttribute("markerRow",    view->selection()->marker().y());
         e.setAttribute("xOffset",      canvas->xOffset());
         e.setAttribute("yOffset",      canvas->yOffset());
-    }
+*/
     spread.appendChild(e);
 
     setModified(false);
@@ -565,9 +534,10 @@ void Doc::updateAllViews()
 }
 
 void Doc::updateBorderButton()
-{
+{/*FIXME
     foreach(KoView* view, views())
-    static_cast<View*>(view)->updateBorderButton();
+    static_cast<View*>(view)->updateBorderButton();*/
+    emit updateBorderButton();
 }
 
 void Doc::addIgnoreWordAll(const QString & word)
@@ -579,13 +549,6 @@ void Doc::addIgnoreWordAll(const QString & word)
 void Doc::clearIgnoreWordAll()
 {
     d->spellListIgnoreAll.clear();
-}
-
-void Doc::addView(KoView *_view)
-{
-    KoDocument::addView(_view);
-    foreach(KoView* view, views())
-    static_cast<View*>(view)->selection()->emitCloseEditor(true);
 }
 
 void Doc::loadConfigFromFile()
@@ -610,30 +573,30 @@ void Doc::sheetAdded(Sheet* sheet)
 
 void Doc::saveOdfViewSettings(KoXmlWriter& settingsWriter)
 {
-    if (!views().isEmpty()) { // no view if embedded document
-        // Save visual info for the first view, such as active sheet and active cell
-        // It looks like a hack, but reopening a document creates only one view anyway (David)
-        View *const view = static_cast<View*>(views().first());
-        // save current sheet selection before to save marker, otherwise current pos is not saved
-        view->saveCurrentSheetSelection();
-        //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
-        if (Sheet *sheet = view->activeSheet()) {
-            settingsWriter.addConfigItem("ActiveTable", sheet->sheetName());
-        }
+    /*FIXME
+    // Save visual info for the first view, such as active sheet and active cell
+    // It looks like a hack, but reopening a document creates only one view anyway (David)
+    View *const view = static_cast<View*>(views().first());
+    // save current sheet selection before to save marker, otherwise current pos is not saved
+    view->saveCurrentSheetSelection();
+    //<config:config-item config:name="ActiveTable" config:type="string">Feuille1</config:config-item>
+    if (Sheet *sheet = view->activeSheet()) {
+        settingsWriter.addConfigItem("ActiveTable", sheet->sheetName());
     }
+    */
 }
 
 void Doc::saveOdfViewSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
 {
-    if (!views().isEmpty()) {
-        View *const view = static_cast<View*>(views().first());
-        QPoint marker = view->markerFromSheet(sheet);
-        QPointF offset = view->offsetFromSheet(sheet);
-        settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
-        settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
-        settingsWriter.addConfigItem("xOffset", offset.x());
-        settingsWriter.addConfigItem("yOffset", offset.y());
-    }
+    /*FIXME
+    View *const view = static_cast<View*>(views().first());
+    QPoint marker = view->markerFromSheet(sheet);
+    QPointF offset = view->offsetFromSheet(sheet);
+    settingsWriter.addConfigItem("CursorPositionX", marker.x() - 1);
+    settingsWriter.addConfigItem("CursorPositionY", marker.y() - 1);
+    settingsWriter.addConfigItem("xOffset", offset.x());
+    settingsWriter.addConfigItem("yOffset", offset.y());
+    */
 }
 
 bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QString *plainText)
@@ -641,8 +604,11 @@ bool Doc::saveOdfHelper(SavingContext &documentContext, SaveFlag saveFlag, QStri
     /* don't pull focus away from the editor if this is just a background
        autosave */
     if (!isAutosaving()) {
+        /*FIXME
         foreach(KoView* view, views())
             static_cast<View *>(view)->selection()->emitCloseEditor(true);
+        */
+        emit closeEditor(true);
     }
 
     return DocBase::saveOdfHelper(documentContext, saveFlag, plainText);

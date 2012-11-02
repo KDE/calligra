@@ -1,0 +1,23 @@
+[Desktop Entry]
+Type=Service
+Name=ODT to Mobi Export Filter
+Name[cs]=Exportní filtr ODT do Mobi
+Name[el]=Φίλτρο εξαγωγής ODT σε Mobi
+Name[et]=ODT->Mobi ekspordifilter
+Name[fr]=Filtre d'exportation ODT vers Mobi
+Name[hu]=ODT -> Mobi exportszűrő
+Name[it]=Filtro di esportazione da ODT a Mobi
+Name[nl]=ODT naar Mobi exportfilter
+Name[pt]=Filtro de Exportação de ODT para Mobi
+Name[pt_BR]=Filtro de exportação de ODT para Mobi
+Name[sk]=Exportný filter ODT do Mobi
+Name[sv]=ODT-till-Mobi-exportfilter
+Name[uk]=Фільтр експорту ODT до Mobi
+Name[x-test]=xxODT to Mobi Export Filterxx
+
+X-KDE-Export=application/x-mobipocket-ebook
+X-KDE-Import=application/vnd.oasis.opendocument.text
+X-KDE-Weight=1
+X-KDE-Library=exportMobi
+X-KDE-ServiceTypes=CalligraFilter
+

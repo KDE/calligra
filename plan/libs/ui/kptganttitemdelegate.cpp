@@ -22,7 +22,7 @@
 #include "kptnodeitemmodel.h"
 #include "kptnode.h"
 #include "kptresourceappointmentsmodel.h"
-#include <kdebug.h>
+#include "kptdebug.h"
 
 #include <QModelIndex>
 #include <QApplication>

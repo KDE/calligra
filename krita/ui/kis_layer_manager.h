@@ -89,15 +89,12 @@ private slots:
     void actLayerVisChanged(int show);
     void layerProperties();
 
-    void layerRemove();
     void layerDuplicate();
     void layerRaise();
     void layerLower();
     void layerFront();
     void layerBack();
 
-    void mirrorLayerX();
-    void mirrorLayerY();
     void flattenImage();
     
     void flattenLayer();
@@ -143,7 +140,6 @@ private:
     KAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KAction *m_rasterizeLayer;
-    KAction *m_duplicateLayer;
     KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;

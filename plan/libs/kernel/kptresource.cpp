@@ -859,7 +859,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
         m_currentSchedule->logDebug( QString( "Make appointments from %1 to %2 load=%4, required: %3" ).arg( from.toString() ).arg( end.toString() ).arg( lst.join(",") ).arg( load ) );
     }
 #endif
-    AppointmentIntervalList lst = workIntervals( from, end );
+    AppointmentIntervalList lst = workIntervals( from, end, m_currentSchedule );
     foreach ( const AppointmentInterval &i, lst.map() ) {
         m_currentSchedule->addAppointment( node, i.startTime(), i.endTime(), load );
         foreach ( Resource *r, required ) {
@@ -1020,7 +1020,7 @@ DateTime Resource::WorkInfoCache::firstAvailableAfter( const DateTime &time, con
 {
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constEnd();
     if ( start.isValid() && start <= time ) {
-        // possibly usefull cache
+        // possibly useful cache
         it = intervals.map().lowerBound( time.date() );
     }
     if ( it == intervals.map().constEnd() ) {
@@ -1059,7 +1059,7 @@ DateTime Resource::WorkInfoCache::firstAvailableBefore( const DateTime &time, co
     }
     QMultiMap<QDate, AppointmentInterval>::const_iterator it = intervals.map().constBegin();
     if ( time.isValid() && limit.isValid() && end.isValid() && end >= time && ! intervals.isEmpty() ) {
-        // possibly usefull cache
+        // possibly useful cache
         it = intervals.map().upperBound( time.date() );
     }
     if ( it == intervals.map().constBegin() ) {
@@ -2101,7 +2101,7 @@ void ResourceGroupRequest::allocateDynamicRequests( const DateTime &time, const 
         ResourceRequest *rr = find( r );
         if ( rr ) {
             if ( rr->isDynamicallyAllocated() ) {
-                --num; // allready allocated
+                --num; // already allocated
             }
             continue;
         }

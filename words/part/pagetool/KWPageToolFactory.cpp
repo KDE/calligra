@@ -20,6 +20,7 @@
 #include "KWPageToolFactory.h"
 #include "KWPageTool.h"
 #include <KoCanvasBase.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -28,8 +29,8 @@ KWPageToolFactory::KWPageToolFactory()
     : KoToolFactoryBase("PageToolFactory_ID")
 {
     setToolTip(i18n("Page layout"));
-    setToolType(dynamicToolType()+",calligrawords");
-    setIcon("tool-pagelayout");
+    setToolType(dynamicToolType()+",calligrawords, calligraauthor");
+    setIconName(koIconNameCStr("tool_pagelayout"));
     setPriority(25);
     setActivationShapeId("flake/always");
 }
@@ -47,3 +48,4 @@ KoToolBase* KWPageToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KWPageTool(canvas);
 }
+

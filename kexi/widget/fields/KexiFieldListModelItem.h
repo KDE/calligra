@@ -23,7 +23,7 @@
 
 #include <kexi_export.h>
 #include <QString>
-#include <QPixmap>
+#include <QIcon>
 
 class KexiFieldListModelItem
 {
@@ -32,15 +32,15 @@ public:
     KexiFieldListModelItem(const QString &fname, const QString &dtype, bool pkey);
     virtual ~KexiFieldListModelItem();
     QVariant data(int column) const;
-    QPixmap icon() const;
+    QIcon icon() const;
     QString caption() const;
     void setCaption(const QString &caption);
     Qt::ItemFlags flags() const;
-    
+
 private:
     QString m_fieldName;
     QString m_dateType;
-    QPixmap m_icon;
+    QIcon m_icon;
     QString m_caption;
 };
 

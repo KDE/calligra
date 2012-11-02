@@ -242,7 +242,7 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
     KoChangeTrackerDisabledRAII disableChangeTracker(ktd.changeTracker());
     Q_UNUSED(disableChangeTracker);
 
-    int originalpos = editor->position();
+//    int originalpos = editor->position();
     KoTextMeta *startmark = new KoTextMeta(editor->document());
     editor->insertInlineObject(startmark);
     KoTextInlineRdf *inlineRdf(new KoTextInlineRdf((QTextDocument*)editor->document(), startmark));
@@ -406,6 +406,7 @@ void KoRdfSemanticItem::defaultStylesheet(hKoSemanticStylesheet ss)
     QString uuid = ss->uuid();
     QString name = ss->name();
     QString semanticClass = metaObject()->className();
+    
     m->removeAllStatements(
         Statement(Node::createResourceNode(QUrl("http://calligra.org/rdf/document/" + semanticClass)),
                   Node::createResourceNode(QUrl("http://calligra.org/rdf/stylesheet")),

@@ -293,7 +293,7 @@ void TestInformationFunctions::testCOUNTA()
     CHECK_EVAL("COUNTA(B3:B5;B3:B5)",        Value(6));     // Duplicates are not removed.
     CHECK_EVAL("COUNTA(B3:B9)",              Value(6));     // Where B9 is "=1/0", i.e. an error,
     // counts the error as non-empty; errors contained
-    // in a reference do not propogate the error into the result.
+    // in a reference do not propagate the error into the result.
     CHECK_EVAL("COUNTA(\"1\";2;SUM(B3:B9))", Value(3));     // Errors in an evaluated formula do not propagate; they are just counted.
     CHECK_EVAL("COUNTA(\"1\";2;B3:B9)",      Value(8));     // Errors in the range do not propagate either
 }

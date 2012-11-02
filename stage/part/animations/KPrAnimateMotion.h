@@ -22,7 +22,12 @@
 
 #include "KPrAnimationBase.h"
 
-class KPrAnimateMotion : public KPrAnimationBase
+#include <QPainterPath>
+#include "stage_export.h"
+
+class KoPathShape;
+
+class STAGE_EXPORT KPrAnimateMotion : public KPrAnimationBase
 {
 public:
     KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
@@ -31,9 +36,21 @@ public:
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void init(KPrAnimationCache *animationCache, int step);
+    QPainterPath pathOutline();
+    KoPathShape *path();
+    KoPathShape *getPath(qreal zoom, QSizeF pageSize, bool absolutePosition = true) const;
+
+    QSizeF currentPageSize();
+    qreal currentZoom();
 
 protected:
     virtual void next(int currentTime);
+
+private:
+    KoPathShape *m_motionPath;
+    mutable qreal m_currentZoom;
+    mutable QSizeF m_currentPageSize;
+    mutable QPointF m_currentPosition;
 };
 
 #endif // KPRANIMATEMOTION_H

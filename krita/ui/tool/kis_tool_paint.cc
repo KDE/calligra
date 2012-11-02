@@ -36,12 +36,11 @@
 #include <QPoint>
 
 #include <kis_debug.h>
-#include <kicon.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 
+#include <KoIcon.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoCanvasResourceManager.h>
@@ -311,7 +310,7 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     if (!quickHelp().isEmpty()) {
-        QPushButton* push = new QPushButton(KIcon("help-contents"), "", optionWidget);
+        QPushButton* push = new QPushButton(koIcon("help-contents"), QString(), optionWidget);
         connect(push, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
 
         QHBoxLayout* hLayout = new QHBoxLayout(optionWidget);
@@ -469,7 +468,7 @@ void KisToolPaint::stepAlpha(float step)
 {
     qreal alpha = canvas()->resourceManager()->resource(KisCanvasResourceProvider::Opacity).toDouble();
     alpha += step;
-    alpha = qBound(0.0, alpha, 1.0);
+    alpha = qBound<qreal>(0.0, alpha, 1.0);
     canvas()->resourceManager ()->setResource(KisCanvasResourceProvider::Opacity, alpha);
 }
 

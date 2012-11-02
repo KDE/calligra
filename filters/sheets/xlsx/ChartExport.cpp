@@ -532,7 +532,7 @@ bool ChartExport::saveContent(KoStore* store, KoXmlWriter* manifestWriter)
     bodyWriter->addAttribute("chart:style-name", genPlotAreaStyle( chartstyle, styles, mainStyles ) );
 
     QString verticalCellRangeAddress = chart()->m_verticalCellRangeAddress;
-// FIXME microsoft treats the regions from this area in a different order, so dont use it or x and y values will be switched
+// FIXME microsoft treats the regions from this area in a different order, so don't use it or x and y values will be switched
 //     if( !chart()->m_cellRangeAddress.isEmpty() ) {
 //         if ( sheetReplacement )
 //             bodyWriter->addAttribute( "table:cell-range-address", replaceSheet( normalizeCellRange( m_cellRangeAddress ), QString::fromLatin1( "local" ) ) ); //"Sheet1.C2:Sheet1.E5");

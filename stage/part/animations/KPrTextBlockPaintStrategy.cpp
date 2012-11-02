@@ -27,9 +27,9 @@
 
 #include "kdebug.h"
 #include "KoTextBlockData.h"
-KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(KoTextBlockData *blockData, KPrAnimationCache *animationCache)
+KPrTextBlockPaintStrategy::KPrTextBlockPaintStrategy(QTextBlockUserData *blockUserData, KPrAnimationCache *animationCache)
     : m_animationCache(animationCache)
-    , m_textBlockData(blockData)
+    , m_textBlockData(blockUserData)
 {
 }
 

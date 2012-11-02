@@ -37,7 +37,6 @@
 
 #include <kcombobox.h>
 #include <kconfig.h>
-#include <kicon.h>
 #include <kstatusbar.h>
 #include <knuminput.h>
 #include <kmessagebox.h>
@@ -46,6 +45,7 @@
 #include <KStandardDirs>
 #include <sonnet/configwidget.h>
 
+#include <KoIcon.h>
 #include "CalculationSettings.h"
 #include "Localization.h"
 #include "Map.h"
@@ -81,7 +81,7 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
     KVBox *page2 = new KVBox();
     d->page1 = addPage(page2, i18n("Locale Settings"));
     d->page1->setHeader(i18n("Document's Locale Settings"));
-    d->page1->setIcon(KIcon("preferences-desktop-locale"));
+    d->page1->setIcon(koIcon("preferences-desktop-locale"));
     d->localePage = new parameterLocale(selection, page2);
 }
 

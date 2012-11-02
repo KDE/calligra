@@ -29,6 +29,8 @@
 #include <kfiledialog.h>
 #include <kstatusbar.h>
 
+#include <KoIcon.h>
+
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoMainWindow.h>
@@ -41,6 +43,7 @@
 #include <KoZoomController.h>
 
 #include "KPrDocument.h"
+#include "KPrPart.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
@@ -64,8 +67,9 @@
 
 #include "KPrPdfPrintJob.h"
 
-KPrView::KPrView( KPrDocument *document, QWidget *parent )
-  : KoPAView( document, parent )
+KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
+  : KoPAView(part, document, parent)
+  , m_part(part)
   , m_presentationMode( new KPrViewModePresentation( this, kopaCanvas() ))
   , m_normalMode( viewMode() )
   , m_notesMode( new KPrViewModeNotes( this, kopaCanvas() ))
@@ -90,9 +94,17 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
     actionCollection()->action("page_deletepage")->setWhatsThis(i18n("Delete the current slide"));
     actionCollection()->action("format_masterpage")->setText(i18n("Master Slide..."));
     actionCollection()->action("page_previous")->setText(i18n("Previous Slide"));
+    actionCollection()->action("page_previous")->setToolTip(i18n("Go to previous slide"));
+    actionCollection()->action("page_previous")->setWhatsThis(i18n("Go to previous slide"));
     actionCollection()->action("page_next")->setText(i18n("Next Slide"));
+    actionCollection()->action("page_next")->setToolTip(i18n("Go to next slide"));
+    actionCollection()->action("page_next")->setWhatsThis(i18n("Go to next slide"));
     actionCollection()->action("page_first")->setText(i18n("First Slide"));
+    actionCollection()->action("page_first")->setToolTip(i18n("Go to first slide"));
+    actionCollection()->action("page_first")->setWhatsThis(i18n("Go to first slide"));
     actionCollection()->action("page_last")->setText(i18n("Last Slide"));
+    actionCollection()->action("page_last")->setToolTip(i18n("Go to last slide"));
+    actionCollection()->action("page_last")->setWhatsThis(i18n("Go to last slide"));
     actionCollection()->action("configure")->setText(i18n("Configure Stage..."));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
@@ -201,7 +213,7 @@ void KPrView::initGUI()
 void KPrView::initActions()
 {
     setComponentData(KPrFactory::componentData());
-    if ( !kopaDocument()->isReadWrite() )
+    if (!m_part->isReadWrite() )
        setXMLFile( "stage_readonly.rc" );
     else
        setXMLFile( "stage.rc" );
@@ -250,7 +262,7 @@ void KPrView::initActions()
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
     connect( m_actionEditCustomSlideShows, SIGNAL( activated() ), this, SLOT( editCustomSlideShows() ) );
 
-    m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
+    m_actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
     KAction* action = new KAction( i18n( "From Current Slide" ), this );
@@ -517,6 +529,13 @@ void KPrView::restoreZoomConfig()
 {
     zoomController()->setZoom(zoomMode(), zoom()/100.);
     centerPage();
+}
+
+void KPrView::replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage)
+{
+    if (page == activePage() ) {
+        viewMode()->updateActivePage(newActivePage);
+    }
 }
 
 #include "KPrView.moc"

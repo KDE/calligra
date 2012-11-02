@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -122,7 +122,7 @@ public:
 
     /*! \return name of icon provided by part that created this dialog.
      The name is used by KexiMainWindow to set/reset icon for this dialog. */
-    virtual QString itemIcon();
+    virtual QString itemIconName();
 
     /*! \return true if this dialog supports switching to \a mode.
      \a mode is one of Kexi::ViewMode enum elements.
@@ -216,7 +216,7 @@ public slots:
      form part item. On success, part item's ID is updated to new value,
      and schema data is set. \sa schemaData().
      \return true on success, false on failure and cancelled when storing has been cancelled. */
-    tristate storeNewData();
+    tristate storeNewData(KexiView::StoreNewDataOptions options = 0);
 
     /*! Reimplemented - we're informing the current view about performed
      detaching by calling KexiView::parentDialogDetached(), so the view
@@ -230,6 +230,10 @@ public slots:
      (by default KexiView::parentDialogAttached() does nothing, you can
      reimplement it). */
     void sendAttachedStateToCurrentView();
+
+    /*! Saves settings for this window, for all views.
+        @see KexiView::saveSettings() */
+    bool saveSettings();
 
 signals:
     void updateContextHelp();
@@ -320,4 +324,3 @@ private:
 };
 
 #endif
-

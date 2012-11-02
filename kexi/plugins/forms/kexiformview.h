@@ -152,7 +152,9 @@ protected:
         return &m_form->propertySet(); // 2.0 m_propertySet;
     }
 
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
 
     KexiFormPart::TempData* tempData() const {
