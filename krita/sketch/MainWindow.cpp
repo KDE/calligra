@@ -73,6 +73,7 @@
 #include "KritaNamespace.h"
 #include "PanelConfiguration.h"
 #include "cpuid.h"
+#include "DocumentManager.h"
 
 class MainWindow::Private
 {
@@ -81,7 +82,7 @@ public:
 
     QDeclarativeView* view;
     Constants* constants;
-    QObject* settings;
+    Settings* settings;
     RecentFileManager *recentFileManager;
 
     bool allowClose;
@@ -99,6 +100,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
     d->constants = new Constants( this );
     d->settings = new Settings( this );
+    DocumentManager::instance()->setSettingsManager( d->settings );
     d->recentFileManager = new RecentFileManager(this);
     foreach(QString fileName, fileNames) {
         d->recentFileManager->addRecent(fileName);
