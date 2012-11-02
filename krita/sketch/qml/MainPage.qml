@@ -166,6 +166,7 @@ Page {
                     if(Settings.temporaryFile) {
                         pageStack.push( saveAsPage, { view: sketchView, updateCurrentFile: false } );
                     } else {
+                        savingDialog.show("Please wait...");
                         sketchView.save();
 
                         if(d.closeRequested) {
@@ -257,6 +258,7 @@ Page {
         function loadNewFile() {
             d.saveRequested = false;
             loadingDialog.show("Loading " + Settings.currentFile);
+            loadingDialog.progress = 0;
 
             sketchView.file = Settings.currentFile;
             menuPanel.collapsed = true;
