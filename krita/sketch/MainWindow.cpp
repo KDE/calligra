@@ -147,11 +147,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 
     // This is needed because OpenGL viewport doesn't support partial updates.
-    if (isUltraBook()) {
-        d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
-        QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
-        d->view->setViewport(glWidget);
-    }
+//    if (isUltraBook()) {
+//        d->view->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+//        QGLWidget* glWidget = new QGLWidget(this, KisGL2Canvas::shareWidget());
+//        d->view->setViewport(glWidget);
+//    }
 
     d->view->viewport()->grabGesture(Qt::PanGesture);
     d->view->viewport()->grabGesture(Qt::PinchGesture);
