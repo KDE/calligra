@@ -176,7 +176,7 @@ Page {
                         base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
 
                         if(base.updateCurrentFile) {
-                            Settings.currentFile = filePath;
+                            // The current file is updated by the saveAs call above
                             Settings.temporaryFile = false;
                         }
                         pageStack.pop();
