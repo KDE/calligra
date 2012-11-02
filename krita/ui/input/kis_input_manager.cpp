@@ -256,13 +256,13 @@ void KisInputManager::Private::setupActions()
 
         shortcut = createShortcut(action, 0);
         shortcut->setKeys(QList<Qt::Key>() << Qt::Key_F);
-
-        action = new KisGestureAction(q);
-        actions.append(action);
-
-        shortcut = createShortcut(action, 0);
-        shortcut->setGesture(true);
     }
+
+    action = new KisGestureAction(q);
+    actions.append(action);
+
+    shortcut = createShortcut(action, 0);
+    shortcut->setGesture(true);
 }
 
 KisShortcut* KisInputManager::Private::createShortcut(KisAbstractInputAction* action, int index)
