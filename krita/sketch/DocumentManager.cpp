@@ -19,6 +19,7 @@
 #include "DocumentManager.h"
 #include "KisSketchPart.h"
 #include "ProgressProxy.h"
+#include "Settings.h"
 
 #include <KoColorSpaceRegistry.h>
 
@@ -32,29 +33,41 @@ public:
         : proxy(0)
         , document(0)
         , part(0)
+        , settingsManager(0)
     { }
     ProgressProxy* proxy;
     KisDoc2 *document;
     KisSketchPart *part;
+    Settings* settingsManager;
 
     QString saveAsFilename;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
 
-KisDoc2* DocumentManager::document()
+KisDoc2* DocumentManager::document() const
 {
     return d->document;
 }
 
-KisSketchPart* DocumentManager::part()
+KisSketchPart* DocumentManager::part() const
 {
     return d->part;
 }
 
-ProgressProxy* DocumentManager::progressProxy()
+ProgressProxy* DocumentManager::progressProxy() const
 {
     return d->proxy;
+}
+
+Settings* DocumentManager::settingsManager() const
+{
+    return d->settingsManager;
+}
+
+void DocumentManager::setSettingsManager(Settings* newManager)
+{
+    d->settingsManager = newManager;
 }
 
 void DocumentManager::newDocument(int width, int height, float resolution)
@@ -114,6 +127,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
 void DocumentManager::delayedSaveAs()
 {
     d->part->saveAs(d->saveAsFilename);
+    d->settingsManager->setCurrentFile(d->saveAsFilename);
 }
 
 DocumentManager* DocumentManager::instance()

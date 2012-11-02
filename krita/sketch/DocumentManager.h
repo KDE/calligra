@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class Settings;
 class ProgressProxy;
 class KisDoc2;
 class KisSketchPart;
@@ -28,9 +29,11 @@ class DocumentManager : public QObject
 {
 Q_OBJECT
 public:
-    KisDoc2* document();
-    KisSketchPart* part();
-    ProgressProxy* progressProxy();
+    KisDoc2* document() const;
+    KisSketchPart* part() const;
+    ProgressProxy* progressProxy() const;
+    Settings* settingsManager() const;
+    void setSettingsManager(Settings* newManager);
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
