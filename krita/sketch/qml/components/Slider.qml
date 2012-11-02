@@ -21,7 +21,7 @@ import org.krita.sketch 1.0
 
 Item {
     id: base;
-    height: Constants.DefaultFontSize;
+    height: Constants.LargeFontSize;
     property double value: 0;
     property bool highPrecision: false;
     onValueChanged: handle.resetHandle();
@@ -32,6 +32,14 @@ Item {
         border.color: "silver";
         color: "#63ffffff";
         radius: height / 2;
+    }
+    MouseArea {
+        anchors.fill: parent;
+        onClicked: {
+            var position = mouse.x - base.height / 2;
+            handle.x = position < 0 ? 0 : position > base.width - handle.width ? base.width - handle.width : position;
+            handle.resetHandle();
+        }
     }
     Rectangle {
         id: handle;
@@ -54,13 +62,13 @@ Item {
             if(highPrecision) {
                 var newValue = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
                 if(base.value != newValue) {
-                    base.value = newValue;
+                    base.value = Math.max(0, newValue);
                 }
             }
             else {
                 var newValue = Math.round( ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX) );
                 if(base.value != newValue) {
-                    base.value = newValue;
+                    base.value = Math.max(0, newValue);
                 }
             }
             settingSelf = false;
@@ -72,6 +80,7 @@ Item {
         MouseArea {
             id: mouseArea;
             anchors.fill: parent;
+            anchors.margins: -4;
             drag {
                 target: parent;
                 axis: "XAxis";
