@@ -415,7 +415,9 @@ void KisSketchView::documentChanged()
     }
     else {
         d->canvasWidget = d->canvas->canvasWidget();
-        connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
+        //connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
+        connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(update()));
+        connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(update()));
     }
 
     static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());

@@ -175,8 +175,6 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     QPainter painter(this);
     painter.drawImage(ev->rect(), m_buffer, ev->rect());
-
-    emit updated();
 }
 
 bool KisQPainterCanvas::event(QEvent *e)
