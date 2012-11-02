@@ -496,7 +496,8 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
 
 void KisSketchView::Private::update()
 {
-    q->scene()->invalidate( 0, 0, q->width(), q->height() );
+    if(q->scene())
+        q->scene()->invalidate( 0, 0, q->width(), q->height() );
 }
 
 void KisSketchView::Private::resetDocumentPosition()
