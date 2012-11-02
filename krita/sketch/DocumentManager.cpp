@@ -41,6 +41,7 @@ public:
     Settings* settingsManager;
 
     QString saveAsFilename;
+    QString openDocumentFilename;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
@@ -94,8 +95,13 @@ void DocumentManager::openDocument(const QString& document)
     d->part->setDocument(d->document);
 
     d->document->setModified(false);
-    d->document->openUrl(QUrl::fromLocalFile(document));
+    d->openDocumentFilename = document;
+    QTimer::singleShot(1000, this, SLOT(delayedOpenDocument()));
+}
 
+void DocumentManager::delayedOpenDocument()
+{
+    d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     emit documentChanged();
 }
 

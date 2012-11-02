@@ -59,6 +59,7 @@ private:
 
 private Q_SLOTS:
     void delayedSaveAs();
+    void delayedOpenDocument();
 };
 
 #endif // DOCUMENTMANAGER_H
