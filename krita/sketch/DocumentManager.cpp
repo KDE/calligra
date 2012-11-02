@@ -93,6 +93,7 @@ void DocumentManager::openDocument(const QString& document)
     d->document->setSaveInBatchMode(true);
     d->part->setDocument(d->document);
 
+    d->document->setModified(false);
     d->document->openUrl(QUrl::fromLocalFile(document));
 
     emit documentChanged();
