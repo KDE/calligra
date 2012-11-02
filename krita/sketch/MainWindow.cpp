@@ -154,7 +154,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 //    }
 
     d->view->viewport()->grabGesture(Qt::PanGesture);
-    d->view->viewport()->grabGesture(Qt::PinchGesture);
+//    d->view->viewport()->grabGesture(Qt::PinchGesture);
 
     QDir appdir(qApp->applicationDirPath());
     // for now, the app in bin/ and we still use the env.bat script

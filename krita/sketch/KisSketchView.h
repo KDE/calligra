@@ -56,6 +56,9 @@ public Q_SLOTS:
     void undo();
     void redo();
 
+    void zoomIn();
+    void zoomOut();
+
     void save();
     void saveAs(const QString& fileName, const QString& mimeType);
 

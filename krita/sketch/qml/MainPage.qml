@@ -114,6 +114,10 @@ Page {
                     Krita.Window.minimize();
                 case "close":
                     Krita.Window.close();
+                case "zoomIn":
+                    sketchView.zoomIn();
+                case "zoomOut":
+                    sketchView.zoomOut();
             }
         }
     }

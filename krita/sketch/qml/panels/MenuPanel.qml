@@ -128,6 +128,26 @@ Item {
                 enabled: sketchView.canRedo;
                 onClicked: base.buttonClicked( "redo" );
             }
+            Button {
+                id: zoomInButton;
+                width: Constants.GridWidth;
+                height: Constants.GridHeight;
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-add.svg"
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: base.buttonClicked( "zoomIn" );
+            }
+            Button {
+                id: zoomOutButton;
+                width: Constants.GridWidth;
+                height: Constants.GridHeight;
+                color: "#1d3458"
+                shadow: false
+                image: "../images/svg/icon-delete.svg"
+                highlightColor: Constants.Theme.HighlightColor;
+                onClicked: base.buttonClicked( "zoomOut" );
+            }
             Item {
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
