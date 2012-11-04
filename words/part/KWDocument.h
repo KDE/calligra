@@ -223,7 +223,7 @@ signals:
     void pageSetupChanged();
 
     /// emitted whenever a shape is added.
-    void shapeAdded(KoShape *, KoShapeManager::Repaint repaint = KoShapeManager::PaintShapeOnAdd);
+    void shapeAdded(KoShape *, KoShapeManager::Repaint);
 
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
