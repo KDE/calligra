@@ -175,7 +175,7 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
         addFrameSet(frame->frameSet());
     }
 
-    emit shapeAdded(shape);
+    emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
 
     shape->update();
 }
@@ -422,8 +422,8 @@ void KWDocument::addFrame(KWFrame *frame)
 {
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     //firePageSetupChanged();
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
     emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
