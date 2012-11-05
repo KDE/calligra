@@ -466,7 +466,7 @@ void View::slotCreateNewProject()
     if ( KMessageBox::Continue == KMessageBox::warningContinueCancel( this,
                       i18nc( "@info",
                              "<note>This action cannot be undone.</note><nl/><nl/>"
-                             "Create a new Project from the current project >"
+                             "Create a new Project from the current project "
                              "with new project- and task identities.<nl/>"
                              "Resource- and calendar identities are not changed.<nl/>"
                              "All scheduling information is removed.<nl/>"
