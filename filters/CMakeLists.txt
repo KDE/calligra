@@ -37,9 +37,13 @@ if (NOT CREATIVEONLY)
 
 set(WRITERPERFECT_INCLUDES ${CMAKE_SOURCE_DIR}/filters/writerperfect)
 
+set(SHOULD_BUILD_OOXML_FILTERS ${SHARED_MIME_INFO_FOUND})
+
 add_subdirectory(libmso)
 
-macro_optional_add_subdirectory( libmsooxml )
+if(SHOULD_BUILD_OOXML_FILTERS)
+    macro_optional_add_subdirectory( libmsooxml )
+endif(SHOULD_BUILD_OOXML_FILTERS)
 
 if(SHOULD_BUILD_KCHART)
     macro_optional_add_subdirectory(kchart)

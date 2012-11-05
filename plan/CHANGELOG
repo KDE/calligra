@@ -2,6 +2,14 @@
 Calligra Plan current:
 ----------------------
 
+* Add a command to generate a new project from the current project
+
+* Add export to csv and ods
+
+Release 2.6
+-----------
+* Fix bug 308855 -  Gantt chart: No tree structure in printed version
+
 * Fix bug 307450 - Calligra Plan crash when adding subtask
 
 * Always check appointments to avoid overbooking resources

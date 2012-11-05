@@ -1,5 +1,5 @@
 include_directories(${KOTEXT_INCLUDES}
-                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig 
+                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory( tests )
@@ -44,6 +44,8 @@ set(kotext_LIB_SRCS
     KoTextReference.cpp
     KoTextAnchor.cpp
     KoTextShapeSavingContext.cpp
+    KoAnnotation.cpp
+    KoAnnotationManager.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
@@ -168,6 +170,8 @@ install(
     KoTextBlockData.h
     KoTextDocument.h
     KoText.h
+    KoTextRange.h
+    KoTextRangeManager.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h

@@ -42,8 +42,6 @@ private:
     KDeclarative kdeclarative;
     QString documentPath;
 
-    void loadMetadataModel();
-
 private slots:
     void adjustWindowSize (QSize size);
     void checkForAndOpenDocument();

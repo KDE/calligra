@@ -122,6 +122,10 @@ protected:
     void updateLog();
     void updateLog( SchedulerThread *job );
 
+private:
+    class Private;
+    Private *d;
+
 protected:
     QTimer m_synctimer;
     QList<SchedulerThread*> m_jobs;
@@ -129,9 +133,6 @@ protected:
     int m_granularity;
     QList<long unsigned int> m_granularities;
 
-private:
-    class Private;
-    Private *d;
 };
 
 /**
