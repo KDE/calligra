@@ -100,8 +100,6 @@ MainDocument::MainDocument(KoPart *part)
     m_project->registerNodeId( m_project ); // register myself
 
     QTimer::singleShot ( 5000, this, SLOT( autoCheckForWorkPackages() ) );
-
-    connect(this, SIGNAL(modified(bool)), SLOT(slotModified(bool)));
 }
 
 
@@ -999,19 +997,18 @@ void MainDocument::removeViewListItem( View */*view*/, const ViewListItem *item 
     m_viewlistModified = true;
 }
 
-void MainDocument::slotModified( bool mod )
+void MainDocument::setModified( bool mod )
 {
-    if ( ! mod && m_viewlistModified ) {
-        setModified( true );
-    }
+    kDebug(planDbg())<<mod<<m_viewlistModified;
+    KoDocument::setModified( mod || m_viewlistModified ); // Must allways call to activate autosave
 }
 
 void MainDocument::viewlistModified()
 {
     if ( ! m_viewlistModified ) {
         m_viewlistModified = true;
-        setModified( true );
     }
+    setModified( true );  // Must allways call to activate autosave
 }
 
 void MainDocument::createNewProject()
