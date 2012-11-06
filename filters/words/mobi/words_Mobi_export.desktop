@@ -2,6 +2,7 @@
 Type=Service
 Name=ODT to Mobi Export Filter
 Name[cs]=Exportní filtr ODT do Mobi
+Name[da]=ODT til Mobi-eksportfilter
 Name[el]=Φίλτρο εξαγωγής ODT σε Mobi
 Name[et]=ODT->Mobi ekspordifilter
 Name[fr]=Filtre d'exportation ODT vers Mobi

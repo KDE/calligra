@@ -2,6 +2,7 @@
 Type=Service
 Name=ODT to HTML Export Filter
 Name[cs]=Exportní filtr ODT do HTML
+Name[da]=ODT til HTML-eksportfilter
 Name[el]=Φίλτρο εξαγωγής ODT σε HTML
 Name[et]=ODT->HTML ekspordifilter
 Name[fr]=Filtre d'exportation ODT vers HTML

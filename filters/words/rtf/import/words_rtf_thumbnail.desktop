@@ -2,6 +2,7 @@
 Type=Service
 Name=RTF Documents
 Name[cs]=Dokumenty RTF
+Name[da]=RTF-dokumenter
 Name[de]=RTF-Dokumente
 Name[el]=Έγγραφα RTF
 Name[et]=RTF-dokumendid
