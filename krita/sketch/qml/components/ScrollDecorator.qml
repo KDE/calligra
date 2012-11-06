@@ -22,12 +22,15 @@ import org.krita.sketch 1.0
 Item {
     id: base;
     anchors.fill: parent;
-    property ListView listView;
+    property Flickable flickableItem;
 
     Rectangle {
         id: verticalDecorator;
-        anchors.right: parent.right;
-        visible: (listView.orientation === ListView.Vertical);
+        anchors {
+            right: parent.right;
+            rightMargin: Constants.DefaultMargin;
+        }
+        visible: (flickableItem.contentHeight > flickableItem.height);
         color: "silver";
         border {
             width: 2;
@@ -35,8 +38,28 @@ Item {
         }
         radius: Constants.DefaultMargin / 2;
         width: Constants.DefaultMargin;
-        height: (listView.height * (listView.height / listView.contentHeight)) - Constants.DefaultMargin * 2;
-        opacity: 0.3;
-        y: (listView.contentY * (listView.height / listView.contentHeight)) + Constants.DefaultMargin;
+        height: (flickableItem.height * (flickableItem.height / flickableItem.contentHeight)) - Constants.DefaultMargin * 2;
+        opacity: flickableItem.moving ? 0.5 : 0.1;
+        Behavior on opacity { PropertyAnimation { duration: 150; } }
+        y: (flickableItem.contentY * (flickableItem.height / flickableItem.contentHeight)) + Constants.DefaultMargin;
+    }
+    Rectangle {
+        id: horizontalDecorator;
+        anchors {
+            bottom: parent.bottom;
+            bottomMargin: Constants.DefaultMargin;
+        }
+        visible: (flickableItem.contentWidth > flickableItem.width);
+        color: "silver";
+        border {
+            width: 2;
+            color: "gray";
+        }
+        radius: Constants.DefaultMargin / 2;
+        height: Constants.DefaultMargin;
+        width: (flickableItem.width * (flickableItem.width / flickableItem.contentWidth)) - Constants.DefaultMargin * 2;
+        opacity: flickableItem.moving ? 0.5 : 0.1;
+        Behavior on opacity { PropertyAnimation { duration: 150; } }
+        x: (flickableItem.contentX * (flickableItem.width / flickableItem.contentWidth)) + Constants.DefaultMargin;
     }
 }
