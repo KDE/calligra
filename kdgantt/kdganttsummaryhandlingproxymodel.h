@@ -26,7 +26,7 @@
 #include "kdganttforwardingproxymodel.h"
 
 namespace KDGantt {
-    class KDGANTT_EXPORT SummaryHandlingProxyModel : public ForwardingProxyModel {
+    class SummaryHandlingProxyModel : public ForwardingProxyModel {
         Q_OBJECT
         KDGANTT_DECLARE_PRIVATE_BASE_POLYMORPHIC( SummaryHandlingProxyModel )
     public:

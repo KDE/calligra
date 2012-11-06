@@ -33,7 +33,7 @@
 #endif
 
 namespace KDGantt {
-    class KDGANTT_EXPORT Constraint {
+    class Constraint {
         class Private;
     public:
         enum Type
