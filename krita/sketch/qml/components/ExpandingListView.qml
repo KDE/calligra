@@ -132,7 +132,7 @@ Item {
                 }
             }
             ScrollDecorator {
-                listView: parent;
+                flickableItem: parent;
             }
         }
     }
