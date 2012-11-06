@@ -29,7 +29,7 @@
 #include <QSet>
 
 namespace KDGantt {
-    class KDGANTT_EXPORT DateTimeGrid : public AbstractGrid {
+    class DateTimeGrid : public AbstractGrid {
         Q_OBJECT
         KDGANTT_DECLARE_PRIVATE_DERIVED( DateTimeGrid )
     public:

@@ -41,7 +41,7 @@ namespace KDGantt {
     class AbstractRowController;
     class GraphicsItem;
     
-    class KDGANTT_EXPORT View : public QWidget {
+    class View : public QWidget {
         Q_OBJECT
         KDGANTT_DECLARE_PRIVATE_BASE_POLYMORPHIC_QWIDGET(View)
         Q_PRIVATE_SLOT( d, void slotCollapsed(const QModelIndex&) )

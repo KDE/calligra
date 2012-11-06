@@ -71,7 +71,7 @@ namespace Ui {
     class TimeScaleZoomPane: public Ui_TimeScaleZoomPane {};
 } // namespace Ui
 
-class KDGANTT_EXPORT TimeScaleZoomDialog : public QDialog
+class TimeScaleZoomDialog : public QDialog
 {
     Q_OBJECT
 public:

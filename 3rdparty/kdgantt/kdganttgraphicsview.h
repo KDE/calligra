@@ -40,7 +40,7 @@ namespace KDGantt {
     class ConstraintModel;
     class ItemDelegate;
 
-    class KDGANTT_EXPORT GraphicsView : public QGraphicsView {
+    class GraphicsView : public QGraphicsView {
         Q_OBJECT
         KDGANTT_DECLARE_PRIVATE_BASE_POLYMORPHIC(GraphicsView)
 
