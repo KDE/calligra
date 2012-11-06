@@ -277,6 +277,8 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
     {
         index.internalPointer();
         KisNodeSP node = d->layers.at(index.row());
+        if(node.isNull())
+            return data;
         KisNodeSP parent;
         int depth = -1;
         switch(role)
@@ -313,7 +315,8 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             break;
         case CompositeDetailsRole:
             // composite op goes here...
-            data = node->compositeOp()->description();
+            if(node->compositeOp())
+                data = node->compositeOp()->description();
             break;
         case FilterRole:
             break;
