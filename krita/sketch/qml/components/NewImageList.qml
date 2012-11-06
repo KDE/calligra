@@ -54,7 +54,7 @@ PageStack {
                             base.clicked();
                         }
                         case "screen": {
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(base.parent.width, base.parent.height, 72);
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(mainBase.width, mainBase.height, 72);
                             Settings.temporaryFile = true;
                             base.clicked();
                         }
