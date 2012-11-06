@@ -101,6 +101,9 @@ Panel {
             cellWidth: width / 2;
             cellHeight: Constants.GridHeight;
             visible: !colorSelectorPeek.visible;
+            ScrollDecorator {
+                flickableItem: parent;
+            }
         }
     }
 
@@ -176,6 +179,9 @@ Panel {
             clip: true;
             cellWidth: (width / 2) - 1;
             cellHeight: Constants.GridHeight;
+            ScrollDecorator {
+                flickableItem: parent;
+            }
         }
     }
 

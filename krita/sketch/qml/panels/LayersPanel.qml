@@ -177,6 +177,9 @@ Panel {
                 color: "transparent";
             }
         }
+        ScrollDecorator {
+            flickableItem: parent;
+        }
     }
 
     fullContents: Item {
@@ -427,6 +430,9 @@ Panel {
                         height: Constants.DefaultMargin;
                         color: "transparent";
                     }
+                }
+                ScrollDecorator {
+                    flickableItem: parent;
                 }
             }
         }

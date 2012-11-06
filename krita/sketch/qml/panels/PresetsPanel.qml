@@ -131,6 +131,9 @@ Panel {
 
         cellWidth: Constants.GridWidth;
         cellHeight: Constants.GridHeight;
+        ScrollDecorator {
+            flickableItem: parent;
+        }
     }
 
     fullContents: PageStack {
@@ -189,6 +192,9 @@ Panel {
 
             cellWidth: contentArea.width;
             cellHeight: Constants.GridHeight;
+            ScrollDecorator {
+                flickableItem: parent;
+            }
         }
     }
 
