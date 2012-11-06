@@ -306,7 +306,7 @@ KoDocument::KoDocument(QObject *parent, KUndo2Stack *undoStack)
     KConfigGroup cfgGrp(componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
-    connect(d->undoStack, SIGNAL(cleanChanged(bool)), this, SLOT(setDocumentClean(bool)));
+    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
 
     connect(this, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
 }
@@ -2544,10 +2544,10 @@ void KoDocument::endMacro()
     d->undoStack->endMacro();
 }
 
-
-void KoDocument::setDocumentClean(bool clean)
+void KoDocument::slotUndoStackIndexChanged(int idx)
 {
-    setModified(!clean);
+    // even if the document was allready modified, call setModified to re-start autosave timer
+    setModified(idx != d->undoStack->cleanIndex());
 }
 
 void KoDocument::setProfileStream(QTextStream *profilestream)
