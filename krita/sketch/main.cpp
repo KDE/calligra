@@ -87,6 +87,8 @@ int main( int argc, char** argv )
                    + "/AppData"
                    + "/Roaming"
                    + "/kritasketch");
+        env.insert("KDESYCOCA", appdir.currentPath() + "/sycoca");
+        env.insert("XDG_DATA_DIRS", appdir.currentPath() + "/share");
         env.insert("KDEDIR", appdir.currentPath());
         env.insert("KDEDIRS", appdir.currentPath());
         QString currentPath = env.value("PATH");
