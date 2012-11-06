@@ -20,7 +20,7 @@ import QtQuick 1.1
 import "components"
 
 Item {
-    id: base;
+    id: mainBase;
     width: 1280;
     height: 768;
 
@@ -35,12 +35,12 @@ Item {
             bottom: keyboard.top;
         }
 
-        contentWidth: base.width;
-        contentHeight: base.height;
+        contentWidth: mainBase.width;
+        contentHeight: mainBase.height;
 
         PageStack {
-            width: base.width;
-            height: base.height;
+            width: mainBase.width;
+            height: mainBase.height;
 
             initialPage: welcomePage;
 
@@ -57,8 +57,8 @@ Item {
         function ensureVisible(item) {
             if(item !== undefined && item !== null) {
                 var targetPosition = item.mapToItem(screenScroller, item.x, item.y);
-                if(targetPosition.y > base.height * 0.5) {
-                    screenScroller.contentY = targetPosition.y - base.height / 2;
+                if(targetPosition.y > mainBase.height * 0.5) {
+                    screenScroller.contentY = targetPosition.y - mainBase.height / 2;
                     screenScroller.returnToBounds();
                 }
             }
