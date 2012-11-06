@@ -30,7 +30,7 @@
 #include "kdganttconstraint.h"
 
 namespace KDGantt {
-    class KDGANTT_EXPORT ConstraintModel : public QObject {
+    class ConstraintModel : public QObject {
         Q_OBJECT
         KDGANTT_DECLARE_PRIVATE_DERIVED_PARENT( ConstraintModel, QObject* )
      public:
