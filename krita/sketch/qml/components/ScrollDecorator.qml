@@ -17,6 +17,7 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 
 Item {
     id: base;
@@ -34,8 +35,8 @@ Item {
         }
         radius: Constants.DefaultMargin / 2;
         width: Constants.DefaultMargin;
-        height: listView.height * (listView.height / listView.contentHeight);
-        opacity: 0.5;
-        y: listView.contentY * (listView.height / listView.contentHeight);
+        height: (listView.height * (listView.height / listView.contentHeight)) - Constants.DefaultMargin * 2;
+        opacity: 0.3;
+        y: (listView.contentY * (listView.height / listView.contentHeight)) + Constants.DefaultMargin;
     }
 }
