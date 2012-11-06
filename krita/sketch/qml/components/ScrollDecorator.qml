@@ -32,14 +32,10 @@ Item {
         }
         visible: (flickableItem.contentHeight > flickableItem.height);
         color: "silver";
-        border {
-            width: 2;
-            color: "gray";
-        }
         radius: Constants.DefaultMargin / 2;
         width: Constants.DefaultMargin;
         height: (flickableItem.height * (flickableItem.height / flickableItem.contentHeight)) - Constants.DefaultMargin * 2;
-        opacity: flickableItem.moving ? 0.5 : 0.1;
+        opacity: flickableItem.moving ? 0.5 : 0.2;
         Behavior on opacity { PropertyAnimation { duration: 150; } }
         y: (flickableItem.contentY * (flickableItem.height / flickableItem.contentHeight)) + Constants.DefaultMargin;
     }
@@ -51,14 +47,10 @@ Item {
         }
         visible: (flickableItem.contentWidth > flickableItem.width);
         color: "silver";
-        border {
-            width: 2;
-            color: "gray";
-        }
         radius: Constants.DefaultMargin / 2;
         height: Constants.DefaultMargin;
         width: (flickableItem.width * (flickableItem.width / flickableItem.contentWidth)) - Constants.DefaultMargin * 2;
-        opacity: flickableItem.moving ? 0.5 : 0.1;
+        opacity: flickableItem.moving ? 0.5 : 0.2;
         Behavior on opacity { PropertyAnimation { duration: 150; } }
         x: (flickableItem.contentX * (flickableItem.width / flickableItem.contentWidth)) + Constants.DefaultMargin;
     }
