@@ -75,7 +75,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
