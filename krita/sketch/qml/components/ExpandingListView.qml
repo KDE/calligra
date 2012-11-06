@@ -131,6 +131,9 @@ Item {
                     }
                 }
             }
+            ScrollDecorator {
+                listView: parent;
+            }
         }
     }
 
