@@ -21,6 +21,7 @@
 */
 
 #include "kptmaindocument.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
@@ -928,37 +929,46 @@ bool MainDocument::loadAndParse(KoStore *store, const QString &filename, KoXmlDo
 
 void MainDocument::insertFile( const QString &filename, Node *parent, Node *after )
 {
-    MainDocument *part = new MainDocument();
-    part->disconnect(); // part shall not handle feedback from openUrl()
-    part->setAutoSave( 0 ); //disable
-    part->m_insertFileInfo.url = filename;
-    part->m_insertFileInfo.parent = parent;
-    part->m_insertFileInfo.after = after;
+    Part *part = new Part( this );
+    MainDocument *doc = new MainDocument( part );
+    part->setDocument( doc );
+    doc->disconnect(); // doc shall not handle feedback from openUrl()
+    doc->setAutoSave( 0 ); //disable
+    doc->m_insertFileInfo.url = filename;
+    doc->m_insertFileInfo.parent = parent;
+    doc->m_insertFileInfo.after = after;
     connect(part, SIGNAL(completed()), SLOT(insertFileCompleted()));
     connect(part, SIGNAL(canceled(const QString&)), SLOT(insertFileCancelled(const QString&)));
-    connect(part, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
+    connect(part, SIGNAL(started(KIO::Job*)), part, SLOT(slotStarted(KIO::Job*)));
 
     part->openUrl( KUrl( filename ) );
 }
 
 void MainDocument::insertFileCompleted()
 {
-    MainDocument *part = qobject_cast<MainDocument*>( sender() );
+    kDebug(planDbg())<<sender();
+    Part *part = qobject_cast<Part*>( sender() );
     if ( part ) {
-        Project &p = part->getProject();
-        insertProject( p, part->m_insertFileInfo.parent, part->m_insertFileInfo.after );
-        part->deleteLater();
+        MainDocument *doc = qobject_cast<MainDocument*>( part->document() );
+        if ( doc ) {
+            Project &p = doc->getProject();
+            insertProject( p, doc->m_insertFileInfo.parent, doc->m_insertFileInfo.after );
+        } else {
+            KMessageBox::error( 0, i18n("Internal error, failed to insert file.") );
+        }
+        part->deleteLater(); // also deletes document
     }
 }
 
 void MainDocument::insertFileCancelled( const QString &error )
 {
+    kDebug(planDbg())<<sender()<<"error="<<error;
     if ( ! error.isEmpty() ) {
         KMessageBox::error( 0, error );
     }
-    MainDocument *part = qobject_cast<MainDocument*>( sender() );
+    Part *part = qobject_cast<Part*>( sender() );
     if ( part ) {
-        part->deleteLater();
+        part->deleteLater(); // also deletes document
     }
 }
 
