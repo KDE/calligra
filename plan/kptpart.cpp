@@ -21,6 +21,7 @@
 */
 
 #include "kptpart.h"
+#include "kptpartpart.h"
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
@@ -929,37 +930,44 @@ bool Part::loadAndParse(KoStore *store, const QString &filename, KoXmlDocument &
 
 void Part::insertFile( const QString &filename, Node *parent, Node *after )
 {
-    Part *part = new Part();
+    PartPart *pp = new PartPart( this );
+    Part *part = new Part( pp );
+    pp->setDocument( part );
     part->disconnect(); // part shall not handle feedback from openUrl()
     part->setAutoSave( 0 ); //disable
     part->m_insertFileInfo.url = filename;
     part->m_insertFileInfo.parent = parent;
     part->m_insertFileInfo.after = after;
-    connect(part, SIGNAL(completed()), SLOT(insertFileCompleted()));
-    connect(part, SIGNAL(canceled(const QString&)), SLOT(insertFileCancelled(const QString&)));
-    connect(part, SIGNAL(started(KIO::Job*)), SLOT(slotStarted(KIO::Job*)));
+    connect(pp, SIGNAL(completed()), SLOT(insertFileCompleted()));
+    connect(pp, SIGNAL(canceled(const QString&)), SLOT(insertFileCancelled(const QString&)));
+    connect(pp, SIGNAL(started(KIO::Job*)), pp, SLOT(slotStarted(KIO::Job*)));
 
-    part->openUrl( KUrl( filename ) );
+    pp->openUrl( KUrl( filename ) );
 }
 
 void Part::insertFileCompleted()
 {
-    Part *part = qobject_cast<Part*>( sender() );
-    if ( part ) {
-        Project &p = part->getProject();
-        insertProject( p, part->m_insertFileInfo.parent, part->m_insertFileInfo.after );
-        part->deleteLater();
+    kDebug(planDbg())<<sender();
+    PartPart *pp = qobject_cast<PartPart*>( sender() );
+    if ( pp ) {
+        Part *part = qobject_cast<Part*>( pp->document() );
+        if ( part ) {
+            Project &p = part->getProject();
+            insertProject( p, part->m_insertFileInfo.parent, part->m_insertFileInfo.after );
+            pp->deleteLater(); // also deletes part
+        }
     }
 }
 
 void Part::insertFileCancelled( const QString &error )
 {
+    kDebug(planDbg())<<sender()<<"error="<<error;
     if ( ! error.isEmpty() ) {
         KMessageBox::error( 0, error );
     }
-    Part *part = qobject_cast<Part*>( sender() );
-    if ( part ) {
-        part->deleteLater();
+    PartPart *pp = qobject_cast<PartPart*>( sender() );
+    if ( pp ) {
+        pp->deleteLater(); // also deletes part
     }
 }
 
