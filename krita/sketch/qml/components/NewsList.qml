@@ -59,6 +59,7 @@ PageStack {
                 }
             }
 
+            ScrollDecorator { }
         }
     }
 

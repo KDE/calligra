@@ -97,6 +97,8 @@ Page {
             anchors.fill: parent;
             onPressed: { parent.focus = true; mouse.accepted = false; }
         }
+
+        ScrollDecorator { }
     }
 
     Rectangle {

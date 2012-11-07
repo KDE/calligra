@@ -90,6 +90,8 @@ Page {
         cellHeight: Constants.GridHeight * 1.75;
 
         clip: true;
+
+        ScrollDecorator { }
     }
 
     Component {

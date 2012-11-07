@@ -55,6 +55,8 @@ Item {
         }
 
         model: recentImagesModel;
+
+        ScrollDecorator { }
     }
 
     ListItem {
