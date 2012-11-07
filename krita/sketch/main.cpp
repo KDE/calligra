@@ -81,12 +81,7 @@ int main( int argc, char** argv )
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
     if (!env.contains("KDEHOME") ) {
-        //QMessageBox::information(0, "sketch: data env", QDesktopServices::storageLocation(QDesktopServices::DataLocation));
-        //QMessageBox::information(0, "sketch: home env", QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::HomeLocation)
-                   + "/AppData"
-                   + "/Roaming"
-                   + "/kritasketch");
+        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation));
         env.insert("KDESYCOCA", appdir.currentPath() + "/sycoca");
         env.insert("XDG_DATA_DIRS", appdir.currentPath() + "/share");
         env.insert("KDEDIR", appdir.currentPath());
