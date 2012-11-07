@@ -132,6 +132,9 @@ public:
     QAction* redoAction;
     bool useOpenGL;
 
+    KisPrescaledProjectionSP prescaledProjection;
+
+    QColor backgroundColor;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -151,6 +154,9 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     if (d->useOpenGL) {
         KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
     }
+
+    KisConfig config;
+    d->backgroundColor = config.canvasBorderColor();
 
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
@@ -223,7 +229,6 @@ void KisSketchView::setFile(const QString& file)
 
 void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-    Q_UNUSED(painter)
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
@@ -273,7 +278,41 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         d->shader->release();
     }
     else {
-        d->canvasWidget->render(painter);
+        d->prescaledProjection->recalculateCache(d->prescaledProjection->updateCache(QRect(x(), y(), width(), height())));
+        d->prescaledProjection->preScale();
+
+        const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
+        QTransform imageTransform = converter->viewportToWidgetTransform();
+
+        painter->save();
+
+        painter->setCompositionMode(QPainter::CompositionMode_Source);
+        painter->fillRect(QRect(x(), y(), width(), height()), d->backgroundColor);
+
+        QTransform checkersTransform;
+        QPointF brushOrigin;
+        QPolygonF polygon;
+
+        converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(Qt::CrossPattern);
+        painter->setBrushOrigin(brushOrigin);
+        painter->setTransform(checkersTransform);
+        painter->drawPolygon(polygon);
+
+        painter->setTransform(imageTransform);
+
+        QRectF viewportRect = converter->widgetToViewport(QRect(x(), y(), width(), height()));
+
+        painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+        painter->drawImage(viewportRect, d->prescaledProjection->prescaledQImage(),
+                    viewportRect);
+
+        painter->restore();
+
+        //QRect boundingRect = converter->imageRectInWidgetPixels().toAlignedRect();
+        //drawDecorations(gc, boundingRect);
+        //gc.end();
     }
 }
 
@@ -436,6 +475,13 @@ void KisSketchView::documentChanged()
     d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    if(!d->prescaledProjection)
+        d->prescaledProjection = new KisPrescaledProjection();
+
+    d->prescaledProjection->setCoordinatesConverter(const_cast<KisCoordinatesConverter*>(d->canvas->coordinatesConverter()));
+    d->prescaledProjection->setMonitorProfile(d->canvas->monitorProfile(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
+    d->prescaledProjection->setImage(d->canvas->image());
+
     //    emit progress(100);
     //    emit completed();
 
@@ -500,6 +546,7 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
             d->canvasWidget->setGeometry(newGeometry.toRect());
             d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
         }
+        d->prescaledProjection->notifyCanvasSizeChanged(newGeometry.size().toSize());
         d->timer->start(100);
     }
 }
