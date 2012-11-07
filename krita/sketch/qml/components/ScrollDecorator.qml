@@ -22,7 +22,7 @@ import org.krita.sketch 1.0
 Item {
     id: base;
     anchors.fill: parent;
-    property Flickable flickableItem;
+    property Flickable flickableItem: parent;
 
     Rectangle {
         id: verticalDecorator;
