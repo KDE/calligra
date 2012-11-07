@@ -174,7 +174,6 @@ Page {
                 onClicked: {
                     if( fileNameField.text != "" ) {
                         var filePath = "%1/%2.%3".arg(view.model.path).arg(fileNameField.text).arg(fileType.model.get(fileType.currentIndex).type);
-                        RecentFileManager.addRecent(filePath);
                         base.view.saveAs( filePath, fileType.model.get(fileType.currentIndex).mime );
 
                         if(base.updateCurrentFile) {

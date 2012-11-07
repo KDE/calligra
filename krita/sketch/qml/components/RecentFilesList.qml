@@ -49,7 +49,6 @@ Item {
             imageFillMode: Image.PreserveAspectCrop;
 
             onClicked: {
-                recentImagesModel.addRecent(model.url);
                 Settings.currentFile = model.url;
             }
         }

@@ -116,7 +116,6 @@ Page {
                 } else {
                     pageStack.pop();
 
-                    RecentFileManager.addRecent( model.path );
                     Settings.currentFile = model.path;
                 }
             }
