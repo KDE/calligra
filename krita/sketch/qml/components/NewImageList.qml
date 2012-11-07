@@ -54,7 +54,7 @@ PageStack {
                             base.clicked();
                         }
                         case "screen": {
-                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(mainBase.width, mainBase.height, 72);
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(Krita.Window.width, Krita.Window.height, 72);
                             Settings.temporaryFile = true;
                             base.clicked();
                         }
@@ -83,6 +83,8 @@ PageStack {
                 ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
                 /* ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-green.svg" } */
             }
+
+            ScrollDecorator { }
         }
     } }
 
@@ -116,19 +118,21 @@ PageStack {
                 id: width;
                 height: Constants.GridHeight;
                 placeholder: "Width";
-                text: base.parent.width;
                 validator: IntValidator{bottom: 0; top: 10000;}
                 numeric: true;
                 nextFocus: height;
+
+                Component.onCompleted: text = Krita.Window.width;
             }
             TextField {
                 id: height;
                 height: Constants.GridHeight;
                 placeholder: "Height"
-                text: base.parent.height;
                 validator: IntValidator{bottom: 0; top: 10000;}
                 numeric: true;
                 nextFocus: resolution;
+
+                Component.onCompleted: text = Krita.Window.height;
             }
             TextField {
                 id: resolution;
