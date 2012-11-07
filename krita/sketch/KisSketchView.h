@@ -86,7 +86,8 @@ private:
     class Private;
     Private * const d;
 
-    Q_PRIVATE_SLOT(d, void update())
+    Q_PRIVATE_SLOT(d, void imageUpdated(const QRect &updated))
+    Q_PRIVATE_SLOT(d, void documentOffsetMoved())
     Q_PRIVATE_SLOT(d, void resetDocumentPosition())
 };
 

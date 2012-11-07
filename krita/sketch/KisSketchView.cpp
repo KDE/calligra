@@ -99,8 +99,10 @@ public:
     { }
     ~Private() { }
 
-    void update();
+    void imageUpdated(const QRect &updated);
+    void documentOffsetMoved();
     void resetDocumentPosition();
+    void configChanged();
 
     KisSketchView* q;
 
@@ -135,6 +137,7 @@ public:
     KisPrescaledProjectionSP prescaledProjection;
 
     QColor backgroundColor;
+    QBrush checkers;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -155,8 +158,7 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
         KisCanvas2::setCanvasWidgetFactory(new KisSketchCanvasFactory());
     }
 
-    KisConfig config;
-    d->backgroundColor = config.canvasBorderColor();
+    d->configChanged();
 
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
@@ -278,9 +280,6 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         d->shader->release();
     }
     else {
-        d->prescaledProjection->recalculateCache(d->prescaledProjection->updateCache(QRect(x(), y(), width(), height())));
-        d->prescaledProjection->preScale();
-
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
         QTransform imageTransform = converter->viewportToWidgetTransform();
 
@@ -295,7 +294,7 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 
         converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
         painter->setPen(Qt::NoPen);
-        painter->setBrush(Qt::CrossPattern);
+        painter->setBrush(d->checkers);
         painter->setBrushOrigin(brushOrigin);
         painter->setTransform(checkersTransform);
         painter->drawPolygon(polygon);
@@ -465,8 +464,8 @@ void KisSketchView::documentChanged()
     else {
         d->canvasWidget = d->canvas->canvasWidget();
         //connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
-        connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(update()));
-        connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(update()));
+        connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(imageUpdated(QRect)));
+        connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
     }
 
     static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
@@ -551,10 +550,24 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
     }
 }
 
-void KisSketchView::Private::update()
+void KisSketchView::Private::imageUpdated(const QRect &updated)
 {
-    if(q->scene())
-        q->scene()->invalidate( 0, 0, q->width(), q->height() );
+    if(prescaledProjection) {
+        prescaledProjection->recalculateCache(prescaledProjection->updateCache(updated));
+
+        if(q->scene())
+            q->scene()->invalidate( 0, 0, q->width(), q->height() );
+    }
+}
+
+void KisSketchView::Private::documentOffsetMoved()
+{
+    if(prescaledProjection) {
+        prescaledProjection->preScale();
+
+        if(q->scene())
+            q->scene()->invalidate( 0, 0, q->width(), q->height() );
+    }
 }
 
 void KisSketchView::Private::resetDocumentPosition()
@@ -570,6 +583,22 @@ void KisSketchView::Private::resetDocumentPosition()
     pos.ry() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
 
     view->canvasControllerWidget()->setScrollBarValue(pos);
+}
+
+void KisSketchView::Private::configChanged()
+{
+    KisConfig config;
+    backgroundColor = config.canvasBorderColor();
+
+    int checkSize = config.checkSize();
+    QImage tile(checkSize * 2, checkSize * 2, QImage::Format_RGB32);
+    QPainter pt(&tile);
+    pt.fillRect(tile.rect(), Qt::white);
+    pt.fillRect(0, 0, checkSize, checkSize, config.checkersColor());
+    pt.fillRect(checkSize, checkSize, checkSize, checkSize, config.checkersColor());
+    pt.end();
+
+    checkers = QBrush(tile);
 }
 
 #include "KisSketchView.moc"
