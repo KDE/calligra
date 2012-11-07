@@ -133,7 +133,13 @@ void RecentImagesModel::setRecentFileManager(QObject *recentFileManager)
 {
     disconnect(d->recentFileManager);
     d->recentFileManager = qobject_cast<RecentFileManager*>(recentFileManager);
-    connect(d->recentFileManager, SIGNAL(recentFilesListChanged()), SIGNAL(recentFilesListChanged()));
+    connect(d->recentFileManager, SIGNAL(recentFilesListChanged()), SLOT(recentFilesListChanged()));
+    emit recentFileManagerChanged();
+}
+
+void RecentImagesModel::recentFilesListChanged()
+{
+    reset();
 }
 
 void RecentImagesModel::addRecent(const QString &_url)
@@ -141,6 +147,5 @@ void RecentImagesModel::addRecent(const QString &_url)
     if (d->recentFileManager)
         d->recentFileManager->addRecent(_url);
 }
-
 
 #include "RecentImagesModel.moc"

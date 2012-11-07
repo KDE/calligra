@@ -24,7 +24,7 @@
 class RecentImagesModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* recentFileManager READ recentFileManager WRITE setRecentFileManager NOTIFY recentFilesListChanged)
+    Q_PROPERTY(QObject* recentFileManager READ recentFileManager WRITE setRecentFileManager NOTIFY recentFileManagerChanged)
 public:
     enum PresetRoles
     {
@@ -46,7 +46,7 @@ public:
     void setRecentFileManager(QObject* recentFileManager);
 
 Q_SIGNALS:
-    void recentFilesListChanged();
+    void recentFileManagerChanged();
 
 public Q_SLOTS:
 
@@ -55,6 +55,9 @@ public Q_SLOTS:
 private:
     class Private;
     Private* d;
+
+private Q_SLOTS:
+    void recentFilesListChanged();
 };
 
 #endif // RECENTIMAGESMODEL_H
