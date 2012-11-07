@@ -101,7 +101,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     d->constants = new Constants( this );
     d->settings = new Settings( this );
     DocumentManager::instance()->setSettingsManager( d->settings );
-    d->recentFileManager = new RecentFileManager(this);
+    d->recentFileManager = DocumentManager::instance()->recentFileManager();
     foreach(QString fileName, fileNames) {
         d->recentFileManager->addRecent(fileName);
     }

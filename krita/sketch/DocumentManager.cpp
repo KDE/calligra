@@ -20,6 +20,7 @@
 #include "KisSketchPart.h"
 #include "ProgressProxy.h"
 #include "Settings.h"
+#include "RecentFileManager.h"
 
 #include <KoColorSpaceRegistry.h>
 
@@ -34,11 +35,13 @@ public:
         , document(0)
         , part(0)
         , settingsManager(0)
+        , recentFileManager(0)
     { }
     ProgressProxy* proxy;
     KisDoc2 *document;
     KisSketchPart *part;
     Settings* settingsManager;
+    RecentFileManager* recentFileManager;
 
     QString saveAsFilename;
     QString openDocumentFilename;
@@ -69,6 +72,11 @@ Settings* DocumentManager::settingsManager() const
 void DocumentManager::setSettingsManager(Settings* newManager)
 {
     d->settingsManager = newManager;
+}
+
+RecentFileManager* DocumentManager::recentFileManager() const
+{
+    return d->recentFileManager;
 }
 
 void DocumentManager::newDocument(int width, int height, float resolution)
@@ -102,6 +110,7 @@ void DocumentManager::openDocument(const QString& document)
 void DocumentManager::delayedOpenDocument()
 {
     d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
+    d->recentFileManager->addRecent(d->openDocumentFilename);
     emit documentChanged();
 }
 
@@ -151,6 +160,7 @@ DocumentManager::DocumentManager(QObject* parent)
 {
     d->part = new KisSketchPart(this);
     d->proxy = new ProgressProxy(this);
+    d->recentFileManager = new RecentFileManager(this);
 }
 
 DocumentManager::~DocumentManager()

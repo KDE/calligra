@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+class RecentFileManager;
 class Settings;
 class ProgressProxy;
 class KisDoc2;
@@ -34,6 +35,7 @@ public:
     ProgressProxy* progressProxy() const;
     Settings* settingsManager() const;
     void setSettingsManager(Settings* newManager);
+    RecentFileManager* recentFileManager() const;
 
 public Q_SLOTS:
     void newDocument(int width, int height, float resolution);
