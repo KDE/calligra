@@ -29,6 +29,7 @@ Item {
     property alias imageShadow: imageShadow.visible;
     property alias imageFillMode: image.fillMode;
     property alias imageSmooth: image.smooth;
+    property alias imageCache: image.cache;
 
     signal clicked();
 
