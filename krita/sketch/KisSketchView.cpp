@@ -78,6 +78,7 @@
 #include <kis_layer.h>
 #include <kis_qpainter_canvas.h>
 #include <kis_part2.h>
+#include <kis_canvas_decoration.h>
 
 #include "KisSketchCanvas.h"
 #include "KisSketchPart.h"
@@ -309,6 +310,21 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         //QRect boundingRect = converter->imageRectInWidgetPixels().toAlignedRect();
         //drawDecorations(gc, boundingRect);
         //gc.end();
+
+        painter->save();
+
+        painter->setTransform(converter->flakeToWidgetTransform());
+        d->canvas->globalShapeManager()->paint(*painter, *converter, false);
+
+
+        d->canvas->toolProxy()->paint(*painter, *converter);
+
+        KisQPainterCanvas *qc = qobject_cast<KisQPainterCanvas*>(d->canvasWidget);
+        Q_FOREACH(KisCanvasDecoration* deco, qc->decorations()) {
+            deco->paint(*painter, converter->widgetToDocument(QRectF(0, 0, width(), height())), converter);
+        }
+
+        painter->restore();
     }
 }
 
@@ -504,6 +520,7 @@ bool KisSketchView::sceneEvent(QEvent* event)
             QGraphicsSceneMouseEvent *gsmevent = static_cast<QGraphicsSceneMouseEvent*>(event);
             QMouseEvent mevent(QMouseEvent::MouseMove, gsmevent->pos().toPoint(), gsmevent->button(), gsmevent->buttons(), gsmevent->modifiers());
             QApplication::sendEvent(d->canvasWidget, &mevent);
+            update();
             emit interactionStarted();
             return true;
         }
