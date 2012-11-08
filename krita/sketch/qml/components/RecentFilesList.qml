@@ -47,6 +47,7 @@ Item {
             imageShadow: true;
             imageSmooth: false;
             imageFillMode: Image.PreserveAspectCrop;
+            imageCache: false;
 
             onClicked: {
                 Settings.currentFile = model.url;
