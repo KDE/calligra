@@ -51,6 +51,7 @@
 #include <KoShapeController.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
+#include <KoShapeManager.h>
 
 #include <kundo2stack.h>
 
@@ -281,7 +282,6 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     }
     else {
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
-        QTransform imageTransform = converter->viewportToWidgetTransform();
 
         painter->save();
 
@@ -299,13 +299,10 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         painter->setTransform(checkersTransform);
         painter->drawPolygon(polygon);
 
-        painter->setTransform(imageTransform);
-
-        QRectF viewportRect = converter->widgetToViewport(QRect(x(), y(), width(), height()));
+        painter->setTransform(converter->viewportToWidgetTransform());
 
         painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
-        painter->drawImage(viewportRect, d->prescaledProjection->prescaledQImage(),
-                    viewportRect);
+        painter->drawImage(QRect(0, 0, width(), height()), d->prescaledProjection->prescaledQImage());
 
         painter->restore();
 
@@ -466,13 +463,8 @@ void KisSketchView::documentChanged()
         //connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
         connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(imageUpdated(QRect)));
         connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
+        connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
     }
-
-    static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
-    d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
-    d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
-    d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     if(!d->prescaledProjection)
         d->prescaledProjection = new KisPrescaledProjection();
@@ -481,8 +473,16 @@ void KisSketchView::documentChanged()
     d->prescaledProjection->setMonitorProfile(d->canvas->monitorProfile(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     d->prescaledProjection->setImage(d->canvas->image());
 
+    d->imageUpdated(d->canvas->image()->bounds());
+
     //    emit progress(100);
     //    emit completed();
+
+    static_cast<KoZoomHandler*>(d->canvas->viewConverter())->setResolution(d->doc->image()->xRes(), d->doc->image()->yRes());
+    d->view->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    d->view->canvasControllerWidget()->setScrollBarValue(QPoint(0, 0));
+    d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
 
