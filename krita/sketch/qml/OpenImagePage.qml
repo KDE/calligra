@@ -102,16 +102,17 @@ Page {
 
             width: GridView.view.cellWidth;
 
-            image: model.fileType != "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
-            imageShadow: model.fileType != "inode/directory" ? true : false;
-            imageFillMode: model.fileType != "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
-            imageSmooth: model.fileType != "inode/directory" ? false : true;
+            image: model.fileType !== "inode/directory" ? model.icon : "images/svg/icon-fileopen-red.svg";
+            imageShadow: model.fileType !== "inode/directory" ? true : false;
+            imageFillMode: model.fileType !== "inode/directory" ? Image.PreserveAspectCrop : Image.PreserveAspectFit;
+            imageSmooth: model.fileType !== "inode/directory" ? false : true;
+            imageCache: model.fileType !== "inode/directory" ? true : false;
 
             title: model.fileName;
-            description: model.fileType != "inode/directory" ? model.date : "";
+            description: model.fileType !== "inode/directory" ? model.date : "";
 
             onClicked: {
-                if( model.fileType == "inode/directory" ) {
+                if( model.fileType === "inode/directory" ) {
                     GridView.view.model.path = model.path;
                 } else {
                     pageStack.pop();
