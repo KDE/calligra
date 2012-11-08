@@ -8,6 +8,8 @@ Calligra Plan current:
 
 Release 2.6
 -----------
+* Fix crash after File->Open on empty document
+
 * Fix bug 308855 -  Gantt chart: No tree structure in printed version
 
 * Fix bug 307450 - Calligra Plan crash when adding subtask
