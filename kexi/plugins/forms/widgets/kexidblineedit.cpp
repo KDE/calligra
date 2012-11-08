@@ -108,6 +108,8 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     m_originalPalette = palette();
     connect(this, SIGNAL(textChanged(const QString&)),
             this, SLOT(slotTextChanged(const QString&)));
+    connect(this, SIGNAL(textEdited(const QString&)),
+            this, SLOT(slotTextEdited(const QString&)));
     connect(this, SIGNAL(cursorPositionChanged(int,int)),
             this, SLOT(slotCursorPositionChanged(int,int)));
 
@@ -117,6 +119,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
     m_inStyleChangeEvent = true; // do not allow KLineEdit::event() to touch the style
     setStyle(m_internalStyle);
     m_inStyleChangeEvent = false;
+    m_lengthExceededEmittedAtPreviousChange = false;
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
@@ -142,9 +145,12 @@ void KexiDBLineEdit::setInvalidState(const QString& displayText)
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
     m_slotTextChanged_enabled = false;
-    m_originalText = m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString());
+    bool lengthExceeded;
+    m_originalText = m_textFormatter.toString(
+                         removeOld ? QVariant() : m_origValue, add.toString(), &lengthExceeded);
     setText(m_originalText);
     setCursorPosition(0); //ok?
+    emitLengthExceededIfNeeded(lengthExceeded);
     m_slotTextChanged_enabled = true;
 }
 
@@ -158,6 +164,24 @@ void KexiDBLineEdit::slotTextChanged(const QString&)
     if (!m_slotTextChanged_enabled)
         return;
     signalValueChanged();
+}
+
+void KexiDBLineEdit::slotTextEdited(const QString& text)
+{
+    bool lengthExceeded = m_textFormatter.lengthExceeded(text);
+    emitLengthExceededIfNeeded(lengthExceeded);
+}
+
+bool KexiDBLineEdit::fixup()
+{
+    const QString t(text());
+    bool lengthExceeded = m_textFormatter.lengthExceeded(t);
+    if (lengthExceeded) {
+        m_slotTextChanged_enabled = false;
+        setText(t.left(field()->maxLength()));
+        m_slotTextChanged_enabled = true;
+    }
+    return true;
 }
 
 void KexiDBLineEdit::slotCursorPositionChanged(int oldPos, int newPos)
@@ -292,14 +316,6 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
         setInputMask(inputMask);
 
     KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
-
-    if (cinfo->field->isTextType()) {
-        if (!designMode()) {
-            if (cinfo->field->maxLength() > 0) {
-                setMaxLength(cinfo->field->maxLength());
-            }
-        }
-    }
 }
 
 /*todo

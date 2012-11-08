@@ -122,7 +122,10 @@ public:
     /// Keeps resource- and calendar ids
     void createNewProject();
 
+    using KoDocument::setModified;
 public slots:
+    void setModified( bool mod );
+
     /// Inserts an item into all other views than @p view
     void insertViewListItem( View *view, const ViewListItem *item, const ViewListItem *parent, int index );
     /// Removes the view list item from all other views than @p view
@@ -164,8 +167,6 @@ protected slots:
 
     void autoCheckForWorkPackages();
     void checkForWorkPackage();
-
-    void slotModified( bool );
 
     void insertFileCompleted();
     void insertFileCancelled( const QString& );
