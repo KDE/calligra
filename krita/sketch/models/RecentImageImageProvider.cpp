@@ -26,6 +26,7 @@
 #include <KoDocument.h>
 #include <KMimeTypeTrader>
 #include <KMimeType>
+#include <kio/previewjob.h>
 
 RecentImageImageProvider::RecentImageImageProvider()
     : QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
@@ -34,8 +35,8 @@ RecentImageImageProvider::RecentImageImageProvider()
 
 QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
-    int width = 100;
-    int height = 50;
+    int width = 38;
+    int height = 38;
 
     if (size) {
         *size = QSize(width, height);
@@ -43,7 +44,6 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
 
     QSize sz(requestedSize.width() > 0 ? requestedSize.width() : width,
              requestedSize.height() > 0 ? requestedSize.height() : height);
-
 
     QFile f(id);
     QImage thumbnail;
@@ -69,7 +69,7 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
         }
         else {
             QImage img(id);
-            if (img.width() >= width || img.height() >= height) {
+            if (img.width() >= sz.width() || img.height() >= sz.height()) {
                 thumbnail = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             }
         }
