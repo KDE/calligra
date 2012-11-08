@@ -1,6 +1,7 @@
 
 Release 2.6:
 ----------------------
+* Fix crash after File->Open on empty document
 
 * Fix bug: Do not add/remove views twice
 
