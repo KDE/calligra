@@ -35,6 +35,7 @@
 #include <QHelpEvent>
 #include <QScrollBar>
 #include <QAbstractProxyModel>
+#include <QAbstractItemView>
 #include <QToolButton>
 #include <qmath.h>
 

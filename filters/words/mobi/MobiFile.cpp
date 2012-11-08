@@ -58,6 +58,9 @@ KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeade
         out.device()->write(m_imageContent.value(imgId));
     }
 
+//    if (m_imageContent.isEmpty()) {
+//        out << (qint16)0;
+//    }
     writeFLISRecord(out, headerGenerator);
     writeFCISRecord(out, headerGenerator);
     writeEndOfFileRecord(out, headerGenerator);

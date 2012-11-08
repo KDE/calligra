@@ -27,11 +27,12 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles
 )
 
-if (HAVE_LCMS24)
+if (HAVE_LCMS24 AND OPENEXR_FOUND)
 include_directories( 
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
+    ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/ycbcr_f16
 )
-endif (HAVE_LCMS24)
+endif (HAVE_LCMS24 AND OPENEXR_FOUND)
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -74,12 +75,13 @@ SET ( lcmsengine_SRCS
     LcmsEnginePlugin.cpp
 )
 
-if (HAVE_LCMS24)
+if (HAVE_LCMS24 AND OPENEXR_FOUND)
     set ( lcmsengine_SRCS
         ${lcmsengine_SRCS}
         colorspaces/rgb_f16/RgbF16ColorSpace.cpp
+        colorspaces/xyz_f16/XyzF16ColorSpace.cpp
     )
-endif (HAVE_LCMS24)
+endif (HAVE_LCMS24 AND OPENEXR_FOUND)
 
 
 

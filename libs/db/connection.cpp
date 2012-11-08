@@ -1697,7 +1697,7 @@ bool Connection::createTable(KexiDB::TableSchema* tableSchema, bool replaceExist
     KexiDB::TableSchema *existingTable = 0;
     if (replaceExisting) {
         //get previous table (do not retrieve, though)
-        existingTable = d->table(tableName);
+        existingTable = this->tableSchema(tableName);
         if (existingTable) {
             if (existingTable == tableSchema) {
                 clearError();
@@ -1746,7 +1746,7 @@ bool Connection::createTable(KexiDB::TableSchema* tableSchema, bool replaceExist
         if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id()))
             return false;
 
-        FieldList *fl = createFieldListForKexi__Fields(d->table("kexi__fields"));
+        FieldList *fl = createFieldListForKexi__Fields(ts);
         if (!fl)
             return false;
 
@@ -1918,7 +1918,7 @@ tristate Connection::alterTable(TableSchema& tableSchema, TableSchema& newTableS
 bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName, bool replace)
 {
     clearError();
-    if (&tableSchema != d->table(tableSchema.id())) {
+    if (&tableSchema != this->tableSchema(tableSchema.id())) {
         setError(ERR_OBJECT_NOT_FOUND, i18n("Unknown table \"%1\"", tableSchema.name()));
         return false;
     }
@@ -2072,7 +2072,7 @@ bool Connection::drv_createTable(const KexiDB::TableSchema& tableSchema)
 
 bool Connection::drv_createTable(const QString& tableSchemaName)
 {
-    TableSchema *ts = d->table(tableSchemaName);
+    TableSchema *ts = tableSchema(tableSchemaName);
     if (!ts)
         return false;
     return drv_createTable(*ts);
@@ -2429,7 +2429,7 @@ tristate Connection::loadObjectSchemaData(int objectType, const QString& objectN
 {
     RecordData data;
     if (true != querySingleRecord(QString::fromLatin1("SELECT o_id, o_type, o_name, o_caption, o_desc "
-                                  "FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
+                                  "FROM kexi__objects WHERE o_type=%1 AND o_name=%2")
                                   .arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName)), data))
         return cancelled;
     return setupObjectSchemaData(data, sdata);
@@ -2443,8 +2443,8 @@ bool Connection::storeObjectSchemaData(SchemaData &sdata, bool newObject)
     if (newObject) {
         int existingID;
         if (true == querySingleNumber(QString::fromLatin1(
-                                          "SELECT o_id FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
-                                      .arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name().toLower())), existingID)) {
+                                          "SELECT o_id FROM kexi__objects WHERE o_type=%1 AND o_name=%2")
+                                      .arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name())), existingID)) {
             //we already have stored a schema data with the same name and type:
             //just update it's properties as it would be existing object
             sdata.m_id = existingID;
@@ -2504,7 +2504,7 @@ tristate Connection::querySingleRecordInternal(RecordData &data, const QString* 
     if (!cursor->moveFirst()
             || cursor->eof()
             || !cursor->storeCurrentRow(data)) {
-        const tristate result = cursor->error() ? false : cancelled;
+        const tristate result = cursor->error() ? tristate(false) : tristate(cancelled);
         KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() || cursor->storeCurrentRow(data) m_sql=" << m_sql;
         setError(cursor);
         deleteCursor(cursor);
@@ -2541,7 +2541,7 @@ tristate Connection::querySingleString(const QString& sql, QString &value, uint 
         return false;
     }
     if (!cursor->moveFirst() || cursor->eof()) {
-        const tristate result = cursor->error() ? false : cancelled;
+        const tristate result = cursor->error() ? tristate(false) : tristate(cancelled);
         KexiDBWarn << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof() " << m_sql;
         deleteCursor(cursor);
         return result;
@@ -2747,12 +2747,14 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
                 extendedTableSchemaMainEl, extendedTableSchemaFieldEl, extendedTableSchemaStringIsEmpty,
                 /*custom*/true);
         }
+
         // save lookup table specification, if present
         LookupFieldSchema *lookupFieldSchema = tableSchema.lookupFieldSchema(*f);
         if (lookupFieldSchema) {
             createExtendedTableSchemaFieldElementIfNeeded(
-                doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl, false/* !append */);
-            LookupFieldSchema::saveToDom(*lookupFieldSchema, doc, extendedTableSchemaFieldEl);
+                doc, extendedTableSchemaMainEl, f->name(), extendedTableSchemaFieldEl,
+                false/* !append */);
+            lookupFieldSchema->saveToDom(&doc, &extendedTableSchemaFieldEl);
 
             if (extendedTableSchemaFieldEl.hasChildNodes()) {
                 // this element provides the definition, so let's append it now
@@ -2761,6 +2763,7 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
                 extendedTableSchemaMainEl.appendChild(extendedTableSchemaFieldEl);
             }
         }
+        //KexiDBDbg << doc.toString(1);
     }
 
     // Store extended schema information (see ExtendedTableSchemaInformation in Kexi Wiki)
@@ -2874,7 +2877,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
                     } else if (propEl.tagName() == "lookup-column") {
                         LookupFieldSchema *lookupFieldSchema = LookupFieldSchema::loadFromDom(propEl);
                         if (lookupFieldSchema) {
-                            lookupFieldSchema->debug();
+                            lookupFieldSchema->debug(f->name());
                             tableSchema.setLookupFieldSchema(f->name(), lookupFieldSchema);
                         }
                     }
@@ -3011,7 +3014,7 @@ TableSchema* Connection::tableSchema(const QString& tableName)
     //not found: retrieve schema
     RecordData data;
     if (true != querySingleRecord(QString::fromLatin1(
-                                      "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1'"
+                                      "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE o_name='%1'"
                                       " AND o_type=%2")
                                   .arg(tableName).arg(KexiDB::TableObjectType), data))
         return 0;
@@ -3120,7 +3123,7 @@ QuerySchema* Connection::querySchema(const QString& queryName)
     //not found: retrieve schema
     RecordData data;
     if (true != querySingleRecord(QString::fromLatin1(
-                                      "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1'"
+                                      "SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE o_name='%1'"
                                       " AND o_type=%2")
                                   .arg(m_queryName).arg(KexiDB::QueryObjectType), data))
         return 0;
@@ -3167,7 +3170,7 @@ TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
 
 bool Connection::isInternalTableSchema(const QString& tableName)
 {
-    return (d->kexiDBSystemTables().contains(d->table(tableName)))
+    return (d->kexiDBSystemTables().contains(tableSchema(tableName)))
            // these are here for compatiblility because we're no longer instantiate
            // them but can exist in projects created with previous Kexi versions:
            || tableName == "kexi__final" || tableName == "kexi__useractions";

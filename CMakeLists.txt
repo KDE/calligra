@@ -206,7 +206,6 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ## Look for OpenGL
 ##
 set(HAVE_OPENGL 0)
-if (NOT WIN32)
 macro_optional_find_package(OpenGL)
 
 if(OPENGL_FOUND)
@@ -222,7 +221,6 @@ else(OPENGL_FOUND)
 endif(OPENGL_FOUND)
 
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
-endif (NOT WIN32)
 
 ##
 ## Test for kdepimlibs
@@ -283,13 +281,15 @@ if( MARBLE_FOUND )
     ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
     ## with commit ea177ca. This is for compatibility with older versions.
     ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
     if( MARBLECONTROLBOX_H )
     file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
     string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
+    else( MARBLECONTROLBOX_H )
+        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
@@ -404,6 +404,13 @@ include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 
 ##
+## Test SharedMimeInfo
+##
+macro_optional_find_package(SharedMimeInfo)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
+
+
+##
 ## Generate a file for prefix information
 ##
 
@@ -502,9 +509,16 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
 
 # calligradb
-SET(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
-set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
-                        ${CMAKE_BINARY_DIR}/libs/db)
+# TODO: remove when Predicate lib arrives
+if (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
+   set(SHOULD_BUILD_CALLIGRADB TRUE)
+   set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+   set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                           ${CMAKE_BINARY_DIR}/libs/db)
+else (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
+   set(SHOULD_BUILD_CALLIGRADB FALSE)
+   set(SHOULD_BUILD_KEXI FALSE)
+endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
 
  #############################################
 ##############################################
@@ -524,10 +538,10 @@ if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)
 
-### Krita: pigment, eigen2, exiv2
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+### Krita: pigment, eigen2, exiv2, sharedmimeinfo
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 ### Active needs sheets, stage and words
 if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)

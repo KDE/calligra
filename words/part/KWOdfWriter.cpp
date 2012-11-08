@@ -246,6 +246,10 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
+    if (m_document->isMasterDocument()) {
+        bodyWriter->addAttribute("text:global", "true");
+    }
+    // FIXME: text:use-soft-page-breaks
 
     calculateZindexOffsets();
 

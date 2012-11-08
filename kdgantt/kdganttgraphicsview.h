@@ -31,6 +31,7 @@ class QModelIndex;
 class QAbstractItemModel;
 class QAbstractProxyModel;
 class QItemSelectionModel;
+class QAbstractItemView;
 
 namespace KDGantt {
     class AbstractRowController;

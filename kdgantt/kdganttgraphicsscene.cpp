@@ -35,7 +35,6 @@
 #include <QToolTip>
 #include <QGraphicsSceneHelpEvent>
 #include <QTextDocument>
-
 #include <QDebug>
 
 #include <functional>
@@ -598,6 +597,9 @@ QRectF GraphicsScene::printRect( bool drawRowLabels, GraphicsView *view )
 {
     assert(rowController());
 
+    int indentation = 20;
+    bool indentRoot = true;
+
     qreal leftEdge = sceneRect().left();
     QVector<QGraphicsTextItem*> labelItems;
     if ( drawRowLabels ) {
@@ -610,12 +612,13 @@ QRectF GraphicsScene::printRect( bool drawRowLabels, GraphicsView *view )
                 continue;
             }
             const Span rg = rowController()->rowGeometry( sidx );
-            const QString txt = " " + item->index().data( Qt::DisplayRole ).toString();
+            const QString txt = item->index().data( Qt::DisplayRole ).toString();
             QGraphicsTextItem* ti = new QGraphicsTextItem( txt, 0, this );
             ti->setPos( 0, rg.start() );
             ti->document()->size().setWidth( ti->document()->size().width() + KDGANTT_LIST_CHART_GAP );
-            if ( ti->document()->size().width() > textWidth ) {
-                textWidth = ti->document()->size().width();
+            int indent = indentation * ( level( item->index() ) + ( indentRoot ? 1 : 0 ) );
+            if ( ti->document()->size().width() + indentation > textWidth ) {
+                textWidth = ti->document()->size().width() + indent;
             }
             if ( rg.length() > rowHeight ) {
                 rowHeight = rg.length();
@@ -636,11 +639,73 @@ QRectF GraphicsScene::printRect( bool drawRowLabels, GraphicsView *view )
     return res;
 }
 
+void GraphicsScene::drawTreeIndication( QPainter *painter, const QModelIndex &idx, const QRect &rect, int indent, bool drawRoot )
+{
+//    qDebug()<<"drawTreeIndication:"<<idx.data().toString()<<rect;
+
+    QStyleOptionViewItemV4 option;
+    option.rect.setRect( rect.left(), rect.top(), rect.width(), rect.height() );
+    option.state = option.state | QStyle::State_Enabled | QStyle::State_Active | QStyle::State_Item;
+    if ( idx.sibling(idx.row()+1, 0).isValid() ) {
+        option.state |= QStyle::State_Sibling;
+    }
+    if ( idx.model()->hasChildren( idx ) ) {
+        option.state |= QStyle::State_Children;
+    }
+
+    QPalette::ColorGroup cg;
+    cg = QPalette::Active;
+    option.palette.setCurrentColorGroup(cg);
+
+    QModelIndex parent = idx.parent();
+    QModelIndex currentParent = parent;
+    QModelIndex ancestor = currentParent.parent();
+
+    QRect area( option.rect.right() + 1, option.rect.top(), indent, option.rect.height() ); // moved left before use
+
+    if ( currentParent.isValid() || drawRoot ) {
+        // draw for idx
+        area.moveLeft(area.left() - indent);
+        option.rect = area;
+        style()->drawPrimitive(QStyle::PE_IndicatorBranch, &option, painter, 0);
+    }
+    option.state &= ~QStyle::State_Item;
+    option.state &= ~QStyle::State_Children;
+    while ( currentParent.isValid() ) {
+        // then draw ancestors
+        if ( ! ancestor.isValid() && ! drawRoot ) {
+            break;
+        }
+        area.moveLeft(area.left() - indent);
+        option.rect = area;
+        if ( currentParent.sibling( currentParent.row() + 1, 0 ).isValid() ) {
+            option.state |= QStyle::State_Sibling;
+        } else {
+            option.state &= ~QStyle::State_Sibling;
+        }
+        style()->drawPrimitive(QStyle::PE_IndicatorBranch, &option, painter);
+        currentParent = ancestor;
+        ancestor = currentParent.parent();
+    }
+}
+
+int GraphicsScene::level( const QModelIndex &idx ) const
+{
+    int l = 0;
+    for ( QModelIndex p = idx.parent(); p.isValid(); p = p.parent() ) {
+        ++l;
+    }
+    return l;
+}
+
 void GraphicsScene::print( QPainter* painter, const QRectF& target, const QRectF& source, bool drawRowLabels, GraphicsView *view )
 {
     QRectF targetRect(target);
 
     assert(rowController());
+
+    int indentation = 20;
+    bool indentRoot = true;
 
     qreal scale = 1.0;
     if ( source.width() > target.width() ) {
@@ -664,18 +729,23 @@ void GraphicsScene::print( QPainter* painter, const QRectF& target, const QRectF
                 continue;
             }
             const Span rg = rowController()->rowGeometry( sidx );
-            const QString txt = " " + item->index().data( Qt::DisplayRole ).toString();
-            QRectF r( 0.0, rg.start() + top, 0.0, rg.length() );
+            const QString txt = item->index().data( Qt::DisplayRole ).toString();
+            int indent = indentation * (level( item->index() ) + ( indentRoot ? 1 : 0 ) );
+            QRectF r( indent, rg.start() + top, 0.0, rg.length() );
             r = painter->boundingRect( r, Qt::AlignLeft | Qt::AlignVCenter, txt );
             painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, txt );
             if ( r.width() > textWidth ) {
-                textWidth = r.width();
+                textWidth = r.width() + indent;
             }
+            QRect rect = r.toRect();
+            rect.setLeft( 1 );
+            rect.setRight( r.left() );
+            drawTreeIndication( painter, item->index(), rect, indentation, indentRoot );
         }}
         painter->restore();
         if ( view ) {
             QStyle* style = QApplication::style();
-            QRectF r( 0.0, 0.0, textWidth, view->headerHeight() ); 
+            QRectF r( 0.0, 0.0, textWidth, view->headerHeight() );
             QStyleOptionHeader opt;
             opt.init( view );
             opt.rect = r.toRect();

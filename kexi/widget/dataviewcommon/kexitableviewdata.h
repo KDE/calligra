@@ -250,8 +250,8 @@ public:
         return KexiTableViewDataBase::last();
     }
 //Qt 4 inline int findRef( const KexiDB::RecordData* record ) { return KexiTableViewDataBase::findRef(record); }
-    inline int indexOf(KexiDB::RecordData* record, int from = 0) const {
-        return KexiTableViewDataBase::indexOf(record, from);
+    inline int indexOf(const KexiDB::RecordData* record, int from = 0) const {
+        return KexiTableViewDataBase::indexOf(const_cast<KexiDB::RecordData*>(record), from);
     }
     inline void removeFirst() {
         KexiTableViewDataBase::removeFirst();

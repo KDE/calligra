@@ -223,7 +223,7 @@ void SybaseCursor::drv_bufferMovePointerPrev()
 }
 
 
-void SybaseCursor::drv_bufferMovePointerTo(qint64 to)
+void SybaseCursor::drv_bufferMovePointerTo(qint64 /*to*/)
 {
     //dbgetrow( d->dbProcess, to );
 }

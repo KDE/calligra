@@ -728,7 +728,7 @@ public:
 
     /*! Added for convenience.
      \sa setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata ).
-     \return true on success, false on failure and cancelled when such object couldn't */
+     \return true on success, false on failure and cancelled when such object couldn't be found. */
     tristate loadObjectSchemaData(int objectID, SchemaData &sdata);
 
     /*! Finds object schema data for object of type \a objectType and name \a objectName.
@@ -869,7 +869,7 @@ protected:
     /*! @internal drops table \a tableSchema physically, but destroys
      \a tableSchema object only if \a alsoRemoveSchema is true.
      Used (alsoRemoveSchema==false) on table altering:
-     if recreating table can failed we're giving up and keeping
+     if recreating table can fail we're giving up and keeping
      the original table schema (even if it is no longer points to any real data). */
     tristate dropTable(KexiDB::TableSchema* tableSchema, bool alsoRemoveSchema);
 

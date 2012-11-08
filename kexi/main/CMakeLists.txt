@@ -19,8 +19,6 @@ KexiMainWindow.cpp
 KexiMenuWidget.cpp
 kexifinddialog.cpp
 kexistatusbar.cpp 
-kexinamewidget.cpp 
-kexinamedialog.cpp 
 kexinewstuff.cpp
 KexiSearchLineEdit.cpp
 KexiUserFeedbackAgent.cpp

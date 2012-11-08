@@ -50,7 +50,7 @@ Item {
                       anchors { fill: parent; margins: 10 }
                       source: decoration
                       Text {
-                          text: "Page " + (index + 1)
+                          text: i18n("Page %1",(index + 1))
                           font.pointSize: 10
                           anchors.bottom: parent.bottom
                           anchors.horizontalCenter: parent.horizontalCenter

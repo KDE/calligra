@@ -69,7 +69,9 @@ private:
 protected:
     virtual KoProperty::Set *propertySet();
     virtual tristate storeData(bool dontAsk = false);
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
 private slots:
     void slotDesignerPropertySetChanged();
