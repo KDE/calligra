@@ -50,7 +50,7 @@ palmDocHeader::palmDocHeader():
 mobiHeader::mobiHeader():
     mobiHeaderLength(232)
   , mobiType(2)
-  , textEncoding(65001)
+  , textEncoding(1252)
   , uniqueId(123456789)
   , fileVersion(4)
   , ortographicIndex(0xFFFFFFFF)
@@ -219,8 +219,15 @@ void MobiHeaderGenerator::generatePalmDataBase()
                 m_dbHeader->recordOffset += imgSize;
                 recordId++;
             }
-
     }
+
+//    if (m_imgListSize.isEmpty()) {
+//        m_dbHeader->recordUniqueId = recordId;
+//        m_dbHeader->recordsInfo.insert((m_dbHeader->recordOffset + 1), m_dbHeader->recordUniqueId);
+//        m_dbHeader->recordOffset = m_dbHeader->recordOffset + 2;
+//        m_mobiHeader->firstImageIndex = recordId;
+//        recordId++;
+//    }
 
     // FLIS record.
     m_dbHeader->recordUniqueId = recordId;
@@ -286,8 +293,8 @@ void MobiHeaderGenerator::generateMobiHeader()
         m_mobiHeader->firstImageIndex = 2;
     }
     else {
-        m_mobiHeader->firstNonBookIndex = 2;
-        m_mobiHeader->firstImageIndex = 0;
+        m_mobiHeader->firstNonBookIndex = calculateRecordsCount() - 3;
+        m_mobiHeader->firstImageIndex = calculateRecordsCount() - 3;
     }
 
     //
