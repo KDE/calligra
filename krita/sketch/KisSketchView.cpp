@@ -103,6 +103,7 @@ public:
 
     void imageUpdated(const QRect &updated);
     void documentOffsetMoved();
+    void zoomChanged();
     void resetDocumentPosition();
     void configChanged();
 
@@ -240,10 +241,6 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         return;
     }
 
-    if(d->view->canvasControllerWidget()->geometry() != QRect(x(), y(), width(), height())) {
-        geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
-    }
-
     if (d->useOpenGL) {
         qobject_cast<QGLWidget*>(scene()->views().at(0)->viewport())->makeCurrent();
 
@@ -283,15 +280,18 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     }
     else {
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
+        QRectF geometry(x(), y(), width(), height());
 
         painter->save();
 
         painter->setCompositionMode(QPainter::CompositionMode_Source);
-        painter->fillRect(QRect(x(), y(), width(), height()), d->backgroundColor);
+        painter->fillRect(geometry, d->backgroundColor);
 
         QTransform checkersTransform;
         QPointF brushOrigin;
         QPolygonF polygon;
+
+        painter->setClipRect(geometry);
 
         converter->getQPainterCheckersInfo(&checkersTransform, &brushOrigin, &polygon);
         painter->setPen(Qt::NoPen);
@@ -303,25 +303,16 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         painter->setTransform(converter->viewportToWidgetTransform());
 
         painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
-        painter->drawImage(QRect(0, 0, width(), height()), d->prescaledProjection->prescaledQImage());
-
-        painter->restore();
-
-        //QRect boundingRect = converter->imageRectInWidgetPixels().toAlignedRect();
-        //drawDecorations(gc, boundingRect);
-        //gc.end();
-
-        painter->save();
+        painter->drawImage(geometry, d->prescaledProjection->prescaledQImage(), geometry);
 
         painter->setTransform(converter->flakeToWidgetTransform());
         d->canvas->globalShapeManager()->paint(*painter, *converter, false);
-
 
         d->canvas->toolProxy()->paint(*painter, *converter);
 
         KisQPainterCanvas *qc = qobject_cast<KisQPainterCanvas*>(d->canvasWidget);
         Q_FOREACH(KisCanvasDecoration* deco, qc->decorations()) {
-            deco->paint(*painter, converter->widgetToDocument(QRectF(0, 0, width(), height())), converter);
+            deco->paint(*painter, converter->widgetToDocument(geometry), converter);
         }
 
         painter->restore();
@@ -476,7 +467,6 @@ void KisSketchView::documentChanged()
     }
     else {
         d->canvasWidget = d->canvas->canvasWidget();
-        //connect(qobject_cast<KisQPainterCanvas*>(d->canvasWidget), SIGNAL(updated()), SLOT(update()));
         connect(d->doc->image(), SIGNAL(sigImageUpdated(QRect)), SLOT(imageUpdated(QRect)));
         connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
         connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
@@ -581,7 +571,6 @@ void KisSketchView::Private::documentOffsetMoved()
 {
     if(prescaledProjection) {
         prescaledProjection->preScale();
-
         if(q->scene())
             q->scene()->invalidate( 0, 0, q->width(), q->height() );
     }
@@ -616,6 +605,11 @@ void KisSketchView::Private::configChanged()
     pt.end();
 
     checkers = QBrush(tile);
+}
+
+void KisSketchView::Private::zoomChanged()
+{
+    prescaledProjection->notifyZoomChanged();
 }
 
 #include "KisSketchView.moc"

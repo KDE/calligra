@@ -88,6 +88,7 @@ private:
 
     Q_PRIVATE_SLOT(d, void imageUpdated(const QRect &updated))
     Q_PRIVATE_SLOT(d, void documentOffsetMoved())
+    Q_PRIVATE_SLOT(d, void zoomChanged())
     Q_PRIVATE_SLOT(d, void resetDocumentPosition())
 };
 
