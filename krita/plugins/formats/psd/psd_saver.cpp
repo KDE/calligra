@@ -120,7 +120,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 
     PSDHeader header;
     header.signature = "8BPS";
-    header.version = 2;
+    header.version = 1;
     header.nChannels = m_image->colorSpace()->channelCount();
     header.width = m_image->width();
     header.height = m_image->height();
@@ -129,6 +129,8 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
                                                                           m_image->colorSpace()->colorDepthId().id());
     header.colormode = colordef.first;
     header.channelDepth = colordef.second;
+
+    qDebug() << "header" << header;
 
     if (!header.write(&f)) {
         qDebug() << "Failed to write header. Error:" << header.error;
