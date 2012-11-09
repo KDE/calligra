@@ -98,6 +98,7 @@ public:
         , undoAction(0)
         , redoAction(0)
         , useOpenGL(false)
+        , wantPrescale(true)
     { }
     ~Private() { }
 
@@ -138,6 +139,7 @@ public:
     bool useOpenGL;
 
     KisPrescaledProjectionSP prescaledProjection;
+    bool wantPrescale;
 
     QColor backgroundColor;
     QBrush checkers;
@@ -279,6 +281,11 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         d->shader->release();
     }
     else {
+        if(d->wantPrescale) {
+            d->wantPrescale = false;
+            d->prescaledProjection->preScale();
+        }
+
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
         QRectF geometry(x(), y(), width(), height());
 
@@ -570,7 +577,8 @@ void KisSketchView::Private::imageUpdated(const QRect &updated)
 void KisSketchView::Private::documentOffsetMoved()
 {
     if(prescaledProjection) {
-        prescaledProjection->preScale();
+        wantPrescale = true;
+        //prescaledProjection->preScale();
         if(q->scene())
             q->scene()->invalidate( 0, 0, q->width(), q->height() );
     }
