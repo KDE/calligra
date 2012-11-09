@@ -24,17 +24,14 @@
 #include <kdemacros.h>
 
 #ifndef SVM_EXPORT
-
-#if defined(MAKE_VECTORSHAPE_LIB)
-
-#define SVM_EXPORT KDE_EXPORT
-
-#else
-
-#define SVM_EXPORT KDE_IMPORT
-
-#endif
-
+# if defined(KDELIBS_STATIC_LIBS)
+   /* No export/import for static libraries */
+#  define SVM_EXPORT
+# elif defined(MAKE_VECTORIMAGE_LIB)
+#  define SVM_EXPORT KDE_EXPORT
+# else
+#  define SVM_EXPORT KDE_IMPORT
+# endif
 #endif
 
 #endif

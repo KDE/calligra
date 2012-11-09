@@ -25,17 +25,14 @@
 #include <kdemacros.h>
 
 #ifndef EMF_EXPORT
-
-#if defined(MAKE_VECTORSHAPE_LIB)
-
-#define EMF_EXPORT KDE_EXPORT
-
-#else
-
-#define EMF_EXPORT KDE_IMPORT
-
-#endif
-
+# if defined(KDELIBS_STATIC_LIBS)
+   /* No export/import for static libraries */
+#  define EMF_EXPORT
+# elif defined(MAKE_VECTORIMAGE_LIB)
+#  define EMF_EXPORT KDE_EXPORT
+# else
+#  define EMF_EXPORT KDE_IMPORT
+# endif
 #endif
 
 #endif
