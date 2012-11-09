@@ -73,7 +73,7 @@ QPair<PSDColorMode, quint16> colormodelid_to_psd_colormode(const QString &colorS
     else if (colorDepthId == Integer16BitsColorDepthID.id()) {
         depth = 16;
     }
-    else if (colorDepthId == Float32BitsColorDepthID.id()) {
+    else if (colorDepthId == Float16BitsColorDepthID.id()) {
         depth = 32;
     }
     else if (colorDepthId == Float32BitsColorDepthID.id()) {
@@ -88,6 +88,7 @@ QPair<PSDColorMode, quint16> colormodelid_to_psd_colormode(const QString &colorS
 PSDSaver::PSDSaver(KisDoc2 *doc)
 {
     m_doc = doc;
+    m_image  = doc->image();
     m_job = 0;
     m_stop = false;
 }
@@ -102,13 +103,9 @@ KisImageWSP PSDSaver::image()
 }
 
 
-KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri, KisPaintLayerSP layer)
+KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 {
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
-
-    KisImageWSP image = layer->image();
-    if (!image)
+    if (!m_image)
         return KisImageBuilder_RESULT_EMPTY;
 
     if (uri.isEmpty())
@@ -124,16 +121,20 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri, KisPaintLayerSP laye
     PSDHeader header;
     header.signature = "8BPS";
     header.version = 2;
-    header.nChannels = image->colorSpace()->channelCount();
-    header.width = image->width();
-    header.height = image->height();
+    header.nChannels = m_image->colorSpace()->channelCount();
+    header.width = m_image->width();
+    header.height = m_image->height();
 
-    QPair<PSDColorMode, quint16> colordef = colormodelid_to_psd_colormode(image->colorSpace()->colorModelId().id(),
-                                                                          image->colorSpace()->colorDepthId().id());
+    QPair<PSDColorMode, quint16> colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(),
+                                                                          m_image->colorSpace()->colorDepthId().id());
     header.colormode = colordef.first;
     header.channelDepth = colordef.second;
 
-    if (!header.write(&f)) return KisImageBuilder_RESULT_FAILURE;
+    if (!header.write(&f)) {
+        qDebug() << "Failed to write header. Error:" << header.error;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
 
     f.close();
 
