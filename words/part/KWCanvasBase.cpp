@@ -49,6 +49,8 @@
 #include <sys/time.h>
 
 //#define DEBUG_REPAINT
+#define ANNOTATION_WIDTH 200
+
 
 KWCanvasBase::KWCanvasBase(KWDocument *document, QObject *parent)
     : KoCanvasBase(document),
@@ -299,7 +301,6 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     m_viewMode->mapExposedRects(paintRect.translated(m_documentOffset),
                                                 viewConverter());
             foreach (KWViewMode::ViewMap vm, map) {
-
                 painter.save();
 
                 // Set up the painter to clip the part of the canvas that contains the rect.

@@ -22,8 +22,8 @@
 #define KEXIPROJECTMODELITEM_H
 
 #include <QVariant>
-#include <QPixmap>
 #include <QString>
+#include <QIcon>
 #include <core/kexipartitem.h>
 #include <kexi.h>
 
@@ -90,7 +90,7 @@ public:
  private:
     QList<KexiProjectModelItem*> m_childItems;
     KexiProjectModelItem *m_parentItem;
-    QPixmap m_icon;
+    QIcon m_icon;
     bool m_dirty;
 
  protected:

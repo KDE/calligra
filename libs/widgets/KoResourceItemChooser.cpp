@@ -36,7 +36,6 @@
 #include <QSplitter>
 
 #include <kfiledialog.h>
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <klineedit.h>
@@ -47,6 +46,8 @@
 #include <knewstuff3/downloaddialog.h>
 #include <knewstuff3/uploaddialog.h>
 #endif
+
+#include <KoIcon.h>
 
 #include "KoResourceServerAdapter.h"
 #include "KoResourceItemView.h"
@@ -88,8 +89,10 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->view->setModel(d->model);
     d->view->setItemDelegate( new KoResourceItemDelegate( this ) );
     d->view->setSelectionMode( QAbstractItemView::SingleSelection );
-    connect( d->view, SIGNAL(clicked( const QModelIndex & ) ),
+    connect(d->view, SIGNAL(clicked( const QModelIndex & ) ),
              this, SLOT(activated ( const QModelIndex & ) ) );
+    connect(d->view, SIGNAL(currentResourceChanged( const QModelIndex &)),
+            this, SLOT(activated(const QModelIndex &)));
 
     d->previewScroller = new QScrollArea(this);
     d->previewScroller->setWidgetResizable(true);
@@ -122,21 +125,21 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     QGridLayout* buttonLayout = new QGridLayout;
 
     QPushButton *button = new QPushButton( this );
-    button->setIcon( SmallIcon("document-open") );
+    button->setIcon(koIcon("document-open"));
     button->setToolTip( i18n("Import Resource") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
     buttonLayout->addWidget( button, 0, 0 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("trash-empty") );
+    button->setIcon(koIcon("trash-empty"));
     button->setToolTip( i18n("Delete Resource") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
     buttonLayout->addWidget( button, 0, 1 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("download") );
+    button->setIcon(koIcon("download"));
     button->setToolTip( i18n("Download Resource") );
     button->setEnabled( true );
     button->hide();
@@ -144,7 +147,7 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     buttonLayout->addWidget( button, 0, 3 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon("go-up") );
+    button->setIcon(koIcon("go-up"));
     button->setToolTip( i18n("Share Resource") );
     button->setEnabled( false );
     button->hide();
@@ -164,8 +167,8 @@ KoResourceItemChooser::KoResourceItemChooser(KoAbstractResourceServerAdapter * r
     d->tagOpLineEdit->setEnabled( false );
     d->tagOpLineEdit->hide();
 
-    connect( d->tagOpLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagOpLineEditActivated(QString)));
-    connect( d->tagOpLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagOpLineEditTextChanged(QString)));
+    connect(d->tagOpLineEdit, SIGNAL(returnPressed(QString)), this, SLOT(tagOpLineEditActivated(QString)));
+    connect(d->tagOpLineEdit, SIGNAL(textChanged(QString)), this, SLOT(tagOpLineEditTextChanged(QString)));
 
     layout->addWidget( d->tagOpLineEdit );
     layout->addLayout( buttonLayout );
@@ -412,8 +415,8 @@ void KoResourceItemChooser::updatePreview(KoResource *resource)
 
     QImage image = resource->image();
     if (d->tiledPreview) {
-        int width = qMax(d->previewScroller->width() * 4, image.width() * 4);
-        int height = qMax(d->previewScroller->height() * 4, image.height() * 4);
+        int width = d->previewScroller->width() * 4;
+        int height = d->previewScroller->height() * 4;
         QImage img(width, height, image.format());
         QPainter gc(&img);
         gc.fillRect(img.rect(), Qt::white);
@@ -558,6 +561,11 @@ QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
         return autoCompletionTagsList;
     }
     return tagNamesList;
+}
+
+KoResourceItemView *KoResourceItemChooser::itemView()
+{
+    return d->view;
 }
 
 QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)

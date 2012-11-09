@@ -37,6 +37,7 @@ class KoShape;
 class KoStyleManager;
 class KoChangeTracker;
 class QTextLayout;
+class KoTextRangeManager;
 class KoInlineTextObjectManager;
 class KoViewConverter;
 class KoImageCollection;
@@ -97,12 +98,19 @@ public:
 
     /// return the currently set manager, or 0 if none is set.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
+    void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
+
+    /// return the currently set manager, or 0 if none is set.
+    KoTextRangeManager *textRangeManager() const;
+    void setTextRangeManager(KoTextRangeManager *manager);
 
     /// return the currently set changeTracker, or 0 if none is set.
     KoChangeTracker *changeTracker() const;
+    void setChangeTracker(KoChangeTracker *tracker);
 
     /// return the currently set styleManager, or 0 if none is set.
     KoStyleManager *styleManager() const;
+    void setStyleManager(KoStyleManager *manager);
 
     /// Returns the bounding rectangle of block.
     QRectF blockBoundingRect(const QTextBlock & block) const;

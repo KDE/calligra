@@ -19,7 +19,7 @@
 
 #include "icalendarexport.h"
 
-#include <kptpart.h>
+#include <kptmaindocument.h>
 #include <kpttask.h>
 #include <kptnode.h>
 #include <kptresource.h>
@@ -72,8 +72,8 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
         return KoFilter::UsageError;
     }
     kDebug(planDbg())<<"online:"<<m_chain->inputDocument();
-    Part *part = dynamic_cast<Part*>( m_chain->inputDocument() );
-    if (part == 0) {
+    MainDocument *doc = dynamic_cast<MainDocument*>( m_chain->inputDocument() );
+    if (doc == 0) {
         kError() << "Cannot open Plan document";
         return KoFilter::InternalError;
     }
@@ -87,7 +87,7 @@ KoFilter::ConversionStatus ICalendarExport::convert(const QByteArray& from, cons
         return KoFilter::StorageCreationError;
     }
 
-    KoFilter::ConversionStatus status = convert(part->getProject(), file);
+    KoFilter::ConversionStatus status = convert(doc->getProject(), file);
     file.close();
     //kDebug(planDbg()) << "Finished with status:"<<status;
     return status;

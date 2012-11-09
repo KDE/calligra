@@ -19,6 +19,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_display_filter.cpp
     canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp
@@ -67,7 +68,7 @@ set(kritaui_LIB_SRCS
     kis_custom_palette.cc
     kis_custom_pattern.cc
     kis_doc2.cc
-    kis_exposure_visitor.cc
+    kis_part2.cpp
     kis_factory2.cc
     kis_filter_handler.cc
     kis_filter_manager.cc
@@ -99,7 +100,6 @@ set(kritaui_LIB_SRCS
     kis_statusbar.cc
     kis_view2.cpp
     kis_zoom_manager.cc
-    thememanager.cpp
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_mirror_visitor.cpp
@@ -208,7 +208,6 @@ if(HAVE_OPENGL)
             opengl/kis_opengl_fragment_shader.cpp
             opengl/kis_opengl_vertex_shader.cpp
             opengl/kis_opengl_program.cpp
-            opengl/kis_opengl_hdr_exposure_program.cpp
             opengl/kis_opengl_gradient_program.cpp
             )
     endif(HAVE_GLEW)
@@ -320,7 +319,6 @@ install( FILES
 #    kis_tool_dummy.h
 #    kis_tool_manager.h
 #    kis_tool_types.h
-#    kis_view2.h
 #    KoInputDevice.h
 #    canvas/kis_perspective_grid_manager.h
    DESTINATION ${INCLUDE_INSTALL_DIR})

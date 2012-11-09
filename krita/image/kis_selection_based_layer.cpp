@@ -47,9 +47,12 @@ public:
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         const QString &name,
-        KisSelectionSP selection)
+        KisSelectionSP selection,
+        KisFilterConfiguration *filterConfig,
+        bool useGeneratorRegistry)
         : KisLayer(image.data(), name, OPACITY_OPAQUE_U8),
-        m_d(new Private())
+          KisNodeFilterInterface(filterConfig, useGeneratorRegistry),
+          m_d(new Private())
 {
     if (!selection)
         initSelection();
@@ -233,7 +236,6 @@ void KisSelectionBasedLayer::setY(qint32 y)
 
 void KisSelectionBasedLayer::setDirty(const QRect & rect)
 {
-    KisIndirectPaintingSupport::setDirty(rect);
     KisLayer::setDirty(rect);
 }
 
@@ -266,7 +268,7 @@ QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h)
     KisPaintDeviceSP originalDevice = original();
 
     return originalDevice && originalSelection ?
-           originalDevice->createThumbnail(w, h, originalSelection) :
+           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) :
            QImage();
 }
 

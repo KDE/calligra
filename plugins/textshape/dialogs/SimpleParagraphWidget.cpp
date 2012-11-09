@@ -34,6 +34,7 @@
 #include <KoTextBlockData.h>
 #include <KoParagraphStyle.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <KoTextDocumentLayout.h>
 #include <KoZoomHandler.h>
 #include <KoStyleManager.h>
@@ -120,7 +121,8 @@ void SimpleParagraphWidget::fillListButtons()
     zoomHandler.setDpi(72, 72);
 
     KoInlineTextObjectManager itom;
-    TextShape textShape(&itom);
+    KoTextRangeManager tlm;
+    TextShape textShape(&itom, &tlm);
     textShape.setSize(QSizeF(300, 100));
     QTextCursor cursor (textShape.textShapeData()->document());
     foreach(Lists::ListStyleItem item, Lists::genericListStyleItems()) {
@@ -164,9 +166,7 @@ void SimpleParagraphWidget::fillListButtons()
     widget.bulletListButton->addSeparator();
 
     KAction *action = new KAction(i18n("Change List Level"),this);
-
-    //TODO: Uncomment the below line when the string freeze is over
-    //action->setToolTip(i18n("Change the level the list is at"));
+    action->setToolTip(i18n("Change the level the list is at"));
 
     QMenu *listLevelMenu = new QMenu();
     const int levelIndent = 13;

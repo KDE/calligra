@@ -157,7 +157,7 @@ protected:
     GanttPrintingOptionsWidget *m_options;
 };
 
-class GanttTreeView : public TreeViewBase
+class KPLATOUI_EXPORT GanttTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
@@ -165,7 +165,7 @@ public:
 
 };
 
-class GanttViewBase : public KDGantt::View
+class KPLATOUI_EXPORT GanttViewBase : public KDGantt::View
 {
     Q_OBJECT
 public:
@@ -174,8 +174,8 @@ public:
     GanttTreeView *treeView() const;
     GanttPrintingOptions printingOptions() const { return m_printOptions; }
 
-    bool loadContext( const KoXmlElement &settings );
-    void saveContext( QDomElement &settings ) const;
+    virtual bool loadContext( const KoXmlElement &settings );
+    virtual void saveContext( QDomElement &settings ) const;
 
 public slots:
     void setPrintingOptions( const GanttPrintingOptions &opt ) { m_printOptions = opt; }
@@ -238,7 +238,7 @@ class KPLATOUI_EXPORT GanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    GanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    GanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
 
     //~GanttView();
 
@@ -335,7 +335,7 @@ class KPLATOUI_EXPORT MilestoneGanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    MilestoneGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    MilestoneGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
 
     virtual void setZoom( double zoom );
     void show();
@@ -401,7 +401,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsGanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
+    ResourceAppointmentsGanttView(KoPart *part, KoDocument *doc, QWidget *parent, bool readWrite = true);
     ~ResourceAppointmentsGanttView();
 
     virtual void setZoom( double zoom );

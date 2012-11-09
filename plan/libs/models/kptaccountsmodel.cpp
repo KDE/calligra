@@ -31,13 +31,14 @@
 #include "kptschedule.h"
 #include "kptdebug.h"
 
+#include <KoIcon.h>
+
 #include <QList>
 #include <QObject>
 
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <KIcon>
 
 
 namespace KPlato
@@ -98,7 +99,7 @@ QVariant AccountModel::name( const Account *a, int role ) const
              return  m_project && m_project->isBaselined() ? QVariant() : Qt::Unchecked;
          case Qt::DecorationRole:
              if ( a->isBaselined() ) {
-                return KIcon( "view-time-schedule-baselined" );
+                return koIcon("view-time-schedule-baselined");
              }
              break;
     }

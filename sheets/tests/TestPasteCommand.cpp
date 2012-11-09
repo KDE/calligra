@@ -20,6 +20,8 @@
 
 #include <qtest_kde.h>
 
+#include <KoPart.h>
+
 #include "part/CanvasItem.h"
 #include "part/Doc.h"
 #include "Map.h"
@@ -31,7 +33,7 @@ using namespace Calligra::Sheets;
 
 void PasteCommandTest::testKSpreadSnippet()
 {
-    Doc doc;
+    Doc doc(new MockPart);
     Map *map = doc.map();
     Sheet* sheet = new Sheet(map, "Sheet1");
     map->addSheet(sheet);

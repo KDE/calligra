@@ -87,10 +87,6 @@ public:
         return m_profile;
     }
 
-    virtual KoColorProfile* profile() {
-        return m_profile;
-    }
-
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const {
         warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
@@ -128,7 +124,7 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
-            convertPixelsTo(src, dst, dstCs, nPixels);
+            convertPixelsTo(src, dst, dstCs, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         }
     }
 
@@ -137,7 +133,7 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->lab16();
-            srcCs->convertPixelsTo(src, dst, this, nPixels);
+            srcCs->convertPixelsTo(src, dst, this, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         }
     }
 
@@ -146,7 +142,7 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->rgb16();
-            convertPixelsTo(src, dst, dstCs, nPixels);
+            convertPixelsTo(src, dst, dstCs, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         }
     }
 
@@ -155,15 +151,18 @@ public:
             memcpy(dst, src, nPixels * 2);
         } else {
             const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb16();
-            srcCs->convertPixelsTo(src, dst, this, nPixels);
+            srcCs->convertPixelsTo(src, dst, this, nPixels, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         }
     }
 
     virtual bool convertPixelsTo(const quint8 *src,
                                  quint8 *dst, const KoColorSpace * dstColorSpace,
                                  quint32 numPixels,
-                                 KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const {
+                                 KoColorConversionTransformation::Intent renderingIntent,
+                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const
+    {
         Q_UNUSED(renderingIntent);
+        Q_UNUSED(conversionFlags);
 
         QColor c;
         quint32 srcPixelsize = this->pixelSize();

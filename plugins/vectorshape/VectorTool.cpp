@@ -25,11 +25,11 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <KLocale>
-#include <KIconLoader>
 #include <KUrl>
 #include <KFileDialog>
 #include <KIO/Job>
 
+#include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoImageCollection.h>
 #include <KoSelection.h>
@@ -72,7 +72,7 @@ QWidget * VectorTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton(optionWidget);
-    button->setIcon(SmallIcon("document-open"));
+    button->setIcon(koIcon("document-open"));
     button->setToolTip(i18n("Open Vector Image (EMF/WMF/SVM)"));
     layout->addWidget(button, 0, 0);
     connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
@@ -84,7 +84,7 @@ void VectorTool::changeUrlPressed()
 {
     if (m_shape == 0)
         return;
-    const KUrl url = KFileDialog::getOpenUrl(KUrl(), QLatin1String("image/x-emf image/x-wmf"));
+    const KUrl url = KFileDialog::getOpenUrl(KUrl(), QLatin1String("image/x-emf image/x-wmf image/x-svm"));
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);

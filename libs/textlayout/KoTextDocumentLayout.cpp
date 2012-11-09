@@ -67,6 +67,7 @@ public:
        : styleManager(0)
        , changeTracker(0)
        , inlineTextObjectManager(0)
+       , textRangeManager(0)
        , provider(0)
        , layoutPosition(0)
        , anchoringRootArea(0)
@@ -92,6 +93,7 @@ public:
     KoChangeTracker *changeTracker;
 
     KoInlineTextObjectManager *inlineTextObjectManager;
+    KoTextRangeManager *textRangeManager;
     KoTextLayoutRootAreaProvider *provider;
     KoPostscriptPaintDevice *paintDevice;
     QList<KoTextLayoutRootArea *> rootAreaList;
@@ -140,6 +142,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
     d->styleManager = KoTextDocument(document()).styleManager();
     d->changeTracker = KoTextDocument(document()).changeTracker();
     d->inlineTextObjectManager = KoTextDocument(document()).inlineTextObjectManager();
+    d->textRangeManager = KoTextDocument(document()).textRangeManager();
 
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 
@@ -184,14 +187,39 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
     return d->inlineTextObjectManager;
 }
 
+void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
+{
+    d->inlineTextObjectManager = manager;
+}
+
+KoTextRangeManager *KoTextDocumentLayout::textRangeManager() const
+{
+    return d->textRangeManager;
+}
+
+void KoTextDocumentLayout::setTextRangeManager(KoTextRangeManager *manager)
+{
+    d->textRangeManager = manager;
+}
+
 KoChangeTracker *KoTextDocumentLayout::changeTracker() const
 {
     return d->changeTracker;
 }
 
+void KoTextDocumentLayout::setChangeTracker(KoChangeTracker *tracker)
+{
+    d->changeTracker = tracker;
+}
+
 KoStyleManager *KoTextDocumentLayout::styleManager() const
 {
     return d->styleManager;
+}
+
+void KoTextDocumentLayout::setStyleManager(KoStyleManager *manager)
+{
+    d->styleManager = manager;
 }
 
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const

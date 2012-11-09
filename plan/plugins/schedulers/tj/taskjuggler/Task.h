@@ -566,7 +566,7 @@ private:
      * from one end the other in a continuous way. No timeslot may be
      * scheduled twice. This variable stores information about the last
      * allocation, so we can make sure the next slot is exactly adjacent
-     * the the previous one. */
+     * the previous one. */
     time_t lastSlot;
 
     /// This variable is set to true when the task has been scheduled.

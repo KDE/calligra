@@ -28,7 +28,7 @@
 #include <QStack>
 
 class KoShape;
-class KoTextBlockData;
+class QTextBlockUserData;
 class KPrAnimationCache;
 
 class Token
@@ -195,7 +195,7 @@ public:
         Formula
     };
 
-    KPrFormulaParser(QString formula, KoShape *shape, KoTextBlockData *textBlockData, ParseType type);
+    KPrFormulaParser(QString formula, KoShape *shape, QTextBlockUserData *textBlockUserData, ParseType type);
     QString formula() const;
     qreal eval(KPrAnimationCache *cache, const qreal time = -1) const;
     bool valid() const;
@@ -208,7 +208,7 @@ protected:
     qreal formulaToValue(QString identifier, qreal arg1) const;
 private:
     KoShape *m_shape;
-    KoTextBlockData *m_textBlockData;
+    QTextBlockUserData *m_textBlockData;
     QString m_formula;
     bool m_fcompiled;
     mutable bool m_fvalid;

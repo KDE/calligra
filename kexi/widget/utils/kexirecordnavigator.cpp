@@ -32,7 +32,6 @@
 #include <QStyleOptionFrameV2>
 
 #include <KLocale>
-#include <KIconLoader>
 #include <KLineEdit>
 #include <KGuiItem>
 #include <KDebug>

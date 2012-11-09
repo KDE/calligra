@@ -19,6 +19,8 @@
 
 #ifndef STATISTICSPREFERENCESPOPUP_H
 #define STATISTICSPREFERENCESPOPUP_H
+
+#include "ui_StatisticsPreferencesPopup.h"
 #include <QWidget>
 #include<QToolButton>
 #include<QMenu>
@@ -36,6 +38,7 @@ class StatisticsPreferencesPopup : public QMenu
 public:
     StatisticsPreferencesPopup(QWidget *parent = 0);
     virtual QSize sizeHint() const;
+    Ui::StatisticsPreferencesPopup *w;
 
 signals:
     void wordsDisplayChange(int);

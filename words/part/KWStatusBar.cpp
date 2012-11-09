@@ -215,9 +215,9 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     m_statusLabel = new KSqueezedTextLabel(m_statusbar);
     m_statusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusbar->addWidget(m_statusLabel, 1);
-    connect(m_statusbar, SIGNAL(messageChanged(const QString&)), this, SLOT(setText(const QString&)));
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString&)),
-            this, SLOT(setText(const QString&)));
+    connect(m_statusbar, SIGNAL(messageChanged(QString)), this, SLOT(setText(QString)));
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
+            this, SLOT(setText(QString)));
 
     m_zoomAction = new KAction(i18n("Zoom Controller"), this);
     m_zoomAction->setObjectName("zoom_controller");
@@ -363,8 +363,8 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
         return; // ignore tool changes in other mainWindows
 
     if (m_controller) {
-        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)),
-                this, SLOT(updateMousePosition(const QPoint&)));
+        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(QPoint)),
+                this, SLOT(updateMousePosition(QPoint)));
     }
     m_controller = canvasController->proxyObject;
     if (canvasController) {
@@ -380,8 +380,8 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
         if (view) {
             setCurrentView(view);
         }
-        connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this,
-                SLOT(updateMousePosition(const QPoint&)));
+        connect(m_controller, SIGNAL(canvasMousePositionChanged(QPoint)), this,
+                SLOT(updateMousePosition(QPoint)));
     } else {
         m_mousePosLabel->setText(QString());
     }

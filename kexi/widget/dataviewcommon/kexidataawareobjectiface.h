@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -32,8 +32,8 @@
 #include <QList>
 
 #include <kdebug.h>
-#include <widget/utils/kexiarrowtip.h>
 #include <core/kexisearchandreplaceiface.h>
+#include <kexiutils/KexiContextMessage.h>
 #include "kexitableviewdata.h"
 
 class QObject;
@@ -758,6 +758,9 @@ protected:
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
+    /*! @return height of horizontal header, if there is any. By default returns 0. */
+    virtual int horizontalHeaderHeight() const;
+
     /*! Changes 'row editing' flag, true if currently selected row is edited.
      * Can be reimplemented with calling superclass setRowEditing()
      * Sends rowEditStarted(int) signal.
@@ -779,6 +782,21 @@ protected:
      \return code of button clicked: KMessageBox::Ok in case of "sorry" or "detailedSorry" messages
      and KMessageBox::Yes or KMessageBox::No in case of "queryYesNo" message. */
     int showErrorMessageForResult(const KexiDB::ResultInfo& resultInfo);
+
+    /*! Shows context message @a message for editor @a item. */
+    void showEditorContextMessage(
+            KexiDataItemInterface *item,
+            const QString &message,
+            KMessageWidget::MessageType type,
+            KMessageWidget::CalloutPointerDirection direction);
+
+    /*! Shows context message about exceeded length for editor @a item.
+     If @a exceeded is true, a new message is created, else the message will be removed. */
+    void showLengthExceededMessage(KexiDataItemInterface *item, bool exceeded);
+
+    /*! Updates message about exceeded length for editor @a item.
+     Useful only where message created with showLengthExceededMessage() is displayed. */
+    void showUpdateForLengthExceededMessage(KexiDataItemInterface *item);
 
     /*! Prepares array of indices of visible values to search within.
      This is per-interface global cache.
@@ -923,7 +941,7 @@ protected:
     int m_rowWillBeDeleted;
 
     /*! Displays passive error popup label used when invalid data has been entered. */
-    QPointer<KexiArrowTip> m_errorMessagePopup;
+    QPointer<KexiContextMessageWidget> m_errorMessagePopup;
 
     /*! Used to enable/disable execution of vScrollBarValueChanged()
      when users navigate through rows using keyboard, so vscrollbar tooltips are not visible. */
@@ -963,6 +981,8 @@ protected:
 private:
     /*! true if currently selected row is edited */
     bool m_rowEditing;
+
+    bool m_lengthExceededMessageVisible;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const

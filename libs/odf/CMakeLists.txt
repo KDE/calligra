@@ -35,6 +35,7 @@ set(koodf_LIB_SRCS
     KoShadowStyle.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp
+    KoColumns.cpp
     KoStore.cpp
     KoTarStore.cpp
     KoDirectoryStore.cpp
@@ -119,5 +120,6 @@ install( FILES
     KoProperties.h
     KoUnit.h
     KoElementReference.h
+    KoTableTemplate.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

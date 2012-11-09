@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -281,6 +281,12 @@ protected:
      This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
+
+    /*! Implementation for KexiFormDataProvider. */
+    virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
+
+    /*! Implementation for KexiFormDataProvider. */
+    virtual void updateLengthExceededMessage(KexiDataItemInterface *item);
 
     //! Implementation for KexiDataAwareObjectInterface
     //! Called by KexiDataAwareObjectInterface::setCursorPosition()

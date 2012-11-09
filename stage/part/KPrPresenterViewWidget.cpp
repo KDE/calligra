@@ -25,7 +25,6 @@
 
 #include <KDebug>
 #include <KLocale>
-#include <KIcon>
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>

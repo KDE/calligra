@@ -1,5 +1,7 @@
 add_subdirectory( tests )
 
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
+
 if (KdepimLibs_FOUND)
    include_directories(${KDEPIMLIBS_INCLUDE_DIR})
    add_definitions(-DKDEPIMLIBS_FOUND)
@@ -18,7 +20,7 @@ set(komain_LIB_SRCS
     KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
-    KoDocumentAdaptor.cpp
+    KoPartAdaptor.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
@@ -91,6 +93,10 @@ set(komain_LIB_SRCS
     KoFindOption.cpp
     KoFindOptionSet.cpp
     KoFindStyle.cpp
+
+    KoPart.cpp
+
+    thememanager.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -171,6 +177,11 @@ if( MARBLE_FOUND )
     target_link_libraries(komain ${MARBLE_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif( MARBLE_FOUND )
+if( KActivities_FOUND )
+    include_directories(${KACTIVITIES_INCLUDES})
+    target_link_libraries(komain ${KACTIVITIES_LIBRARY})
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
+endif( KActivities_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -220,6 +231,7 @@ install( FILES
     KoMainWindow.h
     KoModeBoxFactory.h
     KoServiceProvider.h
+    KoPart.h
     KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h

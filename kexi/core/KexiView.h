@@ -102,6 +102,8 @@ public:
 
     void addChildView(KexiView* childView);
 
+    void removeView(Kexi::ViewMode mode);
+
     /*! True if contents (data) of the view is dirty and need to be saved
      This may or not be used, depending if changes in the window
      are saved immediately (e.g. like in datatableview) or saved by hand (by user)
@@ -154,6 +156,11 @@ public:
      If there's no such action, global shared action is enabled or disabled (if exists). */
     virtual void setAvailable(const QString& action_name, bool set);
 
+    enum StoreNewDataOption {
+        OverwriteExistingObject = 1 //!< Overwerite existing object in storeNewData()
+    };
+    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
+
 public slots:
     virtual void setFocus();
 
@@ -161,6 +168,10 @@ public slots:
      (returned by propertySet()) is switched to other,
      so property editor contents need to be completely replaced. */
     virtual void propertySetSwitched();
+
+    /*! Saves settings for the view. Default implementation does nothing and returns true.
+      Implement this if there are settings to save. */
+    virtual bool saveSettings();
 
     /*! Sets dirty flag on or off. It the flag changes,
      dirty(bool) signal is emitted by the parent window (KexiWindow),
@@ -232,7 +243,9 @@ protected:
        just a schem adata. You should use such subclasses if needed.
      Should return newly created schema data object on success.
      In this case, do not store schema object yourself (make deep copy if needed). */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
      indexed with optional \a dataID, from the database backend.
@@ -367,5 +380,7 @@ private:
     Private * const d;
     friend class KexiWindow;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiView::StoreNewDataOptions)
 
 #endif

@@ -24,18 +24,11 @@
 #include "reports/reportview.h"
 #include <kptdebug.h>
 
-#include <kiconloader.h>
 #include <klocale.h>
 
 
 namespace KPlato
 {
-
-// little helper stolen from kmail/words
-static inline QPixmap loadIcon( const char * name ) {
-  return KIconLoader::global()->loadIcon( QString::fromLatin1(name), KIconLoader::NoGroup, KIconLoader::SizeMedium );
-}
-
 
 ViewListDialog::ViewListDialog( View *view, ViewListWidget &viewlist, QWidget *parent )
     : KDialog(parent)

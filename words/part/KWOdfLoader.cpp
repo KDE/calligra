@@ -46,6 +46,8 @@
 #include <KoProgressUpdater.h>
 #include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoApplication.h>
+
 #ifdef SHOULD_BUILD_RDF
 #include <KoDocumentRdf.h>
 #endif
@@ -107,9 +109,17 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         return false;
     }
 
+    // Load attributes from the office:text.  These are text:global and text:use-soft-page-breaks.
+    QString textGlobal = body.attributeNS(KoXmlNS::text, "global");
+    bool isTextGlobal = (textGlobal == "true");
+    if (isTextGlobal) {
+        m_document->setIsMasterDocument(true);
+    }
+    // FIXME: text:use-soft-page-breaks
+
     if (updater) updater->setProgress(20);
 
-    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
+    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), KGlobal::mainComponent());
     KoShapeLoadingContext sc(odfContext, m_document->resourceManager());
     sc.setDocumentRdf(m_document->documentRdf());
 

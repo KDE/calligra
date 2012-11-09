@@ -26,11 +26,11 @@
 #include <QMetaObject>
 
 #include <kpushbutton.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include "kexitableview.h"
 #include "kexitableviewdata.h"
 
@@ -94,11 +94,11 @@ ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
 
     //// Setup the icon toolbar /////////////////
     QVBoxLayout *vlayout = new QVBoxLayout(layout);
-    m_addButton = new KPushButton(KIcon("document-new"), i18n("&New Connection"), frame);
+    m_addButton = new KPushButton(koIcon("document-new"), i18n("&New Connection"), frame);
     vlayout->addWidget(m_addButton);
     connect(m_addButton, SIGNAL(clicked()), this, SLOT(newItem()));
 
-    m_removeButton = new KPushButton(KIcon("edit-delete"), i18n("&Remove Connection"), frame);
+    m_removeButton = new KPushButton(koIcon("edit-delete"), i18n("&Remove Connection"), frame);
     vlayout->addWidget(m_removeButton);
     connect(m_removeButton, SIGNAL(clicked()), this, SLOT(removeItem()));
 
@@ -224,7 +224,7 @@ ConnectionDialog::updateTableData()
 void
 ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
 {
-    m_pixmapLabel->setPixmap(DesktopIcon("dialog-ok"));
+    m_pixmapLabel->setPixmap(koDesktopIcon("dialog-ok"));
     m_textLabel->setText(i18n("<qt><h2>The connection is OK.</h2></qt>"));
 
     if (!record)
@@ -243,7 +243,7 @@ ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
 void
 ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
 {
-    m_pixmapLabel->setPixmap(DesktopIcon("dialog-cancel"));
+    m_pixmapLabel->setPixmap(koDesktopIcon("dialog-cancel"));
     m_textLabel->setText(i18n("<qt><h2>The connection is invalid.</h2></qt>") + msg);
 
     if (!record)

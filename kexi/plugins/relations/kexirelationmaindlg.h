@@ -36,7 +36,7 @@ public:
 
     virtual QWidget* mainWidget();
 
-    virtual QString itemIcon();
+    virtual QString itemIconName();
 
 private:
     KexiRelationsView *m_rel;

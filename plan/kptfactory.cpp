@@ -18,6 +18,7 @@
 */
 
 #include "kptfactory.h"
+#include "kptmaindocument.h"
 #include "kptpart.h"
 #include "kptaboutdata.h"
 #include <kcomponentdata.h>
@@ -53,6 +54,8 @@ QObject* Factory::create( const char* /*iface*/, QWidget* /*parentWidget*/, QObj
     Q_UNUSED( keyword );
 
     Part *part = new Part(parent);
+    MainDocument *doc = new MainDocument(part);
+    part->setDocument(doc);
 
     return part;
 }
@@ -77,7 +80,6 @@ const KComponentData &Factory::global()
 
         // Tell the iconloader about share/apps/calligra/icons
         KIconLoader::global()->addAppDir("calligra");
-        
     }
     return *s_global;
 }

@@ -981,7 +981,7 @@ void ChartExport::addDataThemeToStyle( KoGenStyle& style, int dataNumber, int ma
             if ( rounds > 1 )
                 seriesColor = tintColor( seriesColor, tintFactor );
         }
-    } else if ( std::find( patternFourIndexes, patternFourIndexes + 5, chart()->m_style ) != patternFourIndexes + 5 ) {
+    } else if ( std::find( patternFourIndexes, patternFourIndexes + 1, chart()->m_style ) != patternFourIndexes + 1 ) {
         const QString themeColorString = QString::fromLatin1( "dk1" );
         MSOOXML::DrawingMLColorSchemeItemBase *colorSchemeItem = colorScheme.value( themeColorString );
         if ( colorSchemeItem ) {

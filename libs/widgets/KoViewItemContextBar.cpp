@@ -23,10 +23,10 @@
 
 //Calligra headers
 #include "KoContextBarButton.h"
+#include <KoIcon.h>
 
 //KDE headers
 #include <KGlobalSettings>
-#include <KIconLoader>
 #include <klocale.h>
 
 //Qt Headers
@@ -38,12 +38,14 @@
 
 /** Space between the item outer rect and the context bar */
 const int CONTEXTBAR_MARGIN = 4;
+const int MIN_BUTTON_WIDTH = 24;
 
 KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     : QObject(parent)
     , m_view(parent)
     , m_enabled(true)
     , m_appliedPointingHandCursor(false)
+    , m_showToggleButton(true)
 {
     connect(parent, SIGNAL(entered(const QModelIndex&)),
             this, SLOT(slotEntered(const QModelIndex&)));
@@ -150,12 +152,17 @@ void KoViewItemContextBar::showContextBar(const QRect &rect)
     // Center bar in FullContextBar mode, left align in
     // SelectionOnlyContextBar mode
     const int posX = 0;
-    const int posY = CONTEXTBAR_MARGIN;
+    const int posY = CONTEXTBAR_MARGIN / 4;
     int numButtons = 0;
     m_ContextBar->move(rect.topLeft() + QPoint(posX, posY));
     //Hide buttons if item is too small
+    int width = m_ToggleSelectionButton->width();
+    if (!m_showToggleButton) {
+        m_ToggleSelectionButton->setVisible(false);
+        width = qMin(m_contextBarButtons.at(0)->width(), MIN_BUTTON_WIDTH);
+    }
     for (int i=m_contextBarButtons.size()-1; i>=0; --i) {
-        if ((rect.width() - 2*CONTEXTBAR_MARGIN) > ((i+1)*m_ToggleSelectionButton->width())) {
+        if ((rect.width() - 2 * CONTEXTBAR_MARGIN) > ((i + 1) * width)) {
             m_contextBarButtons.at(i)->setVisible(true);
             numButtons++;
             continue;
@@ -222,9 +229,11 @@ void KoViewItemContextBar::restoreCursor()
 
 void KoViewItemContextBar::updateToggleSelectionButton()
 {
-    m_ToggleSelectionButton->setIcon(SmallIcon(
-            m_view->selectionModel()->isSelected(m_IndexUnderCursor) ? "list-remove" : "list-add"));
-    m_ToggleSelectionButton->setToolTip( m_view->selectionModel()->isSelected(m_IndexUnderCursor) ? i18n("deselect item") : i18n("select item"));
+    const bool isHoveredIndexSelected = m_view->selectionModel()->isSelected(m_IndexUnderCursor);
+    const char *const iconName = (isHoveredIndexSelected ? koIconNameCStr("list-remove") : koIconNameCStr("list-add"));
+
+    m_ToggleSelectionButton->setIcon(KIcon(QLatin1String(iconName)));
+    m_ToggleSelectionButton->setToolTip(isHoveredIndexSelected ? i18n("deselect item") : i18n("select item"));
 }
 
 void KoViewItemContextBar::update()
@@ -255,6 +264,11 @@ QModelIndex KoViewItemContextBar::currentIndex()
 int KoViewItemContextBar::preferredWidth()
 {
     return ((m_contextBarButtons.count()+1)*m_ToggleSelectionButton->sizeHint().width() + 2*CONTEXTBAR_MARGIN);
+}
+
+void KoViewItemContextBar::setShowSelectionToggleButton(bool enabled)
+{
+    m_showToggleButton = enabled;
 }
 
 void KoViewItemContextBar::reset()
