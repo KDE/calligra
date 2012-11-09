@@ -118,6 +118,8 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     QFile f(uri.toLocalFile());
     f.open(QIODevice::WriteOnly);
 
+    // HEADER
+
     PSDHeader header;
     header.signature = "8BPS";
     header.version = 1;
@@ -136,6 +138,17 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         qDebug() << "Failed to write header. Error:" << header.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
+
+    // COLORMODE BlOCK
+
+    PSDColorModeBlock colorModeBlock(header.colormode);
+    // XXX: check for annotations that contain the duotone spec
+    qDebug() << "colormode block";
+    if (colorModeBlock.write(&f)) {
+        qDebug() << "Failed to write colormode block. Error:" << header.error;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+
 
 
     f.close();
