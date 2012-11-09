@@ -145,11 +145,18 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     // XXX: check for annotations that contain the duotone spec
     qDebug() << "colormode block";
     if (colorModeBlock.write(&f)) {
-        qDebug() << "Failed to write colormode block. Error:" << header.error;
+        qDebug() << "Failed to write colormode block. Error:" << colorModeBlock.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+    // IMAGE RESOURCES SECTION
+    PSDResourceSection resourceSection;
 
+    qDebug() << "resource section";
+    if (!resourceSection.write(&f)) {
+        qDebug() << "Failed to write resource section. Error:" << resourceSection.error;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
 
     f.close();
 
