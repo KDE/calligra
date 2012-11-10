@@ -79,7 +79,10 @@ bool PSDColorModeBlock::write(QIODevice* io)
     else if (duotoneSpecification.size() > 0 && colormode == DuoTone) {
         quint32 blocksize = duotoneSpecification.size();
         psdwrite(io, blocksize);
-        return (io->write(duotoneSpecification.constData(), blocksize) == blocksize);
+        if (io->write(duotoneSpecification.constData(), blocksize) != blocksize) {
+            error = "Failed to write duotone specification";
+            return false;
+        }
     }
     else {
         quint32 i = 0;

@@ -27,6 +27,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
+#include <KoUnit.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -144,13 +145,36 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     PSDColorModeBlock colorModeBlock(header.colormode);
     // XXX: check for annotations that contain the duotone spec
     qDebug() << "colormode block";
-    if (colorModeBlock.write(&f)) {
+    if (!colorModeBlock.write(&f)) {
         qDebug() << "Failed to write colormode block. Error:" << colorModeBlock.error;
         return KisImageBuilder_RESULT_FAILURE;
     }
 
     // IMAGE RESOURCES SECTION
     PSDResourceSection resourceSection;
+
+
+    // Add resolution block
+    {
+        RESN_INFO_1005 *resInfo = new RESN_INFO_1005;
+        resInfo->hRes = INCH_TO_POINT(m_image->xRes());
+        resInfo->vRes = INCH_TO_POINT(m_image->yRes());
+        PSDResourceBlock *block = new PSDResourceBlock;
+        block->resource = resInfo;
+        resourceSection.resources[PSDResourceSection::RESN_INFO] = block;
+    }
+
+    // Add icc block
+    {
+        ICC_PROFILE_1039 *profileInfo = new ICC_PROFILE_1039;
+        profileInfo->icc = m_image->profile()->rawData();
+        PSDResourceBlock *block = new PSDResourceBlock;
+        block->resource = profileInfo;
+        resourceSection.resources[PSDResourceSection::ICC_PROFILE] = block;
+
+    }
+
+    // Add other blocks...
 
     qDebug() << "resource section";
     if (!resourceSection.write(&f)) {
