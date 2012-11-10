@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <KLocale>
-#include <KDebug>
-
 #include "kexitextformatter.h"
+
 #include <widget/utils/kexidatetimeformatter.h>
 #include <db/utils.h>
+
+#include <KLocale>
 
 //! @internal
 class KexiTextFormatter::Private
@@ -79,13 +79,35 @@ void KexiTextFormatter::setField(KexiDB::Field* field)
     }
 }
 
-QString KexiTextFormatter::toString(const QVariant& value, const QString& add) const
+//! toString() implementation for Text type
+static QString toStringForTextType(const QVariant& value, const QString& add,
+                                   KexiDB::Field *field,
+                                   bool *lengthExceeded)
+{
+    const QString str(value.toString());
+    if (lengthExceeded) {
+        if (field && field->maxLength() > 0) {
+            *lengthExceeded = (str.length() + add.length()) > field->maxLength();
+        }
+        else {
+            *lengthExceeded = false;
+        }
+    }
+    return str + add;
+}
+
+QString KexiTextFormatter::toString(const QVariant& value, const QString& add,
+                                    bool *lengthExceeded) const
 {
     //cases, in order of expected frequency
-    if (!d->field || d->field->isTextType()) {
-        return value.toString() + add;
+    if (!d->field || d->field->type() == KexiDB::Field::Text) {
+        return toStringForTextType(value, add, d->field, lengthExceeded);
     }
-    else if (d->field->isIntegerType()) {
+
+    if (lengthExceeded) {
+        *lengthExceeded = false;
+    }
+    if (d->field->isIntegerType()) {
         if (value.toInt() == 0)
             return add; //eat 0
     }
@@ -125,7 +147,7 @@ QString KexiTextFormatter::toString(const QVariant& value, const QString& add) c
         break;
     }
     //default: text
-    return value.toString() + add;
+    return toStringForTextType(value, add, d->field, lengthExceeded);
 }
 
 QVariant KexiTextFormatter::fromString(const QString& text) const
@@ -232,4 +254,10 @@ QString KexiTextFormatter::inputMask() const
     }
 
     return QString();
+}
+
+bool KexiTextFormatter::lengthExceeded(const QString& text) const
+{
+    return d->field && d->field->type() == KexiDB::Field::Text && d->field->maxLength() > 0
+            && uint(text.length()) > d->field->maxLength();
 }

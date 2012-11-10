@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@ KexiDataItemInterface::KexiDataItemInterface()
         , m_hasFocusableWidget(true)
         , m_disable_signalValueChanged(false)
         , m_acceptEditorAfterDeleteContents(false)
+        , m_lengthExceededEmittedAtPreviousChange(false)
 {
 }
 
@@ -79,6 +80,35 @@ void KexiDataItemInterface::signalValueChanged()
     if (m_listener) {
         beforeSignalValueChanged();
         m_listener->valueChanged(this);
+    }
+}
+
+void KexiDataItemInterface::signalLengthExceeded(bool lengthExceeded)
+{
+    if (m_listener) {
+        m_listener->lengthExceeded(this, lengthExceeded);
+    }
+}
+
+void KexiDataItemInterface::signalUpdateLengthExceededMessage()
+{
+    if (m_listener) {
+        m_listener->updateLengthExceededMessage(this);
+    }
+}
+
+void KexiDataItemInterface::emitLengthExceededIfNeeded(bool lengthExceeded)
+{
+    if (lengthExceeded && !m_lengthExceededEmittedAtPreviousChange) {
+        m_lengthExceededEmittedAtPreviousChange = true;
+        signalLengthExceeded(true);
+    }
+    else if (!lengthExceeded && m_lengthExceededEmittedAtPreviousChange) {
+        m_lengthExceededEmittedAtPreviousChange = false;
+        signalLengthExceeded(false);
+    }
+    else if (lengthExceeded) {
+        signalUpdateLengthExceededMessage();
     }
 }
 
@@ -150,4 +180,9 @@ bool KexiDataItemInterface::isComboBox() const
 QWidget* KexiDataItemInterface::internalEditor() const
 {
     return 0;
+}
+
+bool KexiDataItemInterface::fixup()
+{
+    return true;
 }

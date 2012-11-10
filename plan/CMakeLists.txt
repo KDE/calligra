@@ -67,8 +67,8 @@ set(planprivate_LIB_SRCS
     kptcontext.cpp
 
     kptfactory.cpp
-    kptpartpart.cpp
     kptpart.cpp
+    kptmaindocument.cpp
     kptview.cpp
 #     KPtViewAdaptor.cpp
 

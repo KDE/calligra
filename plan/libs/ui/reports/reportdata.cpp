@@ -163,6 +163,11 @@ bool ReportData::close()
             }
         }
     }
+    ItemModelBase *basemodel = itemModel();
+    if ( basemodel ) {
+        basemodel->setScheduleManager( 0 );
+        basemodel->setProject( 0 );
+    }
     return true;
 }
 
@@ -303,12 +308,6 @@ KoReportData* ReportData::data(const QString &source)
 void ReportData::setModel( QAbstractItemModel *model )
 {
     m_model.setSourceModel( model );
-    ItemModelBase *m = itemModel();
-    if ( m ) {
-        m->setProject( m_project );
-        m->setScheduleManager( m_schedulemanager );
-    }
-    kDebug(planDbg())<<this<<model<<m<<m_project<<m_schedulemanager;
 }
 
 QAbstractItemModel *ReportData::model() const

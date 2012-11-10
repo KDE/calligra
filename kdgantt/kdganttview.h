@@ -76,6 +76,7 @@ namespace KDGantt {
         QAbstractProxyModel* ganttProxyModel();
 
         void print( QPainter* painter, const QRectF& target = QRectF(), const QRectF& source = QRectF(), bool drawRowLabels=true, bool drawHeader=true);
+        QRectF printRect( bool drawRowLabels=true, bool drawHeader=true);
 
     public Q_SLOTS:
         void setModel(QAbstractItemModel* model);

@@ -16,7 +16,7 @@ Name[uk]=Тексти OpenDocument (ODT)
 Name[x-test]=xxOpenDocument Textsxx
 
 X-KDE-ServiceTypes=ThumbCreator
-MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;
+MimeType=application/vnd.oasis.opendocument.text-master;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;
 
 X-KDE-Library=calligrathumbnail
 CacheThumbnail=true

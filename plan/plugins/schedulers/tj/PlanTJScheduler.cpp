@@ -539,14 +539,19 @@ TJ::Resource *PlanTJScheduler::addResource( KPlato::Resource *r)
             res->addShift( sl );
         }
     }
-    if ( m_project->startTime() < r->availableFrom() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( m_project->startTime(), r->availableFrom(), tjGranularity() ) ) );
+    if ( m_project->constraintStartTime() < r->availableFrom() ) {
+        res->addVacation( new TJ::Interval( toTJInterval( m_project->constraintStartTime(), r->availableFrom(), tjGranularity() ) ) );
     }
-    if ( m_project->endTime() > r->availableUntil() ) {
-        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->startTime(), tjGranularity() ) ) );
+    if ( r->availableUntil().isValid() && m_project->constraintEndTime() > r->availableUntil() ) {
+        res->addVacation( new TJ::Interval( toTJInterval( r->availableUntil(), m_project->constraintEndTime(), tjGranularity() ) ) );
     }
     m_resourcemap[res] = r;
-//     if ( locale() ) { logDebug( m_project, 0, "Added resource: " + r->name() ); }
+    logDebug( m_project, 0, "Added resource: " + r->name() );
+/*    QListIterator<TJ::Interval*> it = res->getVacationListIterator();
+    while ( it.hasNext() ) {
+        TJ::Interval *i = it.next();
+        logDebug( m_project, 0, "Vacation: " + TJ::time2ISO( i->getStart() ) + " - " + TJ::time2ISO( i->getEnd() ) );
+    }*/
     return res;
 }
 

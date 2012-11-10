@@ -119,8 +119,6 @@ include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
-set(IHAVEPATCHEDQT TRUE)
-
 set(SHOULD_BUILD_TEXTSHAPE TRUE)
 if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
     if (NOT IHAVEPATCHEDQT)
@@ -283,13 +281,15 @@ if( MARBLE_FOUND )
     ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
     ## with commit ea177ca. This is for compatibility with older versions.
     ##
-    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR})
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
     if( MARBLECONTROLBOX_H )
     file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
     string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
         if( SETMARBLEWIDGET )
             add_definitions(-DHAVE_SETMARBLEWIDGET)
         endif( SETMARBLEWIDGET)
+    else( MARBLECONTROLBOX_H )
+        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
     endif( MARBLECONTROLBOX_H )
 endif( MARBLE_FOUND )
 
@@ -402,6 +402,13 @@ endif(NOT KDECLARATIVE_FOUND)
 ##
 include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
+
+##
+## Test SharedMimeInfo
+##
+macro_optional_find_package(SharedMimeInfo)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
+
 
 ##
 ## Generate a file for prefix information
@@ -531,10 +538,10 @@ if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_SHEETS FALSE)
 endif(NOT EIGEN2_FOUND)
 
-### Krita: pigment, eigen2, exiv2
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+### Krita: pigment, eigen2, exiv2, sharedmimeinfo
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
 ### Active needs sheets, stage and words
 if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
