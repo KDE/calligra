@@ -99,6 +99,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.characterStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 
+    m_sortedStylesModel->setStylesModel(m_stylesModel);
 }
 
 SimpleCharacterWidget::~SimpleCharacterWidget()
@@ -109,13 +110,26 @@ SimpleCharacterWidget::~SimpleCharacterWidget()
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
 {
+    Q_ASSERT(sm);
+    if (!sm || m_styleManager == sm) {
+        return;
+    }
+    if (m_styleManager) {
+        disconnect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotParagraphStyleApplied(const KoCharacterStyle*)));
+    }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
     disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     m_sortedStylesModel->setStyleManager(sm);
     m_stylesModel->setStyleManager(sm);
-    m_sortedStylesModel->setStylesModel(m_stylesModel);
+//    m_sortedStylesModel->setStylesModel(m_stylesModel);
     connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    connect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotCharacterStyleApplied(const KoCharacterStyle*)));
+}
+
+void SimpleCharacterWidget::setInitialUsedStyles(QVector<int> list)
+{
+    m_sortedStylesModel->setInitialUsedStyles(list);
 }
 
 void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat)
@@ -228,7 +242,7 @@ void SimpleCharacterWidget::slotShowStyleManager(int index)
     emit doneWithFocus();
 }
 
-void SimpleCharacterWidget::slotCharacterStyleApplied(KoCharacterStyle *style)
+void SimpleCharacterWidget::slotCharacterStyleApplied(const KoCharacterStyle *style)
 {
     m_sortedStylesModel->styleApplied(style);
 }

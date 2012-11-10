@@ -32,22 +32,65 @@ DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
 
 void DockerStylesComboModel::setInitialUsedStyles(QVector<int> usedStyles)
 {
-    m_usedStyles << usedStyles;
-    beginResetModel();
-    createMapping();
-    endResetModel();
+//    m_usedStyles << usedStyles;
+//    beginResetModel();
+//    createMapping();
+//    endResetModel();
 }
 
 void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
 {
     Q_ASSERT(sm);
-    if(!sm) {
+    Q_ASSERT(m_sourceModel);
+    if(!sm || !m_sourceModel || m_styleManager == sm) {
         return;
     }
     m_styleManager = sm;
+    m_usedStyles.clear();
+    m_usedStylesId.clear();
+
+    if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
+        KoCharacterStyle *compareStyle;
+        foreach(int i, m_styleManager->usedCharacterStyles()) {
+            if (!m_usedStylesId.contains(i)) {
+                QVector<int>::iterator begin = m_usedStyles.begin();
+                compareStyle = m_styleManager->characterStyle(i);
+                for ( ; begin != m_usedStyles.end(); ++begin) {
+                    if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
+                        KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
+                        if (QString::localeAwareCompare(compareStyle->name(), s->name()) < 0) {
+                            break;
+                        }
+                    }
+                }
+                m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*compareStyle).row());
+                m_usedStylesId.append(i);
+            }
+        }
+    }
+    else {
+        KoParagraphStyle *compareStyle;
+        foreach(int i, m_styleManager->usedParagraphStyles()) {
+            if (!m_usedStylesId.contains(i)) {
+                QVector<int>::iterator begin = m_usedStyles.begin();
+                compareStyle = m_styleManager->paragraphStyle(i);
+                for ( ; begin != m_usedStyles.end(); ++begin) {
+                    if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
+                        KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
+                        if (QString::localeAwareCompare(compareStyle->name(), s->name()) < 0) {
+                            break;
+                        }
+                    }
+                }
+                m_usedStyles.insert(begin, m_sourceModel->indexForParagraphStyle(*compareStyle).row());
+                m_usedStylesId.append(i);
+            }
+        }
+    }
+    createMapping();
 }
 
-void DockerStylesComboModel::styleApplied(KoCharacterStyle *style)
+void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 {
     if (!m_usedStylesId.contains(style->styleId())) {
         m_usedStylesId.append(style->styleId());
@@ -71,7 +114,7 @@ void DockerStylesComboModel::styleApplied(KoCharacterStyle *style)
                     break;
                 }
             }
-            m_usedStyles.insert(begin, m_sourceModel->indexForParagraphStyle(*(dynamic_cast<KoParagraphStyle*>(style))).row());
+            m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*(style)).row());   // We use the ForCharacterStyle variant also for parag styles because the signal exist only in charStyle variant. TODO merge these functions in StylesModel. they use the styleId anyway.
         }
         //we do not reset the model here, as it will mess up the view's visibility. perhaps this is very wrong. to be considered in case we have bugs.
         createMapping();
@@ -81,7 +124,7 @@ void DockerStylesComboModel::styleApplied(KoCharacterStyle *style)
 void DockerStylesComboModel::createMapping()
 {
     Q_ASSERT(m_sourceModel);
-    Q_ASSERT(m_styleManager);
+//    Q_ASSERT(m_styleManager);
     if (!m_sourceModel || !m_styleManager) {
         return;
     }
@@ -104,20 +147,22 @@ void DockerStylesComboModel::createMapping()
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
         int id = (int)index.internalId();
         if (!m_usedStylesId.contains(id)) {
-            KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
-            if (paragStyle) {
-                if (m_unusedStyles.count()) {
-                    QVector<int>::iterator begin = m_unusedStyles.begin();
-                    for ( ; begin != m_unusedStyles.end(); ++begin) {
-                        KoParagraphStyle *style = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                        if (QString::localeAwareCompare(paragStyle->name(), style->name()) < 0) {
-                            break;
+            if (m_sourceModel->stylesType() == AbstractStylesModel::ParagraphStyle) {
+                KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
+                if (paragStyle) {
+                    if (m_unusedStyles.count()) {
+                        QVector<int>::iterator begin = m_unusedStyles.begin();
+                        for ( ; begin != m_unusedStyles.end(); ++begin) {
+                            KoParagraphStyle *style = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
+                            if (QString::localeAwareCompare(paragStyle->name(), style->name()) < 0) {
+                                break;
+                            }
                         }
+                        m_unusedStyles.insert(begin, i);
                     }
-                    m_unusedStyles.insert(begin, i);
-                }
-                else {
-                    m_unusedStyles.append(i);
+                    else {
+                        m_unusedStyles.append(i);
+                    }
                 }
             }
             else {
@@ -140,9 +185,13 @@ void DockerStylesComboModel::createMapping()
             }
         }
     }
+    kDebug() << "m_usedStyles: " << m_usedStyles;
+    kDebug() << "m_unusedStyles: " << m_unusedStyles;
     m_proxyToSource << m_usedStyles << m_unusedStyles;
+    kDebug() << "m_proxyToSource: " << m_proxyToSource;
     m_sourceToProxy.fill(-1, m_sourceModel->rowCount((QModelIndex())));
     for (int i = 0; i < m_proxyToSource.count(); ++i) {
         m_sourceToProxy[m_proxyToSource.at(i)] = i;
     }
+    kDebug() << "m_sourceToProxy: " << m_sourceToProxy;
 }

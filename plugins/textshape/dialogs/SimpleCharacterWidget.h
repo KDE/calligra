@@ -43,11 +43,13 @@ public:
     explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = 0);
     virtual ~SimpleCharacterWidget();
 
+    void setInitialUsedStyles(QVector<int> list);
+
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextCharFormat& format, const QTextCharFormat& refBlockCharFormat);
     void setCurrentBlockFormat(const QTextBlockFormat &format);
-    void slotCharacterStyleApplied(KoCharacterStyle *style);
+    void slotCharacterStyleApplied(const KoCharacterStyle *style);
 
 private slots:
     void fontFamilyActivated(int index);

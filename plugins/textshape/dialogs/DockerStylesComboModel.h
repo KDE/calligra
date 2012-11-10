@@ -39,7 +39,7 @@ public:
 signals:
 
 public slots:
-    void styleApplied(KoCharacterStyle *style);
+    void styleApplied(const KoCharacterStyle *style);
 
 protected:
     virtual void createMapping();

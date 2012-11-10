@@ -2076,8 +2076,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     if (m_textEditor.data()) {
-        connect(m_textEditor.data(), SIGNAL(paragraphStyleApplied(KoParagraphStyle*)), spw, SLOT(slotParagraphStyleApplied(KoParagraphStyle*)));
-        connect(m_textEditor.data(), SIGNAL(characterStyleApplied(KoCharacterStyle*)), scw, SLOT(slotCharacterStyleApplied(KoCharacterStyle*)));
+//        connect(m_textEditor.data(), SIGNAL(paragraphStyleApplied(KoParagraphStyle*)), spw, SLOT(slotParagraphStyleApplied(KoParagraphStyle*)));
+//        connect(m_textEditor.data(), SIGNAL(characterStyleApplied(KoCharacterStyle*)), scw, SLOT(slotCharacterStyleApplied(KoCharacterStyle*)));
         //initialise the char- and par- widgets with the current block and formats.
         scw->setCurrentBlockFormat(m_textEditor.data()->blockFormat());
         scw->setCurrentFormat(m_textEditor.data()->charFormat(), m_textEditor.data()-> blockCharFormat());
@@ -2086,6 +2086,46 @@ QList<QWidget *> TextTool::createOptionWidgets()
     }
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
+
+
+    if (m_textShapeData && KoTextDocument(m_textShapeData->document()).styleManager()) {
+        kDebug() << "init styles. doc's styleManager: " << KoTextDocument(m_textShapeData->document()).styleManager();
+        kDebug() << "initial char styles: " << (KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
+        kDebug() << "initial parag styles: " << (KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
+        scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
+        kDebug() << "will now set initial paraStyles";
+        spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
+    }
+
+
+/*
+        QVector<int> initialCharacterStyles;
+        QVector<int> initialParagraphStyles;
+        QTextBlock block = m_textShapeData->document()->begin();
+        while (block.isValid()) {
+            QTextBlock::iterator it;
+            for (it = block.begin(); !(it.atEnd()); ++it) {
+                QTextFragment currentFragment = it.fragment();
+                if (currentFragment.isValid()) {
+                    int styleId = currentFragment.charFormat().intProperty(KoCharacterStyle::StyleId);
+                    KoCharacterStyle *charStyle = KoTextDocument(m_textShapeData->document()).styleManager()->characterStyle(styleId);
+                    if ((charStyle->styleType() == KoCharacterStyle::CharacterStyle) && !initialCharacterStyles.contains(styleId)) {
+                        initialCharacterStyles.append(styleId);
+                    }
+                    else if ((charStyle->styleType() == KoCharacterStyle::ParagraphStyle) && !initialParagraphStyles.contains(styleId)) {
+                        initialParagraphStyles.append(styleId);
+                    }
+                }
+            }
+            block = block.next();
+        }
+        kDebug() << "populated initialStyles";
+        kDebug() << "initialChar: " << initialCharacterStyles;
+        kDebug() << "initialPar: " << initialParagraphStyles;
+        spw->setInitialUsedStyles(initialParagraphStyles);
+        scw->setInitialUsedStyles(initialCharacterStyles);
+    }
+    */
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));

@@ -456,7 +456,7 @@ public:
      * Apply this style to a blockFormat by copying all properties from this
      * style to the target char format.
      */
-    void applyStyle(QTextCharFormat &format) const;
+    void applyStyle(QTextCharFormat &format, bool emitSignal=true) const;
     /**
      * Apply this style to the textBlock by copying all properties from this
      * style to the target block formats.
@@ -515,6 +515,10 @@ public:
      */
     bool isEmpty() const;
 
+    /** Returns true if the style is in use.
+     */
+    bool isApplied();
+
     /**
      * Return the value of key as represented on this style.
      * You should consider using the direct accessors for individual properties instead.
@@ -535,6 +539,7 @@ public:
 
 signals:
     void nameChanged(const QString &newName);
+    void styleApplied(const KoCharacterStyle*) const;
 
 protected:
     /**

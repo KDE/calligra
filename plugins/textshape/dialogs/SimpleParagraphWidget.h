@@ -45,12 +45,14 @@ public:
     explicit SimpleParagraphWidget(TextTool *tool, QWidget *parent = 0);
     virtual ~SimpleParagraphWidget();
 
+    void setInitialUsedStyles(QVector<int> list);
+
 public slots:
     void setCurrentBlock(const QTextBlock &block);
     void setCurrentFormat(const QTextBlockFormat& format);
     void setStyleManager(KoStyleManager *sm);
     void slotShowStyleManager(int index);
-    void slotParagraphStyleApplied(KoParagraphStyle *style);
+    void slotParagraphStyleApplied(const KoParagraphStyle *style);
 
 signals:
     void doneWithFocus();

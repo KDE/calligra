@@ -108,6 +108,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
 
     connect(m_mapper, SIGNAL(mapped(int)), this, SLOT(changeListLevel(int)));
+
+    m_sortedStylesModel->setStylesModel(m_stylesModel);
 }
 
 SimpleParagraphWidget::~SimpleParagraphWidget()
@@ -275,6 +277,7 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
         }
         //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
         disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+        m_sortedStylesModel->styleApplied(style);
         widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexForParagraphStyle(*style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
         m_stylesModel->setCurrentParagraphStyle(id);
@@ -289,13 +292,22 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
     if (!sm || m_styleManager == sm) {
         return;
     }
+    if (m_styleManager) {
+        disconnect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
+    }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
     disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
-    m_sortedStylesModel->setStyleManager(sm);
     m_stylesModel->setStyleManager(sm);
-    m_sortedStylesModel->setStylesModel(m_stylesModel);
+    m_sortedStylesModel->setStyleManager(sm);
+//    m_sortedStylesModel->setStylesModel(m_stylesModel);
     connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    connect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
+}
+
+void SimpleParagraphWidget::setInitialUsedStyles(QVector<int> list)
+{
+    m_sortedStylesModel->setInitialUsedStyles(list);
 }
 
 void SimpleParagraphWidget::listStyleChanged(int id)
@@ -324,8 +336,11 @@ void SimpleParagraphWidget::slotShowStyleManager(int index)
     emit doneWithFocus();
 }
 
-void SimpleParagraphWidget::slotParagraphStyleApplied(KoParagraphStyle *style)
+void SimpleParagraphWidget::slotParagraphStyleApplied(const KoParagraphStyle *style)
 {
+    if (style) {
+        kDebug() << "style applied: " << style->name();
+    }
     m_sortedStylesModel->styleApplied(style);
 }
 

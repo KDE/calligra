@@ -722,8 +722,14 @@ public:
 
     void applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const;
 
+    /** Returns true if the style is in use.
+     */
+    bool isApplied();
+
+
 signals:
     void nameChanged(const QString &newName);
+    void styleApplied(const KoParagraphStyle*) const;
 
 private:
     /**

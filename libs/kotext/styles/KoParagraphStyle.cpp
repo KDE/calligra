@@ -61,7 +61,7 @@ static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 class KoParagraphStyle::Private
 {
 public:
-    Private() : parentStyle(0), defaultStyle(0), list(0) {}
+    Private() : parentStyle(0), defaultStyle(0), list(0), m_inUse(false) {}
 
     ~Private()
     {
@@ -91,6 +91,7 @@ public:
     KoParagraphStyle *defaultStyle;
     KoList *list;
     StylePrivate stylesPrivate;
+    bool m_inUse;
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
@@ -263,6 +264,8 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
        format.setProperty(OutlineLevel, defaultOutlineLevel());
     }
+    emit styleApplied(this);
+    d->m_inUse = true;
 }
 
 void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
@@ -278,6 +281,11 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     if (applyListStyle) {
         applyParagraphListStyle(block, format);
     }
+}
+
+bool KoParagraphStyle::isApplied()
+{
+    return d->m_inUse;
 }
 
 void KoParagraphStyle::applyParagraphListStyle(QTextBlock &block, const QTextBlockFormat &blockFormat) const

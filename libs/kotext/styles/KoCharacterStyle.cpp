@@ -154,10 +154,11 @@ public:
     StylePrivate stylesPrivate;
     KoCharacterStyle *parentStyle;
     KoCharacterStyle *defaultStyle;
+    bool m_inUse;
 };
 
 KoCharacterStyle::Private::Private()
- : parentStyle(0), defaultStyle(0)
+    : parentStyle(0), defaultStyle(0), m_inUse(false)
 {
     //set the minimal default properties
     hardCodedDefaultStyle.add(QTextFormat::FontFamily, QString("Sans Serif"));
@@ -428,7 +429,7 @@ void KoCharacterStyle::clearForeground()
     d->stylesPrivate.remove(QTextCharFormat::ForegroundBrush);
 }
 
-void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
+void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) const
 {
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
@@ -493,12 +494,17 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format) const
         kDebug(32500) << "clearProperty" << property;
         format.clearProperty(property);
     }
+    if (emitSignal) {
+        emit styleApplied(this);
+        d->m_inUse = true;
+    }
 }
 
 KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const
 {
     KoCharacterStyle *autoStyle = new KoCharacterStyle(format);
-    applyStyle(blockCharFormat);
+//    blockSignals(true);
+    applyStyle(blockCharFormat, false);
     ensureMinimalProperties(blockCharFormat);
     autoStyle->removeDuplicates(blockCharFormat);
     autoStyle->setParentStyle(const_cast<KoCharacterStyle*>(this));
@@ -510,6 +516,7 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     autoStyle->d->stylesPrivate.remove(QTextFormat::IsAnchor);
     autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorHref);
     autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorName);
+//    blockSignals(false);
     return autoStyle;
 }
 
@@ -602,6 +609,11 @@ void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const
         }
         ++it;
     }
+}
+
+bool KoCharacterStyle::isApplied()
+{
+    return d->m_inUse;
 }
 
 void KoCharacterStyle::unapplyStyle(QTextBlock &block) const

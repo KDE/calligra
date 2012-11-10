@@ -91,6 +91,9 @@ public:
     KoOdfBibliographyConfiguration *bibliographyConfiguration;
     KUndo2Stack *undoStack;
     ChangeStylesMacroCommand *changeCommand;
+
+    QVector<int> m_usedCharacterStyles;
+    QVector<int> m_usedParagraphStyles;
 };
 
 // static
@@ -341,8 +344,13 @@ void KoStyleManager::add(KoCharacterStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
+    if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber)) {
+        d->m_usedCharacterStyles.append(d->s_stylesNumber);
+    }
     d->charStyles.insert(d->s_stylesNumber++, style);
 
+//    connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SIGNAL(styleApplied(const KoCharacterStyle*)));
+    connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotAppliedStyle(const KoCharacterStyle*)));
     emit styleAdded(style);
 }
 
@@ -352,6 +360,9 @@ void KoStyleManager::add(KoParagraphStyle *style)
         return;
     style->setParent(this);
     style->setStyleId(d->s_stylesNumber);
+    if (style->isApplied() && !d->m_usedParagraphStyles.contains(d->s_stylesNumber)) {
+        d->m_usedParagraphStyles.append(d->s_stylesNumber);
+    }
     d->paragStyles.insert(d->s_stylesNumber++, style);
 
     if (style->listStyle() && style->listStyle()->styleId() == 0)
@@ -363,6 +374,8 @@ void KoStyleManager::add(KoParagraphStyle *style)
             add(root);
     }
 
+//    connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SIGNAL(styleApplied(const KoParagraphStyle*)));
+    connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotAppliedStyle(const KoParagraphStyle*)));
     emit styleAdded(style);
 }
 
@@ -442,6 +455,20 @@ void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
     tableTemplate->setStyleId(d->s_stylesNumber);
 
     d->tableTemplates.insert(d->s_stylesNumber++, tableTemplate);
+}
+
+void KoStyleManager::slotAppliedStyle(const KoParagraphStyle *style)
+{
+    d->m_usedParagraphStyles.append(style->styleId());
+    emit styleApplied(style);
+    kDebug() << "slotAppliedStyle. styleManager pointer: " << this;
+    kDebug() << "slotAppliedStyle" << ((style)?style->name():"empty style");
+}
+
+void KoStyleManager::slotAppliedStyle(const KoCharacterStyle *style)
+{
+    d->m_usedCharacterStyles.append(style->styleId());
+    emit styleApplied(style);
 }
 
 void KoStyleManager::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
@@ -728,6 +755,8 @@ KoCharacterStyle *KoStyleManager::characterStyle(int id) const
 
 KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const
 {
+    kDebug() << "will return parag style for id: " << id;
+    kDebug() << "pointer to private: " << d;
     return d->paragStyles.value(id);
 }
 
@@ -1042,6 +1071,16 @@ void KoStyleManager::moveToUsedStyles(int id)
 KoParagraphStyle *KoStyleManager::unusedStyle(int id)
 {
     return d->unusedParagraphStyles.value(id);
+}
+
+QVector<int> KoStyleManager::usedCharacterStyles()
+{
+    return d->m_usedCharacterStyles;
+}
+
+QVector<int> KoStyleManager::usedParagraphStyles()
+{
+    return d->m_usedParagraphStyles;
 }
 
 KoTextTableTemplate *KoStyleManager::tableTemplate(const QString &name) const
