@@ -84,7 +84,7 @@ bool PSDResourceSection::write(QIODevice* io)
     buf.open(QBuffer::WriteOnly);
 
     foreach(PSDResourceBlock* block, resources) {
-        if (!block->write(io)) {
+        if (!block->write(&buf)) {
             error = block->error;
             return false;
         }
@@ -94,6 +94,7 @@ bool PSDResourceSection::write(QIODevice* io)
 
     // Then get the size
     quint32 resourceBlockLength = ba.size();
+    dbgFile << "resource section has size" << resourceBlockLength;
     psdwrite(io, resourceBlockLength);
 
     // and write the whole buffer;
