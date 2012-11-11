@@ -218,25 +218,43 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
 {
     // XXX: make the compression settting configurable. For now, always use RLE.
-    psdwrite(io, (quint16)Compression::Uncompressed);
+    psdwrite(io, (quint16)Compression::RLE);
 
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
     QRect rc = dev->exactBounds();
     QVector<quint8* > planes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
 
+    quint64 channelLengthPos = io->pos();
+    // write zero's for the channel lengths section
+    for(uint i = 0; i < dev->colorSpace()->channelCount() * rc.height(); ++i) {
+        psdwrite(io, (quint16)0);
+    }
+    // here the actual channel data starts
+    quint64 channelStartPos = io->pos();
+
     foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+
+        dbgFile << "Writing channel" << channelInfo->name() << "to image section";
+
         quint8 *plane = planes[KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels())];
         quint32 stride = channelInfo->size() * rc.width();
         for (qint32 row = 0; row < rc.height(); ++row) {
 
             QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
-            QByteArray compressed = Compression::compress(uncompressed, Compression::Uncompressed);
+            QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+
+            io->seek(channelLengthPos);
             psdwrite(io, (quint16)compressed.size());
+            channelLengthPos +=2;
+            io->seek(channelStartPos);
+
             if (!io->write(compressed) == compressed.size()) {
                 error = "Could not write image data";
                 return false;
             }
+
+            channelStartPos += compressed.size();
         }
     }
 
