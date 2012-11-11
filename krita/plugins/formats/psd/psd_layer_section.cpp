@@ -165,7 +165,7 @@ bool PSDLayerSection::read(QIODevice* io)
 
             // read the rle row lengths;
             if (channelInfo->compressionType == Compression::RLE) {
-                for(quint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
+                for(qint64 row = 0; row < (layerRecord->bottom - layerRecord->top); ++row) {
 
                     //dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io->pos();
 

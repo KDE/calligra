@@ -24,6 +24,7 @@
 #include <QBuffer>
 
 
+#include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
@@ -216,7 +217,30 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
 bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
 {
-    return false;
+    // XXX: make the compression settting configurable. For now, always use RLE.
+    psdwrite(io, (quint16)1);
+
+    // now write all the channels in display order
+    // fill in the channel chooser, in the display order, but store the pixel index as well.
+    QRect rc = dev->exactBounds();
+    QVector<quint8* > planes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+
+    foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+        quint8 *plane = planes[KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels())];
+        quint32 stride = channelInfo->size() * rc.width();
+        for (qint32 row = 0; row < rc.height(); ++row) {
+
+            QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
+            QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+            psdwrite(io, (quint16)compressed.size());
+            if (!io->write(compressed) == compressed.size()) {
+                error = "Could not write image data";
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
@@ -316,6 +340,7 @@ bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
 
 
 bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
+
     int channelid = 0;
 
     for (quint32 row = 0; row < m_header->height; row++) {

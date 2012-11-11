@@ -195,7 +195,10 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 
     // IMAGE DATA
     PSDImageData imagedata(&header);
-    imagedata.write(&f, m_image->projection());
+    if (!imagedata.write(&f, m_image->projection())) {
+        qDebug() << "Failed to write image data. Error:"  << imagedata.error;
+        return KisImageBuilder_RESULT_FAILURE;
+    }
 
     f.close();
 

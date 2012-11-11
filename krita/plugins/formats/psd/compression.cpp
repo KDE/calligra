@@ -23,10 +23,10 @@
 #include "kis_debug.h"
 
 // from gimp's psd-save.c
-static quint32 pack_pb_line (quint8 *start,
+static quint32 pack_pb_line (const char *start,
                              quint32 length,
                              quint32 stride,
-                             quint8 *dest_ptr)
+                             char *dest_ptr)
 {
     quint32  remaining = length;
     quint8   i, j;
@@ -197,40 +197,35 @@ quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 
     return return_val;
 }
 
-
-QByteArray unRLE(int nBytes, QByteArray bytes)
-{
-    char *dst = new char[nBytes];
-    decode_packbits(bytes.constData(), dst, bytes.length(), nBytes);
-    return QByteArray(dst, nBytes);
-}
-
-QByteArray unzip(quint32 nBytes, QByteArray bytes)
-{
-    // prepend the expected length of the pixels in big-endian
-    // format to the byte array as qUncompress expects...
-    QByteArray b;
-    QBuffer buf(&b);
-    psdwrite(&buf, nBytes);
-    b.append(bytes);
-
-    // and let's hope that this is sufficient...
-    return qUncompress(bytes);
-}
-
-
-QByteArray Compression::uncompress(quint32 nBytes, QByteArray bytes, Compression::CompressionType compressionType)
+QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compression::CompressionType compressionType)
 {
     switch(compressionType) {
     case Uncompressed:
         return bytes;
     case RLE:
-        return unRLE(nBytes, bytes);
+    {
+        char *dst = new char[unpacked_len];
+        decode_packbits(bytes.constData(), dst, bytes.length(), unpacked_len);
+        QByteArray ba(dst, unpacked_len);
+        delete[] dst;
+        return ba;
+     }
     case ZIP:
     case ZIPWithPrediction:
-        return unzip(nBytes, bytes);
+    {
+        // prepend the expected length of the pixels in big-endian
+        // format to the byte array as qUncompress expects...
+
+        QByteArray b;
+        QBuffer buf(&b);
+        psdwrite(&buf, unpacked_len);
+        b.append(bytes);
+
+        // and let's hope that this is sufficient...
+        return qUncompress(bytes);
+    }
     default:
-        qFatal("Cannot uncompress layer data");
+        qFatal("Cannot uncompress layer data: invalid compression type");
     }
 
 
@@ -239,8 +234,23 @@ QByteArray Compression::uncompress(quint32 nBytes, QByteArray bytes, Compression
 
 QByteArray Compression::compress(QByteArray bytes, Compression::CompressionType compressionType)
 {
-    Q_UNUSED(bytes);
-    Q_UNUSED(compressionType);
+    switch(compressionType) {
+    case Uncompressed:
+        return bytes;
+    case RLE:
+    {
+        char *dst = new char[bytes.size()];
+        int packed_len = pack_pb_line(bytes.constData(), bytes.size(), 1, dst);
+        QByteArray ba(dst, packed_len);
+        delete[] dst;
+        return ba;
+    }
+    case ZIP:
+    case ZIPWithPrediction:
+        return qCompress(bytes);
+    default:
+        qFatal("Cannot compress layer data: invalid compression type");
+    }
 
     return QByteArray();
 }

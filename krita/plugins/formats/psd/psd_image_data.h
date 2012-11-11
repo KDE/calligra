@@ -40,6 +40,9 @@ public:
     bool read(QIODevice *io, KisPaintDeviceSP dev);
     bool write(QIODevice *io, KisPaintDeviceSP dev);
 
+
+    QString error;
+
 private:
 
     bool readRGB(QIODevice *io, KisPaintDeviceSP dev);
