@@ -218,7 +218,7 @@ bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
 {
     // XXX: make the compression settting configurable. For now, always use RLE.
-    psdwrite(io, (quint16)1);
+    psdwrite(io, (quint16)Compression::Uncompressed);
 
     // now write all the channels in display order
     // fill in the channel chooser, in the display order, but store the pixel index as well.
@@ -231,7 +231,7 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
         for (qint32 row = 0; row < rc.height(); ++row) {
 
             QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
-            QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+            QByteArray compressed = Compression::compress(uncompressed, Compression::Uncompressed);
             psdwrite(io, (quint16)compressed.size());
             if (!io->write(compressed) == compressed.size()) {
                 error = "Could not write image data";
