@@ -120,8 +120,8 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
     disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
-    m_sortedStylesModel->setStyleManager(sm);
     m_stylesModel->setStyleManager(sm);
+    m_sortedStylesModel->setStyleManager(sm);
 //    m_sortedStylesModel->setStylesModel(m_stylesModel);
     connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     connect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotCharacterStyleApplied(const KoCharacterStyle*)));
