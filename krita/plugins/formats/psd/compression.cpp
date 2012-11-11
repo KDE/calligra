@@ -22,6 +22,71 @@
 #include "psd_utils.h"
 #include "kis_debug.h"
 
+// from gimp's psd-save.c
+static quint32 pack_pb_line (quint8 *start,
+                             quint32 length,
+                             quint32 stride,
+                             quint8 *dest_ptr)
+{
+    quint32  remaining = length;
+    quint8   i, j;
+
+    length = 0;
+    while (remaining > 0)
+    {
+        /* Look for characters matching the first */
+
+        i = 0;
+        while ((i < 128) &&
+               (remaining - i > 0) &&
+               (start[0] == start[i*stride]))
+            i++;
+
+        if (i > 1)              /* Match found */
+        {
+
+            *dest_ptr++ = -(i - 1);
+            *dest_ptr++ = *start;
+
+            start += i*stride;
+            remaining -= i;
+            length += 2;
+        }
+        else       /* Look for characters different from the previous */
+        {
+            i = 0;
+            while ((i < 128)             &&
+                   (remaining - (i + 1) > 0) &&
+                   (start[i*stride] != start[(i + 1)*stride] ||
+                    remaining - (i + 2) <= 0  || start[i*stride] != start[(i+2)*stride]))
+                i++;
+
+            /* If there's only 1 remaining, the previous WHILE stmt doesn't
+             catch it */
+
+            if (remaining == 1)
+            {
+                i = 1;
+            }
+
+            if (i > 0)               /* Some distinct ones found */
+            {
+                *dest_ptr++ = i - 1;
+                for (j = 0; j < i; j++)
+                {
+                    *dest_ptr++ = start[j*stride];
+                }
+                start += i*stride;
+                remaining -= i;
+                length += i + 1;
+            }
+
+        }
+    }
+    return length;
+}
+
+
 // from gimp's psd-util.c
 quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 unpacked_len)
 {
@@ -127,7 +192,7 @@ quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 
     }
 
     if (error_code)
-       dbgFile << "Error code" <<  error_code;
+        dbgFile << "Error code" <<  error_code;
 
     return return_val;
 }
