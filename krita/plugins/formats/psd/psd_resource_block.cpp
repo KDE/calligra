@@ -298,7 +298,7 @@ bool RESN_INFO_1005::interpretBlock(QByteArray data)
     /* Resolution always recorded as pixels / inch in a fixed point implied
        decimal int32 with 16 bits before point and 16 after (i.e. cast as
        double and divide resolution by 2^16 */
-    qDebug() << "hres" << hRes / 65536.0 << "vres" << vRes / 65536.0;
+    qDebug() << "hres" << hRes << "vres" << vRes;
 
     hRes = hRes / 65536.0;
     vRes = vRes / 65536.0;
@@ -317,16 +317,18 @@ bool RESN_INFO_1005::createBlock(QByteArray & data)
     psdwrite(&buf, "8BIM");
     psdwrite(&buf, (quint16)PSDResourceSection::RESN_INFO);
     psdwrite(&buf, (quint16)0);
-    psdwrite(&buf, (quint16)16);
+    psdwrite(&buf, (quint32)16);
 
     // Convert to 16.16 fixed point
     Fixed h = hRes * 65536.0 + 0.5;
+    qDebug() << "h" << h << "hRes" << hRes;
     psdwrite(&buf, (quint32)h);
     psdwrite(&buf, hResUnit);
     psdwrite(&buf, widthUnit);
 
     // Convert to 16.16 fixed point
     Fixed v = vRes * 65536.0 + 0.5;
+    qDebug() << "v" << v << "vRes" << vRes;
     psdwrite(&buf, (quint32)v);
     psdwrite(&buf, vResUnit);
     psdwrite(&buf, heightUnit);
@@ -355,6 +357,12 @@ bool ICC_PROFILE_1039::createBlock(QByteArray &data)
     }
     QBuffer buf(&data);
     buf.open(QBuffer::WriteOnly);
+
+    psdwrite(&buf, "8BIM");
+    psdwrite(&buf, (quint16)PSDResourceSection::ICC_PROFILE);
+    psdwrite(&buf, (quint16)0);
+    psdwrite(&buf, (quint32)icc.size());
+
     buf.write(icc.constData(), icc.size());
     buf.close();
 
