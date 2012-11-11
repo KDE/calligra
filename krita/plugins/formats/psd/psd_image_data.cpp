@@ -42,7 +42,7 @@ PSDImageData::~PSDImageData() {
 
 }
 
-bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
+bool PSDImageData::read(QIODevice *io, KisPaintDeviceSP dev ) {
 
     psdread(io, &m_compression);
     quint64 start = io->pos();
@@ -73,17 +73,17 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         case Indexed:
             break;
         case RGB:
-            doRGB(dev, io);
+            readRGB(io, dev);
             break;
         case CMYK:
-            doCMYK(dev,io);
+            readCMYK(io, dev);
             break;
         case MultiChannel:
             break;
         case DuoTone:
             break;
         case Lab:
-            doLAB(dev, io);
+            readLAB(io, dev);
             break;
         case UNKNOWN:
             break;
@@ -136,17 +136,17 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
         case Indexed:
             break;
         case RGB:
-            doRGB(dev,io);
+            readRGB(io, dev);
             break;
         case CMYK:
-            doCMYK(dev,io);
+            readCMYK(io, dev);
             break;
         case MultiChannel:
             break;
         case DuoTone:
             break;
         case Lab:
-            doLAB(dev, io);
+            readLAB(io, dev);
             break;
         case UNKNOWN:
             break;
@@ -214,7 +214,12 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io) {
     return true;
 }
 
-bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
+bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
+{
+    return false;
+}
+
+bool PSDImageData::readRGB(QIODevice *io, KisPaintDeviceSP dev) {
 
     int channelid = 0;
 
@@ -310,7 +315,7 @@ bool PSDImageData::doRGB(KisPaintDeviceSP dev, QIODevice *io) {
 }
 
 
-bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
+bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
     int channelid = 0;
 
     for (quint32 row = 0; row < m_header->height; row++) {
@@ -417,7 +422,7 @@ bool PSDImageData::doCMYK(KisPaintDeviceSP dev, QIODevice *io) {
 
 }
 
-bool PSDImageData::doLAB(KisPaintDeviceSP dev, QIODevice *io) {
+bool PSDImageData::readLAB(QIODevice *io, KisPaintDeviceSP dev) {
 
     int channelid = 0;
 

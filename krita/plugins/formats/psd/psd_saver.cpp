@@ -182,6 +182,21 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
+
+    // LAYER AND MASK DATA
+    // Only save layers and masks if there is more than one layer
+    if (m_image->rootLayer()->childCount() > 1) {
+
+    }
+    else {
+        // else write a zero length block
+        psdwrite(&f, (quint32)0);
+    }
+
+    // IMAGE DATA
+    PSDImageData imagedata(&header);
+    imagedata.write(&f, m_image->projection());
+
     f.close();
 
     return KisImageBuilder_RESULT_OK;
