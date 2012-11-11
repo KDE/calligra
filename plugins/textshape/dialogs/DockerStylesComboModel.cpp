@@ -26,7 +26,8 @@
 #include <KDebug>
 
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
-    StylesFilteredModelBase(parent)
+    StylesFilteredModelBase(parent),
+    m_styleManager(0)
 {
 }
 
@@ -51,13 +52,17 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
 
     if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
         KoCharacterStyle *compareStyle;
+        kDebug() << "inserting used charStyles. m_usedStylesId: " << m_usedStylesId;
+        kDebug() << "m_usedStyles: " << m_usedStyles;
         foreach(int i, m_styleManager->usedCharacterStyles()) {
             if (!m_usedStylesId.contains(i)) {
                 QVector<int>::iterator begin = m_usedStyles.begin();
                 compareStyle = m_styleManager->characterStyle(i);
+                kDebug() << "compareStyle: " << compareStyle << "for id: " << i;
                 for ( ; begin != m_usedStyles.end(); ++begin) {
                     if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
                         KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
+                        kDebug() << "currentUsedStyle: " << s << " for id: " << m_sourceModel->index(*begin, 0, QModelIndex()).internalId();
                         if (QString::localeAwareCompare(compareStyle->name(), s->name()) < 0) {
                             break;
                         }
@@ -66,6 +71,8 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
                 m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*compareStyle).row());
                 m_usedStylesId.append(i);
             }
+            kDebug() << "inserted used charStyle: " << i << " m_usedStylesId: " << m_usedStylesId;
+            kDebug() << "m_usedStyles: " << m_usedStyles;
         }
     }
     else {
@@ -123,6 +130,7 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 
 void DockerStylesComboModel::createMapping()
 {
+    kDebug() << "createMapping. styleManager: " << (void*)(m_styleManager);
     Q_ASSERT(m_sourceModel);
 //    Q_ASSERT(m_styleManager);
     if (!m_sourceModel || !m_styleManager) {

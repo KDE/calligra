@@ -1903,10 +1903,13 @@ void TextTool::updateActions()
 
 void TextTool::updateStyleManager()
 {
+    kDebug() << "updating styleManager: " << KoTextDocument(m_textShapeData->document()).styleManager();
     if (!m_textShapeData)
         return;
     KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
+    kDebug() << "will emit signal";
     emit styleManagerChanged(styleManager);
+    kDebug() << "done with emission";
 
     //TODO move this to its own method
     m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
@@ -2099,6 +2102,7 @@ QList<QWidget *> TextTool::createOptionWidgets()
         scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
         kDebug() << "will now set initial paraStyles";
         spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
+        kDebug() << "done setting the styles";
     }
 
 
@@ -2158,6 +2162,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
     // Connect to/with simple insert widget (docker)
     connect(siw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(siw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
+
+    kDebug() << "done connecting signals to slots, will update the styleManager";
 
     updateStyleManager();
     if (m_textShape) {
