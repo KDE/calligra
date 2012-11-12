@@ -482,6 +482,8 @@ bool PSDLayerRecord::read(QIODevice* io)
 
 bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
 {
+    m_node = node;
+
     QRect rc = node->projection()->exactBounds();
     top = rc.top();
     left = rc.left();
@@ -489,7 +491,7 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     right = rc.right();
 
     // XXX: masks should be saved as channels as well
-        for (int i = 0; i < nChannels; ++i) {
+    for (int i = 0; i < nChannels; ++i) {
         ChannelInfo *info = new ChannelInfo;
         info->channelId = i; // 0 for red, 1 = green, etc
         channelInfoRecords << info;
@@ -512,6 +514,7 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     psdwrite(io, nChannels);
     foreach(ChannelInfo *channel, channelInfoRecords) {
         psdwrite(io, channel->channelId);
+        channel->channelInfoPosition = io->pos();
         psdwrite(io, (quint32)0); // to be filled in when we know how big each channel block is going to be
     }
     psdwrite(io, blendModeKey);
@@ -539,8 +542,8 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     {
         quint32 len = layerName.length();
         quint32 blocksize = 0;
-        psdwrite(io, "8BIM");
-        psdwrite(io, "luni");
+        io->write("8BIM", 4);
+        io->write("luni", 4);
 
         // pad to even number of chars
         if (len % 2) {
@@ -560,8 +563,6 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
         if (len % 2) {
             psdwrite(io, (quint16)0);
         }
-
-
     }
     // write real length for extra data
     quint64 eofPos = io->pos();
@@ -574,7 +575,77 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
 
 bool PSDLayerRecord::writeChannelData(QIODevice *io)
 {
-    return false;
+    KisPaintDeviceSP dev = m_node->projection();
+
+    // XXX: make the compression settting configurable. For now, always use RLE.
+    psdwrite(io, (quint16)Compression::RLE);
+
+    // now write all the channels in display order
+    // fill in the channel chooser, in the display order, but store the pixel index as well.
+    QRect rc = dev->exactBounds();
+
+    // yeah... we read the entire layer into a vector of quint8
+    QVector<quint8* > planes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+
+    // here's where we save the total size of the channel data
+    int channelInfoIndex = 0;
+
+    foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+
+        dbgFile << "Writing channel" << channelInfo->name() << "to layer section";
+
+        // where this block starts, for the total size calculation
+        quint64 startChannelBlockPos = io->pos();
+
+        // start of the block where we write the length of the individual scanlines
+        quint64 channelLengthPos = io->pos();
+        // write zero's for the channel lengths section
+        for(int i = 0; i < rc.height(); ++i) {
+            psdwrite(io, (quint16)0);
+        }
+        // here the actual channel data starts; that's where we return after writing
+        // the size of the current row
+        quint64 channelStartPos = io->pos();
+
+        quint8 *plane = planes[KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels())];
+        quint32 stride = channelInfo->size() * rc.width();
+        for (qint32 row = 0; row < rc.height(); ++row) {
+
+            QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
+            QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+
+            io->seek(channelLengthPos);
+            psdwrite(io, (quint16)compressed.size());
+            channelLengthPos +=2;
+            io->seek(channelStartPos);
+
+            if (!io->write(compressed) == compressed.size()) {
+                error = "Could not write image data";
+                return false;
+            }
+
+            quint16 size = compressed.size();
+            // If the layer's size, and therefore the data, is odd, a pad byte will be inserted
+            // at the end of the row. (weirdly enough, that's not true for the image data)
+            if ((size & 0x01) != 0) {
+                psdwrite(io, (quint8)0);
+                size++;
+            }
+
+            channelStartPos += size;
+        }
+        // write the size of the channel image data block in the channel info block
+        quint64 currentPos = io->pos();
+        io->seek(channelInfoRecords[channelInfoIndex]->channelInfoPosition);
+        psdwrite(io, (quint32)(currentPos - startChannelBlockPos));
+        io->seek(currentPos);
+
+        channelInfoIndex++;
+    }
+
+    return true;
+
+
 }
 
 bool PSDLayerRecord::valid()
@@ -840,92 +911,92 @@ bool PSDLayerRecord::doLAB(KisPaintDeviceSP dev, QIODevice *io)
 {    quint64 oldPosition = io->pos();
 
      quint64 width = right - left;
-     int channelSize = m_header.channelDepth / 8;
-     int uncompressedLength = width * channelSize;
+      int channelSize = m_header.channelDepth / 8;
+       int uncompressedLength = width * channelSize;
 
-     if (channelInfoRecords.first()->compressionType == Compression::ZIP
-             || channelInfoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
+        if (channelInfoRecords.first()->compressionType == Compression::ZIP
+                || channelInfoRecords.first()->compressionType == Compression::ZIPWithPrediction) {
 
-         // Zip needs to be implemented here.
-         return false;
-     }
+            // Zip needs to be implemented here.
+            return false;
+        }
 
-     KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
-     for (int row = top ; row < bottom; row++)
-     {
+        KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
+         for (int row = top ; row < bottom; row++)
+         {
 
-         QMap<quint16, QByteArray> channelBytes;
+             QMap<quint16, QByteArray> channelBytes;
 
-         foreach(ChannelInfo *channelInfo, channelInfoRecords) {
+             foreach(ChannelInfo *channelInfo, channelInfoRecords) {
 
-             io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
+                 io->seek(channelInfo->channelDataStart + channelInfo->channelOffset);
 
-             if (channelInfo->compressionType == Compression::Uncompressed) {
-                 channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
-                 channelInfo->channelOffset += uncompressedLength;
-             }
-             else if (channelInfo->compressionType == Compression::RLE) {
-                 int rleLength = channelInfo->rleRowLengths[row - top];
-                 QByteArray compressedBytes = io->read(rleLength);
-                 QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
-                 channelBytes.insert(channelInfo->channelId, uncompressedBytes);
-                 channelInfo->channelOffset += rleLength;
-
-             }
-         }
-
-         for (quint64 col = 0; col < width; col++){
-
-             if (channelSize == 1) {
-                 quint8 opacity = OPACITY_OPAQUE_U8;
-                 if (channelBytes.contains(-1)) {
-                     opacity = channelBytes[-1].constData()[col];
+                 if (channelInfo->compressionType == Compression::Uncompressed) {
+                     channelBytes[channelInfo->channelId] = io->read(uncompressedLength);
+                     channelInfo->channelOffset += uncompressedLength;
                  }
-                 KoLabTraits<quint8>::setOpacity(it->rawData(), opacity, 1);
+                 else if (channelInfo->compressionType == Compression::RLE) {
+                     int rleLength = channelInfo->rleRowLengths[row - top];
+                     QByteArray compressedBytes = io->read(rleLength);
+                     QByteArray uncompressedBytes = Compression::uncompress(uncompressedLength, compressedBytes, channelInfo->compressionType);
+                     channelBytes.insert(channelInfo->channelId, uncompressedBytes);
+                     channelInfo->channelOffset += rleLength;
 
-                 quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
-                 KoLabTraits<quint8>::setL(it->rawData(),L);
-
-                 quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
-                 KoLabTraits<quint8>::setA(it->rawData(),A);
-
-                 quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
-                 KoLabTraits<quint8>::setB(it->rawData(),B);
-
-
-             }
-
-             else if (channelSize == 2) {
-
-                 quint16 opacity = quint16_MAX;
-                 if (channelBytes.contains(-1)) {
-                     opacity = channelBytes[-1].constData()[col];
                  }
-                 // We don't have a convenient setOpacity function :-(
-                 memcpy(it->rawData() + KoLabU16Traits::alpha_pos, &opacity, sizeof(quint16));
-                // KoLabTraits<quint16>::setOpacity(it->rawData(), opacity, 1);
-
-                 quint16 L = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
-                 KoLabTraits<quint16>::setL(it->rawData(),L);
-
-                 quint16 A = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
-                 KoLabTraits<quint16>::setA(it->rawData(),A);
-
-                 quint16 B = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
-                 KoLabTraits<quint16>::setB(it->rawData(),B);
-             }
-             else {
-                 // Unsupported channel sizes for now
-                 return false;
              }
 
-             it->nextPixel();
+             for (quint64 col = 0; col < width; col++){
+
+                 if (channelSize == 1) {
+                     quint8 opacity = OPACITY_OPAQUE_U8;
+                     if (channelBytes.contains(-1)) {
+                         opacity = channelBytes[-1].constData()[col];
+                     }
+                     KoLabTraits<quint8>::setOpacity(it->rawData(), opacity, 1);
+
+                     quint8 L = ntohs(reinterpret_cast<const quint8 *>(channelBytes[0].constData())[col]);
+                     KoLabTraits<quint8>::setL(it->rawData(),L);
+
+                     quint8 A = ntohs(reinterpret_cast<const quint8 *>(channelBytes[1].constData())[col]);
+                     KoLabTraits<quint8>::setA(it->rawData(),A);
+
+                     quint8 B = ntohs(reinterpret_cast<const quint8 *>(channelBytes[2].constData())[col]);
+                     KoLabTraits<quint8>::setB(it->rawData(),B);
+
+
+                 }
+
+                 else if (channelSize == 2) {
+
+                     quint16 opacity = quint16_MAX;
+                     if (channelBytes.contains(-1)) {
+                         opacity = channelBytes[-1].constData()[col];
+                     }
+                     // We don't have a convenient setOpacity function :-(
+                     memcpy(it->rawData() + KoLabU16Traits::alpha_pos, &opacity, sizeof(quint16));
+                     // KoLabTraits<quint16>::setOpacity(it->rawData(), opacity, 1);
+
+                     quint16 L = ntohs(reinterpret_cast<const quint16 *>(channelBytes[0].constData())[col]);
+                     KoLabTraits<quint16>::setL(it->rawData(),L);
+
+                     quint16 A = ntohs(reinterpret_cast<const quint16 *>(channelBytes[1].constData())[col]);
+                     KoLabTraits<quint16>::setA(it->rawData(),A);
+
+                     quint16 B = ntohs(reinterpret_cast<const quint16 *>(channelBytes[2].constData())[col]);
+                     KoLabTraits<quint16>::setB(it->rawData(),B);
+                 }
+                 else {
+                     // Unsupported channel sizes for now
+                     return false;
+                 }
+
+                 it->nextPixel();
+             }
+             it->nextRow();
          }
-         it->nextRow();
-     }
-     // go back to the old position, because we've been seeking all over the place
-     io->seek(oldPosition);
-     return true;
+          // go back to the old position, because we've been seeking all over the place
+          io->seek(oldPosition);
+           return true;
 }
 
 

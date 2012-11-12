@@ -251,14 +251,15 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
 {
     for (uint i = 0; i < node->childCount(); ++i) {
         KisNodeSP child = node->at(i);
-        qDebug() << child->name();
-        if (node->inherits("KisPaintLayer")) {
+        qDebug() << child->name() << "node->inherits(isPaintLayer)" << child->inherits("KisPaintLayer");
+        if (child->inherits("KisPaintLayer")) {
             layers << child;
         }
         if (child->childCount() > 0) {
             flattenLayers(child, layers);
         }
     }
+    qDebug() << layers.size();
 }
 
 bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)

@@ -314,7 +314,7 @@ bool RESN_INFO_1005::createBlock(QByteArray & data)
     QBuffer buf(&data);
     buf.open(QBuffer::WriteOnly);
 
-    psdwrite(&buf, "8BIM");
+    buf.write("8BIM", 4);
     psdwrite(&buf, (quint16)PSDResourceSection::RESN_INFO);
     psdwrite(&buf, (quint16)0);
     psdwrite(&buf, (quint32)16);
@@ -358,7 +358,7 @@ bool ICC_PROFILE_1039::createBlock(QByteArray &data)
     QBuffer buf(&data);
     buf.open(QBuffer::WriteOnly);
 
-    psdwrite(&buf, "8BIM");
+    buf.write("8BIM", 4);
     psdwrite(&buf, (quint16)PSDResourceSection::ICC_PROFILE);
     psdwrite(&buf, (quint16)0);
     psdwrite(&buf, (quint32)icc.size());

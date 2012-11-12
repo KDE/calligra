@@ -191,7 +191,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         layerSection.hasTransparency = true;
 
         if (!layerSection.write(&f, m_image->rootLayer())) {
-            qDebug() << "failed to write layser section. Error:" << layerSection.error;
+            qDebug() << "failed to write layer section. Error:" << layerSection.error;
             return KisImageBuilder_RESULT_FAILURE;
         }
     }

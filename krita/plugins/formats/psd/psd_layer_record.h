@@ -25,6 +25,7 @@
 
 #include <kis_types.h>
 #include <kis_paint_device.h>
+#include <kis_node.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -121,6 +122,7 @@ private:
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doGrayscale(KisPaintDeviceSP dev ,QIODevice *io);
 
+    KisNodeSP m_node;
     const PSDHeader m_header;
 };
 
