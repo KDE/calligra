@@ -20,6 +20,7 @@
 #include <QIODevice>
 
 #include <kis_debug.h>
+#include <kis_node.h>
 
 #include "psd_header.h"
 #include "psd_utils.h"
@@ -246,16 +247,82 @@ bool PSDLayerSection::read(QIODevice* io)
     return valid();
 }
 
-bool PSDLayerSection::write(QIODevice* io)
+void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
 {
+    for (uint i = 0; i < node->childCount(); ++i) {
+        KisNodeSP child = node->at(i);
+        qDebug() << child->name();
+        if (node->inherits("KisPaintLayer")) {
+            layers << child;
+        }
+        if (child->childCount() > 0) {
+            flattenLayers(child, layers);
+        }
+    }
+}
+
+bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
+{
+    qDebug() << "Writing layer layer section";
+
     Q_UNUSED(io);
-    Q_ASSERT(valid());
-    if (!valid()) {
-        error = "Cannot write an invalid Layer Section object";
+
+    // Build the whole layer structure
+    QList<KisNodeSP> nodes;
+    flattenLayers(rootLayer, nodes);
+
+    if (nodes.isEmpty()) {
+        error = "Could not find paint layers to save";
         return false;
     }
-    qFatal("TODO: implement writing the layer section");
-    return false;
+
+    quint64 layerSectionSizePos = io->pos();
+    // length of the layer info and mask information section
+    psdwrite(io, (quint32)0);
+
+    // length of the layer info section, rounded up to a multiple of two
+    psdwrite(io, (quint32)0);
+
+    // number of layers
+    psdwrite(io, (quint16)nodes.size());
+
+    // the layers need to be saved in reverse order from the Krita one
+    for (int i = nodes.size(); i > 0; --i) {
+        KisNodeSP node = nodes[i -1];
+        PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
+        layers.append(layerRecord);
+        if (!layerRecord->write(io, node)) {
+            error = layerRecord->error;
+            return false;
+        }
+    }
+
+    // Now save the channel data
+    foreach(PSDLayerRecord *layerRecord, layers) {
+        if (!layerRecord->writeChannelData(io)) {
+            error = layerRecord->error;
+            return false;
+        }
+    }
+
+    // Write the final size of the block
+    quint64 pos = io->pos();
+    io->seek(layerSectionSizePos);
+    // length of the layer info and mask information section
+    psdwrite(io, (quint32)(pos - layerSectionSizePos));
+
+    // length of the layer info section, rounded up to a multiple of two
+    // XXX: for now, we don't do a mask section, so let's assume this is correct
+    psdwrite(io, (quint32)(io->pos() - layerSectionSizePos));
+
+    io->seek(pos);
+
+    // Wriute empty layer mask/adjustment layer data
+    psdwrite(io, (quint32)0);
+    // Write empty layer blending ragnes data
+    psdwrite(io, (quint32)0);
+
+    return true;
 }
 
 bool PSDLayerSection::valid()

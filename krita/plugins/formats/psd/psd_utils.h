@@ -29,6 +29,7 @@ bool psdwrite(QIODevice* io, qint16 v);
 bool psdwrite(QIODevice* io, quint32 v);
 bool psdwrite(QIODevice* io, const QString &s);
 bool psdwrite_pascalstring(QIODevice* io, const QString &s);
+bool psdwrite_pascalstring(QIODevice* io, const QString &s, int padding);
 bool psdpad(QIODevice* io, quint32 padding);
 
 bool psdread(QIODevice* io, quint8* v);

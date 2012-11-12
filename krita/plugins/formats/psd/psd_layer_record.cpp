@@ -25,6 +25,9 @@
 #include <QStringList>
 
 #include <kis_debug.h>
+#include <kis_node.h>
+#include "kis_iterator_ng.h"
+#include <kis_paint_layer.h>
 
 #include "psd_utils.h"
 #include "psd_header.h"
@@ -33,7 +36,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
-#include "kis_iterator_ng.h"
+
 
 // Just for pretty debug messages
 QString channelIdToChannelType(int channelId, PSDColorMode colormode)
@@ -477,15 +480,100 @@ bool PSDLayerRecord::read(QIODevice* io)
     return valid();
 }
 
-bool PSDLayerRecord::write(QIODevice* io)
+bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
 {
-    Q_UNUSED(io);
-    Q_ASSERT(valid());
-    if (!valid()) {
-        error = "Cannot write an invalid Layer Record object";
-        return false;
+    QRect rc = node->projection()->exactBounds();
+    top = rc.top();
+    left = rc.left();
+    bottom = rc.bottom();
+    right = rc.right();
+
+    // XXX: masks should be saved as channels as well
+        for (int i = 0; i < nChannels; ++i) {
+        ChannelInfo *info = new ChannelInfo;
+        info->channelId = i; // 0 for red, 1 = green, etc
+        channelInfoRecords << info;
     }
-    qFatal("TODO: implement writing the layer record");
+
+    blendModeKey = composite_op_to_psd_blendmode(node->compositeOpId());
+    opacity = node->opacity();
+    clipping = 1;
+
+    KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+    transparencyProtected = (paintLayer && paintLayer->alphaLocked());
+    visible = node->visible();
+
+    layerName = node->name();
+
+    psdwrite(io, (quint32)left);
+    psdwrite(io, (quint32)top);
+    psdwrite(io, (quint32)bottom);
+    psdwrite(io, (quint32)right);
+    psdwrite(io, nChannels);
+    foreach(ChannelInfo *channel, channelInfoRecords) {
+        psdwrite(io, channel->channelId);
+        psdwrite(io, (quint32)0); // to be filled in when we know how big each channel block is going to be
+    }
+    psdwrite(io, blendModeKey);
+    psdwrite(io, opacity);
+    psdwrite(io, clipping);
+    quint8 flags = 0;
+    if (transparencyProtected) flags |= 1;
+    if (visible) flags |= 1;
+    psdwrite(io, flags);
+    psdwrite(io, (quint8)0); //filler
+
+    quint64 extraDataPos = io->pos();
+    psdwrite(io, (quint32)0); // length of the extra data fields
+
+    // layer mask data: not implemented for now, so zero
+    psdwrite(io, quint32(0));
+
+    // Layer blending ranges: not implemented for now, so zero
+    psdwrite(io, quint32(0));
+
+    // layer name: Pascal string, padded to a multiple of 4 bytes.
+    psdwrite_pascalstring(io, layerName, 4);
+
+    // write luni data block
+    {
+        quint32 len = layerName.length();
+        quint32 blocksize = 0;
+        psdwrite(io, "8BIM");
+        psdwrite(io, "luni");
+
+        // pad to even number of chars
+        if (len % 2) {
+            blocksize = len + 1;
+        }
+        else {
+            blocksize = len;
+        }
+        // 2 bytes per character + 4 bytes for pascal string length
+        blocksize = (blocksize * 2)  + 4;
+        psdwrite(io, blocksize);
+        const ushort *chars = layerName.utf16();
+        for (uint i = 0; i < len; i++) {
+            psdwrite(io, (quint16)chars[i]);
+        }
+
+        if (len % 2) {
+            psdwrite(io, (quint16)0);
+        }
+
+
+    }
+    // write real length for extra data
+    quint64 eofPos = io->pos();
+    io->seek(extraDataPos);
+    psdwrite(io, (quint32)(eofPos - extraDataPos - sizeof(quint32)));
+    io->seek(eofPos);
+
+    return true;
+}
+
+bool PSDLayerRecord::writeChannelData(QIODevice *io)
+{
     return false;
 }
 

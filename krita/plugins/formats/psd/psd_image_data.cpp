@@ -23,7 +23,6 @@
 #include <QByteArray>
 #include <QBuffer>
 
-
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceMaths.h>
@@ -32,7 +31,9 @@
 #include <psd_image_data.h>
 #include "psd_utils.h"
 #include "compression.h"
+
 #include "kis_iterator_ng.h"
+#include "kis_paint_device.h"
 
 PSDImageData::PSDImageData(PSDHeader *header)
 {

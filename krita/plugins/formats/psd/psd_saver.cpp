@@ -182,11 +182,18 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-
     // LAYER AND MASK DATA
     // Only save layers and masks if there is more than one layer
+    qDebug() << "m_image->rootLayer->childCount" << m_image->rootLayer()->childCount();
     if (m_image->rootLayer()->childCount() > 1) {
 
+        PSDLayerSection layerSection(header);
+        layerSection.hasTransparency = true;
+
+        if (!layerSection.write(&f, m_image->rootLayer())) {
+            qDebug() << "failed to write layser section. Error:" << layerSection.error;
+            return KisImageBuilder_RESULT_FAILURE;
+        }
     }
     else {
         // else write a zero length block

@@ -44,7 +44,6 @@ bool psdwrite(QIODevice* io, qint16 v)
     return written == 2;
 }
 
-
 bool psdwrite(QIODevice* io, quint32 v)
 {
     quint32 val = ntohl(v);
@@ -94,6 +93,37 @@ bool psdwrite_pascalstring(QIODevice* io, const QString &s)
 
     return true;
 }
+
+bool psdwrite_pascalstring(QIODevice* io, const QString &s, int padding)
+{
+    Q_ASSERT(s.length() < 256);
+    Q_ASSERT(s.length() >= 0);
+    if (s.length() < 0 || s.length() > 255) return false;
+
+    if (s.isNull()) {
+        psdwrite(io, (quint8)0);
+        psdwrite(io, (quint8)0);
+        return true;
+    }
+    quint8 length = s.length();
+    psdwrite(io, length);
+
+    QByteArray b = s.toAscii();
+    char* str = b.data();
+    int written = io->write(str, length);
+    if (written != length) return false;
+
+    // If the total length (length byte + content) is not a multiple of padding, add zeroes to pad
+    length++;
+    if ((length % padding) != 0) {
+        for (int i = 0; i < (padding - (length %padding)); i++) {
+            psdwrite(io, (quint8)0);
+        }
+    }
+
+    return true;
+}
+
 
 bool psdread(QIODevice *io, quint8 *v)
 {
