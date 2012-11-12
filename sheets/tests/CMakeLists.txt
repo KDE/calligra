@@ -53,7 +53,7 @@ target_link_libraries(TestRegion calligrasheetscommon ${QT_QTCORE_LIBRARY} ${QT_
 ########### next target ###############
 
 set(TestRTree_SRCS TestRTree.cpp)
-kde4_add_unit_test(TestRTree TESTNAME kpsread-RTree  ${TestRTree_SRCS})
+kde4_add_unit_test(TestRTree TESTNAME sheets-RTree  ${TestRTree_SRCS})
 target_link_libraries(TestRTree ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
