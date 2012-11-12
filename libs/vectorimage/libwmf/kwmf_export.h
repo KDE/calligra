@@ -30,6 +30,8 @@
 # if defined(MAKE_KWMF_LIB)
 /* We are building this library */
 #  define KWMF_EXPORT KDE_EXPORT
+# elif defined(MAKE_VECTORIMAGE_LIB)
+#  define KWMF_EXPORT KDE_EXPORT
 # else
 /* We are using this library */
 #  define KWMF_EXPORT KDE_IMPORT

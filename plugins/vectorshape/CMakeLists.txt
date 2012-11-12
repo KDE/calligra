@@ -1,15 +1,6 @@
 project( vectorshape)
 
-
-# The EMF library is directly under this directory.
-# When it becomes an entity on its own we have to create
-# some cmake code here to find it.
-# SET(EMF_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/libemf)
-
-# Duplicate from filters/CMakeLists.txt
-set(WMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
-
-include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES} ${WMF_INCLUDES})
+include_directories(${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${VECTORIMAGE_INCLUDES})
 
 SET ( VectorShape_SRCS
     VectorShapePlugin.cpp
@@ -28,7 +19,7 @@ SET ( VectorShape_SRCS
 
 kde4_add_plugin(vectorshape ${VectorShape_SRCS})
 
-target_link_libraries(vectorshape flake libwmf vectorimage ${KDE4_KFILE_LIBRARY})
+target_link_libraries(vectorshape flake vectorimage ${KDE4_KFILE_LIBRARY})
 
 install(TARGETS vectorshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -1,13 +1,5 @@
 include_directories( ${VECTORIMAGE_INCLUDES} ${KDE4_INCLUDES} )
 
-# The EMF library is directly under this directory.
-# When it becomes an entity on its own we have to create
-# some cmake code here to find it.
-
-# Duplicate from filters/CMakeLists.txt
-#set(WMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
-# SET(WMF_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/libwmf)
-
 include_directories(${KOMAIN_INCLUDES})
 
 set(vectorimage_LIB_SRCS    
@@ -25,6 +17,14 @@ set(vectorimage_LIB_SRCS
     libsvm/SvmGraphicsContext.cpp
     libsvm/SvmParser.cpp
     libsvm/SvmPainterBackend.cpp
+    
+    libwmf/WmfStack.cpp
+    libwmf/WmfDeviceContext.cpp
+    libwmf/WmfParser.cpp 
+    libwmf/WmfAbstractBackend.cpp 
+    libwmf/WmfPainterBackend.cpp
+    libwmf/WmfWriter.cpp
+
 )
 
 kde4_add_library(vectorimage SHARED ${vectorimage_LIB_SRCS})

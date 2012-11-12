@@ -467,7 +467,7 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
 set(VECTORIMAGE_INCLUDES 
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
-                   ${CMAKE_SOURCE_DIR}/filters/libkowmf)
+                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
                    
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
