@@ -289,8 +289,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     psdwrite(io, (qint16)-nodes.size());
 
     // the layers need to be saved in reverse order from the Krita one
-    for (int i = nodes.size(); i > 0; --i) {
-        KisNodeSP node = nodes[i -1];
+    foreach(KisNodeSP node, nodes) {
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
         if (!layerRecord->write(io, node)) {
@@ -319,8 +318,9 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
 
     io->seek(pos);
 
-    // Wriute empty layer mask/adjustment layer data
+    // Write empty layer mask/adjustment layer data
     psdwrite(io, (quint32)0);
+
     // Write empty layer blending ragnes data
     psdwrite(io, (quint32)0);
 

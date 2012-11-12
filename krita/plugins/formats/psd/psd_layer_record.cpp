@@ -134,10 +134,10 @@ QString channelIdToChannelType(int channelId, PSDColorMode colormode)
             return QString("WARNING: %1").arg(channelId);
         case RGB:
         case RGB48:
-            return QString("WARNING: %1").arg(channelId);
+            return QString("alpha: %1").arg(channelId);
         case Lab:
         case Lab48:
-            return QString("WARNING: %1").arg(channelId);
+            return QString("alpha: %1").arg(channelId);
         case CMYK:
         case CMYK64:
             return "Key";
@@ -489,6 +489,7 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     left = rc.left();
     bottom = rc.bottom();
     right = rc.right();
+    nChannels = node->projection()->channelCount();
 
     // XXX: masks should be saved as channels as well
     for (int i = 0; i < nChannels; ++i) {
@@ -507,16 +508,21 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
 
     layerName = node->name();
 
+    dbgFile << "saving layer record for " << layerName << "at pos" << io->pos();
+    dbgFile << "\ttop" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
+
     psdwrite(io, (quint32)left);
     psdwrite(io, (quint32)top);
     psdwrite(io, (quint32)bottom);
     psdwrite(io, (quint32)right);
     psdwrite(io, nChannels);
+
     foreach(ChannelInfo *channel, channelInfoRecords) {
         psdwrite(io, channel->channelId);
         channel->channelInfoPosition = io->pos();
         psdwrite(io, (quint32)0); // to be filled in when we know how big each channel block is going to be
     }
+    io->write("8BIM", 4);
     psdwrite(io, blendModeKey);
     psdwrite(io, opacity);
     psdwrite(io, clipping);
