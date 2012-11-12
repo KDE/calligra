@@ -278,14 +278,15 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     }
 
     quint64 layerSectionSizePos = io->pos();
+
     // length of the layer info and mask information section
     psdwrite(io, (quint32)0);
 
     // length of the layer info section, rounded up to a multiple of two
     psdwrite(io, (quint32)0);
 
-    // number of layers
-    psdwrite(io, (quint16)nodes.size());
+    // number of layers (negative, because krita always has alpha)
+    psdwrite(io, (qint16)-nodes.size());
 
     // the layers need to be saved in reverse order from the Krita one
     for (int i = nodes.size(); i > 0; --i) {
