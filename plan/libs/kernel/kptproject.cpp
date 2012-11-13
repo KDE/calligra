@@ -585,7 +585,7 @@ void Project::tasksBackward()
                 m_softConstraints.append( t );
                 break;
             default:
-                if ( t->isEndNode() ) {
+                if ( t->isStartNode() ) {
                     m_terminalNodes.append( t );
                 }
                 break;
