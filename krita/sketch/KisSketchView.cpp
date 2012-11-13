@@ -98,7 +98,6 @@ public:
         , undoAction(0)
         , redoAction(0)
         , useOpenGL(false)
-        , wantPrescale(true)
     { }
     ~Private() { }
 
@@ -139,10 +138,11 @@ public:
     bool useOpenGL;
 
     KisPrescaledProjectionSP prescaledProjection;
-    bool wantPrescale;
 
     QColor backgroundColor;
     QBrush checkers;
+
+    QPoint canvasOffset;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -577,8 +577,13 @@ void KisSketchView::Private::imageUpdated(const QRect &updated)
 void KisSketchView::Private::documentOffsetMoved()
 {
     if(prescaledProjection) {
-        wantPrescale = true;
-        //prescaledProjection->preScale();
+        QPoint newOffset = canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
+
+        QPoint moveOffset = newOffset - canvasOffset;
+        prescaledProjection->viewportMoved(moveOffset);
+
+        canvasOffset = newOffset;
+
         if(q->scene())
             q->scene()->invalidate( 0, 0, q->width(), q->height() );
     }
@@ -597,6 +602,8 @@ void KisSketchView::Private::resetDocumentPosition()
     pos.ry() = sb->minimum() + (sb->maximum() - sb->minimum()) / 2;
 
     view->canvasControllerWidget()->setScrollBarValue(pos);
+
+    canvasOffset = canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
 }
 
 void KisSketchView::Private::configChanged()
