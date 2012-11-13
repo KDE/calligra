@@ -8,6 +8,10 @@ Calligra Plan current:
 
 Release 2.6
 -----------
+* Fix regression in scheduling, backward calculation
+
+* Fix bug in kplato xml loader
+
 * Fix crash after File->Open on empty document
 
 * Fix bug 308855 -  Gantt chart: No tree structure in printed version
