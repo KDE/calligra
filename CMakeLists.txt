@@ -463,8 +463,9 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${CMAKE_SOURCE_DIR}/libs/flake/svg
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
-# vectorimage depends on libkowmf
+# vectorimage
 set(VECTORIMAGE_INCLUDES 
+                   ${CMAKE_SOURCE_DIR}/libs/vectorimage
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
                    ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
