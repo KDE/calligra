@@ -7,8 +7,9 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
-
-add_subdirectory(tests)
+if (!WIN32) ## Disable tests in Windows whilst they break builds
+	add_subdirectory(tests)
+endif(!WIN32)
 add_subdirectory(tools)
 
 ### calligrastageprivate ###
