@@ -281,11 +281,6 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         d->shader->release();
     }
     else {
-        if(d->wantPrescale) {
-            d->wantPrescale = false;
-            d->prescaledProjection->preScale();
-        }
-
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
         QRectF geometry(x(), y(), width(), height());
 
