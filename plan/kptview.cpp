@@ -238,12 +238,17 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
     if ( shell() == 0 ) {
         // Don't use docker if embedded
         m_viewlist = new ViewListWidget(doc, m_sp);
+        m_viewlist->setProject( &( getProject() ) );
+        connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
+        connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+        connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), SLOT( slotUpdateViewInfo( ViewListItem* ) ) );
     } else {
         ViewListDockerFactory vl(this);
         docker = dynamic_cast<ViewListDocker *>(shell()->createDockWidget(&vl));
-        if (docker->view() != this) docker->setView(this);
+        if (docker->view() != this) {
+            docker->setView(this);
+        }
         m_viewlist = docker->viewList();
-
 #if 0        //SchedulesDocker
         SchedulesDockerFactory sdf;
         SchedulesDocker *sd = dynamic_cast<SchedulesDocker*>( createDockWidget( &sdf ) );
@@ -254,11 +259,6 @@ View::View(KoPart *part, MainDocument *doc, QWidget *parent)
         connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), sd, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
 #endif
     }
-
-    m_viewlist->setProject( &( getProject() ) );
-    connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), SLOT( slotSelectionChanged( ScheduleManager* ) ) );
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
-    connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), SLOT( slotUpdateViewInfo( ViewListItem* ) ) );
 
     m_tab = new QStackedWidget( m_sp );
 

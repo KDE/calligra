@@ -117,7 +117,7 @@ void MainWindow::adjustWindowSize (QSize size)
 
 void MainWindow::openFileDialog()
 {
-    const QString path = QFileDialog::getOpenFileName (this, "Open File", QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
+    const QString path = QFileDialog::getOpenFileName (this, i18n("Open File"), QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
     if (!path.isEmpty()) {
         QObject* object = m_view->rootObject();
         Q_ASSERT (object);
