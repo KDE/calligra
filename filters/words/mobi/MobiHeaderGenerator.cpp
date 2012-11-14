@@ -143,7 +143,7 @@ void MobiHeaderGenerator::generatePalmDataBase()
     QDateTime date = QDateTime::currentDateTime();
 
     qint32 pdTime = date.toTime_t();
-    kDebug(30517) << date.toTime_t();
+    kDebug(31000) << date.toTime_t();
 
     m_dbHeader->creationDate = pdTime;
     m_dbHeader->modificationDate = pdTime;
