@@ -20,7 +20,7 @@
 #ifndef _WMFWRITER_H_
 #define _WMFWRITER_H_
 
-#include "kowmf_export.h"
+#include "vectorimage_export.h"
 
 #include <QPainter>
 
@@ -53,7 +53,7 @@ class WmfWriterPrivate;
  *   wmf.end();
  *   </pre>
  */
-class LIBWMF_EXPORT WmfWriter
+class VECTORIMAGE_EXPORT WmfWriter
 {
 public:
     explicit WmfWriter(const QString& fileName);
