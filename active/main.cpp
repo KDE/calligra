@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     KAboutData aboutData("calligraactive",
                          0,
                          ki18n("Calligra Active"),
-                         "0.1",
+                         "1.0 Beta",
                          ki18n("Calligra application for tablets"),
                          KAboutData::License_GPL_V2,
                          ki18n("Copyright (c) 2011-2012"));
