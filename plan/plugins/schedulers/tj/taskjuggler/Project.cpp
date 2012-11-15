@@ -1077,9 +1077,9 @@ Project::schedule(int sc)
         foreach (CoreAttributes *t, taskList) {
             if (static_cast<Task*>(t)->isRunaway()) {
                 if (static_cast<Task*>(t)->getScheduling() == Task::ASAP) {
-                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projects target finish time. Try using a later project end date.", t->getName()));
+                    TJMH.errorMessage(i18nc("@info/plain", "Cannot meet the projects target finish time. Try using a later project end date.", t->getName()), t);
                 } else {
-                    TJMH.errorMessage(i18nc("@info/plain", "Task '%1' cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()));
+                    TJMH.errorMessage(i18nc("@info/plain", "Cannot meet the projetcs target start time. Try using an earlier project start date.", t->getName()), t);
                 }
             }
         }
