@@ -24,8 +24,8 @@ set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan
-    ${CMAKE_SOURCE_DIR}/kdgantt
-    ${CMAKE_BINARY_DIR}/kdgantt
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
 
     ${KOMAIN_INCLUDES}    
