@@ -86,7 +86,8 @@ struct KisPrescaledProjection::Private {
         , projectionBackend(0) {
     }
 
-    QImage prescaledQImage;
+    QImage *prescaledQImage;
+    QImage *emptyQImage;
 
     QSize updatePatchSize;
     QSize canvasSize;
@@ -105,6 +106,9 @@ KisPrescaledProjection::KisPrescaledProjection()
     // we disable building the pyramid with setting its height to 1
     // XXX: setting it higher than 1 is broken because it's not updated until you show/hide the layer
     m_d->projectionBackend = new KisImagePyramid(1);
+
+    m_d->prescaledQImage = new QImage(1024, 1024, QImage::Format_ARGB32);
+    m_d->emptyQImage = new QImage(1024, 1024, QImage::Format_ARGB32);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateSettings()));
 }
@@ -125,7 +129,7 @@ void KisPrescaledProjection::setImage(KisImageWSP image)
 
 QImage KisPrescaledProjection::prescaledQImage() const
 {
-    return m_d->prescaledQImage;
+    return *m_d->prescaledQImage;
 }
 
 void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *coordinatesConverter)
@@ -143,7 +147,7 @@ void KisPrescaledProjection::updateSettings()
 void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 {
     // FIXME: \|/
-    if (m_d->prescaledQImage.isNull()) return;
+    if (!m_d->prescaledQImage) return;
     if (offset.isNull()) return;
 
     QPoint alignedOffset = offset.toPoint();
@@ -158,8 +162,9 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
         return;
     }
 
-    QImage newImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
-    newImage.fill(0);
+    //QImage newImage(m_d->viewportSize, QImage::Format_ARGB32);
+    //newImage.fill(0);
+    m_d->emptyQImage->fill(0);
 
     /**
      * TODO: viewport rects should be cropped by the borders of
@@ -173,15 +178,14 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     QRect savedArea = newViewportRect & oldViewportRect;
 
     if(!savedArea.isEmpty()) {
-        copyQImage(alignedOffset.x(), alignedOffset.y(), &newImage, m_d->prescaledQImage);
+        copyQImage(alignedOffset.x(), alignedOffset.y(), m_d->emptyQImage, *m_d->prescaledQImage);
         updateRegion -= savedArea;
     }
 
-    QPainter gc(&newImage);
+    QPainter gc(m_d->emptyQImage);
     QVector<QRect> rects = updateRegion.rects();
 
     foreach(QRect rect, rects) {
-
         QRect imageRect =
             m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();
         QVector<QRect> patches =
@@ -197,7 +201,7 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
         }
     }
 
-    m_d->prescaledQImage = newImage;
+    qSwap(m_d->prescaledQImage, m_d->emptyQImage);
 }
 
 void KisPrescaledProjection::slotImageSizeChanged(qint32 w, qint32 h)
@@ -268,7 +272,7 @@ QRect KisPrescaledProjection::preScale(const QRect & rc)
         KisPPUpdateInfoSP info = getInitialUpdateInformation(QRect());
         fillInUpdateInformation(rc, info);
 
-        QPainter gc(&m_d->prescaledQImage);
+        QPainter gc(m_d->prescaledQImage);
         gc.setCompositionMode(QPainter::CompositionMode_Source);
         gc.fillRect(rc, QColor(0, 0, 0, 0));
         drawUsingBackend(gc, info);
@@ -298,11 +302,12 @@ void KisPrescaledProjection::updateViewportSize()
 
     m_d->viewportSize = m_d->coordinatesConverter->widgetToViewport(minimalRect).toAlignedRect().size();
 
-    if (m_d->prescaledQImage.isNull() ||
-        m_d->prescaledQImage.size() != m_d->viewportSize) {
+    if (m_d->prescaledQImage->size() != m_d->viewportSize) {
+        delete m_d->prescaledQImage;
+        delete m_d->emptyQImage;
 
-        m_d->prescaledQImage = QImage(m_d->viewportSize, QImage::Format_ARGB32);
-        m_d->prescaledQImage.fill(0);
+        m_d->prescaledQImage = new QImage(m_d->viewportSize, QImage::Format_ARGB32);
+        m_d->emptyQImage = new QImage(m_d->viewportSize, QImage::Format_ARGB32);
     }
 }
 
@@ -394,7 +399,7 @@ void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
 
 void KisPrescaledProjection::updateScaledImage(KisPPUpdateInfoSP info)
 {
-    QPainter gc(&m_d->prescaledQImage);
+    QPainter gc(m_d->prescaledQImage);
     gc.setCompositionMode(QPainter::CompositionMode_Source);
     drawUsingBackend(gc, info);
 }
