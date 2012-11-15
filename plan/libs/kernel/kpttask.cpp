@@ -1003,6 +1003,10 @@ void Task::initiateCalculation(MainSchedule &sch) {
     m_currentSchedule->initiateCalculation();
     clearProxyRelations();
     Node::initiateCalculation(sch);
+    m_calculateForwardRun = false;
+    m_calculateBackwardRun = false;
+    m_scheduleForwardRun = false;
+    m_scheduleBackwardRun = false;
 }
 
 
@@ -1079,6 +1083,9 @@ DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
 }
 
 DateTime Task::calculateForward(int use) {
+    if ( m_calculateForwardRun ) {
+        return m_currentSchedule->earlyFinish;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1101,6 +1108,7 @@ DateTime Task::calculateForward(int use) {
         }
     }
     //cs->logDebug( "calculateForward: earlyStart=" + cs->earlyStart.toString() );
+    m_calculateForwardRun = true;
     return calculateEarlyFinish( use );
 }
 
@@ -1332,6 +1340,9 @@ DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
 
 DateTime Task::calculateBackward(int use) {
     //kDebug(planDbg())<<m_name;
+    if ( m_calculateBackwardRun ) {
+        return m_currentSchedule->lateStart;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1351,6 +1362,7 @@ DateTime Task::calculateBackward(int use) {
             cs->lateFinish = time;
         }
     }
+    m_calculateBackwardRun = true;
     return calculateLateStart( use );
 }
 
@@ -1559,6 +1571,9 @@ DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
 }
 
 DateTime Task::scheduleForward(const DateTime &earliest, int use) {
+    if ( m_scheduleForwardRun ) {
+        return m_currentSchedule->endTime;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1580,6 +1595,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     if ( ! m_visitedForward ) {
         cs->startTime = startTime;
     }
+    m_scheduleForwardRun = true;
     return scheduleFromStartTime( use );
 }
 
@@ -1951,6 +1967,9 @@ DateTime Task::scheduleSuccessors(const QList<Relation*> &list, int use) {
 }
 
 DateTime Task::scheduleBackward(const DateTime &latest, int use) {
+    if ( m_scheduleBackwardRun ) {
+        return m_currentSchedule->startTime;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1971,6 +1990,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     if ( ! m_visitedBackward ) {
         cs->endTime = endTime;
     }
+    m_scheduleBackwardRun = true;
     return scheduleFromEndTime( use );
 }
 
