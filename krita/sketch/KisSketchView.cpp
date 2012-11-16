@@ -143,6 +143,8 @@ public:
     QBrush checkers;
 
     QPoint canvasOffset;
+    bool viewportMoved;
+    bool zoomLevelChanged;
 };
 
 KisSketchView::KisSketchView(QDeclarativeItem* parent)
@@ -281,6 +283,18 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
         d->shader->release();
     }
     else {
+        if(d->zoomLevelChanged) {
+            d->prescaledProjection->notifyZoomChanged();
+        } else if(d->viewportMoved) {
+            d->viewportMoved = false;
+            QPoint newOffset = d->canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
+
+            QPoint moveOffset = newOffset - d->canvasOffset;
+            d->prescaledProjection->viewportMoved(moveOffset);
+
+            d->canvasOffset = newOffset;
+        }
+
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
         QRectF geometry(x(), y(), width(), height());
 
@@ -573,12 +587,7 @@ void KisSketchView::Private::imageUpdated(const QRect &updated)
 void KisSketchView::Private::documentOffsetMoved()
 {
     if(prescaledProjection) {
-        QPoint newOffset = canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
-
-        QPoint moveOffset = newOffset - canvasOffset;
-        prescaledProjection->viewportMoved(moveOffset);
-
-        canvasOffset = newOffset;
+        viewportMoved = true;
 
         if(q->scene())
             q->scene()->invalidate( 0, 0, q->width(), q->height() );
@@ -620,7 +629,7 @@ void KisSketchView::Private::configChanged()
 
 void KisSketchView::Private::zoomChanged()
 {
-    prescaledProjection->notifyZoomChanged();
+    zoomLevelChanged = true;
 }
 
 #include "KisSketchView.moc"
