@@ -554,6 +554,7 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
             d->canvasWidget->setGeometry(newGeometry.toRect());
             d->canvasWidget->resize(newGeometry.width(), newGeometry.height());
         }
+        const_cast<KisCoordinatesConverter*>(d->canvas->coordinatesConverter())->setCanvasWidgetSize(newGeometry.size().toSize());
         d->prescaledProjection->notifyCanvasSizeChanged(newGeometry.size().toSize());
         d->timer->start(100);
     }
