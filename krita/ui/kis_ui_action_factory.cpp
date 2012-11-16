@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@kde.org>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,12 +16,42 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_NODE_COMMANDS_H
-#define KIS_NODE_COMMANDS_H
+#include "kis_ui_action_factory.h"
 
-#include "kis_change_filter_command.h"
-#include "kis_node_compositeop_command.h"
-#include "kis_node_opacity_command.h"
+KisUiActionConfiguration::KisUiActionConfiguration()
+{
+}
 
-#endif
+KisUiActionConfiguration::KisUiActionConfiguration(const QString &id)
+{
+    setProperty("id", id);
+}
+
+QString KisUiActionConfiguration::id() const
+{
+    return getString("id", "wrong-id");
+}
+
+
+KisUiActionFactory::KisUiActionFactory(const QString &id)
+    : m_id(id)
+{
+}
+
+KisUiActionFactory::~KisUiActionFactory()
+{
+}
+
+QString KisUiActionFactory::id() const
+{
+    return m_id;
+}
+
+void KisUiActionFactory::runFromXML(KisView2 *view, const KisUiActionConfiguration &config)
+{
+    Q_UNUSED(view);
+    Q_UNUSED(config);
+
+    qFatal("Not implemented yet");
+}
 

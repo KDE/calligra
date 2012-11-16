@@ -1003,6 +1003,10 @@ void Task::initiateCalculation(MainSchedule &sch) {
     m_currentSchedule->initiateCalculation();
     clearProxyRelations();
     Node::initiateCalculation(sch);
+    m_calculateForwardRun = false;
+    m_calculateBackwardRun = false;
+    m_scheduleForwardRun = false;
+    m_scheduleBackwardRun = false;
 }
 
 
@@ -1057,12 +1061,16 @@ DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
                 // I can't start earlier than my predesseccor
                 t = r->parent()->earlyStart() + r->lag();
                 break;
-            case Relation::FinishFinish:
+            case Relation::FinishFinish: {
                 // I can't finish earlier than my predeccessor, so
                 // I can't start earlier than it's (earlyfinish+lag)- my duration
                 t += r->lag();
+                Schedule::OBState obs = m_currentSchedule->allowOverbookingState();
+                m_currentSchedule->setAllowOverbookingState( Schedule::OBS_Allow );
                 t -= duration(t, use, true);
+                m_currentSchedule->setAllowOverbookingState( obs );
                 break;
+            }
             default:
                 t += r->lag();
                 break;
@@ -1075,6 +1083,9 @@ DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
 }
 
 DateTime Task::calculateForward(int use) {
+    if ( m_calculateForwardRun ) {
+        return m_currentSchedule->earlyFinish;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1097,6 +1108,7 @@ DateTime Task::calculateForward(int use) {
         }
     }
     //cs->logDebug( "calculateForward: earlyStart=" + cs->earlyStart.toString() );
+    m_calculateForwardRun = true;
     return calculateEarlyFinish( use );
 }
 
@@ -1300,12 +1312,16 @@ DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
         }
         DateTime t = r->child()->calculateBackward(use);
         switch (r->type()) {
-            case Relation::StartStart:
+            case Relation::StartStart: {
                 // I must start before my successor, so
                 // I can't finish later than it's (starttime-lag) + my duration
                 t -= r->lag();
+                Schedule::OBState obs = m_currentSchedule->allowOverbookingState();
+                m_currentSchedule->setAllowOverbookingState( Schedule::OBS_Allow );
                 t += duration(t, use, false);
+                m_currentSchedule->setAllowOverbookingState( obs );
                 break;
+            }
             case Relation::FinishFinish:
                 // My successor cannot finish before me, so
                 // I can't finish later than it's latest finish - lag
@@ -1324,6 +1340,9 @@ DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
 
 DateTime Task::calculateBackward(int use) {
     //kDebug(planDbg())<<m_name;
+    if ( m_calculateBackwardRun ) {
+        return m_currentSchedule->lateStart;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1343,6 +1362,7 @@ DateTime Task::calculateBackward(int use) {
             cs->lateFinish = time;
         }
     }
+    m_calculateBackwardRun = true;
     return calculateLateStart( use );
 }
 
@@ -1551,6 +1571,9 @@ DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
 }
 
 DateTime Task::scheduleForward(const DateTime &earliest, int use) {
+    if ( m_scheduleForwardRun ) {
+        return m_currentSchedule->endTime;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1572,6 +1595,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     if ( ! m_visitedForward ) {
         cs->startTime = startTime;
     }
+    m_scheduleForwardRun = true;
     return scheduleFromStartTime( use );
 }
 
@@ -1943,6 +1967,9 @@ DateTime Task::scheduleSuccessors(const QList<Relation*> &list, int use) {
 }
 
 DateTime Task::scheduleBackward(const DateTime &latest, int use) {
+    if ( m_scheduleBackwardRun ) {
+        return m_currentSchedule->startTime;
+    }
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1963,6 +1990,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     if ( ! m_visitedBackward ) {
         cs->endTime = endTime;
     }
+    m_scheduleBackwardRun = true;
     return scheduleFromEndTime( use );
 }
 
@@ -2577,29 +2605,13 @@ void Task::addChildProxyRelation(Node *node, const Relation *rel) {
     }
 }
 
-bool Task::isEndNode() const {
-    foreach (Relation *r, m_dependChildNodes) {
-        if (r->type() == Relation::FinishStart)
-            return false;
-    }
-    foreach (Relation *r, m_childProxyRelations) {
-        if (r->type() == Relation::FinishStart)
-            return false;
-    }
-    return true;
+bool Task::isEndNode() const
+{
+    return m_dependChildNodes.isEmpty() && m_childProxyRelations.isEmpty();
 }
-bool Task::isStartNode() const {
-    foreach (Relation *r, m_dependParentNodes) {
-        if (r->type() == Relation::FinishStart ||
-            r->type() == Relation::StartStart)
-            return false;
-    }
-    foreach (Relation *r, m_parentProxyRelations) {
-        if (r->type() == Relation::FinishStart ||
-            r->type() == Relation::StartStart)
-            return false;
-    }
-    return true;
+bool Task::isStartNode() const
+{
+    return m_dependParentNodes.isEmpty() && m_parentProxyRelations.isEmpty();
 }
 
 DateTime Task::workTimeAfter(const DateTime &dt, Schedule *sch) const {

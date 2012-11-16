@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Boudewijn Rempt <boud@kde.org>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,12 +16,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_NODE_COMMANDS_H
-#define KIS_NODE_COMMANDS_H
+#ifndef __KIS_UI_ACTION_FACTORY_H
+#define __KIS_UI_ACTION_FACTORY_H
 
-#include "kis_change_filter_command.h"
-#include "kis_node_compositeop_command.h"
-#include "kis_node_opacity_command.h"
+#include <QString>
+#include <krita_export.h>
+#include "kis_properties_configuration.h"
 
-#endif
+class KisView2;
 
+class KisUiActionConfiguration : public KisPropertiesConfiguration
+{
+public:
+    KisUiActionConfiguration();
+    KisUiActionConfiguration(const QString &id);
+
+    QString id() const;
+};
+
+
+class KRITAUI_EXPORT KisUiActionFactory
+{
+public:
+    KisUiActionFactory(const QString &id);
+    virtual ~KisUiActionFactory();
+
+    QString id() const;
+
+    virtual void runFromXML(KisView2 *view, const KisUiActionConfiguration &config);
+
+private:
+    const QString m_id;
+};
+
+#endif /* __KIS_UI_ACTION_FACTORY_H */

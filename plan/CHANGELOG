@@ -1,6 +1,11 @@
 
 Release 2.6:
 ----------------------
+* Fix regression in scheduling, backward calculation
+
+* Fix bug in kplato xml loader
+
+* Fix crash after File->Open on empty document
 
 * Fix bug: Do not add/remove views twice
 
