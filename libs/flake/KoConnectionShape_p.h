@@ -41,6 +41,9 @@ public:
     qreal scalarProd(const QPointF &v1, const QPointF &v2) const;
     qreal crossProd(const QPointF &v1, const QPointF &v2) const;
 
+    /// Returns control handle position with constraint of the escaping direction of Start/End Handle
+    QPointF constraintHandlePosition(const QPointF &mosPos, const QPointF &ed, int handleId, const int refHandleId) const;
+
     /// Returns if given handle is connected to a shape
     bool handleConnected(int handleId) const;
 
@@ -54,7 +57,6 @@ public:
     bool forceUpdate;
     bool hasCustomPath;
     bool resetControlHandles;
-    QList<QPair<QPointF, QPointF> > edgePoints;
     QList<KoConnectionShape::HandleDirection> handleDirections;
     Q_DECLARE_PUBLIC(KoConnectionShape)
 };

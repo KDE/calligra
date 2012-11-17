@@ -56,7 +56,7 @@ public:
      * After that updatePath and a repaint is called.
      *
      * @param handleId the id of the handle to move
-     * @param point the point to move the handle to in document coordinates
+     * @param point the point to move the handle to in shape coordinates
      * @param modifiers the keyboard modifiers used during moving the handle
      */
     void moveHandle(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);

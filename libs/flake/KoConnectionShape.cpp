@@ -204,40 +204,108 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
     QPointF direction1 = escapeDirection(KoConnectionShape::StartHandle);
     QPointF direction2 = escapeDirection(KoConnectionShape::EndHandle);
 
-    QPointF edgePoint1 = handles[KoConnectionShape::StartHandle] + MinimumEscapeLength * direction1;
-    QPointF edgePoint2 = handles[KoConnectionShape::EndHandle] + MinimumEscapeLength * direction2;
+    QPointF escapeVector1;
+    QPointF escapeVector2;
 
-    edges1.append(edgePoint1);
-    edges2.prepend(edgePoint2);
+    QPointF edgePoint1;
+    QPointF edgePoint2;
 
-    if (handleConnected(KoConnectionShape::StartHandle) && handleConnected(KoConnectionShape::EndHandle)) {
-        QPointF intersection;
-        bool connected = false;
-        do {
+    QPointF intersection;
+
+    if (resetControlHandles) {
+        // new connection
+        if ( !(handleConnected(KoConnectionShape::StartHandle) && handleConnected(KoConnectionShape::EndHandle)) ) {
+            // I-shape connection, end points not connected to shapes, no control point
+            path.append(handles[KoConnectionShape::EndHandle]);
+            return;
+        } else if (intersects(handles[KoConnectionShape::StartHandle], direction1, handles[KoConnectionShape::EndHandle], direction2, intersection)) {
+            // L-shape connection, we have one edge point and be done, no control point
+            path.append(intersection);
+            path.append(handles[KoConnectionShape::EndHandle]);
+            return;
+        } else if (direction1 == direction2) {
+            // U-shape connection, one control point
+            QPointF diff = handles[KoConnectionShape::EndHandle] - handles[KoConnectionShape::StartHandle];
+            diff.setX(diff.x() * direction1.x());
+            diff.setY(diff.x() * direction1.y());
+
+            if (diff.x() >= 0 && diff.y() >= 0) {
+                // end handle leading
+                diff.setX(diff.x() * direction1.x());
+                diff.setY(diff.y() * direction1.y());
+                path.append(handles[KoConnectionShape::StartHandle] + diff);
+                path.append(handles[KoConnectionShape::EndHandle] + MinimumEscapeLength * direction2);
+                path.append(handles[KoConnectionShape::EndHandle]);
+                return;
+            } else {
+                // start handle leading
+                diff.setX(diff.x() * direction2.x());
+                diff.setY(diff.y() * direction2.y());
+                path.append(handles[KoConnectionShape::StartHandle] + MinimumEscapeLength * direction1);
+                path.append(handles[KoConnectionShape::EndHandle] - diff);
+                path.append(handles[KoConnectionShape::EndHandle]);
+                return;
+            }
+        } else if (direction1 == -direction2 && scalarProd(direction1,
+                   handles[KoConnectionShape::StartHandle] - handles[KoConnectionShape::EndHandle]) > 0) {
+            // Z-shape connection, one control point
+            QPointF mid = (handles[KoConnectionShape::EndHandle] - handles[KoConnectionShape::StartHandle]) / 2;
+            mid.setX(mid.x() * direction1.x());
+            mid.setY(mid.y() * direction1.y());
+
+            path.append(handles[KoConnectionShape::StartHandle] + mid);
+            path.append(handles[KoConnectionShape::EndHandle] - mid);
+            path.append(handles[KoConnectionShape::EndHandle]);
+            return;
+        } else {
+            // more complicated connections
+            edgePoint1 = handles[KoConnectionShape::StartHandle] + MinimumEscapeLength * direction1;
+            edgePoint2 = handles[KoConnectionShape::EndHandle] + MinimumEscapeLength * direction2;
+        }
+    } else {
+        // move control points
+        if (handles.size() > 2) {
+            // connection handle changed
+            escapeVector1 = handles[KoConnectionShape::ControlHandle_1] - handles[KoConnectionShape::StartHandle];
+            escapeVector1.setX(escapeVector1.x() * direction1.x());
+            escapeVector1.setY(escapeVector1.y() * direction1.y());
+
+            escapeVector2 = handles.last() - handles[KoConnectionShape::EndHandle];
+            escapeVector2.setX(escapeVector2.x() * direction2.x());
+            escapeVector2.setY(escapeVector2.y() * direction2.y());
+
+            // escape length determined by control handles
+            edgePoint1 = handles[KoConnectionShape::StartHandle] + escapeVector1;
+            edgePoint2 = handles[KoConnectionShape::EndHandle] + escapeVector2;
+        }
+    }
+
+    //when handle connected and complex path with control point
+    while (true) {
+        // check if we are going toward the other handle
+        qreal sp = scalarProd(direction1, edges2.first() - edges1.last());
+        if (sp >= 0.0) {
+            // if we are having the same direction, go all the way toward
+            // the other handle, else only go half the way
+            if (direction1 == direction2)
+                edgePoint1 += sp * direction1;
+            else
+                edgePoint1 += 0.5 * sp * direction1;
+            edges1.append(edgePoint1);
+            // switch direction
+            direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
+        } else {
+            // we are not going into the same direction, so switch direction
+            direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
+        }
             // first check if directions from current edge points intersect
-            if (intersects(edgePoint1, direction1, edgePoint2, direction2, intersection)) {
+            if (intersects(edges1.last(), direction1, edgePoint2, direction2, intersection)) {
                 // directions intersect, we have another edge point and be done
                 edges1.append(intersection);
                 break;
             }
 
-            // check if we are going toward the other handle
-            qreal sp = scalarProd(direction1, edgePoint2 - edgePoint1);
-            if (sp >= 0.0) {
-                // if we are having the same direction, go all the way toward
-                // the other handle, else only go half the way
-                if (direction1 == direction2)
-                    edgePoint1 += sp * direction1;
-                else
-                    edgePoint1 += 0.5 * sp * direction1;
-                edges1.append(edgePoint1);
-                // switch direction
-                direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
-            } else {
-                // we are not going into the same direction, so switch direction
-                direction1 = perpendicularDirection(edgePoint1, direction1, edgePoint2);
-            }
-        } while (! connected);
+
     }
 
     path.append(edges1);
@@ -254,6 +322,28 @@ qreal KoConnectionShapePrivate::scalarProd(const QPointF &v1, const QPointF &v2)
 qreal KoConnectionShapePrivate::crossProd(const QPointF &v1, const QPointF &v2) const
 {
     return v1.x() * v2.y() - v1.y() * v2.x();
+}
+
+QPointF KoConnectionShapePrivate::constraintHandlePosition(const QPointF &mosPos, const QPointF &ed, int handleId, const int refHandleId) const
+{
+    QPointF retPos = handles[handleId];
+    QPointF refPos = handles[refHandleId];
+    if (ed.x() == 0) {
+        if ((mosPos.y()-refPos.y() >= 0 && ed.y() >= 0) || (mosPos.y()-refPos.y() < 0 && ed.y() < 0)) {
+            retPos.setY(mosPos.y());
+        } else {
+            retPos.setY(refPos.y());
+        }
+    }
+    if (ed.y() == 0) {
+        if ((mosPos.x()-refPos.x() >= 0 && ed.x() >= 0) || (mosPos.x()-refPos.x() < 0 && ed.x() < 0)) {
+            retPos.setX(mosPos.x());
+        } else {
+            retPos.setX(refPos.x());
+        }
+    }
+
+    return retPos;
 }
 
 bool KoConnectionShapePrivate::handleConnected(int handleId) const
@@ -548,22 +638,37 @@ void KoConnectionShape::moveHandleAction(int handleId, const QPointF &point, Qt:
 
     if (handleId == StartHandle || handleId == EndHandle) {
         d->handles[handleId] = point;
+        d->resetControlHandles = true;
     } else {
-        QPointF p(point);
-        if (d->handleDirections[handleId-2] == DirectionX) {
-            p.setY(d->handles[handleId].y()); // keep position on y axis
-            if (d->connectionType == Standard) {
-                d->edgePoints[handleId-2].first.setX(point.x());
-                d->edgePoints[handleId-2].second.setX(point.x());
-            }
-        } else {
-            p.setX(d->handles[handleId].x()); // keep position on x axis
-            if (d->connectionType == Standard) {
-                d->edgePoints[handleId-2].first.setY(point.y());
-                d->edgePoints[handleId-2].second.setY(point.y());
+        if (d->connectionType != Straight) {
+            d->resetControlHandles = false;
+            QPointF direction;
+            kDebug(30006) << d->handles[handleId];
+            if (handleId == ControlHandle_1) { // control handle 1 always follows start handle
+                direction = d->escapeDirection(StartHandle);
+                d->handles[handleId] = d->constraintHandlePosition(point, direction, handleId, StartHandle);
+                kDebug(30006) << d->handles[handleId] << "c1";
+
+            } else if (handleId == ControlHandle_2) {
+                if (d->handles.size() == 4) { // control handle 2 follows end handle when there it's last control handle
+                    direction = d->escapeDirection(EndHandle);
+                    d->handles[handleId] = d->constraintHandlePosition(point, direction, handleId, EndHandle);
+                    kDebug(30006) << d->handles[handleId] << "c2";
+                } else if (d->handles.size() == 5){ // this only happens in Standard type with 3 control handles
+                    if (d->handleDirections[ControlHandle_1] == DirectionX) {
+                        d->handles[handleId].setY(point.y());
+                        kDebug(30006) << d->handles[handleId] << "c2y";
+                    } else {
+                        d->handles[handleId].setX(point.x());
+                        kDebug(30006) << d->handles[handleId] << "c2x";
+                    }
+                }
+            } else if (handleId == ControlHandle_3) {
+                direction = d->escapeDirection(EndHandle);
+                d->handles[handleId] = d->constraintHandlePosition(point, direction, handleId, EndHandle);
+                kDebug(30006) << d->handles[handleId] << "c3";
             }
         }
-        d->handles[handleId] = p;
     }
 }
 
@@ -587,17 +692,14 @@ void KoConnectionShape::updatePath(const QSizeF &size)
             d->normalPath(MinimumEscapeLength);
             if (d->path.count() != 0){
                 moveTo(d->path[0]);
-                QList<QPair<QPointF, QPointF> > edgePoints;
                 for (int index = 1; index < d->path.count(); ++index) {
                     lineTo(d->path[index]);
-                    if (index > 1 && index < d->path.count()-2) {
+                    if (index > 1 && index < d->path.count()-2) { // no control handle on first path and last path
                         QPointF controlHandle = (d->path[index-1] + d->path[index]) / 2;
                         handles << controlHandle;
                         handleDirections << (d->path[index-1].x() == d->path[index].x() ? DirectionX : DirectionY);
-                        edgePoints.append(qMakePair(d->path[index-1], d->path[index]));
                     }
                 }
-                d->edgePoints = edgePoints;
             }
             break;
         }
@@ -646,16 +748,16 @@ void KoConnectionShape::updatePath(const QSizeF &size)
         d->handleDirections = handleDirections;
 
     } else {
+        kDebug(30006) << d->path << "before";
         switch (d->connectionType) {
         case Standard: {
-            moveTo(d->handles[StartHandle]);
-            if (d->handles.count() > EndHandle) {
-                lineTo(d->edgePoints[0].first);
-                for (int index = 2; index < d->handles.count(); ++index) { // ControlHandle_1 = 2
-                    lineTo(d->edgePoints[index-2].second);
+            d->normalPath(0);
+            if (d->path.count() != 0){
+                moveTo(d->path[0]);
+                for (int index = 1; index < d->path.count(); ++index) {
+                    lineTo(d->path[index]);
                 }
             }
-            lineTo(d->handles[EndHandle]); //FIXME
             break;
         }
         case Lines: {
@@ -676,6 +778,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
                 curveTo(d->handles[ControlHandle_1], d->handles[ControlHandle_2], d->handles[EndHandle]);
             break;
         }
+        kDebug(30006) << d->path << "after";
     }
 
     normalize();

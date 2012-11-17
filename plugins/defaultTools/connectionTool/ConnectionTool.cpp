@@ -48,6 +48,7 @@
 #include <KoShapeConfigWidgetBase.h>
 #include <KoConnectionShapeConfigWidget.h>
 #include <KoPathConnectionPointStrategy.h>
+#include <KoParameterChangeStrategy.h>
 #include <KoToolManager.h>
 #include <KoIcon.h>
 
@@ -284,8 +285,15 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
     int hitHandle = handleAtPoint(m_currentShape, event->point);
 
     if (m_editMode == EditConnection && hitHandle >= 0) {
-        // create connection handle change strategy
-        m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), hitHandle);
+        if (hitHandle == KoConnectionShape::StartHandle || hitHandle == KoConnectionShape::EndHandle) {
+            // create connection handle change strategy
+            m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), hitHandle);
+        } else {
+            KoConnectionShape* connection = dynamic_cast<KoConnectionShape*>(m_currentShape);
+            if (connection) {
+                m_currentStrategy = new KoParameterChangeStrategy(this, connection, hitHandle);
+            }
+        }
     } else if (m_editMode == EditConnectionPoint) {
         if (hitHandle >= KoConnectionPoint::FirstCustomConnectionPoint) {
             // start moving custom connection point
