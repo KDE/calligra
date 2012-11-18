@@ -1,5 +1,13 @@
 include_directories( ${PHONON_INCLUDE_DIR} )
 
+if(PHONON_FOUND_EXPERIMENTAL)
+   set(SHOULD_BUILD_THUMBNAIL TRUE)
+   add_definitions( -DSHOULD_BUILD_THUMBNAIL )
+else(PHONON_FOUND_EXPERIMENTAL)
+    set(SHOULD_BUILD_THUMBNAIL FALSE)
+endif(PHONON_FOUND_EXPERIMENTAL)
+
+
 ########### Flake Plugin library ###############
 
 SET (videoshape_LIB_SRCS
@@ -15,16 +23,20 @@ SET (videoshape_LIB_SRCS
     VideoToolFactory.cpp
     ChangeVideoCommand.cpp
     SelectVideoWidget.cpp
-    VideoThumbnailer.cpp
 )
+
+if(SHOULD_BUILD_THUMBNAIL)
+    set(videoshape_LIB_SRCS ${videoshape_LIB_SRCS} VideoThumbnailer.cpp)
+endif(SHOULD_BUILD_THUMBNAIL)
 
 kde4_add_ui_files(videoshape_LIB_SRCS forms/VideoToolWidget.ui)
 kde4_add_plugin(videoshape ${videoshape_LIB_SRCS})
 
-target_link_libraries(videoshape komain phononexperimental
+target_link_libraries(videoshape komain
     ${KDE4_KFILE_LIBRARY}
-    ${KDE4_PHONON_LIBRARY}
+    ${PHONON_LIBS}
 )
+
 install(TARGETS videoshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
