@@ -131,7 +131,6 @@ bool PSDLayerSection::read(QIODevice* io)
     for (int i = 0; i < nLayers; ++i) {
 
         dbgFile << "Going to seek channel positions for layer" << i << "pos" << io->pos();
-        Q_ASSERT(i < layers.size());
         if (i > layers.size()) {
             error = QString("Expected layer %1, but only have %2 layers").arg(i).arg(layers.size());
             return false;
@@ -251,7 +250,6 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
 {
     for (uint i = 0; i < node->childCount(); ++i) {
         KisNodeSP child = node->at(i);
-        qDebug() << child->name() << "node->inherits(isPaintLayer)" << child->inherits("KisPaintLayer");
         if (child->inherits("KisPaintLayer")) {
             layers << child;
         }
@@ -266,8 +264,6 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
 {
     qDebug() << "Writing layer layer section";
 
-    Q_UNUSED(io);
-
     // Build the whole layer structure
     QList<KisNodeSP> nodes;
     flattenLayers(rootLayer, nodes);
@@ -277,18 +273,20 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         return false;
     }
 
-    quint64 layerSectionSizePos = io->pos();
-
+    quint64 layerMaskPos = io->pos();
     // length of the layer info and mask information section
+    dbgFile << "Length of layer info and mask info section at" << layerMaskPos;
     psdwrite(io, (quint32)0);
 
-    // length of the layer info section, rounded up to a multiple of two
+    quint64 layerInfoPos = io->pos();
+    dbgFile << "length of the layer info section, rounded up to a multiple of two, at" << layerInfoPos;
     psdwrite(io, (quint32)0);
 
     // number of layers (negative, because krita always has alpha)
+    dbgFile << "number of layers" << -nodes.size() << "at" << io->pos();
     psdwrite(io, (qint16)-nodes.size());
 
-    // the layers need to be saved in reverse order from the Krita one
+    // Layer records section
     foreach(KisNodeSP node, nodes) {
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
@@ -299,6 +297,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     }
 
     // Now save the channel data
+    dbgFile << "start writing channel data" << io->pos();
     foreach(PSDLayerRecord *layerRecord, layers) {
         if (!layerRecord->writeChannelData(io)) {
             error = layerRecord->error;
@@ -307,22 +306,22 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     }
 
     // Write the final size of the block
+    qDebug() << "Final io pos after writing channel data" << io->pos();
     quint64 pos = io->pos();
-    io->seek(layerSectionSizePos);
-    // length of the layer info and mask information section
-    psdwrite(io, (quint32)(pos - layerSectionSizePos));
+    io->seek(layerInfoPos);
 
-    // length of the layer info section, rounded up to a multiple of two
-    // XXX: for now, we don't do a mask section, so let's assume this is correct
-    psdwrite(io, (quint32)(io->pos() - layerSectionSizePos));
+    // length of the layer info information section
+    quint32 layerInfoSize = pos - layerInfoPos - sizeof(quint32);
+    qDebug() << "Layer Info Section size" << layerInfoSize << "at"  << io->pos();
+    psdwrite(io, layerInfoSize);
+
+    // length of the layer and mask info section, rounded up to a multiple of two
+    io->seek(layerMaskPos);
+    quint32 layerMaskSize = pos - layerMaskPos - sizeof(quint32);
+    qDebug() << "Layer and Mask information length" << layerMaskSize << "at" << io->pos();
+    psdwrite(io, layerMaskSize);
 
     io->seek(pos);
-
-    // Write empty layer mask/adjustment layer data
-    psdwrite(io, (quint32)0);
-
-    // Write empty layer blending ragnes data
-    psdwrite(io, (quint32)0);
 
     return true;
 }

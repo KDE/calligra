@@ -250,7 +250,7 @@ bool PSDLayerRecord::read(QIODevice* io)
                 .arg(QString(b));
         return false;
     }
-
+    qDebug() << "reading blend mode at pos" << io->pos();
     blendModeKey = QString(io->read(4));
     if (blendModeKey.size() != 4) {
         error = QString("Could not read blend mode key. Got: %1").arg(blendModeKey);
@@ -482,25 +482,34 @@ bool PSDLayerRecord::read(QIODevice* io)
 
 bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
 {
+    dbgFile << "writing layer info record" << node->name() << "at" << io->pos();
+
     m_node = node;
 
     QRect rc = node->projection()->exactBounds();
+    // keep to the max of photoshop's capabilities
+    if (rc.width() > 30000) rc.setWidth(30000);
+    if (rc.height() > 30000) rc.setHeight(30000);
     top = rc.top();
     left = rc.left();
     bottom = rc.bottom();
     right = rc.right();
-    nChannels = node->projection()->channelCount();
+    nChannels = node->projection()->colorSpace()->colorChannelCount();
 
-    // XXX: masks should be saved as channels as well
+    // XXX: masks should be saved as channels as well, with id -2
+    ChannelInfo *info = new ChannelInfo;
+    info->channelId = -1; // For the alpha channel, which we always have in Krita
+    channelInfoRecords << info;
     for (int i = 0; i < nChannels; ++i) {
-        ChannelInfo *info = new ChannelInfo;
+        info = new ChannelInfo;
         info->channelId = i; // 0 for red, 1 = green, etc
         channelInfoRecords << info;
     }
+    nChannels++; // to compensate for the alpha channel at the start
 
     blendModeKey = composite_op_to_psd_blendmode(node->compositeOpId());
     opacity = node->opacity();
-    clipping = 1;
+    clipping = 0;
 
     KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
     transparencyProtected = (paintLayer && paintLayer->alphaLocked());
@@ -515,23 +524,37 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     psdwrite(io, (quint32)top);
     psdwrite(io, (quint32)bottom);
     psdwrite(io, (quint32)right);
-    psdwrite(io, nChannels);
+    psdwrite(io, (quint16)nChannels);
 
     foreach(ChannelInfo *channel, channelInfoRecords) {
-        psdwrite(io, channel->channelId);
+        psdwrite(io, (quint16)channel->channelId);
         channel->channelInfoPosition = io->pos();
+        dbgFile << "ChannelInfo record position:" << channel->channelInfoPosition << "channel id" << channel->channelId;
         psdwrite(io, (quint32)0); // to be filled in when we know how big each channel block is going to be
     }
+
+    // blend mode
     io->write("8BIM", 4);
-    psdwrite(io, blendModeKey);
+    dbgFile << "blendModeKey" << blendModeKey << "pos" << io->pos();
+    io->write(blendModeKey.toAscii());
+
+    // opacity
     psdwrite(io, opacity);
+
+    // clipping - unused
     psdwrite(io, clipping);
+
+    // visibility and protection
     quint8 flags = 0;
     if (transparencyProtected) flags |= 1;
     if (visible) flags |= 1;
     psdwrite(io, flags);
-    psdwrite(io, (quint8)0); //filler
 
+
+    // padding byte to make the length even
+    psdwrite(io, (quint8)0);
+
+    // position of the extra data size
     quint64 extraDataPos = io->pos();
     psdwrite(io, (quint32)0); // length of the extra data fields
 
@@ -544,36 +567,41 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     // layer name: Pascal string, padded to a multiple of 4 bytes.
     psdwrite_pascalstring(io, layerName, 4);
 
-    // write luni data block
-    {
-        quint32 len = layerName.length();
-        quint32 blocksize = 0;
-        io->write("8BIM", 4);
-        io->write("luni", 4);
+//    // write luni data block
+//    {
+//        quint32 len = layerName.length();
+//        quint32 blocksize = 0;
+//        io->write("8BIM", 4);
+//        io->write("luni", 4);
 
-        // pad to even number of chars
-        if (len % 2) {
-            blocksize = len + 1;
-        }
-        else {
-            blocksize = len;
-        }
-        // 2 bytes per character + 4 bytes for pascal string length
-        blocksize = (blocksize * 2)  + 4;
-        psdwrite(io, blocksize);
-        const ushort *chars = layerName.utf16();
-        for (uint i = 0; i < len; i++) {
-            psdwrite(io, (quint16)chars[i]);
-        }
+//        // pad to even number of chars
+//        if (len % 2) {
+//            blocksize = len + 1;
+//        }
+//        else {
+//            blocksize = len;
+//        }
+//        // 2 bytes per character + 4 bytes for pascal string length
+//        blocksize = (blocksize * 2)  + 4;
+//        psdwrite(io, blocksize);
+//        const ushort *chars = layerName.utf16();
+//        for (uint i = 0; i < len; i++) {
+//            psdwrite(io, (quint16)chars[i]);
+//        }
 
-        if (len % 2) {
-            psdwrite(io, (quint16)0);
-        }
-    }
+//        if (len % 2) {
+//            psdwrite(io, (quint16)0);
+//        }
+//    }
     // write real length for extra data
     quint64 eofPos = io->pos();
     io->seek(extraDataPos);
     psdwrite(io, (quint32)(eofPos - extraDataPos - sizeof(quint32)));
+    dbgFile << "ExtraData size" << (eofPos - extraDataPos - sizeof(quint32))
+            << "extra data pos" << extraDataPos
+            << "eofpos" << eofPos;
+
+    // retor to eof to continue writing
     io->seek(eofPos);
 
     return true;
@@ -581,6 +609,8 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
 
 bool PSDLayerRecord::writeChannelData(QIODevice *io)
 {
+    dbgFile << "writing pixel data for layer" << layerName << "at" << io->pos();
+
     KisPaintDeviceSP dev = m_node->projection();
 
     // XXX: make the compression settting configurable. For now, always use RLE.
@@ -598,7 +628,8 @@ bool PSDLayerRecord::writeChannelData(QIODevice *io)
 
     foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
 
-        dbgFile << "Writing channel" << channelInfo->name() << "to layer section";
+        dbgFile << "\tWriting channel" << channelInfo->name() << "index" << channelInfoIndex;
+        dbgFile << "\t\tpsd channel id" << channelInfoRecords[channelInfoIndex]->channelId;
 
         // where this block starts, for the total size calculation
         quint64 startChannelBlockPos = io->pos();
@@ -629,6 +660,9 @@ bool PSDLayerRecord::writeChannelData(QIODevice *io)
                 error = "Could not write image data";
                 return false;
             }
+//            dbgFile << "\t\tUncompressed:" << uncompressed.size() << "compressed" << compressed.size();
+//            QByteArray control = Compression::uncompress(rc.width(), compressed, Compression::RLE);
+//            Q_ASSERT(qstrcmp(control, uncompressed) == 0);
 
             quint16 size = compressed.size();
             // If the layer's size, and therefore the data, is odd, a pad byte will be inserted
