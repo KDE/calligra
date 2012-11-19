@@ -103,9 +103,9 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     }
 
 #if 0 // Debug
-    kDebug(30517) << "======== >> Styles";
+    kDebug(30503) << "======== >> Styles";
     foreach(const QString &name, m_styles.keys()) {
-        kDebug(30517) << "==" << name << ":\t"
+        kDebug(30503) << "==" << name << ":\t"
                       << m_styles.value(name)->parent
                       << m_styles.value(name)->family
                       << m_styles.value(name)->isDefaultStyle
@@ -113,7 +113,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
                       << m_styles.value(name)->attributes
             ;
     }
-    kDebug(30517) << "======== << Styles";
+    kDebug(30503) << "======== << Styles";
 #endif
 
     // Propagate style inheritance.
@@ -121,8 +121,8 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
 
     // 2. Create CSS contents and store it in the file collector.
     status = createCSS(m_styles, m_cssContent);
-    //kDebug(30517) << "Styles:" << m_styles;
-    //kDebug(30517) << "CSS:" << m_cssContent;
+    //kDebug(30503) << "Styles:" << m_styles;
+    //kDebug(30503) << "CSS:" << m_cssContent;
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -137,7 +137,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     // Parse body from content.xml
 
     if (!odfStore->open("content.xml")) {
-        kDebug(30517) << "Can not open content.xml .";
+        kDebug(30503) << "Can not open content.xml .";
         return KoFilter::FileNotFound;
     }
 
@@ -146,7 +146,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     int errorLine;
     int errorColumn;
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
-        kDebug(30517) << "Error occurred while parsing content.xml "
+        kDebug(30503) << "Error occurred while parsing content.xml "
                       << errorMsg << " in Line: " << errorLine
                       << " Column: " << errorColumn;
         odfStore->close();
@@ -197,7 +197,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
             if (m_options->doBreakIntoChapters
                 && (hasOutlineLevel1 || (style && style->shouldBreakChapter)))
             {
-                //kDebug(30517) << "Found paragraph which breaks into new chapter";
+                //kDebug(30503) << "Found paragraph which breaks into new chapter";
 
                 // Write out any footnotes
                 if (!m_footNotes.isEmpty()) {
@@ -872,9 +872,9 @@ KoFilter::ConversionStatus OdtHtmlConverter::collectStyles(KoStore *odfStore,
     // Get style info from content.xml.
 
     // Try to open content.xml. Return if it failed.
-    //kDebug(30517) << "parse content.xml styles";
+    //kDebug(30503) << "parse content.xml styles";
     if (!odfStore->open("content.xml")) {
-        kError(30517) << "Unable to open input file! content.xml" << endl;
+        kError(30503) << "Unable to open input file! content.xml" << endl;
         return KoFilter::FileNotFound;
     }
 
@@ -900,7 +900,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::collectStyles(KoStore *odfStore,
 
     // Try to open and set styles.xml as a KoXmlDocument. Return if it failed.
     if (!odfStore->open("styles.xml")) {
-        kError(30517) << "Unable to open input file! style.xml" << endl;
+        kError(30503) << "Unable to open input file! style.xml" << endl;
         return KoFilter::FileNotFound;
     }
     if (!doc.setContent(odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
@@ -983,7 +983,7 @@ void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, Sty
 #if 0 // Disable - use outline-level = 1 instead.
             // Check for fo:break-before
             if (propertiesElement.attribute("break-before") == "page") {
-                //kDebug(30517) << "Found break-before=page in style" << styleName;
+                //kDebug(30503) << "Found break-before=page in style" << styleName;
                 styleInfo->shouldBreakChapter = true;
             }
 #endif
@@ -994,7 +994,7 @@ void OdtHtmlConverter::collectStyleSet(KoXmlNode &stylesNode, QHash<QString, Sty
         }
 
 #if 0 // debug
-        kDebug(30517) << "==" << styleName << ":\t"
+        kDebug(30503) << "==" << styleName << ":\t"
                       << styleInfo->parent
                       << styleInfo->family
                       << styleInfo->isDefaultStyle
@@ -1078,7 +1078,7 @@ void OdtHtmlConverter::collectStyleAttributes(KoXmlElement &propertiesElement, S
     // Image align
     attribute = propertiesElement.attribute("horizontal-pos");
     if (!attribute.isEmpty()) {
-        //kDebug(30517) << "horisontal pos attribute" << attribute;
+        //kDebug(30503) << "horisontal pos attribute" << attribute;
         if (attribute == "right" || attribute == "from-left") {
             styleInfo->attributes.insert("float", "right");
             styleInfo->attributes.insert("margin", "5px 0 5px 15px");

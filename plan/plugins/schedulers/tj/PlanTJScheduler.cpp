@@ -615,7 +615,7 @@ void PlanTJScheduler::addDependencies( KPlato::Task *task )
             case Relation::StartStart:
                 kWarning()<<"Dependency type not handled. Using FinishStart.";
                 if ( locale() ) {
-                    logWarning( task, 0, i18nc( "@info/plain" , "Dependency type '%1' not handled. Using FinishStart.", task->constraintToString( true ) ) );
+                    logWarning( task, 0, i18nc( "@info/plain" , "Dependency type '%1' not handled. Using FinishStart.", r->typeToString( true ) ) );
                 }
                 break;
         }

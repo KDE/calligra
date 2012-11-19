@@ -65,7 +65,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     // have names like this.
     odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
-        kError(30517) << "Unable to open input file!" << endl;
+        kError(31000) << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -154,7 +154,7 @@ KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile
     int imgId = 1;
     foreach (const QString imgSrc, m_imagesSrcList.keys()) {
         if (!odfStore->extractFile(imgSrc, imgContent)) {
-            kDebug(30517) << "Can not to extract file";
+            kDebug(31000) << "Can not to extract file";
             return KoFilter::FileNotFound;
         }
         m_imagesSize << imgContent.size();
