@@ -21,8 +21,6 @@
 #ifndef KEXIWINDOWBASE_H
 #define KEXIWINDOWBASE_H
 
-//#define KEXI_IMPL_WARNINGS
-
 #include "kexipartguiclient.h"
 #include "kexiactionproxy.h"
 #include "kexi.h"
@@ -82,12 +80,6 @@ public:
     /*! reimplemented: size hint is inherited from currently visible view. */
     virtual QSize sizeHint() const;
 
-#if 0 //main window moved to a singleton
-    KexiMainWindow *mainWin() const {
-        return m_parentWindow;
-    }
-#endif
-
     //js todo: maybe remove this since it's often the same as partItem()->identifier()?:
 
     /*! This method sets internal identifier for the dialog, but
@@ -114,11 +106,6 @@ public:
     //! Kexi dialog's gui client for currently selected view.
     //! It's obtained by querying part object for this dialog.
     KexiPart::GUIClient* guiClient() const;
-
-    /*! Tries to close the dialog. \return true if closing is accepted
-     (sometimes, user may not want to close the dialog by pressing cancel).
-     If \a dontSaveChanges if true, changes are not saved even if this dialog is dirty. */
-//js removed  bool tryClose(bool dontSaveChanges);
 
     /*! \return name of icon provided by part that created this dialog.
      The name is used by KexiMainWindow to set/reset icon for this dialog. */
@@ -179,9 +166,6 @@ public:
     //! By default schema data is not owned.
     //! @see setSchemaData(), KexiPart::loadSchemaData(), KexiPart::loadAndSetSchemaData()
     void setSchemaDataOwned(bool set);
-
-    /*! Reimplemented: "*" is added if for 'dirty' dialog's data. */
-//  QString caption() const;
 
     /*! Used by KexiView subclasses. \return temporary data shared between
      views */
@@ -293,10 +277,6 @@ protected:
     /*! Sets temporary data shared between views. */
     void setData(KexiWindowData* data);
 
-    /*! @return action for name @a name, shared between views.
-     @since 2.0 */
-//  KAction* sharedViewAction(const char* name) const;
-
     //! Used by KexiView
     QVariant internalPropertyValue(const QByteArray& name,
                                    const QVariant& defaultValue = QVariant()) const;
@@ -308,9 +288,6 @@ private slots:
 
 private:
     void createSubwidgets();
-//moved to KexiView  void createViewModeToggleButtons();
-    void showSaveDesignButton(bool show);
-//moved to KexiView  void initViewActions(KexiView* view, Kexi::ViewMode mode);
 
     class Private;
     Private *d;

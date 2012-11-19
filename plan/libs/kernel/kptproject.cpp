@@ -543,6 +543,83 @@ DateTime Project::checkEndConstraints( const DateTime &dt ) const
     return t;
 }
 
+#ifndef PLAN_NLOGDEBUG
+bool Project::checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked )
+{
+    if ( n->isStartNode() ) {
+        kDebug(planDbg())<<n<<"start node"<<list;
+        return true;
+    }
+    kDebug(planDbg())<<"Check:"<<n<<":"<<checked.count()<<":"<<list;
+    if ( list.contains( n ) ) {
+        kDebug(planDbg())<<"Failed:"<<n<<":"<<list;
+        return false;
+    }
+    QList<Node*> lst = list;
+    lst << n;
+    foreach ( Relation *r, n->dependParentNodes() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        checked << r;
+        if ( ! checkParent( r->parent(), lst, checked ) ) {
+            return false;
+        }
+    }
+    Task *t = static_cast<Task*>( n );
+    foreach ( Relation *r, t->parentProxyRelations() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        checked << r;
+        kDebug(planDbg())<<"Proxy:"<<n<<":"<<r->parent()<<":"<<lst;
+        if ( ! checkParent( r->parent(), lst, checked ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Project::checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked )
+{
+    if ( n->isEndNode() ) {
+        kDebug(planDbg())<<n<<"end node"<<list;
+        return true;
+    }
+    kDebug(planDbg())<<"Check:"<<n<<":"<<checked.count()<<":"<<list;
+    if ( list.contains( n ) ) {
+        kDebug(planDbg())<<"Failed:"<<n<<":"<<list;
+        return false;
+    }
+    QList<Node*> lst = list;
+    lst << n;
+    foreach ( Relation *r, n->dependChildNodes() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        checked << r;
+        if ( ! checkChildren( r->child(), lst, checked ) ) {
+            return false;
+        }
+    }
+    Task *t = static_cast<Task*>( n );
+    foreach ( Relation *r, t->childProxyRelations() ) {
+        if ( checked.contains( r ) ) {
+            kDebug(planDbg())<<"Depend:"<<n<<":"<<r->parent()<<": checked";
+            continue;
+        }
+        kDebug(planDbg())<<"Proxy:"<<n<<":"<<r->parent()<<":"<<lst;
+        checked << r;
+        if ( ! checkChildren( r->child(), lst, checked ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+#endif
 void Project::tasksForward()
 {
     m_hardConstraints.clear();
@@ -566,6 +643,14 @@ void Project::tasksForward()
                 break;
         }
     }
+#ifndef PLAN_NLOGDEBUG
+    kDebug(planDbg())<<"End nodes:"<<m_terminalNodes;
+    foreach ( Node* n, m_terminalNodes ) {
+        QList<Node*> lst;
+        QList<Relation*> rel;
+        Q_ASSERT( checkParent( n, lst, rel ) );
+    }
+#endif
 }
 
 void Project::tasksBackward()
@@ -585,12 +670,20 @@ void Project::tasksBackward()
                 m_softConstraints.append( t );
                 break;
             default:
-                if ( t->isEndNode() ) {
+                if ( t->isStartNode() ) {
                     m_terminalNodes.append( t );
                 }
                 break;
         }
     }
+#ifndef PLAN_NLOGDEBUG
+    kDebug(planDbg())<<"Start nodes:"<<m_terminalNodes;
+    foreach ( Node* n, m_terminalNodes ) {
+        QList<Node*> lst;
+        QList<Relation*> rel;
+        Q_ASSERT( checkChildren( n, lst, rel ) );
+    }
+#endif
 }
 
 DateTime Project::calculateForward( int use )
@@ -602,6 +695,9 @@ DateTime Project::calculateForward( int use )
         return finish;
     }
     if ( type() == Node::Type_Project ) {
+        QTime timer;
+        timer.start();
+        cs->logInfo( i18n( "Start calculating forward" ) );
         m_visitedForward = true;
         if ( ! m_visitedBackward ) {
             // setup tasks
@@ -647,6 +743,7 @@ DateTime Project::calculateForward( int use )
                 }
             }
         }
+        cs->logInfo( i18n( "Finished calculating forward: %1 ms", timer.elapsed() ) );
     } else {
         //TODO: subproject
     }
@@ -662,6 +759,9 @@ DateTime Project::calculateBackward( int use )
         return start;
     }
     if ( type() == Node::Type_Project ) {
+        QTime timer;
+        timer.start();
+        cs->logInfo( i18n( "Start calculating backward" ) );
         m_visitedBackward = true;
         if ( ! m_visitedForward ) {
             // setup tasks
@@ -707,6 +807,7 @@ DateTime Project::calculateBackward( int use )
                 }
             }
         }
+        cs->logInfo( i18n( "Finished calculating backward: %1 ms", timer.elapsed() ) );
     } else {
         //TODO: subproject
     }
@@ -720,6 +821,9 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
     if ( cs == 0 || stopcalculation ) {
         return DateTime();
     }
+    QTime timer;
+    timer.start();
+    cs->logInfo( i18n( "Start scheduling forward" ) );
     resetVisited();
     // Schedule in the same order as calculated forward
     // Do all hard constrained first
@@ -739,6 +843,13 @@ DateTime Project::scheduleForward( const DateTime &earliest, int use )
     }
     // Fix summarytasks
     adjustSummarytask();
+    cs->logInfo( i18n( "Finished scheduling forward: %1 ms", timer.elapsed() ) );
+    foreach ( Node *n, allNodes() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+            Q_ASSERT( n->isScheduled() );
+        }
+    }
+
     return end;
 }
 
@@ -749,6 +860,9 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
     if ( cs == 0 || stopcalculation ) {
         return start;
     }
+    QTime timer;
+    timer.start();
+    cs->logInfo( i18n( "Start scheduling backward" ) );
     resetVisited();
     // Schedule in the same order as calculated backward
     // Do all hard constrained first
@@ -768,6 +882,12 @@ DateTime Project::scheduleBackward( const DateTime &latest, int use )
     }
     // Fix summarytasks
     adjustSummarytask();
+    cs->logInfo( i18n( "Finished scheduling backward: %1 ms", timer.elapsed() ) );
+    foreach ( Node *n, allNodes() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+            Q_ASSERT( n->isScheduled() );
+        }
+    }
     return start;
 }
 

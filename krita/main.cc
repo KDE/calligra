@@ -104,7 +104,6 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     delete aboutData;
 
-
     return state;
 }
 

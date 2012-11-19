@@ -142,7 +142,7 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
     // Write contents of added files.
     foreach(FileInfo *file, d->m_files) {
         if (!store->open(file->m_fileName)) {
-            kDebug(30517) << "Can not create" << file->m_fileName;
+            kDebug(30503) << "Can not create" << file->m_fileName;
             return KoFilter::CreationError;
         }
         store->write(file->m_fileContents);

@@ -176,4 +176,30 @@ void Relation::printDebug(const QByteArray& _indent) {
 }
 #endif
 
+
 }  //KPlato namespace
+
+QDebug operator<<( QDebug dbg, const KPlato::Relation *r )
+{
+    return dbg<<(*r);
+}
+
+QDebug operator<<( QDebug dbg, const KPlato::Relation &r )
+{
+    KPlato::Node *parent = r.parent();
+    KPlato::Node *child = r.child();
+    QString type = "FS";
+    switch ( r.type() ) {
+    case KPlato::Relation::StartStart: type = "SS"; break;
+    case KPlato::Relation::FinishFinish: type = "FF"; break;
+    default: break;
+    }
+
+    KPlato::Duration lag = r.lag();
+    dbg<<"Relation["<<parent->name()<<"->"<<child->name()<<type;
+    if ( lag != 0 ) {
+        dbg<<lag.toString( KPlato::Duration::Format_HourFraction );
+    }
+    dbg <<']';
+    return dbg;
+}

@@ -1,6 +1,6 @@
 add_subdirectory( eventactions )
 add_subdirectory( pageeffects )
 add_subdirectory( shapeanimations )
-if(!WIN32) ## Disable in Windows for now
+if(NOT WIN32) ## Disable in Windows for now
 	add_subdirectory( variable )
-endif(!WIN32)
+endif(NOT WIN32)
