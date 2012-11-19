@@ -195,7 +195,7 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
             if (returnCode == FAIL)
                 r = false;
             else if (returnCode == NO_MORE_RESULTS)
-                r = (numRecords == -1) ? true : cancelled;
+                r = (numRecords == -1) ? tristate(true) : tristate(cancelled);
             return r;
         }
 

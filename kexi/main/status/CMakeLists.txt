@@ -18,4 +18,4 @@ install(FILES
         contribution_help.ui
         status_strings.ui
         ${status_rcc}
-        DESTINATION "${DATA_INSTALL_DIR}/kexi/status/2.5.0")
+        DESTINATION "${DATA_INSTALL_DIR}/kexi/status/2.7.0")
