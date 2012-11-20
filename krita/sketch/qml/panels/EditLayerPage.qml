@@ -23,9 +23,12 @@ import org.krita.sketch 1.0
 Item {
     id: base;
     anchors.fill: parent;
-    property QtObject layersModel: undefined;
+    property QtObject layersModel: null;
     property bool isInitialised: false;
-    onLayersModelChanged: {
+    property bool isShown: false;
+    onIsShownChanged: {
+        if(!isShown)
+            return;
         var filterConfig = layersModel.activeFilterConfig;
         if(filterConfig !== null) {
             var categoryIndex = filtersCategoryModel.categoryIndexForConfig(filterConfig);
@@ -35,10 +38,8 @@ Item {
             if(configLoader.item && typeof(configLoader.item.configuration) !== "undefined") {
                 configLoader.item.configuration = filterConfig;
             }
-            if(layersModel) {
-                base.isInitialised = true;
-            }
         }
+        base.isInitialised = (layersModel !== null);
     }
     // tile goes here
 

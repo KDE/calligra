@@ -438,5 +438,5 @@ Panel {
         }
     }
 
-    Component { id: editLayerPage; EditLayerPage { layersModel: layerModel; } }
+    Component { id: editLayerPage; EditLayerPage { layersModel: layerModel; isShown: backFromEditButton.visible  } }
 }
