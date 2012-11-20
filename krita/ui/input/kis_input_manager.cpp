@@ -57,6 +57,7 @@ public:
         , touchEvent(0)
         , setMirrorMode(false)
         , fixedAction(false)
+        , enabled(false)
     { }
 
     void match(QEvent *event);
@@ -84,6 +85,8 @@ public:
 
     bool setMirrorMode;
     bool fixedAction;
+
+    bool enabled;
 };
 
 void KisInputManager::Private::match(QEvent* event)
@@ -287,6 +290,8 @@ void KisInputManager::Private::clearState()
         currentShortcut = 0;
         potentialShortcuts = shortcuts;
 
+        enabled = false;
+
         delete tabletPressEvent;
         tabletPressEvent = 0;
 
@@ -335,6 +340,36 @@ KisInputManager::~KisInputManager()
 bool KisInputManager::eventFilter(QObject* object, QEvent* event)
 {
     Q_UNUSED(object)
+    if(event->type() == QEvent::TabletPress) {
+        //We want both the tablet information and the mouse button state.
+        //Since QTabletEvent only provides the tablet information, we save that
+        //and then ignore the event so it will generate a mouse event.
+        QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
+
+        //Since events get deleted once they are processed we need to clone the event
+        //to save it.
+        QTabletEvent* newEvent = new QTabletEvent(QEvent::TabletPress,
+                                                  tevent->pos(),
+                                                  tevent->globalPos(),
+                                                  tevent->hiResGlobalPos(),
+                                                  tevent->device(),
+                                                  tevent->pointerType(),
+                                                  tevent->pressure(),
+                                                  tevent->xTilt(),
+                                                  tevent->yTilt(),
+                                                  tevent->tangentialPressure(),
+                                                  tevent->rotation(),
+                                                  tevent->z(),
+                                                  tevent->modifiers(),
+                                                  tevent->uniqueId()
+                                                  );
+        d->tabletPressEvent = newEvent;
+        event->ignore();
+    }
+
+    if(!d->enabled)
+        return false;
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
@@ -411,33 +446,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //Clear all state so we don't have half-matched shortcuts dangling around.
         d->clearState();
         return true;
-    case QEvent::TabletPress: {
-        //We want both the tablet information and the mouse button state.
-        //Since QTabletEvent only provides the tablet information, we save that
-        //and then ignore the event so it will generate a mouse event.
-        QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
-
-        //Since events get deleted once they are processed we need to clone the event
-        //to save it.
-        QTabletEvent* newEvent = new QTabletEvent(QEvent::TabletPress,
-                                                  tevent->pos(),
-                                                  tevent->globalPos(),
-                                                  tevent->hiResGlobalPos(),
-                                                  tevent->device(),
-                                                  tevent->pointerType(),
-                                                  tevent->pressure(),
-                                                  tevent->xTilt(),
-                                                  tevent->yTilt(),
-                                                  tevent->tangentialPressure(),
-                                                  tevent->rotation(),
-                                                  tevent->z(),
-                                                  tevent->modifiers(),
-                                                  tevent->uniqueId()
-                                                  );
-        d->tabletPressEvent = newEvent;
-        event->ignore();
-        break;
-    }
     case QEvent::TabletMove:
         //Only process tablet move events if the current action has special code for it.
         //In all other cases, we simply ignore it so it will generate a mouse event
@@ -519,6 +527,11 @@ void KisInputManager::setMirrorAxis()
 {
     d->setMirrorMode = true;
     QApplication::setOverrideCursor(Qt::CrossCursor);
+}
+
+void KisInputManager::setEnabled(bool enabled)
+{
+    d->enabled = enabled;
 }
 
 void KisInputManager::slotToolChanged()
