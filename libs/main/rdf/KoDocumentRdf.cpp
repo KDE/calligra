@@ -1120,8 +1120,9 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
 {
     RDEBUG << "top";
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(qdoc).inlineTextObjectManager();
+    KoTextRangeManager *textRangeManager = KoTextDocument(qdoc).textRangeManager();
     d->inlineRdfObjects.clear();
-    if(!textObjectManager) {
+    if(!textObjectManager || !textRangeManager) {
         return;
     }
     //
@@ -1130,6 +1131,15 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
     QList<KoInlineObject*> kiocol = textObjectManager->inlineTextObjects();
     foreach (KoInlineObject *kio, kiocol) {
         if (KoTextInlineRdf *inlineRdf = kio->inlineRdf()) {
+            rememberNewInlineRdfObject(inlineRdf);
+        }
+    }
+    //
+    // Rdf from textranges
+    //
+    QList<KoTextRange *> rangelist = textRangeManager->textRanges();
+    foreach (KoTextRange *range, rangelist) {
+        if (KoTextInlineRdf *inlineRdf = range->inlineRdf()) {
             rememberNewInlineRdfObject(inlineRdf);
         }
     }
