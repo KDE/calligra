@@ -146,7 +146,7 @@ QVariant SybaseCursor::value(uint pos)
     if (!d->dbProcess || pos >= m_fieldCount)
         return QVariant();
 
-    KexiDB::Field *f = (m_fieldsExpanded && pos < m_fieldsExpanded->count())
+    KexiDB::Field *f = (m_fieldsExpanded && pos < uint(m_fieldsExpanded->count()))
                        ? m_fieldsExpanded->at(pos)->field : 0;
 
     // db-library indexes its columns from 1
@@ -225,6 +225,7 @@ void SybaseCursor::drv_bufferMovePointerPrev()
 
 void SybaseCursor::drv_bufferMovePointerTo(qint64 to)
 {
+    Q_UNUSED(to);
     //dbgetrow( d->dbProcess, to );
 }
 

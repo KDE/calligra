@@ -99,10 +99,10 @@ bool MySqlCursor::drv_close()
 void MySqlCursor::drv_getNextRecord()
 {
 // KexiDBDrvDbg << "MySqlCursor::drv_getNextRecord";
-    if (at() < d->numRows && at() >= 0) {
+    if (at() < qint64(d->numRows) && at() >= 0) {
         d->lengths = mysql_fetch_lengths(d->mysqlres);
         m_result = FetchOK;
-    } else if (at() >= d->numRows) {
+    } else if (at() >= qint64(d->numRows)) {
         m_result = FetchEnd;
     } else {
         // control will reach here only when at() < 0 ( which is usually -1 )
