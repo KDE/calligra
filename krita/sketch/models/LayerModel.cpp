@@ -993,7 +993,8 @@ void LayerModel::setActiveFilterConfig(QObject* newConfig)
     {
         realConfig->setProperty(QString(i.key()), config->property(i.key().toAscii()));
     }
-    delete(d->newConfig);
+    if(d->newConfig)
+        delete(d->newConfig);
     d->newConfig = realConfig;
     d->updateActiveLayerWithNewFilterConfigTimer->start();
 }
@@ -1003,6 +1004,8 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
     KisFilterMask* filterMask = qobject_cast<KisFilterMask*>(d->activeNode.data());
     if(filterMask)
     {
+        if(filterMask->filter() == d->newConfig)
+            return;
         filterMask->setFilter(d->newConfig);
     }
     else
@@ -1010,10 +1013,14 @@ void LayerModel::updateActiveLayerWithNewFilterConfig()
         KisAdjustmentLayer* adjustmentLayer = qobject_cast<KisAdjustmentLayer*>(d->activeNode.data());
         if(adjustmentLayer)
         {
+            if(adjustmentLayer->filter() == d->newConfig)
+                return;
             adjustmentLayer->setFilter(d->newConfig);
         }
     }
+    d->newConfig = 0;
     d->activeNode->setDirty(d->activeNode->extent());
+    d->image->setModified();
     emit activeFilterConfigChanged();
 }
 
