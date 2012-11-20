@@ -96,6 +96,7 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            enabled: layerModel.count > 0;
             onClicked: layerModel.deleteCurrentLayer();
         }
     ]
