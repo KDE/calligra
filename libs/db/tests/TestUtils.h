@@ -17,19 +17,17 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIUTILS_IDENTIFIERTEST_H
+#ifndef KEXIDBUTILSTEST_H
 #define KEXIUTILS_IDENTIFIERTEST_H
 
 #include <QtCore/QObject>
 
-class IdentifierTest : public QObject
+class TestUtils : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
-//! @todo move to libCalligraDB void testIsIdentifier();
-    void testString2FileName_data();
-    void testString2FileName();
+    void testIsIdentifier();
     void cleanupTestCase();
 };
 

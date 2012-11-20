@@ -17,49 +17,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "IdentifierTest.h"
+#include "TestIdentifier.h"
 #include "kexiutils/identifier.h"
 #include <QTest>
 
-void IdentifierTest::initTestCase()
+void TestIdentifier::initTestCase()
 {
 }
 
-//! @todo move to libCalligraDB
-/*
-void IdentifierTest::testIsIdentifier()
-{
-    QVERIFY(!KexiUtils::isIdentifier(""));
-    QVERIFY(!KexiUtils::isIdentifier(QString()));
-    QVERIFY(!KexiUtils::isIdentifier("\0"));
-    QVERIFY(!KexiUtils::isIdentifier(" "));
-    QVERIFY(!KexiUtils::isIdentifier("7"));
-    QVERIFY(KexiUtils::isIdentifier("_"));
-    QVERIFY(KexiUtils::isIdentifier("abc_2"));
-    QVERIFY(KexiUtils::isIdentifier("Abc_2"));
-    QVERIFY(KexiUtils::isIdentifier("_7"));
-}*/
-
-void IdentifierTest::testString2FileName_data()
+void TestIdentifier::testString2FileName_data()
 {
     QTest::addColumn<QString>("string1");
     QTest::addColumn<QString>("string2");
 
     QTest::newRow("empty") << "" << "";
     QTest::newRow("whitespace") << " \n   \t" << "";
-    QTest::newRow("special chars") << ": \\-abc" << "-_--abc";
-    QTest::newRow("special chars2") << " */$" << "--_";
+    QTest::newRow("special chars") << ": \\-abc" << "_abc";
+    QTest::newRow("special chars2") << " */$" << "_";
 }
 
-void IdentifierTest::testString2FileName()
+void TestIdentifier::testString2FileName()
 {
     QFETCH(QString, string1);
     QFETCH(QString, string2);
     QCOMPARE(KexiUtils::string2Identifier(string1), string2);
 }
 
-void IdentifierTest::cleanupTestCase()
+void TestIdentifier::cleanupTestCase()
 {
 }
 
-QTEST_MAIN(IdentifierTest)
+QTEST_MAIN(TestIdentifier)
