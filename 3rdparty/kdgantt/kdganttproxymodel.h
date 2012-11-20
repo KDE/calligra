@@ -26,7 +26,7 @@
 #include "kdganttforwardingproxymodel.h"
 
 namespace KDGantt {
-    class ProxyModel : public ForwardingProxyModel {
+    class KDGANTT_EXPORT ProxyModel : public ForwardingProxyModel {
         Q_OBJECT
         Q_DISABLE_COPY(ProxyModel)
         KDGANTT_DECLARE_PRIVATE_BASE_POLYMORPHIC( ProxyModel )

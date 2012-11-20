@@ -29,7 +29,7 @@ class QAbstractProxyModel;
 class QTreeView;
 
 namespace KDGantt {
-    class  TreeViewRowController :  public AbstractRowController {
+    class KDGANTT_EXPORT TreeViewRowController :  public AbstractRowController {
         KDGANTT_DECLARE_PRIVATE_BASE_POLYMORPHIC(TreeViewRowController)
     public:
         TreeViewRowController( QTreeView* tv, QAbstractProxyModel* proxy );

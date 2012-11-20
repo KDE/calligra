@@ -28,7 +28,7 @@
 #include "kdganttglobal.h"
 
 namespace KDGantt {
-    class ForwardingProxyModel : public QAbstractProxyModel {
+    class KDGANTT_EXPORT ForwardingProxyModel : public QAbstractProxyModel {
         Q_OBJECT
         Q_DISABLE_COPY(ForwardingProxyModel)
     public:
