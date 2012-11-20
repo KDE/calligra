@@ -233,10 +233,10 @@ void KisInputManager::Private::setupActions()
      * Don't forget to disable wheel-zooming in KoCanvasControllerWidget
      * before activation of this shortcut.
      */
-    // shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
-    // shortcut->setWheel(KisShortcut::WheelUp);
-    // shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
-    // shortcut->setWheel(KisShortcut::WheelDown);
+    shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
+    shortcut->setWheel(KisShortcut::WheelUp);
+    shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
+    shortcut->setWheel(KisShortcut::WheelDown);
     shortcut = createShortcut(action, KisZoomAction::ZoomInShortcut);
     shortcut->setKeys(QList<Qt::Key>() << Qt::Key_Plus);
     shortcut = createShortcut(action, KisZoomAction::ZoomOutShortcut);
@@ -429,6 +429,7 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         }
         return true;
     case QEvent::Wheel:
+        qDebug() << "Wheel Event";
         if (d->currentAction) {
             d->currentAction->inputEvent(event);
         } else {
