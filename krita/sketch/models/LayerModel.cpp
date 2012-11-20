@@ -627,6 +627,7 @@ void LayerModel::source_rowsInserted(QModelIndex /*p*/, int, int)
 //
 //     endInsertRows();
     d->rebuildLayerList();
+    emit countChanged();
     endResetModel();
 }
 
@@ -642,6 +643,7 @@ void LayerModel::source_rowsRemoved(QModelIndex, int, int)
 {
 //     endRemoveRows();
     d->rebuildLayerList();
+    emit countChanged();
     endResetModel();
 }
 
@@ -671,6 +673,7 @@ void LayerModel::source_modelReset()
         d->nodeManager->slotUiActivatedNode(d->layers.at(0));
         currentNodeChanged(d->layers.at(0));
     }
+    emit countChanged();
     endResetModel();
 }
 

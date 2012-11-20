@@ -74,6 +74,7 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            enabled: layerModel.count > 0;
             visible: (base.state === "full" && backFromEditButton.visible === false);
             onClicked: {
                 fullViewStack.push(editLayerPage);

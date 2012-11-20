@@ -29,6 +29,8 @@ class LayerModel : public QAbstractListModel
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QObject* engine READ engine WRITE setEngine NOTIFY engineChanged)
 
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged);
+
     Q_PROPERTY(QString activeName READ activeName WRITE setActiveName NOTIFY activeNameChanged);
     Q_PROPERTY(QString activeType READ activeType NOTIFY activeTypeChanged);
     Q_PROPERTY(int activeCompositeOp READ activeCompositeOp WRITE setActiveCompositeOp NOTIFY activeCompositeOpChanged);
@@ -74,7 +76,7 @@ public:
     void setEngine(QObject* newEngine);
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    Q_INVOKABLE virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     Q_INVOKABLE void setActive(int index);
@@ -124,6 +126,7 @@ public:
 Q_SIGNALS:
     void viewChanged();
     void engineChanged();
+    void countChanged();
 
     void activeNameChanged();
     void activeTypeChanged();
