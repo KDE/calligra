@@ -666,8 +666,11 @@ void LayerModel::source_modelReset()
     beginResetModel();
     d->rebuildLayerList();
     d->activeNode.clear();
-    d->nodeManager->slotUiActivatedNode(d->layers.at(0));
-    currentNodeChanged(d->layers.at(0));
+    if(d->layers.count() > 0)
+    {
+        d->nodeManager->slotUiActivatedNode(d->layers.at(0));
+        currentNodeChanged(d->layers.at(0));
+    }
     endResetModel();
 }
 
