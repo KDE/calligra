@@ -221,6 +221,7 @@ void LayerModel::setView(QObject *newView)
         connect(d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(d->image, SIGNAL(sigNodeChanged(KisNodeSP)), SLOT(nodeChanged(KisNodeSP)));
         connect(d->image, SIGNAL(sigImageUpdated(QRect)), SLOT(imageChanged()));
+        connect(d->image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(aboutToRemoveNode(KisNodeSP)));
 
         // cold start
         currentNodeChanged(d->nodeManager->activeNode());
@@ -664,6 +665,9 @@ void LayerModel::source_modelReset()
 {
     beginResetModel();
     d->rebuildLayerList();
+    d->activeNode.clear();
+    d->nodeManager->slotUiActivatedNode(d->layers.at(0));
+    currentNodeChanged(d->layers.at(0));
     endResetModel();
 }
 
@@ -689,6 +693,12 @@ void LayerModel::imageHasChanged()
     QModelIndex top = createIndex(0, 0);
     QModelIndex bottom = createIndex(d->layers.count() - 1, 0);
     dataChanged(top, bottom);
+}
+
+void LayerModel::aboutToRemoveNode(KisNodeSP node)
+{
+    Q_UNUSED(node)
+    QTimer::singleShot(0, this, SLOT(source_modelReset()));
 }
 
 void LayerModel::emitActiveChanges()

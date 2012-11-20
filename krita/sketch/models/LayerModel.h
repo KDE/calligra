@@ -153,6 +153,7 @@ private slots:
     void nodeChanged(KisNodeSP node);
     void imageChanged();
     void imageHasChanged();
+    void aboutToRemoveNode(KisNodeSP node);
     void updateActiveLayerWithNewFilterConfig();
 
 private:
