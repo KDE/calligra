@@ -107,6 +107,11 @@ public:
 
     void rebuildLayerList(KisNodeSP layer = 0)
     {
+        if(!image)
+        {
+            layers.clear();
+            return;
+        }
         if(layer == 0)
         {
             layers.clear();
@@ -182,14 +187,20 @@ QObject* LayerModel::view() const
 void LayerModel::setView(QObject *newView)
 {
     KisView2* view = qobject_cast<KisView2*>(newView);
+    // This has to happen very early, and we will be filling it back up again soon anyway...
     if (d->canvas) {
         d->canvas->disconnectCanvasObserver(this);
-        d->nodeModel->setDummiesFacade(0, 0);
-
         disconnect(d->image, 0, this, 0);
         disconnect(d->nodeManager, 0, this, 0);
         disconnect(d->nodeModel, 0, d->nodeManager, 0);
         disconnect(d->nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(currentNodeChanged(KisNodeSP)));
+        d->image = 0;
+        d->nodeManager = 0;
+        d->layers.clear();
+        d->activeNode.clear();
+        d->canvas = 0;
+        d->nodeModel->setDummiesFacade(0, 0);
+
     }
 
     d->view = view;
@@ -198,10 +209,6 @@ void LayerModel::setView(QObject *newView)
         if(newView) {
             qDebug() << "The view is not a view, on attempting to set the view on the layer model!";
         }
-        d->canvas = 0;
-        d->image = 0;
-        d->nodeManager = 0;
-        d->activeNode.clear();
         return;
     }
 
