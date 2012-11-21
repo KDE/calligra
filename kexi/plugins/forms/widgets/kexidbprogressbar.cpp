@@ -32,6 +32,7 @@ KexiDBProgressBar::~KexiDBProgressBar()
 
 void KexiDBProgressBar::setInvalidState(const QString& displayText)
 {
+    Q_UNUSED(displayText);
     m_invalidState = true;
     setEnabled(false);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?

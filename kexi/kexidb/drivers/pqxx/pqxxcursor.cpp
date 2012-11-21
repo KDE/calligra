@@ -150,9 +150,9 @@ bool pqxxSqlCursor::drv_close()
 void pqxxSqlCursor::drv_getNextRecord()
 {
 // KexiDBDrvDbg << "pqxxSqlCursor::drv_getNextRecord, size is " <<m_res->size() << " Current Position is " << (long)at();
-    if (at() < m_res->size() && at() >= 0) {
+    if (at() < qint64(m_res->size()) && at() >= 0) {
         m_result = FetchOK;
-    } else if (at() >= m_res->size()) {
+    } else if (at() >= qint64(m_res->size())) {
         m_result = FetchEnd;
     } else {
         // control will reach here only when at() < 0 ( which is usually -1 )
@@ -167,9 +167,9 @@ void pqxxSqlCursor::drv_getPrevRecord()
 {
 // KexiDBDrvDbg << "pqxxSqlCursor::drv_getPrevRecord";
 
-    if (at() < m_res->size() && at() >= 0) {
+    if (at() < qint64(m_res->size()) && at() >= 0) {
         m_result = FetchOK;
-    } else if (at() >= m_res->size()) {
+    } else if (at() >= qint64(m_res->size())) {
         m_result = FetchEnd;
     } else {
         m_result = FetchError;
@@ -240,7 +240,7 @@ const char** pqxxSqlCursor::rowData() const
 
     row = (const char**)malloc(m_res->columns() + 1);
     row[m_res->columns()] = NULL;
-    if (at() >= 0 && at() < m_res->size()) {
+    if (at() >= 0 && at() < qint64(m_res->size())) {
         for (int i = 0; i < (int)m_res->columns(); i++) {
             row[i] = (char*)malloc(strlen((*m_res)[at()][i].c_str()) + 1);
             strcpy((char*)(*m_res)[at()][i].c_str(), row[i]);
