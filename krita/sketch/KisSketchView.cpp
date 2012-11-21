@@ -98,6 +98,8 @@ public:
         , undoAction(0)
         , redoAction(0)
         , useOpenGL(false)
+        , viewportMoved(false)
+        , zoomLevelChanged(false)
     { }
     ~Private() { }
 
@@ -284,15 +286,17 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     }
     else {
         if(d->zoomLevelChanged) {
+            d->zoomLevelChanged = false;
             d->prescaledProjection->notifyZoomChanged();
         } else if(d->viewportMoved) {
             d->viewportMoved = false;
-            QPoint newOffset = d->canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
+            d->prescaledProjection->preScale();
+//            QPoint newOffset = d->canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
 
-            QPoint moveOffset = newOffset - d->canvasOffset;
-            d->prescaledProjection->viewportMoved(moveOffset);
+//            QPoint moveOffset = newOffset - d->canvasOffset;
+//            d->prescaledProjection->viewportMoved(moveOffset);
 
-            d->canvasOffset = newOffset;
+//            d->canvasOffset = newOffset;
         }
 
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
