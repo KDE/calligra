@@ -29,9 +29,11 @@
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoViewConverter.h>
 
 #include <KDialog>
 
+#include <QPainter>
 #include <QPointer>
 
 struct VideoToolUI: public QWidget, public Ui::VideoTool
