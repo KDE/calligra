@@ -159,7 +159,7 @@ Page {
                         ListElement { text: "OpenRaster Image"; type: "ora"; mime: "image/openraster"; }
                         ListElement { text: "PNG Image"; type: "png"; mime: "image/png"; }
                         ListElement { text: "BMP Image"; type: "bmp"; mime: "image/bmp"; }
-                        ListElement { text: "JPEG Image"; type: "jpeg"; mime: "image/jpeg"; }
+                        ListElement { text: "JPEG Image"; type: "jpg"; mime: "image/jpeg"; }
                     }
                 }
             }
