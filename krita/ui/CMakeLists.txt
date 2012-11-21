@@ -51,6 +51,7 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection.cpp
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
+    iccjpeg.c
     kis_autogradient.cc
     kis_autogradient_resource.cc
     kis_bookmarked_configurations_editor.cc
@@ -64,6 +65,9 @@ set(kritaui_LIB_SRCS
     kis_color_data_list.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
+    kis_jpeg_converter.cc
+    kis_jpeg_source.cpp
+    kis_jpeg_destination.cpp
     kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_palette.cc
@@ -273,9 +277,9 @@ target_link_libraries(kritaui ${QT_QTDECLARATIVE_LIBRARY}
                               ${X11_X11_LIB})
 
 if(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES} ${KDE4_KNEWSTUFF3_LIBS})
 else(GHNS)
-    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+    target_link_libraries(kritaui ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KFILE_LIBRARY} kritaimage komain kowidgets ${JPEG_LIBRARIES} ${PNG_LIBRARIES} ${LCMS2_LIBRARIES} ${EXIV2_LIBRARIES})
 endif (GHNS)
 
 if(HAVE_OPENGL)
@@ -305,6 +309,7 @@ install( FILES
     kis_cursor.h
     kis_view2.h
     kis_ui_types.h
+    kis_jpeg_converter.h
 #    kis_cmb_composite.h
 #    kis_cmb_idlist.h
 #    kis_color_cup.h

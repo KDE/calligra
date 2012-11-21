@@ -13,9 +13,6 @@ macro_log_feature(OPENEXR_FOUND "OpenEXR" "High dynamic-range (HDR) image file f
 macro_optional_find_package(TIFF)
 macro_log_feature(TIFF_FOUND "tiff" "TIFF Library and Utilities" "http://www.remotesensing.org/libtiff" FALSE "" "Required by the Krita TIFF filter")
 
-macro_optional_find_package(JPEG)
-macro_log_feature(JPEG_FOUND "jpeg" "Free library for JPEG image compression" "http://www.ijg.org" FALSE "" "Required by the Krita JPEG filter")
-
 macro_optional_find_package(Poppler)
 macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Poppler Qt4 interface library" "http://poppler.freedesktop.org" FALSE "" "Required by the Krita PDF filter")
 
@@ -32,7 +29,7 @@ if(KDCRAW_FOUND)
 endif(KDCRAW_FOUND)
 
 if(JPEG_FOUND AND HAVE_LCMS2)
-	add_subdirectory(jpeg)
+    add_subdirectory(jpeg)
 endif(JPEG_FOUND AND HAVE_LCMS2)
 
 if(TIFF_FOUND)

@@ -29,8 +29,7 @@ extern "C" {
 #include <QVector>
 
 #include <kio/job.h>
-
-
+#include <krita_export.h>
 
 #include "kis_types.h"
 #include "kis_annotation.h"
@@ -81,7 +80,7 @@ namespace KisMetaData
 class Store;
 }
 
-class KisJPEGConverter : public QObject
+class KRITAUI_EXPORT KisJPEGConverter : public QObject
 {
     Q_OBJECT
 public:
