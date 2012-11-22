@@ -42,6 +42,7 @@
 #include "kis_projection_backend.h"
 #include "kis_image_pyramid.h"
 
+
 #define EPSILON 1e-10
 
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
@@ -53,27 +54,25 @@
 inline void copyQImageBuffer(uchar* dst, const uchar* src , qint32 deltaX, qint32 width)
 {
     if (deltaX >= 0) {
-        memmove(dst + 4 * deltaX, src, 4 * (width - deltaX) * sizeof(uchar));
+        memcpy(dst + 4 * deltaX, src, 4 *(width - deltaX) * sizeof(uchar));
     } else {
-        memmove(dst, src - 4 * deltaX, 4 *(width + deltaX) * sizeof(uchar));
+        memcpy(dst, src - 4 * deltaX, 4 *(width + deltaX) * sizeof(uchar));
     }
 }
 
-inline void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& srcImage)
+void copyQImage(qint32 deltaX, qint32 deltaY, QImage* dstImage, const QImage& srcImage)
 {
+    qint32 height = dstImage->height();
+    qint32 width = dstImage->width();
     Q_ASSERT(dstImage->width() == srcImage.width() && dstImage->height() == srcImage.height());
-
-    const qint32 width = dstImage->width();
     if (deltaY >= 0) {
-        const qint32 copyHeight = dstImage->height() - deltaY;
-        for (int y = 0; y < copyHeight; ++y) {
+        for (int y = 0; y < height - deltaY; y ++) {
             const uchar* src = srcImage.scanLine(y);
             uchar* dst = dstImage->scanLine(y + deltaY);
             copyQImageBuffer(dst, src, deltaX, width);
         }
     } else {
-        const int copyHeight = dstImage->height() + deltaY;
-        for (int y = 0; y < copyHeight; ++y) {
+        for (int y = 0; y < height + deltaY; y ++) {
             const uchar* src = srcImage.scanLine(y - deltaY);
             uchar* dst = dstImage->scanLine(y);
             copyQImageBuffer(dst, src, deltaX, width);
@@ -88,6 +87,7 @@ struct KisPrescaledProjection::Private {
     }
 
     QImage *prescaledQImage;
+    QImage *emptyQImage;
 
     QSize updatePatchSize;
     QSize canvasSize;
@@ -108,6 +108,7 @@ KisPrescaledProjection::KisPrescaledProjection()
     m_d->projectionBackend = new KisImagePyramid(1);
 
     m_d->prescaledQImage = new QImage(1024, 1024, QImage::Format_ARGB32);
+    m_d->emptyQImage = new QImage(1024, 1024, QImage::Format_ARGB32);
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(updateSettings()));
 }
@@ -161,6 +162,10 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
         return;
     }
 
+    //QImage newImage(m_d->viewportSize, QImage::Format_ARGB32);
+    //newImage.fill(0);
+    m_d->emptyQImage->fill(0);
+
     /**
      * TODO: viewport rects should be cropped by the borders of
      * the image, because it may be requested to read/write
@@ -173,11 +178,11 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
     QRect savedArea = newViewportRect & oldViewportRect;
 
     if(!savedArea.isEmpty()) {
-        copyQImage(alignedOffset.x(), alignedOffset.y(), m_d->prescaledQImage, *m_d->prescaledQImage);
+        copyQImage(alignedOffset.x(), alignedOffset.y(), m_d->emptyQImage, *m_d->prescaledQImage);
         updateRegion -= savedArea;
     }
 
-    QPainter gc(m_d->prescaledQImage);
+    QPainter gc(m_d->emptyQImage);
     QVector<QRect> rects = updateRegion.rects();
 
     foreach(QRect rect, rects) {
@@ -195,6 +200,8 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
             drawUsingBackend(gc, info);
         }
     }
+
+    qSwap(m_d->prescaledQImage, m_d->emptyQImage);
 }
 
 void KisPrescaledProjection::slotImageSizeChanged(qint32 w, qint32 h)
@@ -297,7 +304,10 @@ void KisPrescaledProjection::updateViewportSize()
 
     if (m_d->prescaledQImage->size() != m_d->viewportSize) {
         delete m_d->prescaledQImage;
+        delete m_d->emptyQImage;
+
         m_d->prescaledQImage = new QImage(m_d->viewportSize, QImage::Format_ARGB32);
+        m_d->emptyQImage = new QImage(m_d->viewportSize, QImage::Format_ARGB32);
     }
 }
 
