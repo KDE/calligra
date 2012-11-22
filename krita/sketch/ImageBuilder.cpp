@@ -50,33 +50,42 @@ QString ImageBuilder::createBlankImage(int width, int height, int resolution)
 
 QString ImageBuilder::createImageFromClipboard()
 {
+    QSize sz = KisClipboard::instance()->clipSize();
+    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QPoint(0,0));
+
+    if (clipDevice) {
+        connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(createImageFromClipboardDelayed()));
+        DocumentManager::instance()->newDocument(sz.width(), sz.height(), 1.0);
+    }
+    else {
+        sz.setWidth(qApp->desktop()->width());
+        sz.setHeight(qApp->desktop()->height());
+        DocumentManager::instance()->newDocument(sz.width(), sz.height(), 1.0f);
+    }
+    return QString("temp://%1x%2").arg(sz.width()).arg(sz.height());
+}
+
+void ImageBuilder::createImageFromClipboardDelayed()
+{
+    DocumentManager::instance()->disconnect(this, SLOT(createImageFromClipboardDelayed()));
     KisConfig cfg;
     cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
 
     QSize sz = KisClipboard::instance()->clipSize();
     KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QPoint(0,0));
+    KisImageWSP image = DocumentManager::instance()->document()->image();
+    if (image && image->root() && image->root()->firstChild()) {
+        KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
+        Q_ASSERT(layer);
+        layer->setOpacity(OPACITY_OPAQUE_U8);
+        QRect r = clipDevice->exactBounds();
 
-    if (clipDevice) {
-        DocumentManager::instance()->newDocument(sz.width(), sz.height(), 1.0);
-
-        KisImageWSP image = DocumentManager::instance()->document()->image();
-        if (image && image->root() && image->root()->firstChild()) {
-            KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
-            Q_ASSERT(layer);
-            layer->setOpacity(OPACITY_OPAQUE_U8);
-            QRect r = clipDevice->exactBounds();
-
-            KisPainter painter;
-            painter.begin(layer->paintDevice());
-            painter.setCompositeOp(COMPOSITE_COPY);
-            painter.bitBlt(QPoint(0, 0), clipDevice, r);
-            layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
-        }
+        KisPainter painter;
+        painter.begin(layer->paintDevice());
+        painter.setCompositeOp(COMPOSITE_COPY);
+        painter.bitBlt(QPoint(0, 0), clipDevice, r);
+        layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
     }
-    else {
-        DocumentManager::instance()->newDocument(qApp->desktop()->width(), qApp->desktop()->height(), 1.0f);
-    }
-    return QString("temp://%1x%2").arg(DocumentManager::instance()->document()->image()->width()).arg(DocumentManager::instance()->document()->image()->height());
 }
 
 QString ImageBuilder::createImageFromWebcam(int width, int height, int resolution)

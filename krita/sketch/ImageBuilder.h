@@ -32,6 +32,9 @@ public:
     Q_INVOKABLE QString createBlankImage(int width, int height, int resolution);
     Q_INVOKABLE QString createImageFromClipboard();
     Q_INVOKABLE QString createImageFromWebcam(int width, int height, int resolution);
+
+private Q_SLOTS:
+    void createImageFromClipboardDelayed();
 };
 
 #endif // IMAGEBUILDER_H
