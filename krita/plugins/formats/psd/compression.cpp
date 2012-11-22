@@ -21,6 +21,7 @@
 #include <QBuffer>
 #include "psd_utils.h"
 #include "kis_debug.h"
+#include <netinet/in.h> // htonl
 
 // from gimp's psd-save.c
 static quint32 pack_pb_line (const char *start,
@@ -223,7 +224,8 @@ QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compr
 
         QByteArray b;
         QBuffer buf(&b);
-        psdwrite(&buf, unpacked_len);
+        quint32 val = ntohl(unpacked_len);
+        buf.write((char*)&val, 4);
         b.append(bytes);
 
         // and let's hope that this is sufficient...

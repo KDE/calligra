@@ -179,28 +179,37 @@ bool psdread(QIODevice* io, quint64* v)
     return true;
 }
 
-bool psdread_pascalstring(QIODevice* io, QString& s)
+bool psdread_pascalstring(QIODevice* io, QString& s, int padding)
 {
-
     quint8 length;
     if (!psdread(io, &length)) return false;
 
+    //qDebug() << "psdread_pascalstring length:" << length;
+
     if (length == 0) {
-        // read another null byte
-        if (!psdread(io, &length)) return false;
+        // read the padding
+        if (io->seek(io->pos() + (padding -1))) return false;
         return (length == 0);
     }
 
     QByteArray chars = io->read(length);
+    //qDebug() << "psdread_pascalstring bytes:" << QString::fromLatin1(chars, length) << chars.length();
     if (chars.length() != length) return false;
 
-    s.append(chars);
-
     // read padding byte
-    if (((length +1) & 0x01) != 0) {
-        if (!psdread(io, &length)) return false;
-        return (length == 0);
+    quint32 paddedLength = length + 1;
+    if (padding > 0) {
+        while (paddedLength % padding != 0) {
+            if (!io->seek(io->pos() + 1)) {
+                return false;
+            }
+            paddedLength++;
+        }
     }
+
+    s.append(QString::fromLatin1(chars));
+    //qDebug() << "psdread_pascalstring bytes:" << s;
+
 
     return true;
 }

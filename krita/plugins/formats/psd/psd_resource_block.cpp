@@ -55,7 +55,7 @@ bool PSDResourceBlock::read(QIODevice* io)
 
     dbgFile << "\tresource block identifier" << identifier;
 
-    if (!psdread_pascalstring(io, name)) {
+    if (!psdread_pascalstring(io, name, 2)) {
         error = "Could not read name of resource block";
         return false;
     }

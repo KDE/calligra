@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,25 +15,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef COMPRESSION_H
-#define COMPRESSION_H
 
+#include "compression_test.h"
+
+#include <QTest>
+#include <QCoreApplication>
+#include <klocale.h>
+#include <qtest_kde.h>
+#include "../compression.h"
 #include <QByteArray>
+#include <QBuffer>
 
-class Compression
+
+void CompressionTest::testCompression()
 {
-public:
+}
 
-    enum CompressionType {
-        Uncompressed = 0,
-        RLE,
-        ZIP,
-        ZIPWithPrediction,
-        Unknown
-    };
+QTEST_KDEMAIN(CompressionTest, GUI)
 
-    static QByteArray uncompress(quint32 unpacked_len, QByteArray bytes, CompressionType compressionType);
-    static QByteArray compress(QByteArray bytes, CompressionType compressionType);
-};
-
-#endif // PSD_COMPRESSION_H
+#include "compression_test.moc"
