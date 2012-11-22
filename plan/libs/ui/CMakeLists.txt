@@ -8,20 +8,20 @@ include_directories(
     ${CMAKE_BINARY_DIR}/plan/libs/models
     ${CMAKE_SOURCE_DIR}/plan/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/plan/libs/ui
-    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
-    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
 
+    # 3rdparty/*
+    ${KDGANTT_INCLUDES}
+
+    # libs/*
     ${KOODF_INCLUDES} 
     ${KOPROPERTY_INCLUDES}
-
+    ${KOPROPERTIES_INCLUDES}
+    ${KOMAIN_INCLUDES}    
     ${CMAKE_SOURCE_DIR}/libs/koreport
     ${CMAKE_SOURCE_DIR}/libs/koreport/common
     ${CMAKE_SOURCE_DIR}/libs/koreport/renderer
     ${CMAKE_SOURCE_DIR}/libs/koreport/wrtembed
 
-    ${KOPROPERTIES_INCLUDES}
-
-    ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
