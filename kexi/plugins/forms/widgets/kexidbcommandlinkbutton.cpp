@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Oleg Kukharchuk <oleg.kuh@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,8 +21,9 @@
 
 #include "kexidbcommandlinkbutton.h"
 
-KexiDBCommandLinkButton::KexiDBCommandLinkButton(const QString & text, const QString &description, QWidget * parent)
-        : KexiCommandLinkButton(text, parent)
+KexiDBCommandLinkButton::KexiDBCommandLinkButton(const QString &text,
+                                                 const QString &description, QWidget * parent)
+        : KexiCommandLinkButton(text, description, parent)
 {
 }
 

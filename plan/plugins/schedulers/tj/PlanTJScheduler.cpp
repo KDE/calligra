@@ -336,6 +336,10 @@ bool PlanTJScheduler::kplatoFromTJ()
 
     adjustSummaryTasks( m_schedule->summaryTasks() );
 
+    foreach ( Task *task, m_taskmap ) {
+        calcPertValues( task );
+    }
+
     m_project->calcCriticalPathList( m_schedule );
     // calculate positive float
     foreach ( Task* t, m_taskmap ) {
@@ -364,8 +368,23 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
     Schedule *cs = task->currentSchedule();
     Q_ASSERT( cs );
     kDebug(planDbg())<<"taskFromTJ:"<<task<<task->name()<<cs->id();
-    task->setStartTime( DateTime( QDateTime::fromTime_t( job->getStart( 0 ) ) ) );
-    task->setEndTime( DateTime( QDateTime::fromTime_t( job->getEnd( 0 ) ).addSecs( 1 ) ) );
+    time_t s = job->getStart( 0 );
+    if ( s < m_tjProject->getStart() || s > m_tjProject->getEnd() ) {
+        m_project->currentSchedule()->setSchedulingError( true );
+        cs->setSchedulingError( true );
+        s = m_tjProject->getStart();
+    }
+    time_t e = job->getEnd( 0 );
+    if ( job->isMilestone() ) {
+        Q_ASSERT( s = (e + 1));
+        e = s - 1;
+    } else if ( e <= s || e > m_tjProject->getEnd() ) {
+        m_project->currentSchedule()->setSchedulingError( true );
+        cs->setSchedulingError( true );
+        e = s + (8*60*60);
+    }
+    task->setStartTime( DateTime( QDateTime::fromTime_t( s ) ) );
+    task->setEndTime( DateTime( QDateTime::fromTime_t( e + 1 ) ) );
     task->setDuration( task->endTime() - task->startTime() );
 
     if ( ! task->startTime().isValid() ) {
@@ -401,7 +420,6 @@ bool PlanTJScheduler::taskFromTJ( TJ::Task *job, Task *task )
             logInfo( task, 0, i18nc( "@info/plain" , "Scheduled task: %1 - %2", locale()->formatDateTime( task->startTime() ), locale()->formatDateTime( task->endTime() ) ) );
         }
     }
-    calcPertValues( task );
     return true;
 }
 
@@ -442,32 +460,70 @@ Duration PlanTJScheduler::calcPositiveFloat( Task *task )
 
 void PlanTJScheduler::calcPertValues( Task *t )
 {
-    // NOTE: no need for milliseconds as TJ works with seconds
+    switch ( t->constraint() ) {
+    case Node::MustStartOn:
+        if ( t->constraintStartTime() != t->startTime() ) {
+            t->setNegativeFloat( t->startTime() - t->constraintStartTime() );
+        }
+        break;
+    case Node::StartNotEarlier:
+        if ( t->startTime() < t->constraintStartTime() ) {
+            t->setNegativeFloat( t->constraintStartTime() - t->startTime() );
+        }
+        break;
+    case Node::MustFinishOn:
+        if ( t->constraintEndTime() != t->endTime() ) {
+            t->setNegativeFloat( t->endTime() - t->constraintEndTime() );
+        }
+        break;
+    case Node::FinishNotLater:
+        if ( t->endTime() > t->constraintEndTime() ) {
+            t->setNegativeFloat( t->endTime() - t->constraintEndTime() );
+        }
+        break;
+    case Node::FixedInterval:
+        if ( t->constraintStartTime() != t->startTime() ) {
+            t->setNegativeFloat( t->startTime() - t->constraintStartTime() );
+        } else if ( t->endTime() != t->constraintEndTime() ) {
+            t->setNegativeFloat( t->endTime() - t->constraintEndTime() );
+        }
+        break;
+    default:
+        break;
+    }
+    if ( t->negativeFloat() != 0 ) {
+        t->currentSchedule()->setConstraintError( true );
+        m_project->currentSchedule()->setSchedulingError( true );
+        logError( t, 0, i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", t->constraintToString( true ), t->negativeFloat().toString( Duration::Format_i18nHour ) ) );
+    }
     kDebug(planDbg())<<t->name()<<t->startTime()<<t->endTime();
-    qint64 startfloat = 0, freefloat = 0, negativefloat = 0;
+    Duration negativefloat;
     foreach ( const Relation *r, t->dependParentNodes() + t->parentProxyRelations() ) {
-        qint64 f = (qint64)(r->parent()->endTime().secsTo( t->startTime() ) - r->lag().seconds());
-        if ( f < negativefloat ) {
-            negativefloat = f;
-        }
-        if ( f > 0 && ( startfloat == 0 || startfloat > f ) ) {
-            startfloat = f;
+        if ( r->parent()->endTime() + r->lag() > t->startTime() ) {
+            Duration f = r->parent()->endTime() + r->lag() - t->startTime();
+            if ( f > negativefloat ) {
+                negativefloat = f;
+            }
         }
     }
+    if ( negativefloat > 0 ) {
+        t->currentSchedule()->setSchedulingError( true );
+        m_project->currentSchedule()->setSchedulingError( true );
+        logError( t, 0, i18nc( "@info/plain", "Failed to meet dependency. Negative float=%1", negativefloat.toString( Duration::Format_i18nHour ) ) );
+        if ( t->negativeFloat() < negativefloat ) {
+            t->setNegativeFloat( negativefloat );
+        }
+    }
+    Duration freefloat;
     foreach ( const Relation *r, t->dependChildNodes() + t->childProxyRelations() ) {
-        qint64 f = t->endTime().secsTo( r->child()->startTime() ) - r->lag().seconds();
-        if ( f > 0 && ( freefloat == 0 || freefloat > f ) ) {
-            freefloat = f;
+        if ( t->endTime() + r->lag() <  r->child()->startTime() ) {
+            Duration f = r->child()->startTime() - r->lag() - t->endTime();
+            if ( f > 0 && ( freefloat == 0 || freefloat > f ) ) {
+                freefloat = f;
+            }
         }
     }
-    t->setFreeFloat( Duration( freefloat, Duration::Unit_s ) );
-    t->setNegativeFloat( Duration( negativefloat, Duration::Unit_s ) );
-    // TODO calculate real values dependent on resources
-    t->setEarlyStart( t->startTime().addSecs( -startfloat ) );
-    t->setLateStart( t->startTime().addSecs( freefloat ) );
-    t->setEarlyFinish( t->endTime().addSecs( -startfloat ) );
-    t->setLateFinish( t->endTime().addSecs( freefloat ) );
-
+    t->setFreeFloat( freefloat );
 }
 
 bool PlanTJScheduler::exists( QList<CalendarDay*> &lst, CalendarDay *day )
@@ -628,10 +684,16 @@ void PlanTJScheduler::addDependencies( KPlato::Task *task )
             case Node::MustStartOn:
             case Node::StartNotEarlier:
                 addPrecedes( r );
+                if ( task->constraintStartTime() < m_project->constraintStartTime() ) {
+                    addDepends( r );
+                }
                 break;
             case Node::MustFinishOn:
             case Node::FinishNotLater:
                 addDepends( r );
+                if ( task->constraintEndTime() < m_project->constraintEndTime() ) {
+                    addPrecedes( r );
+                }
                 break;
             case Node::FixedInterval:
                 break;
@@ -666,27 +728,43 @@ void PlanTJScheduler::setConstraint( TJ::Task *job, KPlato::Task *task )
             job->setScheduling( TJ::Task::ALAP);
             break;
         case Node::MustStartOn:
-            job->setPriority( 600 );
-            job->setSpecifiedStart( 0, task->constraintStartTime().toTime_t() );
-            logDebug( task, 0, QString( "MSO: set specified start: %1").arg( TJ::time2ISO( task->constraintStartTime().toTime_t() ) ) );
+            if ( task->constraintStartTime() >= m_project->constraintStartTime() ) {
+                job->setPriority( 600 );
+                job->setSpecifiedStart( 0, task->constraintStartTime().toTime_t() );
+                logDebug( task, 0, QString( "MSO: set specified start: %1").arg( TJ::time2ISO( task->constraintStartTime().toTime_t() ) ) );
+            } else {
+                if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "%1: Invalid start constraint", task->constraintToString( true ) ) );
+            }
             break;
         case Node::StartNotEarlier: {
-            job->setPriority( 500 );
-            job->setSpecifiedStart( 0, task->constraintStartTime().toTime_t() );
-            logDebug( task, 0, QString( "SNE: set specified start: %1").arg( TJ::time2ISO( task->constraintStartTime().toTime_t() ) ) );
+            if ( task->constraintStartTime() >= m_project->constraintStartTime() ) {
+                job->setPriority( 500 );
+                job->setSpecifiedStart( 0, task->constraintStartTime().toTime_t() );
+                logDebug( task, 0, QString( "SNE: set specified start: %1").arg( TJ::time2ISO( task->constraintStartTime().toTime_t() ) ) );
+            } else {
+                if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "%1: Invalid start constraint", task->constraintToString( true ) ) );
+            }
             break;
         }
         case Node::MustFinishOn:
-            job->setPriority( 600 );
-            job->setScheduling( TJ::Task::ALAP );
-            job->setSpecifiedEnd( 0, task->constraintEndTime().toTime_t() - 1 );
-            logDebug( task, 0, QString( "MFO: set specified end: %1").arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) ) );
+            if ( task->constraintEndTime() <= m_project->constraintEndTime() ) {
+                job->setPriority( 600 );
+                job->setScheduling( TJ::Task::ALAP );
+                job->setSpecifiedEnd( 0, task->constraintEndTime().toTime_t() - 1 );
+                logDebug( task, 0, QString( "MFO: set specified end: %1").arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) ) );
+            } else {
+                if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "%1: Invalid end constraint", task->constraintToString( true ) ) );
+            }
             break;
         case Node::FinishNotLater: {
-            job->setPriority( 500 );
-            job->setScheduling( TJ::Task::ALAP );
-            job->setSpecifiedEnd( 0, task->constraintEndTime().toTime_t() - 1 );
-            logDebug( task, 0, QString( "FNL: set specified end: %1").arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) ) );
+            if ( task->constraintEndTime() <= m_project->constraintEndTime() ) {
+                job->setPriority( 500 );
+                job->setScheduling( TJ::Task::ALAP );
+                job->setSpecifiedEnd( 0, task->constraintEndTime().toTime_t() - 1 );
+                logDebug( task, 0, QString( "FNL: set specified end: %1").arg( TJ::time2ISO( task->constraintEndTime().toTime_t() ) ) );
+            } else {
+                if ( locale() ) logWarning( task, 0, i18nc( "@info/plain", "%1: Invalid end constraint", task->constraintToString( true ) ) );
+            }
             break;
         }
         case Node::FixedInterval: {
