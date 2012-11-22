@@ -60,6 +60,7 @@ private:
     static DocumentManager *sm_instance;
 
 private Q_SLOTS:
+    void delayedNewDocument();
     void delayedSaveAs();
     void delayedOpenDocument();
 };

@@ -45,6 +45,7 @@ public:
 
     QString saveAsFilename;
     QString openDocumentFilename;
+    int newDocWidth, newDocHeight; float newDocResolution;
 };
 
 DocumentManager *DocumentManager::sm_instance = 0;
@@ -83,12 +84,20 @@ void DocumentManager::newDocument(int width, int height, float resolution)
 {
     closeDocument();
 
+    d->newDocWidth = width;
+    d->newDocHeight = height;
+    d->newDocResolution = resolution;
+    QTimer::singleShot(1000, this, SLOT(delayedNewDocument()));
+}
+
+void DocumentManager::delayedNewDocument()
+{
     d->document = new KisDoc2(d->part);
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
     d->part->setDocument(d->document);
-    d->document->newImage("New Image", width, height, KoColorSpaceRegistry::instance()->rgb8());
-    d->document->image()->setResolution(resolution, resolution);
+    d->document->newImage("New Image", d->newDocWidth, d->newDocHeight, KoColorSpaceRegistry::instance()->rgb8());
+    d->document->image()->setResolution(d->newDocResolution, d->newDocResolution);
 
     emit documentChanged();
 }
@@ -96,19 +105,18 @@ void DocumentManager::newDocument(int width, int height, float resolution)
 void DocumentManager::openDocument(const QString& document)
 {
     closeDocument();
-
-    d->document = new KisDoc2(d->part);
-    d->document->setProgressProxy(d->proxy);
-    d->document->setSaveInBatchMode(true);
-    d->part->setDocument(d->document);
-
-    d->document->setModified(false);
     d->openDocumentFilename = document;
     QTimer::singleShot(1000, this, SLOT(delayedOpenDocument()));
 }
 
 void DocumentManager::delayedOpenDocument()
 {
+    d->document = new KisDoc2(d->part);
+    d->document->setProgressProxy(d->proxy);
+    d->document->setSaveInBatchMode(true);
+    d->part->setDocument(d->document);
+
+    d->document->setModified(false);
     d->document->openUrl(QUrl::fromLocalFile(d->openDocumentFilename));
     d->recentFileManager->addRecent(d->openDocumentFilename);
     emit documentChanged();
