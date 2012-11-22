@@ -84,10 +84,12 @@ Page {
         onButtonClicked: {
             switch( button ) {
                 case "new": {
+                    d.previousFile = Settings.currentFile;
                     newPanel.collapsed = !newPanel.collapsed;
                     openPanel.collapsed = true;
                 }
                 case "open": {
+                    d.previousFile = Settings.currentFile;
                     openPanel.collapsed = !openPanel.collapsed;
                     newPanel.collapsed = true;
                 }
@@ -184,6 +186,7 @@ Page {
                     }
                 }
                 default: {
+                    Settings.currentFile = d.previousFile;
                     d.saveRequested = false;
                     d.closeRequested = false;
                 }
@@ -191,6 +194,7 @@ Page {
         }
 
         onCanceled: {
+            Settings.currentFile = d.previousFile;
             d.saveRequested = false;
             d.closeRequested = false;
         }
@@ -252,6 +256,7 @@ Page {
     QtObject {
         id: d;
 
+        property string previousFile;
         property bool closeRequested;
         property bool saveRequested;
 
