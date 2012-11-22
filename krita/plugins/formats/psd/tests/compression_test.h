@@ -26,7 +26,9 @@ class CompressionTest : public QObject
     Q_OBJECT
 private slots:
 
-    void testCompression();
+    void testCompressionRLE();
+    void testCompressionZIP();
+    void testCompressionUncompressed();
 
 };
 
