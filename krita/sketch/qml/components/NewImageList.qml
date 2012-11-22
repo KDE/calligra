@@ -44,32 +44,32 @@ PageStack {
                 onClicked: {
                     switch(model.bnrole) {
                         case "a4p": {
+                            base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createBlankImage(2400, 3500, 300);
                             Settings.temporaryFile = true;
-                            base.clicked();
                         }
                         case "a4l": {
+                            base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createBlankImage(3500, 2400, 300);
                             Settings.temporaryFile = true;
-                            base.clicked();
                         }
                         case "screen": {
+                            base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createBlankImage(Krita.Window.width, Krita.Window.height, 72);
                             Settings.temporaryFile = true;
-                            base.clicked();
                         }
                         case "custom": {
                             pageStack.push( createNewPage );
                         }
                         case "clip": {
+                            base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createImageFromClipboard();
                             Settings.temporaryFile = true;
-                            base.clicked();
                         }
                         case "webcam": {
+                            base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createImageFromWebcam();
                             Settings.temporaryFile = true;
-                            base.clicked();
                         }
                     }
                 }
@@ -157,9 +157,9 @@ PageStack {
                     image: "../images/svg/icon-apply-green.svg";
                     onClicked: {
                         if(width.acceptableInput && height.acceptableInput && resolution.acceptableInput) {
+                            base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createBlankImage(parseInt(width.text), parseInt(height.text), parseInt(resolution.text));
                             Settings.temporaryFile = true;
-                            base.clicked();
                         }
                     }
                 }
