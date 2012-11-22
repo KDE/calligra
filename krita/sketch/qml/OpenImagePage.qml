@@ -22,6 +22,7 @@ import "components"
 
 Page {
     id: base;
+    signal itemClicked();
 
     Rectangle {
         anchors.fill: parent;
@@ -115,6 +116,7 @@ Page {
                 if( model.fileType === "inode/directory" ) {
                     GridView.view.model.path = model.path;
                 } else {
+                    base.itemClicked();
                     pageStack.pop();
 
                     Settings.currentFile = model.path;
