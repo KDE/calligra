@@ -236,7 +236,9 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
 
     foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
 
-        dbgFile << "Writing channel" << channelInfo->name() << "to image section";
+        if (channelInfo->channelType() != KoChannelInfo::COLOR) continue;
+
+        dbgFile << "Writing channel" << channelInfo->name() << "to image section, Display position" << channelInfo->displayPosition() << "channel index" << KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels());
 
         quint8 *plane = planes[KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels())];
         quint32 stride = channelInfo->size() * rc.width();

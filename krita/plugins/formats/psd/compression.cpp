@@ -199,6 +199,11 @@ quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 
 
 QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compression::CompressionType compressionType)
 {
+    qDebug()<< "unpacked_len" << unpacked_len << "bytes" << bytes.size();
+    if (unpacked_len > 30000) return QByteArray();
+    if (bytes.size() < 1) return QByteArray();
+
+
     switch(compressionType) {
     case Uncompressed:
         return bytes;
@@ -234,6 +239,8 @@ QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compr
 
 QByteArray Compression::compress(QByteArray bytes, Compression::CompressionType compressionType)
 {
+    if (bytes.size() < 1) return QByteArray();
+
     switch(compressionType) {
     case Uncompressed:
         return bytes;

@@ -386,29 +386,29 @@ bool PSDLayerRecord::read(QIODevice* io)
             error = QString("Got %1 bytes for the blending range block, needed %2").arg(blendingRanges.data.size(), blendingDataLength);
         }
         /*
-    // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
+        // XXX: reading this block correctly failed, I have more channel ranges than I'd expected.
 
-    if (!psdread(io, &blendingRanges.blackValues[0]) ||
-        !psdread(io, &blendingRanges.blackValues[1]) ||
-        !psdread(io, &blendingRanges.whiteValues[0]) ||
-        !psdread(io, &blendingRanges.whiteValues[1]) ||
-        !psdread(io, &blendingRanges.compositeGrayBlendDestinationRange)) {
+        if (!psdread(io, &blendingRanges.blackValues[0]) ||
+            !psdread(io, &blendingRanges.blackValues[1]) ||
+            !psdread(io, &blendingRanges.whiteValues[0]) ||
+            !psdread(io, &blendingRanges.whiteValues[1]) ||
+            !psdread(io, &blendingRanges.compositeGrayBlendDestinationRange)) {
 
-        error = "Could not read blending black/white values";
-        return false;
-    }
-
-    for (int i = 0; i < nChannels; ++i) {
-        quint32 src;
-        quint32 dst;
-        if (!psdread(io, &src) || !psdread(io, &dst)) {
-            error = QString("could not read src/dst range for channel %1").arg(i);
+            error = "Could not read blending black/white values";
             return false;
         }
-        dbgFile << "\tread range " << src << "to" << dst << "for channel" << i;
-        blendingRanges.sourceDestinationRanges << QPair<quint32, quint32>(src, dst);
-    }
-    */
+
+        for (int i = 0; i < nChannels; ++i) {
+            quint32 src;
+            quint32 dst;
+            if (!psdread(io, &src) || !psdread(io, &dst)) {
+                error = QString("could not read src/dst range for channel %1").arg(i);
+                return false;
+            }
+            dbgFile << "\tread range " << src << "to" << dst << "for channel" << i;
+            blendingRanges.sourceDestinationRanges << QPair<quint32, quint32>(src, dst);
+        }
+        */
         dbgFile << "\tGoing to read layer name at" << io->pos();
         quint8 layerNameLength;
         if (!psdread(io, &layerNameLength)) {
@@ -417,13 +417,10 @@ bool PSDLayerRecord::read(QIODevice* io)
         }
 
         dbgFile << "\tlayer name length unpadded" << layerNameLength << "pos" << io->pos();
-
         layerNameLength = ((layerNameLength + 1 + 3) & ~0x03) - 1;
 
         dbgFile << "\tlayer name length padded" << layerNameLength << "pos" << io->pos();
-
         layerName = io->read(layerNameLength);
-
         dbgFile << "\tlayer name" << layerName << io->pos();
 
         QStringList longBlocks;
@@ -567,32 +564,32 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     // layer name: Pascal string, padded to a multiple of 4 bytes.
     psdwrite_pascalstring(io, layerName, 4);
 
-//    // write luni data block
-//    {
-//        quint32 len = layerName.length();
-//        quint32 blocksize = 0;
-//        io->write("8BIM", 4);
-//        io->write("luni", 4);
+    //    // write luni data block
+    //    {
+    //        quint32 len = layerName.length();
+    //        quint32 blocksize = 0;
+    //        io->write("8BIM", 4);
+    //        io->write("luni", 4);
 
-//        // pad to even number of chars
-//        if (len % 2) {
-//            blocksize = len + 1;
-//        }
-//        else {
-//            blocksize = len;
-//        }
-//        // 2 bytes per character + 4 bytes for pascal string length
-//        blocksize = (blocksize * 2)  + 4;
-//        psdwrite(io, blocksize);
-//        const ushort *chars = layerName.utf16();
-//        for (uint i = 0; i < len; i++) {
-//            psdwrite(io, (quint16)chars[i]);
-//        }
+    //        // pad to even number of chars
+    //        if (len % 2) {
+    //            blocksize = len + 1;
+    //        }
+    //        else {
+    //            blocksize = len;
+    //        }
+    //        // 2 bytes per character + 4 bytes for pascal string length
+    //        blocksize = (blocksize * 2)  + 4;
+    //        psdwrite(io, blocksize);
+    //        const ushort *chars = layerName.utf16();
+    //        for (uint i = 0; i < len; i++) {
+    //            psdwrite(io, (quint16)chars[i]);
+    //        }
 
-//        if (len % 2) {
-//            psdwrite(io, (quint16)0);
-//        }
-//    }
+    //        if (len % 2) {
+    //            psdwrite(io, (quint16)0);
+    //        }
+    //    }
     // write real length for extra data
     quint64 eofPos = io->pos();
     io->seek(extraDataPos);
@@ -607,35 +604,44 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
     return true;
 }
 
-bool PSDLayerRecord::writeChannelData(QIODevice *io)
+bool PSDLayerRecord::writePixelData(QIODevice *io)
 {
     dbgFile << "writing pixel data for layer" << layerName << "at" << io->pos();
 
     KisPaintDeviceSP dev = m_node->projection();
 
-    // XXX: make the compression settting configurable. For now, always use RLE.
-    psdwrite(io, (quint16)Compression::RLE);
-
     // now write all the channels in display order
-    // fill in the channel chooser, in the display order, but store the pixel index as well.
     QRect rc = dev->exactBounds();
 
     // yeah... we read the entire layer into a vector of quint8
-    QVector<quint8* > planes = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+    QVector<quint8* > tmp = dev->readPlanarBytes(rc.x(), rc.y(), rc.width(), rc.height());
+
+    // then reorder the planes to fit the psd model -- alpha first, then display order
+    QVector<quint8* > planes;
+    foreach(KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
+        if (ch->channelType() == KoChannelInfo::ALPHA) {
+            planes.insert(0, tmp[ch->pos()]);
+        }
+        else {
+            planes.append(tmp[ch->pos()]);
+        }
+    }
+
 
     // here's where we save the total size of the channel data
-    int channelInfoIndex = 0;
+    for (int channelInfoIndex = 0; channelInfoIndex  < nChannels; ++channelInfoIndex) {
 
-    foreach (KoChannelInfo *channelInfo, KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())) {
-
-        dbgFile << "\tWriting channel" << channelInfo->name() << "index" << channelInfoIndex;
-        dbgFile << "\t\tpsd channel id" << channelInfoRecords[channelInfoIndex]->channelId;
+        dbgFile << "\tWriting channel" << channelInfoIndex << "psd channel id" << channelInfoRecords[channelInfoIndex]->channelId;
 
         // where this block starts, for the total size calculation
         quint64 startChannelBlockPos = io->pos();
 
-        // start of the block where we write the length of the individual scanlines
-        quint64 channelLengthPos = io->pos();
+        // XXX: make the compression settting configurable. For now, always use RLE.
+        psdwrite(io, (quint16)Compression::RLE);
+
+        // where this block starts, for the total size calculation
+        quint64 channelRLESizePos = io->pos();
+
         // write zero's for the channel lengths section
         for(int i = 0; i < rc.height(); ++i) {
             psdwrite(io, (quint16)0);
@@ -644,27 +650,29 @@ bool PSDLayerRecord::writeChannelData(QIODevice *io)
         // the size of the current row
         quint64 channelStartPos = io->pos();
 
-        quint8 *plane = planes[KoChannelInfo::displayPositionToChannelIndex(channelInfo->displayPosition(), dev->colorSpace()->channels())];
-        quint32 stride = channelInfo->size() * rc.width();
+        quint8 *plane = planes[channelInfoIndex];
+        quint32 stride = (m_header.channelDepth / 8) * rc.width();
         for (qint32 row = 0; row < rc.height(); ++row) {
 
             QByteArray uncompressed = QByteArray::fromRawData((const char*)plane + row * stride, stride);
             QByteArray compressed = Compression::compress(uncompressed, Compression::RLE);
+            quint16 size = compressed.size();
 
-            io->seek(channelLengthPos);
-            psdwrite(io, (quint16)compressed.size());
-            channelLengthPos +=2;
+            io->seek(channelRLESizePos);
+            psdwrite(io, size);
+            channelRLESizePos +=2;
             io->seek(channelStartPos);
 
-            if (!io->write(compressed) == compressed.size()) {
+            if (!io->write(compressed) == size) {
                 error = "Could not write image data";
                 return false;
             }
-//            dbgFile << "\t\tUncompressed:" << uncompressed.size() << "compressed" << compressed.size();
-//            QByteArray control = Compression::uncompress(rc.width(), compressed, Compression::RLE);
-//            Q_ASSERT(qstrcmp(control, uncompressed) == 0);
+            //            dbgFile << "\t\tUncompressed:" << uncompressed.size() << "compressed" << compressed.size();
+            //            QByteArray control = Compression::uncompress(rc.width(), compressed, Compression::RLE);
+            //            Q_ASSERT(qstrcmp(control, uncompressed) == 0);
 
-            quint16 size = compressed.size();
+
+
             // If the layer's size, and therefore the data, is odd, a pad byte will be inserted
             // at the end of the row. (weirdly enough, that's not true for the image data)
             if ((size & 0x01) != 0) {
@@ -679,8 +687,6 @@ bool PSDLayerRecord::writeChannelData(QIODevice *io)
         io->seek(channelInfoRecords[channelInfoIndex]->channelInfoPosition);
         psdwrite(io, (quint32)(currentPos - startChannelBlockPos));
         io->seek(currentPos);
-
-        channelInfoIndex++;
     }
 
     return true;

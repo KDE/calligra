@@ -33,7 +33,7 @@ public:
     };
 
     static QByteArray uncompress(quint32 unpacked_len, QByteArray bytes, CompressionType compressionType);
-    static QByteArray compress(QByteArray bytes, CompressionType compressionType);
+    static QByteArray compress(QByteArray bytes, int stride, CompressionType compressionType);
 };
 
 #endif // PSD_COMPRESSION_H

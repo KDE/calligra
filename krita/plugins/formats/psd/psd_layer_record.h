@@ -23,6 +23,8 @@
 #include <QByteArray>
 #include <QBitArray>
 
+#include <KoColorSpace.h>
+
 #include <kis_types.h>
 #include <kis_paint_device.h>
 #include <kis_node.h>
@@ -56,8 +58,11 @@ public:
     }
 
     bool read(QIODevice* io);
+    bool readChannels(QIODevice* io, KisPaintDeviceSP device);
+
     bool write(QIODevice* io, KisNodeSP node);
-    bool writeChannelData(QIODevice* io);
+    bool writePixelData(QIODevice* io);
+
     bool valid();
 
     QString error;
@@ -111,9 +116,6 @@ public:
     };
 
     QMap<QString, LayerInfoBlock*> infoBlocks;
-
-    bool readChannels(QIODevice* io, KisPaintDeviceSP device);
-
 
 private:
 

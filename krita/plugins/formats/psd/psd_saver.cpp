@@ -38,6 +38,7 @@
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
+#include <kis_debug.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -117,7 +118,9 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 
     // Open file for writing
     QFile f(uri.toLocalFile());
-    f.open(QIODevice::WriteOnly);
+    if (!f.open(QIODevice::WriteOnly)) {
+        return KisImageBuilder_RESULT_NOT_LOCAL;
+    }
 
     // HEADER
 
@@ -196,7 +199,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     }
     else {
         // else write a zero length block
-        dgbFile << "No layers, saving empty layers/mask block" << f.pos();
+        dbgFile << "No layers, saving empty layers/mask block" << f.pos();
         psdwrite(&f, (quint32)0);
     }
 

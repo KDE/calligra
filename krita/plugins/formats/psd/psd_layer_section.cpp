@@ -141,8 +141,7 @@ bool PSDLayerSection::read(QIODevice* io)
         for (int j = 0; j < layerRecord->nChannels; ++j) {
             // save the current location so we can jump beyond this block later on.
             quint64 channelStartPos = io->pos();
-
-            dbgFile << "\tReading channel image data for" << j << "from pos" << io->pos();
+            dbgFile << "\tReading channel image data for channel" << j << "from pos" << io->pos();
 
             Q_ASSERT(j < layerRecord->channelInfoRecords.size());
             if (j > layerRecord->channelInfoRecords.size()) {
@@ -297,22 +296,22 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     }
 
     // Now save the channel data
-    dbgFile << "start writing channel data" << io->pos();
+    dbgFile << "start writing layer pixel data" << io->pos();
     foreach(PSDLayerRecord *layerRecord, layers) {
-        if (!layerRecord->writeChannelData(io)) {
+        if (!layerRecord->writePixelData(io)) {
             error = layerRecord->error;
             return false;
         }
     }
 
     // Write the final size of the block
-    qDebug() << "Final io pos after writing channel data" << io->pos();
+    qDebug() << "Final io pos after writing layer pixel data" << io->pos();
     quint64 pos = io->pos();
     io->seek(layerInfoPos);
 
     // length of the layer info information section
     quint32 layerInfoSize = pos - layerInfoPos - sizeof(quint32);
-    qDebug() << "Layer Info Section size" << layerInfoSize << "at"  << io->pos();
+    qDebug() << "Layer Info Section length" << layerInfoSize << "at"  << io->pos();
     psdwrite(io, layerInfoSize);
 
     // length of the layer and mask info section, rounded up to a multiple of two
