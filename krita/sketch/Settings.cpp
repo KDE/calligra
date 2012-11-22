@@ -19,6 +19,7 @@
 
 #include "Settings.h"
 #include <QDebug>
+#include <QApplication>
 
 class Settings::Private
 {
@@ -48,6 +49,7 @@ QString Settings::currentFile() const
 
 void Settings::setCurrentFile(const QString& fileName)
 {
+    qApp->processEvents();
     if(fileName != d->currentFile) {
         d->currentFile = fileName;
         emit currentFileChanged();
