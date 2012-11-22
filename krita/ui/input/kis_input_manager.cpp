@@ -429,7 +429,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         }
         return true;
     case QEvent::Wheel:
-        qDebug() << "Wheel Event";
         if (d->currentAction) {
             d->currentAction->inputEvent(event);
         } else {
