@@ -290,13 +290,12 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
             d->prescaledProjection->notifyZoomChanged();
         } else if(d->viewportMoved) {
             d->viewportMoved = false;
-            d->prescaledProjection->preScale();
-//            QPoint newOffset = d->canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
+            QPoint newOffset = d->canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
 
-//            QPoint moveOffset = newOffset - d->canvasOffset;
-//            d->prescaledProjection->viewportMoved(moveOffset);
+            QPoint moveOffset = newOffset - d->canvasOffset;
+            d->prescaledProjection->viewportMoved(moveOffset);
 
-//            d->canvasOffset = newOffset;
+            d->canvasOffset = newOffset;
         }
 
         const KisCoordinatesConverter *converter = d->canvas->coordinatesConverter();
