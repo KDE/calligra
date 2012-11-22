@@ -287,13 +287,20 @@ void KisSketchView::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     else {
         if(d->zoomLevelChanged) {
             d->zoomLevelChanged = false;
+            d->viewportMoved = false;
             d->prescaledProjection->notifyZoomChanged();
+            d->canvasOffset = QPoint();
         } else if(d->viewportMoved) {
             d->viewportMoved = false;
+
             QPoint newOffset = d->canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
 
-            QPoint moveOffset = newOffset - d->canvasOffset;
-            d->prescaledProjection->viewportMoved(moveOffset);
+            if(!d->canvasOffset.isNull()) {
+                QPoint moveOffset = newOffset - d->canvasOffset;
+                d->prescaledProjection->viewportMoved(moveOffset);
+            } else {
+                d->prescaledProjection->preScale();
+            }
 
             d->canvasOffset = newOffset;
         }
@@ -620,7 +627,7 @@ void KisSketchView::Private::resetDocumentPosition()
 
     view->canvasControllerWidget()->setScrollBarValue(pos);
 
-    canvasOffset = canvas->coordinatesConverter()->imageRectInViewportPixels().topLeft().toPoint();
+    canvasOffset = QPoint();
 }
 
 void KisSketchView::Private::configChanged()
