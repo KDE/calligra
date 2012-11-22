@@ -21,6 +21,7 @@ import org.krita.sketch 1.0
 
 Item {
     id: base;
+    signal itemClicked();
     signal openClicked();
 
     RecentImagesModel {
@@ -50,6 +51,7 @@ Item {
             imageCache: false;
 
             onClicked: {
+                base.itemClicked();
                 Settings.currentFile = model.url;
             }
         }
