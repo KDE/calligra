@@ -164,11 +164,12 @@ Panel {
             onContainsMouseChanged: toolOptionsPeek.focus = containsMouse;
         }
         Flickable {
-            anchors.fill: parent;
+            anchors.fill: parent
+            contentHeight: toolOptionsPeek.height;
             Loader {
                 id: toolOptionsPeek;
                 width: parent.width;
-                height: item.height;
+                height: item.childrenRect.height;
                 onSourceChanged: item.fullView = false;
                 source: "toolconfigpages/paint.qml";
             }
