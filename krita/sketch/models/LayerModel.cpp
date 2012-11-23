@@ -40,6 +40,21 @@
 #include <KoProperties.h>
 #include <QDeclarativeEngine>
 
+struct LayerModelMetaInfo {
+    LayerModelMetaInfo()
+    : canMoveUp(false)
+    , canMoveRight(false)
+    , canMoveDown(false)
+    , canMoveLeft(false)
+    , depth(-1)
+    {}
+    bool canMoveUp;
+    bool canMoveRight;
+    bool canMoveDown;
+    bool canMoveLeft;
+    int depth;
+};
+
 class LayerModel::Private {
 public:
     Private(LayerModel* qq)
@@ -66,6 +81,7 @@ public:
 
     LayerModel* q;
     QList<KisNodeSP> layers;
+    QHash<const KisNode*, LayerModelMetaInfo> layerMeta;
     KisNodeModel* nodeModel;
     bool aboutToRemoveRoots;
     KisView2* view;
@@ -107,6 +123,7 @@ public:
 
     void rebuildLayerList(KisNodeSP layer = 0)
     {
+        bool refreshingFromRoot = false;
         if(!image)
         {
             layers.clear();
@@ -114,6 +131,7 @@ public:
         }
         if(layer == 0)
         {
+            refreshingFromRoot = true;
             layers.clear();
             layer = image->rootLayer();
         }
@@ -126,6 +144,42 @@ public:
         {
             layers << children.at(i-1);
             rebuildLayerList(children.at(i-1));
+        }
+
+        if(refreshingFromRoot)
+            refreshLayerMovementAbilities();
+    }
+
+    void refreshLayerMovementAbilities()
+    {
+        layerMeta.clear();
+        if(layers.count() == 0)
+            return;
+        for(int i = 0; i < layers.count(); ++i)
+        {
+            const KisNodeSP layer = layers.at(i);
+            LayerModelMetaInfo ability;
+
+            if(i > 0)
+                ability.canMoveUp = true;
+
+            if(i < layers.count() - 1)
+                ability.canMoveDown = true;
+
+            KisNodeSP parent = layer;
+            while(parent)
+            {
+                ++ability.depth;
+                parent = parent->parent();
+            }
+
+            if(ability.depth > 1)
+                ability.canMoveLeft = true;
+
+            if(i < layers.count() - 1 && qobject_cast<const KisGroupLayer*>(layers.at(i + 1).constData()))
+                ability.canMoveRight = true;
+
+            layerMeta[layer] = ability;
         }
     }
 };
@@ -288,7 +342,6 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
         if(node.isNull())
             return data;
         KisNodeSP parent;
-        int depth = -1;
         switch(role)
         {
         case IconRole:
@@ -335,72 +388,31 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
             data = d->deepChildCount(d->layers.at(index.row()));
             break;
         case DepthRole:
-            parent = node;
-            while(parent)
-            {
-                ++depth;
-                parent = parent->parent();
-            }
-            data = depth;
+            data = d->layerMeta[node.data()].depth;
             break;
         case PreviousItemDepthRole:
             if(index.row() == 0)
                 data = -1;
             else
-            {
-                parent = d->layers.at(index.row() - 1);
-                while(parent)
-                {
-                    ++depth;
-                    parent = parent->parent();
-                }
-                data = depth;
-            }
+                data = d->layerMeta[d->layers[index.row() - 1].data()].depth;
             break;
         case NextItemDepthRole:
             if(index.row() == d->layers.count() - 1)
                 data = -1;
             else
-            {
-                parent = d->layers.at(index.row() + 1);
-                while(parent)
-                {
-                    ++depth;
-                    parent = parent->parent();
-                }
-                data = depth;
-            }
+                data = d->layerMeta[d->layers[index.row() + 1].data()].depth;
             break;
         case CanMoveDownRole:
-            data = (node == d->activeNode) && node && (node->prevSibling() || (node->parent() && node->parent() != d->image->root()));
+            data = (node == d->activeNode) && d->layerMeta[node.data()].canMoveDown;
             break;
         case CanMoveLeftRole:
-            data = false;
-            if(node == d->activeNode)
-            {
-                parent = node;
-                while(parent)
-                {
-                    ++depth;
-                    parent = parent->parent();
-                    if(depth > 1)
-                        break;
-                }
-                data = (depth > 1);
-            }
+            data = (node == d->activeNode) && d->layerMeta[node.data()].canMoveLeft;
             break;
         case CanMoveRightRole:
-            data = false;
-            if(node == d->activeNode)
-            {
-                if(node->nextSibling() && node->nextSibling()->childCount() > 0)
-                    data = true;
-                else if(node->prevSibling() && node->prevSibling()->childCount() > 0)
-                    data = true;
-            }
+            data = (node == d->activeNode) && d->layerMeta[node.data()].canMoveRight;
             break;
         case CanMoveUpRole:
-            data = (node == d->activeNode) && node && (node->nextSibling() || (node->parent() && node->parent() != d->image->root()));
+            data = (node == d->activeNode) && d->layerMeta[node.data()].canMoveUp;
             break;
         default:
             break;
