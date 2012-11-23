@@ -24,32 +24,32 @@
 #include <netinet/in.h> // htonl
 
 // from gimp's psd-save.c
-static quint32 pack_pb_line (const char *start,
-                             quint32 length,
-                             quint32 stride,
-                             char *dest_ptr)
+static quint32 pack_pb_line (const QByteArray &src,
+                             QByteArray &dst)
 {
-    quint32  remaining = length;
-    quint8   i, j;
+    quint32 length = src.size();
+    quint32 remaining = length;
+    quint8  i, j;
+    quint32 dest_ptr = 0;
+    const char *start = src.constData();
 
     length = 0;
     while (remaining > 0)
     {
         /* Look for characters matching the first */
-
         i = 0;
         while ((i < 128) &&
                (remaining - i > 0) &&
-               (start[0] == start[i*stride]))
+               (start[0] == start[i]))
             i++;
 
         if (i > 1)              /* Match found */
         {
 
-            *dest_ptr++ = -(i - 1);
-            *dest_ptr++ = *start;
+            dst[dest_ptr++] = -(i - 1);
+            dst[dest_ptr++] = *start;
 
-            start += i*stride;
+            start += i;
             remaining -= i;
             length += 2;
         }
@@ -58,8 +58,8 @@ static quint32 pack_pb_line (const char *start,
             i = 0;
             while ((i < 128)             &&
                    (remaining - (i + 1) > 0) &&
-                   (start[i*stride] != start[(i + 1)*stride] ||
-                    remaining - (i + 2) <= 0  || start[i*stride] != start[(i+2)*stride]))
+                   (start[i] != start[(i + 1)] ||
+                    remaining - (i + 2) <= 0  || start[i] != start[(i+2)]))
                 i++;
 
             /* If there's only 1 remaining, the previous WHILE stmt doesn't
@@ -72,12 +72,12 @@ static quint32 pack_pb_line (const char *start,
 
             if (i > 0)               /* Some distinct ones found */
             {
-                *dest_ptr++ = i - 1;
+                dst[dest_ptr++] = i - 1;
                 for (j = 0; j < i; j++)
                 {
-                    *dest_ptr++ = start[j*stride];
+                    dst[dest_ptr++] = start[j];
                 }
-                start += i*stride;
+                start += i;
                 remaining -= i;
                 length += i + 1;
             }
@@ -200,7 +200,6 @@ quint32 decode_packbits(const char *src, char* dst, quint16 packed_len, quint32 
 
 QByteArray Compression::uncompress(quint32 unpacked_len, QByteArray bytes, Compression::CompressionType compressionType)
 {
-    qDebug()<< "unpacked_len" << unpacked_len << "bytes" << bytes.size();
     if (unpacked_len > 30000) return QByteArray();
     if (bytes.size() < 1) return QByteArray();
 
@@ -248,11 +247,10 @@ QByteArray Compression::compress(QByteArray bytes, Compression::CompressionType 
         return bytes;
     case RLE:
     {
-        char *dst = new char[bytes.size()];
-        int packed_len = pack_pb_line(bytes.constData(), bytes.size(), 1, dst);
-        QByteArray ba(dst, packed_len);
-        delete[] dst;
-        return ba;
+        QByteArray dst;
+        int packed_len = pack_pb_line(bytes, dst);
+        Q_ASSERT(packed_len == dst.size());
+        return dst;
     }
     case ZIP:
     case ZIPWithPrediction:

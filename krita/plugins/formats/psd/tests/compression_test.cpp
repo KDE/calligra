@@ -31,33 +31,44 @@
 
 void CompressionTest::testCompressionRLE()
 {
-    QByteArray ba;
+    QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
+    QByteArray compressed = Compression::compress(ba, Compression::RLE);
+    qDebug() << compressed.size() << "uncompressed" << ba.size();
+
+    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
+    QVERIFY(qstrcmp(ba, uncompressed) == 0);
+
+    ba.clear();
     QDataStream ds(&ba, QIODevice::WriteOnly);
     for (int i = 0; i < 500; ++i) {
         ds << rand();
     }
-
-    QByteArray compressed = Compression::compress(ba, Compression::RLE);
-    QVERIFY(compressed.size() <= ba.size());
-
-    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
+    compressed = Compression::compress(ba, Compression::RLE);
+    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    uncompressed = Compression::uncompress(ba.size(), compressed, Compression::RLE);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
+
 
 }
 
 
 void CompressionTest::testCompressionZIP()
 {
-    QByteArray ba;
+    QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
+    QByteArray compressed = Compression::compress(ba, Compression::ZIP);
+    qDebug() << compressed.size() << "uncompressed" << ba.size();
+
+    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::ZIP);
+    QVERIFY(qstrcmp(ba, uncompressed) == 0);
+
+    ba.clear();
     QDataStream ds(&ba, QIODevice::WriteOnly);
     for (int i = 0; i < 500; ++i) {
         ds << rand();
     }
-
-    QByteArray compressed = Compression::compress(ba, Compression::ZIP);
-    QVERIFY(compressed.size() <= ba.size());
-
-    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::ZIP);
+    compressed = Compression::compress(ba, Compression::ZIP);
+    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    uncompressed = Compression::uncompress(ba.size(), compressed, Compression::ZIP);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
 
 }
@@ -65,17 +76,23 @@ void CompressionTest::testCompressionZIP()
 
 void CompressionTest::testCompressionUncompressed()
 {
-    QByteArray ba;
+    QByteArray ba("Twee eeee aaaaa asdasda47892347981    wwwwwwwwwwwwWWWWWWWWWW");
+    QByteArray compressed = Compression::compress(ba, Compression::Uncompressed);
+    qDebug() << compressed.size() << "uncompressed" << ba.size();
+
+    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
+    QVERIFY(qstrcmp(ba, uncompressed) == 0);
+
+    ba.clear();
     QDataStream ds(&ba, QIODevice::WriteOnly);
     for (int i = 0; i < 500; ++i) {
         ds << rand();
     }
-
-    QByteArray compressed = Compression::compress(ba, Compression::Uncompressed);
-    QVERIFY(compressed.size() <= ba.size());
-
-    QByteArray uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
+    compressed = Compression::compress(ba, Compression::Uncompressed);
+    qDebug() << compressed.size() << "uncompressed" << ba.size();
+    uncompressed = Compression::uncompress(ba.size(), compressed, Compression::Uncompressed);
     QVERIFY(qstrcmp(ba, uncompressed) == 0);
+
 
 }
 
