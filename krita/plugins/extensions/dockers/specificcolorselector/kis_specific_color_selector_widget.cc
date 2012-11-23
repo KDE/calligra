@@ -146,7 +146,7 @@ void KisSpecificColorSelectorWidget::update()
 void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
 {
     m_updateAllowed = false;
-    m_color = c;
+    m_color.fromKoColor(c);
     emit(updated());
     m_updateAllowed = true;
 }
