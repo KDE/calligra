@@ -44,7 +44,7 @@ target_link_libraries(
     kplatoui
     planprivate
     komain
-    kdgantt
+    calligrakdgantt
     )
 
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
