@@ -183,12 +183,13 @@ Item {
         id: channelsLabel;
         anchors {
             top: visibleAndLockRow.bottom;
+            topMargin: Constants.DefaultMargin;
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
         }
         visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
         horizontalAlignment: Text.AlignLeft;
-        font.pixelSize: Constants.LargeFontSize;
+        font.pixelSize: Constants.DefaultFontSize;
         font.bold: true;
         height: visible ? Constants.GridHeight / 2 : 0;
         text: "Active Channels:";
@@ -257,12 +258,13 @@ Item {
         id: channelsLockedLabel;
         anchors {
             top: channelsRow.bottom;
+            topMargin: Constants.DefaultMargin;
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
         }
         visible: layersModel ? (layersModel.activeType === "KisPaintLayer" || layersModel.activeType === "KisGroupLayer") : false;
         horizontalAlignment: Text.AlignLeft;
-        font.pixelSize: Constants.LargeFontSize;
+        font.pixelSize: Constants.DefaultFontSize;
         font.bold: true;
         height: visible ? Constants.GridHeight / 2 : 0;
         text: "Locked Channels:";
