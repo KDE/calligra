@@ -124,6 +124,7 @@ Panel {
 
             onClicked: {
                 presetsModel.activatePreset(index);
+                toolManager.requestToolChange("KritaShape/KisToolBrush");
                 peekViewGrid.currentIndex = index;
                 fullViewGrid.currentIndex = index;
             }
@@ -184,6 +185,7 @@ Panel {
                     anchors.fill: parent;
                     onClicked: {
                         presetsModel.activatePreset(index);
+                        toolManager.requestToolChange("KritaShape/KisToolBrush");
                         peekViewGrid.currentIndex = index;
                         fullViewGrid.currentIndex = index;
                     }
