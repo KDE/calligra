@@ -373,6 +373,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick: {
+        if(d->touchEvent)
+            break;
+
         d->mousePosition = widgetToPixel(static_cast<QMouseEvent*>(event)->posF());
 
         //If the palette is visible, then hide it and eat the event.
@@ -469,7 +472,6 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
                                                 touchEvent->touchPointStates(),
                                                 touchEvent->touchPoints());
         d->touchEvent = newEvent;
-        //event->ignore();
         d->mousePosition = touchEvent->touchPoints().at(0).pos();
 
         break;
