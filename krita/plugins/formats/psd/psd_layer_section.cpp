@@ -291,8 +291,10 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
 
-
         QRect rc = node->projection()->exactBounds();
+        rc = rc.normalized();
+        Q_ASSERT(rc.top() <= rc.bottom());
+        Q_ASSERT(rc.left() <= rc.right());
         // keep to the max of photoshop's capabilities
         if (rc.width() > 30000) rc.setWidth(30000);
         if (rc.height() > 30000) rc.setHeight(30000);

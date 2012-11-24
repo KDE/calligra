@@ -173,7 +173,7 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             // XXX: work out the group layer structure in Photoshop, as well as the adjustment layers
 
             PSDLayerRecord* layerRecord = layerSection.layers.at(i);
-            dbgFile << "Going to read channels for layer " << i << layerRecord->layerName;
+            dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
 
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
             layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));

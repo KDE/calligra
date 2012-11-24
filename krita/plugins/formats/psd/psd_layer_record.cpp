@@ -157,7 +157,18 @@ QString channelIdToChannelType(int channelId, PSDColorMode colormode)
 }
 
 PSDLayerRecord::PSDLayerRecord(const PSDHeader& header)
-    : m_header(header)
+    : top(0)
+    , left(0)
+    , bottom(0)
+    , right(0)
+    , nChannels(0)
+    , opacity(0)
+    , clipping(0)
+    , transparencyProtected(false)
+    , visible(true)
+    , irrelevant(false)
+    , layerName("UNINITIALIZED")
+    , m_header(header)
 {
 }
 
@@ -176,6 +187,11 @@ bool PSDLayerRecord::read(QIODevice* io)
     }
 
     dbgFile << "\ttop" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
+
+    Q_ASSERT(top <= bottom);
+    Q_ASSERT(left <= right);
+    Q_ASSERT(nChannels > 0);
+
 
     switch(m_header.colormode) {
     case(Bitmap):
@@ -485,9 +501,11 @@ bool PSDLayerRecord::write(QIODevice* io, KisNodeSP node)
 
     dbgFile << "saving layer record for " << layerName << "at pos" << io->pos();
     dbgFile << "\ttop" << top << "left" << left << "bottom" << bottom << "right" << right << "number of channels" << nChannels;
-
-    psdwrite(io, (quint32)left);
+    Q_ASSERT(left <= right);
+    Q_ASSERT(top <= bottom);
+    Q_ASSERT(nChannels > 0);
     psdwrite(io, (quint32)top);
+    psdwrite(io, (quint32)left);
     psdwrite(io, (quint32)bottom);
     psdwrite(io, (quint32)right);
     psdwrite(io, (quint16)nChannels);
@@ -660,7 +678,8 @@ bool PSDLayerRecord::writePixelData(QIODevice *io)
         // write the size of the channel image data block in the channel info block
         quint64 currentPos = io->pos();
         io->seek(channelInfoRecords[channelInfoIndex]->channelInfoPosition);
-        dbgFile << "total length" << len << "calculated length" << currentPos - startChannelBlockPos;
+        Q_ASSERT(len == currentPos - startChannelBlockPos);
+        dbgFile << "\t\ttotal length" << len << "calculated length" << currentPos - startChannelBlockPos << "writing at" << channelInfoRecords[channelInfoIndex]->channelInfoPosition;
         psdwrite(io, (quint32)(currentPos - startChannelBlockPos));
         io->seek(currentPos);
     }
@@ -678,6 +697,7 @@ bool PSDLayerRecord::valid()
 
 bool PSDLayerRecord::readPixelData(QIODevice *io, KisPaintDeviceSP device)
 {
+    dbgFile << "Reading pixel data for layer" << layerName << "pos" << io->pos();
     switch (m_header.colormode) {
     case Bitmap:
         error = "Unsupported color mode: bitmap";
@@ -715,8 +735,13 @@ bool PSDLayerRecord::doGrayscale(KisPaintDeviceSP /*dev*/, QIODevice */*io*/)
 bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
 {
     quint64 oldPosition = io->pos();
+    qint64 width = right - left;
 
-    quint64 width = right - left;
+    if (width <= 0) {
+        dbgFile << "Empty layer";
+        return true;
+    }
+
     int channelSize = m_header.channelDepth / 8;
     int uncompressedLength = width * channelSize;
 
@@ -727,6 +752,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
         return false;
     }
 
+    qDebug() << ">>>>>>>>>>>> "<< right << left << "right - left" << right - left << top << width;
     KisHLineIteratorSP it = dev->createHLineIteratorNG(left, top, width);
     for (int row = top ; row < bottom; row++)
     {
@@ -753,7 +779,7 @@ bool PSDLayerRecord::doRGB(KisPaintDeviceSP dev, QIODevice *io)
             }
         }
 
-        for (quint64 col = 0; col < width; col++){
+        for (qint64 col = 0; col < width; col++){
 
             if (channelSize == 1) {
                 quint8 opacity = OPACITY_OPAQUE_U8;
