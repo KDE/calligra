@@ -444,12 +444,19 @@ void PlanTJScheduler::adjustSummaryTasks( const QList<Node*> &nodes )
 
 Duration PlanTJScheduler::calcPositiveFloat( Task *task )
 {
+    if ( task->positiveFloat() != 0 ) {
+        return task->positiveFloat();
+    }
     Duration x;
-    foreach ( const Relation *r, task->dependChildNodes() + task->childProxyRelations() ) {
-        if ( ! r->child()->inCriticalPath() ) {
-            Duration f = calcPositiveFloat( static_cast<Task*>( r->child() ) );
-            if ( x == 0 || f < x ) {
-                x = f;
+    if ( task->dependChildNodes().isEmpty() && task->childProxyRelations().isEmpty() ) {
+        x = m_project->endTime() - task->endTime();
+    } else {
+        foreach ( const Relation *r, task->dependChildNodes() + task->childProxyRelations() ) {
+            if ( ! r->child()->inCriticalPath() ) {
+                Duration f = calcPositiveFloat( static_cast<Task*>( r->child() ) );
+                if ( x == 0 || f < x ) {
+                    x = f;
+                }
             }
         }
     }

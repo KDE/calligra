@@ -93,6 +93,10 @@ template<bool useMask, bool useFlow, class Compositor>
     }
 }
 
+static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
+    return quint8(qint16(b - a) * alpha + a);
+}
+
 #if defined HAVE_VC
 
 /**
@@ -196,17 +200,6 @@ template<bool useMask, bool useFlow, class Compositor>
     void genericComposite32(const KoCompositeOp::ParameterInfo& params)
 {
     using namespace Arithmetic;
-
-    quint8 flow;
-    quint8 opacity;
-
-    if (useFlow) {
-        flow = scale<quint8>(params.flow);
-        opacity = mul(flow, scale<quint8>(params.opacity));
-    } else {
-        flow = 255;
-        opacity = scale<quint8>(params.opacity);
-    }
 
     const int vectorSize = Vc::float_v::Size;
     const qint32 vectorInc = 4 * vectorSize;
@@ -315,10 +308,6 @@ template<bool useMask, bool useFlow, class Compositor>
     if (!params.srcRowStride) {
         Vc::free<float>(reinterpret_cast<float*>(const_cast<quint8*>(srcRowStart)));
     }
-}
-
-static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha) {
-    return quint8(qint16(b - a) * alpha + a);
 }
 
 #else /* if ! defined HAVE_VC */
