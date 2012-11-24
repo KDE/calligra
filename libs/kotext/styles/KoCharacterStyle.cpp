@@ -503,7 +503,6 @@ void KoCharacterStyle::applyStyle(QTextCharFormat &format, bool emitSignal) cons
 KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTextCharFormat blockCharFormat) const
 {
     KoCharacterStyle *autoStyle = new KoCharacterStyle(format);
-//    blockSignals(true);
     applyStyle(blockCharFormat, false);
     ensureMinimalProperties(blockCharFormat);
     autoStyle->removeDuplicates(blockCharFormat);
@@ -516,7 +515,6 @@ KoCharacterStyle *KoCharacterStyle::autoStyle(const QTextCharFormat &format, QTe
     autoStyle->d->stylesPrivate.remove(QTextFormat::IsAnchor);
     autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorHref);
     autoStyle->d->stylesPrivate.remove(QTextFormat::AnchorName);
-//    blockSignals(false);
     return autoStyle;
 }
 

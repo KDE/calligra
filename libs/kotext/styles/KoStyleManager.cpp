@@ -349,7 +349,6 @@ void KoStyleManager::add(KoCharacterStyle *style)
     }
     d->charStyles.insert(d->s_stylesNumber++, style);
 
-//    connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SIGNAL(styleApplied(const KoCharacterStyle*)));
     connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotAppliedStyle(const KoCharacterStyle*)));
     emit styleAdded(style);
 }
@@ -374,7 +373,6 @@ void KoStyleManager::add(KoParagraphStyle *style)
             add(root);
     }
 
-//    connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SIGNAL(styleApplied(const KoParagraphStyle*)));
     connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotAppliedStyle(const KoParagraphStyle*)));
     emit styleAdded(style);
 }
@@ -461,8 +459,6 @@ void KoStyleManager::slotAppliedStyle(const KoParagraphStyle *style)
 {
     d->m_usedParagraphStyles.append(style->styleId());
     emit styleApplied(style);
-    kDebug() << "slotAppliedStyle. styleManager pointer: " << this;
-    kDebug() << "slotAppliedStyle" << ((style)?style->name():"empty style");
 }
 
 void KoStyleManager::slotAppliedStyle(const KoCharacterStyle *style)
