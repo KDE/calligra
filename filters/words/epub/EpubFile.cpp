@@ -102,7 +102,7 @@ KoFilter::ConversionStatus EpubFile::writeMetaInf(KoStore *epubStore)
 {
     // We can hardcode this one.
     if (!epubStore->open("META-INF/container.xml")) {
-        kDebug(30517) << "Can not to open META-INF/container.xml.";
+        kDebug(30503) << "Can not to open META-INF/container.xml.";
         return KoFilter::CreationError;
     }
 
@@ -131,7 +131,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
                                               QHash<QString, QString> &metadata)
 {
     if (!epubStore->open(pathPrefix() + "content.opf")) {
-        kDebug(30517) << "Can not create content.opf .";
+        kDebug(30503) << "Can not create content.opf .";
         return KoFilter::CreationError;
     }
 
@@ -158,7 +158,10 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.endElement(); // dc:title
 
     writer.startElement("dc:language");
-    writer.addTextNode("en");  // FIXME: Where to get this?
+    if (!metadata.value("language").isEmpty())
+        writer.addTextNode(metadata.value("language"));
+    else
+        writer.addTextNode("en");
     writer.endElement(); // dc:language
 
     writer.startElement("dc:identifier");
@@ -230,7 +233,7 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
                                               QHash<QString, QString> &metadata)
 {
     if (!epubStore->open(pathPrefix() + "toc.ncx")) {
-        kDebug(30517) << "Can not create toc.ncx.";
+        kDebug(30503) << "Can not create toc.ncx.";
         return KoFilter::CreationError;
     }
 

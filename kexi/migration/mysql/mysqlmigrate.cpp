@@ -187,7 +187,7 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
             if (mysql_errno(d->mysql))
                 r = false;
             else
-                r = (numRecords == -1) ? true : cancelled;
+                r = (numRecords == -1) ? tristate(true) : tristate(cancelled);
             mysql_free_result(res);
             return r;
         }

@@ -659,6 +659,11 @@ protected:
     bool legalParents( const Node *par, const Node *child ) const;
     bool legalChildren( const Node *par, const Node *child ) const;
 
+#ifndef PLAN_NLOGDEBUG
+private:
+    static bool checkParent( Node *n, QList<Node*> list, QList<Relation*> &checked );
+    static bool checkChildren( Node *n, QList<Node*> list, QList<Relation*> &checked );
+#endif
 private:
     void init();
 

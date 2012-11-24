@@ -1,8 +1,5 @@
 include(CheckIncludeFiles)
 
-macro_optional_add_subdirectory( libkowmf )
-set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
-
 macro_optional_find_package(WPD)
 macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the Words WPD import filter")
 

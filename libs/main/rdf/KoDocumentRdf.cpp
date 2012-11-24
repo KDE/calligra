@@ -914,7 +914,7 @@ QPair<int, int> KoDocumentRdf::findExtent(const QString &xmlid) const
         RDEBUG << "(Semantic) have inline obj, extent:" << ret;
         return ret;
     }
-    return QPair<int, int>(0, 0);
+    return QPair<int, int>(-1, 0);
 }
 
 QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
@@ -960,7 +960,7 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
                                 QTextDocument::FindBackward);
     }
     */
-    return QPair<int, int>(0, 0);
+    return QPair<int, int>(-1, 0);
 }
 
 QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
@@ -1121,8 +1121,9 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
 {
     RDEBUG << "top";
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(qdoc).inlineTextObjectManager();
+    KoTextRangeManager *textRangeManager = KoTextDocument(qdoc).textRangeManager();
     d->inlineRdfObjects.clear();
-    if(!textObjectManager) {
+    if(!textObjectManager || !textRangeManager) {
         return;
     }
     //
@@ -1131,6 +1132,15 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
     QList<KoInlineObject*> kiocol = textObjectManager->inlineTextObjects();
     foreach (KoInlineObject *kio, kiocol) {
         if (KoTextInlineRdf *inlineRdf = kio->inlineRdf()) {
+            rememberNewInlineRdfObject(inlineRdf);
+        }
+    }
+    //
+    // Rdf from textranges
+    //
+    QList<KoTextRange *> rangelist = textRangeManager->textRanges();
+    foreach (KoTextRange *range, rangelist) {
+        if (KoTextInlineRdf *inlineRdf = range->inlineRdf()) {
             rememberNewInlineRdfObject(inlineRdf);
         }
     }

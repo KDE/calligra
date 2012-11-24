@@ -42,7 +42,7 @@ KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeade
 {
     QFile mobi(outputFile);
     if (!mobi.open(QIODevice::WriteOnly)) {
-        kDebug(30517) << "Can not create the file";
+        kDebug(31000) << "Can not create the file";
         return KoFilter::CreationError;
     }
 

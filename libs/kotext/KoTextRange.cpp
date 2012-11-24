@@ -44,13 +44,19 @@ public:
     QTextCursor cursor;
     KoTextInlineRdf *rdf; //< A textrange might have RDF, we own it.
     bool positionOnlyMode;
+    int snapStart;
+    int snapEnd;
 };
 
 KoTextRange::KoTextRange(const QTextCursor &cursor)
     : d_ptr(new KoTextRangePrivate)
 {
     d_ptr->cursor = cursor;
+    d_ptr->cursor.setPosition(cursor.selectionStart());
     d_ptr->cursor.setKeepPositionOnInsert(true);
+    if (cursor.hasSelection()) {
+        setRangeEnd(cursor.selectionEnd());
+    }
 }
 
 KoTextRangePrivate::~KoTextRangePrivate()
@@ -136,3 +142,16 @@ KoTextInlineRdf* KoTextRange::inlineRdf() const
     return d->rdf;
 }
 
+void KoTextRange::snapshot()
+{
+    Q_D(KoTextRange);
+    d->snapStart = d->cursor.selectionStart();
+    d->snapEnd = d->cursor.selectionEnd();
+}
+
+void KoTextRange::restore()
+{
+    Q_D(KoTextRange);
+    d->cursor.setPosition(d->snapStart);
+    d->cursor.setPosition(d->snapEnd, QTextCursor::KeepAnchor);
+}

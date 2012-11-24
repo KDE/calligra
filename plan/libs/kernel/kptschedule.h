@@ -241,6 +241,9 @@ public:
             {}
             Log( const Node *n, int sev, const QString &msg, int ph = -1 );
             Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph = -1 );
+            Log( const Log &other );
+
+            Log &operator=( const Log &other );
 
             const Node *node;
             const Resource *resource;
@@ -721,6 +724,9 @@ protected:
 
 
 } //namespace KPlato
+
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule *s );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule &s );
 
 KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule::Log &log );
 
