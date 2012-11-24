@@ -122,7 +122,6 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
     disconnect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     m_stylesModel->setStyleManager(sm);
     m_sortedStylesModel->setStyleManager(sm);
-//    m_sortedStylesModel->setStylesModel(m_stylesModel);
     connect(widget.characterStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     connect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotCharacterStyleApplied(const KoCharacterStyle*)));
 }

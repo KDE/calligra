@@ -290,9 +290,6 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
 
 void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 {
-    kDebug() << "setting the style manager";
-    kDebug() << "m_styleManager: " << m_styleManager;
-    kDebug() << "new styleManager: " << sm;
     Q_ASSERT(sm);
     if (!sm || m_styleManager == sm) {
         return;
@@ -300,25 +297,17 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
     if (m_styleManager) {
         disconnect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
     }
-    kDebug() << "setting different things in models";
     m_styleManager = sm;
-    kDebug() << "m_styleManager set: " << m_styleManager;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
     disconnect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
-    kDebug() << "disconnected selected signal";
     m_stylesModel->setStyleManager(sm);
-    kDebug() << "styleManager set in root model";
     m_sortedStylesModel->setStyleManager(sm);
-    kDebug() << "stylemanager set in proxy model";
-//    m_sortedStylesModel->setStylesModel(m_stylesModel);
     connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
     connect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
-    kDebug() << "done setting";
 }
 
 void SimpleParagraphWidget::setInitialUsedStyles(QVector<int> list)
 {
-    kDebug() << "setting initial styles: " << list;
     m_sortedStylesModel->setInitialUsedStyles(list);
 }
 
@@ -351,7 +340,6 @@ void SimpleParagraphWidget::slotShowStyleManager(int index)
 void SimpleParagraphWidget::slotParagraphStyleApplied(const KoParagraphStyle *style)
 {
     if (style) {
-        kDebug() << "style applied: " << style->name();
     }
     m_sortedStylesModel->styleApplied(style);
 }

@@ -1903,13 +1903,10 @@ void TextTool::updateActions()
 
 void TextTool::updateStyleManager()
 {
-    kDebug() << "updating styleManager: " << KoTextDocument(m_textShapeData->document()).styleManager();
     if (!m_textShapeData)
         return;
     KoStyleManager *styleManager = KoTextDocument(m_textShapeData->document()).styleManager();
-    kDebug() << "will emit signal";
     emit styleManagerChanged(styleManager);
-    kDebug() << "done with emission";
 
     //TODO move this to its own method
     m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
@@ -2094,47 +2091,12 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
-
+/* We do not use these for now. Let's see if they become usefull at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
     if (m_textShapeData && KoTextDocument(m_textShapeData->document()).styleManager()) {
-        kDebug() << "init styles. doc's styleManager: " << KoTextDocument(m_textShapeData->document()).styleManager();
-        kDebug() << "initial char styles: " << (KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
-        kDebug() << "initial parag styles: " << (KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
         scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
-        kDebug() << "will now set initial paraStyles";
         spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
-        kDebug() << "done setting the styles";
     }
-
-
-/*
-        QVector<int> initialCharacterStyles;
-        QVector<int> initialParagraphStyles;
-        QTextBlock block = m_textShapeData->document()->begin();
-        while (block.isValid()) {
-            QTextBlock::iterator it;
-            for (it = block.begin(); !(it.atEnd()); ++it) {
-                QTextFragment currentFragment = it.fragment();
-                if (currentFragment.isValid()) {
-                    int styleId = currentFragment.charFormat().intProperty(KoCharacterStyle::StyleId);
-                    KoCharacterStyle *charStyle = KoTextDocument(m_textShapeData->document()).styleManager()->characterStyle(styleId);
-                    if ((charStyle->styleType() == KoCharacterStyle::CharacterStyle) && !initialCharacterStyles.contains(styleId)) {
-                        initialCharacterStyles.append(styleId);
-                    }
-                    else if ((charStyle->styleType() == KoCharacterStyle::ParagraphStyle) && !initialParagraphStyles.contains(styleId)) {
-                        initialParagraphStyles.append(styleId);
-                    }
-                }
-            }
-            block = block.next();
-        }
-        kDebug() << "populated initialStyles";
-        kDebug() << "initialChar: " << initialCharacterStyles;
-        kDebug() << "initialPar: " << initialParagraphStyles;
-        spw->setInitialUsedStyles(initialParagraphStyles);
-        scw->setInitialUsedStyles(initialCharacterStyles);
-    }
-    */
-
+*/
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(charFormatChanged(QTextCharFormat, QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat, QTextCharFormat)));
@@ -2162,8 +2124,6 @@ QList<QWidget *> TextTool::createOptionWidgets()
     // Connect to/with simple insert widget (docker)
     connect(siw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(siw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
-
-    kDebug() << "done connecting signals to slots, will update the styleManager";
 
     updateStyleManager();
     if (m_textShape) {

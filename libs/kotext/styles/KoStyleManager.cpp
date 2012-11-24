@@ -755,8 +755,6 @@ KoCharacterStyle *KoStyleManager::characterStyle(int id) const
 
 KoParagraphStyle *KoStyleManager::paragraphStyle(int id) const
 {
-    kDebug() << "will return parag style for id: " << id;
-    kDebug() << "pointer to private: " << d;
     return d->paragStyles.value(id);
 }
 
