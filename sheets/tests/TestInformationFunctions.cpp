@@ -335,7 +335,7 @@ void TestInformationFunctions::testINFO()
     CHECK_EVAL("ISTEXT(INFO(\"directory\"))",  Value(true));            // Test to see that every required category is supported
 //     CHECK_EVAL( "ISNUMBER(INFO(\"memavail\"))", Value( true        ) ); // not implemented
 //     CHECK_EVAL( "ISNUMBER(INFO(\"memused\"))",  Value( true        ) ); // not implemented
-    CHECK_EVAL("ISNUMBER(INFO(\"numfile\"))",  Value(true));            //
+    CHECK_EVAL("ISNUMBER(INFO(\"numfile\"))",  Value(false));            //
     CHECK_EVAL("ISTEXT(INFO(\"osversion\"))",  Value(true));            //
 //     CHECK_EVAL( "ISTEXT(INFO(\"origin\"))",     Value( true        ) ); // not implemented
     CHECK_EVAL("ISTEXT(INFO(\"recalc\"))",     Value(true));            //
