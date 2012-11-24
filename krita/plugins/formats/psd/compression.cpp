@@ -40,7 +40,7 @@ static quint32 pack_pb_line (const QByteArray &src,
         i = 0;
         while ((i < 128) &&
                (remaining - i > 0) &&
-               (start[0] == start[i]))
+               (start[0] == start[i]) )
             i++;
 
         if (i > 1)              /* Match found */

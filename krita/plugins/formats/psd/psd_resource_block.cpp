@@ -287,7 +287,7 @@ bool PSDResourceBlock::valid()
 
 bool RESN_INFO_1005::interpretBlock(QByteArray data)
 {
-    qDebug() << "Reading RESN_INFO_1005";
+    dbgFile << "Reading RESN_INFO_1005";
 
     // the resolution we set on the image should be dpi; we can also set the unit on the KoDocument.
     QDataStream ds(data);
@@ -298,19 +298,19 @@ bool RESN_INFO_1005::interpretBlock(QByteArray data)
     /* Resolution always recorded as pixels / inch in a fixed point implied
        decimal int32 with 16 bits before point and 16 after (i.e. cast as
        double and divide resolution by 2^16 */
-    qDebug() << "hres" << hRes << "vres" << vRes;
+    dbgFile << "hres" << hRes << "vres" << vRes;
 
     hRes = hRes / 65536.0;
     vRes = vRes / 65536.0;
 
-    qDebug() << hRes << hResUnit << widthUnit << vRes << vResUnit << heightUnit;
+    dbgFile << hRes << hResUnit << widthUnit << vRes << vResUnit << heightUnit;
 
     return ds.atEnd();
 }
 
 bool RESN_INFO_1005::createBlock(QByteArray & data)
 {
-    qDebug() << "Writing RESN_INFO_1005";
+    dbgFile << "Writing RESN_INFO_1005";
     QBuffer buf(&data);
     buf.open(QBuffer::WriteOnly);
 
@@ -321,14 +321,14 @@ bool RESN_INFO_1005::createBlock(QByteArray & data)
 
     // Convert to 16.16 fixed point
     Fixed h = hRes * 65536.0 + 0.5;
-    qDebug() << "h" << h << "hRes" << hRes;
+    dbgFile << "h" << h << "hRes" << hRes;
     psdwrite(&buf, (quint32)h);
     psdwrite(&buf, hResUnit);
     psdwrite(&buf, widthUnit);
 
     // Convert to 16.16 fixed point
     Fixed v = vRes * 65536.0 + 0.5;
-    qDebug() << "v" << v << "vRes" << vRes;
+    dbgFile << "v" << v << "vRes" << vRes;
     psdwrite(&buf, (quint32)v);
     psdwrite(&buf, vResUnit);
     psdwrite(&buf, heightUnit);
@@ -340,7 +340,7 @@ bool RESN_INFO_1005::createBlock(QByteArray & data)
 
 bool ICC_PROFILE_1039::interpretBlock(QByteArray data)
 {
-    qDebug() << "Reading ICC_PROFILE_1039";
+    dbgFile << "Reading ICC_PROFILE_1039";
 
     icc = data;
 
@@ -350,7 +350,7 @@ bool ICC_PROFILE_1039::interpretBlock(QByteArray data)
 
 bool ICC_PROFILE_1039::createBlock(QByteArray &data)
 {
-    qDebug() << "Writing ICC_PROFILE_1039";
+    dbgFile << "Writing ICC_PROFILE_1039";
     if (icc.size() == 0) {
         error = "ICC_PROFILE_1039: Trying to save an empty profile";
         return false;

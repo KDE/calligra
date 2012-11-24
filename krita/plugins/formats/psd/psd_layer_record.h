@@ -37,6 +37,16 @@
 class QIODevice;
 
 struct  ChannelInfo {
+
+    ChannelInfo()
+        : channelId(-1)
+        , compressionType(Compression::Unknown)
+        , channelDataStart(0)
+        , channelDataLength(0)
+        , channelOffset(0)
+        , channelInfoPosition(0)
+    {}
+
     qint16 channelId; // 0 red, 1 green, 2 blue, -1 transparency, -2 user-supplied layer mask
     Compression::CompressionType compressionType;
     quint64 channelDataStart;
@@ -58,7 +68,7 @@ public:
     }
 
     bool read(QIODevice* io);
-    bool readChannels(QIODevice* io, KisPaintDeviceSP device);
+    bool readPixelData(QIODevice* io, KisPaintDeviceSP device);
 
     bool write(QIODevice* io, KisNodeSP node);
     bool writePixelData(QIODevice* io);

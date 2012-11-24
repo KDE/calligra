@@ -420,7 +420,7 @@ bool PSDImageData::readCMYK(QIODevice *io, KisPaintDeviceSP dev) {
                 memset(pixel + 1, 255 - channelBytes[1].constData()[col], 1);
                 memset(pixel + 2, 255 - channelBytes[2].constData()[col], 1);
                 memset(pixel + 3, 255 - channelBytes[3].constData()[col], 1);
-                qDebug() << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
+                dbgFile << "C" << pixel[0] << "M" << pixel[1] << "Y" << pixel[2] << "K" << pixel[3] << "A" << pixel[4];
                 memcpy(it->rawData(), pixel, 5);
 
 

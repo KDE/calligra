@@ -22,6 +22,9 @@ struct QIODevice;
 
 #include <QDebug>
 #include <QString>
+
+#include <kis_debug.h>
+
 #include "psd.h"
 #include "psd_resource_section.h"
 
@@ -78,7 +81,7 @@ struct MAC_PRINT_INFO_1001 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading MAC_PRINT_INFO_1001";
+        dbgFile << "Reading MAC_PRINT_INFO_1001";
         return true;
     }
 
@@ -123,7 +126,7 @@ struct ALPHA_NAMES_1006 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading ALPHA_NAMES_1006";
+        dbgFile << "Reading ALPHA_NAMES_1006";
         return true;
     }
 };
@@ -134,7 +137,7 @@ struct DISPLAY_INFO_1007 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading DISPLAY_INFO_1007";
+        dbgFile << "Reading DISPLAY_INFO_1007";
         return true;
     }
 };
@@ -145,7 +148,7 @@ struct CAPTION_1008 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading CAPTION_1008";
+        dbgFile << "Reading CAPTION_1008";
         return true;
     }
 };
@@ -156,7 +159,7 @@ struct BORDER_INFO_1009 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading BORDER_INFO_1009";
+        dbgFile << "Reading BORDER_INFO_1009";
         return true;
     }
 };
@@ -167,7 +170,7 @@ struct BACKGROUND_COL_1010 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading BACKGROUND_COL_1010";
+        dbgFile << "Reading BACKGROUND_COL_1010";
         return true;
     }
 };
@@ -178,7 +181,7 @@ struct PRINT_FLAGS_1011 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading PRINT_FLAGS_1011";
+        dbgFile << "Reading PRINT_FLAGS_1011";
         return true;
     }
 };
@@ -189,7 +192,7 @@ struct GREY_HALFTONE_1012 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading GREY_HALFTONE_1012";
+        dbgFile << "Reading GREY_HALFTONE_1012";
         return true;
     }
 };
@@ -200,7 +203,7 @@ struct COLOR_HALFTONE_1013 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading COLOR_HALFTONE_1013";
+        dbgFile << "Reading COLOR_HALFTONE_1013";
         return true;
     }
 };
@@ -211,7 +214,7 @@ struct DUOTONE_HALFTONE_1014 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading DUOTONE_HALFTONE_1014";
+        dbgFile << "Reading DUOTONE_HALFTONE_1014";
         return true;
     }
 };
@@ -222,7 +225,7 @@ struct GREY_XFER_1015 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading GREY_XFER_1015";
+        dbgFile << "Reading GREY_XFER_1015";
         return true;
     }
 };
@@ -233,7 +236,7 @@ struct COLOR_XFER_1016 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading COLOR_XFER_1016";
+        dbgFile << "Reading COLOR_XFER_1016";
         return true;
     }
 };
@@ -244,7 +247,7 @@ struct DUOTONE_XFER_1017 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading DUOTONE_XFER_1017";
+        dbgFile << "Reading DUOTONE_XFER_1017";
         return true;
     }
 };
@@ -255,7 +258,7 @@ struct DUOTONE_INFO_1018 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading DUOTONE_INFO_1018";
+        dbgFile << "Reading DUOTONE_INFO_1018";
         return true;
     }
 };
@@ -266,7 +269,7 @@ struct EFFECTIVE_BW_1019 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading EFFECTIVE_BW_1019";
+        dbgFile << "Reading EFFECTIVE_BW_1019";
         return true;
     }
 };
@@ -277,7 +280,7 @@ struct EPS_OPT_1021 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading EPS_OPT_1021";
+        dbgFile << "Reading EPS_OPT_1021";
         return true;
     }
 };
@@ -287,7 +290,7 @@ struct EPS_OPT_1021 : public PSDInterpretedResource
 struct QUICK_MASK_1022 : public PSDInterpretedResource
 {    bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading QUICK_MASK_1022";
+        dbgFile << "Reading QUICK_MASK_1022";
         return true;
     }
 };
@@ -298,7 +301,7 @@ struct LAYER_STATE_1024 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading LAYER_STATE_1024";
+        dbgFile << "Reading LAYER_STATE_1024";
         return true;
     }
 };
@@ -309,7 +312,7 @@ struct WORKING_PATH_1025 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
 {
-    qDebug() << "Reading WORKING_PATH_1025";
+    dbgFile << "Reading WORKING_PATH_1025";
     return true;
 }
 };
@@ -320,7 +323,7 @@ struct LAYER_GROUP_1026 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading LAYER_GROUP_1026";
+        dbgFile << "Reading LAYER_GROUP_1026";
         return true;
     }
 };
@@ -331,7 +334,7 @@ struct IPTC_NAA_DATA_1028 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading IPTC_NAA_DATA_1028";
+        dbgFile << "Reading IPTC_NAA_DATA_1028";
         return true;
     }
 };
@@ -342,7 +345,7 @@ struct IMAGE_MODE_RAW_1029 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading IMAGE_MODE_RAW_1029";
+        dbgFile << "Reading IMAGE_MODE_RAW_1029";
         return true;
     }
 };
@@ -353,7 +356,7 @@ struct JPEG_QUAL_1030 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading JPEG_QUAL_1030";
+        dbgFile << "Reading JPEG_QUAL_1030";
         return true;
     }
 };
@@ -364,7 +367,7 @@ struct GRID_GUIDE_1032 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading GRID_GUIDE_1032";
+        dbgFile << "Reading GRID_GUIDE_1032";
         return true;
     }
 };
@@ -375,7 +378,7 @@ struct THUMB_RES_1033 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading THUMB_RES_1033";
+        dbgFile << "Reading THUMB_RES_1033";
         return true;
     }
 };
@@ -386,7 +389,7 @@ struct COPYRIGHT_FLG_1034 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading COPYRIGHT_FLG_1034";
+        dbgFile << "Reading COPYRIGHT_FLG_1034";
         return true;
     }
 };
@@ -397,7 +400,7 @@ struct URL_1035 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading URL_1035";
+        dbgFile << "Reading URL_1035";
         return true;
     }
 };
@@ -408,7 +411,7 @@ struct THUMB_RES2_1036 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading THUMB_RES2_1036";
+        dbgFile << "Reading THUMB_RES2_1036";
         return true;
     }
 };
@@ -419,7 +422,7 @@ struct GLOBAL_ANGLE_1037 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading GLOBAL_ANGLE_1037";
+        dbgFile << "Reading GLOBAL_ANGLE_1037";
         return true;
     }
 };
@@ -430,7 +433,7 @@ struct COLOR_SAMPLER_1038 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading COLOR_SAMPLER_1038";
+        dbgFile << "Reading COLOR_SAMPLER_1038";
         return true;
     }
 };
@@ -451,7 +454,7 @@ struct WATERMARK_1040 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading WATERMARK_1040";
+        dbgFile << "Reading WATERMARK_1040";
         return true;
     }
 };
@@ -462,7 +465,7 @@ struct ICC_UNTAGGED_1041 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading ICC_UNTAGGED_1041";
+        dbgFile << "Reading ICC_UNTAGGED_1041";
         return true;
     }
 };
@@ -473,7 +476,7 @@ struct EFFECTS_VISIBLE_1042 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading EFFECTS_VISIBLE_1042";
+        dbgFile << "Reading EFFECTS_VISIBLE_1042";
         return true;
     }
 };
@@ -484,7 +487,7 @@ struct SPOT_HALFTONE_1043 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading SPOT_HALFTONE_1043";
+        dbgFile << "Reading SPOT_HALFTONE_1043";
         return true;
     }
 };
@@ -495,7 +498,7 @@ struct DOC_IDS_1044 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading DOC_IDS_1044";
+        dbgFile << "Reading DOC_IDS_1044";
         return true;
     }
 };
@@ -506,7 +509,7 @@ struct ALPHA_NAMES_UNI_1045 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading ALPHA_NAMES_UNI_1045";
+        dbgFile << "Reading ALPHA_NAMES_UNI_1045";
         return true;
     }
 };
@@ -517,7 +520,7 @@ struct IDX_COL_TAB_CNT_1046 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading IDX_COL_TAB_CNT_1046";
+        dbgFile << "Reading IDX_COL_TAB_CNT_1046";
         return true;
     }
 };
@@ -528,7 +531,7 @@ struct IDX_TRANSPARENT_1047 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading IDX_TRANSPARENT_1047";
+        dbgFile << "Reading IDX_TRANSPARENT_1047";
         return true;
     }
 };
@@ -539,7 +542,7 @@ struct GLOBAL_ALT_1049 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading GLOBAL_ALT_1049";
+        dbgFile << "Reading GLOBAL_ALT_1049";
         return true;
     }
 };
@@ -550,7 +553,7 @@ struct SLICES_1050 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading SLICES_1050";
+        dbgFile << "Reading SLICES_1050";
         return true;
     }
 };
@@ -561,7 +564,7 @@ struct WORKFLOW_URL_UNI_1051 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading WORKFLOW_URL_UNI_1051";
+        dbgFile << "Reading WORKFLOW_URL_UNI_1051";
         return true;
     }
 };
@@ -572,7 +575,7 @@ struct JUMP_TO_XPEP_1052 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "JUMP_TO_XPEP_1052";
+        dbgFile << "JUMP_TO_XPEP_1052";
         return true;
     }
 };
@@ -583,7 +586,7 @@ struct ALPHA_ID_1053 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "ALPHA_ID_1053";
+        dbgFile << "ALPHA_ID_1053";
         return true;
     }
 };
@@ -593,7 +596,7 @@ struct URL_LIST_UNI_1054 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "URL_LIST_UNI_1054";
+        dbgFile << "URL_LIST_UNI_1054";
         return true;
     }
 };
@@ -603,7 +606,7 @@ struct VERSION_INFO_1057 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "VERSION_INFO_1057";
+        dbgFile << "VERSION_INFO_1057";
         return true;
     }
 };
@@ -614,7 +617,7 @@ struct EXIF_DATA_1058 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading EXIF_DATA_1058";
+        dbgFile << "Reading EXIF_DATA_1058";
         return true;
     }
 };
@@ -625,7 +628,7 @@ struct XMP_DATA_1060 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading XMP_DATA_1060";
+        dbgFile << "Reading XMP_DATA_1060";
         return true;
     }
 };
@@ -636,7 +639,7 @@ struct PATH_INFO_FIRST_2000 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "PATH_INFO_FIRST_2000";
+        dbgFile << "PATH_INFO_FIRST_2000";
         return true;
     }
 };
@@ -647,7 +650,7 @@ struct PATH_INFO_LAST_2998 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "PATH_INFO_LAST_2998";
+        dbgFile << "PATH_INFO_LAST_2998";
         return true;
     }
 };
@@ -658,7 +661,7 @@ struct CLIPPING_PATH_2999 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading CLIPPING_PATH_2999";
+        dbgFile << "Reading CLIPPING_PATH_2999";
         return true;
     }
 };
@@ -669,7 +672,7 @@ struct PRINT_FLAGS_2_10000 : public PSDInterpretedResource
 {
     bool interpretBlock(QByteArray /*data*/)
     {
-        qDebug() << "Reading PRINT_FLAGS_2_10000";
+        dbgFile << "Reading PRINT_FLAGS_2_10000";
         return true;
     }
 };

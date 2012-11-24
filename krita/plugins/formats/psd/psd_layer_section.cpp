@@ -21,6 +21,7 @@
 
 #include <kis_debug.h>
 #include <kis_node.h>
+#include <kis_paint_layer.h>
 
 #include "psd_header.h"
 #include "psd_utils.h"
@@ -183,7 +184,7 @@ bool PSDLayerSection::read(QIODevice* io)
                             return 0;
                         }
                     }
-                    ////qDebug() << "rle byte count" << byteCount;
+                    ////dbgFile << "rle byte count" << byteCount;
                     channelInfo->rleRowLengths << byteCount;
                 }
             }
@@ -256,12 +257,12 @@ void flattenLayers(KisNodeSP node, QList<KisNodeSP> &layers)
             flattenLayers(child, layers);
         }
     }
-    qDebug() << layers.size();
+    dbgFile << layers.size();
 }
 
 bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
 {
-    qDebug() << "Writing layer layer section";
+    dbgFile << "Writing layer layer section";
 
     // Build the whole layer structure
     QList<KisNodeSP> nodes;
@@ -289,13 +290,48 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     foreach(KisNodeSP node, nodes) {
         PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
         layers.append(layerRecord);
+
+
+        QRect rc = node->projection()->exactBounds();
+        // keep to the max of photoshop's capabilities
+        if (rc.width() > 30000) rc.setWidth(30000);
+        if (rc.height() > 30000) rc.setHeight(30000);
+        layerRecord->top = rc.top();
+        layerRecord->left = rc.left();
+        layerRecord->bottom = rc.bottom();
+        layerRecord->right = rc.right();
+        layerRecord->nChannels = node->projection()->colorSpace()->colorChannelCount();
+
+        // XXX: masks should be saved as channels as well, with id -2
+        ChannelInfo *info = new ChannelInfo;
+        info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
+        layerRecord->channelInfoRecords << info;
+
+        // the rest is in display order: rgb, cmyk, lab
+        for (int i = 0; i < layerRecord->nChannels; ++i) {
+            info = new ChannelInfo;
+            info->channelId = i; // 0 for red, 1 = green, etc
+            layerRecord->channelInfoRecords << info;
+        }
+        layerRecord->nChannels++; // to compensate for the alpha channel at the start
+
+        layerRecord->blendModeKey = composite_op_to_psd_blendmode(node->compositeOpId());
+        layerRecord->opacity = node->opacity();
+        layerRecord->clipping = 0;
+
+        KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
+        layerRecord->transparencyProtected = (paintLayer && paintLayer->alphaLocked());
+        layerRecord->visible = node->visible();
+
+        layerRecord->layerName = node->name();
+
         if (!layerRecord->write(io, node)) {
             error = layerRecord->error;
             return false;
         }
     }
 
-    // Now save the channel data
+    // Now save the pixel data
     dbgFile << "start writing layer pixel data" << io->pos();
     foreach(PSDLayerRecord *layerRecord, layers) {
         if (!layerRecord->writePixelData(io)) {
@@ -305,22 +341,23 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     }
 
     // Write the final size of the block
-    qDebug() << "Final io pos after writing layer pixel data" << io->pos();
-    quint64 pos = io->pos();
+    dbgFile << "Final io pos after writing layer pixel data" << io->pos();
+    quint64 eof_pos = io->pos();
+
     io->seek(layerInfoPos);
 
     // length of the layer info information section
-    quint32 layerInfoSize = pos - layerInfoPos - sizeof(quint32);
-    qDebug() << "Layer Info Section length" << layerInfoSize << "at"  << io->pos();
+    quint32 layerInfoSize = eof_pos - layerInfoPos - sizeof(qint32);
+    dbgFile << "Layer Info Section length" << layerInfoSize << "at"  << io->pos();
     psdwrite(io, layerInfoSize);
 
     // length of the layer and mask info section, rounded up to a multiple of two
     io->seek(layerMaskPos);
-    quint32 layerMaskSize = pos - layerMaskPos - sizeof(quint32);
-    qDebug() << "Layer and Mask information length" << layerMaskSize << "at" << io->pos();
+    quint32 layerMaskSize = eof_pos - layerMaskPos - sizeof(qint32);
+    dbgFile << "Layer and Mask information length" << layerMaskSize << "at" << io->pos();
     psdwrite(io, layerMaskSize);
 
-    io->seek(pos);
+    io->seek(eof_pos);
 
     return true;
 }
