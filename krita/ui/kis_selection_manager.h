@@ -48,6 +48,7 @@ class KRITAUI_EXPORT KisSelectionManager : public QObject
 
     Q_OBJECT
     Q_PROPERTY(bool displaySelection READ displaySelection NOTIFY displaySelectionChanged);
+    Q_PROPERTY(bool havePixelsSelected READ havePixelsSelected NOTIFY currentSelectionChanged);
 public:
 
     KisSelectionManager(KisView2 * view, KisDoc2 * doc);
