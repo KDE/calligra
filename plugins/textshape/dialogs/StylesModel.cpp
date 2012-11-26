@@ -512,7 +512,10 @@ void StylesModel::addDraftParagraphStyle(KoParagraphStyle *style)
 
 void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
 {
-    style->setStyleId(-(m_draftCharStyleList.count()+2)); //we have a virtual characterStyle with style id -1, so we need to skip it
+    if (m_draftCharStyleList.count() == 0) // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
+        style->setStyleId(-(m_draftCharStyleList.count()+2));
+    else
+        style->setStyleId(-(m_draftCharStyleList.count()+1));
     m_draftCharStyleList.insert(style->styleId(), style);
     addCharacterStyle(style);
 }
