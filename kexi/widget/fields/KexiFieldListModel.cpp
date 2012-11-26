@@ -127,15 +127,19 @@ int KexiFieldListModel::rowCount(const QModelIndex& /*parent*/) const
     return d->items.count();
 }
 
-QVariant KexiFieldListModel::headerData(int /*section*/, Qt::Orientation orientation, int role) const
+QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    if (orientation == Qt::Horizontal)
-        return i18n("Field Name");
-    else
+    if (orientation == Qt::Horizontal) {
+        if (section == 0) {
+            return i18n("Field Name");
+        } else if (section == 1) {
+            return i18n("Data Type");
+        }
         return QVariant();
+    }
 }
 
 QStringList KexiFieldListModel::mimeTypes() const
