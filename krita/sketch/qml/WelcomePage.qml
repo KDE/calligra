@@ -185,7 +185,7 @@ Page {
             height: Constants.GridHeight * 9;
 
             onOpenClicked: pageStack.push( openImage );
-            onItemClicked: loadingDialog.visible = true;
+            onItemClicked: baseLoadingDialog.visible = true;
         }
 
         Divider { height: Constants.GridHeight * 9; }
@@ -193,7 +193,7 @@ Page {
         NewImageList {
             width: parent.width / 3 - 8;
             height: Constants.GridHeight * 9;
-            onClicked: loadingDialog.visible = true;
+            onClicked: baseLoadingDialog.visible = true;
         }
 
         Divider { height: Constants.GridHeight * 9; }
@@ -216,36 +216,11 @@ Page {
         onCurrentFileChanged: if(!d.mainPageActive) {
             d.mainPageActive = true;
             pageStack.push( main );
+            baseLoadingDialog.hideMe();
         }
     }
 
-    // This component is used to get around the fact that MainPage takes a very long time to initialise in some cases
-    Dialog {
-        id: loadingDialog;
-        title: "Loading";
-        message: "Please wait...";
-        textAlign: Text.AlignHCenter;
-        modalBackgroundColor: "#ffffff";
-        opacity: 1;
-        visible: false;
-        onVisibleChanged: {
-            header.visible = false;
-            headersRow.visible = false;
-            listsRow.visible = false;
-        }
-    }
     Component { id: main; MainPage { } }
     Component { id: help; HelpPage { } }
-    Component { id: openImage; OpenImagePage {
-        onItemClicked: openLoadingDialog.visible = true;
-        Dialog {
-            id: openLoadingDialog;
-            title: "Loading";
-            message: "Please wait...";
-            textAlign: Text.AlignHCenter;
-            modalBackgroundColor: "#ffffff";
-            opacity: 1;
-            visible: false;
-        }
-    } }
+    Component { id: openImage; OpenImagePage { onItemClicked: baseLoadingDialog.visible = true; } }
 }
