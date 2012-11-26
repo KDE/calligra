@@ -36,6 +36,13 @@ Page {
             if(value === -1 || value === 100) {
                 loadingDialog.hide("Done!");
                 savingDialog.hide("Done!");
+                // These are basically a hack to make the transition on first load smoother.
+                // We hide everything except for the loadingDialog and only show the various
+                // tool items here.
+                panelBar.visible = true;
+                menuPanel.visible = true;
+                newPanel.visible = true;
+                openPanel.visible = true;
             }
             loadingDialog.progress = value;
             savingDialog.progress = value;
@@ -47,10 +54,16 @@ Page {
         view: sketchView.view;
     }
 
-    PanelBar { id: panelBar; height: parent.height; width: parent.width; }
+    PanelBar {
+        id: panelBar;
+        visible: false;
+        height: parent.height;
+        width: parent.width;
+    }
 
     NewImagePanel {
         id: newPanel;
+        visible: false;
         anchors.left: parent.left;
         width: Constants.GridWidth * 4;
         height: parent.height;
@@ -58,6 +71,7 @@ Page {
 
     OpenImagePanel {
         id: openPanel;
+        visible: false;
         anchors.left: parent.left;
         width: Constants.GridWidth * 4;
         height: parent.height;
@@ -67,6 +81,7 @@ Page {
 
     MenuPanel {
         id: menuPanel;
+        visible: false;
 
         anchors.bottom: parent.bottom;
 

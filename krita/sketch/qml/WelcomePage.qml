@@ -73,6 +73,7 @@ Page {
     }
 
     Row {
+        id: headersRow;
         anchors.top: header.bottom;
         width: parent.width;
 
@@ -175,6 +176,7 @@ Page {
     }
 
     Row {
+        id: listsRow;
         anchors.bottom: parent.bottom;
         width: parent.width;
 
@@ -226,6 +228,11 @@ Page {
         modalBackgroundColor: "#ffffff";
         opacity: 1;
         visible: false;
+        onVisibleChanged: {
+            header.visible = false;
+            headersRow.visible = false;
+            listsRow.visible = false;
+        }
     }
     Component { id: main; MainPage { } }
     Component { id: help; HelpPage { } }
