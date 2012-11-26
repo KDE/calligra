@@ -519,6 +519,9 @@ void KisSketchView::documentChanged()
     d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    // TODO Hopefully we should be able to not need this in the future, but for now
+    // it's needed to ensure the view is updated when the selection changes (we know
+    // what it changes to, not what it changes from)
     connect(d->view->selectionManager(), SIGNAL(currentSelectionChanged()), SLOT(refreshEverything()));
 
     geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
