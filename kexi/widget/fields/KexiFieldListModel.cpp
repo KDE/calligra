@@ -138,8 +138,8 @@ QVariant KexiFieldListModel::headerData(int section, Qt::Orientation orientation
         } else if (section == 1) {
             return i18n("Data Type");
         }
-        return QVariant();
     }
+    return QVariant();
 }
 
 QStringList KexiFieldListModel::mimeTypes() const
