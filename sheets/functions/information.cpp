@@ -192,14 +192,11 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
     if (type == "numfile") {
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if(! app) {
-           return Value(false);
+           return Value(0);
         } else {
-           if(! app->documents()) {
-              return Value(true);
-           } else {
-              return Value(false);
-           }
-	}
+           int val = app->documents();
+           return Value(val);
+        }
     }
 
     if (type == "recalc") {
