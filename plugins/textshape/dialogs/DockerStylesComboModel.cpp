@@ -153,7 +153,7 @@ void DockerStylesComboModel::createMapping()
             if (m_sourceModel->stylesType() == AbstractStylesModel::ParagraphStyle) {
                 KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
                 if (paragStyle) {
-                    if (m_unusedStyles.count()) {
+                    if (!m_unusedStyles.empty()) {
                         QVector<int>::iterator begin = m_unusedStyles.begin();
                         for ( ; begin != m_unusedStyles.end(); ++begin) {
                             KoParagraphStyle *style = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
@@ -171,7 +171,7 @@ void DockerStylesComboModel::createMapping()
             else {
                 KoCharacterStyle *charStyle = m_styleManager->characterStyle(id);
                 if (charStyle) {
-                    if (m_unusedStyles.count()) {
+                    if (!m_unusedStyles.empty()) {
                         QVector<int>::iterator begin = m_unusedStyles.begin();
                         for ( ; begin != m_unusedStyles.end(); ++begin) {
                             KoCharacterStyle *style = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());

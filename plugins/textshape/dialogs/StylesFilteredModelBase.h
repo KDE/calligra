@@ -72,7 +72,7 @@ public:
     */
     virtual QImage stylePreview(int row, QSize size = QSize());
 
-    virtual AbstractStylesModel::Type stylesType();
+    virtual AbstractStylesModel::Type stylesType() const;
 
     /** Specific methods of the StylesFiltermodelBase */
 

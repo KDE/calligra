@@ -130,6 +130,11 @@ KoParagraphStyle::~KoParagraphStyle()
     delete d;
 }
 
+KoCharacterStyle::Type KoParagraphStyle::styleType() const
+{
+    return KoCharacterStyle::ParagraphStyle;
+}
+
 void KoParagraphStyle::setDefaultStyle(KoParagraphStyle *defaultStyle)
 {
     d->defaultStyle = defaultStyle;
@@ -283,7 +288,7 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
     }
 }
 
-bool KoParagraphStyle::isApplied()
+bool KoParagraphStyle::isApplied() const
 {
     return d->m_inUse;
 }

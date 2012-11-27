@@ -60,7 +60,6 @@ int StylesFilteredModelBase::rowCount(const QModelIndex &parent) const
         return m_proxyToSource.size();
     }
     return 0;
-
 }
 
 QVariant StylesFilteredModelBase::data(const QModelIndex &index, int role) const
@@ -89,7 +88,6 @@ Qt::ItemFlags StylesFilteredModelBase::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
     return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-
 }
 
 void StylesFilteredModelBase::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
@@ -158,7 +156,7 @@ void StylesFilteredModelBase::setStylesModel(AbstractStylesModel *sourceModel)
     endResetModel();
 }
 
-AbstractStylesModel::Type StylesFilteredModelBase::stylesType()
+AbstractStylesModel::Type StylesFilteredModelBase::stylesType() const
 {
     Q_ASSERT(m_sourceModel);
     return m_sourceModel->stylesType();

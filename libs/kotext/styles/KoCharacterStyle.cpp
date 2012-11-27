@@ -351,6 +351,11 @@ KoCharacterStyle::KoCharacterStyle(const QTextCharFormat &format, QObject *paren
     copyProperties(format);
 }
 
+KoCharacterStyle::Type KoCharacterStyle::styleType() const
+{
+    return KoCharacterStyle::CharacterStyle;
+}
+
 void KoCharacterStyle::copyProperties(const KoCharacterStyle *style)
 {
     d->stylesPrivate = style->d->stylesPrivate;
@@ -609,7 +614,7 @@ void KoCharacterStyle::unapplyStyle(QTextCharFormat &format) const
     }
 }
 
-bool KoCharacterStyle::isApplied()
+bool KoCharacterStyle::isApplied() const
 {
     return d->m_inUse;
 }

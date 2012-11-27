@@ -134,7 +134,7 @@ public:
     void clearStyleModel();
 
     /** Returns the type of styles in the model */
-    AbstractStylesModel::Type stylesType();
+    AbstractStylesModel::Type stylesType() const;
 
 private slots:
     void removeParagraphStyle(KoParagraphStyle*);

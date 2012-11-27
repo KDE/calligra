@@ -88,7 +88,7 @@ public:
     virtual QImage stylePreview(int row, QSize size = QSize()) = 0;
 
     /** Returns the type of styles in the model */
-    virtual AbstractStylesModel::Type stylesType() = 0;
+    virtual AbstractStylesModel::Type stylesType() const = 0;
 
 protected:
     KoStyleThumbnailer *m_styleThumbnailer;

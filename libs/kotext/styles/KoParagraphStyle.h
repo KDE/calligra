@@ -192,7 +192,7 @@ public:
     /// Destructor
     ~KoParagraphStyle();
 
-    virtual KoCharacterStyle::Type styleType() {return KoCharacterStyle::ParagraphStyle;}
+    virtual KoCharacterStyle::Type styleType() const;
 
     /// Creates a KoParagraphStyle that represents the formatting of \a block.
     static KoParagraphStyle *fromBlock(const QTextBlock &block, QObject *parent = 0);
@@ -724,7 +724,7 @@ public:
 
     /** Returns true if the style is in use.
      */
-    bool isApplied();
+    bool isApplied() const;
 
 
 signals:

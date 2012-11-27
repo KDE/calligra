@@ -200,7 +200,7 @@ public:
     ~KoCharacterStyle();
 
     /// returns the type of style
-    virtual Type styleType() {return CharacterStyle;}
+    virtual Type styleType() const;
 
     /// set the default style this one inherits its unset properties from if no parent style.
     void setDefaultStyle(KoCharacterStyle *parent);
@@ -456,7 +456,7 @@ public:
      * Apply this style to a blockFormat by copying all properties from this
      * style to the target char format.
      */
-    void applyStyle(QTextCharFormat &format, bool emitSignal=true) const;
+    void applyStyle(QTextCharFormat &format, bool emitSignal = true) const;
     /**
      * Apply this style to the textBlock by copying all properties from this
      * style to the target block formats.
@@ -517,7 +517,7 @@ public:
 
     /** Returns true if the style is in use.
      */
-    bool isApplied();
+    bool isApplied() const;
 
     /**
      * Return the value of key as represented on this style.
