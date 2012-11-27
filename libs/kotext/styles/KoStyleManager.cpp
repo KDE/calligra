@@ -1067,12 +1067,12 @@ KoParagraphStyle *KoStyleManager::unusedStyle(int id)
     return d->unusedParagraphStyles.value(id);
 }
 
-QVector<int> KoStyleManager::usedCharacterStyles()
+QVector<int> KoStyleManager::usedCharacterStyles() const
 {
     return d->m_usedCharacterStyles;
 }
 
-QVector<int> KoStyleManager::usedParagraphStyles()
+QVector<int> KoStyleManager::usedParagraphStyles() const
 {
     return d->m_usedParagraphStyles;
 }

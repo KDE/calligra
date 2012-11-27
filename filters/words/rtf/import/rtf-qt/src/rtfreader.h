@@ -22,9 +22,9 @@
 #include <QDebug>
 #include <QFile>
 #include <QObject>
-#include <QTextformat>
+#include <QTextFormat>
 #include <QStack>
-#include <QTextdocument>
+#include <QTextDocument>
 
 #include "Destination.h"
 #include "Tokenizer.h"

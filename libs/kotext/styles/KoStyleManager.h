@@ -448,8 +448,8 @@ public:
 
     KoParagraphStyle *unusedStyle(int id);
 
-    QVector<int> usedCharacterStyles();
-    QVector<int> usedParagraphStyles();
+    QVector<int> usedCharacterStyles() const;
+    QVector<int> usedParagraphStyles() const;
 
 signals:
     void styleAdded(KoParagraphStyle*);
