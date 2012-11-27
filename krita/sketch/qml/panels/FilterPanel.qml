@@ -27,16 +27,6 @@ Panel {
 
     actions: [
         Button {
-            id: undoButton;
-            width: height;
-            height: Constants.GridHeight
-            color: "transparent";
-            image: "../images/svg/icon-undo.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-        },
-        Button {
             id: applyButton;
             width: height;
             height: Constants.GridHeight
@@ -55,7 +45,7 @@ Panel {
             }
         },
         Item {
-            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
+            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 2)
             height: Constants.GridHeight;
         },
         Button {
