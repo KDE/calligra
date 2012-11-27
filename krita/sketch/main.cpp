@@ -85,7 +85,7 @@ int main( int argc, char** argv )
     if (!env.contains("KDEHOME") ) {
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
-    if (!env.contains("KESYCOCA")) {
+    if (!env.contains("KDESYCOCA")) {
         _putenv_s("KDESYCOCA", QString(appdir.currentPath() + "/sycoca").toLocal8Bit());
     }
     if (!env.contains("XDG_DATA_DIRS")) {
