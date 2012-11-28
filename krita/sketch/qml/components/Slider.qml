@@ -25,6 +25,7 @@ Item {
     property double value: 0;
     property double exponentialValue: 0;
     property bool highPrecision: false;
+    property bool useExponentialValue: false;
     onValueChanged: handle.resetHandle();
     onExponentialValueChanged: handle.resetHandle(true);
     Rectangle {
@@ -81,8 +82,8 @@ Item {
             return Math.min(100, Math.max(0, v));
         }
         onXChanged: {
-            if(settingExp)
-                return;
+             if(settingExp)
+                 return;
             settingSelf = true;
             if(highPrecision) {
                 var newValue = ((handle.x - mouseArea.drag.minimumX) * 100) / (mouseArea.drag.maximumX - mouseArea.drag.minimumX);
@@ -113,7 +114,7 @@ Item {
                 axis: "XAxis";
                 minimumX: 2;
                 maximumX: base.width - handle.width - 2;
-                onMaximumXChanged: handle.resetHandle();
+                onMaximumXChanged: handle.resetHandle(useExponentialValue);
             }
         }
     }

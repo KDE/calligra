@@ -27,7 +27,7 @@ Item {
     property real min: 0;
     property real max: 1000;
     property int decimals: 2;
-    property bool useExponentialValue: false;
+    property alias useExponentialValue: valueSlider.useExponentialValue;
 
     height: childrenRect.height;
 
@@ -86,11 +86,13 @@ Item {
             rightMargin: Constants.DefaultMargin;
         }
         highPrecision: true;
-        onValueChanged: {
+        onExponentialValueChanged: {
             if(useExponentialValue) {
                 base.value = base.min + ((exponentialValue / 100) * (base.max - base.min))
             }
-            else {
+        }
+        onValueChanged: {
+            if(!useExponentialValue) {
                 base.value = base.min + ((value / 100) * (base.max - base.min));
             }
         }
