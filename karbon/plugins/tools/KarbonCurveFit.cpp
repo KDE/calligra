@@ -583,14 +583,14 @@ KoPathShape * bezierFit(const QList<QPointF> &points, float error)
 
 KoPathShape *bezierMultipathFit(const QPainterPath &path, float error)
 {
-    //KoPathShape *shape = new KoPathShape();
-
+    KoPathShape *finalShape = new KoPathShape();
     QList<QPolygonF> toCloseShapes;
     QPolygonF *nerf = 0;
     nerf = new QPolygonF();
     toCloseShapes.append(*nerf);
     int index = 0;
     int elementCount = path.elementCount();
+    qDebug() << "INSIDE BEZIERMULTIPATHFIT";
 
     for (int i = 0; i < elementCount; i++) {
         QPainterPath::Element element = path.elementAt(i);
@@ -600,19 +600,26 @@ KoPathShape *bezierMultipathFit(const QPainterPath &path, float error)
             nerf = new QPolygonF();
             toCloseShapes.append(*nerf);
             index++;
+            qDebug() << "Peak";
             break;
         case QPainterPath::LineToElement:
             toCloseShapes[index].append(QPointF(element.x, element.y));
+            qDebug() << "Peak2";
             break;
         case QPainterPath::CurveToElement:
             toCloseShapes[index].append(QPointF(element.x, element.y));
+            qDebug() << "Peak3";
             break;
         default:
             continue;
         }
     }
     
-    return bezierFit(toCloseShapes.at(index).toList(), error);
+    for (int i = 0; i < index; ++i) {
+        finalShape->combine(bezierFit(toCloseShapes.at(++i).toList(), error));
+    }
+    qDebug() << "IS_THIS_REAL?";
+    return finalShape;
 }
 
 
