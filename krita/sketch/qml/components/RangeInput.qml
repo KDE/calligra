@@ -27,6 +27,7 @@ Item {
     property real min: 0;
     property real max: 1000;
     property int decimals: 2;
+    property bool useExponentialValue: false;
 
     height: childrenRect.height;
 
@@ -53,8 +54,15 @@ Item {
         if(textField.text != value) {
             textField.text = value.toFixed(decimals);
         }
-        if(valueSlider.value !== value) {
-            valueSlider.value = ( (value - min) / (max - min) ) * 100;
+        if(useExponentialValue) {
+             if(valueSlider.exponentialValue !== value) {
+                 valueSlider.exponentialValue = ( (value - min) / (max - min) ) * 100;
+             }
+        }
+        else {
+            if(valueSlider.value !== value) {
+                valueSlider.value = ( (value - min) / (max - min) ) * 100;
+            }
         }
     }
 
@@ -78,6 +86,13 @@ Item {
             rightMargin: Constants.DefaultMargin;
         }
         highPrecision: true;
-        onValueChanged: base.value = base.min + ((value / 100) * (base.max - base.min));
+        onValueChanged: {
+            if(useExponentialValue) {
+                base.value = base.min + ((exponentialValue / 100) * (base.max - base.min))
+            }
+            else {
+                base.value = base.min + ((value / 100) * (base.max - base.min));
+            }
+        }
     }
 }
