@@ -96,8 +96,8 @@ const KComponentData &KWFactory::componentData()
         KoDockRegistry *dockRegistry = KoDockRegistry::instance();
         dockRegistry->add(new KWStatisticsDockerFactory());
 #ifdef SHOULD_BUILD_RDF
-// TODO reenable after release
-        dockRegistry->add(new KWRdfDockerFactory());
+// disable for 2.6, UI not really usable yet
+//         dockRegistry->add(new KWRdfDockerFactory());
 #endif
 
     }
