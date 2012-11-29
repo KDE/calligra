@@ -22,6 +22,7 @@
 #define COMPOSITEOPMODEL_H
 
 #include <QtCore/QModelIndex>
+#include <kis_types.h>
 
 class KoCanvasController;
 
@@ -101,6 +102,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotToolChanged(KoCanvasController* canvas, int toolId);
     void resourceChanged(int key, const QVariant& v);
+    void currentNodeChanged(KisLayerSP newNode);
 
 private:
     class Private;
