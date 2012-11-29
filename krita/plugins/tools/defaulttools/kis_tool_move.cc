@@ -35,13 +35,6 @@
 #include "kis_tool_movetooloptionswidget.h"
 #include "strokes/move_selection_stroke_strategy.h"
 
-void MoveToolOptionsWidget::connectSignals()
-{
-    connect(radioSelectedLayer, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
-    connect(radioFirstLayer, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
-    connect(radioGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
-}
-
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
