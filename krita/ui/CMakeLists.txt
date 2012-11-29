@@ -194,7 +194,6 @@ set(kritaui_LIB_SRCS
 #    widgets/kis_light_source.cpp
 #    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
-    input/kis_shortcut.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
     input/kis_pan_action.cpp
@@ -203,7 +202,11 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
-    input/kis_gesture_action.cpp
+    input/kis_abstract_shortcut.cpp
+    input/kis_single_action_shortcut.cpp
+    input/kis_stroke_shortcut.cpp
+    input/kis_shortcut_matcher.cpp
+    #input/kis_gesture_action.cpp
     kis_ui_action_factory.cpp
     kis_ui_action_factory_registry.cpp
     actions/kis_selection_action_factories.cpp

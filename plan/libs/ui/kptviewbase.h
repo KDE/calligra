@@ -49,7 +49,7 @@ class QMainWindow;
 
 class KoDocument;
 class KoPrintJob;
-class KoPageLayoutWidget;
+struct KoPageLayoutWidget;
 class KoPart;
 
 /// The main namespace

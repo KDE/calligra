@@ -5,5 +5,5 @@ include_directories(${CMAKE_SOURCE_DIR}/kexiutils)
 
 ########### next target ###############
 
-kde4_add_unit_test(IdentifierTest TESTNAME KexiUtilsTest IdentifierTest.cpp)
-target_link_libraries(IdentifierTest ${QT_QTTEST_LIBRARY} ${KDE4_KDECORE_LIBS} kexiutils)
+kde4_add_unit_test(TestIdentifier TESTNAME TestIdentifier TestIdentifier.cpp)
+target_link_libraries(TestIdentifier ${QT_QTTEST_LIBRARY} ${KDE4_KDECORE_LIBS} kexiutils)

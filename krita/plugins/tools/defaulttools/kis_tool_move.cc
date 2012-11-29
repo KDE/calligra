@@ -35,6 +35,13 @@
 #include "kis_tool_movetooloptionswidget.h"
 #include "strokes/move_selection_stroke_strategy.h"
 
+void MoveToolOptionsWidget::connectSignals()
+{
+    connect(radioSelectedLayer, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
+    connect(radioFirstLayer, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
+    connect(radioGroup, SIGNAL(toggled(bool)), SIGNAL(sigConfigurationChanged()));
+}
+
 KisToolMove::KisToolMove(KoCanvasBase * canvas)
         :  KisTool(canvas, KisCursor::moveCursor())
 {
@@ -227,12 +234,16 @@ QWidget* KisToolMove::createOptionWidget()
 {
     m_optionsWidget = new MoveToolOptionsWidget(0);
     m_optionsWidget->setFixedHeight(m_optionsWidget->sizeHint().height());
+
     connect(m_optionsWidget->radioSelectedLayer, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
     connect(m_optionsWidget->radioFirstLayer, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
     connect(m_optionsWidget->radioGroup, SIGNAL(toggled(bool)),
             this, SLOT(slotWidgetRadioToggled(bool)));
+
+    connect(m_optionsWidget, SIGNAL(sigConfigurationChanged()), SLOT(endStroke()));
+
     return m_optionsWidget;
 }
 

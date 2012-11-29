@@ -34,9 +34,8 @@
 class KisPanAction::Private
 {
 public:
-    Private() : active(false), panDistance(10) { }
+    Private() : panDistance(10) { }
 
-    bool active;
     const int panDistance;
 };
 
@@ -59,13 +58,22 @@ KisPanAction::~KisPanAction()
     delete d;
 }
 
-void KisPanAction::begin(int shortcut)
+void KisPanAction::activate()
 {
+    QApplication::setOverrideCursor(Qt::OpenHandCursor);
+}
+
+void KisPanAction::deactivate()
+{
+    QApplication::restoreOverrideCursor();
+}
+
+void KisPanAction::begin(int shortcut, QEvent *event)
+{
+    KisAbstractInputAction::begin(shortcut, event);
+
     switch (shortcut) {
         case PanToggleShortcut:
-            setMousePosition(inputManager()->canvas()->coordinatesConverter()->documentToWidget(inputManager()->mousePosition()));
-            QApplication::setOverrideCursor(Qt::OpenHandCursor);
-            d->active = true;
             break;
         case PanLeftShortcut:
             inputManager()->canvas()->canvasController()->pan(QPoint(d->panDistance, 0));
@@ -82,44 +90,46 @@ void KisPanAction::begin(int shortcut)
     }
 }
 
-void KisPanAction::end()
-{
-    d->active = false;
-    QApplication::restoreOverrideCursor();
-}
+// <<<<<<< HEAD
+// void KisPanAction::end()
+// {
+//     d->active = false;
+//     QApplication::restoreOverrideCursor();
+// }
+//
+// void KisPanAction::inputEvent(QEvent *event)
+// {
+//     switch (event->type()) {
+//         case QEvent::MouseButtonPress: {
+//             setMousePosition(static_cast<QMouseEvent*>(event)->posF());
+//             break;
+//         }
+//         case QEvent::MouseMove: {
+//             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
+//             if (mevent->buttons()) {
+//                 QPointF relMovement = -(mevent->posF() - mousePosition());
+//                 inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
+//                 setMousePosition(mevent->posF());
+//                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
+//             } else {
+//                 QApplication::changeOverrideCursor(Qt::OpenHandCursor);
+//             }
+//             break;
+//         }
+//         case QEvent::Gesture: {
+//             QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
+//             if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
+//                 QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
+//                 inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint());
+//             }
+//         }
+//         default:
+//             break;
+//     }
+// }
 
-void KisPanAction::inputEvent(QEvent *event)
+void KisPanAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {
-    switch (event->type()) {
-        case QEvent::MouseButtonPress: {
-            setMousePosition(static_cast<QMouseEvent*>(event)->posF());
-            break;
-        }
-        case QEvent::MouseMove: {
-            QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-            if (mevent->buttons()) {
-                QPointF relMovement = -(mevent->posF() - mousePosition());
-                inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
-                setMousePosition(mevent->posF());
-                QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
-            } else {
-                QApplication::changeOverrideCursor(Qt::OpenHandCursor);
-            }
-            break;
-        }
-        case QEvent::Gesture: {
-            QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
-            if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
-                QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
-                inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint());
-            }
-        }
-        default:
-            break;
-    }
-}
-
-bool KisPanAction::isBlockingAutoRepeat() const
-{
-    return d->active;
+    QPointF relMovement = -(pos - lastPos);
+    inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
 }

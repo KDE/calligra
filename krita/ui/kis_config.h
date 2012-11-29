@@ -287,6 +287,9 @@ public:
     QString defaultPalette() const;
     void setDefaultPalette(const QString& name) const;
 
+    QString toolbarSlider(int sliderNumber);
+    void setToolbarSlider(int sliderNumber, const QString &slider);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

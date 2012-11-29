@@ -2,6 +2,8 @@
 Calligra Plan current:
 ----------------------
 
+* TJ Scheduler: Fix bug and improve performance in positive float calculation
+
 * Add a command to generate a new project from the current project
 
 * Add export to csv and ods

@@ -32,6 +32,26 @@
 
 class KoCanvasBase;
 class MoveToolOptionsWidget;
+
+#include "ui_wdgmovetool.h"
+
+class MoveToolOptionsWidget : public QWidget, public Ui::WdgMoveTool
+{
+    Q_OBJECT
+
+public:
+    MoveToolOptionsWidget(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+        connectSignals();
+    }
+
+signals:
+    void sigConfigurationChanged();
+
+private:
+    void connectSignals();
+};
+
 class KisToolMove : public KisTool
 {
     Q_OBJECT
@@ -69,9 +89,11 @@ Q_SIGNALS:
 
 private:
     void drag(const QPoint& newPos);
-    void endStroke();
     void cancelStroke();
     QPoint applyModifiers(Qt::KeyboardModifiers modifiers, QPoint pos);
+
+private slots:
+    void endStroke();
 
 private:
 

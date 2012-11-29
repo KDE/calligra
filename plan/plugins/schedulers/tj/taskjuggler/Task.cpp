@@ -290,6 +290,7 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             if (DEBUGTS(20)) {
                 qDebug()<<"Scheduling of ASAP task"<<name<<"not continuous slots:"<<time2tjp(date)<<"last:"<<time2tjp(lastSlot);
             }
+            //warningMessage(i18nc("info/plain", "ASAP: Not continuous slots: %1 last: %2", time2ISO(date), time2ISO(lastSlot)));
             return false;
         }
 
@@ -2566,12 +2567,12 @@ Task::scheduleOk(int sc) const
     }
     if (start == 0)
     {
-        errorMessage(i18nc("@info/plain", "Start time is not calculated"));
+        warningMessage(i18nc("@info/plain", "Start time is not calculated"));
         return false;
     }
     if (start < project->getStart() || start > project->getEnd())
     {
-        errorMessage(i18nc("@info/plain", "Start time %1 is outside of the project target times (%2 - %3)",
+        warningMessage(i18nc("@info/plain", "Start time %1 is outside of the project target times (%2 - %3)",
                      formatTime(start),
                      formatTime(project->getStart()),
                      formatTime(project->getEnd())));
@@ -2601,12 +2602,12 @@ NOT USED ATM
 #endif
     if (end == 0)
     {
-        errorMessage(i18nc("info/plain", "End time is not calculated"));
+        warningMessage(i18nc("info/plain", "End time is not calculated"));
         return false;
     }
     if ((end + 1) < project->getStart() || (end > project->getEnd()))
     {
-        errorMessage(i18nc("info/plain", "End time %1 is outside of the project target times (%2 - %3)",
+        warningMessage(i18nc("info/plain", "End time %1 is outside of the project target times (%2 - %3)",
                      formatTime(end + 1),
                      formatTime(project->getStart()),
                      formatTime(project->getEnd() + 1)));
@@ -2672,26 +2673,34 @@ NOT USED ATM
     // Check if all previous tasks end before start of this task.
     for (TaskListIterator tli(predecessors); tli.hasNext();) {
         Task *t = static_cast<Task*>(tli.next());
-        if (t->end > start && !t->runAway)
-        {
-            errorMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
-                              "Task '%1' ends at %2 but must precede<nl/>"
-                              "task '%3' which starts at %4",
-                         t->getName(), formatTime(t->end + 1),
-                         name, formatTime(start)));
+        if (t->end > start && !t->runAway) {
+            if (t->end == 0) {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Predeccessor task '%1': End time not calculated", t->getName()));
+            } else {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Task '%1' ends at %2 but must precede<nl/>"
+                                   "task '%3' which starts at %4",
+                                   t->getName(), formatTime(t->end + 1),
+                                   name, formatTime(start)));
+            }
             return false;
         }
     }
     // Check if all following task start after this tasks end.
     for (TaskListIterator tli(successors); tli.hasNext();) {
         Task *t = static_cast<Task*>(tli.next());
-        if (end > t->start && !t->runAway)
-        {
-            errorMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
-                              "Task '%1' starts at %2 but must follow<nl/>"
-                              "task %3 which ends at %4",
-                         t->getName(), formatTime(t->start),
-                         name, formatTime(end + 1)));
+        if (end > t->start && !t->runAway) {
+            if (t->start == 0) {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Successor task '%1': Start time not calculated", t->getName()));
+            } else {
+                warningMessage(i18nc("@info/plain", "Impossible dependency:<nl/>"
+                                   "Task '%1' starts at %2 but must follow<nl/>"
+                                   "task %3 which ends at %4",
+                                   t->getName(), formatTime(t->start),
+                                   name, formatTime(end + 1)));
+            }
             return false;
         }
     }

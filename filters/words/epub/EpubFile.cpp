@@ -158,7 +158,10 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.endElement(); // dc:title
 
     writer.startElement("dc:language");
-    writer.addTextNode("en");  // FIXME: Where to get this?
+    if (!metadata.value("language").isEmpty())
+        writer.addTextNode(metadata.value("language"));
+    else
+        writer.addTextNode("en");
     writer.endElement(); // dc:language
 
     writer.startElement("dc:identifier");
