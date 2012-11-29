@@ -42,11 +42,12 @@
 #include "kis_zoom_action.h"
 #include "kis_show_palette_action.h"
 #include "kis_change_primary_setting_action.h"
-#include "kis_gesture_action.h"
+//#include "kis_gesture_action.h"
 
 #include "kis_shortcut_matcher.h"
 #include "kis_stroke_shortcut.h"
 #include "kis_single_action_shortcut.h"
+#include "kis_gesture_shortcut.h"
 
 class KisInputManager::Private
 {
@@ -74,6 +75,7 @@ public:
     void addWheelShortcut(KisAbstractInputAction* action, int index,
                           const QList<Qt::Key> &modifiers,
                           KisSingleActionShortcut::WheelAction wheelAction);
+    void addGestureShortcut(KisAbstractInputAction* action, int index, Qt::GestureType gesture);
     bool processUnhandledEvent(QEvent *event);
     Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
@@ -144,6 +146,13 @@ void KisInputManager::Private::addWheelShortcut(KisAbstractInputAction* action, 
     matcher.addShortcut(keyShortcut);
 }
 
+void KisInputManager::Private::addGestureShortcut(KisAbstractInputAction* action, int index, Qt::GestureType gesture)
+{
+    KisGestureShortcut *shortcut = new KisGestureShortcut(action, index);
+    shortcut->setGesture(gesture);
+    matcher.addShortcut(shortcut);
+}
+
 void KisInputManager::Private::setupActions()
 {
 #if QT_VERSION >= 0x040700
@@ -179,6 +188,8 @@ void KisInputManager::Private::setupActions()
     addKeyShortcut(action, KisPanAction::PanRightShortcut, KEYS(), Qt::Key_Right);
     addKeyShortcut(action, KisPanAction::PanUpShortcut, KEYS(), Qt::Key_Up);
     addKeyShortcut(action, KisPanAction::PanDownShortcut, KEYS(), Qt::Key_Down);
+
+    addGestureShortcut(action, KisPanAction::PanToggleShortcut, Qt::PanGesture);
 
 
     action = new KisRotateCanvasAction(q);
@@ -337,26 +348,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         //Since QTabletEvent only provides the tablet information, we save that
         //and then ignore the event so it will generate a mouse event.
         QTabletEvent* tevent = static_cast<QTabletEvent*>(event);
-
-        //Since events get deleted once they are processed we need to clone the event
-        //to save it.
-        QTabletEvent* newEvent = new QTabletEvent(QEvent::TabletPress,
-                                                  tevent->pos(),
-                                                  tevent->globalPos(),
-                                                  tevent->hiResGlobalPos(),
-                                                  tevent->device(),
-                                                  tevent->pointerType(),
-                                                  tevent->pressure(),
-                                                  tevent->xTilt(),
-                                                  tevent->yTilt(),
-                                                  tevent->tangentialPressure(),
-                                                  tevent->rotation(),
-                                                  tevent->z(),
-                                                  tevent->modifiers(),
-                                                  tevent->uniqueId()
-                                                  );
-        d->lastTabletEvent = newEvent;
-        event->ignore();
+        d->saveTabletEvent(tevent);
+        tevent->ignore();
     }
 
     if(!d->enabled)
@@ -384,6 +377,9 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         retval = d->matcher.buttonReleased(mouseEvent->button(), mouseEvent);
         d->resetSavedTabletEvent();
+
+        if(retval)
+                d->enabled = false;
         break;
     }
     case QEvent::KeyPress: {
@@ -412,6 +408,8 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = d->workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);
+            if(retval)
+                d->enabled = false;
         }
         break;
     }
@@ -455,7 +453,10 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         break;
     }
     case QEvent::Gesture:
-    case QEvent::TouchEnd:
+        retval = d->matcher.gestureEvent(static_cast<QGestureEvent*>(event));
+        break;
+//     case QEvent::Gesture:
+//     case QEvent::TouchEnd:
 //     case QEvent::TouchBegin: {
 //         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
 //         QTouchEvent *newEvent = new QTouchEvent(QEvent::TouchBegin,

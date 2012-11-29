@@ -210,6 +210,7 @@ set(kritaui_LIB_SRCS
     kis_ui_action_factory.cpp
     kis_ui_action_factory_registry.cpp
     actions/kis_selection_action_factories.cpp
+    input/kis_gesture_shortcut.cpp
 )
 
 if(HAVE_OPENGL)

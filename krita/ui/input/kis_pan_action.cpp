@@ -97,36 +97,22 @@ void KisPanAction::begin(int shortcut, QEvent *event)
 //     QApplication::restoreOverrideCursor();
 // }
 //
-// void KisPanAction::inputEvent(QEvent *event)
-// {
-//     switch (event->type()) {
-//         case QEvent::MouseButtonPress: {
-//             setMousePosition(static_cast<QMouseEvent*>(event)->posF());
-//             break;
-//         }
-//         case QEvent::MouseMove: {
-//             QMouseEvent *mevent = static_cast<QMouseEvent*>(event);
-//             if (mevent->buttons()) {
-//                 QPointF relMovement = -(mevent->posF() - mousePosition());
-//                 inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
-//                 setMousePosition(mevent->posF());
-//                 QApplication::changeOverrideCursor(Qt::ClosedHandCursor);
-//             } else {
-//                 QApplication::changeOverrideCursor(Qt::OpenHandCursor);
-//             }
-//             break;
-//         }
-//         case QEvent::Gesture: {
-//             QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
-//             if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
-//                 QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
-//                 inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint());
-//             }
-//         }
-//         default:
-//             break;
-//     }
-// }
+void KisPanAction::inputEvent(QEvent *event)
+{
+    switch (event->type()) {
+        case QEvent::Gesture: {
+            QGestureEvent *gevent = static_cast<QGestureEvent*>(event);
+            if (gevent->activeGestures().at(0)->gestureType() == Qt::PanGesture) {
+                QPanGesture *pan = static_cast<QPanGesture*>(gevent->activeGestures().at(0));
+                inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint());
+            }
+        }
+        default:
+            break;
+    }
+
+    KisAbstractInputAction::inputEvent(event);
+}
 
 void KisPanAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {

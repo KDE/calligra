@@ -27,8 +27,11 @@
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
+class QGestureEvent;
+class QGesture;
 
 class KisStrokeShortcut;
+class KisGestureShortcut;
 class KisAbstractInputAction;
 
 /**
@@ -85,6 +88,7 @@ public:
 
     void addShortcut(KisSingleActionShortcut *shortcut);
     void addShortcut(KisStrokeShortcut *shortcut);
+    void addShortcut(KisGestureShortcut *shortcut);
     void addAction(KisAbstractInputAction *action);
 
     /**
@@ -154,6 +158,8 @@ public:
      */
     bool mouseMoved(QMouseEvent *event);
 
+    bool gestureEvent(QGestureEvent *event);
+
     /**
      * Resets the internal state of the matcher
      *
@@ -183,6 +189,9 @@ private:
     bool tryRunReadyShortcut(Qt::MouseButton button, QMouseEvent *event);
     void tryActivateReadyShortcut();
     bool tryEndRunningShortcut(Qt::MouseButton button, QMouseEvent *event);
+
+    bool tryRunGestureShortcut(QGestureEvent* event);
+    bool tryEndGestureShortcut(QGestureEvent* event);
 
 private:
     class Private;

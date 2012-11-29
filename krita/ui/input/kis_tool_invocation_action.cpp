@@ -61,7 +61,7 @@ void KisToolInvocationAction::begin(int shortcut, QEvent *event)
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
         } else if (touchEvent) {
-            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter, inputManager()->canvas()->documentOffset());
+            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
         } else if (mouseEvent) {
             inputManager()->toolProxy()->mousePressEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
         }
