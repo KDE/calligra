@@ -224,19 +224,12 @@ Item {
         MouseArea {
             id: mousearea1
             anchors.fill: parent;
-
-            property real start: NaN;
-
             onClicked: base.collapsed = !base.collapsed;
-            onPositionChanged: {
-                var dist = mouse.y - start;
-                if( dist > 30 ) {
-                    base.collapsed = true;
-                } else if( dist < -30 ) {
-                    base.collapsed = false;
-                }
-            }
-            onPressed: start = mouse.y;
+        }
+
+        SimpleTouchArea {
+            anchors.fill: parent;
+            onTouched: base.collapsed = !base.collapsed;
         }
     }
 
