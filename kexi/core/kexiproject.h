@@ -215,6 +215,10 @@ public:
      \return true on success. */
     bool renameObject(KexiPart::Item& item, const QString& newName);
 
+    /*! Renames a part instance pointed by \a item to a new name \a newName.
+     \return true on success. */
+    bool setObjectCaption(KexiPart::Item& item, const QString& newCaption);
+
     /*! Creates part item for given part \a info.
      Newly item will not be saved to the backend but stored in memory only
      (owned by project), and marked as "neverSaved" (see KexiPart::Item::neverSaved()).
@@ -365,6 +369,9 @@ signals:
 
     /** instance pointed by \a item is renamed */
     void itemRenamed(const KexiPart::Item &item, const QString& oldName);
+
+    /** caption for instance pointed by \a item is changed */
+    void itemCaptionChanged(const KexiPart::Item &item, const QString& oldCaption);
 
 //  /** new table \a schema created */
 //  void tableCreated(KexiDB::TableSchema& schema);

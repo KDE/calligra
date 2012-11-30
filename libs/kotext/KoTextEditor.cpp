@@ -25,6 +25,7 @@
 
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
+#include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoInlineNote.h"
 #include "KoInlineCite.h"
@@ -65,6 +66,7 @@
 #include "commands/DeleteCommand.h"
 #include "commands/DeleteAnchorsCommand.h"
 #include "commands/InsertNoteCommand.h"
+#include "commands/AddTextRangeCommand.h"
 
 #include <KoShapeCreateCommand.h>
 
@@ -437,47 +439,19 @@ void KoTextEditor::recursivelyVisitSelection(QTextFrame::iterator it, KoTextVisi
     } while (!it.atEnd());
 }
 
-void KoTextEditor::addBookmark(const QString &name)
+KoBookmark *KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
-    if (isEditProtected()) {
-        return;
-    }
+    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Bookmark"));
 
-    d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Insert Bookmark"));
-    KoBookmark *bookmark = new KoBookmark(d->document);
+    KoBookmark *bookmark = new KoBookmark(d->caret);
     bookmark->setName(name);
-    int startPos = -1, endPos = -1, caretPos = -1;
+    bookmark->setManager(KoTextDocument(d->document).textRangeManager());
 
-    if (d->caret.hasSelection()) {
-        startPos = d->caret.selectionStart();
-        endPos = d->caret.selectionEnd();
-        caretPos = d->caret.position();
+    addCommand(new AddTextRangeCommand(bookmark, topCommand));
 
-        d->caret.setPosition(endPos);
-        KoBookmark *endBookmark = new KoBookmark(d->document);
-        endBookmark->setName(name);
-        bookmark->setType(KoBookmark::StartBookmark);
-        endBookmark->setType(KoBookmark::EndBookmark);
-        KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, endBookmark);
-        bookmark->setEndBookmark(endBookmark);
-        d->caret.setPosition(startPos);
-    } else {
-        bookmark->setType(KoBookmark::SinglePosition);
-    }
-    // TODO the macro & undo things
-    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, bookmark);
-    if (startPos != -1) {
-        // TODO repaint selection properly
-        if (caretPos == startPos) {
-            startPos = endPos + 1;
-            endPos = caretPos;
-        } else {
-            endPos += 2;
-        }
-        d->caret.setPosition(startPos);
-        d->caret.setPosition(endPos, QTextCursor::KeepAnchor);
-    }
-    d->updateState(KoTextEditor::Private::NoOp);
+    endEditBlock();
+
+    return bookmark;
 }
 
 KoInlineObject *KoTextEditor::insertIndexMarker()
@@ -814,10 +788,12 @@ bool KoTextEditor::atBlockStart() const
 
 bool KoTextEditor::atEnd() const
 {
-    QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
-    KoTextDocument::AuxillaryFrameURL);
-    QTextFrame *auxFrame = resource.value<QTextFrame *>();
-    if (auxFrame) {
+    QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+    cursor.movePosition(QTextCursor::PreviousCharacter);
+    QTextFrame *auxFrame = cursor.currentFrame();
+
+    if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
+        //auxFrame really is the auxillary frame
         if (d->caret.position() == auxFrame->firstPosition() - 1) {
             return true;
         }
@@ -918,7 +894,7 @@ void KoTextEditor::deletePreviousChar()
     emit cursorPositionChanged();
 }
 
-const QTextDocument *KoTextEditor::document() const
+QTextDocument *KoTextEditor::document() const
 {
     return d->caret.document();
 }
@@ -1569,10 +1545,11 @@ bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCurso
 
     if (beforeFrame == afterFrame) {
         if (after.selectionEnd() == after.document()->characterCount() -1) {
-            QVariant resource = after.document()->resource(KoTextDocument::AuxillaryFrame,
-            KoTextDocument::AuxillaryFrameURL);
-            QTextFrame *auxFrame = resource.value<QTextFrame *>();
-            if (auxFrame) {
+            QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+            cursor.movePosition(QTextCursor::PreviousCharacter);
+            QTextFrame *auxFrame = cursor.currentFrame();
+
+            if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
                 if (operation == QTextCursor::End) {
                     d->caret.setPosition(auxFrame->firstPosition() - 1, mode);
                     emit cursorPositionChanged();
@@ -1691,9 +1668,11 @@ void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode mode)
     d->editProtectionCached = false;
 
     if (pos == d->caret.document()->characterCount() -1) {
-        QVariant resource = d->caret.document()->resource(KoTextDocument::AuxillaryFrame,
-        KoTextDocument::AuxillaryFrameURL);
-        if (resource.isValid()) {
+        QTextCursor cursor(d->caret.document()->rootFrame()->lastCursorPosition());
+        cursor.movePosition(QTextCursor::PreviousCharacter);
+        QTextFrame *auxFrame = cursor.currentFrame();
+
+        if (auxFrame->format().intProperty(KoText::SubFrameType) == KoText::AuxillaryFrameType) {
             return;
         }
     }

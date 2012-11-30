@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QSplitter>
 #include <QByteArray>
+#include <QHash>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -58,8 +59,6 @@
 #include <kexitableview.h>
 
 #include <kexi_global.h>
-
-//#define MAX_FIELDS 101 //nice prime number
 
 //! used only for BLOBs
 #define DEFAULT_OBJECT_TYPE_VALUE "image"
@@ -270,9 +269,9 @@ void KexiTableDesignerView::initData()
 //  d->sets->clear();//default size
 // }
 
-    //add empty space
-// const int columnsCount = d->data->columnsCount();
-    for (int i = tableFieldCount; i < (int)d->sets->size(); i++) {
+    //add empty space, at least 2 times more than number of existing fields
+    uint fullSize = qMax(d->sets->size(), uint(2 * tableFieldCount));
+    for (int i = tableFieldCount; i < fullSize; i++) {
 //  KexiDB::RecordData *item = new KexiDB::RecordData(columnsCount);//3 empty fields
         d->data->append(d->data->createItem());
     }
@@ -415,8 +414,8 @@ KexiTableDesignerView::createPropertySet(int row, const KexiDB::Field& field, bo
     prop->setOption("minValueText", i18nc("Auto Decimal Places", "Auto"));
 
 //! @todo set reasonable default for column width
-    set->addProperty(prop = new KoProperty::Property("width", QVariant(0) /*field.width()*//*200?*/,
-                                                     i18n("Column Width")));
+    set->addProperty(prop = new KoProperty::Property("defaultWidth", QVariant(0) /*field.width()*//*200?*/,
+                                                     i18n("Default Width")));
 #ifdef KEXI_NO_UNFINISHED
     prop->setVisible(false);
 #endif
@@ -1183,11 +1182,11 @@ KexiDB::Field * KexiTableDesignerView::buildField(const KoProperty::Set &set) co
 {
     //create a map of property values
     kDebug() << set["type"].value();
-    QHash<QByteArray, QVariant> values(KoProperty::propertyValues(set));
+    QMap<QByteArray, QVariant> values(KoProperty::propertyValues(set));
     //remove internal values, to avoid creating custom field's properties
     KexiDB::Field *field = new KexiDB::Field();
 
-    for (QMutableHashIterator<QByteArray, QVariant> it(values); it.hasNext();) {
+    for (QMutableMapIterator<QByteArray, QVariant> it(values); it.hasNext();) {
         it.next();
         const QByteArray propName(it.key());
         if (d->internalPropertyNames.contains(propName)
@@ -1397,7 +1396,9 @@ tristate KexiTableDesignerView::buildAlterTableActions(
     return true;
 }
 
-KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData& sdata,
+                                                        KexiView::StoreNewDataOptions options,
+                                                        bool &cancel)
 {
     if (tempData()->table || window()->schemaData()) //must not be
         return 0;
@@ -1415,9 +1416,13 @@ KexiDB::SchemaData* KexiTableDesignerView::storeNewData(const KexiDB::SchemaData
     if (res == true) {
         //todo
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-        res = conn->createTable(tempData()->table);
-        if (res != true)
+        res = conn->createTable(tempData()->table, options & KexiView::OverwriteExistingObject);
+        if (res == true) {
+            res = KexiMainWindowIface::global()->project()->removeUserDataBlock(tempData()->table->id());
+        }
+        else {
             window()->setStatus(conn, "");
+        }
     }
 
     if (res == true) {
@@ -1905,7 +1910,7 @@ void KexiTableDesignerView::changePropertyVisibility(
 void KexiTableDesignerView::propertySetSwitched()
 {
     KexiDataTable::propertySetSwitched();
-    KexiLookupColumnPage *page = static_cast<KexiTablePart*>(window()->part())->lookupColumnPage();
+    KexiLookupColumnPage *page = qobject_cast<KexiTablePart*>(window()->part())->lookupColumnPage();
     if (page)
         page->assignPropertySet(propertySet());
 }

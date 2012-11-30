@@ -109,6 +109,14 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
         return false;
     }
 
+    // Load attributes from the office:text.  These are text:global and text:use-soft-page-breaks.
+    QString textGlobal = body.attributeNS(KoXmlNS::text, "global");
+    bool isTextGlobal = (textGlobal == "true");
+    if (isTextGlobal) {
+        m_document->setIsMasterDocument(true);
+    }
+    // FIXME: text:use-soft-page-breaks
+
     if (updater) updater->setProgress(20);
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), KGlobal::mainComponent());

@@ -30,7 +30,10 @@ static const char* AUTHOR_VERSION = CALLIGRA_VERSION_STRING;
 
 KAboutData * newAuthorAboutData()
 {
-    KAboutData * aboutData = new KAboutData("author", 0, ki18nc("application name", "Calligra Author"),
+    // The second argument, "words", apparently enables translations.
+    // FIXME: We will probably have to change this when we move into
+    //        our own top level directory.
+    KAboutData * aboutData = new KAboutData("author", "words", ki18nc("application name", "Calligra Author"),
                                             AUTHOR_VERSION, ki18n(AUTHOR_DESCRIPTION), KAboutData::License_LGPL,
                                             ki18n("© 2012, The Author Team"), KLocalizedString(),
                                             "http://www.calligra.org/author/");

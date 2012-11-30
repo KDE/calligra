@@ -47,7 +47,7 @@
 #include <QDateTime>
 #include <QPushButton>
 
-#include <kdebug.h>
+#include <kptdebug.h>
 
 namespace KPlato
 {
@@ -506,22 +506,26 @@ QDateTime TaskGeneralPanelImpl::endDateTime()
 
 void TaskGeneralPanelImpl::setStartTime( const QTime &time )
 {
-    scheduleStartTime->setTime(time);
+    scheduleStartTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 void TaskGeneralPanelImpl::setEndTime( const QTime &time )
 {
-    scheduleEndTime->setTime(time);
+    scheduleEndTime->setTime( QTime( time.hour(), time.minute(), 0 ) );
 }
 
 QTime TaskGeneralPanelImpl::startTime() const
 {
-    return scheduleStartTime->time();
+    QTime t = scheduleStartTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QTime TaskGeneralPanelImpl::endTime()
 {
-    return scheduleEndTime->time();
+    QTime t = scheduleEndTime->time();
+    t.setHMS( t.hour(), t.minute(), 0 );
+    return t;
 }
 
 QDate TaskGeneralPanelImpl::startDate()

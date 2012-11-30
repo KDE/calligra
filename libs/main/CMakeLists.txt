@@ -95,6 +95,8 @@ set(komain_LIB_SRCS
     KoFindStyle.cpp
 
     KoPart.cpp
+
+    thememanager.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -175,6 +177,11 @@ if( MARBLE_FOUND )
     target_link_libraries(komain ${MARBLE_LIBRARIES})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${MARBLE_LIBRARIES})
 endif( MARBLE_FOUND )
+if( KActivities_FOUND )
+    include_directories(${KACTIVITIES_INCLUDES})
+    target_link_libraries(komain ${KACTIVITIES_LIBRARY})
+    target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
+endif( KActivities_FOUND )
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -183,19 +190,8 @@ set_target_properties(komain PROPERTIES
 )
 install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-########### plugin for the properties dialog ###############
-
-set(kodocinfopropspage_PART_SRCS KoDocInfoPropsFactory.cpp )
-
-kde4_add_plugin(kodocinfopropspage ${kodocinfopropspage_PART_SRCS})
-
-target_link_libraries(kodocinfopropspage  ${KDE4_KIO_LIBS} komain )
-
-install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
-
 ########### install files ###############
 
-install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 install( FILES

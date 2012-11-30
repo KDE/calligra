@@ -60,6 +60,8 @@ void WorkPackageProxyModelTester::moveTask( Node *task, Node *newParent, int new
 void WorkPackageProxyModelTester::initTestCase()
 {
     project.setName( "P1" );
+    project.setId( project.uniqueNodeId() );
+    project.registerNodeId( &project );
     Calendar *calendar = new Calendar();
     calendar->setName( "C1" );
     calendar->setDefault( true );

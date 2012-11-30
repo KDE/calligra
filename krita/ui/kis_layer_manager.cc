@@ -178,9 +178,10 @@ public:
 
             QRect r = m_image->bounds();
 
-            KisPart2 *p = new KisPart2();
-            KisDoc2 d(p);
-            p->setDocument(&d);
+            KisPart2 part;
+            KisDoc2 d(&part);
+            part.setDocument(&d);
+
             d.prepareForImport();
 
             KisImageWSP dst = new KisImage(d.createUndoStore(), r.width(), r.height(), m_image->colorSpace(), layer->name());
@@ -240,7 +241,6 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
     , m_imageResizeToLayer(0)
     , m_flattenLayer(0)
     , m_rasterizeLayer(0)
-    , m_duplicateLayer(0)
     , m_addPaintLayer(0)
     , m_activeLayer(0)
     , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
@@ -307,11 +307,6 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     m_imageResizeToLayer  = new KAction(i18n("Size Canvas to Size of Current Layer"), this);
     actionCollection->addAction("resizeimagetolayer", m_imageResizeToLayer);
     connect(m_imageResizeToLayer, SIGNAL(triggered()), this, SLOT(imageResizeToActiveLayer()));
-
-    m_duplicateLayer = new KAction(i18n("Duplicate current layer"), this);
-    m_duplicateLayer->setShortcut(KShortcut(Qt::ControlModifier + Qt::Key_J));
-    actionCollection->addAction("duplicatelayer", m_duplicateLayer);
-    connect(m_duplicateLayer, SIGNAL(triggered()), this, SLOT(layerDuplicate()));
 
     m_addPaintLayer = new KAction(i18n("Add new paint layer"), this);
     m_addPaintLayer->setShortcut(KShortcut(Qt::Key_Insert));
@@ -380,41 +375,45 @@ void KisLayerManager::layerProperties()
         KisLayerSP prev = dynamic_cast<KisLayer*>(alayer->prevSibling().data());
         if (prev) dev = prev->projection();
 
-        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, alayer->image(), alayer->filter(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
+        KisDlgAdjLayerProps dlg(alayer, alayer.data(), dev, alayer->image(), alayer->filter().data(), alayer->name(), i18n("Filter Layer Properties"), m_view, "dlgadjlayerprops");
         dlg.resize(dlg.minimumSizeHint());
-        KisFilterConfiguration* config = dlg.filterConfiguration();
-        QString before;
 
-        if (config) {
-            before = config->toXML();
-        }
+
+        KisSafeFilterConfigurationSP configBefore(alayer->filter());
+        Q_ASSERT(configBefore);
+        QString xmlBefore = configBefore->toXML();
+
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            QString after;
             alayer->setName(dlg.layerName());
 
-            if (dlg.filterConfiguration()) {
-                after = dlg.filterConfiguration()->toXML();
-            }
-            if (after != before) {
-                KisChangeFilterCmd<KisAdjustmentLayerSP> * cmd
-                        = new KisChangeFilterCmd<KisAdjustmentLayerSP>(alayer,
-                                                                       dlg.filterConfiguration(),
-                                                                       before,
-                                                                       after);
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+            if(xmlBefore != xmlAfter) {
+                KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(alayer,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             false);
+                // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
                 m_doc->setModified(true);
             }
         }
         else {
-            if (dlg.filterConfiguration() && config) {
-                QString after = dlg.filterConfiguration()->toXML();
-                if (after != before) {
-                    alayer->setFilter(config);
-                    alayer->setDirty();
-                }
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+            if(xmlBefore != xmlAfter) {
+                alayer->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                alayer->setDirty();
             }
         }
     }
@@ -423,21 +422,28 @@ void KisLayerManager::layerProperties()
         KisDlgGeneratorLayer dlg(alayer->name(), m_view);
         dlg.setCaption(i18n("Generator Layer Properties"));
 
-        QString before = alayer->generator()->toXML();
-        dlg.setConfiguration(alayer->generator());
+        KisSafeFilterConfigurationSP configBefore(alayer->filter());
+        Q_ASSERT(configBefore);
+        QString xmlBefore = configBefore->toXML();
+
+        dlg.setConfiguration(configBefore.data());
         dlg.resize(dlg.minimumSizeHint());
 
         if (dlg.exec() == QDialog::Accepted) {
 
-            QString after = dlg.configuration()->toXML();
-            if (after != before) {
-                KisChangeGeneratorCmd<KisGeneratorLayerSP> * cmd
-                        = new KisChangeGeneratorCmd<KisGeneratorLayerSP>(alayer,
-                                                                         dlg.configuration(),
-                                                                         before,
-                                                                         after
-                                                                         );
+            KisSafeFilterConfigurationSP configAfter(dlg.configuration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
 
+            if(xmlBefore != xmlAfter) {
+                KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(alayer,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             true);
+                // FIXME: check whether is needed
                 cmd->redo();
                 m_view->undoAdapter()->addCommand(cmd);
                 m_doc->setModified(true);
@@ -640,28 +646,6 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const
 
     KisGeneratorLayerSP l = new KisGeneratorLayer(image, name, generator, selection);
     m_commandsAdapter->addNode(l.data(), parent, above.data());
-}
-
-
-void KisLayerManager::layerRemove()
-{
-    KisImageWSP image = m_view->image();
-
-    if (image) {
-        KisLayerSP layer = activeLayer();
-        if (layer) {
-            QRect extent = layer->extent();
-            KisNodeSP parent = layer->parent();
-
-            m_commandsAdapter->removeNode(layer);
-
-            if (parent)
-                parent->setDirty(extent);
-
-            m_view->canvas()->update();
-            m_view->updateGUI();
-        }
-    }
 }
 
 void KisLayerManager::layerDuplicate()
@@ -913,9 +897,9 @@ void KisLayerManager::saveLayerAsImage()
 
     QRect r = image->bounds();
 
-    KisPart2 *p = new KisPart2();
-    KisDoc2 d(p);
-    p->setDocument(&d);
+    KisPart2 part;
+    KisDoc2 d(&part);
+    part.setDocument(&d);
 
     d.prepareForImport();
 

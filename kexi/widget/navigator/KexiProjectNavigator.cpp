@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2010 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
@@ -24,6 +24,8 @@
 #include "KexiProjectModel.h"
 #include "KexiProjectModelItem.h"
 #include "KexiProjectItemDelegate.h"
+#include <widget/KexiNameDialog.h>
+#include <widget/KexiNameWidget.h>
 
 #include <QHeaderView>
 #include <QPoint>
@@ -56,6 +58,7 @@
 #include <kexiutils/FlowLayout.h>
 #include <kexiutils/SmallToolButton.h>
 #include <db/utils.h>
+#include <kexidb/dbobjectnamevalidator.h>
 #include <kexi_global.h>
 
 
@@ -67,7 +70,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         , m_singleClick(false)
         , m_readOnly(false)
 {
-    kDebug();
     setObjectName("KexiProjectNavigator");
     setWindowTitle(i18n("Project Navigator"));
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
@@ -135,6 +137,7 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
                                    i18n("Rename object"),
                                    i18n("Renames the object selected in the list."),
                                    SLOT(slotRename()));
+//! @todo enable, doesn't work now: m_renameAction->setShortcut(KShortcut(Qt::Key_F2));
 #ifdef KEXI_SHOW_UNIMPLEMENTED
         //todo plugSharedAction("edit_cut",SLOT(slotCut()));
         //todo plugSharedAction("edit_copy",SLOT(slotCopy()));
@@ -218,7 +221,6 @@ KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
 
 void KexiProjectNavigator::setProject(KexiProject* prj, const QString& itemsPartClass, QString* partManagerErrorMessages, bool addAsSearchableModel)
 {
-    kDebug() << itemsPartClass << ".";
     m_itemsPartClass = itemsPartClass;
 
     m_model->setProject(prj, itemsPartClass, partManagerErrorMessages);
@@ -279,10 +281,9 @@ void KexiProjectNavigator::contextMenuEvent(QContextMenuEvent* event)
 
 void KexiProjectNavigator::slotExecuteItem(const QModelIndex& vitem)
 {
-    kDebug();
     KexiProjectModelItem *it = static_cast<KexiProjectModelItem*>(vitem.internalPointer());
     if (!it) {
-        kDebug() << "No internal pointer";
+        kWarning() << "No internal pointer";
         return;
     }
 //TODO is this needed?
@@ -468,7 +469,48 @@ void KexiProjectNavigator::slotRename()
 {
     if (!m_renameAction || !(m_features & Writable))
         return;
-    m_list->edit(m_list->currentIndex());
+
+    KexiPart::Item* partItem = selectedPartItem();
+    if (!partItem) {
+        return;
+    }
+    KexiProjectModelItem *partModelItem = m_model->modelItemFromItem(*partItem);
+    if (!partModelItem) {
+        return;
+    }
+    KexiPart::Info *info = partModelItem->partInfo();
+    KexiPart::Part *part = Kexi::partManager().partForClass(partItem->partClass());
+    if (!info || !part) {
+        return;
+    }
+    KexiNameDialog dialog(
+        i18nc("@info Rename object %1:", "Rename <resource>%1</resource>:").arg(partItem->name()),
+        this);
+    if (!m_model->project()) {
+        kWarning() << "No KexiProject assigned!";
+        return;
+    }
+    dialog.widget()->addNameSubvalidator( //check if new name is allowed
+        new KexiDB::ObjectNameValidator(m_model->project()->dbConnection()->driver()));
+    dialog.widget()->setCaptionText(partItem->caption());
+    dialog.widget()->setNameText(partItem->name());
+    dialog.setWindowTitle(
+        i18nc("@title:window Rename Object %1.", "Rename <resource>%1</resource>").arg(partItem->name()));
+    dialog.setDialogIcon(info->itemIconName());
+    dialog.setAllowOverwriting(true);
+
+    bool overwriteNeeded;
+    if (dialog.execAndCheckIfObjectExists(*m_model->project(), *part, &overwriteNeeded)
+        != QDialog::Accepted)
+    {
+        return;
+    }
+    if (dialog.widget()->nameText() != dialog.widget()->originalNameText()
+        && !m_model->renameItem(partItem, dialog.widget()->nameText()))
+    {
+        return;
+    }
+    m_model->setItemCaption(partItem, dialog.widget()->captionText());
 }
 
 void KexiProjectNavigator::setFocus()

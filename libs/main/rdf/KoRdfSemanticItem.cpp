@@ -242,7 +242,7 @@ void KoRdfSemanticItem::insert(KoCanvasBase *host)
     KoChangeTrackerDisabledRAII disableChangeTracker(ktd.changeTracker());
     Q_UNUSED(disableChangeTracker);
 
-    int originalpos = editor->position();
+//    int originalpos = editor->position();
     KoTextMeta *startmark = new KoTextMeta(editor->document());
     editor->insertInlineObject(startmark);
     KoTextInlineRdf *inlineRdf(new KoTextInlineRdf((QTextDocument*)editor->document(), startmark));
@@ -447,6 +447,14 @@ hKoSemanticStylesheet KoRdfSemanticItem::createUserStylesheet(const QString &nam
     const_cast<KoDocumentRdf*>(documentRdf())->setUserStyleSheetList(className(),userSheets);
     connect(ss.data(), SIGNAL(nameChanging(hKoSemanticStylesheet, QString, QString)),
             this, SLOT(onUserStylesheetRenamed(hKoSemanticStylesheet, QString, QString)));
+    return ss;
+}
+
+hKoSemanticStylesheet KoRdfSemanticItem::createSystemStylesheet(const QString &uuid, const QString &name, const QString &templateString) const
+{
+    const bool isNotMutable = false;
+    hKoSemanticStylesheet ss =
+        hKoSemanticStylesheet(new KoSemanticStylesheet(uuid, name, templateString, KoSemanticStylesheet::stylesheetTypeSystem(), isNotMutable));
     return ss;
 }
 

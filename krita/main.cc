@@ -23,6 +23,9 @@
 #include <QString>
 #include <QPixmap>
 #include <QDebug>
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QDir>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>

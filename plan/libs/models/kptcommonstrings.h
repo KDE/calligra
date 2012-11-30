@@ -128,6 +128,7 @@ struct KPLATOMODELS_EXPORT ToolTip
     static QString scheduleFinish();
     static QString schedulingDirection();
     static QString scheduleScheduler();
+    static QString scheduleGranularity();
 
     static QString documentUrl();
     static QString documentType();

@@ -86,10 +86,10 @@ void KWRdfDocker::setCanvas(KoCanvasBase *canvas)
         
         m_document = newDoc;
         widgetDocker.semanticView->setDocumentRdf(static_cast<KoDocumentRdf*>(m_document->documentRdf()));
-        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(KoRdfSemanticItem*)),
-                this, SLOT(semanticObjectAdded(KoRdfSemanticItem*)));
-        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(KoRdfSemanticItem*)),
-                this, SLOT(semanticObjectUpdated(KoRdfSemanticItem*)));
+        connect(static_cast<KoDocumentRdf*>(m_document->documentRdf()), SIGNAL(semanticObjectAdded(hKoRdfSemanticItem)),
+                this, SLOT(semanticObjectAdded(hKoRdfSemanticItem)));
+        connect(m_document->documentRdf(), SIGNAL(semanticObjectUpdated(hKoRdfSemanticItem)),
+                this, SLOT(semanticObjectUpdated(hKoRdfSemanticItem)));
     }
     widgetDocker.semanticView->setCanvas(m_canvas);
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int,const QVariant&)),
@@ -109,14 +109,14 @@ KoCanvasBase* KWRdfDocker::canvas()
 }
 
 
-void KWRdfDocker::semanticObjectAdded(KoRdfSemanticItem *item)
+void KWRdfDocker::semanticObjectAdded(hKoRdfSemanticItem item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "new item...";
     updateData();
 }
 
-void KWRdfDocker::semanticObjectUpdated(KoRdfSemanticItem *item)
+void KWRdfDocker::semanticObjectUpdated(hKoRdfSemanticItem item)
 {
     Q_UNUSED(item);
     //kDebug(30015) << "updated item...";

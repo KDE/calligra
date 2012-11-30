@@ -65,9 +65,9 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
                 continue;
             }
 
-            KisPart2 *p = new KisPart2();
-            KisDoc2 doc(p);
-            p->setDocument(&doc);
+            KisPart2 part;
+            KisDoc2 doc(&part);
+            part.setDocument(&doc);
 
             KoFilterManager manager(&doc);
             manager.setBatchMode(true);
@@ -82,11 +82,11 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
             }
 
             QString id = doc.image()->colorSpace()->id();
-            if (id != "GRAYA" && id != "GRAYA16" && id != "RGBA" && id != "RGBA16") {
+            if (id != "GRAYA" && id != "GRAYAU16" && id != "RGBA" && id != "RGBA16") {
                 dbgKrita << "Images need conversion";
                 doc.image()->convertImageColorSpace(KoColorSpaceRegistry::instance()->rgb8(),
-                                                    KoColorConversionTransformation::IntentPerceptual,
-                                                    KoColorConversionTransformation::Empty);
+                                                    KoColorConversionTransformation::IntentAbsoluteColorimetric,
+                                                    KoColorConversionTransformation::NoOptimization);
             }
 
             KTemporaryFile tmpFile;

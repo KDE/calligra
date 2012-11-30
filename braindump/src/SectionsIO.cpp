@@ -33,6 +33,7 @@
 #include <KoStore.h>
 #include <KoOdf.h>
 #include <kio/netaccess.h>
+#include <kio/copyjob.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyles.h>
@@ -166,8 +167,10 @@ bool SectionsIO::SaveContext::saveSection(SectionsIO* sectionsIO)
     delete context;
 
     KIO::NetAccess::del(fullFileNameTmpOld, 0);
-    KIO::NetAccess::move(fullFileName, fullFileNameTmpOld, 0);
-    KIO::NetAccess::move(fullFileNameTmpNew, fullFileName, 0);
+    KIO::CopyJob *mv = KIO::move(fullFileName, fullFileNameTmpOld);
+    KIO::NetAccess::synchronousRun(mv, 0);
+    mv = KIO::move(fullFileNameTmpNew, fullFileName);
+    KIO::NetAccess::synchronousRun(mv, 0);
     KIO::NetAccess::del(fullFileNameTmpOld, 0);
     return true;
 }
@@ -181,9 +184,11 @@ bool SectionsIO::SaveContext::loadSection(SectionsIO* sectionsIO, SectionsIO::Sa
     QString fullFileNameTmpOld = fullFileName + ".tmp_old";
     if(!QFileInfo(fullFileName).exists()) {
         if(QFileInfo(fullFileNameTmpNew).exists()) {
-            KIO::NetAccess::move(fullFileNameTmpNew, fullFileName);
+            KIO::CopyJob *mv = KIO::move(fullFileNameTmpNew, fullFileName);
+            KIO::NetAccess::synchronousRun(mv, 0);
         } else if(QFileInfo(fullFileNameTmpOld).exists()) {
-            KIO::NetAccess::move(fullFileNameTmpOld, fullFileName);
+            KIO::CopyJob *mv = KIO::move(fullFileNameTmpOld, fullFileName);
+            KIO::NetAccess::synchronousRun(mv, 0);
         } else {
             return false;
         }

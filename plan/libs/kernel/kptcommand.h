@@ -1642,6 +1642,18 @@ private:
     int oldvalue, newvalue;
 };
 
+class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulingGranularityCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerSchedulingGranularityCmd( ScheduleManager &sm, int value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    int oldvalue, newvalue;
+};
+
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeYearCmd : public NamedCommand
 {
 public:

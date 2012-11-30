@@ -32,8 +32,8 @@ Item
         anchors.centerIn: parent
         height: width
         width: parent.width
-        visible: root.documentController.documentHandler().currentSlideNumber > 1
+        visible: root.documentController.documentHandler.currentSlideNumber > 1
 
-        onClicked: root.documentController.documentHandler().previousSlide()
+        onClicked: root.documentController.documentHandler.previousSlide()
     }
 }

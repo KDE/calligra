@@ -21,15 +21,23 @@
 
 #ifndef KWSTATISTICSDOCKER_H
 #define KWSTATISTICSDOCKER_H
-#include <QBoxLayout>
-#include <QGridLayout>
+
+// Base classes
 #include <QDockWidget>
-#include <dockers/KWStatistics.h>
-#include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
 
+// Qt
+#include <QBoxLayout>
+#include <QGridLayout>
+
+// Calligra
+#include <KoDockFactoryBase.h>
+
+// Local
+#include <dockers/KWStatisticsWidget.h>
+
 class KoCanvasBase;
-class KWStatistics;
+
 
 class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 {
@@ -38,18 +46,16 @@ class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWStatisticsDocker();
     ~KWStatisticsDocker();
-    void initLayout();
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
 
 private:
     bool m_canvasReset;
-    KWStatistics *statisticsDock;
-    QBoxLayout *mainBox;
-    QHBoxLayout *wordsLayout,*sentencesLayout,*syllablesLayout,*spacesLayout;
-    QHBoxLayout *fleschLayout, *cjkcharsLayout,*nospacesLayout,*linesLayout;
-    int count;
+
+    // The statistics widget
+    KWStatisticsWidget *m_statisticsWidget;
+
     
 public slots:
     void ondockLocationChanged(Qt::DockWidgetArea newArea);

@@ -41,7 +41,6 @@
 #include <kcomponentdata.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kservicetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kparts/plugin.h>
 

@@ -36,14 +36,15 @@ class FileCollector
 public:
     struct FileInfo 
     {
-        FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents)
-            : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents)
+        FileInfo(QString id, QString fileName, QByteArray mimetype, QByteArray fileContents, QString label)
+            : m_id(id), m_fileName(fileName), m_mimetype(mimetype), m_fileContents(fileContents), m_label(label)
         {}
 
         QString     m_id;
         QString     m_fileName;
         QByteArray  m_mimetype;
         QByteArray  m_fileContents;
+        QString     m_label;
     };
 
     FileCollector();
@@ -53,11 +54,12 @@ public:
     QString filePrefix() const;
     void setPathPrefix(QString prefix);
     QString pathPrefix() const;
-    void setBreakIntoChapters(bool doBreak);
-    bool breakIntoChapters() const;
 
     void addContentFile(QString id, QString fileName,
                         QByteArray mimetype, QByteArray fileContents);
+
+    void addContentFile(QString id, QString fileName,
+                        QByteArray mimetype, QByteArray fileContents, QString label);
 
     QList<FileInfo*>  files() const;   // Embedded files
 

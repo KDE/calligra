@@ -79,7 +79,7 @@ void KPrAnimateMotion::init(KPrAnimationCache *animationCache, int step)
         m_animationCache = animationCache;
         QSizeF pageSize = m_animationCache->pageSize();
         QPointF endPoint = path.pointAtPercent(1);
-        animationCache->init(step + 1, shape, m_shapeAnimation->textBlockData(), "transform", QTransform().translate(endPoint.x() * pageSize.width() * animationCache->zoom(), endPoint.y() * pageSize.height() * animationCache->zoom()));
+        animationCache->init(step + 1, shape, m_shapeAnimation->textBlockUserData(), "transform", QTransform().translate(endPoint.x() * pageSize.width() * animationCache->zoom(), endPoint.y() * pageSize.height() * animationCache->zoom()));
     }
 }
 
@@ -141,5 +141,5 @@ void KPrAnimateMotion::next(int currentTime)
     KoShape *shape = m_shapeAnimation->shape();
     QTransform transform;
     transform.translate(offset.x() * m_animationCache->zoom(), offset.y() * m_animationCache->zoom());
-    m_animationCache->update(shape, m_shapeAnimation->textBlockData(), "transform", transform);
+    m_animationCache->update(shape, m_shapeAnimation->textBlockUserData(), "transform", transform);
 }

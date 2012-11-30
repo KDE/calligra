@@ -24,8 +24,6 @@ inline double drand48() {
 }
 #endif
 
-#include <KoCompositeOps.h>
-
 #include "hairy_brush.h"
 #include "trajectory.h"
 
@@ -433,7 +431,7 @@ double HairyBrush::computeMousePressure(double distance)
 }
 
 
-void HairyBrush::colorifyBristles(KisRandomConstAccessorSP acc, KoColorSpace * cs, QPointF point)
+void HairyBrush::colorifyBristles(KisRandomConstAccessorSP acc, const KoColorSpace * cs, QPointF point)
 {
     KoColor color(cs);
     int pixelSize = cs->pixelSize();

@@ -45,8 +45,8 @@
 #include <KActionCollection>
 #include <kdebug.h>
 
-const QString i18nModified = i18n("Modified");
-const QString i18nSaved = i18n("Saved");
+const KLocalizedString i18nModified = ki18n("Modified");
+const KLocalizedString i18nSaved = ki18n("Saved");
 const KLocalizedString i18nPage = ki18n("Page %1/%2");
 const KLocalizedString i18nLine = ki18n("Line %1");
 
@@ -187,7 +187,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     m_modifiedLabel = new QLabel(m_statusbar);
     m_modifiedLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     QFontMetrics modfm(m_modifiedLabel->font());
-    m_modifiedLabel->setMinimumWidth(qMax(modfm.width(i18nModified), modfm.width(i18nSaved)));
+    m_modifiedLabel->setMinimumWidth(qMax(modfm.width(i18nModified.toString()), modfm.width(i18nSaved.toString())));
     m_statusbar->addWidget(m_modifiedLabel);
     m_modifiedLabel->setVisible(document->config().statusBarShowModified());
     connect(document, SIGNAL(modified(bool)), this, SLOT(setModified(bool)));
@@ -215,9 +215,9 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     m_statusLabel = new KSqueezedTextLabel(m_statusbar);
     m_statusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     m_statusbar->addWidget(m_statusLabel, 1);
-    connect(m_statusbar, SIGNAL(messageChanged(const QString&)), this, SLOT(setText(const QString&)));
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString&)),
-            this, SLOT(setText(const QString&)));
+    connect(m_statusbar, SIGNAL(messageChanged(QString)), this, SLOT(setText(QString)));
+    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
+            this, SLOT(setText(QString)));
 
     m_zoomAction = new KAction(i18n("Zoom Controller"), this);
     m_zoomAction->setObjectName("zoom_controller");
@@ -251,7 +251,7 @@ void KWStatusBar::setText(const QString &text)
 
 void KWStatusBar::setModified(bool modified)
 {
-    m_modifiedLabel->setText(modified ? i18nModified : i18nSaved);
+    m_modifiedLabel->setText(modified ? i18nModified.toString() : i18nSaved.toString());
 }
 
 void KWStatusBar::updatePageCount()
@@ -363,8 +363,8 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
         return; // ignore tool changes in other mainWindows
 
     if (m_controller) {
-        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)),
-                this, SLOT(updateMousePosition(const QPoint&)));
+        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(QPoint)),
+                this, SLOT(updateMousePosition(QPoint)));
     }
     m_controller = canvasController->proxyObject;
     if (canvasController) {
@@ -380,8 +380,8 @@ void KWStatusBar::updateCurrentTool(KoCanvasController *canvasController)
         if (view) {
             setCurrentView(view);
         }
-        connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this,
-                SLOT(updateMousePosition(const QPoint&)));
+        connect(m_controller, SIGNAL(canvasMousePositionChanged(QPoint)), this,
+                SLOT(updateMousePosition(QPoint)));
     } else {
         m_mousePosLabel->setText(QString());
     }

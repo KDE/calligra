@@ -241,6 +241,9 @@ public:
             {}
             Log( const Node *n, int sev, const QString &msg, int ph = -1 );
             Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph = -1 );
+            Log( const Log &other );
+
+            Log &operator=( const Log &other );
 
             const Node *node;
             const Resource *resource;
@@ -667,6 +670,13 @@ public:
 
     QMap< int, QString > phaseNames() const;
 
+    /// Return a list of the supported granularities of the current scheduler
+    QList<long unsigned int> supportedGranularities() const;
+    /// Return current index of supported granularities of the selected scheduler
+    int granularity() const;
+    /// Set current index of supported granularities of the selected scheduler
+    void setGranularity( int duration );
+
 public slots:
     /// Set maximum progress. Emits signal maxProgressChanged
     void setMaxProgress( int value );
@@ -714,6 +724,9 @@ protected:
 
 
 } //namespace KPlato
+
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule *s );
+KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule &s );
 
 KPLATOKERNEL_EXPORT QDebug operator<<( QDebug dbg, const KPlato::Schedule::Log &log );
 

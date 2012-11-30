@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=AccessPoint
-Name[ca]=PuntAccés
+Name[ca]=Punt d'accés
 Name[ca@valencia]=PuntAccés
 Name[cs]=Přístupový bod
 Name[de]=AccessPoint
@@ -10,6 +10,7 @@ Name[et]=Tugijaam
 Name[fi]=Tukiasema
 Name[fr]=point d'accès
 Name[gl]=Punto de acceso
+Name[hu]=Elérési pont
 Name[it]=AccessPoint
 Name[ja]=アクセスポイント
 Name[kk]=Қатынау нүктесі

@@ -41,16 +41,6 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-// Other.  (Will be moved to a library)
-#include "WmfPainterBackend.h"
-
-#include "EmfParser.h"
-#include "EmfOutputPainterStrategy.h"
-#include "EmfOutputDebugStrategy.h"
-#include "SvmParser.h"
-#include "SvmPainterBackend.h"
-
-
 OdfParser::OdfParser()
 {
 }
@@ -65,7 +55,7 @@ KoFilter::ConversionStatus OdfParser::parseMetadata(KoStore *odfStore,
                                                     QHash<QString, QString> &metadata)
 {
     if (!odfStore->open("meta.xml")) {
-        kDebug(30517) << "Cannot open meta.xml";
+        kDebug(30503) << "Cannot open meta.xml";
         return KoFilter::FileNotFound;
     }
 
@@ -97,7 +87,7 @@ KoFilter::ConversionStatus OdfParser::parseManifest(KoStore *odfStore,
                                                     QHash<QString, QString> &manifest)
 {
     if (!odfStore->open("META-INF/manifest.xml")) {
-        kDebug(30517) << "Cannot to open manifest.xml.";
+        kDebug(30503) << "Cannot to open manifest.xml.";
         return KoFilter::FileNotFound;
     }
 
