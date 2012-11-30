@@ -243,8 +243,8 @@ Item {
         Behavior on y { id: yHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
         Behavior on x { id: xHandleAnim; enabled: false; NumberAnimation { onRunningChanged: handle.fixParent(); } }
 
-        width: 1;
-        height: 1;
+        width: 0;
+        height: 0;
         opacity: 0;
 
         property bool dragging: false;
@@ -284,21 +284,28 @@ Item {
         }
 
         Rectangle {
-            anchors.bottom: parent.top;
-            anchors.horizontalCenter: parent.horizontalCenter;
+            anchors {
+                bottom: parent.top;
+                left: parent.horizontalCenter;
+                leftMargin: -handle.anchors.leftMargin;
+            }
             color: base.panelColor;
             radius: 0
 
-            width: (Constants.GridWidth * 1) - 8
-            height: Constants.GridHeight / 4
+            width: handle.anchors.leftMargin * 2;
+            height: handle.anchors.topMargin + 1
         }
 
         Rectangle {
-            anchors.verticalCenter: parent.verticalCenter;
-            anchors.horizontalCenter: parent.horizontalCenter;
+            anchors {
+                top: parent.top;
+                topMargin: -handle.anchors.topMargin;
+                left: parent.horizontalCenter;
+                leftMargin: -handle.anchors.leftMargin;
+            }
 
-            width: (Constants.GridWidth * 1) - 8
-            height: Constants.GridHeight / 2
+            width: handle.anchors.leftMargin * 2;
+            height: handle.anchors.topMargin * 2
             color: base.panelColor
             radius: 8
 
