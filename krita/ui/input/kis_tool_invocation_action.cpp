@@ -91,8 +91,11 @@ void KisToolInvocationAction::end(QEvent *event)
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
-        } else {
+        } else if(mouseEvent) {
             inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
+        } else {
+            QMouseEvent fakeRelease(QEvent::MouseButtonRelease, QPoint(0,0), Qt::LeftButton, Qt::LeftButton, 0);
+            inputManager()->toolProxy()->mouseReleaseEvent(&fakeRelease, QPoint(0,0));
         }
 
         d->active = false;

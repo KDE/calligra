@@ -27,7 +27,7 @@
 
 struct KisShortcutMatcher::Private
 {
-    Private() : suppressAllActions(false) {}
+    Private() : suppressAllActions(false), runningShortcut(0), readyShortcut(0), gestureShortcut(0) {}
 
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
@@ -130,6 +130,9 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
 bool KisShortcutMatcher::buttonPressed(Qt::MouseButton button, QMouseEvent *event)
 {
     bool retval = false;
+
+    if(m_d->gestureShortcut)
+        return false;
 
     if (m_d->buttons.contains(button)) reset();
 
@@ -342,6 +345,12 @@ bool KisShortcutMatcher::tryRunGestureShortcut(QGestureEvent* event)
 
     if (m_d->suppressAllActions)
         return false;
+
+    if(m_d->runningShortcut) {
+        m_d->runningShortcut->action()->end(0);
+        m_d->runningShortcut->action()->deactivate();
+        m_d->runningShortcut = 0;
+    }
 
     foreach(KisGestureShortcut *shortcut, m_d->gestureShortcuts) {
         QGesture *matchedGesture = shortcut->match(event);
