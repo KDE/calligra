@@ -47,7 +47,11 @@ Page {
         view: sketchView.view;
     }
 
-    PanelBar { id: panelBar; height: parent.height; width: parent.width; }
+    PanelBar {
+        id: panelBar;
+        height: parent.height;
+        width: parent.width;
+    }
 
     NewImagePanel {
         id: newPanel;

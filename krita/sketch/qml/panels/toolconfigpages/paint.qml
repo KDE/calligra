@@ -56,6 +56,7 @@ Item {
             width: parent.width;
             visible: compositeOpModel.sizeEnabled;
             placeholder: "Size";
+            useExponentialValue: true;
             min: 1; max: 1000; decimals: 0;
             value: compositeOpModel.size;
             onValueChanged: compositeOpModel.changePaintopValue("size", value);

@@ -65,6 +65,23 @@ Item {
         }
     }
 
+    // This component is used to get around the fact that MainPage takes a very long time to initialise in some cases
+    Dialog {
+        id: baseLoadingDialog;
+        title: "Loading";
+        message: "Please wait...";
+        textAlign: Text.AlignHCenter;
+        modalBackgroundColor: "#ffffff";
+        opacity: 1;
+        visible: false;
+        function hideMe() { timer.start(); }
+        Timer {
+            id: timer;
+            interval: 500; running: false; repeat: false;
+            onTriggered: parent.visible = false;
+        }
+    }
+
     VirtualKeyboard {
         id: keyboard;
         onKeyboardVisibleChanged: if(keyboardVisible) screenScroller.ensureVisible(Settings.focusItem);

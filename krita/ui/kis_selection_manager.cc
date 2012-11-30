@@ -443,7 +443,12 @@ void KisSelectionManager::cutToNewLayer()
 void KisSelectionManager::toggleDisplaySelection()
 {
     KisCanvasDecoration* decoration = m_view->canvasBase()->decoration("selection");
-    if (decoration) decoration->toggleVisibility();
+    if (decoration) {
+        decoration->toggleVisibility();
+        m_toggleDisplaySelection->blockSignals(true);
+        m_toggleDisplaySelection->setChecked(decoration->visible());
+        m_toggleDisplaySelection->blockSignals(false);
+    }
     emit displaySelectionChanged();
 }
 

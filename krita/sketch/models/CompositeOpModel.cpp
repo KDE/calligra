@@ -25,7 +25,9 @@
 #include <kis_tool.h>
 #include <kis_canvas2.h>
 #include <input/kis_input_manager.h>
+#include <kis_node_manager.h>
 #include <kis_node.h>
+#include <kis_layer.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
 #include <kis_paintop_registry.h>
@@ -183,12 +185,15 @@ void CompositeOpModel::setView(QObject* newView)
     {
         d->view->canvasBase()->disconnect(this);
         d->view->canvasBase()->inputManager()->disconnect(this);
+        d->view->nodeManager()->disconnect(this);
     }
     d->view = qobject_cast<KisView2*>( newView );
     if(d->view)
     {
         connect(d->view->canvasBase()->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
+        connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)),
+                this, SLOT(currentNodeChanged(KisLayerSP)));
         slotToolChanged(0, 0);
         connect(this, SIGNAL(changeMirrorCenter()),
                 d->view->canvasBase()->inputManager(), SLOT(setMirrorAxis()));
@@ -432,7 +437,31 @@ void CompositeOpModel::resourceChanged(int /*key*/, const QVariant& /*v*/)
             }
             emit flowChanged();
             emit flowEnabledChanged();
+
+            QString compositeOp = preset->settings()->getString("CompositeOp");
+            // This is a little odd, but the logic here is that the opposite of an eraser is a normal composite op (so we just select over, aka normal)
+            // This means that you can switch your eraser over to being a painting tool by turning off the eraser again.
+            if(compositeOp == COMPOSITE_ERASE)
+            {
+                d->currentCompositeOpID = COMPOSITE_OVER;
+                d->eraserMode = true;
+            }
+            else
+                d->eraserMode = false;
+            emit eraserModeChanged();
+            d->updateCompositeOp(compositeOp);
         }
+    }
+}
+
+void CompositeOpModel::currentNodeChanged(KisLayerSP newNode)
+{
+    Q_UNUSED(newNode);
+    if(d->eraserMode)
+    {
+        d->eraserMode = false;
+        d->updateCompositeOp(d->prevCompositeOpID);
+        emit eraserModeChanged();
     }
 }
 

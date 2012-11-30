@@ -108,6 +108,7 @@ public:
     void zoomChanged();
     void resetDocumentPosition();
     void configChanged();
+    void refreshEverything();
 
     KisSketchView* q;
 
@@ -518,6 +519,11 @@ void KisSketchView::documentChanged()
     d->view->canvasControllerWidget()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     d->view->canvasControllerWidget()->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    // TODO Hopefully we should be able to not need this in the future, but for now
+    // it's needed to ensure the view is updated when the selection changes (we know
+    // what it changes to, not what it changes from)
+    connect(d->view->selectionManager(), SIGNAL(currentSelectionChanged()), SLOT(refreshEverything()));
+
     geometryChanged(QRectF(x(), y(), width(), height()), QRectF());
 
     d->loadedTimer->start(100);
@@ -591,6 +597,12 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& /*o
         d->prescaledProjection->notifyCanvasSizeChanged(newGeometry.size().toSize());
         d->timer->start(100);
     }
+}
+
+void KisSketchView::Private::refreshEverything()
+{
+    QRect updated = canvas->viewConverter()->viewToDocument(QRectF(0, 0, q->width(), q->height()).toRect()).toRect();
+    imageUpdated(updated);
 }
 
 void KisSketchView::Private::imageUpdated(const QRect &updated)

@@ -41,6 +41,8 @@
 #include "SketchInputContext.h"
 #include "cpuid.h"
 
+#include "stdlib.h"
+
 
 int main( int argc, char** argv )
 {
@@ -81,24 +83,26 @@ int main( int argc, char** argv )
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
     if (!env.contains("KDEHOME") ) {
-        env.insert("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation));
-        env.insert("KDESYCOCA", appdir.currentPath() + "/sycoca");
-        env.insert("XDG_DATA_DIRS", appdir.currentPath() + "/share");
-        env.insert("KDEDIR", appdir.currentPath());
-        env.insert("KDEDIRS", appdir.currentPath());
-        QString currentPath = env.value("PATH");
-        env.insert("PATH", appdir.currentPath() + "/bin" + ";"
-                   + appdir.currentPath() + "/lib" + ";"
-                   + appdir.currentPath() + "/lib"  +  "/kde4" + ";"
-                   + currentPath);
-
-        QProcess *p = new QProcess();
-        p->setProcessEnvironment(env);
-        //QMessageBox::information(0, "Arguments", fileNames.join(", "));
-        p->start(app.applicationFilePath(), fileNames);
-        // the process doesn't get deleted -- we leak it, but that's fine.
-        exit(0);
+        _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
+    if (!env.contains("KDESYCOCA")) {
+        _putenv_s("KDESYCOCA", QString(appdir.currentPath() + "/sycoca").toLocal8Bit());
+    }
+    if (!env.contains("XDG_DATA_DIRS")) {
+        _putenv_s("XDG_DATA_DIRS", QString(appdir.currentPath() + "/share").toLocal8Bit());
+    }
+    if (!env.contains("KDEDIR")) {
+
+        _putenv_s("KDEDIR", appdir.currentPath().toLocal8Bit());
+    }
+    if (!env.contains("KDEDIRS")) {
+        _putenv_s("KDEDIRS", appdir.currentPath().toLocal8Bit());
+    }
+    _putenv_s("PATH", QString(appdir.currentPath() + "/bin" + ";"
+              + appdir.currentPath() + "/lib" + ";"
+              + appdir.currentPath() + "/lib"  +  "/kde4" + ";"
+              + appdir.currentPath()).toLocal8Bit());
+
 #endif
 
     app.addLibraryPath(appdir.currentPath());

@@ -70,7 +70,7 @@ Item {
             height: font.pixelSize;
             width: parent.width;
             horizontalAlignment: Text.AlignHCenter;
-            elide: Text.ElideMiddle;
+            elide: Text.ElideRight;
             opacity: base.enabled ? 1 : 0.7;
         }
 //         Rectangle {

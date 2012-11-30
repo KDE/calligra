@@ -33,6 +33,7 @@ Panel {
             textColor: "white";
             shadow: false;
             highlight: false;
+            enabled: sketchView.selectionManager ? sketchView.selectionManager.havePixelsSelected : false;
             onClicked: if(sketchView.selectionManager) sketchView.selectionManager.deselect();
         },
         Button {
