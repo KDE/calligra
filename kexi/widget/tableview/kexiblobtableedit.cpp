@@ -39,7 +39,6 @@
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kservice.h>
-#include <karrowbutton.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kio/job.h>
