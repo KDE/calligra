@@ -374,6 +374,7 @@ install( FILES
     part/CanvasItem.h
     part/CellTool.h
     part/Doc.h
+    part/Part.h
     part/Find.h
     part/HeaderItems.h
     part/Headers.h
