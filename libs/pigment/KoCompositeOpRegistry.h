@@ -26,6 +26,8 @@
 #include <QMultiMap>
 #include <QBitArray>
 
+#include <KoID.h>
+
 #include "pigment_export.h"
 
 class KoColorSpace;
