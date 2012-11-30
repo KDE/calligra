@@ -43,9 +43,9 @@
 #include "TitlePcdataDestination.h"
 #include "UserPropsDestination.h"
 
-#include "Qt/qstack.h"
-#include "Qt/qtextcursor.h"
-#include "Qt/qurl.h"
+#include <QStack>
+#include <QTextCursor>
+#include <QUrl>
 
 namespace RtfReader
 {

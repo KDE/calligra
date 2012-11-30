@@ -239,7 +239,7 @@ void CATextDocumentHandler::findNoMatchFound()
 
 QString CATextDocumentHandler::bottomToolbarSource() const
 {
-    return "TextDocumentFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 QString CATextDocumentHandler::topToolbarSource() const
