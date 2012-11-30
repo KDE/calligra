@@ -20,6 +20,8 @@
 #include "View.h"
 
 #include <QGridLayout>
+#include <QString>
+#include <QVariant>
 #include <QToolBar>
 #include <QScrollBar>
 #include <QTimer>
@@ -217,14 +219,14 @@ void View::loadExtensions()
     for(iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
 
         KService::Ptr service = *iter;
-        int errCode = 0;
+        QString error;
         KParts::Plugin* plugin =
-            KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
+            service->createInstance<KParts::Plugin> (this, QVariantList(), &error);
         if(plugin) {
             insertChildClient(plugin);
         } else {
-            if(errCode == KLibLoader::ErrNoLibrary) {
-                kWarning() << " Error loading plugin was : ErrNoLibrary" << KLibLoader::self()->lastErrorMessage();
+            if(!error.isEmpty()) {
+                kWarning() << " Error loading plugin was : ErrNoLibrary" << error;
             }
         }
     }

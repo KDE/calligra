@@ -117,7 +117,7 @@ static int handleUrls(const KCmdLineArgs *args)
         foreach (KService::Ptr service, mimeServices) {
             //kDebug() << "-" << service->name() << service->property("X-DBUS-ServiceName", QVariant::String);
             kDebug() << "-" << service->name() << service->hasServiceType("Calligra/Application")
-                << service->hasMimeType(mimetype.data());
+                << service->hasMimeType(mimetype->name());
             //QVariant isCalligraApp = service->property("X-Calligra-App", QVariant::Bool);
             /*if (isCalligraApp.isValid() && isCalligraApp.toBool()) {
                 kDebug() << "FOUND:" << service->name();
