@@ -114,6 +114,11 @@ void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, 
     const KoDocumentRdf *rdf = obj->documentRdf();
     Q_ASSERT(rdf);
     Q_ASSERT(editor);
+    QString data = templateString();
+    // hack: enable 3rd-party to have items with stylesheets which do not change the text at all
+    if (data == QLatin1String("__KORDF_DO_NOT_CHANGE_TEXT")) {
+        return;
+    }
     QPair<int, int> p;
     if (xmlid.size()) {
         p = rdf->findExtent(xmlid);
@@ -138,7 +143,6 @@ void KoSemanticStylesheet::format(hKoRdfSemanticItem obj, KoTextEditor *editor, 
     editor->setPosition(startpos, QTextCursor::MoveAnchor);
     kDebug(30015) << "formating start:" << startpos << " end:" << endpos;
     kDebug(30015) << "semantic item oldText:" << oldText;
-    QString data = templateString();
     QMap<QString, QString> m;
     m["%NAME%"] = obj->name();
     obj->setupStylesheetReplacementMapping(m);

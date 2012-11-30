@@ -343,7 +343,12 @@ public:
 
 protected:
     /**
-     * Create a new system stylesheet
+     * Create a new system stylesheet.
+     * If the content reflecting this item is not just text, but e.g.
+     * a chart, it has to be updated manually, as the stylesheets
+     * currently just insert text, by the template string. In this case
+     * use "__KORDF_DO_NOT_CHANGE_TEXT" as the template string, to
+     * block any changes to the text the item is connected to.
      */
     hKoSemanticStylesheet createSystemStylesheet(const QString &uuid, const QString &name, const QString &templateString) const;
 
