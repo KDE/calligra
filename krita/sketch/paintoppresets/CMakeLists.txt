@@ -29,6 +29,8 @@ Pencil_HB.kpp
 Pencil_shade_texture.kpp
 Rake_paint_dry_bristle.kpp
 Rake_smudge.kpp
+Shape_fill.kpp
+Shape_smooth.kpp
 Sketch_fur.kpp
 Sketch_ink_dirty.kpp
 Sketch_ink_dirty_xl.kpp
