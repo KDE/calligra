@@ -53,13 +53,11 @@ KPrPageLayoutWidget::KPrPageLayoutWidget( QWidget* parent)
     m_layoutsView->setResizeMode( QListView::Adjust );
     m_layoutsView->setMovement( QListView::Static );
     m_layoutsView->setSelectionRectVisible(false);
-    //m_layoutsView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( m_layoutsView );
     layout->setMargin(0);
     setLayout( layout );
-    //setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 void KPrPageLayoutWidget::setView( KPrView* view )
