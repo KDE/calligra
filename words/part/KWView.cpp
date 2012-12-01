@@ -946,9 +946,9 @@ void KWView::offsetInDocumentMoved(int yOffset)
         setCurrentPage(page);
 }
 
+#ifdef SHOULD_BUILD_RDF
 void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
 {
-#ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {
@@ -958,8 +958,8 @@ void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QStrin
     kDebug(30015) << "reflowing rdf semantic item.";
     KoRdfSemanticItemViewSite vs(item, xmlid);
     vs.reflowUsingCurrentStylesheet(editor);
-#endif
 }
+#endif
 
 void KWView::findMatchFound(KoFindMatch match)
 {

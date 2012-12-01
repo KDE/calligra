@@ -27,6 +27,7 @@
 #include <KoZoomHandler.h>
 
 #include <part/Doc.h>
+#include <part/Part.h>
 #include <part/CanvasItem.h>
 #include <part/HeaderItems.h>
 #include <Sheet.h>
@@ -36,7 +37,11 @@ int main(int argc, char** argv)
     QApplication qapp(argc, argv);
     KComponentData cd("graphicsview-test");
 
-    Calligra::Sheets::Doc doc;
+    Calligra::Sheets::Part part;
+    Calligra::Sheets::Doc doc(&part);
+    part.setDocument(&doc);
+
+
     bool ok = doc.openUrl(KUrl("/home/marijn/kde/src/calligra/docs/oos_AMSAT-IARU_Link_Model.ods"));
     if (!ok) {
         qDebug() << "failed to load";
