@@ -191,11 +191,6 @@ void KoList::setStyle(KoListStyle *style)
         if (properties.listId())
             d->textListIds[i] = properties.listId();
         QTextListFormat format;
-        kDebug();
-        kDebug();
-        kDebug() << "default format indent: " << format.property(4160);
-        kDebug();
-        kDebug();
         properties.applyStyle(format);
         textList->setFormat(format);
         d->invalidate(textList->item(0));
