@@ -224,6 +224,10 @@ public:
      If \a window is 0, the current one will be closed. */
     virtual tristate closeWindow(KexiWindow *window) = 0;
 
+    /*! Find window for a given \a item.
+     \return 0 if no windows found. */
+    virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
+
     /*! Displays a window for entering object's name and title.
      Used on new object saving.
      \return true on successul closing or cancelled on cancel returned.

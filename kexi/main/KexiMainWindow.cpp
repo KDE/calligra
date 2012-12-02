@@ -3232,6 +3232,11 @@ QWidget* KexiMainWindow::findWindow(QWidget *w)
     return w;
 }
 
+KexiWindow* KexiMainWindow::openedWindowFor(const KexiPart::Item* item) 
+{
+    return item ? d->openedWindowFor(item->identifier()) : 0;
+}
+
 bool KexiMainWindow::acceptsSharedActions(QObject *w)
 {
     return w->inherits("KexiWindow") || w->inherits("KexiView");
@@ -3297,7 +3302,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         return 0;
     }
 #else
-    KexiWindow *window = d->openedWindowFor(item);
+    KexiWindow *window = openedWindowFor(item);
 #endif
     openingCancelled = false;
 
@@ -3431,7 +3436,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
         return 0;
     }
 #else
-    KexiWindow *window = d->openedWindowFor(item);
+    KexiWindow *window = openedWindowFor(item);
 #endif
     openingCancelled = false;
     if (window) {
@@ -3464,7 +3469,7 @@ tristate KexiMainWindow::closeObject(KexiPart::Item* item)
     else if (pendingType == Private::WindowOpeningJob)
         return cancelled;
 #else
-    KexiWindow *window = d->openedWindowFor(item);
+    KexiWindow *window = openedWindowFor(item);
 #endif
     if (!window)
         return cancelled;
@@ -3544,7 +3549,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
         return cancelled;
     }
 #else
-    KexiWindow *window = d->openedWindowFor(item);
+    KexiWindow *window = openedWindowFor(item);
 #endif
 
     if (window) {//close existing window
@@ -3586,7 +3591,7 @@ void KexiMainWindow::renameObject(KexiPart::Item *item, const QString& _newName,
         return;
     }
 
-    KexiWindow *window = d->openedWindowFor(item);
+    KexiWindow *window = openedWindowFor(item);
     if (window) {
         QString msg = i18n("<para>Before renaming object <resource>%1</resource> it should be closed.</para>"
                            "<para>Do you want to close it?</para>")
@@ -3634,7 +3639,7 @@ void KexiMainWindow::slotObjectRenamed(const KexiPart::Item &item, const QString
     if (pendingType != Private::NoJob)
         return;
 #else
-    KexiWindow *window = d->openedWindowFor(&item);
+    KexiWindow *window = openedWindowFor(&item);
 #endif
     if (!window)
         return;
@@ -4204,7 +4209,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
     if (pendingType != Private::NoJob)
         return cancelled;
 #else
-    KexiWindow *window = d->openedWindowFor(item);
+    KexiWindow *window = openedWindowFor(item);
 #endif
 
     if (window) {
