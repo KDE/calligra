@@ -1653,10 +1653,6 @@ public:
         return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;
     }
 #else
-    KexiWindow *openedWindowFor(const KexiPart::Item* item) {
-        return openedWindowFor(item->identifier());
-    }
-
     KexiWindow *openedWindowFor(int identifier) {
 //todo(threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;
