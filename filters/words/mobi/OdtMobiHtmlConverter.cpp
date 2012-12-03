@@ -60,10 +60,10 @@ OdtMobiHtmlConverter::OdtMobiHtmlConverter()
     : m_currentChapter(1),
       m_optionsTag(false),
       m_boldTag(false),
-      m_italicTag(false),
       m_underlineTag(false),
-      m_fontColorTag(false),
-      m_spanTag(false)
+      m_italicTag(false),
+      m_spanTag(false),
+      m_fontColorTag(false)
 {
     qDeleteAll(m_styles);
 }
