@@ -53,6 +53,7 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
+#include <KoStrokeConfigWidget.h>
 
 #include <KoIcon.h>
 
@@ -1108,9 +1109,13 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
-    QWidget* snapWidget = canvas()->createSnapGuideConfigWidget();
+    QWidget *snapWidget = canvas()->createSnapGuideConfigWidget();
     snapWidget->setWindowTitle(i18n("Snapping"));
     widgets.append(snapWidget);
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Stroke"));
+    strokeWidget->setCanvas(canvas());
+    widgets.append(strokeWidget);
     return widgets;
 }
 

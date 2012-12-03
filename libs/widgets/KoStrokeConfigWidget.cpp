@@ -59,13 +59,27 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoMarker.h>
+#include <KoShapeStroke.h>
 #include <KoPathShape.h>
+#include <KoMarkerCollection.h>
+#include <KoPathShapeMarkerCommand.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoCanvasResourceManager.h>
+#include <KoDocumentResourceManager.h>
+#include <KoToolManager.h>
+#include <KoSelection.h>
+#include <KoShapeController.h>
+#include <KoShapeManager.h>
+#include <KoShapeStrokeCommand.h>
+#include <KoShapeStrokeModel.h>
 
 
 class KoStrokeConfigWidget::Private
 {
 public:
     Private()
+        : canvas(0)
     {
     }
 
@@ -79,12 +93,15 @@ public:
 
     QSpacerItem *spacer;
     QGridLayout *layout;
+
+    KoCanvasBase *canvas;
 };
 
 KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     : QWidget(parent)
     , d(new Private())
 {
+    setObjectName("Stroke widget");
     QGridLayout *mainLayout = new QGridLayout(this);
 
     // Line style
@@ -190,13 +207,13 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->layout = mainLayout;
 
     // Make the signals visible on the outside of this widget.
-    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentIndexChanged()));
-    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SIGNAL(widthChanged()));
-    connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SIGNAL(capChanged(int)));
-    connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SIGNAL(joinChanged(int)));
-    connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SIGNAL(miterLimitChanged()));
-    connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentStartMarkerChanged()));
-    connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentEndMarkerChanged()));
+    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
+    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
+    connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
+    connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
+    connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
+    connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(startMarkerChanged()));
+    connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(endMarkerChanged()));
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()
@@ -241,16 +258,28 @@ KoMarker *KoStrokeConfigWidget::endMarker() const
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateControls(KoShapeStroke &stroke, KoMarker *startMarker, KoMarker *endMarker)
+void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker)
 {
     blockChildSignals(true);
 
-    d->capGroup->button(stroke.capStyle())->setChecked(true);
-    d->joinGroup->button(stroke.joinStyle())->setChecked(true);
-    d->lineWidth->changeValue(stroke.lineWidth());
-    d->miterLimit->changeValue(stroke.miterLimit());
-    d->lineStyle->setLineStyle(stroke.lineStyle(), stroke.lineDashes());
-    d->miterLimit->setEnabled(stroke.joinStyle() == Qt::MiterJoin);
+    const KoShapeStroke *lineStroke = dynamic_cast<const KoShapeStroke*>( stroke );
+    if (lineStroke) {
+        d->lineWidth->changeValue(lineStroke->lineWidth());
+        d->capGroup->button(lineStroke->capStyle())->setChecked(true);
+        d->joinGroup->button(lineStroke->joinStyle())->setChecked(true);
+        d->miterLimit->changeValue(lineStroke->miterLimit());
+        d->miterLimit->setEnabled(lineStroke->joinStyle() == Qt::MiterJoin);
+        d->lineStyle->setLineStyle(lineStroke->lineStyle(), lineStroke->lineDashes());
+    }
+    else {
+        d->lineWidth->changeValue(0.0);
+        d->capGroup->button(Qt::FlatCap)->setChecked(true);
+        d->joinGroup->button(Qt::MiterJoin)->setChecked(true);
+        d->miterLimit->changeValue(0.0);
+        d->miterLimit->setEnabled(true);
+        d->lineStyle->setLineStyle(Qt::NoPen, QVector<qreal>());
+   }
+
     d->startMarkerSelector->setMarker(startMarker);
     d->endMarkerSelector->setMarker(endMarker);
 
@@ -302,5 +331,122 @@ void KoStrokeConfigWidget::locationChanged(Qt::DockWidgetArea area)
     d->layout->invalidate();
 }
 
+//------------------------
+void KoStrokeConfigWidget::applyChanges()
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+
+    //FIXME d->canvas->resourceManager()->setActiveStroke( d->stroke );
+
+    if (!selection || !selection->count())
+        return;
+
+    KoShapeStroke *newStroke = new KoShapeStroke();
+    KoShapeStroke *oldStroke = dynamic_cast<KoShapeStroke*>( selection->firstSelectedShape()->stroke() );
+    if (oldStroke) {
+        newStroke->setColor(oldStroke->color());
+        newStroke->setLineBrush(oldStroke->lineBrush());
+    }
+    newStroke->setLineWidth(lineWidth());
+    newStroke->setCapStyle(static_cast<Qt::PenCapStyle>(d->capGroup->checkedId()));
+    newStroke->setJoinStyle(static_cast<Qt::PenJoinStyle>(d->joinGroup->checkedId()));
+    newStroke->setMiterLimit(miterLimit());
+    newStroke->setLineStyle(lineStyle(), lineDashes());
+
+    KoShapeStrokeCommand *cmd = new KoShapeStrokeCommand(selection->selectedShapes(), newStroke);
+    canvasController->canvas()->addCommand(cmd);
+}
+
+void KoStrokeConfigWidget::applyMarkerChanges(KoMarkerData::MarkerPosition position)
+{
+    KoMarker *marker = 0;
+    if (position == KoMarkerData::MarkerStart) {
+        marker = startMarker();
+    }
+    else if (position == KoMarkerData::MarkerEnd) {
+        marker = endMarker();
+    }
+
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+
+    if (! selection || !selection->count()) {
+        return;
+    }
+
+    QList<KoShape*> shapeList = selection->selectedShapes();
+    QList<KoPathShape*> pathShapeList;
+    for (QList<KoShape*>::iterator itShape = shapeList.begin(); itShape != shapeList.end(); ++itShape) {
+        KoPathShape* pathShape = dynamic_cast<KoPathShape*>(*itShape);
+        if (pathShape) {
+            pathShapeList << pathShape;
+        }
+    }
+
+    if(pathShapeList.size()){
+        KoPathShapeMarkerCommand* cmdMarker = new KoPathShapeMarkerCommand(pathShapeList, marker, position);
+        canvasController->canvas()->addCommand(cmdMarker);
+    }
+}
+
+void KoStrokeConfigWidget::startMarkerChanged()
+{
+    applyMarkerChanges(KoMarkerData::MarkerStart);
+}
+
+void KoStrokeConfigWidget::endMarkerChanged()
+{
+    applyMarkerChanges(KoMarkerData::MarkerEnd);
+}
+// ----------------------------------------------------------------
+
+
+
+void KoStrokeConfigWidget::selectionChanged()
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoShape * shape = selection->firstSelectedShape();
+    if (shape) {
+        KoPathShape *pathShape = dynamic_cast<KoPathShape *>(shape);
+        if (pathShape) {
+            updateControls(shape->stroke(), pathShape->marker(KoMarkerData::MarkerStart),
+                                             pathShape->marker(KoMarkerData::MarkerEnd));
+        }
+        else {
+            updateControls(shape->stroke(), 0 ,0);
+        }
+    }
+}
+
+void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
+{
+    if (canvas) {
+        connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+                this, SLOT(selectionChanged()));
+        connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+                this, SLOT(resourceChanged(int, const QVariant &)));
+        setUnit(canvas->unit());
+    }
+
+    d->canvas = canvas;
+    KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();
+    if (resourceManager) {
+        KoMarkerCollection *collection = resourceManager->resource(KoDocumentResourceManager::MarkerCollection).value<KoMarkerCollection*>();
+        if (collection) {
+            updateMarkers(collection->markers());
+        }
+    }
+}
+
+void KoStrokeConfigWidget::resourceChanged(int key, const QVariant &value)
+{
+    switch (key) {
+    case KoCanvasResourceManager::Unit:
+        setUnit(value.value<KoUnit>());
+        break;
+    }
+}
 
 #include <KoStrokeConfigWidget.moc>

@@ -29,10 +29,8 @@
 #ifndef STROKEDOCKER_H
 #define STROKEDOCKER_H
 
-#include <KoUnit.h>
 #include <KoCanvasObserverBase.h>
 #include <QDockWidget>
-#include <KoMarkerData.h>
 
 class KoShapeStrokeModel;
 
@@ -46,41 +44,10 @@ public:
     StrokeDocker();
     virtual ~StrokeDocker();
 
-public slots:
-    /// Sets the stroke to edit the properties of
-    virtual void setStroke( const KoShapeStrokeModel * );
-    /// Sets the unit to be used for the line width editing
-    virtual void setUnit( KoUnit unit );
-
 private slots:
-    /// line style has changed
-    void styleChanged();
-    /// line width has changed
-    void widthChanged();
-    /// line cap has changed
-    void slotCapChanged( int ID );
-    /// line join has changed
-    void slotJoinChanged( int ID );
-    /// miter limit has changed
-    void miterLimitChanged();
-    /// start marker has changed
-    void startMarkerChanged();
-    /// end marker has changed
-    void endMarkerChanged();
-
-    void resourceChanged(int key, const QVariant & value);
     void locationChanged(Qt::DockWidgetArea area);
 
-    /// selection has changed
-    void selectionChanged();
-
 private:
-    /// apply line changes to the selected shape
-    void applyChanges();
-
-    /// apply marker changes to the selected shape
-    void applyMarkerChanges(KoMarkerData::MarkerPosition position);
-
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
     virtual void unsetCanvas();
