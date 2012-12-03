@@ -21,35 +21,54 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
+    onConfigurationChanged: {
+        var exposureVal = configuration.readProperty("exposure");
+        exposure.value = (exposureVal === undefined) ? 0.5 : exposureVal;
+        var modeVal = configuration.readProperty("type");
+        modeChoice.currentIndex = (modeVal === undefined) ? 1 : modeVal;
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: exposure;
             width: parent.width;
-            height: Constants.GridHeight;
-        }
-        Text {
-            width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
+            placeholder: "Exposure";
+            min: 0; max: 1; decimals: 2;
+            onValueChanged: setProp("exposure", value);
         }
         Item {
             width: parent.width;
-            height: Constants.GridHeight / 2;
+            height: Constants.DefaultMargin
         }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+        Label {
+            anchors.leftMargin: Constants.DefaultMargin;
+            text: "Mode:"
+        }
+        ExpandingListView {
+            id: modeChoice
+            width: parent.width;
+            model: ListModel {
+                ListElement {
+                    text: "Shadows"
+                }
+                ListElement {
+                    text: "Midtones"
+                }
+                ListElement {
+                    text: "Highlights"
+                }
+            }
+            onCurrentIndexChanged: setProp("type", currentIndex);
         }
     }
 }
