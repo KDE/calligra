@@ -17,39 +17,107 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
+    onConfigurationChanged: {
+        horizRadius.value = configuration.readProperty("halfWidth");
+        vertRadius.value = configuration.readProperty("halfHeight");
+        var lockAspectVal = configuration.readProperty("lockAspect");
+        lockAspect.checked = (lockAspectVal === undefined) ? true : lockAspectVal;
+        var rotateVal = configuration.readProperty("rotate");
+        rotate.value = (rotateVal === undefined || rotateVal === null) ? 1 : configuration.readProperty("rotate");
+        strength.value = configuration.readProperty("strength");
+        blurShape.currentIndex = configuration.readProperty("shape");
+    }
     Column {
         anchors.fill: parent;
+        RangeInput {
+            id: horizRadius;
+            width: parent.width;
+            placeholder: "Horizontal Radius";
+            min: 1; max: 100; decimals: 0;
+            value: 1;
+            onValueChanged: {
+                if(lockAspect.checked && vertRadius.value != value) {
+                    vertRadius.value = value;
+                }
+                setProp("halfWidth", value);
+            }
+        }
+        RangeInput {
+            id: vertRadius;
+            width: parent.width;
+            placeholder: "Vertical Radius";
+            min: 1; max: 100; decimals: 0;
+            value: 1;
+            onValueChanged: {
+                if(lockAspect.checked && horizRadius.value != value) {
+                    horizRadius.value = value;
+                }
+                setProp("halfHeight", value);
+            }
+        }
+        CheckBox {
+            id: lockAspect
+            width: parent.width;
+            text: "Lock aspect ratio";
+            checked: false;
+            onCheckedChanged: {
+                if(checked && vertRadius.value != horizRadius.value) {
+                    vertRadius.value = horizRadius.value;
+                }
+                setProp("lockAspect", checked);
+            }
+        }
+        RangeInput {
+            id: rotate;
+            width: parent.width;
+            placeholder: "Angle";
+            min: 0; max: 360; decimals: 0;
+            value: 1;
+            onValueChanged: setProp("rotate", value);
+        }
+        RangeInput {
+            id: strength;
+            width: parent.width;
+            placeholder: "Strength";
+            min: 0; max: 100; decimals: 0;
+            value: 100;
+            onValueChanged: setProp("strength", value);
+        }
         Item {
             width: parent.width;
-            height: Constants.GridHeight;
+            height: Constants.DefaultMargin
         }
-        Text {
+        Label {
+            anchors.leftMargin: Constants.DefaultMargin;
+            text: "Shape:"
+        }
+        ExpandingListView {
+            id: blurShape
             width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
-        }
-        Item {
-            width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            model: ListModel {
+                ListElement {
+                    text: "Circle"
+                }
+                ListElement {
+                    text: "Rectangle"
+                }
+            }
+            onCurrentIndexChanged: setProp("shape", currentIndex);
         }
     }
 }
