@@ -6,8 +6,8 @@ set(exportMobi_PART_SRCS
   MobiHeaderGenerator.cpp
   MobiFile.cpp
   PalmDocCompression.cpp
+  OdtMobiHtmlConverter.cpp
   
-  ${CMAKE_SOURCE_DIR}/filters/words/epub/OdtHtmlConverter.cpp
   ${CMAKE_SOURCE_DIR}/filters/words/epub/FileCollector.cpp
   ${CMAKE_SOURCE_DIR}/filters/words/epub/OdfParser.cpp
 )

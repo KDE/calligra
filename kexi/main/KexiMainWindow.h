@@ -279,6 +279,9 @@ public slots:
     virtual tristate saveObject(KexiWindow *window,
                                 const QString& messageWhenAskingForName = QString(), bool dontAsk = false);
 
+    /*! Implemented for KexiMainWindowIface. */
+    virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
+
     /*! Implemented for KexiMainWindow */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part,
                                       bool allowOverwriting, bool *overwriteNeeded,
@@ -512,7 +515,7 @@ protected:
 protected slots:
 
     tristate createNewProject(KexiProjectData* projectData);
-    
+
     /*! Called once after timeout (after ctors are executed). */
     void slotAutoOpenObjectsLater();
 
