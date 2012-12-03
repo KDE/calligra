@@ -21,35 +21,49 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
+    onConfigurationChanged: {
+        var hueVal = configuration.readProperty("h");
+        hue.value = (hueVal === undefined) ? 0 : hueVal;
+        var saturationVal = configuration.readProperty("s");
+        saturation.value = (saturationVal === undefined) ? 0 : saturationVal;
+        var valVal = configuration.readProperty("v");
+        val.value = (valVal === undefined) ? 0 : valVal;
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: hue;
             width: parent.width;
-            height: Constants.GridHeight;
+            placeholder: "Hue";
+            min: -180; max: 180; decimals: 0;
+            value: 1
+            onValueChanged: setProp("h", value);
         }
-        Text {
+        RangeInput {
+            id: saturation;
             width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
+            placeholder: "Saturation";
+            min: -100; max: 100; decimals: 0;
+            value: 1
+            onValueChanged: setProp("s", value);
         }
-        Item {
+        RangeInput {
+            id: val;
             width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            placeholder: "Value";
+            min: -100; max: 100; decimals: 0;
+            value: 1
+            onValueChanged: setProp("v", value);
         }
     }
 }
