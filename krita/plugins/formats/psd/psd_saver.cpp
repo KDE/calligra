@@ -123,7 +123,6 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     }
 
     // HEADER
-
     PSDHeader header;
     header.signature = "8BPS";
     header.version = 1;
@@ -133,6 +132,10 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 
     QPair<PSDColorMode, quint16> colordef = colormodelid_to_psd_colormode(m_image->colorSpace()->colorModelId().id(),
                                                                           m_image->colorSpace()->colorDepthId().id());
+
+    if (colordef.first == UNKNOWN || colordef.second == 0) {
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
     header.colormode = colordef.first;
     header.channelDepth = colordef.second;
 
@@ -144,7 +147,6 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
     }
 
     // COLORMODE BlOCK
-
     PSDColorModeBlock colorModeBlock(header.colormode);
     // XXX: check for annotations that contain the duotone spec
     dbgFile << "colormode block" << f.pos();
@@ -176,7 +178,7 @@ KisImageBuilder_Result PSDSaver::buildFile(const KUrl& uri)
 
     }
 
-    // Add other blocks...
+    // XXX: Add other blocks...
 
     dbgFile << "resource section" << f.pos();
     if (!resourceSection.write(&f)) {

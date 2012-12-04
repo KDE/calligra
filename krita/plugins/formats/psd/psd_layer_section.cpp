@@ -298,10 +298,10 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         // keep to the max of photoshop's capabilities
         if (rc.width() > 30000) rc.setWidth(30000);
         if (rc.height() > 30000) rc.setHeight(30000);
-        layerRecord->top = rc.top();
-        layerRecord->left = rc.left();
-        layerRecord->bottom = rc.bottom();
-        layerRecord->right = rc.right();
+        layerRecord->top = rc.y();
+        layerRecord->left = rc.x();
+        layerRecord->bottom = rc.y() + rc.height();
+        layerRecord->right = rc.x() + rc.width();
         layerRecord->nChannels = node->projection()->colorSpace()->colorChannelCount();
 
         // XXX: masks should be saved as channels as well, with id -2
@@ -309,7 +309,7 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
         info->channelId = -1; // For the alpha channel, which we always have in Krita, and should be saved first in
         layerRecord->channelInfoRecords << info;
 
-        // the rest is in display order: rgb, cmyk, lab
+        // the rest is in display order: rgb, cmyk, lab...
         for (int i = 0; i < layerRecord->nChannels; ++i) {
             info = new ChannelInfo;
             info->channelId = i; // 0 for red, 1 = green, etc
@@ -352,6 +352,17 @@ bool PSDLayerSection::write(QIODevice* io, KisNodeSP rootLayer)
     quint32 layerInfoSize = eof_pos - layerInfoPos - sizeof(qint32);
     dbgFile << "Layer Info Section length" << layerInfoSize << "at"  << io->pos();
     psdwrite(io, layerInfoSize);
+
+    io->seek(eof_pos);
+
+    // Write the global layer mask info -- which is empty
+    psdwrite(io, (quint32)0);
+
+    // Write the final size of the block
+    dbgFile << "Final io pos after writing layer pixel data" << io->pos();
+    eof_pos = io->pos();
+
+    io->seek(layerInfoPos);
 
     // length of the layer and mask info section, rounded up to a multiple of two
     io->seek(layerMaskPos);

@@ -228,7 +228,7 @@ bool PSDImageData::write(QIODevice *io, KisPaintDeviceSP dev)
 
     quint64 channelLengthPos = io->pos();
     // write zero's for the channel lengths section
-    for(uint i = 0; i < dev->colorSpace()->channelCount() * rc.height(); ++i) {
+    for (uint i = 0; i < dev->colorSpace()->channelCount() * rc.height(); ++i) {
         psdwrite(io, (quint16)0);
     }
     // here the actual channel data starts

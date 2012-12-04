@@ -90,7 +90,7 @@ QString psd_blendmode_to_composite_op(const QString& blendmode)
     if (blendmode == "hMix") return COMPOSITE_HARD_MIX; //hard mix
     if (blendmode == "pass") return COMPOSITE_PASS_THROUGH; //pass through
 
-    return COMPOSITE_UNDEF;
+    return COMPOSITE_OVER;
 }
 
 QString composite_op_to_psd_blendmode(const QString& compositeop)
