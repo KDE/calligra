@@ -21,35 +21,30 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
+    onConfigurationChanged: {
+        depth.value = configuration.readProperty("depth");
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: depth;
             width: parent.width;
-            height: Constants.GridHeight;
-        }
-        Text {
-            width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
-        }
-        Item {
-            width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            placeholder: "Depth";
+            useExponentialValue: true;
+            min: 10; max: 300; decimals: 0;
+            onValueChanged: {
+                setProp("depth", value);
+            }
         }
     }
 }
