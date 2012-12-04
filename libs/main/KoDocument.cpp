@@ -1240,7 +1240,7 @@ bool KoDocument::openFile()
             switch (status) {
             case KoFilter::OK: break;
             case KoFilter::FilterCreationError:
-                KMessageBox::error(0, i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot Windows. Krita Sketch will now close.", prettyPathOrUrl()));
+                KMessageBox::error(0, i18n("Could not open\n%1.\nThe filter plugins have not been properly registered. Please reboot. Krita Sketch will now close.", prettyPathOrUrl()));
                 qApp->exit(0);
             case KoFilter::CreationError:
                 msg = i18n("Could not create the output document"); break;

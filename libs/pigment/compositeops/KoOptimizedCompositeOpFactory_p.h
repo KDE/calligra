@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,36 +15,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PSD_COLORMODE_BLOCK_H
-#define PSD_COLORMODE_BLOCK_H
 
-#include "psd.h"
-#include "psd_header.h"
+#ifndef KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H
+#define KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H
 
-#include <QByteArray>
-#include <QColor>
+#include "pigment_export.h"
 
-class PSDColorModeBlock
+class KoCompositeOp;
+class KoColorSpace;
+
+/**
+ * The creation of the legacy composite ops is moved to a separate
+ * object file. Putting all the implementations together makes the
+ * system run 1.4 times slower. I do not know the reason of it,
+ * looks like some layout/code locality problem (DK)
+ */
+
+class PIGMENTCMS_EXPORT KoOptimizedCompositeOpFactoryPrivate
 {
 public:
-
-    PSDColorModeBlock(PSDColorMode colormode);
-
-    bool read(QIODevice* io);
-    bool write(QIODevice* io);
-    bool valid();
-
-    quint32 blocksize;
-    PSDColorMode colormode;
-    QByteArray data;
-
-    QString error;
-
-    /* to store rgb colormap values of indexed image
-    */
-    QList<QColor> colormap;
-    QByteArray duotoneSpecification; // Krita should save this in an annotation and write it back, if present
-
+    static KoCompositeOp* createLegacyAlphaDarkenOp32(const KoColorSpace *cs);
+    static KoCompositeOp* createLegacyOverOp32(const KoColorSpace *cs);
 };
 
-#endif // PSD_COLORMODE_BLOCK_H
+#endif /* KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H */

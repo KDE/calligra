@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,36 +15,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef PSD_COLORMODE_BLOCK_H
-#define PSD_COLORMODE_BLOCK_H
 
-#include "psd.h"
-#include "psd_header.h"
+#include "KoOptimizedCompositeOpFactory_p.h"
 
-#include <QByteArray>
-#include <QColor>
+#include "KoColorSpaceTraits.h"
+#include "KoCompositeOpAlphaDarken.h"
+#include "KoCompositeOpOver.h"
 
-class PSDColorModeBlock
+
+KoCompositeOp* KoOptimizedCompositeOpFactoryPrivate::createLegacyAlphaDarkenOp32(const KoColorSpace *cs)
 {
-public:
+    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
+}
 
-    PSDColorModeBlock(PSDColorMode colormode);
-
-    bool read(QIODevice* io);
-    bool write(QIODevice* io);
-    bool valid();
-
-    quint32 blocksize;
-    PSDColorMode colormode;
-    QByteArray data;
-
-    QString error;
-
-    /* to store rgb colormap values of indexed image
-    */
-    QList<QColor> colormap;
-    QByteArray duotoneSpecification; // Krita should save this in an annotation and write it back, if present
-
-};
-
-#endif // PSD_COLORMODE_BLOCK_H
+KoCompositeOp* KoOptimizedCompositeOpFactoryPrivate::createLegacyOverOp32(const KoColorSpace *cs)
+{
+    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
+}
