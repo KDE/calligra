@@ -77,6 +77,17 @@ Page {
 
     GridView {
         id: view;
+        function startNavigation(path) {
+            navigating = true;
+            model.path = path;
+            navigationTimer.start();
+        }
+        Timer {
+            id: navigationTimer;
+            interval: 150; running: false; repeat: false;
+            onTriggered: view.navigating = false;
+        }
+        property bool navigating: false;
         anchors {
             top: header.bottom;
             left: parent.left;
@@ -113,8 +124,11 @@ Page {
             description: model.fileType !== "inode/directory" ? model.date : "";
 
             onClicked: {
+                if( GridView.view.navigating ) {
+                    return;
+                }
                 if( model.fileType === "inode/directory" ) {
-                    GridView.view.model.path = model.path;
+                    view.startNavigation(model.path);
                 } else {
                     base.itemClicked();
                     pageStack.pop();
