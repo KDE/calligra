@@ -122,26 +122,36 @@ QObject* Constants::theme() const
 
 qreal Constants::defaultMargin() const
 {
+    if(m_gridHeight > m_gridWidth)
+        return 0.1 * m_gridWidth;
     return 0.1 * m_gridHeight;
 }
 
 qreal Constants::smallFontSize() const
 {
+    if(m_gridHeight > m_gridWidth)
+        return 0.2 * m_gridWidth;
     return 0.2 * m_gridHeight;
 }
 
 qreal Constants::defaultFontSize() const
 {
+    if(m_gridHeight > m_gridWidth)
+        return 0.3 * m_gridWidth;
     return 0.3 * m_gridHeight;
 }
 
 qreal Constants::largeFontSize() const
 {
+    if(m_gridHeight > m_gridWidth)
+        return 0.4 * m_gridWidth;
     return 0.4 * m_gridHeight;
 }
 
 qreal Constants::hugeFontSize() const
 {
+    if(m_gridHeight > m_gridWidth)
+        return 0.9 * m_gridWidth;
     return 0.9 * m_gridHeight;
 }
 
