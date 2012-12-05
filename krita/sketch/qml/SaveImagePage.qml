@@ -157,6 +157,7 @@ Page {
                     model: ListModel {
                         ListElement { text: "Krita Image"; type: "kra"; mime: "application/x-krita"; }
                         ListElement { text: "OpenRaster Image"; type: "ora"; mime: "image/openraster"; }
+                        ListElement { text: "PhotoShop Image"; type: "psd"; mime: "image/vnd.adobe.photoshop"; }
                         ListElement { text: "PNG Image"; type: "png"; mime: "image/png"; }
                         ListElement { text: "BMP Image"; type: "bmp"; mime: "image/bmp"; }
                         ListElement { text: "JPEG Image"; type: "jpg"; mime: "image/jpeg"; }
