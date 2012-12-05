@@ -45,7 +45,7 @@ Panel {
             }
         },
         Item {
-            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 2)
+            width: base.width - Constants.DefaultMargin - (Constants.GridHeight * 2)
             height: Constants.GridHeight;
         },
         Button {

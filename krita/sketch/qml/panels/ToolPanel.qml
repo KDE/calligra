@@ -127,7 +127,7 @@ Panel {
             }
         },
         Item {
-            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
+            width: base.width - Constants.DefaultMargin - (Constants.GridHeight * 3)
             height: Constants.GridHeight;
         },
         Button {

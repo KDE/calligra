@@ -20,6 +20,7 @@ import QtQuick 1.1
 import "../components"
 
 Panel {
+    id: base;
     name: "Select";
     panelColor: Constants.Theme.QuaternaryColor;
 
@@ -48,7 +49,7 @@ Panel {
             onClicked: sketchView.selectionManager.reselect();
         },
         Item {
-            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3)
+            width: base.width - Constants.DefaultMargin - (Constants.GridHeight * 3)
             height: Constants.GridHeight;
         },
         Button {
