@@ -56,7 +56,7 @@ add_subdirectory(bmp)
 add_subdirectory(ora)
 add_subdirectory(ppm)
 add_subdirectory(xcf)
-#add_subdirectory(psd)
+add_subdirectory(psd)
 add_subdirectory(odg)
 
 #if(OIIO_FOUND)
