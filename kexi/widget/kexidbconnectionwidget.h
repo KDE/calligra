@@ -60,9 +60,7 @@ public:
     //! \return a pointer to 'test connection' button. You can call hide() for this to hide it.
     KPushButton* testConnectionButton() const;
 
-    KexiDBDriverComboBox *driversCombo() const {
-        return m_driversCombo;
-    }
+    KexiDBDriverComboBox *driversCombo() const;
 
     //! \return true if only connection data is managed by this widget
     bool connectionOnly() const;
@@ -81,9 +79,7 @@ protected:
     void setDataInternal(const KexiProjectData& data, bool connectionOnly,
                          const QString& shortcutFileName);
 
-    KexiProjectData m_data;
-    KexiDBDriverComboBox *m_driversCombo;
-
+private:
     class Private;
     Private * const d;
 
@@ -135,6 +131,7 @@ protected:
     friend class KexiDBConnectionDialog;
 };
 
+
 class KEXIEXTWIDGETS_EXPORT KexiDBConnectionDialog : public KDialog
 {
     Q_OBJECT
@@ -184,11 +181,11 @@ signals:
 
     void loadDBList();
 
-protected:
-    KexiDBConnectionTabWidget *m_tabWidget;
-
 private:
     void init(const KGuiItem& acceptButtonGuiItem);
+
+    class Private;
+    Private * const d;
 };
 
 #endif // KEXIDBCONNECTIONWIDGET_H
