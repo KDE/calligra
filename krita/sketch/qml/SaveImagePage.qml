@@ -85,7 +85,7 @@ Page {
             bottom: footer.top;
         }
 
-        model: Krita.FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.ora *.tif *.tiff *.exr" }
+        model: Krita.FileSystemModel { filter: "*.png *.jpg *.jpeg *.bmp *.kra *.psd *.ora *.tif *.tiff *.exr" }
         delegate: delegate;
 
         cellWidth: Constants.GridWidth * 4;
