@@ -31,6 +31,8 @@ Item {
 
     height: childrenRect.height;
 
+    onMinChanged: d.fixHandle();
+    onMaxChanged: d.fixHandle();
     onValueChanged: {
         if(decimals === 0) {
             if(value !== Math.round(value))
@@ -95,6 +97,17 @@ Item {
             if(!useExponentialValue) {
                 base.value = base.min + ((value / 100) * (base.max - base.min));
             }
+        }
+    }
+    QtObject {
+        id: d;
+        function fixHandle() {
+            var currentVal = base.value;
+            // Set the value to something it isn't currently
+            base.value = base.min;
+            base.value = base.max;
+            // Set it back to what it was
+            base.value = currentVal;
         }
     }
 }
