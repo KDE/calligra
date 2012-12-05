@@ -34,7 +34,7 @@ Item {
     PresetsPanel {
         id: presetsPanel;
         objectName: "presets";
-        width: Constants.GridWidth * 2;
+        width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
         height: base.height;
         page: base.parent;
         onPeek: beginPeek( presetsPanel );
@@ -46,7 +46,7 @@ Item {
     LayersPanel {
         id: layersPanel;
         objectName: "layers";
-        width: Constants.GridWidth * 2;
+        width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
         height: base.height;
         page: base.parent;
         onPeek: beginPeek( layersPanel );
@@ -58,7 +58,7 @@ Item {
     FilterPanel {
         id: filterPanel;
         objectName: "filter";
-        width: Constants.GridWidth * 2;
+        width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
         height: base.height;
         page: base.parent;
         onPeek: beginPeek( filterPanel );
@@ -70,7 +70,7 @@ Item {
     SelectPanel {
         id: selectPanel;
         objectName: "select";
-        width: Constants.GridWidth * 2;
+        width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
         height: base.height;
         page: base.parent;
         onPeek: beginPeek( selectPanel );
@@ -82,7 +82,7 @@ Item {
     ToolPanel {
         id: toolPanel;
         objectName: "tool";
-        width: Constants.GridWidth * 2;
+        width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
         height: base.height;
         page: base.parent;
         onPeek: beginPeek( toolPanel );
@@ -94,7 +94,7 @@ Item {
     ColorPanel {
         id: colorPanel;
         objectName: "color";
-        width: Constants.GridWidth * 2;
+        width: (parent === leftArea || parent === rightArea) ? parent.width : Constants.GridWidth * 2;
         height: base.height;
         page: base.parent;
         onPeek: beginPeek( colorPanel );
@@ -137,6 +137,7 @@ Item {
     }
 
     Row {
+        id: panelTopRow;
         x: Constants.GridWidth * 2 + 4;
 
         PanelDropArea {
@@ -304,4 +305,32 @@ Item {
             item.parent = d.dragParent;
         }
     }
+
+    onHeightChanged: {
+        if(height > width) {
+            state = "portrait";
+        }
+        else {
+            state = "";
+        }
+    }
+    onWidthChanged: {
+        if(height > width) {
+            state = "portrait";
+        }
+        else {
+            state = "";
+        }
+    }
+
+    states: [
+        State {
+            name: "portrait";
+            PropertyChanges { target: panelTopRow; x: Constants.GridWidth * 4 + 4; }
+            PropertyChanges { target: leftArea; width: Constants.GridWidth * 4; }
+            PropertyChanges { target: rightArea; width: Constants.GridWidth * 4; }
+            AnchorChanges { target: leftArea; anchors.bottom: parent.verticalCenter; }
+            AnchorChanges { target: rightArea; anchors.right: undefined; anchors.left: parent.left; anchors.top: parent.verticalCenter; }
+        }
+    ]
 }
