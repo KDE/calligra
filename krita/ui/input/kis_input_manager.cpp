@@ -48,6 +48,7 @@
 #include "kis_stroke_shortcut.h"
 #include "kis_single_action_shortcut.h"
 #include "kis_gesture_shortcut.h"
+#include "kis_touch_shortcut.h"
 
 class KisInputManager::Private
 {
@@ -76,9 +77,13 @@ public:
                           const QList<Qt::Key> &modifiers,
                           KisSingleActionShortcut::WheelAction wheelAction);
     void addGestureShortcut(KisAbstractInputAction* action, int index, Qt::GestureType gesture);
+
+    void addTouchShortcut( KisAbstractInputAction* action, int index, int minTouchCount, int maxTouchCount );
+
     bool processUnhandledEvent(QEvent *event);
     Qt::Key workaroundShiftAltMetaHell(const QKeyEvent *keyEvent);
     void setupActions();
+    void saveTouchEvent( QTouchEvent* event );
 
     KisInputManager *q;
 
@@ -153,6 +158,14 @@ void KisInputManager::Private::addGestureShortcut(KisAbstractInputAction* action
     matcher.addShortcut(shortcut);
 }
 
+void KisInputManager::Private::addTouchShortcut( KisAbstractInputAction* action, int index, int minTouchCount, int maxTouchCount )
+{
+    KisTouchShortcut *shortcut = new KisTouchShortcut(action, index);
+    shortcut->setMinimumTouchPoints(minTouchCount);
+    shortcut->setMaximumTouchPoints(maxTouchCount);
+    matcher.addShortcut(shortcut);
+}
+
 void KisInputManager::Private::setupActions()
 {
 #if QT_VERSION >= 0x040700
@@ -168,6 +181,8 @@ void KisInputManager::Private::setupActions()
     addKeyShortcut(action, KisToolInvocationAction::ConfirmShortcut, KEYS(), Qt::Key_Return);
     addKeyShortcut(action, KisToolInvocationAction::ConfirmShortcut, KEYS(), Qt::Key_Enter);
     defaultInputAction = action;
+
+    addTouchShortcut(action, KisToolInvocationAction::ActivateShortcut, 1, 1);
 
     action = new KisAlternateInvocationAction(q);
     matcher.addAction(action);
@@ -189,7 +204,8 @@ void KisInputManager::Private::setupActions()
     addKeyShortcut(action, KisPanAction::PanUpShortcut, KEYS(), Qt::Key_Up);
     addKeyShortcut(action, KisPanAction::PanDownShortcut, KEYS(), Qt::Key_Down);
 
-    addGestureShortcut(action, KisPanAction::PanToggleShortcut, Qt::PanGesture);
+    //addGestureShortcut(action, KisPanAction::PanToggleShortcut, Qt::PanGesture);
+    addTouchShortcut(action, KisPanAction::PanToggleShortcut, 3, 10);
 
 
     action = new KisRotateCanvasAction(q);
@@ -220,6 +236,8 @@ void KisInputManager::Private::setupActions()
     addKeyShortcut(action, KisZoomAction::ZoomResetShortcut, KEYS(), Qt::Key_1);
     addKeyShortcut(action, KisZoomAction::ZoomToPageShortcut, KEYS(), Qt::Key_2);
     addKeyShortcut(action, KisZoomAction::ZoomToWidthShortcut, KEYS(), Qt::Key_3);
+
+    addTouchShortcut(action, KisZoomAction::ZoomToggleShortcut, 2, 2);
 
 
     if (qApp->applicationName() == "krita") {
@@ -305,10 +323,19 @@ void KisInputManager::Private::saveTabletEvent(const QTabletEvent *event)
                          event->uniqueId());
 }
 
+void KisInputManager::Private::saveTouchEvent( QTouchEvent* event )
+{
+    delete lastTouchEvent;
+    lastTouchEvent = new QTouchEvent(event->type(), event->deviceType(), event->modifiers(), event->touchPointStates(), event->touchPoints());
+}
+
 void KisInputManager::Private::resetSavedTabletEvent()
 {
     delete lastTabletEvent;
     lastTabletEvent = 0;
+
+    delete lastTouchEvent;
+    lastTouchEvent = 0;
 }
 
 KisInputManager::KisInputManager(KisCanvas2 *canvas, KoToolProxy *proxy)
@@ -452,40 +479,25 @@ bool KisInputManager::eventFilter(QObject* object, QEvent* event)
         event->ignore();
         break;
     }
-    case QEvent::Gesture:
-        retval = d->matcher.gestureEvent(static_cast<QGestureEvent*>(event));
-        break;
 //     case QEvent::Gesture:
-//     case QEvent::TouchEnd:
-//     case QEvent::TouchBegin: {
-//         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
-//         QTouchEvent *newEvent = new QTouchEvent(QEvent::TouchBegin,
-//                                                 touchEvent->deviceType(),
-//                                                 touchEvent->modifiers(),
-//                                                 touchEvent->touchPointStates(),
-//                                                 touchEvent->touchPoints());
-//         d->touchEvent = newEvent;
-//         d->mousePosition = touchEvent->touchPoints().at(0).pos();
-//
+//         retval = d->matcher.gestureEvent(static_cast<QGestureEvent*>(event));
 //         break;
-//     }
-//     case QEvent::TouchUpdate:
-//         if (d->currentAction) {
-//             d->currentShortcut->match(event);
-//
-//             if (d->currentShortcut->matchLevel() == KisShortcut::NoMatch && !d->fixedAction) {
-//                 d->clearState();
-//                 break;
-//             }
-//
-//             d->currentAction->inputEvent(event);
-//         } else {
-//             QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
-//             d->toolProxy->touchEvent(touchEvent, d->canvas->viewConverter(), d->canvas->documentOffset());
-//
-//             d->match(event);
-//         }
-//         return true;
+    case QEvent::TouchBegin:
+        retval = d->matcher.touchBeginEvent(static_cast<QTouchEvent*>(event));
+        event->accept();
+        d->resetSavedTabletEvent();
+        d->saveTouchEvent(static_cast<QTouchEvent*>(event));
+        break;
+    case QEvent::TouchUpdate:
+        retval = d->matcher.touchUpdateEvent(static_cast<QTouchEvent*>(event));
+        event->accept();
+        d->resetSavedTabletEvent();
+        break;
+    case QEvent::TouchEnd:
+        retval = d->matcher.touchEndEvent(static_cast<QTouchEvent*>(event));
+        event->accept();
+        d->resetSavedTabletEvent();
+        break;
     default:
         break;
     }
@@ -527,7 +539,7 @@ void KisInputManager::setEnabled(bool enabled)
 void KisInputManager::slotToolChanged()
 {
     QString toolId = KoToolManager::instance()->activeToolId();
-    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID") {
+    if (toolId == "ArtisticTextToolFactoryID" || toolId == "TextToolFactory_ID" || toolId == "KisToolTransform") {
         d->forwardAllEventsToTool = true;
         d->matcher.suppressAllActions(true);
     } else {
