@@ -28,7 +28,7 @@
 
 struct KisShortcutMatcher::Private
 {
-    Private() : runningShortcut(0), readyShortcut(0), gestureShortcut(0), suppressAllActions(false), usingTouch(false) {}
+    Private() : runningShortcut(0), readyShortcut(0), gestureShortcut(0), touchShortcut(0), suppressAllActions(false), usingTouch(false) {}
 
     QList<KisSingleActionShortcut*> singleActionShortcuts;
     QList<KisStrokeShortcut*> strokeShortcuts;
