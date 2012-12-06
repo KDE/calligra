@@ -87,10 +87,13 @@ void KisToolInvocationAction::end(QEvent *event)
 {
     if (d->active) {
         QTabletEvent *tabletEvent = inputManager()->lastTabletEvent();
+        QTouchEvent *touchEvent = inputManager()->lastTouchEvent();
         QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
         if (tabletEvent) {
             inputManager()->toolProxy()->tabletEvent(tabletEvent, d->tabletToPixel(tabletEvent->hiResGlobalPos()));
+        } else if(touchEvent) {
+            inputManager()->toolProxy()->touchEvent(touchEvent, inputManager()->canvas()->viewConverter(), inputManager()->canvas()->documentOffset());
         } else if(mouseEvent) {
             inputManager()->toolProxy()->mouseReleaseEvent(mouseEvent, inputManager()->widgetToPixel(mouseEvent->posF()));
         } else {
