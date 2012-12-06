@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2008-2009 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,19 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KoOptimizedCompositeOpFactory_p.h"
+#ifndef _KIS_CIRCLE_MASK_GENERATOR_P_H_
+#define _KIS_CIRCLE_MASK_GENERATOR_P_H_
 
-#include "KoColorSpaceTraits.h"
-#include "KoCompositeOpAlphaDarken.h"
-#include "KoCompositeOpOver.h"
+struct KisCircleMaskGenerator::Private {
+    double xcoef, ycoef;
+    double xfadecoef, yfadecoef;
+    double transformedFadeX, transformedFadeY;
 
+    KisBrushMaskApplicatorBase *applicator;
+};
 
-KoCompositeOp* KoOptimizedCompositeOpFactoryPrivate::createLegacyAlphaDarkenOp32(const KoColorSpace *cs)
-{
-    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(cs);
-}
-
-KoCompositeOp* KoOptimizedCompositeOpFactoryPrivate::createLegacyOverOp32(const KoColorSpace *cs)
-{
-    return new KoCompositeOpOver<KoBgrU8Traits>(cs);
-}
+#endif /* _KIS_CIRCLE_MASK_GENERATOR_P_H_ */

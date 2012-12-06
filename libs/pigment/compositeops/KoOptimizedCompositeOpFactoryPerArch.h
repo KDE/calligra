@@ -16,26 +16,40 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H
-#define KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H
+#ifndef KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
+#define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
-#include "pigment_export.h"
+
+#include "KoVcMultiArchBuildSupport.h"
+
 
 class KoCompositeOp;
 class KoColorSpace;
 
-/**
- * The creation of the legacy composite ops is moved to a separate
- * object file. Putting all the implementations together makes the
- * system run 1.4 times slower. I do not know the reason of it,
- * looks like some layout/code locality problem (DK)
- */
 
-class PIGMENTCMS_EXPORT KoOptimizedCompositeOpFactoryPrivate
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpAlphaDarken32;
+
+template<Vc::Implementation _impl>
+class KoOptimizedCompositeOpOver32;
+
+template<template<Vc::Implementation I> class CompositeOp>
+struct KoOptimizedCompositeOpFactoryPerArch
 {
-public:
-    static KoCompositeOp* createLegacyAlphaDarkenOp32(const KoColorSpace *cs);
-    static KoCompositeOp* createLegacyOverOp32(const KoColorSpace *cs);
+    typedef const KoColorSpace* ParamType;
+    typedef KoCompositeOp* ReturnType;
+
+    template<Vc::Implementation _impl>
+    static ReturnType create(ParamType param);
 };
 
-#endif /* KOOPTIMIZEDCOMPOSITEOPFACTORY_P_H */
+struct KoReportCurrentArch
+{
+    typedef void* ParamType;
+    typedef void ReturnType;
+
+    template<Vc::Implementation _impl>
+    static ReturnType create(ParamType);
+};
+
+#endif /* KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H */

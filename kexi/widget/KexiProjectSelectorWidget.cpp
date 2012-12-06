@@ -42,13 +42,25 @@
 class KexiProjectSelectorWidget::Private
 {
 public:
-    Private() {
+    Private(KexiProjectSet *prj_set_)
+         : prj_set(prj_set_)
+    {
         selectable = true;
     }
+
     QIcon fileicon, dbicon;
     bool showProjectNameColumn;
     bool showConnectionColumns;
     bool selectable;
+
+    KexiProjectSet *prj_set;
+};
+
+class KexiProjectSelectorDialog::Private
+{
+public:
+  Private() {}
+  KexiProjectSelectorWidget* sel;
 };
 
 /*================================================================*/
@@ -102,8 +114,7 @@ public:
 KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
         KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
         : QWidget(parent)
-        , m_prj_set(prj_set)
-        , d(new Private())
+        , d(new Private(prj_set))
 {
     setupUi(this);
     setObjectName("KexiProjectSelectorWidget");
@@ -131,7 +142,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget(QWidget* parent,
     setFocusProxy(list());
 
     //show projects
-    setProjectSet(m_prj_set);
+    setProjectSet(d->prj_set);
     connect(list(), SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotItemExecuted(QTreeWidgetItem*)));
     //connect(list(), SIGNAL(returnPressed(QTreeWidgetItem*)),
@@ -194,16 +205,16 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
         //old list
         list()->clear();
     }
-    m_prj_set = prj_set;
-    if (!m_prj_set)
+    d->prj_set = prj_set;
+    if (!d->prj_set)
         return;
 //TODO: what with project set's ownership?
-    if (m_prj_set->error()) {
-        kDebug() << "KexiProjectSelectorWidget::setProjectSet() : m_prj_set->error() !";
+    if (d->prj_set->error()) {
+        kDebug() << "KexiProjectSelectorWidget::setProjectSet() : d->prj_set->error() !";
         return;
     }
     KexiDB::DriverManager manager;
-    KexiProjectData::List prjlist = m_prj_set->list();
+    KexiProjectData::List prjlist = d->prj_set->list();
     foreach(KexiProjectData* data, prjlist) {
         KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
         if (!info.name.isEmpty()) {
@@ -229,6 +240,10 @@ void KexiProjectSelectorWidget::setProjectSet(KexiProjectSet* prj_set)
     if (list()->topLevelItemCount() > 0) {
         list()->topLevelItem(0)->setSelected(true);
     }
+}
+
+KexiProjectSet *KexiProjectSelectorWidget::projectSet() {
+    return d->prj_set;
 }
 
 void KexiProjectSelectorWidget::setSelectable(bool set)
@@ -291,6 +306,7 @@ bool KexiProjectSelectorWidget::eventFilter(QObject* watched, QEvent* event)
 KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
+	, d(new Private)
 {
     setWindowTitle(i18n("Open Recent Project"));
     init(prj_set, showProjectNameColumn, showConnectionColumns);
@@ -300,6 +316,7 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
         const KexiDB::ConnectionData& cdata,
         bool showProjectNameColumn, bool showConnectionColumns)
         : KPageDialog(parent)
+	, d(new Private)
 {
     setWindowTitle(i18n("Open Project"));
     KexiDB::ConnectionData _cdata(cdata);
@@ -308,12 +325,13 @@ KexiProjectSelectorDialog::KexiProjectSelectorDialog(QWidget *parent,
     setButtonGuiItem(Ok, KGuiItem(i18n("&Open"), koIconName("document-open"),
                                   i18n("Open Database Connection")));
 
-    m_sel->label()->setText(i18n("Select a project on <b>%1</b> database server to open:",
+    d->sel->label()->setText(i18n("Select a project on <b>%1</b> database server to open:",
                                  _cdata.serverInfoString(false)));
 }
 
 KexiProjectSelectorDialog::~KexiProjectSelectorDialog()
 {
+    delete d;
 }
 
 void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNameColumn,
@@ -332,21 +350,21 @@ void KexiProjectSelectorDialog::init(KexiProjectSet* prj_set, bool showProjectNa
     setFaceType(Plain);
     setSizeGripEnabled(true);
 
-    m_sel = new KexiProjectSelectorWidget(this, prj_set,
+    d->sel = new KexiProjectSelectorWidget(this, prj_set,
                                           showProjectNameColumn, showConnectionColumns);
-    setMainWidget(m_sel);
-    setWindowIcon(m_sel->windowIcon());
-    m_sel->setFocus();
+    setMainWidget(d->sel);
+    setWindowIcon(d->sel->windowIcon());
+    d->sel->setFocus();
 
-    connect(m_sel, SIGNAL(projectExecuted(KexiProjectData*)),
+    connect(d->sel, SIGNAL(projectExecuted(KexiProjectData*)),
             this, SLOT(slotProjectExecuted(KexiProjectData*)));
-    connect(m_sel, SIGNAL(selectionChanged(KexiProjectData*)),
+    connect(d->sel, SIGNAL(selectionChanged(KexiProjectData*)),
             this, SLOT(slotProjectSelectionChanged(KexiProjectData*)));
 }
 
 KexiProjectData* KexiProjectSelectorDialog::selectedProjectData() const
 {
-    return m_sel->selectedProjectData();
+    return d->sel->selectedProjectData();
 }
 
 void KexiProjectSelectorDialog::slotProjectExecuted(KexiProjectData*)

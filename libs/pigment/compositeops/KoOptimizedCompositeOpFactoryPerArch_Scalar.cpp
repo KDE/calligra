@@ -16,23 +16,32 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KoOptimizedCompositeOpFactory.h"
-
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
 
-static struct ArchReporter {
-    ArchReporter() {
-        createOptimizedClass<KoReportCurrentArch>(0);
-    }
-} StaticReporter;
+#include "KoColorSpaceTraits.h"
+#include "KoCompositeOpAlphaDarken.h"
+#include "KoCompositeOpOver.h"
 
 
-KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOp32(const KoColorSpace *cs)
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32>::create<Vc::ScalarImpl>(ParamType param)
 {
-    return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarken32> >(cs);
+    return new KoCompositeOpAlphaDarken<KoBgrU8Traits>(param);
 }
 
-KoCompositeOp* KoOptimizedCompositeOpFactory::createOverOp32(const KoColorSpace *cs)
+template<>
+template<>
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::ReturnType
+KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32>::create<Vc::ScalarImpl>(ParamType param)
 {
-    return createOptimizedClass<KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpOver32> >(cs);
+    return new KoCompositeOpOver<KoBgrU8Traits>(param);
+}
+
+template<>
+KoReportCurrentArch::ReturnType
+KoReportCurrentArch::create<Vc::ScalarImpl>(ParamType)
+{
+    qDebug() << "Legacy integer arithmetics implementation";
 }

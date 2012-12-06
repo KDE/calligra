@@ -56,9 +56,7 @@ public:
     KexiFormScrollView(QWidget *parent, bool preview);
     virtual ~KexiFormScrollView();
 
-    void setForm(KFormDesigner::Form *form) {
-        m_form = form;
-    }
+    void setForm(KFormDesigner::Form *form);
 
     /*! Reimplemented from KexiDataAwareObjectInterface
      for checking 'readOnly' flag from a widget
@@ -78,14 +76,7 @@ public:
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. */
-    virtual int fieldNumberForColumn(int col) {
-        KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
-                                              dbFormWidget()->orderedDataAwareWidgets()->at(col));
-        if (!item)
-            return -1;
-        KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find(item));
-        return it != m_fieldNumbersForDataItems.constEnd() ? (int)it.value() : -1;
-    }
+    virtual int fieldNumberForColumn(int col);
 
     /*! @internal Used by KexiFormView in view switching. */
     void beforeSwitchView();
@@ -317,10 +308,9 @@ protected:
 
     //virtual bool focusNextPrevChild( bool next );
 
-    KFormDesigner::Form *m_form;
-    int m_currentLocalSortColumn, m_localSortingOrder;
-    //! Used in selectCellInternal() to avoid fetching the same record twice
-    KexiDB::RecordData *m_previousRecord;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

@@ -94,7 +94,7 @@ public:
     virtual bool cursorAtEnd();
     virtual void clear();
 
-    bool preview() const;
+    bool isPreviewing() const;
 
 //    virtual void setCursor(const QCursor & cursor);
 

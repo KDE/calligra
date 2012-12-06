@@ -31,6 +31,21 @@
 #include <kmenu.h>
 #include <kdebug.h>
 
+class KexiFormScrollView::Private
+{
+public:
+    Private()
+      : currentLocalSortColumn(-1) /* no column */
+      , localSortingOrder(-1) /* no sorting */
+      , previousRecord(0)
+    {
+    }
+    KFormDesigner::Form *form;
+    int currentLocalSortColumn, localSortingOrder;
+    //! Used in selectCellInternal() to avoid fetching the same record twice
+    KexiDB::RecordData *previousRecord;
+};
+
 KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
         : KexiScrollView(parent, preview)
         , KexiRecordNavigatorHandler()
@@ -38,11 +53,9 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
         , KexiDataAwareObjectInterface()
         , KexiFormDataProvider()
         , KexiFormEventHandler()
+	, d(new Private)
 {
-    m_currentLocalSortColumn = -1; /* no column */
-    m_localSortingOrder = -1; /* no sorting */
-    m_previousRecord = 0;
-    m_navPanel = m_scrollViewNavPanel; //copy this pointer from KexiScrollView
+    m_navPanel = recordNavigator(); //copy this pointer from KexiScrollView
     if (preview) {
         setRecordNavigatorVisible(true);
 //tmp
@@ -63,6 +76,7 @@ KexiFormScrollView::~KexiFormScrollView()
     if (m_owner)
         delete m_data;
     m_data = 0;
+    delete d;
 }
 
 void
@@ -72,7 +86,7 @@ KexiFormScrollView::show()
 
 #if 0 //moved to KexiFormView, OK?
     //now get resize mode settings for entire form
-    if (m_preview) {
+    if (isPreviewing()) {
         KexiFormView* fv = dynamic_cast<KexiFormView*>(parent());
         int resizeMode = fv ? fv->resizeMode() : KexiFormView::ResizeAuto;
         if (resizeMode == KexiFormView::ResizeAuto)
@@ -84,8 +98,8 @@ KexiFormScrollView::show()
 void
 KexiFormScrollView::slotResizingStarted()
 {
-    if (m_form)
-        setSnapToGrid(m_form->isSnapWidgetsToGridEnabled(), m_form->gridSize());
+    if (d->form)
+        setSnapToGrid(d->form->isSnapWidgetsToGridEnabled(), d->form->gridSize());
     else
         setSnapToGrid(false);
 }
@@ -100,9 +114,9 @@ void KexiFormScrollView::selectCellInternal()
 {
     //m_currentItem is already set by KexiDataAwareObjectInterface::setCursorPosition()
     if (m_currentItem) {
-        if (m_currentItem != m_previousRecord) {
+        if (m_currentItem != d->previousRecord) {
             fillDataItems(*m_currentItem, cursorAtNewRow());
-            m_previousRecord = m_currentItem;
+            d->previousRecord = m_currentItem;
             QWidget *w = 0;
             if (m_curCol >= 0 && m_curCol < dbFormWidget()->orderedDataAwareWidgets()->count()) {
                 w = dbFormWidget()->orderedDataAwareWidgets()->at(m_curCol);
@@ -118,7 +132,7 @@ void KexiFormScrollView::selectCellInternal()
             }
         }
     } else {
-        m_previousRecord = 0;
+        d->previousRecord = 0;
     }
 }
 
@@ -130,8 +144,8 @@ void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
 // if (m_currentItem)
     //fillDataItems(*m_currentItem);
 
-// if (m_form->tabStops()->first() && m_form->tabStops()->first()->widget())
-//  m_form->tabStops()->first()->widget()->setFocus();
+// if (d->form->tabStops()->first() && d->form->tabStops()->first()->widget())
+//  d->form->tabStops()->first()->widget()->setFocus();
 }
 
 void KexiFormScrollView::moveToRecordRequested(uint r)
@@ -184,19 +198,19 @@ void KexiFormScrollView::addHeaderColumn(const QString& caption, const QString& 
 int KexiFormScrollView::currentLocalSortingOrder() const
 {
     //! @todo
-    return m_localSortingOrder;
+    return d->localSortingOrder;
 }
 
 int KexiFormScrollView::currentLocalSortColumn() const
 {
-    return m_currentLocalSortColumn;
+    return d->currentLocalSortColumn;
 }
 
 void KexiFormScrollView::setLocalSortingOrder(int col, int order)
 {
     //! @todo
-    m_currentLocalSortColumn = col;
-    m_localSortingOrder = order;
+    d->currentLocalSortColumn = col;
+    d->localSortingOrder = order;
 }
 
 void KexiFormScrollView::sortColumnInternal(int col, int order)
@@ -251,9 +265,9 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 //   m_verticalHeaderAlreadyAdded = true;
             updateWidgetContentsSize();
             //refr. current and next row
-//   updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight*2);
+//   updateContents(columnPos(0), rowPos(row), viewport()->width(), m_rowHeight*2);
 //js: warning this breaks behaviour (cursor is skipping, etc.): qApp->processEvents(500);
-//   ensureVisible(columnPos(m_curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(m_curCol), d->rowHeight);
+//   ensureVisible(columnPos(m_curCol), rowPos(row+1)+m_rowHeight-1, columnWidth(m_curCol), m_rowHeight);
 
 //   m_verticalHeader->setOffset(contentsY());
         }
@@ -284,10 +298,10 @@ KexiDataItemInterface *KexiFormScrollView::editor(int col, bool ignoreMissingEdi
 
     /*
       KexiTableViewColumn *tvcol = m_data->column(col);
-    // int t = tvcol->field->type();
+    // int t = tvcol->fielm_type();
 
       //find the editor for this column
-      KexiDataItemInterface *editor = d->editors[ tvcol ];
+      KexiDataItemInterface *editor = m_editors[ tvcol ];
       if (editor)
         return editor;
 
@@ -311,7 +325,7 @@ KexiDataItemInterface *KexiFormScrollView::editor(int col, bool ignoreMissingEdi
       if (editor->widget())
         editor->widget()->installEventFilter(this);
       //store
-      d->editors.insert( tvcol, editor );
+      m_editors.insert( tvcol, editor );
       return editor;*/
 }
 
@@ -395,7 +409,7 @@ void KexiFormScrollView::slotRowsDeleted(const QList<int> &)
 
 KexiDBForm* KexiFormScrollView::dbFormWidget() const
 {
-    return dynamic_cast<KexiDBForm*>(m_widget);
+    return dynamic_cast<KexiDBForm*>(widget());
 }
 
 int KexiFormScrollView::columns() const
@@ -411,6 +425,14 @@ int KexiFormScrollView::columns() const
   KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
   return it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1;
 }*/
+
+
+void KexiFormScrollView::setForm(KFormDesigner::Form *form)
+{
+    d->form = form;
+}
+
+
 
 bool KexiFormScrollView::columnEditable(int col)
 {
@@ -481,7 +503,7 @@ void KexiFormScrollView::initDataContents()
 {
     KexiDataAwareObjectInterface::initDataContents();
 
-    if (m_preview) {
+    if (isPreviewing()) {
 //! @todo here we can react if user wanted to show the navigator
         setRecordNavigatorVisible(m_data);
         recordNavigator()->setEnabled(m_data);
@@ -504,7 +526,7 @@ bool KexiFormScrollView::shouldDisplayDefaultValueForItem(KexiFormDataItemInterf
 {
     return cursorAtNewRow()
            && !itemIface->columnInfo()->field->defaultValue().isNull()
-//??  && (m_editor ? m_editor->value()==itemIface->columnInfo()->field->defaultValue() : true)
+//??  && (m_editor ? m_editor->value()==itemIface->columnInfo()->fielm_defaultValue() : true)
            && !itemIface->columnInfo()->field->isAutoIncrement(); // default value defined
 }
 
@@ -556,8 +578,19 @@ void KexiFormScrollView::updateAfterAcceptRowEdit()
     dbFormWidget()->editedItem = 0;
     //update visible data because there could be auto-filled (eg. autonumber) fields
     fillDataItems(*m_currentItem, cursorAtNewRow());
-    m_previousRecord = m_currentItem;
+    d->previousRecord = m_currentItem;
 }
+
+int KexiFormScrollView::fieldNumberForColumn(int col)
+{
+    KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
+                                            dbFormWidget()->orderedDataAwareWidgets()->at(col));
+    if (!item)
+        return -1;
+    KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find(item));
+    return it != m_fieldNumbersForDataItems.constEnd() ? (int)it.value() : -1;
+}
+
 
 void KexiFormScrollView::beforeSwitchView()
 {
@@ -568,9 +601,9 @@ void KexiFormScrollView::refreshContentsSize()
 {
     KexiScrollView::refreshContentsSize();
     //only clear cmd history when KexiScrollView::refreshContentsSizeLater() has been called
-    if (!m_preview && sender() == &m_delayedResize) {
-        if (m_form)
-            m_form->clearUndoStack();
+    if (!isPreviewing() && sender() == delayedResizeTimer()) {
+        if (d->form)
+            d->form->clearUndoStack();
     }
 }
 
