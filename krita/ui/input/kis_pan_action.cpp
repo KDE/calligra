@@ -117,7 +117,9 @@ void KisPanAction::inputEvent(QEvent *event)
         case QEvent::TouchUpdate: {
             QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
             QPointF newPos = d->averagePoint(tevent);
-            inputManager()->canvas()->canvasController()->pan(newPos.toPoint());
+            QPointF delta = newPos - d->lastPosition;
+            inputManager()->canvas()->canvasController()->pan(-delta.toPoint());
+            d->lastPosition = newPos;
         }
         default:
             break;
