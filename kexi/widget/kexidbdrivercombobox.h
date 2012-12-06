@@ -73,9 +73,7 @@ public:
         was false, this won't include the file based drivers either.
 
         \return a list of names of drivers that were found */
-    QStringList driverNames() const {
-        return m_driverNames;
-    }
+    QStringList driverNames() const;
 
     /*! Get the name of the currrently selected driver.  If the combobox is empty,
         QString() will be returned.
@@ -92,9 +90,9 @@ public:
         */
     void setDriverName(const QString& driverName);
 
-protected:
-    QHash<QString, QString> m_drivers; //!< a map: driver caption -> driver name
-    QStringList m_driverNames;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

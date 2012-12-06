@@ -431,7 +431,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
         kDebug() << "RESIZE";
 
     if (e->type() == QEvent::KeyPress) {
-        if (preview()) {
+        if (isPreviewing()) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
             const int key = ke->key();
             bool tab = ke->modifiers() == Qt::NoModifier && key == Qt::Key_Tab;
@@ -620,7 +620,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
             }
         }
     } else if (e->type() == QEvent::FocusIn || (e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent*>(e)->button() == Qt::LeftButton)) {
-        bool focusDataWidget = preview();
+        bool focusDataWidget = isPreviewing();
         if (static_cast<QFocusEvent*>(e)->reason() == Qt::PopupFocusReason) {
             kDebug() << "->>> focus IN, popup";
             focusDataWidget = !d->popupFocused;
@@ -720,10 +720,10 @@ void KexiDBForm::clear()
     //! @todo clear all fields?
 }
 
-bool KexiDBForm::preview() const
+bool KexiDBForm::isPreviewing() const
 {
     return dynamic_cast<KexiScrollView*>(d->dataAwareObject)
-           ? dynamic_cast<KexiScrollView*>(d->dataAwareObject)->preview() : false;
+           ? dynamic_cast<KexiScrollView*>(d->dataAwareObject)->isPreviewing() : false;
 }
 
 void KexiDBForm::dragMoveEvent(QDragMoveEvent *e)
