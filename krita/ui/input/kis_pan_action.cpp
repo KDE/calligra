@@ -36,7 +36,11 @@ class KisPanAction::Private
 public:
     Private() : panDistance(10) { }
 
+        QPointF averagePoint( QTouchEvent* event );
+
     const int panDistance;
+
+    QPointF lastPosition;
 };
 
 KisPanAction::KisPanAction(KisInputManager *manager)
@@ -73,8 +77,11 @@ void KisPanAction::begin(int shortcut, QEvent *event)
     KisAbstractInputAction::begin(shortcut, event);
 
     switch (shortcut) {
-        case PanToggleShortcut:
+        case PanToggleShortcut: {
+            QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
+            d->lastPosition = d->averagePoint(tevent);
             break;
+        }
         case PanLeftShortcut:
             inputManager()->canvas()->canvasController()->pan(QPoint(d->panDistance, 0));
             break;
@@ -107,6 +114,11 @@ void KisPanAction::inputEvent(QEvent *event)
                 inputManager()->canvas()->canvasController()->pan(-pan->delta().toPoint() * 0.2);
             }
         }
+        case QEvent::TouchUpdate: {
+            QTouchEvent *tevent = static_cast<QTouchEvent*>(event);
+            QPointF newPos = d->averagePoint(tevent);
+            inputManager()->canvas()->canvasController()->pan(newPos.toPoint());
+        }
         default:
             break;
     }
@@ -118,4 +130,23 @@ void KisPanAction::mouseMoved(const QPointF &lastPos, const QPointF &pos)
 {
     QPointF relMovement = -(pos - lastPos);
     inputManager()->canvas()->canvasController()->pan(relMovement.toPoint());
+}
+
+QPointF KisPanAction::Private::averagePoint( QTouchEvent* event )
+{
+    QPointF result;
+    int count = 0;
+
+    foreach( QTouchEvent::TouchPoint point, event->touchPoints() ) {
+        if( point.state() != Qt::TouchPointReleased ) {
+            result += point.screenPos();
+            count++;
+        }
+    }
+
+    if( count > 0 ) {
+        return result / count;
+    } else {
+        return QPointF();
+    }
 }
