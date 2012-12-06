@@ -94,13 +94,16 @@ protected:
 
     TJ::Resource *addResource( KPlato::Resource *resource );
     void addTasks();
-    TJ::Task *addTask( KPlato::Task *task );
+    void addWorkingTime( KPlato::Task *task, TJ::Task *job );
+    TJ::Task *addTask( KPlato::Task *task , TJ::Task *parent = 0 );
     void addDependencies();
     void addPrecedes( const Relation *rel );
     void addDepends( const Relation *rel );
     void addDependencies( Task *task );
     void setConstraints();
     void setConstraint( TJ::Task *job, KPlato::Task *task );
+    TJ::Task *addStartNotEarlier( Node *task );
+    TJ::Task *addFinishNotLater( Node *task );
     void addRequests();
     void addRequest( TJ::Task *job, Task *task );
     void addStartEndJob();
@@ -109,7 +112,9 @@ protected:
     Duration calcPositiveFloat( Task *task );
 
     static bool exists( QList<CalendarDay*> &lst, CalendarDay *day );
+    static int toTJDayOfWeek( int day );
     static DateTime fromTime_t( time_t );
+    static time_t toTJTime_t( const QDateTime &dt, ulong granularity );
     AppointmentInterval fromTJInterval( const TJ::Interval &tji );
     static TJ::Interval toTJInterval( const QDateTime &start, const QDateTime &end, ulong tjGranularity );
     static TJ::Interval toTJInterval( const QTime &start, const QTime &end, ulong tjGranularity );
