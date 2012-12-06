@@ -79,7 +79,8 @@ void KisPanAction::begin(int shortcut, QEvent *event)
     switch (shortcut) {
         case PanToggleShortcut: {
             QTouchEvent *tevent = dynamic_cast<QTouchEvent*>(event);
-            d->lastPosition = d->averagePoint(tevent);
+            if(tevent)
+                d->lastPosition = d->averagePoint(tevent);
             break;
         }
         case PanLeftShortcut:
