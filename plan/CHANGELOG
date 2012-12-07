@@ -2,7 +2,11 @@
 Calligra Plan current:
 ----------------------
 
-* TJ Scheduler: Fix bug and improve performance in positive float calculation
+* TJ scheduler improvements
+    Fix bug and improve performance in positive float calculation.
+    Honor calendar timezone other than local timezone.
+    Improve handling of StartNotEarlier/FinishNotLater.
+    Fix bug in scheduling tasks with estimate in work time duration.
 
 * Add a command to generate a new project from the current project
 
