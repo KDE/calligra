@@ -825,13 +825,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
         d->processDeleteChange(cursor);
     }
     cursor.endEditBlock();
-
-    KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
-    kDebug(32500) << "text ranges::";
-    foreach(KoTextRange *range, textRangeManager->textRanges()) {
-        //kDebug(32500) << range->id();
-    }
-
 }
 
 KoXmlNode KoTextLoader::loadDeleteMerges(const KoXmlElement& elem, QString *generatedXmlString)
