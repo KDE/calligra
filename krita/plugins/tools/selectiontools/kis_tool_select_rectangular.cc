@@ -92,7 +92,8 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect)
 
     // If the user just clicks on the canvas deselect
     if (rc.isEmpty()) {
-        kisCanvas->view()->selectionManager()->deselect();
+        // Queueing this action to ensure we avoid a race condition when unlocking the node system
+        QTimer::singleShot(0, kisCanvas->view()->selectionManager(), SLOT(deselect()));
         return;
     }
 
