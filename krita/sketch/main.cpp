@@ -86,28 +86,28 @@ int main( int argc, char** argv )
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
     if (!env.contains("KDESYCOCA")) {
-        _putenv_s("KDESYCOCA", QString(appdir.absoluteFilePath() + "/sycoca").toLocal8Bit());
+        _putenv_s("KDESYCOCA", QString(appdir.absolutePath() + "/sycoca").toLocal8Bit());
     }
     if (!env.contains("XDG_DATA_DIRS")) {
-        _putenv_s("XDG_DATA_DIRS", QString(appdir.absoluteFilePath() + "/share").toLocal8Bit());
+        _putenv_s("XDG_DATA_DIRS", QString(appdir.absolutePath() + "/share").toLocal8Bit());
     }
     if (!env.contains("KDEDIR")) {
-        _putenv_s("KDEDIR", appdir.absoluteFilePath().toLocal8Bit());
+        _putenv_s("KDEDIR", appdir.absolutePath().toLocal8Bit());
     }
     if (!env.contains("KDEDIRS")) {
-        _putenv_s("KDEDIRS", appdir.absoluteFilePath().toLocal8Bit());
+        _putenv_s("KDEDIRS", appdir.absolutePath().toLocal8Bit());
     }
-    _putenv_s("PATH", QString(appdir.absoluteFilePath() + "/bin" + ";"
-              + appdir.absoluteFilePath() + "/lib" + ";"
-              + appdir.absoluteFilePath() + "/lib"  +  "/kde4" + ";"
-              + appdir.absoluteFilePath()).toLocal8Bit());
+    _putenv_s("PATH", QString(appdir.absolutePath() + "/bin" + ";"
+              + appdir.absolutePath() + "/lib" + ";"
+              + appdir.absolutePath() + "/lib"  +  "/kde4" + ";"
+              + appdir.absolutePath()).toLocal8Bit());
 
 #endif
 
-    app.addLibraryPath(appdir.absoluteFilePath());
-    app.addLibraryPath(appdir.absoluteFilePath() + "/bin");
-    app.addLibraryPath(appdir.absoluteFilePath() + "/lib");
-    app.addLibraryPath(appdir.absoluteFilePath() + "/lib/kde4");
+    app.addLibraryPath(appdir.absolutePath());
+    app.addLibraryPath(appdir.absolutePath() + "/bin");
+    app.addLibraryPath(appdir.absolutePath() + "/lib");
+    app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
 
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 
