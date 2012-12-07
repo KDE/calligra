@@ -86,29 +86,28 @@ int main( int argc, char** argv )
         _putenv_s("KDEHOME", QDesktopServices::storageLocation(QDesktopServices::DataLocation).toLocal8Bit());
     }
     if (!env.contains("KDESYCOCA")) {
-        _putenv_s("KDESYCOCA", QString(appdir.currentPath() + "/sycoca").toLocal8Bit());
+        _putenv_s("KDESYCOCA", QString(appdir.absoluteFilePath() + "/sycoca").toLocal8Bit());
     }
     if (!env.contains("XDG_DATA_DIRS")) {
-        _putenv_s("XDG_DATA_DIRS", QString(appdir.currentPath() + "/share").toLocal8Bit());
+        _putenv_s("XDG_DATA_DIRS", QString(appdir.absoluteFilePath() + "/share").toLocal8Bit());
     }
     if (!env.contains("KDEDIR")) {
-
-        _putenv_s("KDEDIR", appdir.currentPath().toLocal8Bit());
+        _putenv_s("KDEDIR", appdir.absoluteFilePath().toLocal8Bit());
     }
     if (!env.contains("KDEDIRS")) {
-        _putenv_s("KDEDIRS", appdir.currentPath().toLocal8Bit());
+        _putenv_s("KDEDIRS", appdir.absoluteFilePath().toLocal8Bit());
     }
-    _putenv_s("PATH", QString(appdir.currentPath() + "/bin" + ";"
-              + appdir.currentPath() + "/lib" + ";"
-              + appdir.currentPath() + "/lib"  +  "/kde4" + ";"
-              + appdir.currentPath()).toLocal8Bit());
+    _putenv_s("PATH", QString(appdir.absoluteFilePath() + "/bin" + ";"
+              + appdir.absoluteFilePath() + "/lib" + ";"
+              + appdir.absoluteFilePath() + "/lib"  +  "/kde4" + ";"
+              + appdir.absoluteFilePath()).toLocal8Bit());
 
 #endif
 
-    app.addLibraryPath(appdir.currentPath());
-    app.addLibraryPath(appdir.currentPath() + "/bin");
-    app.addLibraryPath(appdir.currentPath() + "/lib");
-    app.addLibraryPath(appdir.currentPath() + "/lib/kde4");
+    app.addLibraryPath(appdir.absoluteFilePath());
+    app.addLibraryPath(appdir.absoluteFilePath() + "/bin");
+    app.addLibraryPath(appdir.absoluteFilePath() + "/lib");
+    app.addLibraryPath(appdir.absoluteFilePath() + "/lib/kde4");
 
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 
