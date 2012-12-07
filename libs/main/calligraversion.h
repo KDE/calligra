@@ -49,7 +49,7 @@
  * CALLIGRA_VERSION_MINOR is computed based on this value.
  * Unstable versions subtract 1 from this value, e.g. 2.5 Alpha has minor 4.
 */
-#define CALLIGRA_STABLE_VERSION_MINOR 6
+#define CALLIGRA_STABLE_VERSION_MINOR 5
 
 /**
  * @def CALLIGRA_VERSION_RELEASE
@@ -77,7 +77,7 @@
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in "release candidate" stage
  */
-// #define CALLIGRA_RC 1
+#define CALLIGRA_RC 1
 
 /**
  * @def CALLIGRA_STABLE
