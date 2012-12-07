@@ -152,7 +152,7 @@ void MobiFile::writeRecord0(QDataStream &out, MobiHeaderGenerator &headers)
 
     // Creator Software
     out << qint32(204);// Record type 204
-    out << qint32(12);// Record lenght
+    out << qint32(12);// Record length
     /* Known Values: 1=mobigen, 2=Mobipocket Creator, 200=kindlegen (Windows),
         201=kindlegen (Linux), 202=kindlegen (Mac).
         Warning: Calibre creates fake creator entries, pretending to be a Linux
@@ -163,12 +163,12 @@ void MobiFile::writeRecord0(QDataStream &out, MobiHeaderGenerator &headers)
 
     // Creator Minor Version
     out << qint32(206); // Record type 206
-    out << qint32(12); // Record lenght
+    out << qint32(12); // Record length
     out << qint32(2); // Mobi Creator Minor version (Minor version of calligra)
 
     // Creator Major Version
     out << qint32(205); // Record type 205
-    out << qint32(12); // Record lenght
+    out << qint32(12); // Record length
     out << qint32(2); // Mobi Creator Major version (Major version of calligra)
 
     for (int i = 0; i < headers.m_exthHeader->pad; i++) {

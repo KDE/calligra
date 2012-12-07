@@ -172,7 +172,7 @@ void MobiHeaderGenerator::generatePalmDataBase()
     // text record.
 
     // palmDBHeader length + palmDoc header length (16) + MobiHeader length + EXTH header length
-    // + EHTH header padding + book name (title) lenght + padding
+    // + EHTH header padding + book name (title) length + padding
     // *(padding are for to make it multiple of four bytes)
     // + 2052 bytes (I dont know what exactly it is for but i see it in
     // every file that i have made it by mobi packet creator)
@@ -249,7 +249,7 @@ void MobiHeaderGenerator::generateEXTH()
     m_exthHeader->exthRecord.insert(112, source);
     // 4 bytes identifier, 4 bytes header length,
     // 4 bytes record count, two record type each one 4 bytes (2 * 4)
-    // two record lenght (2 * 4)
+    // two record length (2 * 4)
     // publisher size, author size
     m_exthHeader->headerLength = 4 + 4 + 4 + (6 * 2 * 4) + contributor.size() + source.size() +
                                  4 + 4 + 4 + m_author.size();
