@@ -35,7 +35,7 @@ Page {
         leftArea: Image {
             width: Constants.GridWidth * 0.5;
             height: parent.height;
-            source: "images/svg/icon-krita_sketch.svg";
+            source: "images/kritasketch.png";
             fillMode: Image.PreserveAspectFit;
 
             sourceSize.width: width;
