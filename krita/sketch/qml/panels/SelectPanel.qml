@@ -451,14 +451,15 @@ Panel {
             Item {
                 width: fullItem.width;
                 height: featherTxt.height;
-                PanelTextField {
+                RangeInput {
                     id: featherTxt;
                     anchors {
                         left: parent.left;
                         right: featherImg.left;
                     }
                     placeholder: "Feather";
-                    text: "0"
+                    min: 1; max: 500; decimals: 0;
+                    useExponentialValue: true;
                 }
                 Image {
                     id: featherImg;
@@ -467,27 +468,28 @@ Panel {
                         rightMargin: Constants.DefaultMargin;
                         verticalCenter: featherTxt.verticalCenter;
                     }
-                    height: parent.height - (Constants.DefaultMargin * 2);
+                    height: parent.height - (Constants.DefaultMargin * 6);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.feather(featherTxt.text);
+                        onClicked: sketchView.selectionManager.feather(featherTxt.value);
                     }
                 }
             }
             Item {
                 width: fullItem.width;
                 height: growTxt.height;
-                PanelTextField {
+                RangeInput {
                     id: growTxt;
                     anchors {
                         left: parent.left;
                         right: growImg.left;
                     }
                     placeholder: "Grow";
-                    text: "0"
+                    min: 1; max: 500; decimals: 0;
+                    useExponentialValue: true;
                 }
                 Image {
                     id: growImg;
@@ -496,27 +498,28 @@ Panel {
                         rightMargin: Constants.DefaultMargin;
                         verticalCenter: growTxt.verticalCenter;
                     }
-                    height: parent.height - (Constants.DefaultMargin * 2);
+                    height: parent.height - (Constants.DefaultMargin * 6);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.grow(growTxt.text, growTxt.text);
+                        onClicked: sketchView.selectionManager.grow(growTxt.value, growTxt.value);
                     }
                 }
             }
             Item {
                 width: fullItem.width;
                 height: borderTxt.height;
-                PanelTextField {
+                RangeInput {
                     id: borderTxt;
                     anchors {
                         left: parent.left;
                         right: borderImg.left;
                     }
                     placeholder: "Border";
-                    text: "0"
+                    min: 1; max: 500; decimals: 0;
+                    useExponentialValue: true;
                 }
                 Image {
                     id: borderImg;
@@ -525,27 +528,28 @@ Panel {
                         rightMargin: Constants.DefaultMargin;
                         verticalCenter: borderTxt.verticalCenter;
                     }
-                    height: parent.height - (Constants.DefaultMargin * 2);
+                    height: parent.height - (Constants.DefaultMargin * 6);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.border(borderTxt.text, borderTxt.text);
+                        onClicked: sketchView.selectionManager.border(borderTxt.value, borderTxt.value);
                     }
                 }
             }
             Item {
                 width: fullItem.width;
                 height: shrinkTxt.height;
-                PanelTextField {
+                RangeInput {
                     id: shrinkTxt;
                     anchors {
                         left: parent.left;
                         right: shrinkImg.left;
                     }
                     placeholder: "Shrink";
-                    text: "0"
+                    min: 1; max: 500; decimals: 0;
+                    useExponentialValue: true;
                 }
                 Image {
                     id: shrinkImg;
@@ -554,13 +558,13 @@ Panel {
                         rightMargin: Constants.DefaultMargin;
                         verticalCenter: shrinkTxt.verticalCenter;
                     }
-                    height: parent.height - (Constants.DefaultMargin * 2);
+                    height: parent.height - (Constants.DefaultMargin * 6);
                     width: height;
                     source: "../images/svg/icon-select-apply.svg";
                     smooth: true;
                     MouseArea {
                         anchors.fill: parent;
-                        onClicked: sketchView.selectionManager.shrink(shrinkTxt.text, shrinkTxt.text, false);
+                        onClicked: sketchView.selectionManager.shrink(shrinkTxt.value, shrinkTxt.value, false);
                     }
                 }
             }
