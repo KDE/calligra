@@ -1960,6 +1960,17 @@ in the menu.
 </varlistentry>
 
 <varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Themes</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Choose the color theme for &stage; window.</action> You can choose
+one of the predefined color schemes or select <guimenuitem>Configuration...</guimenuitem> to
+open <ulink url="help:/kcontrol/colors">&systemsettings; color selection module</ulink>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu>
