@@ -1,4 +1,3 @@
-
 include_directories( ${POPPLER_INCLUDE_DIR} )
 
 macro_optional_find_package(OpenJPEG)

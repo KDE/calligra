@@ -28,13 +28,14 @@
 #include <KoShapeLoadingContext.h>
 #include <KoDocumentResourceManager.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 PresentationViewPortShapeFactory::PresentationViewPortShapeFactory(QObject * parent)
     : KoShapeFactoryBase("PresentationViewPortShape", i18n("PresentationViewPort"))
 {	
     setToolTip(i18n("A Presentation View Port"));
-    setIcon("rectangle-shape");//TODO New icon needed shaped like [ ]
+    setIconName(koIconNameCStr("rectangle-shape"));//TODO New icon needed shaped like [ ]
     setLoadingPriority(2);
     
     QList<QPair<QString, QStringList> > elementNamesList;
