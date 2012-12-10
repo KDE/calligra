@@ -91,6 +91,7 @@ public:
                 currentCompositeOpID = compositeOpID;
             }
         }
+        emit q->currentCompositeOpIDChanged();
     }
 
     void ofsChanged()
@@ -468,6 +469,11 @@ void CompositeOpModel::currentNodeChanged(KisLayerSP newNode)
 int CompositeOpModel::indexOf(QString compositeOpId)
 {
     return d->model->indexOf(KoID(compositeOpId)).row();
+}
+
+QString CompositeOpModel::currentCompositeOpID() const
+{
+    return d->currentCompositeOpID;
 }
 
 #include "CompositeOpModel.moc"
