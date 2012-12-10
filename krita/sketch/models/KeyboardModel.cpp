@@ -35,12 +35,21 @@ struct Key {
 class KeyboardModel::Private
 {
 public:
-    Private() : mode(NormalMode), currentKeys(&normalKeys) { }
+    Private()
+        : mode(NormalMode),
+          currentKeys(&normalKeys),
+          useBuiltIn(true)
+    {
+#ifdef Q_OS_WIN
+        useBuiltIn = false;
+#endif 
+    }
     KeyboardMode mode;
     QList<Key> *currentKeys;
     QList<Key> normalKeys;
     QList<Key> capitalKeys;
     QList<Key> numericKeys;
+    bool useBuiltIn;
 };
 
 KeyboardModel::KeyboardModel(QObject* parent)
@@ -274,4 +283,9 @@ void KeyboardModel::setKeyboardMode(KeyboardModel::KeyboardMode mode)
 
         emit keyboardModeChanged();
     }
+}
+
+bool KeyboardModel::useBuiltIn() const
+{
+    return d->useBuiltIn;
 }

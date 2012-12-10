@@ -27,6 +27,7 @@ class KeyboardModel : public QAbstractListModel, public QDeclarativeParserStatus
 Q_OBJECT
 Q_INTERFACES(QDeclarativeParserStatus)
 Q_PROPERTY(KeyboardMode mode READ keyboardMode WRITE setKeyboardMode NOTIFY keyboardModeChanged)
+Q_PROPERTY(bool useBuiltIn READ useBuiltIn NOTIFY useBuiltInChanged)
 
 public:
     enum Roles {
@@ -67,8 +68,11 @@ public:
     KeyboardMode keyboardMode() const;
     void setKeyboardMode(KeyboardModel::KeyboardMode mode);
 
+    bool useBuiltIn() const;
+
 Q_SIGNALS:
     void keyboardModeChanged();
+    bool useBuiltInChanged();
 
 private:
     class Private;
