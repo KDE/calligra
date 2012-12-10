@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2007-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -124,6 +125,14 @@ void KexiFlowLayout::addSpacing(int size)
         addItem(new QSpacerItem(size, 0, QSizePolicy::Fixed, QSizePolicy::Minimum));
     else
         addItem(new QSpacerItem(0, size, QSizePolicy::Minimum, QSizePolicy::Fixed));
+}
+
+void KexiFlowLayout::insertWidget(int index, QWidget* widget, int stretch, Qt::Alignment alignment)
+{
+    Q_UNUSED(stretch);
+    QWidgetItem *wi = new QWidgetItem(widget);
+    wi->setAlignment(alignment);
+    m_list.insert(index, wi);
 }
 
 /*2.0 removed
