@@ -31,7 +31,7 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        text: "Compositing mode:"
+        text: "Blending mode:"
     }
     ExpandingListView {
         id: compositeModeList
