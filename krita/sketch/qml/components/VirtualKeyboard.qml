@@ -41,18 +41,19 @@ Rectangle {
         onTouched: { }
     }
 
-//    Flow {
-//        anchors.fill: parent;
-//        anchors.topMargin: 4;
-//        anchors.leftMargin: Constants.GridWidth * 1.5;
-//        anchors.rightMargin: Constants.GridWidth * 1.5;
-//        anchors.bottomMargin: 4;
+   Flow {
+       visible: KeyboardModel.useBuiltIn;
+       anchors.fill: parent;
+       anchors.topMargin: 4;
+       anchors.leftMargin: Constants.GridWidth * 1.5;
+       anchors.rightMargin: Constants.GridWidth * 1.5;
+       anchors.bottomMargin: 4;
 
-//        Repeater {
-//            model: keys;
-//            delegate: keyDelegate;
-//        }
-//    }
+       Repeater {
+           model: keys;
+           delegate: keyDelegate;
+       }
+   }
 
     states: State {
         name: "visible";
