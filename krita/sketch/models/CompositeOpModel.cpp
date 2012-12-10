@@ -465,4 +465,9 @@ void CompositeOpModel::currentNodeChanged(KisLayerSP newNode)
     }
 }
 
+int CompositeOpModel::indexOf(QString compositeOpId)
+{
+    return d->model->indexOf(KoID(compositeOpId)).row();
+}
+
 #include "CompositeOpModel.moc"
