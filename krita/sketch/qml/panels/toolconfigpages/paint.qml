@@ -43,7 +43,6 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        currentIndex: model.indexOf("normal");
         onCurrentIndexChanged: model.activateItem(currentIndex);
         model: compositeOpModel;
     }
@@ -52,6 +51,7 @@ Item {
         onSizeChanged: sizeInput.value = compositeOpModel.size;
         onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
         onFlowChanged: flowInput.value = compositeOpModel.flow;
+        onCurrentCompositeOpIDChanged: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
     }
     Column {
         anchors {
