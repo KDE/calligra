@@ -87,24 +87,24 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, KisColorSelec
     if (!view->canvas())
         return;
 
-    colorUpdateAllowed=false;
-
     if (role==KisColorSelectorBase::Foreground)
     {
         if(view->resourceProvider()->fgColor() == color)
             return;
+        colorUpdateAllowed=false;
         view->resourceProvider()->setFGColor(color);
         emit q->colorChanged(color.toQColor(), color.toQColor().alphaF(), false);
+        colorUpdateAllowed=true;
     }
     else
     {
         if(view->resourceProvider()->bgColor() == color)
             return;
+        colorUpdateAllowed=false;
         view->resourceProvider()->setBGColor(color);
         emit q->colorChanged(color.toQColor(), color.toQColor().alphaF(), true);
+        colorUpdateAllowed=true;
     }
-
-    colorUpdateAllowed=true;
 }
 
 ColorSelectorItem::ColorSelectorItem(QDeclarativeItem* parent)
@@ -230,6 +230,7 @@ void ColorSelectorItem::setView(QObject* newView)
                 this, SLOT(bgColorChanged(KoColor)));
 
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        setChangeBackground(changeBackground());
     }
     emit viewChanged();
 }
@@ -244,6 +245,15 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
     d->changeBackground = newChangeBackground;
     d->colorRole = newChangeBackground ? KisColorSelectorBase::Background : KisColorSelectorBase::Foreground;
     emit changeBackgroundChanged();
+    if(!d->view)
+        return;
+    if(newChangeBackground)
+        d->currentColor = d->view->resourceProvider()->bgColor().toQColor();
+    else
+        d->currentColor = d->view->resourceProvider()->fgColor().toQColor();
+    d->main->setColor(d->currentColor);
+    d->sub->setColor(d->currentColor);
+    update();
 }
 
 void ColorSelectorItem::setAlpha(int percentValue)
@@ -263,7 +273,10 @@ void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
         if (d->colorUpdateAllowed==false)
             return;
         d->currentColor = c;
+        d->main->setColor(c);
+        d->sub->setColor(c);
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        update();
     }
 }
 
@@ -275,7 +288,10 @@ void ColorSelectorItem::bgColorChanged(const KoColor& newColor)
         if (d->colorUpdateAllowed==false)
             return;
         d->currentColor = c;
+        d->main->setColor(c);
+        d->sub->setColor(c);
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        update();
     }
 }
 
