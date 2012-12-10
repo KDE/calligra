@@ -32,6 +32,9 @@
 #include "Scenario.h"
 #include "CustomAttributeDefinition.h"
 #include "UsageLimits.h"
+#include "Shift.h"
+#include "ShiftSelection.h"
+
 #include <QExplicitlySharedDataPointer>
 
 namespace TJ
@@ -255,6 +258,20 @@ Task::warningMessage(const QString& msg) const
 }
 
 bool
+Task::isWorkingTime(const Interval& slot) const
+{
+    if (shifts.isEmpty()) {
+        return project->isWorkingTime(slot);
+    }
+    for (ShiftSelectionList::Iterator ssli(shifts); ssli.hasNext();) {
+        ShiftSelection *s = ssli.next();
+        if (s->getPeriod().contains(slot))
+            return s->getShift()->isOnShift(slot);
+    }
+    return false;
+}
+
+bool
 Task::schedule(int sc, time_t& date, time_t slotDuration)
 {
     // Has the task been scheduled already or is it a container?
@@ -334,8 +351,9 @@ Task::schedule(int sc, time_t& date, time_t slotDuration)
             bookResources(sc, date, slotDuration);
 
         doneDuration += ((double) slotDuration) / ONEDAY;
-        if (project->isWorkingTime(Interval(date, date + slotDuration - 1)))
+        if (isWorkingTime(Interval(date, date + slotDuration - 1))) {
             doneLength += project->convertToDailyLoad(slotDuration);
+        }
 
         if (DEBUGTS(10))
             qDebug("Length: %f/%f   Duration: %f/%f",
@@ -936,7 +954,7 @@ Task::bookResource(Allocation *allocation, Resource* r, time_t date, time_t slot
                 continue;
             }
             addBookedResource(*rti);
-//             TJMH.debugMessage(QString("Booked resource: '%1' at %2").arg((*rti)->getName()).arg(time2ISO(date)), this);
+            TJMH.debugMessage(QString("Booked resource: '%1' at %2").arg((*rti)->getName()).arg(time2ISO(date)), this);
             if (DEBUGTS(20)) {
                 qDebug()<<" Booked resource"<<(*rti)->getName()<<"at"<<time2ISO(date);
             }
@@ -1268,7 +1286,7 @@ Task::earliestStart(int sc) const
         for (dateAfterLengthGap = potentialDate;
              gapLength > 0 && dateAfterLengthGap < project->getEnd();
              dateAfterLengthGap += project->getScheduleGranularity())
-            if (project->isWorkingTime(dateAfterLengthGap))
+            if (isWorkingTime(dateAfterLengthGap))
                 gapLength -= project->getScheduleGranularity();
         if (dateAfterLengthGap > potentialDate + td->getGapDuration(sc))
             potentialDate = dateAfterLengthGap;
@@ -1325,7 +1343,7 @@ Task::latestEnd(int sc) const
         for (dateBeforeLengthGap = potentialDate;
              gapLength > 0 && dateBeforeLengthGap >= project->getStart();
              dateBeforeLengthGap -= project->getScheduleGranularity())
-            if (project->isWorkingTime(dateBeforeLengthGap))
+            if (isWorkingTime(dateBeforeLengthGap))
                 gapLength -= project->getScheduleGranularity();
         if (dateBeforeLengthGap < potentialDate - td->getGapDuration(sc))
             potentialDate = dateBeforeLengthGap;

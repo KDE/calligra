@@ -38,6 +38,7 @@
 
 #ifdef KEXI_SHOW_OUTERAREA_TEXT
 //! @internal
+
 class KexiScrollViewData
 {
 public:
@@ -49,13 +50,40 @@ public:
 K_GLOBAL_STATIC(KexiScrollViewData, KexiScrollView_data)
 #endif
 
+
+class KexiScrollView::Private
+{
+public:
+    Private(bool preview_)
+	: widget(0)
+        , preview(preview_)
+        , scrollViewNavPanel(0)
+    {
+    }
+
+    bool resizing;
+    bool enableResizing;
+    QWidget *widget;
+
+    int gridSize;
+    QFont helpFont;
+    QColor helpColor;
+    QTimer delayedResize;
+    //! for refreshContentsSizeLater()
+    Q3ScrollView::ScrollBarMode vsmode, hsmode;
+    bool snapToGrid;
+    bool preview;
+    bool scrollbarModeSet;
+    bool outerAreaVisible;
+    KexiRecordNavigator* scrollViewNavPanel;
+};
+
+
 KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
         : Q3ScrollView(parent)
-        , m_widget(0)
-        , m_helpFont(font())
-        , m_preview(preview)
-        , m_scrollViewNavPanel(0)
+        , d(new Private(preview))
 {
+
     setObjectName("kexiscrollview");
     setAttribute(Qt::WA_StaticContents, true);
     setFrameStyle(QFrame::StyledPanel|QFrame::Sunken);
@@ -64,10 +92,11 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
     viewport()->setPalette(pal);
     const QColor fc = palette().color(QPalette::WindowText);
     const QColor bc = viewport()->palette().color(QPalette::Window);
-    m_helpColor = KexiUtils::blendedColors(fc, bc, 1, 2);
-// m_helpColor = QColor((fc.red()+bc.red()*2)/3, (fc.green()+bc.green()*2)/3,
+    d->helpColor = KexiUtils::blendedColors(fc, bc, 1, 2);
+// d->helpColor = QColor((fc.red()+bc.red()*2)/3, (fc.green()+bc.green()*2)/3,
 //  (fc.blue()+bc.blue()*2)/3);
-    m_helpFont.setPointSize(m_helpFont.pointSize() * 3);
+    d->helpFont = font();
+    d->helpFont.setPointSize(d->helpFont.pointSize() * 3);
 
     setFocusPolicy(Qt::WheelFocus);
 
@@ -76,27 +105,28 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
     setResizePolicy(Manual);
 
     viewport()->setMouseTracking(true);
-    m_resizing = false;
-    m_enableResizing = true;
-    m_snapToGrid = false;
-    m_gridSize = 0;
-    m_outerAreaVisible = true;
+    d->resizing = false;
+    d->enableResizing = true;
+    d->snapToGrid = false;
+    d->gridSize = 0;
+    d->outerAreaVisible = true;
 
-    m_delayedResize.setSingleShot(true);
-    connect(&m_delayedResize, SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
-    m_smodeSet = false;
-    if (m_preview) {
+    d->delayedResize.setSingleShot(true);
+    connect(&(d->delayedResize), SIGNAL(timeout()), this, SLOT(refreshContentsSize()));
+    d->scrollbarModeSet = false;
+    if (d->preview) {
         refreshContentsSizeLater(true, true);
 //! @todo allow to hide navigator
         updateScrollBars();
-        m_scrollViewNavPanel = new KexiRecordNavigator(this, this, leftMargin());
-        m_scrollViewNavPanel->setObjectName("nav");
-        m_scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        d->scrollViewNavPanel = new KexiRecordNavigator(this, this, leftMargin());
+        d->scrollViewNavPanel->setObjectName("nav");
+        d->scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     }
 }
 
 KexiScrollView::~KexiScrollView()
 {
+    delete d;
 }
 
 void
@@ -105,29 +135,40 @@ KexiScrollView::setWidget(QWidget *w)
     if (!w)
         return;
     addChild(w);
-    m_widget = w;
+    d->widget = w;
 }
 
 void
 KexiScrollView::setRecordNavigatorVisible(bool visible)
 {
-    if (/*m_scrollViewNavPanel->isVisible() &&*/ !visible) {
-        if (m_scrollViewNavPanel)
-            m_scrollViewNavPanel->hide();
+    if (/*d->scrollViewNavPanel->isVisible() &&*/ !visible) {
+        if (d->scrollViewNavPanel)
+            d->scrollViewNavPanel->hide();
     } else if (visible)  {
-        if (m_scrollViewNavPanel)
-            m_scrollViewNavPanel->show();
+        if (d->scrollViewNavPanel)
+            d->scrollViewNavPanel->show();
         updateNavPanelGeometry();
     }
 }
+void
+KexiScrollView::setOuterAreaIndicatorVisible(bool visible)  {
+    d->outerAreaVisible = visible;
+}
+
 
 void
 KexiScrollView::setSnapToGrid(bool enable, int gridSize)
 {
-    m_snapToGrid = enable;
+    d->snapToGrid = enable;
     if (enable) {
-        m_gridSize = gridSize;
+        d->gridSize = gridSize;
     }
+}
+
+void
+KexiScrollView::setResizingEnabled(bool enabled)
+{
+    d->enableResizing = enabled;
 }
 
 void
@@ -136,31 +177,31 @@ KexiScrollView::refreshContentsSizeLater(bool horizontal, bool vertical)
     Q_UNUSED(horizontal);
     Q_UNUSED(vertical);
 
-    if (!m_smodeSet) {
-        m_smodeSet = true;
-        m_vsmode = vScrollBarMode();
-        m_hsmode = hScrollBarMode();
+    if (!d->scrollbarModeSet) {
+        d->scrollbarModeSet = true;
+        d->vsmode = vScrollBarMode();
+        d->hsmode = hScrollBarMode();
     }
 // if (vertical)
     setVScrollBarMode(Q3ScrollView::AlwaysOff);
     //if (horizontal)
     setHScrollBarMode(Q3ScrollView::AlwaysOff);
     updateScrollBars();
-    m_delayedResize.start(100);
+    d->delayedResize.start(100);
 }
 
 void
 KexiScrollView::refreshContentsSize()
 {
-    if (!m_widget)
+    if (!d->widget)
         return;
-    if (m_preview) {
-        resizeContents(m_widget->width(), m_widget->height());
+    if (d->preview) {
+        resizeContents(d->widget->width(), d->widget->height());
 //  kDebug() << "KexiScrollView::refreshContentsSize(): ( "
-        //  << m_widget->width() <<", "<< m_widget->height();
-        setVScrollBarMode(m_vsmode);
-        setHScrollBarMode(m_hsmode);
-        m_smodeSet = false;
+        //  << d->widget->width() <<", "<< d->widget->height();
+        setVScrollBarMode(d->vsmode);
+        setHScrollBarMode(d->hsmode);
+        d->scrollbarModeSet = false;
         updateScrollBars();
     } else {
         // Ensure there is always space to resize Form
@@ -173,18 +214,18 @@ KexiScrollView::refreshContentsSize()
         const int delta_x = 300;
         const int delta_y = 300;
 #endif
-        if ((m_widget->width() + delta_x * 2 / 3) > w) {
-            w = m_widget->width() + delta_x;
+        if ((d->widget->width() + delta_x * 2 / 3) > w) {
+            w = d->widget->width() + delta_x;
             change = true;
-        } else if ((w - m_widget->width()) > delta_x) {
-            w = m_widget->width() + delta_x;
+        } else if ((w - d->widget->width()) > delta_x) {
+            w = d->widget->width() + delta_x;
             change = true;
         }
-        if ((m_widget->height() + delta_y * 2 / 3) > h) {
-            h = m_widget->height() + delta_y;
+        if ((d->widget->height() + delta_y * 2 / 3) > h) {
+            h = d->widget->height() + delta_y;
             change = true;
-        } else if ((h - m_widget->height()) > delta_y) {
-            h = m_widget->height() + delta_y;
+        } else if ((h - d->widget->height()) > delta_y) {
+            h = d->widget->height() + delta_y;
             change = true;
         }
         if (change) {
@@ -209,28 +250,28 @@ KexiScrollView::refreshContentsSize()
 void
 KexiScrollView::updateNavPanelGeometry()
 {
-    if (m_scrollViewNavPanel)
-        m_scrollViewNavPanel->updateGeometry(leftMargin());
+    if (d->scrollViewNavPanel)
+        d->scrollViewNavPanel->updateGeometry(leftMargin());
 }
 
 void
 KexiScrollView::contentsMousePressEvent(QMouseEvent *ev)
 {
-    if (!m_widget)
+    if (!d->widget)
         return;
 
-    QRect r3(0, 0, m_widget->width() + 4, m_widget->height() + 4);
+    QRect r3(0, 0, d->widget->width() + 4, d->widget->height() + 4);
     if (!r3.contains(ev->pos())) // clicked outside form
-        //m_form->resetSelection();
+        //d->form->resetSelection();
         emit outerAreaClicked();
 
-    if (!m_enableResizing)
+    if (!d->enableResizing)
         return;
 
-    QRect r(m_widget->width(),  0, 4, m_widget->height() + 4); // right limit
-    QRect r2(0, m_widget->height(), m_widget->width() + 4, 4); // bottom limit
+    QRect r(d->widget->width(),  0, 4, d->widget->height() + 4); // right limit
+    QRect r2(0, d->widget->height(), d->widget->width() + 4, 4); // bottom limit
     if (r.contains(ev->pos()) || r2.contains(ev->pos())) {
-        m_resizing = true;
+        d->resizing = true;
         emit resizingStarted();
     }
 }
@@ -238,8 +279,8 @@ KexiScrollView::contentsMousePressEvent(QMouseEvent *ev)
 void
 KexiScrollView::contentsMouseReleaseEvent(QMouseEvent *)
 {
-    if (m_resizing) {
-        m_resizing = false;
+    if (d->resizing) {
+        d->resizing = false;
         emit resizingEnded();
     }
 
@@ -249,10 +290,10 @@ KexiScrollView::contentsMouseReleaseEvent(QMouseEvent *)
 void
 KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 {
-    if (!m_widget || !m_enableResizing)
+    if (!d->widget || !d->enableResizing)
         return;
 
-    if (m_resizing) { // resize widget
+    if (d->resizing) { // resize widget
         int tmpx = ev->x(), tmpy = ev->y();
         const int exceeds_x = (tmpx - contentsX() + 5) - clipper()->width();
         const int exceeds_y = (tmpy - contentsY() + 5) - clipper()->height();
@@ -266,7 +307,7 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
             tmpy = contentsY();
 
         // we look for the max widget right() (or bottom()), which would be the limit for form resizing (not to hide widgets)
-        const QList<QWidget*> list(m_widget->findChildren<QWidget*>());   /* not recursive*/
+        const QList<QWidget*> list(d->widget->findChildren<QWidget*>());   /* not recursive*/
         foreach(QWidget *w, list) {
             tmpx = qMax(tmpx, (w->geometry().right() + 10));
             tmpy = qMax(tmpy, (w->geometry().bottom() + 10));
@@ -274,37 +315,37 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 
         int neww = -1, newh;
         if (cursor().shape() == Qt::SizeHorCursor) {
-            if (m_snapToGrid)
-                neww = int(float(tmpx) / float(m_gridSize) + 0.5) * m_gridSize;
+            if (d->snapToGrid)
+                neww = int(float(tmpx) / float(d->gridSize) + 0.5) * d->gridSize;
             else
                 neww = tmpx;
-            newh = m_widget->height();
+            newh = d->widget->height();
         } else if (cursor().shape() == Qt::SizeVerCursor) {
-            neww = m_widget->width();
-            if (m_snapToGrid)
-                newh = int(float(tmpy) / float(m_gridSize) + 0.5) * m_gridSize;
+            neww = d->widget->width();
+            if (d->snapToGrid)
+                newh = int(float(tmpy) / float(d->gridSize) + 0.5) * d->gridSize;
             else
                 newh = tmpy;
         } else if (cursor().shape() == Qt::SizeFDiagCursor) {
-            if (m_snapToGrid) {
-                neww = int(float(tmpx) / float(m_gridSize) + 0.5) * m_gridSize;
-                newh = int(float(tmpy) / float(m_gridSize) + 0.5) * m_gridSize;
+            if (d->snapToGrid) {
+                neww = int(float(tmpx) / float(d->gridSize) + 0.5) * d->gridSize;
+                newh = int(float(tmpy) / float(d->gridSize) + 0.5) * d->gridSize;
             } else {
                 neww = tmpx;
                 newh = tmpy;
             }
         }
         //needs update?
-        if (neww != -1 && m_widget->size() != QSize(neww, newh)) {
-            m_widget->resize(neww, newh);
+        if (neww != -1 && d->widget->size() != QSize(neww, newh)) {
+            d->widget->resize(neww, newh);
             refreshContentsSize();
             updateContents();
         }
     } else { // update mouse cursor
         QPoint p = ev->pos();
-        QRect r(m_widget->width(),  0, 4, m_widget->height()); // right
-        QRect r2(0, m_widget->height(), m_widget->width(), 4); // bottom
-        QRect r3(m_widget->width(), m_widget->height(), 4, 4); // bottom-right corner
+        QRect r(d->widget->width(),  0, 4, d->widget->height()); // right
+        QRect r2(0, d->widget->height(), d->widget->width(), 4); // bottom
+        QRect r3(d->widget->width(), d->widget->height(), 4, 4); // bottom-right corner
 
         if (r.contains(p))
             setCursor(Qt::SizeHorCursor);
@@ -322,7 +363,7 @@ KexiScrollView::setupPixmapBuffer(QPixmap& pixmap, const QString& text, int line
 {
     Q_UNUSED(lines);
 
-    QFontMetrics fm(m_helpFont);
+    QFontMetrics fm(d->helpFont);
     const int flags = Qt::AlignCenter | Qt::AlignTop;
     QRect rect(fm.boundingRect(0, 0, 1000, 1000, flags, text));
     const int txtw = rect.width(), txth = rect.height();//fm.width(text), txth = fm.height()*lines;
@@ -332,8 +373,8 @@ KexiScrollView::setupPixmapBuffer(QPixmap& pixmap, const QString& text, int line
         pixmap.fill(viewport()->palette().color(QPalette::Window));
         QPainter pb(&pixmap);
         pb.initFrom(this);
-        pb.setPen(m_helpColor);
-        pb.setFont(m_helpFont);
+        pb.setPen(d->helpColor);
+        pb.setFont(d->helpFont);
         pb.drawText(0, 0, txtw, txth, Qt::AlignCenter | Qt::AlignTop, text);
     }
 }
@@ -342,17 +383,17 @@ void
 KexiScrollView::drawContents(QPainter * p, int clipx, int clipy, int clipw, int cliph)
 {
     Q3ScrollView::drawContents(p, clipx, clipy, clipw, cliph);
-    if (m_widget) {
-        if (m_preview || !m_outerAreaVisible)
+    if (d->widget) {
+        if (d->preview || !d->outerAreaVisible)
             return;
 
         //draw right and bottom borders
-        const int wx = childX(m_widget);
-        const int wy = childY(m_widget);
+        const int wx = childX(d->widget);
+        const int wy = childY(d->widget);
         p->setPen(palette().color(QPalette::Active, QPalette::Foreground));
-        p->drawLine(wx + m_widget->width(), wy, wx + m_widget->width(), wy + m_widget->height());
-        p->drawLine(wx, wy + m_widget->height(), wx + m_widget->width(), wy + m_widget->height());
-//kDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height();
+        p->drawLine(wx + d->widget->width(), wy, wx + d->widget->width(), wy + d->widget->height());
+        p->drawLine(wx, wy + d->widget->height(), wx + d->widget->width(), wy + d->widget->height());
+//kDebug() << "KexiScrollView::drawContents() " << wy+d->widget->height();
 
 #ifdef KEXI_SHOW_OUTERAREA_TEXT
         if (KexiScrollView_data->horizontalOuterAreaPixmapBuffer.isNull()) {
@@ -362,17 +403,17 @@ KexiScrollView::drawContents(QPainter * p, int clipx, int clipy, int clipw, int 
         }
         if (!KexiScrollView_data->horizontalOuterAreaPixmapBuffer.isNull()
                 && !KexiScrollView_data->verticalOuterAreaPixmapBuffer.isNull()
-                && !m_delayedResize.isActive() /* only draw text if there's not pending delayed resize*/) {
-            if (m_widget->height() > (KexiScrollView_data->verticalOuterAreaPixmapBuffer.height() + 20)) {
+                && !d->delayedResize.isActive() /* only draw text if there's not pending delayed resize*/) {
+            if (d->widget->height() > (KexiScrollView_data->verticalOuterAreaPixmapBuffer.height() + 20)) {
                 p->drawPixmap(
-                    qMax(m_widget->width(), KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() + 20) + 20,
-                    qMax((m_widget->height() - KexiScrollView_data->verticalOuterAreaPixmapBuffer.height()) / 2, 20),
+                    qMax(d->widget->width(), KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() + 20) + 20,
+                    qMax((d->widget->height() - KexiScrollView_data->verticalOuterAreaPixmapBuffer.height()) / 2, 20),
                     KexiScrollView_data->verticalOuterAreaPixmapBuffer
                 );
             }
             p->drawPixmap(
-                qMax((m_widget->width() - KexiScrollView_data->horizontalOuterAreaPixmapBuffer.width()) / 2, 20),
-                qMax(m_widget->height(), KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() + 20) + 20,
+                qMax((d->widget->width() - KexiScrollView_data->horizontalOuterAreaPixmapBuffer.width()) / 2, 20),
+                qMax(d->widget->height(), KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() + 20) + 20,
                 KexiScrollView_data->horizontalOuterAreaPixmapBuffer
             );
         }
@@ -384,7 +425,7 @@ void
 KexiScrollView::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
-    m_widget->update(); //update form elements on too fast mouse move
+    d->widget->update(); //update form elements on too fast mouse move
 }
 
 void
@@ -392,8 +433,8 @@ KexiScrollView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
 {
     /*todo*/
 // kDebug()<<"KexiScrollView::setHBarGeometry";
-    if (m_scrollViewNavPanel && m_scrollViewNavPanel->isVisible()) {
-        m_scrollViewNavPanel->setHBarGeometry(hbar, x, y, w, h);
+    if (d->scrollViewNavPanel && d->scrollViewNavPanel->isVisible()) {
+        d->scrollViewNavPanel->setHBarGeometry(hbar, x, y, w, h);
     } else {
         hbar.setGeometry(x, y, w, h);
     }
@@ -402,8 +443,25 @@ KexiScrollView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
 KexiRecordNavigator*
 KexiScrollView::recordNavigator() const
 {
-    return m_scrollViewNavPanel;
+    return d->scrollViewNavPanel;
+}
+
+
+bool KexiScrollView::isPreviewing() const
+{
+    return d->preview;
+}
+
+const QTimer *KexiScrollView::delayedResizeTimer() const
+{
+  return &(d->delayedResize);
+}
+
+QWidget * KexiScrollView::widget() const
+{
+    return d->widget;
 }
 
 #include "kexiscrollview.moc"
+
 

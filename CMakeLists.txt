@@ -23,8 +23,8 @@ endif()
 
 # define the generic version of the Calligra libraries here
 # this makes it easy to advance it when the next Calligra release comes
-set(GENERIC_CALLIGRA_LIB_VERSION "11.0.0")
-set(GENERIC_CALLIGRA_LIB_SOVERSION "11")
+set(GENERIC_CALLIGRA_LIB_VERSION "12.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "12")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -41,6 +41,7 @@ option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
@@ -109,9 +110,9 @@ set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
 if (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
+    find_package(Qt4 4.7.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
 else (QT3SUPPORT)
-    find_package(Qt4 4.6.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
+    find_package(Qt4 4.7.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
 endif (QT3SUPPORT)
 
 include (KDE4Defaults)
@@ -315,17 +316,78 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 macro_optional_find_package(Vc)
 macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
 macro_bool_to_01(Vc_FOUND HAVE_VC)
-if(NOT MSVC)
-macro_bool_to_01(Vc_FOUND HAVE_SANE_VC)
-endif(NOT MSVC)
+macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
+
 configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
 
 if(HAVE_VC)
     message(STATUS "Vc found!")
 
     SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
-    include (OptimizeForArchitecture)
-    OptimizeForArchitecture()
+    include (VcMacros)
+
+    # This is a copy-paste from VcMacros.cmake
+    # we need a version *without* Scalar implementation
+    macro(ko_compile_for_all_implementations_no_scalar_impl _objs _src)
+      set(${_objs})
+
+      # remove all -march, -msse, etc. flags from the flags we want to pass
+      string(REPLACE "${Vc_ARCHITECTURE_FLAGS}" "" _flags "${Vc_DEFINITIONS}")
+      string(REPLACE "-DVC_IMPL=[^ ]*" "" _flags "${_flags}")
+
+      # capture the -march= switch as -mtune; if there is none skip it
+      if(Vc_ARCHITECTURE_FLAGS MATCHES "-march=")
+        string(REGEX REPLACE "^.*-march=([^ ]*).*$" "-mtune=\\1" _tmp "${Vc_ARCHITECTURE_FLAGS}")
+        set(_flags "${_flags} ${_tmp}")
+      endif()
+
+      # make a semicolon separated list of all flags
+      string(TOUPPER "${CMAKE_BUILD_TYPE}" _tmp)
+      set(_tmp "CMAKE_CXX_FLAGS_${_tmp}")
+      string(REPLACE " " ";" _flags "${CMAKE_CXX_FLAGS} ${${_tmp}} ${_flags} ${ARGN}")
+      get_directory_property(_inc INCLUDE_DIRECTORIES)
+      foreach(_i ${_inc})
+        list(APPEND _flags "-I${_i}")
+      endforeach()
+
+      set(_vc_compile_src "${_src}")
+
+      ##! commented out intentionally, the only difference with original
+      #   _vc_compile_one_implementation(${_objs} Scalar NO_FLAG)
+      ##!
+      if(NOT Vc_SSE_INTRINSICS_BROKEN)
+        _vc_compile_one_implementation(${_objs} SSE2   "-msse2"   "-xSSE2"   "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE3   "-msse3"   "-xSSE3"   "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSSE3  "-mssse3"  "-xSSSE3"  "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE4_1 "-msse4.1" "-xSSE4.1" "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE4_2 "-msse4.2" "-xSSE4.2" "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE4a  "-msse4a"  "-xSSSE3"  "/arch:SSE2")
+      endif()
+      if(NOT Vc_AVX_INTRINSICS_BROKEN)
+        _vc_compile_one_implementation(${_objs} AVX      "-mavx"    "-xAVX"    "/arch:AVX")
+      endif()
+    endmacro()
+
+    macro(ko_compile_for_all_implementations_no_scalar _objs _src _opts)
+      if(PACKAGERS_BUILD)
+        ko_compile_for_all_implementations_no_scalar_impl(${_objs} ${_src} ${_opts})
+      else(PACKAGERS_BUILD)
+        set(${_objs} ${_src})
+      endif(PACKAGERS_BUILD)
+    endmacro()
+
+    macro(ko_compile_for_all_implementations _objs _src _opts)
+      if(PACKAGERS_BUILD)
+        vc_compile_for_all_implementations(${_objs} ${_src} ${_opts})
+      else(PACKAGERS_BUILD)
+        set(${_objs} ${_src})
+      endif(PACKAGERS_BUILD)
+    endmacro()
+
+    if (NOT PACKAGERS_BUILD)
+      # Optimize the whole Calligra for current architecture
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+    endif (NOT PACKAGERS_BUILD)
 endif(HAVE_VC)
 set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 

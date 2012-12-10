@@ -48,23 +48,17 @@ public:
     void setWidget(QWidget *w);
     void setSnapToGrid(bool enable, int gridSize = 10);
 
-    void setResizingEnabled(bool enabled) {
-        m_enableResizing = enabled;
-    }
+    void setResizingEnabled(bool enabled);
     void setRecordNavigatorVisible(bool visible);
 
-    void setOuterAreaIndicatorVisible(bool visible)  {
-        m_outerAreaVisible = visible;
-    }
+    void setOuterAreaIndicatorVisible(bool visible);
 
     void refreshContentsSizeLater(bool horizontal, bool vertical);
     void updateNavPanelGeometry();
 
     KexiRecordNavigator* recordNavigator() const;
 
-    inline bool preview() const {
-        return m_preview;
-    }
+    bool isPreviewing() const;
 
 public slots:
     /*! Make sure there is a 300px margin around the form contents to allow resizing. */
@@ -84,21 +78,12 @@ protected:
     virtual void setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h);
     void setupPixmapBuffer(QPixmap& pixmap, const QString& text, int lines);
 
-    bool m_resizing;
-    bool m_enableResizing;
-    QWidget *m_widget;
+    const QTimer *delayedResizeTimer() const;
+    QWidget *widget() const;
 
-    int m_gridSize;
-    QFont m_helpFont;
-    QColor m_helpColor;
-    QTimer m_delayedResize;
-    //! for refreshContentsSizeLater()
-    Q3ScrollView::ScrollBarMode m_vsmode, m_hsmode;
-    bool m_snapToGrid;
-    bool m_preview;
-    bool m_smodeSet;
-    bool m_outerAreaVisible;
-    KexiRecordNavigator* m_scrollViewNavPanel;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif
