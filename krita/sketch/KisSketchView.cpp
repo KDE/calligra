@@ -136,6 +136,7 @@ public:
     QTimer *timer;
 
     QTimer *loadedTimer;
+    QTimer *savedTimer;
     QAction* undoAction;
     QAction* redoAction;
     bool useOpenGL;
@@ -179,10 +180,15 @@ KisSketchView::KisSketchView(QDeclarativeItem* parent)
     d->loadedTimer->setInterval(100);
     connect(d->loadedTimer, SIGNAL(timeout()), SIGNAL(loadingFinished()));
 
+    d->savedTimer = new QTimer(this);
+    d->savedTimer->setSingleShot(true);
+    d->savedTimer->setInterval(100);
+    connect(d->savedTimer, SIGNAL(timeout()), SIGNAL(savingFinished()));
+
     connect(DocumentManager::instance(), SIGNAL(aboutToDeleteDocument()), SLOT(documentAboutToBeDeleted()));
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
     connect(DocumentManager::instance()->progressProxy(), SIGNAL(valueChanged(int)), SIGNAL(progress(int)));
-    connect(DocumentManager::instance()->part(), SIGNAL(completed()), d->loadedTimer, SLOT(start()));
+    connect(DocumentManager::instance(), SIGNAL(documentSaved()), d->savedTimer, SLOT(start()));
 
     if(DocumentManager::instance()->document())
         documentChanged();

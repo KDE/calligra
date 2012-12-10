@@ -32,6 +32,10 @@ Page {
             loadingDialog.hide("Done!");
             savingDialog.hide("Done!");
         }
+        onSavingFinished: {
+            loadingDialog.hide("Done!");
+            savingDialog.hide("Done!");
+        }
         onProgress: {
             if(value === -1 || value === 100) {
                 loadingDialog.hide("Done!");

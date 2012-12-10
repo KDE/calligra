@@ -76,6 +76,7 @@ Q_SIGNALS:
     void floatingMessageRequested(QString message, QString iconName);
     void interactionStarted();
     void loadingFinished();
+    void savingFinished();
     void canUndoChanged();
     void canRedoChanged();
 

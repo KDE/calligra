@@ -136,6 +136,7 @@ void DocumentManager::save()
 {
     d->part->save();
     d->recentFileManager->addRecent(d->document->url().toLocalFile());
+    emit documentSaved();
 }
 
 void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
@@ -153,6 +154,7 @@ void DocumentManager::delayedSaveAs()
 {
     d->part->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
+    emit documentSaved();
 }
 
 DocumentManager* DocumentManager::instance()

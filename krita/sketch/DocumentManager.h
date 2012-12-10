@@ -49,6 +49,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void documentChanged();
     void aboutToDeleteDocument();
+    void documentSaved();
 
 private:
     explicit DocumentManager(QObject *parent = 0);
