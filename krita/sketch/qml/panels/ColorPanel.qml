@@ -31,8 +31,20 @@ Panel {
             height: parent.height;
             width: height;
         },
+        Button {
+            id: colorPicker;
+            width: height;
+            height: Constants.GridHeight;
+            color: "transparent";
+            image: "../images/svg/icon-colorpicker.svg";
+            textColor: "white";
+            shadow: false;
+            highlight: false;
+            checked: false;
+            onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
+        },
         Item {
-            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 2);
+            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3);
             height: Constants.GridHeight;
         },
         Button {
