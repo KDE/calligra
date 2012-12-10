@@ -42,7 +42,7 @@ Rectangle {
     }
 
    Flow {
-       visible: KeyboardModel.useBuiltIn;
+       visible: keys.useBuiltIn;
        anchors.fill: parent;
        anchors.topMargin: 4;
        anchors.leftMargin: Constants.GridWidth * 1.5;
