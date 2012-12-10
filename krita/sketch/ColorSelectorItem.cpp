@@ -276,6 +276,7 @@ void ColorSelectorItem::fgColorChanged(const KoColor& newColor)
         d->main->setColor(c);
         d->sub->setColor(c);
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        emit colorChanged(d->currentColor, d->currentColor.alphaF(), false);
         update();
     }
 }
@@ -291,6 +292,7 @@ void ColorSelectorItem::bgColorChanged(const KoColor& newColor)
         d->main->setColor(c);
         d->sub->setColor(c);
         d->commitColor(KoColor(d->currentColor, d->view->resourceProvider()->fgColor().colorSpace()), d->colorRole);
+        emit colorChanged(d->currentColor, d->currentColor.alphaF(), true);
         update();
     }
 }
