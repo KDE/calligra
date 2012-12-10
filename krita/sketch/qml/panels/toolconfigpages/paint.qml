@@ -23,15 +23,27 @@ import "../../components"
 Item {
     id: base
     property bool fullView: true;
-    ExpandingListView {
-        id: compositeModeList
-        visible: fullView;
+    Label {
+        id: compositeModeListLabel
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
+        text: "Compositing mode:"
+    }
+    ExpandingListView {
+        id: compositeModeList
+        visible: fullView;
+        expandedHeight: Constants.GridHeight * 6;
+        anchors {
+            top: compositeModeListLabel.bottom;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        currentIndex: model.indexOf("normal");
         onCurrentIndexChanged: model.activateItem(currentIndex);
         model: compositeOpModel;
     }
