@@ -61,6 +61,7 @@ int main( int argc, char** argv )
 
     KCmdLineOptions options;
     options.add( "+[files]", ki18n( "Images to open" ) );
+    options.add( "novkb", ki18n( "Don't use the virtual keyboard" ) );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -124,7 +125,7 @@ int main( int argc, char** argv )
 
     MainWindow window(fileNames);
 
-    if (!isUltraBook()) {
+    if (args->isSet("vkb")) {
         app.setInputContext(new SketchInputContext(&app));
     }
 
