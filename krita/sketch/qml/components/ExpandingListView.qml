@@ -115,6 +115,15 @@ Item {
                     color: "white";
                     opacity: model.isCategory ? 0.3 : 0;
                 }
+                Image {
+                    anchors {
+                        bottom: delegateLabel.bottom;
+                        left: delegateLabel.left;
+                        right: delegateLabel.right;
+                    }
+                    source: "../images/shadow-smooth.png";
+                    visible: listView.currentIndex === index;
+                }
                 Label {
                     id: delegateLabel
                     anchors.fill: parent
@@ -125,6 +134,9 @@ Item {
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {
+                        if(model.isCategory) {
+                            return;
+                        }
                         listView.currentIndex = index;
                         base.newIndex(index);
                         base.state = "";
