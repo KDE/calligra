@@ -24,6 +24,7 @@
 #include "StylesDelegate.h"
 
 #include <QListView>
+#include <QTreeView>
 #include <QMouseEvent>
 #include <QStyleOptionViewItemV4>
 
@@ -32,7 +33,8 @@
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent),
       m_stylesModel(0),
-      m_view(new QListView()),
+//      m_view(new QListView()),
+      m_view(new QTreeView()),
       m_selectedItem(-1),
       m_originalStyle(true)
 {
@@ -52,6 +54,10 @@ StylesCombo::StylesCombo(QWidget *parent)
 
     m_view->setMinimumWidth(250);
     m_view->setMouseTracking(true);
+    m_view->setRootIsDecorated(false);
+    m_view->setItemsExpandable(false);
+    m_view->setHeaderHidden(true);
+    m_view->setIndentation(0);
     setView(m_view);
     view()->viewport()->installEventFilter(this);
 
@@ -91,6 +97,8 @@ void StylesCombo::setStylesModel(AbstractStylesModel *model)
 {
     m_stylesModel = model;
     setModel(model);
+    connect(m_stylesModel, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+//    m_view->expandAll();
 }
 
 void StylesCombo::setEditable(bool editable)
@@ -192,6 +200,11 @@ void StylesCombo::slotShowDia(QModelIndex index)
 void StylesCombo::slotDeleteStyle(QModelIndex index)
 {
     emit deleteStyle(index.row());
+}
+
+void StylesCombo::slotModelReset()
+{
+    m_view->expandAll();
 }
 
 void StylesCombo::showEditIcon(bool show){

@@ -323,7 +323,7 @@ void SimpleParagraphWidget::listStyleChanged(int id)
 
 void SimpleParagraphWidget::styleSelected(int index)
 {
-    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_sortedStylesModel->index(index).internalId());
+    KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(m_sortedStylesModel->index(index, 0, QModelIndex()).internalId());
     if (paragStyle) {
         emit paragraphStyleSelected(paragStyle);
     }
@@ -332,7 +332,7 @@ void SimpleParagraphWidget::styleSelected(int index)
 
 void SimpleParagraphWidget::slotShowStyleManager(int index)
 {
-    int styleId = m_sortedStylesModel->index(index).internalId();
+    int styleId = m_sortedStylesModel->index(index, 0, QModelIndex()).internalId();
     emit showStyleManager(styleId);
     emit doneWithFocus();
 }

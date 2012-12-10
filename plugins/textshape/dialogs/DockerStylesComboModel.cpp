@@ -23,12 +23,133 @@
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
 
+#include <KLocale>
+
 #include <KDebug>
 
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
     StylesFilteredModelBase(parent),
     m_styleManager(0)
 {
+}
+
+Qt::ItemFlags DockerStylesComboModel::flags(const QModelIndex &index) const
+{
+    if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
+        return (Qt::NoItemFlags);
+    }
+    return (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+}
+
+QModelIndex DockerStylesComboModel::parent(const QModelIndex &child) const
+{
+    if (child.data(isTitleRole).toBool()) {
+        return QModelIndex();
+    }
+    else {
+        if (m_usedStylesId.contains(child.internalId())) {
+            return createIndex(0, 0, UsedStyleId);
+        }
+        else {
+            return createIndex(1, 0, UnusedStyleId);
+        }
+    }
+    return QModelIndex();
+}
+
+int DockerStylesComboModel::rowCount(const QModelIndex &parent) const
+{
+    if (!parent.isValid()) {
+        return 2;
+    }
+    if (parent.internalId() == UsedStyleId) {
+        return m_usedStyles.count();
+    }
+    if (parent.internalId() == UnusedStyleId) {
+        return (m_sourceModel->rowCount() - m_usedStyles.count());
+    }
+    return 0;
+}
+
+QModelIndex DockerStylesComboModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (row < 0 || column != 0)
+        return QModelIndex();
+
+    if (!parent.isValid()) {
+        if (row >= 2) {
+            return QModelIndex();
+        }
+        return createIndex(row, 0, (row == 0)?UsedStyleId:UnusedStyleId);
+    }
+    else {
+//        if (parent.internalId() == UsedStyleId) {
+//            if (row >= m_usedStyles.count()) {
+//                return QModelIndex();
+//            }
+//            return createIndex(row, 0, int(m_sourceModel->index(m_, 0, QModelIndex()).internalId()));
+//        }
+//        else {
+//            if (row >= m_originalStylesCount) {
+//                return QModelIndex();
+//            }
+//            return createIndex(row, 0, int(m_sourceModel->index(m_modifiedStylesCount + row, 0, QModelIndex()).internalId()));
+//        }
+        if (row >= m_proxyToSource.count()) {
+            return QModelIndex();
+        }
+        return createIndex(row, 0, int(m_sourceModel->index(m_proxyToSource.at(row), 0, QModelIndex()).internalId()));
+    }
+    return QModelIndex();
+}
+
+QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid()) {
+        return QVariant();
+    }
+
+    switch (role) {
+    case AbstractStylesModel::isTitleRole: {
+        if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
+            return true;
+        }
+    }
+    case Qt::DisplayRole: {
+        if (index.internalId() == UsedStyleId) {
+            return i18n("Used Styles");
+        }
+        if (index.internalId() == UnusedStyleId) {
+            return i18n("Unused Styles");
+        }
+        return QVariant();
+    }
+    case Qt::DecorationRole: {
+        if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
+            return QVariant();
+        }
+        if (index.parent().isValid()) {
+            return m_sourceModel->data(m_sourceModel->index(m_proxyToSource.at(index.row()), 0, QModelIndex()), role);
+        }
+//        if (index.parent().isValid() && index.parent().internalId() == OriginalStyleId) {
+//            return m_sourceModel->data(m_sourceModel->index(index.row() + m_modifiedStylesCount, 0, QModelIndex()), role);
+//        }
+        return QVariant();
+    }
+    case Qt::SizeHintRole: {
+        return QVariant(QSize(250, 48));
+    }
+    default: break;
+//        if (index.parent().isValid()) {
+//        }
+//        kDebug() << "other role. style id: " << index.row();
+//        kDebug() << "other role. data: " << m_sourceModel->data(index, role);
+
+//        return KCategorizedSortFilterProxyModel::data(index, role);
+//        return QSortFilterProxyModel::data(index, role);
+    }
+
+    return QVariant();
 }
 
 void DockerStylesComboModel::setInitialUsedStyles(QVector<int> usedStyles)

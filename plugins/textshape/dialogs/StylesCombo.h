@@ -22,6 +22,7 @@
 #include <QComboBox>
 
 class QListView;
+class QTreeView;
 
 class AbstractStylesModel;
 class StylesComboPreview;
@@ -92,11 +93,13 @@ private slots:
     void slotSelectionChanged(int index);
     void slotItemClicked(QModelIndex);
     void slotPreviewClicked();
+    void slotModelReset();
 
 private:
     AbstractStylesModel *m_stylesModel;
     StylesComboPreview *m_preview;
-    QListView *m_view;
+//    QListView *m_view;
+    QTreeView *m_view;
     int m_selectedItem;
     bool m_originalStyle;
 };

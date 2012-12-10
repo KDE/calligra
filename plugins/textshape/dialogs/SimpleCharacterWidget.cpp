@@ -227,7 +227,7 @@ void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format
 
 void SimpleCharacterWidget::styleSelected(int index)
 {
-    KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_sortedStylesModel->index(index).internalId());
+    KoCharacterStyle *charStyle = m_styleManager->characterStyle(m_sortedStylesModel->index(index, 0, QModelIndex()).internalId());
 
     //if the selected item correspond to a null characterStyle, send the null pointer. the tool should set the characterStyle as per paragraph
     emit characterStyleSelected(charStyle);
@@ -236,7 +236,7 @@ void SimpleCharacterWidget::styleSelected(int index)
 
 void SimpleCharacterWidget::slotShowStyleManager(int index)
 {
-    int styleId = m_sortedStylesModel->index(index).internalId();
+    int styleId = m_sortedStylesModel->index(index, 0, QModelIndex()).internalId();
     emit showStyleManager(styleId);
     emit doneWithFocus();
 }
