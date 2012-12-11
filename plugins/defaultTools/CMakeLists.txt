@@ -9,6 +9,9 @@ add_subdirectory(pics)
 
 SET ( defaulttools_SRCS
     Plugin.cpp
+    createPathTool/KoCreatePathTool.cpp
+    createPathTool/KoCreatePathToolFactory.cpp
+    
     defaulttool/DefaultTool.cpp
     defaulttool/DefaultToolFactory.cpp
     defaulttool/DefaultToolWidget.cpp

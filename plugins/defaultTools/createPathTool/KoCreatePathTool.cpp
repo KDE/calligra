@@ -27,7 +27,7 @@
 #include "KoShapeStroke.h"
 #include "KoSelection.h"
 #include "commands/KoPathPointMergeCommand.h"
-#include "SnapGuideConfigWidget.h"
+// #include "SnapGuideConfigWidget.h"
 #include "KoCanvasResourceManager.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapePaintingContext.h"
@@ -370,9 +370,9 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     Q_D(KoCreatePathTool);
 
     QList<QWidget *> list;
-    SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(canvas()->snapGuide());
-    widget->setWindowTitle(i18n("Snapping"));
-    list.append(widget);
+    // SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(canvas()->snapGuide());
+    // widget->setWindowTitle(i18n("Snapping"));
+    // list.append(widget);
 
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");

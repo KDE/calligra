@@ -36,7 +36,7 @@ class KoCreatePathToolPrivate;
 /**
  * Tool for creating path shapes.
  */
-class FLAKE_EXPORT KoCreatePathTool : public KoToolBase
+class KoCreatePathTool : public KoToolBase
 {
     Q_OBJECT
 public:
