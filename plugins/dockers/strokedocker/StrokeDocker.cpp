@@ -71,9 +71,6 @@ StrokeDocker::StrokeDocker()
 
     d->mainWidget = new KoStrokeConfigWidget( this );
     setWidget( d->mainWidget );
-
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(locationChanged(Qt::DockWidgetArea)));
 }
 
 StrokeDocker::~StrokeDocker()
@@ -102,7 +99,6 @@ void StrokeDocker::unsetCanvas()
 
 void StrokeDocker::locationChanged(Qt::DockWidgetArea area)
 {
-    d->mainWidget->locationChanged(area);
 }
 
 #include <StrokeDocker.moc>

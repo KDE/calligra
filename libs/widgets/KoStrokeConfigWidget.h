@@ -52,14 +52,12 @@ public:
     Qt::PenStyle lineStyle() const;
     QVector<qreal> lineDashes() const;
     qreal lineWidth() const;
+    QColor color() const;
     qreal miterLimit() const;
     KoMarker *startMarker() const;
     KoMarker *endMarker() const;
 
     void setCanvas( KoCanvasBase *canvas );
-
-public slots:
-    void locationChanged(Qt::DockWidgetArea area);
 
 private slots:
     void updateControls(KoShapeStrokeModel *stroke, KoMarker *startMarker, KoMarker *endMarker);

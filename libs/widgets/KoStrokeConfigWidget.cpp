@@ -40,9 +40,11 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QButtonGroup>
+#include <QMenu>
 
 // KDE
 #include <klocale.h>
+#include <kaction.h>
 
 // Calligra
 #include <KoIcon.h>
@@ -51,6 +53,7 @@
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
 #include "KoMarkerSelector.h"
+#include <KoColorPopupAction.h>
 
 #include <QBuffer>
 #include <KoXmlReader.h>
@@ -74,6 +77,93 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeStrokeModel.h>
 
+class CapNJoinButton : public QToolButton
+{
+public:
+    CapNJoinButton(QWidget *parent);
+
+    KoUnitDoubleSpinBox *miterLimit;
+    QButtonGroup        *capGroup;
+    QButtonGroup        *joinGroup;
+};
+
+CapNJoinButton::CapNJoinButton(QWidget *parent)
+    : QToolButton(parent)
+{
+    setText("...");
+    QMenu *menu = new QMenu();
+    setPopupMode(InstantPopup);
+
+    QGridLayout *mainLayout = new QGridLayout();
+    mainLayout->setMargin(2);
+
+     // The cap group
+    capGroup = new QButtonGroup(this);
+    capGroup->setExclusive(true);
+
+    QToolButton *button = 0;
+
+    button = new QToolButton(this);
+    button->setIcon(koIcon("cap_butt"));
+    button->setCheckable(true);
+    button->setToolTip(i18n("Butt cap"));
+    capGroup->addButton(button, Qt::FlatCap);
+    mainLayout->addWidget(button, 2, 0);
+
+    button = new QToolButton(this);
+    button->setIcon(koIcon("cap_round"));
+    button->setCheckable(true);
+    button->setToolTip(i18n("Round cap"));
+    capGroup->addButton(button, Qt::RoundCap);
+    mainLayout->addWidget(button, 2, 1);
+
+    button = new QToolButton(this);
+    button->setIcon(koIcon("cap_square"));
+    button->setCheckable(true);
+    button->setToolTip(i18n("Square cap"));
+    capGroup->addButton(button, Qt::SquareCap);
+    mainLayout->addWidget(button, 2, 2, Qt::AlignLeft);
+
+    // The join group
+    joinGroup = new QButtonGroup(this);
+    joinGroup->setExclusive(true);
+
+    button = new QToolButton(this);
+    button->setIcon(koIcon("join_miter"));
+    button->setCheckable(true);
+    button->setToolTip(i18n("Miter join"));
+    joinGroup->addButton(button, Qt::MiterJoin);
+    mainLayout->addWidget(button, 3, 0);
+
+    button = new QToolButton(this);
+    button->setIcon(koIcon("join_round"));
+    button->setCheckable(true);
+    button->setToolTip(i18n("Round join"));
+    joinGroup->addButton(button, Qt::RoundJoin);
+    mainLayout->addWidget(button, 3, 1);
+
+    button = new QToolButton(this);
+    button->setIcon(koIcon("join_bevel"));
+    button->setCheckable(true);
+    button->setToolTip(i18n("Bevel join"));
+    joinGroup->addButton(button, Qt::BevelJoin);
+    mainLayout->addWidget(button, 3, 2, Qt::AlignLeft);
+
+    // Miter limit
+    // set min/max/step and value in points, then set actual unit
+    miterLimit = new KoUnitDoubleSpinBox(this);
+    miterLimit->setMinMaxStep(0.0, 1000.0, 0.5);
+    miterLimit->setDecimals(2);
+    miterLimit->setUnit(KoUnit(KoUnit::Point));
+    miterLimit->setToolTip(i18n("Miter limit"));
+    mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
+
+    mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    menu->setLayout(mainLayout);
+    setMenu(menu);
+}
+
+
 
 class KoStrokeConfigWidget::Private
 {
@@ -85,13 +175,14 @@ public:
 
     KoLineStyleSelector *lineStyle;
     KoUnitDoubleSpinBox *lineWidth;
-    KoUnitDoubleSpinBox *miterLimit;
-    QButtonGroup        *capGroup;
-    QButtonGroup        *joinGroup;
     KoMarkerSelector    *startMarkerSelector;
     KoMarkerSelector    *endMarkerSelector;
 
-    QSpacerItem *spacer;
+    CapNJoinButton *capNJoinButton;
+    QToolButton *colorButton;
+    KoColorPopupAction *colorAction;
+
+    QWidget *spacer;
     QGridLayout *layout;
 
     KoCanvasBase *canvas;
@@ -103,105 +194,48 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 {
     setObjectName("Stroke widget");
     QGridLayout *mainLayout = new QGridLayout(this);
+    mainLayout->setMargin(0);
+
+    // Start marker
+    QList<KoMarker*> markers;
+
+    d->startMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
+    d->startMarkerSelector->updateMarkers(markers);
+    mainLayout->addWidget(d->startMarkerSelector, 0, 0, 1, 2);
 
     // Line style
-    QLabel * styleLabel = new QLabel(i18n("Style:"), this);
-    mainLayout->addWidget(styleLabel, 0, 0);
     d->lineStyle = new KoLineStyleSelector(this);
-    mainLayout->addWidget(d->lineStyle, 0, 1, 1, 3);
+    mainLayout->addWidget(d->lineStyle, 0, 2, 1, 3);
+
+    // End marker
+    d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
+    d->endMarkerSelector->updateMarkers(markers);
+    mainLayout->addWidget(d->endMarkerSelector, 0, 5, 1, 2);
 
     // Line width
-    QLabel* widthLabel = new QLabel(i18n("Width:"), this);
-    mainLayout->addWidget(widthLabel, 1, 0);
     // set min/max/step and value in points, then set actual unit
     d->lineWidth = new KoUnitDoubleSpinBox(this);
     d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
     d->lineWidth->setDecimals(2);
     d->lineWidth->setUnit(KoUnit(KoUnit::Point));
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
-    mainLayout->addWidget(d->lineWidth, 1, 1, 1, 3);
+    mainLayout->addWidget(d->lineWidth, 1, 0, 1, 5);
 
-    // The cap group
-    QLabel* capLabel = new QLabel(i18n("Cap:"), this);
-    mainLayout->addWidget(capLabel, 2, 0);
-    d->capGroup = new QButtonGroup(this);
-    d->capGroup->setExclusive(true);
+    d->capNJoinButton = new CapNJoinButton(this);
+    mainLayout->addWidget(d->capNJoinButton, 1, 5);
 
-    QToolButton *button = 0;
-
-    button = new QToolButton(this);
-    button->setIcon(koIcon("cap_butt"));
-    button->setCheckable(true);
-    button->setToolTip(i18n("Butt cap"));
-    d->capGroup->addButton(button, Qt::FlatCap);
-    mainLayout->addWidget(button, 2, 1);
-
-    button = new QToolButton(this);
-    button->setIcon(koIcon("cap_round"));
-    button->setCheckable(true);
-    button->setToolTip(i18n("Round cap"));
-    d->capGroup->addButton(button, Qt::RoundCap);
-    mainLayout->addWidget(button, 2, 2);
-
-    button = new QToolButton(this);
-    button->setIcon(koIcon("cap_square"));
-    button->setCheckable(true);
-    button->setToolTip(i18n("Square cap"));
-    d->capGroup->addButton(button, Qt::SquareCap);
-    mainLayout->addWidget(button, 2, 3, Qt::AlignLeft);
-
-    // The join group
-    QLabel* joinLabel = new QLabel(i18n("Join:"), this);
-    mainLayout->addWidget(joinLabel, 3, 0);
-
-    d->joinGroup = new QButtonGroup(this);
-    d->joinGroup->setExclusive(true);
-
-    button = new QToolButton(this);
-    button->setIcon(koIcon("join_miter"));
-    button->setCheckable(true);
-    button->setToolTip(i18n("Miter join"));
-    d->joinGroup->addButton(button, Qt::MiterJoin);
-    mainLayout->addWidget(button, 3, 1);
-
-    button = new QToolButton(this);
-    button->setIcon(koIcon("join_round"));
-    button->setCheckable(true);
-    button->setToolTip(i18n("Round join"));
-    d->joinGroup->addButton(button, Qt::RoundJoin);
-    mainLayout->addWidget(button, 3, 2);
-
-    button = new QToolButton(this);
-    button->setIcon(koIcon("join_bevel"));
-    button->setCheckable(true);
-    button->setToolTip(i18n("Bevel join"));
-    d->joinGroup->addButton(button, Qt::BevelJoin);
-    mainLayout->addWidget(button, 3, 3, Qt::AlignLeft);
-
-    // Miter limit
-    QLabel* miterLabel = new QLabel(i18n("Miter limit:"), this);
-    mainLayout->addWidget(miterLabel, 4, 0);
-    // set min/max/step and value in points, then set actual unit
-    d->miterLimit = new KoUnitDoubleSpinBox(this);
-    d->miterLimit->setMinMaxStep(0.0, 1000.0, 0.5);
-    d->miterLimit->setDecimals(2);
-    d->miterLimit->setUnit(KoUnit(KoUnit::Point));
-    d->miterLimit->setToolTip(i18n("Set miter limit"));
-    mainLayout->addWidget(d->miterLimit, 4, 1, 1, 3);
-
-    QList<KoMarker*> markers;
-
-    d->startMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
-    d->startMarkerSelector->updateMarkers(markers);
-    mainLayout->addWidget(d->startMarkerSelector, 5, 0, 1, 2);
-
-    d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
-    d->endMarkerSelector->updateMarkers(markers);
-    mainLayout->addWidget(d->endMarkerSelector, 5, 2, 1, 2);
+    d->colorButton = new QToolButton(this);
+    mainLayout->addWidget(d->colorButton, 1, 6);
+    d->colorAction = new KoColorPopupAction(this);
+    d->colorAction->setIcon(koIcon("format-stroke-color"));
+    d->colorAction->setToolTip(i18n("Change the color of the line/border"));
+    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
+    d->colorButton->setDefaultAction(d->colorAction);
 
     // Spacer
-    d->spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    mainLayout->addItem(d->spacer, 5, 4);
+    d->spacer = new QWidget();
+    d->spacer->setObjectName("SpecialSpacer");
+    mainLayout->addWidget(d->spacer, 3, 0);
 
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->layout = mainLayout;
@@ -209,9 +243,9 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
     connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
+    connect(d->capNJoinButton->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
+    connect(d->capNJoinButton->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
+    connect(d->capNJoinButton->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
     connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(startMarkerChanged()));
     connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(endMarkerChanged()));
 }
@@ -240,9 +274,14 @@ qreal KoStrokeConfigWidget::lineWidth() const
     return d->lineWidth->value();
 }
 
+QColor KoStrokeConfigWidget::color() const
+{
+    return d->colorAction->currentColor();
+}
+
 qreal KoStrokeConfigWidget::miterLimit() const
 {
-    return d->miterLimit->value();
+    return d->capNJoinButton->miterLimit->value();
 }
 
 KoMarker *KoStrokeConfigWidget::startMarker() const
@@ -265,18 +304,18 @@ void KoStrokeConfigWidget::updateControls(KoShapeStrokeModel *stroke, KoMarker *
     const KoShapeStroke *lineStroke = dynamic_cast<const KoShapeStroke*>( stroke );
     if (lineStroke) {
         d->lineWidth->changeValue(lineStroke->lineWidth());
-        d->capGroup->button(lineStroke->capStyle())->setChecked(true);
-        d->joinGroup->button(lineStroke->joinStyle())->setChecked(true);
-        d->miterLimit->changeValue(lineStroke->miterLimit());
-        d->miterLimit->setEnabled(lineStroke->joinStyle() == Qt::MiterJoin);
+        d->capNJoinButton->capGroup->button(lineStroke->capStyle())->setChecked(true);
+        d->capNJoinButton->joinGroup->button(lineStroke->joinStyle())->setChecked(true);
+        d->capNJoinButton->miterLimit->changeValue(lineStroke->miterLimit());
+        d->capNJoinButton->miterLimit->setEnabled(lineStroke->joinStyle() == Qt::MiterJoin);
         d->lineStyle->setLineStyle(lineStroke->lineStyle(), lineStroke->lineDashes());
     }
     else {
         d->lineWidth->changeValue(0.0);
-        d->capGroup->button(Qt::FlatCap)->setChecked(true);
-        d->joinGroup->button(Qt::MiterJoin)->setChecked(true);
-        d->miterLimit->changeValue(0.0);
-        d->miterLimit->setEnabled(true);
+        d->capNJoinButton->capGroup->button(Qt::FlatCap)->setChecked(true);
+        d->capNJoinButton->joinGroup->button(Qt::MiterJoin)->setChecked(true);
+        d->capNJoinButton->miterLimit->changeValue(0.0);
+        d->capNJoinButton->miterLimit->setEnabled(true);
         d->lineStyle->setLineStyle(Qt::NoPen, QVector<qreal>());
    }
 
@@ -291,7 +330,7 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
     blockChildSignals(true);
 
     d->lineWidth->setUnit(unit);
-    d->miterLimit->setUnit(unit);
+    d->capNJoinButton->miterLimit->setUnit(unit);
 
     blockChildSignals(false);
 }
@@ -305,30 +344,12 @@ void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
 void KoStrokeConfigWidget::blockChildSignals(bool block)
 {
     d->lineWidth->blockSignals(block);
-    d->capGroup->blockSignals(block);
-    d->joinGroup->blockSignals(block);
-    d->miterLimit->blockSignals(block);
+    d->capNJoinButton->capGroup->blockSignals(block);
+    d->capNJoinButton->joinGroup->blockSignals(block);
+    d->capNJoinButton->miterLimit->blockSignals(block);
     d->lineStyle->blockSignals(block);
     d->startMarkerSelector->blockSignals(block);
     d->endMarkerSelector->blockSignals(block);
-}
-
-void KoStrokeConfigWidget::locationChanged(Qt::DockWidgetArea area)
-{
-    switch (area) {
-        case Qt::TopDockWidgetArea:
-        case Qt::BottomDockWidgetArea:
-            d->spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-            break;
-        case Qt::LeftDockWidgetArea:
-        case Qt::RightDockWidgetArea:
-            d->spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-            break;
-        default:
-            break;
-    }
-    d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    d->layout->invalidate();
 }
 
 //------------------------
@@ -345,12 +366,12 @@ void KoStrokeConfigWidget::applyChanges()
     KoShapeStroke *newStroke = new KoShapeStroke();
     KoShapeStroke *oldStroke = dynamic_cast<KoShapeStroke*>( selection->firstSelectedShape()->stroke() );
     if (oldStroke) {
-        newStroke->setColor(oldStroke->color());
         newStroke->setLineBrush(oldStroke->lineBrush());
     }
+    newStroke->setColor(color());
     newStroke->setLineWidth(lineWidth());
-    newStroke->setCapStyle(static_cast<Qt::PenCapStyle>(d->capGroup->checkedId()));
-    newStroke->setJoinStyle(static_cast<Qt::PenJoinStyle>(d->joinGroup->checkedId()));
+    newStroke->setCapStyle(static_cast<Qt::PenCapStyle>(d->capNJoinButton->capGroup->checkedId()));
+    newStroke->setJoinStyle(static_cast<Qt::PenJoinStyle>(d->capNJoinButton->joinGroup->checkedId()));
     newStroke->setMiterLimit(miterLimit());
     newStroke->setLineStyle(lineStyle(), lineDashes());
 
