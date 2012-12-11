@@ -46,7 +46,7 @@ public:
     void deactivate();
 
 protected:
-    virtual QWidget * createOptionWidget();
+    virtual QList<QWidget *> createOptionWidgets();
 
 private slots:
     void selectMode(int mode);

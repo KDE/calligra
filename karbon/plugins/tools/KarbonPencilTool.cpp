@@ -34,6 +34,7 @@
 #include <KoPathPointData.h>
 #include <KoPathPointMergeCommand.h>
 #include <KoShapePaintingContext.h>
+#include <KoStrokeConfigWidget.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -312,8 +313,9 @@ void KarbonPencilTool::finish(bool closePath)
     }
 }
 
-QWidget * KarbonPencilTool::createOptionWidget()
+QList<QWidget *> KarbonPencilTool::createOptionWidgets()
 {
+    QList<QWidget *> widgets;
     QWidget *optionWidget = new QWidget();
     QVBoxLayout * layout = new QVBoxLayout(optionWidget);
 
@@ -368,8 +370,15 @@ QWidget * KarbonPencilTool::createOptionWidget()
 
     modeBox->setCurrentIndex(m_mode);
     stackedWidget->setCurrentIndex(m_mode);
-
-    return optionWidget;
+    optionWidget->setObjectName(i18n("Pencil"));
+    optionWidget->setWindowTitle(i18n("Pencil"));
+    widgets.append(optionWidget);
+    
+    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
+    strokeWidget->setWindowTitle(i18n("Stroke"));
+    strokeWidget->setCanvas(canvas());
+    widgets.append(strokeWidget);
+    return widgets;
 }
 
 void KarbonPencilTool::selectMode(int mode)
