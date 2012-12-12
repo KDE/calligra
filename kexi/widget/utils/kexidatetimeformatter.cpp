@@ -28,95 +28,160 @@
 #include <kmenu.h>
 #include <kdatewidget.h>
 
+
+class KexiDateFormatter::Private
+{
+public:
+    Private() {}
+
+    //! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
+    QString inputMask;
+
+    //! Order of date sections
+    Order order;
+
+    //! 4 or 2 digits
+    bool longYear;
+
+    bool monthWithLeadingZero, dayWithLeadingZero;
+
+    //! Date format used in toString()
+    QString qtFormat;
+
+    //! Used in fromString(const QString&) to convert string back to QDate
+    int yearpos, monthpos, daypos;
+
+    QString separator;
+};
+
+class KexiTimeFormatter::Private
+{
+public:
+    Private()
+        : hmsRegExp(new QRegExp(
+            QLatin1String("(\\d*):(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
+        , hmRegExp(new QRegExp(
+            QLatin1String("(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
+    {
+    }
+
+    ~Private()
+    {
+        delete hmsRegExp;
+        delete hmRegExp;
+    }
+
+    //! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
+    QString inputMask;
+
+//  //! Order of date sections
+//  QDateEdit::Order order;
+
+    //! 12 or 12h
+    bool is24h;
+
+    bool hoursWithLeadingZero;
+
+    //! Time format used in toString(). Notation from KLocale::setTimeFormat() is used.
+    QString outputFormat;
+
+    //! Used in fromString(const QString&) to convert string back to QTime
+    int hourpos, minpos, secpos, ampmpos;
+
+    QRegExp *hmsRegExp, *hmRegExp;
+};
+
 KexiDateFormatter::KexiDateFormatter()
+  : d(new Private)
 {
     // use "short date" format system settings
 //! @todo allow to override the format using column property and/or global app settings
     QString df(KGlobal::locale()->dateFormatShort());
     if (df.length() > 2)
-        m_separator = df.mid(2, 1);
+        d->separator = df.mid(2, 1);
     else
-        m_separator = "-";
-    const int separatorLen = m_separator.length();
+        d->separator = "-";
+    const int separatorLen = d->separator.length();
     QString yearMask("9999");
     QString yearDateFormat("yyyy");
     QString monthDateFormat("MM");
-    QString dayDateFormat("dd"); //for setting up m_dateFormat
+    QString dayDateFormat("dd"); //for setting up d->dateFormat
     bool ok = df.length() >= 8;
     int yearpos, monthpos, daypos; //result of df.find()
     if (ok) {//look at % variables
 //! @todo more variables are possible here, see void KLocale::setDateFormatShort() docs
 //!       http://developer.kde.org/documentation/library/3.5-api/kdelibs-apidocs/kdecore/html/classKLocale.html#a59
         yearpos = df.indexOf("%y", 0, Qt::CaseInsensitive); //&y or %y
-        m_longYear = !(yearpos >= 0 && df.mid(yearpos + 1, 1) == "y");
-        if (!m_longYear) {
+        d->longYear = !(yearpos >= 0 && df.mid(yearpos + 1, 1) == "y");
+        if (!d->longYear) {
             yearMask = "99";
             yearDateFormat = "yy";
         }
         monthpos = df.indexOf("%m", 0, Qt::CaseSensitive); //%m or %n
-        m_monthWithLeadingZero = true;
+        d->monthWithLeadingZero = true;
         if (monthpos < 0) {
             monthpos = df.indexOf("%n", 0, Qt::CaseInsensitive);
-            m_monthWithLeadingZero = false;
+            d->monthWithLeadingZero = false;
             monthDateFormat = "M";
         }
         daypos = df.indexOf("%d", 0, Qt::CaseSensitive);//%d or %e
-        m_dayWithLeadingZero = true;
+        d->dayWithLeadingZero = true;
         if (daypos < 0) {
             daypos = df.indexOf("%e", 0, Qt::CaseInsensitive);
-            m_dayWithLeadingZero = false;
+            d->dayWithLeadingZero = false;
             dayDateFormat = "d";
         }
         ok = (yearpos >= 0 && monthpos >= 0 && daypos >= 0);
     }
-    m_order = YMD; //default
+    d->order = YMD; //default
     if (ok) {
         if (yearpos < monthpos && monthpos < daypos) {
             //will be set in "default: YMD"
         } else if (yearpos < daypos && daypos < monthpos) {
-            m_order = YDM;
+            d->order = YDM;
 //! @todo use QRegExp (to replace %Y by %1, etc.) instead of hardcoded "%1%299%399"
 //!       because df may contain also other characters
-            m_inputMask = yearMask + m_separator + QLatin1String("99") + m_separator + QLatin1String("99");
-            m_qtFormat = yearDateFormat + m_separator + dayDateFormat + m_separator + monthDateFormat;
-            m_yearpos = 0;
-            m_daypos = yearMask.length() + separatorLen;
-            m_monthpos = m_daypos + 2 + separatorLen;
+            d->inputMask = yearMask + d->separator + QLatin1String("99") + d->separator + QLatin1String("99");
+            d->qtFormat = yearDateFormat + d->separator + dayDateFormat + d->separator + monthDateFormat;
+            d->yearpos = 0;
+            d->daypos = yearMask.length() + separatorLen;
+            d->monthpos = d->daypos + 2 + separatorLen;
         } else if (daypos < monthpos && monthpos < yearpos) {
-            m_order = DMY;
-            m_inputMask = QLatin1String("99") + m_separator + QLatin1String("99") + m_separator + yearMask;
-            m_qtFormat = dayDateFormat + m_separator + monthDateFormat + m_separator + yearDateFormat;
-            m_daypos = 0;
-            m_monthpos = 2 + separatorLen;
-            m_yearpos = m_monthpos + 2 + separatorLen;
+            d->order = DMY;
+            d->inputMask = QLatin1String("99") + d->separator + QLatin1String("99") + d->separator + yearMask;
+            d->qtFormat = dayDateFormat + d->separator + monthDateFormat + d->separator + yearDateFormat;
+            d->daypos = 0;
+            d->monthpos = 2 + separatorLen;
+            d->yearpos = d->monthpos + 2 + separatorLen;
         } else if (monthpos < daypos && daypos < yearpos) {
-            m_order = MDY;
-            m_inputMask = QLatin1String("99") + m_separator + QLatin1String("99") + m_separator + yearMask;
-            m_qtFormat = monthDateFormat + m_separator + dayDateFormat + m_separator + yearDateFormat;
-            m_monthpos = 0;
-            m_daypos = 2 + separatorLen;
-            m_yearpos = m_daypos + 2 + separatorLen;
+            d->order = MDY;
+            d->inputMask = QLatin1String("99") + d->separator + QLatin1String("99") + d->separator + yearMask;
+            d->qtFormat = monthDateFormat + d->separator + dayDateFormat + d->separator + yearDateFormat;
+            d->monthpos = 0;
+            d->daypos = 2 + separatorLen;
+            d->yearpos = d->daypos + 2 + separatorLen;
         } else
             ok = false;
     }
-    if (!ok || m_order == YMD) {//default: YMD
-        m_inputMask = yearMask + m_separator + QLatin1String("99") + m_separator + QLatin1String("99");
-        m_qtFormat = yearDateFormat + m_separator + monthDateFormat + m_separator + dayDateFormat;
-        m_yearpos = 0;
-        m_monthpos = yearMask.length() + separatorLen;
-        m_daypos = m_monthpos + 2 + separatorLen;
+    if (!ok || d->order == YMD) {//default: YMD
+        d->inputMask = yearMask + d->separator + QLatin1String("99") + d->separator + QLatin1String("99");
+        d->qtFormat = yearDateFormat + d->separator + monthDateFormat + d->separator + dayDateFormat;
+        d->yearpos = 0;
+        d->monthpos = yearMask.length() + separatorLen;
+        d->daypos = d->monthpos + 2 + separatorLen;
     }
-    m_inputMask += ";_";
+    d->inputMask += ";_";
 }
 
 KexiDateFormatter::~KexiDateFormatter()
 {
+    delete d;
 }
 
 QDate KexiDateFormatter::fromString(const QString& str) const
 {
     bool ok = true;
-    int year = str.mid(m_yearpos, m_longYear ? 4 : 2).toInt(&ok);
+    int year = str.mid(d->yearpos, d->longYear ? 4 : 2).toInt(&ok);
     if (!ok)
         return QDate();
     if (year < 30) {//2000..2029
@@ -125,11 +190,11 @@ QDate KexiDateFormatter::fromString(const QString& str) const
         year = 1900 + year;
     }
 
-    int month = str.mid(m_monthpos, 2).toInt(&ok);
+    int month = str.mid(d->monthpos, 2).toInt(&ok);
     if (!ok)
         return QDate();
 
-    int day = str.mid(m_daypos, 2).toInt(&ok);
+    int day = str.mid(d->daypos, 2).toInt(&ok);
     if (!ok)
         return QDate();
 
@@ -152,83 +217,91 @@ QVariant KexiDateFormatter::stringToVariant(const QString& str) const
 bool KexiDateFormatter::isEmpty(const QString& str) const
 {
     QString s(str);
-    return s.remove(m_separator).trimmed().isEmpty();
+    return s.remove(d->separator).trimmed().isEmpty();
+}
+
+QString KexiDateFormatter::inputMask() const
+{
+    return d->inputMask;
+}
+
+QString KexiDateFormatter::separator() const
+{
+    return d->separator;
 }
 
 QString KexiDateFormatter::toString(const QDate& date) const
 {
-    return date.toString(m_qtFormat);
+    return date.toString(d->qtFormat);
 }
 
 //------------------------------------------------
 
 KexiTimeFormatter::KexiTimeFormatter()
-        : m_hmsRegExp( new QRegExp(
-            QLatin1String("(\\d*):(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
-        , m_hmRegExp( new QRegExp(
-            QLatin1String("(\\d*):(\\d*).*( am| pm){,1}"), Qt::CaseInsensitive))
+        : d(new Private)
 {
     QString tf(KGlobal::locale()->timeFormat());
-    //m_hourpos, m_minpos, m_secpos; are result of tf.indexOf()
+    //d->hourpos, d->minpos, d->secpos; are result of tf.indexOf()
     QString hourVariable, minVariable, secVariable;
 
     //detect position of HOUR section: find %H or %k or %I or %l
-    m_24h = true;
-    m_hoursWithLeadingZero = true;
-    m_hourpos = tf.indexOf("%H", 0, Qt::CaseSensitive);
-    if (m_hourpos >= 0) {
-        m_24h = true;
-        m_hoursWithLeadingZero = true;
+    d->is24h = true;
+    d->hoursWithLeadingZero = true;
+    d->hourpos = tf.indexOf("%H", 0, Qt::CaseSensitive);
+    if (d->hourpos >= 0) {
+        d->is24h = true;
+        d->hoursWithLeadingZero = true;
     } else {
-        m_hourpos = tf.indexOf("%k", 0, Qt::CaseSensitive);
-        if (m_hourpos >= 0) {
-            m_24h = true;
-            m_hoursWithLeadingZero = false;
+        d->hourpos = tf.indexOf("%k", 0, Qt::CaseSensitive);
+        if (d->hourpos >= 0) {
+            d->is24h = true;
+            d->hoursWithLeadingZero = false;
         } else {
-            m_hourpos = tf.indexOf("%I", 0, Qt::CaseSensitive);
-            if (m_hourpos >= 0) {
-                m_24h = false;
-                m_hoursWithLeadingZero = true;
+            d->hourpos = tf.indexOf("%I", 0, Qt::CaseSensitive);
+            if (d->hourpos >= 0) {
+                d->is24h = false;
+                d->hoursWithLeadingZero = true;
             } else {
-                m_hourpos = tf.indexOf("%l", 0, Qt::CaseSensitive);
-                if (m_hourpos >= 0) {
-                    m_24h = false;
-                    m_hoursWithLeadingZero = false;
+                d->hourpos = tf.indexOf("%l", 0, Qt::CaseSensitive);
+                if (d->hourpos >= 0) {
+                    d->is24h = false;
+                    d->hoursWithLeadingZero = false;
                 }
             }
         }
     }
-    m_minpos = tf.indexOf("%M", 0, Qt::CaseSensitive);
-    m_secpos = tf.indexOf("%S", 0, Qt::CaseSensitive); //can be -1
-    m_ampmpos = tf.indexOf("%p", 0, Qt::CaseSensitive); //can be -1
+    d->minpos = tf.indexOf("%M", 0, Qt::CaseSensitive);
+    d->secpos = tf.indexOf("%S", 0, Qt::CaseSensitive); //can be -1
+    d->ampmpos = tf.indexOf("%p", 0, Qt::CaseSensitive); //can be -1
 
-    if (m_hourpos < 0 || m_minpos < 0) {
+    if (d->hourpos < 0 || d->minpos < 0) {
         //set default: hr and min are needed, sec are optional
         tf = "%H:%M:%S";
-        m_24h = true;
-        m_hoursWithLeadingZero = false;
-        m_hourpos = 0;
-        m_minpos = 3;
-        m_secpos = m_minpos + 3;
-        m_ampmpos = -1;
+        d->is24h = true;
+        d->hoursWithLeadingZero = false;
+        d->hourpos = 0;
+        d->minpos = 3;
+        d->secpos = d->minpos + 3;
+        d->ampmpos = -1;
     }
-    hourVariable = tf.mid(m_hourpos, 2);
+    hourVariable = tf.mid(d->hourpos, 2);
 
-    m_inputMask = tf;
-// m_inputMask.replace( hourVariable, "00" );
-// m_inputMask.replace( "%M", "00" );
-// m_inputMask.replace( "%S", "00" ); //optional
-    m_inputMask.replace(hourVariable, "99");
-    m_inputMask.replace("%M", "99");
-    m_inputMask.replace("%S", "00");   //optional
-    m_inputMask.replace("%p", "AA");   //am or pm
-    m_inputMask += ";_";
+    d->inputMask = tf;
+// d->inputMask.replace( hourVariable, "00" );
+// d->inputMask.replace( "%M", "00" );
+// d->inputMask.replace( "%S", "00" ); //optional
+    d->inputMask.replace(hourVariable, "99");
+    d->inputMask.replace("%M", "99");
+    d->inputMask.replace("%S", "00");   //optional
+    d->inputMask.replace("%p", "AA");   //am or pm
+    d->inputMask += ";_";
 
-    m_outputFormat = tf;
+    d->outputFormat = tf;
 }
 
 KexiTimeFormatter::~KexiTimeFormatter()
 {
+    delete d;
 }
 
 QTime KexiTimeFormatter::fromString(const QString& str) const
@@ -237,24 +310,24 @@ QTime KexiTimeFormatter::fromString(const QString& str) const
     bool pm = false;
 
     bool tryWithoutSeconds = true;
-    if (m_secpos >= 0) {
-        if (-1 != m_hmsRegExp->indexIn(str)) {
-            hour = m_hmsRegExp->cap(1).toInt();
-            min = m_hmsRegExp->cap(2).toInt();
-            sec = m_hmsRegExp->cap(3).toInt();
-            if (m_ampmpos >= 0 && m_hmsRegExp->numCaptures() > 3)
-                pm = m_hmsRegExp->cap(4).trimmed().toLower() == "pm";
+    if (d->secpos >= 0) {
+        if (-1 != d->hmsRegExp->indexIn(str)) {
+            hour = d->hmsRegExp->cap(1).toInt();
+            min = d->hmsRegExp->cap(2).toInt();
+            sec = d->hmsRegExp->cap(3).toInt();
+            if (d->ampmpos >= 0 && d->hmsRegExp->numCaptures() > 3)
+                pm = d->hmsRegExp->cap(4).trimmed().toLower() == "pm";
             tryWithoutSeconds = false;
         }
     }
     if (tryWithoutSeconds) {
-        if (-1 == m_hmRegExp->indexIn(str))
+        if (-1 == d->hmRegExp->indexIn(str))
             return QTime(99, 0, 0);
-        hour = m_hmRegExp->cap(1).toInt();
-        min = m_hmRegExp->cap(2).toInt();
+        hour = d->hmRegExp->cap(1).toInt();
+        min = d->hmRegExp->cap(2).toInt();
         sec = 0;
-        if (m_ampmpos >= 0 && m_hmRegExp->numCaptures() > 2)
-            pm = m_hmsRegExp->cap(4).toLower() == "pm";
+        if (d->ampmpos >= 0 && d->hmRegExp->numCaptures() > 2)
+            pm = d->hmsRegExp->cap(4).toLower() == "pm";
     }
 
     if (pm && hour < 12)
@@ -283,25 +356,30 @@ QString KexiTimeFormatter::toString(const QTime& time) const
     if (!time.isValid())
         return QString();
 
-    QString s(m_outputFormat);
-    if (m_24h) {
-        if (m_hoursWithLeadingZero)
+    QString s(d->outputFormat);
+    if (d->is24h) {
+        if (d->hoursWithLeadingZero)
             s.replace("%H", QString::fromLatin1(time.hour() < 10 ? "0" : "") + QString::number(time.hour()));
         else
             s.replace("%k", QString::number(time.hour()));
     } else {
         int time12 = (time.hour() > 12) ? (time.hour() - 12) : time.hour();
-        if (m_hoursWithLeadingZero)
+        if (d->hoursWithLeadingZero)
             s.replace("%I", QString::fromLatin1(time12 < 10 ? "0" : "") + QString::number(time12));
         else
             s.replace("%l", QString::number(time12));
     }
     s.replace("%M", QString::fromLatin1(time.minute() < 10 ? "0" : "") + QString::number(time.minute()));
-    if (m_secpos >= 0)
+    if (d->secpos >= 0)
         s.replace("%S", QString::fromLatin1(time.second() < 10 ? "0" : "") + QString::number(time.second()));
-    if (m_ampmpos >= 0)
+    if (d->ampmpos >= 0)
         s.replace("%p", ki18n( time.hour() >= 12 ? "pm" : "am" ).toString( KGlobal::locale() ));
     return s;
+}
+
+QString KexiTimeFormatter::inputMask() const
+{
+    return d->inputMask;
 }
 
 //------------------------------------------------
@@ -352,7 +430,7 @@ bool KexiDateTimeFormatter::isEmpty(const KexiDateFormatter& dateFormatter,
 {
     int timepos = str.indexOf(" ");
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).replace(':',"").trimmed().isEmpty();
-    return (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) //s.left(timepos).replace(m_dateFormatter.separator(), "").trimmed().isEmpty()
+    return (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) //s.left(timepos).replace(d->dateFormatter.separator(), "").trimmed().isEmpty()
             && emptyTime);
 }
 
@@ -361,7 +439,7 @@ bool KexiDateTimeFormatter::isValid(const KexiDateFormatter& dateFormatter,
 {
     int timepos = str.indexOf(" ");
     const bool emptyTime = timepos >= 0 && timeFormatter.isEmpty(str.mid(timepos + 1)); //s.mid(timepos+1).replace(':',"").trimmed().isEmpty();
-    if (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) // s.left(timepos).replace(m_dateFormatter.separator(), "").trimmed().isEmpty()
+    if (timepos >= 0 && dateFormatter.isEmpty(str.left(timepos)) // s.left(timepos).replace(d->dateFormatter.separator(), "").trimmed().isEmpty()
             && emptyTime)
         //empty date/time is valid
         return true;

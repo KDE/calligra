@@ -42,26 +42,44 @@
 #include <kexidragobjects.h>
 #include <kexiutils/utils.h>
 
+class KexiFieldListView::Private
+{
+public:
+    Private(KexiFieldListOptions options_)
+      : schema(0)
+      , model(0)
+      , options(options_)
+    {
+    }
+
+    ~Private()
+    {
+        delete schema;
+    }
+
+
+    KexiDB::TableOrQuerySchema* schema;
+    KexiFieldListModel *model;
+    KexiFieldListOptions options;
+};
+
 KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions options)
         : QListView(parent)
-        , m_schema(0)
-        , m_model(0)
-        , m_options(options)
-
+	, d(new Private(options))
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
     setAlternatingRowColors(true);
-    
+
 /*    setDropVisualizer(false);
     setDropHighlighter(true);
     setAllColumnsShowFocus(true);
     addColumn(i18n("Field Name"));
-    if (m_options & ShowDataTypes)
+    if (d->options & ShowDataTypes)
         addColumn(i18n("Data Type"));
-    if (m_options & AllowMultiSelection)
+    if (d->options & AllowMultiSelection)
         setSelectionMode(Q3ListView::Extended);
     setResizeMode(Q3ListView::LastColumn);
 // header()->hide();
@@ -73,38 +91,42 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions optio
 
 KexiFieldListView::~KexiFieldListView()
 {
-    delete m_schema;
+    delete d;
 }
 
 void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 {
-    if (schema && m_schema == schema)
+    if (schema && d->schema == schema)
         return;
 
-    delete m_schema;
-    m_schema = schema;
-    if (!m_schema)
+    delete d->schema;
+    d->schema = schema;
+    if (!d->schema)
         return;
 
     if (!schema->table() && !schema->query())
         return;
 
-    delete m_model;
-   
-    m_model = new KexiFieldListModel(this, m_options);
-    
-    m_model->setSchema(schema);
-    setModel(m_model);
+    delete d->model;
+
+    d->model = new KexiFieldListModel(this, d->options);
+
+    d->model->setSchema(schema);
+    setModel(d->model);
+}
+
+KexiDB::TableOrQuerySchema* KexiFieldListView::schema() const {
+    return d->schema;
 }
 
 QStringList KexiFieldListView::selectedFieldNames() const
 {
     if (!schema())
         return QStringList();
-    
+
     QStringList selectedFields;
     QModelIndexList idxlist = selectedIndexes();
-    
+
     foreach (QModelIndex idx, idxlist) {
         QString field = model()->data(idx).toString();
         if (field.startsWith("*")) {

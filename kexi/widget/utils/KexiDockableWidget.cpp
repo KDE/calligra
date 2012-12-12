@@ -21,37 +21,50 @@
 #include <kexiutils/utils.h>
 #include <QVBoxLayout>
 
+
+class KexiDockableWidget::Private
+{
+public:
+    Private() {}
+
+    QPointer<QWidget> widget;
+    QSize hint;
+};
+
+
 KexiDockableWidget::KexiDockableWidget(QWidget* parent)
         : QWidget(parent)
+	, d(new Private)
 {
 }
 
 KexiDockableWidget::~KexiDockableWidget()
 {
+    delete d;
 }
 
 QSize KexiDockableWidget::sizeHint() const
 {
-    return m_hint.isValid() ? m_hint : QWidget::sizeHint();
+    return d->hint.isValid() ? d->hint : QWidget::sizeHint();
 }
 
 void KexiDockableWidget::setSizeHint(const QSize& size)
 {
-    m_hint = size;
+    d->hint = size;
 }
 
 QWidget* KexiDockableWidget::widget() const
 {
-    return m_widget;
+    return d->widget;
 }
 
 void KexiDockableWidget::setWidget(QWidget* widget)
 {
-    if (m_widget || widget == this)
+    if (d->widget || widget == this)
         return;
-    m_widget = widget;
-    m_widget->setParent(this);
+    d->widget = widget;
+    d->widget->setParent(this);
     QVBoxLayout *lyr = new QVBoxLayout(this);
     KexiUtils::setMargins(lyr, 0);
-    lyr->addWidget(m_widget);
+    lyr->addWidget(d->widget);
 }

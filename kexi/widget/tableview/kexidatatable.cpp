@@ -127,7 +127,7 @@ void KexiDataTable::filter()
 
 KexiTableView* KexiDataTable::tableView() const
 {
-    return dynamic_cast<KexiTableView*>(m_internalView);
+  return dynamic_cast<KexiTableView*>(internalView());
 }
 
 bool KexiDataTable::saveSettings()

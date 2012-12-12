@@ -24,47 +24,64 @@
 #include <KoIcon.h>
 #include <klocalizedstring.h>
 
-KexiFieldListModelItem::KexiFieldListModelItem(const QString &fname, const QString &dtype, bool pkey) : m_fieldName(fname), m_dateType(dtype)
+class KexiFieldListModelItem::Private
+{
+public:
+    Private(const QString &fname, const QString &dtype)
+      : fieldName(fname)
+      , dateType(dtype)
+    {
+    }
+
+    QString dateType;
+    QString fieldName;
+    QIcon icon;
+    QString caption;
+};
+
+KexiFieldListModelItem::KexiFieldListModelItem(const QString &fname,
+					       const QString &dtype, bool pkey)
+        : d(new Private(fname, dtype))
 {
     if (pkey) {
-        m_icon = koIcon("key");
+        d->icon = koIcon("key");
     } else {
-        m_icon = KexiUtils::emptyIcon(KIconLoader::Small);
+        d->icon = KexiUtils::emptyIcon(KIconLoader::Small);
     }
 }
 
 KexiFieldListModelItem::~KexiFieldListModelItem()
 {
-
+    delete d;
 }
 
 QVariant KexiFieldListModelItem::data(int column) const
 {
     if (column == 0) {
-        return m_fieldName == "*" ? i18n("* (All Columns)") : m_fieldName;
+        return d->fieldName == "*" ? i18n("* (All Columns)") : d->fieldName;
     } else {
-        return m_dateType;
+        return d->dateType;
     }
 }
 
 QIcon KexiFieldListModelItem::icon() const
 {
-    return m_icon;
+    return d->icon;
 }
 
 QString KexiFieldListModelItem::caption() const
 {
-    return m_caption;
+    return d->caption;
 }
 
 void KexiFieldListModelItem::setCaption(const QString& caption)
 {
-    m_caption = caption;
+    d->caption = caption;
 }
 
 Qt::ItemFlags KexiFieldListModelItem::flags() const
 {
-    if (m_fieldName.isEmpty() || m_fieldName == "*"){
+    if (d->fieldName.isEmpty() || d->fieldName == "*"){
         return Qt::NoItemFlags;
     }
     return Qt::ItemIsDragEnabled;

@@ -30,12 +30,28 @@
 #include <QGridLayout>
 #include <QLabel>
 
+class KexiNameDialog::Private
+{
+
+public:
+    Private() {}
+
+    QLabel *icon;
+    KexiNameWidget* widget;
+    const KexiProject *project;
+    const KexiPart::Part *part;
+    bool checkIfObjectExists;
+    bool allowOverwriting;
+    bool *overwriteNeeded;
+};
+
 KexiNameDialog::KexiNameDialog(
     const QString& message, QWidget * parent)
         : KDialog(parent)
+	, d(new Private)
 {
     setMainWidget(new QWidget(this));
-    m_widget = new KexiNameWidget(message, mainWidget());
+    d->widget = new KexiNameWidget(message, mainWidget());
     init();
 }
 
@@ -44,50 +60,53 @@ KexiNameDialog::KexiNameDialog(const QString& message,
                                const QString& captionLabel, const QString& captionText,
                                QWidget * parent)
         : KDialog(parent)
+	, d(new Private)
 {
     setMainWidget(new QWidget(this));
-    m_widget = new KexiNameWidget(message, nameLabel, nameText,
+    d->widget = new KexiNameWidget(message, nameLabel, nameText,
                                   captionLabel, captionText, mainWidget());
     init();
 }
 
 KexiNameDialog::~KexiNameDialog()
 {
+    delete d;
 }
 
 void KexiNameDialog::init()
 {
-    m_checkIfObjectExists = false;
-    m_allowOverwriting = false;
+    d->checkIfObjectExists = false;
+    d->allowOverwriting = false;
     setButtons(Ok | Cancel | Help);
     QGridLayout *lyr = new QGridLayout(mainWidget());
-    m_icon = new QLabel(mainWidget());
-    m_icon->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    d->icon = new QLabel(mainWidget());
+    d->icon->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     QSizePolicy sp(QSizePolicy::Fixed, QSizePolicy::Preferred);
     sp.setHorizontalStretch(1);
-    m_icon->setSizePolicy(sp);
-    m_icon->setFixedWidth(50);
-    lyr->addWidget(m_icon, 0, 0);
+    d->icon->setSizePolicy(sp);
+    d->icon->setFixedWidth(50);
+    lyr->addWidget(d->icon, 0, 0);
 
     sp = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     sp.setHorizontalStretch(1);
-    m_widget->setSizePolicy(sp);
-    lyr->addWidget(m_widget, 0, 1);
+    d->widget->setSizePolicy(sp);
+    lyr->addWidget(d->widget, 0, 1);
     lyr->addItem(new QSpacerItem(25, 10, QSizePolicy::Expanding, QSizePolicy::Minimum), 0, 2);
     lyr->addItem(new QSpacerItem(5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding), 1, 1);
-// m_widget->captionLineEdit()->selectAll();
-// m_widget->captionLineEdit()->setFocus();
-    connect(m_widget, SIGNAL(messageChanged()), this, SLOT(updateSize()));
+// d->widget->captionLineEdit()->selectAll();
+// d->widget->captionLineEdit()->setFocus();
+    connect(d->widget, SIGNAL(messageChanged()), this, SLOT(updateSize()));
     updateSize();
     enableButtonOk(true);
     slotTextChanged();
-    connect(m_widget, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+    connect(d->widget, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
 
 void KexiNameDialog::updateSize()
 {
-// resize( QSize(400, 140 + (m_widget->lbl_message->isVisible()?m_widget->lbl_message->height():0) )
-    resize(QSize(400, 140 + (!m_widget->lbl_message->text().isEmpty() ? m_widget->lbl_message->height() : 0))
+// resize( QSize(400, 140 + (d->widget->lbl_message->isVisible()?d->widget->lbl_message->height():0) )
+  resize(QSize(400, 140 + (!d->widget->messageLabel()->text().isEmpty() ?
+			   d->widget->messageLabel()->height() : 0))
            .expandedTo(minimumSizeHint()));
 // updateGeometry();
 }
@@ -95,8 +114,8 @@ void KexiNameDialog::updateSize()
 void KexiNameDialog::slotTextChanged()
 {
     bool enable = true;
-    if (   (m_widget->isNameRequired() && m_widget->nameText().isEmpty())
-        || (m_widget->isCaptionRequired() && m_widget->captionText().isEmpty()) )
+    if (   (d->widget->isNameRequired() && d->widget->nameText().isEmpty())
+        || (d->widget->isCaptionRequired() && d->widget->captionText().isEmpty()) )
     {
         enable = false;
     }
@@ -106,8 +125,8 @@ void KexiNameDialog::slotTextChanged()
 bool KexiNameDialog::canOverwrite()
 {
     KexiDB::SchemaData tmp_sdata;
-    tristate result = m_project->dbConnection()->loadObjectSchemaData(
-                          m_project->idForClass(m_part->info()->partClass()),
+    tristate result = d->project->dbConnection()->loadObjectSchemaData(
+                          d->project->idForClass(d->part->info()->partClass()),
                           widget()->nameText(), tmp_sdata);
     if (result == cancelled) {
         return true;
@@ -119,16 +138,16 @@ bool KexiNameDialog::canOverwrite()
     if (widget()->originalNameText() == tmp_sdata.name()) {
         return true;
     }
-    if (!m_allowOverwriting) {
+    if (!d->allowOverwriting) {
         KMessageBox::information(this,
-                                 "<p>" + m_part->i18nMessage("Object \"%1\" already exists.", 0)
+                                 "<p>" + d->part->i18nMessage("Object \"%1\" already exists.", 0)
                                              .subs(widget()->nameText()).toString()
                                  + "</p><p>" + i18n("Please choose other name.") + "</p>");
         return false;
     }
 
     QString msg =
-        "<p>" + m_part->i18nMessage("Object \"%1\" already exists.", 0)
+        "<p>" + d->part->i18nMessage("Object \"%1\" already exists.", 0)
                     .subs(widget()->nameText()).toString()
         + "</p><p>" + i18n("Do you want to replace it?") + "</p>";
     KGuiItem yesItem(KStandardGuiItem::yes());
@@ -139,18 +158,18 @@ bool KexiNameDialog::canOverwrite()
                   yesItem, KGuiItem(i18n("&Choose Other Name...")),
                   QString(),
                   KMessageBox::Notify | KMessageBox::Dangerous);
-    if (m_overwriteNeeded && res == KMessageBox::Yes) {
-        *m_overwriteNeeded = true;
+    if (d->overwriteNeeded && res == KMessageBox::Yes) {
+        *d->overwriteNeeded = true;
     }
     return res == KMessageBox::Yes;
 }
 
 void KexiNameDialog::accept()
 {
-    if (!m_widget->checkValidity())
+    if (!d->widget->checkValidity())
         return;
 
-    if (m_checkIfObjectExists && m_project) {
+    if (d->checkIfObjectExists && d->project) {
         if (!canOverwrite()) {
             return;
         }
@@ -161,43 +180,43 @@ void KexiNameDialog::accept()
 
 void KexiNameDialog::setDialogIcon(const QString &iconName)
 {
-    m_icon->setPixmap(DesktopIcon(iconName, KIconLoader::SizeMedium));
+    d->icon->setPixmap(DesktopIcon(iconName, KIconLoader::SizeMedium));
 }
 
 void KexiNameDialog::showEvent(QShowEvent * event)
 {
-    m_widget->captionLineEdit()->selectAll();
-    m_widget->captionLineEdit()->setFocus();
+    d->widget->captionLineEdit()->selectAll();
+    d->widget->captionLineEdit()->setFocus();
     KDialog::showEvent(event);
 }
 
 KexiNameWidget* KexiNameDialog::widget() const
 {
-    return m_widget;
+    return d->widget;
 }
 
 int KexiNameDialog::execAndCheckIfObjectExists(const KexiProject &project,
                                                const KexiPart::Part &part,
                                                bool *overwriteNeeded)
 {
-    m_project = &project;
-    m_part = &part;
-    m_checkIfObjectExists = true;
-    m_overwriteNeeded = overwriteNeeded;
-    if (m_overwriteNeeded) {
-        *m_overwriteNeeded = false;
+    d->project = &project;
+    d->part = &part;
+    d->checkIfObjectExists = true;
+    d->overwriteNeeded = overwriteNeeded;
+    if (d->overwriteNeeded) {
+        *d->overwriteNeeded = false;
     }
     int res = exec();
-    m_project = 0;
-    m_part = 0;
-    m_checkIfObjectExists = false;
-    m_overwriteNeeded = 0;
+    d->project = 0;
+    d->part = 0;
+    d->checkIfObjectExists = false;
+    d->overwriteNeeded = 0;
     return res;
 }
 
 void KexiNameDialog::setAllowOverwriting(bool set)
 {
-    m_allowOverwriting = set;
+    d->allowOverwriting = set;
 }
 
 #include "KexiNameDialog.moc"

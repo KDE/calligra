@@ -42,6 +42,15 @@
 Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QVector<QString>;
 #endif
 
+class KexiCSVInfoLabel::Private
+{
+public:
+    Private() {}
+
+    QLabel *leftLabel, *iconLbl, *fnameLbl, *commentLbl;
+    QFrame* separator;
+};
+
 class KexiCSVDelimiterWidget::Private
 {
 public:
@@ -186,6 +195,7 @@ void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 
 KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bool showFnameLine)
         : QWidget(parent)
+	, d(new Private)
 {
     QVBoxLayout *vbox = new QVBoxLayout;
     setLayout(vbox);
@@ -194,89 +204,115 @@ KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bo
     QGridLayout *topbox = new QGridLayout;
     vbox->addLayout(topbox);
 
-    m_iconLbl = new QLabel(this);
-    m_iconLbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    m_iconLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    topbox->addWidget(m_iconLbl, 0, 0, 2, 1);
+    d->iconLbl = new QLabel(this);
+    d->iconLbl->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    d->iconLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    topbox->addWidget(d->iconLbl, 0, 0, 2, 1);
     topbox->addItem(new QSpacerItem(
         KDialog::spacingHint(), KDialog::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed),
         0, 1, 2, 1
     );
 
-    m_leftLabel = new QLabel(labelText, this);
-    m_leftLabel->setMinimumWidth(130);
-    m_leftLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    d->leftLabel = new QLabel(labelText, this);
+    d->leftLabel->setMinimumWidth(130);
+    d->leftLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     QSizePolicy fnameLblSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     fnameLblSizePolicy.setHorizontalStretch(1);
-    m_leftLabel->setSizePolicy(fnameLblSizePolicy);
-    m_leftLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-//    m_leftLabel->setWordWrap(true);
-    topbox->addWidget(m_leftLabel, 0, 2, showFnameLine ? 1 : 2, 1);
+    d->leftLabel->setSizePolicy(fnameLblSizePolicy);
+    d->leftLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+//    d->leftLabel->setWordWrap(true);
+    topbox->addWidget(d->leftLabel, 0, 2, showFnameLine ? 1 : 2, 1);
 
     if (showFnameLine) {
-        m_fnameLbl = new QLabel(this);
-        m_fnameLbl->setOpenExternalLinks(true);
-        m_fnameLbl->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
-        m_fnameLbl->setFocusPolicy(Qt::NoFocus);
-        m_fnameLbl->setTextFormat(Qt::PlainText);
+        d->fnameLbl = new QLabel(this);
+        d->fnameLbl->setOpenExternalLinks(true);
+        d->fnameLbl->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+        d->fnameLbl->setFocusPolicy(Qt::NoFocus);
+        d->fnameLbl->setTextFormat(Qt::PlainText);
         QSizePolicy fnameLblSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         fnameLblSizePolicy.setHorizontalStretch(1);
-        m_fnameLbl->setSizePolicy(fnameLblSizePolicy);
-    //    m_fnameLbl->setLineWidth(1);
-    //    m_fnameLbl->setFrameStyle(QFrame::Box);
-        m_fnameLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-        m_fnameLbl->setWordWrap(true);
-        topbox->addWidget(m_fnameLbl, 1, 2); //Qt::AlignVCenter | Qt::AlignLeft);
+        d->fnameLbl->setSizePolicy(fnameLblSizePolicy);
+    //    d->fnameLbl->setLineWidth(1);
+    //    d->fnameLbl->setFrameStyle(QFrame::Box);
+        d->fnameLbl->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+        d->fnameLbl->setWordWrap(true);
+        topbox->addWidget(d->fnameLbl, 1, 2); //Qt::AlignVCenter | Qt::AlignLeft);
     }
     else {
-        m_fnameLbl = 0;
+        d->fnameLbl = 0;
     }
 
-    m_commentLbl = new QLabel(this);
-    m_commentLbl->setOpenExternalLinks(true);
-    m_commentLbl->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
-    m_commentLbl->setFocusPolicy(Qt::NoFocus);
-    m_commentLbl->setTextFormat(Qt::PlainText);
-    m_commentLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-//    m_commentLbl->setLineWidth(1);
-//    m_commentLbl->setFrameStyle(QFrame::Box);
-    m_commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    m_commentLbl->setWordWrap(true);
-    topbox->addWidget(m_commentLbl, 0, 3, 2, 1); //, Qt::AlignVCenter | Qt::AlignRight);
+    d->commentLbl = new QLabel(this);
+    d->commentLbl->setOpenExternalLinks(true);
+    d->commentLbl->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    d->commentLbl->setFocusPolicy(Qt::NoFocus);
+    d->commentLbl->setTextFormat(Qt::PlainText);
+    d->commentLbl->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+//    d->commentLbl->setLineWidth(1);
+//    d->commentLbl->setFrameStyle(QFrame::Box);
+    d->commentLbl->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    d->commentLbl->setWordWrap(true);
+    topbox->addWidget(d->commentLbl, 0, 3, 2, 1); //, Qt::AlignVCenter | Qt::AlignRight);
 
-    m_separator = new QFrame(this);
-    m_separator->setFrameShape(QFrame::HLine);
-    m_separator->setFrameShadow(QFrame::Sunken);
-    vbox->addWidget(m_separator);
+    d->separator = new QFrame(this);
+    d->separator->setFrameShape(QFrame::HLine);
+    d->separator->setFrameShadow(QFrame::Sunken);
+    vbox->addWidget(d->separator);
+}
+
+KexiCSVInfoLabel::~KexiCSVInfoLabel()
+{
+    delete d;
 }
 
 void KexiCSVInfoLabel::setFileName(const QString& fileName)
 {
-    if (!m_fnameLbl)
+    if (!d->fnameLbl)
         return;
-    m_fnameLbl->setText(QDir::convertSeparators(fileName));
+    d->fnameLbl->setText(QDir::convertSeparators(fileName));
     if (!fileName.isEmpty()) {
-        m_iconLbl->setPixmap(
+        d->iconLbl->setPixmap(
             KIO::pixmapForUrl(KUrl(fileName), 0, KIconLoader::Desktop));
     }
 }
 
 void KexiCSVInfoLabel::setLabelText(const QString& text)
 {
-    m_leftLabel->setText(text);
-// int lines = m_fnameLbl->lines();
-// m_fnameLbl->setFixedHeight(
-//  QFontMetrics(m_fnameLbl->currentFont()).height() * lines );
+    d->leftLabel->setText(text);
+// int lines = d->fnameLbl->lines();
+// d->fnameLbl->setFixedHeight(
+//  QFontMetrics(d->fnameLbl->currentFont()).height() * lines );
 }
 
 void KexiCSVInfoLabel::setIcon(const QString& iconName)
 {
-    m_iconLbl->setPixmap(DesktopIcon(iconName));
+    d->iconLbl->setPixmap(DesktopIcon(iconName));
 }
+
+
+QLabel* KexiCSVInfoLabel::leftLabel() const
+{
+    return d->leftLabel;
+}
+
+QLabel* KexiCSVInfoLabel::fileNameLabel() const
+{
+    return d->fnameLbl;
+}
+
+QLabel* KexiCSVInfoLabel::commentLabel() const
+{
+    return d->commentLbl;
+}
+
+QFrame* KexiCSVInfoLabel::separator() const {
+    return d->separator;
+}
+
 
 void KexiCSVInfoLabel::setCommentText(const QString& text)
 {
-    m_commentLbl->setText(text);
+    d->commentLbl->setText(text);
 }
 
 //----------------------------------------------------

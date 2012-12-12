@@ -90,9 +90,7 @@ public:
     virtual ~KexiMigrate();
 
 //! @todo Remove this! KexiMigrate should be usable for multiple concurrent migrations!
-    KexiMigration::Data* data() const {
-        return m_migrateData;
-    }
+    KexiMigration::Data* data();
 
 //! @todo Remove this! KexiMigrate should be usable for multiple concurrent migrations!
     //! Data Setup.  Requires two connection objects, a name and a bool
@@ -119,7 +117,7 @@ public:
 
     //! Perform an export operation
     bool performExport(Kexi::ObjectStatus* result = 0);
-    
+
     //! Returns true if the migration driver supports progress updates.
     inline bool progressSupported() {
         return drv_progressSupported();
@@ -131,17 +129,21 @@ public:
 #endif
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
-    //! \return property value for \a propeName available for this driver.
+    //! \return property value for \a propertyName available for this driver.
     //! If there's no such property defined for driver, Null QVariant value is returned.
-    virtual QVariant propertyValue(const QByteArray& propName);
+    virtual QVariant propertyValue(const QByteArray& propertyName);
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
-    void setPropertyValue(const QByteArray& propName, const QVariant& value);
+    void setPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
-    //! \return translated property caption for \a propeName.
+    //! \return translated property caption for \a propertyName.
     //! If there's no such property defined for driver, empty string value is returned.
-    QString propertyCaption(const QByteArray& propName) const;
+    QString propertyCaption(const QByteArray& propertyName) const;
+
+    //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+    //! Set translated property caption for \a propertyName.
+    void setPropertyCaption(const QByteArray& propertyName, const QString &caption);
 
 //! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
     //! \return a list of property names available for this driver.
@@ -152,32 +154,32 @@ public:
 //     and KexiMigrate::versionMinor() are matching.
 //     You can reimplement this but always call KexiMigrate::isValid() implementation. */
 //    virtual bool isValid();
-    
+
     //Extension of existing api to provide generic row access to external data.
     //!Connect to the source data
     bool connectSource();
-    
+
     //! Get table names in source database (driver specific)
     bool tableNames(QStringList& tablenames);
 
     //! Read schema for a given table (driver specific)
     bool readTableSchema(const QString& originalName, KexiDB::TableSchema& tableSchema);
-    
-    //!Position the source dataset at the start of a table    
+
+    //!Position the source dataset at the start of a table
     bool readFromTable(const QString& tableName);
-    
+
     //!Move to the next row
     bool moveNext();
-    
+
     //!Move to the previous row
     bool movePrevious();
-    
+
     //!Move to the next row
     bool moveFirst();
-    
+
     //!Move to the previous row
     bool moveLast();
-    
+
     //!Read the data at the given row/field
     QVariant value(uint i);
 
@@ -246,7 +248,8 @@ protected:
      \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
-                                            KexiDB::RecordData& data, bool &firstRecord) {
+                                            KexiDB::RecordData& data,
+					    bool &firstRecord) {
         Q_UNUSED(sqlStatement); Q_UNUSED(data); Q_UNUSED(firstRecord);
         return cancelled;
     }
@@ -288,58 +291,40 @@ protected:
     //! Prompt user to select a field type for unrecognized fields
     KexiDB::Field::Type userType(const QString& fname);
 
-    virtual QString drv_escapeIdentifier(const QString& str) const {
-        return m_kexiDBDriver ? m_kexiDBDriver->escapeIdentifier(str) : str;
-    }
+    virtual QString drv_escapeIdentifier(const QString& str) const;
 
-//! @todo Remove this! KexiMigrate should be usable for multiple concurrent migrations!
-    //! Migrate Options
-    KexiMigration::Data* m_migrateData;
 
-//   // Temporary values used during import (set by driver specific methods)
-//   KexiDB::Field* m_f;
-
-    /*! Driver properties dictionary (indexed by name),
-     useful for presenting properties to the user.
-     Set available properties here in driver implementation. */
-    QMap<QByteArray, QVariant> m_properties;
-
-    /*! i18n'd captions for properties. You do not need
-     to set predefined properties' caption in driver implementation
-     -it's done automatically. */
-    QMap<QByteArray, QString> m_propertyCaptions;
-
-    //! KexiDB driver. For instance, it is used for escaping identifiers
-    QPointer<KexiDB::Driver> m_kexiDBDriver;
-    
     //Extended API
     //! Position the source dataset at the start of a table
-    virtual bool drv_readFromTable(const QString & tableName) { Q_UNUSED(tableName); return false; }
-    
+    virtual bool drv_readFromTable(const QString & tableName) {
+      Q_UNUSED(tableName);
+      return false;
+    }
+
     //! Move to the next row
     virtual bool drv_moveNext() { return false; }
-    
+
     //! Move to the previous row
     virtual bool drv_movePrevious() { return false; }
-    
+
     //! Move to the next row
     virtual bool drv_moveFirst() { return false; }
-    
+
     //! Move to the previous row
     virtual bool drv_moveLast() { return false; }
-    
+
     //! Read the data at the given row/field
     virtual QVariant drv_value(uint i) { Q_UNUSED(i); return QVariant(); };
-    
+
+    //! @return Database driver for this migration.
+    KexiDB::Driver *driver();
+
+    //! Sets database driver for this migration.
+    void setDriver(KexiDB::Driver *driver);
+
 private:
-
     //! Create the target database project
-//  KexiProject* createProject(Kexi::ObjectStatus* result);
-
-    //! Table schemas from source DB
-    QList<KexiDB::TableSchema*> m_tableSchemas;
-
-    QList<KexiDB::TableSchema*> m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport;
+    //  KexiProject* createProject(Kexi::ObjectStatus* result);
 
     /*! Estimate size of migration job
      Calls drv_getTableSize for each table to be copied.
@@ -347,16 +332,8 @@ private:
     */
     bool progressInitialise();
 
-    KexiProject *m_destPrj;
-
-    //! Size of migration job
-    quint64 m_progressTotal;
-
-    //! Amount of migration job complete
-    quint64 m_progressDone;
-
-    //! Don't recalculate progress done until this value is reached.
-    quint64 m_progressNextReport;
+    class Private;
+    Private * const d;
 
     friend class MigrateManager;
 };

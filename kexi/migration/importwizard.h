@@ -122,43 +122,8 @@ private:
     //! @return source filename selected by user or preselected one (if present)
     QString selectedSourceFileName() const;
 
-    QWidget *m_introPageWidget, *m_srcConnPageWidget, *m_srcDBPageWidget,
-    *m_dstTypePageWidget, *m_dstPageWidget, *m_importTypePageWidget, *m_importingPageWidget, *m_finishPageWidget;
-
-    KPageWidgetItem *m_introPageItem, *m_srcConnPageItem, *m_srcDBPageItem, *m_dstTypePageItem,
-        *m_dstPageItem, *m_importTypePageItem, *m_importingPageItem, *m_finishPageItem;
-
-        
-    QGroupBox *m_importTypeGroupBox;
-    QRadioButton *m_importTypeStructureAndDataCheckBox;
-    QRadioButton *m_importTypeStructureOnlyCheckBox;
-    KexiDBTitlePage* m_dstTitlePageWidget;
-    KPageWidgetItem *m_dstTitlePageItem;
-
-    KComboBox *m_srcTypeCombo;
-    KexiDBDriverComboBox *m_dstServerTypeCombo;
-    KexiPrjTypeSelector *m_dstPrjTypeSelector;
-
-    KexiConnectionSelectorWidget *m_srcConn, *m_dstConn;
-    KLineEdit *m_dstNewDBNameLineEdit;
-    KexiProjectSelectorWidget *m_srcDBName;
-
-    QLabel *m_lblImportingTxt, *m_lblImportingErrTxt, *m_finishLbl;
-    QCheckBox *m_openImportedProjectCheckBox;
-    bool m_fileBasedDstWasPresented : 1;
-    bool m_setupFileBasedSrcNeeded : 1;
-    bool m_importExecuted  :1; //!< used in import()
-    KexiProjectSet* m_prjSet;
-    QProgressBar *m_progressBar;
-    KPushButton* m_importOptionsButton;
-    QMap<QString, QString> *m_args;
-    QString m_predefinedDatabaseName, m_predefinedMimeType;
-    KexiDB::ConnectionData *m_predefinedConnectionData;
-    MigrateManager m_migrateManager; //!< object lives here, so status messages can be globally preserved
-
-    //! Encoding for source db. Currently only used for MDB driver.
-//! @todo Hardcoded. Move to KexiMigrate driver's impl.
-    QString m_sourceDBEncoding;
+    class Private;
+    Private * const d;
 };
 
 }

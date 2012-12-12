@@ -37,6 +37,24 @@
 #include "../kexiformmanager.h"
 #include <widget/utils/kexicontextmenuutils.h>
 
+
+class KexiDBWidgetContextMenuExtender::Private
+{
+public:
+    Private(KexiDataItemInterface* iface_)
+      : iface(iface_)
+      , contextMenuHasTitle(false)
+    {
+    }
+
+    KexiDataItemInterface* iface;
+    QPointer<QMenu> contextMenu;
+    QPointer<QAction> titleAction;
+    bool contextMenuHasTitle; //!< true if KPopupTitle has been added to the context menu.
+
+};
+
+
 //! Static data for kexi forms
 struct KexiFormStatics
 {
@@ -92,8 +110,7 @@ QPixmap KexiFormUtils::dataSourceRTLTagIcon()
 
 KexiDBWidgetContextMenuExtender::KexiDBWidgetContextMenuExtender(QObject* parent, KexiDataItemInterface* iface)
         : QObject(parent)
-        , m_iface(iface)
-        , m_contextMenuHasTitle(false)
+	, d(new Private(iface))
 {
 }
 
@@ -117,15 +134,15 @@ void KexiDBWidgetContextMenuExtender::createTitle(KMenu *menu)
         return;
 
     QString icon;
-    if (dynamic_cast<QWidget*>(m_iface)) {
+    if (dynamic_cast<QWidget*>(d->iface)) {
         icon = KexiFormManager::self()->library()->iconName(
-                   dynamic_cast<QWidget*>(m_iface)->metaObject()->className());
+                   dynamic_cast<QWidget*>(d->iface)->metaObject()->className());
     }
-    m_contextMenuHasTitle = m_iface->columnInfo() ?
+    d->contextMenuHasTitle = d->iface->columnInfo() ?
         KexiContextMenuUtils::updateTitle(
             menu,
-            m_iface->columnInfo()->captionOrAliasOrName(),
-            KexiDB::simplifiedTypeName(*m_iface->columnInfo()->field), icon)
+            d->iface->columnInfo()->captionOrAliasOrName(),
+            KexiDB::simplifiedTypeName(*d->iface->columnInfo()->field), icon)
         : false;
 
     updatePopupMenuActions(menu);
@@ -133,7 +150,7 @@ void KexiDBWidgetContextMenuExtender::createTitle(KMenu *menu)
 
 void KexiDBWidgetContextMenuExtender::updatePopupMenuActions(QMenu *menu)
 {
-    const bool readOnly = m_iface->isReadOnly();
+    const bool readOnly = d->iface->isReadOnly();
 
     foreach(QAction* action, menu->actions()) {
         const QString text(action->text());

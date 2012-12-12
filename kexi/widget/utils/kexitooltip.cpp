@@ -34,9 +34,20 @@
 #pragma WARNING( KexiToolTip ported to Qt4 but not tested )
 #endif
 
+class KexiToolTip::Private
+{
+public:
+    Private(const QVariant& val)
+      : value(val)
+    {
+    }
+
+    QVariant value;
+};
+
 KexiToolTip::KexiToolTip(const QVariant& value, QWidget* parent)
         : QWidget(parent)
-        , m_value(value)
+        , d(new Private(value))
 {
     setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
                    | Qt::X11BypassWindowManagerHint);
@@ -47,11 +58,12 @@ KexiToolTip::KexiToolTip(const QVariant& value, QWidget* parent)
 
 KexiToolTip::~KexiToolTip()
 {
+    delete d;
 }
 
 QSize KexiToolTip::sizeHint() const
 {
-    QSize sz(fontMetrics().boundingRect(m_value.toString()).size());
+    QSize sz(fontMetrics().boundingRect(d->value.toString()).size());
     return sz;
 }
 
@@ -78,7 +90,7 @@ void KexiToolTip::drawFrame(QPainter& p)
 
 void KexiToolTip::drawContents(QPainter& p)
 {
-    p.drawText(rect(), Qt::AlignCenter, m_value.toString());
+    p.drawText(rect(), Qt::AlignCenter, d->value.toString());
 }
 
 #include "kexitooltip.moc"

@@ -66,20 +66,70 @@
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 
+class KexiFormView::Private
+{
+public:
+    Private()
+      : query(0)
+//2.0 , propertySet(0)
+//    , firstFocusWidget(0)
+      , queryIsOwned(false)
+      , cursor(0)
+      , resizeMode(KexiFormView::ResizeDefault)
+  {
+  }
+
+    KexiDBForm *dbform;
+    KexiFormScrollView *scrollView;
+//2.0     KoProperty::Set *propertySet;
+
+    /*! Database cursor used for data retrieving.
+     It is shared between subsequent Data view sessions (just reopened on switch),
+     but deleted and recreated from scratch when form's "dataSource" property changed
+     since last form viewing (d->previousDataSourceString is used for that). */
+    QString previousDataSourceString;
+
+    int resizeMode;
+
+    KexiDB::QuerySchema* query;
+
+    /*! True, if d->query is created as temporary object within this form.
+     If user selected an existing, predefined (stored) query, d->queryIsOwned will be false,
+     so the query object will not be destroyed. */
+    bool queryIsOwned;
+
+    KexiDB::Cursor *cursor;
+
+    /*! For new (empty) forms only:
+     Our form's area will be resized more than once.
+     We will resize form widget itself later (in resizeEvent()). */
+    int delayedFormContentsResizeOnShow;
+
+    //! Used in setFocusInternal()
+    QPointer<QWidget> setFocusInternalOnce;
+
+    /*! Stores geometry of widget recently inserted using insertAutoFields() method.
+     having this information, we'r eable to compute position for a newly
+     inserted widget in insertAutoFields() is such position has not been specified.
+     (the position is specified when a widget is inserted with mouse drag & dropping
+     but not with clicking of 'Insert fields' button from Data Source pane) */
+    QRect widgetGeometryForRecentInsertAutoFields;
+
+    //! Cached form pointer
+    QPointer<KFormDesigner::Form> form;
+
+
+};
+
 KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
         : KexiDataAwareView(parent)
-//2.0        , m_propertySet(0)
-        , m_resizeMode(KexiFormView::ResizeDefault)
-        , m_query(0)
-        , m_queryIsOwned(false)
-        , m_cursor(0)
-// , m_firstFocusWidget(0)
+	, d(new Private)
 {
-    m_delayedFormContentsResizeOnShow = 0;
+    d->delayedFormContentsResizeOnShow = 0;
 //! @todo remove?
     setSortedProperties(true);
 
-    m_scrollView = new KexiFormScrollView(         // will be added to layout
+    d->scrollView = new KexiFormScrollView(         // will be added to layout
         this, viewMode() == Kexi::DataViewMode);   // in KexiDataAwareView::init()
 
     initForm();
@@ -92,9 +142,9 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 //                this, SLOT(slotDirty(KFormDesigner::Form *, bool)));
         connect(form(), SIGNAL(modified()), this, SLOT(slotModified()));
 
-        connect(m_dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
+        connect(d->dbform, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
                 this, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
-        connect(m_dbform, SIGNAL(handleDropEvent(QDropEvent*)),
+        connect(d->dbform, SIGNAL(handleDropEvent(QDropEvent*)),
                 this, SLOT(slotHandleDropEvent(QDropEvent*)));
 
         // action stuff
@@ -192,45 +242,45 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 
 //2.0: moved up     initForm();
 
-    KexiDataAwareView::init(m_scrollView, m_scrollView, m_scrollView,
+    KexiDataAwareView::init(d->scrollView, d->scrollView, d->scrollView,
                             /* skip data-awarness if design mode */ viewMode() == Kexi::DesignViewMode);
 
     connect(this, SIGNAL(focus(bool)), this, SLOT(slotFocus(bool)));
     /// @todo skip this if ther're no borders
-// m_dbform->resize( m_dbform->size()+QSize(m_scrollView->verticalScrollBar()->width(), m_scrollView->horizontalScrollBar()->height()) );
+// d->dbform->resize( d->dbform->size()+QSize(d->scrollView->verticalScrollBar()->width(), d->scrollView->horizontalScrollBar()->height()) );
 }
 
 KexiFormView::~KexiFormView()
 {
-    if (m_cursor) {
+    if (d->cursor) {
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-        conn->deleteCursor(m_cursor);
-        m_cursor = 0;
+        conn->deleteCursor(d->cursor);
+        d->cursor = 0;
     }
     deleteQuery();
 
     // Important: form window is closed.
     // Set property set to 0 because there is *only one* instance of a property set class
     // in Kexi, so the main window wouldn't know the set in fact has been changed.
-//2.0    m_propertySet = 0;
+//2.0    d->propertySet = 0;
     propertySetSwitched();
 }
 
 void
 KexiFormView::deleteQuery()
 {
-    if (m_cursor) {
+    if (d->cursor) {
         KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-        conn->deleteCursor(m_cursor);
-        m_cursor = 0;
+        conn->deleteCursor(d->cursor);
+        d->cursor = 0;
     }
 
-    if (m_queryIsOwned) {
-        delete m_query;
+    if (d->queryIsOwned) {
+        delete d->query;
     } else {
 //! @todo remove this shared query from listened queries list
     }
-    m_query = 0;
+    d->query = 0;
 }
 
 void
@@ -240,35 +290,35 @@ KexiFormView::setForm(KFormDesigner::Form *f)
         tempData()->previewForm = f;
     else
         tempData()->form = f;
-    m_form = f;
+    d->form = f;
 }
 
 void KexiFormView::initForm()
 {
 // <here moved from ctor>
-    m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
-    m_dbform->setObjectName(
+    d->dbform = new KexiDBForm(d->scrollView->viewport(), d->scrollView);
+    d->dbform->setObjectName(
         i18nc("Widget name. This string will be used to name widgets of this class. "
               "It must _not_ contain white spaces and non latin1 characters.", "form"));
-    QPalette pal(m_dbform->palette());
+    QPalette pal(d->dbform->palette());
     pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
-    m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
-                               // from m_scrollView->viewport()
+    d->dbform->setPalette(pal); // avoid inheriting QPalette::Window role
+                               // from d->scrollView->viewport()
 
-// m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
-// m_dbform->resize(QSize(400, 300));
-    m_scrollView->setWidget(m_dbform);
-    m_scrollView->setResizingEnabled(viewMode() != Kexi::DataViewMode);
+// d->dbform->resize( d->scrollView->viewport()->size() - QSize(20, 20) );
+// d->dbform->resize(QSize(400, 300));
+    d->scrollView->setWidget(d->dbform);
+    d->scrollView->setResizingEnabled(viewMode() != Kexi::DataViewMode);
 
 // initForm();
 
     if (viewMode() == Kexi::DataViewMode) {
-        m_scrollView->recordNavigator()->setRecordHandler(m_scrollView);
-        //m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
-        QPalette pal(m_scrollView->viewport()->palette());
-        pal.setBrush(m_scrollView->viewport()->backgroundRole(), 
-            m_dbform->palette().brush(QPalette::Background));
-        m_scrollView->viewport()->setPalette(pal);
+        d->scrollView->recordNavigator()->setRecordHandler(d->scrollView);
+        //d->scrollView->viewport()->setPaletteBackgroundColor(d->dbform->palette().active().background());
+        QPalette pal(d->scrollView->viewport()->palette());
+        pal.setBrush(d->scrollView->viewport()->backgroundRole(), 
+            d->dbform->palette().brush(QPalette::Background));
+        d->scrollView->viewport()->setPalette(pal);
 //moved to formmanager  connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
     }
 // </here>
@@ -282,7 +332,7 @@ void KexiFormView::initForm()
     );
 // if (viewMode()==Kexi::DataViewMode)
     //form()->setDesignMode(false);
-    form()->createToplevel(m_dbform, m_dbform);
+    form()->createToplevel(d->dbform, d->dbform);
 
     if (viewMode() == Kexi::DesignViewMode) {
         //we want to be informed about executed commands
@@ -311,7 +361,7 @@ void KexiFormView::initForm()
     if (fields) {
         QDomDocument dom;
         formPart()->generateForm(fields, dom);
-        KFormDesigner::FormIO::loadFormFromDom(form(), m_dbform, dom);
+        KFormDesigner::FormIO::loadFormFromDom(form(), d->dbform, dom);
         //! @todo handle errors
     } else
         loadForm();
@@ -320,10 +370,10 @@ void KexiFormView::initForm()
         form()->autoAssignTabStops();
 
     //collect tab order information
-    m_dbform->updateTabStopsOrder(form());
+    d->dbform->updateTabStopsOrder(form());
 
-// if (m_dbform->orderedFocusWidgets()->first())
-    // m_scrollView->setFocusProxy( m_dbform->orderedFocusWidgets()->first() );
+// if (d->dbform->orderedFocusWidgets()->first())
+    // d->scrollView->setFocusProxy( d->dbform->orderedFocusWidgets()->first() );
 
 #ifdef __GNUC__
 #warning "TODO port initForm()"
@@ -335,17 +385,17 @@ void KexiFormView::initForm()
     if (viewMode() == Kexi::DesignViewMode) {
 //2.0        initForm(form());
         //from FormManager::initForm(Form *form)
-//2.0    m_forms.append(form);
-//2.0    if (m_treeview)
-//2.0       m_treeview->setForm(form);
-//2.0    m_active = form;
+//2.0    d->forms.append(form);
+//2.0    if (d->treeview)
+//2.0       d->treeview->setForm(form);
+//2.0    d->active = form;
 //2.0    connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
-//2.0            m_propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*, bool, bool)));
-/*2.0    if (m_treeview) {
+//2.0            d->propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*, bool, bool)));
+/*2.0    if (d->treeview) {
         connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
-                m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
-        connect(form, SIGNAL(childAdded(ObjectTreeItem*)), m_treeview, SLOT(addItem(ObjectTreeItem*)));
-        connect(form, SIGNAL(childRemoved(ObjectTreeItem*)), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
+                d->treeview, SLOT(setSelectedWidget(QWidget*, bool)));
+        connect(form, SIGNAL(childAdded(ObjectTreeItem*)), d->treeview, SLOT(addItem(ObjectTreeItem*)));
+        connect(form, SIGNAL(childRemoved(ObjectTreeItem*)), d->treeview, SLOT(removeItem(ObjectTreeItem*)));
     }*/
         connect(form(), SIGNAL(widgetNameChanged(const QByteArray&,const QByteArray&)),
                 this, SLOT(slotWidgetNameChanged(const QByteArray&,const QByteArray&)));
@@ -358,24 +408,24 @@ void KexiFormView::initForm()
         //end of: from FormManager::initForm(Form *form)
     }
     else {
-//2.0 rm        m_preview.append(form);
+//2.0 rm        d->preview.append(form);
 //2.0        form()->setDesignMode(false);
         form()->setMode(KFormDesigner::Form::DataMode);
     }
-    m_scrollView->setForm(form());
+    d->scrollView->setForm(form());
 
-// m_dbform->updateTabStopsOrder(form());
-// QSize s = m_dbform->size();
+// d->dbform->updateTabStopsOrder(form());
+// QSize s = d->dbform->size();
 // QApplication::sendPostedEvents();
-// m_scrollView->resize( s );
-// m_dbform->resize(s);
-    m_scrollView->refreshContentsSize();
-// m_scrollView->refreshContentsSizeLater(true,true);
+// d->scrollView->resize( s );
+// d->dbform->resize(s);
+    d->scrollView->refreshContentsSize();
+// d->scrollView->refreshContentsSizeLater(true,true);
 
     if (newForm && !fields) {
         /* Our form's area will be resized more than once.
         Let's resize form widget itself later. */
-        m_delayedFormContentsResizeOnShow = 3;
+        d->delayedFormContentsResizeOnShow = 3;
     }
 
     slotPropertySetSwitched(); // this prepares the data source page
@@ -385,8 +435,8 @@ void KexiFormView::initForm()
         form()->clearUndoStack();
     }
 
-/*    QList<QWidget*> wlist(m_dbform->findChildren<QWidget*>());
-    wlist.prepend(m_dbform);
+/*    QList<QWidget*> wlist(d->dbform->findChildren<QWidget*>());
+    wlist.prepend(d->dbform);
     foreach(QWidget* w, wlist) {
         KFormDesigner::FormWidgetInterface* fwiface = dynamic_cast<KFormDesigner::FormWidgetInterface*>(w);
         if (fwiface)
@@ -401,8 +451,8 @@ void KexiFormView::updateAutoFieldsDataSource()
     //-inherit captions
     //-inherit data types
     //(this data has not been stored in the form)
-    QString dataSourceString(m_dbform->dataSource());
-    QString dataSourcePartClassString(m_dbform->dataSourcePartClass());
+    QString dataSourceString(d->dbform->dataSource());
+    QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::TableOrQuerySchema tableOrQuery(
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
@@ -428,8 +478,8 @@ void KexiFormView::updateValuesForSubproperties()
     //-inherit captions
     //-inherit data types
     //(this data has not been stored in the form)
-    QString dataSourceString(m_dbform->dataSource());
-    QString dataSourcePartClassString(m_dbform->dataSourcePartClass());
+    QString dataSourceString(d->dbform->dataSource());
+    QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::TableOrQuerySchema tableOrQuery(
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
@@ -495,13 +545,13 @@ static void setUnsavedBLOBIdsForDataViewMode(
 void
 KexiFormView::loadForm()
 {
-//@todo also load m_resizeMode !
+//@todo also load d->resizeMode !
 
     kDebug() << "Loading the form with id : " << window()->id();
     // If we are previewing the Form, use the tempData instead of the form stored in the db
     if (viewMode() == Kexi::DataViewMode && !tempData()->tempForm.isNull()) {
-        KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, tempData()->tempForm);
-        setUnsavedBLOBIdsForDataViewMode(m_dbform, tempData()->unsavedLocalBLOBsByName);
+        KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, tempData()->tempForm);
+        setUnsavedBLOBIdsForDataViewMode(d->dbform, tempData()->unsavedLocalBLOBsByName);
         updateAutoFieldsDataSource();
         updateValuesForSubproperties();
         return;
@@ -510,10 +560,10 @@ KexiFormView::loadForm()
     // normal load
     QString data;
     loadDataBlock(data);
-    KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, data);
+    KFormDesigner::FormIO::loadFormFromString(form(), d->dbform, data);
 
     //"autoTabStops" property is loaded -set it within the form tree as well
-    form()->setAutoTabStops(m_dbform->autoTabStops());
+    form()->setAutoTabStops(d->dbform->autoTabStops());
 
     updateAutoFieldsDataSource();
     updateValuesForSubproperties();
@@ -526,11 +576,11 @@ KexiFormView::slotPropertySetSwitched()
 // if (set && window()!=KexiMainWindowIface::global()->currentWindow())
     if (form() != KFormDesigner::FormManager::self()->activeForm())
         return; //this is not the current form view
-//2.0    m_propertySet = set;
+//2.0    d->propertySet = set;
 #endif
     //QWidgetList* widgets = form()->selectedWidgets();
-//    delete m_propertySet;
-//2.0    m_propertySet = 0;
+//    delete d->propertySet;
+//2.0    d->propertySet = 0;
     //todo
 //      KFormDesigner::WidgetPropertySet
 /* 2.0
@@ -553,14 +603,14 @@ KexiFormView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
     if (mode != viewMode()) {
         if (viewMode() == Kexi::DataViewMode) {
-            if (!m_scrollView->acceptRowEdit())
+            if (!d->scrollView->acceptRowEdit())
                 return cancelled;
 
-            m_scrollView->beforeSwitchView();
+            d->scrollView->beforeSwitchView();
         } else {
             //remember our pos
             tempData()->scrollViewContentsPos
-                = QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
+                = QPoint(d->scrollView->contentsX(), d->scrollView->contentsY());
         }
     }
 
@@ -589,57 +639,57 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     if (mode == 0 || mode == Kexi::DesignViewMode) {
         if (window()->neverSaved()) {
-            m_dbform->resize(QSize(400, 300));
-            m_scrollView->refreshContentsSizeLater(true, true);
-            //m_delayedFormContentsResizeOnShow = false;
+            d->dbform->resize(QSize(400, 300));
+            d->scrollView->refreshContentsSizeLater(true, true);
+            //d->delayedFormContentsResizeOnShow = false;
         }
     }
 
     if (mode != 0 && mode != Kexi::DesignViewMode) {
         //preserve contents pos after switching to other view
-        m_scrollView->setContentsPos(tempData()->scrollViewContentsPos.x(),
+        d->scrollView->setContentsPos(tempData()->scrollViewContentsPos.x(),
                                      tempData()->scrollViewContentsPos.y());
     }
 // if (mode == Kexi::DesignViewMode) {
-    //m_scrollView->move(0,0);
-    //m_scrollView->setContentsPos(0,0);
-    //m_scrollView->moveChild(m_dbform, 0, 0);
+    //d->scrollView->move(0,0);
+    //d->scrollView->setContentsPos(0,0);
+    //d->scrollView->moveChild(d->dbform, 0, 0);
 // }
 
     if ((mode == Kexi::DesignViewMode) && viewMode() == Kexi::DataViewMode) {
         // The form may have been modified, so we must recreate the preview
-        delete m_dbform; // also deletes form()
+        delete d->dbform; // also deletes form()
         initForm();
 /* moved to initForm()
-        m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
-        m_dbform->setObjectName(
+        d->dbform = new KexiDBForm(d->scrollView->viewport(), d->scrollView);
+        d->dbform->setObjectName(
             i18nc("Widget name. This string will be used to name widgets of this class. "
                   "It must _not_ contain white spaces and non latin1 characters.", "form"));
-        QPalette pal(m_dbform->palette());
+        QPalette pal(d->dbform->palette());
         pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
-        m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
-                                   // from m_scrollView->viewport()
+        d->dbform->setPalette(pal); // avoid inheriting QPalette::Window role
+                                   // from d->scrollView->viewport()
 
         initForm();
         */
 //moved to formmanager  slotNoFormSelected();
 
         //reset position
-        m_scrollView->setContentsPos(0, 0);
-        m_dbform->move(0, 0);
+        d->scrollView->setContentsPos(0, 0);
+        d->dbform->move(0, 0);
 
     }
 
     //update tab stops if needed
     if (viewMode() == Kexi::DataViewMode) {
 //  //propagate current "autoTabStops" property value to the form tree
-//  form()->setAutoTabStops( m_dbform->autoTabStops() );
+//  form()->setAutoTabStops( d->dbform->autoTabStops() );
 
 //  if(form()->autoTabStops())
 //   form()->autoAssignTabStops();
     } else {
         //set "autoTabStops" property
-        m_dbform->setAutoTabStops(form()->autoTabStops());
+        d->dbform->setAutoTabStops(form()->autoTabStops());
     }
 
     if (viewMode() == Kexi::DataViewMode) {
@@ -647,10 +697,10 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
         initDataSource();
 
         //handle events for this form
-        m_scrollView->setMainWidgetForEventHandling(m_dbform);
+        d->scrollView->setMainWidgetForEventHandling(d->dbform);
 
         //set focus on 1st focusable widget which has valid dataSource property set
-        QList<QWidget*> *orderedFocusWidgets = m_dbform->orderedFocusWidgets();
+        QList<QWidget*> *orderedFocusWidgets = d->dbform->orderedFocusWidgets();
         if (!orderedFocusWidgets->isEmpty()) {
 //   QWidget *www = focusWidget();
             //if (Kexi::hasParent(this, qApp->focusWidget())) {
@@ -674,11 +724,11 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
 
             widget->setFocus();
             KexiUtils::setFocusWithReason(widget, Qt::TabFocusReason);
-            m_setFocusInternalOnce = widget;
+            d->setFocusInternalOnce = widget;
         }
 
-        if (m_query)
-            m_scrollView->selectFirstRow();
+        if (d->query)
+            d->scrollView->selectFirstRow();
     }
 
     //dirty only if it's a new object
@@ -694,18 +744,30 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
     return true;
 }
 
+KoProperty::Set* KexiFormView::propertySet() {
+    return &d->form->propertySet(); // 2.0 m_propertySet;
+}
+
+KexiFormPart::TempData* KexiFormView::tempData() const {
+    return dynamic_cast<KexiFormPart::TempData*>(window()->data());
+}
+KexiFormPart* KexiFormView::formPart() const {
+    return dynamic_cast<KexiFormPart*>(part());
+}
+
+
 void KexiFormView::initDataSource()
 {
     deleteQuery();
-    QString dataSourceString(m_dbform->dataSource());
-    QString dataSourcePartClassString(m_dbform->dataSourcePartClass());
+    QString dataSourceString(d->dbform->dataSource());
+    QString dataSourcePartClassString(d->dbform->dataSourcePartClass());
 //! @todo also handle anonymous (not stored) queries provided as statements here
     bool ok = !dataSourceString.isEmpty();
 
-    /*   if (m_previousDataSourceString.toLower()==dataSourceString.toLower() && !m_cursor) {
+    /*   if (d->previousDataSourceString.toLower()==dataSourceString.toLower() && !d->cursor) {
           //data source changed: delete previous cursor
-          m_conn->deleteCursor(m_cursor);
-          m_cursor = 0;
+          d->conn->deleteCursor(d->cursor);
+          d->cursor = 0;
         }*/
 
     KexiDB::TableSchema *tableSchema = 0;
@@ -714,22 +776,22 @@ void KexiFormView::initDataSource()
     bool forceReadOnlyDataSource = false;
 
     if (ok) {
-//  m_previousDataSourceString = dataSourceString;
+//  d->previousDataSourceString = dataSourceString;
 
         //collect all data-aware widgets and create query schema
-        m_scrollView->setMainDataSourceWidget(m_dbform);
-        sources = m_scrollView->usedDataSources();
+        d->scrollView->setMainDataSourceWidget(d->dbform);
+        sources = d->scrollView->usedDataSources();
         conn = KexiMainWindowIface::global()->project()->dbConnection();
         if (dataSourcePartClassString.isEmpty() /*table type is the default*/
                 || dataSourcePartClassString == "org.kexi-project.table") {
             tableSchema = conn->tableSchema(dataSourceString);
             if (tableSchema) {
-                /* We will build a _minimum_ query schema from selected table fields. */
-                m_query = new KexiDB::QuerySchema();
-                m_queryIsOwned = true;
+                /* We will build a _minimud-> query schema from selected table fields. */
+                d->query = new KexiDB::QuerySchema();
+                d->queryIsOwned = true;
 
                 if (dataSourcePartClassString.isEmpty())
-                    m_dbform->setDataSourcePartClass("org.kexi-project.table"); //update for compatibility
+                    d->dbform->setDataSourcePartClass("org.kexi-project.table"); //update for compatibility
             }
         }
 
@@ -740,11 +802,11 @@ void KexiFormView::initDataSource()
                 //Note: In general, we could not skip unused fields within this query because
                 //      it can have GROUP BY clause.
                 //! @todo check if the query could have skipped unused fields (no GROUP BY, no joins, etc.)
-                m_query = conn->querySchema(dataSourceString);
-                m_queryIsOwned = false;
-                ok = m_query != 0;
+                d->query = conn->querySchema(dataSourceString);
+                d->queryIsOwned = false;
+                ok = d->query != 0;
                 if (ok && dataSourcePartClassString.isEmpty())
-                    m_dbform->setDataSourcePartClass("org.kexi-project.query"); //update for compatibility
+                    d->dbform->setDataSourcePartClass("org.kexi-project.query"); //update for compatibility
                 // query results are read-only
 //! @todo There can be read-write queries, e.g. simple "SELECT * FROM...". Add a checking function to KexiDB.
                 forceReadOnlyDataSource = true;
@@ -773,9 +835,9 @@ void KexiFormView::initDataSource()
             if (tableSchema && fieldName.startsWith(tableSchema->name().toLower() + "."))
                 fieldName = fieldName.mid(tableSchema->name().length() + 1);
             //remove "queryname." if it was prepended
-            if (!tableSchema && fieldName.startsWith(m_query->name().toLower() + "."))
-                fieldName = fieldName.mid(m_query->name().length() + 1);
-            KexiDB::Field *f = tableSchema ? tableSchema->field(fieldName) : m_query->field(fieldName);
+            if (!tableSchema && fieldName.startsWith(d->query->name().toLower() + "."))
+                fieldName = fieldName.mid(d->query->name().length() + 1);
+            KexiDB::Field *f = tableSchema ? tableSchema->field(fieldName) : d->query->field(fieldName);
             if (!f) {
                 /*! @todo show error */
                 //remove this widget from the set of data widgets in the provider
@@ -785,9 +847,9 @@ void KexiFormView::initDataSource()
                 continue;
             }
             if (tableSchema) {
-                if (!m_query->hasField(f)) {
+                if (!d->query->hasField(f)) {
                     //we're building a new query: add this field
-                    m_query->addField(f);
+                    d->query->addField(f);
                 }
             }
         }
@@ -795,27 +857,27 @@ void KexiFormView::initDataSource()
             //all data sources are invalid! don't execute the query
             deleteQuery();
         } else {
-            KexiDB::debug(m_query->parameters());
+            KexiDB::debug(d->query->parameters());
             // like in KexiQueryView::executeQuery()
             QList<QVariant> params;
             {
                 KexiUtils::WaitCursorRemover remover;
-                params = KexiQueryParameters::getParameters(this, *conn->driver(), *m_query, ok);
+                params = KexiQueryParameters::getParameters(this, *conn->driver(), *d->query, ok);
             }
             if (ok) //input cancelled
-                m_cursor = conn->executeQuery(*m_query, params);
+                d->cursor = conn->executeQuery(*d->query, params);
         }
-        m_scrollView->invalidateDataSources(invalidSources, m_query);
-        ok = m_cursor != 0;
+        d->scrollView->invalidateDataSources(invalidSources, d->query);
+        ok = d->cursor != 0;
     }
 
     if (!invalidSources.isEmpty())
-        m_dbform->updateTabStopsOrder();
+        d->dbform->updateTabStopsOrder();
 
     if (ok) {
 //! @todo PRIMITIVE!! data setting:
 //! @todo KexiTableViewData is not great name for data class here... rename/move?
-        KexiTableViewData* data = new KexiTableViewData(m_cursor);
+        KexiTableViewData* data = new KexiTableViewData(d->cursor);
         if (forceReadOnlyDataSource)
             data->setReadOnly(true);
         data->preloadAllRows();
@@ -823,15 +885,15 @@ void KexiFormView::initDataSource()
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //   int resultCount = -1;
 //   if (ok) {
-//    resultCount = m_conn->resultCount(m_conn->selectStatement(*m_query));
-//    ok = m_cursor->reopen();
+//    resultCount = d->conn->resultCount(d->conn->selectStatement(*d->query));
+//    ok = d->cursor->reopen();
 //   }
 //   if (ok)
-//    ok = ! (!m_cursor->moveFirst() && m_cursor->error());
+//    ok = ! (!d->cursor->moveFirst() && d->cursor->error());
 
-        m_scrollView->setData(data, true /*owner*/);
+        d->scrollView->setData(data, true /*owner*/);
     } else
-        m_scrollView->setData(0, false);
+        d->scrollView->setData(0, false);
 }
 
 void KexiFormView::slotModified()
@@ -1090,12 +1152,22 @@ KexiFormView::setRedoEnabled(bool enabled)
 }
 #endif //0
 
+
+int KexiFormView::resizeMode() const {
+    return d->resizeMode;
+}
+
+KFormDesigner::Form* KexiFormView::form() const {
+    return d->form;
+}
+
+
 QSize
 KexiFormView::preferredSizeHint(const QSize& otherSize)
 {
-    return (m_dbform->size()
-            + QSize(m_scrollView->verticalScrollBar()->isVisible() ? m_scrollView->verticalScrollBar()->width()*3 / 2 : 10,
-                    m_scrollView->horizontalScrollBar()->isVisible() ? m_scrollView->horizontalScrollBar()->height()*3 / 2 : 10))
+    return (d->dbform->size()
+            + QSize(d->scrollView->verticalScrollBar()->isVisible() ? d->scrollView->verticalScrollBar()->width()*3 / 2 : 10,
+                    d->scrollView->horizontalScrollBar()->isVisible() ? d->scrollView->horizontalScrollBar()->height()*3 / 2 : 10))
            .expandedTo(KexiView::preferredSizeHint(otherSize));
 }
 
@@ -1103,16 +1175,16 @@ void
 KexiFormView::resizeEvent(QResizeEvent *e)
 {
     if (viewMode() == Kexi::DataViewMode) {
-        m_scrollView->refreshContentsSizeLater(
+        d->scrollView->refreshContentsSizeLater(
             e->size().width() != e->oldSize().width(),
             e->size().height() != e->oldSize().height()
         );
     }
     KexiView::resizeEvent(e);
-    m_scrollView->updateNavPanelGeometry();
-    if (m_delayedFormContentsResizeOnShow > 0) { // && isVisible()) {
-        m_delayedFormContentsResizeOnShow--;
-        m_dbform->resize(e->size() - QSize(30, 30));
+    d->scrollView->updateNavPanelGeometry();
+    if (d->delayedFormContentsResizeOnShow > 0) { // && isVisible()) {
+        d->delayedFormContentsResizeOnShow--;
+        d->dbform->resize(e->size() - QSize(30, 30));
     }
 }
 
@@ -1138,13 +1210,13 @@ void
 KexiFormView::setFocusInternal()
 {
     if (viewMode() == Kexi::DataViewMode) {
-        if (m_dbform->focusWidget()) {
+        if (d->dbform->focusWidget()) {
             //better-looking focus
-            if (m_setFocusInternalOnce) {
-                KexiUtils::setFocusWithReason(m_setFocusInternalOnce, Qt::OtherFocusReason);
-                m_setFocusInternalOnce = 0;
+            if (d->setFocusInternalOnce) {
+                KexiUtils::setFocusWithReason(d->setFocusInternalOnce, Qt::OtherFocusReason);
+                d->setFocusInternalOnce = 0;
             } else {
-                //ok? SET_FOCUS_USING_REASON(m_dbform->focusWidget(), QFocusEvent::Other);//Tab);
+                //ok? SET_FOCUS_USING_REASON(d->dbform->focusWidget(), QFocusEvent::Other);//Tab);
             }
             return;
         }
@@ -1163,7 +1235,7 @@ KexiFormView::show()
     // if (resizeMode() == KexiFormView::ResizeAuto)
     if (viewMode() == Kexi::DataViewMode) {
         if (resizeMode() == KexiFormView::ResizeAuto)
-            m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
+            d->scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
     }
 }
 
@@ -1178,7 +1250,7 @@ KexiFormView::slotFocus(bool in)
 #endif
 /* todo
     if (in && form() && KFormDesigner::FormManager::self() && KFormDesigner::FormManager::self()->activeForm() != form()) {
-        KFormDesigner::FormManager::self()->windowChanged(m_dbform);
+        KFormDesigner::FormManager::self()->windowChanged(d->dbform);
         updateDataSourcePage();
     }*/
 }
@@ -1238,8 +1310,8 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     QPoint pos(_pos);
     //if pos is not specified, compute a new position:
     if (pos == QPoint(-1, -1)) {
-        if (m_widgetGeometryForRecentInsertAutoFields.isValid()) {
-            pos = m_widgetGeometryForRecentInsertAutoFields.bottomLeft()
+        if (d->widgetGeometryForRecentInsertAutoFields.isValid()) {
+            pos = d->widgetGeometryForRecentInsertAutoFields.bottomLeft()
                   + QPoint(0, form()->gridSize());
         } else {
             pos = QPoint(40, 40); //start here
@@ -1342,21 +1414,21 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     }
     if (widgetsToSelect.last()) {
         //resize form if needed
-        QRect oldFormRect(m_dbform->geometry());
+        QRect oldFormRect(d->dbform->geometry());
         QRect newFormRect(oldFormRect);
-        newFormRect.setWidth(qMax(m_dbform->width(), widgetsToSelect.last()->geometry().right() + 1));
-        newFormRect.setHeight(qMax(m_dbform->height(), widgetsToSelect.last()->geometry().bottom() + 1));
+        newFormRect.setWidth(qMax(d->dbform->width(), widgetsToSelect.last()->geometry().right() + 1));
+        newFormRect.setHeight(qMax(d->dbform->height(), widgetsToSelect.last()->geometry().bottom() + 1));
         if (newFormRect != oldFormRect) {
             //1. resize by hand
-            m_dbform->setGeometry(newFormRect);
+            d->dbform->setGeometry(newFormRect);
             //2. store information about resize
-            (void)new KFormDesigner::PropertyCommand( *form(), m_dbform->objectName().toLatin1(),
+            (void)new KFormDesigner::PropertyCommand( *form(), d->dbform->objectName().toLatin1(),
                 oldFormRect, newFormRect, "geometry", group);
 //2.0            group->addCommand(resizeFormCommand, true/*will be executed on CommandGroup::execute()*/);
         }
 
         //remember geometry of the last inserted widget
-        m_widgetGeometryForRecentInsertAutoFields = widgetsToSelect.last()->geometry();
+        d->widgetGeometryForRecentInsertAutoFields = widgetsToSelect.last()->geometry();
     }
 
     //eventually, add entire command group to active form
@@ -1367,12 +1439,12 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     //enable proper REDO usage
 //2.0    group->resetAllowExecuteFlags();
 
-    m_scrollView->repaint();
-    m_scrollView->viewport()->repaint();
-    m_scrollView->repaintContents();
-    m_scrollView->updateContents();
-    m_scrollView->clipper()->repaint();
-    m_scrollView->refreshContentsSize();
+    d->scrollView->repaint();
+    d->scrollView->viewport()->repaint();
+    d->scrollView->repaintContents();
+    d->scrollView->updateContents();
+    d->scrollView->clipper()->repaint();
+    d->scrollView->refreshContentsSize();
 
     //select all inserted widgets, if multiple
     if (widgetsToSelect.count() > 1) {
@@ -1458,7 +1530,7 @@ void KexiFormView::updateActionsInternal()
         );
     }
 #ifdef KEXI_DEBUG_GUI
-    QAction *show_form_ui_action = KexiFormManager::self()->action("show_form_ui");
+    QAction *show_ford->ui_action = KexiFormManager::self()->action("show_ford->ui");
     if (show_form_ui_action) {
         show_form_ui_action->setEnabled(viewMode()==Kexi::DesignViewMode);
     }

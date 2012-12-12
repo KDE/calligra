@@ -49,9 +49,10 @@ public:
 
     void setSizeHint(const QSize& size);
 
-protected:
-    QPointer<QWidget> m_widget;
-    QSize m_hint;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

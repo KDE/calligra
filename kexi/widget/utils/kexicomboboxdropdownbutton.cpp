@@ -33,21 +33,37 @@
 #pragma WARNING( KexiComboBoxDropDownButton ported to Qt4 but not tested )
 #endif
 
+class KexiComboBoxDropDownButton::Private
+{
+public:
+    Private() {}
+
+    int fixForHeight;
+
+    bool drawComplexControl;
+
+    //! fake combo used only to pass it as 'this' for QStyle
+    //! (because styles use \<static_cast\>)
+    KComboBox *paintedCombo;
+};
+
 KexiComboBoxDropDownButton::KexiComboBoxDropDownButton(QWidget *parent)
         : KPushButton(parent)
+	, d(new Private)
 {
-    m_paintedCombo = new KComboBox(this);
-    m_paintedCombo->hide();
-    m_paintedCombo->setEditable(true);
+    d->paintedCombo = new KComboBox(this);
+    d->paintedCombo->hide();
+    d->paintedCombo->setEditable(true);
 
     setCheckable(true);
     styleChanged();
-    m_paintedCombo->move(0, 0);
-    m_paintedCombo->setFixedSize(size());
+    d->paintedCombo->move(0, 0);
+    d->paintedCombo->setFixedSize(size());
 }
 
 KexiComboBoxDropDownButton::~KexiComboBoxDropDownButton()
 {
+    delete d;
 }
 
 void KexiComboBoxDropDownButton::paintEvent(QPaintEvent *pe)
@@ -56,14 +72,14 @@ void KexiComboBoxDropDownButton::paintEvent(QPaintEvent *pe)
 
     QPainter p(this);
     QRect r = rect();
-    r.setHeight(r.height() + m_fixForHeight);
-    if (m_drawComplexControl) {
-        if (m_fixForHeight > 0 && m_paintedCombo->size() != size()) {
-            m_paintedCombo->move(0, 0);
-            m_paintedCombo->setFixedSize(size() + QSize(0, m_fixForHeight)); //last chance to fix size
+    r.setHeight(r.height() + d->fixForHeight);
+    if (d->drawComplexControl) {
+        if (d->fixForHeight > 0 && d->paintedCombo->size() != size()) {
+            d->paintedCombo->move(0, 0);
+            d->paintedCombo->setFixedSize(size() + QSize(0, d->fixForHeight)); //last chance to fix size
         }
         QStyleOptionComplex option;
-        option.initFrom(m_fixForHeight > 0 ? (const QWidget*)m_paintedCombo : this);
+        option.initFrom(d->fixForHeight > 0 ? (const QWidget*)d->paintedCombo : this);
         option.rect = r;
         option.state = QStyle::State_HasFocus
                        | (isDown() ? QStyle::State_Raised : QStyle::State_Sunken);
@@ -74,7 +90,7 @@ void KexiComboBoxDropDownButton::paintEvent(QPaintEvent *pe)
 #pragma WARNING( TODO compare to Qt code for QStyles )
 #endif
         style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p,
-                                    m_fixForHeight > 0 ? (const QWidget*)m_paintedCombo : this);
+                                    d->fixForHeight > 0 ? (const QWidget*)d->paintedCombo : this);
 // TODO flags, (uint)(QStyle::SC_ComboBoxArrow), QStyle::SC_None );
     } else {
 #ifdef __GNUC__
@@ -116,16 +132,16 @@ void KexiComboBoxDropDownButton::styleChanged()
 #endif
     //<hack>
     if (style()->objectName().toLower() == "thinkeramik") {
-        m_fixForHeight = 3;
+        d->fixForHeight = 3;
     } else
-        m_fixForHeight = 0;
+        d->fixForHeight = 0;
     //</hack>
-    m_drawComplexControl = false;
-    /* m_drawComplexControl =
+    d->drawComplexControl = false;
+    /* d->drawComplexControl =
         (style()->inherits("KStyle") && style()->objectName().toLower()!="qtcurve")
         || style()->objectName().toLower()=="platinum";*/
-    if (m_fixForHeight == 0) {
+    if (d->fixForHeight == 0) {
         /*TODO  setFixedWidth( style()->subControlRect( QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxArrow,
-              (const QWidget*)m_paintedCombo ).width() +1 );*/
+              (const QWidget*)d->paintedCombo ).width() +1 );*/
     }
 }
