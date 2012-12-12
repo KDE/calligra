@@ -22,6 +22,10 @@
 
 #include "KoMainWindow.h"
 
+#ifdef __APPLE__
+#include "MacSupport.h"
+#endif
+
 #include "KoView.h"
 #include "KoDocument.h"
 #include "KoFilterManager.h"
@@ -240,6 +244,10 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         : KParts::MainWindow()
         , d(new KoMainWindowPrivate(this))
 {
+#ifdef __APPLE__
+    setUnifiedTitleAndToolBarOnMac(true);
+    MacSupport::addFullscreen(this);
+#endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 
