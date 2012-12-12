@@ -116,6 +116,7 @@ void FileSystemModel::setPath(const QString& path)
 
         if(path != Private::drivesPath) {
             d->dir.setPath(path);
+            d->dir.refresh();
             d->list = d->dir.entryInfoList();
             if(d->list.count() > 0) {
                 beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
@@ -123,6 +124,7 @@ void FileSystemModel::setPath(const QString& path)
             }
         } else {
             d->dir.setPath("");
+            d->dir.refresh();
             d->list = QDir::drives();
 
             beginInsertRows(QModelIndex(), 0, d->list.count() - 1);
