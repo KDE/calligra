@@ -209,7 +209,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
 
                 // Write the result to the file collector object.
                 QString fileId = m_collector->filePrefix() + QString::number(m_currentChapter);
-                QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+                QString fileName = m_collector->pathPrefix() + fileId + m_collector->fileSuffix();
                 m_collector->addContentFile(fileId, fileName,
                                             "application/xhtml+xml", m_htmlContent, currentChapterTitle);
 
@@ -281,7 +281,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     QString fileId = m_collector->filePrefix();
     if (m_options->doBreakIntoChapters)
         fileId += QString::number(m_currentChapter);
-    QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+    QString fileName = m_collector->pathPrefix() + fileId + m_collector->fileSuffix();
     m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, currentChapterTitle);
 
     // 5. Write any data that we have collected on the way.
@@ -295,7 +295,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
         endHtmlFile();
 
         QString fileId = "chapter-endnotes";
-        QString fileName = m_collector->pathPrefix() + fileId + ".xhtml";
+        QString fileName = m_collector->pathPrefix() + fileId + m_collector->fileSuffix();
         m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, i18n("End notes"));
     }
 
@@ -662,7 +662,7 @@ void OdtHtmlConverter::handleTagNote(KoXmlElement &nodeElement, KoXmlWriter *htm
             if (noteClass == "footnote")
                 htmlWriter->addAttribute("href", "#" + id + "n"); // n rerence to note foot-note or end-note
             else { // endnote
-                QString endRef = "chapter-endnotes.xhtml#" + id + "n";
+                QString endRef = "chapter-endnotes" + m_collector->fileSuffix() + '#' + id + 'n';
                 htmlWriter->addAttribute("href", endRef);
             }
             htmlWriter->addAttribute("id", id + "t"); // t is for text
@@ -789,7 +789,7 @@ void OdtHtmlConverter::collectInternalLinksInfo(KoXmlElement &currentElement, in
             QString value = m_collector->filePrefix();
             if (m_options->doBreakIntoChapters)
                 value += QString::number(chapter);
-            value += ".xhtml";
+            value += m_collector->fileSuffix();
             m_linksInfo.insert(key, value);
             continue;
         }
