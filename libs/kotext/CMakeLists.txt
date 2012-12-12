@@ -1,6 +1,7 @@
 include_directories(${KOTEXT_INCLUDES}
                     ${FONTCONFIG_INCLUDE_DIR}/fontconfig 
-                    ${FREETYPE_INCLUDE_DIRS})
+                    ${FREETYPE_INCLUDE_DIRS}
+                    ${CALLIGRADB_INCLUDES})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
@@ -67,6 +68,7 @@ set(kotext_LIB_SRCS
     BibliographyDb.cpp
     KoBridgeServer.cpp
     KoBridgeActions.cpp
+    BibliographyTableModel.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -126,7 +128,7 @@ endif( Soprano_FOUND )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
-target_link_libraries(kotext flake ${QT_QTSQL_LIBRARY})
+target_link_libraries(kotext flake ${CALLIGRADB_LIBS})
 if( Soprano_FOUND )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
