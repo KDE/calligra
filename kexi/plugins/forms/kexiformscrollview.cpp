@@ -53,7 +53,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
         , KexiDataAwareObjectInterface()
         , KexiFormDataProvider()
         , KexiFormEventHandler()
-	, d(new Private)
+        , d(new Private)
 {
     m_navPanel = recordNavigator(); //copy this pointer from KexiScrollView
     if (preview) {

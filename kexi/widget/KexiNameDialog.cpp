@@ -48,7 +48,7 @@ public:
 KexiNameDialog::KexiNameDialog(
     const QString& message, QWidget * parent)
         : KDialog(parent)
-	, d(new Private)
+        , d(new Private)
 {
     setMainWidget(new QWidget(this));
     d->widget = new KexiNameWidget(message, mainWidget());
@@ -60,7 +60,7 @@ KexiNameDialog::KexiNameDialog(const QString& message,
                                const QString& captionLabel, const QString& captionText,
                                QWidget * parent)
         : KDialog(parent)
-	, d(new Private)
+        , d(new Private)
 {
     setMainWidget(new QWidget(this));
     d->widget = new KexiNameWidget(message, nameLabel, nameText,
@@ -106,7 +106,7 @@ void KexiNameDialog::updateSize()
 {
 // resize( QSize(400, 140 + (d->widget->lbl_message->isVisible()?d->widget->lbl_message->height():0) )
   resize(QSize(400, 140 + (!d->widget->messageLabel()->text().isEmpty() ?
-			   d->widget->messageLabel()->height() : 0))
+                           d->widget->messageLabel()->height() : 0))
            .expandedTo(minimumSizeHint()));
 // updateGeometry();
 }

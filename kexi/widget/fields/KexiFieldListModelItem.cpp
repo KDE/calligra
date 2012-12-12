@@ -33,14 +33,14 @@ public:
     {
     }
 
-    QString dateType;
     QString fieldName;
+    QString dateType;
     QIcon icon;
     QString caption;
 };
 
 KexiFieldListModelItem::KexiFieldListModelItem(const QString &fname,
-					       const QString &dtype, bool pkey)
+                                               const QString &dtype, bool pkey)
         : d(new Private(fname, dtype))
 {
     if (pkey) {

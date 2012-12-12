@@ -123,7 +123,7 @@ public:
 
 KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
         : KexiDataAwareView(parent)
-	, d(new Private)
+        , d(new Private)
 {
     d->delayedFormContentsResizeOnShow = 0;
 //! @todo remove?

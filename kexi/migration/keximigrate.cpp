@@ -94,7 +94,7 @@ public:
 
 KexiMigrate::KexiMigrate(QObject *parent, const QVariantList&)
         : QObject(parent)
-	, d(new Private)
+        , d(new Private)
 {
 }
 

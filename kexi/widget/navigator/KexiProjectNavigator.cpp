@@ -112,7 +112,7 @@ public:
 
 KexiProjectNavigator::KexiProjectNavigator(QWidget* parent, Features features)
         : QWidget(parent)
-	, d(new Private(features))
+        , d(new Private(features))
 {
     d->actions = new KActionCollection(this);
 

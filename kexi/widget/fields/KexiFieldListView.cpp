@@ -65,7 +65,7 @@ public:
 
 KexiFieldListView::KexiFieldListView(QWidget *parent, KexiFieldListOptions options)
         : QListView(parent)
-	, d(new Private(options))
+        , d(new Private(options))
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);

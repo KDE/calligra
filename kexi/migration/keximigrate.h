@@ -249,7 +249,7 @@ protected:
 //! @todo SQL-dependent!
     virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement,
                                             KexiDB::RecordData& data,
-					    bool &firstRecord) {
+                                            bool &firstRecord) {
         Q_UNUSED(sqlStatement); Q_UNUSED(data); Q_UNUSED(firstRecord);
         return cancelled;
     }

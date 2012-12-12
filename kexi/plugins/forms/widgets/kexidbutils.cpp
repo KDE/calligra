@@ -110,7 +110,7 @@ QPixmap KexiFormUtils::dataSourceRTLTagIcon()
 
 KexiDBWidgetContextMenuExtender::KexiDBWidgetContextMenuExtender(QObject* parent, KexiDataItemInterface* iface)
         : QObject(parent)
-	, d(new Private(iface))
+        , d(new Private(iface))
 {
 }
 

@@ -35,8 +35,8 @@
 WebBrowserWidget::WebBrowserWidget(QWidget *parent)
         : QWidget(parent),KexiFormDataItemInterface()
         ,KFormDesigner::FormWidgetInterface()
-	,m_readOnly(false)
-	,m_urlChanged_enabled(false)
+        ,m_readOnly(false)
+        ,m_urlChanged_enabled(false)
 {
     setFocusPolicy(Qt::StrongFocus);
     setMinimumHeight(sizeHint().height());
@@ -75,7 +75,7 @@ WebBrowserWidget::WebBrowserWidget(QWidget *parent)
   
 };
   
-WebBrowserWidget::~WebBrowserWidget()	
+WebBrowserWidget::~WebBrowserWidget()
 {
 
 }
@@ -176,23 +176,23 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
 
     if (isReadOnly())
         return;
-    m_urlChanged_enabled= false;		
+    m_urlChanged_enabled= false;
     
-    if (removeOld) { 			
-	setUrl(add.toString());  
+    if (removeOld) {
+        setUrl(add.toString());
     }       
     else{
         setUrl(m_origValue.toString() + add.toString());
-     	
+
     }
 
     if (removeOld)
-        { 			
-	 setUrl(add.toString()); 
-	}       
+        {
+         setUrl(add.toString());
+        }
     else
         { setUrl(m_origValue.toString() + add.toString()) ;
-     	
+
         }
 
     m_urlChanged_enabled = true;

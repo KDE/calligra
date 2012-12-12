@@ -33,7 +33,7 @@ public:
 KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
         const KexiDB::Driver::InfoHash& driversInfo, Options options)
         : KComboBox(parent)
-	, d(new Private)
+        , d(new Private)
 {
     //retrieve list of drivers and sort it: file-based first, then server-based
     QStringList captionsForFileBasedDrivers, captionsForServerBasedDrivers;

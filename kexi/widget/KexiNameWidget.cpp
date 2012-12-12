@@ -55,7 +55,7 @@ public:
 
 KexiNameWidget::KexiNameWidget(const QString& message, QWidget* parent)
         : QWidget(parent)
-	, d(new Private)
+        , d(new Private)
 {
     setObjectName("KexiNameWidget");
     init(message, QString(), QString(), QString(), QString());
@@ -66,7 +66,7 @@ KexiNameWidget::KexiNameWidget(const QString& message,
                                const QString& captionLabel, const QString& captionText,
                                QWidget * parent)
         : QWidget(parent)
-	, d(new Private)
+        , d(new Private)
 {
     setObjectName("KexiNameWidget");
     init(message, nameLabel, nameText, captionLabel, captionText);

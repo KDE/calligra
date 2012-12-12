@@ -34,7 +34,7 @@ public:
 
 KexiDockableWidget::KexiDockableWidget(QWidget* parent)
         : QWidget(parent)
-	, d(new Private)
+        , d(new Private)
 {
 }
 

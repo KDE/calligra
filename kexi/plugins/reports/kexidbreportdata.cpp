@@ -47,7 +47,7 @@ public:
 };
 
 KexiDBReportData::KexiDBReportData (const QString &qstrSQL,
-				    KexiDB::Connection * pDb)
+                                    KexiDB::Connection * pDb)
         : d(new Private(pDb))
 {
     d->qstrQuery = qstrSQL;

@@ -48,7 +48,7 @@ public:
 KexiDataAwareView::KexiDataAwareView(QWidget *parent)
         : KexiView(parent)
         , KexiSearchAndReplaceViewInterface()
-	, d(new Private)
+        , d(new Private)
 {
 }
 

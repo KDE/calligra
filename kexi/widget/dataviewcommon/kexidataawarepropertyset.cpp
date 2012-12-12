@@ -53,7 +53,7 @@ public:
 KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
         KexiDataAwareObjectInterface* dataObject)
         : QObject(view)
-	, d(new Private(view, dataObject))
+        , d(new Private(view, dataObject))
 {
     setObjectName(view->objectName() + "_KexiDataAwarePropertySet");
     d->dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiTableViewData*)));

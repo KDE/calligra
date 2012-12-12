@@ -195,7 +195,7 @@ void KexiCSVTextQuoteComboBox::setTextQuote(const QString& textQuote)
 
 KexiCSVInfoLabel::KexiCSVInfoLabel(const QString& labelText, QWidget* parent, bool showFnameLine)
         : QWidget(parent)
-	, d(new Private)
+        , d(new Private)
 {
     QVBoxLayout *vbox = new QVBoxLayout;
     setLayout(vbox);

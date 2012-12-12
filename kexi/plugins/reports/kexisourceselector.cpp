@@ -123,12 +123,12 @@ KexiSourceSelector::~KexiSourceSelector()
 void KexiSourceSelector::setConnectionData(QDomElement c)
 {
     if (c.attribute("type") == "internal") {
-	d->sourceType->setCurrentIndex(d->sourceType->findData("internal"));
+        d->sourceType->setCurrentIndex(d->sourceType->findData("internal"));
         d->internalSource->setCurrentIndex(d->internalSource->findText(c.attribute("source")));
     }
 
     if (c.attribute("type") == "external") {
-	d->sourceType->setCurrentIndex(d->sourceType->findText("external"));
+        d->sourceType->setCurrentIndex(d->sourceType->findText("external"));
         d->externalSource->setText(c.attribute("source"));
     }
 

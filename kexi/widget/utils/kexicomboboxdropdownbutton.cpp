@@ -49,7 +49,7 @@ public:
 
 KexiComboBoxDropDownButton::KexiComboBoxDropDownButton(QWidget *parent)
         : KPushButton(parent)
-	, d(new Private)
+        , d(new Private)
 {
     d->paintedCombo = new KComboBox(this);
     d->paintedCombo->hide();
