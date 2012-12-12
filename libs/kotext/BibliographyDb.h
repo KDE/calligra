@@ -22,6 +22,8 @@
 
 #include "kotext_export.h"
 
+#include <db/connection.h>
+
 #include <QObject>
 #include <QSqlDatabase>
 #include <QMap>
@@ -31,6 +33,7 @@ class QSqlTableModel;
 class QSqlError;
 class QDir;
 class QSortFilterProxyModel;
+class BibliographyTableModel;
 
 class KoInlineCite;
 
@@ -40,7 +43,9 @@ class KOTEXT_EXPORT BibliographyDb : public QObject
 public:
     explicit BibliographyDb(QObject *parent = 0, const QString &path = QString(), const QString &dbName = QString());
     ~BibliographyDb();
-    bool openDb();
+
+    QString getDbPath() const;
+    bool connect();
     bool deleteDb();
     void closeDb();
     QString lastError() const;
@@ -50,24 +55,30 @@ public:
     void removeRow(int index);
     void submitAll();
     bool createTable();
-    QSqlTableModel* tableModel();
+    BibliographyTableModel *tableModel();
     QSortFilterProxyModel* proxyModel();
     void setSearchFilter(QRegExp);
     void setFilter(QString filter);
     bool insertCitation(KoInlineCite *);
     QMap<QString, KoInlineCite *> citationRecords();
 
-    static QSqlRecord sqlRecord(const KoInlineCite* cite);
     static const QList<QString> dbFields;
     static const QDir tableDir;
+    static KexiDB::DriverManager manager;
 
 private:
-    QSqlTableModel *m_model;
+    BibliographyTableModel *m_model;
     QSortFilterProxyModel *m_filterModel;
-    QSqlDatabase m_db;
     QString m_dbName;
     QString m_fullPath;
     bool m_valid;
+
+    KexiDB::Driver *m_driver;
+    KexiDB::ConnectionData m_cdata;
+    KexiDB::Connection *m_conn;
+    KexiDB::TableSchema *m_schema;
+
+    void init();
 };
 
 #endif // BIBLIOGRAPHYDB_H
