@@ -10,6 +10,9 @@ set(calligradockers_SRCS
 
     strokedocker/StrokeDocker.cpp
     strokedocker/StrokeDockerFactory.cpp
+    
+    snapguidedocker/SnapGuideDocker.cpp
+    snapguidedocker/SnapGuideDockerFactory.cpp
 
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp

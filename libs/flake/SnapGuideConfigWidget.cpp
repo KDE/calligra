@@ -18,9 +18,13 @@
  */
 
 #include "SnapGuideConfigWidget.h"
-#include "KoSnapGuide.h"
+
+#include <KoSnapGuide.h>
+#include <KoCanvasBase.h>
 
 #include <KoIcon.h>
+
+#include <QWidget>
 
 SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
         : QWidget(parent), m_snapGuide(snapGuide)
@@ -107,6 +111,11 @@ void SnapGuideConfigWidget::showEvent(QShowEvent * event)
 {
     Q_UNUSED(event);
     updateControls();
+}
+
+void SnapGuideConfigWidget::setCanvas(KoCanvasBase *canvas)
+{
+    m_canvas = canvas;
 }
 
 #include <SnapGuideConfigWidget.moc>
