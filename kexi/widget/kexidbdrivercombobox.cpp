@@ -85,10 +85,7 @@ QStringList KexiDBDriverComboBox::driverNames() const
 
 QString KexiDBDriverComboBox::selectedDriverName() const
 {
-    QHash<QString, QString>::ConstIterator it = d->drivers.find(itemText(currentIndex()));
-    if (it == d->drivers.constEnd())
-        return QString();
-    return it.value();
+    return d->drivers.value(itemText(currentIndex()));
 }
 
 void KexiDBDriverComboBox::setDriverName(const QString& driverName)
