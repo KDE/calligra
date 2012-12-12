@@ -95,7 +95,7 @@ void KoBridgeServer::handle(QObject *o)
         new InsertBibliographyBridgeAction(res, m_editor);
     } else if (res["action"].toString() == "insert_cite_record") {
         out << "Action insert_cite_record";
-        QFileInfo biblioFile(BibliographyDb::tableDir.absolutePath().append(QDir::separator()).append("biblio.sqlite"));
+        QFileInfo biblioFile(BibliographyDb::tableDir.absolutePath().append(QDir::separator()).append("biblio.kexi"));
         BibliographyDb *biblioDb = new BibliographyDb(this, biblioFile.dir().absolutePath(), biblioFile.fileName());
 
         new InsertCiteRecordBridgeAction(res, biblioDb);

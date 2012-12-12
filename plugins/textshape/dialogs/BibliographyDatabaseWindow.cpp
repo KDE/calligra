@@ -21,12 +21,12 @@
 #include "InsertCitationDialog.h"
 #include "EditFiltersDialog.h"
 #include "BibliographyTypeEntryDelegate.h"
+#include "BibliographyTableModel.h"
 
 #include <BibliographyDb.h>
 
 #include <QTableView>
 #include <QHeaderView>
-#include <QSqlTableModel>
 #include <QSortFilterProxyModel>
 #include <QDir>
 #include <QMessageBox>
@@ -76,7 +76,7 @@ BibliographyDatabaseWindow::BibliographyDatabaseWindow(QWidget *parent) :
     connect(ui.search, SIGNAL(textChanged(QString)), this, SLOT(searchQueryChanged(QString)));
 
     if (loadBibliographyDbs() == 0) {
-        QFileInfo fileInfo(BibliographyDb::tableDir.absolutePath().append(QDir::separator()).append("biblio.sqlite"));
+        QFileInfo fileInfo(BibliographyDb::tableDir.absolutePath().append(QDir::separator()).append("biblio.kexi"));
         addTableEntry(fileInfo);
     }
 }
@@ -111,11 +111,12 @@ void BibliographyDatabaseWindow::tableChanged(int index)
     m_bibTableView->setItemDelegateForColumn(2, new BibliographyTypeEntryDelegate);
 
     if (!m_table->isValid()) {
-        int ret = QMessageBox::warning(this, i18n("Error opening bibref table")
-                                       , i18n("This database does not have bibref table. Do you want to create one?")
-                                       , QMessageBox::Yes, QMessageBox::No);
-        if (ret == QMessageBox::Yes) {
-            m_table->createTable();             //create bibref table manually
+        int ret = QMessageBox::critical(this, i18n("Error opening bibliography database")
+                                        , i18n("Do you want to remove %1 from database directory?", QDir::convertSeparators(m_table->getDbPath()))
+                                        , QMessageBox::Yes, QMessageBox::No);
+        if (ret == QMessageBox::Yes && QFile(m_table->getDbPath()).exists() && !QDir().remove(m_table->getDbPath())) {
+            QMessageBox::critical(this, i18n("Could not remove file \"%1\".",QDir::convertSeparators(m_table->getDbPath()))
+                                  , i18n("Check the file's permissions and whether it is already opened and locked by another application."));
         } else {
             removeTableEntry(index);
         }
@@ -234,7 +235,7 @@ void BibliographyDatabaseWindow::newRecord()
 void BibliographyDatabaseWindow::openFile()
 {
     QString tableFile = KFileDialog::getOpenFileName(
-                KUrl(BibliographyDb::tableDir.absolutePath()), i18n("*.sqlite|SQLITE citation database (*.sqlite)"),
+                KUrl(BibliographyDb::tableDir.absolutePath()), i18n("*.kexi|Kexi citation database (*.kexi)"),
                 this, i18n("Open Bibliography database table from file"));
 
     if (!tableFile.isEmpty()) {
@@ -247,7 +248,7 @@ void BibliographyDatabaseWindow::newDatabase()
 {
     QString fileName = QFileDialog::getSaveFileName(
                 this, i18n("Save Bibliography database table to file"),
-                BibliographyDb::tableDir.absolutePath(), i18n("SQLITE citation database (*.sqlite);;All files(*.*)"));
+                BibliographyDb::tableDir.absolutePath(), i18n("Kexi citation database (*.kexi);;All files(*.*)"));
 
     if (fileName.isEmpty()) {
         return;
@@ -255,6 +256,10 @@ void BibliographyDatabaseWindow::newDatabase()
 
     QFileInfo fileInfo(fileName);
     QFile dbFile(fileName);
+
+    if (fileInfo.completeSuffix().isEmpty()) {
+        fileInfo.setFile(fileName.append(".kexi"));
+    }
 
     if (m_tables.contains(fileInfo)) {
         removeTableEntry(m_tables.indexOf(fileInfo));
@@ -265,13 +270,10 @@ void BibliographyDatabaseWindow::newDatabase()
         }
     }
 
-    dbFile.open(QIODevice::WriteOnly);              //Create database file
-    dbFile.close();
-
     BibliographyDb *table = new BibliographyDb(this, fileInfo.dir().absolutePath(), fileInfo.fileName());
-    if (!table->isValid()) {
-        table->createTable();            //creates bibref table in database file
-    }
+//    if (!table->isValid()) {
+//        table->createTable();            //creates bibref table in database file
+//    }
 
     //add to table list
     addTableEntry(fileInfo);
