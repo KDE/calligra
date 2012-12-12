@@ -60,7 +60,13 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
     bool hasSelection = m_layer->selection();
 
     if (!hasSelection) {
+        // We are blocking the signals here to avoid the initial creation of the
+        // outline. This still happens if you undo and then redo the selection,
+        // however as a workaround it makes sure the first impression is that the
+        // system is snappy.
+        undoAdapter->blockSignals(true);
         undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
+        undoAdapter->blockSignals(false);
     }
 
     KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
@@ -99,7 +105,13 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     undoAdapter->beginMacro(m_name);
 
     if (!m_layer->selection()) {
+        // We are blocking the signals here to avoid the initial creation of the
+        // outline. This still happens if you undo and then redo the selection,
+        // however as a workaround it makes sure the first impression is that the
+        // system is snappy.
+        undoAdapter->blockSignals(true);
         undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
+        undoAdapter->blockSignals(false);
     }
 
     KisSelectionSP selection = m_layer->selection();
