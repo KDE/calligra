@@ -88,6 +88,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectRectangular";
             }
             Button {
                 id: selectPolygon;
@@ -101,6 +102,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectPolygonal";
             }
             Button {
                 id: selectArea;
@@ -114,6 +116,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectContiguous";
             }
             Button {
                 id: selectColor;
@@ -127,6 +130,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectSimilar";
             }
         }
         Item {
@@ -257,6 +261,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectRectangular";
             }
             Button {
                 id: selectPolygonFull;
@@ -270,6 +275,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectPolygonal";
             }
             Button {
                 id: selectAreaFull;
@@ -283,6 +289,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectContiguous";
             }
             Button {
                 id: selectColorFull;
@@ -296,6 +303,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
+                checked: toolManager.currentTool.toolId() === "KisToolSelectSimilar";
             }
         }
         Label {
