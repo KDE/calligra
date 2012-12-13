@@ -33,7 +33,7 @@
 
 #include <KoCanvasBase.h>
 #include <KoCanvasObserverBase.h>
-
+#include <KoSnapGuide.h>
 
 class SnapGuideDocker::Private
 {
@@ -53,7 +53,7 @@ SnapGuideDocker::SnapGuideDocker()
 {
     setWindowTitle(i18n("SnapGuide Properties"));
 
-    d->mainWidget = new SnapGuideConfigWidget(d->canvas->snapGuide());
+    d->mainWidget = new SnapGuideConfigWidget(new KoSnapGuide(d->canvas));
     setWidget(d->mainWidget);
 }
 

@@ -26,7 +26,7 @@ SnapGuideDockerFactory::SnapGuideDockerFactory()
 
 QString SnapGuideDockerFactory::id() const
 {
-    return QString("Stroke Properties");
+    return QString("SnapGuide Properties");
 }
 
 QDockWidget* SnapGuideDockerFactory::createDockWidget()
