@@ -234,7 +234,7 @@ public:
      * @return the toolId.
      * @see KoToolFactoryBase::id()
      */
-    QString toolId() const;
+    Q_INVOKABLE QString toolId() const;
 
     /// return the last emitted cursor
     QCursor cursor() const;
