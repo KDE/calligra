@@ -216,6 +216,7 @@ Panel {
                             textColor: "white";
                             shadow: false;
                             highlight: false;
+                            checked: toolManager.currentTool.toolId() === toolNameToID(model.name);
                             onClicked: {
                                 firstTool.toolName = model.name;
                                 changeTool(model.name);
@@ -247,6 +248,7 @@ Panel {
                             textColor: "white";
                             shadow: false;
                             highlight: false;
+                            checked: toolManager.currentTool.toolId() === toolNameToID(model.name);
                             onClicked: {
                                 secondTool.toolName = model.name;
                                 changeTool(model.name);
