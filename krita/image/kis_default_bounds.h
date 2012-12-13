@@ -26,8 +26,10 @@
 
 class KisDefaultBounds;
 class KisSelectionDefaultBounds;
+class KisSelectionEmptyBounds;
 typedef KisSharedPtr<KisDefaultBounds> KisDefaultBoundsSP;
 typedef KisSharedPtr<KisSelectionDefaultBounds> KisSelectionDefaultBoundsSP;
+typedef KisSharedPtr<KisSelectionEmptyBounds> KisSelectionEmptyBoundsSP;
 
 class KRITAIMAGE_EXPORT KisDefaultBounds :  public KisDefaultBoundsBase
 {
@@ -56,6 +58,14 @@ public:
 private:
     struct Private;
     Private * const m_d;
+};
+
+class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBoundsBase
+{
+public:
+    KisSelectionEmptyBounds();
+    virtual ~KisSelectionEmptyBounds();
+    QRect bounds() const;
 };
 
 #endif // KIS_DEFAULT_BOUNDS_H
