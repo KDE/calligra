@@ -215,9 +215,13 @@ Item {
     }
 
     Image {
-        anchors.left: dialogBackground.left;
-        anchors.right: dialogBackground.right;
-        anchors.top: dialogBackground.bottom;
+        anchors {
+            left: dialogBackground.left;
+            leftMargin: dialogBackground.radius;
+            right: dialogBackground.right;
+            rightMargin: dialogBackground.radius;
+            top: dialogBackground.bottom;
+        }
 
         source: "../images/shadow-smooth.png";
     }
