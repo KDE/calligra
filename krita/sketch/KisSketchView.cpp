@@ -68,6 +68,7 @@
 #include "kis_config.h"
 #include "kis_view2.h"
 #include "kis_image.h"
+#include <kis_image_signal_router.h>
 #include "kis_clipboard.h"
 #include <opengl2/kis_gl2_canvas.h>
 #include <input/kis_input_manager.h>
@@ -108,7 +109,7 @@ public:
     void zoomChanged();
     void resetDocumentPosition();
     void configChanged();
-    void refreshEverything();
+    void removeNodeAsync(KisNodeSP removedNode);
 
     KisSketchView* q;
 
@@ -506,6 +507,7 @@ void KisSketchView::documentChanged()
         connect(d->view->canvasControllerWidget()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved()));
         connect(d->view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), SLOT(zoomChanged()));
         connect(d->canvas, SIGNAL(updateCanvasRequested(QRect)), SLOT(imageUpdated(QRect)));
+        connect(d->doc->image()->signalRouter(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(removeNodeAsync(KisNodeSP)));
     }
 
     if(!d->prescaledProjection)
@@ -652,6 +654,13 @@ void KisSketchView::Private::configChanged()
     pt.end();
 
     checkers = QBrush(tile);
+}
+
+void KisSketchView::Private::removeNodeAsync(KisNodeSP removedNode)
+{
+    if(removedNode) {
+        imageUpdated(removedNode->extent());
+    }
 }
 
 void KisSketchView::Private::zoomChanged()

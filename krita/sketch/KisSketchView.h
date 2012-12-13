@@ -91,6 +91,7 @@ private:
     Q_PRIVATE_SLOT(d, void documentOffsetMoved())
     Q_PRIVATE_SLOT(d, void zoomChanged())
     Q_PRIVATE_SLOT(d, void resetDocumentPosition())
+    Q_PRIVATE_SLOT(d, void removeNodeAsync(KisNodeSP removedNode))
 };
 
 #endif // KRITA_SKETCH_CANVAS_H
