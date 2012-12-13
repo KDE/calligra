@@ -224,9 +224,14 @@ void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
             selectionMask = new KisSelectionMask(this);
             selectionMask->initSelection(0, m_d->rootLayer);
             addNode(selectionMask);
+            // If we do not set the selection now, the setActive call coming next
+            // can be very, very expensive, depending on the size of the image.
+            selectionMask->setSelection(globalSelection);
             selectionMask->setActive(true);
         }
-        selectionMask->setSelection(globalSelection);
+        else {
+            selectionMask->setSelection(globalSelection);
+        }
 
         Q_ASSERT(m_d->rootLayer->childCount() > 0);
         Q_ASSERT(m_d->rootLayer->selectionMask());
