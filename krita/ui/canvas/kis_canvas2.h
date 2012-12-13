@@ -170,8 +170,9 @@ signals:
     void sigCanvasCacheUpdated(KisUpdateInfoSP);
     void sigContinueResizeImage(qint32 w, qint32 h);
 
-public slots:
+    void updateCanvasRequested(const QRect& area);
 
+public slots:
     /// Update the entire canvas area
     void updateCanvas();
 

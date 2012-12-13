@@ -474,7 +474,9 @@ void KisCanvas2::updateCanvas(const QRectF& documentRect)
     // updates, so no need to prescale!
     QRect widgetRect = m_d->coordinatesConverter->documentToWidget(documentRect).toAlignedRect();
     widgetRect.adjust(-2, -2, 2, 2);
+
     if (!widgetRect.isEmpty()) {
+        emit updateCanvasRequested(widgetRect);
         m_d->canvasWidget->widget()->update(widgetRect);
     }
 }
