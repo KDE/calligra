@@ -26,6 +26,7 @@
 #include "KoShapeLayer.h"
 #include "KoImageData.h"
 #include "KoMarker.h"
+#include "SaveCoverImage.h"
 
 #include <KoXmlWriter.h>
 #include <KoStore.h>
@@ -303,6 +304,17 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
             kWarning(30006) << "saving image failed: open store failed";
         }
     }
+    // Save Cover Image
+    SaveCoverImage *cover = new SaveCoverImage;
+    bool okey;
+    //if (cover->hasCoverImage())
+        okey = cover->saveCoveImageData(store);
+        if (okey)
+            kDebug(31000) << "Can to save cover image";
+        else
+            kDebug(31000) << "Can't' to save cover image";
+
+
     return ok;
 }
 
