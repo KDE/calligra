@@ -159,6 +159,11 @@ public:
     enum StoreNewDataOption {
         OverwriteExistingObject = 1 //!< Overwerite existing object in storeNewData()
     };
+
+    QString defaultIconName() const;
+
+    void setDefaultIconName(const QString& iconName);
+
     Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
 public slots:
@@ -331,8 +336,6 @@ protected:
     void initMainMenuActions();
 
     void toggleViewModeButtonBack();
-
-    QString m_defaultIconName;
 
 #ifdef __GNUC__
 #warning todo: add some protected access methods

@@ -70,12 +70,12 @@ class KexiFormView::Private
 {
 public:
     Private()
-      : query(0)
+      : resizeMode(KexiFormView::ResizeDefault)
+      , query(0)
 //2.0 , propertySet(0)
 //    , firstFocusWidget(0)
       , queryIsOwned(false)
       , cursor(0)
-      , resizeMode(KexiFormView::ResizeDefault)
   {
   }
 

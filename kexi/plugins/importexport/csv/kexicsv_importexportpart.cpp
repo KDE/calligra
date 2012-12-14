@@ -44,8 +44,8 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
                                          ? KexiCSVImportDialog::File : KexiCSVImportDialog::Clipboard;
         KexiCSVImportDialog *dlg = new KexiCSVImportDialog(mode, parent);
         dlg->setObjectName(objName);
-        m_cancelled = dlg->cancelled();
-        if (m_cancelled) {
+        KexiInternalPart::setCancelled(dlg->cancelled());
+        if (KexiInternalPart::cancelled()) {
             delete dlg;
             return 0;
         }
@@ -58,8 +58,8 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
             return 0;
         KexiCSVExportWizard *dlg = new KexiCSVExportWizard(options, parent);
         dlg->setObjectName(objName);
-        m_cancelled = dlg->cancelled();
-        if (m_cancelled) {
+        KexiInternalPart::setCancelled(dlg->cancelled());
+        if (KexiInternalPart::cancelled()) {
             delete dlg;
             return 0;
         }

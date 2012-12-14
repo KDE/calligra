@@ -182,8 +182,7 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
         setUrl(add.toString());
     }       
     else{
-        setUrl(m_origValue.toString() + add.toString());
-
+        setUrl(KexiDataItemInterface::originalValue().toString() + add.toString());
     }
 
     if (removeOld)
@@ -191,8 +190,8 @@ void WebBrowserWidget::setValueInternal(const QVariant &add, bool removeOld)
          setUrl(add.toString());
         }
     else
-        { setUrl(m_origValue.toString() + add.toString()) ;
-
+        { 
+	 setUrl(KexiDataItemInterface::originalValue().toString() + add.toString()) ;
         }
 
     m_urlChanged_enabled = true;

@@ -40,33 +40,24 @@ public:
     QList<QWidget*>* widgetList() const;
 
     /*! Sets layout's orientation to \a orientation. Default orientation is Vertical. */
-    void  setOrientation(Qt::Orientation orientation) {
-        m_orientation = orientation;
-    }
+    void  setOrientation(Qt::Orientation orientation);
+
 
     /*! \return layout's orientation. */
-    Qt::Orientation orientation() const {
-        return m_orientation;
-    }
+    Qt::Orientation orientation() const;
 
-    void setJustified(bool justify) {
-        m_justify = justify;
-    }
-    bool isJustified() const {
-        return m_justify;
-    }
+    void setJustified(bool justify);
+    bool isJustified() const;
 
     virtual void addItem(QLayoutItem *item);
     virtual void addSpacing(int size);
     void insertWidget(int index, QWidget* widget, int stretch = 0, Qt::Alignment alignment = 0);
-//2.0: removed  virtual QLayoutIterator iterator();
     virtual void invalidate();
 
     virtual bool hasHeightForWidth() const;
     virtual int heightForWidth(int width) const;
     virtual QSize sizeHint() const;
     virtual QSize minimumSize() const;
-    //virtual QSizePolicy::ExpandData expanding() const;
     virtual Qt::Orientations expandingDirections() const;
     virtual int count() const;
     virtual bool isEmpty() const;
@@ -80,13 +71,9 @@ protected:
     int doVerticalLayout(const QRect&, bool testonly = false);
 
 private:
-    QList<QLayoutItem*> m_list;
-    int m_cached_width;
-    int m_cached_hfw;
-    bool m_justify;
-    Qt::Orientation m_orientation;
-    QSize m_cached_sizeHint;
-    QSize m_cached_minSize;
+    class Private;
+
+    Private* const d;
 };
 
 #endif

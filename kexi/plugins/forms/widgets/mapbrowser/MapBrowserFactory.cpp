@@ -56,6 +56,7 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
                             KFormDesigner::Container* container,
                             KFormDesigner::WidgetFactory::CreateWidgetOptions options)
 {
+    Q_UNUSED(options);
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(name, classname));
 //2.0    const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
@@ -75,11 +76,16 @@ QWidget* MapBrowserFactory::createWidget(const QByteArray& classname,
 bool MapBrowserFactory::createMenuActions(const QByteArray &classname, QWidget *w,
                                     QMenu *menu, KFormDesigner::Container *container)
 {
+    Q_UNUSED(classname);
+    Q_UNUSED(w);
+    Q_UNUSED(menu);
+    Q_UNUSED(container);
     return false;
 }
 
 bool MapBrowserFactory::startInlineEditing(InlineEditorCreationArguments& args)
 {
+    Q_UNUSED(args);
     return false;
 }
 

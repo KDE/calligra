@@ -32,21 +32,37 @@
 
 using namespace KFormDesigner;
 
+class LibActionWidget::Private
+{
+public:
+    Private(WidgetInfo *w);
+    ~Private();
+
+    QByteArray className;
+};
+
+LibActionWidget::Private::Private(WidgetInfo *w) : className(w->className())
+{
+
+}
+
+LibActionWidget::Private::~Private()
+{
+
+}
+
 LibActionWidget::LibActionWidget(ActionGroup *group, WidgetInfo *w)
-        : KToggleAction(KIcon(w->iconName()), w->name(), group)
+    : KToggleAction(KIcon(w->iconName()), w->name(), group), d(new Private(w))
 {
     setObjectName(QLatin1String("library_widget_") + w->className());
     group->addAction(this);
-// kDebug() << QString("library_widget_" + w->className()).toLatin1();
-    m_className = w->className();
-//kde4 not needed setExclusiveGroup("LibActionWidgets");
     setToolTip(w->name());
     setWhatsThis(w->description());
-// connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
 }
 
 LibActionWidget::~LibActionWidget()
 {
+    delete d;
 }
 
 void
@@ -54,7 +70,7 @@ LibActionWidget::slotToggled(bool checked)
 {
     KToggleAction::slotToggled(checked);
     if (checked)
-        emit toggled(m_className);
+        emit toggled(d->className);
 }
 
 #include "libactionwidget.moc"

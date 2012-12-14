@@ -411,67 +411,67 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QVariantList &)
     wDateTime->setAutoSaveProperties(QList<QByteArray>() << "dateTime");
     addClass(wDateTime);
 
-    m_propDesc["toggleButton"] = i18n("Toggle");
-    m_propDesc["checkable"] = i18nc("Button is checkable", "Checkable");
-    m_propDesc["autoRepeat"] = i18n("Auto Repeat");
-    m_propDesc["autoRepeatDelay"] = i18nc("Auto Repeat Button's Delay", "Auto Rep. Delay");
-    m_propDesc["autoRepeatInterval"] = i18nc("Auto Repeat Button's Interval", "Auto Rep. Interval");
-    m_propDesc["autoDefault"] = i18n("Auto Default");
-    m_propDesc["default"] = i18n("Default");
-    m_propDesc["flat"] = i18n("Flat");
-    m_propDesc["echoMode"] =
-        i18nc("Echo mode for Line Edit widget eg. Normal, NoEcho, Password", "Echo Mode");
-    m_propDesc["indent"] = i18n("Indent");
+    setPropertyDescription("toggleButton", i18n("Toggle"));
+    setPropertyDescription("checkable", i18nc("Button is checkable", "Checkable"));
+    setPropertyDescription("autoRepeat", i18n("Auto Repeat"));
+    setPropertyDescription("autoRepeatDelay", i18nc("Auto Repeat Button's Delay", "Auto Rep. Delay"));
+    setPropertyDescription("autoRepeatInterval", i18nc("Auto Repeat Button's Interval", "Auto Rep. Interval"));
+    setPropertyDescription("autoDefault", i18n("Auto Default"));
+    setPropertyDescription("default", i18n("Default"));
+    setPropertyDescription("flat", i18n("Flat"));
+    setPropertyDescription("echoMode",
+        i18nc("Echo mode for Line Edit widget eg. Normal, NoEcho, Password", "Echo Mode"));
+    setPropertyDescription("indent", i18n("Indent"));
     //line
-    m_propDesc["orientation"] = i18n("Orientation");
+    setPropertyDescription("orientation", i18n("Orientation"));
     //checkbox
-    m_propDesc["checked"] = i18nc("Checked checkbox", "Checked");
-    m_propDesc["tristate"] = i18nc("Tristate checkbox", "Tristate");
+    setPropertyDescription("checked", i18nc("Checked checkbox", "Checked"));
+    setPropertyDescription("tristate", i18nc("Tristate checkbox", "Tristate"));
 
     //for spring
-    m_propDesc["sizeType"] = i18n("Size Type");
+    setPropertyDescription("sizeType", i18n("Size Type"));
 
     //for labels
-    m_propDesc["textFormat"] = i18n("Text Format");
-    m_propValDesc["PlainText"] = i18nc("For Text Format", "Plain");
-    m_propValDesc["RichText"] = i18nc("For Text Format", "Hypertext");
-    m_propValDesc["AutoText"] = i18nc("For Text Format", "Auto");
-    m_propValDesc["LogText"] = i18nc("For Text Format", "Log");
-    m_propDesc["openExternalLinks"] = i18nc("property: Can open external links in label", "Open Ext. Links");
+    setPropertyDescription("textFormat", i18n("Text Format"));
+    setValueDescription("PlainText", i18nc("For Text Format", "Plain"));
+    setValueDescription("RichText", i18nc("For Text Format", "Hypertext"));
+    setValueDescription("AutoText", i18nc("For Text Format", "Auto"));
+    setValueDescription("LogText", i18nc("For Text Format", "Log"));
+    setPropertyDescription("openExternalLinks", i18nc("property: Can open external links in label", "Open Ext. Links"));
 
     //KLineEdit
-    m_propDesc["clickMessage"] = i18nc("Property: \"Click Me\" message for line edit", "Click Message");
-    m_propDesc["showClearButton"] = i18nc("Property: Show Clear Button", "Clear Button");
+    setPropertyDescription("clickMessage", i18nc("Property: \"Click Me\",message for line edit", "Click Message"));
+    setPropertyDescription("showClearButton", i18nc("Property: Show Clear Button", "Clear Button"));
     //for EchoMode
 /* obsolete
-    m_propValDesc["Normal"] = i18nc("For Echo Mode", "Normal");
-    m_propValDesc["NoEcho"] = i18nc("For Echo Mode", "No Echo");
-    m_propValDesc["Password"] = i18nc("For Echo Mode", "Password"); */
-    m_propDesc["passwordMode"] = i18nc("Password Mode for line edit", "Password Mode");
-    m_propDesc["squeezedTextEnabled"] = i18nc("Squeezed Text Mode for line edit", "Squeezed Text");
+    setValueDescription("Normal", i18nc("For Echo Mode", "Normal"));
+    setValueDescription("NoEcho", i18nc("For Echo Mode", "No Echo"));
+    setValueDescription("Password", i18nc("For Echo Mode", "Password")); */
+    setPropertyDescription("passwordMode", i18nc("Password Mode for line edit", "Password Mode"));
+    setPropertyDescription("squeezedTextEnabled", i18nc("Squeezed Text Mode for line edit", "Squeezed Text"));
     
     //KTextEdit
-    m_propDesc["tabStopWidth"] = i18n("Tab Stop Width");
-    m_propDesc["tabChangesFocus"] = i18n("Tab Changes Focus");
-    m_propDesc["wrapPolicy"] = i18n("Word Wrap Policy");
-    m_propValDesc["AtWordBoundary"] = i18nc("For Word Wrap Policy", "At Word Boundary");
-    m_propValDesc["Anywhere"] = i18nc("For Word Wrap Policy", "Anywhere");
-    m_propValDesc["AtWordOrDocumentBoundary"] = i18nc("For Word Wrap Policy", "At Word Boundary If Possible");
-    m_propDesc["wordWrap"] = i18n("Word Wrapping");
-    m_propDesc["wrapColumnOrWidth"] = i18n("Word Wrap Position");
-    m_propValDesc["NoWrap"] = i18nc("For Word Wrap Position", "None");
-    m_propValDesc["WidgetWidth"] = i18nc("For Word Wrap Position", "Widget's Width");
-    m_propValDesc["FixedPixelWidth"] = i18nc("For Word Wrap Position", "In Pixels");
-    m_propValDesc["FixedColumnWidth"] = i18nc("For Word Wrap Position", "In Columns");
-    m_propDesc["linkUnderline"] = i18n("Links Underlined");
-    m_propDesc["horizontalScrollBarPolicy"] = i18n("Horizontal Scroll Bar");
-    m_propDesc["verticalScrollBarPolicy"] = i18n("Vertical Scroll Bar");
+    setPropertyDescription("tabStopWidth", i18n("Tab Stop Width"));
+    setPropertyDescription("tabChangesFocus", i18n("Tab Changes Focus"));
+    setPropertyDescription("wrapPolicy", i18n("Word Wrap Policy"));
+    setValueDescription("AtWordBoundary", i18nc("For Word Wrap Policy", "At Word Boundary"));
+    setValueDescription("Anywhere", i18nc("For Word Wrap Policy", "Anywhere"));
+    setValueDescription("AtWordOrDocumentBoundary", i18nc("For Word Wrap Policy", "At Word Boundary If Possible"));
+    setPropertyDescription("wordWrap", i18n("Word Wrapping"));
+    setPropertyDescription("wrapColumnOrWidth", i18n("Word Wrap Position"));
+    setValueDescription("NoWrap", i18nc("For Word Wrap Position", "None"));
+    setValueDescription("WidgetWidth", i18nc("For Word Wrap Position", "Widget's Width"));
+    setValueDescription("FixedPixelWidth", i18nc("For Word Wrap Position", "In Pixels"));
+    setValueDescription("FixedColumnWidth", i18nc("For Word Wrap Position", "In Columns"));
+    setPropertyDescription("linkUnderline", i18n("Links Underlined"));
+    setPropertyDescription("horizontalScrollBarPolicy", i18n("Horizontal Scroll Bar"));
+    setPropertyDescription("verticalScrollBarPolicy", i18n("Vertical Scroll Bar"));
     //ScrollBarPolicy
-    m_propValDesc["ScrollBarAsNeeded"] = i18nc("Show Scroll Bar As Needed", "As Needed");
-    m_propValDesc["ScrollBarAlwaysOff"] = i18nc("Scroll Bar Always Off", "Always Off");
-    m_propValDesc["ScrollBarAlwaysOn"] = i18nc("Scroll Bar Always On", "Always On");
-    m_propDesc["acceptRichText"] = i18nc("Property: Text Edit accepts rich text", "Rich Text");
-    m_propDesc["HTML"] = i18nc("Property: HTML value of text edit", "HTML");
+    setValueDescription("ScrollBarAsNeeded", i18nc("Show Scroll Bar As Needed", "As Needed"));
+    setValueDescription("ScrollBarAlwaysOff", i18nc("Scroll Bar Always Off", "Always Off"));
+    setValueDescription("ScrollBarAlwaysOn", i18nc("Scroll Bar Always On", "Always On"));
+    setPropertyDescription("acceptRichText", i18nc("Property: Text Edit accepts rich text", "Rich Text"));
+    setPropertyDescription("HTML", i18nc("Property: HTML value of text edit", "HTML"));
 }
 
 StdWidgetFactory::~StdWidgetFactory()
@@ -984,7 +984,7 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
         if (property == "vAlign")
             return false;
     } else if (classname == "KTextEdit")
-        ok = m_showAdvancedProperties ||
+        ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() ||
              (   property != "undoDepth"
               && property != "undoRedoEnabled" //always true!
               && property != "dragAutoScroll" //always true!
@@ -999,12 +999,12 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
         if ((property == "frameShape") || (property == "font") || (property == "margin"))
             return false;
     } else if (classname == "QCheckBox") {
-        ok = m_showAdvancedProperties || (property != "autoRepeat");
+        ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "autoRepeat");
     } else if (classname == "QRadioButton") {
-        ok = m_showAdvancedProperties || (property != "autoRepeat");
+        ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "autoRepeat");
     } else if (classname == "KPushButton") {
 //! @todo reenable autoDefault / default if the top level window is dialog...
-        ok = m_showAdvancedProperties || (property != "autoDefault" && property != "default");
+        ok = KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "autoDefault" && property != "default");
     }
     return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);
 }

@@ -54,9 +54,7 @@ public:
     }
 
     //! Implemented for KexiComboBoxBase
-    virtual QVariant origValue() const {
-        return m_origValue;
-    }
+    virtual QVariant origValue() const;
 
     virtual void setValueInternal(const QVariant& add, bool removeOld) {
         KexiComboBoxBase::setValueInternal(add, removeOld);

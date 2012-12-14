@@ -749,4 +749,14 @@ bool KexiView::saveSettings()
     return true;
 }
 
+QString KexiView::defaultIconName() const
+{
+    return d->defaultIconName;
+}
+
+void KexiView::setDefaultIconName(const QString& iconName)
+{
+    d->defaultIconName = iconName;
+}
+
 #include "KexiView.moc"
