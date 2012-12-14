@@ -25,6 +25,8 @@ Item {
     property bool fullView: true;
     Label {
         id: compositeModeListLabel
+        visible: fullView;
+        height: fullView ? Constants.DefaultFontSize : 0;
         anchors {
             top: parent.top;
             left: parent.left;
