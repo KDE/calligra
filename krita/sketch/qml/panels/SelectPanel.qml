@@ -88,7 +88,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectRectangular";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectRectangular" : false;
             }
             Button {
                 id: selectPolygon;
@@ -102,7 +102,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectPolygonal";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectPolygonal" : false;
             }
             Button {
                 id: selectArea;
@@ -116,7 +116,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectContiguous";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectContiguous" : false;
             }
             Button {
                 id: selectColor;
@@ -130,7 +130,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectSimilar";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectSimilar" : false;
             }
         }
         Item {
@@ -261,7 +261,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectRectangular");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectRectangular";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectRectangular" : false;
             }
             Button {
                 id: selectPolygonFull;
@@ -275,7 +275,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectPolygonal");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectPolygonal";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectPolygonal" : false;
             }
             Button {
                 id: selectAreaFull;
@@ -289,7 +289,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectContiguous");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectContiguous";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectContiguous" : false;
             }
             Button {
                 id: selectColorFull;
@@ -303,7 +303,7 @@ Panel {
                 shadow: false;
                 highlight: false;
                 onClicked: toolManager.requestToolChange("KisToolSelectSimilar");
-                checked: toolManager.currentTool.toolId() === "KisToolSelectSimilar";
+                checked: toolManager.currentTool !== null ? toolManager.currentTool.toolId() === "KisToolSelectSimilar" : false;
             }
         }
         Label {
