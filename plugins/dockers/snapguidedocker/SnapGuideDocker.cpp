@@ -51,7 +51,7 @@ public:
 SnapGuideDocker::SnapGuideDocker()
     : d(new Private())
 {
-    setWindowTitle(i18n("SnapGuide Properties"));
+    setWindowTitle(i18n("Snap Settings"));
 
     d->mainWidget = new SnapGuideConfigWidget(new KoSnapGuide(d->canvas));
     setWidget(d->mainWidget);

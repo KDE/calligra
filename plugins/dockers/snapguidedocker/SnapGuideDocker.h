@@ -32,9 +32,7 @@
 #include <KoCanvasObserverBase.h>
 #include <QDockWidget>
 
-class KoShapeStrokeModel;
-
-/// A docker for setting properties of a stroke
+/// A docker for setting properties of a snapping
 class SnapGuideDocker : public QDockWidget, public KoCanvasObserverBase
 {
     Q_OBJECT
