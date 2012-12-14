@@ -103,6 +103,7 @@ ActionsListViewBase::~ActionsListViewBase()
 
 QTreeWidgetItem *ActionsListViewBase::itemForAction(const QString& actionName, QTreeWidgetItem* parent)
 {   
+    Q_UNUSED(parent);
     QTreeWidgetItemIterator it(this);
     while (*it) {
         ActionSelectorDialogTreeItem* itm = dynamic_cast<ActionSelectorDialogTreeItem*>(*it);

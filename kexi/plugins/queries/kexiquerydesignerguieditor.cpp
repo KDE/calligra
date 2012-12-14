@@ -706,6 +706,7 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata,
                                          KexiView::StoreNewDataOptions options,
                                          bool &cancel)
 {
+    Q_UNUSED(options);
     if (!d->dataTable->dataAwareObject()->acceptRowEdit()) {
         cancel = true;
         return 0;
