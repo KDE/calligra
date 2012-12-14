@@ -164,6 +164,7 @@ Panel {
             onContainsMouseChanged: toolOptionsPeek.focus = containsMouse;
         }
         Flickable {
+            id: toolOptionsPeekFlickable;
             anchors.fill: parent
             contentHeight: toolOptionsPeek.height;
             Loader {
@@ -174,6 +175,7 @@ Panel {
                 source: "toolconfigpages/paint.qml";
             }
         }
+        ScrollDecorator { flickableItem: toolOptionsPeekFlickable; }
     }
 
     fullContents: Item {
@@ -216,7 +218,7 @@ Panel {
                             textColor: "white";
                             shadow: false;
                             highlight: false;
-                            checked: toolManager.currentTool.toolId() === toolNameToID(model.name);
+                            checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 firstTool.toolName = model.name;
                                 changeTool(model.name);
@@ -248,7 +250,7 @@ Panel {
                             textColor: "white";
                             shadow: false;
                             highlight: false;
-                            checked: toolManager.currentTool.toolId() === toolNameToID(model.name);
+                            checked: toolManager.currentTool !== null ? (toolManager.currentTool.toolId() === toolNameToID(model.name)) : false;
                             onClicked: {
                                 secondTool.toolName = model.name;
                                 changeTool(model.name);
@@ -259,6 +261,7 @@ Panel {
             }
         }
         Flickable {
+            id: toolOptionsFullFlickable;
             anchors {
                 top: toolSelectorContainer.bottom;
                 left: parent.left;
@@ -277,5 +280,6 @@ Panel {
                 source: "toolconfigpages/paint.qml";
             }
         }
+        ScrollDecorator { flickableItem: toolOptionsFullFlickable; }
     }
 }
