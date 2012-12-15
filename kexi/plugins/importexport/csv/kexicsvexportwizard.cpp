@@ -298,8 +298,8 @@ void KexiCSVExportWizard::next()
     if (currentPage() == m_fileSavePage) {
         if (!m_fileSaveWidget->checkSelectedFile()) {
             return;
-	    }
-	    kDebug() << "selectedFile:" << m_fileSaveWidget->selectedFile();
+        }
+        kDebug() << "selectedFile:" << m_fileSaveWidget->selectedFile();
         kDebug() << "selectedUrl:" << m_fileSaveWidget->selectedUrl();
         kDebug() << "highlightedFile:" << m_fileSaveWidget->highlightedFile();
         KAssistantDialog::next();
@@ -312,9 +312,9 @@ void KexiCSVExportWizard::done(int result)
 {
     if (QDialog::Accepted == result) {
         if (m_fileSavePage) {
-	    kDebug() << m_fileSaveWidget->highlightedFile();
+            kDebug() << m_fileSaveWidget->highlightedFile();
             m_options.fileName = m_fileSaveWidget->highlightedFile();
-	}
+        }
         m_options.delimiter = m_delimiterWidget->delimiter();
         m_options.textQuote = m_textQuote->textQuote();
         m_options.addColumnNames = m_addColumnNamesCheckBox->isChecked();

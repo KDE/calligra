@@ -70,10 +70,7 @@ public:
     KoProperty::Set* currentPropertySet() const;
 
     uint currentRow() const;
-
-    inline KoProperty::Set* at(uint row) const {
-        return m_sets.value(row);
-    }
+    KoProperty::Set* at(uint row) const;
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
@@ -140,13 +137,9 @@ protected slots:
 protected:
     void enlargeToFitRow(uint row);
 
-    QVector<KoProperty::Set*> m_sets; //!< prop. sets vector
-
-    QPointer<KexiView> m_view;
-    KexiDataAwareObjectInterface* m_dataObject;
-    QPointer<KexiTableViewData> m_currentTVData;
-
-    int m_row; //!< used to know if a new row is selected in slotCellSelected()
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

@@ -55,7 +55,7 @@ class KexiScrollView::Private
 {
 public:
     Private(bool preview_)
-	: widget(0)
+        : widget(0)
         , preview(preview_)
         , scrollViewNavPanel(0)
     {

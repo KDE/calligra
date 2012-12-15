@@ -78,7 +78,7 @@ void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOl
         m_lineedit->setCursorPosition(add.length());
         return;
     }
-    setValueInInternalEditor(m_origValue);
+    setValueInInternalEditor(KexiDataItemInterface::originalValue());
     m_lineedit->setCursorPosition(0); //ok?
 }
 
@@ -128,7 +128,7 @@ bool KexiDateTimeTableEdit::valueIsValid()
 bool KexiDateTimeTableEdit::valueChanged()
 {
     //kDebug() << m_origValue.toString() << " ? " << m_lineedit->text();
-    return m_origValue != m_lineedit->text();
+    return KexiDataItemInterface::originalValue() != m_lineedit->text();
 }
 
 bool KexiDateTimeTableEdit::textIsEmpty() const

@@ -37,30 +37,53 @@
 
 using namespace KexiPart;
 
-Manager::Manager(QObject *parent)
-        : QObject(parent)
+class Manager::Private
 {
-    m_lookupDone = false;
-    m_lookupResult = false;
-//    m_nextTempProjectPartID = -1;
+public:
+    Private();
+
+    ~Private();
+
+    PartDict parts;
+    PartInfoList partlist;
+    PartInfoDict partsByClass;
+    bool lookupDone;
+    bool lookupResult;
+};
+
+Manager::Private::Private() : lookupDone(false)
+                              ,lookupResult(false)
+{  
+
+}
+
+Manager::Private::~Private()
+{
+    qDeleteAll(partlist);
+    partlist.clear();
+
+}
+
+Manager::Manager(QObject *parent)
+    : QObject(parent), d(new Private())
+{
 }
 
 Manager::~Manager()
 {
-    qDeleteAll(m_partlist);
-    m_partlist.clear();
+    delete d;
 }
 
 bool Manager::lookup()
 {
 //js: TODO: allow refreshing!!!! (will need calling removeClient() by Part objects)
-    if (m_lookupDone)
-        return m_lookupResult;
-    m_lookupDone = true;
-    m_lookupResult = false;
-    m_partlist.clear();
-    m_partsByClass.clear();
-    m_parts.clear();
+    if (d->lookupDone)
+        return d->lookupResult;
+    d->lookupDone = true;
+    d->lookupResult = false;
+    d->partlist.clear();
+    d->partsByClass.clear();
+    d->parts.clear();
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
         kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
@@ -100,16 +123,16 @@ bool Manager::lookup()
         KService::Ptr ptr = ordered[i];
         if (ptr) {
             Info *info = new Info(ptr);
-//            info->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
+//            info->setProjectPartID(d->nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
             // to avoid duplicates
             if (!info->partClass().isEmpty()) {
-                m_partsByClass.insert(info->partClass(), info);
+                d->partsByClass.insert(info->partClass(), info);
                 //kDebug() << "inserting info to" << info->partClass();
             }
-            m_partlist.append(info);
+            d->partlist.append(info);
         }
     }
-    m_lookupResult = true;
+    d->lookupResult = true;
     return true;
 }
 
@@ -126,7 +149,7 @@ Part* Manager::part(Info *i)
         return 0;
     }
 
-    Part *p = m_parts.value(i->partClass());
+    Part *p = d->parts.value(i->partClass());
     if (!p) {
 //2.0        int error = 0;
 /*2.0        p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error); */
@@ -158,7 +181,7 @@ Part* Manager::part(Info *i)
         }*/
         p->setInfo(i);
         p->setObjectName(QString("%1 plugin").arg(i->objectName()));
-        m_parts.insert(i->partClass(), p);
+        d->parts.insert(i->partClass(), p);
         emit partLoaded(p);
     }
     return p;
@@ -187,7 +210,7 @@ Info* Manager::infoForClass(const QString &className)
     if (!lookup())
         return 0;
     const QString realClass = realPartClass(className);
-    Info *i = realClass.isEmpty() ? 0 : m_partsByClass.value(realClass);
+    Info *i = realClass.isEmpty() ? 0 : d->partsByClass.value(realClass);
     if (i)
         return i;
     setError(i18n("No plugin for class \"%1\"", realClass));
@@ -200,11 +223,11 @@ void Manager::insertStaticPart(StaticPart* part)
         return;
     if (!lookup())
         return;
-//    part->info()->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
-    m_partlist.append(part->info());
+//    part->info()->setProjectPartID(d->nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
+    d->partlist.append(part->info());
     if (!part->info()->partClass().isEmpty())
-        m_partsByClass.insert(part->info()->partClass(), part->info());
-    m_parts.insert(part->info()->partClass(), part);
+        d->partsByClass.insert(part->info()->partClass(), part->info());
+    d->parts.insert(part->info()->partClass(), part);
 }
 
 PartInfoList* Manager::infoList()
@@ -212,7 +235,7 @@ PartInfoList* Manager::infoList()
     if (!lookup()) {
         return 0;
     }
-    return &m_partlist;
+    return &d->partlist;
 }
 
 #include "kexipartmanager.moc"

@@ -26,22 +26,40 @@
 
 using namespace KFormDesigner;
 
-WidgetWithSubpropertiesInterface::WidgetWithSubpropertiesInterface()
+class WidgetWithSubpropertiesInterface::Private
+{
+public:
+    Private()
+    {
+
+    }
+
+    ~Private()
+    {
+
+    }
+
+    QPointer<QWidget> subwidget;
+    QSet<QByteArray> subproperies;
+};
+
+WidgetWithSubpropertiesInterface::WidgetWithSubpropertiesInterface() : d(new Private())
 {
 }
 
 WidgetWithSubpropertiesInterface::~WidgetWithSubpropertiesInterface()
 {
+    delete d;
 }
 
 void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
 {
-    m_subwidget = widget;
-    m_subproperies.clear();
+    d->subwidget = widget;
+    d->subproperies.clear();
     QSet<QByteArray> addedSubproperies;
-    if (m_subwidget) {
+    if (d->subwidget) {
         //remember properties in the subwidget that are not present in the parent
-        for (const QMetaObject *metaObject = m_subwidget->metaObject(); metaObject;
+        for (const QMetaObject *metaObject = d->subwidget->metaObject(); metaObject;
                 metaObject = metaObject->superClass()) {
             QList<QMetaProperty> properties(
                 KexiUtils::propertiesForMetaObjectWithInherited(metaObject));
@@ -50,7 +68,7 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
                     && -1 != dynamic_cast<QObject*>(this)->metaObject()->indexOfProperty(property.name())
                     && !addedSubproperies.contains(property.name()))
                 {
-                    m_subproperies.insert(property.name());
+                    d->subproperies.insert(property.name());
                     addedSubproperies.insert(property.name());
                     kDebug() << "added subwidget's property that is not present in the parent: "
                         << property.name();
@@ -62,34 +80,34 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
 
 QWidget* WidgetWithSubpropertiesInterface::subwidget() const
 {
-    return m_subwidget;
+    return d->subwidget;
 }
 
 QSet<QByteArray> WidgetWithSubpropertiesInterface::subproperies() const
 {
-    return m_subproperies;
+    return d->subproperies;
 }
 
 QMetaProperty WidgetWithSubpropertiesInterface::findMetaSubproperty(const char * name) const
 {
-    if (!m_subwidget || m_subproperies.contains(name))
+    if (!d->subwidget || d->subproperies.contains(name))
         return QMetaProperty();
-    return KexiUtils::findPropertyWithSuperclasses(m_subwidget, name);
+    return KexiUtils::findPropertyWithSuperclasses(d->subwidget, name);
 }
 
 QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool &ok) const
 {
-    if (!m_subwidget || m_subproperies.contains(name)) {
+    if (!d->subwidget || d->subproperies.contains(name)) {
         ok = false;
         return QVariant();
     }
     ok = true;
-    return m_subwidget->property(name);
+    return d->subwidget->property(name);
 }
 
 bool WidgetWithSubpropertiesInterface::setSubproperty(const char * name, const QVariant & value)
 {
-    if (!m_subwidget || m_subproperies.contains(name))
+    if (!d->subwidget || d->subproperies.contains(name))
         return false;
-    return m_subwidget->setProperty(name, value);
+    return d->subwidget->setProperty(name, value);
 }

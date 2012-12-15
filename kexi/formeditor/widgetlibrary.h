@@ -75,15 +75,8 @@ public:
      * creates actions for widget creating
      */
     void createWidgetActions(ActionGroup *group);
-//prev    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
-//prev                                   QObject *receiver, const char *slot);
 
     void addCustomWidgetActions(KActionCollection *col);
-
-//old  /**
-//old   * creates the XML for widget actions
-//old   */
-//old  QString createXML();
 
     /**
      * searches the right factory and creates a widget.

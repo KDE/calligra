@@ -82,24 +82,6 @@ public:
      */
     Info *infoForClass(const QString& className);
 
-#if 0 // moved to KexiProject
-    /**
-     * checks project's kexi__part table
-     * and checks if all parts used in a project are available locally
-     *
-     * use @ref missingParts() to get a list of missing parts
-     */
-    bool checkProject(KexiDB::Connection *conn);
-
-    /**
-     * @returns parts metioned in the project meta tables but not available locally
-     */
-    MissingList missingParts() const {
-        return m_missing;
-    }
-#endif
-
-
     /**
      * @return a list of the available KexiParts in well-defined order
      * Can return 0 if plugins were not found (what means the installation is broken).
@@ -123,11 +105,9 @@ private:
 
     Q_DISABLE_COPY(Manager)
 
-    PartDict m_parts;
-    PartInfoList m_partlist;
-    PartInfoDict m_partsByClass;
-    bool m_lookupDone;
-    bool m_lookupResult;
+    class Private;
+
+    Private* const d;
 
     friend class StaticPart;
 };

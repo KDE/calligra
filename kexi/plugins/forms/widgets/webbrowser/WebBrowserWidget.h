@@ -21,7 +21,7 @@
 #define WEBBROWSERWIDGET_H
 #include <QProgressBar>
 #include <QWidget>
-#include "widgetfactory.h"	
+#include "widgetfactory.h"
 #include "container.h"
 #include <formeditor/FormWidgetInterface.h>
 #include <widget/dataviewcommon/kexiformdataiteminterface.h>
@@ -52,7 +52,7 @@ class WebBrowserWidget : public QWidget,
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QIcon icon READ icon)
     Q_PROPERTY(bool modified READ modified)
-    //Q_PROPERTY(QString selectedText READ selectedText) 						//Do
+    //Q_PROPERTY(QString selectedText READ selectedText)                                                 //Do
     Q_PROPERTY(qreal textScale READ textScale WRITE setTextScale)
     
      
@@ -68,23 +68,23 @@ public:
     }
 
     inline QString url() const {
-	
-	return m_view->url().toString();
+
+        return m_view->url().toString();
     }
     
     inline bool modified() const {
-	
- 	return m_view->isModified();
+
+         return m_view->isModified();
     }
 
     inline QString title() const {
-	
- 	return m_view->title();
+
+         return m_view->title();
     }
 
     inline qreal zoomFactor() const {
-	
-	return m_view->zoomFactor();
+
+        return m_view->zoomFactor();
     }
   
     inline QIcon icon() const 

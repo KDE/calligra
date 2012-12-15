@@ -22,7 +22,6 @@
 
 #include <QDir>
 #include <QComboBox>
-#include <q3buttongroup.h>
 #include <QRadioButton>
 #include <QCheckBox>
 

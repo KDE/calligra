@@ -1053,7 +1053,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
     if (KexiUtils::objectIsA(item->widget(), "CustomWidget")) {
         QDomDocument doc("TEMP");
-        doc.setContent(item->m_unknownProps);
+        doc.setContent(item->unknownProperties());
         for (QDomNode n = doc.firstChild(); !n.isNull(); n = n.nextSibling()) {
             tclass.appendChild(n.cloneNode());
         }
@@ -1545,20 +1545,20 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
                 item->container()->m_layout = (QLayout*)layout;
 #endif
             } else { // grid layout
-                item->container()->m_layType = Form::Grid;
+                item->container()->setLayoutType(Form::Grid);
                 QGridLayout *layout = new QGridLayout(item->widget());
-                item->container()->m_layout = (QLayout*)layout;
+                item->container()->setLayout((QLayout*)layout);
             }
             readChildNodes(item, container, node, w);
         } else if (tag == "vbox")  {
-            item->container()->m_layType = Form::VBox;
+            item->container()->setLayoutType(Form::VBox);
             QVBoxLayout *layout = new QVBoxLayout(item->widget());
-            item->container()->m_layout = (QLayout*)layout;
+            item->container()->setLayout((QLayout*)layout);
             readChildNodes(item, container, node, w);
         } else if (tag == "hbox") {
-            item->container()->m_layType = Form::HBox;
+            item->container()->setLayoutType(Form::HBox);
             QHBoxLayout *layout = new QHBoxLayout(item->widget());
-            item->container()->m_layout = (QLayout*)layout;
+            item->container()->setLayout((QLayout*)layout);
             readChildNodes(item, container, node, w);
         } else {// unknown tag, we let the Factory handle it
             if (w->metaObject()->className() == QString::fromLatin1("CustomWidget"))

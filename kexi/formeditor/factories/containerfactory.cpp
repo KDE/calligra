@@ -607,24 +607,24 @@ ContainerFactory::ContainerFactory(QObject *parent, const QVariantList &)
 #endif
 
     //groupbox
-    m_propDesc["title"] = i18n("Title");
-    m_propDesc["flat"] = i18n("Flat");
+    setPropertyDescription("title", i18n("Title"));
+    setPropertyDescription("flat", i18n("Flat"));
 
     //tab widget
-    m_propDesc["tabPosition"] = i18n("Tab Position");
-    m_propDesc["currentIndex"] = i18n("Current Page");
-    m_propDesc["tabShape"] = i18n("Tab Shape");
-    m_propDesc["elideMode"] = i18nc("Tab Widget's Elide Mode", "Elide Mode");
-    m_propDesc["usesScrollButtons"] = i18nc("Tab Widget uses scroll buttons", "Scroll Buttons");
+    setPropertyDescription("tabPosition", i18n("Tab Position"));
+    setPropertyDescription("currentIndex", i18n("Current Page"));
+    setPropertyDescription("tabShape", i18n("Tab Shape"));
+    setPropertyDescription("elideMode", i18nc("Tab Widget's Elide Mode", "Elide Mode"));
+    setPropertyDescription("usesScrollButtons", i18nc("Tab Widget uses scroll buttons", "Scroll Buttons"));
 
-    m_propDesc["tabPosition"] = i18n("Tab Position");
-    m_propDesc["tabPosition"] = i18n("Tab Position");
-    m_propDesc["tabsClosable"] = i18n("Closable Tabs");
-    m_propDesc["movable"] = i18n("Movable Tabs");
-    m_propDesc["documentMode"] = i18n("Document Mode");
+    setPropertyDescription("tabPosition", i18n("Tab Position"));
+    setPropertyDescription("tabPosition", i18n("Tab Position"));
+    setPropertyDescription("tabsClosable", i18n("Closable Tabs"));
+    setPropertyDescription("movable", i18n("Movable Tabs"));
+    setPropertyDescription("documentMode", i18n("Document Mode"));
 
-    m_propValDesc["Rounded"] = i18nc("for Tab Shape", "Rounded");
-    m_propValDesc["Triangular"] = i18nc("for Tab Shape", "Triangular");
+    setValueDescription("Rounded", i18nc("for Tab Shape", "Rounded"));
+    setValueDescription("Triangular", i18nc("for Tab Shape", "Triangular"));
 }
 
 ContainerFactory::~ContainerFactory()
@@ -910,12 +910,12 @@ ContainerFactory::isPropertyVisibleInternal(const QByteArray &classname,
             /*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding
             a fake properties which will allow to properly work in design mode, otherwise
             child widgets become frozen when checked==true */
-            (m_showAdvancedProperties || (property != "checkable" && property != "checked")) &&
+            (KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "checkable" && property != "checked")) &&
 #endif
             true
             ;
     } else if (classname == "KFDTabWidget") {
-        ok = (m_showAdvancedProperties || (property != "tabReorderingEnabled" && property != "hoverCloseButton" && property != "hoverCloseButtonDelayed"));
+        ok = (KFormDesigner::WidgetFactory::advancedPropertiesVisible() || (property != "tabReorderingEnabled" && property != "hoverCloseButton" && property != "hoverCloseButtonDelayed"));
     }
 
     return ok && WidgetFactory::isPropertyVisibleInternal(classname, w, property, isTopLevel);

@@ -65,9 +65,10 @@ public:
     virtual int base() const;
 
 private:
-    qint64 m_base;
-    qint64 m_min;
-    qint64 m_max;
+
+    class Private;
+
+    Private* const d;
 };
 
 }

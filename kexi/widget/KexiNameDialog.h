@@ -69,13 +69,9 @@ protected:
     //! Checks if specified name already exists.
     bool canOverwrite();
 
-    QLabel *m_icon;
-    KexiNameWidget* m_widget;
-    const KexiProject *m_project;
-    const KexiPart::Part *m_part;
-    bool m_checkIfObjectExists;
-    bool m_allowOverwriting;
-    bool *m_overwriteNeeded;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif
