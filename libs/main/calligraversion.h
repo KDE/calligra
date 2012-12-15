@@ -33,7 +33,7 @@
 * it contains the version at compile time. See Calligra::versionString() if you need
 * the Calligra version used at runtime.
 */
-#define CALLIGRA_VERSION_STRING "2.6 RC1"
+#define CALLIGRA_VERSION_STRING "2.6 RC2"
 
 /**
  * @def CALLIGRA_VERSION_MAJOR
@@ -56,7 +56,7 @@
  * @ingroup CalligraMacros
  * @brief Release version of Calligra, at compile time
  */
-#define CALLIGRA_VERSION_RELEASE 92
+#define CALLIGRA_VERSION_RELEASE 93
 
 /**
  * @def CALLIGRA_ALPHA
@@ -77,7 +77,7 @@
  * @ingroup CalligraMacros
  * @brief If defined (1..9), indicates at compile time that Calligra is in "release candidate" stage
  */
-#define CALLIGRA_RC 1
+#define CALLIGRA_RC 2
 
 /**
  * @def CALLIGRA_STABLE
