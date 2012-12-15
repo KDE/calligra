@@ -19,9 +19,6 @@ set(calligradockers_SRCS
     shapecollection/CollectionItemModel.cpp
     shapecollection/OdfCollectionLoader.cpp
 
-    shadowdocker/ShadowDocker.cpp
-    shadowdocker/ShadowDockerFactory.cpp
-
     styledocker/StyleDockerFactory.cpp
     styledocker/StyleDocker.cpp
     styledocker/StrokeFillWidget.cpp
