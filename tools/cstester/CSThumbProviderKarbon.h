@@ -29,7 +29,7 @@ class KarbonKoDocument;
 class CSThumbProviderKarbon : public CSThumbProvider
 {
 public:
-    CSThumbProviderKarbon(KarbonKoDocument *doc);
+    explicit CSThumbProviderKarbon(KarbonKoDocument *doc);
     virtual ~CSThumbProviderKarbon();
 
     virtual QList<QImage> createThumbnails(const QSize &thumbSize);

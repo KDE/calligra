@@ -100,7 +100,7 @@ void CSTProcessRunner::processFinished(int exitCode, QProcess::ExitStatus exitSt
             }
             else {
                 QString tmp(document);
-                document = QString();
+                document.clear();
                 startMd5(process, tmp);
             }
         }
@@ -144,7 +144,7 @@ void CSTProcessRunner::startCstester(QProcess *process)
 
 void CSTProcessRunner::startMd5(QProcess *process, const QString &document)
 {
-    QString dir = m_resultDir + "/" + document + ".check";
+    QString dir = m_resultDir + '/' + document + ".check";
     QStringList arguments;
     arguments << dir;
     process->start("cstmd5gen.sh", arguments, QIODevice::NotOpen);
