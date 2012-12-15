@@ -312,6 +312,7 @@ install(
     KoFilterEffectConfigWidgetBase.h
     KoFilterEffectRenderContext.h
     KoFilterEffectLoadingContext.h
+    SaveCoverImage.h
     commands/KoEventActionAddCommand.h
     commands/KoEventActionRemoveCommand.h
     commands/KoParameterToPathCommand.h

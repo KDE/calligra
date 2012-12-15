@@ -83,7 +83,6 @@ bool KoImageCollection::completeSaving(KoStore *store, KoXmlWriter *manifestWrit
                 Q_ASSERT(0); // not implemented yet
             }
             else if (store->open(imagesToSaveIter.value())) {
-                kDebug(31000) << "####" << imagesToSaveIter.value() << "####";
                 KoStoreDevice device(store);
                 bool ok = imageData->saveData(device);
                 store->close();
