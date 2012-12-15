@@ -20,7 +20,7 @@ Name[uk]=Електронні таблиці OpenDocument (ODS)
 Name[x-test]=xxOpenDocument Spreadsheetsxx
 
 X-KDE-ServiceTypes=ThumbCreator
-MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;application/vnd.openxmlformats-officedocument.spreadsheetml.template;
+MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;
 
 X-KDE-Library=calligrathumbnail
 CacheThumbnail=true
