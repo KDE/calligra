@@ -1767,8 +1767,6 @@ void TextTool::ensureCursorVisible(bool moveView)
     if (!textEditor || !m_textShapeData)
         return;
 
-    const int position = textEditor->position();
-
     bool upToDate;
     QRectF cRect = caretRect(textEditor->cursor(), &upToDate);
 
