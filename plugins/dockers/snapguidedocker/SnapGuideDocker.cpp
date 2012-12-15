@@ -27,8 +27,6 @@
 
 #include "SnapGuideDocker.h"
 
-#include <SnapGuideConfigWidget.h>
-
 #include <klocale.h>
 
 #include <KoCanvasBase.h>
@@ -44,7 +42,7 @@ public:
     {}
 
     KoCanvasBase *canvas;
-    SnapGuideConfigWidget *mainWidget;
+    QWidget *mainWidget;
 };
 
 
@@ -52,9 +50,6 @@ SnapGuideDocker::SnapGuideDocker()
     : d(new Private())
 {
     setWindowTitle(i18n("Snap Settings"));
-
-    d->mainWidget = new SnapGuideConfigWidget(new KoSnapGuide(d->canvas));
-    setWidget(d->mainWidget);
 }
 
 SnapGuideDocker::~SnapGuideDocker()
@@ -70,10 +65,11 @@ void SnapGuideDocker::setCanvas(KoCanvasBase *canvas)
     }
 
     if (canvas) {
-        d->mainWidget->setCanvas(canvas);
+        d->mainWidget = canvas->createSnapGuideConfigWidget();
     }
 
     d->canvas = canvas;
+    setWidget(d->mainWidget);    
 }
 
 void SnapGuideDocker::unsetCanvas()
