@@ -527,6 +527,18 @@ else (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
    set(SHOULD_BUILD_KEXI FALSE)
 endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
 
+#############################################
+####          3rd party libraries        ####
+#############################################
+
+set(KDGANTT_INCLUDES
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+)
+
+#set(KDCHART_INCLUDES
+#    ${CMAKE_SOURCE_DIR}/3rdparty/kdchart
+#)
+
  #############################################
 ##############################################
 ## Detect which applications can be compile ##
@@ -601,10 +613,6 @@ if (SHOULD_BUILD_FLOW)
     macro_optional_add_subdirectory(flow)
 endif (SHOULD_BUILD_FLOW)
 
-if (SHOULD_BUILD_PLAN)
-    macro_optional_add_subdirectory(kdgantt)
-endif (SHOULD_BUILD_PLAN)
-
 if(SHOULD_BUILD_STAGE)
   macro_optional_add_subdirectory(stage)
 endif(SHOULD_BUILD_STAGE)
@@ -658,6 +666,7 @@ macro_optional_add_subdirectory(doc)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
+add_subdirectory(3rdparty)
 add_subdirectory(interfaces)
 add_subdirectory(cmake)
 add_subdirectory(pics)
