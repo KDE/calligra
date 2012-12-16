@@ -8,9 +8,6 @@ include_directories(${KDE4_INCLUDE_DIR}
 
 set(calligradockers_SRCS
 
-    strokedocker/StrokeDocker.cpp
-    strokedocker/StrokeDockerFactory.cpp
-
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp
 
