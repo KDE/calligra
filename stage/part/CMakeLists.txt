@@ -168,7 +168,7 @@ install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
 ### kdeinit stage ###
 set(stage_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(stage_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-stage.png")
+kde4_add_app_icon(stage_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrastage.png")
 
 kde4_add_kdeinit_executable(calligrastage ${stage_KDEINIT_SRCS})
 
