@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QImage>
+#include <QGridLayout>
 
 class QLabel;
 class QTabBar;
@@ -58,6 +59,7 @@ private:
     QImage m_diff;
 
     // UI
+    QGridLayout *m_layout;
     QTabBar *m_tabBar;
     QStackedWidget *m_stack;
     QLabel *m_image1Label;
