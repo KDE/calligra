@@ -79,7 +79,6 @@
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
-#include <SaveCoverImage.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>

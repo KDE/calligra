@@ -24,6 +24,7 @@
 #include <KoStoreDevice.h>
 
 #include <kdebug.h>
+#include <kmimetype.h>
 #include <klocale.h>
 #include <QFile>
 #include <QFileDialog>
@@ -41,14 +42,18 @@ bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter)
     if (m_coverData.isEmpty())
         return true;
 
-    if (!store->open("Author profile/cover." + m_coverMimeType)) {
-        kDebug(31000) << "Couldn't open Author_profile/cover."<<m_coverMimeType;
+    if (!store->open("Author-Profile/cover." + m_coverMimeType)) {
+        kDebug(31000) << "Unable to open Author-Profile/cover."<<m_coverMimeType;
         return false;
     }
 
     KoStoreDevice device(store);
     device.write(m_coverData, m_coverData.size());
     store->close();
+
+    const QString mimetype(KMimeType::findByPath("Author-Profile/cover." + m_coverMimeType, 0 , true)->name());
+    manifestWriter->addManifestEntry("Author-Profile/cover." + m_coverMimeType, mimetype);
+
     return true;
 }
 
@@ -56,7 +61,7 @@ void CoverImage::setCoverData(QString path)
 {
     QFile file (path);
     if (!file.open(QIODevice::ReadOnly)) {
-        kDebug(31000) << "Couldn't to open" << path;
+        kDebug(31000) << "Unable to open" << path;
     }
     QByteArray data = file.readAll();
 
