@@ -79,7 +79,7 @@
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
-#include "SaveCoverImage.h"
+#include <SaveCoverImage.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
@@ -398,12 +398,6 @@ void KWView::setupActions()
     if (m_currentPage.isValid())
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
-
-    // ------------ Book tool
-    action = new KAction(i18n("Insert Cover Image"), this);
-    actionCollection()->addAction("insert_coverimage", action);
-    action->setToolTip(i18n("Set cover for your ebook"));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertCoverImage()));
 
     /* ********** From old kwview ****
     We probably want to have each of these again, so just move them when you want to implement it
@@ -1051,13 +1045,3 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         m_canvas->addCommand(cmd);
     }
 }
-
-void KWView::insertCoverImage()
-{
-    QString coverSourc = QFileDialog::getOpenFileName(0, i18n("Open File"),
-                                                      "/home",
-                                                      i18n("Images (*.png *.xpm *.jpg)"));
-    SaveCoverImage *cover = new SaveCoverImage();
-    cover->setCoverData(coverSourc);
-}
-

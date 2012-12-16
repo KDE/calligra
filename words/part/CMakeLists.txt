@@ -74,6 +74,7 @@ set(wordsprivate_LIB_SRCS
     author/CAuFactory.cpp
     author/CAuView.cpp
     author/CAuPart.cpp
+    author/CoverImage.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}

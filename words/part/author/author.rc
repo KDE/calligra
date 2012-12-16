@@ -50,6 +50,10 @@
   <Action name="view_fullscreen"/>
  </Menu>
  
+  <Menu name="book"><text>Book</text>
+  <Action name="insert_coverimage"/>
+ </Menu>
+ 
  <Menu name="semantic"><text>Semantics</text>
   <Action name="insert_semanticobject_ref"/>
   <Action name="insert_semanticobject_new"/>
@@ -60,10 +64,6 @@
   <Action name="insert_link"/>
   <Action name="add_bookmark"/>
  -->
-
- <Menu name="book"><text>Book</text>
-  <Action name="insert_coverimage"/>
- </Menu>
  
  <Menu name="format"><text>S&amp;tyles</text>
   <Action name="format_stylemenu"/>

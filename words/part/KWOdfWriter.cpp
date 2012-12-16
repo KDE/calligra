@@ -46,6 +46,8 @@
 #include <KoStoreDevice.h>
 #include <KoDocumentRdfBase.h>
 
+#include "author/CoverImage.h"
+
 #include <QBuffer>
 #include <QTextCursor>
 #include <KDebug>
@@ -228,6 +230,8 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
     context.addOption(KoShapeSavingContext::ZIndex);
 
+    CoverImage cover;
+
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
     context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
@@ -370,6 +374,11 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
         return false;
 
     if (!context.saveDataCenter(store, manifestWriter)) {
+        return false;
+    }
+
+    // save cover image in Author.
+    if (!cover.saveCoverImage(store, manifestWriter)) {
         return false;
     }
 

@@ -29,7 +29,6 @@
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
 #include <KoTextAnchor.h>
-#include <SaveCoverImage.h>
 
 #include <QWidget>
 
@@ -132,7 +131,6 @@ public slots:
     void goToPreviousPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     /// go to next page
     void goToNextPage(Qt::KeyboardModifiers modifiers = Qt::NoModifier);
-     void insertCoverImage();
 
 protected:
     /// reimplemented method from superclass
@@ -196,8 +194,6 @@ private slots:
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard
     void pasteRequested();
-    /// user wants to inser an image as cover image.
-
 
 private:
     KWGui *m_gui;
