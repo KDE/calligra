@@ -124,7 +124,6 @@ set(flake_SRCS
     KoTosContainer.cpp
     KoTosContainerModel.cpp
     KoClipPath.cpp
-    SaveCoverImage.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -312,7 +311,6 @@ install(
     KoFilterEffectConfigWidgetBase.h
     KoFilterEffectRenderContext.h
     KoFilterEffectLoadingContext.h
-    SaveCoverImage.h
     commands/KoEventActionAddCommand.h
     commands/KoEventActionRemoveCommand.h
     commands/KoParameterToPathCommand.h
