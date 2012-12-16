@@ -44,11 +44,14 @@ public:
 protected:
     virtual void keyPressEvent(QKeyEvent * event);
 
+    virtual void resizeEvent(QResizeEvent *event);
+
 protected slots:
     void currentChanged(int currentIndex);
 
 private:
     void init();
+    void setLabelText();
 
     QImage m_image1;
     QImage m_image2;
@@ -63,3 +66,4 @@ private:
 };
 
 #endif /* COMPAREVIEW_H */
+

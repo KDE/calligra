@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2012 Mohammed Nafees <nafees.technocool@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,10 +27,17 @@
 #include <QLabel>
 #include <QTabBar>
 #include <QStackedWidget>
+#include <QDesktopWidget>
+#include <QApplication>
+
 
 CompareView::CompareView(QWidget *parent)
 : QWidget(parent)
 {
+    QDesktopWidget* desktopWidget = QApplication::desktop();
+    QRect clientRect(desktopWidget->availableGeometry());
+    setMaximumSize(clientRect.width(), clientRect.height());
+    setMinimumSize(600, 400);
     init();
 }
 
@@ -72,6 +80,7 @@ void CompareView::update(const QImage &image1, const QImage &image2, const QStri
 {
     m_image1 = image1;
     m_image2 = image2;
+
     if (forcedDeltaView.isNull()) {
         m_diff = difference(image1, image2);
     } else {
@@ -79,11 +88,16 @@ void CompareView::update(const QImage &image1, const QImage &image2, const QStri
     }
     m_tabBar->setTabText(0, name1);
     m_tabBar->setTabText(1, name2);
-    m_image1Label->setPixmap(QPixmap::fromImage(image1));
-    m_image2Label->setPixmap(QPixmap::fromImage(image2));
-    m_diffLabel->setPixmap(QPixmap::fromImage(m_diff));
-    m_diffLabel->setMinimumWidth(image1.width());
+    setLabelText();
     m_diffLabel->setAlignment(Qt::AlignCenter);
+}
+
+void CompareView::setLabelText()
+{
+    QSize newSize(m_stack->size());
+    m_image1Label->setPixmap(QPixmap::fromImage(m_image1.scaled(newSize,Qt::KeepAspectRatio)));
+    m_image2Label->setPixmap(QPixmap::fromImage(m_image2.scaled(newSize,Qt::KeepAspectRatio)));
+    m_diffLabel->setPixmap(QPixmap::fromImage(m_diff.scaled(newSize,Qt::KeepAspectRatio)));
 }
 
 int lighten(int value)
@@ -114,7 +128,6 @@ QImage CompareView::difference(const QImage &image1, const QImage &image2)
             }
         }
     }
-
     return result;
 }
 
@@ -131,8 +144,15 @@ void CompareView::keyPressEvent(QKeyEvent * event)
     }
 }
 
+void CompareView::resizeEvent(QResizeEvent *event)
+{
+    setLabelText();
+    QWidget::resizeEvent(event);
+}
+
 void CompareView::currentChanged(int currentIndex)
 {
     m_tabBar->setCurrentIndex(currentIndex);
     m_stack->setCurrentIndex(currentIndex);
 }
+
