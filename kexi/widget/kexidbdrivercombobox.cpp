@@ -33,7 +33,7 @@ public:
 KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
         const KexiDB::Driver::InfoHash& driversInfo, Options options)
         : KComboBox(parent)
-	, d(new Private)
+        , d(new Private)
 {
     //retrieve list of drivers and sort it: file-based first, then server-based
     QStringList captionsForFileBasedDrivers, captionsForServerBasedDrivers;
@@ -85,10 +85,7 @@ QStringList KexiDBDriverComboBox::driverNames() const
 
 QString KexiDBDriverComboBox::selectedDriverName() const
 {
-    QHash<QString, QString>::ConstIterator it = d->drivers.find(itemText(currentIndex()));
-    if (it == d->drivers.constEnd())
-        return QString();
-    return it.value();
+    return d->drivers.value(itemText(currentIndex()));
 }
 
 void KexiDBDriverComboBox::setDriverName(const QString& driverName)

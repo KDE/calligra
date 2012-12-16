@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2012 Mohammed Nafees <nafees.technocool@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,15 +22,16 @@
 #include "CompareView.h"
 
 #include <QDebug>
-#include <QGridLayout>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QTabBar>
 #include <QStackedWidget>
 
+
 CompareView::CompareView(QWidget *parent)
 : QWidget(parent)
 {
+    setMinimumSize(800, 600);
     init();
 }
 
@@ -48,30 +50,31 @@ CompareView::~CompareView()
 
 void CompareView::init()
 {
-    QGridLayout *layout = new QGridLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+    m_layout = new QGridLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     m_tabBar = new QTabBar();
     m_tabBar->addTab("Image 1");
     m_tabBar->addTab("Image 2");
-    layout->addWidget(m_tabBar, 0, 0, 1, 2);
+    m_layout->addWidget(m_tabBar, 0, 0, 1, 2);
     connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
     m_image1Label = new QLabel();
     m_image2Label = new QLabel();
     m_stack = new QStackedWidget();
     m_stack->addWidget(m_image1Label);
     m_stack->addWidget(m_image2Label);
-    layout->addWidget(m_stack, 1, 0);
+    m_layout->addWidget(m_stack, 1, 0);
 
     m_diffLabel = new QLabel(this);
-    layout->addWidget(m_diffLabel, 1, 1, Qt::AlignCenter);
+    m_layout->addWidget(m_diffLabel, 1, 1, Qt::AlignCenter);
 
-    setLayout(layout);
+    setLayout(m_layout);
 }
 
 void CompareView::update(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, const QImage &forcedDeltaView)
 {
     m_image1 = image1;
     m_image2 = image2;
+
     if (forcedDeltaView.isNull()) {
         m_diff = difference(image1, image2);
     } else {
@@ -79,11 +82,22 @@ void CompareView::update(const QImage &image1, const QImage &image2, const QStri
     }
     m_tabBar->setTabText(0, name1);
     m_tabBar->setTabText(1, name2);
-    m_image1Label->setPixmap(QPixmap::fromImage(image1));
-    m_image2Label->setPixmap(QPixmap::fromImage(image2));
-    m_diffLabel->setPixmap(QPixmap::fromImage(m_diff));
-    m_diffLabel->setMinimumWidth(image1.width());
+    setLabelText();
     m_diffLabel->setAlignment(Qt::AlignCenter);
+}
+
+void CompareView::setLabelText()
+{
+    QSize stackSize(m_stack->size());
+    QSize diffSize(m_diffLabel->size());
+    // the maximum size of the images can be the width of the widget - 4 / 2 and the height of the stack 
+    int minLength = qMin((size().width() - 4)/ 2, stackSize.height());
+    QSize newSize(minLength, minLength);
+    m_layout->setColumnMinimumWidth(0, minLength);
+    m_layout->setColumnMinimumWidth(1, minLength);
+    m_image1Label->setPixmap(QPixmap::fromImage(m_image1.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+    m_image2Label->setPixmap(QPixmap::fromImage(m_image2.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+    m_diffLabel->setPixmap(QPixmap::fromImage(m_diff.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
 }
 
 int lighten(int value)
@@ -114,7 +128,6 @@ QImage CompareView::difference(const QImage &image1, const QImage &image2)
             }
         }
     }
-
     return result;
 }
 
@@ -131,8 +144,15 @@ void CompareView::keyPressEvent(QKeyEvent * event)
     }
 }
 
+void CompareView::resizeEvent(QResizeEvent *event)
+{
+    setLabelText();
+    QWidget::resizeEvent(event);
+}
+
 void CompareView::currentChanged(int currentIndex)
 {
     m_tabBar->setCurrentIndex(currentIndex);
     m_stack->setCurrentIndex(currentIndex);
 }
+

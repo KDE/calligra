@@ -53,42 +53,24 @@ public:
 
     //! \return Input mask generated using the formatter settings.
     //! Can be used in QLineEdit::setInputMask().
-    QString inputMask() const {
-        return m_inputMask;
-    }
+    QString inputMask() const;
 
     //! \return separator for this date format, a single character like "-" or "/"
-    QString separator() const {
-        return m_separator;
-    }
+    QString separator() const;
 
     //! \return true if \a str contains only spaces
     //! and separators according to the date format.
     bool isEmpty(const QString& str) const;
 
 protected:
-    //! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
-    QString m_inputMask;
-
     //! Order of date's components (day, month, year)
     enum Order { DMY, MDY, YMD, YDM };
 
-    //! Order of date sections
-    Order m_order;
-
-    //! 4 or 2 digits
-    bool m_longYear;
-
-    bool m_monthWithLeadingZero, m_dayWithLeadingZero;
-
-    //! Date format used in toString()
-    QString m_qtFormat;
-
-    //! Used in fromString(const QString&) to convert string back to QDate
-    int m_yearpos, m_monthpos, m_daypos;
-
-    QString m_separator;
+private:
+    class Private;
+    Private * const d;
 };
+
 
 /*! @short Time formatter used by KexiTimeTableEdit and KexiDateTimeTableEdit
  Following time formats are allowed: HH:MM:SS (24h), HH:MM (24h), HH:MM AM/PM (12h)
@@ -121,33 +103,15 @@ public:
 
     //! \return Input mask generated using the formatter settings.
     //! Can be used in QLineEdit::setInputMask().
-    QString inputMask() const {
-        return m_inputMask;
-    }
+    QString inputMask() const;
 
     //! \return true if \a str contains only spaces
     //! and separators according to the time format.
     bool isEmpty(const QString& str) const;
 
-protected:
-    //! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
-    QString m_inputMask;
-
-//  //! Order of date sections
-//  QDateEdit::Order m_order;
-
-    //! 12 or 12h
-    bool m_24h;
-
-    bool m_hoursWithLeadingZero;
-
-    //! Time format used in toString(). Notation from KLocale::setTimeFormat() is used.
-    QString m_outputFormat;
-
-    //! Used in fromString(const QString&) to convert string back to QTime
-    int m_hourpos, m_minpos, m_secpos, m_ampmpos;
-
-    QRegExp *m_hmsRegExp, *m_hmRegExp;
+private:
+    class Private;
+    Private * const d;
 };
 
 //! Date/time formatting routines

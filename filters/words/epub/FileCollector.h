@@ -52,6 +52,8 @@ public:
 
     void setFilePrefix(QString prefix);
     QString filePrefix() const;
+    void setFileSuffix(const QString &suffix);
+    QString fileSuffix() const;
     void setPathPrefix(QString prefix);
     QString pathPrefix() const;
 

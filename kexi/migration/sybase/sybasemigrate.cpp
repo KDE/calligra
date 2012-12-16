@@ -54,7 +54,7 @@ SybaseMigrate::SybaseMigrate(QObject *parent, const QVariantList&args) :
         //,m_mysqlres(0)
 {
     KexiDB::DriverManager manager;
-    m_kexiDBDriver = manager.driver("sybase");
+    setDriver(manager.driver("sybase"));
 }
 
 /* ************************************************************************** */
@@ -68,9 +68,9 @@ SybaseMigrate::~SybaseMigrate()
 /*! Connect to the db backend */
 bool SybaseMigrate::drv_connect()
 {
-    if (!d->db_connect(*m_migrateData->source))
+    if (!d->db_connect(*data()->source))
         return false;
-    return d->useDatabase(m_migrateData->sourceName);
+    return d->useDatabase(data()->sourceName);
 }
 
 

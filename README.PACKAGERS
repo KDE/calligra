@@ -26,6 +26,7 @@ Table Of Contents
 5. Calligra libraries
 5.1. Calligra default database driver: SQLite
 6. WARNING against qt 4.8.0 and 4.8.1
+7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
 
 1. Kexi
 =======
@@ -268,3 +269,48 @@ Without SQLite in at least this version Calligra will not compile.
 6. WARNING against qt 4.8.0 and 4.8.1
 ====================
 Using Qt 4.8.0 and 4.8.1 causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch in this directory
+
+
+7. IMPORTANT On using CPU vector capabilities in Calligra Libs and Krita
+====================
+
+IN BRIEF: 1) Intall Vc library [1] and don't forget to activate
+             PACKAGERS_BUILD=ON option when building a package.
+          2) Vc libary should be present on the building system only,
+             it need not be installed on all the client systems.
+
+Krita and Pigment can make use of the vector capabilities of the
+user's CPU. To make it possible Vc library [1] should be present in
+the host system. This is a static library and fully included into the
+final Pigment/Krita binary, so it is not necessary to have it
+installed in the client system.
+
+The code generation is generally controlled by two factors: the
+presence of the Vc library and a special cmake option
+'PACKAGERS_BUILD'. Consider three cases:
+
+1) Vc library is not present. PACKAGERS_BUILD=<don't care>.
+
+The calligra is build with default compiller options. The resulting
+binary is non-optimized and portable among different CPU
+architectures.
+
+2) Vc library is present. PACKAGERS_BUILD=OFF (default).
+
+All the calligra binaries are optimized for the host CPU. This is the
+most efficient type of build of Krita. But be careful, because such
+binaries are not portable among different CPU architectures! Using
+this build for packages distributed to many users will most probably
+result in SIGILL crashes on the client system. Use this option for
+private builds only.
+
+3) Vc library is present. PACKAGERS_BUILD=ON.
+
+This option disables CPU optimizations for the most of Calligra, but
+gnerates several versions of the code for its hottest parts. The
+specific implementation of the code is chosen on the fly when Calligra
+starts. This version is a bit slower than 2) but much faster than 1)
+and is *portable* among all the CPU architectures. Use this type of
+build for building distributable packages.
+
+[1] - http://code.compeng.uni-frankfurt.de/projects/vc

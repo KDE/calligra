@@ -193,34 +193,11 @@ protected:
                        const QString& toolTip, const QString& whatsThis, const char* slot);
 
     virtual void contextMenuEvent ( QContextMenuEvent *event );
-    Features m_features;
-    KexiProjectTreeView *m_list;
-    KActionCollection *m_actions;
 
-    KexiItemMenu *m_itemMenu;
-    KexiGroupMenu *m_partMenu;
-    KAction *m_deleteAction, *m_renameAction,
-       *m_newObjectAction, 
-    // *m_newObjectToolbarAction,
-        *m_openAction, *m_designAction, *m_editTextAction,
-        *m_executeAction,
-        *m_dataExportToClipboardAction, *m_dataExportToFileAction;
-#ifndef KEXI_NO_QUICK_PRINTING
-    KAction *m_printAction, *m_pageSetupAction;
-#endif
 
-    KActionMenu* m_exportActionMenu;
-    QAction *m_itemMenuTitle, *m_partMenuTitle,
-    *m_exportActionMenu_sep, *m_pageSetupAction_sep;
-
-    KexiPart::Info *m_prevSelectedPartInfo;
-    KToolBar *m_toolbar;
-    KexiSmallToolButton /* *m_newObjectToolButton,*/ *m_deleteObjectToolButton;
-    
-    bool m_singleClick;
-    bool m_readOnly;
-    KexiProjectModel *m_model;
-    QString m_itemsPartClass;
+private:
+    class Private;
+    Private * const d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiProjectNavigator::Features)

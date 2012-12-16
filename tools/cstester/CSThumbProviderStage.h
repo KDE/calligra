@@ -30,7 +30,7 @@ class KoPADocument;
 class CSThumbProviderStage : public CSThumbProvider
 {
 public:
-    CSThumbProviderStage(KoPADocument *doc);
+    explicit CSThumbProviderStage(KoPADocument *doc);
     virtual ~CSThumbProviderStage();
 
     virtual QList<QImage> createThumbnails(const QSize &thumbSize);

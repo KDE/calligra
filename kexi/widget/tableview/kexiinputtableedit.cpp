@@ -130,10 +130,10 @@ void KexiInputTableEdit::init()
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
     bool lengthExceeded;
-    QString text(m_textFormatter.toString(removeOld ? QVariant() : m_origValue, add.toString(),
+    QString text(m_textFormatter.toString(removeOld ? QVariant() : KexiDataItemInterface::originalValue(), add.toString(),
                                           &lengthExceeded));
     if (text.isEmpty()) {
-        if (m_origValue.toString().isEmpty()) {
+        if (KexiDataItemInterface::originalValue().toString().isEmpty()) {
             //we have to set NULL initial value:
             m_lineedit->setText(QString());
         }

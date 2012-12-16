@@ -49,8 +49,10 @@ public:
      For now, all of them must be KexiPushButton). */
     void setMainWidgetForEventHandling(QWidget* mainWidget);
 
-protected:
-    QWidget *m_mainWidget;
+private:
+    class Private;
+
+    Private* const d;
 };
 
 //! @internal form-level action for handling "on click" actions
@@ -95,7 +97,9 @@ public slots:
     void slotTrigger();
 
 private:
-    QString m_actionName, m_objectName, m_actionOption;
+    class Private;
+
+    Private* const d;
 };
 
 #endif

@@ -188,8 +188,8 @@ private slots:
 #endif
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
-    /// The document has finished loading. This is used to update the text that can be searched.
-    void loadingCompleted();
+    /// This is used to update the text that can be searched.
+    void refreshFindTexts();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard

@@ -68,68 +68,89 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
 
 //-------------------------------------
 
+class KexiFormEventAction::Private
+{
+public:
+    Private(const QString& actionName_, const QString& objectName_, const QString actionOption_);
+
+    ~Private();
+    QString actionName, objectName, actionOption;
+};
+
+KexiFormEventAction::Private::Private(const QString& actionName_, const QString& objectName_, const QString actionOption_)
+    :actionName(actionName_), objectName(objectName_), actionOption(actionOption_)
+{
+
+}
+
+KexiFormEventAction::Private::~Private()
+{
+
+}
+
 KexiFormEventAction::KexiFormEventAction(QObject* parent,
         const QString& actionName, const QString& objectName, const QString& actionOption)
-        : KAction(parent), m_actionName(actionName), m_objectName(objectName)
-        , m_actionOption(actionOption)
+        : KAction(parent)
+        ,d(new Private(actionName, objectName, actionOption))
 {
     connect(this, SIGNAL(triggered()), this, SLOT(trigger()));
 }
 
 KexiFormEventAction::~KexiFormEventAction()
 {
+    delete d;
 }
 
 void KexiFormEventAction::slotTrigger()
 {
-kDebug() << m_actionName << m_objectName;
+    kDebug() << d->actionName << d->objectName;
     KexiProject* project = KexiMainWindowIface::global()->project();
     if (!project)
         return;
     KexiPart::Part* part = Kexi::partManager().partForClass(
-                               QString("org.kexi-project.%1").arg(m_actionName));
+                               QString("org.kexi-project.%1").arg(d->actionName));
     if (!part)
         return;
-    KexiPart::Item* item = project->item(part->info(), m_objectName);
+    KexiPart::Item* item = project->item(part->info(), d->objectName);
     if (!item)
         return;
     bool actionCancelled = false;
-    if (m_actionOption.isEmpty()) { // backward compatibility (good defaults)
+    if (d->actionOption.isEmpty()) { // backward compatibility (good defaults)
         if (part->info()->isExecuteSupported())
             part->execute(item, parent());
         else
             KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
     } else {
 //! @todo react on failure...
-        if (m_actionOption == "open")
+        if (d->actionOption == "open")
             KexiMainWindowIface::global()->openObject(item, Kexi::DataViewMode, actionCancelled);
-        else if (m_actionOption == "execute")
+        else if (d->actionOption == "execute")
             part->execute(item, parent());
-        else if (m_actionOption == "print") {
+        else if (d->actionOption == "print") {
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->printItem(item);
         }
 #ifndef KEXI_NO_QUICK_PRINTING
-        else if (m_actionOption == "printPreview") {
+        else if (d->actionOption == "printPreview") {
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->printPreviewForItem(item);
         }
-        else if (m_actionOption == "pageSetup") {
+        else if (d->actionOption == "pageSetup") {
             if (part->info()->isPrintingSupported())
                 KexiMainWindowIface::global()->showPageSetupForItem(item);
         }
 #endif
-        else if (m_actionOption == "exportToCSV"
-                   || m_actionOption == "copyToClipboardAsCSV") {
+        else if (d->actionOption == "exportToCSV"
+                   || d->actionOption == "copyToClipboardAsCSV") {
             if (part->info()->isDataExportSupported())
-                KexiMainWindowIface::global()->executeCustomActionForObject(item, m_actionOption);
-        } else if (m_actionOption == "new")
+                KexiMainWindowIface::global()->executeCustomActionForObject(item, d->actionOption);
+        } else if (d->actionOption == "new")
             KexiMainWindowIface::global()->newObject(part->info(), actionCancelled);
-        else if (m_actionOption == "design")
+        else if (d->actionOption == "design")
             KexiMainWindowIface::global()->openObject(item, Kexi::DesignViewMode, actionCancelled);
-        else if (m_actionOption == "editText")
+        else if (d->actionOption == "editText")
             KexiMainWindowIface::global()->openObject(item, Kexi::TextViewMode, actionCancelled);
-        else if (m_actionOption == "close") {
+        else if (d->actionOption == "close") {
             tristate res = KexiMainWindowIface::global()->closeObject(item);
             if (~res)
                 actionCancelled = true;
@@ -139,24 +160,43 @@ kDebug() << m_actionName << m_objectName;
 
 //------------------------------------------
 
-KexiFormEventHandler::KexiFormEventHandler()
-        : m_mainWidget(0)
+class KexiFormEventHandler::Private
 {
+public:
+    Private();
+    ~Private()
+    {
+
+    }
+
+    QWidget *mainWidget;
+};
+
+KexiFormEventHandler::Private::Private() : mainWidget(0)
+{
+
+}
+
+KexiFormEventHandler::KexiFormEventHandler()
+    : d(new Private())
+{
+
 }
 
 KexiFormEventHandler::~KexiFormEventHandler()
 {
+    delete d;
 }
 
 void KexiFormEventHandler::setMainWidgetForEventHandling(QWidget* mainWidget)
 {
-    m_mainWidget = mainWidget;
-    if (!m_mainWidget)
+    d->mainWidget = mainWidget;
+    if (!d->mainWidget)
         return;
 
     //find widgets whose will work as data items
 //! @todo look for other widgets too
-    QList<QWidget*> widgets(m_mainWidget->findChildren<QWidget*>());
+    QList<QWidget*> widgets(d->mainWidget->findChildren<QWidget*>());
     foreach(QWidget *widget, widgets) {
         if (!widget->inherits("QPushButton") ){
             continue;

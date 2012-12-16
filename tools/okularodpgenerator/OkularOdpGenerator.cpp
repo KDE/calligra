@@ -18,20 +18,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kaboutdata.h>
+#include <OkularOdpGenerator.h>
+
+#include <QDebug>
+#include <QImage>
+#include <QPainter>
+
 
 #include <KoPart.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
+
+#include <kaboutdata.h>
 #include <KDE/KPluginFactory>
 #include <KDE/KStandardDirs>
 #include <KDE/KMimeType>
 #include <KDE/KParts/ComponentFactory>
-#include <QDebug>
-#include <OkularOdpGenerator.h>
+
 #include <okular/core/page.h>
-#include <QImage>
-#include <QPainter>
+
 
 static KAboutData createAboutData()
 {

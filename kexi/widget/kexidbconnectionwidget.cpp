@@ -377,7 +377,7 @@ void KexiDBConnectionTabWidget::slotSocketComboboxToggled(bool on)
 KexiDBConnectionDialog::KexiDBConnectionDialog(QWidget* parent, const KexiProjectData& data,
         const QString& shortcutFileName, const KGuiItem& acceptButtonGuiItem)
         : KDialog(parent)
-	, d(new Private)
+        , d(new Private)
 {
     setWindowTitle(i18n("Open Database"));
     d->tabWidget = new KexiDBConnectionTabWidget(this);

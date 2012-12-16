@@ -27,7 +27,7 @@ class SlideLoader : public QObject {
 private:
 Q_OBJECT
 public:
-    SlideLoader(QObject* parent = 0) :QObject(parent) {}
+    explicit SlideLoader(QObject* parent = 0) :QObject(parent) {}
     virtual int numberOfSlides() = 0;
     virtual QSize slideSize() = 0;
     virtual int slideVersion(int position) = 0;

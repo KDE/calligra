@@ -114,7 +114,7 @@ struct mobiHeader
     qint32 textEncoding; /// 1252 = CP1252 (WinLatin1); 65001 = UTF-8
     qint32 uniqueId; /// Some kind of unique ID number
 
-    // FIXME: Realy i dont know what should i set for this parametr.
+    // FIXME: Really i dont know what should i set for this parametr.
     qint32 fileVersion; /// Version of the Mobipocket format used in this file.
 
     qint32 ortographicIndex;/// Section number of orthographic meta index. 0xFFFFFFFF if index is not available.
