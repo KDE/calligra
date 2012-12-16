@@ -33,8 +33,8 @@
 StylesCombo::StylesCombo(QWidget *parent)
     : QComboBox(parent),
       m_stylesModel(0),
-//      m_view(new QListView()),
-      m_view(new QTreeView()),
+      m_view(new QListView()),
+//      m_view(new QTreeView()),
       m_selectedItem(-1),
       m_originalStyle(true)
 {
@@ -54,10 +54,10 @@ StylesCombo::StylesCombo(QWidget *parent)
 
     m_view->setMinimumWidth(250);
     m_view->setMouseTracking(true);
-    m_view->setRootIsDecorated(false);
-    m_view->setItemsExpandable(false);
-    m_view->setHeaderHidden(true);
-    m_view->setIndentation(0);
+//    m_view->setRootIsDecorated(false);
+//    m_view->setItemsExpandable(false);
+//    m_view->setHeaderHidden(true);
+//    m_view->setIndentation(0);
     setView(m_view);
     view()->viewport()->installEventFilter(this);
 
@@ -97,7 +97,7 @@ void StylesCombo::setStylesModel(AbstractStylesModel *model)
 {
     m_stylesModel = model;
     setModel(model);
-    connect(m_stylesModel, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+//    connect(m_stylesModel, SIGNAL(modelReset()), this, SLOT(slotModelReset()));
 //    m_view->expandAll();
 }
 
@@ -143,16 +143,31 @@ void StylesCombo::slotSelectionChanged(int index)
     m_selectedItem = index;
     m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
     update();
-    emit selectionChanged(index);
+//    emit selectionChanged(index);
 }
 
 void StylesCombo::slotItemClicked(QModelIndex index)
 {
     //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the selectionChanged signal from the slot above.
+//    kDebug() << "item parent: " << index.parent();
+    kDebug() << "item row: " << index.row();
+/*    if (index.parent().isValid()) {
+        if (index.parent().row() == 0) {
+            m_selectedItem = index.row();
+        }
+        else if (index.parent().row() == 1) {
+            QModelIndex sibling = index.parent().sibling(0, 0);
+            m_selectedItem = sibling.model()->rowCount(sibling) + index.row();
+        }
+    }
+*/
     m_selectedItem = index.row();
     m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
+//    m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
+    m_currentIndex = index;
     update();
     emit selected(m_selectedItem);
+    emit selected(index);
 }
 
 void StylesCombo::slotUpdatePreview()
@@ -160,6 +175,10 @@ void StylesCombo::slotUpdatePreview()
     if (!m_stylesModel) {
         return;
     }
+    if (m_stylesModel->stylesType() == AbstractStylesModel::CharacterStyle) {
+        kDebug() << "currentIndex: " << currentIndex();
+    }
+//    m_preview->setPreview(m_stylesModel->stylePreview(m_currentIndex, m_preview->availableSize()));
     m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
     update();
 }
@@ -204,7 +223,10 @@ void StylesCombo::slotDeleteStyle(QModelIndex index)
 
 void StylesCombo::slotModelReset()
 {
-    m_view->expandAll();
+    kDebug() << "model used style count: " << m_stylesModel->rowCount(m_stylesModel->index(0,0,QModelIndex()));
+    kDebug() << "model unused style count: " << m_stylesModel->rowCount(m_stylesModel->index(1,0,QModelIndex()));
+    m_view->reset();
+//    m_view->expandAll();
 }
 
 void StylesCombo::showEditIcon(bool show){

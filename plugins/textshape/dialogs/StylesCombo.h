@@ -67,6 +67,7 @@ signals:
       * to be noted that this signal is also emitted when an item is selected again.
       * @param index: the index of the selected item. */
     void selected(int index);
+    void selected(QModelIndex &index);
 
     /** This is emitted when a selection is changed (programatically or by user interaction). It is
       * to be noted that this signal is _not_ emitted when an item is selected again. Not even if it
@@ -98,10 +99,11 @@ private slots:
 private:
     AbstractStylesModel *m_stylesModel;
     StylesComboPreview *m_preview;
-//    QListView *m_view;
-    QTreeView *m_view;
+    QListView *m_view;
+//    QTreeView *m_view;
     int m_selectedItem;
     bool m_originalStyle;
+    QModelIndex m_currentIndex;
 };
 
 #endif //STYLESCOMBO_H
