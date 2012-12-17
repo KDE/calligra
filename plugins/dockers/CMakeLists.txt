@@ -8,6 +8,9 @@ include_directories(${KDE4_INCLUDE_DIR}
 
 set(calligradockers_SRCS
 
+    snapguidedocker/SnapGuideDocker.cpp
+    snapguidedocker/SnapGuideDockerFactory.cpp
+
     shapeproperties/ShapePropertiesDocker.cpp
     shapeproperties/ShapePropertiesDockerFactory.cpp
 

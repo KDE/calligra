@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,24 +16,23 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef SLIDELOADER_H
-#define SLIDELOADER_H
 
-#include <QObject>
-#include <QSize>
-#include <QPixmap>
+#ifndef SNAPGUIDEDOCKERFACTORY_H
+#define SNAPGUIDEDOCKERFACTORY_H
 
-class SlideLoader : public QObject {
-private:
-Q_OBJECT
+#include <KoDockFactoryBase.h>
+#include <QDockWidget>
+
+/// the factory which creates the stroke docker
+class SnapGuideDockerFactory : public KoDockFactoryBase
+{
 public:
-    explicit SlideLoader(QObject* parent = 0) :QObject(parent) {}
-    virtual int numberOfSlides() = 0;
-    virtual QSize slideSize() = 0;
-    virtual int slideVersion(int position) = 0;
-    virtual QPixmap loadSlide(int number, const QSize& maxsize) = 0;
-signals:
-    void slidesChanged();
+    SnapGuideDockerFactory();
+
+    virtual QString id() const;
+    virtual QDockWidget* createDockWidget();
+    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
+
 };
 
-#endif
+#endif // SNAPGUIDEDOCKERFACTORY_H

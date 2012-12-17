@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   Copyright (C) 2012 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,24 +16,28 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#ifndef SLIDELOADER_H
-#define SLIDELOADER_H
 
-#include <QObject>
-#include <QSize>
-#include <QPixmap>
+#include "SnapGuideDockerFactory.h"
+#include "SnapGuideDocker.h"
 
-class SlideLoader : public QObject {
-private:
-Q_OBJECT
-public:
-    explicit SlideLoader(QObject* parent = 0) :QObject(parent) {}
-    virtual int numberOfSlides() = 0;
-    virtual QSize slideSize() = 0;
-    virtual int slideVersion(int position) = 0;
-    virtual QPixmap loadSlide(int number, const QSize& maxsize) = 0;
-signals:
-    void slidesChanged();
-};
+SnapGuideDockerFactory::SnapGuideDockerFactory()
+{
+}
 
-#endif
+QString SnapGuideDockerFactory::id() const
+{
+    return QString("SnapGuide Properties");
+}
+
+QDockWidget* SnapGuideDockerFactory::createDockWidget()
+{
+    SnapGuideDocker* widget = new SnapGuideDocker();
+    widget->setObjectName(id());
+
+    return widget;
+}
+
+KoDockFactoryBase::DockPosition SnapGuideDockerFactory::defaultDockPosition() const
+{
+    return DockMinimized;
+}
