@@ -201,31 +201,34 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 
     d->startMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
     d->startMarkerSelector->updateMarkers(markers);
-    mainLayout->addWidget(d->startMarkerSelector, 0, 0, 1, 2);
+    mainLayout->addWidget(d->startMarkerSelector, 0, 0);
 
     // Line style
     d->lineStyle = new KoLineStyleSelector(this);
-    mainLayout->addWidget(d->lineStyle, 0, 2, 1, 3);
+    mainLayout->addWidget(d->lineStyle, 0, 1, 1, 1);
 
     // End marker
     d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
     d->endMarkerSelector->updateMarkers(markers);
-    mainLayout->addWidget(d->endMarkerSelector, 0, 5, 1, 2);
+    mainLayout->addWidget(d->endMarkerSelector, 0, 2, 1, 2);
 
     // Line width
+    QLabel *l = new QLabel(this);
+    l->setText(i18n("Thickness:"));
+    mainLayout->addWidget(l, 1, 0, 1, 1);
     // set min/max/step and value in points, then set actual unit
     d->lineWidth = new KoUnitDoubleSpinBox(this);
     d->lineWidth->setMinMaxStep(0.0, 1000.0, 0.5);
     d->lineWidth->setDecimals(2);
     d->lineWidth->setUnit(KoUnit(KoUnit::Point));
     d->lineWidth->setToolTip(i18n("Set line width of actual selection"));
-    mainLayout->addWidget(d->lineWidth, 1, 0, 1, 5);
+    mainLayout->addWidget(d->lineWidth, 1, 1, 1, 1);
 
     d->capNJoinButton = new CapNJoinButton(this);
-    mainLayout->addWidget(d->capNJoinButton, 1, 5);
+    mainLayout->addWidget(d->capNJoinButton, 1, 2);
 
     d->colorButton = new QToolButton(this);
-    mainLayout->addWidget(d->colorButton, 1, 6);
+    mainLayout->addWidget(d->colorButton, 1, 3);
     d->colorAction = new KoColorPopupAction(this);
     d->colorAction->setIcon(koIcon("format-stroke-color"));
     d->colorAction->setToolTip(i18n("Change the color of the line/border"));
@@ -237,6 +240,7 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->spacer->setObjectName("SpecialSpacer");
     mainLayout->addWidget(d->spacer, 3, 0);
 
+    mainLayout->setColumnStretch(1,1);
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->layout = mainLayout;
 

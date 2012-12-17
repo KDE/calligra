@@ -2,48 +2,33 @@
 <ui version="4.0">
  <class>KoShadowConfigWidget</class>
  <widget class="QWidget" name="KoShadowConfigWidget">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>188</width>
-    <height>66</height>
-   </rect>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <property name="margin">
-    <number>0</number>
-   </property>
-   <item row="3" column="0">
+  <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,1">
+   <item row="0" column="0">
     <widget class="QCheckBox" name="shadowVisible">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="KoUnitDoubleSpinBox" name="shadowBlur"/>
-   </item>
-   <item row="4" column="0">
-    <widget class="KoUnitDoubleSpinBox" name="shadowOffset"/>
-   </item>
-   <item row="3" column="2">
-    <widget class="QToolButton" name="shadowColor">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" rowspan="2">
+   <item row="0" column="1" rowspan="2">
     <widget class="QDial" name="shadowAngle">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>48</width>
+       <height>48</height>
+      </size>
      </property>
      <property name="maximum">
       <number>359</number>
@@ -54,12 +39,53 @@
      <property name="notchTarget">
       <double>3.700000000000000</double>
      </property>
-     <property name="notchesVisible">
-      <bool>false</bool>
-     </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="0" column="2">
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0,1">
+     <item row="0" column="0">
+      <widget class="QToolButton" name="shadowColor">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Blur:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="KoUnitDoubleSpinBox" name="shadowBlur"/>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="2">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Size:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KoUnitDoubleSpinBox" name="shadowOffset"/>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="1">
     <widget class="QWidget" name="SpecialSpacer" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
