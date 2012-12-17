@@ -99,7 +99,7 @@ Panel {
             property string toolName: "paint";
             onToolNameChanged: changeTool(toolName);
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-" + toolName + ".svg"
             textColor: "white";
@@ -115,7 +115,7 @@ Panel {
             property string toolName: "move";
             onToolNameChanged: changeTool(toolName);
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-" + toolName + ".svg"
             textColor: "white";
@@ -127,13 +127,13 @@ Panel {
             }
         },
         Item {
-            width: base.width - Constants.DefaultMargin - (Constants.GridHeight * 3)
-            height: Constants.GridHeight;
+            width: base.width - Constants.DefaultMargin - (Constants.ToolbarButtonSize * 3)
+            height: Constants.ToolbarButtonSize;
         },
         Button {
             id: eraserButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-erase.svg";
             textColor: "white";
@@ -145,7 +145,7 @@ Panel {
         Button {
             id: topApplyButton;
             width: height;
-            height: Constants.GridHeight;
+            height: Constants.ToolbarButtonSize;
             color: "transparent";
             image: "../images/svg/icon-apply.svg";
             textColor: "white";
@@ -199,7 +199,7 @@ Panel {
             Item {
                 id: firstToolSelector;
                 width: parent.width;
-                height: Constants.GridHeight;
+                height: Constants.ToolbarButtonSize;
                 Rectangle {
                     anchors.fill: parent;
                     opacity: 0.5;
@@ -212,7 +212,7 @@ Panel {
                         model: paintingTools;
                         delegate: Button {
                             width: height;
-                            height: Constants.GridHeight
+                            height: Constants.ToolbarButtonSize
                             color: "transparent";
                             image: "../images/svg/icon-" + model.name + "-blue.svg"
                             textColor: "white";
@@ -230,7 +230,7 @@ Panel {
             Item {
                 id: secondToolSelector;
                 width: parent.width;
-                height: Constants.GridHeight;
+                height: Constants.ToolbarButtonSize;
                 visible: false;
                 Rectangle {
                     anchors.fill: parent;
@@ -244,7 +244,7 @@ Panel {
                         model: adjustmentTools;
                         delegate: Button {
                             width: height;
-                            height: Constants.GridHeight
+                            height: Constants.ToolbarButtonSize
                             color: "transparent";
                             image: "../images/svg/icon-" + model.name + "-blue.svg"
                             textColor: "white";
@@ -262,6 +262,8 @@ Panel {
         }
         Flickable {
             id: toolOptionsFullFlickable;
+            contentHeight: toolOptionsFull.height;
+            clip: true;
             anchors {
                 top: toolSelectorContainer.bottom;
                 left: parent.left;
