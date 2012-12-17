@@ -21,23 +21,19 @@
 #define SNAPGUIDECONFIGWIDGET_H
 
 #include "ui_SnapGuideConfigWidget.h"
-#include "flake_export.h"
 
 #include <QWidget>
 
 class KoSnapGuide;
-class KoCanvasBase;
 class QShowEvent;
 
-class FLAKE_EXPORT SnapGuideConfigWidget : public QWidget
+class SnapGuideConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent = 0);
     ~SnapGuideConfigWidget();
 
-    void setCanvas(KoCanvasBase *canvas);
-    
 private slots:
     void snappingEnabled(bool isEnabled);
     void strategyChanged();
@@ -51,7 +47,6 @@ private:
 
     Ui_SnapGuideConfigWidget widget;
     KoSnapGuide *m_snapGuide;
-    KoCanvasBase *m_canvas;
 };
 
 #endif // SNAPGUIDECONFIGWIDGET_H

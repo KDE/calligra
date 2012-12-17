@@ -113,9 +113,4 @@ void SnapGuideConfigWidget::showEvent(QShowEvent * event)
     updateControls();
 }
 
-void SnapGuideConfigWidget::setCanvas(KoCanvasBase *canvas)
-{
-    m_canvas = canvas;
-}
-
 #include <SnapGuideConfigWidget.moc>
