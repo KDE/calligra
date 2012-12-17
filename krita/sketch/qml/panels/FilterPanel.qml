@@ -29,7 +29,7 @@ Panel {
         Button {
             id: applyButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-apply.svg"
             textColor: "white";
@@ -45,13 +45,13 @@ Panel {
             }
         },
         Item {
-            width: base.width - Constants.DefaultMargin - (Constants.GridHeight * 2)
-            height: Constants.GridHeight;
+            width: base.width - Constants.DefaultMargin - (Constants.ToolbarButtonSize * 2)
+            height: Constants.ToolbarButtonSize;
         },
         Button {
             id: toggleShowPreviewButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: filtersCategoryModel.previewEnabled ? "../images/svg/icon-visible_on.svg" : "../images/svg/icon-visible_off.svg";
             textColor: "white";

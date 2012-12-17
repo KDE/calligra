@@ -34,7 +34,7 @@ Panel {
         Button {
             id: colorPicker;
             width: height;
-            height: Constants.GridHeight;
+            height: Constants.ToolbarButtonSize;
             color: "transparent";
             image: "../images/svg/icon-colorpicker.svg";
             textColor: "white";
@@ -44,14 +44,14 @@ Panel {
             onClicked: toolManager.requestToolChange("KritaSelected/KisToolColorPicker");
         },
         Item {
-            width: (Constants.GridWidth * 2) - Constants.DefaultMargin - (Constants.GridHeight * 3);
-            height: Constants.GridHeight;
+            width: base.width - Constants.DefaultMargin - (Constants.ToolbarButtonSize * 3);
+            height: Constants.ToolbarButtonSize;
         },
         Button {
             id: showPeekGrid;
             visible: base.state === "peek";
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: colorSelectorPeek.visible ? "../images/svg/icon-palette.svg" : "../images/svg/icon-color_wheel.svg";
             textColor: "white";

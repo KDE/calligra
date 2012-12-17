@@ -28,7 +28,7 @@ Panel {
         Button {
             id: deselectButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-select-deselect.svg"
             textColor: "white";
@@ -40,7 +40,7 @@ Panel {
         Button {
             id: reselectButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-select-reselect.svg"
             textColor: "white";
@@ -49,14 +49,14 @@ Panel {
             onClicked: sketchView.selectionManager.reselect();
         },
         Item {
-            width: base.width - Constants.DefaultMargin - (Constants.GridHeight * 3)
-            height: Constants.GridHeight;
+            width: base.width - Constants.DefaultMargin - (Constants.ToolbarButtonSize * 3)
+            height: Constants.ToolbarButtonSize;
         },
         Button {
             id: toggleShowSelectionButton;
             property bool showSelection: sketchView.selectionManager ? sketchView.selectionManager.displaySelection : false;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: showSelection ? "../images/svg/icon-select-show.svg" : "../images/svg/icon-select-hide.svg";
             textColor: "white";
@@ -81,7 +81,7 @@ Panel {
                 id: selectRectangle;
                 anchors.verticalCenter: parent.verticalCenter;
                 image: "../images/svg/icon-select-rectangle.svg"
-                width: Constants.GridWidth * 2 / 5;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -95,7 +95,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectRectangle.right;
                 image: "../images/svg/icon-select-polygon.svg"
-                width: Constants.GridWidth * 2 / 5;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -109,7 +109,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectPolygon.right;
                 image: "../images/svg/icon-select-area.svg"
-                width: Constants.GridWidth * 2 / 5;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -123,7 +123,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectArea.right;
                 image: "../images/svg/icon-select-color.svg"
-                width: Constants.GridWidth * 2 / 5;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -152,7 +152,7 @@ Panel {
                 id: selectIntersect;
                 anchors.left: selectReplace.right;
                 image: "../images/svg/icon-select-intersect.svg"
-                width: Constants.GridWidth * 2 / 5;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -164,7 +164,7 @@ Panel {
                 id: selectAdd;
                 anchors.left: selectIntersect.right;
                 image: "../images/svg/icon-select-add.svg"
-                width: Constants.GridWidth * 2 / 5;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -176,7 +176,7 @@ Panel {
                 id: selectSub;
                 anchors.left: selectAdd.right;
                 image: "../images/svg/icon-select-sub.svg"
-                width: Constants.GridWidth * 2 / 5;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -202,7 +202,7 @@ Panel {
                 border.width: 1;
                 border.color: "silver";
                 radius: Constants.DefaultMargin;
-                width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
+                width: (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2;
                 onClicked: sketchView.selectionManager.selectAll();
             }
@@ -217,7 +217,7 @@ Panel {
                 border.width: 1;
                 border.color: "silver";
                 radius: Constants.DefaultMargin;
-                width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
+                width: (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
                 onClicked: sketchView.selectionManager.invert();
             }
@@ -254,7 +254,7 @@ Panel {
                 id: selectRectangleFull;
                 anchors.verticalCenter: parent.verticalCenter;
                 image: "../images/svg/icon-select-rectangle.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -268,7 +268,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectRectangleFull.right;
                 image: "../images/svg/icon-select-polygon.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -282,7 +282,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectPolygonFull.right;
                 image: "../images/svg/icon-select-area.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -296,7 +296,7 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter;
                 anchors.left: selectAreaFull.right;
                 image: "../images/svg/icon-select-color.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 textColor: "white";
@@ -328,7 +328,7 @@ Panel {
             Button {
                 id: selectReplaceFull;
                 image: "../images/svg/icon-select-replace.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -340,7 +340,7 @@ Panel {
                 id: selectIntersectFull;
                 anchors.left: selectReplaceFull.right;
                 image: "../images/svg/icon-select-intersect.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -352,7 +352,7 @@ Panel {
                 id: selectAddFull;
                 anchors.left: selectIntersectFull.right;
                 image: "../images/svg/icon-select-add.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -364,7 +364,7 @@ Panel {
                 id: selectSubFull;
                 anchors.left: selectAddFull.right;
                 image: "../images/svg/icon-select-sub.svg"
-                width: (Constants.GridWidth / 2) - Constants.DefaultMargin;
+                width: Constants.ToolbarButtonSize * 0.8;
                 height: width;
                 color: "transparent";
                 shadow: false;
@@ -403,7 +403,7 @@ Panel {
                 border.width: 1;
                 border.color: "silver";
                 radius: Constants.DefaultMargin;
-                width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
+                width: (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
                 onClicked: sketchView.selectionManager.selectAll();
             }
@@ -418,7 +418,7 @@ Panel {
                 border.width: 1;
                 border.color: "silver";
                 radius: Constants.DefaultMargin;
-                width: (Constants.GridWidth * 2 / 3) - Constants.DefaultMargin;
+                width: (Constants.GridWidth * 2 / 3);// - Constants.DefaultMargin;
                 height: textSize + Constants.DefaultMargin * 2
                 onClicked: sketchView.selectionManager.invert();
             }

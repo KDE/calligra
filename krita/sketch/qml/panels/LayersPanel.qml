@@ -29,7 +29,7 @@ Panel {
         Button {
             id: backFromEditButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-back.svg"
             textColor: "white";
@@ -46,7 +46,7 @@ Panel {
         Button {
             id: addButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-add.svg"
             textColor: "white";
@@ -63,12 +63,12 @@ Panel {
         },
         Item {
             width: editButton.visible ? 0 : editButton.width;
-            height: Constants.GridHeight;
+            height: Constants.ToolbarButtonSize;
         },
         Button {
             id: editButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-edit.svg"
             textColor: "white";
@@ -84,13 +84,13 @@ Panel {
             }
         },
         Item {
-            width: base.width - Constants.DefaultMargin - (Constants.GridHeight * 3)
-            height: Constants.GridHeight;
+            width: base.width - Constants.DefaultMargin - (Constants.ToolbarButtonSize * 3)
+            height: Constants.ToolbarButtonSize;
         },
         Button {
             id: removeButton;
             width: height;
-            height: Constants.GridHeight
+            height: Constants.ToolbarButtonSize
             color: "transparent";
             image: "../images/svg/icon-delete.svg"
             textColor: "white";
@@ -211,7 +211,7 @@ Panel {
                 height: childrenRect.height;
                 width: childrenRect.width;
                 Button {
-                    width: height; height: Constants.GridHeight * 0.9
+                    width: height; height: Constants.ToolbarButtonSize * 0.9
                     color: "transparent"; textColor: "white"; shadow: false; highlight: false;
                     image: "../images/svg/icon-layer_paint-red.svg"
                     onClicked: {
@@ -220,7 +220,7 @@ Panel {
                     }
                 }
                 Button {
-                    width: height; height: Constants.GridHeight * 0.9
+                    width: height; height: Constants.ToolbarButtonSize * 0.9
                     color: "transparent"; textColor: "white"; shadow: false; highlight: false;
                     image: "../images/svg/icon-layer_group-red.svg"
                     onClicked: {
@@ -229,7 +229,7 @@ Panel {
                     }
                 }
                 Button {
-                    width: height; height: Constants.GridHeight * 0.9
+                    width: height; height: Constants.ToolbarButtonSize * 0.9
                     color: "transparent"; textColor: "white"; shadow: false; highlight: false;
                     image: "../images/svg/icon-layer_filter-red.svg"
                     onClicked: {
