@@ -1110,9 +1110,6 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
     defaultTool->setWindowTitle(i18n("Geometry"));
     widgets.append(defaultTool);
-    QWidget *snapWidget = canvas()->createSnapGuideConfigWidget();
-    snapWidget->setWindowTitle(i18n("Snapping"));
-    widgets.append(snapWidget);
     KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
     strokeWidget->setWindowTitle(i18n("Line / Border"));
     strokeWidget->setCanvas(canvas());
