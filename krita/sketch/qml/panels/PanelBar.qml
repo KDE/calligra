@@ -205,26 +205,11 @@ Item {
         opacity: 0;
         Behavior on opacity { NumberAnimation { } }
 
-        Repeater {
-            model: 8;
-
-            delegate: Rectangle {
-                x: Constants.GridWidth * (index + 2);
-                y: 0;
-                width: Constants.GridWidth;
-                height: Constants.GridHeight / 2;
-
-                color: "transparent";
-
-                border.color: "white";
-                border.width: 2;
-            }
-        }
-
         Rectangle {
-            x: 0;
-            width: Constants.GridWidth * 2;
-            height: parent.height
+            id: leftOverlay;
+            x: leftArea.x;
+            width: leftArea.width;
+            height: leftArea.height
 
             color: "transparent";
 
@@ -232,10 +217,33 @@ Item {
             border.width: 2;
         }
 
+        Row {
+            x: panelTopRow.x;
+            y: panelTopRow.y;
+            width: panelTopRow.width;
+            Repeater {
+                model: 8;
+
+                delegate: Rectangle {
+    //                 x: Constants.GridWidth * (index + 2);
+    //                 y: 0;
+                    width: Constants.GridWidth;
+                    height: Constants.GridHeight / 2;
+
+                    color: "transparent";
+
+                    border.color: "white";
+                    border.width: 2;
+                }
+            }
+        }
+
         Rectangle {
-            x: Constants.GridWidth * 10;
-            width: Constants.GridWidth * 2;
-            height: parent.height;
+            id: rightOverlay;
+            x: rightArea.x
+            y: rightArea.y
+            width: rightArea.width;
+            height: rightArea.height;
 
             color: "transparent";
 
