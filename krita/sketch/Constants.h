@@ -57,9 +57,11 @@ class Constants : public QObject
     Q_PROPERTY( int GridColumns READ gridColumns CONSTANT )
     Q_PROPERTY( QObject* Theme READ theme CONSTANT )
 
+    Q_PROPERTY( bool IsLandscape READ isLandscape NOTIFY gridSizeChanged )
     Q_PROPERTY( qreal DefaultMargin READ defaultMargin NOTIFY gridSizeChanged )
     Q_PROPERTY( qreal GridHeight READ gridHeight NOTIFY gridSizeChanged )
     Q_PROPERTY( qreal GridWidth READ gridWidth NOTIFY gridSizeChanged )
+    Q_PROPERTY( qreal ToolbarButtonSize READ toolbarButtonSize NOTIFY gridSizeChanged )
     Q_PROPERTY( qreal SmallFontSize READ smallFontSize NOTIFY gridSizeChanged )
     Q_PROPERTY( qreal DefaultFontSize READ defaultFontSize NOTIFY gridSizeChanged )
     Q_PROPERTY( qreal LargeFontSize READ largeFontSize NOTIFY gridSizeChanged )
@@ -70,6 +72,7 @@ public:
 
     qreal gridHeight() const;
     qreal gridWidth() const;
+    qreal toolbarButtonSize() const;
     int gridRows() const;
     int gridColumns() const;
     qreal defaultMargin() const;
@@ -78,6 +81,7 @@ public:
     qreal defaultFontSize() const;
     qreal largeFontSize() const;
     qreal hugeFontSize() const;
+    bool isLandscape() const;
 
     void setGridWidth( qreal width );
     void setGridHeight( qreal height );
@@ -89,6 +93,7 @@ private:
     Theme* m_theme;
     qreal m_gridWidth;
     qreal m_gridHeight;
+    qreal m_toolbarButtonSize;
 };
 
 #endif // CONSTANTS_H
