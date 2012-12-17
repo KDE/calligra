@@ -51,7 +51,7 @@ KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)
     , d(new Private())
 {
     d->widget.setupUi(this);
-    d->widget.shadowOffset->setValue(0.02);
+    d->widget.shadowOffset->setValue(8.0);
     d->widget.shadowBlur->setValue(8.0);
     d->widget.shadowBlur->setMinimum(0.0);
     d->widget.shadowAngle->setValue(315.0);
@@ -61,6 +61,7 @@ KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)
     visibilityChanged();
 
     d->actionShadowColor = new KoColorPopupAction(this);
+    d->actionShadowColor->setCurrentColor(QColor(0, 0, 0, 192)); // some reasonable default for shadow
     d->widget.shadowColor->setDefaultAction(d->actionShadowColor);
 
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(applyChanges()));
