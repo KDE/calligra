@@ -154,7 +154,12 @@ Item {
 
                 Flow {
                     id: actionsLayout;
-                    anchors.fill: parent;
+                    anchors {
+                        verticalCenter: parent.verticalCenter;
+                        left: parent.left;
+                        right: parent.right;
+                    }
+                    height: Constants.ToolbarButtonSize;
                 }
             }
 
