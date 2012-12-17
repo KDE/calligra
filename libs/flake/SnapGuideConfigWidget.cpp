@@ -18,13 +18,9 @@
  */
 
 #include "SnapGuideConfigWidget.h"
-
-#include <KoSnapGuide.h>
-#include <KoCanvasBase.h>
+#include "KoSnapGuide.h"
 
 #include <KoIcon.h>
-
-#include <QWidget>
 
 SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * parent)
         : QWidget(parent), m_snapGuide(snapGuide)
