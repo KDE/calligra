@@ -225,8 +225,6 @@ Item {
                 model: 8;
 
                 delegate: Rectangle {
-    //                 x: Constants.GridWidth * (index + 2);
-    //                 y: 0;
                     width: Constants.GridWidth;
                     height: Constants.GridHeight / 2;
 
