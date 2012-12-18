@@ -45,7 +45,6 @@
 #include <KoXmlWriter.h>
 #include <KoShapePainter.h>
 
-//#include <QtCore/QBuffer>
 #include <QFile>
 #include <QString>
 #include <QTextStream>
@@ -215,7 +214,7 @@ void SvgWriter::savePath(KoPathShape *path, SvgSavingContext &context)
 
     context.shapeWriter().addAttribute("d", path->toString(context.userSpaceTransform()));
     context.shapeWriter().endElement();
-    }
+}
 
 void SvgWriter::saveGeneric(KoShape *shape, SvgSavingContext &context)
 {

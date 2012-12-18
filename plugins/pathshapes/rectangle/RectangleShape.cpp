@@ -327,7 +327,7 @@ bool RectangleShape::loadSvg(const KoXmlElement &element, SvgLoadingContext &con
 {
   if(element.hasAttribute("calligra:viewport") && (element.attribute("calligra:viewport") == "Yes") || (element.attribute("calligra:viewport") == "yes")){
       return false;
-  }
+}
       
     const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
     const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));

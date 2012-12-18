@@ -1252,9 +1252,9 @@ KoShape * SvgParser::createShapeFromElement(const KoXmlElement &element, SvgLoad
         if (!shape)
             continue;
 
-	SvgShape *svgShape = dynamic_cast<SvgShape*>(shape);
+	    SvgShape *svgShape = dynamic_cast<SvgShape*>(shape);
         if (!svgShape) {
-	    delete shape;
+	        delete shape;
             continue;
         }
         

@@ -42,8 +42,6 @@ IF (NOT CREATIVEONLY)
     macro_optional_add_subdirectory( chartshape )
     macro_optional_add_subdirectory( pictureshape )
     macro_optional_add_subdirectory( videoshape )
- #   #TODO is this is correct place to add subdir for pvp?
-#    macro_optional_add_subdirectory( presentationviewportshape )
 ENDIF (NOT CREATIVEONLY)
 
 if (SHOULD_BUILD_TEXTSHAPE)

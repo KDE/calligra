@@ -9,7 +9,6 @@ set(karbonsvgexport_PART_SRCS
     SvgExport.cpp
 )
 
-
 kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})
 
 target_link_libraries(karbonsvgexport karbonui)

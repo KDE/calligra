@@ -28,7 +28,7 @@ bool SvgCustomSavingContext::saveScript()
 {
      QString version("11.10-14231214");
      
-    //TODO: SHould be read from a file instead of initializing a QString with the code right here
+    //TODO Read from a file instead of initializing a QString with the code right here
      /*QString sozijsFile("sozi.js");
      QString sozicssFile("sozi.css");
      
