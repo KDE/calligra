@@ -4534,7 +4534,7 @@ bool DocxXmlDocumentReader::handleSpecialField()
         return false;
     }
     QString instr = m_specialCharacters.trimmed();
-    m_specialCharacters = QString();
+    m_specialCharacters.clear();
     QVector<QString> instructions;
     while (instr.indexOf(' ') > 0) {
         int place = instr.indexOf(' ');

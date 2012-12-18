@@ -182,7 +182,7 @@ QList<QMap<QString, QString> > XlsxXmlWorksheetReaderContext::conditionalStyleFo
         int columnIndex = range.indexOf(':');
         if (columnIndex < 0) {
             splitToRowAndColumn(range, startLetter, startNumber);
-            endLetter = QString();
+            endLetter.clear();
         }
         else {
             splitToRowAndColumn(range.left(columnIndex), startLetter, startNumber);

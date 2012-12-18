@@ -621,7 +621,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentColor = QColor();
-    m_referredFontName = QString();
+    m_referredFontName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {

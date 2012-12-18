@@ -1630,7 +1630,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_style()
             ELSE_TRY_READ_IF_NS(a, lnRef)
             else if (qualifiedName() == "a:fontRef") {
                 m_currentColor = QColor();
-                m_referredFontName = QString();
+                m_referredFontName.clear();
                 TRY_READ(fontRef)
                 if (m_currentColor.isValid()) {
                     m_referredFont.addProperty("fo:color", m_currentColor.name());
@@ -1705,9 +1705,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_spPr()
     }
 
     m_contentAvLstExists = false;
-    m_customPath = QString();
-    m_customEquations = QString();
-    m_textareas = QString();
+    m_customPath.clear();
+    m_customEquations.clear();
+    m_textareas.clear();
 
     while (!atEnd()) {
         readNext();
@@ -2269,9 +2269,9 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     currentFilter = MSOOXML::Utils::DocxFilter;
 #endif
 
-    QString fontSize = QString();
-    QString bulletColor = QString();
-    QString listStyleName = QString();
+    QString fontSize;
+    QString bulletColor;
+    QString listStyleName;
 
     // Creating a list out of what we have, pPr MAY overwrite the list style
     m_currentListStyle = KoGenStyle(KoGenStyle::ListAutoStyle);
