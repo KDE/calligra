@@ -19,10 +19,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCREATEPATHTOOL_P_H
-#define KOCREATEPATHTOOL_P_H
+#ifndef CREATEPATHTOOL_P_H
+#define CREATEPATHTOOL_P_H
 
-#include "KoCreatePathTool.h"
+#include "CreatePathTool.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
 #include "KoPathPointMergeCommand.h"
@@ -177,10 +177,10 @@ private:
 };
 
 
-class KoCreatePathToolPrivate : public KoToolBasePrivate {
-    KoCreatePathTool * const q;
+class CreatePathToolPrivate : public KoToolBasePrivate {
+    CreatePathTool * const q;
 public:
-    KoCreatePathToolPrivate(KoCreatePathTool * const qq, KoCanvasBase* canvas)
+    CreatePathToolPrivate(CreatePathTool * const qq, KoCanvasBase* canvas)
         : KoToolBasePrivate(qq, canvas),
         q(qq),
         shape(0),
@@ -415,4 +415,4 @@ public:
     }
 };
 
-#endif // KOCREATEPATHTOOL_P_H
+#endif // CREATEPATHTOOL_P_H

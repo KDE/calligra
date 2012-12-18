@@ -19,7 +19,7 @@
 #ifndef KIS_TOOL_SELECT_PATH_H_
 #define KIS_TOOL_SELECT_PATH_H_
 
-#include <KoCreatePathTool.h>
+#include <CreatePathTool.h>
 #include <KoToolFactoryBase.h>
 #include "kis_tool_select_base.h"
 
@@ -69,7 +69,7 @@ private:
     /// reimplemented
     virtual QList<QWidget *> createOptionWidgets();
 
-    class LocalTool : public KoCreatePathTool {
+    class LocalTool : public CreatePathTool {
         friend class KisToolSelectPath;
     public:
         LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool);

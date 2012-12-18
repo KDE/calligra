@@ -18,7 +18,7 @@
  */
 #include "Plugin.h"
 #include "defaulttool/DefaultToolFactory.h"
-#include "createPathTool/KoCreatePathToolFactory.h"
+#include "createPathTool/CreatePathToolFactory.h"
 #include "guidestool/GuidesToolFactory.h"
 #include "connectionTool/ConnectionToolFactory.h"
 
@@ -34,7 +34,7 @@ Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new DefaultToolFactory());
-    KoToolRegistry::instance()->add(new KoCreatePathToolFactory());
+    KoToolRegistry::instance()->add(new CreatePathToolFactory());
     KoToolRegistry::instance()->add(new GuidesToolFactory());
     KoToolRegistry::instance()->add(new ConnectionToolFactory());
 }

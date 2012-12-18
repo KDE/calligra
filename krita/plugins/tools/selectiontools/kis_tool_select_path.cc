@@ -58,7 +58,7 @@ QList<QWidget *> KisToolSelectPath::createOptionWidgets()
 
 
 KisToolSelectPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolSelectPath* selectingTool)
-        : KoCreatePathTool(canvas), m_selectionTool(selectingTool)
+        : CreatePathTool(canvas), m_selectionTool(selectingTool)
 {
 }
 

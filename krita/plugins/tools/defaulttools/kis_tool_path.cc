@@ -210,7 +210,7 @@ QList<QWidget *> KisToolPath::createOptionWidgets()
 }
 
 KisToolPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool)
-        : KoCreatePathTool(canvas), m_parentTool(selectingTool) {}
+        : CreatePathTool(canvas), m_parentTool(selectingTool) {}
 
 void KisToolPath::LocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {

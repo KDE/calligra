@@ -24,7 +24,7 @@
 #include <QTransform>
 
 #include <KoToolFactoryBase.h>
-#include <KoCreatePathTool.h>
+#include <CreatePathTool.h>
 #include "flake/kis_node_shape.h"
 #include "kis_tool_select_base.h"
 //#include "kis_tool_select_magnetic_option_widget.h"
@@ -78,7 +78,7 @@ private:
     virtual QWidget* createOptionWidget();
     Ui::KisToolSelectMagneticOptionWidget *m_magneticOptions;
 
-    class LocalTool : public KoCreatePathTool {
+    class LocalTool : public CreatePathTool {
         friend class KisToolSelectPath;
     public:
         LocalTool(KoCanvasBase * canvas, KisToolSelectMagnetic* selectingTool);

@@ -18,8 +18,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KOCREATEPATHTOOL_H
-#define KOCREATEPATHTOOL_H
+#ifndef CREATEPATHTOOL_H
+#define CREATEPATHTOOL_H
 
 
 #include <KoToolBase.h>
@@ -29,14 +29,14 @@
 class KoPathShape;
 class KoPathPoint;
 
-class KoCreatePathToolPrivate;
+class CreatePathToolPrivate;
 
-#define KoCreatePathTool_ID "CreatePathTool"
+#define CreatePathTool_ID "CreatePathTool"
 
 /**
  * Tool for creating path shapes.
  */
-class KoCreatePathTool : public KoToolBase
+class CreatePathTool : public KoToolBase
 {
     Q_OBJECT
 public:
@@ -44,8 +44,8 @@ public:
      * Constructor for the tool that allows you to create new paths by hand.
      * @param canvas the canvas this tool will be working for.
      */
-    explicit KoCreatePathTool(KoCanvasBase * canvas);
-    virtual ~KoCreatePathTool();
+    explicit CreatePathTool(KoCanvasBase * canvas);
+    virtual ~CreatePathTool();
 
     /// reimplemented
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -79,7 +79,7 @@ protected:
 
 protected:
     /**
-      * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.
+      * This method is called to paint the path. Decorations are drawn by CreatePathTool afterwards.
       */
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
@@ -87,7 +87,7 @@ protected:
     virtual QList<QWidget *> createOptionWidgets();
 
 private:
-    Q_DECLARE_PRIVATE(KoCreatePathTool)
+    Q_DECLARE_PRIVATE(CreatePathTool)
     Q_PRIVATE_SLOT(d_func(), void angleDeltaChanged(int))
 };
 #endif

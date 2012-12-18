@@ -151,7 +151,7 @@ QWidget* KisToolSelectMagnetic::createOptionWidget()
 
 
 KisToolSelectMagnetic::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolSelectMagnetic* selectingTool)
-        : KoCreatePathTool(canvas), m_selectingTool(selectingTool), m_accuracy(5) {}
+        : CreatePathTool(canvas), m_selectingTool(selectingTool), m_accuracy(5) {}
 
 KisToolSelectMagnetic::LocalTool::~LocalTool()
 {
@@ -159,7 +159,7 @@ KisToolSelectMagnetic::LocalTool::~LocalTool()
 
 void KisToolSelectMagnetic::LocalTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    KoCreatePathTool::activate(toolActivation, shapes);
+    CreatePathTool::activate(toolActivation, shapes);
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
     KisImageWSP img = kisCanvas->image();
@@ -172,7 +172,7 @@ void KisToolSelectMagnetic::LocalTool::activate(ToolActivation toolActivation, c
 
 void KisToolSelectMagnetic::LocalTool::deactivate()
 {
-    KoCreatePathTool::deactivate();
+    CreatePathTool::deactivate();
 
     delete m_colorTransformation;
 }
@@ -228,7 +228,7 @@ void KisToolSelectMagnetic::LocalTool::paintOutline(QPainter *painter, const QPa
 
 void KisToolSelectMagnetic::LocalTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    KoCreatePathTool::mouseReleaseEvent(event);
+    CreatePathTool::mouseReleaseEvent(event);
 //    m_detectedBorder+=m_tmpDetectedBorder;
 //    m_tmpDetectedBorder.clear();
 //    if(m_detectedBorder.size()>1) {

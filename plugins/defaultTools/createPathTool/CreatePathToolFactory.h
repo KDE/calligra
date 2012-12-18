@@ -18,19 +18,19 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCREATEPATHTOOLFACTORY_H
-#define KOCREATEPATHTOOLFACTORY_H
+#ifndef CREATEPATHTOOLFACTORY_H
+#define CREATEPATHTOOLFACTORY_H
 
 #include <KoToolFactoryBase.h>
 
-/// The factory for the KoCreatePathTool
-class KoCreatePathToolFactory : public KoToolFactoryBase
+/// The factory for the CreatePathTool
+class CreatePathToolFactory : public KoToolFactoryBase
 {
 public:
     /// Constructor
-    KoCreatePathToolFactory();
+    CreatePathToolFactory();
     /// Destructor
-    ~KoCreatePathToolFactory();
+    ~CreatePathToolFactory();
 
     KoToolBase* createTool(KoCanvasBase *canvas);
 };

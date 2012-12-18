@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoCreatePathTool.h"
+#include "CreatePathTool.h"
 
 #include "KoShapeController.h"
 #include "KoPointerEvent.h"
@@ -38,21 +38,21 @@
 #include <QLabel>
 #include <QGridLayout>
 
-#include "KoCreatePathTool_p.h"
+#include "CreatePathTool_p.h"
 
 
-KoCreatePathTool::KoCreatePathTool(KoCanvasBase *canvas)
-        : KoToolBase(*(new KoCreatePathToolPrivate(this, canvas)))
+CreatePathTool::CreatePathTool(KoCanvasBase *canvas)
+        : KoToolBase(*(new CreatePathToolPrivate(this, canvas)))
 {
 }
 
-KoCreatePathTool::~KoCreatePathTool()
+CreatePathTool::~CreatePathTool()
 {
 }
 
-void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter)
+void CreatePathTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
     if (d->shape) {
         painter.save();
         paintPath(*(d->shape), painter, converter);
@@ -104,9 +104,9 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     painter.restore();
 }
 
-void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter)
+void CreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
     painter.setTransform(pathShape.absoluteTransformation(&converter) * painter.transform());
     painter.save();
 
@@ -120,9 +120,9 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
     }
 }
 
-void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
+void CreatePathTool::mousePressEvent(KoPointerEvent *event)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     if (event->button() == Qt::RightButton || (event->button() == Qt::LeftButton && event->modifiers() & Qt::ShiftModifier)) {
         if (d->shape) {
@@ -195,9 +195,9 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
         d->angleSnapStrategy->setStartPoint(d->activePoint->point());
 }
 
-void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
+void CreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     //remove handle
     canvas()->updateCanvas(handlePaintRect(event->point));
@@ -210,9 +210,9 @@ void KoCreatePathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     }
 }
 
-void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
+void CreatePathTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     KoPathPoint *endPoint = d->endPointAtPosition(event->point);
     if (d->hoveredPoint != endPoint) {
@@ -259,9 +259,9 @@ void KoCreatePathTool::mouseMoveEvent(KoPointerEvent *event)
     canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
 }
 
-void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
+void CreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     if (! d->shape || (event->buttons() & Qt::RightButton))
         return;
@@ -283,7 +283,7 @@ void KoCreatePathTool::mouseReleaseEvent(KoPointerEvent *event)
     }
 }
 
-void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
+void CreatePathTool::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape)
         emit done();
@@ -291,9 +291,9 @@ void KoCreatePathTool::keyPressEvent(QKeyEvent *event)
         event->ignore();
 }
 
-void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
+void CreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
     useCursor(Qt::ArrowCursor);
 
     // retrieve the actual global handle radius
@@ -304,9 +304,9 @@ void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
     canvas()->snapGuide()->reset();
 }
 
-void KoCreatePathTool::deactivate()
+void CreatePathTool::deactivate()
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     if (d->shape) {
         canvas()->updateCanvas(handlePaintRect(d->firstPoint->point()));
@@ -317,9 +317,9 @@ void KoCreatePathTool::deactivate()
     d->cleanUp();
 }
 
-void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
+void CreatePathTool::documentResourceChanged(int key, const QVariant & res)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     switch (key) {
     case KoDocumentResourceManager::HandleRadius: {
@@ -331,9 +331,9 @@ void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
     }
 }
 
-void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
+void CreatePathTool::addPathShape(KoPathShape *pathShape)
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     KoPathShape *startShape = 0;
     KoPathShape *endShape = 0;
@@ -366,9 +366,9 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     }
 }
 
-QList<QWidget *> KoCreatePathTool::createOptionWidgets()
+QList<QWidget *> CreatePathTool::createOptionWidgets()
 {
-    Q_D(KoCreatePathTool);
+    Q_D(CreatePathTool);
 
     QList<QWidget *> list;
 
@@ -391,4 +391,4 @@ QList<QWidget *> KoCreatePathTool::createOptionWidgets()
     return list;
 }
 
-#include <KoCreatePathTool.moc>
+#include <CreatePathTool.moc>
