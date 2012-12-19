@@ -21,25 +21,21 @@
 #define COVERIMAGE_H
 
 #include <QObject>
-#include "words_export.h"
+#include <QPair>
 
 class KoStore;
 class KoXmlWriter;
 
-class WORDS_EXPORT CoverImage
+class CoverImage
 {
 public:
     explicit CoverImage();
-    bool saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter); // save cover to store.
+    bool saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPair<QString, QByteArray> coverData); // save cover to store.
+
     /**
      * Give the image @par path and read and save its data.
      */
-    void setCoverData(QString path);
-    void getCoverPath();
-    
-private:
-    static QByteArray m_coverData;
-    static QString m_coverMimeType;
+    QPair<QString, QByteArray> getCoverData(QString path);
 };
 
 #endif // COVERIMAGE_H

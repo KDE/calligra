@@ -303,7 +303,6 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
             kWarning(30006) << "saving image failed: open store failed";
         }
     }
-
     return ok;
 }
 

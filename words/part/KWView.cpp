@@ -79,7 +79,6 @@
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
-
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
@@ -93,12 +92,10 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoIcon.h>
 
-
 // KDE + Qt includes
 #include <QHBoxLayout>
 #include <KMenu>
 #include <QTimer>
-#include <QFileDialog>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdialog.h>
@@ -397,6 +394,7 @@ void KWView::setupActions()
     if (m_currentPage.isValid())
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
+
 
     /* ********** From old kwview ****
     We probably want to have each of these again, so just move them when you want to implement it
@@ -1044,3 +1042,4 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         m_canvas->addCommand(cmd);
     }
 }
+

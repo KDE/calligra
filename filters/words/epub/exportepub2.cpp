@@ -410,7 +410,7 @@ KoFilter::ConversionStatus ExportEpub2::epubCoverImage(KoStore *odfStore, EpubFi
     // Find Cover from manifest
     QString coverPath;
     foreach (QString path, m_manifest.keys()) {
-        if (path.contains("Author-Profile")) {
+        if (path.contains("Author-Profile/cover.")) {
             coverPath = path;
             break;
         }
@@ -419,7 +419,7 @@ KoFilter::ConversionStatus ExportEpub2::epubCoverImage(KoStore *odfStore, EpubFi
     // Extact cover data.
     QByteArray coverData;
     if (!odfStore->extractFile(coverPath, coverData)) {
-        kDebug(30503) << "Can not to extract file";
+        kDebug(30503) << "Can not to extract file" + coverPath;
         return KoFilter::FileNotFound;
     }
 
@@ -457,7 +457,7 @@ KoFilter::ConversionStatus ExportEpub2::epubCoverImage(KoStore *odfStore, EpubFi
 
     writer->startElement("img");
     writer->addAttribute("src", coverPath.section('/', -1));
-    writer->addAttribute("alt", "This image is a cover for book");
+    writer->addAttribute("alt", "Cover Image");
 
     writer->endElement();
 

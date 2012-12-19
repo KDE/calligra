@@ -27,6 +27,7 @@
 #include <KoPart.h>
 
 #include <QWidget>
+#include <QFileDialog>
 #include <kaction.h>
 #include <kactioncollection.h>
 
@@ -49,6 +50,13 @@ void CAuView::setupActions()
 
 void CAuView::selectCoverImage()
 {
-    CoverImage *cover = new CoverImage;
-    cover->getCoverPath();
+    CoverImage cover;
+
+    QString path = QFileDialog::getOpenFileName(0, i18n("Open File"),
+                                                QDir::currentPath(),
+                                                      i18n("Images (*.png *.xpm *.jpg)"));
+    if (!path.isEmpty()) {
+        QPair<QString, QByteArray> coverData = cover.getCoverData(path);
+        kwdocument()->setCoverImage(coverData);
+    }
 }

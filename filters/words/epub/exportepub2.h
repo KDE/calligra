@@ -64,7 +64,6 @@ private:
     bool isWmf(QByteArray &content);
 
     KoFilter::ConversionStatus epubCoverImage(KoStore *odfStore, EpubFile *epubFile);
-
 public slots:
 
 

@@ -28,36 +28,34 @@
 #include <klocale.h>
 #include <QFile>
 #include <QFileDialog>
-
-QByteArray CoverImage::m_coverData;
-QString CoverImage::m_coverMimeType;
+#include <QPair>
 
 CoverImage::CoverImage()
 {
 }
 
-bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter)
+bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPair<QString, QByteArray> coverData)
 {
     // There is no cover to save.
-    if (m_coverData.isEmpty())
+    if (coverData.first.isEmpty())
         return true;
 
-    if (!store->open("Author-Profile/cover." + m_coverMimeType)) {
-        kDebug(31000) << "Unable to open Author-Profile/cover."<<m_coverMimeType;
+    if (!store->open("Author-Profile/cover." + coverData.first)) {
+        kDebug(31000) << "Unable to open Author-Profile/cover."<<coverData.first;
         return false;
     }
 
     KoStoreDevice device(store);
-    device.write(m_coverData, m_coverData.size());
+    device.write(coverData.second, coverData.second.size());
     store->close();
 
-    const QString mimetype(KMimeType::findByPath("Author-Profile/cover." + m_coverMimeType, 0 , true)->name());
-    manifestWriter->addManifestEntry("Author-Profile/cover." + m_coverMimeType, mimetype);
+    const QString mimetype(KMimeType::findByPath("Author-Profile/cover." + coverData.first, 0 , true)->name());
+    manifestWriter->addManifestEntry("Author-Profile/cover." + coverData.first, mimetype);
 
     return true;
 }
 
-void CoverImage::setCoverData(QString path)
+QPair<QString, QByteArray> CoverImage::getCoverData(QString path)
 {
     QFile file (path);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -65,17 +63,10 @@ void CoverImage::setCoverData(QString path)
     }
     QByteArray data = file.readAll();
 
-    m_coverMimeType = path.right(3);
-    m_coverData = data;
+    QPair<QString, QByteArray> coverData;
+    coverData.first = path.right(3);
+    coverData.second = data;
 
     file.close();
-}
-
-void CoverImage::getCoverPath()
-{
-    QString path = QFileDialog::getOpenFileName(0, i18n("Open File"),
-                                                QDir::currentPath(),
-                                                      i18n("Images (*.png *.xpm *.jpg)"));
-    if (!path.isEmpty())
-        setCoverData(path);
+    return coverData;
 }

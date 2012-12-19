@@ -841,3 +841,12 @@ KWFrame *KWDocument::frameOfShape(KoShape* shape) const
     return answer;
 }
 
+void KWDocument::setCoverImage(QPair<QString, QByteArray> cover)
+{
+    m_coverImage = cover;
+}
+
+QPair<QString, QByteArray> KWDocument::coverImage()
+{
+    return m_coverImage;
+}

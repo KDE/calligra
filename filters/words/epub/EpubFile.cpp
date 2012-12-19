@@ -208,7 +208,6 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
 
     foreach (FileInfo *file, files()) {
         if ( file->m_id == "cover") {
-
             writer.startElement("itemref");
             writer.addAttribute("idref", file->m_id);
             writer.endElement(); // itemref

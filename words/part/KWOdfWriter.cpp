@@ -225,12 +225,12 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
 
     KoGenChanges changes;
 
+    CoverImage coverImage;
+
     KoChangeTracker *changeTracker = m_document->resourceManager()->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
 
     KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
     context.addOption(KoShapeSavingContext::ZIndex);
-
-    CoverImage cover;
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
@@ -378,10 +378,9 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     }
 
     // save cover image in Author.
-    if (!cover.saveCoverImage(store, manifestWriter)) {
+    if (!coverImage.saveCoverImage(store, manifestWriter, m_document->coverImage())) {
         return false;
     }
-
     return true;
 }
 
