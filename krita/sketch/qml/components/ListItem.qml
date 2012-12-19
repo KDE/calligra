@@ -33,8 +33,8 @@ Item {
 
     signal clicked();
 
-    width: Constants.GridWidth * 4;
-    height: Constants.GridHeight * 1.75;
+    width: Constants.GridWidth > 1 ? Constants.GridWidth * 4 : 1;
+    height: Constants.GridHeight > 1 ? Constants.GridHeight * 1.75 : 1;
 
     Rectangle {
         id: background;
