@@ -25,8 +25,7 @@ set(libdialogfilter_SRCS
 
 set(liboofilter_SRCS 
 	${CMAKE_SOURCE_DIR}/filters/liboofilter/ooutils.cc 
-	${CMAKE_SOURCE_DIR}/filters/liboofilter/liststylestack.cc
-	)
+)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
