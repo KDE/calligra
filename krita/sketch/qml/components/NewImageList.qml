@@ -43,6 +43,16 @@ PageStack {
 
                 onClicked: {
                     switch(model.bnrole) {
+                        case "a5p": {
+                            base.clicked();
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1200, 1750, 300);
+                            Settings.temporaryFile = true;
+                        }
+                        case "a5l": {
+                            base.clicked();
+                            Settings.currentFile = Krita.ImageBuilder.createBlankImage(1750, 1200, 300);
+                            Settings.temporaryFile = true;
+                        }
                         case "a4p": {
                             base.clicked();
                             Settings.currentFile = Krita.ImageBuilder.createBlankImage(2400, 3500, 300);
@@ -78,10 +88,12 @@ PageStack {
             model: ListModel {
                 ListElement { bnrole: "a4p";    name: "Blank Image (A4 Portrait)"; image: "../images/svg/icon-A4portrait-green.svg" }
                 ListElement { bnrole: "a4l";    name: "Blank Image (A4 Landscape)"; image: "../images/svg/icon-A4landscape-green.svg" }
+//                 ListElement { bnrole: "a5p";    name: "Blank Image (A5 Portrait)"; image: "../images/svg/icon-A4portrait-green.svg" }
+//                 ListElement { bnrole: "a5l";    name: "Blank Image (A5 Landscape)"; image: "../images/svg/icon-A4landscape-green.svg" }
                 ListElement { bnrole: "screen"; name: "Blank Image (Screen Size)"; image: "../images/svg/icon-filenew-green.svg" }
                 ListElement { bnrole: "custom"; name: "Custom Size"; image: "../images/svg/icon-filenew-green.svg" }
                 ListElement { bnrole: "clip";   name: "From Clipboard"; image: "../images/svg/icon-fileclip-green.svg" }
-                /* ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-green.svg" } */
+//                 ListElement { bnrole: "webcam"; name: "From Camera"; image: "../images/svg/icon-camera-green.svg" }
             }
 
             ScrollDecorator { }
