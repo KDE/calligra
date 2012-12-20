@@ -58,6 +58,10 @@ public:
         main->setConfiguration(selector->configuration().mainTypeParameter, selector->configuration().mainType);
         sub->setConfiguration(selector->configuration().subTypeParameter, selector->configuration().subType);
     }
+    ~Private()
+    {
+        selector->deleteLater();
+    }
 
     ColorSelectorItem* q;
 
