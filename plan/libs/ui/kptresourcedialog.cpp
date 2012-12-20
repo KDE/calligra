@@ -63,6 +63,10 @@ ResourceDialogImpl::ResourceDialogImpl( const Project &project, Resource &resour
     chooseBtn->hide();
 #endif
 
+    // FIXME
+    // [Bug 311940] New: Plan crashes when typing a text in the filter textbox before the textbook is fully loaded when selecting a contact from the adressbook
+    chooseBtn->hide();
+
     QSortFilterProxyModel *pr = new QSortFilterProxyModel( ui_teamView );
     QStandardItemModel *m = new QStandardItemModel( ui_teamView );
     pr->setSourceModel( new QStandardItemModel( ui_teamView ) );
