@@ -31,6 +31,7 @@
 // KDE
 #include <kdebug.h>
 #include <kpluginfactory.h>
+#include <kmimetype.h>
 
 // Calligra
 #include <KoFilterChain.h>
@@ -132,6 +133,12 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
 
     // Extract images
     status = extractImages(odfStore, &epub);
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
+    // Check for cover image
+    status = extractCoverImage(odfStore, &epub);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -393,4 +400,82 @@ bool ExportEpub2::isWmf(QByteArray &content)
     }
 
     return false;
+}
+
+KoFilter::ConversionStatus ExportEpub2::extractCoverImage(KoStore *odfStore, EpubFile *epubFile)
+{
+    // Find Cover from manifest
+    QString coverPath;
+    foreach (QString path, m_manifest.keys()) {
+        if (path.contains("coverImage.")) {
+            coverPath = path;
+            break;
+        }
+    }
+
+    // There is no cover image.
+    if (coverPath.isEmpty()) {
+        return KoFilter::OK;
+    }
+
+    // Extact cover data.
+    QByteArray coverData;
+    if (!odfStore->extractFile(coverPath, coverData)) {
+        kDebug(30503) << "Can not to extract file" + coverPath;
+        return KoFilter::FileNotFound;
+    }
+
+    // Add it to epub file content.
+    QByteArray mime = m_manifest.value(coverPath).toUtf8();
+    epubFile->addContentFile(QString("cover-image"),
+                             QString((epubFile->pathPrefix() + coverPath.section('/', -1))),
+                             mime, coverData);
+    // Write the html for cover.
+    writeCoverImage(epubFile, coverPath.section('/', -1));
+
+    return KoFilter::OK;
+}
+
+void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
+{
+    QByteArray coverHtmlContent;
+    QBuffer *buff = new QBuffer(&coverHtmlContent);
+    KoXmlWriter * writer = new KoXmlWriter(buff);
+
+    writer->startElement("html");
+    writer->addAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+
+    writer->startElement("head");
+
+    writer->startElement("title");
+    writer->addTextNode("Cover");
+    writer->endElement();
+
+    writer->startElement("style");
+    writer->addAttribute("type", "text/css");
+    writer->addTextNode("img { max-width: 100%; }");
+    writer->endElement();
+
+    writer->endElement(); // head
+
+    writer->startElement("body");
+
+    writer->startElement("div");
+    writer->addAttribute("id", "cover-image");
+
+    writer->startElement("img");
+    writer->addAttribute("src", coverPath);
+    writer->addAttribute("alt", "Cover Image");
+
+    writer->endElement();
+
+    writer->endElement(); // div
+
+    writer->endElement(); // body
+
+    writer->endElement(); // html
+
+    // Add cover html to content
+    epubFile->addContentFile(QString("cover"), QString(epubFile->pathPrefix() + "cover.xhtml")
+                             , "application/xhtml+xml", coverHtmlContent, QString("Cover"));
 }
