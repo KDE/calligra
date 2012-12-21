@@ -206,9 +206,22 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     writer.startElement("spine");
     writer.addAttribute("toc", "ncx");
 
+    // If there is a cover image, it should be the first page for now
+    // maybe we can have an option to lets user choose the cover page
+    // number in future.
+    foreach (FileInfo *file, files()) {
+        if ( file->m_id == "cover") {
+            writer.startElement("itemref");
+            writer.addAttribute("idref", file->m_id);
+            writer.endElement(); // itemref
+        }
+    }
     foreach(FileInfo *file, files()) {
         // Since paths are relative from where this file is, remove
         // the common prefix from the reference.
+        if (file->m_id == "cover") {
+            continue;
+        }
         QString relativeFilename = file->m_fileName;
         if (relativeFilename.contains(filePrefix())) {
             if (relativeFilename.startsWith(pathPrefix())) {
@@ -298,9 +311,37 @@ KoFilter::ConversionStatus EpubFile::writeNcx(KoStore *epubStore,
     writer.startElement("navMap");
 
     int playOrder = 1;
+    foreach (FileInfo *file, files()) {
+        if ( file->m_id == "cover") {
+            writer.startElement("navPoint");
+            writer.addAttribute("id", "navpoint-" + QString::number(playOrder));
+            writer.addAttribute("playOrder", QString::number(playOrder));
+
+            writer.startElement("navLabel");
+
+            writer.startElement("text");
+            writer.addTextNode(file->m_label);
+            writer.endElement();
+
+            writer.endElement(); // navLabel
+
+            writer.startElement("content");
+            QString src = file->m_fileName;
+            src = src.right(src.size() - pathPrefix().size());
+            writer.addAttribute("src", src);
+            writer.endElement(); // content
+
+            writer.endElement(); // navePoint
+            playOrder ++;
+        }
+    }
+
     foreach(FileInfo *file, files()) {
 
         if (file->m_label.isEmpty()) {
+            continue;
+        }
+        if (file->m_id == "cover-html") {
             continue;
         }
 
