@@ -56,7 +56,7 @@ void CAuView::selectCoverImage()
                                                 QDir::currentPath(),
                                                       i18n("Images (*.png *.xpm *.jpg)"));
     if (!path.isEmpty()) {
-        QPair<QString, QByteArray> coverData = cover.getCoverData(path);
+        QPair<QString, QByteArray> coverData = cover.readCoverImage(path);
         kwdocument()->setCoverImage(coverData);
     }
 }

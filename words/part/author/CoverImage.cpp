@@ -30,6 +30,8 @@
 #include <QFileDialog>
 #include <QPair>
 
+#define coverPath "Pictures/coverImage."
+
 CoverImage::CoverImage()
 {
 }
@@ -40,8 +42,8 @@ bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPa
     if (coverData.first.isEmpty())
         return true;
 
-    if (!store->open("Author-Profile/cover." + coverData.first)) {
-        kDebug(31000) << "Unable to open Author-Profile/cover."<<coverData.first;
+    if (!store->open(coverPath + coverData.first)) {
+        kDebug(31000) << "Unable to open"<<coverPath + coverData.first;
         return false;
     }
 
@@ -49,13 +51,13 @@ bool CoverImage::saveCoverImage(KoStore *store, KoXmlWriter *manifestWriter, QPa
     device.write(coverData.second, coverData.second.size());
     store->close();
 
-    const QString mimetype(KMimeType::findByPath("Author-Profile/cover." + coverData.first, 0 , true)->name());
-    manifestWriter->addManifestEntry("Author-Profile/cover." + coverData.first, mimetype);
+    const QString mimetype(KMimeType::findByPath(coverPath + coverData.first, 0 , true)->name());
+    manifestWriter->addManifestEntry(coverPath + coverData.first, mimetype);
 
     return true;
 }
 
-QPair<QString, QByteArray> CoverImage::getCoverData(QString path)
+QPair<QString, QByteArray> CoverImage::readCoverImage(QString path)
 {
     QFile file (path);
     if (!file.open(QIODevice::ReadOnly)) {

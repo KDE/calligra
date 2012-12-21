@@ -138,14 +138,11 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         return status;
     }
     // Check for cover image
-    if (odfStore->enterDirectory("Author-Profile")) {
-        odfStore->leaveDirectory();
-        status = epubCoverImage(odfStore, &epub);
+        status = extractCoverImage(odfStore, &epub);
         if (status != KoFilter::OK) {
             delete odfStore;
             return status;
         }
-    }
 
     // ----------------------------------------------------------------
     // Write the finished epub file to disk
@@ -405,15 +402,20 @@ bool ExportEpub2::isWmf(QByteArray &content)
     return false;
 }
 
-KoFilter::ConversionStatus ExportEpub2::epubCoverImage(KoStore *odfStore, EpubFile *epubFile)
+KoFilter::ConversionStatus ExportEpub2::extractCoverImage(KoStore *odfStore, EpubFile *epubFile)
 {
     // Find Cover from manifest
     QString coverPath;
     foreach (QString path, m_manifest.keys()) {
-        if (path.contains("Author-Profile/cover.")) {
+        if (path.contains("coverImage.")) {
             coverPath = path;
             break;
         }
+    }
+
+    // There is no cover image.
+    if (coverPath.isEmpty()) {
+        return KoFilter::OK;
     }
 
     // Extact cover data.
@@ -428,8 +430,14 @@ KoFilter::ConversionStatus ExportEpub2::epubCoverImage(KoStore *odfStore, EpubFi
     epubFile->addContentFile(QString("cover-image"),
                              QString((epubFile->pathPrefix() + coverPath.section('/', -1))),
                              mime, coverData);
-
     // Write the html for cover.
+    writeCoverImage(epubFile, coverPath.section('/', -1));
+
+    return KoFilter::OK;
+}
+
+void ExportEpub2::writeCoverImage(EpubFile *epubFile, const QString coverPath)
+{
     QByteArray coverHtmlContent;
     QBuffer *buff = new QBuffer(&coverHtmlContent);
     KoXmlWriter * writer = new KoXmlWriter(buff);
@@ -456,7 +464,7 @@ KoFilter::ConversionStatus ExportEpub2::epubCoverImage(KoStore *odfStore, EpubFi
     writer->addAttribute("id", "cover-image");
 
     writer->startElement("img");
-    writer->addAttribute("src", coverPath.section('/', -1));
+    writer->addAttribute("src", coverPath);
     writer->addAttribute("alt", "Cover Image");
 
     writer->endElement();
@@ -470,5 +478,4 @@ KoFilter::ConversionStatus ExportEpub2::epubCoverImage(KoStore *odfStore, EpubFi
     // Add cover html to content
     epubFile->addContentFile(QString("cover"), QString(epubFile->pathPrefix() + "cover.xhtml")
                              , "application/xhtml+xml", coverHtmlContent, QString("Cover"));
-    return KoFilter::OK;
 }

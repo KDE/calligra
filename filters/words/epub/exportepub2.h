@@ -63,7 +63,9 @@ private:
     bool isEmf(QByteArray &content);
     bool isWmf(QByteArray &content);
 
-    KoFilter::ConversionStatus epubCoverImage(KoStore *odfStore, EpubFile *epubFile);
+    KoFilter::ConversionStatus extractCoverImage(KoStore *odfStore, EpubFile *epubFile);
+    void writeCoverImage(EpubFile *epubFile, const QString coverPath);
+
 public slots:
 
 

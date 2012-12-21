@@ -35,7 +35,7 @@ public:
     /**
      * Give the image @par path and read and save its data.
      */
-    QPair<QString, QByteArray> getCoverData(QString path);
+    QPair<QString, QByteArray> readCoverImage(QString path);
 };
 
 #endif // COVERIMAGE_H
