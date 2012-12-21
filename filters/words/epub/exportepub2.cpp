@@ -138,11 +138,11 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         return status;
     }
     // Check for cover image
-        status = extractCoverImage(odfStore, &epub);
-        if (status != KoFilter::OK) {
-            delete odfStore;
-            return status;
-        }
+    status = extractCoverImage(odfStore, &epub);
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
 
     // ----------------------------------------------------------------
     // Write the finished epub file to disk
