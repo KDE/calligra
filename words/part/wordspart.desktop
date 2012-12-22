@@ -2,6 +2,7 @@
 Type=Service
 Name=Calligra Word Processing Component
 Name[bg]=Компонент за текстообработка в Calligra
+Name[bs]=Calligra komponenta za obrađivanje riječi
 Name[ca]=Component de processament de textos del Calligra
 Name[ca@valencia]=Component de processament de textos del Calligra
 Name[cs]=Komponenta Calligra pro zpracování textu
@@ -40,6 +41,7 @@ MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocum
 X-KDE-ServiceTypes=CalligraPart
 GenericName=Word processor
 GenericName[bg]=Текстообработваща програма
+GenericName[bs]=Obrada teksta
 GenericName[ca]=Processador de textos
 GenericName[ca@valencia]=Processador de textos
 GenericName[cs]=Textový procesor

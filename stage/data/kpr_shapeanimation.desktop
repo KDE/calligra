@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=CalligraStage/ShapeAnimation
 Comment=Shape animation plugin for Calligra Stage
 Comment[bg]=Приставка за анимации на Calligra Stage
+Comment[bs]=Plugin za animirane oblike za Calligra Scenu
 Comment[ca]=Connector d'animació de formes per al Calligra Stage
 Comment[ca@valencia]=Connector d'animació de formes per al Calligra
 Comment[da]=Form-animationsplugin til Calligra Stage

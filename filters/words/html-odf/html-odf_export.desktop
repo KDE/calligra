@@ -2,6 +2,7 @@
 Type=Service
 Name=Words HTML-ODF Export Filter
 Name[bg]=Филтър за изнасяне от Words в HTML-ODF
+Name[bs]=Words HTML-ODF izvozni filter
 Name[ca]=Filtre d'exportació HTML-ODF per al Words
 Name[ca@valencia]=Filtre d'exportació HTML-ODF per al Words
 Name[cs]=Exportní filtr HTML-ODF pro Words

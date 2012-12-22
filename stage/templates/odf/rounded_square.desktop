@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=rounded_square
 Name=Rounded Square
+Name[bs]=Zaobljeni kvadrat
 Name[ca]=Quadrat arrodonit
 Name[ca@valencia]=Quadrat arrodonit
 Name[cs]=Zaoblený čtverec
@@ -32,6 +33,7 @@ Name[wa]=Cwåré arondi
 Name[x-test]=xxRounded Squarexx
 Name[zh_TW]=圓角方形
 Comment=Rounded Square
+Comment[bs]=Zaobljeni kvadrat
 Comment[ca]=Quadrat arrodonit
 Comment[ca@valencia]=Quadrat arrodonit
 Comment[cs]=Zaoblený čtverec

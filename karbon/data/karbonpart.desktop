@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Calligra Scalable Graphics Component
 Name[bg]=Компонент за векторна графика в Calligra
+Name[bs]=Komponenta Calligra-e za grafiku koja se moze skalirati
 Name[ca]=Component de gràfics escalables del Calligra
 Name[ca@valencia]=Component de gràfics escalables del Calligra
 Name[cs]=SVG komponenta pro Calligra Office
@@ -42,6 +43,7 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,applicati
 GenericName=Scalable Graphics
 GenericName[af]=Skaal veranderbare Grafieka
 GenericName[bg]=Векторна графика
+GenericName[bs]=Grafika koja se može skalirati
 GenericName[ca]=Gràfics escalables
 GenericName[ca@valencia]=Gràfics escalables
 GenericName[cs]=Škálovatelná grafika

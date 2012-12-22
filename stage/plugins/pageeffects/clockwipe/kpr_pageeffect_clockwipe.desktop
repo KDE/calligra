@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Clock wipe
+Name[bs]=Brisanje sata
 Name[ca]=Esborrat de rellotge
 Name[ca@valencia]=Esborrat de rellotge
 Name[da]=Urvisker
@@ -32,6 +33,7 @@ Name[wa]=Schover l' ôrlodje evoye
 Name[x-test]=xxClock wipexx
 Name[zh_TW]=時鐘掃描
 Comment=Clock wipe Page Effects
+Comment[bs]=Efekat Brisanja Stranice Sata
 Comment[ca]=Efectes d'esborrat de rellotge de la pàgina
 Comment[ca@valencia]=Efectes d'esborrat de rellotge de la pàgina
 Comment[da]=Urvisker-sideeffekter

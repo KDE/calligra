@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Some extensions to color spaces
+Name[bs]=Neki dodaci za obojena mjesta
 Name[ca]=Algunes extensions per a espais de color
 Name[ca@valencia]=Algunes extensions per a espais de color
 Name[da]=Nogle udvidelser til farverum
@@ -36,6 +37,7 @@ Name[x-test]=xxSome extensions to color spacesxx
 Name[zh_CN]=色彩空间的一些扩展
 Name[zh_TW]=顏色空間的一些延伸
 Comment=Some extensions to color spaces
+Comment[bs]=Neki dodaci za obojena mjesta
 Comment[ca]=Algunes extensions per a espais de color
 Comment[ca@valencia]=Algunes extensions per a espais de color
 Comment[da]=Nogle udvidelser til farverum

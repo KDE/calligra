@@ -2,6 +2,7 @@
 Name=SQLite3
 Name[bg]=SQLite3
 Name[br]=SQLite3
+Name[bs]=SQLite3
 Name[ca]=SQLite3
 Name[ca@valencia]=SQLite3
 Name[cs]=SQLite3
@@ -54,6 +55,7 @@ Name[x-test]=xxSQLite3xx
 Name[zh_CN]=SQLite3
 Name[zh_TW]=SQLite3
 Comment=SQLite is default Kexi embedded SQL engine
+Comment[bs]=SQLite je zadani Kexi ugrađeni SQL motor
 Comment[ca]=SQLite és el motor SQL encastat i per defecte del Kexi
 Comment[ca@valencia]=SQLite és el motor SQL encastat i per defecte del Kexi
 Comment[cs]=SQLite je standardní embedded SQL systém Kexi

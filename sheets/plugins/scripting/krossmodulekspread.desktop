@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Scripting plugin
 Name[bg]=Приставка за скриптове
+Name[bs]=Dodatak za skriptanje
 Name[ca]=Connector d'scripting
 Name[ca@valencia]=Connector d'scripting
 Name[cs]=Skriptovací modul
@@ -47,6 +48,7 @@ Name[zh_CN]=脚本插件
 Name[zh_TW]=命令稿外掛程式
 Comment=Allow execution of scripts
 Comment[bg]=Изпълнение на скриптове
+Comment[bs]=Dozvoli izvršenje skripti
 Comment[ca]=Permet l'execució d'scripts
 Comment[ca@valencia]=Permet l'execució d'scripts
 Comment[cs]=Umožní spouštění skriptů

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Calligra Project Management Component
 Name[bg]=Компонент за управление на проекти в Calligra
+Name[bs]=Komponenta Calligra Projekt Menadžmenta
 Name[ca]=Component de gestió de projectes del Calligra
 Name[ca@valencia]=Component de gestió de projectes del Calligra
 Name[cs]=Komponenta Calligra pro správu projektů
@@ -38,6 +39,7 @@ X-KDE-NativeMimeType=application/x-vnd.kde.plan
 GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
+GenericName[bs]=Upravljanje projektima
 GenericName[ca]=Gestió de projectes
 GenericName[ca@valencia]=Gestió de projectes
 GenericName[cs]=Správa projektů

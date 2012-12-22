@@ -2,6 +2,7 @@
 Name=Levels
 Name[bg]=Нива
 Name[br]=Liveoù
+Name[bs]=Nivoi
 Name[ca]=Nivells
 Name[ca@valencia]=Nivells
 Name[cs]=Úrovně
@@ -42,6 +43,7 @@ Name[zh_TW]=等級
 Comment=Levels
 Comment[bg]=Нива
 Comment[br]=Liveoù
+Comment[bs]=Nivoi
 Comment[ca]=Nivells
 Comment[ca@valencia]=Nivells
 Comment[cs]=Úrovně

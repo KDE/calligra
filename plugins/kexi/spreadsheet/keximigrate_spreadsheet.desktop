@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Spreadsheet
+Name[bs]=Tablica
 Name[ca]=Full de càlcul
 Name[ca@valencia]=Full de càlcul
 Name[cs]=Sešit
@@ -30,6 +31,7 @@ Name[x-test]=xxSpreadsheetxx
 Name[zh_CN]=电子表格
 Name[zh_TW]=試算表
 Comment=Spreadsheet Import Plugin for Kexi
+Comment[bs]=Plugin za Tabelarni Prikaz za Kexi
 Comment[ca]=Connector d'importació de fulls de dades per al Kexi
 Comment[ca@valencia]=Connector d'importació de fulls de dades per al Kexi
 Comment[da]=Importplugin til regneark til Kexi

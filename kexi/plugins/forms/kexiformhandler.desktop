@@ -4,6 +4,7 @@ X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Forms
 GenericName[br]=Paperennoù-reol
+GenericName[bs]=Formulari
 GenericName[ca]=Formularis
 GenericName[ca@valencia]=Formularis
 GenericName[cs]=Formuláře
@@ -60,6 +61,7 @@ GenericName[x-test]=xxFormsxx
 GenericName[zh_CN]=窗体
 GenericName[zh_TW]=表單
 Name=Form
+Name[bs]=Formular
 Name[ca]=Formulari
 Name[ca@valencia]=Formulari
 Name[cs]=Formulář

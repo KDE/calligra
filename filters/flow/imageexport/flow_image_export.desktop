@@ -2,6 +2,7 @@
 Type=Service
 Name=Flow Image Export Filter
 Name[bg]=Филтър за изнасяне на изображения от Flow
+Name[bs]=Filter izvoza za protok Slika
 Name[ca]=Filtre d'exportació d'imatges del Flow
 Name[ca@valencia]=Filtre d'exportació d'imatges del Flow
 Name[cs]=Exportní filtr do formátu obrázků Proud

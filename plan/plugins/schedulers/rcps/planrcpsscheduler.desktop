@@ -4,6 +4,7 @@ Type=Service
 X-KDE-Library=kplatorcpsscheduler
 
 Name=RCPS Scheduler
+Name[bs]=RCPS Planer
 Name[ca]=Planificador RCPS
 Name[ca@valencia]=Planificador RCPS
 Name[da]=RCPS-skemalægning
@@ -34,6 +35,7 @@ Name[x-test]=xxRCPS Schedulerxx
 Name[zh_CN]=RCPS 调度器
 Name[zh_TW]=RCPS 排程器
 Comment=Genetics based Resource Constrained Project Scheduler
+Comment[bs]=Resursno Ograničeni Projektni Planer na Genetskoj osnovi
 Comment[ca]=Recurs de conflictes de planificador de projectes basat en la genètica
 Comment[ca@valencia]=Recurs de conflictes de planificador de projectes basat en la genètica
 Comment[da]=Genetikbaseret projektskemalægning med begrænsede ressourcer

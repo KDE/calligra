@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Text
+Name[bs]=Tekst
 Name[ca]=Text
 Name[ca@valencia]=Text
 Name[cs]=Text
@@ -35,6 +36,7 @@ Name[x-test]=xxTextxx
 Name[zh_CN]=文本
 Name[zh_TW]=文字
 Comment=Text Import Plugin for Kexi
+Comment[bs]=Tekst uvozni plugin za Kexi
 Comment[ca]=Connector d'importació de text per al Kexi
 Comment[ca@valencia]=Connector d'importació de text per al Kexi
 Comment[cs]=Modul Kexi pro import textu

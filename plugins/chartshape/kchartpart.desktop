@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Calligra Chart Component
 Name[bg]=Компонент за диаграми в Calligra
+Name[bs]=Komponenta Calligra Dijagrama
 Name[ca]=Component de diagrames del Calligra
 Name[ca@valencia]=Component de diagrames del Calligra
 Name[cs]=Komponenta Calligra pro grafy
@@ -40,6 +41,7 @@ GenericName=Chart
 GenericName[af]=Kaart
 GenericName[bg]=Диаграма
 GenericName[br]=Treser grafoù
+GenericName[bs]=Dijagram
 GenericName[ca]=Diagrames
 GenericName[ca@valencia]=Diagrames
 GenericName[cs]=Graf
