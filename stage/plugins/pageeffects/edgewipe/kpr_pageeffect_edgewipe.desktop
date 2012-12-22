@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Edge wipe
+Name[bs]=Brisanje ivice
 Name[ca]=Esborrat de vora
 Name[ca@valencia]=Esborrat de vora
 Name[da]=Kantvisker
@@ -32,6 +33,7 @@ Name[wa]=Schover l' boird evoye
 Name[x-test]=xxEdge wipexx
 Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
+Comment[bs]=Efekat Brisanja Ivice Stranice
 Comment[ca]=Efectes d'esborrat de vora de la pàgina
 Comment[ca@valencia]=Efectes d'esborrat de vora de la pàgina
 Comment[da]=Kantvisker-sideeffekter

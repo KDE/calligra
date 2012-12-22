@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Karbon
+Name[bs]=Karbon
 Name[ca]=Karbon
 Name[cs]=Karbon
 Name[da]=Karbon
@@ -28,6 +29,7 @@ Exec=karbon %u
 GenericName=Scalable Graphics
 GenericName[af]=Skaal veranderbare Grafieka
 GenericName[bg]=Векторна графика
+GenericName[bs]=Grafika koja se može skalirati
 GenericName[ca]=Gràfics escalables
 GenericName[ca@valencia]=Gràfics escalables
 GenericName[cs]=Škálovatelná grafika
@@ -91,6 +93,7 @@ X-Calligra-DefaultMimeTypes=application/vnd.oasis.opendocument.graphics,applicat
 Categories=Qt;KDE;Graphics;Office;
 Comment=Create scalable vector drawings
 Comment[bg]=Създаване на векторни графики
+Comment[bs]=Kreiraj vektorski crtež koji se može skalirati
 Comment[ca]=Crea dibuixos de vectors escalables
 Comment[ca@valencia]=Crea dibuixos de vectors escalables
 Comment[cs]=Vytvářejte vektorové kresby

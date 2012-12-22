@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Kexi/MigrationDriver
 Comment=Kexi Data Migration Driver
+Comment[bs]=Kexi drajver za premještanje podataka
 Comment[ca]=Controlador de migració de dades del Kexi
 Comment[ca@valencia]=Controlador de migració de dades del Kexi
 Comment[cs]=Ovládač Kexi pro migraci dat

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calligra Sheets
+Name[bs]=Calligra Tablice
 Name[ca]=Sheets del Calligra
 Name[cs]=Calligra Sheets
 Name[da]=Calligra Sheets
@@ -25,6 +26,7 @@ Name[x-test]=xxCalligra Sheetsxx
 Exec=calligrasheets %u
 GenericName=Spreadsheet
 GenericName[bg]=Електронни таблици
+GenericName[bs]=Tablica
 GenericName[ca]=Full de càlcul
 GenericName[ca@valencia]=Full de càlcul
 GenericName[cs]=Sešit
@@ -68,6 +70,7 @@ GenericName[zh_CN]=电子表格
 GenericName[zh_TW]=工作表
 Comment=Write spreadsheet documents
 Comment[bg]=Писане на електронни таблици
+Comment[bs]=Napiši Dokumente Tablice
 Comment[ca]=Escriu documents de full de càlcul
 Comment[ca@valencia]=Escriu documents de full de càlcul
 Comment[da]=Skriv regnearksdokumenter

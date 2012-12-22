@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Flow/Dock
 Comment=Docker for Flow
+Comment[bs]=Docker za protok
 Comment[ca]=Acoblador per al Flow
 Comment[ca@valencia]=Amarrador per al Flow
 Comment[cs]=Dok pro Proud

@@ -4,6 +4,7 @@ X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Migration Plugin
 GenericName[be]=Міграцыя
+GenericName[bs]=Dodatak za migraciju
 GenericName[ca]=Connector de migració
 GenericName[ca@valencia]=Connector de migració
 GenericName[cs]=Modul pro migraci
@@ -55,6 +56,7 @@ GenericName[zh_CN]=升迁插件
 GenericName[zh_TW]=轉移外掛程式
 Name=Migration Plugin
 Name[be]=Утулка міграцыі
+Name[bs]=Dodatak za migraciju
 Name[ca]=Connector de migració
 Name[ca@valencia]=Connector de migració
 Name[cs]=Modul pro migraci
