@@ -743,6 +743,11 @@ private:
 
     WorkPackage m_workPackage;
     QList<WorkPackage*> m_packageLog;
+
+    bool m_calculateForwardRun;
+    bool m_calculateBackwardRun;
+    bool m_scheduleForwardRun;
+    bool m_scheduleBackwardRun;
 };
 
 }  //KPlato namespace

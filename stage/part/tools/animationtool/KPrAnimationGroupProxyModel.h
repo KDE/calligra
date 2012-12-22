@@ -23,11 +23,9 @@
 
 #include <QSortFilterProxyModel>
 
-#include "stage_export.h"
-
 /** Filter animations model to display only groups of after preview / with preview
     animations that begin with an on click animation */
-class STAGE_EXPORT KPrAnimationGroupProxyModel : public QSortFilterProxyModel
+class KPrAnimationGroupProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:

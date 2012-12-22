@@ -1,6 +1,6 @@
 #project(planwork)
 
-include (${CMAKE_SOURCE_DIR}/kdgantt/CMakeLists.txt)
+include (${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/CMakeLists.txt)
 
 add_subdirectory( templates )
 add_subdirectory( pics )

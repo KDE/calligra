@@ -1,5 +1,4 @@
 include_directories( ${CMAKE_SOURCE_DIR}/sheets ${KDE4_INCLUDES} ${KOMAIN_INCLUDES} )
-#add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 set(gnumericexport_PART_SRCS gnumericexport.cc )
 kde4_add_plugin(gnumericexport ${gnumericexport_PART_SRCS})

@@ -58,6 +58,25 @@ Schedule::Log::Log( const Node *n, const Resource *r, int sev, const QString &ms
 //     kDebug(planDbg())<<*this<<resourceId;
 }
 
+Schedule::Log::Log( const Log &other )
+{
+    node = other.node;
+    resource = other.resource;
+    message = other.message;
+    severity = other.severity;
+    phase = other.phase;
+}
+
+Schedule::Log &Schedule::Log::operator=( const Schedule::Log &other )
+{
+    node = other.node;
+    resource = other.resource;
+    message = other.message;
+    severity = other.severity;
+    phase = other.phase;
+    return *this;
+}
+
 Schedule::Schedule()
         : m_type( Expected ),
         m_id( 0 ),
@@ -2021,6 +2040,25 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
 
 
 } //namespace KPlato
+
+QDebug operator<<( QDebug dbg, const KPlato::Schedule *s )
+{
+    if ( s ) {
+        return dbg<<(*s);
+    }
+    return dbg<<"Schedule(0x0)";
+}
+QDebug operator<<( QDebug dbg, const KPlato::Schedule &s )
+{
+    dbg.nospace()<<"Schedule["<<s.id();
+    if (s.isDeleted()) {
+        dbg.nospace()<<": Deleted";
+    } else {
+        dbg.nospace()<<": "<<s.name();
+    }
+    dbg.nospace()<<"]";
+    return dbg.space();
+}
 
 QDebug operator<<( QDebug dbg, const KPlato::Schedule::Log &log )
 {

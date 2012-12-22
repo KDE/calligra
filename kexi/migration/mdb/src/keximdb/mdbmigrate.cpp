@@ -43,12 +43,10 @@ MDBMigrate::MDBMigrate(QObject *parent, const QVariantList &args)
         : KexiMigrate(parent, args)
 {
     /*! @todo invert the sense of values, then remove "Non-" from these strings */
-    m_properties[ isNonUnicodePropId ] = QVariant(true);
-    m_propertyCaptions[ isNonUnicodePropId ] =
-        i18n("Source Database Has Non-Unicode Encoding");
-    m_properties[ nonUnicodePropId ] = QVariant(QString());
-    m_propertyCaptions[ nonUnicodePropId ]
-    = i18n("Source Database Non-Unicode Encoding");
+    setPropertyValue(isNonUnicodePropId, true);
+    setPropertyCaption(isNonUnicodePropId, i18n("Source Database Has Non-Unicode Encoding"));
+    setPropertyValue(nonUnicodePropId, QString());
+    setPropertyCaption(nonUnicodePropId, i18n("Source Database Non-Unicode Encoding"));
 
     initBackend();
 }
@@ -77,7 +75,7 @@ void MDBMigrate::releaseBackend()
 QVariant MDBMigrate::propertyValue(const QByteArray& propName)
 {
     if (propName == isNonUnicodePropId) {
-        m_properties[ isNonUnicodePropId ] = false;
+        setPropertyValue(isNonUnicodePropId, false);
 
         // Costly, but we need this to get this property from file...
         drv_connect();
@@ -90,7 +88,7 @@ QVariant MDBMigrate::propertyValue(const QByteArray& propName)
 bool MDBMigrate::drv_connect()
 {
     kDebug() << "mdb_open:";
-    KexiDB::ConnectionData *data = m_migrateData->source;
+    KexiDB::ConnectionData *data = this->data()->source;
 
     // mdb_open takes a char*, not const char*, hence this nonsense.
     char *filename = qstrdup(QFile::encodeName(data->fileName()));
@@ -103,8 +101,8 @@ bool MDBMigrate::drv_connect()
     }
 
     // Setting source encoding
-    if (!m_properties[ nonUnicodePropId ].toString().isEmpty()) {
-        const QByteArray encoding(m_properties[ nonUnicodePropId ].toByteArray());
+    if (!propertyValue(nonUnicodePropId).toString().isEmpty()) {
+        const QByteArray encoding(propertyValue(nonUnicodePropId).toByteArray());
 
         mdb_set_encoding(m_mdb, encoding.constData());
         kDebug() << "non-unicode encoding set to \""
@@ -113,7 +111,7 @@ bool MDBMigrate::drv_connect()
     }
 
     // Supports setting source encoding
-    m_properties[ isNonUnicodePropId ] = QVariant((bool)IS_JET3(m_mdb));
+    setPropertyValue(isNonUnicodePropId, bool(IS_JET3(m_mdb)));
 
     return true;
 }

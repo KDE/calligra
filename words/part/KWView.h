@@ -42,9 +42,12 @@ class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoFindStyle;
-class KoRdfSemanticItem;
 class KoTextAnchor;
+
+#ifdef SHOULD_BUILD_RDF
+class KoRdfSemanticItem;
 typedef QExplicitlySharedDataPointer<KoRdfSemanticItem> hKoRdfSemanticItem;
+#endif
 
 class KToggleAction;
 /**
@@ -179,12 +182,14 @@ private slots:
     void setGuideVisibility(bool on);
     /// open the configure dialog.
     void configure();
+#ifdef SHOULD_BUILD_RDF
     /// A semantic item was updated and should have it's text refreshed.
     void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
+#endif
     /// A match was found when searching.
     void findMatchFound(KoFindMatch match);
-    /// The document has finished loading. This is used to update the text that can be searched.
-    void loadingCompleted();
+    /// This is used to update the text that can be searched.
+    void refreshFindTexts();
     /// The KWPageSettingsDialog was closed.
     void pageSettingsDialogFinished();
     /// user wants to past data from the clipboard

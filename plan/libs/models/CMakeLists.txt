@@ -5,8 +5,8 @@ include_directories(
     ../kernel 
     ${KOMAIN_INCLUDES}
     ${KUNDO2_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/kdgantt
-    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+    ${KDCHART_INCLUDES}
     ${KDE4_INCLUDES}
     ${KDEPIMLIBS_INCLUDE_DIR}
 )

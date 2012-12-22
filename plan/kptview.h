@@ -71,8 +71,8 @@ class ResourceAssignmentView;
 class TaskStatusView;
 class TaskModuleModel;
 class Calendar;
+class MainDocument;
 class Part;
-class PartPart;
 class Node;
 class Project;
 class Task;
@@ -144,10 +144,10 @@ class KPLATO_EXPORT View : public KoView
     Q_OBJECT
 
 public:
-    explicit View(KoPart *part, Part *doc, QWidget *parent = 0);
+    explicit View(KoPart *part, MainDocument *doc, QWidget *parent = 0);
     ~View();
 
-    Part *getPart() const;
+    MainDocument *getPart() const;
 
     KoPart *getKoPart() const;
 
@@ -210,6 +210,7 @@ signals:
 public slots:
     void slotUpdate();
     void slotCreateTemplate();
+    void slotCreateNewProject();
     void slotEditResource();
     void slotEditResource( Resource *resource );
     void slotEditCut();
@@ -396,6 +397,7 @@ private:
 
     // ------ File
     QAction *actionCreateTemplate;
+    QAction *actionCreateNewProject;
 
     // ------ Edit
     QAction *actionCut;

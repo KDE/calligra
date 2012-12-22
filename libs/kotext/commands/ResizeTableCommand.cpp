@@ -70,7 +70,7 @@ void ResizeTableCommand::undo()
         carsManager.rowStyle(m_band).copyProperties(m_oldRowStyle);
     }
     KUndo2Command::undo();
-    m_document->markContentsDirty(m_tablePosition, 0);
+    m_document->markContentsDirty(m_tablePosition, table->lastPosition()-table->firstPosition());
 }
 
 void ResizeTableCommand::redo()
@@ -92,11 +92,12 @@ void ResizeTableCommand::redo()
         m_first = false;
         if (m_horizontal) {
             m_oldColumnStyle = carsManager.columnStyle(m_band).clone();
-
             // make sure the style is set (could have been a default style)
             carsManager.setColumnStyle(m_band, carsManager.columnStyle(m_band));
 
-            carsManager.columnStyle(m_band).setColumnWidth(m_size);
+            KoTableColumnStyle style = carsManager.columnStyle(m_band);
+            style.setColumnWidth(m_size);
+            carsManager.setColumnStyle(m_band, style);
 
             m_newColumnStyle = carsManager.columnStyle(m_band).clone();
         } else {
@@ -105,10 +106,12 @@ void ResizeTableCommand::redo()
             // make sure the style is set (could have been a default style)
             carsManager.setRowStyle(m_band, carsManager.rowStyle(m_band));
 
-            carsManager.rowStyle(m_band).setMinimumRowHeight(m_size);
+            KoTableRowStyle style = carsManager.rowStyle(m_band);
+            style.setMinimumRowHeight(m_size);
+            carsManager.setRowStyle(m_band, style);
 
             m_newRowStyle = carsManager.rowStyle(m_band).clone();
         }
     }
-    m_document->markContentsDirty(m_tablePosition, 0);
+    m_document->markContentsDirty(m_tablePosition, table->lastPosition()-table->firstPosition());
 }

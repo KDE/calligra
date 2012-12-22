@@ -337,7 +337,7 @@ QString CAPresentationHandler::centerOverlaySource() const
 
 QString CAPresentationHandler::bottomToolbarSource() const
 {
-    return "PresentationFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 void CAPresentationHandler::setSlideshowDelay(int delay)

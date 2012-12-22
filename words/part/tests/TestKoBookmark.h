@@ -29,7 +29,6 @@ class TestKoBookmark: public QObject
 
 private slots:
 
-    void testInsertion();
     void testRoundtrip();
 };
 

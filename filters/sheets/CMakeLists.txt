@@ -19,4 +19,6 @@ if(NOT TINY)
 endif(NOT TINY)
 
 add_subdirectory( excel )
-add_subdirectory( xlsx )
+if(SHOULD_BUILD_OOXML_FILTERS)
+    add_subdirectory( xlsx )
+endif(SHOULD_BUILD_OOXML_FILTERS)

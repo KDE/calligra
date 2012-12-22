@@ -52,6 +52,7 @@
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <KoStyleManager.h>
 #include <KoTextOdfSaveHelper.h>
 #include <KoTextDrag.h>
@@ -496,7 +497,7 @@ void TextTool::createActions()
 
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
+    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_P);
     addAction("detailed_debug_paragraphs", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
     action = new KAction("Styles Debug", this); // do NOT add i18n!
@@ -537,6 +538,9 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
     KoTextDocument(document).setInlineTextObjectManager(inlineManager);
+
+    KoTextRangeManager *locationManager = new KoTextRangeManager();
+    KoTextDocument(document).setTextRangeManager(locationManager);
 
     m_textEditor = new KoTextEditor(document);
     KoTextDocument(document).setTextEditor(m_textEditor.data());
@@ -806,19 +810,18 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
                 drawRect.setWidth(2);
                 painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-                painter.fillRect(drawRect, QColor(128, 255, 128));
                 if (m_textEditor.data()->isEditProtected(true)) {
                     QRectF circleRect(shapeMatrix.map(baselinePoint),QSizeF(14, 14));
-                    circleRect.translate(-7.5, -7.5);
-                    QPen pen(Qt::red);
+                    circleRect.translate(-6.5, -6.5);
+                    QPen pen(QColor(16, 255, 255));
                     pen.setWidthF(2.0);
-                    painter.setPen(Qt::NoPen);
                     painter.setPen(pen);
-                    painter.setBrush(QBrush(QColor(255, 255, 255, 192)));
                     painter.setRenderHint(QPainter::Antialiasing, true);
                     painter.drawEllipse(circleRect);
-                    painter.drawLine(circleRect.topLeft() + QPointF(2,2),
-                                    circleRect.bottomRight() - QPointF(2,2));
+                    painter.drawLine(circleRect.topLeft() + QPointF(4.5,4.5),
+                                    circleRect.bottomRight() - QPointF(4.5,4.5));
+                } else {
+                    painter.fillRect(drawRect, QColor(128, 255, 128));
                 }
             }
         }
@@ -905,7 +908,8 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             m_clickWithinSelection = true;
             m_draggingOrigin = event->pos(); //we store the pixel pos
         } else if (! (event->button() == Qt::RightButton && m_textEditor.data()->hasSelection())) {
-            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);                useCursor(Qt::IBeamCursor);
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+            useCursor(Qt::IBeamCursor);
         }
         m_tableDragInfo.tableHit = KoPointedAt::None;
         if (m_caretTimer.isActive()) { // make the caret not blink, (blinks again after first draw)
@@ -1504,7 +1508,7 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     // Is there an anchor here ?
     if ((event->modifiers() & Qt::ControlModifier) && !m_textEditor.data()->hasSelection()) {
         if (pointedAt.bookmark) {
-            m_textEditor.data()->setPosition(pointedAt.bookmark->position());
+            m_textEditor.data()->setPosition(pointedAt.bookmark->rangeStart());
             ensureCursorVisible();
             event->accept();
             return;
@@ -1764,8 +1768,6 @@ void TextTool::ensureCursorVisible(bool moveView)
     if (!textEditor || !m_textShapeData)
         return;
 
-    const int position = textEditor->position();
-
     bool upToDate;
     QRectF cRect = caretRect(textEditor->cursor(), &upToDate);
 
@@ -1994,12 +1996,11 @@ void TextTool::repaintCaret()
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
 
         // Make sure there is enough space to show an icon
-        QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0,0,16, 16));
+        QRectF iconSize = canvas()->viewConverter()->viewToDocument(QRect(0, 0, 18, 18));
         repaintRect.setX(repaintRect.x() - iconSize.width() / 2);
-        repaintRect.setWidth(iconSize.width());
-        repaintRect.moveTop(repaintRect.y() - iconSize.height() / 2);
-        repaintRect.moveBottom(repaintRect.bottom() + iconSize.height() / 2);
-
+        repaintRect.setRight(repaintRect.right() + iconSize.width() / 2);
+        repaintRect.setTop(repaintRect.y() - iconSize.height() / 2);
+        repaintRect.setBottom(repaintRect.bottom() + iconSize.height() / 2);
         canvas()->updateCanvas(repaintRect);
     }
 }
@@ -2075,6 +2076,8 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     if (m_textEditor.data()) {
+//        connect(m_textEditor.data(), SIGNAL(paragraphStyleApplied(KoParagraphStyle*)), spw, SLOT(slotParagraphStyleApplied(KoParagraphStyle*)));
+//        connect(m_textEditor.data(), SIGNAL(characterStyleApplied(KoCharacterStyle*)), scw, SLOT(slotCharacterStyleApplied(KoCharacterStyle*)));
         //initialise the char- and par- widgets with the current block and formats.
         scw->setCurrentBlockFormat(m_textEditor.data()->blockFormat());
         scw->setCurrentFormat(m_textEditor.data()->charFormat(), m_textEditor.data()-> blockCharFormat());
@@ -2084,6 +2087,12 @@ QList<QWidget *> TextTool::createOptionWidgets()
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
     SimpleInsertWidget *siw = new SimpleInsertWidget(this, 0);
 
+/* We do not use these for now. Let's see if they become usefull at a certain point in time. If not, we can remove the whole chain (SimpleCharWidget, SimpleParWidget, DockerStyleComboModel)
+    if (m_textShapeData && KoTextDocument(m_textShapeData->document()).styleManager()) {
+        scw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedCharacterStyles());
+        spw->setInitialUsedStyles(KoTextDocument(m_textShapeData->document()).styleManager()->usedParagraphStyles());
+    }
+*/
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(charFormatChanged(QTextCharFormat, QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat, QTextCharFormat)));
@@ -2432,8 +2441,7 @@ void TextTool::selectAll()
     if (!textEditor || !m_textShapeData)
         return;
     const int selectionLength = qAbs(textEditor->position() - textEditor->anchor());
-    QTextBlock lastBlock = m_textShapeData->document()->lastBlock();
-    textEditor->setPosition(lastBlock.position() + lastBlock.length() - 1);
+    textEditor->movePosition(QTextCursor::End);
     textEditor->setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection();
     if (selectionLength != qAbs(textEditor->position() - textEditor->anchor())) // it actually changed

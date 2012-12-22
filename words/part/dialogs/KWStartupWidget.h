@@ -27,7 +27,7 @@
 #include <QWidget>
 
 class KWDocument;
-class KoPageLayoutWidget;
+struct KoPageLayoutWidget;
 class KWDocumentColumns;
 
 /**

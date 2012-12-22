@@ -42,7 +42,7 @@ KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeade
 {
     QFile mobi(outputFile);
     if (!mobi.open(QIODevice::WriteOnly)) {
-        kDebug(30517) << "Can not create the file";
+        kDebug(31000) << "Can not create the file";
         return KoFilter::CreationError;
     }
 
@@ -54,8 +54,14 @@ KoFilter::ConversionStatus MobiFile::writeMobiFile(QString outputFile, MobiHeade
 
     out.device()->write(m_textContent);
 
-    for (int imgId = 1; imgId <= m_imageContent.size(); imgId++) {
-        out.device()->write(m_imageContent.value(imgId));
+    if (!m_imageContent.isEmpty()) {
+        // After text blocks finished i need to add two zero bytes to kindle can open images.
+        // I don't know why i have seen this in calibre ebooks.
+        out << qint8(0);
+        out << qint8(0);
+        for (int imgId = 1; imgId <= m_imageContent.size(); imgId++) {
+            out.device()->write(m_imageContent.value(imgId));
+        }
     }
 
     writeFLISRecord(out, headerGenerator);
@@ -72,7 +78,7 @@ void MobiFile::writeRecord0(QDataStream &out, MobiHeaderGenerator &headers)
     out <<  headers.m_docHeader->compression;
     out <<  headers.m_docHeader->unused;
     out <<  headers.m_docHeader->textLength;
-    out <<  headers.m_docHeader->recordCount;
+    out <<  headers.m_docHeader->pdbrecordCount;
     out <<  headers.m_docHeader->maxRecordSize;
     out <<  headers.m_docHeader->encryptionType;
     out <<  headers.m_docHeader->unknown;
@@ -135,15 +141,38 @@ void MobiFile::writeRecord0(QDataStream &out, MobiHeaderGenerator &headers)
     // EXTH header.
     out.device()->write(headers.m_exthHeader->identifier);
 
-    out <<  (qint32)headers.m_exthHeader->headerLength;
+    out <<  qint32(headers.m_exthHeader->headerLength);
     out <<  headers.m_exthHeader->exthRecordCount;
     foreach (qint32 type, headers.m_exthHeader->exthRecord.keys()) {
         out <<  type;
-        out <<  (qint32)(8 + headers.m_exthHeader->exthRecord.value(type).size());
+        out <<  qint32((8 + headers.m_exthHeader->exthRecord.value(type).size()));
         out.device()->write(headers.m_exthHeader->exthRecord.value(type));
     }
+    // These are extra EXTH records information about ebook.
+
+    // Creator Software
+    out << qint32(204);// Record type 204
+    out << qint32(12);// Record length
+    /* Known Values: 1=mobigen, 2=Mobipocket Creator, 200=kindlegen (Windows),
+        201=kindlegen (Linux), 202=kindlegen (Mac).
+        Warning: Calibre creates fake creator entries, pretending to be a Linux
+        kindlegen 1.2 (201, 1, 2, 33307) for normal ebooks and a non-public Linux
+        kindlegen 2.0 (201, 2, 0, 101) for periodicals.
+        */
+    out << qint32(201);
+
+    // Creator Minor Version
+    out << qint32(206); // Record type 206
+    out << qint32(12); // Record length
+    out << qint32(2); // Mobi Creator Minor version (Minor version of calligra)
+
+    // Creator Major Version
+    out << qint32(205); // Record type 205
+    out << qint32(12); // Record length
+    out << qint32(2); // Mobi Creator Major version (Major version of calligra)
+
     for (int i = 0; i < headers.m_exthHeader->pad; i++) {
-        out << (qint8)0;
+        out << qint8(0);
     }
 
     // Reminder of record 0.
@@ -152,7 +181,7 @@ void MobiFile::writeRecord0(QDataStream &out, MobiHeaderGenerator &headers)
     // write pad to make title multiple of 4 bytes.
     int padding = 4 - (headers.m_title.size() % 4);
     for (int i = 0; i < padding; i++) {
-        out << (qint8)0;
+        out << qint8(0);
     }
 
     // Write 2052 null bytes.
@@ -166,7 +195,7 @@ void MobiFile::writePalmDataBaseHeader(QDataStream &out, MobiHeaderGenerator &he
     out.device()->write(headers.m_title);
 
     for (int i = 0; i < (32 - headers.m_title.size()); i++) {
-        out << (qint8)0;
+        out << qint8(0);
     }
 
     out << headers.m_dbHeader->attributes;
@@ -184,11 +213,11 @@ void MobiFile::writePalmDataBaseHeader(QDataStream &out, MobiHeaderGenerator &he
     out << headers.m_dbHeader->numberOfRecords;
 
     for(int offset = 0; offset < headers.m_dbHeader->recordsInfo.size(); offset++) {
-        out << (qint32)headers.m_dbHeader->recordsInfo.key(offset);
-        out << (qint32)offset;
+        out << qint32(headers.m_dbHeader->recordsInfo.key(offset));
+        out << qint32((2 * offset));
     }
 
-    out << (qint16)0;
+    out << qint16(0);
 }
 
 void MobiFile::writeFLISRecord(QDataStream &out, MobiHeaderGenerator &headers)
@@ -197,16 +226,16 @@ void MobiFile::writeFLISRecord(QDataStream &out, MobiHeaderGenerator &headers)
     Q_UNUSED(headers);
     QByteArray id = "FLIS";
     out.device()->write(id);
-    out << (qint32)8;
-    out << (qint16)65;
-    out << (qint16)0;
-    out << (qint32)0;
-    out << (qint32)0xFFFFFFFF;
-    out << (qint16)1;
-    out << (qint16)3;
-    out << (qint32)3;
-    out << (qint32)1;
-    out << (qint32)0xFFFFFFFF;
+    out << qint32(8);
+    out << qint16(65);
+    out << qint16(0);
+    out << qint32(0);
+    out << qint32(0xFFFFFFFF);
+    out << qint16(1);
+    out << qint16(3);
+    out << qint32(3);
+    out << qint32(1);
+    out << qint32(0xFFFFFFFF);
 }
 
 void MobiFile::writeFCISRecord(QDataStream &out, MobiHeaderGenerator &headers)
@@ -214,25 +243,25 @@ void MobiFile::writeFCISRecord(QDataStream &out, MobiHeaderGenerator &headers)
     // The FCIS record appears to have mostly fixed values.
     QByteArray id = "FCIS";
     out.device()->write(id);
-    out << (qint32)20;
-    out << (qint32)16;
-    out << (qint32)1;
-    out << (qint32)0;
+    out << qint32(20);
+    out << qint32(16);
+    out << qint32(1);
+    out << qint32(0);
     out << headers.m_docHeader->textLength;
-    out << (qint32)0;
-    out << (qint32)32;
-    out << (qint32)8;
-    out << (qint16)1;
-    out << (qint16)1;
-    out << (qint32)0;
+    out << qint32(0);
+    out << qint32(32);
+    out << qint32(8);
+    out << qint16(1);
+    out << qint16(1);
+    out << qint32(0);
 }
 
 void MobiFile::writeEndOfFileRecord(QDataStream &out, MobiHeaderGenerator &headers)
 {
     // The end-of-file record is a fixed 4-byte record.
     Q_UNUSED(headers);
-    out << (qint8)233;
-    out << (qint8)142;
-    out << (qint8)13;
-    out << (qint8)10;
+    out << qint8(233);
+    out << qint8(142);
+    out << qint8(13);
+    out << qint8(10);
 }

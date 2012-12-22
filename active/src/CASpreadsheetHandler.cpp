@@ -223,14 +223,10 @@ void CASpreadsheetHandler::previousSheet()
 
 void CASpreadsheetHandler::gotoSheet(int sheetNumber, SearchDirection direction)
 {
-    Calligra::Sheets::DocBase* kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*> (document());
-    d->sheet = kspreadDoc->map()->sheet(sheetNumber);
     if(direction == SearchForward) {
-       d->sheet = kspreadDoc->map()->nextSheet(d->sheet);
-       d->currentSheetNum = sheetNumber + 1;
+       d->currentSheetNum = sheetNumber;
     } else if(direction == SearchBackwards) {
-       d->sheet = kspreadDoc->map()->previousSheet(d->sheet);
-       d->currentSheetNum = sheetNumber - 1;
+       d->currentSheetNum = sheetNumber;
     }
     emit currentSheetNumChanged();
     d->canvasItem->setActiveSheet(d->sheet);
@@ -248,6 +244,7 @@ void CASpreadsheetHandler::setSearchString (const QString& searchString)
     d->searchString = searchString;
 
     d->sheetView = d->canvasItem->sheetView(d->sheet);
+    d->canvasItem->setActiveSheet(d->sheet);
     d->findText->setCurrentSheet(d->sheet,d->sheetView);
     d->findText->find(searchString);
 
@@ -255,14 +252,18 @@ void CASpreadsheetHandler::setSearchString (const QString& searchString)
 }
 
 void CASpreadsheetHandler::searchOtherSheets(SearchDirection direction) {
-    //Reset the count per sheet
-    d->matchPerSheet = 0;
+    int tempCurrentSheet = d->currentSheetNum;
     if(direction == SearchForward) {
-       d->searchSheetNumber = currentSheetNumber() - 1;
+       d->matchPerSheet = 0;
+       if(d->searchSheetNumber < sheetCount()) {
+           d->searchSheetNumber = currentSheetNumber();
+       } else {
+         return;
+       }
     } else if(direction == SearchBackwards) {
        if(d->searchSheetNumber >= 0) {
-          d->matchPerSheet = d->findText->matches().count();
-          d->searchSheetNumber = d->currentSheetNum;
+          d->matchPerSheet = d->findText->matches().count() - 1;
+          d->searchSheetNumber = d->currentSheetNum - 1;
        } else {
           return;
        }
@@ -270,22 +271,19 @@ void CASpreadsheetHandler::searchOtherSheets(SearchDirection direction) {
 
     Calligra::Sheets::DocBase* kspreadDoc = qobject_cast<Calligra::Sheets::DocBase*> (document());
 
-    while((d->searchSheetNumber < sheetCount()) && (d->searchSheetNumber >= -1)) {
+    while((d->searchSheetNumber < sheetCount()) && (d->searchSheetNumber >= 0)) {
       d->sheet = kspreadDoc->map()->sheet(d->searchSheetNumber);
-      if(direction == SearchForward) {
-         d->sheet = kspreadDoc->map()->nextSheet(d->sheet);
-      } else if(direction == SearchBackwards) {
-         d->sheet = kspreadDoc->map()->previousSheet(d->sheet);
-      }
+      d->sheet = kspreadDoc->map()->sheet(d->searchSheetNumber);
       setSearchString(d->searchString);
       if(d->matchFound == true) {
          gotoSheet(d->searchSheetNumber, direction);
          setSearchString(d->searchString);
          if(direction == SearchBackwards) {
-            d->findText->findPrevious();
-            if(d->searchSheetNumber == 1) {
+            if(d->findText->matches().count() == 1) {
+               d->matchPerSheet = 0;
+            }
+            if(d->searchSheetNumber == 0) {
                d->findText->findPrevious();
-               d->matchPerSheet--;
             }
          }
          break;
@@ -296,6 +294,16 @@ void CASpreadsheetHandler::searchOtherSheets(SearchDirection direction) {
       } else if(direction == SearchBackwards) {
          d->searchSheetNumber--;
       }
+    }
+
+    if(d->matchFound == false) {
+       gotoSheet(tempCurrentSheet,direction);
+       if(direction == SearchBackwards) {
+          d->matchPerSheet = d->findText->matches().count();
+          d->findText->findPrevious();
+       } else if( direction == SearchForward) {
+          d->matchPerSheet = 1;
+       }
     }
 }
 
@@ -360,7 +368,7 @@ QString CASpreadsheetHandler::rightToolbarSource() const
 
 QString CASpreadsheetHandler::bottomToolbarSource() const
 {
-    return "SpreadsheetFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 int CASpreadsheetHandler::currentSheetNumber() const

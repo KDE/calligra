@@ -68,8 +68,9 @@ static QString realPartClass(const QString &partClass, const QString &partMime)
 class KexiProject::Private
 {
 public:
-    Private()
-            : data(0)
+    Private(KexiProject *qq)
+            : q(qq)
+            , data(0)
             , tempPartItemID_Counter(-1)
             , sqlParser(0)
             , versionMajor(0)
@@ -111,6 +112,87 @@ public:
         return name.isNull() ? "" : name;
     }
 
+    bool setNameOrCaption(KexiPart::Item& item,
+                          const QString* _newName,
+                          const QString* _newCaption)
+    {
+        q->clearError();
+        if (data->userMode()) {
+            return false;
+        }
+
+        KexiUtils::WaitCursor wait;
+        QString newName;
+        if (_newName) {
+            newName = _newName->trimmed();
+            KexiDB::MessageTitle et(q);
+            if (newName.isEmpty()) {
+                q->setError(i18n("Could not set empty name for this object."));
+                return false;
+            }
+            if (q->itemForClass(item.partClass(), newName) != 0) {
+                q->setError(i18n("Could not use this name. Object with name \"%1\" already exists.",
+                              newName));
+                return false;
+            }
+        }
+        QString newCaption;
+        if (_newCaption) {
+            newCaption = _newCaption->trimmed();
+        }
+
+        KexiDB::MessageTitle et(q,
+                                i18n("Could not rename object \"%1\".", item.name()));
+        if (!q->checkWritable())
+            return false;
+        KexiPart::Part *part = q->findPartFor(item);
+        if (!part)
+            return false;
+        KexiDB::TransactionGuard tg(*connection);
+        if (!tg.transaction().active()) {
+            q->setError(connection);
+            return false;
+        }
+        if (_newName) {
+            if (!part->rename(item, newName)) {
+                q->setError(part->lastOperationStatus().message, part->lastOperationStatus().description);
+                return false;
+            }
+            if (!connection->executeSQL("UPDATE kexi__objects SET o_name="
+                                        + connection->driver()->valueToSQL(KexiDB::Field::Text, newName)
+                                        + " WHERE o_id=" + QString::number(item.identifier())))
+            {
+                q->setError(connection);
+                return false;
+            }
+        }
+        if (_newCaption) {
+            if (!connection->executeSQL("UPDATE kexi__objects SET o_caption="
+                                        + connection->driver()->valueToSQL(KexiDB::Field::Text, newCaption)
+                                        + " WHERE o_id=" + QString::number(item.identifier())))
+            {
+                q->setError(connection);
+                return false;
+            }
+        }
+        if (!tg.commit()) {
+            q->setError(connection);
+            return false;
+        }
+        QString oldName(item.name());
+        if (_newName) {
+            item.setName(newName);
+            emit q->itemRenamed(item, oldName);
+        }
+        QString oldCaption(item.caption());
+        if (_newCaption) {
+            item.setCaption(newCaption);
+            emit q->itemCaptionChanged(item, oldCaption);
+        }
+        return true;
+    }
+
+    KexiProject *q;
     QPointer<KexiDB::Connection> connection;
     QPointer<KexiProjectData> data;
     QString error_title;
@@ -154,7 +236,7 @@ class KexiProject::ErrorTitle
 
 KexiProject::KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler)
         : QObject(), Object(handler)
-        , d(new Private())
+        , d(new Private(this))
 {
     d->data = new KexiProjectData(pdata);
 }
@@ -162,7 +244,7 @@ KexiProject::KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* h
 KexiProject::KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler,
                          KexiDB::Connection* conn)
         : QObject(), Object(handler)
-        , d(new Private())
+        , d(new Private(this))
 {
     d->data = new KexiProjectData(pdata);
     if (d->data->connectionData() == d->connection->data())
@@ -920,57 +1002,14 @@ bool KexiProject::removeObject(KexiPart::Item& item)
     return true;
 }
 
-bool KexiProject::renameObject(KexiPart::Item& item, const QString& _newName)
+bool KexiProject::renameObject(KexiPart::Item& item, const QString& newName)
 {
-    clearError();
-    if (data()->userMode())
-        return 0;
+    return d->setNameOrCaption(item, &newName, 0);
+}
 
-    KexiUtils::WaitCursor wait;
-    QString newName = _newName.trimmed();
-    {
-        KexiDB::MessageTitle et(this);
-        if (newName.isEmpty()) {
-            setError(i18n("Could not set empty name for this object."));
-            return false;
-        }
-        if (this->itemForClass(item.partClass(), newName) != 0) {
-            setError(i18n("Could not use this name. Object with name \"%1\" already exists.",
-                          newName));
-            return false;
-        }
-    }
-
-    KexiDB::MessageTitle et(this,
-                            i18n("Could not rename object \"%1\".", item.name()));
-    if (!checkWritable())
-        return false;
-    KexiPart::Part *part = findPartFor(item);
-    if (!part)
-        return false;
-    KexiDB::TransactionGuard tg(*d->connection);
-    if (!tg.transaction().active()) {
-        setError(d->connection);
-        return false;
-    }
-    if (!part->rename(item, newName)) {
-        setError(part->lastOperationStatus().message, part->lastOperationStatus().description);
-        return false;
-    }
-    if (!d->connection->executeSQL("update kexi__objects set o_name="
-                                   + d->connection->driver()->valueToSQL(KexiDB::Field::Text, newName)
-                                   + " where o_id=" + QString::number(item.identifier()))) {
-        setError(d->connection);
-        return false;
-    }
-    if (!tg.commit()) {
-        setError(d->connection);
-        return false;
-    }
-    QString oldName(item.name());
-    item.setName(newName);
-    emit itemRenamed(item, oldName);
-    return true;
+bool KexiProject::setObjectCaption(KexiPart::Item& item, const QString& newCaption)
+{
+    return d->setNameOrCaption(item, 0, &newCaption);
 }
 
 KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString& suggestedCaption)

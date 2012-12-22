@@ -57,6 +57,7 @@
 #include <KoStyleManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
+#include <KoTextRangeManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
@@ -67,6 +68,7 @@
 #include <KoSelection.h>
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoPart.h>
 
 #include <KoDocumentRdfBase.h>
 #ifdef SHOULD_BUILD_RDF
@@ -174,7 +176,7 @@ void KWDocument::addShape(KoShape* shape, KoTextAnchor* anchor)
         addFrameSet(frame->frameSet());
     }
 
-    emit shapeAdded(shape);
+    emit shapeAdded(shape, KoShapeManager::PaintShapeOnAdd);
 
     shape->update();
 }
@@ -215,7 +217,7 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
     }
 }
 
-QPixmap KWDocument::generatePreview(const QSize &/*size*/)
+QPixmap KWDocument::generatePreview(const QSize &size)
 {
     // use first page as preview for all pages
     KWPage firstPage = pageManager()->begin();
@@ -227,10 +229,9 @@ QPixmap KWDocument::generatePreview(const QSize &/*size*/)
     // use shape manager from canvasItem even for QWidget environments
     // if using the shape manager from one of the views there is no guarantee
     // that the view, its canvas and the shapemanager is not destroyed in between
-//FIXME    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(canvasItem())->shapeManager();
+    KoShapeManager* shapeManager = static_cast<KWCanvasItem*>(documentPart()->canvasItem())->shapeManager();
 
-//FIXME    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
-        return QPixmap();
+    return QPixmap::fromImage(firstPage.thumbnail(size, shapeManager));
 }
 
 void KWDocument::paintContent(QPainter &, const QRect &)
@@ -421,8 +422,8 @@ void KWDocument::addFrame(KWFrame *frame)
 {
     kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
     //firePageSetupChanged();
-    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
     emit shapeAdded(frame->shape(), KoShapeManager::AddWithoutRepaint);
+    emit resourceChanged(Words::CurrentFrameSetCount, m_frameSets.count());
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
@@ -470,6 +471,12 @@ KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
 {
     QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
     return var.value<KoInlineTextObjectManager*>();
+}
+
+KoTextRangeManager *KWDocument::textRangeManager() const
+{
+    QVariant var = resourceManager()->resource(KoText::TextRangeManager);
+    return var.value<KoTextRangeManager*>();
 }
 
 QString KWDocument::uniqueFrameSetName(const QString &suggestion)
@@ -834,3 +841,12 @@ KWFrame *KWDocument::frameOfShape(KoShape* shape) const
     return answer;
 }
 
+void KWDocument::setCoverImage(QPair<QString, QByteArray> cover)
+{
+    m_coverImage = cover;
+}
+
+QPair<QString, QByteArray> KWDocument::coverImage()
+{
+    return m_coverImage;
+}

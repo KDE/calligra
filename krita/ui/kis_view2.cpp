@@ -90,6 +90,7 @@
 #include "canvas/kis_grid_manager.h"
 #include "canvas/kis_perspective_grid_manager.h"
 #include "dialogs/kis_dlg_preferences.h"
+#include "dialogs/kis_dlg_blacklist_cleanup.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -128,7 +129,6 @@
 #include "ko_favorite_resource_manager.h"
 #include "kis_paintop_box.h"
 
-#include "thememanager.h"
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -168,7 +168,6 @@ public:
         , gridManager(0)
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
-        , themeManager(0)
     {
     }
 
@@ -214,9 +213,7 @@ public:
     KisGridManager * gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager* paintingAssistantManager;
-    KoFavoriteResourceManager* favoriteResourceManager;
     BlockingUserInputEventFilter blockingEventFilter;
-    Digikam::ThemeManager *themeManager;
 };
 
 
@@ -224,11 +221,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     : KoView(part, doc, parent),
       m_d(new KisView2Private())
 {
-    setComponentData(KisFactory2::componentData());
     setXMLFile("krita.rc");
-
-    // populate theme menu
-    m_d->themeManager = new Digikam::ThemeManager(this);
 
     setFocusPolicy(Qt::NoFocus);
 
@@ -297,7 +290,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("createTemplate", m_d->createTemplate);
     connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
 
-    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
+    m_d->mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::Key_M));
@@ -370,6 +363,9 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
 
+    connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
+            m_d->doc->image(), SLOT(requestStrokeEnd()));
+
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(const KoInputDevice &)),
             m_d->controlFrame->paintopBox(), SLOT(slotInputDeviceChanged(const KoInputDevice &)));
 
@@ -418,10 +414,6 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
 KisView2::~KisView2()
 {
     {
-        KConfigGroup group(KGlobal::config(), "theme");
-        group.writeEntry("Theme", m_d->themeManager->currentThemeName());
-    }
-    {
         KConfigGroup group(KGlobal::config(), "krita/shortcuts");
         foreach(KActionCollection *collection, KActionCollection::allCollections()) {
             collection->setConfigGroup("krita/shortcuts");
@@ -460,9 +452,9 @@ void KisView2::dropEvent(QDropEvent *event)
 
             QByteArray ba = event->mimeData()->data("application/x-krita-node");
 
-            KisPart2 *p = new KisPart2();
-            KisDoc2 tempDoc(p);
-            p->setDocument(&tempDoc);
+            KisPart2 part;
+            KisDoc2 tempDoc(&part);
+            part.setDocument(&tempDoc);
 
             tempDoc.loadNativeFormatFromStore(ba);
 
@@ -779,12 +771,9 @@ void KisView2::createActions()
     actionCollection()->addAction("edit_palette", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotEditPalette()));
 
-    KConfigGroup group(KGlobal::config(), "theme");
-    m_d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
-    m_d->themeManager->registerThemeActions(actionCollection());
-    m_d->themeManager->setCurrentTheme(group.readEntry("Theme",
-                                                       m_d->themeManager->defaultThemeName()));
-
+    action = new KAction(i18n("Cleanup removed files..."), this);
+    actionCollection()->addAction("edit_blacklist_cleanup", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotBlacklistCleanup()));
 }
 
 
@@ -919,6 +908,13 @@ void KisView2::slotEditPalette()
     base->setMainWidget(cp);
     base->show();
 }
+
+void KisView2::slotBlacklistCleanup()
+{
+    KisDlgBlacklistCleanup dialog;
+    dialog.exec();
+}
+
 
 void KisView2::slotImageSizeChanged()
 {

@@ -7,8 +7,9 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
-
-add_subdirectory(tests)
+if (!WIN32) ## Disable tests in Windows whilst they break builds
+	add_subdirectory(tests)
+endif(!WIN32)
 add_subdirectory(tools)
 
 ### calligrastageprivate ###
@@ -168,7 +169,7 @@ install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR})
 ### kdeinit stage ###
 set(stage_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(stage_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-stage.png")
+kde4_add_app_icon(stage_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrastage.png")
 
 kde4_add_kdeinit_executable(calligrastage ${stage_KDEINIT_SRCS})
 

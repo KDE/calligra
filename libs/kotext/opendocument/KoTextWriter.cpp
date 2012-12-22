@@ -125,8 +125,10 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, co
         KoGenStyle style(KoGenStyle::ParagraphAutoStyle, "paragraph", internalName);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
-        if (originalParagraphStyle)
+        if (originalParagraphStyle) {
             paragStyle.removeDuplicates(*originalParagraphStyle);
+            paragStyle.setParentStyle(originalParagraphStyle);
+        }
         paragStyle.saveOdf(style, context);
         generatedName = context.mainStyles().insert(style, "P");
     }
@@ -199,5 +201,7 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     }
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(fromblock, to);
+    d->globalFrom = from;
+    d->globalTo = to;
     d->writeBlocks(const_cast<QTextDocument *>(document), from, to, listStyles, currentTable, currentList);
 }

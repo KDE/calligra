@@ -431,14 +431,14 @@ void KWAnchoringProperties::anchorTypeChanged(int type)
     QString vertRelStrings[20]; //NOTE: order needs to be the same as KoTextAnchor::VerticalRel
     vertRelStrings[0] = i18n("Baseline"); // KoTextAnchor::VBaseline
     vertRelStrings[1] = i18n("Character"); // KoTextAnchor::VChar
-    vertRelStrings[2] = QString(); // KoTextAnchor::VFrame
-    vertRelStrings[3] = QString(); // KoTextAnchor::VFrameContent
+    vertRelStrings[2].clear(); // KoTextAnchor::VFrame
+    vertRelStrings[3].clear(); // KoTextAnchor::VFrameContent
     vertRelStrings[4] = i18n("Row"); // KoTextAnchor::VLine
     vertRelStrings[5] = i18n("Page (entire) area"); // KoTextAnchor::VPage
     vertRelStrings[6] = i18n("Page text area"); // KoTextAnchor::VPageContent
     vertRelStrings[7] = i18n("Paragraph area"); // KoTextAnchor::VParagraph
     vertRelStrings[8] = i18n("Paragraph text area"); // KoTextAnchor::VParagraphContent
-    vertRelStrings[9] = QString(); // KoTextAnchor::VText
+    vertRelStrings[9].clear(); // KoTextAnchor::VText
 
     QString horizRelStrings[20]; //NOTE: order needs to be the same as KoTextAnchor::HorizontalRel
     horizRelStrings[0] = i18n("Character"); // KoTextAnchor::HChar
@@ -446,10 +446,10 @@ void KWAnchoringProperties::anchorTypeChanged(int type)
     horizRelStrings[2] = i18n("Page text area"); // KoTextAnchor::HPageContent
     horizRelStrings[3] = i18n("Left page border"); // KoTextAnchor::HPageStartMargin
     horizRelStrings[4] = i18n("Right page border"); // KoTextAnchor::HPageEndMargin
-    horizRelStrings[5] = QString(); // KoTextAnchor::HFrame
-    horizRelStrings[6] = QString(); // KoTextAnchor::HFrameContent
-    horizRelStrings[7] = QString(); // KoTextAnchor::HFrameEndMargin
-    horizRelStrings[8] = QString(); // KoTextAnchor::HFrameStartMargin
+    horizRelStrings[5].clear(); // KoTextAnchor::HFrame
+    horizRelStrings[6].clear(); // KoTextAnchor::HFrameContent
+    horizRelStrings[7].clear(); // KoTextAnchor::HFrameEndMargin
+    horizRelStrings[8].clear(); // KoTextAnchor::HFrameStartMargin
     horizRelStrings[9] = i18n("Paragraph area"); // KoTextAnchor::HParagraph
     horizRelStrings[10] = i18n("Paragraph text area"); // KoTextAnchor::HParagraphContent
     horizRelStrings[11] = i18n("Right paragraph border"); // KoTextAnchor::HParagraphEndMargin

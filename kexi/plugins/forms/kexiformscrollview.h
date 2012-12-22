@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,9 +56,7 @@ public:
     KexiFormScrollView(QWidget *parent, bool preview);
     virtual ~KexiFormScrollView();
 
-    void setForm(KFormDesigner::Form *form) {
-        m_form = form;
-    }
+    void setForm(KFormDesigner::Form *form);
 
     /*! Reimplemented from KexiDataAwareObjectInterface
      for checking 'readOnly' flag from a widget
@@ -78,14 +76,7 @@ public:
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. */
-    virtual int fieldNumberForColumn(int col) {
-        KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
-                                              dbFormWidget()->orderedDataAwareWidgets()->at(col));
-        if (!item)
-            return -1;
-        KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find(item));
-        return it != m_fieldNumbersForDataItems.constEnd() ? (int)it.value() : -1;
-    }
+    virtual int fieldNumberForColumn(int col);
 
     /*! @internal Used by KexiFormView in view switching. */
     void beforeSwitchView();
@@ -282,6 +273,12 @@ protected:
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
 
+    /*! Implementation for KexiFormDataProvider. */
+    virtual void lengthExceeded(KexiDataItemInterface *item, bool lengthExceeded);
+
+    /*! Implementation for KexiFormDataProvider. */
+    virtual void updateLengthExceededMessage(KexiDataItemInterface *item);
+
     //! Implementation for KexiDataAwareObjectInterface
     //! Called by KexiDataAwareObjectInterface::setCursorPosition()
     //! if cursor's position is really changed.
@@ -311,10 +308,9 @@ protected:
 
     //virtual bool focusNextPrevChild( bool next );
 
-    KFormDesigner::Form *m_form;
-    int m_currentLocalSortColumn, m_localSortingOrder;
-    //! Used in selectCellInternal() to avoid fetching the same record twice
-    KexiDB::RecordData *m_previousRecord;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

@@ -44,6 +44,7 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
 class KoTextAnchor;
@@ -162,6 +163,9 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
+    /// return the textRangeManager for this document.
+    KoTextRangeManager *textRangeManager() const;
+
     KWApplicationConfig &config() {
         return m_config;
     }
@@ -191,6 +195,12 @@ public:
     //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
     KoShapeController *shapeController() const { return m_shapeController; }
 
+    /// Set cover image data at a QPair<cover mime type, cover data>.
+    void setCoverImage(QPair<QString, QByteArray> cover);
+
+    /// return cover data.
+    QPair<QString, QByteArray> coverImage();
+
 public slots:
     /**
      * Relayout the pages or frames within the framesets.
@@ -219,7 +229,7 @@ signals:
     void pageSetupChanged();
 
     /// emitted whenever a shape is added.
-    void shapeAdded(KoShape *, KoShapeManager::Repaint repaint = KoShapeManager::PaintShapeOnAdd);
+    void shapeAdded(KoShape *, KoShapeManager::Repaint);
 
     /// emitted whenever a shape is removed
     void shapeRemoved(KoShape *);
@@ -273,6 +283,7 @@ private:
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
     QPointer<KoUpdater> m_layoutProgressUpdater;
     KoShapeController *m_shapeController;
+    QPair<QString, QByteArray> m_coverImage;
 };
 
 #endif

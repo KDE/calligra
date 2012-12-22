@@ -39,6 +39,7 @@ set(kritaui_LIB_SRCS
     dialogs/kis_dlg_image_properties.cc
     dialogs/kis_dlg_layer_properties.cc
     dialogs/kis_dlg_preferences.cc
+    dialogs/kis_dlg_blacklist_cleanup.cpp
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
     flake/kis_dummies_facade.cpp
@@ -100,7 +101,6 @@ set(kritaui_LIB_SRCS
     kis_statusbar.cc
     kis_view2.cpp
     kis_zoom_manager.cc
-    thememanager.cpp
     ko_favorite_resource_manager.cpp
     kis_workspace_resource.cpp
     kis_mirror_visitor.cpp
@@ -190,7 +190,6 @@ set(kritaui_LIB_SRCS
 #    widgets/kis_light_source.cpp
 #    widgets/kis_light_stage.cpp
     input/kis_input_manager.cpp
-    input/kis_shortcut.cpp
     input/kis_abstract_input_action.cpp
     input/kis_tool_invocation_action.cpp
     input/kis_pan_action.cpp
@@ -199,6 +198,13 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_action.cpp
     input/kis_show_palette_action.cpp
     input/kis_change_primary_setting_action.cpp
+    input/kis_abstract_shortcut.cpp
+    input/kis_single_action_shortcut.cpp
+    input/kis_stroke_shortcut.cpp
+    input/kis_shortcut_matcher.cpp
+    kis_ui_action_factory.cpp
+    kis_ui_action_factory_registry.cpp
+    actions/kis_selection_action_factories.cpp
 )
 
 if(HAVE_OPENGL)
@@ -256,6 +262,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
+    forms/wdgdlgblacklistcleanup.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

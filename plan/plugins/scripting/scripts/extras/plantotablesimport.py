@@ -38,7 +38,7 @@ class PlanImport:
         if Plan is None:
             raise Exception, T.i18n("Failed to start Plan. Is Plan installed?")
 
-        Plan.document().openUrl( filename )
+        Plan.openUrl( filename )
         proj = Plan.project()
         data = self.showDataSelectionDialog( writer, Plan )
         if len(data) == 0:

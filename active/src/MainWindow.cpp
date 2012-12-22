@@ -89,7 +89,6 @@ MainWindow::MainWindow (QWidget* parent)
     m_view->rootContext()->setContextProperty("mainwindow", this);
     m_view->rootContext()->setContextProperty("_calligra_version_string", CALLIGRA_VERSION_STRING);
     m_view->engine()->addImageProvider(CAImageProvider::identificationString, CAImageProvider::instance());
-    loadMetadataModel();
 
     m_view->setSource (QUrl::fromLocalFile (CalligraActive::Global::installPrefix()
                                             + "/share/calligraactive/qml/Doc.qml"));
@@ -118,29 +117,13 @@ void MainWindow::adjustWindowSize (QSize size)
 
 void MainWindow::openFileDialog()
 {
-    const QString path = QFileDialog::getOpenFileName (this, "Open File", QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
+    const QString path = QFileDialog::getOpenFileName (this, i18n("Open File"), QDesktopServices::storageLocation (QDesktopServices::DocumentsLocation));
     if (!path.isEmpty()) {
         QObject* object = m_view->rootObject();
         Q_ASSERT (object);
         QMetaObject::invokeMethod (object, "openDocument", Q_ARG (QVariant, QVariant (path)));
     }
 
-}
-
-void MainWindow::loadMetadataModel()
-{
-    if (!m_view) {
-        return;
-    }
-    QDeclarativeComponent component(m_view->engine());
-    component.setData("import org.kde.metadatamodels 0.1\nMetadataModel { sortOrder: Qt.AscendingOrder }\n", QUrl());
-
-    if (!component.isError()) {
-        m_view->rootContext()->setContextProperty("metadataInternalModel", component.create());
-    } else {
-        kDebug() << "Plasma Active Metadata Models are not installed, using built in model";
-        m_view->rootContext()->setContextProperty("metadataInternalModel", false);
-    }
 }
 
 MainWindow::~MainWindow()

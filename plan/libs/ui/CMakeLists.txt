@@ -1,16 +1,16 @@
 
-include (${CMAKE_SOURCE_DIR}/kdgantt/CMakeLists.txt)
+include (${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/CMakeLists.txt)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+    ${KDCHART_INCLUDES}
 
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models
     ${CMAKE_BINARY_DIR}/plan/libs/models
     ${CMAKE_SOURCE_DIR}/plan/libs/ui/reports/odt
     ${CMAKE_BINARY_DIR}/plan/libs/ui
-    ${CMAKE_SOURCE_DIR}/kdgantt
-    ${CMAKE_BINARY_DIR}/kdgantt
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
 
     ${KOODF_INCLUDES} 
     ${KOPROPERTY_INCLUDES}

@@ -67,6 +67,8 @@
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
+#include <KoTextRangeManager.h>
+#include <KoAnnotationManager.h>
 #include <KoTextEditor.h>
 #include <KoToolProxy.h>
 #include <KoTextAnchor.h>
@@ -81,6 +83,9 @@
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
 #endif
+
+#include <KoAnnotationSideBar.h>
+
 #include <KoFindStyle.h>
 #include <KoFindText.h>
 #include <KoFindToolbar.h>
@@ -114,9 +119,15 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_canvas = m_gui->canvas();
     setFocusProxy(m_canvas);
 
+#ifdef SHOW_ANNOTATIONS
+    QGridLayout *layout = new QGridLayout(this);
+    layout->setMargin(0);
+    layout->addWidget(m_gui,0,0);
+#else
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->addWidget(m_gui);
+#endif
 
     setComponentData(KWFactory::componentData());
     setXMLFile("words.rc");
@@ -127,15 +138,14 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-
     m_find = new KoFindText(this);
-    m_find->setDocuments(texts);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
+    // The text documents to search in will potentially change when we add/remove shapes and after load
+    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
 
     layout->addWidget(toolbar);
 
@@ -157,14 +167,23 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
-        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)),
-                this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
+        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)),
+                this, SLOT(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)));
     }
 #endif
     if (m_document->inlineTextObjectManager()) {
         connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
            m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
+
+#ifdef SHOW_ANNOTATIONS
+    if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
+        if (textRangeManager->annotationManager()) {
+            KoAnnotationSideBar *annotationBar = new KoAnnotationSideBar(textRangeManager->annotationManager());
+            layout->addWidget(annotationBar, 0, 1);
+        }
+    }
+#endif
 }
 
 KWView::~KWView()
@@ -491,7 +510,7 @@ void KWView::addBookmark()
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     Q_ASSERT(editor);
 
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
     if (editor->hasSelection()) {
         suggestedName = editor->selectedText();
     }
@@ -512,7 +531,7 @@ void KWView::addBookmark()
 void KWView::selectBookmark()
 {
     QString name;
-    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    const KoBookmarkManager *manager = m_document->textRangeManager()->bookmarkManager();
 
     QPointer<KWSelectBookmarkDialog> dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
     connect(dia, SIGNAL(nameChanged(const QString &, const QString &)),
@@ -526,8 +545,8 @@ void KWView::selectBookmark()
         return;
     }
     delete dia;
+    KoBookmark *bookmark = manager->bookmark(name);
 #if 0
-    KoBookmark *bookmark = manager->retrieveBookmark(name);
     KoShape *shape = bookmark->shape();
     KoSelection *selection = canvasBase()->shapeManager()->selection();
     selection->deselectAll();
@@ -535,20 +554,24 @@ void KWView::selectBookmark()
 
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
-
-    KoCanvasResourceManager *rm = m_canvas->resourceManager();
-    if (bookmark->hasSelection()) {
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position());
-        rm->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
-        rm->clearResource(KoText::SelectedTextPosition);
-        rm->clearResource(KoText::SelectedTextAnchor);
-    } else
-        rm->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
 #else
 #ifdef __GNUC__
     #warning FIXME: port to textlayout-rework
 #endif
 #endif
+
+    KoCanvasResourceManager *rm = m_canvas->resourceManager();
+    if ((bookmark->positionOnlyMode() == false) && bookmark->hasRange()) {
+        rm->clearResource(KoText::SelectedTextPosition);
+        rm->clearResource(KoText::SelectedTextAnchor);
+    }
+    if (bookmark->positionOnlyMode()) {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeStart());
+    } else {
+        rm->setResource(KoText::CurrentTextPosition, bookmark->rangeStart());
+        rm->setResource(KoText::CurrentTextAnchor, bookmark->rangeEnd());
+    }
 }
 
 void KWView::deleteBookmark(const QString &name)
@@ -556,7 +579,7 @@ void KWView::deleteBookmark(const QString &name)
     Q_UNUSED(name);
 #if 0
     KoInlineTextObjectManager*manager = m_document->inlineTextObjectManager();
-    KoBookmark *bookmark = manager->bookmarkManager()->retrieveBookmark(name);
+    KoBookmark *bookmark = manager->bookmarkManager()->bookmark(name);
     if (!bookmark || !bookmark->shape())
         return;
 
@@ -922,9 +945,9 @@ void KWView::offsetInDocumentMoved(int yOffset)
         setCurrentPage(page);
 }
 
+#ifdef SHOULD_BUILD_RDF
 void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
 {
-#ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {
@@ -934,8 +957,8 @@ void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QStrin
     kDebug(30015) << "reflowing rdf semantic item.";
     KoRdfSemanticItemViewSite vs(item, xmlid);
     vs.reflowUsingCurrentStylesheet(editor);
-#endif
 }
+#endif
 
 void KWView::findMatchFound(KoFindMatch match)
 {
@@ -949,10 +972,15 @@ void KWView::findMatchFound(KoFindMatch match)
     m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
 }
 
-void KWView::loadingCompleted()
+void KWView::refreshFindTexts()
 {
     QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    foreach (KWFrameSet *fSet, m_document->frameSets()) {
+        KWTextFrameSet *tFSet = dynamic_cast<KWTextFrameSet *>(fSet);
+        if (tFSet) {
+           texts.append(tFSet->document());
+        }
+    }
     m_find->setDocuments(texts);
 }
 

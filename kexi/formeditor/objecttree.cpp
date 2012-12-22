@@ -36,44 +36,75 @@ using namespace KFormDesigner;
 /////////////////        ObjectTreeItem                                    /////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
+class ObjectTreeItem::Private
+{
+public:
+    Private(const QString &classn, const QString &name_, QWidget *widget_,
+            Container *parentContainer_, Container *c);
+
+    ~Private();
+
+    QString className;
+    QString name;
+    ObjectTreeList children;
+    QPointer<Container> container;
+    QHash<QString, QVariant> props;
+    QHash<QString, QVariant> *subprops;
+    QString  unknownProps;
+    QHash<QByteArray, QString> pixmapNames;
+    ObjectTreeItem* parent;
+    QPointer<QWidget> widget;
+    QPointer<EventEater> eater;
+
+    bool  enabled;
+
+    int row, col, rowspan, colspan;
+    bool span;
+};
+
+ObjectTreeItem::Private::Private(const QString &classn, const QString &name_, QWidget *widget_,
+                        Container *parentContainer_, Container *c)
+    : className(classn), name(name_), container(c)
+    , subprops(0), parent(0), widget(widget_), eater(new EventEater(widget_, parentContainer_))
+    , enabled(true), row(-1), col(-1), rowspan(-1), colspan(-1), span(false)
+{
+
+}
+
+ObjectTreeItem::Private::~Private()
+{
+    delete subprops;
+}
 
 ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget,
                                Container *parentContainer, Container *container)
-        : m_enabled(true), m_row(-1), m_col(-1), m_rowspan(-1), m_colspan(-1), m_span(false)
+    : d(new Private(classn, name, widget, parentContainer, container))
 {
     kDebug() << classn << name << widget->objectName() << "parentContainer:" << parentContainer << "container:" << container;
-    m_className = classn;
-    m_name = name;
-    m_widget = widget;
-    m_container = container;
-    m_eater = new EventEater(widget, parentContainer);
-    m_parent = 0;
-    m_subprops = 0;
 }
 
 ObjectTreeItem::~ObjectTreeItem()
 {
-// kDebug() << "ObjectTreeItem deleted: " << name();
-    delete m_subprops;
+    delete d;
 }
 
 void
 ObjectTreeItem::rename(const QString &name)
 {
-    m_name = name;
+    d->name = name;
 }
 
 void
 ObjectTreeItem::addChild(ObjectTreeItem *c)
 {
-    m_children.append(c);
+    d->children.append(c);
     c->setParent(this);
 }
 
 void
 ObjectTreeItem::removeChild(ObjectTreeItem *c)
 {
-    m_children.removeAt( m_children.indexOf(c) );
+    d->children.removeAt( d->children.indexOf(c) );
 }
 
 void
@@ -82,8 +113,8 @@ ObjectTreeItem::addModifiedProperty(const QByteArray &property, const QVariant &
     if (property == "objectName")
         return;
 
-    if (!m_props.contains(property)) {
-        m_props.insert(property, oldValue);
+    if (!d->props.contains(property)) {
+        d->props.insert(property, oldValue);
         kDebug() << "Added this property in the list: " << property << " oldValue: " << oldValue;
     }
 }
@@ -91,64 +122,168 @@ ObjectTreeItem::addModifiedProperty(const QByteArray &property, const QVariant &
 void
 ObjectTreeItem::addSubproperty(const QByteArray &property, const QVariant& value)
 {
-    if (!m_subprops)
-        m_subprops = new QHash<QString, QVariant>();
-    if (!m_props.contains(property))
-        m_subprops->insert(property, value);
+    if (!d->subprops)
+        d->subprops = new QHash<QString, QVariant>();
+    if (!d->props.contains(property))
+        d->subprops->insert(property, value);
 }
 
 void
 ObjectTreeItem::storeUnknownProperty(QDomElement &el)
 {
     if (!el.isNull()) {
-        QTextStream ts(&m_unknownProps, QIODevice::WriteOnly | QIODevice::Append);
+        QTextStream ts(&d->unknownProps, QIODevice::WriteOnly | QIODevice::Append);
         el.save(ts, 0);
     }
+}
+
+QString ObjectTreeItem::unknownProperties()
+{
+    return d->unknownProps;
+}
+
+void ObjectTreeItem::setUnknownProperties(const QString &set)
+{
+    d->unknownProps = set;
 }
 
 void
 ObjectTreeItem::setPixmapName(const QByteArray &property, const QString &name)
 {
-    m_pixmapNames.insert(property, name);
+    d->pixmapNames.insert(property, name);
 }
 
 QString
 ObjectTreeItem::pixmapName(const QByteArray &property)
 {
-    return m_pixmapNames.value(property);
+    return d->pixmapNames.value(property);
 }
 
 void
 ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
 {
-    m_row = row;  m_col = col;
-    m_rowspan = rowspan;
-    m_colspan = colspan;
+    d->row = row;  d->col = col;
+    d->rowspan = rowspan;
+    d->colspan = colspan;
     if (colspan || rowspan)
-        m_span = true;
+        d->span = true;
     else
-        m_span = false;
+        d->span = false;
 }
 
-#if 0 // moved to WidgetLibrary
-ObjectTreeItem* ObjectTreeItem::selectableItem()
+QHash<QString, QVariant>* ObjectTreeItem::subproperties() const
 {
-    if (parent() && parent()->widget()) {
-        if (qobject_cast<QTabWidget*>(parent()->widget())) {
-            // tab widget's page
-            return parent();
-        }
-    }
-    return this;
+    return d->subprops;
 }
-#endif
+
+void ObjectTreeItem::setEnabled(bool enabled)
+{
+    d->enabled = enabled;
+}
+
+bool ObjectTreeItem::isEnabled() const
+{
+    return d->enabled;
+}
+
+int ObjectTreeItem::gridRow() const
+{
+    return d->row;
+}
+
+int ObjectTreeItem::gridCol() const
+{
+    return d->col;
+}
+
+int ObjectTreeItem::gridRowSpan() const
+{
+    return d->rowspan;
+}
+
+int ObjectTreeItem::gridColSpan() const
+{
+    return d->colspan;
+}
+
+bool ObjectTreeItem::spanMultipleCells() const
+{
+    return d->span;
+}
+
+QString ObjectTreeItem::name() const
+{
+    return d->name;
+}
+
+QString ObjectTreeItem::className() const
+{
+    return d->className;
+}
+
+QWidget* ObjectTreeItem::widget() const
+{
+    return d->widget;
+}
+
+EventEater* ObjectTreeItem::eventEater() const
+{
+    return d->eater;
+}
+
+ObjectTreeItem* ObjectTreeItem::parent() const
+{
+    return d->parent;
+}
+
+ObjectTreeList* ObjectTreeItem::children()
+{
+    return &d->children;
+}
+
+const QHash<QString, QVariant>* ObjectTreeItem::modifiedProperties() const
+{
+    return &d->props;
+}
+
+Container* ObjectTreeItem::container() const
+{
+    return d->container;
+}
+
+void ObjectTreeItem::setWidget(QWidget *w)
+{
+    d->widget = w;
+}
+
+void ObjectTreeItem::setParent(ObjectTreeItem *parent)
+{
+    d->parent = parent;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 ///                      ObjectTree                                             /////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
+class ObjectTree::Private
+{
+public:
+    Private()
+    {
+
+    }
+
+    ~Private()
+    {
+
+    }
+
+    ObjectTreeHash treeHash;
+};
+
 ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widget, Container *container)
-        : ObjectTreeItem(classn, name, widget, container, container)
+    : ObjectTreeItem(classn, name, widget, container, container), d(new Private())
 {
 }
 
@@ -157,12 +292,13 @@ ObjectTree::~ObjectTree()
     while (!children()->isEmpty()) {
         removeItem(children()->first());
     }
+    delete d;
 }
 
 bool
 ObjectTree::rename(const QString &oldname, const QString &newname)
 {
-    if (oldname == m_name) {
+    if (oldname == name()) {
         ObjectTreeItem::rename(newname);
         return true;
     }
@@ -172,8 +308,8 @@ ObjectTree::rename(const QString &oldname, const QString &newname)
         return false;
 
     it->rename(newname);
-    m_treeHash.remove(oldname);
-    m_treeHash.insert(newname, it);
+    d->treeHash.remove(oldname);
+    d->treeHash.insert(newname, it);
 
     return true;
 }
@@ -197,18 +333,18 @@ ObjectTree::lookup(const QString &name)
     if (name == this->name())
         return this;
     else
-        return m_treeHash.value(name);
+        return d->treeHash.value(name);
 }
 
 void
 ObjectTree::addItem(ObjectTreeItem *parent, ObjectTreeItem *c)
 {
-    m_treeHash.insert(c->name(), c);
+    d->treeHash.insert(c->name(), c);
 
     if (!parent)
         parent = this;
     parent->addChild(c);
-    m_container->form()->emitChildAdded(c);
+    container()->form()->emitChildAdded(c);
 
     kDebug() << "adding " << c->name() << " to " << parent->name();
 }
@@ -223,14 +359,14 @@ ObjectTree::removeItem(const QString &name)
 void
 ObjectTree::removeItem(ObjectTreeItem *c)
 {
-    if (m_container && m_container->form())
-        m_container->form()->emitChildRemoved(c);
+    if (container() && container()->form())
+        container()->form()->emitChildRemoved(c);
 
     foreach (ObjectTreeItem *titem, *c->children()) {
         removeItem(titem->name());
     }
 
-    m_treeHash.remove(c->name());
+    d->treeHash.remove(c->name());
     c->parent()->removeChild(c);
     delete c;
 }
@@ -238,11 +374,6 @@ ObjectTree::removeItem(ObjectTreeItem *c)
 QByteArray
 ObjectTree::generateUniqueName(const QByteArray &prefix, bool numberSuffixRequired)
 {
-    /* old way of naming widgets
-    int appendix = m_names[c] + 1;
-    QString name(c);
-    name.append(QString::number(appendix));
-    m_names[c] = appendix;*/
     if (!numberSuffixRequired && !lookup(prefix))
         return prefix;
     QString name(prefix);
@@ -253,3 +384,7 @@ ObjectTree::generateUniqueName(const QByteArray &prefix, bool numberSuffixRequir
     return (name + QString::number(i)).toLatin1();
 }
 
+ObjectTreeHash* ObjectTree::hash()
+{
+    return &d->treeHash;
+}
