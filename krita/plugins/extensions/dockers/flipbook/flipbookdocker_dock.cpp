@@ -45,7 +45,7 @@ FlipbookDockerDock::FlipbookDockerDock( )
 
     bnLoadFlipbook->setIcon(koIcon("document-open"));
     bnLoadFlipbook->setToolTip(i18n("Open a flipbook file"));
-    connect(bnLoadFlipbook, SIGNAL(clicked()), SLOT(loadFlipbook()));
+    connect(bnLoadFlipbook, SIGNAL(clicked()), SLOT(openFlipbook()));
 
     connect(cmbFlipbooks, SIGNAL(activated(int)), SLOT(selectFlipbook(int)));
 
@@ -77,7 +77,7 @@ FlipbookDockerDock::FlipbookDockerDock( )
     bnDeleteItem->setToolTip(i18n("Remove selected images from the current flipbook"));
     connect(bnDeleteItem, SIGNAL(clicked()), SLOT(removeImage()));
 
-    connect(listFlipbook, SIGNAL(itemActivated(QListWidgetItem *item)), SLOT(selectImage(QListWidgetItem*)));
+    connect(listFlipbook, SIGNAL(itemActivated(QListWidgetItem *)), SLOT(selectImage(QListWidgetItem*)));
 }
 
 FlipbookDockerDock::~FlipbookDockerDock()
