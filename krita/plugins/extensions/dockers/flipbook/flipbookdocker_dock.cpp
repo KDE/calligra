@@ -35,8 +35,37 @@ FlipbookDockerDock::FlipbookDockerDock( )
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
+    setWidget(widget);
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(updateLayout()));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(updateLayout(Qt::DockWidgetArea)));
+
+    bnFirstItem->setIcon(koIcon("arrow-up-double"));
+    bnFirstItem->setToolTip(i18n("Go to the first image in the current flipbook"));
+
+    bnPreviousItem->setIcon(koIcon("arrow-up"));
+    bnPreviousItem->setToolTip(i18n("Show previous image"));
+
+    bnNextItem->setIcon(koIcon("arrow-down"));
+    bnNextItem->setToolTip(i18n("Show next image"));
+
+    bnLastItem->setIcon(koIcon("arrow-down-double"));
+    bnLastItem->setToolTip(i18n("Go to the last image in the current flipblook"));
+
+    bnAddItem->setIcon(koIcon("list-add"));
+    bnAddItem->setToolTip(i18n("Add one or more images to the current flipbook"));
+
+    bnDeleteItem->setIcon(koIcon("list-remove"));
+    bnDeleteItem->setToolTip(i18n("Remove selected images from the current flipbook"));
+
+    bnDeleteFlipbook->setIcon(koIcon("edit-delete"));
+    bnDeleteFlipbook->setToolTip(i18n("Delete current flipbook from disk"));
+
+    bnLoadFlipbook->setIcon(koIcon("document-open"));
+    bnLoadFlipbook->setToolTip(i18n("Open a flipbook file"));
+
+    bnNewFlipbook->setIcon(koIcon("document-new"));
+    bnNewFlipbook->setToolTip(i18n("Create a new flipbook"));
+    //cmbFlipbooks;
 }
 
 FlipbookDockerDock::~FlipbookDockerDock()
@@ -63,9 +92,17 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
 {
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea) {
         listFlipbook->setFlow(QListView::TopToBottom);
+        bnFirstItem->setIcon(koIcon("arrow-up-double"));
+        bnPreviousItem->setIcon(koIcon("arrow-up"));
+        bnNextItem->setIcon(koIcon("arrow-down"));
+        bnLastItem->setIcon(koIcon("arrow-down-double"));
     }
     else {
         listFlipbook->setFlow(QListView::LeftToRight);
+        bnFirstItem->setIcon(koIcon("arrow-left-double"));
+        bnPreviousItem->setIcon(koIcon("arrow-left"));
+        bnNextItem->setIcon(koIcon("arrow-right"));
+        bnLastItem->setIcon(koIcon("arrow-left-double"));
     }
 }
 
