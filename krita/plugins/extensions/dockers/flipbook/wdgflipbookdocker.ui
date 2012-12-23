@@ -10,20 +10,8 @@
     <height>300</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="KisPopupButton" name="chooserButton" native="true"/>
-   </item>
-  </layout>
+  <layout class="QGridLayout" name="gridLayout"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KisPopupButton</class>
-   <extends>QWidget</extends>
-   <header>kis_popup_button.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
