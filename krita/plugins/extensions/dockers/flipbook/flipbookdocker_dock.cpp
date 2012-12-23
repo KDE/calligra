@@ -17,6 +17,8 @@
 
 #include "flipbookdocker_dock.h"
 
+#include <QListWidget>
+
 #include <klocale.h>
 #include <kactioncollection.h>
 
@@ -33,6 +35,8 @@ FlipbookDockerDock::FlipbookDockerDock( )
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
+
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(updateLayout()));
 }
 
 FlipbookDockerDock::~FlipbookDockerDock()
@@ -53,6 +57,16 @@ void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
 void FlipbookDockerDock::unsetCanvas()
 {
     m_canvas = 0;
+}
+
+void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
+{
+    if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea) {
+        listFlipbook->setFlow(QListView::TopToBottom);
+    }
+    else {
+        listFlipbook->setFlow(QListView::LeftToRight);
+    }
 }
 
 #include "flipbookdocker_dock.moc"

@@ -37,6 +37,11 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
     virtual void unsetCanvas();
     
+
+private slots:
+
+    void updateLayout(Qt::DockWidgetArea area);
+
 private:
     KisCanvas2 *m_canvas;
 };
