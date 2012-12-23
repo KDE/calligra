@@ -226,6 +226,7 @@ KisView2::KisView2(KisPart2 *part, KisDoc2 * doc, QWidget * parent)
     setFocusPolicy(Qt::NoFocus);
 
     if (mainWindow()) {
+        mainWindow()->setDockNestingEnabled(true);
         actionCollection()->addAction(KStandardAction::KeyBindings, "keybindings", mainWindow()->guiFactory(), SLOT(configureShortcuts()));
     }
 
