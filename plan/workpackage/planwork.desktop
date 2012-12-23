@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Plan WorkPackage Handler
-Name[bs]=Upravljač planskih radnih paketa
 Name[ca]=Gestor de paquets de feina del Plan
 Name[ca@valencia]=Gestor de paquets de faena del Plan
 Name[da]=Håndtering af WorkPackage til Plan
@@ -29,7 +28,6 @@ Name[zh_TW]=Plan 工作套件處理器
 GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
-GenericName[bs]=Upravljanje projektima
 GenericName[ca]=Gestió de projectes
 GenericName[ca@valencia]=Gestió de projectes
 GenericName[cs]=Správa projektů

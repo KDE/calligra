@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Calendar Tool
 Name[bg]=Инструмент календар
-Name[bs]=Kalendarski alat
 Name[ca]=Eina de calendari
 Name[ca@valencia]=Eina de calendari
 Name[cs]=Nástroj kalendáře
@@ -41,7 +40,6 @@ Name[zh_CN]=日历工具
 Name[zh_TW]=行事曆工具
 Comment=Inserts a calendar into a cell range.
 Comment[bg]=Вмъкване на календар в набор от клетки
-Comment[bs]=Umeće kalendar u čeliju
 Comment[ca]=Insereix un calendari a un interval de cel·la.
 Comment[ca@valencia]=Insereix un calendari a un interval de cel·la.
 Comment[cs]=Vloží kalendář do rozsahu buněk.

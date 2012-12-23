@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Image Docker
-Name[bs]=Slikovni Doker
 Name[ca]=Acoblador d'imatges
 Name[ca@valencia]=Amarradors d'imatges
 Name[cs]=Dok obrázků
@@ -27,7 +26,6 @@ Name[uk]=Панель швартування зображень
 Name[x-test]=xxImage Dockerxx
 Name[zh_TW]=影像嵌入器
 Comment=Docker for reference images
-Comment[bs]=Doker za obavještajne slike
 Comment[ca]=Acoblador per a imatges de referència
 Comment[ca@valencia]=Amarrador per a imatges de referència
 Comment[cs]=Dok pro referenční obrázky

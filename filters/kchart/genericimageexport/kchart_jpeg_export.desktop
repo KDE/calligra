@@ -3,7 +3,6 @@ Type=Service
 Name=KChart JPEG Export Filter
 Name[bg]=Филтър за изнасяне от KChart в JPEG
 Name[br]=Sil ezporzh JPEG evit KChart
-Name[bs]=KChart JPEG izvozni filter
 Name[ca]=Filtre d'exportació JPEG per al KChart
 Name[ca@valencia]=Filtre d'exportació JPEG per al KChart
 Name[cs]=Exportní filtr do formátu JPEG pro KChart

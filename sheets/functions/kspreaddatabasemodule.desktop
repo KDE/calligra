@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Database Functions
 Name[bg]=Функции за бази от данни
-Name[bs]=Funkcije Baze Podataka
 Name[ca]=Funcions de base de dades
 Name[ca@valencia]=Funcions de base de dades
 Name[cs]=Funkce databází
@@ -41,7 +40,6 @@ Name[x-test]=xxDatabase Functionsxx
 Name[zh_CN]=数据库函数
 Name[zh_TW]=資料庫函數
 Comment=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA
-Comment[bs]=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA
 Comment[ca]=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA
 Comment[ca@valencia]=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA
 Comment[cs]=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA

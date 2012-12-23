@@ -7,7 +7,6 @@ X-KDE-Library=kchartgenericimageexport
 X-KDE-ServiceTypes=CalligraFilter
 Name=KChart MNG Export Filter
 Name[bg]=Филтър за изнасяне от KChart в MNG
-Name[bs]=KChart MNG izvozni filter
 Name[ca]=Filtre d'exportació MNG per al KChart
 Name[ca@valencia]=Filtre d'exportació MNG per al KChart
 Name[cs]=Exportní filtr do formátu MNG pro KChart

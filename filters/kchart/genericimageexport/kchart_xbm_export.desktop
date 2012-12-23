@@ -3,7 +3,6 @@ Type=Service
 Name=KChart XBM Export Filter
 Name[bg]=Филтър за изнасяне от KChart в XBM
 Name[br]=Sil ezporzh XBM evit KChart
-Name[bs]=KChart XBM izvozni filter
 Name[ca]=Filtre d'exportació XBM per al KChart
 Name[ca@valencia]=Filtre d'exportació XBM per al KChart
 Name[cs]=Exportní filtr do formátu XBM pro KChart

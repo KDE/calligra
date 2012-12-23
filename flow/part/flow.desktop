@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=Calligra Flow
-Name[bs]=Calligra tok
 Name[ca]=Flux del Calligra
 Name[ca@valencia]=Flux del Calligra
 Name[cs]=Calligra Flow
@@ -34,7 +33,6 @@ Name[zh_TW]=Calligra Flow
 Exec=calligraflow %u
 GenericName=Flowchart & Diagram Editing
 GenericName[bg]=Редактиране на блоксхеми и диаграми
-GenericName[bs]=Flowchart i Dijagram editovanje
 GenericName[ca]=Editor de diagrames de fluxos
 GenericName[ca@valencia]=Editor de diagrames de fluxos
 GenericName[cs]=Editor nákresů a diagramů

@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Web Report Plugin
-Name[bs]=Plugin za Web Izvještaj
 Name[ca]=Connector d'informes web
 Name[ca@valencia]=Connector d'informes web
 Name[da]=Plugin til webrapporter
@@ -26,7 +25,6 @@ Name[uk]=Додаток перегляду інтернету у звіті
 Name[x-test]=xxWeb Report Pluginxx
 Name[zh_TW]=網頁報告外掛程式
 Comment=Calligra Reports web Plugin
-Comment[bs]=Plugin za Calligra Web Izvještaj
 Comment[ca]=Connector d'informes web del Calligra
 Comment[ca@valencia]=Connector d'informes web del Calligra
 Comment[da]=Webplugin til Calligra Reports

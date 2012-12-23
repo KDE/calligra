@@ -2,7 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=Kexi/Handler
 Comment=Kexi Project Handlers
-Comment[bs]=Kexi upravitelji projekta
 Comment[ca]=Gestors de projectes del Kexi
 Comment[ca@valencia]=Gestors de projectes del Kexi
 Comment[cs]=Ovladač projektů Kexi

@@ -2,7 +2,6 @@
 Type=Service
 Name=Krita Encapsulated PostScript Import Filter
 Name[bg]=Филтър за внасяне на вграден PostScript в Krita
-Name[bs]=Krita EPS unosni filter
 Name[ca]=Filtre d'importació de PostScript encapsulat per al Krita
 Name[ca@valencia]=Filtre d'importació de PostScript encapsulat per al Krita
 Name[cs]=Importní filtr formátu Encapsulated PostScript pro Kritu

@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Slide Wipe
-Name[bs]=Brisanje slajda
 Name[ca]=Esborrat de diapositiva
 Name[ca@valencia]=Esborrat de diapositiva
 Name[da]=Diasvisker
@@ -32,7 +31,6 @@ Name[wa]=Schover l' diya evoye
 Name[x-test]=xxSlide Wipexx
 Name[zh_TW]=滑動掃描
 Comment=Slide Wipe Page Effect
-Comment[bs]=Efekt Brisanja Stranice Slajda
 Comment[ca]=Efectes d'esborrat de diapositiva de la pàgina
 Comment[ca@valencia]=Efectes d'esborrat de diapositiva de la pàgina
 Comment[da]=Diasvisker-sideeffekt

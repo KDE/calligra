@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Script Event Action Plugin
-Name[bs]=Plugin za događaje skripte
 Name[ca]=Connector d'script d'acció d'esdeveniment
 Name[ca@valencia]=Connector d'script d'acció d'esdeveniment
 Name[da]=Plugin til script-begivenhedshandling
@@ -33,7 +32,6 @@ Name[zh_TW]=文稿事件動作外掛程式
 Type=ServiceType
 X-KDE-ServiceType=Calligra/ScriptEventAction
 Comment=A plugin that contains a script event action
-Comment[bs]=Plugin koji sadrzi događaje skripte
 Comment[ca]=Un connector que conté un script d'acció d'esdeveniment
 Comment[ca@valencia]=Un connector que conté un script d'acció d'esdeveniment
 Comment[da]=Et plugin som indeholder en script-begivenhedshandling

@@ -3,7 +3,6 @@ Type=ServiceType
 X-KDE-ServiceType=CalligraFilter
 Comment=Calligra Filter
 Comment[bg]=Филтър за Calligra
-Comment[bs]=Calligra Filter
 Comment[ca]=Filtre del Calligra
 Comment[ca@valencia]=Filtre del Calligra
 Comment[cs]=Filtr Calligra

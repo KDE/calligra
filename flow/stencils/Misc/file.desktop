@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=File
 Name[bg]=Файл
-Name[bs]=Datoteka
 Name[ca]=Fitxer
 Name[ca@valencia]=Fitxer
 Name[cs]=Soubor
@@ -23,6 +22,7 @@ Name[nl]=Bestand
 Name[pl]=Plik
 Name[pt]=Ficheiro
 Name[pt_BR]=Arquivo
+Name[ro]=Fișier
 Name[ru]=Файл
 Name[sk]=Súbor
 Name[sl]=Datoteka

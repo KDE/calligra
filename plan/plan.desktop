@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Plan
-Name[bs]=Plan
 Name[ca]=Plan
 Name[ca@valencia]=Plan
 Name[cs]=Plan
@@ -34,7 +33,6 @@ Name[zh_TW]=Plan
 GenericName=Project Management
 GenericName[bg]=Управление на проекти
 GenericName[br]=Mererezh raktresioù
-GenericName[bs]=Upravljanje projektima
 GenericName[ca]=Gestió de projectes
 GenericName[ca@valencia]=Gestió de projectes
 GenericName[cs]=Správa projektů

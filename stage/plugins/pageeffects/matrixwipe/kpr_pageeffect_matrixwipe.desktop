@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Matrix wipe
-Name[bs]=Brisanje matrice
 Name[ca]=Esborrat de matriu
 Name[ca@valencia]=Esborrat de matriu
 Name[da]=Matrixvisker
@@ -33,7 +32,6 @@ Name[wa]=Schover l' matrice evoye
 Name[x-test]=xxMatrix wipexx
 Name[zh_TW]=矩陣掃描
 Comment=Matrix wipe Page Effects
-Comment[bs]=Efekat Brisanja Stranice Matrice
 Comment[ca]=Efectes d'esborrat de matriu de la pàgina
 Comment[ca@valencia]=Efectes d'esborrat de matriu de la pàgina
 Comment[da]=Matrixvisker-sideeffekt

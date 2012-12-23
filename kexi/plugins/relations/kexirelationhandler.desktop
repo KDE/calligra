@@ -4,7 +4,6 @@ X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Relationships
 GenericName[be]=Сувязі
-GenericName[bs]=Relacije
 GenericName[ca]=Relacions
 GenericName[ca@valencia]=Relacions
 GenericName[cs]=Vztahy
@@ -60,7 +59,6 @@ GenericName[zh_CN]=关系
 GenericName[zh_TW]=關係
 Name=Relationships
 Name[be]=Узаемасувязі
-Name[bs]=Relacije
 Name[ca]=Relacions
 Name[ca@valencia]=Relacions
 Name[cs]=Vztahy

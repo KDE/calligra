@@ -2,7 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=Braindump/Extensions
 Comment=Extensions for Braindump
-Comment[bs]=Ekstenzije za Braindump
 Comment[ca]=Extensions per a Braindump
 Comment[ca@valencia]=Extensions per a Braindump
 Comment[cs]=Rozšíření pro Braindump

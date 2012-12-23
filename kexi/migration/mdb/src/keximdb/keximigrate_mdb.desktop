@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=MS Access
 Name[bg]=MS Access
-Name[bs]=MS Access
 Name[ca]=MS Access
 Name[ca@valencia]=MS Access
 Name[cs]=MS Access
@@ -45,7 +44,6 @@ Name[x-test]=xxMS Accessxx
 Name[zh_CN]=MS Access
 Name[zh_TW]=MS Access
 Comment=MS Access (MDB) Import Plugin for Kexi
-Comment[bs]=MS Access (MDB) uvozni Plugin za Kexi
 Comment[ca]=Connector d'importació de MS Access (MDB) per al Kexi
 Comment[ca@valencia]=Connector d'importació de MS Access (MDB) per al Kexi
 Comment[cs]=Modul Kexi pro import MS Access (MDB)
