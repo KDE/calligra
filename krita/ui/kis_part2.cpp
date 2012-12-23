@@ -25,6 +25,7 @@
 #include "kis_clipboard.h"
 #include "kis_custom_image_widget.h"
 #include "kis_shape_controller.h"
+#include "KisFlipbookSelector.h"
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
@@ -126,9 +127,22 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
     }
 
     QList<KoPart::CustomDocumentWidgetItem> widgetList;
-    KoPart::CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(parent, qobject_cast<KisDoc2*>(document()), w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(), "unnamed");
-    widgetList << item;
+    {
+        KoPart::CustomDocumentWidgetItem item;
+        item.widget = new KisCustomImageWidget(parent,
+                                               qobject_cast<KisDoc2*>(document()), w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(),
+                                               "unnamed");
+
+        item.icon = "application-x-krita";
+        widgetList << item;
+    }
+    {
+        KoPart::CustomDocumentWidgetItem item;
+        item.widget = new KisFlipbookSelector(parent);
+        item.title = i18n("Flipbooks");
+        item.icon = "folder-video";
+        widgetList << item;
+    }
 
     return widgetList;
 }
