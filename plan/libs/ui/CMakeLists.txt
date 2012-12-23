@@ -2,7 +2,7 @@
 include (${CMAKE_SOURCE_DIR}/3rdparty/kdgantt/CMakeLists.txt)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+    ${KDCHART_INCLUDES}
 
     ${CMAKE_SOURCE_DIR}/plan/libs/kernel
     ${CMAKE_SOURCE_DIR}/plan/libs/models

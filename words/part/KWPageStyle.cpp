@@ -364,7 +364,7 @@ void KWPageStyle::loadOdf(KoOdfLoadingContext &context, const KoXmlElement &mast
     }
 
     // Load background color
-    QString backgroundColor = props.attributeNS(KoXmlNS::fo, "background-color", QString::null);
+    QString backgroundColor = props.attributeNS(KoXmlNS::fo, "background-color", QString());
     if (!backgroundColor.isNull() && d->fullPageBackground == 0) {
 
         if (backgroundColor == "transparent") {

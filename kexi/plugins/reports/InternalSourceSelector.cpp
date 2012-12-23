@@ -60,4 +60,3 @@ QStringList InternalSourceSelector::queryList(){
     
     return qs;
 }
-    
