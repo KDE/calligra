@@ -43,7 +43,7 @@ public slots:
     void on_Ok_clicked();
 private:
     
-    void selectBase();
+//     void selectBase();
     class Private;
     Private *const d;
 };

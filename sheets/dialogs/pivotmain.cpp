@@ -589,7 +589,16 @@ void PivotMain::Summarize()
       vector.append(Cell(mySheet,z,y).value());
       
     }
-    calc->arrayWalk(vector,res,calc->awFunc(d->func),Value(0));
+    if(d->func!="average")
+      calc->arrayWalk(vector,res,calc->awFunc(d->func),Value(0));
+    else
+    {
+      calc->arrayWalk(vector,res,calc->awFunc("sum"),Value(0));
+      if(vector.count()!=0)
+	  res=calc->div(res,vector.count());
+    }
+    
+    
     Cell(mySheet,z,rowList.size()+colmult+1).setValue(res);
     res=Value(0);
     
@@ -611,7 +620,16 @@ void PivotMain::Summarize()
       vector.append(Cell(mySheet,y,z).value());
       
     }
-    calc->arrayWalk(vector,res,calc->awFunc(d->func),Value(0));
+    
+    if(d->func!="average")
+      calc->arrayWalk(vector,res,calc->awFunc(d->func),Value(0));
+    else
+    {
+      calc->arrayWalk(vector,res,calc->awFunc("sum"),Value(0));
+      if(vector.count()!=0)
+	  res=calc->div(res,vector.count());
+    }
+    
     Cell(mySheet,columnList.size()+rowmult+1,z).setValue(res);
     res=Value(0);
      

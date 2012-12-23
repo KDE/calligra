@@ -47,7 +47,7 @@ PivotOptions::PivotOptions(QWidget* parent,Selection* selection) :
    setCaption(i18n("Pivot Options"));
    setMainWidget(widget);
    d->selection= selection;
-   selectBase();   
+//    selectBase();   
    enableButton(Ok,true);
    d->mainWidget.SelectFunction->addItem("prod");
    d->mainWidget.SelectFunction->addItem("devsq");
@@ -64,7 +64,7 @@ QString PivotOptions::returnFunction()
 }
 
 
-
+/*
 void PivotOptions::selectBase()
 {
     Sheet *const sheet = d->selection->lastSheet();
@@ -90,6 +90,7 @@ void PivotOptions::selectBase()
 	}
     }
 }
+*/
 void PivotOptions::on_Ok_clicked()
 {
   //returnFunction();

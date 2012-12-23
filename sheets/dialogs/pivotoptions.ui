@@ -86,31 +86,6 @@
        </item>
        <item>
         <property name="text">
-         <string>% of</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>% Difference from</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>% of Row</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>% of Column</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>% of Total</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string/>
         </property>
        </item>
