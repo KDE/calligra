@@ -42,6 +42,21 @@ private slots:
 
     void updateLayout(Qt::DockWidgetArea area);
 
+    void newFlipbook();
+    void openFlipbook();
+    void selectFlipbook(int index);
+    void deleteFlipbook();
+
+    void addImage();
+    void removeImage();
+
+    void goFirst();
+    void goPrevious();
+    void goNext();
+    void goLast();
+
+    void selectImage(QListWidgetItem *item);
+
 private:
     KisCanvas2 *m_canvas;
 };
