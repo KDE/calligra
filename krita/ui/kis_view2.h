@@ -182,6 +182,9 @@ public:  // Krita specific interfaces
     /// shows a floating message in the top right corner of the canvas
     void showFloatingMessage(const QString message, const QIcon& icon);
 
+    QString currentFlipbook() const;
+    void setCurrentFlipbook(const QString &flipbook);
+
 signals:
 
     void sigLoadingFinished();

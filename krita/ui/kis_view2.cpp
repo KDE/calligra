@@ -214,6 +214,7 @@ public:
     KisPerspectiveGridManager * perspectiveGridManager;
     KisPaintingAssistantsManager* paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
+    QString currentFlipbook;
 };
 
 
@@ -1299,6 +1300,16 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
     floatingMessage->setShowOverParent(true);
     floatingMessage->setIcon(icon);
     floatingMessage->showMessage();
+}
+
+QString KisView2::currentFlipbook() const
+{
+    return m_d->currentFlipbook;
+}
+
+void KisView2::setCurrentFlipbook(const QString &flipbook)
+{
+    m_d->currentFlipbook = flipbook;
 }
 
 #include "kis_view2.moc"
