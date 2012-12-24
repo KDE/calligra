@@ -21,6 +21,7 @@
 #include "KoShadowConfigWidget.h"
 #include "ui_KoShadowConfigWidget.h"
 
+#include <KoIcon.h>
 #include <KoUnit.h>
 #include <KoColorPopupAction.h>
 #include <KoCanvasBase.h>
@@ -62,6 +63,8 @@ KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)
 
     d->actionShadowColor = new KoColorPopupAction(this);
     d->actionShadowColor->setCurrentColor(QColor(0, 0, 0, 192)); // some reasonable default for shadow
+    d->actionShadowColor->setIcon(koIcon("format-stroke-color"));
+    d->actionShadowColor->setToolTip(i18n("Change the color of the shadow"));
     d->widget.shadowColor->setDefaultAction(d->actionShadowColor);
 
     connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(applyChanges()));
