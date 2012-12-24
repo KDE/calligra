@@ -18,17 +18,27 @@
 #define KISFLIPBOOKSELECTOR_H
 
 #include <QWidget>
+#include "ui_wdgflipbookselector.h"
 
-class KisFlipbookSelector : public QWidget
+class KisDoc2;
+
+class KisFlipbookSelector : public QWidget, public Ui::WdgFlipbookSelector
 {
     Q_OBJECT
 public:
-    explicit KisFlipbookSelector(QWidget *parent = 0);
+    KisFlipbookSelector(QWidget *parent, KisDoc2 *document);
     
 signals:
     
-public slots:
-    
+    void documentSelected();
+
+private slots:
+
+    void loadFlipbook();
+    void createImage();
+
+private:
+    KisDoc2 *m_document;
 };
 
 #endif // KISFLIPBOOKSELECTOR_H

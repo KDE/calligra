@@ -65,6 +65,7 @@ KoView *KisPart2::createViewInstance(QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
     KisView2 *v = new KisView2(this, m_document, parent);
+    v->setCurrentFlipbook(m_flipbook);
 
     //XXX : fix this ugliness
     dynamic_cast<KisShapeController*>(m_document->shapeController())->setInitialShapeForView(v);
@@ -138,13 +139,18 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
     }
     {
         KoPart::CustomDocumentWidgetItem item;
-        item.widget = new KisFlipbookSelector(parent);
+        item.widget = new KisFlipbookSelector(parent, qobject_cast<KisDoc2*>(document()));
         item.title = i18n("Flipbooks");
         item.icon = "folder-video";
         widgetList << item;
     }
 
     return widgetList;
+}
+
+void KisPart2::setFlipbook(const QString &flipbook)
+{
+    m_flipbook = flipbook;
 }
 
 

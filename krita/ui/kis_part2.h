@@ -55,12 +55,15 @@ public:
 
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
+    void setFlipbook(const QString &flipbook);
+
 protected slots:
 
     /// Quits Krita with error message from m_errorMessage.
     void showErrorAndDie();
 
 protected:
+    QString m_flipbook;
     QString m_errorMessage;
     bool m_dieOnError;
     KisDoc2 *m_document;

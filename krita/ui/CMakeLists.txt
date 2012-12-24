@@ -264,6 +264,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgnodequerypatheditor.ui
     forms/wdgpresetselectorstrip.ui
     forms/wdgdlgblacklistcleanup.ui
+    forms/wdgflipbookselector.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

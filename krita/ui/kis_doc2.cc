@@ -141,6 +141,8 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     KisPart2 *part; // XXX: we shouldn't know about the part here!
+
+    QString flipbook;
 };
 
 
@@ -523,7 +525,6 @@ void KisDoc2::undoIndexChanged(int idx)
 
     undoStore->notifyCommandExecuted(command);
 }
-
 
 #include "kis_doc2.moc"
 
