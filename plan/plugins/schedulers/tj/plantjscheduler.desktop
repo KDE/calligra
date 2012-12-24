@@ -4,6 +4,7 @@ Type=Service
 X-KDE-Library=plantjscheduler
 
 Name=TJ Scheduler
+Name[bs]=TJ planer
 Name[ca]=Planificador TJ
 Name[ca@valencia]=Planificador TJ
 Name[cs]=Plánovač TJ
@@ -31,6 +32,7 @@ Name[x-test]=xxTJ Schedulerxx
 Name[zh_CN]=TJ 调度器
 Name[zh_TW]=TJ 排程器
 Comment=The TaskJuggler scheduler
+Comment[bs]=TaskJuggler Planer
 Comment[ca]=El planificador TakJuggler
 Comment[ca@valencia]=El planificador TakJuggler
 Comment[cs]=Plánovač TaskJuggler

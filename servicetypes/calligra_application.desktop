@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Calligra/Application
 Comment=Calligra Application
+Comment[bs]=Calligra Aplikacija
 Comment[ca]=Aplicació Calligra
 Comment[ca@valencia]=Aplicació Calligra
 Comment[cs]=Aplikace Calligra

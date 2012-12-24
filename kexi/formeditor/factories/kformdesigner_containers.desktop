@@ -3,6 +3,7 @@ Type=Service
 X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Container Widgets
+Name[bs]=Kontejnerski dodaci
 Name[ca]=Estris contenidors
 Name[ca@valencia]=Estris contenidors
 Name[cs]=Kontejnerové widgety
