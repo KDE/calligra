@@ -82,7 +82,7 @@ public:
 
     KexiUtils::Validator *nameValidator() const;
 
-    /*! Adds subvalidator for name field. In fact it's is added to internal
+    /*! Adds subvalidator for name field. In fact it is added to internal
      multivalidator. If \a owned is true, \a validator will be owned by the object.
      \sa MultiValidator::addSubvalidator(). */
     void addNameSubvalidator(KexiUtils::Validator* validator, bool owned = true);
