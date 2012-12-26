@@ -27,6 +27,7 @@
 class KisDoc2;
 class QGraphicsItem;
 class KoView;
+class KisFlipbook;
 
 class KRITAUI_EXPORT KisPart2 : public KoPart
 {
@@ -55,7 +56,7 @@ public:
 
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
-    void setFlipbook(const QString &flipbook);
+    void setFlipbook(KisFlipbook *flipbook);
 
 protected slots:
 
@@ -63,7 +64,7 @@ protected slots:
     void showErrorAndDie();
 
 protected:
-    QString m_flipbook;
+    KisFlipbook *m_flipbook;
     QString m_errorMessage;
     bool m_dieOnError;
     KisDoc2 *m_document;

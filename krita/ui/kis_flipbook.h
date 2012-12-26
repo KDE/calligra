@@ -31,7 +31,7 @@ public:
 
     void setName(const QString &name);
     QString name() const;
-    
+
     KisFlipbookItem *addItem(const QString &url);
 
     void load(const QString &url);

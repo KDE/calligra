@@ -78,13 +78,4 @@ void KisFlipbookSelector::loadFlipbook()
 
 void KisFlipbookSelector::createImage()
 {
-    QListWidgetItem *item = listFlipbooks->currentItem();
-    if (!item) {
-        item = listFlipbooks->item(0);
-    }
-
-    if (item) {
-        static_cast<KisPart2*>(m_document->documentPart())->setFlipbook(item->data(Qt::UserRole).toString());
-        emit documentSelected();
-    }
 }

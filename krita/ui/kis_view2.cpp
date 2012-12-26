@@ -168,6 +168,7 @@ public:
         , gridManager(0)
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
+        , flipbook(0)
     {
     }
 
@@ -195,26 +196,26 @@ public:
     KisCanvas2 *canvas;
     KisDoc2 *doc;
     KisPart2 *part;
-    KisCoordinatesConverter * viewConverter;
-    KisCanvasController * canvasController;
-    KisCanvasResourceProvider * resourceProvider;
-    KisFilterManager * filterManager;
-    KisStatusBar * statusBar;
-    KAction * totalRefresh;
-    KAction* mirrorCanvas;
-    KAction* createTemplate;
+    KisCoordinatesConverter *viewConverter;
+    KisCanvasController *canvasController;
+    KisCanvasResourceProvider *resourceProvider;
+    KisFilterManager *filterManager;
+    KisStatusBar *statusBar;
+    KAction *totalRefresh;
+    KAction *mirrorCanvas;
+    KAction *createTemplate;
     KAction *saveIncremental;
     KAction *saveIncrementalBackup;
     KisSelectionManager *selectionManager;
-    KisControlFrame * controlFrame;
-    KisNodeManager * nodeManager;
-    KisZoomManager * zoomManager;
-    KisImageManager * imageManager;
-    KisGridManager * gridManager;
+    KisControlFrame *controlFrame;
+    KisNodeManager *nodeManager;
+    KisZoomManager *zoomManager;
+    KisImageManager *imageManager;
+    KisGridManager *gridManager;
     KisPerspectiveGridManager * perspectiveGridManager;
-    KisPaintingAssistantsManager* paintingAssistantManager;
+    KisPaintingAssistantsManager *paintingAssistantManager;
     BlockingUserInputEventFilter blockingEventFilter;
-    QString currentFlipbook;
+    KisFlipbook *flipbook;
 };
 
 
@@ -1302,14 +1303,14 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
     floatingMessage->showMessage();
 }
 
-QString KisView2::currentFlipbook() const
+KisFlipbook *KisView2::flipbook() const
 {
-    return m_d->currentFlipbook;
+    return m_d->flipbook;
 }
 
-void KisView2::setCurrentFlipbook(const QString &flipbook)
+void KisView2::setFlipbook(KisFlipbook *flipbook)
 {
-    m_d->currentFlipbook = flipbook;
+    m_d->flipbook = flipbook;
 }
 
 #include "kis_view2.moc"

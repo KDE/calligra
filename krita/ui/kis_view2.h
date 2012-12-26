@@ -52,6 +52,7 @@ class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
+class KisFlipbook;
 
 /**
  * Krita view class
@@ -182,8 +183,8 @@ public:  // Krita specific interfaces
     /// shows a floating message in the top right corner of the canvas
     void showFloatingMessage(const QString message, const QIcon& icon);
 
-    QString currentFlipbook() const;
-    void setCurrentFlipbook(const QString &flipbook);
+    KisFlipbook *flipbook() const;
+    void setFlipbook(KisFlipbook *flipbook);
 
 signals:
 

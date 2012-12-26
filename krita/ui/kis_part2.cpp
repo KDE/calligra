@@ -26,6 +26,7 @@
 #include "kis_custom_image_widget.h"
 #include "kis_shape_controller.h"
 #include "KisFlipbookSelector.h"
+#include "kis_flipbook.h"
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
@@ -45,6 +46,7 @@
 
 KisPart2::KisPart2(QObject *parent)
     : KoPart(parent)
+    , m_flipbook(0)
     , m_dieOnError(false)
 {
     setComponentData(KisFactory2::componentData(), false);
@@ -53,6 +55,11 @@ KisPart2::KisPart2(QObject *parent)
 
 KisPart2::~KisPart2()
 {
+    foreach(KoView *v, views()) {
+        KisView2 *view = dynamic_cast<KisView2*>(v);
+        view->setFlipbook(0);
+    }
+    delete m_flipbook;
 }
 
 void KisPart2::setDocument(KisDoc2 *document)
@@ -65,7 +72,7 @@ KoView *KisPart2::createViewInstance(QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
     KisView2 *v = new KisView2(this, m_document, parent);
-    v->setCurrentFlipbook(m_flipbook);
+    v->setFlipbook(m_flipbook);
 
     //XXX : fix this ugliness
     dynamic_cast<KisShapeController*>(m_document->shapeController())->setInitialShapeForView(v);
@@ -148,7 +155,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
     return widgetList;
 }
 
-void KisPart2::setFlipbook(const QString &flipbook)
+void KisPart2::setFlipbook(KisFlipbook *flipbook)
 {
     m_flipbook = flipbook;
 }
