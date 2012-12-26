@@ -92,7 +92,9 @@ KoFilter::ConversionStatus KisFlipbookImport::convert(const QByteArray& from, co
     if (!QFile::exists(item->filename()))
         return KoFilter::FileNotFound;
 
-    doc->openUrl(item->filename());
+    KisDoc2 *tmpDoc = item->document();
+    doc->setCurrentImage(tmpDoc->image());
+    doc->setUrl(tmpDoc->url());
 
     return KoFilter::OK;
 
