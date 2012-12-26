@@ -157,7 +157,14 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
 void KisPart2::setFlipbook(KisFlipbook *flipbook)
 {
+    foreach(KoView *v, views()) {
+        KisView2 *view = dynamic_cast<KisView2*>(v);
+        view->setFlipbook(flipbook);
+    }
+    delete m_flipbook;
+
     m_flipbook = flipbook;
+
 }
 
 
