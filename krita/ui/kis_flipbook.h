@@ -14,44 +14,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef FLIPBOOK_ITEM_H
-#define FLIPBOOK_ITEM_H
+#ifndef KIS_FLIPBOOK_H
+#define KIS_FLIPBOOK_H
 
+#include <QStandardItemModel>
+#include <krita_export.h>
+
+class KisFlipbookItem;
 class QString;
-class QSize;
-class KisDoc2;
-class KisPart2;
 
-#include <QStandardItem>
-#include <QImage>
-
-/**
- * The FlipbookItem class represents an item in the flipbook. It is lazy loading
- * when a non-kra image is referred. When the item gets shown for the first time in
- * the KisView2, then a KisDoc2 is created and cached.
- */
-class FlipbookItem : public QStandardItem
+class KRITAUI_EXPORT KisFlipbook : public QStandardItemModel
 {
-
+    Q_OBJECT
 public:
-    FlipbookItem(const QString &filename);
-    ~FlipbookItem();
+    explicit KisFlipbook(QObject *parent = 0);
 
-    KisDoc2 *document();
-    QImage icon() const;
-    QString filename() const;
+    void setName(const QString &name);
     QString name() const;
+    
+    KisFlipbookItem *addItem(const QString &url);
 
-    int width() const;
-    int height() const;
-    const QSize &size() const;
+    void load(const QString &url);
+    void save(const QString &url);
+
 private:
 
-    QString m_filename;
-    KisDoc2 *m_document;
-    KisPart2 *m_part;
-    QImage m_icon;
-    QSize m_imageSize;
+    QString m_name;
 };
 
-#endif // FLIPBOOK_ITEM_H
+#endif // KIS_FLIPBOOK_H

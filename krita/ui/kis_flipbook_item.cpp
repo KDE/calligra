@@ -14,7 +14,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "flipbook_item.h"
+#include "kis_flipbook_item.h"
 
 #include <kis_doc2.h>
 #include <kis_part2.h>
@@ -23,23 +23,20 @@
 #include <QFileInfo>
 #include <QSize>
 
-FlipbookItem::FlipbookItem(const QString &filename)
+KisFlipbookItem::KisFlipbookItem(const QString &filename)
     : m_filename(filename)
     , m_document(0)
     , m_part(0)
 {
-    m_icon.load(filename);
-    m_imageSize = m_icon.size();
-    m_icon = m_icon.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
-FlipbookItem::~FlipbookItem()
+KisFlipbookItem::~KisFlipbookItem()
 {
     delete m_part;
     delete m_document;
 }
 
-KisDoc2 *FlipbookItem::document()
+KisDoc2 *KisFlipbookItem::document()
 {
     if (!m_document) {
         KisPart2 *part = new KisPart2(0);
@@ -50,33 +47,38 @@ KisDoc2 *FlipbookItem::document()
     return m_document;
 }
 
-QImage FlipbookItem::icon() const
+QImage KisFlipbookItem::icon()
 {
+    if (m_icon.isNull()) {
+        m_icon.load(m_filename);
+        m_imageSize = m_icon.size();
+        m_icon = m_icon.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
     return m_icon;
 }
 
-QString FlipbookItem::filename() const
+QString KisFlipbookItem::filename() const
 {
     return m_filename;
 }
 
-QString FlipbookItem::name() const
+QString KisFlipbookItem::name() const
 {
     QFileInfo info(m_filename);
     return info.fileName();
 }
 
-int FlipbookItem::width() const
+int KisFlipbookItem::width() const
 {
     return m_imageSize.width();
 }
 
-int FlipbookItem::height() const
+int KisFlipbookItem::height() const
 {
     return m_imageSize.height();
 }
 
-const QSize &FlipbookItem::size() const
+const QSize &KisFlipbookItem::size() const
 {
     return m_imageSize;
 }

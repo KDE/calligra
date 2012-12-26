@@ -74,6 +74,8 @@ set(kritaui_LIB_SRCS
     kis_filter_handler.cc
     kis_filter_manager.cc
     kis_filters_model.cc
+    kis_flipbook.cpp
+    kis_flipbook_item.cpp
     kis_histogram_view.cc
     kis_image_manager.cc
     kis_image_view_converter.cpp
