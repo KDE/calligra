@@ -168,7 +168,6 @@ public:
         , gridManager(0)
         , perspectiveGridManager(0)
         , paintingAssistantManager(0)
-        , flipbook(0)
     {
     }
 
@@ -1301,16 +1300,6 @@ void KisView2::showFloatingMessage(const QString message, const QIcon& icon)
     floatingMessage->setShowOverParent(true);
     floatingMessage->setIcon(icon);
     floatingMessage->showMessage();
-}
-
-KisFlipbook *KisView2::flipbook() const
-{
-    return m_d->flipbook;
-}
-
-void KisView2::setFlipbook(KisFlipbook *flipbook)
-{
-    m_d->flipbook = flipbook;
 }
 
 #include "kis_view2.moc"

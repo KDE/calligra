@@ -183,8 +183,9 @@ public:  // Krita specific interfaces
     /// shows a floating message in the top right corner of the canvas
     void showFloatingMessage(const QString message, const QIcon& icon);
 
-    KisFlipbook *flipbook() const;
-    void setFlipbook(KisFlipbook *flipbook);
+public slots:
+
+    void slotLoadingFinished();
 
 signals:
 
@@ -192,7 +193,7 @@ signals:
 
 private slots:
 
-    void slotLoadingFinished();
+
     void slotPreferences();
     void slotEditPalette();
     void slotBlacklistCleanup();

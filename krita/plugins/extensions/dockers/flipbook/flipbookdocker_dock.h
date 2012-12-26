@@ -23,7 +23,7 @@
 #include "ui_wdgflipbookdocker.h"
 
 class KoResourceLoaderThread;
-class FlipbookModel;
+class KisFlipbook;
 class QListView;
 class QThread;
 class KisCanvas2;
@@ -55,10 +55,14 @@ private slots:
     void goNext();
     void goLast();
 
-    void selectImage(QListWidgetItem *item);
+    void selectImage(const QModelIndex &index);
 
 private:
+
+    void showCurrentItem();
+
     KisCanvas2 *m_canvas;
+    KisFlipbook *m_flipbook;
 };
 
 

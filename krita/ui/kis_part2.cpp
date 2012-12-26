@@ -55,10 +55,6 @@ KisPart2::KisPart2(QObject *parent)
 
 KisPart2::~KisPart2()
 {
-    foreach(KoView *v, views()) {
-        KisView2 *view = dynamic_cast<KisView2*>(v);
-        view->setFlipbook(0);
-    }
     delete m_flipbook;
 }
 
@@ -72,7 +68,7 @@ KoView *KisPart2::createViewInstance(QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
     KisView2 *v = new KisView2(this, m_document, parent);
-    v->setFlipbook(m_flipbook);
+    qDebug() << "create view" << this << "flipbook" << m_flipbook;
 
     //XXX : fix this ugliness
     dynamic_cast<KisShapeController*>(m_document->shapeController())->setInitialShapeForView(v);
@@ -157,17 +153,8 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
 void KisPart2::setFlipbook(KisFlipbook *flipbook)
 {
-    foreach(KoView *v, views()) {
-        KisView2 *view = dynamic_cast<KisView2*>(v);
-        view->setFlipbook(flipbook);
-    }
-    delete m_flipbook;
-
     m_flipbook = flipbook;
-
 }
-
-
 
 void KisPart2::showErrorAndDie()
 {

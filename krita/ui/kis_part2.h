@@ -56,6 +56,7 @@ public:
 
     QList<KoPart::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
+    KisFlipbook *flipbook() const { return m_flipbook; }
     void setFlipbook(KisFlipbook *flipbook);
 
 protected slots:

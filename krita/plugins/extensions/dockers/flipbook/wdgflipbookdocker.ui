@@ -40,7 +40,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QListWidget" name="listFlipbook"/>
+    <widget class="QListView" name="listFlipbook"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

@@ -75,7 +75,6 @@ void KisFlipbook::load(const QString &url)
                 n = n.nextSibling();
             }
         }
-
     }
 }
 

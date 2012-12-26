@@ -28,6 +28,16 @@ KisFlipbookItem::KisFlipbookItem(const QString &filename)
     , m_document(0)
     , m_part(0)
 {
+    if (m_icon.isNull()) {
+        m_icon.load(m_filename);
+        m_imageSize = m_icon.size();
+        m_icon = m_icon.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+    QIcon icon;
+    icon.addPixmap(QPixmap::fromImage(m_icon));
+    setIcon(icon);
+    setText(name());
+    setToolTip(filename);
 }
 
 KisFlipbookItem::~KisFlipbookItem()
@@ -47,15 +57,6 @@ KisDoc2 *KisFlipbookItem::document()
     return m_document;
 }
 
-QImage KisFlipbookItem::icon()
-{
-    if (m_icon.isNull()) {
-        m_icon.load(m_filename);
-        m_imageSize = m_icon.size();
-        m_icon = m_icon.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
-    return m_icon;
-}
 
 QString KisFlipbookItem::filename() const
 {

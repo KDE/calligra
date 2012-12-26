@@ -40,7 +40,6 @@ public:
     ~KisFlipbookItem();
 
     KisDoc2 *document();
-    QImage icon();
     QString filename() const;
     QString name() const;
 

@@ -18,16 +18,30 @@
 #include "flipbookdocker_dock.h"
 
 #include <QListWidget>
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QStyleOptionViewItem>
+#include <QModelIndex>
 
 #include <klocale.h>
 #include <kactioncollection.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
+#include <KoZoomController.h>
+#include <KoZoomMode.h>
 
+#include <kis_image.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
+#include <kis_flipbook.h>
+#include <kis_flipbook_item.h>
+#include <kis_doc2.h>
+#include <kis_part2.h>
+#include <kis_zoom_manager.h>
+//class FlipbookItemDelegate : public QAbstractItemDelegate {
 
+//};
 
 FlipbookDockerDock::FlipbookDockerDock( )
     : QDockWidget(i18n("Flipbook"))
@@ -77,7 +91,9 @@ FlipbookDockerDock::FlipbookDockerDock( )
     bnDeleteItem->setToolTip(i18n("Remove selected images from the current flipbook"));
     connect(bnDeleteItem, SIGNAL(clicked()), SLOT(removeImage()));
 
-    connect(listFlipbook, SIGNAL(itemActivated(QListWidgetItem *)), SLOT(selectImage(QListWidgetItem*)));
+    listFlipbook->setViewMode(QListView::IconMode);
+    listFlipbook->setIconSize(QSize(128,128));
+    connect(listFlipbook, SIGNAL(activated(const QModelIndex&)), SLOT(selectImage(const QModelIndex&)));
 }
 
 FlipbookDockerDock::~FlipbookDockerDock()
@@ -93,6 +109,14 @@ void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
         }
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    m_flipbook = static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->flipbook();
+    if (!m_flipbook) {
+        qDebug() << "no flipbook set";
+    }
+    else {
+        qDebug() << "Flipbook items" << m_flipbook->rowCount();
+        listFlipbook->setModel(m_flipbook);
+    }
 }
 
 void FlipbookDockerDock::unsetCanvas()
@@ -102,6 +126,7 @@ void FlipbookDockerDock::unsetCanvas()
 
 void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
 {
+    listFlipbook->setWrapping(false);
     if (area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea) {
         listFlipbook->setFlow(QListView::TopToBottom);
         bnFirstItem->setIcon(koIcon("arrow-up-double"));
@@ -114,7 +139,7 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
         bnFirstItem->setIcon(koIcon("arrow-left-double"));
         bnPreviousItem->setIcon(koIcon("arrow-left"));
         bnNextItem->setIcon(koIcon("arrow-right"));
-        bnLastItem->setIcon(koIcon("arrow-left-double"));
+        bnLastItem->setIcon(koIcon("arrow-right-double"));
     }
 }
 
@@ -169,8 +194,20 @@ void FlipbookDockerDock::goLast()
 
 }
 
-void FlipbookDockerDock::selectImage(QListWidgetItem *item)
+void FlipbookDockerDock::selectImage( const QModelIndex &index)
 {
+    if (!index.isValid()) return;
+
+    KisFlipbookItem *item = static_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
+    if (m_canvas->view()->document()->isModified()) {
+        m_canvas->view()->document()->documentPart()->save();
+        m_canvas->view()->document()->setModified(false);
+    }
+    m_canvas->view()->document()->setCurrentImage(item->document()->image());
+    m_canvas->view()->document()->setUrl(item->filename());
+    m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+//    m_canvas->view()->slotLoadingFinished();
+//    m_canvas->view()->image()->initialRefreshGraph();
 
 }
 

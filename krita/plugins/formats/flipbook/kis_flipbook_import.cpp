@@ -57,7 +57,7 @@ KisFlipbookImport::~KisFlipbookImport()
 
 KoFilter::ConversionStatus KisFlipbookImport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile << "Flipbook import! From:" << from << ", To:" << to << 0;
+    qDebug() << "Flipbook import! From:" << from << ", To:" << to << 0;
 
     if (!(from == "application/x-krita-flipbook"))
         return KoFilter::NotImplemented;
@@ -75,7 +75,7 @@ KoFilter::ConversionStatus KisFlipbookImport::convert(const QByteArray& from, co
     if (filename.isEmpty() || !QFile::exists(filename))
         return KoFilter::FileNotFound;
 
-    KisFlipbook *flipbook = new KisFlipbook;
+    KisFlipbook *flipbook = new KisFlipbook();
     flipbook->load(filename);
     if (flipbook->rowCount() > 0) {
         // XXX: load the last loaded current file
