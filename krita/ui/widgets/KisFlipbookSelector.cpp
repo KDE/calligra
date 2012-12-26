@@ -15,10 +15,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "KisFlipbookSelector.h"
+
 #include <kis_doc2.h>
 #include <kis_part2.h>
+#include <kis_flipbook.h>
+#include <kis_flipbook_item.h>
+#include <kis_image.h>
 
 #include <KoIcon.h>
+#include <KoFilterManager.h>
+#include <KoServiceProvider.h>
 
 #include <KGlobal>
 #include <KStandardDirs>
@@ -34,48 +40,34 @@ KisFlipbookSelector::KisFlipbookSelector(QWidget *parent, KisDoc2 *document)
 {
     setupUi(this);
 
-    bnGetFlipbookName->setIcon(koIcon("document-open"));
-    connect(bnGetFlipbookName, SIGNAL(clicked()), SLOT(loadFlipbook()));
-    connect(bnLoadFlipbook, SIGNAL(clicked()), SLOT(createImage()));
-
-    KConfigGroup config(document->documentPart()->componentData().config(), "RecentFlipbooks");
-    QString path;
-    int i = 0;
-    do {
-        path = config.readPathEntry(QString("File%1").arg(i), QString());
-
-        if (!path.isEmpty()) {
-            QString name = config.readPathEntry(QString("Name%1").arg(i), QString());
-
-            KUrl url(path);
-
-            if (name.isEmpty())
-                name = url.fileName();
-
-            if (QFile::exists(url.toLocalFile())) {
-                QListWidgetItem *item = new QListWidgetItem(name, listFlipbooks);
-                item->setData(Qt::UserRole, path);
-                qDebug() << name << path;
-            }
-        }
-        i++;
-    } while (!path.isEmpty() || i <= 100);
-
-
-    bnLoadFlipbook->setEnabled(listFlipbooks->count() > 0);
-
+    connect(bnCreateNewFlipbook, SIGNAL(clicked()), SLOT(createImage()));
 }
-
-void KisFlipbookSelector::loadFlipbook()
-{
-    QString flipbook = KFileDialog::getSaveFileName(QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                                                    "flipbook",
-                                                    this, i18n("Open Flipbook Definitions"));
-    txtFlipbookName->setText(flipbook);
-    bnCreateNewFlipbook->setEnabled(true);
-}
-
 
 void KisFlipbookSelector::createImage()
 {
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                   KoFilterManager::Import,
+                                   KoServiceProvider::readExtraNativeMimeTypes());
+
+    QStringList urls = KFileDialog::getOpenFileNames(QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                     mimeFilter.join(" "),
+                                                     this, i18n("Select files to add to flipbook"));
+
+    if (urls.size() < 1) return;
+
+    KisFlipbook *flipBook = new KisFlipbook();
+    foreach(QString url, urls) {
+        if (QFile::exists(url)) {
+            flipBook->addItem(url);
+        }
+    }
+
+    flipBook->setName(txtFlipbookName->text());
+
+    m_document->setUrl(urls[0]);
+    m_document->setCurrentImage(static_cast<KisFlipbookItem*>(flipBook->item(0))->document()->image());
+
+    static_cast<KisPart2*>(m_document->documentPart())->setFlipbook(flipBook);
+
+    emit documentSelected();
 }

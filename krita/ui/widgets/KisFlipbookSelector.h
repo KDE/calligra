@@ -34,7 +34,6 @@ signals:
 
 private slots:
 
-    void loadFlipbook();
     void createImage();
 
 private:

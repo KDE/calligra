@@ -40,6 +40,7 @@ public:
 private:
 
     QString m_name;
+
 };
 
 #endif // KIS_FLIPBOOK_H
