@@ -269,6 +269,7 @@ void FlipbookDockerDock::goLast()
 void FlipbookDockerDock::selectImage(const QModelIndex &index)
 {
     if (!index.isValid()) return;
+    if (!m_canvas) return;
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
