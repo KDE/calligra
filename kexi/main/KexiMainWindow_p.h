@@ -1180,7 +1180,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         if (watched == d->searchLineEdit) {
             activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
                                       // back on Escape key press
-            return true;
+            return false;
         }
         else if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
