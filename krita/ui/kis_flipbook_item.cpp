@@ -17,6 +17,7 @@
 #include "kis_flipbook_item.h"
 
 #include <kis_doc2.h>
+#include <kis_image.h>
 #include <kis_part2.h>
 
 #include <QImage>
@@ -32,6 +33,13 @@ KisFlipbookItem::KisFlipbookItem(const QString &filename)
 {
     if (m_icon.isNull()) {
         m_icon.load(m_filename);
+        if (m_icon.isNull()) {
+            // This is an image that Qt cannot load quickly, so we load it ourselves
+            KisDoc2 *doc = document();
+            doc->image()->refreshGraph();
+            m_icon = doc->image()->convertToQImage(doc->image()->bounds(), 0);
+        }
+
         m_imageSize = m_icon.size();
         m_icon = m_icon.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
@@ -40,12 +48,13 @@ KisFlipbookItem::KisFlipbookItem(const QString &filename)
     pm.fill(Qt::darkGray);
     QPainter gc(&pm);
     int x = (128 - m_icon.width()) / 2;
-    int y = (128 - m_icon.width()) / 2;
+    int y = (128 - m_icon.height()) / 2;
     gc.drawImage(x, y, m_icon);
     gc.end();
 
     QIcon icon;
     icon.addPixmap(pm);
+
     setIcon(icon);
     setText(name());
     setToolTip(filename);
