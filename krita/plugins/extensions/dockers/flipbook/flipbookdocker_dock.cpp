@@ -147,6 +147,40 @@ void FlipbookDockerDock::saveFlipbook()
 
 void FlipbookDockerDock::newFlipbook()
 {
+    if (!m_canvas) return;
+    if (!m_canvas->view()) return;
+    if (!m_canvas->view()->document()) return;
+    if (!m_canvas->view()->document()->documentPart()) return;
+
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                   KoFilterManager::Import,
+                                   KoServiceProvider::readExtraNativeMimeTypes());
+
+    QStringList urls = KFileDialog::getOpenFileNames(QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                     mimeFilter.join(" "),
+                                                     this, i18n("Select files to add to flipbook"));
+
+    if (urls.size() < 1) return;
+
+
+    KisFlipbook *flipbook = new KisFlipbook();
+    foreach(QString url, urls) {
+        if (QFile::exists(url)) {
+            flipbook->addItem(url);
+        }
+    }
+
+    txtName->setText("");
+
+    static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->setFlipbook(flipbook);
+
+    KisFlipbook *old = m_flipbook;
+    m_flipbook = flipbook;
+
+    listFlipbook->setModel(m_flipbook);
+    selectImage(m_flipbook->index(0, 0));
+
+    delete old;
 
 }
 
