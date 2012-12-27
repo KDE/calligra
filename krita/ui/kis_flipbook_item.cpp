@@ -22,6 +22,8 @@
 #include <QImage>
 #include <QFileInfo>
 #include <QSize>
+#include <QPixmap>
+#include <QPainter>
 
 KisFlipbookItem::KisFlipbookItem(const QString &filename)
     : m_filename(filename)
@@ -33,8 +35,17 @@ KisFlipbookItem::KisFlipbookItem(const QString &filename)
         m_imageSize = m_icon.size();
         m_icon = m_icon.scaled(128, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
+
+    QPixmap pm(128, 128);
+    pm.fill(Qt::darkGray);
+    QPainter gc(&pm);
+    int x = (128 - m_icon.width()) / 2;
+    int y = (128 - m_icon.width()) / 2;
+    gc.drawImage(x, y, m_icon);
+    gc.end();
+
     QIcon icon;
-    icon.addPixmap(QPixmap::fromImage(m_icon));
+    icon.addPixmap(pm);
     setIcon(icon);
     setText(name());
     setToolTip(filename);
