@@ -54,7 +54,7 @@ void KisFlipbookSelector::createImage()
                                                      this, i18n("Select files to add to flipbook"));
 
     if (urls.size() < 1) return;
-
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     KisFlipbook *flipbook = new KisFlipbook();
     foreach(QString url, urls) {
         if (QFile::exists(url)) {
@@ -68,6 +68,6 @@ void KisFlipbookSelector::createImage()
     m_document->setCurrentImage(static_cast<KisFlipbookItem*>(flipbook->item(0))->document()->image());
 
     static_cast<KisPart2*>(m_document->documentPart())->setFlipbook(flipbook);
-
+    QApplication::restoreOverrideCursor();
     emit documentSelected();
 }
