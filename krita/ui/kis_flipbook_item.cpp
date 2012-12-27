@@ -53,6 +53,13 @@ KisDoc2 *KisFlipbookItem::document()
         m_document = new KisDoc2(part);
         part->setDocument(m_document);
         m_document->openUrl(KUrl(m_filename));
+
+        if (!m_document->image().isValid()) {
+            delete m_document;
+            delete part;
+            m_document = 0;
+            return 0;
+        }
     }
     return m_document;
 }

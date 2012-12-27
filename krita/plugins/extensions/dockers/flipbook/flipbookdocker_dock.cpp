@@ -39,9 +39,6 @@
 #include <kis_doc2.h>
 #include <kis_part2.h>
 #include <kis_zoom_manager.h>
-//class FlipbookItemDelegate : public QAbstractItemDelegate {
-
-//};
 
 FlipbookDockerDock::FlipbookDockerDock( )
     : QDockWidget(i18n("Flipbook"))
@@ -53,6 +50,10 @@ FlipbookDockerDock::FlipbookDockerDock( )
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), SLOT(updateLayout(Qt::DockWidgetArea)));
 
+    bnSaveFlipbook->setIcon(koIcon("document-save"));
+    bnSaveFlipbook->setToolTip(i18n("Save the current flipbook"));
+    connect(bnSaveFlipbook, SIGNAL(clicked()), SLOT(saveFlipbook()));
+
     bnNewFlipbook->setIcon(koIcon("document-new"));
     bnNewFlipbook->setToolTip(i18n("Create a new flipbook"));
     connect(bnNewFlipbook, SIGNAL(clicked()), SLOT(newFlipbook()));
@@ -60,8 +61,6 @@ FlipbookDockerDock::FlipbookDockerDock( )
     bnLoadFlipbook->setIcon(koIcon("document-open"));
     bnLoadFlipbook->setToolTip(i18n("Open a flipbook file"));
     connect(bnLoadFlipbook, SIGNAL(clicked()), SLOT(openFlipbook()));
-
-    connect(cmbFlipbooks, SIGNAL(activated(int)), SLOT(selectFlipbook(int)));
 
     bnDeleteFlipbook->setIcon(koIcon("edit-delete"));
     bnDeleteFlipbook->setToolTip(i18n("Delete current flipbook from disk"));
@@ -93,7 +92,10 @@ FlipbookDockerDock::FlipbookDockerDock( )
 
     listFlipbook->setViewMode(QListView::IconMode);
     listFlipbook->setIconSize(QSize(128,128));
-    connect(listFlipbook, SIGNAL(activated(const QModelIndex&)), SLOT(selectImage(const QModelIndex&)));
+//    listFlipbook->setSelectionBehavior(QAbstractItemView::SelectItems);
+//    listFlipbook->setSelectionMode(QAbstractItemView::SingleSelection);
+//    listFlipbook->setDragEnabled(false);
+    connect(listFlipbook, SIGNAL(currentItemChanged(const QModelIndex &)), SLOT(selectImage(const QModelIndex&)));
 }
 
 FlipbookDockerDock::~FlipbookDockerDock()
@@ -116,6 +118,7 @@ void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
     else {
         qDebug() << "Flipbook items" << m_flipbook->rowCount();
         listFlipbook->setModel(m_flipbook);
+        txtName->setText(m_flipbook->name());
     }
 }
 
@@ -143,6 +146,10 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
     }
 }
 
+void FlipbookDockerDock::saveFlipbook()
+{
+}
+
 
 void FlipbookDockerDock::newFlipbook()
 {
@@ -150,11 +157,6 @@ void FlipbookDockerDock::newFlipbook()
 }
 
 void FlipbookDockerDock::openFlipbook()
-{
-
-}
-
-void FlipbookDockerDock::selectFlipbook(int index)
 {
 
 }
@@ -176,39 +178,44 @@ void FlipbookDockerDock::removeImage()
 
 void FlipbookDockerDock::goFirst()
 {
-
+    listFlipbook->scrollToTop();
+    listFlipbook->setCurrentIndex(m_flipbook->index(0, 0));
 }
 
 void FlipbookDockerDock::goPrevious()
 {
-
+    listFlipbook->goPrevious();
 }
 
 void FlipbookDockerDock::goNext()
 {
-
+    listFlipbook->goNext();
 }
 
 void FlipbookDockerDock::goLast()
 {
-
+    listFlipbook->scrollToBottom();
+    listFlipbook->setCurrentIndex(m_flipbook->index(m_flipbook->rowCount() -1, 0));
 }
 
-void FlipbookDockerDock::selectImage( const QModelIndex &index)
+void FlipbookDockerDock::selectImage(const QModelIndex &index)
 {
     if (!index.isValid()) return;
 
-    KisFlipbookItem *item = static_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
-    if (m_canvas->view()->document()->isModified()) {
-        m_canvas->view()->document()->documentPart()->save();
-        m_canvas->view()->document()->setModified(false);
-    }
-    m_canvas->view()->document()->setCurrentImage(item->document()->image());
-    m_canvas->view()->document()->setUrl(item->filename());
-    m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
-//    m_canvas->view()->slotLoadingFinished();
-//    m_canvas->view()->image()->initialRefreshGraph();
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    KisFlipbookItem *item = static_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
+
+    if (item->document()) {
+        if (m_canvas->view()->document()->isModified()) {
+            m_canvas->view()->document()->documentPart()->save();
+            m_canvas->view()->document()->setModified(false);
+        }
+        m_canvas->view()->document()->setCurrentImage(item->document()->image());
+        m_canvas->view()->document()->setUrl(item->filename());
+        m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
+    }
+    QApplication::restoreOverrideCursor();
 }
 
 

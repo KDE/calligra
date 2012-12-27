@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>178</width>
+    <width>190</width>
     <height>570</height>
    </rect>
   </property>
@@ -28,7 +28,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cmbFlipbooks"/>
+      <widget class="QToolButton" name="bnSaveFlipbook">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="txtName"/>
      </item>
      <item>
       <widget class="QToolButton" name="bnDeleteFlipbook">
@@ -40,7 +47,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QListView" name="listFlipbook"/>
+    <widget class="FlipbookView" name="listFlipbook"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -103,6 +110,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FlipbookView</class>
+   <extends>QListView</extends>
+   <header location="global">FlipbookView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

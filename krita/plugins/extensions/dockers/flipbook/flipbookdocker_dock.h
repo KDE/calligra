@@ -20,6 +20,9 @@
 
 #include <QDockWidget>
 #include <KoCanvasObserverBase.h>
+
+#include "FlipbookView.h"
+
 #include "ui_wdgflipbookdocker.h"
 
 class KoResourceLoaderThread;
@@ -42,9 +45,9 @@ private slots:
 
     void updateLayout(Qt::DockWidgetArea area);
 
+    void saveFlipbook();
     void newFlipbook();
     void openFlipbook();
-    void selectFlipbook(int index);
     void deleteFlipbook();
 
     void addImage();
