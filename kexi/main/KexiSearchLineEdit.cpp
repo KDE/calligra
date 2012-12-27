@@ -507,7 +507,9 @@ void KexiSearchLineEdit::focusOutEvent(QFocusEvent *e)
     update();
     if (e->reason() == Qt::TabFocusReason || e->reason() == Qt::BacktabFocusReason) {
         // go back to previously focused widget
-        d->previouslyFocusedWidget->setFocus();
+        if (d->previouslyFocusedWidget) {
+            d->previouslyFocusedWidget->setFocus();
+        }
         e->accept();
     }
     d->previouslyFocusedWidget = 0;
