@@ -35,6 +35,16 @@ Time frame: (days / weeks)
 assigned to a person.]
 
 
+Allow user to add a book cover image                                    DONE
+ * Send parameter (filename) to the filter                              [Done]
+ * UI to find / edit the filename                                       [Done]
+
+
+Allow user to add a book cover image                                    DONE
+ * Send parameter (filename) to the filter                              [Done]
+ * UI to find / edit the filename                                       [Done]
+
+
 Fix known bugs / misfeatures
 
 
@@ -43,15 +53,36 @@ Medium term issues
 
 Time frame: (weeks / months)
 
-Allow user to add a book cover image
- * Send parameter (filename) to the filter
- * UI to find / edit the filename
+Configuration of the conversion process
+ * Styles in css file (bool)                                            [Done]
+ * Use breaks (bool)                                                    [Done]
+
+
+Misfeatures
+ * Styles in css should go back to only those that are used.
+
+
+Long term issues
+----------------
+
+Time frame: (months / years)
+ 
+EPUB 3.0
+ * MathML
+ * Multimedia, video
+
+Fix known bugs / misfeatures
+
+
+Medium term issues
+------------------
+
+Time frame: (weeks / months)
 
 Configuration of the conversion process
  * Styles in css file (bool)                                            [Done]
  * Use breaks (bool)                                                    [Done]
 
-Create a generic HTML export filter                                     DONE
 
 Misfeatures
  * Styles in css should go back to only those that are used.
