@@ -90,11 +90,6 @@ FlipbookDockerDock::FlipbookDockerDock( )
     bnDeleteItem->setToolTip(i18n("Remove selected images from the current flipbook"));
     connect(bnDeleteItem, SIGNAL(clicked()), SLOT(removeImage()));
 
-    listFlipbook->setViewMode(QListView::IconMode);
-    listFlipbook->setIconSize(QSize(128,128));
-//    listFlipbook->setSelectionBehavior(QAbstractItemView::SelectItems);
-//    listFlipbook->setSelectionMode(QAbstractItemView::SingleSelection);
-//    listFlipbook->setDragEnabled(false);
     connect(listFlipbook, SIGNAL(currentItemChanged(const QModelIndex &)), SLOT(selectImage(const QModelIndex&)));
 }
 
@@ -173,7 +168,14 @@ void FlipbookDockerDock::addImage()
 
 void FlipbookDockerDock::removeImage()
 {
-
+    QModelIndex idx = listFlipbook->currentIndex();
+    QStandardItem *item = m_flipbook->itemFromIndex(idx);
+    for (int i = 0; i < m_flipbook->rowCount(); ++i) {
+        if (m_flipbook->item(i) == item) {
+            delete m_flipbook->takeItem(i);
+        }
+    }
+    listFlipbook->reset();
 }
 
 void FlipbookDockerDock::goFirst()

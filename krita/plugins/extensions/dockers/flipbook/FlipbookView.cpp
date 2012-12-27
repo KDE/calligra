@@ -19,6 +19,10 @@
 FlipbookView::FlipbookView(QWidget *parent)
     : QListView(parent)
 {
+    setViewMode(QListView::IconMode);
+    setIconSize(QSize(128,128));
+    setTextElideMode(Qt::ElideMiddle);
+
 }
 
 void FlipbookView::goPrevious()
