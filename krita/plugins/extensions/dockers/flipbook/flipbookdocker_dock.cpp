@@ -47,6 +47,7 @@
 FlipbookDockerDock::FlipbookDockerDock( )
     : QDockWidget(i18n("Flipbook"))
     , m_canvas(0)
+    , m_flipbook(0)
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
@@ -106,14 +107,16 @@ void FlipbookDockerDock::setCanvas(KoCanvasBase * canvas)
         }
     }
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    m_flipbook = static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->flipbook();
-    if (!m_flipbook) {
-        qDebug() << "no flipbook set";
-    }
-    else {
-        qDebug() << "Flipbook items" << m_flipbook->rowCount();
-        listFlipbook->setModel(m_flipbook);
-        txtName->setText(m_flipbook->name());
+    if (m_canvas && m_canvas->view() && m_canvas->view()->document() && m_canvas->view()->document()->documentPart()) {
+        m_flipbook = dynamic_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->flipbook();
+        if (!m_flipbook) {
+            listFlipbook->setModel(0);
+            txtName->clear();
+        }
+        else {
+            listFlipbook->setModel(m_flipbook);
+            txtName->setText(m_flipbook->name());
+        }
     }
 }
 
@@ -146,6 +149,7 @@ void FlipbookDockerDock::saveFlipbook()
     QString filename = KFileDialog::getSaveFileName(KUrl("kfiledialog:///OpenDialog"),
                                                     "*.flipbook", this, "Save Flaipbook");
     if (!filename.isEmpty()) {
+        m_flipbook->setName(txtName->text());
         m_flipbook->save(filename);
     }
     m_canvas->view()->document()->documentPart()->addRecentURLToAllShells(filename);
@@ -169,7 +173,6 @@ void FlipbookDockerDock::newFlipbook()
 
     if (urls.size() < 1) return;
 
-
     KisFlipbook *flipbook = new KisFlipbook();
     foreach(QString url, urls) {
         if (QFile::exists(url)) {
@@ -186,14 +189,27 @@ void FlipbookDockerDock::newFlipbook()
 
     listFlipbook->setModel(m_flipbook);
     selectImage(m_flipbook->index(0, 0));
-
     delete old;
 
 }
 
 void FlipbookDockerDock::openFlipbook()
 {
+    QString filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///OpenDialog"), "*.flipbook", this, i18n("Load flipbook"));
+    if (!QFile::exists(filename)) return;
 
+    KisFlipbook *flipbook = new KisFlipbook();
+    flipbook->load(filename);
+    txtName->setText(flipbook->name());
+
+    static_cast<KisPart2*>(m_canvas->view()->document()->documentPart())->setFlipbook(flipbook);
+
+    KisFlipbook *old = m_flipbook;
+    m_flipbook = flipbook;
+
+    listFlipbook->setModel(m_flipbook);
+    selectImage(m_flipbook->index(0, 0));
+    delete old;
 }
 
 void FlipbookDockerDock::addImage()
@@ -256,9 +272,9 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    KisFlipbookItem *item = static_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
+    KisFlipbookItem *item = dynamic_cast<KisFlipbookItem*>(m_flipbook->itemFromIndex(index));
 
-    if (item->document()) {
+    if (item && item->document() && item->document()->image()) {
         if (m_canvas->view()->document()->isModified()) {
             m_canvas->view()->document()->documentPart()->save();
             m_canvas->view()->document()->setModified(false);
