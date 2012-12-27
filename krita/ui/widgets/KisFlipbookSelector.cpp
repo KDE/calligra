@@ -29,6 +29,7 @@
 #include <KGlobal>
 #include <KStandardDirs>
 #include <KFileDialog>
+#include <KUrl>
 
 #include <QDesktopServices>
 #include <QListWidget>
@@ -49,7 +50,7 @@ void KisFlipbookSelector::createImage()
                                    KoFilterManager::Import,
                                    KoServiceProvider::readExtraNativeMimeTypes());
 
-    QStringList urls = KFileDialog::getOpenFileNames(QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+    QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
                                                      this, i18n("Select files to add to flipbook"));
 

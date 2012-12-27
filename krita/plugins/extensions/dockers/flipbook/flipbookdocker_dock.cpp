@@ -26,6 +26,7 @@
 
 #include <klocale.h>
 #include <kactioncollection.h>
+#include <kurl.h>
 
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
@@ -142,6 +143,12 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
 
 void FlipbookDockerDock::saveFlipbook()
 {
+    QString filename = KFileDialog::getSaveFileName(KUrl("kfiledialog:///OpenDialog"),
+                                                    "*.flipbook", this, "Save Flaipbook");
+    if (!filename.isEmpty()) {
+        m_flipbook->save(filename);
+    }
+    m_canvas->view()->document()->documentPart()->addRecentURLToAllShells(filename);
 }
 
 
@@ -156,7 +163,7 @@ void FlipbookDockerDock::newFlipbook()
                                    KoFilterManager::Import,
                                    KoServiceProvider::readExtraNativeMimeTypes());
 
-    QStringList urls = KFileDialog::getOpenFileNames(QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+    QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
                                                      this, i18n("Select files to add to flipbook"));
 
@@ -195,7 +202,7 @@ void FlipbookDockerDock::addImage()
                                    KoFilterManager::Import,
                                    KoServiceProvider::readExtraNativeMimeTypes());
 
-    QStringList urls = KFileDialog::getOpenFileNames(QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+    QStringList urls = KFileDialog::getOpenFileNames(KUrl("kfiledialog:///OpenDialog"),
                                                      mimeFilter.join(" "),
                                                      this, i18n("Select files to add to flipbook"));
 
