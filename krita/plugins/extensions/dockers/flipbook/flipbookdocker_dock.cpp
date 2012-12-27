@@ -147,7 +147,7 @@ void FlipbookDockerDock::updateLayout(Qt::DockWidgetArea area)
 void FlipbookDockerDock::saveFlipbook()
 {
     QString filename = KFileDialog::getSaveFileName(KUrl("kfiledialog:///OpenDialog"),
-                                                    "*.flipbook", this, "Save Flaipbook");
+                                                    "*.flipbook", this, i18n("Save flipbook"));
     if (!filename.isEmpty()) {
         m_flipbook->setName(txtName->text());
         m_flipbook->save(filename);
