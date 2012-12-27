@@ -65,10 +65,6 @@ FlipbookDockerDock::FlipbookDockerDock( )
     bnLoadFlipbook->setToolTip(i18n("Open a flipbook file"));
     connect(bnLoadFlipbook, SIGNAL(clicked()), SLOT(openFlipbook()));
 
-    bnDeleteFlipbook->setIcon(koIcon("edit-delete"));
-    bnDeleteFlipbook->setToolTip(i18n("Delete current flipbook from disk"));
-    connect(bnDeleteFlipbook, SIGNAL(clicked()), SLOT(deleteFlipbook()));
-
     bnFirstItem->setIcon(koIcon("arrow-up-double"));
     bnFirstItem->setToolTip(i18n("Go to the first image in the current flipbook"));
     connect(bnFirstItem, SIGNAL(clicked()), SLOT(goFirst()));
@@ -155,11 +151,6 @@ void FlipbookDockerDock::newFlipbook()
 }
 
 void FlipbookDockerDock::openFlipbook()
-{
-
-}
-
-void FlipbookDockerDock::deleteFlipbook()
 {
 
 }

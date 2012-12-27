@@ -37,13 +37,6 @@
      <item>
       <widget class="QLineEdit" name="txtName"/>
      </item>
-     <item>
-      <widget class="QToolButton" name="bnDeleteFlipbook">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>

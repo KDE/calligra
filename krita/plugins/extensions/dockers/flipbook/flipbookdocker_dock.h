@@ -48,7 +48,6 @@ private slots:
     void saveFlipbook();
     void newFlipbook();
     void openFlipbook();
-    void deleteFlipbook();
 
     void addImage();
     void removeImage();
