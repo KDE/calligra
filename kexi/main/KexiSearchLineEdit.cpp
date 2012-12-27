@@ -157,6 +157,7 @@ class KexiSearchLineEditCompleter : public KexiCompleter
 {
 public:
     KexiSearchLineEditCompleter(QObject *parent = 0) : KexiCompleter(parent) {
+        setCompletionRole(Qt::DisplayRole);
     }
 
     virtual QString pathFromIndex(const QModelIndex &index) const {
