@@ -68,6 +68,8 @@ Item {
                 id: input;
 
                 property bool numeric: false;
+                DoubleValidator { id: numberValidator }
+                validator: numeric ? numberValidator : null;
                 property Item nextFocus: null;
 
                 anchors {
