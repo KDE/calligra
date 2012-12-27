@@ -55,19 +55,19 @@ void KisFlipbookSelector::createImage()
 
     if (urls.size() < 1) return;
 
-    KisFlipbook *flipBook = new KisFlipbook();
+    KisFlipbook *flipbook = new KisFlipbook();
     foreach(QString url, urls) {
         if (QFile::exists(url)) {
-            flipBook->addItem(url);
+            flipbook->addItem(url);
         }
     }
 
-    flipBook->setName(txtFlipbookName->text());
+    flipbook->setName(txtFlipbookName->text());
 
     m_document->setUrl(urls[0]);
-    m_document->setCurrentImage(static_cast<KisFlipbookItem*>(flipBook->item(0))->document()->image());
+    m_document->setCurrentImage(static_cast<KisFlipbookItem*>(flipbook->item(0))->document()->image());
 
-    static_cast<KisPart2*>(m_document->documentPart())->setFlipbook(flipBook);
+    static_cast<KisPart2*>(m_document->documentPart())->setFlipbook(flipbook);
 
     emit documentSelected();
 }
