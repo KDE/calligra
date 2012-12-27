@@ -482,7 +482,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
                 }
             }
             else {
-                htmlWriter->addAttribute("src", m_collector->filePrefix() + imgSrc);
+                htmlWriter->addAttribute("src", imgSrc);
             }
 
             m_images.insert(imgElement.attribute("href"), size);
