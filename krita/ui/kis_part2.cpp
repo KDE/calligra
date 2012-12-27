@@ -68,7 +68,6 @@ KoView *KisPart2::createViewInstance(QWidget *parent)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
     KisView2 *v = new KisView2(this, m_document, parent);
-    qDebug() << "create view" << this << "flipbook" << m_flipbook;
 
     //XXX : fix this ugliness
     dynamic_cast<KisShapeController*>(m_document->shapeController())->setInitialShapeForView(v);
