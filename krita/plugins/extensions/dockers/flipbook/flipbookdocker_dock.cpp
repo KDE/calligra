@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 #include <QModelIndex>
+#include <QDesktopServices>
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -30,6 +31,8 @@
 #include <KoCanvasBase.h>
 #include <KoZoomController.h>
 #include <KoZoomMode.h>
+#include <KoFilterManager.h>
+#include <KoServiceProvider.h>
 
 #include <kis_image.h>
 #include <kis_view2.h>
@@ -163,6 +166,21 @@ void FlipbookDockerDock::deleteFlipbook()
 
 void FlipbookDockerDock::addImage()
 {
+    const QStringList mimeFilter = KoFilterManager::mimeFilter(KoServiceProvider::readNativeFormatMimeType(),
+                                   KoFilterManager::Import,
+                                   KoServiceProvider::readExtraNativeMimeTypes());
+
+    QStringList urls = KFileDialog::getOpenFileNames(QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                     mimeFilter.join(" "),
+                                                     this, i18n("Select files to add to flipbook"));
+
+    if (urls.size() < 1) return;
+
+    foreach(QString url, urls) {
+        if (QFile::exists(url)) {
+            m_flipbook->addItem(url);
+        }
+    }
 
 }
 
