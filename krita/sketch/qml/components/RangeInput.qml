@@ -77,6 +77,7 @@ Item {
         }
         onFocusLost: value = text;
         onAccepted: value = text;
+        numeric: true;
     }
     Slider {
         id: valueSlider;
