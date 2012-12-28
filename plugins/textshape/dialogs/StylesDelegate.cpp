@@ -245,6 +245,11 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         m_deleteButtonPressed = false;
         m_editButtonPressed = false;
         emit needsUpdate(index);
+
+        if (index.flags() == Qt::NoItemFlags) { //if the item is NoItemFlagged, it means it is a separator in the view. In that case, we should not close the combo's drop down.
+            return true;
+        }
+
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         int dx1 = option.rect.width() - qMin(option.rect.height()-2, m_buttonSize) - m_buttonSize - m_buttonDistance -2;
         int dy1 = 1 + (option.rect.height()-qMin(option.rect.height(), m_buttonSize))/2;
@@ -267,7 +272,7 @@ bool StylesDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
             return true;
         }
         emit clickedInItem(index);
-        return false;
+        return true; //returning true here means the QComboBox mouseRelease code will not get called. The effect of it is that hidePopup will not get called. StylesCombo calls it in the corresponding slot.
     }
     if (event->type() == QEvent::MouseMove) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

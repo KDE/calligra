@@ -46,11 +46,13 @@ QModelIndex StylesFilteredModelBase::index(int row, int column, const QModelInde
 
 QModelIndex StylesFilteredModelBase::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child);
     return QModelIndex();
 }
 
 int StylesFilteredModelBase::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 1;
 }
 
@@ -121,12 +123,10 @@ QImage StylesFilteredModelBase::stylePreview(int row, QSize size)
     if (row < 0) {
         return QImage();
     }
-    kDebug() << "requested preview for: " << row;
-    kDebug() << "proxyToSource item: "  << m_proxyToSource.at(row);
     return m_sourceModel->stylePreview(m_proxyToSource.at(row), size);
 
 }
-
+/*
 QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, QSize size)
 {
     if (!index.isValid()) {
@@ -135,7 +135,7 @@ QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, QSize size)
     return m_sourceModel->stylePreview(index, size); //TODO be carefull there. this is assuming the sourceModel is only using the internalId, and the index's internalId matches the model's
 
 }
-
+*/
 void StylesFilteredModelBase::setStylesModel(AbstractStylesModel *sourceModel)
 {
     if (m_sourceModel == sourceModel) {

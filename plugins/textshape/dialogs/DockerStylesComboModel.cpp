@@ -40,42 +40,7 @@ Qt::ItemFlags DockerStylesComboModel::flags(const QModelIndex &index) const
     }
     return (Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 }
-/*
-QModelIndex DockerStylesComboModel::parent(const QModelIndex &child) const
-{
-    if (child.data(isTitleRole).toBool()) {
-        return QModelIndex();
-    }
-    else {
-        if (m_usedStylesId.contains(child.internalId())) {
-            return createIndex(0, 0, UsedStyleId);
-        }
-        else {
-            return createIndex(1, 0, UnusedStyleId);
-        }
-    }
-    return QModelIndex();
-}
 
-int DockerStylesComboModel::rowCount(const QModelIndex &parent) const
-{
-    kDebug() << "parent: " << parent;
-    kDebug() << "parent isValid: " << parent.isValid();
-    if (!parent.isValid()) {
-        return m_proxyToSource.count();
-//        return 2;
-    }
-    if (parent.internalId() == UsedStyleId) {
-        kDebug() << "rowCount used: "<< m_usedStyles.count();
-        return m_usedStyles.count();
-    }
-    if (parent.internalId() == UnusedStyleId) {
-        kDebug() << "rowCount unused: " << m_sourceModel->rowCount() - m_usedStyles.count();
-        return (m_sourceModel->rowCount() - m_usedStyles.count());
-    }
-    return 0;
-}
-*/
 QModelIndex DockerStylesComboModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (row < 0 || column != 0)
@@ -88,44 +53,6 @@ QModelIndex DockerStylesComboModel::index(int row, int column, const QModelIndex
         return createIndex(row, column, (m_proxyToSource.at(row) >= 0)?int(m_sourceModel->index(m_proxyToSource.at(row), 0, QModelIndex()).internalId()):m_proxyToSource.at(row));
     }
     return QModelIndex();
-    /*
-    kDebug() << "index row: " << row;
-    if (row < 0 || column != 0)
-        return QModelIndex();
-
-    if (!parent.isValid()) {
-        if (row >= 2) {
-            return QModelIndex();
-        }
-        return createIndex(row, 0, (row == 0)?UsedStyleId:UnusedStyleId);
-    }
-    else {
-//        if (parent.internalId() == UsedStyleId) {
-//            if (row >= m_usedStyles.count()) {
-//                return QModelIndex();
-//            }
-//            return createIndex(row, 0, int(m_sourceModel->index(m_, 0, QModelIndex()).internalId()));
-//        }
-//        else {
-//            if (row >= m_originalStylesCount) {
-//                return QModelIndex();
-//            }
-//            return createIndex(row, 0, int(m_sourceModel->index(m_modifiedStylesCount + row, 0, QModelIndex()).internalId()));
-//        }
-        if (row >= m_proxyToSource.count()) {
-            return QModelIndex();
-        }
-        kDebug() << "proxyToSource count: " << m_proxyToSource.count();
-        kDebug() << "parent: " << parent;
-        kDebug() << "parent internalId: " << parent.internalId();
-        kDebug() << "parent rowCount: " << rowCount(parent);
-        kDebug() << "parent internal id == UsedStyle: " << (parent.internalId()==UsedStyleId);
-        kDebug() << "m_usedStyle count: " << m_usedStyles.count();
-        kDebug() << "row+count: " << m_usedStyles.count()+row;
-        return createIndex(row, 0, int(m_sourceModel->index(m_proxyToSource.at((parent.internalId()==UsedStyleId)?row:m_usedStyles.count()+row), 0, QModelIndex()).internalId()));
-    }
-    return QModelIndex();
-    */
 }
 
 QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
@@ -158,53 +85,6 @@ QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
     default: break;
     };
     return QVariant();
-
-/*    if (!index.isValid()) {
-        return QVariant();
-    }
-
-    switch (role) {
-    case AbstractStylesModel::isTitleRole: {
-        if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
-            return true;
-        }
-    }
-    case Qt::DisplayRole: {
-        if (index.internalId() == UsedStyleId) {
-            return i18n("Used Styles");
-        }
-        if (index.internalId() == UnusedStyleId) {
-            return i18n("Unused Styles");
-        }
-        return QVariant();
-    }
-    case Qt::DecorationRole: {
-        if (index.internalId() == UsedStyleId || index.internalId() == UnusedStyleId) {
-            return QVariant();
-        }
-        if (index.parent().isValid()) {
-            return m_sourceModel->data(m_sourceModel->index(m_proxyToSource.at((index.parent().internalId()==UsedStyleId)?index.row():m_usedStyles.count()+index.row()), 0, QModelIndex()), role);
-        }
-//        if (index.parent().isValid() && index.parent().internalId() == OriginalStyleId) {
-//            return m_sourceModel->data(m_sourceModel->index(index.row() + m_modifiedStylesCount, 0, QModelIndex()), role);
-//        }
-        return QVariant();
-    }
-    case Qt::SizeHintRole: {
-        return QVariant(QSize(250, 48));
-    }
-    default: break;
-//        if (index.parent().isValid()) {
-//        }
-//        kDebug() << "other role. style id: " << index.row();
-//        kDebug() << "other role. data: " << m_sourceModel->data(index, role);
-
-//        return KCategorizedSortFilterProxyModel::data(index, role);
-//        return QSortFilterProxyModel::data(index, role);
-    }
-
-    return QVariant();
-*/
 }
 
 void DockerStylesComboModel::setInitialUsedStyles(QVector<int> usedStyles)
@@ -296,8 +176,9 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
             }
             m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*(style)).row());   // We use the ForCharacterStyle variant also for parag styles because the signal exist only in charStyle variant. TODO merge these functions in StylesModel. they use the styleId anyway.
         }
-        //we do not reset the model here, as it will mess up the view's visibility. perhaps this is very wrong. to be considered in case we have bugs.
+        beginResetModel();
         createMapping();
+        endResetModel();
     }
 }
 
@@ -364,7 +245,12 @@ void DockerStylesComboModel::createMapping()
             }
         }
     }
-    m_proxyToSource << UsedStyleId << m_usedStyles << UnusedStyleId << m_unusedStyles; //UsedStyleId and -UnusedStyleId will be detected as title (in index method) and will be treated accordingly
+    if (!m_usedStyles.isEmpty()) {
+        m_proxyToSource << UsedStyleId << m_usedStyles;
+    }
+    if (!m_unusedStyles.isEmpty()) {
+        m_proxyToSource << UnusedStyleId << m_unusedStyles; //UsedStyleId and UnusedStyleId will be detected as title (in index method) and will be treated accordingly
+    }
     m_sourceToProxy.fill(-1, m_sourceModel->rowCount((QModelIndex())));
     for (int i = 0; i < m_proxyToSource.count(); ++i) {
         if (m_proxyToSource.at(i) >= 0) { //we do not need to map to the titles

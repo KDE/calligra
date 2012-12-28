@@ -77,6 +77,7 @@ QModelIndex StylesModel::index(int row, int column, const QModelIndex &parent) c
 
 QModelIndex StylesModel::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child);
     return QModelIndex();
 }
 
@@ -89,6 +90,7 @@ int StylesModel::rowCount(const QModelIndex &parent) const
 
 int StylesModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 1;
 }
 
@@ -211,7 +213,6 @@ QImage StylesModel::stylePreview(int row, QSize size)
         }
     }
     else {
-        kDebug() << "request for preview. row: " << row << " internalId: " << index(row).internalId();
         KoCharacterStyle *usedStyle = 0;
         if (index(row).internalId() == -1) {
             usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
@@ -236,7 +237,7 @@ QImage StylesModel::stylePreview(int row, QSize size)
     }
     return QImage();
 }
-
+/*
 QImage StylesModel::stylePreview(QModelIndex &index, QSize size)
 {
     if (!m_styleManager || !m_styleThumbnailer) {
@@ -277,7 +278,7 @@ QImage StylesModel::stylePreview(QModelIndex &index, QSize size)
     }
     return QImage();
 }
-
+*/
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
     if (sm == m_styleManager)
