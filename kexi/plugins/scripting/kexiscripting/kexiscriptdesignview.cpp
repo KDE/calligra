@@ -205,7 +205,7 @@ void KexiScriptDesignView::slotFileNew()
 void KexiScriptDesignView::slotFileOpen()
 {
     QStringList filters;
-    foreach(QString interpreter, Kross::Manager::self().interpreters()) {
+    foreach(const QString &interpreter, Kross::Manager::self().interpreters()) {
         filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
     }
     const QString file = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kexiscriptingdesigner"), filters.join(" "));
@@ -221,7 +221,7 @@ void KexiScriptDesignView::slotFileOpen()
 void KexiScriptDesignView::slotFileSave()
 {
     QStringList filters;
-    foreach(QString interpreter, Kross::Manager::self().interpreters()) {
+    foreach(const QString &interpreter, Kross::Manager::self().interpreters()) {
         filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
     }
     const QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///kexiscriptingdesigner"), filters.join(" "));

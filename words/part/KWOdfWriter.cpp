@@ -120,7 +120,7 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
     }
 
     // save page styles that don't have a header or footer which will be handled later
-    foreach (KWPageStyle pageStyle, m_document->pageManager()->pageStyles()) {
+    foreach (const KWPageStyle &pageStyle, m_document->pageManager()->pageStyles()) {
         if (data.contains(pageStyle))
             continue;
 
@@ -140,7 +140,7 @@ void KWOdfWriter::saveHeaderFooter(KoShapeSavingContext &context)
           << Words::OddPagesFooterTextFrameSet
           << Words::EvenPagesFooterTextFrameSet;
 
-    foreach (KWPageStyle pageStyle, data.keys()) {
+    foreach (const KWPageStyle &pageStyle, data.keys()) {
         KoGenStyle masterStyle(KoGenStyle::MasterPageStyle);
         //masterStyle.setAutoStyleInStylesDotXml(true);
         KoGenStyle layoutStyle = pageStyle.saveOdf();
@@ -339,7 +339,7 @@ bool KWOdfWriter::save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embed
     // if there is e.g. text:p or text:h there
     if (!mainTextFrame) {
         bodyWriter->startElement("text:page-sequence");
-        foreach (KWPage page, m_document->pageManager()->pages()) {
+        foreach (const KWPage &page, m_document->pageManager()->pages()) {
             Q_ASSERT(m_masterPages.contains(page.pageStyle()));
             bodyWriter->startElement("text:page");
             bodyWriter->addAttribute("text:master-page-name",

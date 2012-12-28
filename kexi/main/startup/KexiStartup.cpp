@@ -247,7 +247,7 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray
 {
     QStringList list = args->getOptionList(action_name);
     bool atLeastOneFound = false;
-    foreach(QString option, list) {
+    foreach(const QString &option, list) {
         QString type_name, obj_name, item = option;
         int idx;
         bool name_required = true;

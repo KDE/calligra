@@ -767,9 +767,9 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                             drawing->save(body);
                         }
 
-                        QPair<QString,QString> oleObject;
+                        typedef QPair<QString,QString> OleObject;
                         int listIndex = 0;
-                        foreach( oleObject, cell->embedded->oleObjects ) {
+                        foreach( const OleObject& oleObject, cell->embedded->oleObjects ) {
                             const QString olePath = oleObject.first;
                             const QString previewPath = oleObject.second;
                             body->addCompleteElement(cell->embedded->oleFrameBegins.at(listIndex).toUtf8());
