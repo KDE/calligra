@@ -10,7 +10,6 @@ add_subdirectory( functions )
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
-                    ${CMAKE_SOURCE_DIR}/kchart
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
