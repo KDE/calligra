@@ -41,7 +41,8 @@
 #include <KoCanvasResourceManager.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeManager.h>
-#include <KoShapeBackground.h>
+#include <KoShapeBackgroundCommand.h>
+#include <KoColorBackground.h>
 
 static const char* const buttonnone[]={
     "16 16 3 1",
@@ -178,7 +179,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget * parent)
     d->colorAction = new KoColorPopupAction(this);
     d->colorAction->setIcon(koIcon("format-stroke-color"));
     d->colorAction->setToolTip(i18n("Change the filling color"));
-    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(colorChanged(const KoColor &)));
+    connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(applyChanges()));
     d->colorButton->setDefaultAction(d->colorAction);
 
     d->group = new QButtonGroup(this);
@@ -269,10 +270,13 @@ void KoFillConfigWidget::applyChanges()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    //FIXME d->canvas->resourceManager()->setActiveStroke( d->stroke );
-
     if (!selection || !selection->count())
         return;
+
+    KoColorBackground *fill = new KoColorBackground(d->colorAction->currentColor());
+
+    KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand(selection->selectedShapes(), fill);
+    canvasController->canvas()->addCommand(cmd);
 }
 
 
