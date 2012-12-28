@@ -100,9 +100,7 @@ public:
     bool isTaggedForSaving();
 
 
-    bool operator==(const KPrSoundData &other) {
-        return other.d == d;
-    }
+    bool operator==(const KPrSoundData &other) const;
 
     /**
      * Get the collection used

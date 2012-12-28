@@ -76,6 +76,9 @@ KPrSoundData::~KPrSoundData() {
     }
 }
 
+bool KPrSoundData::operator==(const KPrSoundData &other) const {
+    return other.d == d;
+}
 
 QString KPrSoundData::tagForSaving() {
     d->taggedForSaving=true;
