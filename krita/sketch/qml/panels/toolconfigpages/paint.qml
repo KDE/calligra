@@ -45,7 +45,11 @@ Item {
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        onCurrentIndexChanged: model.activateItem(currentIndex);
+        property bool firstSet: false;
+        onCurrentIndexChanged: {
+            if(firstSet) { model.activateItem(currentIndex); }
+            else { firstSet = true; }
+        }
         model: compositeOpModel;
     }
     Component.onCompleted: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);

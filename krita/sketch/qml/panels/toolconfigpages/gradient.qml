@@ -22,15 +22,33 @@ import "../../components"
 Item {
     id: base
     property bool fullView: true;
-    ExpandingListView {
-        id: compositeModeList
+    Label {
+        id: compositeModeListLabel
+        visible: fullView;
+        height: fullView ? Constants.DefaultFontSize : 0;
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
             margins: Constants.DefaultMargin;
         }
-        onCurrentIndexChanged: model.activateItem(currentIndex);
+        text: "Blending mode:"
+    }
+    ExpandingListView {
+        id: compositeModeList
+        visible: fullView;
+        expandedHeight: Constants.GridHeight * 6;
+        anchors {
+            top: compositeModeListLabel.bottom;
+            left: parent.left;
+            right: parent.right;
+            margins: Constants.DefaultMargin;
+        }
+        property bool firstSet: false;
+        onCurrentIndexChanged: {
+            if(firstSet) { model.activateItem(currentIndex); }
+            else { firstSet = true; }
+        }
         model: compositeOpModel;
     }
     Component.onCompleted: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
@@ -48,7 +66,7 @@ Item {
     Column {
         id: firstColumn
         anchors {
-            top: compositeModeList.bottom;
+            top: fullView ? compositeModeList.bottom : compositeModeList.top;
             left: parent.left;
             leftMargin: Constants.DefaultMargin;
             right: parent.right;
