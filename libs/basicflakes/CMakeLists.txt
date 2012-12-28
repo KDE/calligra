@@ -1,10 +1,12 @@
+add_subdirectory(plugin)
+
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES} ${KOWIDGETS_INCLUDES})
 
 set(basicflakes_LIB_SRCS
     tools/KoCreatePathTool.cpp
 )
 
-kde4_add_ui_files( kowidgets_LIB_SRCS
+kde4_add_ui_files( basicflakes_LIB_SRCS
 )
 
 
