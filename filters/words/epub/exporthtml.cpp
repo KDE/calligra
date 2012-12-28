@@ -129,7 +129,7 @@ KoFilter::ConversionStatus ExportHtml::convert(const QByteArray &from, const QBy
         false,                    // don't break into chapters
         false                     // It is not mobi.
     };
-    status = converter.convertContent(odfStore, m_metadata, &options, &html,
+    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &html,
                                       m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;

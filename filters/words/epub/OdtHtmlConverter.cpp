@@ -36,6 +36,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoOdfReadStore.h>
 
 // EPUB filter
 #include "FileCollector.h"
@@ -81,6 +82,7 @@ OdtHtmlConverter::ConversionOptions defaultOptions = {
 KoFilter::ConversionStatus
 OdtHtmlConverter::convertContent(KoStore *odfStore,
                                  QHash<QString, QString> &metaData,
+                                 QHash<QString, QString> *manifest,
                                  OdtHtmlConverter::ConversionOptions *options,
                                  FileCollector *collector,
                                  // Out parameters:
@@ -91,6 +93,8 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
     else
         m_options = &defaultOptions;
     m_collector = collector;
+    m_manifest = manifest;
+    m_odfStore = odfStore;
 
     m_doIndent = !m_options->useMobiConventions;
     m_imgIndex = 1;
@@ -438,12 +442,6 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
 {
     QString styleName = nodeElement.attribute("style-name");
     StyleInfo *styleInfo = m_styles.value(styleName);
-    htmlWriter->startElement("img", m_doIndent);
-    if (styleInfo) {
-        styleInfo->inUse = true;
-        htmlWriter->addAttribute("class", styleName);
-    }
-    htmlWriter->addAttribute("alt", "(No Description)");
 
     // Find height and width
     QString height = nodeElement.attribute("height");
@@ -463,11 +461,47 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     qreal qWidth = width.toFloat();
     QSizeF size(qWidth, qHeight);
 
-    // Check image tag to find image source
-    KoXmlElement imgElement;
-    forEachElement (imgElement, nodeElement) {
-        if (imgElement.localName() == "image" && imgElement.namespaceURI() == KoXmlNS::draw) {
-            QString imgSrc = imgElement.attribute("href").section('/', -1);
+    // Go through the frame's content and see what we can handle.
+    KoXmlElement framePartElement;
+    forEachElement (framePartElement, nodeElement) {
+
+        // Handle at least a few types of objects (hopefully more in the future).
+        if (framePartElement.localName() == "object"
+            && framePartElement.namespaceURI() == KoXmlNS::draw)
+        {
+            QString href = framePartElement.attribute("href");
+            if (href.isEmpty())
+                continue;
+
+            // Normalize the object reference
+            if (href.startsWith("./"))
+                href = href.right(href.size() - 2);
+            QString type = m_manifest->value(href);
+
+            // So far we can only an handle embedded object (formula).
+            // In the future we will probably be able to handle more types.
+            if (type == "application/vnd.oasis.opendocument.formula") {
+
+                handleEmbeddedFormula(href, htmlWriter);
+                break; // Only one object per frame.
+            }
+            // ...more types here in the future, e.g. video.
+
+            // Ok, so we couldn't handle this one.
+            continue;
+        }
+        else if (framePartElement.localName() == "image"
+                 && framePartElement.namespaceURI() == KoXmlNS::draw)
+        {
+            // Handle image
+            htmlWriter->startElement("img", m_doIndent);
+            if (styleInfo) {
+                styleInfo->inUse = true;
+                htmlWriter->addAttribute("class", styleName);
+            }
+            htmlWriter->addAttribute("alt", "(No Description)");
+
+            QString imgSrc = framePartElement.attribute("href").section('/', -1);
 
             if (m_options->useMobiConventions) {
                 // Mobi
@@ -485,11 +519,110 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
                 htmlWriter->addAttribute("src", imgSrc);
             }
 
-            m_images.insert(imgElement.attribute("href"), size);
+            m_images.insert(framePartElement.attribute("href"), size);
+
+            htmlWriter->endElement(); // end img
+            break; // Only one image per frame.
+        }
+    } // foreach
+}
+
+void OdtHtmlConverter::handleEmbeddedFormula(QString &href, KoXmlWriter *htmlWriter)
+{
+    // Open the formula content file if possible.
+    m_odfStore->close();
+    if (!m_odfStore->open(href + "/content.xml")) {
+        kDebug(30503) << "Can not open" << href << "/content.xml .";
+        return;
+    }
+
+    // Copy the math:math xml tree.
+    KoXmlDocument doc;
+    QString errorMsg;
+    int errorLine;
+    int errorColumn;
+    if (!doc.setContent(m_odfStore->device(), true, &errorMsg, &errorLine, &errorColumn)) {
+        kDebug(30503) << "Error occurred while parsing content.xml "
+                      << errorMsg << " in Line: " << errorLine
+                      << " Column: " << errorColumn;
+        m_odfStore->close();
+        return;
+    }
+
+    KoXmlNode n = doc.documentElement();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            KoXmlElement el = n.toElement();
+            if (el.tagName() == "math") {
+                QHash<QString, QString> unknownNamespaces;
+                copyXmlElement(el, *htmlWriter, unknownNamespaces);
+
+                // No need to continue once we have the math:math node.
+                break;
+            }
         }
     }
-    htmlWriter->endElement(); // end img
+
+    m_odfStore->close();
 }
+
+// Note: This code was copied from libs/flake/KoUnavailShape.  It
+// should probably be placed near /libs/odf/KoXml* instead.
+
+void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
+                                      QHash<QString, QString> &unknownNamespaces)
+{
+    // Start the element;
+    // keep the name in a QByteArray so that it stays valid until end element is called.
+    const QByteArray name(el.nodeName().toAscii());
+    kDebug(30503) << "Copying element;" << name;
+    writer.startElement(name.constData());
+
+    // Copy all the attributes, including namespaces.
+    QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();
+    for (int i = 0; i < attributeNames.size(); ++i) {
+        QPair<QString, QString> attrPair(attributeNames.value(i));
+        if (attrPair.first.isEmpty()) {
+            kDebug(30503) << "Copying attribute;" << attrPair.second;
+            writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
+        }
+        else {
+            // This somewhat convoluted code is because we need the
+            // namespace, not the namespace URI.
+            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
+            // in case we don't find the namespace in our list create a own one and use that
+            // so the document created on saving is valid.
+            if (nsShort.isEmpty()) {
+                nsShort = unknownNamespaces.value(attrPair.first);
+                if (nsShort.isEmpty()) {
+                    nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
+                    unknownNamespaces.insert(attrPair.first, nsShort);
+                }
+                writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
+            }
+            QString attr(nsShort + ':' + attrPair.second);
+            writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
+                                                               attrPair.second));
+        }
+    }
+
+    // Child elements
+    // Loop through all the child elements of the draw:frame.
+    KoXmlNode n = el.firstChild();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            copyXmlElement(n.toElement(), writer, unknownNamespaces);
+        }
+        else if (n.isText()) {
+            writer.addTextNode(n.toText().data()/*.toUtf8()*/);
+        }
+    }
+
+    // End the element
+    writer.endElement();
+}
+
+// ----------------------------------------------------------------
 
 void OdtHtmlConverter::handleTagP(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter)
 {

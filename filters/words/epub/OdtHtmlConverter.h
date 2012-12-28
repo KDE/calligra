@@ -65,7 +65,8 @@ class OdtHtmlConverter
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
-    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
+    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString,
+                                              QString> &metaData, QHash<QString, QString> *manifest,
                                               ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
@@ -94,6 +95,10 @@ class OdtHtmlConverter
     void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
     void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleEmbeddedFormula(QString &href, KoXmlWriter *htmlWriter);
+    void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
+                        QHash<QString, QString> &unknownNamespaces);
+
 
     void handleTagTab(KoXmlWriter *htmlWriter);
     void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
@@ -135,7 +140,9 @@ class OdtHtmlConverter
     KoXmlWriter *m_htmlWriter;
 
     // Options for the conversion process
-    ConversionOptions  *m_options;
+    ConversionOptions       *m_options;
+    QHash<QString, QString> *m_manifest;
+    KoStore                 *m_odfStore;
 
     QHash<QString, StyleInfo*> m_styles;
 
