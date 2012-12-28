@@ -48,12 +48,18 @@ Item {
         onCurrentIndexChanged: model.activateItem(currentIndex);
         model: compositeOpModel;
     }
+    Component.onCompleted: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
     Connections {
         target: compositeOpModel;
         onSizeChanged: sizeInput.value = compositeOpModel.size;
         onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
         onFlowChanged: flowInput.value = compositeOpModel.flow;
-        onCurrentCompositeOpIDChanged: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
+        onCurrentCompositeOpIDChanged: {
+            var newIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
+            if(compositeModeList.currentIndex !== newIndex) {
+                compositeModeList.currentIndex = newIndex;
+            }
+        }
     }
     Column {
         anchors {

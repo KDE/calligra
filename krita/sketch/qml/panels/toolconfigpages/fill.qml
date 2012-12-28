@@ -34,9 +34,16 @@ Item {
         onCurrentIndexChanged: model.activateItem(currentIndex);
         model: compositeOpModel;
     }
+    Component.onCompleted: compositeModeList.currentIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
     Connections {
         target: compositeOpModel;
         onOpacityChanged: opacityInput.value = compositeOpModel.opacity;
+        onCurrentCompositeOpIDChanged: {
+            var newIndex = compositeOpModel.indexOf(compositeOpModel.currentCompositeOpID);
+            if(compositeModeList.currentIndex !== newIndex) {
+                compositeModeList.currentIndex = newIndex;
+            }
+        }
     }
     Column {
         anchors {
