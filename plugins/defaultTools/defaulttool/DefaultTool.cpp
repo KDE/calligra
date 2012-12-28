@@ -54,6 +54,7 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
+#include <KoFillConfigWidget.h>
 #include <KoShadowConfigWidget.h>
 
 #include <KoIcon.h>
@@ -1114,6 +1115,12 @@ QList<QWidget *> DefaultTool::createOptionWidgets()
     strokeWidget->setWindowTitle(i18n("Line / Border"));
     strokeWidget->setCanvas(canvas());
     widgets.append(strokeWidget);
+
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    fillWidget->setWindowTitle(i18n("Fill"));
+    fillWidget->setCanvas(canvas());
+    widgets.append(fillWidget);
+
     KoShadowConfigWidget *shadowWidget = new KoShadowConfigWidget(0);
     shadowWidget->setWindowTitle(i18n("Shadow"));
     shadowWidget->setCanvas(canvas());
