@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2012 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,25 +17,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "Plugin.h"
 
-#ifndef INSERTTEXTLOCATOR_H
-#define INSERTNAMEDVARIABLEACTION_H
+#include <KoCreatePathToolFactory.h>
+#include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 
-#include "InsertInlineObjectActionBase_p.h"
+#include <kpluginfactory.h>
 
-#include <QString>
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("calligra-basicflakes"))
 
-
-/**
- * helper class
- */
-class InsertTextLocator : public InsertInlineObjectActionBase
+Plugin::Plugin(QObject * parent, const QVariantList &)
+    : QObject(parent)
 {
-public:
-    InsertTextLocator(KoCanvasBase *canvas);
+    KoToolRegistry::instance()->add(new KoCreatePathToolFactory());
+}
 
-private:
-    virtual KoInlineObject *createInlineObject();
-};
-
-#endif
+#include <Plugin.moc>

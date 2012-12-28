@@ -88,7 +88,7 @@ public:
     }
     /**
      * Returns the current project ID. If the project ID list is empty
-     * QString::null is returned.
+     * an empty QString is returned.
      */
     QString getCurrentId() const
     {

@@ -16,25 +16,17 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
-#ifndef INSERTTEXTLOCATOR_H
-#define INSERTNAMEDVARIABLEACTION_H
+#include <QObject>
+#include <QVariantList>
 
-#include "InsertInlineObjectActionBase_p.h"
+class Plugin : public QObject {
+    Q_OBJECT
 
-#include <QString>
-
-
-/**
- * helper class
- */
-class InsertTextLocator : public InsertInlineObjectActionBase
-{
 public:
-    InsertTextLocator(KoCanvasBase *canvas);
-
-private:
-    virtual KoInlineObject *createInlineObject();
+    Plugin(QObject * parent, const QVariantList &);
+    ~Plugin() {}
 };
-
 #endif
