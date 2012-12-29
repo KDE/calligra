@@ -52,7 +52,7 @@ public:
     bool taggedForSaving;
 };
 
-KPrSoundData::KPrSoundData(KPrSoundCollection *collection, QString href)
+KPrSoundData::KPrSoundData(KPrSoundCollection *collection, const QString &href)
     : d(new Private(collection))
 {
     Q_ASSERT(collection);

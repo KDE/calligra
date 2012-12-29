@@ -294,7 +294,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
     if ( info->isEndJob ) {
         if ( info->finish == 0 ) {
             info->finish = time;
-/*            const char *s = QString( "First  : %1 %2 %3 End job" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).toAscii();
+/*            const char *s = QString( "First  : %1 %2 %3 End job" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).toLatin1();
             std::cout<<s<<"\n";*/
         }
 /*        w = WEIGHT_FINISH * info->finish / ( time > 0 ? time : 1 );
@@ -306,7 +306,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
             f.weight = time - info->targettime;
         }
 
-/*        const char *s = QString( "End job: %1 %2 %3 End job target: %4" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->targettime ).toAscii();
+/*        const char *s = QString( "End job: %1 %2 %3 End job target: %4" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->targettime ).toLatin1();
         std::cout<<s<<"\n";*/
     } else {
         if ( m_backward ) {
@@ -339,7 +339,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
                 default:
                     break;
             }
-/*            const char *s = QString( "Backwrd: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toAscii();
+/*            const char *s = QString( "Backwrd: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toLatin1();
             std::cout<<s<<"\n";*/
         } else {
             switch ( info->task->constraint() ) {
@@ -375,7 +375,7 @@ int KPlatoRCPSScheduler::weight( int time, int duration, struct rcps_fitness *no
                 default:
                     break;
             }
-/*            const char *s = QString( "Forward: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toAscii();
+/*            const char *s = QString( "Forward: %1 %2 %3 %4 (target: %5)" ).arg( time, 10 ).arg( duration, 10 ).arg( w, 10 ).arg( info->task->name() ).arg( info->targettime ).toLatin1();
             std::cout<<s<<"\n";*/
         }
     }

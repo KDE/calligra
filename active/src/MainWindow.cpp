@@ -32,9 +32,9 @@
 
 #include <libs/main/calligraversion.h>
 
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
-#include <KDE/KDebug>
+#include <KGlobal>
+#include <KStandardDirs>
+#include <KDebug>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
@@ -66,7 +66,7 @@ MainWindow::MainWindow (QWidget* parent)
     QList<QObject*> recentSpreadsheets;
     QList<QObject*> recentPresentations;
     QSettings settings;
-    foreach (QString string, settings.value ("recentFiles").toStringList()) {
+    foreach (const QString &string, settings.value ("recentFiles").toStringList()) {
         CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (";"));
         recentFiles.append (docInfo);
         switch (docInfo->type()) {

@@ -449,11 +449,11 @@ void SvgOutputDev::drawString(GfxState * state, GooString * s)
     *d->body << " y=\"" << y << "px\"";
 
     if (font && font->getFamily()) {
-        *d->body << " font-family=\"" << QString::fromAscii(font->getFamily()->getCString()) << "\"";
-        //kDebug(30516) << "font family:" << QString::fromAscii( font->getFamily()->getCString() );
+        *d->body << " font-family=\"" << QString::fromLatin1(font->getFamily()->getCString()) << "\"";
+        //kDebug(30516) << "font family:" << QString::fromLatin1( font->getFamily()->getCString() );
     } else if (font && font->getName()) {
-        *d->body << " font-family=\"" << QString::fromAscii(font->getName()->getCString()) << "\"";
-        //kDebug(30516) << "font name:" << QString::fromAscii( font->getName()->getCString() );
+        *d->body << " font-family=\"" << QString::fromLatin1(font->getName()->getCString()) << "\"";
+        //kDebug(30516) << "font name:" << QString::fromLatin1( font->getName()->getCString() );
     }
     *d->body << " font-size=\"" << qMax(state->getFontSize(), state->getTransformedFontSize()) << "px\"";
 

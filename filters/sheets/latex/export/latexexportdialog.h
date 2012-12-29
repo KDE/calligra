@@ -17,33 +17,30 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KSPREADLATEXEXPORTDIA_H__
-#define __KSPREADLATEXEXPORTDIA_H__
+#ifndef __LATEXEXPORTDIALOG_H__
+#define __LATEXEXPORTDIALOG_H__
 
-#include <latexexportdia.h>
+#include <ui_latexexportwidget.h>
+
+// KDE
+#include <KDialog>
+#include <KUrl>
+// Qt
 #include <QStringList>
-#include <kurl.h>
 
 class KoStore;
 class KConfig;
 
-class KSpreadLatexExportDiaImpl : public LatexExportDia
+class LatexExportDialog : public KDialog
 {
     Q_OBJECT
 
-private:
-    QString _fileOut;
-    KoStore* _in;
-    KConfig* _config;
-
 public:
-    explicit KSpreadLatexExportDiaImpl(KoStore*, QWidget* parent = 0,
-                                       const char* name = 0,
-                                       bool modal = false, Qt::WFlags fl = 0);
-    virtual ~KSpreadLatexExportDiaImpl();
+    explicit LatexExportDialog(KoStore*, QWidget* parent = 0);
+    virtual ~LatexExportDialog();
 
-    void setOutputFile(QString file) {
-        _fileOut = file;
+    void setOutputFile(const QString& file) {
+        m_fileOut = file;
     }
 
 public slots:
@@ -51,6 +48,14 @@ public slots:
     virtual void accept();
     virtual void addLanguage();
     virtual void removeLanguage();
+
+private:
+    Ui::LatexExportWidget m_ui;
+
+    QString m_fileOut;
+    KoStore* m_inputStore;
+    KConfig* m_config;
+
 };
 
-#endif /* __KSPREADLATEXEXPORTDIA_H__ */
+#endif /* __LATEXEXPORTDIALOG_H__ */

@@ -907,7 +907,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
         QObject *subobject = (subpropIface && subpropIface->subwidget())
                              ? subpropIface->subwidget() : obj;
-        const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1().constData()));
+        const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1()));
         if (meta.isValid()) {
             if (meta.isFlagType()) {
                 /*qt4   Q3StrList keys;

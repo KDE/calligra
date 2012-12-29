@@ -34,7 +34,7 @@ ODBCSpecialColumnsQueryUnit::ODBCSpecialColumnsQueryUnit( QObject* parent , cons
 
 SQLRETURN ODBCSpecialColumnsQueryUnit::execute()
 {
-    QByteArray ba = m_tableName.toAscii();
+    QByteArray ba = m_tableName.toLatin1();
     const char* tableName = ba.constData();
     return SQLSpecialColumns(m_cursorData->statementHandle,
                      SQL_BEST_ROWID,

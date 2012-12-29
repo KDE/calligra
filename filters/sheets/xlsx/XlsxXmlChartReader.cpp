@@ -3341,7 +3341,7 @@ int charToInt( const QString& string )
     int ret = 0;
     int multiplier = 1;
     for(int i=string.size()-1; i>-1; i--,multiplier = multiplier*26) {
-        char val = string[i].toAscii();
+        const char val = string[i].toLatin1();
         if ( val >= 65 && val <= 90 ) {
             ret = ret +  (val - 64)*multiplier;
         } else {
