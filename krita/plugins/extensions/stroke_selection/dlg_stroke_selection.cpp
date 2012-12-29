@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2012 Boudewijn Rempt <boud@valdyas.org>
  *
- *  This program is free software; you can redistribute it and/or stroke
+ *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
@@ -15,40 +15,40 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef DLG_STROKE_SELECTION_H
-#define DLG_STROKE_SELECTION_H
 
-#include <kdialog.h>
+#include "dlg_stroke_selection.h"
 
-#include "ui_wdg_stroke_selection.h"
+#include <math.h>
 
-class WdgStrokeSelection : public QWidget, public Ui::WdgStrokeSelection
+#include <klocale.h>
+#include <kis_debug.h>
+
+DlgStrokeSelection::DlgStrokeSelection(QWidget *  parent, const char * name)
+        : KDialog(parent)
 {
-    Q_OBJECT
+    setCaption(i18n("Stroke Selection"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    setObjectName(name);
 
-public:
-    WdgStrokeSelection(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    m_page = new WdgStrokeSelection(this);
+    Q_CHECK_PTR(m_page);
+    m_page->setObjectName("stroke_selection");
 
-class DlgStrokeSelection: public KDialog
+    setMainWidget(m_page);
+    resize(m_page->sizeHint());
+
+    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+}
+
+DlgStrokeSelection::~DlgStrokeSelection()
 {
+    delete m_page;
+}
 
-    Q_OBJECT
+void DlgStrokeSelection::okClicked()
+{
+    accept();
+}
 
-public:
-
-    DlgStrokeSelection(QWidget * parent = 0, const char* name = 0);
-    ~DlgStrokeSelection();
-
-private slots:
-
-    void okClicked();
-
-private:
-
-    WdgStrokeSelection * m_page;
-};
-
-#endif // DLG_STROKE_SELECTION_H
+#include "dlg_stroke_selection.moc"

@@ -86,6 +86,7 @@ void StrokeSelection::slotStrokeSelection()
 
     if (dlgStrokeSelection->exec() == QDialog::Accepted) {
         // XXX: stroke selection
+        KisSel
     }
 
     delete dlgStrokeSelection;
