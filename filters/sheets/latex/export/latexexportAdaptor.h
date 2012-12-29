@@ -22,7 +22,7 @@
 #define __LATEXEXPORTADAPTOR_H__
 
 #include <QObject>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 
 class KSpreadLatexExportDiaImpl;
 

@@ -32,9 +32,9 @@
 
 #include <libs/main/calligraversion.h>
 
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
-#include <KDE/KDebug>
+#include <KGlobal>
+#include <KStandardDirs>
+#include <KDebug>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>

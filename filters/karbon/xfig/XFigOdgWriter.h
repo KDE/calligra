@@ -25,7 +25,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
 // Qt
-#include <QtCore/QLocale>
+#include <QLocale>
 
 class XFigDocument;
 class XFigPage;

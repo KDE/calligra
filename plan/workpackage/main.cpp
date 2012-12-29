@@ -30,7 +30,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include <QFile>
 
 
