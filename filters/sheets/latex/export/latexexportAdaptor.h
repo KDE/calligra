@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QtDBus>
 
-class KSpreadLatexExportDiaImpl;
+class LatexExportDialog;
 
 class LatexExportAdaptor: public QDBusAbstractAdaptor
 {
@@ -32,7 +32,7 @@ class LatexExportAdaptor: public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.filter.kspread.latex")
 
 public:
-    LatexExportAdaptor(KSpreadLatexExportDiaImpl* dia);
+    LatexExportAdaptor(LatexExportDialog* dialog);
 
     ~LatexExportAdaptor();
 
@@ -40,7 +40,7 @@ public Q_SLOTS: // METHODS
     Q_SCRIPTABLE void useDefaultConfig();
 
 private:
-    KSpreadLatexExportDiaImpl* _dialog;
+    LatexExportDialog* _dialog;
 };
 
 #endif /* __LATEXEXPORTADAPTOR_H__ */
