@@ -115,7 +115,9 @@ private slots:
 
 protected:
     bool m_smooth;
-    double m_smoothness;
+    qreal m_smoothnessFactor;
+    int m_smoothnessQuality;
+
     bool m_assistant;
     double m_magnetism;
 

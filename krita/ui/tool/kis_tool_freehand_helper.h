@@ -49,7 +49,7 @@ public:
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 
-    void setSmoothness(bool smooth, qreal smoothness);
+    void setSmoothness(bool smooth, qreal smoothnessFactor, int smoothnessQuality);
 
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,

@@ -32,6 +32,7 @@ class QGridLayout;
 
 class KoCanvasBase;
 class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
 
 class KisToolBrush : public KisToolFreehand
 {
@@ -44,7 +45,8 @@ public:
     QWidget * createOptionWidget();
 
 private slots:
-    void slotSetSmoothness(int smoothness);
+    void slotSetSmoothnessQuality(int quality);
+    void slotSetSmoothnessFactor(qreal factor);
     void slotSetMagnetism(int magnetism);
 
 private:
@@ -52,7 +54,8 @@ private:
     QCheckBox *m_chkSmooth;
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
-    KisSliderSpinBox *m_sliderSmoothness;
+    KisDoubleSliderSpinBox *m_sliderSmoothnessFactor;
+    KisSliderSpinBox *m_sliderSmoothnessQuality;
 };
 
 

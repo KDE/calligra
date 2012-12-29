@@ -41,7 +41,6 @@ struct KisToolFreehandHelper::Private
     bool haveTangent;
     QPointF previousTangent;
 
-
     bool hasPaintAtLeastOnce;
 
     QTime strokeTime;
@@ -55,7 +54,8 @@ struct KisToolFreehandHelper::Private
     KisPaintInformation olderPaintInformation;
 
     bool smooth;
-    qreal smoothness;
+    qreal smoothnessFactor;
+    int smoothnessQuality;
 
     QTimer airbrushingTimer;
 };
@@ -69,7 +69,8 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->recordingAdapter = recordingAdapter;
 
     m_d->smooth = true;
-    m_d->smoothness = 1.0;
+    m_d->smoothnessFactor = 50.0;
+    m_d->smoothnessQuality = 20;
 
     m_d->strokeTimeoutTimer.setSingleShot(true);
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
@@ -82,10 +83,11 @@ KisToolFreehandHelper::~KisToolFreehandHelper()
     delete m_d;
 }
 
-void KisToolFreehandHelper::setSmoothness(bool smooth, qreal smoothness)
+void KisToolFreehandHelper::setSmoothness(bool smooth, qreal smoothnessFactor, int smoothnessQuality)
 {
     m_d->smooth = smooth;
-    m_d->smoothness = smoothness;
+    m_d->smoothnessQuality = smoothnessQuality;
+    m_d->smoothnessFactor = smoothnessFactor;
 }
 
 void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
@@ -98,7 +100,6 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     Q_UNUSED(overrideNode);
 
     m_d->strokesFacade = strokesFacade;
-
 
     m_d->haveTangent = false;
     m_d->previousTangent = QPointF();
@@ -145,26 +146,26 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                                          m_d->strokeTime.elapsed());
 
     if (m_d->smooth) {
-        if (!m_d->haveTangent) {
-            m_d->haveTangent = true;
-            m_d->previousTangent =
-                (info.pos() - m_d->previousPaintInformation.pos()) * m_d->smoothness /
-                (3.0 * (info.currentTime() - m_d->previousPaintInformation.currentTime()));
-        } else {
-            QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) * m_d->smoothness /
-                                  (3.0 * (info.currentTime() - m_d->olderPaintInformation.currentTime()));
-            qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
-            QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
-            QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
-            paintBezierCurve(m_d->painterInfos,
-                             m_d->olderPaintInformation,
-                             control1,
-                             control2,
-                             m_d->previousPaintInformation);
-            m_d->previousTangent = newTangent;
-        }
-        m_d->olderPaintInformation = m_d->previousPaintInformation;
-        m_d->strokeTimeoutTimer.start(100);
+//        if (!m_d->haveTangent) {
+//            m_d->haveTangent = true;
+//            m_d->previousTangent =
+//                (info.pos() - m_d->previousPaintInformation.pos()) * m_d->smoothness /
+//                (3.0 * (info.currentTime() - m_d->previousPaintInformation.currentTime()));
+//        } else {
+//            QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) * m_d->smoothness /
+//                                  (3.0 * (info.currentTime() - m_d->olderPaintInformation.currentTime()));
+//            qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
+//            QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
+//            QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
+//            paintBezierCurve(m_d->painterInfos,
+//                             m_d->olderPaintInformation,
+//                             control1,
+//                             control2,
+//                             m_d->previousPaintInformation);
+//            m_d->previousTangent = newTangent;
+//        }
+//        m_d->olderPaintInformation = m_d->previousPaintInformation;
+//        m_d->strokeTimeoutTimer.start(100);
     } else {
         paintLine(m_d->painterInfos, m_d->previousPaintInformation, info);
     }
@@ -215,7 +216,8 @@ void KisToolFreehandHelper::finishStroke()
     if(m_d->haveTangent) {
         m_d->haveTangent = false;
 
-        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) * m_d->smoothness / 3.0;
+        //QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) * m_d->smoothness / 3.0;
+        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos());
         qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
         QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
         QPointF control2 = m_d->previousPaintInformation.pos() - newTangent;
