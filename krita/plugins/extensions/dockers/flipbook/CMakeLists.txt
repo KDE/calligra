@@ -2,6 +2,7 @@ set(KRITA_flipbookDOCKER_PART_SRCS
     flipbookdocker.cpp 
     flipbookdocker_dock.cpp 
     FlipbookView.cpp
+    sequence_viewer.cpp
 )
 
 kde4_add_ui_files(KRITA_flipbookDOCKER_PART_SRCS

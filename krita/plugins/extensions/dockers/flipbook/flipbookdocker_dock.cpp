@@ -34,6 +34,8 @@
 #include <KoZoomMode.h>
 #include <KoFilterManager.h>
 #include <KoServiceProvider.h>
+#include <KoMainWindow.h>
+#include <KoView.h>
 
 #include <kis_image.h>
 #include <kis_view2.h>
@@ -43,11 +45,18 @@
 #include <kis_doc2.h>
 #include <kis_part2.h>
 #include <kis_zoom_manager.h>
+#include <kis_canvas_controller.h>
+
+#include "FlipbookView.h"
+#include "sequence_viewer.h"
 
 FlipbookDockerDock::FlipbookDockerDock( )
     : QDockWidget(i18n("Flipbook"))
     , m_canvas(0)
     , m_flipbook(0)
+    , m_animating(false)
+    , m_animationWidget(0)
+    , m_canvasWidget(0)
 {
     QWidget* widget = new QWidget(this);
     setupUi(widget);
@@ -90,6 +99,10 @@ FlipbookDockerDock::FlipbookDockerDock( )
     bnDeleteItem->setIcon(koIcon("list-remove"));
     bnDeleteItem->setToolTip(i18n("Remove selected images from the current flipbook"));
     connect(bnDeleteItem, SIGNAL(clicked()), SLOT(removeImage()));
+
+    bnAnimate->setIcon(koIcon("media-playback-start"));
+    bnAnimate->setToolTip(i18n("Show Animation"));
+    connect(bnAnimate, SIGNAL(clicked()), SLOT(toggleAnimation()));
 
     connect(listFlipbook, SIGNAL(currentItemChanged(const QModelIndex &)), SLOT(selectImage(const QModelIndex&)));
 }
@@ -285,6 +298,36 @@ void FlipbookDockerDock::selectImage(const QModelIndex &index)
         m_canvas->view()->zoomController()->setZoomMode(KoZoomMode::ZOOM_PAGE);
     }
     QApplication::restoreOverrideCursor();
+}
+
+void FlipbookDockerDock::toggleAnimation()
+{
+    if (!m_animationWidget) {
+        m_animationWidget = new SequenceViewer(m_canvas->view()->shell());
+        m_animationWidget->hide();
+    }
+
+    if (!m_canvasWidget) {
+        m_canvasWidget = m_canvas->view()->findChild<KisCanvasController*>();
+    }
+
+    if (!m_animating) {
+        qDebug() << "start animation";
+        m_animating = true;
+        bnAnimate->setIcon(koIcon("media-playback-stop"));
+        m_canvas->view()->
+        m_mainWindow->setCentralWidget(m_animationWidget);
+        m_animationWidget->show();
+        m_canvasWidget->hide();
+    }
+    else {
+        qDebug() << "stopt animation";
+        m_animating = false;
+        bnAnimate->setIcon(koIcon("media-playback-start"));
+        m_mainWindow->setCentralWidget(m_canvasWidget);
+        m_animationWidget->hide();
+        m_canvasWidget->show();
+    }
 }
 
 

@@ -30,6 +30,9 @@ class KisFlipbook;
 class QListView;
 class QThread;
 class KisCanvas2;
+class FlipbookView;
+class SequenceViewer;
+class KoMainWindow;
 
 class FlipbookDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui_WdgFlipbookDocker {
     Q_OBJECT
@@ -59,12 +62,18 @@ private slots:
 
     void selectImage(const QModelIndex &index);
 
+    void toggleAnimation();
+
 private:
 
     void showCurrentItem();
 
     KisCanvas2 *m_canvas;
     KisFlipbook *m_flipbook;
+
+    bool m_animating;
+    SequenceViewer *m_animationWidget;
+    QWidget *m_canvasWidget;
 };
 
 
