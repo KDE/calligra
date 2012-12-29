@@ -266,7 +266,7 @@ bool KexiProjectData::load(const QString& fileName, QString* _groupKey)
     QString groupKey;
     if (!_groupKey || _groupKey->isEmpty()) {
         QStringList groups(config.groupList());
-        foreach(QString s, groups) {
+        foreach(const QString &s, groups) {
             if (s.toLower() != "file information") {
                 groupKey = s;
                 break;
@@ -399,7 +399,7 @@ bool KexiProjectData::save(const QString& fileName, bool savePassword,
         const QStringList groups(config.groupList());
         if (overwriteFirstGroup && !groups.isEmpty()) {
 //   groupKey = groups.first(); //found
-            foreach(QString s, groups) {
+            foreach(const QString &s, groups) {
                 if (s.toLower() != "file information") {
                     groupKey = s;
                     break;

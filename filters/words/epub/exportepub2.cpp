@@ -160,7 +160,7 @@ KoFilter::ConversionStatus ExportEpub2::extractImages(KoStore *odfStore, EpubFil
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
-    foreach (const QString imgSrc, m_imagesSrcList.keys()) {
+    foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         kDebug(30503) << imgSrc;
         if (!odfStore->extractFile(imgSrc, imgContent)) {
             kDebug(30503) << "Can not to extract file";
@@ -406,7 +406,7 @@ KoFilter::ConversionStatus ExportEpub2::extractCoverImage(KoStore *odfStore, Epu
 {
     // Find Cover from manifest
     QString coverPath;
-    foreach (QString path, m_manifest.keys()) {
+    foreach (const QString &path, m_manifest.keys()) {
         if (path.contains("coverImage.")) {
             coverPath = path;
             break;

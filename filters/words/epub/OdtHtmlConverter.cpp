@@ -941,7 +941,7 @@ void OdtHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_footNotes.keys()) {
+    foreach(const QString &id, m_footNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
         htmlWriter->addAttribute("id", id + "n");
 
@@ -969,7 +969,7 @@ void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_endNotes.keys()) {
+    foreach(const QString &id, m_endNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
         htmlWriter->addAttribute("id", id.section("/", 1) + "n");
 
@@ -1321,7 +1321,7 @@ KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*
 
     QByteArray begin("{\n");
     QByteArray end("}\n");
-    foreach (QString styleName, styles.keys()) {
+    foreach (const QString &styleName, styles.keys()) {
         QByteArray head;
         QByteArray attributeList;
 

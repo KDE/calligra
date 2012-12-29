@@ -221,7 +221,7 @@ std::ostream& operator<<(std::ostream& s, const QByteArray& d)
 
 std::ostream& operator<<(std::ostream& s, const QUuid& uuid)
 {
-    return s << uuid.toString().toAscii().data();
+    return s << uuid.toString().toLatin1().constData();
 }
 
 Value errorAsValue(int errorCode)

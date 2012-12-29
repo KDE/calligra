@@ -129,8 +129,8 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             index++;
             if ((index % m_maxBlockSize) != 0) {
                 if (QChar(input.at(index)).isLetter()
-                        && ((QChar(input.at(index)).toAscii() >= (qint8)0X09)
-                            && (QChar(input.at(index)).toAscii() <= (qint8)0X7f))) {
+                        && ((QChar(input.at(index)).toLatin1() >= (qint8)0X09)
+                            && (QChar(input.at(index)).toLatin1() <= (qint8)0X7f))) {
 
                     winIndex += 2;
                     lookahead += 2;
@@ -141,15 +141,15 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
         }
 
         // litterals ascii is between 0X09 - 0X7f
-        if (QChar(input.at(lookahead)).toAscii() < (qint8)0X09 ||
-               QChar(input.at(lookahead)).toAscii() > (qint8)0X7f ) {
+        if (QChar(input.at(lookahead)).toLatin1() < (qint8)0X09 ||
+               QChar(input.at(lookahead)).toLatin1() > (qint8)0X7f ) {
 
             // Check the length of unknown characters.
             int len = 1;
             int index = lookahead + 1;
             while (1) {
-                if (QChar(input.at(index)).toAscii() < (qint8)0X09 ||
-                        QChar(input.at(index)).toAscii() > (qint8)0X7f ) {
+                if (QChar(input.at(index)).toLatin1() < (qint8)0X09 ||
+                        QChar(input.at(index)).toLatin1() > (qint8)0X7f ) {
                     if ((index % m_maxBlockSize) == 0)
                         break;
                     index++;
