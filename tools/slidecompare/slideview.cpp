@@ -28,7 +28,7 @@
 #include <QScrollBar>
 #include <QTransform>
 #include <QWheelEvent>
-#include <QtOpenGL/QGLWidget>
+#include <QGLWidget>
 #include <cmath>
 
 class GraphicsSlideItem : public QGraphicsItem {

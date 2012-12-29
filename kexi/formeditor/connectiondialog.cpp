@@ -322,7 +322,7 @@ ConnectionDialog::updateSlotList(KexiDB::RecordData *record)
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Slot, QMetaMethod::Public));
-    foreach(QMetaMethod method, list) {
+    foreach(const QMetaMethod &method, list) {
         // we add the slot only if it is compatible with the signal
         QString slotArg(method.signature());
         slotArg = slotArg.remove(QRegExp(".*[(]|[)]"));
@@ -347,7 +347,7 @@ ConnectionDialog::updateSignalList(KexiDB::RecordData *record)
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(tree->widget()->metaObject(),
                 QMetaMethod::Signal, QMetaMethod::Public));
-    foreach(QMetaMethod method, list) {
+    foreach(const QMetaMethod &method, list) {
         KexiDB::RecordData *record = d->signalsColumnData->createItem();
         (*record)[0] = QString::fromLatin1(method.signature());
         (*record)[1] = (*record)[0];

@@ -200,7 +200,7 @@ getText(const TextContainer* tc)
         // each item represents the low byte of a UTF-16 Unicode character
         // whose high byte is 0x00
         const QByteArray& textChars(tc->text.get<TextBytesAtom>()->textChars);
-        ret = QString::fromAscii(textChars, textChars.size());
+        ret = QString::fromLatin1(textChars, textChars.size());
     }
     return ret;
 }
@@ -3457,7 +3457,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
 
         if (headerFooterAtom && headerFooterAtom->fHasHeader && headerAtom) {
 #if 0
-            QString headerText = QString::fromAscii(headerAtom->header, headerAtom->header.size());
+            QString headerText = QString::fromLatin1(headerAtom->header, headerAtom->header.size());
             QString hdrName = findDeclaration(Header, headerText);
             if (hdrName == 0 ) {
                 hdrName = QString("hdr%1").arg(declaration.values(Header).count() + 1);

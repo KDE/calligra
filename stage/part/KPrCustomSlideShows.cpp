@@ -141,7 +141,7 @@ void KPrCustomSlideShows::removeSlidesFromAll( const QList<KoPAPageBase*> &slide
 
 void KPrCustomSlideShows::saveOdf( KoPASavingContext & context )
 {
-    foreach( QString name, m_customSlideShows.keys() ) {
+    foreach( const QString &name, m_customSlideShows.keys() ) {
         QList<KoPAPageBase*> slideList = m_customSlideShows.value( name );
         context.xmlWriter().startElement( "presentation:show" );
         context.xmlWriter().addAttribute( "presentation:name", name );

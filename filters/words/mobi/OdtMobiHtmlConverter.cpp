@@ -918,7 +918,7 @@ void OdtMobiHtmlConverter::writeFootNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_footNotes.keys()) {
+    foreach(const QString &id, m_footNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
 //        htmlWriter->addAttribute("id", id + "n");
 //        htmlWriter->startElement("a", m_doIndent);
@@ -946,7 +946,7 @@ void OdtMobiHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
 
     htmlWriter->startElement("ul", m_doIndent);
     int noteCounts = 1;
-    foreach(QString id, m_endNotes.keys()) {
+    foreach(const QString &id, m_endNotes.keys()) {
         htmlWriter->startElement("li", m_doIndent);
 //        htmlWriter->addAttribute("id", id.section("/", 1) + "n");
 
@@ -1298,7 +1298,7 @@ KoFilter::ConversionStatus OdtMobiHtmlConverter::createCSS(QHash<QString, StyleI
 
     QByteArray begin("{\n");
     QByteArray end("}\n");
-    foreach (QString styleName, styles.keys()) {
+    foreach (const QString &styleName, styles.keys()) {
         QByteArray head;
         QByteArray attributeList;
 
@@ -1443,7 +1443,7 @@ void OdtMobiHtmlConverter::generateMobiInternalLinks()
 
     // For each refrence that we add to file, should update bookmark position.
     foreach (qint64 refPosition, m_refrencesList.keys()) {
-        foreach (QString id, m_bookMarksList.keys()) {
+        foreach (const QString &id, m_bookMarksList.keys()) {
             if (m_bookMarksList.value(id) > refPosition) {
                 qint64 newPos = (qint64)11 + (qint64)QString::number(m_bookMarksList.value(id)).size()
                         + m_bookMarksList.value(id) + 1;

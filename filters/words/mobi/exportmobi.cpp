@@ -164,7 +164,7 @@ KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
-    foreach (const QString imgSrc, m_imagesSrcList.keys()) {
+    foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         if (!odfStore->extractFile(imgSrc, imgContent)) {
             kDebug(31000) << "Can not to extract file";
             return KoFilter::FileNotFound;
