@@ -18,11 +18,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONCURVEFIT_H
-#define KARBONCURVEFIT_H
+#ifndef KOCURVEFIT_H
+#define KOCURVEFIT_H
 
 #include <QList>
 #include <QPointF>
+
+#include "flake_export.h"
 
 class KoPathShape;
 
@@ -41,7 +43,7 @@ class KoPathShape;
  * @return a path shape representing the fitted curve
  */
 
-KoPathShape * bezierFit(const QList<QPointF> &points, float error);
+FLAKE_EXPORT KoPathShape * bezierFit(const QList<QPointF> &points, float error);
 
 #endif
 

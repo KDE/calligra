@@ -19,7 +19,7 @@
 
 #include "KarbonSimplifyPath.h"
 
-#include <KarbonCurveFit.h>
+#include <KoCurveFit.h>
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
 #include <KDebug>
