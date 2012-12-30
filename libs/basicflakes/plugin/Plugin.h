@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,19 +16,17 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
-#ifndef _KARBONPENCILTOOLFACTORY_H_
-#define _KARBONPENCILTOOLFACTORY_H_
+#include <QObject>
+#include <QVariantList>
 
-#include <KoToolFactoryBase.h>
+class Plugin : public QObject {
+    Q_OBJECT
 
-class KarbonPencilToolFactory : public KoToolFactoryBase
-{
 public:
-    KarbonPencilToolFactory();
-    ~KarbonPencilToolFactory();
-
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    Plugin(QObject * parent, const QVariantList &);
+    ~Plugin() {}
 };
-
-#endif // _KARBONPENCILTOOLFACTORY_H_
+#endif

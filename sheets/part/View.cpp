@@ -158,8 +158,10 @@
 #include "ui/PixmapCachingSheetView.h"
 
 // D-Bus
+#ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
-#include <QtDBus/QtDBus>
+#include <QtDBus>
+#endif
 
 using namespace Calligra::Sheets;
 
@@ -603,7 +605,10 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     // process, is called from resizeEvent(). The loading flag will be unset
     // at the end of initialPosition().
 
+#ifndef QT_NO_DBUS
     new ViewAdaptor(this);
+#endif
+
     d->canvas->setFocus();
 }
 

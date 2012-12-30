@@ -532,7 +532,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
         deltaSequence = _seqList.createDeltaSequence(intervalLength);
 
         QString str("Deltas: [ ");
-        foreach(Value v, deltaSequence) {
+        foreach(const Value &v, deltaSequence) {
             if (v.isBoolean())
                 str += v.asBoolean() ? "change " : "nochange ";
             else if (v.isInteger())
@@ -572,7 +572,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
             deltaSequence.append(Value());
 
         QString str("Deltas: [ ");
-        foreach(Value v, deltaSequence) {
+        foreach(const Value &v, deltaSequence) {
             if (v.isBoolean())
                 str += v.asBoolean() ? "change " : "nochange ";
             else if (v.isInteger())

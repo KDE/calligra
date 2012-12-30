@@ -1630,11 +1630,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
+            m_prevCursorPosition = textEditor->position();
             textEditor->newLine();
             updateActions();
             editingPluginEvents();
         } else if ((event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
             m_prevCursorPosition = textEditor->position();
+            startingSimpleEdit(); //signal editing plugins that this is a simple edit
             textEditor->insertText(event->text());
             editingPluginEvents();
         }
@@ -2519,11 +2521,7 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
     KoTextEditingPlugin *plugin = m_textEditingPlugins->plugin(pluginId);
     if (plugin) {
         if (m_textEditor.data()->hasSelection()) {
-            int from = m_textEditor.data()->position();
-            int to = m_textEditor.data()->anchor();
-            if (from > to) // make sure we call the plugin consistently
-                qSwap(from, to);
-            plugin->checkSection(m_textShapeData->document(), from, to);
+            plugin->checkSection(m_textShapeData->document(), m_textEditor.data()->selectionStart(), m_textEditor.data()->selectionEnd());
         } else
             plugin->finishedWord(m_textShapeData->document(), m_textEditor.data()->position());
     }
@@ -2688,6 +2686,14 @@ void TextTool::finishedParagraph()
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
 }
 
+void TextTool::startingSimpleEdit()
+{
+    kDebug();
+    if (m_textShapeData)
+        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+            plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
+}
+
 void TextTool::setTextColor(const KoColor &color)
 {
     m_textEditor.data()->setTextColor(color.toQColor());
@@ -2821,7 +2827,7 @@ void TextTool::debugTextDocument()
         else if (block.length() == 1) { // no actual tet
             kDebug(32500) << "\\n";
         }
-        foreach (QTextCharFormat cf, inlineCharacters) {
+        foreach (const QTextCharFormat &cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
             // kDebug(32500) << "-> id:" << cf.intProperty(577297549);

@@ -57,6 +57,32 @@ public:
     explicit KoTextBlockData(QTextBlockUserData *userData);
     virtual ~KoTextBlockData();
 
+    struct MarkupRange {
+        int firstChar;
+        int lastChar;
+        qreal startX;
+        qreal endX;
+    };
+
+    enum MarkupType {
+        Misspell,
+        Grammar
+    };
+
+    void appendMarkup(MarkupType type, int firstChar, int lastChar);
+
+    void clearMarkups(MarkupType type);
+
+    void rebaseMarkups(MarkupType type, int fromPosition, int delta);
+
+    MarkupRange findMarkup(MarkupType type, int positionWithin) const;
+
+    void setMarkupsLayoutValidity(MarkupType type, bool valid);
+    bool isMarkupsLayoutValid(MarkupType type) const;
+
+    QList<MarkupRange>::Iterator markupsBegin(MarkupType type);
+    QList<MarkupRange>::Iterator markupsEnd(MarkupType type);
+
     /**
      * Clear the counter and set everything to default values.
      */

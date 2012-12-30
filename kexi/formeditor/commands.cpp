@@ -1729,7 +1729,7 @@ DeleteWidgetCommand::DeleteWidgetCommand(Form& form, const QWidgetList &list, Co
         // We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
         d->containers.insert(
             item->name().toLatin1(),
-            d->form->parentContainer(item->widget())->widget()->objectName().toLatin1().constData()
+            d->form->parentContainer(item->widget())->widget()->objectName().toLatin1())
         );
         d->parents.insert(
             item->name().toLatin1(),

@@ -31,7 +31,7 @@
 // KDE
 #include <KPluginFactory>
 // Qt
-#include <QtCore/QFile>
+#include <QFile>
 
 
 K_PLUGIN_FACTORY(CdrImportFactory, registerPlugin<XFigImportFilter>();)

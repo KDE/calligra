@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonPencilToolFactory.h"
-#include "KarbonPencilTool.h"
+#include "KoPencilToolFactory.h"
+#include "KoPencilTool.h"
 
 #include <KoToolRegistry.h>
 
@@ -26,8 +26,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KarbonPencilToolFactory::KarbonPencilToolFactory()
-        : KoToolFactoryBase("KarbonPencilTool")
+KoPencilToolFactory::KoPencilToolFactory()
+        : KoToolFactoryBase("KoPencilTool")
 {
     setToolTip(i18n("Freehand Path Drawing Tool"));
     setToolType("karbon, krita");
@@ -36,12 +36,12 @@ KarbonPencilToolFactory::KarbonPencilToolFactory()
     setActivationShapeId("flake/edit");
 }
 
-KarbonPencilToolFactory::~KarbonPencilToolFactory()
+KoPencilToolFactory::~KoPencilToolFactory()
 {
 }
 
-KoToolBase * KarbonPencilToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase * KoPencilToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new KarbonPencilTool(canvas);
+    return new KoPencilTool(canvas);
 }
 

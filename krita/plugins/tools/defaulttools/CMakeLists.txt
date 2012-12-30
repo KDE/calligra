@@ -17,13 +17,14 @@ set(kritadefaulttools_PART_SRCS
     strokes/move_stroke_strategy.cpp
     strokes/move_selection_stroke_strategy.cpp
     kis_tool_multihand.cpp
+    kis_tool_pencil.cc
     )
 
 kde4_add_ui_files(kritadefaulttools_PART_SRCS wdgcolorpicker.ui wdgmovetool.ui)
 
 kde4_add_plugin(kritadefaulttools ${kritadefaulttools_PART_SRCS})
 
-target_link_libraries(kritadefaulttools kritaui)
+target_link_libraries(kritadefaulttools kritaui basicflakes)
 if (HAVE_OPENGL)
   target_link_libraries(kritadefaulttools ${QT_QTOPENGL_LIBRARY} ${OPENGL_LIBRARIES} )
 endif (HAVE_OPENGL)

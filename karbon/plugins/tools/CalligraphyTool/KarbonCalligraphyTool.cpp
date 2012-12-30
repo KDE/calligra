@@ -29,7 +29,7 @@
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KarbonCurveFit.h>
+#include <KoCurveFit.h>
 #include <KoColorBackground.h>
 #include <KoCanvasResourceManager.h>
 #include <KoColor.h>

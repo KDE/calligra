@@ -742,7 +742,7 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
             framesets.append(tfs);
     }
     int pageNumber = -1;
-    foreach (KWPage page, pageManager()->pages()) {
+    foreach (const KWPage &page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
             pageNumber = page.pageNumber();
             break;
