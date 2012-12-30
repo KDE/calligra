@@ -1,6 +1,4 @@
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
-include_directories(${CMAKE_SOURCE_DIR}/kspread ${KOMAIN_INCLUDES})
+include_directories(${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
@@ -11,7 +9,7 @@ set(kspreadlatexexport_PART_SRCS
    document.cc 
    fileheader.cc 
    format.cc 
-   kspreadlatexexportdiaImpl.cc 
+   latexexportdialog.cc
    latexexport.cc 
    latexexportAdaptor.cc 
    map.cc 
@@ -21,13 +19,13 @@ set(kspreadlatexexport_PART_SRCS
    table.cc 
    xmlparser.cc )
 
-kde4_add_ui3_files(kspreadlatexexport_PART_SRCS latexexportdia.ui )
+kde4_add_ui_files(kspreadlatexexport_PART_SRCS latexexportwidget.ui )
 
 kde4_add_plugin(kspreadlatexexport ${kspreadlatexexport_PART_SRCS})
 
 
 
-target_link_libraries(kspreadlatexexport komain ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(kspreadlatexexport komain)
 
 install(TARGETS kspreadlatexexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -37,7 +37,7 @@
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kconfiggroup.h>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 
 #include <qtest_kde.h>
 #include <kdebug.h>

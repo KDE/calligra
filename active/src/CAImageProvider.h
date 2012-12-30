@@ -22,8 +22,8 @@
 #ifndef CAIMAGEPROVIDER_H
 #define CAIMAGEPROVIDER_H
 
-#include <QtDeclarative/QDeclarativeImageProvider>
-#include <QtCore/QHash>
+#include <QDeclarativeImageProvider>
+#include <QHash>
 
 class CAImageProvider : public QDeclarativeImageProvider
 {

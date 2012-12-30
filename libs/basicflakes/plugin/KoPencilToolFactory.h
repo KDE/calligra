@@ -17,18 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KARBONPENCILTOOLFACTORY_H_
-#define _KARBONPENCILTOOLFACTORY_H_
+#ifndef _KOPENCILTOOLFACTORY_H_
+#define _KOPENCILTOOLFACTORY_H_
 
 #include <KoToolFactoryBase.h>
 
-class KarbonPencilToolFactory : public KoToolFactoryBase
+class KoPencilToolFactory : public KoToolFactoryBase
 {
 public:
-    KarbonPencilToolFactory();
-    ~KarbonPencilToolFactory();
+    KoPencilToolFactory();
+    ~KoPencilToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
-#endif // _KARBONPENCILTOOLFACTORY_H_
+#endif // _KOPENCILTOOLFACTORY_H_

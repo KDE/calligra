@@ -33,12 +33,12 @@
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 
-#include <KDE/KActionCollection>
+#include <KActionCollection>
 #include <KDebug>
 
-#include <QtCore/QPoint>
-#include <QtCore/QSize>
-#include <QtGui/QGraphicsWidget>
+#include <QPoint>
+#include <QSize>
+#include <QGraphicsWidget>
 
 #include <cmath>
 

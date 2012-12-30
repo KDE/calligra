@@ -19,10 +19,10 @@
 #include "kpresenterslideloader.h"
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
-#include <KDE/KPluginFactory>
-#include <KDE/KStandardDirs>
-#include <KDE/KMimeType>
-#include <KDE/KParts/ComponentFactory>
+#include <KPluginFactory>
+#include <KStandardDirs>
+#include <KMimeType>
+#include <KParts/ComponentFactory>
 #include <QDebug>
 
 KPresenterSlideLoader::KPresenterSlideLoader(QObject* parent) :SlideLoader(parent) {
