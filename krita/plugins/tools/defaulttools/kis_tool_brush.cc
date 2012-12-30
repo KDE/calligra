@@ -28,7 +28,7 @@
 #include "kis_slider_spin_box.h"
 
 #define MAXIMUM_SMOOTHNESS_QUALITY 100 // 0..100
-#define MAXIMUM_SMOOTHNESS_FACTOR 1000.- // 0..1000.0 == weight in gui
+#define MAXIMUM_SMOOTHNESS_FACTOR 1000.0 // 0..1000.0 == weight in gui
 #define MAXIMUM_MAGNETISM 1000
 
 
@@ -81,7 +81,7 @@ QWidget * KisToolBrush::createOptionWidget()
     addOptionWidgetOption(m_sliderSmoothnessQuality, new QLabel(i18n("Quality:")));
 
     m_sliderSmoothnessFactor = new KisDoubleSliderSpinBox(optionWidget);
-    //m_sliderSmoothnessFactor->setRange(0.0, MAXIMUM_SMOOTHNESS_FACTOR, 1);
+    m_sliderSmoothnessFactor->setRange(0.0, MAXIMUM_SMOOTHNESS_FACTOR, 1);
     m_sliderSmoothnessFactor->setEnabled(true);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothnessFactor, SLOT(setEnabled(bool)));
     connect(m_sliderSmoothnessFactor, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessFactor(qreal)));
