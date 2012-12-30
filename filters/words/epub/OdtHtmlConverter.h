@@ -95,7 +95,7 @@ class OdtHtmlConverter
     void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
     void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
-    void handleEmbeddedFormula(QString &href, KoXmlWriter *htmlWriter);
+    void handleEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter);
     void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
                         QHash<QString, QString> &unknownNamespaces);
 

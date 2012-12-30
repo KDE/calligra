@@ -107,7 +107,7 @@ KoFilter::ConversionStatus OdfParser::parseManifest(KoStore *odfStore,
         // Normalize the file name, i.e. remove trailing slashes.
         QString path = nodeElement.attribute("full-path");
         if (path.endsWith('/'))
-            path = path.left(path.size() - 1);
+            path.chop(1);
         QString type = nodeElement.attribute("media-type");
 
         manifest.insert(path, type);

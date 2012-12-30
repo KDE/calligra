@@ -498,7 +498,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
 
             // Normalize the object reference
             if (href.startsWith("./"))
-                href = href.right(href.size() - 2);
+                href.remove(0, 2);
             QString type = m_manifest->value(href);
 
             // So far we can only an handle embedded object (formula).
@@ -550,10 +550,13 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     } // foreach
 }
 
-void OdtHtmlConverter::handleEmbeddedFormula(QString &href, KoXmlWriter *htmlWriter)
+void OdtHtmlConverter::handleEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter)
 {
-    // Open the formula content file if possible.
+    // FIXME: Track down why we need to close() the store here and
+    //        whip that code with a wet noodle.
     m_odfStore->close();
+
+    // Open the formula content file if possible.
     if (!m_odfStore->open(href + "/content.xml")) {
         kDebug(30503) << "Can not open" << href << "/content.xml .";
         return;
@@ -602,9 +605,9 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
     writer.startElement(name.constData());
 
     // Copy all the attributes, including namespaces.
-    QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();
+    const QList< QPair<QString, QString> >  &attributeNames = el.attributeFullNames();
     for (int i = 0; i < attributeNames.size(); ++i) {
-        QPair<QString, QString> attrPair(attributeNames.value(i));
+        const QPair<QString, QString>  &attrPair(attributeNames.value(i));
         if (attrPair.first.isEmpty()) {
             kDebug(30503) << "Copying attribute;" << attrPair.second;
             writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
