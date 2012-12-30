@@ -39,6 +39,7 @@ set(kowidgets_LIB_SRCS
     KoUniColorChooser.cpp
     KoUniColorDialog.cpp
     KoXYColorSelector.cpp
+    KoResourcePopupAction.cpp
     KoStrokeConfigWidget.cpp
     KoFillConfigWidget.cpp
     KoShadowConfigWidget.cpp

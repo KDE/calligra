@@ -27,6 +27,9 @@
 
 class KoCanvasBase;
 class KoColor;
+class KoResource;
+class KoShapeBackground;
+class KoShape;
 
 /// A widget for configuring the fill of a shape
 class KOWIDGETS_EXPORT KoFillConfigWidget : public QWidget
@@ -44,17 +47,26 @@ public:
 
     void setCanvas( KoCanvasBase *canvas );
 
-signals:
-    void opacityChanged(qreal opacity);
-    void colorChanged(const KoColor &color);
-
 private slots:
     void styleButtonPressed(int buttonId);
 
-    /// apply line changes to the selected shape
-    void applyChanges();
+    void noColorSelected();
+
+    /// apply color changes to the selected shape
+    void colorChanged();
+
+    /// the gradient of the fill changed, apply the changes
+    void gradientChanged(KoResource *resource);
+
+    /// the pattern of the fill changed, apply the changes
+    void patternChanged(KoResource *resource);
+
+    /// update the opacity of the shape
+    void updateOpacity(qreal opacity);
 
 private:
+    static KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+
     class Private;
     Private * const d;
 };
