@@ -48,9 +48,9 @@ Allow user to add a book cover image                                    [DONE]
  * UI to find / edit the filename                                       [Done]
 
 EPUB 3.0
- * MathML
+ * MathML                                                               [DONE]
     + Handle formulas as embedded document                              [Done]
-    + Handle formulas as inline mathML
+    + Handle formulas as inline mathML                                  [Done]
  * Multimedia, video
 
 Fix known bugs / misfeatures
