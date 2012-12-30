@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonPencilTool.h"
-#include "KarbonCurveFit.h"
+#include "KoPencilTool.h"
+#include "KoCurveFit.h"
 
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
@@ -55,7 +55,7 @@ qreal squareDistance(const QPointF &p1, const QPointF &p2)
     return dx*dx + dy*dy;
 }
 
-KarbonPencilTool::KarbonPencilTool(KoCanvasBase *canvas)
+KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
         : KoToolBase(canvas),  m_mode(ModeCurve), m_optimizeRaw(false)
         , m_optimizeCurve(false), m_combineAngle(15.0), m_fittingError(5.0)
         , m_close(false), m_shape(0)
@@ -63,11 +63,11 @@ KarbonPencilTool::KarbonPencilTool(KoCanvasBase *canvas)
 {
 }
 
-KarbonPencilTool::~KarbonPencilTool()
+KoPencilTool::~KoPencilTool()
 {
 }
 
-void KarbonPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
+void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (m_shape) {
         painter.save();
@@ -101,11 +101,11 @@ void KarbonPencilTool::paint(QPainter &painter, const KoViewConverter &converter
     }
 }
 
-void KarbonPencilTool::repaintDecorations()
+void KoPencilTool::repaintDecorations()
 {
 }
 
-void KarbonPencilTool::mousePressEvent(KoPointerEvent *event)
+void KoPencilTool::mousePressEvent(KoPointerEvent *event)
 {
     if (! m_shape) {
         m_shape = new KoPathShape();
@@ -122,7 +122,7 @@ void KarbonPencilTool::mousePressEvent(KoPointerEvent *event)
     }
 }
 
-void KarbonPencilTool::mouseMoveEvent(KoPointerEvent *event)
+void KoPencilTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (event->buttons() & Qt::LeftButton)
         addPoint(event->point);
@@ -141,7 +141,7 @@ void KarbonPencilTool::mouseMoveEvent(KoPointerEvent *event)
     }
 }
 
-void KarbonPencilTool::mouseReleaseEvent(KoPointerEvent *event)
+void KoPencilTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     if (! m_shape)
         return;
@@ -165,7 +165,7 @@ void KarbonPencilTool::mouseReleaseEvent(KoPointerEvent *event)
     m_points.clear();
 }
 
-void KarbonPencilTool::keyPressEvent(QKeyEvent *event)
+void KoPencilTool::keyPressEvent(QKeyEvent *event)
 {
     if (m_shape) {
         event->accept();
@@ -174,14 +174,14 @@ void KarbonPencilTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KarbonPencilTool::activate(ToolActivation, const QSet<KoShape*> &)
+void KoPencilTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     m_points.clear();
     m_close = false;
     useCursor(Qt::ArrowCursor);
 }
 
-void KarbonPencilTool::deactivate()
+void KoPencilTool::deactivate()
 {
     m_points.clear();
     delete m_shape;
@@ -191,7 +191,7 @@ void KarbonPencilTool::deactivate()
     m_hoveredPoint = 0;
 }
 
-void KarbonPencilTool::addPoint(const QPointF & point)
+void KoPencilTool::addPoint(const QPointF & point)
 {
     if (! m_shape)
         return;
@@ -209,7 +209,7 @@ void KarbonPencilTool::addPoint(const QPointF & point)
     canvas()->updateCanvas(m_shape->boundingRect());
 }
 
-qreal KarbonPencilTool::lineAngle(const QPointF &p1, const QPointF &p2)
+qreal KoPencilTool::lineAngle(const QPointF &p1, const QPointF &p2)
 {
     qreal angle = atan2(p2.y() - p1.y(), p2.x() - p1.x());
     if (angle < 0.0)
@@ -218,7 +218,7 @@ qreal KarbonPencilTool::lineAngle(const QPointF &p1, const QPointF &p2)
     return angle * 180.0 / M_PI;
 }
 
-void KarbonPencilTool::finish(bool closePath)
+void KoPencilTool::finish(bool closePath)
 {
     if (m_points.count() < 2)
         return;
@@ -274,45 +274,10 @@ void KarbonPencilTool::finish(bool closePath)
     if (! path)
         return;
 
-    KoShape * startShape = 0;
-    KoShape * endShape = 0;
-
-    if (closePath) {
-        path->close();
-        path->normalize();
-    } else {
-        path->normalize();
-        if (connectPaths(path, m_existingStartPoint, m_existingEndPoint)) {
-            if (m_existingStartPoint)
-                startShape = m_existingStartPoint->parent();
-            if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint)
-                endShape = m_existingEndPoint->parent();
-        }
-    }
-
-    // set the proper shape id
-    path->setShapeId(KoPathShapeId);
-    path->setStroke(currentStroke());
-
-    KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
-    if (cmd) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select(path);
-
-        if (startShape)
-            canvas()->shapeController()->removeShape(startShape, cmd);
-        if (endShape && startShape != endShape)
-            canvas()->shapeController()->removeShape(endShape, cmd);
-
-        canvas()->addCommand(cmd);
-    } else {
-        canvas()->updateCanvas(path->boundingRect());
-        delete path;
-    }
+    addPathShape(path, closePath);
 }
 
-QWidget * KarbonPencilTool::createOptionWidget()
+QWidget * KoPencilTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     QVBoxLayout * layout = new QVBoxLayout(optionWidget);
@@ -372,12 +337,51 @@ QWidget * KarbonPencilTool::createOptionWidget()
     return optionWidget;
 }
 
-void KarbonPencilTool::selectMode(int mode)
+void KoPencilTool::addPathShape(KoPathShape* path, bool closePath)
+{
+    KoShape * startShape = 0;
+    KoShape * endShape = 0;
+
+    if (closePath) {
+        path->close();
+        path->normalize();
+    } else {
+        path->normalize();
+        if (connectPaths(path, m_existingStartPoint, m_existingEndPoint)) {
+            if (m_existingStartPoint)
+                startShape = m_existingStartPoint->parent();
+            if (m_existingEndPoint && m_existingEndPoint != m_existingStartPoint)
+                endShape = m_existingEndPoint->parent();
+        }
+    }
+
+    // set the proper shape id
+    path->setShapeId(KoPathShapeId);
+    path->setStroke(currentStroke());
+    KUndo2Command * cmd = canvas()->shapeController()->addShape(path);
+    if (cmd) {
+        KoSelection *selection = canvas()->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select(path);
+
+        if (startShape)
+            canvas()->shapeController()->removeShape(startShape, cmd);
+        if (endShape && startShape != endShape)
+            canvas()->shapeController()->removeShape(endShape, cmd);
+
+        canvas()->addCommand(cmd);
+    } else {
+        canvas()->updateCanvas(path->boundingRect());
+        delete path;
+    }
+}
+
+void KoPencilTool::selectMode(int mode)
 {
     m_mode = static_cast<PencilMode>(mode);
 }
 
-void KarbonPencilTool::setOptimize(int state)
+void KoPencilTool::setOptimize(int state)
 {
     if (m_mode == ModeRaw)
         m_optimizeRaw = state == Qt::Checked ? true : false;
@@ -385,7 +389,7 @@ void KarbonPencilTool::setOptimize(int state)
         m_optimizeCurve = state == Qt::Checked ? true : false;
 }
 
-void KarbonPencilTool::setDelta(double delta)
+void KoPencilTool::setDelta(double delta)
 {
     if (m_mode == ModeCurve)
         m_fittingError = delta;
@@ -393,14 +397,14 @@ void KarbonPencilTool::setDelta(double delta)
         m_combineAngle = delta;
 }
 
-KoShapeStroke * KarbonPencilTool::currentStroke()
+KoShapeStroke * KoPencilTool::currentStroke()
 {
     KoShapeStroke * stroke = new KoShapeStroke(canvas()->resourceManager()->activeStroke());
     stroke->setColor(canvas()->resourceManager()->foregroundColor().toQColor());
     return stroke;
 }
 
-KoPathPoint* KarbonPencilTool::endPointAtPosition(const QPointF &position)
+KoPathPoint* KoPencilTool::endPointAtPosition(const QPointF &position)
 {
     QRectF roi = handleGrabRect(position);
     QList<KoShape *> shapes = canvas()->shapeManager()->shapesAt(roi);
@@ -442,7 +446,7 @@ KoPathPoint* KarbonPencilTool::endPointAtPosition(const QPointF &position)
     return nearestPoint;
 }
 
-bool KarbonPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd)
+bool KoPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAtStart, KoPathPoint *pointAtEnd)
 {
     // at least one point must be valid
     if (!pointAtStart && !pointAtEnd)
@@ -522,4 +526,4 @@ bool KarbonPencilTool::connectPaths(KoPathShape *pathShape, KoPathPoint *pointAt
     return true;
 }
 
-#include "KarbonPencilTool.moc"
+#include "KoPencilTool.moc"

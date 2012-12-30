@@ -160,7 +160,7 @@
 // D-Bus
 #ifndef QT_NO_DBUS
 #include "interfaces/ViewAdaptor.h"
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #endif
 
 using namespace Calligra::Sheets;

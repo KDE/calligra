@@ -1003,7 +1003,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    foreach(const QImage image, imageList) {
+    foreach(const QImage &image, imageList) {
         KoProperties params;
         params.setProperty("qimage", image);
 

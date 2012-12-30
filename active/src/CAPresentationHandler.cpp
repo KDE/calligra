@@ -45,8 +45,8 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 
-#include <QtCore/QSize>
-#include <QtCore/QTimer>
+#include <QSize>
+#include <QTimer>
 #include <QTextDocument>
 
 class CAPresentationHandler::Private

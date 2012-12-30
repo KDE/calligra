@@ -874,7 +874,7 @@ static const FunctionEntry* functionEntry(const QString& functionName)
     static QHash<QString, const FunctionEntry*> entries;
     if (entries.isEmpty()) {
         for (int i = 0; i <= 380; i++) {
-            entries[QString::fromAscii(FunctionEntries[i].name)] = &FunctionEntries[i];
+            entries[QString::fromLatin1(FunctionEntries[i].name)] = &FunctionEntries[i];
         }
     }
     return entries.value(functionName);
