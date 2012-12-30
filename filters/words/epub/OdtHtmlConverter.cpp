@@ -470,8 +470,31 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
             && framePartElement.namespaceURI() == KoXmlNS::draw)
         {
             QString href = framePartElement.attribute("href");
-            if (href.isEmpty())
+            if (href.isEmpty()) {
+                // Check for inline stuff.
+                // So far only math:math is supported.
+                if (!framePartElement.hasChildNodes())
+                    continue;
+
+                // Handle inline math:math
+                KoXmlElement childElement = framePartElement.firstChildElement();
+                if (childElement.localName() == "math"
+                    && childElement.namespaceURI() == KoXmlNS::math)
+                {
+                    QHash<QString, QString> unknownNamespaces;
+                    copyXmlElement(childElement, *htmlWriter, unknownNamespaces);
+
+                    // We are done with the whole frame.
+                    break;
+                }
+
+                // We couldn't handle this inline object. Check for
+                // object replacements (pictures).
                 continue;
+            }
+
+            // If we get here, this frame part was not an inline object.
+            // We already have an object reference.
 
             // Normalize the object reference
             if (href.startsWith("./"))
