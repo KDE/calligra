@@ -48,10 +48,12 @@ private slots:
     void slotSetSmoothnessQuality(int quality);
     void slotSetSmoothnessFactor(qreal factor);
     void slotSetMagnetism(int magnetism);
+    void slotSetSmoothingType(int index);
 
 private:
     QGridLayout *m_optionLayout;
-    QCheckBox *m_chkSmooth;
+    QComboBox *m_cmbSmoothingType;
+
     QCheckBox *m_chkAssistant;
     KisSliderSpinBox *m_sliderMagnetism;
     KisDoubleSliderSpinBox *m_sliderSmoothnessFactor;
