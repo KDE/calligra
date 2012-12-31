@@ -142,7 +142,7 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
 kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS})
 
 set ( KPLATO_REPORTS_LIBS koreport koproperty )
-target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart kdgantt ${KDE4_KHTML_LIBS} )
+target_link_libraries(kplatoui ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KPLATO_REPORTS_LIBS} komain kplatokernel kplatomodels kdchart calligrakdgantt ${KDE4_KHTML_LIBS} )
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 

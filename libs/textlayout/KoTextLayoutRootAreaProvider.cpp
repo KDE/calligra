@@ -26,7 +26,3 @@ KoTextLayoutRootAreaProvider::KoTextLayoutRootAreaProvider()
 KoTextLayoutRootAreaProvider::~KoTextLayoutRootAreaProvider()
 {
 }
-
-void KoTextLayoutRootAreaProvider::updateAll()
-{
-}

@@ -2672,7 +2672,6 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
@@ -2680,7 +2679,6 @@ void TextTool::finishedWord()
 
 void TextTool::finishedParagraph()
 {
-    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
@@ -2688,7 +2686,6 @@ void TextTool::finishedParagraph()
 
 void TextTool::startingSimpleEdit()
 {
-    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
