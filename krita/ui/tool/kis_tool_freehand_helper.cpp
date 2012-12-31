@@ -32,6 +32,7 @@
 #include "kis_painter.h"
 
 #include <math.h>
+#include <qnumeric.h> // for qIsNaN
 
 struct KisToolFreehandHelper::Private
 {
@@ -61,6 +62,7 @@ struct KisToolFreehandHelper::Private
     QTimer airbrushingTimer;
 
     QList<KisPaintInformation> history;
+    QList<qreal> velocityHistory;
 };
 
 
@@ -137,7 +139,8 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
 
     m_d->history.clear();
     m_d->history.append(m_d->previousPaintInformation);
-
+    m_d->velocityHistory.clear();
+    m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN());
     if(m_d->resources->needsAirbrushing()) {
         m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
         m_d->airbrushingTimer.start();
@@ -157,8 +160,10 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     if (m_d->smooth && m_d->smoothnessQuality > 1 && m_d->smoothnessFactor > 3.0) {
 
         m_d->history.append(info);
+        m_d->velocityHistory.append(std::numeric_limits<qreal>::signaling_NaN()); // Fake velocity!
 
-        QPointF pos(0.0, 0.0);
+        qreal x = 0.0;
+        qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
 
@@ -174,35 +179,42 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                 gaussianWeight = 1 / (sqrt(2 * M_PI) * m_d->smoothnessFactor);
             }
 
+            Q_ASSERT(m_d->history.size() == m_d->velocityHistory.size());
+
             for (int i = m_d->history.size() - 1; i >= minIndex; i--) {
                 qreal rate = 0.0;
+
                 const KisPaintInformation nextInfo = m_d->history.at(i);
-                int previousTime = nextInfo.currentTime();
-                if (i > 0) {
-                    previousTime = m_d->history.at(i - 1).currentTime();
+                double velocity = m_d->velocityHistory.at(i);
+
+               if (qIsNaN(velocity)) {
+
+                    int previousTime = nextInfo.currentTime();
+                    if (i > 0) {
+                        previousTime = m_d->history.at(i - 1).currentTime();
+                    }
+
+                    int deltaTime = qMax(1, nextInfo.currentTime() - previousTime); // make sure deltaTime > 1
+                    velocity = info.movement().norm() / deltaTime;
+                    m_d->velocityHistory[i] = velocity;
                 }
 
-                int deltaTime = qMax(1, nextInfo.currentTime() - previousTime); // make sure deltaTime > 1
-                double velocity = info.movement().norm() / deltaTime;
-//                // Average it to get nicer result, at the price of being less mathematically correct,
-//                // but we quickly reach a situation where dt = 1 and currentMove = 1
-//                qreal velocity = qMin(1.0, (m_speed * 0.9 + currentMove * 0.1));
                 if (gaussianWeight2 != 0.0) {
                     velocitySum += velocity * 100;
                     rate = gaussianWeight * exp(-velocitySum * velocitySum / (2 * gaussianWeight2));
                 }
                 scaleSum += rate;
-                pos.setX(pos.x() + rate * nextInfo.pos().x());
-                pos.setY(pos.y() + rate * nextInfo.pos().y());
+                x += rate * nextInfo.pos().x();
+                y += rate * nextInfo.pos().y();
             }
 
             if (scaleSum != 0.0) {
-                pos.setX(pos.x() / scaleSum);
-                pos.setY(pos.y() / scaleSum);
+                x /= scaleSum;
+                y /= scaleSum;
             }
-            if (pos != QPointF(0.0, 0.0)) {
-                //m_d->history.last().setPos(pos);
-                info.setPos(pos);
+            if ((x != 0.0 && y != 0.0) || (x == info.pos().x() && y == info.pos().y())) {
+                m_d->history.last().setPos(QPointF(x, y));
+                info.setPos(QPointF(x, y));
             }
         }
     }
