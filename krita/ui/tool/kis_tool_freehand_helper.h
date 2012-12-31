@@ -35,7 +35,7 @@ class KisStrokesFacade;
 class KisPostExecutionUndoAdapter;
 class KisPaintOp;
 class KisPainter;
-
+class KisSmoothingOptions;
 
 class KRITAUI_EXPORT KisToolFreehandHelper : public QObject
 {
@@ -51,7 +51,7 @@ public:
                           KisRecordingAdapter *recordingAdapter = 0);
     ~KisToolFreehandHelper();
 
-    void setSmoothness(bool smooth, qreal smoothnessFactor, int smoothnessQuality);
+    void setSmoothness(const KisSmoothingOptions &smoothingOptions);
 
     void initPaint(KoPointerEvent *event,
                    KoCanvasResourceManager *resourceManager,

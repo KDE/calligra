@@ -71,10 +71,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 {
     m_explicitShowOutline = false;
 
-    m_smooth = true;
-    m_smoothnessFactor = 50;
-    m_smoothnessQuality = 20;
-
     m_assistant = false;
     m_magnetism = 1.0;
 
@@ -162,7 +158,7 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
     setCurrentNodeLocked(true);
 
-    m_helper->setSmoothness(m_smooth, m_smoothnessFactor, m_smoothnessQuality);
+    m_helper->setSmoothness(m_smoothingOptions);
     m_helper->initPaint(event, canvas()->resourceManager(),
                         image(),
                         image().data(),
@@ -336,11 +332,6 @@ void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &i
 bool KisToolFreehand::wantsAutoScroll() const
 {
     return false;
-}
-
-void KisToolFreehand::setSmooth(bool smooth)
-{
-    m_smooth = smooth;
 }
 
 void KisToolFreehand::setAssistant(bool assistant)
