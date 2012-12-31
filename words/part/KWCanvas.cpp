@@ -85,6 +85,11 @@ QPointF KWCanvas::viewToDocument(const QPointF &viewPoint) const
     return m_viewMode->viewToDocument(viewPoint, m_viewConverter);
 }
 
+void KWCanvas::contextMenuEvent(QContextMenuEvent *e)
+{
+    m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
+    e->setAccepted(true);
+}
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
