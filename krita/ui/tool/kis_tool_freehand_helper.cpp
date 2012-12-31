@@ -58,6 +58,8 @@ struct KisToolFreehandHelper::Private
     int smoothnessQuality;
 
     QTimer airbrushingTimer;
+
+    QList<KisPaintInformation*> history;
 };
 
 
@@ -132,6 +134,9 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
     m_d->previousPaintInformation =
         m_d->infoBuilder->startStroke(event, m_d->strokeTime.elapsed());
 
+    m_d->history.clear();
+    m_d->history.append(m_d->previousPaintInformation);
+
     if(m_d->resources->needsAirbrushing()) {
         m_d->airbrushingTimer.setInterval(m_d->resources->airbrushingRate());
         m_d->airbrushingTimer.start();
@@ -145,29 +150,34 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                                          m_d->previousPaintInformation.pos(),
                                          m_d->strokeTime.elapsed());
 
-    if (m_d->smooth) {
-//        if (!m_d->haveTangent) {
-//            m_d->haveTangent = true;
-//            m_d->previousTangent =
-//                (info.pos() - m_d->previousPaintInformation.pos()) * m_d->smoothness /
-//                (3.0 * (info.currentTime() - m_d->previousPaintInformation.currentTime()));
-//        } else {
-//            QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) * m_d->smoothness /
-//                                  (3.0 * (info.currentTime() - m_d->olderPaintInformation.currentTime()));
-//            qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
-//            QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
-//            QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
-//            paintBezierCurve(m_d->painterInfos,
-//                             m_d->olderPaintInformation,
-//                             control1,
-//                             control2,
-//                             m_d->previousPaintInformation);
-//            m_d->previousTangent = newTangent;
-//        }
-//        m_d->olderPaintInformation = m_d->previousPaintInformation;
-//        m_d->strokeTimeoutTimer.start(100);
-    } else {
-        paintLine(m_d->painterInfos, m_d->previousPaintInformation, info);
+    if (m_d->smooth && m_d->smoothnessQuality > 0) {
+
+        //
+
+
+        // Now paint between the coordinates, using the bezier curve interpolation
+
+        if (!m_d->haveTangent) {
+            m_d->haveTangent = true;
+            m_d->previousTangent =
+                (info.pos() - m_d->previousPaintInformation.pos()) * 1000 /
+                (3.0 * (info.currentTime() - m_d->previousPaintInformation.currentTime()));
+        } else {
+            QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) * 1000 /
+                                  (3.0 * (info.currentTime() - m_d->olderPaintInformation.currentTime()));
+            qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
+            QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
+            QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
+            paintBezierCurve(m_d->painterInfos,
+                             m_d->olderPaintInformation,
+                             control1,
+                             control2,
+                             m_d->previousPaintInformation);
+            m_d->previousTangent = newTangent;
+        }
+        m_d->olderPaintInformation = m_d->previousPaintInformation;
+        m_d->strokeTimeoutTimer.start(100);
+
     }
 
     m_d->previousPaintInformation = info;
@@ -216,8 +226,7 @@ void KisToolFreehandHelper::finishStroke()
     if(m_d->haveTangent) {
         m_d->haveTangent = false;
 
-        //QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) * m_d->smoothness / 3.0;
-        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos());
+        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) * 1000 / 3.0;
         qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
         QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
         QPointF control2 = m_d->previousPaintInformation.pos() - newTangent;
