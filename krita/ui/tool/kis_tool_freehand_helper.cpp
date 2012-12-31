@@ -154,7 +154,7 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
     // Smooth the coordinates out using the history and the velocity. See
     // https://bugs.kde.org/show_bug.cgi?id=281267 and http://www24.atwiki.jp/sigetch_2007/pages/17.html.
     // This is also implemented in gimp, which is where I cribbed the code from.
-    if (m_d->smooth && m_d->smoothnessQuality > 0) {
+    if (m_d->smooth && m_d->smoothnessQuality > 1 && m_d->smoothnessFactor > 3.0) {
 
         m_d->history.append(info);
 
@@ -200,8 +200,10 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                 pos.setX(pos.x() / scaleSum);
                 pos.setY(pos.y() / scaleSum);
             }
-            m_d->history.last().setPos(pos);
-            info.setPos(pos);
+            if (pos != QPointF(0.0, 0.0)) {
+                //m_d->history.last().setPos(pos);
+                info.setPos(pos);
+            }
         }
     }
 
