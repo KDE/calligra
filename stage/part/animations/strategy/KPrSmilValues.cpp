@@ -80,7 +80,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
         return false;
     }
 
-    foreach (QString value, valuesList) {
+    foreach (const QString &value, valuesList) {
         KPrFormulaParser parser(value, m_shape, m_textBlockData, KPrFormulaParser::Values);
         if (!parser.valid()) {
             return false;

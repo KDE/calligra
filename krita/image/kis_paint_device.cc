@@ -392,7 +392,7 @@ QRect KisPaintDevice::extent() const
 
 QRegion KisPaintDevice::region() const
 {
-    return m_d->cache.region();
+    return m_d->cache.region().translated(m_d->x, m_d->y);
 }
 
 QRect KisPaintDevice::exactBounds() const
@@ -402,7 +402,7 @@ QRect KisPaintDevice::exactBounds() const
 
 QRect KisPaintDevice::calculateExactBounds() const
 {
-    quint8 defaultOpacity = colorSpace()->opacityU8(defaultPixel());
+    quint8 defaultOpacity = m_d->colorSpace->opacityU8(defaultPixel());
     if(defaultOpacity != OPACITY_TRANSPARENT_U8) {
         /**
          * We will not calculate exact bounds for the device,
@@ -425,9 +425,6 @@ QRect KisPaintDevice::calculateExactBounds() const
     // XXX: a small optimization is possible by using H/V line iterators in the first
     //      and third cases, at the cost of making the code a bit more complex
 
-    const qint32 pixelSize = this->pixelSize();
-    const quint8* defaultPixel = m_datamanager->defaultPixel();
-
     KisRandomConstAccessorSP accessor = createRandomConstAccessorNG(x, y);
 
     bool found = false;
@@ -435,7 +432,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 y2 = y; y2 < y + h ; ++y2) {
             for (qint32 x2 = x; x2 < x + w || found; ++ x2) {
                 accessor->moveTo(x2, y2);
-                if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
+                if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
                     boundY2 = y2;
                     found = true;
                     break;
@@ -450,7 +447,7 @@ QRect KisPaintDevice::calculateExactBounds() const
     for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {
         for (qint32 x2 = x + w - 1; x2 >= x || found; --x2) {
             accessor->moveTo(x2, y2);
-            if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
+            if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
                 boundH2 = y2 - boundY2 + 1;
                 found = true;
                 break;
@@ -464,7 +461,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x; x2 < x + w ; ++x2) {
             for (qint32 y2 = y; y2 < y + h || found; ++y2) {
                 accessor->moveTo(x2, y2);
-                if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
+                if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
                     boundX2 = x2;
                     found = true;
                     break;
@@ -482,7 +479,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x + w - 1; x2 >= x; --x2) {
             for (qint32 y2 = y + h -1; y2 >= y || found; --y2) {
                 accessor->moveTo(x2, y2);
-                if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
+                if (m_d->colorSpace->opacityU8(accessor->oldRawData()) != OPACITY_TRANSPARENT_U8) {
                     boundW2 = x2 - boundX2 + 1;
                     found = true;
                     break;

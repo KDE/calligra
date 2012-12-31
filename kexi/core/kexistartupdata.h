@@ -62,7 +62,7 @@ public:
     Action action() const;
 
     //! \return project data of a project that should be opened (for action()==OpenProject)
-    KexiProjectData *projectData() const;
+    KexiProjectData *projectData();
 
     //! \return import action's data needed to perform import (for action()==ImportProject)
     KexiStartupData::Import importActionData() const;
@@ -87,17 +87,27 @@ public:
     bool forcedFullScreen() const;
 
 protected:
-    KexiProjectData *m_projectData;
-    Action m_action;
-    KexiStartupData::Import m_importActionData;
-    bool m_forcedUserMode;
-    bool m_forcedDesignMode;
-    bool m_isProjectNavigatorVisible;
-    bool m_isMainMenuVisible;
-    bool m_createDB;
-    bool m_dropDB;
-    bool m_alsoOpenDB;
-    bool m_forcedFullScreen;
+    void setAction(Action action);
+
+    //! Set project data of a project that should be opened (for action()==OpenProject).
+    //! The ownership is passed.
+    void setProjectData(KexiProjectData *data);
+
+    void setImportActionData(KexiStartupData::Import import);
+
+    void setForcedDesignMode(bool set);
+
+    void setForcedUserMode(bool set);
+
+    void setProjectNavigatorVisible(bool set);
+
+    void setMainMenuVisible(bool set);
+
+    void setForcedFullScreen(bool set);
+
+private:
+    class Private;
+    Private* const d;
 };
 
 #endif

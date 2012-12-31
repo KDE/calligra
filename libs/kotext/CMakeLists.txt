@@ -1,10 +1,9 @@
 include_directories(${KOTEXT_INCLUDES}
-                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig 
+                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
-add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
@@ -114,6 +113,7 @@ set(kotext_LIB_SRCS
     commands/ListItemNumberingCommand.cpp
     commands/RemoveDeleteChangesCommand.cpp
     commands/TextPasteCommand.cpp
+    commands/AddTextRangeCommand.cpp
 
     KoTextDrag.cpp
     KoTextCommandBase.cpp
@@ -164,6 +164,7 @@ install(
     KoInlineObjectFactoryBase.h
     KoBookmark.h
     KoBookmarkManager.h
+    KoAnnotationManager.h
     KoInlineTextObjectManager.h
     KoTextAnchor.h
     KoTextBlockBorderData.h

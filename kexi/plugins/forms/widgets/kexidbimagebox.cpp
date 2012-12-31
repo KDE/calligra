@@ -175,7 +175,7 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
     if (removeOld)
         m_value = add.toByteArray();
     else //do not add "m_origValue" to "add" as this is QByteArray
-        m_value = m_origValue.toByteArray();
+        m_value = KexiDataItemInterface::originalValue().toByteArray();
     bool ok = !m_value.isEmpty();
     if (ok) {
         ///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );

@@ -914,7 +914,7 @@ QPair<int, int> KoDocumentRdf::findExtent(const QString &xmlid) const
         RDEBUG << "(Semantic) have inline obj, extent:" << ret;
         return ret;
     }
-    return QPair<int, int>(0, 0);
+    return QPair<int, int>(-1, 0);
 }
 
 QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
@@ -960,12 +960,13 @@ QPair<int, int> KoDocumentRdf::findExtent(KoTextEditor *handler) const
                                 QTextDocument::FindBackward);
     }
     */
-    return QPair<int, int>(0, 0);
+    return QPair<int, int>(-1, 0);
 }
 
 QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
 {
     int startPosition = handler->position();
+    Q_UNUSED(startPosition);
 
     KoTextInlineRdf *inlineRdf = 0;
 
@@ -1033,7 +1034,7 @@ QString KoDocumentRdf::findXmlId(KoTextEditor *handler) const
         return inlineRdf->xmlId();
     }
 
-    return QString::null;
+    return QString();
 }
 
 
@@ -1120,8 +1121,9 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
 {
     RDEBUG << "top";
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(qdoc).inlineTextObjectManager();
+    KoTextRangeManager *textRangeManager = KoTextDocument(qdoc).textRangeManager();
     d->inlineRdfObjects.clear();
-    if(!textObjectManager) {
+    if(!textObjectManager || !textRangeManager) {
         return;
     }
     //
@@ -1130,6 +1132,15 @@ void KoDocumentRdf::updateInlineRdfStatements(const QTextDocument *qdoc)
     QList<KoInlineObject*> kiocol = textObjectManager->inlineTextObjects();
     foreach (KoInlineObject *kio, kiocol) {
         if (KoTextInlineRdf *inlineRdf = kio->inlineRdf()) {
+            rememberNewInlineRdfObject(inlineRdf);
+        }
+    }
+    //
+    // Rdf from textranges
+    //
+    QList<KoTextRange *> rangelist = textRangeManager->textRanges();
+    foreach (KoTextRange *range, rangelist) {
+        if (KoTextInlineRdf *inlineRdf = range->inlineRdf()) {
             rememberNewInlineRdfObject(inlineRdf);
         }
     }
@@ -1184,11 +1195,8 @@ void KoDocumentRdf::emitSemanticObjectUpdated(hKoRdfSemanticItem item)
         // reflow the formatting for each view of the semanticItem, in reverse document order
         //
         QMap<int, reflowItem> col;
-        QStringList xmlidlist = item->xmlIdList();
-        foreach (const QString &xmlid, xmlidlist) {
-            RDEBUG << "xmlid:" << xmlid << " reflow item:" << item->name();
-            insertReflow(col, item);
-        }
+        RDEBUG << "xmlids:" << item->xmlIdList() << " reflow item:" << item->name();
+        insertReflow(col, item);
         applyReflow(col);
     }
     emit semanticObjectUpdated(item);
@@ -1256,10 +1264,10 @@ void KoDocumentRdf::applyReflow(const QMap<int, reflowItem> &col)
     QMapIterator< int, reflowItem > i(col);
     i.toBack();
     while (i.hasPrevious()) {
-        reflowItem item = i.previous().value();
+        const reflowItem &item = i.previous().value();
         RDEBUG << "format(), extent:" << item.m_extent;
         RDEBUG << "xmlid:" << item.m_xmlid;
-        RDEBUG << "format(), semitem:" << item.m_si;
+        RDEBUG << "format(), semitem:" << item.m_si.constData();
         RDEBUG << "format(), semitem.name:" << item.m_si->name();
         if (item.m_ss) {
             KoRdfSemanticItemViewSite vs(item.m_si, item.m_xmlid);

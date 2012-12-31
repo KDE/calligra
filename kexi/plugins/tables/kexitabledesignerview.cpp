@@ -60,8 +60,6 @@
 
 #include <kexi_global.h>
 
-//#define MAX_FIELDS 101 //nice prime number
-
 //! used only for BLOBs
 #define DEFAULT_OBJECT_TYPE_VALUE "image"
 
@@ -271,9 +269,9 @@ void KexiTableDesignerView::initData()
 //  d->sets->clear();//default size
 // }
 
-    //add empty space
-// const int columnsCount = d->data->columnsCount();
-    for (int i = tableFieldCount; i < (int)d->sets->size(); i++) {
+    //add empty space, at least 2 times more than number of existing fields
+    uint fullSize = qMax(d->sets->size(), uint(2 * tableFieldCount));
+    for (int i = tableFieldCount; i < fullSize; i++) {
 //  KexiDB::RecordData *item = new KexiDB::RecordData(columnsCount);//3 empty fields
         d->data->append(d->data->createItem());
     }

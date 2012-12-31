@@ -2,6 +2,7 @@
  * This file is part of the KDE project
  *
  * Copyright (C) 2011 Shantanu Tushar <shaan7in@gmail.com>
+ * Copyright (C) 2012 Sujith Haridasan <sujith.haridasan@kdemail.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,20 +21,44 @@
  * USA
  */
 
-#include <QApplication>
 #include "src/MainWindow.h"
+#include <KApplication>
+#include <KAboutData>
+#include <KCmdLineArgs>
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    QCoreApplication::setOrganizationName("KDE");
-    QCoreApplication::setOrganizationDomain("kde.org");
-    QCoreApplication::setApplicationName("Calligra Active");
+    KAboutData aboutData("calligraactive",
+                         0,
+                         ki18n("Calligra Active"),
+                         "1.0 Beta",
+                         ki18n("Calligra application for tablets"),
+                         KAboutData::License_GPL_V2,
+                         ki18n("Copyright (c) 2011-2012"));
+    aboutData.addAuthor(ki18n("Shantanu Tushar"),
+                        ki18n("Maintainer and main developer"),
+                        "shantanu@kde.org",
+                        "http://www.shantanutushar.com");
+    aboutData.addAuthor(ki18n("Sujith Haridasan"),
+                        ki18n("Maintainer and main developer"),
+                        "sujith.haridasan@kdemail.net",
+                        "http://www.sujithh.info");
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KCmdLineOptions options;
+    options.add("+[file]", ki18n("File to open"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-    MainWindow window;
-    if (app.argc() > 1)
-        window.openFile(app.arguments().at(1));
-    window.show();
+
+    KApplication app;
+    MainWindow mw;
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if(args->count()) {
+       mw.openFile(args->arg(0));
+    }
+    args->clear();
+
+    mw.show();
 
     return app.exec();
 }

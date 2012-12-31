@@ -41,7 +41,7 @@ QML.Item {
             id: button1
 
             iconSource: "words"
-            text: "Text Document"
+            text: i18n("Text Document")
             width: buttonWidth; height: buttonHeight
 
             onClicked: homeScreen.state = "showTextDocs";
@@ -51,7 +51,7 @@ QML.Item {
             id: button2
 
             iconSource: "sheets"
-            text: "Spreadsheet"
+            text: i18n("Spreadsheet")
             width: buttonWidth; height: buttonHeight
 
             onClicked: homeScreen.state = "showSpreadsheets";
@@ -60,7 +60,7 @@ QML.Item {
             id: button3
 
             iconSource: "stage"
-            text: "Presentation"
+            text: i18n("Presentation")
             width: buttonWidth; height: buttonHeight
 
             onClicked: homeScreen.state = "showPresentations";

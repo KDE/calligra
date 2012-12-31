@@ -45,8 +45,8 @@
 #include <KMimeType>
 #include <KMimeTypeTrader>
 
-#include <QtCore/QSize>
-#include <QtCore/QTimer>
+#include <QSize>
+#include <QTimer>
 #include <QTextDocument>
 
 class CAPresentationHandler::Private
@@ -337,7 +337,7 @@ QString CAPresentationHandler::centerOverlaySource() const
 
 QString CAPresentationHandler::bottomToolbarSource() const
 {
-    return "PresentationFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 void CAPresentationHandler::setSlideshowDelay(int delay)

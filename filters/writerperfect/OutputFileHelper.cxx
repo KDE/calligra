@@ -126,7 +126,7 @@ bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str
         return true;
 #ifdef USE_GSF_OUTPUT
     GsfOutput *child;
-    if (0 != (child = gsf_outfile_new_child  (m_impl->mpOutfile, childFileName, FALSE)))
+    if (0 != (child = gsf_outfile_new_child  (m_impl->mpOutfile, childFileName, false)))
     {
         bool res = gsf_output_puts (child, str) &&
             gsf_output_close (child);
@@ -155,9 +155,9 @@ bool OutputFileHelper::writeChildFile(const char *childFileName, const char *str
 #ifdef USE_GSF_OUTPUT
     GsfOutput *child;
 #ifdef GSF_HAS_COMPRESSION_LEVEL
-    if (0 != (child = gsf_outfile_new_child_full  (m_impl->mpOutfile, childFileName, FALSE,"compression-level", compression_level, (void*)0)))
+    if (0 != (child = gsf_outfile_new_child_full  (m_impl->mpOutfile, childFileName, false,"compression-level", compression_level, (void*)0)))
 #else
-    if (0 != (child = gsf_outfile_new_child  (m_impl->mpOutfile, childFileName, FALSE)))
+    if (0 != (child = gsf_outfile_new_child  (m_impl->mpOutfile, childFileName, false)))
 #endif
     {
         bool res = gsf_output_puts (child, str) &&
@@ -194,7 +194,7 @@ bool OutputFileHelper::writeConvertedContent(const char *childFileName, const ch
     GsfOutput *pContentChild = 0;
     if (m_impl->mpOutfile)
     {
-            pContentChild = gsf_outfile_new_child(m_impl->mpOutfile, childFileName, FALSE);
+            pContentChild = gsf_outfile_new_child(m_impl->mpOutfile, childFileName, false);
             pHandler = new DiskOdfDocumentHandler(pContentChild); // WLACH_REFACTORING: rename to DiskHandler
 #else
     if (m_impl->mpOutfile)

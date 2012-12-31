@@ -52,7 +52,6 @@ class KisSelectionManager;
 class KisStatusBar;
 class KisUndoAdapter;
 class KisZoomManager;
-class KoFavoriteResourceManager;
 
 /**
  * Krita view class
@@ -192,6 +191,7 @@ private slots:
     void slotLoadingFinished();
     void slotPreferences();
     void slotEditPalette();
+    void slotBlacklistCleanup();
     void slotImageSizeChanged();
     void slotNodeChanged();
     void slotTotalRefresh();

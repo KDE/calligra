@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -159,6 +159,11 @@ public:
     enum StoreNewDataOption {
         OverwriteExistingObject = 1 //!< Overwerite existing object in storeNewData()
     };
+
+    QString defaultIconName() const;
+
+    void setDefaultIconName(const QString& iconName);
+
     Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
 
 public slots:
@@ -318,6 +323,9 @@ protected:
     /*! Assigns a list of view-level actions. Used by KexiView ctor. */
     void setViewActions(const QList<QAction*>& actions);
 
+    /*! Assigns a list of main-menu-level actions. Used by KexiView ctor. */
+    void setMainMenuActions(const QList<QAction*>& actions);
+
     /*! @return a list of view-level actions. */
     QList<QAction*> viewActions() const;
 
@@ -325,10 +333,9 @@ protected:
     QAction* viewAction(const char* name) const;
 
     void initViewActions();
+    void initMainMenuActions();
 
     void toggleViewModeButtonBack();
-
-    QString m_defaultIconName;
 
 #ifdef __GNUC__
 #warning todo: add some protected access methods

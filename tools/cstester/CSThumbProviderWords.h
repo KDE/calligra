@@ -30,7 +30,7 @@ class KWDocument;
 class CSThumbProviderWords : public CSThumbProvider
 {
 public:
-    CSThumbProviderWords(KWDocument *doc);
+    explicit CSThumbProviderWords(KWDocument *doc);
     virtual ~CSThumbProviderWords();
 
     virtual QList<QImage> createThumbnails(const QSize &thumbSize);

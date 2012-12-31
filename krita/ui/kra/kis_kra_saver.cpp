@@ -125,7 +125,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     // e.g. have <ANNOTATION> tags or so.
     KisAnnotationSP annotation = image->annotation("exif");
     if (annotation) {
-        location = external ? QString::null : uri;
+        location = external ? QString() : uri;
         location += m_d->imageName + EXIF_PATH;
         if (store->open(location)) {
             store->write(annotation->annotation());
@@ -147,7 +147,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
         }
 
         if (annotation) {
-            location = external ? QString::null : uri;
+            location = external ? QString() : uri;
             location += m_d->imageName + ICC_PATH;
             if (store->open(location)) {
                 store->write(annotation->annotation());
@@ -157,7 +157,7 @@ bool KisKraSaver::saveBinaryData(KoStore* store, KisImageWSP image, const QStrin
     }
 
     const QByteArray mimetype = "application/x-krita";
-    location =  external ? QString::null : uri;
+    location =  external ? QString() : uri;
     location += "mimetype";
     if (store->open(location)) {
         store->write(mimetype);
@@ -191,7 +191,7 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
             if (!assistantcounters.contains(assist->id())){
                 assistantcounters.insert(assist->id(),0);
             }
-            location = external ? QString::null : uri;
+            location = external ? QString() : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             location += QString(assist->id()+"%1.assistant").arg(assistantcounters[assist->id()]);
             data = assist->saveXml(handlemap);

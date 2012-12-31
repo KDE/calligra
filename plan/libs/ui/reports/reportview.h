@@ -35,7 +35,7 @@
 
 class KoDocument;
 class KoShape;
-class KoPageLayout;
+struct KoPageLayout;
 
 class KoReportPage;
 class KoReportData;

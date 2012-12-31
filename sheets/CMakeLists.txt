@@ -10,7 +10,6 @@ add_subdirectory( functions )
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
 include_directories( ${CMAKE_SOURCE_DIR}/interfaces
-                    ${CMAKE_SOURCE_DIR}/kchart
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
@@ -281,7 +280,6 @@ target_link_libraries(calligrasheetscommon
     ${QT_QTSQL_LIBRARY}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${KDE4_THREADWEAVER_LIBS}
-#    ${KDE4_KDE3SUPPORT_LIBS}
 )
 if(KDE4_KCMUTILS_LIBS)
     target_link_libraries(calligrasheetscommon ${KDE4_KCMUTILS_LIBS} )
@@ -312,7 +310,7 @@ install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 SET (calligrasheets_KDEINIT_SRCS part/Main.cpp )
 
-kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-sheets.png")
+kde4_add_app_icon(calligrasheets_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-calligrasheets.png")
 
 kde4_add_kdeinit_executable( calligrasheets ${calligrasheets_KDEINIT_SRCS})
 
@@ -374,6 +372,7 @@ install( FILES
     part/CanvasItem.h
     part/CellTool.h
     part/Doc.h
+    part/Part.h
     part/Find.h
     part/HeaderItems.h
     part/Headers.h

@@ -26,6 +26,18 @@
 #include <QSlider>
 #include <QStyleOptionSlider>
 
+
+class KexiSlider::Private
+{
+public:
+    Private() {}
+
+    Slider *slider;
+    QSpinBox *spinBox;
+    QBoxLayout *layout;
+};
+
+
 class Slider : public QSlider
 {
 public:
@@ -146,33 +158,35 @@ protected:
 
 KexiSlider::KexiSlider(QWidget *parent)
     : QWidget(parent)
+    , d(new Private)
 {
     init(Qt::Horizontal);
 }
 
 KexiSlider::KexiSlider(Qt::Orientation orientation, QWidget *parent)
     : QWidget(parent)
+    , d(new Private)
 {
     init(orientation);
 }
 
 void KexiSlider::init(Qt::Orientation orientation)
 {
-    m_layout=new QBoxLayout(QBoxLayout::LeftToRight, this);
-    m_layout->setSpacing(2);
-    m_layout->setMargin(0);
-    m_slider = new Slider(this);
-    m_spinBox = new QSpinBox(this);
-    m_spinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    d->layout=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    d->layout->setSpacing(2);
+    d->layout->setMargin(0);
+    d->slider = new Slider(this);
+    d->spinBox = new QSpinBox(this);
+    d->spinBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    m_layout->addWidget(m_spinBox,0, Qt::AlignVCenter);
-    m_layout->addWidget(m_slider,0, Qt::AlignVCenter);
+    d->layout->addWidget(d->spinBox,0, Qt::AlignVCenter);
+    d->layout->addWidget(d->slider,0, Qt::AlignVCenter);
 
-    connect(m_slider, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
-    connect(m_slider, SIGNAL(sliderPressed()), this, SIGNAL(sliderPressed()));
-    connect(m_slider, SIGNAL(sliderReleased()), this, SIGNAL(sliderReleased()));
-    connect(m_slider, SIGNAL(valueChanged(int)), m_spinBox, SLOT(setValue(int)));
-    connect(m_spinBox, SIGNAL(valueChanged(int)), m_slider, SLOT(setValue(int)));
+    connect(d->slider, SIGNAL(valueChanged(int)), this, SIGNAL(valueChanged(int)));
+    connect(d->slider, SIGNAL(sliderPressed()), this, SIGNAL(sliderPressed()));
+    connect(d->slider, SIGNAL(sliderReleased()), this, SIGNAL(sliderReleased()));
+    connect(d->slider, SIGNAL(valueChanged(int)), d->spinBox, SLOT(setValue(int)));
+    connect(d->spinBox, SIGNAL(valueChanged(int)), d->slider, SLOT(setValue(int)));
 
     setMaximum(100);
     setOrientation(orientation);
@@ -181,131 +195,131 @@ void KexiSlider::init(Qt::Orientation orientation)
 
 KexiSlider::~KexiSlider()
 {
-
+    delete d;
 }
 
 void KexiSlider::setMinimum(int min)
 {
-    m_spinBox->setMinimum(min);
-    m_slider->setMinimum(min);
+    d->spinBox->setMinimum(min);
+    d->slider->setMinimum(min);
 }
 
 void KexiSlider::setMaximum(int max)
 {
-    m_spinBox->setMaximum(max);
-    m_slider->setMaximum(max);
+    d->spinBox->setMaximum(max);
+    d->slider->setMaximum(max);
 }
 
 void KexiSlider::setValue(int val)
 {
-    m_slider->setValue(val);
+    d->slider->setValue(val);
 }
 
 int KexiSlider::minimum() const
 {
-    return m_slider->minimum();
+    return d->slider->minimum();
 }
 
 int KexiSlider::maximum() const
 {
-    return m_slider->maximum();
+    return d->slider->maximum();
 }
 
 int KexiSlider::value() const
 {
-    return m_slider->value();
+    return d->slider->value();
 }
 
 void KexiSlider::setPageStep(int step)
 {
-    m_slider->setPageStep(step);
+    d->slider->setPageStep(step);
 }
 
 int KexiSlider::pageStep() const
 {
-    return m_slider->pageStep();
+    return d->slider->pageStep();
 }
 
 void KexiSlider::setSingleStep(int step)
 {
-    m_spinBox->setSingleStep(step);
-    m_slider->setSingleStep(step);
+    d->spinBox->setSingleStep(step);
+    d->slider->setSingleStep(step);
 }
 
 int KexiSlider::singleStep() const
 {
-    return m_slider->singleStep();
+    return d->slider->singleStep();
 }
 
 void KexiSlider::setOrientation(Qt::Orientation o)
 {
-    m_layout->removeWidget(m_spinBox);
-    m_slider->setOrientation(o);
+    d->layout->removeWidget(d->spinBox);
+    d->slider->setOrientation(o);
     if(o == Qt::Horizontal)
-        m_layout->insertWidget(0, m_spinBox);
+        d->layout->insertWidget(0, d->spinBox);
     else
-        m_layout->addWidget(m_spinBox);
+        d->layout->addWidget(d->spinBox);
     updateLayout();
 }
 
 Qt::Orientation KexiSlider::orientation() const
 {
-    return m_slider->orientation();
+    return d->slider->orientation();
 }
 
 void KexiSlider::setTickInterval(int ti)
 {
-    m_slider->setTickInterval(ti);
+    d->slider->setTickInterval(ti);
 }
 
 int KexiSlider::tickInterval() const
 {
-    return m_slider->tickInterval();
+    return d->slider->tickInterval();
 }
 
 void KexiSlider::setTickPosition(QSlider::TickPosition pos)
 {
-    m_slider->setTickPosition(pos);
+    d->slider->setTickPosition(pos);
     updateLayout();
 }
 
 QSlider::TickPosition KexiSlider::tickPosition() const
 {
-    return m_slider->tickPosition();
+    return d->slider->tickPosition();
 }
 
 void KexiSlider::setShowEditor(bool show)
 {
-    m_spinBox->setVisible(show);
+    d->spinBox->setVisible(show);
 
 }
 
 bool KexiSlider::showEditor() const
 {
-    return m_spinBox->isVisible();
+    return d->spinBox->isVisible();
 }
 
 void KexiSlider::updateLayout()
 {
-    m_layout->setDirection(orientation() == Qt::Horizontal ?
+    d->layout->setDirection(orientation() == Qt::Horizontal ?
                         QBoxLayout::LeftToRight : QBoxLayout::TopToBottom);
 
     if (tickPosition() == QSlider::TicksBothSides
             || tickPosition() == QSlider::NoTicks) {
-        m_layout->setAlignment(m_slider, orientation() == Qt::Horizontal ?
+        d->layout->setAlignment(d->slider, orientation() == Qt::Horizontal ?
                                    Qt::AlignVCenter :Qt::AlignHCenter);
-        m_layout->setAlignment(m_spinBox, orientation() == Qt::Horizontal ?
+        d->layout->setAlignment(d->spinBox, orientation() == Qt::Horizontal ?
                                    Qt::AlignVCenter :Qt::AlignHCenter);
     } else {
         if (orientation() == Qt::Horizontal) {
-            m_layout->setAlignment(m_slider,
+            d->layout->setAlignment(d->slider,
                                    tickPosition() == QSlider::TicksAbove ? Qt::AlignBottom : Qt::AlignTop);
-            m_layout->setAlignment(m_spinBox,
+            d->layout->setAlignment(d->spinBox,
                                    tickPosition() == QSlider::TicksAbove ? Qt::AlignBottom : Qt::AlignTop);
         } else {
-            m_layout->setAlignment(m_slider,
+            d->layout->setAlignment(d->slider,
                                    tickPosition() == QSlider::TicksLeft ? Qt::AlignRight : Qt::AlignLeft);
-            m_layout->setAlignment(m_spinBox,
+            d->layout->setAlignment(d->spinBox,
                                    tickPosition() == QSlider::TicksLeft ? Qt::AlignRight : Qt::AlignLeft);
         }
     }

@@ -64,6 +64,7 @@ public:
     ~FileCollectorPrivate();
 
     QString  filePrefix;        // default: "chapter"
+    QString  fileSuffix;        // default: ".xhtml"
     QString  pathPrefix;        // default: "OEBPS/"
 
     QList<FileCollector::FileInfo*>  m_files;  // Embedded files
@@ -71,6 +72,7 @@ public:
 
 FileCollectorPrivate::FileCollectorPrivate()
     : filePrefix("chapter")
+    , fileSuffix(".xhtml")
     , pathPrefix("OEBPS/")
 {
 }
@@ -104,6 +106,16 @@ void FileCollector::setFilePrefix(QString prefix)
 QString FileCollector::filePrefix() const
 {
     return d->filePrefix;
+}
+
+void FileCollector::setFileSuffix(const QString &suffix)
+{
+    d->fileSuffix = suffix;
+}
+
+QString FileCollector::fileSuffix() const
+{
+    return d->fileSuffix;
 }
 
 void FileCollector::setPathPrefix(QString prefix)
@@ -142,7 +154,7 @@ KoFilter::ConversionStatus FileCollector::writeFiles(KoStore *store)
     // Write contents of added files.
     foreach(FileInfo *file, d->m_files) {
         if (!store->open(file->m_fileName)) {
-            kDebug(30517) << "Can not create" << file->m_fileName;
+            kDebug(30503) << "Can not create" << file->m_fileName;
             return KoFilter::CreationError;
         }
         store->write(file->m_fileContents);

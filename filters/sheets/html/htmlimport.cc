@@ -226,7 +226,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const KUrl &url)
     // the KHTMLPart and DOM::Document are no more and we can call us recursivly now.
     if(!sheets.isEmpty()) {
         m_states.push(InFrameset);
-        foreach(QString src, sheets) {
+        foreach(const QString &src, sheets) {
             KUrl u(QFileInfo(m_inputDir, src).absoluteFilePath());
             loadUrl(u);
         }

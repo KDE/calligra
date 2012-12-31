@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -783,6 +783,21 @@ protected:
      and KMessageBox::Yes or KMessageBox::No in case of "queryYesNo" message. */
     int showErrorMessageForResult(const KexiDB::ResultInfo& resultInfo);
 
+    /*! Shows context message @a message for editor @a item. */
+    void showEditorContextMessage(
+            KexiDataItemInterface *item,
+            const QString &message,
+            KMessageWidget::MessageType type,
+            KMessageWidget::CalloutPointerDirection direction);
+
+    /*! Shows context message about exceeded length for editor @a item.
+     If @a exceeded is true, a new message is created, else the message will be removed. */
+    void showLengthExceededMessage(KexiDataItemInterface *item, bool exceeded);
+
+    /*! Updates message about exceeded length for editor @a item.
+     Useful only where message created with showLengthExceededMessage() is displayed. */
+    void showUpdateForLengthExceededMessage(KexiDataItemInterface *item);
+
     /*! Prepares array of indices of visible values to search within.
      This is per-interface global cache.
      Needed for faster lookup because there could be lookup values.
@@ -966,6 +981,8 @@ protected:
 private:
     /*! true if currently selected row is edited */
     bool m_rowEditing;
+
+    bool m_lengthExceededMessageVisible;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const

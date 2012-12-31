@@ -166,7 +166,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         return false;
     }
 
-    loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
     bool result = visitAll(layer);
     return result;
@@ -186,10 +186,9 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
 
-
     loadSelection(getLocation(layer), layer->selection());
 
-    loadFilterConfiguration(layer->generator(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
     layer->update();
 
@@ -217,7 +216,7 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
     loadSelection(getLocation(mask), mask->selection());
-    loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
+    loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
     return true;
 }
 
@@ -364,7 +363,7 @@ void KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
 
 QString KisKraLoadVisitor::getLocation(KisNode* node, const QString& suffix)
 {
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
     return location;
 }

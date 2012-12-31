@@ -67,13 +67,9 @@ protected slots:
     void updatePos();
 
 private:
-    ResizeHandleSet *m_set;
-    HandlePos m_pos;
-    //QWidget *m_buddy;
-    bool m_dragging;
-    //bool m_editing;
-    int m_x;
-    int m_y;
+    class Private;
+
+    Private* const d;
 };
 
 /**
@@ -91,7 +87,7 @@ public:
 
     ~ResizeHandleSet();
 
-    QWidget *widget() const { return m_widget; }
+    QWidget *widget() const;
 
     void setWidget(QWidget *modify, bool editing = false);
     
@@ -99,18 +95,15 @@ public:
     
     void setEditingMode(bool editing);
     
-    Form *form() const { return m_form; }
+    Form *form() const;
 
 protected:
     void resizeStarted();
     void resizeFinished();
 private:
-    QRect m_origWidgetRect;
-    QPointer<ResizeHandle> m_handles[8];
-    QPointer<QWidget> m_widget;
-    QPointer<Form>   m_form;
-    bool  m_editing;
+    class Private;
 
+    Private* const d;
     friend class ResizeHandle;
 };
 

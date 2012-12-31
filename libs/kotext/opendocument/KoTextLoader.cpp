@@ -827,10 +827,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     cursor.endEditBlock();
 
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
-    kDebug(32500) << "text ranges::";
-    foreach(KoTextRange *range, textRangeManager->textRanges()) {
+    Q_UNUSED(textRangeManager);
+    //kDebug(32500) << "text ranges::";
+    //foreach(KoTextRange *range, textRangeManager->textRanges()) {
         //kDebug(32500) << range->id();
-    }
+    //}
 
 }
 
@@ -1978,7 +1979,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     delete annotation;
                 }
             }
-        } 
+        }
         else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
             If a heading has a numbering applied, the text of the formatted number can be included in a
@@ -2618,6 +2619,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // to store the contents we use an extrafor "meta-information" about the TOC we use this class
     QTextDocument *tocDocument = new QTextDocument();
     KoTextDocument(tocDocument).setStyleManager(d->styleManager);
+    KoTextDocument(tocDocument).setTextRangeManager(new KoTextRangeManager);
 
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");

@@ -35,9 +35,9 @@
 #include <QMap>
 // kde
 #include <kdebug.h>
-// kplato
+// plan
+#include "kptmaindocument.h"
 #include "kptpart.h"
-#include "kptpartpart.h"
 #include "kptview.h"
 #include "kptproject.h"
 #include "kptnode.h"
@@ -58,7 +58,7 @@ namespace Scripting {
     class Module::Private
     {
         public:
-            QPointer<KPlato::Part> doc;
+            QPointer<KPlato::MainDocument> doc;
             Project *project;
             QMap<QString, Module*> modules;
             KPlato::MacroCommand *command; // used for beginCommand()/endCommand()
@@ -89,15 +89,15 @@ Module::~Module()
     delete d;
 }
 
-KPlato::Part* Module::part()
+KPlato::MainDocument* Module::part()
 {
     if(! d->doc) {
         if( KPlato::View* v = dynamic_cast< KPlato::View* >(view()) ) {
             d->doc = v->getPart();
         }
         if( ! d->doc ) {
-            KPlato::PartPart *part = new KPlato::PartPart(this);
-            d->doc = new KPlato::Part(part);
+            KPlato::Part *part = new KPlato::Part(this);
+            d->doc = new KPlato::MainDocument(part);
             part->setDocument(d->doc);
         }
     }

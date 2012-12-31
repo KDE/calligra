@@ -563,6 +563,13 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
 
 }
 
+void KWRootAreaProvider::updateAll()
+{
+    foreach (KWFrame *frame, m_textFrameSet->frames()) {
+        frame->shape()->update();
+    }
+}
+
 QSizeF KWRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
     KoShape *shape = rootArea->associatedShape();

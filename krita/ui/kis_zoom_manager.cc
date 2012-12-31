@@ -95,9 +95,14 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 {
     if(m_view->image()->isCanvasInfinite())
         KoZoomMode::setMinimumZoom(0.005);
-    else
-        KoZoomMode::setMinimumZoom(0.125);
-    KoZoomMode::setMaximumZoom(64.0);
+    else {
+        QSize imageSize = m_view->image()->size();
+        qreal minDimension = qMin(imageSize.width(), imageSize.height());
+        qreal minZoom = qMin(100.0 / minDimension, 0.1);
+
+        KoZoomMode::setMinimumZoom(minZoom);
+        KoZoomMode::setMaximumZoom(90.0);
+    }
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);

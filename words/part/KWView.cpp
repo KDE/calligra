@@ -138,15 +138,14 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-
     m_find = new KoFindText(this);
-    m_find->setDocuments(texts);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
+    // The text documents to search in will potentially change when we add/remove shapes and after load
+    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
 
     layout->addWidget(toolbar);
 
@@ -168,8 +167,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
-        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)),
-                this, SLOT(semanticObjectViewSiteUpdated(KoRdfSemanticItem*, const QString&)));
+        connect(rdf, SIGNAL(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)),
+                this, SLOT(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)));
     }
 #endif
     if (m_document->inlineTextObjectManager()) {
@@ -946,9 +945,9 @@ void KWView::offsetInDocumentMoved(int yOffset)
         setCurrentPage(page);
 }
 
+#ifdef SHOULD_BUILD_RDF
 void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid)
 {
-#ifdef SHOULD_BUILD_RDF
     kDebug(30015) << "xmlid:" << xmlid << " reflow item:" << item->name();
     KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
     if (!editor) {
@@ -958,8 +957,8 @@ void KWView::semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QStrin
     kDebug(30015) << "reflowing rdf semantic item.";
     KoRdfSemanticItemViewSite vs(item, xmlid);
     vs.reflowUsingCurrentStylesheet(editor);
-#endif
 }
+#endif
 
 void KWView::findMatchFound(KoFindMatch match)
 {
@@ -973,10 +972,15 @@ void KWView::findMatchFound(KoFindMatch match)
     m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
 }
 
-void KWView::loadingCompleted()
+void KWView::refreshFindTexts()
 {
     QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    foreach (KWFrameSet *fSet, m_document->frameSets()) {
+        KWTextFrameSet *tFSet = dynamic_cast<KWTextFrameSet *>(fSet);
+        if (tFSet) {
+           texts.append(tFSet->document());
+        }
+    }
     m_find->setDocuments(texts);
 }
 
@@ -999,7 +1003,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    foreach(const QImage image, imageList) {
+    foreach(const QImage &image, imageList) {
         KoProperties params;
         params.setProperty("qimage", image);
 

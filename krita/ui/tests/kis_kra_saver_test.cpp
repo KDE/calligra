@@ -58,7 +58,7 @@ void KisKraSaverTest::testRoundTrip()
     doc->image()->rootLayer()->accept(cv1);
     bool infiCanvastest_1 = doc->isCanvasInfinite();
 
-    delete doc;
+    //delete doc;
 
     KisPart2 part;
     KisDoc2 doc2(&part);

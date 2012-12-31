@@ -93,6 +93,9 @@ public slots:
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
+    //! Implemented for KexiDataItemInterface
+    virtual bool fixup();
+
 protected slots:
     void setRestrictedCompletion();
     void completed(const QString &);
@@ -109,7 +112,6 @@ protected:
     KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
     QString m_decsym; //! decimal symbol
-    QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
     KLineEdit *m_lineedit;
 
 signals:

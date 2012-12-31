@@ -233,6 +233,7 @@ public:
     bool autoDelete;
     QWidget* contentsWidget;
     bool clickClosesMessage;
+    bool resizeToContentsOnTimeLineFinished;
 
     void createLayout();
     void updateSnapShot();
@@ -262,6 +263,7 @@ void KMessageWidgetPrivate::init(KMessageWidget *q_ptr)
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     wordWrap = false;
+    resizeToContentsOnTimeLineFinished = false;
 
     if (contentsWidget) {
         iconLabel = 0;
@@ -480,6 +482,11 @@ void KMessageWidgetPrivate::slotTimeLineFinished()
         // Show
         content->move(0, 0);
         content->updateCalloutPointerPosition();
+        if (resizeToContentsOnTimeLineFinished) {
+            resizeToContentsOnTimeLineFinished = false;
+            content->resize(q->size());
+            updateStyleSheet(); // needed because margins could be changed
+        }
         //q->setFixedHeight(QWIDGETSIZE_MAX);
         if (defaultButton) {
             defaultButton->setFocus();
@@ -866,6 +873,7 @@ void KMessageWidget::resizeToContents()
 //    kDebug() << LAYOUT_SPACING + d->iconLabel->width() + LAYOUT_SPACING + d->textLabel->width() + LAYOUT_SPACING;
 //    kDebug() << "sizeHint():" << sizeHint();
 //    kDebug() << "d->content->sizeHint():" << d->content->sizeHint();
+    d->resizeToContentsOnTimeLineFinished = true; // try to resize later too if animation in progress
     (void)sizeHint(); // to update d->content->sizeHint()
     setFixedSize(d->content->sizeHint());
 }

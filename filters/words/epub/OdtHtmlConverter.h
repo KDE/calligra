@@ -135,8 +135,6 @@ class OdtHtmlConverter
     KoXmlWriter *m_htmlWriter;
 
     // Options for the conversion process
-    // FIXME: This should go into an Options struct together with some
-    //        others from FileConversion.h.
     ConversionOptions  *m_options;
 
     QHash<QString, StyleInfo*> m_styles;

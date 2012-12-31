@@ -204,7 +204,7 @@ void XlsRecordOutputStream::writeUnicodeStringWithFlagsAndLength(const QString& 
 
 void XlsRecordOutputStream::writeByteString(const QString& value)
 {
-    writeBlob(value.toAscii());
+    writeBlob(value.toLatin1());
 }
 
 void XlsRecordOutputStream::writeBlob(const QByteArray& value)

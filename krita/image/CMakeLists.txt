@@ -40,9 +40,11 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-macro_optional_find_package(FFTW3)
-macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
-macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+if(NOT WIN32)
+    macro_optional_find_package(FFTW3)
+    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+endif(NOT WIN32)
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
@@ -52,6 +54,9 @@ include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
 
 if(HAVE_VC)
   include_directories(${Vc_INCLUDE_DIR})
+  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp "-fPIC")
+else(HAVE_VC)
+  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
 endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
@@ -102,6 +107,7 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_registry.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
+   kis_node_filter_interface.cpp
    kis_background.cpp
    kis_base_accessor.cpp
    kis_base_node.cpp
@@ -154,6 +160,7 @@ set(kritaimage_LIB_SRCS
    kis_circle_mask_generator.cpp
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
+   ${__per_arch_circle_mask_generator_objs}
    kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp

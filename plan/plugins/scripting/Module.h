@@ -30,13 +30,13 @@
 
 #include <KoScriptingModule.h>
 
-#include <kptpart.h>
+#include <kptmaindocument.h>
 
 class QWidget;
 class KUndo2Command;
 
 namespace KPlato {
-    class Part;
+    class MainDocument;
     class NamedCommand;
 }
 
@@ -64,7 +64,7 @@ namespace Scripting {
             explicit Module(QObject* parent = 0);
             virtual ~Module();
 
-            KPlato::Part* part();
+            KPlato::MainDocument* part();
             virtual KoDocument* doc();
             void addCommand( KUndo2Command *cmd );
 

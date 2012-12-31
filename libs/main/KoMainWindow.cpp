@@ -22,6 +22,10 @@
 
 #include "KoMainWindow.h"
 
+#ifdef __APPLE__
+#include "MacSupport.h"
+#endif
+
 #include "KoView.h"
 #include "KoDocument.h"
 #include "KoFilterManager.h"
@@ -240,6 +244,10 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         : KParts::MainWindow()
         , d(new KoMainWindowPrivate(this))
 {
+#ifdef __APPLE__
+    setUnifiedTitleAndToolBarOnMac(true);
+    MacSupport::addFullscreen(this);
+#endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 
@@ -797,10 +805,10 @@ void KoMainWindow::slotSaveCanceled(const QString &errMsg)
 void KoMainWindow::slotSaveCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotSaveCompleted";
-    KoDocument* pDoc = (KoDocument *)(sender());
-    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(pDoc, SIGNAL(canceled(const QString &)),
+    KoPart* pPart = (KoPart *)(sender());
+    disconnect(pPart->document(), SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(pPart, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    disconnect(pPart, SIGNAL(canceled(const QString &)),
                this, SLOT(slotSaveCanceled(const QString &)));
 
     if (d->deferredClosingEvent) {
@@ -949,7 +957,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             bOk = true;
             if (dialog->exec() == QDialog::Accepted) {
                 newURL = dialog->selectedUrl();
-                QString outputFormatString = dialog->currentMimeFilter().toLatin1();
+                QString outputFormatString = dialog->currentMimeFilter();
                 if (outputFormatString.isNull()) {
                     KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
                     outputFormatString = mime->name();

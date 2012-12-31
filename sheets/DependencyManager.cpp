@@ -67,13 +67,13 @@ void DependencyManager::Private::dump() const
             Region tmpRange(keys[i].toRect(), sheet);
             table.insertMulti(tmpRange.name(), values[i].name());
         }
-        foreach(QString uniqueKey, table.uniqueKeys()) {
+        foreach(const QString &uniqueKey, table.uniqueKeys()) {
             QStringList debugStr(table.values(uniqueKey));
             kDebug(36002) << uniqueKey << " provides values for:" << debugStr.join(",");
         }
     }
 
-    foreach(Cell cell, depths.keys()) {
+    foreach(const Cell &cell, depths.keys()) {
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');
         kDebug(36002) << "depth(" << cellName << " ) =" << depths[cell];
