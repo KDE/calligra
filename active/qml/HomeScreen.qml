@@ -34,7 +34,7 @@ Image {
         id: openFileDialogButton
 
         iconSource: "document-open"
-        text: "Open File"
+        text: i18n("Open File")
         width: 512
         height: 64
 

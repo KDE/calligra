@@ -5,6 +5,8 @@ install(FILES
     busyinfoexport.py
     busyinfoimport.py
     busyinfoclear.py
+    plan2csvexport.py
+    plan2odsexport.py
     DESTINATION ${DATA_INSTALL_DIR}/plan/scripts/extensions)
 
 install(FILES

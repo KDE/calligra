@@ -22,7 +22,12 @@
 #include "KoApplication.h"
 
 #include "KoGlobal.h"
+
+#ifndef QT_NO_DBUS
 #include "KoApplicationAdaptor.h"
+#include <QtDBus>
+#endif
+
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
 #include "KoDocument.h"
@@ -46,7 +51,6 @@
 #include <krecentdirs.h>
 #endif
 
-#include <QtDBus/QtDBus>
 #include <QFile>
 #include <QSplashScreen>
 #include <QSysInfo>
@@ -78,8 +82,10 @@ KoApplication::KoApplication()
     // Initialize all Calligra directories etc.
     KoGlobal::initialize();
 
+#ifndef QT_NO_DBUS
     new KoApplicationAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/application", this);
+#endif
 
     m_starting = true;
 #ifdef Q_WS_WIN
@@ -217,7 +223,7 @@ bool KoApplication::start()
         // Using the extension allows to avoid relying on the mime magic when opening
         KMimeType::Ptr mime = KMimeType::mimeType(doc->nativeFormatMimeType());
         if (!mime) {
-            qFatal("It seems your installation is broken/incomplete cause we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
+            qFatal("It seems your installation is broken/incomplete because we failed to load the native mimetype \"%s\".", doc->nativeFormatMimeType().constData());
         }
         QString extension = mime->property("X-KDE-NativeExtension").toString();
         if (extension.isEmpty()) extension = mime->mainExtension();
@@ -229,11 +235,13 @@ bool KoApplication::start()
         // all autosave files for our application
         autoSaveFiles = dir.entryList(filters, QDir::Files | QDir::Hidden);
 
-        // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
-        QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
         QStringList pids;
         QString ourPid;
         ourPid.setNum(kapp->applicationPid());
+
+#ifndef QT_NO_DBUS
+        // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
+        QDBusReply<QStringList> reply = QDBusConnection::sessionBus().interface()->registeredServiceNames();
 
         foreach (QString name, reply.value()) {
             if (name.contains(part->componentData().componentName())) {
@@ -244,6 +252,7 @@ bool KoApplication::start()
                 }
             }
         }
+#endif
 
         // remove the autosave files that are saved for other, open instances of ourselves
         foreach(const QString &autoSaveFileName, autoSaveFiles) {
@@ -496,6 +505,16 @@ QList<KoPart*> KoApplication::partList() const
 void KoApplication::addPart(KoPart* part)
 {
     d->partList << part;
+}
+
+int KoApplication::documents()
+{
+   QSet<QString> nameList;
+   QList<KoPart*> parts = d->partList;
+   foreach(KoPart* part, parts) {
+      nameList.insert(part->document()->objectName());
+   }
+   return nameList.size();
 }
 
 bool KoApplication::notify(QObject *receiver, QEvent *event)

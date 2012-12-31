@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    Based on KexiTableView code.
    Copyright (C) 2002 Till Busch <till@bux.at>
@@ -101,6 +101,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_scrollBarTip->setFrameStyle(QFrame::Plain | QFrame::Box);
     m_scrollBarTip->setLineWidth(1);
  */
+    m_lengthExceededMessageVisible = false;
     clearVariables();
 }
 
@@ -957,36 +958,14 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         if (!m_editor->valueIsValid()) {
             //used e.g. for date or time values - the value can be null but not necessary invalid
             res = Validator::Error;
-            QWidget *par = dynamic_cast<QScrollArea*>(this) ? dynamic_cast<QScrollArea*>(this)->widget() :
-                           dynamic_cast<QWidget*>(this);
-            QWidget *edit = dynamic_cast<QWidget*>(m_editor);
-            if (par && edit) {
-//! @todo allow displaying user-defined warning
-//! @todo also use for other error messages
-                delete m_errorMessagePopup;
-                m_errorMessagePopup = 0;
-                if (!m_errorMessagePopup) {
-                    KexiContextMessage msg(
-                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()));
-                    m_errorMessagePopup = new KexiContextMessageWidget(dynamic_cast<QWidget*>(this), 0, 0, msg);
-                    QPoint arrowPos =
-                        par->mapToGlobal(edit->pos()) + QPoint(12, edit->height() + 6);
-                    if (m_verticalHeader) {
-                        arrowPos += QPoint(m_verticalHeader->width(), horizontalHeaderHeight());
-                    }
-                    m_errorMessagePopup->setMessageType(KMessageWidget::Error);
-                    m_errorMessagePopup->setCalloutPointerDirection(KMessageWidget::Up);
-                    m_errorMessagePopup->setCalloutPointerPosition(arrowPos);
-                    m_errorMessagePopup->setWordWrap(false);
-                    m_errorMessagePopup->setClickClosesMessage(true);
-                    m_errorMessagePopup->resizeToContents();
-                    m_errorMessagePopup->animatedShow();
-                    QObject::connect(m_errorMessagePopup, SIGNAL(animatedHideFinished()),
-                                     dynamic_cast<QWidget*>(m_editor), SLOT(setFocus()));
-                }
-                m_editor->setFocus();
-            }
-        } else if (m_editor->valueIsNull()) {//null value entered
+            //! @todo allow displaying user-defined warning
+            showEditorContextMessage(
+                        m_editor,
+                        i18nc("Question", "Error: %1?", m_editor->columnInfo()->field->typeName()),
+                        KMessageWidget::Error,
+                        KMessageWidget::Up);
+        }
+        else if (m_editor->valueIsNull()) {//null value entered
 //   if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
             if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
                 kDebug() << "NULL NOT ALLOWED!";
@@ -1038,6 +1017,19 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     setNull = true;
                 }
             }
+        }
+        else {
+            // try to fixup the value before accepting, e.g. trim the text
+            if (!m_editor->fixup()) {
+                res = Validator::Error;
+            }
+            if (m_errorMessagePopup) {
+                m_errorMessagePopup->animatedHide();
+            }
+            if (res != Validator::Ok) {
+                //! @todo display message related to failed fixup if needed
+            }
+            //! @todo after fixup we may want to apply validation rules again
         }
     }//changed
 
@@ -2170,4 +2162,75 @@ void KexiDataAwareObjectInterface::setRowEditing(bool set)
 int KexiDataAwareObjectInterface::horizontalHeaderHeight() const
 {
     return 0;
+}
+
+void KexiDataAwareObjectInterface::showEditorContextMessage(
+        KexiDataItemInterface *item,
+        const QString &message,
+        KMessageWidget::MessageType type,
+        KMessageWidget::CalloutPointerDirection direction)
+{
+    QWidget *par = dynamic_cast<QScrollArea*>(this)
+                   ? dynamic_cast<QScrollArea*>(this)->widget() : dynamic_cast<QWidget*>(this);
+    QWidget *edit = dynamic_cast<QWidget*>(item);
+    if (par && edit) {
+        delete m_errorMessagePopup;
+        KexiContextMessage msg(message);
+        m_errorMessagePopup = new KexiContextMessageWidget(dynamic_cast<QWidget*>(this), 0, 0, msg);
+        QPoint arrowPos = par->mapToGlobal(edit->pos()) + QPoint(12, edit->height() + 6);
+        if (m_verticalHeader) {
+            arrowPos += QPoint(m_verticalHeader->width(), horizontalHeaderHeight());
+        }
+        m_errorMessagePopup->setMessageType(type);
+        m_errorMessagePopup->setCalloutPointerDirection(direction);
+        m_errorMessagePopup->setCalloutPointerPosition(arrowPos);
+        m_errorMessagePopup->setWordWrap(false);
+        m_errorMessagePopup->setClickClosesMessage(true);
+        m_errorMessagePopup->resizeToContents();
+        QObject::connect(m_errorMessagePopup, SIGNAL(animatedHideFinished()),
+                         edit, SLOT(setFocus()));
+        m_errorMessagePopup->animatedShow();
+
+        edit->setFocus();
+    }
+}
+
+static QString lengthExceededMessage(KexiDataItemInterface *item)
+{
+    return i18np(
+        "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 character.\n"
+        "Fix the text or it will be truncated upon saving changes.",
+        "Limit of %2 characters for <resource>%3</resource> field has been exceeded by %1 characters.\n"
+        "Fix the text or it will be truncated upon saving changes.",
+        item->value().toString().length() - item->columnInfo()->field->maxLength(),
+        item->columnInfo()->field->maxLength(),
+        item->columnInfo()->captionOrAliasOrName());
+}
+
+void KexiDataAwareObjectInterface::showLengthExceededMessage(KexiDataItemInterface *item, bool exceeded)
+{
+    if (exceeded) {
+        if (item) {
+            showEditorContextMessage(
+                item,
+                lengthExceededMessage(item),
+                KMessageWidget::Warning,
+                KMessageWidget::Up);
+            m_lengthExceededMessageVisible = true;
+        }
+    }
+    else {
+         if (m_errorMessagePopup) {
+             m_errorMessagePopup->animatedHide();
+             m_lengthExceededMessageVisible = false;
+         }
+    }
+}
+
+void KexiDataAwareObjectInterface::showUpdateForLengthExceededMessage(KexiDataItemInterface *item)
+{
+    if (m_errorMessagePopup && m_lengthExceededMessageVisible) {
+        m_errorMessagePopup->setText(lengthExceededMessage(item));
+        m_errorMessagePopup->resizeToContents();
+    }
 }

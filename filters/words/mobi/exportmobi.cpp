@@ -29,7 +29,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-#include "OdtHtmlConverter.h"
+#include "OdtMobiHtmlConverter.h"
 #include "FileCollector.h"
 #include "MobiFile.h"
 #include "OdfParser.h"
@@ -65,7 +65,7 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     // have names like this.
     odfStore->disallowNameExpansion();
     if (!odfStore->open("mimetype")) {
-        kError(30517) << "Unable to open input file!" << endl;
+        kError(31000) << "Unable to open input file!" << endl;
         delete odfStore;
         return KoFilter::FileNotFound;
     }
@@ -93,8 +93,8 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     // Create content files.
     MobiFile mobi;
 
-    OdtHtmlConverter converter;
-    OdtHtmlConverter::ConversionOptions options = {
+    OdtMobiHtmlConverter converter;
+    OdtMobiHtmlConverter::ConversionOptions options = {
         false,                   // don't put styles in css file
         false,                    // don't break into chapters
         true                     // It is mobi.
@@ -126,14 +126,26 @@ KoFilter::ConversionStatus ExportMobi::convert(const QByteArray &from, const QBy
     // Start copression data.
     PalmDocCompression palmCompression;
     QByteArray compressContent;
+    QList<qint32> recordOffset;
 
-    palmCompression.compressContent(textContent, compressContent);
-
-    mobi.addContentRawText(compressContent);
+    palmCompression.compressContent(textContent, compressContent, recordOffset);
 
     // Generate mobi headers.
     MobiHeaderGenerator headerGenerator;
-    headerGenerator.generateMobiHeaders(m_metaData, compressContent.size(), m_imagesSize);
+    headerGenerator.generateMobiHeaders(m_metaData, (compressContent.size()/* - recordOffset.size()*/),
+                                        textContent.size(), m_imagesSize, recordOffset);
+
+
+    // After each text block i should insert a zero byte, i use record offset to
+    // set them after each inser record offset move one byte to forward.
+    int move = 0;
+    for (int i = 1; i < recordOffset.size(); i++) {
+        compressContent.insert((recordOffset.at(i) + qint32(move)), '\0');
+        move++;
+    }
+
+    mobi.addContentRawText(compressContent);
+
 
     // Write Mobi file
     status = mobi.writeMobiFile(m_chain->outputFile(), headerGenerator);
@@ -152,9 +164,9 @@ KoFilter::ConversionStatus ExportMobi::extractImages(KoStore *odfStore, MobiFile
     // Extract images and add them to epubFile one by one
     QByteArray imgContent;
     int imgId = 1;
-    foreach (const QString imgSrc, m_imagesSrcList.keys()) {
+    foreach (const QString &imgSrc, m_imagesSrcList.keys()) {
         if (!odfStore->extractFile(imgSrc, imgContent)) {
-            kDebug(30517) << "Can not to extract file";
+            kDebug(31000) << "Can not to extract file";
             return KoFilter::FileNotFound;
         }
         m_imagesSize << imgContent.size();

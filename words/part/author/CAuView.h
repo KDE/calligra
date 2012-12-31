@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2012 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +36,12 @@ class WORDS_EXPORT CAuView : public KWView
 
 public:
     CAuView(KoPart *part, KWDocument *document, QWidget *parent);
+
+private slots:
+    void selectCoverImage();
+
+private:
+    void setupActions();
 };
 
 #endif

@@ -149,6 +149,11 @@ KisImage::~KisImage()
     dbgImage << "deleting kisimage" << objectName();
 
     /**
+     * Request the tools to end currently running strokes
+     */
+    waitForDone();
+
+    /**
      * First delete the nodes, while strokes
      * and undo are still alive
      */
@@ -334,6 +339,8 @@ bool KisImage::locked() const
 void KisImage::barrierLock()
 {
     if (!locked()) {
+        requestStrokeEnd();
+
         if (m_d->scheduler) {
             m_d->scheduler->barrierLock();
         }
@@ -366,6 +373,8 @@ bool KisImage::tryBarrierLock()
 void KisImage::lock()
 {
     if (!locked()) {
+        requestStrokeEnd();
+
         if (m_d->scheduler) {
             m_d->scheduler->lock();
         }
@@ -588,7 +597,7 @@ void KisImage::rotateImpl(const QString &actionName,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
                                        emitSignals, actionName);
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bilinear");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,
@@ -659,7 +668,7 @@ void KisImage::shearImpl(const QString &actionName,
                                        signalFlags,
                                        emitSignals, actionName);
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bilinear");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0,
@@ -1321,6 +1330,8 @@ KisImageSignalRouter* KisImage::signalRouter()
 
 void KisImage::waitForDone()
 {
+    requestStrokeEnd();
+
     if (m_d->scheduler) {
         m_d->scheduler->waitForDone();
     }
@@ -1328,6 +1339,15 @@ void KisImage::waitForDone()
 
 KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
 {
+    /**
+     * Ask open strokes to end gracefully. All the strokes clients
+     * (including the one calling this method right now) will get
+     * a notification that they should probably end their strokes.
+     * However this is purely their choice whether to end a stroke
+     * or not.
+     */
+    requestStrokeEnd();
+
     KisStrokeId id;
 
     if (m_d->scheduler) {
@@ -1358,6 +1378,16 @@ bool KisImage::cancelStroke(KisStrokeId id)
         result = m_d->scheduler->cancelStroke(id);
     }
     return result;
+}
+
+void KisImage::requestStrokeCancellation()
+{
+    emit sigStrokeCancellationRequested();
+}
+
+void KisImage::requestStrokeEnd()
+{
+    emit sigStrokeEndRequested();
 }
 
 void KisImage::refreshGraph(KisNodeSP root)

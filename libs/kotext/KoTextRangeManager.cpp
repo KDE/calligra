@@ -51,6 +51,7 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
 
     if (m_deletedTextRanges.contains(textRange)) {
         m_deletedTextRanges.remove(textRange);
+        textRange->restore();
     } else {
         textRange->setManager(this);
     }
@@ -87,6 +88,7 @@ void KoTextRangeManager::remove(KoTextRange *textRange)
 
     m_textRanges.remove(textRange);
     m_deletedTextRanges.insert(textRange);
+    textRange->snapshot();
 }
 
 const KoBookmarkManager *KoTextRangeManager::bookmarkManager() const
@@ -116,12 +118,16 @@ QHash<int, KoTextRange *> KoTextRangeManager::textRangesChangingWithin(int first
         } else {
             if (range->rangeStart() >= first && range->rangeStart() <= last) {
                 if (matchLast == -1 || range->rangeEnd() <= matchLast) {
-                    ranges.insertMulti(range->rangeStart(), range);
+                    if (range->rangeEnd() >= matchFirst) {
+                        ranges.insertMulti(range->rangeStart(), range);
+                    }
                 }
             }
             if (range->rangeEnd() >= first && range->rangeEnd() <= last) {
-                if (matchFirst == -1 || range->rangeStart() >= matchFirst) {
-                    ranges.insertMulti(range->rangeEnd(), range);
+                if (matchLast == -1 || range->rangeStart() <= matchLast) {
+                    if (range->rangeStart() >= matchFirst) {
+                        ranges.insertMulti(range->rangeEnd(), range);
+                    }
                 }
             }
         }

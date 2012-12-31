@@ -79,11 +79,8 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         // For cut and paste, make sure that the name is unique.
         d->name = createUniqueBookmarkName(manager()->bookmarkManager(), bookmarkName, false);
 
-        if (localName == "bookmark") {
-            setPositionOnlyMode(true);
-        }
-        else if (localName == "bookmark-start") {
-            setPositionOnlyMode(false);
+        if (localName == "bookmark" || localName == "bookmark-start") {
+            setPositionOnlyMode(localName == "bookmark");
 
             // Add inline Rdf to the bookmark.
             if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
@@ -107,22 +104,27 @@ bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     return false;
 }
 
-void KoBookmark::saveOdf(KoShapeSavingContext &context, int position) const
+void KoBookmark::saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
 
     if (!hasRange()) {
-        writer->startElement("text:bookmark", false);
-        writer->addAttribute("text:name", d->name.toUtf8());
-        writer->endElement();
-    } else if (position == rangeStart()) {
+        if (tagType == StartTag) {
+            writer->startElement("text:bookmark", false);
+            writer->addAttribute("text:name", d->name.toUtf8());
+            if (inlineRdf()) {
+                inlineRdf()->saveOdf(context, writer);
+            }
+            writer->endElement();
+        }
+    } else if ((tagType == StartTag) && (position == rangeStart())) {
         writer->startElement("text:bookmark-start", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         if (inlineRdf()) {
             inlineRdf()->saveOdf(context, writer);
         }
         writer->endElement();
-    } else if (position == rangeEnd()) {
+    } else if ((tagType == EndTag) && (position == rangeEnd())) {
         writer->startElement("text:bookmark-end", false);
         writer->addAttribute("text:name", d->name.toUtf8());
         writer->endElement();

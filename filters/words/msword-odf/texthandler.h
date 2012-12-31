@@ -401,12 +401,7 @@ private:
             m_insideField(false),
             m_afterSeparator(false),
             m_hyperLinkActive(false),
-            m_hyperLinkUrl(QString::null),
-            m_refFormat(QString::null),
-            m_styleName(QString::null),
             m_tabLeader(QChar::Null),
-            m_instructions(QString::null),
-/*             m_result(QString::null), */
             m_writer(0),
             m_buffer(0)
         {

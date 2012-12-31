@@ -440,11 +440,24 @@ void KoTextEditor::setStyle(KoCharacterStyle *style)
     Q_ASSERT(style);
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Set Character Style"));
 
+    int caretAnchor = d->caret.anchor();
+    int caretPosition = d->caret.position();
+
     SetCharacterStyleVisitor visitor(this, style);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+
+    if (!isEditProtected() && caretAnchor == caretPosition) {
+        style->applyStyle(&(d->caret));
+    }
+    else {
+        d->caret.setPosition(caretAnchor);
+        d->caret.setPosition(caretPosition, QTextCursor::KeepAnchor);
+    }
+
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
+    emit characterStyleApplied(style);
 }
 
 
@@ -480,12 +493,23 @@ void KoTextEditor::setStyle(KoParagraphStyle *style)
 {
     d->updateState(KoTextEditor::Private::Custom, i18nc("(qtundo-format)", "Set Paragraph Style"));
 
+    int caretAnchor = d->caret.anchor();
+    int caretPosition = d->caret.position();
     KoStyleManager *styleManager = KoTextDocument(d->document).styleManager();
     SetParagraphStyleVisitor visitor(this, styleManager, style);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
 
+    if (!isEditProtected() && caretAnchor == caretPosition) {
+        style->KoCharacterStyle::applyStyle(&(d->caret));
+    }
+    else {
+        d->caret.setPosition(caretAnchor);
+        d->caret.setPosition(caretPosition, QTextCursor::KeepAnchor);
+    }
+
     d->updateState(KoTextEditor::Private::NoOp);
+    emit paragraphStyleApplied(style);
     emit textFormatChanged();
 }
 

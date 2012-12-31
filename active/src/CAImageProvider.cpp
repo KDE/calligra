@@ -21,7 +21,7 @@
 
 #include "CAImageProvider.h"
 
-#include <KDE/KGlobal>
+#include <KGlobal>
 
 const char *CAImageProvider::identificationString = "caimage";
 

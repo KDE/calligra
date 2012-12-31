@@ -209,6 +209,38 @@ void print( Task *t, bool full = true ) {
             qDebug()<<pad<<printAvailable( rr->resource(), "   " + rr->resource()->name() );
         }
     }
+    if (t->isStartNode()) {
+        qDebug()<<pad<<"Start node";
+    }
+    QStringList rel;
+    foreach (Relation *r, t->dependChildNodes()) {
+        QString type;
+        switch(r->type()) {
+        case Relation::StartStart: type = "SS"; break;
+        case Relation::FinishFinish: type = "FF"; break;
+        default: type = "FS"; break;
+        }
+        rel << QString("(%1) -> %2, %3 %4").arg(r->parent()->name()).arg(r->child()->name()).arg(type).arg(r->lag() == 0?QString():r->lag().toString(Duration::Format_HourFraction));
+    }
+    if (!rel.isEmpty()) {
+        qDebug()<<pad<<"Successors:"<<rel.join(" : ");
+    }
+    if (t->isEndNode()) {
+        qDebug()<<pad<<"End node";
+    }
+    rel.clear();
+    foreach (Relation *r, t->dependParentNodes()) {
+        QString type;
+        switch(r->type()) {
+        case Relation::StartStart: type = "SS"; break;
+        case Relation::FinishFinish: type = "FF"; break;
+        default: type = "FS"; break;
+        }
+        rel << QString("%1 -> (%2), %3 %4").arg(r->parent()->name()).arg(r->child()->name()).arg(type).arg(r->lag() == 0?QString():r->lag().toString(Duration::Format_HourFraction));
+    }
+    if (!rel.isEmpty()) {
+        qDebug()<<pad<<"Predeccessors:"<<rel.join(" : ");
+    }
     qDebug()<<pad;
     Schedule *s = t->currentSchedule();
     if ( s ) {

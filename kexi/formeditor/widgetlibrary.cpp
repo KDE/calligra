@@ -47,18 +47,6 @@
 namespace KFormDesigner
 {
 
-#if 0 // 2.0
-//! @internal
-class XMLGUIClient : public QObject, public KXMLGUIClient
-{
-public:
-    XMLGUIClient(KXMLGUIClient* parent, const QString& xmlFileName)
-            : QObject(parent->actionCollection()), KXMLGUIClient(parent) {
-        setXMLFile(xmlFileName, true /*merge*/);
-    }
-};
-#endif
-
 //! @internal
 class WidgetLibraryPrivate
 {
@@ -147,7 +135,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
                 kWarning() << "class" << w->className() << ": no such parent factory" << w->parentFactoryName();
                 continue;
             }
-            WidgetInfo* inheritedClass = parentFactory->m_classesByName.value( w->inheritedClassName() );
+            WidgetInfo* inheritedClass = parentFactory->widgetInfoForClassName(w->inheritedClassName());
             if (!inheritedClass) {
                 kWarning() << "class" << w->inheritedClassName() << " - no such class to inherit in factory"
                     << w->parentFactoryName();
@@ -172,12 +160,8 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
                 w->setDescription(inheritedClass->description());
         }
 
-//  kDebug() << "adding class " << w->className();
         QList<QByteArray> cnames( w->alternateClassNames() );
         cnames.prepend(w->className());
-        //d->widgets.insert(w->className(), w);
-//  if(!w->alternateClassName().isEmpty()) {
-//   QStringList l = QStringList::split("|", w->alternateClassName());
         foreach (const QByteArray &wname, cnames) {
             WidgetInfo *widgetForClass = d->widgets.value(wname);
             if (!widgetForClass || (widgetForClass && !widgetForClass->isOverriddenClassName(wname))) {
@@ -186,14 +170,6 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
                 //2) this class has alternate class assigned but without 'override' flag
                 d->widgets.insert(wname, w);
             }
-
-            /*   WidgetInfo *widgetForClass = d->alternateWidgets.find(*it);
-                  if (!widgetForClass || (widgetForClass && !widgetForClass->isOverriddenClassName(*it))) {
-                    //insert a widgetinfo, if:
-                    //1) this class has no alternate class assigned yet, or
-                    //2) this class has alternate class assigned but without 'override' flag
-                    d->alternateWidgets.replace(*it, w);
-                  }*/
         }
     }
 }
@@ -236,8 +212,6 @@ WidgetLibrary::loadFactories()
         return;
     d->factoriesLoaded = true;
     foreach (KService::Ptr ptr, d->services) {
-//2.0        WidgetFactory *f = KService::createInstance<WidgetFactory>(
-//2.0                               ptr, this, QStringList());
         KPluginLoader loader(ptr->library());
         const uint foundMajor = (loader.pluginVersion() >> 16) & 0xff;
         const uint foundMinor = (loader.pluginVersion() >> 8) & 0xff;
@@ -262,14 +236,13 @@ WidgetLibrary::loadFactories()
             continue;
         }
         f->setObjectName(ptr->library());
-        f->m_library = this;
-        f->m_showAdvancedProperties = d->showAdvancedProperties; //inherit this flag from the library
-//2.0        f->m_xmlGUIFileName = ptr->property("X-KFormDesigner-XMLGUIFileName").toString();
+        f->setLibrary(this);
+        f->setAdvancedPropertiesVisible(d->showAdvancedProperties); //inherit this flag from the library
         d->factories.insert(f->objectName().toLower().toLatin1(), f);
 
         //collect information about classes to be hidden
-        if (f->m_hiddenClasses) {
-            foreach (const QByteArray &c, *f->m_hiddenClasses) {
+        if (f->hiddenClasses()) {
+            foreach (const QByteArray &c, *f->hiddenClasses()) {
                 d->hiddenClasses.insert(c);
             }
         }
@@ -292,77 +265,14 @@ WidgetLibrary::loadFactories()
     }
 }
 
-/* old
-QString
-WidgetLibrary::createXML()
-{
-  loadFactories();
-
-  QDomDocument doc("kpartgui");
-  QDomElement root = doc.createElement("kpartgui");
-
-  root.setAttribute("name", "kformdesigner");
-  root.setAttribute("version", "0.3");
-  doc.appendChild(root);
-
-  QDomElement toolbar = doc.createElement("ToolBar");
-  toolbar.setAttribute("name", "widgets");
-  root.appendChild(toolbar);
-
-  QDomElement texttb = doc.createElement("text");
-  toolbar.appendChild(texttb);
-  QDomText ttext = doc.createTextNode("Widgets");
-  texttb.appendChild(ttext);
-
-  QDomElement menubar = doc.createElement("MenuBar");
-  toolbar.setAttribute("name", "widgets");
-  root.appendChild(menubar);
-
-  QDomElement Mtextb = doc.createElement("text");
-  toolbar.appendChild(Mtextb);
-  QDomText Mtext = doc.createTextNode("Widgets");
-  Mtextb.appendChild(Mtext);
-  QDomElement menu = doc.createElement("Menu");
-  menu.setAttribute("name", "widgets");
-
-  Q3AsciiDictIterator<WidgetInfo> it(d->widgets);
-  int i = 0;
-  for(; it.current(); ++it)
-  {
-    QDomElement action = doc.createElement("Action");
-    action.setAttribute("name", "library_widget" + it.current()->className());
-    toolbar.appendChild(action);
-
-    i++;
-  }
-
-  return doc.toString();
-}*/
-
 void WidgetLibrary::createWidgetActions(ActionGroup *group)
 {
     loadFactories();
 
-#if 0 // 2.0: we're removing XML gui client stuff
-    // init XML gui clients (custom factories have their own .rc files)
-    foreach (WidgetFactory *factory, d->factories) {
-        if (factory->m_xmlGUIFileName.isEmpty()) { // probably a built-in factory, with GUI file like kexiformpartinstui.rc
-            factory->m_guiClient = 0;
-        } else { // a custom factory with its own .rc file
-            factory->m_guiClient = new XMLGUIClient(client, factory->m_xmlGUIFileName);
-        }
-    }
-#endif
-
-//2.0    ActionList actions;
     foreach (WidgetInfo *winfo, d->widgets) {
         LibActionWidget *a = new LibActionWidget(group, winfo);
- //2.0               winfo->factory()->m_guiClient
- //2.0               ? winfo->factory()->m_guiClient->actionCollection() : parent);
         connect(a, SIGNAL(toggled(const QByteArray &)), this, SIGNAL(widgetActionToggled(const QByteArray &)));
-//2.0        actions.append(a);
     }
-//2.0    return actions;
 }
 
 void
@@ -680,7 +590,7 @@ QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QByteArray& 
 {
     if (!winfo || !winfo->factory())
         return QString();
-    QString desc(winfo->factory()->propertyDescForName(propertyName));
+    QString desc(winfo->factory()->propertyDescription(propertyName));
     if (!desc.isEmpty())
         return desc;
     if (winfo->parentFactoryName().isEmpty())
@@ -691,14 +601,14 @@ QString WidgetLibrary::propertyDescForName(WidgetInfo *winfo, const QByteArray& 
     if (!parentFactory)
         return QString();
 
-    return parentFactory->propertyDescForName(propertyName);
+    return parentFactory->propertyDescription(propertyName);
 }
 
 QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QByteArray& name)
 {
     if (!winfo->factory())
         return QString();
-    QString desc(winfo->factory()->propertyDescForValue(name));
+    QString desc(winfo->factory()->valueDescription(name));
     if (!desc.isEmpty())
         return desc;
     if (winfo->parentFactoryName().isEmpty())
@@ -709,7 +619,7 @@ QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QByteArray&
     if (!parentFactory)
         return QString();
 
-    return parentFactory->propertyDescForValue(name);
+    return parentFactory->valueDescription(name);
 }
 
 void WidgetLibrary::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& winfo, QWidget* w)

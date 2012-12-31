@@ -1180,7 +1180,7 @@ bool KexiTabbedToolBar::eventFilter(QObject* watched, QEvent* event)
         if (watched == d->searchLineEdit) {
             activateSearchLineEdit(); // custom setFocus() for search box, so it's possible to focus
                                       // back on Escape key press
-            return true;
+            return false;
         }
         else if (watched == tabBar()) {
             QMouseEvent* me = static_cast<QMouseEvent*>(event);
@@ -1653,10 +1653,6 @@ public:
         return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;
     }
 #else
-    KexiWindow *openedWindowFor(const KexiPart::Item* item) {
-        return openedWindowFor(item->identifier());
-    }
-
     KexiWindow *openedWindowFor(int identifier) {
 //todo(threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         return windows.contains(identifier) ? (KexiWindow*)windows.value(identifier) : 0;

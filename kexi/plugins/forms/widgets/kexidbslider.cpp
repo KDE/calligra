@@ -55,7 +55,7 @@ KexiDBSlider::setEnabled(bool enabled)
 
 void KexiDBSlider::setValueInternal(const QVariant&, bool)
 {
-    KexiSlider::setValue(m_origValue.toInt());
+    KexiSlider::setValue(KexiDataItemInterface::originalValue().toInt());
 }
 
 QVariant

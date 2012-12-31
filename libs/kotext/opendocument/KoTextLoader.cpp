@@ -797,7 +797,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             kWarning(32500) << "unhandled text:" << localName;
                         }
                     }
-                } else if (tag.namespaceURI() == KoXmlNS::draw) {
+                } else if (tag.namespaceURI() == KoXmlNS::draw
+                           || tag.namespaceURI() == KoXmlNS::dr3d) {
                     loadShape(tag, cursor);
                 } else if (tag.namespaceURI() == KoXmlNS::table) {
                     if (localName == "table") {
@@ -826,11 +827,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     cursor.endEditBlock();
 
     KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
-    kDebug(32500) << "text ranges::";
-    foreach(KoTextRange *range, textRangeManager->textRanges()) {
+    Q_UNUSED(textRangeManager);
+    //kDebug(32500) << "text ranges::";
+    //foreach(KoTextRange *range, textRangeManager->textRanges()) {
         //kDebug(32500) << range->id();
-    }
-
+    //}
 }
 
 KoXmlNode KoTextLoader::loadDeleteMerges(const KoXmlElement& elem, QString *generatedXmlString)
@@ -1735,6 +1736,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const QString localName(ts.localName());
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
+        const bool isDr3dNS = ts.namespaceURI() == KoXmlNS::dr3d;
         const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
         const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
 
@@ -1976,7 +1978,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     delete annotation;
                 }
             }
-        } 
+        }
         else if (isTextNS && localName == "number") { // text:number
             /*                ODF Spec, §4.1.1, Formatted Heading Numbering
             If a heading has a numbering applied, the text of the formatted number can be included in a
@@ -1992,7 +1994,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             }
         } else if ((isDrawNS) && localName == "a") { // draw:a
             loadShapeWithHyperLink(ts, cursor);
-        } else if (isDrawNS) {
+        } else if (isDrawNS || isDr3dNS) {
             loadShape(ts, cursor);
         } else {
             KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(ts, d->context);
@@ -2616,6 +2618,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // to store the contents we use an extrafor "meta-information" about the TOC we use this class
     QTextDocument *tocDocument = new QTextDocument();
     KoTextDocument(tocDocument).setStyleManager(d->styleManager);
+    KoTextDocument(tocDocument).setTextRangeManager(new KoTextRangeManager);
 
     info->m_name = element.attribute("name");
     info->m_styleName = element.attribute("style-name");

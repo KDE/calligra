@@ -111,7 +111,7 @@ void SheetSelectPage::setOptions( const QMap<QString,QString>& opts )
 
 void SheetSelectPage::setAvailableSheets(const QStringList& sheetlist)
 {
-    foreach(QString sname, sheetlist) {
+    foreach(const QString &sname, sheetlist) {
         kDebug() << " adding sheet to list of printed sheets:" << sname;
         this->prependSelectedSheet(sname);
     }

@@ -89,8 +89,6 @@ KexiSmallToolButton::KexiSmallToolButton(QAction* action, QWidget* parent)
         setCheckable(d->action->isCheckable());
         if (d->action->menu()) {
             setPopupMode(QToolButton::MenuButtonPopup);
-            //setArrowType(Qt::DownArrow);
-            //setToolButtonStyle(Qt::ToolButtonTextOnly);
             setMenu(d->action->menu());
         } else {
             connect(this, SIGNAL(toggled(bool)), this, SLOT(slotButtonToggled(bool)));
@@ -98,7 +96,6 @@ KexiSmallToolButton::KexiSmallToolButton(QAction* action, QWidget* parent)
         }
     }
     connect(this, SIGNAL(clicked()), action, SLOT(trigger()));
-// connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)));
     updateAction();
 }
 
@@ -109,25 +106,11 @@ KexiSmallToolButton::~KexiSmallToolButton()
 
 void KexiSmallToolButton::updateAction()
 {
-// setDefaultAction(0);
-// setDefaultAction(d->action);
 
-    /*
-      if (!d->action)
-        return;
-      removeAction(d->action);
-      addAction(d->action);
-      update(d->action->text(), KIcon(d->action->icon()));
-      setShortcut(d->action->shortcut());
-      setToolTip( d->action->toolTip());
-      setWhatsThis( d->action->whatsThis());*/
 }
 
 void KexiSmallToolButton::init()
 {
-// QPalette palette(this->palette());
-//  palette.setColor(backgroundRole(), ??);
-// setPalette(palette);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     QFont f(KGlobalSettings::toolBarFont());
     f.setPixelSize(KexiUtils::smallFont().pixelSize());
@@ -202,27 +185,6 @@ void KexiSmallToolButton::setText(const QString& text)
     update(text, icon());
 }
 
-#if 0
-void KexiSmallToolButton::paintEvent(QPaintEvent *pe)
-{
-#ifdef __GNUC__
-#warning TODO KexiSmallToolButton::drawButton() - painting OK?
-#endif
-    QToolButton::paintEvent(pe);
-    /* QPainter painter(this);
-      if (QToolButton::menu()) {
-        QStyle::State arrowFlags = QStyle::State_None;
-        QStyleOption option;
-        option.initFrom(this);
-        if (isDown())
-          option.state |= QStyle::State_DownArrow;
-        if (isEnabled())
-          option.state |= QStyle::State_Enabled;
-        style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, &option, &painter, this);
-      }*/
-}
-#endif
-
 void KexiSmallToolButton::slotActionChanged()
 {
     kDebug() << "slotActionChanged()" << d->action->isEnabled();
@@ -238,8 +200,6 @@ void KexiSmallToolButton::slotButtonToggled(bool checked)
     .arg(checked).arg(d->action ? d->action->text() : QString())
     .arg(view ? view->objectName() : QString("??"));
     d->enableSlotActionToggled = false;
-// if (d->action)
-//  d->action->setChecked(checked);
     d->enableSlotActionToggled = true;
 }
 
@@ -263,9 +223,29 @@ QAction* KexiSmallToolButton::action() const
 
 //------------------------------------------
 
+class KexiToolBarSeparator::Private
+{
+public:
+    Private();
+    ~Private();
+
+    Qt::Orientation orientation;
+};
+
+KexiToolBarSeparator::Private::Private()
+    :orientation(Qt::Horizontal)
+{
+
+}
+
+KexiToolBarSeparator::Private::~Private()
+{
+
+}
+
 KexiToolBarSeparator::KexiToolBarSeparator(QWidget *parent)
         : QWidget(parent)
-        , m_orientation(Qt::Horizontal)
+        , d(new Private())
 {
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 //! @todo
@@ -274,6 +254,7 @@ KexiToolBarSeparator::KexiToolBarSeparator(QWidget *parent)
 
 KexiToolBarSeparator::~KexiToolBarSeparator()
 {
+    delete d;
 }
 
 void KexiToolBarSeparator::initStyleOption(QStyleOption *o) const
@@ -285,13 +266,13 @@ void KexiToolBarSeparator::initStyleOption(QStyleOption *o) const
 
 void KexiToolBarSeparator::setOrientation(Qt::Orientation o)
 {
-    m_orientation = o;
+    d->orientation = o;
     update();
 }
 
 Qt::Orientation KexiToolBarSeparator::orientation() const
 {
-    return m_orientation;
+    return d->orientation;
 }
 
 QSize KexiToolBarSeparator::sizeHint() const
@@ -309,7 +290,6 @@ void KexiToolBarSeparator::paintEvent(QPaintEvent *e)
     QPainter p(this);
     QStyleOption o;
     initStyleOption(&o);
-// o.rect.setHeight( o.rect.height()-6 );
     style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &o, &p, parentWidget());
 }
 

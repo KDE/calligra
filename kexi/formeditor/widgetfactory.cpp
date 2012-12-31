@@ -24,18 +24,18 @@
 #include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
-//#ifdef KEXI_KTEXTEDIT
+
 #include <ktextedit.h>
-//#else
+
 #include <klineedit.h>
-//#endif
+
 #include <kdialog.h>
 #if KDE_IS_VERSION(4,5,90)
 # include <keditlistwidget.h>
 #else
 # include <keditlistbox.h>
 #endif
-//2.0#include <kxmlguiclient.h>
+
 #include <kactioncollection.h>
 
 #include "richtextdialog.h"
@@ -43,14 +43,14 @@
 # include "editlistviewdialog.h"
 #endif
 #include "resizehandle.h"
-//#include "formmanager.h"
+
 #include "form.h"
 #include "container.h"
 #include "objecttree.h"
 #include "widgetlibrary.h"
 #include "WidgetInfo.h"
 #include "utils.h"
-//removed #include "widgetpropertyset.h"
+
 #include "widgetwithsubpropertiesinterface.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
@@ -79,24 +79,54 @@ WidgetFactory::InlineEditorCreationArguments::InlineEditorCreationArguments(
 
 ///// Widget Factory //////////////////////////
 
+class WidgetFactory::Private
+{
+public:
+    Private();
+    ~Private();
+
+    WidgetLibrary *library;
+
+    WidgetInfoHash classesByName;
+    QSet<QByteArray>* hiddenClasses;
+
+    //! i18n stuff
+    QHash<QByteArray, QString> propDesc;
+    QHash<QByteArray, QString> propValDesc;
+    //! internal properties
+    QHash<QByteArray, QVariant> internalProp;
+
+    /*! flag useful to decide whether to hide some properties.
+     It's value is inherited from WidgetLibrary. */
+    bool advancedPropertiesVisible;
+};
+
+WidgetFactory::Private::Private()
+    : hiddenClasses(0), advancedPropertiesVisible(true)
+{
+
+}
+
+WidgetFactory::Private::~Private()
+{
+    qDeleteAll(classesByName);
+    delete hiddenClasses;
+}
+
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
-        : QObject(parent)
+    : QObject(parent), d(new Private())
 {
     setObjectName(QString("kformdesigner_") + name);
-    m_showAdvancedProperties = true;
-    m_hiddenClasses = 0;
-//2.0    m_guiClient = 0;
 }
 
 WidgetFactory::~WidgetFactory()
 {
-    qDeleteAll(m_classesByName);
-    delete m_hiddenClasses;
+    delete d;
 }
 
 void WidgetFactory::addClass(WidgetInfo *w)
 {
-    WidgetInfo *oldw = m_classesByName.value(w->className());
+    WidgetInfo *oldw = d->classesByName.value(w->className());
     if (oldw == w)
         return;
     if (oldw) {
@@ -105,19 +135,19 @@ void WidgetFactory::addClass(WidgetInfo *w)
             << "' already exists for factory '" << objectName() << "'";
         return;
     }
-    m_classesByName.insert(w->className(), w);
+    d->classesByName.insert(w->className(), w);
 }
 
 void WidgetFactory::hideClass(const char *classname)
 {
-    if (!m_hiddenClasses)
-        m_hiddenClasses = new QSet<QByteArray>;
-    m_hiddenClasses->insert(QByteArray(classname).toLower());
+    if (!d->hiddenClasses)
+        d->hiddenClasses = new QSet<QByteArray>;
+    d->hiddenClasses->insert(QByteArray(classname).toLower());
 }
 
 const WidgetInfoHash& WidgetFactory::classes() const
 {
-    return m_classesByName;
+    return d->classesByName;
 }
 
 void WidgetFactory::disableFilter(QWidget *w, Container *container)
@@ -186,21 +216,6 @@ void WidgetFactory::changeProperty(Form *form, QWidget *widget, const char *name
         }
     }
 }
-
-/*
-void
-WidgetFactory::addPropertyDescription(Container *container, const char *prop, const QString &desc)
-{
-  WidgetPropertySet *buff = container->form()->manager()->buffer();
-  buff->addPropertyDescription(prop, desc);
-}
-
-void
-WidgetFactory::addValueDescription(Container *container, const char *value, const QString &desc)
-{
-  WidgetPropertySet *buff = container->form()->manager()->buffer();
-  buff->addValueDescription(value, desc);
-}*/
 
 bool
 WidgetFactory::isPropertyVisible(const QByteArray &classname, QWidget *w,
@@ -280,69 +295,12 @@ WidgetFactory::saveSpecialProperty(const QByteArray &, const QString &, const QV
 
 bool WidgetFactory::inheritsFactories()
 {
-    foreach (WidgetInfo *winfo, m_classesByName) {
+    foreach (WidgetInfo *winfo, d->classesByName) {
         if (!winfo->parentFactoryName().isEmpty())
             return true;
     }
     return false;
 }
-
-#if 0 // 2.0
-void WidgetFactory::setEditor(QWidget *widget, QWidget *editor)
-{
-    if (!widget)
-        return;
-    WidgetInfo *winfo = m_classesByName.value(widget->metaObject()->className());
-    if (!winfo || winfo->parentFactoryName().isEmpty()) {
-        m_editor = editor;
-    } else {
-        WidgetFactory *f = m_library->factory(winfo->parentFactoryName());
-        if (f != this)
-            f->setEditor(widget, editor);
-        m_editor = editor; //keep a copy
-    }
-}
-#endif
-
-#if 0 // 2.0
-QWidget *WidgetFactory::editor(QWidget *widget) const
-{
-    if (!widget)
-        return 0;
-    WidgetInfo *winfo = m_classesByName.value(widget->metaObject()->className());
-    if (!winfo || winfo->parentFactoryName().isEmpty()) {
-        return m_editor;
-    } else {
-        WidgetFactory *f = m_library->factoryForClassName(
-                               widget->metaObject()->className());
-        if (f != this)
-            return f->editor(widget);
-        return m_editor;
-    }
-}
-#endif
-
-#if 0 // 2.0
-void WidgetFactory::setWidget(QWidget *widget, Container* container)
-{
-    WidgetInfo *winfo = widget
-        ? m_classesByName.value(widget->metaObject()->className()) : 0;
-    if (winfo && !winfo->parentFactoryName().isEmpty()) {
-        WidgetFactory *f = m_library->factory(winfo->parentFactoryName());
-        if (f != this)
-            f->setWidget(widget, container);
-    }
-    m_widget = widget; //keep a copy
-    m_container = container;
-}
-#endif
-
-#if 0 // 2.0
-QWidget *WidgetFactory::widget() const
-{
-    return m_widget;
-}
-#endif
 
 void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w)
 {
@@ -355,6 +313,66 @@ void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& i
 ObjectTreeItem* WidgetFactory::selectableItem(ObjectTreeItem* item)
 {
     return item;
+}
+
+void WidgetFactory::setInternalProperty(const QByteArray &classname, const QByteArray &property, const QVariant &value)
+{
+    d->internalProp.insert(classname + ":" + property, value);
+}
+
+QVariant WidgetFactory::internalProperty(const QByteArray &classname, const QByteArray &property) const
+{
+    return d->internalProp.value(classname + ":" + property);
+}
+
+QString WidgetFactory::propertyDescription(const char* name) const
+{
+    return d->propDesc.value(name);
+}
+
+QString WidgetFactory::valueDescription(const char* name) const
+{
+    return d->propValDesc.value(name);
+}
+
+WidgetInfo* WidgetFactory::widgetInfoForClassName(const char* classname)
+{
+    return d->classesByName.value(classname);
+}
+
+const QSet<QByteArray> *WidgetFactory::hiddenClasses() const
+{
+    return d->hiddenClasses;
+}
+
+WidgetLibrary* WidgetFactory::library()
+{
+    return d->library;
+}
+
+bool WidgetFactory::advancedPropertiesVisible() const
+{
+    return d->advancedPropertiesVisible;
+}
+
+void WidgetFactory::setLibrary(WidgetLibrary* library)
+{
+    d->library = library;
+}
+
+void WidgetFactory::setAdvancedPropertiesVisible(bool set)
+{
+    d->advancedPropertiesVisible = set;
+}
+
+void WidgetFactory::setPropertyDescription(const char* property, const QString &description)
+{
+    d->propDesc.insert(property, description);
+}
+
+void WidgetFactory::setValueDescription(const char *valueName, const QString &description)
+{
+    d->propValDesc.insert(valueName, description);
 }
 
 #include "widgetfactory.moc"

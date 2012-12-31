@@ -22,12 +22,12 @@
 #include "kptviewlist.h"
 
 #include "kptview.h"
+#include "kptdebug.h"
 
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 namespace KPlato
 {
@@ -53,8 +53,13 @@ void ViewListDocker::setView(View *view)
     QWidget *wdg = widget();
     if (wdg)
         delete wdg;
-    m_viewlist = new ViewListWidget(view->getPart(), view);
+    m_viewlist = new ViewListWidget(view->getPart(), this);
     setWidget(m_viewlist);
+    m_viewlist->setProject( &( view->getProject() ) );
+    connect( m_viewlist, SIGNAL( selectionChanged( ScheduleManager* ) ), view, SLOT( slotSelectionChanged( ScheduleManager* ) ) );
+    connect( view, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), m_viewlist, SLOT( setSelectedSchedule( ScheduleManager* ) ) );
+    connect( m_viewlist, SIGNAL( updateViewInfo( ViewListItem* ) ), view, SLOT( slotUpdateViewInfo( ViewListItem* ) ) );
+
 }
 
 void ViewListDocker::slotModified()

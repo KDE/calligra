@@ -56,7 +56,7 @@ struct palmDBHeader {
     qint16 numberOfRecords; /// number of records in the file - N
 
     // This will repeate of record numbers.
-    int recordOffset; /// the offset of record n from the start of the PDB of this record
+    qint32 recordOffset; /// the offset of record n from the start of the PDB of this record
     int recordUniqueId; /// The unique ID for this record. Often just a sequential count from 0
     // Format: QHash<recordOffset, recorUniqueId>
     QHash<int, int> recordsInfo;
@@ -76,7 +76,7 @@ struct palmDocHeader
     qint16 compression;  /// 1 == no compression, 2 = PalmDOC compression, 17480 = HUFF/CDIC compression
     qint16 unused; /// Always zero
     qint32 textLength;
-    qint16 recordCount;
+    qint16 pdbrecordCount;
     qint16 maxRecordSize;/// Maximum size of each record containing text, always 4096
 
     /// 0 == no encryption, 1 = Old Mobipocket
@@ -114,7 +114,7 @@ struct mobiHeader
     qint32 textEncoding; /// 1252 = CP1252 (WinLatin1); 65001 = UTF-8
     qint32 uniqueId; /// Some kind of unique ID number
 
-    // FIXME: Realy i dont know what should i set for this parametr.
+    // FIXME: Really i dont know what should i set for this parametr.
     qint32 fileVersion; /// Version of the Mobipocket format used in this file.
 
     qint32 ortographicIndex;/// Section number of orthographic meta index. 0xFFFFFFFF if index is not available.
@@ -218,7 +218,8 @@ public:
     ~MobiHeaderGenerator();
 
     void generateMobiHeaders(QHash<QString, QString> metaData
-                             ,int mHtmlFileSize, QList<int> imagesSize);
+                             ,int compressedTextSize, int uncompressedTextSize,
+                             QList<int> imagesSize, QList<qint32> textRecordsOffset);
 
 public:
     palmDBHeader *m_dbHeader;
@@ -239,7 +240,9 @@ private:
 
     QByteArray m_author;
     int m_rawTextSize;
+    int m_uncompressedTextSize;
     QList<int> m_imgListSize;
+    QList<qint32> m_textRecordsOffset;
 };
 
 #endif // MOBIHEADERGENERATOR_H

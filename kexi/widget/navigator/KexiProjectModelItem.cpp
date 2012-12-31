@@ -27,68 +27,101 @@
 #include <QtAlgorithms>
 #include <kdebug.h>
 
-KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p)
-    : m_parentItem(p), m_dirty(false), m_info(0), m_item(0)
+class KexiProjectModelItem::Private
 {
-    m_groupName = n;
+public:
+    Private(KexiPart::Info *info_, KexiPart::Item *item_, KexiProjectModelItem *p)
+      : parentItem(p), dirty(false), info(info_), item(item_)
+    {
+    }
+
+    ~Private()
+    {
+        qDeleteAll(childItems);
+    }
+
+    /* private: */
+    QList<KexiProjectModelItem*> childItems;
+    KexiProjectModelItem *parentItem;
+    QIcon icon;
+    bool dirty;
+    /* protected: */
+    KexiPart::Info *info;
+    KexiPart::Item *item;
+    QString groupName;
+};
+
+KexiProjectModelItem::KexiProjectModelItem(const QString& n, KexiProjectModelItem *p)
+    : d(new Private(0, 0, p))
+{
+    d->groupName = n;
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiProjectModelItem *p)
-    : m_parentItem(p), m_dirty(false), m_info(&i), m_item(0)
+    : d(new Private(&i, 0, p))
 {
-    m_icon = KIcon(i.itemIconName());
-    m_fifoSorting = 1; //because this is top level item
+    d->icon = KIcon(i.itemIconName());
 }
 
 KexiProjectModelItem::KexiProjectModelItem(KexiPart::Info &i, KexiPart::Item &item, KexiProjectModelItem *p)
-    : m_parentItem(p), m_dirty(false), m_info(&i), m_item(&item)
+    : d(new Private(&i, &item, p))
 {
-    m_icon = KIcon(i.itemIconName());
+    d->icon = KIcon(i.itemIconName());
 }
 
 KexiProjectModelItem::~KexiProjectModelItem()
 {
-    qDeleteAll(m_childItems);
+    delete d;
 }
 
 void KexiProjectModelItem::appendChild(KexiProjectModelItem* c)
 {
-    m_childItems.append(c);
+    d->childItems.append(c);
 }
 
 void KexiProjectModelItem::debugPrint() const
 {
-    if (m_item) {
-        kDebug() << m_item->captionOrName();
-    } else if (m_info) {
-        kDebug() << m_info->groupName();
+    if (d->item) {
+        kDebug() << d->item->captionOrName();
+    } else if (d->info) {
+        kDebug() << d->info->groupName();
     } else   {
-        kDebug() << m_groupName;
+        kDebug() << d->groupName;
     }
 
-    foreach(KexiProjectModelItem* itm, m_childItems) {
+    foreach(KexiProjectModelItem* itm, d->childItems) {
         itm->debugPrint();
     }
 }
 
 void KexiProjectModelItem::clearChildren()
 {
-    qDeleteAll(m_childItems);
+    qDeleteAll(d->childItems);
+}
+
+KexiPart::Info *KexiProjectModelItem::partInfo() const
+{
+    return d->info;
+}
+
+KexiPart::Item* KexiProjectModelItem::partItem() const
+{
+    return d->item;
 }
 
 KexiProjectModelItem* KexiProjectModelItem::parent()
 {
-    return m_parentItem;
+    return d->parentItem;
 }
 
 KexiProjectModelItem* KexiProjectModelItem::child(int row)
 {
-    return m_childItems.value(row);
+    return d->childItems.value(row);
 }
 
 int KexiProjectModelItem::childCount() const
 {
-    return m_childItems.count();
+    return d->childItems.count();
 }
 
 int KexiProjectModelItem::columnCount() const
@@ -99,25 +132,25 @@ int KexiProjectModelItem::columnCount() const
 QVariant KexiProjectModelItem::data(int column) const
 {
     Q_UNUSED(column);
-    if (m_item) {
+    if (d->item) {
 #ifdef KEXI_MOBILE
-        return m_item->captionOrName();
+        return d->item->captionOrName();
 #else
-        return m_item->name() + (m_dirty ? "*" : "");
+        return d->item->name() + (d->dirty ? "*" : "");
 #endif
-    } else if (m_info) {
-        return m_info->groupName();
+    } else if (d->info) {
+        return d->info->groupName();
     } else   {
-        return m_groupName;
+        return d->groupName;
     }
 }
 
 int KexiProjectModelItem::row()
 {
-     if (m_parentItem)
+     if (d->parentItem)
      {
-         //kDebug() << m_parentItem->m_childItems << this << data(0);
-         return m_parentItem->m_childItems.indexOf(this);
+         //kDebug() << d->parentItem->d->childItems << this << data(0);
+         return d->parentItem->d->childItems.indexOf(this);
      }
      kDebug() << "No parent item!";
      return 0;
@@ -125,12 +158,12 @@ int KexiProjectModelItem::row()
 
 QIcon KexiProjectModelItem::icon() const
 {
-    return m_icon;
+    return d->icon;
 }
 
 Qt::ItemFlags KexiProjectModelItem::flags() const
 {
-    if (m_item) {
+    if (d->item) {
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     } else {
         return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
@@ -141,13 +174,13 @@ void KexiProjectModelItem::removeChild(const KexiPart::Item& item)
 {
     KexiProjectModelItem *to_delete = 0;
     int i = 0;
-    if (!m_item) {
-        foreach(KexiProjectModelItem *child, m_childItems) {
+    if (!d->item) {
+        foreach(KexiProjectModelItem *child, d->childItems) {
             ++i;
             if (!to_delete) {
-                if (child->m_item) {
-                    if (child->m_item && child->m_item->identifier() == item.identifier()) {
-                        to_delete = m_childItems.takeAt(i-1);
+                if (child->d->item) {
+                    if (child->d->item && child->d->item->identifier() == item.identifier()) {
+                        to_delete = d->childItems.takeAt(i-1);
                     }
                 }
             }
@@ -162,10 +195,10 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromItem(const KexiPart::It
 {
     KexiProjectModelItem* itm = 0;
 
-    if (!m_item) {
-        foreach(KexiProjectModelItem *child, m_childItems) {
-            if (child->m_item) {
-               if (child->m_item && child->m_item->identifier() == item.identifier()) {
+    if (!d->item) {
+        foreach(KexiProjectModelItem *child, d->childItems) {
+            if (child->d->item) {
+               if (child->d->item && child->d->item->identifier() == item.identifier()) {
                     itm = child;
                 }
             } else {
@@ -183,8 +216,8 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& nam
 {
     KexiProjectModelItem* itm = 0;
 
-    foreach(KexiProjectModelItem *child, m_childItems) {
-        if ((child->m_item && child->m_item->name() == name) || (child->m_info && child->m_info->partClass() == name) || (child->m_groupName == name)) {
+    foreach(KexiProjectModelItem *child, d->childItems) {
+        if ((child->d->item && child->d->item->name() == name) || (child->d->info && child->d->info->partClass() == name) || (child->d->groupName == name)) {
                 itm = child;
         } else {
                 itm = child->modelItemFromName(name);
@@ -198,7 +231,7 @@ KexiProjectModelItem* KexiProjectModelItem::modelItemFromName(const QString& nam
 
 void KexiProjectModelItem::sortChildren()
 {
-    qSort(m_childItems.begin(), m_childItems.end(), itemLessThan);
+    qSort(d->childItems.begin(), d->childItems.end(), itemLessThan);
 }
 
 bool itemLessThan(const KexiProjectModelItem *a, const KexiProjectModelItem *b)
@@ -208,5 +241,5 @@ bool itemLessThan(const KexiProjectModelItem *a, const KexiProjectModelItem *b)
 
 void KexiProjectModelItem::setDirty(bool set)
 {
-    m_dirty = set;
+    d->dirty = set;
 }

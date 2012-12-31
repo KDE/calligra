@@ -55,6 +55,41 @@
 #include <kis_layer_composition.h>
 
 
+/*
+
+  Color model id comparison through the ages:
+
+2.4        2.5          2.6         ideal
+
+ALPHA      ALPHA        ALPHA       ALPHAU8
+
+CMYK       CMYK         CMYK        CMYKAU8
+           CMYKAF32     CMYKAF32
+CMYKA16    CMYKAU16     CMYKAU16
+
+GRAYA      GRAYA        GRAYA       GRAYAU8
+GrayF32    GRAYAF32     GRAYAF32
+GRAYA16    GRAYAU16     GRAYAU16
+
+LABA       LABA         LABA        LABAU16
+           LABAF32      LABAF32
+           LABAU8       LABAU8
+
+RGBA       RGBA         RGBA        RGBAU8
+RGBA16     RGBA16       RGBA16      RGBAU16
+RgbAF32    RGBAF32      RGBAF32
+RgbAF16    RgbAF16      RGBAF16
+
+XYZA16     XYZA16       XYZA16      XYZAU16
+           XYZA8        XYZA8       XYZAU8
+XyzAF16    XyzAF16      XYZAF16
+XyzAF32    XYZAF32      XYZAF32
+
+YCbCrA     YCBCRA8      YCBCRA8     YCBCRAU8
+YCbCrAU16  YCBCRAU16    YCBCRAU16
+           YCBCRF32     YCBCRF32
+ */
+
 using namespace KRA;
 
 struct KisKraLoader::Private
@@ -70,6 +105,45 @@ public:
     QMap<QString, QString> assistantsFilenames;
     QList<KisPaintingAssistant*> assistants;
 };
+
+void convertColorSpaceNames(QString &colorspacename, QString &profileProductName) {
+    if (colorspacename  == "Grayscale + Alpha") {
+        colorspacename  = "GRAYA";
+        profileProductName.clear();
+    }
+    else if (colorspacename == "RgbAF32") {
+        colorspacename = "RGBAF32";
+        profileProductName.clear();
+    }
+    else if (colorspacename == "RgbAF16") {
+        colorspacename = "RGBAF32";
+        profileProductName.clear();
+    }
+    else if (colorspacename == "CMYKA16") {
+        colorspacename = "CMYKAU16";
+    }
+    else if (colorspacename == "GrayF32") {
+        colorspacename =  "GRAYAF32";
+        profileProductName.clear();
+    }
+    else if (colorspacename == "GRAYA16") {
+        colorspacename  = "GRAYAU16";
+    }
+    else if (colorspacename == "XyzAF16") {
+        colorspacename  = "XYZAF16";
+        profileProductName.clear();
+    }
+    else if (colorspacename == "XyzAF32") {
+        colorspacename  = "XYZAF32";
+        profileProductName.clear();
+    }
+    else if (colorspacename == "YCbCrA") {
+        colorspacename  = "YCBCRA8";
+    }
+    else if (colorspacename == "YCbCrAU16") {
+        colorspacename  = "YCBCRAU16";
+    }
+}
 
 KisKraLoader::KisKraLoader(KisDoc2 * document, int syntaxVersion)
         : m_d(new Private())
@@ -136,18 +210,8 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
 
         profileProductName = element.attribute(PROFILE);
         // A hack for an old colorspacename
-        if (colorspacename  == "Grayscale + Alpha") {
-            colorspacename  = "GRAYA";
-            profileProductName = QString::null;
-        }
-        if (colorspacename == "RgbAF32") {
-            colorspacename = "RGBAF32";
-            profileProductName = QString::null;
-        }
-        if (colorspacename == "RgbAF16") {
-            colorspacename = "RGBAF32";
-            profileProductName = QString::null;
-        }
+        convertColorSpaceNames(colorspacename, profileProductName);
+
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
         QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(colorspacename).id();
 
@@ -159,8 +223,12 @@ KisImageWSP KisKraLoader::loadXML(const KoXmlElement& element)
         }
 
         if (cs == 0) {
-            warnFile << "Could not open colorspace";
-            return KisImageWSP(0);
+            // try once more without the profile
+            cs = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
+            if (cs == 0) {
+                warnFile << "Could not open colorspace";
+                return KisImageWSP(0);
+            }
         }
 
         image = new KisImage(m_d->document->createUndoStore(), width, height, cs, name);
@@ -189,7 +257,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 {
 
     // icc profile: if present, this overrides the profile product name loaded in loadXML.
-    QString location = external ? QString::null : uri;
+    QString location = external ? QString() : uri;
     location += m_d->imageName + ICC_PATH;
     if (store->hasFile(location)) {
         store->open(location);
@@ -217,7 +285,7 @@ void KisKraLoader::loadBinaryData(KoStore * store, KisImageWSP image, const QStr
 
     // annotations
     // exif
-    location = external ? QString::null : uri;
+    location = external ? QString() : uri;
     location += m_d->imageName + EXIF_PATH;
     if (store->hasFile(location)) {
         QByteArray data;
@@ -256,7 +324,7 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
         const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(loadedAssistant.value());
         if (factory) {
             assistant = factory->createPaintingAssistant();
-            location = external ? QString::null : uri;
+            location = external ? QString() : uri;
             location += m_d->imageName + ASSISTANTS_PATH;
             file_path = location + loadedAssistant.key();
             assistant->loadXml(store, handleMap, file_path);
@@ -324,10 +392,15 @@ KisNodeSP KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image,
         colorSpace = image->colorSpace();
     } else {
         QString colorspacename = element.attribute(COLORSPACE_NAME);
+        QString profileProductName;
+
+        convertColorSpaceNames(colorspacename, profileProductName);
+
         QString colorspaceModel = KoColorSpaceRegistry::instance()->colorSpaceColorModelId(colorspacename).id();
         QString colorspaceDepth = KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(colorspacename).id();
         dbgFile << "Searching color space: " << colorspacename << colorspaceModel << colorspaceDepth << " for layer: " << name;
         // use default profile - it will be replaced later in completeLoading
+
         colorSpace = KoColorSpaceRegistry::instance()->colorSpace(colorspaceModel, colorspaceDepth, "");
         dbgFile << "found colorspace" << colorSpace;
     }

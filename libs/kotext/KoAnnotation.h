@@ -61,14 +61,7 @@ public:
     virtual ~KoAnnotation();
 
     /// reimplemented from super
-    void saveOdf(KoShapeSavingContext &context, int position) const;
-
-    /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document,
-                                int posInDocument, const QTextCharFormat &format);
-    /// reimplemented from super
-    virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
-                       const QRectF &rect);
+    virtual void saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const;
 
     /**
      * Set the new name for this annotation

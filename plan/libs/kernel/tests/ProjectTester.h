@@ -79,6 +79,8 @@ private slots:
     void fixedInterval();
     void estimateDuration();
 
+    void startStart();
+
 private:
     Project *m_project;
     Calendar *m_calendar;

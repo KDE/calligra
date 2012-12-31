@@ -339,12 +339,12 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
             m_reportPage = new KoReportPage(this, m_reportDocument);
             m_reportPage->setObjectName("KexiReportPage");
-	    
-	    m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
-	    m_reportScene->addItem(m_reportPage);
-	    m_reportPage->setPos(20,20);
-	    m_reportView->centerOn(0,0);
-	    
+
+            m_reportScene->setSceneRect(0,0,m_reportPage->rect().width() + 40, m_reportPage->rect().height() + 40);
+            m_reportScene->addItem(m_reportPage);
+            m_reportPage->setPos(20,20);
+            m_reportView->centerOn(0,0);
+
         } else {
             KMessageBox::error(this, i18n("Report schema appears to be invalid or corrupt"), i18n("Opening failed"));
         }
@@ -382,46 +382,46 @@ void KexiReportView::addNewRecordRequested()
 
 void KexiReportView::moveToFirstRecordRequested()
 {
-	if (m_currentPage != 1) {
-		m_currentPage = 1;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);  
-		#endif
-	}
+        if (m_currentPage != 1) {
+                m_currentPage = 1;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToLastRecordRequested()
 {
-	if (m_currentPage != m_pageCount) {
-		m_currentPage = m_pageCount;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);
-		#endif
-	}
+        if (m_currentPage != m_pageCount) {
+                m_currentPage = m_pageCount;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToNextRecordRequested()
 {
-	if (m_currentPage < m_pageCount) {
-		m_currentPage++;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);
-		#endif
-	}
+        if (m_currentPage < m_pageCount) {
+                m_currentPage++;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToPreviousRecordRequested()
 {
-	if (m_currentPage > 1) {
-		m_currentPage--;
-		m_reportPage->renderPage(m_currentPage);
-		#ifndef KEXI_MOBILE
-		m_pageSelector->setCurrentRecordNumber(m_currentPage);
-		#endif
-	}
+        if (m_currentPage > 1) {
+                m_currentPage--;
+                m_reportPage->renderPage(m_currentPage);
+                #ifndef KEXI_MOBILE
+                m_pageSelector->setCurrentRecordNumber(m_currentPage);
+                #endif
+        }
 }
 
 void KexiReportView::moveToRecordRequested(uint r)

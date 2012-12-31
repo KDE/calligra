@@ -1,7 +1,5 @@
 #project(planwork)
 
-include (${CMAKE_SOURCE_DIR}/kdgantt/CMakeLists.txt)
-
 add_subdirectory( templates )
 add_subdirectory( pics )
 #add_subdirectory( toolbar )
@@ -37,7 +35,7 @@ kde4_add_ui_files(planworkfactory_LIB_SRCS
 
 kde4_add_kcfg_files(planworksettings_SRCS planworksettings.kcfgc)
 
-kde4_add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS} ${libkdgantt_SRCS})
+kde4_add_library(planworkfactory SHARED ${planworkfactory_LIB_SRCS} ${planworksettings_SRCS})
 
 target_link_libraries(
     planworkfactory
@@ -46,6 +44,7 @@ target_link_libraries(
     kplatoui
     planprivate
     komain
+    calligrakdgantt
     )
 
 set_target_properties(planworkfactory PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )

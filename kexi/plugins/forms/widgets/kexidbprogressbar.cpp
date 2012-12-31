@@ -32,6 +32,7 @@ KexiDBProgressBar::~KexiDBProgressBar()
 
 void KexiDBProgressBar::setInvalidState(const QString& displayText)
 {
+    Q_UNUSED(displayText);
     m_invalidState = true;
     setEnabled(false);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
@@ -51,7 +52,7 @@ KexiDBProgressBar::setEnabled(bool enabled)
 
 void KexiDBProgressBar::setValueInternal(const QVariant&, bool)
 {
-    QProgressBar::setValue(m_origValue.toInt());
+    QProgressBar::setValue(KexiDataItemInterface::originalValue().toInt());
 }
 
 QVariant

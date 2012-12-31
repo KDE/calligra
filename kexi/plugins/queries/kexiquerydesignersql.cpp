@@ -284,7 +284,6 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         // Use query with Kexi keywords (but not driver-specific keywords) escaped.
         temp->setQuery(query);
 //  temp->query = query;
-        KexiDB::Connection* conn = KexiMainWindowIface::global()->project()->dbConnection();
         KexiDB::Connection::SelectStatementOptions options;
         options.identifierEscaping = KexiDB::Driver::EscapeKexi;
         options.addVisibleLookupColumns = false;

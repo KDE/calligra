@@ -37,19 +37,36 @@
 
 using namespace KFormDesigner;
 
-ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
-        : QWidget(set->m_widget->parentWidget()), m_set(set), m_pos(pos)
+class ResizeHandle::Private
 {
-// setBackgroundMode(Qt::NoBackground);
-    m_dragging = false;
-    //m_editing = editing;
+public:
+    Private(ResizeHandleSet* set_, HandlePos pos_);
+    ~Private();
+
+    ResizeHandleSet *set;
+    HandlePos pos;
+    bool dragging;
+    int x;
+    int y;
+};
+
+ResizeHandle::Private::Private(ResizeHandleSet *set_, HandlePos pos_) : set(set_), pos(pos_), dragging(false)
+{
+
+}
+
+ResizeHandle::Private::~Private()
+{
+
+}
+
+ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
+    : QWidget(set->widget()->parentWidget()), d(new Private(set, pos))
+{
     setEditingMode(editing);
     setFixedSize(6, 6);
-    //m_buddy = buddy;
-    //buddy->installEventFilter(this);
-    m_set->m_widget->installEventFilter(this);
+    d->set->widget()->installEventFilter(this);
     setAutoFillBackground(true);
-//js installEventFilter(this);
 
     updatePos();
     show();
@@ -57,6 +74,7 @@ ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
 
 ResizeHandle::~ResizeHandle()
 {
+    delete d;
 }
 
 void ResizeHandle::setEditingMode(bool editing)
@@ -68,37 +86,37 @@ void ResizeHandle::setEditingMode(bool editing)
 
 void ResizeHandle::updatePos()
 {
-    switch (m_pos) {
+    switch (d->pos) {
     case TopLeftCorner:
-        move(m_set->m_widget->x() - 3, m_set->m_widget->y() - 3);
+        move(d->set->widget()->x() - 3, d->set->widget()->y() - 3);
         setCursor(QCursor(Qt::SizeFDiagCursor));
         break;
     case TopCenter:
-        move(m_set->m_widget->x() + m_set->m_widget->width() / 2 - 3, m_set->m_widget->y() - 3);
+        move(d->set->widget()->x() + d->set->widget()->width() / 2 - 3, d->set->widget()->y() - 3);
         setCursor(QCursor(Qt::SizeVerCursor));
         break;
     case TopRightCorner:
-        move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() - 3);
+        move(d->set->widget()->x() + d->set->widget()->width() - 3, d->set->widget()->y() - 3);
         setCursor(QCursor(Qt::SizeBDiagCursor));
         break;
     case LeftCenter:
-        move(m_set->m_widget->x() - 3, m_set->m_widget->y() + m_set->m_widget->height() / 2 - 3);
+        move(d->set->widget()->x() - 3, d->set->widget()->y() + d->set->widget()->height() / 2 - 3);
         setCursor(QCursor(Qt::SizeHorCursor));
         break;
     case RightCenter:
-        move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() + m_set->m_widget->height() / 2 - 3);
+        move(d->set->widget()->x() + d->set->widget()->width() - 3, d->set->widget()->y() + d->set->widget()->height() / 2 - 3);
         setCursor(QCursor(Qt::SizeHorCursor));
         break;
     case BottomLeftCorner:
-        move(m_set->m_widget->x() - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
+        move(d->set->widget()->x() - 3, d->set->widget()->y() + d->set->widget()->height() - 3);
         setCursor(QCursor(Qt::SizeBDiagCursor));
         break;
     case BottomCenter:
-        move(m_set->m_widget->x() + m_set->m_widget->width() / 2 - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
+        move(d->set->widget()->x() + d->set->widget()->width() / 2 - 3, d->set->widget()->y() + d->set->widget()->height() - 3);
         setCursor(QCursor(Qt::SizeVerCursor));
         break;
     case BottomRightCorner:
-        move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() + m_set->m_widget->height() - 3);
+        move(d->set->widget()->x() + d->set->widget()->width() - 3, d->set->widget()->y() + d->set->widget()->height() - 3);
         setCursor(QCursor(Qt::SizeFDiagCursor));
         break;
     }
@@ -106,26 +124,9 @@ void ResizeHandle::updatePos()
 
 bool ResizeHandle::eventFilter(QObject *o, QEvent *ev)
 {
-    if (((ev->type() == QEvent::Move) || (ev->type() == QEvent::Resize)) && o == m_set->m_widget) {
-        //QTimer::singleShot(0,this,SLOT(updatePos()));
+    if (((ev->type() == QEvent::Move) || (ev->type() == QEvent::Resize)) && o == d->set->widget()) {
         updatePos();
     }
-    /* else if (ev->type() == QEvent::Paint && o == this) {
-        QPainter p;
-        p.begin(m_set->m_widget, true);
-        const bool unclipped = testWFlags( WPaintUnclipped );
-        setWFlags( WPaintUnclipped );
-
-        p.setPen(QPen(white, 10));
-        p.setRasterOp(XorROP);
-        p.drawRect( 20, 20, 100, 100 );//m_set->m_widget->x(), m_set->m_widget->y(), 150, 150 );
-        p.drawRect( m_set->m_widget->x(), m_set->m_widget->y(), 150, 150 );
-        if (!unclipped)
-          clearWFlags( WPaintUnclipped );
-        p.end();
-
-        return true;
-      }*/
     return false;
 }
 
@@ -134,42 +135,38 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
     if (ev->button() != Qt::LeftButton)
         return;
 
-    const bool startDragging = !m_dragging;
-    m_dragging = true;
-    m_x = ev->x();
-    m_y = ev->y();
+    const bool startDragging = !d->dragging;
+    d->dragging = true;
+    d->x = ev->x();
+    d->y = ev->y();
     if (startDragging) {
-// m_form->resizeHandleDraggingStarted(m_set->widget());
-        m_set->resizeStarted();
-/*2.0        WidgetFactory *wfactory = m_set->m_form->library()->factoryForClassName(m_set->widget()->metaObject()->className());
-        if (wfactory)
-            wfactory->resetEditor();*/
-        m_set->form()->resetInlineEditor();
+        d->set->resizeStarted();
+        d->set->form()->resetInlineEditor();
     }
 }
 
 void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 {
-    int gridX = m_set->m_form->gridSize();
-    int gridY = m_set->m_form->gridSize();
+    int gridX = d->set->form()->gridSize();
+    int gridY = d->set->form()->gridSize();
 
-    if (!m_dragging)
+    if (!d->dragging)
         return;
 
-    int tmpx = m_set->m_widget->x();
-    int tmpy = m_set->m_widget->y();
-    int tmpw = m_set->m_widget->width();
-    int tmph = m_set->m_widget->height();
+    int tmpx = d->set->widget()->x();
+    int tmpy = d->set->widget()->y();
+    int tmpw = d->set->widget()->width();
+    int tmph = d->set->widget()->height();
 
-    int dummyx = ev->x() - m_x;
-    int dummyy = ev->y() - m_y;
+    int dummyx = ev->x() - d->x;
+    int dummyy = ev->y() - d->y;
 
-    if (m_set->m_form->isSnapWidgetsToGridEnabled() && ev->buttons() == Qt::LeftButton && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier)) {
+    if (d->set->form()->isSnapWidgetsToGridEnabled() && ev->buttons() == Qt::LeftButton && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier)) {
         dummyx = alignValueToGrid(dummyx, gridX);
         dummyy = alignValueToGrid(dummyy, gridY);
     }
 
-    switch (m_pos) {
+    switch (d->pos) {
     case TopRightCorner:
         tmpw += dummyx;
         tmpy += dummyy;
@@ -207,13 +204,13 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     }
 
     // Not move the top-left corner further than the bottom-right corner
-    if (tmpx >= m_set->m_widget->x() + m_set->m_widget->width()) {
-        tmpx = m_set->m_widget->x() + m_set->m_widget->width() - MINIMUM_WIDTH;
+    if (tmpx >= d->set->widget()->x() + d->set->widget()->width()) {
+        tmpx = d->set->widget()->x() + d->set->widget()->width() - MINIMUM_WIDTH;
         tmpw = MINIMUM_WIDTH;
     }
 
-    if (tmpy >= m_set->m_widget->y() + m_set->m_widget->height()) {
-        tmpy = m_set->m_widget->y() + m_set->m_widget->height() - MINIMUM_HEIGHT;
+    if (tmpy >= d->set->widget()->y() + d->set->widget()->height()) {
+        tmpy = d->set->widget()->y() + d->set->widget()->height() - MINIMUM_HEIGHT;
         tmph = MINIMUM_HEIGHT;
     }
 
@@ -221,22 +218,22 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     if (tmpx < 0) {
         tmpw += tmpx;
         tmpx = 0;
-    } else if (tmpx + tmpw > m_set->m_widget->parentWidget()->width()) {
-        tmpw = m_set->m_widget->parentWidget()->width() - tmpx;
+    } else if (tmpx + tmpw > d->set->widget()->parentWidget()->width()) {
+        tmpw = d->set->widget()->parentWidget()->width() - tmpx;
     }
 
     if (tmpy < 0) {
         tmph += tmpy;
         tmpy = 0;
-    } else if (tmpy + tmph > m_set->m_widget->parentWidget()->height()) {
-        tmph = m_set->m_widget->parentWidget()->height() - tmpy;
+    } else if (tmpy + tmph > d->set->widget()->parentWidget()->height()) {
+        tmph = d->set->widget()->parentWidget()->height() - tmpy;
     }
 
-    const bool shouldBeMoved = (tmpx != m_set->m_widget->x()) || (tmpy != m_set->m_widget->y());
-    const bool shouldBeResized = (tmpw != m_set->m_widget->width()) || (tmph != m_set->m_widget->height());
+    const bool shouldBeMoved = (tmpx != d->set->widget()->x()) || (tmpy != d->set->widget()->y());
+    const bool shouldBeResized = (tmpw != d->set->widget()->width()) || (tmph != d->set->widget()->height());
 
     if (shouldBeMoved && shouldBeResized) {
-        m_set->m_widget->hide();
+        d->set->widget()->hide();
     }
 
     // Resize it
@@ -244,108 +241,119 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
         // Keep a QSize(10, 10) minimum size
         tmpw = (tmpw < MINIMUM_WIDTH) ? MINIMUM_WIDTH : tmpw;
         tmph = (tmph < MINIMUM_HEIGHT) ? MINIMUM_HEIGHT : tmph;
-        m_set->m_widget->resize(tmpw, tmph);
+        d->set->widget()->resize(tmpw, tmph);
     }
 
     // Move the widget if necessary
     if (shouldBeMoved) {
-        m_set->m_widget->move(tmpx, tmpy);
+        d->set->widget()->move(tmpx, tmpy);
     }
 
     if (shouldBeMoved && shouldBeResized) {
-        m_set->m_widget->show();
+        d->set->widget()->show();
     }
 }
 
 void ResizeHandle::mouseReleaseEvent(QMouseEvent *)
 {
-    m_dragging = false;
-    m_set->resizeFinished();
+    d->dragging = false;
+    d->set->resizeFinished();
 }
 
 void ResizeHandle::paintEvent(QPaintEvent *)
 {
-    //draw XORed background
-
-    /*QPainter p(this);
-    p.setRasterOp(XorROP);
-    p.fillRect(QRect(0, 0, 6, 6),white);
-    bitBlt( this, QPoint(0,0), parentWidget(), rect(), XorROP);*/
 }
 
 /////////////// ResizeHandleSet //////////////////
 
-ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form, bool editing)
-        : QObject(modify->parentWidget()), /*m_widget(modify),*/ m_form(form)
+class ResizeHandleSet::Private
 {
-    m_widget = 0;
-    /*QWidget *parent = modify->parentWidget();
+public:
+    Private();
+    ~Private();
 
-    handles[0] = new ResizeHandle( modify, ResizeHandle::TopLeft, editing);
-    handles[1] = new ResizeHandle( modify, ResizeHandle::TopCenter, editing);
-    handles[2] = new ResizeHandle( modify, ResizeHandle::TopRight, editing);
-    handles[3] = new ResizeHandle( modify, ResizeHandle::LeftCenter, editing);
-    handles[4] = new ResizeHandle( modify, ResizeHandle::RightCenter, editing);
-    handles[5] = new ResizeHandle( modify, ResizeHandle::BottomLeft, editing);
-    handles[6] = new ResizeHandle( modify, ResizeHandle::BottomCenter, editing);
-    handles[7] = new ResizeHandle( modify, ResizeHandle::BottomRight, editing);*/
+    QRect origWidgetRect;
+    QPointer<ResizeHandle> handles[8];
+    QPointer<QWidget> widget;
+    QPointer<Form>   form;
+    bool  editing;
+};
+
+ResizeHandleSet::Private::Private() : widget(0)
+{
+
+}
+
+ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form, bool editing)
+    : QObject(modify->parentWidget()), d(new Private)
+{
     setWidget(modify, editing);
 }
 
 ResizeHandleSet::~ResizeHandleSet()
 {
     for (int i = 0; i < 8; i++)
-        delete m_handles[i];
+        delete d->handles[i];
 }
 
 void
 ResizeHandleSet::setWidget(QWidget *modify, bool editing)
 {
-    if (modify == m_widget)
+    if (modify == d->widget)
         return;
 
-    if (m_widget) {
+    if (d->widget) {
         for (int i = 0; i < 8; i++)
-            delete m_handles[i];
+            delete d->handles[i];
     }
 
-    m_widget = modify;
+    d->widget = modify;
 
-    m_handles[0] = new ResizeHandle(this, ResizeHandle::TopLeftCorner, editing);
-    m_handles[1] = new ResizeHandle(this, ResizeHandle::TopCenter, editing);
-    m_handles[2] = new ResizeHandle(this, ResizeHandle::TopRightCorner, editing);
-    m_handles[3] = new ResizeHandle(this, ResizeHandle::LeftCenter, editing);
-    m_handles[4] = new ResizeHandle(this, ResizeHandle::RightCenter, editing);
-    m_handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeftCorner, editing);
-    m_handles[6] = new ResizeHandle(this, ResizeHandle::BottomCenter, editing);
-    m_handles[7] = new ResizeHandle(this, ResizeHandle::BottomRightCorner, editing);
+    d->handles[0] = new ResizeHandle(this, ResizeHandle::TopLeftCorner, editing);
+    d->handles[1] = new ResizeHandle(this, ResizeHandle::TopCenter, editing);
+    d->handles[2] = new ResizeHandle(this, ResizeHandle::TopRightCorner, editing);
+    d->handles[3] = new ResizeHandle(this, ResizeHandle::LeftCenter, editing);
+    d->handles[4] = new ResizeHandle(this, ResizeHandle::RightCenter, editing);
+    d->handles[5] = new ResizeHandle(this, ResizeHandle::BottomLeftCorner, editing);
+    d->handles[6] = new ResizeHandle(this, ResizeHandle::BottomCenter, editing);
+    d->handles[7] = new ResizeHandle(this, ResizeHandle::BottomRightCorner, editing);
 }
 
 void
 ResizeHandleSet::raise()
 {
     for (int i = 0; i < 8; i++)
-        m_handles[i]->raise();
+        d->handles[i]->raise();
 }
 
 void ResizeHandleSet::setEditingMode(bool editing)
 {
     for (int i = 0; i < 8; i++)
-        m_handles[i]->setEditingMode(editing);
+        d->handles[i]->setEditingMode(editing);
 }
 
 void ResizeHandleSet::resizeStarted()
 {
-    m_origWidgetRect = m_widget->geometry();
+    d->origWidgetRect = d->widget->geometry();
 }
 
 void ResizeHandleSet::resizeFinished()
 {
-    if (m_widget) {
-        kDebug() << "old:" << m_origWidgetRect << "new:" << m_widget->geometry();
-        m_form->addPropertyCommand(m_widget->objectName().toLatin1(), m_origWidgetRect,
-                                   m_widget->geometry(), "geometry", Form::DontExecuteCommand);
+    if (d->widget) {
+        kDebug() << "old:" << d->origWidgetRect << "new:" << d->widget->geometry();
+        d->form->addPropertyCommand(d->widget->objectName().toLatin1(), d->origWidgetRect,
+                                   d->widget->geometry(), "geometry", Form::DontExecuteCommand);
     }
+}
+
+QWidget* ResizeHandleSet::widget() const
+{
+    return d->widget;
+}
+
+Form* ResizeHandleSet::form() const
+{
+    return d->form;
 }
 
 #include "resizehandle.moc"

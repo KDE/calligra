@@ -242,14 +242,15 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    KisFilterConfiguration* filter = 0;
-    if (node->inherits("KisFilterMask")) {
-        filter = static_cast<KisFilterMask*>(node)->filter();
-    } else if (node->inherits("KisAdjustmentLayer")) {
-        filter = static_cast<KisAdjustmentLayer*>(node)->filter();
-    } else if (node->inherits("KisGeneratorLayer")) {
-        filter = static_cast<KisGeneratorLayer*>(node)->filter();
+    KisNodeFilterInterface *filterInterface =
+        dynamic_cast<KisNodeFilterInterface*>(node);
+
+    KisSafeFilterConfigurationSP filter;
+
+    if (filterInterface) {
+        filter = filterInterface->filter();
     }
+
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);
         if (m_store->open(location)) {
@@ -295,7 +296,7 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
 QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)
 {
 
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     Q_ASSERT(m_nodeFileNames.contains(node));
     location += m_name + LAYER_PATH + m_nodeFileNames[node] + suffix;
     return location;

@@ -368,7 +368,7 @@ QString CASpreadsheetHandler::rightToolbarSource() const
 
 QString CASpreadsheetHandler::bottomToolbarSource() const
 {
-    return "SpreadsheetFindToolbar.qml";
+    return "FindToolbar.qml";
 }
 
 int CASpreadsheetHandler::currentSheetNumber() const

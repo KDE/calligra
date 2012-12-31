@@ -82,7 +82,7 @@ void KPrDeleteSlidesCommand::redo()
     Q_UNUSED(index); // to build with unused-but-set-variable
     customShows.removeDuplicates();
     //Save custom slides shows
-    foreach (QString name, customShows) {
+    foreach (const QString &name, customShows) {
         m_customSlideShows.insert(name, m_document->customSlideShows()->getByName(name));
     }
     //Remove slide from all custom slides shows

@@ -49,7 +49,7 @@ private slots:
     void slotUpdateSlides();
     void slotViewChanged();
 public:
-    SlideView(SlideLoader* loader, QWidget* parent = 0);
+    explicit SlideView(SlideLoader* loader, QWidget* parent = 0);
 public slots:
     void setView(qreal zoomFactor, int h, int v);
 signals:
