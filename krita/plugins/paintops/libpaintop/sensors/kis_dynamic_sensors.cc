@@ -34,7 +34,7 @@ qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
     m_lastTime = info.currentTime();
     double currentMove = info.movement().norm() / deltaTime;
     // Average it to get nicer result, at the price of being less mathematically correct,
-    // but we quicly reach a situation where dt = 1 and currentMove = 1
+    // but we quickly reach a situation where dt = 1 and currentMove = 1
     m_speed = qMin(1.0, (m_speed * 0.9 + currentMove * 0.1));
     return m_speed;
 }
