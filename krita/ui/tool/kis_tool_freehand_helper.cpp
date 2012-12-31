@@ -220,7 +220,6 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
             || m_d->smoothingOptions.smoothingType == KisSmoothingOptions::WEIGHTED_SMOOTHING)
     {
         // Now paint between the coordinates, using the bezier curve interpolation
-        // The old, completely unsmoothed line-between-points option is gone.
         if (!m_d->haveTangent) {
             m_d->haveTangent = true;
 
