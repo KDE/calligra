@@ -56,8 +56,7 @@ public:
     enum SpecialButton {
         AspectMode = 1, ///< changing aspect mode
         ZoomToSelection = 2, ///< zooms to current selection
-        ZoomToAll = 4, ///< zooms to the whole content of the document
-        ZoomTo100 = 5 ///< zooms to 100%
+        ZoomToAll = 4 ///< zooms to the whole content of the document
     };
     Q_DECLARE_FLAGS(SpecialButtons, SpecialButton)
 

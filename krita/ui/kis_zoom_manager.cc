@@ -39,7 +39,7 @@
 #include <KoRulerController.h>
 #include <KoUnit.h>
 #include <KoDpi.h>
-#include <KoIcon.h>
+
 
 #include "kis_doc2.h"
 #include "kis_view2.h"
@@ -102,7 +102,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
 
     KisConfig cfg;
-    m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, KoZoomAction::AspectMode | KoZoomAction::ZoomTo100, this);
+    m_zoomController = new KisZoomController(m_canvasController, converter, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
 
