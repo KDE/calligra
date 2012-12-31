@@ -31,6 +31,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 
+#include <math.h>
 
 struct KisToolFreehandHelper::Private
 {
@@ -59,7 +60,7 @@ struct KisToolFreehandHelper::Private
 
     QTimer airbrushingTimer;
 
-    QList<KisPaintInformation*> history;
+    QList<KisPaintInformation> history;
 };
 
 
@@ -150,35 +151,88 @@ void KisToolFreehandHelper::paint(KoPointerEvent *event)
                                          m_d->previousPaintInformation.pos(),
                                          m_d->strokeTime.elapsed());
 
+    // Smooth the coordinates out using the history and the velocity. See
+    // https://bugs.kde.org/show_bug.cgi?id=281267 and http://www24.atwiki.jp/sigetch_2007/pages/17.html.
+    // This is also implemented in gimp, which is where I cribbed the code from.
     if (m_d->smooth && m_d->smoothnessQuality > 0) {
 
-        //
+        m_d->history.append(info);
 
+        QPointF pos(0.0, 0.0);
 
-        // Now paint between the coordinates, using the bezier curve interpolation
+        if (m_d->history.size() > 3) {
 
-        if (!m_d->haveTangent) {
-            m_d->haveTangent = true;
-            m_d->previousTangent =
-                (info.pos() - m_d->previousPaintInformation.pos()) * 1000 /
-                (3.0 * (info.currentTime() - m_d->previousPaintInformation.currentTime()));
-        } else {
-            QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) * 1000 /
-                                  (3.0 * (info.currentTime() - m_d->olderPaintInformation.currentTime()));
-            qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
-            QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
-            QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
-            paintBezierCurve(m_d->painterInfos,
-                             m_d->olderPaintInformation,
-                             control1,
-                             control2,
-                             m_d->previousPaintInformation);
-            m_d->previousTangent = newTangent;
+            int length = qMin(m_d->smoothnessQuality, m_d->history.size());
+            int minIndex = m_d->history.size() - length;
+
+            qreal gaussianWeight = 0.0;
+            qreal gaussianWeight2 = m_d->smoothnessFactor * m_d->smoothnessFactor;
+            qreal velocitySum = 0.0;
+            qreal scaleSum = 0.0;
+
+            if (gaussianWeight2 != 0.0) {
+                gaussianWeight = 1 / (sqrt(2 * M_PI) * m_d->smoothnessFactor);
+            }
+
+            for (int i = m_d->history.size() - 1; i >= minIndex; i--) {
+                qreal rate = 0.0;
+                const KisPaintInformation nextInfo = m_d->history.at(i);
+                int previousTime = nextInfo.currentTime();
+                if (i > 0) {
+                    previousTime = m_d->history.at(i - 1).currentTime();
+                }
+
+                int deltaTime = qMax(1, nextInfo.currentTime() - previousTime); // make sure deltaTime > 1
+                double velocity = info.movement().norm() / deltaTime;
+//                // Average it to get nicer result, at the price of being less mathematically correct,
+//                // but we quickly reach a situation where dt = 1 and currentMove = 1
+//                qreal velocity = qMin(1.0, (m_speed * 0.9 + currentMove * 0.1));
+                if (gaussianWeight2 != 0.0) {
+                    velocitySum += velocity * 100;
+                    rate = gaussianWeight * exp(-velocitySum * velocitySum / (2 * gaussianWeight2));
+                }
+                scaleSum += rate;
+                pos.setX(pos.x() + rate * nextInfo.pos().x());
+                pos.setY(pos.y() + rate * nextInfo.pos().y());
+            }
+
+            if (scaleSum != 0.0) {
+                pos.setX(pos.x() / scaleSum);
+                pos.setY(pos.y() / scaleSum);
+            }
+            m_d->history.last().setPos(pos);
+            info.setPos(pos);
         }
-        m_d->olderPaintInformation = m_d->previousPaintInformation;
-        m_d->strokeTimeoutTimer.start(100);
-
     }
+
+    // Now paint between the coordinates, using the bezier curve interpolation
+    // The old, completely unsmoothed line-between-points option is gone.
+    if (!m_d->haveTangent) {
+        m_d->haveTangent = true;
+
+        // XXX: 3.0 is a magic number I don't know anything about
+        //      1.0 was the old default value for smoothness, and anything lower than that
+        //      gave horrible results, so remove that setting.
+        m_d->previousTangent =
+                (info.pos() - m_d->previousPaintInformation.pos()) /
+                (3.0 * (info.currentTime() - m_d->previousPaintInformation.currentTime()));
+    } else {
+        QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
+                (3.0 * (info.currentTime() - m_d->olderPaintInformation.currentTime()));
+        qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
+        QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
+        QPointF control2 = m_d->previousPaintInformation.pos() - newTangent * scaleFactor;
+        paintBezierCurve(m_d->painterInfos,
+                         m_d->olderPaintInformation,
+                         control1,
+                         control2,
+                         m_d->previousPaintInformation);
+        m_d->previousTangent = newTangent;
+    }
+    m_d->olderPaintInformation = m_d->previousPaintInformation;
+    m_d->strokeTimeoutTimer.start(100);
+
+
 
     m_d->previousPaintInformation = info;
 
@@ -226,7 +280,7 @@ void KisToolFreehandHelper::finishStroke()
     if(m_d->haveTangent) {
         m_d->haveTangent = false;
 
-        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) * 1000 / 3.0;
+        QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) / 3.0;
         qreal scaleFactor = (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
         QPointF control1 = m_d->olderPaintInformation.pos() + m_d->previousTangent * scaleFactor;
         QPointF control2 = m_d->previousPaintInformation.pos() - newTangent;
