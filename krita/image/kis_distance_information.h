@@ -37,7 +37,8 @@ struct KisDistanceInformation {
 
     void clear()
     {
-        distance = 0; spacing = 0;
+        distance = 0;
+        spacing = 0;
     }
 
     double distance;
