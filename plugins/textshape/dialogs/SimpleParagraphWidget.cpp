@@ -103,7 +103,7 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_sortedStylesModel);
-    connect(widget.paragraphStyleCombo, SIGNAL(selected(int)), this, SLOT(styleSelected(int)));
+    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
     connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
     connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
