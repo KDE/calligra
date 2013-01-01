@@ -146,6 +146,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // The text documents to search in will potentially change when we add/remove shapes and after load
     connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
     connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+    refreshFindTexts();
 
     layout->addWidget(toolbar);
 
