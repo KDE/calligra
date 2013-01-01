@@ -1,6 +1,6 @@
 
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core  ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/flow/part ${KDE4_INCLUDES} )
 
 
 ########### next target ###############
@@ -11,7 +11,7 @@ kde4_add_ui_files( karbonimageexport_PART_SRCS ImageExportOptionsWidget.ui )
 
 kde4_add_plugin(karbonimageexport ${karbonimageexport_PART_SRCS})
 
-target_link_libraries(karbonimageexport karbonui komain)
+target_link_libraries(karbonimageexport karbonui flowprivate komain)
 
 install(TARGETS karbonimageexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
