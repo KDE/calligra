@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 
 class QLabel;
-class KexiAboutData;
+class KAboutData;
 class KexiRecentProjects;
 
 #ifndef NDEBUG
@@ -43,7 +43,7 @@ class KexiTester;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
