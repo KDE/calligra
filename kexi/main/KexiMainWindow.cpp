@@ -237,14 +237,17 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
 
     bool GUIenabled = true;
 //! @todo switch GUIenabled off when needed
-    KApplication* app = new KApplication(GUIenabled);
+    bool kappExisted = kapp;
+    KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return (~res) ? 0 : 1;
     }
 
@@ -252,7 +255,9 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
 
     /* Exit requested, e.g. after database removing. */
     if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return 0;
     }
 
@@ -270,7 +275,9 @@ int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
 
     if (true != win->startup()) {
         delete win;
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return 1;
     }
 
