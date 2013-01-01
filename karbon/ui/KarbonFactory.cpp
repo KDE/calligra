@@ -32,7 +32,7 @@
 #include "KarbonFactory.h"
 
 #include "KarbonPart.h"
-#include "KarbonKoDocument.h"
+#include "KarbonDocument.h"
 #include "KarbonAboutData.h"
 
 #include <kaboutdata.h>
@@ -69,7 +69,7 @@ QObject* KarbonFactory::create(const char* /*iface*/, QWidget* /*parentWidget*/,
     Q_UNUSED(keyword);
 
     KarbonPart *part = new KarbonPart(parent);
-    KarbonKoDocument* doc = new KarbonKoDocument(part);
+    KarbonDocument* doc = new KarbonDocument(part);
     part->setDocument(doc);;
     return part;
 }
