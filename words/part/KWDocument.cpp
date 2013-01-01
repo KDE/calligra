@@ -574,6 +574,7 @@ void KWDocument::initEmpty()
     parag->setListStyle(list);
     styleManager->add(parag);
 
+    setMimeTypeAfterLoading("application/vnd.oasis.opendocument.text");
     KoDocument::initEmpty();
     clearUndoHistory();
 }
