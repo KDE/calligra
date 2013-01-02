@@ -481,8 +481,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
                 if (childElement.localName() == "math"
                     && childElement.namespaceURI() == KoXmlNS::math)
                 {
-                    QHash<QString, QString> unknownNamespaces;
-                    copyXmlElement(childElement, *htmlWriter, unknownNamespaces);
+                    copyMathTree(childElement, *htmlWriter, false);
 
                     // We are done with the whole frame.
                     break;
@@ -504,8 +503,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
             // So far we can only an handle embedded object (formula).
             // In the future we will probably be able to handle more types.
             if (type == "application/vnd.oasis.opendocument.formula") {
-
-                handleEmbeddedFormula(href, htmlWriter);
+                handleEmbeddedFormula(href, *htmlWriter);
                 break; // Only one object per frame.
             }
             // ...more types here in the future, e.g. video.
@@ -550,7 +548,7 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
     } // foreach
 }
 
-void OdtHtmlConverter::handleEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter)
+void OdtHtmlConverter::handleEmbeddedFormula(const QString &href, KoXmlWriter &htmlWriter)
 {
     // FIXME: Track down why we need to close() the store here and
     //        whip that code with a wet noodle.
@@ -580,8 +578,8 @@ void OdtHtmlConverter::handleEmbeddedFormula(const QString &href, KoXmlWriter *h
         if (n.isElement()) {
             KoXmlElement el = n.toElement();
             if (el.tagName() == "math") {
-                QHash<QString, QString> unknownNamespaces;
-                copyXmlElement(el, *htmlWriter, unknownNamespaces);
+
+                copyMathTree(el, htmlWriter, false);
 
                 // No need to continue once we have the math:math node.
                 break;
@@ -592,15 +590,47 @@ void OdtHtmlConverter::handleEmbeddedFormula(const QString &href, KoXmlWriter *h
     m_odfStore->close();
 }
 
+void OdtHtmlConverter::copyMathTree(const KoXmlElement &el, KoXmlWriter &htmlWriter,
+                                    bool withNamespaces)
+{
+    // Unfortunately we cannot just call copyXmlElement()
+    // because the top element (math:math) needs a special
+    // treatment of its namespace attribute.
+    htmlWriter.startElement("math");
+    htmlWriter.addAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
+
+    // Copy child elements
+    // Loop through all the child elements of the math:math.
+    QHash<QString, QString> unknownNamespaces;
+    KoXmlNode n = el.firstChild();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (n.isElement()) {
+            copyXmlElement(n.toElement(), htmlWriter, unknownNamespaces, withNamespaces);
+        }
+        else if (n.isText()) {
+            htmlWriter.addTextNode(n.toText().data()/*.toUtf8()*/);
+        }
+    }
+
+    htmlWriter.endElement(); // math
+}
+
 // Note: This code was copied from libs/flake/KoUnavailShape.  It
 // should probably be placed near /libs/odf/KoXml* instead.
 
 void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
-                                      QHash<QString, QString> &unknownNamespaces)
+                                      QHash<QString, QString> &unknownNamespaces,
+                                      bool withNamespaces)
 {
     // Start the element;
     // keep the name in a QByteArray so that it stays valid until end element is called.
-    const QByteArray name(el.nodeName().toAscii());
+    QByteArray name;
+    if (withNamespaces) {
+        name = el.nodeName().toAscii();
+    }
+    else {
+        name = el.tagName().toAscii();
+    }
     kDebug(30503) << "Copying element;" << name;
     writer.startElement(name.constData());
 
@@ -613,22 +643,29 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
             writer.addAttribute(attrPair.second.toAscii(), el.attribute(attrPair.second));
         }
         else {
-            // This somewhat convoluted code is because we need the
-            // namespace, not the namespace URI.
-            QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
-            // in case we don't find the namespace in our list create a own one and use that
-            // so the document created on saving is valid.
-            if (nsShort.isEmpty()) {
-                nsShort = unknownNamespaces.value(attrPair.first);
+            if (withNamespaces) {
+                // This somewhat convoluted code is because we need the
+                // namespace, not the namespace URI.
+                QString nsShort = KoXmlNS::nsURI2NS(attrPair.first.toAscii());
+                // In case we don't find the namespace in our list create a own one and use that
+                // so the document created on saving is valid.
                 if (nsShort.isEmpty()) {
-                    nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
-                    unknownNamespaces.insert(attrPair.first, nsShort);
+                    nsShort = unknownNamespaces.value(attrPair.first);
+                    if (nsShort.isEmpty()) {
+                        nsShort = QString("ns%1").arg(unknownNamespaces.size() + 1);
+                        unknownNamespaces.insert(attrPair.first, nsShort);
+                    }
+                    writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
                 }
-                writer.addAttribute("xmlns:" + nsShort.toAscii(), attrPair.first);
+                QString attr(nsShort + ':' + attrPair.second);
+                writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
+                                                                   attrPair.second));
             }
-            QString attr(nsShort + ':' + attrPair.second);
-            writer.addAttribute(attr.toAscii(), el.attributeNS(attrPair.first,
-                                                               attrPair.second));
+            else {
+                // Don't copy the name space, only the tagname.
+                writer.addAttribute(attrPair.second.toAscii(), el.attributeNS(attrPair.first,
+                                                                              attrPair.second));
+            }
         }
     }
 
@@ -637,7 +674,7 @@ void OdtHtmlConverter::copyXmlElement(const KoXmlElement &el, KoXmlWriter &write
     KoXmlNode n = el.firstChild();
     for (; !n.isNull(); n = n.nextSibling()) {
         if (n.isElement()) {
-            copyXmlElement(n.toElement(), writer, unknownNamespaces);
+            copyXmlElement(n.toElement(), writer, unknownNamespaces, withNamespaces);
         }
         else if (n.isText()) {
             writer.addTextNode(n.toText().data()/*.toUtf8()*/);
