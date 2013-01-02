@@ -21,35 +21,35 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
+    onConfigurationChanged: {
+        brushSize.value = configuration.readProperty("brushSize");
+        smooth.value = configuration.readProperty("smooth");
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: brushSize;
             width: parent.width;
-            height: Constants.GridHeight;
+            placeholder: "Brush size";
+            min: 1; max: 5; decimals: 0;
+            onValueChanged: setProp("halfWidth", value);
         }
-        Text {
+        RangeInput {
+            id: smooth;
             width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
-        }
-        Item {
-            width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            placeholder: "Smooth";
+            min: 10; max: 255; decimals: 0;
+            onValueChanged: setProp("smooth", value);
         }
     }
 }
