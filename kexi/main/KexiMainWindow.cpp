@@ -231,20 +231,23 @@ void KexiMainWindowTabWidget::setTabIndexFromContextMenu(int clickedIndex)
 //-------------------------------------------------
 
 //static
-int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutData)
+int KexiMainWindow::create(int argc, char *argv[], const KAboutData &aboutData)
 {
     Kexi::initCmdLineArgs(argc, argv, aboutData);
 
     bool GUIenabled = true;
 //! @todo switch GUIenabled off when needed
-    KApplication* app = new KApplication(GUIenabled);
+    bool kappExisted = kapp;
+    KApplication* app = kapp ? kapp : new KApplication(GUIenabled);
 
     KGlobal::locale()->insertCatalog("calligra");
     KGlobal::locale()->insertCatalog("koproperty");
 
     tristate res = Kexi::startupHandler().init(argc, argv);
     if (!res || ~res) {
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return (~res) ? 0 : 1;
     }
 
@@ -252,7 +255,9 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
 
     /* Exit requested, e.g. after database removing. */
     if (Kexi::startupHandler().action() == KexiStartupData::Exit) {
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return 0;
     }
 
@@ -270,7 +275,9 @@ int KexiMainWindow::create(int argc, char *argv[], const KexiAboutData &aboutDat
 
     if (true != win->startup()) {
         delete win;
-        delete app;
+        if (!kappExisted) {
+            delete app;
+        }
         return 1;
     }
 
@@ -296,6 +303,9 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         , d(new KexiMainWindow::Private(this))
 {
     setObjectName("KexiMainWindow");
+#ifndef NDEBUG
+    Kexi::tester().addObject(this);
+#endif
 
 //kde4: removed  KImageIO::registerFormats();
 
@@ -1844,7 +1854,10 @@ void KexiMainWindow::setupProjectNavigator()
 
         KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
         d->navigator = new KexiProjectNavigator(navDockableWidget);
-        
+#ifndef NDEBUG
+        Kexi::tester().addObject(d->navigator, "KexiProjectNavigator");
+#endif
+
         navDockableWidget->setWidget(d->navigator);
 
         d->navDockWidget->setWindowTitle(d->navigator->windowTitle());

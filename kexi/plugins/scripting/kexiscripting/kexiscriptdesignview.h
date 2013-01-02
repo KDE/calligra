@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2005 Sebastian Sauer <mail@dipe.org>
 
@@ -97,9 +97,8 @@ private slots:
      */
     void initialize();
 
-    void slotFileNew();
-    void slotFileOpen();
-    void slotFileSave();
+    void slotImport();
+    void slotExport();
 
     /**
      * Handle changes in the property editor.

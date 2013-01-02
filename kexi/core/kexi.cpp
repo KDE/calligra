@@ -18,13 +18,16 @@
 */
 
 #include "kexi.h"
-#include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
 #include "KexiMainWindowIface.h"
 #include <kexiutils/identifier.h>
 #include <db/msghandler.h>
 #include <KoIcon.h>
+
+#ifndef NDEBUG
+#include <kexiutils/KexiTester.h>
+#endif
 
 #include <QTimer>
 #include <QImage>
@@ -76,6 +79,9 @@ public:
     KexiDBConnectionSet recentConnections;
     KexiDB::DriverManager driverManager;
     KexiPart::Manager partManager;
+#ifndef NDEBUG
+    KexiTester tester;
+#endif
 };
 
 KexiInternal *KexiInternal::_int = 0;
@@ -130,6 +136,14 @@ bool& Kexi::tempShowScripts()
 #endif
     return _tempShowScripts;
 }
+
+#ifndef NDEBUG
+KexiTester& Kexi::tester()
+{
+    return KexiInternal::self()->tester;
+}
+
+#endif
 
 //--------------------------------------------------------------------------------
 QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
@@ -308,7 +322,7 @@ ObjectStatus::operator KexiDB::MessageHandler*()
     return msgHandler;
 }
 
-void Kexi::initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData)
+void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData)
 {
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(kexi_options());

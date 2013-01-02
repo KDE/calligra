@@ -28,9 +28,9 @@
 #include <QClipboard>
 
 #include <kdebug.h>
+#include <KAboutData>
 
 #include <main/KexiMainWindow.h>
-#include <core/kexiaboutdata.h>
 #include <core/KexiWindow.h>
 #include <core/KexiView.h>
 #include <core/kexipartitem.h>
@@ -671,7 +671,7 @@ int main(int argc, char *argv[])
     newArgv[0] = qstrdup(argv[0]);
     newArgv[1] = qstrdup("--skip-startup-dialog");
 
-    KexiAboutData aboutdata;
+    KAboutData aboutdata;
     aboutdata.setProgramName("Kexi Alter Table Test");
     int result = KexiMainWindow::create(newArgc, newArgv, aboutdata);
     if (!qApp)
