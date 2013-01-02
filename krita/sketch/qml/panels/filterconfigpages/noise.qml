@@ -21,35 +21,36 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
+    onConfigurationChanged: {
+        level.value = configuration.readProperty("level");
+        opacity.value = configuration.readProperty("opacity");
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: level;
             width: parent.width;
-            height: Constants.GridHeight;
+            placeholder: "Level";
+            min: 0; max: 99; decimals: 0;
+            onValueChanged: setProp("level", value);
         }
-        Text {
+        RangeInput {
+            id: opacity;
             width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
-        }
-        Item {
-            width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            placeholder: "Opacity";
+            min: 0; max: 99; decimals: 0;
+            useExponentialValue: true;
+            onValueChanged: setProp("opacity", value);
         }
     }
 }
