@@ -21,35 +21,46 @@ import "../../components"
 
 Item {
     id: base
+    property QtObject configuration;
+    function applyConfigurationChanges() {
+        fullFilters.applyConfiguration(configuration);
+    }
+    function setProp(name, value) {
+        if(configuration !== null) {
+            configuration.writeProperty(name, value);
+            base.applyConfigurationChanges();
+        }
+    }
+    onConfigurationChanged: {
+        dropsize.value = configuration.readProperty("dropsize");
+        dropletCount.value = configuration.readProperty("number");
+        fishEyes.value = configuration.readProperty("fishEyes");
+    }
     Column {
         anchors.fill: parent;
-        Item {
+        RangeInput {
+            id: dropsize;
             width: parent.width;
-            height: Constants.GridHeight;
+            placeholder: "Drop Size";
+            min: 1; max: 200; decimals: 0;
+            useExponentialValue: true;
+            onValueChanged: setProp("dropsize", value);
         }
-        Text {
+        RangeInput {
+            id: dropletCount;
             width: parent.width;
-            font.pixelSize: Constants.DefaultFontSize;
-            color: Constants.Theme.TextColor;
-            font.family: "Source Sans Pro"
-            wrapMode: Text.WordWrap;
-            horizontalAlignment: Text.AlignHCenter;
-            text: "This filter requires no configuration. Click below to apply it.";
+            placeholder: "Number";
+            min: 1; max: 500; decimals: 0;
+            useExponentialValue: true;
+            onValueChanged: setProp("number", value);
         }
-        Item {
+        RangeInput {
+            id: fishEyes;
             width: parent.width;
-            height: Constants.GridHeight / 2;
-        }
-        Button {
-            width: height;
-            height: Constants.GridHeight
-            anchors.horizontalCenter: parent.horizontalCenter;
-            color: "transparent";
-            image: "../../images/svg/icon-apply.svg"
-            textColor: "white";
-            shadow: false;
-            highlight: false;
-            onClicked: fullFilters.model.activateFilter(fullFilters.currentIndex);
+            placeholder: "Fish Eyes";
+            min: 1; max: 100; decimals: 0;
+            useExponentialValue: true;
+            onValueChanged: setProp("fishEyes", value);
         }
     }
 }
