@@ -49,7 +49,6 @@ Item {
             width: parent.width;
             placeholder: "Opacity";
             min: 0; max: 99; decimals: 0;
-            useExponentialValue: true;
             onValueChanged: setProp("opacity", value);
         }
     }
