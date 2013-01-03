@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef NDEBUG
+
 #include "KexiTester.h"
 
 #include <KDebug>
@@ -71,3 +73,5 @@ QWidget *KexiTester::widget(const QString &name) const
 }
 
 #include "KexiTester.moc"
+
+#endif // !NDEBUG

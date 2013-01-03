@@ -26,13 +26,10 @@ set(kexiutils_LIB_SRCS
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
+  KexiTester.cpp
   
   completer/KexiCompleter.cpp
 )
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-   list(APPEND kexiutils_LIB_SRCS KexiTester.cpp)
-endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 IF (KEXI_MOBILE)
 

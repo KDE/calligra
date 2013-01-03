@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef NDEBUG
 #ifndef KEXITESTER_H
 #define KEXITESTER_H
 
@@ -50,3 +51,4 @@ private:
 };
 
 #endif // KEXITESTER_H
+#endif // !NDEBUG
