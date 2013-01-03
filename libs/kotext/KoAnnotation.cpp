@@ -55,8 +55,9 @@ public:
     QString name;
 
     // The actual contents of the annotation
-    QString creator;
-    QString date;
+    QString creator;    // dc:creator
+    QString date;       // dc:date
+    QString dateString; // meta:date-string
     QTextDocument contents;
 };
 
@@ -137,7 +138,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 
     // FIXME: Load more attributes here
 
-    // Load the metadata (author, date) and contents here.
+    // Load the metadata (author, date, date-string) and contents here.
     KoXmlElement el;
     forEachElement(el, element) {
         if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
@@ -147,7 +148,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
             d->date = el.text();
         }
         else if (el.localName() == "date-string" && el.namespaceURI() == KoXmlNS::meta) {
-            // FIXME: What to do here?
+            d->dateString = el.text();
         }
     }
 
@@ -172,12 +173,18 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
             inlineRdf()->saveOdf(context, writer);
         }
 
+        // Save child elements that are not text contents
         writer->startElement("dc:creator", false);
         writer->addTextNode(d->creator);
         writer->endElement(); // dc:creator
         writer->startElement("dc:date", false);
         writer->addTextNode(d->date);
         writer->endElement(); // dc:date
+        if (!d->dateString.isEmpty()) {
+            writer->startElement("meta:date-string", false);
+            writer->addTextNode(d->dateString);
+            writer->endElement(); // meta:date-string
+        }
 
         KoTextWriter textWriter(context);
         textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
