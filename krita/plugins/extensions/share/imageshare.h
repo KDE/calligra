@@ -25,12 +25,14 @@
 #include <kparts/plugin.h>
 #include "kis_types.h"
 
+class Stash;
 class QUrl;
 
 class KisView2;
 class KisPainter;
 
 class O2DeviantART;
+class SubmitDlg;
 
 class ImageShare : public KParts::Plugin
 {
@@ -44,11 +46,15 @@ private slots:
     void slotImageShare();
     void openBrowser(const QUrl &url);
     void closeBrowser();
+    void showSubmit();
+    void performUpload();
 
 private:
 
     KisView2 *m_view;
     O2DeviantART *m_deviantArt;
+    Stash* m_stash;
+    SubmitDlg* m_submitDlg;
 };
 
 #endif // IMAGESHARE_H

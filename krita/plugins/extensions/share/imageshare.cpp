@@ -37,12 +37,17 @@
 #include "o2deviantart.h"
 #include "dlg_login.h"
 #include "stash.h"
+#include "submitdlg.h"
 
 K_PLUGIN_FACTORY(ImageShareFactory, registerPlugin<ImageShare>();)
 K_EXPORT_PLUGIN(ImageShareFactory("krita"))
 
 ImageShare::ImageShare(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
+        , m_view(0)
+        , m_deviantArt(0)
+        , m_stash(0)
+        , m_submitDlg(0)
 {
     if (parent->inherits("KisView2")) {
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageshare.rc"), true);
@@ -52,6 +57,8 @@ ImageShare::ImageShare(QObject *parent, const QVariantList &)
         connect(action, SIGNAL(triggered()), this, SLOT(slotImageShare()));
 
         m_view = qobject_cast<KisView2*>(parent);
+        m_submitDlg = new SubmitDlg(m_view);
+        connect(m_submitDlg, SIGNAL(accepted()), SLOT(performUpload()));
     }
 }
 
@@ -62,19 +69,24 @@ ImageShare::~ImageShare()
 
 void ImageShare::slotImageShare()
 {
+    if(!m_submitDlg)
+        return;
     m_deviantArt = new O2DeviantART(this);
     m_deviantArt->setClientId("272");
     m_deviantArt->setClientSecret("a8464938f858f68661c4246347f09b62");
 
     connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SLOT(openBrowser(QUrl)));
     connect(m_deviantArt, SIGNAL(closeBrowser()), SLOT(closeBrowser()));
+    connect(m_deviantArt, SIGNAL(linkingSucceeded()), SLOT(showSubmit()));
 
     qDebug() << "slotImageShare" << m_deviantArt->token() << m_deviantArt->linked();
 
     if (!m_deviantArt->linked()) {
         m_deviantArt->link();
     }
-
+    else {
+        showSubmit();
+    }
 }
 
 void ImageShare::openBrowser(const QUrl &url)
@@ -88,6 +100,23 @@ void ImageShare::openBrowser(const QUrl &url)
 void ImageShare::closeBrowser()
 {
     qDebug() << "close browser" << m_deviantArt->token();
+}
+
+void ImageShare::showSubmit()
+{
+    m_stash = new Stash(m_deviantArt, this);
+    m_stash->testCall();
+    m_stash->delta();
+    QList<Submission> subm = m_stash->submissions();
+    foreach(const Submission& sub, subm) {
+        qDebug() << sub.title;
+    }
+    m_submitDlg->open();
+}
+
+void ImageShare::performUpload()
+{
+    qDebug() << m_submitDlg->submitDlg()->txtTitle->text();
 }
 
 #include "imageshare.moc"
