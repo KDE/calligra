@@ -8,10 +8,12 @@ set(kritaimageshare_PART_SRCS
     simplecrypt.cpp
     dlg_login.cpp
     stash.cpp
+    submitdlg.cpp
     )
 
 kde4_add_ui_files(kritaimageshare_PART_SRCS
     dlg_login.ui
+    submit.ui
 )
 
 kde4_add_plugin(kritaimageshare ${kritaimageshare_PART_SRCS})
