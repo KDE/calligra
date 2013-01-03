@@ -262,6 +262,13 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget * parent)
     d->spacer = new QWidget();
     d->spacer->setObjectName("SpecialSpacer");
     layout->addWidget(d->spacer);
+
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if (selection) {
+        d->canvas = canvasController->canvas();
+        connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeChanged()));
+    }
 }
 
 KoFillConfigWidget::~KoFillConfigWidget()
@@ -271,6 +278,11 @@ KoFillConfigWidget::~KoFillConfigWidget()
 
 void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
 {
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+
+    connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeChanged()));
+
     d->canvas = canvas;
 }
 
@@ -307,8 +319,6 @@ void KoFillConfigWidget::noColorSelected()
     if (!selection || !selection->count())
         return;
 
-
-    KoCanvasResourceManager *provider = canvasController->canvas()->resourceManager();
     canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), 0));
 }
 
@@ -412,6 +422,38 @@ void KoFillConfigWidget::updateOpacity(qreal opacity)
     canvasController->canvas()->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0 - opacity / 100));
 }
 
+void KoFillConfigWidget::shapeChanged()
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    KoShape * shape = selection->firstSelectedShape();
+    if (! shape)
+        return;
+
+    updateWidget(shape);
+}
+
+
+void KoFillConfigWidget::updateWidget(KoShape *shape)
+{
+    blockChildSignals(true);
+
+    QColor qColor;
+    KoColorBackground *background = dynamic_cast<KoColorBackground*>(shape->background());
+    if (background)
+        qColor = background->color();
+
+    // We don't want the opacity slider to send any signals when it's only initialized.
+    // Otherwise an undo record is created.
+    d->opacity->blockSignals(true);
+    d->opacity->setValue(100 - shape->transparency() * 100);
+    d->opacity->blockSignals(false);
+
+    d->colorAction->setCurrentColor(qColor);
+
+    blockChildSignals(false);
+}
+
 KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
 {
     if (! shape || ! stops.count())
@@ -435,5 +477,16 @@ KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, co
     }
     return newGradient;
 }
+
+void KoFillConfigWidget::blockChildSignals(bool block)
+{
+    d->colorButton->blockSignals(block);
+    d->colorAction->blockSignals(block);
+    d->gradientAction->blockSignals(block);
+    d->patternAction->blockSignals(block);
+    d->group->blockSignals(block);
+    d->opacity->blockSignals(block);
+}
+
 
 #include <KoFillConfigWidget.moc>
