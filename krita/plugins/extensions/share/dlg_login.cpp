@@ -26,7 +26,12 @@ void DlgLogin::urlChanged(const QUrl &url)
     qDebug() << "URL =" << url << m_deviant->token() << "," << m_accessToken;
     QString str = url.toString();
 
-    if (str.contains("access_token")) {
+    if (!url.queryItemValue("code").isEmpty()) {
+        m_accessToken = url.queryItemValue("code");
+        emit accessTokenObtained();
+        QDialog::accept();
+    }
+    else if (str.contains("access_token")) {
         QStringList query = str.split("#");
         QStringList lst = query[1].split("&");
         for (int i=0; i<lst.count(); i++ ) {
@@ -38,9 +43,6 @@ void DlgLogin::urlChanged(const QUrl &url)
                 QDialog::accept();
             }
         }
-    }
-    else if (str.contains("blank")) {
-        QDialog::close();
     }
 }
 
