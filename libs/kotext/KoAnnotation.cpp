@@ -100,62 +100,65 @@ void KoAnnotation::setMotherFrame(QTextFrame *frame)
 bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     kDebug(32500) << "****** Start Load odf ******";
-    KoTextLoader textLoader(context);
-    QTextCursor cursor(d->textFrame);
 
     QString annotationName = element.attribute("name");
 
     const QString localName(element.localName());
 
-    if (manager()) {
-        // For cut and paste, make sure that the name is unique.
-        d->name = createUniqueAnnotationName(manager()->annotationManager(), annotationName, false);
+    // We need the text range manager.
+    if (!manager()) {
+        return false;
+    }
 
-        if (localName == "annotation") {
-            // We only support annotations for a point to start with.
-            // point, not a region. If we encounter an annotation-end
-            // tag, we will change that.
-            setPositionOnlyMode(true);
+    if (!(localName == "annotation")) {
+        // something pretty weird going on...
+        return false;
+    }
 
-            // Add inline Rdf to the annotation.
-            if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
-                KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
-                if (inlineRdf->loadOdf(element)) {
-                    setInlineRdf(inlineRdf);
-                }
-                else {
-                    delete inlineRdf;
-                    inlineRdf = 0;
-                }
-            }
+    // For cut and paste, make sure that the name is unique.
+    d->name = createUniqueAnnotationName(manager()->annotationManager(), annotationName, false);
 
-            // FIXME: Load more attributes here
+    // We only support annotations for a point to start with.
+    // point, not a region. If we encounter an annotation-end
+    // tag, we will change that.
+    setPositionOnlyMode(true);
 
-            // Load the metadata (author, date) and contents here.
-            KoXmlElement el;
-            forEachElement(el, element) {
-                if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
-                    d->creator = el.text();
-                }
-                else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
-                    d->date = el.text();
-                }
-                else if (el.localName() == "datestring" && el.namespaceURI() == KoXmlNS::meta) {
-                    // FIXME: What to do here?
-                }
-          }
-            textLoader.loadBody(element, cursor);
-
-            kDebug(32500) << "****** End Load ******";
-            kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
+    // Add inline Rdf to the annotation.
+    if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
+        KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
+        if (inlineRdf->loadOdf(element)) {
+            setInlineRdf(inlineRdf);
         }
         else {
-            // something pretty weird going on...
-            return false;
+            delete inlineRdf;
+            inlineRdf = 0;
         }
-        return true;
     }
-    return false;
+
+    // FIXME: Load more attributes here
+
+    // Load the metadata (author, date) and contents here.
+    KoXmlElement el;
+    forEachElement(el, element) {
+        if (el.localName() == "creator" && el.namespaceURI() == KoXmlNS::dc) {
+            d->creator = el.text();
+        }
+        else if (el.localName() == "date" && el.namespaceURI() == KoXmlNS::dc) {
+            d->date = el.text();
+        }
+        else if (el.localName() == "date-string" && el.namespaceURI() == KoXmlNS::meta) {
+            // FIXME: What to do here?
+        }
+    }
+
+    KoTextLoader textLoader(context);
+    QTextCursor cursor(d->textFrame);
+    textLoader.loadBody(element, cursor);
+
+    kDebug(32500) << "****** End Load ******";
+    kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
+
+    return true;
 }
 
 void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const
