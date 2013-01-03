@@ -47,7 +47,8 @@ void Stash::testCall()
     qDebug() << "testCall";
 
     QUrl url("https://www.deviantart.com/api/draft15/placebo");
-
+    QNetworkRequest request(url);
+    int id = m_requestor->get(request);
 }
 
 void Stash::submit(KisImageWSP image, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder)
@@ -92,6 +93,7 @@ void Stash::fetch(const QString &id)
 
 void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data)
 {
+    qDebug() << "Data in" << Q_FUNC_INFO << QString(data);
 }
 
 #include "stash.moc"
