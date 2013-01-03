@@ -78,17 +78,16 @@ void O2DeviantART::onTokenReplyFinished() {
         // Process reply
         QByteArray replyData = tokenReply->readAll();
         QMap<QString, QString> reply;
-        foreach (QString pair, QString(replyData).split("&")) {
-            QStringList kv = pair.split("=");
+        foreach (QString pair, QString(replyData).split(",")) {
+            QStringList kv = pair.split(":");
             if (kv.length() == 2) {
-                reply.insert(kv[0], kv[1]);
+                reply.insert(kv[0].mid(1, kv[0].length()-2), kv[1].mid(1, kv[1].length()-2));
             }
         }
 
         // Interpret reply
         setToken(reply.contains("access_token")? reply.value("access_token"): "");
-        // FIXME: I have no idea how to interpret DeviantART's "expires" value. So let's use a default of 2 hours
-        setExpires(QDateTime::currentMSecsSinceEpoch() / 1000 + 2 * 60 * 60);
+        setExpires(reply.contains("expires_in")? reply.value("expires_in").toInt() : 3600);
         setRefreshToken(reply.contains("refresh_token")? reply.value("refresh_token"): "");
 
         timedReplies_.remove(tokenReply);
