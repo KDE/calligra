@@ -20,6 +20,7 @@
 #include "Plugin.h"
 
 #include <KoCreatePathToolFactory.h>
+#include <KoPencilToolFactory.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
@@ -32,6 +33,7 @@ Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new KoCreatePathToolFactory());
+    KoToolRegistry::instance()->add(new KoPencilToolFactory());
 }
 
 #include <Plugin.moc>

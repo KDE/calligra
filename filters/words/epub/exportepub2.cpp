@@ -124,7 +124,7 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         true,                    // do break into chapters
         false                    // It is not mobi
     };
-    status = converter.convertContent(odfStore, m_metadata, &options, &epub,
+    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &epub,
                                       m_imagesSrcList);
     if (status != KoFilter::OK) {
         delete odfStore;

@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KarbonCurveFit.h"
+#include "KoCurveFit.h"
 #include <KoPathShape.h>
 #include <QVector>
 #include <math.h>

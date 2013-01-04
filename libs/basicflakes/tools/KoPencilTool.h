@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KARBONPENCILTOOL_H_
-#define _KARBONPENCILTOOL_H_
+#ifndef _KOPENCILTOOL_H_
+#define _KOPENCILTOOL_H_
 
 #include <KoToolBase.h>
 #include <QRectF>
@@ -27,12 +27,12 @@ class KoPathShape;
 class KoShapeStroke;
 class KoPathPoint;
 
-class KarbonPencilTool : public KoToolBase
+class FLAKE_EXPORT KoPencilTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    explicit KarbonPencilTool(KoCanvasBase *canvas);
-    ~KarbonPencilTool();
+    explicit KoPencilTool(KoCanvasBase *canvas);
+    ~KoPencilTool();
 
     void paint(QPainter &painter, const KoViewConverter &converter);
     void repaintDecorations();
@@ -48,6 +48,15 @@ public:
 protected:
     virtual QWidget * createOptionWidget();
 
+    /**
+     * Add path shape to document.
+     * This method can be overridden and change the behaviour of the tool. In that case the subclass takes ownership of pathShape.
+     * It gets only called, if there are two or more points in the path.
+     */
+    virtual void addPathShape(KoPathShape* path, bool closePath);
+
+    KoShapeStroke * currentStroke();
+
 private slots:
     void selectMode(int mode);
     void setOptimize(int state);
@@ -57,7 +66,6 @@ private:
     qreal lineAngle(const QPointF &p1, const QPointF &p2);
     void addPoint(const QPointF & point);
     void finish(bool closePath);
-    KoShapeStroke * currentStroke();
 
     /// returns the nearest existing path point
     KoPathPoint* endPointAtPosition(const QPointF &position);
@@ -82,4 +90,4 @@ private:
     KoPathPoint *m_hoveredPoint; ///< an existing path end point the mouse is hovering on
 };
 
-#endif // _KARBONPENCILTOOL_H_
+#endif // _KOPENCILTOOL_H_

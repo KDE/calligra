@@ -25,6 +25,8 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocale>
+#include <KAboutData>
+#include <KGlobal>
 
 #include "kexipartmanager.h"
 #include "kexipart.h"
@@ -87,14 +89,22 @@ bool Manager::lookup()
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
         kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
-        setError(i18n("No \"%1\" service type installed. Check your Kexi installation. Aborting.",
-                      QString("Kexi/Handler")));
+        setError(i18nc("@info", "No <resource>%1</resource> service type installed. "
+                       "Check your <application>%2</application> installation. The application will be closed.",
+                       QLatin1String("Kexi/Handler"), KGlobal::mainComponent().aboutData()->programName()));
         return false;
     }
     KService::List tlist = KServiceTypeTrader::self()->query("Kexi/Handler",
                            "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 
     KConfigGroup cg(KGlobal::config()->group("Parts"));
+    if (!cg.hasKey("Order")) {
+        setError(i18nc("@info",
+                       "Missing or invalid default <application>%1</application> configuration (no <resource>%2</resource> key). "
+                       "Check your <application>%1</application> installation. The application will be closed.",
+                       KGlobal::mainComponent().aboutData()->programName(), QLatin1String("Parts/Order")));
+        return false;
+    }
     const QStringList sl_order = cg.readEntry("Order").split(",");  //we'll set parts in defined order
     QVector<KService::Ptr> ordered(sl_order.count());
 

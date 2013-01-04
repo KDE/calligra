@@ -34,12 +34,16 @@
 #include <kmessagebox.h>
 
 class QLabel;
-class KexiAboutData;
+class KAboutData;
 class KexiRecentProjects;
+
+#ifndef NDEBUG
+class KexiTester;
+#endif
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
@@ -83,6 +87,14 @@ KEXICORE_EXPORT bool& tempShowMacros();
 
 //! false by default, flag loaded on main window startup
 KEXICORE_EXPORT bool& tempShowScripts();
+
+//! false by default, flag loaded on main window startup
+KEXICORE_EXPORT bool& tempShowScripts();
+
+#ifndef NDEBUG
+//! @return global object for setting up tests
+KEXICORE_EXPORT KexiTester& tester();
+#endif
 
 /*! Helper class for storing object status. */
 class KEXICORE_EXPORT ObjectStatus

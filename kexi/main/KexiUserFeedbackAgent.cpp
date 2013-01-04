@@ -26,6 +26,7 @@
 #include <KLocale>
 #include <KDebug>
 #include <KConfigGroup>
+#include <KAboutData>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -231,7 +232,10 @@ void KexiUserFeedbackAgent::sendData()
     if (d->areas == NoAreas) {
         return;
     }
-    
+    if (KGlobal::mainComponent().aboutData()->programName() != i18n(KEXI_APP_NAME)) {
+        // Do not send feedback if this is not really Kexi but a test app based on Kexi
+        return;
+    }
     if (!d->redirectChecked) {
         sendRedirectQuestion();
         return;

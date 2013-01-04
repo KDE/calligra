@@ -32,6 +32,7 @@
 class KComboBox;
 class QLabel;
 class KLineEdit;
+class KPushButton;
 
 class KListWidget;
 
@@ -65,6 +66,9 @@ private:
     Selection*      m_selection;
     KListWidget*    m_list;
     QLabel*         m_rangeName;
+    KPushButton*    m_newButton;
+    KPushButton*    m_editButton;
+    KPushButton*    m_removeButton;
 };
 
 

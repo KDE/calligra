@@ -1,43 +1,40 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
 
-   This library is free software; you can redistribute it and/or
+   This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
+   This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
+   along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VEPSEXPORTDLG_H__
-#define __VEPSEXPORTDLG_H__
+#ifndef GLOBALSEARCHTEST_H
+#define GLOBALSEARCHTEST_H
 
-#include <kdialog.h>
+#include <QtCore/QObject>
 
-
-class Q3ButtonGroup;
-
-
-class EpsExportDlg : public KDialog
+class TestGlobalSearch : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit EpsExportDlg(QWidget* parent = 0L, const char* name = 0L);
-
-    uint psLevel() const;
-
+    TestGlobalSearch(int argc, char **argv, bool goToEventLoop);
+private Q_SLOTS:
+    void initTestCase();
+    void testGlobalSearch();
+    void cleanupTestCase();
 private:
-    Q3ButtonGroup* m_psLevelButtons;
+    const int m_argc;
+    char **m_argv;
+    bool m_goToEventLoop;
 };
 
 #endif
-
