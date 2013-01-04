@@ -24,8 +24,8 @@
 
 #include <kparts/plugin.h>
 #include "kis_types.h"
+#include "stash.h"
 
-class Stash;
 class QUrl;
 
 class KisView2;
@@ -47,6 +47,7 @@ private slots:
     void openBrowser(const QUrl &url);
     void closeBrowser();
     void showSubmit();
+    void testCallCompleted(Stash::Call, bool result);
     void performUpload();
 
 private:

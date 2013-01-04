@@ -36,7 +36,6 @@
 
 #include "o2deviantart.h"
 #include "dlg_login.h"
-#include "stash.h"
 #include "submitdlg.h"
 
 K_PLUGIN_FACTORY(ImageShareFactory, registerPlugin<ImageShare>();)
@@ -105,12 +104,21 @@ void ImageShare::closeBrowser()
 void ImageShare::showSubmit()
 {
     m_stash = new Stash(m_deviantArt, this);
+    connect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), SLOT(testCallCompleted(Stash::Call,bool)));
     m_stash->testCall();
-    m_stash->delta();
-    QList<Submission> subm = m_stash->submissions();
-    foreach(const Submission& sub, subm) {
-        qDebug() << sub.title;
+}
+
+void ImageShare::testCallCompleted(Stash::Call, bool result)
+{
+    if(!result) {
+        qDebug() << Q_FUNC_INFO << "if this happens, something failed and we'll need to start over...";
     }
+    disconnect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), this, SLOT(testCallCompleted(Stash::Call,bool)));
+    m_stash->delta();
+//    QList<Submission> subm = m_stash->submissions();
+//    foreach(const Submission& sub, subm) {
+//        qDebug() << sub.title;
+//    }
     m_submitDlg->open();
 }
 
