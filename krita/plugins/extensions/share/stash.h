@@ -51,10 +51,15 @@ struct Submission {
     QString thumbFolder;
     QList<Submission> contents;
 };
+Q_DECLARE_METATYPE(QList<Submission>);
 
 class Stash : public QObject {
 
     Q_OBJECT
+    /// The number of bytes available in the stash. Update by calling updateAvailableSpace
+    Q_PROPERTY(int availableSpace READ availableSpace NOTIFY availableSpaceChanged)
+    /// The current list of submissions. Update this list by calling delta, and update a single item by calling fetch on a submission's id
+    Q_PROPERTY(QList<Submission> submissions READ submissions NOTIFY submissionsChanged)
 
 public:
 
@@ -62,7 +67,7 @@ public:
     ~Stash();
 
     QList<Submission> submissions() const;
-    int bytesAvailable() const;
+    int availableSpace() const;
 
     enum Call {
         None,
@@ -109,19 +114,27 @@ private slots:
     void slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data);
 
 signals:
+    void availableSpaceChanged();
+    void submissionsChanged();
 
     void callFinished(Stash::Call call, bool result);
 
 private:
-
-
-    Call m_currentCall;
+    QMap<int, Call> m_callMap;
 
     QNetworkAccessManager m_networkAccessManager;
     O2Requestor *m_requestor;
     QList<Submission> m_submissions;
     int m_bytesAvailable;
-};
 
+    void testCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void submitCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void updateCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void moveCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void renameFolderCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void updateAvailableSpaceCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void deltaCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+};
 
 #endif

@@ -17,6 +17,7 @@
  */
 #include <stash.h>
 
+#include <QCoreApplication>
 #include <QUrl>
 #include <kis_image.h>
 
@@ -37,18 +38,16 @@ QList<Submission> Stash::submissions() const
     return m_submissions;
 }
 
-int Stash::bytesAvailable() const
+int Stash::availableSpace() const
 {
     return m_bytesAvailable;
 }
 
 void Stash::testCall()
 {
-    qDebug() << "testCall";
-
     QUrl url("https://www.deviantart.com/api/draft15/placebo");
     QNetworkRequest request(url);
-    int id = m_requestor->get(request);
+    m_callMap[m_requestor->get(request)] = Placebo;
 }
 
 void Stash::submit(KisImageWSP image, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder)
@@ -82,7 +81,10 @@ void Stash::updateAvailableSpace()
 
 void Stash::delta()
 {
-
+    // TODO remember to store the results and include the cursor if we have one from previously...
+    QUrl url("https://www.deviantart.com/api/draft15/stash/delta");
+    QNetworkRequest request(url);
+    m_callMap[m_requestor->get(request)] = Delta;
 }
 
 
@@ -91,9 +93,98 @@ void Stash::fetch(const QString &id)
 
 }
 
+QMap<QString, QString> parseReply(const QByteArray& replyData) {
+    QMap<QString, QString> reply;
+    foreach (QString pair, QString(replyData).mid(1, replyData.length()-2).split(",")) {
+        QStringList kv = pair.split(":");
+        if (kv.length() == 2) {
+            if(kv[1].startsWith("\""))
+                reply.insert(kv[0].mid(1, kv[0].length()-2), kv[1].mid(1, kv[1].length()-2));
+            else
+                reply.insert(kv[0].mid(1, kv[0].length()-2), kv[1]);
+        }
+    }
+    return reply;
+}
+
 void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data)
 {
-    qDebug() << "Data in" << Q_FUNC_INFO << QString(data);
+    Call currentCall = m_callMap[id];
+    switch(currentCall)
+    {
+        case Placebo:
+            testCallFinished(error, data);
+            break;
+        case Submit:
+            submitCallFinished(error, data);
+            break;
+        case Update:
+            updateCallFinished(error, data);
+            break;
+        case Move:
+            moveCallFinished(error, data);
+            break;
+        case RenameFolder:
+            renameFolderCallFinished(error, data);
+            break;
+        case UpdateAvailableSpace:
+            updateAvailableSpaceCallFinished(error, data);
+            break;
+        case Delta:
+            deltaCallFinished(error, data);
+            break;
+        case Fetch:
+            fetchCallFinished(error, data);
+            break;
+        default:
+            qDebug() << "Unknown call or successful completion of call after expected ending (no call currently set)";
+            break;
+    }
+    m_callMap.remove(id);
+}
+
+void Stash::testCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+    QMap<QString, QString> reply = parseReply(data);
+    if(reply.contains("status")) {
+        emit callFinished(Delta, (reply.value("status") == "success"));
+    }
+}
+
+void Stash::submitCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+
+}
+
+void Stash::updateCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+
+}
+
+void Stash::moveCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+
+}
+
+void Stash::renameFolderCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+
+}
+
+void Stash::updateAvailableSpaceCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+
+}
+
+void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+    QMap<QString, QString> reply = parseReply(data);
+    qDebug() << Q_FUNC_INFO << reply;
+}
+
+void Stash::fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+{
+
 }
 
 #include "stash.moc"
