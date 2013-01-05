@@ -32,13 +32,14 @@
 class KoGroupButton::Private
 {
 public:
-    Private(KoGroupButton *qq, const GroupPosition position) : groupPosition(position)
+    Private(KoGroupButton *qq, const GroupPosition position) : groupPosition(position), groupProperty(KoGroupButton::Flat)
     {
         // Make the policy closer to QPushButton's default but horizontal shouldn't be Fixed,
         // otherwise spacing gets broken
         qq->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
     GroupPosition groupPosition;
+    GroupProperty groupProperty;
 };
 
 KoGroupButton::KoGroupButton(GroupPosition position, QWidget* parent)
@@ -64,6 +65,16 @@ void KoGroupButton::setGroupPosition(KoGroupButton::GroupPosition groupPosition)
 KoGroupButton::GroupPosition KoGroupButton::groupPosition() const
 {
     return d->groupPosition;
+}
+
+KoGroupButton::GroupProperty KoGroupButton::groupProperty() const
+{
+    return d->groupProperty;
+}
+
+void KoGroupButton::setGroupProperty(KoGroupButton::GroupProperty groupProperty)
+{
+    d->groupProperty = groupProperty;
 }
 
 void KoGroupButton::paintEvent(QPaintEvent* event)
@@ -93,20 +104,22 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
     case NoGroup:
         Q_ASSERT(0);
     }
-    if (!isChecked() && !isDown() && !(panelOpt.state & QStyle::State_MouseOver)) {
-        // Use 'pushed' appearance for all buttons but button that are not really pushed
-        // have less contrast and is toned down.
-        panelOpt.state |= (QStyle::State_On | QStyle::State_Sunken);
-        QPalette panelPal(panelOpt.palette);
-        QColor c;
-        c = panelPal.color(QPalette::Button);
-        c.setAlpha(50);
-        panelPal.setColor(QPalette::Button, c);
-        c = panelPal.color(QPalette::Window);
-        c.setAlpha(50);
-        panelPal.setColor(QPalette::Window, c);
-        panelOpt.palette = panelPal;
-        painter.setOpacity(0.5);
+    if (groupProperty() == Flat) {
+        if (!isChecked() && !isDown() && !(panelOpt.state & QStyle::State_MouseOver)) {
+            // Use 'pushed' appearance for all buttons but button that are not really pushed
+            // have less contrast and is toned down.
+            panelOpt.state |= (QStyle::State_On | QStyle::State_Sunken);
+            QPalette panelPal(panelOpt.palette);
+            QColor c;
+            c = panelPal.color(QPalette::Button);
+            c.setAlpha(50);
+            panelPal.setColor(QPalette::Button, c);
+            c = panelPal.color(QPalette::Window);
+            c.setAlpha(50);
+            panelPal.setColor(QPalette::Window, c);
+            panelOpt.palette = panelPal;
+            painter.setOpacity(0.5);
+        }
     }
     painter.drawPrimitive(QStyle::PE_PanelButtonTool, panelOpt);
     painter.setOpacity(1.0);
@@ -139,6 +152,22 @@ void KoGroupButton::paintEvent(QPaintEvent* event)
         QAction* action = actions().first();
         setToolTip(i18nc("@info:tooltip of custom triple button", "%1", action->toolTip()));
     }
+
+/*       +    // Separator
+            +    const int y1 = opt.rect.top() + 6;
+            +    const int y2 = opt.rect.bottom() - 6;
+            +    if (d->groupPosition & GroupRight) {
+                +        const int x = opt.rect.left();
+                +        painter.setPen(opt.palette.color(QPalette::Light));
+                +        painter.drawLine(x, y1, x, y2);
+                +    }
+                +    if (d->groupPosition & GroupLeft) {
+                    +        const int x = opt.rect.right();
+                    +        painter.setPen(opt.palette.color(QPalette::Mid));
+                    +        painter.drawLine(x, y1, x, y2);
+                    +    }
+                    +
+*/
 }
 
 #include <KoGroupButton.moc>

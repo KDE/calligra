@@ -21,15 +21,16 @@
 #define KOGROUPBUTTON_H
 
 #include "kowidgetutils_export.h"
+//#include <krita/plugins/extensions/dockers/lut/ocio_display_filter.h>
 
 // Qt
 #include <QToolButton>
 
 /**
  * A thin tool button which can be visually grouped with other buttons.
- * 
+ *
  * The group can thus look like one solid bar: ( button1 | button2 | button3 )
- * 
+ *
  * For groupping layout can be used. For exclusive checkable behaviour assign QButtonGroup on the buttons.
  */
 class KOWIDGETUTILS_EXPORT KoGroupButton : public QToolButton
@@ -47,6 +48,13 @@ public:
         GroupRight,  //!< The button is at the right of the group, so it would have rounded the right part
         GroupCenter  //!< The button is on the center of the group, so it would have separators on both sides
     };
+    /**
+     *  Flat or Button style
+     */
+    enum GroupProperty {
+        Flat,
+        Button
+    };
 
     explicit KoGroupButton(GroupPosition position, QWidget* parent = 0);
 
@@ -60,6 +68,10 @@ public:
     void setGroupPosition(KoGroupButton::GroupPosition groupPosition);
 
     KoGroupButton::GroupPosition groupPosition() const;
+
+    void setGroupProperty(KoGroupButton::GroupProperty groupProperty);
+
+    KoGroupButton::GroupProperty groupProperty() const;
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
