@@ -202,3 +202,7 @@ shadeSelectorUpdateOnRightClick=false
 useCustomColorSpace=false
 zoomSize=280
 
+
+[theme]
+Theme=Krita-dark
+
