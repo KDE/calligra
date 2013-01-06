@@ -90,6 +90,8 @@ void DockWidget::deactivate( KoMainWindow *shell )
 {
     disconnect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setShown(bool)));
     shell->removeDockWidget( this );
+     // activation re-parents to QMainWindow, so re-parent back to view
+    setParent( const_cast<ViewBase*>( view ) );
     foreach(const KActionCollection *c, KActionCollection::allCollections()) {
         KActionMenu *a = qobject_cast<KActionMenu*>(c->action("settings_dockers_menu"));
         if ( a ) {

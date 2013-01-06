@@ -7,6 +7,10 @@ if (KdepimLibs_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
 endif (KdepimLibs_FOUND)
 
+if (APPLE)
+    find_library(FOUNDATION_LIBRARY Foundation)
+endif (APPLE)
+
 include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
@@ -17,10 +21,8 @@ endif( QCA2_FOUND )
 
 set(komain_LIB_SRCS
     KoAutoSaveRecoveryDialog.cpp
-    KoApplicationAdaptor.cpp
     KoApplication.cpp
     KoDockerManager.cpp
-    KoPartAdaptor.cpp
     KoDocument.cpp
     KoDocumentEntry.cpp
     KoDocumentInfo.cpp
@@ -43,7 +45,6 @@ set(komain_LIB_SRCS
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoVersionDialog.cpp
-    KoViewAdaptor.cpp
     KoView.cpp
     calligraversion.cpp
     KoFilterManager.cpp
@@ -95,7 +96,18 @@ set(komain_LIB_SRCS
     KoFindStyle.cpp
 
     KoPart.cpp
+
+    thememanager.cpp
 )
+
+if( QT_QTDBUS_FOUND )
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        KoApplicationAdaptor.cpp
+        KoViewAdaptor.cpp
+        KoPartAdaptor.cpp
+    )
+endif( QT_QTDBUS_FOUND )
+
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
         rdf/KoDocumentRdf.cpp
@@ -124,6 +136,12 @@ if( Soprano_FOUND )
         rdf/InsertSemanticObjectReferenceAction.cpp
     )
 endif( Soprano_FOUND )
+
+if (APPLE)
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        MacSupport.mm
+    )
+endif (APPLE)
 
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
@@ -165,6 +183,7 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KCAL_LIBS}
     kowidgets
     textlayout
+    
 )
 if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
@@ -181,6 +200,10 @@ if( KActivities_FOUND )
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
 endif( KActivities_FOUND )
 
+if (APPLE)
+    target_link_libraries(komain ${FOUNDATION_LIBRARY})
+endif (APPLE)
+
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
 set_target_properties(komain PROPERTIES
@@ -188,24 +211,12 @@ set_target_properties(komain PROPERTIES
 )
 install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-########### plugin for the properties dialog ###############
-
-set(kodocinfopropspage_PART_SRCS KoDocInfoPropsFactory.cpp )
-
-kde4_add_plugin(kodocinfopropspage ${kodocinfopropspage_PART_SRCS})
-
-target_link_libraries(kodocinfopropspage  ${KDE4_KIO_LIBS} komain )
-
-install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
-
 ########### install files ###############
 
-install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES calligradocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
 install( FILES
     KoApplication.h
-    KoApplicationAdaptor.h
     KoDocument.h
     KoDocumentEntry.h
     KoDocumentInfo.h
@@ -227,6 +238,7 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    MacSupport.h
     KoModeBoxFactory.h
     KoServiceProvider.h
     KoPart.h
@@ -235,7 +247,6 @@ install( FILES
     KoProgressProxy.h
     KoVersionDialog.h
     KoView.h
-    KoViewAdaptor.h
     calligraversion.h
     KoProgressUpdater.h
     KoProgressBar.h
@@ -243,6 +254,13 @@ install( FILES
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+
+if( QT_QTDBUS_FOUND )
+    install( FILES
+        KoApplicationAdaptor.h
+        KoViewAdaptor.h
+    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+endif( QT_QTDBUS_FOUND )
 
 if( Soprano_FOUND )
     install( FILES

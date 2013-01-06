@@ -19,7 +19,7 @@
 
 #include "kplatoimport.h"
 
-#include <kptpart.h>
+#include <kptmaindocument.h>
 #include <kpttask.h>
 #include <kptnode.h>
 #include <kptresource.h>

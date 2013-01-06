@@ -241,7 +241,7 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
         // We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
         containers.insert(
             item->name().toLatin1(),
-            c->widget()->objectName().toLatin1().constData()
+            c->widget()->objectName().toLatin1()
         );
         parents.insert(
             item->name().toLatin1(),

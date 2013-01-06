@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -156,6 +156,16 @@ public:
      If there's no such action, global shared action is enabled or disabled (if exists). */
     virtual void setAvailable(const QString& action_name, bool set);
 
+    enum StoreNewDataOption {
+        OverwriteExistingObject = 1 //!< Overwerite existing object in storeNewData()
+    };
+
+    QString defaultIconName() const;
+
+    void setDefaultIconName(const QString& iconName);
+
+    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
+
 public slots:
     virtual void setFocus();
 
@@ -238,7 +248,9 @@ protected:
        just a schem adata. You should use such subclasses if needed.
      Should return newly created schema data object on success.
      In this case, do not store schema object yourself (make deep copy if needed). */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
      indexed with optional \a dataID, from the database backend.
@@ -311,6 +323,9 @@ protected:
     /*! Assigns a list of view-level actions. Used by KexiView ctor. */
     void setViewActions(const QList<QAction*>& actions);
 
+    /*! Assigns a list of main-menu-level actions. Used by KexiView ctor. */
+    void setMainMenuActions(const QList<QAction*>& actions);
+
     /*! @return a list of view-level actions. */
     QList<QAction*> viewActions() const;
 
@@ -318,10 +333,9 @@ protected:
     QAction* viewAction(const char* name) const;
 
     void initViewActions();
+    void initMainMenuActions();
 
     void toggleViewModeButtonBack();
-
-    QString m_defaultIconName;
 
 #ifdef __GNUC__
 #warning todo: add some protected access methods
@@ -373,5 +387,7 @@ private:
     Private * const d;
     friend class KexiWindow;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiView::StoreNewDataOptions)
 
 #endif

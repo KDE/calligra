@@ -29,7 +29,7 @@ private:
     int version;
 
 public:
-    KPresenterSlideLoader(QObject* parent = 0);
+    explicit KPresenterSlideLoader(QObject* parent = 0);
     ~KPresenterSlideLoader();
     int numberOfSlides();
     QSize slideSize();

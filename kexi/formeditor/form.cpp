@@ -1570,7 +1570,7 @@ void Form::setFormWidget(FormWidget* w)
     d->formWidget = w;
     if (!d->formWidget)
         return;
-    d->formWidget->m_form = this;
+    d->formWidget->setForm(this);
 }
 
 // moved from FormManager

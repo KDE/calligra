@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QImage>
+#include <QGridLayout>
 
 class QLabel;
 class QTabBar;
@@ -44,17 +45,21 @@ public:
 protected:
     virtual void keyPressEvent(QKeyEvent * event);
 
+    virtual void resizeEvent(QResizeEvent *event);
+
 protected slots:
     void currentChanged(int currentIndex);
 
 private:
     void init();
+    void setLabelText();
 
     QImage m_image1;
     QImage m_image2;
     QImage m_diff;
 
     // UI
+    QGridLayout *m_layout;
     QTabBar *m_tabBar;
     QStackedWidget *m_stack;
     QLabel *m_image1Label;
@@ -63,3 +68,4 @@ private:
 };
 
 #endif /* COMPAREVIEW_H */
+

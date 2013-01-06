@@ -42,6 +42,7 @@
 #include "CellStorage.h"
 
 #include <KoDocument.h>
+#include <KoApplication.h>
 
 using namespace Calligra::Sheets;
 
@@ -187,10 +188,17 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (type == "release")
         return Value(QString(CALLIGRA_VERSION_STRING));
-/*FIXME
-    if (type == "numfile")
-        return Value(KoDocument::documentList() ? KoDocument::documentList()->count() : 0);
-*/
+
+    if (type == "numfile") {
+        KoApplication *app = qobject_cast<KoApplication*>(qApp);
+        if(! app) {
+           return Value(0);
+        } else {
+           int val = app->documents();
+           return Value(val);
+        }
+    }
+
     if (type == "recalc") {
         QString result;
         if (!calc->settings()->isAutoCalculationEnabled())

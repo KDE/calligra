@@ -56,7 +56,9 @@ protected slots:
     virtual void slotToggled(bool checked);
 
 private:
-    QByteArray m_className;
+    class Private;
+
+    Private* const d;
 };
 
 }

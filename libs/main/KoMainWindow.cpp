@@ -22,6 +22,10 @@
 
 #include "KoMainWindow.h"
 
+#ifdef __APPLE__
+#include "MacSupport.h"
+#endif
+
 #include "KoView.h"
 #include "KoDocument.h"
 #include "KoFilterManager.h"
@@ -87,6 +91,8 @@
 #include <QDesktopWidget>
 #include <QPrintPreviewDialog>
 
+#include "thememanager.h"
+
 #include "calligraversion.h"
 
 class KoPartManager : public KParts::PartManager
@@ -144,6 +150,7 @@ public:
 #ifdef HAVE_KACTIVITIES
         activityResource = 0;
 #endif
+        themeManager = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
@@ -229,12 +236,18 @@ public:
     KActivities::ResourceInstance *activityResource;
 #endif
 
+    Digikam::ThemeManager *themeManager;
+
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
         : KParts::MainWindow()
         , d(new KoMainWindowPrivate(this))
 {
+#ifdef __APPLE__
+    setUnifiedTitleAndToolBarOnMac(true);
+    MacSupport::addFullscreen(this);
+#endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 
@@ -316,6 +329,14 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->exportPdf->setEnabled(false);
     d->closeFile->setEnabled(false);
 
+    // populate theme menu
+    d->themeManager = new Digikam::ThemeManager(this);
+    KConfigGroup group(KGlobal::config(), "theme");
+    d->themeManager->setThemeMenuAction(new KActionMenu(i18n("&Themes"), this));
+    d->themeManager->registerThemeActions(actionCollection());
+    d->themeManager->setCurrentTheme(group.readEntry("Theme",
+                                                     d->themeManager->defaultThemeName()));
+
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     KToggleAction *fullscreenAction  = new KToggleAction(koIcon("view-fullscreen"), i18n("Full Screen Mode"), this);
     actionCollection()->addAction("view_fullscreen", fullscreenAction);
@@ -392,6 +413,13 @@ KoMainWindow::~KoMainWindow()
     KConfigGroup cfg(KGlobal::config(), "MainWindow");
     cfg.writeEntry("ko_x", frameGeometry().x());
     cfg.writeEntry("ko_y", frameGeometry().y());
+
+    {
+        KConfigGroup group(KGlobal::config(), "theme");
+        group.writeEntry("Theme", d->themeManager->currentThemeName());
+    }
+
+
 
     // Explicitly delete the docker manager to ensure that it is deleted before the dockers
     delete d->dockerManager;
@@ -777,10 +805,10 @@ void KoMainWindow::slotSaveCanceled(const QString &errMsg)
 void KoMainWindow::slotSaveCompleted()
 {
     kDebug(30003) << "KoMainWindow::slotSaveCompleted";
-    KoDocument* pDoc = (KoDocument *)(sender());
-    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-    disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(pDoc, SIGNAL(canceled(const QString &)),
+    KoPart* pPart = (KoPart *)(sender());
+    disconnect(pPart->document(), SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(pPart, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    disconnect(pPart, SIGNAL(canceled(const QString &)),
                this, SLOT(slotSaveCanceled(const QString &)));
 
     if (d->deferredClosingEvent) {
@@ -929,7 +957,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             bOk = true;
             if (dialog->exec() == QDialog::Accepted) {
                 newURL = dialog->selectedUrl();
-                QString outputFormatString = dialog->currentMimeFilter().toLatin1();
+                QString outputFormatString = dialog->currentMimeFilter();
                 if (outputFormatString.isNull()) {
                     KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
                     outputFormatString = mime->name();

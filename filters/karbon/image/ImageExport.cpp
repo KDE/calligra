@@ -113,7 +113,7 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
     // paint the shapes
     painter.paint(image);
 
-    if(!image.save(m_chain->outputFile(), format.toAscii())) {
+    if(!image.save(m_chain->outputFile(), format.toLatin1())) {
         return KoFilter::CreationError;
     }
 

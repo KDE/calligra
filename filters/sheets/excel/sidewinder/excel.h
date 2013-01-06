@@ -734,7 +734,7 @@ public:
     /**
       Returns the string at specified index.
       Note that index must be less than count().
-      If index is not valid, this will return QString::null.
+      If index is not valid, this will return an empty QString.
      */
     QString stringAt(unsigned index) const;
 

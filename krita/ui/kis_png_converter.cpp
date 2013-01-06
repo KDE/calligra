@@ -73,14 +73,17 @@ const quint8 PIXEL_ALPHA = 3;
 
 int getColorTypeforColorSpace(const KoColorSpace * cs , bool alpha)
 {
-    if (KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16")) {
+
+    QString id = cs->id();
+
+    if (id == "GRAYA" || id == "GRAYAU16" || id == "GRAYA16") {
         return alpha ? PNG_COLOR_TYPE_GRAY_ALPHA : PNG_COLOR_TYPE_GRAY;
     }
-    if (KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16")) {
+    if (id == "RGBA" || id == "RGBA16") {
         return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
     }
 
-    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
+//    KMessageBox::error(0, i18n("Cannot export images in %1.\n", cs->name())) ;
     return -1;
 
 }
@@ -114,7 +117,7 @@ void fillText(png_text* p_text, const char* key, QString& text)
     p_text->compression = PNG_TEXT_COMPRESSION_zTXt;
     p_text->key = const_cast<char *>(key);
     char* textc = new char[text.length()+1];
-    strcpy(textc, text.toAscii());
+    strcpy(textc, text.toLatin1());
     p_text->text = textc;
     p_text->text_length = text.length() + 1;
 }
@@ -166,7 +169,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     png_charp dp = text[0].text;
     *dp++ = '\n';
 
-    memcpy(dp, (const char *) profile_type.toLatin1().data(), profile_type.length());
+    memcpy(dp, profile_type.toLatin1().constData(), profile_type.length());
 
     dp += description_length;
     *dp++ = '\n';
@@ -934,7 +937,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
     while (it != annotationsEnd) {
         if (!(*it) || (*it)->type().isEmpty()) {
             dbgFile << "Warning: empty annotation";
-
+            it++;
             continue;
         }
 
@@ -959,7 +962,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             png_set_text(png_ptr, info_ptr, text, 1);
             png_free(png_ptr, text);
         }
-
+        it++;
     }
 
     // Save the color profile

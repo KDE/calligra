@@ -19,7 +19,10 @@ Legend
 ================================================================
                         Milestones
 
-Next Milestone: EPUB 2.0.1 filter done
+EPUB 2.0.1 filter done                                                  [DONE]
+
+Next Milestone:
+EPUB 3 MathML and video done
 
 
 ================================================================
@@ -35,9 +38,23 @@ Time frame: (days / weeks)
 assigned to a person.]
 
 
+Allow user to add a book cover image                                    [DONE]
+ * Send parameter (filename) to the filter                              [Done]
+ * UI to find / edit the filename                                       [Done]
+
+
+Allow user to add a book cover image                                    [DONE]
+ * Send parameter (filename) to the filter                              [Done]
+ * UI to find / edit the filename                                       [Done]
+
+EPUB 3.0
+ * MathML                                                               [DONE]
+    + Handle formulas as embedded document                              [Done]
+    + Handle formulas as inline mathML                                  [Done]
+ * Multimedia, video
+
 Fix known bugs / misfeatures
- * Create an object from the html conversion                            [DONE]
- * styles.css seems to be wrongly placed now                            [DONE]
+ * If there is only one chapter then the ToC is wrong
 
 
 Medium term issues
@@ -45,34 +62,13 @@ Medium term issues
 
 Time frame: (weeks / months)
 
-Allow user to add a book cover image
- * Send parameter (filename) to the filter
- * UI to find / edit the filename
-
 Configuration of the conversion process
  * Styles in css file (bool)                                            [Done]
  * Use breaks (bool)                                                    [Done]
 
-Create a generic HTML export filter
- * Refactor some things to prepare for the HTML filter.                 [DONE]
-    + Generalize some concepts                                           [Done]
-       - Add "OEBPS/" as a configurable parameter.                        [done]
-       - Add "chapter" as a configurable prefix to names of files.        [done]
-       - Generalize the criterium for chapter break                       [done]
-    + Move handling of styles and creation of CSS to OdtHtmlConverter    [Done]
-    + Make staring a new html file and ending another functions          [Done]
-    + Remove parameter imagesSrcList from handleTag*()                   [Done]
-    + Remove parameter styles from handleTag*()                          [Done]
-    + Move generic ODF parsing from exportepub2                          [Done]
-       - New class: OdfParser                                             [done]
-       - Move parsing of metadata to OdfParser                            [done]
-       - Move parsing of manifest to OdfParser                            [done]
- * Create the HTML backend instead of the Epub one.                     [DONE]
-    + Create a base class FileCollector.                                 [Done]
-    + Move general code from EpubFile to FileCollector                   [Done]
-    + Create the class HtmlFile                                          [Done]
- * Create the actual filter                                             {DONE]
 
+Misfeatures
+ * Styles in css should go back to only those that are used.
 
 
 Long term issues

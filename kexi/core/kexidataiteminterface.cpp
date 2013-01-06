@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,25 +30,67 @@ KexiDataItemChangesListener::~KexiDataItemChangesListener()
 }
 
 //-----------------------------------------------
+class KexiDataItemInterface::Private
+{
+public:
+    Private();
+    ~Private();
+
+    QPointer<QObject> listenerObject;
+    KexiDataItemChangesListener* listener;
+    bool listenerIsQObject;
+    QVariant origValue;
+
+    /*! @see parentDataItemInterface() */
+    KexiDataItemInterface* parentDataItemInterface;
+    bool hasFocusableWidget;
+    bool disable_signalValueChanged;
+    bool acceptEditorAfterDeleteContents;
+    bool lengthExceededEmittedAtPreviousChange;
+};
+
+KexiDataItemInterface::Private::Private()
+    : listener(0), listenerIsQObject(false) ,parentDataItemInterface(0)
+    ,hasFocusableWidget(true), disable_signalValueChanged(false), acceptEditorAfterDeleteContents(false)
+    ,lengthExceededEmittedAtPreviousChange(false)
+{
+
+}
+
+KexiDataItemInterface::Private::~Private()
+{
+
+}
 
 KexiDataItemInterface::KexiDataItemInterface()
-        : m_listener(0)
-        , m_listenerIsQObject(false)
-        , m_parentDataItemInterface(0)
-        , m_hasFocusableWidget(true)
-        , m_disable_signalValueChanged(false)
-        , m_acceptEditorAfterDeleteContents(false)
+    : d(new Private())
 {
 }
 
 KexiDataItemInterface::~KexiDataItemInterface()
 {
+    delete d;
+}
+
+KexiDataItemInterface* KexiDataItemInterface::parentDataItemInterface() const
+{
+    return d->parentDataItemInterface;
+}
+
+bool KexiDataItemInterface::acceptEditorAfterDeleteContents() const
+{
+    return d->acceptEditorAfterDeleteContents;
+}
+
+bool KexiDataItemInterface::hasFocusableWidget() const
+{
+    return d->hasFocusableWidget;
 }
 
 void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
                                      bool removeOld, const QVariant* visibleValue)
 {
-    m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
+    d->disable_signalValueChanged = true; //to prevent emmiting valueChanged()
 //needed? clear();
     if (dynamic_cast<QObject*>(this)) {
         kDebug() <<
@@ -56,11 +98,11 @@ void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add,
             << dynamic_cast<QWidget*>(this)->objectName()
             << "value=" << value << "add=" << add;
     }
-    m_origValue = value;
+    d->origValue = value;
     setValueInternal(add, removeOld);
     if (visibleValue)
         setVisibleValueInternal(*visibleValue);
-    m_disable_signalValueChanged = false;
+    d->disable_signalValueChanged = false;
 }
 
 void KexiDataItemInterface::setVisibleValueInternal(const QVariant& value)
@@ -70,47 +112,68 @@ void KexiDataItemInterface::setVisibleValueInternal(const QVariant& value)
 
 void KexiDataItemInterface::signalValueChanged()
 {
-    if (m_disable_signalValueChanged || isReadOnly())
+    if (d->disable_signalValueChanged || isReadOnly())
         return;
-    if (m_parentDataItemInterface) {
-        m_parentDataItemInterface->signalValueChanged();
+    if (d->parentDataItemInterface) {
+        d->parentDataItemInterface->signalValueChanged();
         return;
     }
-    if (m_listener) {
+    if (d->listener) {
         beforeSignalValueChanged();
-        m_listener->valueChanged(this);
+        d->listener->valueChanged(this);
+    }
+}
+
+void KexiDataItemInterface::signalLengthExceeded(bool lengthExceeded)
+{
+    if (d->listener) {
+        d->listener->lengthExceeded(this, lengthExceeded);
+    }
+}
+
+void KexiDataItemInterface::signalUpdateLengthExceededMessage()
+{
+    if (d->listener) {
+        d->listener->updateLengthExceededMessage(this);
+    }
+}
+
+void KexiDataItemInterface::emitLengthExceededIfNeeded(bool lengthExceeded)
+{
+    if (lengthExceeded && !d->lengthExceededEmittedAtPreviousChange) {
+        d->lengthExceededEmittedAtPreviousChange = true;
+        signalLengthExceeded(true);
+    }
+    else if (!lengthExceeded && d->lengthExceededEmittedAtPreviousChange) {
+        d->lengthExceededEmittedAtPreviousChange = false;
+        signalLengthExceeded(false);
+    }
+    else if (lengthExceeded) {
+        signalUpdateLengthExceededMessage();
     }
 }
 
 bool KexiDataItemInterface::valueChanged()
 {
-    kDebug() << m_origValue.toString() << " ? " << value().toString();
-    return m_origValue != value();
+    kDebug() << d->origValue.toString() << " ? " << value().toString();
+    return d->origValue != value();
 }
-
-/*
-void KexiDataItemInterface::setValue(const QVariant& value)
-{
-  m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
-  setValueInternal( value );
-  m_disable_signalValueChanged = false;
-}*/
 
 KexiDataItemChangesListener* KexiDataItemInterface::listener()
 {
-    if (!m_listener || !m_listenerIsQObject)
-        return m_listener;
-    if (!m_listenerObject)
-        m_listener = 0; //destroyed, update pointer
-    return m_listener;
+    if (!d->listener || !d->listenerIsQObject)
+        return d->listener;
+    if (!d->listenerObject)
+        d->listener = 0; //destroyed, update pointer
+    return d->listener;
 }
 
 void KexiDataItemInterface::installListener(KexiDataItemChangesListener* listener)
 {
-    m_listener = listener;
-    m_listenerIsQObject = dynamic_cast<QObject*>(listener);
-    if (m_listenerIsQObject)
-        m_listenerObject = dynamic_cast<QObject*>(listener);
+    d->listener = listener;
+    d->listenerIsQObject = dynamic_cast<QObject*>(listener);
+    if (d->listenerIsQObject)
+        d->listenerObject = dynamic_cast<QObject*>(listener);
 }
 
 void KexiDataItemInterface::showFocus(const QRect& r, bool readOnly)
@@ -134,7 +197,7 @@ bool KexiDataItemInterface::valueIsValid()
 
 void KexiDataItemInterface::setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface)
 {
-    m_parentDataItemInterface = parentDataItemInterface;
+    d->parentDataItemInterface = parentDataItemInterface;
 }
 
 bool KexiDataItemInterface::cursorAtNewRow()
@@ -150,4 +213,74 @@ bool KexiDataItemInterface::isComboBox() const
 QWidget* KexiDataItemInterface::internalEditor() const
 {
     return 0;
+}
+
+bool KexiDataItemInterface::fixup()
+{
+    return true;
+}
+
+void KexiDataItemInterface::setFocusableWidget(bool set)
+{
+    d->hasFocusableWidget = set;
+}
+
+void KexiDataItemInterface::setFocus()
+{
+    if (widget())
+        widget()->setFocus();
+}
+
+void KexiDataItemInterface::showWidget()
+{
+    if (widget())
+        widget()->show();
+}
+
+void KexiDataItemInterface::hideWidget()
+{
+    if (widget())
+        widget()->hide();
+}
+
+QVariant KexiDataItemInterface::visibleValue()
+{
+    return QVariant();
+}
+
+bool KexiDataItemInterface::isReadOnly() const
+{
+
+    return false;
+
+}
+
+void KexiDataItemInterface::handleAction(const QString &actionName)
+{
+    Q_UNUSED(actionName);
+}
+
+QVariant KexiDataItemInterface::originalValue() const
+{
+    return d->origValue;
+}
+
+void KexiDataItemInterface::setHasFocusableWidget(bool set) const
+{
+    d->hasFocusableWidget = set;
+}
+
+void KexiDataItemInterface::setAcceptEditorAfterDeleteContents(bool set) const
+{
+    d->acceptEditorAfterDeleteContents = set;
+}
+
+bool KexiDataItemInterface::lengthExceededEmittedAtPreviousChange() const
+{
+    return d->lengthExceededEmittedAtPreviousChange;
+}
+
+void KexiDataItemInterface::setLengthExceededEmittedAtPreviousChange(bool set)
+{
+    d->lengthExceededEmittedAtPreviousChange = set;
 }

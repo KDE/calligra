@@ -224,6 +224,10 @@ public:
      If \a window is 0, the current one will be closed. */
     virtual tristate closeWindow(KexiWindow *window) = 0;
 
+    /*! Find window for a given \a item.
+     \return 0 if no windows found. */
+    virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
+
     /*! Displays a window for entering object's name and title.
      Used on new object saving.
      \return true on successul closing or cancelled on cancel returned.
@@ -233,11 +237,13 @@ public:
      If \a allowOverwriting is true, user will be asked for existing
      object's overwriting, else it will be impossible to enter
      a name of existing object.
-     You can check \a allowOverwriting after calling this method.
+     You can check \a overwriteNeeded after calling this method.
      If it's true, user agreed on overwriting, if it's false, user picked
      nonexisting name, so no overwrite will be needed. */
     virtual tristate getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part,
-                                      bool& allowOverwriting, const QString& messageWhenAskingForName = QString()) = 0;
+                                      bool allowOverwriting,
+                                      bool *overwriteNeeded,
+                                      const QString& messageWhenAskingForName = QString()) = 0;
 
     /*! Highlights object of mime \a mime and name \a name.
      This can be done in the Project Navigator or so.

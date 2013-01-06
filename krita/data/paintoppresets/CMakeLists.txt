@@ -16,7 +16,6 @@ Basic_mix_over.kpp
 Basic_mix_over_dull.kpp
 Basic_mix_over_wet.kpp
 Basic_mix_over_wet_dull.kpp
-Basic_mix_small.kpp
 Basic_mix_soft.kpp
 Basic_paint_05.kpp
 Basic_paint_25.kpp
@@ -73,7 +72,7 @@ Rake_paint_dry_bristle.kpp
 Rake_paint_texture.kpp
 Rake_smudge.kpp
 Rake_smudge_2.kpp
-Shape_basic_fill.kpp
+Shape_fill.kpp
 Shape_smooth.kpp
 Sketch_2.kpp
 Sketch_chrome.kpp

@@ -2,6 +2,26 @@
 Calligra Plan current:
 ----------------------
 
+* TJ scheduler improvements
+    Fix bug and improve performance in positive float calculation.
+    Honor calendar timezone other than local timezone.
+    Improve handling of StartNotEarlier/FinishNotLater.
+    Fix bug in scheduling tasks with estimate in work time duration.
+
+* Add a command to generate a new project from the current project
+
+* Add export to csv and ods
+
+Release 2.6
+-----------
+* Fix regression in scheduling, backward calculation
+
+* Fix bug in kplato xml loader
+
+* Fix crash after File->Open on empty document
+
+* Fix bug 308855 -  Gantt chart: No tree structure in printed version
+
 * Fix bug 307450 - Calligra Plan crash when adding subtask
 
 * Always check appointments to avoid overbooking resources

@@ -26,16 +26,23 @@
 
 #include <QSize>
 
+class KoFindMatch;
+
 class CASpreadsheetHandler : public CAAbstractDocumentHandler
 {
     Q_OBJECT
     Q_PROPERTY(int currentSheetNumber READ currentSheetNumber NOTIFY currentSheetNumChanged)
     Q_PROPERTY(int sheetCount READ sheetCount NOTIFY sheetCountChanged)
+    Q_PROPERTY (QString searchString READ searchString WRITE setSearchString NOTIFY searchStringChanged)
 
 protected:
     virtual KoDocument* document();
 
 public:
+    enum SearchDirection {
+         SearchForward,
+         SearchBackwards
+    };
     explicit CASpreadsheetHandler (CADocumentController* documentController);
     virtual ~CASpreadsheetHandler();
 
@@ -47,8 +54,13 @@ public:
 
     virtual QString rightToolbarSource() const;
     virtual QString leftToolbarSource() const;
+    virtual QString bottomToolbarSource() const;
 
     int currentSheetNumber() const;
+    QString searchString() const;
+    void setSearchString (const QString& searchString);
+    void gotoSheet(int sheetNumber, SearchDirection direction);
+    void searchOtherSheets(SearchDirection direction);
 
 public slots:
     void tellZoomControllerToSetDocumentSize(QSize size);
@@ -57,10 +69,17 @@ public slots:
 
     void nextSheet();
     void previousSheet();
+    void findNext();
+    void findPrevious();
+
+private slots:
+    void findMatchFound(const KoFindMatch& match);
+    void findNoMatchFound();
 
 signals:
     void currentSheetNumChanged();
     void sheetCountChanged();
+    void searchStringChanged();
 
 private:
     class Private;

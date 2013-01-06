@@ -284,7 +284,6 @@ KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
         // Use query with Kexi keywords (but not driver-specific keywords) escaped.
         temp->setQuery(query);
 //  temp->query = query;
-        KexiDB::Connection* conn = KexiMainWindowIface::global()->project()->dbConnection();
         KexiDB::Connection::SelectStatementOptions options;
         options.identifierEscaping = KexiDB::Driver::EscapeKexi;
         options.addVisibleLookupColumns = false;
@@ -360,9 +359,11 @@ KexiQueryDesignerSQLView::tempData() const
     return dynamic_cast<KexiQueryPart::TempData*>(window()->data());
 }
 
-KexiDB::SchemaData*
-KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
+KexiDB::SchemaData* KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata,
+                                                           KexiView::StoreNewDataOptions options,
+                                                           bool &cancel)
 {
+    Q_UNUSED(options);
     Q_UNUSED(cancel);
 
     //here: we won't store query layout: it will be recreated 'by hand' in GUI Query Editor
@@ -380,6 +381,9 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 
         (KexiDB::SchemaData&)*query = sdata; //copy main attributes
         ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(*query, true /*newObject*/);
+        if (ok) {
+            ok = KexiMainWindowIface::global()->project()->removeUserDataBlock(sdata.id()); // for sanity
+        }
         if (ok) {
             window()->setId(query->id());
             ok = storeDataBlock(d->editor->text(), "sql");

@@ -3,6 +3,7 @@ Name=DSLR Templates
 Name[el]=Πρότυπα DSLR
 Name[et]=Digitaalpeegelkaamera (DSLR) mallid
 Name[fr]=Modèles DSLR
+Name[hu]=DSLR sablonok
 Name[it]=Modelli DSLR
 Name[nl]=DSLR-sjablonen
 Name[pt]=Modelos de DSLR
@@ -12,6 +13,3 @@ Name[sv]=Mallar för digitala spegelreflexkameror
 Name[uk]=Шаблони DSLR
 Name[x-test]=xxDSLR Templatesxx
 X-KDE-DefaultTab=true
-
-[Dolphin]
-Timestamp=2012,7,7,13,47,20

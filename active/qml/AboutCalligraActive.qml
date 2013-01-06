@@ -45,9 +45,9 @@ Item {
             width: parent.width
             anchors.horizontalCenter: parent.horizontalCenter
             wrapMode: Text.WordWrap
-            text: "<p>Calligra Active 1.0 Beta using Calligra Engine " + _calligra_version_string + "</p> \
+            text: i18n("<p>Calligra Active 1.0 Beta using Calligra Office Engine %1 </p> \
                    <p>Calligra Active is an office document viewer for tablets especially tailored to the Plasma Active platform.</p> \
-                   <p><a href=\"http://www.calligra.org/\">http://www.calligra.org</a></p>"
+                   <p><a href=\"http://www.calligra.org/\">http://www.calligra.org</a></p>", _calligra_version_string)
             color: theme.textColor
             styleColor: theme.backgroundColor
             font.pointSize: 20

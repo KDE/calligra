@@ -584,7 +584,7 @@ void KPrViewModeSlidesSorter::customShowChanged(int showNumber)
     bool panelVisible = true;
     if (showNumber < 1) {
         panelVisible = false;
-        name = QString();
+        name.clear();
     }
 
     //Change document current custom slide show

@@ -24,9 +24,10 @@ set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan/libs/ui
     ${CMAKE_BINARY_DIR}/plan
-    ${CMAKE_SOURCE_DIR}/kdgantt
-    ${CMAKE_BINARY_DIR}/kdgantt
-    ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
+
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+    ${CMAKE_BINARY_DIR}/3rdparty/kdgantt
+    ${KDCHART_INCLUDES}
 
     ${KOMAIN_INCLUDES}    
     ${KDEPIMLIBS_INCLUDE_DIR}
@@ -67,8 +68,8 @@ set(planprivate_LIB_SRCS
     kptcontext.cpp
 
     kptfactory.cpp
-    kptpartpart.cpp
     kptpart.cpp
+    kptmaindocument.cpp
     kptview.cpp
 #     KPtViewAdaptor.cpp
 

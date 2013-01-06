@@ -107,6 +107,8 @@ protected: // QWidget
     /// reimplemented method from superclass
     virtual void keyPressEvent(QKeyEvent *e);
     /// reimplemented method from superclass
+    virtual void contextMenuEvent(QContextMenuEvent *e);
+    /// reimplemented method from superclass
     virtual void mouseMoveEvent(QMouseEvent *e);
     /// reimplemented method from superclass
     virtual void mousePressEvent(QMouseEvent *e);

@@ -19,8 +19,6 @@ KexiMainWindow.cpp
 KexiMenuWidget.cpp
 kexifinddialog.cpp
 kexistatusbar.cpp 
-kexinamewidget.cpp 
-kexinamedialog.cpp 
 kexinewstuff.cpp
 KexiSearchLineEdit.cpp
 KexiUserFeedbackAgent.cpp
@@ -75,3 +73,4 @@ set_target_properties(keximain PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION
 install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 add_subdirectory(status)
+add_subdirectory(tests)

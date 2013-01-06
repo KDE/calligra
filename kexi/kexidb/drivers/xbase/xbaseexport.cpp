@@ -106,7 +106,7 @@ bool xBaseExportPrivate::appendRecord( const QString& sourceTableName , KexiDB::
 
 // 	kDebug()<<recordData->debugString();
   QString pathName = tableNamePathMap.value( sourceTableName );
-  QByteArray pathNameBa = pathName.toAscii();
+  QByteArray pathNameBa = pathName.toLatin1();
   xbDbf* table = xbase.GetDbfPtr( pathNameBa.constData() );
 
   int returnCode;
@@ -185,12 +185,12 @@ QByteArray xBaseExportPrivate::fieldData(QVariant data, char type) {
 
     case XB_LOGICAL_FLD:
       if (data.toBool()) {
-        return QString( "t" ).toAscii();
+        return QByteArray(1, 't');
       } else
-        return QString( "f" ).toAscii();
+        return QByteArray(1, 'f');
 
     case XB_DATE_FLD:
-      return data.toDate().toString("yyyyMMdd").toAscii();
+      return data.toDate().toString("yyyyMMdd").toLatin1();
 
     case XB_MEMO_FLD:
       return data.toByteArray();
@@ -202,7 +202,7 @@ QByteArray xBaseExportPrivate::fieldData(QVariant data, char type) {
 bool xBaseExportPrivate::createIndexes(const QString& sourceTableName, KexiDB::TableSchema* tableSchema) {
 
   QString pathName = tableNamePathMap.value( sourceTableName );
-  QByteArray pathNameBa = pathName.toAscii();
+  QByteArray pathNameBa = pathName.toLatin1();
   xbDbf* table = xbase.GetDbfPtr( pathNameBa.constData() );
   uint fieldCount = tableSchema->fieldCount();
 
@@ -214,7 +214,7 @@ bool xBaseExportPrivate::createIndexes(const QString& sourceTableName, KexiDB::T
     int returnCode;
     QString fieldName = f->name();
     QString indexName = dirName + QDir::separator() + sourceTableName + '_' + fieldName + ".ndx";
-    QByteArray indexNameBa = indexName.toAscii();
+    QByteArray indexNameBa = indexName.toLatin1();
     QByteArray fieldNameBa = fieldName.toLatin1();
 
     xbNdx index(table);
@@ -362,7 +362,7 @@ bool xBaseExport::dest_connect() {
 bool xBaseExport::dest_disconnect() {
   QList<QString> pathNameList = d->tableNamePathMap.values();
   foreach(const QString& pathName, pathNameList) {
-    QByteArray ba = pathName.toAscii();
+    QByteArray ba = pathName.toLatin1();
     xbDbf* tablePtr = d->xbase.GetDbfPtr(ba.constData());
     tablePtr->CloseDatabase();
     // delete tablePtr ?
@@ -387,7 +387,7 @@ bool xBaseExport::dest_createTable(const QString& originalName, KexiDB::TableSch
 
     QByteArray ba = f->name().toLatin1();
     //! TODO Fieldname can only be 11 characters
-    strcpy(xBaseTableSchema[i].FieldName, ba.data());
+    strcpy(xBaseTableSchema[i].FieldName, ba);
     xBaseTableSchema[i].Type = d->type(f->type());
     xBaseTableSchema[i].FieldLen = d->fieldLength( f ); //! TODO Check semantics
     xBaseTableSchema[i].NoOfDecs = ( xBaseTableSchema[i].Type != XB_CHAR_FLD )? f->scale() : 0 ;
@@ -406,7 +406,7 @@ bool xBaseExport::dest_createTable(const QString& originalName, KexiDB::TableSch
   QString pathName = dirName + originalName + ".dbf";
   d->tableNamePathMap[originalName] = pathName;
 
-  QByteArray pathNameBa = pathName.toAscii();
+  QByteArray pathNameBa = pathName.toLatin1();
 
   xbDbf* xBaseTable = new xbDbf( &d->xbase );
   xBaseTable->SetVersion( 4 ); // create dbase IV style files

@@ -69,7 +69,8 @@ KoView *KWPart::createViewInstance(QWidget *parent)
 
 void KWPart::setupViewInstance(KWView *view)
 {
-    connect(m_document, SIGNAL(shapeAdded(KoShape *)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *)));
+    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape *, KoShapeManager::Repaint)));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape *)));
     connect(m_document, SIGNAL(resourceChanged(int, const QVariant &)), view->canvasBase()->resourceManager(), SLOT(setResource(int, const QVariant &)));
 
     bool switchToolCalled = false;

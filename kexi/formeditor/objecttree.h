@@ -59,42 +59,22 @@ public:
     ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *parentContainer, Container *container = 0);
     virtual ~ObjectTreeItem();
 
-    QString name() const {
-        return m_name;
-    }
-    QString className() const {
-        return m_className;
-    }
-    QWidget* widget() const {
-        return m_widget;
-    }
-    EventEater* eventEater() const {
-        return m_eater;
-    }
-    ObjectTreeItem* parent() const {
-        return m_parent;
-    }
-    ObjectTreeList* children() {
-        return &m_children;
-    }
+    QString name() const;
+    QString className() const;
+    QWidget* widget() const;
+    EventEater* eventEater() const;
+    ObjectTreeItem* parent() const;
+    ObjectTreeList* children();
 
     /*! \return a QHash<QString, QVariant> of all modified properties for this widget.
       The QVariant is the old value (ie first value) of the property whose name is the QString. */
-    const QHash<QString, QVariant>* modifiedProperties() const {
-        return &m_props;
-    }
+    const QHash<QString, QVariant>* modifiedProperties() const;
 
     //! \return the widget's Container, or 0 if the widget is not a Container.
-    Container* container() const {
-        return m_container;
-    }
+    Container* container() const;
 
-    void setWidget(QWidget *w) {
-        m_widget = w;
-    }
-    void setParent(ObjectTreeItem *parent)  {
-        m_parent = parent;
-    }
+    void setWidget(QWidget *w);
+    void setParent(ObjectTreeItem *parent);
 
     void debug(int ident);
     void rename(const QString &name);
@@ -115,63 +95,26 @@ public:
 
     /*! \return subproperties for this item, added by addSubproperty()
      or 0 is there are no subproperties. */
-    QHash<QString, QVariant>* subproperties() const {
-        return m_subprops;
-    }
+    QHash<QString, QVariant>* subproperties() const;
 
     void setPixmapName(const QByteArray &property, const QString &name);
     QString pixmapName(const QByteArray &property);
 
-    void setEnabled(bool enabled)  {
-        m_enabled = enabled;
-    }
-    bool isEnabled() const {
-        return m_enabled;
-    }
+    void setEnabled(bool enabled);
+    bool isEnabled() const;
 
-    int gridRow() const {
-        return m_row;
-    }
-    int gridCol() const {
-        return m_col;
-    }
-    int gridRowSpan() const {
-        return m_rowspan;
-    }
-    int gridColSpan() const {
-        return m_colspan;
-    }
-    bool spanMultipleCells() const {
-        return m_span;
-    }
+    int gridRow() const;
+    int gridCol() const;
+    int gridRowSpan() const;
+    int gridColSpan() const;
+    bool spanMultipleCells() const;
     void setGridPos(int row, int col, int rowspan, int colspan);
+    QString unknownProperties();
+    void setUnknownProperties(const QString& set);
+private:
+    class Private;
 
-#if 0 // moved to WidgetLibrary
-    //! @return selectable item for this item.
-    //! In most cases it is equal to this item but e.g. for pages of QTabWidget,
-    //! item for the widget itself is returned.
-    //! Used when user clicks on widget tree item or when parent of the current
-    //! widget should to be selected. Defaults can be overridden by widget factories.
-    ObjectTreeItem* selectableItem();
-#endif
-protected:
-    QString m_className;
-    QString m_name;
-    ObjectTreeList m_children;
-    QPointer<Container> m_container;
-    QHash<QString, QVariant> m_props;
-    QHash<QString, QVariant> *m_subprops;
-    QString  m_unknownProps;
-    QHash<QByteArray, QString> m_pixmapNames;
-    ObjectTreeItem* m_parent;
-    QPointer<QWidget> m_widget;
-    QPointer<EventEater> m_eater;
-
-    bool  m_enabled;
-
-    int m_row, m_col, m_rowspan, m_colspan;
-    bool m_span;
-
+    Private* const d;
     friend class ObjectTree;
     friend class FormIO;
 };
@@ -195,9 +138,7 @@ public:
     ObjectTreeItem* lookup(const QString &name);
 
     /*! \return a hash containing all ObjectTreeItem in this ObjectTree. */
-    ObjectTreeHash* hash() {
-        return &m_treeHash;
-    }
+    ObjectTreeHash* hash();
 
     void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
     void removeItem(const QString &name);
@@ -213,7 +154,9 @@ public:
     QByteArray generateUniqueName(const QByteArray &prefix, bool numberSuffixRequired = true);
 
 private:
-    ObjectTreeHash m_treeHash;
+    class Private;
+
+    Private* const d;
 };
 
 }

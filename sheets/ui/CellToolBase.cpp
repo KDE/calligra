@@ -1467,8 +1467,10 @@ void CellToolBase::deleteEditor(bool saveChanges, bool expandMatrix)
     } else {
         selection()->update();
     }
-    d->externalEditor->applyAction()->setEnabled(false);
-    d->externalEditor->cancelAction()->setEnabled(false);
+    if (d->externalEditor) {
+        d->externalEditor->applyAction()->setEnabled(false);
+        d->externalEditor->cancelAction()->setEnabled(false);
+    }
     canvas()->canvasWidget()->setFocus();
 }
 

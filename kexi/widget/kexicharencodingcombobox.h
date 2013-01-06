@@ -41,9 +41,9 @@ public:
     void selectDefaultEncoding();
     bool defaultEncodingSelected() const;
 
-protected:
-    QHash<QString, QString> m_encodingDescriptionForName;
-    bool m_defaultEncodingAdded;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

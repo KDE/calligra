@@ -18,13 +18,13 @@
 #ifndef RTFREADER_H
 #define RTFREADER_H
 
-#include <Qt/qdatetime.h>
-#include "Qt/qdebug.h"
-#include <Qt/qfile.h>
-#include <Qt/qobject.h>
-#include <Qt/qtextformat.h>
-#include <Qt/qstack.h>
-#include <Qt/qtextdocument.h>
+#include <QDateTime>
+#include <QDebug>
+#include <QFile>
+#include <QObject>
+#include <QTextFormat>
+#include <QStack>
+#include <QTextDocument>
 
 #include "Destination.h"
 #include "Tokenizer.h"

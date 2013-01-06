@@ -24,6 +24,7 @@
 #include "kis_doc2.h"
 #include "kis_doc2_p.h"
 
+#include <QDesktopServices>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>
@@ -141,6 +142,8 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     KisPart2 *part; // XXX: we shouldn't know about the part here!
+
+    QString flipbook;
 };
 
 
@@ -366,6 +369,9 @@ bool KisDoc2::newImage(const QString& name,
 
     image->assignImageProfile(cs->profile());
     documentInfo()->setAboutInfo("title", name);
+    if (name != i18n("unnamed") && !name.isEmpty()) {
+        setUrl(QDesktopServices::storageLocation(QDesktopServices::PicturesLocation) + "/" + name + ".kra");
+    }
     documentInfo()->setAboutInfo("comments", description);
 
     layer = new KisPaintLayer(image.data(), image->nextLayerName(), bgColor.opacityU8(), cs);
@@ -477,9 +483,12 @@ KisImageWSP KisDoc2::image() const
 
 void KisDoc2::setCurrentImage(KisImageWSP image)
 {
+    //if (!image.isValid()) return;
+
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
+        m_d->shapeController->setImage(0);
     }
     m_d->image = image;
     m_d->shapeController->setImage(image);
@@ -523,7 +532,6 @@ void KisDoc2::undoIndexChanged(int idx)
 
     undoStore->notifyCommandExecuted(command);
 }
-
 
 #include "kis_doc2.moc"
 

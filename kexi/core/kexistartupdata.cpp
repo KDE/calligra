@@ -25,59 +25,119 @@
 
 #include <QFileInfo>
 
-KexiStartupData::KexiStartupData()
-        : m_projectData(0)
-        , m_action(KexiStartupData::DoNothing)
-        , m_forcedUserMode(false)
-        , m_forcedDesignMode(false)
-        , m_isProjectNavigatorVisible(false)
-        , m_forcedFullScreen(false)
-// , m_createDB(false)
-// , m_dropDB(false)
-// , m_alsoOpenDB(false)
+class KexiStartupData::Private
 {
+public:
+    Private();
+    ~Private();
+
+    KexiProjectData *projectData;
+    Action action;
+    KexiStartupData::Import importActionData;
+    bool forcedUserMode;
+    bool forcedDesignMode;
+    bool isProjectNavigatorVisible;
+    bool isMainMenuVisible;
+    bool createDB;
+    bool dropDB;
+    bool alsoOpenDB;
+    bool forcedFullScreen;
+};
+
+KexiStartupData::Private::Private()
+    :projectData(0), action(KexiStartupData::DoNothing), forcedUserMode(false)
+      ,forcedDesignMode(false), isProjectNavigatorVisible(false), forcedFullScreen(false)
+{
+}
+
+KexiStartupData::Private::~Private()
+{
+    delete projectData;
+}
+
+KexiStartupData::KexiStartupData() : d(new Private)
+{
+
 }
 
 KexiStartupData::~KexiStartupData()
 {
-    delete m_projectData;
+    delete d;
 }
 
-KexiProjectData *KexiStartupData::projectData() const
+KexiProjectData *KexiStartupData::projectData()
 {
-    return m_projectData;
+    return d->projectData;
+}
+
+void KexiStartupData::setProjectData(KexiProjectData *data)
+{
+    if (data != d->projectData) {
+        delete d->projectData;
+    }
+    d->projectData = data;
 }
 
 KexiStartupData::Action KexiStartupData::action() const
 {
-    return m_action;
+    return d->action;
+}
+
+void KexiStartupData::setAction(KexiStartupData::Action action)
+{
+    d->action = action;
 }
 
 bool KexiStartupData::forcedUserMode() const
 {
-    return m_forcedUserMode;
+    return d->forcedUserMode;
+}
+
+void KexiStartupData::setForcedUserMode(bool set)
+{
+    d->forcedUserMode = set;
 }
 
 bool KexiStartupData::forcedDesignMode() const
 {
-    return m_forcedDesignMode;
+    return d->forcedDesignMode;
+}
+
+void KexiStartupData::setForcedDesignMode(bool set)
+{
+    d->forcedDesignMode = set;
 }
 
 bool KexiStartupData::isProjectNavigatorVisible() const
 {
-    if (m_forcedUserMode && !m_forcedDesignMode)
-        return m_isProjectNavigatorVisible;
+    if (d->forcedUserMode && !d->forcedDesignMode)
+        return d->isProjectNavigatorVisible;
     return true;
+}
+
+void KexiStartupData::setProjectNavigatorVisible(bool set)
+{
+    d->isProjectNavigatorVisible = set;
 }
 
 bool KexiStartupData::isMainMenuVisible() const
 {
-    return m_isMainMenuVisible;
+    return d->isMainMenuVisible;
+}
+
+void KexiStartupData::setMainMenuVisible(bool set)
+{
+    d->isMainMenuVisible = set;
 }
 
 KexiStartupData::Import KexiStartupData::importActionData() const
 {
-    return m_importActionData;
+    return d->importActionData;
+}
+
+void KexiStartupData::setImportActionData(KexiStartupData::Import import)
+{
+    d->importActionData = import;
 }
 
 KexiStartupData::Import::Import()
@@ -91,5 +151,10 @@ KexiStartupData::Import::operator bool() const
 
 bool KexiStartupData::forcedFullScreen() const
 {
-    return m_forcedFullScreen;
+    return d->forcedFullScreen;
+}
+
+void KexiStartupData::setForcedFullScreen(bool set)
+{
+    d->forcedFullScreen = set;
 }

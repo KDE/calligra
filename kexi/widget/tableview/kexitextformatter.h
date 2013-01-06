@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ public:
      A field schema set using setField() is used to perform the formatting.
      \a add is a text that should be added to the value if possible.
      Used in KexiInputTableEdit::setValueInternal(), by form widgets and for reporting/printing. */
-    QString toString(const QVariant& value, const QString& add) const;
+    QString toString(const QVariant& value, const QString& add, bool *lengthExceeded) const;
 
     /*! \return variant value converted from \a text
      A field schema set using setField() is used to perform the formatting.
@@ -57,6 +57,9 @@ public:
     /*! \return input mask for intering values related to a field schema
      which has been set using setField(). */
     QString inputMask() const;
+
+    /*! \return true if @a text length is exceeded. */
+    bool lengthExceeded(const QString& text) const;
 
     class Private;
     Private * const d;

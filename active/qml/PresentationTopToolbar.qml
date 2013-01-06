@@ -70,7 +70,7 @@ Item
                 height: parent.height
                 width: height
 
-                text: "Slide " + root.documentController.documentHandler.currentSlideNumber + " of " + root.documentController.documentHandler.totalNumberOfSlides
+                text: i18n("Slide %1 of %2", root.documentController.documentHandler.currentSlideNumber, root.documentController.documentHandler.totalNumberOfSlides)
             }
 
             PlasmaComponents.ToolButton {

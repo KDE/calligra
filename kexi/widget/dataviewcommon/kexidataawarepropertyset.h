@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,8 +27,6 @@
 #include <QByteArray>
 #include <koproperty/Set.h>
 #include <db/RecordData.h>
-
-typedef QVector<KoProperty::Set*> SetVector;
 
 class KexiView;
 class KexiTableViewData;
@@ -72,15 +70,12 @@ public:
     KoProperty::Set* currentPropertySet() const;
 
     uint currentRow() const;
-
-    inline KoProperty::Set* at(uint row) const {
-        return m_sets[row];
-    }
+    KoProperty::Set* at(uint row) const;
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
      if assigned table view has no data set. */
-    KoProperty::Set* findPropertySetForItem(KexiDB::RecordData& record);
+    KoProperty::Set* findPropertySetForItem(const KexiDB::RecordData& record);
 
     /*! \return number of the first row containing \a propertyName property equal to \a value.
      This is used e.g. in the Table Designer to find a row by field name.
@@ -101,7 +96,7 @@ signals:
 public slots:
     void eraseCurrentPropertySet();
 
-    void clear(uint minimumSize = 0);
+    void clear();
 
     /*! Inserts \a set property set at \a row position.
      If there was a buffer at this position before, it will be destroyed.
@@ -117,7 +112,7 @@ public slots:
     */
     void set(uint row, KoProperty::Set* set, bool newOne = false);
 
-    /*! Erases a property set at \a row position. */
+    /*! Deletes a property set at \a row position without removing the row. */
     void eraseAt(uint row);
 
 protected slots:
@@ -140,13 +135,11 @@ protected slots:
     void slotReloadRequested();
 
 protected:
-    SetVector m_sets; //!< prop. sets vector
+    void enlargeToFitRow(uint row);
 
-    QPointer<KexiView> m_view;
-    KexiDataAwareObjectInterface* m_dataObject;
-    QPointer<KexiTableViewData> m_currentTVData;
-
-    int m_row; //!< used to know if a new row is selected in slotCellSelected()
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif
