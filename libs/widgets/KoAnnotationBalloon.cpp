@@ -53,4 +53,3 @@ KoAnnotationBalloon::KoAnnotationBalloon(int position, KoAnnotation *data, QWidg
 	setPalette(pal);
 	setAutoFillBackground(true);
 }
-

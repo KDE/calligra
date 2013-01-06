@@ -1,6 +1,9 @@
 /* This file is part of the KDE project
  * Copyright (c) 2012 Boudewijn Rempt <boud@kogmbh.com>
+<<<<<<< HEAD
+=======
  * Copyright (c) 2012 C. Boemann <cbo@boemann.dk>
+>>>>>>> master
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

@@ -832,7 +832,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     //foreach(KoTextRange *range, textRangeManager->textRanges()) {
         //kDebug(32500) << range->id();
     //}
-
 }
 
 KoXmlNode KoTextLoader::loadDeleteMerges(const KoXmlElement& elem, QString *generatedXmlString)
