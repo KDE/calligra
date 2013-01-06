@@ -178,7 +178,7 @@ public:
     KoCanvasBase *canvas;
 };
 
-KoFillConfigWidget::KoFillConfigWidget(QWidget * parent)
+KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 :  QWidget(parent)
 , d(new Private())
 {
@@ -317,7 +317,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
     }
     // Put the button pressed
     resetButtons();
-    KoGroupButton *button = dynamic_cast<KoGroupButton *>(d->group->button(buttonId));
+    KoGroupButton *button = dynamic_cast<KoGroupButton*>(d->group->button(buttonId));
     button->setAutoRaise(true);
 
     blockChildSignals(false);
@@ -325,7 +325,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
 
 void KoFillConfigWidget::noColorSelected()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
     if (!selection || !selection->count())
@@ -336,7 +336,7 @@ void KoFillConfigWidget::noColorSelected()
 
 void KoFillConfigWidget::colorChanged()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
     if (!selection || !selection->count())
@@ -348,8 +348,8 @@ void KoFillConfigWidget::colorChanged()
     if (selectedShapes.isEmpty())
         return;
 
-    KUndo2Command * firstCommand = 0;
-    foreach (KoShape * shape, selectedShapes) {
+    KUndo2Command *firstCommand = 0;
+    foreach (KoShape *shape, selectedShapes) {
         if (! firstCommand)
             firstCommand = new KoShapeBackgroundCommand(shape, fill);
         else
@@ -360,13 +360,13 @@ void KoFillConfigWidget::colorChanged()
 
 void KoFillConfigWidget::gradientChanged(KoResource *resource)
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
     if (!selection || !selection->count())
         return;
 
-    KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>(resource);
+    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
     if (! gradient)
         return;
 
@@ -374,16 +374,16 @@ void KoFillConfigWidget::gradientChanged(KoResource *resource)
     if (selectedShapes.isEmpty())
         return;
 
-    QGradient * newGradient = gradient->toQGradient();
+    QGradient *newGradient = gradient->toQGradient();
     if (! newGradient)
         return;
 
     QGradientStops newStops = newGradient->stops();
     delete newGradient;
 
-    KUndo2Command * firstCommand = 0;
-    foreach (KoShape * shape, selectedShapes) {
-        KoShapeBackground * fill = applyFillGradientStops(shape, newStops);
+    KUndo2Command *firstCommand = 0;
+    foreach (KoShape *shape, selectedShapes) {
+        KoShapeBackground *fill = applyFillGradientStops(shape, newStops);
         if (! fill)
             continue;
         if (! firstCommand)
@@ -396,13 +396,13 @@ void KoFillConfigWidget::gradientChanged(KoResource *resource)
 
 void KoFillConfigWidget::patternChanged(KoResource *resource)
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
     if (!selection || !selection->count())
         return;
 
-    KoPattern * pattern = dynamic_cast<KoPattern*>(resource);
+    KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
     if (! pattern)
         return;
 
@@ -412,16 +412,16 @@ void KoFillConfigWidget::patternChanged(KoResource *resource)
 
     KoImageCollection *imageCollection = canvasController->canvas()->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
-        KoPatternBackground * fill = new KoPatternBackground(imageCollection);
+        KoPatternBackground *fill = new KoPatternBackground(imageCollection);
         fill->setPattern(pattern->image());
-        canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill ));
+        canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
 
     }
 }
 
 void KoFillConfigWidget::updateOpacity(qreal opacity)
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
     if (!selection || !selection->count())
@@ -436,9 +436,9 @@ void KoFillConfigWidget::updateOpacity(qreal opacity)
 
 void KoFillConfigWidget::shapeChanged()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
+    KoShape *shape = selection->firstSelectedShape();
     if (! shape)
         return;
 
@@ -458,13 +458,13 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(shape->background());
     if (colorBackground){
         d->colorAction->setCurrentColor(colorBackground->color());
-        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::Solid));
+        button = dynamic_cast<KoGroupButton*>(d->group->button(KoFillConfigWidget::Solid));
     } else if (gradientBackground) {
-        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::Gradient));
+        button = dynamic_cast<KoGroupButton*>(d->group->button(KoFillConfigWidget::Gradient));
     } else if (patternBackground) {
-        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::Pattern));
+        button = dynamic_cast<KoGroupButton*>(d->group->button(KoFillConfigWidget::Pattern));
     } else {
-        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::None));
+        button = dynamic_cast<KoGroupButton*>(d->group->button(KoFillConfigWidget::None));
     }
     button->setAutoRaise(true);
     // We don't want the opacity slider to send any signals when it's only initialized.
