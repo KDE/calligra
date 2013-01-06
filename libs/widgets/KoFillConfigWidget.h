@@ -74,6 +74,8 @@ private:
 
     void blockChildSignals(bool block);
 
+    void resetButtons();
+
     class Private;
     Private * const d;
 };

@@ -217,6 +217,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget * parent)
 
     // The button for no fill
     KoGroupButton *button = new KoGroupButton(KoGroupButton::GroupLeft, this);
+    button->setGroupProperty(KoGroupButton::Button);
     button->setIcon(koIcon("edit-delete"));
     button->setToolTip(i18nc("No stroke or fill", "None"));
     d->group->addButton(button, None);
@@ -224,6 +225,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget * parent)
 
     // The button for solid fill
     button = new KoGroupButton(KoGroupButton::GroupCenter, this);
+    button->setGroupProperty(KoGroupButton::Button);
     button->setIcon(QPixmap((const char **) buttonsolid));
     button->setToolTip(i18nc("Solid color stroke or fill", "Solid"));
     d->group->addButton(button, Solid);
@@ -231,6 +233,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget * parent)
 
     // The button for gradient fill
     button = new KoGroupButton(KoGroupButton::GroupCenter, this);
+    button->setGroupProperty(KoGroupButton::Button);
     button->setIcon(QPixmap((const char **) buttongradient));
     button->setToolTip(i18n("Gradient"));
     d->group->addButton(button, Gradient);
@@ -238,6 +241,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget * parent)
 
     // The button for pattern fill
     button = new KoGroupButton(KoGroupButton::GroupRight, this);
+    button->setGroupProperty(KoGroupButton::Button);
     button->setIcon(QPixmap((const char **) buttonpattern));
     button->setToolTip(i18n("Pattern"));
     d->group->addButton(button, Pattern);
@@ -288,6 +292,8 @@ void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
 
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
+    blockChildSignals(true);
+
     switch (buttonId) {
         case KoFillConfigWidget::None:
             // Direct manipulation
@@ -309,6 +315,12 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             patternChanged(d->patternAction->currentResource());
             break;
     }
+    // Put the button pressed
+    resetButtons();
+    KoGroupButton *button = dynamic_cast<KoGroupButton *>(d->group->button(buttonId));
+    button->setAutoRaise(true);
+
+    blockChildSignals(false);
 }
 
 void KoFillConfigWidget::noColorSelected()
@@ -438,18 +450,28 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
     blockChildSignals(true);
 
-    QColor qColor;
-    KoColorBackground *background = dynamic_cast<KoColorBackground*>(shape->background());
-    if (background)
-        qColor = background->color();
+    resetButtons();
 
+    KoGroupButton *button;
+    KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(shape->background());
+    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(shape->background());
+    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(shape->background());
+    if (colorBackground){
+        d->colorAction->setCurrentColor(colorBackground->color());
+        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::Solid));
+    } else if (gradientBackground) {
+        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::Gradient));
+    } else if (patternBackground) {
+        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::Pattern));
+    } else {
+        button = dynamic_cast<KoGroupButton *>(d->group->button(KoFillConfigWidget::None));
+    }
+    button->setAutoRaise(true);
     // We don't want the opacity slider to send any signals when it's only initialized.
     // Otherwise an undo record is created.
     d->opacity->blockSignals(true);
     d->opacity->setValue(100 - shape->transparency() * 100);
     d->opacity->blockSignals(false);
-
-    d->colorAction->setCurrentColor(qColor);
 
     blockChildSignals(false);
 }
@@ -488,5 +510,12 @@ void KoFillConfigWidget::blockChildSignals(bool block)
     d->opacity->blockSignals(block);
 }
 
+void KoFillConfigWidget::resetButtons()
+{
+    foreach(QAbstractButton *button, d->group->buttons()) {
+        KoGroupButton *groupButton = dynamic_cast<KoGroupButton*>(button);
+        groupButton->setAutoRaise(false);
+    }
+}
 
 #include <KoFillConfigWidget.moc>
