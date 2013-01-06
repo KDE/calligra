@@ -39,6 +39,8 @@
 
 const int GUI_DELAY = 10;
 
+#define FILES_DATA_DIR KDESRCDIR "data"
+
 void TestGlobalSearch::initTestCase()
 {
 }
@@ -64,17 +66,13 @@ public:
     char **vals;
 };
 
-#define JOIN(a, b) a#b
-#define STRINGIFY(s) JOIN("", s) // indirection needed because only function-like macro parameters can be pasted
-
 TestGlobalSearch::TestGlobalSearch(int argc, char **argv, bool goToEventLoop)
  : m_argc(argc), m_argv(argv), m_goToEventLoop(goToEventLoop)
 {
 }
-
 void TestGlobalSearch::testGlobalSearch()
 {
-    QString filename(QFile::decodeName(STRINGIFY(FILES_DATA_DIR)) + "/TestGlobalSearch.kexi");
+    QString filename(QFile::decodeName(FILES_DATA_DIR "/TestGlobalSearch.kexi"));
     kDebug() << filename;
     NewArgs args(m_argv);
     args.vals[args.count - 1] = qstrdup(QFile::encodeName(filename).constData());
