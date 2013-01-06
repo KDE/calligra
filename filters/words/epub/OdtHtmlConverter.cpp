@@ -59,6 +59,7 @@ StyleInfo::StyleInfo()
 
 OdtHtmlConverter::OdtHtmlConverter()
     : m_currentChapter(1)
+    , m_mediaId(1)
 {
     qDeleteAll(m_styles);
 }
@@ -86,7 +87,7 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
                                  OdtHtmlConverter::ConversionOptions *options,
                                  FileCollector *collector,
                                  // Out parameters:
-                                 QHash<QString, QSizeF> &images)
+                                 QHash<QString, QSizeF> &images, QHash<QString, QString> &mediaFiles)
 {
     if (options)
         m_options = options;
@@ -303,10 +304,16 @@ OdtHtmlConverter::convertContent(KoStore *odfStore,
         m_collector->addContentFile(fileId, fileName, "application/xhtml+xml", m_htmlContent, i18n("End notes"));
     }
 
+    // Write media document file.
+    if (!m_mediaFilesList.isEmpty()) {
+        writeMediaOverlayDocumentFile();
+    }
     odfStore->close();
 
     // Return the list of images.
     images = m_images;
+    // Return the list of media files source.
+    mediaFiles = m_mediaFilesList;
 
     return KoFilter::OK;
 }
@@ -546,6 +553,18 @@ void OdtHtmlConverter::handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *ht
 
             htmlWriter->endElement(); // end img
             break; // Only one image per frame.
+        }
+        // Handle video
+        else if (framePartElement.localName() == "plugin"
+                 && framePartElement.namespaceURI() == KoXmlNS::draw) {
+            QString videoSource = framePartElement.attribute("href");
+            QString videoId = "media_id_" + QString::number(m_mediaId);
+            m_mediaId++;
+
+            htmlWriter->addAttribute("id", videoId);
+            QString id = "chapter" + QString::number(m_currentChapter) +
+                    m_collector->fileSuffix() + "#" + videoId;
+            m_mediaFilesList.insert(id, videoSource);
         }
     } // foreach
 }
@@ -1014,6 +1033,37 @@ void OdtHtmlConverter::writeEndNotes(KoXmlWriter *htmlWriter)
     htmlWriter->endElement();
 }
 
+void OdtHtmlConverter::writeMediaOverlayDocumentFile()
+{
+    QByteArray mediaContent;
+    QBuffer *buff = new QBuffer(&mediaContent);
+    KoXmlWriter * writer = new KoXmlWriter(buff);
+
+    writer->startElement("smil");
+    writer->addAttribute("xmlns", "http://www.w3.org/ns/SMIL");
+    writer->addAttribute("version", "3.0");
+
+    writer->startElement("body");
+
+    foreach (QString mediaReference, m_mediaFilesList.keys()) {
+        writer->startElement("par");
+
+        writer->startElement("text");
+        writer->addAttribute("src", mediaReference);
+        writer->endElement(); // text
+
+        writer->startElement("audio");
+        writer->addAttribute("src", m_mediaFilesList.value(mediaReference).section("/", -1));
+        writer->endElement();
+
+        writer->endElement(); // par
+    }
+    writer->endElement(); // body
+    writer->endElement(); // smil
+
+    m_collector->addContentFile(QString("smil"), QString(m_collector->pathPrefix() + "media.smil")
+                                ,"application/smil", mediaContent);
+}
 
 // ================================================================
 //                         Style handling
@@ -1332,8 +1382,6 @@ void OdtHtmlConverter::fixStyleTree(QHash<QString, StyleInfo*> &styles)
         }
     }
 }
-
-
 
 KoFilter::ConversionStatus OdtHtmlConverter::createCSS(QHash<QString, StyleInfo*> &styles,
                                                        QByteArray &cssContent)

@@ -70,7 +70,8 @@ class OdtHtmlConverter
                                               ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
-                                              QHash<QString, QSizeF> &images);
+                                              QHash<QString, QSizeF> &images,
+                                              QHash<QString, QString> &mediaFiles);
 
  private:
 
@@ -128,6 +129,8 @@ class OdtHtmlConverter
     void flattenStyles(QHash<QString, StyleInfo*> &styles);
     void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
                       QSet<QString> &doneStyles);
+
+    void writeMediaOverlayDocumentFile();
 
 
  private:
@@ -204,7 +207,9 @@ class OdtHtmlConverter
     // Format: QHash<Qstring anchor, qint64 anchor position>
     QHash<QString, qint64> m_mobiInternalLinks;
 
-    //
+    // Format: QHash< QString id, QString video source>
+    QHash<QString, QString> m_mediaFilesList;
+    int m_mediaId;
 
 };
 
