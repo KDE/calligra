@@ -88,7 +88,7 @@ GenericName[zh_CN]=流程图和图表编辑
 GenericName[zh_TW]=流程圖與圖表編輯
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.visio;
 X-KDE-ServiceTypes=Calligra/Application
-Icon=kivio
+Icon=calligraflow
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 # application/vnd.oasis.opendocument.graphics is not on this list because Karbon has the default;
 # Flow will be used only in absence of Karbon

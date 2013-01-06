@@ -34,6 +34,7 @@ KAboutData * newWordsAboutData()
                                             ki18n("© 1998-2012, The Words Team"), KLocalizedString(),
                                             "http://www.calligra.org/words/");
     aboutData->setProductName("calligrawords"); // for bugs.kde.org
+    aboutData->setProgramIconName(QLatin1String("calligrawords"));
     aboutData->addAuthor(ki18n("Pierre Ducroquet"), ki18n("Co maintainer"), "");
     aboutData->addAuthor(ki18n("C. Boemann"), ki18n("Co maintainer"), "cbo@boemann.dk");
     aboutData->addAuthor(ki18n("Sebastian Sauer"), ki18n("Everything"), "mail@dipe.org");
