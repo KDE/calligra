@@ -37,6 +37,9 @@ class KisDoubleSliderSpinBox;
 class KisToolBrush : public KisToolFreehand
 {
     Q_OBJECT
+    Q_PROPERTY(int smoothnessQuality READ smoothnessQuality WRITE slotSetSmoothnessQuality NOTIFY smoothnessQualityChanged)
+    Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetSmoothnessFactor NOTIFY smoothnessFactorChanged)
+    Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
 
 public:
     KisToolBrush(KoCanvasBase * canvas);
@@ -44,11 +47,20 @@ public:
 
     QWidget * createOptionWidget();
 
+    int smoothnessQuality() const;
+    int smoothnessFactor() const;
+    int smoothingType() const;
+
 public slots:
     void slotSetSmoothnessQuality(int quality);
     void slotSetSmoothnessFactor(qreal factor);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
+
+Q_SIGNALS:
+    void smoothnessQualityChanged();
+    void smoothnessFactorChanged();
+    void smoothingTypeChanged();
 
 private:
     QGridLayout *m_optionLayout;

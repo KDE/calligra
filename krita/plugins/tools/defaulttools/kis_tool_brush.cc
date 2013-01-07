@@ -45,6 +45,21 @@ KisToolBrush::~KisToolBrush()
 {
 }
 
+int KisToolBrush::smoothingType() const
+{
+    return m_smoothingOptions.smoothingType;
+}
+
+int KisToolBrush::smoothnessQuality() const
+{
+    return m_smoothingOptions.smoothnessQuality;
+}
+
+int KisToolBrush::smoothnessFactor() const
+{
+    return m_smoothingOptions.smoothnessFactor;
+}
+
 void KisToolBrush::slotSetSmoothingType(int index)
 {
     switch (index) {
@@ -64,16 +79,19 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_sliderSmoothnessFactor->setEnabled(true);
         m_sliderSmoothnessQuality->setEnabled(true);
     }
+    emit smoothingTypeChanged();
 }
 
 void KisToolBrush::slotSetSmoothnessQuality(int quality)
 {
     m_smoothingOptions.smoothnessQuality = quality;
+    emit smoothnessQualityChanged();
 }
 
 void KisToolBrush::slotSetSmoothnessFactor(qreal factor)
 {
     m_smoothingOptions.smoothnessFactor = factor;
+    emit smoothnessFactorChanged();
 }
 
 void KisToolBrush::slotSetMagnetism(int magnetism)
