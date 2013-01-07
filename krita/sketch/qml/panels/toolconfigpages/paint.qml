@@ -104,13 +104,53 @@ Item {
             visible: compositeOpModel.flowEnabled;
         }
 
-        RangeInput {
-            visible: fullView && toolManager.currentTool !== null && toolManager.currentTool.slotSetSmoothness !== undefined;
+        Column {
+            visible: fullView && toolManager.currentTool !== null && toolManager.currentTool.slotSetSmoothingType !== undefined;
+            height: !visible ? 0 : (smoothnessTypeList.currentIndex < 2 ? smoothingLabel.height + smoothnessTypeList.height : smoothingLabel.height + smoothnessTypeList.height + smoothnessQuality.height + smoothnessFactor.height)
             width: parent.width;
-            placeholder: "Smoothness";
-            min: 0; max: 1000; decimals: 0;
-            value: 1000;
-            onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothness(value);
+            Label {
+                id: smoothingLabel
+                horizontalAlignment: Text.AlignLeft;
+                font.pixelSize: Constants.DefaultFontSize;
+                font.bold: true;
+                height: visible ? Constants.GridHeight / 2 : 0;
+                text: "Smoothing:";
+            }
+            ExpandingListView {
+                id: smoothnessTypeList
+                width: parent.width;
+                expandedHeight: Constants.GridHeight * 2
+                model: ListModel {
+                    ListElement { text: "No smoothing" }
+                    ListElement { text: "Basic smoothing" }
+                    ListElement { text: "Weighted smoothing" }
+                }
+                currentIndex: 1;
+                onCurrentIndexChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothingType(currentIndex);
+            }
+            RangeInput {
+                id: smoothnessQuality;
+                visible: smoothnessTypeList.currentIndex === 2
+                height: visible ? childrenRect.height : 0;
+                Behavior on height { NumberAnimation { duration: 150; } }
+                width: parent.width;
+                placeholder: "Quality";
+                min: 1; max: 100; decimals: 0;
+                value: 20;
+                onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothnessQuality(value);
+            }
+            RangeInput {
+                id: smoothnessFactor;
+                visible: smoothnessTypeList.currentIndex === 2
+                height: visible ? childrenRect.height : 0;
+                Behavior on height { NumberAnimation { duration: 150; } }
+                width: parent.width;
+                placeholder: "Weight"
+                useExponentialValue: true;
+                min: 3; max: 1000; decimals: 1;
+                value: 50;
+                onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothnessFactor(value);
+            }
         }
 // No Assistant for the first release
 //         RangeInput {
