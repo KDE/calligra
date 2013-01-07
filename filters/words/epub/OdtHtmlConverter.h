@@ -65,11 +65,13 @@ class OdtHtmlConverter
     OdtHtmlConverter();
     ~OdtHtmlConverter();
 
-    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString, QString> &metaData,
+    KoFilter::ConversionStatus convertContent(KoStore *odfStore, QHash<QString,
+                                              QString> &metaData, QHash<QString, QString> *manifest,
                                               ConversionOptions *options,
                                               FileCollector *collector,
                                               // Out parameters:
-                                              QHash<QString, QSizeF> &images);
+                                              QHash<QString, QSizeF> &images,
+                                              QHash<QString, QString> &mediaFiles);
 
  private:
 
@@ -94,6 +96,10 @@ class OdtHtmlConverter
     void handleTagList(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
 
     void handleTagFrame(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
+    void handleEmbeddedFormula(const QString &href, KoXmlWriter *htmlWriter);
+    void copyXmlElement(const KoXmlElement &el, KoXmlWriter &writer,
+                        QHash<QString, QString> &unknownNamespaces);
+
 
     void handleTagTab(KoXmlWriter *htmlWriter);
     void handleTagTableOfContent(KoXmlElement &nodeElement, KoXmlWriter *htmlWriter);
@@ -124,6 +130,8 @@ class OdtHtmlConverter
     void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
                       QSet<QString> &doneStyles);
 
+    void writeMediaOverlayDocumentFile();
+
 
  private:
     FileCollector *m_collector;
@@ -135,9 +143,9 @@ class OdtHtmlConverter
     KoXmlWriter *m_htmlWriter;
 
     // Options for the conversion process
-    // FIXME: This should go into an Options struct together with some
-    //        others from FileConversion.h.
-    ConversionOptions  *m_options;
+    ConversionOptions       *m_options;
+    QHash<QString, QString> *m_manifest;
+    KoStore                 *m_odfStore;
 
     QHash<QString, StyleInfo*> m_styles;
 
@@ -199,7 +207,9 @@ class OdtHtmlConverter
     // Format: QHash<Qstring anchor, qint64 anchor position>
     QHash<QString, qint64> m_mobiInternalLinks;
 
-    //
+    // Format: QHash< QString id, QString video source>
+    QHash<QString, QString> m_mediaFilesList;
+    int m_mediaId;
 
 };
 

@@ -55,6 +55,7 @@ target_link_libraries(kexicore
   kexidb
   ${CALLIGRADB_LIBS}
   ${KOPROPERTY_LIBS}
+  kowidgetutils
 )
 target_link_libraries(kexicore LINK_INTERFACE_LIBRARIES kexiutils kexidb ${KOPROPERTY_LIBS})
 

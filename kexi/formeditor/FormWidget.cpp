@@ -24,14 +24,44 @@
 
 using namespace KFormDesigner;
 
-FormWidget::FormWidget()
-    : m_form(0)
+class FormWidget::Private
 {
+public:
+    Private();
+    ~Private();
+
+    Form *form;
+};
+
+FormWidget::Private::Private() : form(0)
+{
+
+}
+
+FormWidget::Private::~Private()
+{
+    if (form) {
+        form->setFormWidget(0);
+    }
+}
+
+FormWidget::FormWidget()
+    : d(new Private())
+{
+
 }
 
 FormWidget::~FormWidget()
 {
-    if (m_form) {
-        m_form->setFormWidget(0);
-    }
+    delete d;
+}
+
+Form* FormWidget::form() const
+{
+    return d->form;
+}
+
+void FormWidget::setForm(Form *f)
+{
+    d->form = f;
 }

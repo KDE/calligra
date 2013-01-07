@@ -244,7 +244,7 @@ KoFilter::ConversionStatus DocxXmlNumberingReader::read_lvl()
         m_currentBulletProperties.m_level = ilvl.toInt() + 1;
     }
 
-    m_bulletCharacter = QString();
+    m_bulletCharacter.clear();
     m_bulletStyle = false;
 
     bool pictureType = false;

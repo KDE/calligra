@@ -138,15 +138,15 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 
-    QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
-
     m_find = new KoFindText(this);
-    m_find->setDocuments(texts);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
     connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
+    // The text documents to search in will potentially change when we add/remove shapes and after load
+    connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
+    connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+    refreshFindTexts();
 
     layout->addWidget(toolbar);
 
@@ -973,10 +973,15 @@ void KWView::findMatchFound(KoFindMatch match)
     m_canvas->resourceManager()->setResource(KoText::CurrentTextPosition, cursor.position());
 }
 
-void KWView::loadingCompleted()
+void KWView::refreshFindTexts()
 {
     QList<QTextDocument*> texts;
-    KoFindText::findTextInShapes(m_canvas->shapeManager()->shapes(), texts);
+    foreach (KWFrameSet *fSet, m_document->frameSets()) {
+        KWTextFrameSet *tFSet = dynamic_cast<KWTextFrameSet *>(fSet);
+        if (tFSet) {
+           texts.append(tFSet->document());
+        }
+    }
     m_find->setDocuments(texts);
 }
 
@@ -999,7 +1004,7 @@ void KWView::addImages(const QList<QImage> &imageList, const QPoint &insertAt)
         return;
     }
 
-    foreach(const QImage image, imageList) {
+    foreach(const QImage &image, imageList) {
         KoProperties params;
         params.setProperty("qimage", image);
 

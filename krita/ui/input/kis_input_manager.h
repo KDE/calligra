@@ -19,7 +19,7 @@
 #ifndef KIS_INPUTMANAGER_H
 #define KIS_INPUTMANAGER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include "krita_export.h"
 

@@ -125,27 +125,28 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
 }
 
 TextTool::TextTool(KoCanvasBase *canvas)
-        : KoToolBase(canvas),
-        m_textShape(0),
-        m_textShapeData(0),
-        m_changeTracker(0),
-        m_allowActions(true),
-        m_allowAddUndoCommand(true),
-        m_allowResourceManagerUpdates(true),
-        m_prevCursorPosition(-1),
-        m_caretTimer(this),
-        m_caretTimerState(true),
-        m_currentCommand(0),
-        m_currentCommandHasChildren(false),
-        m_specialCharacterDocker(0),
-        m_textTyping(false),
-        m_textDeleting(false)
-        , m_editTipTimer(this),
-        m_delayedEnsureVisible(false),
-        m_toolSelection(0)
+        : KoToolBase(canvas)
+        , m_textShape(0)
+        , m_textShapeData(0)
+        , m_changeTracker(0)
+        , m_allowActions(true)
+        , m_allowAddUndoCommand(true)
+        , m_allowResourceManagerUpdates(true)
+        , m_prevCursorPosition(-1)
+        , m_caretTimer(this)
+        , m_caretTimerState(true)
+        , m_currentCommand(0)
+        , m_currentCommandHasChildren(false)
+        , m_specialCharacterDocker(0)
+        , m_textTyping(false)
+        , m_textDeleting(false)
+        , m_editTipTimer(this)
+        , m_delayedEnsureVisible(false)
+        , m_toolSelection(0)
         , m_tableDraggedOnce(false)
         , m_tablePenMode(false)
-        ,m_lastImMicroFocus(QRectF(0,0,0,0))
+        , m_lastImMicroFocus(QRectF(0,0,0,0))
+        , m_drag(0)
 {
     setTextMode(true);
 
@@ -1629,11 +1630,13 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
+            m_prevCursorPosition = textEditor->position();
             textEditor->newLine();
             updateActions();
             editingPluginEvents();
         } else if ((event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
             m_prevCursorPosition = textEditor->position();
+            startingSimpleEdit(); //signal editing plugins that this is a simple edit
             textEditor->insertText(event->text());
             editingPluginEvents();
         }
@@ -1767,8 +1770,6 @@ void TextTool::ensureCursorVisible(bool moveView)
     KoTextEditor *textEditor = m_textEditor.data();
     if (!textEditor || !m_textShapeData)
         return;
-
-    const int position = textEditor->position();
 
     bool upToDate;
     QRectF cRect = caretRect(textEditor->cursor(), &upToDate);
@@ -2443,8 +2444,7 @@ void TextTool::selectAll()
     if (!textEditor || !m_textShapeData)
         return;
     const int selectionLength = qAbs(textEditor->position() - textEditor->anchor());
-    QTextBlock lastBlock = m_textShapeData->document()->lastBlock();
-    textEditor->setPosition(lastBlock.position() + lastBlock.length() - 1);
+    textEditor->movePosition(QTextCursor::End);
     textEditor->setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection();
     if (selectionLength != qAbs(textEditor->position() - textEditor->anchor())) // it actually changed
@@ -2521,11 +2521,7 @@ void TextTool::startTextEditingPlugin(const QString &pluginId)
     KoTextEditingPlugin *plugin = m_textEditingPlugins->plugin(pluginId);
     if (plugin) {
         if (m_textEditor.data()->hasSelection()) {
-            int from = m_textEditor.data()->position();
-            int to = m_textEditor.data()->anchor();
-            if (from > to) // make sure we call the plugin consistently
-                qSwap(from, to);
-            plugin->checkSection(m_textShapeData->document(), from, to);
+            plugin->checkSection(m_textShapeData->document(), m_textEditor.data()->selectionStart(), m_textEditor.data()->selectionEnd());
         } else
             plugin->finishedWord(m_textShapeData->document(), m_textEditor.data()->position());
     }
@@ -2676,7 +2672,6 @@ void TextTool::editingPluginEvents()
 
 void TextTool::finishedWord()
 {
-    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedWord(m_textShapeData->document(), m_prevCursorPosition);
@@ -2684,10 +2679,16 @@ void TextTool::finishedWord()
 
 void TextTool::finishedParagraph()
 {
-    kDebug();
     if (m_textShapeData)
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
             plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
+}
+
+void TextTool::startingSimpleEdit()
+{
+    if (m_textShapeData)
+        foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values())
+            plugin->startingSimpleEdit(m_textShapeData->document(), m_prevCursorPosition);
 }
 
 void TextTool::setTextColor(const KoColor &color)
@@ -2823,7 +2824,7 @@ void TextTool::debugTextDocument()
         else if (block.length() == 1) { // no actual tet
             kDebug(32500) << "\\n";
         }
-        foreach (QTextCharFormat cf, inlineCharacters) {
+        foreach (const QTextCharFormat &cf, inlineCharacters) {
             KoInlineObject *object= inlineManager->inlineTextObject(cf);
             kDebug(32500) << "At pos:" << cf.intProperty(CHARPOSITION) << object;
             // kDebug(32500) << "-> id:" << cf.intProperty(577297549);

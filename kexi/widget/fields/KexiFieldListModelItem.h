@@ -38,10 +38,8 @@ public:
     Qt::ItemFlags flags() const;
 
 private:
-    QString m_fieldName;
-    QString m_dateType;
-    QIcon m_icon;
-    QString m_caption;
+    class Private;
+    Private * const d;
 };
 
 #endif // KEXIFIELDLISTMODELITEM_H

@@ -177,7 +177,7 @@ void SchedulerPlugin::updateLog( SchedulerThread *j )
     }
 
     QList<Schedule::Log> logs;
-    foreach ( const Schedule::Log log, j->log() ) {
+    foreach ( const Schedule::Log &log, j->log() ) {
         // map log from temporary project to real project
         Schedule::Log l = log;
         if ( l.resource ) {

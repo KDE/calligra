@@ -52,7 +52,7 @@ private:
 protected:
     void run();
 public:
-    OoThread(QObject* o);
+    explicit OoThread(QObject* o);
     ~OoThread();
 
     void stop();

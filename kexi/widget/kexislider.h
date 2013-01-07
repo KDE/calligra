@@ -81,8 +81,7 @@ private:
     void updateLayout();
     void init(Qt::Orientation);
 
-    Slider *m_slider;
-    QSpinBox *m_spinBox;
-    QBoxLayout *m_layout;
+    class Private;
+    Private * const d;
 };
 #endif // KEXISLIDER_H

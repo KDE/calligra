@@ -41,7 +41,7 @@ Q_OBJECT
 
         Slide() :version(0) {}
         Slide(const Slide& s) { version = 0; *this = s; }
-        Slide(const QString& p) {
+        explicit Slide(const QString& p) {
             path = p;
             lastModified = QFileInfo(path).lastModified();
             version = 1;

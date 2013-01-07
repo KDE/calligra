@@ -22,9 +22,12 @@
 #include "KoApplication.h"
 
 #include "KoGlobal.h"
+
 #ifndef QT_NO_DBUS
 #include "KoApplicationAdaptor.h"
+#include <QtDBus>
 #endif
+
 #include "KoPrintJob.h"
 #include "KoDocumentEntry.h"
 #include "KoDocument.h"
@@ -46,10 +49,6 @@
 
 #if KDE_IS_VERSION(4,6,0)
 #include <krecentdirs.h>
-#endif
-
-#ifndef QT_NO_DBUS
-#include <QtDBus/QtDBus>
 #endif
 
 #include <QFile>
@@ -239,6 +238,8 @@ bool KoApplication::start()
         QStringList pids;
         QString ourPid;
         ourPid.setNum(kapp->applicationPid());
+
+        // all running instances of our application -- bit hackish, but we cannot get at the dbus name here, for some reason
 
         foreach (QString name, reply.value()) {
             if (name.contains(part->componentData().componentName())) {

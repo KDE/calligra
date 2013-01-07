@@ -55,6 +55,7 @@ class KisZoomManager;
 class KoFavoriteResourceManager;
 class KisPaintopBox;
 class KisCanvasController;
+class KisFlipbook;
 
 /**
  * Krita view class
@@ -186,6 +187,10 @@ public:  // Krita specific interfaces
     /// shows a floating message in the top right corner of the canvas
     void showFloatingMessage(const QString message, const QIcon& icon);
 
+public slots:
+
+    void slotLoadingFinished();
+
 signals:
 
     void sigLoadingFinished();
@@ -193,9 +198,10 @@ signals:
 
 private slots:
 
-    void slotLoadingFinished();
+
     void slotPreferences();
     void slotEditPalette();
+    void slotBlacklistCleanup();
     void slotImageSizeChanged();
     void slotNodeChanged();
     void slotTotalRefresh();

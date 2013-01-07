@@ -535,6 +535,19 @@ void KWDocument::initEmpty()
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
     Q_ASSERT(styleManager);
     KoParagraphStyle *parag = new KoParagraphStyle();
+    parag->setName(i18n("Standard"));
+    parag->setFontPointSize(12);
+    parag->setFontWeight(QFont::Normal);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName(i18n("Document Title"));
+    parag->setFontPointSize(24);
+    parag->setFontWeight(QFont::Bold);
+    parag->setAlignment(Qt::AlignCenter);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
     parag->setName(i18n("Head 1"));
     parag->setFontPointSize(20);
     parag->setFontWeight(QFont::Bold);
@@ -561,6 +574,7 @@ void KWDocument::initEmpty()
     parag->setListStyle(list);
     styleManager->add(parag);
 
+    setMimeTypeAfterLoading("application/vnd.oasis.opendocument.text");
     KoDocument::initEmpty();
     clearUndoHistory();
 }
@@ -742,7 +756,7 @@ void KWDocument::updatePagesForStyle(const KWPageStyle &style)
             framesets.append(tfs);
     }
     int pageNumber = -1;
-    foreach (KWPage page, pageManager()->pages()) {
+    foreach (const KWPage &page, pageManager()->pages()) {
         if (page.pageStyle() == style) {
             pageNumber = page.pageNumber();
             break;
@@ -796,7 +810,7 @@ KoTextAnchor* KWDocument::anchorOfShape(KoShape *shape) const
     Q_ASSERT(mainFrameSet());
     Q_ASSERT(shape);
 
-    // try and find out if shape is already anchored    
+    // try and find out if shape is already anchored
     foreach (KoInlineObject *inlineObject, inlineTextObjectManager()->inlineTextObjects()) {
         KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(inlineObject);
         if (anchor && anchor->shape() == shape) {
@@ -841,3 +855,12 @@ KWFrame *KWDocument::frameOfShape(KoShape* shape) const
     return answer;
 }
 
+void KWDocument::setCoverImage(QPair<QString, QByteArray> cover)
+{
+    m_coverImage = cover;
+}
+
+QPair<QString, QByteArray> KWDocument::coverImage()
+{
+    return m_coverImage;
+}

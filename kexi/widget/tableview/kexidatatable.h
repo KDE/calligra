@@ -80,6 +80,8 @@ protected slots:
 protected:
     void init();
 
+    
+
 class Private;
     Private * const d;
 };

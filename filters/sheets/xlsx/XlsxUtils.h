@@ -34,7 +34,7 @@ int rangeStringToInt(const QString &string)
     int result = 0;
     const int size = string.size();
     for ( int i = 0; i < size; i++ )
-        result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );
+        result += rangeCharToInt( string[i].toLatin1() ) * pow( 10.0, ( size - i - 1 ) );
     return result;
 }
 

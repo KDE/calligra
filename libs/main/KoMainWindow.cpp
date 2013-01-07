@@ -22,6 +22,10 @@
 
 #include "KoMainWindow.h"
 
+#ifdef __APPLE__
+#include "MacSupport.h"
+#endif
+
 #include "KoView.h"
 #include "KoDocument.h"
 #include "KoFilterManager.h"
@@ -240,6 +244,10 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
         : KParts::MainWindow()
         , d(new KoMainWindowPrivate(this))
 {
+#ifdef __APPLE__
+    setUnifiedTitleAndToolBarOnMac(true);
+    MacSupport::addFullscreen(this);
+#endif
     setStandardToolBarMenuEnabled(true);
     Q_ASSERT(componentData.isValid());
 
@@ -958,7 +966,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
             bOk = true;
             if (dialog->exec() == QDialog::Accepted) {
                 newURL = dialog->selectedUrl();
-                QString outputFormatString = dialog->currentMimeFilter().toLatin1();
+                QString outputFormatString = dialog->currentMimeFilter();
                 if (outputFormatString.isNull()) {
                     KMimeType::Ptr mime = KMimeType::findByUrl(newURL);
                     outputFormatString = mime->name();

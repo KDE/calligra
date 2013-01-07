@@ -59,15 +59,15 @@ void PalmDocCompression::compressContent(QByteArray input, QByteArray &output,
         its structure, two bytes 10 00000000000 000
         first two bits are used to make sure the decoder can identify the first byte as
         the beginning of such a two-byte sequence.
-        the next 11 bits are for distance and other 3 bits are for lenght
-        so i get my window size 4096 and buffer size 7 bits but for lenght
+        the next 11 bits are for distance and other 3 bits are for length
+        so i get my window size 4096 and buffer size 7 bits but for length
         There is some thing This line form the its wiki http://wiki.mobileread.com/wiki/PalmDOC
         "the 2 leftmost bits of this byte ('10') are discarded, and the following 6
         bits are combined with the 8 bits of the next byte to make a 14 bit "distance,
         length" item. Those 14 bits are broken into 11 bits of distance backwards from
         the current location in the uncompressed text, and 3 bits of length to copy from
         that point (copying n+3 bytes, 3 to 10 bytes)."
-        I got that for copress i should do  lenght = length - 3.
+        I got that for copress i should do  length = length - 3.
 
         So i get a base 0X0001000000000000
         then i add this with distance and then shift it 3 bits to left
@@ -129,8 +129,8 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             index++;
             if ((index % m_maxBlockSize) != 0) {
                 if (QChar(input.at(index)).isLetter()
-                        && ((QChar(input.at(index)).toAscii() >= (qint8)0X09)
-                            && (QChar(input.at(index)).toAscii() <= (qint8)0X7f))) {
+                        && ((QChar(input.at(index)).toLatin1() >= (qint8)0X09)
+                            && (QChar(input.at(index)).toLatin1() <= (qint8)0X7f))) {
 
                     winIndex += 2;
                     lookahead += 2;
@@ -141,15 +141,15 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
         }
 
         // litterals ascii is between 0X09 - 0X7f
-        if (QChar(input.at(lookahead)).toAscii() < (qint8)0X09 ||
-               QChar(input.at(lookahead)).toAscii() > (qint8)0X7f ) {
+        if (QChar(input.at(lookahead)).toLatin1() < (qint8)0X09 ||
+               QChar(input.at(lookahead)).toLatin1() > (qint8)0X7f ) {
 
             // Check the length of unknown characters.
             int len = 1;
             int index = lookahead + 1;
             while (1) {
-                if (QChar(input.at(index)).toAscii() < (qint8)0X09 ||
-                        QChar(input.at(index)).toAscii() > (qint8)0X7f ) {
+                if (QChar(input.at(index)).toLatin1() < (qint8)0X09 ||
+                        QChar(input.at(index)).toLatin1() > (qint8)0X7f ) {
                     if ((index % m_maxBlockSize) == 0)
                         break;
                     index++;

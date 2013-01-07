@@ -602,7 +602,7 @@ void KisImage::rotateImpl(const QString &actionName,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
                                        emitSignals, actionName);
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bicubic");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,
@@ -673,7 +673,7 @@ void KisImage::shearImpl(const QString &actionName,
                                        signalFlags,
                                        emitSignals, actionName);
 
-    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Triangle");
+    KisFilterStrategy *filter = KisFilterStrategyRegistry::instance()->value("Bilinear");
 
     KisProcessingVisitorSP visitor =
             new KisTransformProcessingVisitor(1.0, 1.0,

@@ -40,6 +40,7 @@
 #include <QPainter>
 #include <QRectF>
 #include <QVector>
+#include <QPair>
 
 #include "FrameIterator.h"
 
@@ -253,9 +254,18 @@ KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccu
             QTextTableCell cell = d->table->cellAt(row, column);
             pointedAt = d->cellAreas[cell.row()][cell.column()]->hitTest(headerPoint, accuracy);
         }
+        if (pointedAt.tableHit == KoPointedAt::ColumnDivider) {
+            if (column > 0) {
+                pointedAt.tableLeadSize = d->columnPositions[column] - d->columnPositions[column-1];
+            }
+            if (column < d->table->columns()) {
+                pointedAt.tableTrailSize = d->columnPositions[column+1] - d->columnPositions[column];
+            }
+        }
         pointedAt.table = d->table;
         pointedAt.tableRowDivider = row;
         pointedAt.tableColumnDivider = column;
+        pointedAt.tableDividerPos = QPointF(d->columnPositions[column],d->rowPositions[row]);
         return pointedAt;
     }
 
@@ -859,19 +869,21 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         painter->fillRect(rowRect, rowStyle.background());
     }
 
+    QSet<QPair<int, int> > visitedCells;
     // Draw cell backgrounds and contents.
     for (int row = firstRow; row <= lastRow; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
             int testRow = (row == firstRow ? tableCell.row() : row);
-            if (d->cellAreas[testRow][column]) {
+            if (d->cellAreas[testRow][column] && !visitedCells.contains(QPair<int, int>(testRow, column))) {
                 cellContext.background = tableBackground;
                 QBrush bgBrush = d->effectiveCellStyle(tableCell).background();
                 if (bgBrush != Qt::NoBrush) {
                     cellContext.background = bgBrush.color();
                 }
-                paintCell(painter, cellContext, tableCell);
+                paintCell(painter, cellContext, tableCell, d->cellAreas[testRow][column]);
+                visitedCells.insert(QPair<int, int>(testRow, column));
             }
         }
     }
@@ -894,7 +906,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
                 if (bgBrush != Qt::NoBrush) {
                     cellContext.background = bgBrush.color();
                 }
-                paintCell(painter, cellContext, tableCell);
+                paintCell(painter, cellContext, tableCell, d->cellAreas[testRow][column]);
             }
         }
     }
@@ -906,7 +918,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
             int testRow = row == firstRow ? tableCell.row() : row;
             if (d->cellAreas[testRow][column]) {
                 painter->setRenderHint(QPainter::Antialiasing, true);
-                paintCellBorders(painter, context, tableCell, false, &accuBlankBorders);
+                paintCellBorders(painter, context, tableCell, false, lastRow, &accuBlankBorders);
                 painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
             }
         }
@@ -921,17 +933,20 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     bool topRow = !d->headerRows && firstRow != 0; // are we top row in this area
 
     painter->setRenderHint(QPainter::Antialiasing, true);
+    visitedCells.clear();
     for (int row = firstRow; row <= lastRow; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
 
             int testRow = row == firstRow ? tableCell.row() : row;
-            if (d->cellAreas[testRow][column]) {
-                paintCellBorders(painter, context, tableCell, topRow, &accuBlankBorders);
+            if (d->cellAreas[testRow][column] && !visitedCells.contains(QPair<int, int>(testRow, column))) {
+                paintCellBorders(painter, context, tableCell, topRow, lastRow, &accuBlankBorders);
+                visitedCells.insert(QPair<int, int>(testRow, column));
             }
         }
         topRow = false;
     }
+
     painter->setRenderHint(QPainter::Antialiasing, hasAntialiasing);
 
     if (context.showTableBorders) {
@@ -942,7 +957,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     }
 }
 
-void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell)
+void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, KoTextLayoutArea *frameArea)
 {
     int row = tableCell.row();
     int column = tableCell.column();
@@ -986,12 +1001,12 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
     }
 
     // Paint the content of the cellArea
-    d->cellAreas[row][column]->paint(painter, context);
+    frameArea->paint(painter, context);
 
     painter->restore();
 }
 
-void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, QVector<QLineF> *accuBlankBorders)
+void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, int lastRow, QVector<QLineF> *accuBlankBorders)
 {
     Q_UNUSED(context);
 
@@ -1050,7 +1065,7 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
         } else {
             // we have cells to the right so draw sharedborders
             int r = row;
-            while (r < row + tableCell.rowSpan()) {
+            while (r < row + tableCell.rowSpan() && r <= lastRow) {
                 QTextTableCell tableCellRight = d->table->cellAt(r, column + tableCell.columnSpan());
                 KoTableCellStyle cellRightStyle = d->effectiveCellStyle(tableCellRight);
                 QRectF rightBRect = cellBoundingRect(tableCellRight);

@@ -34,7 +34,7 @@ class Doc;
 class CSThumbProviderTables : public CSThumbProvider
 {
 public:
-    CSThumbProviderTables(Calligra::Sheets::Doc *doc);
+    explicit CSThumbProviderTables(Calligra::Sheets::Doc *doc);
     virtual ~CSThumbProviderTables();
 
     virtual QList<QImage> createThumbnails(const QSize &thumbSize);

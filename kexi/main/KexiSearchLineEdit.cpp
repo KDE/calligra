@@ -25,6 +25,12 @@
 #include <KDebug>
 
 #include <kexiutils/completer/KexiCompleter.h>
+
+#ifndef NDEBUG
+#include <core/kexi.h>
+#include <kexiutils/KexiTester.h>
+#endif
+
 #include <QShortcut>
 #include <QKeySequence>
 #include <QTreeView>
@@ -157,6 +163,7 @@ class KexiSearchLineEditCompleter : public KexiCompleter
 {
 public:
     KexiSearchLineEditCompleter(QObject *parent = 0) : KexiCompleter(parent) {
+        setCompletionRole(Qt::DisplayRole);
     }
 
     virtual QString pathFromIndex(const QModelIndex &index) const {
@@ -342,6 +349,9 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
 {
     d->completer = new KexiSearchLineEditCompleter(this);
     QTreeView *treeView = new QTreeView;
+#ifndef NDEBUG
+    Kexi::tester().addObject(treeView, "globalSearch.treeView");
+#endif
     d->completer->setPopup(treeView);
     d->completer->setModel(d->model = new KexiSearchLineEditCompleterPopupModel(d->completer));
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -506,7 +516,9 @@ void KexiSearchLineEdit::focusOutEvent(QFocusEvent *e)
     update();
     if (e->reason() == Qt::TabFocusReason || e->reason() == Qt::BacktabFocusReason) {
         // go back to previously focused widget
-        d->previouslyFocusedWidget->setFocus();
+        if (d->previouslyFocusedWidget) {
+            d->previouslyFocusedWidget->setFocus();
+        }
         e->accept();
     }
     d->previouslyFocusedWidget = 0;

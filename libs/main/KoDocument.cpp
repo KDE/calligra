@@ -69,7 +69,7 @@
 #include <QPainter>
 #include <QTimer>
 #ifndef QT_NO_DBUS
-#   include <QtDBus/QDBusConnection>
+#   include <QDBusConnection>
 #endif
 #include <QLayout>
 #include <QApplication>
@@ -777,6 +777,8 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
 {
     if (!url.isLocalFile()) return mimeType;
 
+    if (url.toLocalFile().endsWith(".flipbook")) return "application/x-krita-flipbook";
+
     QStringList imageMimeTypes;
     imageMimeTypes << "image/jpeg"
                    << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
@@ -788,7 +790,6 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const KUrl &url
                    << "image/png"
                    << "image/bmp" << "image/x-xpixmap" << "image/gif" << "image/x-xbitmap"
                    << "image/tiff"
-                   << "image/openraster"
                    << "image/jp2";
 
     if (!imageMimeTypes.contains(mimeType)) return mimeType;
@@ -2131,7 +2132,7 @@ void KoDocument::endMacro()
 
 void KoDocument::slotUndoStackIndexChanged(int idx)
 {
-    // even if the document was allready modified, call setModified to re-start autosave timer
+    // even if the document was already modified, call setModified to re-start autosave timer
     setModified(idx != d->undoStack->cleanIndex());
 }
 

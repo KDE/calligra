@@ -91,6 +91,7 @@ public slots:
 
     void shapeSelectionChanged();
     void imageResizeToSelection();
+    void paintSelectedShapes();
 
 signals:
     void currentSelectionChanged();
@@ -151,6 +152,7 @@ private:
     KAction *m_fillBackgroundColor;
     KAction *m_fillPattern;
     KAction *m_imageResizeToSelection;
+    KAction *m_strokeShapes;
     KToggleAction *m_toggleDisplaySelection;
 
     QList<QAction*> m_pluginActions;

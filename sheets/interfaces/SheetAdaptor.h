@@ -27,7 +27,7 @@
 #ifndef CALLIGRA_SHEETS_SHEET_ADAPTOR
 #define CALLIGRA_SHEETS_SHEET_ADAPTOR
 
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 #include "calligra_sheets_export.h"
 #include <QString>
 

@@ -22,7 +22,7 @@
 #ifndef CACANVASITEM_H
 #define CACANVASITEM_H
 
-#include <QtDeclarative/QDeclarativeItem>
+#include <QDeclarativeItem>
 
 class QGraphicsWidget;
 class KoCanvasBase;

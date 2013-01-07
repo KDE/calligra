@@ -121,7 +121,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareO
 //test setDisplayMode( KexiGradientWidget::SimpleGradient );
     editedItem = 0;
     d->dataAwareObject = dataAwareObject;
-    m_hasFocusableWidget = false;
+    KexiDataItemInterface::setHasFocusableWidget(false);
 
     kDebug() << ":";
     setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
@@ -463,7 +463,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         while (dataItemIface) {
                             if (dataItemIface->keyPressed(ke))
                                 return false;
-                            dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(dataItemIface->parentInterface()); //try in parent, e.g. in combobox
+                            dataItemIface = dynamic_cast<KexiFormDataItemInterface*>(dataItemIface->parentDataItemInterface()); //try in parent, e.g. in combobox
                         }
                         break;
                     }
@@ -537,8 +537,8 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     return true; //ignore
                 //the watched widget can be a subwidget of a real widget, e.g. autofield: find it
                 //QWidget* realWidget = static_cast<QWidget*>(watched);
-                while (dynamic_cast<KexiDataItemInterface*>(realWidget) && dynamic_cast<KexiDataItemInterface*>(realWidget)->parentInterface())
-                    realWidget = dynamic_cast<QWidget*>(dynamic_cast<KexiDataItemInterface*>(realWidget)->parentInterface());
+                while (dynamic_cast<KexiDataItemInterface*>(realWidget) && dynamic_cast<KexiDataItemInterface*>(realWidget)->parentDataItemInterface())
+                    realWidget = dynamic_cast<QWidget*>(dynamic_cast<KexiDataItemInterface*>(realWidget)->parentDataItemInterface());
 
                 d->setOrderedFocusWidgetsIteratorTo(realWidget);
                 kDebug() << realWidget->objectName();

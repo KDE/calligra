@@ -65,7 +65,7 @@ namespace RtfReader
 
     void PictDestination::handlePlainText( const QString &plainText )
     {
-	m_pictHexData += plainText.toAscii();
+	m_pictHexData += plainText.toLatin1();
     }
 
     void PictDestination::aboutToEndDestination()

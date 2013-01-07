@@ -338,7 +338,7 @@ QString KexiWindow::itemIconName()
     if (!d->part || !d->part->info()) {
         KexiView *v = selectedView();
         if (v) {
-            return v->m_defaultIconName;
+            return v->defaultIconName();
         }
         return QString();
     }

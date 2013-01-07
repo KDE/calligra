@@ -7,6 +7,10 @@ if (KdepimLibs_FOUND)
    add_definitions(-DKDEPIMLIBS_FOUND)
 endif (KdepimLibs_FOUND)
 
+if (APPLE)
+    find_library(FOUNDATION_LIBRARY Foundation)
+endif (APPLE)
+
 include_directories( ${KOMAIN_INCLUDES})
 
 ########### next target ###############
@@ -96,14 +100,13 @@ set(komain_LIB_SRCS
     thememanager.cpp
 )
 
-if (QT_QTDBUS_FOUND)
-set(komain_LIB_SRCS
-    ${komain_LIB_SRCS}
-    KoPartAdaptor.cpp
-    KoApplicationAdaptor.cpp
-    KoViewAdaptor.cpp
-)
-endif (QT_QTDBUS_FOUND)
+if( QT_QTDBUS_FOUND )
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        KoApplicationAdaptor.cpp
+        KoViewAdaptor.cpp
+        KoPartAdaptor.cpp
+    )
+endif( QT_QTDBUS_FOUND )
 
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -133,6 +136,12 @@ if( Soprano_FOUND )
         rdf/InsertSemanticObjectReferenceAction.cpp
     )
 endif( Soprano_FOUND )
+
+if (APPLE)
+    set(komain_LIB_SRCS ${komain_LIB_SRCS}
+        MacSupport.mm
+    )
+endif (APPLE)
 
 kde4_add_ui_files( komain_LIB_SRCS
    koDocumentInfoAboutWidget.ui
@@ -174,6 +183,7 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KCAL_LIBS}
     kowidgets
     textlayout
+    
 )
 if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})
@@ -189,6 +199,10 @@ if( KActivities_FOUND )
     target_link_libraries(komain ${KACTIVITIES_LIBRARY})
     target_link_libraries(komain LINK_INTERFACE_LIBRARIES  ${KACTIVITIES_LIBRARY})
 endif( KActivities_FOUND )
+
+if (APPLE)
+    target_link_libraries(komain ${FOUNDATION_LIBRARY})
+endif (APPLE)
 
 target_link_libraries(komain LINK_INTERFACE_LIBRARIES kotext kowidgets ${KDE4_KPARTS_LIBS})
 
@@ -224,6 +238,7 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    MacSupport.h
     KoModeBoxFactory.h
     KoServiceProvider.h
     KoPart.h
@@ -239,6 +254,13 @@ install( FILES
     KoStandardAction.h
     komain_export.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+
+if( QT_QTDBUS_FOUND )
+    install( FILES
+        KoApplicationAdaptor.h
+        KoViewAdaptor.h
+    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+endif( QT_QTDBUS_FOUND )
 
 if( Soprano_FOUND )
     install( FILES
