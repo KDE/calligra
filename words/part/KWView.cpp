@@ -176,8 +176,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
            m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
-    connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
-           m_document->documentInfo(), SLOT(updateParamters(const QString &)));
 
 #ifdef SHOW_ANNOTATIONS
     if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
