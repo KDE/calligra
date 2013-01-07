@@ -105,8 +105,8 @@ Item {
         }
 
         Column {
-            visible: fullView && toolManager.currentTool !== null && toolManager.currentTool.slotSetSmoothingType !== undefined;
-            height: !visible ? 0 : (smoothnessTypeList.currentIndex < 2 ? smoothingLabel.height + smoothnessTypeList.height : smoothingLabel.height + smoothnessTypeList.height + smoothnessQuality.height + smoothnessFactor.height)
+            visible: fullView && toolManager.currentTool !== null && toolManager.currentTool.smoothingType !== undefined;
+            height: !visible ? 0 : (smoothnessTypeList.currentIndex < 2 ? smoothingLabel.height + smoothnessTypeList.height : smoothingLabel.height + smoothnessTypeList.height + smoothnessQualitySlider.height + smoothnessFactorSlider.height)
             width: parent.width;
             Label {
                 id: smoothingLabel
@@ -125,22 +125,22 @@ Item {
                     ListElement { text: "Basic smoothing" }
                     ListElement { text: "Weighted smoothing" }
                 }
-                currentIndex: 1;
-                onCurrentIndexChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothingType(currentIndex);
+                currentIndex: (toolManager.currentTool && toolManager.currentTool.smoothingType) ? toolManager.currentTool.smoothingType : 1;
+                onCurrentIndexChanged: if(toolManager.currentTool && toolManager.currentTool.smoothingType !== undefined && toolManager.currentTool.smoothingType !== currentIndex) toolManager.currentTool.smoothingType = currentIndex;
             }
             RangeInput {
-                id: smoothnessQuality;
+                id: smoothnessQualitySlider;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? childrenRect.height : 0;
                 Behavior on height { NumberAnimation { duration: 150; } }
                 width: parent.width;
                 placeholder: "Quality";
                 min: 1; max: 100; decimals: 0;
-                value: 20;
-                onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothnessQuality(value);
+                value: toolManager.currentTool.smoothnessQuality;
+                onValueChanged: if(toolManager.currentTool && toolManager.currentTool.smoothnessQuality !== undefined && toolManager.currentTool.smoothnessQuality !== value) toolManager.currentTool.smoothnessQuality = value;
             }
             RangeInput {
-                id: smoothnessFactor;
+                id: smoothnessFactorSlider;
                 visible: smoothnessTypeList.currentIndex === 2
                 height: visible ? childrenRect.height : 0;
                 Behavior on height { NumberAnimation { duration: 150; } }
@@ -148,8 +148,23 @@ Item {
                 placeholder: "Weight"
                 useExponentialValue: true;
                 min: 3; max: 1000; decimals: 1;
-                value: 50;
-                onValueChanged: if(toolManager.currentTool) toolManager.currentTool.slotSetSmoothnessFactor(value);
+                value: toolManager.currentTool.smoothnessFactor;
+                onValueChanged: if(toolManager.currentTool && toolManager.currentTool.smoothnessFactor !== undefined && toolManager.currentTool.smoothnessFactor !== value) toolManager.currentTool.smoothnessFactor = value;
+            }
+            Component.onCompleted: {
+                if(toolManager.currentTool === null)
+                    return;
+                smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
+                smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+            }
+            Connections {
+                target: toolManager;
+                onCurrentToolChanged: {
+                    if(toolManager.currentTool.smoothnessQuality === undefined)
+                        return;
+                    smoothnessQualitySlider.value = toolManager.currentTool.smoothnessQuality;
+                    smoothnessFactorSlider.value = toolManager.currentTool.smoothnessFactor;
+                }
             }
         }
 // No Assistant for the first release
