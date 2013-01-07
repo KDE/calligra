@@ -38,6 +38,8 @@
 #include "dialogs/KWCreateBookmarkDialog.h"
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dialogs/KWConfigureDialog.h"
+#include "dialogs/KWInsertAnnotationDialog.h"
+
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWShapeCreateCommand.h"
 #include <KoShapeReorderCommand.h>
@@ -261,6 +263,14 @@ void KWView::setupActions()
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
+
+    // FIXME: Find a good shortcut and a good for its icon i suggest "im-status-message-edit"
+    action = new KAction(i18n("Insert Comment"), this);
+    //action->setIconText(i18n("Comment"));
+    //action->setIcon(koIcon("bookmarks"));
+    //action->setShortcut(Qt::CTRL + Qt::Key_G);
+    actionCollection()->addAction("insert_comment", action);
+    connect(action, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
 
     action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
@@ -527,6 +537,36 @@ void KWView::addBookmark()
     delete dia;
 
     editor->addBookmark(name);
+}
+
+void KWView::insertAnnotation()
+{
+//    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
+//    KoToolManager::instance()->switchToolRequested(tool);
+    KoTextEditor *editor = KoTextEditor::getTextEditorFromCanvas(canvasBase());
+    Q_ASSERT(editor);
+    const KoAnnotationManager *manager = m_document->textRangeManager()->annotationManager();
+
+    // FIXME: This is annotation content.
+    // I don't know how to add content to document.
+    // What should i do with it.
+    QTextDocument *anntationDoc;
+
+    QPointer<KWInsertAnnotationDialog> dia = new KWInsertAnnotationDialog(m_canvas->canvasWidget());
+
+    if (dia->exec() == QDialog::Accepted) {
+        anntationDoc = dia->annotationTextDocument();
+        kDebug(31000) << "Annotation text conetnt" << anntationDoc->toPlainText();
+    }
+    else {
+        delete dia;
+        return;
+    }
+
+    // FIXME: Here we should handle annotation ui,
+    // idea add an icon at current text cursor and pop up a textbox.
+    KoAnnotation *annotatio = editor->insertAnnotation();
+
 }
 
 void KWView::selectBookmark()

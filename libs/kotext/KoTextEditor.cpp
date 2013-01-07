@@ -25,6 +25,7 @@
 
 #include "KoDocumentRdfBase.h"
 #include "KoBookmark.h"
+#include "KoAnnotation.h"
 #include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
 #include "KoInlineNote.h"
@@ -482,6 +483,18 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
     endEditBlock();
 
     return bookmark;
+}
+KoAnnotation *KoTextEditor::insertAnnotation()
+{
+        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Annotation"));
+
+        KoAnnotation *annotation = new KoAnnotation(d->caret);
+        annotation->setManager(KoTextDocument(d->document).textRangeManager());
+
+        addCommand(new AddTextRangeCommand(annotation, topCommand));
+        endEditBlock();
+
+   return annotation;
 }
 
 KoInlineObject *KoTextEditor::insertIndexMarker()

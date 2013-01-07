@@ -156,6 +156,7 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     QTextCursor cursor(d->textFrame);
     textLoader.loadBody(element, cursor);
 
+    kDebug(32500) << d->textFrame;
     kDebug(32500) << "****** End Load ******";
     kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
 
@@ -165,7 +166,6 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
 void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType tagType) const
 {
     KoXmlWriter *writer = &context.xmlWriter();
-
     if ((tagType == StartTag) && (position == rangeStart())) {
         writer->startElement("office:annotation", false);
         writer->addAttribute("text:name", d->name.toUtf8());
@@ -188,7 +188,6 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
 
         KoTextWriter textWriter(context);
         textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
-
         writer->endElement(); //office:annotation
     } else if ((tagType == EndTag) && (position == rangeEnd())) {
         writer->startElement("text:annotation-end", false);
@@ -213,6 +212,7 @@ QString KoAnnotation::createUniqueAnnotationName(const KoAnnotationManager* kam,
                 if (!uniqID)
                     ret = annotationName;
                 else
+
                     ret = QString("%1_%2").arg(annotationName).arg(uniqID);
             }
             break;
@@ -227,6 +227,12 @@ QString KoAnnotation::creator() const
     //return d->creator;
     return "creator";
 }
+
+void KoAnnotation::setData(const QString &data)
+{
+    d->date = data;
+}
+
 
 QString KoAnnotation::date() const
 {

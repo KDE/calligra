@@ -156,6 +156,8 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
+    /// Set an annotaion on current text cursor location or selection
+    void insertAnnotation();
     /// enable document headers
     void enableHeader();
     /// enable document footers

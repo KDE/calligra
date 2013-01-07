@@ -22,6 +22,7 @@
   <Action name="edit_findprevious"/>
   <Action name="edit_replace"/>
   <Action name="select_bookmark"/>
+  <Action name="insert_comment"/>
  </Menu>
 
  <Menu name="view"><text>&amp;View</text>
