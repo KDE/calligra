@@ -81,6 +81,7 @@
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
+#include <KoDocumentInfo.h>
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
@@ -179,7 +180,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
            m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
     }
     connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
-           m_document->documentInfo(), SLOT(updateParamters(const QString &)));
+           m_document->documentInfo(), SLOT(updateParameters(const QString &)));
 
 #ifdef SHOW_ANNOTATIONS
     if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {
