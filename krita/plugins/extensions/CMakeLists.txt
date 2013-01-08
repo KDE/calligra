@@ -12,7 +12,7 @@ add_subdirectory( rotateimage )
 add_subdirectory( separate_channels )
 add_subdirectory( shearimage )
 add_subdirectory( dockers )
-if (QT_QTWEBKIT_FOUND AND QT_QTDECLARATIVE_FOUND)
+if (QT_QTWEBKIT_FOUND AND QT_QTDECLARATIVE_FOUND AND HAVE_QJSON)
     add_subdirectory( share )
 endif (QT_QTWEBKIT_FOUND AND QT_QTDECLARATIVE_FOUND)
 
