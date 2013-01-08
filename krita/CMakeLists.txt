@@ -15,6 +15,17 @@ endif(MSVC)
 
 include(CheckFunctionExists)
 
+macro_optional_find_package(QJSON)
+macro_log_feature(QJSON_FOUND "QJson" "A Qt based library for mapping JSON data to QVariant objects" "http://qjson.sourceforge.net/" FALSE "" "Required by the deviantArt Sta.sh sharing plugin")
+macro_bool_to_01(QJSON_FOUND HAVE_QJSON)
+configure_file(config-qjson.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qjson.h )
+
+if(HAVE_QJSON)
+        message(STATUS "QJson found!")
+else(HAVE_QJSON)
+        message(STATUS "QJson NOT found! - krita will not be able to upload items to deviantArt Sta.sh")
+endif(HAVE_QJSON)
+
 macro_optional_find_package(GLEW)
 macro_bool_to_01(GLEW_FOUND HAVE_GLEW)
 configure_file(config-glew.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-glew.h )
