@@ -18,7 +18,7 @@ kde4_add_ui_files(kritaimageshare_PART_SRCS
 
 kde4_add_plugin(kritaimageshare ${kritaimageshare_PART_SRCS})
 
-target_link_libraries(kritaimageshare kritaui ${QT_QTSCRIPT_LIBRARY} ${QT_QTWEBKIT_LIBRARY})
+target_link_libraries(kritaimageshare kritaui ${QT_QTSCRIPT_LIBRARY} ${QT_QTWEBKIT_LIBRARY} ${QJSON_LIBRARIES})
 
 install(TARGETS kritaimageshare  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  imageshare.rc  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
