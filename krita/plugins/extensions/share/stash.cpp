@@ -19,6 +19,7 @@
 
 #include <QCoreApplication>
 #include <QUrl>
+#include <qjson/parser.h>
 #include <kis_image.h>
 
 Stash::Stash(O2DeviantART *deviant, QObject *parent)
@@ -93,20 +94,6 @@ void Stash::fetch(const QString &id)
 
 }
 
-QMap<QString, QString> parseReply(const QByteArray& replyData) {
-    QMap<QString, QString> reply;
-    foreach (QString pair, QString(replyData).mid(1, replyData.length()-2).split(",")) {
-        QStringList kv = pair.split(":");
-        if (kv.length() == 2) {
-            if(kv[1].startsWith("\""))
-                reply.insert(kv[0].mid(1, kv[0].length()-2), kv[1].mid(1, kv[1].length()-2));
-            else
-                reply.insert(kv[0].mid(1, kv[0].length()-2), kv[1]);
-        }
-    }
-    return reply;
-}
-
 void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data)
 {
     Call currentCall = m_callMap[id];
@@ -145,9 +132,11 @@ void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteA
 
 void Stash::testCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
 {
-    QMap<QString, QString> reply = parseReply(data);
-    if(reply.contains("status")) {
-        emit callFinished(Delta, (reply.value("status") == "success"));
+    QJson::Parser parser;
+    bool ok(false);
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if(ok && result.contains("status")) {
+        emit callFinished(Placebo, (result.value("status").toString() == QLatin1String("success"));
     }
 }
 
@@ -178,8 +167,13 @@ void Stash::updateAvailableSpaceCallFinished(QNetworkReply::NetworkError error, 
 
 void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
 {
-    QMap<QString, QString> reply = parseReply(data);
-    qDebug() << Q_FUNC_INFO << reply;
+    QJson::Parser parser;
+    bool ok(false);
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    qDebug() << result;
+    if(ok && result.contains("status")) {
+        emit callFinished(Delta, error == QNetworkReply::NoError);
+    }
 }
 
 void Stash::fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
