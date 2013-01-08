@@ -136,7 +136,7 @@ void Stash::testCallFinished(QNetworkReply::NetworkError error, const QByteArray
     bool ok(false);
     QVariantMap result = parser.parse(data, &ok).toMap();
     if(ok && result.contains("status")) {
-        emit callFinished(Placebo, (result.value("status").toString() == QLatin1String("success"));
+        emit callFinished(Placebo, (result.value("status").toString() == QLatin1String("success")));
     }
 }
 
@@ -172,7 +172,7 @@ void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArra
     QVariantMap result = parser.parse(data, &ok).toMap();
     qDebug() << result;
     if(ok && result.contains("status")) {
-        emit callFinished(Delta, error == QNetworkReply::NoError);
+        emit callFinished(Delta, (error == QNetworkReply::NoError));
     }
 }
 
