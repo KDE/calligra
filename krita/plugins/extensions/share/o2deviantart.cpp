@@ -29,6 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <QString>
 #include <QStringList>
 #include <QDesktopServices>
+#include <qjson/parser.h>
 
 #include "o2deviantart.h"
 
@@ -77,18 +78,18 @@ void O2DeviantART::onTokenReplyFinished() {
 
         // Process reply
         QByteArray replyData = tokenReply->readAll();
-        QMap<QString, QString> reply;
-        foreach (QString pair, QString(replyData).split(",")) {
-            QStringList kv = pair.split(":");
-            if (kv.length() == 2) {
-                reply.insert(kv[0].mid(1, kv[0].length()-2), kv[1].mid(1, kv[1].length()-2));
-            }
-        }
+        QJson::Parser parser;
+        bool ok(false);
+        QVariantMap reply = parser.parse(replyData, &ok).toMap();
 
+        if(!ok) {
+            qDebug() << "Malformed JSON while parsing deviantart token reply! Response contents:\n" << replyData;
+            return;
+        }
         // Interpret reply
-        setToken(reply.contains("access_token")? reply.value("access_token"): "");
+        setToken(reply.contains("access_token")? reply.value("access_token").toString(): "");
         setExpires(reply.contains("expires_in")? reply.value("expires_in").toInt() : 3600);
-        setRefreshToken(reply.contains("refresh_token")? reply.value("refresh_token"): "");
+        setRefreshToken(reply.contains("refresh_token")? reply.value("refresh_token").toString(): "");
 
         timedReplies_.remove(tokenReply);
         emit linkedChanged();
