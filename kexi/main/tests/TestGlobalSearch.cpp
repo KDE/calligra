@@ -83,9 +83,9 @@ void TestGlobalSearch::testGlobalSearch()
     QVERIFY(kapp);
     QCOMPARE(result, 0);
 
-    KLineEdit *lineEdit = Kexi::tester().widget<KLineEdit*>("globalSearch.lineEdit");
+    KLineEdit *lineEdit = kexiTester().widget<KLineEdit*>("globalSearch.lineEdit");
     QVERIFY(lineEdit);
-    QTreeView *treeView = Kexi::tester().widget<QTreeView*>("globalSearch.treeView");
+    QTreeView *treeView = kexiTester().widget<QTreeView*>("globalSearch.treeView");
     QVERIFY(treeView);
 
     lineEdit->setFocus();
@@ -120,7 +120,7 @@ void TestGlobalSearch::testGlobalSearch()
     // check if proper entry of Project Navigator is selected
     QTest::keyPress(treeView, Qt::Key_Enter, Qt::NoModifier, GUI_DELAY);
 
-    KexiProjectNavigator *projectNavigator = Kexi::tester().widget<KexiProjectNavigator*>("KexiProjectNavigator");
+    KexiProjectNavigator *projectNavigator = kexiTester().widget<KexiProjectNavigator*>("KexiProjectNavigator");
     QVERIFY(projectNavigator);
     KexiPart::Item* selectedPartItem = projectNavigator->selectedPartItem();
     QVERIFY(selectedPartItem);

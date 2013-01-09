@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,26 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef NDEBUG
 #ifndef KEXITESTER_H
 #define KEXITESTER_H
 
-#include <QObject>
-
+#include <QPointer>
 #include <kexiutils/kexiutils_export.h>
 
 class QWidget;
+class KexiTestObject;
 
 //! Global object for setting up tests.
 class KEXIUTILS_EXPORT KexiTester : public QObject
 {
     Q_OBJECT
 public:
-    explicit KexiTester(QObject *parent = 0);
-
     ~KexiTester();
-
-    bool addObject(QObject *object, const QString &name = QString());
 
     QObject *object(const QString &name) const;
 
@@ -46,9 +41,37 @@ public:
     W widget(const QString &name) const { return qobject_cast<W>(widget(name)); }
 
 private:
+    KexiTester();
+    static KexiTester* self();
+
+    Q_DISABLE_COPY(KexiTester)
+    friend KexiTester& operator<<(KexiTester&, const KexiTestObject &);
+    friend KexiTester& kexiTester();
+
     class Private;
     Private * const d;
 };
 
+//! KexiTestObject is a container for object added for tests
+class KEXIUTILS_EXPORT KexiTestObject
+{
+public:
+    explicit KexiTestObject(QObject *object, const QString &name = QString());
+private:
+    QPointer<QObject> m_object;
+    QString m_name;
+
+    friend KexiTester& operator<<(KexiTester&, const KexiTestObject &);
+};
+
+//! @return global KexiTester object.
+inline KexiTester& kexiTester() { return *KexiTester::self(); }
+
+//! Adds test object @a object to the tester.
+KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object);
+
+#ifndef COMPILING_TESTS
+#define kexiTester while (false) kexiTester // Completely skip tester for final code
+#endif
+
 #endif // KEXITESTER_H
-#endif // !NDEBUG

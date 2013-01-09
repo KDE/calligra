@@ -25,11 +25,7 @@
 #include <KDebug>
 
 #include <kexiutils/completer/KexiCompleter.h>
-
-#ifndef NDEBUG
-#include <core/kexi.h>
 #include <kexiutils/KexiTester.h>
-#endif
 
 #include <QShortcut>
 #include <QKeySequence>
@@ -349,9 +345,8 @@ KexiSearchLineEdit::KexiSearchLineEdit(QWidget *parent)
 {
     d->completer = new KexiSearchLineEditCompleter(this);
     QTreeView *treeView = new QTreeView;
-#ifndef NDEBUG
-    Kexi::tester().addObject(treeView, "globalSearch.treeView");
-#endif
+    kexiTester() << KexiTestObject(treeView, "globalSearch.treeView");
+
     d->completer->setPopup(treeView);
     d->completer->setModel(d->model = new KexiSearchLineEditCompleterPopupModel(d->completer));
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
