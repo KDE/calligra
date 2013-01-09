@@ -2,6 +2,7 @@
 Name=Lut Docker
 Name[da]=LUT-dokker
 Name[el]=Εργαλείο προσάρτησης lut
+Name[es]=Acoplable de tabla de búsqueda (LUT)
 Name[et]=Otsingutabeli dokk
 Name[fr]=Panneau lut
 Name[gl]=Dockers predefinidos
@@ -18,6 +19,7 @@ Name[x-test]=xxLut Dockerxx
 Comment=Docker for selecting luts
 Comment[da]=Dokker til at vælge LUT'er
 Comment[el]=Εργαλείο προσάρτησης για επιλογή lut
+Comment[es]=Acoplable de selección de tablas de búsqueda (LUT)
 Comment[et]=Otsingutabeli valimise dokk
 Comment[fr]=Panneau de sélection des luts
 Comment[gl]=Doca para seleccionar predefinidos.
