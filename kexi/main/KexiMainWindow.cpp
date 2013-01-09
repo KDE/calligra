@@ -303,9 +303,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
         , d(new KexiMainWindow::Private(this))
 {
     setObjectName("KexiMainWindow");
-#ifndef NDEBUG
-    Kexi::tester().addObject(this);
-#endif
+    kexiTester() << KexiTestObject(this);
 
 //kde4: removed  KImageIO::registerFormats();
 
@@ -1854,9 +1852,7 @@ void KexiMainWindow::setupProjectNavigator()
 
         KexiDockableWidget* navDockableWidget = new KexiDockableWidget(d->navDockWidget);
         d->navigator = new KexiProjectNavigator(navDockableWidget);
-#ifndef NDEBUG
-        Kexi::tester().addObject(d->navigator, "KexiProjectNavigator");
-#endif
+        kexiTester() << KexiTestObject(d->navigator, "KexiProjectNavigator");
 
         navDockableWidget->setWidget(d->navigator);
 

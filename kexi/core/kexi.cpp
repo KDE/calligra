@@ -25,10 +25,6 @@
 #include <db/msghandler.h>
 #include <KoIcon.h>
 
-#ifndef NDEBUG
-#include <kexiutils/KexiTester.h>
-#endif
-
 #include <QTimer>
 #include <QImage>
 #include <QPixmap>
@@ -79,9 +75,6 @@ public:
     KexiDBConnectionSet recentConnections;
     KexiDB::DriverManager driverManager;
     KexiPart::Manager partManager;
-#ifndef NDEBUG
-    KexiTester tester;
-#endif
 };
 
 KexiInternal *KexiInternal::_int = 0;
@@ -136,14 +129,6 @@ bool& Kexi::tempShowScripts()
 #endif
     return _tempShowScripts;
 }
-
-#ifndef NDEBUG
-KexiTester& Kexi::tester()
-{
-    return KexiInternal::self()->tester;
-}
-
-#endif
 
 //--------------------------------------------------------------------------------
 QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
