@@ -44,6 +44,8 @@
 #include "KexiUserFeedbackAgent.h"
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/styleproxy.h>
+#include <kexiutils/KexiTester.h>
+#include <core/kexi.h>
 
 class KexiProjectNavigator;
 
@@ -962,6 +964,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     btn->setMenu(d->helpMenu->menu());
     setCornerWidget(helpWidget, Qt::TopRightCorner);
     d->searchLineEdit = new KexiSearchLineEdit;
+    kexiTester() << KexiTestObject(d->searchLineEdit, "globalSearch.lineEdit");
     d->searchLineEdit->installEventFilter(this);
     helpLyr->addWidget(d->searchLineEdit);
 

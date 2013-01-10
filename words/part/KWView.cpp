@@ -79,6 +79,7 @@
 #include <KoPathShape.h> // for KoPathShapeId
 #include <KoCanvasController.h>
 #include <KoDocumentRdfBase.h>
+#include <KoDocumentInfo.h>
 #ifdef SHOULD_BUILD_RDF
 #include <rdf/KoDocumentRdf.h>
 #include <rdf/KoSemanticStylesheetsEditor.h>
@@ -146,6 +147,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // The text documents to search in will potentially change when we add/remove shapes and after load
     connect(m_document, SIGNAL(shapeAdded(KoShape *, KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
     connect(m_document, SIGNAL(shapeRemoved(KoShape *)), this, SLOT(refreshFindTexts()));
+    refreshFindTexts();
 
     layout->addWidget(toolbar);
 
@@ -171,10 +173,6 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
                 this, SLOT(semanticObjectViewSiteUpdated(hKoRdfSemanticItem,QString)));
     }
 #endif
-    if (m_document->inlineTextObjectManager()) {
-        connect(actionCollection()->action("settings_active_author"), SIGNAL(triggered(const QString &)),
-           m_document->inlineTextObjectManager(), SLOT(activeAuthorUpdated(const QString &)));
-    }
 
 #ifdef SHOW_ANNOTATIONS
     if (KoTextRangeManager *textRangeManager = m_document->textRangeManager()) {

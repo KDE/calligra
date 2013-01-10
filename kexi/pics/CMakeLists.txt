@@ -9,3 +9,4 @@ install(FILES
         DESTINATION ${DATA_INSTALL_DIR}/kexi/pics)
 
 add_subdirectory(oxygen)
+add_subdirectory(app)

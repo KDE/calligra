@@ -3,6 +3,7 @@ Date:   May 14 2012
 In the commits
     4254f88a2a816aa81e2d68e73348354814363960  (most of this list, not marked)
     45582416016079de1ccf0988c1ce58e20fd0ece2  (marked with [A])
+    fb49b8f49c4c3d0f76b7862bbfe66f259127531d  (marked with [B])
 a lot of obsolete code was removed from our source tree. This file lists the
 removed plugins, why they were removed and why you might want to resurrect the
 code if you are interested in working on the features these plugins used to
@@ -25,6 +26,8 @@ Filters:
     ported to Qt4
 
       ai - adobe illustrator
+      applixgraphics - Applixgraphics  [B]
+      eps (export) - Encapsulated PostScript [B]
       kontour - the old kontour application from KOffice 1.1
       xcf - gimp
       msod - microsoft draw (this is also the only filter that used the sub-filter 

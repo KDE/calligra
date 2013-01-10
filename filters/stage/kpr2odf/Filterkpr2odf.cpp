@@ -125,7 +125,6 @@ KoFilter::ConversionStatus Filterkpr2odf::convert(const QByteArray& from, const 
     output->write(*preview);
     output->close();
     output->leaveDirectory();
-    manifest->addManifestEntry(QLatin1String("Thumbnails/"), QString());
     manifest->addManifestEntry(QLatin1String("Thumbnails/thumbnail.png"), QString());
     delete preview;
 

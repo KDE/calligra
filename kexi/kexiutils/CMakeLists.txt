@@ -26,6 +26,7 @@ set(kexiutils_LIB_SRCS
   KexiAssistantWidget.cpp
   KexiAnimatedLayout.cpp
   KexiCategorizedView.cpp
+  KexiTester.cpp
   
   completer/KexiCompleter.cpp
 )
