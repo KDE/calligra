@@ -35,5 +35,5 @@ Name[zh_TW]=展示事件動作...
 X-KDE-ServiceTypes=Calligra/PresentationEventAction
 Type=Service
 X-KDE-Library=calligrastageeventactions
-X-PresentationEventAction-MinVersion=4
-X-PresentationEventAction-PluginVersion=4
+X-PresentationEventAction-MinVersion=27
+X-PresentationEventAction-PluginVersion=27
