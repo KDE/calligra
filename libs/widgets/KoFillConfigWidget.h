@@ -64,8 +64,17 @@ private slots:
     /// update the opacity of the shape
     void updateOpacity(qreal opacity);
 
+    void shapeChanged();
+
 private:
+    /// update the widget
+    void updateWidget(KoShape *shape);
+
     static KoShapeBackground *applyFillGradientStops(KoShape *shape, const QGradientStops &stops);
+
+    void blockChildSignals(bool block);
+
+    void resetButtons();
 
     class Private;
     Private * const d;
