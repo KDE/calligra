@@ -46,8 +46,8 @@ using namespace Calligra::Sheets;
 // gdb or from debug output to check that everything is set up ok.
 void DependencyManager::Private::dump() const
 {
-    QHash<Cell, Region>::ConstIterator mend(providers.end());
-    for (QHash<Cell, Region>::ConstIterator mit(providers.begin()); mit != mend; ++mit) {
+    QMap<Cell, Region>::ConstIterator mend(providers.end());
+    for (QMap<Cell, Region>::ConstIterator mit(providers.begin()); mit != mend; ++mit) {
         Cell cell = mit.key();
 
         QStringList debugStr;
@@ -60,12 +60,11 @@ void DependencyManager::Private::dump() const
     }
 
     foreach(Sheet* sheet, consumers.keys()) {
-        QList<QRectF> keys = consumers[sheet]->keys();
-        QList<Cell> values = consumers[sheet]->values();
+        const QList< QPair<QRectF, Cell> > pairs = consumers[sheet]->intersectingPairs(QRect(1, 1, KS_colMax, KS_rowMax)).values();
         QHash<QString, QString> table;
-        for (int i = 0; i < keys.count(); ++i) {
-            Region tmpRange(keys[i].toRect(), sheet);
-            table.insertMulti(tmpRange.name(), values[i].name());
+        for (int i = 0; i < pairs.count(); ++i) {
+            Region tmpRange(pairs[i].first.toRect(), sheet);
+            table.insertMulti(tmpRange.name(), pairs[i].second.name());
         }
         foreach(const QString &uniqueKey, table.uniqueKeys()) {
             QStringList debugStr(table.values(uniqueKey));
@@ -429,33 +428,13 @@ void DependencyManager::Private::generateDepths(const Region& region)
 
         int bottom = range.bottom();
         if (bottom > cells->rows()) bottom = cells->rows();
+        int right = range.right();
+        if (right > cells->columns()) right = cells->columns();
 
         for (int row = range.top(); row <= bottom; ++row) {
-            int col = 0;
-            Formula formula = sheet->formulaStorage()->firstInRow(row, &col);
-            if (col > 0 && col < range.left())
-                formula = sheet->formulaStorage()->nextInRow(col, row, &col);
-            while (col != 0 && col <= range.right()) {
+            for (int col = range.left(); col <= right; ++col) {
                 Cell cell(sheet, col, row);
-
-                // compute the cell depth and automatically the depths of its providers
-                int depth = computeDepth(cell);
-                depths.insert(cell, depth);
-
-                // compute the consumers' depths
-                QHash<Sheet*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
-                if (cit == consumers.constEnd()) {
-                    formula = sheet->formulaStorage()->nextInRow(col, row, &col);
-                    continue;
-                }
-
-                const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
-                foreach (const Cell &c, consumers) {
-                    if (!region.contains(c.cellPosition(), c.sheet()))
-                        generateDepths(c, computedDepths);
-                }
-
-                formula = sheet->formulaStorage()->nextInRow(col, row, &col);
+                generateDepths(cell, computedDepths);
             }
         }
     }
