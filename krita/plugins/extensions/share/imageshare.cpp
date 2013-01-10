@@ -32,7 +32,9 @@
 #include <kactioncollection.h>
 
 #include <kis_debug.h>
+#include <kis_image.h>
 #include <kis_view2.h>
+#include <kis_doc2.h>
 
 #include "o2deviantart.h"
 #include "dlg_login.h"
@@ -57,6 +59,7 @@ ImageShare::ImageShare(QObject *parent, const QVariantList &)
 
         m_view = qobject_cast<KisView2*>(parent);
         m_submitDlg = new SubmitDlg(m_view);
+        m_submitDlg->submitDlg()->txtTitle->setText(m_view->document()->url().fileName());
         connect(m_submitDlg, SIGNAL(accepted()), SLOT(performUpload()));
     }
 }
@@ -121,10 +124,12 @@ void ImageShare::testCallCompleted(Stash::Call, bool result)
 
 void ImageShare::performUpload()
 {
-    // First item is non-folder
-    if(m_submitDlg->submitDlg()->folderList->itemData(0).isValid()) {
+    QString folderId;
+    // First item is non-folder, so if it's that, don't assign a folder
+    if(m_submitDlg->submitDlg()->folderList->currentIndex() != 0) {
+        folderId = m_submitDlg->submitDlg()->folderList->itemData(m_submitDlg->submitDlg()->folderList->currentIndex()).toString();
     }
-    qDebug() << m_submitDlg->submitDlg()->txtTitle->text();
+    m_stash->submit(m_view->image(), m_submitDlg->submitDlg()->txtTitle->text(), m_submitDlg->submitDlg()->txtComments->toPlainText(), m_submitDlg->submitDlg()->txtKeywords->text().split(","), folderId);
 }
 
 void ImageShare::submissionsChanged()
@@ -132,7 +137,6 @@ void ImageShare::submissionsChanged()
     m_submitDlg->submitDlg()->folderList->clear();
     m_submitDlg->submitDlg()->folderList->addItem(i18n("No folder"));
     foreach(const Submission& sub, m_stash->submissions()) {
-        qDebug() << sub.title << "Is a folder?" << sub.isFolder;
         if(sub.isFolder) {
             m_submitDlg->submitDlg()->folderList->addItem(sub.title, sub.folderId);
         }
