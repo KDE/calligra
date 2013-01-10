@@ -35,5 +35,5 @@ Name[zh_TW]=簡報變數
 X-KDE-ServiceTypes=Calligra/Text-InlineObject
 Type=Service
 X-KDE-Library=kprvariables
-X-KoText-MinVersion=4
-X-Flake-PluginVersion=4
+X-KoText-MinVersion=27
+X-Flake-PluginVersion=27
