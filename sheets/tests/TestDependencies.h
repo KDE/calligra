@@ -39,6 +39,7 @@ private Q_SLOTS:
     void initTestCase();
     void testCircleRemoval();
     void testCircles();
+    void testDepths();
     void cleanupTestCase();
 
 private:
