@@ -192,7 +192,15 @@ KoPathTool::~KoPathTool()
 
 QList<QWidget *>  KoPathTool::createOptionWidgets()
 {
+    Q_D(KoToolBase);
     QList<QWidget *> list;
+
+    PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
+    connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));
+    updateOptionsWidget();
+    toolOptions->setWindowTitle(i18n("Line/Curve"));
+    list.append(toolOptions);
+
     return list;
 }
 
