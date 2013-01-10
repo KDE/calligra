@@ -129,7 +129,7 @@ void ImageShare::performUpload()
     if(m_submitDlg->submitDlg()->folderList->currentIndex() != 0) {
         folderId = m_submitDlg->submitDlg()->folderList->itemData(m_submitDlg->submitDlg()->folderList->currentIndex()).toString();
     }
-    m_stash->submit(m_view->image(), m_submitDlg->submitDlg()->txtTitle->text(), m_submitDlg->submitDlg()->txtComments->toPlainText(), m_submitDlg->submitDlg()->txtKeywords->text().split(","), folderId);
+    m_stash->submit(m_view->image(), m_view->document()->url().fileName(), m_submitDlg->submitDlg()->txtTitle->text(), m_submitDlg->submitDlg()->txtComments->toPlainText(), m_submitDlg->submitDlg()->txtKeywords->text().split(","), folderId);
 }
 
 void ImageShare::submissionsChanged()
