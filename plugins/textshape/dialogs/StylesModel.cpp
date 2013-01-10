@@ -490,6 +490,9 @@ void StylesModel::updateName(int styleId)
 
 QModelIndex StylesModel::firstStyleIndex()
 {
+    if (!m_styleList.count()) {
+        return QModelIndex();
+    }
     return createIndex(m_styleList.indexOf(m_styleList.at(0)), 0, m_styleList.at(0));
 }
 
