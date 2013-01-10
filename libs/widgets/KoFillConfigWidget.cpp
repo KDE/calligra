@@ -292,15 +292,12 @@ void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
 
 void KoFillConfigWidget::styleButtonPressed(int buttonId)
 {
-    blockChildSignals(true);
-
     switch (buttonId) {
         case KoFillConfigWidget::None:
             // Direct manipulation
             d->colorButton->setDefaultAction(d->colorAction);
             noColorSelected();
         case KoFillConfigWidget::Solid:
-            // Only select mode in the widget, don't set actual gradient :/
             d->colorButton->setDefaultAction(d->colorAction);
             colorChanged();
             break;
@@ -316,11 +313,11 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             break;
     }
     // Put the button pressed
-    resetButtons();
+     resetButtons();
+
     KoGroupButton *button = dynamic_cast<KoGroupButton*>(d->group->button(buttonId));
     button->setAutoRaise(true);
 
-    blockChildSignals(false);
 }
 
 void KoFillConfigWidget::noColorSelected()
@@ -331,7 +328,11 @@ void KoFillConfigWidget::noColorSelected()
     if (!selection || !selection->count())
         return;
 
-    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), 0));
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    if (selectedShapes.isEmpty())
+        return;
+
+    canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, 0));
 }
 
 void KoFillConfigWidget::colorChanged()
@@ -448,8 +449,6 @@ void KoFillConfigWidget::shapeChanged()
 
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
-    blockChildSignals(true);
-
     resetButtons();
 
     KoGroupButton *button;
@@ -457,7 +456,6 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(shape->background());
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(shape->background());
     if (colorBackground){
-        d->colorAction->setCurrentColor(colorBackground->color());
         button = dynamic_cast<KoGroupButton*>(d->group->button(KoFillConfigWidget::Solid));
     } else if (gradientBackground) {
         button = dynamic_cast<KoGroupButton*>(d->group->button(KoFillConfigWidget::Gradient));
@@ -472,8 +470,6 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     d->opacity->blockSignals(true);
     d->opacity->setValue(100 - shape->transparency() * 100);
     d->opacity->blockSignals(false);
-
-    blockChildSignals(false);
 }
 
 KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
