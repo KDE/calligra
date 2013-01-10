@@ -34,7 +34,12 @@
 
 struct Submission {
 
+    /// The ID of the stash entry. This may be empty (will be empty if isFolder is true)
     QString id;
+    /// If this is a folder, the ID of the folder in question. If this is not a folder,
+    /// the ID of the folder the submission is contained within
+    QString folderId;
+    /// Whether or not this submission is a folder
     bool isFolder;
     QString title;
     QString artist_comments;

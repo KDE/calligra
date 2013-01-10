@@ -170,10 +170,28 @@ void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArra
     QJson::Parser parser;
     bool ok(false);
     QVariantMap result = parser.parse(data, &ok).toMap();
-    qDebug() << result;
-    if(ok && result.contains("status")) {
+    if(!ok)
         emit callFinished(Delta, (error == QNetworkReply::NoError));
+
+    // TODO handle has_more and cursor
+    m_submissions.clear();
+    if(result.contains("entries")) {
+        foreach(const QVariant& var, result.value("entries").toList()) {
+            QVariantMap entry = var.toMap();
+            Submission sub;
+            sub.id = entry.value("stashid").toString();
+            sub.folderId = entry.value("folderid").toString();
+            QVariantMap meta = entry.value("metadata").toMap();
+            sub.artist_comments = meta.value("artist_comments").toString();
+            sub.description = meta.value("description").toString();
+            sub.isFolder = meta.value("is_folder").toBool();
+            sub.title = meta.value("title").toString();
+            m_submissions.append(sub);
+            qDebug() << "-----------------------\n" << meta;
+        }
     }
+    emit callFinished(Delta, true);
+    emit submissionsChanged();
 }
 
 void Stash::fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
