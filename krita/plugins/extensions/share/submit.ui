@@ -57,18 +57,25 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="txtKeywords"/>
       </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Folder:</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="txtFolder"/>
-      </item>
       <item row="1" column="1">
        <widget class="QPlainTextEdit" name="txtComments"/>
+      </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="folderList">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
