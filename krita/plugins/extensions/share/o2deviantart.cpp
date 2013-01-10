@@ -40,6 +40,7 @@ static const quint16 FbLocalPort = 1965;
 O2DeviantART::O2DeviantART(QObject *parent): O2(parent) {
     setRequestUrl(FbEndpoint);
     setTokenUrl(FbTokenUrl);
+    setRefreshTokenUrl(FbTokenUrl);
     setLocalPort(FbLocalPort);
 }
 
