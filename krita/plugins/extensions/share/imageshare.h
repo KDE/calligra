@@ -49,6 +49,7 @@ private slots:
     void showSubmit();
     void testCallCompleted(Stash::Call, bool result);
     void performUpload();
+    void submissionsChanged();
 
 private:
 

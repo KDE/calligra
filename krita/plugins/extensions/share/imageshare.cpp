@@ -105,6 +105,7 @@ void ImageShare::showSubmit()
 {
     m_stash = new Stash(m_deviantArt, this);
     connect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), SLOT(testCallCompleted(Stash::Call,bool)));
+    connect(m_stash, SIGNAL(submissionsChanged()), SLOT(submissionsChanged()));
     m_stash->testCall();
 }
 
@@ -115,16 +116,27 @@ void ImageShare::testCallCompleted(Stash::Call, bool result)
     }
     disconnect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), this, SLOT(testCallCompleted(Stash::Call,bool)));
     m_stash->delta();
-//    QList<Submission> subm = m_stash->submissions();
-//    foreach(const Submission& sub, subm) {
-//        qDebug() << sub.title;
-//    }
     m_submitDlg->open();
 }
 
 void ImageShare::performUpload()
 {
+    // First item is non-folder
+    if(m_submitDlg->submitDlg()->folderList->itemData(0).isValid()) {
+    }
     qDebug() << m_submitDlg->submitDlg()->txtTitle->text();
+}
+
+void ImageShare::submissionsChanged()
+{
+    m_submitDlg->submitDlg()->folderList->clear();
+    m_submitDlg->submitDlg()->folderList->addItem(i18n("No folder"));
+    foreach(const Submission& sub, m_stash->submissions()) {
+        qDebug() << sub.title << "Is a folder?" << sub.isFolder;
+        if(sub.isFolder) {
+            m_submitDlg->submitDlg()->folderList->addItem(sub.title, sub.folderId);
+        }
+    }
 }
 
 #include "imageshare.moc"
