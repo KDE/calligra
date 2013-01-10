@@ -21,6 +21,7 @@
  */
 
 #include "submitdlg.h"
+#include <QPushButton>
 
 class SubmitDlg::Private {
 public:
@@ -35,6 +36,8 @@ SubmitDlg::SubmitDlg(QWidget* parent, Qt::WindowFlags f)
     , d(new Private)
 {
     d->ui->setupUi(this);
+    d->ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    connect(d->ui->txtTitle, SIGNAL(textChanged(QString)), SLOT(inputsChanged()));
 }
 
 SubmitDlg::~SubmitDlg()
@@ -47,5 +50,10 @@ Ui::Dialog* SubmitDlg::submitDlg()
     return d->ui;
 }
 
+void SubmitDlg::inputsChanged()
+{
+    // This is not a requirement of the API, but we kind of want to ensure people actually put something in the title here...
+    d->ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!d->ui->txtTitle->text().trimmed().isEmpty());
+}
 
 #include "submitdlg.moc"

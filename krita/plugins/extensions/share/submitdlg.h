@@ -35,6 +35,8 @@ public:
     ~SubmitDlg();
 
     Ui::Dialog* submitDlg();
+
+    Q_SLOT void inputsChanged();
 private:
     class Private;
     Private * d;
