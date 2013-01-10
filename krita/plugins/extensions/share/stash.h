@@ -93,7 +93,7 @@ public slots:
     void testCall();
 
     /// Upload the given image to deviantart as PNG)
-    void submit(KisImageWSP image, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder);
+    void submit(KisImageWSP image, const QString& filename, const QString& title, const QString& comments, const QStringList& keywords, const QString& folder);
 
     /// Update the given item
     void update(const QString &stashid, const QString &title, const QString comments, const QStringList& keywords);
@@ -117,6 +117,7 @@ public slots:
 private slots:
 
     void slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data);
+    void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
 
 signals:
     void availableSpaceChanged();

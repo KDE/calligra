@@ -19,7 +19,11 @@
 
 #include <QCoreApplication>
 #include <QUrl>
+#include <QBuffer>
 #include <qjson/parser.h>
+#include <KTemporaryFile>
+#include <QImageWriter>
+#include <complex>
 #include <kis_image.h>
 
 Stash::Stash(O2DeviantART *deviant, QObject *parent)
@@ -27,6 +31,7 @@ Stash::Stash(O2DeviantART *deviant, QObject *parent)
 {
     m_requestor = new O2Requestor(&m_networkAccessManager, deviant, this);
     connect(m_requestor, SIGNAL(finished(int,QNetworkReply::NetworkError,QByteArray)), SLOT(slotFinished(int,QNetworkReply::NetworkError,QByteArray)));
+    connect(m_requestor, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(uploadProgress(int,qint64,qint64)));
 }
 
 Stash::~Stash()
@@ -51,9 +56,38 @@ void Stash::testCall()
     m_callMap[m_requestor->get(request)] = Placebo;
 }
 
-void Stash::submit(KisImageWSP image, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder)
+void Stash::submit(KisImageWSP image, const QString &filename, const QString &title, const QString &comments, const QStringList &keywords, const QString &folder)
 {
+    QUrl url("https://www.deviantart.com/api/draft15/stash/submit");
+    url.addQueryItem("title", title);
+    url.addQueryItem("artist_comments", comments);
+    url.addQueryItem("keywords", keywords.join(","));
+    if(!folder.isEmpty())
+        url.addQueryItem("folderid", folder);
+    QNetworkRequest request(url);
 
+    //QString bound="margin"; //name of the boundary
+    //according to rfc 1867 we need to put this string here:
+    QByteArray data(QString("--margin\r\n").toAscii());
+    data.append("Content-Disposition: form-data; name=\"action\"\r\n\r\n");
+    data.append("submit\r\n");   //our script's name, as I understood. Please, correct me if I'm wrong
+    data.append("--margin\r\n");   //according to rfc 1867
+    data.append(QString("Content-Disposition: form-data; name=\"uploaded\"; filename=\"%1\"\r\n").arg(filename).toAscii());  //name of the input is "uploaded" in my form, next one is a file name.
+    data.append("Content-Type: image/jpeg\r\n\r\n"); //data type
+
+    QByteArray tmpData;
+    QBuffer buffer(&tmpData, this);
+    buffer.open(QIODevice::WriteOnly);
+    QImage imagedata = image->convertToQImage(image->bounds(), image->profile());
+    imagedata.save(&buffer, "PNG");
+    data.append(tmpData);
+
+    data.append("\r\n");
+    data.append("--margin--\r\n");  //closing boundary according to rfc 1867
+    request.setRawHeader(QString("Content-Type").toAscii(),QString("multipart/form-data; boundary=margin").toAscii());
+    request.setRawHeader(QString("Content-Length").toAscii(), QString::number(data.length()).toAscii());
+
+    m_callMap[m_requestor->post(request, data)] = Submit;
 }
 
 void Stash::update(const QString &stashid, const QString &title, const QString comments, const QStringList& keywords)
@@ -142,7 +176,8 @@ void Stash::testCallFinished(QNetworkReply::NetworkError error, const QByteArray
 
 void Stash::submitCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
 {
-
+    qDebug() << "submit call finished";
+    qDebug() << data;
 }
 
 void Stash::updateCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
@@ -197,6 +232,11 @@ void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArra
 void Stash::fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
 {
 
+}
+
+void Stash::uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal)
+{
+    qDebug() << id << bytesSent << "/" << bytesTotal;
 }
 
 #include "stash.moc"
