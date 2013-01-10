@@ -190,7 +190,6 @@ void DependencyManager::updateAllDependencies(const Map* map, KoUpdater *updater
     d->depths.clear();
 
     int cellsCount = 9;
-    int cellCurrent = 0;
 
     if (updater) {
         updater->setProgress(0);
@@ -200,20 +199,31 @@ void DependencyManager::updateAllDependencies(const Map* map, KoUpdater *updater
     }
 
     Cell cell;
+    int cellCurrent = 0;
     foreach(const Sheet* sheet, map->sheetList()) {
         for (int c = 0; c < sheet->formulaStorage()->count(); ++c, ++cellCurrent) {
             cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
 
             d->generateDependencies(cell, sheet->formulaStorage()->data(c));
-            if (!d->depths.contains(cell)) {
-                int depth = d->computeDepth(cell);
-                d->depths.insert(cell , depth);
-            }
             if (!sheet->formulaStorage()->data(c).isValid())
                 cell.setValue(Value::errorPARSE());
 
             if (updater)
-                updater->setProgress(int(qreal(cellCurrent) / qreal(cellsCount) * 100.));
+                updater->setProgress(int(qreal(cellCurrent) / qreal(cellsCount) * 50.));
+        }
+    }
+    cellCurrent = 0;
+    foreach(const Sheet* sheet, map->sheetList()) {
+        for (int c = 0; c < sheet->formulaStorage()->count(); ++c, ++cellCurrent) {
+            cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+
+            if (!d->depths.contains(cell)) {
+                int depth = d->computeDepth(cell);
+                d->depths.insert(cell , depth);
+            }
+
+            if (updater)
+                updater->setProgress(50 + int(qreal(cellCurrent) / qreal(cellsCount) * 50.));
         }
     }
 
