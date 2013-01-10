@@ -76,32 +76,6 @@ public:
     explicit KoTextBlockData(QTextBlockUserData *userData);
     virtual ~KoTextBlockData();
 
-    struct MarkupRange {
-        int firstChar;
-        int lastChar;
-        qreal startX;
-        qreal endX;
-    };
-
-    enum MarkupType {
-        Misspell,
-        Grammar
-    };
-
-    void appendMarkup(MarkupType type, int firstChar, int lastChar);
-
-    void clearMarkups(MarkupType type);
-
-    void rebaseMarkups(MarkupType type, int fromPosition, int delta);
-
-    MarkupRange findMarkup(MarkupType type, int positionWithin) const;
-
-    void setMarkupsLayoutValidity(MarkupType type, bool valid);
-    bool isMarkupsLayoutValid(MarkupType type) const;
-
-    QList<MarkupRange>::Iterator markupsBegin(MarkupType type);
-    QList<MarkupRange>::Iterator markupsEnd(MarkupType type);
-
     /**
      * Add a range to the _end_ of the list of markups. It's important that firstChar is after
      * lastChar of the previous range for that type of markup.
