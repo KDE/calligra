@@ -181,9 +181,12 @@ void ChangeTrackedDeleteCommand::handleListItemDelete(KoTextEditor *editor)
     KoTextOdfSaveHelper saveHelper(m_document.data(), from, to);
     KoTextDrag drag;
 
+#ifdef SHOULD_BUILD_RDF
     if (m_rdf) {
         saveHelper.setRdfModel(m_rdf->model());
     }
+#endif
+
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
     QTextDocumentFragment fragment = editor->selection();
     drag.setData("text/html", fragment.toHtml("utf-8").toUtf8());

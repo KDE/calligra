@@ -1036,10 +1036,12 @@ QMimeData *TextTool::generateMimeData() const
         rm = canvas()->shapeController()->resourceManager();
     }
     if (rm && rm->hasResource(KoText::DocumentRdf)) {
+#ifdef SHOULD_BUILD_RDF
         KoDocumentRdfBase *rdf = qobject_cast<KoDocumentRdfBase*>(rm->resource(KoText::DocumentRdf).value<QObject*>());
         if (rdf) {
             saveHelper.setRdfModel(rdf->model());
         }
+#endif 
     }
 
     drag.setOdf(KoOdf::mimeType(KoOdf::Text), saveHelper);
