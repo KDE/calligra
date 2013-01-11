@@ -31,7 +31,7 @@ Stash::Stash(O2DeviantART *deviant, QObject *parent)
 {
     m_requestor = new O2Requestor(&m_networkAccessManager, deviant, this);
     connect(m_requestor, SIGNAL(finished(int,QNetworkReply::NetworkError,QByteArray)), SLOT(slotFinished(int,QNetworkReply::NetworkError,QByteArray)));
-    connect(m_requestor, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(uploadProgress(int,qint64,qint64)));
+    connect(m_requestor, SIGNAL(uploadProgress(int,qint64,qint64)), SIGNAL(uploadProgress(int,qint64,qint64)));
 }
 
 Stash::~Stash()
@@ -232,11 +232,6 @@ void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArra
 void Stash::fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
 {
 
-}
-
-void Stash::uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal)
-{
-    qDebug() << id << bytesSent << "/" << bytesTotal;
 }
 
 #include "stash.moc"

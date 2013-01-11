@@ -115,15 +115,14 @@ public slots:
 
 
 private slots:
-
     void slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data);
-    void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
 
 signals:
     void availableSpaceChanged();
     void submissionsChanged();
 
     void callFinished(Stash::Call call, bool result);
+    void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
 
 private:
     QMap<int, Call> m_callMap;
