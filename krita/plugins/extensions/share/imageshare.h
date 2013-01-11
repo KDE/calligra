@@ -26,6 +26,8 @@
 #include "kis_types.h"
 #include "stash.h"
 
+class KoUpdater;
+class KoProgressUpdater;
 class QUrl;
 
 class KisView2;
@@ -50,6 +52,8 @@ private slots:
     void testCallCompleted(Stash::Call, bool result);
     void performUpload();
     void submissionsChanged();
+    void submitCallCompleted(Stash::Call, bool result);
+    void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
 
 private:
 
@@ -57,6 +61,8 @@ private:
     O2DeviantART *m_deviantArt;
     Stash* m_stash;
     SubmitDlg* m_submitDlg;
+    KoProgressUpdater* m_progressUpdater;
+    QPointer<KoUpdater> m_progressSubtask;
 };
 
 #endif // IMAGESHARE_H

@@ -39,6 +39,7 @@
 #include "o2deviantart.h"
 #include "dlg_login.h"
 #include "submitdlg.h"
+#include <KoUpdater.h>
 
 K_PLUGIN_FACTORY(ImageShareFactory, registerPlugin<ImageShare>();)
 K_EXPORT_PLUGIN(ImageShareFactory("krita"))
@@ -109,6 +110,7 @@ void ImageShare::showSubmit()
     m_stash = new Stash(m_deviantArt, this);
     connect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), SLOT(testCallCompleted(Stash::Call,bool)));
     connect(m_stash, SIGNAL(submissionsChanged()), SLOT(submissionsChanged()));
+    connect(m_stash, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(uploadProgress(int,qint64,qint64)));
     m_stash->testCall();
 }
 
@@ -129,6 +131,12 @@ void ImageShare::performUpload()
     if(m_submitDlg->submitDlg()->folderList->currentIndex() != 0) {
         folderId = m_submitDlg->submitDlg()->folderList->itemData(m_submitDlg->submitDlg()->folderList->currentIndex()).toString();
     }
+    m_progressUpdater = m_view->createProgressUpdater();
+    m_progressUpdater->start(100, i18n("Uploading to Sta.sh"));
+    m_progressSubtask = m_progressUpdater->startSubtask(1, i18n("Uploading to Sta.sh"));
+    m_progressSubtask->setRange(0, 1);
+    qApp->processEvents();
+    connect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), SLOT(submitCallCompleted(Stash::Call,bool)));
     m_stash->submit(m_view->image(), m_view->document()->url().fileName(), m_submitDlg->submitDlg()->txtTitle->text(), m_submitDlg->submitDlg()->txtComments->toPlainText(), m_submitDlg->submitDlg()->txtKeywords->text().split(","), folderId);
 }
 
@@ -141,6 +149,22 @@ void ImageShare::submissionsChanged()
             m_submitDlg->submitDlg()->folderList->addItem(sub.title, sub.folderId);
         }
     }
+}
+
+void ImageShare::uploadProgress(int, qint64 bytesSent, qint64 bytesTotal)
+{
+    if(m_progressUpdater) {
+        if(m_progressSubtask->max == 1) {
+            m_progressSubtask->setRange(0, bytesTotal);
+        }
+        m_progressSubtask->setValue(bytesSent);
+    }
+}
+
+void ImageShare::submitCallCompleted(Stash::Call, bool result)
+{
+    qDebug() << Q_FUNC_INFO;
+    m_progressUpdater->deleteLater();
 }
 
 #include "imageshare.moc"
