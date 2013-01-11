@@ -60,7 +60,7 @@ ImageShare::ImageShare(QObject *parent, const QVariantList &)
 
         m_view = qobject_cast<KisView2*>(parent);
         m_submitDlg = new SubmitDlg(m_view);
-        m_submitDlg->submitDlg()->txtTitle->setText(m_view->document()->url().fileName());
+        m_submitDlg->submitDlg()->txtTitle->setText(m_view->document()->url().fileName().split(".").first());
         connect(m_submitDlg, SIGNAL(accepted()), SLOT(performUpload()));
     }
 }
