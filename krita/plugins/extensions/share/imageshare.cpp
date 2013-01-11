@@ -120,7 +120,7 @@ void ImageShare::testCallCompleted(Stash::Call, bool result)
         qDebug() << Q_FUNC_INFO << "if this happens, something failed and we'll need to start over...";
     }
     disconnect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), this, SLOT(testCallCompleted(Stash::Call,bool)));
-    m_stash->delta();
+    QTimer::singleShot(100, m_stash, SLOT(delta()));
     m_submitDlg->open();
 }
 
