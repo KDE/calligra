@@ -187,6 +187,43 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     layout->setMargin(0);
     layout->setSpacing(0);
 
+    d->group = new QButtonGroup(this);
+    d->group->setExclusive(true);
+
+    // The button for no fill
+    KoGroupButton *button = new KoGroupButton(KoGroupButton::GroupLeft, this);
+    button->setIcon(koIcon("edit-delete"));
+    button->setToolTip(i18nc("No stroke or fill", "None"));
+    button->setCheckable(true);
+    d->group->addButton(button, None);
+    layout->addWidget(button);
+
+    // The button for solid fill
+    button = new KoGroupButton(KoGroupButton::GroupCenter, this);
+    button->setIcon(QPixmap((const char **) buttonsolid));
+    button->setToolTip(i18nc("Solid color stroke or fill", "Solid"));
+    button->setCheckable(true);
+    d->group->addButton(button, Solid);
+    layout->addWidget(button);
+
+    // The button for gradient fill
+    button = new KoGroupButton(KoGroupButton::GroupCenter, this);
+    button->setIcon(QPixmap((const char **) buttongradient));
+    button->setToolTip(i18n("Gradient"));
+    button->setCheckable(true);
+    d->group->addButton(button, Gradient);
+    layout->addWidget(button);
+
+    // The button for pattern fill
+    button = new KoGroupButton(KoGroupButton::GroupRight, this);
+    button->setIcon(QPixmap((const char **) buttonpattern));
+    button->setToolTip(i18n("Pattern"));
+    button->setCheckable(true);
+    d->group->addButton(button, Pattern);
+    layout->addWidget(button);
+
+    connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(styleButtonPressed(int)));
+
     d->colorButton = new QToolButton(this);
     layout->addWidget(d->colorButton);
 
@@ -211,39 +248,6 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->patternAction->setIcon(koIcon("format-stroke-color"));
     d->patternAction->setToolTip(i18n("Change the filling color"));
     connect(d->patternAction, SIGNAL(resourceSelected(KoResource*)), this, SLOT(patternChanged(KoResource*)));
-
-    d->group = new QButtonGroup(this);
-    d->group->setExclusive(true);
-
-    // The button for no fill
-    KoGroupButton *button = new KoGroupButton(KoGroupButton::GroupLeft, this);
-    button->setIcon(koIcon("edit-delete"));
-    button->setToolTip(i18nc("No stroke or fill", "None"));
-    d->group->addButton(button, None);
-    layout->addWidget(button);
-
-    // The button for solid fill
-    button = new KoGroupButton(KoGroupButton::GroupCenter, this);
-    button->setIcon(QPixmap((const char **) buttonsolid));
-    button->setToolTip(i18nc("Solid color stroke or fill", "Solid"));
-    d->group->addButton(button, Solid);
-    layout->addWidget(button);
-
-    // The button for gradient fill
-    button = new KoGroupButton(KoGroupButton::GroupCenter, this);
-    button->setIcon(QPixmap((const char **) buttongradient));
-    button->setToolTip(i18n("Gradient"));
-    d->group->addButton(button, Gradient);
-    layout->addWidget(button);
-
-    // The button for pattern fill
-    button = new KoGroupButton(KoGroupButton::GroupRight, this);
-    button->setIcon(QPixmap((const char **) buttonpattern));
-    button->setToolTip(i18n("Pattern"));
-    d->group->addButton(button, Pattern);
-    layout->addWidget(button);
-
-    connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(styleButtonPressed(int)));
 
     // Opacity setting
     // FIXME: There is also an opacity setting in the color chooser. How do they interact?
