@@ -19,8 +19,8 @@
  */
 
 #include "tool_transform.h"
-#include <stdlib.h>
-#include <vector>
+
+#include <QtDeclarative/QtDeclarative>
 
 #include <klocale.h>
 #include <kcomponentdata.h>
@@ -46,6 +46,7 @@ ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolTransformFactory(QStringList()));
 
+    qmlRegisterUncreatableType<KisToolTransform>("org.krita.sketch", 1, 0, "TransformTool", "This class is only used for enum values.");
 }
 
 ToolTransform::~ToolTransform()

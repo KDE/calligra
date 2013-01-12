@@ -88,7 +88,41 @@ class KisToolTransform : public KisTool, KisCommandHistoryListener
 
     Q_OBJECT
 
+    Q_PROPERTY(TransformToolMode transformMode READ transformMode WRITE setTransformMode NOTIFY transformModeChanged)
+
+    Q_PROPERTY(double translateX READ translateX WRITE setTranslateX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double translateY READ translateY WRITE setTranslateX NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double rotateX READ rotateX WRITE setRotateX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double rotateY READ rotateY WRITE setRotateY NOTIFY freeTransformChanged)
+    Q_PROPERTY(double rotateZ READ rotateZ WRITE setRotateZ NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double scaleX READ scaleX WRITE setScaleX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double scaleY READ scaleY WRITE setScaleY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(double shearX READ shearX WRITE setShearX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double shearY READ shearY WRITE setShearY NOTIFY freeTransformChanged)
+
+    Q_PROPERTY(WarpType warpType READ warpType WRITE setWarpType NOTIFY warpTransformChanged)
+    Q_PROPERTY(double warpFlexibility READ warpFlexibility WRITE setWarpFlexibility NOTIFY warpTransformChanged)
+    Q_PROPERTY(int warpPointDensity READ warpPointDensity WRITE setWarpPointDensity NOTIFY warpTransformChanged)
+
+
+
 public:
+    enum TransformToolMode {
+        FreeTransformMode,
+        WarpTransformMode
+    };
+    Q_ENUMS(TransformToolMode)
+
+    enum WarpType {
+        RigidWarpType,
+        AffineWarpType,
+        SimilitudeWarpType
+    };
+    Q_ENUMS(WarpType)
+
     KisToolTransform(KoCanvasBase * canvas);
     virtual ~KisToolTransform();
 
@@ -99,18 +133,63 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
+    //virtual void touchEvent(QTouchEvent *event);
 
     virtual void resourceChanged(int key, const QVariant& res);
 
-public:
     void paint(QPainter& gc, const KoViewConverter &converter);
 
     void notifyCommandAdded(const KUndo2Command *);
     void notifyCommandExecuted(const KUndo2Command *);
 
+    TransformToolMode transformMode() const;
+
+    double translateX() const;
+    double translateY() const;
+
+    double rotateX() const;
+    double rotateY() const;
+    double rotateZ() const;
+
+    double scaleX() const;
+    double scaleY() const;
+
+    double shearX() const;
+    double shearY() const;
+
+    WarpType warpType() const;
+    double warpFlexibility() const;
+    int warpPointDensity() const;
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
+    // Applies the current transformation to the original paint device and commits it to the undo stack
+    void applyTransform();
+
+    void setTransformMode( KisToolTransform::TransformToolMode newMode );
+
+    void setTranslateX(double translateX);
+    void setTranslateY(double translateY);
+
+    void setRotateX(double rotation);
+    void setRotateY(double rotation);
+    void setRotateZ(double rotation);
+
+    void setScaleX(double scaleX);
+    void setScaleY(double scaleY);
+
+    void setShearX(double shearX);
+    void setShearY(double shearY);
+
+    void setWarpType(WarpType type);
+    void setWarpFlexibility(double flexibility);
+    void setWarpPointDensity(int density);
+
+Q_SIGNALS:
+    void transformModeChanged();
+    void freeTransformChanged();
+    void warpTransformChanged();
 
 private:
     // Used in dichotomic search (see below)
@@ -266,6 +345,8 @@ private:
     // Sets m_function according to mouse position and modifier
     void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
 
+    void setDensity(int density);
+
     double gradientDescent_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY);
     double gradientDescent_partialDeriv1_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon);
     double gradientDescent_partialDeriv2_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon);
@@ -284,8 +365,6 @@ private:
     void initTransform(ToolTransformArgs::TransfMode mode);
     // Only commits the changes made on the preview to the undo stack
     void transform();
-    // Applies the current transformation to the original paint device and commits it to the undo stack
-    void applyTransform();
     // Updated the widget according to m_currentArgs
     void updateOptionWidget();
     // Disable/Enable Apply-Reset button
@@ -405,28 +484,22 @@ private slots:
 
     void slotSetFilter(const KoID &);
     void setRotCenter(int id);
-    void setScaleX(double scaleX);
-    void setScaleY(double scaleY);
-    void setShearX(double shearX);
-    void setShearY(double shearY);
-    void setAX(double aX);
-    void setAY(double aY);
-    void setAZ(double aZ);
-    void setAlpha(double alpha);
-    void setDensity(int density);
-    void setTranslateX(double translateX);
-    void setTranslateY(double translateY);
     void slotButtonBoxClicked(QAbstractButton *button);
     void slotKeepAspectRatioChanged(bool keep);
     void slotEditingFinished();
-	void slotWarpButtonClicked(bool checked);
-	void slotFreeTransformButtonClicked(bool checked);
+    void slotWarpButtonClicked(bool checked);
+    void slotFreeTransformButtonClicked(bool checked);
     void slotWarpTypeChanged(int index);
     void slotWarpDefaultButtonClicked(bool checked);
     void slotWarpCustomButtonClicked(bool checked);
     void slotLockUnlockPointsButtonClicked();
     void slotResetPointsButtonClicked();
 
+    void setAX(double aX);
+    void setAY(double aY);
+    void setAZ(double aZ);
+
+    void setAlpha(double alpha);
 };
 
 class KisToolTransformFactory : public KoToolFactoryBase

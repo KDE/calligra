@@ -435,6 +435,8 @@ void KisToolTransform::outlineChanged()
         return;
     }
 
+    emit freeTransformChanged();
+
     KisImageSP kisimage = image();
     double maxRadiusX = m_canvas->viewConverter()->viewToDocumentX(m_maxRadius);
     double maxRadiusY = m_canvas->viewConverter()->viewToDocumentY(m_maxRadius);
@@ -935,6 +937,132 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 
     setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
     KisTool::keyReleaseEvent(event);
+}
+
+KisToolTransform::TransformToolMode KisToolTransform::transformMode() const
+{
+    return m_currentArgs.mode() == ToolTransformArgs::FREE_TRANSFORM ? FreeTransformMode : WarpTransformMode;
+}
+
+double KisToolTransform::translateX() const
+{
+    return m_currentArgs.translate().x();
+}
+
+double KisToolTransform::translateY() const
+{
+    return m_currentArgs.translate().y();
+}
+
+double KisToolTransform::rotateX() const
+{
+    return m_currentArgs.aX();
+}
+
+double KisToolTransform::rotateY() const
+{
+    return m_currentArgs.aY();
+}
+
+double KisToolTransform::rotateZ() const
+{
+    return m_currentArgs.aZ();
+}
+
+double KisToolTransform::scaleX() const
+{
+    return m_currentArgs.scaleX();
+}
+
+double KisToolTransform::scaleY() const
+{
+    return m_currentArgs.scaleY();
+}
+
+double KisToolTransform::shearX() const
+{
+    return m_currentArgs.shearX();
+}
+
+double KisToolTransform::shearY() const
+{
+    return m_currentArgs.shearY();
+}
+
+KisToolTransform::WarpType KisToolTransform::warpType() const
+{
+    switch(m_currentArgs.warpType()) {
+        case KisWarpTransformWorker::AFFINE_TRANSFORM:
+            return AffineWarpType;
+        case KisWarpTransformWorker::RIGID_TRANSFORM:
+            return RigidWarpType;
+        case KisWarpTransformWorker::SIMILITUDE_TRANSFORM:
+            return SimilitudeWarpType;
+        default:
+            return RigidWarpType;
+    }
+}
+
+double KisToolTransform::warpFlexibility() const
+{
+    return m_currentArgs.alpha();
+}
+
+int KisToolTransform::warpPointDensity() const
+{
+    return m_currentArgs.pointsPerLine();
+}
+
+void KisToolTransform::setTransformMode( KisToolTransform::TransformToolMode newMode )
+{
+    ToolTransformArgs::TransfMode mode = newMode == FreeTransformMode ? ToolTransformArgs::FREE_TRANSFORM : ToolTransformArgs::WARP;
+    if( mode != m_currentArgs.mode() ) {
+        //m_currentArgs.setMode( mode );
+        initTransform(mode);
+        emit transformModeChanged();
+    }
+}
+
+void KisToolTransform::setRotateX( double rotation )
+{
+    m_currentArgs.setAX( rotation );
+}
+
+void KisToolTransform::setRotateY( double rotation )
+{
+    m_currentArgs.setAY( rotation );
+}
+
+void KisToolTransform::setRotateZ( double rotation )
+{
+    m_currentArgs.setAZ( rotation );
+}
+
+void KisToolTransform::setWarpType( KisToolTransform::WarpType type )
+{
+    switch( type ) {
+        case RigidWarpType:
+            m_currentArgs.setWarpType(KisWarpTransformWorker::RIGID_TRANSFORM);
+            break;
+        case AffineWarpType:
+            m_currentArgs.setWarpType(KisWarpTransformWorker::AFFINE_TRANSFORM);
+            break;
+        case SimilitudeWarpType:
+            m_currentArgs.setWarpType(KisWarpTransformWorker::SIMILITUDE_TRANSFORM);
+            break;
+        default:
+            break;
+    }
+}
+
+void KisToolTransform::setWarpFlexibility( double flexibility )
+{
+    m_currentArgs.setAlpha( flexibility );
+}
+
+void KisToolTransform::setWarpPointDensity( int density )
+{
+    setDensity( density );
 }
 
 void KisToolTransform::resourceChanged(int key, const QVariant& res)
