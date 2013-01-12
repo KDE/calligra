@@ -26,15 +26,12 @@
 using namespace std;
 
 extern "C" int shell_main(const char *inFilename);
-
-#define JOIN(a, b) a#b
-#define STRINGIFY(s) JOIN("", s) // indirection needed because only function-like macro parameters can be pasted
-
+    
 void usage()
 {
-    cout << STRINGIFY(KEXI_SQLITE_DUMP_TOOL) " version " KEXI_VERSION_STRING << endl
+    cout << KEXI_SQLITE_DUMP_TOOL " version " KEXI_VERSION_STRING << endl
          << "A tool for executing DUMP command on SQLite 3 databases." << endl
-         << "Usage: " STRINGIFY(KEXI_SQLITE_DUMP_TOOL) " <database>" << endl;
+         << "Usage: " KEXI_SQLITE_DUMP_TOOL " <database>" << endl;
 }
 
 int main(int argc, char **argv)

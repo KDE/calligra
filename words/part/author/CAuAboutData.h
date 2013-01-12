@@ -38,6 +38,7 @@ KAboutData * newAuthorAboutData()
                                             ki18n("© 2012, The Author Team"), KLocalizedString(),
                                             "http://www.calligra.org/author/");
     aboutData->setProductName("calligraauthor"); // for bugs.kde.org
+    aboutData->setProgramIconName(QLatin1String("calligraauthor"));
     //                          Name             Function               email (if any)
     aboutData->addAuthor(ki18n("Inge Wallin"), ki18n("Co-maintainer"), "");
     aboutData->addAuthor(ki18n("Gopalakrishna Bhat"), ki18n("Co-maintainer"), "");

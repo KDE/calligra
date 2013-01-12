@@ -18,7 +18,6 @@
 */
 
 #include "kexi.h"
-#include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
 #include "KexiRecentProjects.h"
 #include "KexiMainWindowIface.h"
@@ -308,7 +307,7 @@ ObjectStatus::operator KexiDB::MessageHandler*()
     return msgHandler;
 }
 
-void Kexi::initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData)
+void Kexi::initCmdLineArgs(int argc, char *argv[], const KAboutData& aboutData)
 {
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(kexi_options());

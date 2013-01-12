@@ -124,8 +124,8 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         true,                    // do break into chapters
         false                    // It is not mobi
     };
-    status = converter.convertContent(odfStore, m_metadata, &options, &epub,
-                                      m_imagesSrcList);
+    status = converter.convertContent(odfStore, m_metadata, &m_manifest, &options, &epub,
+                                      m_imagesSrcList, m_mediaFilesList);
     if (status != KoFilter::OK) {
         delete odfStore;
         return status;
@@ -137,7 +137,13 @@ KoFilter::ConversionStatus ExportEpub2::convert(const QByteArray &from, const QB
         delete odfStore;
         return status;
     }
+    // Extract media files
+    status = extractMediaFiles(&epub);
     // Check for cover image
+    if (status != KoFilter::OK) {
+        delete odfStore;
+        return status;
+    }
     status = extractCoverImage(odfStore, &epub);
     if (status != KoFilter::OK) {
         delete odfStore;
@@ -400,6 +406,30 @@ bool ExportEpub2::isWmf(QByteArray &content)
     }
 
     return false;
+}
+
+KoFilter::ConversionStatus ExportEpub2::extractMediaFiles(EpubFile *epubFile)
+{
+    QByteArray mediaContent;
+    foreach (QString mediaId, m_mediaFilesList.keys()) {
+        QString mediaSrc = m_mediaFilesList.value(mediaId);
+        // Remove scheme (file://) from the path
+        QUrl mediaPath(mediaSrc);
+        mediaSrc = mediaPath.path();
+
+        QFile file (mediaSrc);
+        if (!file.open(QIODevice::ReadOnly)) {
+            kDebug(31000) << "Unable to open" << mediaSrc;
+            return KoFilter::FileNotFound;
+            Qt::ArrowCursor;
+        }
+        mediaContent = file.readAll();
+
+        const QString mimetype(KMimeType::findByPath(mediaSrc.section("/", -1), 0 , true)->name());
+        epubFile->addContentFile(mediaId.section("#", -1), epubFile->pathPrefix() + mediaSrc.section("/", -1),
+                                 mimetype.toUtf8(), mediaContent);
+    }
+    return KoFilter::OK;
 }
 
 KoFilter::ConversionStatus ExportEpub2::extractCoverImage(KoStore *odfStore, EpubFile *epubFile)

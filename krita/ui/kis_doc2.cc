@@ -142,6 +142,8 @@ public:
     QList<KisPaintingAssistant*> assistants;
 
     KisPart2 *part; // XXX: we shouldn't know about the part here!
+
+    QString flipbook;
 };
 
 
@@ -481,9 +483,12 @@ KisImageWSP KisDoc2::image() const
 
 void KisDoc2::setCurrentImage(KisImageWSP image)
 {
+    //if (!image.isValid()) return;
+
     if (m_d->image) {
         // Disconnect existing sig/slot connections
         m_d->image->disconnect(this);
+        m_d->shapeController->setImage(0);
     }
     m_d->image = image;
     m_d->shapeController->setImage(image);
@@ -527,7 +532,6 @@ void KisDoc2::undoIndexChanged(int idx)
 
     undoStore->notifyCommandExecuted(command);
 }
-
 
 #include "kis_doc2.moc"
 

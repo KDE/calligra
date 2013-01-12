@@ -270,7 +270,7 @@ class ResizeHandleSet::Private
 {
 public:
     Private();
-    ~Private();
+    ~Private() {}
 
     QRect origWidgetRect;
     QPointer<ResizeHandle> handles[8];
@@ -287,6 +287,7 @@ ResizeHandleSet::Private::Private() : widget(0)
 ResizeHandleSet::ResizeHandleSet(QWidget *modify, Form *form, bool editing)
     : QObject(modify->parentWidget()), d(new Private)
 {
+    d->form = form;
     setWidget(modify, editing);
 }
 
@@ -294,6 +295,7 @@ ResizeHandleSet::~ResizeHandleSet()
 {
     for (int i = 0; i < 8; i++)
         delete d->handles[i];
+    delete d;
 }
 
 void
