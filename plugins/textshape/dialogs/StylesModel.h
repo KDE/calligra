@@ -76,15 +76,6 @@ public:
     /** ************************* */
     /** Initialising of the model */
 
-    /** Specify if the combo should provide the virtual style None. This style is a virtual style which equates to no style. It is only relevant for character styles.
-        In case the "None" character style is selected, the character formatting properties of the paragraph style are used.
-        A @class StylesModel of the @enum Type ParagraphStyle always has this property set to false.
-        On the other hand, the default for a @class StylesModel of the @enum Type CharacterStyle is true.
-
-        It is important to set this before setting the stylemanager on the model. The flag is used when populating the styles from the KoStyleManager.
-    */
-    void setProvideStyleNone(bool provide);
-
     /** Sets the @class KoStyleManager of the model. Setting this will populate the styles. It is required that a @param manager is set before using the model.
       * CAUTION: Populating the style will select the first inserted item. If this model is already set on a view, this might cause the view to emit an item selection changed signal.
     */
@@ -103,11 +94,10 @@ public:
     /** Return a @class QModelIndex for the specified @param style. */
     QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
-    /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
+    /** Returns a QImage which is a preview of the style specified by @param index of the given @param size.
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
     */
-    QImage stylePreview(int row, QSize size = QSize());
-//    QImage stylePreview(QModelIndex &index, QSize size = QSize());
+    QImage stylePreview(const QModelIndex &index, QSize size = QSize());
 
     /** Specifies which paragraph style is currently the active one (on the current paragraph). This is used in order to properly preview the "As paragraph" virtual character style. */
     void setCurrentParagraphStyle(int styleId);

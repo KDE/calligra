@@ -94,7 +94,7 @@ Qt::ItemFlags StylesFilteredModelBase::flags(const QModelIndex &index) const
 
 void StylesFilteredModelBase::setStyleThumbnailer(KoStyleThumbnailer *thumbnailer)
 {
-    Q_UNUSED(thumbnailer);
+    m_styleThumbnailer = thumbnailer;
 }
 
 QModelIndex StylesFilteredModelBase::indexForParagraphStyle(const KoParagraphStyle &style) const
@@ -104,8 +104,7 @@ QModelIndex StylesFilteredModelBase::indexForParagraphStyle(const KoParagraphSty
     if (!sourceIndex.isValid() || (m_sourceToProxy.at(sourceIndex.row()) < 0)) {
         return QModelIndex();
     }
-
-    return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, style.styleId());
+    return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, int(sourceIndex.internalId()));
 }
 
 QModelIndex StylesFilteredModelBase::indexForCharacterStyle(const KoCharacterStyle &style) const
@@ -115,27 +114,17 @@ QModelIndex StylesFilteredModelBase::indexForCharacterStyle(const KoCharacterSty
     if (!sourceIndex.isValid() || m_sourceToProxy.at(sourceIndex.row()) < 0) {
         return QModelIndex();
     }
-    return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, style.styleId());
+    return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, int(sourceIndex.internalId()));
 }
 
-QImage StylesFilteredModelBase::stylePreview(int row, QSize size)
-{
-    if (row < 0) {
-        return QImage();
-    }
-    return m_sourceModel->stylePreview(m_proxyToSource.at(row), size);
-
-}
-/*
-QImage StylesFilteredModelBase::stylePreview(QModelIndex &index, QSize size)
+QImage StylesFilteredModelBase::stylePreview(const QModelIndex &index, QSize size)
 {
     if (!index.isValid()) {
         return QImage();
     }
-    return m_sourceModel->stylePreview(index, size); //TODO be carefull there. this is assuming the sourceModel is only using the internalId, and the index's internalId matches the model's
-
+    return m_sourceModel->stylePreview(m_sourceModel->index(m_proxyToSource.at(index.row()), 0), size);
 }
-*/
+
 void StylesFilteredModelBase::setStylesModel(AbstractStylesModel *sourceModel)
 {
     if (m_sourceModel == sourceModel) {

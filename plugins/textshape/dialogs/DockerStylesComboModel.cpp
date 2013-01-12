@@ -22,6 +22,7 @@
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 
 #include <KLocale>
 #include <KStringHandler>
@@ -29,9 +30,23 @@
 #include <KDebug>
 
 DockerStylesComboModel::DockerStylesComboModel(QObject *parent) :
-    StylesFilteredModelBase(parent),
-    m_styleManager(0)
+    StylesFilteredModelBase(parent)
+    , m_styleManager(0)
+    , m_currentParagraphStyle(0)
+    , m_defaultCharacterStyle(0)
 {
+}
+
+DockerStylesComboModel::~DockerStylesComboModel()
+{
+    if (m_currentParagraphStyle) {
+        delete m_currentParagraphStyle;
+        m_currentParagraphStyle = 0;
+    }
+    if (m_defaultCharacterStyle) {
+        delete m_defaultCharacterStyle;
+        m_defaultCharacterStyle = 0;
+    }
 }
 
 Qt::ItemFlags DockerStylesComboModel::flags(const QModelIndex &index) const
@@ -77,7 +92,17 @@ QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     case Qt::DecorationRole: {
-        return m_sourceModel->data(m_sourceModel->index(m_proxyToSource.at(index.row()), 0, QModelIndex()), role);
+        if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle && index.internalId() == CharacterStyleNoneId) {
+            KoCharacterStyle *usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
+            if (!usedStyle) {
+                usedStyle = m_defaultCharacterStyle;
+            }
+            usedStyle->setName(i18n("None"));
+            return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, data(index, Qt::SizeHintRole).toSize());
+        }
+        else {
+            return m_sourceModel->data(m_sourceModel->index(m_proxyToSource.at(index.row()), 0, QModelIndex()), role);
+        }
         break;
     }
     case Qt::SizeHintRole: {
@@ -86,6 +111,45 @@ QVariant DockerStylesComboModel::data(const QModelIndex &index, int role) const
     default: break;
     };
     return QVariant();
+}
+
+QModelIndex DockerStylesComboModel::indexForCharacterStyle(const KoCharacterStyle &style) const
+{
+    if (&style) {
+        QModelIndex sourceIndex(m_sourceModel->indexForCharacterStyle(style));
+
+        if (!sourceIndex.isValid() || (m_sourceToProxy.at(sourceIndex.row()) < 0)) {
+            return QModelIndex();
+        }
+        return createIndex(m_sourceToProxy.at(sourceIndex.row()), 0, int(sourceIndex.internalId()));
+    }
+    else {
+        if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
+            return createIndex((m_proxyToSource.indexOf(CharacterStyleNoneId)), 0, CharacterStyleNoneId);
+        }
+        return QModelIndex();
+    }
+}
+
+QImage DockerStylesComboModel::stylePreview(const QModelIndex &index, QSize size)
+{
+    if (!index.isValid()) {
+        return QImage();
+    }
+    if (index.internalId() == CharacterStyleNoneId) {
+        KoCharacterStyle *usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
+        if (!usedStyle) {
+            usedStyle = m_defaultCharacterStyle;
+        }
+        usedStyle->setName(i18n("None"));
+        if (usedStyle->styleId() >= 0) {
+            usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
+        }
+        return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
+    }
+    else {
+        return m_sourceModel->stylePreview(m_sourceModel->index(m_proxyToSource.at(index.row()), 0), size);
+    }
 }
 
 void DockerStylesComboModel::setInitialUsedStyles(QVector<int> usedStyles)
@@ -97,6 +161,17 @@ void DockerStylesComboModel::setInitialUsedStyles(QVector<int> usedStyles)
 //    beginResetModel();
 //    createMapping();
 //    endResetModel();
+}
+
+void DockerStylesComboModel::setStylesModel(AbstractStylesModel *sourceModel)
+{
+    if ((!m_sourceModel || !m_defaultCharacterStyle) && sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
+        m_defaultCharacterStyle = new KoCharacterStyle();
+        m_defaultCharacterStyle->setStyleId(CharacterStyleNoneId);
+        m_defaultCharacterStyle->setName(i18n("None"));
+        m_defaultCharacterStyle->setFontPointSize(12);
+    }
+    StylesFilteredModelBase::setStylesModel(sourceModel);
 }
 
 void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
@@ -117,11 +192,9 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
                 QVector<int>::iterator begin = m_usedStyles.begin();
                 compareStyle = m_styleManager->characterStyle(i);
                 for ( ; begin != m_usedStyles.end(); ++begin) {
-                    if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                        KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                        if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
-                            break;
-                        }
+                    KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
+                    if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
+                        break;
                     }
                 }
                 m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*compareStyle).row());
@@ -136,11 +209,9 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
                 QVector<int>::iterator begin = m_usedStyles.begin();
                 compareStyle = m_styleManager->paragraphStyle(i);
                 for ( ; begin != m_usedStyles.end(); ++begin) {
-                    if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                        KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                        if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
-                            break;
-                        }
+                    KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
+                    if (KStringHandler::naturalCompare(compareStyle->name(), s->name()) < 0) {
+                        break;
                     }
                 }
                 m_usedStyles.insert(begin, m_sourceModel->indexForParagraphStyle(*compareStyle).row());
@@ -151,6 +222,19 @@ void DockerStylesComboModel::setStyleManager(KoStyleManager *sm)
     createMapping();
 }
 
+void DockerStylesComboModel::setCurrentParagraphStyle(int styleId)
+{
+    if (!m_styleManager || !m_styleManager->paragraphStyle(styleId) || m_currentParagraphStyle == m_styleManager->paragraphStyle(styleId)) {
+        return; //TODO do we create a default paragraphStyle? use the styleManager default?
+    }
+    if (m_currentParagraphStyle) {
+        delete m_currentParagraphStyle;
+        m_currentParagraphStyle = 0;
+    }
+    m_currentParagraphStyle = m_styleManager->paragraphStyle(styleId)->clone();
+    m_currentParagraphStyle->setStyleId(-styleId);
+}
+
 void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 {
     if (!m_usedStylesId.contains(style->styleId())) {
@@ -158,11 +242,9 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
         if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
             QVector<int>::iterator begin = m_usedStyles.begin();
             for ( ; begin != m_usedStyles.end(); ++begin) {
-                if (m_sourceModel->index(*begin, 0, QModelIndex()).internalId() != -1) { //styleNone (internalId=-1) is a virtual style provided only for the UI. it does not exist in KoStyleManager
-                    KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                    if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
-                        break;
-                    }
+                KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
+                if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
+                    break;
                 }
             }
             m_usedStyles.insert(begin, m_sourceModel->indexForCharacterStyle(*style).row());
@@ -193,16 +275,6 @@ void DockerStylesComboModel::createMapping()
     m_proxyToSource.clear();
     m_sourceToProxy.clear();
     m_unusedStyles.clear();
-
-    //Handle the default characterStyle. If provided, the None virtual style is the first style of the model. Its internalId is -1
-    if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
-        if (m_sourceModel->index(0, 0, QModelIndex()).isValid() && m_sourceModel->index(0, 0, QModelIndex()).internalId() == -1) {
-            if (!m_usedStylesId.contains(-1)) {
-                m_usedStylesId.prepend(-1);
-                m_usedStyles.prepend(0);
-            }
-        }
-    }
 
     for (int i = 0; i < m_sourceModel->rowCount(QModelIndex()); ++i) {
         QModelIndex index = m_sourceModel->index(i, 0, QModelIndex());
@@ -246,8 +318,14 @@ void DockerStylesComboModel::createMapping()
             }
         }
     }
-    if (!m_usedStyles.isEmpty()) {
-        m_proxyToSource << UsedStyleId << m_usedStyles;
+    if (!m_usedStyles.isEmpty() || m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
+        m_proxyToSource << UsedStyleId;
+        if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
+            m_proxyToSource << CharacterStyleNoneId;
+        }
+        if (!m_usedStyles.isEmpty()) {
+            m_proxyToSource << m_usedStyles;
+        }
     }
     if (!m_unusedStyles.isEmpty()) {
         m_proxyToSource << UnusedStyleId << m_unusedStyles; //UsedStyleId and UnusedStyleId will be detected as title (in index method) and will be treated accordingly

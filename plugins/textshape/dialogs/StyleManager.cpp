@@ -64,7 +64,6 @@ StyleManager::StyleManager(QWidget *parent)
 
     m_paragraphStylesModel->setStyleThumbnailer(m_thumbnailer);
     m_characterStylesModel->setStyleThumbnailer(m_thumbnailer);
-    m_characterStylesModel->setProvideStyleNone(false);
     widget.paragraphStylesListView->setModel(m_paragraphStylesModel);
     widget.characterStylesListView->setModel(m_characterStylesModel);
 

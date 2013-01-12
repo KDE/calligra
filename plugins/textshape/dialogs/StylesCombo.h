@@ -61,6 +61,9 @@ public slots:
     /** This slot needs to be called if the preview in the main area needs to be updated for some reason */
     void slotUpdatePreview();
 
+    /** Set the current item of the combo (equivalent of the QComboBox::setCurrentIndex(int row) */
+    void setCurrentItem(const QModelIndex &index);
+
 signals:
     /** This is emitted when a selection is made (programatically or by user interaction). It is
       * to be noted that this signal is also emitted when an item is selected again.
@@ -90,7 +93,6 @@ signals:
 private slots:
     void slotDeleteStyle(QModelIndex);
     void slotShowDia(QModelIndex);
-    void slotSelectionChanged(int index);
     void slotItemClicked(QModelIndex);
     void slotPreviewClicked();
     void slotModelReset();

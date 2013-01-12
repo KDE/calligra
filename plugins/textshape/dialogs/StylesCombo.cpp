@@ -62,8 +62,6 @@ StylesCombo::StylesCombo(QWidget *parent)
     connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
     setItemDelegate(delegate);
 
-//    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
-
     QComboBox::setEditable(true);
     setIconSize(QSize(0,0));
 
@@ -130,22 +128,21 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
 
 }
 
-void StylesCombo::slotSelectionChanged(int index)
+void StylesCombo::setCurrentItem(const QModelIndex &index)
 {
-    m_selectedItem = index;
-    m_preview->setPreview(m_stylesModel->stylePreview(index, m_preview->availableSize()));
-    update();
-//    emit selectionChanged(index);
+    m_currentIndex = index;
+    blockSignals(true);
+    setCurrentIndex(index.row());
+    slotUpdatePreview();
+    blockSignals(false);
 }
 
 void StylesCombo::slotItemClicked(QModelIndex index)
 {
     //this slot allows us to emit a selected signal. There is a bit of redundancy if the item clicked was indeed a new selection, where we also emit the selectionChanged signal from the slot above.
     m_selectedItem = index.row();
-    m_preview->setPreview(m_stylesModel->stylePreview(m_selectedItem, m_preview->availableSize()));
-    m_currentIndex = index;
-    update();
-    emit selected(m_selectedItem);
+    setCurrentItem(index);
+    emit selected(m_selectedItem); //TODO: remove this when the styleManager dialog is redone
     emit selected(index);
     hidePopup(); //the editor event has accepted the mouseReleased event. Call hidePopup ourselves then.
 }
@@ -155,7 +152,7 @@ void StylesCombo::slotUpdatePreview()
     if (!m_stylesModel) {
         return;
     }
-    m_preview->setPreview(m_stylesModel->stylePreview(currentIndex(), m_preview->availableSize()));
+    m_preview->setPreview(m_stylesModel->stylePreview(m_currentIndex, m_preview->availableSize()));
     update();
 }
 

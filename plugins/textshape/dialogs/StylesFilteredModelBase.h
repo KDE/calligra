@@ -42,7 +42,7 @@ class StylesFilteredModelBase : public AbstractStylesModel
 public:
     explicit StylesFilteredModelBase(QObject *parent = 0);
 
-    /** Re-implement from QAbstractItemModel. */
+    /** ***************** Re-implement from QAbstractItemModel. */
 
     virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
 
@@ -56,7 +56,7 @@ public:
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    /** Specific methods of the AbstractStylesModel */
+    /** ***************** Specific methods of the AbstractStylesModel */
 
     /** Sets the @class KoStyleThumbnailer of the model. It is required that a @param thumbnailer is set before using the model. */
     virtual void setStyleThumbnailer(KoStyleThumbnailer *thumbnailer);
@@ -67,19 +67,18 @@ public:
     /** Return a @class QModelIndex for the specified @param style. */
     virtual QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
 
-    /** Returns a QImage which is a preview of the style specified by @param row of the given @param size.
+    /** Returns a QImage which is a preview of the style specified by @param index of the given @param size.
       * If size isn't specified, the default size of the given @class KoStyleThumbnailer is used.
     */
-    virtual QImage stylePreview(int row, QSize size = QSize());
-//    virtual QImage stylePreview(QModelIndex &index, QSize size = QSize());
+    virtual QImage stylePreview(const QModelIndex &index, QSize size = QSize());
 
     virtual AbstractStylesModel::Type stylesType() const;
 
-    /** Specific methods of the StylesFiltermodelBase */
+    /** ***************** Specific methods of the StylesFiltermodelBase */
 
     /** Sets the sourceModel. Setting the model will trigger the mapping.
      */
-    void setStylesModel(AbstractStylesModel *sourceModel);
+    virtual void setStylesModel(AbstractStylesModel *sourceModel);
 
 protected slots:
     void modelAboutToBeReset();

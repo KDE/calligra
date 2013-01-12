@@ -50,8 +50,6 @@ StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type mode
         m_defaultCharacterStyle->setStyleId(-1);
         m_defaultCharacterStyle->setName(i18n("None"));
         m_defaultCharacterStyle->setFontPointSize(12);
-
-        m_provideStyleNone = true;
     }
 
     connect(m_styleMapper, SIGNAL(mapped(int)), this, SLOT(updateName(int)));
@@ -112,33 +110,20 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
         if (m_modelType == StylesModel::ParagraphStyle) {
             KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
             if (paragStyle) {
-                return m_styleThumbnailer->thumbnail(paragStyle);
+                return m_styleThumbnailer->thumbnail(paragStyle, data(index, Qt::SizeHintRole).toSize());
             }
             if (!paragStyle && m_draftParStyleList.contains(id)) {
-                return m_styleThumbnailer->thumbnail(m_draftParStyleList[id]);
+                return m_styleThumbnailer->thumbnail(m_draftParStyleList[id], data(index, Qt::SizeHintRole).toSize());
             }
         }
         else {
             KoCharacterStyle *usedStyle = 0;
-            if (id == -1) {
-                usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
-                if (!usedStyle) {
-                    usedStyle = m_defaultCharacterStyle;
-                }
-                usedStyle->setName(i18n("None"));
-                if (usedStyle->styleId() >= 0) { //if the styleId is -1, we are using the default character style
-                    usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
-                }
-                return m_styleThumbnailer->thumbnail(usedStyle);
+            usedStyle = m_styleManager->characterStyle(id);
+            if (usedStyle) {
+                return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, data(index, Qt::SizeHintRole).toSize());
             }
-            else {
-                usedStyle = m_styleManager->characterStyle(id);
-                if (usedStyle) {
-                    return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle);
-                }
-                if (!usedStyle && m_draftCharStyleList.contains(id)) {
-                    return m_styleThumbnailer->thumbnail(m_draftCharStyleList[id]);
-                }
+            if (!usedStyle && m_draftCharStyleList.contains(id)) {
+                return m_styleThumbnailer->thumbnail(m_draftCharStyleList[id], m_currentParagraphStyle, data(index, Qt::SizeHintRole).toSize());
             }
         }
         break;
@@ -170,13 +155,6 @@ void StylesModel::setCurrentParagraphStyle(int styleId)
     m_currentParagraphStyle = m_styleManager->paragraphStyle(styleId)->clone();
 }
 
-void StylesModel::setProvideStyleNone(bool provide)
-{
-    if (m_modelType == StylesModel::CharacterStyle) {
-        m_provideStyleNone = provide;
-    }
-}
-
 QModelIndex StylesModel::indexForParagraphStyle(const KoParagraphStyle &style) const
 {
     if (&style) {
@@ -193,53 +171,10 @@ QModelIndex StylesModel::indexForCharacterStyle(const KoCharacterStyle &style) c
     if (&style) {
         return createIndex(m_styleList.indexOf(style.styleId()), 0, style.styleId());
     }
-    else {
-        return QModelIndex();
-    }
+    return QModelIndex();
 }
 
-QImage StylesModel::stylePreview(int row, QSize size)
-{
-    if (!m_styleManager || !m_styleThumbnailer) {
-        return QImage();
-    }
-    if (m_modelType == StylesModel::ParagraphStyle) {
-        KoParagraphStyle *usedStyle = 0;
-        usedStyle = m_styleManager->paragraphStyle(index(row).internalId());
-        if (usedStyle) {
-            return m_styleThumbnailer->thumbnail(usedStyle, size);
-        }
-        if (!usedStyle && m_draftParStyleList.contains(index(row).internalId())) {
-            return m_styleThumbnailer->thumbnail(m_draftParStyleList[index(row).internalId()], size);
-        }
-    }
-    else {
-        KoCharacterStyle *usedStyle = 0;
-        if (index(row).internalId() == -1) {
-            usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
-            if (!usedStyle) {
-                usedStyle = m_defaultCharacterStyle;
-            }
-            usedStyle->setName(i18n("None"));
-            if (usedStyle->styleId() >= 0) {
-                usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
-            }
-            return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
-        }
-        else {
-            usedStyle = m_styleManager->characterStyle(index(row).internalId());
-            if (usedStyle) {
-                return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
-            }
-            if (!usedStyle && m_draftCharStyleList.contains(index(row).internalId())) {
-                return m_styleThumbnailer->thumbnail(m_draftCharStyleList[index(row).internalId()],m_currentParagraphStyle, size);
-            }
-        }
-    }
-    return QImage();
-}
-/*
-QImage StylesModel::stylePreview(QModelIndex &index, QSize size)
+QImage StylesModel::stylePreview(const QModelIndex &index, QSize size)
 {
     if (!m_styleManager || !m_styleThumbnailer) {
         return QImage();
@@ -256,30 +191,17 @@ QImage StylesModel::stylePreview(QModelIndex &index, QSize size)
     }
     else {
         KoCharacterStyle *usedStyle = 0;
-        if (index.internalId() == -1) {
-            usedStyle = static_cast<KoCharacterStyle*>(m_currentParagraphStyle);
-            if (!usedStyle) {
-                usedStyle = m_defaultCharacterStyle;
-            }
-            usedStyle->setName(i18n("None"));
-            if (usedStyle->styleId() >= 0) {
-                usedStyle->setStyleId(-usedStyle->styleId()); //this style is not managed by the styleManager but its styleId will be used in the thumbnail cache as part of the key.
-            }
+        usedStyle = m_styleManager->characterStyle(index.internalId());
+        if (usedStyle) {
             return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
         }
-        else {
-            usedStyle = m_styleManager->characterStyle(index.internalId());
-            if (usedStyle) {
-                return m_styleThumbnailer->thumbnail(usedStyle, m_currentParagraphStyle, size);
-            }
-            if (!usedStyle && m_draftCharStyleList.contains(index.internalId())) {
-                return m_styleThumbnailer->thumbnail(m_draftCharStyleList[index.internalId()],m_currentParagraphStyle, size);
-            }
+        if (!usedStyle && m_draftCharStyleList.contains(index.internalId())) {
+            return m_styleThumbnailer->thumbnail(m_draftCharStyleList[index.internalId()],m_currentParagraphStyle, size);
         }
     }
     return QImage();
 }
-*/
+
 void StylesModel::setStyleManager(KoStyleManager *sm)
 {
     if (sm == m_styleManager)
@@ -370,11 +292,6 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
     // find the place where we need to insert the style
     QList<int>::iterator begin = m_styleList.begin();
     int index = 0;
-    // the None style should also be the first one so only start after it
-    if (begin != m_styleList.end() && *begin == -1) {
-        ++begin;
-        ++index;
-    }
     for ( ; begin != m_styleList.end(); ++begin) {
         KoCharacterStyle *s = m_styleManager->characterStyle(*begin);;
         if (!s && m_draftCharStyleList.contains(*begin))
@@ -406,10 +323,6 @@ void StylesModel::updateCharacterStyles()
 
     beginResetModel();
     m_styleList.clear();
-
-    if (m_provideStyleNone && m_styleManager->paragraphStyles().count()) {
-        m_styleList.append(-1);
-    }
 
     QList<KoCharacterStyle *> styles = m_styleManager->characterStyles();
     qSort(styles.begin(), styles.end(), sortCharacterStyleByName);
@@ -494,10 +407,6 @@ void StylesModel::updateName(int styleId)
                 m_styleThumbnailer->removeFromCache(characterStyle);
 
                 QList<int>::iterator begin = m_styleList.begin();
-                if (begin != m_styleList.end() && *begin == -1) {
-                    ++begin;
-                    ++newIndex;
-                }
                 for ( ; begin != m_styleList.end(); ++begin) {
                     // don't test again the same style
                     if (*begin == styleId) {

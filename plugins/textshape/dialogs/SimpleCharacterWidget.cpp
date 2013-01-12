@@ -38,6 +38,7 @@
 #include <KoStyleManager.h>
 
 #include <KDebug>
+#include <KoTextDebug.h>
 
 #include <QTextLayout>
 #include <QComboBox>
@@ -93,6 +94,7 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     widget.fontsFrame->setColumnStretch(0,1);
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
+    m_sortedStylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.characterStyleCombo->setStylesModel(m_sortedStylesModel);
     connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
@@ -166,8 +168,9 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
             }
         }
         disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
-         //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
-        widget.characterStyleCombo->setCurrentIndex((useParagraphStyle)?1:m_sortedStylesModel->indexForCharacterStyle(*style).row());
+        //if the comparison style was the paragraph style. Send a null style, the DockerStylesComboModel will return an index for the None character style
+        style = (useParagraphStyle?0:style);
+        widget.characterStyleCombo->setCurrentItem(m_sortedStylesModel->indexForCharacterStyle(*style));
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
         connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
@@ -221,6 +224,7 @@ void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format
     m_currentBlockFormat = format;
 
     m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
+    m_sortedStylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
     disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));
     widget.characterStyleCombo->slotUpdatePreview();
     connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex&)), this, SLOT(styleSelected(QModelIndex&)));

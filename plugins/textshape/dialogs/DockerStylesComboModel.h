@@ -31,12 +31,17 @@ class DockerStylesComboModel : public StylesFilteredModelBase
     Q_OBJECT
 public:
 
-    enum CategoriesInternalIds {
+    enum DockerStylesComboInternalIds {
+        CharacterStyleNoneId = -1,
         UsedStyleId = -32000,
         UnusedStyleId = -32001
     };
 
     explicit DockerStylesComboModel(QObject *parent = 0);
+
+    ~DockerStylesComboModel();
+
+    /** ***************** Re-implement from QAbstractItemModel. */
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
@@ -44,9 +49,24 @@ public:
 
     virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
+    /** ***************** Re-implement from the AbstractStylesModel */
+
+    virtual QModelIndex indexForCharacterStyle(const KoCharacterStyle &style) const;
+
+    virtual QImage stylePreview(const QModelIndex &index, QSize size);
+
+    /** ***************** Specific methods of the StylesFiltermodelBase */
+
+    virtual void setStylesModel(AbstractStylesModel *sourceModel);
+
+    /** Specific methods of the DockerStylesComboModel. */
+
     void setStyleManager(KoStyleManager *sm);
 
     void setInitialUsedStyles(QVector<int> usedStyles);
+
+    /** Specifies which paragraph style is currently the active one (on the current paragraph). This is used in order to properly preview the "As paragraph" virtual character style. */
+    void setCurrentParagraphStyle(int styleId);
 
 signals:
 
@@ -58,6 +78,8 @@ protected:
 
 private:
     KoStyleManager *m_styleManager;
+    KoParagraphStyle *m_currentParagraphStyle;
+    KoCharacterStyle *m_defaultCharacterStyle;
     QVector<int> m_usedStylesId;
     QVector<int> m_usedStyles;
     QVector<int> m_unusedStyles;

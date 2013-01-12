@@ -170,8 +170,8 @@ void CharacterGeneral::setStyleManager(KoStyleManager *sm)
 
 void CharacterGeneral::updateNextStyleCombo(KoParagraphStyle *style)
 {
-    widget.nextStyle->setCurrentIndex(m_paragraphStyleModel->indexForParagraphStyle(*style).row());
     m_paragraphStyleModel->setCurrentParagraphStyle(style->styleId());
+    widget.nextStyle->setCurrentItem(m_paragraphStyleModel->indexForParagraphStyle(*style));
 }
 
 int CharacterGeneral::nextStyleId()
