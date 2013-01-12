@@ -1300,14 +1300,13 @@ static QString internalReason(KexiDB::Object *obj)
 tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 {
     kDebug() << projectData;
-    KexiProjectData *newProjectData = new KexiProjectData(projectData);
-    createKexiProject(*newProjectData);
-    if (!newProjectData->connectionData()->savePassword
-            && newProjectData->connectionData()->password.isEmpty()
-            && newProjectData->connectionData()->fileName().isEmpty() //! @todo temp.: change this if there are file-based drivers requiring a password
+    createKexiProject(projectData);
+    if (!d->prj->data()->connectionData()->savePassword
+            && d->prj->data()->connectionData()->password.isEmpty()
+            && d->prj->data()->connectionData()->fileName().isEmpty() //! @todo temp.: change this if there are file-based drivers requiring a password
        ) {
         //ask for password
-        KexiDBPasswordDialog pwdDlg(this, *newProjectData->connectionData(),
+        KexiDBPasswordDialog pwdDlg(this, *d->prj->data()->connectionData(),
                                     false /*!showDetailsButton*/);
         if (QDialog::Accepted != pwdDlg.exec()) {
             delete d->prj;
@@ -1349,8 +1348,8 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
         return false;
     }
     setupProjectNavigator();
-    newProjectData->setLastOpened(QDateTime::currentDateTime());
-    Kexi::recentProjects()->addProjectData(newProjectData);
+    d->prj->data()->setLastOpened(QDateTime::currentDateTime());
+    Kexi::recentProjects()->addProjectData(new KexiProjectData(*d->prj->data()));
     updateReadOnlyState();
     invalidateActions();
     enableMessages(false);
