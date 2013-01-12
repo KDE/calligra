@@ -25,9 +25,13 @@
 class ProgressProxy : public QObject, public KoProgressProxy
 {
     Q_OBJECT
+    Q_PROPERTY(QString taskName READ taskName NOTIFY taskNameChanged)
+
 public:
     ProgressProxy(QObject* parent = 0);
     virtual ~ProgressProxy();
+
+    QString taskName() const;
 
     virtual void setFormat(const QString& format);
     virtual void setRange(int minimum, int maximum);
@@ -35,7 +39,14 @@ public:
     virtual int maximum() const;
 
 Q_SIGNALS:
-    void valueChanged(int);
+    void valueChanged(int value);
+    void taskStarted();
+    void taskEnded();
+    void taskNameChanged();
+
+private:
+    class Private;
+    const QScopedPointer<Private> d;
 };
 
 #endif // CMPROGRESSPROXY_H

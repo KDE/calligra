@@ -18,10 +18,17 @@
  */
 #include "ProgressProxy.h"
 
-ProgressProxy::ProgressProxy(QObject *parent)
-    : QObject(parent)
+class ProgressProxy::Private
 {
+public:
+    int minimum;
+    int maximum;
+    QString taskName;
+};
 
+ProgressProxy::ProgressProxy(QObject *parent)
+    : QObject(parent), d(new Private)
+{
 }
 
 ProgressProxy::~ProgressProxy()
@@ -29,24 +36,40 @@ ProgressProxy::~ProgressProxy()
 
 }
 
+QString ProgressProxy::taskName() const
+{
+    return d->taskName;
+}
+
 void ProgressProxy::setFormat(const QString& format)
 {
-    Q_UNUSED(format)
+    if( format != d->taskName ) {
+        d->taskName = format;
+        emit taskNameChanged();
+    }
 }
 
 void ProgressProxy::setRange(int minimum, int maximum)
 {
-    Q_UNUSED(minimum)
-    Q_UNUSED(maximum)
+    d->minimum = minimum;
+    d->maximum = maximum;
 }
 
 void ProgressProxy::setValue(int value)
 {
+    if(value == d->minimum) {
+        emit taskStarted();
+    }
+
+    if(value == d->maximum) {
+        emit taskEnded();
+    }
+
     emit valueChanged(value);
 }
 
 int ProgressProxy::maximum() const
 {
-    return -1;
+    return d->maximum;
 }
 
