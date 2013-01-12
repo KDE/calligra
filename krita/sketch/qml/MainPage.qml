@@ -208,6 +208,21 @@ Page {
         }
     }
 
+    Dialog {
+        id: progressDialog;
+
+        title: Krita.ProgressProxy.taskName != "" ? Krita.ProgressProxy.taskName : "Applying...";
+    }
+
+    Connections {
+        target: Krita.ProgressProxy;
+
+        onTaskStarted: progressDialog.show();
+        onTaskEnded: progressDialog.hide();
+
+        onValueChanged: progressDialog.progress = value;
+    }
+
     Connections {
         target: Settings;
 
