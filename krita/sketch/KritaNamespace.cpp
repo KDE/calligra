@@ -21,6 +21,8 @@
 #include "ImageBuilder.h"
 #include "MouseTracker.h"
 #include "VirtualKeyboardController.h"
+#include "DocumentManager.h"
+#include "ProgressProxy.h"
 
 class KritaNamespace::Private
 {
@@ -59,4 +61,9 @@ QObject* KritaNamespace::window() const
 QObject* KritaNamespace::virtualKeyboardController() const
 {
     return VirtualKeyboardController::instance();
+}
+
+QObject* KritaNamespace::progressProxy() const
+{
+    return DocumentManager::instance()->progressProxy();
 }
