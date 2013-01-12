@@ -25,6 +25,7 @@
 #include <QButtonGroup>
 #include <QLabel>
 #include <QSizePolicy>
+#include <QBitmap>
 
 #include <klocale.h>
 
@@ -57,24 +58,24 @@
 
 static const char* const buttonnone[]={
     "16 16 3 1",
-    "# c #333333",
+    "# c #000000",
     "e c #ff0000",
     "- c #ffffff",
     "################",
-    "#------------ee#",
-    "#-----------eee#",
-    "#----------eee-#",
-    "#---------eee--#",
-    "#--------eee---#",
-    "#-------eee----#",
-    "#------eee-----#",
-    "#-----eee------#",
-    "#----eee-------#",
-    "#---eee--------#",
-    "#--eee---------#",
-    "#-eee----------#",
-    "#eee-----------#",
-    "#ee------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
+    "#--------------#",
     "################"};
 
 static const char* const buttonsolid[]={
@@ -192,7 +193,9 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
 
     // The button for no fill
     KoGroupButton *button = new KoGroupButton(KoGroupButton::GroupLeft, this);
-    button->setIcon(koIcon("edit-delete"));
+    QPixmap noFillButtonIcon((const char **) buttonnone);
+    noFillButtonIcon.setMask(QBitmap(noFillButtonIcon));
+    button->setIcon(noFillButtonIcon);
     button->setToolTip(i18nc("No stroke or fill", "None"));
     button->setCheckable(true);
     d->group->addButton(button, None);
