@@ -41,7 +41,7 @@ option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
 option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
-option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
+option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
