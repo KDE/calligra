@@ -562,9 +562,19 @@ void KoTextEditor::mergeAutoStyle(QTextCharFormat deltaCharFormat)
 {
     d->updateState(KoTextEditor::Private::Custom, "Formatting");
 
+    int caretAnchor = d->caret.anchor();
+    int caretPosition = d->caret.position();
     MergeAutoCharacterStyleVisitor visitor(this, deltaCharFormat);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+        d->caret.mergeCharFormat(deltaCharFormat);
+    }
+    else {
+        d->caret.setPosition(caretAnchor);
+        d->caret.setPosition(caretPosition, QTextCursor::KeepAnchor);
+    }
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
@@ -625,9 +635,20 @@ void KoTextEditor::mergeAutoStyle(QTextCharFormat deltaCharFormat, QTextBlockFor
 {
     d->updateState(KoTextEditor::Private::Custom, "Formatting");
 
+    int caretAnchor = d->caret.anchor();
+    int caretPosition = d->caret.position();
     MergeAutoParagraphStyleVisitor visitor(this, deltaCharFormat, deltaBlockFormat);
 
     recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
+
+    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
+        d->caret.mergeBlockFormat(deltaBlockFormat);
+        d->caret.mergeBlockCharFormat(deltaCharFormat);
+    }
+    else {
+        d->caret.setPosition(caretAnchor);
+        d->caret.setPosition(caretPosition, QTextCursor::KeepAnchor);
+    }
 
     d->updateState(KoTextEditor::Private::NoOp);
     emit textFormatChanged();
