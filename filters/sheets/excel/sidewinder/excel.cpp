@@ -40,6 +40,9 @@
 #include <QTextCursor>
 #include <QTextBlock>
 
+#include <KoTextDocument.h>
+#include <KoTextRangeManager.h>
+
 #include <pole.h>
 #include "swinder.h"
 #include "utils.h"
@@ -1716,6 +1719,8 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
     } while(true);
     if (ToXRunsPositionIndex > 0) {
         m_doc = QSharedPointer<QTextDocument>(new QTextDocument());
+        // also add a textrangemanager, as KoTextWriter assumes one
+        KoTextDocument(m_doc).setTextRangeManager(new KoTextRangeManager);
         m_doc->setPlainText(m_text);
         QTextCursor cursor(m_doc.data());
         //cursor.setVisualNavigation(true);
