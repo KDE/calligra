@@ -486,15 +486,16 @@ KoBookmark *KoTextEditor::addBookmark(const QString &name)
 }
 KoAnnotation *KoTextEditor::insertAnnotation()
 {
-        KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Annotation"));
+    KUndo2Command *topCommand = beginEditBlock(i18nc("(qtundo-format)", "Add Annotation"));
 
-        KoAnnotation *annotation = new KoAnnotation(d->caret);
-        annotation->setManager(KoTextDocument(d->document).textRangeManager());
+    KoAnnotation *annotation = new KoAnnotation(d->caret);
+    annotation->setManager(KoTextDocument(d->document).textRangeManager());
+    annotation->setMotherFrame(KoTextDocument(d->document).auxillaryFrame());
 
-        addCommand(new AddTextRangeCommand(annotation, topCommand));
-        endEditBlock();
+    addCommand(new AddTextRangeCommand(annotation, topCommand));
+    endEditBlock();
 
-   return annotation;
+    return annotation;
 }
 
 KoInlineObject *KoTextEditor::insertIndexMarker()

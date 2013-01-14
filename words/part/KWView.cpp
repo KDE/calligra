@@ -547,26 +547,29 @@ void KWView::insertAnnotation()
     Q_ASSERT(editor);
     const KoAnnotationManager *manager = m_document->textRangeManager()->annotationManager();
 
-    // FIXME: This is annotation content.
-    // I don't know how to add content to document.
-    // What should i do with it.
-    QTextDocument *anntationDoc;
+    KoAnnotation *annotatio = editor->insertAnnotation();
+    QTextCursor cursor(annotatio->textFrame()->lastCursorPosition());
 
+    QTextDocument *annotationDoc; // annotation document content.
     QPointer<KWInsertAnnotationDialog> dia = new KWInsertAnnotationDialog(m_canvas->canvasWidget());
-
     if (dia->exec() == QDialog::Accepted) {
-        anntationDoc = dia->annotationTextDocument();
-        kDebug(31000) << "Annotation text conetnt" << anntationDoc->toPlainText();
+        annotationDoc = dia->annotationTextDocument();
     }
     else {
         delete dia;
         return;
     }
 
+    // It is just  for now, we should do to can use TextTool to handle annotation content.
+   // I am not sure that i am right here.
+    for (QTextBlock it = annotationDoc->begin(); it != annotationDoc->end(); it = it.next()) {
+        cursor.insertBlock(it.blockFormat());
+        cursor.insertText(it.text(), it.charFormat());
+    }
+
+
     // FIXME: Here we should handle annotation ui,
     // idea add an icon at current text cursor and pop up a textbox.
-    KoAnnotation *annotatio = editor->insertAnnotation();
-
 }
 
 void KWView::selectBookmark()

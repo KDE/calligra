@@ -156,7 +156,6 @@ bool KoAnnotation::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     QTextCursor cursor(d->textFrame);
     textLoader.loadBody(element, cursor);
 
-    kDebug(32500) << d->textFrame;
     kDebug(32500) << "****** End Load ******";
     kDebug(32500) << "loaded Annotation: " << d->creator << d->date;
 
@@ -185,7 +184,6 @@ void KoAnnotation::saveOdf(KoShapeSavingContext &context, int position, TagType 
             writer->addTextNode(d->dateString);
             writer->endElement(); // meta:date-string
         }
-
         KoTextWriter textWriter(context);
         textWriter.write(d->document, d->textFrame->firstPosition(),d->textFrame->lastPosition());
         writer->endElement(); //office:annotation

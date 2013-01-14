@@ -140,7 +140,6 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
     d->document = const_cast<QTextDocument*>(document);
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
-
     d->saveAllChanges();
 
 

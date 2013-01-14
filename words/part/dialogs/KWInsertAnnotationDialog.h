@@ -14,9 +14,8 @@ class KWInsertAnnotation : public QWidget
     
 public:
     explicit KWInsertAnnotation(QWidget *parent = 0);
-
     QTextDocument *textDocument();
-    
+
 private:
     Ui::KWInsertAnnotation widget;
 };
