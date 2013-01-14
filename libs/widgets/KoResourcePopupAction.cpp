@@ -42,7 +42,6 @@ public:
     {}
     QMenu *menu;
     KoResourceItemView *resourceList;
-    KoResource *currentResource;
     bool applyMode;
     KoCheckerBoardPainter checkerPainter;
 };
@@ -88,10 +87,6 @@ KoResource *KoResourcePopupAction::currentResource()
     return static_cast<KoResource*>(d->resourceList->currentIndex().internalPointer());
 }
 
-void KoResourcePopupAction::setCurrentResource(KoResource* resource) const
-{
-    d->currentResource = resource;
-}
 
 void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
 {
@@ -103,6 +98,8 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
     KoResource * resource = static_cast<KoResource*>( modelIndex.internalPointer());
     if(resource)
         emit resourceSelected(resource);
+
+    updateIcon();
 }
 
 void KoResourcePopupAction::updateIcon()
@@ -128,7 +125,7 @@ void KoResourcePopupAction::updateIcon()
             p.fillRect(QRect(0, iconSize.height() - 4, iconSize.width(), 4), newGradient);
         }
         */
-        p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, currentResource()->image());
+        p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, dynamic_cast<KoPattern*>(currentResource())->image());
     }
     else {
         d->checkerPainter.paint(p, QRect(QPoint(),iconSize));

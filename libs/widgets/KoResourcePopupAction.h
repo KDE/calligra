@@ -45,7 +45,6 @@ public:
     virtual ~KoResourcePopupAction();
 
     KoResource *currentResource();
-    void setCurrentResource(KoResource *resource) const;
 
 signals:
     /// Emitted when a resource was selected
@@ -56,6 +55,7 @@ private slots:
 
 private:
     void updateIcon();
+
     class Private;
     Private * const d;
 };
