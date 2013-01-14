@@ -20,6 +20,7 @@
 #include <QCoreApplication>
 #include <QUrl>
 #include <QBuffer>
+#include <QMetaClassInfo>
 #include <qjson/parser.h>
 #include <KTemporaryFile>
 #include <QImageWriter>
@@ -176,8 +177,23 @@ void Stash::testCallFinished(QNetworkReply::NetworkError error, const QByteArray
 
 void Stash::submitCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
 {
-    qDebug() << "submit call finished";
-    qDebug() << data;
+    if(error != QNetworkReply::NoError) {
+        emit callFinished(Submit, false);
+        QString errorName = QNetworkReply::staticMetaObject.enumerator( QNetworkReply::staticMetaObject.indexOfEnumerator("NetworkError") ).valueToKey(error);
+        emit callError(QString("Error %1 submitting artwork: %2").arg(error).arg(errorName));
+        return;
+    }
+    QJson::Parser parser;
+    bool ok(false);
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if(ok && result.contains("status")) {
+        if(result.value("status").toString() == QLatin1String("success")) {
+            emit newSubmission(result.value("stashid").toInt(), result.value("folder").toString(), result.value("folderid").toInt());
+        }
+        emit callFinished(Submit, true);
+    }
+    emit callFinished(Submit, false);
+    emit callError(QString("Unknown error submitting new artwork: %1").arg(QString(data)));
 }
 
 void Stash::updateCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
