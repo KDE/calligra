@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2012 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012-2013 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,14 +17,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef NDEBUG
-
 #include "KexiTester.h"
 
 #include <KDebug>
+#include <KGlobal>
 
 #include <QMap>
 #include <QWidget>
+
+KexiTestObject::KexiTestObject(QObject *object, const QString &name)
+ : m_object(object), m_name(name)
+{
+}
 
 class KexiTester::Private
 {
@@ -33,8 +37,8 @@ public:
     QMap<QString, QObject*> objects;
 };
 
-KexiTester::KexiTester(QObject *parent)
-    : QObject(parent), d(new Private)
+KexiTester::KexiTester()
+    : QObject(), d(new Private)
 {
 }
 
@@ -43,22 +47,11 @@ KexiTester::~KexiTester()
     delete d;
 }
 
-bool KexiTester::addObject(QObject *object, const QString &name)
+//static
+KexiTester* KexiTester::self()
 {
-    if (!object) {
-        kWarning() << "No object provided";
-        return false;
-    }
-    QString realName = name;
-    if (realName.isEmpty()) {
-        realName = object->objectName();
-    }
-    if (realName.isEmpty()) {
-        kWarning() << "No name for object provided, won't add";
-        return false;
-    }
-    d->objects.insert(realName, object);
-    return true;
+    K_GLOBAL_STATIC(KexiTester, g_kexiTester)
+    return g_kexiTester;
 }
 
 QObject *KexiTester::object(const QString &name) const
@@ -72,6 +65,22 @@ QWidget *KexiTester::widget(const QString &name) const
     return qobject_cast<QWidget*>(o);
 }
 
-#include "KexiTester.moc"
+KEXIUTILS_EXPORT KexiTester& operator<<(KexiTester& tester, const KexiTestObject &object)
+{
+    if (!object.m_object) {
+        kWarning() << "No object provided";
+        return tester;
+    }
+    QString realName = object.m_name;
+    if (realName.isEmpty()) {
+        realName = object.m_object->objectName();
+    }
+    if (realName.isEmpty()) {
+        kWarning() << "No name for object provided, won't add";
+        return tester;
+    }
+    KexiTester::self()->d->objects.insert(realName, object.m_object);
+    return tester;
+}
 
-#endif // !NDEBUG
+#include "KexiTester.moc"

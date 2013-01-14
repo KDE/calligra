@@ -66,4 +66,4 @@ Comment[zh_TW]=時鐘掃描頁面效果
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_clockwipe
-X-KPresenter-Version=0
+X-KPresenter-Version=27

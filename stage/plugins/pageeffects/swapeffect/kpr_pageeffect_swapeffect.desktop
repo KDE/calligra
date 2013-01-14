@@ -56,4 +56,4 @@ Comment[zh_TW]=變換頁面效果
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_swapeffect
-X-KPresenter-Version=0
+X-KPresenter-Version=27

@@ -39,6 +39,7 @@
 #include "kis_filter_strategy.h"
 #include "kis_painter.h"
 #include "kis_filter_weights_applicator.h"
+#include "kis_progress_update_helper.h"
 
 
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
@@ -79,43 +80,6 @@ QTransform KisTransformWorker::transform() const
     return TS.inverted() * S * TS * SC * R * T;
 }
 
-class ProgressUpdateHelper {
-public:
-    ProgressUpdateHelper(KoUpdaterPtr progressUpdater, int portion, int numSteps)
-        : m_progressUpdater(progressUpdater),
-          m_portion(portion),
-          m_currentStep(0),
-          m_numSteps(numSteps)
-
-    {
-        if (m_progressUpdater) {
-            m_baseProgress = m_progressUpdater->progress();
-        }
-    }
-
-    ~ProgressUpdateHelper() {
-        if (m_progressUpdater) {
-            m_progressUpdater->setProgress(m_baseProgress + m_portion);
-        }
-    }
-
-    void step() {
-        int localProgress = m_portion * (++m_currentStep) / m_numSteps;
-        if (m_progressUpdater) {
-            m_progressUpdater->setProgress(m_baseProgress + localProgress);
-        }
-        // TODO: handle interrupted processing (connect to other layers, i.e. undo)
-    }
-
-private:
-    KoUpdaterPtr m_progressUpdater;
-    int m_baseProgress;
-    int m_portion;
-    int m_currentStep;
-    int m_numSteps;
-};
-
-
 QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
                    QRect boundRect,
                    KoUpdaterPtr progressUpdater,
@@ -125,11 +89,11 @@ QRect rotateWithTf(int rotation, KisPaintDeviceSP dev,
     QRect r(boundRect);
 
     KisPaintDeviceSP tmp = new KisPaintDevice(dev->colorSpace());
-    tmp->setDefaultPixel(dev->defaultPixel());
+    tmp->prepareClone(dev);
 
     KisRandomAccessorSP devAcc = dev->createRandomAccessorNG(0, 0);
     KisRandomAccessorSP tmpAcc = tmp->createRandomAccessorNG(0, 0);
-    ProgressUpdateHelper progressHelper(progressUpdater, portion, r.height());
+    KisProgressUpdateHelper progressHelper(progressUpdater, portion, r.height());
 
     QTransform tf;
     tf = tf.rotate(rotation);
@@ -234,7 +198,7 @@ void KisTransformWorker::transformPass(KisPaintDevice *src, KisPaintDevice *dst,
     qint32 srcStart, srcLen, firstLine, numLines;
     calcDimensions<T>(m_boundRect, srcStart, srcLen, firstLine, numLines);
 
-    ProgressUpdateHelper progressHelper(m_progressUpdater, portion, numLines);
+    KisProgressUpdateHelper progressHelper(m_progressUpdater, portion, numLines);
     KisFilterWeightsBuffer buf(filterStrategy, qAbs(floatscale));
     KisFilterWeightsApplicator applicator(src, dst, floatscale, shear, dx, clampToEdge);
 
@@ -446,7 +410,7 @@ QRect KisTransformWorker::mirrorX(KisPaintDeviceSP dev, qreal axis, const KisSel
             // Extend rect so it has the same width on both sides of the axis
             qreal distanceFromAxis = qMax(fabs((qreal)r.left() - axis), fabs((qreal)r.right() - axis));
             QRect newRect(floor(axis - distanceFromAxis), r.y(), ceil(2*distanceFromAxis), r.height());
-            r = newRect.adjusted(-1, 0, 2, 0);
+            r = newRect;
         }
     }
 
@@ -516,7 +480,7 @@ QRect KisTransformWorker::mirrorY(KisPaintDeviceSP dev, qreal axis, const KisSel
             // Extend rect so it has the same height on both sides of the axis
             qreal distanceFromAxis = qMax(fabs((qreal)r.top() - axis), fabs((qreal)r.bottom() - axis));
             QRect newRect(r.x(), floor(axis - distanceFromAxis), r.width(), ceil(2*distanceFromAxis));
-            r = newRect.adjusted(0, -1, 0, 2);
+            r = newRect;
         }
     }
     {

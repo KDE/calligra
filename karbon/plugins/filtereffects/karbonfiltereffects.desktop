@@ -36,5 +36,5 @@ Name[zh_TW]=過濾器效果
 X-KDE-ServiceTypes=Calligra/FilterEffect
 Type=Service
 X-KDE-Library=karbonfiltereffects
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

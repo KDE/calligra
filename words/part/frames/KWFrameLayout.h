@@ -79,6 +79,8 @@ public:
      */
     void layoutFramesOnPage(int pageNumber);
 
+    static void proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page);
+
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) {
         m_document = document;

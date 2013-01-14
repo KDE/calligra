@@ -27,6 +27,7 @@
 #include <KLocale>
 #include <KAboutData>
 #include <KGlobal>
+#include <KApplication>
 
 #include "kexipartmanager.h"
 #include "kexipart.h"
@@ -98,7 +99,7 @@ bool Manager::lookup()
                            "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 
     KConfigGroup cg(KGlobal::config()->group("Parts"));
-    if (!cg.hasKey("Order")) {
+    if (qApp && !cg.hasKey("Order")) {
         setError(i18nc("@info",
                        "Missing or invalid default <application>%1</application> configuration (no <resource>%2</resource> key). "
                        "Check your <application>%1</application> installation. The application will be closed.",

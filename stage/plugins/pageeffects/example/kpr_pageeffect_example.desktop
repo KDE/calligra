@@ -74,4 +74,4 @@ Comment[zh_TW]=爆炸頁面效果
 X-KDE-ServiceTypes=CalligraStage/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_example
-X-KPresenter-Version=1
+X-KPresenter-Version=27

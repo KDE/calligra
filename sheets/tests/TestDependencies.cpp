@@ -83,6 +83,31 @@ void TestDependencies::testCircles()
     QCOMPARE(m_storage->value(1, 3), Value::errorCIRCLE());
 }
 
+void TestDependencies::testDepths()
+{
+    Cell a1(m_sheet, 1, 1); a1.setUserInput("5");
+    Cell a2(m_sheet, 1, 2); a2.setUserInput("=A1");
+    Cell a3(m_sheet, 1, 3); a3.setUserInput("=A2");
+    Cell a4(m_sheet, 1, 4); a4.setUserInput("=A1 + A3");
+
+    QApplication::processEvents(); // handle Damages
+    
+    QMap<Cell, int> depths = m_map->dependencyManager()->depths();
+    QCOMPARE(depths[a1], 0);
+    QCOMPARE(depths[a2], 1);
+    QCOMPARE(depths[a3], 2);
+    QCOMPARE(depths[a4], 3);
+
+    a2.setUserInput("");
+    QApplication::processEvents(); // handle Damages
+    
+    depths = m_map->dependencyManager()->depths();
+    QCOMPARE(depths[a1], 0);
+    QCOMPARE(depths[a2], 0);
+    QCOMPARE(depths[a3], 1);
+    QCOMPARE(depths[a4], 2);
+}
+
 void TestDependencies::cleanupTestCase()
 {
     delete m_map;
