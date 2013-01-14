@@ -228,10 +228,10 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(styleButtonPressed(int)));
 
     d->colorButton = new QToolButton(this);
+    d->colorButton->setPopupMode(QToolButton::InstantPopup);
     layout->addWidget(d->colorButton);
 
     d->colorAction = new KoColorPopupAction(this);
-    d->colorAction->setIcon(koIcon("format-stroke-color"));
     d->colorAction->setToolTip(i18n("Change the filling color"));
     connect(d->colorAction, SIGNAL(colorChanged(const KoColor &)), this, SLOT(colorChanged()));
 
@@ -241,14 +241,12 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
     KoAbstractResourceServerAdapter *gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer(), this);
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
-    d->gradientAction->setIcon(koIcon("format-stroke-color"));
     d->gradientAction->setToolTip(i18n("Change the filling color"));
     connect(d->gradientAction, SIGNAL(resourceSelected(KoResource*)), this, SLOT(gradientChanged(KoResource*)));
 
     // Pattern selector
     KoAbstractResourceServerAdapter *patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
-    d->patternAction->setIcon(koIcon("format-stroke-color"));
     d->patternAction->setToolTip(i18n("Change the filling color"));
     connect(d->patternAction, SIGNAL(resourceSelected(KoResource*)), this, SLOT(patternChanged(KoResource*)));
 
@@ -300,6 +298,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
             // Direct manipulation
             d->colorButton->setDefaultAction(d->colorAction);
             noColorSelected();
+            break;
         case KoFillConfigWidget::Solid:
             d->colorButton->setDefaultAction(d->colorAction);
             colorChanged();
@@ -446,18 +445,26 @@ void KoFillConfigWidget::shapeChanged()
 
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
-    QColor qColor;
-    KoColorBackground *background = dynamic_cast<KoColorBackground*>(shape->background());
-    if (background)
-        qColor = background->color();
-
     // We don't want the opacity slider to send any signals when it's only initialized.
     // Otherwise an undo record is created.
     d->opacity->blockSignals(true);
     d->opacity->setValue(100 - shape->transparency() * 100);
     d->opacity->blockSignals(false);
 
-    d->colorAction->setCurrentColor(qColor);
+    KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(shape->background());
+    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(shape->background());
+    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(shape->background());
+
+    if (colorBackground) {
+        d->group->button(KoFillConfigWidget::Solid)->setChecked(true);
+    } else if (gradientBackground) {
+        d->group->button(KoFillConfigWidget::Gradient)->setChecked(true);
+    } else if (patternBackground) {
+        d->group->button(KoFillConfigWidget::Pattern)->setChecked(true);
+    } else {
+        // No Fill
+        d->group->button(KoFillConfigWidget::None)->setChecked(true);
+    }
 }
 
 KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, const QGradientStops &stops)
