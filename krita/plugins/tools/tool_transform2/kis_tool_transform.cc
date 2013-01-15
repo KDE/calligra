@@ -899,8 +899,6 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 
 void KisToolTransform::touchEvent( QTouchEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
-
     //Count all moving touch points
     int touchCount = 0;
     foreach( QTouchEvent::TouchPoint tp, event->touchPoints() ) {
@@ -914,7 +912,9 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
         case 1: { //Panning
             QTouchEvent::TouchPoint tp = event->touchPoints().at( 0 );
             QPointF diff = tp.screenPos() - tp.lastScreenPos();
+
             m_currentArgs.setTranslate( m_currentArgs.translate() + diff );
+            outlineChanged();
             break;
         }
         case 2: { //Scaling
@@ -924,14 +924,18 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
             float lastZoom = (tp1.lastScreenPos() - tp2.lastScreenPos()).manhattanLength();
             float newZoom = (tp1.screenPos() - tp2.screenPos()).manhattanLength();
 
-            float diff = newZoom - lastZoom;
+            float diff = (newZoom - lastZoom) / 100;
 
             m_currentArgs.setScaleX( m_currentArgs.scaleX() + diff );
             m_currentArgs.setScaleY( m_currentArgs.scaleY() + diff );
 
+            outlineChanged();
             break;
         }
         case 3: { //Rotation
+
+            /*
+              TODO: Fix this code so it works.
             Vector2f center;
             foreach( const QTouchEvent::TouchPoint &tp, event->touchPoints() ) {
                 if( tp.state() == Qt::TouchPointMoved ) {
@@ -945,10 +949,14 @@ void KisToolTransform::touchEvent( QTouchEvent* event )
             Vector2f oldPosition = (Vector2f( tp.lastScreenPos().x(), tp.lastScreenPos().y() ) - center).normalized();
             Vector2f newPosition = (Vector2f( tp.screenPos().x(), tp.screenPos().y() ) - center).normalized();
 
-            float diff = qAcos( newPosition.dot( center ) ) - qAcos( oldPosition.dot( center ) );
+            float oldAngle = qAcos( oldPosition.dot( Vector2f( 0.0f, 0.0f ) ) );
+            float newAngle = qAcos( newPosition.dot( Vector2f( 0.0f, 0.0f ) ) );
+
+            float diff = newAngle - oldAngle;
 
             m_currentArgs.setAZ( m_currentArgs.aZ() + diff );
 
+            outlineChanged();*/
             break;
         }
     }

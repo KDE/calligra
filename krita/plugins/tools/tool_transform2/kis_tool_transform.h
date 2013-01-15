@@ -163,6 +163,8 @@ public:
     double warpFlexibility() const;
     int warpPointDensity() const;
 
+    bool wantsTouch() const { return true; }
+
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
