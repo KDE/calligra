@@ -46,6 +46,7 @@ class QInputMethodEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
+class QTouchEvent;
 
 /**
  * Abstract base class for all tools. Tools can create or manipulate
@@ -181,6 +182,8 @@ public:
      */
     virtual void wheelEvent(KoPointerEvent *event);
 
+    virtual void touchEvent(QTouchEvent *event);
+
     /**
      * This method is used to query a set of properties of the tool to be
      * able to support complex input method operations as support for surrounding
@@ -221,6 +224,8 @@ public:
      * @param event state and reason of this custom device move
      */
     virtual void customMoveEvent(KoPointerEvent *event);
+
+    virtual bool wantsTouch() const;
 
     /**
      * Set the identifier code from the KoToolFactoryBase that created this tool.
