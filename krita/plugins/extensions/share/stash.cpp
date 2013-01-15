@@ -114,7 +114,7 @@ void Stash::renameFolder(const QString &folderId, const QString &folder)
 
 void Stash::updateAvailableSpace()
 {
-    QUrl url("https://www.deviantart.com/api/draft15/space");
+    QUrl url("https://www.deviantart.com/api/draft15/stash/space");
     QNetworkRequest request(url);
     m_callMap[m_requestor->get(request)] = UpdateAvailableSpace;
 }
