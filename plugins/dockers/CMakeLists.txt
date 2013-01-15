@@ -27,8 +27,6 @@ set(calligradockers_SRCS
     Plugin.cpp
 )
 
-add_subdirectory( strokedocker/pics )
-
 set(calligradockers_SRCS ${calligradockers_SRCS}
     colordocker/ColorDocker.h
     colordocker/ColorDockerFactory.h
