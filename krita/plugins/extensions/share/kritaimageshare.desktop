@@ -3,4 +3,4 @@ Name=Share Images
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritaimageshare
-X-Krita-Version=5
+X-Krita-Version=27
