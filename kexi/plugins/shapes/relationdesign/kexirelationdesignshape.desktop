@@ -31,5 +31,5 @@ Name[zh_TW]=Kexi 關係設計元件
 ServiceTypes=Calligra/Flake
 Type=Service
 X-KDE-Library=kexirelationdesignshape
-X-Flake-MinVersion=4
-X-Flake-PluginVersion=4
+X-Flake-MinVersion=27
+X-Flake-PluginVersion=27

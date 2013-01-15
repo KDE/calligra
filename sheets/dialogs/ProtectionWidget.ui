@@ -158,7 +158,6 @@ Note that you can print it even if the cell is protected</string>
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
   <tabstops>
   <tabstop>m_bHideAll</tabstop>
   <tabstop>m_bIsProtected</tabstop>

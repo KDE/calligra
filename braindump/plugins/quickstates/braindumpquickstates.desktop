@@ -27,4 +27,4 @@ Name[zh_TW]=Quickstates 外掛程式
 X-KDE-ServiceTypes=Braindump/Extensions
 Type=Service
 X-KDE-Library=braindumpquickstates
-X-Braindump-Version=1
+X-Braindump-Version=27

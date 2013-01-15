@@ -28,6 +28,7 @@
 #include "KWViewMode.h"
 #include "KWPage.h"
 #include "KWPageCacheManager.h"
+#include "frames/KWFrameLayout.h"
 
 // calligra libs includes
 #include <KoShapeManager.h>
@@ -138,6 +139,9 @@ void KWCanvasBase::clipToDocument(const KoShape *shape, QPointF &move) const
         else if (shapeBounds.bottom() < pageRect.top()) // need to move down some
             move.setY(move.y() + pageRect.top() - shapeBounds.bottom());
     }
+
+    // Also make sure any anchoring restrictions are adhered to
+    KWFrameLayout::proposeShapeMove(shape, move, page);
 }
 
 KoGuidesData *KWCanvasBase::guidesData()
