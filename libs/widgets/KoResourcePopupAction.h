@@ -54,6 +54,8 @@ private slots:
     void indexChanged(QModelIndex modelIndex);
 
 private:
+    void updateIcon();
+
     class Private;
     Private * const d;
 };

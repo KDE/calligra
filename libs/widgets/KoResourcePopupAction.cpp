@@ -26,18 +26,24 @@
 #include "KoResourceModel.h"
 #include "KoResourceItemDelegate.h"
 #include "KoResource.h"
+#include "KoCheckerBoardPainter.h"
 
 #include <QMenu>
 #include <QHBoxLayout>
 #include <QHeaderView>
+#include <QPainter>
+#include <QGradient>
+#include <QRect>
 
 class KoResourcePopupAction::Private
 {
 public:
-    Private()
+    Private() : applyMode(true), checkerPainter(4)
     {}
     QMenu *menu;
     KoResourceItemView *resourceList;
+    bool applyMode;
+    KoCheckerBoardPainter checkerPainter;
 };
 
 KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *resourceAdapter, QObject *parent)
@@ -78,7 +84,6 @@ KoResourcePopupAction::~KoResourcePopupAction()
 
 KoResource *KoResourcePopupAction::currentResource()
 {
-
     return static_cast<KoResource*>(d->resourceList->currentIndex().internalPointer());
 }
 
@@ -93,6 +98,43 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
     KoResource * resource = static_cast<KoResource*>( modelIndex.internalPointer());
     if(resource)
         emit resourceSelected(resource);
+
+    updateIcon();
+}
+
+void KoResourcePopupAction::updateIcon()
+{
+    QSize iconSize(16,16);
+    // This must be a QImage, as drawing to a QPixmap outside the
+    // UI thread will cause sporadic crashes.
+    QImage pm = icon().pixmap(iconSize).toImage();
+    if(pm.isNull())
+    {
+        pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
+        pm.fill(Qt::transparent);
+        // there was no icon set so we assume
+        // that we create an icon from the current color
+        d->applyMode = false;
+    }
+    QPainter p(&pm);
+    if(d->applyMode) {
+        /*
+        KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(currentResource());
+        if (gradient) {
+            QGradient *newGradient = gradient->toQGradient();
+            p.fillRect(QRect(0, iconSize.height() - 4, iconSize.width(), 4), newGradient);
+        }
+        */
+        p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, dynamic_cast<KoPattern*>(currentResource())->image());
+    }
+    else {
+        d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
+        p.fillRect(0, 0, iconSize.width(), iconSize.height(), currentResource()->image());
+    }
+
+    p.end();
+
+    setIcon(QIcon(QPixmap::fromImage(pm)));
 }
 
 #include <KoResourcePopupAction.moc>
