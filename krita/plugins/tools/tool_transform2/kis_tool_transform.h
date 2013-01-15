@@ -50,6 +50,8 @@
 class KoID;
 class KisFilterStrategy;
 
+class QTouchEvent;
+
 class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
 {
     Q_OBJECT
@@ -133,7 +135,7 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *e);
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
-    //virtual void touchEvent(QTouchEvent *event);
+    virtual void touchEvent(QTouchEvent *event);
 
     virtual void resourceChanged(int key, const QVariant& res);
 

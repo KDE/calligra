@@ -77,6 +77,9 @@
 #include "kis_canvas_resource_provider.h"
 #include "widgets/kis_progress_widget.h"
 
+#include <Eigen/Geometry>
+using namespace Eigen;
+
 KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::rotateCursor())
          , m_canvas(canvas), m_isActive(false)
@@ -892,6 +895,63 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
     m_clickMiddleBottomProj = m_middleBottomProj;
     m_clickPlane = m_currentPlane;
     storeArgs(m_clickArgs);
+}
+
+void KisToolTransform::touchEvent( QTouchEvent* event )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    //Count all moving touch points
+    int touchCount = 0;
+    foreach( QTouchEvent::TouchPoint tp, event->touchPoints() ) {
+        if( tp.state() == Qt::TouchPointMoved ) {
+            touchCount++;
+        }
+    }
+
+    //Use the touch point count to determine the gesture
+    switch( touchCount ) {
+        case 1: { //Panning
+            QTouchEvent::TouchPoint tp = event->touchPoints().at( 0 );
+            QPointF diff = tp.screenPos() - tp.lastScreenPos();
+            m_currentArgs.setTranslate( m_currentArgs.translate() + diff );
+            break;
+        }
+        case 2: { //Scaling
+            QTouchEvent::TouchPoint tp1 = event->touchPoints().at( 0 );
+            QTouchEvent::TouchPoint tp2 = event->touchPoints().at( 1 );
+
+            float lastZoom = (tp1.lastScreenPos() - tp2.lastScreenPos()).manhattanLength();
+            float newZoom = (tp1.screenPos() - tp2.screenPos()).manhattanLength();
+
+            float diff = newZoom - lastZoom;
+
+            m_currentArgs.setScaleX( m_currentArgs.scaleX() + diff );
+            m_currentArgs.setScaleY( m_currentArgs.scaleY() + diff );
+
+            break;
+        }
+        case 3: { //Rotation
+            Vector2f center;
+            foreach( const QTouchEvent::TouchPoint &tp, event->touchPoints() ) {
+                if( tp.state() == Qt::TouchPointMoved ) {
+                    center += Vector2f( tp.screenPos().x(), tp.screenPos().y() );
+                }
+            }
+            center /= touchCount;
+
+            QTouchEvent::TouchPoint tp = event->touchPoints().at(0);
+
+            Vector2f oldPosition = (Vector2f( tp.lastScreenPos().x(), tp.lastScreenPos().y() ) - center).normalized();
+            Vector2f newPosition = (Vector2f( tp.screenPos().x(), tp.screenPos().y() ) - center).normalized();
+
+            float diff = qAcos( newPosition.dot( center ) ) - qAcos( oldPosition.dot( center ) );
+
+            m_currentArgs.setAZ( m_currentArgs.aZ() + diff );
+
+            break;
+        }
+    }
 }
 
 void KisToolTransform::keyPressEvent(QKeyEvent *event)
