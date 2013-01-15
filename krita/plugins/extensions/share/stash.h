@@ -72,7 +72,7 @@ public:
     ~Stash();
 
     QList<Submission> submissions() const;
-    int availableSpace() const;
+    int availableSpace();
 
     enum Call {
         None,

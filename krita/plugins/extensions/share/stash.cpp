@@ -29,6 +29,7 @@
 
 Stash::Stash(O2DeviantART *deviant, QObject *parent)
     : QObject(parent)
+    , m_bytesAvailable(-1)
 {
     m_requestor = new O2Requestor(&m_networkAccessManager, deviant, this);
     connect(m_requestor, SIGNAL(finished(int,QNetworkReply::NetworkError,QByteArray)), SLOT(slotFinished(int,QNetworkReply::NetworkError,QByteArray)));
@@ -45,8 +46,10 @@ QList<Submission> Stash::submissions() const
     return m_submissions;
 }
 
-int Stash::availableSpace() const
+int Stash::availableSpace()
 {
+    if(m_bytesAvailable == -1)
+        updateAvailableSpace();
     return m_bytesAvailable;
 }
 
@@ -111,7 +114,9 @@ void Stash::renameFolder(const QString &folderId, const QString &folder)
 
 void Stash::updateAvailableSpace()
 {
-
+    QUrl url("https://www.deviantart.com/api/draft15/space");
+    QNetworkRequest request(url);
+    m_callMap[m_requestor->get(request)] = UpdateAvailableSpace;
 }
 
 
@@ -194,6 +199,7 @@ void Stash::submitCallFinished(const QByteArray& data)
     }
     emit callFinished(Submit, false);
     emit callError(QString("Unknown error submitting new artwork: %1").arg(QString(data)));
+    updateAvailableSpace();
 }
 
 void Stash::updateCallFinished(const QByteArray& data)
@@ -213,7 +219,16 @@ void Stash::renameFolderCallFinished(const QByteArray& data)
 
 void Stash::updateAvailableSpaceCallFinished(const QByteArray& data)
 {
-
+    QJson::Parser parser;
+    bool ok(false);
+    QVariantMap result = parser.parse(data, &ok).toMap();
+    if(ok && result.contains("available_space")) {
+        m_bytesAvailable = result.value("available_space").toInt();
+        emit availableSpaceChanged();
+        emit callFinished(UpdateAvailableSpace, true);
+    }
+    emit callFinished(UpdateAvailableSpace, false);
+    emit callError(QString("Unknown error updating the available space: %1").arg(QString(data)));
 }
 
 void Stash::deltaCallFinished(const QByteArray& data)
