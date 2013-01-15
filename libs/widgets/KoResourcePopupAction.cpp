@@ -99,10 +99,10 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
     if(resource)
         emit resourceSelected(resource);
 
-    updateIcon();
+    updateIcon(modelIndex);
 }
 
-void KoResourcePopupAction::updateIcon()
+void KoResourcePopupAction::updateIcon(const QModelIndex modelIndex)
 {
     QSize iconSize(16,16);
     // This must be a QImage, as drawing to a QPixmap outside the
@@ -117,24 +117,50 @@ void KoResourcePopupAction::updateIcon()
         d->applyMode = false;
     }
     QPainter p(&pm);
+    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(currentResource());
     if(d->applyMode) {
-        /*
-        KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(currentResource());
+        QRect innerRect(0, iconSize.height() - 4, iconSize.width(), 4);
         if (gradient) {
-            QGradient *newGradient = gradient->toQGradient();
-            p.fillRect(QRect(0, iconSize.height() - 4, iconSize.width(), 4), newGradient);
+            QGradient * g = gradient->toQGradient();
+
+            QLinearGradient paintGradient;
+            paintGradient.setStops(g->stops());
+            paintGradient.setStart(innerRect.topLeft());
+            paintGradient.setFinalStop(innerRect.topRight());
+
+            d->checkerPainter.paint(p, innerRect);
+            p.fillRect(innerRect, QBrush(paintGradient));
+
+            delete g;
+        } else {
+            d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
+            p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, dynamic_cast<KoPattern*>(currentResource())->image());
         }
-        */
-        p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, dynamic_cast<KoPattern*>(currentResource())->image());
     }
     else {
-        d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
-        p.fillRect(0, 0, iconSize.width(), iconSize.height(), currentResource()->image());
-    }
+        QRect innerRect(0, 0, iconSize.width(), iconSize.height());
+        if (gradient) {
+            QGradient * g = gradient->toQGradient();
 
+            QLinearGradient paintGradient;
+            paintGradient.setStops(g->stops());
+            paintGradient.setStart(innerRect.topLeft());
+            paintGradient.setFinalStop(innerRect.topRight());
+
+            d->checkerPainter.paint(p, innerRect);
+            p.fillRect(innerRect, QBrush(paintGradient));
+
+            delete g;
+        } else {
+            d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
+            p.fillRect(0, 0, iconSize.width(), iconSize.height(), currentResource()->image());
+        }
+    }
     p.end();
 
     setIcon(QIcon(QPixmap::fromImage(pm)));
+
+    delete gradient;
 }
 
 #include <KoResourcePopupAction.moc>
