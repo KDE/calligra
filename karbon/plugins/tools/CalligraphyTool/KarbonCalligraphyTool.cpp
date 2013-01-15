@@ -34,7 +34,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoColor.h>
 #include <KoShapePaintingContext.h>
-#include <KoStrokeConfigWidget.h>
+#include <KoFillConfigWidget.h>
 
 #include <KAction>
 #include <KDebug>
@@ -346,6 +346,12 @@ QList<QWidget *> KarbonCalligraphyTool::createOptionWidgets()
 {
     // if the widget don't exists yet create it
     QList<QWidget *> widgets;
+    
+    KoFillConfigWidget *fillWidget = new KoFillConfigWidget(0);
+    fillWidget->setWindowTitle(i18n("Stroke"));
+    fillWidget->setCanvas(canvas());
+    widgets.append(fillWidget);
+    
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
     connect(widget, SIGNAL(usePathChanged(bool)),
             this, SLOT(setUsePath(bool)));
@@ -407,10 +413,6 @@ QList<QWidget *> KarbonCalligraphyTool::createOptionWidgets()
     widget->setWindowTitle(i18n("Calligraphy"));
     widgets.append(widget);
     
-    KoStrokeConfigWidget *strokeWidget = new KoStrokeConfigWidget(0);
-    strokeWidget->setWindowTitle(i18n("Stroke"));
-    strokeWidget->setCanvas(canvas());
-    widgets.append(strokeWidget);
     return widgets;
 }
 
