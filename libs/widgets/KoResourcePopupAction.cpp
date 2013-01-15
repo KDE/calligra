@@ -99,10 +99,10 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
     if(resource)
         emit resourceSelected(resource);
 
-    updateIcon(modelIndex);
+    updateIcon();
 }
 
-void KoResourcePopupAction::updateIcon(const QModelIndex modelIndex)
+void KoResourcePopupAction::updateIcon()
 {
     QSize iconSize(16,16);
     // This must be a QImage, as drawing to a QPixmap outside the
