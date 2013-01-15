@@ -54,6 +54,7 @@ private slots:
     void submissionsChanged();
     void submitCallCompleted(Stash::Call, bool result);
     void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
+    void availableSpaceChanged();
 
 private:
 

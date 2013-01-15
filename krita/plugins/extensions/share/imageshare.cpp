@@ -61,6 +61,8 @@ ImageShare::ImageShare(QObject *parent, const QVariantList &)
         m_view = qobject_cast<KisView2*>(parent);
         m_submitDlg = new SubmitDlg(m_view);
         m_submitDlg->submitDlg()->txtTitle->setText(m_view->document()->url().fileName().split(".").first());
+        // TODO change this once we have this information from dA... broken response is fun...
+        m_submitDlg->submitDlg()->lblRemaining->setVisible(false);
         connect(m_submitDlg, SIGNAL(accepted()), SLOT(performUpload()));
     }
 }
@@ -111,6 +113,8 @@ void ImageShare::showSubmit()
     connect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), SLOT(testCallCompleted(Stash::Call,bool)));
     connect(m_stash, SIGNAL(submissionsChanged()), SLOT(submissionsChanged()));
     connect(m_stash, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(uploadProgress(int,qint64,qint64)));
+    // This will need doing... once deviantArt fixes the call
+    //connect(m_stash, SIGNAL(availableSpaceChanged()), SLOT(availableSpaceChanged()));
     m_stash->testCall();
 }
 
@@ -165,6 +169,13 @@ void ImageShare::submitCallCompleted(Stash::Call, bool result)
 {
     qDebug() << Q_FUNC_INFO;
     m_progressUpdater->deleteLater();
+}
+
+void ImageShare::availableSpaceChanged()
+{
+    if(m_submitDlg) {
+        m_submitDlg->submitDlg()->lblRemaining->setText(i18n("Remaining space: %1", m_stash->availableSpace()));
+    }
 }
 
 #include "imageshare.moc"
