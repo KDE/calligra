@@ -134,14 +134,14 @@ private:
     QList<Submission> m_submissions;
     int m_bytesAvailable;
 
-    void testCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
-    void submitCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
-    void updateCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
-    void moveCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
-    void renameFolderCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
-    void updateAvailableSpaceCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
-    void deltaCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
-    void fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray &data);
+    void testCallFinished(const QByteArray& data);
+    void submitCallFinished(const QByteArray& data);
+    void updateCallFinished(const QByteArray& data);
+    void moveCallFinished(const QByteArray& data);
+    void renameFolderCallFinished(const QByteArray& data);
+    void updateAvailableSpaceCallFinished(const QByteArray& data);
+    void deltaCallFinished(const QByteArray& data);
+    void fetchCallFinished(const QByteArray& data);
 };
 
 #endif

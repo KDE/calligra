@@ -132,31 +132,37 @@ void Stash::fetch(const QString &id)
 void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data)
 {
     Call currentCall = m_callMap[id];
+    if(error != QNetworkReply::NoError) {
+        emit callFinished(currentCall, false);
+        QString errorName = QNetworkReply::staticMetaObject.enumerator( QNetworkReply::staticMetaObject.indexOfEnumerator("NetworkError") ).valueToKey(error);
+        emit callError(QString("Error %1 submitting artwork: %2").arg(error).arg(errorName));
+        return;
+    }
     switch(currentCall)
     {
         case Placebo:
-            testCallFinished(error, data);
+            testCallFinished(data);
             break;
         case Submit:
-            submitCallFinished(error, data);
+            submitCallFinished(data);
             break;
         case Update:
-            updateCallFinished(error, data);
+            updateCallFinished(data);
             break;
         case Move:
-            moveCallFinished(error, data);
+            moveCallFinished(data);
             break;
         case RenameFolder:
-            renameFolderCallFinished(error, data);
+            renameFolderCallFinished(data);
             break;
         case UpdateAvailableSpace:
-            updateAvailableSpaceCallFinished(error, data);
+            updateAvailableSpaceCallFinished(data);
             break;
         case Delta:
-            deltaCallFinished(error, data);
+            deltaCallFinished(data);
             break;
         case Fetch:
-            fetchCallFinished(error, data);
+            fetchCallFinished(data);
             break;
         default:
             qDebug() << "Unknown call or successful completion of call after expected ending (no call currently set)";
@@ -165,7 +171,7 @@ void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteA
     m_callMap.remove(id);
 }
 
-void Stash::testCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::testCallFinished(const QByteArray& data)
 {
     QJson::Parser parser;
     bool ok(false);
@@ -175,14 +181,8 @@ void Stash::testCallFinished(QNetworkReply::NetworkError error, const QByteArray
     }
 }
 
-void Stash::submitCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::submitCallFinished(const QByteArray& data)
 {
-    if(error != QNetworkReply::NoError) {
-        emit callFinished(Submit, false);
-        QString errorName = QNetworkReply::staticMetaObject.enumerator( QNetworkReply::staticMetaObject.indexOfEnumerator("NetworkError") ).valueToKey(error);
-        emit callError(QString("Error %1 submitting artwork: %2").arg(error).arg(errorName));
-        return;
-    }
     QJson::Parser parser;
     bool ok(false);
     QVariantMap result = parser.parse(data, &ok).toMap();
@@ -196,33 +196,33 @@ void Stash::submitCallFinished(QNetworkReply::NetworkError error, const QByteArr
     emit callError(QString("Unknown error submitting new artwork: %1").arg(QString(data)));
 }
 
-void Stash::updateCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::updateCallFinished(const QByteArray& data)
 {
 
 }
 
-void Stash::moveCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::moveCallFinished(const QByteArray& data)
 {
 
 }
 
-void Stash::renameFolderCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::renameFolderCallFinished(const QByteArray& data)
 {
 
 }
 
-void Stash::updateAvailableSpaceCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::updateAvailableSpaceCallFinished(const QByteArray& data)
 {
 
 }
 
-void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::deltaCallFinished(const QByteArray& data)
 {
     QJson::Parser parser;
     bool ok(false);
     QVariantMap result = parser.parse(data, &ok).toMap();
     if(!ok)
-        emit callFinished(Delta, (error == QNetworkReply::NoError));
+        emit callFinished(Delta, false);
 
     // TODO handle has_more and cursor
     m_submissions.clear();
@@ -245,7 +245,7 @@ void Stash::deltaCallFinished(QNetworkReply::NetworkError error, const QByteArra
     emit submissionsChanged();
 }
 
-void Stash::fetchCallFinished(QNetworkReply::NetworkError error, const QByteArray& data)
+void Stash::fetchCallFinished(const QByteArray& data)
 {
 
 }
