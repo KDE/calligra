@@ -216,6 +216,9 @@ void KexiConnectionSelectorWidget::slotPrjTypeSelected(int id)
                 //   }
             }
             if (d->remote->list->topLevelItemCount() > 0) {
+                d->remote->list->sortByColumn(0, Qt::AscendingOrder);
+                d->remote->list->resizeColumnToContents(0); // name
+                d->remote->list->resizeColumnToContents(1); // type
                 d->remote->list->topLevelItem(0)->setSelected(true);
             }
             d->remote->descGroupBox->layout()->setMargin(2);
