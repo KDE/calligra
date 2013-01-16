@@ -19,6 +19,8 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 
+#include "../../exceptions.h"
+
 #include "global.h"
 #include "wv2_export.h"
 #include <utility>
@@ -39,7 +41,8 @@ namespace wvWare
     class Headers
     {
     public:
-        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, OLEStreamReader* tableStream, WordVersion version );
+        Headers( U32 ccpHdd, U32 fcPlcfhdd, U32 lcbPlcfhdd, U32 fcPlcfsed, U32 lcbPlcfsed,
+                 OLEStreamReader* tableStream, WordVersion version );
         virtual ~Headers();
 
         /**
@@ -62,7 +65,7 @@ namespace wvWare
 
     protected:
         QList<U32> m_headers;
-        static const int headerTypes;
+        static const uint headerTypes;
     };
 
 } // namespace wvWare

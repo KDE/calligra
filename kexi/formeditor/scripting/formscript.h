@@ -22,8 +22,8 @@
 
 #include "kexievents.h"
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <ksharedptr.h>
 
 class ScriptManager;

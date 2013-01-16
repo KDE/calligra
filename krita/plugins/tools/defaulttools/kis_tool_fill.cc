@@ -45,6 +45,7 @@
 #include <kis_pattern.h>
 #include <kis_fill_painter.h>
 #include <kis_selection.h>
+#include <kis_system_locker.h>
 
 #include <kis_view2.h>
 #include <canvas/kis_canvas2.h>
@@ -54,14 +55,19 @@
 #include <recorder/kis_recorded_fill_paint_action.h>
 #include <recorder/kis_node_query_path.h>
 #include <recorder/kis_action_recorder.h>
+#include "kis_resources_snapshot.h"
+
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
 {
     setObjectName("tool_fill");
+    m_feather = 0;
+    m_sizemod = 0;
     m_painter = 0;
     m_oldColor = 0;
     m_threshold = 80;
+    m_depth = 0;
     m_usePattern = false;
     m_unmerged = false;
     m_fillOnlySelection = false;
@@ -99,10 +105,12 @@ bool KisToolFill::flood(int startX, int startY)
     KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);
     updater->start(100, i18n("Flood Fill"));
 
-    QRegion dirty;
+    QVector<QRect> dirty;
+
+    KisUndoAdapter *undoAdapter = image()->undoAdapter();
+    undoAdapter->beginMacro(i18n("Flood Fill"));
 
     if (m_fillOnlySelection && selection) {
-        QRect rc = selection->selectedRect();
         KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
         KisFillPainter fillPainter(filled);
         fillPainter.setProgress(updater->startSubtask());
@@ -124,20 +132,13 @@ bool KisToolFill::flood(int startX, int startY)
         m_painter = new KisPainter(device, currentSelection());
         Q_CHECK_PTR(m_painter);
 
-        m_painter->beginTransaction(i18n("Fill"));
+        m_painter->beginTransaction("");
 
-        QVector<QRect> rects = dirty.rects();
-
-        QVector<QRect>::iterator it = rects.begin();
-        QVector<QRect>::iterator end = rects.end();
-
-        m_painter->setCompositeOp(m_compositeOp);
+        m_painter->setCompositeOp(compositeOp());
         m_painter->setOpacity(m_opacity);
 
-        while (it != end) {
-            QRect rc = *it;
+        foreach(const QRect &rc, dirty) {
             m_painter->bitBlt(rc.topLeft(), filled, rc);
-            ++it;
         }
 
         m_painter->endTransaction(image()->undoAdapter());
@@ -145,13 +146,19 @@ bool KisToolFill::flood(int startX, int startY)
     } else {
 
         KisFillPainter fillPainter(device, currentSelection());
-        setupPainter(&fillPainter);
-        fillPainter.beginTransaction(i18n("Flood Fill"));
 
+        KisResourcesSnapshotSP resources =
+            new KisResourcesSnapshot(image(), 0, this->canvas()->resourceManager());
+        resources->setupPainter(&fillPainter);
+
+        fillPainter.beginTransaction("");
+
+        fillPainter.setSizemod(m_sizemod);
+        fillPainter.setFeather(m_feather);
         fillPainter.setProgress(updater->startSubtask());
         fillPainter.setOpacity(m_opacity);
         fillPainter.setFillThreshold(m_threshold);
-        fillPainter.setCompositeOp(m_compositeOp);
+        fillPainter.setCompositeOp(compositeOp());
         fillPainter.setSampleMerged(!m_unmerged);
         fillPainter.setCareForSelection(true);
         fillPainter.setWidth(currentImage()->width());
@@ -165,9 +172,11 @@ bool KisToolFill::flood(int startX, int startY)
         fillPainter.endTransaction(image()->undoAdapter());
         dirty = fillPainter.takeDirtyRegion();
     }
+
+    undoAdapter->endMacro();
+
     device->setDirty(dirty);
     delete updater;
-
 
     return true;
 }
@@ -176,6 +185,10 @@ void KisToolFill::mousePressEvent(KoPointerEvent *event)
 {
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
+
+        if (!nodeEditable()) {
+            return;
+        }
 
         setMode(KisTool::PAINT_MODE);
 
@@ -197,9 +210,8 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
             return;
         }
 
-        setCurrentNodeLocked(true);
+        KisSystemLocker locker(currentNode());
         flood(m_startPos.x(), m_startPos.y());
-        setCurrentNodeLocked(false);
         notifyModified();
     }
     else {
@@ -209,33 +221,53 @@ void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
 
 QWidget* KisToolFill::createOptionWidget()
 {
-    //QWidget *widget = KisToolPaint::createOptionWidget(parent);
     QWidget *widget = KisToolPaint::createOptionWidget();
     widget->setObjectName(toolId() + " option widget");
-    m_lbThreshold = new QLabel(i18n("Threshold: "), widget);
+
+    QLabel *lbl_threshold = new QLabel(i18n("Threshold: "), widget);
     m_slThreshold = new KisSliderSpinBox(widget);
     m_slThreshold->setObjectName("int_widget");
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
     m_slThreshold->setValue(m_threshold);
-    connect(m_slThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
 
+    QLabel *lbl_sizemod = new QLabel(i18n("Grow/shrink selection: "), widget);
+    KisSliderSpinBox *sizemod = new KisSliderSpinBox(widget);
+    sizemod->setObjectName("sizemod");
+    sizemod->setRange(-40, 40);
+    sizemod->setSingleStep(1);
+    sizemod->setValue(0);
+    sizemod->setSuffix("px");
+
+    QLabel *lbl_feather = new QLabel(i18n("Feathering radius: "), widget);
+    KisSliderSpinBox *feather = new KisSliderSpinBox(widget);
+    feather->setObjectName("feather");
+    feather->setRange(0, 40);
+    feather->setSingleStep(1);
+    feather->setValue(0);
+    feather->setSuffix("px");
+    
     m_checkUsePattern = new QCheckBox(i18n("Use pattern"), widget);
     m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the gradient selected to fill with"));
     m_checkUsePattern->setChecked(m_usePattern);
-    connect(m_checkUsePattern, SIGNAL(toggled(bool)), this, SLOT(slotSetUsePattern(bool)));
-
+    
     m_checkSampleMerged = new QCheckBox(i18n("Limit to current layer"), widget);
     m_checkSampleMerged->setChecked(m_unmerged);
-    connect(m_checkSampleMerged, SIGNAL(toggled(bool)), this, SLOT(slotSetSampleMerged(bool)));
-
+    
     m_checkFillSelection = new QCheckBox(i18n("Fill entire selection"), widget);
     m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
     m_checkFillSelection->setChecked(m_fillOnlySelection);
-    connect(m_checkFillSelection, SIGNAL(toggled(bool)), this, SLOT(slotSetFillSelection(bool)));
 
-    addOptionWidgetOption(m_slThreshold, m_lbThreshold);
+    connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+    connect (sizemod             , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
+    connect (feather             , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
+    connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
+    connect (m_checkSampleMerged , SIGNAL(toggled(bool))    , this, SLOT(slotSetSampleMerged(bool)));
+    connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
 
+    addOptionWidgetOption(m_slThreshold, lbl_threshold);
+    addOptionWidgetOption(sizemod      , lbl_sizemod);
+    addOptionWidgetOption(feather      , lbl_feather);
     addOptionWidgetOption(m_checkFillSelection);
     addOptionWidgetOption(m_checkSampleMerged);
     addOptionWidgetOption(m_checkUsePattern);
@@ -267,4 +299,13 @@ void KisToolFill::slotSetFillSelection(bool state)
     m_checkSampleMerged->setEnabled(!state);
 }
 
+void KisToolFill::slotSetSizemod(int sizemod)
+{
+    m_sizemod = sizemod;
+}
+
+void KisToolFill::slotSetFeather(int feather)
+{
+    m_feather = feather;
+}
 #include "kis_tool_fill.moc"

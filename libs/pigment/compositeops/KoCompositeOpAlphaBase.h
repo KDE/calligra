@@ -30,6 +30,8 @@
 #define NATIVE_MAX_VALUE KoColorSpaceMathsTraits<channels_type>::max
 #define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::unitValue
 #define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::zeroValue
+#define NATIVE_ZERO_VALUE KoColorSpaceMathsTraits<channels_type>::zeroValue
+
 
 /**
  * A template base class for all composite op that compose color
@@ -80,7 +82,7 @@ public:
 
                 // apply the alphamask
                 if (mask != 0) {
-                    srcAlpha = KoColorSpaceMaths<channels_type, quint8>::multiply(srcAlpha, *mask, U8_opacity);
+                    srcAlpha = KoColorSpaceMaths<quint8, channels_type>::multiply(*mask, srcAlpha, opacity);
                     mask++;
                 } else if (opacity != NATIVE_OPACITY_OPAQUE) {
                     srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
@@ -95,17 +97,27 @@ public:
 
                     if (dstAlpha == NATIVE_OPACITY_OPAQUE) {
                         srcBlend = srcAlpha;
+                    } else if (dstAlpha == NATIVE_OPACITY_TRANSPARENT) {
+                        if (!allChannelFlags) {
+                            for (int i = 0; i < (int)_CSTraits::channels_nb; i++) {
+                                if (i != _CSTraits::alpha_pos) {
+                                    dstN[i] = NATIVE_ZERO_VALUE;
+                                }
+                            }
+                        }
+
+                        if (!alphaLocked && !_alphaLocked) {
+                            dstN[_CSTraits::alpha_pos] = srcAlpha;
+                        }
+                        srcBlend = NATIVE_OPACITY_OPAQUE;
+
                     } else {
                         channels_type newAlpha = dstAlpha + KoColorSpaceMaths<channels_type>::multiply(NATIVE_OPACITY_OPAQUE - dstAlpha, srcAlpha);
                         if (!alphaLocked && !_alphaLocked) { // No need to check for _CSTraits::alpha_pos == -1 since it is contained in alphaLocked
                             dstN[_CSTraits::alpha_pos] = newAlpha;
                         }
-
-                        if (newAlpha != 0) {
-                            srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
-                        } else {
-                            srcBlend = srcAlpha;
-                        }
+                        // newAlpha cannot be zero, because srcAlpha!=zero and dstAlpha!=unit here
+                        srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
                     }
                     _compositeOp::composeColorChannels(srcBlend, srcN, dstN, allChannelFlags, channelFlags);
 
@@ -143,16 +155,17 @@ public:
             composite<alphaLocked, false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
         }
     }
-    void composite(quint8 *dstRowStart,
-                   qint32 dststride,
-                   const quint8 *srcRowStart,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
+
+    virtual void composite(quint8 *dstRowStart,
+                           qint32 dststride,
+                           const quint8 *srcRowStart,
+                           qint32 srcstride,
+                           const quint8 *maskRowStart,
+                           qint32 maskstride,
+                           qint32 rows,
+                           qint32 cols,
+                           quint8 U8_opacity,
+                           const QBitArray& channelFlags = QBitArray()) const
     {
         bool alphaLocked = false;
         if (!channelFlags.isEmpty()) {

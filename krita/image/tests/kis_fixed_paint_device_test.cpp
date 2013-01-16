@@ -76,7 +76,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
           .arg(dstCs->name())
           .arg(profile2)
           .arg(reason)
-          .toAscii());
+          .toLatin1());
 }
 
 void KisFixedPaintDeviceTest::testColorSpaceConversion()
@@ -85,7 +85,7 @@ void KisFixedPaintDeviceTest::testColorSpaceConversion()
     const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
     const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(srcCs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
 
     dev->convertTo(dstCs);
 
@@ -101,7 +101,7 @@ void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
 
     QPoint errpoint;
@@ -109,7 +109,7 @@ void KisFixedPaintDeviceTest::testRoundtripQImageConversion()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_fixed_paint_device_test_test_roundtrip_qimage.png");
         result.save("kis_fixed_paint_device_test_test_roundtrip_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -118,7 +118,7 @@ void KisFixedPaintDeviceTest::testBltFixed()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     // Without opacity
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -129,10 +129,10 @@ void KisFixedPaintDeviceTest::testBltFixed()
 
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, image, result)) {
-        fdev->convertToQImage().save("kis_fixed_paint_device_test_test_blt_fixed_expected.png");
+    if (!TestUtil::compareQImages(errpoint, image, result, 1)) {
+        fdev->convertToQImage(0).save("kis_fixed_paint_device_test_test_blt_fixed_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
 }
@@ -144,7 +144,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
@@ -155,10 +155,10 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, checkResult, result)) {
+    if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
         checkResult.save("kis_fixed_paint_device_test_test_blt_fixed_opactiy_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_opacity_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -209,7 +209,7 @@ void KisFixedPaintDeviceTest::testFill()
     if (!TestUtil::compareQImages(errpoint, image, checkImage)) {
         image.save("kis_fixed_paint_device_filled_result.png");
         checkImage.save("kis_fixed_paint_device_filled_result_expected.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     } 
     
     delete[] red;
@@ -220,7 +220,7 @@ void KisFixedPaintDeviceTest::testBltFixedSmall()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "fixed_blit_small.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     // Without opacity
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -234,7 +234,7 @@ void KisFixedPaintDeviceTest::testBltFixedSmall()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_fixed_paint_device_test_blt_small_image.png");
         result.save("kis_fixed_paint_device_test_blt_small_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -243,7 +243,7 @@ void KisFixedPaintDeviceTest::testBltPerformance()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());

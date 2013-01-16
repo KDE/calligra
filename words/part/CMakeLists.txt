@@ -1,14 +1,15 @@
 project(wordspart)
 
+#TODO port to textlayout-rework
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES}  ${KDE4_INCLUDE_DIR}/threadweaver/ )
+include_directories( ${KOTEXT_INCLUDES} ${TEXTLAYOUT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
-########### KWordPrivate library ###############
+########### WordsPrivate library ###############
 
 set(wordsprivate_LIB_SRCS
     KWFactory.cpp
-    KWord.cpp
+    Words.cpp
     KWApplicationConfig.cpp
     KWCanvasBase.cpp
     KWCanvas.cpp
@@ -16,11 +17,11 @@ set(wordsprivate_LIB_SRCS
     KWDocument.cpp
     KWGui.cpp
     KWView.cpp
+    KWPart.cpp
     KWPage.cpp
     KWPageCacheManager.cpp
     KWPageManager.cpp
     KWPageStyle.cpp
-    KWPageTextInfo.cpp
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
@@ -28,35 +29,37 @@ set(wordsprivate_LIB_SRCS
     KWOdfLoader.cpp
     KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
-    KWDLoader.cpp
+    KWRootAreaProvider.cpp
 
-    frames/KWTextDocumentLayout.cpp
+    pagetool/KWPageTool.cpp
+    pagetool/KWPageToolFactory.cpp
+    pagetool/SimpleSetupWidget.cpp
+    pagetool/SimpleHeaderFooterWidget.cpp
+
     frames/KWFrameLayout.cpp
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
-    frames/KWTextFrame.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
     frames/KWOutlineShape.cpp
-    frames/KWPageBackground.cpp
 
     dialogs/KWFrameConnectSelector.cpp
-    dialogs/KWFrameGeometry.cpp
     dialogs/KWRunAroundProperties.cpp
     dialogs/KWGeneralFrameProperties.cpp
+    dialogs/KWAnchoringProperties.cpp
     dialogs/KWFrameDialog.cpp
     dialogs/KWShapeConfigFactory.cpp
     dialogs/KWDocumentColumns.cpp
     dialogs/KWStartupWidget.cpp
     dialogs/KWPageSettingsDialog.cpp
-    dialogs/KWStatistics.cpp
-    dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
-    dialogs/KWInsertPageDialog.cpp
-    dialogs/KWInsertInlineNoteDialog.cpp
+    dialogs/KWConfigureDialog.cpp
+
     dockers/KWStatisticsDocker.cpp
+    dockers/KWStatisticsWidget.cpp
+    dockers/StatisticsPreferencesPopup.cpp
 
     commands/KWPageStylePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
@@ -64,9 +67,14 @@ set(wordsprivate_LIB_SRCS
     commands/KWNewPageStyleCommand.cpp
     commands/KWFrameDeleteCommand.cpp
     commands/KWFrameCreateCommand.cpp
-    commands/KWClipFrameCommand.cpp
-    commands/KWRemoveFrameClipCommand.cpp
     commands/KWChangePageStyleCommand.cpp
+    commands/KWShapeCreateCommand.cpp
+
+##calligra author specific additions
+    author/CAuFactory.cpp
+    author/CAuView.cpp
+    author/CAuPart.cpp
+    author/CoverImage.cpp
 )
 if( Soprano_FOUND )
     set(wordsprivate_LIB_SRCS ${wordsprivate_LIB_SRCS}
@@ -78,17 +86,17 @@ endif( Soprano_FOUND )
 
 kde4_add_ui_files(wordsprivate_LIB_SRCS
     dialogs/KWFrameConnectSelector.ui
-    dialogs/KWFrameGeometry.ui
     dialogs/KWRunAroundProperties.ui
     dialogs/KWGeneralFrameProperties.ui
+    dialogs/KWAnchoringProperties.ui
     dialogs/KWDocumentColumns.ui
     dialogs/KWStartupWidget.ui
-    dialogs/KWStatistics.ui
     dialogs/KWCreateBookmark.ui
     dialogs/KWSelectBookmark.ui
-    dialogs/KWInsertPageDialog.ui
-    dialogs/KWInsertInlineNoteDialog.ui
-    dockers/KWStatisticsDocker.ui
+    dialogs/KWInsertImage.ui
+    dockers/StatisticsPreferencesPopup.ui
+    pagetool/SimpleSetupWidget.ui
+    pagetool/SimpleHeaderFooterWidget.ui
 )
 if( Soprano_FOUND )
     kde4_add_ui_files(wordsprivate_LIB_SRCS
@@ -99,18 +107,18 @@ endif( Soprano_FOUND )
 
 kde4_add_library(wordsprivate SHARED ${wordsprivate_LIB_SRCS})
 
-target_link_libraries(wordsprivate komain)
+target_link_libraries(wordsprivate komain textlayout)
 if( Soprano_FOUND )
     target_link_libraries(wordsprivate ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )
 target_link_libraries(wordsprivate LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(wordsprivate
-    PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-########### KWordPart Library ###############
+########### WordsPart Library ###############
 
 set(wordspart_PART_SRCS KWFactoryInit.cpp )
 
@@ -124,26 +132,26 @@ target_link_libraries(wordspart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordspr
 install(TARGETS wordspart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
-########### KWord exe ###############
+########### Words exe ###############
 
 set(words_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon(words_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/words.png")
+kde4_add_app_icon(words_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-calligrawords.png")
 
-kde4_add_kdeinit_executable( words ${words_KDEINIT_SRCS})
+kde4_add_kdeinit_executable( calligrawords ${words_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
-   set_target_properties(words PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(words PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
-   set_target_properties(words PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
+   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.words")
+   set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
 endif (Q_WS_MAC)
 
-target_link_libraries(kdeinit_words  ${KDE4_KDEUI_LIBS} komain )
+target_link_libraries(kdeinit_calligrawords  ${KDE4_KDEUI_LIBS} komain )
 
-install(TARGETS kdeinit_words  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-target_link_libraries( words kdeinit_words )
-install(TARGETS words  ${INSTALL_TARGETS_DEFAULT_ARGS})
+target_link_libraries( calligrawords kdeinit_calligrawords )
+install(TARGETS calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
@@ -153,11 +161,11 @@ install( PROGRAMS words.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES wordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
 
 install( FILES
-kword_export.h
+words_export.h
 KWPage.h
 KWPageManager.h
 KWPageStyle.h
-KWord.h
+Words.h
 KWCanvasBase.h
 KWCanvas.h
 KWCanvasItem.h
@@ -175,3 +183,44 @@ frames/KWFrameSet.h
 frames/KWTextFrameSet.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/words/part/frames COMPONENT Devel)
 
+
+###What follows is calligraauthor section###
+
+########### AuthorPart Library ###############
+
+set(authorpart_PART_SRCS author/CAuFactoryInit.cpp )
+
+kde4_add_plugin(authorpart ${authorpart_PART_SRCS})
+
+target_link_libraries(authorpart ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} wordsprivate )
+
+install(TARGETS authorpart DESTINATION ${PLUGIN_INSTALL_DIR})
+
+########### Author exe ###############
+
+set(author_KDEINIT_SRCS author/main.cpp )
+
+#kde4_add_app_icon(author_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/author/hi*-app-calligraauthor.png")
+
+kde4_add_kdeinit_executable( calligraauthor ${author_KDEINIT_SRCS})
+
+if (Q_WS_MAC)
+   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
+   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.author")
+   set_target_properties(calligraauthor PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Author")
+endif (Q_WS_MAC)
+
+target_link_libraries(kdeinit_calligraauthor  ${KDE4_KDEUI_LIBS} komain )
+
+install(TARGETS kdeinit_calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+target_link_libraries( calligraauthor kdeinit_calligraauthor )
+install(TARGETS calligraauthor  ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+
+########### install files ###############
+
+install( FILES author/author.rc author/author_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/author)
+install( FILES author/authorpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( PROGRAMS author/author.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES author/authorrc DESTINATION ${CONFIG_INSTALL_DIR} )

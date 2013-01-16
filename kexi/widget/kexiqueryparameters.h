@@ -21,7 +21,7 @@
 #define KEXIQUERYPARAMETERS_H
 
 #include <kexi_export.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 
 //! @short Utilities providing GUI for getting query parameters
 class KEXIEXTWIDGETS_EXPORT KexiQueryParameters

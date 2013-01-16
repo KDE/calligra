@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=source voltage
+Name[ca]=font de voltatge
+Name[ca@valencia]=font de voltatge
+Name[de]=Spannungsquelle
+Name[el]=τάση πηγής
+Name[es]=tensión de fuente
+Name[et]=Pingeallikas
+Name[fr]=source voltage
+Name[gl]=Fonte de tensión
+Name[it]=sorgente di tensione
+Name[kk]=кернеу-көзі
+Name[nb]=kildespenning
+Name[nl]=voedingsspanning
+Name[pl]=napięcie źródłowe
 Name[pt]=tensão fonte
 Name[pt_BR]=tensão de fonte
+Name[ru]=Источник напряжения
+Name[sk]=zdroj napätia
 Name[sv]=källa spänning
 Name[uk]=Джерело напруги
 Name[x-test]=xxsource voltagexx
+Name[zh_TW]=source voltage

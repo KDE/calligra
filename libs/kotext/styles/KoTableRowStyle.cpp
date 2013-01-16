@@ -77,6 +77,20 @@ KoTableRowStyle::~KoTableRowStyle()
 {
 }
 
+void KoTableRowStyle::copyProperties(const KoTableRowStyle *style)
+{
+    d->stylesPrivate = style->d->stylesPrivate;
+    setName(style->name()); // make sure we emit property change
+    d->parentStyle = style->d->parentStyle;
+}
+
+KoTableRowStyle *KoTableRowStyle::clone() const
+{
+    KoTableRowStyle *newStyle = new KoTableRowStyle();
+    newStyle->copyProperties(this);
+    return newStyle;
+}
+
 void KoTableRowStyle::setParentStyle(KoTableRowStyle *parent)
 {
     d->parentStyle = parent;
@@ -208,7 +222,10 @@ qreal KoTableRowStyle::minimumRowHeight() const
 
 void KoTableRowStyle::setRowHeight(qreal height)
 {
-    setProperty(RowHeight, height);
+    if(height <= 0)
+        d->stylesPrivate.remove(RowHeight);
+    else
+        setProperty(RowHeight, height);
 }
 
 qreal KoTableRowStyle::rowHeight() const
@@ -359,8 +376,6 @@ void KoTableRowStyle::saveOdf(KoGenStyle &style) const
             style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
         } else if (key == RowHeight) {
             style.addPropertyPt("style:row-height", rowHeight(), KoGenStyle::TableRowType);
-        } else if (key == MinimumRowHeight) {
-            style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
         } else if (key == UseOptimalHeight) {
             style.addProperty("style:use-optimal-row-height", useOptimalHeight(), KoGenStyle::TableRowType);
         } else if (key == BreakBefore) {

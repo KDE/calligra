@@ -27,7 +27,7 @@
 
 #include <KDebug>
 
-#include <kexidb/tableschema.h>
+#include <db/tableschema.h>
 
 #include <google/template.h>
 

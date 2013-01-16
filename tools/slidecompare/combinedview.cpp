@@ -22,11 +22,11 @@
 #include "slideview.h"
 #include "oothread.h"
 #include <PptToOdp.h>
-#include <QtGui/QGridLayout>
-#include <QtGui/QDragEnterEvent>
-#include <QtCore/QCoreApplication>
-#include <KDE/KMessageBox>
-#include <KDE/KMimeType>
+#include <QGridLayout>
+#include <QDragEnterEvent>
+#include <QCoreApplication>
+#include <KMessageBox>
+#include <KMimeType>
 
 CombinedView::CombinedView(QWidget* parent) :QWidget(parent),
         ooodploader(new DirSlideLoader(this)),
@@ -90,7 +90,7 @@ koppttoodp(const QString& from) {
     QString to = dirpath + QDir::separator()
                  + QFileInfo(from).baseName() + ".odp";
     QFile::remove(to);
-    PptToOdp ppttoodp;
+    PptToOdp ppttoodp(0, 0);
     ppttoodp.convert(from, to, KoStore::Zip);
     return to;
 }
@@ -141,7 +141,7 @@ CombinedView::openFile(const QString& path) {
     }
     QString dir = oothread->toPng(path, koodploader->slideSize().width());
     ooodploader->setSlideDir(dir);
-    // if ppt, convert to odp with koffice and put in queue for conversion to
+    // if ppt, convert to odp with calligra and put in queue for conversion to
     // png
 
     // adapt zoom level to number of slides

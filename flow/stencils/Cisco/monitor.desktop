@@ -1,11 +1,27 @@
 [Desktop Entry]
 Name=Monitor
+Name[bg]=Монитор
+Name[ca]=Monitor
+Name[ca@valencia]=Monitor
+Name[cs]=Monitor
+Name[de]=Monitor
+Name[el]=Οθόνη
 Name[es]=Monitor
 Name[et]=Monitor
+Name[fr]=Moniteur
+Name[gl]=Monitor
+Name[it]=Monitor
+Name[kk]=Дисплей
+Name[nb]=Skjerm
 Name[nl]=Monitor
+Name[pl]=Monitor
 Name[pt]=Monitor
 Name[pt_BR]=Monitor
+Name[ru]=Монитор
+Name[sk]=Monitor
 Name[sv]=Bildskärm
+Name[ug]=ئېكران
 Name[uk]=Монітор
 Name[x-test]=xxMonitorxx
 Name[zh_CN]=监视器
+Name[zh_TW]=螢幕

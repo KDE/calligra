@@ -20,6 +20,7 @@
 
 #include <QVector>
 #include <QPoint>
+#include <QList>
 
 template<class T>
 class KisWeakSharedPtr;
@@ -52,9 +53,6 @@ typedef KisSharedPtr<KisFixedPaintDevice> KisFixedPaintDeviceSP;
 class KisMask;
 typedef KisSharedPtr<KisMask> KisMaskSP;
 typedef KisWeakSharedPtr<KisMask> KisMaskWSP;
-typedef KisSharedPtrVector<KisMask> vKisMaskSP;
-typedef vKisMaskSP::iterator vKisMaskSP_it;
-typedef vKisMaskSP::const_iterator vKisMaskSP_cit;
 
 class KisNode;
 typedef KisSharedPtr<KisNode> KisNodeSP;
@@ -66,17 +64,10 @@ typedef vKisNodeSP::const_iterator vKisNodeSP_cit;
 class KisBaseNode;
 typedef KisSharedPtr<KisBaseNode> KisBaseNodeSP;
 typedef KisWeakSharedPtr<KisBaseNode> KisBaseNodeWSP;
-typedef KisSharedPtrVector<KisBaseNode> vKisBaseNodeSP;
-typedef vKisBaseNodeSP::iterator vKisBaseNodeSP_it;
-typedef vKisBaseNodeSP::const_iterator vKisBaseNodeSP_cit;
-
 
 class KisEffectMask;
 typedef KisSharedPtr<KisEffectMask> KisEffectMaskSP;
 typedef KisWeakSharedPtr<KisEffectMask> KisEffectMaskWSP;
-typedef KisSharedPtrVector<KisEffectMask> vKisEffectMaskSP;
-typedef vKisEffectMaskSP::iterator vKisEffectMaskSP_it;
-typedef vKisEffectMaskSP::const_iterator vKisEffectMaskSP_cit;
 
 class KisFilterMask;
 typedef KisSharedPtr<KisFilterMask> KisFilterMaskSP;
@@ -85,24 +76,10 @@ typedef KisWeakSharedPtr<KisFilterMask> KisFilterMaskWSP;
 class KisTransparencyMask;
 typedef KisSharedPtr<KisTransparencyMask> KisTransparencyMaskSP;
 typedef KisWeakSharedPtr<KisTransparencyMask> KisTransparencyMaskWSP;
-typedef KisSharedPtrVector<KisTransparencyMask> vKisTransparencyMaskSP;
-typedef vKisTransparencyMaskSP::iterator vKisTransparencyMaskSP_it;
-typedef vKisTransparencyMaskSP::const_iterator vKisTransparencyMaskSP_cit;
-
-class KisTransformationMask;
-typedef KisSharedPtr<KisTransformationMask> KisTransformationMaskSP;
-typedef KisWeakSharedPtr<KisTransformationMask> KisTransformationMaskWSP;
-typedef KisSharedPtrVector<KisTransformationMask> vKisTransformationMaskSP;
-typedef vKisTransformationMaskSP::iterator vKisTransformationMaskSP_it;
-typedef vKisTransformationMaskSP::const_iterator vKisTransformationMaskSP_cit;
-
 
 class KisLayer;
 typedef KisSharedPtr<KisLayer> KisLayerSP;
 typedef KisWeakSharedPtr<KisLayer> KisLayerWSP;
-typedef KisSharedPtrVector<KisLayer> vKisLayerSP;
-typedef vKisLayerSP::iterator vKisLayerSP_it;
-typedef vKisLayerSP::const_iterator vKisLayerSP_cit;
 
 class KisShapeLayer;
 typedef KisSharedPtr<KisShapeLayer> KisShapeLayerSP;
@@ -127,6 +104,9 @@ typedef KisWeakSharedPtr<KisGroupLayer> KisGroupLayerWSP;
 class KisSelection;
 typedef KisSharedPtr<KisSelection> KisSelectionSP;
 typedef KisWeakSharedPtr<KisSelection> KisSelectionWSP;
+
+class KisSelectionComponent;
+typedef KisSharedPtr<KisSelectionComponent> KisSelectionComponentSP;
 
 class KisBackground;
 typedef KisSharedPtr<KisBackground> KisBackgroundSP;
@@ -174,10 +154,16 @@ class KisRectIterator;
 typedef KisRectIteratorPixelBase<KisRectIterator, quint8*> KisRectIteratorPixel;
 
 // Repeat iterators
+class KisHLineIterator2;
 template<class T> class KisRepeatHLineIteratorPixelBase;
-typedef KisRepeatHLineIteratorPixelBase< KisHLineConstIteratorPixel > KisRepeatHLineConstIteratorPixel;
+typedef KisRepeatHLineIteratorPixelBase< KisHLineIterator2 > KisRepeatHLineConstIteratorNG;
+typedef KisSharedPtr<KisRepeatHLineConstIteratorNG> KisRepeatHLineConstIteratorSP;
+
+class KisVLineIterator2;
 template<class T> class KisRepeatVLineIteratorPixelBase;
-typedef KisRepeatVLineIteratorPixelBase< KisVLineConstIteratorPixel > KisRepeatVLineConstIteratorPixel;
+typedef KisRepeatVLineIteratorPixelBase< KisVLineIterator2 > KisRepeatVLineConstIteratorNG;
+typedef KisSharedPtr<KisRepeatVLineConstIteratorNG> KisRepeatVLineConstIteratorSP;
+
 
 // Random accessor
 template<class T, typename TSelect> class KisRandomAccessorPixelBase;
@@ -211,8 +197,8 @@ typedef KisSharedPtr<KisRandomConstAccessorNG> KisRandomConstAccessorSP;
 class KisRandomAccessorNG;
 typedef KisSharedPtr<KisRandomAccessorNG> KisRandomAccessorSP;
 
-class KisRandomSubAccessorPixel;
-typedef KisSharedPtr<KisRandomSubAccessorPixel> KisRandomSubAccessorPixelSP;
+class KisRandomSubAccessor;
+typedef KisSharedPtr<KisRandomSubAccessor> KisRandomSubAccessorSP;
 
 // Things
 
@@ -224,6 +210,28 @@ typedef KisSharedPtr<KisPaintOpPreset> KisPaintOpPresetSP;
 class KisPaintOpSettings;
 typedef KisSharedPtr<KisPaintOpSettings> KisPaintOpSettingsSP;
 
+class KisPaintOp;
+typedef KisSharedPtr<KisPaintOp> KisPaintOpSP;
+
+class KoID;
+typedef QList<KoID> KoIDList;
+
+class KisProcessingVisitor;
+typedef KisSharedPtr<KisProcessingVisitor> KisProcessingVisitorSP;
+
+template<class T> class QSharedPointer;
+template<class T> class QWeakPointer;
+
+class KUndo2Command;
+typedef QSharedPointer<KUndo2Command> KUndo2CommandSP;
+
+class KisStroke;
+typedef QSharedPointer<KisStroke> KisStrokeSP;
+typedef QWeakPointer<KisStroke> KisStrokeWSP;
+typedef KisStrokeWSP KisStrokeId;
+
+#include <QSharedPointer>
+#include <QWeakPointer>
 #include <kis_shared_ptr.h>
 
 #endif // KISTYPES_H_

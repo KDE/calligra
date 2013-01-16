@@ -44,7 +44,7 @@ public:
     void updateAction();
 
     virtual void setIcon(const QIcon& icon);
-    virtual void setIcon(const QString& icon);
+    virtual void setIcon(const QString &iconName);
     virtual void setText(const QString& text);
     void setToolButtonStyle(Qt::ToolButtonStyle style);
     virtual QSize sizeHint() const;
@@ -83,7 +83,9 @@ protected:
     void initStyleOption(QStyleOption *o) const;
 
 private:
-    Qt::Orientation m_orientation;
+    class Private;
+
+    Private* const d;
 };
 
 #endif

@@ -37,6 +37,7 @@ public:
     PSDImageData(PSDHeader *header);
     virtual ~PSDImageData();
 
+<<<<<<< HEAD
     bool read(KisPaintDeviceSP dev ,QIODevice *io);
 
 private:
@@ -44,6 +45,19 @@ private:
     bool doRGB(KisPaintDeviceSP dev ,QIODevice *io);
     bool doCMYK(KisPaintDeviceSP dev ,QIODevice *io);
     bool doLAB(KisPaintDeviceSP dev ,QIODevice *io);
+=======
+    bool read(QIODevice *io, KisPaintDeviceSP dev);
+    bool write(QIODevice *io, KisPaintDeviceSP dev);
+
+
+    QString error;
+
+private:
+
+    bool readRGB(QIODevice *io, KisPaintDeviceSP dev);
+    bool readCMYK(QIODevice *io, KisPaintDeviceSP dev);
+    bool readLAB(QIODevice *io, KisPaintDeviceSP dev);
+>>>>>>> master
     
     PSDHeader *m_header;
     

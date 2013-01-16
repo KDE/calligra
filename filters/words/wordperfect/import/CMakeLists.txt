@@ -1,25 +1,25 @@
+include_directories(
+    ../../../writerperfect
+    ${WPD_INCLUDE_DIR}
+    ${LIBWPG_INCLUDE_DIR}
+)
+
+set(wpdimport_PART_SRCS WPDImport.cpp )
 
 
-include_directories(${WPD_INCLUDE_DIR})
-
-
-########### next target ###############
-
-set(wpimport_PART_SRCS wpimport.cc )
-
-
-kde4_add_plugin(wpimport ${wpimport_PART_SRCS})
+kde4_add_plugin(wpdimport ${wpdimport_PART_SRCS})
 
 
 
-target_link_libraries(wpimport komain ${WPD_LIBRARIES})
+target_link_libraries(wpdimport komain writerperfect)
 
-install(TARGETS wpimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wpdimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  kword_wp_import.desktop   DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES words_wpd_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
+install( FILES words_wpd_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 

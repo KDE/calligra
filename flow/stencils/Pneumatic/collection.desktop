@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=Pneumatic
-Name[et]=Pneumo
+Name[ca]=Pneumàtic
+Name[ca@valencia]=Pneumàtic
+Name[cs]=Pneumatický
+Name[de]=Pneumatik
+Name[el]=Pneumatic
+Name[es]=Neumático
+Name[et]=Pneumaatika
+Name[fr]=Pneumatique
+Name[gl]=Pneumática
+Name[hu]=Pneumatikus
+Name[it]=Pneumatico
+Name[kk]=Пневматика
+Name[nb]=Trykkluft
 Name[nl]=Pneumatisch
+Name[pl]=Pneumatyka
 Name[pt]=Pneumático
 Name[pt_BR]=Pneumático
+Name[ru]=Пневматический
+Name[sk]=Pneumatické
 Name[sv]=Pneumatik
 Name[uk]=Пневматика
 Name[x-test]=xxPneumaticxx
+Name[zh_TW]=充氣裝置
 X-KDE-DirType=odg-collection

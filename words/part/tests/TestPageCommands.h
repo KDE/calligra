@@ -1,5 +1,5 @@
 /*
- * This file is part of KOffice tests
+ * This file is part of Calligra tests
  *
  * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  *
@@ -22,7 +22,7 @@
 #define KWPAGECOMMANDS_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <qtest_kde.h>
 class TestPageCommands : public QObject
 {

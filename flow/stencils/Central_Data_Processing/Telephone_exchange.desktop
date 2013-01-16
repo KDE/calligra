@@ -1,9 +1,22 @@
 [Desktop Entry]
 Name=TelephoneExchange
+Name[ca]=TelephoneExchange
+Name[ca@valencia]=TelephoneExchange
+Name[el]=TelephoneExchange
+Name[es]=Central telefónica
 Name[et]=Telefonijaam
+Name[fr]=TelephoneExchange
+Name[gl]=Intercambio de teléfono
+Name[it]=TelephoneExchange
+Name[kk]=Телефон станциясы
+Name[nb]=Telefonsentral
 Name[nl]=Telefooncentrale
+Name[pl]=WymianaTelefonu
 Name[pt]=ComutadorTelefone
 Name[pt_BR]=Comutador de telefone
+Name[ru]=Телефонная станция
+Name[sk]=TelephoneExchange
 Name[sv]=Telefonväxel
 Name[uk]=Телефонна станція
 Name[x-test]=xxTelephoneExchangexx
+Name[zh_TW]=電話交換器

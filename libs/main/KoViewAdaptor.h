@@ -22,9 +22,9 @@
 #ifndef __KoViewAdaptor_h__
 #define __KoViewAdaptor_h__
 
-#include <QtCore/QMap>
-#include <QtCore/QObject>
-#include <QtDBus/QtDBus>
+#include <QMap>
+#include <QObject>
+#include <QtDBus>
 
 class QString;
 class QStringList;
@@ -36,7 +36,7 @@ class KoView;
 class KOMAIN_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.koffice.view")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.view")
 public:
     explicit KoViewAdaptor(KoView *view);
 

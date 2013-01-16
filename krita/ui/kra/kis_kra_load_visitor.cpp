@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,6 @@
 #include <kis_clone_layer.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
-#include <kis_transformation_mask.h>
 #include <kis_selection_mask.h>
 #include "kis_shape_selection.h"
 
@@ -157,7 +156,8 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         loadPaintDevice(pixelSelection, getLocation(layer, ".selection"));
         layer->setSelection(selection);
     } else if (m_syntaxVersion == 2) {
-        layer->setSelection(loadSelection(getLocation(layer)));
+        loadSelection(getLocation(layer), layer->selection());
+
     } else {
         // We use the default, empty selection
     }
@@ -166,7 +166,7 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
         return false;
     }
 
-    loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
     bool result = visitAll(layer);
     return result;
@@ -186,32 +186,13 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
         return false;
     }
 
-    layer->setSelection(loadSelection(getLocation(layer)));
+    loadSelection(getLocation(layer), layer->selection());
 
-    loadFilterConfiguration(layer->generator(), getLocation(layer, DOT_FILTERCONFIG));
+    loadFilterConfiguration(layer->filter().data(), getLocation(layer, DOT_FILTERCONFIG));
 
     layer->update();
 
     bool result = visitAll(layer);
-    return result;
-}
-
-
-KisNodeSP KisKraLoadVisitor::findNodeByName(const QString &name,
-                                            KisNodeSP rootNode)
-{
-    if(rootNode->name() == name)
-        return rootNode;
-
-    KisNodeSP result;
-    KisNodeSP child = rootNode->firstChild();
-    while(child) {
-        result = findNodeByName(name, child);
-        if(result) break;
-
-        child = child->nextSibling();
-    }
-
     return result;
 }
 
@@ -221,8 +202,7 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
         return false;
     }
 
-    KisNodeSP srcNode = findNodeByName(layer->copyFromName(),
-                                        m_image->rootLayer());
+    KisNodeSP srcNode = layer->copyFromInfo().findNode(m_image->rootLayer());
     KisLayerSP srcLayer = dynamic_cast<KisLayer*>(srcNode.data());
     Q_ASSERT(srcLayer);
 
@@ -235,27 +215,20 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 
 bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
-    mask->setSelection(loadSelection(getLocation(mask)));
-    loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
+    loadSelection(getLocation(mask), mask->selection());
+    loadFilterConfiguration(mask->filter().data(), getLocation(mask, DOT_FILTERCONFIG));
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
-    mask->setSelection(loadSelection(getLocation(mask)));
-    return true;
-}
-
-bool KisKraLoadVisitor::visit(KisTransformationMask *mask)
-{
-
-    mask->setSelection(loadSelection(getLocation(mask)));
+    loadSelection(getLocation(mask), mask->selection());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
-    mask->setSelection(loadSelection(getLocation(mask)));
+    loadSelection(getLocation(mask), mask->selection());
     return true;
 }
 
@@ -299,8 +272,8 @@ bool KisKraLoadVisitor::loadProfile(KisPaintDeviceSP device, const QString& loca
         dbgFile << "Profile size: " << data.size() << " " << m_store->atEnd() << " " << m_store->device()->bytesAvailable() << " " << read;
         m_store->close();
         // Create a colorspace with the embedded profile
-        const KoColorProfile* profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
-        const KoColorSpace * cs =
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->createColorProfile(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), data);
+        const KoColorSpace *cs =
             KoColorSpaceRegistry::instance()->colorSpace(device->colorSpace()->colorModelId().id(), device->colorSpace()->colorDepthId().id(), profile);
         // replace the old colorspace
         device->setDataManager(device->dataManager(), cs);
@@ -366,14 +339,12 @@ bool KisKraLoadVisitor::loadMetaData(KisNode* node)
     return result;
 }
 
-KisSelectionSP KisKraLoadVisitor::loadSelection(const QString& location)
+void KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP dstSelection)
 {
-    KisSelectionSP selection = new KisSelection();
-
     // Pixel selection
     QString pixelSelectionLocation = location + DOT_PIXEL_SELECTION;
     if (m_store->hasFile(pixelSelectionLocation)) {
-        KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
+        KisPixelSelectionSP pixelSelection = dstSelection->getOrCreatePixelSelection();
         loadPaintDevice(pixelSelection, pixelSelectionLocation);
     }
 
@@ -383,19 +354,16 @@ KisSelectionSP KisKraLoadVisitor::loadSelection(const QString& location)
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 
-        KisShapeSelection* shapeSelection = new KisShapeSelection(m_image, selection);
-        selection->setShapeSelection(shapeSelection);
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_image, dstSelection);
+        dstSelection->setShapeSelection(shapeSelection);
         shapeSelection->loadSelection(m_store);
         m_store->popDirectory();
     }
-
-    return selection;
-
 }
 
 QString KisKraLoadVisitor::getLocation(KisNode* node, const QString& suffix)
 {
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     location += m_name + LAYER_PATH + m_layerFilenames[node] + suffix;
     return location;
 }

@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=Reproducer
+Name[ca]=Reproductor
+Name[ca@valencia]=Reproductor
+Name[el]=Αναπαραγωγός
 Name[es]=Reproductor
+Name[et]=Reprodutseerija
+Name[fr]=Reproducteur
+Name[gl]=Reprodutor
+Name[it]=Riproduttore
+Name[kk]=қайта өндіргіш
+Name[nb]=Gjengiver
+Name[nl]=Reproducer
+Name[pl]=Odtwórca
 Name[pt]=Reprodutor
 Name[pt_BR]=Reprodutor
+Name[ru]=Репродуктор
+Name[sk]=Reproduktor
+Name[sv]=Återgivare
 Name[uk]=Підсистема відтворення
 Name[x-test]=xxReproducerxx
+Name[zh_TW]=重新生產者

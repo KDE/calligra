@@ -19,9 +19,9 @@
 #ifndef KEXILOOKUPCOLUMNPAGE_H
 #define KEXILOOKUPCOLUMNPAGE_H
 
-#include <widget/KexiPropertyPaneViewBase.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <widget/properties/KexiPropertyPaneViewBase.h>
+#include <db/field.h>
+#include <db/utils.h>
 #include <koproperty/Set.h>
 
 class KexiProject;
@@ -52,7 +52,7 @@ public slots:
     void assignPropertySet(KoProperty::Set* propertySet);
 
 signals:
-    //! Signal emitted when helper button 'Go to selected row sourcesource' is clicked.
+    //! Signal emitted when helper button 'Go to selected record sourcesource' is clicked.
     void jumpToObjectRequested(const QString& mime, const QString& name);
 
 //  /*! Signal emitted when current bound column has been changed. */

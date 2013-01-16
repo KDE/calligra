@@ -25,12 +25,19 @@
 
 #include <KoColorSpaceRegistry.h>
 
+#include <QSpacerItem>
+#include <QVBoxLayout>
+
 SmallColorSelectorDock::SmallColorSelectorDock()
         : QDockWidget()
         , m_canvas(0)
 {
+    QWidget *page = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(page);
     m_smallColorWidget = new KisSmallColorWidget(this);
-    setWidget(m_smallColorWidget);
+    layout->addWidget(m_smallColorWidget);
+    layout->addStretch(1);
+    setWidget(page);
     m_smallColorWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     connect(m_smallColorWidget, SIGNAL(colorChanged(const QColor&)),
             this, SLOT(colorChangedProxy(const QColor&)));
@@ -40,6 +47,7 @@ SmallColorSelectorDock::SmallColorSelectorDock()
 
 void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas) m_canvas->disconnectCanvasObserver(this);
     m_canvas = canvas;
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this, SLOT(resourceChanged(int, const QVariant&)));
@@ -54,7 +62,7 @@ void SmallColorSelectorDock::colorChangedProxy(const QColor& c)
 
 void SmallColorSelectorDock::resourceChanged(int key, const QVariant& v)
 {
-    if (key == KoCanvasResource::ForegroundColor) {
+    if (key == KoCanvasResourceManager::ForegroundColor) {
         m_smallColorWidget->setQColor(v.value<KoColor>().toQColor());
     }
 }

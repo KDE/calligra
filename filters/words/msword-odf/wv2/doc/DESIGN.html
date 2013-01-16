@@ -42,7 +42,7 @@
            If we are not sure about our changes and fixes of the SPEC we don't change the
            HTML file, but add an entry to src/generator/spec_defects.
        </li>
-       <li>The "old" WinWord filter of KOffice reads the information "just in time"
+       <li>The "old" WinWord filter of Calligra reads the information "just in time"
            which makes the code a bit crowded and hard to follow. wv2 reads the important
            information like stylesheets, list information,... <i>before</i> we start to process
            the main document body. This way the code should get a bit simpler (but we'll
@@ -167,7 +167,7 @@
          deal of flexibility in parsing, as the consumer decides <i>when</i> to parse e.g. the header (also known as stored
          command). This helps to avoid nasty hacks if the concepts of the destination file format differ from the
          MS Word ones. The consumer just stores the functor objects and executes them whenever it feels like. For
-         an example please refer to the KOffice MS Word filter in <code>koffice/filters/kword/msword</code>.
+         an example please refer to the Calligra MS Word filter in <code>calligra/filters/words/msword</code>.
       </p>
 
     <h4>Parser</h4>

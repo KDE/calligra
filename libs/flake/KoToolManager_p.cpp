@@ -37,7 +37,7 @@ ToolHelper::ToolHelper(KoToolFactoryBase *tool)
 QToolButton* ToolHelper::createButton()
 {
     QToolButton *but = new QToolButton();
-    but->setIcon(KIcon(m_toolFactory->icon()).pixmap(22));
+    but->setIcon(KIcon(m_toolFactory->iconName()));
     but->setToolTip(m_toolFactory->toolTip());
     connect(but, SIGNAL(clicked()), this, SLOT(buttonPressed()));
     return but;
@@ -87,11 +87,6 @@ KShortcut ToolHelper::shortcut() const
     return m_toolFactory->shortcut();
 }
 
-bool ToolHelper::inputDeviceAgnostic() const
-{
-    return m_toolFactory->inputDeviceAgnostic();
-}
-
 bool ToolHelper::canCreateTool(KoCanvasBase *canvas) const
 {
     return m_toolFactory->canCreateTool(canvas);
@@ -111,8 +106,8 @@ void Connector::selectionChanged()
 }
 
 //   ************ ToolAction **********
-ToolAction::ToolAction(KoToolManager* toolManager, QString id, QString name)
-    : KAction(name, toolManager),
+ToolAction::ToolAction(KoToolManager* toolManager, QString id, QString name, QObject *parent)
+    : KAction(name, parent),
     m_toolManager(toolManager),
     m_toolID(id)
 {

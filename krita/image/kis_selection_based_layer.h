@@ -29,6 +29,7 @@
 #include "kis_node_filter_interface.h"
 
 class KisNodeVisitor;
+class KisFilterConfiguration;
 
 /**
  * @class KisSelectionBasedLayer describes base behaviour for
@@ -50,7 +51,7 @@ public:
      * @param selection is a mask used by the layer to know
      * where to apply the filter/generator.
      */
-    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection);
+    KisSelectionBasedLayer(KisImageWSP image, const QString &name, KisSelectionSP selection, KisFilterConfiguration *filterConfig, bool useGeneratorRegistry = false);
     KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs);
     virtual ~KisSelectionBasedLayer();
 
@@ -83,7 +84,7 @@ public:
     void resetCache(const KoColorSpace *colorSpace = 0);
 
     /**
-     * for KisLayer::setDirty() and KisLayer::setDirty(const QRegion&)
+     * for KisLayer::setDirty(const QRegion&)
      */
     using KisLayer::setDirty;
 
@@ -92,6 +93,7 @@ public:
      * as our extent() function doesn't fit for this
      */
     void setDirty();
+    void setDirty(const QRect & rect);
 
 public:
 
@@ -185,7 +187,7 @@ public slots:
     }
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

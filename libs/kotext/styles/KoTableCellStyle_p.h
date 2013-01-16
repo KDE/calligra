@@ -22,9 +22,7 @@
 #ifndef KOTABLECELLSTYLE_P_H
 #define KOTABLECELLSTYLE_P_H
 
-#include "KoTableBorderStyle_p.h"
-
-class KoTableCellStylePrivate : public KoTableBorderStylePrivate
+class KoTableCellStylePrivate
 {
 public:
     KoTableCellStylePrivate();
@@ -33,6 +31,7 @@ public:
     void setProperty(int key, const QVariant &value);
 
     QString name;
+    KoParagraphStyle *paragraphStyle;
     KoTableCellStyle *parentStyle;
     int next;
     StylePrivate stylesPrivate;

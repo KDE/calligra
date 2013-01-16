@@ -21,7 +21,7 @@
 #ifndef KOOASISLOADINGCONTEXT_H
 #define KOOASISLOADINGCONTEXT_H
 
-#include <QtCore/QString>
+#include <QString>
 
 #include <kcomponentdata.h>
 
@@ -42,7 +42,7 @@ class KoOdfManifestEntry;
 class KOODF_EXPORT KoOdfLoadingContext
 {
 public:
-    enum GeneratorType { Unknown, KOffice, OpenOffice, MicrosoftOffice };
+    enum GeneratorType { Unknown, Calligra, OpenOffice, MicrosoftOffice };
     /**
      * Stores reference to the KoOdfStylesReader and stored passed by
      * KoDocument. Make sure that the KoOdfStylesReader instance outlives
@@ -72,9 +72,9 @@ public:
 
     KoStyleStack &styleStack() const;
 
-    /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
+    /// Return the <meta:generator> of the document, e.g. "Calligra/1.4.0a"
     QString generator() const;
-    /// Return the GeneratorType of the document, e.g. KOffice
+    /// Return the GeneratorType of the document, e.g. Calligra
     GeneratorType generatorType() const;
 
     /**
@@ -116,8 +116,12 @@ public:
     /**
      * @return the mimetype for the document in the given path using the manifest
      * The mimetype is defined in the manifest.xml document.
+     * @param path The path to get the mimetpye for
+     * @param guess If set to true it tries to guess the mimetype in case it is not provided in the manifest
+                    Note: Be sure to call this function with a closed store when guess is set to true as otherwise
+                    it will fail.
      */
-    QString mimeTypeForPath(const QString& path) const;
+    QString mimeTypeForPath(const QString& path, bool guess = false) const;
 
     /**
      * @return the full list of entries from the manifest file

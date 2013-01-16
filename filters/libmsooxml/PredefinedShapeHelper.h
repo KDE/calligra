@@ -39,6 +39,9 @@ public:
     // Container for draw:enhanced-path attributes for shapes, these should be used in draw:enhanced-geometry
     QHash<QString, QString> attributes;
 
+    // Container for draw:text-areas attribute, should be used in draw:enhanced-geometry
+    QHash<QString, QString> textareas;
+
 };
 
 #endif

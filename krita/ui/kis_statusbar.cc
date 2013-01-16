@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 
+#include <KoIcon.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 
@@ -52,18 +53,23 @@ KisStatusBar::KisStatusBar(KisView2 * view)
         : m_view(view)
 {
     m_selectionStatusLabel = new QLabel(view);
-    m_selectionStatusLabel->setPixmap(KIcon("tool_rect_selection").pixmap(22));
+    m_selectionStatusLabel->setPixmap(koIcon("tool_rect_selection").pixmap(22));
     m_selectionStatusLabel->setEnabled(false);
     view->addStatusBarItem(m_selectionStatusLabel);
 
     // XXX: Use the KStatusbar fixed size labels!
     m_statusBarStatusLabel = new KSqueezedTextLabel(view);
+    m_statusBarStatusLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     connect(KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
             m_statusBarStatusLabel, SLOT(setText(const QString &)));
     view->addStatusBarItem(m_statusBarStatusLabel, 2);
 
     m_statusBarProfileLabel = new KSqueezedTextLabel(view);
+    m_statusBarProfileLabel->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     view->addStatusBarItem(m_statusBarProfileLabel, 3);
+
+    m_progress = new KisProgressWidget(view);
+    view->addStatusBarItem(m_progress);
 
     m_imageSizeLabel = new QLabel(QString(), view);
     m_imageSizeLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -75,13 +81,6 @@ KisStatusBar::KisStatusBar(KisView2 * view)
     m_pointerPositionLabel->setMinimumWidth(100);
     view->addStatusBarItem(m_pointerPositionLabel);
     m_pointerPositionLabel->setVisible(false);
-
-    m_progress = new KisProgressWidget(view);
-    m_progress->setMaximumWidth(225);
-    m_progress->setMinimumWidth(225);
-    view->addStatusBarItem(m_progress, 2, true);
-
-    m_progress->hide();
 }
 
 KisStatusBar::~KisStatusBar()
@@ -127,7 +126,7 @@ void KisStatusBar::setSelection(KisImageWSP image)
     Q_UNUSED(image);
 
     KisSelectionSP selection = m_view->selection();
-    if (selection && !selection->isDeselected()) {
+    if (selection) {
         m_selectionStatusLabel->setEnabled(true);
 
         QRect r = selection->selectedExactRect();

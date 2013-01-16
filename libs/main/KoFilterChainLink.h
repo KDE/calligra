@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@ Boston, MA 02110-1301, USA.
 class QByteArray;
 class KoUpdater;
 
-namespace KOfficeFilter {
+namespace CalligraFilter {
 
 /**
  * A small private helper class with represents one single filter
@@ -51,10 +51,6 @@ public:
 
     // debugging
     void dump() const;
-
-    // This hack is only needed due to crappy Microsoft design and
-    // circular dependencies in their embedded files :}
-    int lruPartIndex() const;
 
     QPointer<KoUpdater> updater() const {
         return m_updater;

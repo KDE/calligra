@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,17 +23,16 @@
 #include "KoTextBlockBorderData.h"
 #include "KoTextBlockPaintStrategyBase.h"
 
-class KoTextBlockData::Private
+class KoTextBlockData::Private : public QTextBlockUserData
 {
 public:
     Private()
-        : counterWidth(0),
-        counterSpacing(0),
-        counterIsImage(false),
-        counterIndex(1),
-        border(0),
-        paintStrategy(0),
-        top(0)
+        : counterWidth(-1.0)
+        , counterSpacing(0)
+        , counterIsImage(false)
+        , counterIndex(1)
+        , border(0)
+        , paintStrategy(0)
     {
     }
 
@@ -43,31 +43,36 @@ public:
     }
     qreal counterWidth;
     qreal counterSpacing;
-    QString counterText;
+    QString counterPrefix;
+    QString counterPlainText;
+    QString counterSuffix;
     QString partialCounterText;
     bool counterIsImage;
     int counterIndex;
     QPointF counterPos;
+    QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
-    qreal top;
-    qreal bottom;
 };
 
-KoTextBlockData::KoTextBlockData()
-        : d(new Private())
+KoTextBlockData::KoTextBlockData(QTextBlock &block)
+ : d(block.userData() ? dynamic_cast<KoTextBlockData::Private *>(block.userData()) : new Private())
 {
-    d->counterWidth = -1.0;
+    block.setUserData(d);
+}
+
+KoTextBlockData::KoTextBlockData(QTextBlockUserData *userData)
+ : d(dynamic_cast<KoTextBlockData::Private *>(userData))
+{
 }
 
 KoTextBlockData::~KoTextBlockData()
 {
-    delete d;
 }
 
 bool KoTextBlockData::hasCounterData() const
 {
-    return d->counterWidth >= 0 && (!d->counterText.isNull() || d->counterIsImage);
+    return d->counterWidth >= 0 && (!d->counterPlainText.isNull() || d->counterIsImage);
 }
 
 qreal KoTextBlockData::counterWidth() const
@@ -99,14 +104,20 @@ void KoTextBlockData::setCounterSpacing(qreal spacing)
     d->counterSpacing = spacing;
 }
 
-void KoTextBlockData::setCounterText(const QString &text)
-{
-    d->counterText = text;
-}
-
 QString KoTextBlockData::counterText() const
 {
-    return d->counterText;
+    return d->counterPrefix + d->counterPlainText + d->counterSuffix;
+}
+
+void KoTextBlockData::clearCounter()
+{
+    d->partialCounterText.clear();
+    d->counterPlainText.clear();
+    d->counterPrefix.clear();
+    d->counterSuffix.clear();
+    d->counterSpacing = 0.0;
+    d->counterWidth = 0.0;
+    d->counterIsImage = false;
 }
 
 void KoTextBlockData::setPartialCounterText(const QString &text)
@@ -117,6 +128,36 @@ void KoTextBlockData::setPartialCounterText(const QString &text)
 QString KoTextBlockData::partialCounterText() const
 {
     return d->partialCounterText;
+}
+
+void KoTextBlockData::setCounterPlainText(const QString &text)
+{
+    d->counterPlainText = text;
+}
+
+QString KoTextBlockData::counterPlainText() const
+{
+    return d->counterPlainText;
+}
+
+void KoTextBlockData::setCounterPrefix(const QString &text)
+{
+    d->counterPrefix = text;
+}
+
+QString KoTextBlockData::counterPrefix() const
+{
+    return d->counterPrefix;
+}
+
+void KoTextBlockData::setCounterSuffix(const QString &text)
+{
+    d->counterSuffix = text;
+}
+
+QString KoTextBlockData::counterSuffix() const
+{
+    return d->counterSuffix;
 }
 
 void KoTextBlockData::setCounterIsImage(bool isImage)
@@ -149,6 +190,16 @@ QPointF KoTextBlockData::counterPosition() const
     return d->counterPos;
 }
 
+void KoTextBlockData::setLabelFormat(const QTextCharFormat &format)
+{
+    d->labelFormat = format;
+}
+
+QTextCharFormat KoTextBlockData::labelFormat() const
+{
+    return d->labelFormat;
+}
+
 KoTextBlockBorderData *KoTextBlockData::border() const
 {
     return d->border;
@@ -165,12 +216,8 @@ KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
     return d->paintStrategy;
 }
 
-void KoTextBlockData::setEffectiveTop(qreal y)
+bool KoTextBlockData::saveXmlID() const
 {
-    d->top = y;
-}
-
-qreal KoTextBlockData::effectiveTop() const
-{
-    return d->top;
+    // as suggested by boemann, http://lists.kde.org/?l=calligra-devel&m=132396354701553&w=2
+    return d->paintStrategy != 0;
 }

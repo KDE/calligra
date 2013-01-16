@@ -37,11 +37,12 @@
 #include "kis_image.h"
 #include "kis_fill_painter.h"
 #include "kis_outline_generator.h"
+#include <kis_iterator_ng.h>
 
 struct KisPixelSelection::Private {
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBoundsSP defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsBaseSP defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
@@ -64,21 +65,19 @@ KisPixelSelection::~KisPixelSelection()
     delete m_d;
 }
 
-KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const
+KisPaintDeviceSP KisPixelSelection::createThumbnailDevice(qint32 w, qint32 h, QRect rect) const
 {
     KisPaintDeviceSP dev =
-        KisPaintDevice::createThumbnailDevice(w, h, selection, rect);
+        KisPaintDevice::createThumbnailDevice(w, h, rect);
 
     QRect bounds = dev->exactBounds();
-    KisHLineIteratorPixel it = dev->createHLineIterator(bounds.x(), bounds.y(), bounds.width());
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(bounds.x(), bounds.y(), bounds.width());
 
     for (int y2 = bounds.y(); y2 < bounds.height() + bounds.y(); ++y2) {
-
-        while (!it.isDone()) {
-            *(it.rawData()) = MAX_SELECTED - *(it.rawData());
-            ++it;
-        }
-        it.nextRow();
+        do {
+            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
+        } while (it->nextPixel());
+        it->nextRow();
     }
     return dev;
 }
@@ -93,7 +92,7 @@ void KisPixelSelection::select(const QRect & rc, quint8 selectedness)
     }
 }
 
-void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionAction action)
+void KisPixelSelection::applySelection(KisPixelSelectionSP selection, SelectionAction action)
 {
     switch (action) {
     case SELECTION_REPLACE:
@@ -117,58 +116,51 @@ void KisPixelSelection::applySelection(KisPixelSelectionSP selection, selectionA
 void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
-    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
-    KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
+    KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
+    KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
-        while (!src.isDone()) {
-            if (*src.rawData() + *dst.rawData() < MAX_SELECTED)
-                *dst.rawData() = *src.rawData() + *dst.rawData();
+        do {
+            if (*src->oldRawData() + *dst->rawData() < MAX_SELECTED)
+                *dst->rawData() = *src->oldRawData() + *dst->rawData();
             else
-                *dst.rawData() = MAX_SELECTED;
-            ++src;
-            ++dst;
-        }
-        dst.nextRow();
-        src.nextRow();
-    }
+                *dst->rawData() = MAX_SELECTED;
 
+        } while (src->nextPixel() && dst->nextPixel());
+        dst->nextRow();
+        src->nextRow();
+    }
 }
 
 void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect();
-    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
-    KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
+    KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
+    KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
-        while (!src.isDone()) {
-            if (*dst.rawData() - *src.rawData() > MIN_SELECTED)
-                *dst.rawData() = *dst.rawData() - *src.rawData();
+        do {
+            if (*dst->rawData() - *src->oldRawData() > MIN_SELECTED)
+                *dst->rawData() = *dst->rawData() - *src->oldRawData();
             else
-                *dst.rawData() = MIN_SELECTED;
-            ++src;
-            ++dst;
-        }
-        dst.nextRow();
-        src.nextRow();
-    }
+                *dst->rawData() = MIN_SELECTED;
 
+        } while (src->nextPixel() && dst->nextPixel());
+        dst->nextRow();
+        src->nextRow();
+    }
 }
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 {
     QRect r = selection->selectedRect().united(selectedRect());
 
-    KisHLineIteratorPixel dst = createHLineIterator(r.x(), r.y(), r.width());
-    KisHLineConstIteratorPixel src = selection->createHLineConstIterator(r.x(), r.y(), r.width());
+    KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
+    KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
     for (int i = 0; i < r.height(); ++i) {
-        while (!src.isDone()) {
-            *dst.rawData() = qMin(*dst.rawData(), *src.rawData());
-
-            ++src;
-            ++dst;
-        }
-        dst.nextRow();
-        src.nextRow();
+        do {
+            *dst->rawData() = qMin(*dst->rawData(), *src->oldRawData());
+        }  while (src->nextPixel() && dst->nextPixel());
+        dst->nextRow();
+        src->nextRow();
     }
 }
 
@@ -192,14 +184,27 @@ void KisPixelSelection::clear()
 
 void KisPixelSelection::invert()
 {
-    // Extent is needed here (not exactBounds), because unselected but existing pixel
-    // need to be inverted too
-    QRect rc = extent();
+    // Region is needed here (not exactBounds or extent), because
+    // unselected but existing pixels need to be inverted too
+    QRect rc = region().boundingRect();
 
-    KisRectIterator it = createRectIterator(rc.x(), rc.y(), rc.width(), rc.height());
-    while (! it.isDone()) {
-        *(it.rawData()) = MAX_SELECTED - *(it.rawData());
-        ++it;
+    if (!rc.isEmpty()) {
+#if 0
+        quint8 *bytes = new quint8[rc.width()];
+        for(int row = rc.y(); row < rc.height(); ++row) {
+            readBytes(bytes, rc.x(), row, rc.width(), 1);
+            for (int i = 0; i < rc.width(); ++i) {
+                bytes[i] = MAX_SELECTED - bytes[i];
+            }
+            writeBytes(bytes, rc.x(), row, rc.width(), 1);
+        }
+        delete []bytes;
+#else
+        KisRectIteratorSP it = createRectIteratorNG(rc.x(), rc.y(), rc.width(), rc.height());
+        do {
+            *(it->rawData()) = MAX_SELECTED - *(it->rawData());
+        } while (it->nextPixel());
+#endif
     }
     quint8 defPixel = MAX_SELECTED - *defaultPixel();
     setDefaultPixel(&defPixel);
@@ -213,15 +218,6 @@ bool KisPixelSelection::isTotallyUnselected(const QRect & r) const
     return ! r.intersects(sr);
 }
 
-bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
-{
-    if (*defaultPixel() != MIN_SELECTED)
-        return false;
-    QRect sr = selectedRect();
-    return ! r.intersects(sr);
-}
-
-
 QRect KisPixelSelection::selectedRect() const
 {
     return extent();
@@ -232,7 +228,7 @@ QRect KisPixelSelection::selectedExactRect() const
     return exactBounds();
 }
 
-QVector<QPolygon> KisPixelSelection::outline()
+QVector<QPolygon> KisPixelSelection::outline() const
 {
     QRect selectionExtent = selectedExactRect();
     qint32 xOffset = selectionExtent.x();
@@ -240,29 +236,26 @@ QVector<QPolygon> KisPixelSelection::outline()
     qint32 width = selectionExtent.width();
     qint32 height = selectionExtent.height();
 
-    quint8* buffer = new quint8[width*height];
+    KisOutlineGenerator generator(colorSpace(), MIN_SELECTED);
+    // If the selection is small using a buffer is much fast
+    if (width*height < 5000000) {
+        quint8* buffer = new quint8[width*height];
+        readBytes(buffer, xOffset, yOffset, width, height);
 
-#ifdef __GNUC__
-#warning "Do not deep copy the entire image here!"
-#else
-#pragma WARNING( "Do not deep copy the entire image here!" )
-#endif
-    readBytes(buffer, xOffset, yOffset, width, height);
+        QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
 
-    KisOutlineGenerator generator(colorSpace(), *defaultPixel());
-    QVector<QPolygon> paths = generator.outline(buffer, xOffset, yOffset, width, height);
-    
-    delete[] buffer;
-
-    return paths;
+        delete[] buffer;
+        return paths;
+    }
+    return generator.outline(this, xOffset, yOffset, width, height);
 }
 
-void KisPixelSelection::renderToProjection(KisSelection* projection)
+void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     renderToProjection(projection, selectedExactRect());
 }
 
-void KisPixelSelection::renderToProjection(KisSelection* projection, const QRect& rc)
+void KisPixelSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& rc)
 {
     QRect updateRect = rc & selectedExactRect();
 

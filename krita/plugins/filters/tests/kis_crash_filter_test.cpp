@@ -37,7 +37,7 @@ bool applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
 //    dev->fill(0, 0, 100, 100, dev->defaultPixel());
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     // Get the predefined configuration from a file
     KisFilterConfiguration * kfc = f->defaultConfiguration(dev);
@@ -92,7 +92,7 @@ void KisCrashFilterTest::testCrashFilters()
     }
     qDebug() << "Success: " << successes;
     if (failures.size() > 0) {
-        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toAscii());
+        QFAIL(QString("Failed filters:\n\t %1").arg(failures.join("\n\t")).toLatin1());
     }
 }
 

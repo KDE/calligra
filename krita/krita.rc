@@ -1,8 +1,10 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="30">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="41">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
+  <Action name="save_incremental_version"/>
+  <Action name="save_incremental_backup"/>
   <Action name="createTemplate"/>
  </Menu>
 
@@ -19,6 +21,7 @@
   <Action name="fill_selection_foreground_color"/>
   <Action name="fill_selection_background_color"/>
   <Action name="fill_selection_pattern"/>
+  <Action name="stroke_shapes"/>
   <Action name="delete"/>
   <Separator/>
   <Action name="revert"/>
@@ -26,18 +29,17 @@
   <Menu name="Resources"><text>&amp;Resources</text>
    <Action name="add_palette"/>
    <Action name="edit_palette"/>
+   <Action name="edit_blacklist_cleanup"/>
   </Menu>
  </Menu>
 
  <Menu name="View"><text>&amp;View</text>
+  <Action name="view_show_just_the_canvas"/>
   <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
-  <Action name="view_toggledockers"/>
   <Separator/>
   <Action name="view_newview"/>    
-  <ActionList name="view_closeallviews"/>   
   <Separator/>      
-  <ActionList name="view_split"/>
   <Action name="zoom"/>
   <Action name="zoom_in"/>
   <Action name="zoom_out"/>
@@ -87,11 +89,14 @@
   	<Action name="insert_image_as_layer"/>
   	<Action name="cut_selection_to_new_layer"/>
   	<Action name="copy_selection_to_new_layer"/>
-	<Action name="create_layer_from_mask"/>
+    <Action name="create_layer_from_mask"/>
+    <Action name="duplicatelayer"/>
+    <Action name="add_new_paint_layer"/>
   </Menu>
   <Action name="resizelayertoowner"/>
   <Separator/>
   <Action name="save_layer_as_image"/>
+  <Action name="save_groups_as_images"/>
   <Action name="layer_to_image"/>
   <Separator/>
   <Action name="mirrorX"/>
@@ -142,14 +147,12 @@
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
-  <Separator group="settings_show"/>
+  <!--Action name="view_fullscreen" group="settings_show"/-->
+  <!--Action name="view_toggledockers" group="settings_show"/-->
+  <!--Action name="showStatusBar" group="settings_show"/-->
+  <Action name="settings_active_author" group="settings_configure"/>
   <Action name="preferences" group="settings_configure"/>
-</Menu>
-
-
-<Menu name="help"><text>&amp;Help</text>
-  <Separator/>
-  <Action name="first_run"/>
+  <Action name="theme_menu" />
 </Menu>
 
 </MenuBar>
@@ -157,14 +160,22 @@
 <ToolBar name="BrushesAndStuff" position="top">
      <Text>Brushes and Stuff</Text>
      <Action name="gradients"/>
-     <Separator/>
      <Action name="patterns"/>
      <Separator/>
      <Action name="dual"/>
      <Separator/>
      <Action name="paintops"/>
      <Action name="paintop_options"/>
+     <Action name="composite_actions"/>
+     <Separator/>
+     <Action name="brushslider1"/>
+     <Action name="brushslider2"/>
+     <Separator/>
+     <Action name="mirror_actions"/>
+     <Separator/>
      <Action name="palette_manager"/>
+     <Separator/>
+     <Action name="workspaces"/>
 </ToolBar>
 
 <Menu name="image_popup">

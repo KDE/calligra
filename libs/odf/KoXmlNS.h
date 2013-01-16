@@ -56,12 +56,13 @@ public:
     static const QString VL;
     static const QString smil;
     static const QString xhtml;
+    static const QString xml;
 
-    static const QString koffice;
+    static const QString calligra;
     static const QString officeooo;
     static const QString ooo;
 
-    static const char* nsURI2NS(const QString nsURI);
+    static const char* nsURI2NS(const QString &nsURI);
     
     static const QString delta;
     static const QString split;

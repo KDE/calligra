@@ -47,7 +47,7 @@ public slots:
     void setOffset(int offset);
     void setCellHeight(int cellHeight);
     void setCurrentRow(int row);
-    void setHighlightedRow(int row);
+    void setHighlightedRecord(int row);
 
     /*! Sets 'edit row' flag for \a row. Use row==-1 if you want to switch the flag off. */
     void setEditRow(int row);
@@ -65,11 +65,11 @@ public slots:
     void clear(bool upd = true);
 
 signals:
-    //! Used to allow row selecting by clicking on the section
-    void rowPressed(uint row);
+    //! Used to allow record selecting by clicking on the section
+    void rowPressed(uint record);
 
-    //! Used to allow row highlighting by moving mouse over the section
-    void rowHighlighted(int row);
+    //! Used to allow record highlighting by moving mouse over the section
+    void recordHighlighted(int record);
 
 protected:
     virtual void paintEvent(QPaintEvent *e);

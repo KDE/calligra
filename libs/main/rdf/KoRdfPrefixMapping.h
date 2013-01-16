@@ -23,6 +23,7 @@
 #include "komain_export.h"
 #include "RdfForward.h"
 
+#include <QSharedPointer>
 #include <QObject>
 #include <QMap>
 #include <QString>
@@ -37,7 +38,7 @@ class KoRdfPrefixMappingPrivate;
  * @see KoDocumentRdf
  *
  * Both Rdf and XML support namespaces. This class is intended to allow
- * the advanced user to use such namespace mappings in the KOffice suite
+ * the advanced user to use such namespace mappings in the Calligra suite
  * when dealing with Rdf.
  *
  * For example, to be able to say dc:author for the dublin core author uri
@@ -88,7 +89,7 @@ public:
      *
      * @see save()
      */
-    void load(Soprano::Model *model);
+    void load(QSharedPointer<Soprano::Model> model);
 
     /**
      * Save the prefix mapping into the given Rdf model. If there is
@@ -98,7 +99,7 @@ public:
      *
      * @see load()
      */
-    void save(Soprano::Model *model, Soprano::Node context) const;
+    void save(QSharedPointer<Soprano::Model> model, Soprano::Node context) const;
 
     /**
      * Debug method to capture the data structure in the logs.

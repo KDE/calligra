@@ -7,20 +7,20 @@ import os, sys, traceback, tempfile, zipfile
 # import the kross module.
 import Kross
 
-KOfficeAppName="KWord"
-KOfficeAppExt="odt"
+CalligraAppName="Words"
+CalligraAppExt="odt"
 
 try:
-    # try to import the KOffice application. If this fails we are not running embedded.
-    KOfficeAppModule = __import__(KOfficeAppName)
+    # try to import the Calligra application. If this fails we are not running embedded.
+    CalligraAppModule = __import__(CalligraAppName)
 except ImportError:
-    # looks as we are not running embedded within the KOffice application. So, let's use Kross to import the library.
-    KOfficeAppModule = Kross.module(KOfficeAppName)
+    # looks as we are not running embedded within the Calligra application. So, let's use Kross to import the library.
+    CalligraAppModule = Kross.module(CalligraAppName)
 
     # testcase that loads a ODT file direct without the probably annoying fileopen-dialog.
-    #KOfficeAppModule.document().openUrl("/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt")
+    #CalligraAppModule.document().openUrl("/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt")
 
-    if not KOfficeAppModule.document().url():
+    if not CalligraAppModule.document().url():
         # if the app does not have a loaded document now we show a fileopen-dialog to let the user choose the file.
         forms = Kross.module("forms")
         dialog = forms.createDialog("XML Viewer")
@@ -28,10 +28,10 @@ except ImportError:
         dialog.setFaceType("Plain")
         openwidget = forms.createFileWidget(dialog.addPage("Open","Open OpenDocument File"))
         openwidget.setMode("Opening")
-        openwidget.setFilter("*.%s|OpenDocument Files\n*|All Files" % KOfficeAppExt)
+        openwidget.setFilter("*.%s|OpenDocument Files\n*|All Files" % CalligraAppExt)
         if not dialog.exec_loop():
             raise Exception("Aborted.")
-        KOfficeAppModule.document().openUrl(openwidget.selectedFile())
+        CalligraAppModule.document().openUrl(openwidget.selectedFile())
 
 # This class does provide us the viewer dialog we are using to display something to the user.
 class Dialog:
@@ -46,8 +46,8 @@ class Dialog:
 
         # we like to fetch the KoStore which is the backend for the document and does
         # allow us to access files within the store direct.
-        doc = KOfficeAppModule.document()
-        self.store = KOfficeAppModule.store()
+        doc = CalligraAppModule.document()
+        self.store = CalligraAppModule.store()
         self.pages = {}
 
         # let's read the manifest file by using a KoScriptingOdfReader
@@ -220,7 +220,7 @@ class Dialog:
         cmdEdit = self.forms.createWidget(page, "QLineEdit")
         cmdEdit.text = "\"kdiff3\" --L1 \"Current\" --L2 \"OpenDocument File\""
 
-        self._url = KOfficeAppModule.document().url()
+        self._url = CalligraAppModule.document().url()
         self.forms.createWidget(page, "QLabel").text = "Compare with OpenDocument file:"
         urlEdit = self.forms.createWidget(page, "KUrlRequester")
         urlEdit.setPath(self._url)

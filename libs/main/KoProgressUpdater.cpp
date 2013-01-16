@@ -30,6 +30,9 @@
 
 #include <kdebug.h>
 
+// 4 updates per second should be enough
+#define PROGRESSUPDATER_GUITIMERINTERVAL 250
+
 class KoProgressUpdater::Private
 {
 public:
@@ -43,6 +46,7 @@ public:
         , currentProgress(0)
         , updated(false)
         , output(output_)
+        , updateGuiTimer(_parent)
         , canceled(false)
     {
     }
@@ -82,6 +86,11 @@ KoProgressUpdater::~KoProgressUpdater()
         Private::logEvents(*d->output, d, referenceTime(), "");
     }
     d->progressBar->setValue(d->progressBar->maximum());
+
+    // make sure to stop the timer to avoid accessing
+    // the data we are going to delete right now
+    d->updateGuiTimer.stop();
+
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
 
@@ -104,7 +113,7 @@ QTime KoProgressUpdater::referenceTime() const
 void KoProgressUpdater::start(int range, const QString &text)
 {
     kDebug(30003) << range << text;
-    d->updateGuiTimer.start(100); // 10 updates/second should be enough?
+    d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
 
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
@@ -133,6 +142,12 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
 
     QPointer<KoUpdater> updater = new KoUpdater(p);
     d->subTaskWrappers.append(updater);
+
+    if (!d->updateGuiTimer.isActive()) {
+        // we maybe need to restart the timer if it was stopped in updateUi() cause
+        // other sub-tasks created before this one finished already.
+        d->updateGuiTimer.start(PROGRESSUPDATER_GUITIMERINTERVAL);
+    }
 
     return updater;
 }
@@ -214,7 +229,7 @@ void KoProgressUpdater::Private::logEvents(QTextStream& out,
     // initial implementation: write out the names of all events
     foreach (QPointer<KoUpdaterPrivate> p, updater->subtasks) {
         if (!p) continue;
-        foreach (KoUpdaterPrivate::TimePoint tp, p->getPoints()) {
+        foreach (const KoUpdaterPrivate::TimePoint &tp, p->getPoints()) {
             out << prefix+p->objectName() << '\t'
                     << startTime.msecsTo(tp.time) << '\t' << tp.value << endl;
         }

@@ -18,6 +18,7 @@
  */
 
 #include "MsooXmlDrawingTableStyleReader.h"
+#include "MsooXmlThemesReader.h"
 
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
@@ -35,8 +36,6 @@
 #include <KoXmlWriter.h>
 
 #include <QString>
-
-#define MSOOXMLDRAWINGTABLESTYLEREADER_CPP
 
 using namespace MSOOXML;
 
@@ -622,7 +621,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
     const QXmlStreamAttributes attrs(attributes());
 
     m_currentColor = QColor();
-    m_referredFontName = QString();
+    m_referredFontName.clear();
     m_currentTextStyle = KoGenStyle(KoGenStyle::TextAutoStyle, "text");
 
     while (!atEnd()) {
@@ -640,13 +639,13 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tcTxStyle()
         }
     }
 
-    TRY_READ_ATTR(b)
-    TRY_READ_ATTR(i)
+    TRY_READ_ATTR_WITHOUT_NS(b)
+    TRY_READ_ATTR_WITHOUT_NS(i)
     if (b == "on") {
-        m_currentTextStyle.addProperty("svg:font-weight", "bold");
+        m_currentTextStyle.addProperty("fo:font-weight", "bold");
     }
     if (i == "on") {
-        m_currentTextStyle.addProperty("svg:font-style", "italic");
+        m_currentTextStyle.addProperty("fo:font-style", "italic");
     }
     if (m_currentColor.isValid()) {
         m_currentTextStyle.addProperty("fo:color", m_currentColor.name());
@@ -907,7 +906,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
     }
 
     TRY_READ_ATTR_WITHOUT_NS(w) //width
-    m_currentBorder.width = EMU_TO_POINT(w.toDouble());
+    m_currentBorder.outerPen.setWidthF(EMU_TO_POINT(w.toDouble()));
 
     while(!atEnd()) {
         readNext();
@@ -916,19 +915,21 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_Table_ln()
             if(QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill);
                 m_currentBorder.style = KoBorder::BorderSolid;
-                m_currentBorder.color = m_currentColor;
+                m_currentBorder.innerPen.setColor(m_currentColor);
+                m_currentBorder.outerPen.setColor(m_currentColor);
             }
             else if (QUALIFIED_NAME_IS(prstDash)) {
                 attrs = attributes();
                 //TODO find out how other colors are handled
-                m_currentBorder.color = Qt::black;
+                m_currentBorder.innerPen.setColor(Qt::black);
+                m_currentBorder.outerPen.setColor(Qt::black);
                 TRY_READ_ATTR_WITHOUT_NS(val)
                 //TODO support other dash types. Make it its own function.
                 if (val == "dash") {
                     m_currentBorder.style = KoBorder::BorderDashed;
                 }
                 else if(val == "dashDot") {
-                    m_currentBorder.style = KoBorder::BorderDashDotPattern;
+                    m_currentBorder.style = KoBorder::BorderDashDot;
                 }
                 else if(val == "dot") {
                     m_currentBorder.style = KoBorder::BorderDotted;
@@ -976,6 +977,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
                 TRY_READ(solidFill)
                 m_currentTableStyleProperties->backgroundColor = m_currentColor;
                 m_currentTableStyleProperties->setProperties |= TableStyleProperties::BackgroundColor;
+                if (m_currentAlpha > 0) {
+                    m_currentTableStyleProperties->backgroundOpacity = m_currentAlpha;
+                    m_currentTableStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundOpacity;
+                }
             }
             SKIP_UNKNOWN
 //             ELSE_WRONG_FORMAT
@@ -985,11 +990,5 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_fill()
     READ_EPILOGUE
 }
 
-#define blipFill_NS "a"
+#include "MsooXmlDrawingMLSharedImpl.h"
 
-#include <MsooXmlCommonReaderImpl.h>
-
-#define DRAWINGML_NS "a"
-#define DRAWINGML_PIC_NS "p" // DrawingML/Picture
-
-#include <MsooXmlCommonReaderDrawingMLImpl.h>

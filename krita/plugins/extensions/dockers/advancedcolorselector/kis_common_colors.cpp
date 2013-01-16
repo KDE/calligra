@@ -29,6 +29,7 @@
 #include <KComponentData>
 #include <KGlobal>
 
+#include <KoIcon.h>
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
 #include "kis_canvas2.h"
@@ -42,9 +43,9 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     KisColorPatches("commonColors", parent)
 {
     m_reloadButton = new QPushButton();
-    m_reloadButton->setIcon(KIcon("view-refresh"));
+    m_reloadButton->setIcon(koIcon("view-refresh"));
     connect(m_reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
-    
+
     QList<QWidget*> tmpList;
     tmpList.append(m_reloadButton);
     setAdditionalButtons(tmpList);
@@ -68,8 +69,12 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     if(cfg.readEntry("commonColorsAutoUpdate", false)) {
+        if (m_image) {
+            m_image->disconnect(this);
+        }
         connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
+        m_image = m_canvas->image();
     }
 }
 
@@ -92,14 +97,10 @@ void KisCommonColors::updateSettings()
     if(cfg.readEntry("commonColorsAutoUpdate", false)) {
         connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
-        connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
-                this,                  SLOT(setDirty(const QRect &)), Qt::UniqueConnection);
     }
     else {
         disconnect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()));
-        disconnect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
-                this,                  SLOT(setDirty(const QRect &)));
     }
 
     m_reloadButton->setEnabled(true);
@@ -137,7 +138,7 @@ void KisCommonColors::recalculate()
 
     KisImageWSP kisImage = m_canvas->image();
 
-    QImage image = kisImage->projection()->createThumbnail(1024, 1024, 0, kisImage->bounds());
+    QImage image = kisImage->projection()->createThumbnail(1024, 1024, kisImage->bounds(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
 
     KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(image, patchCount(), this);
     QThreadPool::globalInstance()->start(runner);

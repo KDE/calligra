@@ -20,39 +20,46 @@
 #define KOINLINETEXTOBJECTMANAGER_H
 
 #include "KoInlineObject.h"
-#include "KoBookmarkManager.h"
 #include "KoVariableManager.h"
 #include "kotext_export.h"
+
+#include <KoOdfBibliographyConfiguration.h>
 
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
+#include <QTextBlock>
 
 class KoCanvasBase;
 class KoTextLocator;
 class KoInlineNote;
+class KoInlineCite;
 class QAction;
 
 /**
  * A container to register all the inlineTextObjects with.
  * Inserting an inline-object in a QTextDocument should be done via this manager which will
- * insert a placeholder in the text and if you add the KoInlineTextObjectManager to the
- * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
- * properly.
+ * insert a placeholder in the text and you should add the KoInlineTextObjectManager to the
+ * KoTextDocument.
  */
 class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
 {
     Q_OBJECT
-// TODO, when to delete the inlineObject s
 public:
+    enum Properties {
+        InlineInstanceId = 577297549 // If you change this, don't forget to change KoCharacterStyle.h
+    };
+
     /// Constructor
     explicit KoInlineTextObjectManager(QObject *parent = 0);
+    virtual ~KoInlineTextObjectManager();
 
     /**
      * Retrieve a formerly added inline object based on the format.
      * @param format the textCharFormat
      */
     KoInlineObject *inlineTextObject(const QTextCharFormat &format) const;
+
     /**
      * Retrieve a formerly added inline object based on the cursor position.
      * @param cursor the cursor which position is used. The anchor is ignored.
@@ -79,16 +86,23 @@ public:
     void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
 
     /**
-     * Remove an inline object from this manager (as well as the document).
-     * This method will also remove the placeholder for the inline object.
-     * @param cursor the cursor which indicated the document and the position in that document
-     *      where the inline object will be deleted
-     * @return returns true if the inline object in the cursor position has been successfully
-     *      deleted
+     * Add inline object into the manager.
+     *
+     * This methods add the inline object into the manager. This is useful if you have a command
+     * that removes and adds a inline object to the manager. If the object already was inserted before
+     * (the object id is already set) it keeps the old id, otherwise a new id will be generated.
+     *
+     * @param object the inline object to insert.
      */
-    bool removeInlineObject(QTextCursor &cursor);
+    void addInlineObject(KoInlineObject* object);
 
-    /// remove an inline object from this manager.
+    /**
+     * Remove an inline object from this manager. The object will also be removed from
+     * the bookmarkmanager if it is a bookmark. This is not done smart: you might end up
+     * with dangling start or end bookmarks.
+     * Should really only be called by KoTextEditor's delete commands
+     * @param the object to be removed
+     */
     void removeInlineObject(KoInlineObject *object);
 
     /**
@@ -99,14 +113,19 @@ public:
      * @see KoInlineObject::propertyChangeListener()
      */
     void setProperty(KoInlineObject::Property key, const QVariant &value);
+
     /// retrieve a propery
     QVariant property(KoInlineObject::Property key) const;
+
     /// retrieve an int property
     int intProperty(KoInlineObject::Property key) const;
+
     /// retrieve a bool property
     bool boolProperty(KoInlineObject::Property key) const;
+
     /// retrieve a string property
     QString stringProperty(KoInlineObject::Property key) const;
+
     /// remove a property from the store.
     void removeProperty(KoInlineObject::Property key);
 
@@ -118,16 +137,12 @@ public:
      * Return the variableManager.
      */
     KoVariableManager *variableManager();
-    /**
-     * Return the bookmarkManager.
-     */
-    KoBookmarkManager *bookmarkManager();
 
     /**
      * Create a list of actions that can be used to plug into a menu, for example.
      * This method internally uses KoInlineObjectRegistry::createInsertVariableActions() but extends
      * the list with all registered variable-names.
-     * Each of thse actions, when executed, will insert the relevant variable in the current text-position.
+     * Each of these actions, when executed, will insert the relevant variable in the current text-position.
      * The actions assume that the text tool is selected, if thats not the case then they will silently fail.
      * @param host the canvas for which these actions are created.  Note that the actions will get these
      *  actions as a parent (for memory management purposes) as well.
@@ -136,16 +151,20 @@ public:
     QList<QAction*> createInsertVariableActions(KoCanvasBase *host) const;
 
     QList<KoTextLocator*> textLocators() const;
+
     /**
-     * Note: once document sections are implemented, we need to be able
-     * to retrieve the endnotes for a particular section only.
-     *
-     * @return a list of all inline objects that are endnotes
-     */
+      * It returns a list of all end notes in the document
+      */
     QList<KoInlineNote*> endNotes() const;
+
+    QMap<QString, KoInlineCite*> citations(bool duplicatesEnabled = true) const;
+
+    QList<KoInlineCite*> citationsSortedByPosition(bool duplicatesEnabled = true,
+                                                           QTextBlock block = QTextBlock()) const;
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);
+    void activeAuthorUpdated(const QString &data);
 
 signals:
     /**
@@ -154,17 +173,15 @@ signals:
     void propertyChanged(int, const QVariant &variant);
 
 private:
-    enum Properties {
-        InlineInstanceId = 577297549 // If you change this, don't forget to change KoCharacterStyle.h
-    };
+    void insertObject(KoInlineObject *object);
 
     QHash<int, KoInlineObject*> m_objects;
+    QHash<int, KoInlineObject*> m_deletedObjects;
     QList<KoInlineObject*> m_listeners; // holds objects also in m_objects, but which want propertyChanges
     int m_lastObjectId;
     QHash<int, QVariant> m_properties;
 
     KoVariableManager m_variableManager;
-    KoBookmarkManager m_bookmarkManager;
 };
 
 Q_DECLARE_METATYPE(KoInlineTextObjectManager*)

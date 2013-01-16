@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/connection.h>
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/drivermanager.h>
+#include <db/driver_p.h>
+#include <db/utils.h>
 #include "pqxxdriver.h"
 #include "pqxxconnection.h"
 #include <string>
@@ -132,7 +132,7 @@ QString pqxxSqlDriver::escapeString(const QString& str) const
     //to escape using the char encoding of the database
     //see http://www.postgresql.org/docs/8.1/static/libpq-exec.html#LIBPQ-EXEC-ESCAPE-STRING
 /*    return QString::fromLatin1("'")
-    + QString::fromAscii(_internalWork->esc(std::string(str.toAscii().constData())).c_str())
+    + QString::fromLatin1(_internalWork->esc(std::string(str.toLatin1().constData())).c_str())
            + QString::fromLatin1("'");
 */
 //TODO Optimize

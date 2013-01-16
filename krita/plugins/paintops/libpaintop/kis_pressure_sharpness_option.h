@@ -45,7 +45,7 @@ public:
     /**
     * Apply threshold specified by user
     */
-    void applyTreshold(KisFixedPaintDeviceSP dab);
+    void applyThreshold(KisFixedPaintDeviceSP dab);
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -54,12 +54,11 @@ public:
     void setThreshold(qint32 threshold){ m_threshold = qBound<qint32>(0,threshold,100); }
     qint32 threshold(){ return m_threshold; }
 
-    void setSharpnessFactor(qreal factor){ m_sharpnessFactor = factor; }
-    qreal sharpnessFactor() { return m_sharpnessFactor; }
+    void setSharpnessFactor(qreal factor){ KisCurveOption::setValue(factor); }
+    qreal sharpnessFactor() { return KisCurveOption::value(); }
 
 private:
     qint32 m_threshold;
-    qreal m_sharpnessFactor;
 };
 
 #endif

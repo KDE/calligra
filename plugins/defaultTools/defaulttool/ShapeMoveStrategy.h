@@ -47,8 +47,8 @@ public:
     virtual ~ShapeMoveStrategy() {}
 
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    QUndoCommand* createCommand();
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
+    KUndo2Command* createCommand();
+    void finishInteraction(Qt::KeyboardModifiers modifiers);
     virtual void paint( QPainter &painter, const KoViewConverter &converter);
     virtual void handleCustomEvent( KoPointerEvent * event );
 private:

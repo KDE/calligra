@@ -23,7 +23,6 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -41,7 +40,7 @@
 #include <kis_paint_device.h>
 #include <kis_layer.h>
 #include <kis_statusbar.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <widgets/kis_progress_widget.h>
 
 #include "kis_channel_separator.h"
@@ -54,8 +53,6 @@ KisSeparateChannelsPlugin::KisSeparateChannelsPlugin(QObject *parent, const QVar
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(KisSeparateChannelsPluginFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imageseparate.rc"), true);
         m_view = (KisView2*) parent;
         KAction *action  = new KAction(i18n("Separate Image..."), this);
@@ -73,7 +70,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisLayerSP l = m_view->layerManager()->activeLayer();
+    KisLayerSP l = m_view->nodeManager()->activeLayer();
     if (!l) return;
 
     KisPaintDeviceSP dev = l->paintDevice();

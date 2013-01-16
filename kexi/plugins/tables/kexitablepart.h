@@ -27,7 +27,7 @@
 #include <KexiWindow.h>
 #include <KexiWindowData.h>
 #include <kexipartitem.h>
-#include <kexidb/fieldlist.h>
+#include <db/fieldlist.h>
 
 class KexiLookupColumnPage;
 
@@ -39,7 +39,7 @@ public:
     KexiTablePart(QObject *parent, const QVariantList &);
     virtual ~KexiTablePart();
 
-    virtual bool remove(KexiPart::Item &item);
+    virtual tristate remove(KexiPart::Item &item);
 
     virtual tristate rename(KexiPart::Item &item,
                             const QString& newName);

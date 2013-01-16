@@ -19,7 +19,7 @@
 #include "kis_selection_tool_helper.h"
 
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KoShapeController.h>
 #include <KoPathShape.h>
@@ -52,15 +52,16 @@ KisSelectionToolHelper::~KisSelectionToolHelper()
 {
 }
 
-void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, selectionAction action)
+void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action)
 {
     KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
     undoAdapter->beginMacro(m_name);
 
     bool hasSelection = m_layer->selection();
 
-    if (!hasSelection)
-        undoAdapter->addCommand(new KisSetGlobalSelectionCommand(m_image));
+    if (!hasSelection) {
+        undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
+    }
 
     KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
 
@@ -98,7 +99,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
     undoAdapter->beginMacro(m_name);
 
     if (!m_layer->selection()) {
-        undoAdapter->addCommand(new KisSetGlobalSelectionCommand(m_image, 0));
+        undoAdapter->addCommand(new KisSetEmptyGlobalSelectionCommand(m_image));
     }
 
     KisSelectionSP selection = m_layer->selection();
@@ -106,7 +107,7 @@ void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 
     transaction.commit(undoAdapter);
 
-    QUndoCommand *cmd = m_canvas->shapeController()->addShape(shape);
+    KUndo2Command *cmd = m_canvas->shapeController()->addShape(shape);
     undoAdapter->addCommand(cmd);
     undoAdapter->endMacro();
 }

@@ -1,8 +1,27 @@
 [Desktop Entry]
 Name=transform
+Name[ca]=transformació
+Name[ca@valencia]=transformació
+Name[cs]=převést
+Name[el]=Μετασχηματισμός
+Name[es]=transformación
+Name[et]=Teisendus
+Name[fr]=transformation
+Name[gl]=Transformar
+Name[hu]=átalakítás
+Name[it]=trasformazione
+Name[kk]=түрлендіру
+Name[nb]=omdann
+Name[nds]=Wanneln
+Name[nl]=transformeren
+Name[pl]=przekształć
 Name[pt]=transformação
 Name[pt_BR]=transformação
+Name[ru]=Преобразование
+Name[sk]=transformovať
 Name[sv]=transform
+Name[ug]=ئالماشتۇر
 Name[uk]=Перетворення
 Name[x-test]=xxtransformxx
 Name[zh_CN]=变换
+Name[zh_TW]=轉換

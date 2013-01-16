@@ -1,8 +1,24 @@
 [Desktop Entry]
 Name=product
+Name[ca]=producte
+Name[ca@valencia]=producte
+Name[cs]=produkt
+Name[el]=προϊόν
+Name[es]=producto
+Name[et]=Korrutis
+Name[fr]=produit
+Name[gl]=Produto
+Name[hu]=termék
+Name[it]=prodotto
+Name[kk]=көбейту
+Name[nb]=produkt
 Name[nl]=product
+Name[pl]=produkt
 Name[pt]=produto
 Name[pt_BR]=produto
+Name[ru]=Продукт
+Name[sk]=produkt
 Name[sv]=produkt
 Name[uk]=Добуток
 Name[x-test]=xxproductxx
+Name[zh_TW]=product

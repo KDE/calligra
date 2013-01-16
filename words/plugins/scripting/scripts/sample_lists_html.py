@@ -1,11 +1,11 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-# Import the KWord module.
-import KWord
+# Import the Words module.
+import Words
 
 # Get the TextDocument.
-doc = KWord.mainFrameSet().document()
+doc = Words.mainFrameSet().document()
 
 # Set the default cascading stylesheet.
 doc.setDefaultStyleSheet(
@@ -51,17 +51,17 @@ doc.setDefaultStyleSheet(
 doc.setHtml(
     (
         "<h1>Python Sample: Lists with HTML</h1>"
-        "<p align=\"justify\">This script demonstrates how to work in KWord with lists using the Python "
+        "<p align=\"justify\">This script demonstrates how to work in Words with lists using the Python "
         "scripting language. The whole content displayed here was created direct within "
         "the Python script. You are also able to use Ruby or JavaScript. All supported "
         "scripting languages are accessing the same exposed functionality to flexible "
-        "manipulate KWord documents.<br>"
+        "manipulate Words documents.<br>"
         "We are using stylesheets to color the headers, align text and indent the items. You "
         "are able to use the whole functionality of CSS and HTML to create or format "
         "content or just use the cursor-functionality to deal with the content on a "
         "more abstract level.</p>"
-        "<p align=\"center\"><b>KOffice 2.0 to maximize your productivity</b></p>"
-        "<p align=\"right\"><a href=\"http://www.koffice.org\">http://www.koffice.org</a></p>"
+        "<p align=\"center\"><b>Calligra 2.0 to maximize your productivity</b></p>"
+        "<p align=\"right\"><a href=\"http://www.calligra.org\">http://www.calligra.org</a></p>"
         "<h2>Unsorted list (UL)</h2>"
         "<ul class=\"ulist1\">"
             "<li>First main item"
@@ -109,9 +109,9 @@ doc.setHtml(
         "<dl>"
             "<dt>KDE</dt>"
                 "<dd>The Desktop Environment</dd>"
-            "<dt>KOffice</dt>"
+            "<dt>Calligra</dt>"
                 "<dd>The Integrated Office Suite</dd>"
-            "<dt>KWord</dt>"
+            "<dt>Words</dt>"
                 "<dd>The word-processing and desktop publishing application</dd>"
             "<dt>Kross</dt>"
                 "<dd>The Scripting Framework</dd>"

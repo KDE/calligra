@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=End-Event-Cancel
-Name[et]=Sündmuse lõpu katkestamine
+Name[ca]=Final-Esdeveniment-Cancel·la
+Name[ca@valencia]=Final-Esdeveniment-Cancel·la
+Name[el]=Ακύρωση-γεγονότος-τέλους
+Name[es]=Cancelación del evento final
+Name[et]=Lõpusündmuse katkestamine
+Name[fr]=Annulation de la fin de l'évènement
+Name[gl]=Evento final de cancelación
+Name[hu]=Vége-Esemény-Mégsem
+Name[it]=Evento-finale-Annullamento
+Name[kk]=Аяқтау-оқиға-айну
+Name[nb]=Slutt-hendelse-avbryt
+Name[nl]=Einde-gebeurtenis-annuleren
+Name[pl]=Anulowanie-Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Cancelar
 Name[pt_BR]=Cancelar evento final
+Name[ru]=Отмена завершения события
+Name[sk]=End-Event-Cancel
 Name[sv]=Sluthändelse-avbryt
 Name[uk]=Скасування кінцевої події
 Name[x-test]=xxEnd-Event-Cancelxx

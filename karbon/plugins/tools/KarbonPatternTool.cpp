@@ -25,7 +25,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShape.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
 #include <KoPattern.h>
@@ -39,9 +39,9 @@
 
 #include <KLocale>
 
-#include <QtGui/QPainter>
-#include <QtGui/QWidget>
-#include <QtGui/QUndoCommand>
+#include <QPainter>
+#include <QWidget>
+#include <kundo2command.h>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
         : KoToolBase(canvas), m_currentStrategy(0), m_optionsWidget(0)
@@ -123,7 +123,7 @@ void KarbonPatternTool::mouseReleaseEvent(KoPointerEvent *event)
     // if we are editing, get out of edit mode and add a command to the stack
     if (m_currentStrategy && m_currentStrategy->isEditing()) {
         m_currentStrategy->setEditing(false);
-        QUndoCommand * cmd = m_currentStrategy->createCommand();
+        KUndo2Command * cmd = m_currentStrategy->createCommand();
         if (cmd)
             canvas()->addCommand(cmd);
 
@@ -135,7 +135,7 @@ void KarbonPatternTool::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
     case Qt::Key_I: {
-        KoResourceManager *rm = canvas()->shapeController()->resourceManager();
+        KoDocumentResourceManager *rm = canvas()->shapeController()->resourceManager();
         uint handleRadius = rm->handleRadius();
         if (event->modifiers() & Qt::ControlModifier)
             handleRadius--;
@@ -247,10 +247,10 @@ void KarbonPatternTool::deactivate()
     m_currentStrategy = 0;
 }
 
-void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
+void KarbonPatternTool::documentResourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoDocumentResource::HandleRadius:
+    case KoDocumentResourceManager::HandleRadius:
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
             strategy->repaint();
 
@@ -259,7 +259,7 @@ void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
         foreach(KarbonPatternEditStrategyBase *strategy, m_strategies)
             strategy->repaint();
         break;
-    case KoDocumentResource::GrabSensitivity:
+    case KoDocumentResourceManager::GrabSensitivity:
         KarbonPatternEditStrategyBase::setGrabSensitivity(res.toUInt());
         break;
     default:
@@ -267,9 +267,9 @@ void KarbonPatternTool::resourceChanged(int key, const QVariant & res)
     }
 }
 
-QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
+QList<QWidget *> KarbonPatternTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
 
     m_optionsWidget = new KarbonPatternOptionsWidget();
     connect(m_optionsWidget, SIGNAL(patternChanged()),
@@ -283,11 +283,11 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     connect(chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(patternSelected(KoResource*)));
 
-    widgets.insert(i18n("Pattern Options"), m_optionsWidget);
-    widgets.insert(i18n("Patterns"), chooser);
-
+    m_optionsWidget->setWindowTitle(i18n("Pattern Options"));
+    widgets.append(m_optionsWidget);
+    chooser->setWindowTitle(i18n("Patterns"));
+    widgets.append(chooser);
     updateOptionsWidget();
-
     return widgets;
 }
 

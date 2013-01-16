@@ -25,6 +25,9 @@
 #include "kis_node.h"
 #include "kis_mask.h"
 #include "kis_selection.h"
+#include "kis_image.h"
+#include "kis_group_layer.h"
+#include "testutil.h"
 
 
 class TestMask : public KisMask
@@ -48,26 +51,36 @@ public:
 
 void KisMaskTest::testCreation()
 {
-    TestMask test;
+    TestUtil::MaskParent p;
+    TestMask mask;
+    mask.initSelection(0, p.layer);
+
+    QCOMPARE(mask.extent(), QRect(0,0,512,512));
+    QCOMPARE(mask.exactBounds(), QRect(0,0,512,512));
 }
 
 void KisMaskTest::testSelection()
 {
+    TestUtil::MaskParent p;
     TestMask mask;
-    QVERIFY(mask.selection()->isTotallyUnselected(QRect(0, 0, 1000, 1000)));
-    QVERIFY(mask.exactBounds().width() == 0);
-    QVERIFY(mask.extent().width() == 0);
 
-    mask.select(QRect(0, 0, 1000, 1000));
+    KisSelectionSP sel = new KisSelection();
+    sel->getOrCreatePixelSelection()->select(QRect(0,0,100,100), MAX_SELECTED);
 
-    QCOMPARE(mask.exactBounds(), QRect(0, 0, 1000, 1000));
-    QCOMPARE(mask.extent(), QRect(0, 0, 1024, 1024));
+    mask.initSelection(sel, p.layer);
 
+    QCOMPARE(mask.extent(), QRect(0,0,128,128));
+    QCOMPARE(mask.exactBounds(), QRect(0,0,100,100));
+
+    mask.select(QRect(0,0,500,500), MAX_SELECTED);;
+
+    QCOMPARE(mask.extent(), QRect(0,0,512,512));
+    QCOMPARE(mask.exactBounds(), QRect(0,0,500,500));
 }
 
 void KisMaskTest::testCropUpdateBySelection()
 {
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    TestUtil::MaskParent p;
 
     /**
      * We do not use exact selection bounds for cropping,
@@ -75,12 +88,15 @@ void KisMaskTest::testCropUpdateBySelection()
      */
     QRect selectionRect(10, 10, 20, 20);
     QRect updateRect(64, 64, 20, 20);
-    KisPaintDeviceSP projection = new KisPaintDevice(cs);
 
     TestMask mask;
-    mask.select(selectionRect, MAX_SELECTED);
 
-    mask.apply(projection, updateRect);
+    KisSelectionSP sel = new KisSelection();
+    sel->getOrCreatePixelSelection()->select(selectionRect, MAX_SELECTED);
+
+    mask.initSelection(sel, p.layer);
+
+    mask.apply(p.layer->projection(), updateRect);
     // Here we crash! :)
 
     /**
@@ -88,6 +104,26 @@ void KisMaskTest::testCropUpdateBySelection()
      * the area that is outside its selection.
      * Please consider fixing KisMask::apply() first
      */
+}
+
+void KisMaskTest::testSelectionParent()
+{
+    {
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        KisImageSP image = new KisImage(0, 100, 100, cs, "stest");
+
+        KisMaskSP mask = new TestMask;
+        mask->initSelection(0, image->rootLayer());
+        KisSelectionSP selection = mask->selection();
+        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+    }
+
+    {
+        KisMaskSP mask = new TestMask;
+        mask->setSelection(new KisSelection());
+        KisSelectionSP selection = mask->selection();
+        QCOMPARE(selection->parentNode(), KisNodeWSP(mask));
+    }
 }
 
 QTEST_KDEMAIN(KisMaskTest, GUI)

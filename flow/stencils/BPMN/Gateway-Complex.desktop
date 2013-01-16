@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=Gateway-Complex
-Name[et]=Keeruline lüüs
+Name[ca]=Passarel·la-Complex
+Name[ca@valencia]=Passarel·la-Complex
+Name[el]=Σύμπλεγμα-πύλης
+Name[es]=Puerta de enlace compleja
+Name[et]=Keeruline värav
+Name[fr]=Entrée complexe
+Name[gl]=Porta complexa
+Name[hu]=Átjáró-Komplex
+Name[it]=Gateway-Complesso
+Name[kk]=Шлюз кешені
+Name[nb]=Portner-kompleks
+Name[nl]=Gateway-Complex
+Name[pl]=Brama-złożona
 Name[pt]='Gateway'-Complexa
 Name[pt_BR]=Gateway complexo
+Name[ru]=Сложный оператор
+Name[sk]=Brána-komplexná
 Name[sv]=Port-komplex
 Name[uk]=Шлюзовий комплекс
 Name[x-test]=xxGateway-Complexxx

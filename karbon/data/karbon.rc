@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gui name="Karbon" 
-     version="7" 
+<gui name="Karbon"
+     version="8"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -45,13 +45,13 @@
             <Action name="edit_select_all"/>
             <Action name="edit_deselect_all"/>
             <Action name="edit_delete"/>
+            <Separator/>
+            <Action name="edit_guides"/>
         </Menu>
         <Menu name="view">
             <text>&amp;View</text>
             <Action name="view_newview"/>
-            <ActionList name="view_closeallviews"/>
             <Separator/>
-            <ActionList name="view_split"/>
             <Action name="zoom_in"/>
             <Action name="zoom_out"/>
             <Action name="view_zoom"/>
@@ -64,6 +64,7 @@
             <Separator/>
             <Action name="view_show_margins"/>
             <Action name="view_show_ruler"/>
+            <Action name="view_show_palette"/>
             <Action name="view_grid"/>
             <Action name="view_show_guides"/>
             <Separator/>
@@ -129,6 +130,7 @@
             <Separator group="settings_show"/>
             <Action name="page_layout" group="settings_show"/>
             <Separator group="settings_show"/>
+            <Action name="settings_active_author" group="settings_configure"/>
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>
@@ -142,7 +144,7 @@
         <Action name="edit_paste"/>
         <Action name="edit_delete"/>
     </ToolBar>
-    <ToolBar name="object_toolbar" hidden="true" fullWidth="false">
+    <ToolBar name="object_toolbar" hidden="true">
         <text>Object</text>
         <Action name="object_order_front"/>
         <Action name="object_order_raise"/>
@@ -151,7 +153,7 @@
         <Action name="selection_group"/>
         <Action name="selection_ungroup"/>
     </ToolBar>
-    <ToolBar name="align_toolbar" hidden="true" fullWidth="false">
+    <ToolBar name="align_toolbar" hidden="true">
         <text>Align</text>
         <Action name="object_align_horizontal_left"/>
         <Action name="object_align_horizontal_center"/>
@@ -160,7 +162,7 @@
         <Action name="object_align_vertical_center"/>
         <Action name="object_align_vertical_bottom"/>
     </ToolBar>
-    <ToolBar name="Effects" hidden="true" fullWidth="false">
+    <ToolBar name="Effects" hidden="true">
         <text>Effects</text>
     </ToolBar>
 </gui>

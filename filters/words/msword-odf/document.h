@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -34,7 +34,7 @@
 #include <wv2/src/functordata.h>
 
 #include <QString>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QObject>
 #include <QStringList>
 #include <QRectF>
@@ -59,11 +59,11 @@ class BRC;
 }
 class MSWordOdfImport;
 /* class KoFilterChain; */
-class KWordReplacementHandler;
-class KWordTableHandler;
-class KWordPictureHandler;
-class KWordTextHandler;
-class KWordGraphicsHandler;
+class WordsReplacementHandler;
+class WordsTableHandler;
+class WordsPictureHandler;
+class WordsTextHandler;
+class WordsGraphicsHandler;
 
 class Document : public QObject, public wvWare::SubDocumentHandler
 {
@@ -74,7 +74,7 @@ public:
 /*              KoFilterChain* chain, */
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
-             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream* data);
+             LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si);
     virtual ~Document();
 
     virtual void setProgress(int percent);
@@ -92,7 +92,12 @@ public:
     virtual void annotationStart();
     virtual void annotationEnd();
 
-    bool parse();
+    /**
+     * Call the wv2 parser and check if our handlers are fine after the parsing
+     * process is finished.
+     * @return 0 - Ok, 1 - parser error, 2 - handler error
+     */
+    quint8 parse();
 
     void processSubDocQueue();
 
@@ -119,14 +124,15 @@ public:
     bool useLastMasterPage(void) const { return m_useLastMasterPage; }
     bool writingHeader(void) const { return m_writingHeader; }
     KoXmlWriter* headerWriter(void) const { return m_headerWriter; }
-    KWordTextHandler *textHandler(void) const { return m_textHandler; }
+    WordsTextHandler *textHandler(void) const { return m_textHandler; }
     bool hasParser(void) const { return m_parser != 0L; }
     bool bodyFound(void) const { return m_bodyFound; }
 
     /**
-     * Add element val to the backgroud-color stack.
+     * Add a color item to the backgroud-color stack.
+     * @param color in the format "#RRGGBB"
      */
-    void addBgColor(const QString val) { m_bgColors.push(val); }
+    void addBgColor(const QString& val) { m_bgColors.push(val); }
 
     /**
      * Remove the last item from the backgroud-color stack.
@@ -135,11 +141,12 @@ public:
 
     /**
      * Update the last item of the background-color stack.
+     * @param color in the format "#RRGGBB"
      */
-    void updateBgColor(const QString val) { m_bgColors.pop(); m_bgColors.push(val); }
+    void updateBgColor(const QString& val) { m_bgColors.pop(); m_bgColors.push(val); }
 
     /**
-     * @return the current background-color.
+     * @return the current background-color in the format "#RRGGBB".
      */
     QString currentBgColor(void) { return m_bgColors.isEmpty() ? QString() : m_bgColors.top(); }
 
@@ -167,7 +174,7 @@ public:
     QString lineNumbersStyleName() const { return m_lineNumbersStyleName; }
 
 public slots:
-    // Connected to the KWordTextHandler only when parsing the body
+    // Connected to the WordsTextHandler only when parsing the body
     void slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
 
     void slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
@@ -182,7 +189,7 @@ public slots:
 
     void slotHeadersFound(const wvWare::FunctorBase* functor, int data);
 
-    void slotTableFound(KWord::Table* table);
+    void slotTableFound(Words::Table* table);
 
     void slotInlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
 
@@ -190,7 +197,7 @@ public slots:
 
     void slotTextBoxFound(unsigned int index, bool stylesxml);
 
-    // Similar to footnoteStart/footnoteEnd but cells, connected to KWordTableHandler
+    // Similar to footnoteStart/footnoteEnd but cells, connected to WordsTableHandler
 /*     void slotTableCellStart(int row, int column, int rowSize, int columnSize, const QRectF& cellRect, */
 /*                             const QString& tableName, */
 /*                             const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, */
@@ -202,27 +209,22 @@ private:
     void processStyles();
     void processAssociatedStrings();
 
-/*     enum NewFrameBehavior { Reconnect = 0, NoFollowup = 1, Copy = 2 }; */
-/*     void generateFrameBorder(QDomElement& frameElementOut, */
-/*                              const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, */
-/*                              const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, */
-/*                              const wvWare::Word97::SHD& shd); */
-
     void setPageLayoutStyle(KoGenStyle* pageLayoutStyle, wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                             bool firstPage);
 
     // Handlers for different data types in the document.
-    KWordTextHandler*        m_textHandler;
-    KWordTableHandler*       m_tableHandler;
-    KWordReplacementHandler* m_replacementHandler;
-    KWordGraphicsHandler*    m_graphicsHandler;
+    WordsTextHandler*        m_textHandler;
+    WordsTableHandler*       m_tableHandler;
+    WordsReplacementHandler* m_replacementHandler;
+    WordsGraphicsHandler*    m_graphicsHandler;
 
     MSWordOdfImport* m_filter;
 /*     KoFilterChain* m_chain; */
 
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+
     std::queue<SubDocument> m_subdocQueue;
-    std::queue<KWord::Table> m_tableQueue;
+/*     std::queue<Words::Table> m_tableQueue; */
 
     bool m_bodyFound;
 
@@ -255,9 +257,6 @@ private:
     bool m_omittMasterPage; //whether master-page style for current section has been omitted
     bool m_useLastMasterPage; //whether to use the last define master-page style for current section
 
-    int m_initialFootnoteNumber;
-    int m_initialEndnoteNumber;
-
     QString m_lineNumbersStyleName;
     QString m_lastMasterPageName;
 
@@ -265,9 +264,10 @@ private:
     LEInputStream& m_wdstm;
     LEInputStream* m_tblstm;
     LEInputStream* m_datastm;
+    LEInputStream* m_sistm;
     POLE::Stream& m_tblstm_pole;
 
-    //A stack for backgroud-colors, which represets a background color context
+    //A stack for background-colors, which represets a background color context
     //for automatic colors.
     QStack<QString> m_bgColors;
 

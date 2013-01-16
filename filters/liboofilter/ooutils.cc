@@ -23,7 +23,7 @@
 #include <KoOdfReadStore.h>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QColor>
 #include <QImage>
 #include <KoUnit.h>
@@ -201,25 +201,25 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
         QString type = tabStop.attributeNS(ooNS::style, "type", QString());   // left, right, center or char
 
         QDomElement elem = parentElement.ownerDocument().createElement("TABULATOR");
-        int kOfficeType = 0;
+        int calligraType = 0;
         if (type == "left")
-            kOfficeType = 0;
+            calligraType = 0;
         else if (type == "center")
-            kOfficeType = 1;
+            calligraType = 1;
         else if (type == "right")
-            kOfficeType = 2;
+            calligraType = 2;
         else if (type == "char") {
             QString delimiterChar = tabStop.attributeNS(ooNS::style, "char", QString());   // single character
             elem.setAttribute("alignchar", delimiterChar);
-            kOfficeType = 3; // "alignment on decimal point"
+            calligraType = 3; // "alignment on decimal point"
         }
 
-        elem.setAttribute("type", kOfficeType);
+        elem.setAttribute("type", calligraType);
 
         double pos = KoUnit::parseValue(tabStop.attributeNS(ooNS::style, "position", QString()));
         elem.setAttribute("ptpos", pos);
 
-        // TODO Convert leaderChar's unicode value to the KOffice enum
+        // TODO Convert leaderChar's unicode value to the Calligra enum
         // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
         QString leaderChar = tabStop.attributeNS(ooNS::style, "leader-char", QString());   // single character
         if (!leaderChar.isEmpty()) {
@@ -229,10 +229,10 @@ void OoUtils::importTabulators(QDomElement& parentElement, const KoStyleStack& s
             case '.':
                 filling = 1; break;
             case '-':
-            case '_':  // TODO in KWord: differentiate --- and ___
+            case '_':  // TODO in Words: differentiate --- and ___
                 filling = 2; break;
             default:
-                // KWord doesn't have support for "any char" as filling.
+                // Words doesn't have support for "any char" as filling.
                 // Instead it has dash-dot and dash-dot-dot - but who uses that in a tabstop?
                 break;
             }
@@ -356,7 +356,7 @@ void OoUtils::importTextPosition(const QString& text_position, QString& value, Q
 {
     //OO: <vertical position (% or sub or super)> [<size as %>]
     //Examples: "super" or "super 58%" or "82% 58%" (where 82% is the vertical position)
-    // TODO in kword: vertical positions other than sub/super
+    // TODO in words: vertical positions other than sub/super
     QStringList lst = text_position.split(' ');
     if (!lst.isEmpty()) {
         QString textPos = lst.front().trimmed();

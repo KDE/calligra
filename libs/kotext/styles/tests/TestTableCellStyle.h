@@ -2,7 +2,7 @@
 #define TESTTABLECELLSTYLE_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestTableCellStyle : public QObject
 {
@@ -11,7 +11,10 @@ public:
     TestTableCellStyle() {}
 
 private slots:
-    void testTableCellStyle();
+    void testPen();
+    void testPadding();
+    void testSpacing();
+    void testMargin();
 
 };
 

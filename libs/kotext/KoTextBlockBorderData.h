@@ -90,31 +90,14 @@ public:
                  KoParagraphStyle::Property space, KoParagraphStyle::Property innerWidth);
 
     /**
+     * Set if this border should possibly be merged with the next.
+     */
+    void setMergeWithNext(bool merge);
+
+    /**
      * @return true if there has been at least one border set.
      */
     bool hasBorders() const;
-
-    /**
-     * Alter the param insets object to add the insets needed by the borders.
-     * @param insets the object to alter
-     * @param paragraphStart the y-offset in the document of the paragraph for which the insets apply.
-     *     This parameter is used to find out if this is the top paragraph and thus the top insets should apply.
-     * @param startUnderBorder if true the paragraphStart is calculated from the top of the text, and thus under
-            the border.  If false; its above the border.
-     * @see inset()
-     */
-    void applyInsets(KoInsets &insets, qreal paragraphStart, bool startUnderBorder) const;
-
-    /**
-     * Alter the bounding rect of the borders to move the bottom to the parameter position.
-     * @param bottom the new y position of the bottom. The border will be drawn directly below that point.
-     */
-    void setParagraphBottom(qreal bottom);
-
-    /**
-     * Return the rectangle in which the border is drawn.  The border is drawn on the insides of the rect
-     */
-    QRectF rect() const;
 
     /**
      * Find the inset that a border causes for a specific side.
@@ -123,13 +106,13 @@ public:
     qreal inset(Side side) const;
 
     /// returns true if the borders of param border are the same as this one.
-    bool operator==(const KoTextBlockBorderData &border);
-    bool equals(const KoTextBlockBorderData &border);
+    bool operator==(const KoTextBlockBorderData &border) const;
+    bool equals(const KoTextBlockBorderData &border) const;
 
     /**
      * Paint the borders.
      */
-    void paint(QPainter &painter) const;
+    void paint(QPainter &painter, const QRectF &clip) const;
 
 private:
     class Private;

@@ -1,8 +1,26 @@
 [Desktop Entry]
 Name=Content Service Router
+Name[bg]=Маршрутизатор за услуги на съдържание
+Name[ca]=Encaminador de servei de contingut
+Name[ca@valencia]=Encaminador de servei de contingut
+Name[de]=Content-Service-Router
+Name[el]=Content Service Router
+Name[es]=Enrutador de servicios de contenido
 Name[et]=Content Service marsruuter
-Name[pt]=Encaminhador Serviços Conteúdos
+Name[fr]=Content Service Router
+Name[gl]=Encamiñador do servizo de contidos
+Name[it]=Router content service
+Name[kk]=Мазмұн қызмет маршруттауышы
+Name[nb]=Ruter for innholdstjeneste
+Name[nds]=Inholtdeenst-Nettweger
+Name[nl]=Content Service Router
+Name[pl]=Router usługi treści
+Name[pt]=Encaminhamento Serviços de Conteúdos
 Name[pt_BR]=Roteador de serviços de conteúdo
+Name[ru]=Маршрутизатор службы содержимого
+Name[sk]=Router služby obsahu
 Name[sv]=Innehållstjänstrouter
 Name[uk]=Маршрутизатор служби даних
 Name[x-test]=xxContent Service Routerxx
+Name[zh_CN]=内容服务路由器
+Name[zh_TW]=內容服務路由器

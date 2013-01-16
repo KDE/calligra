@@ -32,7 +32,7 @@
 class QImage;
 
 /**
- * Velocity won't be supported, atm Angular and Tilt aren't either,
+ * Velocity won't be supported, atm Tilt isn't either,
  * but have chances of implementation
  */
 namespace KisParasite
@@ -73,19 +73,14 @@ public:
     /**
      * @return the next image in the pipe.
     */
-    virtual QImage image() const;
-
     virtual KisFixedPaintDeviceSP paintDevice(const KoColorSpace * colorSpace,
                                               double scale, double angle,
                                               const KisPaintInformation& info,
                                               double subPixelX = 0, double subPixelY = 0) const;
 
-    virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);
     virtual bool hasColor() const;
     
-    virtual quint32 brushIndex(const KisPaintInformation& info) const;
-
     virtual enumBrushType brushType() const;
 
     virtual const KisBoundary* boundary() const;
@@ -97,32 +92,40 @@ public:
     virtual KisImagePipeBrush* clone() const;
 
     virtual QString defaultFileExtension() const;
-    virtual void setAngle(qreal _angle);
-    virtual void setScale(qreal _scale);
+    void setAngle(qreal _angle);
+    void setScale(qreal _scale);
+    void setSpacing(double _spacing);
 
-    /**
-     *  @return the next mask in the pipe.
-     */
-    virtual void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
-            double scaleX, double scaleY, double angle,
-            const KisPaintInformation& info,
-            double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
+    quint32 brushIndex(const KisPaintInformation& info) const;
+    qint32 maskWidth(double scale, double angle, const KisPaintInformation& info) const;
+    qint32 maskHeight(double scale, double angle, const KisPaintInformation& info) const;
+
+    void notifyCachedDabPainted();
+
+    void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
+                                             double scaleX, double scaleY, double angle,
+                                             const KisPaintInformation& info,
+                                             double subPixelX = 0, double subPixelY = 0, qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
             
 
 protected:
-
+    void setBrushType(enumBrushType type);
+    void setHasColor(bool hasColor);
 
     KisImagePipeBrush(const KisImagePipeBrush& rhs);
 
 private:
+    friend class KisImagePipeBrushTest;
 
-    bool init();
-    void setParasiteString(const QString& parasite);
-    void selectNextBrush(const KisPaintInformation& info) const;
+    KisGbrBrush* testingGetCurrentBrush(const KisPaintInformation& info) const;
+    QVector<KisGbrBrush*> testingGetBrushes() const;
+    void testingSelectNextBrush(const KisPaintInformation& info) const;
+
+    bool initFromData(const QByteArray &data);
     void sanitize(); // Force some default values in case the ones read in don't make sense
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 
 

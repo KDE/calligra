@@ -19,9 +19,9 @@
 #ifndef LEINPUTSTREAM_H
 #define LEINPUTSTREAM_H
 
-#include <QtCore/QIODevice>
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
+#include <QIODevice>
+#include <QDataStream>
+#include <QDebug>
 #include <exception>
 
 class IOException : public std::exception {

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,17 +23,18 @@
 
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 ReviewToolFactory::ReviewToolFactory()
         : KoToolFactoryBase("ReviewToolFactory_ID")
 {
-    setToolTip(i18n("Review tool"));
-    setToolType(dynamicToolType());
-    setIcon("tool-changetracking");
-    setPriority(3);
+    setToolTip(i18n("Review"));
+    setToolType(dynamicToolType()+",calligrawords");
+    setIconName(koIconNameCStr("tool_review"));
+    setPriority(30);
     setActivationShapeId(TextShape_SHAPEID);
 }
 

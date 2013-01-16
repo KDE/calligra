@@ -25,17 +25,18 @@
 #include "flake_export.h"
 
 #include <QList>
+#include <QMetaType>
 
 class KoCanvasBase;
 class KoShape;
-class KoShapeControllerBase;
-class QUndoCommand;
-class KoResourceManager;
+class KoShapeBasedDocumentBase;
+class KUndo2Command;
+class KoDocumentResourceManager;
 
 /**
  * Class used by tools to maintain the list of shapes.
  * All applications have some sort of list of all shapes that belong to the document.
- * The applications implement the KoShapeControllerBase interface (all pure virtuals)
+ * The applications implement the KoShapeBasedDocumentBase interface (all pure virtuals)
  * to add and remove shapes from the document. To ensure that an application can expect
  * a certain protocol to be adhered to when adding/removing shapes, all tools use the API
  * from this class for maintaining the list of shapes in the document. So no tool gets
@@ -47,10 +48,10 @@ public:
     /**
      * Create a new Controller; typically not called by applications, only
      * by the KonCanvasBase constructor.
-     * @param canvas the canvas this controller works for.
-     * @param shapeController the application provided shapeControllerBase that we can call.
+     * @param canvas the canvas this controller works for. The canvas can be 0
+     * @param shapeController the application provided shapeBasedDocument that we can call.
      */
-    KoShapeController(KoCanvasBase *canvas, KoShapeControllerBase *shapeController);
+    KoShapeController(KoCanvasBase *canvas, KoShapeBasedDocumentBase *shapeBasedDocument);
     /// destructor
     ~KoShapeController();
 
@@ -64,7 +65,7 @@ public:
      * @return command which will insert the shape into the document or 0 if the
      *         insertion was cancelled. The command is not yet executed.
      */
-    QUndoCommand* addShape(KoShape *shape, QUndoCommand *parent = 0);
+    KUndo2Command* addShape(KoShape *shape, KUndo2Command *parent = 0);
 
     /**
      * @brief Add a shape to the document, skipping any dialogs or other user interaction.
@@ -74,7 +75,7 @@ public:
      *
      * @return command which will insert the shape into the document. The command is not yet executed.
      */
-    QUndoCommand* addShapeDirect(KoShape *shape, QUndoCommand *parent = 0);
+    KUndo2Command* addShapeDirect(KoShape *shape, KUndo2Command *parent = 0);
 
     /**
      * @brief Remove a shape from the document.
@@ -85,7 +86,7 @@ public:
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    QUndoCommand* removeShape(KoShape *shape, QUndoCommand *parent = 0);
+    KUndo2Command* removeShape(KoShape *shape, KUndo2Command *parent = 0);
 
     /**
      * Remove a shape from the document.
@@ -96,29 +97,32 @@ public:
      * @return command which will remove the shape from the document.
      *         The command is not yet executed.
      */
-    QUndoCommand* removeShapes(const QList<KoShape*> &shapes, QUndoCommand *parent = 0);
+    KUndo2Command* removeShapes(const QList<KoShape*> &shapes, KUndo2Command *parent = 0);
 
     /**
-     * @brief Set the KoShapeControllerBase used to add/remove shapes
+     * @brief Set the KoShapeBasedDocumentBase used to add/remove shapes.
      *
-     * @param shapeControllerBase the new shapeControllerBase.
-     * @param canvas the canvas for which we set the shapecontrollerbase
+     * NOTE: only Tables uses this method. Do not use it in your application. Tables
+     * has to also call:
+     * <code>KoToolManager::instance()->updateShapeControllerBase(shapeBasedDocument, canvas->canvasController());</code>
+     *
+     * @param shapeBasedDocument the new shapeBasedDocument.
      */
-    void setShapeControllerBase(KoShapeControllerBase *shapeControllerBase,
-                                KoCanvasBase *canvas);
+    void setShapeControllerBase(KoShapeBasedDocumentBase *shapeBasedDocument);
 
     /**
      * Return a pointer to the resource manager associated with the
      * shape-set (typically a document). The resource manager contains
      * document wide resources * such as variable managers, the image
      * collection and others.
-     * @see KoCanvasBase::resourceManager()
      */
-    KoResourceManager *resourceManager() const;
+    KoDocumentResourceManager *resourceManager() const;
 
 private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_METATYPE(KoShapeController *)
 
 #endif

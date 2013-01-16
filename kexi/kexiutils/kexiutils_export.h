@@ -23,12 +23,12 @@
 #include <kdemacros.h>
 #include "kexiutils_global.h"
 
-#ifdef MAKE_KEXIUTILS_LIB
-# define KEXIUTILS_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIUTILS_EXPORT KDE_IMPORT
-#else
-# define KEXIUTILS_EXPORT
+#ifndef KEXIUTILS_EXPORT
+# ifdef MAKE_KEXIUTILS_LIB
+#  define KEXIUTILS_EXPORT KDE_EXPORT
+# else
+#  define KEXIUTILS_EXPORT KDE_IMPORT
+# endif
 #endif
 
 #endif

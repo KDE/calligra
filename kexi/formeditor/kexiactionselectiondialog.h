@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2012 Adam Pigg <adam@piggz.co.uk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,7 +24,8 @@
 #include <KDialog>
 #include "kexiformeventhandler.h"
 
-class Q3ListViewItem;
+class QTreeWidgetItem;
+
 namespace KexiPart
 {
 class Item;
@@ -46,16 +48,14 @@ public:
      or "No action" has been selected. */
     KexiFormEventAction::ActionData currentAction() const;
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-
 protected slots:
-    void slotActionCategorySelected(Q3ListViewItem* item);
-    void slotKActionItemExecuted(Q3ListViewItem*);
-    void slotKActionItemSelected(Q3ListViewItem*);
-    void slotActionToExecuteItemExecuted(Q3ListViewItem* item);
-    void slotActionToExecuteItemSelected(Q3ListViewItem*);
-    void slotCurrentFormActionItemExecuted(Q3ListViewItem*);
-    void slotCurrentFormActionItemSelected(Q3ListViewItem*);
+    void slotActionCategorySelected(QTreeWidgetItem* item);
+    void slotKActionItemExecuted(QTreeWidgetItem*);
+    void slotKActionItemSelected(QTreeWidgetItem*);
+    void slotActionToExecuteItemExecuted(QTreeWidgetItem* item);
+    void slotActionToExecuteItemSelected(QTreeWidgetItem*);
+    void slotCurrentFormActionItemExecuted(QTreeWidgetItem*);
+    void slotCurrentFormActionItemSelected(QTreeWidgetItem*);
     void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
 
 protected:

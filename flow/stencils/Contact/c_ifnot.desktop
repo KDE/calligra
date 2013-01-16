@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=ifnot
+Name[ca]=ifnot
+Name[ca@valencia]=ifnot
+Name[el]=ifnot
+Name[es]=ifnot
+Name[et]=ifnot
+Name[fi]=ifnot
+Name[fr]=Sinon
+Name[gl]=Senón
+Name[it]=ifnot
+Name[kk]=егерде теріс
+Name[nb]=hvis ikke
+Name[nl]=als-niet
+Name[pl]=jeślinie
 Name[pt]=senão
 Name[pt_BR]=senão
+Name[ru]=Если не
+Name[sk]=ifnot
 Name[sv]=om inte
 Name[uk]=ifnot
 Name[x-test]=xxifnotxx
+Name[zh_TW]=ifnot

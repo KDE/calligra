@@ -24,11 +24,10 @@
 
 #include <KoCanvasObserverBase.h>
 #include <klocale.h>
-#include <kundostack.h>
+#include <kundo2stack.h>
 
 #include <KoShapeController.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
 #include "kis_types.h"
 #include "kis_canvas2.h"
 #include "kis_view2.h"
@@ -42,7 +41,7 @@ public:
     HistoryDock();
 
     virtual void setCanvas(KoCanvasBase *canvas);
-
+    virtual void unsetCanvas() { historyCanvas = 0; }
 private:
     KisUndoView* undoView;
 

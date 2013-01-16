@@ -42,12 +42,12 @@
 #include "kis_shape_layer.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
 #include "kis_shape_selection.h"
 #include "util.h"
+#include "kis_part2.h"
 
 void KisKraSaverTest::testRoundTrip()
 {
@@ -57,9 +57,12 @@ void KisKraSaverTest::testRoundTrip()
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    delete doc;
+    //delete doc;
 
-    KisDoc2 doc2;
+    KisPart2 part;
+    KisDoc2 doc2(&part);
+    part.setDocument(&doc2);
+
     doc2.loadNativeFormat("roundtriptest.kra");
 
     KisCountVisitor cv2(list, KoProperties());

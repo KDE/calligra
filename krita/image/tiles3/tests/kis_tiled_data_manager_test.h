@@ -18,7 +18,7 @@
 #ifndef KIS_TILED_DATA_MANAGER_TEST_H
 #define KIS_TILED_DATA_MANAGER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTiledDataManager;
 
@@ -43,11 +43,16 @@ private:
     void benchmarkCOWImpl();
 
 private slots:
+    void testUndoingNewTiles();
+    void testPurgedAndEmptyTransactions();
     void testUnversionedBitBlt();
     void testVersionedBitBlt();
+    void testBitBltOldData();
     void testBitBltRough();
     void testTransactions();
     void testPurgeHistory();
+    void testUndoSetDefaultPixel();
+
     void benchmarkReadOnlyTileLazy();
     void benchmarkSharedPointers();
 

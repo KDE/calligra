@@ -33,13 +33,15 @@ class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
 class QTabletEvent;
-class KoToolSelection;
 class KoToolBase;
 class KoCanvasBase;
 class KoCanvasController;
 class KoToolProxyPrivate;
 class QInputMethodEvent;
 class KoPointerEvent;
+class QDragMoveEvent;
+class QDragLeaveEvent;
+class QDropEvent;
 
 /**
  * Tool proxy object which allows an application to address the current tool.
@@ -61,7 +63,7 @@ public:
      * @param parent a parent QObject for memory management purposes.
      */
     explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
-    ~KoToolProxy();
+    virtual ~KoToolProxy();
 
     /// Forwarded to the current KoToolBase
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -107,11 +109,8 @@ public:
      */
     QHash<QString, KAction*> actions() const;
 
-    /**
-     * Proxies for KoToolBase::selection()
-     */
-    KoToolSelection *selection();
-
+    /// returns true if the current tool holds a selection
+    bool hasSelection() const;
     /// Forwarded to the current KoToolBase
     void cut();
     /// Forwarded to the current KoToolBase
@@ -120,6 +119,13 @@ public:
     bool paste();
     /// Forwarded to the current KoToolBase
     QStringList supportedPasteMimeTypes() const;
+    /// Forwarded to the current KoToolBase
+    void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+    /// Forwarded to the current KoToolBase
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    /// Forwarded to the current KoToolBase
+    void dropEvent(QDropEvent *event, const QPointF &point);
+ 
     /// Set the new active tool.
     void setActiveTool(KoToolBase *tool);
 
@@ -139,6 +145,10 @@ signals:
      * @see KoToolBase::toolId()
      */
     void toolChanged(const QString &toolId);
+
+protected:
+    virtual QPointF widgetToDocument(const QPointF &widgetPoint) const;
+    KoCanvasBase* canvas() const;
 
 private:
     Q_PRIVATE_SLOT(d, void timeout())

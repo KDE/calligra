@@ -61,7 +61,6 @@ public:
     virtual QDockWidget* createDockWidget()
     {
         PresetDockerDock * dockWidget = new PresetDockerDock();
-        
         dockWidget->setObjectName(id());
 
         return dockWidget;

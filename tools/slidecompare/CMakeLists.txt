@@ -5,7 +5,7 @@ if(OOOSDK_FOUND)
 		${OOOSDK_INCLUDE_DIRS}
 		${KOMAIN_INCLUDES}
 		${KOPAGEAPP_INCLUDES}
-		../../filters/kpresenter/powerpoint
+                ../../filters/stage/powerpoint
 		../../filters/libmso
 	)
 

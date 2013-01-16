@@ -21,7 +21,7 @@
 #define BLUREFFECT_H
 
 #include "KoFilterEffect.h"
-#include <QtCore/QPointF>
+#include <QPointF>
 
 #define BlurEffectId "feGaussianBlur"
 

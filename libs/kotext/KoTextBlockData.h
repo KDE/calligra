@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,7 +32,7 @@ class KoTextBlockPaintStrategyBase;
  * This class is used to store properties for KoText layouting inside Qt QTextBlock
  * instances.
  */
-class KOTEXT_EXPORT KoTextBlockData : public QTextBlockUserData
+class KOTEXT_EXPORT KoTextBlockData
 {
 public:
     /**
@@ -52,8 +53,14 @@ public:
         QList<qreal> tabLength;
     };
 
-    KoTextBlockData();
+    KoTextBlockData(QTextBlock &block);
+    explicit KoTextBlockData(QTextBlockUserData *userData);
     virtual ~KoTextBlockData();
+
+    /**
+     * Clear the counter and set everything to default values.
+     */
+    void clearCounter();
 
     /// return if this block has up-to-date counter data
     bool hasCounterData() const;
@@ -65,10 +72,6 @@ public:
     qreal counterSpacing() const;
     /// set the spacing (in pt) between the counter and the text
     void setCounterSpacing(qreal spacing);
-    /// set the exact text that will be painted as the counter
-    void setCounterText(const QString &text);
-    /// return the exact text that will be painted as the counter
-    QString counterText() const;
 
     /** sets the index that is used at this level.
      * If this represents a paragraph with counter 3.1, then the text is the 1.
@@ -77,6 +80,9 @@ public:
     void setCounterIndex(int index);
     /// returns the index for the counter at this level
     int counterIndex() const;
+
+    /// return the exact text that will be painted as the counter
+    QString counterText() const;
 
     /**
      * set the text that is used for the counter at this level. the text is formatted
@@ -89,6 +95,17 @@ public:
     void setPartialCounterText(const QString &text);
     /// return the partial text for this paragraphs counter
     QString partialCounterText() const;
+
+    /// set the plain counter text which equals the counterText minus prefix and sufix
+    void setCounterPlainText(const QString &text);
+    /// return the plain counter text which equals the counterText minus prefix and sufix
+    QString counterPlainText() const;
+
+    void setCounterPrefix(const QString &text);
+    QString counterPrefix() const;
+
+    void setCounterSuffix(const QString &text);
+    QString counterSuffix() const;
 
     /// Set if the counter is a image or not
     void setCounterIsImage(bool isImage);
@@ -108,6 +125,17 @@ public:
     QPointF counterPosition() const;
 
     /**
+     * Sets a textformat to be used for the counter/bullet
+     * @param font the format
+     */
+    void setLabelFormat(const QTextCharFormat &format);
+
+    /**
+     * Return the format to be used for the counter/bullet
+     */
+    QTextCharFormat labelFormat() const;
+
+    /**
      * When a paragraph has a border, it will have a KoTextBlockBorderData instance.
      * Adding the border will increase the refcount.
      * @param border the border used for this paragraph, or 0 if no border is needed (anymore).
@@ -120,18 +148,6 @@ public:
     KoTextBlockBorderData *border() const;
 
     /**
-     * This is to set the effective top of block. Then follows margin and then the text
-     * @param margin the effective top of the block.
-     */
-    void setEffectiveTop(qreal y);
-
-    /**
-     * Return the effective top of the block. Useful when drawing paragraph background,
-     * or placing anchored shapes relative to this.
-     */
-    qreal effectiveTop() const;
-
-    /**
      * sets a paintStrategy of this paragraph
      * @param paintStrategy the paintStrategy to be used for this paragraph
      */
@@ -142,11 +158,19 @@ public:
      */
     KoTextBlockPaintStrategyBase *paintStrategy() const;
 
+    /**
+     * @brief saveXmlID can be used to determine whether we need to save the xml:id
+     *    for this text block data object. This is true if the text block data describes
+     *    animations.
+     * @return true of we need to save the xml id, false if not.
+     */
+    bool saveXmlID() const;
+
 private:
     class Private;
     Private * const d;
 };
 
-Q_DECLARE_METATYPE(KoTextBlockData*)
+Q_DECLARE_METATYPE(QTextBlockUserData*)
 
 #endif

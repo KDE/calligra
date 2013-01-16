@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,13 +20,13 @@
 #include "KoPrintingDialog.h"
 #include "KoProgressUpdater.h"
 
-#include <KoAction.h>
 #include <KoZoomHandler.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoProgressBar.h>
 #include <KoUpdater.h>
 
+#include <QCoreApplication>
 #include <KDebug>
 #include <KLocale>
 #include <QPainter>
@@ -35,6 +36,8 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QDialog>
+#include <QThread>
+
 
 class KoPrintingDialogPrivate {
 public:
@@ -49,11 +52,6 @@ public:
           dialog(0),
           removePolicy(KoPrintJob::DoNotDelete)
     {
-        action = new KoAction(parent);
-        QObject::connect(action, SIGNAL(triggered (const QVariant&)),
-                         parent, SLOT(preparePage(const QVariant&)), Qt::DirectConnection);
-        QObject::connect(action, SIGNAL(updateUi (const QVariant&)),
-                         parent, SLOT(printPage(const QVariant&)), Qt::DirectConnection);
     }
 
     ~KoPrintingDialogPrivate() {
@@ -72,7 +70,7 @@ public:
     void preparePage(const QVariant &page) {
         const int pageNumber = page.toInt();
 
-        QPointer<KoUpdater> updater = updaters.at(index-1);
+        QPointer<KoUpdater> updater = updaters.at(index - 1);
 
         if (painter) {
             painter->save(); // state before page preparation
@@ -138,27 +136,25 @@ public:
         if (parent->property("blocking").toBool()) {
             return;
         }
+    }
 
-        if (!stop && index < pages.count()) {
-            pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));
-            action->execute(pages[index++]);
+    void printingDone() {
+
+        // printing done!
+        painter->end();
+        progress->cancel();
+        parent->printingDone();
+        pageNumber->setText(i18n("Printing done"));
+        button->setText(i18n("Close"));
+        stop = true;
+        QTimer::singleShot(1200, dialog, SLOT(accept()));
+        if (removePolicy == KoPrintJob::DeleteWhenDone) {
+            parent->deleteLater();
         }
         else {
-            // printing done!
-            painter->end();
-            progress->cancel();
-            parent->printingDone();
-            pageNumber->setText(i18n("Printing done"));
-            button->setText(i18n("Close"));
-            stop = true;
-            QTimer::singleShot(1200, dialog, SLOT(accept()));
-            if (removePolicy == KoPrintJob::DeleteWhenDone) {
-                parent->deleteLater();
-            }
-            else {
-                resetValues();
-            }
+            resetValues();
         }
+
     }
 
     void stopPressed() {
@@ -177,9 +173,9 @@ public:
             resetValues();
     }
 
-    KoZoomHandler zoomer;
-    KoAction *action;
     KoPrintingDialog *parent;
+    KoZoomHandler zoomer;
+
     volatile bool stop;
     KoShapeManager *shapeManager;
     QPainter *painter;
@@ -194,6 +190,7 @@ public:
     QDialog *dialog;
     KoPrintJob::RemovePolicy removePolicy;
 };
+
 
 class PrintDialog : public QDialog {
 public:
@@ -281,8 +278,9 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
     }
 
     const bool blocking = property("blocking").toBool();
+    const bool noprogressdialog = property("noprogressdialog").toBool();
     if (d->index == 0 && d->pages.count() > 0 && d->printer) {
-        if (!blocking)
+        if (!blocking && !noprogressdialog)
             d->dialog->show();
         d->stop = false;
         delete d->painter;
@@ -315,24 +313,27 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
             } while (iter != pages.begin());
         }
 
-        if (blocking) {
-            d->resetValues();
-            foreach (int page, d->pages) {
-                d->index++;
-                d->updaters.append(d->progress->startSubtask()); // one per page
-                d->preparePage(page);
-                d->printPage(page);
+
+        d->resetValues();
+        foreach (int page, d->pages) {
+            d->index++;
+            d->updaters.append(d->progress->startSubtask()); // one per page
+            d->preparePage(page);
+            d->printPage(page);
+            if (!blocking) {
+                qApp->processEvents();
             }
-            d->painter->end();
-            printingDone();
-            d->stop = true;
-            d->resetValues();
-        } else {
-            for (int i=0; i < d->pages.count(); i++)
-                d->updaters.append(d->progress->startSubtask()); // one per page
-            d->pageNumber->setText(i18n("Printing page %1", QString::number(d->pages[d->index])));
-            d->action->execute(d->pages[d->index++]);
+            
         }
+        d->painter->end();
+        if (blocking) {
+            printingDone();
+        }
+        else {
+            d->printingDone();
+        }
+        d->stop = true;
+        d->resetValues();
     }
 }
 

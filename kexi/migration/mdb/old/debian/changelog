@@ -1,13 +1,13 @@
 keximdb (1.1.0-1) unstable; urgency=low
 
-  * Update for KOffice 1.6 packages.
+  * Update for Calligra 1.6 packages.
 
  -- Martin Ellis <martin.ellis@kdemail.net>  Wed, 18 Oct 2006 21:22:27 +0100
 
 keximdb (1.0.2-1) unstable; urgency=low
 
-  * Update for KOffice 1.5 packages
-  * libkexi-dev is gone, using koffice-dev
+  * Update for Calligra 1.5 packages
+  * libkexi-dev is gone, using calligra-dev
   * Update standards version to 3.7.2
   * Update copyright: new description, and update FSF address
 

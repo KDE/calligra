@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=Firewall subdued
+Name[ca]=Tallafocs suavitzat
+Name[ca@valencia]=Tallafocs suavitzat
+Name[el]=Τείχος προστασίας υποτονικό
+Name[es]=Cortafuegos poco activo
+Name[et]=Toonita tulemüür
+Name[fr]=Firewall subdued
+Name[gl]=Devasa controlada
+Name[it]=Firewall attenuato
+Name[kk]=Басыңқы желіаралық қалқаны
+Name[nb]=Brannmur dempet
+Name[nl]=Firewall ondergeschikt
+Name[pl]=Zapora ogniowa podległa
 Name[pt]='Firewall' ultrapassada
 Name[pt_BR]=Firewall ultrapassado
+Name[ru]=Защитный экран приглушённый
+Name[sk]=Firewall tlmený
 Name[sv]=Brandvägg diskret
 Name[uk]=Брандмауер (притлумлено)
 Name[x-test]=xxFirewall subduedxx
+Name[zh_CN]=防火墙(柔和)
+Name[zh_TW]=防火牆（不活躍）

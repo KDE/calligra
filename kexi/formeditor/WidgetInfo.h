@@ -27,7 +27,7 @@
 #include <QHash>
 
 #include <kexi_export.h>
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 
 namespace KFormDesigner
 {
@@ -43,10 +43,10 @@ public:
 
     virtual ~WidgetInfo();
 
-    //! \return a pixmap associated with the widget
-    QString pixmap() const;
+    //! \return the name of the icon associated with the widget
+    QString iconName() const;
 
-    void setPixmap(const QString &p);
+    void setIconName(const QString &iconName);
 
     //! @return the class name of a widget e.g. "LineEdit"
     QByteArray className() const;

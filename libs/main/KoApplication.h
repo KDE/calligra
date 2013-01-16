@@ -23,15 +23,18 @@
 #include <kapplication.h>
 #include "komain_export.h"
 
+class KoPart;
+
 class KoApplicationPrivate;
+class QSplashScreen;
 
 /**
- *  @brief Base class for all %KOffice apps
+ *  @brief Base class for all %Calligra apps
  *
  *  This class handles arguments given on the command line and
- *  shows a generic about dialog for all KOffice apps.
+ *  shows a generic about dialog for all Calligra apps.
  *
- *  In addition it adds the standard directories where KOffice applications
+ *  In addition it adds the standard directories where Calligra applications
  *  can find their images etc.
  *
  *  If the last mainwindow becomes closed, KoApplication automatically
@@ -72,10 +75,32 @@ public:
      */
     static bool isStarting();
 
-signals:
-    /// KoDocument needs to be able to emit document signals from here.
-    friend class KoDocument;
+    /**
+     * Tell KoApplication to show this splashscreen when you call start();
+     * when start returns, the splashscreen is hidden. Use KSplashScreen
+     * to have the splash show correctly on Xinerama displays. 
+     */
+    void setSplashScreen(QSplashScreen *splash);
 
+
+    QList<KoPart*> partList() const;
+
+    void addPart(KoPart* part);
+
+    /**
+     *  Get the number of currently open documents.
+     */
+    int documents();
+
+
+    // Overridden to handle exceptions from event handlers.
+    bool notify(QObject *receiver, QEvent *event);
+
+signals:
+
+    /// KoDocument needs to be able to emit document signals from here.
+    friend class KoDocument; // remove this line when done
+    friend class KoPart;
     /**
      * emitted when a new document is opened.
      */

@@ -1,2 +1,2 @@
-SKIP /kword/pdf/xpdf\|/krita/raw/dcraw\.c
+SKIP /words/pdf/xpdf\|/krita/raw/dcraw\.c
 

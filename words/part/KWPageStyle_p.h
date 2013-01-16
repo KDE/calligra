@@ -30,18 +30,20 @@ public:
     ~KWPageStylePrivate();
     void clear();
 
+    KWPageStyle::PageUsageType pageUsage;
     KoColumns columns;
     KoPageLayout pageLayout;
     QString name;
-    bool mainFrame;
+    QString displayName;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
     qreal headerMinimumHeight,footerMinimumHeight;
-    KWord::HeaderFooterType headers, footers;
-
+    Words::HeaderFooterType headers, footers;
+    bool headerDynamicSpacing;
+    bool footerDynamicSpacing;
     qreal footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
     int footNoteSeparatorLineLength; ///< It's a percentage of page.
     Qt::PenStyle footNoteSeparatorLineType; ///< foot note separate type
-    KWord::FootNoteSeparatorLinePos footNoteSeparatorLinePos; ///< alignment in page
+    Words::FootNoteSeparatorLinePos footNoteSeparatorLinePos; ///< alignment in page
 
     // See parag 16.2 for all the ODF features.
     KoText::Direction direction;
@@ -50,10 +52,10 @@ public:
 
     // called from the command
     void copyProperties(KWPageStylePrivate *other) {
+        pageUsage = other->pageUsage;
         columns = other->columns;
         pageLayout = other->pageLayout;
         //name = other->name;
-        mainFrame = other->mainFrame;
         headerDistance = other->headerDistance;
         footerDistance = other->footerDistance;
         footNoteDistance = other->footNoteDistance;

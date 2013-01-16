@@ -57,9 +57,15 @@ const ListInfo* ParagraphProperties::listInfo() const
     return m_listInfo;
 }
 
-void ParagraphProperties::createListInfo( ListInfoProvider& listInfoProvider )
+void ParagraphProperties::setBulletPictureName(const QString& name)
 {
-    if ( m_listInfo || !listInfoProvider.isValid( m_pap.ilfo, m_pap.nLvlAnm ) )
+    m_listInfo->setBulletPictureName(name);
+}
+
+void ParagraphProperties::createListInfo( ListInfoProvider& listInfoProvider, Word97::CHP& chp)
+{
+    if ( m_listInfo || !listInfoProvider.isValid( m_pap.ilfo, m_pap.nLvlAnm ) ) {
         return;
-    m_listInfo = new ListInfo( m_pap, listInfoProvider );
+    }
+    m_listInfo = new ListInfo( m_pap, chp, listInfoProvider );
 }

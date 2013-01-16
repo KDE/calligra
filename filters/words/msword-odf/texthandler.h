@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -28,6 +28,7 @@
 #include "tablehandler.h"
 //#include "versionmagic.h"
 #include "paragraph.h"
+#include "exceptions.h"
 
 #include <wv2/src/handlers.h>
 #include <wv2/src/functordata.h>
@@ -46,6 +47,7 @@
 #include <vector>
 #include <stack>
 
+
 class Document;
 
 namespace wvWare
@@ -58,7 +60,7 @@ class PAP;
 }
 }
 
-class KWordReplacementHandler : public wvWare::InlineReplacementHandler
+class WordsReplacementHandler : public wvWare::InlineReplacementHandler
 {
 public:
     virtual wvWare::U8 hardLineBreak();
@@ -67,12 +69,12 @@ public:
 };
 
 
-class KWordTextHandler : public QObject, public wvWare::TextHandler
+class WordsTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~KWordTextHandler() { Q_ASSERT (m_fldStart == m_fldEnd); }
+    WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
+    ~WordsTextHandler();
 
     //////// TextHandler interface
 
@@ -80,14 +82,15 @@ public:
     virtual void sectionEnd();
     virtual void pageBreak();
     virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
-    virtual void footnoteFound(wvWare::FootnoteData::Type type, wvWare::UString characters,
+    virtual void footnoteFound(wvWare::FootnoteData data, wvWare::UString characters,
+                               wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                const wvWare::FootnoteFunctor& parseFootnote);
     virtual void annotationFound(wvWare::UString characters,
                                  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                  const wvWare::AnnotationFunctor& parseAnnotation);
 
-    virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties);
+    virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
     virtual void paragraphEnd();
     virtual void fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
     virtual void fieldSeparator(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
@@ -99,10 +102,16 @@ public:
     virtual void bookmarkStart( const wvWare::BookmarkData& data );
     virtual void bookmarkEnd( const wvWare::BookmarkData& data );
 
-    virtual void inlineObjectFound(const wvWare::PictureData& data);
-    virtual void floatingObjectFound(unsigned int globalCP );
+    virtual void msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data);
 
     ///////// Our own interface
+
+    /**
+     * Check the current texthandler state.  At the moment only the number of
+     * opened and closed fields if checked.
+     * @return 0 - Not Ok, 1 - Ok
+     */
+    bool stateOk() const;
 
     /**
      * Paragraph can be present in {header, footer, footnote, endnote,
@@ -116,16 +125,49 @@ public:
      */
     QString getFont(unsigned ftc) const;
 
+    /**
+     * A special purpose function which provides the first font color not set
+     * to cvAuto from the styles hierarchy of the lately processed paragraph.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string.
+     */
+    QString paragraphBaseFontColorBkp() const { return m_paragraphBaseFontColorBkp; }
+
+    /**
+     * Provides access to the background color of the lately processed
+     * paragraph to other handlers.  Notice that text-properties of any of the
+     * text styles might modify the background color.
+     *
+     * @return background color in the format "#RRGGBB" or an empty string.
+     */
+    QString paragraphBgColor() const { return m_paragraph ? m_paragraph->currentBgColor() : QString(); }
+
+    /**
+     * TODO:
+     */
+    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
+
+    /**
+     * TODO:
+     */
+    void defineListStyle(KoGenStyle &style);
+
+    /**
+     *
+     */
+    bool listIsOpen(); //tell us whether a list is open
+
+    /**
+     *
+     */
+    void closeList();
+
     // Provide access to private attributes for our handlers
     Document* document() const { return m_document; }
     void setDocument(Document * document) { m_document = document; }
     void set_breakBeforePage(bool val) { m_breakBeforePage = val; }
     bool breakBeforePage(void) const { return m_breakBeforePage; }
     int sectionNumber(void) const { return m_sectionNumber; }
-
-    //TODO: let's try to solve all list related stuff locally in TextHandler
-    bool listIsOpen(); //tell us whether a list is open
-    void closeList();
 
     // Communication with Document, without having to know about Document
 signals:
@@ -135,12 +177,22 @@ signals:
     void footnoteFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void annotationFound(const wvWare::FunctorBase* parsingFunctor, int data);
     void headersFound(const wvWare::FunctorBase* parsingFunctor, int data);
-    void tableFound(KWord::Table* table);
+    void tableFound(Words::Table* table);
     void inlineObjectFound(const wvWare::PictureData& data, KoXmlWriter* writer);
     void floatingObjectFound(unsigned int globalCP, KoXmlWriter* writer);
 /*     void updateListDepth(int); */
 
 private:
+
+    /**
+     * A special purpose function which provides the font color of the current
+     * paragraph.  Looking for the first built-in paragraph style in the styles
+     * hierarchy providing a font color not set to cvAuto.
+     *
+     * @return font color in the format "#RRGGBB" or an empty string
+     */
+    QString paragraphBaseFontColor() const;
+
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
     Document* m_document; // The document owning this text handler
@@ -157,8 +209,6 @@ private:
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
 
-    KWord::Table* m_currentTable;
-    Paragraph *m_paragraph; //pointer to paragraph object
 #if 1
     bool       m_hasStoredDropCap; // True if the previous paragraph was a dropcap
     int        m_dcs_fdct;
@@ -185,47 +235,67 @@ private:
     KoXmlWriter* m_drawingWriter; //write the drawing data, then add it to bodyWriter
 
     // ************************************************
+    //  Paragraph
+    // ************************************************
+    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
+    Paragraph *m_paragraph; //pointer to paragraph object
+
+    // The 1st font color not set to cvAuto from the built-in styles hierarchy
+    // of the lately processed paragraph.
+    QString m_paragraphBaseFontColorBkp;
+
+    // ************************************************
+    //  Table
+    // ************************************************
+    Words::Table* m_currentTable;
+    KoXmlWriter* m_tableWriter;
+    QBuffer* m_tableBuffer;
+    QString m_floatingTable;
+
+    // ************************************************
+    //  List
+    // ************************************************
+    QString m_listSuffixes[9]; // the suffix for every list level seen so far
+    int m_currentListLevel; // tells us which list level we're on (-1 if not in a list)
+    int m_currentListID;    // tracks the ID of the current list - 0 if not a list
+
+    QStack <KoXmlWriter*> m_usedListWriters;
+
+    // Map of listID keys and listLevel/continue-list pairs
+    QMap<int, QPair<quint8, bool> > m_continueListNum;
+
+    // Map of listId.level keys and xml:id values of text:list elements to
+    // continue automatic numbering.
+    QMap<QString, QString> m_numIdXmlIdMap;
+
+    // ************************************************
     //  State
     // ************************************************
 
-    //save/restore for processing footnotes (very similar to the wv2 method)
+    //save/restore (very similar to the wv2 method)
     struct State {
-        State(KWord::Table* curTab, Paragraph* para, QString lStyleName,
-              int curListDepth, int curListID, const QMap<int, QString> &preLists) :
-                currentTable(curTab), paragraph(para), listStyleName(lStyleName),
-                currentListDepth(curListDepth), currentListID(curListID),
-                previousLists(preLists) {}
+        State(Words::Table* table, Paragraph* paragraph,
+              int listDepth, int listID,
+              KoXmlWriter* drawingWriter, bool insideDrawing) :
 
-        KWord::Table* currentTable;
+            table(table),
+            paragraph(paragraph),
+            listDepth(listDepth),
+            listID(listID),
+            drawingWriter(drawingWriter),
+            insideDrawing(insideDrawing)
+        {}
+        Words::Table* table;
         Paragraph* paragraph;
-        QString listStyleName;
-        int currentListDepth; //tells us which list level we're on (-1 if not in a list)
-        int currentListID; //tracks the id of the current list - 0 if no list
-        QMap<int, QString> previousLists; //remember previous lists, to continue numbering
+        int listDepth; //tells us which list level we're on (-1 if not in a list)
+        int listID;    //tracks the id of the current list - 0 if no list
+        KoXmlWriter* drawingWriter;
+        bool insideDrawing;
     };
 
     std::stack<State> m_oldStates;
     void saveState();
     void restoreState();
-
-    // ************************************************
-    //  List related
-    // ************************************************
-
-    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
-    QString createBulletStyle(const QString& textStyleName) const;
-    void updateListStyle(const QString& textStyleName);
-
-    QString m_listSuffixes[9]; // The suffix for every list level seen so far
-    QString m_listStyleName; //track the name of the list style
-    bool m_listLevelStyleRequired; //track if a list-level-style is required for current paragraph
-    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
-    int m_currentListID; //tracks the id of the current list - 0 if no list
-    wvWare::SharedPtr<const wvWare::ParagraphProperties> m_currentPPs; //paragraph properties
-
-    //int m_previousListID; //track previous list, in case we need to continue the numbering
-    QMap<int, QString> m_previousLists; //remember previous lists, to continue numbering
-    QStack <KoXmlWriter*> m_usedListWriters;
 
     // ************************************************
     //  Field related
@@ -236,9 +306,9 @@ private:
     {
         UNSUPPORTED = 0,
         //PARSE_ERROR = 0x01, ///< Specifies that the field was unable to be parsed.
-        //REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
-        //REF = 0x03, ///< Reference
-        //FTNREF = 0x05, ///< Identicial to NOTEREF (not a reference)
+        REF_WITHOUT_KEYWORD = 0x02, ///< Specifies that the field represents a REF field where the keyword has been omitted.
+        REF = 0x03, ///< Reference
+        //FTNREF = 0x05, ///< Identical to NOTEREF (not a reference)
         //SET = 0x06,
         //IF = 0x07,
         //INDEX = 0x08,
@@ -332,10 +402,6 @@ private:
             m_afterSeparator(false),
             m_hyperLinkActive(false),
             m_tabLeader(QChar::Null),
-            m_hyperLinkUrl(QString::null),
-            m_styleName(QString::null),
-            m_instructions(QString::null),
-/*             m_result(QString::null), */
             m_writer(0),
             m_buffer(0)
         {
@@ -352,32 +418,37 @@ private:
             m_buffer = 0;
         }
 
-        //set to UNSUPPORTED for a field we can't handle, anything else is the field type
+        // Set to UNSUPPORTED for a field we can't handle.
         fldType m_type;
-        
-        //other field related variables
+
         bool m_insideField;
         bool m_afterSeparator;
+
+        // Whether to interpret the field content as a hyperlink.
         bool m_hyperLinkActive;
 
-        //the tab leader character for a TOC entry
-        QChar m_tabLeader;
-
-        //stores the location (bookmark/URL) to jump to
+        // Stores the location (bookmark/URL) to jump to.
         QString m_hyperLinkUrl;
 
-        //KoGenStyle name for the <text:span> element encapsulating content of the
-        //processed field (if applicable)
+        // The text:reference-format value to be used in text:bookmark-ref.
+        QString m_refFormat;
+
+        // Name of a KoGenStyle for the <text:span> element encapsulating the
+        // XML interpretation of the processed field (if applicable).
         QString m_styleName;
-        
-        //stores field instructions
+
+        // The tab leader character for a TOC entry.
+        QChar m_tabLeader;
+
+        // Stores field instructions.
         QString m_instructions;
 
-        //stores the field result
+        // Stores the field result. NOTE: Disabled, becasue we use either
+        // m_writer or save the result as vanilla text.
 /*         QString m_result; */
 
-        //writer and buffer used to place bookmark elements into the field result,
-        //if bookmarks are not to be supported by your field type, use m_result
+        // A writer and buffer used to interpret bookmark elements and tabs in
+        // the field result (if applicable to the field type).
         KoXmlWriter* m_writer;
         QBuffer* m_buffer;
     };

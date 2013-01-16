@@ -21,7 +21,7 @@
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
-#include <qpixmap.h>
+#include <QPixmap>
 #include <QDragMoveEvent>
 #include <QEvent>
 #include <QDropEvent>
@@ -29,7 +29,7 @@
 #include <formeditor/form.h>
 #include <formeditor/FormWidget.h>
 #include <formeditor/FormWidgetInterface.h>
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 
 class KexiDataAwareObjectInterface;
 class KexiFormScrollView;
@@ -94,7 +94,7 @@ public:
     virtual bool cursorAtEnd();
     virtual void clear();
 
-    bool preview() const;
+    bool isPreviewing() const;
 
 //    virtual void setCursor(const QCursor & cursor);
 

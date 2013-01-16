@@ -18,7 +18,7 @@
  */
 
 #include "KarbonBooleanCommand.h"
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoPathShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
@@ -26,13 +26,13 @@
 
 #include <klocale.h>
 
-#include <QtGui/QPainterPath>
+#include <QPainterPath>
 
 class KarbonBooleanCommand::Private
 {
 public:
-    Private(KoShapeControllerBase * c)
-            : controller(c), pathA(0), pathB(0), resultingPath(0)
+    Private(KoShapeBasedDocumentBase * c)
+            : shapeBasedDocument(c), pathA(0), pathB(0), resultingPath(0)
             , resultParent(0), resultParentCmd(0)
             , operation(Intersection), isExecuted(false)
     {}
@@ -43,29 +43,29 @@ public:
             delete resultingPath;
     }
 
-    KoShapeControllerBase *controller;
+    KoShapeBasedDocumentBase *shapeBasedDocument;
     KoPathShape * pathA;
     KoPathShape * pathB;
     KoPathShape * resultingPath;
     KoShapeContainer * resultParent;
-    QUndoCommand * resultParentCmd;
+    KUndo2Command * resultParentCmd;
     BooleanOperation operation;
     bool isExecuted;
 };
 
 KarbonBooleanCommand::KarbonBooleanCommand(
-    KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB,
-    BooleanOperation operation, QUndoCommand *parent
+    KoShapeBasedDocumentBase *shapeBasedDocument, KoPathShape* pathA, KoPathShape * pathB,
+    BooleanOperation operation, KUndo2Command *parent
 )
-        : QUndoCommand(parent), d(new Private(controller))
+        : KUndo2Command(parent), d(new Private(shapeBasedDocument))
 {
-    Q_ASSERT(controller);
+    Q_ASSERT(shapeBasedDocument);
 
     d->pathA = pathA;
     d->pathB = pathB;
     d->operation = operation;
 
-    setText(i18n("Boolean Operation"));
+    setText(i18nc("(qtundo-format)", "Boolean Operation"));
 }
 
 KarbonBooleanCommand::~KarbonBooleanCommand()
@@ -101,7 +101,7 @@ void KarbonBooleanCommand::redo()
         pr = transformationA.inverted().map(pr);
         // create a path shape from the resulting path in local coordinates
         d->resultingPath = KoPathShape::createShapeFromPainterPath(pr);
-        d->resultingPath->setBorder(d->pathA->border());
+        d->resultingPath->setStroke(d->pathA->stroke());
         d->resultingPath->setBackground(d->pathA->background());
         d->resultingPath->setShapeId(d->pathA->shapeId());
         // the created shape has a transformation applied so we have to
@@ -118,28 +118,28 @@ void KarbonBooleanCommand::redo()
         }
     }
 
-    if (d->controller) {
+    if (d->shapeBasedDocument) {
         if (d->resultParent)
             d->resultParent->addShape(d->resultingPath);
-        d->controller->addShape(d->resultingPath);
+        d->shapeBasedDocument->addShape(d->resultingPath);
     }
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     d->isExecuted = true;
 }
 
 void KarbonBooleanCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
-    if (d->controller && d->resultingPath) {
+    if (d->shapeBasedDocument && d->resultingPath) {
         if (! d->resultParentCmd) {
             d->resultParent = d->resultingPath->parent();
             if (d->resultParent)
                 d->resultParent->removeShape(d->resultingPath);
         }
-        d->controller->removeShape(d->resultingPath);
+        d->shapeBasedDocument->removeShape(d->resultingPath);
     }
 
     d->isExecuted = false;

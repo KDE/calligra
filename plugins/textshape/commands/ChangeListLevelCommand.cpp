@@ -32,14 +32,16 @@
 #include <QHash>
 #include <QList>
 
+#define MARGIN_DEFAULT 18 // we consider it the default value
+
 ChangeListLevelCommand::ChangeListLevelCommand(const QTextCursor &cursor, ChangeListLevelCommand::CommandType type,
-                                               int coef, QUndoCommand *parent)
-    : TextCommandBase(parent),
+                                               int coef, KUndo2Command *parent)
+    : KoTextCommandBase(parent),
       m_type(type),
       m_coefficient(coef),
       m_first(true)
 {
-    setText(i18n("Change List Level"));
+    setText(i18nc("(qtundo-format)", "Change List Level"));
 
     int selectionStart = qMin(cursor.anchor(), cursor.position());
     int selectionEnd = qMax(cursor.anchor(), cursor.position());
@@ -72,7 +74,7 @@ int ChangeListLevelCommand::effectiveLevel(int level)
     } else if (m_type == DecreaseLevel) {
         result = level - m_coefficient;
     } else if (m_type == SetLevel) {
-        result = level;
+        result = m_coefficient;
     }
     result = qMax(1, qMin(10, result));
     return result;
@@ -81,7 +83,7 @@ int ChangeListLevelCommand::effectiveLevel(int level)
 void ChangeListLevelCommand::redo()
 {
     if (!m_first) {
-        TextCommandBase::redo();
+        KoTextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             m_lists.value(i)->updateStoredList(m_blocks.at(i));
@@ -90,10 +92,20 @@ void ChangeListLevelCommand::redo()
         }
     }
     else {
-        for (int i = 0; i < m_blocks.size(); ++i) {
+        for (int i = 0; i < m_blocks.size() && m_lists.value(i); ++i) {
             if (!m_lists.value(i)->style()->hasLevelProperties(m_levels.value(i))) {
                 KoListLevelProperties llp = m_lists.value(i)->style()->levelProperties(m_levels.value(i));
-                llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable
+                if (llp.alignmentMode() == false) {
+                    //old list mode, see KoListLevelProperties::alignmentMode() documentation
+                    llp.setIndent((m_levels.value(i)-1) * 20); //TODO make this configurable
+                } else {
+                    llp.setTabStopPosition(MARGIN_DEFAULT*(m_levels.value(i)+1));
+                    llp.setMargin(MARGIN_DEFAULT*(m_levels.value(i)+1));
+                    llp.setTextIndent(- MARGIN_DEFAULT);
+                }
+                llp.setDisplayLevel(llp.displayLevel() + m_coefficient);
+                llp.setLevel(m_levels.value(i));
+
                 m_lists.value(i)->style()->setLevelProperties(llp);
             }
             m_lists.value(i)->add(m_blocks.at(i), m_levels.value(i));
@@ -104,7 +116,7 @@ void ChangeListLevelCommand::redo()
 
 void ChangeListLevelCommand::undo()
 {
-    TextCommandBase::undo();
+    KoTextCommandBase::undo();
     UndoRedoFinalizer finalizer(this);
     for (int i = 0; i < m_blocks.size(); ++i) {
         if (m_blocks.at(i).textList())
@@ -115,7 +127,7 @@ void ChangeListLevelCommand::undo()
     }
 }
 
-bool ChangeListLevelCommand::mergeWith(const QUndoCommand *)
+bool ChangeListLevelCommand::mergeWith(const KUndo2Command *)
 {
     return false;
 }

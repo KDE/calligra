@@ -17,17 +17,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOFFICE_XMLREADER
-#define KOFFICE_XMLREADER
+#ifndef CALLIGRA_XMLREADER
+#define CALLIGRA_XMLREADER
 
 // KOXML_USE_QDOM is defined there
 #include "KoXmlReaderForward.h"
 
 #include "koodf_export.h"
 
-#include <QtXml/qxml.h>
-#include <QtXml/qdom.h>
-#include <qpair.h>
+#include <QPair>
+#include <QtXml>
+#include <QDomDocument>
 
 class QIODevice;
 class QTextDecoder;
@@ -45,7 +45,6 @@ typedef QDomDocument KoXmlDocument;
 
 class QString;
 class QXmlStreamReader;
-template<class T1, class T2> class QPair;
 
 class KoXmlNode;
 class KoXmlText;
@@ -53,6 +52,15 @@ class KoXmlCDATASection;
 class KoXmlDocumentType;
 class KoXmlDocument;
 class KoXmlNodeData;
+
+/**
+ * The office-text-content-prelude type.
+ */
+enum KoXmlNamedItemType {
+    KoXmlTextContentPrelude ///< office-text-content-prelude
+    //KoXmlTextContentMain, ///< office-text-content-main
+    //KoXmlTextContentEpilogue ///< office-text-content-epilogue
+};
 
 /**
 * KoXmlNode represents a node in a DOM tree.
@@ -118,6 +126,8 @@ public:
     KoXmlNode nextSibling() const;
     KoXmlNode previousSibling() const;
 
+    KoXmlElement firstChildElement() const;
+
     // equivalent to node.childNodes().count() if node is a QDomNode instance
     int childNodesCount() const;
 
@@ -127,6 +137,7 @@ public:
 
     KoXmlNode namedItem(const QString& name) const;
     KoXmlNode namedItemNS(const QString& nsURI, const QString& name) const;
+    KoXmlNode namedItemNS(const QString& nsURI, const QString& name, KoXmlNamedItemType type) const;
 
     /**
     * Loads all child nodes (if any) of this node. Normally you do not need
@@ -141,7 +152,11 @@ public:
     void unload();
 
     // compatibility
-    QDomNode asQDomNode(QDomDocument ownerDoc) const;
+    /**
+     * @internal do not call directly
+     * Use KoXml::asQDomDocument(), KoXml::asQDomElement() or KoXml::asQDomNode() instead
+     */
+    void asQDomNode(QDomDocument& ownerDoc) const;
 
 protected:
     KoXmlNodeData* d;
@@ -265,7 +280,7 @@ private:
 class KOODF_EXPORT KoXmlDocument: public KoXmlNode
 {
 public:
-    KoXmlDocument();
+    KoXmlDocument(bool stripSpaces = false);
     KoXmlDocument(const KoXmlDocument& node);
     KoXmlDocument& operator=(const KoXmlDocument& node);
     bool operator==(const KoXmlDocument&) const;
@@ -293,6 +308,12 @@ public:
     // no namespace processing
     bool setContent(const QString& text,
                     QString *errorMsg = 0, int *errorLine = 0, int *errorColumn = 0);
+     /**
+     * Change the way an XMLDocument will be read: <a> <b/> <a/>
+     * if stripSpaces = true then a will only have one child
+     * if stripSpaces = false then a will have 3 children.
+     */
+    void setWhitespaceStripping(bool stripSpaces);
 
 private:
     friend class KoXmlNode;
@@ -323,7 +344,7 @@ private:
  *
  * To find the attribute with a given name, use QDomElement::attributeNS.
  *
- * Do not use getElementsByTagNameNS, it's recursive (which is never needed in KOffice).
+ * Do not use getElementsByTagNameNS, it's recursive (which is never needed in Calligra).
  * Do not use tagName() or nodeName() or prefix(), since the prefix isn't fixed.
  *
  * @author David Faure <faure@kde.org>
@@ -334,6 +355,7 @@ namespace KoXml
 /**
  * A namespace-aware version of QDomNode::namedItem(),
  * which also takes care of casting to a QDomElement.
+ *
  * Use this when a domelement is known to have only *one* child element
  * with a given tagname.
  *
@@ -341,6 +363,21 @@ namespace KoXml
  */
 KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
                                         const QString& nsURI, const QString& localName);
+
+/**
+ * A namespace-aware version of QDomNode::namedItem().
+ * which also takes care of casting to a QDomElement.
+ *
+ * Use this when you like to return the first or an invalid
+ * KoXmlElement with a known type.
+ *
+ * This is an optimized version of the namedItemNS above to
+ * give fast access to certain sections of the document using
+ * the office-text-content-prelude condition as @a KoXmlNamedItemType .
+ */
+KOODF_EXPORT KoXmlElement namedItemNS(const KoXmlNode& node,
+                                      const QString& nsURI, const QString& localName,
+                                      KoXmlNamedItemType type);
 
 /**
  * Explicitly load child nodes of specified node, up to given depth.
@@ -365,12 +402,33 @@ KOODF_EXPORT int childNodesCount(const KoXmlNode& node);
 KOODF_EXPORT QStringList attributeNames(const KoXmlNode& node);
 
 /**
- * Convert KoXml classes to the corresponding QDom classes, which has
- * 'ownerDoc' as the owner document (QDomDocument instance).
+ * Convert KoXmlNode classes to the corresponding QDom classes, which has
+ * @p ownerDoc as the owner document (QDomDocument instance).
+ * The converted @p node (and its children) are added to ownerDoc.
+ *
+ * NOTE:
+ * - If ownerDoc is not empty, this may fail, @see QDomDocument
+ * - @p node must not be a KoXmlDocument, use asQDomDocument()
+ * 
+ * @see asQDomDocument, asQDomElement
  */
-KOODF_EXPORT QDomNode asQDomNode(QDomDocument ownerDoc, const KoXmlNode& node);
-KOODF_EXPORT QDomElement asQDomElement(QDomDocument ownerDoc, const KoXmlElement& element);
-KOODF_EXPORT QDomDocument asQDomDocument(QDomDocument ownerDoc, const KoXmlDocument& document);
+KOODF_EXPORT void asQDomNode(QDomDocument& ownerDoc, const KoXmlNode& node);
+
+/**
+ * Convert KoXmlNode classes to the corresponding QDom classes, which has
+ * @p ownerDoc as the owner document (QDomDocument instance).
+ * The converted @p element (and its children) is added to ownerDoc.
+ * 
+ * NOTE: If ownerDoc is not empty, this may fail, @see QDomDocument
+ *
+ */
+KOODF_EXPORT void asQDomElement(QDomDocument& ownerDoc, const KoXmlElement& element);
+
+/**
+ * Converts the whole @p document into a QDomDocument
+ * If KOXML_USE_QDOM is defined, just returns @p document
+ */
+KOODF_EXPORT QDomDocument asQDomDocument(const KoXmlDocument& document);
 
 /*
  * Load an XML document from specified device to a document. You can of
@@ -405,4 +463,4 @@ KOODF_EXPORT bool setDocument(KoXmlDocument& doc, QIODevice* device,
         if ( ( elem = _node.toElement() ).isNull() ) {} else
 
 
-#endif // KOFFICE_XMLREADER
+#endif // CALLIGRA_XMLREADER

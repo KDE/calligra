@@ -2,7 +2,7 @@
  * This file is part of Krita
  *
  * Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
-  * Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+  * Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
 *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QLabel>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QString>
 #include <QStringList>
 #include <QPushButton>
@@ -44,8 +44,6 @@
 
 #include "kis_bookmarked_configuration_manager.h"
 #include "kis_paint_device.h"
-#include "kis_iterators_pixel.h"
-#include "kis_iterator.h"
 #include "widgets/kis_curve_widget.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
@@ -67,7 +65,6 @@ void KisBrightnessContrastFilterConfiguration::fromLegacyXML(const QDomElement& 
 void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
 {
     KisCubicCurve curve;
-    quint16 numTransfers = 0;
     int version;
     version  = root.attribute("version").toInt();
 
@@ -75,9 +72,7 @@ void KisBrightnessContrastFilterConfiguration::fromXML(const QDomElement& root)
     QString attributeName;
 
     while (!e.isNull()) {
-        if ((attributeName = e.attribute("name")) == "nTransfers") {
-            numTransfers = e.text().toUShort();
-        } else {
+        if ((attributeName = e.attribute("name")) != "nTransfers") {
             QRegExp rx("curve(\\d+)");
             if (rx.indexIn(attributeName, 0) != -1) {
                 quint16 index = rx.cap(1).toUShort();

@@ -20,7 +20,9 @@
 #ifndef REPORTSECTIONDETAILGROUP_H
 #define REPORTSECTIONDETAILGROUP_H
 
-#include <qobject.h>
+#include <QObject>
+
+#include "koreport_export.h"
 
 class ReportSection;
 class ReportSectionDetail;
@@ -31,7 +33,7 @@ class QDomDocument;
 /**
  @author
 */
-class ReportSectionDetailGroup : public QObject
+class KOREPORT_EXPORT ReportSectionDetailGroup : public QObject
 {
     Q_OBJECT
 public:

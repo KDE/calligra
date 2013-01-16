@@ -1,7 +1,27 @@
 [Desktop Entry]
 Name=source
+Name[ca]=font
+Name[ca@valencia]=font
+Name[cs]=zdroj
+Name[de]=Quelle
+Name[el]=πηγή
+Name[es]=fuente
+Name[et]=Allikas
+Name[fr]=source
+Name[gl]=Fonte
+Name[hu]=forrás
+Name[ia]=Fonte
+Name[it]=sorgente
+Name[kk]=бірдеме-көзі
+Name[nb]=kilde
+Name[nl]=bron
+Name[pl]=źródło
 Name[pt]=fonte
 Name[pt_BR]=fonte
+Name[ru]=Источник
+Name[sk]=zdroj
 Name[sv]=källa
+Name[ug]=مەنبە
 Name[uk]=Джерело струму або його вимірювач
 Name[x-test]=xxsourcexx
+Name[zh_TW]=source

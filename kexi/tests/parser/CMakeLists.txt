@@ -10,7 +10,7 @@ set(kexidbparser_SRCS main.cpp )
 
 kde4_add_executable(kexidbparser ${kexidbparser_SRCS})
 
-target_link_libraries(kexidbparser  ${KDE4_KDECORE_LIBS} kexidb kexidbparser )
+target_link_libraries(kexidbparser  ${KDE4_KDECORE_LIBS} kexidb ${CALLIGRADB_LIBS} kexidbparser)
 
 install(TARGETS kexidbparser  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

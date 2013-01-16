@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=buff h
+Name[ca]=buff h
+Name[ca@valencia]=buff h
+Name[el]=buff h
+Name[es]=bufer horizontal
+Name[et]=Horisontaalne puhver
+Name[fr]=buff h
+Name[gl]=Búfer horizontal
+Name[it]=buff h
+Name[kk]=буферлеу жатық
+Name[nb]=buff vannr
+Name[nl]=h in buffer
+Name[pl]=buff h
 Name[pt]=tampão h
 Name[pt_BR]=tampão h
+Name[ru]=buff h
+Name[sk]=buff h
 Name[sv]=buffer h
 Name[uk]=Надсилання до буфера (горизонтально)
 Name[x-test]=xxbuff hxx
+Name[zh_TW]=buff h

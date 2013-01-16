@@ -35,10 +35,10 @@ public:
     bool initialized;   ///< tells whether the subcommands are already created
 };
 
-KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, QUndoCommand *parent)
-        : QUndoCommand(parent), d(new Private(path, insertPointsCount))
+KarbonPathRefineCommand::KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, KUndo2Command *parent)
+        : KUndo2Command(parent), d(new Private(path, insertPointsCount))
 {
-    setText(i18n("Refine path"));
+    setText(i18nc("(qtundo-format)", "Refine path"));
 }
 
 KarbonPathRefineCommand::~KarbonPathRefineCommand()
@@ -71,19 +71,19 @@ void KarbonPathRefineCommand::redo()
                 }
             }
             // create the command and execute it
-            QUndoCommand * cmd = new KoPathPointInsertCommand(pointData, insertPosition, this);
+            KUndo2Command * cmd = new KoPathPointInsertCommand(pointData, insertPosition, this);
             cmd->redo();
         }
         d->initialized = true;
     } else {
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     }
     d->path->update();
 }
 
 void KarbonPathRefineCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     d->path->update();
 }
 

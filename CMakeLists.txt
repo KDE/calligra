@@ -1,6 +1,13 @@
 project(calligra)
 
-cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.0 FATAL_ERROR)
+
+cmake_policy(SET CMP0002 OLD)
+
+#cmake_policy CMP0017 was introduced in version 2.8.4
+if(${CMAKE_VERSION} VERSION_GREATER 2.8.3)
+    cmake_policy(SET CMP0017 NEW)
+endif()
 
  ############
 #############
@@ -14,10 +21,10 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 #######################
 ######################
 
-# define the generic version of the KOffice libraries here
-# this makes it easy to advance it when the next KOffice release comes
-set(GENERIC_KOFFICE_LIB_VERSION "8.0.0")
-set(GENERIC_KOFFICE_LIB_SOVERSION "8")
+# define the generic version of the Calligra libraries here
+# this makes it easy to advance it when the next Calligra release comes
+set(GENERIC_CALLIGRA_LIB_VERSION "12.0.0")
+set(GENERIC_CALLIGRA_LIB_SOVERSION "12")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
@@ -30,70 +37,63 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
 
 option(GHNS "support Get Hot New Stuff" ON)
-
+option(NEPOMUK "support NEPOMUK Tagging" ON)
 option(TINY "compile a tiny Calligra" OFF)
 option(CREATIVEONLY "compile only Karbon and Krita" OFF)
+option(QT3SUPPORT "Build the parts of Calligra that still depend on Qt3" ON)
+option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." OFF)
 
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_TABLES TRUE)
+    set(SHOULD_BUILD_SHEETS TRUE)
     set(SHOULD_BUILD_KARBON FALSE)
     set(SHOULD_BUILD_KRITA FALSE)
     set(SHOULD_BUILD_KEXI FALSE)
     set(SHOULD_BUILD_FLOW FALSE)
-    set(SHOULD_BUILD_KPLATO FALSE)
-    set(SHOULD_BUILD_KFORMULA FALSE)
-    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE TRUE)
 ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_WORDS FALSE)
     set(SHOULD_BUILD_STAGE FALSE)
-    set(SHOULD_BUILD_TABLES FALSE)
+    set(SHOULD_BUILD_SHEETS FALSE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI FALSE)
     set(SHOULD_BUILD_FLOW FALSE)
-    set(SHOULD_BUILD_KPLATO FALSE)
-    set(SHOULD_BUILD_KFORMULA FALSE)
-    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_PLAN FALSE)
     set(SHOULD_BUILD_KDGANTT FALSE)
-    set(SHOULD_BUILD_KOUNAVAIL FALSE)
-    set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE FALSE)
+    set(SHOULD_BUILD_SCRIPTING FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
-    set(SHOULD_BUILD_TABLES TRUE)
+    set(SHOULD_BUILD_SHEETS TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI TRUE)
     set(SHOULD_BUILD_FLOW TRUE)
-    set(SHOULD_BUILD_KPLATO TRUE)
-    set(SHOULD_BUILD_KFORMULA TRUE)
-    set(SHOULD_BUILD_KCHART FALSE)
+    set(SHOULD_BUILD_PLAN TRUE)
     set(SHOULD_BUILD_KDGANTT TRUE)
-    set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ENDIF()
 
 if(KDE4_BUILD_TESTS)
@@ -109,17 +109,43 @@ endif(KDE4_BUILD_TESTS)
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
-find_package(Qt4 4.6.0 REQUIRED)
+if (QT3SUPPORT)
+    find_package(Qt4 4.7.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL Qt3Support)
+else (QT3SUPPORT)
+    find_package(Qt4 4.7.0 REQUIRED QtCore QtGui QtXml QtScript QtSvg QtTest QtWebKit QtDBus QtOpenGL)
+endif (QT3SUPPORT)
 
-include(KDE4Defaults)
-include(MacroLibrary)
+include (KDE4Defaults)
+include (MacroLibrary)
 include (MacroAdditionalCleanFiles)
 include (MacroAddFileDependencies)
 
-option(GHNS "support Get Hot New Stuff" ON)
-if(KDE_VERSION LESS "4.4.0")
+set(SHOULD_BUILD_TEXTSHAPE TRUE)
+if ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+    if (NOT IHAVEPATCHEDQT)
+        set(SHOULD_BUILD_WORDS FALSE)
+        set(SHOULD_BUILD_STAGE FALSE)
+        set(SHOULD_BUILD_TEXTSHAPE FALSE)
+        MESSAGE(STATUS "WARNING: You are using a version of Qt that causes crashes. As a result Words and Stage will not be built. Please upgrade to 4.8.2. You can also patch Qt and when building Calligra set IHAVEPATCHEDQT. Patch against Qt can be found in qt48setx.patch")
+    endif (NOT IHAVEPATCHEDQT)
+endif ((${QTVERSION} VERSION_EQUAL 4.8.0) OR (${QTVERSION} VERSION_EQUAL 4.8.1))
+
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
     set(GHNS FALSE)
-endif(KDE_VERSION LESS "4.4.0")
+endif(NOT ${KDE_VERSION} VERSION_GREATER 4.4.0)
+
+macro_optional_find_package(LibAttica)
+macro_log_feature(LIBATTICA_FOUND "LibAttica" "Attica is used for Get Hot New Stuff." "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "You need at least version 3.0 for uploading of resources to work.")
+
+if (NOT LIBATTICA_FOUND)
+    set(GHNS FALSE)
+endif (NOT LIBATTICA_FOUND)
+
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
+  set(NEPOMUK FALSE)
+endif(NOT ${KDE_VERSION} VERSION_GREATER 4.6.4)
+
+macro_ensure_out_of_source_build("Compiling Calligra inside the source directory is not possible. Please refer to the build instruction http://community.kde.org/Calligra/Building/Building_Calligra")
 
  ###########################
 ############################
@@ -130,21 +156,18 @@ endif(KDE_VERSION LESS "4.4.0")
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+if (APPLE)
+    # this is not added correctly on OSX -- see http://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
+    include_directories(${PNG_INCLUDE_DIR})
+endif(APPLE)
+find_package(Boost REQUIRED) # for pigment and stage
+if (NOT Boost_FOUND)
+    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, sheets and krita.")
+endif (NOT Boost_FOUND)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
-
- ################################
-#################################
-## Check for OpenEXR           ##
-#################################
-################################
-
-
-macro_optional_find_package(OpenEXR)
-macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
-
 
  ###########################
 ############################
@@ -153,11 +176,38 @@ macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
 ###########################
 
 ##
-## Look for OpenGL
+## Test for sqlite
+##
+set(SQLITE_MIN_VERSION 3.6.16)
+set(SQLITE_RECOMMENDED_VERSION 3.7.14)
+set(SQLITE_LOAD_EXTENSION_REQUIRED ON)
+macro_optional_find_package(CalligraSqlite 3.6.16)
+macro_bool_to_01(SQLITE_FOUND HAVE_SQLITE)
+macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine with enabled extensions loading"
+                    "http://www.sqlite.org" FALSE "${SQLITE_MIN_VERSION}"
+		    "Required by Calligra's default database handler for Kexi and Words.")
+
+##
+## Test for ICU
+##
+macro_optional_find_package(ICU)
+macro_bool_to_01(ICU_FOUND HAVE_ICU)
+macro_log_feature(ICU_FOUND "ICU" "International Components for Unicode (ICU) Library"
+                    "http://icu-project.org" FALSE ""
+		    "Required by Calligra's default database handler for Kexi and Words.")
+
+##
+## Check for OpenEXR
 ##
 
-macro_optional_find_package(OpenGL)
+macro_optional_find_package(OpenEXR)
+macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+
+##
+## Look for OpenGL
+##
 set(HAVE_OPENGL 0)
+macro_optional_find_package(OpenGL)
 
 if(OPENGL_FOUND)
     message(STATUS "Found OpenGL: ${OPENGL_LIBRARIES}")
@@ -174,28 +224,17 @@ endif(OPENGL_FOUND)
 macro_log_feature(HAVE_OPENGL "OpenGL" "OpenGL support" "" FALSE "" "Required by parts of Krita and optionally by flake")
 
 ##
-## Test for create ressources
-##
-macro_optional_find_package(CreateResources)
-macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (brushes, palettes etc.)" "http://create.freedesktop.org" FALSE "" "Recommended at runtime for KOffice for optional extra resources.")
-
-##
 ## Test for kdepimlibs
 ##
 macro_optional_find_package(KdepimLibs)
-macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
+macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by Plan and the KDE address book integration (available as a module in KDE)")
 
-##
-## Test for boost
-##
-macro_optional_find_package(Boost)
-macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by Stage")
 
 ##
 ## Test for eigen2
 ##
 macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Tables and Krita")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Calligra Sheets and Krita")
 
 ##
 ## Test for QCA2
@@ -227,28 +266,151 @@ endif( Soprano_FOUND )
 
 
 ##
+## Test for marble
+##
+macro_optional_find_package(Marble)
+macro_log_feature(MARBLE_FOUND "Marble" "KDE4 World Globe Widget library" "http://techbase.kde.org/Projects/Marble/" FALSE "" "Required by RDF, Kexi Forms and Reports to show locations on a map")
+if(NOT MARBLE_FOUND)
+    set(CAN_USE_MARBLE FALSE)
+    set(MARBLE_INCLUDE_DIR "")
+else(NOT MARBLE_FOUND)
+    set(CAN_USE_MARBLE TRUE)
+endif(NOT MARBLE_FOUND)
+if( MARBLE_FOUND )
+    add_definitions( -DCAN_USE_MARBLE )
+    ##
+    ## Marble changed addMarbleWidget to setMarbleWidget in MarbleControlBox.h
+    ## with commit ea177ca. This is for compatibility with older versions.
+    ##
+    find_file(MARBLECONTROLBOX_H MarbleControlBox.h ${MARBLE_INCLUDE_DIR} PATH_SUFFIXES marble)
+    if( MARBLECONTROLBOX_H )
+    file(READ ${MARBLECONTROLBOX_H} MARBLECONTROLBOX_H_CONTENT)
+    string(REGEX MATCH "setMarbleWidget" SETMARBLEWIDGET ${MARBLECONTROLBOX_H_CONTENT})
+        if( SETMARBLEWIDGET )
+            add_definitions(-DHAVE_SETMARBLEWIDGET)
+        endif( SETMARBLEWIDGET)
+    else( MARBLECONTROLBOX_H )
+        message( WARNING "MarbleControlBox.h not found, could not properly set the SETMARBLEWIDGET define." )
+    endif( MARBLECONTROLBOX_H )
+endif( MARBLE_FOUND )
+
+##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS)
-set(REQUIRED_LCMS_VERSION 118)
-if(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-    set(HAVE_LCMS TRUE)
-else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-    set(HAVE_REQUIRED_LCMS_VERSION FALSE)
-    set(HAVE_LCMS FALSE)
-endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
-
 macro_optional_find_package(LCMS2)
-macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.0" "Optional replacement for LittleCMS 1.18. Can be used for color management and Krita")
+macro_log_feature(LCMS2_FOUND "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "2.4" "Will be used for color management and is necesary for Krita")
 if(LCMS2_FOUND)
+    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
+        set(HAVE_LCMS24 TRUE)
+    endif(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
     set(HAVE_REQUIRED_LCMS_VERSION TRUE)
-    set(HAVE_LCMS TRUE)
+    set(HAVE_LCMS2 TRUE)
 endif(LCMS2_FOUND)
 
-    
+##
+## Test for Vc
+##
 
-macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
+set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+macro_optional_find_package(Vc)
+macro_log_feature(Vc_FOUND "Vc" "Portable, zero-overhead SIMD library for C++" "http://code.compeng.uni-frankfurt.de/projects/vc" FALSE "" "Required by the Krita for vectorization")
+macro_bool_to_01(Vc_FOUND HAVE_VC)
+macro_bool_to_01(PACKAGERS_BUILD DO_PACKAGERS_BUILD)
+
+configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+
+if(HAVE_VC)
+    message(STATUS "Vc found!")
+
+    SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${Vc_CMAKE_MODULES_DIR}")
+    include (VcMacros)
+
+    # This is a copy-paste from VcMacros.cmake
+    # we need a version *without* Scalar implementation
+    macro(ko_compile_for_all_implementations_no_scalar_impl _objs _src)
+      set(${_objs})
+
+      # remove all -march, -msse, etc. flags from the flags we want to pass
+      string(REPLACE "${Vc_ARCHITECTURE_FLAGS}" "" _flags "${Vc_DEFINITIONS}")
+      string(REPLACE "-DVC_IMPL=[^ ]*" "" _flags "${_flags}")
+
+      # capture the -march= switch as -mtune; if there is none skip it
+      if(Vc_ARCHITECTURE_FLAGS MATCHES "-march=")
+        string(REGEX REPLACE "^.*-march=([^ ]*).*$" "-mtune=\\1" _tmp "${Vc_ARCHITECTURE_FLAGS}")
+        set(_flags "${_flags} ${_tmp}")
+      endif()
+
+      # make a semicolon separated list of all flags
+      string(TOUPPER "${CMAKE_BUILD_TYPE}" _tmp)
+      set(_tmp "CMAKE_CXX_FLAGS_${_tmp}")
+      string(REPLACE " " ";" _flags "${CMAKE_CXX_FLAGS} ${${_tmp}} ${_flags} ${ARGN}")
+      get_directory_property(_inc INCLUDE_DIRECTORIES)
+      foreach(_i ${_inc})
+        list(APPEND _flags "-I${_i}")
+      endforeach()
+
+      set(_vc_compile_src "${_src}")
+
+      ##! commented out intentionally, the only difference with original
+      #   _vc_compile_one_implementation(${_objs} Scalar NO_FLAG)
+      ##!
+      if(NOT Vc_SSE_INTRINSICS_BROKEN)
+        _vc_compile_one_implementation(${_objs} SSE2   "-msse2"   "-xSSE2"   "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE3   "-msse3"   "-xSSE3"   "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSSE3  "-mssse3"  "-xSSSE3"  "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE4_1 "-msse4.1" "-xSSE4.1" "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE4_2 "-msse4.2" "-xSSE4.2" "/arch:SSE2")
+        _vc_compile_one_implementation(${_objs} SSE4a  "-msse4a"  "-xSSSE3"  "/arch:SSE2")
+      endif()
+      if(NOT Vc_AVX_INTRINSICS_BROKEN)
+        _vc_compile_one_implementation(${_objs} AVX      "-mavx"    "-xAVX"    "/arch:AVX")
+      endif()
+    endmacro()
+
+    macro(ko_compile_for_all_implementations_no_scalar _objs _src _opts)
+      if(PACKAGERS_BUILD)
+        ko_compile_for_all_implementations_no_scalar_impl(${_objs} ${_src} ${_opts})
+      else(PACKAGERS_BUILD)
+        set(${_objs} ${_src})
+      endif(PACKAGERS_BUILD)
+    endmacro()
+
+    macro(ko_compile_for_all_implementations _objs _src _opts)
+      if(PACKAGERS_BUILD)
+        vc_compile_for_all_implementations(${_objs} ${_src} ${_opts})
+      else(PACKAGERS_BUILD)
+        set(${_objs} ${_src})
+      endif(PACKAGERS_BUILD)
+    endmacro()
+
+    if (NOT PACKAGERS_BUILD)
+      # Optimize the whole Calligra for current architecture
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+    endif (NOT PACKAGERS_BUILD)
+endif(HAVE_VC)
+set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
+
+##
+## Test for Nepomuk
+##
+if(NEPOMUK)
+    macro_optional_find_package(Nepomuk)
+    if(NOT NEPOMUK_FOUND)
+        set(NEPOMUK FALSE)
+    endif(NOT NEPOMUK_FOUND)
+    add_definitions(-DDISABLE_NEPOMUK_LEGACY)
+    macro_log_feature(NEPOMUK_FOUND "Nepomuk" "Handles metadata of resources" FALSE  "Required to handle metadata of resources")
+endif(NEPOMUK)
+
+##
+## Test for KActivities
+##
+macro_optional_find_package(KActivities 6.1.0)
+macro_log_feature(KActivities_FOUND "KActivities" "Activities interface library" "https://projects.kde.org/projects/kde/kdelibs/kactivities" FALSE "" "Required for Activities integration.")
+if(KActivities_FOUND)
+    set(HAVE_KACTIVITIES TRUE)
+endif(KActivities_FOUND)
 
 #Set the build of TextShape changetraker
 
@@ -276,28 +438,62 @@ endif(WIN32)
 ##
 ## Test for Fontconfig
 ##
-macro_optional_find_package(Fontconfig)
-macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Fontconfig)
+    macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
 ##
 ## Test for Freetype
 ##
-macro_optional_find_package(Freetype)
-macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+## Only test if on non-Windows system
+if(!WIN32)
+    macro_optional_find_package(Freetype)
+    macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+endif(!WIN32)
 
-if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
     set(FONTCONFIG_INCLUDE_DIR "")
     set(FREETYPE_INCLUDE_DIRS "")
 else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+    add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
 endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-  
+
+##
+## Test for Qt Webkit
+##
+macro_log_feature(QT_QTWEBKIT_FOUND "Qt Webkit" "Qt binding for Webkit, the HTML engine." "http://qt.nokia.com" FALSE "" "Required for the web shape, web Kexi widget and web report element")
+if(QT_QTWEBKIT_FOUND)
+    add_definitions( -DCAN_USE_QTWEBKIT )
+endif(QT_QTWEBKIT_FOUND)
+
+##
+## QImageBlitz (for Kexi)
+##
+#macro_optional_find_package(QImageBlitz)
+#macro_log_feature(QIMAGEBLITZ_FOUND "QImageBlitz" "Fast, smooth scaling of QImages" "sourceforge.net/projects/qimageblitz/" FALSE "" "Required for Kexi")
+
+##
+## Test for KDeclarative
+##
+macro_optional_find_package(KDeclarative)
+if(NOT KDECLARATIVE_FOUND)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif(NOT KDECLARATIVE_FOUND)
 
 ##
 ## Test endianess
 ##
 include (TestBigEndian)
 TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
+
+##
+## Test SharedMimeInfo
+##
+macro_optional_find_package(SharedMimeInfo)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SharedMimeInfo" "Shared Mime Info" "http://freedesktop.org/wiki/Software/shared-mime-info" FALSE "" "Required to determine file types OpenRaster (Krita default format), SVM or all of MSOOXML.")
+
 
 ##
 ## Generate a file for prefix information
@@ -309,7 +505,7 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 ##############################
 #############################
 
-include(MacroKOfficeAddBenchmark)
+include(MacroCalligraAddBenchmark)
 
  ####################
 #####################
@@ -331,6 +527,8 @@ set(KOODF_INCLUDES ${CMAKE_SOURCE_DIR}/libs/odf
                    ${CMAKE_BINARY_DIR}/libs/odf
                    ${KDE4_INCLUDES})
 
+set(KUNDO2_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kundo2)
+
 # pigment depends on koplugin and lcms
 set(PIGMENT_INCLUDES ${KOPLUGIN_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/pigment
@@ -344,10 +542,19 @@ set(FLAKE_INCLUDES ${CMAKE_SOURCE_DIR}/libs/flake
                    ${KOODF_INCLUDES}
                    ${KOPLUGIN_INCLUDES}
                    ${PIGMENT_INCLUDES}
+                   ${KUNDO2_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/flake/commands
                    ${CMAKE_SOURCE_DIR}/libs/flake/tools
+                   ${CMAKE_SOURCE_DIR}/libs/flake/svg
                    ${CMAKE_BINARY_DIR}/libs/flake)
 
+# vectorimage
+set(VECTORIMAGE_INCLUDES 
+                   ${CMAKE_SOURCE_DIR}/libs/vectorimage
+                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libemf
+                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libsvm
+                   ${CMAKE_SOURCE_DIR}/libs/vectorimage/libwmf)
+                   
 # KoText depends on koplugin, odf
 set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${CMAKE_BINARY_DIR}/libs/kotext
@@ -359,11 +566,22 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${KOODF_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/main)
 
+# TextLayout depends on kotext
+set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/textlayout)
+
+# BasicFlakes depends on flake, widgets
+set(BASICFLAKES_INCLUDES ${KOWIDGETS_INCLUDES} ${FLAKE_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/basicflakes
+                   ${CMAKE_SOURCE_DIR}/libs/basicflakes/tools)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
-                    ${KOTEXT_INCLUDES}
+                    ${TEXTLAYOUT_INCLUDES}
+                    ${MARBLE_INCLUDE_DIR}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_SOURCE_DIR}/libs/main/rdf
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 if(SHOULD_BUILD_SCRIPTING)
@@ -371,17 +589,41 @@ if(SHOULD_BUILD_SCRIPTING)
 endif(SHOULD_BUILD_SCRIPTING)
 
 # kopageapp
-set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
+set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
+                    ${PIGMENT_INCLUDES}
+                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
 # koproperty
-SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
-SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})                   # TODO remove when we move to independent place
-SET(KOPROPERTY_LIB_VERSION ${GENERIC_KOFFICE_LIB_VERSION})      # TODO remove when we move to independent place
-SET(KOPROPERTY_LIB_SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION})  # TODO remove when we move to independent place
-SET(KOPROPERTY_USE_KOLIBS TRUE)                                 # TODO remove when we move to independent place
 set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/libs
                         ${CMAKE_SOURCE_DIR}/libs/widgets)
+set(KOPROPERTY_LIBS koproperty)
+
+# calligradb
+# TODO: remove when Predicate lib arrives
+if (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE) # These are hard deps for calligradb
+   set(SHOULD_BUILD_CALLIGRADB TRUE)
+   set(CALLIGRADB_LIBS calligradb)                    # TODO remove when Predicate lib arrives
+   set(CALLIGRADB_INCLUDES ${CMAKE_SOURCE_DIR}/libs   # TODO remove when Predicate lib arrives
+                           ${CMAKE_BINARY_DIR}/libs/db)
+else (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
+   set(SHOULD_BUILD_CALLIGRADB FALSE)
+   set(SHOULD_BUILD_KEXI FALSE)
+endif (NOT TINY AND NOT CREATIVEONLY AND HAVE_ICU AND HAVE_SQLITE)
+
+#############################################
+####          3rd party libraries        ####
+#############################################
+
+set(KDGANTT_INCLUDES
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdgantt
+)
+
+set(KDCHART_INCLUDES
+    ${CMAKE_SOURCE_DIR}/3rdparty/kdchart/include
+)
 
  #############################################
 ##############################################
@@ -390,31 +632,48 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #############################################
 
 #
-# WARNING: when adding a dependency if there is allready a line
+# WARNING: when adding a dependency if there is already a line
 # containing SHOULD_BUILD_app, don't add a new one, just add
 # the test to the if construct
 #
 
 
-### Tables: eigen2, boost
-if(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
-    set(SHOULD_BUILD_TABLES FALSE)
-endif(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
+### Calligra Sheets: eigen2, boost
+if(NOT EIGEN2_FOUND)
+    set(SHOULD_BUILD_SHEETS FALSE)
+endif(NOT EIGEN2_FOUND)
 
-### Stage: boost
-if(NOT Boost_FOUND)
-    set(SHOULD_BUILD_STAGE FALSE)
-endif(NOT Boost_FOUND)
-
-### Krita: pigment, eigen2, exiv2
-if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+### Krita: pigment, eigen2, exiv2, sharedmimeinfo
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION OR NOT SHARED_MIME_INFO_FOUND)
 
-### KPlato: kdepimlibs
-if(NOT KdepimLibs_FOUND)
-    set(SHOULD_BUILD_KPLATO FALSE)
-endif(NOT KdepimLibs_FOUND)
+### Active needs sheets, stage and words
+if (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT SHOULD_BUILD_SHEETS OR NOT SHOULD_BUILD_STAGE OR NOT SHOULD_BUILD_WORDS)
+
+
+### Active: only build with Qt 4.7.0 or better
+if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+
+if (NOT QT_QTDECLARATIVE_FOUND)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT QT_QTDECLARATIVE_FOUND)
+
+if(${KDE_VERSION} VERSION_LESS 4.8.0)
+    set(SHOULD_BUILD_ACTIVE FALSE)
+endif(${KDE_VERSION} VERSION_LESS 4.8.0)
+
+#if(NOT QIMAGEBLITZ_FOUND)
+#    set (SHOULD_BUILD_KEXI FALSE)
+#endif(NOT QIMAGEBLITZ_FOUND)
+
+if (NOT QT3SUPPORT)
+    set (SHOULD_BUILD_KEXI FALSE)
+endif (NOT QT3SUPPORT)
 
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
@@ -423,18 +682,7 @@ option(BUILD_koreport "Build directory libs/koreport" ON)
 ### HACK ###
 
 if(BUILD_kexi AND SHOULD_BUILD_KEXI)
-    ##
-    ## Test for sqlite
-    ##
-    set(SQLITE_RECOMMENDED_VERSION "3.7.3")
-    find_package(KofficeSqlite 3.6.16)
-    macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
-                      FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")
-
-    if(NOT SQLITE_FOUND)
-        set(SHOULD_BUILD_KEXI FALSE)
-        message(STATUS "WARNING: Kexi will not be built.")
-    endif(NOT SQLITE_FOUND)
+###
 endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 
  ###################
@@ -444,45 +692,28 @@ endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 ###################
 
 if(SHOULD_BUILD_WORDS)
-    macro_optional_add_subdirectory(words)
+   macro_optional_add_subdirectory(words)
 endif(SHOULD_BUILD_WORDS)
-
-if (SHOULD_BUILD_KFORMULA)
-    macro_optional_add_subdirectory(kformula)
-endif (SHOULD_BUILD_KFORMULA)
 
 if (SHOULD_BUILD_FLOW)
     macro_optional_add_subdirectory(flow)
 endif (SHOULD_BUILD_FLOW)
 
-if (SHOULD_BUILD_KOUNAVAIL)
-    macro_optional_add_subdirectory(kounavail)
-endif (SHOULD_BUILD_KOUNAVAIL)
-
-if (SHOULD_BUILD_KPLATO)
-    macro_optional_add_subdirectory(kdgantt)
-endif (SHOULD_BUILD_KPLATO)
-
-if (SHOULD_BUILD_KCHART)
-    add_definitions(-DHAVE_KCHART)
-    macro_optional_add_subdirectory(kchart)
-endif (SHOULD_BUILD_KCHART)
-
 if(SHOULD_BUILD_STAGE)
-  macro_optional_add_subdirectory(kpresenter)
+  macro_optional_add_subdirectory(stage)
 endif(SHOULD_BUILD_STAGE)
 
 if(SHOULD_BUILD_KEXI)
     macro_optional_add_subdirectory(kexi)
 endif(SHOULD_BUILD_KEXI)
 
-if(SHOULD_BUILD_KPLATO)
-    macro_optional_add_subdirectory(kplato)
-endif(SHOULD_BUILD_KPLATO)
+if(SHOULD_BUILD_PLAN)
+    macro_optional_add_subdirectory(plan)
+endif(SHOULD_BUILD_PLAN)
 
-if(SHOULD_BUILD_TABLES)
-    macro_optional_add_subdirectory(tables)
-endif(SHOULD_BUILD_TABLES)
+if(SHOULD_BUILD_SHEETS)
+    macro_optional_add_subdirectory(sheets)
+endif(SHOULD_BUILD_SHEETS)
 
 if(SHOULD_BUILD_KRITA)
   macro_optional_add_subdirectory(krita)
@@ -496,32 +727,32 @@ if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
-if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+if(SHOULD_BUILD_ACTIVE)
+  macro_optional_add_subdirectory(active)
+endif(SHOULD_BUILD_ACTIVE)
+
+
+if(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
+   OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
+   OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
+  )
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
-endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
+endif(   NOT SHOULD_BUILD_SHEETS OR NOT BUILD_sheets
+      OR NOT SHOULD_BUILD_WORDS OR NOT BUILD_words
+      OR NOT SHOULD_BUILD_STAGE OR NOT BUILD_stage
+     )
 
-if(SHOULD_BUILD_KOABSTRACTION)
-    # koabstraction depends on kotext & flake
-    set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
-                        ${KOTEXT_INCLUDES}
-                        ${FLAKE_INCLUDES}
-                        ${KOPAGEAPP_INCLUDES}
-                        ${KOMAIN_INCLUDES}
-                        ${CMAKE_SOURCE_DIR}/tools/koabstraction)
-else(SHOULD_BUILD_KOABSTRACTION)
-    set(SHOULD_BUILD_MOBILE FALSE)
-endif(SHOULD_BUILD_KOABSTRACTION)
-
-if(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+if(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     # build cstester
-else(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+else(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
     set(SHOULD_BUILD_CSTESTER FALSE)
-endif(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
+endif(SHOULD_BUILD_SHEETS AND SHOULD_BUILD_WORDS)
 
 macro_optional_add_subdirectory(doc)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
 add_subdirectory(libs)
+add_subdirectory(3rdparty)
 add_subdirectory(interfaces)
 add_subdirectory(cmake)
 add_subdirectory(pics)
@@ -542,19 +773,17 @@ endmacro(macro_display_application_enabled)
 message(STATUS "---------------- The following applications will be built ----------------" )
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
-macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
-macro_display_application_enabled(kpresenter ${SHOULD_BUILD_STAGE})
+macro_display_application_enabled(sheets ${SHOULD_BUILD_SHEETS})
+macro_display_application_enabled(stage ${SHOULD_BUILD_STAGE})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
-macro_display_application_enabled(kplato ${SHOULD_BUILD_KPLATO})
+macro_display_application_enabled(plan ${SHOULD_BUILD_PLAN})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
-macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
-macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
-macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
+macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

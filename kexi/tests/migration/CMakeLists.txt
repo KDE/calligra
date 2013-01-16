@@ -11,7 +11,7 @@ set(xbasemigrationtest_SRCS main.cpp )
 
 kde4_add_executable(xbasemigrationtest NOGUI ${xbasemigrationtest_SRCS})
 
-target_link_libraries(xbasemigrationtest ${KDE4_KDECORE_LIBS} kexicore kexidb keximigrate )
+target_link_libraries(xbasemigrationtest ${KDE4_KDECORE_LIBS} kexicore kexidb ${CALLIGRADB_LIBS} keximigrate)
 
 ########### next target ###############
 
@@ -19,6 +19,6 @@ set(readertest_SRCS readertest.cpp )
 
 kde4_add_executable(readertest ${readertest_SRCS})
 
-target_link_libraries(readertest  ${KDE4_KDECORE_LIBS} keximigrate kexicore kexidb keximain )
+target_link_libraries(readertest  ${KDE4_KDECORE_LIBS} keximigrate kexicore kexidb ${CALLIGRADB_LIBS} keximain)
 
 ########### install files ###############

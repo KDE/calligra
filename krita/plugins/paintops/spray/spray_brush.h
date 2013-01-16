@@ -89,26 +89,26 @@ private:
     /// rotation in radians according the settings (gauss distribution, uniform distribution or fixed angle)
     qreal rotationAngle();
     /// Paints Wu Particle
-    void paintParticle(KisRandomAccessor &writeAccessor, const KoColor &color, qreal rx, qreal ry);
+    void paintParticle(KisRandomAccessorSP &writeAccessor, const KoColor &color, qreal rx, qreal ry);
     void paintCircle(KisPainter * painter, qreal x, qreal y, int radius, int steps);
     void paintEllipse(KisPainter * painter, qreal x, qreal y, int a, int b, qreal angle, int steps);
     void paintRectangle(KisPainter * painter, qreal x, qreal y, int width, int height, qreal angle, int steps);
 
     void paintOutline(KisPaintDeviceSP dev, const KoColor& painterColor, qreal posX, qreal posY, qreal radius);
 
-    /// mix a with b.b mix with weight and a with 1.0 - weight 
-    inline qreal linearInterpolation(qreal a, qreal b, qreal weight){
+    /// mix a with b.b mix with weight and a with 1.0 - weight
+    inline qreal linearInterpolation(qreal a, qreal b, qreal weight) const {
         return (1.0 - weight) * a + weight * b;
     }
 
-    // TODO: move this somewhere where I can reuse it 
+    // TODO: move this somewhere where I can reuse it
     /// convert radians to degrees
-    inline qreal rad2deg(qreal rad){
+    inline qreal rad2deg(qreal rad) const {
         return rad * (180.0/M_PI);
     }
 
     /// convert degrees to radians
-    inline qreal deg2rad(quint16 deg){
+    inline qreal deg2rad(quint16 deg) const {
         return deg * (M_PI/180.0);
     }
 };

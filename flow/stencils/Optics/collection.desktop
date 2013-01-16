@@ -1,9 +1,25 @@
 [Desktop Entry]
 Name=Optics
+Name[ca]=Òptica
+Name[ca@valencia]=Òptica
+Name[de]=Optik
+Name[el]=Οπτική
+Name[es]=Óptica
 Name[et]=Optika
+Name[fi]=Optiikka
+Name[fr]=Optics
+Name[gl]=Óptica
+Name[it]=Ottica
+Name[kk]=Оптика
+Name[nb]=Optikk
+Name[nl]=Optica
+Name[pl]=Optyka
 Name[pt]=Óptica
 Name[pt_BR]=Ótica
+Name[ru]=Оптика
+Name[sk]=Optika
 Name[sv]=Optik
 Name[uk]=Оптика
 Name[x-test]=xxOpticsxx
+Name[zh_TW]=光學器具
 X-KDE-DirType=odg-collection

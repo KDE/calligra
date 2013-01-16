@@ -22,16 +22,19 @@
 #ifndef KOPAVIEW_H
 #define KOPAVIEW_H
 
-#include <QObject>
-
-#include <KoView.h>
-#include <KoPAViewBase.h>
-#include <KoZoomHandler.h>
+#include "KoPAViewBase.h"
 #include "KoPageApp.h"
 #include "kopageapp_export.h"
 
+#include <KoView.h>
+#include <KoZoomHandler.h>
+#include <KoPart.h>
+
+#include <QObject>
+
 class KoCanvasController;
 class KoFind;
+class KoPart;
 class KoPACanvasBase;
 class KoPADocument;
 class KoPAPageBase;
@@ -43,8 +46,14 @@ class KoZoomAction;
 class KoZoomController;
 class KToggleAction;
 class KUrl;
+
+class QDragEnterEvent;
+class QDropEvent;
 class QTextDocument;
 class QLabel;
+class QTabBar;
+class KoCopyController;
+class KoCutController;
 
 /// Creates a view with a KoPACanvasBase and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView, public KoPAViewBase
@@ -66,10 +75,21 @@ public:
      * @param document the document of this view
      * @param parent the parent widget
      */
-    explicit KoPAView( KoPADocument * document, QWidget * parent = 0 );
+    explicit KoPAView(KoPart *part, KoPADocument *document, QWidget *parent);
+
     virtual ~KoPAView();
 
+    //  KoPAViewBase/KoView overrides
+
+    void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+
     KoZoomController* zoomController() const;
+
+    KoCopyController* copyController() const;
+
+    KoCutController* cutController() const;
+
+    KAction* deleteSelectionAction() const;
 
     void updateReadWrite( bool readwrite );
 
@@ -150,6 +170,26 @@ public:
     /// Insert a new page after the current one
     void insertPage();
 
+    void centerPage();
+
+    /// return a pointer to the tab bar (horizontal by default)
+    QTabBar *tabBar() const;
+
+    /// set view Tab Bar position (vertical / horizontal)
+    void setTabBarPosition(Qt::Orientation orientation);
+
+    /// Show a custom central widget and hides the standard one.
+    void replaceCentralWidget(QWidget *newWidget);
+
+    /// hides any custom central widget and shows the standard widget.
+    void restoreCentralWidget();
+
+signals:
+    /// emitted when select All action is triggered and the view is not visible
+    void selectAllRequested();
+    /// emitted when deselect All action is triggered and the view is not visible
+    void deselectAllRequested();
+
 protected:
 
     /// creates the widgets (called from the constructor)
@@ -166,6 +206,8 @@ protected:
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
 
+    void hideCustomCentralWidget();
+
 public slots:
 
     /// Copy Page
@@ -173,6 +215,9 @@ public slots:
 
     /// Delete the current page
     void deletePage();
+
+    /// Make sure the canvas size matches the content
+    void updateCanvasSize(bool forceUpdate = false);
 
 protected slots:
 
@@ -241,6 +286,11 @@ protected slots:
      * Configure kopapage apps
      */
     void configure();
+
+    /**
+     * This is called when the unit of the document changes
+     */
+    void updateUnit(const KoUnit &unit);
 
 private:
     class Private;

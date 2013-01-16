@@ -19,12 +19,12 @@
  */
 
 #include "kexitableedit.h"
-#include "kexidataawareobjectiface.h"
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
+#include <widget/dataviewcommon/kexidataawareobjectiface.h>
+#include <db/field.h>
+#include <db/utils.h>
 
-#include <qpalette.h>
-#include <qpainter.h>
+#include <QPalette>
+#include <QPainter>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
@@ -33,22 +33,34 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#ifdef KEXI_MOBILE
 KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
-        : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
+        : QWidget(parent)
         , m_column(&column)
 // ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
-        , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
         , m_usesSelectedTextColor(true)
         , m_view(0)
 // ,m_hasFocusableWidget(true)
 // ,m_acceptEditorAfterDeleteContents(false)
+#else
+        KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
+        : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
+        , m_column(&column)
+        // ,m_field(&f)
+        // ,m_type(f.type()) //copied because the rest of code uses m_type
+        , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
+        , m_usesSelectedTextColor(true)
+        , m_view(0)
+        // ,m_hasFocusableWidget(true)
+        // ,m_acceptEditorAfterDeleteContents(false)   
+#endif
 {
 //    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
     QPalette pal(palette());
     pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
     setPalette(pal);
-    installEventFilter(this);
+    //installEventFilter(this);
 
     //margins
     if (displayedField()->isFPNumericType()) {
@@ -91,14 +103,16 @@ void KexiTableEdit::setViewWidget(QWidget *v)
 {
     m_view = v;
     m_view->move(0, 0);
-    m_view->installEventFilter(this);
+    //m_view->installEventFilter(this);
     setFocusProxy(m_view);
 }
 
 void KexiTableEdit::moveChild(QWidget * child, int x, int y)
 {
+#ifndef KEXI_MOBILE
     if (m_scrollView)
         m_scrollView->moveChild(child, x, y);
+#endif
 }
 
 void KexiTableEdit::resize(int w, int h)
@@ -112,6 +126,7 @@ void KexiTableEdit::resize(int w, int h)
     }
 }
 
+#if 0
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
@@ -138,6 +153,7 @@ KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
     return false;
 // return QWidget::eventFilter(watched, e);
 }
+#endif
 
 void KexiTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h)
 {
@@ -184,9 +200,9 @@ void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val
 
 void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
         const QString& txt, int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-        const QFontMetrics &fm, bool readOnly, bool fullRowSelection)
+        const QFontMetrics &fm, bool readOnly, bool fullRecordSelection)
 {
-    if (!readOnly && !fullRowSelection && !txt.isEmpty()) {
+    if (!readOnly && !fullRecordSelection && !txt.isEmpty()) {
         QRect bound = fm.boundingRect(x, y_offset, w - (x + x), h, align, txt);
         bound.setY(0);
         bound.setWidth(qMin(bound.width() + 2, w - (x + x) + 1));
@@ -198,7 +214,7 @@ void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
 //TODO align center
         bound.setHeight(h - 1);
         p->fillRect(bound, fillColor);
-    } else if (fullRowSelection) {
+    } else if (fullRecordSelection) {
         p->fillRect(0, 0, w, h, fillColor);
     }
 }
@@ -210,8 +226,10 @@ int KexiTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm)
 
 void KexiTableEdit::repaintRelatedCell()
 {
+#ifndef KEXI_MOBILE
     if (dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView))
         dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
+#endif
 }
 
 bool KexiTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,

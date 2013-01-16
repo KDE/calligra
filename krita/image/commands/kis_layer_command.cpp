@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "commands/kis_layer_commands.h"
 
 KisLayerCommand::KisLayerCommand(const QString& name, KisLayerSP layer) :
-        QUndoCommand(name), m_layer(layer)
+        KUndo2Command(name), m_layer(layer)
 {
 }
 

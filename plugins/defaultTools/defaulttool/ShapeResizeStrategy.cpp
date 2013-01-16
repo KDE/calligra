@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +24,6 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
 #include <commands/KoShapeSizeCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 #include <KoSnapGuide.h>
@@ -98,7 +97,9 @@ ShapeResizeStrategy::ShapeResizeStrategy(KoToolBase *tool,
 
 void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModifiers modifiers)
 {
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
     QPointF newPos = tool()->canvas()->snapGuide()->snap( point, modifiers );
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 
     bool keepAspect = modifiers & Qt::ShiftModifier;
     foreach(KoShape *shape, m_selectedShapes)
@@ -112,6 +113,14 @@ void ShapeResizeStrategy::handleMouseMove(const QPointF &point, Qt::KeyboardModi
         startHeight = std::numeric_limits<qreal>::epsilon();
 
     QPointF distance = m_unwindMatrix.map(newPos) - m_unwindMatrix.map( m_start );
+    // guard against resizing zero width shapes, which would result in huge zoom factors
+    if (m_initialSize.width() < std::numeric_limits<qreal>::epsilon()) {
+        distance.rx() = 0.0;
+    }
+    // guard against resizing zero height shapes, which would result in huge zoom factors
+    if (m_initialSize.height() < std::numeric_limits<qreal>::epsilon()) {
+        distance.ry() = 0.0;
+    }
 
     const bool scaleFromCenter = modifiers & Qt::ControlModifier;
     if (scaleFromCenter) {
@@ -156,7 +165,7 @@ void ShapeResizeStrategy::handleCustomEvent( KoPointerEvent * event )
 void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zoomY )
 {
     QTransform matrix;
-    matrix.translate(center.x(), center.y()); // translate to 
+    matrix.translate(center.x(), center.y()); // translate to
     matrix.scale(zoomX, zoomY);
     matrix.translate(-center.x(), -center.y()); // and back
 
@@ -165,13 +174,13 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
 
     // the resizing transformation without the mirroring part
     QTransform resizeMatrix;
-    resizeMatrix.translate(center.x(), center.y()); // translate to 
+    resizeMatrix.translate(center.x(), center.y()); // translate to
     resizeMatrix.scale( qAbs(zoomX), qAbs(zoomY) );
     resizeMatrix.translate(-center.x(), -center.y()); // and back
 
     // the mirroring part of the resizing transformation
     QTransform mirrorMatrix;
-    mirrorMatrix.translate(center.x(), center.y()); // translate to 
+    mirrorMatrix.translate(center.x(), center.y()); // translate to
     mirrorMatrix.scale( zoomX < 0 ? -1 : 1, zoomY < 0 ? -1 : 1 );
     mirrorMatrix.translate(-center.x(), -center.y()); // and back
 
@@ -227,8 +236,9 @@ void ShapeResizeStrategy::resizeBy( const QPointF &center, qreal zoomX, qreal zo
     m_scaleMatrix = matrix;
 }
 
-QUndoCommand* ShapeResizeStrategy::createCommand()
+KUndo2Command* ShapeResizeStrategy::createCommand()
 {
+    tool()->canvas()->snapGuide()->reset();
     QList<QSizeF> newSizes;
     QList<QTransform> transformations;
     const int shapeCount = m_selectedShapes.count();
@@ -237,10 +247,16 @@ QUndoCommand* ShapeResizeStrategy::createCommand()
         newSizes << m_selectedShapes[i]->size();
         transformations << m_selectedShapes[i]->transformation();
     }
-    QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
+    KUndo2Command * cmd = new KUndo2Command(i18nc("(qtundo-format)", "Resize"));
     new KoShapeSizeCommand(m_selectedShapes, m_startSizes, newSizes, cmd );
     new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, transformations, cmd );
     return cmd;
+}
+
+void ShapeResizeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED(modifiers);
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &converter)

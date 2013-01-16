@@ -1,6 +1,22 @@
 [Desktop Entry]
 Name=Polarisation Control
+Name[ca]=Control de polarització
+Name[ca@valencia]=Control de polarització
+Name[el]=Έλεγχος πόλωσης
+Name[es]=Control de polarización
+Name[et]=Polarisatsiooni regulaator
+Name[fr]=Contrôle de polarisation
+Name[gl]=Control de polarización
+Name[it]=Controllo di polarizzazione
+Name[kk]=Поляризация бақылауы
+Name[nb]=Polarisasjonsstyring
+Name[nl]=Polarisatiebesturing
+Name[pl]=Kontrola polaryzacji
 Name[pt]=Controlo Polarização
 Name[pt_BR]=Controle de polarização
+Name[ru]=Контроль поляризации
+Name[sk]=Polarizačný ovládač
+Name[sv]=Polariseringskontroll
 Name[uk]=Керування поляризацією
 Name[x-test]=xxPolarisation Controlxx
+Name[zh_TW]=極化控制

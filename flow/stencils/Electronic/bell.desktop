@@ -1,8 +1,26 @@
 [Desktop Entry]
 Name=bell
+Name[bg]=звънец
+Name[ca]=campana
+Name[ca@valencia]=campana
+Name[cs]=zvonek
+Name[el]=κουδούνι
+Name[es]=campana
+Name[et]=Kell
+Name[fr]=sonnerie
+Name[gl]=Campá
+Name[hu]=csengő
+Name[it]=bell
+Name[kk]=қоңырау
+Name[nb]=klokke
+Name[nds]=Pingel
 Name[nl]=bel
+Name[pl]=dzwonek
 Name[pt]=campainha
 Name[pt_BR]=campainha
+Name[ru]=Звонок
+Name[sk]=zvonček
 Name[sv]=ringklocka
 Name[uk]=Дзвінок
 Name[x-test]=xxbellxx
+Name[zh_TW]=鈴

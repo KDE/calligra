@@ -24,8 +24,8 @@
 #include <kcombobox.h>
 #include <klocale.h>
 
-#include <qcheckbox.h>
-#include <qlabel.h>
+#include <QCheckBox>
+#include <QLabel>
 
 KexiFindDialog::KexiFindDialog(bool replaceMode, QWidget* parent, const char* name, bool modal)
         : KexiFindDialogBase(parent, name, modal)

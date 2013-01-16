@@ -1,41 +1,38 @@
 
-include_directories( ${KWMF_INCLUDES} ${CMAKE_SOURCE_DIR}/shapes/ )
+include_directories( ${VECTORIMAGE_INCLUDES} )
 
 ########### next target ###############
 
 set(wmfimport_PART_SRCS 
-    wmfimport.cc 
-    wmfimportparser.cc
-    ${SHAPES_SOURCES} )
+    WmfImport.cpp 
+    WmfImportParser.cpp
+)
 
 kde4_add_plugin(wmfimport ${wmfimport_PART_SRCS})
 
-target_link_libraries(wmfimport kowmf karbonui)
+target_link_libraries(wmfimport vectorimage komain koodf)
 
-install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wmfimport
+        DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(wmfexport_PART_SRCS wmfexport.cc )
+set(wmfexport_PART_SRCS WmfExport.cpp)
 
 kde4_add_plugin(wmfexport ${wmfexport_PART_SRCS})
 
 target_link_libraries(
     wmfexport
-    kowmf
+    vectorimage
     karboncommon
     karbonui
-    pigmentcms
-    komain
-    flake
-    ${KDE4_KDECORE_LIBS}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
-    )
+)
 
-install(TARGETS wmfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS wmfexport
+        DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop karbon_wmf_thumbnail.desktop
+        DESTINATION ${SERVICES_INSTALL_DIR})
 

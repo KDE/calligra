@@ -1,7 +1,25 @@
 [Desktop Entry]
 Name=switch
+Name[ca]=commutació
+Name[ca@valencia]=commutació
+Name[cs]=přepínač
+Name[el]=διακόπτης
+Name[es]=conmutación
+Name[et]=Vahetaja
+Name[fr]=bascule
+Name[gl]=Conmutar
+Name[hu]=switch
+Name[it]=switch
+Name[kk]=ауыстырғыш
+Name[nb]=switch
+Name[nl]=wisselen
+Name[pl]=przełącz
 Name[pt]=comutação
 Name[pt_BR]=comutação
+Name[ru]=Переключатель
+Name[sk]=prepínač
 Name[sv]=omkopplare
+Name[ug]=ئالماشتۇر
 Name[uk]=Перемикач
 Name[x-test]=xxswitchxx
+Name[zh_TW]=切換

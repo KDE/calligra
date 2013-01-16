@@ -21,7 +21,7 @@
 #define MOVESTARTOFFSETSTRATEGY_H
 
 #include <KoInteractionStrategy.h>
-#include <QtCore/QList>
+#include <QList>
 
 class KoPathShape;
 class ArtisticTextShape;
@@ -37,13 +37,13 @@ public:
     // reimplemnted from KoInteractionStrategy
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     // reimplemnted from KoInteractionStrategy
-    virtual QUndoCommand *createCommand();
+    virtual KUndo2Command *createCommand();
     // reimplemnted from KoInteractionStrategy
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 private:
     ArtisticTextShape *m_text;      ///< the text shape we are working on
     KoPathShape *m_baselineShape;   ///< path shape the text is put on
-    qreal m_oldStartOffset;         ///< the intial start offset
+    qreal m_oldStartOffset;         ///< the initial start offset
     QList<qreal> m_segmentLengths;  ///< cached lenths of baseline path segments
     qreal m_totalLength;            ///< total length of baseline path
 };

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 #include <QTimer>
 #include <QStyleOption>
 #include <QDomDocument>
-#include <KUndoStack>
+#include <kundo2stack.h>
 
 #include <kdebug.h>
 #include <KLocale>
@@ -37,6 +37,8 @@
 #include <KFontDialog>
 #include <KTextEdit>
 #include <KLineEdit>
+
+#include <KoIcon.h>
 
 #include "WidgetInfo.h"
 #include "FormWidget.h"
@@ -59,6 +61,7 @@
 #include <kexiutils/styleproxy.h>
 #include <kexi_global.h>
 
+#include <db/utils.h>
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
 
@@ -289,7 +292,7 @@ public:
     QString  filename;
 
 //2.0    K3CommandHistory  *commandHistory;
-    KUndoStack undoStack;
+    KUndo2Stack undoStack;
     KActionCollection internalCollection;
     KActionCollection *collection;
     KFormDesigner::ActionGroup* widgetActionGroup;
@@ -465,7 +468,7 @@ void FormPrivate::initPropertiesDescription()
     propCaption["midLineWidth"] = i18n("Mid Frame Width");
     propCaption["frameShape"] = i18n("Frame Shape");
     propCaption["frameShadow"] = i18n("Frame Shadow");
-    //any QScrollbar
+    //any QScrollBar
     propCaption["vScrollBarMode"] = i18n("Vertical Scrollbar");
     propCaption["hScrollBarMode"] = i18n("Horizontal Scrollbar");
 
@@ -1506,9 +1509,12 @@ void Form::autoAssignTabStops()
 
         ++it;
         QWidget *nextw = it==list.constEnd() ? 0 : *it;
+        Q_UNUSED(nextw);
         QObject *page_w = 0;
         KFormDesigner::TabWidget *tab_w = KFormDesigner::findParent<KFormDesigner::TabWidget>(w, "KFormDesigner::TabWidget", page_w);
-        while (nextw) {
+        
+        for (; it!=list.constEnd(); ++it) {
+            QWidget *nextw = *it;
             if (KexiUtils::hasParent(w, nextw)) // do not group (sort) widgets where on is a child of another
                 break;
             if (nextw->y() >= (w->y() + 20))
@@ -1522,8 +1528,6 @@ void Form::autoAssignTabStops()
                 }
             }
             hlist.append(nextw);
-            ++it;
-            nextw = *it;
         }
         hlist.sort();
 
@@ -1566,7 +1570,7 @@ void Form::setFormWidget(FormWidget* w)
     d->formWidget = w;
     if (!d->formWidget)
         return;
-    d->formWidget->m_form = this;
+    d->formWidget->setForm(this);
 }
 
 // moved from FormManager
@@ -1874,11 +1878,6 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         saveLayoutProperty(property, value);
         return;
     }
-    else if (property == "enabled")  {
-        // we cannot really disable the widget, we just change its color palette
-        saveEnabledProperty(value.toBool());
-        return;
-    }
 
     // make sure we are not already undoing -> avoid recursion
     if (d->isUndoing && !d->isRedoing) // && !d->insideAddPropertyCommand)
@@ -1966,7 +1965,7 @@ bool Form::isNameValid(const QString &name) const
 //! @todo add to the undo buffer
     QWidget *w = d->selected.first();
     //also update widget's name in QObject member
-    if (!KexiUtils::isIdentifier(name)) {
+    if (!KexiDB::isIdentifier(name)) {
         KMessageBox::sorry(widget(),
                            i18n("Could not rename widget \"%1\" to \"%2\" because "
                                 "\"%3\" is not a valid name (identifier) for a widget.\n",
@@ -2256,14 +2255,12 @@ void Form::createPropertiesForWidget(QWidget *w)
     d->propertySet.addProperty(newProp);
 
     d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
-//! @todo fix enabled property here
-//crashes:    d->propertySet["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
         m_lib->setPropertyOptions(d->propertySet, *winfo, w);
         d->propertySet.addProperty(newProp = new KoProperty::Property("this:classString", winfo->name()));
         newProp->setVisible(false);
-        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->pixmap()));
+        d->propertySet.addProperty(newProp = new KoProperty::Property("this:iconName", winfo->iconName()));
         newProp->setVisible(false);
     }
     d->propertySet.addProperty(newProp = new KoProperty::Property("this:className",
@@ -2425,17 +2422,17 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QString titleText;
     if (!multiple) {
         if (w == container->form()->widget()) {
-            icon = SmallIcon("form");
+            icon = koIcon("form");
             titleText = i18n("%1 : Form", w->objectName());
         }
         else {
-            icon = SmallIcon(
+            icon = KIcon(
                        container->form()->library()->iconName(w->metaObject()->className()));
             titleText = QString(w->objectName()) + " : " + n;
         }
     }
     else {
-        icon = SmallIcon("multiple_obj");
+        icon = koIcon("multiple_obj");
         titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
 
@@ -2580,7 +2577,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     QPoint pos;
     switch (target) {
     case FormContextMenuTarget: {
-        pos = container->widget()->mapToGlobal(w->pos() + menuPos);
+        pos = w->mapToGlobal(menuPos);
         d->insertionPoint = menuPos;
         break;
     }
@@ -2591,6 +2588,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
     }
 
+    //kDebug() << w << container->widget() << "menuPos=" << menuPos << "pos=" << pos;
     QAction *result = menu.exec(pos);
     if (!result) {
         // nothing to do
@@ -3281,38 +3279,6 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
     }
 }
 
-//! @todo make it support undo
-void Form::saveEnabledProperty(bool value)
-{
-    foreach(QWidget* widget, d->selected) {
-        ObjectTreeItem *tree = objectTree()->lookup(widget->objectName());
-        if (tree->isEnabled() == value)
-            continue;
-
-        QPalette p(widget->palette());
-        p.setCurrentColorGroup(value ? QPalette::Normal : QPalette::Disabled);
-#if 0
-        QPalette p(widget->palette());
-        if (!d->origActiveColors) {
-            d->origActiveColors = new QColorGroup(p.active());
-        }
-        if (value) {
-            p.setActive(*d->origActiveColors);   //revert
-        }
-        else {
-            QColorGroup cg = p.disabled();
-            //also make base color a bit disabled-like
-            cg.setColor(QColorGroup::Base, cg.color(QColorGroup::Background));
-            p.setActive(cg);
-        }
-#endif
-        widget->setPalette(p);
-
-        tree->setEnabled(value);
-        handleWidgetPropertyChanged(widget, "enabled", QVariant(value));
-    }
-}
-
 void Form::createPropertyCommandsInDesignMode(QWidget* widget,
         const QHash<QByteArray, QVariant> &propValues, Command *parentCommand, bool addToActiveForm)
 {
@@ -3466,7 +3432,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
 
         connect(textedit, SIGNAL(textChanged()), this, SLOT(slotInlineTextChanged()));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(textedit, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(textedit, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     } else {
         KLineEdit *editor = new KLineEdit(args.widget->parentWidget());
         d->inlineEditor = editor;
@@ -3480,7 +3446,7 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
         editor->selectAll();
         connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeInlineTextInternal(const QString&)));
         connect(args.widget, SIGNAL(destroyed()), this, SLOT(widgetDestroyed()));
-        connect(editor, SIGNAL(destroyed()), this, SLOT(editorDeleted()));
+        connect(editor, SIGNAL(destroyed()), this, SLOT(inlineEditorDeleted()));
     }
     d->inlineEditor->installEventFilter(this);
     d->inlineEditor->setFont(args.widget->font());
@@ -3495,7 +3461,9 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     else {
         baseBrush = pal.base();
         QColor baseColor(baseBrush.color());
-        baseColor.setAlpha(120);
+        if (!args.widget->inherits("KexiCommandLinkButton")) { //! @todo HACK! any idea??
+            baseColor.setAlpha(120);
+        }
         baseBrush.setColor(baseColor);
     }
     pal.setBrush(QPalette::Base, baseBrush);
@@ -3528,7 +3496,11 @@ void Form::createInlineEditor(const KFormDesigner::WidgetFactory::InlineEditorCr
     d->editedWidgetClass = args.classname;
     d->originalInlineText = args.text;
 
-    changeInlineTextInternal(args.text); // to update size of the widget
+    d->slotPropertyChangedEnabled = false;
+    InlineTextEditingCommand command( // to update size of the widget
+        *this, selectedWidget(), d->editedWidgetClass, args.text);
+    command.execute();
+    d->slotPropertyChangedEnabled = true;
 }
 
 //moved from WidgetFactory
@@ -3759,7 +3731,15 @@ void Form::resetInlineEditor()
         }
     }
     if (ed) {
-        changeInlineTextInternal(inlineEditorText());
+        d->slotPropertyChangedEnabled = false;
+        InlineTextEditingCommand command(
+            *this, selectedWidget(), d->editedWidgetClass, inlineEditorText());
+        command.execute();
+        d->slotPropertyChangedEnabled = true;
+    }
+    d->inlineEditor = 0;
+    d->inlineEditorContainer = 0;
+    if (ed) {
         disconnect(ed, 0, this, 0);
         ed->deleteLater();
     }
@@ -3773,8 +3753,6 @@ void Form::resetInlineEditor()
     if (handles) {
         handles->setEditingMode(false);
     }
-    d->inlineEditor = 0;
-    d->inlineEditorContainer = 0;
     d->editedWidgetClass.clear();
 //2.0    setInlineEditor(widget, 0);
 //2.0    setWidget(0, 0);

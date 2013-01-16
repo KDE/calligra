@@ -1,8 +1,27 @@
 [Desktop Entry]
 Name=IP Phone
+Name[bg]=IP-телефон
+Name[ca]=IP Phone
+Name[ca@valencia]=IP Phone
+Name[de]=IP-Telefon
+Name[el]=IP τηλέφωνο
+Name[es]=Teléfono IP
 Name[et]=IP-telefon
+Name[fr]=IP Phone
+Name[gl]=Teléfono por IP
+Name[hu]=IP telefon
+Name[it]=Telefono IP
+Name[kk]=IP телефон
+Name[nb]=IP-telefon
+Name[nds]=IP-Telefoon
+Name[nl]=IP telefoon
+Name[pl]=Telefon IP
 Name[pt]=Telefone IP
 Name[pt_BR]=Telefone IP
+Name[ru]=IP-телефон
+Name[sk]=IP telefón
 Name[sv]=Internet-telefon
 Name[uk]=IP-телефон
 Name[x-test]=xxIP Phonexx
+Name[zh_CN]=IP 电话
+Name[zh_TW]=IP 電話

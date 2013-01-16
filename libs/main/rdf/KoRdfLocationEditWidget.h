@@ -24,6 +24,13 @@
 #include <QObject>
 #include <QWidget>
 
+class KoRdfLocationEditWidgetPrivate;
+
+namespace Marble
+{
+    class MarbleWidget;
+    class LatLonEdit;
+};
 
 /**
  * This class allows the map to adjust the LatLonEdit widgets as the
@@ -31,10 +38,17 @@
  */
 class KoRdfLocationEditWidget : public QWidget
 {
-    Q_OBJECT
+    Q_OBJECT;
+    KoRdfLocationEditWidgetPrivate* const d;
+    
 public:
     KoRdfLocationEditWidget(QWidget *parent, Ui::KoRdfLocationEditWidget *ew);
+    ~KoRdfLocationEditWidget();
 
+//#ifdef CAN_USE_MARBLE
+//    void setupMap(Marble::MarbleWidget* map, Marble::LatLonEdit* xlat, Marble::LatLonEdit* xlong);
+//#endif
+    
 public slots:
     void mouseMoveGeoPosition(QString);
 

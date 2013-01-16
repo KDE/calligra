@@ -58,37 +58,6 @@ KFormDesigner::removeChildrenFromList(QWidgetList &list)
 }
 
 void
-KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
-{
-    if (!object || !container || !object->isWidgetType())
-        return;
-
-//    kDebug() << "Installing event filter on widget:" << object 
-//        << "directed to" << container->objectName();
-    object->installEventFilter(container);
-//2.0    if (((QWidget*)object)->testAttribute(Qt::WA_SetCursor))
-//2.0    ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
-
-    const QObjectList list(object->children());
-    foreach(QObject *obj, list) {
-        installRecursiveEventFilter(obj, container);
-    }
-}
-
-void
-KFormDesigner::removeRecursiveEventFilter(QObject *object, QObject *container)
-{
-    object->removeEventFilter(container);
-    if (!object->isWidgetType())
-        return;
-
-    const QObjectList list(object->children());
-    foreach(QObject *obj, list) {
-        removeRecursiveEventFilter(obj, container);
-    }
-}
-
-void
 KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 {
     ObjectTreeItem *tree = form->objectTree()->lookup(w->objectName());
@@ -272,7 +241,7 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
         // We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
         containers.insert(
             item->name().toLatin1(),
-            c->widget()->objectName().toLatin1().constData()
+            c->widget()->objectName().toLatin1()
         );
         parents.insert(
             item->name().toLatin1(),

@@ -2,6 +2,8 @@
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Mojtaba Shahi Senobari <mojtaba.shahi3000@gmail.com>
+ * Copyright (C) 2008, 2012 Pierre Stirnweiss <pstirnweiss@googlemail.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,8 +25,12 @@
 #define KOTEXTTOOL_H
 
 #include "TextShape.h"
+#include "KoPointedAt.h"
 
 #include <KoToolBase.h>
+#include <KoTextCommandBase.h>
+#include <KoUnit.h>
+#include <KoBorder.h>
 
 #include <QClipboard>
 #include <QHash>
@@ -32,6 +38,7 @@
 #include <QTextCursor>
 #include <QTimer>
 #include <QWeakPointer>
+#include <QRectF>
 
 class TextEditingPluginContainer;
 class InsertCharacter;
@@ -46,17 +53,22 @@ class KoTextEditor;
 class UndoTextCommand;
 
 class KAction;
+class KActionMenu;
 class KFontAction;
 class FontSizeAction;
 
-class QUndoCommand;
+class KUndo2Command;
+
+class QDrag;
+class QMimeData;
 
 class MockCanvas;
+class TextToolSelection;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class TextTool : public KoToolBase
+class TextTool : public KoToolBase, public KoUndoableTool
 {
     Q_OBJECT
 public:
@@ -64,15 +76,17 @@ public:
 #ifndef NDEBUG
     explicit TextTool(MockCanvas *canvas);
 #endif
-    ~TextTool();
+    virtual ~TextTool();
 
     /// reimplemented from superclass
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented from superclass
+    virtual void mouseTripleClickEvent(KoPointerEvent *event);
     /// reimplemented from superclass
     virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented from superclass
@@ -88,6 +102,10 @@ public:
     virtual void deactivate();
     /// reimplemented from superclass
     virtual void copy() const;
+
+    /// reimplemented from KoUndoableTool
+    virtual void setAddUndoCommandAllowed(bool allowed) { m_allowAddUndoCommand = allowed; }
+
     ///reimplemented
     virtual void deleteSelection();
     /// reimplemented from superclass
@@ -97,64 +115,65 @@ public:
     /// reimplemented from superclass
     virtual QStringList supportedPasteMimeTypes() const;
     /// reimplemented from superclass
+    virtual void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
+    /// reimplemented from superclass
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    /// reimplemented from superclass
+    virtual void dropEvent(QDropEvent *event, const QPointF &point);
+
+    /// reimplemented from superclass
     virtual void repaintDecorations();
 
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
     /// reimplemented from superclass
     virtual void inputMethodEvent(QInputMethodEvent * event);
 
-    bool isBidiDocument() const;
-
 
     /// The following two methods allow an undo/redo command to tell the tool, it will modify the QTextDocument and wants to be parent of the undo/redo commands resulting from these changes.
 
-    void startEditing(QUndoCommand* command);
+    void startEditing(KUndo2Command* command);
 
     void stopEditing();
 
-    const QTextCursor cursor();
-
     void setShapeData(KoTextShapeData *data);
 
-    KoTextEditor *textEditor() { return m_textEditor.data(); }
-
-    QRectF caretRect(int position) const;
+    QRectF caretRect(QTextCursor *cursor, bool *upToDate=0) const;
 
     QRectF textRect(QTextCursor &cursor) const;
+
+protected:
+    virtual void createActions();
+
+    friend class SimpleParagraphWidget;
+    friend class ParagraphSettingsDialog;
+
+    KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);
-    /// add a command to the undo stack, executing it as well.
-    void addCommand(QUndoCommand *command);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
-    //When enabled, display changes
-    void toggleShowChanges(bool);
-    /// When enabled, make the change tracker record changes made while typing
-    void toggleRecordChanges(bool);
-    /// Configure Change Tracking
-    void configureChangeTracking();
-    /// call this when the 'is-bidi' boolean has been changed.
-    void isBidiUpdated();
 
 signals:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);
     /// emitted every time a caret move leads to a different character format being under the caret
-    void charFormatChanged(const QTextCharFormat &format);
+    void charFormatChanged(const QTextCharFormat &format, const QTextCharFormat& refBlockCharFormat);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockFormatChanged(const QTextBlockFormat &format);
     /// emitted every time a caret move leads to a different paragraph format being under the caret
     void blockChanged(const QTextBlock &block);
 
 private slots:
+    /// paste text from the clipboard without formatting
+    void pasteAsText();
     /// make the selected text bold or not
     void bold(bool);
     /// make the selected text italic or not
@@ -171,6 +190,8 @@ private slots:
     void softHyphen();
     /// insert a linebreak at the caret position
     void lineBreak();
+    /// force the remainder of the text into the next page
+    void insertFrameBreak();
     /// align all of the selected text left
     void alignLeft();
     /// align all of the selected text right
@@ -195,9 +216,7 @@ private slots:
     void setFontFamily(const QString &);
     /// Set Font size
     void setFontSize(qreal size);
-    /// Default Format
-    void setDefaultFormat();
-    /// see KoTextSelectionHandler::insertIndexMarker
+    /// see KoTextEditor::insertIndexMarker
     void insertIndexMarker();
     /// shows a dialog to insert a table
     void insertTable();
@@ -219,12 +238,14 @@ private slots:
     void mergeTableCells();
     /// split previous merged table cells
     void splitTableCells();
+    /// format the table border (enter table pen mode)
+    void setTableBorderData(const KoBorder::BorderData &data);
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
-    void showStyleManager();
+    void showStyleManager(int styleId = -1);
     /// change color of a selected text
     void setTextColor(const KoColor &color);
     /// change background color of a selected text
@@ -235,13 +256,12 @@ private slots:
     void setGrowHeightToFit(bool enabled);
     /// Enable or disable shrink-to-fit-text.
     void setShrinkToFit(bool enabled);
-    /// set Paragraph style of current selection. Exisiting style will be completely overridden.
+    /// set Paragraph style of current selection. Existing style will be completely overridden.
     void setStyle(KoParagraphStyle *syle);
     /// set the characterStyle of the current selection. see above.
     void setStyle(KoCharacterStyle *style);
-
-    /// add a KoDocument wide undo command which will call undo on the qtextdocument.
-    void addUndoCommand();
+    /// set the level of current selected list
+    void setListLevel(int level);
 
     /// slot to call when a series of commands is started that together need to become 1 undo action.
     void startMacro(const QString &title);
@@ -260,61 +280,66 @@ private slots:
     void shapeAddedToCanvas();
 
     void blinkCaret();
+    void relayoutContent();
 
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
 
-    //Show tooltip with change info
-    void showChangeTip();
+    //Show tooltip with editing info
+    void showEditTip();
 
     /// print debug about the details of the text document
     void debugTextDocument();
     /// print debug about the details of the styles on the current text document
     void debugTextStyles();
-    /// the document we are editing has received an extra shape
-    void shapeAddedToDoc(KoShape *shape);
-    void ensureCursorVisible();
+
+    void ensureCursorVisible(bool moveView = true);
+
+    void createStyleFromCurrentBlockFormat(QString name);
+    void createStyleFromCurrentCharFormat(QString name);
 
     void testSlot(bool);
+
+    /// change block text direction
+    void textDirectionChanged();
+
+    void updateActions();
 
 private:
     void repaintCaret();
     void repaintSelection();
-    void repaintSelection(QTextCursor &cursor);
-    int pointToPosition(const QPointF & point) const;
-    void updateActions();
+    KoPointedAt hitTest(const QPointF & point) const;
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point);
     void updateSelectionHandler();
     void editingPluginEvents();
     void finishedWord();
     void finishedParagraph();
-    void readConfig();
-    void writeConfig();
     void runUrl(KoPointerEvent *event, QString &url);
+    void useTableBorderCursor();
+
+    QMimeData *generateMimeData() const;
 
 private:
     friend class UndoTextCommand;
-    friend class TextCommandBase;
     friend class ChangeTracker;
-    friend class TextPasteCommand;
     friend class TextCutCommand;
     friend class ShowChangesCommand;
-    friend class ChangeTrackedDeleteCommand;
-    friend class DeleteCommand;
-    TextShape *m_textShape;
-    KoTextShapeData *m_textShapeData;
+
+    TextShape *m_textShape; // where caret of m_textEditor currently is
+    KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
+    KoUnit m_unit;
     bool m_allowActions;
     bool m_allowAddUndoCommand;
-    bool m_trackChanges;
     bool m_allowResourceManagerUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
+    int m_prevMouseSelectionStart, m_prevMouseSelectionEnd;
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
-    int m_caretColorState;
+    KAction *m_actionPasteAsText;
     KAction *m_actionFormatBold;
     KAction *m_actionFormatItalic;
     KAction *m_actionFormatUnderline;
@@ -327,28 +352,20 @@ private:
     KAction *m_actionFormatSub;
     KAction *m_actionFormatIncreaseIndent;
     KAction *m_actionFormatDecreaseIndent;
-    KAction *m_actionShowChanges;
-    KAction *m_actionRecordChanges;
-    KAction *m_configureChangeTracking;
     KAction *m_growWidthAction;
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
+    KAction *m_actionChangeDirection;
+    KActionMenu *m_variableMenu;
+
     FontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;
     KoColorPopupAction *m_actionFormatBackgroundColor;
 
-    QUndoCommand *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
+    KUndo2Command *m_currentCommand; //this command will be the direct parent of undoCommands generated as the result of QTextDocument changes
 
     bool m_currentCommandHasChildren;
-
-    /// structure that allows us to remember the text position and selection of previously edited documents.
-    struct TextSelection {
-        QTextDocument *document; // be warned that this may end up being a dangling pointer, so don't use.
-        int position;
-        int anchor;
-    };
-    QList<TextSelection> m_previousSelections;
 
     InsertCharacter *m_specialCharacterDocker;
 
@@ -357,9 +374,26 @@ private:
     bool m_textTyping;
     bool m_textDeleting;
 
-    QTimer m_changeTipTimer;
-    int m_changeTipCursorPos;
-    QPoint m_changeTipPos;
+    QTimer m_editTipTimer;
+    KoPointedAt m_editTipPointedAt;
+    QPoint m_editTipPos;
+
+    bool m_delayedEnsureVisible;
+    TextToolSelection *m_toolSelection;
+
+    KoPointedAt m_tableDragInfo;
+    bool m_tableDraggedOnce;
+    bool m_tableDragWithShift;
+    QPointF m_draggingOrigin;
+    qreal m_dx;
+    qreal m_dy;
+    bool m_tablePenMode;
+    KoBorder::BorderData m_tablePenBorderData;
+    mutable QRectF m_lastImMicroFocus;
+
+    bool m_clickWithinSelection;
+    QDrag *m_drag;
+    QAbstractTextDocumentLayout::Selection m_preDragSelection;
 };
 
 #endif

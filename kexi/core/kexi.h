@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,24 +20,26 @@
 #ifndef KEXI_H
 #define KEXI_H
 
-#include <qpointer.h>
+#include <QPointer>
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
+#include <db/drivermanager.h>
+#include <db/driver.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
 
-class KAboutData;
+class QLabel;
+class KexiAboutData;
+class KexiRecentProjects;
 
 namespace Kexi
 {
-KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
+KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData);
 
 /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
 enum ViewMode {
@@ -61,7 +63,7 @@ KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
 KEXICORE_EXPORT KexiDBConnectionSet& connset();
 
 //! A set available of project information
-KEXICORE_EXPORT KexiProjectSet& recentProjects();
+KEXICORE_EXPORT KexiRecentProjects* recentProjects();
 
 //! shared driver manager
 KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
@@ -136,12 +138,16 @@ KEXICORE_EXPORT QString msgYouCanImproveData();
 }//namespace Kexi
 
 //! Icon name for database servers
-#define KEXI_ICON_DATABASE_SERVER "network-server-database"
+#define KEXI_DATABASE_SERVER_ICON_NAME (koIconName("network-server-database"))
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 
 //! Displays information that feature "feature_name" is not availabe in the current application version
 KEXICORE_EXPORT void KEXI_UNFINISHED(
+    const QString& feature_name, const QString& extra_text = QString());
+
+//! Like KEXI_UNFINISHED but returns new label instance with expected text
+KEXICORE_EXPORT QLabel *KEXI_UNFINISHED_LABEL(
     const QString& feature_name, const QString& extra_text = QString());
 
 //! Like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text

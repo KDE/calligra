@@ -20,14 +20,14 @@
 #ifndef KWFRAMECREATECOMMAND_H
 #define KWFRAMECREATECOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KWFrame;
 class KWFrameSet;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 /// The undo / redo command for creating frames
-class KWFrameCreateCommand : public QUndoCommand
+class KWFrameCreateCommand : public KUndo2Command
 {
 public:
     /**
@@ -36,7 +36,7 @@ public:
      * @param frame the frame to create.
      * @param parent the parent for macro command functionality
      */
-    explicit KWFrameCreateCommand(KoShapeControllerBase *shapeController, KWFrame *frame, QUndoCommand *parent = 0);
+    explicit KWFrameCreateCommand(KoShapeBasedDocumentBase *shapeController, KWFrame *frame, KUndo2Command *parent = 0);
 
     /// redo the command
     virtual void redo();

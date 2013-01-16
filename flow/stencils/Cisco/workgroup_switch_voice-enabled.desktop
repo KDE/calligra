@@ -1,8 +1,27 @@
 [Desktop Entry]
 Name=Voice switch
+Name[bg]=Комутиране на глас
+Name[ca]=Commutador de veu
+Name[ca@valencia]=Commutador de veu
+Name[de]=Voice-Switch
+Name[el]=Μεταγωγέας φωνής
+Name[es]=Conmutador de voz
 Name[et]=Häälekommutaator
+Name[fr]=Voice switch
+Name[gl]=Conmutador de voz
+Name[hu]=Hang switch
+Name[it]=Voice switch
+Name[kk]=Дауыс қосқышы
+Name[nb]=Talesvitsj
+Name[nds]=Stimm-Ümschalter
+Name[nl]=Omschakelen van stem
+Name[pl]=Przełącznik głosowy
 Name[pt]=Comutador voz
 Name[pt_BR]=Comutador de voz
+Name[ru]=Голосовой коммутатор
+Name[sk]=Hlasový prepínač
 Name[sv]=Röstväxel
 Name[uk]=Голосовий комутатор
 Name[x-test]=xxVoice switchxx
+Name[zh_CN]=语音交换机
+Name[zh_TW]=聲音交換器

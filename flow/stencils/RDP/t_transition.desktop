@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=timed transition
+Name[ca]=transició temporitzada
+Name[ca@valencia]=transició temporitzada
+Name[el]=χρονολογημένη μετάβαση
+Name[es]=transición temporizada
+Name[et]=Ajastatud üleminek
+Name[fr]=temps de transition
+Name[gl]=Transición temporizada
+Name[hu]=időzített átmenet
+Name[it]=transizione a tempo
+Name[kk]=уақыты белгілеген ауысым
+Name[nb]=timet overgang
+Name[nl]=Getimede overgang
+Name[pl]=czasowe przejście
 Name[pt]=transição temporizada
 Name[pt_BR]=transição temporizada
+Name[ru]=Размеренный по времени переход
+Name[sk]=časový prechod
 Name[sv]=tidtagen övergång
 Name[uk]=Відкладена передача
 Name[x-test]=xxtimed transitionxx
+Name[zh_TW]=timed transition

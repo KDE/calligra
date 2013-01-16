@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (c) 2007 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2007 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -25,6 +25,8 @@
 #include "KoColorSlider.h"
 #include "KoCheckerBoardPainter.h"
 #include "KoColorSpaceRegistry.h"
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
 
 #include <QPainter>
 #include <QWidgetAction>
@@ -35,7 +37,6 @@
 #include <KColorDialog>
 #include <KDebug>
 #include <klocale.h>
-#include <kicon.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
@@ -43,7 +44,7 @@
 class KoColorPopupAction::KoColorPopupActionPrivate
 {
 public:
-    KoColorPopupActionPrivate() 
+    KoColorPopupActionPrivate()
         : colorSetWidget(0), colorChooser(0), opacitySlider(0), menu(0), checkerPainter(4)
         , showFilter(true), applyMode(true)
     {}
@@ -55,7 +56,7 @@ public:
         delete opacitySlider;
         delete menu;
     }
-    
+
     KoColor currentColor;
     KoColor buddyColor;
 
@@ -76,12 +77,20 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     QWidget *widget = new QWidget(d->menu);
     QWidgetAction *wdgAction = new QWidgetAction(d->menu);
     d->colorSetWidget = new KoColorSetWidget(widget);
+
+    KoResourceServer<KoColorSet>* srv = KoResourceServerProvider::instance()->paletteServer();
+    QList<KoColorSet*> palettes = srv->resources();
+    if (!palettes.empty()) {
+        d->colorSetWidget->setColorSet(palettes.first());
+    }
+
     d->colorChooser = new KoTriangleColorSelector( widget );
     // prevent mouse release on color selector from closing popup
     d->colorChooser->setAttribute( Qt::WA_NoMousePropagation );
     d->opacitySlider = new KoColorSlider( Qt::Vertical, widget );
     d->opacitySlider->setFixedWidth(25);
     d->opacitySlider->setRange(0, 255);
+    d->opacitySlider->setValue(255);
     d->opacitySlider->setToolTip( i18n( "Opacity" ) );
 
     QGridLayout * layout = new QGridLayout( widget );
@@ -101,9 +110,9 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
 
     connect(d->colorSetWidget, SIGNAL(colorChanged(const KoColor &, bool)), this, SLOT(colorWasSelected(const KoColor &, bool)));
 
-    connect( d->colorChooser, SIGNAL( colorChanged( const QColor &) ), 
+    connect( d->colorChooser, SIGNAL( colorChanged( const QColor &) ),
              this, SLOT( colorWasEdited( const QColor &) ) );
-    connect( d->opacitySlider, SIGNAL(valueChanged(int)), 
+    connect( d->opacitySlider, SIGNAL(valueChanged(int)),
              this, SLOT(opacityWasChanged(int)));
 }
 
@@ -154,12 +163,14 @@ KoColor KoColorPopupAction::currentKoColor() const
 void KoColorPopupAction::updateIcon( )
 {
     QSize iconSize(16,16);
-    QPixmap pm = icon().pixmap(iconSize);
+    // This must be a QImage, as drawing to a QPixmap outside the
+    // UI thread will cause sporadic crashes.
+    QImage pm = icon().pixmap(iconSize).toImage();
     if(pm.isNull())
     {
-        pm = QPixmap(iconSize);
+        pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
         pm.fill(Qt::transparent);
-        // there was no icon set so we assume 
+        // there was no icon set so we assume
         // that we create an icon from the current color
         d->applyMode = false;
     }
@@ -174,7 +185,7 @@ void KoColorPopupAction::updateIcon( )
 
     p.end();
 
-    setIcon(QIcon(pm));
+    setIcon(QIcon(QPixmap::fromImage(pm)));
 }
 
 void KoColorPopupAction::emitColorChanged()

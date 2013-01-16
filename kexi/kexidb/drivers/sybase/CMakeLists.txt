@@ -19,7 +19,7 @@ set(kexidb_sybasedriver_PART_SRCS
 kde4_add_plugin(kexidb_sybasedriver ${kexidb_sybasedriver_PART_SRCS})
 
 target_link_libraries(kexidb_sybasedriver ${FreeTDS_LIBRARIES}
- ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexidb )
+ ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} ${CALLIGRADB_LIBS} kexidb)
 
 install(TARGETS kexidb_sybasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 

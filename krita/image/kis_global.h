@@ -22,11 +22,11 @@
 #include <limits.h>
 
 #include <kglobal.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 #include <KoConfig.h>
 
-#define KRITA_VERSION KOFFICE_VERSION
+#define KRITA_VERSION CALLIGRA_VERSION
 
 const quint8 quint8_MAX = UCHAR_MAX;
 const quint16 quint16_MAX = 65535;
@@ -43,10 +43,9 @@ enum enumCursorStyle {
     CURSOR_STYLE_CROSSHAIR = 1,
     CURSOR_STYLE_POINTER = 2,
     CURSOR_STYLE_OUTLINE = 3,
-    CURSOR_STYLE_NO_CURSOR = 4
-#if defined(HAVE_OPENGL)
-    , CURSOR_STYLE_3D_MODEL = 5
-#endif
+    CURSOR_STYLE_NO_CURSOR = 4,
+    CURSOR_STYLE_SMALL_ROUND = 5,
+    CURSOR_STYLE_3D_MODEL = 6
 };
 
 /*

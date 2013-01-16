@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -38,6 +38,11 @@ public:
     virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
     void setProgress(const int percent);
+
+private:
+    // checks from FIB if document is encrypted
+    bool isEncrypted(const QString &inputfile);
+
 
 };
 

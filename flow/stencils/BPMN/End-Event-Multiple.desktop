@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=End-Event-Multiple
-Name[et]=Sündmuse mitmiklõpp
+Name[ca]=Final-Esdeveniment-Múltiple
+Name[ca@valencia]=Final-Esdeveniment-Múltiple
+Name[el]=Πολλαπλότητα-γεγονότος-τέλους
+Name[es]=Evento final múltiple
+Name[et]=Mitmiklõpusündmus
+Name[fr]=Multiplication de fin d'évènement
+Name[gl]=Evento final múltiple
+Name[hu]=Vége-Esemény-Többszörös
+Name[it]=Evento-finale-Multiplo
+Name[kk]=Аяқтау-оқиға-тармақтау
+Name[nb]=Slutt-hendelse-flere
+Name[nl]=Einde-gebeurtenis-meervoudig
+Name[pl]=Mnożenie-Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Múltiplo
 Name[pt_BR]=Evento final múltiplo
+Name[ru]=Составное завершение события
+Name[sk]=End-Event-Multiple
 Name[sv]=Sluthändelse-flera
 Name[uk]=Розгалуження кінцевої події
 Name[x-test]=xxEnd-Event-Multiplexx

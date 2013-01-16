@@ -1,8 +1,27 @@
 [Desktop Entry]
 Name=Software based server
+Name[bg]=Софтуерно базиран сървър
+Name[ca]=Servidor basat en programari
+Name[ca@valencia]=Servidor basat en programari
+Name[de]=Software-basierter Server
+Name[el]=Εξυπηρετητής με λογισμικό
+Name[es]=Servidor basado en software
 Name[et]=Tarkvaraline server
+Name[fr]=Software based server
+Name[gl]=Servidor baseado en software
+Name[hu]=Szoftveralapú kiszolgáló
+Name[it]=Server basato su software
+Name[kk]=Бағдарламалық сервері
+Name[nb]=Programvarebasert tjener
+Name[nds]=Programm-baseert Server
+Name[nl]=Op software gebaseerde server
+Name[pl]=Serwer programowy
 Name[pt]=Servidor por SW
 Name[pt_BR]=Servidor baseado em software
+Name[ru]=Софтовый сервер
+Name[sk]=Softvérový server
 Name[sv]=Progravarubaserad server
 Name[uk]=Програмний сервер
 Name[x-test]=xxSoftware based serverxx
+Name[zh_CN]=基于软件的服务器
+Name[zh_TW]=軟體伺服器

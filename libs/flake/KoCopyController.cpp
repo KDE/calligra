@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,7 +58,7 @@ KoCopyControllerPrivate::KoCopyControllerPrivate(KoCopyController *p, KoCanvasBa
 
 void KoCopyControllerPrivate::copy()
 {
-    if (canvas->toolProxy()->selection() && canvas->toolProxy()->selection()->hasSelection())
+    if (canvas->toolProxy()->hasSelection())
         // means the copy can be done by a flake tool
         canvas->toolProxy()->copy();
     else // if not; then the application gets a request to do the copy
@@ -66,7 +67,12 @@ void KoCopyControllerPrivate::copy()
 
 void KoCopyControllerPrivate::cut()
 {
-    canvas->toolProxy()->cut();
+    if (canvas->toolProxy()->hasSelection()) {
+        canvas->toolProxy()->cut();
+    }
+    else {
+        emit parent->copyRequested();
+    }
 }
 
 void KoCopyControllerPrivate::selectionChanged(bool hasSelection)
@@ -94,7 +100,7 @@ void KoCopyController::hasSelection(bool selection)
 {
     d->appHasSelection = selection;
     d->action->setEnabled(d->appHasSelection ||
-            (d->canvas->toolProxy()->selection() && d->canvas->toolProxy()->selection()->hasSelection()));
+                          d->canvas->toolProxy()->hasSelection());
 }
 
 #include <KoCopyController.moc>

@@ -1,8 +1,27 @@
 [Desktop Entry]
 Name=PIX Firewall
+Name[bg]=Защитна стена PIX
+Name[ca]=Tallafocs PIX
+Name[ca@valencia]=Tallafocs PIX
+Name[de]=PIX-Firewall
+Name[el]=PIX Firewall
+Name[es]=Cortafuegos PIX
 Name[et]=PIX tulemüür
+Name[fr]=PIX Firewall
+Name[gl]=Devasa PIX
+Name[hu]=PIX tűzfal
+Name[it]=Firewall PIX
+Name[kk]=PIX желіаралық қалқаны
+Name[nb]=PIX brannmur
+Name[nds]=PIX-Nettdiek
+Name[nl]=PIX firewall
+Name[pl]=Zapora ogniowa PIX
 Name[pt]='Firewall' PIX
 Name[pt_BR]=Firewall PIX
+Name[ru]=Защитный экран PIX
+Name[sk]=PIX Firewall
 Name[sv]=PIX-brandvägg
 Name[uk]=Брандмауер PIX
 Name[x-test]=xxPIX Firewallxx
+Name[zh_CN]=PIX 防火墙
+Name[zh_TW]=PIX 防火牆

@@ -1,5 +1,5 @@
 Changes in trunk
-These are changes that can not be backported, and will be available from KOffice 1.5
+These are changes that can not be backported, and will be available from Calligra 1.5
 - Changed version to 0.2.90
 - Added names of contributors
 - Enabled right mouse click to zoom out of canvas, partially fixing bug 96944
@@ -78,7 +78,7 @@ Changes after 1.4 (available from 1.4.1):
 - Gradient widget crashes when cursor with pushed LMB leaves widget (#92976)
 - Crashes when applying pattern to object (#77476)
   Don't crash if the pattern doesn't have an image
-- Karbon14 crashes often and does not load files (#69738)
+- Karbon crashes often and does not load files (#69738)
   Don't crash in VSmallPreview when there are more then one object selected
 - Raising/Lowering layers has no effect (#68060)
 

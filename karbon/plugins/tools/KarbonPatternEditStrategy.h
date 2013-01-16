@@ -28,7 +28,7 @@ class KoViewConverter;
 class KoImageCollection;
 
 class QPainter;
-class QUndoCommand;
+class KUndo2Command;
 
 /// The class used for editing a shapes pattern
 class KarbonPatternEditStrategyBase
@@ -58,7 +58,7 @@ public:
     }
 
     /// create the command for changing the shapes background
-    QUndoCommand * createCommand();
+    KUndo2Command * createCommand();
 
     /// schedules a repaint of the shape and gradient handles
     void repaint() const;

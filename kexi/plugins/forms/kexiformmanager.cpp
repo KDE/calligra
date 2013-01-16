@@ -24,6 +24,8 @@
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
 
+#include <KoIcon.h>
+
 #include <QToolButton>
 #include <KAction>
 #include <KToggleAction>
@@ -44,7 +46,7 @@
 
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
-#include <widget/kexicustompropertyfactory.h>
+#include <widget/properties/KexiCustomPropertyFactory.h>
 #include <core/KexiMainWindowIface.h>
 #include <kexiutils/SmallToolButton.h>
 
@@ -161,7 +163,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
     }
     else {
         d->dragConnectionAction = new KToggleAction(
-            KIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
+            koIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
 //        d->widgetActionGroup->addAction(d->dragConnectionAction);
         connect(d->dragConnectionAction, SIGNAL(triggered()),
@@ -171,7 +173,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #endif
 
     d->pointerAction = new KToggleAction(
-        KIcon("mouse_pointer"), i18n("Pointer"), d->collection);
+        koIcon("mouse_pointer"), i18n("Pointer"), d->collection);
     d->pointerAction->setObjectName("edit_pointer");
     d->widgetActionGroup->addAction(d->pointerAction);
     connect(d->pointerAction, SIGNAL(triggered()),
@@ -216,7 +218,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #ifdef KEXI_DEBUG_GUI
     KConfigGroup generalGroup(KGlobal::config()->group("General"));
     if (generalGroup.readEntry("ShowInternalDebugger", false)) {
-        KAction *a = new KAction(KIcon("run-build-file"), i18n("Show Form UI Code"), this);
+        KAction *a = new KAction(koIcon("run-build-file"), i18n("Show Form UI Code"), this);
         d->collection->addAction("show_form_ui", a);
         a->setShortcut(Qt::CTRL + Qt::Key_U);
         connect(a, SIGNAL(triggered()), this, SLOT(showFormUICode()));
@@ -231,25 +233,39 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "edit_pointer"
             << QString() //sep
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
-            << ":library_widget_KexiDBAutoField"
+            << "library_widget_KexiDBAutoField"
 #endif
-            << ":library_widget_KexiDBLabel"
-            << ":library_widget_KexiDBImageBox"
-            << ":library_widget_KexiDBLineEdit"
-            << ":library_widget_KexiDBTextEdit"
-            << ":library_widget_KPushButton"
-            << ":library_widget_KexiDBComboBox"
-            << ":library_widget_KexiDBCheckBox"
+            << "library_widget_KexiDBLabel"
+            << "library_widget_KexiDBLineEdit"
+            << "library_widget_KexiDBTextEdit"
+            << "library_widget_KexiDBComboBox"
+            << "library_widget_KexiDBCheckBox"
+            << "library_widget_KexiDBImageBox"
+            << QString() //sep
+            << "library_widget_KPushButton"
+            << QString() //sep
+            << "library_widget_KexiFrame"
+            << "library_widget_QGroupBox"
+            << "library_widget_KFDTabWidget"
+            << QString() //sep
+            << "library_widget_Line"
 #ifndef KEXI_NO_FORM_LAYOUTS
-            << ":library_widget_Spacer"
+            << "library_widget_Spacer"
 #endif
-            << ":library_widget_Line"
-            << ":library_widget_KexiFrame"
-            << ":library_widget_QGroupBox"
-            << ":library_widget_KFDTabWidget"
 #ifndef KEXI_NO_FORM_SPRING_ELEMENT
-            << ":library_widget_Spring"
+            << "library_widget_Spring"
+            << QString() //sep
 #endif
+#ifdef CAN_USE_QTWEBKIT
+            << "library_widget_WebBrowserWidget"
+#endif
+#ifdef CAN_USE_MARBLE
+            << "library_widget_MapBrowserWidget"
+#endif
+            << "library_widget_KexiDBSlider"
+            << "library_widget_KexiDBProgressBar"
+            << "library_widget_KexiDBCommandLinkButton"
+            << "library_widget_KexiDBDatePicker"
             << QString() //sep
             ;
         KexiMainWindowIface *win = KexiMainWindowIface::global();
@@ -274,7 +290,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
         }
 
         QSet<QString> iconOnlyActions;
-        iconOnlyActions << "widget_assign_action" << "show_form_ui";
+        iconOnlyActions << "show_form_ui";
         const QList<QAction*> actions( d->collection->actions() );
         foreach( QAction *a, actions ) {
             if (iconOnlyActions.contains(a->objectName())) { // icon only
@@ -550,3 +566,4 @@ void KexiFormManager::slotPointerClicked()
 }
 
 #include "kexiformmanager.moc"
+

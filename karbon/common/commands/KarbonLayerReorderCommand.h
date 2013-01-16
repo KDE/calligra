@@ -25,14 +25,14 @@
 #ifndef KARBONLAYERREORDERCOMMAND_H
 #define KARBONLAYERREORDERCOMMAND_H
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <karboncommon_export.h>
 
 class KarbonDocument;
 class KoShapeLayer;
 
 /// Command for raising or lowering layers
-class KARBONCOMMON_EXPORT KarbonLayerReorderCommand : public QUndoCommand
+class KARBONCOMMON_EXPORT KarbonLayerReorderCommand : public KUndo2Command
 {
 public:
     /// The different types of layer commands.
@@ -47,7 +47,7 @@ public:
      * @param layer the layer which is subject to the command
      * @param commandType the type of the command to redo
      */
-    KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent = 0);
+    KarbonLayerReorderCommand(KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, KUndo2Command* parent = 0);
 
     /**
      * Layer command which works on a single layer.
@@ -55,7 +55,7 @@ public:
      * @param layers the list of layers which are subject to the command
      * @param commandType the type of the command to redo
      */
-    KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent = 0);
+    KarbonLayerReorderCommand(KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, KUndo2Command* parent = 0);
 
     virtual ~KarbonLayerReorderCommand();
 

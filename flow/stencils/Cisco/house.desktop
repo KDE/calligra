@@ -1,10 +1,27 @@
 [Desktop Entry]
 Name=House
+Name[bg]=Къща
+Name[ca]=Casa
+Name[ca@valencia]=Casa
+Name[cs]=Dům
+Name[el]=House
+Name[es]=Casa
 Name[et]=Hoone
+Name[fr]=House
+Name[gl]=Casa
+Name[it]=Casa
+Name[kk]=Үй
+Name[nb]=Hus
+Name[nds]=Huus
 Name[nl]=Huis
+Name[pl]=Dom
 Name[pt]=Casa
 Name[pt_BR]=Casa
+Name[ru]=Дом
+Name[sk]=Dom
 Name[sv]=Hus
+Name[ug]=House مۇزىكىسى
 Name[uk]=Будинок
 Name[x-test]=xxHousexx
 Name[zh_CN]=房屋
+Name[zh_TW]=房屋

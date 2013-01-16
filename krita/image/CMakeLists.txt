@@ -19,14 +19,9 @@ set(libkritatile_SRCS
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tile_data_pooler.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_data_manager.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_memento_manager.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tilediterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledrectiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledvlineiterator.cc
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiledhlineiterator.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_hline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_vline_iterator.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_rect_iterator.cpp
-    ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_tiled_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/kis_random_accessor.cc
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_abstract_compression.cpp
     ${CMAKE_SOURCE_DIR}/krita/image/tiles3/swap/kis_lzf_compression.cpp
@@ -41,19 +36,28 @@ set(libkritatile_SRCS
 add_subdirectory( tiles3 )
 endif(USE_TILESYSTEM EQUAL 3)
 
-option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" ON)
+option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in release build)" OFF)
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-macro_optional_find_package(FFTW3)
-macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
-macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+if(NOT WIN32)
+    macro_optional_find_package(FFTW3)
+    macro_log_feature(FFTW3_FOUND "FFTW3" "A fast, free C FFT library" "http://www.fftw.org/" FALSE "" "Required by the Krita for fast convolution operators")
+    macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
+endif(NOT WIN32)
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
 include_directories( ${KDE4_INCLUDE_DIR}/threadweaver/
                      ${CMAKE_SOURCE_DIR}/krita/image/metadata
                      ${KOMAIN_INCLUDES}
 )
+
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp "-fPIC")
+else(HAVE_VC)
+  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+endif(HAVE_VC)
 
 set(kritaimage_LIB_SRCS
    ${libkritatile_SRCS}
@@ -77,17 +81,22 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_node_to_bottom_command.cpp
    commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
-   commands/kis_image_resize_command.cpp
-   commands/kis_image_set_resolution_command.cpp
    commands/kis_layer_command.cpp
    commands/kis_layer_props_command.cpp
    commands/kis_node_command.cpp
    commands/kis_node_compositeop_command.cpp
    commands/kis_node_opacity_command.cpp
-   commands/kis_node_move_command.cpp
    commands/kis_node_property_list_command.cpp
    commands/kis_reselect_global_selection_command.cpp
    commands/kis_set_global_selection_command.cpp
+   commands_new/kis_saved_commands.cpp
+   commands_new/kis_processing_command.cpp
+   commands_new/kis_node_move_command2.cpp
+   commands_new/kis_image_resize_command.cpp
+   commands_new/kis_image_set_resolution_command.cpp
+   commands_new/kis_update_command.cpp
+   processing/kis_crop_processing_visitor.cpp
+   processing/kis_transform_processing_visitor.cpp
    filter/kis_filter.cc
    filter/kis_filter_configuration.cc
    filter/kis_filter_job.cpp
@@ -98,12 +107,14 @@ set(kritaimage_LIB_SRCS
    generator/kis_generator_registry.cpp
    kis_adjustment_layer.cc
    kis_selection_based_layer.cpp
+   kis_node_filter_interface.cpp
    kis_background.cpp
    kis_base_accessor.cpp
    kis_base_node.cpp
    kis_base_processor.cpp
    kis_basic_math_toolbox.cpp
    kis_bookmarked_configuration_manager.cc
+   kis_clone_info.cpp
    kis_clone_layer.cpp
    kis_colorspace_convert_visitor.cpp
    kis_config_widget.cpp
@@ -111,6 +122,7 @@ set(kritaimage_LIB_SRCS
    kis_convolution_painter.cc
    kis_cubic_curve.cpp
    kis_default_bounds.cpp
+   kis_default_bounds_base.cpp
    kis_effect_mask.cc
    kis_fast_math.cpp
    kis_fill_painter.cc
@@ -118,24 +130,38 @@ set(kritaimage_LIB_SRCS
    kis_filter_strategy.cc
    kis_gradient_painter.cc
    kis_iterator_ng.cpp
+   kis_async_merger.cpp
    kis_merge_walker.cc
    kis_updater_context.cpp
-   kis_abstract_update_queue.cpp
+   kis_update_job_item.cpp
+   kis_stroke_strategy_undo_command_based.cpp
+   kis_simple_stroke_strategy.cpp
+   kis_stroke_job_strategy.cpp
+   kis_stroke_strategy.cpp
+   kis_stroke.cpp
+   kis_strokes_queue.cpp
    kis_simple_update_queue.cpp
-   kis_abstract_update_scheduler.cpp
    kis_update_scheduler.cpp
+   kis_queues_progress_updater.cpp
+   kis_composite_progress_proxy.cpp
    kis_group_layer.cc
    kis_count_visitor.cpp
    kis_histogram.cc
+   kis_image_interfaces.cpp
+   kis_node_graph_listener.cpp
    kis_image.cc
+   kis_image_signal_router.cpp
    kis_image_config.cpp
-   kis_iterator.cc
    kis_layer.cc
    kis_indirect_painting_support.cpp
    kis_mask.cc
    kis_base_mask_generator.cpp
    kis_rect_mask_generator.cpp
    kis_circle_mask_generator.cpp
+   kis_gauss_circle_mask_generator.cpp
+   kis_gauss_rect_mask_generator.cpp
+   ${__per_arch_circle_mask_generator_objs}
+   kis_gtl_lock.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp
@@ -153,13 +179,10 @@ set(kritaimage_LIB_SRCS
    kis_perspective_math.cpp
    kis_pixel_selection.cpp
    kis_processing_information.cpp
-   kis_projection.cc
    kis_properties_configuration.cc
-   kis_random_accessor.cpp
    kis_random_accessor_ng.cpp
    kis_random_generator.cc
    kis_random_sub_accessor.cpp
-   kis_shear_visitor.cpp
    kis_selected_transaction_data.cpp
    kis_selection.cc
    kis_selection_mask.cpp
@@ -171,12 +194,18 @@ set(kritaimage_LIB_SRCS
    kis_transform_worker.cc
    kis_perspectivetransform_worker.cpp
    kis_warptransform_worker.cc
-   kis_transformation_mask.cpp
    kis_transparency_mask.cc
-   kis_undo_adapter.cc
+   kis_undo_store.cpp
+   kis_undo_stores.cpp
+   kis_undo_adapter.cpp
+   kis_surrogate_undo_adapter.cpp
+   kis_legacy_undo_adapter.cpp
+   kis_post_execution_undo_adapter.cpp
+   kis_processing_visitor.cpp
+   kis_processing_applicator.cpp
    krita_utils.cpp
-   kis_dumb_undo_adapter.cpp
    kis_outline_generator.cpp
+   kis_layer_composition.cpp
    metadata/kis_meta_data_entry.cc
    metadata/kis_meta_data_filter.cc
    metadata/kis_meta_data_filter_p.cc
@@ -213,8 +242,8 @@ set(kritaimage_LIB_SRCS
 
 kde4_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS})
 
-target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES} )
-target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} )
+target_link_libraries(kritaimage ${KDE4_KPARTS_LIBS} komain pigmentcms ${KDE4_THREADWEAVER_LIBRARIES})
+target_link_libraries(kritaimage LINK_INTERFACE_LIBRARIES pigmentcms komain ${KDE4_KPARTS_LIBS} )
 
 if(OPENEXR_FOUND)
   target_link_libraries(kritaimage  ${OPENEXR_LIBRARIES})
@@ -224,9 +253,12 @@ if(FFTW3_FOUND)
   target_link_libraries(kritaimage  ${FFTW3_LIBRARIES})
 endif(FFTW3_FOUND)
 
+if(HAVE_VC)
+  target_link_libraries(kritaimage  ${Vc_LIBRARIES})
+endif(HAVE_VC)
 
 set_target_properties(kritaimage PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kritaimage  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -261,9 +293,6 @@ install( FILES
     kis_generic_colorspace.h
     kis_global.h
     kis_image.h
-    kis_iterator.h
-    kis_iterators_pixel.h
-    kis_iterator_pixel_trait.h
     kis_mask.h
     kis_node.h
     kis_node_facade.h
@@ -272,8 +301,6 @@ install( FILES
     kis_paint_device.h
     kis_properties_configuration.h
     kis_processing_information.h
-    kis_random_accessor.h
-    kis_iterators_pixel.h
     kis_transform_worker.h
     kis_perspectivetransform_worker.h
     kis_warptransform_worker.h

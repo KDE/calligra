@@ -78,6 +78,11 @@ void ORODocument::setPageOptions(const ReportPageOptions & options)
     m_pageOptions = options;
 }
 
+void ORODocument::notifyChange(int pageNo)
+{
+    emit(updated(pageNo));
+}
+
 //
 // OROPage
 //
@@ -114,8 +119,10 @@ OROPrimitive* OROPage::primitive(int idx)
     return m_primitives.at(idx);
 }
 
-void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning)
+void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning, bool notify)
 {
+    kDebug() << "Adding primitive" << p->type() << "to page" << page();
+    
     if (p == 0)
         return;
 
@@ -126,6 +133,10 @@ void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning)
         m_primitives.prepend(p);
     } else {
         m_primitives.append(p);
+    }
+    
+    if (notify) {
+        document()->notifyChange(page());
     }
 }
 
@@ -217,6 +228,11 @@ void OROPrimitive::setPosition(const QPointF & p)
     m_position = p;
 }
 
+void OROPrimitive::setSize(const QSizeF & s)
+{
+    m_size = s;
+}
+
 //
 // OROTextBox
 //
@@ -238,11 +254,6 @@ OROTextBox::OROTextBox()
 
 OROTextBox::~OROTextBox()
 {
-}
-
-void OROTextBox::setSize(const QSizeF & s)
-{
-    m_size = s;
 }
 
 void OROTextBox::setText(const QString & s)
@@ -345,11 +356,6 @@ void OROImage::setImage(const QImage & img)
     m_image = img;
 }
 
-void OROImage::setSize(const QSizeF & sz)
-{
-    m_size = sz;
-}
-
 void OROImage::setScaled(bool b)
 {
     m_scaled = b;
@@ -392,11 +398,6 @@ OROPicture::~OROPicture()
 {
 }
 
-void OROPicture::setSize(const QSizeF & sz)
-{
-    m_size = sz;
-}
-
 OROPrimitive* OROPicture::clone()
 {
     OROPicture *theClone = new OROPicture();
@@ -418,11 +419,6 @@ ORORect::ORORect()
 
 ORORect::~ORORect()
 {
-}
-
-void ORORect::setSize(const QSizeF & s)
-{
-    m_size = s;
 }
 
 void ORORect::setRect(const QRectF & r)
@@ -462,11 +458,6 @@ OROEllipse::OROEllipse()
 
 OROEllipse::~OROEllipse()
 {
-}
-
-void OROEllipse::setSize(const QSizeF & s)
-{
-    m_size = s;
 }
 
 void OROEllipse::setRect(const QRectF & r)

@@ -21,7 +21,7 @@
 #define COMPOSITEEFFECT_H
 
 #include "KoFilterEffect.h"
-#include <QtGui/QColor>
+#include <QColor>
 
 #define CompositeEffectId "feComposite"
 

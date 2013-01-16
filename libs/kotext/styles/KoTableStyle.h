@@ -36,6 +36,8 @@ class QTextTable;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
+class KoShadowStyle;
+
 #include "KoXmlReaderForward.h"
 class KoOdfLoadingContext;
 
@@ -52,20 +54,30 @@ class KOTEXT_EXPORT KoTableStyle : public QObject
     Q_OBJECT
 public:
     enum Property {
-        StyleId = QTextTableFormat::UserProperty + 1,
+        StyleId = QTextTableFormat::UserProperty + 100,
         // Linespacing properties
-        KeepWithNext,    ///< If true, keep table with next paragraph
-        BreakBefore,    ///< If true, insert a frame break before this table
-        BreakAfter,     ///< If true, insert a frame break after this table
-        MayBreakBetweenRows,     ///< If true, then the table is allowed to break between rows
-        ColumnAndRowStyleManager,     ///< QVariant of a KoColumnAndRowStyleManager
-                                                             /// It's not really a property of KoTableStyle but defined here for convenience
-        CollapsingBorders,     ///< If true, then the table has collapsing border model
-        MasterPageName,         ///< Optional name of the master-page
-        NumberHeadingRows,      ///< Count the number of heading rows
-        Visible,                ///< If true, the table is visible
-        PageNumber,             ///< The page number that is applied after the page break
+        KeepWithNext,               ///< If true, keep table with next paragraph
+        BreakBefore,                ///< If true, insert a frame break before this table
+        BreakAfter,                 ///< If true, insert a frame break after this table
+        MayBreakBetweenRows,        ///< If true, then the table is allowed to break between rows
+        ColumnAndRowStyleManager,   ///< QVariant of a KoColumnAndRowStyleManager
+                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        CollapsingBorders,          ///< If true, then the table has collapsing border model
+        MasterPageName,             ///< Optional name of the master-page
+        NumberHeadingRows,          ///< Count the number of heading rows
+        Visible,                    ///< If true, the table is visible
+        PageNumber,                 ///< The page number that is applied after the page break
         TextProgressionDirection,   ///< The direction of the text in the table
+        TableIsProtected,           ///< boolean, if true, the table is protected against edits
+                                        /// It's not really a property of KoTableStyle but defined here for convenience
+        Shadow,                      ///< KoShadowStyle, the table shadow
+        TableTemplate,               ///< KoTextTableTemplate, template for the table
+        UseBandingColumnStyles,      ///< table:use-banding-column-styles ODF 1.2 19.736
+        UseBandingRowStyles,         ///< table:use-banding-row-styles ODF 1.2 19.737
+        UseFirstColumnStyles,        ///< table:use-first-column-styles ODF 1.2 19.738
+        UseFirstRowStyles,           ///< table:use-first-row-styles ODF 1.2 19.739
+        UseLastColumnStyles,         ///< table:use-last-column-styles ODF 1.2 19.740
+        UseLastRowStyles             ///< table:use-last-row-styles ODF 1.2 19.741
     };
 
     /// Constructor
@@ -88,6 +100,11 @@ public:
     void setKeepWithNext(bool keep);
     
     bool keepWithNext() const;
+
+    /// This property describe the shadow of the table, if any
+    void setShadow (const KoShadowStyle &shadow);
+
+    KoShadowStyle shadow() const;
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);
@@ -119,23 +136,23 @@ public:
 
     // ************ properties from QTextTableFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(qreal topMargin);
+    void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
     qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin(qreal margin);
+    void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin(qreal margin);
+    void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin(qreal margin);
+    void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal rightMargin() const;
     /// set the margin around the table, making the margin on all sides equal.
-    void setMargin(qreal margin);
+    void setMargin(QTextLength margin);
 
     /// duplicated property from QTextBlockFormat
     void setAlignment(Qt::Alignment alignment);
@@ -230,6 +247,7 @@ private:
     Qt::Alignment alignmentFromString(const QString &align);
     QString alignmentToString(Qt::Alignment alignment);
     qreal propertyDouble(int key) const;
+    QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;

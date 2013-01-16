@@ -27,7 +27,7 @@
 #include "ora_converter.h"
 
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<OraImport>();)
-K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
 OraImport::OraImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -47,7 +47,7 @@ KoFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArra
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -60,7 +60,7 @@ KoFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        OraConverter ib(doc, doc -> undoAdapter());
+        OraConverter ib(doc);
 
 
         switch (ib.buildImage(url)) {
@@ -82,7 +82,10 @@ KoFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArra
             return KoFilter::InternalError;
             break;
         case KisImageBuilder_RESULT_OK:
-            doc -> setCurrentImage(ib.image());
+            doc->setCurrentImage(ib.image());
+            if (ib.activeNodes().size() > 0) {
+                doc->setPreActivatedNode(ib.activeNodes()[0]);
+            }
             return KoFilter::OK;
         default:
             break;

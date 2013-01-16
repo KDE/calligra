@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
+ * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,11 +20,12 @@
 
 #include "kexireportpart.h"
 
-#include <qlabel.h>
+#include <QLabel>
 
 #include <kmainwindow.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <KoIcon.h>
 #include <core/KexiWindow.h>
 #include "kexireportview.h"
 #include "kexireportdesignview.h"
@@ -36,28 +38,28 @@
 class KexiReportPart::Private
 {
 public:
-    Private() {
+    Private() : toolboxActionGroup(0)
+    {
         ksrc = 0;
     }
     ~Private() {
     }
     KexiSourceSelector *ksrc;
+    QActionGroup toolboxActionGroup;
+    QMap<QString, QAction*> toolboxActionsByName;
 };
 
 KexiReportPart::KexiReportPart(QObject *parent, const QVariantList &l)
-        : KexiPart::Part(parent, l)
-        , d(new Private())
+  : KexiPart::Part(parent,
+        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+              "Use '_' character instead of spaces. First character should be a..z character. "
+              "If you cannot use latin characters in your language, use english word.",
+              "report"),
+        i18nc("tooltip", "Create new report"),
+        i18nc("what's this", "Creates new report."),
+        l)
+  , d(new Private)
 {
-    kDebug();
-    setInternalPropertyValue("instanceName",
-                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                   "Use '_' character instead of spaces. First character should be a..z character. "
-                                   "If you cannot use latin characters in your language, use english word.",
-                                   "report"));
-    setInternalPropertyValue("instanceCaption", i18n("Report"));
-    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new report"));
-    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new report."));
-    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
     setInternalPropertyValue("newObjectsAreDirty", true);
 }
 
@@ -80,6 +82,7 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
     } else if (viewMode == Kexi::DesignViewMode) {
         view = new KexiReportDesignView(parent, d->ksrc);
         connect(d->ksrc, SIGNAL(setData(KoReportData*)), view, SLOT(slotSetData(KoReportData*)));
+        connect(view, SIGNAL(itemInserted(QString)), this, SLOT(slotItemInserted(QString)));
     }
     return view;
 }
@@ -87,12 +90,14 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 void KexiReportPart::initPartActions()
 {
     KexiMainWindowIface *win = KexiMainWindowIface::global();
-    QList<QAction*> reportActions = KoReportDesigner::actions(this);
+    QList<QAction*> reportActions = KoReportDesigner::actions(&d->toolboxActionGroup);
 
     foreach(QAction* action, reportActions) {
-        connect(action, SIGNAL(triggered()), this, SLOT(slotActionTriggered()));
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(slotToolboxActionTriggered(bool)));
         win->addToolBarAction("report", action);
+        d->toolboxActionsByName.insert(action->objectName(), action);
     }
+    
 }
 
 QString KexiReportPart::loadReport(const QString& name)
@@ -159,12 +164,14 @@ void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
     if (!d->ksrc)
         d->ksrc = new KexiSourceSelector(tab, KexiMainWindowIface::global()->project()->dbConnection());
-    tab->addTab(d->ksrc, KIcon("server-database"), QString());
+    tab->addTab(d->ksrc, koIcon("server-database"), QString());
     tab->setTabToolTip(tab->indexOf(d->ksrc), i18n("Data Source"));
 }
 
-void KexiReportPart::slotActionTriggered()
+void KexiReportPart::slotToolboxActionTriggered(bool checked)
 {
+    if (!checked)
+        return;
     QObject *theSender = sender();
     if (!theSender)
         return;
@@ -184,6 +191,16 @@ void KexiReportPart::slotActionTriggered()
         if (!dv)
             return;
         dv->triggerAction(senderName);
+    }
+}
+
+void KexiReportPart::slotItemInserted(const QString& entity)
+{
+    Q_UNUSED(entity);
+    // uncheck toolbox action after it is used
+    QAction * a = d->toolboxActionGroup.checkedAction();
+    if (a) {
+        a->setChecked(false);
     }
 }
 

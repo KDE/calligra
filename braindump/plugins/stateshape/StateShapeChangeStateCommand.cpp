@@ -19,16 +19,19 @@
 #include "StateShapeChangeStateCommand.h"
 #include "StateShape.h"
 
-StateShapeChangeStateCommand::StateShapeChangeStateCommand( StateShape* _shape, const QString& _newCategoryId, const QString& _newStateId ) : m_shape(_shape), m_newCategoryId(_newCategoryId), m_newStateId(_newStateId), m_oldCategoryId(m_shape->categoryId()), m_oldStateId(m_shape->stateId()) {
-  
+StateShapeChangeStateCommand::StateShapeChangeStateCommand(StateShape* _shape, const QString& _newCategoryId, const QString& _newStateId) : m_shape(_shape), m_newCategoryId(_newCategoryId), m_newStateId(_newStateId), m_oldCategoryId(m_shape->categoryId()), m_oldStateId(m_shape->stateId())
+{
+
 }
 
-void StateShapeChangeStateCommand::undo() {
-  m_shape->setCategoryId(m_oldCategoryId);
-  m_shape->setStateId(m_oldStateId);
+void StateShapeChangeStateCommand::undo()
+{
+    m_shape->setCategoryId(m_oldCategoryId);
+    m_shape->setStateId(m_oldStateId);
 }
 
-void StateShapeChangeStateCommand::redo() {
-  m_shape->setCategoryId(m_newCategoryId);
-  m_shape->setStateId(m_newStateId);
+void StateShapeChangeStateCommand::redo()
+{
+    m_shape->setCategoryId(m_newCategoryId);
+    m_shape->setStateId(m_newStateId);
 }

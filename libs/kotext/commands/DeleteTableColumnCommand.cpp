@@ -1,7 +1,7 @@
 /*
  This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,14 +30,14 @@
 #include <kdebug.h>
 
 DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, int changeId,
-                                             QUndoCommand *parent) :
-    QUndoCommand (parent)
+                                             KUndo2Command *parent) :
+    KUndo2Command (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
     ,m_changeId(changeId)
 {
-    setText(i18n("Delete Column"));
+    setText(i18nc("(qtundo-format)", "Delete Column"));
 }
 
 void DeleteTableColumnCommand::undo()
@@ -49,7 +49,7 @@ void DeleteTableColumnCommand::undo()
         }
     }
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void DeleteTableColumnCommand::redo()
@@ -59,7 +59,7 @@ void DeleteTableColumnCommand::redo()
         if (!m_changeId) {
             carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
         }
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         m_first = false;
         int selectionRow;

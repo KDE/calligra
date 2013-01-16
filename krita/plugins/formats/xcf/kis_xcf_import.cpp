@@ -40,12 +40,12 @@
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <kis_iterator.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_paint_layer.h>
 #include <kis_transparency_mask.h>
-
+#include "kis_iterator_ng.h"
+#include "kis_types.h"
 #include <KoColorModelStandardIds.h>
 extern "C" {
 
@@ -63,7 +63,7 @@ extern "C" {
 }
 
 K_PLUGIN_FACTORY(XCFImportFactory, registerPlugin<KisXCFImport>();)
-K_EXPORT_PLUGIN(XCFImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(XCFImportFactory("calligrafilters"))
 
 KisXCFImport::KisXCFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -84,7 +84,7 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -123,7 +123,7 @@ KoFilter::ConversionStatus KisXCFImport::convert(const QByteArray& from, const Q
         return result;
     }
     dbgFile << "Download failed";
-    return KoFilter::CreationError;
+    return KoFilter::DownloadFailed;
 }
 
 QString layerModeG2K(GimpLayerModeEffects mode)
@@ -201,8 +201,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
     dbgFile << XCF.version << "width = " << XCF.width << "height = " << XCF.height << "layers = " << XCF.numLayers;
 
     // Create the image
-    KisImageSP image = new KisImage(doc->undoAdapter(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
-    image->lock();
+    KisImageSP image = new KisImage(doc->createUndoStore(), XCF.width, XCF.height, KoColorSpaceRegistry::instance()->rgb8(), "built image");
 
     // Read layers
     for (int i = 0; i < XCF.numLayers; ++i) {
@@ -229,12 +228,13 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         }
 
         // Create the layer
-        KisPaintLayerSP layer = new KisPaintLayer(image, xcflayer.name, xcflayer.opacity, colorSpace);
+        KisPaintLayerSP layer = new KisPaintLayer(image, QString::fromUtf8(xcflayer.name), xcflayer.opacity, colorSpace);
         KisTransaction("", layer -> paintDevice());
 
         // Set some properties
         layer->setCompositeOp(layerModeG2K(xcflayer.mode));
         layer->setVisible(xcflayer.isVisible);
+        layer->disableAlphaChannel(xcflayer.mode != GIMP_NORMAL_MODE);
 
         image->addNode(layer.data(), image->rootLayer().data());
 
@@ -253,29 +253,27 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                 want.b = want.t + TILE_HEIGHT;
                 want.r = want.l + TILE_WIDTH;
                 Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.pixels, want);
-                KisHLineIteratorPixel it = layer->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
+                KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                 rgba* data = tile->pixels;
                 for (int v = 0; v < TILE_HEIGHT; ++v) {
                     if (isRgbA) {
                         // RGB image
-                        while (!it.isDone()) {
-                            KoRgbTraits<quint8>::setRed(it.rawData(), GET_RED(*data));
-                            KoRgbTraits<quint8>::setGreen(it.rawData(), GET_GREEN(*data));
-                            KoRgbTraits<quint8>::setBlue(it.rawData(), GET_BLUE(*data));
-                            KoRgbTraits<quint8>::setOpacity(it.rawData(), quint8(GET_ALPHA(*data)), 1);
+                        do {
+                            KoBgrTraits<quint8>::setRed(it->rawData(), GET_RED(*data));
+                            KoBgrTraits<quint8>::setGreen(it->rawData(), GET_GREEN(*data));
+                            KoBgrTraits<quint8>::setBlue(it->rawData(), GET_BLUE(*data));
+                            KoBgrTraits<quint8>::setOpacity(it->rawData(), quint8(GET_ALPHA(*data)), 1);
                             ++data;
-                            ++it;
-                        }
+                        } while (it->nextPixel());
                     } else {
                         // Grayscale image
-                        while (!it.isDone()) {
-                            it.rawData()[0] = GET_RED(*data);
-                            it.rawData()[1] = GET_ALPHA(*data);
+                        do {
+                            it->rawData()[0] = GET_RED(*data);
+                            it->rawData()[1] = GET_ALPHA(*data);
                             ++data;
-                            ++it;
-                        }
+                        } while (it->nextPixel());
                     }
-                    it.nextRow();
+                    it->nextRow();
                 }
             }
         }
@@ -287,6 +285,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         // Create the mask
         if (xcflayer.hasMask) {
             KisTransparencyMaskSP mask = new KisTransparencyMask();
+            mask->initSelection(0, layer);
             for (unsigned int x = 0; x < xcflayer.dim.width; x += TILE_WIDTH) {
                 for (unsigned int y = 0; y < xcflayer.dim.height; y += TILE_HEIGHT) {
                     rect want;
@@ -295,15 +294,14 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
                     want.b = want.t + TILE_HEIGHT;
                     want.r = want.l + TILE_WIDTH;
                     Tile* tile = getMaskOrLayerTile(&xcflayer.dim, &xcflayer.mask, want);
-                    KisHLineIteratorPixel it = mask->paintDevice()->createHLineIterator(x, y, TILE_WIDTH);
+                    KisHLineIteratorSP it = mask->paintDevice()->createHLineIteratorNG(x, y, TILE_WIDTH);
                     rgba* data = tile->pixels;
                     for (int v = 0; v < TILE_HEIGHT; ++v) {
-                        while (!it.isDone()) {
-                            it.rawData()[0] = GET_ALPHA(*data);
+                        do {
+                            it->rawData()[0] = GET_ALPHA(*data);
                             ++data;
-                            ++it;
-                        }
-                        it.nextRow();
+                        } while (it->nextPixel());
+                        it->nextRow();
                     }
 
                 }
@@ -316,7 +314,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         dbgFile << xcflayer.pixels.tileptrs;
 
     }
-    image->unlock();
+
     doc->setCurrentImage(image);
     return KoFilter::OK;
 }

@@ -21,14 +21,13 @@
 
 #define UNSTABLE_POPPLER_QT4
 // poppler's headers
-#include <poppler-qt4.h>
+#include <poppler/qt4/poppler-qt4.h>
 
 // Qt's headers
-#include <qradiobutton.h>
+#include <QRadioButton>
 
 // KDE's headers
 #include <kis_debug.h>
-#include <k3listbox.h>
 #include <knuminput.h>
 
 // For ceil()
@@ -43,7 +42,7 @@ KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * pare
     updateMaxCanvasSize();
 
     for (int i = 1; i <= m_pdfDoc->numPages(); i++) {
-        listPages->insertItem(QString::number(i));
+        listPages->addItem(QString::number(i));
     }
 
     connect(intWidth, SIGNAL(valueChanged(int)), this, SLOT(updateHRes()));
@@ -53,7 +52,8 @@ KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * pare
     connect(boolAllPages, SIGNAL(toggled(bool)), this, SLOT(selectAllPages(bool)));
     connect(boolFirstPage, SIGNAL(toggled(bool)), this, SLOT(selectFirstPage(bool)));
     connect(boolSelectionPage, SIGNAL(toggled(bool)), this, SLOT(selectSelectionOfPages(bool)));
-    connect(listPages, SIGNAL(selectionChanged()), this, SLOT(updateSelectionOfPages()));
+    connect(listPages, SIGNAL(itemSelectionChanged()), this, SLOT(updateSelectionOfPages()));
+
 }
 
 
@@ -64,6 +64,10 @@ KisPDFImportWidget::~KisPDFImportWidget()
 void KisPDFImportWidget::selectAllPages(bool v)
 {
     if (v) {
+        if (listPages->selectedItems().count() != 0){
+            listPages->clearSelection();
+            boolAllPages->toggle();
+        }
         m_pages.clear();
         for (int i = 0; i < m_pdfDoc->numPages(); i++) {
             m_pages.push_back(i);
@@ -74,8 +78,13 @@ void KisPDFImportWidget::selectAllPages(bool v)
 void KisPDFImportWidget::selectFirstPage(bool v)
 {
     if (v) {
+        if (listPages->selectedItems().count() != 0){
+            listPages->clearSelection();
+            boolFirstPage->toggle();
+        }
         m_pages.clear();
         m_pages.push_back(0); // The first page is selected
+        updateMaxCanvasSize();
     }
 }
 void KisPDFImportWidget::selectSelectionOfPages(bool v)
@@ -92,8 +101,9 @@ void KisPDFImportWidget::updateSelectionOfPages()
     if (! boolSelectionPage->isChecked()) boolSelectionPage->toggle();
     m_pages.clear();
     for (int i = 0; i < m_pdfDoc->numPages(); i++) {
-        if (listPages->isSelected(i)) m_pages.push_back(i);
+        if (listPages->item(i)->isSelected()) m_pages.push_back(i);
     }
+    updateMaxCanvasSize();
 }
 
 

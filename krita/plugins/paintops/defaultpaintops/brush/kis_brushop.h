@@ -25,7 +25,7 @@
 
 #include "kis_brush_based_paintop.h"
 #include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
+#include <kis_pressure_flow_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
@@ -36,6 +36,7 @@
 #include <kis_pressure_sharpness_option.h>
 #include <kis_color_source_option.h>
 #include <kis_pressure_spacing_option.h>
+#include <kis_texture_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -57,11 +58,11 @@ public:
     virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
 
 private:
-    KisColorSource* m_colorSource;
+    KisColorSource *m_colorSource;
     KisPressureSizeOption m_sizeOption;
     KisPressureSpacingOption m_spacingOption;
     KisPressureMirrorOption m_mirrorOption;
-    KisPressureOpacityOption m_opacityOption;
+    KisFlowOpacityOption m_opacityOption;
     KisPressureSoftnessOption m_softnessOption;
     KisPressureSharpnessOption m_sharpnessOption;
     KisPressureDarkenOption m_darkenOption;
@@ -69,7 +70,9 @@ private:
     KisPressureMixOption m_mixOption;
     KisPressureScatterOption m_scatterOption;
     QList<KisPressureHSVOption*> m_hsvOptions;
-    KoColorTransformation* m_hsvTransfo;
+    KisTextureProperties m_textureProperties;
+
+    KoColorTransformation *m_hsvTransformation;
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_colorSourceDevice;
 };

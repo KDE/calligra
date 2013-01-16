@@ -21,8 +21,8 @@
 
 #include <QMap>
 struct StateCategory::Private {
-  QString id, name;
-  QMap<QString, const State*> states;
-  int priority;
+    QString id, name;
+    QMap<QString, const State*> states;
+    int priority;
 };
 

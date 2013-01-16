@@ -28,7 +28,7 @@
 #include "jp2_converter.h"
 
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<jp2Import>();)
-K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
 jp2Import::jp2Import(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -48,7 +48,7 @@ KoFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArra
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -61,7 +61,7 @@ KoFilter::ConversionStatus jp2Import::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        jp2Converter ib(doc, doc -> undoAdapter());
+        jp2Converter ib(doc);
 
 
         switch (ib.buildImage(url)) {

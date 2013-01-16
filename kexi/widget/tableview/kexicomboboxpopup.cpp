@@ -24,15 +24,15 @@
 #include "kexitableedit.h"
 
 #include <kexi_global.h>
-#include <kexidb/connection.h>
-#include <kexidb/lookupfieldschema.h>
-#include <kexidb/expression.h>
-#include <kexidb/parser/sqlparser.h>
+#include <db/connection.h>
+#include <db/lookupfieldschema.h>
+#include <db/expression.h>
+#include <db/parser/sqlparser.h>
 
 #include <kdebug.h>
 
-#include <qlayout.h>
-#include <qevent.h>
+#include <QLayout>
+#include <QEvent>
 #include <QKeyEvent>
 
 /*! @internal
@@ -53,13 +53,13 @@ public:
         a.navigatorEnabled = false;
 //! @todo add option for backgroundAltering??
         a.backgroundAltering = false;
-        a.fullRowSelection = true;
-        a.rowHighlightingEnabled = true;
-        a.rowMouseOverHighlightingEnabled = true;
+        a.fullRecordSelection = true;
+        a.recordHighlightingEnabled = true;
+        a.recordMouseOverHighlightingEnabled = true;
         a.persistentSelections = false;
-        a.rowMouseOverHighlightingColor = palette().highlight().color();
-        a.rowMouseOverHighlightingTextColor = palette().highlightedText().color();
-        a.rowHighlightingTextColor = a.rowMouseOverHighlightingTextColor;
+        a.recordMouseOverHighlightingColor = palette().highlight().color();
+        a.recordMouseOverHighlightingTextColor = palette().highlightedText().color();
+        a.recordHighlightingTextColor = a.recordMouseOverHighlightingTextColor;
         a.gridEnabled = false;
         setAppearance(a);
         setInsertingEnabled(false);

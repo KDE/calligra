@@ -24,8 +24,8 @@
 #include <KComboBox>
 #include <KLocale>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
+#include <QGridLayout>
+#include <QLabel>
 
 BlendEffectConfigWidget::BlendEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)

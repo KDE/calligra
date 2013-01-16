@@ -24,6 +24,7 @@
 
 #include "flake/kis_node_shape.h"
 #include "kis_tool_shape.h"
+#include <KoIcon.h>
 
 class KisSelectionOptions;
 class KoCanvasBase;
@@ -43,15 +44,13 @@ public:
     void mouseMoveEvent(KoPointerEvent *event);
     void mouseReleaseEvent(KoPointerEvent *event);
     
-    void addPathShape(KoPathShape* pathShape);
-
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
 private:
     /// reimplemented
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
     class LocalTool : public KoCreatePathTool {
         friend class KisToolPath;
@@ -72,10 +71,10 @@ class KisToolPathFactory : public KoToolFactoryBase
 public:
     KisToolPathFactory(const QStringList&)
             : KoToolFactoryBase("KisToolPath") {
-        setToolTip(i18n("Draw a path."));
+        setToolTip(i18n("Draw a path. Shift-mouseclick ends the path."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
-        setIcon("krita_draw_path");
+        setIconName(koIconNameCStr("krita_draw_path"));
         setPriority(7);
     }
 

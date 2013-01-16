@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,6 @@ class KisExternalLayer;
 class KisCloneLayer;
 class KisFilterMask;
 class KisTransparencyMask;
-class KisTransformationMask;
 class KisSelectionMask;
 
 class KRITAIMAGE_EXPORT KisNodeVisitor
@@ -56,8 +55,6 @@ public:
     virtual bool visit(KisFilterMask *mask) = 0;
 
     virtual bool visit(KisTransparencyMask *mask) = 0;
-
-    virtual bool visit(KisTransformationMask *mask) = 0;
 
     virtual bool visit(KisSelectionMask *mask) = 0;
 

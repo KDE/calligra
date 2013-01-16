@@ -2,7 +2,7 @@
  * Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <commands/KoShapeMoveCommand.h>
@@ -33,8 +33,8 @@
 #include "SelectionDecorator.h"
 
 #include <QSize>
-#include <QtGui/QRadioButton>
-#include <QtGui/QLabel>
+#include <QRadioButton>
+#include <QLabel>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QList>
@@ -72,7 +72,7 @@ void DefaultToolTransformWidget::setUnit( const KoUnit &unit )
 
 void DefaultToolTransformWidget::resourceChanged( int key, const QVariant & res )
 {
-    if (key == KoCanvasResource::Unit)
+    if (key == KoCanvasResourceManager::Unit)
         setUnit(res.value<KoUnit>());
 }
 
@@ -104,7 +104,7 @@ void DefaultToolTransformWidget::rotationChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Rotate") );
+    cmd->setText( i18nc("(qtundo-format)", "Rotate") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -137,7 +137,7 @@ void DefaultToolTransformWidget::shearXChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Shear X") );
+    cmd->setText( i18nc("(qtundo-format)", "Shear X") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -170,7 +170,7 @@ void DefaultToolTransformWidget::shearYChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Shear Y") );
+    cmd->setText( i18nc("(qtundo-format)", "Shear Y") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -207,7 +207,7 @@ void DefaultToolTransformWidget::scaleXChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Scale") );
+    cmd->setText( i18nc("(qtundo-format)", "Scale") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -239,7 +239,7 @@ void DefaultToolTransformWidget::scaleYChanged()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Scale") );
+    cmd->setText( i18nc("(qtundo-format)", "Scale") );
     m_tool->canvas()->addCommand( cmd );
 }
 
@@ -266,7 +266,7 @@ void DefaultToolTransformWidget::resetTransformations()
         newTransforms << shape->transformation();
 
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );
-    cmd->setText( i18n("Reset Transformations") );
+    cmd->setText( i18nc("(qtundo-format)", "Reset Transformations") );
     m_tool->canvas()->addCommand( cmd );
 }
 

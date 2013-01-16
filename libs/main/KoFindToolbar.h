@@ -50,20 +50,28 @@ public:
 
 public Q_SLOTS:
     /**
-     * Set focus to this widget and make sure it is visible.
+     * Set focus to this widget, show it and hide replace related features.
      */
-    void activate();
+    void activateSearch();
 
+    /**
+     * Set focus to this widget, show it including replace related features.
+     */
+    void activateReplace();
+    
 private:
     class Private;
     Private * const d;
 
-    Q_PRIVATE_SLOT(d, void matchFound());
-    Q_PRIVATE_SLOT(d, void noMatchFound());
-    Q_PRIVATE_SLOT(d, void searchWrapped(bool direction));
-    Q_PRIVATE_SLOT(d, void addToHistory());
-    Q_PRIVATE_SLOT(d, void find(const QString &pattern));
-    Q_PRIVATE_SLOT(d, void optionChanged());
+    Q_PRIVATE_SLOT(d, void matchFound())
+    Q_PRIVATE_SLOT(d, void noMatchFound())
+    Q_PRIVATE_SLOT(d, void searchWrapped(bool direction))
+    Q_PRIVATE_SLOT(d, void addToHistory())
+    Q_PRIVATE_SLOT(d, void find(const QString &pattern))
+    Q_PRIVATE_SLOT(d, void optionChanged())
+    Q_PRIVATE_SLOT(d, void replace())
+    Q_PRIVATE_SLOT(d, void replaceAll())
+    Q_PRIVATE_SLOT(d, void inputTimeout())
 };
 
 #endif // KOFINDTOOLBAR_H

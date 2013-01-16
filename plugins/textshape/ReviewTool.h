@@ -30,12 +30,16 @@ class KoViewConverter;
 class TextShape;
 class TrackedChangeManager;
 class TrackedChangeModel;
+class KoChangeTracker;
+
+class KAction;
 
 class QModelIndex;
 class QPainter;
 class QRectF;
 class QKeyEvent;
 class QTreeView;
+class QTextCursor;
 template <class T> class QVector;
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 
@@ -56,7 +60,10 @@ public:
     virtual void deactivate();
 
 protected:
-    virtual QMap<QString, QWidget*> createOptionWidgets();
+    virtual QList<QWidget*> createOptionWidgets();
+
+    void readConfig();
+    void writeConfig();
 
 private slots:
     void acceptChange();
@@ -65,12 +72,22 @@ private slots:
     void setShapeData(KoTextShapeData *data);
     void showTrackedChangeManager();
 
+    /// When enabled, display changes
+    void toggleShowChanges(bool);
+    /// When enabled, make the change tracker record changes made while typing
+    void toggleRecordChanges(bool);
+    /// Configure Change Tracking
+    void configureChangeTracking();
+
 private:
     int pointToPosition(const QPointF & point) const;
-    QVector<QRectF> *textRect(int startPosition, int endPosition);
+    QRectF textRect(QTextCursor &cursor) const;
     void updateSelectedShape(const QPointF &point);
 
-    bool m_disableShowChangesOnExit;
+    KAction *m_actionShowChanges;
+    KAction *m_actionRecordChanges;
+    KAction *m_configureChangeTracking;
+
     KoTextEditor *m_textEditor;
     KoTextShapeData *m_textShapeData;
     KoCanvasBase *m_canvas;
@@ -78,6 +95,7 @@ private:
     TrackedChangeModel *m_model;
     TrackedChangeManager *m_trackedChangeManager;
     QTreeView *m_changesTreeView;
+    KoChangeTracker *m_changeTracker;
 };
 
 #endif // CHANGETRACKINGTOOL_H

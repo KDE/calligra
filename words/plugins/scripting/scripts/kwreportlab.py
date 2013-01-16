@@ -178,13 +178,13 @@ class MyWriter:
                 parentStyle = self.styles['BodyText']
                 self.style = ParagraphStyle(self.styleName, parentStyle)
 
-                kwparagstyle = KWord.paragraphStyle(self.styleName)
+                kwparagstyle = Words.paragraphStyle(self.styleName)
                 if not kwparagstyle:
                     decodedStyleName = urllib.unquote( self.styleName.replace('_','%') )
-                    kwparagstyle = KWord.paragraphStyle(decodedStyleName)
+                    kwparagstyle = Words.paragraphStyle(decodedStyleName)
                     if not kwparagstyle:
                         for n in (decodedStyleName, self.styleName):
-                            kwparagstyle = KWord.paragraphStyle( re.sub('[0-9]+','',n) )
+                            kwparagstyle = Words.paragraphStyle( re.sub('[0-9]+','',n) )
                             if kwparagstyle:
                                 break
 
@@ -270,20 +270,20 @@ class MyWriter:
                 myParagraph.text += "%s " % text
 
         def getCharacterStyle(self):
-            kwcharstyle = KWord.characterStyle(self.styleName)
+            kwcharstyle = Words.characterStyle(self.styleName)
             if not kwcharstyle:
                 decodedStyleName = urllib.unquote( self.styleName.replace('_','%') )
-                kwcharstyle = KWord.characterStyle(decodedStyleName)
+                kwcharstyle = Words.characterStyle(decodedStyleName)
                 if not kwcharstyle:
                     for n in (decodedStyleName, self.styleName):
-                        kwcharstyle = KWord.characterStyle( re.sub('[0-9]+','',n) )
+                        kwcharstyle = Words.characterStyle( re.sub('[0-9]+','',n) )
                         if kwcharstyle:
                             break
             return kwcharstyle
 
     def __init__(self, config):
         self.config = config
-        self.kwdoc = KWord.document()
+        self.kwdoc = Words.document()
         self.style = getSampleStyleSheet()
 
         if not hasattr(MyTemplates, config.templateName):
@@ -294,11 +294,11 @@ class MyWriter:
         style = getSampleStyleSheet()
         story = []
 
-        # Get the KWord document.
-        kwdoc = KWord.document()
+        # Get the Words document.
+        kwdoc = Words.document()
 
         # Get the KoStore backend for the file.
-        store = KWord.store()
+        store = Words.store()
 
         # We like to read the content.xml file from the KoStore.
         reader = store.open("content.xml")
@@ -348,7 +348,7 @@ class MyDialog:
 
         #if not self.config.writeFileName:
         savepage = self.dialog.addPage("Save","Export to PDF Document","document-save")
-        savewidget = forms.createFileWidget(savepage, "kfiledialog:///kwordreportlab")
+        savewidget = forms.createFileWidget(savepage, "kfiledialog:///wordsreportlab")
         savewidget.setFilter("*.pdf|PDF Documents\n*|All Files")
         savewidget.setMode("Saving")
 
@@ -369,18 +369,18 @@ class MyDialog:
 config = MyConfig()
 
 try:
-    # try to import KWord. If this fails we are not running embedded in KWord.
-    import KWord
+    # try to import Words. If this fails we are not running embedded in Words.
+    import Words
     config.showDialog = True
 except ImportError:
-    # looks as we are not running embedded within KWord. So, let's use Kross to import the KWord library.
-    KWord = Kross.module("kword")
+    # looks as we are not running embedded within Words. So, let's use Kross to import the Words library.
+    Words = Kross.module("words")
 
     if config.readOdfFile:
-        KWord.document().openUrl(config.readOdfFile)
+        Words.document().openUrl(config.readOdfFile)
 
-    if not KWord.document().url():
-        # if KWord does not have a loaded document now we show a fileopen-dialog to let the user choose the odt file.
+    if not Words.document().url():
+        # if Words does not have a loaded document now we show a fileopen-dialog to let the user choose the odt file.
         forms = Kross.module("forms")
         dialog = forms.createDialog("ReportLab.org")
         dialog.setButtons("Ok|Cancel")
@@ -390,7 +390,7 @@ except ImportError:
         openwidget.setFilter("*.odt|ODT Files\n*|All Files")
         if not dialog.exec_loop():
             raise Exception("Aborted.")
-        if not KWord.document().openUrl(openwidget.selectedFile()):
+        if not Words.document().openUrl(openwidget.selectedFile()):
             raise Exception("Failed to open file: %s" % openwidget.selectedFile())
 
 if not config.writeFileName:

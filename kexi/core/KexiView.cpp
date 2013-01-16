@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,10 +22,11 @@
 
 #include "KexiWindow.h"
 #include "kexiproject.h"
+#include "kexipartinfo.h"
 #include <koproperty/Set.h>
 
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/connection.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 #include <kexiutils/SmallToolButton.h>
 #include <kexiutils/FlowLayout.h>
@@ -33,6 +34,7 @@
 #include <KDebug>
 #include <KDialog>
 #include <KActionCollection>
+#include <KMenu>
 #include <QEvent>
 #include <QCloseEvent>
 #include <QApplication>
@@ -100,7 +102,9 @@ public:
             , isDirty(false)
             , slotSwitchToViewModeInternalEnabled(true)
             , sortedProperties(false)
-            , recentResultOfSwitchToViewModeInternal(true) {
+            , recentResultOfSwitchToViewModeInternal(true)
+            , m_mainMenu(0)
+    {
     }
 
     ~Private() {
@@ -124,6 +128,29 @@ public:
             //a->setChecked(viewMode == mode);
             slotSwitchToViewModeInternalEnabled = true;
         }
+    }
+
+    KMenu* mainMenu()
+    {
+        if (m_mainMenu) {
+            return m_mainMenu;
+        }
+        if (!window) {
+            return 0;
+        }
+        KexiSmallToolButton* menuButton = new KexiSmallToolButton(
+                         KIcon(),
+                         window->part()->info()->instanceCaption() + " ",
+                         topBarHWidget);
+        menuButton->setToolTip(i18n("Menu for the current window"));
+        menuButton->setWhatsThis(i18n("Shows menu for the current window."));
+        menuButton->setPopupMode(QToolButton::InstantPopup);
+        topBarLyr->insertWidget(0, menuButton);
+        topBarLyr->insertWidget(1, new KexiToolBarSeparator(topBarHWidget));
+
+        m_mainMenu = new KMenu;
+        menuButton->setMenu(m_mainMenu);
+        return m_mainMenu;
     }
 
     QVBoxLayout* mainLyr;
@@ -161,6 +188,10 @@ public:
     QList<QAction*> viewActions;
     QHash<QByteArray, QAction*> viewActionsHash;
 
+    /*! Main-meny-level actions (not shared), owned by the view. */
+    QList<QAction*> mainMenuActions;
+    QHash<QByteArray, QAction*> mainMenuActionsHash;
+
     bool isDirty;
 
     //! Used in slotSwitchToViewModeInternal() to disabling it
@@ -172,6 +203,8 @@ public:
     //! Needed because there is another slotSwitchToViewModeInternal() calls if d->window->switchToViewModeInternal(mode)
     //! did not succeed, so for the second time we block this call.
     tristate recentResultOfSwitchToViewModeInternal;
+private:
+    KMenu* m_mainMenu;
 };
 
 //----------------------------------------------------------
@@ -212,29 +245,37 @@ KexiView::KexiView(QWidget *parent)
 
         const bool userMode = KexiMainWindowIface::global()->userMode();
 
+        bool addSeparator = false;
         if (userMode
                 || d->window->supportedViewModes() == Kexi::DataViewMode
                 || d->window->supportedViewModes() == Kexi::DesignViewMode
-                || d->window->supportedViewModes() == Kexi::TextViewMode) {
+                || d->window->supportedViewModes() == Kexi::TextViewMode)
+        {
             // nothing to do: only single view mode supported
-        } else {
+        }
+        else {
             if (parentWidget()->inherits("KexiWindow")) {
                 createViewModeToggleButtons();
+                addSeparator = true;
             }
         }
 
-        QAction * a;
-        if (d->viewMode == Kexi::DesignViewMode || d->viewMode == Kexi::TextViewMode) {
-            d->topBarLyr->addWidget(new KexiToolBarSeparator(d->topBarHWidget));
+        (void)d->mainMenu();
 
-            a = sharedAction("project_save");
+        if (d->viewMode == Kexi::DesignViewMode || d->viewMode == Kexi::TextViewMode) {
+            if (addSeparator) {
+                d->topBarLyr->addWidget(new KexiToolBarSeparator(d->topBarHWidget));
+                addSeparator = false;
+            }
+
+            QAction *a = sharedAction("project_save");
             d->saveDesignButton = new KexiSmallToolButton(a, d->topBarHWidget);
             d->saveDesignButton->setText(i18n("Save"));
             d->saveDesignButton->setToolTip(i18n("Save current design"));
             d->saveDesignButton->setWhatsThis(i18n("Saves changes made to the current design."));
             d->topBarLyr->addWidget(d->saveDesignButton);
-//   d->topBarLyr->addWidget( d->saveDesignButtonSeparator = new KexiToolBarSeparator(d->topBarHWidget));
-        } else {
+        }
+        else {
             d->saveDesignButton = 0;
         }
     } else {
@@ -258,6 +299,21 @@ KexiWindow* KexiView::window() const
 bool KexiView::isDirty() const
 {
     return d->isDirty;
+}
+
+bool KexiView::isDataEditingInProgress() const
+{
+    return false;
+}
+
+tristate KexiView::saveDataChanges()
+{
+    return true;
+}
+
+tristate KexiView::cancelDataChanges()
+{
+    return true;
 }
 
 Kexi::ViewMode KexiView::viewMode() const
@@ -285,21 +341,6 @@ tristate KexiView::afterSwitchFrom(Kexi::ViewMode mode)
 
 QSize KexiView::preferredSizeHint(const QSize& otherSize)
 {
-#ifdef __GNUC__
-#warning KexiView::preferredSizeHint()
-#else
-#pragma WARNING( KexiView::preferredSizeHint() )
-#endif
-#if 0 //todo
-    KexiWindow* w = d->window;
-    if (dlg && dlg->mdiParent()) {
-        QRect r = dlg->mdiParent()->mdiAreaContentsRect();
-        return otherSize.boundedTo(QSize(
-                                       r.width() - 10,
-                                       r.height() - dlg->mdiParent()->captionHeight() - dlg->pos().y() - 10
-                                   ));
-    }
-#endif
     return otherSize;
 }
 
@@ -350,22 +391,20 @@ void KexiView::setDirty(bool set)
     }
 }
 
-/*bool KexiView::saveData()
+KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
+                                           KexiView::StoreNewDataOptions options,
+                                           bool &cancel)
 {
-  //TODO....
-
-  //finally:
-  setDirty(false);
-  return true;
-}*/
-
-KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata, bool & /*cancel*/)
-{
+    Q_UNUSED(options)
+    Q_UNUSED(cancel)
     KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
     *new_schema = sdata;
 
     if (!KexiMainWindowIface::global()->project()->dbConnection()
-            ->storeObjectSchemaData(*new_schema, true)) {
+            ->storeObjectSchemaData(*new_schema, true)
+        || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
+       )
+    {
         delete new_schema;
         new_schema = 0;
     }
@@ -494,6 +533,11 @@ void KexiView::addChildView(KexiView* childView)
     childView->installEventFilter(this);
 }
 
+void KexiView::removeView(Kexi::ViewMode mode)
+{
+    window()->removeView(mode);
+}
+
 void KexiView::setFocus()
 {
     if (!d->lastFocusedChildBeforeFocusOut.isNull()) {
@@ -550,6 +594,15 @@ void KexiView::setViewActions(const QList<QAction*>& actions)
     d->viewActionsHash.clear();
     foreach(QAction* action, d->viewActions) {
         d->viewActionsHash.insert(action->objectName().toLatin1(), action);
+    }
+}
+
+void KexiView::setMainMenuActions(const QList<QAction*>& actions)
+{
+    d->mainMenuActions = actions;
+    d->mainMenuActionsHash.clear();
+    foreach(QAction* action, d->mainMenuActions) {
+        d->mainMenuActionsHash.insert(action->objectName().toLatin1(), action);
     }
 }
 
@@ -673,9 +726,37 @@ void KexiView::initViewActions()
     }
 }
 
+void KexiView::initMainMenuActions()
+{
+    if (!d->topBarLyr)
+        return;
+    if (d->mainMenuActions.isEmpty()) {
+        return;
+    }
+    d->mainMenu()->clear();
+    foreach(QAction* action, d->mainMenuActions) {
+        d->mainMenu()->addAction(action);
+    }
+}
+
 void KexiView::setSortedProperties(bool set)
 {
     d->sortedProperties = set;
+}
+
+bool KexiView::saveSettings()
+{
+    return true;
+}
+
+QString KexiView::defaultIconName() const
+{
+    return d->defaultIconName;
+}
+
+void KexiView::setDefaultIconName(const QString& iconName)
+{
+    d->defaultIconName = iconName;
 }
 
 #include "KexiView.moc"

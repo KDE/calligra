@@ -19,11 +19,11 @@
 #ifndef OOTHREAD_H
 #define OOTHREAD_H
 
-#include <QtCore/QThread>
-#include <QtCore/QAtomicInt>
-#include <QtCore/QMutex>
-#include <QtCore/QWaitCondition>
-#include <QtCore/QPair>
+#include <QThread>
+#include <QAtomicInt>
+#include <QMutex>
+#include <QWaitCondition>
+#include <QPair>
 
 class OoThread : public QThread {
 Q_OBJECT
@@ -52,7 +52,7 @@ private:
 protected:
     void run();
 public:
-    OoThread(QObject* o);
+    explicit OoThread(QObject* o);
     ~OoThread();
 
     void stop();

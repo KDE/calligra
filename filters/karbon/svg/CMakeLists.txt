@@ -1,36 +1,24 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon
-${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes  ${KDE4_INCLUDES}  )
+                     ${CMAKE_SOURCE_DIR}/karbon/core
+                     ${KDE4_INCLUDES} )
 
 ########### next target ###############
 
 set(karbonsvgexport_PART_SRCS 
     SvgExport.cpp
-    SvgUtil.cpp
-    SvgWriter.cpp
-    ${SHAPES_SOURCES} 
 )
 
 kde4_add_plugin(karbonsvgexport ${karbonsvgexport_PART_SRCS})
 
 target_link_libraries(karbonsvgexport karbonui)
 
-install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS karbonsvgexport DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
 set(karbonsvgimport_PART_SRCS 
     SvgImport.cpp
-    SvgUtil.cpp
-    SvgParser.cpp
-    SvgGradientHelper.cpp
-    SvgPatternHelper.cpp
-    SvgFilterHelper.cpp
-    SvgCssHelper.cpp
-    SvgClipPathHelper.cpp
-    SvgTextHelper.cpp
-    SvgLoadingContext.cpp
-    ${SHAPES_SOURCES} 
 )
 
 kde4_add_plugin(karbonsvgimport ${karbonsvgimport_PART_SRCS})

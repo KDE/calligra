@@ -25,6 +25,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
 
 #include "kis_types.h"
 #include "kis_paint_device.h"
@@ -113,7 +114,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(qimage, "", 0, 0);
+    dev->convertFromQImage(qimage, 0, 0, 0);
 
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, 0, 0);
     kernel->data()[0] = 0;
@@ -126,7 +127,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     kernel->data()[7] = 0;
     kernel->data()[8] = 0;
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction("");
+    gc.beginTransaction(0);
     gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
     gc.deleteTransaction();
 
@@ -135,7 +136,7 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, qimage, resultImage)) {
         resultImage.save("identity_convolution.png");
-        QFAIL(QString("Identity kernel did change image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Identity kernel did change image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -154,7 +155,7 @@ void KisConvolutionPainterTest::testSymmConvolution()
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction("");
+    gc.beginTransaction(0);
     gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                    imageRect.size());
     gc.deleteTransaction();
@@ -176,11 +177,10 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     QByteArray initialData;
     KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
 
-
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
-    gc.beginTransaction("");
+    gc.beginTransaction(0);
     gc.setChannelFlags(channelFlags);
     gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                    imageRect.size());
@@ -230,7 +230,7 @@ void KisConvolutionPainterTest::testAsymmSkipRed()
 {
     QBitArray channelFlags =
         KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
-    channelFlags[0] = false;
+    channelFlags[2] = false;
 
     testAsymmConvolutionImp(channelFlags);
 }
@@ -248,7 +248,7 @@ void KisConvolutionPainterTest::testAsymmSkipBlue()
 {
     QBitArray channelFlags =
         KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
-    channelFlags[2] = false;
+    channelFlags[0] = false;
 
     testAsymmConvolutionImp(channelFlags);
 }
@@ -270,7 +270,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
     QRect imageRect(QPoint(), referenceImage.size());
 
     KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(referenceImage, "", 0, 0);
+    dev->convertFromQImage(referenceImage, 0, 0, 0);
 
     qreal offset = 0.0;
     qreal factor = 1.0;
@@ -289,7 +289,7 @@ void KisConvolutionPainterTest::benchmarkConvolution()
 
         // CALLGRIND_START_INSTRUMENTATION;
 
-        gc.beginTransaction("");
+        gc.beginTransaction(0);
         gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                        imageRect.size());
         gc.deleteTransaction();

@@ -25,7 +25,7 @@
 #include "kis_undo_adapter.h"
 
 KisImageNodeToTopCommand::KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP node)
-        : KisImageCommand(i18n("Lower"), image), m_node(node)
+        : KisImageCommand(i18nc("(qtundo-format)", "Lower"), image), m_node(node)
 {
     m_prevParent = m_node->parent();
     m_prevAbove = m_node->prevSibling();
@@ -33,9 +33,7 @@ KisImageNodeToTopCommand::KisImageNodeToTopCommand(KisImageWSP image, KisNodeSP 
 
 void KisImageNodeToTopCommand::redo()
 {
-    m_image->lock();
     m_image->toTop(m_node);
-    m_image->unlock();
 
     m_image->refreshGraph(m_prevParent);
     m_prevParent->setDirty(m_image->bounds());
@@ -43,9 +41,7 @@ void KisImageNodeToTopCommand::redo()
 
 void KisImageNodeToTopCommand::undo()
 {
-    m_image->lock();
     m_image->moveNode(m_node, m_prevParent, m_prevAbove);
-    m_image->unlock();
 
     m_image->refreshGraph(m_prevParent);
     m_prevParent->setDirty(m_image->bounds());

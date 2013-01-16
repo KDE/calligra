@@ -22,7 +22,15 @@
 
 #include "KoRdfSemanticItem.h"
 
-class KoRdfLocationPrivate;
+/* #ifdef CAN_USE_MARBLE */
+/* #include <ui_KoRdfLocationEditWidgetMarble.h> */
+/* #include <ui_KoRdfLocationViewWidgetMarble.h> */
+/* #else */
+#include <ui_KoRdfLocationEditWidget.h>
+#include <ui_KoRdfLocationViewWidget.h>
+/* #endif */
+
+#include "komain_export.h"
 
 /**
  * @short A Location class which handles ICBM (lat/long) data of various kinds.
@@ -37,13 +45,13 @@ class KoRdfLocationPrivate;
  * http://www.w3.org/TR/rdfcal/     Relates an Rdf "geo" to a list of 2 doubles.
  *
  */
-class KoRdfLocation : public KoRdfSemanticItem
+class KOMAIN_EXPORT KoRdfLocation : public KoRdfSemanticItem
 {
     Q_OBJECT
 
 public:
-    KoRdfLocation(QObject *parent, KoDocumentRdf *m_rdf = 0);
-    KoRdfLocation(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84);
+    KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf = 0);
+    KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84);
     virtual ~KoRdfLocation();
 
     // inherited and reimplemented...
@@ -56,7 +64,7 @@ public:
     virtual Soprano::Node linkingSubject() const;
     virtual void setupStylesheetReplacementMapping(QMap<QString, QString> &m);
     virtual void exportToMime(QMimeData *md) const;
-    virtual QList<KoSemanticStylesheet*> stylesheets() const;
+    virtual QList<hKoSemanticStylesheet> stylesheets() const;
     virtual QString className() const;
 
     /**
@@ -71,7 +79,29 @@ public:
     double dlat() const;
     double dlong() const;
 
+    // setter methods
+    void setName(const QString &name);
+    void setDlat(double dlat);
+    void setDlong(double dlong);
+
 private:
-    Q_DECLARE_PRIVATE(KoRdfLocation);
+
+    Soprano::Node m_linkSubject;
+    QString m_name;
+    double m_dlat;
+    double m_dlong;
+    //
+    // For geo84 simple ontology
+    // geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    //
+    bool m_isGeo84;
+    //
+    // For lat, long as an Rdf list pointed at by cal:geo
+    //
+    Soprano::Node m_joiner;
+    Ui::KoRdfLocationEditWidget editWidget;
+    Ui::KoRdfLocationViewWidget viewWidget;
+
+
 };
 #endif

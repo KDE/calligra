@@ -13,9 +13,9 @@ target_link_libraries(
     keximigrate
     kexidb 
     kexiutils
+    ${CALLIGRADB_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KPARTS_LIBS}
-    ${QT_QT3SUPPORT_LIBRARY}
     ${MYSQL_LIBRARIES}
     )
 

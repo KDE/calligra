@@ -1,8 +1,24 @@
 [Desktop Entry]
 Name=LAN2LAN Switch
+Name[ca]=LAN2LAN Switch
+Name[ca@valencia]=LAN2LAN Switch
+Name[el]=Μεταγωγέας LAN2LAN
+Name[es]=Conmutador LAN2LAN
 Name[et]=LAN2LAN kommutaator
+Name[fr]=LAN2LAN Switch
+Name[gl]=Conmutador LAN2LAN
+Name[hu]=LAN2LAN Switch
+Name[it]=LAN2LAN Switch
+Name[kk]=LAN2LAN қосқышы
+Name[nb]=LAN2LAN-svitsj
+Name[nl]=LAN2LAN switch
+Name[pl]=Przełącznik LAN2LAN
 Name[pt]=Comutador LAN2LAN
 Name[pt_BR]=Comutador LAN2LAN
+Name[ru]=Коммутатор локальных сетей
+Name[sk]=LAN2LAN Switch
 Name[sv]=Lokalt nätverk till lokalt nätverk-växel
 Name[uk]=Комутатор LAN2LAN
 Name[x-test]=xxLAN2LAN Switchxx
+Name[zh_CN]=LAN2LAN 交换机
+Name[zh_TW]=LAN2LAN 交換器

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,16 +22,17 @@
 #include "TextShape.h"
 
 #include <KoCanvasBase.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 
 ReferencesToolFactory::ReferencesToolFactory()
         : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
-    setToolTip(i18n("References tool"));
-    setToolType(dynamicToolType());
-    setIcon("tool-references");
-    setPriority(3);
+    setToolTip(i18n("References"));
+    setToolType("calligrawords");
+    setIconName(koIconNameCStr("tool_references"));
+    setPriority(20);
     setActivationShapeId(TextShape_SHAPEID);
 }
 

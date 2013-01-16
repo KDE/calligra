@@ -24,7 +24,7 @@
 
 #include <core/kexistartupdata.h>
 #include <core/kexi.h>
-#include <kexiutils/tristate.h>
+#include <db/tristate.h>
 
 class KexiProjectData;
 class KexiProjectData;
@@ -35,30 +35,27 @@ class ConnectionData;
 }
 
 /*! */
-class KEXIMAIN_EXPORT KexiDBPasswordDialog : public KPasswordDialog
+class KexiDBPasswordDialog : public KPasswordDialog
 {
     Q_OBJECT
 public:
     KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton = false);
     virtual ~KexiDBPasswordDialog();
 
-    bool showConnectionDetailsRequested() const {
-        return m_showConnectionDetailsRequested;
-    }
+    bool showConnectionDetailsRequested() const;
 
 protected slots:
     virtual void done(int r);
     void slotShowConnectionDetails();
 
 protected:
-    KexiDB::ConnectionData *m_cdata;
-    bool m_showConnectionDetailsRequested;
+    class Private;
+    Private* const d;
 };
 
 /*! Handles startup actions for Kexi application.
 */
-class KEXIMAIN_EXPORT KexiStartupHandler
-            : public QObject, public KexiStartupData, public Kexi::ObjectStatus
+class KexiStartupHandler : public QObject, public KexiStartupData, public Kexi::ObjectStatus
 {
     Q_OBJECT
 
@@ -106,7 +103,7 @@ public:
      \a driverName is a preferred driver name.
      \a options should be a combination of DetectDriverForFileOptions enum values. */
     static tristate detectActionForFile(
-        KexiStartupData::Import& detectedImportAction, QString& detectedDriverName,
+        KexiStartupData::Import* detectedImportAction, QString* detectedDriverName,
         const QString& _suggestedDriverName,
         const QString &dbFileName, QWidget *parent = 0, int options = 0);
 
@@ -134,7 +131,7 @@ protected:
 namespace Kexi
 {
 //! \return singleton Startup Handler singleton.
-KEXIMAIN_EXPORT KexiStartupHandler& startupHandler();
+    KexiStartupHandler& startupHandler();
 }
 
 #endif

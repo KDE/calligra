@@ -24,7 +24,7 @@
 #include "KWDocument.h"
 #include "KWCanvasBase.h"
 #include "KWViewMode.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <QGraphicsWidget>
 
@@ -41,7 +41,7 @@ class KoShape;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWORD_EXPORT KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
+class WORDS_EXPORT KWCanvasItem : public QGraphicsWidget, public KWCanvasBase
 {
     Q_OBJECT
 

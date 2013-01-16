@@ -1,4 +1,4 @@
-/*
+    /*
  *  Copyright (c) 2010 Adam Celarek <kdedev at xibo dot at>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@
 
 #include "kis_canvas2.h"
 #include "kis_view2.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_color_space_selector.h"
 #include "kis_preference_set_registry.h"
@@ -41,8 +41,6 @@
 #include "kis_common_colors.h"
 #include "kis_color_selector_settings.h"
 #include "kis_color_selector_container.h"
-
-#include <KDebug>
 
 KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) :
     QWidget(parent),
@@ -80,44 +78,65 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     //emit settingsChanged() if the settings are changed in krita preferences
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
-    KisColorSelectorSettings* settings = dynamic_cast<KisColorSelectorSettings*>(preferenceSetRegistry->get("advancedColorSelector"));
-    Q_ASSERT(settings);
+    KisColorSelectorSettingsFactory* factory =
+            dynamic_cast<KisColorSelectorSettingsFactory*>(preferenceSetRegistry->get("KisColorSelectorSettingsFactory"));
+    Q_ASSERT(factory);
+    connect(&(factory->repeater), SIGNAL(settingsUpdated()), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+    connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(updateLayout()), Qt::UniqueConnection);
+    connect(this,     SIGNAL(settingsChanged()), m_commonColorsWidget,     SLOT(updateSettings()), Qt::UniqueConnection);
+    connect(this,     SIGNAL(settingsChanged()), m_colorHistoryWidget,     SLOT(updateSettings()), Qt::UniqueConnection);
+    connect(this,     SIGNAL(settingsChanged()), m_colorSelectorContainer, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+    connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(update()), Qt::UniqueConnection);
 
-    connect(settings, SIGNAL(settingsChanged()), this,                     SIGNAL(settingsChanged()));
-    connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(updateLayout()));
-    connect(this,     SIGNAL(settingsChanged()), m_commonColorsWidget,     SLOT(updateSettings()));
-    connect(this,     SIGNAL(settingsChanged()), m_colorHistoryWidget,     SLOT(updateSettings()));
-    connect(this,     SIGNAL(settingsChanged()), m_colorSelectorContainer, SIGNAL(settingsChanged()));
-    connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(update()));
 
     emit settingsChanged();
 }
 
+void KisColorSelectorNgDockerWidget::unsetCanvas()
+{
+    m_canvas = 0;
+    m_commonColorsWidget->unsetCanvas();
+    m_colorHistoryWidget->unsetCanvas();
+    m_colorSelectorContainer->unsetCanvas();
+}
+
 void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnect(this);
+        KActionCollection *ac = m_canvas->view()->actionCollection();
+        ac->takeAction(ac->action("show_color_history"));
+        ac->takeAction(ac->action("show_common_colors"));
+    }
+
+    m_canvas = canvas;
     Q_ASSERT(canvas);
     m_commonColorsWidget->setCanvas(canvas);
     m_colorHistoryWidget->setCanvas(canvas);
     m_colorSelectorContainer->setCanvas(canvas);
-    m_canvas = canvas;
 
-    if(m_canvas->view()->layerManager())
-        connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()));
 
+    if (m_canvas->view()->nodeManager()) {
+        connect(m_canvas->view()->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
+    }
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 
-    if(m_colorHistoryAction!=0)
-        return;     //we don't need to create the actions a second time
-
-    m_colorHistoryAction = new KAction("Show color history", this);
-    m_colorHistoryAction->setShortcut(QKeySequence(tr("H")));
-    connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()));
+    if (!m_colorHistoryAction) {
+        m_colorHistoryAction = new KAction("Show color history", this);
+        m_colorHistoryAction->setShortcut(QKeySequence(tr("H")));
+        connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()), Qt::UniqueConnection);
+    }
     actionCollection->addAction("show_color_history", m_colorHistoryAction);
 
-    m_commonColorsAction = new KAction("Show common colors", this);
-    m_commonColorsAction->setShortcut(QKeySequence(tr("C")));
-    connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()));
+    if (!m_commonColorsAction) {
+        m_commonColorsAction = new KAction("Show common colors", this);
+        m_commonColorsAction->setShortcut(QKeySequence(tr("C")));
+        connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()), Qt::UniqueConnection);
+    }
     actionCollection->addAction("show_common_colors", m_commonColorsAction);
+
+
+    reactOnLayerChange();
 }
 
 void KisColorSelectorNgDockerWidget::openSettings()
@@ -190,16 +209,24 @@ void KisColorSelectorNgDockerWidget::updateLayout()
 
 void KisColorSelectorNgDockerWidget::reactOnLayerChange()
 {
-    KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
-    if (node) {
-        KisPaintDeviceSP device = node->paintDevice();
-        if (device) {
-            m_colorHistoryAction->setEnabled(true);
-            m_commonColorsAction->setEnabled(true);
-        }
-        else {
-            m_colorHistoryAction->setEnabled(false);
-            m_commonColorsAction->setEnabled(false);
+    // this will trigger settings update and therefore an update of the color space setting and therefore it will change
+    // the color space to the current layer
+    emit settingsChanged();
+    if (m_canvas) {
+        KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
+        if (node && node->paintDevice()) {
+            KisPaintDeviceSP device = node->paintDevice();
+            connect(device.data(), SIGNAL(profileChanged(const KoColorProfile*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+            connect(device.data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+            
+            if (device) {
+                m_colorHistoryAction->setEnabled(true);
+                m_commonColorsAction->setEnabled(true);
+            }
+            else {
+                m_colorHistoryAction->setEnabled(false);
+                m_commonColorsAction->setEnabled(false);
+            }
         }
     }
 }

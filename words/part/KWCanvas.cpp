@@ -20,14 +20,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// kword includes
+// words includes
 #include "KWCanvas.h"
 #include "KWGui.h"
 #include "KWView.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
@@ -51,7 +51,7 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     setFocusPolicy(Qt::StrongFocus);
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
     m_viewConverter = m_view->viewConverter();
-    m_viewMode = KWViewMode::create(viewMode, document, this);
+    m_viewMode = KWViewMode::create(viewMode, document);
 }
 
 KWCanvas::~KWCanvas()
@@ -66,7 +66,7 @@ void KWCanvas::pageSetupChanged()
 
 void KWCanvas::updateSize()
 {
-    resourceManager()->setResource(KWord::CurrentPageCount, m_document->pageCount());
+    resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
     emit documentSize(m_viewMode->contentsSize());
 }
 
@@ -80,28 +80,34 @@ bool KWCanvas::snapToGrid() const
     return m_view->snapToGrid();
 }
 
+QPointF KWCanvas::viewToDocument(const QPointF &viewPoint) const
+{
+    return m_viewMode->viewToDocument(viewPoint, m_viewConverter);
+}
+
+
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e)
 {
-    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!e->isAccepted() && e->button() == Qt::RightButton) {
         m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
-        e->setAccepted(true);
     }
+    e->setAccepted(true);
 }
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 bool KWCanvas::event(QEvent *e)
@@ -121,43 +127,41 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
             focusNextPrevChild(false);
         else if (e->key() == Qt::Key_Tab)
             focusNextPrevChild(true);
+        else if (e->key() == Qt::Key_PageUp)
+            m_view->goToPreviousPage(e->modifiers());
+        else if (e->key() == Qt::Key_PageDown)
+            m_view->goToNextPage(e->modifiers());
     }
 }
 
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        rect = m_viewMode->documentToView(viewConverter()->viewToDocument(rect), viewConverter());
+        QPointF scroll(canvasController()->scrollBarValue());
+        if (canvasWidget()->layoutDirection() == Qt::RightToLeft) {
+            scroll.setX(-scroll.x());
+        }
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 
 void KWCanvas::keyReleaseEvent(QKeyEvent *e)
 {
-#ifndef NDEBUG
-    // Debug keys
-    if ((e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier))) {
-        if (e->key() == Qt::Key_F) {
-            document()->printDebug();
-            e->accept();
-            return;
-        }
-        if (e->key() == Qt::Key_M) {
-            const QDateTime dtMark(QDateTime::currentDateTime());
-            kDebug(32001) << "Developer mark:" << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz");
-            e->accept();
-            return;
-        }
-    }
-#endif
     m_toolProxy->keyReleaseEvent(e);
 }
 
 void KWCanvas::tabletEvent(QTabletEvent *e)
 {
-    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::wheelEvent(QWheelEvent *e)
 {
-    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
 }
 
 void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
@@ -169,7 +173,17 @@ void KWCanvas::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(this);
     painter.eraseRect(ev->rect());
-    paint(painter, ev->rect());
+#ifdef SHOW_ANNOTATIONS
+    QRect adjRect(ev->rect());
+    adjRect.adjust(0, 0, -200, 0);
+    paint(painter, adjRect);
+        QColor color = Qt::gray;
+        QRect annotationRect(adjRect.right(), adjRect.top(), 200, adjRect.height());
+        qDebug()<<"annotation rect "<<annotationRect;
+        //painter.fillRect(annotationRect, QBrush(color));
+#else
+        paint(painter, ev->rect());
+#endif
     painter.end();
 }
 

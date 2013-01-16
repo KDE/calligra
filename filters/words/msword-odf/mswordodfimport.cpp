@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -34,7 +34,10 @@
 
 #include "mswordodfimport.h"
 #include "document.h"
-#include "fibbase.h"
+#include "exceptions.h"
+#include "msdoc.h"
+
+#include "generated/simpleParser.h"
 #include "pole.h"
 
 //function prototypes of local functions
@@ -85,18 +88,29 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     }
     LEInputStream wdstm(&buff1);
 
-    FibBase fb(wdstm);
+    MSO::FibBase fibBase;
+    LEInputStream::Mark m = wdstm.setMark();
+    try {
+        parseFibBase(wdstm, fibBase);
+    } catch (const IOException &e) {
+        kError(30513) << e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::InvalidFormat;
+    }
+    wdstm.rewind(m);
 
     //document is encrypted or obfuscated
-    if (fb.fEncrypted) {
+    if (fibBase.fEncrypted) {
         return KoFilter::PasswordProtected;
     }
 
     //1Table Stream or 0Table Stream
-    const char* tblstm_name = fb.fWhichTblStm ? "1Table" : "0Table";
+    const char* tblstm_name = fibBase.fWhichTblStm ? "1Table" : "0Table";
     POLE::Stream tblstm_pole(&storage, tblstm_name);
     if (tblstm_pole.fail()) {
-        if (fb.nFib >= Word8nFib) {
+        if (fibBase.nFib >= Word8nFib) {
             kDebug(30513) << "Either the 1Table stream or the 0Table stream MUST be present in the file!";
             return KoFilter::InvalidFormat;
         }
@@ -111,6 +125,15 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         datastm = new LEInputStream(&buff3);
     }
 
+    //Summary Information Stream
+    LEInputStream* sistm = 0;
+    QBuffer buff4;
+    if (!readStream(storage, "/SummaryInformation", buff4)) {
+        kDebug(30513) << "Failed to open /SummaryInformation stream, no big deal (OPTIONAL).";
+    } else {
+        sistm = new LEInputStream(&buff4);
+    }
+
     /*
      * ************************************************
      *  Processing file
@@ -118,12 +141,16 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
      */
     struct Finalizer {
     public:
-        Finalizer(LEInputStream* s) : m_store(0), m_genStyles(0), m_document(0),
-                                      m_contentWriter(0), m_bodyWriter(0), m_datastm(s) { }
+        Finalizer(LEInputStream *ds, LEInputStream *sis) : m_store(0), m_genStyles(0), m_document(0),
+                                      m_contentWriter(0), m_bodyWriter(0),
+                                      m_datastm(ds), m_sistm(sis) { }
         ~Finalizer() {
             delete m_store; delete m_genStyles; delete m_document; delete m_contentWriter; delete m_bodyWriter;
             if (m_datastm) {
                 delete m_datastm;
+            }
+            if (m_sistm) {
+              delete m_sistm;
             }
         }
 
@@ -133,8 +160,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         KoXmlWriter *m_contentWriter;
         KoXmlWriter *m_bodyWriter;
         LEInputStream* m_datastm;
+        LEInputStream* m_sistm;
     };
-    Finalizer finalizer(datastm);
+    Finalizer finalizer(datastm, sistm);
 
     // Create output files
     KoStore *storeout;
@@ -185,10 +213,21 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    Document *document = new Document(QFile::encodeName(inputFile).data(), this,
-                                      bodyWriter, &metaWriter, &manifestWriter,
-                                      storeout, mainStyles,
-                                      wdstm, tblstm_pole, datastm);
+    Document *document = 0;
+
+    try {
+        document = new Document(QFile::encodeName(inputFile).data(), this,
+                                bodyWriter, &metaWriter, &manifestWriter,
+                                storeout, mainStyles,
+                                wdstm, tblstm_pole, datastm, sistm);
+    } catch (const InvalidFormatException &_e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
+    }
+
     finalizer.m_document = document;
 
     //check that we can parse the document?
@@ -196,9 +235,22 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
         return KoFilter::WrongFormat;
     }
     //actual parsing & action
-    if (!document->parse()) {
-        return KoFilter::CreationError;
+    try {
+        quint8 ret = document->parse();
+        switch (ret) {
+        case 1:
+            return KoFilter::CreationError;
+        case 2:
+            return KoFilter::StupidError;
+        }
+    } catch (const InvalidFormatException &_e) {
+        kDebug(30513) << _e.msg;
+        return KoFilter::InvalidFormat;
+    } catch (...) {
+        kWarning(30513) << "Warning: Caught an unknown exception!";
+        return KoFilter::StupidError;
     }
+
     document->processSubDocQueue(); //process the queues we've created?
     document->finishDocument(); //process footnotes, pictures, ...
 
@@ -238,20 +290,44 @@ KoFilter::ConversionStatus MSWordOdfImport::convert(const QByteArray &from, cons
     storeout->open("settings.xml");
     KoStoreDevice settingsDev(storeout);
     KoXmlWriter *settingsWriter = oasisStore.createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "ooo:configuration-settings");
+
     settingsWriter->startElement("config:config-item");
     settingsWriter->addAttribute("config:name", "UseFormerLineSpacing");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
+
     settingsWriter->startElement("config:config-item");
     settingsWriter->addAttribute("config:name", "TabsRelativeToIndent");
     settingsWriter->addAttribute("config:type", "boolean");
     settingsWriter->addTextSpan("false");
     settingsWriter->endElement();
+
+    // This config-item is used in KoTextLayoutArea::handleBordersAndSpacing
+    // during layouting.  The defined 'Above paragraph' and 'Below paragraph'
+    // paragraph spacing (which is written in the ODF as fo:margin-top for the
+    // KoParagraphStyle) are not applied to the first and the last paragraph if
+    // this value is true.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "AddParaTableSpacingAtStart");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("true");
+    settingsWriter->endElement();
+
+    // OOo requires this config item to display files produced by this filter
+    // correctly.  If true, then the fo:text-indent attribute will be ignored.
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "IgnoreFirstLineIndentInNumbering");
+    settingsWriter->addAttribute("config:type", "boolean");
+    settingsWriter->addTextSpan("false");
+    settingsWriter->endElement();
+
     settingsWriter->endElement(); // config-item-set
 
+    settingsWriter->endElement(); // settings
     settingsWriter->endElement(); // document-settings
     settingsWriter->endDocument();
     delete settingsWriter;

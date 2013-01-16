@@ -1,7 +1,7 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2008,2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,18 +29,17 @@
 
 #include <KDebug>
 
-//#define DEBUG_PAGES
+#define DEBUG_PAGES
 
 KWPageManagerPrivate::KWPageManagerPrivate()
         : lastId(0),
-        preferPageSpread(false),
-        defaultPageStyle("Standard")
+        defaultPageStyle(QLatin1String("Standard"), QLatin1String("Default")) // don't translate cause both strings are used as identifier!
 {
-    pageStyles.insert(defaultPageStyle.name(), defaultPageStyle);
 }
 
-qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
+qreal KWPageManagerPrivate::pageOffset(int pageNum/*, bool bottom*/) const
 {
+#if 0
     Q_ASSERT(pageNum >= 0);
     qreal offset = 0.0;
     const qreal totalPadding = padding.top + padding.bottom;
@@ -58,13 +57,24 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
         offset += page.style.priv()->pageLayout.height + totalPadding;
     }
     return offset;
+#else
+    //Q_ASSERT(pageOffsets.contains(pageNum));
+    qreal offset = pageOffsets.value(pageNum);
+    //kDebug(32001) << "pageNum=" << pageNum << "offset=" << offset;
+    return offset;
+#endif
 }
 
-void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
+void KWPageManagerPrivate::setPageOffset(int pageNum, qreal offset)
 {
+    pageOffsets[pageNum] = offset;
+}
+
+void KWPageManagerPrivate::setVisiblePageNumber(int pageId, int newPageNumber)
+{
+#if 0
     if (pageNumbers.isEmpty() || ! pages.contains(pageId))
         return;
-
     const int oldPageNumber = pages[pageId].pageNumber;
     int diff = newPageNumber - oldPageNumber;
     int from = oldPageNumber;
@@ -107,16 +117,24 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
     }
 
     Q_ASSERT(pages.count() == oldPages.count()); // don't loose anything :)
+#else
+    if (newPageNumber >= 0)
+        visiblePageNumbers[pageId] = newPageNumber;
+    else
+        visiblePageNumbers.remove(pageId);
+#endif
 }
 
 void KWPageManagerPrivate::insertPage(const Page &newPage)
 {
+#ifdef DEBUG_PAGES
+    kDebug(32001) << "pageNumber=" << newPage.pageNumber;
+#endif
+
     // increase the pagenumbers of pages following the pageNumber
     if (!pageNumbers.isEmpty()) {
         QMap<int, int> numbers = pageNumbers;
-        const int offset = newPage.pageSide == KWPage::PageSpread ? 2 : 1;
         QMap<int, int>::iterator iter = numbers.end();
-        int prevId = -1;
         do {
             --iter;
 
@@ -124,20 +142,15 @@ void KWPageManagerPrivate::insertPage(const Page &newPage)
                 break;
             KWPageManagerPrivate::Page page = pages[iter.value()];
             pageNumbers.remove(iter.key());
-            if (iter.value() != prevId) { // make sure we don't increase pagespreads twice.
-                page.pageNumber += offset;
-                prevId = iter.value();
-            }
+            page.pageNumber += 1;
             pages.insert(iter.value(), page);
-            pageNumbers.insert(iter.key() + offset, iter.value());
+            pageNumbers.insert(iter.key() + 1, iter.value());
         } while (iter != numbers.begin());
     }
 
     pages.insert(++lastId, newPage);
     Q_ASSERT(! pageNumbers.contains(newPage.pageNumber));
     pageNumbers.insert(newPage.pageNumber, lastId);
-    if (newPage.pageSide == KWPage::PageSpread)
-        pageNumbers.insert(newPage.pageNumber + 1, lastId);
 }
 
 ///////////
@@ -145,6 +158,7 @@ void KWPageManagerPrivate::insertPage(const Page &newPage)
 KWPageManager::KWPageManager()
     : d (new KWPageManagerPrivate())
 {
+    addPageStyle(d->defaultPageStyle);
 }
 
 KWPageManager::~KWPageManager()
@@ -159,8 +173,6 @@ int KWPageManager::pageNumber(const QPointF &point) const
     QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
     for (;iter != d->pageNumbers.constEnd(); ++iter) {
         const KWPageManagerPrivate::Page page = d->pages[iter.value()];
-        if (page.pageSide == KWPage::PageSpread && iter.key() % 2 == 1)
-            continue;
         startOfpage += page.style.pageLayout().height + d->padding.top + d->padding.bottom;
         answer = iter.key();
         if (startOfpage >= point.y())
@@ -184,8 +196,6 @@ int KWPageManager::pageCount() const
     int count = 0;
     QHash<int,KWPageManagerPrivate::Page>::const_iterator iter = d->pages.constBegin();
     while (iter != d->pages.constEnd()) {
-        if (iter.value().pageSide == KWPage::PageSpread)
-            ++count;
         ++count;
         ++iter;
     }
@@ -223,13 +233,15 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
     if (pageNumber <= 0 || d->pages.isEmpty() || pageNumber > last().pageNumber())
         return appendPage(pageStyle);
 
+#ifdef DEBUG_PAGES
+    kDebug(32001) << "pageNumber=" << pageNumber << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
+#endif
+
     KWPageManagerPrivate::Page newPage;
     newPage.style = pageStyle;
 
     KWPage prevPage = page(pageNumber - 1);
     if (prevPage.isValid()) {
-        if (pageNumber % 2 == 1 && prevPage.pageSide() == KWPage::PageSpread)
-            pageNumber++; // don't insert in the middle of a pageSpread.
         if (! newPage.style.isValid())
             newPage.style = prevPage.pageStyle();
     }
@@ -238,19 +250,12 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
         newPage.style = defaultPageStyle();
     newPage.pageNumber = pageNumber;
     if (newPage.pageNumber % 2 == 0) {
-        if (newPage.style.pageLayout().bindingSide >= 0) // pageSpread
-            newPage.pageSide = KWPage::PageSpread;
-        else
-            newPage.pageSide = KWPage::Left;
+        newPage.pageSide = KWPage::Left;
     } else {
         newPage.pageSide = KWPage::Right;
     }
 
     d->insertPage(newPage);
-
-#ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
-#endif
 
     return KWPage(d, d->lastId);
 }
@@ -265,8 +270,6 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
         KWPageManagerPrivate::Page lastPage = d->pages[end.value()];
         page = lastPage;
         ++page.pageNumber;
-        if (lastPage.pageSide == KWPage::PageSpread)
-            ++page.pageNumber;
     } else {
         page.pageNumber = 1;
     }
@@ -287,21 +290,16 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
     }
 
     if (page.pageNumber % 2 == 0) {
-        if (page.style.pageLayout().bindingSide >= 0) // pageSpread
-            page.pageSide = KWPage::PageSpread;
-        else
-            page.pageSide = KWPage::Left;
+        page.pageSide = KWPage::Left;
     } else {
         page.pageSide = KWPage::Right;
     }
 
     d->pages.insert(++d->lastId, page);
     d->pageNumbers.insert(page.pageNumber, d->lastId);
-    if (page.pageSide == KWPage::PageSpread)
-        d->pageNumbers.insert(page.pageNumber + 1, d->lastId);
+
 #ifdef DEBUG_PAGES
-    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount();
-    kDebug(32001) << "           " << d->pageNumbers;
+    kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount() << "pageStyle=" << (pageStyle.isValid() ? pageStyle.name() : QString());
 #endif
 
     return KWPage(d, d->lastId);
@@ -309,12 +307,14 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
 
 qreal KWPageManager::topOfPage(int pageNum) const
 {
-    return d->pageOffset(pageNum, false);
+    return d->pageOffset(pageNum);
 }
 
 qreal KWPageManager::bottomOfPage(int pageNum) const
 {
-    return d->pageOffset(pageNum, true);
+    KWPage p = page(pageNum);
+    Q_ASSERT(p.isValid());
+    return d->pageOffset(pageNum) + p.height();
 }
 
 void KWPageManager::removePage(int pageNumber)
@@ -324,11 +324,12 @@ void KWPageManager::removePage(int pageNumber)
 
 void KWPageManager::removePage(const KWPage &page)
 {
-    if (!page.isValid())
-        return;
+    Q_ASSERT(page.isValid());
+    kDebug(32001) << page.pageNumber();
+
     const int removedPageNumber = page.pageNumber();
-    const int offset = page.pageSide() == KWPage::PageSpread ? 2 : 1;
     d->pages.remove(d->pageNumbers[removedPageNumber]);
+    d->visiblePageNumbers.remove(removedPageNumber);
 
     // decrease the pagenumbers of pages following the pageNumber
     QMap<int, int> pageNumbers = d->pageNumbers;
@@ -336,7 +337,7 @@ void KWPageManager::removePage(const KWPage &page)
     while (iter != pageNumbers.end()) {
         if (iter.key() < removedPageNumber) {
             //  don't touch those
-        } else if (iter.key() > removedPageNumber + offset - 1) {
+        } else if (iter.key() > removedPageNumber) {
             KWPageManagerPrivate::Page page = d->pages[iter.value()];
             d->pageNumbers.remove(iter.key());
             page.pageNumber--;
@@ -347,46 +348,10 @@ void KWPageManager::removePage(const KWPage &page)
         }
         ++iter;
     }
+
 #ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
-    kDebug(32001) << "           " << d->pageNumbers;
 #endif
-}
-
-QPointF KWPageManager::clipToDocument(const QPointF &point) const
-{
-    qreal startOfpage = 0.0;
-
-    KWPage page;
-    // decrease the pagenumbers of pages following the pageNumber
-    QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
-    while (iter != d->pageNumbers.constEnd()) {
-        const KWPageManagerPrivate::Page p = d->pages[iter.value()];
-        startOfpage += p.style.pageLayout().height + d->padding.top + d->padding.bottom;
-        if (startOfpage >= point.y()) {
-            page = KWPage(d, iter.value());
-            break;
-        }
-        ++iter;
-    }
-    if (! page.isValid())
-        page = last();
-
-    QRectF rect = page.rect();
-    if (rect.contains(point))
-        return point;
-
-    QPointF rc(point);
-    if (rect.top() > rc.y())
-        rc.setY(rect.top());
-    else if (rect.bottom() < rc.y())
-        rc.setY(rect.bottom());
-
-    if (rect.left() > rc.x())
-        rc.setX(rect.left());
-    else if (rect.right() < rc.x())
-        rc.setX(rect.right());
-    return rc;
 }
 
 QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
@@ -401,8 +366,6 @@ QList<KWPage> KWPageManager::pages(const QString &pageStyle) const
     return answer;
 }
 
-// **** PageList ****
-
 QHash<QString, KWPageStyle> KWPageManager::pageStyles() const
 {
     return d->pageStyles;
@@ -412,30 +375,27 @@ KWPageStyle KWPageManager::pageStyle(const QString &name) const
 {
     if (d->pageStyles.contains(name))
         return d->pageStyles[name];
+    if (d->pageStyleNames.contains(name))
+        return d->pageStyles[d->pageStyleNames[name]];
     return KWPageStyle();
 }
 
 void KWPageManager::addPageStyle(const KWPageStyle &pageStyle)
 {
-    Q_ASSERT(! pageStyle.name().isEmpty());
+    Q_ASSERT(!pageStyle.name().isEmpty());
     Q_ASSERT(pageStyle.isValid());
     d->pageStyles.insert(pageStyle.name(), pageStyle);
-}
-
-KWPageStyle KWPageManager::addPageStyle(const QString &name)
-{
-    if (d->pageStyles.contains(name))
-        return d->pageStyles[name];
-    KWPageStyle pagestyle(name);
-    addPageStyle(pagestyle);
-    return pagestyle;
+    if (!pageStyle.displayName().isEmpty())
+        d->pageStyleNames.insert(pageStyle.displayName(), pageStyle.name());
 }
 
 void KWPageManager::removePageStyle(const KWPageStyle &pageStyle)
 {
     KWPageStyle style = d->pageStyles.value(pageStyle.name());
-    if (style == pageStyle)
-        d->pageStyles.remove(pageStyle.name());
+    Q_ASSERT(style == pageStyle);
+    d->pageStyles.remove(pageStyle.name());
+    Q_ASSERT(!d->pageStyleNames.contains(pageStyle.displayName()) || d->pageStyleNames[pageStyle.displayName()] == pageStyle.name());
+    d->pageStyleNames.remove(pageStyle.displayName());
 }
 
 KWPageStyle KWPageManager::defaultPageStyle() const
@@ -446,7 +406,9 @@ KWPageStyle KWPageManager::defaultPageStyle() const
 void KWPageManager::clearPageStyles()
 {
     d->pageStyles.clear();
-    d->defaultPageStyle = addPageStyle("Standard");
+    d->pageStyleNames.clear();
+    d->defaultPageStyle = KWPageStyle(QLatin1String("Standard"), QLatin1String("Default")); // don't translate cause both strings are used as identifier!
+    addPageStyle(d->defaultPageStyle);
 }
 
 const KWPage KWPageManager::begin() const
@@ -489,14 +451,4 @@ KoInsets KWPageManager::padding() const
 void KWPageManager::setPadding(const KoInsets &padding)
 {
     d->padding = padding;
-}
-
-bool KWPageManager::preferPageSpread() const
-{
-    return d->preferPageSpread;
-}
-
-void KWPageManager::setPreferPageSpread(bool on)
-{
-    d->preferPageSpread = on;
 }

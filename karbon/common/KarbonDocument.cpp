@@ -10,7 +10,7 @@
    Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Gabor Lehel <illissius@gmail.com>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
@@ -39,7 +39,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeSavingContext.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
@@ -55,7 +55,7 @@
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QRectF>
 
 class KarbonDocument::Private
@@ -85,7 +85,7 @@ public:
 
     QMap<QString, KoDataCenterBase*> dataCenterMap;
     bool hasExternalDataCenterMap;
-    KoResourceManager *resourceManager;
+    KoDocumentResourceManager *resourceManager;
 };
 
 KarbonDocument::KarbonDocument()
@@ -185,6 +185,7 @@ void KarbonDocument::saveOasis(KoShapeSavingContext & context) const
     context.xmlWriter().startElement("draw:page");
     context.xmlWriter().addAttribute("draw:name", "");
     context.xmlWriter().addAttribute("draw:id", "page1");
+    context.xmlWriter().addAttribute("xml:id", "page1");
     context.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     foreach(KoShapeLayer * layer, d->layers) {
@@ -416,7 +417,7 @@ void KarbonDocument::saveOdfStyles(KoShapeSavingContext & context)
     if (! styleManager)
         return;
 
-    styleManager->saveOdf(context.mainStyles());
+    styleManager->saveOdf(context);
 }
 
 void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenterBase* dataCenter)
@@ -424,12 +425,12 @@ void KarbonDocument::addToDataCenterMap(const QString &key, KoDataCenterBase* da
     d->dataCenterMap.insert(key, dataCenter);
 }
 
-KoResourceManager *KarbonDocument::resourceManager() const
+KoDocumentResourceManager *KarbonDocument::resourceManager() const
 {
     return d->resourceManager;
 }
 
-void KarbonDocument::setResourceManager(KoResourceManager *rm)
+void KarbonDocument::setResourceManager(KoDocumentResourceManager *rm)
 {
     d->resourceManager = rm;
 }

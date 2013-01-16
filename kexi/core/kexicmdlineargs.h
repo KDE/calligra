@@ -174,6 +174,12 @@ static KCmdLineOptions kexi_options()
              "Skip displaying connection dialog window\n"
              "and connect directly. Available when\n"
              "opening .kexic or .kexis shortcut files."))
+    .add("f")
+    .add("fullscreen", ki18n(
+             "Start fullscreen\n"
+             "Start Kexi in full screen mode to occupy the\n"
+             "whole screen area by hiding window decorations,\n"
+             "such as a title bar."))
     .add("+[project-name]", ki18n(
              "Kexi database project filename,\n"
              "Kexi shortcut filename,\n"

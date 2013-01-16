@@ -25,7 +25,7 @@
 
 #include <KoInteractionTool.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <commands/KoShapeMoveCommand.h>
@@ -37,8 +37,8 @@
 
 #include <KAction>
 #include <QSize>
-#include <QtGui/QRadioButton>
-#include <QtGui/QLabel>
+#include <QRadioButton>
+#include <QLabel>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QList>
@@ -58,7 +58,7 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     updatePosition();
     updateSize();
 
-    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ), 
+    connect( positionSelector, SIGNAL( positionSelected(KoFlake::Position) ),
         this, SLOT( positionSelected(KoFlake::Position) ) );
 
     connect( positionXSpinBox, SIGNAL( editingFinished() ), this, SLOT( positionHasChanged() ) );
@@ -186,7 +186,8 @@ void DefaultToolWidget::sizeHasChanged()
 
         QTransform resizeMatrix;
         resizeMatrix.translate( scaleCenter.x(), scaleCenter.y() );
-        resizeMatrix.scale( newSize.width() / rect.width(), newSize.height() / rect.height() );
+        // make sure not to devide by 0 in case the selection is a line and has no width. In this case just scale by 1.
+        resizeMatrix.scale( rect.width() ? newSize.width() / rect.width() : 1, rect.height() ? newSize.height() / rect.height() : 1);
         resizeMatrix.translate( -scaleCenter.x(), -scaleCenter.y() );
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::StrippedSelection );
@@ -224,7 +225,7 @@ void DefaultToolWidget::sizeHasChanged()
         }
         m_tool->repaintDecorations();
         selection->applyAbsoluteTransformation( resizeMatrix );
-        QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
+        KUndo2Command * cmd = new KUndo2Command(i18nc("(qtundo-format)", "Resize"));
         new KoShapeSizeCommand( selectedShapes, oldSizes, newSizes, cmd );
         new KoShapeTransformCommand( selectedShapes, oldState, newState, cmd );
         m_tool->canvas()->addCommand( cmd );
@@ -245,7 +246,7 @@ void DefaultToolWidget::setUnit( const KoUnit &unit )
 
 void DefaultToolWidget::resourceChanged( int key, const QVariant & res )
 {
-    if( key == KoCanvasResource::Unit )
+    if( key == KoCanvasResourceManager::Unit )
         setUnit(res.value<KoUnit>());
     else if( key == DefaultTool::HotPosition )
     {

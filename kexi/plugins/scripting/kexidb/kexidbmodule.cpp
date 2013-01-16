@@ -24,11 +24,11 @@
 #include "kexidbfield.h"
 #include "kexidbschema.h"
 
-#include <kexidb/driver.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/field.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
+#include <db/driver.h>
+#include <db/connectiondata.h>
+#include <db/field.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
 
 #include <kdebug.h>
 #include <kmimetype.h>
@@ -116,7 +116,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         KConfig _config(filename, KConfig::NoGlobals);
 
         QString groupkey;
-        foreach(QString s, _config.groupList()) {
+        foreach(const QString &s, _config.groupList()) {
             if (s.toLower() != "file information") {
                 groupkey = s;
                 break;

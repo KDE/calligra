@@ -33,7 +33,7 @@ class KWApplicationConfig
 public:
     KWApplicationConfig();
 
-    /// load the kword settings.
+    /// load the words settings.
     void load(KWDocument *document);
     /// save the config settings.
     void save();
@@ -43,6 +43,20 @@ public:
     }
     bool viewFrameBorders() const {
         return m_viewFrameBorders;
+    }
+
+    void setShowFormattingChars(bool on) {
+        m_showFormattingChars = on;
+    }
+    bool showFormattingChars() const {
+        return m_showFormattingChars;
+    }
+
+    void setShowTableBorders(bool on) {
+        m_showTableBorders = on;
+    }
+    bool showTableBorders() const {
+        return m_showTableBorders;
     }
 
     void setViewRulers(bool on) {
@@ -58,6 +72,30 @@ public:
 
     bool statusBarShowPage() {
         return m_statusBarShowPage;
+    }
+
+    bool statusBarShowPageStyle() {
+        return m_statusBarShowPageStyle;
+    }
+
+    void setStatusBarShowPageStyle(bool on) {
+        m_statusBarShowPageStyle = on;
+    }
+
+    bool statusBarShowPageSize() {
+        return m_statusBarShowPageSize;
+    }
+
+    void setStatusBarShowPageSize(bool on) {
+        m_statusBarShowPageSize = on;
+    }
+
+    void setStatusBarShowLineNumber(bool on) {
+        m_statusBarShowLineNumber = on;
+    }
+
+    bool statusBarShowLineNumber() {
+        return m_statusBarShowLineNumber;
     }
 
     void setStatusBarShowModified(bool on) {
@@ -85,7 +123,7 @@ public:
     }
 
     /**
-     * Set the zoom level for new views and for next startups of kword.
+     * Set the zoom level for new views and for next startups of words.
      * Documents shown at 100% will show the page on screen at the same amount of
      * metric units as the user set them to be. In other words; the paper and the
      * screen versions should be exactly the same.
@@ -126,10 +164,12 @@ public:
     void setUnit(const KoUnit &unit);
 
 private:
-    bool m_viewFrameBorders, m_viewRulers, m_viewFormattingChars, m_viewFormattingBreak, m_viewFormattingSpace;
-    bool m_viewFormattingEndParag, m_viewFormattingTabs;
+    bool m_viewFrameBorders, m_viewRulers;
+    bool m_showFormattingChars;
+    bool m_showTableBorders;
     bool m_createBackupFile;
-    bool m_statusBarShowPage, m_statusBarShowModified;
+    bool m_statusBarShowPage, m_statusBarShowPageStyle, m_statusBarShowPageSize;
+    bool m_statusBarShowLineNumber, m_statusBarShowModified;
     bool m_statusBarShowMouse, m_statusBarShowZoom;
 
     int m_zoom; /// < zoom level in percent

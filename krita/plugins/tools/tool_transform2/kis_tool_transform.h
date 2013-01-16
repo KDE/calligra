@@ -2,7 +2,7 @@
  *  kis_tool_transform.h - part of Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,8 @@
 #ifndef KIS_TOOL_TRANSFORM_H_
 #define KIS_TOOL_TRANSFORM_H_
 
+#include <KoIcon.h>
+
 #include <complex>
 
 #include <QPoint>
@@ -32,7 +34,6 @@
 #include <QButtonGroup>
 
 #include <KStandardDirs>
-#include <KIcon>
 
 #include <KoInteractionTool.h>
 #include <KoToolFactoryBase.h>
@@ -56,15 +57,15 @@ class WdgToolTransform : public QWidget, public Ui::WdgToolTransform
 public:
     WdgToolTransform(QWidget *parent) : QWidget(parent) {
         setupUi(this);
-        showDecorationsBox->setIcon(KIcon("krita_tool_transform"));
-        label_shearX->setPixmap(KIcon("shear_horizontal").pixmap(16, 16));
-        label_shearY->setPixmap(KIcon("shear_vertical").pixmap(16, 16));
+        showDecorationsBox->setIcon(koIcon("krita_tool_transform"));
+        label_shearX->setPixmap(koIcon("shear_horizontal").pixmap(16, 16));
+        label_shearY->setPixmap(koIcon("shear_vertical").pixmap(16, 16));
 
-        label_width->setPixmap(KIcon("width_icon").pixmap(16, 16));
-        label_height->setPixmap(KIcon("height_icon").pixmap(16, 16));
+        label_width->setPixmap(koIcon("width_icon").pixmap(16, 16));
+        label_height->setPixmap(koIcon("height_icon").pixmap(16, 16));
 
-        label_offsetX->setPixmap(KIcon("offset_horizontal").pixmap(16, 16));
-        label_offsetY->setPixmap(KIcon("offset_vertical").pixmap(16, 16));
+        label_offsetX->setPixmap(koIcon("offset_horizontal").pixmap(16, 16));
+        label_offsetY->setPixmap(koIcon("offset_vertical").pixmap(16, 16));
     }
 };
 
@@ -93,7 +94,6 @@ public:
     virtual ~KisToolTransform();
 
     virtual QWidget* createOptionWidget();
-    virtual QWidget* optionWidget();
 
     virtual void mousePressEvent(KoPointerEvent *e);
     virtual void mouseMoveEvent(KoPointerEvent *e);
@@ -101,11 +101,13 @@ public:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
 
+    virtual void resourceChanged(int key, const QVariant& res);
+
 public:
     void paint(QPainter& gc, const KoViewConverter &converter);
 
-    void notifyCommandAdded(const QUndoCommand *);
-    void notifyCommandExecuted(const QUndoCommand *);
+    void notifyCommandAdded(const KUndo2Command *);
+    void notifyCommandExecuted(const KUndo2Command *);
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
@@ -293,11 +295,11 @@ private:
 
 private:
     enum function {ROTATE = 0, MOVE, RIGHTSCALE, TOPRIGHTSCALE, TOPSCALE, TOPLEFTSCALE,
-                   LEFTSCALE, BOTTOMLEFTSCALE, BOTTOMSCALE, BOTTOMRIGHTSCALE, 
+                   LEFTSCALE, BOTTOMLEFTSCALE, BOTTOMSCALE, BOTTOMRIGHTSCALE,
                    BOTTOMSHEAR, RIGHTSHEAR, TOPSHEAR, LEFTSHEAR,
                    MOVECENTER, PERSPECTIVE
                   };
-	
+
     function m_function; // current transformation function
 
     QPointF m_handleDir[9];
@@ -315,10 +317,10 @@ private:
     bool m_boxValueChanged; // true if a boxValue has been changed directly by the user (not by click + move mouse)
     bool m_editWarpPoints;
 
-    QImage *m_origImg; // image of the pixels in selection bound rect
+    QImage m_origImg; // image of the pixels in selection bound rect
     QTransform m_transform; // transformation to apply on origImg
     QImage m_currImg; // origImg transformed using m_transform
-    QImage *m_origSelectionImg; // original selection with white used as alpha channel
+    QImage m_origSelectionImg; // original selection with white used as alpha channel
     QImage m_scaledOrigSelectionImg; // original selection to be drawn, scaled to the view
     QSizeF m_refSize; // used in paint() to check if the view has changed (need to update m_currSelectionImg)
 
@@ -398,6 +400,8 @@ private:
 	bool m_cursorOverPoint;
 	int m_pointUnderCursor; // the id of the point in the vector
 
+    bool m_isActive;
+
 private slots:
 
     void slotSetFilter(const KoID &);
@@ -434,7 +438,8 @@ public:
             : KoToolFactoryBase("KisToolTransform") {
         setToolTip(i18n("Transform a layer or a selection"));
         setToolType(TOOL_TYPE_TRANSFORM);
-        setIcon("krita_tool_transform");
+        setIconName(koIconNameCStr("krita_tool_transform"));
+        setShortcut(KShortcut( QKeySequence(Qt::CTRL + Qt::Key_T) ));
         setPriority(11);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
     }

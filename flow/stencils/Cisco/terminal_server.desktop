@@ -1,8 +1,26 @@
 [Desktop Entry]
 Name=Terminal Server
+Name[bg]=Терминален сървър
+Name[ca]=Servidor de terminal
+Name[ca@valencia]=Servidor de terminal
+Name[de]=Terminal-Server
+Name[el]=Τερματικός εξυπηρετητής
+Name[es]=Servidor terminal
 Name[et]=Terminalserver
-Name[pt]=Servidor Terminal
+Name[fr]=Terminal Server
+Name[gl]=Servidor de terminal
+Name[hu]=Terminál kiszolgáló
+Name[it]=Terminal server
+Name[kk]=Терминал сервері
+Name[nb]=Terminaltjener
+Name[nl]=Terminal-server
+Name[pl]=Serwer terminala
+Name[pt]=Servidor de Terminal
 Name[pt_BR]=Servidor de terminais
+Name[ru]=Терминал-сервер
+Name[sk]=Terminálový server
 Name[sv]=Terminalserver
 Name[uk]=Термінальний сервер
 Name[x-test]=xxTerminal Serverxx
+Name[zh_CN]=终端服务器
+Name[zh_TW]=終端伺服器

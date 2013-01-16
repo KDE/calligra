@@ -21,7 +21,11 @@
 #include "psd.h"
 #include "psd_header.h"
 
+<<<<<<< HEAD
 #include <QtCore/QByteArray>
+=======
+#include <QByteArray>
+>>>>>>> master
 #include <QColor>
 
 class PSDColorModeBlock
@@ -43,6 +47,10 @@ public:
     /* to store rgb colormap values of indexed image
     */
     QList<QColor> colormap;
+<<<<<<< HEAD
+=======
+    QByteArray duotoneSpecification; // Krita should save this in an annotation and write it back, if present
+>>>>>>> master
 
 };
 

@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=Server Switch
+Name[ca]=Commutador de servidor
+Name[ca@valencia]=Commutador de servidor
+Name[el]=Server Switch
+Name[es]=Conmutador servidor
+Name[et]=Serveri kommutaator
+Name[fr]=Server Switch
+Name[gl]=Conmutador de servidor
+Name[it]=Server Switch
+Name[kk]=Сервер қосқышы
+Name[nb]=Tjenersvitsj
+Name[nl]=Server-switch
+Name[pl]=Przełącznik serwerowy
 Name[pt]=Comutador de Servidor
 Name[pt_BR]=Comutador de servidor
+Name[ru]=Сервер с маршрутизатором
+Name[sk]=Serverový prepínač
 Name[sv]=Serverväxel
 Name[uk]=Сервер з маршрутизатором
 Name[x-test]=xxServer Switchxx
+Name[zh_CN]=服务器路由器
+Name[zh_TW]=伺服器交換器

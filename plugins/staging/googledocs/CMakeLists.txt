@@ -8,7 +8,7 @@ include_directories( ${KOMAIN_INCLUDES} ${KOTEXT_INCLUDES} )
 SET(onlinedocs_RCCS onlineservices.qrc)
 QT4_ADD_RESOURCES(onlinedocs_RCC_SRCS ${onlinedocs_RCCS})
 
-set(kofficegoogledocs_PART_SRCS
+set(calligragoogledocs_PART_SRCS
     onlinedocument.cpp
     googlecontenthandler.cpp
     googledocument.cpp
@@ -19,20 +19,21 @@ set(kofficegoogledocs_PART_SRCS
     ${onlinedocs_RCC_SRCS}
 )
 
-kde4_add_ui_files( kofficegoogledocs_PART_SRCS
+kde4_add_ui_files( calligragoogledocs_PART_SRCS
    authenticationdialog.ui
    documentlist.ui
 )
-kde4_add_plugin(kofficegoogledocs ${kofficegoogledocs_PART_SRCS})
+kde4_add_plugin(calligragoogledocs ${calligragoogledocs_PART_SRCS})
 
-target_link_libraries(kofficegoogledocs ${QT_LIBRARIES} komain )
+target_link_libraries(calligragoogledocs ${QT_LIBRARIES} komain )
 
-install(TARGETS kofficegoogledocs  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligragoogledocs  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES  googledocs-kpresenter.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter/kpartplugins)
+install( FILES  googledocs-stage.rc  DESTINATION ${DATA_INSTALL_DIR}/stage/kpartplugins)
+install( FILES  googledocs-sheets.rc  DESTINATION ${DATA_INSTALL_DIR}/sheets/kpartplugins)
 install( FILES  googledocs-words.rc  DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)
 
 

@@ -23,24 +23,26 @@
 #include <Layout.h>
 #include <LayoutFactory.h>
 
-class ColumnLayout : public Layout {
-  public:
+class ColumnLayout : public Layout
+{
+public:
     ColumnLayout();
     virtual ~ColumnLayout();
     virtual QRectF boundingBox() const;
-  protected:
+protected:
     virtual void shapesAdded(QList<KoShape*> _shape);
     virtual void shapeAdded(KoShape* _shape);
     virtual void shapeRemoved(KoShape* _shape);
     virtual void shapeGeometryChanged(KoShape*_shape);
     virtual void relayout();
-  private:
+private:
     QList<KoShape*> m_shapes;
     bool m_isUpdating;
 };
 
-class ColumnLayoutFactory : public LayoutFactory {
-  public:
+class ColumnLayoutFactory : public LayoutFactory
+{
+public:
     ColumnLayoutFactory();
     virtual ~ColumnLayoutFactory();
     virtual Layout* createLayout() const;

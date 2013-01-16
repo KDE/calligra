@@ -19,7 +19,7 @@
 
 #include "writer.h"
 
-#include <QtCore/QRegExp>
+#include <QRegExp>
 
 namespace
 {
@@ -68,22 +68,22 @@ Writer Writer::transform(const QRectF& oldCoords, const QRectF &newCoords) const
     return w;
 }
 
-qreal Writer::vLength(qreal length)
+qreal Writer::vLength(qreal length) const
 {
     return length*scaleY;
 }
 
-qreal Writer::hLength(qreal length)
+qreal Writer::hLength(qreal length) const
 {
     return length*scaleX;
 }
 
-qreal Writer::vOffset(qreal offset)
+qreal Writer::vOffset(qreal offset) const
 {
     return yOffset + offset*scaleY;
 }
 
-qreal Writer::hOffset(qreal offset)
+qreal Writer::hOffset(qreal offset) const
 {
     return xOffset + offset*scaleX;
 }

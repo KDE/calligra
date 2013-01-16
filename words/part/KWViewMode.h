@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2010-2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,10 +25,9 @@
 class KWPageManager;
 class KoViewConverter;
 class KWDocument;
-class KoCanvasBase;
 
 #include "KWPage.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <QPointF>
 #include <QRectF>
@@ -45,20 +44,20 @@ class KoCanvasBase;
  * and mouseclicks on the canvas get converted into real document coordinates.
  *
  * On the implementation side the viewMode will not have the notion of zoom; its using
- * the KWCanvas::viewConverter() for that.  This means that to the user of this API zooming
+ * the viewconverter for that.  This means that to the user of this API zooming
  * is applied just like translation is.
  *
- * This class provides a layer on top of the KoViewConverter and KWord should not use that
+ * This class provides a layer on top of the KoViewConverter and Words should not use that
  * interface directly.
  */
-class KWORD_EXPORT KWViewMode : public QObject
+class WORDS_EXPORT KWViewMode : public QObject
 {
     Q_OBJECT
 public:
     KWViewMode();
     virtual ~KWViewMode() {}
 
-    /// a two value return type for clipRectToDocument()
+    /// a two value return type for mapExposedRects()
     struct ViewMap {
         QRect clipRect;   ///< the rectangle in the view coordinates showing (part of) the clip
         QPointF distance; ///< the displacement between the document and the view in view coordinates.
@@ -66,16 +65,16 @@ public:
     };
 
     /** Document coord -> view coord */
-    virtual QPointF documentToView(const QPointF &point) const = 0;
+    virtual QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const = 0;
 
     /** Document coord -> view coord */
-    QRectF documentToView(const QRectF &rect) const;
+    QRectF documentToView(const QRectF &rect, KoViewConverter *viewConverter) const;
 
     /** View coord -> Document coord */
-    virtual QPointF viewToDocument(const QPointF &point) const = 0;
+    virtual QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const = 0;
 
     /** View coord -> Document coord */
-    QRectF viewToDocument(const QRectF &rect) const;
+    QRectF viewToDocument(const QRectF &rect, KoViewConverter *viewConverter) const;
 
     /** Size of the contents area, in pixels */
     virtual QSizeF contentsSize() const = 0;
@@ -111,9 +110,9 @@ public:
      *  @endcode
      * @param viewModeType the type of viewMode
      * @param document
-     * @param canvas passed to the new ViewMode as a parent for which this viewMode is made
+     * @param viewConverter used to calculate the document->view and vv conversions
      */
-    static KWViewMode *create(const QString& viewModeType, KWDocument *document, KoCanvasBase* canvas);
+    static KWViewMode *create(const QString& viewModeType, KWDocument *document);
 
     /**
      * This method converts a clip-rect of the view to a set of cliprects as they are
@@ -129,9 +128,10 @@ public:
      * same zoom-level. This means that adding all the output rects should have the same repaint
      * area as the input rect.
      * @param viewRect the clipping-rect as it was on the Canvas.
+     * @param viewConverter An optional viewconverter to override the viewconverter set on the viewmode.
      * @return a list of clipping-rects as it maps to the internal document.
      */
-    virtual QList<ViewMap> clipRectToDocument(const QRect &viewRect) const = 0;
+    virtual QList<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const = 0;
 
 public slots:
     /**
@@ -140,7 +140,6 @@ public slots:
      */
     void pageSetupChanged();
     void setPageManager(KWPageManager *pageManager) { m_pageManager = pageManager; updatePageCache(); }
-    void setViewConverter(const KoViewConverter *viewConverter) { m_viewConverter = viewConverter; }
 
 protected:
     /**
@@ -149,7 +148,6 @@ protected:
     virtual void updatePageCache() = 0;
 
     KWPageManager *m_pageManager;
-    const KoViewConverter *m_viewConverter;
 
 private:
     bool m_drawFrameBorders;

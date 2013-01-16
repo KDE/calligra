@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
    Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
@@ -31,16 +31,18 @@
 class QDomElement;
 namespace wvWare
 {
-namespace Word97 {
-class LSPD;
-class BRC;
-}
-class FLD;
+    namespace Word97
+    {
+        class BRC;
+        class LSPD;
+        class SHD;
+    }
+    class FLD;
 }
 
-// Static methods for simple MSWord->KWord conversions
-// (enums etc.)
-
+/**
+ * Static methods for simple DOC->ODT conversions (enums etc.)
+ */
 namespace Conversion
 {
     const int MS_SYMBOL_ENCODING[256] = {
@@ -61,83 +63,181 @@ namespace Conversion
         9674, 9001, 0, 0, 0, 8721, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 9002, 8747, 8992, 0, 8993, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
-// UString -> QString conversion. 
-inline QString string(const wvWare::UString& str)
-{
-    // Do a deep copy.  We used to not do that, but it lead to several
-    // memory corruption bugs that were difficult to find.
-    //
-    // FIXME: Get rid of UString altogether and port wv2 to QString.
-    return QString(reinterpret_cast<const QChar*>(str.data()), str.length());
-}
+    /**
+     * UString -> QString conversion.
+     */
+    inline QString string(const wvWare::UString& str)
+    {
+        // Do a deep copy.  We used to not do that, but it lead to several
+        // memory corruption bugs that were difficult to find.
+        //
+        // FIXME: Get rid of UString altogether and port wv2 to QString.
+        return QString(reinterpret_cast<const QChar*>(str.data()), str.length());
+    }
 
-//special version of string() that replaces spaces with _20_,
-//since style names can't have spaces in them
-QString styleNameString(const wvWare::UString& str);
+    /**
+     * Special version of string() that replaces spaces with _20_, since style
+     * names can't have spaces in them.
+     * @param UString
+     */
+    QString styleName2QString(const wvWare::UString& str);
 
-// Prepare text for inclusion in XML
-void encodeText(QString &text);
+    /**
+     * Replace spaces with _20_, since style names can't have spaces in them.
+     * @param QString
+     */
+    QString processStyleName(QString str);
 
-// Convert color code (ico) to QString with hex code
-QString color(int number, int defaultcolor, bool defaultWhite = false);
+    /**
+     * Prepare text for inclusion in XML
+     */
+    void encodeText(QString &text);
 
-// Convert pattern style (ipat) to QBrush::BrushStyle
-int fillPatternStyle(int ipat);
+    /**
+     * Convert color code (ico) to QString with hex code.
+     */
+    QString color(int number, int defaultcolor, bool defaultWhite = false);
 
-// Hackery for gray levels
-int ditheringToGray(int ipat, bool* ok);
+    /**
+     * Convert pattern style (ipat) to QBrush::BrushStyle.
+     */
+    int fillPatternStyle(int ipat);
 
-// convert shading pattern (ipat) to RGB color
-uint shadingPatternToColor(int ipat);
+    /**
+     * Hackery for gray levels.
+     */
+    int ditheringToGray(const quint16 ipat, bool* ok);
 
-// Convert alignment code to string
-//QString alignment( int jc );
+    /**
+     * Convert shading pattern (ipat) to RGB color.
+     */
+    quint32 shadingPatternToColor(const quint16 ipat);
 
-// Convert linespacing struct to string
-QString lineSpacing(const wvWare::Word97::LSPD& lspd);
+    /**
+     * Convert the shading information to a color string.
+     * @param SHD structure
+     * @param background color in the format "#RRGGBB"
+     * @param font color in the format "#RRGGBB"
+     * @return color in the format "#RRGGBB" or an empty string.
+     */
+    QString shdToColorStr(const wvWare::Word97::SHD& shd, const QString& bgColor, const QString& fontColor);
 
-// Convert number format code to a value for the odt style:num-format attribute
-QString numberFormatCode(int nfc);
+    /**
+     * Compute a color contrasting to @param color.
+     * @return color in the format "#RRGGBB".
+     */
+    QString contrastColor(const QString& color);
 
-// Set the 3 color attributes in the XML element, from a color code (ico)
-// prefix: if empty, the attribute names will be red/blue/green
-// if not empty, they will be xRed/xBlue/xGreen
-void setColorAttributes(QDomElement& element, int ico, const QString& prefix = QString(), bool defaultWhite = false);
+    /**
+     * Compute a color for a COLORREF set to cvAuto.
+     * @param SHD shading structure
+     * @param background color in the format "#RRGGBB"
+     * @param font color in the format "#RRGGBB"
+     * @return color in the format "#RRGGBB".
+     */
+    QString computeAutoColor(const wvWare::Word97::SHD& shd, const QString& bgColor,  const QString& fontColor);
 
-// Return an ODF attribute for border linewidths from a BRC structure
-QString setDoubleBorderAttributes(const wvWare::Word97::BRC& brc);
 
-// Return an ODF attribute for border characteristics from a BRC structure
-QString setBorderAttributes(const wvWare::Word97::BRC& brc);
+    /**
+     * Convert linespacing struct to string.
+     */
+    QString lineSpacing(const wvWare::Word97::LSPD& lspd);
 
-//get a  koffice:borderspecial value "style"
-QString borderKOfficeAttributes(const wvWare::Word97::BRC& brc);
+    /**
+     * Convert number format code to a value for the odt style:num-format
+     * attribute.
+     */
+    QString numberFormatCode(int nfc);
 
-// Convert wv2's Header Type to a KWord frameInfo value
-int headerTypeToFrameInfo(unsigned char type);
+    /**
+     * Set the 3 color attributes in the XML element, from a color code (ico)
+     * prefix: if empty, the attribute names will be red/blue/green if not
+     * empty, they will be xRed/xBlue/xGreen
+     */
+    void setColorAttributes(QDomElement& element, int ico, const QString& prefix = QString(), bool defaultWhite = false);
 
-// Convert wv2's Header Type to a KWord frameset name
-QString headerTypeToFramesetName(unsigned char type);
+    /**
+     * Return an ODF attribute for border linewidths from a BRC structure.
+     */
+    QString setDoubleBorderAttributes(const wvWare::Word97::BRC& brc);
 
-// Convert a mask of Header Types to the hType value for KWord
-int headerMaskToHType(unsigned char mask);
+    /**
+     * Return an ODF attribute for border characteristics from a BRC structure.
+     */
+    QString setBorderAttributes(const wvWare::Word97::BRC& brc);
 
-// Convert a mask of Header Types to the fType value for KWord
-int headerMaskToFType(unsigned char mask);
+    /**
+     * Get a calligra:borderspecial value "style".
+     */
+    QString borderCalligraAttributes(const wvWare::Word97::BRC& brc);
 
-// Convert wv2's FLD to KWord FIELD.subtype (or -1 if can't be handled)
-int fldToFieldType(const wvWare::FLD* fld);
+    /**
+     * Convert wv2's Header Type to a Words frameInfo value.
+     */
+    int headerTypeToFrameInfo(unsigned char type);
 
-bool isHeader(unsigned char type);
+    /**
+     * Convert wv2's Header Type to a Words frameset name.
+     */
+    QString headerTypeToFramesetName(unsigned char type);
 
-qreal twipsToMM(int twips);
+    /**
+     * Convert a mask of Header Types to the hType value for Words.
+     */
+    int headerMaskToHType(unsigned char mask);
 
-qreal twipsToInch(int twips);
+    /**
+     * Convert a mask of Header Types to the fType value for Words
+     */
+    int headerMaskToFType(unsigned char mask);
 
-qreal twipsToPt(int twips);
+    /**
+     * Convert wv2's FLD to Words FIELD.subtype (or -1 if can't be handled)
+     */
+    int fldToFieldType(const wvWare::FLD* fld);
 
-QString rncToStartNumberingAt(int rnc);
+    /**
+     * Convert footnote automatic numbering restart code to ODF equivalent.
+     */
+    const char* rncToStartNumberingAt(quint16 rnc);
 
-}
+    /**
+     * Convert footnote placement code to ODF equivalent.
+     */
+    const char* fpcToFtnPosition(quint16 fpc);
+
+    /**
+     * TODO:
+     */
+    bool isHeader(unsigned char type);
+
+    qreal twipsToMM(int twips);
+    qreal twipsToInch(int twips);
+    qreal twipsToPt(int twips);
+
+/*    // Convert alignment code to string */
+/*    QString alignment( int jc ); */
+
+    /**
+     * @return horizontal position for the anchor.
+     */
+    const char* getHorizontalPos(qint16 dxaAbs);
+
+    /**
+     * @return relative horizontal position for the anchor.
+     */
+    const char* getHorizontalRel(uint pcHorz);
+
+    /**
+     * @return vertical position for the anchor.
+     */
+    const char* getVerticalPos(qint16 dyaAbs);
+
+    /**
+     * @return relative vertical position for the anchor.
+     */
+    const char* getVerticalRel(uint pcVert);
+
+} // namespace Conversion
 
 #endif

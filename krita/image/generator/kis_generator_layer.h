@@ -51,21 +51,10 @@ public:
         return KisNodeSP(new KisGeneratorLayer(*this));
     }
 
-    KisFilterConfiguration *filter() const;
-    void setFilter(KisFilterConfiguration * filterConfig);
-
-    /**
-     * Convenience functions.
-     * FIXME: should be deprecated? (DK)
-     */
-    KisFilterConfiguration *generator() const {
-        return filter();
-    };
-    void setGenerator(KisFilterConfiguration * filterConfig) {
-        setFilter(filterConfig);
-    };
+    void setFilter(KisFilterConfiguration *filterConfig);
 
     bool accept(KisNodeVisitor &);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     QIcon icon() const;
     KoDocumentSectionModel::PropertyList sectionModelProperties() const;
@@ -75,16 +64,12 @@ public:
      * of the associated selection.
      */
     void update();
-    
+
 public slots:
     // KisIndirectPaintingSupport
     KisLayer* layer() {
         return this;
     }
-
-private:
-    class Private;
-    Private * const m_d;
 };
 
 #endif

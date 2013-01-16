@@ -26,15 +26,17 @@
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
 #include <KoShapeBackgroundCommand.h>
-#include <KoShapeBorderCommand.h>
+#include <KoShapeStrokeCommand.h>
 #include <KoResourceServerProvider.h>
 #include <KoGradientBackground.h>
 #include <KarbonGradientHelper.h>
+#include <KoShapeController.h>
 #include <KoShapeBackground.h>
 #include <KoResource.h>
 #include <KoResourceItemChooser.h>
@@ -152,22 +154,22 @@ void KarbonGradientTool::mousePressEvent(KoPointerEvent *event)
                 newStrategy = createStrategy(shape, m_gradient, GradientStrategy::Fill);
             }
         } else {
-            // target is stroke so check the border style
-            KoLineBorder * border = dynamic_cast<KoLineBorder*>(shape->border());
-            if (! border) {
-                border = new KoLineBorder(1.0);
-                border->setLineBrush(QBrush(*m_gradient));
-                m_currentCmd = new KoShapeBorderCommand(shape, border);
-                shape->setBorder(border);
+            // target is stroke so check the stroke style
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
+            if (! stroke) {
+                stroke = new KoShapeStroke(1.0);
+                stroke->setLineBrush(QBrush(*m_gradient));
+                m_currentCmd = new KoShapeStrokeCommand(shape, stroke);
+                shape->setStroke(stroke);
                 newStrategy = createStrategy(shape, m_gradient, GradientStrategy::Stroke);
                 break;
             } else {
-                Qt::BrushStyle style = border->lineBrush().style();
+                Qt::BrushStyle style = stroke->lineBrush().style();
                 if (style < Qt::LinearGradientPattern || style > Qt::RadialGradientPattern) {
-                    KoLineBorder * newBorder = new KoLineBorder(*border);
-                    newBorder->setLineBrush(QBrush(*m_gradient));
-                    m_currentCmd = new KoShapeBorderCommand(shape, newBorder);
-                    border->setLineBrush(QBrush(*m_gradient));
+                    KoShapeStroke * newStroke = new KoShapeStroke(*stroke);
+                    newStroke->setLineBrush(QBrush(*m_gradient));
+                    m_currentCmd = new KoShapeStrokeCommand(shape, newStroke);
+                    stroke->setLineBrush(QBrush(*m_gradient));
                     newStrategy = createStrategy(shape, m_gradient, GradientStrategy::Stroke);
                     break;
                 }
@@ -255,7 +257,7 @@ void KarbonGradientTool::mouseReleaseEvent(KoPointerEvent *event)
     Q_UNUSED(event)
     // if we are editing, get out of edit mode and add a command to the stack
     if (m_currentStrategy) {
-        QUndoCommand * cmd = m_currentStrategy->createCommand(m_currentCmd);
+        KUndo2Command * cmd = m_currentStrategy->createCommand(m_currentCmd);
         canvas()->addCommand(m_currentCmd ? m_currentCmd : cmd);
         m_currentCmd = 0;
         if (m_gradientWidget) {
@@ -278,7 +280,7 @@ void KarbonGradientTool::mouseDoubleClickEvent(KoPointerEvent *event)
     canvas()->updateCanvas(m_currentStrategy->boundingRect(*canvas()->viewConverter()));
 
     if (m_currentStrategy->handleDoubleClick(event->point)) {
-        QUndoCommand * cmd = m_currentStrategy->createCommand(m_currentCmd);
+        KUndo2Command * cmd = m_currentStrategy->createCommand(m_currentCmd);
         canvas()->addCommand(m_currentCmd ? m_currentCmd : cmd);
         m_currentCmd = 0;
         if (m_gradientWidget) {
@@ -301,7 +303,8 @@ void KarbonGradientTool::keyPressEvent(QKeyEvent *event)
             handleRadius--;
         else
             handleRadius++;
-        canvas()->resourceManager()->setHandleRadius(handleRadius);
+        // XXX: this is a KoDocumentResourceController feature, but shouldn't it be canvas?
+        canvas()->shapeController()->resourceManager()->setHandleRadius(handleRadius);
     }
     break;
     default:
@@ -365,7 +368,7 @@ void KarbonGradientTool::initialize()
         }
         // is the gradient a stroke gradient but shape has no stroke gradient anymore ?
         if (strategy->target() == GradientStrategy::Stroke) {
-            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(strategy->shape()->border());
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(strategy->shape()->stroke());
             if (! stroke  || ! stroke->lineBrush().gradient() || stroke->lineBrush().gradient()->type() != strategy->type()) {
                 // delete the gradient
                 m_strategies.remove(strategy->shape(), strategy);
@@ -408,7 +411,7 @@ void KarbonGradientTool::initialize()
         }
 
         if (! strokeExists) {
-            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>(shape->border());
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
             if (stroke) {
                 GradientStrategy * strokeStrategy = createStrategy(shape, stroke->lineBrush().gradient(), GradientStrategy::Stroke);
                 if (strokeStrategy) {
@@ -465,17 +468,17 @@ void KarbonGradientTool::deactivate()
     canvas()->snapGuide()->reset();
 }
 
-void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
+void KarbonGradientTool::documentResourceChanged(int key, const QVariant & res)
 {
     switch (key) {
-    case KoDocumentResource::HandleRadius:
+    case KoDocumentResourceManager::HandleRadius:
         foreach(GradientStrategy *strategy, m_strategies)
             strategy->repaint(*canvas()->viewConverter());
         GradientStrategy::setHandleRadius(res.toUInt());
         foreach(GradientStrategy *strategy, m_strategies)
             strategy->repaint(*canvas()->viewConverter());
         break;
-    case KoDocumentResource::GrabSensitivity:
+    case KoDocumentResourceManager::GrabSensitivity:
         GradientStrategy::setGrabSensitivity(res.toUInt());
         break;
     default:
@@ -483,7 +486,7 @@ void KarbonGradientTool::resourceChanged(int key, const QVariant & res)
     }
 }
 
-QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
+QList<QWidget *> KarbonGradientTool::createOptionWidgets()
 {
     m_gradientWidget = new KarbonGradientEditWidget();
     m_gradientWidget->setGradient(*m_gradient);
@@ -496,29 +499,16 @@ QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
     chooser->setObjectName("KarbonGradientChooser");
     chooser->setColumnCount(1);
 
-    connect(chooser, SIGNAL(resourceSelected(KoResource *)),
-            this, SLOT(gradientSelected(KoResource *)));
+    connect(chooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SLOT(gradientSelected(KoResource*)));
 
-    QMap<QString, QWidget *> widgets;
-    widgets.insert(i18n("Edit Gradient"), m_gradientWidget);
-    widgets.insert(i18n("Predefined Gradients"), chooser);
+    QList<QWidget *> widgets;
+    m_gradientWidget->setWindowTitle(i18n("Edit Gradient"));
+    widgets.append(m_gradientWidget);
+    chooser->setWindowTitle(i18n("Predefined Gradients"));
+    widgets.append(chooser);
 
     return widgets;
-}
-
-QWidget * KarbonGradientTool::createOptionWidget()
-{
-    QWidget *optionWidget = new QWidget();
-    QVBoxLayout* layout = new QVBoxLayout(optionWidget);
-    layout->setMargin(6);
-
-    m_gradientWidget = new KarbonGradientEditWidget(optionWidget);
-    m_gradientWidget->setGradient(*m_gradient);
-    layout->addWidget(m_gradientWidget);
-
-    connect(m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()));
-
-    return optionWidget;
 }
 
 void KarbonGradientTool::gradientSelected(KoResource * resource)
@@ -565,17 +555,17 @@ void KarbonGradientTool::gradientChanged()
         }
         canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, newFills));
     } else {
-        QList<KoShapeBorderModel*> newBorders;
+        QList<KoShapeStrokeModel*> newStrokes;
         foreach(KoShape * shape, selectedShapes) {
-            KoLineBorder * border = dynamic_cast<KoLineBorder*>(shape->border());
-            KoLineBorder * newBorder = 0;
-            if (border)
-                newBorder = new KoLineBorder(*border);
+            KoShapeStroke * stroke = dynamic_cast<KoShapeStroke*>(shape->stroke());
+            KoShapeStroke * newStroke = 0;
+            if (stroke)
+                newStroke = new KoShapeStroke(*stroke);
             else
-                newBorder = new KoLineBorder(1.0);
+                newStroke = new KoShapeStroke(1.0);
             QBrush newGradient;
-            if (newBorder->lineBrush().gradient()) {
-                QGradient * g = KarbonGradientHelper::convertGradient(newBorder->lineBrush().gradient(), type);
+            if (newStroke->lineBrush().gradient()) {
+                QGradient * g = KarbonGradientHelper::convertGradient(newStroke->lineBrush().gradient(), type);
                 g->setSpread(spread);
                 g->setStops(stops);
                 newGradient = QBrush(*g);
@@ -586,10 +576,10 @@ void KarbonGradientTool::gradientChanged()
                 newGradient = QBrush(*g);
                 delete g;
             }
-            newBorder->setLineBrush(newGradient);
-            newBorders.append(newBorder);
+            newStroke->setLineBrush(newGradient);
+            newStrokes.append(newStroke);
         }
-        canvas()->addCommand(new KoShapeBorderCommand(selectedShapes, newBorders));
+        canvas()->addCommand(new KoShapeStrokeCommand(selectedShapes, newStrokes));
     }
     initialize();
 }

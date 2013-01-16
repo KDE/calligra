@@ -166,7 +166,7 @@ CollectionTreeWidget::CollectionTreeWidget(QWidget* parent): QTreeWidget(parent)
 
     setItemDelegate(new SheetDelegate(this, this));
 
-    //expandAll();
+    //regenerateFilteredMap();
 
     connect(this, SIGNAL(itemPressed(QTreeWidgetItem*,int)),
             this, SLOT(handleMousePress(QTreeWidgetItem*)));
@@ -177,15 +177,33 @@ CollectionTreeWidget::~CollectionTreeWidget()
     saveViewMode();
 }
 
-void CollectionTreeWidget::setFamilyMap(QMap<QString, QSortFilterProxyModel*> map)
+void CollectionTreeWidget::setFamilyMap(QMap<QString, CollectionItemModel*> map)
 {
-    QMapIterator<QString, QSortFilterProxyModel*> i(map);
-    while (i.hasNext())
+    m_familyMap = map;
+}
+
+void CollectionTreeWidget::regenerateFilteredMap()
+{
+    QMapIterator<QString, CollectionItemModel*> i(m_familyMap);
+    while(i.hasNext())
     {
-         i.next();
+        i.next();
+        i.value()->setViewMode(m_viewMode);
+        QSortFilterProxyModel* proxy = new QSortFilterProxyModel();
+        proxy->setSourceModel(i.value());
+        m_filteredMap.insert(i.key(), proxy);
+    }
+
+    //delete category view
+
+    //regenerate category view
+    QMapIterator<QString, QSortFilterProxyModel*> j(m_filteredMap);
+    while (j.hasNext())
+    {
+         j.next();
          QTreeWidgetItem *category = new QTreeWidgetItem(this);
-         category->setText(0, i.key());
-         addCategoryView(category, m_iconMode, i.value());
+         category->setText(0, j.key());
+         addCategoryView(category, m_viewMode, j.value());
     }
 }
 
@@ -223,7 +241,7 @@ void CollectionTreeWidget::saveViewMode()
 void  CollectionTreeWidget::restoreViewMode()
 {
     //FIXME
-    m_iconMode = 0;
+    m_viewMode = QListView::ListMode;
 }
 
 void CollectionTreeWidget::handleMousePress(QTreeWidgetItem *item)
@@ -242,23 +260,29 @@ void CollectionTreeWidget::handleMousePress(QTreeWidgetItem *item)
 
 void CollectionTreeWidget::slotListMode()
 {
-    m_iconMode = false;
+    m_viewMode = QListView::ListMode;
     updateViewMode();
 }
 
 void CollectionTreeWidget::slotIconMode()
 {
-    m_iconMode = true;
+    m_viewMode = QListView::IconMode;
     updateViewMode();
 }
 
 void CollectionTreeWidget::updateViewMode()
 {
+    QMapIterator<QString, CollectionItemModel*> i(m_familyMap);
+    while(i.hasNext())
+    {
+        i.next();
+        i.value()->setViewMode(m_viewMode);
+    }
     if (const int numTopLevels = topLevelItemCount())
     {
         for (int i = numTopLevels - 1; i >= 0; --i)
         {
-            const QListView::ViewMode viewMode  = m_iconMode ? QListView::IconMode : QListView::ListMode;
+            const QListView::ViewMode viewMode  = m_viewMode ? QListView::IconMode : QListView::ListMode;
             ShapeListView *categoryView = categoryViewAt(i);
 
             if (viewMode != categoryView->viewMode())
@@ -287,8 +311,15 @@ void CollectionTreeWidget::adjustSubListSize(QTreeWidgetItem *cat_item)
     embedItem->setSizeHint(0, QSize(-1, height - 1));
 }
 
-void CollectionTreeWidget::filter()
+void CollectionTreeWidget::setFilter(QRegExp regExp)
 {
+    QMapIterator<QString, QSortFilterProxyModel*> j(m_filteredMap);
+    while (j.hasNext())
+    {
+         j.next();
+         j.value()->setFilterRegExp(regExp);
+         j.value()->setFilterRole(Qt::UserRole+1);
+    }
     const int numTopLevels = topLevelItemCount();
     for (int i = 0; i < numTopLevels; i++)
     {
@@ -330,7 +361,7 @@ void CollectionTreeWidget::contextMenuEvent(QContextMenuEvent *e)
     QActionGroup *viewModeGroup = new QActionGroup(&menu);
     viewModeGroup->addAction(listModeAction);
     viewModeGroup->addAction(iconModeAction);
-    if (m_iconMode) {
+    if (m_viewMode) {
         iconModeAction->setChecked(true);
     }
     else {

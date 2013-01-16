@@ -58,7 +58,7 @@ using namespace MusicCore;
 //static MusicShape* firstShape = 0;
 
 MusicShape::MusicShape()
-    : KoFrameShape("http://www.koffice.org/music", "shape"),
+    : KoFrameShape("http://www.calligra.org/music", "shape"),
     m_firstSystem(0),
     m_style(new MusicStyle),
     m_engraver(new Engraver()),
@@ -113,7 +113,7 @@ void MusicShape::setSize( const QSizeF &newSize )
     engrave(false);
 }
 
-void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
+void MusicShape::paint( QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
     constPaint( painter, converter );
 }
@@ -123,7 +123,7 @@ void MusicShape::constPaint( QPainter& painter, const KoViewConverter& converter
     applyConversion( painter, converter );
 
     painter.setClipping(true);
-    painter.setClipRect(QRectF(0, 0, size().width(), size().height()));
+    painter.setClipRect(QRectF(0, 0, size().width(), size().height()), Qt::IntersectClip);
 
     m_renderer->renderSheet( painter, m_sheet, m_firstSystem, m_lastSystem );
 }
@@ -139,7 +139,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfAttributes(context, OdfAllAttributes);
 
     writer.startElement("music:shape");
-    writer.addAttribute("xmlns:music", "http://www.koffice.org/music");
+    writer.addAttribute("xmlns:music", "http://www.calligra.org/music");
     MusicXmlWriter().writeSheet(writer, m_sheet, false);
     writer.endElement(); // music:shape
 
@@ -216,7 +216,7 @@ bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &c
 
 bool MusicShape::loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & /*context*/ )
 {
-    KoXmlElement score = KoXml::namedItemNS(element, "http://www.koffice.org/music", "score-partwise");
+    KoXmlElement score = KoXml::namedItemNS(element, "http://www.calligra.org/music", "score-partwise");
     if (score.isNull()) {
         kWarning() << "no music:score-partwise element as first child";
         return false;

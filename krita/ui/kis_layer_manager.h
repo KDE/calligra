@@ -22,7 +22,6 @@
 #include <QList>
 
 #include "kis_types.h"
-#include <krita_export.h>
 
 
 class KAction;
@@ -45,7 +44,7 @@ class KisNodeCommandsAdapter;
  * adding, removing, editing. It also keeps track of the active layer
  * for this view.
  */
-class KRITAUI_EXPORT KisLayerManager : public QObject
+class KisLayerManager : public QObject
 {
 
     Q_OBJECT
@@ -54,52 +53,57 @@ public:
 
     KisLayerManager(KisView2 * view,  KisDoc2 * doc);
     ~KisLayerManager();
+signals:
 
+    void sigLayerActivated(KisLayerSP layer);
+
+private:
+    
+    friend class KisNodeManager;
+    
+    /**
+     * Activate the specified layer. The layer may be 0.
+     */
+    void activateLayer(KisLayerSP layer);
+
+    KisLayerSP activeLayer();
+    KisPaintDeviceSP activeDevice();
+    
+    
     void setup(KActionCollection * collection);
     void addAction(QAction * action);
 
     void updateGUI();
+    
 
-    KisLayerSP activeLayer();
-    KisPaintDeviceSP activeDevice();
+    void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
+    void rotateLayer(double radians);
+    void shearLayer(double angleX, double angleY);
+    
+private slots:
 
-signals:
-
-    /// XXX: Move this to kisview or to kisresourceprovider? (BSAR)
-    void currentColorSpaceChanged(const KoColorSpace * cs);
-    void sigLayerActivated(KisLayerSP layer);
-
-public slots:
-
-
+    void mergeLayer();
+    
     void imageResizeToActiveLayer();
 
     void actLayerVisChanged(int show);
     void layerProperties();
 
-    void layerRemove();
     void layerDuplicate();
     void layerRaise();
     void layerLower();
     void layerFront();
     void layerBack();
 
-    void rotateLayer180();
-    void rotateLayerLeft90();
-    void rotateLayerRight90();
-    void mirrorLayerX();
-    void mirrorLayerY();
-    void scaleLayer(double sx, double sy, KisFilterStrategy *filterStrategy);
-    void rotateLayer(double radians);
-    void shearLayer(double angleX, double angleY);
     void flattenImage();
-    void mergeLayer();
+    
     void flattenLayer();
     void rasterizeLayer();
 
     void layersUpdated();
 
     void saveLayerAsImage();
+    void saveGroupLayers();
     bool activeLayerHasSelection();
 
     void layerAdd();
@@ -120,12 +124,6 @@ public slots:
     void addGeneratorLayer(KisNodeSP parent, KisNodeSP above);
     void addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const QString & name, KisFilterConfiguration * filter, KisSelectionSP selection);
 
-private:
-
-    friend class KisNodeManager;
-
-    void activateLayer(KisLayerSP layer);
-
 
 private:
 
@@ -137,10 +135,12 @@ private:
     KAction *m_imageFlatten;
     KAction *m_imageMergeLayer;
     KAction *m_layerSaveAs;
+    KAction *m_groupLayersSave;
     bool m_actLayerVis;
     KAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
     KAction *m_rasterizeLayer;
+    KAction *m_addPaintLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

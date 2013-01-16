@@ -21,6 +21,7 @@
 #include "ReviewTool.h"
 
 #include <KoCanvasBase.h>
+#include <KoTextLayoutRootArea.h>
 #include <KoChangeTracker.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
@@ -30,6 +31,8 @@
 #include <KoTextEditor.h>
 #include <KoTextShapeData.h>
 #include <KoViewConverter.h>
+#include <KoGlobal.h>
+
 #include "TextShape.h"
 
 #include "commands/AcceptChangeCommand.h"
@@ -38,11 +41,15 @@
 #include "dialogs/TrackedChangeModel.h"
 #include "dialogs/TrackedChangeManager.h"
 #include "dialogs/AcceptRejectChangeDialog.h"
+#include "dialogs/ChangeConfigureDialog.h"
 
 #include <KLocale>
 #include <KAction>
+#include <KUser>
 
 #include <QHBoxLayout>
+#include <QToolButton>
+#include <QCheckBox>
 #include <QKeyEvent>
 #include <QModelIndex>
 #include <QPainter>
@@ -54,7 +61,6 @@
 #include <QLabel>
 
 ReviewTool::ReviewTool(KoCanvasBase* canvas): KoToolBase(canvas),
-    m_disableShowChangesOnExit(false),
     m_textEditor(0),
     m_textShapeData(0),
     m_canvas(canvas),
@@ -68,6 +74,20 @@ ReviewTool::ReviewTool(KoCanvasBase* canvas): KoToolBase(canvas),
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_T);
     addAction("show_changeManager", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showTrackedChangeManager()));
+
+    m_actionShowChanges = new KAction(i18n("Show Changes"), this);
+    m_actionShowChanges->setCheckable(true);
+    addAction("edit_show_changes", m_actionShowChanges);
+    connect(m_actionShowChanges, SIGNAL(triggered(bool)), this, SLOT(toggleShowChanges(bool)));
+
+    m_actionRecordChanges = new KAction(i18n("Record Changes"), this);
+    m_actionRecordChanges->setCheckable(true);
+    addAction("edit_record_changes", m_actionRecordChanges);
+    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), this, SLOT(toggleRecordChanges(bool)));
+
+    m_configureChangeTracking = new KAction(i18n("Configure Change Tracking..."), this);
+    addAction("configure_change_tracking", m_configureChangeTracking);
+    connect(m_configureChangeTracking, SIGNAL(triggered()), this, SLOT(configureChangeTracking()));
 }
 
 ReviewTool::~ReviewTool()
@@ -127,8 +147,6 @@ void ReviewTool::updateSelectedShape(const QPointF &point)
             if (textShape) {
                 KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
                 const bool sameDocument = d->document() == m_textShapeData->document();
-                if (sameDocument && d->position() < 0)
-                    continue; // don't change to a shape that has no text
                     m_textShape = textShape;
                 if (sameDocument)
                     break; // stop looking.
@@ -141,12 +159,7 @@ void ReviewTool::updateSelectedShape(const QPointF &point)
 int ReviewTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textEditor->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
-    caretPos = qMax(caretPos, m_textShapeData->position());
-    if (m_textShapeData->endPosition() == -1) {
-        m_textShapeData->fireResizeEvent(); // requests a layout run ;)
-    }
-    caretPos = qMin(caretPos, m_textShapeData->endPosition());
+    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit).position;
     return caretPos;
 }
 
@@ -170,6 +183,9 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
         int end = changeRanges.at(i).second;
         if (end < start)
             qSwap(start, end);
+        QTextCursor cursor;
+        cursor.setPosition(start);
+        cursor.setPosition(end, QTextCursor::KeepAnchor);
         QList<TextShape *> shapesToPaint;
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay) {
@@ -178,10 +194,7 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
                 if (! ts)
                     continue;
                 KoTextShapeData *data = ts->textShapeData();
-                // check if shape contains some of the selection, if not, skip
-                if (!( (data->endPosition() >= start && data->position() <= end)
-                    || (data->position() <= start && data->endPosition() >= end)))
-                    continue;
+
                 if (painter.hasClipping()) {
                     QRect rect = converter.documentToView(ts->boundingRect()).toRect();
                     if (painter.clipRegion().intersect(QRegion(rect)).isEmpty())
@@ -199,7 +212,7 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
         foreach(TextShape *ts, shapesToPaint) {
             KoTextShapeData *data = ts->textShapeData();
             Q_ASSERT(data);
-            if (data->endPosition() == -1)
+            if (data->isDirty())
                 continue;
 
             painter.save();
@@ -208,9 +221,9 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
             painter.setTransform(shapeMatrix * painter.transform());
             painter.setClipRect(QRectF(QPointF(), ts->size()), Qt::IntersectClip);
             painter.translate(0, -data->documentOffset());
-            if ((data->endPosition() >= start && data->position() <= end)
-                || (data->position() <= start && data->endPosition() >= end)) {
-                QVector<QRectF> *clipVec = textRect(qMax(data->position(), start), qMin(data->endPosition(), end));
+#if 0 //FIXME refactor to new textlayout
+            if (data->isCursorVisible(&cursor)) {
+                QVector<QRectF> *clipVec = textRect(cursor);
                 QRectF clip;
                 foreach(clip, *clipVec) {
                     painter.save();
@@ -220,67 +233,20 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
                 }
                 delete clipVec;
             }
+#endif
 
             painter.restore();
         }
     }
 }
 
-QVector<QRectF> *ReviewTool::textRect ( int startPosition, int endPosition )
+
+QRectF ReviewTool::textRect(QTextCursor &cursor) const
 {
-    QVector<QRectF> *retVec = new QVector<QRectF>();
-    Q_ASSERT(startPosition >= 0);
-    Q_ASSERT(endPosition >= 0);
-    if (startPosition > endPosition)
-        qSwap(startPosition, endPosition);
-    QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
-    if (!block.isValid())
-        return retVec;
-    QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
-    if (! line1.isValid())
-        return retVec;
-    qreal startX = line1.cursorToX(startPosition - block.position());
-    if (startPosition == endPosition) {
-        retVec->push_back(QRectF(startX, line1.y(), 1, line1.height()));
-        return retVec;
-    }
-
-    QTextBlock block2 = m_textShapeData->document()->findBlock(endPosition);
-    if (!block2.isValid())
-        return retVec;
-    QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
-    if (! line2.isValid())
-        return retVec;
-    qreal endX = line2.cursorToX(endPosition - block2.position());
-
-    if (line1.textStart() + block.position() == line2.textStart() + block2.position()) {
-        retVec->push_back(QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height()));
-        return retVec;
-    } else {
-        QTextBlock startBlock = block;
-        int numberOfLines = block.layout()->lineCount();
-
-        while (1) {
-            for (int i=0; i < numberOfLines; i++) {
-                QTextLine currentLine = block.layout()->lineAt(i);
-                if ((block == startBlock) && (i < line1.lineNumber())) {
-                    continue;
-                } else if ((block == startBlock) && (i == line1.lineNumber())) {
-                    retVec->push_back(QRectF(startX, currentLine.y(), line1.width(), currentLine.height()));
-                } else if ((block == block2) && (i == line2.lineNumber())) {
-                    retVec->push_back(QRectF(0, currentLine.y(), endX, currentLine.height()));
-                    break;
-                } else {
-                    retVec->push_back(QRectF(0, currentLine.y(),10E6, currentLine.height()));
-                }
-            }
-            
-            if (block == block2)
-                break;
-            block = block.next();
-        }
-        return retVec;
-    }
+    if (!m_textShapeData)
+        return QRectF();
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    return lay->selectionBoundingBox(cursor);
 }
 
 void ReviewTool::keyPressEvent(QKeyEvent* event)
@@ -305,6 +271,8 @@ void ReviewTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
 
 
     m_textShape->update();
+
+    readConfig();
 }
 
 void ReviewTool::setShapeData(KoTextShapeData *data)
@@ -318,12 +286,6 @@ void ReviewTool::setShapeData(KoTextShapeData *data)
 //            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
     }
 */
-    if (!data) {
-        if (m_disableShowChangesOnExit) {
-            ShowChangesCommand *command = new ShowChangesCommand(false, m_textShapeData->document(), m_canvas);
-            m_textEditor->addCommand(command);
-        }
-    }
     m_textShapeData = data;
     if (m_textShapeData == 0)
         return;
@@ -340,12 +302,7 @@ void ReviewTool::setShapeData(KoTextShapeData *data)
 //            connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
         }
     }
-    m_textEditor->updateDefaultTextDirection(m_textShapeData->pageDirection());
-    if (!KoTextDocument(m_textShapeData->document()).changeTracker()->displayChanges()) {
-        m_disableShowChangesOnExit = true;
-        ShowChangesCommand *command = new ShowChangesCommand(true, m_textShapeData->document(), m_canvas);
-        m_textEditor->addCommand(command);
-    }
+
     if (m_model) {
         disconnect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
         delete m_model;
@@ -358,6 +315,8 @@ void ReviewTool::setShapeData(KoTextShapeData *data)
         connect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
         m_changesTreeView->reset();
     }
+
+    m_changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
 }
 
 void ReviewTool::deactivate()
@@ -367,39 +326,50 @@ void ReviewTool::deactivate()
     canvas()->canvasWidget()->setFocus();
 }
 
-QMap<QString, QWidget*> ReviewTool::createOptionWidgets()
+QList<QWidget*> ReviewTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
     QWidget *widget = new QWidget();
     widget->setObjectName("hmm");
 
     m_changesTreeView = new QTreeView(widget);
     m_changesTreeView->setModel(m_model);
+    m_changesTreeView->setColumnHidden(0, true);
     connect(m_changesTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(selectedChangeChanged(QModelIndex,QModelIndex)));
 
     QVBoxLayout *vLayout = new QVBoxLayout(widget);
     vLayout->addWidget(m_changesTreeView);
-    QHBoxLayout *hLayout = new QHBoxLayout(widget);
+    QHBoxLayout *hLayout = new QHBoxLayout;
     QPushButton *accept = new QPushButton(i18n("Accept"));
     QPushButton *reject = new QPushButton(i18n("Reject"));
     hLayout->addWidget(accept);
     hLayout->addWidget(reject);
     vLayout->addLayout(hLayout);
-    widget->setLayout(vLayout);
+    QCheckBox *showChanges = new QCheckBox(i18n("Show Changes"));
+    vLayout->addWidget(showChanges);
+    QCheckBox *recordChanges = new QCheckBox(i18n("Record Changes"));
+    vLayout->addWidget(recordChanges);
+    QToolButton *configureTracing = new QToolButton();
+    configureTracing->setDefaultAction(action("configure_change_tracking"));
+    vLayout->addWidget(configureTracing);
 
+    connect(m_actionShowChanges, SIGNAL(triggered(bool)), showChanges, SLOT(setChecked(bool)));
+    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), recordChanges, SLOT(setChecked(bool)));
+    connect(showChanges, SIGNAL(clicked(bool)), this, SLOT(toggleShowChanges(bool)));
+    connect(recordChanges, SIGNAL(clicked(bool)), this, SLOT(toggleRecordChanges(bool)));
     connect(accept, SIGNAL(clicked(bool)), this, SLOT(acceptChange()));
     connect(reject, SIGNAL(clicked(bool)), this, SLOT(rejectChange()));
 
-    widgets.insert(i18n("Changes"), widget);
+    widget->setWindowTitle(i18n("Changes"));
+    widgets.append(widget);
     QWidget *dummy = new QWidget();
     dummy->setObjectName("dummy1");
-    widgets.insert(i18n("Spell checking"), dummy);
+    dummy->setWindowTitle(i18n("Spell checking"));
+    widgets.append(dummy);
     dummy = new QWidget();
     dummy->setObjectName("dummy2");
-    widgets.insert(i18n("Comments"), dummy);
-    dummy = new QWidget();
-    dummy->setObjectName("dummy3");
-    widgets.insert(i18n("Statistics"), dummy);
+    dummy->setWindowTitle(i18n("Comments"));
+    widgets.append(dummy);
     return widgets;
 }
 
@@ -431,6 +401,89 @@ void ReviewTool::selectedChangeChanged(QModelIndex newItem, QModelIndex previous
     Q_UNUSED(previousItem);
     canvas()->updateCanvas(m_textShape->boundingRect());
 }
+
+void ReviewTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
+{
+    m_actionShowChanges->setChecked(on);
+    ShowChangesCommand *command = new ShowChangesCommand(on, m_textShapeData->document(), this->canvas());
+    connect(command, SIGNAL(toggledShowChange(bool)), m_actionShowChanges, SLOT(setChecked(bool)));
+    m_textEditor->addCommand(command);
+}
+
+void ReviewTool::toggleRecordChanges(bool on)
+{
+    m_actionRecordChanges->setChecked(on);
+    if (m_changeTracker)
+        m_changeTracker->setRecordChanges(on);
+}
+
+void ReviewTool::configureChangeTracking()
+{
+    if (m_changeTracker) {
+        QColor insertionBgColor, deletionBgColor, formatChangeBgColor;
+        insertionBgColor = m_changeTracker->getInsertionBgColor();
+        deletionBgColor = m_changeTracker->getDeletionBgColor();
+        formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
+        QString authorName = m_changeTracker->authorName();
+        KoChangeTracker::ChangeSaveFormat changeSaveFormat = m_changeTracker->saveFormat();
+
+        ChangeConfigureDialog changeDialog(insertionBgColor, deletionBgColor, formatChangeBgColor, authorName, changeSaveFormat, canvas()->canvasWidget());
+
+        if (changeDialog.exec()) {
+            m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
+            m_changeTracker->setDeletionBgColor(changeDialog.getDeletionBgColor());
+            m_changeTracker->setFormatChangeBgColor(changeDialog.getFormatChangeBgColor());
+            m_changeTracker->setAuthorName(changeDialog.authorName());
+            m_changeTracker->setSaveFormat(changeDialog.saveFormat());
+            writeConfig();
+        }
+    }
+}
+
+
+void ReviewTool::readConfig()
+{
+    if (m_changeTracker) {
+        QColor bgColor, defaultColor;
+        QString changeAuthor;
+        int changeSaveFormat = KoChangeTracker::DELTAXML;
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
+        if (interface.exists()) {
+            bgColor = interface.readEntry("insertionBgColor", defaultColor);
+            m_changeTracker->setInsertionBgColor(bgColor);
+            bgColor = interface.readEntry("deletionBgColor", defaultColor);
+            m_changeTracker->setDeletionBgColor(bgColor);
+            bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
+            m_changeTracker->setFormatChangeBgColor(bgColor);
+            changeAuthor = interface.readEntry("changeAuthor", changeAuthor);
+            if (changeAuthor.isEmpty()) {
+                KUser user(KUser::UseRealUserID);
+                m_changeTracker->setAuthorName(user.property(KUser::FullName).toString());
+            } else {
+                m_changeTracker->setAuthorName(changeAuthor);
+            }
+            changeSaveFormat = interface.readEntry("changeSaveFormat", changeSaveFormat);
+            m_changeTracker->setSaveFormat((KoChangeTracker::ChangeSaveFormat)(changeSaveFormat));
+        }
+    }
+}
+
+void ReviewTool::writeConfig()
+{
+    if (m_changeTracker) {
+        KConfigGroup interface = KoGlobal::calligraConfig()->group("Change-Tracking");
+        interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
+        interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
+        interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
+        KUser user(KUser::UseRealUserID);
+        QString changeAuthor = m_changeTracker->authorName();
+        if (changeAuthor != user.property(KUser::FullName).toString()) {
+            interface.writeEntry("changeAuthor", changeAuthor);
+        }
+        interface.writeEntry("changeSaveFormat", (int)(m_changeTracker->saveFormat()));
+    }
+}
+
 
 void ReviewTool::showTrackedChangeManager()
 {

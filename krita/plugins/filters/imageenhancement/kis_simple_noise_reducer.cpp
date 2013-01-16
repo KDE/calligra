@@ -18,7 +18,7 @@
 
 #include "kis_simple_noise_reducer.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
@@ -26,7 +26,6 @@
 #include <KoUpdater.h>
 
 #include <kis_mask_generator.h>
-#include <kis_iterators_pixel.h>
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
 #include <kis_global.h>

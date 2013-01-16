@@ -21,6 +21,7 @@
 #include "StylesDelegate.h"
 #include "ParagraphGeneral.h"
 #include "CharacterGeneral.h"
+#include <KoStyleThumbnailer.h>
 
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
@@ -31,20 +32,45 @@
 #include <QHeaderView>
 #include <QFormLayout>
 #include <QRadioButton>
+#include <QScrollBar>
+#include <QHideEvent>
+#include <QShowEvent>
+
+#include <QModelIndex>
 
 StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags f)
         : QFrame(parent, f),
         m_styleManager(0),
-        m_stylesModel(new StylesModel(0, paragraphMode, this)),
+          m_styleThumbnailer(0),
+        m_stylesModel(new StylesModel(0, StylesModel::ParagraphStyle)),
         m_stylesDelegate(new StylesDelegate()),
-        m_blockSignals(false)
-        ,m_isHovered(false)
+        m_blockSignals(false),
+        m_isHovered(false)
 {
+    m_styleThumbnailer = new KoStyleThumbnailer();
+    m_styleThumbnailer->setThumbnailSize(QSize(250, 48));
+    m_stylesModel->setStyleThumbnailer(m_styleThumbnailer);
     widget.setupUi(this);
     widget.stylesView->setModel(m_stylesModel);
-    widget.stylesView->setItemDelegate(m_stylesDelegate);
+//    widget.stylesView->setItemDelegate(m_stylesDelegate);
 
-    connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyStyle()));
+    if (paragraphMode) {
+        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyParagraphStyle()));
+    } else {
+        connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyCharacterStyle()));
+    }
+}
+
+StylesWidget::~StylesWidget()
+{
+    delete m_stylesDelegate;
+    delete m_stylesModel;
+    delete m_styleThumbnailer;
+}
+
+QSize StylesWidget::sizeHint() const
+{
+    return QSize(widget.stylesView->sizeHint().width() + 2*widget.stylesView->verticalScrollBar()->width(), widget.stylesView->sizeHint().height());
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm)
@@ -59,7 +85,7 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
         return;
     m_currentBlockFormat = format;
     int id = m_currentBlockFormat.intProperty(KoParagraphStyle::StyleId);
-    bool unchanged = true;
+    // bool unchanged = true;
     KoParagraphStyle *usedStyle = 0;
     if (m_styleManager)
         usedStyle = m_styleManager->paragraphStyle(id);
@@ -70,15 +96,16 @@ void StylesWidget::setCurrentFormat(const QTextBlockFormat &format)
             if (property == KoParagraphStyle::ListStyleId)
                 continue;
             if (m_currentBlockFormat.property(property) != usedStyle->value(property)) {
-                unchanged = false;
+                // unchanged = false;
                 break;
             }
         }
     }
 
     m_blockSignals = true;
-    m_stylesModel->setCurrentParagraphStyle(id, unchanged);
+//    m_stylesModel->setCurrentParagraphStyle(id, unchanged);
     m_blockSignals = false;
+    widget.stylesView->setCurrentIndex(m_stylesModel->indexForParagraphStyle(*usedStyle));
 }
 
 void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
@@ -88,7 +115,7 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
     m_currentCharFormat = format;
 
     int id = m_currentCharFormat.intProperty(KoCharacterStyle::StyleId);
-    bool unchanged = true;
+    //bool unchanged = true;
     KoCharacterStyle *usedStyle = 0;
     if (m_styleManager)
         usedStyle = m_styleManager->characterStyle(id);
@@ -100,18 +127,19 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format)
                 continue;
             if (m_currentCharFormat.property(property) != usedStyle->value(property)
                     && m_currentCharFormat.property(property) != defaultFormat.property(property)) {
-                unchanged = false;
+      //          unchanged = false;
                 break;
             }
         }
     }
 
     m_blockSignals = true;
-    m_stylesModel->setCurrentCharacterStyle(id, unchanged);
+//    m_stylesModel->setCurrentCharacterStyle(id, unchanged);
     m_blockSignals = false;
+    widget.stylesView->setCurrentIndex(m_stylesModel->indexForCharacterStyle(*usedStyle));
 }
 
-void StylesWidget::applyStyle()
+void StylesWidget::applyParagraphStyle()
 {
     QModelIndex index = widget.stylesView->currentIndex();
     Q_ASSERT(index.isValid());
@@ -121,7 +149,12 @@ void StylesWidget::applyStyle()
         emit doneWithFocus();
         return;
     }
+}
 
+void StylesWidget::applyCharacterStyle()
+{
+    QModelIndex index = widget.stylesView->currentIndex();
+    Q_ASSERT(index.isValid());
     KoCharacterStyle *characterStyle = m_stylesModel->characterStyleForIndex(index);
     if (characterStyle) {
         emit characterStyleSelected(characterStyle);

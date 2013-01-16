@@ -1,0 +1,5 @@
+RESOLVE: SOURCE=/opt.kde/src/kdesvn/calligra/plan/plugins/schedulers/tj/ BUILD=/opt.kde/src/kdesvn/calligra/build/plan/plugins/schedulers/tj/
+/opt.kde/src/kdesvn/calligra/plan/libs/kernel
+/usr/include/qt4/QtCore
+/usr/include/qt4/QtGui
+/usr/include/KDE

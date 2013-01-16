@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2006 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
  *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
@@ -23,7 +23,7 @@
 #ifndef KIS_TRANSFORM_VISITOR_H_
 #define KIS_TRANSFORM_VISITOR_H_
 
-#include "qrect.h"
+#include "QRect"
 
 #include "klocale.h"
 
@@ -43,7 +43,6 @@
 #include "kis_pixel_selection.h"
 #include "kis_transparency_mask.h"
 #include "kis_selection_mask.h"
-#include "kis_transformation_mask.h"
 #include "kis_clone_layer.h"
 #include "kis_filter_mask.h"
 
@@ -79,7 +78,12 @@ public:
     bool visit(KisExternalLayer * layer) {
         KisUndoAdapter* undoAdapter = layer->image()->undoAdapter();
 
-        QUndoCommand* command = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+        KisTransformWorker tw(layer->projection(), m_sx, m_sy,
+                              0, 0, 0, 0,
+                              m_angle, m_tx, m_ty, 0,
+                              m_filter, true);
+
+        KUndo2Command* command = layer->transform(tw.transform());
         if (command)
             undoAdapter->addCommand(command);
         visitAll(layer);
@@ -136,10 +140,6 @@ public:
         transformMask(mask);
         return true;
     }
-    bool visit(KisTransformationMask* mask) {
-        transformMask(mask);
-        return true;
-    }
     bool visit(KisSelectionMask* mask) {
         transformMask(mask);
         return true;
@@ -176,7 +176,9 @@ private:
             transaction.commit(m_image->undoAdapter());
         }
         if (selection->hasShapeSelection()) {
-            QUndoCommand* command = selection->shapeSelection()->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+            KisTransformWorker tw(selection->projection(), m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, 0, m_filter, true);
+
+            KUndo2Command* command = selection->shapeSelection()->transform(tw.transform());
             if (command)
                 m_image->undoAdapter()->addCommand(command);
         }

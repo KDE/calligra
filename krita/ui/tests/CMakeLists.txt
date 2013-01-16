@@ -3,7 +3,8 @@ include_directories(  ${KOMAIN_INCLUDES}   ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 
 add_subdirectory(scratchpad)
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
+add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 
 ########### next target ###############
 
@@ -23,7 +24,7 @@ target_link_libraries(KisImageViewConverterTest  ${KDE4_KDEUI_LIBS}  komain krit
 
 ########### next target ###############
 
-set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp )
+set(kis_shape_controller_test_SRCS kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp)
 
 kde4_add_unit_test(kis_shape_controller_test TESTNAME krita-ui-kis_shape_controller_test  ${kis_shape_controller_test_SRCS})
 
@@ -101,3 +102,57 @@ target_link_libraries(KisDoc2Test  ${KDE4_KDEUI_LIBS}  komain kritaui kritaimage
 set(kis_coordinates_converter_test_SRCS kis_coordinates_converter_test.cpp )
 kde4_add_unit_test(KisCoordinatesConverterTest TESTNAME krita-ui-KisCoordinatesConverterTest  ${kis_coordinates_converter_test_SRCS})
 target_link_libraries(KisCoordinatesConverterTest  ${KDE4_KDEUI_LIBS}  komain kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_clipboard_test_SRCS kis_clipboard_test.cpp )
+kde4_add_unit_test(KisClipboardTest TESTNAME krita-ui-KisClipboardTest  ${kis_clipboard_test_SRCS})
+target_link_libraries(KisClipboardTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(freehand_stroke_test_SRCS freehand_stroke_test.cpp ../../sdk/tests/stroke_testing_utils.cpp)
+kde4_add_unit_test(FreehandStrokeTest TESTNAME krita-ui-FreehandStrokeTest  ${freehand_stroke_test_SRCS})
+target_link_libraries(FreehandStrokeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_selection_manager_test_SRCS kis_selection_manager_test.cpp)
+kde4_add_unit_test(KisSelectionManagerTest TESTNAME krita-ui-KisSelectionManagerTest  ${kis_selection_manager_test_SRCS})
+target_link_libraries(KisSelectionManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_node_dummies_graph_test_SRCS kis_node_dummies_graph_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisNodeDummiesGraphTest TESTNAME krita-ui-KisNodeDummiesGraphTest  ${kis_node_dummies_graph_test_SRCS})
+target_link_libraries(KisNodeDummiesGraphTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_node_shapes_graph_test_SRCS kis_node_shapes_graph_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisNodeShapesGraphTest TESTNAME krita-ui-KisNodeShapesGraphTest  ${kis_node_shapes_graph_test_SRCS})
+target_link_libraries(KisNodeShapesGraphTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_dummies_facade_test_SRCS kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisDummiesFacadeTest TESTNAME krita-ui-KisDummiesFacadeTest  ${kis_dummies_facade_test_SRCS})
+target_link_libraries(KisDummiesFacadeTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_model_index_converter_test_SRCS kis_model_index_converter_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisModelIndexConverterTest TESTNAME krita-ui-KisModelIndexConverterTest  ${kis_model_index_converter_test_SRCS})
+target_link_libraries(KisModelIndexConverterTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_zoom_and_pan_test_SRCS kis_zoom_and_pan_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisZoomAndPanTest TESTNAME krita-ui-KisZoomAndPanTest  ${kis_zoom_and_pan_test_SRCS})
+target_link_libraries(KisZoomAndPanTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(kis_input_manager_test_SRCS kis_input_manager_test.cpp ../../sdk/tests/testutil.cpp)
+kde4_add_unit_test(KisInputManagerTest TESTNAME krita-ui-KisInputManagerTest  ${kis_input_manager_test_SRCS})
+target_link_libraries(KisInputManagerTest  ${KDE4_KDEUI_LIBS}  kritaui kritaimage ${QT_QTTEST_LIBRARY})

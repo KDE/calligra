@@ -1,19 +1,19 @@
 /**
 * @mainpage
 *
-* The KWord scripting plugin offers flexible access to the
+* The Words scripting plugin offers flexible access to the
 * Kross scripting framework. Languages like Python, Ruby or
-* KDE JavaScript could be used to script KWord, extend the
+* KDE JavaScript could be used to script Words, extend the
 * functionality with script-packages, automate tasks or
 * control the runtime-environment.
 *
 * <b>Important note;</b> the scripting API is currently unfinished and
 * will change in the future. Your scripts probably will stop working then!
 *
-* The \a Scripting::Module class enables access to the KWord
+* The \a Scripting::Module class enables access to the Words
 * functionality from within the scripting backends.
 *
-* \see http://techbase.kde.org/Development/Tutorials/KWord_Scripting
+* \see http://techbase.kde.org/Development/Tutorials/Words_Scripting
 */
 DETAILS_AT_TOP = YES
 CLASS_DIAGRAMS = NO

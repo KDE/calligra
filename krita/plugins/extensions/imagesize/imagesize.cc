@@ -30,7 +30,6 @@
 #include <QRect>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -52,10 +51,10 @@
 #include <kis_selection_manager.h>
 #include <kis_transaction.h>
 #include <kis_image_manager.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_transform_visitor.h>
 #include <widgets/kis_progress_widget.h>
-#include <commands/kis_image_set_resolution_command.h>
+#include <commands_new/kis_image_set_resolution_command.h>
 
 #include "dlg_imagesize.h"
 #include "dlg_canvassize.h"
@@ -70,8 +69,6 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ImageSizeFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/imagesize.rc"), true);
 
         KAction *action  = new KAction(i18n("Scale To New Size..."), this);
@@ -87,14 +84,16 @@ ImageSize::ImageSize(QObject *parent, const QVariantList &)
         connect(m_scaleLayerAction, SIGNAL(triggered()), this, SLOT(slotLayerSize()));
 
         m_view = (KisView2*) parent;
-        // Selection manager takes ownership?
-        action  = new KAction(i18n("&Scale..."), this);
-        actionCollection()->addAction("selectionscale", action);
-        Q_CHECK_PTR(action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
+        // Selection manager takes ownership
+        m_scaleSelectionAction  = new KAction(i18n("&Scale..."), this);
+        actionCollection()->addAction("selectionscale", m_scaleSelectionAction);
+        Q_CHECK_PTR(m_scaleSelectionAction);
+        connect(m_scaleSelectionAction, SIGNAL(triggered()), this, SLOT(slotSelectionScale()));
+        m_view ->selectionManager()->addSelectionAction(m_scaleSelectionAction);
 
-        m_view ->selectionManager()->addSelectionAction(action);
         connect(m_view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), SLOT(slotNodeChanged(KisNodeSP)));
+        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
+                SLOT(slotSelectionChanged()));
     }
 }
 
@@ -120,19 +119,7 @@ void ImageSize::slotImageSize()
         qint32 h = dlgImageSize->height();
         double res = dlgImageSize->resolution();
 
-        image->undoAdapter()->beginMacro(i18n("Scale Image"));
-        double oldRes = image->xRes();
-        image->undoAdapter()->addCommand(new KisImageSetResolutionCommand(image, res, res));
-
-        if (w != image->width() || h != image->height()) {
-            m_view->imageManager()->scaleCurrentImage((double)w / ((double)(image->width())),
-                    (double)h / ((double)(image->height())), dlgImageSize->filterType());
-        } else {
-            //in case the resolution changes only the shape need to be scaled
-            m_view->imageManager()->scaleCurrentImage(oldRes/res, oldRes/res, dlgImageSize->filterType(), true);
-        }
-        image->rootLayer()->setDirty();
-        image->undoAdapter()->endMacro();
+        m_view->imageManager()->scaleCurrentImage(QSize(w, h), res, res, dlgImageSize->filterType());
     }
 
     delete dlgImageSize;
@@ -182,9 +169,9 @@ void ImageSize::slotLayerSize()
         qint32 w = dlgLayerSize->width();
         qint32 h = dlgLayerSize->height();
 
-        m_view->layerManager()->scaleLayer((double)w / ((double)(rc.width())),
-                                           (double)h / ((double)(rc.height())),
-                                           dlgLayerSize->filterType());
+        m_view->nodeManager()->scale((double)w / ((double)(rc.width())),
+                                     (double)h / ((double)(rc.height())),
+                                     dlgLayerSize->filterType());
     }
     delete dlgLayerSize;
 }
@@ -220,15 +207,18 @@ void ImageSize::slotSelectionScale()
     QPointer<KoUpdater> u = pu->startSubtask();
 
     if (dlgSize->exec() == QDialog::Accepted) {
+        KisSelectionTransaction transaction(i18n("Scale Selection"), image, selection);
+
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(selection.data(),
+        KisTransformWorker worker(selection->getOrCreatePixelSelection(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
                                   0, 0, 0.0, 0.0, 0.0, 0, 0, u,
                                   dlgSize->filterType()
                                  );
         worker.run();
+        transaction.commit(image->undoAdapter());
         layer->setDirty();
         pu->deleteLater();
     }
@@ -240,6 +230,11 @@ void ImageSize::slotNodeChanged(const KisNodeSP node)
 {
     Q_UNUSED(node);
     m_scaleLayerAction->setEnabled(m_view->activeLayer());
+}
+
+void ImageSize::slotSelectionChanged()
+{
+    m_scaleSelectionAction->setEnabled(m_view->selectionEditable() && m_view->selectionManager()->havePixelsSelected());
 }
 
 #include "imagesize.moc"

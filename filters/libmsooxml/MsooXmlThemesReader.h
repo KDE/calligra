@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -80,10 +80,13 @@ public:
     DrawingMLColorScheme();
     ~DrawingMLColorScheme();
 
-    DrawingMLColorSchemeItemBase* value(const QString& name) const { return DrawingMLColorSchemeItemHash::value(name); }
+    DrawingMLColorSchemeItemBase* value(const QString& name) const {
+        return DrawingMLColorSchemeItemHash::value(name);
+    }
 
-    /*! @return color value for index. Needed because while PPTX uses lookup by name: value(QString&),
-                XLSX uses lookup by index. When index is invalid, 0 is returned. */
+    /*! @return color value for index. Needed because while PPTX uses lookup by
+        name: value(QString&), XLSX uses lookup by index. When index is
+        invalid, 0 is returned. */
     DrawingMLColorSchemeItemBase* value(int index) const;
 
     DrawingMLColorScheme(const DrawingMLColorScheme& scheme);
@@ -128,7 +131,7 @@ class MSOOXML_EXPORT DrawingMLFillBase
 {
 public:
     virtual ~DrawingMLFillBase();
-    // This function will create the fill style and fill the approriate styles
+    // This function will create the fill style and fill the appropriate styles
     // and filePath if needed.
     // Number is used to index to correct style, color is the color which should be used when making the styles
     virtual void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color) = 0;
@@ -159,7 +162,7 @@ private:
 class MSOOXML_EXPORT DrawingMLGradientFill : public DrawingMLFillBase
 {
 public:
-    // Simplified gradient constuctor
+    // Simplified gradient constructor
     DrawingMLGradientFill(QVector<qreal> shadeModifier, QVector<qreal> tintModifier, QVector<qreal> satModifier,
                           QVector<int> alphaModifier, QVector<int> gradPositions, QString gradAngle);
     void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, QColor color);
@@ -187,8 +190,9 @@ public:
     DrawingMLFormatScheme& operator=(const DrawingMLFormatScheme& format);
 
     QMap<int, DrawingMLFillBase*> fillStyles;
-    // Stores currently only line width, should be made to store everything else too
-    QVector<QString> lineStyles;
+
+    // Stores the three line styles for use within a theme.
+    QList<KoGenStyle> lnStyleLst;
 };
 
 //! Defines a single DrawingML theme.
@@ -238,14 +242,13 @@ protected:
     //! @todo no CASE
     KoFilter::ConversionStatus read_objectDefaults();
     KoFilter::ConversionStatus read_custClrLst();
-    KoFilter::ConversionStatus read_extLst();
     KoFilter::ConversionStatus read_extraClrSchemeLst();
     KoFilter::ConversionStatus read_extraClrScheme();
+
     KoFilter::ConversionStatus read_clrScheme();
     KoFilter::ConversionStatus read_color(); //!< helper
-    KoFilter::ConversionStatus read_srgbClr();
-    KoFilter::ConversionStatus read_sysClr();
-    DrawingMLColorSchemeItemBase* m_currentColor; //!< used by *Clr()
+    DrawingMLColorSchemeItemBase* m_currentColor_local; //!< used by *Clr()
+
     KoFilter::ConversionStatus read_fmtScheme();
     KoFilter::ConversionStatus read_fontScheme();
     KoFilter::ConversionStatus read_clrMap();
@@ -256,11 +259,15 @@ protected:
     KoFilter::ConversionStatus read_majorFont();
     KoFilter::ConversionStatus read_minorFont();
     KoFilter::ConversionStatus read_lnStyleLst();
-    KoFilter::ConversionStatus read_ln();
 
     //! Used for skipping a subtree - just reads and shows each element.
     //! called by BIND_READ_SKIP() macro.
     KoFilter::ConversionStatus read_SKIP();
+
+#include "MsooXmlDrawingMLShared.h"
+
+    KoFilter::ConversionStatus read_srgbClr_local();
+    KoFilter::ConversionStatus read_sysClr_local();
 
 private:
     void init();

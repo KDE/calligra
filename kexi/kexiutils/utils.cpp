@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,10 +36,10 @@
 #include <KCursor>
 #include <KApplication>
 #include <KIconEffect>
-#include <KIconLoader>
 #include <KGlobalSettings>
 #include <KAction>
 #include <KDialog>
+#include <KColorScheme>
 
 using namespace KexiUtils;
 
@@ -103,7 +103,7 @@ WaitCursorRemover::~WaitCursorRemover()
 
 //--------------------------------------------------------------------------------
 
-QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className /* compat with Qt3 */, const char* objName)
+QObject* KexiUtils::findFirstQObjectChild(QObject *o, const char* className, const char* objName)
 {
     if (!o)
         return 0;
@@ -399,9 +399,9 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //! and performing detailed painting later (using QTimer)
 //    QPixmap pixmapBuffer;
 //    QPainter p2;
-    QPainter *target;
+//    QPainter *target;
 //    if (fast) {
-        target = p;
+//       target = p;
 //    } else {
 //moved  pixmapBuffer.resize(rect.size()-QSize(lineWidth, lineWidth));
 //moved  p2.begin(&pm, p.device());
@@ -410,11 +410,11 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //! @todo only create buffered pixmap of the minimum size and then do not fillRect()
 // target->fillRect(0,0,rect.width(),rect.height(), backgroundColor);
 
+    pos = rect.topLeft() + QPoint(margins.left, margins.top);
     if (scaledContents) {
         if (keepAspectRatio) {
             QImage img(pixmap.toImage());
             img = img.scaled(w, h, Qt::KeepAspectRatio, transformMode);
-            pos = rect.topLeft();
             if (img.width() < w) {
 //                int hAlign = QApplication::horizontalAlignment(alignment);
                 if (alignment & Qt::AlignRight)
@@ -448,7 +448,6 @@ static void drawOrScalePixmapInternal(QPainter* p, const WidgetMargins& margins,
 //                p2.begin(&pixmapBuffer);
                 //, p.device());
 //                p2.drawPixmap(QRect(rect.x(), rect.y(), w, h), pixmap);
-                pos = rect.topLeft();
                 pixmap = pixmap.scaled(w, h, Qt::IgnoreAspectRatio, transformMode);
                 if (p) {
                     p->drawPixmap(pos, pixmap);
@@ -628,59 +627,6 @@ QFont KexiUtils::smallFont(QWidget *init)
     return *_smallFont;
 }
 
-//---------
-
-//! @internal
-class StaticSetOfStrings::Private
-{
-public:
-    Private() : array(0), set(0) {}
-    ~Private() {
-        delete set;
-    }
-    const char** array;
-    QSet<QByteArray> *set;
-};
-
-StaticSetOfStrings::StaticSetOfStrings()
-        : d(new Private)
-{
-}
-
-StaticSetOfStrings::StaticSetOfStrings(const char* array[])
-        : d(new Private)
-{
-    setStrings(array);
-}
-
-StaticSetOfStrings::~StaticSetOfStrings()
-{
-    delete d;
-}
-
-void StaticSetOfStrings::setStrings(const char* array[])
-{
-    delete d->set;
-    d->set = 0;
-    d->array = array;
-}
-
-bool StaticSetOfStrings::isEmpty() const
-{
-    return d->array == 0;
-}
-
-bool StaticSetOfStrings::contains(const QByteArray& string) const
-{
-    if (!d->set) {
-        d->set = new QSet<QByteArray>();
-        for (const char ** p = d->array;*p;p++) { 
-            d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)));
-        }
-    }
-    return d->set->contains(string);
-}
-
 //---------------------
 
 KTextEditorFrame::KTextEditorFrame(QWidget * parent, Qt::WindowFlags f)
@@ -713,16 +659,89 @@ void KexiUtils::setMargins(QLayout *layout, int value)
     layout->setContentsMargins(value, value, value, value);
 }
 
-QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
+void KexiUtils::replaceColors(QPixmap* original, const QColor& color)
 {
-    QPixmap dest(original);
-    dest.fill(color);
-    {
-        QPainter p(&dest);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.drawPixmap(0, 0, original);
+    Q_ASSERT(original);
+    QImage dest(original->toImage());
+    replaceColors(&dest, color);
+    *original = QPixmap::fromImage(dest);
+}
+
+void KexiUtils::replaceColors(QImage* original, const QColor& color)
+{
+    Q_ASSERT(original);
+    QPainter p(original);
+    p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    p.fillRect(original->rect(), color);
+}
+
+bool KexiUtils::isLightColorScheme()
+{
+    return KColorScheme(QPalette::Active, KColorScheme::Window).background().color().lightness() >= 128;
+}
+
+QPalette KexiUtils::paletteForReadOnly(const QPalette &palette)
+{
+    QPalette p(palette);
+    p.setBrush(QPalette::QPalette::Base, palette.brush(QPalette::Disabled, QPalette::Base));
+    p.setBrush(QPalette::Text, palette.brush(QPalette::Disabled, QPalette::Text));
+    p.setBrush(QPalette::Highlight, palette.brush(QPalette::Disabled, QPalette::Highlight));
+    p.setBrush(QPalette::HighlightedText, palette.brush(QPalette::Disabled, QPalette::HighlightedText));
+    return p;
+}
+
+//---------------------
+
+void KexiUtils::installRecursiveEventFilter(QObject *object, QObject *filter)
+{
+    if (!object || !filter || !object->isWidgetType())
+        return;
+
+//    kDebug() << "Installing event filter on widget:" << object 
+//        << "directed to" << filter->objectName();
+    object->installEventFilter(filter);
+
+    const QObjectList list(object->children());
+    foreach(QObject *obj, list) {
+        installRecursiveEventFilter(obj, filter);
     }
-    return dest;
+}
+
+void KexiUtils::removeRecursiveEventFilter(QObject *object, QObject *filter)
+{
+    object->removeEventFilter(filter);
+    if (!object->isWidgetType())
+        return;
+
+    const QObjectList list(object->children());
+    foreach(QObject *obj, list) {
+        removeRecursiveEventFilter(obj, filter);
+    }
+}
+
+PaintBlocker::PaintBlocker(QWidget* parent)
+ : QObject(parent)
+ , m_enabled(true)
+{
+    parent->installEventFilter(this);
+}
+
+void PaintBlocker::setEnabled(bool set)
+{
+    m_enabled = set;
+}
+
+bool PaintBlocker::enabled() const
+{
+    return m_enabled;
+}
+
+bool PaintBlocker::eventFilter(QObject* watched, QEvent* event)
+{
+    if (m_enabled && watched == parent() && event->type() == QEvent::Paint) {
+        return true;
+    }
+    return false;
 }
 
 #include "utils_p.moc"

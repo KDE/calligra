@@ -31,8 +31,8 @@
 #include "KexiRelationsScrollArea.h"
 #include "KexiRelationsView.h"
 #include "KexiRelationsConnection.h"
-#include <kexidb/tableschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 

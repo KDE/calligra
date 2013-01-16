@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2008 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,7 +23,6 @@
 #include "komain_export.h"
 
 #include <QObject>
-#include <QMap>
 
 class KoMainWindow;
 
@@ -37,17 +36,21 @@ public:
     explicit KoDockerManager(KoMainWindow* mainWindow);
     ~KoDockerManager();
 
+    void resetToolDockerWidgets();
+
+    void removeToolOptionsDocker();
+
+    /// sets the visibility of the tab and lock icons
+    void setIcons(bool enabled);
+
 public slots:
-    //void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
+    void newOptionWidgets(const QList<QWidget *> & optionWidgetList);
 
 
 private:
-    Q_PRIVATE_SLOT(d, void moveToolBarsBack())
-    Q_PRIVATE_SLOT(d, void moveToolBars())
     Q_PRIVATE_SLOT(d, void restoringDone())
     class Private;
     Private * const d;

@@ -1,9 +1,27 @@
 [Desktop Entry]
 Name=ACL
+Name[bg]=ACL
+Name[ca]=ACL
+Name[ca@valencia]=ACL
+Name[cs]=ACL
+Name[el]=ACL
 Name[es]=ACL
 Name[et]=ACL
+Name[fr]=ACL
+Name[gl]=ACL
+Name[hu]=ACL
+Name[ia]=ACL
+Name[it]=ACL
+Name[kk]=ACL
+Name[nb]=ACL
 Name[nl]=ACL
+Name[pl]=ACL
 Name[pt]=ACL
 Name[pt_BR]=ACL
+Name[ru]=Список контроля доступа (ACL)
+Name[sk]=ACL
+Name[sv]=ACL
 Name[uk]=ACL
 Name[x-test]=xxACLxx
+Name[zh_CN]=ACL
+Name[zh_TW]=存取控制清單

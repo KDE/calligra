@@ -20,12 +20,13 @@
 #include "EllipseShapeFactory.h"
 #include "EllipseShape.h"
 #include "EllipseShapeConfigWidget.h"
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 
@@ -33,19 +34,23 @@ EllipseShapeFactory::EllipseShapeFactory()
     : KoShapeFactoryBase(EllipseShapeId, i18n("Ellipse"))
 {
     setToolTip(i18n( "An ellipse"));
-    setIcon("ellipse-shape");
+    setIconName(koIconNameCStr("ellipse-shape"));
     setFamily("geometric");
-    QStringList elementNames;
-    elementNames << "ellipse" << "circle";
-    setOdfElementNames(KoXmlNS::draw, elementNames);
     setLoadingPriority(1);
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("circle")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("ellipse")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("circle")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("ellipse")));
+    setXmlElements(elementNamesList);
 }
 
-KoShape *EllipseShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *EllipseShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     EllipseShape *ellipse = new EllipseShape();
 
-    ellipse->setBorder(new KoLineBorder(1.0));
+    ellipse->setStroke(new KoShapeStroke(1.0));
     ellipse->setShapeId(KoPathShapeId);
 
     QRadialGradient *gradient = new QRadialGradient(QPointF(0.5,0.5), 0.5, QPointF(0.25,0.25));

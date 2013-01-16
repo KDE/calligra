@@ -28,7 +28,8 @@ class KoShapeLoadingContext;
 class KoChangeTracker;
 class KoStyleManager;
 
-class QTextDocumentFragment;
+class QTextFrame;
+class InsertNodeCommand;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
@@ -36,16 +37,17 @@ class QTextDocumentFragment;
  */
 class KOTEXT_EXPORT KoInlineNote : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// The type of note specifies how the application will use the text from the note.
     enum Type {
         Footnote,      ///< Notes of this type will have their text placed at the bottom of a shape.
         Endnote,       ///< Notes of this type are used as endnotes in applications that support it.
-        Annotation,    ///< Notes of this type will have their text placed in the document margin.
+        Annotation     ///< Notes of this type will have their text placed in the document margin.
     };
 
     /**
-     * Construct a new note to be inserted in the text using KoTextSelectionHandler::insertInlineObject() for example.
+     * Construct a new note to be inserted in the text using KoTextEditor::insertInlineObject() for example.
      * @param type the type of note, which specifies how the application will use the text from the new note.
      */
     KoInlineNote(Type type);
@@ -53,19 +55,11 @@ public:
     virtual ~KoInlineNote();
 
     /**
-     * Set the text that backs this note.
+     * Set the textframe where we will create our own textframe within
+     * Our textframe is the one containing the real note contents.
      * @param text the new text
      */
-    void setText(const QTextDocumentFragment &text);
-
-
-    /**
-     * Set the text that backs this note. The text will have no
-     * formatting.
-     *
-     * @param text the new text
-     */
-    void setText(const QString &text);
+    void setMotherFrame(QTextFrame *text);
 
     /**
      * Set the label that is shown at the spot this inline note is inserted.
@@ -74,19 +68,16 @@ public:
     void setLabel(const QString &text);
 
     /**
-     * Set the id that is used to reference this note.
-     * @param id the new id
+     * Indirectly set the label that is shown at the spot this inline note is inserted.
+     * @param autoNumber the number that the label will portray. 0 should be the first
      */
-    void setId(const QString &id);
+    void setAutoNumber(int autoNumber);
 
     /// return the current text
-    QTextDocumentFragment text() const;
+    QTextFrame *textFrame() const;
 
     /// return the current label
     QString label() const;
-
-    /// return the current id
-    QString id() const;
 
     /**
      * @return whether the label should be automatically recreated or if the label is static.
@@ -103,14 +94,15 @@ public:
     Type type() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoStyleManager *styleManager, KoChangeTracker *changeTracker);
 
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);
 
+    int getPosInDocument();
+
 protected:
     /// reimplemented
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
@@ -120,6 +112,11 @@ protected:
                        const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
+    friend class InsertNoteCommand;
+
+    // only to be used on subsequent redo of insertion
+    void setTextFrame(QTextFrame *textFrame);
+
     class Private;
     Private * const d;
 };

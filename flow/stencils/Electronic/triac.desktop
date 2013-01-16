@@ -1,7 +1,25 @@
 [Desktop Entry]
 Name=triac
+Name[ca]=triac
+Name[ca@valencia]=triac
+Name[cs]=triak
+Name[de]=Doppeltransistor
+Name[el]=triac
+Name[es]=triac
+Name[et]=Sümistor
+Name[fr]=triac
+Name[gl]=Tríodo para corrente alterna
+Name[it]=triac
+Name[kk]=cимистор
+Name[nb]=triac
+Name[nds]=Triac
+Name[nl]=triac
+Name[pl]=triak
 Name[pt]=triac
 Name[pt_BR]=triac
+Name[ru]=Симистор
+Name[sk]=triak
 Name[sv]=triac
 Name[uk]=Симістор
 Name[x-test]=xxtriacxx
+Name[zh_TW]=triac

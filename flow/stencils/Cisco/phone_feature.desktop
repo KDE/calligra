@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=Phone Feature
+Name[ca]=Característica de telèfon
+Name[ca@valencia]=Característica de telèfon
+Name[el]=Χαρακτηριστικό τηλεφώνου
+Name[es]=Funcionalidad del teléfono
+Name[et]=Lihtne telefon
+Name[fr]=Propriété téléphonique
+Name[gl]=Funcionalidade telefónica
+Name[it]=Funzionalità telefono
+Name[kk]=Телефон мүмкіншілігі
+Name[nb]=Telefonfunksjon
+Name[nl]=Telefooneigenschap
+Name[pl]=Funkcje telefonu
 Name[pt]=Funcionalidade Telefone
 Name[pt_BR]=Funcionalidade de telefone
+Name[ru]=Дополнение телефона
+Name[sk]=Telefónna funkcia
 Name[sv]=Telefonfunktion
 Name[uk]=Додатки телефону
 Name[x-test]=xxPhone Featurexx
+Name[zh_CN]=电话功能
+Name[zh_TW]=電話功能

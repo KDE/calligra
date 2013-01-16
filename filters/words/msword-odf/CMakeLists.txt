@@ -1,10 +1,10 @@
 add_subdirectory(wv2)
 
 INCLUDE_DIRECTORIES(
-    ${GLIB2_INCLUDE_DIR} ${LIBGSF_INCLUDE_DIR} ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
+    ${ICONV_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR}
     ../../libmso
     ../../libmsooxml
-    ../../tables/xlsx/
+    ../../sheets/xlsx/
 )
 
 set(mswordodf_import_PART_SRCS
@@ -15,9 +15,8 @@ set(mswordodf_import_PART_SRCS
    paragraph.cpp
    tablehandler.cpp
    graphicshandler.cpp
-   fibbase.cpp
    drawclient.cpp
-   ../../tables/xlsx/NumberFormatParser.cpp
+   ../../sheets/xlsx/NumberFormatParser.cpp
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
@@ -31,4 +30,4 @@ target_link_libraries(mswordodf_import kowv2 komain mso msooxml ${ZLIB_LIBRARIES
 install(TARGETS mswordodf_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  words_msword-odf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-
+install( FILES  words_msword_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

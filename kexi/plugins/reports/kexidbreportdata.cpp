@@ -18,29 +18,52 @@
 
 #include "kexidbreportdata.h"
 #include <kdebug.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <core/kexipart.h>
 #include <QDomDocument>
 
 
-KexiDBReportData::KexiDBReportData ( const QString &qstrSQL,
-                                     KexiDB::Connection * pDb ) : m_cursor(0), m_connection(pDb), m_originalSchema(0), m_copySchema(0), m_parser(0)
+class KexiDBReportData::Private
 {
-    m_qstrQuery = qstrSQL;
-    m_parser = new KexiDB::Parser(m_connection);
+public:
+    Private(KexiDB::Connection *pDb)
+      : cursor(0), connection(pDb), originalSchema(0), copySchema(0)
+    {
+    }
+    ~Private()
+    {
+        delete copySchema;
+        delete originalSchema;
+        delete cursor;
+    }
+
+
+    QString qstrQuery;
+
+    KexiDB::Cursor *cursor;
+    KexiDB::Connection *connection;
+    KexiDB::QuerySchema *originalSchema;
+    KexiDB::QuerySchema *copySchema;
+};
+
+KexiDBReportData::KexiDBReportData (const QString &qstrSQL,
+                                    KexiDB::Connection * pDb)
+        : d(new Private(pDb))
+{
+    d->qstrQuery = qstrSQL;
     getSchema();
 }
 
 void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
 {
-    if (m_copySchema) {
+    if (d->copySchema) {
         if (sorting.isEmpty())
             return;
         KexiDB::OrderByColumnList order;
         for (int i = 0; i < sorting.count(); i++) {
-            order.appendField(*m_copySchema, sorting[i].field, sorting[i].order == Qt::AscendingOrder);
+            order.appendField(*d->copySchema, sorting[i].field, sorting[i].order == Qt::AscendingOrder);
         }
-        m_copySchema->setOrderByColumnList(order);
+        d->copySchema->setOrderByColumnList(order);
     } else {
         kDebug() << "Unable to sort null schema";
     }
@@ -48,10 +71,10 @@ void KexiDBReportData::setSorting(const QList<SortedField>& sorting)
 
 void KexiDBReportData::addExpression(const QString& field, const QVariant& value, int relation)
 {
-    if (m_copySchema) {
-        KexiDB::Field *fld = m_copySchema->findTableField(field);
+    if (d->copySchema) {
+        KexiDB::Field *fld = d->copySchema->findTableField(field);
         if (fld) {
-            m_copySchema->addToWhereExpression(fld, value, relation);
+            d->copySchema->addToWhereExpression(fld, value, relation);
         }
     } else {
         kDebug() << "Unable to add expresstion to null schema";
@@ -61,31 +84,28 @@ void KexiDBReportData::addExpression(const QString& field, const QVariant& value
 KexiDBReportData::~KexiDBReportData()
 {
     close();
-    delete m_parser;
-    delete m_copySchema;
-    delete m_originalSchema;
-    delete m_cursor;    
+    delete d;
 }
 
 bool KexiDBReportData::open()
 {
-    if ( m_connection && m_cursor == 0 )
+    if ( d->connection && d->cursor == 0 )
     {
-        if ( m_qstrQuery.isEmpty() )
+        if ( d->qstrQuery.isEmpty() )
         {
-            m_cursor = m_connection->executeQuery ( "SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'" );
+            d->cursor = d->connection->executeQuery ( "SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'" );
         }
-        else if ( m_copySchema)
+        else if ( d->copySchema)
         {
-            kDebug() << "Opening cursor.." << m_copySchema->debugString();
-            m_cursor = m_connection->executeQuery ( *m_copySchema, 1 );
+            kDebug() << "Opening cursor.." << d->copySchema->debugString();
+            d->cursor = d->connection->executeQuery ( *d->copySchema, 1 );
         }
 
-        
-        if ( m_cursor )
+
+        if ( d->cursor )
         {
-            kDebug() << "Moving to first row..";
-            return m_cursor->moveFirst();
+            kDebug() << "Moving to first record..";
+            return d->cursor->moveFirst();
         }
         else
             return false;
@@ -95,11 +115,11 @@ bool KexiDBReportData::open()
 
 bool KexiDBReportData::close()
 {
-    if ( m_cursor )
+    if ( d->cursor )
     {
-        m_cursor->close();
-        delete m_cursor;
-        m_cursor = 0;
+        d->cursor->close();
+        delete d->cursor;
+        d->cursor = 0;
     }
 
     return true;
@@ -107,33 +127,32 @@ bool KexiDBReportData::close()
 
 bool KexiDBReportData::getSchema()
 {
-    if ( m_connection )
+    if ( d->connection )
     {
-        delete m_originalSchema;
-        delete m_copySchema;
-        
-        if ( m_connection->tableSchema ( m_qstrQuery ) )
+        delete d->originalSchema;
+        delete d->copySchema;
+
+        if ( d->connection->tableSchema ( d->qstrQuery ) )
         {
-            kDebug() << m_qstrQuery <<  " is a table..";
-            m_originalSchema = new KexiDB::QuerySchema ( *(m_connection->tableSchema ( m_qstrQuery )) );
+            kDebug() << d->qstrQuery <<  " is a table..";
+            d->originalSchema = new KexiDB::QuerySchema ( *(d->connection->tableSchema ( d->qstrQuery )) );
         }
-        else if ( m_connection->querySchema ( m_qstrQuery ) )
+        else if ( d->connection->querySchema ( d->qstrQuery ) )
         {
-            kDebug() << m_qstrQuery <<  " is a query..";
-            m_originalSchema = m_connection->querySchema ( m_qstrQuery );
+            kDebug() << d->qstrQuery <<  " is a query..";
+            d->connection->querySchema(d->qstrQuery)->debug();
+            d->originalSchema = new KexiDB::QuerySchema(*(d->connection->querySchema ( d->qstrQuery )));
         }
 
-        if (m_originalSchema) {
-            kDebug() << "Original:" << m_connection->selectStatement(*m_originalSchema);
-            
-            //m_copySchema = new KexiDB::QuerySchema(*m_originalSchema);
-            
-            m_parser->parse(m_connection->selectStatement(*m_originalSchema));
-            m_copySchema = m_parser->query();
-            
-            kDebug() << "Copy:" << m_connection->selectStatement(*m_copySchema);
+        if (d->originalSchema) {
+            kDebug() << "Original:" << d->connection->selectStatement(*d->originalSchema);
+            d->originalSchema->debug();
+
+            d->copySchema = new KexiDB::QuerySchema(*d->originalSchema);
+            d->copySchema->debug();
+            kDebug() << "Copy:" << d->connection->selectStatement(*d->copySchema);
         }
-        
+
         return true;
     }
     return false;
@@ -141,48 +160,44 @@ bool KexiDBReportData::getSchema()
 
 QString KexiDBReportData::sourceName() const
 {
-    return m_qstrQuery;
+    return d->qstrQuery;
 }
 
-uint KexiDBReportData::fieldNumber ( const QString &fld ) const
+int KexiDBReportData::fieldNumber ( const QString &fld ) const
 {
-    KexiDB::QueryColumnInfo::Vector flds;
-    
-    uint x = -1;
-    if ( m_cursor && m_cursor->query() )
-    {
-        flds = m_cursor->query()->fieldsExpanded();
-    }
 
-    for ( int i = 0; i < flds.size() ; ++i )
-    {
-        if ( fld.toLower() == flds[i]->aliasOrName().toLower() )
-        {
-            x = i;
+    if (!d->cursor || !d->cursor->query()) {
+        return -1;
+    }
+    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(
+        d->cursor->query()->fieldsExpanded(KexiDB::QuerySchema::Unique));
+    for (int i = 0; i < fieldsExpanded.size() ; ++i) {
+        if (0 == QString::compare(fld, fieldsExpanded[i]->aliasOrName(), Qt::CaseInsensitive)) {
+            return i;
         }
     }
-    return x;
+    return -1;
 }
 
 QStringList KexiDBReportData::fieldNames() const
 {
-    QStringList names;
-
-    if ( m_originalSchema )
-    {
-        for(unsigned int i = 0; i < m_originalSchema->fieldCount(); ++i)
-        {
-            names << m_originalSchema->field(i)->name();
-        }
+    if (!d->originalSchema) {
+        return QStringList();
     }
-
+    QStringList names;
+    const KexiDB::QueryColumnInfo::Vector fieldsExpanded(
+        d->originalSchema->fieldsExpanded(KexiDB::QuerySchema::Unique));
+    for (int i = 0; i < fieldsExpanded.size(); i++) {
+//! @todo in some Kexi mode captionOrAliasOrName() would be used here (more user-friendly)
+        names.append(fieldsExpanded[i]->aliasOrName());
+    }
     return names;
 }
 
 QVariant KexiDBReportData::value ( unsigned int i ) const
 {
-    if ( m_cursor )
-        return m_cursor->value ( i );
+    if ( d->cursor )
+        return d->cursor->value ( i );
 
     return QVariant();
 }
@@ -191,55 +206,55 @@ QVariant KexiDBReportData::value ( const QString &fld ) const
 {
     int i = fieldNumber ( fld );
 
-    if ( m_cursor )
-        return m_cursor->value ( i );
+    if ( d->cursor )
+        return d->cursor->value ( i );
 
     return QVariant();
 }
 
 bool KexiDBReportData::moveNext()
 {
-    if ( m_cursor )
-        return m_cursor->moveNext();
+    if ( d->cursor )
+        return d->cursor->moveNext();
 
     return false;
 }
 
 bool KexiDBReportData::movePrevious()
 {
-    if ( m_cursor ) return m_cursor->movePrev();
+    if ( d->cursor ) return d->cursor->movePrev();
 
     return false;
 }
 
 bool KexiDBReportData::moveFirst()
 {
-    if ( m_cursor ) return m_cursor->moveFirst();
+    if ( d->cursor ) return d->cursor->moveFirst();
 
     return false;
 }
 
 bool KexiDBReportData::moveLast()
 {
-    if ( m_cursor )
-        return m_cursor->moveLast();
+    if ( d->cursor )
+        return d->cursor->moveLast();
 
     return false;
 }
 
 qint64 KexiDBReportData::at() const
 {
-    if ( m_cursor )
-        return m_cursor->at();
+    if ( d->cursor )
+        return d->cursor->at();
 
     return 0;
 }
 
 qint64 KexiDBReportData::recordCount() const
 {
-    if ( m_copySchema )
+    if ( d->copySchema )
     {
-        return KexiDB::rowCount ( *m_copySchema );
+        return KexiDB::rowCount ( *d->copySchema );
     }
     else
     {
@@ -251,9 +266,9 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
 {
     QStringList scripts;
 
-    if( m_connection) {
-        QList<int> scriptids = m_connection->objectIds(KexiPart::ScriptObjectType);
-        QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
+    if( d->connection) {
+        QList<int> scriptids = d->connection->objectIds(KexiPart::ScriptObjectType);
+        QStringList scriptnames = d->connection->objectNames(KexiPart::ScriptObjectType);
         QString script;
 
         int i;
@@ -265,11 +280,11 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
         //A blank entry
         scripts << "";
 
-       
+
         foreach(int id, scriptids) {
             kDebug() << "ID:" << id;
             tristate res;
-            res = m_connection->loadDataBlock(id, script, QString());
+            res = d->connection->loadDataBlock(id, script, QString());
             if (res == true) {
                 QDomDocument domdoc;
                 bool parsed = domdoc.setContent(script, false);
@@ -287,7 +302,7 @@ QStringList KexiDBReportData::scriptList(const QString& interpreter) const
             }
             ++i;
         }
-        
+
         kDebug() << scripts;
     }
 
@@ -298,30 +313,30 @@ QString KexiDBReportData::scriptCode(const QString& scriptname, const QString& l
 {
     QString scripts;
 
-    if (m_connection) {
-        QList<int> scriptids = m_connection->objectIds(KexiPart::ScriptObjectType);
-        QStringList scriptnames = m_connection->objectNames(KexiPart::ScriptObjectType);
-        
+    if (d->connection) {
+        QList<int> scriptids = d->connection->objectIds(KexiPart::ScriptObjectType);
+        QStringList scriptnames = d->connection->objectNames(KexiPart::ScriptObjectType);
+
         int i = 0;
         QString script;
 
         foreach(int id, scriptids) {
             kDebug() << "ID:" << id;
             tristate res;
-            res = m_connection->loadDataBlock(id, script, QString());
+            res = d->connection->loadDataBlock(id, script, QString());
             if (res == true) {
                 QDomDocument domdoc;
                 bool parsed = domdoc.setContent(script, false);
 
                 if (! parsed) {
                     kDebug() << "XML parsing error";
-                    return false;
+                    return QString();
                 }
 
                 QDomElement scriptelem = domdoc.namedItem("script").toElement();
                 if (scriptelem.isNull()) {
                     kDebug() << "script domelement is null";
-                    return false;
+                    return QString();
                 }
 
                 QString interpretername = scriptelem.attribute("language");
@@ -345,19 +360,19 @@ QStringList KexiDBReportData::dataSources() const
 {
     //Get the list of queries in the database
     QStringList qs;
-    if (m_connection && m_connection->isConnected()) {
-        QList<int> tids = m_connection->tableIds();
+    if (d->connection && d->connection->isConnected()) {
+        QList<int> tids = d->connection->tableIds();
         qs << "";
         for (int i = 0; i < tids.size(); ++i) {
-            KexiDB::TableSchema* tsc = m_connection->tableSchema(tids[i]);
+            KexiDB::TableSchema* tsc = d->connection->tableSchema(tids[i]);
             if (tsc)
                 qs << tsc->name();
         }
 
-        QList<int> qids = m_connection->queryIds();
+        QList<int> qids = d->connection->queryIds();
         qs << "";
         for (int i = 0; i < qids.size(); ++i) {
-            KexiDB::QuerySchema* qsc = m_connection->querySchema(qids[i]);
+            KexiDB::QuerySchema* qsc = d->connection->querySchema(qids[i]);
             if (qsc)
                 qs << qsc->name();
         }
@@ -368,5 +383,5 @@ QStringList KexiDBReportData::dataSources() const
 
 KoReportData* KexiDBReportData::data(const QString& source)
 {
-return new KexiDBReportData(source, m_connection);
+    return new KexiDBReportData(source, d->connection);
 }

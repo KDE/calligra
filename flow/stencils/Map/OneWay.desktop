@@ -1,8 +1,24 @@
 [Desktop Entry]
 Name=OneWay
+Name[ca]=OneWay
+Name[ca@valencia]=OneWay
+Name[de]=Einbahnstraße
+Name[el]=OneWay
+Name[es]=Camino único
 Name[et]=Ühesuunaline
+Name[fi]=Yksisuuntainen
+Name[fr]=Sens unique
+Name[gl]=Dirección única
+Name[it]=Una via
+Name[kk]=БірБағыты
+Name[nb]=EnVei
+Name[nl]=Eén richting
+Name[pl]=Jednokierunkowy
 Name[pt]=SentidoÚnico
 Name[pt_BR]=Sentido único
+Name[ru]=Одностороннее движение
+Name[sk]=Jedna cesta
 Name[sv]=Enkelriktat
 Name[uk]=Однобічний шлях
 Name[x-test]=xxOneWayxx
+Name[zh_TW]=單行道

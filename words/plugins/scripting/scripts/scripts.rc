@@ -2,7 +2,7 @@
 <KrossScripting>
 
     <!--
-        The "import" collection provides scripts to import content into KWord.
+        The "import" collection provides scripts to import content into Words.
         //-->
     <collection name="import" text="Import" comment="Import content">
         <script text="Text or HTML File" comment="Python script to import content from a text or html file"
@@ -20,7 +20,7 @@
     </collection>
 
     <!--
-        The "export" collection provides scripts to export content from KWord.
+        The "export" collection provides scripts to export content from Words.
         //-->
     <collection name="export" text="Export" comment="Export content">
         <script text="Text or HTML File" comment="Python script to export content to a text or html file"
@@ -35,7 +35,7 @@
 
     <!--
         The "tools" collection provides misc example scripts to demonstrate
-        parts of the KWord scripting functionality.
+        parts of the Words scripting functionality.
         //-->
     <collection name="tools" text="Tools" comment="Miscellaneous scripts">
         <script text="XML Viewer" comment="Python script to view the OpenDocument XML representation of the current document"
@@ -46,18 +46,18 @@
                name="rbdoctree"
                interpreter="ruby"
                file="extensions/doctree.rb" />
-        <script text="Online Help" comment="Python script that uses the KHTML Part to display the KWord Scripting online help"
+        <script text="Online Help" comment="Python script that uses the KHTML Part to display the Words Scripting online help"
                name="pyonlinehelp"
                interpreter="python"
                file="extensions/onlinehelp.py" />
     </collection>
 
     <!--
-        The "variables" collection provides scripting variables to KWord. Those
+        The "variables" collection provides scripting variables to Words. Those
         scripting variables are displayed in the Insert=>Variable menu and
         they are able to map functions like to get the variable content or to
         create an options widget for a variable from within scripts.
-    <collection name="variables" text="Variables" comment="Scripting variables for KWord" enabled="false">
+    <collection name="variables" text="Variables" comment="Scripting variables for Words" enabled="false">
             This script reads the value of a variable from an external file.
         <script text="Read From File..." comment="Python script to read a variable from a file"
             name="pyvariablereadfile"
@@ -75,9 +75,9 @@
 
     <!--
         The "samples" collection provides misc example scripts to demonstrate
-        parts of the KWord scripting functionality.
+        parts of the Words scripting functionality.
         //-->
-    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord" enabled="false">
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with Words" enabled="false">
         <script text="Insert Shape..." comment="Python script to insert a shape"
             name="pysampleinsertshape"
             interpreter="python"

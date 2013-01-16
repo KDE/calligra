@@ -29,7 +29,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -49,7 +48,7 @@
 #include "dlg_histogram.h"
 #include "KoColorSpace.h"
 #include "kis_histogram.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 
 K_PLUGIN_FACTORY(HistogramFactory, registerPlugin<Histogram>();)
 K_EXPORT_PLUGIN(HistogramFactory("krita"))
@@ -58,9 +57,6 @@ Histogram::Histogram(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-
-        setComponentData(HistogramFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/histogram.rc"),
                    true);
 
@@ -69,13 +65,14 @@ Histogram::Histogram(QObject *parent, const QVariantList &)
         connect(m_action,  SIGNAL(triggered()), this, SLOT(slotActivated()));
 
         m_view = (KisView2*) parent;
-        if (KisImageWSP image = m_view->image()) {
-            connect(image.data(), SIGNAL(sigLayersChanged(KisGroupLayerSP)), SLOT(slotLayersChanged()));
-            connect(image.data(), SIGNAL(sigNodeHasBeenAdded(KisNode *, int)), SLOT(slotLayersChanged()));
-            connect(m_view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
-            connect(image.data(), SIGNAL(sigLayerPropertiesChanged(KisLayerSP)), SLOT(slotLayersChanged()));
-            connect(image.data(), SIGNAL(sigNodeHasBeenRemoved(KisNode *, int)), SLOT(slotLayersChanged()));
-            m_image = image.data();
+        m_image = m_view->image();
+
+        if (m_image) {
+            connect(m_image, SIGNAL(sigLayersChangedAsync()), SLOT(slotLayersChanged()));
+            connect(m_image, SIGNAL(sigNodeAddedAsync(KisNodeSP)), SLOT(slotLayersChanged()));
+            connect(m_image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)), SLOT(slotLayersChanged()));
+
+            connect(m_view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(slotLayersChanged()));
         }
     }
 }
@@ -86,7 +83,7 @@ Histogram::~Histogram()
 
 void Histogram::slotLayersChanged()
 {
-    m_action->setEnabled(m_image && m_view->layerManager()->activeLayer() && m_view->layerManager()->activeLayer()->visible());
+    m_action->setEnabled(m_image && m_view->nodeManager()->activeLayer());
 }
 
 void Histogram::slotActivated()
@@ -94,7 +91,7 @@ void Histogram::slotActivated()
     DlgHistogram * dlgHistogram = new DlgHistogram(m_view, "Histogram");
     Q_CHECK_PTR(dlgHistogram);
 
-    KisLayerSP layer = m_view->layerManager()->activeLayer();
+    KisLayerSP layer = m_view->nodeManager()->activeLayer();
     if (layer) {
         KisPaintDeviceSP dev = layer->paintDevice();
 

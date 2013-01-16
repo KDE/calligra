@@ -131,12 +131,17 @@ private:
     inline void unregisterTileDataImp(KisTileData *td);
     void freeRegisteredTiles();
 
+    friend class DeadlockyThread;
+    friend class KisLowMemoryTests;
     void debugSwapAll();
     void debugClear();
 
     friend class KisTiledDataManagerTest;
     void testingSuspendPooler();
     void testingResumePooler();
+
+    friend class KisLowMemoryBenchmark;
+    void testingRereadConfig();
 private:
     KisTileDataPooler m_pooler;
     KisTileDataSwapper m_swapper;

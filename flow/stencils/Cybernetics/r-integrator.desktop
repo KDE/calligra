@@ -1,6 +1,23 @@
 [Desktop Entry]
 Name=r-integrator
+Name[ca]=integrador-r
+Name[ca@valencia]=integrador-r
+Name[el]=r-integrator
+Name[es]=integrador derecho
+Name[et]=Parem integreerimislüli
+Name[fr]=r-intégrateur
+Name[gl]=Integrador R
+Name[hu]=r-integrátor
+Name[it]=r-integrator
+Name[kk]=оң-ж-интегратор
+Name[nb]=r-integrator
+Name[nl]=r-integrator
+Name[pl]=r-całkowanie
 Name[pt]=integrador-r
 Name[pt_BR]=integrator-r
+Name[ru]=r-интегратор
+Name[sk]=r-integrator
+Name[sv]=h-integrator
 Name[uk]=Інтегратор (вхід праворуч)
 Name[x-test]=xxr-integratorxx
+Name[zh_TW]=r-integrator

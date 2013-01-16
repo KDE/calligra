@@ -1,6 +1,8 @@
 Kexi tests
 ----------
 
+Note: these are functional tests, not unit tests.
+
 newapi/    New KexiDB API test in few aspects
 parser/    Interactive test of KEXISQL parser
 tableview/ Test for not-data-aware KexiTableView widget

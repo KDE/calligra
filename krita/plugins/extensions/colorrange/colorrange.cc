@@ -29,7 +29,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -47,6 +46,7 @@
 #include "kis_selection_manager.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_canvas2.h"
+#include "kis_iterator_ng.h"
 
 #include "dlg_colorrange.h"
 #include <KoColorSpace.h>
@@ -58,20 +58,21 @@ ColorRange::ColorRange(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ColorRangeFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/colorrange.rc"),
                    true);
         m_view = dynamic_cast<KisView2*>(parent);
-        QAction *action  = new KAction(i18n("Select from Color Range..."), this);
-        actionCollection()->addAction("colorrange", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(slotActivated()));
-        m_view->selectionManager()->addSelectionAction(action);
+        m_selectRange = new KAction(i18n("Select from Color Range..."), this);
+        actionCollection()->addAction("colorrange", m_selectRange);
+        connect(m_selectRange, SIGNAL(triggered()), this, SLOT(slotActivated()));
+        m_view->selectionManager()->addSelectionAction(m_selectRange);
 
-        action  = new KAction(i18n("Select Opaque"), this);
-        actionCollection()->addAction("selectopaque", action);
-        connect(action, SIGNAL(triggered()), this, SLOT(selectOpaque()));
-        m_view->selectionManager()->addSelectionAction(action);
+        m_selectOpaque  = new KAction(i18n("Select Opaque"), this);
+        actionCollection()->addAction("selectopaque", m_selectOpaque);
+        connect(m_selectOpaque, SIGNAL(triggered()), this, SLOT(selectOpaque()));
+        m_view->selectionManager()->addSelectionAction(m_selectOpaque);
+
+        connect(m_view->selectionManager(), SIGNAL(signalUpdateGUI()),
+                SLOT(slotUpdateGUI()));
     }
 }
 
@@ -79,12 +80,16 @@ ColorRange::~ColorRange()
 {
 }
 
+void ColorRange::slotUpdateGUI()
+{
+    bool enable = m_view->selectionEditable();
+    m_selectRange->setEnabled(enable);
+    m_selectOpaque->setEnabled(enable);
+}
+
 void ColorRange::slotActivated()
 {
-    KisPaintDeviceSP layer = m_view->activeDevice();
-    if (!layer) return;
-
-    DlgColorRange * dlgColorRange = new DlgColorRange(m_view, layer, m_view, "ColorRange");
+    DlgColorRange *dlgColorRange = new DlgColorRange(m_view, m_view);
     Q_CHECK_PTR(dlgColorRange);
 
     dlgColorRange->exec();
@@ -96,32 +101,34 @@ void ColorRange::selectOpaque()
     if (!canvas)
         return;
     
-    KisLayerSP layer = m_view->activeLayer();
-    if(!layer)
+    KisNodeSP node = m_view->activeNode();
+    if(!node)
         return;
     
-    KisPaintDeviceSP device = layer->paintDevice();
+    KisPaintDeviceSP device = node->paintDevice();
     if (!device) return;
     
-    KisSelectionToolHelper helper(canvas, layer, i18n("Select Opaque"));
+    KisSelectionToolHelper helper(canvas, node, i18n("Select Opaque"));
     
     qint32 x, y, w, h;
-    device->exactBounds(x, y, w, h);
+    QRect rc = device->exactBounds();
+    x = rc.x();
+    y = rc.y();
+    w = rc.width();
+    h = rc.height();
+    
     const KoColorSpace * cs = device->colorSpace();
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
-    KisHLineConstIterator deviter = device->createHLineConstIterator(x, y, w);
-    KisHLineIterator selIter = tmpSel ->createHLineIterator(x, y, w);
+    KisHLineConstIteratorSP deviter = device->createHLineConstIteratorNG(x, y, w);
+    KisHLineIteratorSP selIter = tmpSel ->createHLineIteratorNG(x, y, w);
 
     for (int row = y; row < h + y; ++row) {
-        while (!deviter.isDone()) {
-            *selIter.rawData() = cs->opacityU8(deviter.rawData());
-            
-            ++deviter;
-            ++selIter;            
-        }      
-        deviter.nextRow();
-        selIter.nextRow();
+        do {
+            *selIter->rawData() = cs->opacityU8(deviter->oldRawData());
+        } while (deviter->nextPixel() && selIter->nextPixel());
+        deviter->nextRow();
+        selIter->nextRow();
     }
 
     helper.selectPixelSelection(tmpSel, SELECTION_ADD);

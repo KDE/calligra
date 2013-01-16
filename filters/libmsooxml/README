@@ -1,4 +1,4 @@
-MS OOXML filters helper library for KOffice.
+MS OOXML filters helper library for Calligra.
 Contains common code for XLSX, DOCX, PPTX filters for MS Office 2007.
 
 References to the ECMA-376 specification in the source code are made

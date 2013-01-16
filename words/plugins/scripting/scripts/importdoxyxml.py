@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-This KWord python script implements import of with doxygen generated content into KWord.
+This Words python script implements import of with doxygen generated content into Words.
 
 To generate the handbook from within the commandline;
     cd kspread/plugins/scripting/docs
@@ -10,8 +10,8 @@ To generate the handbook from within the commandline;
     cd xml
     xsltproc combine.xslt index.xml | ../doxy2doc.py ../kspread.html
 
-To import the handbook in KWord, first generate the doxygen xml file like demonstrated
-bellow and then use in KWord the "Import Doxygen XML File" python script;
+To import the handbook in Words, first generate the doxygen xml file like demonstrated
+bellow and then use in Words the "Import Doxygen XML File" python script;
     cd kspread/plugins/scripting/docs
     doxygen kspreadscripting.doxyfile
     cd xml
@@ -335,10 +335,10 @@ class Writer:
 
 class ImportDialog:
     """ The dialog we are using to provide some frontend to the user if the script runs
-    for example embedded in KWord. """
+    for example embedded in Words. """
 
     def __init__(self, action, config):
-        import Kross, KWord
+        import Kross, Words
 
         self.action = action
         self.config = config
@@ -349,7 +349,7 @@ class ImportDialog:
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         openpage = self.dialog.addPage("Open","Import Doxygen XML File","document-open")
-        openwidget = forms.createFileWidget(openpage, "kfiledialog:///kwordsampleimportfile")
+        openwidget = forms.createFileWidget(openpage, "kfiledialog:///wordssampleimportfile")
         openwidget.setMode("Opening")
         #openwidget.minimumWidth = 540
         #openwidget.minimumHeight = 400
@@ -388,7 +388,7 @@ class ImportDialog:
         self.dialog.delayedDestruct()
 
     def importFile(self, styles):
-        import Kross, KWord
+        import Kross, Words
 
         try:
             file = open(self.config.FileName, "r")
@@ -397,10 +397,10 @@ class ImportDialog:
 
         xmldoc = xml.dom.minidom.parse( file )
 
-        kwdoc = KWord.mainFrameSet().document()
+        kwdoc = Words.mainFrameSet().document()
         kwdoc.setDefaultStyleSheet("%s" % styles)
 
-        class KWordFileWriter:
+        class WordsFileWriter:
             def __init__(self, kwdoc):
                 self.kwdoc = kwdoc
                 self.lines = []
@@ -409,7 +409,7 @@ class ImportDialog:
             def flush(self):
                 self.kwdoc.setHtml(' '.join(self.lines))
         writer = Writer(xmldoc, self.config)
-        kwwriter = KWordFileWriter(kwdoc)
+        kwwriter = WordsFileWriter(kwdoc)
         writer.writeHtml(kwwriter)
         kwwriter.flush()
 
@@ -429,7 +429,7 @@ if __name__=="__main__":
     writer.writeHtml(file)
 
 else:
-    # We are probably embedded into e.g. KWord. But in any case we display
+    # We are probably embedded into e.g. Words. But in any case we display
     # the import-dialog to let the user choose what he wanna do.
     import Kross
     ImportDialog(self, Config())

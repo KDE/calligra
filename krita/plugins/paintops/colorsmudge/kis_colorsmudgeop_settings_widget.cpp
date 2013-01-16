@@ -20,6 +20,7 @@
 #include "kis_brush_based_paintop_settings.h"
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option_widget.h"
+#include "kis_smudge_option_widget.h"
 
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
@@ -31,20 +32,26 @@
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_gradient_option.h>
-
+#include <kis_airbrush_option.h>
+#include <kis_compositeop_option.h>
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
+    setPrecisionEnabled(true);
 
+//     KisSmudgeOptionWidget* opt = 
+
+    addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSpacingOption()));
-    addPaintOpOption(new KisRateOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
+    addPaintOpOption(new KisSmudgeOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
     addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());
+//     addPaintOpOption(new KisAirbrushOption(false));
     addPaintOpOption(new KisOverlayModeOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption()));
 }

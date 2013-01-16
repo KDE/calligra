@@ -31,17 +31,16 @@
 #include <KarbonGradientHelper.h>
 
 #include <KLocale>
-#include <KIconLoader>
 #include <KColorDialog>
 
-#include <QtGui/QLabel>
-#include <QtGui/QBitmap>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QPixmap>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
+#include <QLabel>
+#include <QBitmap>
+#include <QPaintEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPointF>
+#include <QRectF>
 
 #include <limits>
 

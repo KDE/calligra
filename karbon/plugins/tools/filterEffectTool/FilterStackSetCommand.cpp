@@ -23,8 +23,8 @@
 
 #include <KLocale>
 
-FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent), m_newFilterStack(newStack), m_shape(shape)
+FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent), m_newFilterStack(newStack), m_shape(shape)
 {
     Q_ASSERT(m_shape);
     m_oldFilterStack = m_shape->filterEffectStack();
@@ -33,7 +33,7 @@ FilterStackSetCommand::FilterStackSetCommand(KoFilterEffectStack *newStack, KoSh
     if (m_oldFilterStack)
         m_oldFilterStack->ref();
 
-    setText(i18n("Set filter stack"));
+    setText(i18nc("(qtundo-format)", "Set filter stack"));
 }
 
 FilterStackSetCommand::~FilterStackSetCommand()
@@ -46,7 +46,7 @@ FilterStackSetCommand::~FilterStackSetCommand()
 
 void FilterStackSetCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     m_shape->update();
     m_shape->setFilterEffectStack(m_newFilterStack);
@@ -59,5 +59,5 @@ void FilterStackSetCommand::undo()
     m_shape->setFilterEffectStack(m_oldFilterStack);
     m_shape->update();
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=xor h
+Name[ca]=xor h
+Name[ca@valencia]=xor h
+Name[el]=xor h
+Name[es]=XOR horizontal
+Name[et]=Horisontaalne välistav või
+Name[fr]=xor h
+Name[gl]=OU-exclusivo (XOR) horizontal
+Name[it]=xor h
+Name[kk]=лог-сиысп-немесе жатық
+Name[nb]=xor vannr
+Name[nl]=xor h
+Name[pl]=xor h
 Name[pt]=xor h
 Name[pt_BR]=xor h
+Name[ru]=xor h
+Name[sk]=xor h
 Name[sv]=xor h
 Name[uk]=Виключне «АБО» (горизонтально)
 Name[x-test]=xxxor hxx
+Name[zh_TW]=xor h

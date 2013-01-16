@@ -22,28 +22,19 @@
 #include <QString>
 #include <QStringList>
 
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <migration/migratemanager.h>
 #include <migration/keximigrate.h>
 #include <KoReportData.h>
 
 class KexiMigrateReportData : public KoReportData
 {
-private:
-    QString m_qstrName;
-    QString m_qstrQuery;
-    bool m_valid;
-    KexiDB::TableSchema m_TableSchema;
-    KexiDB::TableOrQuerySchema *m_schema;
-    KexiMigration::KexiMigrate *m_kexiMigrate;
-    qint64 m_position;
-
 public:
     KexiMigrateReportData(const QString &);
 
     virtual ~KexiMigrateReportData();
 
-    virtual unsigned int fieldNumber(const QString &field) const;
+    virtual int fieldNumber(const QString &field) const;
     virtual QStringList fieldNames() const;
 
     virtual QVariant value(unsigned int) const;
@@ -63,6 +54,10 @@ public:
     virtual qint64 at() const;
 
     virtual qint64 recordCount() const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

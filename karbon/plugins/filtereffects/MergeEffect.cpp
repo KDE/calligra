@@ -22,8 +22,8 @@
 #include "KoXmlWriter.h"
 #include "KoXmlReader.h"
 #include <KLocale>
-#include <QtCore/QRect>
-#include <QtGui/QPainter>
+#include <QRect>
+#include <QPainter>
 #include <limits.h>
 
 MergeEffect::MergeEffect()

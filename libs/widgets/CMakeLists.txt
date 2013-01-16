@@ -2,6 +2,14 @@ add_subdirectory( tests )
 add_subdirectory( pics )
 
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
+if (LIBATTICA_FOUND)
+    include_directories(${LIBATTICA_INCLUDE_DIR})
+endif (LIBATTICA_FOUND)
+
+if(NEPOMUK)
+    include(SopranoAddOntology)
+    include_directories(${SOPRANO_INCLUDE_DIR} ${NEPOMUK_INCLUDES})
+endif(NEPOMUK)
 
 set(kowidgets_LIB_SRCS
     KoAspectButton.cpp
@@ -38,6 +46,7 @@ set(kowidgets_LIB_SRCS
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
+    KoResourceTagging.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -45,8 +54,16 @@ set(kowidgets_LIB_SRCS
     KoLineStyleSelector.cpp
     KoLineStyleItemDelegate.cpp
     KoLineStyleModel.cpp
+    KoMarkerModel.cpp
+    KoMarkerItemDelegate.cpp
+    KoMarkerSelector.cpp
     KoDockWidgetTitleBar.cpp
     KoDockWidgetTitleBarButton.cpp
+    KoViewItemContextBar.cpp
+    KoContextBarButton.cpp
+    KoBalloon.cpp
+    KoAnnotationBalloon.cpp
+    KoAnnotationSideBar.cpp  
 )
 
 kde4_add_ui_files( kowidgets_LIB_SRCS
@@ -65,10 +82,14 @@ else(GHNS)
     target_link_libraries(kowidgets kotext pigmentcms )
 endif (GHNS)
 
+if(NEPOMUK)
+    target_link_libraries(kowidgets kotext pigmentcms ${NEPOMUK_LIBRARIES} ${SOPRANO_LIBRARIES})
+endif(NEPOMUK)
+
 target_link_libraries(kowidgets LINK_INTERFACE_LIBRARIES kotext pigmentcms ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kowidgets PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kowidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -101,6 +122,7 @@ install( FILES
     KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h
+    KoResourceTagging.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBar.h

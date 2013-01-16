@@ -1,9 +1,26 @@
 [Desktop Entry]
 Name=diode zener
+Name[bg]=ценеров диод
+Name[ca]=diode zener
+Name[ca@valencia]=diode zener
+Name[cs]=Zenerova dioda
+Name[de]=Zener-Diode
+Name[el]=δίοδος zener
 Name[es]=diodo zener
-Name[et]=tunneldiood
+Name[et]=Stabilitron
+Name[fr]=diode zener
+Name[gl]=Díodo Zener
+Name[it]=diodo zener
+Name[kk]=стабилитрон
+Name[nb]=zenerdiode
+Name[nds]=Z-Diood
+Name[nl]=diode zener
+Name[pl]=dioda zenera
 Name[pt]=díodo zener
 Name[pt_BR]=diodo zener
+Name[ru]=Зенеровский диод
+Name[sk]=dióda zenerova
 Name[sv]=diod Zener
 Name[uk]=Стабілітрон
 Name[x-test]=xxdiode zenerxx
+Name[zh_TW]=diode zener

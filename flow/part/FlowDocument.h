@@ -24,12 +24,14 @@
 
 #include <KoPADocument.h>
 
+class KoPart;
+
 class FlowDocument : public KoPADocument
 {
     Q_OBJECT
 
     public:
-        FlowDocument(QWidget* parentWidget, QObject* parent, bool singleViewMode = false);
+        FlowDocument(KoPart *part);
         ~FlowDocument();
 
         virtual KoOdf::DocumentType documentType() const;
@@ -39,9 +41,6 @@ class FlowDocument : public KoPADocument
         void updateGui();
 
     protected:
-        /// Creates a FlowView instance and returns it
-        virtual KoView* createViewInstance(QWidget* parent);
-        virtual QGraphicsItem *createCanvasItem();
         const char *odfTagName( bool withNamespace );
 };
 

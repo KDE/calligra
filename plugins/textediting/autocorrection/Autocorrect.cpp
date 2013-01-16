@@ -90,7 +90,6 @@ void Autocorrect::finishedWord(QTextDocument *document, int cursorPosition)
     if (m_word.isEmpty()) return;
 
     emit startMacro(i18n("Autocorrection"));
-
     bool done = autoFormatURLs();
     if (!done) done = singleSpaces();
     if (!done) done = autoBoldUnderline();
@@ -116,11 +115,11 @@ void Autocorrect::finishedParagraph(QTextDocument * /*document*/, int /*cursorPo
     // TODO
 }
 
-void Autocorrect::setUpperCaseExceptions(QSet<QString> exceptions) { m_upperCaseExceptions = exceptions; }
-void Autocorrect::setTwoUpperLetterExceptions(QSet<QString> exceptions) { m_twoUpperLetterExceptions = exceptions; }
-void Autocorrect::setAutocorrectEntries(QHash<QString, QString> entries) { m_autocorrectEntries = entries; }
+void Autocorrect::setUpperCaseExceptions(const QSet<QString> &exceptions) { m_upperCaseExceptions = exceptions; }
+void Autocorrect::setTwoUpperLetterExceptions(const QSet<QString> &exceptions) { m_twoUpperLetterExceptions = exceptions; }
+void Autocorrect::setAutocorrectEntries(const QHash<QString, QString> &entries) { m_autocorrectEntries = entries; }
 
-Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes()
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes() const
 {
     Autocorrect::TypographicQuotes quote;
     quote.begin = QChar(0x2018);
@@ -128,7 +127,7 @@ Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultSingleQuotes()
     return quote;
 }
 
-Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes()
+Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes() const
 {
     Autocorrect::TypographicQuotes quote;
     quote.begin = QChar(0x201c);
@@ -136,9 +135,9 @@ Autocorrect::TypographicQuotes Autocorrect::getTypographicDefaultDoubleQuotes()
     return quote;
 }
 
-QSet<QString> Autocorrect::getUpperCaseExceptions() { return m_upperCaseExceptions; }
-QSet<QString> Autocorrect::getTwoUpperLetterExceptions() { return m_twoUpperLetterExceptions; }
-QHash<QString, QString> Autocorrect::getAutocorrectEntries() { return m_autocorrectEntries; }
+QSet<QString> Autocorrect::getUpperCaseExceptions() const { return m_upperCaseExceptions; }
+QSet<QString> Autocorrect::getTwoUpperLetterExceptions() const { return m_twoUpperLetterExceptions; }
+QHash<QString, QString> Autocorrect::getAutocorrectEntries() const { return m_autocorrectEntries; }
 
 void Autocorrect::configureAutocorrect()
 {
@@ -146,6 +145,7 @@ void Autocorrect::configureAutocorrect()
     if (cfgDlg->exec()) {
         // TODO
     }
+    delete cfgDlg;
 }
 
 // ******************** individual features;
@@ -426,7 +426,7 @@ void Autocorrect::autoFormatBulletList()
 void Autocorrect::replaceTypographicQuotes()
 {
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doTypographicQuotes
-     * from KOffice 1.x branch */
+     * from Calligra 1.x branch */
 
     if (!(m_replaceDoubleQuotes && m_word.contains('"')) &&
             !(m_replaceSingleQuotes && m_word.contains('\''))) return;
@@ -557,7 +557,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     QString word = _word;
 
     /* this method is ported from lib/kotext/KoAutoFormat.cpp KoAutoFormat::doAutoDetectUrl
-     * from KOffice 1.x branch */
+     * from Calligra 1.x branch */
     // kDebug() <<"link:" << word;
 
     char link_type = 0;
@@ -606,7 +606,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
     }
 
     if (pos != -1) {
-        // A URL inside e.g. quotes (like "http://www.koffice.org" with the quotes) shouldn't include the quote in the URL.
+        // A URL inside e.g. quotes (like "http://www.calligra.org" with the quotes) shouldn't include the quote in the URL.
 	    while (!word.at(word.length()-1).isLetter() &&  !word.at(word.length()-1).isDigit() && word.at(word.length()-1) != '/')
             word.truncate(word.length() - 1);
         word.remove(0, pos);
@@ -628,7 +628,7 @@ QString Autocorrect::autoDetectURL(const QString &_word) const
 
 void Autocorrect::readConfig()
 {
-    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
+    KConfigGroup interface = KoGlobal::calligraConfig()->group("Autocorrect");
 
     m_enabled->setChecked(interface.readEntry("enabled", m_enabled->isChecked()));
     m_uppercaseFirstCharOfSentence = interface.readEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
@@ -649,12 +649,12 @@ void Autocorrect::readConfig()
 
     m_autocorrectLang = interface.readEntry("formatLanguage", m_autocorrectLang);
 
-    readAutocorrectXmlEntry();
+    readAutocorrectXmlEntries();
 }
 
 void Autocorrect::writeConfig()
 {
-    KConfigGroup interface = KoGlobal::kofficeConfig()->group("Autocorrect");
+    KConfigGroup interface = KoGlobal::calligraConfig()->group("Autocorrect");
     interface.writeEntry("enabled", m_enabled->isChecked());
     interface.writeEntry("UppercaseFirstCharOfSentence", m_uppercaseFirstCharOfSentence);
     interface.writeEntry("FixTwoUppercaseChars", m_fixTwoUppercaseChars);
@@ -673,34 +673,53 @@ void Autocorrect::writeConfig()
     interface.writeEntry("ReplaceSingleQuotes", m_replaceSingleQuotes);
 
     interface.writeEntry("formatLanguage", m_autocorrectLang);
+    writeAutocorrectXmlEntry();
 }
 
-void Autocorrect::readAutocorrectXmlEntry()
+void Autocorrect::readAutocorrectXmlEntries()
 {
-    // Taken from KOffice 1.x KoAutoFormat.cpp
+    // The idea here is to load the kde shared (and localized) xml files first
+    // If such a file doesn't exist we load the calligra installed files instead
+    //
+    // in any case we load the custom-* files on top, just in case the user has edited them
+    // These costum files is only the kde shared one, as that is where we save too
     KLocale *locale = KGlobal::locale();
     QString kdelang = locale->languageList().first();
     kdelang.remove(QRegExp("@.*"));
 
+    QStringList folders;
+    folders << QLatin1String("") << QLatin1String("calligra/");
     QString fname;
-    if (!m_autocorrectLang.isEmpty())
-        fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + m_autocorrectLang + ".xml");
-    if (m_autocorrectLang != "all_languages") {
-        if (fname.isEmpty() && !kdelang.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + kdelang + ".xml");
-        if (fname.isEmpty() && kdelang.contains("_")) {
-            kdelang.remove( QRegExp( "_.*" ) );
-            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/" + kdelang + ".xml");
+    Q_FOREACH(const QString& path, folders)
+    {
+        if (!m_autocorrectLang.isEmpty())
+            fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + m_autocorrectLang + ".xml");
+        if (m_autocorrectLang != "all_languages") {
+            if (fname.isEmpty() && !kdelang.isEmpty())
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+            if (fname.isEmpty() && kdelang.contains("_")) {
+                kdelang.remove( QRegExp( "_.*" ) );
+                fname = KGlobal::dirs()->findResource("data", path + "autocorrect/" + kdelang + ".xml");
+            }
         }
-        if (fname.isEmpty())
-            fname = KGlobal::dirs()->findResource("data", "koffice/autocorrect/autocorrect.xml");
+
+        if(!fname.isEmpty()) {
+            readAutocorrectXmlEntry(fname, false);
+            break;
+        }
     }
+
     if (m_autocorrectLang.isEmpty())
         m_autocorrectLang = kdelang;
 
-    if (fname.isEmpty())
-        return;
+    fname = KGlobal::dirs()->findResource("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    if(!fname.isEmpty()) {
+        readAutocorrectXmlEntry(fname, true);
+    }
+}
 
+void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomization)
+{
     QFile xmlFile(fname);
     if (!xmlFile.open(QIODevice::ReadOnly))
         return;
@@ -716,6 +735,9 @@ void Autocorrect::readAutocorrectXmlEntry()
 
     QDomElement upper = de.namedItem("UpperCaseExceptions").toElement();
     if (!upper.isNull()) {
+        if (onlyCustomization) {
+            m_upperCaseExceptions.clear();
+        }
         QDomNodeList nl = upper.childNodes();
         for (int i = 0; i < nl.count(); i++)
             m_upperCaseExceptions += nl.item(i).toElement().attribute("exception");
@@ -723,22 +745,21 @@ void Autocorrect::readAutocorrectXmlEntry()
 
     QDomElement twoUpper = de.namedItem("TwoUpperLetterExceptions").toElement();
     if (!twoUpper.isNull()) {
+        if (onlyCustomization) {
+            m_twoUpperLetterExceptions.clear();
+        }
         QDomNodeList nl = twoUpper.childNodes();
         for(int i = 0; i < nl.count(); i++)
             m_twoUpperLetterExceptions += nl.item(i).toElement().attribute("exception");
-    }
-
-    QDomElement superScript = de.namedItem("SuperScript").toElement();
-    if (!superScript.isNull()) {
-        QDomNodeList nl = superScript.childNodes();
-        for(int i = 0; i < nl.count() ; i++)
-            m_superScriptEntries.insert(nl.item(i).toElement().attribute("find"), nl.item(i).toElement().attribute("super"));
     }
 
     /* Load advanced autocorrect entry, including the format */
     QDomElement item = de.namedItem("items").toElement();
     if (!item.isNull())
     {
+        if (onlyCustomization) {
+            m_autocorrectEntries.clear();
+        }
         QDomNodeList nl = item.childNodes();
         for (int i = 0; i < nl.count(); i++) {
             QDomElement element = nl.item(i).toElement();
@@ -768,5 +789,102 @@ void Autocorrect::readAutocorrectXmlEntry()
             m_autocorrectEntries.insert(find, replace);
         }
     }
+
+    QDomElement doubleQuote = de.namedItem(QLatin1String("DoubleQuote")).toElement();
+    if(!doubleQuote.isNull()) {
+      QDomNodeList nl = doubleQuote.childNodes();
+      if(nl.count()==1) {
+        QDomElement element = nl.item(0).toElement();
+        m_typographicDoubleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+        m_typographicDoubleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+      }
+    }
+
+    QDomElement singleQuote = de.namedItem(QLatin1String("SimpleQuote")).toElement();
+    if(!singleQuote.isNull()) {
+      QDomNodeList nl = singleQuote.childNodes();
+      if(nl.count()==1) {
+        QDomElement element = nl.item(0).toElement();
+        m_typographicSingleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
+        m_typographicSingleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+      }
+    }
+
+    if (onlyCustomization) {
+        return;
+    }
+
+    QDomElement superScript = de.namedItem("SuperScript").toElement();
+    if (!superScript.isNull()) {
+        QDomNodeList nl = superScript.childNodes();
+        for(int i = 0; i < nl.count() ; i++) {
+            m_superScriptEntries.insert(nl.item(i).toElement().attribute("find"), nl.item(i).toElement().attribute("super"));
+        }
+    }
+
 }
 
+
+void Autocorrect::writeAutocorrectXmlEntry()
+{
+    const QString fname = KGlobal::dirs()->locateLocal("data", "autocorrect/custom-" + m_autocorrectLang + ".xml");
+    QFile file(fname);
+    if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) ) {
+        qDebug()<<"We can't save in file :"<<fname;
+        return;
+    }
+    QDomDocument root(QLatin1String("autocorrection"));
+
+    QDomElement word = root.createElement(QLatin1String( "Word" ));
+    root.appendChild(word);
+    QDomElement items = root.createElement(QLatin1String( "items" ));
+
+    QHashIterator<QString, QString> i(m_autocorrectEntries);
+    while (i.hasNext()) {
+        i.next();
+        QDomElement item = root.createElement(QLatin1String( "item" ));
+        item.setAttribute(QLatin1String("find"),i.key());
+        item.setAttribute(QLatin1String("replace"),i.value());
+        items.appendChild(item);
+    }
+    word.appendChild(items);
+
+
+    QDomElement upperCaseExceptions = root.createElement(QLatin1String( "UpperCaseExceptions" ));
+    QSet<QString>::const_iterator upper = m_upperCaseExceptions.constBegin();
+    while (upper != m_upperCaseExceptions.constEnd()) {
+        QDomElement item = root.createElement(QLatin1String( "word" ));
+        item.setAttribute(QLatin1String("exception"),*upper);
+        upperCaseExceptions.appendChild(item);
+        ++upper;
+    }
+    word.appendChild(upperCaseExceptions);
+
+    QDomElement twoUpperLetterExceptions = root.createElement(QLatin1String( "TwoUpperLetterExceptions" ));
+    QSet<QString>::const_iterator twoUpper = m_twoUpperLetterExceptions.constBegin();
+    while (twoUpper != m_twoUpperLetterExceptions.constEnd()) {
+        QDomElement item = root.createElement(QLatin1String( "word" ));
+        item.setAttribute(QLatin1String("exception"),*twoUpper);
+        twoUpperLetterExceptions.appendChild(item);
+        ++twoUpper;
+    }
+    word.appendChild(twoUpperLetterExceptions);
+
+    QDomElement doubleQuote = root.createElement(QLatin1String( "DoubleQuote" ));
+    QDomElement item = root.createElement(QLatin1String( "doublequote" ));
+    item.setAttribute(QLatin1String("begin"),m_typographicDoubleQuotes.begin);
+    item.setAttribute(QLatin1String("end"),m_typographicDoubleQuotes.end);
+    doubleQuote.appendChild(item);
+    word.appendChild(doubleQuote);
+
+    QDomElement singleQuote = root.createElement(QLatin1String( "SimpleQuote" ));
+    item = root.createElement(QLatin1String( "simplequote" ));
+    item.setAttribute(QLatin1String("begin"),m_typographicSingleQuotes.begin);
+    item.setAttribute(QLatin1String("end"),m_typographicSingleQuotes.end);
+    singleQuote.appendChild(item);
+    word.appendChild(singleQuote);
+
+    QTextStream ts( &file );
+    ts << root.toString();
+    file.close();
+}

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (c) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,6 +45,7 @@ KoBookmarkManager::~KoBookmarkManager()
 
 void KoBookmarkManager::insert(const QString &name, KoBookmark *bookmark)
 {
+    bookmark->setName(name);
     d->bookmarkHash[name] = bookmark;
     d->bookmarkNameList.append(name);
 }
@@ -67,17 +69,17 @@ void KoBookmarkManager::rename(const QString &oldName, const QString &newName)
             d->bookmarkNameList.replace(listPos, newName);
             return;
         }
-        i++;
+        ++i;
     }
 }
 
-KoBookmark *KoBookmarkManager::retrieveBookmark(const QString &name)
+KoBookmark *KoBookmarkManager::bookmark(const QString &name) const
 {
     KoBookmark *bookmark = d->bookmarkHash.value(name);
     return bookmark;
 }
 
-QList<QString> KoBookmarkManager::bookmarkNameList()
+QList<QString> KoBookmarkManager::bookmarkNameList() const
 {
     return d->bookmarkNameList;
 }

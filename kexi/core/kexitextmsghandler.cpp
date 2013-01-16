@@ -20,27 +20,48 @@
 #include "kexitextmsghandler.h"
 
 #include "kexi.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
+
+class KexiTextMessageHandler::Private
+{
+public:
+    Private(QString* msgTarget, QString* dTarget);
+    ~Private();
+
+    QString *messageTarget, *detailsTarget;
+};
+
+KexiTextMessageHandler::Private::Private(QString* msgTarget, QString* dTarget)
+    :messageTarget(msgTarget), detailsTarget(dTarget)
+{
+    messageTarget->clear();
+    detailsTarget->clear();
+}
+
+KexiTextMessageHandler::Private::~Private()
+{
+
+}
 
 KexiTextMessageHandler::KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget)
         : KexiGUIMessageHandler(0)
-        , m_messageTarget(&messageTarget)
-        , m_detailsTarget(&detailsTarget)
+        ,d(new Private(&messageTarget, &detailsTarget))
 {
-    m_messageTarget->clear();
-    m_detailsTarget->clear();
+
 }
 
 KexiTextMessageHandler::~KexiTextMessageHandler()
 {
+    delete d;
 }
 
-void
-KexiTextMessageHandler::showMessage(MessageType type,
-                                    const QString &title, const QString &details)
+void KexiTextMessageHandler::showMessage(MessageType type,
+                                         const QString &title, const QString &details,
+                                         const QString& dontShowAgainName)
 {
     Q_UNUSED(type);
+    Q_UNUSED(dontShowAgainName);
     if (!m_enableMessages)
         return;
 
@@ -51,7 +72,7 @@ KexiTextMessageHandler::showMessage(MessageType type,
     if (title.isEmpty())
         msg = i18n("Unknown error");
     msg = "<qt><p>" + msg + "</p>";
-    *m_messageTarget = msg;
-    *m_detailsTarget = details;
+    *d->messageTarget = msg;
+    *d->detailsTarget = details;
 }
 

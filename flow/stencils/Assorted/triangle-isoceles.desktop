@@ -1,12 +1,23 @@
 [Desktop Entry]
-Name=Isoceles Triangle
+Name=Isosceles Triangle
+Name[ca]=Triangle isòsceles
+Name[de]=Gleichschenkliges Dreieck
+Name[el]=Ισοσκελές τρίγωνο
 Name[es]=Triángulo isósceles
 Name[et]=Võrdhaarne kolmnurk
+Name[fi]=Tasakylkinen kolmio
+Name[fr]=Triangle isocèle
+Name[gl]=Triángulo isósceles
+Name[hu]=Egyenlő szárú háromszög
 Name[it]=Triangolo isoscele
-Name[nl]=Isoceles driehoek
+Name[kk]=Тең бүйірлі үшбұрыш
+Name[nl]=Gelijkbenige driehoek
+Name[pl]=Trójką równoramienny
 Name[pt]=Triângulo Isósceles
 Name[pt_BR]=Triângulo isósceles
+Name[ru]=Равнобедренный треугольник
+Name[sk]=Rovnoramenný trojuholník
 Name[sv]=Likbent triangel
 Name[uk]=Рівнобедрений трикутник
-Name[x-test]=xxIsoceles Trianglexx
+Name[x-test]=xxIsosceles Trianglexx
 Name[zh_TW]=等腰三角形

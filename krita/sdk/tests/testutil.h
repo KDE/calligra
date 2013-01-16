@@ -21,7 +21,8 @@
 
 #include <QList>
 #include <QTime>
-#include <QUndoStack>
+#include <QDir>
+#include <kundo2qstack.h>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -31,6 +32,10 @@
 #include <kis_paint_device.h>
 #include <kis_node.h>
 #include <kis_undo_adapter.h>
+#include "kis_node_graph_listener.h"
+#include "kis_iterator_ng.h"
+
+
 /**
  * Routines that are useful for writing efficient tests
  */
@@ -38,7 +43,7 @@
 namespace TestUtil
 {
 
-void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
+inline void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
 {
     qDebug() << node->name();
     KisNodeSP child = node->firstChild();
@@ -54,20 +59,40 @@ void dumpNodeStack(KisNodeSP node, QString prefix = QString("\t"))
     }
 }
 
-struct TestProgressBar : public KoProgressProxy {
+class TestProgressBar : public KoProgressProxy {
+public:
+    TestProgressBar()
+        : m_min(0), m_max(0), m_value(0)
+    {}
+
     int maximum() const {
-        return 0;
+        return m_max;
     }
     void setValue(int value) {
-        Q_UNUSED(value);
-        //qDebug() << "Progress (" << this << "): " << value ;
+        m_value = value;
     }
-    void setRange(int, int) {}
-    void setFormat(const QString &) {}
+    void setRange(int min, int max) {
+        m_min = min;
+        m_max = max;
+    }
+    void setFormat(const QString &format) {
+        m_format = format;
+    }
+
+    int min() { return m_min; }
+    int max() { return m_max; }
+    int value() { return m_value; }
+    QString format() { return m_format; }
+
+private:
+    int m_min;
+    int m_max;
+    int m_value;
+    QString m_format;
 };
 
 
-bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0)
+inline bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, int fuzzy = 0, int fuzzyAlpha = 0)
 {
     //     QTime t;
     //     t.start();
@@ -96,7 +121,7 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
                 const bool same = qAbs(qRed(a) - qRed(b)) <= fuzzy
                                   && qAbs(qGreen(a) - qGreen(b)) <= fuzzy
                                   && qAbs(qBlue(a) - qBlue(b)) <= fuzzy;
-                const bool sameAlpha = qAlpha(a) == qAlpha(b);
+                const bool sameAlpha = qAlpha(a) - qAlpha(b) <= fuzzyAlpha;
                 const bool bothTransparent = sameAlpha && qAlpha(a)==0;
 
                 if (!bothTransparent && (!same || !sameAlpha)) {
@@ -104,7 +129,8 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
                     pt.setY(y);
                     qDebug() << " Different at" << pt
                              << "source" << qRed(a) << qGreen(a) << qBlue(a) << qAlpha(a)
-                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b);
+                             << "dest" << qRed(b) << qGreen(b) << qBlue(b) << qAlpha(b)
+                             << "fuzzy" << fuzzy;
                     return false;
                 }
             }
@@ -115,7 +141,7 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
     return true;
 }
 
-bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
+inline bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPaintDeviceSP dev2)
 {
     //     QTime t;
     //     t.start();
@@ -128,75 +154,178 @@ bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPain
         pt.setY(-1);
     }
 
-    KisHLineConstIteratorPixel iter1 = dev1->createHLineConstIterator(0, 0, rc1.width());
-    KisHLineConstIteratorPixel iter2 = dev2->createHLineConstIterator(0, 0, rc1.width());
+    KisHLineConstIteratorSP iter1 = dev1->createHLineConstIteratorNG(0, 0, rc1.width());
+    KisHLineConstIteratorSP iter2 = dev2->createHLineConstIteratorNG(0, 0, rc1.width());
 
     int pixelSize = dev1->pixelSize();
 
     for (int y = 0; y < rc1.height(); ++y) {
 
-        while (!iter1.isDone()) {
-            if (memcmp(iter1.rawData(), iter2.rawData(), pixelSize) != 0)
+        do {
+            if (memcmp(iter1->oldRawData(), iter2->oldRawData(), pixelSize) != 0)
                 return false;
-            ++iter1;
-            ++iter2;
-        }
+        } while (iter1->nextPixel() && iter2->nextPixel());
 
-        iter1.nextRow();
-        iter2.nextRow();
+        iter1->nextRow();
+        iter2->nextRow();
     }
     //     qDebug() << "comparePaintDevices time elapsed:" << t.elapsed();
     return true;
 }
 
-quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
+#ifdef FILES_OUTPUT_DIR
+
+inline bool checkQImage(const QImage &image, const QString &testName,
+                        const QString &prefix, const QString &name,
+                        int fuzzy = 0)
 {
-    KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(x, y, 1);
-    const quint8 *pix = iter.rawData();
+    Q_UNUSED(fuzzy);
+    QString filename(prefix + "_" + name + ".png");
+    QString dumpName(prefix + "_" + name + "_expected.png");
+
+    QImage ref(QString(FILES_DATA_DIR) + QDir::separator() +
+               testName + QDir::separator() +
+               prefix + QDir::separator() + filename);
+
+    bool valid = true;
+    QPoint t;
+    if(!compareQImages(t, image, ref)) {
+        qDebug() << "--- Wrong image:" << name;
+        valid = false;
+
+        image.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + filename);
+        ref.save(QString(FILES_OUTPUT_DIR) + QDir::separator() + dumpName);
+    }
+
+    return valid;
+}
+
+#endif
+
+inline quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
+{
+    KisHLineConstIteratorSP iter = dev->createHLineConstIteratorNG(x, y, 1);
+    const quint8 *pix = iter->oldRawData();
     return *pix;
 }
 
-void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
+inline void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
 {
-    KisHLineIteratorPixel iter = dev->createHLineIterator(x, y, 1);
-    quint8 *pix = iter.rawData();
+    KisHLineIteratorSP iter = dev->createHLineIteratorNG(x, y, 1);
+    quint8 *pix = iter->rawData();
     *pix = s;
 }
 
+inline bool checkAlphaDeviceFilledWithPixel(KisPaintDeviceSP dev, const QRect &rc, quint8 expected)
+{
+    KisHLineIteratorSP it = dev->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
 
-QList<const KoColorSpace*> allColorSpaces()
+    for (int y = rc.y(); y < rc.y() + rc.height(); y++) {
+        for (int x = rc.x(); x < rc.x() + rc.width(); x++) {
+
+            if(*((quint8*)it->rawData()) != expected) {
+                qCritical() << "At point:" << x << y;
+                qCritical() << "Expected pixel:" << expected;
+                qCritical() << "Actual pixel:  " << *((quint8*)it->rawData());
+                return false;
+            }
+            it->nextPixel();
+        }
+        it->nextRow();
+    }
+    return true;
+}
+
+
+inline QList<const KoColorSpace*> allColorSpaces()
 {
     return KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 }
 
-class KisUndoAdapterDummy : public KisUndoAdapter
+class TestNode : public KisNode
 {
+    Q_OBJECT
 public:
-    KisUndoAdapterDummy() : KisUndoAdapter(0) {}
-    ~KisUndoAdapterDummy() {}
-
-public:
-    void addCommand(QUndoCommand *cmd) {
-        qDebug() << cmd;
-        undostack.push(cmd);
-    }
-
-    void beginMacro(const QString& s = "Test") {
-        undostack.beginMacro(s);
-    }
-
-    void endMacro() {
-        undostack.endMacro();
-    }
-
-    void doUndo() {
-        undostack.undo();
-    }
-
-private:
-    QUndoStack undostack;
+    KisNodeSP clone() const;
+    bool allowAsChild(KisNodeSP) const;
+    const KoColorSpace * colorSpace() const;
+    const KoCompositeOp * compositeOp() const;
 };
 
+class TestGraphListener : public KisNodeGraphListener
+{
+public:
+
+    virtual void aboutToAddANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToAddANode(parent, index);
+        beforeInsertRow = true;
+    }
+
+    virtual void nodeHasBeenAdded(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenAdded(parent, index);
+        afterInsertRow = true;
+    }
+
+    virtual void aboutToRemoveANode(KisNode *parent, int index) {
+        KisNodeGraphListener::aboutToRemoveANode(parent, index);
+        beforeRemoveRow  = true;
+    }
+
+    virtual void nodeHasBeenRemoved(KisNode *parent, int index) {
+        KisNodeGraphListener::nodeHasBeenRemoved(parent, index);
+        afterRemoveRow = true;
+    }
+
+    virtual void aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::aboutToMoveNode(parent, oldIndex, newIndex);
+        beforeMove = true;
+    }
+
+    virtual void nodeHasBeenMoved(KisNode *parent, int oldIndex, int newIndex) {
+        KisNodeGraphListener::nodeHasBeenMoved(parent, oldIndex, newIndex);
+        afterMove = true;
+    }
+
+    bool beforeInsertRow;
+    bool afterInsertRow;
+    bool beforeRemoveRow;
+    bool afterRemoveRow;
+    bool beforeMove;
+    bool afterMove;
+
+    void resetBools() {
+        beforeRemoveRow = false;
+        afterRemoveRow = false;
+        beforeInsertRow = false;
+        afterInsertRow = false;
+        beforeMove = false;
+        afterMove = false;
+    }
+};
+
+}
+
+#include <kis_paint_layer.h>
+#include <kis_image.h>
+#include "kis_undo_stores.h"
+
+namespace TestUtil {
+
+struct MaskParent
+{
+    MaskParent()
+        : imageRect(0,0,512,512) {
+        const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+        image = new KisImage(new KisSurrogateUndoStore(), imageRect.width(), imageRect.height(), cs, "test image");
+        layer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+        image->addNode(layer);
+    }
+
+
+    const QRect imageRect;
+    KisImageSP image;
+    KisPaintLayerSP layer;
+};
 
 }
 

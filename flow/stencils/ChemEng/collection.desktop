@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=ChemEng
+Name[ca]=Enginyeria Química
+Name[ca@valencia]=Enginyeria Química
+Name[el]=ChemEng
+Name[es]=Ingeniería química
 Name[et]=Keemia
+Name[fr]=ChemEng
+Name[gl]=Electrotecnia
+Name[it]=ChemEng
+Name[kk]=Химия өндірісі
+Name[nb]=Kjemitekn
 Name[nl]=Scheikunde
+Name[pl]=ChemEng
 Name[pt]=MotorQuim
 Name[pt_BR]=Motor químico
+Name[ru]=Химическая инженерия
+Name[sk]=ChemEng
 Name[sv]=Kemiteknik
 Name[uk]=Хімічна промисловість
 Name[x-test]=xxChemEngxx
+Name[zh_CN]=化学工程
+Name[zh_TW]=ChemEng
 X-KDE-DirType=odg-collection

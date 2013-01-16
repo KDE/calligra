@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,14 +19,14 @@
 #ifndef KIS_LAYER_COMMAND_H_
 #define KIS_LAYER_COMMAND_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <krita_export.h>
 #include "kis_types.h"
 
 class KisLayer;
 
 /// the base command for commands altering a layer
-class KRITAIMAGE_EXPORT KisLayerCommand : public QUndoCommand
+class KRITAIMAGE_EXPORT KisLayerCommand : public KUndo2Command
 {
 
 public:

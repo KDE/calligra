@@ -21,9 +21,9 @@
 #define KO_CHART_MODEL
 
 
-#include <QtCore/QHash>
-#include <QtCore/QVector>
-#include <QtCore/QtPlugin>
+#include <QHash>
+#include <QVector>
+#include <QtPlugin>
 
 
 class QAbstractItemModel;
@@ -83,7 +83,7 @@ public:
 
 } // Namespace KoChart
 
-Q_DECLARE_INTERFACE(KoChart::ChartModel, "org.koffice.KoChart.ChartModel:1.0")
+Q_DECLARE_INTERFACE(KoChart::ChartModel, "org.calligra.KoChart.ChartModel:1.0")
 
 #endif // KO_CHART_MODEL
 

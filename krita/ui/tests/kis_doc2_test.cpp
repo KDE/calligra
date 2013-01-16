@@ -18,13 +18,15 @@
 
 #include "kis_doc2_test.h"
 
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <qtest_kde.h>
 #include <kstandarddirs.h>
 #include "kis_doc2.h"
-#include "kis_undo_adapter.h"
+#include "kis_image.h"
+#include "kis_undo_store.h"
 #include "kis_factory2.h"
 #include <KoDocumentEntry.h>
+#include "kis_part2.h"
 #include <KoMainWindow.h>
 
 class KisCommandHistoryListenerFake : public KisCommandHistoryListener
@@ -40,7 +42,7 @@ public:
         m_added = false;
     }
 
-    void notifyCommandAdded(const QUndoCommand * cmd) {
+    void notifyCommandAdded(const KUndo2Command * cmd) {
         if(!m_command) {
             m_command = cmd;
         }
@@ -49,7 +51,7 @@ public:
         m_added = true;
     }
 
-    void notifyCommandExecuted(const QUndoCommand * cmd) {
+    void notifyCommandExecuted(const KUndo2Command * cmd) {
         if(!m_command) {
             m_command = cmd;
         }
@@ -66,18 +68,18 @@ public:
         return m_executed;
     }
 
-    const QUndoCommand* command() {
+    const KUndo2Command* command() {
         return m_command;
     }
 
 private:
-    const QUndoCommand* m_command;
+    const KUndo2Command* m_command;
     bool m_executed;
     bool m_added;
 };
 
 
-class TestCommand : public QUndoCommand
+class TestCommand : public KUndo2Command
 {
 public:
     void undo() {}
@@ -86,20 +88,25 @@ public:
 
 void KisDoc2Test::testUndoRedoNotify()
 {
-    KisDoc2 doc;
+    KisPart2 part;
+    KisDoc2 doc(&part);
+    part.setDocument(&doc);
 
-    QUndoCommand *testCommand1 = new TestCommand();
-    QUndoCommand *testCommand2 = new TestCommand();
+    doc.initEmpty();
 
+    KUndo2Command *testCommand1 = new TestCommand();
+    KUndo2Command *testCommand2 = new TestCommand();
+
+    KisUndoStore *undoStore = doc.image()->undoStore();
     KisCommandHistoryListenerFake listener;
 
-    doc.undoAdapter()->setCommandHistoryListener(&listener);
+    undoStore->setCommandHistoryListener(&listener);
 
     qDebug() << "Undo index:" << doc.undoStack()->index();
 
     qDebug() << "Adding one command";
     listener.reset();
-    doc.undoAdapter()->addCommand(testCommand1);
+    undoStore->addCommand(testCommand1);
     QVERIFY(listener.wasAdded());
     QVERIFY(!listener.wasExecuted());
     QCOMPARE(listener.command(), testCommand1);
@@ -107,7 +114,7 @@ void KisDoc2Test::testUndoRedoNotify()
 
     qDebug() << "Adding one more command";
     listener.reset();
-    doc.undoAdapter()->addCommand(testCommand2);
+    undoStore->addCommand(testCommand2);
     QVERIFY(listener.wasAdded());
     QVERIFY(!listener.wasExecuted());
     QCOMPARE(listener.command(), testCommand2);
@@ -128,6 +135,15 @@ void KisDoc2Test::testUndoRedoNotify()
     QVERIFY(listener.wasExecuted());
     QCOMPARE(listener.command(), testCommand1);
     qDebug() << "Undo index:" << doc.undoStack()->index();
+
+
+    /**
+     * FIXME: Here is a bug in undo listeners framework
+     * notifyCommandExecuted works wrong with redo(),
+     * because KUndo2Stack->index() returns "the command
+     * that will be executed on the next redo()", but
+     * not the undone command
+     */
 
     qDebug() << "Redo";
     listener.reset();
@@ -142,12 +158,16 @@ void KisDoc2Test::testUndoRedoNotify()
 void KisDoc2Test::testOpenImageTwiceInSameDoc()
 {
     QString fname2 = QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra";
-    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+    QString fname = QString(FILES_DATA_DIR) + QDir::separator() + "load_test2.kra";
 
 
     Q_ASSERT(!fname.isEmpty());
     Q_ASSERT(!fname2.isEmpty());
-    KisDoc2 doc;
+
+    KisPart2 part;
+    KisDoc2 doc(&part);
+    part.setDocument(&doc);
+
     doc.loadNativeFormat(fname);
     doc.loadNativeFormat(fname2);
 }

@@ -1,10 +1,10 @@
-KOffice 2.0 TOC proposal
+Calligra 2.0 TOC proposal
 ------------------------
 
 
 Preface
 
-This document gives some suggestions about what the KOffice documentation
+This document gives some suggestions about what the Calligra documentation
 should contain, in the form of annotated tables of contents. The TOCs have
 been compiled from
 - thoughts
@@ -15,7 +15,7 @@ The current status of the documentation should be available in the file
 status.txt in the same directory as this file.
 
 Contributors to this document:
-- Sander Koning (KOffice documentation coordinator) <sanderkoning@kde.nl>
+- Sander Koning (Calligra documentation coordinator) <sanderkoning@kde.nl>
 - Thomas Zander <zander@kde.org>
 
 Comments and suggestions are more than welcome, either as SVN commits, or as
@@ -54,9 +54,9 @@ We still need:
 
 --------------------------------------------------------------------------------
 
-KOffice
+Calligra
 
-Introduction to what KOffice is, how to use the user interface that is common
+Introduction to what Calligra is, how to use the user interface that is common
 to all applications, how to set general configuration options, where to get
 more information.
 
@@ -65,13 +65,13 @@ derive from the general layout noted above.
 
 What is it / Key features
     Goal-driven (not implementation-driven) description of what users can do
-    with KOffice.
-The KOffice Workspace
+    with Calligra.
+The Calligra Workspace
     A short description of how to use the workspace:
     - what each application does
     - tabbed editing
 Working with documents
-    How to manage KOffice documents
+    How to manage Calligra documents
     - open, save, print, ...
 Menus and toolbars
     Description of common menus and toolbars.
@@ -79,16 +79,16 @@ Configuration
     (If any configuration options are available for KOShell, describe them
     here.)
 More information
-    Where to get more information about KOffice
+    Where to get more information about Calligra
     (web sites, mailing lists, ...)
 
 --------------------------------------------------------------------------------
 
-KWord
+Words
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
-Working with KWord
+    Basically a copy of the goals described in the general Calligra handbook.
+Working with Calligra Words
     Working with text
         Styles
         linespacing
@@ -111,11 +111,11 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-KSpread
+Calligra Sheets
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
-Working with KSpread
+    Basically a copy of the goals described in the general Calligra handbook.
+Working with Calligra Sheets
     Working with cells
     Working with formulas
     Working with sheets
@@ -125,11 +125,11 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-KPresenter
+Stage
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
-Working with KPresenter
+    Basically a copy of the goals described in the general Calligra handbook.
+Working with Calligra Stage
     Working with slides
     Working with master slides
     Working with animations
@@ -141,22 +141,15 @@ Reference Guide
 
 Kexi
 
-Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
-Working with Kexi
-    Working with databases
-    Working with forms
-   <more technologies?>
-<usecases>
-Reference Guide
+The Handbook is at advanced stage already; see doc/kexi/README.
 
 --------------------------------------------------------------------------------
 
-Kivio
+Flow
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
-Working with Kivio
+    Basically a copy of the goals described in the general Calligra handbook.
+Working with Calligra Flow
     Working with stencils
     Working with stencil sets
     <more technologies?>
@@ -165,10 +158,10 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-Karbon14
+Karbon
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
+    Basically a copy of the goals described in the general Calligra handbook.
 Working with Karbon
     Working with shapes ("objects"?)
     Working with effects
@@ -181,7 +174,7 @@ Reference Guide
 Krita
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
+    Basically a copy of the goals described in the general Calligra handbook.
 Working with Krita
     Working with painting tools
     Working with filters
@@ -193,11 +186,11 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-KPlato
+Plan
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
-Working with KPlato
+    Basically a copy of the goals described in the general Calligra handbook.
+Working with Calligra Plan
     Working with tasks
     Working with dependencies
     <more technologies?>
@@ -209,7 +202,7 @@ Reference Guide
 KChart
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
+    Basically a copy of the goals described in the general Calligra handbook.
 Working with KChart
     Working with charts
         Chart types
@@ -223,7 +216,7 @@ Reference Guide
 KFormula
 
 Introduction
-    Basically a copy of the goals described in the general KOffice handbook.
+    Basically a copy of the goals described in the general Calligra handbook.
 Working with KFormula
     Working with formulas
     <more technologies?>

@@ -21,22 +21,25 @@
 #include "kis_color_patches.h"
 
 
+class KisCanvasResourceProvider;
+
 class KisColorHistory : public KisColorPatches
 {
     Q_OBJECT
 public:
     explicit KisColorHistory(QWidget *parent = 0);
     void setCanvas(KisCanvas2 *canvas);
+    void unsetCanvas();
 
 protected:
     KisColorSelectorBase* createPopup() const;
 
 public slots:
     void commitColor(const KoColor& color);
-    
+
 private:
     QList<KoColor> m_colorHistory;
-
+    KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...
 };
 
 #endif // KIS_COLOR_HISTORY_H

@@ -26,7 +26,6 @@
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoShapeContainerModel.h>
-#include <KoResourceManager.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <KoSnapGuide.h>
 #include <KoPointerEvent.h>
@@ -37,7 +36,7 @@ ShapeMoveStrategy::ShapeMoveStrategy(KoToolBase *tool, const QPointF &clicked)
     : KoInteractionStrategy(tool),
     m_start(clicked)
 {
-    QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection);
+    QList<KoShape*> selectedShapes = tool->canvas()->shapeManager()->selection()->selectedShapes(KoFlake::StrippedSelection);
     QRectF boundingRect;
     foreach(KoShape *shape, selectedShapes) {
         if (! shape->isEditable())
@@ -117,12 +116,18 @@ void ShapeMoveStrategy::moveSelection()
     tool()->canvas()->shapeManager()->selection()->setPosition(m_initialSelectionPosition + m_diff);
 }
 
-QUndoCommand* ShapeMoveStrategy::createCommand()
+KUndo2Command* ShapeMoveStrategy::createCommand()
 {
     tool()->canvas()->snapGuide()->reset();
     if(m_diff.x() == 0 && m_diff.y() == 0)
         return 0;
     return new KoShapeMoveCommand(m_selectedShapes, m_previousPositions, m_newPositions);
+}
+
+void ShapeMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED(modifiers);
+    tool()->canvas()->updateCanvas(tool()->canvas()->snapGuide()->boundingRect());
 }
 
 void ShapeMoveStrategy::paint( QPainter &painter, const KoViewConverter &converter)

@@ -1,8 +1,26 @@
 [Desktop Entry]
 Name=sine
+Name[ca]=sinusoïdal
+Name[ca@valencia]=sinusoïdal
+Name[cs]=sinus
+Name[de]=Sinus
+Name[el]=ημίτονο
+Name[es]=seno
+Name[et]=Sinusoid
+Name[fr]=sinusoïde
+Name[gl]=Seno
+Name[hu]=szinusz
+Name[it]=seno
+Name[kk]=синус
+Name[nb]=sinus
+Name[nl]=sinus
+Name[pl]=sinus
 Name[pt]=seno
 Name[pt_BR]=seno
+Name[ru]=Синусоидальная
+Name[sk]=sínus
 Name[sv]=sinus
 Name[uk]=Синусоподібна характеристика або вхідний сигнал
 Name[x-test]=xxsinexx
 Name[zh_CN]=正弦
+Name[zh_TW]=sine

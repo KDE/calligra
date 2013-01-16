@@ -25,7 +25,7 @@
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
 #include <KoZoomHandler.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 
@@ -61,27 +61,27 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
 
     d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), this);
     d->action->setSpecialButtons(KoZoomAction::ZoomToSelection | KoZoomAction::ZoomToAll);
-    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
-            this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
+    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
+            this, SLOT(setZoom(KoZoomMode::Mode,qreal)));
     connect(d->action, SIGNAL(zoomedToSelection()),
             this, SIGNAL(zoomedToSelection()));
     connect(d->action, SIGNAL(zoomedToAll()),
             this, SIGNAL(zoomedToAll()));
 
     actionCollection->addAction("view_zoom", d->action);
-    actionCollection->addAction(KStandardAction::ZoomIn, "zoom_in", d->action, SLOT(zoomIn()));
-    actionCollection->addAction(KStandardAction::ZoomOut, "zoom_out", d->action, SLOT(zoomOut()));
+    actionCollection->addAction(KStandardAction::ZoomIn, "zoom_in", this, SLOT(zoomInRelative()));
+    actionCollection->addAction(KStandardAction::ZoomOut, "zoom_out", this, SLOT(zoomOutRelative()));
 
     d->canvas = dynamic_cast<KarbonCanvas*>(d->canvasController->canvas());
     d->zoomHandler = dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(d->canvas->viewConverter()));
 
-    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(const QSize &)), this, SLOT(setAvailableSize()));
-    connect(d->canvasController->proxyObject, SIGNAL(zoomBy(const qreal)), this, SLOT(requestZoomBy(const qreal)));
-    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)),
-            d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(setAvailableSize()));
+    connect(d->canvasController->proxyObject, SIGNAL(zoomRelative(qreal, const QPointF&)), this, SLOT(requestZoomRelative(qreal, const QPointF&)));
+    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
+            d->canvas, SLOT(setDocumentOffset(QPoint)));
 
-    connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
-            this, SLOT(resourceChanged(int, const QVariant &)));
+    connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int,QVariant)),
+            this, SLOT(resourceChanged(int,QVariant)));
 }
 
 KarbonZoomController::~KarbonZoomController()
@@ -101,8 +101,16 @@ void KarbonZoomController::setZoomMode(KoZoomMode::Mode mode)
 
 void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
 {
+    setZoom(mode, zoom, d->canvasController->preferredCenter());
+}
+
+void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, const QPointF &stillPoint)
+{
     if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
         return; // no change
+
+    qreal oldEffectiveZoom = d->action->effectiveZoom();
+
     d->zoomHandler->setZoomMode(mode);
 
     if (mode == KoZoomMode::ZOOM_CONSTANT) {
@@ -123,39 +131,35 @@ void KarbonZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
         d->action->setEffectiveZoom(zoom);
     }
 
-    // before changing the zoom get the actual document size, document origin
-    // and the current preferred center point
-    QPoint preferredCenter = d->canvasController->preferredCenter();
-    QPointF documentOrigin = d->canvas->documentOrigin();
-    QRectF documentRect = d->canvas->documentViewRect();
-
-    // now calculate the preferred center in document coordinates
-    QPointF docCenter = d->zoomHandler->viewToDocument(preferredCenter - documentOrigin);
-    KoSelection * selection = d->canvas->shapeManager()->selection();
-    if( selection->count()) {
-        docCenter = selection->boundingRect().center();
-    }
-
     d->zoomHandler->setZoom(zoom);
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
     // has change as a result of the zoom change
+    QRectF documentRect = d->canvas->documentViewRect();
     QSizeF viewSize = d->zoomHandler->documentToView(documentRect).size();
     d->canvasController->updateDocumentSize(QSize(qRound(viewSize.width()), qRound(viewSize.height())), true);
 
     d->canvas->adjustOrigin();
 
     // Finally ask the canvasController to recenter
+    QPointF documentCenter;
     if (mode == KoZoomMode::ZOOM_CONSTANT) {
-        QPointF center = d->canvas->documentOrigin() + d->zoomHandler->documentToView(docCenter);
-        d->canvasController->setPreferredCenter(center.toPoint());
+        KoSelection * selection = d->canvas->shapeManager()->selection();
+        if (selection->count()) {
+            QPointF docCenter = selection->boundingRect().center();
+            documentCenter = d->canvas->documentOrigin() + d->zoomHandler->documentToView(docCenter);
+        } else {
+            qreal zoomCoeff = d->action->effectiveZoom() / oldEffectiveZoom;
+            QPointF oldCenter = d->canvasController->preferredCenter();
+            documentCenter = stillPoint * zoomCoeff - (stillPoint - 1.0 / zoomCoeff * oldCenter);
+        }
     } else {
         // center the page rect when change the zoom mode to ZOOM_PAGE or ZOOM_WIDTH
         QRectF pageRect(-documentRect.topLeft(), d->pageSize);
-        QPointF center = d->zoomHandler->documentToView(pageRect.center());
-        d->canvasController->setPreferredCenter(center.toPoint());
+        documentCenter = d->zoomHandler->documentToView(pageRect.center());
     }
+    d->canvasController->setPreferredCenter(documentCenter);
     d->canvas->update();
 }
 
@@ -167,12 +171,16 @@ void KarbonZoomController::setAvailableSize()
         setZoom(KoZoomMode::ZOOM_PAGE, -1);
 }
 
+void KarbonZoomController::requestZoomRelative(const qreal factor, const QPointF &stillPoint)
+{
+    qreal zoom = d->zoomHandler->zoom();
+    setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom, stillPoint);
+}
+
 void KarbonZoomController::requestZoomBy(const qreal factor)
 {
     qreal zoom = d->zoomHandler->zoom();
-    d->action->setZoom(factor*zoom);
     setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
-    d->action->setEffectiveZoom(factor*zoom);
 }
 
 void KarbonZoomController::setPageSize(const QSizeF &pageSize)
@@ -189,7 +197,7 @@ void KarbonZoomController::setPageSize(const QSizeF &pageSize)
 
 void KarbonZoomController::resourceChanged(int key, const QVariant &value)
 {
-    if (key == KoCanvasResource::PageSize) {
+    if (key == KoCanvasResourceManager::PageSize) {
         setPageSize(value.toSizeF());
 
         // Tell the canvasController that the document in pixels
@@ -200,6 +208,17 @@ void KarbonZoomController::resourceChanged(int key, const QVariant &value)
         d->canvas->adjustOrigin();
         d->canvas->update();
     }
+}
+
+void KarbonZoomController::zoomInRelative()
+{
+    requestZoomBy(sqrt(2.0));
+
+}
+
+void KarbonZoomController::zoomOutRelative()
+{
+    requestZoomBy(sqrt(0.5));
 }
 
 #include "KarbonZoomController.moc"

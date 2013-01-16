@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@ class KoStore;
 class KisKraSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisKraSaveVisitor(KisImageWSP image, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
+    KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames);
 
     using KisNodeVisitor::visit;
 
@@ -57,8 +57,6 @@ public:
 
     bool visit(KisTransparencyMask *mask);
 
-    bool visit(KisTransformationMask *mask);
-
     bool visit(KisSelectionMask *mask);
 
 private:
@@ -71,7 +69,7 @@ private:
     QString getLocation(KisNode* node, const QString& suffix = "");
 
 private:
-    KisImageWSP m_image;
+
     KoStore *m_store;
     bool m_external;
     QString m_uri;

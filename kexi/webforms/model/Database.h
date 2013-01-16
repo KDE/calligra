@@ -25,8 +25,8 @@
 #include <QPair>
 #include <QHash>
 
-#include <kexidb/global.h>
-#include <kexidb/field.h>
+#include <db/global.h>
+#include <db/field.h>
 
 
 namespace KexiDB {

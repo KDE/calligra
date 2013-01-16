@@ -1,9 +1,21 @@
 [Desktop Entry]
 Name=Collapsed-Sub-Process
+Name[ca]=Sub-procés col·lapsat
+Name[ca@valencia]=Sub-procés col·lapsat
+Name[el]=Κατάρρευση-υπο-διεργασίας
+Name[es]=Subproceso colapsado
 Name[et]=Suletud alamprotsess
-Name[nl]=Ingeklapt-subproces
+Name[fr]=Sous-processus en échec
+Name[gl]=Subproceso recollido
+Name[it]=Sottoprocesso-Compresso
+Name[kk]=Бүктелген ішкі процесі
+Name[nb]=Sammenfoldet-underprosess
+Name[nl]=Ingevouwen-subproces
+Name[pl]=Zwinięty-Pod-Proces
 Name[pt]=Sub-Processo-Recolhido
 Name[pt_BR]=Sub-processo-recolhido
+Name[ru]=Свёрнутый подпроцесс
+Name[sk]=Zbalený podproces
 Name[sv]=Sammanslagen-delprocess
 Name[uk]=Згорнутий підпроцес
 Name[x-test]=xxCollapsed-Sub-Processxx

@@ -21,7 +21,8 @@
 #ifndef KOOASISSTYLES_H
 #define KOOASISSTYLES_H
 
-#include <QtCore/QHash>
+#include <QHash>
+#include <QList>
 
 #include <KoXmlReader.h>
 
@@ -29,6 +30,7 @@
 #include "KoOdfNumberStyles.h"
 #include "KoOdfNotesConfiguration.h"
 #include "KoOdfLineNumberingConfiguration.h"
+#include "KoOdfBibliographyConfiguration.h"
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -53,7 +55,7 @@ public:
      * Do NOT use this method for style:style styles.
      *
      * @param name the style name
-     * @return the dom element representing the style, or QString::null if it wasn't found.
+     * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
     const KoXmlElement* findStyle(const QString &name) const;
 
@@ -62,7 +64,7 @@ public:
      * Searches in the list of custom styles first and then in the lists of automatic styles.
      * @param name the style name
      * @param family the style family (for a style:style, use 0 otherwise)
-     * @return the dom element representing the style, or QString::null if it wasn't found.
+     * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
     const KoXmlElement* findStyle(const QString &name, const QString &family) const;
 
@@ -75,7 +77,7 @@ public:
      * @param family the style family (for a style:style, use 0 otherwise)
      * @param stylesDotXml if true search the styles.xml auto-styles otherwise the content.xml ones
      *
-     * @return the dom element representing the style, or QString::null if it wasn't found.
+     * @return the dom element representing the style, or an empty QString if it wasn't found.
      */
     const KoXmlElement* findStyle(const QString &name, const QString &family, bool stylesDotXml) const;
 
@@ -112,8 +114,18 @@ public:
     /// @return all presentation page layouts ("presentation-page-layout" elements), hashed by name
     QHash<QString, KoXmlElement*> presentationPageLayouts() const;
 
-    /// @return draw styles, hashed by name
-    QHash<QString, KoXmlElement*> drawStyles() const;
+    /// @return all table templates("table-template" elements), template names may be duplicated
+    QList<KoXmlElement *> tableTemplates() const;
+
+    /**
+     * Get the draw styles for a specified type. 
+     *
+     * @param drawType The type of the wanted drawStyles
+     *                 Available types: gradient(returns gradient, linearGradient, radialGradient and conicalGradient styles),
+     *                 hatch, fill-image, marker, stroke-dash, opacity
+     * @return draw styles of the specified type, hashed by name
+     */
+    QHash<QString, KoXmlElement*> drawStyles(const QString &drawType) const;
 
     /// @return all custom styles ("style:style" elements) for a given family, hashed by name
     QHash<QString, KoXmlElement*> customStyles(const QString& family) const;
@@ -131,7 +143,7 @@ public:
     DataFormatsMap dataFormats() const;
 
     /**
-     * Return the notes configration for the given note class (footnote or endnote).
+     * Return the notes configuration for the given note class (footnote or endnote).
      *
      * Note that ODF supports different notes configurations for sections, but we don't
      * support that yet.
@@ -143,6 +155,10 @@ public:
      */
     KoOdfLineNumberingConfiguration lineNumberingConfiguration() const;
 
+    /**
+     * return the bibliography configuration for this document.
+     */
+    KoOdfBibliographyConfiguration globalBibliographyConfiguration() const;
 
 private:
     enum TypeAndLocation {

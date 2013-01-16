@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 RdfSemanticTreeWidgetSelectAction::RdfSemanticTreeWidgetSelectAction(QWidget *parent,
-        KoCanvasBase *canvas, KoRdfSemanticItem* si, QString name)
+        KoCanvasBase *canvas, hKoRdfSemanticItem si, QString name)
     : RdfSemanticTreeWidgetAction(parent, canvas, name)
     , si(si)
 {
@@ -39,8 +39,8 @@ RdfSemanticTreeWidgetSelectAction::~RdfSemanticTreeWidgetSelectAction()
 
 void RdfSemanticTreeWidgetSelectAction::activated()
 {
-    KoDocumentRdf *rdf = si->documentRdf();
-    QString xmlid = rdf->findXmlId(editor());
+    const KoDocumentRdf *rdf = si->documentRdf();
+    QString xmlid = rdf->findXmlId(KoTextEditor::getTextEditorFromCanvas(m_canvas));
     kDebug(30015) << "selecting xmlid:" << xmlid;
     KoRdfSemanticItemViewSite vs(si, xmlid);
     vs.select(m_canvas);

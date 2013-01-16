@@ -1,4 +1,4 @@
-/* Part of the KOffice project
+/* Part of the Calligra project
  * Copyright (C) 2008 Peter Simonsson <peter.simonsson@gmail.com>
  * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
  *
@@ -30,19 +30,17 @@
 #include <KoCreateShapesTool.h>
 #include <KoShape.h>
 #include <KoShapeGroup.h>
-#include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
 #include <KoProperties.h>
+#include <KoIcon.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kicon.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kapplication.h>
@@ -99,14 +97,14 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     setWidget(mainWidget);
 
     m_menu = new QMenu();
-    QAction* ghnsAction = m_menu->addAction(KIcon("get-hot-new-stuff"), i18n("Get more stencils"));
-    QAction* installAction = m_menu->addAction(KIcon("document-open-folder"), i18n("Install stencil"));
+    QAction *ghnsAction = m_menu->addAction(koIcon("get-hot-new-stuff"), i18n("Get more stencils"));
+    QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Install stencil"));
 
     connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
     connect(installAction, SIGNAL(triggered()), this, SLOT(installStencil()));
 
     m_button = new QToolButton;
-    m_button->setIcon(SmallIcon("list-add"));
+    m_button->setIcon(koIcon("list-add"));
     m_button->setToolTip(i18n("More shapes"));
     m_button->setMenu(m_menu);
     m_button->setPopupMode(QToolButton::InstantPopup);
@@ -135,9 +133,8 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
         loadShapeCollections();
     }
 
-    regenerateProxyMap();
-    m_treeWidget->setFamilyMap(m_proxyMap);
-    
+    m_treeWidget->setFamilyMap(m_modelMap);
+    m_treeWidget->regenerateFilteredMap();
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
             this, SLOT(locationChanged(Qt::DockWidgetArea)));
     connect(m_filterLineEdit, SIGNAL(textEdited(const QString &)), this, SLOT(reapplyFilter()));
@@ -205,23 +202,7 @@ void StencilBoxDocker::locationChanged(Qt::DockWidgetArea area)
 void StencilBoxDocker::reapplyFilter()
 {
     QRegExp regExp(m_filterLineEdit->originalText(), Qt::CaseInsensitive, QRegExp::RegExp2);
-    foreach(QSortFilterProxyModel* model, m_proxyMap)
-    {
-        model->setFilterRegExp(regExp);
-    }
-    m_treeWidget->filter();
-}
-
-void StencilBoxDocker::regenerateProxyMap()
-{
-    QMapIterator<QString, CollectionItemModel*> i(m_modelMap);
-    while(i.hasNext())
-    {
-        i.next();
-        QSortFilterProxyModel* proxy = new QSortFilterProxyModel();
-        proxy->setSourceModel(i.value());
-        m_proxyMap.insert(i.key(), proxy);
-    }
+    m_treeWidget->setFilter(regExp);
 }
 
 /// Generate lists of shapes registered
@@ -245,7 +226,7 @@ void StencilBoxDocker::loadDefaultShapes()
             temp.id = shapeTemplate.id;
             temp.name = shapeTemplate.name;
             temp.toolTip = shapeTemplate.toolTip;
-            temp.icon = KIcon(shapeTemplate.icon);
+            temp.icon = KIcon(shapeTemplate.iconName);
             temp.properties = shapeTemplate.properties;
 
             if(familyMap.contains(shapeTemplate.family))
@@ -266,7 +247,7 @@ void StencilBoxDocker::loadDefaultShapes()
             temp.id = factory->id();
             temp.name = factory->name();
             temp.toolTip = factory->toolTip();
-            temp.icon = KIcon(factory->icon());
+            temp.icon = KIcon(factory->iconName());
             temp.properties = 0;
 
             if(familyMap.contains(factory->family()))
@@ -372,6 +353,16 @@ void StencilBoxDocker::removeCollection(const QString& family)
 
         m_modelMap.remove(family);
         delete model;
-        regenerateProxyMap();
+        m_treeWidget->regenerateFilteredMap();
+    }
+}
+
+void StencilBoxDocker::setViewMode(QListView::ViewMode iconMode)
+{
+    QMapIterator<QString, CollectionItemModel*> i(m_modelMap);
+    while(i.hasNext())
+    {
+        i.next();
+        i.value()->setViewMode(iconMode);
     }
 }

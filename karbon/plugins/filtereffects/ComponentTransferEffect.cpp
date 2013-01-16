@@ -23,7 +23,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KLocale>
-#include <QtCore/QRect>
+#include <QRect>
 #include <math.h>
 
 ComponentTransferEffect::ComponentTransferEffect()

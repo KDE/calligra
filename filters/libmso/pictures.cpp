@@ -20,7 +20,11 @@
 #include <zlib.h>
 #include <cstdio>
 #include <iostream>
-#include <QtCore/QDebug>
+#include <QDebug>
+#include <QImage>
+#include <QBuffer>
+
+//#define DEBUG_PICTURES
 
 // Use anonymous namespace to cover following functions
 namespace
@@ -38,8 +42,7 @@ static inline quint32 readU32(const void* p)
     return ptr[0] + (ptr[1] << 8) + (ptr[2] << 16) + (ptr[3] << 24);
 }
 
-void
-saveStream(POLE::Stream& stream, quint32 size, KoStore* out)
+void saveStream(POLE::Stream& stream, quint32 size, KoStore* out)
 {
     const quint16 bufferSize = 1024;
     unsigned char buffer[bufferSize];
@@ -51,8 +54,8 @@ saveStream(POLE::Stream& stream, quint32 size, KoStore* out)
         nread = stream.read(buffer, (bufferSize < size) ? bufferSize : size);
     }
 }
-bool
-saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
+
+bool saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
 {
     const quint16 bufferSize = 1024;
     unsigned char bufin[bufferSize];
@@ -98,55 +101,81 @@ saveDecompressedStream(POLE::Stream& stream, quint32 size, KoStore* out)
     inflateEnd(&zstream);
     return false; // the stream was incomplete
 }
-const char*
-getMimetype(quint16 type)
+
+const char* getMimetype(quint16 type)
 {
     switch (type) {
-    case 0xF01A: return "application/octet-stream";
-    case 0xF01B: return "application/octet-stream";
-    case 0xF01C: return "image/pict";
-    case 0xF01D: return "image/jpeg";
-    case 0xF01E: return "image/png";
-    case 0xF01F: return "application/octet-stream";
-    case 0xF029: return "image/tiff";
-    case 0xF02A: return "image/jpeg";
+    case officeArtBlipEMF: return "image/x-emf";
+    case officeArtBlipWMF: return "image/x-wmf";
+    case officeArtBlipPICT: return "image/pict";
+    case officeArtBlipJPEG: return "image/jpeg";
+    case officeArtBlipPNG: return "image/png";
+    case officeArtBlipDIB: return "application/octet-stream";
+    case officeArtBlipTIFF: return "image/tiff";
+    case officeArtBlipJPEG2: return "image/jpeg";
     }
     return "";
 }
-const char*
-getSuffix(quint16 type)
+
+const char* getSuffix(quint16 type)
 {
     switch (type) {
-    case 0xF01A: return ".emf";
-    case 0xF01B: return ".wmf";
-    case 0xF01C: return ".pict";
-    case 0xF01D: return ".jpg";
-    case 0xF01E: return ".png";
-    case 0xF01F: return ".dib";
-    case 0xF029: return ".tiff";
-    case 0xF02A: return ".jpg";
+    case officeArtBlipEMF: return ".emf";
+    case officeArtBlipWMF: return ".wmf";
+    case officeArtBlipPICT: return ".pict";
+    case officeArtBlipJPEG: return ".jpg";
+    case officeArtBlipPNG: return ".png";
+    case officeArtBlipDIB: return ".dib";
+    case officeArtBlipTIFF: return ".tiff";
+    case officeArtBlipJPEG2: return ".jpg";
     }
     return "";
 }
-template<class T>
-void
-savePicture(PictureReference& ref, const T* a, KoStore* out)
+
+template<class T> void savePicture(PictureReference& ref, const T* a, KoStore* out)
 {
     if (!a) return;
     ref.uid = a->rgbUid1 + a->rgbUid2;
-    ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
+    ref.name.clear();
+
+    QByteArray imagePixelBytes = a->BLIPFileData;
+    if (a->rh.recType == officeArtBlipDIB) {
+        // convert to QImage
+        QImage image;
+        bool result = dibToBmp(image, imagePixelBytes.data(), imagePixelBytes.size());
+        if (!result) {
+            return; // empty name reports an error
+        }
+
+        // writes image into ba in PNG format
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        result = image.save(&buffer, "PNG");
+        if (!result) {
+            return; // empty name reports an error
+        }
+
+        imagePixelBytes = ba;
+        // save as png
+        ref.name = ref.uid.toHex() + getSuffix(officeArtBlipPNG);
+        ref.mimetype = getMimetype(officeArtBlipPNG);
+    } else {
+        ref.name = ref.uid.toHex() + getSuffix(a->rh.recType);
+        ref.mimetype = getMimetype(a->rh.recType);
+    }
+
     if (!out->open(ref.name.toLocal8Bit())) {
         ref.name.clear();
         ref.uid.clear();
         return; // empty name reports an error
     }
-    out->write(a->BLIPFileData.data(), a->BLIPFileData.size());
-    ref.mimetype = getMimetype(a->rh.recType);
+
+    out->write(imagePixelBytes.data(), imagePixelBytes.size());
     out->close();
 }
-template<class T>
-void
-saveDecompressedPicture(PictureReference& ref, const T* a, KoStore* store)
+
+template<class T> void saveDecompressedPicture(PictureReference& ref, const T* a, KoStore* store)
 {
     if (!a) return;
 
@@ -165,7 +194,7 @@ saveDecompressedPicture(PictureReference& ref, const T* a, KoStore* store)
         buff.prepend((char*) tmp, 4);
         buff = qUncompress(buff);
 
-        if (buff.size() != cbSize) {
+        if ((uint)buff.size() != cbSize) {
             qDebug() << "Warning: uncompressed size of the metafile differs";
         }
     }
@@ -181,8 +210,8 @@ saveDecompressedPicture(PictureReference& ref, const T* a, KoStore* store)
     ref.mimetype = getMimetype(a->rh.recType);
     store->close();
 }
-PictureReference
-savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
+
+PictureReference savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
 {
     PictureReference ref;
     // only one of these calls will actually save a picture
@@ -197,8 +226,7 @@ savePicture(const MSO::OfficeArtBlip& a, KoStore* store)
 }
 } //namespace
 
-PictureReference
-savePicture(POLE::Stream& stream, KoStore* out)
+PictureReference savePicture(POLE::Stream& stream, KoStore* out)
 {
     PictureReference ref;
     const quint16 bufferSize = 1024;
@@ -227,14 +255,14 @@ savePicture(POLE::Stream& stream, KoStore* out)
     // The offset to the data differs per image type.
     quint16 offset;
     switch (type) {
-    case 0xF01A: offset = (instance == 0x3D4) ? 50 : 66; break;
-    case 0xF01B: offset = (instance == 0x216) ? 50 : 66; break;
-    case 0xF01C: offset = (instance == 0x542) ? 50 : 66; break;
-    case 0xF01D: offset = (instance == 0x46A) ? 17 : 33; break;
-    case 0xF01E: offset = (instance == 0x6E0) ? 17 : 33; break;
-    case 0xF01F: offset = (instance == 0x7A8) ? 17 : 33; break;
-    case 0xF029: offset = (instance == 0x6E4) ? 17 : 33; break;
-    case 0xF02A: offset = (instance == 0x46A) ? 17 : 33; break;
+    case officeArtBlipEMF: offset = (instance == 0x3D4) ? 50 : 66; break;
+    case officeArtBlipWMF: offset = (instance == 0x216) ? 50 : 66; break;
+    case officeArtBlipPICT: offset = (instance == 0x542) ? 50 : 66; break;
+    case officeArtBlipJPEG: offset = (instance == 0x46A) ? 17 : 33; break;
+    case officeArtBlipPNG: offset = (instance == 0x6E0) ? 17 : 33; break;
+    case officeArtBlipDIB: offset = (instance == 0x7A8) ? 17 : 33; break;
+    case officeArtBlipTIFF: offset = (instance == 0x6E4) ? 17 : 33; break;
+    case officeArtBlipJPEG2: offset = (instance == 0x46A) ? 17 : 33; break;
     default: return ref;
     }
     const char* namesuffix = getSuffix(type);
@@ -245,7 +273,7 @@ savePicture(POLE::Stream& stream, KoStore* out)
     size -= offset;
 
     bool compressed = false;
-    if (type == 0xF01A || type == 0xF01B || type == 0xF01C) {
+    if (type == officeArtBlipEMF || type == officeArtBlipWMF || type == officeArtBlipPICT) {
         // read the compressed field from the OfficeArtMetafileHeader
         compressed = buffer[offset-2] == 0;
     }
@@ -267,8 +295,8 @@ savePicture(POLE::Stream& stream, KoStore* out)
 
     return ref;
 }
-PictureReference
-savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
+
+PictureReference savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
 {
     const MSO::OfficeArtBlip* blip = a.anon.get<MSO::OfficeArtBlip>();
     const MSO::OfficeArtFBSE* fbse = a.anon.get<MSO::OfficeArtFBSE>();
@@ -281,20 +309,106 @@ savePicture(const MSO::OfficeArtBStoreContainerFileBlock& a, KoStore* store)
     return PictureReference();
 }
 
-QByteArray
-getRgbUid(const MSO::OfficeArtDggContainer* d, quint16 pib)
+QByteArray getRgbUid(const MSO::OfficeArtDggContainer& dgg, quint32 pib, quint32& offset)
 {
+    quint32 n = pib - 1;
     // return 16 byte rgbuid for this given blip id
-    if (d && d->blipStore) {
-        const MSO::OfficeArtBStoreContainer* b = d->blipStore.data();
-        if (pib < b->rgfb.size() &&
-            b->rgfb[pib].anon.is<MSO::OfficeArtFBSE>())
+    if (dgg.blipStore) {
+        const MSO::OfficeArtBStoreContainer* b = dgg.blipStore.data();
+        if (n < (quint32) b->rgfb.size() &&
+            b->rgfb[n].anon.is<MSO::OfficeArtFBSE>())
         {
-            return b->rgfb[pib].anon.get<MSO::OfficeArtFBSE>()->rgbUid;
+            const MSO::OfficeArtFBSE* fbse = b->rgfb[n].anon.get<MSO::OfficeArtFBSE>();
+#ifdef DEBUG_PICTURES
+            qDebug() << "rgfb.size():" << b->rgfb.size();
+            qDebug() << "pib:" << pib;
+            qDebug() << "OfficeArtFBSE: DEBUG";
+            qDebug() << "rgbUid:" << fbse->rgbUid.toHex();
+            qDebug() << "tag:" << fbse->tag;
+            qDebug() << "cRef:" << fbse->cRef;
+            qDebug() << "foDelay:" << fbse->foDelay;
+            qDebug() << "embeddeBlip:" << fbse->embeddedBlip;
+#endif
+            offset = fbse->foDelay;
+            return fbse->rgbUid;
         }
     }
     if (pib != 0xFFFF && pib != 0) {
+#ifdef DEBUG_PICTURES
         qDebug() << "Could not find image for pib " << pib;
+#endif
     }
     return QByteArray();
+}
+
+QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, const QList<MSO::OfficeArtBStoreContainerFileBlock>* rgfb)
+{
+    PictureReference ref;
+    QMap<QByteArray, QString> fileNames;
+
+    if (!rgfb) return fileNames;
+
+    foreach (const MSO::OfficeArtBStoreContainerFileBlock& block, *rgfb) {
+        ref = savePicture(block, store);
+
+        if (ref.name.length() == 0) {
+#ifdef DEBUG_PICTURES
+            qDebug() << "Empty picture reference, probably an empty slot";
+#endif
+            continue;
+        }
+        //check if the MD4 digest is up2date
+        if (block.anon.is<MSO::OfficeArtFBSE>()) {
+            const MSO::OfficeArtFBSE* fbse = block.anon.get<MSO::OfficeArtFBSE>();
+            if (fbse->rgbUid != ref.uid) {
+                ref.uid = fbse->rgbUid;
+            }
+        }
+
+        if (manifest) {
+            manifest->addManifestEntry("Pictures/" + ref.name, ref.mimetype);
+        }
+
+        fileNames[ref.uid] = ref.name;
+    }
+#ifdef DEBUG_PICTURES
+    qDebug() << "fileNames: DEBUG";
+    QMap<QByteArray, QString>::const_iterator i = fileNames.constBegin();
+    while (i != fileNames.constEnd()) {
+        qDebug() << i.key().toHex() << ": " << i.value();
+        ++i;
+    }
+#endif
+    return fileNames;
+}
+
+// NOTE: copied from qwmf.cc, I just changed WORD -> short and DWORD -> int,
+// removed some commented code, and changed the kWarning to qDebug here
+bool dibToBmp(QImage& bmp, const char* dib, long int size)
+{
+    typedef struct _BMPFILEHEADER {
+        short bmType;
+        int bmSize;
+        short bmReserved1;
+        short bmReserved2;
+        int bmOffBits;
+    }  BMPFILEHEADER;
+
+    int sizeBmp = size + 14;
+    QByteArray pattern;       // BMP header and DIB data
+    pattern.fill(0, sizeBmp);    //resize and fill
+    pattern.insert(14, QByteArray::fromRawData(dib, size));
+
+    // add BMP header
+    BMPFILEHEADER* bmpHeader;
+    bmpHeader = (BMPFILEHEADER*)((const char*)pattern);
+    bmpHeader->bmType = 0x4D42;
+    bmpHeader->bmSize = sizeBmp;
+
+    if (!bmp.loadFromData((const uchar*)bmpHeader, pattern.size(), "BMP")) {
+        qDebug() << "dibToBmp: invalid bitmap";
+        return false;
+    } else {
+        return true;
+    }
 }

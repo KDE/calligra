@@ -12,14 +12,14 @@ kde4-config --prefix
 found=0
 exedirs=`kde4-config --path exe`
 for dir in $exedirs; do
-  if [ -f "$dir/kword" ]; then
-    echo "kword found in $dir"
+  if [ -f "$dir/words" ]; then
+    echo "words found in $dir"
     found=1
   fi
 done
 
 if [ $found -eq 0 ]; then
-    echo "ERROR: kword not found - looked at $exedirs"
+    echo "ERROR: words not found - looked at $exedirs"
 fi
 
 mimelnks=`kde4-config --path mime`

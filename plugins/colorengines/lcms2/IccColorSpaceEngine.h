@@ -22,12 +22,19 @@
 
 #include <KoColorSpaceEngine.h>
 
+class KUrl;
+
 class IccColorSpaceEngine : public KoColorSpaceEngine
 {
 public:
     IccColorSpaceEngine();
     virtual ~IccColorSpaceEngine();
-    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
+    void addProfile(const QString &filename);
+    void removeProfile(const QString &filename);
+    virtual KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
+                                                                       const KoColorSpace* dstColorSpace,
+                                                                       KoColorConversionTransformation::Intent renderingIntent,
+                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags) const;
     quint32 computeColorSpaceType(const KoColorSpace* cs) const;
 private:
     struct Private;

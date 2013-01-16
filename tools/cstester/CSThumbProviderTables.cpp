@@ -23,18 +23,18 @@
 
 #include "CSThumbProviderTables.h"
 
-#include <tables/part/Doc.h>
-#include <tables/Sheet.h>
-#include <tables/Map.h>
-#include <tables/PrintSettings.h>
-#include <tables/ui/SheetView.h>
-#include <tables/SheetPrint.h>
+#include <sheets/part/Doc.h>
+#include <sheets/Sheet.h>
+#include <sheets/Map.h>
+#include <sheets/PrintSettings.h>
+#include <sheets/ui/SheetView.h>
+#include <sheets/SheetPrint.h>
 #include <KoZoomHandler.h>
 #include <KoShapePainter.h>
 #include <KoPAUtil.h>
 #include <QPainter>
 
-CSThumbProviderTables::CSThumbProviderTables(Calligra::Tables::Doc *doc)
+CSThumbProviderTables::CSThumbProviderTables(Calligra::Sheets::Doc *doc)
 : m_doc(doc)
 {
 }
@@ -43,13 +43,13 @@ CSThumbProviderTables::~CSThumbProviderTables()
 {
 }
 
-QList<QPixmap> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
+QList<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {
-    QList<QPixmap> thumbnails;
+    QList<QImage> thumbnails;
     if (0 != m_doc->map()) {
-        foreach(Calligra::Tables::Sheet* sheet, m_doc->map()->sheetList()) {
-            QPixmap thumbnail(thumbSize);
-            thumbnail.fill(Qt::white);
+        foreach(Calligra::Sheets::Sheet* sheet, m_doc->map()->sheetList()) {
+            QImage thumbnail(thumbSize, QImage::Format_RGB32);
+            thumbnail.fill(QColor(Qt::white).rgb());
             QPainter p(&thumbnail);
 
             KoPageLayout pageLayout;
@@ -61,7 +61,7 @@ QList<QPixmap> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
             sheet->printSettings()->setPageLayout(pageLayout);
             sheet->print()->setSettings(*sheet->printSettings(), true);
 
-            Calligra::Tables::SheetView sheetView(sheet);
+            Calligra::Sheets::SheetView sheetView(sheet);
 
             // only paint first page for now
             KoZoomHandler zoomHandler;

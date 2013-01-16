@@ -24,6 +24,7 @@
 #include <KoVariable.h>
 #include <KoTextShapeData.h>
 #include <KoTextPage.h>
+#include <KoOdfNumberDefinition.h>
 
 class KoShapeSavingContext;
 
@@ -55,13 +56,14 @@ public:
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
 
 private:
-    void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
+    void resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
 
     PageType m_type;
 
     KoTextPage::PageSelection m_pageselect;
     int m_pageadjust;
     bool m_fixed;
+    KoOdfNumberDefinition m_numberFormat;
 
     QString m_continuation;
 };

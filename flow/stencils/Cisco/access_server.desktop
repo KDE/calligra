@@ -1,8 +1,23 @@
 [Desktop Entry]
 Name=Access server
+Name[ca]=Servidor d'accés
+Name[ca@valencia]=Servidor d'accés
+Name[el]=Εξυπηρετητής πρόσβασης
+Name[es]=Servidor de acceso
+Name[et]=Pöördusserver
+Name[fr]=Access server
+Name[gl]=Servidor de acceso
+Name[it]=Server di accesso
+Name[kk]=Қатынау сервері
+Name[nb]=Aksesstjener
+Name[nds]=Togriep-Server
 Name[nl]=Access-server
+Name[pl]=Serwer dostępowy
 Name[pt]=Servidor de acesso
 Name[pt_BR]=Servidor de acesso
+Name[ru]=Сервер Доступа
+Name[sk]=Prístupový server
 Name[sv]=Åtkomstserver
 Name[uk]=Сервер доступу
 Name[x-test]=xxAccess serverxx
+Name[zh_TW]=存取伺服器

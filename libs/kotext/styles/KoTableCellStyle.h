@@ -22,28 +22,28 @@
 #ifndef KOTABLECELLSTYLE_H
 #define KOTABLECELLSTYLE_H
 
-#include "KoTableBorderStyle.h"
 #include "KoText.h"
 #include "kotext_export.h"
 
+#include <KoBorder.h>
+#include <KoShadowStyle.h>
 #include <QColor>
 
 #include <QObject>
 #include <QVector>
 #include <QString>
 #include <QVariant>
-#include <QPainter>
 
 struct Property;
 class QTextTableCell;
 class QRectF;
-class QPainter;
-class QPainterPath;
 class KoStyleStack;
 class KoGenStyle;
 class KoGenStyles;
+class KoParagraphStyle;
 #include "KoXmlReaderForward.h"
-class KoOdfLoadingContext;
+class KoShapeLoadingContext;
+class KoShapeSavingContext;
 class KoTableCellStylePrivate;
 
 /**
@@ -54,7 +54,7 @@ class KoTableCellStylePrivate;
  * a specific KoTableCellStyle.
  * @see KoStyleManager
  */
-class KOTEXT_EXPORT KoTableCellStyle : public KoTableBorderStyle
+class KOTEXT_EXPORT KoTableCellStyle : public QObject
 {
     Q_OBJECT
 public:
@@ -65,35 +65,62 @@ public:
         FormulaHidden,
         ProtectedAndFormulaHidden
     };
-    
+
     enum CellTextDirection {
         Default = 0,
         LeftToRight,
         TopToBottom
     };
-    
-    enum Property {
-        StyleId = QTextTableFormat::UserProperty + 1,
-        ShrinkToFit,        ///< Shrink the cell content to fit the size
-        Wrap,               ///< Wrap the text within the cell
-        CellProtection,     ///< The cell protection when the table is protected
-        PrintContent,       ///< Should the content of this cell be printed
-        RepeatContent,      ///< Display the cell content as many times as possible
-        DecimalPlaces,      ///< Count the maximum number of decimal places to display
-        AlignFromType,      ///< Should the alignment property be respected or should the alignment be based on the value type
-        RotationAngle,      ///< Rotation angle of the cell content, in degrees
-        Direction,          ///< The direction of the text in the cell. This is a CellTextDirection.
+
+    enum RotationAlignment {
+        RAlignNone,
+        RAlignBottom,
+        RAlignTop,
+        RAlignCenter
     };
-    
+
+    enum Property {
+        StyleId = QTextTableCellFormat::UserProperty + 7001,
+        ShrinkToFit,                ///< Shrink the cell content to fit the size
+        Wrap,                       ///< Wrap the text within the cell
+        CellProtection,             ///< The cell protection when the table is protected
+        PrintContent,               ///< Should the content of this cell be printed
+        RepeatContent,              ///< Display the cell content as many times as possible
+        DecimalPlaces,              ///< Count the maximum number of decimal places to display
+        AlignFromType,              ///< Should the alignment property be respected or should the alignment be based on the value type
+        RotationAngle,              ///< Rotation angle of the cell content, in degrees
+        Direction,                  ///< The direction of the text in the cell. This is a CellTextDirection.
+        RotationAlign,              ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
+        TextWritingMode,            ///< KoText::Direction, the direction for writing text in the cell
+        VerticalGlyphOrientation,   ///< bool, specify whether this feature is enabled or not
+        CellBackgroundBrush,        ///< the cell background brush, as QTextFormat::BackgroundBrush is used by paragraphs
+        VerticalAlignment,          ///< the vertical alignment oinside the cell
+        MasterPageName,             ///< Optional name of the master-page
+        InlineRdf,                  ///< Optional KoTextInlineRdf object
+        Borders,                    ///< KoBorder, the borders of this cell
+        Shadow,                     ///< KoShadowStyle, the shadow of this cell
+        CellIsProtected             ///< boolean, if true, the cell is protected against edits
+                                        /// It's not really a property of KoTableCellStyle but defined here for convenience
+        ,LastCellStyleProperty
+    };
+
     /// Constructor
     KoTableCellStyle(QObject *parent = 0);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
     KoTableCellStyle(const QTextTableCellFormat &tableCellFormat, QObject *parent = 0);
+    KoTableCellStyle(const KoTableCellStyle &other);
+    KoTableCellStyle& operator=(const KoTableCellStyle &other);
+
     /// Destructor
     ~KoTableCellStyle();
 
     /// Creates a KoTableCellStyle that represents the formatting of \a block.
     static KoTableCellStyle *fromTableCell(const QTextTableCell &table, QObject *parent = 0);
+
+    /// Creates a clean QTextCharFormat, but keeps all the table cell properties.
+    /// This is needed since block.charformat doubles as the QTextTableCellFormat
+    /// This method works even if \a charFormat is not a QTextTableCellFormat
+    static QTextCharFormat cleanCharFormat(const QTextCharFormat &charFormat);
 
     /// creates a clone of this style with the specified parent
     KoTableCellStyle *clone(QObject *parent = 0);
@@ -119,24 +146,22 @@ public:
      */
     QRectF boundingRect(const QRectF &contentRect) const;
 
-
-    /**
-     * Paint the background.
-     *
-     * @painter the painter to draw with.
-     * @bounds the bounding rectangle to draw.
-     */
-    void paintBackground(QPainter &painter, const QRectF &bounds) const;
-
     void setBackground(const QBrush &brush);
     /// See similar named method on QTextBlockFormat
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
-    
+
+    /**
+     * Get the paragraph style for this cell style
+     *
+     * @return the paragraph style
+     */
+    KoParagraphStyle *paragraphStyle() const;
+
     bool shrinkToFit() const;
     void setShrinkToFit(bool state);
-    
+
     bool repeatContent() const;
     void setRepeatContent(bool state);
 
@@ -153,28 +178,43 @@ public:
 
     void setAlignment(Qt::Alignment alignment);
     Qt::Alignment alignment() const;
-    
+
+    KoText::Direction textDirection() const;
+    void setTextDirection (KoText::Direction value);
+
     void setWrap(bool state);
     bool wrap() const;
 
     CellProtectionFlag cellProtection() const;
     void setCellProtection (CellProtectionFlag protection);
-    
+
     void setPrintContent(bool state);
     bool printContent() const;
-    
+
     void setDecimalPlaces(int places);
     int decimalPlaces() const;
-    
+
     void setAlignFromType(bool state);
     bool alignFromType() const;
-    
-    void setRotationAngle(int value);
-    int rotationAngle() const;
-    
+
+    void setRotationAngle(qreal value);
+    qreal rotationAngle() const;
+
     void setDirection(CellTextDirection direction);
     CellTextDirection direction() const;
-    
+
+    void setRotationAlignment(RotationAlignment align);
+    RotationAlignment rotationAlignment () const;
+
+    void setVerticalGlyphOrientation(bool state);
+    bool verticalGlyphOrientation() const;
+
+    void setBorders(const KoBorder &borders);
+    KoBorder borders() const;
+
+    void setShadow (const KoShadowStyle &shadow);
+    KoShadowStyle shadow() const;
+
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);
 
@@ -203,11 +243,14 @@ public:
     void copyProperties(const KoTableCellStyle *style);
 
     /**
-     * Apply this style to a blockFormat by copying all properties from this, and parent
-     * styles to the target block format.  Note that the character format will not be applied
-     * using this method, use the other applyStyle() method for that.
+     * Apply this style to a textTableCellFormat by copying all properties from this, and parent
+     * styles to the target textTableCellFormat.  Note that the paragraph format will not be applied
+     * using this method, use the other method for that.
+     * No default values are applied.
      */
     void applyStyle(QTextTableCellFormat &format) const;
+
+    void applyStyle(QTextTableCell &cell) const;
 
     void remove(int key);
 
@@ -222,9 +265,9 @@ public:
      * @param context the odf loading context
      * @param element the element containing the
      */
-    void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
+    void loadOdf(const KoXmlElement *element, KoShapeLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style, KoShapeSavingContext &context);
 
     /**
      * Returns true if this paragraph style has the property set.
@@ -249,23 +292,83 @@ public:
      */
     QVariant value(int key) const;
 
+
+    /**
+     * Set the properties of an edge.
+     *
+     * @param side defines which edge this is for.
+     * @param style the border style for this side.
+     * @param totalWidth the thickness of the border. Sum of outerwidth, spacing and innerwidth for double borders
+     * @param color the color of the border line(s).
+     */
+    void setEdge(KoBorder::Side side, KoBorder::BorderStyle style, qreal totalWidth, QColor color);
+
+    /**
+     * Set the properties of a double border.
+     * Note: you need to set the edge first or that would overwrite these values.
+     *
+     * The values will not be set if the border doesn't have a double style
+     *
+     * @param side defines which edge this is for.
+     * @param space the amount of spacing between the outer border and the inner border in case of style being double
+     * @param innerWidth the thickness of the inner border line in case of style being double
+     */
+    void setEdgeDoubleBorderValues(KoBorder::Side side, qreal innerWidth, qreal space);
+
+    /**
+     * Check if the border data has any borders.
+     *
+     * @return true if there has been at least one border set.
+     */
+    bool hasBorders() const;
+
+    qreal leftBorderWidth() const;
+    qreal rightBorderWidth() const;
+    qreal topBorderWidth() const;
+    qreal bottomBorderWidth() const;
+
+    qreal leftInnerBorderWidth() const;
+    qreal rightInnerBorderWidth() const;
+    qreal topInnerBorderWidth() const;
+    qreal bottomInnerBorderWidth() const;
+
+    qreal leftOuterBorderWidth() const;
+    qreal rightOuterBorderWidth() const;
+    qreal topOuterBorderWidth() const;
+    qreal bottomOuterBorderWidth() const;
+
+    KoBorder::BorderData getEdge(KoBorder::Side side) const;
+    KoBorder::BorderStyle getBorderStyle(KoBorder::Side side) const;
 signals:
     void nameChanged(const QString &newName);
+
+protected:
+    KoTableCellStylePrivate * const d_ptr;
 
 private:
     /**
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdfProperties(KoStyleStack &styleStack);
+    void loadOdfProperties(KoShapeLoadingContext &context, KoStyleStack &styleStack);
     qreal propertyDouble(int key) const;
+    QPen propertyPen(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
-    BorderStyle oasisBorderStyle(const QString &borderstyle);
-    QString odfBorderStyleString(const BorderStyle borderstyle);
+
+
+    /**
+     * Set the format properties from an Edge structure
+     *
+     * @param side defines which edge this is for.
+     * @param style the border style for this side.
+     * @param edge the Edge that hold the properties values
+     */
+    void setEdge(KoBorder::Side side, const KoBorder::BorderData &edge, KoBorder::BorderStyle style);
 
     Q_DECLARE_PRIVATE(KoTableCellStyle)
+
 };
 
 #endif

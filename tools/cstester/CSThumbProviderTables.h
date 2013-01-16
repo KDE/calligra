@@ -26,7 +26,7 @@
 #include "CSThumbProvider.h"
 
 namespace Calligra {
-namespace Tables {
+namespace Sheets {
 class Doc;
 }
 }
@@ -34,13 +34,13 @@ class Doc;
 class CSThumbProviderTables : public CSThumbProvider
 {
 public:
-    CSThumbProviderTables(Calligra::Tables::Doc *doc);
+    explicit CSThumbProviderTables(Calligra::Sheets::Doc *doc);
     virtual ~CSThumbProviderTables();
 
-    virtual QList<QPixmap> createThumbnails(const QSize &thumbSize);
+    virtual QList<QImage> createThumbnails(const QSize &thumbSize);
 
 private:
-    Calligra::Tables::Doc *m_doc;
+    Calligra::Sheets::Doc *m_doc;
 };
 
 #endif /* CSTHUMBPROVIDERTABLES_H */

@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>543</width>
-    <height>268</height>
+    <width>545</width>
+    <height>270</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="chkPreview">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -40,10 +40,10 @@
       <attribute name="title">
        <string>Basic</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <layout class="QGridLayout">
+         <item row="0" column="0" rowspan="2">
           <widget class="QLabel" name="textLabel1">
            <property name="text">
             <string>File size:</string>
@@ -90,49 +90,40 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item row="1" column="1">
-          <widget class="QSlider" name="qualityLevel">
-           <property name="toolTip">
-            <string>These settings determine how much information is lost during compression</string>
-           </property>
-           <property name="minimum">
-            <number>0</number>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="singleStep">
-            <number>1</number>
-           </property>
-           <property name="pageStep">
-            <number>1</number>
-           </property>
-           <property name="value">
-            <number>80</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="tickPosition">
-            <enum>QSlider::TicksBothSides</enum>
-           </property>
-           <property name="tickInterval">
-            <number>10</number>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout">
+           <item>
+            <widget class="QSlider" name="qualityLevel">
+             <property name="toolTip">
+              <string>These settings determine how much information is lost during compression</string>
+             </property>
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="singleStep">
+              <number>1</number>
+             </property>
+             <property name="pageStep">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>80</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksBothSides</enum>
+             </property>
+             <property name="tickInterval">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item row="2" column="0">
           <widget class="QLabel" name="textLabel1_2">
@@ -192,14 +183,32 @@
          </item>
         </layout>
        </item>
-       <item>
+       <item row="1" column="0">
         <widget class="QCheckBox" name="progressive">
          <property name="text">
           <string comment="A progressive jpeg file can be displayed while loading.">Progressive</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Transparent pixel fill color:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="KColorButton" name="bnTransparencyFillColor">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Background color to replace transparent pixels with.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="3" column="0">
         <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -218,7 +227,7 @@
       <attribute name="title">
        <string>Advanced quality</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout">
        <item>
         <widget class="QCheckBox" name="optimize">
          <property name="text">
@@ -230,15 +239,15 @@
         </widget>
        </item>
        <item>
-        <layout class="QFormLayout" name="formLayout_3">
-         <item row="0" column="0">
+        <layout class="QHBoxLayout">
+         <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
             <string comment="the result will be artificially smoothed to hide jpeg artefacts">Smooth:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item>
           <widget class="QSlider" name="smoothLevel">
            <property name="maximum">
             <number>100</number>
@@ -267,15 +276,15 @@
         </widget>
        </item>
        <item>
-        <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
+        <layout class="QHBoxLayout">
+         <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
             <string>Subsampling:</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item>
           <widget class="QComboBox" name="subsampling">
            <item>
             <property name="text">
@@ -391,6 +400,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

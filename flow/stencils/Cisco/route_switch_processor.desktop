@@ -1,8 +1,27 @@
 [Desktop Entry]
 Name=Route Switch Processor
+Name[bg]=Процесор за комутиране на маршрути
+Name[ca]=Processador de commutació de rutes
+Name[ca@valencia]=Processador de commutació de rutes
+Name[de]=Router-Switch-Prozessor
+Name[el]=Επεξεργαστής δρομολόγησης
+Name[es]=Procesador de conmutación de rutas
 Name[et]=Marsruuter-kommutaatori protsessor
+Name[fr]=processeur de bascule
+Name[gl]=Procesador dun conmutador encamiñador
+Name[hu]=Route Switch Processzor
+Name[it]=Route Switch Processor
+Name[kk]=Маршруттауыш қосқыш процесоры
+Name[nb]=Rute-svitsj-prosessor
+Name[nds]=Nettweeg-Ümschaltperzesser
+Name[nl]=Route-switch-processor
+Name[pl]=Procesor przełączania trasy
 Name[pt]=Processador Comutação Redes
 Name[pt_BR]=Processador de comutação de rotas
+Name[ru]=Обработчик переключения маршрутизации
+Name[sk]=Procesor prepínača trasy
 Name[sv]=Linjeväxelprocessor
 Name[uk]=Процесор комутації маршрутів
 Name[x-test]=xxRoute Switch Processorxx
+Name[zh_CN]=路由交换机处理器
+Name[zh_TW]=路由交換處理器

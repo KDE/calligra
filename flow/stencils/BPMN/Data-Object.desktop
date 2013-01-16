@@ -1,9 +1,25 @@
 [Desktop Entry]
 Name=Data-Object
+Name[ca]=Objecte-dada
+Name[ca@valencia]=Objecte-dada
+Name[de]=Datenobjekt
+Name[el]=Data-Object
+Name[es]=Objeto de datos
 Name[et]=Andmeobjekt
+Name[fr]=Données
+Name[gl]=Obxecto de datos
+Name[hu]=Adatobjektum
+Name[it]=Oggetto-Dati
+Name[ja]=データオブジェクト
+Name[kk]=Дерек нысаны
+Name[nb]=Data-objekt
+Name[nds]=Datenobjekt
 Name[nl]=Gegevensobject
+Name[pl]=Obiekt-Danych
 Name[pt]=Objecto-Dados
 Name[pt_BR]=Objeto de dados
+Name[ru]=Объект данных
+Name[sk]=Dátový objekt
 Name[sv]=Dataobjekt
 Name[uk]=Об’єкт даних
 Name[x-test]=xxData-Objectxx

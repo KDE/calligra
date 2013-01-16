@@ -1,9 +1,25 @@
 [Desktop Entry]
 Name=Chemistry Lab
+Name[ca]=Laboratori químic
+Name[ca@valencia]=Laboratori químic
+Name[de]=Chemielabor
+Name[el]=Chemistry Lab
+Name[es]=Laboratorio de química
 Name[et]=Keemialabor
+Name[fr]=Laboratoire de chimie
+Name[gl]=Química
+Name[hu]=Kémia labor
+Name[it]=Laboratorio di chimica
+Name[kk]=Химия лабораториясы
+Name[nb]=Kjemilab
+Name[nl]=Scheikundelab
+Name[pl]=Laboratorium chemiczne
 Name[pt]=Laboratório de Química
 Name[pt_BR]=Laboratório de Química
+Name[ru]=Химическая лаборатория
+Name[sk]=Chemické laboratórium
 Name[sv]=Kemilabb
 Name[uk]=Хімічна лабораторія
 Name[x-test]=xxChemistry Labxx
+Name[zh_TW]=化學實驗
 X-KDE-DirType=odg-collection

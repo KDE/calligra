@@ -28,28 +28,28 @@ class KoShape;
 class StateTool : public KoToolBase
 {
     Q_OBJECT
-  public:
+public:
     explicit StateTool(KoCanvasBase *canvas);
     ~StateTool();
-    
+
     /// reimplemented
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) ;
 
     /// reimplemented
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented
-    virtual void mousePressEvent( KoPointerEvent *event );
+    virtual void mousePressEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    virtual void mouseMoveEvent(KoPointerEvent *event);
     /// reimplemented
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-  signals:
-    void shapeChanged(StateShape* );
-  protected:
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual void mouseReleaseEvent(KoPointerEvent *event);
+signals:
+    void shapeChanged(StateShape*);
+protected:
+    virtual QList<QWidget *> createOptionWidgets();
 
-  private:
+private:
     StateShape* m_currentShape;
 };
 

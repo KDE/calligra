@@ -39,11 +39,14 @@
 #include "kis_paint_device.h"
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
+#include <kis_fixed_paint_device.h>
 
 #include "kis_brush_server.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include <kis_selection.h>
+#include <KoProperties.h>
+#include "kis_iterator_ng.h"
 
 KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& caption, KisImageWSP image)
         : KisWdgCustomBrush(parent)
@@ -55,10 +58,10 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
-    
+
     m_brush = 0;
     m_brushCreated = false;
-    
+
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
@@ -88,6 +91,12 @@ void KisCustomBrushWidget::showEvent(QShowEvent *)
 
 void KisCustomBrushWidget::slotUpdateCurrentBrush(int)
 {
+    if (brushStyle->currentIndex() == 0) {
+        comboBox2->setEnabled(false);
+    }
+    else {
+        comboBox2->setEnabled(true);
+    }
     if (m_image) {
         createBrush();
         if (m_brush){
@@ -148,7 +157,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     if (m_rServerAdapter) {
         KisGbrBrush * resource = static_cast<KisGbrBrush*>( m_brush.data() )->clone();
         resource->setFilename(tempFileName);
-        
+
         if (nameLineEdit->text().isEmpty()){
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
         }else{
@@ -158,7 +167,7 @@ void KisCustomBrushWidget::slotAddPredefined()
         if (colorAsMask->isChecked()){
             resource->makeMaskImage();
         }
-    
+
         m_rServerAdapter->addResource( resource );
     }
 }
@@ -175,22 +184,39 @@ void KisCustomBrushWidget::createBrush()
             kWarning() << "Brush was not removed correctly for the resource server";
         }
     }
-    
+
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
         // create copy of the data
         m_image->lock();
         KisPaintDeviceSP dev = new KisPaintDevice(*m_image->mergedImage());
         m_image->unlock();
-        
+
         if (!selection){
             m_brush = new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height());
-        }else{
-            dev->applySelectionMask(selection);
+        }
+        else {
+            // apply selection mask
+            QRect r = selection->selectedExactRect();
+            dev->crop(r);
+
+            KisHLineIteratorSP pixelIt = dev->createHLineIteratorNG(r.x(), r.top(), r.width());
+            KisHLineConstIteratorSP maskIt = selection->projection()->createHLineIteratorNG(r.x(), r.top(), r.width());
+
+            for (qint32 y = r.top(); y <= r.bottom(); ++y) {
+
+                do {
+                    dev->colorSpace()->applyAlphaU8Mask(pixelIt->rawData(), maskIt->oldRawData(), 1);
+                } while (pixelIt->nextPixel() && maskIt->nextPixel());
+
+                pixelIt->nextRow();
+                maskIt->nextRow();
+            }
+
             QRect rc = dev->exactBounds();
             m_brush = new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
         }
-    
+
     } else {
         // For each layer in the current image, create a new image, and add it to the list
         QVector< QVector<KisPaintDevice*> > devices;
@@ -198,15 +224,18 @@ void KisCustomBrushWidget::createBrush()
         int w = m_image->width();
         int h = m_image->height();
 
+        m_image->lock();
+
         // We only loop over the rootLayer. Since we actually should have a layer selection
         // list, no need to elaborate on that here and now
-        KisLayer* layer = dynamic_cast<KisLayer*>(m_image->rootLayer()->firstChild().data());
-        while (layer) {
-            KisPaintLayer* paint = 0;
-            if (layer->visible() && (paint = dynamic_cast<KisPaintLayer*>(layer)))
-                devices[0].push_back(paint->paintDevice().data());
-            layer = dynamic_cast<KisLayer*>(layer->nextSibling().data());
+        KoProperties properties;
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> layers = m_image->root()->childNodes(QStringList("KisLayer"), properties);
+        KisNodeSP node;
+        foreach(KisNodeSP node, layers) {
+            devices[0].push_back(node->projection().data());
         }
+
         QVector<KisParasite::SelectionMode> modes;
 
         switch (comboBox2->currentIndex()) {
@@ -219,6 +248,7 @@ void KisCustomBrushWidget::createBrush()
         }
 
         m_brush = new KisImagePipeBrush(m_image->objectName(), w, h, devices, modes);
+        m_image->unlock();
     }
 
     static_cast<KisGbrBrush*>( m_brush.data() )->setUseColorAsMask( colorAsMask->isChecked() );
@@ -226,7 +256,7 @@ void KisCustomBrushWidget::createBrush()
     m_brush->setFilename(TEMPORARY_FILENAME);
     m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);
-    
+
     KisBrushServer::instance()->brushServer()->addResource( m_brush.data() , false);
 }
 

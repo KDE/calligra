@@ -26,7 +26,6 @@
 
 #include <kis_convolution_kernel.h>
 #include <kis_convolution_painter.h>
-#include <kis_iterators_pixel.h>
 
 #include "kis_wdg_blur.h"
 #include "ui_wdgblur.h"
@@ -78,7 +77,7 @@ void KisBlurFilter::process(KisPaintDeviceSP device,
     uint halfHeight = (config->getProperty("halfHeight", value)) ? value.toUInt() : 5;
     uint height = 2 * halfHeight + 1;
     int rotate = (config->getProperty("rotate", value)) ? value.toInt() : 0;
-    int strength = 100 - (config->getProperty("strength", value)) ? value.toUInt() : 0;
+    int strength = 100 - (config->getProperty("strength", value) ? value.toUInt() : 0);
 
     int hFade = (halfWidth * strength) / 100;
     int vFade = (halfHeight * strength) / 100;

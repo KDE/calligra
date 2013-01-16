@@ -23,13 +23,15 @@
 
 #include <core/kexidataiteminterface.h>
 
-#include <qvariant.h>
+#include <QVariant>
+#ifndef KEXI_MOBILE
 #include <q3scrollview.h>
+#endif
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 
-#include "kexitableviewdata.h"
+#include <widget/dataviewcommon/kexitableviewdata.h>
 
 namespace KexiDB
 {
@@ -135,7 +137,7 @@ public:
      setupContents(). */
     virtual void paintSelectionBackground(QPainter *p, bool focused, const QString& txt,
                                           int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-                                          const QFontMetrics &fm, bool readOnly, bool fullRowSelection);
+                                          const QFontMetrics &fm, bool readOnly, bool fullRecordSelection);
 
     /*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
      dropdown button at the right side. \return left margin's size;
@@ -204,7 +206,7 @@ signals:
     void acceptRequested();
 
 protected:
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+    //virtual bool eventFilter(QObject* watched, QEvent* e);
 
     /*! Sets \a v as view widget for this editor. The view will be assigned as focus proxy
      for the editor, its events will be filtered, it will be resized when neede, and so on. */
@@ -221,7 +223,9 @@ protected:
     KexiTableViewColumn *m_column;
     int m_leftMargin;
     int m_rightMargin, m_rightMarginWhenFocused;
+#ifndef KEXI_MOBILE
     Q3ScrollView* m_scrollView; //!< may be 0 if the parent is not a scrollview
+#endif
     bool m_usesSelectedTextColor; //!< set in ctor, @see usesSelectedTextColor()
 
 private:

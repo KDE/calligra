@@ -10,7 +10,7 @@ set(kexitableviewtest_SRCS main.cpp )
 
 kde4_add_executable(kexitableviewtest ${kexitableviewtest_SRCS})
 
-target_link_libraries(kexitableviewtest  ${KDE4_KDECORE_LIBS} kexidb kexiextendedwidgets )
+target_link_libraries(kexitableviewtest  ${KDE4_KDECORE_LIBS} kexidb ${CALLIGRADB_LIBS} kexiextendedwidgets )
 
 install(TARGETS kexitableviewtest  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

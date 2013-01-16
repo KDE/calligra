@@ -1,9 +1,27 @@
 [Desktop Entry]
 Name=Vertical Capacitor
+Name[bg]=Вертикален кондензатор
+Name[ca]=Capacitador vertical
+Name[ca@valencia]=Capacitador vertical
+Name[de]=Senkrechter Kondensator
+Name[el]=Κάθετος πυκνωτής
+Name[es]=Condensador vertical
 Name[et]=Vertikaalne kondensaator
+Name[fr]=Vertical Capacitor
+Name[gl]=Condensador vertical
+Name[hu]=Függőleges kondenzátor
+Name[it]=Condensatore verticale
+Name[kk]=Тік конденсатор
+Name[nb]=Loddrett kondensator
+Name[nds]=Pielrecht Kondensator
 Name[nl]=Verticale condensator
+Name[pl]=Pionowy kondensator
 Name[pt]=Condensador Vertical
 Name[pt_BR]=Capacitor vertical
+Name[ru]=Вертикальный конденсатор
+Name[sk]=Zvislý kondenzátor
 Name[sv]=Vertikal kondensator
 Name[uk]=Конденсатор (вертикально)
 Name[x-test]=xxVertical Capacitorxx
+Name[zh_CN]=垂直电容
+Name[zh_TW]=垂直電容器

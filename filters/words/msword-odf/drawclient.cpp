@@ -25,7 +25,7 @@
 
 #include <QColor>
 
-#define USE_OFFICEARTDGG_CONTAINER
+//#define USE_OFFICEARTDGG_CONTAINER
 
 using namespace MSO;
 using namespace wvWare;
@@ -47,7 +47,7 @@ QString mm(double v) {
 }
 
 QRectF
-KWordGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
+WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
 {
     const DocOfficeArtClientAnchor* a = ca.anon.get<DocOfficeArtClientAnchor>();
     if (!a || (a->clientAnchor == -1)) {
@@ -61,22 +61,35 @@ KWordGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
         plcfSpa = gh->m_drawings->getSpaMom();
     }
     if (!plcfSpa) {
-        kDebug(30513) << "MISSING plcfSpa, returning QRect(0, 0, 1, 1)";
-        return QRect(0, 0, 1, 1);
+        kDebug(30513) << "MISSING plcfSpa, returning QRectF()";
+        return QRectF();
     }
     PLCFIterator<Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
     Word97::FSPA* spa = it.current();
     return QRectF(spa->xaLeft, spa->yaTop, (spa->xaRight - spa->xaLeft), (spa->yaBottom - spa->yaTop));
 }
 
+QRectF
+WordsGraphicsHandler::DrawClient::getReserveRect(void)
+{
+    //At least for floating MS-ODRAW shapes the SPA structure for the current
+    //CP is provided by the GraphicsHandler.  No test files for inline shapes
+    //at the moment.
+    Word97::FSPA* spa = gh->m_pSpa;
+
+    //DO NOT remove the assert, please send the file to: matus.uzak@ixonos.com
+    Q_ASSERT(spa);
+    return QRectF(spa->xaLeft, spa->yaTop, (spa->xaRight - spa->xaLeft), (spa->yaBottom - spa->yaTop));
+}
+
 QString
-KWordGraphicsHandler::DrawClient::getPicturePath(int pib)
+WordsGraphicsHandler::DrawClient::getPicturePath(const quint32 pib)
 {
     return gh->getPicturePath(pib);
 }
 
 void
-KWordGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
+WordsGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                                        const MSO::OfficeArtClientData* cd,
                                                        Writer& out)
 {
@@ -97,7 +110,7 @@ KWordGraphicsHandler::DrawClient::processClientTextBox(const MSO::OfficeArtClien
 }
 
 KoGenStyle
-KWordGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
+WordsGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                                      const MSO::OfficeArtClientData* cd,
                                                      const DrawStyle& ds,
                                                      Writer& out)
@@ -114,7 +127,7 @@ KWordGraphicsHandler::DrawClient::createGraphicStyle(const MSO::OfficeArtClientT
 }
 
 void
-KWordGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
+WordsGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                                 const MSO::OfficeArtClientData* clientData,
                                                 KoGenStyle& style,
                                                 Writer& out)
@@ -133,7 +146,7 @@ KWordGraphicsHandler::DrawClient::addTextStyles(const MSO::OfficeArtClientTextBo
 }
 
 const MSO::OfficeArtDggContainer*
-KWordGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
+WordsGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
 {
 #ifdef USE_OFFICEARTDGG_CONTAINER
     return &gh->m_officeArtDggContainer;
@@ -143,28 +156,21 @@ KWordGraphicsHandler::DrawClient::getOfficeArtDggContainer(void)
 }
 
 const MSO::OfficeArtSpContainer*
-KWordGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
+WordsGraphicsHandler::DrawClient::getMasterShapeContainer(quint32 spid)
 {
     //TODO: No supoort for master shapes at the moment.
     Q_UNUSED(spid);
     return 0;
 }
 
-const MSO::OfficeArtSpContainer*
-KWordGraphicsHandler::DrawClient::defaultShapeContainer(void)
-{
-    //Specific for Ppt at the moment.
-    return 0;
-}
-
 QColor
-KWordGraphicsHandler::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
+WordsGraphicsHandler::DrawClient::toQColor(const MSO::OfficeArtCOLORREF& c)
 {
     return QColor(c.red, c.green, c.blue);
 }
 
 QString
-KWordGraphicsHandler::DrawClient::formatPos(qreal v)
+WordsGraphicsHandler::DrawClient::formatPos(qreal v)
 {
     //assuming the client uses the DrawingWriter class
     return mm(v);
@@ -175,16 +181,22 @@ KWordGraphicsHandler::DrawClient::formatPos(qreal v)
 
 //NOTE: OfficeArtClientData.clientdata (4 bytes): An integer that SHOULD be
 //ignored.  [MS-DOC] — v20100926
+bool
+WordsGraphicsHandler::DrawClient::processRectangleAsTextBox(const MSO::OfficeArtClientData& cd)
+{
+    Q_UNUSED(cd);
+    return false;
+}
 
 bool
-KWordGraphicsHandler::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
+WordsGraphicsHandler::DrawClient::onlyClientData(const MSO::OfficeArtClientData& o)
 {
     Q_UNUSED(o);
     return false;
 }
 
 void
-KWordGraphicsHandler::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* ct,
+WordsGraphicsHandler::DrawClient::processClientData(const MSO::OfficeArtClientTextBox* ct,
                                                     const MSO::OfficeArtClientData& o,
                                                     Writer& out)
 {

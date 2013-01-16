@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+//#define DEAD_TILES_SANITY_CHECK
+
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 #include "kis_tile.h"
@@ -29,6 +31,7 @@ void KisTile::init(qint32 col, qint32 row,
 {
     m_col = col;
     m_row = row;
+    m_lockCounter = 0;
 
     m_extent = QRect(m_col * KisTileData::WIDTH, m_row * KisTileData::HEIGHT,
                      KisTileData::WIDTH, KisTileData::HEIGHT);
@@ -37,7 +40,6 @@ void KisTile::init(qint32 col, qint32 row,
     m_tileData->acquire();
 
     m_mementoManager = mm;
-    m_lockCounter = 0;
 
     if (m_mementoManager)
         m_mementoManager->registerTileChange(this);
@@ -71,10 +73,24 @@ KisTile::~KisTile()
 {
     Q_ASSERT(!m_lockCounter);
 
-    if (m_mementoManager)
-        m_mementoManager->registerTileDeleted(this);
+#ifdef DEAD_TILES_SANITY_CHECK
+    /**
+     * We should have been disconnected from the memento manager in notifyDead().
+     * otherwise, there is a bug
+     */
+    Q_ASSERT(!m_mementoManager);
+#endif
 
     m_tileData->release();
+}
+
+void KisTile::notifyDead()
+{
+    if (m_mementoManager) {
+        KisMementoManager *manager = m_mementoManager;
+        m_mementoManager = 0;
+        manager->registerTileDeleted(this);
+    }
 }
 
 //#define DEBUG_TILE_LOCKING
@@ -100,10 +116,11 @@ inline void KisTile::blockSwapping() const
      * We need to hold a specal barrier lock here to ensure
      * m_tileData->blockSwapping() has finished executing
      * before anyone started reading the tile data. That is
-     * why we not not use atomic operations here.
+     * why we can not use atomic operations here.
      */
 
     QMutexLocker locker(&m_swapBarrierLock);
+    Q_ASSERT(m_lockCounter >= 0);
 
     if(!m_lockCounter++)
         m_tileData->blockSwapping();
@@ -114,9 +131,33 @@ inline void KisTile::blockSwapping() const
 inline void KisTile::unblockSwapping() const
 {
     QMutexLocker locker(&m_swapBarrierLock);
+    Q_ASSERT(m_lockCounter > 0);
 
-    if(--m_lockCounter == 0)
+    if(--m_lockCounter == 0) {
         m_tileData->unblockSwapping();
+
+        if(!m_oldTileData.isEmpty()) {
+            foreach(KisTileData *td, m_oldTileData) {
+                td->unblockSwapping();
+                td->release();
+            }
+            m_oldTileData.clear();
+        }
+    }
+}
+
+inline void KisTile::safeReleaseOldTileData(KisTileData *td)
+{
+    QMutexLocker locker(&m_swapBarrierLock);
+    Q_ASSERT(m_lockCounter >= 0);
+
+    if(m_lockCounter > 0) {
+        m_oldTileData.push(td);
+    }
+    else {
+        td->unblockSwapping();
+        td->release();
+    }
 }
 
 void KisTile::lockForRead() const
@@ -148,8 +189,7 @@ void KisTile::lockForWrite()
             tileData->blockSwapping();
             KisTileData *oldTileData = m_tileData;
             m_tileData = tileData;
-            oldTileData->unblockSwapping();
-            oldTileData->release();
+            safeReleaseOldTileData(oldTileData);
 
             DEBUG_COWING(tileData);
 

@@ -23,13 +23,17 @@
 
 #include "CSThumbProviderWords.h"
 
+#include <KoPart.h>
+
 #include <KWDocument.h>
 #include <KWPage.h>
+#include <KWCanvasItem.h>
+
 #include <frames/KWFrame.h>
 #include <frames/KWFrameSet.h>
 #include <frames/KWTextFrameSet.h>
-#include <frames/KWTextDocumentLayout.h>
 
+#include <KoShapeManager.h>
 #include <KoTextShapeData.h>
 #include <KoZoomHandler.h>
 #include <KoShapePainter.h>
@@ -47,32 +51,10 @@ CSThumbProviderWords::~CSThumbProviderWords()
 {
 }
 
-QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
+QList<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
 {
+    KWCanvasItem *canvasItem = static_cast<KWCanvasItem*>(m_doc->documentPart()->canvasItem());
     KoZoomHandler zoomHandler;
-    QList<KoShape*> shapes;
-    foreach(KWFrameSet *frameSet, m_doc->frameSets()) {
-        foreach(KWFrame *frame, frameSet->frames()) {
-            KoShape *shape = frame->shape();
-            shapes.append(shape);
-
-            // We need to call waitUntilReady so that the Layout is set on the text shape 
-            // representing the main text frame.
-            shape->waitUntilReady(zoomHandler, false);
-            KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-            if (textShapeData) {
-                // the foul is needed otherwise it does not work
-                textShapeData->foul();
-                KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(textShapeData->document()->documentLayout());
-                if (lay) {
-                    while (textShapeData->isDirty()){
-                        lay->scheduleLayout();
-                        QCoreApplication::processEvents();
-                    }
-                }
-            }
-        }
-    }
 
     while (!m_doc->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
@@ -81,39 +63,38 @@ QList<QPixmap> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
             break;
     }
 
-    KWPageManager *manager = m_doc->pageManager();
+    KWPageManager *pageManager = m_doc->pageManager();
+    KoShapeManager *shapeManager = canvasItem->shapeManager();
 
-    // recreate the shape list as they are only created when the shape when the frames are added during first layout
-    shapes.clear();
-    foreach(KWFrameSet* frameSet, m_doc->frameSets()) {
-        foreach(KWFrame *frame, frameSet->frames()) {
-            shapes.append(frame->shape());
-        }
-    }
+    QList<QImage> thumbnails;
 
-    qDebug() << "Shapes" << shapes.size();
+    foreach(const KWPage &page, pageManager->pages()) {
 
-    QList<QPixmap> thumbnails;
-
-    KoShapePainter shapePainter;
-    shapePainter.setShapes(shapes);
-    foreach(KWPage page, manager->pages()) {
-        QRectF pRect(page.rect(page.pageNumber()));
+        QRectF pRect(page.rect());
         KoPageLayout layout;
         layout.width = pRect.width();
         layout.height = pRect.height();
 
         KoPAUtil::setZoom(layout, thumbSize, zoomHandler);
+        QRect pageRect = KoPAUtil::pageRect(layout, thumbSize, zoomHandler);
 
-        QPixmap thumbnail(thumbSize);
-        thumbnail.fill(Qt::white);
+        QImage thumbnail(thumbSize, QImage::Format_RGB32);
+        thumbnail.fill(QColor(Qt::white).rgb());
         QPainter p(&thumbnail);
+
+        QImage img = page.thumbnail(pageRect.size(), shapeManager);
+        p.drawImage(pageRect, img);
+
         p.setPen(Qt::black);
-        p.drawRect(KoPAUtil::pageRect(layout, thumbSize, zoomHandler));
-        shapePainter.paint(p, QRect(QPoint(0,0), thumbSize), pRect);
+        p.drawRect(pageRect);
 
         thumbnails.append(thumbnail);
     }
 
+    // make sure to clean up
+    delete canvasItem;
+
     return thumbnails;
 }
+
+

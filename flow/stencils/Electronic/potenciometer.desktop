@@ -1,9 +1,22 @@
 [Desktop Entry]
-Name=potenciometer
+Name=potentiometer
+Name[ca]=potenciòmetre
+Name[cs]=potenciometr
+Name[de]=Potentiometer
+Name[el]=ποτενσιόμετρο
 Name[es]=potenciómetro
-Name[et]=potentsiomeeter
+Name[et]=Potentsiomeeter
+Name[fr]=potentiomètre
+Name[gl]=Potenciómetro
+Name[hu]=potenciométer
+Name[it]=potenziometro
+Name[kk]=потенциометр
+Name[nl]=potentiometer
+Name[pl]=potencjometr
 Name[pt]=potenciómetro
 Name[pt_BR]=potenciômetro
+Name[ru]=Потенциометр
+Name[sk]=potenciometer
 Name[sv]=potentiometer
 Name[uk]=Потенціометр
-Name[x-test]=xxpotenciometerxx
+Name[x-test]=xxpotentiometerxx

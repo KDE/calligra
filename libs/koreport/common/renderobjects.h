@@ -46,10 +46,13 @@ class OROSection;
 // ORODocument
 // This object is a single document containing one or more OROPage elements
 //
-class KOREPORT_EXPORT ORODocument
+class KOREPORT_EXPORT ORODocument : public QObject
 {
+    Q_OBJECT
+    
     friend class OROPage;
     friend class OROSection;
+
 public:
     ORODocument(const QString & = QString());
     ~ORODocument();
@@ -75,12 +78,17 @@ public:
     ReportPageOptions pageOptions() const {
         return m_pageOptions;
     };
+    
+    void notifyChange(int pageNo);
 
 protected:
     QString m_title;
     QList<OROPage*> m_pages;
     QList<OROSection*> m_sections;
     ReportPageOptions m_pageOptions;
+    
+signals:
+    void updated(int pageNo);
 };
 
 //
@@ -107,7 +115,7 @@ public:
         return m_primitives.count();
     };
     OROPrimitive* primitive(int);
-    void addPrimitive(OROPrimitive*, bool = false);
+    void addPrimitive(OROPrimitive*, bool atBeginning = false, bool notify = false);
 
 protected:
     ORODocument * m_document;
@@ -196,6 +204,9 @@ public:
         return m_position;
     };
     void setPosition(const QPointF &);
+    QSizeF size() const { return m_size; }
+    void setSize(const QSizeF &s);
+
     virtual OROPrimitive* clone() = 0;
     
 protected:
@@ -218,11 +229,6 @@ class KOREPORT_EXPORT OROTextBox : public OROPrimitive
 public:
     OROTextBox();
     virtual ~OROTextBox();
-
-    QSizeF size() const {
-        return m_size;
-    };
-    void setSize(const QSizeF &);
 
     QString text() const {
         return m_text;
@@ -260,7 +266,6 @@ public:
     void setCanGrow(bool cg){m_canGrow = cg;}
 
 protected:
-    QSizeF m_size;
     QString m_text;
     KRTextStyleData m_textStyle;
     KRLineStyleData m_lineStyle;
@@ -318,11 +323,6 @@ public:
     };
     void setImage(const QImage &);
 
-    QSizeF size() const {
-        return m_size;
-    };
-    void setSize(const QSizeF &);
-
     bool scaled() const {
         return m_scaled;
     };
@@ -343,7 +343,6 @@ public:
 
 protected:
     QImage m_image;
-    QSizeF m_size;
     bool m_scaled;
     int m_transformFlags;
     int m_aspectFlags;
@@ -362,16 +361,10 @@ public:
         return &m_picture;
     };
 
-    QSizeF size() const {
-        return m_size;
-    };
-    void setSize(const QSizeF &);
-
     static const int Picture;
     virtual OROPrimitive* clone();
 protected:
     QPicture m_picture;
-    QSizeF m_size;
 
 };
 //
@@ -383,11 +376,6 @@ class KOREPORT_EXPORT ORORect: public OROPrimitive
 public:
     ORORect();
     virtual ~ORORect();
-
-    QSizeF size() const {
-        return m_size;
-    }
-    void setSize(const QSizeF &);
 
     QRectF rect() const {
         return QRectF(m_position, m_size);
@@ -407,7 +395,6 @@ public:
     static const int Rect;
     virtual OROPrimitive* clone();
 protected:
-    QSizeF m_size;
     QPen m_pen;
     QBrush m_brush;
 };
@@ -421,11 +408,6 @@ class KOREPORT_EXPORT OROEllipse: public OROPrimitive
 public:
     OROEllipse();
     virtual ~OROEllipse();
-
-    QSizeF size() const {
-        return m_size;
-    }
-    void setSize(const QSizeF &);
 
     QRectF rect() const {
         return QRectF(m_position, m_size);
@@ -470,13 +452,6 @@ public:
     QString checkType() {
         return m_checkType;
     };
-
-    QSizeF size() const {
-        return m_size;
-    }
-    void setSize(const QSizeF &s) {
-        m_size = s;
-    }
 
     void setValue(bool v) {
         m_value = v;

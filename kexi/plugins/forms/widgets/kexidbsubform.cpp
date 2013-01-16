@@ -23,7 +23,7 @@
 #include "kexidbform.h"
 #include "kexiformmanager.h"
 #include "kexiformview.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 #include <formeditor/formIO.h>

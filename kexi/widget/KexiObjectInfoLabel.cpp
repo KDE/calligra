@@ -30,7 +30,7 @@ class KexiObjectInfoLabel::Private
 public:
     Private() {}
     QString className;
-    QString classIcon;
+    QString classIconName;
     QString objectName;
     QLabel *objectIconLabel;
     QLabel *objectNameLabel;
@@ -57,21 +57,21 @@ KexiObjectInfoLabel::~KexiObjectInfoLabel()
     delete d;
 }
 
-QString KexiObjectInfoLabel::objectClassIcon() const
+QString KexiObjectInfoLabel::objectClassIconName() const
 {
-    return d->classIcon;
+    return d->classIconName;
 }
 
-void KexiObjectInfoLabel::setObjectClassIcon(const QString& name)
+void KexiObjectInfoLabel::setObjectClassIconName(const QString &iconName)
 {
-    d->classIcon = name;
-    if (d->classIcon.isEmpty()) {
+    d->classIconName = iconName;
+    if (d->classIconName.isEmpty()) {
         d->objectIconLabel->setFixedWidth(0);
     }
     else {
         d->objectIconLabel->setFixedWidth(IconSize(KIconLoader::Small) + 2 + 2);
     }
-    d->objectIconLabel->setPixmap(SmallIcon(name));
+    d->objectIconLabel->setPixmap(SmallIcon(iconName));
 }
 
 QString KexiObjectInfoLabel::objectClassName() const

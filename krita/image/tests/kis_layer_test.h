@@ -19,7 +19,7 @@
 #ifndef KIS_LAYER_TESTER_H
 #define KIS_LAYER_TESTER_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "kis_layer.h"
 #include "kis_types.h"
@@ -85,6 +85,8 @@ public:
     QRect exactBounds() const {
         return QRect();
     }
+
+    using KisLayer::accept;
 
     bool accept(KisNodeVisitor& v) {
         return v.visit(this);

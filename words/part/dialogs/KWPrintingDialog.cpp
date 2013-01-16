@@ -75,7 +75,7 @@ QRectF KWPrintingDialog::preparePage(int pageNumber)
     KWPage page = m_document->pageManager()->page(pageNumber);
     if (! page.isValid())
         return QRectF();
-    printer().setPaperSize(page.rect(pageNumber).size(), QPrinter::Point);
+    printer().setPaperSize(page.rect().size(), QPrinter::Point);
 
     KoInsets bleed = m_document->pageManager()->padding();
     const int bleedOffsetX = qRound(POINT_TO_INCH(bleed.left * resolution));
@@ -86,18 +86,9 @@ QRectF KWPrintingDialog::preparePage(int pageNumber)
     const int pageOffset = qRound(POINT_TO_INCH(resolution * page.offsetInDocument()));
     painter().translate(0, -pageOffset);
 
-    qreal width = page.width();
     const int clipHeight = (int) POINT_TO_INCH(resolution * page.height());
     int clipWidth = (int) POINT_TO_INCH(resolution * page.width());
     int offsetX = -bleedOffsetX;
-    if (page.pageSide() == KWPage::PageSpread) {
-        width /= 2;
-        clipWidth /= 2;
-        if (pageNumber != page.pageNumber()) { // right side
-            offsetX += clipWidth;
-            painter().translate(-clipWidth, 0);
-        }
-    }
 
     return QRectF(offsetX, pageOffset - bleedOffsetY, clipWidth + bleedWidth, clipHeight + bleedHeight);
 }
@@ -127,7 +118,7 @@ int KWPrintingDialog::documentFirstPage() const
 int KWPrintingDialog::documentLastPage() const
 {
     KWPage lastPage = m_document->pageManager()->last();
-    return lastPage.pageNumber() + (lastPage.pageSide() == KWPage::PageSpread ? 1 : 0);
+    return lastPage.pageNumber();
 }
 
 QAbstractPrintDialog::PrintDialogOptions KWPrintingDialog::printDialogOptions() const

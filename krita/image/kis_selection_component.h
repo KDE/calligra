@@ -20,9 +20,14 @@
 
 #include <krita_export.h>
 
+#include <QTransform>
+
 class QRect;
-class QUndoCommand;
+class KUndo2Command;
 class KisSelection;
+class KisPixelSelection;
+
+#include "kis_types.h"
 
 class KRITAIMAGE_EXPORT KisSelectionComponent
 {
@@ -32,21 +37,14 @@ public:
 
     virtual KisSelectionComponent* clone(KisSelection* selection) = 0;
 
-    virtual void renderToProjection(KisSelection* projection) = 0;
-    virtual void renderToProjection(KisSelection* projection, const QRect& r) = 0;
+    virtual void renderToProjection(KisPaintDeviceSP projection) = 0;
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r) = 0;
 
     virtual void moveX(qint32 x) { Q_UNUSED(x); }
     virtual void moveY(qint32 y) { Q_UNUSED(y); }
-    
-    virtual QUndoCommand* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey)
-    {
-        Q_UNUSED(xscale);
-        Q_UNUSED(yscale);
-        Q_UNUSED(xshear);
-        Q_UNUSED(yshear);
-        Q_UNUSED(angle);
-        Q_UNUSED(translatex);
-        Q_UNUSED(translatey);
+
+    virtual KUndo2Command* transform(const QTransform &transform) {
+        Q_UNUSED(transform);
         return 0;
     }
 };

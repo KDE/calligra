@@ -32,8 +32,7 @@
 #include "kis_transaction.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
-#include <kis_iterators_pixel.h>
-
+#include "kis_iterator_ng.h"
 
 #include <libkdcraw/kdcraw.h>
 #include <libkdcraw/version.h>
@@ -41,7 +40,7 @@
 using namespace KDcrawIface;
 
 K_PLUGIN_FACTORY(KisRawImportFactory, registerPlugin<KisRawImport>();)
-K_EXPORT_PLUGIN(KisRawImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KisRawImportFactory("calligrafilters"))
 
 KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
         : KoFilter(parent)
@@ -51,7 +50,6 @@ KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
     QWidget* widget = new QWidget;
     m_rawWidget.setupUi(widget);
     m_dialog->setMainWidget(widget);
-
     connect(m_rawWidget.pushButtonUpdate, SIGNAL(clicked()), this, SLOT(slotUpdatePreview()));
 }
 
@@ -80,7 +78,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
     }
 
     doc -> prepareForImport();
@@ -120,9 +118,9 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
         // Init the image
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb16();
-        KisImageWSP image = new KisImage(doc->undoAdapter(), width, height, cs, filename);
+        KisImageWSP image = new KisImage(doc->createUndoStore(), width, height, cs, filename);
         if (image.isNull()) return KoFilter::CreationError;
-        image->lock();
+
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
         KisTransaction("", layer -> paintDevice());
 
@@ -133,11 +131,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         if (device.isNull()) return KoFilter::CreationError;
 
         // Copy the data
-        KisHLineIterator it = device->createHLineIterator(0, 0, width);
+        KisHLineIteratorSP it = device->createHLineIteratorNG(0, 0, width);
         for (int y = 0; y < height; ++y) {
-            while (!it.isDone()) {
-                KoRgbU16Traits::Pixel* pixel = reinterpret_cast<KoRgbU16Traits::Pixel*>(it.rawData());
-                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it.x()) * 3;
+            do {
+                KoBgrU16Traits::Pixel* pixel = reinterpret_cast<KoBgrU16Traits::Pixel*>(it->rawData());
+                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it->x()) * 3;
 #if KDCRAW_VERSION < 0x000400
                 pixel->red = correctIndian(ptr[2]);
                 pixel->green = correctIndian(ptr[1]);
@@ -147,15 +145,12 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
                 pixel->green = correctIndian(ptr[1]);
                 pixel->blue = correctIndian(ptr[2]);
 #endif
-                cs->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
-                ++it;
-            }
-            it.nextRow();
+                pixel->alpha = 0xFFFF;
+            } while (it->nextPixel());
+            it->nextRow();
         }
 
-        layer->setDirty();
         QApplication::restoreOverrideCursor();
-        image->unlock();
         doc->setCurrentImage(image);
         return KoFilter::OK;
     }
@@ -168,6 +163,7 @@ void KisRawImport::slotUpdatePreview()
 {
     QByteArray imageData;
     RawDecodingSettings settings = rawDecodingSettings();
+    settings.sixteenBitsImage =  false;
     int width, height, rgbmax;
     KDcraw dcraw;
     dcraw.decodeHalfRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax);
@@ -175,12 +171,8 @@ void KisRawImport::slotUpdatePreview()
     for (int y = 0; y < height; ++y) {
         QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));
         for (int x = 0; x < width; ++x) {
-            quint16* ptr = ((quint16*)imageData.data()) + (y * width + x) * 3;
-#if KDCRAW_VERSION < 0x000400
-            pixel[x] = qRgb(ptr[0] & 0xFF, ptr[1] & 0xFF, ptr[2]  & 0xFF);
-#else
-            pixel[x] = qRgb(ptr[0] / 0xFF, ptr[1] / 0xFF, ptr[2] / 0xFF);
-#endif
+            quint8* ptr = ((quint8*)imageData.data()) + (y * width + x) * 3;
+            pixel[x] = qRgb(ptr[0], ptr[1], ptr[2]);
         }
     }
     m_rawWidget.preview->setPixmap(QPixmap::fromImage(image));

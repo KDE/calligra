@@ -19,7 +19,6 @@
 #include "kis_import_catcher.h"
 #include <kis_debug.h>
 
-#include <kaboutdata.h>
 #include <kimageio.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -43,11 +42,16 @@
 #include "kis_selection.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_group_layer.h"
+#include "kis_part2.h"
+#include "kis_statusbar.h"
+#include "kis_progress_widget.h"
+
 #include <QMessageBox>
 
-class KisImportCatcher::Private
+struct KisImportCatcher::Private
 {
 public:
+    KisPart2* part;
     KisDoc2* doc;
     KisView2* view;
     KUrl url;
@@ -56,17 +60,24 @@ public:
 KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
         : m_d(new Private)
 {
-    m_d->doc = new KisDoc2(0);
+    KisPart2 *part = new KisPart2(0);
+    m_d->doc = new KisDoc2(part);
+    part->setDocument(m_d->doc);
+
+    KoProgressProxy *progressProxy = view->statusBar()->progress()->progressProxy();
+    m_d->doc->setProgressProxy(progressProxy);
     m_d->view = view;
     m_d->url = url;
-    KoFilterManager manager(m_d->doc);
-    QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
-    KoFilter::ConversionStatus status;
-    QString s = manager.importDocument(url.pathOrUrl(), status);
+    m_d->doc->openUrl(url);
+
     KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {
-        KisLayerSP importedImageLayer = new KisPaintLayer(importedImage.data(),importedImage->nextLayerName(), OPACITY_OPAQUE_U8, importedImage->projection());
+        KisLayerSP importedImageLayer =
+                new KisPaintLayer(importedImage.data(),
+                                  importedImage->nextLayerName(),
+                                  OPACITY_OPAQUE_U8,
+                                  importedImage->projection());
 
         if (!importedImageLayer.isNull()) {
             QStringList list;
@@ -99,8 +110,6 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
 
             KisNodeCommandsAdapter adapter(m_d->view);
             adapter.addNode(importedImageLayer.data(), parent, currentActiveLayer.data());
-            m_d->view->nodeManager()->activateNode(importedImageLayer.data());
-            importedImageLayer->setDirty();
         }
     }
 

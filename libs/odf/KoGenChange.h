@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,9 +20,9 @@
 #ifndef KOGENCHANGE_H
 #define KOGENCHANGE_H
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QList>
+#include <QMap>
+#include <QString>
 #include "koodf_export.h"
 
 #include <QByteArray>
@@ -50,7 +50,8 @@ public:
     enum Type {
         InsertChange,
         FormatChange,
-        DeleteChange
+        DeleteChange,
+        UNKNOWN = 9999
     };
 
     enum ChangeFormat {
@@ -163,8 +164,8 @@ private:
 private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
-    Type m_type;
     ChangeFormat m_changeFormat;
+    Type m_type;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_changeMetaData;
     QMap<QString, QString> m_literalData;

@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,9 +23,9 @@
 #ifndef KWFRAMELAYOUT_H
 #define KWFRAMELAYOUT_H
 
-#include "../KWord.h"
+#include "../Words.h"
 
-#include "../kword_export.h"
+#include "../words_export.h"
 
 #include <QList>
 #include <QObject>
@@ -41,11 +43,16 @@ class KoShape;
 
 /**
  * This class is a controller class for frame layouting.
+ *
  * For automatically generated frames this class creates new frames and places them on a page.
  * For normal frames this class will be able to (re)move them on page resize/deletion or create
  * followup frames for new pages.
+ *
+ * NOTE This class only handles header, footer and the mainframes. It does NOT handle any
+ * other framesets (neither Words::OtherFrameSet nor Words::OtherTextFrameSet). This class
+ * doesn't even know about them.
  */
-class KWORD_TEST_EXPORT KWFrameLayout : public QObject
+class WORDS_TEST_EXPORT KWFrameLayout : public QObject
 {
     Q_OBJECT
 public:
@@ -71,22 +78,6 @@ public:
      * @param pageNumber the number of the page to re-layout.
      */
     void layoutFramesOnPage(int pageNumber);
-    //void relayoutFrames(old layout, new layout); // per page ? Or per doc?
-    /**
-     *  delete any unneeded header/footer frames (but not their contents) based on
-     * the document settings
-     */
-    void cleanupHeadersFooters();
-
-    /**
-     * For the one frameset create all the frames that would be auto-placed
-     * on the target pagenumber if the page was appended.  Will only place
-     * frames if the already present frames in the frameset plus the
-     * newFrameBehavior state it should.
-     * @param fs the frameset to attach a new textframe to
-     * @param pageNumber the (already existing) page where the new frame(s) will show
-     */
-    void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
     void setDocument(KWDocument *document) {
@@ -95,6 +86,17 @@ public:
 
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
+
+    QList<KWFrame *> framesInPage(const QRectF &page) const;
+    QList<KWFrame *> framesInPage(int pageNumber) const;
+
+    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
+    QList<KWFrame *> framesOn(KWFrameSet *fs, int pageNumber) const;
+
+    QList<KWTextFrameSet*> getFrameSets(const KWPageStyle &pageStyle) const;
+    KWTextFrameSet* getFrameSet(Words::TextFrameSetType type, const KWPageStyle &pageStyle) const;
+
+    KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
 signals:
     /**
@@ -111,7 +113,6 @@ private slots:
     void mainframeRemoved(KWFrame *frame);
 
 private:
-    friend class TestFrameLayout;
     struct FrameSets {
         FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0), pageBackground(0) {}
         KWTextFrameSet *oddHeaders;
@@ -122,6 +123,7 @@ private:
     };
 
     KoShape *createTextShape(const KWPage &page);
+
     /**
      * Get or create a text frameset of the specified \a type on the specified \a page.
      * A page follows a KWPageStyle and we have individual framesets for each style.
@@ -131,14 +133,11 @@ private:
      * if it did not exist yet it creates it.
      * \note the main text frameset is consistent across all pages and page styles.
      */
-    KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
-    QList<KWFrame *> framesInPage(const QRectF &page) const;
-    void setup();
-    bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
-    KWFrame *frameOn(KWFrameSet *fs, int pageNumber) const;
-    void cleanFrameSet(KWTextFrameSet *fs);
-    KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
+    KWTextFrameSet *getOrCreate(Words::TextFrameSetType type, const KWPage &page);
 
+    void setup();
+    bool shouldHaveHeaderOrFooter(int pageNumber, bool header, Words::TextFrameSetType *origin);
+    void cleanFrameSet(KWTextFrameSet *fs);
 
     const KWPageManager *m_pageManager;
     const QList<KWFrameSet *> &m_frameSets;
@@ -146,8 +145,7 @@ private:
 
     KWTextFrameSet *m_maintext;
     KWFrameSet *m_backgroundFrameSet;
-
-    const KWDocument *m_document;
+    KWDocument *m_document;
 
     bool m_setup;
 };

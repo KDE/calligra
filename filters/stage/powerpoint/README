@@ -1,0 +1,145 @@
+Overview of converting PPT documents to ODP documents.
+
+This document describes various aspects of ODP documents and of PPT files. Knowledge of both is needed in order to convert from one format to the other.
+
+
+parsing of PPT files.
+
+PPT files are OLE containers with a number of streams. Five streams are common:
+ - "PowerPoint Document"
+ - "Pictures"
+ - "Current User"
+ - "DocumentSummaryInformation"
+ - "SummaryInformation"
+
+This discussion focusses on "PowerPoint Document". This stream contains all the slides information except for most of the embedded picture files. These pictures are stored in the Pictures stream.
+
+A newly generated ODP should contain content.xml and styles.xml as well as all embedded pictures and a list of all embedded files in manifest.xml and a mimetype file.
+The file content.xml contains all the content specific for the file and styles.xml contains all information specific for the style of presentation. That includes definitions of all the masters and the styles used in the master slides.
+
+content.xml also contains style information. This is styling information that is contained in 'automatic' styles, i.e. styles that originate from incidental style changes in the document.
+
+According to this distinction, a powerpoint template would give a nearly empty content.xml file but the same styles.xml file that would be produced for a document created from the template.
+
+== style inheritance in PPT files ==
+
+Slides, handouts and notes can have a master. The master has an OfficeArtDggContainer that specifies the default styles for all drawing objects. For text objects the default styles are defined in textCFDefaultsAtom, textPFDefaultsAtom, and textSIDefaultsAtom.
+For placeholders, slightly different rules apply. A placeholder is first defined in the master. The slide instances can re-use the placeholder and also inherits all the styles from the placeholder. Every shape (OfficeArtSpContainer) can be a placeholder. It is a placeholder if the optional field clientData.placeholderAtom.position exists and is not 0xFFFFFFFF.
+
+If a shape is not placeholder, only the global defaults apply to it. If a shape is a placeholder, the styles derive from the styles of the placeholder.
+
+
+
+
+=== styles.xml ===
+
+== styles ==
+
+We will go through each part of the styles.xml file and look at what information it contains and where to get that information from in a ppt document. We are taking the file OpenDocument-schema-v1.0-os.rng, from here on called the RNG, as leading in the listing of the possible elements for a styles.xml file.
+
+This is a minimal styles document according to the RNG, with zero subelements:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0">
+</office:document-styles>
+
+The root element of styles.xml is office:document-styles. The first allowed element there is office:styles. In office:styles, according to the RNG, elements from the group 'styles' (style:style, text:list-style, number:number-style, number:currenty-style, number:percentage-tyle, number:date-style, number:time-style, number:boolean-style, number:text-style) are allowed as well as style:default-style, text:outline-style, text:notes-configuration, text:bibliography-configuration, text:linenumbering-configuration, draw:gradient, svg:linearGradient, svg:radialGradient, draw:hatch, draw:fill-image, draw:marker, draw:stroke-dash, draw:opacity and style:presentation-page-layout.
+
+The first group of these all have a style:name element. That means they are entities that can be referenced from other parts of content.xml and styles.xml. These entities could also be placed in automatic-styles. There are also global settings that should ideally be defined in every styles.xml file. These are the elements:
+  <style:default-style style:family="...">
+where style:family can be any of 12 families. Each of these families can contain different elements such as style:text-properties,  style:paragraph-properties. Note that if you define style:text-properties for the "paragraph" family that does not automatically mean that it is also defined for the "text" family. To be on the safe side, we should define all of these for all families.
+
+The style:style and style:default-style elements are important elements. The style:style element must have a name and both must have a family. The combination of name and family should be unique across both styles.xml and content.xml. A minimal style element looks like this:
+  <style:style style:name="someName" style:family="graphic"/>
+The value for style:family may be either text, paragraph, section, ruby, table, table-column, table-row, table-cell, graphic, presentation, drawing page, or chart.
+For each of these families, there should be a default style in /office:document-styles/office:styles.
+
+
+== global style elements ==
+
+Besides style definitions there are other global objects related to style. These are line markers, gradients, hatches, background images, stroke dashes and placeholder layouts. These can be referenced from any style and when converting from ppt files, these are anonymous, which means the converter has to generate a name for them.
+
+
+
+
+
+
+
+
+
+
+
+
+
+== procedure for converting ppt to odp ==
+
+= pictures =
+
+Pictures are easy to convert. Each image has a uid value. This binary array of 16 bytes is converted to a hex array and uses as the base part of the name. The extention reflects the type of image. So all image entries in the Pictures stream are converted to files in the zip container with a name that is derived from the uid key. This same key is used in the PowerPoint Document stream and thus it is easy to create the xlink:href attribute.
+
+= styles =
+
+== global elements ==
+
+The global elements such as line markers, gradients, hatches, background images, stroke dashes and placeholder layouts should be added to the front of the styles.xml. The full list of these items is however only known after going through all master slides, slides, notes and handouts. Since this information in a document tree this is not so hard to do. To simply the programming a functor can be used to reduce the amount of code needed. A distinction should be made between the graphic styles and the placeholders, since the former are defined in FOPTE arrays and the latter are defined in OfficeArtSpContainers.
+The names of the global objects that are later referenced should be easily accessible with an appropriate key, without the need to regenerate said options. This could be achieved by a logical naming scheme and the garantee that the objects are travesed in the same order, were it not that equal objects can be referenced more than once.
+
+For fill-image, the rule can be simple; that element has no important additional information, so the number of the image in the blip store can be used.
+
+For things like stroke-dash, a scheme to generate the name from the contents would be convenient, or lacking that map that maps pointers of object using the stroke-dash to the stroke-dash name. This scheme would imply a functor that loops overall FOPTE elements in the entire ppt, collects the object and stores them, with a pointer to the FOPTE container in a map.
+
+
+
+
+== TextCFException to text-properties ==
+
+Roughly one can say that CFExceptions from the PPT format should be mapped to style:text-properties in ODF. CFException occur in many places in PPT and style:text-properties occur in many places in ODF. Here we list the occurances for both.
+
+Where does style:text-properties occur?
+In these style families: text, paragraph, table-cell, graphic, presentation, and chart. In addition, it occurs in text:list-level-style-bullet and text:list-level-style-number, which are part of text:list-style. So where-ever a style:style from one of these families or a text:list-style is referenced, a style:text-properties can occur.
+
+Where does TextCFException occur?
+
+ DocumentContainer
+  DocumenTextInfoContainer
+   TextMasterStyleAtom
+    TextMasterStyleLevel
+     TextCFException
+   TextCFExceptionAtom
+    TextCFException
+  SlideListWithTextContainer
+   SlideListWithTextSubContainerOrAtom
+    StyleTextPropAtom
+     TextCFRun
+      TextCFException
+
+ MasterOrSlideContainer
+  MainMasterContainer
+   TextMasterStyleAtom
+    TextMasterStyleLevel
+     TextCFException
+
+ OfficeArtClientTextBox
+  TextClientDataSubContainerOrAtom
+   StyleTextPropAtom
+    TextCFRun
+     TextCFException
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

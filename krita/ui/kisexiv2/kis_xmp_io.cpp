@@ -14,7 +14,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-
 #include "kis_xmp_io.h"
 
 #include <string>
@@ -42,11 +41,12 @@ KisXMPIO::~KisXMPIO()
 
 inline std::string exiv2Prefix(const KisMetaData::Schema* _schema)
 {
-    std::string prefix = Exiv2::XmpProperties::prefix(_schema->uri().toAscii().data());
+    const QByteArray latin1SchemaUri = _schema->uri().toLatin1();
+    std::string prefix = Exiv2::XmpProperties::prefix(latin1SchemaUri.constData());
     if (prefix.empty()) {
         dbgFile << "Unknown namespace " << ppVar(_schema->uri()) << ppVar(_schema->prefix());
-        prefix = _schema->prefix().toAscii().data();
-        Exiv2::XmpProperties::registerNs(_schema->uri().toAscii().data(), prefix);
+        prefix = _schema->prefix().toLatin1().constData();
+        Exiv2::XmpProperties::registerNs(latin1SchemaUri.constData(), prefix);
     }
     return prefix;
 }
@@ -60,9 +60,12 @@ void saveStructure(Exiv2::XmpData& xmpData_, const QString& name, const std::str
             it != structure.end(); ++it) {
         Q_ASSERT(it.value().type() != KisMetaData::Value::Structure);   // Can't nest structure
         QString key = QString("%1/%2:%3").arg(name).arg(structPrefix.c_str()).arg(it.key());
-        Exiv2::XmpKey ekey(prefix, key.toAscii().data());
+        Exiv2::XmpKey ekey(prefix, key.toLatin1().constData());
         dbgFile << ppVar(key) << ppVar(ekey.key().c_str());
-        xmpData_.add(ekey, kmdValueToExivXmpValue(it.value()));
+        Exiv2::Value *v = kmdValueToExivXmpValue(it.value());
+        if (v) {
+            xmpData_.add(ekey, v);
+        }
     }
 }
 }
@@ -96,7 +99,7 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
             Q_ASSERT(structureSchema);
             saveStructure(xmpData_, entry.name(), prefix, structure, structureSchema);
         } else {
-            Exiv2::XmpKey key(prefix, entry.name().toAscii().data());
+            Exiv2::XmpKey key(prefix, entry.name().toLatin1().constData());
             if (typeInfo && (typeInfo->propertyType() == KisMetaData::TypeInfo::OrderedArrayType
                              || typeInfo->propertyType() == KisMetaData::TypeInfo::UnorderedArrayType
                              || typeInfo->propertyType() == KisMetaData::TypeInfo::AlternativeArrayType)
@@ -114,7 +117,8 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                     tv.setXmpArrayType(Exiv2::XmpValue::xaAlt);
                     break;
                 default:
-                    qFatal("can't happen");
+                    // Cannot happen
+                    ;
                 }
                 xmpData_.add(key, &tv); // set the arrya type
                 const KisMetaData::TypeInfo* stuctureTypeInfo = typeInfo->embeddedPropertyType();
@@ -133,7 +137,10 @@ bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType
                 }
             } else {
                 dbgFile << ppVar(key.key().c_str());
-                xmpData_.add(key, kmdValueToExivXmpValue(value));
+                Exiv2::Value *v = kmdValueToExivXmpValue(value);
+                if (v) {
+                    xmpData_.add(key, v);
+                }
             }
         }
         // TODO property qualifier
@@ -252,7 +259,7 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 KisMetaData::Value::ValueType vt = KisMetaData::Value::Invalid;
                 switch (xav->xmpArrayType()) {
                 case Exiv2::XmpValue::xaNone:
-                    qFatal("Unsupported array.");
+                    warnKrita << "KisXMPIO: Unsupported array";
                     break;
                 case Exiv2::XmpValue::xaAlt:
                     vt = KisMetaData::Value::AlternativeArray;

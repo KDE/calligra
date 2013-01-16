@@ -11,7 +11,7 @@
         <Action name="path_refine"/>
     </Menu>
 </MenuBar>
-<ToolBar name="Effects" fullWidth="false">
+<ToolBar name="Effects">
     <Action name="path_refine"/>
 </ToolBar>
 </gui>

@@ -34,11 +34,13 @@
 #include "KoResourceModel.h"
 #include "KoResourceServerAdapter.h"
 
+#include <KoIcon.h>
+
 #include <KInputDialog>
 #include <KDebug>
 
-#include <QtGui/QGraphicsItem>
-#include <QtCore/QSet>
+#include <QGraphicsItem>
+#include <QSet>
 
 FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
         : QWidget(parent), m_scene(new FilterEffectScene(this))
@@ -63,28 +65,32 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     KoGenericRegistryModel<KoFilterEffectFactoryBase*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactoryBase*>(KoFilterEffectRegistry::instance());
 
     effectSelector->setModel(filterEffectModel);
-    removeEffect->setIcon(KIcon("list-remove"));
+    removeEffect->setIcon(koIcon("list-remove"));
     connect(removeEffect, SIGNAL(clicked()), this, SLOT(removeSelectedItem()));
-    addEffect->setIcon(KIcon("list-add"));
+    addEffect->setIcon(koIcon("list-add"));
     addEffect->setToolTip(i18n("Add effect to current filter stack"));
     connect(addEffect, SIGNAL(clicked()), this, SLOT(addSelectedEffect()));
 
-    raiseEffect->setIcon(KIcon("arrow-up"));
-    lowerEffect->setIcon(KIcon("arrow-down"));
+    // TODO: make these buttons do something useful
+    raiseEffect->setIcon(koIcon("arrow-up"));
+    raiseEffect->hide();
+    lowerEffect->setIcon(koIcon("arrow-down"));
+    lowerEffect->hide();
 
-    addPreset->setIcon(KIcon("list-add"));
+    addPreset->setIcon(koIcon("list-add"));
     addPreset->setToolTip(i18n("Add to filter presets"));
     connect(addPreset, SIGNAL(clicked()), this, SLOT(addToPresets()));
 
-    removePreset->setIcon(KIcon("list-remove"));
+    removePreset->setIcon(koIcon("list-remove"));
     removePreset->setToolTip(i18n("Remove filter preset"));
+    connect(removePreset, SIGNAL(clicked()), this, SLOT(removeFromPresets()));
 
     view->setScene(m_scene);
     view->setRenderHint(QPainter::Antialiasing, true);
     view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
 
-    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource, ConnectionTarget)),
-            this, SLOT(connectionCreated(ConnectionSource, ConnectionTarget)));
+    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource,ConnectionTarget)),
+            this, SLOT(connectionCreated(ConnectionSource,ConnectionTarget)));
     connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
 
     QSet<ConnectionSource::SourceType> inputs;
@@ -222,13 +228,13 @@ void FilterEffectEditWidget::removeSelectedItem()
         }
     }
 
-    QUndoCommand * cmd = new QUndoCommand();
+    KUndo2Command * cmd = new KUndo2Command();
     if (changeData.count()) {
-        QUndoCommand * subCmd = new FilterInputChangeCommand(changeData, m_shape, cmd);
+        KUndo2Command * subCmd = new FilterInputChangeCommand(changeData, m_shape, cmd);
         cmd->setText(subCmd->text());
     }
     if (effectIndexToDelete >= 0) {
-        QUndoCommand * subCmd = new FilterRemoveCommand(effectIndexToDelete, m_effects, m_shape, cmd);
+        KUndo2Command * subCmd = new FilterRemoveCommand(effectIndexToDelete, m_effects, m_shape, cmd);
         cmd->setText(subCmd->text());
     }
     if (m_canvas && m_shape) {
@@ -320,7 +326,7 @@ void FilterEffectEditWidget::connectionCreated(ConnectionSource source, Connecti
     }
 
     if (changeData.count()) {
-        QUndoCommand * cmd = new FilterInputChangeCommand(changeData, m_shape);
+        KUndo2Command * cmd = new FilterInputChangeCommand(changeData, m_shape);
         if (m_canvas) {
             m_canvas->addCommand(cmd);
         } else {
@@ -371,6 +377,28 @@ void FilterEffectEditWidget::addToPresets()
         delete resource;
 }
 
+void FilterEffectEditWidget::removeFromPresets()
+{
+    if (!presets->count()) {
+        return;
+    }
+    FilterResourceServerProvider * serverProvider = FilterResourceServerProvider::instance();
+    if (!serverProvider) {
+        return;
+    }
+    KoResourceServer<FilterEffectResource> * server = serverProvider->filterEffectServer();
+    if (!server) {
+        return;
+    }
+
+    FilterEffectResource *resource = server->resources().at(presets->currentIndex());
+    if (!resource) {
+        return;
+    }
+
+    server->removeResource(resource);
+}
+
 void FilterEffectEditWidget::presetSelected(KoResource *resource)
 {
     FilterEffectResource * effectResource = dynamic_cast<FilterEffectResource*>(resource);
@@ -382,7 +410,7 @@ void FilterEffectEditWidget::presetSelected(KoResource *resource)
         return;
 
     if (m_shape) {
-        QUndoCommand * cmd = new FilterStackSetCommand(filterStack, m_shape);
+        KUndo2Command * cmd = new FilterStackSetCommand(filterStack, m_shape);
         if (m_canvas) {
             m_canvas->addCommand(cmd);
         } else {
@@ -491,7 +519,7 @@ void FilterEffectEditWidget::defaultSourceChanged(int index)
         }
         inputIndex++;
     }
-    QUndoCommand * cmd = new FilterInputChangeCommand(data, m_shape);
+    KUndo2Command * cmd = new FilterInputChangeCommand(data, m_shape);
     if (m_canvas && m_shape) {
         m_canvas->addCommand(cmd);
     } else {

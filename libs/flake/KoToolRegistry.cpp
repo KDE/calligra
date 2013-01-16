@@ -23,7 +23,6 @@
 #include <KDebug>
 #include <kconfiggroup.h>
 
-#include "tools/KoCreatePathToolFactory.h"
 #include "tools/KoCreateShapesToolFactory.h"
 #include "tools/KoCreateShapesTool.h"
 #include "tools/KoPathToolFactory.h"
@@ -31,6 +30,7 @@
 #include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
+#include "KoToolManager.h"
 
 #include <KoPluginLoader.h>
 
@@ -43,24 +43,23 @@ void KoToolRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "FlakePlugins";
     config.blacklist = "FlakePluginsDisabled";
-    config.group = "koffice";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Flake"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+    config.group = "calligra";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Flake"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
                                      config);
     config.whiteList = "ToolPlugins";
     config.blacklist = "ToolPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Tool"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Tool"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
                                      config);
 
     // register generic tools
-    add(new KoCreatePathToolFactory());
     add(new KoCreateShapesToolFactory());
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());
     add(new KoPanToolFactory());
 
-    KConfigGroup cfg = KGlobal::config()->group("koffice");
+    KConfigGroup cfg = KGlobal::config()->group("calligra");
     QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
     foreach (const QString& toolID, toolsBlacklist) {
         remove(toolID);
@@ -80,4 +79,10 @@ KoToolRegistry* KoToolRegistry::instance()
         s_instance->init();
     }
     return s_instance;
+}
+
+void KoToolRegistry::addDeferred(KoToolFactoryBase *toolFactory)
+{
+    add(toolFactory);
+    KoToolManager::instance()->addDeferredToolFactory(toolFactory);
 }

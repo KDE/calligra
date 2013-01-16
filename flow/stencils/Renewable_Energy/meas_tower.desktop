@@ -1,7 +1,24 @@
 [Desktop Entry]
 Name=Wind Measurement Tower
+Name[bg]=Кула за измерване на вятъра
+Name[ca]=Torre de mesures de vent
+Name[ca@valencia]=Torre de mesures de vent
+Name[de]=Windmessturm
+Name[el]=Πύργος μέτρησης ανέμου
+Name[es]=Torre de medida del viento
+Name[et]=Tuulemõõtmistorn
+Name[fr]=Tour de mesure du vent
+Name[gl]=Torre de medida do vento
+Name[it]=Torre di misurazione del vento
+Name[kk]=Жел өлшеу мұнарасы
+Name[nb]=Vindmålingstårn
+Name[nl]=Windmetertoren
+Name[pl]=Wieża pomiaru wiatru
 Name[pt]=Torre Medida Vento
 Name[pt_BR]=Torre de medida de vento
+Name[ru]=Флюгер
+Name[sk]=Veterná kontrolná veža
 Name[sv]=Vindmätningstorn
 Name[uk]=Башта вимірювання сили вітру
 Name[x-test]=xxWind Measurement Towerxx
+Name[zh_TW]=測風塔

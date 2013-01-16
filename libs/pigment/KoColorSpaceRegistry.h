@@ -21,9 +21,9 @@
 #ifndef KOCOLORSPACEFACTORYREGISTRY_H
 #define KOCOLORSPACEFACTORYREGISTRY_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QObject>
+#include <QList>
+#include <QString>
 #include "pigment_export.h"
 
 #include <KoGenericRegistry.h>
@@ -152,8 +152,6 @@ public:
     QList<const KoColorProfile *>  profilesFor(const QString& id) const;
     const KoColorSpaceFactory* colorSpaceFactory(const QString &colorSpaceId) const;
 
-    KoColorSpace* grabColorSpace(const KoColorSpace*);
-    void releaseColorSpace(KoColorSpace*);
 private:
     /**
      * Return a colorspace that works with the parameter profile.

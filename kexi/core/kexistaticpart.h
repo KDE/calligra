@@ -30,12 +30,12 @@ namespace KexiPart
 /**
  * @short Information about a static Kexi Part (plugin).
  */
-class KEXICORE_EXPORT StaticInfo : public Info
+class KEXICORE_EXPORT StaticPartInfo : public Info
 {
 public:
-    StaticInfo(const QString& partClass, const QString& itemIcon,
+    StaticPartInfo(const QString& partClass, const QString& itemIcon,
                const QString& objectName);
-    ~StaticInfo();
+    ~StaticPartInfo();
 
 protected:
 };

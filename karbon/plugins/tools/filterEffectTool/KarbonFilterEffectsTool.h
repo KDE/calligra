@@ -53,11 +53,12 @@ public:
 
 protected:
     /// reimplemented from KoToolBase
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
     /// reimplemented from KoToolBase
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 private slots:
     void editFilter();
+    void clearFilter();
     void filterChanged();
     void filterSelected(int index);
     void selectionChanged();
@@ -66,7 +67,6 @@ private slots:
     void regionYChanged(double y);
     void regionWidthChanged(double width);
     void regionHeightChanged(double height);
-
 private:
     class Private;
     Private * const d;

@@ -18,10 +18,10 @@
 */
 
 #include "kexidbtextwidgetinterface.h"
-#include "kexiformdataiteminterface.h"
-#include <kexidb/queryschema.h>
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
+#include <db/queryschema.h>
 #include <kexiutils/utils.h>
-#include <qpainter.h>
+#include <QPainter>
 
 KexiDBTextWidgetInterface::KexiDBTextWidgetInterface()
         : m_autonumberDisplayParameters(0)

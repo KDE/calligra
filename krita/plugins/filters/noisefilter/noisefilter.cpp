@@ -22,10 +22,9 @@
 #include <stdlib.h>
 #include <vector>
 
-#include <qpoint.h>
+#include <QPoint>
 
 #include <kis_debug.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
@@ -38,7 +37,6 @@
 
 #include <kis_image.h>
 #include <kis_paint_device.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -58,7 +56,6 @@ K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
 KritaNoiseFilter::KritaNoiseFilter(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(KritaNoiseFilterFactory::componentData());
     KisFilterRegistry::instance()->add(new KisFilterNoise());
 
 }
@@ -99,7 +96,6 @@ void KisFilterNoise::process(KisPaintDeviceSP device,
                             KoUpdater* progressUpdater
                             ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(!device.isNull());
 
     if (progressUpdater) {

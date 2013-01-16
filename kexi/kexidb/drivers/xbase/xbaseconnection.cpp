@@ -27,7 +27,7 @@
 #include "xbasecursor.h"
 #include "xbaseconnection.h"
 #include "xbaseconnection_p.h"
-#include <kexidb/error.h>
+#include <db/error.h>
 
 
 using namespace KexiDB;
@@ -156,7 +156,7 @@ QString xBaseConnection::serverErrorMsg()
 
 bool xBaseConnection::drv_containsTable( const QString &tableName )
 {
-  bool success;
+  bool success=false;
   // this will be called on the SQLite database
   return resultExists(QString("show tables like %1")
     .arg(driver()->escapeString(tableName)), success) && success;

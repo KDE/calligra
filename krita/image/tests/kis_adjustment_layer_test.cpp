@@ -82,5 +82,38 @@ void KisAdjustmentLayerTest::testInverted()
 
 }
 
+void KisAdjustmentLayerTest::testSelectionParent()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "adj layer test");
+    KisFilterSP f = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT(f);
+
+    {
+        KisAdjustmentLayerSP adjLayer =
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), 0);
+
+        QCOMPARE(adjLayer->selection()->parentNode(), KisNodeWSP(adjLayer));
+    }
+
+    {
+        KisSelectionSP selection = new KisSelection();
+        KisAdjustmentLayerSP adjLayer =
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), selection);
+
+        QCOMPARE(adjLayer->selection()->parentNode(), KisNodeWSP(adjLayer));
+    }
+
+    {
+        KisAdjustmentLayerSP adjLayer =
+            new KisAdjustmentLayer(image, "bla", f->defaultConfiguration(0), 0);
+
+        KisSelectionSP selection = new KisSelection();
+        adjLayer->setSelection(selection);
+
+        QCOMPARE(adjLayer->selection()->parentNode(), KisNodeWSP(adjLayer));
+    }
+}
+
 QTEST_KDEMAIN(KisAdjustmentLayerTest, GUI)
 #include "kis_adjustment_layer_test.moc"

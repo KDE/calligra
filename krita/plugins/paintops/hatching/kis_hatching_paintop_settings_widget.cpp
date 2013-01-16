@@ -31,9 +31,9 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
+#include <kis_compositeop_option.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -41,16 +41,19 @@
 KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
                                  : KisBrushBasedPaintopOptionWidget(parent)
 {
+    setPrecisionEnabled(true);
+
     //-------Adding widgets to the screen------------
     
     addPaintOpOption(new KisHatchingOptions());
     addPaintOpOption(new KisHatchingPreferences());
-    addPaintOpOption(new KisPaintActionTypeOption());
+    addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisPaintActionTypeOption());
 
     //-----Useful to read first:------
     /*
@@ -124,4 +127,3 @@ KisPropertiesConfiguration*  KisHatchingPaintOpSettingsWidget::configuration() c
     writeConfiguration(config);
     return config;
 }
-;

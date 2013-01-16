@@ -1,6 +1,22 @@
 [Desktop Entry]
 Name=t-minus
+Name[ca]=t-minus
+Name[ca@valencia]=t-minus
+Name[el]=t-minus
+Name[es]=sustracción de la entrada superior
+Name[et]=Ülemine miinus
+Name[fr]=t-minus
+Name[gl]=T menos
+Name[hu]=t-mínusz
+Name[it]=t-minus
+Name[kk]=жоғ-минус
+Name[nb]=t-minus
+Name[nl]=t-minus
+Name[pl]=t-minus
 Name[pt]=t-menos
 Name[pt_BR]=t-menos
+Name[sk]=t-minus
+Name[sv]=t-minus
 Name[uk]=Суматор (віднімання входу згори)
 Name[x-test]=xxt-minusxx
+Name[zh_TW]=t-minus

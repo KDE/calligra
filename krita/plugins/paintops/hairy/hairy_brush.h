@@ -30,7 +30,7 @@
 
 #include <kis_paint_device.h>
 #include <kis_paint_information.h>
-#include <kis_random_accessor.h>
+#include <kis_random_accessor_ng.h>
 
 class KoCompositeOp;
 
@@ -93,7 +93,7 @@ private:
     /// paint wu particle using composite operation 
     void paintParticle(QPointF pos, const KoColor& color);
     /// similar to sample input color in spray
-    void colorifyBristles(KisRandomConstAccessor& acc, KoColorSpace * cs, QPointF point);
+    void colorifyBristles(KisRandomConstAccessorSP acc, const KoColorSpace *cs, QPointF point);
     
     void repositionBristles(double angle, double slope);
     /// compute mouse pressure according distance
@@ -119,7 +119,7 @@ private:
     QHash<QString, QVariant> m_params;    
     // temporary device
     KisPaintDeviceSP m_dab;
-    KisRandomAccessor * m_dabAccessor;
+    KisRandomAccessorSP m_dabAccessor;
     const KoCompositeOp * m_compositeOp;
     quint32 m_pixelSize;
 
@@ -131,12 +131,12 @@ private:
     double m_angle;
     double m_oldPressure;
     KoColor m_color;
-    
+
     int m_saturationId;
     KoColorTransformation * m_transfo;
-    
+
     // internal counter counts the calls of paint, the counter is 1 when the first call occurs
-    inline bool firstStroke(){
+    inline bool firstStroke() const {
         return (m_counter == 1);
     }
 };

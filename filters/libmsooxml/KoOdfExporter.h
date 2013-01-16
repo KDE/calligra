@@ -88,6 +88,11 @@ protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
             KoOdfWriters *writers) = 0;
 
+    /**
+     * This method is called when writing the xml-settings to the ODF document.
+     */
+    virtual void writeConfigurationSettings(KoXmlWriter* settings) const = 0;
+
 private:
     class Private;
     Private* d;

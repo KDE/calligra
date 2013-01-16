@@ -22,7 +22,7 @@
 #include <KoShape.h>
 #include <KoFilterEffect.h>
 #include <KoViewConverter.h>
-#include <QtGui/QPainter>
+#include <QPainter>
 
 FilterRegionEditStrategy::FilterRegionEditStrategy(KoToolBase* parent, KoShape * shape, KoFilterEffect *effect, KarbonFilterEffectsTool::EditMode mode)
 : KoInteractionStrategy(parent), m_effect(effect), m_shape(shape), m_editMode(mode)
@@ -70,7 +70,7 @@ void FilterRegionEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt:
     m_lastPosition = shapePoint;
 }
 
-QUndoCommand *FilterRegionEditStrategy::createCommand()
+KUndo2Command *FilterRegionEditStrategy::createCommand()
 {
     qreal x = m_filterRect.left() / m_sizeRect.width();
     qreal y = m_filterRect.top() / m_sizeRect.height();

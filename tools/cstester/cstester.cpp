@@ -23,8 +23,8 @@
 #include <KoDocument.h>
 #include <KoPADocument.h>
 #include <KWDocument.h>
-#include <tables/part/Doc.h>
-
+#include <sheets/part/Doc.h>
+#include <KoPart.h>
 #include <KMimeType>
 #include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
@@ -35,26 +35,36 @@
 #include <QBuffer>
 #include <QDir>
 #include <QFileInfo>
-#include <QPixmap>
+#include <QImage>
 #include <QTimer>
 
 #include "CSThumbProviderStage.h"
 #include "CSThumbProviderTables.h"
 #include "CSThumbProviderWords.h"
 
+#include "config_cstester.h"
+
+#ifdef BUILD_KARBON
+#include <KarbonPart.h>
+#include <KarbonKoDocument.h>
+#include "CSThumbProviderKarbon.h"
+#endif
+
 KoDocument* openFile(const QString &filename)
 {
     const QString mimetype = KMimeType::findByPath(filename)->name();
 
     QString error;
-    KoDocument *document = KMimeTypeTrader::self()->createPartInstanceFromQuery<KoDocument>(
-                               mimetype, 0, 0, QString(),
+    KoPart *part = KMimeTypeTrader::self()->createInstanceFromQuery<KoPart>(
+                               mimetype, QLatin1String("CalligraPart"), 0, QString(),
                                QVariantList(), &error );
 
     if (!error.isEmpty()) {
-        qWarning() << "Error cerating document" << mimetype << error;
+        qWarning() << "Error creating document" << mimetype << error;
         return 0;
     }
+
+    KoDocument *document = part->document();
 
     if (0 != document) {
         KUrl url;
@@ -75,29 +85,59 @@ KoDocument* openFile(const QString &filename)
     return document;
 }
 
-QList<QPixmap> createThumbnails(KoDocument *document, const QSize &thumbSize)
+QString saveFile(KoDocument *document, const QString &filename, const QString &outname)
 {
-    QList<QPixmap> thumbnails;
+    QString saveAs = outname;
+    // use the name and add -roundtrip
+    if (outname.isEmpty()) {
+        saveAs = filename;
+        int dotPos = saveAs.lastIndexOf('.');
+        if (dotPos != -1) {
+            saveAs.truncate(dotPos);
+        }
+        saveAs += "-roundtrip";
+    }
 
+    QByteArray mimetype = document->nativeFormatMimeType();
+    KMimeType::Ptr mime = KMimeType::mimeType(mimetype);
+    Q_ASSERT(mime);
+    QString extension = mime->mainExtension();
+    saveAs += extension;
+
+    KUrl url;
+    url.setPath(saveAs);
+    document->setOutputMimeType(mimetype, 0);
+    document->documentPart()->saveAs(url);
+    kDebug(31000) << "save done";
+    return saveAs;
+}
+
+QList<QImage> createThumbnails(KoDocument *document, const QSize &thumbSize)
+{
     CSThumbProvider *tp = 0;
 
     if (KoPADocument *doc = qobject_cast<KoPADocument*>(document)) {
         tp = new CSThumbProviderStage(doc);
     }
-    else if (Calligra::Tables::Doc *doc = qobject_cast<Calligra::Tables::Doc*>(document)) {
+    else if (Calligra::Sheets::Doc *doc = qobject_cast<Calligra::Sheets::Doc*>(document)) {
         tp = new CSThumbProviderTables(doc);
     }
     else if (KWDocument *doc = qobject_cast<KWDocument*>(document)) {
         tp = new CSThumbProviderWords(doc);
     }
+#ifdef BUILD_KARBON
+    else if (KarbonKoDocument *doc = qobject_cast<KarbonKoDocument *>(document)) {
+        tp = new CSThumbProviderKarbon(doc);
+    }
+#endif
 
-    return tp->createThumbnails(thumbSize);
+    return tp ? tp->createThumbnails(thumbSize) : QList<QImage>();
 }
 
-void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
+void saveThumbnails(const QList<QImage> &thumbnails, const QString &dir)
 {
     int i = 0;
-    for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         // it is not possible to use QString("%1/thumb_%2.png").arg(dir).arg(++i);
         // as dir can contain % values which then might or might not be overwritten by the second arg
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
@@ -105,11 +145,19 @@ void saveThumbnails(const QList<QPixmap> &thumbnails, const QString &dir)
     }
 }
 
-bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool verbose)
+void saveThumbnails(const QFileInfo &file, const QList<QImage> &thumbnails, const QString &outdir)
+{
+    QDir dir(outdir);
+    QString checkSubDir(file.fileName() + ".check");
+    dir.mkdir(checkSubDir);
+    saveThumbnails(thumbnails, outdir + '/' + checkSubDir);
+}
+
+bool checkThumbnails(const QList<QImage> &thumbnails, const QString &dir, bool verbose)
 {
     bool success = true;
     int i = 0;
-    for (QList<QPixmap>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
+    for (QList<QImage>::const_iterator it(thumbnails.constBegin()); it != thumbnails.constEnd(); ++it) {
         QString thumbFilename = dir + QString("/thumb_%2.png").arg(++i);
 
         QByteArray ba;
@@ -134,12 +182,48 @@ bool checkThumbnails(const QList<QPixmap> &thumbnails, const QString &dir, bool 
     return success;
 }
 
+bool checkThumbnails(const QList<QImage> &thumbnails, const QList<QImage> &others, bool verbose)
+{
+    bool success = true;
+    if (thumbnails.size() != others.size()) {
+        qDebug() << "Check failed: number of pages different" << thumbnails.size() << "!=" << others.size();
+        return false;
+    }
+    int i = 1;
+    QList<QImage>::const_iterator it(thumbnails.constBegin());
+    QList<QImage>::const_iterator oIt(others.constBegin());
+
+    for (; it != thumbnails.constEnd(); ++it, ++oIt, ++i) {
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        it->save(&buffer, "PNG");
+
+        QByteArray baCheck;
+        QBuffer oBuffer(&baCheck);
+        oBuffer.open(QIODevice::WriteOnly);
+        oIt->save(&oBuffer, "PNG");
+
+        if (ba != baCheck) {
+            qDebug() << "Check failed:" << "Page" << i << "differ";
+            success = false;
+        }
+        else if (verbose) {
+            qDebug() << "Check successful:" << "Page" << i << "identical";
+        }
+    }
+    return success;
+}
+
 int main(int argc, char *argv[])
 {
     KCmdLineArgs::init(argc, argv, "cstester", 0, KLocalizedString(), 0, KLocalizedString());
 
     KCmdLineOptions options;
     options.add("create", ki18n("create verification data for file"));
+    options.add("indir <dir>", ki18n("directory to read the data from"));
+    options.add("outdir <dir>", ki18n("directory to save the data to"));
+    options.add("roundtrip", ki18n("load/save/load and check the document is the same after load and save/load"));
     options.add("verbose", ki18n("be verbose"));
     options.add("!verify", ki18n("verify the file"));
     options.add( "+file", ki18n("file to use"));
@@ -148,14 +232,53 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("create") && args->isSet("verify")) {
-        kError() << "create and verify cannot be used the same time";
+    bool create = false;
+    bool roundtrip = false;
+    bool verify = false;
+    int optionCount = 0;
+
+    if (args->isSet("create")) {
+        create = true;
+        optionCount++;
+    }
+    if (args->isSet("roundtrip")) {
+        roundtrip = true;
+        optionCount++;
+    }
+    if (args->isSet("verify")) {
+        verify = true;
+        optionCount++;
+    }
+
+    if (optionCount > 1) {
+        kError() << "create, roundtrip and verify cannot be used the same time";
+        exit(1);
+    }
+    else if (optionCount < 1) {
+        kError() << "one of the options create, roundtrip or verify needs to be specified";
         exit(1);
     }
 
-    if (!args->isSet("create") && !args->isSet("verify")) {
-        kError() << "one of the options create or verify needs to be specified";
-        exit(1);
+    QString outDir;
+    if (args->isSet("outdir")) {
+        // check if it is a directory
+        QDir dir(args->getOption("outdir"));
+        if (!dir.exists()) {
+            kError() << "outdir" << args->getOption("outdir") << "does not exist";
+            exit(1);
+        }
+        outDir = dir.path();
+    }
+
+    QString inDir;
+    if (args->isSet("indir")) {
+        // check if it is a directory
+        QDir dir(args->getOption("indir"));
+        if (!dir.exists()) {
+            kError() << "indir" << args->getOption("indir") << "does not exist";
+            exit(1);
+        }
+        inDir = dir.path();
     }
 
     bool verbose = args->isSet("verbose");
@@ -167,8 +290,21 @@ int main(int argc, char *argv[])
     for (int i=0; i < args->count(); ++i) {
         QString filename(args->arg(i));
         QFileInfo file(filename);
-        QString resDir(filename + ".check");
-        qDebug() << "filename" << filename << "path" << file.path() << file.completeBaseName() << resDir << file.absoluteFilePath();
+        QString checkDir;
+        if (!args->isSet("indir")) {
+            checkDir = filename + ".check";
+        }
+        else {
+            checkDir = inDir + '/' + file.fileName() + ".check";
+        }
+
+        // this is wrong for multiple files in different dirs
+        if (!args->isSet("outdir")) {
+            outDir = file.path();
+        }
+
+        qDebug() << "filename" << filename << "path" << file.path() << file.completeBaseName() << checkDir << file.absoluteFilePath();
+        qDebug() << "inDir" << inDir << "outDir" << outDir << "checkDir" << checkDir;
 
         // filename must be a absolute path
         KoDocument* document = openFile(file.absoluteFilePath());
@@ -176,11 +312,17 @@ int main(int argc, char *argv[])
             exit(2);
         }
 
-        QList<QPixmap> thumbnails(createThumbnails(document, QSize(800,800)));
+        QList<QImage> thumbnails(createThumbnails(document, QSize(800,800)));
 
         qDebug() << "created" << thumbnails.size() << "thumbnails";
-        if (args->isSet("verify")) {
-            if (checkThumbnails(thumbnails, resDir, verbose)) {
+        if (create) {
+            saveThumbnails(file, thumbnails, outDir);
+        }
+        else if (verify) {
+            if (args->isSet("outdir")) {
+                saveThumbnails(file, thumbnails, outDir);
+            }
+            if (checkThumbnails(thumbnails, checkDir, verbose)) {
                 ++successful;
             }
             else {
@@ -188,15 +330,29 @@ int main(int argc, char *argv[])
                 exitValue = 2;
             }
         }
-        else {
-            QDir dir(file.path());
-            dir.mkdir(file.fileName() + ".check");
-            saveThumbnails(thumbnails, resDir);
+        else if (roundtrip) {
+            QString rFilename = saveFile(document, filename, "cstester-roundtrip");
+            delete document;
+            QFileInfo rFile(rFilename);
+            qDebug() << roundtrip << "rFilename" << rFilename << rFile.absoluteFilePath();
+            document = openFile(rFile.absoluteFilePath());
+            QList<QImage> others(createThumbnails(document, QSize(800,800)));
+            if (args->isSet("outdir")) {
+                saveThumbnails(file, others, outDir);
+                saveThumbnails(file, thumbnails, outDir + "/before");
+            }
+            if (checkThumbnails(thumbnails, others, verbose)) {
+                ++successful;
+            }
+            else {
+                ++failed;
+                exitValue = 2;
+            }
         }
         delete document;
     }
 
-    if (args->isSet("verify")) {
+    if (verify || roundtrip) {
         qDebug() << "Totals:" << successful << "passed" << failed << "failed";
     }
 

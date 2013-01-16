@@ -31,7 +31,7 @@
 #include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoColorBackground.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoGradientBackground.h>
 #include <KoApplication.h>
 
@@ -45,7 +45,7 @@
 
 #define TextShapeId "TextShapeID"
 
-CommentShape::CommentShape(KoResourceManager* resourceManager)
+CommentShape::CommentShape(KoDocumentResourceManager* resourceManager)
 : KoShapeContainer()
 , m_active(false)
 {
@@ -72,10 +72,10 @@ CommentShape::CommentShape(KoResourceManager* resourceManager)
     gradient->setColorAt(1.0, QColor(254, 201, 7));
     m_comment->setBackground(new KoGradientBackground(gradient));
 
-    KoLineBorder* border = new KoLineBorder;
-    border->setLineBrush(QBrush(Qt::black));
-    border->setLineWidth(0.5);
-    m_comment->setBorder(border);
+    KoShapeStroke* stroke = new KoShapeStroke;
+    stroke->setLineBrush(QBrush(Qt::black));
+    stroke->setLineWidth(0.5);
+    m_comment->setStroke(stroke);
 
     addShape(m_comment);
 
@@ -149,7 +149,7 @@ void CommentShape::saveOdf(KoShapeSavingContext& context) const
     writer.endElement();//officeooo:annotation
 }
 
-void CommentShape::paintComponent(QPainter& /*painter*/, const KoViewConverter& /*converter*/)
+void CommentShape::paintComponent(QPainter& /*painter*/, const KoViewConverter& /*converter*/, KoShapePaintingContext &)
 {
 }
 

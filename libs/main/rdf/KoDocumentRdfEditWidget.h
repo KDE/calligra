@@ -123,11 +123,11 @@ private slots:
     /**
      * The user edited a semantic item, update the view.
      */
-    void semanticObjectUpdated(KoRdfSemanticItem *item);
+    void semanticObjectUpdated(hKoRdfSemanticItem item);
 
 private:
 
-    KoSemanticStylesheet *stylesheetFromComboBox(QComboBox *w) const;
+    hKoSemanticStylesheet stylesheetFromComboBox(QComboBox *w) const;
 
     class KoDocumentRdfEditWidgetPrivate;
     KoDocumentRdfEditWidgetPrivate *const d;

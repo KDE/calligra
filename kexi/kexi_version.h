@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (c) 2003-2009 Kexi Team <kexi@kde.org>
+   Copyright (c) 2003-2012 Kexi Team <kexi@kde.org>
 
-   Version information based on kofficeversion.h,
+   Version information based on calligraversion.h,
    Copyright (c) 2003 David Faure <faure@kde.org>
    Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
    Copyright (c) 2004 Nicolas Goutte <goutte@kde.org>
@@ -26,30 +26,30 @@
 #define _KEXI_VERSION_
 
 #include "kexi_export.h"
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
-#ifdef CUSTOM_VERSION /* user-friendly version info */
-# include "custom_global.h"
-#else /* default */
-# define KEXI_APP_NAME "Kexi"
+#define KEXI_APP_NAME "Kexi"
+#define KEXI_VERSION_STRING CALLIGRA_VERSION_STRING
+#define KEXI_VERSION_MAJOR CALLIGRA_VERSION_MAJOR
+#define KEXI_VERSION_MINOR CALLIGRA_VERSION_MINOR
+#define KEXI_VERSION_RELEASE CALLIGRA_VERSION_RELEASE
+
+#ifdef CALLIGRA_ALPHA
+#define KEXI_ALPHA CALLIGRA_ALPHA
 #endif
 
-#ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING KOFFICE_VERSION_STRING
+#ifdef CALLIGRA_BETA
+#define KEXI_BETA CALLIGRA_BETA
 #endif
 
-#define KEXI_VERSION_MAJOR KOFFICE_VERSION_MAJOR
-#define KEXI_VERSION_MINOR KOFFICE_VERSION_MINOR
-#define KEXI_VERSION_RELEASE KOFFICE_VERSION_RELEASE
-
-#ifdef KOFFICE_ALPHA
-#define KEXI_ALPHA KOFFICE_ALPHA
+#ifdef CALLIGRA_RC
+#define KEXI_RC CALLIGRA_RC
 #endif
 
 #define KEXI_VERSION \
-    KOFFICE_MAKE_VERSION(KEXI_VERSION_MAJOR,KEXI_VERSION_MINOR,KEXI_VERSION_RELEASE)
+    CALLIGRA_MAKE_VERSION(KEXI_VERSION_MAJOR,KEXI_VERSION_MINOR,KEXI_VERSION_RELEASE)
 
-#define KEXI_IS_VERSION(a,b,c) ( KEXI_VERSION >= KOFFICE_MAKE_VERSION(a,b,c) )
+#define KEXI_IS_VERSION(a,b,c) ( KEXI_VERSION >= CALLIGRA_MAKE_VERSION(a,b,c) )
 
 /**
  * Namespace for general Kexi functions.
@@ -88,6 +88,41 @@ KEXICORE_EXPORT unsigned int versionRelease();
  * @return the Kexi version. You can keep the string forever
  */
 KEXICORE_EXPORT const char *versionString();
+/**
+ * Returns the encoded number of stable Kexi's version.
+ * For 2.3.1 it returns 2.3.1, for 2.5.70 returns 2.6.0, for 2.9.70 returns 3.0.0.
+ * In contrary to KEXI_STABLE_VERSION macro this function returns the number
+ * of the actually installed Kexi version, not the number of the Kexi version that was
+ * installed when the program was compiled.
+ * @return the version number, encoded in a single uint
+ * @see Kexi::version()
+ * @see KEXI_STABLE_VERSION
+ */
+KEXICORE_EXPORT unsigned int stableVersion();
+/**
+ * Returns the major number of stable Kexi's version, e.g.
+ * 1 for Kexi 1.2.3.
+ * @return the major stable version number
+ */
+KEXICORE_EXPORT unsigned int stableVersionMajor();
+/**
+ * Returns the minor number of stable Kexi's version, e.g.
+ * 2 for Kexi 1.2.3.
+ * @return the minor stable version number
+ */
+KEXICORE_EXPORT unsigned int stableVersionMinor();
+/**
+ * Returns the release of stable Kexi's version, e.g.
+ * 3 for Kexi 1.2.3.
+ * @return the release stable version number
+ */
+KEXICORE_EXPORT unsigned int stableVersionRelease();
+/**
+ * Returns the stable Kexi version as string, e.g. "1.2.3"
+ * It never contains alpha, beta or rc part.
+ * @return the stable Kexi version.
+ */
+KEXICORE_EXPORT QString stableVersionString();
 }
 
 /*

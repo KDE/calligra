@@ -1,7 +1,5 @@
 add_subdirectory( tests )
 
-#add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 set(kritalibbrush_LIB_SRCS
     kis_auto_brush.cpp
     kis_boundary.cc
@@ -28,11 +26,18 @@ set(kritalibbrush_LIB_SRCS
 
 kde4_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} )
 
-target_link_libraries(kritalibbrush kritaui )
+target_link_libraries(kritalibbrush kritaui)
+
+if(HAVE_VC)
+  include_directories(${Vc_INCLUDE_DIR})
+  target_link_libraries(kritalibbrush  ${Vc_LIBRARIES})
+#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
+endif(HAVE_VC)
+
 target_link_libraries(kritalibbrush LINK_INTERFACE_LIBRARIES kritaui)
 
 set_target_properties(kritalibbrush PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS kritalibbrush  ${INSTALL_TARGETS_DEFAULT_ARGS})

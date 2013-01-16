@@ -34,6 +34,7 @@
 #include <kis_hairy_bristle_option.h>
 #include <kis_brush_option.h>
 #include <kis_brush_based_paintop_settings.h>
+#include <kis_fixed_paint_device.h>
 
 #include "kis_brush.h"
 
@@ -59,7 +60,7 @@ KisHairyPaintOp::KisHairyPaintOp(const KisBrushBasedPaintOpSettings *settings, K
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(source()->colorSpace(), 1.0, 0.0, KisPaintInformation());
     } else {
-        brush->mask(dab, painter->paintColor(), 1.0, 1.0, 0.0);
+        brush->mask(dab, painter->paintColor(), 1.0, 1.0, 0.0, KisPaintInformation());
     }
 
     m_brush.fromDabWithDensity(dab, settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);
@@ -125,6 +126,8 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
         m_dab->clear();
     }
 
+    // Hairy Brush is capable of working with zero scale,
+    // so no additional checks for 'zero'ness are needed
     qreal scale = m_sizeOption.apply(pi2);
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);

@@ -21,8 +21,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include <sys/types.h>
+#include <netinet/in.h> // htonl
 
 #include "kis_gbr_brush.h"
+
 #include "kis_brush.h"
 #include "kis_qimage_mask.h"
 
@@ -40,10 +43,7 @@
 #include "kis_datamanager.h"
 #include "kis_paint_device.h"
 #include "kis_global.h"
-#include "kis_iterators_pixel.h"
 #include "kis_image.h"
-
-#include <netinet/in.h> // htonl
 
 struct GimpBrushV1Header {
     quint32 header_size;  /*  header_size = sizeof (BrushHeader) + brush name  */
@@ -73,7 +73,7 @@ quint32 const GimpV2BrushMagic = ('G' << 24) + ('I' << 16) + ('M' << 8) + ('P' <
 struct KisGbrBrush::Private {
 
     QByteArray data;
-    bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate wether the data is loaded from file (ownData = true) or memory (ownData = false) */
+    bool ownData;         /* seems to indicate that @ref data is owned by the brush, but in Qt4.x this is already guaranteed... so in reality it seems more to indicate whether the data is loaded from file (ownData = true) or memory (ownData = false) */
 
     bool useColorAsMask;
 
@@ -90,7 +90,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename)
     : KisBrush(filename)
     , d(new Private)
 {
-    setBrushType(INVALID);
     d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
@@ -103,7 +102,6 @@ KisGbrBrush::KisGbrBrush(const QString& filename,
                              : KisBrush(filename)
                              , d(new Private)
 {
-    setBrushType(INVALID);
     d->ownData = false;
     d->useColorAsMask = false;
     setHasColor(false);
@@ -119,7 +117,6 @@ KisGbrBrush::KisGbrBrush(KisPaintDeviceSP image, int x, int y, int w, int h)
     : KisBrush()
     , d(new Private)
 {
-    setBrushType(INVALID);
     d->ownData = true;
     d->useColorAsMask = false;
     setHasColor(false);
@@ -138,7 +135,6 @@ KisGbrBrush::KisGbrBrush(const QImage& image, const QString& name)
 
     setImage(image);
     setName(name);
-    setBrushType(IMAGE);
 }
 
 KisGbrBrush::KisGbrBrush(const KisGbrBrush& rhs)
@@ -214,7 +210,7 @@ bool KisGbrBrush::init()
         // Version 1 has no magic number or spacing, so the name
         // is at a different offset. Character encoding is undefined.
         const char *text = d->data.constData() + sizeof(GimpBrushV1Header);
-        name = QString::fromAscii(text, bh.header_size - sizeof(GimpBrushV1Header) - 1);
+        name = QString::fromLatin1(text, bh.header_size - sizeof(GimpBrushV1Header) - 1);
     } else {
         // ### Version = 3->cinepaint; may be float16 data!
         // Version >=2: UTF-8 encoding is used
@@ -254,7 +250,6 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setBrushType(MASK);
         setHasColor(false);
 
         for (quint32 y = 0; y < bh.height; y++) {
@@ -272,7 +267,6 @@ bool KisGbrBrush::init()
             return false;
         }
 
-        setBrushType(IMAGE);
         setHasColor(true);
 
         for (quint32 y = 0; y < bh.height; y++) {
@@ -305,10 +299,9 @@ bool KisGbrBrush::initFromPaintDev(KisPaintDeviceSP image, int x, int y, int w, 
 {
     // Forcefully convert to RGBA8
     // XXX profile and exposure?
-    setImage(image->convertToQImage(0, x, y, w, h));
+    setImage(image->convertToQImage(0, x, y, w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation));
     setName(image->objectName());
 
-    setBrushType(IMAGE);
     setHasColor(true);
 
     return true;
@@ -407,13 +400,14 @@ QImage KisGbrBrush::image() const
 
 enumBrushType KisGbrBrush::brushType() const
 {
-    if (KisBrush::brushType() == IMAGE && useColorAsMask()) {
-        return MASK;
-    } else {
-        return KisBrush::brushType();
-    }
+    return !hasColor() || useColorAsMask() ? MASK : IMAGE;
 }
 
+void KisGbrBrush::setBrushType(enumBrushType type)
+{
+    Q_UNUSED(type);
+    qFatal("FATAL: protected member setBrushType has no meaning for KisGbrBrush");
+}
 
 void KisGbrBrush::setImage(const QImage& image)
 {
@@ -467,7 +461,6 @@ void KisGbrBrush::makeMaskImage()
         setImage(image);
     }
     
-    setBrushType(MASK);
     setHasColor(false);
     setUseColorAsMask(false);
     resetBoundary();

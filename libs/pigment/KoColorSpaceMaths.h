@@ -202,8 +202,6 @@ inline int float2int(double x)
 
 #endif
 
-#include <KoLut.h>
-
 template<typename _T_>
 struct KoIntegerToFloat {
   inline float operator()(_T_ f) const
@@ -240,7 +238,7 @@ public:
     }
     
     inline static _Tdst multiply(_T a, _Tdst b, _Tdst c) {
-        return (dst_compositetype(a)*b*c) / (dst_compositetype(KoColorSpaceMathsTraits<_Tdst>::unitValue) * KoColorSpaceMathsTraits<_Tdst>::unitValue);
+        return (dst_compositetype(a)*b*c) / (dst_compositetype(KoColorSpaceMathsTraits<_Tdst>::unitValue) * KoColorSpaceMathsTraits<_T>::unitValue);
     }
 
     /**
@@ -275,7 +273,8 @@ public:
      * This function will scale a value of type _T to fit into a _Tdst.
      */
     inline static _Tdst scaleToA(_T a) {
-        return src_compositetype(a) >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
+//         return src_compositetype(a) >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
+        return _Tdst(dst_compositetype(a) * KoColorSpaceMathsTraits<_Tdst>::unitValue / KoColorSpaceMathsTraits<_T>::unitValue);
     }
 
     inline static dst_compositetype clamp(dst_compositetype val) {
@@ -685,18 +684,57 @@ TReal getHue(TReal r, TReal g, TReal b) {
     TReal max    = Arithmetic::max(r, g, b);
     TReal chroma = max - min;
     
-    TReal hue = TReal(0.0);
+    TReal hue = TReal(-1.0);
     
     if(chroma > std::numeric_limits<TReal>::epsilon()) {
+        
+//         return atan2(TReal(2.0)*r - g - b, TReal(1.73205080756887729353)*(g - b));
+        
         if(max == r) // between yellow and magenta
             hue = (g - b) / chroma;
         else if(max == g) // between cyan and yellow
             hue = TReal(2.0) + (b - r) / chroma;
         else if(max == b) // between magenta and cyan
             hue = TReal(4.0) + (r - g) / chroma;
+        
+        if(hue < -std::numeric_limits<TReal>::epsilon())
+            hue += TReal(6.0);
+        
+        hue /= TReal(6.0);
     }
     
+//     hue = (r == max) ? (b-g) : (g == max) ? TReal(2.0)+(r-b) : TReal(4.0)+(g-r);
+    
     return hue;
+}
+
+template<class TReal>
+void getRGB(TReal& r, TReal& g, TReal& b, TReal hue) {
+    // 0 red    -> (1,0,0)
+    // 1 yellow -> (1,1,0)
+    // 2 green  -> (0,1,0)
+    // 3 cyan   -> (0,1,1)
+    // 4 blue   -> (0,0,1)
+    // 5 maenta -> (1,0,1)
+    // 6 red    -> (1,0,0)
+    
+    if(hue < -std::numeric_limits<TReal>::epsilon()) {
+        r = g = b = TReal(0.0);
+        return;
+    }
+    
+    int   i = int(hue * TReal(6.0));
+    TReal x = hue * TReal(6.0) - i;
+    TReal y = TReal(1.0) - x;
+    
+    switch(i % 6){
+        case 0: { r=TReal(1.0), g=x         , b=TReal(0.0); } break;
+        case 1: { r=y         , g=TReal(1.0), b=TReal(0.0); } break;
+        case 2: { r=TReal(0.0), g=TReal(1.0), b=x         ; } break;
+        case 3: { r=TReal(0.0), g=y         , b=TReal(1.0); } break;
+        case 4: { r=x         , g=TReal(0.0), b=TReal(1.0); } break;
+        case 5: { r=TReal(1.0), g=TReal(0.0), b=y         ; } break;
+    }
 }
 
 template<class HSXType, class TReal>

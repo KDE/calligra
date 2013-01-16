@@ -31,7 +31,13 @@ QString KisPaintOpOption::colorCategory()
     return i18n("Color");
 }
 
-class KisPaintOpOption::Private
+QString KisPaintOpOption::textureCategory()
+{
+    return i18n("Texture");
+}
+
+
+struct KisPaintOpOption::Private
 {
 public:
     bool checked;

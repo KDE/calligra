@@ -1,8 +1,23 @@
 [Desktop Entry]
 Name=Decoder
+Name[ca]=Descodificador
+Name[ca@valencia]=Descodificador
+Name[el]=Αποκωδικοποιητής
 Name[es]=Decodificador
+Name[et]=Dekooder
+Name[fr]=décodeur
+Name[gl]=Descodificador
+Name[hu]=Dekóder
+Name[it]=Decodificatore
+Name[kk]=Декодер
+Name[nb]=Avkoder
+Name[nl]=Decoder
+Name[pl]=Dekoder
 Name[pt]=Descodificador
-Name[pt_BR]=Decodificador 
+Name[pt_BR]=Decodificador
+Name[ru]=Декодер
+Name[sk]=Dekodér
 Name[sv]=Avkodare
 Name[uk]=Декодер
 Name[x-test]=xxDecoderxx
+Name[zh_TW]=解碼器

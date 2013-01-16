@@ -27,7 +27,7 @@
 #include "psd_loader.h"
 
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<psdImport>();)
-K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
         psdImport::psdImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -47,7 +47,7 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain->inputFile();
 
@@ -60,7 +60,7 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        PSDLoader ib(doc, doc->undoAdapter());
+        PSDLoader ib(doc);
 
         KisImageBuilder_Result result = ib.buildImage(url);
 
@@ -82,9 +82,9 @@ KoFilter::ConversionStatus psdImport::convert(const QByteArray&, const QByteArra
             doc -> setCurrentImage( ib.image());
             return KoFilter::OK;
         default:
-            qDebug() << "Result was: " << result;
+            return KoFilter::StorageCreationError;
+            //dbgFile << "Result was: " << result;
         }
-
     }
     return KoFilter::StorageCreationError;
 }

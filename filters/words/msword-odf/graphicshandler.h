@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
    Copyright (C) 2003 Werner Trobin <trobin@kde.org>
    Copyright (C) 2003 David Faure <faure@kde.org>
    Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
@@ -67,6 +67,7 @@ public:
     qreal vOffset();
     qreal hOffset();
 
+    void setRect(const QRect& rect);
     void setRectangle(wvWare::Word97::FSPA& spa);
     void setGroupRectangle(MSO::OfficeArtFSPGR& fspgr);
     void setChildRectangle(MSO::OfficeArtChildAnchor& anchor);
@@ -77,7 +78,7 @@ public:
  * Graphics Handler
  * ************************************************
  */
-class KWordGraphicsHandler : public QObject, public wvWare::GraphicsHandler
+class WordsGraphicsHandler : public QObject, public wvWare::GraphicsHandler
 {
     Q_OBJECT
 private:
@@ -90,7 +91,8 @@ private:
     {
     private:
         virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
-        virtual QString getPicturePath(int pib);
+        virtual QRectF getReserveRect(void);
+        virtual QString getPicturePath(const quint32 pib);
         virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
         virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
                                        const MSO::OfficeArtClientData& o,
@@ -98,6 +100,7 @@ private:
         virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
                                           Writer& out);
+        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
         virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                               const MSO::OfficeArtClientData* cd,
                                               const DrawStyle& ds,
@@ -106,22 +109,30 @@ private:
                                    const MSO::OfficeArtClientData* clientData,
                                    KoGenStyle& style, Writer& out);
 
-        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
-        virtual const MSO::OfficeArtSpContainer* defaultShapeContainer();
         virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
         virtual QString formatPos(qreal v);
 
-        KWordGraphicsHandler* const gh;
+        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
+        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+
+        WordsGraphicsHandler* const gh;
     public:
-        DrawClient(KWordGraphicsHandler* p) :gh(p) {}
+        DrawClient(WordsGraphicsHandler* p) :gh(p) {}
 };
 public:
-    KWordGraphicsHandler(Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
+    WordsGraphicsHandler(Document* document,
+                         KoXmlWriter* bodyWriter,
+                         KoXmlWriter* manifestWriter,
                          KoStore* store, KoGenStyles* mainStyles,
                          const wvWare::Drawings* p_drawings,
                          const wvWare::Word97::FIB& fib);
-    ~KWordGraphicsHandler();
+    ~WordsGraphicsHandler();
+
+    /**
+     * Set the appropriate writer for object properties and content.
+     * @param writer KoXmlWriter provided by the Document class
+     */
+    void setCurrentWriter(KoXmlWriter* writer) { m_currentWriter = writer; };
 
     /**
      * This method gets called when a floating object is found by wv2 parser.
@@ -133,13 +144,7 @@ public:
      * This method gets called when an inline object is found by wv2 parser.
      * @param data PictureData as defined in functordata.h
      */
-    virtual void handleInlineObject(const wvWare::PictureData& data);
-
-    /**
-     * Set the appropriate writer for object properties and content.
-     * @param writer KoXmlWriter provided by the Document class
-     */
-    void setBodyWriter(KoXmlWriter* writer);
+    virtual QString handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture = false);
 
     /**
      * Get the DrawStyle to access document backgroud properties and defaults.
@@ -154,7 +159,7 @@ public:
      * generated from the picture with the given pib. (check
      * libmso/ODrawToOdf.h)
      */
-    QString getPicturePath(int pib) const;
+    QString getPicturePath(quint32 pib) const;
 
     // Communication with Document, without having to know about Document
 signals:
@@ -174,19 +179,20 @@ private:
     void init(void);
 
     /**
-     * Parse the OfficeArtDggContainer data from the Table stream.
+     * Parse the OfficeArtDggContainer data and OfficeArtDgContainer data for
+     * both the body and the header document from the Table stream.
      */
-    void parseOfficeArtContainer(void);
+    void parseOfficeArtContainers(void);
 
     /**
      * Parse floating pictures data from the WordDocument stream.
+     *
+     * @param specifies the container for all the BLIPs that are used in all
+     * the drawings in the parent document.
+     *
+     * @return 0 - success, 1 - failed
      */
-    void parseFloatingPictures(void);
-
-    /**
-     * Store floating pictures into ODT, write the appropriate manifest entry.
-     */
-    QMap<QByteArray, QString> createFloatingPictures(KoStore* store, KoXmlWriter* manifest);
+    int parseFloatingPictures(const MSO::OfficeArtBStoreContainer* blipStore);
 
     /**
      * Process the default properties for all drawing objects stored in
@@ -265,9 +271,19 @@ private:
      */
     void emitTextBoxFound(unsigned int index, bool stylesxml);
 
+    /**
+     * Insert an empty frame.  Use when the picture is an external file.
+     */
+    void insertEmptyInlineFrame(DrawingWriter& out);
+
+    /**
+     * A helper to get the correct rectangle for a shape or a childShape.
+     */
+    QRect getRect(const MSO::OfficeArtSpContainer &o);
+
     Document* m_document;
     KoStore* m_store;
-    KoXmlWriter* m_bodyWriter;
+    KoXmlWriter* m_currentWriter;
     KoXmlWriter* m_manifestWriter;
     KoGenStyles* m_mainStyles;
 
@@ -281,19 +297,19 @@ private:
     QMap<QByteArray, QString> m_picNames; //picture names
 
     /*
+     * Group specific attributes.
+     */
+    bool m_processingGroup;
+
+    /*
      * Object specific attributes.
      */
-
     ObjectType m_objectType; // Type of the object in {Inline, Floating}.
     QByteArray m_rgbUid;     // Unique identifier of a BLIP.
     int m_zIndex;            // Position of current shape on z axis.
 
     // Specifies the type, size and border information for an inline picture.
     wvWare::SharedPtr<const wvWare::Word97::PICF> m_picf;
-
-    //TODO: It seems that both inline and floating objects have placement and
-    //dimensions stored in SPA structures.  Check the OfficeArtClientAnchor for
-    //the index into plcfSpa.
 
     //structure that specifies placement of a floating object
     wvWare::Word97::FSPA* m_pSpa;

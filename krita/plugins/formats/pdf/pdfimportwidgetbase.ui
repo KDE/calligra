@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>476</width>
-    <height>238</height>
+    <width>523</width>
+    <height>246</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,12 +15,9 @@
   </property>
   <layout class="QHBoxLayout">
    <item>
-    <widget class="Q3ButtonGroup" name="buttonGroup1">
+    <widget class="QGroupBox" name="buttonGroup1">
      <property name="title">
       <string>Pages</string>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
      </property>
      <layout class="QVBoxLayout">
       <property name="spacing">
@@ -54,9 +51,9 @@
        </widget>
       </item>
       <item>
-       <widget class="K3ListBox" name="listPages">
+       <widget class="QListWidget" name="listPages">
         <property name="selectionMode">
-         <enum>Q3ListBox::Multi</enum>
+         <enum>QAbstractItemView::MultiSelection</enum>
         </property>
        </widget>
       </item>
@@ -68,7 +65,16 @@
      <property name="title">
       <string>Dimensions</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout">
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="textLabel1">
         <property name="text">
@@ -77,7 +83,13 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <layout class="QHBoxLayout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
         <item>
          <spacer>
           <property name="orientation">
@@ -95,33 +107,19 @@
          </spacer>
         </item>
         <item>
-         <layout class="QFormLayout" name="formLayout">
+         <layout class="QGridLayout">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="textLabel5">
             <property name="text">
              <string comment="horizontal resolution">Horizontal:</string>
             </property>
            </widget>
-          </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QSpinBox" name="intHorizontal">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>999999</number>
-              </property>
-              <property name="value">
-               <number>100</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KComboBox" name="kComboBox1"/>
-            </item>
-           </layout>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="intVerticalqsdf">
@@ -130,25 +128,31 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="intHorizontal">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999999</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QSpinBox" name="intVertical">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>999999</number>
-              </property>
-              <property name="value">
-               <number>100</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="KComboBox" name="kComboBox2"/>
-            </item>
-           </layout>
+           <widget class="QSpinBox" name="intVertical">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>999999</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -178,7 +182,13 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
         <item>
          <spacer>
           <property name="orientation">
@@ -196,7 +206,20 @@
          </spacer>
         </item>
         <item>
-         <layout class="QFormLayout" name="formLayout_2">
+         <layout class="QGridLayout">
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="intHeight">
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="intWidthzqffs">
             <property name="text">
@@ -215,13 +238,6 @@
            <widget class="QLabel" name="intHeightqsdfq">
             <property name="text">
              <string>Height:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="intHeight">
-            <property name="maximum">
-             <number>99999</number>
             </property>
            </widget>
           </item>
@@ -252,8 +268,8 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>17</width>
-          <height>26</height>
+          <width>20</width>
+          <height>40</height>
          </size>
         </property>
        </spacer>
@@ -264,50 +280,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ListBox</class>
-   <extends>Q3Frame</extends>
-   <header>q3listbox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>K3ListBox</class>
-   <extends>Q3ListBox</extends>
-   <header>k3listbox.h</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>boolAllPages</tabstop>
   <tabstop>boolFirstPage</tabstop>
   <tabstop>boolSelectionPage</tabstop>
   <tabstop>listPages</tabstop>
   <tabstop>intHorizontal</tabstop>
-  <tabstop>kComboBox1</tabstop>
   <tabstop>intVertical</tabstop>
-  <tabstop>kComboBox2</tabstop>
   <tabstop>intWidth</tabstop>
   <tabstop>intHeight</tabstop>
  </tabstops>

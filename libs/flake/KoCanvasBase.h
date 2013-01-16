@@ -3,7 +3,7 @@
    Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
-      
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -31,22 +31,24 @@
 #include <QRect>
 #include <QWidget>
 #include <QCursor>
+#include <QObject>
 
 #include "flake_export.h"
 
 class QGraphicsWidget;
-class QUndoCommand;
+class KUndo2Command;
 
-class KoResourceManager;
+class KoCanvasResourceManager;
 class KoShapeManager;
 class KoToolProxy;
 class KoViewConverter;
 class KoShapeController;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoCanvasController;
 class KoShape;
 class KoSnapGuide;
 class KoGuidesData;
+
 
 /**
  * KoCanvasBase is the interface actual application canvas classes
@@ -60,10 +62,10 @@ public:
 
     /**
      * The constructor.
-     * @param shapeControllerBase the implementation of the shapeController that the
+     * @param shapeBasedDocument the implementation of the shapeController that the
      *   application provides to allow shapes to be added in multiple views.
      */
-    explicit KoCanvasBase(KoShapeControllerBase *shapeControllerBase);
+    explicit KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument);
     virtual ~KoCanvasBase();
 
 public:
@@ -107,7 +109,7 @@ public:
      * it when the undo limit is reached, or when deleting the command history itself.
      * @param command the command to add
      */
-    virtual void addCommand(QUndoCommand *command) = 0;
+    virtual void addCommand(KUndo2Command *command) = 0;
 
     /**
      * return the current shapeManager
@@ -133,6 +135,12 @@ public:
      * @return the viewConverter for this view.
      */
     virtual KoViewConverter *viewConverter() const = 0;
+
+    /**
+     * Convert a coordinate in pixels to pt.
+     * @param viewPoint the point in the coordinate system of the widget, or window.
+     */
+    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
 
     /**
      * Return the widget that will be added to the scrollArea.
@@ -187,6 +195,13 @@ public:
     virtual void updateInputMethodInfo() = 0;
 
     /**
+     * disconnect the given QObject completely and utterly from any and all
+     * connections it has to any QObject owned by the canvas. Do this in
+     * the setCanvas of every KoCanvasObserver.
+     */
+    virtual void disconnectCanvasObserver(QObject *object);
+
+    /**
      * Return a pointer to the resource manager associated with this
      * canvas. The resource manager contains per-canvas settings such
      * as current foreground and background color.
@@ -197,7 +212,7 @@ public:
      * @endcode
      * @see KoShapeController::resourceManager()
      */
-    KoResourceManager *resourceManager() const;
+    KoCanvasResourceManager *resourceManager() const;
 
     /**
      * Return the shape controller for this canvas.
@@ -245,7 +260,7 @@ public:
     void setCanvasController(KoCanvasController *controller);
 
 private:
-    // we need a KoShapeControllerBase so that it can work
+    // we need a KoShapeBasedDocumentBase so that it can work
     KoCanvasBase();
 
     class Private;

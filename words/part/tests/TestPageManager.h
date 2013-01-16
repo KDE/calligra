@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005-2006,2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #define KWPAGEMANAGERTESTER_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QtTest>
 #include <qtest_kde.h>
 
 #include <tests/MockShapes.h> // from flake

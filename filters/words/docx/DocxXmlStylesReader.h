@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -24,7 +24,7 @@
 #ifndef DOCXXMLSTYLESREADER_H
 #define DOCXXMLSTYLESREADER_H
 
-#include <QtCore/QMap>
+#include <QMap>
 
 #include "DocxXmlDocumentReader.h"
 #include <MsooXmlDrawingTableStyle.h>
@@ -53,14 +53,10 @@ protected:
     KoFilter::ConversionStatus read_name();
     KoFilter::ConversionStatus read_tblStylePr();
 
-    void createDefaultStyle(KoGenStyle::Type type, const char* family);
     QMap<QByteArray, KoGenStyle*> m_defaultStyles;
+    void createDefaultStyle(KoGenStyle::Type type, const char* family);
 
     QString m_name; //!< set by read_name()
-
-    // Styles which are applied to all styles
-    KoGenStyle m_defaultTextStyle;
-    KoGenStyle m_defaultParagraphStyle;
 
     MSOOXML::DrawingTableStyle* m_currentStyle;
 

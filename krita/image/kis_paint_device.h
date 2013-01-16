@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QRect>
+#include <QVector>
 
 #include "kis_debug.h"
 
@@ -29,12 +30,11 @@
 #include "kis_types.h"
 #include "kis_global.h"
 #include "kis_shared.h"
-#include "kis_iterators_pixel.h"
-#include "kis_default_bounds.h"
+#include "kis_default_bounds_base.h"
 
 #include <krita_export.h>
 
-class QUndoCommand;
+class KUndo2Command;
 class QRect;
 class QImage;
 class QPoint;
@@ -87,7 +87,7 @@ public:
      * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
-    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds(), const QString& name = QString());
+    KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsBaseSP defaultBounds = 0, const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
@@ -127,12 +127,12 @@ public:
      * set the default bounds for the paint device when
      * the default pixel in not completely transarent
      */
-    virtual void setDefaultBounds(KisDefaultBoundsSP bounds);
+    virtual void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
      /**
      * the default bounds rect of the paint device
      */
-    KisDefaultBoundsSP defaultBounds() const;
+    KisDefaultBoundsBaseSP defaultBounds() const;
 
     /**
      * Moves the device to these new coordinates (so no incremental move or so)
@@ -169,6 +169,10 @@ public:
      * but may be larger if the underlying datamanager works that way.
      * For instance, the tiled datamanager keeps the extent to the nearest
      * multiple of 64.
+     *
+     * If default pixel is not transparent, then the actual extent
+     * rect is united with the defaultBounds()->bounds() value
+     * (the size of the image, usually).
      */
     virtual QRect extent() const;
 
@@ -184,19 +188,14 @@ public:
      * Exactbounds follows these rules:
      *
      * <ul>
-     * <li>if there is actual pixel data in the paint device, it is the exact bounds of this data,
-     *     no matter the value of the default pixel.
-     * <li>if there no pixel data in the paint device, and the default pixel is transparent,
-     *     exactBounds is empty
-     * <li>If there is no pixel data in the paint device, and the default pixel is not fully transparent,
-     *     exactBounds is the size of the image.
+     * <li>if default pixel is transparent, then exact bounds
+     *     of actual pixel data are returned
+     * <li>if default pixel is not transparent, then extent() of
+     *     the device is returned.
      * </ul>
      * \see calculateExactBounds()
      */
     virtual QRect exactBounds() const;
-
-    /// Convience method for the above
-    KDE_DEPRECATED void exactBounds(qint32 &x, qint32 &y, qint32 &w, qint32 &h) const;
 
     /**
      * Returns a rough approximation of region covered by device.
@@ -221,6 +220,13 @@ public:
     virtual void clear();
 
     /**
+     * Clear the given rectangle to transparent black. The paint device will expand to
+     * contain the given rect.
+     */
+    void clear(const QRect & rc);
+
+
+    /**
      * Sets the default pixel. New data will be initialised with this pixel. The pixel is copied: the
      * caller still owns the pointer and needs to delete it to avoid memory leaks.
      */
@@ -230,12 +236,6 @@ public:
      * Get a pointer to the default pixel.
      */
     const quint8 *defaultPixel() const;
-
-    /**
-     * Clear the given rectangle to transparent black. The paint device will expand to
-     * contain the given rect.
-     */
-    void clear(const QRect & rc);
 
     /**
      * Fill the given rectangle with the given pixel. The paint device will expand to
@@ -308,6 +308,11 @@ protected:
     void fastBitBlt(KisPaintDeviceSP src, const QRect &rect);
 
     /**
+     * The same as \ref fastBitBlt() but reads old data
+     */
+    void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
      * Clones rect from another paint device in a rough and fast way.
      * All the tiles touched by rect will be shared, between both
      * devices, that means it will copy a bigger area than was
@@ -318,6 +323,11 @@ protected:
      * \see fastBitBlt
      */
     void fastBitBltRough(KisPaintDeviceSP src, const QRect &rect);
+
+    /**
+     * The same as \ref fastBitBltRough() but reads old data
+     */
+    void fastBitBltRoughOldData(KisPaintDeviceSP src, const QRect &rect);
 
 public:
     /**
@@ -396,7 +406,9 @@ public:
      *
      * @return a command that can be used to undo the conversion.
      */
-    QUndoCommand* convertTo(const KoColorSpace * dstColorSpace, KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual);
+    KUndo2Command* convertTo(const KoColorSpace * dstColorSpace,
+                             KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                             KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
 
     /**
      * Changes the profile of the colorspace of this paint device to the given
@@ -406,9 +418,9 @@ public:
 
     /**
      * Fill this paint device with the data from image; starting at (offsetX, offsetY)
-     * @param srcProfileName name of the RGB profile to interpret the image as. "" is interpreted as sRGB
+     * @param srcProfileName name of the RGB profile to interpret the image as. 0 is interpreted as sRGB
      */
-    virtual void convertFromQImage(const QImage& image, const QString &srcProfileName, qint32 offsetX = 0, qint32 offsetY = 0);
+    virtual void convertFromQImage(const QImage& image, const KoColorProfile *profile, qint32 offsetX = 0, qint32 offsetY = 0);
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device.
@@ -421,7 +433,9 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile, qint32 x, qint32 y, qint32 w, qint32 h) const;
+    virtual QImage convertToQImage(const KoColorProfile *dstProfile, qint32 x, qint32 y, qint32 w, qint32 h,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
 
     /**
      * Create an RGBA QImage from a rectangle in the paint device. The
@@ -431,7 +445,9 @@ public:
      * case it's up to the color strategy to choose a profile (most
      * like sRGB).
      */
-    virtual QImage convertToQImage(const KoColorProfile *  dstProfile) const;
+    virtual QImage convertToQImage(const KoColorProfile *  dstProfile,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty) const;
 
     /**
      * Creates a paint device thumbnail of the paint device, retaining
@@ -444,8 +460,7 @@ public:
      * @param rect: only this rect will be used for the thumbnail
      *
      */
-
-    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
+    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, QRect rect = QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -454,15 +469,18 @@ public:
      *
      * @param maxw: maximum width
      * @param maxh: maximum height
-     * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
      * @param rect: only this rect will be used for the thumbnail
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect = QRect());
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh, QRect rect,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
 
     /**
      * Cached version of createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect)
      */
-    virtual QImage createThumbnail(qint32 maxw, qint32 maxh);
+    virtual QImage createThumbnail(qint32 maxw, qint32 maxh,
+                                   KoColorConversionTransformation::Intent renderingIntent = KoColorConversionTransformation::IntentPerceptual,
+                                   KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::Empty);
 
     /**
      * Fill c and opacity with the values found at x and y.
@@ -507,12 +525,7 @@ public:
     /**
      * @return the colorspace of the pixels in this paint device
      */
-    KoColorSpace * colorSpace();
-
-    /**
-     * @return the colorspace of the pixels in this paint device
-     */
-    const KoColorSpace * colorSpace() const;
+    const KoColorSpace *colorSpace() const;
 
     /**
      * @return the internal datamanager that keeps the pixels.
@@ -554,36 +567,9 @@ public:
      */
     virtual void setDirty();
 
+    virtual void setDirty(const QVector<QRect> rects);
+
 public:
-
-    /**
-     * Create an iterator over a rectangle section of a paint device, the path followed by
-     * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
-     * use this type of iterator if you are combining two differents layers.
-     * @param w width
-     * @param h height
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * @return an iterator which points to the first pixel of an rectangle
-     */
-    KDE_DEPRECATED KisRectIteratorPixel createRectIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0);
-
-    /**
-     * Create an iterator over a rectangle section of a paint device, the path followed by
-     * the iterator is not guaranteed, it is optimized for speed, which means that you shouldn't
-     * use this type of iterator if you are combining two differents layers.
-     * @param w width
-     * @param h height
-     * @param selection an up-to-date selection that has the same origin as the paint device* @return an iterator which points to the first pixel of an rectangle, this iterator
-     * does not allow to change the pixel values
-     */
-    KDE_DEPRECATED  KisRectConstIteratorPixel createRectConstIterator(qint32 left, qint32 top, qint32 w, qint32 h, const KisSelection * selection = 0) const;
-
-    /**
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * @return an iterator which points to the first pixel of a horizontal line, this iterator
-     * does not allow to change the pixel values
-     */
-    KDE_DEPRECATED KisHLineConstIteratorPixel createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0) const;
 
     KisHLineIteratorSP createHLineIteratorNG(qint32 x, qint32 y, qint32 w);
 
@@ -609,71 +595,27 @@ public:
      *
      * @param rc indicates the rectangle that truly contains data
      */
-    KisRepeatHLineConstIteratorPixel createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth, const KisSelection * selection = 0) const;
+    KisRepeatHLineConstIteratorSP createRepeatHLineConstIterator(qint32 x, qint32 y, qint32 w, const QRect& _dataWidth) const;
     /**
      * Create an iterator that will "artificially" extend the paint device with the
      * value of the border when trying to access values outside the range of data.
      *
      * @param rc indicates the rectangle that trully contains data
      */
-    KisRepeatVLineConstIteratorPixel createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth, const KisSelection * selection = 0) const;
-
-    /**
-    * @param selection an up-to-date selection that has the same origin as the paint device
-     * @return an iterator which points to the first pixel of a horizontal line
-     */
-    KDE_DEPRECATED KisHLineIteratorPixel createHLineIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection = 0);
-
-    /**
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * This function return an iterator which points to the first pixel of a vertical line
-     */
-    KDE_DEPRECATED KisVLineIteratorPixel createVLineIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0);
-
-    /**
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     * This function return an iterator which points to the first pixel of a vertical line
-     */
-    KDE_DEPRECATED KisVLineConstIteratorPixel createVLineConstIterator(qint32 x, qint32 y, qint32 h, const KisSelection * selection = 0) const;
-
-    /**
-     * This function creates a random accessor which allow to randomly access any pixels on
-     * the paint device.
-     * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
-     * you can.
-     * @param x, y starting point of the accessor
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     */
-    KDE_DEPRECATED KisRandomAccessorPixel createRandomAccessor(qint32 x, qint32 y, const KisSelection * selection = 0);
-
-    /**
-     * This function creates a random accessor which allow to randomly access any pixels on
-     * the paint device.
-     * <b>Note:</b> random access is way slower than iterators, always use iterators whenever
-     * you can.
-     * @param selection an up-to-date selection that has the same origin as the paint device
-     */
-    KDE_DEPRECATED KisRandomConstAccessorPixel createRandomConstAccessor(qint32 x, qint32 y, const KisSelection * selection = 0) const;
+    KisRepeatVLineConstIteratorSP createRepeatVLineConstIterator(qint32 x, qint32 y, qint32 h, const QRect& _dataWidth) const;
 
     /**
      * This function create a random accessor which can easily access to sub pixel values.
      * @param selection an up-to-date selection that has the same origin as the paint device
      */
-    KisRandomSubAccessorPixel createRandomSubAccessor(const KisSelection * selection = 0) const;
+    KisRandomSubAccessorSP createRandomSubAccessor() const;
 
 
     /** Clear the selected pixels from the paint device */
     void clearSelection(KisSelectionSP selection);
 
-    /**
-     * Apply a mask to the image data, i.e. multiply each pixel's opacity by its
-     * selectedness in the mask.
-     */
-    void applySelectionMask(KisSelectionSP mask);
-
 signals:
 
-    void ioProgress(qint8 percentage);
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
 
@@ -694,7 +636,7 @@ private:
     KisPaintDevice& operator=(const KisPaintDevice&);
     void init(KisDataManagerSP explicitDataManager,
               const KoColorSpace *colorSpace,
-              KisDefaultBoundsSP defaultBounds,
+              KisDefaultBoundsBaseSP defaultBounds,
               KisNodeWSP parent, const QString& name);
 
     // Only KisPainter is allowed to have access to these low-level methods
@@ -725,9 +667,13 @@ private:
     QVector<qint32> channelSizes();
 
 private:
+    friend class KisSelectionTest;
+    KisNodeWSP parentNode() const;
+
+private:
     KisDataManagerSP m_datamanager;
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

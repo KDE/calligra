@@ -31,7 +31,7 @@
 #include "kis_tiff_converter.h"
 
 K_PLUGIN_FACTORY(TIFFImportFactory, registerPlugin<KisTIFFImport>();)
-K_EXPORT_PLUGIN(TIFFImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(TIFFImportFactory("calligrafilters"))
 
 KisTIFFImport::KisTIFFImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -51,13 +51,7 @@ KoFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByte
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
-
-    KisView2 * view = 0;
-
-    if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
-    }
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -71,7 +65,7 @@ KoFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByte
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        KisTIFFConverter ib(doc, doc -> undoAdapter());
+        KisTIFFConverter ib(doc);
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

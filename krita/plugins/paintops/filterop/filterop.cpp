@@ -18,7 +18,6 @@
 
 #include "filterop.h"
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -38,7 +37,6 @@ K_EXPORT_PLUGIN(FilterOpFactory("krita"))
 FilterOp::FilterOp(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(FilterOpFactory::componentData());
     QStringList whiteList;
     whiteList << COMPOSITE_COPY;
 

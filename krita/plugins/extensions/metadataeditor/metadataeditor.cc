@@ -34,7 +34,7 @@
 #include "kis_cursor.h"
 #include "kis_global.h"
 #include "kis_layer.h"
-#include "kis_layer_manager.h"
+#include "kis_node_manager.h"
 #include "kis_types.h"
 #include "kis_view2.h"
 #include "kis_image.h"
@@ -55,8 +55,6 @@ metadataeditorPlugin::metadataeditorPlugin(QObject *parent, const QVariantList &
 {
     if (parent->inherits("KisView2")) {
         m_view = (KisView2*) parent;
-
-        setComponentData(metadataeditorPluginFactory::componentData());
 
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/metadataeditor.rc"), true);
 
@@ -82,7 +80,7 @@ void metadataeditorPlugin::slotEditLayerMetaData()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    KisMetaDataEditor editor(m_view, m_view->layerManager()->activeLayer()->metaData());
+    KisMetaDataEditor editor(m_view, m_view->nodeManager()->activeLayer()->metaData());
     editor.exec();
 }
 

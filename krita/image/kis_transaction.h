@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSACTION_H_
 #define KIS_TRANSACTION_H_
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 #include "kis_types.h"
 #include <krita_export.h>
@@ -30,11 +30,12 @@
 #include "kis_paint_device.h"
 
 #include "kis_undo_adapter.h"
+#include "kis_post_execution_undo_adapter.h"
 
 class KisTransaction
 {
 public:
-    KisTransaction(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent = 0) {
+    KisTransaction(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0) {
         m_transactionData = new KisTransactionData(name, device, parent);
     }
 
@@ -42,7 +43,7 @@ public:
         delete m_transactionData;
     }
 
-    QUndoCommand* undoCommand() {
+    KUndo2Command* undoCommand() {
         return m_transactionData;
     }
 
@@ -53,6 +54,27 @@ public:
         m_transactionData->endTransaction();
         undoAdapter->addCommand(m_transactionData);
         m_transactionData = 0;
+    }
+
+    void commit(KisPostExecutionUndoAdapter* undoAdapter) {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
+                   "the transaction has been tried to be committed twice");
+
+        m_transactionData->endTransaction();
+        m_transactionData->redo();
+        undoAdapter->addCommand(KUndo2CommandSP(m_transactionData));
+        m_transactionData = 0;
+    }
+
+    KUndo2Command* endAndTake() {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
+                   "the transaction has been tried to be committed twice");
+
+        KisTransactionData *transactionData = m_transactionData;
+        m_transactionData = 0;
+
+        transactionData->endTransaction();
+        return transactionData;
     }
 
     void end() {
@@ -81,15 +103,22 @@ public:
         m_transactionData = 0;
     }
 
+    QString text() const {
+        Q_ASSERT_X(m_transactionData, "KisTransaction::name()",
+                   "the name has been requested after the transaction"
+                   "has already been ended");
+        return m_transactionData->text();
+    }
+
 protected:
-    KisTransaction() {}
+    KisTransaction() : m_transactionData(0) {}
     KisTransactionData* m_transactionData;
 };
 
 class KisSelectedTransaction : public KisTransaction
 {
 public:
-    KisSelectedTransaction(const QString& name, KisNodeSP node, QUndoCommand* parent = 0)
+    KisSelectedTransaction(const QString& name, KisNodeSP node, KUndo2Command* parent = 0)
     {
         m_transactionData = new KisSelectedTransactionData(name, node, parent);
     }
@@ -98,7 +127,7 @@ public:
 class KisSelectionTransaction : public KisTransaction
 {
 public:
-    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent = 0)
+    KisSelectionTransaction(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0)
     {
         m_transactionData = new KisSelectionTransactionData(name, image, selection, parent);
     }

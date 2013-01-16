@@ -18,16 +18,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <qlayout.h>
-#include <qstyle.h>
-#include <qwindowsstyle.h>
-#include <qpainter.h>
+#include <QLayout>
+#include <QStyle>
+#include <QWindowsStyle>
+#include <QPainter>
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QEvent>
 #include <QMouseEvent>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <QApplication>
+#include <QClipboard>
 
 #include "kexicomboboxtableedit.h"
 #include <widget/utils/kexicomboboxdropdownbutton.h>
@@ -63,8 +63,8 @@ public:
 //======================================================
 
 KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QWidget *parent)
-        : KexiInputTableEdit(column, parent)
-        , KexiComboBoxBase()
+        : KexiComboBoxBase()
+        , KexiInputTableEdit(column, parent)
         , d(new Private())
 {
     m_setVisibleValueOnSetValueInternal = true;
@@ -434,6 +434,10 @@ void KexiComboBoxTableEdit::handleAction(const QString& actionName)
         KexiInputTableEdit::handleAction(actionName);
 }
 
+QVariant KexiComboBoxTableEdit::origValue() const
+{
+    return KexiDataItemInterface::originalValue();
+}
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiComboBoxEditorFactoryItem, KexiComboBoxTableEdit)
 

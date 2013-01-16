@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=airforced
-Name[nl]=luchtkoeler
+Name[ca]=forçat per aire
+Name[ca@valencia]=forçat per aire
+Name[el]=airforced
+Name[es]=aire forzado
+Name[et]=Sissepuhe
+Name[fr]=airforced
+Name[gl]=Refrixerador de fluxo forzado
+Name[it]=aria-forzata
+Name[kk]=Мәжбүрлеп ауа шығаратын салқындатқышы
+Name[nb]=blåsekjøler
+Name[nl]=luchtgekoeld
+Name[pl]=wymuszone powietrzem
 Name[pt]=ar-forçado
 Name[pt_BR]=ar forçado
+Name[ru]=Воздушный вентилятор с принудительным затягиванием
+Name[sk]=airforced
 Name[sv]=fläktluft
 Name[uk]=Охолоджувач з примусовим виводом повітря
 Name[x-test]=xxairforcedxx
+Name[zh_TW]=airforced

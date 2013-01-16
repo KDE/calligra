@@ -20,7 +20,7 @@
 #ifndef KEXIDB_DRIVER_KODBC_H
 #define KEXIDB_DRIVER_KODBC_H
 
-#include <kexidb/driver.h>
+#include <db/driver.h>
 
 namespace KexiDB
 {

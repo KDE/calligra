@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=End-Event-Compensation
-Name[et]=Sündmuse lõpu kompenseerimine
+Name[ca]=Final-Esdeveniment-Compensació
+Name[ca@valencia]=Final-Esdeveniment-Compensació
+Name[el]=Αντιστάθμιση-γεγονότος-τέλους
+Name[es]=Compensación del evento final
+Name[et]=Lõpusündmuse kompenseerimine
+Name[fr]=Compensation de fin d'évènement
+Name[gl]=Evento final de compensación
+Name[hu]=Vége-Esemény-Kárpótlás
+Name[it]=Evento-finale-Compensazione
+Name[kk]=Аяқтау-оқиға-компенсация
+Name[nb]=Slutt-hendelse-kompensasjon
+Name[nl]=Einde-gebeurtenis-compensatie
+Name[pl]=Kompensacja-Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Compensação
 Name[pt_BR]=Compensação do evento final
+Name[ru]=Компенсация завершения события
+Name[sk]=End-Event-Compensation
 Name[sv]=Sluthändelse-kompensation
 Name[uk]=Компенсація кінцевої події
 Name[x-test]=xxEnd-Event-Compensationxx

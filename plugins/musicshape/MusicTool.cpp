@@ -21,7 +21,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kiconloader.h>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -87,7 +86,7 @@ void MusicTool::mouseReleaseEvent( KoPointerEvent* )
 {
 }
 
-void MusicTool::addCommand(QUndoCommand* command)
+void MusicTool::addCommand(KUndo2Command* command)
 {
     canvas()->addCommand(command);
 }

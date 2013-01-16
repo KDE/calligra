@@ -22,18 +22,21 @@
 
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 static const char* FLOW_DESCRIPTION = I18N_NOOP("Calligra Flowchart And Diagram Tool");
-static const char* FLOW_VERSION = KOFFICE_VERSION_STRING;
+static const char* FLOW_VERSION = CALLIGRA_VERSION_STRING;
 
 KAboutData* newFlowAboutData()
 {
-  KAboutData* aboutData = new KAboutData("flow", 0, ki18n("Flow"),
+  KAboutData* aboutData = new KAboutData("flow", 0, ki18nc("application name", "Flow"),
                                 FLOW_VERSION, ki18n(FLOW_DESCRIPTION), KAboutData::License_LGPL,
-                                ki18n("(C) 2000-2010, The Flow Team"), KLocalizedString(),
-                                "http://www.calligra-suite.org/flow/");
-  aboutData->addAuthor(ki18n("Yue Liu"), ki18n("Maintainer"), "opuspace@gmail.com");
+                                ki18n("(C) 2000-2011, The Flow Team"), KLocalizedString(),
+                                "http://www.calligra.org/flow/");
+  aboutData->setProductName("calligraflow"); // for bugs.kde.org
+  aboutData->setProgramIconName(QLatin1String("kivio"));
+  aboutData->addAuthor(ki18n("Yue Liu"), ki18n("Maintainer"), "yue.liu@mail.com");
+  aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Former Maintainer"), "peter.simonsson@gmail.com");
 
   return aboutData;
 }

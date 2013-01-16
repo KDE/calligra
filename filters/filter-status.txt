@@ -1,8 +1,8 @@
-= KOffice filters and State =
+= Calligra filters and State =
 
-The KOffice file import and export filters are ''not'' in a good state. This document tries to make an inventory of all our filters, whether they are still useful and worth maintaining and whether they crash when used in KOffice 2.0.
+The Calligra file import and export filters are ''not'' in a good state. This document tries to make an inventory of all our filters, whether they are still useful and worth maintaining and whether they crash when used in Calligra 2.0.
 
-Note: for testing the filters there exists svn.kde.org/home/kde/trunk/tests/kofficetests/ repository with test documents, some of which are no longer supported and an abortive attempt at creating an automated test application
+Note: for testing the filters there exists svn.kde.org/home/kde/trunk/tests/calligratests/ repository with test documents, some of which are no longer supported and an abortive attempt at creating an automated test application
 
 Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, excel and powerpoint filters.
 
@@ -127,28 +127,26 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * native, not a filter
  * crashes 2.1
 
-== kivio ==
+== flow ==
 
 === generic image export ===
 
  * Not compiled.
  * export
 
-== flow ==
+=== visio ===
 
-=== icalendar ===
+ * compiled
+ * import
 
- * Compiled.
- * Export
-
-== KPresenter ==
+== stage ==
 
 === genericimageexport ===
 
  * Not compiled.
  * export
 
-=== kword ===
+=== words ===
 
  * Not compiled
  * export
@@ -176,7 +174,7 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * Not compiled
  * import/export
 
-== kpr2odf ===
+=== kpr2odf ===
 
  * Compiled
  * import
@@ -192,7 +190,7 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * Not compiled
  * export
 
-== kword ==
+== words ==
 
 === abiword === 
 
@@ -242,10 +240,10 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
  * import/export
  * crashes 2.1
 
-=== kword 1.3 ===
+=== words 1.3 ===
 
  * Compiled. 
- * Tests in kofficetests/documents/native/kword (or is that 1.4?)
+ * Tests in calligratests/documents/native/words (or is that 1.4?)
  * import
 
 === latex ===
@@ -304,12 +302,17 @@ Note: pole (p-ole) by Ariya has four copies: in the hancomword, starwriter, exce
 === wordperfect ===
 
  * compiled
- * has tests, tests have already been copied to koffice/filters/kword/wordperfect from kofficetests
+ * has tests, tests have already been copied to calligra/filters/words/wordperfect from calligratests
  * wp files aren't recognized, mime-type not listed
  * import works
  * import/export
 
-== kspread ==
+=== ms works ===
+
+ * compiled
+ * import
+
+== tables ==
 
 === applixspread === 
 

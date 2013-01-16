@@ -21,7 +21,7 @@
 #define __XAMLIMPORT_H__
 
 #include <KoFilter.h>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QMap>
 #include <QStack>
 #include <QByteArray>

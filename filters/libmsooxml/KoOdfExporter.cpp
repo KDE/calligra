@@ -163,7 +163,7 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     kDebug(30003) << "created manifest and styles.xml";
 
-    // create settings.xml, apparently it is used to note koffice that msoffice files should
+    // create settings.xml, apparently it is used to note calligra that msoffice files should
     // have different behavior with some things
     if (!outputStore->open("settings.xml")) {
         delete outputStore;
@@ -172,19 +172,12 @@ KoFilter::ConversionStatus KoOdfExporter::convert(const QByteArray& from, const 
 
     KoStoreDevice settingsDev(outputStore);
     KoXmlWriter* settings = KoOdfWriteStore::createOasisXmlWriter(&settingsDev, "office:document-settings");
+    settings->startElement("office:settings");
     settings->startElement("config:config-item-set");
     settings->addAttribute("config:name", "ooo:configuration-settings");
-    settings->startElement("config:config-item");
-    settings->addAttribute("config:name", "UseFormerLineSpacing");
-    settings->addAttribute("config:type", "boolean");
-    settings->addTextSpan("false");
-    settings->endElement(); // config:config-item
-    settings->startElement("config:config-item");
-    settings->addAttribute("config:name", "TabsRelativeToIndent");
-    settings->addAttribute("config:type", "boolean");
-    settings->addTextSpan("false"); // ODF=true, MSOffice=false
-    settings->endElement(); // config:config-item
+    writeConfigurationSettings(settings);
     settings->endElement(); // config:config-item-set
+    settings->endElement(); // office:settings
     settings->endElement(); // office:document-settings
     settings->endDocument();
     realManifestWriter->addManifestEntry("settings.xml", "text/xml");

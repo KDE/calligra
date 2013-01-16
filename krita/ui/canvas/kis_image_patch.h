@@ -23,6 +23,8 @@
 #include <QImage>
 #include <kis_types.h>
 
+#define BORDER_SIZE(scale) (ceil(0.5/scale))
+
 
 class KisImagePatch
 {
@@ -48,6 +50,13 @@ public:
      * to finish initializing the object
      */
     void setImage(QImage image);
+
+    /**
+     * prescale the patch image. Call after setImage().
+     * This ensures that we use the QImage smoothscale method, not the QPainter scaling,
+     * which is far inferior.
+     */
+    void preScale(const QRectF &dstRect);
 
     /**
      * Returns the rect of KisImage covered by the image
@@ -96,6 +105,7 @@ private:
     QRectF m_interestRect;
 
     QImage m_image;
+    bool m_isScaled;
 };
 
 #endif /* KIS_IMAGE_PATCH_H_ */

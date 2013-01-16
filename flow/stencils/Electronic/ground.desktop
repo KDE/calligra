@@ -1,7 +1,27 @@
 [Desktop Entry]
 Name=ground
+Name[bg]=заземяване
+Name[ca]=terra
+Name[ca@valencia]=terre
+Name[cs]=zem
+Name[de]=Masse
+Name[el]=γείωση
+Name[es]=tierra
+Name[et]=Maaühendus
+Name[fr]=terrain
+Name[gl]=Toma de terra
+Name[hu]=föld
+Name[it]=terra
+Name[kk]=жерге-қосуы
+Name[nb]=jord
+Name[nl]=aarde
+Name[pl]=uziemienie
 Name[pt]=terra
 Name[pt_BR]=terra
+Name[ru]=Земля
+Name[sk]=zem
 Name[sv]=jord
 Name[uk]=Земля
 Name[x-test]=xxgroundxx
+Name[zh_CN]=地
+Name[zh_TW]=接地

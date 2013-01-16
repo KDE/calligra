@@ -42,6 +42,9 @@ class KoStyleManager;
 class KoShape;
 class KoShapeLoadingContext;
 class KoOdfNotesConfiguration;
+class KoOdfBibliographyConfiguration;
+class KoTextAnchor;
+class KoTextTableTemplate;
 
 #define KOTEXT_SHARED_LOADING_ID "KoTextSharedLoadingId"
 
@@ -75,10 +78,18 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The paragraph style for the given name or 0 if not found
      */
     KoParagraphStyle *paragraphStyle(const QString &name, bool stylesDotXml) const;
+
+    /**
+     * Return all paragraph styles.
+     *
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
+     * @return All paragraph styles from the given file
+     */
+    QList<KoParagraphStyle *> paragraphStyles(bool stylesDotXml) const;
 
     /**
      * Get the character style for the given name
@@ -86,7 +97,7 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The character style for the given name or 0 if not found
      */
     KoCharacterStyle *characterStyle(const QString &name, bool stylesDotXml) const;
@@ -94,8 +105,8 @@ public:
     /**
      * Return all character styles.
      *
-     * @param stylesDotXml If set the styles from styles.xml are used if unset styles from content.xml are used.
-     * @return All character styles from the givin file
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
+     * @return All character styles from the given file
      */
     QList<KoCharacterStyle*> characterStyles(bool stylesDotXml) const;
 
@@ -103,7 +114,7 @@ public:
      * Get the list style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The list style for the given name or 0 if not found
      */
     KoListStyle *listStyle(const QString &name, bool stylesDotXml) const;
@@ -112,7 +123,7 @@ public:
      * Get the table style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table style for the given name or 0 if not found
      */
     KoTableStyle *tableStyle(const QString &name, bool stylesDotXml) const;
@@ -121,7 +132,7 @@ public:
      * Get the table column style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table column style for the given name or 0 if not found
      */
     KoTableColumnStyle *tableColumnStyle(const QString &name, bool stylesDotXml) const;
@@ -130,7 +141,7 @@ public:
      * Get the table row style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table row style for the given name or 0 if not found
      */
     KoTableRowStyle *tableRowStyle(const QString &name, bool stylesDotXml) const;
@@ -139,7 +150,7 @@ public:
      * Get the table cell style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table cell style for the given name or 0 if not found
      */
     KoTableCellStyle *tableCellStyle(const QString &name, bool stylesDotXml) const;
@@ -148,7 +159,7 @@ public:
      * Get the section style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The section style for the given name or 0 if not found
      */
     KoSectionStyle *sectionStyle(const QString &name, bool stylesDotXml) const;
@@ -166,17 +177,10 @@ public:
     KoOdfNotesConfiguration endnotesConfiguration() const;
 
     /**
-     * Set the appication default style
-     *
-     * This is done so the application default style needs to be loaded only once.
-     * The ownership of the style is transfered to this class.
+     * Get the document-wide configuration for bibliography this contains information
+     * about prefix, suffix, sort by position, sort algorithm etc.
      */
-    void setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle);
-
-    /**
-     * Get the application default style
-     */
-    KoCharacterStyle *applicationDefaultStyle() const;
+    KoOdfBibliographyConfiguration bibliographyConfiguration() const;
 
 protected:
     /**
@@ -186,7 +190,7 @@ protected:
      * @param shape a shape that has finished loading.
      * @param element the xml element that represents the shape being inserted.
      */
-    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
+    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoTextAnchor *anchor);
 
 private:
     enum StyleType {
@@ -211,6 +215,8 @@ private:
     };
     QList<OdfCharStyle> loadCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
 
+    void addDefaultCharacterStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager);
+
     // helper functions for loading of list styles
     void addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
@@ -232,9 +238,9 @@ private:
     QList<QPair<QString, KoTableRowStyle *> > loadTableRowStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of table cell styles
-    void addTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addTableCellStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
-    QList<QPair<QString, KoTableCellStyle *> > loadTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+    QList<QPair<QString, KoTableCellStyle *> > loadTableCellStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of section styles
     void addSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
@@ -244,6 +250,12 @@ private:
     void addOutlineStyle(KoShapeLoadingContext & context, KoStyleManager *styleManager);
 
     void addNotesConfiguration(KoShapeLoadingContext &context);
+
+    void addBibliographyConfiguration(KoShapeLoadingContext &context);
+
+    void addTableTemplate(KoShapeLoadingContext &context, KoStyleManager *styleManager);
+    QList<QPair<QString, KoTextTableTemplate *> > loadTableTemplates(KoShapeLoadingContext &context);
+
 
     class Private;
     Private * const d;

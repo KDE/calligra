@@ -28,7 +28,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "sybaseconnection_p.h"
 #include "sybasecursor.h"
 #include "sybasepreparedstatement.h"
-#include <kexidb/error.h>
+#include <db/error.h>
 
 
 using namespace KexiDB;
@@ -107,7 +107,7 @@ bool SybaseConnection::drv_createDatabase(const QString &dbName)
     if (drv_executeSQL("CREATE DATABASE " + dbName)) {
         // set allow_nulls_by_default option to true
         QString allowNullsQuery = QString("sp_dboption %1, allow_nulls_by_default, true").arg(dbName);
-        if (drv_executeSQL(allowNullsQuery.toLatin1().data()))
+        if (drv_executeSQL(allowNullsQuery))
             return true;
     }
     d->storeResult();
@@ -173,7 +173,7 @@ QString SybaseConnection::serverErrorMsg()
 
 bool SybaseConnection::drv_containsTable(const QString &tableName)
 {
-    bool success;
+    bool success=false;
     return resultExists(QString("select name from sysobjects where type='U' and name=%1")
                         .arg(driver()->escapeString(tableName)), success) && success;
 }

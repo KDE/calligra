@@ -22,7 +22,7 @@
 #include <KoPathPoint.h>
 
 #include "KarbonSimplifyPath.h"
-#include <KarbonCurveFit.h>
+#include <KoCurveFit.h>
 #include <KoColorBackground.h>
 
 #include <KDebug>
@@ -40,7 +40,7 @@ KarbonCalligraphicShape::KarbonCalligraphicShape(qreal caps)
     setShapeId(KoPathShapeId);
     setFillRule(Qt::WindingFill);
     setBackground(new KoColorBackground(Qt::black));
-    setBorder(0);
+    setStroke(0);
 }
 
 KarbonCalligraphicShape::~KarbonCalligraphicShape()
@@ -268,7 +268,7 @@ int KarbonCalligraphicShape::ccw(const QPointF &p1,
 
 void KarbonCalligraphicShape::setSize(const QSizeF &newSize)
 {
-    QSizeF oldSize = size();
+    // QSizeF oldSize = size();
     // TODO: check
     KoParameterShape::setSize(newSize);
 }

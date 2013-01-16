@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -50,6 +50,8 @@ bool m_insideHdr; //!< used to indicate that we're parsing inside hdr (header)
 bool m_insideFtr; //!< used to indicate that we're parsing inside ftr (footer)
 
 bool m_choiceAccepted; // Whether choice provided something we implement
+
+bool m_read_t_args;
 
 // 2010 specific, meant to offer choice between paths based on what is supported
 KoFilter::ConversionStatus read_AlternateContent();

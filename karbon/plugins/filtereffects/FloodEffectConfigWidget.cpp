@@ -25,9 +25,9 @@
 
 #include <KLocale>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QToolButton>
+#include <QGridLayout>
+#include <QLabel>
+#include <QToolButton>
 
 FloodEffectConfigWidget::FloodEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
@@ -41,7 +41,7 @@ FloodEffectConfigWidget::FloodEffectConfigWidget(QWidget *parent)
     button->setDefaultAction(m_actionStopColor);
     setLayout(g);
 
-    connect(m_actionStopColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(colorChanged()));
+    connect(m_actionStopColor, SIGNAL(colorChanged(KoColor)), this, SLOT(colorChanged()));
 }
 
 bool FloodEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

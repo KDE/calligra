@@ -27,10 +27,10 @@
 #include <KoDataCenterBase.h>
 #include <kconfig.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QStringList>
 #include <Soprano/Soprano>
 #include <QTextBlockUserData>
 #include <QTreeWidgetItem>
@@ -47,21 +47,18 @@ class KoTextEditor;
 #include "RdfForward.h"
 #include "KoSemanticStylesheet.h"
 #include "KoRdfSemanticItem.h"
-#include "KoRdfFoaF.h"
-#include "KoRdfCalendarEvent.h"
-#include "KoRdfLocation.h"
 #include "KoRdfSemanticItemViewSite.h"
 #include "RdfSemanticTreeWidgetAction.h"
 #include "InsertSemanticObjectActionBase.h"
 #include "InsertSemanticObjectCreateAction.h"
 #include "InsertSemanticObjectReferenceAction.h"
-#include "KoRdfSemanticTreeWidgetItem.h"
-#include "KoRdfFoaFTreeWidgetItem.h"
-#include "KoRdfCalendarEventTreeWidgetItem.h"
-#include "KoRdfLocationTreeWidgetItem.h"
 #include "KoRdfSemanticTree.h"
 
+class KoRdfCalendarEvent;
+class KoRdfLocation;
 class KoDocumentRdfPrivate;
+class KoRdfFoaF;
+
 
 /**
  * @short The central access point for the Rdf metadata of an ODF document.
@@ -73,10 +70,10 @@ class KoDocumentRdfPrivate;
  * The KoDocumentRdf object is possibly associated with a KoDocument.
  * There does not need to be a KoDocumentRdf for each KoDocument, but
  * if one exists it is a one-to-one relationship. The KoDocumentRdf
- * is also associated with the KoResourceManager of a canvas. You can use
- * the fromResourceManager() static method to get the KoDocumentRdf
- * which is associated with a canvas, if one exists. Once again,
- * the canvas to KoDocumentRdf is either a 1-1 or 1 to zero relationship.
+ * is also associated with the KoDocumentResourceManager of a canvas.
+ *
+ * Once again, the canvas to KoDocumentRdf is either a 1-1 or 1 to
+ * zero relationship.
  *
  * ACCESS TO Rdf:
  *
@@ -89,16 +86,15 @@ class KoDocumentRdfPrivate;
  * locations() methods of this class. Each of these methods optionally
  * takes a Soprano::Model and returns a list of SemanticItems of a
  * particular subclass. If you do not pass an Soprano::Model to the
- * methods the defualt model() of the KoDocumentRdf is used. By
+ * methods the default model() of the KoDocumentRdf is used. By
  * allowing you to pass a model explicitly, you can find contacts that
  * exist in a subset of the full Rdf graph for a document. This is
  * useful if you want to find the contacts in the users current
  * "selection" in the document.
  *
- * For example, to find the foaf entries related to the current cursor:
+ * For example, to find the foaf entries related to the current KoTextEditor
  *
- * QTextCursor cursor = ...;
- * Soprano::Model* model = rdf->findStatements( cursor );
+ * Soprano::Model* model = rdf->findStatements( editor );
  * KoRdfFoaFList foaflist = rdf->foaf( model );
  *
  * Using the Soprano::Model directly is covered in a latter section of
@@ -117,7 +113,7 @@ class KoDocumentRdfPrivate;
  *
  * The Rdf that is stored using these methods is collected and made
  * available by the KoDocumentRdf class. The inline Rdf using option
- * (1) is stored along with the KOffice C++ objects that are created
+ * (1) is stored along with the Calligra C++ objects that are created
  * during document loading. This class also knows how to find the
  * scattered Rdf that option (1) loads. Leaving the Rdf from option
  * (1) scattered in the document allows it to be preserved in the
@@ -156,21 +152,10 @@ public:
      * The constructor
      * @param parent a pointer to the parent object
      */
-    KoDocumentRdf(KoDocument *parent = 0);
+    KoDocumentRdf(QObject *parent = 0);
 
     /** The destructor */
     ~KoDocumentRdf();
-
-    static KoDocumentRdf *fromResourceManager(KoCanvasBase *host);
-
-    /**
-     * Document containing this Rdf
-     *
-     * There is a 1-1 relationship between KoDocument and a
-     * KoDocumentRdf. Though not every KoDocument has a KoDocumentRdf
-     * object.
-     */
-    KoDocument *document() const;
 
     /**
      * Load from an OASIS document
@@ -194,14 +179,10 @@ public:
 
     /**
      * Find all the KoTextInlineRdf objects that exist in the
-     * document and update the statements in the Soprano::model to
-     * reflect the current state of the inline Rdf. You should call
-     * KoDocument::updateInlineRdfStatements() instead which will pass
-     * the required arguments to the method for you.
-     *
-     * @see KoDocument::updateInlineRdfStatements()
+     * document and update the statements in the Soprano::(model) to
+     * reflect the current state of the inline Rdf.
      */
-    void updateInlineRdfStatements(QTextDocument *qdoc);
+    void updateInlineRdfStatements(const QTextDocument *qdoc);
 
     /**
      * During a save(), various Rdf objects in the document will
@@ -216,7 +197,7 @@ public:
      * also updates the C++ objects to use the new xmlid values so that
      * the instance of the document in memory is correctly linked.
      *
-     * This way, KOffice is free to change the xml:id during save() and
+     * This way, Calligra is free to change the xml:id during save() and
      * the Rdf is still linked correctly.
      */
     void updateXmlIdReferences(const QMap<QString, QString> &m);
@@ -230,7 +211,7 @@ public:
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual Soprano::Model *model() const;
+    virtual QSharedPointer<Soprano::Model> model() const;
 
     /**
      * Convert an inlineRdf object into a Soprano::Statement
@@ -242,7 +223,7 @@ public:
      * start and end position for that semitem. If there is no semitem
      * with the \p xmlId then 0,0 is returned.
      */
-    QPair<int, int> findExtent(const QString &xmlId);
+    QPair<int, int> findExtent(const QString &xmlId) const;
 
     /**
      * Look for the semitem that is at or surrounding the cursor given. Note that if there
@@ -251,16 +232,14 @@ public:
      *
      * <start-a> ... <start-b> ... cursor ... <end-b> ... <end-a>
      */
-    QPair<int, int> findExtent(QTextCursor &cursor);
-    QPair<int, int> findExtent(KoTextEditor *handler);
+    QPair<int, int> findExtent(KoTextEditor *handler) const;
 
     /**
      * find the xmlid of the semitem that is at or surrounding the cursor given. As with
      * findExtent() this will be only the most nested semitem.
      * @see findExtent()
      */
-    QString findXmlId(QTextCursor &cursor);
-    QString findXmlId(KoTextEditor *cursor);
+    QString findXmlId(KoTextEditor *cursor) const;
 
 
     /**
@@ -283,39 +262,38 @@ public:
      *
      * Note that the returned model is owned by the caller, you must delete it.
      */
-    Soprano::Model *findStatements(QTextCursor &cursor, int depth = 1);
-    Soprano::Model *findStatements(const QString &xmlid, int depth = 1);
-    Soprano::Model *findStatements(KoTextEditor *handler, int depth = 1);
+    QSharedPointer<Soprano::Model> findStatements(const QString &xmlid, int depth = 1);
+    QSharedPointer<Soprano::Model> findStatements(KoTextEditor *handler, int depth = 1);
 
     /**
      * Add all the Rdf that is associated with the given xml:id
      */
-    void addStatements(Soprano::Model *model, const QString &xmlid);
+    void addStatements(QSharedPointer<Soprano::Model> model, const QString &xmlid);
 
     /**
      * Find an inline Rdf object from the xml:id which
      * it has in the content.xml file
      */
-    KoTextInlineRdf* findInlineRdfByID(const QString &xmlid);
+    KoTextInlineRdf* findInlineRdfByID(const QString &xmlid) const;
 
     /**
      * Obtain a list of Contact/FOAF semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<KoRdfFoaF*> foaf(Soprano::Model *m = 0);
+    QList<hKoRdfFoaF> foaf(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
 
     /**
      * Obtain a list of calendar/vevent semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<KoRdfCalendarEvent*> calendarEvents(Soprano::Model *m = 0);
+    QList<hKoRdfCalendarEvent> calendarEvents(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
     /**
      * Obtain a list of location semantic objects, if any, for the Rdf
      * in the default model() or the one you optionally pass in.
      */
-    QList<KoRdfLocation*> locations(Soprano::Model *m = 0);
+    QList<hKoRdfLocation> locations(QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0));
 
     /**
      * For Rdf stored in manifest.rdf or another rdf file referenced
@@ -348,18 +326,19 @@ public:
      * look for and add
      * ?s2 ?p2 ?s
      */
-    void expandStatementsReferencingSubject(Soprano::Model *model);
+    void expandStatementsReferencingSubject(QSharedPointer<Soprano::Model> model) const;
+
     /**
      * If model contains ?s ?p ?o
      * look for and add
      * ?o ?p2 ?o2
      */
-    void expandStatementsSubjectPointsTo(Soprano::Model *model);
+    void expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * Add n ?p ?o from m_model to model
      */
-    void expandStatementsSubjectPointsTo(Soprano::Model *model, const Soprano::Node &n);
+    void expandStatementsSubjectPointsTo(QSharedPointer<Soprano::Model> model, const Soprano::Node &n) const;
 
     /**
      * Rdf allows for linked lists to be serialized as a graph. This method will
@@ -375,21 +354,28 @@ public:
      * ?nextN rdf:first  ?valueN
      * ?nextN rdf:rest   rdf:nil
      */
-    void expandStatementsToIncludeRdfLists(Soprano::Model *model);
+    void expandStatementsToIncludeRdfLists(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * If model contains ?s ?p ?o
      * look for and add
      * ?s ?p3 ?o3
      */
-    void expandStatementsToIncludeOtherPredicates(Soprano::Model *model);
+    void expandStatementsToIncludeOtherPredicates(QSharedPointer<Soprano::Model> model) const;
 
     /**
      * One round of all expandStatements methods
      */
-    void expandStatements(Soprano::Model *model);
+    void expandStatements(QSharedPointer<Soprano::Model> model) const;
 
+    /**
+     * XXXX? What does this do?
+     */
     KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
+
+    /**
+     * XXXX? What does this do?
+     */
     QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
 
     /**
@@ -402,13 +388,14 @@ public:
      * @see insertReflow()
      * @see applyReflow()
      */
-    struct reflowItem {
-        KoRdfSemanticItem *m_si;
-        KoSemanticStylesheet *m_ss;
+    struct reflowItem
+    {
+        hKoRdfSemanticItem m_si;
+        hKoSemanticStylesheet m_ss;
         QString m_xmlid;
         QPair<int, int> m_extent;
-    public:
-        reflowItem(KoRdfSemanticItem *si, const QString &xmlid, KoSemanticStylesheet *ss, const QPair<int, int> &extent);
+
+        reflowItem(hKoRdfSemanticItem si, const QString &xmlid, hKoSemanticStylesheet ss, const QPair<int, int> &extent);
     };
 
     /**
@@ -433,9 +420,9 @@ public:
      *
      * @see applyReflow()
      */
-    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj, KoSemanticStylesheet *ss);
-    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj, const QString &sheetType, const QString &stylesheetName);
-    void insertReflow(QMap<int, reflowItem> &col, KoRdfSemanticItem *obj);
+    void insertReflow(QMap<int, reflowItem> &col, hKoRdfSemanticItem obj, hKoSemanticStylesheet ss);
+    void insertReflow(QMap<int, reflowItem> &col, hKoRdfSemanticItem obj, const QString &sheetType, const QString &stylesheetName);
+    void insertReflow(QMap<int, reflowItem> &col, hKoRdfSemanticItem obj);
     /**
      * @short Apply the stylesheets built up with insertReflow().
      *
@@ -446,29 +433,41 @@ public:
     /**
      * For debugging, output the model and a header string for identification
      */
-    void dumpModel(const QString &msg, Soprano::Model *m = 0) const;
+    void dumpModel(const QString &msg, QSharedPointer<Soprano::Model> m = QSharedPointer<Soprano::Model>(0)) const;
+
+signals:
+    /**
+     * Emitted when a new semanticItem is created so that dockers can
+     * update themselves accordingly. It is expected that when
+     * semanticObjectViewSiteUpdated is emitted the view will take care
+     * of reflowing the semanitc item using it's stylesheet.
+     */
+    void semanticObjectAdded(hKoRdfSemanticItem item) const;
+    void semanticObjectUpdated(hKoRdfSemanticItem item) const;
+    void semanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid) const;
+
+public:
+    void emitSemanticObjectAdded(hKoRdfSemanticItem item) const;
+    void emitSemanticObjectUpdated(hKoRdfSemanticItem item);
+    void emitSemanticObjectViewSiteUpdated(hKoRdfSemanticItem item, const QString &xmlid);
+    void emitSemanticObjectAddedConst(hKoRdfSemanticItem const item) const;
 
     /**
-     * If the current tool is not something that you can get a
-     * texteditor for, make sure it is and return a TextEditor.
+     * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
+     * This is mainly an internal method to allow user stylesheets to be managed per document.
      */
-    static KoTextEditor *ensureTextTool(KoCanvasBase *host);
-    /**
-     * Switch to the text tool. Useful in cases like the docinfo dialog
-     * where you don't actually have a pointer to the canvas but you
-     * know that some methods you are going to call will require a
-     * KoTextEditor.
-     */
-    static void ensureTextTool();
+    QList<hKoSemanticStylesheet> userStyleSheetList(const QString& className) const;
+    void setUserStyleSheetList(const QString& className,const QList<hKoSemanticStylesheet>& l);
+
 
 private:
 
     /**
      * @see expandStatementsToIncludeRdfLists()
      */
-    void expandStatementsToIncludeRdfListsRecurse(Soprano::Model *model,
+    void expandStatementsToIncludeRdfListsRecurse(QSharedPointer<Soprano::Model> model,
             QList<Soprano::Statement> &addList,
-            const Soprano::Node &n);
+            const Soprano::Node &n) const;
 
 
     /**
@@ -483,7 +482,7 @@ private:
      * statements to 'm' and be assured that no bnodes in 'm' are
      * going to accidentially be the same as a bnode in m_model.
      */
-    void freshenBNodes(Soprano::Model *m);
+    void freshenBNodes(QSharedPointer<Soprano::Model> m);
 
     /**
      * Used by loadOasis() to load Rdf from a particular external
@@ -497,7 +496,7 @@ private:
      * content.xml, those Rdf statements must be saved as the
      * content.xml file is generated.
      */
-    bool saveRdf(KoStore *store, KoXmlWriter *manifestWriter, Soprano::Node &context);
+    bool saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const Soprano::Node &context) const;
 
 
     /**
@@ -507,34 +506,28 @@ private:
      *
      * @see locations()
      */
-    void addLocations(Soprano::Model *m, QList<KoRdfLocation*> &ret,
+    void addLocations(QSharedPointer<Soprano::Model> m, QList<hKoRdfLocation> &ret,
                       bool isGeo84, const QString &sparql);
 
-signals:
-    /**
-     * Emitted when a new semanticItem is created so that dockers can
-     * update themselves accordingly. It is expected that when
-     * semanticObjectViewSiteUpdated is emitted the view will take care
-     * of reflowing the semanitc item using it's stylesheet.
-     */
-    void semanticObjectAdded(KoRdfSemanticItem *item);
-    void semanticObjectUpdated(KoRdfSemanticItem *item);
-    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
-
-public:
-    void emitSemanticObjectAdded(KoRdfSemanticItem *item);
-    void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
-    void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
-    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item);
 
     /**
-     * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
-     * This is mainly an internal method to allow user stylesheets to be managed per document.
+     * idrefList queries soprano after loading and creates a list of all rdfid's that
+     * where found in the manifest.rdf document. This list is used to make sure we do not
+     * create more inline rdf objects than necessary
+     * @return a list of xml-id's
      */
-    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className);
-    void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
+    QStringList idrefList() const;
 
 private:
+
+    /**
+     * Test whether a model is present that supports:
+     * - context / graphs
+     *  - querying on graphs
+     *  - storage in memory.
+     */
+    bool backendIsSane();
+
     /// reimplemented
     virtual bool completeLoading(KoStore *store);
 

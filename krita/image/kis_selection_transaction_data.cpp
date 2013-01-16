@@ -24,16 +24,11 @@
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
 
-KisSelectionTransactionData::KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent) :
+KisSelectionTransactionData::KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent) :
         KisTransactionData(name, selection->getOrCreatePixelSelection().data(), parent)
         , m_image(image)
         , m_selection(selection)
-        , m_wasDeselected(selection->isDeselected())
 {
-    if (m_selection->isDeselected()) {
-        m_selection->getOrCreatePixelSelection()->clear();
-        m_selection->setDeselected(false);
-    }
 }
 
 KisSelectionTransactionData::~KisSelectionTransactionData()
@@ -45,6 +40,7 @@ void KisSelectionTransactionData::redo()
     KisTransactionData::redo();
     m_selection->setDirty(m_image->bounds());
     m_selection->updateProjection();
+
     m_image->undoAdapter()->emitSelectionChanged();
 }
 
@@ -53,6 +49,6 @@ void KisSelectionTransactionData::undo()
     KisTransactionData::undo();
     m_selection->setDirty(m_image->bounds());
     m_selection->updateProjection();
-    m_selection->setDeselected(m_wasDeselected);
+
     m_image->undoAdapter()->emitSelectionChanged();
 }

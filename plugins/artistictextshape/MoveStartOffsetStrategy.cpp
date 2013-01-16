@@ -73,7 +73,7 @@ void MoveStartOffsetStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
 
     // now find the nearest point of all picked segments
     KoPathSegment nearestSegment;
-    qreal nearestPointParam;
+    qreal nearestPointParam = 0.0;
     KoPathPointIndex nearestPathPoint;
     qreal minDistance = HUGE_VAL;
     foreach(const KoPathSegment &s, segments) {
@@ -111,7 +111,7 @@ void MoveStartOffsetStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     }
 }
 
-QUndoCommand *MoveStartOffsetStrategy::createCommand()
+KUndo2Command *MoveStartOffsetStrategy::createCommand()
 {
     return new ChangeTextOffsetCommand(m_text, m_oldStartOffset, m_text->startOffset());
 }

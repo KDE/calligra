@@ -62,13 +62,15 @@ Properties97::Properties97( OLEStreamReader* wordDocument, OLEStreamReader* tabl
 
     // Read the DOP
     m_table->seek( fib.fcDop );
-    if ( m_version == Word8 )
+    if ( m_version == Word8 ) {
         m_dop.read( m_table, false );
-    else
+    } else {
         m_dop = Word95::toWord97( Word95::DOP( m_table, false ) );
+    }
 
-    if ( m_table->tell() != static_cast<S32>( fib.fcDop + fib.lcbDop ) )
+    if ( m_table->tell() != static_cast<S32>( fib.fcDop + fib.lcbDop ) ) {
         wvlog << "Warning: DOP has a different size than expected." << endl;
+    }
 
     // Read the PLCF SED. The Word95::SED is different, but the differing
     // fields are unused and of the same size, so what :-)
@@ -78,35 +80,36 @@ Properties97::Properties97( OLEStreamReader* wordDocument, OLEStreamReader* tabl
     if ( fib.lcbClx != 0 ) {
         // Read the PAPX and CHPX BTE PLCFs (to locate the appropriate FKPs)
         m_table->seek( fib.fcPlcfbtePapx );
-        if ( m_version == Word8 )
+        if ( m_version == Word8 ) {
             m_plcfbtePapx = new PLCF<Word97::BTE>( fib.lcbPlcfbtePapx, m_table );
-        else
+        } else {
             m_plcfbtePapx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbtePapx, m_table ) );
-        if ( fib.cpnBtePap != 0 && fib.cpnBtePap != m_plcfbtePapx->count() )
+        }
+        if ( fib.cpnBtePap != 0 && fib.cpnBtePap != m_plcfbtePapx->count() ) {
             wvlog << "Error: The PAP piece table is incomplete! (Should be " << fib.cpnBtePap << ")" << endl;
-
+        }
         m_table->seek( fib.fcPlcfbteChpx );
-        if ( m_version == Word8 )
+        if ( m_version == Word8 ) {
             m_plcfbteChpx = new PLCF<Word97::BTE>( fib.lcbPlcfbteChpx, m_table );
-        else
+        } else {
             m_plcfbteChpx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbteChpx, m_table ) );
-        if ( fib.cpnBteChp != 0 && fib.cpnBteChp != m_plcfbteChpx->count() )
+        }
+        if ( fib.cpnBteChp != 0 && fib.cpnBteChp != m_plcfbteChpx->count() ) {
             wvlog << "Error: The CHP piece table is incomplete! (Should be " << fib.cpnBteChp << ")" << endl;
-    }
-    else {
+        }
+    } else {
         // Read the PAPX and CHPX BTE PLCFs (to locate the appropriate FKPs) from a non-complex file
         m_table->seek( fib.fcPlcfbtePapx );
         m_plcfbtePapx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbtePapx, m_table ) );
-        if ( fib.cpnBtePap != m_plcfbtePapx->count() )
+        if ( fib.cpnBtePap != m_plcfbtePapx->count() ) {
             fillBinTable( m_plcfbtePapx, fib.cpnBtePap );
-
+        }
         m_table->seek( fib.fcPlcfbteChpx );
         m_plcfbteChpx = convertPLCF<Word95::BTE, Word97::BTE>( PLCF<Word95::BTE>( fib.lcbPlcfbteChpx, m_table ) );
-        if ( fib.cpnBteChp != m_plcfbteChpx->count() )
+        if ( fib.cpnBteChp != m_plcfbteChpx->count() ) {
             fillBinTable( m_plcfbteChpx, fib.cpnBteChp );
+        }
     }
-
-
 }
 
 Properties97::~Properties97()
@@ -172,9 +175,9 @@ ParagraphProperties* Properties97::fullSavedPap( U32 fc, OLEStreamReader* dataSt
 {
     // Step 1: Search the correct FKP entry in the PLCFBTE
     PLCFIterator<Word97::BTE> it( *m_plcfbtePapx );
-    while ( it.current() && it.currentLim() <= fc )
+    while ( it.current() && it.currentLim() <= fc ) {
         ++it;
-
+    }
     if ( !it.current() ) {
         wvlog << "Bug: PAPX BTE screwed" << endl;
         return new ParagraphProperties;
@@ -192,18 +195,20 @@ ParagraphProperties* Properties97::fullSavedPap( U32 fc, OLEStreamReader* dataSt
     // Step 3: Get the new FKP, if necessary
     if ( !m_papxFkp ) {
         m_wordDocument->push();
-        m_wordDocument->seek( it.current()->pn << 9, G_SEEK_SET );  // 512 byte pages ( << 9 )
-        if ( m_version == Word8 )
+        m_wordDocument->seek( it.current()->pn << 9, WV2_SEEK_SET );  // 512 byte pages ( << 9 )
+        if ( m_version == Word8 ) {
             m_papxFkp = new PAPXFKP_t( m_wordDocument, false );
-        else
+        } else {
             m_papxFkp = convertFKP( PAPXFKP95_t( m_wordDocument, false ) );
+        }
         m_wordDocument->pop();
     }
 
     // Step 4: Get the right entry within our FKP
     PAPXFKPIterator fkpit( *m_papxFkp );
-    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc )
+    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc ) {
         ++fkpit;
+    }
 
     // Step 5: Now that we are at the correct place let's apply the PAPX grpprl
     ParagraphProperties *properties = Word97::initPAPFromStyle( fkpit.current(), m_stylesheet, dataStream, m_version );
@@ -247,7 +252,7 @@ Word97::TAP* Properties97::fullSavedTap( U32 fc, OLEStreamReader* dataStream )
     // Step 3: Get the new FKP, if necessary
     if ( !m_papxFkp ) {
         m_wordDocument->push();
-        m_wordDocument->seek( it.current()->pn << 9, G_SEEK_SET );  // 512 byte pages ( << 9 )
+        m_wordDocument->seek( it.current()->pn << 9, WV2_SEEK_SET );  // 512 byte pages ( << 9 )
         if ( m_version == Word8 )
             m_papxFkp = new PAPXFKP_t( m_wordDocument, false );
         else
@@ -272,22 +277,24 @@ void Properties97::applyClxGrpprl( const Word97::PCD* pcd, U32 fcClx, Word97::TA
 
 U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* paragraphStyle )
 {
-    // Before we start with the plain FKP algorithm like above we have to apply any
-    // CHPX found in the style entry for the CHP, unless it's istdNormalChar (10)
+    // Step 0: Before we start with the plain FKP algorithm like above we have
+    // to apply any CHPX found in the style entry for the CHP, unless it's
+    // istdNormalChar (10)
     if ( chp->istd != 10 ) {
         const Style* style = m_stylesheet->styleByIndex( chp->istd );
-        if ( style && style->type() == Style::sgcChp ) {
+        if ( style && style->type() == sgcChp ) {
             const UPECHPX& upechpx( style->upechpx() );
             chp->apply( upechpx.grpprl, upechpx.cb, paragraphStyle, m_stylesheet, 0, m_version );
-        }
-        else
+        } else {
             wvlog << "Couldn't find the character style with istd " << chp->istd << endl;
+        }
     }
 
     // Step 1: Search the correct FKP entry in the PLCFBTE
     PLCFIterator<Word97::BTE> it( *m_plcfbteChpx );
-    while ( it.current() && it.currentLim() <= fc )
+    while ( it.current() && it.currentLim() <= fc ) {
         ++it;
+    }
 
     if ( !it.current() ) {
         wvlog << "Bug: CHPX BTE screwed (backing out by faking properties)" << endl;
@@ -306,17 +313,20 @@ U32 Properties97::fullSavedChp( const U32 fc, Word97::CHP* chp, const Style* par
     // Step 3: Get the new FKP, if necessary
     if ( !m_chpxFkp ) {
         m_wordDocument->push();
-        m_wordDocument->seek( it.current()->pn << 9, G_SEEK_SET );  // 512 byte pages ( << 9 )
+        m_wordDocument->seek( it.current()->pn << 9, WV2_SEEK_SET );  // 512 byte pages ( << 9 )
         m_chpxFkp = new CHPXFKP_t( m_wordDocument, false );
         m_wordDocument->pop();
     }
 
     // Step 4: Get the right entry within our FKP
     CHPXFKPIterator fkpit( *m_chpxFkp );
-    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc )
+    while ( !fkpit.atEnd() && fkpit.currentLim() <= fc ) {
         ++fkpit;
+    }
 
-    // Step 5: Now that we are at the correct place let's apply the CHPX grpprl
+    // Step 5: Now that we are at the correct place let's apply the CHPX
+    // grpprl.  The built-in character style referred to by the istd provided
+    // by sprmCIstd will be applied recursively.
     chp->applyExceptions( fkpit.current(), paragraphStyle, m_stylesheet, 0, m_version );
     return fkpit.currentLim() - fc;
 }
@@ -344,7 +354,7 @@ void Properties97::applyClxGrpprlImpl( const Word97::PCD* pcd, U32 fcClx, P* pro
         while ( blockType == wvWare::clxtGrpprl && igrpprl > 0 ) {
             U16 size = m_table->readU16();
             //wvlog << "Skipping a clxtGrpprl (size=" << size << ")" << endl;
-            m_table->seek( size, G_SEEK_CUR );
+            m_table->seek( size, WV2_SEEK_CUR );
             blockType = m_table->readU8();
             --igrpprl;
         }
@@ -386,7 +396,7 @@ void Properties97::fillBinTable( PLCF<Word97::BTE>* bte, U16 cpnBte )
     while ( cpnBte > 0 ) {
         Word97::BTE* tmp( new Word97::BTE );
         tmp->pn = ++pnLast;
-        m_wordDocument->seek( pnLast << 9, G_SEEK_SET );
+        m_wordDocument->seek( pnLast << 9, WV2_SEEK_SET );
         bte->insert( m_wordDocument->readU32(), tmp );
         --cpnBte;
     }

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import Kross
-#import KWord
+#import Words
 
 class Reader:
     """ The Reader class provides us implementations for the different file formats
@@ -19,7 +19,7 @@ class Reader:
         filtermask = "*.htm *.html"
 
 def callbackGetValue(*args):
-    """ This function got called by KWord if getting the variable is requested.
+    """ This function got called by Words if getting the variable is requested.
     The callback is mapped in the scripts.rc configurationfile. """
     print "=====> callbackGetValue args=%s" % args
     try:
@@ -47,7 +47,7 @@ class OptionsWidget:
         forms = Kross.module("forms")
         try:
             mainwidget = forms.createWidget("QWidget")
-            self.widget = forms.createFileWidget(mainwidget, "kfiledialog:///kwordscriptingvariablereadfile")
+            self.widget = forms.createFileWidget(mainwidget, "kfiledialog:///wordsscriptingvariablereadfile")
             self.widget.setMode("Opening")
             self.widget.minimumWidth = 540
             self.widget.minimumHeight = 400
@@ -98,7 +98,7 @@ class OptionsWidget:
         print "--------------------------------------------------> OptionsWidget.__del__()"
 
 def callbackCreateOptionsWidget(*args):
-    """ This function got called by KWord if creating an options widget is requested.
+    """ This function got called by Words if creating an options widget is requested.
     The callback is mapped in the scripts.rc configurationfile. """
     print "=====> callbackCreateOptionsWidget args=%s" % args
 

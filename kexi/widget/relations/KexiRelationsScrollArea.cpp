@@ -20,14 +20,14 @@
 
 #include <KDebug>
 
-#include <qstringlist.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QStringList>
+#include <QLayout>
+#include <QLabel>
 #include <q3header.h>
-#include <qevent.h>
-#include <qpainter.h>
-#include <qstyle.h>
-#include <qlineedit.h>
+#include <QEvent>
+#include <QPainter>
+#include <QStyle>
+#include <QLineEdit>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QTimer>
@@ -37,9 +37,9 @@
 #include <kmenu.h>
 #include <kmessagebox.h>
 
-#include <kexidb/tableschema.h>
-#include <kexidb/indexschema.h>
-#include <kexidb/utils.h>
+#include <db/tableschema.h>
+#include <db/indexschema.h>
+#include <db/utils.h>
 
 #include "KexiRelationsScrollArea.h"
 #include "KexiRelationsView.h"
@@ -347,9 +347,9 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
         if (cview->masterTable() == c || cview->detailsTable() == c
                 || cview->connectionRect().intersects(r)) {
             r |= cview->oldRect();
-            kDebug() << r;
+            //kDebug() << r;
             r |= cview->connectionRect();
-            kDebug() << r;
+            //kDebug() << r;
         }
 //   updateContents(cview->oldRect());
 //   updateContents(cview->connectionRect());

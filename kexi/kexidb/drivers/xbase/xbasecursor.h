@@ -20,8 +20,8 @@
 #ifndef _XBASECURSOR_H_
 #define _XBASECURSOR_H_
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
+#include <db/cursor.h>
+#include <db/connection.h>
 
 namespace KexiDB {
 

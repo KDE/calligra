@@ -30,6 +30,7 @@
 
 class KWDocument;
 class KoOdfWriteStore;
+class KoShapeSavingContext;
 class KoEmbeddedDocumentSaver;
 class KoGenStyles;
 class KWTextFrameSet;
@@ -38,7 +39,7 @@ class KWPage;
 class KoGenChanges;
 
 /**
- * Class that has a lot of the OpenDocument (ODF) saving code for KWord.
+ * Class that has a lot of the OpenDocument (ODF) saving code for Words.
  */
 class KWOdfWriter : public QObject
 {
@@ -63,15 +64,15 @@ public:
     bool save(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver);
 
 private:
-    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes, KWTextFrameSet* fs);
-    void saveHeaderFooter(KoEmbeddedDocumentSaver &embeddedSaver, KoGenStyles &mainStyles, KoGenChanges &changes);
+    void saveHeaderFooter(KoShapeSavingContext &context);
+    QByteArray serializeHeaderFooter(KoShapeSavingContext &context, KWTextFrameSet* fs);
 
     void calculateZindexOffsets();
     void addShapeToTree(KoShape *shape);
 
     bool saveOdfSettings(KoStore *store);
 
-    /// The KWord document.
+    /// The Words document.
     KWDocument *m_document;
     QHash<KWPageStyle, QString> m_masterPages;
     /// Since ODF requires zindexes >= 0 and we can have negative ones we will calculate an offset per

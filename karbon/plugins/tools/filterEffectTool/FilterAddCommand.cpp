@@ -24,11 +24,11 @@
 
 #include <KLocale>
 
-FilterAddCommand::FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, QUndoCommand *parent)
-        : QUndoCommand(parent), m_filterEffect(filterEffect), m_shape(shape), m_isAdded(false)
+FilterAddCommand::FilterAddCommand(KoFilterEffect *filterEffect, KoShape * shape, KUndo2Command *parent)
+        : KUndo2Command(parent), m_filterEffect(filterEffect), m_shape(shape), m_isAdded(false)
 {
     Q_ASSERT(m_shape);
-    setText(i18n("Add filter effect"));
+    setText(i18nc("(qtundo-format)", "Add filter effect"));
 }
 
 FilterAddCommand::~FilterAddCommand()
@@ -39,7 +39,7 @@ FilterAddCommand::~FilterAddCommand()
 
 void FilterAddCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 
     if (m_shape->filterEffectStack()) {
         m_shape->update();
@@ -60,5 +60,5 @@ void FilterAddCommand::undo()
         }
         m_isAdded = false;
     }
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

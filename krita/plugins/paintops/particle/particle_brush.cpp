@@ -19,7 +19,7 @@
 #include "particle_brush.h"
 
 #include "kis_paint_device.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 
 #include <KoColorSpace.h>
 #include <KoColor.h>
@@ -51,7 +51,7 @@ void ParticleBrush::setInitialPosition(QPointF pos) {
 }
 
 
-void ParticleBrush::paintParticle(KisRandomAccessor& accWrite,KoColorSpace * cs, QPointF pos, const KoColor& color,qreal weight, bool respectOpacity)
+void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpace * cs, QPointF pos, const KoColor& color,qreal weight, bool respectOpacity)
 {
     // opacity top left, right, bottom left, right
     KoColor myColor(color);
@@ -67,29 +67,29 @@ void ParticleBrush::paintParticle(KisRandomAccessor& accWrite,KoColorSpace * cs,
     quint8 bbl = qRound((1.0 - fx) * (fy)  * opacity * weight);
     quint8 bbr = qRound((fx)  * (fy)  * opacity * weight);
 
-    accWrite.moveTo(ipx  , ipy);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,btl + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
+    accWrite->moveTo(ipx  , ipy);
+    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,btl + cs->opacityU8(accWrite->rawData()),OPACITY_OPAQUE_U8)) );
+    memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 
-    accWrite.moveTo(ipx + 1, ipy);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,btr + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
+    accWrite->moveTo(ipx + 1, ipy);
+    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,btr + cs->opacityU8(accWrite->rawData()),OPACITY_OPAQUE_U8)) );
+    memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 
-    accWrite.moveTo(ipx, ipy + 1);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,bbl + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
+    accWrite->moveTo(ipx, ipy + 1);
+    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,bbl + cs->opacityU8(accWrite->rawData()),OPACITY_OPAQUE_U8)) );
+    memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 
-    accWrite.moveTo(ipx + 1, ipy + 1);
-    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,bbr + cs->opacityU8(accWrite.rawData()),OPACITY_OPAQUE_U8)) );
-    memcpy(accWrite.rawData(), myColor.data(), cs->pixelSize());
+    accWrite->moveTo(ipx + 1, ipy + 1);
+    myColor.setOpacity( quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8,bbr + cs->opacityU8(accWrite->rawData()),OPACITY_OPAQUE_U8)) );
+    memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 }
 
 
 
 
 void ParticleBrush::draw(KisPaintDeviceSP dab,const KoColor& color,QPointF pos) {
-    KisRandomAccessor accessor = dab->createRandomAccessor( qRound(pos.x()), qRound(pos.y()) );
-    KoColorSpace * cs = dab->colorSpace();
+    KisRandomAccessorSP accessor = dab->createRandomAccessorNG( qRound(pos.x()), qRound(pos.y()) );
+    const KoColorSpace * cs = dab->colorSpace();
 
     for (int i = 0; i < m_properties->iterations; i++) {
         for (int j = 0; j < m_properties->particleCount; j++) {
@@ -119,7 +119,7 @@ void ParticleBrush::draw(KisPaintDeviceSP dab,const KoColor& color,QPointF pos) 
             m_particleNextPos[j] *= m_properties->gravity;
             m_particlePos[j] = m_particlePos[j] + (m_particleNextPos[j] * TIME);
 
-            paintParticle(accessor, cs ,m_particlePos[j],color,m_properties->weight, true);
+            paintParticle(accessor, cs, m_particlePos[j], color, m_properties->weight, true);
 
         }//for j
     }//for i

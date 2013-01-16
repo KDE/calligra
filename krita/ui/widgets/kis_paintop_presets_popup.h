@@ -60,10 +60,6 @@ public:
      */
     QString getPresetName() const;
 
-    ///Set preset for the scratchpad
-    ///@param preset that will be used in the scratchpad
-    void setPreset(KisPaintOpPresetSP preset);
-
     ///Image for preset preview
     ///@return image cut out from the scratchpad
     QImage cutOutOverlay();
@@ -72,6 +68,13 @@ public:
 
     void setCurrentPaintOp(const QString & paintOpId);
     QString currentPaintOp();
+    
+    ///fill the cutoutOverlay rect with the cotent of an image, used to get the image back when selecting a preset
+    ///@param image image that will be used, should be image of an existing preset resource
+    void setPresetImage(const QImage& image);
+
+    virtual void resizeEvent(QResizeEvent* );
+
 
 protected:
     void contextMenuEvent(QContextMenuEvent *);
@@ -88,17 +91,17 @@ signals:
     void defaultPresetClicked();
     void presetNameLineEditChanged(const QString& presetName);
     void paintopActivated(const QString& presetName);
+    void signalResourceSelected(KoResource* resource);
+
+    void sizeChanged();
 
 private slots:
-    void fillScratchPadGradient();
-    void fillScratchPadSolid();
-    void fillScratchPadLayer();
     void slotCheckPresetValidity();
 
 
 private:
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

@@ -29,8 +29,8 @@
 #include <kexiproject.h>
 #include <kexipartinfo.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/parser/parser.h>
+#include <db/cursor.h>
+#include <db/parser/parser.h>
 
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
@@ -39,19 +39,16 @@
 //------------------------------------------------
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QVariantList &l)
-        : KexiPart::Part(parent, l)
+  : KexiPart::Part(parent,
+        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+              "Use '_' character instead of spaces. First character should be a..z character. "
+              "If you cannot use latin characters in your language, use english word.",
+              "query"),
+        i18nc("tooltip", "Create new query"),
+        i18nc("what's this", "Creates new query."),
+        l)
 {
-    setInternalPropertyValue("instanceName",
-                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                   "Use '_' character instead of spaces. First character should be a..z character. "
-                                   "If you cannot use latin characters in your language, use english word.",
-                                   "query"));
-    setInternalPropertyValue("instanceCaption", i18n("Query"));
-    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new query"));
-    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new query."));
-// setInternalPropertyValue("textViewModeCaption", i18n("&SQL View"));
     setInternalPropertyValue("textViewModeCaption", i18n("SQL"));
-    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode);
 }
 
 KexiQueryPart::~KexiQueryPart()
@@ -62,8 +59,9 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 {
     KexiQueryPart::TempData *data = new KexiQueryPart::TempData(
         window, KexiMainWindowIface::global()->project()->dbConnection());
-    data->listenerInfoString = window->part()->instanceCaption() + " \""
-                               + window->partItem()->name() + "\"";
+    data->listenerInfoString = i18nc("@info Object \"objectname\"", "%1 <resource>%2</resource>")
+                               .arg(window->part()->info()->instanceCaption())
+                               .arg(window->partItem()->name());
     return data;
 }
 
@@ -100,7 +98,7 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
     return view;
 }
 
-bool KexiQueryPart::remove(KexiPart::Item &item)
+tristate KexiQueryPart::remove(KexiPart::Item &item)
 {
     if (!KexiMainWindowIface::global()->project()
             || !KexiMainWindowIface::global()->project()->dbConnection())

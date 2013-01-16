@@ -34,6 +34,7 @@
 
 #include <kexipart.h>
 #include <kexipartitem.h>
+#include <KoIcon.h>
 #include <kxmlguiclient.h>
 //#include <kexidialogbase.h>
 #include <kconfig.h>
@@ -74,18 +75,16 @@ public:
 };
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QVariantList& l)
-        : KexiPart::Part(parent, l)
-        , d(new Private(this))
+  : KexiPart::Part(parent,
+        i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+              "Use '_' character instead of spaces. First character should be a..z character. "
+              "If you cannot use latin characters in your language, use english word.",
+              "script"),
+        i18nc("tooltip", "Create new script"),
+        i18nc("what's this", "Creates new script."),
+        l)
+  , d(new Private(this))
 {
-    setInternalPropertyValue("instanceName",
-                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-                                   "Use '_' character instead of spaces. First character should be a..z character. "
-                                   "If you cannot use latin characters in your language, use english word.",
-                                   "script"));
-    setInternalPropertyValue("instanceCaption", i18n("Script"));
-    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new script"));
-    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new script."));
-    setSupportedViewModes(Kexi::DesignViewMode);
     //setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
     //setInternalPropertyValue("newObjectsAreDirty", true);
 }
@@ -124,7 +123,7 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
         if (!exec && dontask != "no") {
             exec = KMessageBox::warningContinueCancel(0,
                     i18n("Do you want to execute the script \"%1\"?\n\nScripts obtained from unknown sources can contain dangerous code.").arg(scriptaction->text()),
-                    i18n("Execute Script?"), KGuiItem(i18n("Execute"), "system-run"),
+                    i18n("Execute Script?"), KGuiItem(i18n("Execute"), koIconName("system-run")),
                     dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
                                                      ) == KMessageBox::Continue;
         }
@@ -232,8 +231,8 @@ void KexiScriptPart::initPartActions()
 void KexiScriptPart::initInstanceActions()
 {
     kDebug();
-    //createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "media-playback-start", 0, "data_execute");
-    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", KShortcut(), "script_config_editor");
+    //createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), koIconName("media-playback-start"), 0, "data_execute");
+    createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), koIconName("configure"), KShortcut(), "script_config_editor");
 }
 
 KexiView* KexiScriptPart::createView(QWidget *parent,

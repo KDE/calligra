@@ -28,19 +28,19 @@ Drawings::Drawings( OLEStreamReader* table, const Word97::FIB &fib ) :
     table->push();
 
     // Don't try to read that. It will cause eye-cancer!
-    if ( fib.lcbPlcspaMom != 0 && table->seek( fib.fcPlcspaMom, G_SEEK_SET ) )
+    if ( fib.lcbPlcspaMom != 0 && table->seek( fib.fcPlcspaMom, WV2_SEEK_SET ) )
         m_plcfspaMom = new PLCF<Word97::FSPA>( fib.lcbPlcspaMom, table, false );
-    if ( fib.lcbPlcspaHdr != 0 && table->seek( fib.fcPlcspaHdr, G_SEEK_SET ) )
+    if ( fib.lcbPlcspaHdr != 0 && table->seek( fib.fcPlcspaHdr, WV2_SEEK_SET ) )
         m_plcfspaHdr = new PLCF<Word97::FSPA>( fib.lcbPlcspaHdr, table, false );
 
-    if ( fib.lcbPlcftxbxTxt != 0 && table->seek( fib.fcPlcftxbxTxt, G_SEEK_SET ) )
+    if ( fib.lcbPlcftxbxTxt != 0 && table->seek( fib.fcPlcftxbxTxt, WV2_SEEK_SET ) )
         m_plcftxbxTxt = new PLCF<Word97::FTXBXS>( fib.lcbPlcftxbxTxt, table, false );
-    if ( fib.lcbPlcfHdrtxbxTxt != 0 && table->seek( fib.fcPlcfHdrtxbxTxt, G_SEEK_SET ) )
+    if ( fib.lcbPlcfHdrtxbxTxt != 0 && table->seek( fib.fcPlcfHdrtxbxTxt, WV2_SEEK_SET ) )
         m_plcfHdrtxbxTxt = new PLCF<Word97::FTXBXS>( fib.lcbPlcfHdrtxbxTxt, table, false );
 
-    if ( fib.lcbPlcftxbxBkd != 0 && table->seek( fib.fcPlcftxbxBkd, G_SEEK_SET ) )
+    if ( fib.lcbPlcftxbxBkd != 0 && table->seek( fib.fcPlcftxbxBkd, WV2_SEEK_SET ) )
         m_plcftxbxBkd = new PLCF<Word97::BKD>( fib.lcbPlcftxbxBkd, table, false );
-    if ( fib.lcbPlcftxbxHdrBkd != 0 && table->seek( fib.fcPlcftxbxHdrBkd, G_SEEK_SET ) )
+    if ( fib.lcbPlcftxbxHdrBkd != 0 && table->seek( fib.fcPlcftxbxHdrBkd, WV2_SEEK_SET ) )
         m_plcfHdrtxbxBkd = new PLCF<Word97::BKD>( fib.lcbPlcftxbxHdrBkd, table, false );
 
     table->pop();

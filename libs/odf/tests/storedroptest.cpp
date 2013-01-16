@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 StoreDropTest::StoreDropTest(QWidget* parent)
         : QTextBrowser(parent)
 {
-    setText("KoStore drop/paste test\nDrop or paste a selection from a KOffice application into this widget to see the ZIP contents");
+    setText("KoStore drop/paste test\nDrop or paste a selection from a Calligra application into this widget to see the ZIP contents");
     setAcceptDrops(true);
 }
 
@@ -98,7 +98,7 @@ void StoreDropTest::paste()
         bool oasis = fmt.startsWith(acceptMimeType);
         if (oasis || fmt == "application/x-kpresenter") {
             QByteArray data = m->data(fmt);
-            showZipContents(data, fmt.toAscii(), oasis);
+            showZipContents(data, fmt.toLatin1(), oasis);
             return;
         }
     }

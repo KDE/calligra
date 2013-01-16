@@ -52,13 +52,13 @@ public:
     }
 
     bool accept(KisNodeVisitor &v);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KisFilterMask(const KisFilterMask& rhs);
 
     bool allowAsChild(KisNodeSP) const;
 
-    KisFilterConfiguration * filter() const;
-    void setFilter(KisFilterConfiguration * filterConfig);
+    void setFilter(KisFilterConfiguration *filterConfig);
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
@@ -66,11 +66,6 @@ public:
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
-
-private:
-
-    class Private;
-    Private * const m_d;
 };
 
 #endif //_KIS_FILTER_MASK_

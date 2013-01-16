@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2008 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@ class KRITAIMAGE_EXPORT KisSelectionTransactionData : public KisTransactionData
 {
 
 public:
-    KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, QUndoCommand* parent = 0);
+    KisSelectionTransactionData(const QString& name, KisImageWSP image, KisSelectionSP selection, KUndo2Command* parent = 0);
     virtual ~KisSelectionTransactionData();
 
 public:
@@ -46,7 +46,6 @@ public:
 private:
     KisImageWSP m_image;
     KisSelectionSP m_selection;
-    bool m_wasDeselected;
 };
 
 #endif /* KIS_SELECTION_TRANSACTION_DATA_H_ */

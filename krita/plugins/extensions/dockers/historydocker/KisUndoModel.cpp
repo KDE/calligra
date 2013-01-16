@@ -65,7 +65,7 @@ KisUndoModel::KisUndoModel(QObject *parent)
     m_canvas = 0;
     m_sel_model = new QItemSelectionModel(this, this);
     connect(m_sel_model, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
-    m_emty_label = tr("<empty>");
+    m_empty_label = tr("<empty>");
 }
 
 QItemSelectionModel *KisUndoModel::selectionModel() const
@@ -73,12 +73,12 @@ QItemSelectionModel *KisUndoModel::selectionModel() const
     return m_sel_model;
 }
 
-QUndoStack *KisUndoModel::stack() const
+KUndo2QStack *KisUndoModel::stack() const
 {
     return m_stack;
 }
 
-void KisUndoModel::setStack(QUndoStack *stack)
+void KisUndoModel::setStack(KUndo2QStack *stack)
 {
     if (m_stack == stack)
         return;
@@ -89,7 +89,9 @@ void KisUndoModel::setStack(QUndoStack *stack)
         disconnect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));
         disconnect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(addImage(int)));
     }
+
     m_stack = stack;
+    
     if (m_stack != 0) {
         connect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
         connect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(stackChanged()));
@@ -185,11 +187,11 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole) {
         if (index.row() == 0)
-            return m_emty_label;
+            return m_empty_label;
         return m_stack->text(index.row() - 1);
     } else if (role == Qt::DecorationRole) {
         if(!index.row() == 0) {
-            const QUndoCommand* currentCommand = m_stack->command(index.row() - 1);
+            const KUndo2Command* currentCommand = m_stack->command(index.row() - 1);
             return imageMap[currentCommand];
         }
     }
@@ -199,12 +201,12 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 
 QString KisUndoModel::emptyLabel() const
 {
-    return m_emty_label;
+    return m_empty_label;
 }
 
 void KisUndoModel::setEmptyLabel(const QString &label)
 {
-    m_emty_label = label;
+    m_empty_label = label;
     stackChanged();
 }
 
@@ -228,20 +230,20 @@ void KisUndoModel::addImage(int idx) {
         return;
     }
 
-    const QUndoCommand* currentCommand = m_stack->command(idx-1);
+    const KUndo2Command* currentCommand = m_stack->command(idx-1);
     if( m_stack->count() == idx && !imageMap.contains(currentCommand)) {
         KisImageWSP historyImage = m_canvas->view()->image();
         KisPaintDeviceSP paintDevice = historyImage->projection();
-        QImage image = paintDevice->createThumbnail(32, 32);
+        QImage image = paintDevice->createThumbnail(32, 32, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
         imageMap[currentCommand] = image;
     }
-    QList<const QUndoCommand*> list;
+    QList<const KUndo2Command*> list;
 
     for(int i = 0; i < m_stack->count(); ++i) {
         list << m_stack->command(i);
     }
 
-    for(QMap<const QUndoCommand*, QImage>:: iterator it = imageMap.begin(); it != imageMap.end();)
+    for(QMap<const KUndo2Command*, QImage>:: iterator it = imageMap.begin(); it != imageMap.end();)
     {
         if(!list.contains(it.key())) {
             it = imageMap.erase(it);

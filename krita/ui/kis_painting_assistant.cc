@@ -17,12 +17,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+
 #include "kis_painting_assistant.h"
+#include "kis_coordinates_converter.h"
 #include "kis_debug.h"
 
 #include <kglobal.h>
 #include <QPen>
 #include <QPainter>
+#include <QPixmapCache>
 
 struct KisPaintingAssistantHandle::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -92,11 +97,28 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
     return newHandles;
 }
 
+void KisPaintingAssistantHandle::uncache()
+{
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        assistant->uncache();
+    }
+}
+
 
 struct KisPaintingAssistant::Private {
     QString id;
     QString name;
     QList<KisPaintingAssistantHandleSP> handles;
+    QPixmapCache::Key cached;
+    QRect cachedRect; // relative to boundingRect().topLeft()
+    struct TranslationInvariantTransform {
+        qreal m11, m12, m21, m22;
+        TranslationInvariantTransform() { }
+        TranslationInvariantTransform(const QTransform& t) : m11(t.m11()), m12(t.m12()), m21(t.m21()), m22(t.m22()) { }
+        bool operator==(const TranslationInvariantTransform& b) {
+            return m11 == b.m11 && m12 == b.m12 && m21 == b.m21 && m22 == b.m22;
+        }
+    } cachedTransform;
 };
 
 KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& name) : d(new Private)
@@ -162,6 +184,146 @@ void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
     handle->registerAssistant(this);
 }
 
+void KisPaintingAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool useCache)
+{
+    Q_UNUSED(updateRect);
+
+    if (!useCache) {
+        gc.save();
+        drawCache(gc, converter);
+        gc.restore();
+        return;
+    }
+    const QRect bound = boundingRect();
+    if (bound.isEmpty()) return;
+    const QTransform transform = converter->documentToWidgetTransform();
+    const QRect widgetBound = transform.mapRect(bound);
+
+    const QRect paintRect = transform.mapRect(bound).intersected(gc.viewport());
+    if (paintRect.isEmpty()) return;
+
+    QPixmap cached;
+    if (!(QPixmapCache::find(d->cached, &cached) &&
+          d->cachedTransform == transform &&
+          d->cachedRect.translated(widgetBound.topLeft()).contains(paintRect))) {
+        const QRect cacheRect = gc.viewport().adjusted(-100, -100, 100, 100).intersected(widgetBound);
+        Q_ASSERT(!cacheRect.isEmpty());
+        if (cached.isNull() || cached.size() != cacheRect.size()) {
+            cached = QPixmap(cacheRect.size());
+        }
+        cached.fill(Qt::transparent);
+        QPainter painter(&cached);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setWindow(cacheRect);
+        drawCache(painter, converter);
+        painter.end();
+        d->cachedTransform = transform;
+        d->cachedRect = cacheRect.translated(-widgetBound.topLeft());
+        d->cached = QPixmapCache::insert(cached);
+    }
+    gc.drawPixmap(paintRect, cached, paintRect.translated(-widgetBound.topLeft() - d->cachedRect.topLeft()));
+}
+
+void KisPaintingAssistant::uncache()
+{
+    d->cached = QPixmapCache::Key();
+}
+
+QRect KisPaintingAssistant::boundingRect() const
+{
+    QRectF r;
+    foreach (KisPaintingAssistantHandleSP h, handles()) {
+        r = r.united(QRectF(*h, QSizeF(1,1)));
+    }
+    return r.adjusted(-2, -2, 2, 2).toAlignedRect();
+}
+
+QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int> &handleMap)
+{
+        QByteArray data;
+        QXmlStreamWriter xml(&data);
+            xml.writeStartDocument();
+            xml.writeStartElement("assistant");
+            xml.writeAttribute("type",d->id);
+            xml.writeStartElement("handles");
+            foreach(const KisPaintingAssistantHandleSP handle, d->handles) {
+                int id = handleMap.size();
+                if (!handleMap.contains(handle)){
+                    handleMap.insert(handle, id);
+                }
+                id = handleMap.value(handle);
+                xml.writeStartElement("handle");
+                xml.writeAttribute("id", QString::number(id));
+                xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+                xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+                xml.writeEndElement();
+            }
+            xml.writeEndElement();
+            xml.writeEndElement();
+            xml.writeEndDocument();
+            return data;
+}
+
+void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path)
+{
+    int id;
+    double x,y ;
+    store->open(path);
+    QByteArray data = store->read(store->size());
+    QXmlStreamReader xml(data);
+    while (!xml.atEnd()) {
+        switch (xml.readNext()) {
+        case QXmlStreamReader::StartElement:
+            if (xml.name() == "handle") {
+                QString strId = xml.attributes().value("id").toString(),
+                strX = xml.attributes().value("x").toString(),
+                strY = xml.attributes().value("y").toString();
+                if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+                    id = strId.toInt();
+                    x = strX.toDouble();
+                    y = strY.toDouble();
+                    if (!handleMap.contains(id)) {
+                        handleMap.insert(id, new KisPaintingAssistantHandle(x, y));
+                    }
+                }
+                addHandle(handleMap.value(id));
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    store->close();
+}
+
+void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistantsElement,int count)
+{
+    if (d->id == "ellipse"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "ellipse");
+        assistantElement.setAttribute("filename", QString("ellipse%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "spline"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "spline");
+        assistantElement.setAttribute("filename", QString("spline%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "perspective"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "perspective");
+        assistantElement.setAttribute("filename", QString("perspective%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->id == "ruler"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "ruler");
+        assistantElement.setAttribute("filename", QString("ruler%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+}
+
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const
 {
     return d->handles;
@@ -186,7 +348,7 @@ KisPaintingAssistantFactoryRegistry::KisPaintingAssistantFactoryRegistry()
 
 KisPaintingAssistantFactoryRegistry::~KisPaintingAssistantFactoryRegistry()
 {
-    foreach(QString id, keys()) {
+    foreach(const QString &id, keys()) {
         delete get(id);
     }
     dbgRegistry << "deleting KisPaintingAssistantFactoryRegistry ";

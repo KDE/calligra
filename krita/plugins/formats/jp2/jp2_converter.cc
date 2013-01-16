@@ -20,12 +20,20 @@
 
 #include <openjpeg.h>
 
+#include <QFileInfo>
+
 #include <kapplication.h>
+#include <KMessageBox>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
+#include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceTraits.h>
 #include <KoColorSpaceConstants.h>
+#include <KoFilterManager.h>
+#include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_doc2.h>
 #include <kis_image.h>
@@ -33,19 +41,11 @@
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <kis_undo_adapter.h>
-#include <QFileInfo>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceTraits.h>
-#include <kis_iterator.h>
-#include <KoColorSpace.h>
-#include <KoColorModelStandardIds.h>
-#include <KMessageBox>
+#include "kis_iterator_ng.h"
 
-jp2Converter::jp2Converter(KisDoc2 *doc, KisUndoAdapter *adapter)
+jp2Converter::jp2Converter(KisDoc2 *doc)
 {
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -166,7 +166,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
     if (!hasColorSpaceInfo) {
         if (components == 3) {
             image->color_space = CLRSPC_SRGB;
-        } else if (components == 3) {
+        } else if (components == 1) {
             image->color_space = CLRSPC_GRAY;
         }
     }
@@ -183,9 +183,9 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
             opj_destroy_decompress(dinfo);
             return KisImageBuilder_RESULT_FAILURE;
         }
-        channelorder[0] = KoRgbU16Traits::red_pos;
-        channelorder[1] = KoRgbU16Traits::green_pos;
-        channelorder[2] = KoRgbU16Traits::blue_pos;
+        channelorder[0] = KoBgrU16Traits::red_pos;
+        channelorder[1] = KoBgrU16Traits::green_pos;
+        channelorder[2] = KoBgrU16Traits::blue_pos;
         break;
     }
     case CLRSPC_GRAY: {
@@ -216,6 +216,8 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
         channelorder[2] = 2;
         break;
     }
+    default:
+        ;
     }
     if (!colorSpace) {
         dbgFile << "No colors space found for that image";
@@ -224,8 +226,7 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
     // Create the image
     if (m_image == 0) {
-        m_image = new KisImage(m_adapter, image->x1, image->y1, colorSpace, "built image");
-        m_image->lock();
+        m_image = new KisImage(m_doc->createUndoStore(), image->x1, image->y1, colorSpace, "built image");
     }
 
     // Create the layer
@@ -235,32 +236,32 @@ KisImageBuilder_Result jp2Converter::decode(const KUrl& uri)
 
     // Set the data
     int pos = 0;
+    KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, image->x1);
     for (int v = 0; v < image->y1; ++v) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, image->x1);
         if (bitdepth == 16) {
-            while (!it.isDone()) {
-                quint16* px = reinterpret_cast<quint16*>(it.rawData());
+            do {
+                quint16* px = reinterpret_cast<quint16*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
-                colorSpace->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
+                colorSpace->setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         } else if (bitdepth == 8) {
-            while (!it.isDone()) {
-                quint8* px = reinterpret_cast<quint8*>(it.rawData());
+            do {
+                quint8* px = reinterpret_cast<quint8*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     px[channelorder[i]] = image->comps[i].data[pos];
                 }
                 colorSpace->setOpacity(px, OPACITY_OPAQUE_U8, 1);
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         }
+        it->nextRow();
     }
 
-    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -337,9 +338,9 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
         clrspc = CLRSPC_SRGB;
         components = 3;
         channelorder.resize(components);
-        channelorder[0] = KoRgbU16Traits::red_pos;
-        channelorder[1] = KoRgbU16Traits::green_pos;
-        channelorder[2] = KoRgbU16Traits::blue_pos;
+        channelorder[0] = KoBgrU16Traits::red_pos;
+        channelorder[1] = KoBgrU16Traits::green_pos;
+        channelorder[2] = KoBgrU16Traits::blue_pos;
     } else {
         KMessageBox::error(0, i18n("Cannot export images in %1.\n", layer->colorSpace()->name())) ;
         return KisImageBuilder_RESULT_FAILURE;
@@ -380,27 +381,28 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
 
     // Copy the data in the image
     int pos = 0;
+    KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, image->x1);
     for (int v = 0; v < height; ++v) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, v, image->x1);
         if (bitdepth == 16) {
-            while (!it.isDone()) {
-                quint16* px = reinterpret_cast<quint16*>(it.rawData());
+            do {
+                quint16* px = reinterpret_cast<quint16*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     image->comps[i].data[pos] = px[channelorder[i]];
                 }
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         } else if (bitdepth == 8) {
-            while (!it.isDone()) {
-                quint8* px = reinterpret_cast<quint8*>(it.rawData());
+            do {
+                quint8* px = reinterpret_cast<quint8*>(it->rawData());
                 for (int i = 0; i < components; ++i) {
                     image->comps[i].data[pos] = px[channelorder[i]];
                 }
                 ++pos;
-                ++it;
-            }
+
+            } while (it->nextPixel());
         }
+        it->nextRow();
     }
 
     // coding format
@@ -409,7 +411,6 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Decode the file
     opj_cinfo_t *cinfo = 0;
 
-    bool hasColorSpaceInfo = false;
     /* get a decoder handle */
     switch (parameters.decod_format) {
     case J2K_CFMT: {
@@ -418,7 +419,6 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     }
     case JP2_CFMT: {
         cinfo = opj_create_compress(CODEC_JP2);
-        hasColorSpaceInfo = true;
         break;
     }
     case JPT_CFMT: {

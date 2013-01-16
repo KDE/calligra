@@ -1,6 +1,23 @@
 [Desktop Entry]
 Name=Virtual Layer Switch
+Name[ca]=Virtual Layer Switch
+Name[ca@valencia]=Virtual Layer Switch
+Name[el]=Virtual Layer Switch
+Name[es]=Conmutador de capa virtual
+Name[et]=Virtuaalse kihi kommutaator
+Name[fr]=Virtual Layer Switch
+Name[gl]=Conmutador de capas virtuais
+Name[it]=Virtual Layer Switch
+Name[kk]=Виртуалды деңгейлі қосқышы
+Name[nb]=Virtuell lagsvitsj
+Name[nl]=Virtual Layer Switch
+Name[pl]=Przełącznik wirtualnego poziomu
 Name[pt]=Comutador Virtual de Níveis
 Name[pt_BR]=Comutador virtual de camadas
+Name[ru]=Коммутатор виртуальных слоёв
+Name[sk]=Virtuálny prepínač vrstiev
+Name[sv]=Virtuell lager-växel
 Name[uk]=Комутатор віртуальних рівнів
 Name[x-test]=xxVirtual Layer Switchxx
+Name[zh_CN]=虚拟层交换机
+Name[zh_TW]=虛擬層交換器

@@ -1,8 +1,27 @@
 [Desktop Entry]
 Name=Lock
+Name[bg]=Заключване
+Name[ca]=Lock
+Name[ca@valencia]=Lock
+Name[cs]=Uzamknout
+Name[el]=Κλειδαριά
+Name[es]=Bloquear
+Name[et]=Lukk
+Name[fr]=Lock
+Name[gl]=Cadeado
+Name[hu]=Zárolás
+Name[it]=Lucchetto
+Name[kk]=Құлып
+Name[nb]=Lås
+Name[nds]=Slott
 Name[nl]=Vergrendelen
+Name[pl]=Zablokuj
 Name[pt]=Cadeado
 Name[pt_BR]=Cadeado
+Name[ru]=Замок
+Name[sk]=Zamknúť
 Name[sv]=Lås
+Name[ug]=قۇلۇپلا
 Name[uk]=Замок
 Name[x-test]=xxLockxx
+Name[zh_TW]=鎖

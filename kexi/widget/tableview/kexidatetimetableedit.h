@@ -44,6 +44,7 @@ public:
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
     virtual bool valueIsValid();
+    virtual bool valueChanged();
 
     /*! Reimplemented after KexiInputTableEdit. */
     virtual void handleAction(const QString& actionName);

@@ -24,7 +24,7 @@
 #include <KoShapeOdfSaveHelper.h>
 #include <KoOdf.h>
 #include <KoShapeLoadingContext.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
@@ -48,7 +48,7 @@ StencilShapeFactory::~StencilShapeFactory()
     delete m_shape;
 }
 
-KoShape *StencilShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *StencilShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     /*KoDrag drag;
     KoShapeOdfSaveHelper saveHelper(shapes);
@@ -63,7 +63,7 @@ KoShape *StencilShapeFactory::createDefaultShape(KoResourceManager *documentReso
         KoStore * store = KoStore::createStore( m_path, KoStore::Read );
         if(store->bad())
         {
-            //emit loadingFailed(i18n("Not a valid KOffice file: %1", m_path));
+            //emit loadingFailed(i18n("Not a valid Calligra file: %1", m_path));
             delete store;
             return shape;
         }
@@ -100,14 +100,21 @@ KoShape *StencilShapeFactory::createDefaultShape(KoResourceManager *documentReso
             return shape;
         }
 
-        KoXmlNode child = page.firstChild();
+        KoXmlNode group = KoXml::namedItemNS(page, KoXmlNS::draw, "g");
+        if (group.isNull()) {
+            kError() << "No group found!" << endl;
+            //emit loadingFailed(i18n("No group found in file: %1", m_path));
+            delete store;
+            return shape;
+        }
+
         KoXmlElement n_shape;
-        while (!child.isNull()) {
-            n_shape = child.toElement();
+        while (!group.isNull()) {
+            n_shape = group.toElement();
             if (!n_shape.isNull()) {
                 break;
             }
-            child = child.nextSibling();
+            group = group.nextSibling();
         }
         if (n_shape.isNull()) {
             kError() << "No shapes found!" << endl;

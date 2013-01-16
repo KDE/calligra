@@ -25,7 +25,7 @@
 #include <KLineEdit>
 #include <KPushButton>
 
-#include <kexidb/connection.h>
+#include <db/connection.h>
 #include <KoReportData.h>
 #include "kexidbreportdata.h"
 #include "keximigratereportdata.h"
@@ -43,23 +43,15 @@ public:
     void setConnectionData(QDomElement);
     QDomElement connectionData();
 
-private:
-    KexiDB::Connection *m_conn;
-    QStringList queryList();
-    QVBoxLayout *m_layout;
-    QComboBox *m_sourceType;
-    QComboBox *m_internalSource;
-    KLineEdit *m_externalSource;
-    KPushButton *m_setData;
-
-    KexiDBReportData *m_kexiDBData;
-    KexiMigrateReportData *m_kexiMigrateData;
+signals:
+    void setData(KoReportData*);
 
 private slots:
     void setDataClicked();
 
-signals:
-    void setData(KoReportData*);
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KEXISOURCESELECTOR_H

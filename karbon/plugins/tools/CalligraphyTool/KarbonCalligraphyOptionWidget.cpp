@@ -19,21 +19,22 @@
 
 #include "KarbonCalligraphyOptionWidget.h"
 
+#include <KoIcon.h>
+
 #include <KLocale>
 #include <KComboBox>
 #include <KGlobal>
 #include <KConfigGroup>
 #include <KDebug>
 #include <KMessageBox>
-#include <KIcon>
+#include <KInputDialog>
 
-#include <QtGui/QSpinBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QDoubleSpinBox>
-#include <QtGui/QLabel>
-#include <QtGui/QInputDialog>
-#include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+#include <QLabel>
+#include <QGridLayout>
+#include <QToolButton>
 
 /*
 Profiles are saved in karboncalligraphyrc
@@ -65,12 +66,12 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
     m_saveButton = new QToolButton(this);
     m_saveButton->setToolTip(i18n("Save profile as..."));
-    m_saveButton->setIcon(KIcon("document-save-as"));
+    m_saveButton->setIcon(koIcon("document-save-as"));
     layout->addWidget(m_saveButton, 0, 1);
 
     m_removeButton = new QToolButton(this);
     m_removeButton->setToolTip(i18n("Remove profile"));
-    m_removeButton->setIcon(KIcon("list-remove"));
+    m_removeButton->setIcon(koIcon("list-remove"));
     layout->addWidget(m_removeButton, 0, 2);
 
     QGridLayout *detailsLayout = new QGridLayout();
@@ -149,7 +150,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     detailsLayout->addWidget(m_dragBox, 6, 3);
 
     layout->addLayout(detailsLayout, 1, 0, 1, 3);
-    //layout->setRowStretch( 2, 1 );
+    layout->setRowStretch(2, 1);
 
     createConnections();
     addDefaultProfiles(); // if they are already added does nothing
@@ -214,11 +215,10 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
     // loop until a valid name is entered or the user cancelled
     while (1) {
         bool ok;
-        name = QInputDialog::getText(this,
-                                     i18n("Profile name"),
+        name = KInputDialog::getText(i18n("Profile name"),
                                      i18n("Please insert the name by which "
                                           "you want to save this profile:"),
-                                     QLineEdit::Normal, QString(), &ok);
+                                     QString(), &ok, this);
         if (! ok) return;
 
         if (name.isEmpty() || name == i18n("Current")) {
@@ -283,8 +283,8 @@ void KarbonCalligraphyOptionWidget::decreaseAngle()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect(m_comboBox, SIGNAL(currentIndexChanged(const QString &)),
-            SLOT(loadProfile(const QString &)));
+    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
+            SLOT(loadProfile(QString)));
 
 
     // propagate changes

@@ -25,7 +25,7 @@
 
 
 KisImageCommand::KisImageCommand(const QString& name, KisImageWSP image)
-        : QUndoCommand(name)
+        : KUndo2Command(name)
         , m_image(image)
 {
 }
@@ -49,10 +49,13 @@ KisImageCommand::UpdateTarget::UpdateTarget(KisImageWSP image,
         m_node = removedNode->parent();
     }
     else {
-        m_node = removedNode->nextSibling();
+        m_node = removedNode;
+        while((m_node = m_node->nextSibling()) && !isLayer(m_node));
 
-        if(!m_node)
-            m_node = removedNode->prevSibling();
+        if(!m_node) {
+            m_node = removedNode;
+            while((m_node = m_node->prevSibling()) && !isLayer(m_node));
+        }
 
         if(!m_node) {
             m_node = removedNode->parent();

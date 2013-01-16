@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,39 +27,70 @@
 
 #include <kdebug.h>
 
-KWFrameSet::KWFrameSet(KWord::FrameSetType type)
+KWFrameSet::KWFrameSet(Words::FrameSetType type)
     : QObject(),
     m_type(type)
 {
+    kDebug(32001) << "type=" << m_type;
 }
 
 KWFrameSet::~KWFrameSet()
 {
-    foreach (KWFrame *frame, frames())
-        delete frame->shape();
+    kDebug(32001) << "type=" << m_type << "frameCount=" << frames().count();
+    while (!frames().isEmpty()) { // deleting a shape can result in multiple KWFrame's and shapes being deleted (e.g. copy-shapes)
+        KWFrame *f = frames().last();
+        if (f->shape()) {
+            delete f->shape(); // deletes also the KWFrame and calls KWFrameSet::removeFrame
+            Q_ASSERT(!frames().contains(f));
+        } else {
+            removeFrame(f);
+        }
+    }
 }
 
 void KWFrameSet::addFrame(KWFrame *frame)
 {
     Q_ASSERT(frame);
-    if (m_frames.contains(frame))
-        return;
+    kDebug(32001) << "frame=" << frame << "frameSet=" << frame->frameSet();
+    Q_ASSERT(!m_frames.contains(frame));
     m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
     frame->setFrameSet(this);
     setupFrame(frame);
+    if (frame->isCopy()) {
+        KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+        if (copyShape && copyShape->original()) {
+            KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
+            if (originalFrame) {
+                originalFrame->addCopy(frame);
+            }
+        }
+    }
     emit frameAdded(frame);
 }
 
 void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
 {
     Q_ASSERT(frame);
-    if (!frame->isCopy()) {
+    if (frame->isCopy()) {
+        KWCopyShape* copyShape = dynamic_cast<KWCopyShape*>(frame->shape());
+        if (copyShape && copyShape->original()) {
+            KWFrame *originalFrame = dynamic_cast<KWFrame*>(copyShape->original()->applicationData());
+            if (originalFrame) {
+                originalFrame->removeCopy(frame);
+            }
+        }
+    } else {
+        //TODO use the copyFrame-list the KWFrame's remembers now
         // Loop over all frames to see if there is a copy frame that references the removed
-        // frame; if it does, then mark the copy as obsolete
-        foreach (KWFrame *f, frames()) {
-            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(f->shape())) {
+        // frame; if it does, then delete the copy too.
+        for(int i = frames().count() - 1; i >= 0; --i) {
+            KWFrame *frame = frames()[i];
+            if (KWCopyShape *cs = dynamic_cast<KWCopyShape*>(frame->shape())) {
                 if (cs->original() == shape) {
-                    cs->retire();
+                    Q_ASSERT(frame->frameSet() == this);
+                    frame->cleanupShape(cs);
+                    removeFrame(frame, cs);
+                    delete cs;
                 }
             }
         }
@@ -67,42 +101,4 @@ void KWFrameSet::removeFrame(KWFrame *frame, KoShape *shape)
         emit frameRemoved(frame);
     }
 }
-
-#ifndef NDEBUG
-void KWFrameSet::printDebug()
-{
-    int i = 1;
-    foreach (KWFrame *frame, frames()) {
-        kDebug(32001) << " +-- Frame" << i++ << "of" << frameCount() << "    (" << frame << frame->shape() << ")"
-            << (frame->isCopy() ? "[copy]" : "");
-        printDebug(frame);
-    }
-}
-
-void KWFrameSet::printDebug(KWFrame *frame)
-{
-    static const char * runaroundSide[] = { "Biggest", "Left", "Right", "Auto", "Both", "No Runaround", "Trough", "ERROR" };
-    static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
-    static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
-    kDebug(32001) << "     Rectangle :" << frame->shape()->position().x() << "," << frame->shape()->position().y() << frame->shape()->size().width() << "x" << frame->shape()->size().height();
-    kDebug(32001) << "     RunAround:" << runaroundSide[frame->shape()->textRunAroundSide()];
-    kDebug(32001) << "     FrameBehavior:" << frameBh[frame->frameBehavior()];
-    kDebug(32001) << "     NewFrameBehavior:" << newFrameBh[frame->newFrameBehavior()];
-    if (!frame->shape()->background())
-        kDebug(32001) << "     BackgroundColor: Transparent";
-    else {
-        KoColorBackground * fill = dynamic_cast<KoColorBackground*>(frame->shape()->background());
-        QColor col;
-        if (fill)
-            col = fill->color();
-        kDebug(32001) << "     BackgroundColor:" << (col.isValid() ? col.name() : QString("(default)"));
-    }
-    kDebug(32001) << "     frameOnBothSheets:" << frame->frameOnBothSheets();
-    kDebug(32001) << "     Z Order:" << frame->shape()->zIndex();
-    kDebug(32001) << "     Visible:" << frame->shape()->isVisible();
-
-    //kDebug(32001) <<"     minFrameHeight"<< frame->minimumFrameHeight();
-    //QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
-}
-#endif
 

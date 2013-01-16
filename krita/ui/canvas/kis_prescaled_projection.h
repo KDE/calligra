@@ -24,7 +24,7 @@
 #include <kis_shared.h>
 
 #include "kis_update_info.h"
-
+#include "KoColorConversionTransformation.h"
 class QImage;
 class QPoint;
 class QRect;
@@ -34,39 +34,19 @@ class QPainter;
 
 class KoColorProfile;
 class KisCoordinatesConverter;
+class KisDisplayFilter;
 
 #include <kis_types.h>
 #include "kis_ui_types.h"
+
+
 
 /**
  * KisPrescaledProjection is responsible for keeping around a
  * prescaled QImage representation that is always suitable for
  * painting onto the canvas.
  *
- * [deprecated]
- * Optionally, the KisPrescaledProjection can also provide a QPixmap
- * with the checkered background blended in.
- *
- * Optionally, the projection can also draw the mask and selection
- * masks and the selection outline.
- * [/deprecated]
- *
- * The following scaling methods are supported:
- *
- * <ul>
- *   <li>Qt's smooth scaling
- *   <li>Our own smooth scaling 
- *   <li>Our own sampling 
- *   <li>nearest-neighbour sampling on KisImage directly (doesn't need
- *       a QImage of the visible area)
- * </ul>
- *
  * Note: the export macro is only for the unittest.
- *
- * Note: with any method except for nearest-neighbour sampling Krita
- * keeps a QImage the size of the unscaled image in memory. This
- * should become either a QImage the size of the nearest pyramid level
- * or a tiled QImage representation like the OpenGL image textures.
  */
 class KRITAUI_EXPORT KisPrescaledProjection : public QObject, public KisShared
 {
@@ -79,10 +59,8 @@ public:
     void setImage(KisImageWSP image);
 
     /**
-     * Return the prescaled QImage. This image has a transparency
-     * channel and is therefore suitable for generated a prescaled
-     * representation of an image for the KritaShape. The prescaled
-     * image is exactly as big as the canvas widget in pixels.
+     * Return the prescaled QImage. The prescaled image is exactly as big as
+     * the canvas widget in pixels.
      */
     QImage prescaledQImage() const;
 
@@ -94,15 +72,13 @@ public slots:
      * Retrieves image's data from KisImage object and updates
      * internal cache
      * @param dirtyImageRect the rect changed on the image
-     * @return prefilled info object that should be used in
-     * the second stage of the update
      * @see recalculateCache
      */
     KisUpdateInfoSP updateCache(const QRect &dirtyImageRect);
 
     /**
      * Updates the prescaled cache at current zoom level
-     * @param prefilled update structure returned by updateCache
+     * @param info update structure returned by updateCache
      * @see updateCache
      */
     void recalculateCache(KisUpdateInfoSP info);
@@ -119,9 +95,12 @@ public slots:
     void viewportMoved(const QPointF &offset);
 
     /**
-     * Called whenever the size of the KisImage changes
+     * Called whenever the size of the KisImage changes.
+     * It is a part of a complex update ritual, when the size
+     * fo the image changes. This method just resizes the storage
+     * for the image cache, it doesn't update any cached data.
      */
-    void setImageSize(qint32 w, qint32 h);
+    void slotImageSizeChanged(qint32 w, qint32 h);
 
     /**
      * Checks whether it is needed to resize the prescaled image and
@@ -134,7 +113,9 @@ public slots:
     /**
      * Set the current monitor profile
      */
-    void setMonitorProfile(const KoColorProfile * profile);
+    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+
+    void setDisplayFilter(KisDisplayFilter *displayFilter);
 
     /**
      * Called whenever the zoom level changes or another chunk of the
@@ -144,16 +125,11 @@ public slots:
     void preScale();
 
 private:
+
     friend class KisPrescaledProjectionTest;
 
     KisPrescaledProjection(const KisPrescaledProjection &);
     KisPrescaledProjection operator=(const KisPrescaledProjection &);
-
-    /**
-     * Called from updateSettings to set up chosen backend:
-     * now there is only one option left: KisImagePyramid
-     */
-    void initBackend(bool cacheKisImageAsQImage);
 
     void updateViewportSize();
 
@@ -163,14 +139,33 @@ private:
      */
     QRect preScale(const QRect & rc);
 
+
+    /**
+     * This creates an empty update information and fills it with the only
+     * parameter: @p dirtyImageRect
+     * This function is supposed to be run in the context of the image
+     * threads, so it does no accesses to zoom or any UI specific values.
+     * All the needed information for zooming will be fetched in the context
+     * of the UI thread in fillInUpdateInformation().
+     *
+     * @see fillInUpdateInformation()
+     */
+    KisPPUpdateInfoSP getInitialUpdateInformation(const QRect &dirtyImageRect);
+
     /**
      * Prepare all the information about rects needed during
-     * projection updating
+     * projection updating.
      *
-     * @param dirtyImageRect the part of the KisImage that is dirty
+     * @param viewportRect the part of the viewport that has to be updated
+     * @param info the structure to be filled in. It's member dirtyImageRect
+     * is supposed to have already been set up in the previous step of the
+     * update in getInitialUpdateInformation(). Though it is allowed to
+     * be null rect.
+     *
+     * @see getInitialUpdateInformation()
      */
-    KisPPUpdateInfoSP getUpdateInformation(const QRect &viewportRect,
-                                           const QRect &dirtyImageRect);
+    void fillInUpdateInformation(const QRect &viewportRect,
+                                 KisPPUpdateInfoSP info);
 
     /**
      * Initiates the process of prescaled image update

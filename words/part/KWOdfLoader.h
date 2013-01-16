@@ -23,7 +23,7 @@
 #ifndef KWODFLOADER_H
 #define KWODFLOADER_H
 
-#include "KWord.h"
+#include "Words.h"
 #include "KoXmlReaderForward.h"
 
 #include <KoTextLoader.h>
@@ -32,12 +32,13 @@
 class KWDocument;
 class KoOdfReadStore;
 class KoOdfLoadingContext;
+class KoShapeLoadingContext;
 class KWPageStyle;
 class QTextDocument;
 class QTextCursor;
 
 /**
- * Class that has a lot of the OpenDocument (ODF) loading code for KWord.
+ * Class that has a lot of the OpenDocument (ODF) loading code for Words.
  */
 class KWOdfLoader : public QObject
 {
@@ -73,15 +74,15 @@ private:
     };
 
     void loadSettings(const KoXmlDocument &settings, QTextDocument *textDoc);
-    void loadMasterPageStyles(KoOdfLoadingContext& context, bool hasMainTextFS);
-    void loadHeaderFooter(KoOdfLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPageStyle, HFLoadType headerFooter);
+    void loadMasterPageStyles(KoShapeLoadingContext& context);
+    void loadHeaderFooter(KoShapeLoadingContext &context, KWPageStyle &pageStyle, const KoXmlElement &masterPageStyle, HFLoadType headerFooter);
     void loadFinished(KoOdfLoadingContext &context, QTextCursor &cursor);
 
-    /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
-    void loadHeaderFooterFrame(KoOdfLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, KWord::TextFrameSetType fsType);
+    /// helper function to create a KWTextFrameSet+KWFrame for a header/footer.
+    void loadHeaderFooterFrame(KoShapeLoadingContext &context, const KWPageStyle &pageStyle, const KoXmlElement &elem, Words::TextFrameSetType fsType);
 
 private:
-    /// The KWord document.
+    /// The Words document.
     QPointer<KWDocument> m_document;
 };
 

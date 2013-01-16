@@ -20,7 +20,7 @@
 #ifndef KEXI_DB_FIELDVALIDATOR_H
 #define KEXI_DB_FIELDVALIDATOR_H
 
-#include <kexidb/kexidb_export.h>
+#include "kexidb_export.h"
 #include <kexiutils/validator.h>
 
 class QWidget;

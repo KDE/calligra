@@ -22,6 +22,7 @@
 
 #include <png.h>
 
+#include <QColor>
 #include <QVector>
 
 #include <kio/job.h>
@@ -33,7 +34,7 @@
 
 
 class KisDoc2;
-class KisUndoAdapter;
+
 
 namespace KisMetaData
 {
@@ -42,7 +43,18 @@ class Store;
 }
 
 struct KisPNGOptions {
-    KisPNGOptions() : compression(0), interlace(false), alpha(true), exif(true), iptc(true), xmp(true), tryToSaveAsIndexed(true) {}
+    KisPNGOptions()
+        : compression(0)
+        , interlace(false)
+        , alpha(true)
+        , exif(true)
+        , iptc(true)
+        , xmp(true)
+        , tryToSaveAsIndexed(true)
+        , saveSRGBProfile(false)
+        , transparencyFillColor(Qt::white)
+    {}
+
     int compression;
     bool interlace;
     bool alpha;
@@ -50,7 +62,10 @@ struct KisPNGOptions {
     bool iptc;
     bool xmp;
     bool tryToSaveAsIndexed;
+    bool saveSRGBProfile;
     QList<const KisMetaData::Filter*> filters;
+    QColor transparencyFillColor;
+
 };
 
 /**
@@ -86,7 +101,7 @@ public:
      * @param doc the KisDoc2 related to the image, can be null if you don't have a KisDoc2
      * @param adapter the undo adapter to be used by the image, can be null if you don't want to use an undo adapter
      */
-    KisPNGConverter(KisDoc2 *doc, KisUndoAdapter *adapter);
+    KisPNGConverter(KisDoc2 *doc);
     virtual ~KisPNGConverter();
 public:
     /**
@@ -124,7 +139,6 @@ private:
     png_uint_32 m_max_row;
     KisImageWSP m_image;
     KisDoc2 *m_doc;
-    KisUndoAdapter *m_adapter;
     bool m_stop;
 };
 

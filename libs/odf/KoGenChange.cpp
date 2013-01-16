@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +39,9 @@ static int compareMap(const QMap<QString, QString> &map1, const QMap<QString, QS
 }
 
 
-KoGenChange::KoGenChange(KoGenChange::ChangeFormat changeFormat):m_changeFormat(changeFormat)
+KoGenChange::KoGenChange(KoGenChange::ChangeFormat changeFormat)
+    : m_changeFormat(changeFormat)
+    , m_type(UNKNOWN)
 {
 }
 
@@ -81,6 +83,7 @@ void KoGenChange::writeODF12Change(KoXmlWriter *writer, const QString &name) con
 {
     writer->startElement("text:changed-region");
     writer->addAttribute("text:id", name);
+    writer->addAttribute("xml:id", name);
 
     const char* elementName;
     switch (m_type) {
@@ -95,7 +98,7 @@ void KoGenChange::writeODF12Change(KoXmlWriter *writer, const QString &name) con
         break;
     default:
         elementName = "text:format-change"; //should not happen, format-change is probably the most harmless of the three.
-    }   
+    }
     writer->startElement(elementName);
     if (!m_changeMetaData.isEmpty()) {
         writer->startElement("office:change-info");
@@ -103,7 +106,7 @@ void KoGenChange::writeODF12Change(KoXmlWriter *writer, const QString &name) con
         if (m_literalData.contains("changeMetaData"))
             writer->addCompleteElement(m_literalData.value("changeMetaData").toUtf8());
         writer->endElement(); // office:change-info
-    }   
+    }
     if ((m_type == KoGenChange::DeleteChange) && m_literalData.contains("deleteChangeXml"))
         writer->addCompleteElement(m_literalData.value("deleteChangeXml").toUtf8());
 
@@ -119,8 +122,8 @@ void KoGenChange::writeDeltaXmlChange(KoXmlWriter *writer, const QString &name) 
         writer->startElement("delta:change-info");
         writeChangeMetaData(writer);
         writer->endElement(); // delta:change-info
-    }   
-    writer->endElement(); // delta:change-transaction 
+    }
+    writer->endElement(); // delta:change-transaction
 }
 
 bool KoGenChange::operator<(const KoGenChange &other) const

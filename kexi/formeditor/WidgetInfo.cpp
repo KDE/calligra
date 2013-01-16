@@ -45,7 +45,7 @@ public:
         delete customTypesForProperty;
     }
 
-    QString pixmap;
+    QString iconName;
     QByteArray className;
     QString name;
     QString prefixName;
@@ -92,14 +92,14 @@ WidgetInfo::~WidgetInfo()
     delete d;
 }
 
-QString WidgetInfo::pixmap() const
+QString WidgetInfo::iconName() const
 {
-    return d->pixmap;
+    return d->iconName;
 }
 
-void WidgetInfo::setPixmap(const QString &p)
+void WidgetInfo::setIconName(const QString &iconName)
 {
-    d->pixmap = p;
+    d->iconName = iconName;
 }
 
 QByteArray WidgetInfo::className() const

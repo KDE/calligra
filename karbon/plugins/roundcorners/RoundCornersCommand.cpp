@@ -27,8 +27,8 @@
 
 #include <math.h>
 
-RoundCornersCommand::RoundCornersCommand(KoPathShape * path, qreal radius, QUndoCommand * parent)
-        : QUndoCommand(parent), m_path(path), m_copy(0)
+RoundCornersCommand::RoundCornersCommand(KoPathShape * path, qreal radius, KUndo2Command * parent)
+        : KUndo2Command(parent), m_path(path), m_copy(0)
 {
     Q_ASSERT(path);
 
@@ -38,7 +38,7 @@ RoundCornersCommand::RoundCornersCommand(KoPathShape * path, qreal radius, QUndo
     m_copy = new KoPathShape();
     copyPath(m_copy, m_path);
     m_copy->normalize();
-    setText(i18n("Round Corners"));
+    setText(i18nc("(qtundo-format)", "Round Corners"));
 }
 
 RoundCornersCommand::~RoundCornersCommand()
@@ -53,12 +53,12 @@ void RoundCornersCommand::redo()
     m_path->normalize();
     m_path->update();
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void RoundCornersCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 
     m_path->update();
     copyPath(m_path, m_copy);

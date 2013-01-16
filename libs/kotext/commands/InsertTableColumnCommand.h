@@ -1,7 +1,7 @@
 /*
  This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2010-2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010-2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,18 +21,18 @@
 #ifndef INSERTTABLECOLUMNCOMMAND_H
 #define INSERTTABLECOLUMNCOMMAND_H
 
-#include <QUndoStack>
+#include <kundo2qstack.h>
 #include <QList>
 #include <KoTableColumnStyle.h>
 
 class KoTextEditor;
 class QTextTable;
 
-class InsertTableColumnCommand : public QUndoCommand
+class InsertTableColumnCommand : public KUndo2Command
 {
 public:
 
-    InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, int changeId = 0, QUndoCommand *parent = 0);
+    InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, int changeId = 0, KUndo2Command *parent = 0);
 
     virtual void undo();
     virtual void redo();

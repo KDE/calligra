@@ -19,18 +19,20 @@
 
 #include "KoPABackgroundToolFactory.h"
 
-//KOffice includes
+//Calligra includes
 #include <KoPACanvas.h>
 
 #include "KoPABackgroundTool.h"
+#include <KoIcon.h>
 
 KoPABackgroundToolFactory::KoPABackgroundToolFactory()
     : KoToolFactoryBase("KoPABackgroundTool")
 {
-    setToolTip( i18n( "Background editing tool" ) );
+    // TODO: use "Page" or "Slide" instead of "Document"
+    setToolTip(i18n("Document background"));
     setToolType( mainToolType() );
     setActivationShapeId("flake/always");
-    setIcon( "backgroundtool" );
+    setIconName(koIconNameCStr("backgroundtool"));
     setPriority( 3 );
 }
 

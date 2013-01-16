@@ -19,6 +19,8 @@
 
 #include "kis_indirect_painting_support.h"
 
+#include <QMutex>
+#include <QMutexLocker>
 #include <QReadWriteLock>
 
 #include <KoCompositeOp.h>
@@ -109,7 +111,20 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
     return d->temporaryTarget;
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &region, const QString &transactionText)
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisUndoAdapter *undoAdapter, const QString &transactionText)
+{
+    mergeToLayerImpl(layer, undoAdapter, transactionText);
+}
+
+void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, KisPostExecutionUndoAdapter *undoAdapter, const QString &transactionText)
+{
+    mergeToLayerImpl(layer, undoAdapter, transactionText);
+}
+
+template<class UndoAdapter>
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisLayerSP layer,
+                                                  UndoAdapter *undoAdapter,
+                                                  const QString &transactionText)
 {
     /**
      * We do not apply selection here, because it has already
@@ -121,18 +136,20 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &r
     gc.setChannelFlags(d->channelFlags);
 
     d->lock.lockForWrite();
-    if(layer->image()) {
+
+    /**
+     * Scratchpad may not have an undo adapter
+     */
+    if(undoAdapter) {
         gc.beginTransaction(transactionText);
     }
-
-    foreach(const QRect& rc, region.rects()) {
+    foreach (const QRect &rc, d->temporaryTarget->region().rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     d->temporaryTarget = 0;
 
-    // in the scratchpad the layer has no image and there is no undo adapter
-    if(layer->image()) {
-        gc.endTransaction(layer->image()->undoAdapter());
+    if(undoAdapter) {
+        gc.endTransaction(undoAdapter);
     }
 
     d->lock.unlock();

@@ -33,17 +33,14 @@ public:
 
     ///Reimplemented
     virtual int rate() const;
-    
-    ///Reimplemented
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, KisPaintOpSettings::OutlineMode _mode) const;
-    
-    ///Reimplemented
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter& painter, KisPaintOpSettings::OutlineMode _mode) const;
-    
+
     virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
 
     ///Reimplemented
     virtual bool isValid();
+
+    ///Reimplemented
+    virtual bool isLoadable();
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

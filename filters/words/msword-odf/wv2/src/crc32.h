@@ -3,15 +3,15 @@
    header file for crc32 checksum
 */
 
-#define CRC32_XINIT 0xFFFFFFFFL		/* initial value */
-#define CRC32_XOROT 0xFFFFFFFFL		/* final xor value */
+#define CRC32_XINIT 0xFFFFFFFFL        /* initial value */
+#define CRC32_XOROT 0xFFFFFFFFL        /* final xor value */
 
-#define MINIMUM_CHECKSUM_LEN	 8
-#define MAXIMUM_CHECKSUM_LEN	99
+#define MINIMUM_CHECKSUM_LEN     8
+#define MAXIMUM_CHECKSUM_LEN    99
 
 /* NAACCR 6.0 Specifications */
-#define NAACCR_60_CHECKSUM_POS	942
-#define NAACCR_60_CHECKSUM_LEN	10
+#define NAACCR_60_CHECKSUM_POS    942
+#define NAACCR_60_CHECKSUM_LEN    10
 
 /* function prototypes */
 

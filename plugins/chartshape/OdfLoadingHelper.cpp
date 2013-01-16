@@ -23,15 +23,15 @@
 // Own
 #include "OdfLoadingHelper.h"
 
-// KOffice
+// Calligra
 #include "KoOdfStylesReader.h"
 #include "KoStyleStack.h"
 
 using namespace KChart;
 
 OdfLoadingHelper::OdfLoadingHelper()
-    : tableSource( 0 )
-    , chartUsesInternalModelOnly( true )
-    , categoryRegionSpecifiedInXAxis( false )
+    : tableSource(0)
+    , chartUsesInternalModelOnly(true)
+    , categoryRegionSpecifiedInXAxis(false)
 {
 }

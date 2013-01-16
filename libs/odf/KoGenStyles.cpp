@@ -53,13 +53,14 @@ static const struct {
     { KoGenStyle::ListStyle,            "text:list-style", 0, false  },
     { KoGenStyle::LinearGradientStyle,  "svg:linearGradient", 0, true  },
     { KoGenStyle::RadialGradientStyle,  "svg:radialGradient", 0, true  },
-    { KoGenStyle::ConicalGradientStyle, "koffice:conicalGradient", 0, true  },
+    { KoGenStyle::ConicalGradientStyle, "calligra:conicalGradient", 0, true  },
     { KoGenStyle::StrokeDashStyle,      "draw:stroke-dash", 0, true  },
     { KoGenStyle::FillImageStyle,       "draw:fill-image", 0, true  },
     { KoGenStyle::HatchStyle,           "draw:hatch", "style:graphic-properties", true  },
     { KoGenStyle::GradientStyle,        "draw:gradient", "style:graphic-properties", true  },
     { KoGenStyle::MarkerStyle,          "draw:marker", "style:graphic-properties", true  },
-    { KoGenStyle::PresentationPageLayoutStyle, "style:presentation-page-layout", 0, false  }
+    { KoGenStyle::PresentationPageLayoutStyle, "style:presentation-page-layout", 0, false  },
+    { KoGenStyle::OutlineLevelStyle,    "text:outline-style", 0, false }
 };
 
 static const unsigned int numStyleData = sizeof(styleData) / sizeof(*styleData);

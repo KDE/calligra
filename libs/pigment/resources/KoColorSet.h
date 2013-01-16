@@ -19,10 +19,11 @@
 #ifndef KOCOLORSET
 #define KOCOLORSET
 
-#include <QtGui/QImage>
-#include <QtGui/QColor>
-#include <QtCore/QVector>
-#include <QtGui/QPixmap>
+#include <QObject>
+#include <QImage>
+#include <QColor>
+#include <QVector>
+#include <QPixmap>
 
 #include "KoResource.h"
 #include "KoColor.h"
@@ -42,10 +43,9 @@ struct KoColorSetEntry {
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class PIGMENTCMS_EXPORT KoColorSet : public KoResource
+class PIGMENTCMS_EXPORT KoColorSet : public QObject, public KoResource
 {
-    typedef KoResource super;
-
+    Q_OBJECT
 public:
     /**
      * Load a color set from a file. This can be a Gimp

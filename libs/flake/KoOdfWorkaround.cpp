@@ -2,6 +2,7 @@
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Johannes Simon <johannes.simon@gmail.com>
    Copyright (C) 2010,2011 Jan Hambrecht <jaham@gmx.net>
+   Copyright 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -126,19 +127,19 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
 {
     bool fixed = false;
 
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    if (element.prefix() == "chart") {
-        styleStack.save();
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        if (element.prefix() == "chart") {
+            styleStack.save();
 
-        bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
-        if (hasStyle) {
-            context.odfLoadingContext().fillStyleStack(element, KoXmlNS::chart, "style-name", "chart");
-            styleStack.setTypeProperties("graphic");
-        }
+            bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
+            if (hasStyle) {
+                context.odfLoadingContext().fillStyleStack(element, KoXmlNS::chart, "style-name", "chart");
+                styleStack.setTypeProperties("graphic");
+            }
 
-        if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
             if (hasStyle && styleStack.hasProperty(KoXmlNS::draw, "stroke") &&
-                            !styleStack.hasProperty(KoXmlNS::draw, "stroke-color")) {
+                            !styleStack.hasProperty(KoXmlNS::svg, "stroke-color")) {
                 fixed = true;
                 pen.setColor(Qt::black);
             } else if (!hasStyle) {
@@ -146,8 +147,8 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
                 KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
 
                 if (element.tagName() == "series") {
-                    if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
-                        QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
+                    QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
+                    if (!chartType.isEmpty()) {
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
                         if (chartType == "chart:line" ||
                              chartType == "chart:scatter") {
@@ -160,19 +161,19 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
                     pen = QPen(Qt::black);
                 }
             }
+            styleStack.restore();
         }
-
-        styleStack.restore();
-    } else {
-        const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
-        if (pathShape) {
-            const QString strokeColor(styleStack.property(KoXmlNS::draw, "stroke-color"));
-            if (strokeColor.isEmpty()) {
-                pen.setColor(Qt::black);
-            } else {
-                pen.setColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
+        else {
+            const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
+            if (pathShape) {
+                const QString strokeColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
+                if (strokeColor.isEmpty()) {
+                    pen.setColor(Qt::black);
+                } else {
+                    pen.setColor(strokeColor);
+                }
+                fixed = true;
             }
-            fixed = true;
         }
     }
 
@@ -244,4 +245,60 @@ void KoOdfWorkaround::fixMissingFillRule(Qt::FillRule& fillRule, KoShapeLoadingC
     if ((context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice)) {
         fillRule = Qt::OddEvenFill;
     }
+}
+
+bool KoOdfWorkaround::fixAutoGrow(KoTextShapeDataBase::ResizeMethod method, KoShapeLoadingContext &context)
+{
+    bool fix = false;
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        if (method == KoTextShapeDataBase::AutoGrowWidth || method == KoTextShapeDataBase::AutoGrowHeight || method == KoTextShapeDataBase::AutoGrowWidthAndHeight) {
+            fix = true;
+        }
+    }
+    return fix;
+}
+
+bool KoOdfWorkaround::fixEllipse(const QString &kind, KoShapeLoadingContext &context)
+{
+    bool radiusGiven = false;
+    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+        if (kind == "section" || kind == "arc") {
+            radiusGiven = true;
+        }
+    }
+    return radiusGiven;
+}
+
+void KoOdfWorkaround::fixBadFormulaHiddenForStyleCellProtect(QString& value)
+{
+    if (value.endsWith(QLatin1String("Formula.hidden"))) {
+        const int length = value.length();
+        value[length-14] = QLatin1Char('f');
+        value[length-7] = QLatin1Char('-');
+    }
+}
+
+void KoOdfWorkaround::fixBadDateForTextTime(QString &value)
+{
+    if (value.startsWith(QLatin1String("0-00-00T"))) {
+        value.remove(0, 8);
+    }
+}
+
+void KoOdfWorkaround::fixClipRectOffsetValuesString(QString &offsetValuesString)
+{
+    if (! offsetValuesString.contains(QLatin1Char(','))) {
+        // assumes no spaces existing between values and units
+        offsetValuesString = offsetValuesString.simplified().replace(QLatin1Char(' '), QLatin1Char(','));
+    }
+}
+
+QString KoOdfWorkaround::fixTableTemplateName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
+}
+
+QString KoOdfWorkaround::fixTableTemplateCellStyleName(const KoXmlElement &e)
+{
+    return e.attributeNS(KoXmlNS::text, "style-name", QString());
 }

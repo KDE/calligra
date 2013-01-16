@@ -23,13 +23,13 @@
 #include <QWidget>
 #include <QString>
 
-#include "kicon.h"
-
 #include "KoGenericRegistry.h"
 
 #include "kis_types.h"
 
 #include <krita_export.h>
+
+class KIcon;
 
 /**
  * Implement this abstract class to provide a preferences pane for the preferences dialog.
@@ -49,11 +49,18 @@ public slots:
     virtual void loadDefaultPreferences() = 0;
 };
 
+class KRITAUI_EXPORT KisAbstractPreferenceSetFactory {
+public:
+    virtual ~KisAbstractPreferenceSetFactory() {}
+    virtual KisPreferenceSet* createPreferenceSet() = 0;
+    virtual QString id() const = 0;
+};
+
 /**
  * This registry does not load the plugins itself: plugins with preferences panes should
  * add those panes when they are loaded themselves.
  */
-class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisPreferenceSet*>
+class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisAbstractPreferenceSetFactory*>
 {
 public:
 
@@ -62,7 +69,7 @@ public:
 
 private:
     KisPreferenceSetRegistry();
-    Q_DISABLE_COPY(KisPreferenceSetRegistry);
+    Q_DISABLE_COPY(KisPreferenceSetRegistry)
 };
 
 #endif // KIS_PREFERENCE_SETSPACE_REGISTRY_H_

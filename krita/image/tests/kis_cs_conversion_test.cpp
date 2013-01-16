@@ -53,7 +53,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
           .arg(dstCs->name())
           .arg(profile2)
           .arg(reason)
-          .toAscii());
+          .toLatin1());
 }
 
 void KisCsConversionTest::testColorSpaceConversion()
@@ -70,7 +70,7 @@ void KisCsConversionTest::testColorSpaceConversion()
         foreach(const KoColorSpace * dstCs,  colorSpaces) {
 
             KisPaintDeviceSP dev  = new KisPaintDevice(srcCs);
-            dev->convertFromQImage(image, "");
+            dev->convertFromQImage(image, 0);
             dev->move(10, 10);   // Unalign with tile boundaries
             dev->convertTo(dstCs);
 
@@ -95,7 +95,7 @@ void KisCsConversionTest::testColorSpaceConversion()
     << "ms";
 
     if (failedColorSpaces > 0) {
-        QFAIL(QString("Failed conversions %1, see log for details.").arg(failedColorSpaces).toAscii());
+        QFAIL(QString("Failed conversions %1, see log for details.").arg(failedColorSpaces).toLatin1());
     }
 }
 

@@ -14,5 +14,5 @@ vn.sourceforge.net/svnroot/wvware/tags/wv2-0.x.y -m "tag wv2-0.x.y"
 - gpg --verify wv2-x.y.z.tar.bz2.asc
 - upload files to sourceforge
 - download & gpg verify again
-- announce on koffice-devel
+- announce on calligra-devel
 

@@ -1,22 +1,13 @@
+add_subdirectory(rtf-qt)
 
+include_directories(
+    ./rtf-qt/src/
+)
 
-
-
-
-########### next target ###############
-
-set(rtfimport_PART_SRCS rtfimport.cpp rtfimport_dom.cpp rtfimport_tokenizer.cpp )
-
-
+set(rtfimport_PART_SRCS rtfimport.cpp )
 kde4_add_plugin(rtfimport ${rtfimport_PART_SRCS})
-
-
-
-target_link_libraries(rtfimport kwordexportfilters komain)
+target_link_libraries(rtfimport RtfReader komain)
 
 install(TARGETS rtfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
-########### install files ###############
-
-install( FILES  kword_rtf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_rtf_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_rtf_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

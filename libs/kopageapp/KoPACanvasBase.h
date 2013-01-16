@@ -51,7 +51,7 @@ public:
     /// reimplemented method
     virtual bool snapToGrid() const;
     /// reimplemented method
-    virtual void addCommand( QUndoCommand *command );
+    virtual void addCommand( KUndo2Command *command );
     /// reimplemented method
     virtual KoShapeManager * shapeManager() const;
     KoShapeManager * masterShapeManager() const;
@@ -84,10 +84,9 @@ public:
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
     virtual void updateSize() = 0;
 
-
 protected:
 
-    void paint(QPainter &painter, const QRectF paintRect);
+    void paint(QPainter &painter, const QRectF &paintRect);
 
 private:
     class Private;

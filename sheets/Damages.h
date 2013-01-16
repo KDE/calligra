@@ -1,0 +1,220 @@
+/* This file is part of the KDE project
+   Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; only
+   version 2 of the License.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef CALLIGRA_SHEETS_DAMAGES
+#define CALLIGRA_SHEETS_DAMAGES
+
+
+#include "kdebug.h"
+
+#include "calligra_sheets_export.h"
+
+namespace Calligra
+{
+namespace Sheets
+{
+class Cell;
+class Map;
+class Sheet;
+class Region;
+
+/**
+ * \ingroup Damages
+ * An abstract damage.
+ */
+class CALLIGRA_SHEETS_ODF_EXPORT Damage
+{
+public:
+    virtual ~Damage() {}
+
+    typedef enum {
+        Nothing = 0,
+        Document,
+        Workbook,
+        Sheet,
+        Range,
+        Cell,
+        Selection
+    } Type;
+
+    virtual Type type() const {
+        return Nothing;
+    }
+};
+
+/**
+ * \ingroup Damages
+ * A cell range damage.
+ */
+class CALLIGRA_SHEETS_ODF_EXPORT CellDamage : public Damage
+{
+public:
+    enum Change {
+        Binding    = 0x02, ///< on value changes; always triggered; for binding updates
+        Formula    = 0x04, ///< triggers a dependency update
+        NamedArea  = 0x10, ///< triggers a named area update
+        /// This indicates a value change. It is not triggered while a recalculation is in progress.
+        /// RecalcManager takes over in this case. Otherwise, circular dependencies would cause
+        /// infinite loops and the cells would be recalculated in arbitrary order.
+        Value      = 0x20,
+        /// On style changes; invalidates the style storage cache.
+        StyleCache  = 0x40,
+        /// The visual cache gets damaged, if any of CellView's data members is
+        /// affected. E.g. the displayed text, the cell dimension or the merging.
+        VisualCache = 0x80,
+        // TODO Stefan: Detach the style cache from the CellView cache.
+        /// Updates the caches and triggers a repaint of the cell region.
+        Appearance = StyleCache | VisualCache
+    };
+    Q_DECLARE_FLAGS(Changes, Change)
+
+    CellDamage(const Calligra::Sheets::Cell& cell, Changes changes);
+    CellDamage(Calligra::Sheets::Sheet* sheet, const Region& region, Changes changes);
+
+    virtual ~CellDamage();
+
+    virtual Type type() const {
+        return Damage::Cell;
+    }
+
+    Calligra::Sheets::Sheet* sheet() const;
+    const Region& region() const;
+
+    Changes changes() const;
+
+private:
+    Q_DISABLE_COPY(CellDamage)
+
+    class Private;
+    Private * const d;
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
+
+
+/**
+ * \ingroup Damages
+ * A sheet damage.
+ */
+class CALLIGRA_SHEETS_ODF_EXPORT SheetDamage : public Damage
+{
+public:
+
+    enum Change {
+        None              = 0x00,
+        ContentChanged    = 0x01,
+        PropertiesChanged = 0x02,
+        Hidden            = 0x04,
+        Shown             = 0x08,
+        Name              = 0x10,
+        ColumnsChanged    = 0x20,
+        RowsChanged       = 0x40
+    };
+    Q_DECLARE_FLAGS(Changes, Change)
+
+    SheetDamage(Calligra::Sheets::Sheet* sheet, Changes changes);
+
+    virtual ~SheetDamage();
+
+    virtual Type type() const {
+        return Damage::Sheet;
+    }
+
+    Calligra::Sheets::Sheet* sheet() const;
+
+    Changes changes() const;
+
+private:
+    Q_DISABLE_COPY(SheetDamage)
+
+    class Private;
+    Private * const d;
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS(SheetDamage::Changes)
+
+
+/**
+ * \ingroup Damages
+ * A workbook damage.
+ */
+class WorkbookDamage : public Damage
+{
+public:
+    enum Change {
+        None       = 0x00,
+        Formula    = 0x01,
+        Value      = 0x02
+    };
+    Q_DECLARE_FLAGS(Changes, Change)
+
+    WorkbookDamage(Calligra::Sheets::Map* map, Changes changes);
+    virtual ~WorkbookDamage();
+
+    virtual Type type() const {
+        return Damage::Workbook;
+    }
+    Calligra::Sheets::Map* map() const;
+    Changes changes() const;
+
+private:
+    Q_DISABLE_COPY(WorkbookDamage)
+
+    class Private;
+    Private * const d;
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
+
+
+/**
+ * \ingroup Damages
+ * A selection damage.
+ */
+class CALLIGRA_SHEETS_ODF_EXPORT SelectionDamage : public Damage
+{
+public:
+    SelectionDamage(const Region& region);
+    virtual ~SelectionDamage();
+
+    virtual Type type() const {
+        return Damage::Selection;
+    }
+
+    const Region& region() const;
+
+private:
+    Q_DISABLE_COPY(SelectionDamage)
+
+    class Private;
+    Private * const d;
+};
+
+} // namespace Sheets
+} // namespace Calligra
+
+
+/***************************************************************************
+  kDebug support
+****************************************************************************/
+
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d);
+CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d);
+
+#endif // CALLIGRA_SHEETS_DAMAGES

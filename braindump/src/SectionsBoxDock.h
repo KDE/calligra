@@ -31,34 +31,36 @@ class View;
 #include <QDockWidget>
 #include <KoDockFactoryBase.h>
 
-class SectionsBoxDock : public QDockWidget {
+class SectionsBoxDock : public QDockWidget
+{
     Q_OBJECT
-  public:
+public:
     SectionsBoxDock();
     virtual ~SectionsBoxDock();
     void setup(RootSection* document, View* m_view);
     void updateGUI();
-  private slots:
+private slots:
     void slotSectionActivated(const QModelIndex &);
-    
+    void slotSectionActivated(Section*);
+
     void slotMinimalView();
     void slotDetailedView();
     void slotThumbnailView();
-    
+
     void slotRmClicked();
     void slotRaiseClicked();
     void slotLowerClicked();
     void slotDuplicateClicked();
-    
+
     void slotNewSectionAsChildOfCurrent();
     void slotNewSectionAboveCurrent();
     void slotNewSectionBellowCurrent();
-    
+
     void removedSection();
     void insertedSection(const QModelIndex& parent, int idx);
-  private:
+private:
     void selectSection(Section*);
-  private:
+private:
     Ui::WdgSectionsBox m_wdgSectionsBox;
     View* m_view;
     DocumentModel* m_model;

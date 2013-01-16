@@ -25,8 +25,8 @@
 #include <migration/keximigrate_p.h>
 
 //Kexi Includes
-#include <kexidb/field.h>
-#include <kexidb/connection.h>
+#include <db/field.h>
+#include <db/connection.h>
 
 #include <pqxx/pqxx>
 

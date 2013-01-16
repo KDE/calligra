@@ -20,9 +20,9 @@
 #ifndef KEXIDB_CURSOR_PQXX_H
 #define KEXIDB_CURSOR_PQXX_H
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
-#include <kexidb/utils.h>
+#include <db/cursor.h>
+#include <db/connection.h>
+#include <db/utils.h>
 
 #if 0
 #include <pqxx/all.h>

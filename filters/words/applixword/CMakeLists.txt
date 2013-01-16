@@ -1,7 +1,3 @@
-
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
-
 ########### next target ###############
 
 set(applixwordimport_PART_SRCS applixwordimport.cc )
@@ -18,6 +14,6 @@ install(TARGETS applixwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kword_applixword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  words_applixword_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 

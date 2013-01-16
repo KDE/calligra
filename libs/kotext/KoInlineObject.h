@@ -22,6 +22,7 @@
 #include "kotext_export.h"
 
 #include <QVariant>
+#include <QObject>
 
 class QTextDocument;
 class QTextCharFormat;
@@ -30,7 +31,6 @@ class QPaintDevice;
 class QPainter;
 class QRectF;
 
-class KoShape;
 class KoInlineTextObjectManager;
 class KoInlineObjectPrivate;
 class KoShapeSavingContext;
@@ -47,8 +47,9 @@ class KoShapeLoadingContext;
  *
  * @see KoInlineTextObjectManager
  */
-class KOTEXT_EXPORT KoInlineObject
+class KOTEXT_EXPORT KoInlineObject : public QObject
 {
+    Q_OBJECT
 public:
     enum Property {
         DocumentURL,
@@ -64,6 +65,7 @@ public:
         Keywords,
         Subject,
         Description,
+        Comments,
         SenderPostalCode,
         SenderCity,
         SenderStreet,
@@ -72,17 +74,18 @@ public:
         SenderLastname,
         SenderPosition,
         AuthorInitials,
+        Chapter, ///< Chapter (number, name, number and name, plain number, plain number and name) variables.
 
-
-        KarbonStart = 1000,      ///< Base number for karbon specific values.
-        KexiStart = 2000,        ///< Base number for kexi specific values.
-        FlowStart = 3000,       ///< Base number for flow specific values.
-        KPlatoStart = 4000,      ///< Base number for kplato specific values.
-        KPresenterStart = 5000,  ///< Base number for kpresenter specific values.
-        KritaStart = 6000,       ///< Base number for krita specific values.
-        KWordStart = 7000,       ///< Base number for kword specific values.
+        KarbonStart = 1000,      ///< Base number for Karbon specific values.
+        KexiStart = 2000,        ///< Base number for Kexi specific values.
+        FlowStart = 3000,        ///< Base number for Flow specific values.
+        PlanStart = 4000,        ///< Base number for Plan specific values.
+        StageStart = 5000,       ///< Base number for Stage specific values.
+        KritaStart = 6000,       ///< Base number for Krita specific values.
+        WordsStart = 7000,       ///< Base number for Words specific values.
         VariableManagerStart = 8000, ///< Start of numbers reserved for the KoVariableManager
-        User = 12000
+        UserGet = 12000,         ///< User defined variable user-field-get
+        UserInput = 12001        ///< User defined variable user-field-input
     };
 
     /**
@@ -125,12 +128,10 @@ public:
      * This is called each time the paragraph this inline object is in is re-layouted giving you the opportunity
      * to reposition your object based on the new information.
      * @param document the text document this inline object is operating on.
-     * @param object the inline object properties
      * @param posInDocument the character position in the document (param document) this inline object is at.
      * @param format the character format for the inline object.
      */
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
-                                int posInDocument, const QTextCharFormat &format) = 0;
+    virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) = 0;
 
     /**
      * Update the size of the inline object.
@@ -140,6 +141,7 @@ public:
      * QTextInlineObject::setAscent() and QTextInlineObject::setDescent() methods.
      * Note that this method is called while painting; and thus is time sensitive; avoid doing anything time
      * consuming.
+     * Note make sure that the width is 0 when there is nothing to be shown for the object.
      * @param document the text document this inline object is operating on.
      * @param object the inline object properties
      * @param posInDocument the character position in the document (param document) this inline object is at.
@@ -158,7 +160,7 @@ public:
      * @param format the character format for the inline object.
      * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
      *  classes so the inline object can be reused on any paintdevice.
-     * @param painter the painting object to paint on.  Note that unline many places in koffice painting
+     * @param painter the painting object to paint on.  Note that unline many places in calligra painting
      *    should happen at the position indicated by the rect, not at top-left.
      * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
      *    will give varous problems with regards to repainting issues.
@@ -185,6 +187,7 @@ public:
 
     /// return the inline-object Id that is assigned for this object.
     int id() const;
+
     /// Set the inline-object Id that is assigned for this object by the KoInlineTextObjectManager.
     void setId(int id);
 
@@ -223,15 +226,6 @@ public:
 
 protected:
     explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);
-
-    /**
-     * We allow a text document to be shown in more than one shape; which brings up the need to figure out
-     * which shape is used for a certain text.
-     * @param document the document we are searching in.
-     * @param position the position of the character in the text document we want to locate.
-     * @return the shape the text is laid-out in.  Or 0 if there is no shape for that text character.
-     */
-    static KoShape *shapeForPosition(const QTextDocument *document, int position);
 
     KoInlineObjectPrivate *d_ptr;
 

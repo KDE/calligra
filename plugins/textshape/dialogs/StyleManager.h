@@ -24,9 +24,13 @@
 
 #include <QWidget>
 
+class StylesModel;
 class KoStyleManager;
+class KoStyleThumbnailer;
 class KoParagraphStyle;
 class KoCharacterStyle;
+
+class QModelIndex;
 
 class StyleManager : public QWidget
 {
@@ -39,16 +43,24 @@ public:
 
     void setUnit(const KoUnit &unit);
 
+    //Check that the new name of style is unique or not
+    bool checkUniqueStyleName();
+
 public slots:
     void save();
+    void setParagraphStyle(KoParagraphStyle *style);
+    void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
+    bool unappliedStyleChanges();
 
 private slots:
+    void currentStyleChanged();
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
-    void setParagraphStyle(KoParagraphStyle *style, bool canDelete);
-    void setCharacterStyle(KoCharacterStyle *style, bool canDelete);
+    void slotStyleSelected(QModelIndex index);
+    void buttonNewPressed();
+    void tabChanged(int index);
 
 private:
     Ui::StyleManager widget;
@@ -56,11 +68,19 @@ private:
 
     QMap<int, KoParagraphStyle*> m_alteredParagraphStyles;
     QMap<int, KoCharacterStyle*> m_alteredCharacterStyles;
+    QMap<int, KoParagraphStyle*> m_draftParagraphStyles;
+    QMap<int, KoCharacterStyle*> m_draftCharacterStyles;
 
+    StylesModel *m_paragraphStylesModel;
+    StylesModel *m_characterStylesModel;
+    KoStyleThumbnailer *m_thumbnailer;
     KoParagraphStyle *m_selectedParagStyle;
     KoCharacterStyle *m_selectedCharStyle;
 
     bool m_blockSignals;
+    bool m_blockStyleChangeSignals;
+    bool m_unappliedStyleChanges;
+    bool m_currentStyleChanged;
 };
 
 #endif

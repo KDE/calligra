@@ -22,6 +22,7 @@ target_link_libraries(
     kexiextendedwidgets
     kexidb
     kexiutils
+    ${CALLIGRADB_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
@@ -30,7 +31,7 @@ target_link_libraries(
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
-set_target_properties(kexirelationsview PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kexirelationsview PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexirelationsview  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 

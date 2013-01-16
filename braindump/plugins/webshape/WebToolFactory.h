@@ -24,11 +24,11 @@
 
 class WebToolFactory : public KoToolFactoryBase
 {
-    public:
-        explicit WebToolFactory( );
-        ~WebToolFactory();
+public:
+    explicit WebToolFactory();
+    ~WebToolFactory();
 
-        KoToolBase * createTool( KoCanvasBase *canvas );
+    KoToolBase * createTool(KoCanvasBase *canvas);
 };
 
 #endif

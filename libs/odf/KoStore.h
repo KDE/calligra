@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 David Faure <faure@kde.org>
-   Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+   Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,11 +21,11 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QIODevice>
-#include <QtCore/QStack>
-#include <QtCore/QByteArray>
+#include <QString>
+#include <QStringList>
+#include <QIODevice>
+#include <QStack>
+#include <QByteArray>
 #include "koodf_export.h"
 
 #include <kurl.h>
@@ -34,7 +34,7 @@ class QWidget;
 class KoStorePrivate;
 
 /**
- * Saves and loads KOffice documents using various backends. Currently supported
+ * Saves and loads Calligra documents using various backends. Currently supported
  * backends are ZIP, tar and directory.
  * We call a "store" the file on the hard disk (the one the users sees)
  * and call a "file" a file inside the store.
@@ -47,7 +47,7 @@ public:
     enum Backend { Auto, Tar, Zip, Directory, Encrypted };
 
     /**
-     * Open a store (i.e. the representation on disk of a KOffice document).
+     * Open a store (i.e. the representation on disk of a Calligra document).
      *
      * @param fileName the name of the file to open
      * @param mode if KoStore::Read, open an existing store to read it.
@@ -72,7 +72,7 @@ public:
                                 const QByteArray &appIdentification = "", Backend backend = Auto);
 
     /**
-     * Open a store (i.e. the representation on disk of a KOffice document).
+     * Open a store (i.e. the representation on disk of a Calligra document).
      *
      * @param window associated window (for the progress bar dialog and authentication)
      * @param url URL of the file to open
@@ -259,7 +259,7 @@ public:
 
     /**
      * Do not expand file and directory names
-     * Useful when using KoStore on non-KOffice files.
+     * Useful when using KoStore on non-Calligra files.
      * (This method should be called just after the constructor)
      */
     void disallowNameExpansion();

@@ -18,8 +18,9 @@
 
 #include <kis_ruler_assistant_tool.h>
 
-#include <qpainter.h>
-#include <qxmlstream.h>
+#include <QPainter>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 #include <kis_debug.h>
 #include <klocale.h>
@@ -28,6 +29,8 @@
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kio/jobuidelegate.h>
+
+#include <KoIcon.h>
 
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
@@ -114,6 +117,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         }
         if (m_handleDrag) {
             if (event->modifiers() & Qt::ShiftModifier) {
+                m_handleDrag->uncache();
                 m_handleDrag = m_handleDrag->split()[0];
                 m_handles = m_canvas->view()->paintingAssistantManager()->handles();
             }
@@ -140,9 +144,8 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 
         // create new assistant
         QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-        QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                                  m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(), m_canvas->image()->height())));
-        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->paintingAssistant(imageArea);
+
+        m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant();
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         if (m_newAssistant->numHandles() <= 1) {
             addAssistant();
@@ -187,6 +190,7 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
     } else if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         if (m_handleDrag) {
             *m_handleDrag = event->point;
+            m_handleDrag->uncache();
 
             m_handleCombine = 0;
             if (!(event->modifiers() & Qt::ShiftModifier)) {
@@ -227,6 +231,7 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
         if (m_handleDrag) {
             if (!(event->modifiers() & Qt::ShiftModifier) && m_handleCombine) {
                 m_handleCombine->mergeWith(m_handleDrag);
+                m_handleCombine->uncache();
                 m_handles = m_canvas->view()->paintingAssistantManager()->handles();
             }
             m_handleDrag = m_handleCombine = 0;
@@ -248,7 +253,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     QColor handlesColor(0, 0, 0, 125);
 
     if (m_newAssistant) {
-        m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter());
+        m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter(), false);
         foreach(const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
             QPainterPath path;
             path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));
@@ -270,8 +275,8 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         KisPaintingAssistant::drawPath(_gc, path);        
     }
     
-    QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
-    QPixmap iconMove = KIcon("transform-move").pixmap(32, 32);
+    QPixmap iconDelete = koIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconMove = koIcon("transform-move").pixmap(32, 32);
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
         _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
@@ -281,6 +286,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
 void KisRulerAssistantTool::removeAllAssistants()
 {
+    m_canvas->view()->resourceProvider()->clearPerspectiveGrids();
     m_canvas->view()->paintingAssistantManager()->removeAll();
     m_handles = m_canvas->view()->paintingAssistantManager()->handles();
     m_canvas->updateCanvas();
@@ -378,16 +384,13 @@ void KisRulerAssistantTool::openFinish(KJob* job)
                     }
                 }
             } else if (xml.name() == "assistant") {
-                QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                                          m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(),
-                                                                                    m_canvas->image()->height())));
                 const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
                 if (factory) {
                     if (assistant) {
                         errors = true;
                         delete assistant;
                     }
-                    assistant = factory->paintingAssistant(imageArea);
+                    assistant = factory->createPaintingAssistant();
                 } else {
                     errors = true;
                 }
@@ -398,6 +401,10 @@ void KisRulerAssistantTool::openFinish(KJob* job)
                 if (assistant) {
                     if (assistant->handles().size() == assistant->numHandles()) {
                         m_canvas->view()->paintingAssistantManager()->addAssistant(assistant);
+                        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
+                        if (grid) {
+                            m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+                        }
                     } else {
                         errors = true;
                         delete assistant;
@@ -437,9 +444,9 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
-        m_options.loadButton->setIcon(KIcon("document-open"));
-        m_options.saveButton->setIcon(KIcon("document-save"));
-        m_options.deleteButton->setIcon(KIcon("edit-delete"));
+        m_options.loadButton->setIcon(koIcon("document-open"));
+        m_options.saveButton->setIcon(koIcon("document-save"));
+        m_options.deleteButton->setIcon(koIcon("edit-delete"));
         foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);

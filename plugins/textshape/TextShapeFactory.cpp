@@ -27,14 +27,17 @@
 #include <KoTextShapeData.h>
 #include <KoXmlNS.h>
 #include <KoStyleManager.h>
-#include <KoResourceManager.h>
+#include <KoDocumentResourceManager.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTextRangeManager.h>
 #include <changetracker/KoChangeTracker.h>
 #include <KoImageCollection.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
+
 #include <klocale.h>
-#include <KUndoStack>
+#include <kundo2stack.h>
 #include <QTextCursor>
 
 TextShapeFactory::TextShapeFactory()
@@ -44,12 +47,12 @@ TextShapeFactory::TextShapeFactory()
     QList<QPair<QString, QStringList> > odfElements;
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::draw, QStringList("text-box")));
     odfElements.append(QPair<QString, QStringList>(KoXmlNS::table, QStringList("table")));
-    setOdfElements(odfElements);
+    setXmlElements(odfElements);
     setLoadingPriority(1);
 
     KoShapeTemplate t;
     t.name = i18n("Text");
-    t.icon = "x-shape-text";
+    t.iconName = koIconName("x-shape-text");
     t.toolTip = i18n("Text Shape");
     KoProperties *props = new KoProperties();
     t.properties = props;
@@ -57,22 +60,42 @@ TextShapeFactory::TextShapeFactory()
     addTemplate(t);
 }
 
-KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
     KoInlineTextObjectManager *manager = 0;
+    KoTextRangeManager *locationManager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
-        manager = variant.value<KoInlineTextObjectManager*>();
+        if (variant.isValid()) {
+            manager = variant.value<KoInlineTextObjectManager *>();
+        }
     }
-    TextShape *text = new TextShape(manager);
+    if (documentResources && documentResources->hasResource(KoText::TextRangeManager)) {
+        QVariant variant = documentResources->resource(KoText::TextRangeManager);
+        if (variant.isValid()) {
+            locationManager = variant.value<KoTextRangeManager *>();
+        }
+    }
+    if (!manager) {
+        manager = new KoInlineTextObjectManager();
+    }
+    if (!locationManager) {
+        locationManager = new KoTextRangeManager();
+    }
+    TextShape *text = new TextShape(manager, locationManager);
     if (documentResources) {
         KoTextDocument document(text->textShapeData()->document());
-        document.setUndoStack(documentResources->undoStack());
 
         if (documentResources->hasResource(KoText::StyleManager)) {
             KoStyleManager *styleManager = documentResources->resource(KoText::StyleManager).value<KoStyleManager*>();
             document.setStyleManager(styleManager);
         }
+
+        // this is needed so the shape can reinitialize itself with the stylemanager
+        text->textShapeData()->setDocument(text->textShapeData()->document(), true);
+
+        document.setUndoStack(documentResources->undoStack());
+
         if (documentResources->hasResource(KoText::PageProvider)) {
             KoPageProvider *pp = static_cast<KoPageProvider *>(documentResources->resource(KoText::PageProvider).value<void*>());
             text->setPageProvider(pp);
@@ -82,24 +105,26 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
             document.setChangeTracker(changeTracker);
         }
 
+        //update the resources of the document
+        text->updateDocumentData();
+
         text->setImageCollection(documentResources->imageCollection());
     }
 
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+KoShape *TextShapeFactory::createShape(const KoProperties */*params*/, KoDocumentResourceManager *documentResources) const
 {
     TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));
-    shape->setDemoText(params->boolProperty("demo"));
+    /*
     QString text("text");
     if (params->contains(text)) {
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-        QTextCursor cursor(shapeData->document());
-        cursor.insertText(params->stringProperty(text));
     }
+    */
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());
     }
@@ -114,15 +139,18 @@ bool TextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &c
         (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
 }
 
-void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
+void TextShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
     QVariant variant;
     variant.setValue<KoInlineTextObjectManager*>(new KoInlineTextObjectManager(manager));
     manager->setResource(KoText::InlineTextObjectManager, variant);
 
-    if (!manager->hasResource(KoDocumentResource::UndoStack)) {
-        kWarning(32500) << "No KUndoStack found in the document resource manager, creating a new one";
-        manager->setUndoStack(new KUndoStack(manager));
+    variant.setValue<KoTextRangeManager *>(new KoTextRangeManager());
+    manager->setResource(KoText::TextRangeManager, variant);
+
+    if (!manager->hasResource(KoDocumentResourceManager::UndoStack)) {
+//        kWarning(32500) << "No KUndo2Stack found in the document resource manager, creating a new one";
+        manager->setUndoStack(new KUndo2Stack(manager));
     }
     if (!manager->hasResource(KoText::StyleManager)) {
         variant.setValue(new KoStyleManager(manager));

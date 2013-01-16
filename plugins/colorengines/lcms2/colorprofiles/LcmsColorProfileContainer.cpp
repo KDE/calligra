@@ -124,9 +124,9 @@ QByteArray LcmsColorProfileContainer::createFromChromacities(const KoRGBChromati
 
     // icSigProfileDescriptionTag is the compulsory tag and is the profile name
     // displayed by other applications.
-    cmsWriteTag(profile, cmsSigProfileDescriptionTag, name.toLatin1().data());
+    cmsWriteTag(profile, cmsSigProfileDescriptionTag, name.toLatin1().constData());
 
-    cmsWriteTag(profile, cmsSigDeviceModelDescTag, name.toLatin1().data());
+    cmsWriteTag(profile, cmsSigDeviceModelDescTag, name.toLatin1().constData());
 
     // Clear the default manufacturer's tag that is set to "(lcms internal)"
     QByteArray ba("");
@@ -173,10 +173,11 @@ bool LcmsColorProfileContainer::init()
         
         // Check if the profile can convert (something->this)
         d->suitableForOutput = cmsIsMatrixShaper(d->profile)
-                               || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) && 
+                               || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
                                     cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT) );
         return true;
     }
+
     return false;
 }
 

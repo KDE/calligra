@@ -22,18 +22,18 @@
 #ifndef KWPAGEINSERTCOMMAND_H
 #define KWPAGEINSERTCOMMAND_H
 
-#include "../kword_export.h"
+#include "../words_export.h"
 #include "../KWPage.h"
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 
 class KWPage;
 class KWPageManager;
 class KWDocument;
 class KoShapeMoveCommand;
 
-/// The undo / redo command for inserting a new page in a kword document.
-class KWORD_TEST_EXPORT KWPageInsertCommand : public QUndoCommand
+/// The undo / redo command for inserting a new page in a words document.
+class WORDS_TEST_EXPORT KWPageInsertCommand : public KUndo2Command
 {
 public:
     /**
@@ -43,7 +43,7 @@ public:
      * @param parent the parent for command macros
      * @param masterPageName the master page name for the new page
      */
-    explicit KWPageInsertCommand(KWDocument *document, int afterPageNum, const QString &masterPageName = QString(), QUndoCommand *parent = 0);
+    explicit KWPageInsertCommand(KWDocument *document, int afterPageNum, const QString &masterPageName = QString(), KUndo2Command *parent = 0);
     ~KWPageInsertCommand();
 
     /// redo the command

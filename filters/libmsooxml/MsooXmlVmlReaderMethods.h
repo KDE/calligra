@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -35,75 +35,115 @@
 
 protected:
 
+    enum FrameStartElement {FrameStart, EllipseStart, RectStart, LineStart, CustomStart, GroupStart};
+
     // v namespace:
-    KoFilter::ConversionStatus genericReader();
-    QString m_currentEl;
+    KoFilter::ConversionStatus genericReader(FrameStartElement startType);
     KoFilter::ConversionStatus read_oval();
+    KoFilter::ConversionStatus read_line();
     KoFilter::ConversionStatus read_roundrect();
     KoFilter::ConversionStatus read_rect();
     KoFilter::ConversionStatus read_fill();
     KoFilter::ConversionStatus read_VML_background();
     KoFilter::ConversionStatus read_shapetype();
     KoFilter::ConversionStatus read_formulas();
+    KoFilter::ConversionStatus read_path();
     KoFilter::ConversionStatus read_f();
     KoFilter::ConversionStatus read_shape();
     KoFilter::ConversionStatus read_imagedata();
     KoFilter::ConversionStatus read_textbox();
     KoFilter::ConversionStatus read_group();
     KoFilter::ConversionStatus read_stroke();
+    KoFilter::ConversionStatus read_shadow();
+
+    void handlePathValues(const QXmlStreamAttributes& attrs);
+    void handleStrokeAndFill(const QXmlStreamAttributes& attrs);
+    void takeDefaultValues();
+
+    QString rgbColor(QString color);
 
     // w:10 namespace:
     KoFilter::ConversionStatus read_wrap();
 
-    enum FrameStartElement {FrameStart, RectStart, StraightConnectorStart, CustomStart, GroupStart};
-
     void createFrameStart(FrameStartElement startType = FrameStart);
-    KoFilter::ConversionStatus createFrameEnd();
 
     // utils:
     KoFilter::ConversionStatus parseCSS(const QString& style);
 
-    QMap<QByteArray, QString> m_vmlStyle;
-
     //writer where style:background-image is stored for style:page-layout-properties
     KoXmlWriter* m_pDocBkgImageWriter;
 
-    QString m_imagedataPath; //!< set in read_shape()
-    QString m_imagedataFile; //!< set in read_shape()
-    QString m_shapeAltText; //!< set in read_shape()
-    QString m_shapeTitle; //!< set in read_shape()
-    QString m_shapeColor; //!< set in read_shape()
-    QString m_currentShapeId; //!< set in read_shape()
+public:
 
-    QString m_strokeColor; // stroke color
-    qreal m_strokeWidth; // stroke width
+    struct VMLShapeProperties {
+        QString currentEl;
 
-    //!< Width of the object. Set in read_OLEObject() or read_shape(). Used in writeRect().
-    //! If both w:object/v:shape and w:object/o:OLEObject exist, information from v:shape is used.
-    QString m_currentObjectWidthCm;
-    QString m_currentObjectHeightCm; //!< See m_currentObjectWidthCm for description
+        QMap<QByteArray, QString> vmlStyle;
+
+        QString strokeColor; // stroke color
+        QString strokeWidth; // stroke width
+        QString lineCapStyle;
+        QString joinStyle;
+        QString strokeStyleName;
+        QString fillType;
+        QString gradientStyle;
+        QString shapeColor; //!< set in read_shape()
+        QString shapeSecondaryColor; // used eg. for some gradients
+
+        qreal opacity;
+
+        bool wrapRead;
+        QString currentShapeId; //!< set in read_shape()
+        QString imagedataPath; //!< set in read_shape()
+        QString shapeAltText; //!< set in read_shape()
+        QString shapeTitle; //!< set in read_shape()
+
+        bool stroked, filled, shadowed;
+
+        QString shadowColor;
+        QString shadowXOffset, shadowYOffset;
+        qreal shadowOpacity;
+
+        QString anchorType;
+
+        int formulaIndex;
+        QString shapeTypeString;
+        QString extraShapeFormulas;
+        QString normalFormulas;
+        QString modifiers;
+        QString viewBox;
+        QString shapePath;
+        int extraFormulaIndex;
+
+        QString internalMarginLeft;
+        QString internalMarginRight;
+        QString internalMarginTop;
+        QString internalMarginBottom;
+
+        QString marginLeft;
+        QString marginTop;
+        QString marginRight;
+        QString marginBottom;
+
+        bool fitTextToShape, fitShapeToText;
+
+        // Parameters for group shape situation
+        bool insideGroup;
+        int groupWidth, groupHeight; // Relative group extends
+        int groupX, groupY; // Relative group origin
+        qreal groupXOffset, groupYOffset; // Offset caused by the group parent
+        qreal real_groupWidth, real_groupHeight;
+    };
+
+    // Elements defined by v:shapeType
+    QMap<QString, VMLShapeProperties> m_definedShapeTypes;
+
+protected:
+
+    VMLShapeProperties m_currentVMLProperties;
+
+    // Using stack to make sure correct properties are handled in a case when
+    // there are group shapes
+    QStack<VMLShapeProperties> m_VMLShapeStack;
 
     bool m_outputFrames; // Whether read_shape should output something to shape
-    bool m_wrapRead;
-    QString m_anchorType;
-
-    // For group shape situation
-    bool m_insideGroup;
-
-    // Relative group widths
-    int m_groupWidth, m_groupHeight;
-
-    // Relative group original
-    int m_groupX, m_groupY;
-
-    // Offset caused by the group parent
-    qreal m_groupXOffset, m_groupYOffset;
-
-    QString m_groupWidthUnit; // pt, cm etc.
-    QString m_groupHeightUnit;
-    qreal m_real_groupWidth;
-    qreal m_real_groupHeight;
-
-    int m_formulaIndex;
-    QString m_shapeTypeString;
-    QMap<QString, QString> m_shapeTypeStrings;

@@ -1,8 +1,21 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/kexi/widget/tableview/private ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${KDE4_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR})
+
 
 
 ########### next target ###############
+
+if(MARBLE_FOUND)
+  add_subdirectory(widgets/mapbrowser)
+endif(MARBLE_FOUND)
+
+
+
+########### next target ###############
+
+if(QT_QTWEBKIT_FOUND)
+  add_subdirectory(widgets/webbrowser)
+endif(QT_QTWEBKIT_FOUND)
 
 set(kexihandler_form_PART_SRCS kexiforms.cpp )
 
@@ -19,6 +32,7 @@ target_link_libraries(
     kexiformutils
     ${KDE4_KDECORE_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
+    kexiextendedwidgets
     )
 
 install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -37,9 +51,12 @@ target_link_libraries(
     kformdesigner
     kexiformutils
     kexidb
+    ${CALLIGRADB_LIBS}
     kexicore
     kexiguiutils
+    kexidataviewcommon
 	kexidatatable
+	kexiextendedwidgets
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY}
@@ -52,15 +69,15 @@ install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(kexiformutils_LIB_SRCS 
-   kexiformdataiteminterface.cpp 
-   kexidataawarewidgetinfo.cpp 
-   kexidataprovider.cpp 
+ #  kexiformdataiteminterface.cpp 
+   kexidataawarewidgetinfo.cpp  
    kexiformscrollview.cpp 
    kexidbtextwidgetinterface.cpp 
    kexiformmanager.cpp 
    kexidatasourcepage.cpp 
    kexiformpart.cpp 
    kexiformview.cpp
+   kexidbfactorybase.cpp
 
   widgets/kexidbutils.cpp
   widgets/kexidbautofield.cpp
@@ -74,6 +91,10 @@ set(kexiformutils_LIB_SRCS
   widgets/kexidbcheckbox.cpp
   widgets/kexidbtextedit.cpp
   widgets/kexidbcombobox.cpp
+  widgets/kexidbcommandlinkbutton.cpp
+  widgets/kexidbslider.cpp
+  widgets/kexidbprogressbar.cpp
+  widgets/kexidbdatepicker.cpp
 )
 
 #obsolete	widgets/kexidbdoublespinbox.cpp
@@ -91,7 +112,9 @@ target_link_libraries(
     kexiextendedwidgets
     kformdesigner
     kexidb
+    ${CALLIGRADB_LIBS}
     kexiutils
+    kexidataviewcommon
     kexidatatable
     kexiguiutils
     ${KOPROPERTY_LIBS}
@@ -103,7 +126,7 @@ target_link_libraries(
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
-set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 install(TARGETS kexiformutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 

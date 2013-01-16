@@ -936,7 +936,7 @@ of a file. always a 4 byte quantity.</td>
 
 <td>used to name a variable that contains a width of an object imaged on
 screen or on hard copy that is measured in units of 1/1440 of an inch.
-This unit which is one-twentieth of a point size (1/20 * 1/72") is called
+This unit which is one-twentieth of a point size (1/20 * 1/72 in) is called
 a <b>twip</b> in this documentation. (e.g. xaPage is the width of a page).</td>
 </tr>
 
@@ -2156,7 +2156,9 @@ of <b>crun</b> word offsets to <b>CHPX</b>s from the beginning of the <b>FKP.</b
 This byte array, named <b>rgb</b>, is in 1-to-1 correspondence with the
 <b>rgfc</b>.
 The <b>ith</b> <b>rgb</b> gives the word offset of the exception property
-that belongs to the run\paragraph whose beginning
+that belongs to the run\paragraph whose beginning in <b>FC</b>
+space is <b>rgfc</b>[i] and whose limit is <b>rgfc[i+1]</b> in <b>FC</b>
+space.
 <p>For <b>PAPX FKPSs</b>, immediately following the <b>fkp.rgfc</b> is
 an array of 13 byte entries called <b>BXs</b>. This array called the <b>rgbx</b>
 is in 1-to-1 correspondence with the <b>rgfc</b>. The first byte of the
@@ -2391,7 +2393,7 @@ Word 6.0. In Word 6.0, all information for a paragraph was stored in that
 paragraph's pap.anld. In Word 97, the pap only contains two values: a short
 ilfo and a byte ilvl, which indicate which list the paragraph belongs to
 and which level of that list it should be, respectively. The ilfo is actually
-an index into one of the the document's list tables: the pllfo, and the
+an index into one of the document's list tables: the pllfo, and the
 paragraph gets most of its information about appearance from the list tables.
 <p>There are three list tables in a word document: the rglst, the hpllfo,
 and the hsttbListNames. They will be described below in greater detail,
@@ -19915,7 +19917,7 @@ List Format Override for a single LeVeL (LFOLVL)</h3>
 
 <td>0x20</td>
 
-<td>true if the formatting is overriden (in which case the LFOLVL should
+<td>true if the formatting is overridden (in which case the LFOLVL should
 contain a pointer to a LVL)</td>
 </tr>
 
@@ -20294,7 +20296,7 @@ significant) levels in the list</td>
 <td>0x40</td>
 
 <td>true if this level was from a converted Word 6 document. If it is true,
-all of the Word 6 compability options become valid; otherwise they are
+all of the Word 6 compatibility options become valid; otherwise they are
 ignored.</td>
 </tr>
 
@@ -25970,7 +25972,7 @@ at the end of a paragraph. For a character style, the next style is essentially
 ignored, but should be the same as the current style.
 <p>std.xstzName: The name of the style, including aliases. The name is
 stored as an xstz (preceded by a length byte, followed by a null-terminator.)
-[Attention: It seems that for Word97 the lenght "byte" is in fact a short(!) (Werner)]
+[Attention: It seems that for Word97 the length "byte" is in fact a short(!) (Werner)]
 A style name can contain multiple "aliases", separated by commas. Aliases
 are alternate names for the same style (e.g. a style named "a,b,c" has
 three aliases, and can be referred to by "a", "b", or "c", or any combination.)

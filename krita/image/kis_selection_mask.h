@@ -19,7 +19,6 @@
 #define _KIS_SELECTION_MASK_
 
 #include <QRect>
-#include "kicon.h"
 
 #include "KoDocumentSectionModel.h"
 #include <KoProperties.h>
@@ -48,9 +47,7 @@ public:
 
     bool allowAsChild(KisNodeSP) const;
 
-    QIcon icon() const {
-        return KIcon("edit-paste");
-    }
+    QIcon icon() const;
 
     KisNodeSP clone() const {
         return KisNodeSP(new KisSelectionMask(*this));
@@ -60,16 +57,7 @@ public:
     void setSelection(KisSelectionSP selection);
 
     bool accept(KisNodeVisitor &v);
-
-    /**
-     * @return the deselected selection or 0 if no selection was deselected
-     */
-    KisSelectionSP deleselectedSelection();
-
-    /**
-     * Set deselected selection
-     */
-    void setDeleselectedSelection(KisSelectionSP selection);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
@@ -78,16 +66,11 @@ public:
     bool active() const;
     void setActive(bool active);
 
-    QImage createThumbnail(qint32 w, qint32 h);
-
-signals:
-    void changeActivity(KisSelectionMask* mask, bool active);
-
 private:
 
     KisImageWSP image() const;
 
-    class Private;
+    struct Private;
     Private * const m_d;
 
 };

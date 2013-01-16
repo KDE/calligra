@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,6 @@ public:
     bool visit(KisCloneLayer *layer);
     bool visit(KisFilterMask *mask);
     bool visit(KisTransparencyMask *mask);
-    bool visit(KisTransformationMask *mask);
     bool visit(KisSelectionMask *mask);
 
 private:
@@ -63,11 +62,8 @@ private:
     bool loadProfile(KisPaintDeviceSP device,  const QString& location);
     bool loadFilterConfiguration(KisFilterConfiguration* kfc, const QString& location);
     bool loadMetaData(KisNode* node);
-    KisSelectionSP loadSelection(const QString& location);
+    void loadSelection(const QString& location, KisSelectionSP dstSelection);
     QString getLocation(KisNode* node, const QString& suffix = "");
-
-    static KisNodeSP findNodeByName(const QString &name,
-                                    KisNodeSP rootNode);
 
 private:
     KisImageWSP m_image;

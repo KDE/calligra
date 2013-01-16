@@ -44,7 +44,7 @@ class KoSemanticStylesheetPrivate;
  * @see KoRdfSemanticItemViewSite
  * @see KoDocumentRdf
  */
-class KOMAIN_EXPORT KoSemanticStylesheet : public QObject
+class KOMAIN_EXPORT KoSemanticStylesheet : public QObject, public QSharedData
 {
     Q_OBJECT
     KoSemanticStylesheetPrivate * const d;
@@ -52,9 +52,6 @@ protected:
 
     // Restrict who can make us
     friend class KoRdfSemanticItem;
-    friend class KoRdfCalendarEvent;
-    friend class KoRdfFoaF;
-    friend class KoRdfLocation;
     friend class KoRdfSemanticItemViewSite;
 
     KoSemanticStylesheet(const QString &uuid, const QString &name, const QString &templateString,
@@ -65,7 +62,7 @@ protected:
      * applies the stylesheet to a specific reference to a semantic
      * item in the document.
      */
-    void format(KoRdfSemanticItem *obj, KoTextEditor *editor, const QString& xmlid = QString());
+    void format(hKoRdfSemanticItem obj, KoTextEditor *editor, const QString& xmlid = QString());
 
 public:
     ~KoSemanticStylesheet();
@@ -84,7 +81,7 @@ public:
     void templateString(const QString &v);
 
 signals:
-    void nameChanging(KoSemanticStylesheet*, QString oldName, QString newName);
+    void nameChanging(hKoSemanticStylesheet, QString oldName, QString newName);
 };
 
 #include <QMetaType>

@@ -501,7 +501,7 @@ namespace wvWare
         if ( preservePos )
             reader->push();
         reader->push();
-        reader->seek( 511, G_SEEK_CUR );
+        reader->seek( 511, WV2_SEEK_CUR );
         m_crun = reader->readU8();
         reader->pop();
 
@@ -589,7 +589,7 @@ namespace wvWare
         U8 index() const { return m_index; }
         void setIndex( U8 index ) { if ( index < m_fkp.m_crun ) m_index = index; }
 
-        bool atEnd() { return m_index >= m_fkp.m_crun; }
+        bool atEnd() const { return m_index >= m_fkp.m_crun; }
 
     private:
         // don't copy or assign it
@@ -696,7 +696,7 @@ namespace wvWare
         }
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear()
         {
@@ -771,7 +771,7 @@ namespace wvWare
         bool write( OLEStreamWriter* stream, bool preservePos = false ) const;
 
         /**
-         * Set all the fields to the inital value (default is 0)
+         * Set all the fields to the initial value (default is 0)
          */
         void clear();
 

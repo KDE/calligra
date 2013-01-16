@@ -21,6 +21,7 @@
 #define MSOOXMLDRAWINGTABLESTYLE_H
 
 #include <MsooXmlTableStyle.h>
+#include <KoTblStyle.h>
 
 /**
  * The idea behind these classes is the following:
@@ -79,13 +80,16 @@ public:
     DrawingTableStyle();
     virtual ~DrawingTableStyle();
 
-    ///the style takes ownership of the properties
+    //the style takes ownership of the properties
     void addProperties(Type type, TableStyleProperties* properties);
     TableStyleProperties* properties(Type type) const;
 
+    //Style of the whole table, not cell styles
+    KoTblStyle::Ptr mainStyle;
+
 private:
     QMap<Type, TableStyleProperties*> m_properties;
-    //TODO handle the table background stored in the element TblBg
+    //TODO: handle the table background stored in the element TblBg
 };
 
 class MSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleConverterProperties
@@ -122,10 +126,10 @@ public:
     DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
     virtual ~DrawingTableStyleConverter();
 
-    KoCellStyle::Ptr style(int row, int column);
+    KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans);
 
 private:
-    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column);
+    void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column, const QPair<int, int> &spans);
 
     DrawingTableStyle * const m_style;
     DrawingTableStyleConverterProperties const& m_properties;

@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=Start-Event-Multiple
-Name[et]=Sündmuse mitmikalgus
+Name[ca]=Inicia-Esdeveniment-Múltiple
+Name[ca@valencia]=Inicia-Esdeveniment-Múltiple
+Name[el]=Πολλαπλότητα-γεγονότος-εκκίνησης
+Name[es]=Evento inicial múltiple
+Name[et]=Mitmikalgussündmus
+Name[fr]=Multiplication de démarrage d'évènement
+Name[gl]=Evento inicial múltiple
+Name[hu]=Indítás-Esemény-Többszörös
+Name[it]=Evento-iniziale-Multiplo
+Name[kk]=Бастау-оқиға-тармақтау
+Name[nb]=Start-hendelse-flere
+Name[nl]=Begin-gebeurtenis-meervoudig
+Name[pl]=Mnożenie-Zdarzenia-Rozpoczynającego
 Name[pt]=Evento-Inicial-Múltiplo
 Name[pt_BR]=Evento inicial múltiplo
+Name[ru]=Начальное событие - составное
+Name[sk]=Start-Event-Multiple
 Name[sv]=Starthändelse-flera
 Name[uk]=Декілька початкових подій
 Name[x-test]=xxStart-Event-Multiplexx

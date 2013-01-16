@@ -20,6 +20,7 @@
 
 #include "kis_dlg_filter.h"
 
+#include <kguiitem.h>
 #include <KoCompositeOp.h>
 
 // From krita/image
@@ -36,11 +37,14 @@
 #include "kis_undo_adapter.h"
 #include "ui_wdgfilterdialog.h"
 #include <kis_config.h>
+#include <kis_canvas2.h>
+#include <kis_view2.h>
 
 struct KisFilterDialog::Private {
     Private()
             : currentFilter(0)
-            , mask(0) {
+            , mask(0)
+            , resizeCount(0) {
     }
 
     KisFilterSP currentFilter;
@@ -48,13 +52,13 @@ struct KisFilterDialog::Private {
     KisFilterMaskSP mask;
     KisNodeSP node;
     KisImageWSP image;
+    int resizeCount;
 };
 
 KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP image, KisSelectionSP selection) :
         QDialog(parent),
         d(new Private)
 {
-    QRect rc = node->extent();
     setModal(false);
 
     d->uiFilterDialog.setupUi(this);
@@ -75,14 +79,19 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     d->uiFilterDialog.pushButtonCreateMaskEffect->hide(); // TODO fixme, understand why the mask isn't created, and then remove that line
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
     d->uiFilterDialog.filterSelection->setImage(d->image);
+    d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
+    d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
 
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
-    connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
+    connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
 
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
     connect(this, SIGNAL(finished(int)), SLOT(close()));
+
+    KConfigGroup group(KGlobal::config(), "filterdialog");
+    d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -102,11 +111,14 @@ void KisFilterDialog::setFilter(KisFilterSP f)
 void KisFilterDialog::updatePreview()
 {
     if (!d->currentFilter) return;
-
-    d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
-    d->mask->setDirty();
+    
+    if(d->uiFilterDialog.checkBoxPreview->isChecked()) {
+        d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
+        d->mask->setDirty();
+        d->node->setDirty(d->node->extent());
+    }
+    
     d->uiFilterDialog.pushButtonOk->setEnabled(true);
-    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply"));
 }
 
 void KisFilterDialog::apply()
@@ -114,9 +126,11 @@ void KisFilterDialog::apply()
     if (!d->currentFilter) return;
 
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
+    if (d->node->inherits("KisLayer")) {
+        config->setChannelFlags(qobject_cast<KisLayer*>(d->node.data())->channelFlags());
+    }
     emit(sigPleaseApplyFilter(d->node, config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
-    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply Again"));
 }
 
 void KisFilterDialog::close()
@@ -141,6 +155,40 @@ void KisFilterDialog::createMask()
         accept();
     }
 }
+
+void KisFilterDialog::previewCheckBoxChange(int state)
+{
+    d->mask->setVisible(state == Qt::Checked);
+    updatePreview();
+    if (state != Qt::Checked) {
+        // update node to hide what remains from the filter mask
+        d->node->setDirty(d->node->extent());
+    }
+
+    KConfigGroup group(KGlobal::config(), "filterdialog");
+    group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
+    group.config()->sync();
+}
+
+void KisFilterDialog::resizeEvent(QResizeEvent* event)
+{
+    QDialog::resizeEvent(event);
+
+    // Workaround, after the initalisation don't center the dialog anymore
+    if(d->resizeCount < 2) {
+        KisView2* view = dynamic_cast<KisView2*>(parentWidget());
+        if(view) {
+            QWidget* canvas = dynamic_cast<KisView2*>(parentWidget())->canvas();
+            QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
+            int deltaX = (canvas->geometry().width() - geometry().width())/2;
+            int deltaY = (canvas->geometry().height() - geometry().height())/2;
+            rect.translate(deltaX, deltaY);
+            setGeometry(rect);
+        }
+        d->resizeCount++;
+    }
+}
+
 
 
 #include "kis_dlg_filter.moc"

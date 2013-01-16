@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=ckt-breaker
+Name[ca]=ckt-breaker
+Name[ca@valencia]=ckt-breaker
+Name[el]=ckt-breaker
+Name[es]=interruptor ckt
+Name[et]=Automaatkaitselüliti
+Name[fr]=ckt-breaker
+Name[gl]=Disxuntor
+Name[it]=ckt-breaker
+Name[kk]=авто-ажыратқыш
+Name[nb]=kretsbryter
+Name[nl]=circ-schakelaar
+Name[pl]=wyłącznik-ckt
 Name[pt]=quebra-circ
 Name[pt_BR]=quebra-circ
+Name[ru]=Автоматический выключатель
+Name[sk]=ckt-breaker
 Name[sv]=strömbrytare
 Name[uk]=Автоматичний вимикач
 Name[x-test]=xxckt-breakerxx
+Name[zh_TW]=ckt-breaker

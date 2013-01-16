@@ -73,25 +73,6 @@
         <dict>
             <key>CFBundleTypeExtensions</key>
             <array>
-                <string>ai</string>
-                <string>AI</string>
-            </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                <string>application/illustrator</string>
-            </array>
-            <key>CFBundleTypeOSTypes</key>
-            <array>
-                <string>PDF </string>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>Adobe Illustrator Document</string>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-        </dict>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
-            <array>
                 <string>eps</string>
             </array>
             <key>CFBundleTypeMIMETypes</key>

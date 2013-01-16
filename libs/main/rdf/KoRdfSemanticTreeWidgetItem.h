@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __rdf_KoRdfSemanticTreeWidgetItem_h__
-#define __rdf_KoRdfSemanticTreeWidgetItem_h__
+#ifndef RDF_KORDFSEMANTICTREEWIDGETITEM_H
+#define RDF_KORDFSEMANTICTREEWIDGETITEM_H
 
 #include "komain_export.h"
 #include "RdfForward.h"
@@ -64,7 +64,7 @@ public:
     /**
      * Get the underlying SemanticItem for this widget
      */
-    virtual KoRdfSemanticItem *semanticItem() const = 0;
+    virtual hKoRdfSemanticItem semanticItem() const = 0;
 
     virtual QList<KAction *> actions(QWidget *parent, KoCanvasBase *host = 0);
     virtual void insert(KoCanvasBase *host);

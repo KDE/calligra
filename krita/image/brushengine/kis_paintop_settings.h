@@ -118,28 +118,9 @@ public:
      * This enum defines the current mode for painting an outline.
      */
     enum OutlineMode {
-        CursorIsOutline = 1, ///< When this mode is set, then the outline is supposed to paint an outline around the cursor
-        CursorIsNotOutline = 2 ///< When this mode is set, then the outline is no supposed to paint an outline for the cursor (useful for instance in the duplicate op to show the source)
+        CursorIsOutline = 1, ///< When this mode is set, an outline is painted around the cursor
+        CursorIsNotOutline = 2 ///< Currently, this mode means that there is no outline active. It used to mean using of QImage-based outlines (e.g. for duplicate tool) but it was not implemented.
     };
-    /**
-     * @return the rectangle covered by the current brush (or the previous brush??? and what about pressure???)
-     * based on the given position, in XXX (image or view???) coordinates.
-     *
-     * XXX: the function name is very misleading, since this function doesn't do any painting! Rename
-     * to brushOutlineRect, and perhaps just return the brushSize and let the caller handle the x,y
-     * location. If one wants to use QImage, then one use something else
-     */
-    virtual QRectF paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const;
-
-    /**
-     * This function allow the paintop to draw an outline at a given position.
-     *
-     * XXX: It would be _much_ better to pass return a QImage, instead of pass a painter and
-     * a KoViewConverter (which is _not_ a class that that should be referenced in krita/image (we could make it return a KisPaintopOutlineDrawer whose implementation can be in krita/ui).
-     * And we need a lot of caching here, since no matter what we do, it is utterly slow, especially
-     * when using a tablet. How does XXX works with the duplicate op ? List of images ? With a center ?
-     */
-    virtual void paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const;
 
     /**
      * Returns the brush outline in pixel coordinates. Tool is responsible for conversion into view coordinates.
@@ -157,7 +138,7 @@ public:
      * The behaviour might be different per paintop. Most of the time
      * the brush diameter is increased by x pixels, y ignored
      *
-     * @param x is add to the the diameter or radius (according the paintop)
+     * @param x is add to the diameter or radius (according the paintop)
      *  It might be also negative, to decrease the value of the brush diameter/radius.
      *  x is in pixels
      * @param y is unused, it supposed to be used to change some different attribute
@@ -184,6 +165,14 @@ public:
     /// Overwrite if the settings of a paintop can be invalid
     /// @return state of the settings, default implementation is true
     virtual bool isValid();
+
+    /// Check if the settings are loadable, that might the case if we can fallback to something
+    /// Overwrite if the settings can do some kind of fallback
+    /// @return loadable state of the settings, by default implementation return the same as isValid()
+    virtual bool isLoadable();
+
+    void setCanvasRotation(qreal angle);
+    qreal canvasRotation() const;
 
 protected:
      /**

@@ -1,29 +1,30 @@
 include_directories(${KOTEXT_INCLUDES}
-                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig 
+                    ${FONTCONFIG_INCLUDE_DIR}/fontconfig
                     ${FREETYPE_INCLUDE_DIRS})
 
 add_subdirectory( tests )
 add_subdirectory( styles/tests )
-add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
-    KoTextShapeData.cpp
+    KoDocumentRdfBase.cpp
     KoText.cpp
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
     KoTextBlockPaintStrategyBase.cpp
-    KoTextDocumentLayout.cpp
     KoTextOdfSaveHelper.cpp
     KoTextPaste.cpp
     KoTextDocument.cpp
     KoTextEditor.cpp
+    KoTextEditor_undo.cpp
+    KoTextEditor_format.cpp
     KoList.cpp
 
     KoTextEditingRegistry.cpp
     KoTextEditingFactory.cpp
     KoTextEditingPlugin.cpp
 
+    KoTextRangeManager.cpp
     KoInlineTextObjectManager.cpp
     KoInlineObjectFactoryBase.cpp
     KoInlineObjectRegistry.cpp
@@ -33,17 +34,22 @@ set(kotext_LIB_SRCS
     InsertTextReferenceAction.cpp
     InsertTextLocator.cpp
     KoInlineObject.cpp
+    KoTextRange.cpp
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
+    KoSection.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoTextAnchor.cpp
-    KoTextShapeContainerModel.cpp
     KoTextShapeSavingContext.cpp
+    KoAnnotation.cpp
+    KoAnnotationManager.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
     KoInlineNote.cpp
+    KoInlineCite.cpp
+    KoTextSoftPageBreak.cpp
     FindDirection_p.cpp
     KoFindStrategy.cpp
     KoReplaceStrategy.cpp
@@ -55,8 +61,12 @@ set(kotext_LIB_SRCS
     KoTableColumnAndRowStyleManager.cpp
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
+    KoTextTableTemplate.cpp
 
+    ToCBibGeneratorInfo.cpp
     KoTableOfContentsGeneratorInfo.cpp
+    KoBibliographyInfo.cpp
+    BibliographyGenerator.cpp
 
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
@@ -65,17 +75,15 @@ set(kotext_LIB_SRCS
     styles/KoListStyle.cpp
     styles/KoListLevelProperties.cpp
     styles/ChangeFollower.cpp
-    styles/KoTableBorderStyle.cpp
     styles/KoTableStyle.cpp
     styles/KoTableColumnStyle.cpp
     styles/KoTableRowStyle.cpp
     styles/KoTableCellStyle.cpp
-    styles/KoTableFormat.cpp
-    styles/KoTableFormat_p.cpp
     styles/KoSectionStyle.cpp
     opendocument/KoTextSharedLoadingData.cpp
     opendocument/KoTextSharedSavingData.cpp
     opendocument/KoTextLoader.cpp
+    opendocument/KoTextWriter_p.cpp
     opendocument/KoTextWriter.cpp
 
     changetracker/KoChangeTracker.cpp
@@ -86,12 +94,29 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedRowData.cpp
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
-    KoTextDrag.cpp
 
-    commands/DeleteTableRowCommand.cpp
+    commands/ChangeAnchorPropertiesCommand.cpp
+    commands/ChangeListCommand.cpp
+    commands/ChangeStylesCommand.cpp
+    commands/ChangeStylesMacroCommand.cpp
+    commands/ChangeTrackedDeleteCommand.cpp
+    commands/DeleteAnchorsCommand.cpp
+    commands/DeleteCommand.cpp
     commands/DeleteTableColumnCommand.cpp
-    commands/InsertTableRowCommand.cpp
+    commands/DeleteTableRowCommand.cpp
+    commands/InsertDeleteChangesCommand.cpp
+    commands/InsertNoteCommand.cpp
     commands/InsertTableColumnCommand.cpp
+    commands/InsertTableRowCommand.cpp
+    commands/ResizeTableCommand.cpp
+    commands/InsertInlineObjectCommand.cpp
+    commands/ListItemNumberingCommand.cpp
+    commands/RemoveDeleteChangesCommand.cpp
+    commands/TextPasteCommand.cpp
+    commands/AddTextRangeCommand.cpp
+
+    KoTextDrag.cpp
+    KoTextCommandBase.cpp
 )
 
 if( Soprano_FOUND )
@@ -118,7 +143,7 @@ endif( FREETYPE_FOUND )
 
 
 set_target_properties(kotext PROPERTIES
-   VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+   VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -129,6 +154,7 @@ install( FILES texteditingplugin.desktop inlinetextobject.desktop textvariablepl
 install(
     FILES
     kotext_export.h
+    KoDocumentRdfBase.h
     KoInlineObject.h
     KoTextEditor.h
     KoTextEditingFactory.h
@@ -138,23 +164,28 @@ install(
     KoInlineObjectFactoryBase.h
     KoBookmark.h
     KoBookmarkManager.h
+    KoAnnotationManager.h
     KoInlineTextObjectManager.h
     KoTextAnchor.h
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
-    KoTextDocumentLayout.h
     KoText.h
+    KoTextRange.h
+    KoTextRangeManager.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h
     KoTextPaste.h
-    KoTextShapeData.h
     KoVariable.h
     KoVariableManager.h
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h
+    KoTextSoftPageBreak.cpp
+    KoSection.h
+    KoTextCommandBase.h
+    KoTextTableTemplate.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
@@ -169,10 +200,9 @@ install(
     styles/KoTableColumnStyle.h
     styles/KoTableRowStyle.h
     styles/KoTableCellStyle.h
-    styles/KoTableFormat.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
-    styles/KoTableBorderStyle.h
+    styles/KoTableStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )

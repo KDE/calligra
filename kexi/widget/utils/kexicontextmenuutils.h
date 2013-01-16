@@ -21,7 +21,7 @@
 #define KexiContextMenuUtils_H
 
 #include <kexi_global.h>
-#include <kexidb/queryschema.h>
+#include <db/queryschema.h>
 #include <KMenu>
 #include <KUrl>
 

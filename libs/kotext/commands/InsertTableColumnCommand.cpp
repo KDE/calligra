@@ -1,7 +1,7 @@
 /*
  This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2010-2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010-2011 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,8 +30,8 @@
 #include <kdebug.h>
 
 InsertTableColumnCommand::InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, int changeId,
-                                 QUndoCommand *parent) :
-    QUndoCommand (parent)
+                                 KUndo2Command *parent) :
+    KUndo2Command (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
@@ -39,9 +39,9 @@ InsertTableColumnCommand::InsertTableColumnCommand(KoTextEditor *te, QTextTable 
     ,m_changeId(changeId)
 {
     if(right) {
-        setText(i18n("Insert Column Right"));
+        setText(i18nc("(qtundo-format)", "Insert Column Right"));
     } else {
-        setText(i18n("Insert Column Left"));
+        setText(i18nc("(qtundo-format)", "Insert Column Left"));
     }
 }
 
@@ -51,7 +51,7 @@ void InsertTableColumnCommand::undo()
 
     carsManager.removeColumns(m_column, 1);
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }
 
 void InsertTableColumnCommand::redo()
@@ -59,7 +59,7 @@ void InsertTableColumnCommand::redo()
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     if (!m_first) {
         carsManager.insertColumns(m_column, 1, m_style);
-        QUndoCommand::redo();
+        KUndo2Command::redo();
     } else {
         m_first = false;
         QTextTableCell cell = m_table->cellAt(*m_textEditor->cursor());

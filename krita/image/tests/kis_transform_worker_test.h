@@ -19,7 +19,7 @@
 #ifndef KIS_TRANSFORM_WORKER_TEST_H
 #define KIS_TRANSFORM_WORKER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class KisTransformWorkerTest : public QObject
 {
@@ -41,7 +41,13 @@ private slots:
     void testXShear();
     void testYShear();
     void testRotation();
-
+    void testMatrices();
+    void testRotationSpecialCases();
+    void testScaleUp5times();
+    void rotateNone();
+    void rotate90Left();
+    void rotate90Right();
+    void rotate180();
 
 };
 

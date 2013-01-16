@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,9 +23,9 @@
 #ifndef KWFRAMESET_H
 #define KWFRAMESET_H
 
-#include "KWord.h"
+#include "Words.h"
 #include "KWFrame.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <QObject>
 
@@ -33,12 +36,12 @@
  * The FrameSet holds KWFrame objects that actually render the content this object
  * holds to the screen or to the printer.
  */
-class KWORD_EXPORT KWFrameSet : public QObject
+class WORDS_EXPORT KWFrameSet : public QObject
 {
     Q_OBJECT
 public:
     /// Constructor.
-    KWFrameSet(KWord::FrameSetType type = KWord::OtherFrameSet);
+    KWFrameSet(Words::FrameSetType type = Words::OtherFrameSet);
     virtual ~KWFrameSet();
 
     /**
@@ -52,7 +55,7 @@ public:
      * Remove a previously added Frame
      * @param frame the frame to remove
      * @param shape the shape of the frame
-     * You shouldn't use this method in most cases but the convinience version with only a single
+     * You shouldn't use this method in most cases but the convenience version with only a single
      * parameter
      */
     void removeFrame(KWFrame *frame, KoShape *shape);
@@ -94,14 +97,7 @@ public:
         return m_frames.count();
     }
 
-#ifndef NDEBUG
-    /// use kDebug calls to print internal info on this frameset
-    virtual void printDebug();
-    /// use kDebug calls to print internal info of the argument frame
-    virtual void printDebug(KWFrame *frame);
-#endif
-
-    KWord::FrameSetType type() const {
+    Words::FrameSetType type() const {
         return m_type;
     }
 
@@ -119,6 +115,7 @@ signals:
 
 protected:
     friend class KWFrame;
+
     /**
      * Called from addFrame.
      * Overwrite in inheriting classes to do something with the frame on add.
@@ -128,11 +125,12 @@ protected:
         Q_UNUSED(frame);
     }
 
+private:
     /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;
-    KWord::FrameSetType m_type;
-
-private:
+    /// The type of the frameset.
+    Words::FrameSetType m_type;
+    /// The name of the frameset.
     QString m_name;
 };
 

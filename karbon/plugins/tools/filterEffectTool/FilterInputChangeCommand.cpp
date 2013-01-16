@@ -21,14 +21,14 @@
 #include "KoFilterEffect.h"
 #include "KoShape.h"
 
-FilterInputChangeCommand::FilterInputChangeCommand(const InputChangeData &data, KoShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent), m_shape(shape)
+FilterInputChangeCommand::FilterInputChangeCommand(const InputChangeData &data, KoShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent), m_shape(shape)
 {
     m_data.append(data);
 }
 
-FilterInputChangeCommand::FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape, QUndoCommand *parent)
-        : QUndoCommand(parent), m_shape(shape)
+FilterInputChangeCommand::FilterInputChangeCommand(const QList<InputChangeData> &data, KoShape *shape, KUndo2Command *parent)
+        : KUndo2Command(parent), m_shape(shape)
 {
     m_data = data;
 }
@@ -45,7 +45,7 @@ void FilterInputChangeCommand::redo()
     if (m_shape)
         m_shape->update();
 
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void FilterInputChangeCommand::undo()
@@ -60,5 +60,5 @@ void FilterInputChangeCommand::undo()
     if (m_shape)
         m_shape->update();
 
-    QUndoCommand::undo();
+    KUndo2Command::undo();
 }

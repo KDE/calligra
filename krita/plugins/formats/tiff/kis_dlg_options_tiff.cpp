@@ -20,13 +20,17 @@
 #include "kis_dlg_options_tiff.h"
 
 #include <QCheckBox>
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <QSlider>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 
 #include <kapplication.h>
 #include <kcombobox.h>
 #include <klocale.h>
+
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
+
 
 #include "ui_kis_wdg_options_tiff.h"
 
@@ -43,6 +47,21 @@ KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
     setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+
+    QString filterConfig = KisConfig().exportConfiguration("TIFF");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+
+    optionswdg->kComboBoxCompressionType->setCurrentIndex(cfg.getInt("compressiontype", 0));
+    activated(optionswdg->kComboBoxCompressionType->currentIndex());
+    optionswdg->kComboBoxPredictor->setCurrentIndex(cfg.getInt("predictor", 0));
+    optionswdg->alpha->setChecked(cfg.getBool("alpha", true));
+    optionswdg->flatten->setChecked(cfg.getBool("flatten", true));
+    flattenToggled(optionswdg->flatten->isChecked());
+    optionswdg->qualityLevel->setValue(cfg.getInt("quality", 80));
+    optionswdg->compressionLevelDeflate->setValue(cfg.getInt("deflate", 6));
+    optionswdg->kComboBoxFaxMode->setCurrentIndex(cfg.getInt("faxmode", 0));
+    optionswdg->compressionLevelPixarLog->setValue(cfg.getInt("pixarlog", 6));
 }
 
 KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
@@ -58,23 +77,23 @@ void KisDlgOptionsTIFF::activated(int index)
         optionswdg->groupBoxPixarLog->hide();*/
     switch (index) {
     case 1:
-        optionswdg->codecsOptionsStack->raiseWidget(1);
+        optionswdg->codecsOptionsStack->setCurrentIndex(1);
 //             optionswdg->groupBoxJPEG->show();
         break;
     case 2:
-        optionswdg->codecsOptionsStack->raiseWidget(2);
+        optionswdg->codecsOptionsStack->setCurrentIndex(2);
 //             optionswdg->groupBoxDeflate->show();
         break;
     case 6:
-        optionswdg->codecsOptionsStack->raiseWidget(3);
+        optionswdg->codecsOptionsStack->setCurrentIndex(3);
 //             optionswdg->groupBoxCCITGroupCCITG3->show();
         break;
     case 8:
-        optionswdg->codecsOptionsStack->raiseWidget(4);
+        optionswdg->codecsOptionsStack->setCurrentIndex(4);
 //             optionswdg->groupBoxPixarLog->show();
         break;
     default:
-        optionswdg->codecsOptionsStack->raiseWidget(0);
+        optionswdg->codecsOptionsStack->setCurrentIndex(0);
     }
 }
 
@@ -128,6 +147,20 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
     options.deflateCompress = optionswdg->compressionLevelDeflate->value();
     options.faxMode = optionswdg->kComboBoxFaxMode->currentIndex() + 1;
     options.pixarLogCompress = optionswdg->compressionLevelPixarLog->value();
+
+    qDebug() << options.compressionType << options.predictor << options.alpha << options.jpegQuality << options.deflateCompress << options.faxMode << options.pixarLogCompress;
+
+    KisPropertiesConfiguration cfg;
+    cfg.setProperty("compressiontype", optionswdg->kComboBoxCompressionType->currentIndex());
+    cfg.setProperty("predictor", options.predictor - 1);
+    cfg.setProperty("alpha", options.alpha);
+    cfg.setProperty("flatten", options.flatten);
+    cfg.setProperty("quality", options.jpegQuality);
+    cfg.setProperty("deflate", options.deflateCompress);
+    cfg.setProperty("faxmode", options.faxMode - 1);
+    cfg.setProperty("pixarlog", options.pixarLogCompress);
+
+    KisConfig().setExportConfiguration("TIFF", cfg);
 
     return options;
 }

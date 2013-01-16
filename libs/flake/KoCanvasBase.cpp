@@ -19,13 +19,15 @@
 */
 
 #include "KoCanvasBase.h"
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 #include "KoShapeController.h"
 #include "KoCanvasController.h"
 #include "KoViewConverter.h"
 #include "KoSnapGuide.h"
 #include "SnapGuideConfigWidget.h"
-
+#include "KoShapeManager.h"
+#include "KoToolProxy.h"
+#include "KoSelection.h"
 #include <KGlobal>
 #include <KConfigGroup>
 #include <KSharedPtr>
@@ -47,16 +49,16 @@ public:
         delete snapGuide;
     }
     KoShapeController *shapeController;
-    KoResourceManager *resourceManager;
+    KoCanvasResourceManager *resourceManager;
     KoCanvasController *controller;
     KoSnapGuide *snapGuide;
 };
 
-KoCanvasBase::KoCanvasBase(KoShapeControllerBase *shapeControllerBase)
+KoCanvasBase::KoCanvasBase(KoShapeBasedDocumentBase *shapeBasedDocument)
         : d(new Private())
 {
-    d->resourceManager = new KoResourceManager();
-    d->shapeController = new KoShapeController(this, shapeControllerBase);
+    d->resourceManager = new KoCanvasResourceManager();
+    d->shapeController = new KoShapeController(this, shapeBasedDocument);
     d->snapGuide = new KoSnapGuide(this);
 }
 
@@ -65,13 +67,26 @@ KoCanvasBase::~KoCanvasBase()
     delete d;
 }
 
+QPointF KoCanvasBase::viewToDocument(const QPointF &viewPoint) const
+{
+    return viewConverter()->viewToDocument(viewPoint - documentOrigin());;
+}
 
 KoShapeController *KoCanvasBase::shapeController() const
 {
     return d->shapeController;
 }
 
-KoResourceManager *KoCanvasBase::resourceManager() const
+void KoCanvasBase::disconnectCanvasObserver(QObject *object)
+{
+    shapeManager()->selection()->disconnect(object);
+    resourceManager()->disconnect(object);
+    shapeManager()->disconnect(object);
+    toolProxy()->disconnect(object);
+}
+
+
+KoCanvasResourceManager *KoCanvasBase::resourceManager() const
 {
     return d->resourceManager;
 }

@@ -82,6 +82,12 @@ public:
 
     virtual ~KisMask();
 
+    /**
+     * @brief initSelection initializes the selection for the mask from
+     *   the given selection's projection.
+     * @param copyFrom the selection we base the mask on
+     * @param parentLayer the parent of this mask; it determines the default bounds of the mask.
+     */
     void initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer);
 
     const KoColorSpace * colorSpace() const;
@@ -135,12 +141,11 @@ public:
      */
     void setY(qint32 y);
 
-    void setDirty(const QRect & rect);
-    using KisNode::setDirty;
-
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
     QImage createThumbnail(qint32 w, qint32 h);
+
+    void testingInitSelection(const QRect &rect);
 
 protected:
     /**

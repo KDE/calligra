@@ -34,13 +34,14 @@ class KoTextReference;
  */
 class KOTEXT_EXPORT KoTextLocator : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /// constructor
     KoTextLocator();
     virtual ~KoTextLocator();
 
     /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented from super
     virtual void resize(const QTextDocument *document, QTextInlineObject object,

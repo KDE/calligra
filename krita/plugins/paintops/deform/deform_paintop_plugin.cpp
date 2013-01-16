@@ -18,7 +18,6 @@
 
 #include "deform_paintop_plugin.h"
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -37,7 +36,6 @@ K_EXPORT_PLUGIN(DeformPaintOpPluginFactory("krita"))
 DeformPaintOpPlugin::DeformPaintOpPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(DeformPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
     r->add(new KisDeformPaintOpFactory);
 

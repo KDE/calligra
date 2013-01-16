@@ -32,7 +32,7 @@ class KoStore;
 class KisShapeSelectionCanvas;
 class KisShapeSelectionModel;
 class KisImageViewConverter;
-class QUndoCommand;
+class KUndo2Command;
 
 /**
  * The marker class.
@@ -66,28 +66,28 @@ public:
      *
      * @param projection the target selection
      */
-    virtual void renderToProjection(KisSelection* projection);
-    virtual void renderToProjection(KisSelection* projection, const QRect& r);
+    virtual void renderToProjection(KisPaintDeviceSP projection);
+    virtual void renderToProjection(KisPaintDeviceSP projection, const QRect& r);
 
     virtual void setDirty();
 
     virtual QPainterPath selectionOutline();
 
     KoShapeManager *shapeManager() const;
-    
+
     void moveX(qint32 x);
     void moveY(qint32 y);
-    
-    QUndoCommand* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
-        
+
+    KUndo2Command* transform(const QTransform &transform);
+
 
 protected:
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
+    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
 
 private:
 
-    void renderSelection(KisSelection* projection, const QRect& r);
+    void renderSelection(KisPaintDeviceSP projection, const QRect& r);
 
     KisImageWSP m_image;
     QPainterPath m_outline;
@@ -107,7 +107,7 @@ public:
     KisShapeSelectionFactory();
     ~KisShapeSelectionFactory() {}
 
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const {
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const {
         Q_UNUSED(documentResources);
         return 0;
     }

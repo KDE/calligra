@@ -21,11 +21,13 @@
 #define _STATE_SHAPE_PLUGIN_
 
 #include <QObject>
- 
-class StateShapePlugin : public QObject {
+#include <QVariant>
+
+class StateShapePlugin : public QObject
+{
     Q_OBJECT
 public:
-    StateShapePlugin(QObject *parent, const QStringList&);
+    StateShapePlugin(QObject *parent, const QVariantList&);
 };
 
 #endif

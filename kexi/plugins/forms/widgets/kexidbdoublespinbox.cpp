@@ -20,7 +20,7 @@
 
 #include "kexidbdoublespinbox.h"
 
-#include <qlineedit.h>
+#include <QLineEdit>
 
 KexiDBDoubleSpinBox::KexiDBDoubleSpinBox(QWidget *parent)
         : KDoubleSpinBox(parent) , KexiFormDataItemInterface()

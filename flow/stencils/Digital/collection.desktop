@@ -1,11 +1,27 @@
 [Desktop Entry]
 Name=Digital
+Name[ca]=Digital
+Name[ca@valencia]=Digital
+Name[cs]=Digital
+Name[de]=Digital
+Name[el]=Ψηφιακό
 Name[es]=Digital
 Name[et]=Digitaal
+Name[fr]=Numérique
+Name[gl]=Dixital
+Name[hu]=Digitális
+Name[it]=Digitale
+Name[kk]=Цифрлық
+Name[nb]=Digital
+Name[nl]=Digitaal
+Name[pl]=Cyfrowy
 Name[pt]=Digital
 Name[pt_BR]=Digital
+Name[ru]=Цифровой
+Name[sk]=Digitálne
 Name[sv]=Digitalt
 Name[uk]=Обробка цифрових даних
 Name[x-test]=xxDigitalxx
 Name[zh_CN]=数字
+Name[zh_TW]=數位
 X-KDE-DirType=odg-collection

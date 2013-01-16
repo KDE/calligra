@@ -24,12 +24,10 @@
 
 class LcmsEnginePlugin : public QObject
 {
-
     Q_OBJECT
-
 public:
-
     LcmsEnginePlugin(QObject *parent, const QVariantList &);
+
 };
 
 #endif // KO_LCMS_ENGINE_PLUGIN_H

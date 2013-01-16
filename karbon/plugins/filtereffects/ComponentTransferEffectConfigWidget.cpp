@@ -25,11 +25,11 @@
 #include <KLineEdit>
 #include <KLocale>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QRadioButton>
-#include <QtGui/QButtonGroup>
+#include <QGridLayout>
+#include <QLabel>
+#include <QStackedWidget>
+#include <QRadioButton>
+#include <QButtonGroup>
 
 const qreal ValueStep = 0.1;
 

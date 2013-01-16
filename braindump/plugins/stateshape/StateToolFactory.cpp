@@ -21,25 +21,25 @@
 #include "StateTool.h"
 #include "StateShape.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
-StateToolFactory::StateToolFactory( )
-    : KoToolFactoryBase( "StateToolFactoryID")
+StateToolFactory::StateToolFactory()
+    : KoToolFactoryBase("StateToolFactoryID")
 {
-    setToolTip( i18n("State Tool") );
-    setToolType( dynamicToolType() );
-    setIcon ("statetool");
-    setPriority( 1 );
-    setActivationShapeId( STATESHAPEID );
+    setToolTip(i18n("State Tool"));
+    setToolType(dynamicToolType());
+    setIconName(koIconNameCStr("statetool"));
+    setPriority(1);
+    setActivationShapeId(STATESHAPEID);
 }
 
 StateToolFactory::~StateToolFactory()
 {
 }
 
-KoToolBase* StateToolFactory::createTool( KoCanvasBase * canvas )
+KoToolBase* StateToolFactory::createTool(KoCanvasBase * canvas)
 {
-    return new StateTool( canvas );
+    return new StateTool(canvas);
 }
 
-#include "StateToolFactory.moc"

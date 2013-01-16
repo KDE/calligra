@@ -35,7 +35,7 @@ class QDomElement;
 class QString;
 class KoStore;
 class KoViewConverter;
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 
 const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 /**
@@ -55,17 +55,19 @@ class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLaye
 
 public:
 
-    KisShapeLayer(KoShapeContainer * parent, KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
+    KisShapeLayer(KoShapeContainer * parent, KoShapeBasedDocumentBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
     virtual ~KisShapeLayer();
 private:
-    void initShapeLayer(KoShapeControllerBase* controller);
+    void initShapeLayer(KoShapeBasedDocumentBase* controller);
 public:
     KisNodeSP clone() const {
         return new KisShapeLayer(*this);
     }
     bool allowAsChild(KisNodeSP) const;
 
+
+    virtual void setImage(KisImageWSP image);
 public:
 
     // KoShape overrides
@@ -75,6 +77,7 @@ public:
 
     // KisExternalLayer implementation
     QIcon icon() const;
+    void resetCache();
 
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
@@ -85,14 +88,15 @@ public:
     void setY(qint32);
 
     bool accept(KisNodeVisitor&);
+    void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter);
 
     KoShapeManager *shapeManager() const;
 
     bool saveLayer(KoStore * store) const;
     bool loadLayer(KoStore* store);
 
-    QUndoCommand* crop(const QRect & rect);
-    QUndoCommand* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
+    KUndo2Command* crop(const QRect & rect);
+    KUndo2Command* transform(const QTransform &transform);
 
     bool visible(bool recursive = false) const;
     void setVisible(bool visible);
@@ -103,14 +107,31 @@ protected:
     friend class ShapeLayerContainerModel;
     KoViewConverter* converter() const;
 
-public slots:
+signals:
+    /**
+     * These signals are forwarded from the local shape manager
+     * This is done because we switch KoShapeManager and therefore
+     * KoSelection in KisCanvas2, so we need to connect local managers
+     * to the UI as well.
+     *
+     * \see comment in the constructor of KisCanvas2
+     */
     void selectionChanged();
+    void currentLayerChanged(const KoShapeLayer *layer);
 
 signals:
-    void selectionChanged(QList<KoShape*> shape);
+    /**
+     * A signal + slot to synchronize UI and image
+     * threads. Image thread emits the signal, UI
+     * thread performes the action
+     */
+    void sigMoveShapes(const QPointF &diff);
+
+private slots:
+    void slotMoveShapes(const QPointF &diff);
 
 private:
-    class Private;
+    struct Private;
     Private * const m_d;
 };
 

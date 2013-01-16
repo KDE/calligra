@@ -29,7 +29,6 @@
 #include <QPoint>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -42,7 +41,7 @@
 #include <kis_global.h>
 #include <kis_types.h>
 #include <kis_view2.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_image_manager.h>
 
 
@@ -56,8 +55,6 @@ ShearImage::ShearImage(QObject *parent, const QVariantList &)
         : KParts::Plugin(parent)
 {
     if (parent->inherits("KisView2")) {
-        setComponentData(ShearImageFactory::componentData());
-
         setXMLFile(KStandardDirs::locate("data", "kritaplugins/shearimage.rc"),
                    true);
 
@@ -111,7 +108,7 @@ void ShearImage::slotShearLayer()
     if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();
         qint32 angleY = dlgShearImage->angleY();
-        m_view->layerManager()->shearLayer(angleX, angleY);
+        m_view->nodeManager()->shear(angleX, angleY);
 
     }
     delete dlgShearImage;

@@ -37,20 +37,22 @@
 class KisTransactionData::Private
 {
 public:
-    QString name;
     KisPaintDeviceSP device;
     KisMementoSP memento;
     bool firstRedo;
     bool transactionFinished;
+    QPoint oldOffset;
+    QPoint newOffset;
 };
 
-KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP device, QUndoCommand* parent)
-        : QUndoCommand(name, parent)
+KisTransactionData::KisTransactionData(const QString& name, KisPaintDeviceSP device, KUndo2Command* parent)
+        : KUndo2Command(name, parent)
         , m_d(new Private())
 {
     m_d->device = device;
     DEBUG_ACTION("Transaction started");
     m_d->memento = device->dataManager()->getMemento();
+    m_d->oldOffset = QPoint(device->x(), device->y());
     m_d->firstRedo = true;
     m_d->transactionFinished = false;
 }
@@ -69,12 +71,31 @@ void KisTransactionData::endTransaction()
         DEBUG_ACTION("Transaction ended");
         m_d->transactionFinished = true;
         m_d->device->dataManager()->commit();
+        m_d->newOffset = QPoint(m_d->device->x(), m_d->device->y());
     }
+}
+
+void KisTransactionData::startUpdates()
+{
+    QRect rc;
+    QRect mementoExtent = m_d->memento->extent();
+
+    if (m_d->newOffset == m_d->oldOffset) {
+        rc = mementoExtent.translated(m_d->device->x(), m_d->device->y());
+    } else {
+        QRect totalExtent =
+            m_d->device->dataManager()->extent() | mementoExtent;
+
+        rc = totalExtent.translated(m_d->oldOffset) |
+            totalExtent.translated(m_d->newOffset);
+    }
+
+    m_d->device->setDirty(rc);
 }
 
 void KisTransactionData::redo()
 {
-    //QUndoStack calls redo(), so the first call needs to be blocked
+    //KUndo2QStack calls redo(), so the first call needs to be blocked
     if (m_d->firstRedo) {
         m_d->firstRedo = false;
         return;
@@ -85,12 +106,11 @@ void KisTransactionData::redo()
     Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollforward(m_d->memento);
 
-    QRect rc;
-    qint32 x, y, width, height;
-    m_d->memento->extent(x, y, width, height);
-    rc.setRect(x + m_d->device->x(), y + m_d->device->y(), width, height);
+    if (m_d->newOffset != m_d->oldOffset) {
+        m_d->device->move(m_d->newOffset);
+    }
 
-    m_d->device->setDirty(rc);
+    startUpdates();
 }
 
 void KisTransactionData::undo()
@@ -100,12 +120,11 @@ void KisTransactionData::undo()
     Q_ASSERT(m_d->memento);
     m_d->device->dataManager()->rollback(m_d->memento);
 
-    QRect rc;
-    qint32 x, y, width, height;
-    m_d->memento->extent(x, y, width, height);
-    rc.setRect(x + m_d->device->x(), y + m_d->device->y(), width, height);
+    if (m_d->newOffset != m_d->oldOffset) {
+        m_d->device->move(m_d->oldOffset);
+    }
 
-    m_d->device->setDirty(rc);
+    startUpdates();
 }
 
 void KisTransactionData::undoNoUpdate()

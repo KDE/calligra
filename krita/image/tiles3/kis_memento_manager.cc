@@ -169,10 +169,17 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 void KisMementoManager::commit()
 {
     if (m_index.isEmpty()) {
-        if(namedTransactionInProgress())
-            warnTiles << "Named Transaction is empty";
-        m_currentMemento = 0;
-        return;
+        if(namedTransactionInProgress()) {
+            //warnTiles << "Named Transaction is empty";
+            /**
+             * We still need to continue commit, because
+             * a named transaction may be reverted by the user
+             */
+        }
+        else {
+            m_currentMemento = 0;
+            return;
+        }
     }
 
     KisMementoItemList revisionList;
@@ -238,6 +245,10 @@ KisMementoSP KisMementoManager::getMemento()
 
     DEBUG_LOG_SIMPLE_ACTION("GET_MEMENTO_DONE");
 
+    return m_currentMemento;
+}
+
+KisMementoSP KisMementoManager::currentMemento() {
     return m_currentMemento;
 }
 
@@ -325,8 +336,7 @@ void KisMementoManager::rollforward(KisTileHashTable *ht)
 void KisMementoManager::purgeHistory(KisMementoSP oldestMemento)
 {
     if (m_currentMemento == oldestMemento) {
-        resetIndex();
-        oldestMemento = m_revisions.size() ? m_revisions.last().memento : 0;
+        commit();
     }
 
     qint32 revisionIndex = findRevisionByMemento(oldestMemento);
@@ -355,12 +365,6 @@ qint32 KisMementoManager::findRevisionByMemento(KisMementoSP memento) const
     return index;
 }
 
-void KisMementoManager::resetIndex()
-{
-    m_index.clear();
-    m_currentMemento = 0;
-}
-
 void KisMementoManager::resetRevisionHistory(KisMementoItemList list)
 {
     KisMementoItemSP parentMI;
@@ -387,7 +391,6 @@ void KisMementoManager::debugPrintInfo()
 {
     printf("KisMementoManager stats:\n");
     printf("Index list\n");
-    KisHistoryItem changeList;
     KisMementoItemSP mi;
     KisMementoItemHashTableIterator iter(&m_index);
 
@@ -398,7 +401,7 @@ void KisMementoManager::debugPrintInfo()
 
     printf("Revisions list:\n");
     qint32 i = 0;
-    foreach(changeList, m_revisions) {
+    foreach(const KisHistoryItem &changeList, m_revisions) {
         printf("--- revision #%d ---\n", i++);
         foreach(mi, changeList.itemList) {
             mi->debugPrintInfo();
@@ -407,7 +410,7 @@ void KisMementoManager::debugPrintInfo()
 
     printf("\nCancelled revisions list:\n");
     i = 0;
-    foreach(changeList, m_cancelledRevisions) {
+    foreach(const KisHistoryItem &changeList, m_cancelledRevisions) {
         printf("--- revision #%d ---\n", m_revisions.size() + i++);
         foreach(mi, changeList.itemList) {
             mi->debugPrintInfo();

@@ -21,15 +21,14 @@
 #include <QApplication>
 
 #include <qtest_kde.h>
+#include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>
 
-#include "kis_iterators_pixel.h"
-#include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include "kis_random_sub_accessor.h"
-
 
 #include "kis_paint_device.h"
 #include <kis_iterator_ng.h>
@@ -48,6 +47,19 @@ void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const Ko
     }
 }
 
+inline quint8* allocatePixels(const KoColorSpace *colorSpace, int numPixels)
+{
+    quint8 *bytes = colorSpace->allocPixelBuffer(64 * 64 * 10);
+
+    KoColor color(Qt::red, colorSpace);
+    const int pixelSize = colorSpace->pixelSize();
+    for(int i = 0; i < numPixels; i++) {
+        memcpy(bytes + i * pixelSize, color.data(), pixelSize);
+    }
+
+    return bytes;
+}
+
 void KisIteratorTest::writeBytes(const KoColorSpace * colorSpace)
 {
 
@@ -59,8 +71,7 @@ void KisIteratorTest::writeBytes(const KoColorSpace * colorSpace)
     // Check allocation on tile boundaries
 
     // Allocate memory for a 2 * 5 tiles grid
-    quint8* bytes = colorSpace->allocPixelBuffer(64 * 64 * 10);
-    memset(bytes, 128, 64 * 64 * 10 * colorSpace->pixelSize());
+    quint8* bytes = allocatePixels(colorSpace, 64 * 64 * 10);
 
     // Covers 5 x 2 tiles
     dev.writeBytes(bytes, 0, 0, 5 * 64, 2 * 64);
@@ -96,8 +107,7 @@ void KisIteratorTest::fill(const KoColorSpace * colorSpace)
 
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
 
-    quint8 * bytes = colorSpace->allocPixelBuffer(1);
-    memset(bytes, 128, colorSpace->pixelSize());
+    quint8 * bytes = allocatePixels(colorSpace, 1);
 
     dev.fill(0, 0, 5, 5, bytes);
     QCOMPARE(dev.extent(), QRect(0, 0, 64, 64));
@@ -126,8 +136,7 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
 
     KisPaintDevice dev(colorSpace);
 
-    quint8 * bytes = colorSpace->allocPixelBuffer(1);
-    memset(bytes, 128, colorSpace->pixelSize());
+    quint8 * bytes = allocatePixels(colorSpace, 1);
 
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
 
@@ -166,6 +175,10 @@ void KisIteratorTest::rectIter(const KoColorSpace * colorSpace)
     } while (it->nextPixel());
     QCOMPARE(dev.extent(), QRect(10, -15, 128, 192));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 128));
+    
+    it = dev.createRectIteratorNG(10, 10, 128, 128);
+    QCOMPARE(it->rawData(), it->oldRawData());
+    
 
     delete[] bytes;
 }
@@ -174,8 +187,7 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
 {
     KisPaintDevice dev(colorSpace);
 
-    quint8 * bytes = colorSpace->allocPixelBuffer(1);
-    memset(bytes, 128, colorSpace->pixelSize());
+    quint8 * bytes = allocatePixels(colorSpace, 1);
 
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
 
@@ -225,7 +237,11 @@ void KisIteratorTest::hLineIter(const KoColorSpace * colorSpace)
 
     QCOMPARE(dev.extent(), QRect(10, -15, 128, 64));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 128, 1));
-
+    
+    it = dev.createHLineIteratorNG(10, 10, 128);
+    it->nextRow();
+    QCOMPARE(it->rawData(), it->oldRawData());
+    
     delete[] bytes;
 }
 
@@ -242,8 +258,7 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
 {
 
     KisPaintDevice dev(colorSpace);
-    quint8 * bytes = colorSpace->allocPixelBuffer(1);
-    memset(bytes, 128, colorSpace->pixelSize());
+    quint8 * bytes = allocatePixels(colorSpace, 1);
 
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
 
@@ -284,6 +299,10 @@ void KisIteratorTest::vLineIter(const KoColorSpace * colorSpace)
     QCOMPARE(dev.extent(), QRect(10, -15, 64, 192));
     QCOMPARE(dev.exactBounds(), QRect(10, 10, 1, 128));
 
+    it = dev.createVLineIteratorNG(10, 10, 128);
+    it->nextColumn();
+    QCOMPARE(it->rawData(), it->oldRawData());
+    
     delete[] bytes;
 
 }
@@ -292,8 +311,7 @@ void KisIteratorTest::randomAccessor(const KoColorSpace * colorSpace)
 {
 
     KisPaintDevice dev(colorSpace);
-    quint8 * bytes = colorSpace->allocPixelBuffer(1);
-    memset(bytes, 128, colorSpace->pixelSize());
+    quint8 * bytes = allocatePixels(colorSpace, 1);
 
     QCOMPARE(dev.extent(), QRect(qint32_MAX, qint32_MAX, 0, 0));
 

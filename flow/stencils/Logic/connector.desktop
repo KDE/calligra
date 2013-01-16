@@ -1,10 +1,26 @@
 [Desktop Entry]
 Name=Connector
+Name[ca]=Connector
+Name[ca@valencia]=Connector
+Name[cs]=Konektor
+Name[el]=Υποδοχή
 Name[es]=Conector
+Name[et]=Ühendus
+Name[fr]=Connecteur
+Name[gl]=Conectador
+Name[hu]=Csatlakozó
+Name[it]=Connettore
+Name[kk]=Түйістіргіш
+Name[nb]=Tilkobling
 Name[nl]=Connector
+Name[pl]=Łącznik
 Name[pt]=Ligação
 Name[pt_BR]=Conector
+Name[ru]=Коннектор
+Name[sk]=Konektor
 Name[sv]=Kontakt
+Name[ug]=ئۇلىغۇچ
 Name[uk]=З'єднувач
 Name[x-test]=xxConnectorxx
 Name[zh_CN]=连接器
+Name[zh_TW]=連接器

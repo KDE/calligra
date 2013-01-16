@@ -28,13 +28,11 @@
 #include <kis_transaction.h>
 #include <filter/kis_filter_configuration.h>
 #include <commands/kis_node_commands.h>
-#include "dialogs/kis_dlg_transformation_effect.h"
 #include <kis_undo_adapter.h>
 #include <kis_paint_layer.h>
 #include "kis_doc2.h"
 #include "kis_view2.h"
 #include <kis_layer.h>
-#include <kis_transformation_mask.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
@@ -51,7 +49,7 @@
 #include <KoColor.h>
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_selection_commands.h"
-
+#include "kis_iterator_ng.h"
 
 KisMaskManager::KisMaskManager(KisView2 * view)
         : m_view(view)
@@ -127,26 +125,23 @@ void KisMaskManager::createFilterMask()
     }
 }
 
-void KisMaskManager::createTransformationMask()
+void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
 {
-    KisLayerSP layer = m_view->activeLayer();
+    KisLayerSP parentLayer = dynamic_cast<KisLayer*>(parent.data());
+    if (!parentLayer) return;
 
-    if (layer) {
-        KisNodeSP above = m_activeMask ?
-                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
-        createTransformationMask(layer, above);
-    }
-}
+    KisSelectionMaskSP mask = new KisSelectionMask(m_view->image());
+    mask->initSelection(m_view->selection(), parentLayer);
 
-void KisMaskManager::createSelectionmask()
-{
-    KisLayerSP layer = m_view->activeLayer();
+    //counting number of KisSelectionMask
+    QList<KisNodeSP> selectionMasks = parentLayer->childNodes(QStringList("KisSelectionMask"),KoProperties());
+    mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
+    m_commandsAdapter->addNode(mask, parentLayer, above);
 
-    if (layer) {
-        KisNodeSP above = m_activeMask ?
-                          static_cast<KisNode*>(m_activeMask.data()) : static_cast<KisNode*>(layer->firstChild().data());
-        createSelectionMask(layer, above);
-    }
+    mask->setActive(true);
+
+    activateMask(mask);
+    masksUpdated();
 }
 
 void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
@@ -161,12 +156,6 @@ void KisMaskManager::createTransparencyMask(KisNodeSP parent, KisNodeSP above)
 
     activateMask(mask);
     masksUpdated();
-}
-
-void KisMaskManager::addEffectMask(KisNodeSP parent, KisEffectMaskSP mask)
-{
-    m_commandsAdapter->addNode(mask, parent, 02110);
-    activateMask(mask);
 }
 
 void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
@@ -192,78 +181,25 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
 
     if (dialog.exec() == QDialog::Accepted) {
         KisFilterConfiguration *filter = dialog.filterConfiguration();
-        QString name = dialog.layerName();
-        mask->setFilter(filter);
-        activateMask(mask);
+        if (filter) {
+            QString name = dialog.layerName();
+            mask->setFilter(filter);
+            mask->setName(name);
+            activateMask(mask);
+        }
     } else {
         m_commandsAdapter->undoLastCommand();
     }
     masksUpdated();
 }
 
-void KisMaskManager::createTransformationMask(KisNodeSP parent, KisNodeSP above)
-{
-    KisDlgTransformationEffect dlg(QString(), 1.0, 1.0, 0.0, 0.0, 0.0, 0, 0, KoID("Mitchell"), m_view);
-    if (dlg.exec() == QDialog::Accepted) {
-        /**
-         * FIXME: Add preview feature
-         */
-
-        KisLayer *layer = dynamic_cast<KisLayer*>(parent.data());
-        KisTransformationMask * mask = new KisTransformationMask();
-        mask->initSelection(m_view->selection(), layer);
-
-        mask->setName(dlg.transformationEffect()->maskName());
-        mask->setXScale(dlg.transformationEffect()->xScale());
-        mask->setYScale(dlg.transformationEffect()->yScale());
-        mask->setXShear(dlg.transformationEffect()->xShear());
-        mask->setYShear(dlg.transformationEffect()->yShear());
-        mask->setRotation(dlg.transformationEffect()->rotation());
-        mask->setXTranslation(dlg.transformationEffect()->moveX());
-        mask->setYTranslation(dlg.transformationEffect()->moveY());
-        mask->setFilterStrategy(dlg.transformationEffect()->filterStrategy());
-        m_commandsAdapter->addNode(mask, parent, above);
-
-        // is this line really needed?
-        //mask->setDirty(selection->selectedExactRect());
-
-        activateMask(mask);
-        masksUpdated();
-    }
-
-}
-
-void KisMaskManager::createSelectionMask(KisNodeSP parent, KisNodeSP above)
-{
-    KisLayer * layer = dynamic_cast<KisLayer*>(parent.data());
-    if (layer && layer->selectionMask())
-        layer->selectionMask()->setActive(false);
-
-    KisSelectionMask *mask = new KisSelectionMask(m_view->image());
-    mask->initSelection(m_view->selection(), layer);
-
-    connect(mask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
-
-    //counting number of KisSelectionMask    
-    QList<KisNodeSP> selectionMasks = layer->childNodes(QStringList("KisSelectionMask"),KoProperties());
-
-    mask->setName(i18n("Selection ")+QString::number(selectionMasks.count()+1));
-    m_commandsAdapter->addNode(mask, parent, above);
-
-    activateMask(mask);
-    masksUpdated();
-}
-
-
 void KisMaskManager::maskToSelection()
 {
-    // XXX: should we remove the mask when setting the mask as selection?
-    // XXX: should the selection be layer-local, or global?
     if (!m_activeMask) return;
     KisImageWSP image = m_view->image();
     if (!image) return;
     m_commandsAdapter->beginMacro(i18n("Mask to Selection"));
-    QUndoCommand* cmd = new KisSetGlobalSelectionCommand(image, 0, m_activeMask->selection());
+    KUndo2Command* cmd = new KisSetGlobalSelectionCommand(image, m_activeMask->selection());
     image->undoAdapter()->addCommand(cmd);
     m_commandsAdapter->removeNode(m_activeMask);
     m_commandsAdapter->endMacro();
@@ -292,14 +228,17 @@ void KisMaskManager::maskToLayer()
     QRect rc = selection->selectedExactRect();
     KoColor color(Qt::black, cs);
     int pixelsize = cs->pixelSize();
-    KisHLineIteratorPixel dstiter = layer->paintDevice()->createHLineIterator(rc.x(), rc.y(), rc.width(), selection);
+
+    KisHLineIteratorSP dstIter = layer->paintDevice()->createHLineIteratorNG(rc.x(), rc.y(), rc.width());
+    KisHLineConstIteratorSP selIter = selection->projection()->createHLineConstIteratorNG(rc.x(), rc.y(), rc.width());
+
     for (int row = 0; row < rc.height(); ++row) {
-        while (!dstiter.isDone()) {
-            cs->setOpacity(color.data(), dstiter.selectedness(), 1);
-            memcpy(dstiter.rawData(), color.data(), pixelsize);
-            ++dstiter;
-        }
-        dstiter.nextRow();
+        do {
+            cs->setOpacity(color.data(), *selIter->oldRawData(), 1);
+            memcpy(dstIter->rawData(), color.data(), pixelsize);
+        } while (dstIter->nextPixel() && selIter->nextPixel());
+        dstIter->nextRow();
+        selIter->nextRow();
     }
 
     m_commandsAdapter->beginMacro(i18n("Layer from Mask"));
@@ -316,21 +255,16 @@ void KisMaskManager::duplicateMask()
     if (!m_activeMask) return;
     if (!m_view->image()) return;
 
-    KisNodeSP newMask = m_activeMask->clone();
-    KisSelectionMask *selMask=NULL;
-
-    if (m_activeMask->inherits("KisSelectionMask")) {
-        KisLayerSP l=m_view->activeLayer();
-        if (l && l->selectionMask())
-               l->selectionMask()->setActive(false);
-        selMask=dynamic_cast<KisSelectionMask*>(newMask.data());
-        connect(selMask,SIGNAL(changeActivity(KisSelectionMask*,bool)),this,SLOT(changeActivity(KisSelectionMask*,bool)));
-    }
+    KisMaskSP newMask = dynamic_cast<KisMask*>(m_activeMask->clone().data());
     newMask->setName(i18n("Duplication of ") + m_activeMask->name());
     m_commandsAdapter->addNode(newMask, m_activeMask->parent(), m_activeMask);
-    activateMask(dynamic_cast<KisMask*>(newMask.data()));
-    if (selMask)
-        changeActivity(selMask,true);
+
+    KisSelectionMaskSP selectionMask = dynamic_cast<KisSelectionMask*>(newMask.data());
+    if (selectionMask) {
+        selectionMask->setActive(true);
+    }
+
+    activateMask(newMask);
     masksUpdated();
 }
 
@@ -344,129 +278,61 @@ void KisMaskManager::removeMask()
     masksUpdated();
 }
 
-void KisMaskManager::mirrorMaskX()
-{
-    // XXX_NODE: This is a load of copy-past from KisLayerManager -- how can I fix that?
-    // XXX_NODE: we should also mirror the shape-based part of the selection!
-    if (!m_activeMask) return;
-
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
-    if (!dev) return;
-
-    KisTransaction transaction(i18n("Mirror Mask X"), dev);
-
-    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
-    m_activeMask->setDirty(dirty);
-
-    transaction.commit(m_view->image()->undoAdapter());
-
-    m_view->document()->setModified(true);
-    m_activeMask->selection()->updateProjection();
-    masksUpdated();
-    m_view->canvas()->update();
-}
-
-void KisMaskManager::mirrorMaskY()
-{
-    // XXX_NODE: This is a load of copy-past from Kisupanager -- how can I fix that?
-    // XXX_NODE: we should also mirror the shape-based part of the selection!
-    if (!m_activeMask) return;
-
-    KisPaintDeviceSP dev = m_activeMask->selection()->getOrCreatePixelSelection();
-    if (!dev) return;
-
-    KisTransaction transaction(i18n("Mirror Layer Y"), dev);
-
-    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
-    m_activeMask->setDirty(dirty);
-
-    transaction.commit(m_view->image()->undoAdapter());
-
-    m_view->document()->setModified(true);
-    m_activeMask->selection()->updateProjection();
-    masksUpdated();
-    m_view->canvas()->update();
-}
-
 void KisMaskManager::maskProperties()
 {
     if (!m_activeMask) return;
 
-    if (m_activeMask->inherits("KisTransformationMask")) {
-        KisTransformationMask * mask = static_cast<KisTransformationMask*>(m_activeMask.data());
-
-        KisDlgTransformationEffect dlg(mask->name(),
-                                       mask->xScale(),
-                                       mask->yScale(),
-                                       mask->xShear(),
-                                       mask->yShear(),
-                                       mask->rotation(),
-                                       mask->xTranslate(),
-                                       mask->yTranslate(),
-                                       KoID(mask->filterStrategy()->id()),
-                                       m_view);
-        if (dlg.exec() == QDialog::Accepted) {
-            // XXX_NODE: make undoable
-            KisTransformationSettingsCommand * cmd = new KisTransformationSettingsCommand
-            (mask,
-             mask->name(),
-             mask->xScale(),
-             mask->yScale(),
-             mask->xShear(),
-             mask->yShear(),
-             mask->rotation(),
-             mask->xTranslate(),
-             mask->yTranslate(),
-             mask->filterStrategy(),
-             dlg.transformationEffect()->maskName(),
-             dlg.transformationEffect()->xScale(),
-             dlg.transformationEffect()->yScale(),
-             dlg.transformationEffect()->xShear(),
-             dlg.transformationEffect()->yShear(),
-             dlg.transformationEffect()->rotation(),
-             dlg.transformationEffect()->moveX(),
-             dlg.transformationEffect()->moveY(),
-             dlg.transformationEffect()->filterStrategy());
-            cmd->redo();
-            m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified(true);
-            mask->setDirty(mask->extent());
-        }
-    } else if (m_activeMask->inherits("KisFilterMask")) {
-        KisFilterMask * mask = static_cast<KisFilterMask*>(m_activeMask.data());
+    if (m_activeMask->inherits("KisFilterMask")) {
+        KisFilterMask *mask = static_cast<KisFilterMask*>(m_activeMask.data());
 
         KisLayerSP layer = dynamic_cast<KisLayer*>(mask->parent().data());
         if (! layer)
             return;
 
         KisPaintDeviceSP dev = layer->paintDevice();
-        KisDlgAdjLayerProps dlg(dev, layer->image(), mask->filter(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
-        QString before;
-        if (dlg.filterConfiguration())
-            before = dlg.filterConfiguration()->toXML();
-        if (dlg.exec() == QDialog::Accepted) {
-            QString after;
-            if (dlg.filterConfiguration())
-                after = dlg.filterConfiguration()->toXML();
-            KisChangeFilterCmd<KisFilterMaskSP> * cmd = new KisChangeFilterCmd<KisFilterMaskSP>(mask,
-                    dlg.filterConfiguration(),
-                    before,
-                    after);
+        KisDlgAdjLayerProps dlg(layer, mask, dev, layer->image(), mask->filter().data(), mask->name(), i18n("Effect Mask Properties"), m_view, "dlgeffectmaskprops");
 
-            // FIXME: Check why don't we use m_commandsAdapter instead
-            cmd->redo();
-            m_view->undoAdapter()->addCommand(cmd);
-            m_view->document()->setModified(true);
-            mask->setDirty();
+        KisSafeFilterConfigurationSP configBefore(mask->filter());
+        Q_ASSERT(configBefore);
+        QString xmlBefore = configBefore->toXML();
+
+
+        if (dlg.exec() == QDialog::Accepted) {
+
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+
+            if(xmlBefore != xmlAfter) {
+                KisChangeFilterCmd *cmd
+                    = new KisChangeFilterCmd(mask,
+                                             configBefore->name(),
+                                             xmlBefore,
+                                             configAfter->name(),
+                                             xmlAfter,
+                                             false);
+
+                // FIXME: check whether is needed
+                cmd->redo();
+                m_view->undoAdapter()->addCommand(cmd);
+                m_view->document()->setModified(true);
+            }
         }
+        else {
+            KisSafeFilterConfigurationSP configAfter(dlg.filterConfiguration());
+            Q_ASSERT(configAfter);
+            QString xmlAfter = configAfter->toXML();
+
+            if(xmlBefore != xmlAfter) {
+                mask->setFilter(KisFilterRegistry::instance()->cloneConfiguration(configBefore.data()));
+                mask->setDirty();
+            }
+        }
+
     } else {
         // Not much to show for transparency or selection masks?
     }
-}
-
-void KisMaskManager::showMask()
-{
-    // XXX: make sure the canvas knows it should paint the active mask as a mask
 }
 
 void KisMaskManager::raiseMask()
@@ -496,17 +362,5 @@ void KisMaskManager::maskToBottom()
     if (!m_view->image()) return;
     m_commandsAdapter->toBottom(m_activeMask);
 }
-
-void KisMaskManager::changeActivity(KisSelectionMask *mask,bool active)
-{
-    KisLayer * layer = dynamic_cast<KisLayer*>(mask->parent().data());
-
-    if (active && layer && layer->selectionMask())
-        layer->selectionMask()->setActive(false);
-
-    mask->nodeProperties().setProperty("active", active);
-    m_view->selectionManager()->selectionChanged();
-}
-
 
 #include "kis_mask_manager.moc"

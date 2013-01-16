@@ -29,27 +29,24 @@
 #include "KoChannelInfo.h"
 #include "KoID.h"
 #include "KoIntegerMaths.h"
-#include "KoCompositeOpOver.h"
-#include "KoCompositeOpErase.h"
-#include "KoCompositeOpAlphaDarken.h"
 #include "compositeops/KoCompositeOps.h"
-#include "compositeops/KoCompositeOpAdd.h"
-#include "compositeops/KoCompositeOpSubtract.h"
+
 
 KoRgbU8ColorSpace::KoRgbU8ColorSpace() :
 
-        KoSimpleColorSpace<KoRgbU8Traits>(colorSpaceId(),
+        KoSimpleColorSpace<KoBgrU8Traits>(colorSpaceId(),
                                           i18n("RGB (8-bit integer/channel, unmanaged)"),
                                           RGBAColorModelID,
                                           Integer8BitsColorDepthID)
 {
-    addChannel(new KoChannelInfo(i18n("Red"),   2, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
+    
+    addChannel(new KoChannelInfo(i18n("Blue"),  0, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
-    addChannel(new KoChannelInfo(i18n("Blue"),  0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
+    addChannel(new KoChannelInfo(i18n("Red"),   2, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
     addChannel(new KoChannelInfo(i18n("Alpha"), 3, 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
-    addStandardCompositeOps<KoRgbU8Traits>(this);
+    addStandardCompositeOps<KoBgrU8Traits>(this);
 
 }
 

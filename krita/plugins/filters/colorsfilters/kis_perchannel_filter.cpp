@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ * Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QComboBox>
-#include <qdom.h>
+#include <QDomDocument>
 #include <QHBoxLayout>
 
 #include "KoChannelInfo.h"
@@ -44,7 +44,6 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 
-#include "kis_iterators_pixel.h"
 #include "kis_histogram.h"
 #include "kis_painter.h"
 #include "widgets/kis_curve_widget.h"
@@ -67,11 +66,19 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     KisPerChannelFilterConfiguration::initDefaultCurves(m_curves,
             m_dev->colorSpace()->colorChannelCount());
 
-    /* fill in the channel chooser */
-    QList<KoChannelInfo *> channels = dev->colorSpace()->channels();
-    for (unsigned int ch = 0; ch < dev->colorSpace()->colorChannelCount(); ch++)
-        m_page->cmbChannel->addItem(channels.at(ch)->name());
-
+    QList<KoChannelInfo *> colorChannels;
+    foreach(KoChannelInfo *channel, dev->colorSpace()->channels()) {
+        if (channel->channelType() == KoChannelInfo::COLOR) {
+            colorChannels.append(channel);
+        }
+    }
+    // fill in the channel chooser, in the display order, but store the pixel index as well.
+    QList<KoChannelInfo *> sortedChannels = KoChannelInfo::displayOrderSorted(colorChannels);
+    foreach(KoChannelInfo *channel, sortedChannels) {
+        QVariant pixelIndex(KoChannelInfo::displayPositionToChannelIndex(channel->displayPosition(), 
+                                                                         KoChannelInfo::displayOrderSorted(dev->colorSpace()->channels())));
+        m_page->cmbChannel->addItem(channel->name(), pixelIndex);
+    }
     connect(m_page->cmbChannel, SIGNAL(activated(int)), this, SLOT(setActiveChannel(int)));
 
     // create the horizontal and vertical gradient labels
@@ -82,15 +89,13 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     QList<QString> keys =
         KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(m_dev->colorSpace());
     
-    if(keys.size() > 0)
-    {
+    if(keys.size() > 0) {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
 	m_histogram = new KisHistogram(m_dev, bounds, hpf->generate(), LINEAR);
     }
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->cbPreview, SIGNAL(stateChanged(int)), this, SLOT(setPreview(int)));
 
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
 
@@ -99,15 +104,10 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     m_page->curveWidget->blockSignals(false);
 }
 
-void KisPerChannelConfigWidget::setPreview(int state)
+KisPerChannelConfigWidget::~KisPerChannelConfigWidget()
 {
-    if (state) {
-        connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
-        emit sigConfigurationItemChanged();
-    } else
-        disconnect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
+    delete m_histogram;
 }
-
 
 inline QPixmap KisPerChannelConfigWidget::createGradient(Qt::Orientation orient /*, int invert (not used yet) */)
 {
@@ -236,7 +236,7 @@ void KisPerChannelConfigWidget::setConfiguration(const KisPropertiesConfiguratio
     if (!cfg)
         return;
 
-    if (!cfg->m_curves.size() == 0) {
+    if (cfg->m_curves.size() == 0) {
         /**
          * HACK ALERT: our configuration factory generates
          * default configuration with nTransfers==0.
@@ -359,7 +359,7 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
     QString paramName;
 
     for (int i = 0; i < m_curves.size(); ++i) {
-        paramName = QString::fromAscii("curve") + QString::number(i);
+        paramName = QLatin1String("curve") + QString::number(i);
         t = doc.createElement("param");
         t.setAttribute("name", paramName);
 

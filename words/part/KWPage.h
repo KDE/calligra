@@ -1,5 +1,7 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005, 2007-2008, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2005, 2007-2008, 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,9 +23,10 @@
 
 #include "KWPageManager.h"
 #include "KWPageStyle.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <KoText.h>
+#include <KoTextPage.h>
 #include <QRectF>
 #include <QObject>
 
@@ -39,7 +42,7 @@ class KoShapeManager;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage
+class WORDS_EXPORT KWPage : public KoTextPage
 {
 public:
     inline KWPage() : priv(0), n(0) {}
@@ -50,8 +53,7 @@ public:
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSide {
         Left,       ///< A left page. Used for even-numbered pages
-        Right,      ///< A right page. Used for odd numbered pages
-        PageSpread  ///< A page spread which is one KWPage instance, but represents 2 pagenumbers
+        Right       ///< A right page. Used for odd numbered pages
     };
 
     /// return the width of this page (in pt)
@@ -81,15 +83,17 @@ public:
 
     /**
      * return a rectangle outlining this page, using the offset in the document.
-     * For page-spreads the page size will effectively be 2 pages unless the
-     * pageNumber param is specified and the pagenumber of either the left or the
-     * right page is passed.
-     * @param pageNumber passing a pagenumber will return the rect of either the
-     *  left or the right halve of a pageSpread.
-     * Passing a pagenumber that is not represented by this object will have
-     *  unpredictabe results.
      */
-    QRectF rect(int pageNumber = -1) const;
+    QRectF rect() const;
+
+    /**
+     * return a rectangle outlining the main text on this page, using the offset in the document.
+     */
+    QRectF contentRect() const;
+
+    /* set the content rect valid on this page
+     */
+    void setContentRect(const QRectF &rect);
 
     // the y coordinate
     /**
@@ -100,21 +104,35 @@ public:
      * add the height of all the pages that come before this one.
      */
     qreal offsetInDocument() const;
+    /**
+     * Set the offset of the page.
+     */
+    void setOffsetInDocument(qreal offset);
 
     /// Return the pageSide of this page, see the PageSide
     PageSide pageSide() const;
     /// set the pageSide of this page, see the PageSide
     void setPageSide(PageSide ps);
 
-    /// returns the user visible number of this page.
-    int pageNumber() const;
+    /// reimplemented from KoTextPage
+    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
+
+    /// reimplemented from KoTextPage
+    virtual int pageNumber() const;
 
     /**
-     * Adjusts the page number of this page and all pages following.
-     * Page numbers that are set like this are never saved, this is runtime data only.
-     * Instead you should insert a pagraph in the main-text flow with the new page number.
+     * Adjusts the visible page number of this page.
+     *
+     * This implements hard-coded page numbers like those defined via @a KoParagraphStyle::PageNumber . If
+     * the page number equals zero then the page has an auto page number. That means previous page number
+     * plus one.
+     *
+     * @param pageNumber The visible page-number for this page.
      */
-    void setPageNumber(int pageNumber);
+    void setVisiblePageNumber(int pageNumber);
+
+    /// reimplemented from KoTextPage
+    virtual QString masterPageName() const;
 
     /// returns the page style applied on this page
     KWPageStyle pageStyle() const;
@@ -163,7 +181,7 @@ public:
      * @param shapeManager the shape manager containing the page's shapes
      * @returns the thumbnail
      */
-    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager);
+    QImage thumbnail(const QSize &size, KoShapeManager *shapeManager) const;
 
     bool operator==(const KWPage &other) const;
     inline bool operator!=(const KWPage &other) const { return ! operator==(other); }

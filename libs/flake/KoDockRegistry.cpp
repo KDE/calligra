@@ -32,9 +32,9 @@ void KoDockRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "DockerPlugins";
     config.blacklist = "DockerPluginsDisabled";
-    config.group = "koffice";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Dock"),
-                                     QString::fromLatin1("[X-Flake-MinVersion] <= 0"),
+    config.group = "calligra";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Dock"),
+                                     QString::fromLatin1("[X-Flake-MinVersion] <= 4"),
                                      config);
 }
 

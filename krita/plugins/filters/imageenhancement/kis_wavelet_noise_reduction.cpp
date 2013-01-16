@@ -25,7 +25,6 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_math_toolbox.h>
 #include <widgets/kis_multi_double_filter_widget.h>
@@ -67,7 +66,6 @@ void KisWaveletNoiseReduction::process(KisPaintDeviceSP device,
                                       KoUpdater* progressUpdater
                                       ) const
 {
-    QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
     // TODO take selections into account
     float threshold;

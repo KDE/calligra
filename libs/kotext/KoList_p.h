@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@ class KoListPrivate
 {
 public:
     KoListPrivate(KoList *q, const QTextDocument *document)
-    : q(q), type(KoList::TextList), style(0), textLists(10), textListIds(10), document(document)
+        : q(q), type(KoList::TextList), style(0), textLists(10), textListIds(10), document(document), listToBeContinuedFrom(0)
     {
     }
 
@@ -74,6 +74,7 @@ public:
     QVector<KoListStyle::ListIdType> textListIds;
     const QTextDocument *document;
     QMap<int, QVariant> properties;
+    KoList *listToBeContinuedFrom;
 };
 
 #endif // KOLIST_P_H

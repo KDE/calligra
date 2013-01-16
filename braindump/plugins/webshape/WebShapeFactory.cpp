@@ -19,6 +19,7 @@
 
 #include "WebShapeFactory.h"
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 #include <QWebPage>
@@ -28,42 +29,43 @@
 
 #include "WebShape.h"
 
-WebShapeFactory::WebShapeFactory() 
-   : KoShapeFactoryBase( WEBSHAPEID,
-                     i18n("Web Shape") )
+WebShapeFactory::WebShapeFactory()
+    : KoShapeFactoryBase(WEBSHAPEID,
+                         i18n("Web Shape"))
 {
-  setToolTip( i18n("A web shape") );
-  setIcon( "applications-internet" );
-  setOdfElementNames( "http://kde.org/braindump", QStringList( "web" ) );
+    setToolTip(i18n("A web shape"));
+    setIconName(koIconNameCStr("applications-internet"));
+    setXmlElementNames("http://kde.org/braindump", QStringList("web"));
 }
 
-KoShape *WebShapeFactory::createDefaultShape(KoResourceManager *documentResources) const
+KoShape *WebShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-  WebShape* fooShape = new WebShape();
-  fooShape->setShapeId(WEBSHAPEID);
-  // set defaults
-  return fooShape;
+    Q_UNUSED(documentResources);
+    WebShape* fooShape = new WebShape();
+    fooShape->setShapeId(WEBSHAPEID);
+    // set defaults
+    return fooShape;
 }
 
-KoShape *WebShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+KoShape *WebShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
-  WebShape* fooShape = new WebShape();
-  if(params->contains("url"))
-  {
-    fooShape->setUrl(params->property("url").toUrl());
-  }
-  fooShape->setShapeId(WEBSHAPEID);
-  // use the params
-  return fooShape;
+    Q_UNUSED(documentResources);
+    WebShape* fooShape = new WebShape();
+    if(params->contains("url")) {
+        fooShape->setUrl(params->property("url").toUrl());
+    }
+    fooShape->setShapeId(WEBSHAPEID);
+    // use the params
+    return fooShape;
 }
 
 bool WebShapeFactory::supports(const KoXmlElement& e, KoShapeLoadingContext& /*context*/) const
 {
-  return ( e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump" );
+    return (e.localName() == "web" && e.namespaceURI() == "http://kde.org/braindump");
 }
 
 QList<KoShapeConfigWidgetBase*> WebShapeFactory::createShapeOptionPanels()
 {
-  QList<KoShapeConfigWidgetBase*> answer;
-  return answer;
+    QList<KoShapeConfigWidgetBase*> answer;
+    return answer;
 }

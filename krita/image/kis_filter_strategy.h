@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2004 Michael Thaler <michael.thaler@physik.tu-muenchen.de>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -97,13 +97,13 @@ public:
     }
 };
 
-class KRITAIMAGE_EXPORT KisTriangleFilterStrategy : public KisFilterStrategy
+class KRITAIMAGE_EXPORT KisBilinearFilterStrategy : public KisFilterStrategy
 {
 public:
-    KisTriangleFilterStrategy() : KisFilterStrategy(KoID("Triangle", i18n("Bilinear"))) {
+    KisBilinearFilterStrategy() : KisFilterStrategy(KoID("Bilinear", i18n("Bilinear"))) {
         supportVal = 1.0; intSupportVal = 256;
     }
-    virtual ~KisTriangleFilterStrategy() {}
+    virtual ~KisBilinearFilterStrategy() {}
 
     virtual qint32 intValueAt(qint32 t) const;
     virtual qreal valueAt(qreal t) const;

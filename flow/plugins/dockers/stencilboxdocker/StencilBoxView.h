@@ -1,5 +1,5 @@
 /*
-    Part of Koffice project.
+    Part of Calligra project.
     Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 #ifndef STENCILBOXVIEW_H
 #define STENCILBOXVIEW_H
 
+//#include "CollectionItemModel.h"
+
 #include <QTreeWidget>
 #include <QItemDelegate>
 #include <QListView>
@@ -28,6 +30,7 @@
 class QIcon;
 class QSortFilterProxyModel;
 class ShapeListView;
+class CollectionItemModel;
 
 ///A delegate from qt designer, used to paint category item in the treewidget.
 class SheetDelegate: public QItemDelegate
@@ -81,16 +84,18 @@ class CollectionTreeWidget : public QTreeWidget
         ~CollectionTreeWidget();
         bool loadContents(const QString &contents);
         bool save();
-        void setFamilyMap(QMap<QString, QSortFilterProxyModel*> map);
-
-        void filter();
+        void setFamilyMap(QMap<QString, CollectionItemModel*> map);
+        void regenerateFilteredMap();
+        void setFilter(QRegExp regExp);
 
     protected:
 	void contextMenuEvent(QContextMenuEvent *e);
 	void resizeEvent(QResizeEvent *e);
 	
     private:
-        bool m_iconMode;
+        QListView::ViewMode m_viewMode;
+        QMap<QString, CollectionItemModel*> m_familyMap;
+        QMap<QString, QSortFilterProxyModel*> m_filteredMap;
         ShapeListView* categoryViewAt(int idx) const;
         void addCategoryView(QTreeWidgetItem *parent, bool iconMode, QSortFilterProxyModel *model);
 	void adjustSubListSize(QTreeWidgetItem *cat_item);
@@ -102,7 +107,7 @@ class CollectionTreeWidget : public QTreeWidget
     private slots:
 	void handleMousePress(QTreeWidgetItem *item);
 	void slotListMode();
-    void slotIconMode();
+        void slotIconMode();
 };
 
 #endif // STENCILBOXVIEW_H

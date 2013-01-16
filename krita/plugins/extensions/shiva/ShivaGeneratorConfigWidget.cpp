@@ -23,9 +23,8 @@
 
 #include "filter/kis_filter_configuration.h"
 #include "QVariantValue.h"
-#include "Version.h"
 
-#include METADATA_HEADER
+#include <GTLFragment/Metadata.h>
 
 
 ShivaGeneratorConfigWidget::ShivaGeneratorConfigWidget(const OpenShiva::Source* _source, QWidget* parent) : KisConfigWidget(parent), m_source(_source), m_widget(new QtShiva::SourceParametersWidget(this))
@@ -43,15 +42,11 @@ void ShivaGeneratorConfigWidget::setConfiguration(const KisPropertiesConfigurati
 {
     QMap<QString, QVariant> map = config->getProperties();
     for (QMap<QString, QVariant>::iterator it = map.begin(); it != map.end(); ++it) {
-        const GTLCore::Metadata::Entry* entry = m_source->metadata()->parameter(it.key().toAscii().data());
+        const GTLCore::Metadata::Entry* entry = m_source->metadata()->parameter(it.key().toLatin1().constData());
         if (entry && entry->asParameterEntry()) {
-#if OPENSHIVA_12
-            GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->valueType());
-#else
             GTLCore::Value val = qvariantToValue(it.value(), entry->asParameterEntry()->type());
-#endif
             if (val.isValid()) {
-                m_widget->setParameter(it.key().toAscii().data(), val);
+                m_widget->setParameter(it.key().toLatin1().constData(), val);
             }
         }
     }

@@ -1,6 +1,6 @@
 #! /usr/bin/python -Qwarnall
 
-# This script profiles loading of documents in KOffice.
+# This script profiles loading of documents in Calligra.
 # It is called like this:
 #  profileOfficeFileLoading.py $dir $outputfile
 # The script outputs an csv file that contains the times various functions took
@@ -11,9 +11,20 @@
 import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 
 applications = {
-  'kword': ['odt', 'doc', 'docx'],
-  'kpresenter': ['odp', 'ppt', 'pptx'],
-  'kspread': ['ods', 'xls', 'xlsx']
+  'calligrawords': ['odt', 'doc', 'docx'],
+  'calligrastage': ['odp', 'ppt', 'pptx'],
+  'calligrasheets': ['ods', 'xls', 'xlsx']
+}
+extensions = {
+  'odt': 'odt',
+  'doc': 'odt',
+  'docx': 'odt',
+  'odp': 'odp',
+  'ppt': 'odp',
+  'pptx': 'odp',
+  'ods': 'ods',
+  'xls': 'ods',
+  'xlsx': 'ods'
 }
 
 # limit how many backtraces are recordes, since it takes a lot of time
@@ -60,15 +71,18 @@ class logger:
 		self.suitename = name
 		print "##teamcity[testSuiteStarted name='" + self.suitename \
 			+ "']"
+		sys.stdout.flush()
 	def endTestSuite(self):
 		if not self.suitename: return
 		print "##teamcity[testSuiteFinished name='" + self.suitename \
 			+ "']"
+		sys.stdout.flush()
 		self.suitename = None
 	def startTest(self, name):
 		if not self.suitename: return
 		self.testname = name
 		print "##teamcity[testStarted name='" + self.testname + "']"
+		sys.stdout.flush()
 	# fail the current test
 	def failTest(self, backtrace):
 		if not self.suitename or not self.testname: return
@@ -77,17 +91,21 @@ class logger:
 			bt = bt + self.escape(l)
 		print "##teamcity[testFailed name='" + self.testname \
 			+ "' details='" + bt + "']"
+		sys.stdout.flush()
 	# end test, pass duration as integer representing the milliseconds
 	def endTest(self, duration):
 		if not self.suitename or not self.testname: return
 		print "##teamcity[testFinished name='" + self.testname \
 			+ "' duration='" + str(duration) + "']"
+		sys.stdout.flush()
 		self.testname = None
 
 def containsRealError(err):
 	# some errors reported by libxml2 are false positives, we filter them
 	# out
 	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element styles failed to validate content") != -1:
+		return None
+	if str(err).find("ERROR:RELAXNGV:RELAXNG_ERR_CONTENTVALID: Element automatic-styles failed to validate content") != -1:
 		return None
 	return err
 
@@ -96,11 +114,11 @@ class odfvalidator:
 		path = sys.path[0]
 		self.relaxNGValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cd05-schema-koffice.rng'),
+				'OpenDocument-v1.2-cs01-schema-calligra.rng'),
 				'r')))
 		self.relaxNGManifextValidator = lxml.etree.RelaxNG( \
 				lxml.etree.parse(open(os.path.join(path, \
-				'OpenDocument-v1.2-cd05-manifest-schema.rng'), \
+				'OpenDocument-v1.2-cs01-manifest-schema.rng'), \
 				'r')))
 	# returns error string on error, None otherwise
 	def validate(self, odtpath): 
@@ -124,11 +142,15 @@ class odfvalidator:
 
 	def validateFile(self, zip, file, validator):
 		try:
-			xml = lxml.etree.XML(zip.read(file));
+			data = zip.read(file)
+			xml = lxml.etree.XML(data);
 		except lxml.etree.XMLSyntaxError as e:
 			return e
 		except KeyError as e:
 			return e
+		if len(data) > 1000000:
+			# if the xml file is larger than 1M, the validator may hang
+			return
 		if not validator.validate(xml):
 			return validator.error_log.last_error
 
@@ -203,9 +225,13 @@ def profile(dir, file, logger, validator):
 	roundtripfilename = None
 	args = []
 	# in case of ODF file, do a roundtrip
-        m = re.match('.*(\.od.)$', file)
+	m = re.match('.*(\.od.)$', file)
+	(roundtripfd, roundtripfilename) = tempfile.mkstemp("." + extensions[ext])
 	if m:
-		(roundtripfd, roundtripfilename) = tempfile.mkstemp(m.group(1))
+		isOdfFile = True
+	else:
+		isOdfFile = False
+	if isOdfFile:
 		args += ["--roundtrip-filename", roundtripfilename]
 	args += ["--benchmark-loading", "--profile-filename", tmpfilename,
 		"--nocrashhandler", file]
@@ -213,6 +239,7 @@ def profile(dir, file, logger, validator):
 	outfile = os.fdopen(fileno, 'r')
 	r.lines = outfile.readlines()
 	outfile.close()
+	os.close(roundtripfd)
 	r.backtrace = None
 	if r.returnValue != 0:
 		if maxbacktraces > 0:
@@ -225,17 +252,24 @@ def profile(dir, file, logger, validator):
 			r.backtrace = debugresult.stdout
 			for l in r.backtrace:
 				print l.rstrip()
+				sys.stdout.flush()
 			logger.failTest(r.backtrace)
 		else:
 			logger.failTest("Crash, no backtrace: limit reached.")
-	elif roundtripfilename:
+	else:
+		if not isOdfFile:
+			# convert ms office file to odf
+			exepath = getExecutablePath("calligraconverter")
+			args = [file, roundtripfilename]
+			cr = runCommand(exepath, args, False)
+
 		err = validator.validate(roundtripfilename);
 		if err != None:
 			logger.failTest(str(err))
 
+	# remove the roundtripfile and the temporary file
 	os.remove(tmpfilename)
-	if roundtripfilename:
-		os.remove(roundtripfilename)
+	os.remove(roundtripfilename)
 
 	logger.endTest(int((r.utime + r.stime)*1000))
 	return r
@@ -364,7 +398,7 @@ def createStackTraceGraph(results):
 		for l in r.backtrace:
 			l = l.rstrip()
 			n += 1
-			m = re.search('/koffice/.*/([^/]+:\d+)$', l)
+			m = re.search('/calligra/.*/([^/]+:\d+)$', l)
 			if m != None:
 				key = m.group(1)
 				nodes[key] = l
@@ -376,13 +410,13 @@ def createStackTraceGraph(results):
 	out.write('digraph {')
 	svn = 'http://websvn.kde.org/trunk'
 	for a in nodes:
-		m = re.search('(/koffice/.*):(\d+)$', nodes[a])
+		m = re.search('(/calligra/.*):(\d+)$', nodes[a])
 		n = '"' + a + '" [URL = "'
 		if m:
 			out.write(n + svn + m.group(1) + '?view=markup#l'
 				+ m.group(2) + '"];')
 		else:
-			m = re.search('(/kofficetests/.*)', nodes[a])
+			m = re.search('(/calligratests/.*)', nodes[a])
 			if m:
 				out.write(n + svn + '/tests' + m.group(1)
 					+ '"];')

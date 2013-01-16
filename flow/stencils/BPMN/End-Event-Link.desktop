@@ -1,10 +1,24 @@
 [Desktop Entry]
 Name=End-Event-Link
-Name[et]=Sündmuse lõpu link
+Name[ca]=Final-Esdeveniment-Enllaç
+Name[ca@valencia]=Final-Esdeveniment-Enllaç
+Name[el]=Σύνδεσμος-γεγονότος-τέλους
+Name[es]=Enlace al evento final
+Name[et]=Lõpusündmuse link
+Name[fr]=Lien de fin d'évènement
+Name[gl]=Evento final de ligazón
+Name[hu]=Vége-Esemény-Hivatkozás
+Name[it]=Evento-finale-Collegamento
+Name[kk]=Аяқтау-оқиға-сілтеме
+Name[nb]=Slutt-hendelse-lenke
 Name[nl]=Koppeling met eindgebeurtenis
+Name[pl]=Odnośnik-Zdarzenia-Zakończenia
 Name[pt]=Evento-Final-Ligação
 Name[pt_BR]=Link do evento final
+Name[ru]=Ссылка на завершение события
+Name[sk]=End-Event-Link
 Name[sv]=Sluthändelse-länk
 Name[uk]=Посилання на кінцеву подію
 Name[x-test]=xxEnd-Event-Linkxx
+Name[zh_CN]=结束-事件-连接
 Name[zh_TW]=結束─事件─連結

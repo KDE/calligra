@@ -1,0 +1,191 @@
+
+Calligra Plan current:
+----------------------
+
+* TJ scheduler improvements
+    Fix bug and improve performance in positive float calculation.
+    Honor calendar timezone other than local timezone.
+    Improve handling of StartNotEarlier/FinishNotLater.
+    Fix bug in scheduling tasks with estimate in work time duration.
+
+* Add a command to generate a new project from the current project
+
+* Add export to csv and ods
+
+Release 2.6
+-----------
+* Fix regression in scheduling, backward calculation
+
+* Fix bug in kplato xml loader
+
+* Fix crash after File->Open on empty document
+
+* Fix bug 308855 -  Gantt chart: No tree structure in printed version
+
+* Fix bug 307450 - Calligra Plan crash when adding subtask
+
+* Always check appointments to avoid overbooking resources
+
+* Fix bug 307450 - Crash when calculating schedule (in rcps_solver_solve)
+
+* Add scheduling granularity
+
+* PlanWork:
+  Add gantt chart
+  Update scheduling info when task has been rescheduled
+
+* Fix bug: Send work package schedule info also when schedule is not top level schedule
+
+* Performance charts:
+  Show both effort- and cost based performance index values.
+  Add charting of perfomance indices
+
+* Enable dropping Plan project files into the Task Editor.
+
+* Task Editor: Add a Task Module docker to ease project creation.
+  This makes it possible to define typical solutions with multiple tasks,
+  task dependencies, including resources and resource allocations.
+
+* Reports export: Add option to output data into table.
+  This will not use the reports layout.
+  The "old" export option that tries to honour the layout is still available.
+
+* Report designer usability improvements.
+  Designer moved from a dialog into a view using dockers for editing.
+  This removes the need for multi-layered dialogs.
+
+* Bug 186639 -  Use a more "descriptive" mouse cursor for wiring tasks in the graphic
+
+* Bug 286332 - Auto allocate selected resources to new tasks
+
+* Improve printing:
+    Add printing options to view configuration dialog
+    Save/load option settings
+
+Release 2.5:
+------------
+* Disable calculate action when calculating to avoid potential crash
+
+* Fix bug 306734 - Crash when calculating schedule (in rcps_solver_solve)
+
+* Fix crash when two dependent tasks are deleted in one go
+
+* Fix bug 301888 - New: setting task duration messes up schedule
+
+* Fix bug 301326 - Export to pdf does not respect reports page layout
+
+* Fix Bug 286564 -  plan do not update the resources allocation number when selected
+
+* Add mpxj based filter capable of importing data from
+  Planner, PrimaVera and various MS Project file formats,
+
+Release 2.4:
+------------
+* Fix bug 292931: Crash when scheduling task of type Duration.
+
+* Fix crash in reports due incorrect use of KoXml to QDom conversion
+
+* Fix bug 291056 - Dates are sorted alphabetically and not by date / time
+
+* Improve users control of work package merging
+
+* PlanWork:
+  Add remove document command
+  Support adding new documents of any type
+  Support updating existing reference documents
+
+* Fix bug 259225: Display performance index numbers in red when spi/cpi is < 1.0
+
+* Fix bug 286495: Update reports automatically when schedule changes
+
+* Fix bug 286413: Use calendar popups for all datetimes
+
+* Gantt chart: Use locale defined weekends/start of week
+
+* Bug 286332: Initially expand resource group in the Task resource allocation dialog
+
+* Resource assignment gantt chart: remember zoom and scale settings
+  Ref bug 284349
+
+* Improve view selector:
+  Enable moving views and categories using drag and drop
+  Fix various problems with the view selector dialogs
+
+* Disable dbus adapter
+
+* Fix scheduling of resources that works during daylight saving time changes
+
+* Set datetime grid hour format in accordance with kde settings
+  (Ref bug 284361)
+
+* Fix bug 284349 Gantt chart: remember zoom and scale settings
+
+* Task editor: Do allow editing of irrelevant data for summary tasks and milestones
+
+* Reports: Use localized number formatting
+
+* Schedule log:
+  Allow opening task- and resource dialog
+  Color log entries in accordance with severity
+
+* Report chart item: Add posibility to limit amount of data to display
+
+* Add drag&drop resources from akonadi address book
+
+* View selector: Add 'Execution' category
+
+* Improve scripting
+  Add create capability to make it possible to write importer.
+  Use undo commands so it is possible to keep ui consistent.
+  Cleaner API.
+
+* Fix bug 277074: Task description tooltip does not show full description
+
+* Fix bug 274805: Effort Estimate defaults to 8.0Y instead of 8.0h on first instance.
+
+* Add odt export to reports
+
+* Fix bug 269652: Crash on save/exit.
+
+* Fix bug 268095: Crash in some models when emitting dataChanged.
+
+* Fix bug in load vs available units calculation
+
+* Printing: Improve gantt chart printing
+
+* Printing: Add printing of performance charts
+
+* Reports: Add access to schedule name (=project.Plan())
+
+* Add error indication when required estimated effort cannot be delivered.
+
+* Gantt chart: Fix wrong positioning of time constraint indication
+
+* Lock down baselined project.
+
+* Schedules editor: Add 'detach' schedule for cases where you reschedule frequently
+
+* Scheduling: Performance optimization
+
+-----------------------------------------------------------------------------------
+Calligra KPlato rev 0.10.1 (calligra 2.3.1)
+
+
+Performance views:
+* Show/hide info in accordance with user preferences.
+* Add fields for cpi/spi for both cost and effort based calculations.
+
+Earned value calculations (bug 257413):
+* Add material costs as well as startup and shutdown cost to bcws/bcwp/acwp calculations.
+* Fix bug in BCWS and index calculation when ahead of schedule.
+* Don't add a day too much when calculating a map of effort/cost pr day.
+* Handle non-specified end time when fetching actual effort/cost.
+
+Task editor / task dialog:
+* Fix: When a task refers to account(s) when it becomes a summarytask, the account references are not removed.
+
+Task progress dialog (bug 258668):
+* Fix: Used effort set to 0 when task is set to finished.
+
+Cost breakdown view and performance views (bug 258686):
+* Fix: The views are not updated when cost is changed in tasks or resources.

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2006 casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -27,7 +27,6 @@
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
-#include <KoResourceManager.h>
 #include <commands/KoShapeShearCommand.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeTransformCommand.h>
@@ -172,12 +171,12 @@ void ShapeShearStrategy::paint( QPainter &painter, const KoViewConverter &conver
     decorator.paint(painter, converter);
 }
 
-QUndoCommand* ShapeShearStrategy::createCommand() {
+KUndo2Command* ShapeShearStrategy::createCommand() {
     QList<QTransform> newTransforms;
     foreach( KoShape* shape, m_selectedShapes )
         newTransforms << shape->transformation();
     KoShapeTransformCommand * cmd = new KoShapeTransformCommand( m_selectedShapes, m_oldTransforms, newTransforms );
-    cmd->setText( i18n("Shear") );
+    cmd->setText( i18nc("(qtundo-format)", "Shear") );
     KoSelection * sel = tool()->canvas()->shapeManager()->selection();
     new SelectionTransformCommand(sel, m_initialSelectionMatrix, sel->transformation(), cmd);
     return cmd;

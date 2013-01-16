@@ -1,9 +1,26 @@
 [Desktop Entry]
 Name=Renewable Energy
-Name[et]=Taaskasutatav energia
+Name[bg]=Възобновима енергия
+Name[ca]=Energia renovable
+Name[ca@valencia]=Energia renovable
+Name[de]=Erneuerbare Energie
+Name[el]=Ανανεώσιμη ενέργεια
+Name[es]=Energía renovable
+Name[et]=Taastuvenergia
+Name[fr]=Énergie renouvelable
+Name[gl]=Enerxía renobábel
+Name[it]=Energia rinnovabile
+Name[kk]=Сарқылмайтын эәнергия
+Name[nb]=Fornybar energi
+Name[nl]=Hernieuwbare energie
+Name[pl]=Odnawialna energia
 Name[pt]=Energia Renovável
 Name[pt_BR]=Energia renovável
+Name[ru]=Возобновляемые источники энергии
+Name[sk]=Obnoviteľná energia
+Name[sl]=Obnovljiva energija
 Name[sv]=Förnyelsebar energi
 Name[uk]=Відновлювальні джерела енергії
 Name[x-test]=xxRenewable Energyxx
+Name[zh_TW]=可再造能源
 X-KDE-DirType=odg-collection

@@ -24,17 +24,17 @@
 #include "kotext_export.h"
 
 #include <KoXmlReaderForward.h>
-class KoShape;
 class QTextDocument;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
 
 /**
  * Used to indicate an ODF text:meta container. This is very similar to a KoBookmark
- * in that a specific start-end is marked
+ * in that a specific start-end is marked.
  */
 class KOTEXT_EXPORT KoTextMeta : public KoInlineObject
 {
+    Q_OBJECT
 public:
     enum BookmarkType {
         StartBookmark,      ///< start position
@@ -55,7 +55,7 @@ public:
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /// reimplemented from super
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object,
+    virtual void updatePosition(const QTextDocument *document,
                                 int posInDocument, const QTextCharFormat &format);
     /// reimplemented from super
     virtual void resize(const QTextDocument *document, QTextInlineObject object,
@@ -73,9 +73,6 @@ public:
 
     /// @return the end bookmark if the type is StartBookmark
     KoTextMeta* endBookmark() const;
-
-    /// @return the KoShape where this bookmark is located
-    KoShape *shape() const;
 
     /// @return the exact cursor position of this bookmark in document
     int position() const;

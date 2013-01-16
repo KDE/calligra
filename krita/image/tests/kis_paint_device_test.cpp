@@ -42,7 +42,7 @@ void KisPaintDeviceTest::testCreation()
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    QVERIFY(dev->objectName() == QString());
+    QVERIFY(dev->objectName().isEmpty());
 
     dev = new KisPaintDevice(cs);
     QVERIFY(*dev->colorSpace() == *cs);
@@ -106,7 +106,7 @@ void KisPaintDeviceTest::testStore()
 
     QPoint pt;
     if (!TestUtil::comparePaintDevices(pt, dev, dev2)) {
-        QFAIL(QString("Loading a saved image is not pixel perfect, first different pixel: %1,%2 ").arg(pt.x()).arg(pt.y()).toAscii());
+        QFAIL(QString("Loading a saved image is not pixel perfect, first different pixel: %1,%2 ").arg(pt.x()).arg(pt.y()).toLatin1());
     }
 
 }
@@ -202,7 +202,7 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "tile.png");
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     quint8* bytes = cs->allocPixelBuffer(image.width() * image.height());
     memset(bytes, 0, image.width() * image.height() * dev->pixelSize());
     dev->readBytes(bytes, image.rect());
@@ -216,7 +216,7 @@ void KisPaintDeviceTest::testRoundtripReadWrite()
 
     QPoint pt;
     if (!TestUtil::comparePaintDevices(pt, dev, dev2)) {
-        QFAIL(QString("Failed round trip using readBytes and writeBytes, first different pixel: %1,%2 ").arg(pt.x()).arg(pt.y()).toAscii());
+        QFAIL(QString("Failed round trip using readBytes and writeBytes, first different pixel: %1,%2 ").arg(pt.x()).arg(pt.y()).toLatin1());
     }
 }
 
@@ -235,7 +235,7 @@ void logFailure(const QString & reason, const KoColorSpace * srcCs, const KoColo
           .arg(dstCs->name())
           .arg(profile2)
           .arg(reason)
-          .toAscii());
+          .toLatin1());
 }
 
 void KisPaintDeviceTest::testColorSpaceConversion()
@@ -244,9 +244,9 @@ void KisPaintDeviceTest::testColorSpaceConversion()
     const KoColorSpace* srcCs = KoColorSpaceRegistry::instance()->rgb8();
     const KoColorSpace* dstCs = KoColorSpaceRegistry::instance()->lab16();
     KisPaintDeviceSP dev = new KisPaintDevice(srcCs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     dev->move(10, 10);   // Unalign with tile boundaries
-    QUndoCommand* cmd = dev->convertTo(dstCs);
+    KUndo2Command* cmd = dev->convertTo(dstCs);
 
     QVERIFY(dev->exactBounds() == QRect(10, 10, image.width(), image.height()));
     QVERIFY(dev->pixelSize() == dstCs->pixelSize());
@@ -261,7 +261,7 @@ void KisPaintDeviceTest::testRoundtripConversion()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     QImage result = dev->convertToQImage(0, 0, 0, 640, 441);
 
     QPoint errpoint;
@@ -269,7 +269,7 @@ void KisPaintDeviceTest::testRoundtripConversion()
     if (!TestUtil::compareQImages(errpoint, image, result)) {
         image.save("kis_paint_device_test_test_roundtrip_qimage.png");
         result.save("kis_paint_device_test_test_roundtrip_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -279,7 +279,7 @@ void KisPaintDeviceTest::testFastBitBlt()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dstDev = new KisPaintDevice(cs);
     KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
-    srcDev->convertFromQImage(image, "");
+    srcDev->convertFromQImage(image, 0);
 
     QRect cloneRect(100,100,200,200);
     QPoint errpoint;
@@ -294,7 +294,7 @@ void KisPaintDeviceTest::testFastBitBlt()
                                               cloneRect.width(), cloneRect.height());
 
     if (!TestUtil::compareQImages(errpoint, srcImage, dstImage)) {
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
     // Test Rough version
@@ -307,7 +307,7 @@ void KisPaintDeviceTest::testFastBitBlt()
                                        cloneRect.width(), cloneRect.height());
 
     if (!TestUtil::compareQImages(errpoint, srcImage, dstImage)) {
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 
     srcDev->move(10,10);
@@ -320,7 +320,7 @@ void KisPaintDeviceTest::testMakeClone()
 
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP srcDev = new KisPaintDevice(cs);
-    srcDev->convertFromQImage(image, "");
+    srcDev->convertFromQImage(image, 0);
     srcDev->move(10,10);
 
     const KoColorSpace * weirdCS = KoColorSpaceRegistry::instance()->lab16();
@@ -345,7 +345,7 @@ void KisPaintDeviceTest::testMakeClone()
     QImage dstImage = dstDev->convertToQImage(0, cloneRect.x(), cloneRect.y(),
                                               cloneRect.width(), cloneRect.height());
     if (!TestUtil::compareQImages(errpoint, dstImage, srcImage)) {
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
 }
 
@@ -354,7 +354,7 @@ void KisPaintDeviceTest::testThumbnail()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
-    dev->convertFromQImage(image, "");
+    dev->convertFromQImage(image, 0);
     {
         KisPaintDeviceSP thumb = dev->createThumbnailDevice(50, 50);
         QRect rc = thumb->exactBounds();
@@ -508,7 +508,7 @@ void KisPaintDeviceTest::testBltPerformance()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP fdev = new KisPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
@@ -548,7 +548,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
     referenceImage = device->convertToQImage(0);
 
 
-    KisTransaction transaction1("", device);
+    KisTransaction transaction1(0, device);
 //    qDebug()<<"CLEARING";
     device->clear(clearRect);
 
@@ -559,7 +559,7 @@ void KisPaintDeviceTest::testDeviceDuplication()
 
     KisPaintDeviceSP clone =  new KisPaintDevice(*device);
 
-    KisTransaction transaction("", clone);
+    KisTransaction transaction(0, clone);
 //    qDebug()<<"CLEARING";
     clone->clear(clearRect);
 
@@ -631,7 +631,7 @@ void KisPaintDeviceTest::testOpacity()
     QImage image(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent.png");
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP fdev = new KisPaintDevice(cs);
-    fdev->convertFromQImage(image, "");
+    fdev->convertFromQImage(image, 0);
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->fill(0, 0, 640, 441, KoColor(Qt::white, cs).data());
@@ -642,11 +642,53 @@ void KisPaintDeviceTest::testOpacity()
     QImage checkResult(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa_transparent_result.png");
     QPoint errpoint;
 
-    if (!TestUtil::compareQImages(errpoint, checkResult, result)) {
+    if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
         checkResult.save("kis_paint_device_test_test_blt_fixed_opactiy_expected.png");
         result.save("kis_paint_device_test_test_blt_fixed_opacity_result.png");
-        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
+}
+
+void KisPaintDeviceTest::testExactBoundsWeirdNullAlphaCase()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QVERIFY(dev->exactBounds().isEmpty());
+
+    dev->fill(QRect(10,10,10,10), KoColor(Qt::white, cs));
+
+    QCOMPARE(dev->exactBounds(), QRect(10,10,10,10));
+
+    const quint8 weirdPixelData[4] = {0,10,0,0};
+    KoColor weirdColor(weirdPixelData, cs);
+    dev->setPixel(6,6,weirdColor);
+
+    // such weird pixels should not change our opinion about
+    // device's size
+    QCOMPARE(dev->exactBounds(), QRect(10,10,10,10));
+}
+
+void KisPaintDeviceTest::benchmarkExactBoundsNullDefaultPixel()
+{
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QVERIFY(dev->exactBounds().isEmpty());
+
+    QRect fillRect(60,60, 1930, 1930);
+
+    dev->fill(fillRect, KoColor(Qt::white, cs));
+
+    QRect measuredRect;
+
+    QBENCHMARK {
+        // invalidate the cache
+        dev->setDirty();
+        measuredRect = dev->exactBounds();
+    }
+
+    QCOMPARE(measuredRect, fillRect);
 }
 
 

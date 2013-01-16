@@ -1,6 +1,7 @@
 /*  This file is part of the KDE project
 
     Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -22,6 +23,7 @@
 #define KO_RESOURCESERVER_ADAPTER_H_
 
 #include "KoResourceServer.h"
+#include <KoResource.h>
 
 #include "kowidgets_export.h"
 
@@ -37,8 +39,17 @@ public:
     virtual QList<KoResource*> resources() = 0;
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
-    virtual void importResourceFile( const QString & filename ) = 0;
+    virtual void removeResourceFile(const QString & filename) = 0;
+    virtual void importResourceFile(const QString & filename, bool fileCreation=true) = 0;
     virtual QString extensions() = 0;
+    virtual void setTaggedResourceFileNames(const QStringList& resourceFileNames)=0;
+    virtual void setTagSearch(bool tagSearch)=0;
+    virtual void updateServer()=0;
+    virtual QStringList getAssignedTagsList( KoResource* resource )=0;
+    virtual QStringList getTagNamesList()=0;
+    virtual void addTag( KoResource* resource,const QString& tag)=0;
+    virtual void deleteTag( KoResource* resource,const QString& tag)=0;
+    virtual QStringList searchTag(const QString& lineEditText)=0;
 
 signals:
     void resourceAdded(KoResource*);
@@ -62,6 +73,7 @@ public:
         : KoAbstractResourceServerAdapter(parent)
         , m_resourceServer(resourceServer)
     {
+        m_tagSearch=false;
     }
 
     virtual ~KoResourceServerAdapter()
@@ -84,9 +96,19 @@ public:
         QList<T*> serverResources = m_resourceServer->resources();
 
         QList<KoResource*> resources;
+
         foreach( T* resource, serverResources ) {
             resources.append( resource );
         }
+
+        if(m_tagSearch) {
+            foreach(KoResource* resource, resources) {
+                if(!m_resourceFileNames.contains(resource->filename())) {
+                    resources.removeAll(resource);
+                }
+            }
+        }
+
         return resources;
     }
 
@@ -114,11 +136,21 @@ public:
         return false;
     }
 
-    void importResourceFile( const QString & filename )
+    void importResourceFile(const QString & filename , bool fileCreation=true)
     {
         if( ! m_resourceServer )
             return;
-        m_resourceServer->importResourceFile(filename);
+        m_resourceServer->importResourceFile(filename, fileCreation);
+    }
+
+    void removeResourceFile(const QString & filename)
+    {
+        if (!m_resourceServer) {
+            return;
+        }
+
+        m_resourceServer->removeResourceFile(filename);
+
     }
 
     void resourceAdded(T* resource)
@@ -144,6 +176,46 @@ public:
         return m_resourceServer->extensions();
     }
     
+    void setTaggedResourceFileNames(const QStringList& resourceFileNames)
+    {
+        m_resourceFileNames = resourceFileNames;
+    }
+
+    void setTagSearch(bool tagSearch )
+    {
+        m_tagSearch = tagSearch;
+    }
+
+    void updateServer()
+    {
+        emitRemovingResource(0);
+    }
+
+    QStringList getAssignedTagsList( KoResource* resource )
+    {
+        return m_resourceServer->getAssignedTagsList(resource);
+    }
+
+    QStringList getTagNamesList()
+    {
+        return m_resourceServer->getTagNamesList();
+    }
+
+    void addTag( KoResource* resource,const QString& tag)
+    {
+        m_resourceServer->addTag(resource,tag);
+    }
+
+    void deleteTag( KoResource* resource,const QString& tag)
+    {
+        m_resourceServer->delTag(resource,tag);
+    }
+
+    QStringList searchTag(const QString& lineEditText)
+    {
+        return m_resourceServer->searchTag(lineEditText);
+    }
+
 protected:
     KoResourceServer<T>* resourceServer()
     {
@@ -152,6 +224,8 @@ protected:
 
 private:
     KoResourceServer<T>* m_resourceServer;
+    QStringList m_resourceFileNames;
+    bool m_tagSearch;
 };
 
 #endif // KO_RESOURCESERVER_ADAPTER_H_

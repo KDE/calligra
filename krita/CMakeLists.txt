@@ -1,15 +1,17 @@
 project(krita)
 
 
-# turn on QImage as buffer for QPainter based canvas
-add_definitions(-DINDEPENDENT_CANVAS)
-
 # 
 # The reason for this mode is that the Debug mode disable inlining
 #
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_KRITADEVS "-O2 -g" CACHE STRING "" FORCE)
+    set(CMAKE_CXX_FLAGS_KRITADEVS "-O3 -g" CACHE STRING "" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCXX)
+
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+endif(MSVC)
+
 
 include(CheckFunctionExists)
 
@@ -28,6 +30,11 @@ if(HAVE_OPENGL)
 else(HAVE_OPENGL)
     message(STATUS "OpenGL NOT found - krita will not be able to use OpenGL for hardware accelerated rendering.")
 endif(HAVE_OPENGL)
+
+macro_optional_find_package(OCIO)
+macro_log_feature(OCIO_FOUND "OCIO" "The OpenColorIO Library" "http://www.opencolorio.org" FALSE "" "Required by the Krita LUT docker")
+macro_bool_to_01(OCIO_FOUND HAVE_OCIO)
+configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h )
 
 if(UNIX)
     set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_REQUIRED_LIBRARIES};m")
@@ -70,9 +77,10 @@ set(KRITA_INCLUDES
     ${PIGMENT_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
+    ${BASICFLAKES_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
-    
+    ${CMAKE_SOURCE_DIR}/libs/widgetutils
+
     ${EIGEN2_INCLUDE_DIR}
     
     # 'Export' this for use by filters
@@ -102,23 +110,43 @@ target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(krita_KDEINIT_SRCS main.cc)
-kde4_add_app_icon(krita_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/krita.png")
+kde4_add_app_icon(krita_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-krita.png")
 kde4_add_kdeinit_executable(krita ${krita_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.krita")
+    set_target_properties(krita PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.krita")
     set_target_properties(krita PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Krita 2")
 endif (Q_WS_MAC)
 
 target_link_libraries(kdeinit_krita kritaui)
 target_link_libraries(krita ${QT_QTCORE_LIBRARY} kdeinit_krita)
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    find_package(OpenCTL)
+    find_package(OpenShiva)
+    find_package(QtShiva )
+    
+    if(NOT ${OPENCTL_VERSION} VERSION_GREATER 0.9.15.1 )
+        # Workaround for the following issues:
+        # http://bugs.kde.org/274675 http://bugs.kde.org/248051
+        # http://redmine.opengtl.org/issues/72
+        message(status "Found OpenGTL < 0.9.15.1, on a 64 bits system, krita will be forced linked to the libraries to make sure opengtl symbols are available")
+        if(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
+            target_link_libraries(krita ${OPENSHIVA_LDFLAGS})
+        endif()
+
+        if(OPENCTL_FOUND AND OPENEXR_FOUND)
+            target_link_libraries(krita ${OPENCTL_LDFLAGS})
+        endif()
+    endif()
+endif()
+
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS kdeinit_krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( PROGRAMS  krita.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kritapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita.rc krita_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/krita)
+install( FILES  krita.rc DESTINATION ${DATA_INSTALL_DIR}/krita)
 
 
 

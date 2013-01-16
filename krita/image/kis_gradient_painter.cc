@@ -22,17 +22,15 @@
 #include <string.h>
 #include <cfloat>
 
-#include "qbrush.h"
-#include "qcolor.h"
-#include "qfontinfo.h"
-#include "qfontmetrics.h"
-#include "qpen.h"
-#include "qregion.h"
-#include "qmatrix.h"
+#include <QBrush>
+#include <QColor>
+#include <QFontInfo>
+#include <QFontMetrics>
+#include <QPen>
+#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>
-#include <QPixmap>
 #include <QRect>
 #include <QString>
 
@@ -45,14 +43,11 @@
 #include <KoUpdater.h>
 
 #include "kis_image.h"
-#include "kis_iterators_pixel.h"
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 #include "kis_pattern.h"
 #include "kis_types.h"
-#include "kis_random_accessor.h"
 #include "kis_selection.h"
-
 
 #include "KoColorSpaceRegistry.h"
 #include "kis_iterator_ng.h"
@@ -616,7 +611,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     }
 
     if (!progressUpdater() || (progressUpdater() && !progressUpdater()->interrupted())) {
-        // XXX: FIX ANTIALISED DRAWING OF GRADIENTS
         if (false && antiAliasThreshold < 1 - DBL_EPSILON) {
 
             QList<KoChannelInfo *> channels = colorSpace->channels();
@@ -632,7 +626,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                     memcpy(thisPixel, iter->rawData(), pixelSize);
                     quint8 thisPixelOpacity = colorSpace->opacityU8(thisPixel);
 
-                    // XXX: Move the distance computation into the colorspace when it works.
                     for (int yOffset = -1; yOffset < 2; yOffset++) {
                         for (int xOffset = -1; xOffset < 2; xOffset++) {
 
@@ -686,8 +679,6 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
                             }
                         }
                     }
-
-                    // XXX: Move this averaging code into the colorspace
                     if (maxDistance > 3. * antiAliasThreshold * antiAliasThreshold) {
                         const int numSamples = 4;
 

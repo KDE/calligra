@@ -2,19 +2,19 @@
 # -*- coding: utf-8 -*-
 
 """
-This python script connects KWord and OpenOffice.org together.
+This python script connects Words and OpenOffice.org together.
 
 (C)2006 Sebastian Sauer <mail@dipe.org>
 
 http://kross.dipe.org
-http://www.koffice.org/kword
+http://www.calligra.org/words
 http://udk.openoffice.org/python/python-bridge.html
 
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import sys, os, popen2, time, traceback, tempfile
-import Kross, KWord
+import Kross, Words
 
 class Importer:
     def __init__(self, action):
@@ -30,7 +30,7 @@ class Importer:
         dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         openpage = dialog.addPage("Open","Import File","document-open")
-        startDirOrVariable = "kfiledialog:///kwordooimport"
+        startDirOrVariable = "kfiledialog:///wordsooimport"
         openwidget = self.forms.createFileWidget(openpage, startDirOrVariable)
         openwidget.setMode("Opening")
         filters = [
@@ -138,7 +138,7 @@ class Importer:
                         progress.addText("<b>Error: Seems OpenOffice.org failed to write the intermedia file \"%s\"</b>" % savefile)
                     canceled = True
                 else:
-                    progress.addText("KWord imports the intermedia file \"%s\" now" % savefile)
+                    progress.addText("Words imports the intermedia file \"%s\" now" % savefile)
                     self.importFile(savefile, options)
         finally:
             try:
@@ -167,7 +167,7 @@ class Importer:
                         #progressThread.value = 30
                         #controller.loadDocument( "file://%s" % file )
                         #progressThread.value = 70
-                        #outputstream = KWordOutputStream(controller.unoConfig)
+                        #outputstream = WordsOutputStream(controller.unoConfig)
                         #controller.writeDocument(outputstream)
                         #progressThread.value = 90
                         #outputstream.flush()
@@ -181,7 +181,7 @@ class Importer:
                 #self.forms.showMessageBox("Error","Error","%s" % tb)
 
     def importFile(self, fromFileName, options):
-        fs = KWord.mainFrameSet()
+        fs = Words.mainFrameSet()
         if not fs:
             raise "No main frameset to import the content too."
         doc = fs.document()
@@ -199,7 +199,7 @@ class Importer:
         else: #odt
 
             #TODO this crashes horrible :-(
-            KWord.document().openUrl(fromFileName)
+            Words.document().openUrl(fromFileName)
 
 def start(action):
     importer = Importer(action)

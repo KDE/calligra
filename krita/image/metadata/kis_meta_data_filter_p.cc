@@ -20,9 +20,7 @@
 #include <QDate>
 
 #include <klocale.h>
-#include <kofficeversion.h>
-
-#include "kis_aboutdata.h"
+#include <calligraversion.h>
 
 #include "kis_meta_data_entry.h"
 #include "kis_meta_data_schema.h"
@@ -109,6 +107,6 @@ void ToolInfoFilter::filter(KisMetaData::Store* store) const
     store->getEntry(xmpSchema, "ModifyDate").value() = Value(QDate::currentDate());
     store->getEntry(xmpSchema, "MetadataDate").value() = Value(QDate::currentDate());
     if (!store->containsEntry(xmpSchema, "CreatorTool")) {
-        store->getEntry(xmpSchema, "CreatorTool").value() = Value(i18n("Krita %1", QString(KOFFICE_VERSION_STRING)));
+        store->getEntry(xmpSchema, "CreatorTool").value() = Value(i18n("Krita %1", QString(CALLIGRA_VERSION_STRING)));
     }
 }

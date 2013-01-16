@@ -6,9 +6,9 @@ This python script connects with OpenOffice.org using PyUNO and provides
 us the functionality to control OpenOffice.org.
 
     # Execute the python-script with the ODT-file as argument
-    python `kde4-config --install data`/kword/scripts/extensions/oouno.py /path/mydoc.odt
+    python `kde4-config --install data`/words/scripts/extensions/oouno.py /path/mydoc.odt
     # Define the hostaddress and port the OpenOffice.org server is running on
-    python `kde4-config --install data`/kword/scripts/extensions/oouno.py --host=192.168.0.1 --port=2002 /path/mydoc.odt
+    python `kde4-config --install data`/words/scripts/extensions/oouno.py --host=192.168.0.1 --port=2002 /path/mydoc.odt
 
 We are using the PyUNO module to access OpenOffice.org. For this an optional hidden
 OpenOffice.org instance need to be started. Then the script connects as client to
@@ -26,7 +26,7 @@ the script does not need to do it for you each time.
 (C)2007 Sebastian Sauer <mail@dipe.org>
 
 http://kross.dipe.org
-http://www.koffice.org/kword
+http://www.calligra.org/words
 http://udk.openoffice.org/python/python-bridge.html
 
 Dual-licensed under LGPL v2+higher and the BSD license.
@@ -274,14 +274,14 @@ class UnoController:
     def writeDocument(self, outputstream = UnoDocument.OutputStream()):
         self.unoClient.unoDocument.read(outputstream)
 
-#class KWordOutputStream( UnoDocument.OutputStream ):
+#class WordsOutputStream( UnoDocument.OutputStream ):
     #def __init__(self, unoConfig):
             ##self.filterName = "Text (encoded)"
             #self.filterName = "HTML (StarWriter)"
             ##self.filterName = "writer_pdf_Export"
 
-            #import KWord
-            #self.doc = KWord.mainFrameSet().document()
+            #import Words
+            #self.doc = Words.mainFrameSet().document()
             #self.html = ""
 
     #def closeOutput(self):

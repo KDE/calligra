@@ -21,15 +21,15 @@
 #define KWFACTORY_H
 
 #include <KPluginFactory>
-#include "kword_export.h"
+#include "words_export.h"
 
 class KAboutData;
 
 /**
- * Factory for the KWord application.
- * Will use the KWord library to create a new instance of the KWord doc.
+ * Factory for the Words application.
+ * Will use the Words library to create a new instance of the Words doc.
  */
-class KWORD_EXPORT KWFactory : public KPluginFactory
+class WORDS_EXPORT KWFactory : public KPluginFactory
 {
     Q_OBJECT
 public:

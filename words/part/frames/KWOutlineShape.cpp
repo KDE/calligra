@@ -67,17 +67,3 @@ KWOutlineShape::KWOutlineShape(KWFrame *frame)
 KWOutlineShape::~KWOutlineShape()
 {
 }
-
-void KWOutlineShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
-{
-    if (! canvas->shapeManager()->selection()->isSelected(this))
-        return;
-
-    applyConversion(painter, converter);
-
-    QPen pen = QPen(canvas->resourceManager()->koColorResource(KWord::FrameOutlineColor).toQColor());
-    QPointF onePixel = converter.viewToDocument(QPointF(1, 1));
-    pen.setWidthF(onePixel.x());
-    painter.strokePath(outline(), pen);
-}
-

@@ -4,10 +4,14 @@ include_directories(
     ${KDE4_INCLUDE_DIR}
     ${QT_INCLUDES}
     ${KOTEXT_INCLUDES}
+    ${TEXTLAYOUT_INCLUDES}
     ${KOMAIN_INCLUDES} )
 
 set(textvariables_SRCS
     VariablesPlugin.cpp
+    UserVariable.cpp
+    UserVariableFactory.cpp
+    UserVariableOptionsWidget.cpp
     DateVariable.cpp
     DateVariableFactory.cpp
     FixedDateFormat.cpp
@@ -15,6 +19,8 @@ set(textvariables_SRCS
     PageVariableFactory.cpp
     InfoVariable.cpp
     InfoVariableFactory.cpp
+    ChapterVariable.cpp
+    ChapterVariableFactory.cpp
 )
 
 
@@ -24,7 +30,7 @@ kde4_add_ui_files( textvariables_SRCS
 
 kde4_add_plugin(textvariables ${textvariables_SRCS})
 
-target_link_libraries(textvariables kotext)
+target_link_libraries(textvariables kotext textlayout)
 
 install(TARGETS textvariables DESTINATION ${PLUGIN_INSTALL_DIR})
 

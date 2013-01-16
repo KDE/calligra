@@ -43,9 +43,9 @@ void KoInlineObjectRegistry::Private::init(KoInlineObjectRegistry *q)
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "TextInlinePlugins";
     config.blacklist = "TextInlinePluginsDisabled";
-    config.group = "koffice";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Text-InlineObject"),
-                                     QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
+    config.group = "calligra";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-InlineObject"),
+                                     QString::fromLatin1("[X-KoText-MinVersion] <= 4"), config);
 
     foreach (KoInlineObjectFactoryBase *factory, q->values()) {
         QString nameSpace = factory->odfNameSpace();

@@ -28,34 +28,43 @@ FreeLayout::FreeLayout() : Layout("freelayout")
 {
 }
 
-FreeLayout::~FreeLayout() {
+FreeLayout::~FreeLayout()
+{
 }
 
-QRectF FreeLayout::boundingBox() const {
-  QRectF b = Layout::boundingBox();
-  qreal margin = qMin<qreal>(200.0, 0.5 * (b.width() + b.height()) );
-  return b.adjusted(-margin, -margin, margin, margin);
+QRectF FreeLayout::boundingBox() const
+{
+    QRectF b = Layout::boundingBox();
+    qreal margin = qMin<qreal>(200.0, 0.5 * (b.width() + b.height()));
+    return b.adjusted(-margin, -margin, margin, margin);
 }
 
-void FreeLayout::shapeAdded(KoShape* ) {
+void FreeLayout::shapeAdded(KoShape*)
+{
 }
 
-void FreeLayout::shapeRemoved(KoShape* ) {
+void FreeLayout::shapeRemoved(KoShape*)
+{
 }
 
-void FreeLayout::shapeGeometryChanged(KoShape* ) {
+void FreeLayout::shapeGeometryChanged(KoShape*)
+{
 }
 
-void FreeLayout::relayout() {
-  emit(boundingBoxChanged(boundingBox()));
+void FreeLayout::relayout()
+{
+    emit(boundingBoxChanged(boundingBox()));
 }
 
-FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free")) {
+FreeLayoutFactory::FreeLayoutFactory() : LayoutFactory("freelayout", i18n("Free"))
+{
 }
 
-FreeLayoutFactory::~FreeLayoutFactory() {
+FreeLayoutFactory::~FreeLayoutFactory()
+{
 }
 
-Layout* FreeLayoutFactory::createLayout() const {
-  return new FreeLayout;
+Layout* FreeLayoutFactory::createLayout() const
+{
+    return new FreeLayout;
 }

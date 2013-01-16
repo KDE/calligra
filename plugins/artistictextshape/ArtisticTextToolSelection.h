@@ -21,7 +21,7 @@
 #define ARTISTICTEXTTOOLSELECTION_H
 
 #include <KoToolSelection.h>
-#include <QtGui/QPainterPath>
+#include <QPainterPath>
 
 class ArtisticTextShape;
 class KoCanvasBase;
@@ -31,7 +31,7 @@ class QPainter;
 class ArtisticTextToolSelection : public KoToolSelection
 {
 public:
-    ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent = 0);
+    explicit ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent = 0);
     virtual ~ArtisticTextToolSelection();
 
     // reimplemented from KoToolSelection

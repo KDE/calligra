@@ -31,7 +31,7 @@
 #include "kis_jpeg_converter.h"
 
 K_PLUGIN_FACTORY(JPEGImportFactory, registerPlugin<KisJPEGImport>();)
-K_EXPORT_PLUGIN(JPEGImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(JPEGImportFactory("calligrafilters"))
 
 KisJPEGImport::KisJPEGImport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -51,13 +51,7 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain->outputDocument());
 
     if (!doc)
-        return KoFilter::CreationError;
-
-    KisView2 * view = 0;
-
-    if (!doc->views().isEmpty()) {
-        view = static_cast<KisView2*>(doc->views().first());
-    }
+        return KoFilter::NoDocumentCreated;
 
     QString filename = m_chain -> inputFile();
 
@@ -70,7 +64,7 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QByteArray&, const QByte
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        KisJPEGConverter ib(doc, doc->undoAdapter());
+        KisJPEGConverter ib(doc);
 
 //        if (view != 0)
 //            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);

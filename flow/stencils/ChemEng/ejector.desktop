@@ -1,8 +1,24 @@
 [Desktop Entry]
 Name=ejector
+Name[ca]=ejector
+Name[ca@valencia]=ejector
+Name[de]=Auswurf
+Name[el]=ejector
+Name[es]=eyector
+Name[et]=Ejektor
+Name[fr]=éjecteur
+Name[gl]=Expulsor
+Name[hu]=kiadó
+Name[it]=ejector
+Name[kk]=Эжектор
+Name[nb]=utkaster
 Name[nl]=uitwerper
-Name[pt]=ejector
+Name[pl]=strumienica ssąca
+Name[pt]=ejecção
 Name[pt_BR]=ejetor
+Name[ru]=Эжектор
+Name[sk]=ejektor
 Name[sv]=ejektor
 Name[uk]=Ежектор
 Name[x-test]=xxejectorxx
+Name[zh_TW]=ejector

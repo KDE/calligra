@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@
 #include <KoOdfDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include "KoShapeSavingContext.h"
+#include "KoStyleManager.h"
 #include <opendocument/KoTextSharedSavingData.h>
 
 #include "KoTextOdfSaveHelper.h"
@@ -109,9 +110,13 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     if (!helper.writeBody()) {
         return false;
     }
+    // Save the named styles that was referred to by the copied text
+    if (KoStyleManager *styleManager = helper.styleManager()) {
+        styleManager->saveReferredStylesToOdf(*context);
+    }
 
     mainStyles.saveOdfStyles(KoGenStyles::DocumentAutomaticStyles, contentWriter);
-    changes.saveOdfChanges(contentWriter);
+    changes.saveOdfChanges(contentWriter, false);
 
     odfStore.closeContentWriter();
 
@@ -119,9 +124,11 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 
     kDebug(30015) << "testing to see if we should add rdf to odf file?";
+
 #ifdef SHOULD_BUILD_RDF
+    kDebug(30015) << "helper has model" << ( helper.rdfModel() != 0 );
     // RDF: Copy relevant RDF to output ODF
-    if (Soprano::Model *m = helper.rdfModel()) {
+    if (QSharedPointer<Soprano::Model> m = helper.rdfModel()) {
         kDebug(30015) << "rdf model size:" << m->statementCount();
         KoTextRdfCore::createAndSaveManifest(m, textSharedData->getRdfIdMapping(),
                                              store, manifestWriter);
@@ -162,14 +169,6 @@ void KoTextDrag::setData(const QString & mimeType, const QByteArray & data)
         m_mimeData = new QMimeData();
     }
     m_mimeData->setData(mimeType, data);
-}
-
-void KoTextDrag::addToClipboard()
-{
-    if (m_mimeData) {
-        QApplication::clipboard()->setMimeData(m_mimeData);
-        m_mimeData = 0;
-    }
 }
 
 QMimeData * KoTextDrag::mimeData()

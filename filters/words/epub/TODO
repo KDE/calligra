@@ -1,0 +1,70 @@
+This file describes short and long term tasks that we want to do in
+the epub filter.
+
+
+Legend
+------
+
+* Main issue
++ Sub issue
+- Sub sub issue
+
+[DONE]    Main issue is done
+[Done]    Sub issue is done
+[done]    Sub sub issue is done
+
+[name]    <name> is assigned to this task
+
+
+================================================================
+                        Milestones
+
+Next Milestone: EPUB 2.0.1 filter done
+
+
+================================================================
+                        Issues
+
+
+Short term issues
+-----------------
+
+Time frame: (days / weeks)
+
+[These issues are picked from the medium and long term issues and
+assigned to a person.]
+
+
+Fix known bugs / misfeatures
+
+
+Medium term issues
+------------------
+
+Time frame: (weeks / months)
+
+Allow user to add a book cover image
+ * Send parameter (filename) to the filter
+ * UI to find / edit the filename
+
+Configuration of the conversion process
+ * Styles in css file (bool)                                            [Done]
+ * Use breaks (bool)                                                    [Done]
+
+Create a generic HTML export filter                                     DONE
+
+Misfeatures
+ * Styles in css should go back to only those that are used.
+
+
+Long term issues
+----------------
+
+Time frame: (months / years)
+ 
+EPUB 3.0
+ * SVG
+ * MathML
+ * Multimedia, video
+ * Multimedia, audio
+ * Scripting with Javascript

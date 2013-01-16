@@ -26,17 +26,19 @@
 #include "StateShapeFactory.h"
 #include "StateToolFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY(stateshape,
-    KGenericFactory<StateShapePlugin>( "StateShapePlugin" ) )
- 
-StateShapePlugin::StateShapePlugin(QObject *parent, const QStringList&)
+K_PLUGIN_FACTORY(StateShapePluginFactory, registerPlugin<StateShapePlugin>();)
+K_EXPORT_PLUGIN(StateShapePluginFactory( "StateShapePlugin" ) )
+
+
+StateShapePlugin::StateShapePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
+    KGlobal::locale()->insertCatalog("braindump");
     // register the shape's factory
     KoShapeRegistry::instance()->add(
-        new StateShapeFactory( ) );
+        new StateShapeFactory());
     // we could register more things here in this same plugin.
-    KoToolRegistry::instance()->add( new StateToolFactory( ) );
+    KoToolRegistry::instance()->add(new StateToolFactory());
 }
 
 #include "StateShapePlugin.moc"

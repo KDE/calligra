@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,13 +21,15 @@
 #ifndef KexiDBImageBox_H
 #define KexiDBImageBox_H
 
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexiframe.h"
 #include "kexidbutils.h"
 #include <QContextMenuEvent>
 #include <QPixmap>
 #include <QPaintEvent>
 #include <kexiblobbuffer.h>
+
+#include <widget/utils/kexicontextmenuutils.h>
 
 class KexiDropDownButton;
 class KexiImageContextMenu;
@@ -54,8 +56,13 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox : public KexiFrame,
 // Q_PROPERTY( QString originalFileName READ originalFileName WRITE setOriginalFileName DESIGNABLE false )
 // Q_PROPERTY( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
     Q_PROPERTY(bool dropDownButtonVisible READ dropDownButtonVisible WRITE setDropDownButtonVisible)
-    Q_PROPERTY(int lineWidth READ lineWidth WRITE setLineWidth)
     Q_PROPERTY(Qt::FocusPolicy focusPolicy READ focusPolicyInternal WRITE setFocusPolicy)
+    // overridden to update image geometry
+    Q_ENUMS(Shape Shadow)
+    Q_PROPERTY(Shape frameShape READ frameShape WRITE setFrameShape)
+    Q_PROPERTY(Shadow frameShadow READ frameShadow WRITE setFrameShadow)
+    Q_PROPERTY(int lineWidth READ lineWidth WRITE setLineWidth)
+    Q_PROPERTY(int midLineWidth READ midLineWidth WRITE setMidLineWidth)
 
 public:
     KexiDBImageBox(bool designMode, QWidget *parent);
@@ -117,9 +124,6 @@ public:
      This can be later reused for displaying the image within a collection (to be implemented)
      or on saving the image data back to file. */
 //todo  QString originalFileName() const { return m_value.originalFileName(); }
-
-    //! Reimplemented to override behaviour of "lineWidth" property.
-    virtual void setLineWidth(int width);
 
     //! Reimplemented to override behaviour of "paletteBackgroundColor"
     //! and "paletteForegroundColor" properties.
@@ -193,6 +197,14 @@ public slots:
 
     //! Forces execution of "insert from file" action
     void insertFromFile();
+
+    void setFrameShape(QFrame::Shape s);
+
+    void setFrameShadow(QFrame::Shadow s);
+
+    void setLineWidth(int w);
+
+    void setMidLineWidth(int w);
 
 signals:
     //! Used for db-aware mode. Emitted when value has been changed.
@@ -274,7 +286,7 @@ protected:
     KexiBLOBBuffer::Handle m_data;
 //  QString m_originalFileName;
     KexiDropDownButton *m_chooser;
-    KexiImageContextMenu *m_contextMenu;
+    QPointer<KexiImageContextMenu> m_contextMenu;
 //moved  KActionCollection m_actionCollection;
 //moved  KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
 //   *m_deleteAction, *m_propertiesAction;

@@ -32,7 +32,7 @@ KoSopranoTableModel::KoSopranoTableModel(KoDocumentRdf *rdf)
     }
 }
 
-Soprano::Model *KoSopranoTableModel::model() const
+QSharedPointer<Soprano::Model> KoSopranoTableModel::model() const
 {
     return m_rdf->model();
 }

@@ -24,7 +24,7 @@
 #include <KComboBox>
 
 #include <kexi_export.h>
-#include <kexidb/driver.h>
+#include <db/driver.h>
 
 //! \brief Combo box widget for selecting a database driver
 /*! This widget provides a combobox for selecting a database driver.
@@ -39,7 +39,7 @@
 \endcode
 
 A more complete example can be found in
-<a href="http://websvn.kde.org/trunk/koffice/kexi/tests/widgets/kexidbdrivercombotest.cpp?&view=auto">koffice/kexi/tests/widgets/</a>.
+<a href="http://lxr.kde.org/source/calligra/kexi/tests/widgets/kexidbdrivercombotest.cpp">calligra/kexi/tests/widgets/</a>.
 */
 class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 {
@@ -73,9 +73,7 @@ public:
         was false, this won't include the file based drivers either.
 
         \return a list of names of drivers that were found */
-    QStringList driverNames() const {
-        return m_driverNames;
-    }
+    QStringList driverNames() const;
 
     /*! Get the name of the currrently selected driver.  If the combobox is empty,
         QString() will be returned.
@@ -92,9 +90,9 @@ public:
         */
     void setDriverName(const QString& driverName);
 
-protected:
-    QHash<QString, QString> m_drivers; //!< a map: driver caption -> driver name
-    QStringList m_driverNames;
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif

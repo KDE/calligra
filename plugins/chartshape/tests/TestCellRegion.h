@@ -42,6 +42,7 @@ public:
 private slots:
     void init();
     void testToStringSingleTable();
+    void testSkippedTableEntry();
     void testFromStringSingleTable();
     void testToStringWithSpecialCharactersSingleTable();
     void testFromStringWithSpecialCharactersSingleTable();
@@ -52,6 +53,7 @@ private slots:
     void testFromStringWithSpecialCharactersMultipleTables();
     void testTableNameChangeMultipleTables();
     void testListOfRegions();
+    void testListOfRegions2();
 
 private:
     TableSource m_source;

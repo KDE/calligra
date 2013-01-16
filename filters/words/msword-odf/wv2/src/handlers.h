@@ -25,6 +25,7 @@
 #include "sharedptr.h"
 #include "functordata.h"
 #include "wv2_export.h"
+#include "word97_generated.h"
 
 namespace wvWare {
 
@@ -76,10 +77,10 @@ namespace wvWare {
     public:
         virtual ~SubDocumentHandler();
 
-        /**
-	 * Set the progress of WordDocument Stream processing.  All other
-	 * streams (Table, Data) are refered from this one.
-	 */
+    /**
+     * Set the progress of WordDocument Stream processing.  All other
+     * streams (Table, Data) are referred from this one.
+     */
         virtual void setProgress(const int percent);
 
         /**
@@ -215,17 +216,17 @@ namespace wvWare {
 
         virtual ~GraphicsHandler();
 
-        /**
-         * This method gets called when a floating object is found.
-	 * @param globalCP (character position)
-         */
+       /**
+        * This method gets called when a floating object is found.
+        * @param globalCP (character position)
+        */
         virtual void handleFloatingObject(unsigned int globalCP);
 
-	/**
-	 * This method gets called when an inline object is found.  @param data
-         * the picture properties and offset into data stream.
-	 */
-	virtual void handleInlineObject(const PictureData& data);
+       /**
+        * This method gets called when an inline object is found.  @param data
+        * the picture properties and offset into data stream.
+        */
+	virtual QString handleInlineObject(const PictureData& data, const bool isBulletPicture = false);
     };
 
 
@@ -271,9 +272,11 @@ namespace wvWare {
         // Paragraph related callbacks...
         /**
          * Denotes the start of a paragraph.
-         * The paragraph properties are passed in the @p paragraphProperties argument.
+         * @param paragraph properties of the paragraph.
+         * @param character properties of the paragraph provided for empty
+         * paragraphs to set correct font-size, line-height, etc.
          */
-        virtual void paragraphStart( SharedPtr<const ParagraphProperties> paragraphProperties );
+        virtual void paragraphStart( SharedPtr<const ParagraphProperties> paragraphProperties, SharedPtr<const Word97::CHP> characterProperties);
         virtual void paragraphEnd();
 
         /**
@@ -310,18 +313,18 @@ namespace wvWare {
                                 DateM = 29, DateShort = 30, MonthShort = 33,
                                 YearLong = 34, YearShort = 35,
                                 AbbreviatedMonth = 36, MonthLong = 37,
-                                CurrentTimeHMS = 38, DateLong = 39 };
+                                CurrentTimeHMS = 38, DateLong = 39, Symbol = 40};
 
         /**
          * Very special characters (bad, bad name) are the ones which need additional
-         * information from the file (i.e. the plain "put the current date there" isn't sufficent).
+         * information from the file (i.e. the plain "put the current date there" isn't sufficient).
          */
         enum VerySpecialCharacter { Picture = 1, FootnoteAuto = 2, AnnotationRef = 5,
                                     DrawnObject = 8, FieldBegin = 19,
                                     FieldSeparator = 20, FieldEnd = 21, FieldEscapeChar = 92 };
 
         /**
-         * special charachters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
+         * special characters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
          */
         enum UnusedSpecialCharacter {FootnoteSeparator = 3, FootnodeContinuation = 4, HandAnnotationPic = 7,
                                  AbbrevDate = 10, MergeHelper = 41};
@@ -339,8 +342,10 @@ namespace wvWare {
          * runOfText (that it doesn't get lost if someone doesn't override this method) and
          * invokes the functor.
          */
-        virtual void footnoteFound( FootnoteData::Type type, UString characters,
-                                    SharedPtr<const Word97::CHP> chp, const FootnoteFunctor& parseFootnote);
+        virtual void footnoteFound( FootnoteData data, UString characters,
+                                    SharedPtr<const Word97::SEP> sep,
+                                    SharedPtr<const Word97::CHP> chp,
+                                    const FootnoteFunctor& parseFootnote);
 
         /**
          * The parser found an annotation. The passed functor will trigger the parsing of this
@@ -381,16 +386,14 @@ namespace wvWare {
         virtual void fieldEnd( const FLD* fld, SharedPtr<const Word97::CHP> chp );
 
         /**
-         * This method is called every time we find an inline object.
-         * @param data the picture data as defined by functordata.
+         * This method is called every time an inline or floating MS-ODRAW
+         * object is found.  If the @param data is ZERO, then it's a floating
+         * object.  Else it's an inline object.
+         *
+         * @param globalCP the CP to which the floating object is anchored
+         * @param data the inline object data as defined by functordata
          */
-        virtual void inlineObjectFound(const PictureData& data);
-
-        /**
-         * This method is called every time we find a floating object.
-	 * @param cp of a drawing
-         */
-        virtual void floatingObjectFound( unsigned int globalCP );
+        virtual void msodrawObjectFound( const unsigned int globalCP, const PictureData* data );
 
         /**
          * Denotes the start of a bookmark.

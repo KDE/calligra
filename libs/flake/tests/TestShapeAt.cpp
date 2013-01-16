@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShapeShadow.h>
 
 #include <kcomponentdata.h>
@@ -114,12 +114,12 @@ void TestShapeAt::testShadow()
     shape.setSize(bbox.size());
     QCOMPARE(shape.boundingRect(), bbox);
 
-    KoLineBorder *border = new KoLineBorder();
-    border->setLineWidth(20); // which means the shape grows 10 in all directions.
-    shape.setBorder(border);
-    KoInsets borderInsets;
-    border->borderInsets(&shape, borderInsets);
-    bbox.adjust(-borderInsets.left, -borderInsets.top, borderInsets.right, borderInsets.bottom);
+    KoShapeStroke *stroke = new KoShapeStroke();
+    stroke->setLineWidth(20); // which means the shape grows 10 in all directions.
+    shape.setStroke(stroke);
+    KoInsets strokeInsets;
+    stroke->strokeInsets(&shape, strokeInsets);
+    bbox.adjust(-strokeInsets.left, -strokeInsets.top, strokeInsets.right, strokeInsets.bottom);
     QCOMPARE(shape.boundingRect(), bbox);
 
     KoShapeShadow *shadow = new KoShapeShadow();

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -49,7 +49,8 @@ DocxXmlEndnoteReader::DocxXmlEndnoteReader(KoOdfWriters *writers)
     , d(new Private)
 {
     init();
-    DocxXmlDocumentReader::m_moveToStylesXml = true;
+    //MSWord: Footnotes in header/footer not supported
+    DocxXmlDocumentReader::m_moveToStylesXml = false;
 }
 
 DocxXmlEndnoteReader::~DocxXmlEndnoteReader()
@@ -152,8 +153,8 @@ KoFilter::ConversionStatus DocxXmlEndnoteReader::read_endnotes()
  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start) §17.13.5.9
  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End) §17.13.5.10
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content) §17.13.5.14
- - ins (Inserted Run Content) §17.13.5.18
+ - [done] del (Deleted Run Content) §17.13.5.14
+ - [done] ins (Inserted Run Content) §17.13.5.18
  - moveFrom (Move Source Run Content) §17.13.5.22
  - moveFromRangeEnd (Move Source Location Container - End) §17.13.5.23
  - moveFromRangeStart (Move Source Location Container - Start) §17.13.5.24
@@ -193,6 +194,8 @@ KoFilter::ConversionStatus DocxXmlEndnoteReader::read_endnote()
             TRY_READ_IF(p)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF_NS(m, oMath)
             SKIP_UNKNOWN

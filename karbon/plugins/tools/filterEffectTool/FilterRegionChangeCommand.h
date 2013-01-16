@@ -20,14 +20,14 @@
 #ifndef FILTERREGIONCHANGECOMMAND_H
 #define FILTERREGIONCHANGECOMMAND_H
 
-#include <QtGui/QUndoCommand>
-#include <QtCore/QRectF>
+#include <kundo2command.h>
+#include <QRectF>
 
 class KoShape;
 class KoFilterEffect;
 
 /// A command to change the region of a filter effect
-class FilterRegionChangeCommand : public QUndoCommand
+class FilterRegionChangeCommand : public KUndo2Command
 {
 public:
     /**
@@ -37,7 +37,7 @@ public:
      * @param shape the shape the filter effect is applied to
      * @param parent the parent undo command
      */
-    explicit FilterRegionChangeCommand(KoFilterEffect *effect, const QRectF &filterRegion, KoShape *shape = 0, QUndoCommand *parent = 0);
+    explicit FilterRegionChangeCommand(KoFilterEffect *effect, const QRectF &filterRegion, KoShape *shape = 0, KUndo2Command *parent = 0);
 
     /// redo the command
     virtual void redo();

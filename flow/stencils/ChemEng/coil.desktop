@@ -1,8 +1,23 @@
 [Desktop Entry]
 Name=coil
+Name[ca]=resistència
+Name[ca@valencia]=resistència
+Name[el]=coil
+Name[es]=bobina
+Name[et]=Spiraaltoru
+Name[fr]=coil
+Name[gl]=Bobina horizontal
+Name[hu]=tekercs
+Name[it]=serpentina
+Name[kk]=Ирек түтік
+Name[nb]=spole
 Name[nl]=spiraal
+Name[pl]=coil
 Name[pt]=serpentina
 Name[pt_BR]=serpentina
+Name[ru]=Спираль
+Name[sk]=cievka
 Name[sv]=spole
 Name[uk]=Нагрівальний або охолоджувальний змійовик
 Name[x-test]=xxcoilxx
+Name[zh_TW]=coil

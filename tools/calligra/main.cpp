@@ -33,7 +33,7 @@
 #include <KMessageBox>
 #include <KGuiItem>
 
-#include <kofficeversion.h>
+#include <calligraversion.h>
 
 static void listApplicationNames()
 {
@@ -117,7 +117,11 @@ static int handleUrls(const KCmdLineArgs *args)
         foreach (KService::Ptr service, mimeServices) {
             //kDebug() << "-" << service->name() << service->property("X-DBUS-ServiceName", QVariant::String);
             kDebug() << "-" << service->name() << service->hasServiceType("Calligra/Application")
+#if KDE_IS_VERSION( 4, 6, 0 )
+                << service->hasMimeType(mimetype->name());
+#else
                 << service->hasMimeType(mimetype.data());
+#endif
             //QVariant isCalligraApp = service->property("X-Calligra-App", QVariant::Bool);
             /*if (isCalligraApp.isValid() && isCalligraApp.toBool()) {
                 kDebug() << "FOUND:" << service->name();
@@ -163,7 +167,7 @@ static int handleUrls(const KCmdLineArgs *args)
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData("calligra", 0, ki18n("Calligra Opener"), KOFFICE_VERSION_STRING,
+    KAboutData aboutData("calligra", 0, ki18n("Calligra Opener"), CALLIGRA_VERSION_STRING,
                          ki18n("Calligra Document Opener"),
                          KAboutData::License_GPL,
                          ki18n("(c) 2010-2011 Calligra developers"));

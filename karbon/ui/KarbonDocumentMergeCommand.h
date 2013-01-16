@@ -20,14 +20,14 @@
 #ifndef _KARBONDOCUMENTMERGECOMMAND_H_
 #define _KARBONDOCUMENTMERGECOMMAND_H_
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
-class KarbonPart;
+class KarbonKoDocument;
 
-class KarbonDocumentMergeCommand : public QUndoCommand
+class KarbonDocumentMergeCommand : public KUndo2Command
 {
 public:
-    KarbonDocumentMergeCommand(KarbonPart * targetPart, KarbonPart * sourcePart);
+    KarbonDocumentMergeCommand(KarbonKoDocument * targetPart, KarbonKoDocument * sourcePart);
     virtual ~KarbonDocumentMergeCommand();
     virtual void redo();
     virtual void undo();

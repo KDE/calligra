@@ -3,6 +3,8 @@
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+   Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +27,7 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QCompleter>
 
 #include "kowidgets_export.h"
 #include <KoConfig.h>
@@ -44,21 +47,29 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
   Q_OBJECT
 public:
+    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
+    
     explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
-    /// Sets number of columns in the view
+    /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
     void setColumnCount( int columnCount );
 
+    /// Sets number of rows in the view and causes the number of columns to be calculated accordingly
+    void setRowCount( int rowCount );
+    
     /// Sets the height of the view rows
     void setRowHeight( int rowHeight );
 
+    /// Sets the width of the view columns
+    void setColumnWidth( int columnWidth );
+    
     /// Sets a custom delegate for the view
     void setItemDelegate( QAbstractItemDelegate * delegate );
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResource * currentResource();
+    KoResource *currentResource();
 
     /// Sets the item representing the resource as selected
     void setCurrentResource(KoResource* resource);
@@ -72,22 +83,53 @@ public:
 
     void showButtons( bool show );
 
+    /// shows the aside preview with the resource's image
+    void showPreview(bool show);
+    /// determines whether the preview right or below the splitter
+    void setPreviewOrientation(Qt::Orientation orientation);
+    /// determines whether the preview should tile the resource's image or not
+    void setPreviewTiled(bool tiled);
+    /// shows the preview converted to grayscale
+    void setGrayscalePreview(bool grayscale);
+
+
     void showGetHotNewStuff( bool showDownload, bool showUpload);
+    /// sets the visibilty of tagging KlineEdits.
+    void showTaggingBar( bool showSearchBar, bool showOpBar );
 
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
+
+    void setKnsrcFile(const QString& knsrcFileArg);
+    QSize viewSize();
+    /// Gets the tagged resource names from tagObject in resource Server
+    QStringList getTaggedResourceFileNames(QString lineEditText);
+    /// Gets the tag Names from tag Object for setting the Completer Object
+    QStringList getTagNamesList(QString lineEditText);
+
+    KoResourceItemView *itemView();
+
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
-
-private slots:
+    void splitterMoved();
+public slots:
     void slotButtonClicked( int button );
+    
+private slots:
     void activated ( const QModelIndex & index );
 
-private:
-    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
+    void setTagOpLineEdit(QStringList assignedTagsList);
 
-    void updateRemoveButtonState();
+    void tagOpLineEditActivated(QString lineEditText);
+    void tagOpLineEditTextChanged(QString lineEditText);
+
+    void tagSearchLineEditActivated(QString lineEditText);
+    void tagSearchLineEditTextChanged(QString lineEditText);
+
+private:
+    void updateButtonState();
+    void updatePreview(KoResource *resource);
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

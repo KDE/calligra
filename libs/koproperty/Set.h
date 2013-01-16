@@ -22,8 +22,8 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QObject>
+#include <QHash>
 #include "Property.h"
 
 namespace KoProperty
@@ -342,7 +342,7 @@ private:
 };
 
 //! @return property values for set @a set
-KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
+KOPROPERTY_EXPORT QMap<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

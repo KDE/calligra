@@ -106,14 +106,77 @@ TableStyleConverter::TableStyleConverter(int row, int column)
 TableStyleConverter::~TableStyleConverter()
 {
 }
-
-void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+// TODO: Table-level exception properties, tblCellSpacing
+//
+// ECMA-376:
+//
+// The appearance of a table cell border in the document shall be determined by
+// the following settings:
+//
+// * If the tblCellSpacing element value (§17.4.45;§17.4.44;§17.4.46) applied
+// to the cell is non-zero, then the cell border shall always be displayed
+//
+// * Otherwise, the display of the border is subject to the conflict resolution
+// algorithm defined by the tcBorders element (§17.4.67) and the tblBorders
+// element (§17.4.40;§17.4.39)
+//
+//
+// 17.4.39 tblBorders (Table Borders)
+//
+// If the cell spacing is zero, then there is a conflict [Example: Between the
+// left border of all cells in the first column and the left border of the
+// table. end example], which shall be resolved as follows:
+//
+// * If there is a cell border, then the cell border shall be displayed
+//
+// * If there is no cell border but there is a table-level exception border on
+// this table row, then the table-level exception border shall be displayed
+//
+// * If there is no cell or table-level exception border, then the table border
+// shall be displayed
+//
+//
+// 17.4.67 tcBorders (Table Cell Borders)
+//
+// If the cell spacing is zero, then there can be a conflict between two
+// adjacent cell borders [Example: Between the left border of all cells in the
+// second column and the right border of all cells in the first column of the
+// table. end example], which shall be resolved as follows:
+//
+// * If either conflicting table cell border is nil or none (no border), then
+// the opposing border shall be displayed.
+//
+// * If a cell border conflicts with a table border, the cell border always
+// wins.
+//
+// * Each border shall then be assigned a weight using the formula described in
+// the spec, and the border value using this calculation shall be displayed
+// over the alternative border:
+//
+void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                                     int row, int column, const QPair<int, int> &spans)
 {
     if(!styleProperties) {
         return;
     }
 
-    applyBordersStyle(styleProperties, style, row, column);
+    switch (styleProperties->target) {
+    case TableStyleProperties::TableRow:
+        applyRowLevelBordersStyle(styleProperties, style, row, column, spans);
+        break;
+    case TableStyleProperties::TableColumn:
+        applyColumnLevelBordersStyle(styleProperties, style, row, column, spans);
+        break;
+    case TableStyleProperties::TableCell:
+        applyCellLevelBordersStyle(styleProperties, style);
+        break;
+    default:
+        applyTableLevelBordersStyle(styleProperties, style, row, column, spans);
+        break;
+    }
+
+    //TODO: A similar logic to borders should be used for all other properties!
+
     applyBackground(styleProperties, style, row, column);
 
     if (styleProperties->setProperties & TableStyleProperties::VerticalAlign) {
@@ -124,12 +187,27 @@ void TableStyleConverter::applyStyle(TableStyleProperties* styleProperties, KoCe
         style->setGlyphOrientation(styleProperties->glyphOrientation);
     }
 
-    if (!styleProperties->textStyle.isEmpty()) {
+    if (!styleProperties->textStyle.isEmpty() || !styleProperties->textStyle.parentName().isEmpty()) {
         style->setTextStyle(styleProperties->textStyle);
     }
 
-    if (!styleProperties->paragraphStyle.isEmpty()) {
+    if (!styleProperties->paragraphStyle.isEmpty() || !styleProperties->paragraphStyle.parentName().isEmpty()) {
         style->setParagraphStyle(styleProperties->paragraphStyle);
+    }
+
+    TableStyleProperties::Properties setProperties = styleProperties->setProperties;
+
+    if (setProperties & TableStyleProperties::TopMargin) {
+        style->setTopPadding(styleProperties->topMargin);
+    }
+    if (setProperties & TableStyleProperties::BottomMargin) {
+        style->setBottomPadding(styleProperties->bottomMargin);
+    }
+    if (setProperties & TableStyleProperties::LeftMargin) {
+        style->setLeftPadding(styleProperties->leftMargin);
+    }
+    if (setProperties & TableStyleProperties::RightMargin) {
+        style->setRightPadding(styleProperties->rightMargin);
     }
 }
 
@@ -138,91 +216,395 @@ void TableStyleConverter::applyBackground(TableStyleProperties* styleProperties,
     Q_UNUSED(row);
     Q_UNUSED(column);
 
-    if(styleProperties->setProperties & TableStyleProperties::BackgroundColor) {
+    if (styleProperties->setProperties & TableStyleProperties::BackgroundColor) {
         style->setBackgroundColor(styleProperties->backgroundColor);
+    }
+    if (styleProperties->setProperties & TableStyleProperties::BackgroundOpacity) {
+        style->setBackgroundOpacity(styleProperties->backgroundOpacity);
     }
 }
 
-void TableStyleConverter::applyBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style, int row, int column)
+void TableStyleConverter::applyTableLevelBordersStyle(TableStyleProperties* styleProperties, KoCellStyle::Ptr& style,
+                                                      int row, int column, const QPair<int, int> &spans)
 {
-    const int lastRow = m_row - 1;
-    const int lastColumn = m_column - 1;
-
-    //Borders, are a bit tricky too; we have to take into account whether the cell
-    //has borders facing other cells or facing the border of the table.
+    const int lastRow = m_row;
+    const int lastColumn = m_column;
 
     TableStyleProperties::Properties setProperties = styleProperties->setProperties;
 
-    if(setProperties & TableStyleProperties::TopBorder) {
-        KoBorder::BorderData* topData;
+    if (setProperties & TableStyleProperties::TopBorder) {
         if (row == 0) {
+            KoBorder::BorderData* topData;
             topData = &styleProperties->top;
+            style->borders()->setTopBorderData(*topData);
         }
-        else {
-            topData = &styleProperties->insideH;
-        }
-        style->borders()->setTopBorderColor(topData->color);
-        style->borders()->setTopBorderSpacing(topData->spacing);
-        style->borders()->setTopBorderStyle(topData->style);
-        style->borders()->setTopBorderWidth(topData->width);
     }
 
-    if(setProperties & TableStyleProperties::BottomBorder) {
-        KoBorder::BorderData* bottomData;
-        if (row == lastRow) {
+    if (setProperties & TableStyleProperties::BottomBorder) {
+        if ((row + spans.first) == lastRow) {
+            KoBorder::BorderData* bottomData;
             bottomData = &styleProperties->bottom;
+            style->borders()->setBottomBorderData(*bottomData);
         }
-        else {
-            bottomData = &styleProperties->insideH;
-        }
-        style->borders()->setBottomBorderColor(bottomData->color);
-        style->borders()->setBottomBorderSpacing(bottomData->spacing);
-        style->borders()->setBottomBorderStyle(bottomData->style);
-        style->borders()->setBottomBorderWidth(bottomData->width);
     }
 
-    if(setProperties & TableStyleProperties::LeftBorder) {
-        KoBorder::BorderData* leftData;
+    if (setProperties & TableStyleProperties::LeftBorder) {
         if (column == 0) {
+            KoBorder::BorderData* leftData;
             leftData = &styleProperties->left;
+            style->borders()->setLeftBorderData(*leftData);
         }
-        else {
-            leftData = &styleProperties->insideV;
-        }
-        style->borders()->setLeftBorderColor(leftData->color);
-        style->borders()->setLeftBorderSpacing(leftData->spacing);
-        style->borders()->setLeftBorderStyle(leftData->style);
-        style->borders()->setLeftBorderWidth(leftData->width);
     }
 
-    if(setProperties & TableStyleProperties::RightBorder) {
-        KoBorder::BorderData* rightData;
-        if (column == lastColumn) {
+    if (setProperties & TableStyleProperties::RightBorder) {
+        if ((column + spans.second) == lastColumn) {
+            KoBorder::BorderData* rightData;
             rightData = &styleProperties->right;
+            style->borders()->setRightBorderData(*rightData);
         }
-        else {
-            rightData = &styleProperties->insideV;
-        }
-        style->borders()->setRightBorderColor(rightData->color);
-        style->borders()->setRightBorderSpacing(rightData->spacing);
-        style->borders()->setRightBorderStyle(rightData->style);
-        style->borders()->setRightBorderWidth(rightData->width);
     }
 
-    if(setProperties & TableStyleProperties::Tl2brBorder) {
-        KoBorder::BorderData* tl2brData = &styleProperties->tl2br;
-        style->borders()->setTlbrBorderColor(tl2brData->color);
-        style->borders()->setTlbrBorderSpacing(tl2brData->spacing);
-        style->borders()->setTlbrBorderStyle(tl2brData->style);
-        style->borders()->setTlbrBorderWidth(tl2brData->width);
+    if (setProperties & TableStyleProperties::InsideVBorder) {
+        KoBorder::BorderData* insideVData;
+        insideVData = &styleProperties->insideV;
+        if (column != 0) {
+            style->borders()->setLeftBorderData(*insideVData);
+        }
+        if ((column + spans.second) != lastColumn) {
+            style->borders()->setRightBorderData(*insideVData);
+        }
     }
-    if(setProperties & TableStyleProperties::Tr2blBorder) {
-        KoBorder::BorderData* tr2blData = &styleProperties->tr2bl;
-        style->borders()->setTrblBorderColor(tr2blData->color);
-        style->borders()->setTrblBorderSpacing(tr2blData->spacing);
-        style->borders()->setTrblBorderStyle(tr2blData->style);
-        style->borders()->setTrblBorderWidth(tr2blData->width);
+
+    if (setProperties & TableStyleProperties::InsideHBorder) {
+        KoBorder::BorderData* insideHData;
+        insideHData = &styleProperties->insideH;
+        if (row != 0) {
+            style->borders()->setTopBorderData(*insideHData);
+        }
+        if ((row + spans.first) != lastRow) {
+            style->borders()->setBottomBorderData(*insideHData);
+        }
     }
+
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
+        style->borders()->setTlbrBorderData(styleProperties->tl2br);
+    }
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
+        style->borders()->setTrblBorderData(styleProperties->tr2bl);
+    }
+}
+
+void TableStyleConverter::reapplyTableLevelBordersStyle(TableStyleProperties* properties,
+                                                        TableStyleProperties* localProperties,
+                                                        TableStyleProperties* exceptionProperties,
+                                                        KoCellStyle::Ptr& style,
+                                                        int row, int column, const QPair<int, int> &spans)
+{
+    const int lastRow = m_row;
+    const int lastColumn = m_column;
+
+    TableStyleProperties::Properties setProperties;
+    if (properties) {
+        setProperties = properties->setProperties;
+    }
+    TableStyleProperties::Properties setLocalProperties;
+    if (localProperties) {
+        setLocalProperties = localProperties->setProperties;
+    }
+    TableStyleProperties::Properties setExceptionProperties;
+    if (exceptionProperties) {
+        setExceptionProperties = exceptionProperties->setProperties;
+    }
+    KoBorder::BorderData data;
+
+    //TopBorder
+    if (row == 0) {
+        data = style->borders()->topBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::TopBorder) {
+                style->borders()->setTopBorderData(properties->top);
+            }
+            if (setLocalProperties & TableStyleProperties::TopBorder) {
+                style->borders()->setTopBorderData(localProperties->top);
+            }
+            if (setExceptionProperties & TableStyleProperties::TopBorder) {
+                style->borders()->setTopBorderData(exceptionProperties->top);
+            }
+        }
+    }
+
+    //BottomBorder
+    if ((row + spans.first) == lastRow) {
+        data = style->borders()->bottomBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::BottomBorder) {
+                style->borders()->setBottomBorderData(properties->bottom);
+            }
+            if (setLocalProperties & TableStyleProperties::BottomBorder) {
+                style->borders()->setBottomBorderData(localProperties->bottom);
+            }
+            if (setExceptionProperties & TableStyleProperties::BottomBorder) {
+                style->borders()->setBottomBorderData(exceptionProperties->bottom);
+            }
+        }
+    }
+
+    //LeftBorder
+    if (column == 0) {
+        data = style->borders()->leftBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::LeftBorder) {
+                style->borders()->setLeftBorderData(properties->left);
+            }
+            if (setLocalProperties & TableStyleProperties::LeftBorder) {
+                style->borders()->setLeftBorderData(localProperties->left);
+            }
+            if (setExceptionProperties & TableStyleProperties::LeftBorder) {
+                style->borders()->setLeftBorderData(exceptionProperties->left);
+            }
+        }
+    }
+
+    //RightBorder
+    if ((column + spans.second) == lastColumn) {
+        data = style->borders()->rightBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::RightBorder) {
+                style->borders()->setRightBorderData(properties->right);
+            }
+            if (setLocalProperties & TableStyleProperties::RightBorder) {
+                style->borders()->setRightBorderData(localProperties->right);
+            }
+            if (setExceptionProperties & TableStyleProperties::RightBorder) {
+                style->borders()->setRightBorderData(exceptionProperties->right);
+            }
+        }
+    }
+
+    //InsideVBorder
+    if (column != 0) {
+        data = style->borders()->leftBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::InsideVBorder) {
+                style->borders()->setLeftBorderData(properties->insideV);
+            }
+            if (setLocalProperties & TableStyleProperties::InsideVBorder) {
+                style->borders()->setLeftBorderData(localProperties->insideV);
+            }
+            if (setExceptionProperties & TableStyleProperties::InsideVBorder) {
+                style->borders()->setLeftBorderData(exceptionProperties->insideV);
+            }
+        }
+    }
+
+    if ((column + spans.second) != lastColumn) {
+        data = style->borders()->rightBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::InsideVBorder) {
+                style->borders()->setRightBorderData(properties->insideV);
+            }
+            if (setLocalProperties & TableStyleProperties::InsideVBorder) {
+                style->borders()->setRightBorderData(localProperties->insideV);
+            }
+            if (setExceptionProperties & TableStyleProperties::InsideVBorder) {
+                style->borders()->setRightBorderData(exceptionProperties->insideV);
+            }
+        }
+    }
+
+    //InsideHBorder
+    if (row != 0) {
+        data = style->borders()->topBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::InsideHBorder) {
+                style->borders()->setTopBorderData(properties->insideH);
+            }
+            if (setLocalProperties & TableStyleProperties::InsideHBorder) {
+                style->borders()->setTopBorderData(localProperties->insideH);
+            }
+            if (setExceptionProperties & TableStyleProperties::InsideHBorder) {
+                style->borders()->setTopBorderData(exceptionProperties->insideH);
+            }
+        }
+    }
+
+    if ((row + spans.first) != lastRow) {
+        data = style->borders()->bottomBorderData();
+        //cell-level border set to "None"
+        if ((data.outerPen.widthF() == 0) && (data.style == KoBorder::BorderSolid)) {
+            if (setProperties & TableStyleProperties::InsideHBorder) {
+                style->borders()->setBottomBorderData(properties->insideH);
+            }
+            if (setLocalProperties & TableStyleProperties::InsideHBorder) {
+                style->borders()->setBottomBorderData(localProperties->insideH);
+            }
+            if (setExceptionProperties & TableStyleProperties::InsideHBorder) {
+                style->borders()->setBottomBorderData(exceptionProperties->insideH);
+            }
+        }
+    }
+
+    //TODO: Tl2brBorder, Tr2blBorder
+}
+
+void TableStyleConverter::applyRowLevelBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style,
+                                                    int row, int column, const QPair<int, int> &spans)
+{
+    const int lastColumn = m_column;
+    const int lastRow = m_row;
+
+    TableStyleProperties::Properties setProperties = props->setProperties;
+
+    if (setProperties & TableStyleProperties::TopBorder) {
+        style->borders()->setTopBorderData(props->top);
+    }
+
+    if (setProperties & TableStyleProperties::BottomBorder) {
+        style->borders()->setBottomBorderData(props->bottom);
+    }
+
+    if (setProperties & TableStyleProperties::LeftBorder) {
+        if (column == 0) {
+            style->borders()->setLeftBorderData(props->left);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::RightBorder) {
+        if ((column + spans.second) == lastColumn) {
+            style->borders()->setRightBorderData(props->right);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::InsideHBorder) {
+        KoBorder::BorderData* insideHData;
+        insideHData = &props->insideH;
+        if (row != 0) {
+            style->borders()->setTopBorderData(*insideHData);
+        }
+        if ((row + spans.first) != lastRow) {
+            style->borders()->setBottomBorderData(*insideHData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::InsideVBorder) {
+        KoBorder::BorderData* insideVData;
+        insideVData = &props->insideV;
+        if (column != 0) {
+            style->borders()->setLeftBorderData(*insideVData);
+        }
+        if ((column + spans.second) != lastColumn) {
+            style->borders()->setRightBorderData(*insideVData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
+        style->borders()->setTlbrBorderData(props->tl2br);
+    }
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
+        style->borders()->setTrblBorderData(props->tr2bl);
+    }
+}
+
+void TableStyleConverter::applyColumnLevelBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style,
+                                                       int row, int column, const QPair<int, int> &spans)
+{
+    const int lastColumn = m_column;
+    const int lastRow = m_row;
+
+    TableStyleProperties::Properties setProperties = props->setProperties;
+
+    if (setProperties & TableStyleProperties::TopBorder) {
+        if (row == 0) {
+            style->borders()->setTopBorderData(props->top);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::BottomBorder) {
+        if ((row + spans.first) == lastRow) {
+            style->borders()->setBottomBorderData(props->bottom);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::LeftBorder) {
+        style->borders()->setLeftBorderData(props->left);
+    }
+
+    if (setProperties & TableStyleProperties::RightBorder) {
+        style->borders()->setRightBorderData(props->right);
+    }
+
+    if (setProperties & TableStyleProperties::InsideHBorder) {
+        KoBorder::BorderData* insideHData;
+        insideHData = &props->insideH;
+        if (row != 0) {
+            style->borders()->setTopBorderData(*insideHData);
+        }
+        if ((row + spans.first) != lastRow) {
+            style->borders()->setBottomBorderData(*insideHData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::InsideVBorder) {
+        KoBorder::BorderData* insideVData;
+        insideVData = &props->insideV;
+        if (column != 0) {
+            style->borders()->setLeftBorderData(*insideVData);
+        }
+        if ((column + spans.second) != lastColumn) {
+            style->borders()->setRightBorderData(*insideVData);
+        }
+    }
+
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
+        style->borders()->setTlbrBorderData(props->tl2br);
+    }
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
+        style->borders()->setTrblBorderData(props->tr2bl);
+    }
+}
+
+void TableStyleConverter::applyCellLevelBordersStyle(TableStyleProperties* props, KoCellStyle::Ptr& style)
+{
+    //NOTE: Let's keep the local variables until it's unstable.
+
+    TableStyleProperties::Properties setProperties = props->setProperties;
+
+    if (setProperties & TableStyleProperties::TopBorder) {
+        KoBorder::BorderData* data = &props->top;
+        style->borders()->setTopBorderData(*data);
+    }
+
+    if (setProperties & TableStyleProperties::BottomBorder) {
+        KoBorder::BorderData* data = &props->bottom;
+        style->borders()->setBottomBorderData(*data);
+    }
+
+    if (setProperties & TableStyleProperties::LeftBorder) {
+        KoBorder::BorderData* data = &props->left;
+        style->borders()->setLeftBorderData(*data);
+    }
+
+    if (setProperties & TableStyleProperties::RightBorder) {
+        KoBorder::BorderData* data = &props->right;
+        style->borders()->setRightBorderData(*data);
+    }
+
+    if (setProperties & TableStyleProperties::Tl2brBorder) {
+        KoBorder::BorderData* data = &props->tl2br;
+        style->borders()->setTlbrBorderData(*data);
+    }
+    if (setProperties & TableStyleProperties::Tr2blBorder) {
+        KoBorder::BorderData* data = &props->tr2bl;
+        style->borders()->setTrblBorderData(*data);
+    }
+    //TODO: process InsideHBorder, InsideVBorder
 }
 
 TableStyle::TableStyle()

@@ -23,7 +23,6 @@
 #include <vector>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -44,8 +43,6 @@ K_EXPORT_PLUGIN(ToolTransformFactory("krita"))
 ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    //setComponentData(ToolTransformFactory::componentData());
-
     KoToolRegistry * r = KoToolRegistry::instance();
     r->add(new KisToolTransformFactory(QStringList()));
 

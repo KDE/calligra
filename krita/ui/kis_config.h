@@ -19,13 +19,18 @@
 #define KIS_CONFIG_H_
 
 #include <QString>
+#include <QStringList>
+#include <QList>
 #include <QColor>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
 #include "kis_global.h"
+#include "kis_properties_configuration.h"
 #include "krita_export.h"
+
+class KoColorProfile;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -83,7 +88,9 @@ public:
     void setCursorStyle(enumCursorStyle style);
 
     QString monitorProfile() const;
-    void setMonitorProfile(const QString & monitorProfile);
+    void setMonitorProfile(const QString & monitorProfile, bool override = false);
+    static const KoColorProfile* getScreenProfile(int screen = -1);
+    const KoColorProfile *displayProfile(int screen = -1);
 
     QString workingColorSpace() const;
     void setWorkingColorSpace(const QString & workingColorSpace);
@@ -99,6 +106,10 @@ public:
 
     bool useBlackPointCompensation() const;
     void setUseBlackPointCompensation(bool useBlackPointCompensation);
+
+    bool allowLCMSOptimization() const;
+    void setAllowLCMSOptimization(bool allowLCMSOptimization);
+
 
     bool showRulers() const;
     void setShowRulers(bool rulers);
@@ -118,17 +129,15 @@ public:
     bool useOpenGLToolOutlineWorkaround() const;
     void setUseOpenGLToolOutlineWorkaround(bool useWorkaround);
 
+    bool useOpenGLTrilinearFiltering() const;
+    void setUseOpenGLTrilinearFiltering(bool useTrilinearFiltering);
+
     qint32 maxNumberOfThreads();
     void setMaxNumberOfThreads(qint32 numberOfThreads);
 
     /// Maximum tiles in memory (this is a guideline, not absolute)
     qint32 maxTilesInMem() const;
     void setMaxTilesInMem(qint32 tiles);
-
-    /// Number of tiles that will be swapped at once. The higher, the more swapped, but more
-    /// chance that it will become slow
-    qint32 swappiness() const;
-    void setSwappiness(qint32 swappiness);
 
     quint32 getGridMainStyle();
     void setGridMainStyle(quint32 v);
@@ -178,45 +187,6 @@ public:
     bool antialiasCurves();
     void setAntialiasCurves(bool v);
 
-    int numProjectionThreads();
-    void setNumProjectThreads(int num);
-
-    int projectionChunkSize();
-    void setProjectionChunkSize(int num);
-
-    bool aggregateDirtyRegionsInPainter();
-    void setAggregateDirtyRegionsInPainter(bool aggregate);
-
-    bool useBoundingRectInProjection();
-    void setUseBoundingRectInProjection(bool use);
-
-    bool useRegionOfInterestInProjection();
-    void setUseRegionOfInterestInProjection(bool use);
-
-    // Use nearest-neighbour interpolation on KisImage
-    bool useNearestNeighbour();
-    void setUseNearestNeighbour(bool useNearestNeigbour);
-
-    bool useSampling();
-    void setSampling(bool sampling);
-
-    bool threadColorSpaceConversion();
-    void setThreadColorSpaceConversion(bool threadColorSpaceConversion);
-
-    bool cacheKisImageAsQImage();
-    void setCacheKisImageAsQImage(bool cacheKisImageAsQImage);
-
-    bool drawMaskVisualisationOnUnscaledCanvasCache();
-    void setDrawMaskVisualisationOnUnscaledCanvasCache(bool drawMaskVisualisationOnUnscaledCanvasCache);
-
-    bool fastZoom() {
-        return false;
-    }
-
-    // If there's no XRender use QPixmaps instead of QImage for the QPainterCanvas
-    bool noXRender();
-    void setNoXRender(bool noXRender);
-
     bool showRootLayer();
     void setShowRootLayer(bool showRootLayer);
 
@@ -228,11 +198,6 @@ public:
 
     bool backupFile();
     void setBackupFile(bool backupFile);
-
-    // in megapixels -- above 5, we will no longer use the
-    // memory-guzzling qimage canvas cache
-    quint32 maxCachedImageSize();
-    void setMaxCachedImageSize(quint32);
 
     bool showFilterGallery();
     void setShowFilterGallery(bool showFilterGallery);
@@ -265,6 +230,9 @@ public:
     int presetChooserViewMode() const;
     void setPresetChooserViewMode(const int mode);
 
+    bool presetShowAllMode() const;
+    void setPresetShowAllMode(bool showAll);
+
     bool firstRun() const;
     void setFirstRun(const bool firstRun) const;
 
@@ -277,6 +245,70 @@ public:
     int verticalSplitLines() const;
     void setVerticalSplitLines(const int numberLines) const;
 
+    int hideDockersFullscreen();
+    void setHideDockersFullscreen(const int value) const;
+
+    int hideMenuFullscreen();
+    void setHideMenuFullscreen(const int value) const;
+
+    int hideScrollbarsFullscreen();
+    void setHideScrollbarsFullscreen(const int value) const;
+
+    int hideStatusbarFullscreen();
+    void setHideStatusbarFullscreen(const int value) const;
+
+    int hideTitlebarFullscreen();
+    void setHideTitlebarFullscreen(const int value) const;
+
+    int hideToolbarFullscreen();
+    void setHideToolbarFullscreen(const int value) const;
+
+    QStringList favoriteCompositeOps() const;
+    void setFavoriteCompositeOps(const QStringList& compositeOps);
+
+    QString exportConfiguration(const QString &filterId) const;
+    void setExportConfiguration(const QString &filterId, const KisPropertiesConfiguration &properties);
+
+    bool useOcio();
+    void setUseOcio(bool useOCIO);
+
+    bool useOcioEnvironmentVariable();
+    void setUseOcioEnvironmentVariable(bool useOCIO);
+
+    QString ocioConfigurationPath();
+    void setOcioConfigurationPath(const QString &path);
+
+    QString ocioLutPath();
+    void setOcioLutPath(const QString &path);
+
+    bool useSystemMonitorProfile() const;
+    void setUseSystemMonitorProfile(bool _useSystemMonitorProfile);
+
+    QString defaultPalette();
+    void setDefaultPalette(const QString& name);
+
+    QString toolbarSlider(int sliderNumber);
+    void setToolbarSlider(int sliderNumber, const QString &slider);
+
+    template<class T>
+    void writeEntry(const QString& name, const T& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    void writeList(const QString& name, const QList<T>& value) {
+        m_cfg.writeEntry(name, value);
+    }
+
+    template<class T>
+    T readEntry(const QString& name, const T& defaultValue=T()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
+
+    template<class T>
+    QList<T> readList(const QString& name, const QList<T>& defaultValue=QList<T>()) {
+        return m_cfg.readEntry(name, defaultValue);
+    }
 
 private:
     KisConfig(const KisConfig&);

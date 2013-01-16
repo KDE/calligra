@@ -1,6 +1,22 @@
 [Desktop Entry]
 Name=Input Transducer
+Name[ca]=Introducció de transductor
+Name[ca@valencia]=Introducció de transductor
+Name[el]=Μετατροπέας εισόδου
+Name[es]=Transductor de entrada
+Name[et]=Sisendi tõlgendaja
+Name[fr]=Input Transducer
+Name[gl]=Transdutor de entrada
+Name[it]=Trasduttore di ingresso
+Name[kk]=Кіріс түрлендіргіш
+Name[nb]=Inngangsomvandler
+Name[nl]=Input transducer
+Name[pl]=Wejściowy transduktor
 Name[pt]=Transdutor Entrada
 Name[pt_BR]=Transdutor de entrada
+Name[ru]=Преобразователь ввода
+Name[sk]=Vstupný prevodník
+Name[sv]=Ingångsomvandlare
 Name[uk]=Перетворювач входу
 Name[x-test]=xxInput Transducerxx
+Name[zh_TW]=輸入轉換器

@@ -20,34 +20,35 @@
 #ifndef _SECTION_CONTAINER_H_
 #define _SECTION_CONTAINER_H_
 
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 
 #include <KoShapeContainer.h>
 
-class KoResourceManager;
+class KoDocumentResourceManager;
 class KoShapeLayer;
 class Section;
 class SectionShapeContainerModel;
 class RootSection;
 
-class SectionContainer : public KoShapeControllerBase {
-  public:
-    SectionContainer(Section* , RootSection* _rootSection );
-    SectionContainer(const SectionContainer& _rhs, Section* );
-  private:
-    void initContainer(Section* , RootSection* _rootSection );
-  public:
+class SectionContainer : public KoShapeBasedDocumentBase
+{
+public:
+    SectionContainer(Section* , RootSection* _rootSection);
+    SectionContainer(const SectionContainer& _rhs, Section*);
+private:
+    void initContainer(Section* , RootSection* _rootSection);
+public:
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
-  public:
+public:
     Section* section();
     KoShapeLayer* layer();
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, QList<KoShape*>& shapes);
     void saveOdf(KoShapeSavingContext & context) const;
     QRectF containerBound() const;
-  private:
+private:
     SectionContainer(const SectionContainer& _rhs);
-  private:
+private:
     Section* m_section;
     KoShapeLayer* m_layer;
     RootSection* m_rootSection;

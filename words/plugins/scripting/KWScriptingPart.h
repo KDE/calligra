@@ -1,5 +1,5 @@
 /*
- * This file is part of KWord
+ * This file is part of Words
  *
  * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
  *
@@ -25,7 +25,7 @@
 
 /**
 * The KWScriptingPart class implements a KPart component
-* to integrate scripting into KWord.
+* to integrate scripting into Words.
 * \internal
 */
 class KWScriptingPart : public KoScriptingPart

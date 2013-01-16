@@ -1,9 +1,27 @@
 [Desktop Entry]
 Name=saturation
+Name[bg]=насищане
+Name[ca]=saturació
+Name[ca@valencia]=saturació
+Name[cs]=nasycení
+Name[el]=κορεσμός
 Name[es]=saturación
+Name[et]=Küllastus
+Name[fr]=saturation
+Name[gl]=Saturación
+Name[hu]=telítettség
+Name[it]=saturazione
+Name[kk]=қанықтық
+Name[nb]=metning
+Name[nl]=verzadiging
+Name[pl]=nasycenie
 Name[pt]=saturação
 Name[pt_BR]=saturação
+Name[ru]=Насыщенность
+Name[sk]=sýtosť
 Name[sv]=mättnad
+Name[ug]=تويۇنۇشچانلىقى
 Name[uk]=Характеристика насиченості
 Name[x-test]=xxsaturationxx
 Name[zh_CN]=饱和度
+Name[zh_TW]=saturation

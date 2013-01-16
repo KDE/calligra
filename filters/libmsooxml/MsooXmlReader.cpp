@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -65,7 +65,7 @@ QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
 using namespace MSOOXML;
 
 MsooXmlReaderContext::MsooXmlReaderContext(MSOOXML::MsooXmlRelationships* _relationships)
-        : relationships(_relationships)
+        : relationships(_relationships), graphicObjectIsGroup(false)
 {
 }
 
@@ -151,23 +151,21 @@ void MsooXmlReader::raiseError(const QString & message)
     kDebug() << errorString();
 }
 
-/*
-QXmlStreamReader::TokenType MsooXmlReader::readNext()
-{
-    if (m_readUndoed) {
-        m_readUndoed = false;
-    } else {
-        m_recentType = QXmlStreamReader::readNext();
-    }
-    //kDebug() << tokenName(m_recentType) << *this;
-    return m_recentType;
-}
+// QXmlStreamReader::TokenType MsooXmlReader::readNext()
+// {
+//     if (m_readUndoed) {
+//         m_readUndoed = false;
+//     } else {
+//         m_recentType = QXmlStreamReader::readNext();
+//     }
+//     //kDebug() << tokenName(m_recentType) << *this;
+//     return m_recentType;
+// }
 
-void MsooXmlReader::undoReadNext()
-{
-    m_readUndoed = true;
-}
-*/
+// void MsooXmlReader::undoReadNext()
+// {
+//     m_readUndoed = true;
+// }
 
 void MsooXmlReader::raiseElNotFoundError(const char* elementName)
 {

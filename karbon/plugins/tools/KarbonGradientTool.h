@@ -22,12 +22,12 @@
 
 #include <KoToolBase.h>
 #include <KoSnapGuide.h>
-#include <QtGui/QGradient>
-#include <QtCore/QMultiMap>
+#include <QGradient>
+#include <QMultiMap>
 
 class GradientStrategy;
 class KarbonGradientEditWidget;
-class QUndoCommand;
+class KUndo2Command;
 class KoShape;
 class QTableWidgetItem;
 class KoResource;
@@ -56,14 +56,14 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
+public slots:
+    virtual void documentResourceChanged(int key, const QVariant & res);
+
 protected:
     /// reimplemented from KoToolBase
-    virtual QWidget * createOptionWidget();
-    /// reimplemented from KoToolBase
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
 private Q_SLOTS:
-    virtual void resourceChanged(int key, const QVariant & res);
     void initialize();
     void gradientChanged();
     void gradientSelected(KoResource*);
@@ -73,7 +73,7 @@ private:
     GradientStrategy * m_currentStrategy;  ///< the current editing strategy
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
     KarbonGradientEditWidget * m_gradientWidget;
-    QUndoCommand * m_currentCmd;
+    KUndo2Command * m_currentCmd;
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 

@@ -42,7 +42,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
 
     if (fib.lcbPlcfbkf != 0)
     {
-        tableStream->seek( fib.fcPlcfbkf, G_SEEK_SET );
+        tableStream->seek( fib.fcPlcfbkf, WV2_SEEK_SET );
 
         m_start = new PLCF<Word97::BKF>(fib.lcbPlcfbkf, tableStream);
         m_startIt = new PLCFIterator<Word97::BKF>(*m_start);
@@ -57,7 +57,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     if ( fib.lcbSttbfbkmk != 0 )
     {
         if ( static_cast<U32>( tableStream->tell() ) != fib.fcSttbfbkmk ) {
-            tableStream->seek( fib.fcSttbfbkmk, G_SEEK_SET );
+            tableStream->seek( fib.fcSttbfbkmk, WV2_SEEK_SET );
         }
         // The bookmark names in the STTBF are always Unicode, the lid doesn't matter
         U16 usLid = 0x409;
@@ -69,6 +69,8 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
         for (uint i = 0; i < name->count(); i++ ) {
             m_name.push_back(name->stringAt(i));
         }
+
+        delete name;
     }
 
     //The BKL is no longer stored in the plcfbkl or plcfatnbkl, and is instead
@@ -80,7 +82,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     if (fib.lcbPlcfbkl != 0)
     {
         int count = 0;
-        tableStream->seek( fib.fcPlcfbkl, G_SEEK_SET );
+        tableStream->seek( fib.fcPlcfbkl, WV2_SEEK_SET );
 
         //Word Version 6,7
         if ( fib.nFib < Word8nFib ) {
@@ -115,7 +117,7 @@ Bookmarks::Bookmarks( OLEStreamReader* tableStream, const Word97::FIB& fib ) :
     tableStream->pop();
 
     U16 num = 0;
-    if (!valid(num)) {
+    if (!valid(num, fib.ccpText)) {
         wvlog << "Num. of invalid bookmarks:" << num;
     }
 
@@ -133,20 +135,20 @@ Bookmarks::~Bookmarks()
     delete m_start;
 }
 
-BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
+BookmarkData Bookmarks::bookmark( const U32 globalCP, bool& ok )
 {
 #ifdef WV2_DEBUG_BOOKMARK
     wvlog << " globalCP=" << globalCP << endl;
 #endif
-
+    ok = false;
     if ( (m_startIt && m_startIt->current()) &&
          (m_startIt->currentStart() == globalCP) &&
          (m_nameIt != m_name.end()) )
     {
-        if (!m_valid.isEmpty() && m_valid.first()) {
+        if (m_valid.isEmpty()) {
+            wvlog << "BUG: m_valid empty?";
+        } else if (m_valid.first()) {
             ok = true;
-        } else {
-            ok = false;
         }
 
         U32 start = m_startIt->currentStart();
@@ -174,36 +176,82 @@ BookmarkData Bookmarks::bookmark( U32 globalCP, bool& ok )
 #endif
         return BookmarkData( start, end, name );
     }
-
-    ok = false;
     return BookmarkData( 0, 0, wvWare::UString("") );
 }
 
-U32 Bookmarks::nextBookmarkStart() const
+BookmarkData Bookmarks::bookmark(const UString& name, bool& ok ) const
+{
+    std::vector<UString>::const_iterator nameIt = m_name.begin();
+    PLCFIterator<Word97::BKF> startIt(*m_start);
+
+    PLCFIterator<Word97::BKL>* endIt = 0;
+    if (m_nFib < Word8nFib) {
+        endIt = new PLCFIterator<Word97::BKL>(*m_end);
+    }
+
+    while (startIt.current()) {
+        if (*nameIt == name) {
+            U32 start = startIt.currentStart();
+            U32 end = start;
+            if (m_nFib < Word8nFib) {
+                end = endIt->currentStart();
+                delete endIt;
+            } else {
+                U16 ibkl = startIt.current()->ibkl;
+                end = m_endCP[ibkl];
+            }
+            ok = true;
+            return BookmarkData( start, end, name );
+        }
+        ++startIt;
+        ++nameIt;
+
+        if (m_nFib < Word8nFib) {
+            ++( *endIt );
+        }
+    }
+    if (m_nFib < Word8nFib) {
+        delete endIt;
+    }
+    ok = false;
+    return BookmarkData( 0, 0, UString("") );
+}
+
+U32 Bookmarks::nextBookmarkStart()
 {
     U32 ret = 0xffffffff;
 
-    if (m_startIt && m_startIt->current()) {
-        if (!m_valid.isEmpty() && m_valid.first()) {
+    //find the next valid bookmark
+    while (m_startIt && m_startIt->current()) {
+
+        if (m_valid.isEmpty()) {
+            wvlog << "BUG: m_valid empty?";
+            break;
+        }
+        else if (m_valid.first()) {
             ret = m_startIt->currentStart();
+            break;
         } else {
+            //NOTE: Add logic to process invalid bookmarks here.
+
+            if (m_nFib < Word8nFib) {
+                ++( *m_endIt );
+            }
+            m_valid.removeFirst();
             ++( *m_startIt );
+            ++m_nameIt;
+
+#ifdef WV2_DEBUG_BOOKMARK
+            wvlog << "Warning: Skipped invalid bookmark!";
+#endif
         }
     }
     return ret;
 }
 
-U32 Bookmarks::nextBookmarkEnd()
+U32 Bookmarks::nextBookmarkEnd() const
 {
     U32 ret = 0xffffffff;
-
-    if (!m_valid.isEmpty() && !m_valid.first()) {
-        if (m_nFib < Word8nFib) {
-            ++( *m_endIt );
-        }
-        m_valid.removeFirst();
-        return ret;
-    }
 
     if (m_nFib < Word8nFib) {
         if (m_endIt && m_endIt->current()) {
@@ -228,17 +276,19 @@ void Bookmarks::check( U32 globalCP )
         ++( *m_startIt );
         ++m_nameIt;
 
-        if (!m_valid.isEmpty()) {
+        if (m_valid.isEmpty()) {
+            wvlog << "BUG: m_valid empty?";
+        } else {
             m_valid.removeFirst();
         }
 
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Bookmark skipped!";
+        wvlog << "Bookmark skipped! CP:" << globalCP;
 #endif
     }
 }
 
-bool Bookmarks::valid(U16 &num)
+bool Bookmarks::valid(U16 &num, const U32 ccpText)
 {
     PLCFIterator<Word97::BKF> startIt(*m_start);
     QList<U16> ibkls;
@@ -254,7 +304,8 @@ bool Bookmarks::valid(U16 &num)
         PLCFIterator<Word97::BKL> endIt(*m_end);
         while (startIt.current()) {
             if ( !endIt.current() ||
-                 (startIt.currentStart() > endIt.currentStart()) )
+                 (startIt.currentStart() > endIt.currentStart()) ||
+                 (startIt.currentStart() > ccpText) )
             {
                 m_valid.append(false);
                 ret = false;
@@ -289,12 +340,15 @@ bool Bookmarks::valid(U16 &num)
                 ibkls.append(ibkl);
             }
 
-            if (startIt.currentStart() > m_endCP[ibkl]) {
+            if ( (startIt.currentStart() > m_endCP[ibkl]) ||
+                 (startIt.currentStart() > ccpText) )
+            {
                 m_valid.append(false);
                 ret = false;
                 num++;
 #ifdef WV2_DEBUG_BOOKMARK
-		wvlog << "bkmk" << n << ": startCP > endCP";
+        wvlog << "bkmk" << n << ": startCP > endCP (" <<
+                    startIt.currentStart() << "|" << m_endCP[ibkl] << ")";
 #endif
             } else {
                 m_valid.append(true);
@@ -309,25 +363,23 @@ bool Bookmarks::valid(U16 &num)
     //check bookmark names
     for (uint i = 0; i < m_name.size(); i++) {
         if ( (m_name[i] == UString::null) ) {
-            m_name[i] == UString().from(i + 1);
+            m_name[i] = UString().from(i + 1);
         }
     }
-
     if (m_name.size() < m_start->count()) {
         for (uint i = m_name.size(); i < m_start->count(); i++) {
             m_name.push_back(UString().from(i + 1));
         }
 #ifdef WV2_DEBUG_BOOKMARK
-        wvlog << "Warning: bookmark names missing!  Adding custom names.";
+        wvlog << "Warning: bookmark names missing!  Using custom names.";
         wvlog << "Num. of bookmark names:" << m_name.size();
 
         std::vector<UString>::const_iterator it = m_name.begin();
         while(it != m_name.end()) {
             wvlog << "bkmk name:" << (*it).ascii();
-            it++;
+            ++it;
         }
 #endif
     }
-
     return ret;
 }

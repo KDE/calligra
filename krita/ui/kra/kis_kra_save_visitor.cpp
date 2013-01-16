@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *  Copyright (c) 2007-2008 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,6 @@
 #include <kis_mask.h>
 #include <kis_filter_mask.h>
 #include <kis_transparency_mask.h>
-#include <kis_transformation_mask.h>
 #include <kis_selection_mask.h>
 #include <kis_selection_component.h>
 #include <kis_pixel_selection.h>
@@ -53,9 +52,8 @@
 
 using namespace KRA;
 
-KisKraSaveVisitor::KisKraSaveVisitor(KisImageWSP image, KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
+KisKraSaveVisitor::KisKraSaveVisitor(KoStore *store, quint32 &count, const QString & name, QMap<const KisNode*, QString> nodeFileNames)
         : KisNodeVisitor()
-        , m_image(image)
         , m_store(store)
         , m_external(false)
         , m_count(count)
@@ -138,13 +136,6 @@ bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 }
 
 bool KisKraSaveVisitor::visit(KisTransparencyMask *mask)
-{
-    if (!saveSelection(mask)) return false;
-    m_count++;
-    return true;
-}
-
-bool KisKraSaveVisitor::visit(KisTransformationMask *mask)
 {
     if (!saveSelection(mask)) return false;
     m_count++;
@@ -251,14 +242,15 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
 
 bool KisKraSaveVisitor::saveFilterConfiguration(KisNode* node)
 {
-    KisFilterConfiguration* filter = 0;
-    if (node->inherits("KisFilterMask")) {
-        filter = static_cast<KisFilterMask*>(node)->filter();
-    } else if (node->inherits("KisAdjustmentLayer")) {
-        filter = static_cast<KisAdjustmentLayer*>(node)->filter();
-    } else if (node->inherits("KisGeneratorLayer")) {
-        filter = static_cast<KisGeneratorLayer*>(node)->filter();
+    KisNodeFilterInterface *filterInterface =
+        dynamic_cast<KisNodeFilterInterface*>(node);
+
+    KisSafeFilterConfigurationSP filter;
+
+    if (filterInterface) {
+        filter = filterInterface->filter();
     }
+
     if (filter) {
         QString location = getLocation(node, DOT_FILTERCONFIG);
         if (m_store->open(location)) {
@@ -304,7 +296,7 @@ bool KisKraSaveVisitor::saveMetaData(KisNode* node)
 QString KisKraSaveVisitor::getLocation(KisNode* node, const QString& suffix)
 {
 
-    QString location = m_external ? QString::null : m_uri;
+    QString location = m_external ? QString() : m_uri;
     Q_ASSERT(m_nodeFileNames.contains(node));
     location += m_name + LAYER_PATH + m_nodeFileNames[node] + suffix;
     return location;

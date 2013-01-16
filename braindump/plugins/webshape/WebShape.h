@@ -28,34 +28,35 @@
 class QSvgRenderer;
 class QWebPage;
 
-class WebShape : public QObject, public KoShape{
+class WebShape : public QObject, public KoShape
+{
     Q_OBJECT
-  public:
+public:
     WebShape();
     ~WebShape();
 
     // absolutly necessary:
-    void paint( QPainter &painter,
-                const KoViewConverter &converter );
+    void paint(QPainter &painter,
+               const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     virtual void saveOdf(KoShapeSavingContext & context) const;
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     const KUrl& url();
-    void setUrl( const KUrl& _url);
+    void setUrl(const KUrl& _url);
     bool isCached() const;
     void setCached(bool _cache);
-    void setCache(const QString& );
+    void setCache(const QString&);
     const QString& cache() const;
-    void scrollOf( const QPointF& _scroll);
-    void zoomOf( qreal z);
+    void scrollOf(const QPointF& _scroll);
+    void zoomOf(qreal z);
     QPointF scroll() const;
     void setScroll(const QPointF& point);
     qreal zoom() const;
     void setZoom(qreal _zoom);
-  private:
+private:
     void updateCache();
-  private slots:
+private slots:
     void loadFinished(bool);
-  private:
+private:
     KUrl m_url;
     QWebPage* m_webPage;
     bool m_cached;

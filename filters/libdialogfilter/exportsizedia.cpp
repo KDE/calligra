@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
-#include <qpaintdevice.h>
+#include <QPaintDevice>
 #include <QRect>
 #include <QWidget>
 
@@ -70,8 +70,6 @@ void ExportSizeDia::setupGUI()
     setMainWidget(page);
 
     QGridLayout *mainLayout = new QGridLayout(page);
-    mainLayout->setMargin(KDialog::marginHint());
-    mainLayout->setSpacing(KDialog::spacingHint());
 
     m_proportional = new QCheckBox(page);
     m_proportional->setObjectName("proportional");

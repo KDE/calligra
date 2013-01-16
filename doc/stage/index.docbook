@@ -1,22 +1,31 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY package "koffice">
-  <!ENTITY kappname "&kpresenter;">
+  <!ENTITY package "calligra">
+  <!ENTITY calligra "Calligra">
+  <!ENTITY tables "<application>Calligra Tables</application>">
+  <!ENTITY words "<application>Calligra Words</application>">
+  <!ENTITY stage "<application>Calligra Stage</application>">
+  <!ENTITY flow "<application>Calligra Flow</application>">
+  <!ENTITY plan "<application>Calligra Plan</application>">
+  <!-- the following author entities have been added to user.entities in 4.10 branch and trunk of svn
+       they can be removed from this file once they are present in the kdelibs minimum version required by &kappname; -->
+  <!ENTITY traducteurFrederickAngelique      '<othercredit role="translator"><firstname>Frederick</firstname><surname>Angelique</surname><affiliation><address><email>ti_orion@hotmail.fr</email></address></affiliation><contrib>Traduction française&nbsp;</contrib></othercredit>'>
+  <!ENTITY relecteurFrederickAngelique        '<othercredit role="reviewer"><firstname>Frederick</firstname><surname>Angelique</surname><affiliation><address><email>ti_orion@hotmail.fr</email></address></affiliation><contrib>Relecture de la documentation française&nbsp;</contrib></othercredit>'>
+  <!ENTITY FrederickAngelique 'Frederick Angelique <email>ti_orion@hotmail.fr</email>'>
+
+  <!ENTITY kappname "&stage;">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY tutorial SYSTEM "tutorial.docbook">
-  <!ENTITY screen SYSTEM "screen.docbook">
   <!ENTITY guides SYSTEM "guides.docbook">
   <!ENTITY great SYSTEM "great-presentations.docbook">
   <!ENTITY menus SYSTEM "menus.docbook">
   <!ENTITY options SYSTEM "options.docbook">
-  <!ENTITY a11y SYSTEM "a11y.docbook">
-  <!ENTITY faq SYSTEM "faq.docbook">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
 
-<book lang="&language;">
+<book id="stage" lang="&language;">
 <bookinfo>
-<title>The &kpresenter; Handbook</title>
+<title>The &stage; Handbook</title>
 
 <authorgroup>
 <author>
@@ -42,8 +51,8 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<date>2006-11-22</date>
-<releaseinfo>1.6</releaseinfo>
+<date>2012-12-09</date>
+<releaseinfo>2.6</releaseinfo>
 
 <copyright>
 <year>1999</year><year>2000</year>
@@ -69,15 +78,15 @@
 
 <abstract>
 <para>
-&kpresenter; is the presentations program in the &koffice; suite of
+&stage; is the presentations program in the &calligra; suite of
 productivity applications.
 </para>
 </abstract>
 
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>KPresenter</keyword>
-<keyword>KOffice</keyword>
+<keyword>Stage</keyword>
+<keyword>Calligra</keyword>
 <keyword>Graphics</keyword>
 <keyword>Presentations</keyword>
 </keywordset>
@@ -88,60 +97,40 @@ productivity applications.
 <title>Introduction</title>
 
 <important> <para>Please check <ulink
-url="http://docs.kde.org/en/HEAD/koffice/kpresenter/">http://docs.kde.org</ulink>
+url="http://docs.kde.org/en/development/en/calligra/stage/index.html">http://docs.kde.org</ulink>
 for updated versions of this document.</para></important>
 
 <para>
-&kpresenter; is the presentations program in the &koffice; productivity
-suite. Using &kpresenter;, you can prepare a set of slides for use in an
+&stage; is the presentations program in the &calligra; productivity
+suite. Using &stage;, you can prepare a set of slides for use in an
 on-screen slideshow or for printing. Your slides can include text and
 graphics in a variety of formats, and of course, you can embed all sorts
 of objects using KParts.
 </para>
 
 <para>
-The &koffice; productivity suite consists of a number of applications
+The &calligra; productivity suite consists of a number of applications
 which are designed to work together. Overview documentation for
-&koffice; is available, as well as manuals for each component of the
-suite. The components of &koffice; are:
+&calligra; is available, as well as manuals for each component of the
+suite. Other components of &calligra; are:
 </para>
 
 <itemizedlist>
 <listitem>
 <para>
-&kword; - a frames based wordprocessor.
+&words; - a frames based wordprocessor.
 </para>
 </listitem>
 
 <listitem><para>
-&kspread; - a spreadsheet application.
+&tables; - a spreadsheet application.
 </para>
 </listitem>
-
-<listitem>
-<para>
-&kpresenter; - a presentations application.
-</para>
-</listitem>
-
-
-<listitem>
-<para>
-&kformula; - an editor for mathematical formulae.
-</para>
-</listitem>
-
-<listitem>
-<para>
-&kchart; - an application to draw charts and diagrams.
-</para>
-</listitem>
-
 
 </itemizedlist>
 
 <para>
-&koffice; is a free (or open-source) software project which is
+&calligra; is a free (or open-source) software project which is
 released under the terms of the &GNU; General Public
 License.
 </para>
@@ -149,8 +138,6 @@ License.
 </chapter>
 
 &tutorial;
-
-&screen;
 
 &guides;
 
@@ -160,15 +147,11 @@ License.
 
 &options;
 
-&a11y;
-
-&faq;
-
 <chapter id="credits">
 <title>Credits and License</title>
 
 <para>
-&kpresenter;
+&stage;
 </para>
 
 <para>

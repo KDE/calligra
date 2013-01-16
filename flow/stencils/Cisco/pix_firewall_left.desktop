@@ -1,8 +1,23 @@
 [Desktop Entry]
 Name=PIX Firewall Left
+Name[ca]=Tallafocs PIX esquerra
+Name[ca@valencia]=Tallafocs PIX esquerra
+Name[el]=PIX Firewall Left
+Name[es]=Cortafuegos PIX izquierda
 Name[et]=PIX tulemüür vasakul
+Name[fr]=PIX Firewall Left
+Name[gl]=Devasa PIX á esquerda
+Name[it]=Firewall PIX (sinistra)
+Name[kk]=Сол жақ PIX желіаралық қалқаны
+Name[nb]=PIX brannmur venstre
+Name[nl]=PIX firewall links
+Name[pl]=Zapora ogniowa PIX na lewo
 Name[pt]='Firewall' PIX Esquerda
 Name[pt_BR]=Firewall PIX esquerda
+Name[ru]=Защитный экран PIX левый
+Name[sk]=PIX Firewall vľavo
 Name[sv]=PIX-brandvägg vänster
 Name[uk]=Брандмауер PIX (ліворуч)
 Name[x-test]=xxPIX Firewall Leftxx
+Name[zh_CN]=PIX 防火墙(左)
+Name[zh_TW]=PIX 防火牆（左）

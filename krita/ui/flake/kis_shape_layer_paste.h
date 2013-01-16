@@ -20,7 +20,7 @@
 #include <KoOdf.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfPaste.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoShapeOdfSaveHelper.h>
 #include "kis_shape_layer.h"
 #include "kis_shape_selection.h"
@@ -28,7 +28,7 @@
 class KisShapeLayerShapePaste : public KoOdfPaste
 {
 public:
-    KisShapeLayerShapePaste(KoShapeLayer* _container, KoShapeControllerBase* _controller)
+    KisShapeLayerShapePaste(KoShapeLayer* _container, KoShapeBasedDocumentBase* _controller)
             : m_container(_container)
             , m_controller(_controller) {
     }
@@ -43,7 +43,6 @@ public:
         forEachElement(child, body) {
             KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, context);
             if (shape) {
-                kDebug() << "Adding " << shape << "with parent" << shape->parent() << "to container" << m_container;
                 KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(m_container);
                 if (shapeLayer) {
                     //don't update as the setDirty call would create shared pointer that would delete the layer
@@ -58,5 +57,5 @@ public:
     }
 private:
     KoShapeLayer* m_container;
-    KoShapeControllerBase* m_controller;
+    KoShapeBasedDocumentBase* m_controller;
 };

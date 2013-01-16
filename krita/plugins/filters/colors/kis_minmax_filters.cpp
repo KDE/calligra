@@ -21,8 +21,6 @@
 #include "kis_minmax_filters.h"
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-
-#include <kis_iterators_pixel.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_selection.h>
 #include <kis_paint_device.h>
@@ -125,7 +123,6 @@ void KisFilterMin::process(KisPaintDeviceSP device,
                           ) const
 {
     Q_UNUSED(config);
-    QPoint srcTopLeft = rect.topLeft();
     Q_ASSERT(device != 0);
 
     int pixelsProcessed = 0;

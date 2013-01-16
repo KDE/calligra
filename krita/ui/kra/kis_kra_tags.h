@@ -37,12 +37,14 @@ const QString SEPARATOR = "/";
 const QString SHAPE_LAYER_PATH = "/shapelayers/";
 const QString EXIF_PATH = "/annotations/exif";
 const QString ICC_PATH = "/annotations/icc";
+const QString ASSISTANTS_PATH = "/assistants/";
 const QString LAYER_PATH = "/layers/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
 const QString CHANNEL_FLAGS = "channelflags";
 const QString CHANNEL_LOCK_FLAGS = "channellockflags";
 const QString CLONE_FROM = "clonefrom";
+const QString CLONE_FROM_UUID = "clonefromuuid";
 const QString CLONE_LAYER = "clonelayer";
 const QString CLONE_TYPE = "clonetype";
 const QString COLORSPACE_NAME = "colorspacename";
@@ -76,13 +78,14 @@ const QString MASKS = "masks";
 const QString MIME = "mime";
 const QString NAME = "name";
 const QString OPACITY = "opacity";
+const QString COLLAPSED = "collapsed";
 const QString PAINT_LAYER = "paintlayer";
 const QString PROFILE = "profile";
 const QString ROTATION = "rotation";
 const QString SELECTION_MASK = "selectionmask";
 const QString SHAPE_LAYER = "shapelayer";
-const QString TRANSFORMATION_MASK = "transformationmask";
 const QString TRANSPARENCY_MASK = "transparencymask";
+const QString UUID = "uuid";
 const QString VISIBLE = "visible";
 const QString WIDTH = "width";
 const QString X = "x";
@@ -95,6 +98,7 @@ const QString Y_RESOLUTION = "y-res";
 const QString Y_SCALE = "y_scale";
 const QString Y_SHEAR = "y_shear";
 const QString Y_TRANSLATION = "y_translation";
+const QString ACTIVE = "active";
 }
 
 

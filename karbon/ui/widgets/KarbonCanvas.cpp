@@ -9,10 +9,10 @@
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Peter Simonsson <psn@linux.se>
-   Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
    Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -31,6 +31,7 @@
 
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
+#include <KarbonKoDocument.h>
 #include "KarbonPart.h"
 #include <KarbonOutlinePaintingStrategy.h>
 
@@ -44,14 +45,14 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QFocusEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QMenu>
-#include <QtCore/QEvent>
-#include <QtCore/QSizeF>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QFocusEvent>
+#include <QMouseEvent>
+#include <QMenu>
+#include <QEvent>
+#include <QSizeF>
 
 class KarbonCanvas::KarbonCanvasPrivate {
 public:
@@ -61,7 +62,7 @@ public:
             , part(0)
             , showMargins(false)
             , documentOffset(0, 0)
-            , viewMargin(100) 
+            , viewMargin(100)
     {
         pixelGrid.setGrid(1.0, 1.0);
         pixelGrid.setShowGrid(true);
@@ -79,7 +80,7 @@ public:
     KoToolProxy *toolProxy;
 
     KarbonDocument *document;
-    KarbonPart *part;
+    KarbonKoDocument *part;
     QPoint origin;         ///< the origin of the document page rect
     bool showMargins;      ///< should page margins be shown
     QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
@@ -88,7 +89,7 @@ public:
     KoGridData pixelGrid;  ///< pixel grid data
 };
 
-KarbonCanvas::KarbonCanvas(KarbonPart *p)
+KarbonCanvas::KarbonCanvas(KarbonKoDocument *p)
         : QWidget() , KoCanvasBase(p), d(new KarbonCanvasPrivate())
 {
     d->part = p;
@@ -173,7 +174,7 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     painter.setRenderHint(QPainter::Antialiasing, false);
     // check how big a single point is and paint a pixel grid if big enough
     const qreal pointSize = d->zoomHandler.zoomItX(1.0);
-    if (pointSize > 10.0 && d->part->gridData().showGrid()) { 
+    if (pointSize > 10.0 && d->part->gridData().showGrid()) {
         // set a slightly lighter color than the current grid color
         d->pixelGrid.setGridColor(d->part->gridData().gridColor().lighter(110));
         d->pixelGrid.paintGrid(painter, d->zoomHandler, updateRect);
@@ -224,9 +225,10 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
                 menu.addAction(action);
             }
             menu.exec(e->globalPos());
-            e->setAccepted(true);
         }
     }
+
+    e->setAccepted(true);
 }
 
 void KarbonCanvas::mouseDoubleClickEvent(QMouseEvent *e)
@@ -268,6 +270,12 @@ void KarbonCanvas::wheelEvent(QWheelEvent *e)
 
 QVariant KarbonCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
+    if (query == Qt::ImMicroFocus) {
+        QRectF rect = (d->toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
+        QPointF scroll(canvasController()->scrollBarValue());
+        rect.translate(documentOrigin() - scroll);
+        return rect.toRect();
+    }
     return d->toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 
@@ -294,7 +302,7 @@ bool KarbonCanvas::snapToGrid() const
     return d->part->gridData().snapToGrid();
 }
 
-void KarbonCanvas::addCommand(QUndoCommand *command)
+void KarbonCanvas::addCommand(KUndo2Command *command)
 {
     d->part->addCommand(command);
     updateSizeAndOffset();
@@ -359,6 +367,16 @@ void KarbonCanvas::adjustOrigin()
 void KarbonCanvas::setDocumentOffset(const QPoint &offset)
 {
     d->documentOffset = offset;
+}
+
+const QPoint &KarbonCanvas::documentOffset() const
+{
+    return d->documentOffset;
+}
+
+KarbonKoDocument *KarbonCanvas::document() const
+{
+    return d->part;
 }
 
 void KarbonCanvas::enableOutlineMode(bool on)

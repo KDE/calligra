@@ -1,7 +1,21 @@
 [Desktop Entry]
 Name=source substitution
+Name[ca]=substitució de font
+Name[ca@valencia]=substitució de font
+Name[el]=αντικατάσταση πηγής
+Name[es]=substitución de fuente
+Name[et]=Vooluvaheldi
+Name[fr]=source substitution
+Name[gl]=Fonte de substitución
+Name[it]=sostituzione fonte
+Name[kk]=алмастыру көзі
+Name[nb]=kildeerstatning
+Name[nl]=bronsubstitutie
+Name[pl]=odejmowanie źródła
 Name[pt]=substituição fonte
 Name[pt_BR]=substituição de fonte
+Name[sk]=nahradenie zdroja
 Name[sv]=källersättning
 Name[uk]=Замінник лінеаризованого джерела струму
 Name[x-test]=xxsource substitutionxx
+Name[zh_TW]=source substitution

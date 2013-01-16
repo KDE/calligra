@@ -1,14 +1,14 @@
-add_subdirectory( kdchart )
 add_subdirectory( tests )
 
 include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
-                     ${CMAKE_SOURCE_DIR}/plugins/chartshape/kdchart/include
                      ${CMAKE_SOURCE_DIR}/plugins/chartshape/dialogs
                      ${CMAKE_SOURCE_DIR}/interfaces
+                     ${KDCHART_INCLUDES}
                      ${KOMAIN_INCLUDES}
+                     ${TEXTLAYOUT_INCLUDES}
 )
 
-########### Flake Plugin library ###############
+########### Chart shape Plugin library ###############
 
 SET (chartshape_LIB_SRCS
     kchart_global.cpp
@@ -25,9 +25,8 @@ SET (chartshape_LIB_SRCS
     ChartProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp
-    ThreeDScene.cpp
-    ThreeDTransformation.cpp
     ChartDocument.cpp
+    ChartPart.cpp
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
@@ -41,7 +40,13 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     dialogs/CellRegionDialog.cpp
+    dialogs/FontEditorDialog.cpp
+    dialogs/FormatErrorBarDialog.cpp
     commands/ChartTypeCommand.cpp
+    commands/LegendCommand.cpp
+    commands/AxisCommand.cpp
+    commands/DatasetCommand.cpp
+    commands/ChartTextShapeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
@@ -50,12 +55,16 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui
+    dialogs/FormatErrorBarDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
-target_link_libraries(chartshapelib kdchart komain)
+target_link_libraries(chartshapelib kdchart komain textlayout)
 target_link_libraries(chartshapelib LINK_INTERFACE_LIBRARIES kdchart)
-set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(chartshapelib PROPERTIES
+    VERSION   ${GENERIC_CALLIGRA_LIB_VERSION}
+    SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+)
 
 install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -67,4 +76,4 @@ install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES chartshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES kchartpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
+kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

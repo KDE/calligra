@@ -1,8 +1,22 @@
 [Desktop Entry]
 Name=Intermediate-Event-Error
+Name[ca]=Intermedi-Esdeveniment-Error
+Name[ca@valencia]=Intermedi-Esdeveniment-Error
+Name[el]=Σφάλμα-ενδιάμεσου-γεγονότος
+Name[es]=Error en el evento intermedio
 Name[et]=Vahesündmuse tõrge
+Name[fr]=Erreur d'évènement intermédiaire
+Name[gl]=Evento intermedio de erro
+Name[hu]=Közbülső-Esemény-Hiba
+Name[it]=Evento-intermedio-Errore
+Name[kk]=Аралық-оқиға-қате
+Name[nb]=Mellomliggende-hendelse-feil
+Name[nl]=Tussenin-gebeurtenis-fout
+Name[pl]=Błąd-Zdarzenia-Pośredniego
 Name[pt]=Evento-Intermédio-Erro
 Name[pt_BR]=Erro no evento intermediário
+Name[ru]=Промежуточное событие - ошибка
+Name[sk]=Intermediate-Event-Error
 Name[sv]=Mellanliggande-händelse-fel
 Name[uk]=Помилка проміжної події
 Name[x-test]=xxIntermediate-Event-Errorxx

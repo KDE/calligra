@@ -20,13 +20,14 @@
 #include <QColor>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
 
-#include "KoResourceManager.h"
+#include "KoCanvasResourceManager.h"
 
 #include "kis_shade_selector_line.h"
 
@@ -41,6 +42,8 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     l->setMargin(0);
 
     updateSettings();
+
+    setMouseTracking(true);
 }
 
 void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
@@ -89,6 +92,49 @@ void KisMinimalShadeSelector::updateSettings()
     setPopupBehaviour(false, false);
 }
 
+void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
+{
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent newEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        if(line->rect().contains(newEvent.pos()))
+            line->mousePressEvent(&newEvent);
+    }
+    KisColorSelectorBase::mousePressEvent(e);
+}
+
+void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
+{
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent newEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        if(line->rect().contains(newEvent.pos()))
+            line->mouseMoveEvent(&newEvent);
+    }
+    KisColorSelectorBase::mouseMoveEvent(e);
+}
+
+void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
+{
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent newEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+
+        if(line->rect().contains(newEvent.pos()))
+            line->mouseReleaseEvent(&newEvent);
+    }
+    KisColorSelectorBase::mouseReleaseEvent(e);
+}
+
 void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
 {
     if(m_colorUpdateAllowed==false)
@@ -99,8 +145,8 @@ void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)
     bool onForeground = cfg.readEntry("shadeSelectorUpdateOnForeground", false);
     bool onBackground = cfg.readEntry("shadeSelectorUpdateOnBackground", true);
 
-    if ((key == KoCanvasResource::ForegroundColor && onForeground)
-        || (key == KoCanvasResource::BackgroundColor && onBackground)) {
+    if ((key == KoCanvasResourceManager::ForegroundColor && onForeground)
+        || (key == KoCanvasResourceManager::BackgroundColor && onBackground)) {
         setColor(findGeneratingColor(v.value<KoColor>()));
     }
 }

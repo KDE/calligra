@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/fabrictexture.png</file>
+        <file>images/calligra-logo.png</file>
+    </qresource>
+</RCC>

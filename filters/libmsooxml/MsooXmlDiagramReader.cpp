@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Sebastian Sauer <sebsauer@kdab.com>
  * Copyright (c) 2010 Carlos Licea <carlos@kdab.com>
@@ -50,6 +50,11 @@ MsooXmlDiagramReaderContext::MsooXmlDiagramReaderContext(KoGenStyles* styles)
 MsooXmlDiagramReaderContext::~MsooXmlDiagramReaderContext()
 {
     delete m_context;
+}
+
+int MsooXmlDiagramReaderContext::shapeListSize() const
+{
+    return m_context->m_shapeList.size();
 }
 
 void MsooXmlDiagramReaderContext::saveIndex(KoXmlWriter* xmlWriter, const QRect &rect)

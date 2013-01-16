@@ -1,7 +1,8 @@
 /*
  * OpenRPT report writer and rendering engine
- * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2001-2007 by OpenMFG, LLC <info@openmfg.com>
+ * Copyright (C) 2007-2008 by Adam Pigg <adam@piggz.co.uk>
+ * Copyright (C) 2011 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,18 +20,18 @@
 #ifndef REPORTDESIGNER_H
 #define REPORTDESIGNER_H
 
-#include <qwidget.h>
-#include <qstring.h>
-
-#include <qcolor.h>
-#include <qmap.h>
+#include <QWidget>
+#include <QString>
+#include <QColor>
+#include <QMap>
 #include <QVBoxLayout>
 #include <QCloseEvent>
+
+#include <kdebug.h>
 
 #include <krreportdata.h>
 #include <koproperty/Set.h>
 #include <koproperty/Property.h>
-#include <kdebug.h>
 #include <KoReportItemBase.h>
 #include "koreport_export.h"
 #include "KoReportData.h"
@@ -38,6 +39,7 @@
 class ReportGridOptions;
 class QDomDocument;
 class QGraphicsScene;
+class QActionGroup;
 class KoRuler;
 class KoZoomHandler;
 class QGridLayout;
@@ -213,7 +215,7 @@ public:
     void sectionMouseReleaseEvent(ReportSceneView *, QMouseEvent * e);
 
     /**
-    @brief Sets the property set for the currenty selected item
+    @brief Sets the property set for the currently selected item
     @param set Property set of item
     */
     void changeSet(KoProperty::Set *);
@@ -244,9 +246,9 @@ public:
 
     /**
     @brief Returns a list of actions that represent the entities that can be inserted into the report.
-    Actions are created as children of @a parent.
-    @return list of QActions */
-    static QList<QAction*> actions(QObject* parent);
+    Actions are created as children of @a group and belong to the group.
+    @return list of actions */
+    static QList<QAction*> actions(QActionGroup* group);
 
     
 public slots:
@@ -263,7 +265,7 @@ public slots:
 
     void slotRaiseSelected();
     void slotLowerSelected();
-
+    
 protected:
 
     ReportSection *m_reportHeader;
@@ -289,12 +291,6 @@ private:
     bool m_modified; // true if this document has been modified, false otherwise
 
     KoReportData *m_kordata;
-
-    /**
-    @brief Return a list of supported page formats
-    @return A QStringList of page formats
-    */
-    QStringList pageFormats() const;
 
     /**
     @brief Sets the detail section to the given section
@@ -332,7 +328,8 @@ private:
     ReportWriterSectionData *m_sectionData;
     unsigned int selectionCount() const;
 
-    static bool actionPriortyLessThan(QAction* act1, QAction* act2);
+    void setSectionCursor(const QCursor&);
+    void unsetSectionCursor();
 
 private slots:
     void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);
@@ -347,6 +344,7 @@ signals:
     void propertySetChanged();
     void dirty();
     void reportDataChanged();
+    void itemInserted(const QString& entity);
 };
 
 #endif

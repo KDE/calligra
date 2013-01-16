@@ -20,16 +20,16 @@
 #ifndef FILTERSTACKSETCOMMAND_H
 #define FILTERSTACKSETCOMMAND_H
 
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 class KoFilterEffectStack;
 class KoShape;
 
 /// Command to set a filter stack on a shape
-class FilterStackSetCommand : public QUndoCommand
+class FilterStackSetCommand : public KUndo2Command
 {
 public:
-    FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, QUndoCommand *parent = 0);
+    FilterStackSetCommand(KoFilterEffectStack *newStack, KoShape *shape, KUndo2Command *parent = 0);
     ~FilterStackSetCommand();
 
     /// redo the command

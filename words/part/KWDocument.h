@@ -28,48 +28,59 @@
 #include "KWPageManager.h"
 #include "KWApplicationConfig.h"
 #include "frames/KWFrameLayout.h"
-#include "kword_export.h"
+#include "words_export.h"
 
 #include <KoDocument.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeManager.h>
+#include <KoShapeBasedDocumentBase.h>
 #include <KoXmlReader.h>
 
 #include <QObject>
 #include <QPainter>
 #include <QRect>
+#include <QPointer>
 
 class KWView;
 class KWPage;
 class KWFrameSet;
-class MagicCurtain;
-class PageProcessingQueue;
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
+class KoUpdater;
+class KoTextAnchor;
+class KoShapeContainer;
+class KoShapeController;
+class KoPart;
 
 class KLocalizedString;
 class QIODevice;
 
 /**
- * The class that represents a KWord document containing content and settings.
+ * The class that represents a Words document containing content and settings.
  */
-class KWORD_EXPORT KWDocument : public KoDocument, public KoShapeControllerBase
+class WORDS_EXPORT KWDocument : public KoDocument, public KoShapeBasedDocumentBase
 {
     Q_OBJECT
 public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
+    explicit KWDocument(KoPart *part);
     ~KWDocument();
 
-    // KoShapeControllerBase interface
-    /// reimplemented from KoShapeControllerBase
-    void addShape(KoShape *shape);
-    /// reimplemented from KoShapeControllerBase
-    void removeShape(KoShape *shape);
+    // KoShapeBasedDocumentBase interface
+    /// reimplemented from KoShapeBasedDocumentBase
+    virtual void addShape(KoShape *shape);
+    /// reimplemented from KoShapeBasedDocumentBase
+    virtual void removeShape(KoShape *shape);
+    // reimplemented from KoShapeBasedDocumentBase
+    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
 
+    void addShape(KoShape *shape, KoTextAnchor *anchor);
 
     // KoDocument interface
+    /// reimplemented from KoDocument
+    virtual QPixmap generatePreview(const QSize& size);
     /// reimplemented from KoDocument
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
@@ -79,13 +90,12 @@ public:
     /// reimplemented from KoOdfDocument
     virtual bool saveOdf(SavingContext &documentContext);
     /// reimplemented from KoDocument
-    virtual KoView* createViewInstance(QWidget*);
-    /// reimplemented from KoDocument
-    virtual QGraphicsItem *createCanvasItem();
-    /// reimplemented from KoDocument
     virtual int pageCount() const {
         return pageManager()->pageCount();
     }
+
+    bool isMasterDocument() const;
+    void setIsMasterDocument(bool isMasterDocument);
 
     // others
     /**
@@ -100,6 +110,12 @@ public:
     Q_SCRIPTABLE KWPageManager *pageManager() {
         return &m_pageManager;
     }
+    /**
+     * Return the frameLayout used in this document.
+     */
+    Q_SCRIPTABLE KWFrameLayout *frameLayout() {
+        return &m_frameLayout;
+    }
 
     /**
      * Insert a new page after another,
@@ -109,14 +125,18 @@ public:
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
+     * @param addUndoRedoCommand if true then an undo-redo action is added to the
+     * document to allow undo/redo inserting the page.
      */
-    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString());
+    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      * @param masterPageName the name of the master page to use for this new page.
+     * @param addUndoRedoCommand if true then an undo-redo action is added to the
+     * document to allow undo/redo appending the page.
      */
-    KWPage appendPage(const QString &masterPageName = QString());
+    KWPage appendPage(const QString &masterPageName = QString(), bool addUndoRedoCommand = true);
     /**
      * remove a page from the document.
      * @param pageNumber the pageNumber that should be removed.
@@ -143,8 +163,8 @@ public:
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
-    /// reimplemented from super
-    QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
+    /// return the textRangeManager for this document.
+    KoTextRangeManager *textRangeManager() const;
 
     KWApplicationConfig &config() {
         return m_config;
@@ -153,31 +173,47 @@ public:
         return m_config;
     }
 
-#ifndef NDEBUG
-    /// Use a log of kDebug calls to print out the internal state of the document and its members
-    void printDebug();
-#endif
-
+    /// This emits the pageSetupChanged signal which will call KWViewMode::updatePageCache.
     void firePageSetupChanged();
 
     // reimplemented slot from KoDocument
     virtual void initEmpty();
-    // reimplemented slot from KoDocument
-    virtual QStringList extraNativeMimeTypes(ImportExportType importExportType) const;
 
     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
 
     /// request a relayout of auto-generated frames on all pages of this argument style.
     void updatePagesForStyle(const KWPageStyle &style);
 
-    /// Returns the PageProcessingQueue used to queue and process page-updates.
-    PageProcessingQueue* pageQueue();
+    /// find the frame closest to the given shape or return 0
+    KWFrame *findClosestFrame(KoShape *shape) const;
+
+    KoTextAnchor *anchorOfShape(KoShape *shape) const;
+
+    KWFrame *frameOfShape(KoShape *shape) const;
+
+    /// returns the document's shapeController. This controller should only be used for deleting shapes.
+    //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
+    KoShapeController *shapeController() const { return m_shapeController; }
+
+    /// Set cover image data at a QPair<cover mime type, cover data>.
+    void setCoverImage(QPair<QString, QByteArray> cover);
+
+    /// return cover data.
+    QPair<QString, QByteArray> coverImage();
 
 public slots:
-    /// Relayout the pages
-    void relayout();
-    /// Register new frameset
-    void addFrameSet(KWFrameSet *f);
+    /**
+     * Relayout the pages or frames within the framesets.
+     * @param framesets The framesets that should be relayouted. If no framesets are
+     * provided (empty list) then all framesets and therefore all pages are relayouted.
+     */
+    void relayout(QList<KWFrameSet*> framesets = QList<KWFrameSet*>());
+    /**
+     * Register a frameset.
+     * @param frameset The frameset that should be registered. Future operations like
+     * for example @a relayout() operate on all registered framesets.
+     */
+    void addFrameSet(KWFrameSet *frameset);
     /**
      * Remove frameset from the document stopping it from being saved or displayed.
      * Note that the document is normally the one that deletes framesets when the
@@ -192,52 +228,62 @@ signals:
     /// signal emitted when a page has been added
     void pageSetupChanged();
 
+    /// emitted whenever a shape is added.
+    void shapeAdded(KoShape *, KoShapeManager::Repaint);
+
+    /// emitted whenever a shape is removed
+    void shapeRemoved(KoShape *);
+
+    /// emitted wheneve a resources needs to be set on the canvasResourceManager
+    void resourceChanged(int key, const QVariant &value);
+
 private slots:
     /// Frame maintenance on already registered framesets
     void addFrame(KWFrame *frame);
     void removeFrame(KWFrame *frame);
-    void requestMoreSpace(KWTextFrameSet *fs);
-    void removeFrameFromViews(KWFrame*);
-    void updateHeaderFooter(KWTextFrameSet*);
-
     /// Called after the constructor figures out there is an install problem.
-    void showErrorAndDie();
     void mainTextFrameSetLayoutDone();
 
+    void layoutProgressChanged(int percent);
+    void layoutFinished();
+
+protected:
+    /// reimplemented from KoDocument
+    virtual void setupOpenFileSubProgress();
+
 private:
-    friend class PageProcessingQueue;
     friend class KWDLoader;
     friend class KWOdfLoader;
     friend class KWPagePropertiesCommand;
     QString renameFrameSet(const QString &prefix , const QString &base);
-    /// post process loading after either oasis or oldxml loading finished
+    /**
+     * post process loading after either oasis or oldxml loading finished
+     */
     void endOfLoading();
     /**
      * Called before loading
      * It's important to clear out anything that might be in the document already,
      * for things like using DBUS to load multiple documents into the same KWDocument,
-     * or "reload" when kword is embedded into konqueror.
+     * or "reload" when words is embedded into konqueror.
      */
     void clear();
 
-    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
-    /// emits pageSetupChanged
-
+    /**
+     * emits pageSetupChanged
+     */
     void saveConfig();
 
 private:
+    bool m_isMasterDocument;
     QList<KWFrameSet*> m_frameSets;
-    QString m_viewMode;
-
     KWPageManager m_pageManager;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
-
-    MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
     bool m_mainFramesetEverFinished;
-
     QList<KoShapeConfigFactoryBase *> m_panelFactories;
-    PageProcessingQueue *m_pageQueue;
+    QPointer<KoUpdater> m_layoutProgressUpdater;
+    KoShapeController *m_shapeController;
+    QPair<QString, QByteArray> m_coverImage;
 };
 
 #endif

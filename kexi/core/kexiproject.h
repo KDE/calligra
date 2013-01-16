@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,11 +21,11 @@
 #ifndef KEXIPROJECT_H
 #define KEXIPROJECT_H
 
-#include <qobject.h>
-#include <qpointer.h>
+#include <QObject>
+#include <QPointer>
 
-#include <kexiutils/tristate.h>
-#include <kexidb/object.h>
+#include <db/tristate.h>
+#include <db/object.h>
 #include "kexiprojectdata.h"
 #include "kexipartitem.h"
 #include "kexi.h"
@@ -72,16 +72,15 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 public:
     /*! Constructor 1. Creates a new object using \a pdata.
-     \a pdata which will be then owned by KexiProject object.
      \a handler can be provided to receive error messages during
      entire KexiProject object's lifetime. */
-    KexiProject(KexiProjectData* pdata, KexiDB::MessageHandler* handler = 0);
+    KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler = 0);
 
     /*! Constructor 2. Like above but sets predefined connections \a conn.
      The connection should be created using the same connection data
      as pdata->connectionData(). The connection will become owned by created KexiProject
      object, so do not destroy it. */
-    KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler,
+    KexiProject(const KexiProjectData& pdata, KexiDB::MessageHandler* handler,
                 KexiDB::Connection* conn);
 
 //  KexiProject(KexiDB::ConnectionData *cdata);
@@ -216,6 +215,10 @@ public:
      \return true on success. */
     bool renameObject(KexiPart::Item& item, const QString& newName);
 
+    /*! Renames a part instance pointed by \a item to a new name \a newName.
+     \return true on success. */
+    bool setObjectCaption(KexiPart::Item& item, const QString& newCaption);
+
     /*! Creates part item for given part \a info.
      Newly item will not be saved to the backend but stored in memory only
      (owned by project), and marked as "neverSaved" (see KexiPart::Item::neverSaved()).
@@ -272,12 +275,12 @@ public:
      \a cancelled is set to true if creation has been cancelled (e.g. user answered
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
-    static KexiProject* createBlankProject(bool &cancelled, KexiProjectData* data,
+    static KexiProject* createBlankProject(bool &cancelled, const KexiProjectData& data,
                                            KexiDB::MessageHandler* handler = 0);
 
     /*! Drops project described by \a data. \return true on success.
      Use with care: Any KexiProject objects allocated for this project will become invalid! */
-    static tristate dropProject(KexiProjectData* data,
+    static tristate dropProject(const KexiProjectData& data,
                                 KexiDB::MessageHandler* handler, bool dontAsk = false);
 
     /*! @see KexiDB::Connection::setQuerySchemaObsolete( const QString& queryName ) */
@@ -296,6 +299,25 @@ public:
 
     //! Closes connection. @return true on success.
     bool closeConnection();
+
+    /*! Loads current user's data block, referenced by \a objectID and \a dataID
+     and puts it to \a dataString.
+     \return true on success, false on failure and cancelled when there is no such data block
+     \sa storeUserDataBlock(). */
+    tristate loadUserDataBlock(int objectID, const QString& dataID, QString *dataString);
+
+    /*! Stores current user's data block \a dataString, referenced by \a objectID and \a dataID.
+     The block will be stored in "kexi__userdata" table
+     If there is already such record in the table, it's simply overwritten.
+     \return true on success
+     \sa loadUserDataBlock(). */
+    bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString);
+
+    /*! Removes current user's data block referenced by \a objectID and \a dataID.
+     \return true on success. Does not fail if the block does not exist.
+     Note that if \a dataID is not specified, all data blocks for this user and object will be removed.
+     \sa loadUserDataBlock() storeUserDataBlock(). */
+    bool removeUserDataBlock(int objectID, const QString& dataID = QString());
 
 protected:
     /*! Creates connection using project data.
@@ -347,6 +369,9 @@ signals:
 
     /** instance pointed by \a item is renamed */
     void itemRenamed(const KexiPart::Item &item, const QString& oldName);
+
+    /** caption for instance pointed by \a item is changed */
+    void itemCaptionChanged(const KexiPart::Item &item, const QString& oldCaption);
 
 //  /** new table \a schema created */
 //  void tableCreated(KexiDB::TableSchema& schema);

@@ -1,4 +1,4 @@
-/* This file is part of the KOffice project
+/* This file is part of the Calligra project
  * Copyright (C) 2005, 2007-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -45,18 +45,15 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     m_sizeWidget->showPageSpread(true);
     m_sizeWidget->setUnit(m_unit);
     lay->addWidget(m_sizeWidget);
-    lay->setMargin(0);
 
     lay = new QVBoxLayout(widget.columnsTab);
     m_columnsWidget = new KWDocumentColumns(widget.columnsTab, m_columns);
     m_columnsWidget->setUnit(m_unit);
     m_columnsWidget->setShowPreview(false);
     lay->addWidget(m_columnsWidget);
-    lay->setMargin(0);
 
     lay = new QVBoxLayout(widget.previewPane);
     widget.previewPane->setLayout(lay);
-    lay->setMargin(0);
     KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget.previewPane);
     lay->addWidget(prev);
     prev->setColumns(columns);
@@ -64,8 +61,6 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     connect(m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(sizeUpdated(const KoPageLayout&)));
     connect(widget.createButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-    connect(widget.mainText, SIGNAL(toggled(bool)), m_sizeWidget, SLOT(setTextAreaAvailable(bool)));
-    connect(widget.mainText, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setTextAreaAvailable(bool)));
     connect(m_sizeWidget, SIGNAL(unitChanged(const KoUnit&)), this, SLOT(unitChanged(const KoUnit&)));
     connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), prev, SLOT(setColumns(const KoColumns&)));
     connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), this, SLOT(columnsUpdated(const KoColumns&)));
@@ -92,16 +87,13 @@ void KWStartupWidget::buttonClicked()
 {
     m_doc->initEmpty();
 
-    if (m_layout.leftMargin < 0) {
-        m_layout.width /= 2.0;
-        m_doc->pageManager()->setPreferPageSpread(true);
-    }
     KWPageStyle style = m_doc->pageManager()->defaultPageStyle();
     Q_ASSERT(style.isValid());
     style.setColumns(m_columns);
-    style.setHasMainTextFrame(widget.mainText->isChecked());
     style.setPageLayout(m_layout);
     m_doc->setUnit(m_unit);
+
+    m_doc->relayout();
 
     emit documentSelected();
 }

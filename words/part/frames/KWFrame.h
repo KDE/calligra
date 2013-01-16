@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2000-2006 David Faure <faure@kde.org>
+ * Copyright (C) 2005-2011 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2005-2006, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,18 +23,19 @@
 #ifndef KWFRAME_H
 #define KWFRAME_H
 
-#include "KWord.h"
-#include "kword_export.h"
+#include "Words.h"
+#include "words_export.h"
 
 #include <KoShape.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeApplicationData.h>
+#include <KoTextAnchor.h>
 
-class KoTextAnchor;
 class KWFrameSet;
 class KoViewConverter;
 class KWOutlineShape;
 class KWPage;
+class KoTextAnchor;
 
 /**
  * This class represents a single frame.
@@ -40,53 +44,35 @@ class KWPage;
  * A frame is really just a shape that is used to place the content
  * of a frameset.
  */
-class KWORD_EXPORT KWFrame : public KoShapeApplicationData
+class WORDS_EXPORT KWFrame : public KoShapeApplicationData
 {
 public:
     /**
      * Constructor
      * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
-     * @param pageNumber the page number is normally -1, only set when loading page anchored frames to the
-     *      page where the frame should be positioned
      */
-    KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber = -1);
+    KWFrame(KoShape *shape, KWFrameSet *parent, KoTextAnchor *anchor = 0);
     virtual ~KWFrame();
 
     /**
      * This property what should happen when the frame is full
      */
-    KWord::FrameBehavior frameBehavior() const {
+    Words::FrameBehavior frameBehavior() const {
         return m_frameBehavior;
     }
     /**
      * Set what should happen when the frame is full
      * @param fb the new FrameBehavior
      */
-    void setFrameBehavior(KWord::FrameBehavior fb) {
+    void setFrameBehavior(Words::FrameBehavior fb) {
         m_frameBehavior = fb;
     }
 
     /**
      * For frame duplication policy on new page creation.
-     * Determines if this frame will be copied on even or odd pages only.
      */
-    bool frameOnBothSheets() const {
-        return m_copyToEverySheet;
-    }
-    /**
-     * Determines if this frame will be copied on even or odd pages only.
-     * Altering this does not change the frames placed until a new page is created.
-     * @param both if true this frame will be copied to every page, if false only every other page
-     */
-    void setFrameOnBothSheets(bool both) {
-        m_copyToEverySheet = both;
-    }
-
-    /**
-     * For frame duplication policy on new page creation.
-     */
-    KWord::NewFrameBehavior newFrameBehavior() const {
+    Words::NewFrameBehavior newFrameBehavior() const {
         return m_newFrameBehavior;
     }
     /**
@@ -94,9 +80,20 @@ public:
      * Altering this does not change the frames placed until a new page is created.
      * @param nf the NewFrameBehavior.
      */
-    void setNewFrameBehavior(KWord::NewFrameBehavior nf) {
+    void setNewFrameBehavior(Words::NewFrameBehavior nf) {
         m_newFrameBehavior = nf;
     }
+
+    /**
+     * Set the minimum height of the frame.
+     * @param minimumFrameHeight the minimum height of the frame.
+     */
+    void setMinimumFrameHeight(qreal minimumFrameHeight);
+    /**
+     * Return the minimum height of the frame.
+     * @return the minimum height of the frame. Default is 0.0.
+     */
+    qreal minimumFrameHeight() const;
 
     /**
      * Each frame will be rendered by a shape which also holds the position etc.
@@ -121,12 +118,42 @@ public:
      */
     virtual void setFrameSet(KWFrameSet *newFrameSet);
 
+    void cleanupShape(KoShape* shape);
+
+    /*
     void clearLoadingData() {
         m_anchoredPageNumber = -1;
     }
-    int loadingPageNumber() const {
-        return m_anchoredPageNumber;
+    */
+
+    int anchoredPageNumber() const {
+        return m_anchor ? m_anchor->pageNumber() : -1;
     }
+    qreal anchoredFrameOffset() const {
+        return m_anchoredFrameOffset;
+    }
+    void setAnchoredFrameOffset(qreal offset) {
+        m_anchoredFrameOffset = offset;
+    }
+
+    KoTextAnchor::AnchorType anchorType() {
+        return m_anchor ? m_anchor->anchorType() : KoTextAnchor::AnchorPage;
+    }
+
+    void setAnchor(KoTextAnchor *anchor) {
+        m_anchor = anchor;
+    }
+
+    KoTextAnchor *anchor() const { return m_anchor; }
+
+    /**
+     * Returns the list of copy-shapes, see @a KWCopyShape , that
+     * are copies of this KWFrame.
+     */
+    QList<KWFrame*> copies() const;
+
+    void addCopy(KWFrame* frame);
+    void removeCopy(KWFrame* frame);
 
     /**
      * States if this frame is a copy of the previous one.
@@ -150,15 +177,14 @@ public:
 
 private:
     KoShape *m_shape;
-    KWord::FrameBehavior m_frameBehavior;
+    Words::FrameBehavior m_frameBehavior;
     bool m_copyToEverySheet;
-    KWord::NewFrameBehavior m_newFrameBehavior;
-    // The page number is only used during loading.
-    // It is set to the page number if the frame contains a page anchored frame.
-    // In all other cases it is set to -1.
-    int m_anchoredPageNumber;
-
+    Words::NewFrameBehavior m_newFrameBehavior;
+    qreal m_anchoredFrameOffset;
     KWFrameSet *m_frameSet;
+    qreal m_minimumFrameHeight;
+    QList<KWFrame*> m_copyShapes;
+    KoTextAnchor *m_anchor;
 };
 
 #endif

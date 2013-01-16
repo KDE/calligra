@@ -35,8 +35,8 @@ public:
     bool deletePoints;
 };
 
-KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> &pointDataList, qreal insertPosition, QUndoCommand *parent)
-        : QUndoCommand(parent),
+KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> &pointDataList, qreal insertPosition, KUndo2Command *parent)
+        : KUndo2Command(parent),
         d(new KoPathPointInsertCommandPrivate())
 {
     if (insertPosition < 0)
@@ -73,6 +73,7 @@ KoPathPointInsertCommand::KoPathPointInsertCommand(const QList<KoPathPointData> 
         QPointF cp2 = splitSegments.second.second()->controlPoint1();
         d->controlPoints.append(QPair<QPointF, QPointF>(cp1, cp2));
     }
+    setText(i18nc("(qtundo-format)", "Insert points"));
 }
 
 KoPathPointInsertCommand::~KoPathPointInsertCommand()
@@ -82,7 +83,7 @@ KoPathPointInsertCommand::~KoPathPointInsertCommand()
 
 void KoPathPointInsertCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     for (int i = d->pointDataList.size() - 1; i >= 0; --i) {
         KoPathPointData pointData = d->pointDataList.at(i);
         KoPathShape * pathShape = pointData.pathShape;
@@ -111,7 +112,7 @@ void KoPathPointInsertCommand::redo()
 
 void KoPathPointInsertCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < d->pointDataList.size(); ++i) {
         const KoPathPointData &pdBefore = d->pointDataList.at(i);
         KoPathShape * pathShape = pdBefore.pathShape;

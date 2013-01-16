@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
  * Copyright (C) 2003 David Faure <faure@kde.org>
  * Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -104,6 +104,8 @@ public:
 protected:
     virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
                                                       KoOdfWriters *writers);
+
+    virtual void writeConfigurationSettings(KoXmlWriter* settings) const;
 
     bool isPasswordProtectedFile(QString &filename);
     KTemporaryFile* tryDecryptFile(QString &filename);

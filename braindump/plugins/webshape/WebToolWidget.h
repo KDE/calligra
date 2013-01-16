@@ -22,25 +22,25 @@
 
 #include "ui_WebShapeConfigWidget.h"
 
-class QUndoCommand;
+class KUndo2Command;
 class WebShape;
 class WebTool;
 
 class WebToolWidget : public QWidget
 {
     Q_OBJECT
-  public:
+public:
     WebToolWidget(WebTool* _tool);
-  public slots:
+public slots:
     void open(WebShape *shape);
     void save();
-  private:
+private:
     /// reimplemented
-    QUndoCommand * createCommand();
+    KUndo2Command * createCommand();
     WebShape *shape();
-  private:
-    void blockChildSignals( bool block );
-  private:
+private:
+    void blockChildSignals(bool block);
+private:
     WebTool* m_tool;
     WebShape *m_shape;
     Ui::WebShapeConfigWidget m_widget;

@@ -30,7 +30,6 @@
 #include <QColor>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -39,7 +38,6 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
@@ -58,8 +56,9 @@
 #include <KoChannelInfo.h>
 #include <kis_convolution_painter.h>
 #include <commands/kis_node_commands.h>
-#include <kis_layer_manager.h>
+#include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
+#include "kis_iterator_ng.h"
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -90,8 +89,6 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     KisPaintDeviceSP dev = src->projection();
     if (!dev) return;
 
-    image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
-
     KisPaintDeviceSP shadowDev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
     KisPaintDeviceSP bShadowDev;
     const KoColorSpace *rgb8cs = shadowDev->colorSpace();
@@ -99,22 +96,18 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
     QRect rect = dev->exactBounds();
 
     {
-        KisHLineConstIteratorPixel srcIt = dev->createHLineConstIterator(rect.x(), rect.y(), rect.width());
-        KisHLineIteratorPixel dstIt = shadowDev->createHLineIterator(rect.x(), rect.y(), rect.width());
+        KisHLineConstIteratorSP srcIt = dev->createHLineConstIteratorNG(rect.x(), rect.y(), rect.width());
+        KisHLineIteratorSP dstIt = shadowDev->createHLineIteratorNG(rect.x(), rect.y(), rect.width());
 
         for (qint32 row = 0; row < rect.height(); ++row) {
-            while (! srcIt.isDone()) {
-                if (srcIt.isSelected()) {
-                    //set the shadow color
-                    quint8 alpha = dev->colorSpace()->opacityU8(srcIt.rawData());
-                    color.setAlpha(alpha);
-                    rgb8cs->fromQColor(color, dstIt.rawData());
-                }
-                ++srcIt;
-                ++dstIt;
-            }
-            srcIt.nextRow();
-            dstIt.nextRow();
+            do {
+                //set the shadow color
+                quint8 alpha = dev->colorSpace()->opacityU8(srcIt->oldRawData());
+                color.setAlpha(alpha);
+                rgb8cs->fromQColor(color, dstIt->rawData());
+            } while (srcIt->nextPixel() && dstIt->nextPixel());
+            srcIt->nextRow();
+            dstIt->nextRow();
             progressUpdater->setProgress((row * 100) / rect.height());
         }
     }
@@ -123,6 +116,8 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
         gaussianblur(progressUpdater, shadowDev, bShadowDev, rect, blurradius, blurradius, BLUR_RLE, progressUpdater);
         shadowDev = bShadowDev;
     }
+
+    image->undoAdapter()->beginMacro(i18n("Add Drop Shadow"));
 
     if (!progressUpdater->interrupted()) {
         shadowDev->move(xoffset, yoffset);
@@ -135,32 +130,10 @@ void KisDropshadow::dropshadow(KoUpdater * progressUpdater,
             QRect shadowBounds = shadowDev->exactBounds();
 
             if (!image->bounds().contains(shadowBounds)) {
-
                 QRect newImageSize = image->bounds() | shadowBounds;
-                image->resize(newImageSize.width(), newImageSize.height());
-
-                if (shadowBounds.left() < 0 || shadowBounds.top() < 0) {
-
-                    qint32 newRootX = image->rootLayer()->x();
-                    qint32 newRootY = image->rootLayer()->y();
-
-                    if (shadowBounds.left() < 0) {
-                        newRootX += -shadowBounds.left();
-                    }
-                    if (shadowBounds.top() < 0) {
-                        newRootY += -shadowBounds.top();
-                    }
-
-                    QUndoCommand *moveCommand = new KisNodeMoveCommand(image->rootLayer(),
-                            QPoint(image->rootLayer()->x(), image->rootLayer()->y()), QPoint(newRootX, newRootY), image);
-                    Q_ASSERT(moveCommand != 0);
-
-                    m_view->document()->addCommand(moveCommand);
-                }
+                image->resizeImage(newImageSize);
             }
         }
-        l->setDirty();
-        m_view->image()->setModified();
     }
 
     image->undoAdapter()->endMacro();
@@ -182,7 +155,7 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
     double *val_p = NULL;
     double *val_m = NULL;
     double *vp, *vm;
-    qint32 x1, y1, x2, y2;
+    qint32 x1, y1;
     qint32 i, j;
     qint32 row, col, b;
     qint32 terms;
@@ -203,8 +176,6 @@ void KisDropshadow::gaussianblur(KoUpdater * progressUpdater, KisPaintDeviceSP s
     y1 = (qint32)(rect.y() - vert);
     width = (qint32)(rect.width() + 2 * horz);
     height = (qint32)(rect.height() + 2 * vert);
-    x2 = x1 + width;
-    y2 = y1 + height;
 
     if (width < 1 || height < 1) return;
 

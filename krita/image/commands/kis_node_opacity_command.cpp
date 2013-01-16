@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 
 KisNodeOpacityCommand::KisNodeOpacityCommand(KisNodeSP node, quint8 oldOpacity, quint8 newOpacity) :
-        KisNodeCommand(i18n("Node Opacity"), node)
+        KisNodeCommand(i18nc("(qtundo-format)", "Node Opacity"), node)
 {
     m_oldOpacity = oldOpacity;
     m_newOpacity = newOpacity;

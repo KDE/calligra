@@ -20,7 +20,7 @@
 #ifndef __KOVARIABLE_H__
 #define __KOVARIABLE_H__
 
-// KOffice libs
+// Calligra libs
 #include "KoInlineObject.h"
 #include "kotext_export.h"
 
@@ -47,6 +47,7 @@ class KoVariablePrivate;
  */
 class KOTEXT_EXPORT KoVariable : public KoInlineObject
 {
+    Q_OBJECT
 public:
     /**
      * Constructor.
@@ -90,7 +91,7 @@ protected:
      * If this is a type of variable that needs to change its value based on that
      * you should implement this method and act on it.
      */
-    virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
+    virtual void variableMoved(const QTextDocument *document, int posInDocument);
 
     friend class KoVariableManager;
     /**
@@ -99,11 +100,12 @@ protected:
      */
     int positionInDocument() const;
 
-private:
-    void updatePosition(const QTextDocument *document, QTextInlineObject object,
-                        int posInDocument, const QTextCharFormat &format);
+    /// reimplemented
     void resize(const QTextDocument *document, QTextInlineObject object,
                 int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+private:
+    void updatePosition(const QTextDocument *document,
+                        int posInDocument, const QTextCharFormat &format);
     void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
                const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 

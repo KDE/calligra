@@ -18,9 +18,18 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "drawstyle.h"
+#include "msodraw.h"
 
 namespace
 {
+const MSO::OfficeArtCOLORREF ignore()
+{
+    MSO::OfficeArtCOLORREF w;
+    w.red = w.green = w.blue = 0xFF;
+    w.fPaletteIndex = w.fPaletteRGB = w.fSystemRGB = w.fSchemeIndex
+                                      = w.fSysIndex = true;
+    return w;
+}
 const MSO::OfficeArtCOLORREF white()
 {
     MSO::OfficeArtCOLORREF w;
@@ -78,6 +87,15 @@ const MSO::FixedPoint zero()
 //     tmp.msoshadeOneColor = 0;
 //     return tmp;
 // }
+} //namespace
+
+quint16 DrawStyle::shapeType() const
+{
+    if (!sp) {
+        return msosptNil;
+    } else {
+        return sp->shapeProp.rh.recInstance;
+    }
 }
 
 #define GETTER(TYPE, FOPT, NAME, DEFAULT) \
@@ -102,11 +120,13 @@ const MSO::FixedPoint zero()
 //     TYPE                    FOPT                  NAME                  DEFAULT         ODRAW Ref
 GETTER(quint32,                HspMaster,            hspMaster,            0)              // 2.3.2.1
 GETTER(quint32,                Cxstyle,              cxstyle,              0x00000003)     // 2.3.2.2
+GETTER(quint32,                BWMode,               bWMode,               1)              // 2.3.2.3
 GETTER(quint32,                PWrapPolygonVertices, pWrapPolygonVertices, 0)              // 2.3.4.7
 GETTER(qint32,                 DxWrapDistLeft,       dxWrapDistLeft,       0x0001be7c)     // 2.3.4.9
 GETTER(qint32,                 DyWrapDistTop,        dyWrapDistTop,        0)              // 2.3.4.10
 GETTER(qint32,                 DxWrapDistRight,      dxWrapDistRight,      0x0001be7c)     // 2.3.4.11
 GETTER(qint32,                 DyWrapDistBottom,     dyWrapDistBottom,     0)              // 2.3.4.12
+GETTER(quint32,                LidRegroup,           lidRegroup,           0)              // 2.3.4.13
 GETTER(quint32,                PosH,                 posH,                 0)              // 2.3.4.19
 GETTER(quint32,                PosRelH,              posRelH,              2)              // 2.3.4.20
 GETTER(quint32,                PosV,                 posV,                 0)              // 2.3.4.21
@@ -115,6 +135,10 @@ GETTER(quint32,                PctHR,                pctHR,                0x000
 GETTER(quint32,                AlignHR,              alignHR,              0)              // 2.3.4.24
 GETTER(qint32,                 DxHeightHR,           dxHeightHR,           0)              // 2.3.4.25
 GETTER(qint32,                 DxWidthHR,            dxWidthHR,            0)              // 2.3.4.26
+GETTER(MSO::OfficeArtCOLORREF, BorderTopColor,       borderTopColor,       white())        // 2.3.4.32
+GETTER(MSO::OfficeArtCOLORREF, BorderLeftColor,      borderLeftColor,      white())        // 2.3.4.33
+GETTER(MSO::OfficeArtCOLORREF, BorderBottomColor,    borderBottomColor,    white())        // 2.3.4.34
+GETTER(MSO::OfficeArtCOLORREF, BorderRightColor,     borderRightColor,     white())        // 2.3.4.35
 GETTER(qint32,                 GeoLeft,              geoLeft,              0)              // 2.3.6.1
 GETTER(qint32,                 GeoTop,               geoTop,               0)              // 2.3.6.2
 GETTER(qint32,                 GeoRight,             geoRight,             0x00005460)     // 2.3.6.3
@@ -167,19 +191,36 @@ GETTER(quint32,                LineStartArrowhead,   lineStartArrowhead,   0)   
 GETTER(quint32,                LineEndArrowhead,     lineEndArrowhead,     0)              // 2.3.8.21
 GETTER(quint32,                LineStartArrowWidth,  lineStartArrowWidth,  1)              // 2.3.8.22
 GETTER(quint32,                LineEndArrowWidth,    lineEndArrowWidth,    1)              // 2.3.8.24
+GETTER(quint32,                LineEndArrowLength,   lineEndArrowLength,   1)              // 2.3.8.25
+GETTER(quint32,                LineJoinStyle,        lineJoinStyle,        2)              // 2.3.8.26
+GETTER(quint32,                LineEndCapStyle,      lineEndCapStyle,      2)              // 2.3.8.27
 GETTER(quint32,                ShadowType,           shadowType,           0)              // 2.3.13.1
 GETTER(MSO::OfficeArtCOLORREF, ShadowColor,          shadowColor,          gray())         // 2.3.13.2
 GETTER(MSO::FixedPoint,        ShadowOpacity,        shadowOpacity,        one())          // 2.3.13.5
 GETTER(qint32,                 ShadowOffsetX,        shadowOffsetX,        0x6338)         // 2.3.13.6
 GETTER(qint32,                 ShadowOffsetY,        shadowOffsetY,        0x6338)         // 2.3.13.7
 GETTER(MSO::FixedPoint,        Rotation,             rotation,             zero())         // 2.3.18.5
-GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0)              // 2.3.21.2
-GETTER(qint32,                 DyTextTop,            dyTextTop,            0)              // 2.3.21.3
-GETTER(qint32,                 DxTextRight,          dxTextRight,          0)              // 2.3.21.4
-GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0)              // 2.3.21.5
-GETTER(qint32,                 TxflTextFlow,         txflTextFlow,         0)              // 2.3.21.9
+GETTER(qint32,                 ITxid,                iTxid,                0)              // 2.3.21.1
+GETTER(qint32,                 DxTextLeft,           dxTextLeft,           0x00016530)     // 2.3.21.2
+GETTER(qint32,                 DyTextTop,            dyTextTop,            0x0000B298)     // 2.3.21.3
+GETTER(qint32,                 DxTextRight,          dxTextRight,          0x00016530)     // 2.3.21.4
+GETTER(qint32,                 DyTextBottom,         dyTextBottom,         0x0000B298)     // 2.3.21.5
+GETTER(quint32,                WrapText,             wrapText,             0)              // 2.3.21.6
+GETTER(quint32,                AnchorText,           anchorText,           0)              // 2.3.21.8
+GETTER(quint32,                TxflTextFlow,         txflTextFlow,         0)              // 2.3.21.9
+GETTER(quint32,                CdirFont,             cdirFont,             0)              // 2.3.21.10
+GETTER(quint32,                HspNext,              hspNext,              0)              // 2.3.21.11
+GETTER(quint32,                Txdir,                txdir,                0)              // 2.3.21.12
+GETTER(MSO::FixedPoint,        CropFromTop,          cropFromTop,          zero())         // 2.3.23.1
+GETTER(MSO::FixedPoint,        CropFromBottom,       cropFromBottom,       zero())         // 2.3.23.2
+GETTER(MSO::FixedPoint,        CropFromLeft,         cropFromLeft,         zero())         // 2.3.23.3
+GETTER(MSO::FixedPoint,        CropFromRight,        cropFromRight,        zero())         // 2.3.23.4
 GETTER(quint32,                Pib,                  pib,                  0)              // 2.3.23.5
-
+GETTER(quint32,                PibName,              pibName,              0)              // 2.3.23.7
+GETTER(quint32,                PibFlags,             pibFlags,             0)              // 2.3.23.9
+GETTER(MSO::OfficeArtCOLORREF, PictureTransparent,   pictureTransparent,   ignore())       // 2.3.23.10
+GETTER(qint32,                 PictureContrast,      pictureContrast,      0x00010000)     // 2.3.23.11
+GETTER(qint32,                 PictureBrightness,    pictureBrightness,    0)              // 2.3.23.12
 #undef GETTER
 
 #define GETTER(NAME, TEST, DEFAULT) \
@@ -206,14 +247,20 @@ GETTER(quint32,                Pib,                  pib,                  0)   
         } \
         return DEFAULT; \
     }
+
+//TODO: CalloutBooleanProperties, ProtectionBooleanProperties
+
 // FOPT        NAME           TEST                       DEFAULT
-#define FOPT GeometryBooleanProperties
-GETTER(fFillOk,                fUsefFillOK,              true)
-GETTER(fFillShadeShapeOK,      fUsefFillShadeShapeOK,    false)
-GETTER(fGtextOK,               fUsefGtextOK,             false)
-GETTER(fLineOK,                fUsefLineOK,              true)
-GETTER(f3DOK,                  fUsef3DOK,                true)
-GETTER(fShadowOK,              fUsefShadowOK,            true)
+#define FOPT ShapeBooleanProperties
+GETTER(fBackground,           fUsefBackground,           false)
+GETTER(fInitiator,            fUsefInitiator,            false)
+GETTER(fLockShapeType,        fUsefLockShapeType,        false)
+GETTER(fPreferRelativeResize, fusePreferrelativeResize,  false)
+GETTER(fOleIcon,              fUsefOleIcon,              false)
+GETTER(fFlipVOverride,        fUsefFlipVOverride,        false)
+GETTER(fFlipHOverride,        fUsefFlipHOverride,        false)
+GETTER(fPolicyBarcode,        fUsefPolicyBarcode,        false)
+GETTER(fPolicyLabel,          fUsefPolicyLabel,          false)
 #undef FOPT
 #define FOPT GroupShapeBooleanProperties
 GETTER(fPrint,                fUsefPrint,                true)
@@ -233,6 +280,14 @@ GETTER(fStandardHR,           fUsefStandardHR,           false)
 GETTER(fIsBullet,             fUsefIsBullet,             false)
 GETTER(fLayoutInCell,         fUsefLayoutInCell,         true)
 #undef FOPT
+#define FOPT GeometryBooleanProperties
+GETTER(fFillOk,                fUsefFillOK,              true)
+GETTER(fFillShadeShapeOK,      fUsefFillShadeShapeOK,    false)
+GETTER(fGtextOK,               fUsefGtextOK,             false)
+GETTER(fLineOK,                fUsefLineOK,              true)
+GETTER(f3DOK,                  fUsef3DOK,                true)
+GETTER(fShadowOK,              fUsefShadowOK,            true)
+#undef FOPT
 #define FOPT FillStyleBooleanProperties
 GETTER(fNoFillHitTest,        fUseNoFillHitTest,         false)
 GETTER(fillUseRect,           fUseFillUseRect,           false)
@@ -246,7 +301,7 @@ GETTER(fRecolorFillAsPicture, fUsefRecolorFillAsPicture, false)
 GETTER(fNoLineDrawDash,       fUseNoLineDrawDash,        false)
 GETTER(fLineFillShape,        fUseLineFillShape,         false)
 GETTER(fHitTestLine,          fUseHitTestLine,           true)
-GETTER(fLine,                 fUsefLine,                 true)
+// GETTER(fLine,                 fUsefLine,                 true)
 GETTER(fArrowHeadsOK,         fUsefArrowHeadsOK,         false)
 GETTER(fInsetPenOK,           fUseInsetPenOK,            true)
 GETTER(fInsetPen,             fUseInsetPen,              false)
@@ -256,6 +311,54 @@ GETTER(fLineOpaqueBackColor,  fUsefLineOpaqueBackColor,  false)
 GETTER(fShadowObscured,       fUsefShadowObscured,       false)
 GETTER(fShadow,               fUsefShadow,               false)
 #undef FOPT
+#define FOPT DiagramBooleanProperties
+GETTER(fPseudoInline,         fUsefPseudoInline,         false)
+GETTER(fDoLayout,             fUsefDoLayout,             true)
+GETTER(fReverse,              fUsefReverse,              false)
+GETTER(fDoFormat,             fUsefDoFormat,             false)
+#undef FOPT
+#define FOPT TextBooleanProperties
+GETTER(fFitShapeToText,       fUsefFitShapeToText,       false)
+GETTER(fAutoTextMargin,       fUsefAutoTextMargin,       false)
+GETTER(fSelectText,           fUsefSelectText,           true)
+#undef FOPT
+#define FOPT BlipBooleanProperties
+GETTER(fPictureActive,        fUsefPictureActive,        false)
+GETTER(fPictureBiLevel,       fUsefPictureBiLevel,       false)
+GETTER(fPictureGray,          fUsefPictureGray,          false)
+GETTER(fNoHitTestPicture,     fUsefNoHitTestPicture,     false)
+GETTER(fLooping,              fUsefLooping,              false)
+GETTER(fRewind,               fUsefRewind,               false)
+GETTER(fPicturePreserveGrays, fUsefPicturePreserveGrays, false)
+#undef FOPT
+#undef GETTER
+
+// The override was discussed at Office File Formats Forum:
+// http://social.msdn.microsoft.com/Forums/en-US/os_binaryfile/thread/a1cf51a7-fb93-4028-b3ac-3ed2fd77a94b
+bool DrawStyle::fLine() const
+{
+    const MSO::LineStyleBooleanProperties* p = 0;
+    quint16 shapeType = msosptNil;
+
+    if (sp) {
+        shapeType = sp->shapeProp.rh.recInstance;
+        p = get<MSO::LineStyleBooleanProperties>(*sp);
+        if (p && p->fUsefLine) {
+            return p->fLine;
+        }
+    }
+    if (mastersp) {
+        p = get<MSO::LineStyleBooleanProperties>(*mastersp);
+        if (p && p->fUsefLine) {
+            return p->fLine;
+        }
+    }
+    if (shapeType == msosptPictureFrame) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
 #define COMPLEX(FOPT, NAME) \
     IMsoArray DrawStyle::NAME() const \
@@ -271,10 +374,28 @@ GETTER(fShadow,               fUsefShadow,               false)
         } \
         return a;\
     }
-//FOPT                //NAME
+// FOPT                       NAME
 COMPLEX(FillShadeColors,      fillShadeColors_complex)
 COMPLEX(PVertices,            pVertices_complex)
 COMPLEX(PSegmentInfo,         pSegmentInfo_complex)
 COMPLEX(PWrapPolygonVertices, pWrapPolygonVertices_complex)
-
 #undef COMPLEX
+
+#define COMPLEX_NAME(FOPT, NAME) \
+    QString DrawStyle::NAME() const \
+    { \
+        QString a;\
+        if (sp) { \
+            a = getComplexName<MSO::FOPT>(*sp); \
+            if (!a.isNull()) return a; \
+        } \
+        if (mastersp) { \
+            a = getComplexName<MSO::FOPT>(*mastersp); \
+            if (!a.isNull()) return a; \
+        } \
+        return a;\
+    }
+// FOPT                       NAME
+COMPLEX_NAME(PibName,         pibName_complex)
+COMPLEX_NAME(FillBlipName,    fillBlipName_complex)
+#undef COMPLEX_NAME

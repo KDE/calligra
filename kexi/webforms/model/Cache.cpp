@@ -21,11 +21,11 @@
 
 #include <KDebug>
 
-#include <kexidb/field.h>
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/tableschema.h>
+#include <db/field.h>
+#include <db/cursor.h>
+#include <db/connection.h>
+#include <db/queryschema.h>
+#include <db/tableschema.h>
 
 #include "DataProvider.h"
 

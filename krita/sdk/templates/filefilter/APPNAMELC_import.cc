@@ -10,7 +10,7 @@
 #include "%{APPNAMELC}_converter.h"
 
 K_PLUGIN_FACTORY(ImportFactory, registerPlugin<%{APPNAME}Import>();)
-K_EXPORT_PLUGIN(ImportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ImportFactory("calligrafilters"))
 
 %{APPNAME}Import::%{APPNAME}Import(QObject *parent, const QVariantList&) : KoFilter(parent)
 {
@@ -44,7 +44,7 @@ KoFilter::ConversionStatus %{APPNAME}Import::convert(const QByteArray&, const QB
         if (url.isEmpty())
             return KoFilter::FileNotFound;
 
-        %{APPNAME}Converter ib(doc, doc -> undoAdapter());
+        %{APPNAME}Converter ib(doc);
 
 
         switch (ib.buildImage(url)) {

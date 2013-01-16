@@ -1,10 +1,25 @@
 [Desktop Entry]
 Name=Front End Processor
+Name[ca]=Processador frontal
+Name[ca@valencia]=Processador frontal
+Name[de]=Frontend-Prozessor
+Name[el]=Περιβάλλον επεξεργαστή
+Name[es]=Procesador frontal
 Name[et]=Eesprotsessor
+Name[fr]=processeur externe
+Name[gl]=Procesador de interfaces
+Name[it]=Front End Processor
+Name[kk]=Алдыңғы процессор
+Name[nb]=Inngangs-avlastingsmaskin
+Name[nds]=Frontend-Perzesser
 Name[nl]=Frontend-processor
+Name[pl]=Procesor pierwszoplanowy
 Name[pt]=Processador de Interface
 Name[pt_BR]=Processador de interface
+Name[ru]=Процессор передней панели
+Name[sk]=Frontendový procesor
 Name[sv]=Frontprocessor
 Name[uk]=Процесор передньої панелі
 Name[x-test]=xxFront End Processorxx
 Name[zh_CN]=前端处理器
+Name[zh_TW]=前端處理器

@@ -21,15 +21,17 @@
 #ifndef __koView_h__
 #define __koView_h__
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <kparts/part.h>
 #include "komain_export.h"
 
+class KoPart;
 class KoDocument;
 class KoMainWindow;
 class KoPrintJob;
 class KoViewPrivate;
 class KoZoomController;
+struct KoPageLayout;
 
 // KDE classes
 class KStatusBar;
@@ -38,6 +40,9 @@ class KAction;
 
 // Qt classes
 class QToolBar;
+class QDragEnterEvent;
+class QDropEvent;
+class QPrintDialog;
 
 /**
  * This class is used to display a @ref KoDocument.
@@ -51,7 +56,7 @@ class KOMAIN_EXPORT KoView : public QWidget, public KParts::PartBase
 public:
     /**
      * Creates a new view for the document. Usually you don't create views yourself
-     * since the KOffice components come with their own view classes which inherit
+     * since the Calligra components come with their own view classes which inherit
      * KoView.
      *
      * The standard way to retrieve a KoView is to call @ref KoDocument::createView.
@@ -60,11 +65,37 @@ public:
      *                 must not be zero.
      * @param parent   parent widget for this view.
      */
-    explicit KoView(KoDocument *document, QWidget *parent = 0);
+    KoView(KoPart *part, KoDocument *document, QWidget *parent = 0);
+
     /**
      * Destroys the view and unregisters at the document.
      */
     virtual ~KoView();
+
+    // QWidget overrides
+protected:
+
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+
+    /**
+     * dropEvent by default calls addImages. Your KoView subclass might
+     * override dropEvent and if your app can also handle images, call this
+     * method.
+     */
+    virtual void dropEvent(QDropEvent * event);
+
+    // KoView api
+
+    /**
+     * Adds the given list of QImages as imageshapes to the view's document.
+     *
+     * @param imageList: a list of QImages that can be inserted
+     * @param insertPosition: the position in screen pixels where the images
+     * can be inserted.
+     */
+    virtual void addImages(const QList<QImage> &imageList, const QPoint &insertAt);
+
+public:
 
     /**
      *  Retrieves the document object of this view.
@@ -116,7 +147,7 @@ public:
      *  The default implementation asks @ref KoDocument::hitTest. This
      *  will iterate over all child documents to detect a hit.
      *
-     *  If your koffice component has multiple pages, like for example KSpread, then the hittest
+     *  If your calligra component has multiple pages, like for example KSpread, then the hittest
      *  may not succeed for a child that is not on the visible page. In those
      *  cases you need to reimplement this method.
      */
@@ -184,11 +215,6 @@ public:
     void disableAutoScroll();
 
     /**
-     * calls KoDocument::paintEverything()
-     */
-    virtual void paintEverything(QPainter &painter, const QRect &rect);
-
-    /**
      * In order to print the document represented by this view a new print job should
      * be constructed that is capable of doing the printing.
      * The default implementation returns 0, which silently cancels printing.
@@ -203,8 +229,20 @@ public:
     virtual KoPrintJob * createPdfPrintJob();
 
     /**
+     * @return the page layout to be used for printing.
+     * Default is the documents layout.
+     * Reimplement if your application needs to use a different layout.
+     */
+    virtual KoPageLayout pageLayout() const;
+
+    /**
+     * Create a QPrintDialog based on the @p printJob
+     */
+    virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent);
+
+    /**
      * @return the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a koffice main window.
+     * WARNING: this could be 0, if the main window isn't a calligra main window.
      * (e.g. it can be any KParts application).
      */
     KoMainWindow * shell() const;
@@ -217,7 +255,7 @@ public:
 
     /**
      * @return the statusbar of the KoMainWindow in which this view is currently.
-     * WARNING: this could be 0, if the main window isn't a koffice main window.
+     * WARNING: this could be 0, if the main window isn't a calligra main window.
      * (e.g. it can be any KParts application).
      */
     KStatusBar * statusBar() const;
@@ -336,6 +374,7 @@ signals:
 
 protected slots:
     virtual void slotAutoScroll();
+    virtual void changeAuthorProfile(const QString &profileName);
 
 private:
     virtual void setupGlobalActions(void);

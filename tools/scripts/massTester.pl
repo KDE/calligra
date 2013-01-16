@@ -10,7 +10,7 @@ use strict;
 
 # Examples:
 # find -name '*.odt' | \
-#     massTester.pl --withgui --timeout 3 kword --export-pdf --export-filename dummy.pdf
+#     massTester.pl --withgui --timeout 3 words --export-pdf --export-filename dummy.pdf
 #
 # find -name '*.odt' | \
 #     massTester.pl --withgui --timeout 3 koconverter --batch FILE out.odt

@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=External Entity
+Name[ca]=Entitat externa
+Name[ca@valencia]=Entitat externa
+Name[el]=Εξωτερική οντότητα
+Name[es]=Entidad externa
+Name[et]=Väline olem
+Name[fr]=Unité externe
+Name[gl]=Entidade externa
+Name[it]=Entità esterna
+Name[kk]=Cыртқы нәрсе
+Name[nb]=Ekstern enhet
+Name[nl]=Externe entiteit
+Name[pl]=Zewnętrzny podmiot
 Name[pt]=Entidade Externa
 Name[pt_BR]=Entidade externa
+Name[ru]=Внешняя сущность
+Name[sk]=Externá entita
 Name[sv]=Extern enhet
 Name[uk]=Зовнішній об’єкт
 Name[x-test]=xxExternal Entityxx
+Name[zh_TW]=外部實體

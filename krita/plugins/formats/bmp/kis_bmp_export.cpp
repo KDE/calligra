@@ -35,7 +35,7 @@
 #include <kis_paint_layer.h>
 
 K_PLUGIN_FACTORY(KisBMPExportFactory, registerPlugin<KisBMPExport>();)
-K_EXPORT_PLUGIN(KisBMPExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(KisBMPExportFactory("calligrafilters"))
 
 KisBMPExport::KisBMPExport(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -62,7 +62,7 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
@@ -75,7 +75,7 @@ KoFilter::ConversionStatus KisBMPExport::convert(const QByteArray& from, const Q
     QRect rc = output->image()->bounds();
     output->image()->refreshGraph();
     output->image()->lock();
-    QImage image = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height());
+    QImage image = output->image()->projection()->convertToQImage(0, 0, 0, rc.width(), rc.height(), KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation);
     output->image()->unlock();
     image.save(url.toLocalFile());
     return KoFilter::OK;

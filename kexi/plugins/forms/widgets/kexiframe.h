@@ -38,7 +38,7 @@ public:
     KexiFrame(QWidget * parent, Qt::WindowFlags f = 0);
     virtual ~KexiFrame();
 
-    virtual const QColor& frameColor() const;
+    virtual QColor frameColor() const;
 
 #if 0
 //! @todo more options

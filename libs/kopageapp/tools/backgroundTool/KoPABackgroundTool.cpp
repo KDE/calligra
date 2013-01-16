@@ -21,16 +21,16 @@
 #include "KoPABackgroundTool.h"
 
 //Qt includes
-#include <QMap>
+#include <QList>
 #include <QLabel>
 #include <QPainter>
 
 //KDE includes
 #include <klocale.h>
 
-//KOffice includes
+//Calligra includes
 #include <KoPACanvas.h>
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoPAView.h>
 #include <KoPAPageBase.h> // this is needed to make setResource work correctly
 #include <KoPointerEvent.h>
@@ -39,6 +39,7 @@
 
 #include "KoPAMasterPageDocker.h"
 #include "KoPABackgroundToolWidget.h"
+#include <KoPADocument.h>
 
 KoPABackgroundTool::KoPABackgroundTool( KoCanvasBase *canvas )
 : KoToolBase( canvas )
@@ -98,12 +99,14 @@ KoPAViewBase * KoPABackgroundTool::view() const
     return m_view;
 }
 
-QMap<QString, QWidget *> KoPABackgroundTool::createOptionWidgets()
+QList<QWidget *> KoPABackgroundTool::createOptionWidgets()
 {
     KoPABackgroundToolWidget * widget = new KoPABackgroundToolWidget( this );
-    QMap<QString, QWidget *> widgets;
-    widgets.insert( i18n("Background Tool"), widget );
-    QLabel dummy4( i18n("Use the styles docker to manipulate the background.") );
+    QList<QWidget *> widgets;
+    const QString title =
+        (m_view->kopaDocument()->pageType() == KoPageApp::Page) ? i18n("Page Background") : i18n("Slide Background");
+    widget->setWindowTitle(title);
+    widgets.append(widget );
 #if 0
     KoPAMasterPageDocker *masterPageDocker = new KoPAMasterPageDocker();
     masterPageDocker->setView( static_cast<KoPACanvas *>(m_canvas)->koPAView() );

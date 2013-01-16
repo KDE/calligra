@@ -1,6 +1,6 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
-add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
+add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
 
 include_directories( ${PIGMENT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/../colorspaces )
 
@@ -88,14 +88,6 @@ target_link_libraries(TestKoRgbU8ColorSpaceTester  ${KDE4_KDEUI_LIBS} pigmentcms
 
 ########### next target ###############
 
-set(TestKoCompositeOps_test_SRCS TestKoCompositeOps.cpp )
-
-kde4_add_unit_test(TestKoCompositeOps TESTNAME libs-pigment-TestKoCompositeOps ${TestKoCompositeOps_test_SRCS})
-
-target_link_libraries(TestKoCompositeOps  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
 set(TestKoColorSpaceSanity_test_SRCS TestKoColorSpaceSanity.cpp )
 
 kde4_add_unit_test(TestKoColorSpaceSanity TESTNAME libs-pigment-TestKoColorSpaceSanity ${TestKoColorSpaceSanity_test_SRCS})
@@ -109,3 +101,11 @@ set(TestFallBackColorTransformation_test_SRCS TestFallBackColorTransformation.cp
 kde4_add_unit_test(TestFallBackColorTransformation TESTNAME libs-pigment-TestFallBackColorTransformation ${TestFallBackColorTransformation_test_SRCS})
 
 target_link_libraries(TestFallBackColorTransformation  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestKoChannelInfo_test_SRCS TestKoChannelInfo.cpp )
+
+kde4_add_unit_test(TestKoChannelInfo TESTNAME libs-pigment-TestKoChannelInfo ${TestKoChannelInfo_test_SRCS})
+
+target_link_libraries(TestKoChannelInfo  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})

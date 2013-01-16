@@ -20,29 +20,9 @@
 
 #include "identifier.h"
 #include "transliteration_table.h"
+#include <db/utils.h>
 
 using namespace KexiUtils;
-
-bool KexiUtils::isIdentifier(const QString& s)
-{
-    uint i;
-    const uint sLength = s.length();
-    for (i = 0; i < sLength; i++) {
-        QChar c = s.at(i).toLower();
-        if (!(c == '_' || (c >= 'a' && c <= 'z') || (i > 0 && c >= '0' && c <= '9')))
-            break;
-    }
-    return i > 0 && i == sLength;
-}
-
-QString KexiUtils::string2FileName(const QString &s)
-{
-    QString fn = s.simplified();
-    fn.replace(' ', "_"); fn.replace('$', "_");
-    fn.replace('\\', "-"); fn.replace('/', "-");
-    fn.replace(':', "-"); fn.replace('*', "-");
-    return fn;
-}
 
 inline QString char2Identifier(const QChar& c)
 {
@@ -95,13 +75,21 @@ QString KexiUtils::identifierExpectedMessage(const QString &valueName, const QVa
 
 //--------------------------------------------------------------------------------
 
+class IdentifierValidator::Private
+{
+public:
+    Private() : isLowerCaseForced(false) {}
+    bool isLowerCaseForced;
+};
+
 IdentifierValidator::IdentifierValidator(QObject * parent)
-        : Validator(parent)
+: Validator(parent), d(new Private)
 {
 }
 
 IdentifierValidator::~IdentifierValidator()
 {
+    delete d;
 }
 
 QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
@@ -113,7 +101,7 @@ QValidator::State IdentifierValidator::validate(QString& input, int& pos) const
     if ((int)i < input.length() && input.at(i) >= '0' && input.at(i) <= '9')
         pos++; //_ will be added at the beginning
     bool addspace = (input.right(1) == " ");
-    input = string2Identifier(input);
+    input = d->isLowerCaseForced ? string2Identifier(input).toLower() : string2Identifier(input);
     if (addspace)
         input += "_";
     if (pos > input.length())
@@ -125,9 +113,18 @@ Validator::Result IdentifierValidator::internalCheck(
     const QString &valueName, const QVariant& v,
     QString &message, QString & /*details*/)
 {
-    if (isIdentifier(v.toString()))
+    if (KexiDB::isIdentifier(v.toString()))
         return Validator::Ok;
     message = identifierExpectedMessage(valueName, v);
     return Validator::Error;
 }
 
+bool IdentifierValidator::isLowerCaseForced() const
+{
+    return d->isLowerCaseForced;
+}
+
+void IdentifierValidator::setLowerCaseForced(bool set)
+{
+    d->isLowerCaseForced = set;
+}

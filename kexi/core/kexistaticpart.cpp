@@ -27,16 +27,13 @@ using namespace KexiPart;
 
 //------------------------------
 
-StaticInfo::StaticInfo(const QString& partClass, const QString& itemIcon,
+StaticPartInfo::StaticPartInfo(const QString& partClass, const QString& itemIcon,
                        const QString& objectName)
-        : Info()
+        : Info(partClass, itemIcon, objectName)
 {
-    d->partClass = partClass;
-    d->itemIcon = itemIcon;
-    d->objectName = objectName;
 }
 
-StaticInfo::~StaticInfo()
+StaticPartInfo::~StaticPartInfo()
 {
 }
 
@@ -44,7 +41,7 @@ StaticInfo::~StaticInfo()
 
 StaticPart::StaticPart(const QString& partClass, const QString& itemIcon,
                        const QString& objectName)
-        : Part(&Kexi::partManager(), new StaticInfo(partClass, itemIcon, objectName))
+        : Part(&Kexi::partManager(), new StaticPartInfo(partClass, itemIcon, objectName))
 {
     Kexi::partManager().insertStaticPart(this);
 }

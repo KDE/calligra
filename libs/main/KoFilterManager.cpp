@@ -77,18 +77,24 @@ KoFilterManager::~KoFilterManager()
 }
 
 QString KoFilterManager::importDocument(const QString& url,
+                                        const QString& documentMimeType,
                                         KoFilter::ConversionStatus& status)
 {
     // Find the mime type for the file to be imported.
-    KUrl u;
-    u.setPath(url);
-    KMimeType::Ptr t = KMimeType::findByUrl(u, 0, true);
-    if (t)
-        m_graph.setSourceMimeType(t->name().toLatin1());    // .latin1() is okay here (Werner)
+    QString  typeName(documentMimeType);
+    KUrl u(url);
+    KMimeType::Ptr t;
+    if (documentMimeType.isEmpty()) {
+        t = KMimeType::findByUrl(u, 0, true);
+        if (t)
+            typeName = t->name();
+    }
+    m_graph.setSourceMimeType(typeName.toLatin1()); // .latin1() is okay here (Werner)
+
     if (!m_graph.isValid()) {
         bool userCancelled = false;
 
-        kWarning(30500) << "Can't open " << t->name() << ", trying filter chooser";
+        kWarning(30500) << "Can't open " << typeName << ", trying filter chooser";
         if (m_document) {
             if (!m_document->isAutoErrorHandlingEnabled()) {
                 status = KoFilter::BadConversionGraph;
@@ -102,7 +108,7 @@ QString KoFilterManager::importDocument(const QString& url,
                     m_document->extraNativeMimeTypes(KoDocument::ForImport)), nativeFormat, u);
             if (chooser.exec()) {
                 QByteArray f = chooser.filterSelected().toLatin1();
-
+                qDebug() << "User choose format" << f;
                 if (f == nativeFormat) {
                     status = KoFilter::OK;
                     QApplication::restoreOverrideCursor();
@@ -117,8 +123,8 @@ QString KoFilterManager::importDocument(const QString& url,
 
         if (!m_graph.isValid()) {
             kError(30500) << "Couldn't create a valid graph for this source mimetype: "
-                << t->name();
-            importErrorHelper(t->name(), userCancelled);
+                << typeName;
+            importErrorHelper(typeName, userCancelled);
             status = KoFilter::BadConversionGraph;
             return QString();
         }
@@ -151,7 +157,7 @@ QString KoFilterManager::importDocument(const QString& url,
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain!" << endl;
-        importErrorHelper(t->name());
+        importErrorHelper(typeName);
         status = KoFilter::BadConversionGraph;
         return QString();
     }
@@ -221,7 +227,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!m_graph.isValid()) {
         kError(30500) << "Couldn't create a valid graph for this source mimetype.";
-        if (!userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch && !userCancelled) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -230,7 +236,7 @@ KoFilter::ConversionStatus KoFilterManager::exportDocument(const QString& url, Q
 
     if (!chain) {
         kError(30500) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
-        KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
+        if (!d->batch) KMessageBox::error(0, i18n("Could not export file."), i18n("Missing Export Filter"));
         return KoFilter::BadConversionGraph;
     }
 
@@ -453,7 +459,7 @@ QStringList KoFilterManager::mimeFilter()
     // To find *all* reachable mimetypes, we have to resort to
     // a small hat trick, in order to avoid multiple searches:
     // We introduce a fake vertex, which is connected to every
-    // single KOffice mimetype. Due to that one BFS is enough :)
+    // single Calligra mimetype. Due to that one BFS is enough :)
     // Now we just need an... ehrm.. unique name for our fake mimetype
     Vertex *v = new Vertex("supercalifragilistic/x-pialadocious");
     vertices.insert("supercalifragilistic/x-pialadocious", v);
@@ -504,9 +510,9 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
         QByteArray symname = "check_" + QString(library.objectName()).toLatin1();
         KLibrary::void_function_ptr sym = library.resolveFunction(symname);
         if (!sym) {
-            kWarning(30500) << "The library " << library.objectName()
-                << " does not offer a check_" << library.objectName()
-                << " function." << endl;
+//            kWarning(30500) << "The library " << library.objectName()
+//                << " does not offer a check_" << library.objectName()
+//                << " function." << endl;
             m_filterAvailable[key] = false;
         } else {
             typedef int (*t_func)();

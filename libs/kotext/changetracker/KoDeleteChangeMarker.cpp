@@ -19,7 +19,7 @@
 
 #include "KoDeleteChangeMarker.h"
 
-//KOffice includes
+//Calligra includes
 #include <KoTextDocument.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -39,12 +39,12 @@
 #include <QPainter>
 
 /*********************************** ODF Bug Work-around code **********************************************/
-const QString KoDeleteChangeMarker::RDFListName("http://www.koffice.org/list#");
-const QString KoDeleteChangeMarker::RDFListItemName("http://www.koffice.org/list-item#");
+const QString KoDeleteChangeMarker::RDFListName("http://www.calligra.org/list#");
+const QString KoDeleteChangeMarker::RDFListItemName("http://www.calligra.org/list-item#");
 const QString KoDeleteChangeMarker::RDFListValidity("http://www.kofficde.org/list-status#valid");
-const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.koffice.org/list-item-status#valid");
-const QString KoDeleteChangeMarker::RDFListLevel("http://www.koffice.org/list-status#level");
-const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.koffice.org/deleteChangeMetadata");
+const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.calligra.org/list-item-status#valid");
+const QString KoDeleteChangeMarker::RDFListLevel("http://www.calligra.org/list-status#level");
+const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.calligra.org/deleteChangeMetadata");
 /***********************************************************************************************************/
 
 class KoDeleteChangeMarker::Private
@@ -128,13 +128,12 @@ void KoDeleteChangeMarker::resize(const QTextDocument *document, QTextInlineObje
     object.setWidth(0);
 }
 
-void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
+void KoDeleteChangeMarker::updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format)
 {
     d->position = posInDocument;
     if (document != d->document)
-        d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualisation of deleted changes (ie inserting them in the doc), we can get rid of this.
+        d->document = const_cast<QTextDocument*>(document); //TODO: when we get rid of the current visualization of deleted changes (ie inserting them in the doc), we can get rid of this.
 
-    Q_UNUSED(object);
     Q_UNUSED(format);
 }
 

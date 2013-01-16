@@ -1,8 +1,26 @@
 [Desktop Entry]
 Name=Protocol Translator
+Name[bg]=Преобразувател на протокол
+Name[ca]=Traductor de protocol
+Name[ca@valencia]=Traductor de protocol
+Name[el]=Μεταφραστής πρωτοκόλλου
+Name[es]=Traductor de protocolo
 Name[et]=Protokolli translaator
-Name[pt]=Tradutor Protocolos
+Name[fr]=Protocol Translator
+Name[gl]=Tradutor de protocolo
+Name[hu]=Protokollfordító
+Name[it]=Traduttore di protocollo
+Name[kk]=Протокол аударғышы
+Name[nb]=Protokolloversetter
+Name[nds]=Protokollöversetter
+Name[nl]=Protocol Translator
+Name[pl]=Tłumacz protokołów
+Name[pt]=Tradutor de Protocolos
 Name[pt_BR]=Tradutor de Protocolos
+Name[ru]=Преобразователь протокола
+Name[sk]=Prekladač protokolu
 Name[sv]=Protokollöversättare
 Name[uk]=Транслятор протоколу
 Name[x-test]=xxProtocol Translatorxx
+Name[zh_CN]=协议翻译器
+Name[zh_TW]=協定翻譯器

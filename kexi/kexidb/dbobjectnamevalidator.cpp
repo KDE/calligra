@@ -19,7 +19,7 @@
 
 #include "dbobjectnamevalidator.h"
 
-#include "driver.h"
+#include <db/driver.h>
 
 using namespace KexiDB;
 using namespace KexiUtils;

@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=Circulator
+Name[ca]=Circulador
+Name[ca@valencia]=Circulador
+Name[el]=Κυκλοφορητής
+Name[es]=Circulador
+Name[et]=Tsirkulaator
+Name[fr]=circulateur
+Name[gl]=Circulador
+Name[it]=Circolatore
+Name[kk]=Циркулятор
+Name[nb]=Sirkulator
+Name[nl]=Roerder
+Name[pl]=Cyrkulator
 Name[pt]=Circulador
 Name[pt_BR]=Circulador
+Name[ru]=Распространитель
+Name[sk]=Cirkulátor
 Name[sv]=Cirkulator
 Name[uk]=Циркулятор
 Name[x-test]=xxCirculatorxx
+Name[zh_TW]=循環器

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,8 @@ class KRITAUI_EXPORT KisSaveXmlVisitor : public KisNodeVisitor
 public:
     KisSaveXmlVisitor(QDomDocument doc, const QDomElement & element, quint32 &count, bool root = false);
 
+    void setSelectedNodes(vKisNodeSP selectedNodes);
+
     using KisNodeVisitor::visit;
 
 public:
@@ -46,7 +48,6 @@ public:
     bool visit(KisCloneLayer *layer);
     bool visit(KisFilterMask *mask);
     bool visit(KisTransparencyMask *mask);
-    bool visit(KisTransformationMask *mask);
     bool visit(KisSelectionMask *mask);
 
     QMap<const KisNode*, QString> nodeFileNames() {
@@ -61,6 +62,7 @@ private:
 
     friend class KisKraSaveXmlVisitorTest;
 
+    vKisNodeSP m_selectedNodes;
     QMap<const KisNode*,  QString> m_nodeFileNames;
     QDomDocument m_doc;
     QDomElement m_elem;

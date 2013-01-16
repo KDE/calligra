@@ -93,14 +93,13 @@ class KisPerChannelConfigWidget : public KisConfigWidget
 
 public:
     KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f = 0);
-    virtual ~KisPerChannelConfigWidget() {}
+    virtual ~KisPerChannelConfigWidget();
 
     virtual void setConfiguration(const KisPropertiesConfiguration* config);
     virtual KisPropertiesConfiguration * configuration() const;
 
 private slots:
     virtual void setActiveChannel(int ch);
-    void setPreview(int state);
 
 private:
 

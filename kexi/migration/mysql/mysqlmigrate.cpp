@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qglobal.h>
+#include <QtGlobal>
 #ifdef Q_WS_WIN
 # define KDEWIN_FCNTL_H // avoid redef.
 # define KDEWIN_SYS_STAT_H // avoid redef.
@@ -29,13 +29,13 @@
 #endif
 
 #include "mysqlmigrate.h"
-#include <kexidb/drivers/mySQL/mysqldriver_global.h>
+#include <kexidb/drivers/mysql/mysqldriver_global.h>
 
-#include <qstring.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qvariant.h>
-#include <qlist.h>
+#include <QString>
+#include <QRegExp>
+#include <QFile>
+#include <QVariant>
+#include <QList>
 #include <kdebug.h>
 
 #ifdef Q_WS_WIN
@@ -46,11 +46,11 @@
 #define BOOL bool
 
 #include <migration/keximigratedata.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
-#include <kexidb/drivers/mySQL/mysqlconnection_p.cpp>
-#include <kexidb/drivermanager.h>
+#include <db/cursor.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/drivermanager.h>
+#include <kexidb/drivers/mysql/mysqlconnection_p.cpp>
 #include <kexiutils/identifier.h>
 
 using namespace KexiMigration;
@@ -74,7 +74,7 @@ MySQLMigrate::MySQLMigrate(QObject *parent, const QVariantList& args) :
         , m_dataRow(0)
 {
     KexiDB::DriverManager manager;
-    m_kexiDBDriver = manager.driver("mysql");
+    setDriver(manager.driver("mysql"));
 }
 
 /* ************************************************************************** */
@@ -90,9 +90,9 @@ MySQLMigrate::~MySQLMigrate()
 /*! Connect to the db backend */
 bool MySQLMigrate::drv_connect()
 {
-    if (!d->db_connect(*m_migrateData->source))
+    if (!d->db_connect(*data()->source))
         return false;
-    return d->useDatabase(m_migrateData->sourceName);
+    return d->useDatabase(data()->sourceName);
 }
 
 
@@ -128,7 +128,7 @@ bool MySQLMigrate::drv_readTableSchema(
 
     for (unsigned int i = 0; i < numFlds; i++) {
         QString fldName(fields[i].name);
-        QString fldID(KexiUtils::string2Identifier(fldName));
+        QString fldID(KexiUtils::string2Identifier(fldName.toLower()));
 
         KexiDB::Field *fld =
             new KexiDB::Field(fldID, type(originalName, &fields[i]));
@@ -187,7 +187,7 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
             if (mysql_errno(d->mysql))
                 r = false;
             else
-                r = (numRecords == -1) ? true : cancelled;
+                r = (numRecords == -1) ? tristate(true) : tristate(cancelled);
             mysql_free_result(res);
             return r;
         }
@@ -251,7 +251,8 @@ tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement,
 bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn,
                                  KexiDB::TableSchema* dstTable)
 {
-    if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(srcTable)) + '`')
+    kDebug() << drv_escapeIdentifier(srcTable);
+    if (!d->executeSQL("SELECT * FROM `" + drv_escapeIdentifier(srcTable) + '`'))
         return false;
     MYSQL_RES *res = mysql_use_result(d->mysql);
     if (!res) {
@@ -287,7 +288,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 
 bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size)
 {
-    if (!d->executeSQL("SELECT COUNT(*) FROM `" + drv_escapeIdentifier(table)) + '`')
+    if (!d->executeSQL("SELECT COUNT(*) FROM `" + drv_escapeIdentifier(table) + '`'))
         return false;
     MYSQL_RES *res = mysql_store_result(d->mysql);
     if (!res) {
@@ -588,7 +589,7 @@ QVariant MySQLMigrate::drv_value(uint i)
     if (m_dataRow) {
         val = m_dataRow[i];
     }else {
-        kDebug() << "No row";
+        kDebug() << "No record";
     }
     
     return val;

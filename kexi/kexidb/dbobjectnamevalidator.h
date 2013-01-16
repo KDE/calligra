@@ -20,10 +20,11 @@
 #ifndef KEXIDBOBJECTNAMEVALIDATOR_H
 #define KEXIDBOBJECTNAMEVALIDATOR_H
 
-#include "global.h"
+#include "kexidb_export.h"
+
 #include <kexiutils/validator.h>
-#include <qstring.h>
-#include <qpointer.h>
+#include <QString>
+#include <QPointer>
 
 namespace KexiDB
 {

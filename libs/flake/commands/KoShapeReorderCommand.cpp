@@ -19,6 +19,7 @@
 
 #include "KoShapeReorderCommand.h"
 #include "KoShape.h"
+#include "KoShape_p.h"
 #include "KoShapeManager.h"
 #include "KoShapeContainer.h"
 
@@ -40,15 +41,15 @@ public:
     QList<int> newIndexes;
 };
 
-KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, QUndoCommand *parent)
-    : QUndoCommand(parent),
+KoShapeReorderCommand::KoShapeReorderCommand(const QList<KoShape*> &shapes, QList<int> &newIndexes, KUndo2Command *parent)
+    : KUndo2Command(parent),
     d(new KoShapeReorderCommandPrivate(shapes, newIndexes))
 {
     Q_ASSERT(shapes.count() == newIndexes.count());
     foreach (KoShape *shape, shapes)
         d->previousIndexes.append(shape->zIndex());
 
-    setText(i18n("Reorder shapes"));
+    setText(i18nc("(qtundo-format)", "Reorder shapes"));
 }
 
 KoShapeReorderCommand::~KoShapeReorderCommand()
@@ -58,7 +59,7 @@ KoShapeReorderCommand::~KoShapeReorderCommand()
 
 void KoShapeReorderCommand::redo()
 {
-    QUndoCommand::redo();
+    KUndo2Command::redo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
         d->shapes.at(i)->setZIndex(d->newIndexes.at(i));
@@ -68,7 +69,7 @@ void KoShapeReorderCommand::redo()
 
 void KoShapeReorderCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     for (int i = 0; i < d->shapes.count(); i++) {
         d->shapes.at(i)->update();
         d->shapes.at(i)->setZIndex(d->previousIndexes.at(i));
@@ -122,7 +123,7 @@ static void prepare(KoShape *s, QMap<KoShape*, QList<KoShape*> > &newOrder, KoSh
 }
 
 // static
-KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager, MoveShapeType move, QUndoCommand *parent)
+KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*> &shapes, KoShapeManager *manager, MoveShapeType move, KUndo2Command *parent)
 {
     QList<int> newIndexes;
     QList<KoShape*> changedShapes;
@@ -140,12 +141,11 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
         }
     }
 
-
     QMap<KoShape*, QList<KoShape*> >::iterator newIt(newOrder.begin());
     for (; newIt!= newOrder.end(); ++newIt) {
         QList<KoShape*> order(newIt.value());
         order.removeAll(0);
-        int index = -2^13;
+        int index = -KoShapePrivate::MaxZIndex - 1; // set minimum zIndex
         int pos = 0;
         for (; pos < order.size(); ++pos) {
             if (order[pos]->zIndex() > index) {

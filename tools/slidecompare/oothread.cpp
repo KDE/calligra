@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "oothread.h"
-#include <QtCore/QDir>
-#include <QtCore/QUrl>
-#include <QtCore/QDebug>
-#include <QtCore/QDateTime>
+#include <QDir>
+#include <QUrl>
+#include <QDebug>
+#include <QDateTime>
 #include <cstdio>
 
 #define UNX
@@ -157,7 +157,7 @@ OoThread::toPng(const QString& path, int pngwidth) {
     c.from = path;
     c.width = pngwidth;
     do {
-        c.to = dir.absoluteFilePath(tmpname()+"/");
+        c.to = dir.absoluteFilePath(tmpname() + '/');
     } while(dir.exists(c.to));
     dir.mkdir(c.to);
     mutex.lock();

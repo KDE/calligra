@@ -1,4 +1,4 @@
-/* Koffice/Kexi report engine
+/* Calligra/Kexi report engine
  * Copyright (C) 2007-2010 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ public:
     virtual qint64 recordCount() const = 0;
 
     //!Return the index number of the field given by nane field
-    virtual unsigned int fieldNumber(const QString &field) const = 0;
+    virtual int fieldNumber(const QString &field) const = 0;
 
     //!Return the list of field names
     virtual QStringList fieldNames() const = 0;

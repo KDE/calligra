@@ -32,9 +32,9 @@ class KoSelection;
 class KWDocument;
 
 /**
- * Docker widget that shows a semantic view of the Rdf that is
+ * Docker widget that shows a semantic view of the RDF that is
  * around the cursor location. For example, if you are over a
- * person's name and there is FOAF Rdf associated with that
+ * person's name and there is FOAF RDF associated with that
  * element, then the person will be shown in the docker giving
  * the user the ability to import that contact.
  */
@@ -45,26 +45,26 @@ class KWRdfDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     explicit KWRdfDocker();
     ~KWRdfDocker();
+    
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
+    
     KoCanvasBase *canvas();
 
 private slots:
     void updateDataForced();
     void updateData();
-    void setAutoUpdate(int);
     void showSemanticViewContextMenu(const QPoint &);
-    void semanticObjectAdded(KoRdfSemanticItem *item);
-    void semanticObjectUpdated(KoRdfSemanticItem *item);
+    void semanticObjectAdded(hKoRdfSemanticItem item);
+    void semanticObjectUpdated(hKoRdfSemanticItem item);
     void resourceChanged(int key, const QVariant &value);
 
 private:
     KoCanvasBase *m_canvas;
     int m_lastCursorPosition;
-    bool m_autoUpdate;
     KWDocument *m_document;
     KoSelection *m_selection;
-    QTimer *m_timer;
     QTextDocument *m_textDocument;
     KoRdfSemanticTree m_rdfSemanticTree;
 

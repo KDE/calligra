@@ -46,7 +46,11 @@
 #include <KoPointerEvent.h>
 #include <kis_selection.h>
 #include <kis_layer.h>
-#include <kis_crop_visitor.h>
+#include <kis_canvas2.h>
+#include <kis_view2.h>
+#include <KoZoomController.h>
+#include <kis_floating_message.h>
+#include <kis_group_layer.h>
 
 KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::load("tool_crop_cursor.png", 6, 6))
@@ -79,7 +83,7 @@ void KisToolCrop::activate(ToolActivation toolActivation, const QSet<KoShape*> &
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setEnabled(false);
     }
@@ -91,6 +95,8 @@ void KisToolCrop::deactivate()
     m_rectCrop = QRect(0, 0, 0, 0);
     updateWidgetValues();
     updateCanvasPixelRect(image()->bounds());
+
+    KisTool::deactivate();
 }
 
 void KisToolCrop::resourceChanged(int key, const QVariant &res)
@@ -102,7 +108,7 @@ void KisToolCrop::resourceChanged(int key, const QVariant &res)
     if(currentNode() && currentNode()->paintDevice()) {
         m_optWidget->cmbType->setEnabled(true);
     }
-    //shape layer
+    //vector layer
     else {
         m_optWidget->cmbType->setCurrentIndex(1);
         m_optWidget->cmbType->setEnabled(false);
@@ -337,6 +343,15 @@ void KisToolCrop::mouseDoubleClickEvent(KoPointerEvent *)
     if (m_haveCropSelection) crop();
 }
 
+void KisToolCrop::keyReleaseEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Return && m_haveCropSelection) {
+        crop();
+    }
+    KisTool::keyReleaseEvent(event);
+
+}
+
 void KisToolCrop::validateSelection(bool updateratio)
 {
     if (canvas() && image()) {
@@ -425,7 +440,12 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
 void KisToolCrop::crop()
 {
-    // XXX: Should cropping be part of KisImage/KisPaintDevice's API?
+    if (m_optWidget->cmbType->currentIndex() == 0) {
+        //Cropping layer
+        if (!nodeEditable()) {
+            return;
+        }
+    }
 
     m_haveCropSelection = false;
     useCursor(cursor());
@@ -437,24 +457,14 @@ void KisToolCrop::crop()
 
     // The visitor adds the undo steps to the macro
     if (m_optWidget->cmbType->currentIndex() == 0 && currentNode()->paintDevice()) {
-        // The layer(s) under the current layer will take care of adding
-        // undo information to the Crop macro.
-        currentImage()->undoAdapter()->beginMacro(i18n("Crop"));
-
-        KisCropVisitor v(cropRect, false);
-        KisNodeSP node = currentNode();
-        node->accept(v);
-
-        currentImage()->undoAdapter()->endMacro();
-
+        currentImage()->cropNode(currentNode(), cropRect);
     } else {
-        // Resize creates the undo macro itself
-        currentImage()->resize(cropRect, true);
+        currentImage()->cropImage(cropRect);
     }
-
     m_rectCrop = QRect(0, 0, 0, 0);
 
     updateWidgetValues();
+    dynamic_cast<KisCanvas2*>(canvas())->view()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 0);
 }
 
 void KisToolCrop::setCropX(int x)
@@ -632,11 +642,6 @@ QWidget* KisToolCrop::createOptionWidget()
 
     m_optWidget->setFixedHeight(m_optWidget->sizeHint().height());
 
-    return m_optWidget;
-}
-
-QWidget* KisToolCrop::optionWidget()
-{
     return m_optWidget;
 }
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
- *  Copyright (c) 2005 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2005 C. Boemann <cbo@boemann.dk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,13 +20,13 @@
 #define KIS_NODE_COMMAND_H_
 
 #include <krita_export.h>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include "kis_types.h"
 
 class KisNode;
 
 /// the base command for commands altering a node
-class KRITAIMAGE_EXPORT KisNodeCommand : public QUndoCommand
+class KRITAIMAGE_EXPORT KisNodeCommand : public KUndo2Command
 {
 
 public:

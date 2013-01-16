@@ -25,7 +25,6 @@
 #include "KWOdfLoader.h"
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
-#include "frames/KWTextFrame.h"
 #include "frames/KWCopyShape.h"
 
 #include <KoTextShapeData.h>
@@ -48,20 +47,8 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader *loader)
             KoXmlNS::text, "anchor-page-number", "text:anchor-page-number"));
 }
 
-void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
+void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context, KoTextAnchor *anchor)
 {
-    int pageNumber = -1;
-    if (shape->hasAdditionalAttribute("text:anchor-type")) {
-        QString anchorType = shape->additionalAttribute("text:anchor-type");
-        if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
-            pageNumber = shape->additionalAttribute("text:anchor-page-number").toInt();
-            if (pageNumber <= 0) {
-                pageNumber = -1;
-            }
-        }
-    }
-
-    //kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute("text:anchor-page-number") << pageNumber;
     shape->removeAdditionalAttribute("text:anchor-type");
     const KoXmlElement *style = 0;
     if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
@@ -78,12 +65,11 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
             fs = dynamic_cast<KWTextFrameSet*>(previous->frameSet());
         if (fs == 0) {
             fs = new KWTextFrameSet(m_loader->document());
-            fs->setAllowLayout(false);
             fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
             m_loader->document()->addFrameSet(fs);
         }
 
-        KWTextFrame *frame = new KWTextFrame(shape, fs, pageNumber);
+        KWFrame *frame = new KWFrame(shape, fs, anchor);
         if (style) {
             if (! fillFrameProperties(frame, *style))
                 return; // done
@@ -113,7 +99,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
     } else {
         KWFrameSet *fs = new KWFrameSet();
         fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
-        KWFrame *frame = new KWFrame(shape, fs, pageNumber);
+        KWFrame *frame = new KWFrame(shape, fs, anchor);
         if (style)
             fillFrameProperties(frame, *style);
         m_loader->document()->addFrameSet(fs);
@@ -122,40 +108,41 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &e
 
 bool KWOdfSharedLoadingData::fillFrameProperties(KWFrame *frame, const KoXmlElement &style)
 {
-    frame->setFrameBehavior(KWord::IgnoreContentFrameBehavior);
+    frame->setFrameBehavior(Words::IgnoreContentFrameBehavior);
     KoXmlElement properties(KoXml::namedItemNS(style, KoXmlNS::style, "graphic-properties"));
     if (properties.isNull())
         return frame;
 
     QString copy = properties.attributeNS(KoXmlNS::draw, "copy-of");
     if (! copy.isEmpty()) {
+        //TODO "return false" and untested code...
+#if 0
         // untested... No app saves this currently..
         foreach (KWFrame *f, frame->frameSet()->frames()) {
             if (f->shape()->name() == copy) {
                 KWCopyShape *shape = new KWCopyShape(f->shape());
-                new KWFrame(shape, frame->frameSet(), frame->loadingPageNumber());
+                new KWFrame(shape, frame->frameSet(), frame->anchoredPageNumber());
                 delete frame;
                 return false;
             }
         }
+#endif
     }
 
     QString overflow = properties.attributeNS(KoXmlNS::style, "overflow-behavior", QString());
     if (overflow == "clip")
-        frame->setFrameBehavior(KWord::IgnoreContentFrameBehavior);
+        frame->setFrameBehavior(Words::IgnoreContentFrameBehavior);
     else if (overflow == "auto-create-new-frame")
-        frame->setFrameBehavior(KWord::AutoCreateNewFrameBehavior);
+        frame->setFrameBehavior(Words::AutoCreateNewFrameBehavior);
     else
-        frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
-    QString newFrameBehavior = properties.attributeNS(KoXmlNS::koffice, "frame-behavior-on-new-page", QString());
+        frame->setFrameBehavior(Words::AutoExtendFrameBehavior);
+    QString newFrameBehavior = properties.attributeNS(KoXmlNS::calligra, "frame-behavior-on-new-page", QString());
     if (newFrameBehavior == "followup")
-        frame->setNewFrameBehavior(KWord::ReconnectNewFrame);
+        frame->setNewFrameBehavior(Words::ReconnectNewFrame);
     else if (newFrameBehavior == "copy")
-        frame->setNewFrameBehavior(KWord::CopyNewFrame);
+        frame->setNewFrameBehavior(Words::CopyNewFrame);
     else
-        frame->setNewFrameBehavior(KWord::NoFollowupFrame);
+        frame->setNewFrameBehavior(Words::NoFollowupFrame);
 
-    frame->setFrameOnBothSheets(properties.attributeNS(KoXmlNS::koffice,
-                "frame-copy-to-facing-pages default").compare("true", Qt::CaseInsensitive));
     return true;
 }

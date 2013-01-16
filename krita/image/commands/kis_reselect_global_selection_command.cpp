@@ -26,8 +26,8 @@
 #include "kis_selection_mask.h"
 #include "kis_pixel_selection.h"
 
-KisReselectGlobalSelectionCommand::KisReselectGlobalSelectionCommand(KisImageWSP image, QUndoCommand * parent) :
-        QUndoCommand(i18n("Reselect"), parent)
+KisReselectGlobalSelectionCommand::KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent) :
+        KUndo2Command(i18nc("(qtundo-format)", "Reselect"), parent)
         , m_image(image)
 {
 }
@@ -38,18 +38,17 @@ KisReselectGlobalSelectionCommand::~KisReselectGlobalSelectionCommand()
 
 void KisReselectGlobalSelectionCommand::redo()
 {
-    m_oldSelection = m_image->globalSelection();
-    m_image->setGlobalSelection(m_image->deselectedGlobalSelection());
-    m_image->setDeleselectedGlobalSelection(0);
+    m_canReselect = m_image->canReselectGlobalSelection();
 
-    m_image->undoAdapter()->emitSelectionChanged();
+    if (m_canReselect) {
+        m_image->reselectGlobalSelection();
+    }
 }
 
 void KisReselectGlobalSelectionCommand::undo()
 {
-    m_image->setDeleselectedGlobalSelection(m_image->globalSelection());
-    m_image->setGlobalSelection(m_oldSelection);
-
-    m_image->undoAdapter()->emitSelectionChanged();
+    if (m_canReselect) {
+        m_image->deselectGlobalSelection();
+    }
 }
 

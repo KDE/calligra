@@ -27,6 +27,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
+#include <KoUnit.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -34,11 +35,9 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_undo_adapter.h>
 #include <kis_group_layer.h>
 #include <kis_paint_device.h>
 #include <kis_transaction.h>
-#include <kis_iterator.h>
 
 #include "psd.h"
 #include "psd_header.h"
@@ -49,11 +48,10 @@
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
 
-PSDLoader::PSDLoader(KisDoc2 *doc, KisUndoAdapter *adapter)
+PSDLoader::PSDLoader(KisDoc2 *doc)
 {
     m_image = 0;
     m_doc = doc;
-    m_adapter = adapter;
     m_job = 0;
     m_stop = false;
 }
@@ -117,20 +115,33 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     // Get the icc profile!
     const KoColorProfile* profile = 0;
     if (resourceSection.resources.contains(PSDResourceSection::ICC_PROFILE)) {
-        QByteArray profileData = resourceSection.resources[PSDResourceSection::ICC_PROFILE]->data;
-        profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first,
+        ICC_PROFILE_1039 *iccProfileData = dynamic_cast<ICC_PROFILE_1039*>(resourceSection.resources[PSDResourceSection::ICC_PROFILE]->resource);
+        if (iccProfileData ) {
+            profile = KoColorSpaceRegistry::instance()->createColorProfile(colorSpaceId.first,
                                                                        colorSpaceId.second,
-                                                                       profileData);
+                                                                       iccProfileData->icc);
+            dbgFile  << "Loaded ICC profile" << profile->name();
+        }
+
     }
 
     // Create the colorspace
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(colorSpaceId.first, colorSpaceId.second, profile);
-    if (!cs) return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    if (!cs) {
+        return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
 
     // Creating the KisImageWSP
-    m_image = new KisImage(m_doc->undoAdapter(),  header.width, header.height, cs, "built image");
+    m_image = new KisImage(m_doc->createUndoStore(),  header.width, header.height, cs, "built image");
     Q_CHECK_PTR(m_image);
     m_image->lock();
+
+    // set the correct resolution
+    RESN_INFO_1005 *resInfo = dynamic_cast<RESN_INFO_1005*>(resourceSection.resources[PSDResourceSection::RESN_INFO]->resource);
+    if (resInfo) {
+        m_image->setResolution(POINT_TO_INCH(resInfo->hRes), POINT_TO_INCH(resInfo->vRes));
+        // let's skip the unit for now; we can only set that on the KoDocument, and krita doesn't use it.
+    }
 
     // Preserve the duotone colormode block for saving back to psd
     if (header.colormode == DuoTone) {
@@ -140,7 +151,6 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         m_image->addAnnotation(annotation);
     }
 
-
     // read the projection into our single layer
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
@@ -149,7 +159,11 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
         KisTransaction("", layer -> paintDevice());
 
         PSDImageData imageData(&header);
+<<<<<<< HEAD
         imageData.read(layer->paintDevice(), &f);
+=======
+        imageData.read(&f, layer->paintDevice());
+>>>>>>> master
 
         //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.width, header.height));
         m_image->addNode(layer, m_image->rootLayer());
@@ -163,19 +177,26 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
             // XXX: work out the group layer structure in Photoshop, as well as the adjustment layers
 
             PSDLayerRecord* layerRecord = layerSection.layers.at(i);
-            dbgFile << "Going to read channels for layer " << i << layerRecord->layerName;
+            dbgFile << "Going to read channels for layer" << i << layerRecord->layerName;
 
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
+<<<<<<< HEAD
 
             if (!layerRecord->readChannels(&f, layer->paintDevice())) {
+=======
+            layer->setCompositeOp(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
+            if (!layerRecord->readPixelData(&f, layer->paintDevice())) {
+>>>>>>> master
                 dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
                 return KisImageBuilder_RESULT_FAILURE;
             }
 
             m_image->addNode(layer, m_image->rootLayer());
+            layer->setVisible(layerRecord->visible);
         }
     }
 
+    m_image->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2008,2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (c) 2008,2010 C. Boemann <cbo@boemann.dk>
  * Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ public:
     }
 
     QDockWidget* createDockWidget() {
-        return new QDockWidget(i18n("Tool Bars Docker"));
+        return new QDockWidget(i18n("Tool Bars"));
     }
 
     DockPosition defaultDockPosition() const {
@@ -77,9 +77,8 @@ class DockerManager::Private
 public:
     Private(MainWindow *mw) :
         dockedToolBarsLayout(0)
-        ,mainWindow(mw)
-        ,ignore(true)
-    {
+        , mainWindow(mw)
+        , ignore(true) {
     }
 
     ToolDocker *toolOptionsDocker;
@@ -89,33 +88,30 @@ public:
     MainWindow *mainWindow;
     bool ignore;
 
-    void restoringDone()
-    {
+    void restoringDone() {
         ignore = false;
         moveToolBars();
         toolOptionsDocker->setVisible(true); // should always be visible
     }
 
-    void moveToolBarsBack()
-    {
-        foreach(KToolBar *toolBar, toolBarList) {
+    void moveToolBarsBack() {
+        foreach(KToolBar * toolBar, toolBarList) {
             mainWindow->addToolBar(toolBar);
         }
         toolBarList.clear();
     }
 
-    void moveToolBars()
-    {
+    void moveToolBars() {
         if(ignore)
             return;
 
         // Move toolbars to docker or back depending on visibllity of docker
-        if (toolBarsDocker->isVisible()) {
+        if(toolBarsDocker->isVisible()) {
             QList<KToolBar *> tmpList = mainWindow->toolBars();
             toolBarList.append(tmpList);
-            foreach(KToolBar *toolBar, tmpList) {
+            foreach(KToolBar * toolBar, tmpList) {
                 dockedToolBarsLayout->addWidget(toolBar);
-        }
+            }
         } else {
             moveToolBarsBack();
         }
@@ -123,12 +119,12 @@ public:
 };
 
 DockerManager::DockerManager(MainWindow *mainWindow)
-    : QObject(mainWindow), d( new Private(mainWindow) )
+    : QObject(mainWindow), d(new Private(mainWindow))
 {
     ToolDockerFactory toolDockerFactory;
     ToolBarsDockerFactory toolBarsDockerFactory;
     d->toolOptionsDocker =
-            qobject_cast<ToolDocker*>(mainWindow->createDockWidget(&toolDockerFactory));
+        qobject_cast<ToolDocker*>(mainWindow->createDockWidget(&toolDockerFactory));
     Q_ASSERT(d->toolOptionsDocker);
     d->toolOptionsDocker->setVisible(false);
 
@@ -157,7 +153,7 @@ DockerManager::~DockerManager()
     delete d;
 }
 
-void DockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap)
+void DockerManager::newOptionWidgets(const QList<QWidget*> &optionWidgetMap)
 {
     d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
 }

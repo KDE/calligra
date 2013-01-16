@@ -30,9 +30,9 @@
 /**
  * Spin box for double precision numbers with unit display.
  * Use this widget for any value that represents a real measurable value for consistency throughout
- * KOffice.
+ * Calligra.
  * This widget shows the value in the user-selected units (inch, milimeters, etc) but keeps the
- * koffice-widget default measurement unit internally. This has the advantage that just setting and
+ * calligra-widget default measurement unit internally. This has the advantage that just setting and
  * getting a value will not change the value due to conversions.
  * The KoDocument class has a unit() method for consistent (document wide) configuration of the
  * used unit.
@@ -52,20 +52,7 @@ public:
      */
     explicit KoUnitDoubleSpinBox( QWidget *parent = 0);
     ~KoUnitDoubleSpinBox();
-    /**
-     * Create a new spinBox with specified range.
-     * Use this constructor to set the range, steps and value in points in one go. We don't advice
-     * to use this constructor as it will give you unreadable code.
-     * @param parent the parent widget
-     * @param lower the lowest value this spinbox can contain, in points.
-     * @param upper the largest value this spinbox can contain, in points.
-     * @param step the amount the arrows will change the current value, in points.
-     * @param value is the initial value, in points.
-     * @param unit the displaying unit
-     * @param precision the amount of digits after the separator. 2 means 0.00 will be shown.
-     */
-    KDE_CONSTRUCTOR_DEPRECATED KoUnitDoubleSpinBox( QWidget *parent, double lower, double upper,
-      double step, double value = 0.0, KoUnit unit = KoUnit(KoUnit::Point), unsigned int precision = 2);
+
     /**
      * Set the new value in points which will then be converted to the current unit for display
      * @param newValue the new value

@@ -28,6 +28,7 @@
 #include "kis_brush.h"
 
 class KoResource;
+class KoResourceLoaderThread;
 
 /**
  *
@@ -44,6 +45,9 @@ public:
 
     static KisBrushServer* instance();
 
+private slots:
+    void slotRemoveBlacklistedResources();
+
 private:
 
     KisBrushServer();
@@ -52,14 +56,8 @@ private:
 
     KoResourceServer<KisBrush>* m_brushServer;
 
-private slots:
-
-    void brushThreadDone();
-
 private:
-
-    QThread * m_brushThread;
-
+    KoResourceLoaderThread *m_brushThread;
 };
 
 #endif

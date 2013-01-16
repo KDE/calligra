@@ -20,11 +20,11 @@
 #define DIRSLIDELOADER_H
 
 #include "slideloader.h"
-#include <QtCore/QFileSystemWatcher>
-#include <QtCore/QDir>
-#include <QtCore/QTimer>
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
+#include <QFileSystemWatcher>
+#include <QDir>
+#include <QTimer>
+#include <QDateTime>
+#include <QDebug>
 
 class DirSlideLoader : public SlideLoader {
 private:
@@ -41,7 +41,7 @@ Q_OBJECT
 
         Slide() :version(0) {}
         Slide(const Slide& s) { version = 0; *this = s; }
-        Slide(const QString& p) {
+        explicit Slide(const QString& p) {
             path = p;
             lastModified = QFileInfo(path).lastModified();
             version = 1;

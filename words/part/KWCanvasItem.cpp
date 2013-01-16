@@ -20,13 +20,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-// kword includes
+// words includes
 #include "KWCanvasItem.h"
 #include "KWGui.h"
 #include "KWViewMode.h"
 #include "KWPage.h"
 
-// koffice libs includes
+// calligra libs includes
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoToolManager.h>
@@ -46,6 +46,7 @@
 #include <QStyleOptionGraphicsItem>
 
 
+
 KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
         : QGraphicsWidget(0),
         KWCanvasBase(document, this)
@@ -55,7 +56,7 @@ KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
     setFocusPolicy(Qt::StrongFocus);
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
     m_viewConverter = new KoZoomHandler();
-    m_viewMode = KWViewMode::create(viewMode, document, this);
+    m_viewMode = KWViewMode::create(viewMode, document);
 }
 
 KWCanvasItem::~KWCanvasItem()
@@ -71,7 +72,7 @@ void KWCanvasItem::pageSetupChanged()
 
 void KWCanvasItem::updateSize()
 {
-    resourceManager()->setResource(KWord::CurrentPageCount, m_document->pageCount());
+    resourceManager()->setResource(Words::CurrentPageCount, m_document->pageCount());
     emit documentSize(m_viewMode->contentsSize());
 }
 
@@ -88,14 +89,14 @@ bool KWCanvasItem::snapToGrid() const
 void KWCanvasItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mouseMoveEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseMoveEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
 void KWCanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mousePressEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mousePressEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     if (!me.isAccepted() && me.button() == Qt::RightButton) {
         // XXX: Port to graphicsitem!
         //m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
@@ -107,14 +108,14 @@ void KWCanvasItem::mousePressEvent(QGraphicsSceneMouseEvent *e)
 void KWCanvasItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mouseReleaseEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseReleaseEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
 void KWCanvasItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 {
     QMouseEvent me(e->type(), e->pos().toPoint(), e->button(), e->buttons(), e->modifiers());
-    m_toolProxy->mouseDoubleClickEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    m_toolProxy->mouseDoubleClickEvent(&me, m_viewMode->viewToDocument(e->pos() + m_documentOffset, m_viewConverter));
     e->setAccepted(me.isAccepted());
 }
 
@@ -137,29 +138,13 @@ QVariant KWCanvasItem::inputMethodQuery(Qt::InputMethodQuery query) const
 
 void KWCanvasItem::keyReleaseEvent(QKeyEvent *e)
 {
-#ifndef NDEBUG
-    // Debug keys
-    if ((e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier))) {
-        if (e->key() == Qt::Key_F) {
-            document()->printDebug();
-            e->accept();
-            return;
-        }
-        if (e->key() == Qt::Key_M) {
-            const QDateTime dtMark(QDateTime::currentDateTime());
-            kDebug(32001) << "Developer mark:" << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz");
-            e->accept();
-            return;
-        }
-    }
-#endif
     m_toolProxy->keyReleaseEvent(e);
 }
 
 void KWCanvasItem::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     QWheelEvent ev(event->pos().toPoint(), event->delta(), event->buttons(), event->modifiers(), event->orientation());
-    m_toolProxy->wheelEvent(&ev, m_viewMode->viewToDocument(event->pos() + m_documentOffset));
+    m_toolProxy->wheelEvent(&ev, m_viewMode->viewToDocument(event->pos() + m_documentOffset, m_viewConverter));
     event->setAccepted(ev.isAccepted());
 }
 

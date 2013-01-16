@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2011 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,16 +20,17 @@
 
 #include "kexidbimagebox.h"
 
-#include <qapplication.h>
-#include <qpixmap.h>
+#include <QApplication>
+#include <QPixmap>
 #include <QStyle>
 #include <QStyleOptionFocusRect>
-#include <qclipboard.h>
-#include <qtooltip.h>
-#include <qimage.h>
-#include <qbuffer.h>
-#include <qfiledialog.h>
-#include <qpainter.h>
+#include <QStyleOptionFrameV3>
+#include <QClipboard>
+
+#include <QImage>
+#include <QBuffer>
+#include <QFileDialog>
+#include <QPainter>
 
 #include <kdebug.h>
 #include <kmenu.h>
@@ -43,12 +44,12 @@
 #include <kguiitem.h>
 #include <KIconEffect>
 
+#include <KoIcon.h>
 #include <widget/utils/kexidropdownbutton.h>
-#include <widget/utils/kexicontextmenuutils.h>
 #include <kexiutils/utils.h>
-#include <kexidb/field.h>
-#include <kexidb/utils.h>
-#include <kexidb/queryschema.h>
+#include <db/field.h>
+#include <db/utils.h>
+#include <db/queryschema.h>
 #include <formeditor/widgetlibrary.h>
 #include <formeditor/utils.h>
 #include <kexi_global.h>
@@ -113,7 +114,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Plain);
-    setFrameColor(Qt::black);
+    setFrameColor(palette().color(QPalette::Foreground));
 
     m_paletteBackgroundColorChanged = false; //set this here, not before
 
@@ -174,7 +175,7 @@ void KexiDBImageBox::setValueInternal(const QVariant& add, bool removeOld, bool 
     if (removeOld)
         m_value = add.toByteArray();
     else //do not add "m_origValue" to "add" as this is QByteArray
-        m_value = m_origValue.toByteArray();
+        m_value = KexiDataItemInterface::originalValue().toByteArray();
     bool ok = !m_value.isEmpty();
     if (ok) {
         ///unused (m_valueMimeType is not available unless the px is inserted) QString type( KImageIO::typeForMime(m_valueMimeType) );
@@ -439,11 +440,12 @@ void KexiDBImageBox::handlePasteAction()
     if (isReadOnly() || (!designMode() && !hasFocus()))
         return;
     QPixmap pm(qApp->clipboard()->pixmap(QClipboard::Clipboard));
-// if (!pm.isNull())
-//  setValueInternal(pm, true);
     if (dataSource().isEmpty()) {
         //static mode
-        setData(KexiBLOBBuffer::self()->insertPixmap(pm));
+        KexiBLOBBuffer::Handle h = KexiBLOBBuffer::self()->insertPixmap(pm);
+        if (!h)
+            return;
+        setData(h);
     } else {
         //db-aware mode
         m_pixmap = pm;
@@ -651,10 +653,32 @@ QSize KexiDBImageBox::sizeHint() const
 
 int KexiDBImageBox::realLineWidth() const
 {
-    if (frameShape() == QFrame::Box
-            && (frameShadow() == QFrame::Sunken || frameShadow() == QFrame::Raised)) {
-        return 2 * lineWidth();
-    } else {
+    switch (frameShape()) {
+    case QFrame::NoFrame:
+        // shadow, line, midline unused
+        return 0;
+    case QFrame::Box:
+        switch (frameShadow()) {
+        case QFrame::Plain:
+            // midline unused
+            return lineWidth();
+        default: // sunken, raised:
+            return 2 * lineWidth() + midLineWidth();
+        }
+        break;
+    case QFrame::Panel:
+        // shadow, midline unused
+        return lineWidth();
+    case QFrame::WinPanel:
+        // shadow, line, midline unused
+        return 2;
+    case QFrame::StyledPanel: {
+        // shadow, line, midline unused
+        QStyleOptionFrameV3 option;
+        option.initFrom(this);
+        return style()->pixelMetric(QStyle::PM_DefaultFrameWidth, &option, this);
+    }
+    default:
         return lineWidth();
     }
 }
@@ -734,6 +758,7 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
         const QRect internalRect(QPoint(0, 0), internalSize);
         if (m_currentScaledPixmap.isNull() || internalRect != m_currentRect) {
             m_currentRect = internalRect;
+            m_currentPixmapPos = QPoint(0, 0);
             m_currentScaledPixmap = KexiUtils::scaledPixmap(
                 margins, m_currentRect, pixmap(), m_currentPixmapPos, m_alignment,
                 m_scaledContents, m_keepAspectRatio,
@@ -785,7 +810,7 @@ void KexiDBImageBox::updatePixmap()
     if (!KexiDBImageBox_static->pixmap) {
         const QString fname(KStandardDirs::locate("data", QLatin1String("kexi/pics/imagebox.png")));
         QPixmap pm( KIconLoader::global()->loadMimeTypeIcon(
-            "image-x-generic", KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
+            koIconNameCStr("image-x-generic"), KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DisabledState) );
         if (!pm.isNull()) {
             KIconEffect::semiTransparent(pm);
             KIconEffect::semiTransparent(pm);
@@ -801,8 +826,8 @@ void KexiDBImageBox::updatePixmap()
 void KexiDBImageBox::setAlignment(Qt::Alignment alignment)
 {
     m_alignment = alignment;
-    if (!m_scaledContents || m_keepAspectRatio)
-        repaint();
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    repaint();
 }
 
 void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle& handle)
@@ -811,6 +836,7 @@ void KexiDBImageBox::setData(const KexiBLOBBuffer::Handle& handle)
         return;
     m_insideSetData = true;
     m_data = handle;
+    m_currentScaledPixmap = QPixmap(); // clear cache
     emit idChanged(handle.id());
     m_insideSetData = false;
     update();
@@ -821,7 +847,8 @@ void KexiDBImageBox::resizeEvent(QResizeEvent * e)
     KexiFrame::resizeEvent(e);
     if (m_chooser) {
         QSize s(m_chooser->sizeHint());
-        QSize margin(realLineWidth(), realLineWidth());
+        const int _realLineWidth = realLineWidth();
+        QSize margin(_realLineWidth, _realLineWidth);
         s.setHeight(height() - 2*margin.height());
         s = s.boundedTo(size() - 2 * margin);
         m_chooser->resize(s);
@@ -865,12 +892,6 @@ bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 // else if (ke->modifiers() == Qt::ControlButton && KStdAccel::shortcut(KStdAccel::Copy).keyCodeQt() == (ke->key()|Qt::CTRL)) {
 // }
     return false;
-}
-
-void KexiDBImageBox::setLineWidth(int width)
-{
-//    m_lineWidthChanged = true;
-    KexiFrame::setLineWidth(width);
 }
 
 void KexiDBImageBox::setPalette(const QPalette &pal)
@@ -954,6 +975,34 @@ void KexiDBImageBox::setFocusPolicy(Qt::FocusPolicy policy)
 {
     m_focusPolicyInternal = policy;
     KexiFrame::setFocusPolicy(focusPolicy());   //set modified policy
+}
+
+void KexiDBImageBox::setFrameShape(QFrame::Shape s)
+{
+    KexiFrame::setFrameShape(s);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
+}
+
+void KexiDBImageBox::setFrameShadow(QFrame::Shadow s)
+{
+    KexiFrame::setFrameShadow(s);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
+}
+
+void KexiDBImageBox::setLineWidth(int w)
+{
+    KexiFrame::setLineWidth(w);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
+}
+
+void KexiDBImageBox::setMidLineWidth(int w)
+{
+    KexiFrame::setMidLineWidth(w);
+    m_currentScaledPixmap = QPixmap(); // clear cache
+    update();
 }
 
 #include "kexidbimagebox.moc"

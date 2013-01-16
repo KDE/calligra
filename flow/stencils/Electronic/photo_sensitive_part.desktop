@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=photo sensitive part
+Name[ca]=part fotosensible
+Name[ca@valencia]=part fotosensible
+Name[el]=φωτο ευαίσθητο μέρος
+Name[es]=componente fotosensible
+Name[et]=Valgustundlik komponent
+Name[fr]=photo sensitive part
+Name[gl]=Compoñente sensor de luz
+Name[it]=parte foto-sensibile
+Name[kk]=фотосезім-бөлшек
+Name[nb]=fotosensitiv enhet
+Name[nl]=fotogevoelig deel
+Name[pl]=moduł wyczuwania fotonów
 Name[pt]=componente foto-sensível
 Name[pt_BR]=componente foto-sensível
+Name[ru]=Фоточувствительный элемент
+Name[sk]=svetlocitlivá časť
 Name[sv]=fotokänslig komponent
 Name[uk]=Фоточутлива деталь
 Name[x-test]=xxphoto sensitive partxx
+Name[zh_TW]=photo sensitive part

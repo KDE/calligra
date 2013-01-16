@@ -28,8 +28,6 @@
 #include "mypaint_paintop_settings.h"
 #include "mypaint_paintop.h"
 
-#include <QThread>
-
 #include "mypaint_brush_resource.h"
 #include <kis_paintop_registry.h>
 #include <kis_resource_server_provider.h>
@@ -37,7 +35,7 @@
 class MyPaintFactory::Private {
 public:
 
-    KoResourceServer<MyPaintBrushResource>* brushServer;
+    KoResourceServer<MyPaintBrushResource> *brushServer;
     QMap<QString, MyPaintBrushResource*> brushes;
 };
 
@@ -46,17 +44,17 @@ public:
 MyPaintFactory::MyPaintFactory()
     : m_d( new Private )
 {
-    KGlobal::mainComponent().dirs()->addResourceType("mypaint_brushes", "data", "krita/brushes/");
+    KGlobal::mainComponent().dirs()->addResourceType("mypaint_brushes", "data", "krita/mypaintbrushes/");
     KGlobal::mainComponent().dirs()->addResourceDir("mypaint_brushes", "/usr/share/mypaint/brushes/");
-    
+
     m_d->brushServer = new KoResourceServer<MyPaintBrushResource>("mypaint_brushes", "*.myb");
-    KoResourceLoaderThread thread(m_d->brushServer);
 
     QStringList extensionList = m_d->brushServer->extensions().split(':');
     QStringList fileNames;
 
     foreach (const QString &extension, extensionList) {
-        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_d->brushServer->type().toAscii(), extension);
+        fileNames += KGlobal::mainComponent().dirs()->findAllResources(m_d->brushServer->type().toLatin1(), extension,
+                                                                       KStandardDirs::Recursive | KStandardDirs::NoDuplicates);;
     }
 
     m_d->brushServer->loadResources(fileNames);
@@ -77,8 +75,10 @@ KisPaintOp * MyPaintFactory::createOp(const KisPaintOpSettingsSP settings, KisPa
 {
     const MyPaintSettings *mypaintSettings = dynamic_cast<const MyPaintSettings *>(settings.data());
     Q_ASSERT(settings == 0 || mypaintSettings != 0);
+    if (!settings || !mypaintSettings) {
+        return 0;
+    }
     KisPaintOp * op = new MyPaint(mypaintSettings, painter, image);
-    qDebug() << "got op" << op;
     Q_CHECK_PTR(op);
     return op;
 }
@@ -109,15 +109,19 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
     }
 }
 
-void MyPaintFactory::addPresets()
+void MyPaintFactory::processAfterLoading()
 {
     KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QStringList blackList = rserver->blackListedFiles();
+
     QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);
     while (i.hasNext()) {
         i.next();
-        
+
+        if (blackList.contains(i.key())) continue;
+
         //Create a preset for every loaded brush
-        KisPaintOpSettingsSP s = settings(0);    
+        KisPaintOpSettingsSP s = settings(0);
         s->setProperty("paintop", id());
         s->setProperty("filename", i.key());
 
@@ -128,7 +132,7 @@ void MyPaintFactory::addPresets()
         preset->setPaintOp(paintOpID);
         preset->setValid(true);
         preset->setImage(i.value()->image());
-        
+
         rserver->addResource(preset, false);
     }
 }

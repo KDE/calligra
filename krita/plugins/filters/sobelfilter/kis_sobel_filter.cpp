@@ -30,7 +30,6 @@
 #include <QSpinBox>
 
 #include <klocale.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
@@ -39,7 +38,6 @@
 
 #include <kis_doc2.h>
 #include <kis_image.h>
-#include <kis_iterators_pixel.h>
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
@@ -97,7 +95,7 @@ void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, q
     }
 }
 
-#define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
+#define RMS(a, b) (sqrt ((qreal)(a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
 void KisSobelFilter::process(KisPaintDeviceSP device,

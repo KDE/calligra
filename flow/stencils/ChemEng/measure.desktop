@@ -1,8 +1,24 @@
 [Desktop Entry]
 Name=measure
+Name[ca]=mesura
+Name[ca@valencia]=mesura
+Name[cs]=změřit
+Name[el]=μέτρηση
+Name[es]=medida
+Name[et]=Mõõdik
+Name[fr]=mesure
+Name[gl]=Medidor
+Name[hu]=mérés
+Name[it]=measure
+Name[kk]=Өлшегіш
+Name[nb]=mål
 Name[nl]=maat
+Name[pl]=miara
 Name[pt]=medida
 Name[pt_BR]=medida
+Name[ru]=Мерка
+Name[sk]=miera
 Name[sv]=mått
 Name[uk]=Вимірювання
 Name[x-test]=xxmeasurexx
+Name[zh_TW]=measure

@@ -22,18 +22,19 @@
 
 #include "kis_pattern.h"
 
-
 #include <sys/types.h>
 #include <netinet/in.h>
 
 #include <limits.h>
 #include <stdlib.h>
 
+#include <QCryptographicHash>
 #include <QPoint>
 #include <QSize>
 #include <QImage>
 #include <QMap>
 #include <QFile>
+#include <QBuffer>
 #include <QTextStream>
 
 #include "KoColor.h"
@@ -44,13 +45,24 @@
 #include "kis_layer.h"
 #include "kis_paint_device.h"
 
+QByteArray generateMD5(const QImage &pattern)
+{
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    pattern.save(&buffer, "PNG");
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(ba);
+    return md5.result();
+}
+
 KisPattern::KisPattern(const QString& file)
         : KoPattern(file)
 {
 }
 
 KisPattern::KisPattern(const QImage &image, const QString &name)
-        : KoPattern("")
+        : KoPattern(0)
 {
     setImage(image);
     setName(name);
@@ -62,20 +74,9 @@ KisPattern::~KisPattern()
 
 KisPaintDeviceSP KisPattern::paintDevice(const KoColorSpace * colorSpace) const
 {
-    // Check if there's already a pattern prepared for this colorspace
-    QMap<QString, KisPaintDeviceSP>::const_iterator it = m_colorspaces.constFind(colorSpace->id());
-    if (it != m_colorspaces.constEnd())
-        return (*it);
-
-    // If not, create one
-    KisPaintDeviceSP layer = new KisPaintDevice(colorSpace);
-
-    Q_CHECK_PTR(layer);
-
-    layer->convertFromQImage(image(), "");
-
-    m_colorspaces[colorSpace->id()] = layer;
-    return layer;
+    KisPaintDevice* dev = new KisPaintDevice(colorSpace, name());
+    dev->convertFromQImage(image(), 0);
+    return dev;
 }
 
 KisPattern* KisPattern::clone() const
@@ -85,3 +86,12 @@ KisPattern* KisPattern::clone() const
     pattern->setName(name());
     return pattern;
 }
+
+QByteArray KisPattern::md5()
+{
+    if (m_md5.isEmpty()) {
+        m_md5 = generateMD5(image());
+    }
+    return m_md5;
+}
+

@@ -27,7 +27,7 @@
 #include <QShowEvent>
 #include <QResizeEvent>
 
-#include "kexiformdataiteminterface.h"
+#include <widget/dataviewcommon/kexiformdataiteminterface.h>
 #include "kexidbtextwidgetinterface.h"
 #include <widget/utils/kexidisplayutils.h>
 #include <formeditor/FormWidgetInterface.h>
@@ -91,7 +91,7 @@ public:
     //! used to catch setIndent(), etc.
     virtual bool setProperty(const char * name, const QVariant & value);
 
-    virtual const QColor& frameColor() const;
+    virtual QColor frameColor() const;
 
 //  const QColor & paletteForegroundColor() const;
 

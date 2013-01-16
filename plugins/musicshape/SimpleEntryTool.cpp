@@ -24,11 +24,11 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kicon.h>
 #include <KFileDialog>
 #include <KInputDialog>
 #include <KAction>
 
+#include <KoIcon.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -87,15 +87,15 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
 
-    KAction* importAction = new KAction(KIcon("document-import"), i18n("Import"), this);
+    KAction* importAction = new KAction(koIcon("document-import"), i18n("Import"), this);
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importSheet()));
 
-    KAction* exportAction = new KAction(KIcon("document-export"), i18n("Export"), this);
+    KAction* exportAction = new KAction(koIcon("document-export"), i18n("Export"), this);
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
 
-    KAction* addBars = new KAction(KIcon("list-add"), i18n("Add measures"), this);
+    KAction* addBars = new KAction(koIcon("list-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 
@@ -359,7 +359,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
             painter.save();
             painter.setTransform(shape->absoluteTransformation(&viewConverter) * painter.transform());
             KoShape::applyConversion( painter, viewConverter );
-            painter.setClipRect(QRectF(QPointF(0, 0), shape->size()));            
+            painter.setClipRect(QRectF(QPointF(0, 0), shape->size()), Qt::IntersectClip);
 
             for (int b = qMax(shape->firstBar(), m_selectionStart); b <= m_selectionEnd && b < sheet->barCount() && b <= shape->lastBar(); b++) {
                 Bar* bar = sheet->bar(b);
@@ -395,7 +395,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
 
     painter.setTransform(m_musicshape->absoluteTransformation(&viewConverter) * painter.transform());
     KoShape::applyConversion( painter, viewConverter );
-    painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
+    painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()), Qt::IntersectClip);
         
     if (m_activeAction->isVoiceAware()) {
         for (int i = 0; i < sheet->partCount(); i++) {
@@ -651,7 +651,7 @@ void SimpleEntryTool::keyPressEvent( QKeyEvent *event )
     }
 }
 
-void SimpleEntryTool::addCommand(QUndoCommand* command)
+void SimpleEntryTool::addCommand(KUndo2Command* command)
 {
     canvas()->addCommand(command);
 }
@@ -687,7 +687,7 @@ void SimpleEntryTool::voiceChanged(int voice)
 void SimpleEntryTool::addBars()
 {
     bool ok;
-    int barCount = KInputDialog::getInteger("Add measures", "Add how many measures?", 1, 1, 1000, 1, &ok);
+    int barCount = KInputDialog::getInteger(i18n("Add measures"), i18n("Add how many measures?"), 1, 1, 1000, 1, &ok);
     if (!ok) return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
 }

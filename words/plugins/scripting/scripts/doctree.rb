@@ -7,22 +7,22 @@ rescue LoadError
     raise "Failed to load the required QtRuby module. Please install Qt4-QtRuby."
 end
 
-# Load the KWord scripting module.
+# Load the Words scripting module.
 begin
-    require 'KWord'
+    require 'Words'
 rescue LoadError
     # If loading failed (cause the script was not executed from within
-    # a running KWord instance) we try to load the Kross module and
-    # ask it to load the KWord module for us.
+    # a running Words instance) we try to load the Kross module and
+    # ask it to load the Words module for us.
     require 'Kross'
-    KWord = Kross.module('KWord')
+    Words = Kross.module('Words')
 
-    # Testcase to fill KWord with some content. You are also able to e.g.
-    # load a document here with "KWord.document().openUrl('/path/file.odt')"
-    mytextframeset1 = KWord.addTextFrameSet("myFirstTextFrame")
+    # Testcase to fill Words with some content. You are also able to e.g.
+    # load a document here with "Words.document().openUrl('/path/file.odt')"
+    mytextframeset1 = Words.addTextFrameSet("myFirstTextFrame")
     mytextframeset1.addTextFrame()
     mytextframeset1.document().setHtml("<h1>First Header</h1><p>Some text</p><p>Some more text with <b>bold</b> and <i>italic</i> and <u>underline</u> to test the stuff.</p>")
-    mytextframeset2 = KWord.addTextFrameSet("mySecondTextFrame")
+    mytextframeset2 = Words.addTextFrameSet("mySecondTextFrame")
     mytextframeset2.addTextFrame()
     mytextframeset2.document().setHtml("<h1>Second Header</h1><h2>First Sub Header</h2><p>Some text.</p><h2>Second Sub Header</h2><p>Some text.</p>")
 end
@@ -168,7 +168,7 @@ class Item
 
 end
 
-# FrameItem for KWord Frame objects.
+# FrameItem for Words Frame objects.
 class FrameItem < Item
 
     class TextFrameItem < Item
@@ -308,7 +308,7 @@ class FrameItem < Item
 
 end
 
-# FramesetItem for KWord FrameSet objects.
+# FramesetItem for Words FrameSet objects.
 class FramesetItem < Item
 
     def initialize(rootitem, frameset)
@@ -341,8 +341,8 @@ class RootItem < Item
 
     def initialize
         super(nil, nil)
-        for i in 0..(KWord.frameSetCount() - 1)
-            f = KWord.frameSet(i)
+        for i in 0..(Words.frameSetCount() - 1)
+            f = Words.frameSet(i)
             if f
                 puts "RootItem %s" % f.to_s
                 @childitems.push( FramesetItem.new(self, f) )

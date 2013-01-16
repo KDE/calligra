@@ -22,6 +22,7 @@
 #ifndef KOSHAPEFACTORYBASE_H
 #define KOSHAPEFACTORYBASE_H
 
+#include <QObject>
 #include <QStringList>
 #include <QString>
 #include <QWidget>
@@ -37,7 +38,7 @@ class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
 class KoDataCenterBase;
-class KoResourceManager;
+class KoDocumentResourceManager;
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"
@@ -56,7 +57,7 @@ struct FLAKE_EXPORT KoShapeTemplate {
     QString name;       ///< The name to be shown for this template
     QString family;       ///< The family of the shape (possible values are: "funny","arrow")
     QString toolTip;    ///< The tooltip text for the template
-    QString icon;       ///< Icon name
+    QString iconName;       ///< Icon name
     /**
      * The properties which, when passed to the KoShapeFactoryBase::createShape() method
      * result in the shape this template represents.
@@ -86,8 +87,9 @@ public:
  * After you created the factory you should create a plugin that can announce the factory to the
  * KoShapeRegistry.  See the KoPluginLoader as well.
  */
-class FLAKE_EXPORT KoShapeFactoryBase
+class FLAKE_EXPORT KoShapeFactoryBase : public QObject
 {
+    Q_OBJECT
 public:
 
     /**
@@ -96,7 +98,7 @@ public:
      *   example for use by the KoToolBase::activateTemporary.
      * @param name the user visible name of the shape this factory creates.
      */
-    KoShapeFactoryBase(const QString &id, const QString &name);
+    KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString());
     virtual ~KoShapeFactoryBase();
 
     /**
@@ -153,7 +155,7 @@ public:
      * return the basename of the icon for a selector of shapes
      * @return the basename of the icon for a selector of shapes
      */
-    QString icon() const;
+    QString iconName() const;
     /**
      * return the user visible (and translated) name to be seen by the user.
      * @return the user visible (and translated) name to be seen by the user.
@@ -185,15 +187,26 @@ public:
     bool hidden() const;
 
     /**
-     * This slot is called whenever there is a new document resource
+     * This method is called whenever there is a new document resource
      * manager that is created. The factory may reimplement this in
      * order to get existing resources or put factory specific resources in.
      * In case the factory creates new resources it is adviced to parent
      * them to the manager (which is a QObject) for memory management
      * purposes.
+     *
+     * FIXME: this method is only used by Tables. We should refactor so
+     * it is no longer necessary.
+     * 
+     * NOTE: this actually is also used somehow to create the imagecollection
+     *        for the picture shape?
+     *
+     * NOTE: we store the documentmanagers in a list, and remove them
+     * from the list on delete.
+     *
      * @param manager the new manager
      */
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
+    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
+    QList<KoDocumentResourceManager *> documentResourceManagers() const;
 
     /**
      * This method should be implemented by factories to create a shape that the user
@@ -206,7 +219,7 @@ public:
      * @return a new shape
      * @see createShape() newDocumentResourceManager()
      */
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const = 0;
+    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
 
     /**
      * This method should be implemented by factories to create a shape based on a set of
@@ -220,7 +233,17 @@ public:
      * @see createDefaultShape() newDocumentResourceManager()
      * @see KoShapeTemplate::properties
      */
-    virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
+    virtual KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
+
+    /**
+     * This method provides the default implementation for creating a shape
+     * from a specified xml element of an odf document.
+     * Most derived factories do not need to reimplement this method, however if a factory
+     * has some special requirements or does something special it is still possible.
+     * One example is creating different shapes depending on the content of the passed
+     * xml element.
+     */
+    virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 protected:
 
@@ -242,7 +265,7 @@ protected:
      * @param iconName the basename (without extension) of the icon
      * @see KIconLoader
      */
-    void setIcon(const QString &iconName);
+    void setIconName(const char *iconName);
 
     /**
      * Set the family name of the default shape
@@ -266,10 +289,10 @@ protected:
      * @param nameSpace the ODF name space (like
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
      * take it from KoXmlNS.h)
-     * @param elementNames the name of the element itself, like "draw"
+     * @param elementNames the name of the element itself, like "path"
      *
      */
-    void setOdfElementNames(const QString &nameSpace, const QStringList &elementNames);
+    void setXmlElementNames(const QString &nameSpace, const QStringList &elementNames);
 
     /**
      * Set the namespaces and according element tags used for quick checking whether this shapefactory
@@ -278,9 +301,9 @@ protected:
      *
      * @param elementNamesList containing a list of namespace (like
      * urn:oasis:names:tc:opendocument:xmlns:text:1.0,
-     * take it from KoXmlNS.h) to a list of elementName of the element itself, like "draw"
+     * take it from KoXmlNS.h) to a list of elementName of the element itself, like "path"
      */
-    void setOdfElements(const QList<QPair<QString, QStringList> > &elementNamesList);
+    void setXmlElements(const QList<QPair<QString, QStringList> > &elementNamesList);
 
     /**
      * The hidden boolean requests if the shape should be hidden in the
@@ -291,6 +314,16 @@ protected:
     void setHidden(bool hidden);
 
 private:
+
+    void getDeferredPlugin();
+
+private slots:
+
+    /// called whenever a document KoDocumentResourceManager is deleted
+    void pruneDocumentResourceManager(QObject *);
+
+private:
+
     class Private;
     Private * const d;
 };

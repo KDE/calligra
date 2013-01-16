@@ -30,11 +30,10 @@
 #include <QHBoxLayout>
 #include <QTimer>
 
-class KoPageLayoutDialog::Private
+struct KoPageLayoutDialog::Private
 {
 public:
     Private() : pageLayoutWidget(0), documentCheckBox(0) {}
-    KoPageLayout layout;
     KoPageLayoutWidget *pageLayoutWidget;
     QCheckBox *documentCheckBox;
 };
@@ -44,8 +43,6 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
     : KPageDialog(parent)
     , d(new Private)
 {
-    d->layout = layout;
-
     setWindowTitle(i18n("Page Layout"));
     setFaceType(KPageDialog::Tabbed);
 
@@ -53,17 +50,14 @@ KoPageLayoutDialog::KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layo
     addPage(widget, i18n("Page"));
 
     QHBoxLayout *lay = new QHBoxLayout(widget);
-    lay->setMargin(0);
-    widget->setLayout(lay);
 
-    d->pageLayoutWidget = new KoPageLayoutWidget(widget, d->layout);
+    d->pageLayoutWidget = new KoPageLayoutWidget(widget, layout);
     d->pageLayoutWidget->showUnitchooser(false);
-    d->pageLayoutWidget->layout()->setMargin(0);
-    lay->addWidget(d->pageLayoutWidget);
+    lay->addWidget(d->pageLayoutWidget,1);
 
     KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget);
-    prev->setPageLayout(d->layout);
-    lay->addWidget(prev);
+    prev->setPageLayout(layout);
+    lay->addWidget(prev, 1);
 
     connect (d->pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
             prev, SLOT(setPageLayout(const KoPageLayout&)));
@@ -80,12 +74,12 @@ KoPageLayoutDialog::~KoPageLayoutDialog()
 
 KoPageLayout KoPageLayoutDialog::pageLayout() const
 {
-    return d->layout;
+    return d->pageLayoutWidget->pageLayout();
 }
 
 void KoPageLayoutDialog::setPageLayout(const KoPageLayout &layout)
 {
-    d->layout = layout;
+    d->pageLayoutWidget->setPageLayout(layout);
 }
 
 void KoPageLayoutDialog::accept()

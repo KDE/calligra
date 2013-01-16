@@ -1,6 +1,5 @@
 project(karbon)
 
-
 #Set the correct compiler options
 IF(CMAKE_SIZEOF_VOID_P EQUAL 4)
    # 32 bit
@@ -11,17 +10,13 @@ ELSE(CMAKE_SIZEOF_VOID_P EQUAL 4)
    MESSAGE(STATUS "Karbon detected that you use a 64 bit processor. Added -fPIC to the CXX_FLAGS.")
 ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 4)
 
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-karbon.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-karbon.h )
-
 include_directories(
-    ${QT_INCLUDES} 
-    ${KDE4_INCLUDE_DIR} 
+    ${QT_INCLUDES}
+    ${KDE4_INCLUDE_DIR}
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/resources
-    ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets
     ${CMAKE_SOURCE_DIR}/karbon/ui
     ${CMAKE_SOURCE_DIR}/karbon/common
     ${CMAKE_SOURCE_DIR}/karbon/common/commands
@@ -36,7 +31,7 @@ add_subdirectory( templates )
 
 ########### next target ###############
 
-set(karbonpart_PART_SRCS karbon_factory_init.cc )
+set(karbonpart_PART_SRCS KarbonFactoryInit.cpp )
 
 kde4_add_plugin(karbonpart ${karbonpart_PART_SRCS})
 
@@ -46,14 +41,14 @@ install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(karbon_KDEINIT_SRCS main.cc )
+set(karbon_KDEINIT_SRCS main.cpp )
 
-kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-karbon.png" )
+kde4_add_app_icon( karbon_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/hi*-app-karbon.png" )
 kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 if (Q_WS_MAC)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
-   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.koffice.karbon")
+   set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon 2")
 endif (Q_WS_MAC)
 

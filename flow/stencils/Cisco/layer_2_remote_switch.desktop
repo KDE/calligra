@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=Layer 2 Remote Switch
+Name[ca]=Layer 2 Remote Switch
+Name[ca@valencia]=Layer 2 Remote Switch
+Name[el]=Layer 2 Remote Switch
+Name[es]=Conmutador remoto de capa 2
+Name[et]=Teise kihi kaugkommutaator
+Name[fr]=Layer 2 Remote Switch
+Name[gl]=Conmutador remoto de capa 2
+Name[it]=Switch remoto layer 2
+Name[kk]=2-деңгейлі қашық қосқышы
+Name[nb]=Layer 2 fjernsvitsj
+Name[nl]=Laag 2 remote switch
+Name[pl]=Zdalny przełącznik poziomu 2
 Name[pt]=Comutador Remoto Nível 2
 Name[pt_BR]=Comutador remoto de camada 2
+Name[ru]=Удалённый коммутатор второго уровня
+Name[sk]=Vzdialený prepínač 2. vrstvy
 Name[sv]=Lager 2-fjärrväxel
 Name[uk]=Віддалений комутатор другого рівня
 Name[x-test]=xxLayer 2 Remote Switchxx
+Name[zh_CN]=Layer 2 远程交换机
+Name[zh_TW]=Layer 2 遠端交換器

@@ -1,7 +1,24 @@
 [Desktop Entry]
 Name=Automatic Protection Switching
+Name[ca]=Automatic Protection Switching
+Name[ca@valencia]=Automatic Protection Switching
+Name[el]=Μεταγωγή αυτόματης προστασίας
+Name[es]=Conmutador con protección automática
+Name[et]=Automaatkaitsekommutatsioon
+Name[fr]=Automatic Protection Switching
+Name[gl]=Conmutación de protección automática
+Name[it]=Automatic Protection Switching
+Name[kk]=Авто қоғау қосқышы
+Name[nb]=Automatisk beskyttelsesomkopling
+Name[nds]=Automaatsch Schuulschaltung
+Name[nl]=Automatisch omschakelen voor bescherming
+Name[pl]=Automatyczna ochrona przełączania
 Name[pt]=Comutação de Protecção Automática
 Name[pt_BR]=Comutador de proteção automática
+Name[ru]=Коммутирование с автоматической защитой
+Name[sk]=Prepínanie automatickej ochrany
 Name[sv]=Automatisk skyddsomkoppling
 Name[uk]=Автоматичне перемикання захисту
 Name[x-test]=xxAutomatic Protection Switchingxx
+Name[zh_CN]=自动保护交换
+Name[zh_TW]=自動保護交換

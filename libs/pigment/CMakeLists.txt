@@ -1,6 +1,6 @@
 project(pigmentcms)
 
-include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} )
+include_directories( ${PIGMENT_INCLUDES} ${QT_INCLUDES} ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
@@ -9,6 +9,17 @@ if(OPENEXR_FOUND)
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
+
+set(LINK_VC_LIB)
+
+if(HAVE_VC)
+    include_directories(${Vc_INCLUDE_DIR})
+    set(LINK_VC_LIB ${Vc_LIBRARIES})
+    ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp "-fPIC")
+
+    message("Following objects are generated from the per-arch lib")
+    message(${__per_arch_factory_objs})
+endif(HAVE_VC)
 
 add_subdirectory(tests)
 add_subdirectory(benchmarks)
@@ -33,6 +44,7 @@ set(pigmentcms_SRCS
     KoColorTransformationFactory.cpp
     KoColorTransformationFactoryRegistry.cpp
     KoCompositeOp.cpp
+    KoCompositeOpRegistry.cpp
     KoCopyColorConversionTransformation.cpp
     KoFallBackColorTransformation.cpp
     KoHistogramProducer.cpp
@@ -43,6 +55,9 @@ set(pigmentcms_SRCS
     colorspaces/KoRgbU16ColorSpace.cpp
     colorspaces/KoRgbU8ColorSpace.cpp
     colorspaces/KoSimpleColorSpaceEngine.cpp
+    compositeops/KoOptimizedCompositeOpFactory.cpp
+    compositeops/KoOptimizedCompositeOpFactoryPerArch_Scalar.cpp
+    ${__per_arch_factory_objs}
     colorprofiles/KoDummyColorProfile.cpp
     resources/KoAbstractGradient.cpp
     resources/KoColorSet.cpp
@@ -70,7 +85,13 @@ set(PIGMENT_INSTALL_FILES
         KoColorSpaceConstants.h
         KoColorSpaceMaths.h
         KoColorSpaceRegistry.h
+        KoCmykColorSpaceTraits.h
         KoColorSpaceTraits.h
+        KoGrayColorSpaceTraits.h
+        KoLabColorSpaceTraits.h
+        KoRgbColorSpaceTraits.h
+        KoXyzColorSpaceTraits.h
+        KoYcbcrColorSpaceTraits.h
         KoColorTransformation.h
         KoColorTransformationFactory.h
         KoColorTransformationFactoryRegistry.h
@@ -84,7 +105,7 @@ set(PIGMENT_INSTALL_FILES
         KoHistogramProducer.h
 )
 
-set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB})
+set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
 
 if(MSVC)
   # avoid "cannot open file 'LIBC.lib'" error
@@ -106,7 +127,7 @@ target_link_libraries(
 )
 
 set_target_properties(pigmentcms PROPERTIES
-    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
 install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})

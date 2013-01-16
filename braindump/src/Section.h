@@ -21,24 +21,27 @@
 #define _SECTION_H_
 
 #include <QMetaType>
+#include <QString>
 #include "SectionGroup.h"
 
 class Layout;
 class SectionContainer;
-class KUndoStack;
+class KUndo2Stack;
 class RootSection;
 
-class Section :  public SectionGroup {
-  public:
+class Section :  public SectionGroup
+{
+public:
     Section(RootSection* _rootSection);
     Section(const Section& _rhs);
-  public:
+    virtual ~Section();
+public:
     SectionContainer* sectionContainer();
     const QString& name() const;
     void setName(const QString& _name);
     Layout* layout();
     void setLayout(Layout* layout);
-  private:
+private:
     Layout* m_layout;
     SectionContainer* m_sectionContainer;
     QString m_name;

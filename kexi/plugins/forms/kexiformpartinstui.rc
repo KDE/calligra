@@ -38,9 +38,12 @@
    <Action name="library_widget_KexiDBLineEdit"/>
    <Action name="library_widget_KexiDBTextEdit"/>
    <Action name="library_widget_KPushButton"/>
+   <Action name="library_widget_KexiDBCommandLinkButton"/>
    <Action name="library_widget_KexiDBComboBox"/>
    <!-- Action name="library_widget_QRadioButton"/ -->
    <Action name="library_widget_KexiDBCheckBox"/>
+   <Action name="library_widget_KexiDBSlider"/>
+   <Action name="library_widget_KexiDBProgressBar"/>
    <Action name="library_widget_Spacer"/>
    <Action name="library_widget_Line"/>
    <Separator/>

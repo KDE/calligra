@@ -23,7 +23,7 @@
 #include "kis_layer.h"
 #include "kis_selection.h"
 
-class QUndoCommand;
+class KUndo2Command;
 class KoShape;
 class KisCanvas2;
 
@@ -37,7 +37,7 @@ public:
     KisSelectionToolHelper(KisCanvas2* canvas, KisNodeSP node, const QString& name);
     virtual ~KisSelectionToolHelper();
 
-    void selectPixelSelection(KisPixelSelectionSP selection, selectionAction action);
+    void selectPixelSelection(KisPixelSelectionSP selection, SelectionAction action);
     void addSelectionShape(KoShape* shape);
 
 private:

@@ -24,7 +24,7 @@
 
 
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis)
-        : KisImageCommand(i18n("Add Layer"), image), m_index(-1)
+        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image), m_index(-1)
 {
     m_layer = layer;
     m_parent = parent;
@@ -32,7 +32,7 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP la
 }
 
 KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index)
-        : KisImageCommand(i18n("Add Layer"), image), m_index(index)
+        : KisImageCommand(i18nc("(qtundo-format)", "Add Layer"), image), m_index(index)
 {
     m_layer = layer;
     m_parent = parent;
@@ -41,13 +41,11 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP la
 
 void KisImageLayerAddCommand::redo()
 {
-    m_image->lock();
     if (m_aboveThis || m_index == quint32(-1)) {
         m_image->addNode(m_layer, m_parent, m_aboveThis);
     } else {
         m_image->addNode(m_layer, m_parent, m_index);
     }
-    m_image->unlock();
 
     m_layer->setDirty(m_image->bounds());
 }
@@ -55,10 +53,6 @@ void KisImageLayerAddCommand::redo()
 void KisImageLayerAddCommand::undo()
 {
     UpdateTarget target(m_image, m_layer, m_image->bounds());
-
-    m_image->lock();
     m_image->removeNode(m_layer);
-    m_image->unlock();
-
     target.update();
 }

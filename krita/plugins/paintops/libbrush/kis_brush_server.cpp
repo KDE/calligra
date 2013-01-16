@@ -35,6 +35,7 @@
 #include "kis_imagepipe_brush.h"
 #include "kis_png_brush.h"
 #include "kis_svg_brush.h"
+#include <kis_resource_server_provider.h>
 
 class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResourceServerObserver<KisBrush>
 {
@@ -74,19 +75,22 @@ public:
     }
 
     ///Reimplemented
-    void importResourceFile( const QString & filename ) {
+    virtual void importResourceFile(const QString& filename, bool fileCreation = true)
+    {
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
 
         if( fi.suffix().toLower() == "abr") {
-            QFile::copy(filename, saveLocation() + fi.fileName());
+            if(fileCreation) {
+                QFile::copy(filename, saveLocation() + fi.fileName());
+            }
             QList<KisBrush*> collectionResources = createResources( filename );
             foreach(KisBrush* brush, collectionResources) {
                 addResource(brush);
             }
         } else {
-            KoResourceServer<KisBrush>::importResourceFile(filename);
+            KoResourceServer<KisBrush>::importResourceFile(filename, fileCreation);
         }
     }
 
@@ -101,7 +105,6 @@ private:
         if(fileExtension == "abr") {
             KisAbrBrushCollection collection(filename);
             collection.load();
-            kDebug() << "abr brushes " << collection.brushes().count();
             foreach(KisAbrBrush* abrBrush, collection.brushes()) {
                 brushes.append(abrBrush);
             }
@@ -141,13 +144,16 @@ KisBrushServer::KisBrushServer()
 
     m_brushServer = new BrushResourceServer();
     m_brushThread = new KoResourceLoaderThread(m_brushServer);
-    connect(m_brushThread, SIGNAL(finished()), this, SLOT(brushThreadDone()));
     m_brushThread->start();
+
+    connect(KisResourceServerProvider::instance(), SIGNAL(notifyBrushBlacklistCleanup()),
+            this, SLOT(slotRemoveBlacklistedResources()));
 }
 
 KisBrushServer::~KisBrushServer()
 {
     dbgRegistry << "deleting KisBrushServer";
+    delete m_brushThread;
     delete m_brushServer;
 }
 
@@ -160,13 +166,13 @@ KisBrushServer* KisBrushServer::instance()
 
 KoResourceServer<KisBrush>* KisBrushServer::brushServer()
 {
+    m_brushThread->barrier();
     return m_brushServer;
 }
 
-void KisBrushServer::brushThreadDone()
+void KisBrushServer::slotRemoveBlacklistedResources()
 {
-    delete m_brushThread;
-    m_brushThread = 0;
+    m_brushServer->removeBlackListedFiles();
 }
 
 #include "kis_brush_server.moc"

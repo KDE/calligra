@@ -15,7 +15,7 @@
      <item>
       <widget class="QLabel" name="label_3" >
        <property name="text" >
-        <string>The intermedia format the OpenOffice.org Server saves the loaded document to. KWord then imports the content from those file and once the job is done, those temporary file got removed again.</string>
+        <string>The intermedia format the OpenOffice.org Server saves the loaded document to. Words then imports the content from those file and once the job is done, those temporary file got removed again.</string>
        </property>
        <property name="wordWrap" >
         <bool>true</bool>

@@ -25,9 +25,9 @@
 #include "KoXmlReader.h"
 #include <KLocale>
 #include <KMimeType>
-#include <QtCore/QRect>
-#include <QtCore/QBuffer>
-#include <QtGui/QPainter>
+#include <QRect>
+#include <QBuffer>
+#include <QPainter>
 
 #include <KDebug>
 

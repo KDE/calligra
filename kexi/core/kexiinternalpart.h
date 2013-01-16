@@ -55,8 +55,6 @@ public:
     KexiInternalPart(QObject *parent, const QVariantList &);
     virtual ~KexiInternalPart();
 
-//  KexiWindow *instance();
-
     /*! Creates a new widget instance using part \a partName.
      \a widgetClass is a pseudo class used in case when the part offers more
      than one widget type.
@@ -119,16 +117,16 @@ public:
     static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
 
     /*! \return true if the part can create only one (unique) dialog. */
-    inline bool uniqueWindow() const {
-        return m_uniqueWindow;
-    }
+    bool uniqueWindow() const;
+
+    void setUniqueWindow(bool set);
 
     /*! \return true if the part creation has been cancelled (eg. by a user)
      so it wasn't an error. Internal part's impelmentation should set it to true when needed.
      False by default. */
-    inline bool cancelled() const {
-        return m_cancelled;
-    }
+    bool cancelled() const;
+
+    void setCancelled(bool set);
 
 protected:
     /*! Used internally */
@@ -147,12 +145,10 @@ protected:
      \return true on successful calling. */
     virtual bool executeCommand(const char* commandName, QMap<QString, QString>* args = 0);
 
-    //! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
-    QPointer<QWidget> m_uniqueWidget;
+private:
+    class Private;
+    Private* const d;
 
-    bool m_uniqueWindow; //!< true if createWidgetInstance() should return only one window
-
-    bool m_cancelled; //!< Used in cancelled()
 };
 
 #endif

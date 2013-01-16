@@ -6,10 +6,11 @@
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2005-2006, 2011 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2006 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2006 Peter Simonsson <psn@linux.se>
  * Copyright (C) 2006 Laurent Montel <montel@kde.org>
- * Copyright (C) 2007 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2007,2011 Thorsten Zachmann <t.zachmann@zagge.de>
+ * Copyright (C) 2011 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,22 +35,31 @@
 #include <math.h>
 
 // Qt
-//#include <QtGui/QCheckBox>
 #include <QLabel>
-#include <QRadioButton>
+#include <QToolButton>
 #include <QWidget>
 #include <QGridLayout>
 #include <QButtonGroup>
 
 // KDE
 #include <klocale.h>
-#include <kiconloader.h>
 
 // Calligra
+#include <KoIcon.h>
 #include <KoUnit.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoLineStyleSelector.h>
 #include <KoUnitDoubleSpinBox.h>
+#include "KoMarkerSelector.h"
+
+#include <QBuffer>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoMarker.h>
+#include <KoPathShape.h>
 
 
 class KoStrokeConfigWidget::Private
@@ -64,6 +74,8 @@ public:
     KoUnitDoubleSpinBox *miterLimit;
     QButtonGroup        *capGroup;
     QButtonGroup        *joinGroup;
+    KoMarkerSelector    *startMarkerSelector;
+    KoMarkerSelector    *endMarkerSelector;
 
     QSpacerItem *spacer;
     QGridLayout *layout;
@@ -97,30 +109,29 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->addWidget(capLabel, 2, 0);
     d->capGroup = new QButtonGroup(this);
     d->capGroup->setExclusive(true);
-    d->capGroup->setExclusive(true);
 
-    QRadioButton *button = 0;
+    QToolButton *button = 0;
 
-    button = new QRadioButton(this);
-    button->setIcon(SmallIcon("cap_butt"));
+    button = new QToolButton(this);
+    button->setIcon(koIcon("cap_butt"));
     button->setCheckable(true);
     button->setToolTip(i18n("Butt cap"));
     d->capGroup->addButton(button, Qt::FlatCap);
     mainLayout->addWidget(button, 2, 1);
 
-    button = new QRadioButton(this);
-    button->setIcon(SmallIcon("cap_round"));
+    button = new QToolButton(this);
+    button->setIcon(koIcon("cap_round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round cap"));
     d->capGroup->addButton(button, Qt::RoundCap);
     mainLayout->addWidget(button, 2, 2);
 
-    button = new QRadioButton(this);
-    button->setIcon(SmallIcon("cap_square"));
+    button = new QToolButton(this);
+    button->setIcon(koIcon("cap_square"));
     button->setCheckable(true);
     button->setToolTip(i18n("Square cap"));
     d->capGroup->addButton(button, Qt::SquareCap);
-    mainLayout->addWidget(button, 2, 3);
+    mainLayout->addWidget(button, 2, 3, Qt::AlignLeft);
 
     // The join group
     QLabel* joinLabel = new QLabel(i18n("Join:"), this);
@@ -129,26 +140,26 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->joinGroup = new QButtonGroup(this);
     d->joinGroup->setExclusive(true);
 
-    button = new QRadioButton(this);
-    button->setIcon(SmallIcon("join_miter"));
+    button = new QToolButton(this);
+    button->setIcon(koIcon("join_miter"));
     button->setCheckable(true);
     button->setToolTip(i18n("Miter join"));
     d->joinGroup->addButton(button, Qt::MiterJoin);
     mainLayout->addWidget(button, 3, 1);
 
-    button = new QRadioButton(this);
-    button->setIcon(SmallIcon("join_round"));
+    button = new QToolButton(this);
+    button->setIcon(koIcon("join_round"));
     button->setCheckable(true);
     button->setToolTip(i18n("Round join"));
     d->joinGroup->addButton(button, Qt::RoundJoin);
     mainLayout->addWidget(button, 3, 2);
 
-    button = new QRadioButton(this);
-    button->setIcon(SmallIcon("join_bevel"));
+    button = new QToolButton(this);
+    button->setIcon(koIcon("join_bevel"));
     button->setCheckable(true);
     button->setToolTip(i18n("Bevel join"));
     d->joinGroup->addButton(button, Qt::BevelJoin);
-    mainLayout->addWidget(button, 3, 3);
+    mainLayout->addWidget(button, 3, 3, Qt::AlignLeft);
 
     // Miter limit
     QLabel* miterLabel = new QLabel(i18n("Miter limit:"), this);
@@ -160,6 +171,16 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->miterLimit->setUnit(KoUnit(KoUnit::Point));
     d->miterLimit->setToolTip(i18n("Set miter limit"));
     mainLayout->addWidget(d->miterLimit, 4, 1, 1, 3);
+
+    QList<KoMarker*> markers;
+
+    d->startMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerStart, this);
+    d->startMarkerSelector->updateMarkers(markers);
+    mainLayout->addWidget(d->startMarkerSelector, 5, 0, 1, 2);
+
+    d->endMarkerSelector = new KoMarkerSelector(KoMarkerData::MarkerEnd, this);
+    d->endMarkerSelector->updateMarkers(markers);
+    mainLayout->addWidget(d->endMarkerSelector, 5, 2, 1, 2);
 
     // Spacer
     d->spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -174,6 +195,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SIGNAL(capChanged(int)));
     connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SIGNAL(joinChanged(int)));
     connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SIGNAL(miterLimitChanged()));
+    connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentStartMarkerChanged()));
+    connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentEndMarkerChanged()));
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()
@@ -190,7 +213,6 @@ Qt::PenStyle KoStrokeConfigWidget::lineStyle() const
     return d->lineStyle->lineStyle();
 }
 
-
 QVector<qreal> KoStrokeConfigWidget::lineDashes() const
 {
     return d->lineStyle->lineDashes();
@@ -206,19 +228,31 @@ qreal KoStrokeConfigWidget::miterLimit() const
     return d->miterLimit->value();
 }
 
+KoMarker *KoStrokeConfigWidget::startMarker() const
+{
+    return d->startMarkerSelector->marker();
+}
+
+KoMarker *KoStrokeConfigWidget::endMarker() const
+{
+    return d->endMarkerSelector->marker();
+}
 
 // ----------------------------------------------------------------
 //                         Other public functions
 
-void KoStrokeConfigWidget::updateControls(KoLineBorder &border)
+void KoStrokeConfigWidget::updateControls(KoShapeStroke &stroke, KoMarker *startMarker, KoMarker *endMarker)
 {
     blockChildSignals(true);
 
-    d->capGroup->button(border.capStyle())->setChecked(true);
-    d->joinGroup->button(border.joinStyle())->setChecked(true);
-    d->lineWidth->changeValue(border.lineWidth());
-    d->miterLimit->changeValue(border.miterLimit());
-    d->lineStyle->setLineStyle(border.lineStyle(), border.lineDashes());
+    d->capGroup->button(stroke.capStyle())->setChecked(true);
+    d->joinGroup->button(stroke.joinStyle())->setChecked(true);
+    d->lineWidth->changeValue(stroke.lineWidth());
+    d->miterLimit->changeValue(stroke.miterLimit());
+    d->lineStyle->setLineStyle(stroke.lineStyle(), stroke.lineDashes());
+    d->miterLimit->setEnabled(stroke.joinStyle() == Qt::MiterJoin);
+    d->startMarkerSelector->setMarker(startMarker);
+    d->endMarkerSelector->setMarker(endMarker);
 
     blockChildSignals(false);
 }
@@ -233,6 +267,12 @@ void KoStrokeConfigWidget::setUnit(const KoUnit &unit)
     blockChildSignals(false);
 }
 
+void KoStrokeConfigWidget::updateMarkers(const QList<KoMarker*> &markers)
+{
+    d->startMarkerSelector->updateMarkers(markers);
+    d->endMarkerSelector->updateMarkers(markers);
+}
+
 void KoStrokeConfigWidget::blockChildSignals(bool block)
 {
     d->lineWidth->blockSignals(block);
@@ -240,6 +280,8 @@ void KoStrokeConfigWidget::blockChildSignals(bool block)
     d->joinGroup->blockSignals(block);
     d->miterLimit->blockSignals(block);
     d->lineStyle->blockSignals(block);
+    d->startMarkerSelector->blockSignals(block);
+    d->endMarkerSelector->blockSignals(block);
 }
 
 void KoStrokeConfigWidget::locationChanged(Qt::DockWidgetArea area)

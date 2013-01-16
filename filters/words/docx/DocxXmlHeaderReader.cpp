@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -60,6 +60,7 @@ DocxXmlHeaderReader::~DocxXmlHeaderReader()
 void DocxXmlHeaderReader::init()
 {
     d->counter = 0;
+    m_headerActive = true;
 }
 
 QString DocxXmlHeaderReader::content()
@@ -116,36 +117,36 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read(MSOOXML::MsooXmlReaderConte
  - root element of Wordprocessing Header part
 
  Child elements:
- - altChunk (Anchor for Imported External Content)           §17.17.2.1
- - [done] bookmarkEnd (Bookmark End)                                §17.13.6.1
- - [done] bookmarkStart (Bookmark Start)                            §17.13.6.2
- - commentRangeEnd (Comment Anchor Range End)                §17.13.4.3
- - commentRangeStart (Comment Anchor Range Start)            §17.13.4.4
- - customXml (Block-Level Custom XML Element)                §17.5.1.6
- - customXmlDelRangeEnd (Custom XML Markup Deletion End)     §17.13.5.4
- - customXmlDelRangeStart (Custom XML Markup Deletion Start) §17.13.5.5
- - customXmlInsRangeEnd (Custom XML Markup Insertion End)        §17.13.5.6
- - customXmlInsRangeStart (Custom XML Markup Insertion Start)    §17.13.5.7
- - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End) §17.13.5.8
+ - altChunk (Anchor for Imported External Content)                               §17.17.2.1
+ - [done] bookmarkEnd (Bookmark End)                                             §17.13.6.1
+ - [done] bookmarkStart (Bookmark Start)                                         §17.13.6.2
+ - commentRangeEnd (Comment Anchor Range End)                                    §17.13.4.3
+ - commentRangeStart (Comment Anchor Range Start)                                §17.13.4.4
+ - customXml (Block-Level Custom XML Element)                                    §17.5.1.6
+ - customXmlDelRangeEnd (Custom XML Markup Deletion End)                         §17.13.5.4
+ - customXmlDelRangeStart (Custom XML Markup Deletion Start)                     §17.13.5.5
+ - customXmlInsRangeEnd (Custom XML Markup Insertion End)                        §17.13.5.6
+ - customXmlInsRangeStart (Custom XML Markup Insertion Start)                    §17.13.5.7
+ - customXmlMoveFromRangeEnd (Custom XML Markup Move Source End)                 §17.13.5.8
  - customXmlMoveFromRangeStart (Custom XML Markup Move Source Start)             §17.13.5.9
  - customXmlMoveToRangeEnd (Custom XML Markup Move Destination Location End)     §17.13.5.10
  - customXmlMoveToRangeStart (Custom XML Markup Move Destination Location Start) §17.13.5.11
- - del (Deleted Run Content)                                                     §17.13.5.14
- - ins (Inserted Run Content)                                                    §17.13.5.18
+ - [done] del (Deleted Run Content)                                              §17.13.5.14
+ - [done] ins (Inserted Run Content)                                             §17.13.5.18
  - moveFrom (Move Source Run Content)                                            §17.13.5.22
  - moveFromRangeEnd (Move Source Location Container - End)                       §17.13.5.23
  - moveFromRangeStart (Move Source Location Container - Start)                   §17.13.5.24
  - moveTo (Move Destination Run Content)                                         §17.13.5.25
  - moveToRangeEnd (Move Destination Location Container - End)                    §17.13.5.27
  - moveToRangeStart (Move Destination Location Container - Start)                §17.13.5.28
- - [done] oMath (Office Math)                                                           §22.1.2.77
+ - [done] oMath (Office Math)                                                    §22.1.2.77
  - oMathPara (Office Math Paragraph)                                             §22.1.2.78
  - [done] p (Paragraph)                                                          §17.3.1.22
  - permEnd (Range Permission End)                                                §17.13.7.1
  - permStart (Range Permission Start)                                            §17.13.7.2
  - proofErr (Proofing Error Anchor)                                              §17.13.8.1
- - [done] sdt (Block-Level Structured Document Tag)                                     §17.5.2.29
- - [done] tbl (Table)                                                                   §17.4.38
+ - [done] sdt (Block-Level Structured Document Tag)                              §17.5.2.29
+ - [done] tbl (Table)                                                            §17.4.38
 //! @todo: Handle all children
 */
 KoFilter::ConversionStatus DocxXmlHeaderReader::read_hdr()
@@ -165,6 +166,8 @@ KoFilter::ConversionStatus DocxXmlHeaderReader::read_hdr()
             ELSE_TRY_READ_IF(tbl)
             ELSE_TRY_READ_IF(bookmarkStart)
             ELSE_TRY_READ_IF(bookmarkEnd)
+            ELSE_TRY_READ_IF(del)
+            ELSE_TRY_READ_IF(ins)
             ELSE_TRY_READ_IF(sdt)
             ELSE_TRY_READ_IF_NS(m, oMath)
             SKIP_UNKNOWN

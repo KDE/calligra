@@ -1,11 +1,26 @@
 [Desktop Entry]
 Name=Text-Annotation
+Name[bg]=Текстови функции
+Name[ca]=Anotació de text
+Name[ca@valencia]=Anotació de text
 Name[cs]=Textová anotace
+Name[de]=Text-Anmerkung
+Name[el]=Κείμενο-σημειώσεις
+Name[es]=Comentario de texto
 Name[et]=Tekstiannotatsioon
-Name[it]=Annotazione di testo
+Name[fr]=Annotation de texte
+Name[gl]=Anotación de texto
+Name[hu]=Megjegyzések
+Name[it]=Annotazione-Testo
+Name[kk]=Аңдатпа-мәтін
+Name[nb]=Tekstmerknad
+Name[nds]=Textanmarken
 Name[nl]=Tekstannotatie
+Name[pl]=Adnotacja-Tekstu
 Name[pt]=Anotação-Texto
 Name[pt_BR]=Anotação de texto
+Name[ru]=Аннотация
+Name[sk]=Textová poznámka
 Name[sv]=Text-anmärkning
 Name[uk]=Текстова анотація
 Name[x-test]=xxText-Annotationxx

@@ -1,5 +1,5 @@
 /*
- *  This file is part of KOffice tests
+ *  This file is part of Calligra tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
@@ -20,7 +20,7 @@
 #ifndef TestSelection_H
 #define TestSelection_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 class TestSelection : public QObject
 {

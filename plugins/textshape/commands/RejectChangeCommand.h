@@ -20,7 +20,7 @@
 #ifndef REJECTCHANGECOMMAND_H
 #define REJECTCHANGECOMMAND_H
 
-#include "commands/TextCommandBase.h"
+#include <KoTextCommandBase.h>
 
 #include <QPair>
 
@@ -29,11 +29,11 @@ class KoTextDocumentLayout;
 
 class QTextDocument;
 
-class RejectChangeCommand : public QObject, public TextCommandBase
+class RejectChangeCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:
-    RejectChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand *parent = 0);
+    RejectChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command *parent = 0);
     ~RejectChangeCommand();
 
     virtual void redo();

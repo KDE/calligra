@@ -21,11 +21,11 @@
 #include <KDebug>
 
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/roweditbuffer.h>
+#include <db/cursor.h>
+#include <db/connection.h>
+#include <db/tableschema.h>
+#include <db/queryschema.h>
+#include <db/roweditbuffer.h>
 
 #include <pion/net/PionUser.hpp>
 #include <pion/net/HTTPAuth.hpp>

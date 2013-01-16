@@ -20,11 +20,11 @@
 #ifndef SCRIPTING_KEXIDBFIELD_H
 #define SCRIPTING_KEXIDBFIELD_H
 
-#include <qstring.h>
-#include <qobject.h>
+#include <QString>
+#include <QObject>
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/field.h>
+#include <db/drivermanager.h>
+#include <db/field.h>
 
 namespace Scripting
 {
@@ -126,12 +126,6 @@ public slots:
     uint precision();
     /** Sets the precision for numeric and other fields. */
     void setPrecision(uint precision);
-
-    /** Returns the width of this field (usually in pixels or points).
-    0 (the default) means there is no hint for the width. */
-    uint width();
-    /** Sets the width of this field. */
-    void setWidth(uint width);
 
     /** Returns the default value this field has. */
     QVariant defaultValue();

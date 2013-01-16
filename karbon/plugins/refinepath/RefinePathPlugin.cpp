@@ -37,24 +37,24 @@
 #include <KoSelection.h>
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
+#include <KoIcon.h>
 
 #include <kpluginfactory.h>
-#include <kicon.h>
 #include <knuminput.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QHBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QHBoxLayout>
 
 K_PLUGIN_FACTORY(RefinePathPluginFactory, registerPlugin<RefinePathPlugin>();)
 K_EXPORT_PLUGIN(RefinePathPluginFactory("karbonrefinepathplugin"))
 
 RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &) : Plugin(parent)
 {
-    QAction *actionRefinePath  = new KAction(KIcon("14_refine"), i18n("&Refine Path..."), this);
+    QAction *actionRefinePath  = new KAction(koIcon("effect_refine"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_refine", actionRefinePath);
     connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));
 

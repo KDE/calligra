@@ -1,8 +1,24 @@
 [Desktop Entry]
 Name=condenser
+Name[ca]=condensador
+Name[ca@valencia]=condensador
+Name[de]=Rücklaufkühler
+Name[el]=condenser
+Name[es]=condensador
+Name[et]=Jahuti
+Name[fr]=condenseur
+Name[gl]=Condensador
+Name[hu]=kondenzátor
+Name[it]=condensatore
+Name[kk]=Конденсор
+Name[nb]=kondensator
 Name[nl]=condenser
+Name[pl]=chłodnica
 Name[pt]=condensador
 Name[pt_BR]=condensador
+Name[ru]=Конденсор
+Name[sk]=kondenzátor
 Name[sv]=kylare
 Name[uk]=Холодильник
 Name[x-test]=xxcondenserxx
+Name[zh_TW]=冷凝器

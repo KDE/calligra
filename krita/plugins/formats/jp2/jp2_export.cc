@@ -27,7 +27,10 @@
 
 #include <KoColorSpaceConstants.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
+#include <kis_properties_configuration.h>
+#include <kis_config.h>
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_group_layer.h>
@@ -41,7 +44,7 @@
 class KisExternalLayer;
 
 K_PLUGIN_FACTORY(ExportFactory, registerPlugin<jp2Export>();)
-K_EXPORT_PLUGIN(ExportFactory("kofficefilters"))
+K_EXPORT_PLUGIN(ExportFactory("calligrafilters"))
 
 jp2Export::jp2Export(QObject *parent, const QVariantList &) : KoFilter(parent)
 {
@@ -62,7 +65,7 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     QString filename = m_chain->outputFile();
 
     if (!output)
-        return KoFilter::CreationError;
+        return KoFilter::NoDocumentCreated;
 
 
     if (filename.isEmpty()) return KoFilter::FileNotFound;
@@ -75,16 +78,30 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
 
     QWidget* wdg = new QWidget(kdb);
     optionsJP2.setupUi(wdg);
+
+
+    QString filterConfig = KisConfig().exportConfiguration("JP2");
+    KisPropertiesConfiguration cfg;
+    cfg.fromXML(filterConfig);
+    optionsJP2.numberResolutions->setValue(cfg.getInt("number_resolutions", 6));
+    optionsJP2.qualityLevel->setValue(cfg.getInt("quality", 100));
     
     kdb->setMainWidget(wdg);
+    kapp->restoreOverrideCursor();
 
-    if (kdb->exec() == QDialog::Rejected) {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+    if (!m_chain->manager()->getBatchMode()) {
+        if (kdb->exec() == QDialog::Rejected) {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
-
+    
     JP2ConvertOptions options;
     options.numberresolution = optionsJP2.numberResolutions->value();
+    cfg.setProperty("number_resolutions", options.numberresolution);
     options.rate = optionsJP2.qualityLevel->value();
+    cfg.setProperty("quality", options.rate);
+
+    KisConfig().setExportConfiguration("JP2", cfg);
 
     KUrl url;
     url.setPath(filename);
@@ -94,7 +111,7 @@ KoFilter::ConversionStatus jp2Export::convert(const QByteArray& from, const QByt
     image->refreshGraph();
     image->lock();
 
-    jp2Converter kpc(output, output->undoAdapter());
+    jp2Converter kpc(output);
 
     KisPaintDeviceSP pd = new KisPaintDevice(*image->projection());
     KisPaintLayerSP l = new KisPaintLayer(image, "projection", OPACITY_OPAQUE_U8, pd);

@@ -22,13 +22,12 @@
 #define KO_TOOL_DOCKER_H
 
 #include <QDockWidget>
-#include <QMap>
 
 class QWidget;
 
 /**
-   The tool docker shows the tool option widget associated with the
-   current tool and the current canvas.
+ * The tool docker shows the tool option widget associated with the
+ * current tool and the current canvas.
  */
 class KoToolDocker : public QDockWidget
 {
@@ -37,21 +36,27 @@ public:
     explicit KoToolDocker(QWidget *parent = 0);
     ~KoToolDocker();
 
+    void resetWidgets();
+
 protected:
     virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
 public slots:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
      */
-    void setOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap);
+    void setOptionWidgets(const QList<QWidget *> &optionWidgetList);
 
     /**
      * Returns whether the docker has an optionwidget attached
      */
     bool hasOptionWidget();
 
+    /**
+     * set the tab option
+     */
+    void setTabEnabled(bool enabled);
+
 private:
-    Q_PRIVATE_SLOT(d, void toggleLock())
     Q_PRIVATE_SLOT(d, void toggleTab())
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 

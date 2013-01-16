@@ -48,7 +48,7 @@ void KisTileCompressor2::writeTile(KisTileSP tile, KoStore *store)
     tile->unlock();
 
     QString header = getHeader(tile, bytesWritten);
-    store->write(header.toAscii());
+    store->write(header.toLatin1());
     store->write(m_streamingBuffer.data(), bytesWritten);
 }
 
@@ -148,6 +148,7 @@ void KisTileCompressor2::decompressTileData(quint8 *buffer,
                                                  (quint8*)m_linearizationBuffer.data(), tileDataSize);
 
         Q_ASSERT(bytesWritten == tileDataSize);
+        Q_UNUSED(bytesWritten); // unused-but-set-variable
 
         KisAbstractCompression::delinearizeColors((quint8*)m_linearizationBuffer.data(),
                                                   tileData->data(),

@@ -22,24 +22,23 @@
 
 #include <stdlib.h>
 
-#include <qdatastream.h>
-#include <qfile.h>
-#include <qlayout.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qapplication.h>
-#include <qclipboard.h>
-#include <qbuffer.h>
+#include <QDataStream>
+#include <QFile>
+#include <QLayout>
+#include <QStatusBar>
+#include <QLabel>
+#include <QPixmap>
+#include <QImage>
+#include <QPainter>
+#include <QApplication>
+#include <QClipboard>
+#include <QBuffer>
 #include <QCache>
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
 #include <kmimetype.h>
 #include <kservice.h>
-#include <karrowbutton.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kio/job.h>
@@ -84,7 +83,7 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *paren
 {
 // m_proc = 0;
 // m_content = 0;
-    m_hasFocusableWidget = false;
+    KexiDataItemInterface::setHasFocusableWidget(false);
     d->button = new KexiDropDownButton(parentWidget() /*usually a viewport*/);
     d->button->hide();
     d->button->setToolTip(i18n("Click to show available actions for this cell"));
@@ -142,7 +141,7 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
     if (removeOld)
         d->value = add.toByteArray();
     else //do not add "m_origValue" to "add" as this is QByteArray
-        d->value = m_origValue.toByteArray();
+        d->value = KexiDataItemInterface::originalValue().toByteArray();
 
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
@@ -520,12 +519,12 @@ KexiKIconTableEdit::~KexiKIconTableEdit()
 
 void KexiKIconTableEdit::init()
 {
-    m_hasFocusableWidget = false;
+    KexiDataItemInterface::setHasFocusableWidget(false);
 }
 
 void KexiKIconTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
-    d->currentValue = m_origValue;
+    d->currentValue = KexiDataItemInterface::originalValue();
 }
 
 bool KexiKIconTableEdit::valueIsNull()

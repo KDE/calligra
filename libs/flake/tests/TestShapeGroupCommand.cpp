@@ -18,12 +18,12 @@
  */
 
 #include "TestShapeGroupCommand.h"
-#include <MockShapes.h>
+#include "MockShapes.h"
 #include <KoShapeGroup.h>
 #include <KoShapeGroupCommand.h>
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoShapeShadow.h>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
 TestShapeGroupCommand::TestShapeGroupCommand()
         : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
@@ -77,7 +77,7 @@ void TestShapeGroupCommand::init()
     strokeShape2->setPosition( QPointF(25,25) );
 
     strokeGroup = new KoShapeGroup();
-    strokeGroup->setBorder( new KoLineBorder( 2.0f ) );
+    strokeGroup->setStroke( new KoShapeStroke( 2.0f ) );
     strokeGroup->setShadow( new KoShapeShadow() );
 }
 
@@ -177,8 +177,8 @@ void TestShapeGroupCommand::testSublevelGroup()
     qSort(childOrder.begin(), childOrder.end(), KoShape::compareShapeZIndex);
     QList<KoShape*> expectedOrder;
     expectedOrder << sublevelShape2 << sublevelShape1;
-    QCOMPARE(childOrder, expectedOrder); 
-    // check that the group has the zIndex/parent of its added top shape 
+    QCOMPARE(childOrder, expectedOrder);
+    // check that the group has the zIndex/parent of its added top shape
     QCOMPARE(toplevelGroup->parent(), static_cast<KoShapeContainer*>(0));
     QCOMPARE(toplevelGroup->zIndex(), 1);
 }
@@ -246,15 +246,12 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
 
 void TestShapeGroupCommand::testGroupStrokeShapes()
 {
-    QRectF bound = strokeShape1->boundingRect().united(strokeShape2->boundingRect());
-
     QList<KoShape*> strokeShapes;
     strokeShapes << strokeShape2 << strokeShape1;
     strokeCmd = new KoShapeGroupCommand(strokeGroup, strokeShapes);
     strokeCmd->redo();
     QCOMPARE(strokeShape1->size(), QSizeF(50, 50));
     QCOMPARE(strokeShape2->size(), QSizeF(50, 50));
-    QCOMPARE(strokeGroup->boundingRect(), bound);
 }
 
 QTEST_MAIN(TestShapeGroupCommand)

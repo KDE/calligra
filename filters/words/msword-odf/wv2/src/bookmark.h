@@ -56,18 +56,26 @@ namespace wvWare
              * found.  If @param ok is false no valid bookmark has been found
              * and the returned BookmarkData structure is invalid.
              */
-            BookmarkData bookmark( U32 globalCP, bool& ok );
+            BookmarkData bookmark( const U32 globalCP, bool& ok );
+
+            /**
+             * Get the BookmarkData for the Bookmark of @param name.  The
+             * @param ok flag is true if a bookmark has been found.  If @param
+             * ok is false no valid bookmark has been found and the returned
+             * BookmarkData structure is invalid.
+             */
+            BookmarkData bookmark( const UString& name, bool& ok ) const;
 
             /**
              * Returns the global CP of the next bookmark start,
              * 0xffffffff if none exists or invalid.
              */
-            U32 nextBookmarkStart() const;
+            U32 nextBookmarkStart();
             /**
              * Returns the global CP of the next bookmark end,
              * 0xffffffff if none exists or invalid.
              */
-            U32 nextBookmarkEnd();
+            U32 nextBookmarkEnd() const;
 
             /**
              * Check for unprocessed bookmars located before @param globalCP.
@@ -84,7 +92,7 @@ namespace wvWare
              * Validate bookmarks.
              * @param num. of invalid bookmarks detected
              */
-            bool valid(U16 &num);
+            bool valid(U16 &num, const U32 ccpText);
 
             PLCF<Word97::BKF>* m_start;
             PLCFIterator<Word97::BKF>* m_startIt;

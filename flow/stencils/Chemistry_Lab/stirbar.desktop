@@ -1,8 +1,23 @@
 [Desktop Entry]
 Name=stirbar
+Name[ca]=agitador
+Name[ca@valencia]=agitador
+Name[de]=Magnetrührstab
+Name[el]=stirbar
+Name[es]=barra agitadora
+Name[et]=Segaja varras
+Name[fr]=stirbar
+Name[gl]=Barra de axitación
+Name[it]=ancoretta-magnetica
+Name[kk]=Магнитті араластырғыш
+Name[nb]=magnetstav
+Name[nds]=Röhrfisch
 Name[nl]=roerstaaf
+Name[pl]=mieszadełko-magnetyczne
 Name[pt]=barra-batedora
 Name[pt_BR]=barra batedora
-Name[sv]=omrörarmagnet
+Name[sk]=stirbar
+Name[sv]=magnetstav
 Name[uk]=Магнітний перемішувач
 Name[x-test]=xxstirbarxx
+Name[zh_TW]=攪拌棒

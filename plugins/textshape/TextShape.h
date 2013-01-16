@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_calligra@gadz.org>
  * Copyright (C) 2010 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -30,16 +30,16 @@
 
 #include <QTextDocument>
 #include <QPainter>
-#include <QMutex>
-#include <QWaitCondition>
 
 #define TextShape_SHAPEID "TextShapeID"
 
-
 class KoInlineTextObjectManager;
+class KoTextRangeManager;
 class KoPageProvider;
 class KoImageCollection;
+class KoTextDocument;
 class TextShape;
+class KoTextDocumentLayout;
 
 /**
  * A text shape.
@@ -49,13 +49,11 @@ class TextShape;
 class TextShape : public KoShapeContainer, public KoFrameShape
 {
 public:
-    TextShape(KoInlineTextObjectManager *inlineTextObjectManager);
+    TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
     virtual ~TextShape();
 
     /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
     /// reimplemented
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
 
@@ -63,22 +61,18 @@ public:
     QPointF convertScreenPos(const QPointF &point) const;
 
     /// reimplemented
+    QPainterPath outline() const;
+
+    /// reimplemented
     QRectF outlineRect() const;
+
+    ///reimplemented
+    ChildZOrderPolicy childZOrderPolicy() {return KoShape::ChildZPassThrough;}
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
 
-    /**
-     * Set the shape's text to be demo text or not.
-     * If true, replace the content with an lorem ipsum demo text and don't complain
-     *   when there is not enough space at the end
-     * If false; remove the demo text again.
-     */
-    void setDemoText(bool on);
-    /// return if the content of this shape is demo text.
-    bool demoText() const {
-        return m_demoText;
-    }
+    KoImageCollection *imageCollection();
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -104,15 +98,9 @@ public:
         return m_textShapeData;
     }
 
-    bool hasFootnoteDocument() {
-        return m_footnotes != 0 && !m_footnotes->isEmpty();
-    }
-    QTextDocument *footnoteDocument();
-
-    void markLayoutDone();
+    void updateDocumentData();
 
     virtual void update() const;
-
     virtual void update(const QRectF &shape) const;
 
     // required for kpresenter hack
@@ -120,9 +108,6 @@ public:
 
     /// reimplemented
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    KoTextDocument::ResizeMethod resizeMethod() const;
-    void setResizeMethod(KoTextDocument::ResizeMethod resizemethod);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -137,14 +122,12 @@ private:
     void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     KoTextShapeData *m_textShapeData;
-    QTextDocument *m_footnotes;
-
-    bool m_demoText;
-    mutable QMutex m_mutex;
-    mutable QWaitCondition m_waiter;
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
+    KoParagraphStyle * m_paragraphStyle;
+    bool m_clip;
+    KoTextDocumentLayout *m_layout;
 };
 
 #endif

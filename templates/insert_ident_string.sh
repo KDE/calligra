@@ -16,7 +16,7 @@ gzip -n $file && mv -f $file.gz $file || exit 1
 
 tmpfile=$file.tmp
 echo -e -n '\x01f\x8b\x8\x8\x0\x0\x0\x0\x0\x3' > $tmpfile
-echo -n "KOffice $mime" >> $tmpfile
+echo -n "Calligra $mime" >> $tmpfile
 echo -e -n '\x04\x06\x00' >> $tmpfile
 #outsize=`stat $tmpfile | grep 'Size:' | gawk '{print $2;}'`
 #dd if=$file of=$tmpfile bs=1 skip=10 seek=$outsize

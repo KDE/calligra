@@ -53,7 +53,7 @@ install( FILES  karbon_xaml_export.desktop karbon_xaml_import.desktop  DESTINATI
 #	../../../karbon/libkarboncommon.la
 #
 #INCLUDES = \
-#	$(KOFFICE_INCLUDES) \
+#	$(CALLIGRA_INCLUDES) \
 #	$(KOPAINTER_INCLUDES) \
 #	-I$(top_srcdir)/karbon \
 #	-I$(top_srcdir)/karbon/core \

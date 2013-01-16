@@ -1,10 +1,10 @@
 #!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
-import KWord, time
+import Words, time
 
 # fetch the main window
-komainwindow = KWord.shell()
+komainwindow = Words.shell()
 
 # set the statusbar text
 komainwindow.slotSetStatusBarText("This is the sample_progressbar.py script")

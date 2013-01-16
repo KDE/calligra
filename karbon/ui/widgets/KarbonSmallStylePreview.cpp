@@ -29,21 +29,23 @@
 #include <KoShapeManager.h>
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <KoLineBorder.h>
+#include <KoShapePaintingContext.h>
+#include <KoShapeStroke.h>
+#include <KoViewConverter.h>
 
 #include <KLocale>
 #include <KGlobalSettings>
 
-#include <QtGui/QColor>
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QLayout>
-#include <QtGui/QPixmap>
-#include <QtGui/QGridLayout>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
+#include <QColor>
+#include <QPushButton>
+#include <QLabel>
+#include <QLayout>
+#include <QPixmap>
+#include <QGridLayout>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QPointF>
+#include <QRectF>
 
 #define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15
@@ -94,7 +96,9 @@ protected:
                 painter.setPen(Qt::NoPen);
                 QPainterPath p;
                 p.addRect(rect());
-                m_fill->paint(painter, p);
+                KoViewConverter converter;
+                KoShapePaintingContext context;
+                m_fill->paint(painter, converter, context, p);
             }
         } else {
             painter.setFont(KGlobalSettings::smallestReadableFont());
@@ -126,7 +130,7 @@ public:
             delete m_stroke;
     }
 
-    void setStroke(KoShapeBorderModel * stroke) {
+    void setStroke(KoShapeStrokeModel * stroke) {
         if (stroke != m_stroke) {
             if (m_stroke && !m_stroke->deref())
                 delete m_stroke;
@@ -143,7 +147,7 @@ protected:
 
         if (m_stroke) {
             m_checkerPainter.paint(painter, rect());
-            const KoLineBorder * line = dynamic_cast<const KoLineBorder*>(m_stroke);
+            const KoShapeStroke * line = dynamic_cast<const KoShapeStroke*>(m_stroke);
             if (line) {
                 painter.setPen(Qt::NoPen);
                 QBrush brush = line->lineBrush();
@@ -178,7 +182,7 @@ protected:
     }
 
 private:
-    KoShapeBorderModel * m_stroke; ///< the stroke to preview
+    KoShapeStrokeModel * m_stroke; ///< the stroke to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
@@ -242,7 +246,7 @@ void KarbonSmallStylePreview::selectionChanged()
     KoShape * shape = controller->canvas()->shapeManager()->selection()->firstSelectedShape();
     if (shape) {
         m_fillFrame->setFill(shape->background());
-        m_strokeFrame->setStroke(shape->border());
+        m_strokeFrame->setStroke(shape->stroke());
     } else {
         m_fillFrame->setFill(0);
         m_strokeFrame->setStroke(0);

@@ -20,7 +20,7 @@
 #include "KoShapeContainer.h"
 #include "KoShapeContainer_p.h"
 #include "KoShapeContainerModel.h"
-#include "KoShapeBorderModel.h"
+#include "KoShapeStrokeModel.h"
 #include "KoShapeContainerDefaultModel.h"
 #include "KoShapeSavingContext.h"
 
@@ -73,7 +73,6 @@ void KoShapeContainer::addShape(KoShape *shape)
         shape->parent()->removeShape(shape);
     d->model->add(shape);
     shape->setParent(this);
-    shapeCountChanged();
 }
 
 void KoShapeContainer::removeShape(KoShape *shape)
@@ -84,7 +83,6 @@ void KoShapeContainer::removeShape(KoShape *shape)
         return;
     d->model->remove(shape);
     shape->setParent(0);
-    shapeCountChanged();
 
     KoShapeContainer * grandparent = parent();
     if (grandparent) {
@@ -102,7 +100,6 @@ void KoShapeContainer::removeAllShapes()
         d->model->remove(shape);
         shape->setParent(0);
     }
-    shapeCountChanged();
 
     KoShapeContainer * grandparent = parent();
     if (grandparent) {
@@ -150,11 +147,11 @@ bool KoShapeContainer::inheritsTransform(const KoShape *shape) const
     return d->model->inheritsTransform(shape);
 }
 
-void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter)
+void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext)
 {
     Q_D(KoShapeContainer);
     painter.save();
-    paintComponent(painter, converter);
+    paintComponent(painter, converter, paintcontext);
     painter.restore();
     if (d->model == 0 || d->model->count() == 0)
         return;
@@ -172,7 +169,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     m.scale(zoomX, zoomY);
-    painter.setClipPath(m.map(outline()));
+    painter.setClipPath(m.map(outline()), Qt::IntersectClip);
 
     QRectF toPaintRect = converter.viewToDocument(painter.clipRegion().boundingRect());
     toPaintRect = transform().mapRect(toPaintRect);
@@ -197,21 +194,20 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
         painter.save();
         painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-        shape->paint(painter, converter);
+        shape->paint(painter, converter, paintcontext);
         painter.restore();
-        if (shape->border()) {
+        if (shape->stroke()) {
             painter.save();
             painter.setTransform(shape->absoluteTransformation(&converter) * baseMatrix);
-            shape->border()->paint(shape, painter, converter);
+            shape->stroke()->paint(shape, painter, converter);
             painter.restore();
         }
     }
 }
 
-void KoShapeContainer::shapeChanged(ChangeType type, KoShape *shape)
+void KoShapeContainer::shapeChanged(ChangeType type, KoShape */*shape*/)
 {
     Q_D(KoShapeContainer);
-    Q_UNUSED(shape);
     if (d->model == 0)
         return;
     if (!(type == RotationChanged || type == ScaleChanged || type == ShearChanged

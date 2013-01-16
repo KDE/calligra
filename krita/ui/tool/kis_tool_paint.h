@@ -29,7 +29,7 @@
 #include <QVariant>
 #include <QTimer>
 
-#include <KoResourceManager.h>
+#include <KoCanvasResourceManager.h>
 #include <KoToolBase.h>
 #include <KoAbstractGradient.h>
 
@@ -56,11 +56,10 @@ class KoCanvasBase;
 
 class KisSliderSpinBox;
 
-// wacom 
+// wacom
 const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
-class KRITAUI_EXPORT KisToolPaint
-        : public KisTool
+class KRITAUI_EXPORT KisToolPaint : public KisTool
 {
 
     Q_OBJECT
@@ -68,7 +67,7 @@ class KRITAUI_EXPORT KisToolPaint
 public:
     KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolPaint();
-
+    virtual int flags() const;
 
 protected:
 
@@ -95,6 +94,8 @@ protected:
 
 
 protected:
+    bool specialHoverModeActive() const;
+
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -110,35 +111,38 @@ protected:
     virtual QString quickHelp() const {
         return QString();
     }
-    
-    /// Reimplemented
-    virtual void setupPainter(KisPainter* painter);
 
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
     qreal pressureToCurve(qreal pressure){
         return m_pressureSamples.at( qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION) );
     }
-    
+
     enum NodePaintAbility {
         NONE,
         PAINT,
         VECTOR
     };
-    
+
     /// Checks if and how the tool can paint on the current node
     NodePaintAbility nodePaintAbility();
 
+    const KoCompositeOp* compositeOp();
 
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    virtual void deactivate();
 
 private slots:
 
     void slotPopupQuickHelp();
-    void slotSetOpacity(int opacityPerCent);
+    void slotSetOpacity(qreal opacity);
 
-    void slotSetCompositeMode(const QString& compositeOp);
+    void makeColorLighter();
+    void makeColorDarker();
+
+    void increaseOpacity();
+    void decreaseOpacity();
 
 protected slots:
     virtual void resetCursorStyle();
@@ -147,7 +151,6 @@ protected slots:
 
 protected:
     quint8 m_opacity;
-    const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
     QVector<qreal> m_pressureSamples;
 
@@ -155,13 +158,14 @@ private:
     void pickColor(const QPointF &documentPixel, bool fromCurrentNode,
                    bool toForegroundColor);
 
+    void transformColor(int step);
+    void stepAlpha(float step);
+
 private:
 
+    bool m_specialHoverModifier;
     QGridLayout *m_optionWidgetLayout;
 
-    QLabel *m_lbOpacity;
-    KisSliderSpinBox *m_slOpacity;
-    
     bool m_supportOutline;
 
     /**

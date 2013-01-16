@@ -29,7 +29,7 @@
 
 #include "kexitableview.h"
 
-#include <kexidb/roweditbuffer.h>
+#include <db/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
 
 #include <QEvent>
@@ -141,8 +141,8 @@ public:
      At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
     int internal_bottomMargin;
 
-    /*! Helper for "highlighted row" effect. */
-    int highlightedRow;
+    /*! Helper for "highlighted record" effect. */
+    int highlightedRecord;
 
     /*! Id of context menu key (cached). */
     int contextMenuKey;

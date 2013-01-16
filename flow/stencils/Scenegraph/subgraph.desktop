@@ -1,7 +1,22 @@
 [Desktop Entry]
 Name=subgraph
+Name[ca]=subgràfic
+Name[ca@valencia]=subgràfic
+Name[el]=υπο-γράφος
+Name[es]=subgrafo
+Name[et]=Alamgraaf
+Name[fr]=subgraph
+Name[gl]=Subgrafo
+Name[it]=sottografo
+Name[kk]=ішграф
+Name[nb]=under-graf
+Name[nl]=subgraph
+Name[pl]=pod-wykres
 Name[pt]=sub-grafo
 Name[pt_BR]=sub-grafo
+Name[ru]=Подграф
+Name[sk]=podgraf
 Name[sv]=delgraf
 Name[uk]=Елементи графічного оформлення
 Name[x-test]=xxsubgraphxx
+Name[zh_TW]=子圖形

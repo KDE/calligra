@@ -24,8 +24,6 @@
 USING_PART_OF_NAMESPACE_EIGEN
 #include <cmath>
         
-#include <KDebug>
-        
 #include "KoColor.h"
 
 KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
@@ -34,7 +32,7 @@ KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
 {
 }
 
-bool KisColorSelectorTriangle::isComponent(int x, int y) const
+bool KisColorSelectorTriangle::containsPointInComponentCoords(int x, int y) const
 {
     QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y));
     if(m_pixelCache.valid(triangleCoords) && m_pixelCache.pixel(triangleCoords)!=qRgba(0,0,0,0))
@@ -123,12 +121,13 @@ void KisColorSelectorTriangle::setColor(const QColor &color)
     qreal horizontalLineStart = 0.5*(triangleWidth()-horizontalLineLength);
     qreal x=color.saturationF()*horizontalLineLength+horizontalLineStart;
 
-//    kDebug()<<"y="<<y<<"  horzLineLength="<<horizontalLineLength<<"  horizLineStart="<<horizontalLineStart<<"  x="<<x;
-
     QPoint tmp = triangleToWidgetCoordinates(QPoint(x, y));
 
     m_lastClickPos.setX(tmp.x()/qreal(width()));
     m_lastClickPos.setY(tmp.y()/qreal(height()));
+
+    // Workaround for Bug 287001
+    setLastMousePosition(tmp.x(), tmp.y());
 
     emit paramChanged(-1, color.saturationF(), color.valueF(), -1, -1);
     emit update();
@@ -136,7 +135,7 @@ void KisColorSelectorTriangle::setColor(const QColor &color)
 
 int KisColorSelectorTriangle::triangleWidth() const
 {
-    return triangleHeight()*2/sqrt(3);
+    return triangleHeight()*2/sqrt(3.0);
 }
 
 int KisColorSelectorTriangle::triangleHeight() const

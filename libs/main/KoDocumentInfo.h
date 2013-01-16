@@ -22,10 +22,10 @@
 #ifndef KO_DOCUMENT_INFO_H
 #define KO_DOCUMENT_INFO_H
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QMap>
+#include <QString>
+#include <QStringList>
 
 #include <kconfig.h>
 #include "komain_export.h"
@@ -35,6 +35,7 @@ class QDomDocument;
 class QDomElement;
 class KoStore;
 class KoXmlWriter;
+class KoPartAdaptor;
 
 /**
  * @short The class containing all meta information about a document
@@ -45,8 +46,8 @@ class KoXmlWriter;
  * @see KoDocumentInfoDlg
  *
  * This class contains the meta information for a document. They are
- * stored in two QMap and can be accessed through setAuthorInfo(),
- * setAboutInfo(), aboutInfo() and authorInfo().
+ * stored in two QMap and can be accessed through aboutInfo() and authorInfo().
+ * The about info can be changed with setAboutInfo() and setAuthorInfo()
  */
 class KOMAIN_EXPORT KoDocumentInfo : public QObject
 {
@@ -77,20 +78,24 @@ public:
     bool saveOasis(KoStore* store);
 
     /**
-     * Load the KoDocumentInfo from an KOffice-1.3 DomDocument
+     * Load the KoDocumentInfo from an Calligra-1.3 DomDocument
      * @param doc the QDomDocument to load from
      * @return true if success
      */
     bool load(const KoXmlDocument& doc);
 
     /**
-     * Save the KoDocumentInfo to an KOffice-1.3 DomDocument
+     * Save the KoDocumentInfo to an Calligra-1.3 DomDocument
      * @return the QDomDocument to which was saved
      */
     QDomDocument save();
 
     /**
-     * Set information about the author
+     * Set information about the author.
+     * This will override any information retrieved from the author profile
+     * But it does not change the author profile
+     * Note: authorInfo() will not return the new value until the document has been
+     * saved by the user.(autosave doesn't count)
      * @param info the kind of information to set
      * @param data the data to set for this information
      */
@@ -117,10 +122,32 @@ public:
      */
     QString aboutInfo(const QString& info) const;
 
+    /**
+     * Obtain the generator of the document, as it was loaded from the document
+     */
+    QString originalGenerator() const;
+
+    /**
+     * Sets the original generator of the document. This does not affect what gets
+     * saved to a document in the meta:generator field, it only changes what
+     * originalGenerator() will return.
+     */
+    void setOriginalGenerator(const QString& generator);
+
     /** Resets part of the meta data */
     void resetMetaData();
 
 private:
+    /**
+     * Set information about the author
+     * This sets what is actualy saved to file. The public method setAuthorInfo() can be used to set
+     * values that overide what is fetched from the author profile. During saveParameters() author
+     * profile and any overrides is combined resulting in calls to this method.
+     * @param info the kind of information to set
+     * @param data the data to set for this information
+     */
+    void setActiveAuthorInfo(const QString& info, const QString& data);
+
     /**
      * Load the information about the document from an OASIS file
      * @param metaDoc a reference to the information node
@@ -136,14 +163,14 @@ private:
     bool saveOasisAboutInfo(KoXmlWriter &xmlWriter);
 
     /**
-     * Load the information about the document from a KOffice-1.3 file
+     * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
      */
     bool loadAboutInfo(const KoXmlElement& e);
 
     /**
-     * Save the information about the document to a KOffice-1.3 file
+     * Save the information about the document to a Calligra-1.3 file
      * @param doc the QDomDocument to save in
      * @return the QDomElement to which was saved
      */
@@ -157,14 +184,14 @@ private:
     bool loadOasisAuthorInfo(const KoXmlNode& metaDoc);
 
     /**
-     * Load the information about the document from a KOffice-1.3 file
+     * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
      */
     bool loadAuthorInfo(const KoXmlElement& e);
 
     /**
-     * Save the information about the author to a KOffice-1.3 file
+     * Save the information about the author to a Calligra-1.3 file
      * @param doc the QDomDocument to save in
      * @return the QDomElement to which was saved
      */
@@ -186,10 +213,13 @@ private:
     QStringList m_authorTags;
     /** The map containing information about the author */
     QMap<QString, QString> m_authorInfo;
+    /** The map containing information about the author set programatically*/
+    QMap<QString, QString> m_authorInfoOverride;
     /** The map containing information about the document */
     QMap<QString, QString> m_aboutInfo;
+    /** The original meta:generator of the document */
+    QString m_generator;
 
-    bool m_firstSave;
 signals:
     void infoUpdated(const QString &info, const QString &data);
 };

@@ -21,7 +21,7 @@
 
 #include <ui_KoPageLayoutWidget.h>
 
-class KoPageLayoutWidget::Private
+struct KoPageLayoutWidget::Private
 {
 public:
     Ui::KoPageLayoutWidget widget;
@@ -59,8 +59,8 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     width = qMax(width, qMax(d->widget.leftLabel->width(), d->widget.rightLabel->width()));
     d->widget.leftLabel->setMinimumSize(QSize(width, 5));
 
-    d->widget.units->addItems(KoUnit::listOfUnitName());
-    d->widget.sizes->addItems(KoPageFormat::allFormats());
+    d->widget.units->addItems(KoUnit::listOfUnitNameForUi(KoUnit::HidePixel));
+    d->widget.sizes->addItems(KoPageFormat::localizedPageFormatNames());
     setPageSpread(false);
 
     connect(d->widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
@@ -80,6 +80,7 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     setPageLayout(layout);
     if (layout.format == 0) // make sure we always call this during startup, even if the A3 (index=0) was chosen
         sizeChanged(layout.format);
+
     showTextDirection(false);
     /* disable advanced page layout features by default */
     d->widget.facingPageLabel->setVisible(false);
@@ -92,6 +93,11 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
 KoPageLayoutWidget::~KoPageLayoutWidget()
 {
     delete d;
+}
+
+KoPageLayout KoPageLayoutWidget::pageLayout() const
+{
+    return d->pageLayout;
 }
 
 void KoPageLayoutWidget::sizeChanged(int row)
@@ -120,7 +126,7 @@ void KoPageLayoutWidget::sizeChanged(int row)
 
 void KoPageLayoutWidget::unitChanged(int row)
 {
-    setUnit(KoUnit(static_cast<KoUnit::Unit> (row)));
+    setUnit(KoUnit::fromListForUi(row, KoUnit::HidePixel));
 }
 
 void KoPageLayoutWidget::setUnit(const KoUnit &unit)
@@ -135,7 +141,7 @@ void KoPageLayoutWidget::setUnit(const KoUnit &unit)
     d->widget.bottomMargin->setUnit(unit);
     d->widget.bindingEdgeMargin->setUnit(unit);
     d->widget.pageEdgeMargin->setUnit(unit);
-    d->widget.units->setCurrentIndex(unit.indexInList());
+    d->widget.units->setCurrentIndex(unit.indexInListForUi(KoUnit::HidePixel));
 
     emit unitChanged(d->unit);
 }
@@ -296,17 +302,18 @@ void KoPageLayoutWidget::setTextDirection(KoText::Direction direction )
     int index = 0;
     switch(direction) {
     case KoText::LeftRightTopBottom:
-    case KoText::PerhapsLeftRightTopBottom:
         index = 1;
         break;
     case KoText::RightLeftTopBottom:
-    case KoText::PerhapsRightLeftTopBottom:
         index = 2;
         break;
     case KoText::TopBottomRightLeft: // unused for now.
     case KoText::InheritDirection:
     case KoText::AutoDirection:
         index = 0;
+    case KoText::TopBottomLeftRight:
+        ; // unhandled, because it actually doesn't exist in real-world writing systems.
+          // Boustrophedon would be interesting to implement, though
     }
     d->widget.textDirection->setCurrentIndex(index);
 }

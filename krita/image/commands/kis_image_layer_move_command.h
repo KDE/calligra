@@ -22,7 +22,7 @@
 
 #include <krita_export.h>
 
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QSize>
 #include <QBitArray>
 #include "kis_types.h"
@@ -59,6 +59,8 @@ private:
     KisNodeSP m_newParent;
     KisNodeSP m_newAbove;
     quint32 m_index;
+
+    bool m_useIndex;
 };
 
 #endif

@@ -1,9 +1,24 @@
 [Desktop Entry]
 Name=Start-Event-Link
-Name[et]=Sündmuse alguse link
+Name[ca]=Inicia-Esdeveniment-Enllaç
+Name[ca@valencia]=Inicia-Esdeveniment-Enllaç
+Name[el]=Σύνδεσμος-γεγονότος-εκκίνησης
+Name[es]=Enlace al evento inicial
+Name[et]=Algussündmuse link
+Name[fr]=Démarrage de lien d'évènement
+Name[gl]=Evento inicial de ligazón
+Name[hu]=Indítás-Esemény-Hivatkozás
+Name[it]=Evento-iniziale-Collegamento
+Name[kk]=Бастау-оқиға-сілтеме
+Name[nb]=Start-hendelse-lenke
+Name[nl]=Begin-gebeurtenis-koppeling
+Name[pl]=Odnośnik-Zdarzenia-Rozpoczynającego
 Name[pt]=Evento-Inicial-Ligação
 Name[pt_BR]=Link do evento inicial
+Name[ru]=Начальное событие - связь
+Name[sk]=Start-Event-Link
 Name[sv]=Starthändelse-länk
 Name[uk]=Посилання на початкову подію
 Name[x-test]=xxStart-Event-Linkxx
+Name[zh_CN]=开始-事件-连接
 Name[zh_TW]=開始─事件─連結

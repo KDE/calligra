@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,22 +20,23 @@
 #include "kexi.h"
 #include "kexiaboutdata.h"
 #include "kexicmdlineargs.h"
-//#include <config-kexi.h> //why this new KDE4 include?
+#include "KexiRecentProjects.h"
+#include "KexiMainWindowIface.h"
 #include <kexiutils/identifier.h>
-#include <kexidb/msghandler.h>
+#include <db/msghandler.h>
+#include <KoIcon.h>
 
-#include <qtimer.h>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpixmapcache.h>
-#include <qcolor.h>
-#include <qfileinfo.h>
+#include <QTimer>
+#include <QImage>
+#include <QPixmap>
+#include <QPixmapCache>
+#include <QColor>
+#include <QFileInfo>
+#include <QLabel>
 
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
-#include <kiconloader.h>
-#include <kiconeffect.h>
 #include <ksharedptr.h>
 #include <kglobalsettings.h>
 
@@ -46,50 +47,68 @@ using namespace Kexi;
 class KexiInternal
 {
 public:
+    static KexiInternal *_int;
+
     KexiInternal()
-            : connset(0) {
+            : connset(0)
+    {
     }
     ~KexiInternal() {
         delete connset;
     }
+
+    static KexiInternal* self() {
+        static bool created = false;
+        if (!created) {
+            _int = new KexiInternal;
+            created = true;
+        }
+        return _int;
+    }
+
+    static void destroy() {
+        delete _int;
+        _int = 0;
+    }
+
     KexiDBConnectionSet* connset;
-    KexiProjectSet recentProjects;
+    KexiRecentProjects recentProjects;
     KexiDBConnectionSet recentConnections;
     KexiDB::DriverManager driverManager;
     KexiPart::Manager partManager;
 };
 
-K_GLOBAL_STATIC(KexiInternal, _int)
+KexiInternal *KexiInternal::_int = 0;
 
 KexiDBConnectionSet& Kexi::connset()
 {
     //delayed
-    if (!_int->connset) {
+    if (!KexiInternal::self()->connset) {
         //load stored set data, OK?
-        _int->connset = new KexiDBConnectionSet();
-        _int->connset->load();
+        KexiInternal::self()->connset = new KexiDBConnectionSet();
+        KexiInternal::self()->connset->load();
     }
-    return *_int->connset;
+    return *KexiInternal::self()->connset;
 }
 
-KexiProjectSet& Kexi::recentProjects()
+KexiRecentProjects* Kexi::recentProjects()
 {
-    return _int->recentProjects;
+    return &KexiInternal::self()->recentProjects;
 }
 
 KexiDB::DriverManager& Kexi::driverManager()
 {
-    return _int->driverManager;
+    return KexiInternal::self()->driverManager;
 }
 
 KexiPart::Manager& Kexi::partManager()
 {
-    return _int->partManager;
+    return KexiInternal::self()->partManager;
 }
 
 void Kexi::deleteGlobalObjects()
 {
-    delete _int;
+    KexiInternal::self()->destroy();
 }
 
 //temp
@@ -133,20 +152,20 @@ QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 //--------------------------------------------------------------------------------
 QString Kexi::iconNameForViewMode(ViewMode mode)
 {
-    if (mode == DataViewMode)
-        return i18n("state_data");
-    else if (mode == DesignViewMode)
-        return i18n("state_edit");
-    else if (mode == TextViewMode)
-        return i18n("state_sql");
-    return QString();
+    const char *const id =
+        (mode == DataViewMode) ? koIconNameCStr("state_data") :
+        (mode == DesignViewMode) ? koIconNameCStr("state_edit") :
+        (mode == TextViewMode) ? koIconNameCStr("state_sql"): 
+        0;
+
+    return QLatin1String(id);
 }
 
 //--------------------------------------------------------------------------------
 
 QString Kexi::msgYouCanImproveData()
 {
-    return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
+    return i18n("You can correct data in this record or use \"Cancel record changes\" function.");
 }
 
 //--------------------------------------------------------------------------------
@@ -289,39 +308,46 @@ ObjectStatus::operator KexiDB::MessageHandler*()
     return msgHandler;
 }
 
-void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
+void Kexi::initCmdLineArgs(int argc, char *argv[], const KexiAboutData& aboutData)
 {
-    KAboutData *about = aboutData;
-    if (!about) {
-#if 1 //sebsauer 20061123
-        about = Kexi::createAboutData();
-#else
-        about = 0;
-#endif
-    }
-#ifdef CUSTOM_VERSION
-# include "../custom_startup.h"
-#endif
-    KCmdLineArgs::init(argc, argv, about);
+    KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions(kexi_options());
 }
 
-void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text)
+void KEXI_UNFINISHED_INTERNAL(const QString& feature_name, const QString& extra_text,
+                              QString* line1, QString* line2)
 {
-    QString msg;
     if (feature_name.isEmpty())
-        msg = i18n("This function is not available for version %1 of %2 application.",
+        *line1 = i18n("This function is not available for version %1 of %2 application.",
                    QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     else {
         QString feature_name_(feature_name);
-        msg = i18n(
+        *line1 = i18n(
                   "\"%1\" function is not available for version %2 of %3 application.",
                   feature_name_.replace("&", ""), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
     }
 
-    QString extra_text_(extra_text);
-    if (!extra_text_.isEmpty())
-        extra_text_.prepend("\n");
+    *line2 = extra_text;
+}
 
-    KMessageBox::sorry(0, msg + extra_text_);
+void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text)
+{
+    QString line1, line2;
+    KEXI_UNFINISHED_INTERNAL(feature_name, extra_text, &line1, &line2);
+    if (!line2.isEmpty())
+        line2.prepend("\n");
+    KMessageBox::sorry(0, line1 + line2);
+}
+
+QLabel *KEXI_UNFINISHED_LABEL(const QString& feature_name, const QString& extra_text)
+{
+    QString line1, line2;
+    KEXI_UNFINISHED_INTERNAL(feature_name, extra_text, &line1, &line2);
+    QLabel *label = new QLabel(QLatin1String("<b>") + line1 + QLatin1String("</b><br>")
+        + line2);
+    label->setAlignment(Qt::AlignCenter);
+    label->setWordWrap(true);
+    label->setAutoFillBackground(true);
+    label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    return label;
 }

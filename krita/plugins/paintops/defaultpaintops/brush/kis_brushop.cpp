@@ -40,9 +40,10 @@
 #include <kis_color_source.h>
 #include <kis_pressure_sharpness_option.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_fixed_paint_device.h>
 
 KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter), m_hsvTransfo(0)
+    : KisBrushBasedPaintOp(settings, painter), m_hsvTransformation(0)
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
@@ -59,38 +60,44 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     {
         option->readOptionSetting(settings);
         option->sensor()->reset();
-        if(option->isChecked() && !m_hsvTransfo)
+        if(option->isChecked() && !m_hsvTransformation)
         {
-            m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+            m_hsvTransformation = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
 
+    m_opacityOption.readOptionSetting(settings);
     m_sizeOption.readOptionSetting(settings);
     m_spacingOption.readOptionSetting(settings);
     m_mirrorOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
     m_sharpnessOption.readOptionSetting(settings);
     m_darkenOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
+    m_mirrorOption.readOptionSetting(settings);
+    m_textureProperties.fillProperties(settings);
 
+    m_opacityOption.sensor()->reset();
     m_sizeOption.sensor()->reset();
     m_mirrorOption.sensor()->reset();
-    m_opacityOption.sensor()->reset();
     m_softnessOption.sensor()->reset();
     m_sharpnessOption.sensor()->reset();
     m_darkenOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
+
+    m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
+    m_dabCache->setSharpnessPostprocessing(&m_sharpnessOption);
+    m_dabCache->setTexturePostprocessing(&m_textureProperties);
 }
 
 KisBrushOp::~KisBrushOp()
 {
     qDeleteAll(m_hsvOptions);
     delete m_colorSource;
-    delete m_hsvTransfo;
+    delete m_hsvTransformation;
 }
 
 qreal KisBrushOp::paintAt(const KisPaintInformation& info)
@@ -115,7 +122,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    QPointF hotSpot = brush->hotSpot(scale, scale, rotation);
+    QPointF hotSpot = brush->hotSpot(scale, scale, rotation, info);
     // return info.pos() if sensor is not enabled
     QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale);
     QPointF pt = pos - hotSpot;
@@ -130,49 +137,40 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
 
     m_sharpnessOption.apply(info, pt, x, y, xFraction, yFraction);
 
-    quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    m_colorSource->selectColor(m_mixOption.apply(info) );
+    quint8 origOpacity = painter()->opacity();
+    quint8 origFlow    = painter()->flow();
+
+    m_opacityOption.apply(painter(), info);
+    m_colorSource->selectColor(m_mixOption.apply(info));
     m_darkenOption.apply(m_colorSource, info);
 
-    if(m_hsvTransfo)
-    {
-        foreach(KisPressureHSVOption* option, m_hsvOptions)
-        {
-            option->apply(m_hsvTransfo, info);
+    if (m_hsvTransformation) {
+        foreach(KisPressureHSVOption* option, m_hsvOptions) {
+            option->apply(m_hsvTransformation, info);
         }
-        m_colorSource->applyColorTransformation(m_hsvTransfo);
+        m_colorSource->applyColorTransformation(m_hsvTransformation);
     }
 
-    KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
-    if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
-    } else {
-        if(m_colorSource->isUniformColor())
-        {
-            KoColor color = m_colorSource->uniformColor();
-            color.convertTo(dab->colorSpace());
-            brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        } else {
-            if (!m_colorSourceDevice) {
-                m_colorSourceDevice = new KisPaintDevice(dab->colorSpace());
-            } else {
-                m_colorSourceDevice->clear();
-            }
-            m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
-            brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
-        }
-    }
-
-    MirrorProperties mirrors = m_mirrorOption.apply(info);
-    dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
-
-    m_sharpnessOption.applyTreshold( dab );
+    KisFixedPaintDeviceSP dab = m_dabCache->fetchDab(device->colorSpace(),
+                                                    m_colorSource,
+                                                    scale, scale,
+                                                    rotation,
+                                                    info,
+                                                    xFraction, yFraction,
+                                                    m_softnessOption.apply(info));
 
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
-    painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
-    painter()->setOpacity(origOpacity);
 
-    return spacing(m_spacingOption.apply(info));
+    painter()->renderMirrorMaskSafe(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),
+                                    dab,
+                                    !m_dabCache->needSeparateOriginal());
+    painter()->setOpacity(origOpacity);
+    painter()->setFlow(origFlow);
+
+    if (m_spacingOption.isChecked())
+        return spacing(m_spacingOption.apply(info));
+
+    return spacing(scale);
 }
 
 KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)

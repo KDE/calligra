@@ -21,10 +21,10 @@
 #ifndef _KEXICOMBOBOXTABLEEDIT_H_
 #define _KEXICOMBOBOXTABLEEDIT_H_
 
-#include "kexidb/field.h"
 #include "kexiinputtableedit.h"
 #include "kexicomboboxbase.h"
-#include <kexidb/lookupfieldschema.h>
+#include <db/field.h>
+#include <db/lookupfieldschema.h>
 
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -35,7 +35,7 @@ class KexiTableViewColumn;
 
 /*! @short Drop-down cell editor.
 */
-class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
+class KexiComboBoxTableEdit : public KexiInputTableEdit, virtual public KexiComboBoxBase
 {
     Q_OBJECT
 
@@ -54,9 +54,7 @@ public:
     }
 
     //! Implemented for KexiComboBoxBase
-    virtual QVariant origValue() const {
-        return m_origValue;
-    }
+    virtual QVariant origValue() const;
 
     virtual void setValueInternal(const QVariant& add, bool removeOld) {
         KexiComboBoxBase::setValueInternal(add, removeOld);

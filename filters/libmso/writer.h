@@ -20,7 +20,7 @@
 #ifndef MSO_WRITER_H
 #define MSO_WRITER_H
 
-#include <QtCore/QRectF>
+#include <QRectF>
 
 #include "KoGenStyles.h"
 
@@ -91,19 +91,19 @@ public:
      * @param length a local length.
      * @return the global length.
      */
-    qreal vLength(qreal length);
+    qreal vLength(qreal length) const;
     /**
      * @see vLength
      */
-    qreal hLength(qreal length);
+    qreal hLength(qreal length) const;
     /**
      * @see vLength
      */
-    qreal vOffset(qreal offset);
+    qreal vOffset(qreal offset) const;
     /**
      * @see vLength
      */
-    qreal hOffset(qreal offset);
+    qreal hOffset(qreal offset) const;
 };
 
 #endif //MSO_WRITER_H

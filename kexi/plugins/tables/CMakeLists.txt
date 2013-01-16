@@ -17,16 +17,16 @@ target_link_libraries(
     kexihandler_table
     kexicore
     kexidb
+    ${CALLIGRADB_LIBS}
+    kexidataviewcommon
     kexidatatable
     kexiextendedwidgets
     ${KOPROPERTY_LIBS}
     kexiutils
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    ${QT_QT3SUPPORT_LIBRARY}
     )
 
 install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})

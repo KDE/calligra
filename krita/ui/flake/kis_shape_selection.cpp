@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,13 +22,14 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <QUndoCommand>
+#include <kundo2command.h>
 #include <QMimeData>
 
 #include <ktemporaryfile.h>
 
-#include <KoLineBorder.h>
+#include <KoShapeStroke.h>
 #include <KoPathShape.h>
+#include <KoShapeGroup.h>
 #include <KoCompositeOp.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoShapeManager.h>
@@ -47,15 +49,19 @@
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
 #include <KoShapeTransformCommand.h>
+#include <KoElementReference.h>
 
-#include "kis_painter.h"
-#include "kis_paint_device.h"
+#include <kis_painter.h>
+#include <kis_paint_device.h>
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
+#include <kis_selection.h>
+
 #include "kis_shape_selection_model.h"
-#include "kis_image.h"
-#include "kis_selection.h"
 #include "kis_shape_selection_canvas.h"
 #include "kis_shape_layer_paste.h"
 #include "kis_image_view_converter.h"
+
 
 #include <kis_debug.h>
 
@@ -100,7 +106,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
     if (!success) {
-        warnUI << "Could not paste shape layer";
+        warnUI << "Could not paste vector layer";
     }
 }
 
@@ -157,7 +163,10 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
-    shapeContext.xmlWriter().addAttribute("draw:id", "page1");
+
+    KoElementReference elementRef;
+    elementRef.saveOdf(&shapeContext.xmlWriter(), KoElementReference::DrawId);
+
     shapeContext.xmlWriter().addAttribute("draw:master-page-name", "Default");
 
     saveOdf(shapeContext);
@@ -266,7 +275,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     KoXmlElement layerElement;
     forEachElement(layerElement, context.stylesReader().layerSet()) {
         if (!loadOdf(layerElement, shapeContext)) {
-            kWarning() << "Could not load shape layer!";
+            kWarning() << "Could not load vector layer!";
             return false;
         }
     }
@@ -299,13 +308,13 @@ QPainterPath KisShapeSelection::selectionOutline()
     return m_outline;
 }
 
-void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter)
+void KisShapeSelection::paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
 }
 
-void KisShapeSelection::renderToProjection(KisSelection* projection)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -316,13 +325,13 @@ void KisShapeSelection::renderToProjection(KisSelection* projection)
     renderSelection(projection, boundingRect.toAlignedRect());
 }
 
-void KisShapeSelection::renderToProjection(KisSelection* projection, const QRect& r)
+void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     renderSelection(projection, r);
 }
 
-void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r)
+void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& r)
 {
     Q_ASSERT(projection);
     Q_ASSERT(m_image);
@@ -355,12 +364,11 @@ void KisShapeSelection::renderSelection(KisSelection* projection, const QRect& r
             qint32 rectWidth = qMin(r.x() + r.width() - x, MASK_IMAGE_WIDTH);
             qint32 rectHeight = qMin(r.y() + r.height() - y, MASK_IMAGE_HEIGHT);
 
-            KisRectIterator rectIt = tmpMask->createRectIterator(x, y, rectWidth, rectHeight);
+            KisRectIteratorSP rectIt = tmpMask->createRectIteratorNG(x, y, rectWidth, rectHeight);
 
-            while (!rectIt.isDone()) {
-                (*rectIt.rawData()) = qRed(polygonMaskImage.pixel(rectIt.x() - x, rectIt.y() - y));
-                ++rectIt;
-            }
+            do {
+                (*rectIt->rawData()) = qRed(polygonMaskImage.pixel(rectIt->x() - x, rectIt->y() - y));
+            } while (rectIt->nextPixel());
         }
     }
     KisPainter painter(projection);
@@ -405,20 +413,13 @@ void KisShapeSelection::moveY(qint32 y)
     }
 }
 
-// TODO same code as in shape layer, refactor!
-QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
-
-    Q_UNUSED(xshear);
-    Q_UNUSED(yshear);
-    QPointF transF =  m_converter->viewToDocument(QPoint(translatex, translatey));
+// TODO same code as in vector layer, refactor!
+KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapes();
-    if(shapes.isEmpty())
-        return 0;
+    if(shapes.isEmpty()) return 0;
 
-    QTransform matrix;
-    matrix.translate(transF.x(), transF.y());
-    matrix.scale(xscale,yscale);
-    matrix.rotate(angle*180/M_PI);
+    QTransform realTransform = m_converter->documentToView() *
+        transform * m_converter->viewToDocument();
 
     QList<QTransform> oldTransformations;
     QList<QTransform> newTransformations;
@@ -428,13 +429,14 @@ QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, doubl
     foreach(const KoShape* shape, shapes) {
         QTransform oldTransform = shape->transformation();
         oldTransformations.append(oldTransform);
-
-
-        newTransformations.append(oldTransform*matrix);
+        if (dynamic_cast<const KoShapeGroup*>(shape)) {
+            newTransformations.append(oldTransform);
+        } else {
+            QTransform globalTransform = shape->absoluteTransformation(0);
+            QTransform localTransform = globalTransform * realTransform * globalTransform.inverted();
+            newTransformations.append(localTransform*oldTransform);
+        }
     }
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }
-
-
-#include "kis_shape_selection.moc"

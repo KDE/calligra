@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #ifndef ORACLEDB_H
 #define ORACLEDB_H
-#include <kexidb/driver.h>
+#include <db/driver.h>
 
 // Drivers found in drivers/ folder belong to KexiDB namespace although naming_conventions.txt says they do not.
 namespace KexiDB {

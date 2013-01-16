@@ -29,11 +29,11 @@
 #include <pion/net/HTTPResponseWriter.hpp>
 #include <pion/net/PionUser.hpp>
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/field.h>
+#include <db/cursor.h>
+#include <db/connection.h>
+#include <db/queryschema.h>
+#include <db/roweditbuffer.h>
+#include <db/field.h>
 
 #include "auth/Authenticator.h"
 #include "auth/User.h"

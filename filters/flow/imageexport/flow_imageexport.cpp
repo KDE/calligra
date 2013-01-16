@@ -19,7 +19,7 @@
 
 #include "flow_imageexport.h"
 
-#include <qdom.h>
+#include <QDomDocument>
 #include <QPixmap>
 #include <QPainter>
 #include <QSize>

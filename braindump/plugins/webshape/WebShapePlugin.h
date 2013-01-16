@@ -21,11 +21,13 @@
 #define _WEB_SHAPE_PLUGIN_
 
 #include <QObject>
- 
-class WebShapePlugin : public QObject {
+#include <QVariantList>
+
+class WebShapePlugin : public QObject
+{
     Q_OBJECT
 public:
-    WebShapePlugin(QObject *parent, const QStringList&);
+    WebShapePlugin(QObject *parent, const QVariantList&);
 };
 
 #endif

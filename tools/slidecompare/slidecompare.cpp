@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "combinedview.h"
-#include <QtGui/QApplication>
-#include <QtGui/QPixmap>
+#include <QApplication>
+#include <QPixmap>
 
 int
 main(int argc, char** argv) {

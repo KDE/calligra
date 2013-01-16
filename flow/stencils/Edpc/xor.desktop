@@ -1,7 +1,25 @@
 [Desktop Entry]
 Name=XOR Operator
+Name[ca]=Operador XOR
+Name[ca@valencia]=Operador XOR
+Name[de]=XOR-Operator
+Name[el]=Τελεστής XOR
+Name[es]=Operador XOR
+Name[et]=Välistava või tehe
+Name[fi]=XOR-operaattori
+Name[fr]=opérateur ou bien
+Name[gl]=Operador OU-exclusivo
+Name[hu]=XOR operátor
+Name[it]=Operatore XOR
+Name[kk]=СИЫСПАЙТЫН НЕМЕСЕ операторы
+Name[nb]=XOR-operator
+Name[nl]=Operator XOR
+Name[pl]=Operator XOR
 Name[pt]=Operador XOR
 Name[pt_BR]=Operador XOR
+Name[ru]=Оператор «исключающее ИЛИ»
+Name[sk]=XOR operátor
 Name[sv]=XOR-operator
 Name[uk]=Оператор виключного «АБО»
 Name[x-test]=xxXOR Operatorxx
+Name[zh_TW]=XOR 操作元

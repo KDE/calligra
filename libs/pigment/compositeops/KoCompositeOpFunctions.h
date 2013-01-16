@@ -128,8 +128,16 @@ inline T cfAddition(T src, T dst) {
 
 template<class T>
 inline T cfSubtract(T src, T dst) {
+    using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return Arithmetic::clamp<T>(composite_type(dst) - src);
+    return clamp<T>(composite_type(dst) - src);
+}
+
+template<class T>
+inline T cfInverseSubtract(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return clamp<T>(composite_type(dst) - inv(src));
 }
 
 template<class T>
@@ -286,7 +294,7 @@ inline T cfHardMix(T src, T dst) {
 }
 
 template<class T>
-inline T cfAdditiveSubstractive(T src, T dst) {
+inline T cfAdditiveSubtractive(T src, T dst) {
     using namespace Arithmetic;
     // min(1,max(0,abs(sqr(CB)-sqr(CT))))
     qreal x = sqrt(scale<qreal>(dst)) - sqrt(scale<qreal>(src));

@@ -23,19 +23,17 @@
 */
 
 #include <QApplication>
+#include <core/kexiaboutdata.h>
 #include <main/KexiMainWindow.h>
 
 int main(int argc, char *argv[])
 {
-    int result = KexiMainWindow::create(argc, argv);
+    KexiAboutData aboutData;
+    int result = KexiMainWindow::create(argc, argv, aboutData);
     if (!qApp)
         return result;
 
     result = qApp->exec();
-//Qt4 K3StaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
-#ifndef KEXI_MOBILE
-    delete qApp->mainWidget();
-#endif 
     delete qApp;
     return result;
 }

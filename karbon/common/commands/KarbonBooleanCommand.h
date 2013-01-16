@@ -21,13 +21,13 @@
 #define _KARBONBOOLEANCOMMAND_H_
 
 #include <karboncommon_export.h>
-#include <QtGui/QUndoCommand>
+#include <kundo2command.h>
 
-class KoShapeControllerBase;
+class KoShapeBasedDocumentBase;
 class KoPathShape;
 class QPainterPath;
 
-class KARBONCOMMON_EXPORT KarbonBooleanCommand : public QUndoCommand
+class KARBONCOMMON_EXPORT KarbonBooleanCommand : public KUndo2Command
 {
 public:
     enum BooleanOperation {
@@ -45,8 +45,8 @@ public:
      * @param operation the booelan operation to execute
      * @param parent the parent command used for macro commands
      */
-    explicit KarbonBooleanCommand(KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB,
-                                  BooleanOperation operation, QUndoCommand *parent = 0);
+    explicit KarbonBooleanCommand(KoShapeBasedDocumentBase *controller, KoPathShape* pathA, KoPathShape * pathB,
+                                  BooleanOperation operation, KUndo2Command *parent = 0);
     virtual ~KarbonBooleanCommand();
     /// redo the command
     void redo();

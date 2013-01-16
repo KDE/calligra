@@ -20,7 +20,7 @@
 #include "kexiguimsghandler.h"
 
 #include "kexi.h"
-#include <kexidb/utils.h>
+#include <db/utils.h>
 #include <kexiutils/utils.h>
 
 #include <kmessagebox.h>

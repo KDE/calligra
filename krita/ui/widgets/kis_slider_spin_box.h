@@ -28,9 +28,9 @@
 class QLineEdit;
 class QDoubleValidator;
 class QTimer;
-struct KisAbstractSliderSpinBoxPrivate;
-struct KisSliderSpinBoxPrivate;
-struct KisDoubleSliderSpinBoxPrivate;
+class KisAbstractSliderSpinBoxPrivate;
+class KisSliderSpinBoxPrivate;
+class KisDoubleSliderSpinBoxPrivate;
 
 /**
  * XXX: when inactive, also show the progress bar part as inactive!
@@ -59,6 +59,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void mouseDoubleClickEvent(QMouseEvent* e);
     virtual void keyPressEvent(QKeyEvent* e);
+    virtual void wheelEvent(QWheelEvent *);
 
     virtual bool eventFilter(QObject* recv, QEvent* e);
 
@@ -95,7 +96,7 @@ public:
     ~KisSliderSpinBox();
 
     void setRange(int minimum, int maximum);
-    
+
     int minimum() const;
     void setMinimum(int minimum);
     int maximum() const;
@@ -109,7 +110,7 @@ public:
 
     void setSingleStep(int value);
     void setPageStep(int value);
-    
+
 protected:
     virtual QString valueString() const;
     virtual void setInternalValue(int value);
@@ -127,10 +128,7 @@ public:
 
     void setRange(qreal minimum, qreal maximum, int decimals = 0);
 
-    ///Get the value, don't use value()
     qreal value();
-
-    ///Set the value, don't use setValue()
     void setValue(qreal value);
 
     void setSingleStep(qreal value);

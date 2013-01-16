@@ -34,36 +34,46 @@ class Section;
 class Canvas : public QWidget, public KoCanvasBase
 {
     Q_OBJECT
-  public:
-    explicit Canvas( View * view, RootSection * doc, Section* currentSection );
+public:
+    explicit Canvas(View * view, RootSection * doc, Section* currentSection);
     ~Canvas();
 
     /// Returns pointer to the KoPADocument
-    RootSection* rootSection() const { return m_doc; }
+    RootSection* rootSection() const {
+        return m_doc;
+    }
 
     /// reimplemented method
-    virtual void addCommand( QUndoCommand *command );
+    virtual void addCommand(KUndo2Command *command);
     /// reimplemented method
     virtual KoShapeManager * shapeManager() const;
     /// reimplemented method
-    virtual void updateCanvas( const QRectF& rc );
+    virtual void updateCanvas(const QRectF& rc);
     /// reimplemented method
     virtual void updateInputMethodInfo();
 
-    KoToolProxy * toolProxy() const { return m_toolProxy; }
+    KoToolProxy * toolProxy() const {
+        return m_toolProxy;
+    }
     KoViewConverter *viewConverter() const;
-    QWidget* canvasWidget() { return this; }
-    const QWidget* canvasWidget() const { return this; }
+    QWidget* canvasWidget() {
+        return this;
+    }
+    const QWidget* canvasWidget() const {
+        return this;
+    }
     KoUnit unit() const;
     const QPoint & documentOffset() const;
     QPoint documentOrigin() const;
 
-    View* koPAView () const { return m_view; }
+    View* koPAView() const {
+        return m_view;
+    }
 
     virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     virtual bool snapToGrid() const;
     virtual void setCursor(const QCursor &cursor);
-  public slots:
+public slots:
     /**
      * Update the origin of the document.
      */
@@ -71,10 +81,10 @@ class Canvas : public QWidget, public KoCanvasBase
 
     void setDocumentOffset(const QPoint &offset);
 
-  protected:
+protected:
     virtual void focusInEvent(QFocusEvent * event);
 
-  signals:
+signals:
     void documentRect(const QRectF&);
     void canvasReceivedFocus();
 
@@ -82,56 +92,56 @@ class Canvas : public QWidget, public KoCanvasBase
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */
-    void sizeChanged( const QSize & size );
+    void sizeChanged(const QSize & size);
 
     /// Emitted when updateCanvas has been called.
     void canvasUpdated();
 
-  protected:
+protected:
     /// reimplemented method from superclass
-    void paintEvent( QPaintEvent* event );
+    void paintEvent(QPaintEvent* event);
     /// reimplemented method from superclass
-    void tabletEvent( QTabletEvent *event );
+    void tabletEvent(QTabletEvent *event);
     /// reimplemented method from superclass
-    void mousePressEvent( QMouseEvent *event );
+    void mousePressEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void mouseDoubleClickEvent( QMouseEvent *event );
+    void mouseDoubleClickEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void mouseMoveEvent( QMouseEvent *event );
+    void mouseMoveEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void mouseReleaseEvent( QMouseEvent *event );
+    void mouseReleaseEvent(QMouseEvent *event);
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *event );
+    void keyPressEvent(QKeyEvent *event);
     /// reimplemented method from superclass
-    void keyReleaseEvent( QKeyEvent *event );
+    void keyReleaseEvent(QKeyEvent *event);
     /// reimplemented method from superclass
-    void wheelEvent ( QWheelEvent * event );
+    void wheelEvent(QWheelEvent * event);
     /// reimplemented method from superclass
-    void closeEvent( QCloseEvent * event );
+    void closeEvent(QCloseEvent * event);
     /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
 
     /// reimplemented method from superclass
-    virtual void resizeEvent( QResizeEvent * event );
+    virtual void resizeEvent(QResizeEvent * event);
 
-  private:
+private:
     void updateOffset();
     /**
      * Shows the default context menu
      * @param globalPos global position to show the menu at.
      * @param actionList action list to be inserted into the menu
      */
-    void showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList );
+    void showContextMenu(const QPoint& globalPos, const QList<QAction*>& actionList);
     /// Sets the canvas background color to the given color
-    void setBackgroundColor( const QColor &color );
+    void setBackgroundColor(const QColor &color);
 
-    QPoint widgetToView( const QPoint& p ) const;
-    QRect widgetToView( const QRect& r ) const;
-    QPoint viewToWidget( const QPoint& p ) const;
-    QRect viewToWidget( const QRect& r ) const;
-  private:
+    QPoint widgetToView(const QPoint& p) const;
+    QRect widgetToView(const QRect& r) const;
+    QPoint viewToWidget(const QPoint& p) const;
+    QRect viewToWidget(const QRect& r) const;
+private:
     QPoint m_origin;
     View * m_view;
     RootSection* m_doc;
@@ -141,7 +151,7 @@ class Canvas : public QWidget, public KoCanvasBase
     QPoint m_originalOffset;
     QRectF m_oldDocumentRect;
     QRect m_oldViewDocumentRect;
-    
+
 };
 
 #endif /* KOPACANVAS_H */

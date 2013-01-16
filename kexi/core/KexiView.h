@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include "kexiactionproxy.h"
 
 class KexiWindow;
+class KexiRecordNavigatorHandler;
 
 namespace KoProperty
 {
@@ -91,7 +92,7 @@ public:
     KexiPart::Part* part() const;
 
     /*! \return preferred size hint, that can be used to resize the view.
-     It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size,
+     It is computed using maximum of (a) \a otherSize and (b) current dock area's size,
      so the view won't exceed this maximum size. The method is used e.g. in KexiWindow::sizeHint().
      If you reimplement this method, do not forget to return value of
      yoursize.boundedTo( KexiView::preferredSizeHint(otherSize) ). */
@@ -100,6 +101,8 @@ public:
     virtual bool eventFilter(QObject *o, QEvent *e);
 
     void addChildView(KexiView* childView);
+
+    void removeView(Kexi::ViewMode mode);
 
     /*! True if contents (data) of the view is dirty and need to be saved
      This may or not be used, depending if changes in the window
@@ -110,6 +113,35 @@ public:
      Reimplement this if you e.g. want reuse other "dirty"
      flag from internal structures that may be changed. */
     virtual bool isDirty() const;
+
+    /*! @return true if data editing is in progress. This is useful to indicate
+     * to the master window that the view should save the before switching to 
+     * other view. This information is used in KexiWindow::switchToViewMode().
+     * Implement this in view that supports data editing, typically
+     * of mode Kexi::DataViewMode. If you do this, also implement
+     * saveDataChanges() and cancelDataChanges().
+     * Default implementation just returns false. */
+    virtual bool isDataEditingInProgress() const;
+
+    /*! Saves changes that are currently made to the associated data.
+     * Implement this in view that supports data editing, typically
+     * of mode Kexi::DataViewMode. If you do this, also implement
+     * isDataEditingInProgress() and cancelDataChanges().
+     * This method is used by KexiWindow::switchToViewMode().
+     * Default implementation just returns true.
+     * @return true on success, false on failure and cancelled if the operation
+     * has been cancelled. */
+    virtual tristate saveDataChanges();
+
+    /*! Cancel changes that are currently made to the associated data.
+     * Implement this in view that supports data editing, typically
+     * of mode Kexi::DataViewMode. If you do this, also implement
+     * isDataEditingInProgress() and saveDataChanges().
+     * This method is used by KexiWindow::switchToViewMode().
+     * Default implementation just returns true.
+     * @return true on success, false on failure and cancelled if the operation
+     * has been cancelled. */
+    virtual tristate cancelDataChanges();
 
     /*! \return the view mode for this view. */
     Kexi::ViewMode viewMode() const;
@@ -124,6 +156,16 @@ public:
      If there's no such action, global shared action is enabled or disabled (if exists). */
     virtual void setAvailable(const QString& action_name, bool set);
 
+    enum StoreNewDataOption {
+        OverwriteExistingObject = 1 //!< Overwerite existing object in storeNewData()
+    };
+
+    QString defaultIconName() const;
+
+    void setDefaultIconName(const QString& iconName);
+
+    Q_DECLARE_FLAGS(StoreNewDataOptions, StoreNewDataOption)
+
 public slots:
     virtual void setFocus();
 
@@ -131,6 +173,10 @@ public slots:
      (returned by propertySet()) is switched to other,
      so property editor contents need to be completely replaced. */
     virtual void propertySetSwitched();
+
+    /*! Saves settings for the view. Default implementation does nothing and returns true.
+      Implement this if there are settings to save. */
+    virtual bool saveSettings();
 
     /*! Sets dirty flag on or off. It the flag changes,
      dirty(bool) signal is emitted by the parent window (KexiWindow),
@@ -202,7 +248,9 @@ protected:
        just a schem adata. You should use such subclasses if needed.
      Should return newly created schema data object on success.
      In this case, do not store schema object yourself (make deep copy if needed). */
-    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata,
+                                             KexiView::StoreNewDataOptions options,
+                                             bool &cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
      indexed with optional \a dataID, from the database backend.
@@ -260,20 +308,23 @@ protected:
         QWidget::setFocus();
     }
 
-    /*! Allows to react on parent window's detaching (only for KMDI's ChildFrame mode)
-     - it is called by KexiWindow::youAreDetached().
+    /*! Allows to react on parent window's detaching.
+     @todo it should be called by KexiWindow::youAreDetached().
      Default implementation does nothing.
      Implement it if you want to perform some appropriate actions. */
     virtual void windowDetached() {}
 
-    /*! Allows to react on parent window's attaching (only for KMDI's ChildFrame mode)
-     - it is called by KexiWindow::youAreAttached().
+    /*! Allows to react on parent window's attaching.
+     @todo it should be called by KexiWindow::youAreAttached().
      Default implementation does nothing.
      Implement it if you want to perform some appropriate actions. */
     virtual void windowAttached() {}
 
     /*! Assigns a list of view-level actions. Used by KexiView ctor. */
     void setViewActions(const QList<QAction*>& actions);
+
+    /*! Assigns a list of main-menu-level actions. Used by KexiView ctor. */
+    void setMainMenuActions(const QList<QAction*>& actions);
 
     /*! @return a list of view-level actions. */
     QList<QAction*> viewActions() const;
@@ -282,10 +333,9 @@ protected:
     QAction* viewAction(const char* name) const;
 
     void initViewActions();
+    void initMainMenuActions();
 
     void toggleViewModeButtonBack();
-
-    QString m_defaultIconName;
 
 #ifdef __GNUC__
 #warning todo: add some protected access methods
@@ -337,5 +387,7 @@ private:
     Private * const d;
     friend class KexiWindow;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiView::StoreNewDataOptions)
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * This file is part of Office 2007 Filters for KOffice
+ * This file is part of Office 2007 Filters for Calligra
  *
  * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
  *
@@ -93,6 +93,12 @@
 #define READ_PROLOGUE \
     READ_PROLOGUE2(CURRENT_EL)
 
+#define READ_PROLOGUE_IF_NS(ns) \
+    if (!expectEl(JOIN(STRINGIFY(ns) ":",CURRENT_EL))) { \
+        return KoFilter::WrongFormat; \
+    } \
+    PUSH_NAME_INTERNAL \
+
 #define READ_EPILOGUE_WITHOUT_RETURN \
     POP_NAME_INTERNAL \
     if (!expectElEnd(QUALIFIED_NAME(CURRENT_EL))) { \
@@ -106,6 +112,13 @@
     READ_EPILOGUE_WITHOUT_RETURN \
     return KoFilter::OK;
 
+#define READ_EPILOGUE_IF_NS(ns) \
+    POP_NAME_INTERNAL \
+    if (!expectElEnd((JOIN(STRINGIFY(ns) ":",CURRENT_EL)))) { \
+        return KoFilter::WrongFormat; \
+    } \
+    return KoFilter::OK;
+
 #define BREAK_IF_END_OF_QSTRING(name) \
     /*kDebug() << "BREAK_IF_END_OF" << name << "found:" << qualifiedName();*/ \
     if (isEndElement() && qualifiedName() == name) { \
@@ -114,6 +127,9 @@
 
 #define BREAK_IF_END_OF(name) \
     BREAK_IF_END_OF_QSTRING(QLatin1String(QUALIFIED_NAME(name)))
+
+#define BREAK_IF_END_OF_WITH_NS(ns, name) \
+    BREAK_IF_END_OF_QSTRING(QLatin1String(JOIN(STRINGIFY(ns) ":",name)))
 
 //inline bool aaaa(const char * aa) { kDebug() << "aa" << aa; return true; }
 
@@ -154,6 +170,9 @@
 
 #define ELSE_TRY_READ_IF_IN_CONTEXT(name) \
     else TRY_READ_IF_IN_CONTEXT_INTERNAL(name, PASS_CONTEXT(name))
+
+#define ELSE_TRY_READ_IF_NS_IN_CONTEXT(ns, name) \
+    else TRY_READ_IF_NS_IN_CONTEXT_INTERNAL(ns, name, PASS_CONTEXT(name))
 
 #define TRY_READ_IF_NS_INTERNAL(ns, name) \
     if (qualifiedName() == QLatin1String(JOIN(STRINGIFY(ns) ":", name))) { \
@@ -339,6 +358,19 @@ inline QString atrToString(const QXmlStreamAttributes& attrs, const char* atrnam
         const int val_tmp = string.toInt(&ok); \
         if (!ok) { \
             kDebug() << "STRING_TO_INT: error converting" << string << "to int (attribute" << debugElement << ")"; \
+            return KoFilter::WrongFormat; \
+        } \
+        destination = val_tmp; \
+    }
+
+//! Converts @a string into longlong @a destination; returns KoFilter::WrongFormat on failure.
+//! @warning @a destination is left unchanged if @a string is empty, so it is up to developer to initialize it.
+#define STRING_TO_LONGLONG(string, destination, debugElement) \
+    if (string.isEmpty()) {} else { \
+        bool ok; \
+        const quint64 val_tmp = string.toLongLong(&ok); \
+        if (!ok) { \
+            kDebug() << "STRING_TO_LONGLONG: error converting" << string << "to LONGLONG (attribute" << debugElement << ")"; \
             return KoFilter::WrongFormat; \
         } \
         destination = val_tmp; \

@@ -20,7 +20,7 @@
 #ifndef KEXIACTIONPROXY_P_H
 #define KEXIACTIONPROXY_P_H
 
-#include <qobject.h>
+#include <QObject>
 
 class KexiActionProxy;
 

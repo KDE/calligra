@@ -130,7 +130,7 @@ void KoXmlWriter::startElement(const char* tagName, bool indentInside)
 
     // Tell parent that it has children
     bool parentIndent = prepareForChild();
-    
+
     d->tags.push(Tag(tagName, parentIndent && indentInside));
     writeChar('<');
     writeCString(tagName);
@@ -152,8 +152,10 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
     // already open but for writing, and we need to rewind.
     const bool openOk = indev->open(QIODevice::ReadOnly);
     Q_ASSERT(openOk);
-    if (!openOk)
+    if (!openOk) {
+        kWarning() << "Failed to re-open the device! wasOpen=" << wasOpen;
         return;
+    }
 
     static const int MAX_CHUNK_SIZE = 8 * 1024; // 8 KB
     QByteArray buffer;
@@ -340,8 +342,19 @@ char* KoXmlWriter::escapeForXML(const char* source, int length = -1) const
         case 0:
             *destination = '\0';
             return output;
-        default:
+        // Control codes accepted in XML 1.0 documents.
+        case 9:
+        case 10:
+        case 13:
             *destination++ = *src++;
+            continue;
+        default:
+            // Don't add control codes not accepted in XML 1.0 documents.
+            if (*src > 0 && *src < 32) {
+                ++src;
+            } else {
+                *destination++ = *src++;
+            }
             continue;
         }
         ++src;
@@ -440,7 +453,12 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
     // Flush nrSpaces when encountering two or more consecutive spaces
     for (int i = 0; i < len ; ++i) {
         QChar ch = text[i];
-        if (ch != ' ') {
+        ushort unicode = ch.unicode();
+        if (unicode == ' ') {
+            if (i == 0)
+                leadingSpace = true;
+            ++nrSpaces;
+        } else {
             if (nrSpaces > 0) {
                 // For the first space we use ' '.
                 // "it is good practice to use (text:s) for the second and all following SPACE
@@ -464,36 +482,36 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
             }
             nrSpaces = 0;
             leadingSpace = false;
-        }
-        switch (ch.unicode()) {
-        case '\t':
-            if (!str.isEmpty())
-                addTextNode(str);
-            str.clear();
-            startElement("text:tab");
-            if (tabCache.contains(i))
-                addAttribute("text:tab-ref", tabCache[i] + 1);
-            endElement();
-            break;
-        // gracefully handle \f form feed in text input.
-        // otherwise the xml will not be valid. 
-        // \f can be added e.g. in ascii import filter.
-        case '\f':
-        case '\n':
-            if (!str.isEmpty())
-                addTextNode(str);
-            str.clear();
-            startElement("text:line-break");
-            endElement();
-            break;
-        case ' ':
-            if (i == 0)
-                leadingSpace = true;
-            ++nrSpaces;
-            break;
-        default:
-            str += text[i];
-            break;
+
+            switch (unicode) {
+            case '\t':
+                if (!str.isEmpty())
+                    addTextNode(str);
+                str.clear();
+                startElement("text:tab");
+                if (tabCache.contains(i))
+                    addAttribute("text:tab-ref", tabCache[i] + 1);
+                endElement();
+                break;
+            // gracefully handle \f form feed in text input.
+            // otherwise the xml will not be valid.
+            // \f can be added e.g. in ascii import filter.
+            case '\f':
+            case '\n':
+            case QChar::LineSeparator:
+                if (!str.isEmpty())
+                    addTextNode(str);
+                str.clear();
+                startElement("text:line-break");
+                endElement();
+                break;
+            default:
+                // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
+                if (ch.unicode() >= 0x20) {
+                    str += text[i];
+                }
+                break;
+            }
         }
     }
     // either we still have text in str or we have spaces in nrSpaces
@@ -527,3 +545,27 @@ QList<const char*> KoXmlWriter::tagHierarchy() const
     return answer;
 }
 
+QString KoXmlWriter::toString() const
+{
+    Q_ASSERT(!d->dev->isSequential());
+    if (d->dev->isSequential())
+        return QString();
+    bool wasOpen = d->dev->isOpen();
+    qint64 oldPos = -1;
+    if (wasOpen) {
+        oldPos = d->dev->pos();
+        if (oldPos > 0)
+            d->dev->seek(0);
+    } else {
+        const bool openOk = d->dev->open(QIODevice::ReadOnly);
+        Q_ASSERT(openOk);
+        if (!openOk)
+            return QString();
+    }
+    QString s = QString::fromUtf8(d->dev->readAll());
+    if (wasOpen)
+        d->dev->seek(oldPos);
+    else
+        d->dev->close();
+    return s;
+}

@@ -20,29 +20,34 @@
 #include "RectangleShapeFactory.h"
 #include "RectangleShape.h"
 #include "RectangleShapeConfigWidget.h"
-#include "KoLineBorder.h"
+#include "KoShapeStroke.h"
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
 
+#include <KoIcon.h>
 #include <klocale.h>
 
 RectangleShapeFactory::RectangleShapeFactory()
     : KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))
 {
     setToolTip(i18n("A rectangle"));
-    setIcon("rectangle-shape");
+    setIconName(koIconNameCStr("rectangle-shape"));
     setFamily("geometric");
-    setOdfElementNames(KoXmlNS::draw, QStringList("rect"));
     setLoadingPriority(1);
+
+    QList<QPair<QString, QStringList> > elementNamesList;
+    elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("rect")));
+    elementNamesList.append(qMakePair(QString(KoXmlNS::svg), QStringList("rect")));
+    setXmlElements(elementNamesList);
 }
 
-KoShape *RectangleShapeFactory::createDefaultShape(KoResourceManager *) const
+KoShape *RectangleShapeFactory::createDefaultShape(KoDocumentResourceManager *) const
 {
     RectangleShape *rect = new RectangleShape();
 
-    rect->setBorder(new KoLineBorder(1.0));
+    rect->setStroke(new KoShapeStroke(1.0));
     rect->setShapeId(KoPathShapeId);
 
     QLinearGradient *gradient = new QLinearGradient(QPointF(0,0), QPointF(1,1));

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 C. Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,25 +18,34 @@
  */
 #include "SimpleFootEndNotesWidget.h"
 #include "TextTool.h"
+#include "FormattingButton.h"
+
+#include <KoInlineNote.h>
+#include <KoIcon.h>
 
 #include <KAction>
 #include <KDebug>
 
 #include <QWidget>
 
-SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(QWidget *parent)
-        : QWidget(parent),
-        m_blockSignals(false)
+
+SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *parent)
+        : QWidget(parent)
 {
     widget.setupUi(this);
-//    widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
+    widget.addFootnote->addAction(tool->action("insert_autofootnote"));
+    widget.addFootnote->addAction(tool->action("insert_labeledfootnote"));
+    widget.addFootnote->addAction(tool->action("format_footnotes"));
+    widget.addFootnote->setIcon(koIcon("insert-footnote"));
+    widget.addFootnote->setToolTip(i18n("Inserts a footnote at the current cursor position"));
+    widget.addEndnote->addAction(tool->action("insert_autoendnote"));
+    widget.addEndnote->addAction(tool->action("insert_labeledendnote"));
+    widget.addEndnote->addAction(tool->action("format_endnotes"));
+    widget.addEndnote->setIcon(koIcon("insert-endnote"));
+    widget.addEndnote->setToolTip(i18n("Inserts an endnote at the current cursor position"));
 
-//    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-}
-
-void SimpleFootEndNotesWidget::setStyleManager(KoStyleManager *sm)
-{
-    m_styleManager = sm;
+    connect(widget.addFootnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
+    connect(widget.addEndnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
 }
 
 #include <SimpleFootEndNotesWidget.moc>

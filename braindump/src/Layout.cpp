@@ -27,135 +27,158 @@
 #include <Utils.h>
 #include <QEvent>
 #include <QPainter>
-#include <qcoreapplication.h>
+#include <QCoreApplication>
 
 struct Layout::Private : public KoShape {
-  Private() : eventSent(false) {}
-  Layout* self;
-  QList<KoShape*> shapes;
-  QString id;
-  bool eventSent;
+    Private() : eventSent(false) {}
+    Layout* self;
+    QList<KoShape*> shapes;
+    QString id;
+    bool eventSent;
     void removeDependees();
     void triggerRelayout();
-  protected:
-    virtual void shapeChanged(ChangeType type, KoShape * shape );
-  private:
+protected:
+    virtual void shapeChanged(ChangeType type, KoShape * shape);
+private:
     // Fake
-    virtual void paint(QPainter &painter, const KoViewConverter &converter) { Q_UNUSED(painter); Q_UNUSED(converter); qFatal("Shouldn't be called"); }
-    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) { Q_UNUSED(element); Q_UNUSED(context); qFatal("Shouldn't be called"); return false; }
-    virtual void saveOdf(KoShapeSavingContext & context) const { Q_UNUSED(context); qFatal("Shouldn't be called"); }
+    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+        Q_UNUSED(painter);
+        Q_UNUSED(converter);
+        qFatal("Shouldn't be called");
+    }
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context) {
+        Q_UNUSED(element);
+        Q_UNUSED(context);
+        qFatal("Shouldn't be called");
+        return false;
+    }
+    virtual void saveOdf(KoShapeSavingContext & context) const {
+        Q_UNUSED(context);
+        qFatal("Shouldn't be called");
+    }
 
 };
 
 static int event_type_delayed_relayout = QEvent::registerEventType();
 
-void Layout::Private::removeDependees() {
-  foreach(KoShape* shape, shapes) {
-    shape->removeDependee(this);
-  }
+void Layout::Private::removeDependees()
+{
+    foreach(KoShape * shape, shapes) {
+        shape->removeDependee(this);
+    }
 }
 
-void Layout::Private::shapeChanged(ChangeType type, KoShape * shape) {
-  switch(type)
-  {
+void Layout::Private::shapeChanged(ChangeType type, KoShape * shape)
+{
+    switch(type) {
     case PositionChanged:
     case RotationChanged:
     case ScaleChanged:
     case ShearChanged:
     case SizeChanged:
     case GenericMatrixChange:
-      self->shapeGeometryChanged(shape);
-      triggerRelayout();
-      break;
+        self->shapeGeometryChanged(shape);
+        triggerRelayout();
+        break;
     default:
-      break;
-  }
+        break;
+    }
 }
 
 void Layout::Private::triggerRelayout()
 {
-  if(!eventSent) {
-    QCoreApplication::postEvent(self, new QEvent( QEvent::Type(event_type_delayed_relayout)));
-    eventSent = true;
-  }
+    if(!eventSent) {
+        QCoreApplication::postEvent(self, new QEvent(QEvent::Type(event_type_delayed_relayout)));
+        eventSent = true;
+    }
 }
 
 
 Layout::Layout(const QString& _id) : d(new Private)
 {
-  d->self = this;
-  d->id = _id;
+    d->self = this;
+    d->id = _id;
 }
 
-Layout::~Layout() {
-  d->removeDependees();
-  delete d;
+Layout::~Layout()
+{
+    d->removeDependees();
+    delete d;
 }
 
-const QString& Layout::id() const {
-  return d->id;
+const QString& Layout::id() const
+{
+    return d->id;
 }
 
-void Layout::replaceLayout(Layout* layout) {
-  layout->d->removeDependees(); // Avoid both layout to fight for the shapes possition
-  addShapes(layout->d->shapes);
-  d->triggerRelayout();
+void Layout::replaceLayout(Layout* layout)
+{
+    layout->d->removeDependees(); // Avoid both layout to fight for the shapes possition
+    addShapes(layout->d->shapes);
+    d->triggerRelayout();
 }
 
-void Layout::addShapes(QList<KoShape*> _shapes) {
-  foreach(KoShape* shape, _shapes) {
-    Q_ASSERT(!d->shapes.contains(shape));
-    d->shapes.push_back(shape);
-  }
-  shapesAdded(_shapes);
-  foreach(KoShape* shape, _shapes) {
-    shape->addDependee(d);
-  }
-  d->triggerRelayout();
+void Layout::addShapes(QList<KoShape*> _shapes)
+{
+    foreach(KoShape * shape, _shapes) {
+        Q_ASSERT(!d->shapes.contains(shape));
+        d->shapes.push_back(shape);
+    }
+    shapesAdded(_shapes);
+    foreach(KoShape * shape, _shapes) {
+        shape->addDependee(d);
+    }
+    d->triggerRelayout();
 }
 
-void Layout::addShape(KoShape* _shape) {
-  Q_ASSERT(!d->shapes.contains(_shape));
-  d->shapes.push_back(_shape);
-  shapeAdded(_shape);
-  _shape->addDependee(d);
-  d->triggerRelayout();
+void Layout::addShape(KoShape* _shape)
+{
+    Q_ASSERT(!d->shapes.contains(_shape));
+    d->shapes.push_back(_shape);
+    shapeAdded(_shape);
+    _shape->addDependee(d);
+    d->triggerRelayout();
 }
 
-void Layout::removeShape(KoShape* _shape) {
-  _shape->removeDependee(d);
-  d->shapes.removeAll(_shape);
-  shapeRemoved(_shape);
-  d->triggerRelayout();
+void Layout::removeShape(KoShape* _shape)
+{
+    _shape->removeDependee(d);
+    d->shapes.removeAll(_shape);
+    shapeRemoved(_shape);
+    d->triggerRelayout();
 }
 
-void Layout::shapesAdded(QList<KoShape*> _shapes) {
-  foreach(KoShape* shape, _shapes) {
-    shapeAdded(shape);
-  }
+void Layout::shapesAdded(QList<KoShape*> _shapes)
+{
+    foreach(KoShape * shape, _shapes) {
+        shapeAdded(shape);
+    }
 }
 
 
-QRectF Layout::boundingBox() const {
-  QRectF b;
-  Utils::containerBoundRec(shapes(), b);
-  return b;
+QRectF Layout::boundingBox() const
+{
+    QRectF b;
+    Utils::containerBoundRec(shapes(), b);
+    return b;
 }
 
-const QList<KoShape*>& Layout::shapes() const {
-  return d->shapes;
+const QList<KoShape*>& Layout::shapes() const
+{
+    return d->shapes;
 }
 
-bool Layout::event(QEvent * e) {
-  if(e->type() == event_type_delayed_relayout) {
-    Q_ASSERT(d->eventSent);
-    e->accept();
-    relayout();
-    d->eventSent = false;
-    return true;
-  } else {
-    return QObject::event(e);
-  }
+bool Layout::event(QEvent * e)
+{
+    if(e->type() == event_type_delayed_relayout) {
+        Q_ASSERT(d->eventSent);
+        e->accept();
+        relayout();
+        d->eventSent = false;
+        return true;
+    } else {
+        return QObject::event(e);
+    }
 }
 
 #include "Layout.moc"

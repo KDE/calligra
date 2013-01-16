@@ -23,15 +23,16 @@
 
 #include <kservice.h>
 #include <ksharedptr.h>
-#include <QtCore/QList>
+#include <QList>
 #include "komain_export.h"
 
 class QStringList;
 class KoDocument;
 class KoFilter;
+class KoPart;
 
 /**
- *  Represents an available KOffice component
+ *  Represents an available Calligra component
  *  that supports the document interface.
  */
 class KOMAIN_EXPORT KoDocumentEntry
@@ -82,16 +83,16 @@ public:
 
     /**
      *  Uses the factory of the component to create
-     *  a document. If that is not possible, 0 is returned.
+     *  a part. If that is not possible, 0 is returned.
      */
-    KoDocument* createDoc(QString* errorMsg = 0, KoDocument* parent = 0) const;
+    KoPart *createKoPart(QString* errorMsg = 0) const;
 
     enum QueryFlag {
         AllEntries = 0,
         /**
-         * OnlyEmbeddableDocuments specifies if only KOffice Parts should be
+         * OnlyEmbeddableDocuments specifies if only Calligra Parts should be
          * listed which are embeddable into other koDocuments, or all (if false)
-         * (eg.: it makes no sense to embed Kexi into KWord,
+         * (eg.: it makes no sense to embed Kexi into Words,
          *  but it makes sense to embed it into KoShell)
          */
         OnlyEmbeddableDocuments = 1
@@ -112,7 +113,7 @@ public:
     /**
      *  This is a convenience function.
      *
-     *  @return a document entry for the KOffice component that supports
+     *  @return a document entry for the Calligra component that supports
      *          the requested mimetype and fits the user best.
      */
     static KoDocumentEntry queryByMimeType(const QString & mimetype);

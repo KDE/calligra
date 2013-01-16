@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+ * Copyright (C) 2008 C. Boemann <cbo@boemann.dk>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -78,12 +78,18 @@ QPixmap KoImageData::pixmap(const QSize &size)
     if (d->pixmap.isNull() || d->pixmap.size() != wantedSize) {
         switch (d->dataStoreState) {
         case KoImageDataPrivate::StateEmpty: {
+#if 0       // this is not possible as it gets called during the paint method
+            // and will crash. Therefore create a tmp pixmap and return it.
             d->pixmap = QPixmap(1, 1);
             QPainter p(&d->pixmap);
             p.setPen(QPen(Qt::gray));
             p.drawPoint(0, 0);
             p.end();
             break;
+#endif
+            QPixmap tmp(1, 1);
+            tmp.fill(Qt::gray);
+            return tmp;
         }
         case KoImageDataPrivate::StateNotLoaded:
             image(); // forces load
@@ -161,10 +167,14 @@ bool KoImageData::hasCachedImage() const
 
 void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
 {
-    Q_ASSERT(!image.isNull());
+  qint64 oldKey = 0;
+  if (d) {
+    oldKey = d->key;
+  }
+  Q_ASSERT(!image.isNull());
     if (collection) {
         // let the collection first check if it already has one. If it doesn't it'll call this method
-        // again and we'll go to the other clause
+        // again and well go to the other clause
         KoImageData *other = collection->createImageData(image);
         this->operator=(*other);
         delete other;
@@ -174,6 +184,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             d->refCount.ref();
         }
         delete d->temporaryFile;
+        d->temporaryFile = 0;
         d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
         if (image.byteCount() > MAX_MEMORY_IMAGESIZE) {
@@ -184,6 +195,7 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
                 kWarning(30006) << "Write temporary file failed";
                 d->errorCode = StorageFailed;
                 delete d->temporaryFile;
+                d->temporaryFile = 0;
                 return;
             }
             buffer.close();
@@ -201,7 +213,12 @@ void KoImageData::setImage(const QImage &image, KoImageCollection *collection)
             md5.addData(ba);
             d->key = KoImageDataPrivate::generateKey(md5.result());
         }
+        if (oldKey != 0 && d->collection) {
+            d->collection->update(oldKey, d->key);
+        }
+
     }
+
 }
 
 void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *collection)
@@ -223,7 +240,11 @@ void KoImageData::setExternalImage(const QUrl &location, KoImageCollection *coll
         d->setSuffix(location.toEncoded());
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(location.toEncoded());
+        qint64 oldKey = d->key;
         d->key = KoImageDataPrivate::generateKey(md5.result());
+        if (oldKey != 0 && d->collection) {
+            d->collection->update(oldKey, d->key);
+        }
         d->dataStoreState = KoImageDataPrivate::StateNotLoaded;
     }
 }
@@ -254,13 +275,17 @@ void KoImageData::setImage(const QString &url, KoStore *store, KoImageCollection
             Finalizer closer;
             closer.store = store;
             KoStoreDevice device(store);
-            const bool lossy =url.toLower().endsWith(".jpg");
+            const bool lossy =url.toLower().endsWith(".jpg") || url.toLower().endsWith(".gif");
             if (!lossy && device.size() < MAX_MEMORY_IMAGESIZE) {
                 QByteArray data = device.readAll();
                 if (d->image.loadFromData(data)) {
                     QCryptographicHash md5(QCryptographicHash::Md5);
                     md5.addData(data);
+                    qint64 oldKey = d->key;
                     d->key = KoImageDataPrivate::generateKey(md5.result());
+                    if (oldKey != 0 && d->collection) {
+                        d->collection->update(oldKey, d->key);
+                    }
                     d->dataStoreState = KoImageDataPrivate::StateImageOnly;
                     return;
                 }
@@ -293,13 +318,14 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             d->refCount.ref();
         }
         delete d->temporaryFile;
+        d->temporaryFile = 0;
         d->clear();
         d->suffix = "png"; // good default for non-lossy storage.
         if (imageData.size() <= MAX_MEMORY_IMAGESIZE) {
             QImage image;
             if (!image.loadFromData(imageData)) {
                 // mark the image as invalid, but keep the data in memory
-                // even if KOffice cannot handle the format, the data should
+                // even if Calligra cannot handle the format, the data should
                 // be retained
                 d->errorCode = OpenFailed;
             }
@@ -317,7 +343,12 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
         }
         QCryptographicHash md5(QCryptographicHash::Md5);
         md5.addData(imageData);
+        qint64 oldKey = d->key;
         d->key = KoImageDataPrivate::generateKey(md5.result());
+        if (oldKey != 0 && d->collection) {
+            d->collection->update(oldKey, d->key);
+        }
+
     }
 }
 

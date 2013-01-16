@@ -17,10 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <kglobal.h>
 #include <klocale.h>
+#include <KoID.h>
+#include <QList>
 
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
+#include "KoColorSpaceMaths.h"
 
 QString KoCompositeOp::categoryColor()
 {
@@ -43,7 +47,6 @@ struct KoCompositeOp::Private {
     QString id;
     QString description;
     QString category;
-    bool userVisible;
     QBitArray defaultChannelFlags;
 };
 
@@ -57,13 +60,12 @@ KoCompositeOp::~KoCompositeOp()
     delete d;
 }
 
-KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & category, const bool userVisible)
+KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id,  const QString& description, const QString & category)
         : d(new Private)
 {
     d->colorSpace = cs;
     d->id = id;
     d->description = description;
-    d->userVisible = userVisible;
     d->category = category;
     if (d->category.isEmpty()) {
         d->category = categoryMisc();
@@ -74,14 +76,34 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                               const quint8 *srcRowStart, qint32 srcRowStride,
                               const quint8 *maskRowStart, qint32 maskRowStride,
                               qint32 rows, qint32 numColumns,
-                              quint8 opacity) const
+                              quint8 opacity, const QBitArray& channelFlags) const
 {
-    composite(dstRowStart, dstRowStride,
-              srcRowStart, srcRowStride,
-              maskRowStart, maskRowStride,
-              rows, numColumns,
-              opacity, d->defaultChannelFlags);
+    KoCompositeOp::ParameterInfo params;
+    params.dstRowStart   = dstRowStart;
+    params.dstRowStride  = dstRowStride;
+    params.srcRowStart   = srcRowStart;
+    params.srcRowStride  = srcRowStride;
+    params.maskRowStart  = maskRowStart;
+    params.maskRowStride = maskRowStride;
+    params.rows          = rows;
+    params.cols          = numColumns;
+    params.opacity       = float(opacity) / 255.0f;
+    params.flow          = 1.0f;
+    params.channelFlags  = channelFlags;
+    composite(params);
 }
+
+void KoCompositeOp::composite(const KoCompositeOp::ParameterInfo& params) const
+{
+    using namespace Arithmetic;
+
+    composite(params.dstRowStart           , params.dstRowStride ,
+              params.srcRowStart           , params.srcRowStride ,
+              params.maskRowStart          , params.maskRowStride,
+              params.rows                  , params.cols         ,
+              scale<quint8>(params.opacity), params.channelFlags );
+}
+
 
 QString KoCompositeOp::category() const
 {
@@ -101,9 +123,4 @@ QString KoCompositeOp::description() const
 const KoColorSpace * KoCompositeOp::colorSpace() const
 {
     return d->colorSpace;
-}
-
-bool KoCompositeOp::userVisible() const
-{
-    return d->userVisible;
 }

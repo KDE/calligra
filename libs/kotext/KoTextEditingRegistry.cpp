@@ -28,9 +28,9 @@ void KoTextEditingRegistry::init()
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "TextEditingPlugins";
     config.blacklist = "TextEditingPluginsDisabled";
-    config.group = "koffice";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/Text-EditingPlugin"),
-                                     QString::fromLatin1("[X-KoText-MinVersion] <= 0"), config);
+    config.group = "calligra";
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/Text-EditingPlugin"),
+                                     QString::fromLatin1("[X-KoText-MinVersion] <= 4"), config);
 }
 
 KoTextEditingRegistry* KoTextEditingRegistry::instance()

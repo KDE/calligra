@@ -20,7 +20,7 @@
 #ifndef ACCEPTCHANGECOMMAND_H
 #define ACCEPTCHANGECOMMAND_H
 
-#include "commands/TextCommandBase.h"
+#include <KoTextCommandBase.h>
 
 #include <QPair>
 
@@ -28,11 +28,11 @@ class KoChangeTracker;
 
 class QTextDocument;
 
-class AcceptChangeCommand : public QObject, public TextCommandBase
+class AcceptChangeCommand : public QObject, public KoTextCommandBase
 {
     Q_OBJECT
 public:
-    AcceptChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, QUndoCommand *parent = 0);
+    AcceptChangeCommand(int changeId, QList<QPair<int, int> > changeRanges, QTextDocument *document, KUndo2Command *parent = 0);
     ~AcceptChangeCommand();
 
     virtual void redo();

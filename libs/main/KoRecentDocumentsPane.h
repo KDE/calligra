@@ -30,7 +30,7 @@ class KoRecentDocumentsPanePrivate;
 
 /**
  * This widget is the recent doc part of the template opening widget.
- * The parent widget is initial widget in the document space of each KOffice component.
+ * The parent widget is initial widget in the document space of each Calligra component.
  * This widget shows a list of recent documents and can show their details or open it.
  */
 class KoRecentDocumentsPane : public KoDetailsPane
@@ -53,6 +53,7 @@ protected slots:
 
     void previewResult(KJob* job);
     void updatePreview(const KFileItem& fileItem, const QPixmap& preview);
+    void updateIcon(const KFileItem& fileItem, const QPixmap& pixmap);
 
 private:
     KoRecentDocumentsPanePrivate * const d;

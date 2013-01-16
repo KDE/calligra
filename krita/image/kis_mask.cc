@@ -76,8 +76,10 @@ KisMask::KisMask(const KisMask& rhs)
 {
     setName(rhs.name());
 
-    if (rhs.m_d->selection)
+    if (rhs.m_d->selection) {
         m_d->selection = new KisSelection(*rhs.m_d->selection.data());
+        m_d->selection->setParentNode(this);
+    }
 }
 
 KisMask::~KisMask()
@@ -114,46 +116,33 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 
     KisPaintDeviceSP parentPaintDevice = parentLayer->original();
 
-    if(copyFrom) {
+    if (copyFrom) {
         /**
          * We can't use setSelection as we may not have parent() yet
          */
         m_d->selection = new KisSelection(*copyFrom);
         m_d->selection->setDefaultBounds(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        if (copyFrom->hasShapeSelection()) {
+            m_d->selection->flatten();
+        }
     }
     else {
-        m_d->selection = new KisSelection(parentPaintDevice,
-                                          new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
+        m_d->selection = new KisSelection(new KisSelectionDefaultBounds(parentPaintDevice, parentLayer->image()));
 
         quint8 newDefaultPixel = MAX_SELECTED;
         m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
     }
+    m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
 
 KisSelectionSP KisMask::selection() const
 {
-    #ifdef __GNUC__
-    #warning "Please remove lazyness from KisMask::selection() after release of 2.3"
-    #else
-    #pragma WARNING( "Please remove lazyness from KisMask::selection() after release of 2.3" )
-    #endif
-
-    if(!m_d->selection) {
-        KisLayer *parentLayer = dynamic_cast<KisLayer*>(parent().data());
-        if(parentLayer) {
-            KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
-            m_d->selection = new KisSelection(parentPaintDevice,
-                                              parentPaintDevice->defaultBounds());
-
-            quint8 newDefaultPixel = MAX_SELECTED;
-            m_d->selection->getOrCreatePixelSelection()->setDefaultPixel(&newDefaultPixel);
-        }
-        else {
-            m_d->selection = new KisSelection();
-        }
-        m_d->selection->updateProjection();
-    }
+    /**
+     * The mask is created without any selection present.
+     * You must always init the selection with initSelection() method.
+     */
+    Q_ASSERT(m_d->selection);
 
     return m_d->selection;
 }
@@ -170,6 +159,7 @@ void KisMask::setSelection(KisSelectionSP selection)
         const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
         m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image()));
     }
+    m_d->selection->setParentNode(this);
 }
 
 void KisMask::select(const QRect & rc, quint8 selectedness)
@@ -197,7 +187,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
 
         m_d->selection->updateProjection(rc);
 
-        if(!m_d->selection->selectedRect().intersects(rc))
+        if(!extent().intersects(rc))
             return;
 
         KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
@@ -280,23 +270,20 @@ void KisMask::setY(qint32 y)
         m_d->selection->setY(y);
 }
 
-void KisMask::setDirty(const QRect & rect)
-{
-    Q_ASSERT(parent());
-
-    const KisLayer *parentLayer = qobject_cast<const KisLayer*>(parent());
-    KisImageWSP image = parentLayer->image();
-    Q_ASSERT(image);
-
-    image->updateProjection(this, rect);
-}
-
 QImage KisMask::createThumbnail(qint32 w, qint32 h)
 {
-    KisPaintDeviceSP originalDevice = paintDevice();
+    KisPaintDeviceSP originalDevice =
+        selection() ? selection()->projection() : 0;
 
     return originalDevice ?
-           originalDevice->createThumbnail(w, h) : QImage();
+           originalDevice->createThumbnail(w, h, KoColorConversionTransformation::IntentPerceptual, KoColorConversionTransformation::BlackpointCompensation) : QImage();
+}
+
+void KisMask::testingInitSelection(const QRect &rect)
+{
+    m_d->selection = new KisSelection();
+    m_d->selection->getOrCreatePixelSelection()->select(rect, OPACITY_OPAQUE_U8);
+    m_d->selection->updateProjection(rect);
 }
 
 #include "kis_mask.moc"

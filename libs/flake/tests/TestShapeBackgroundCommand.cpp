@@ -21,6 +21,8 @@
 #include <MockShapes.h>
 #include "KoShapeBackgroundCommand.h"
 #include "KoColorBackground.h"
+#include "KoShapePaintingContext.h"
+#include "KoViewConverter.h"
 
 void TestShapeBackgroundCommand::refCounting()
 {
@@ -34,7 +36,7 @@ void TestShapeBackgroundCommand::refCounting()
     QCOMPARE(whiteFill->useCount(), 1);
 
     // old fill is white, new fill is black
-    QUndoCommand *cmd1 = new KoShapeBackgroundCommand(shape1, blackFill);
+    KUndo2Command *cmd1 = new KoShapeBackgroundCommand(shape1, blackFill);
     cmd1->redo();
     QVERIFY(shape1->background() == blackFill);
 
@@ -43,7 +45,7 @@ void TestShapeBackgroundCommand::refCounting()
     QVERIFY(shape1->background() == whiteFill);
 
     // old fill is white, new fill is red
-    QUndoCommand *cmd2 = new KoShapeBackgroundCommand(shape1, redFill);
+    KUndo2Command *cmd2 = new KoShapeBackgroundCommand(shape1, redFill);
     cmd2->redo();
     QVERIFY(shape1->background() == redFill);
 
@@ -58,7 +60,9 @@ void TestShapeBackgroundCommand::refCounting()
     QPainter p;
     QPainterPath path;
     path.addRect( QRectF(0,0,100,100) );
-    whiteFill->paint( p, path );
+    KoViewConverter converter;
+    KoShapePaintingContext context;
+    whiteFill->paint( p, converter, context, path );
 
     delete cmd2;
     delete shape1;

@@ -1,9 +1,26 @@
 [Desktop Entry]
 Name=Horizontal Inductor
+Name[bg]=Хоризонтална бобина
+Name[ca]=Inductor horitzontal
+Name[ca@valencia]=Inductor horitzontal
+Name[de]=Waagerechte Drosselspule
+Name[el]=Οριζόντιο πηνίο
+Name[es]=Inductor horizontal
 Name[et]=Horisontaalne induktor
+Name[fr]=Horizontal Inductor
+Name[gl]=Bobina horizontal
+Name[hu]=Vízszintes induktor
+Name[it]=Induttore orizzontale
+Name[kk]=Жатық индуктор
+Name[nb]=Vannrett spole
+Name[nds]=Kimmrecht Spool
 Name[nl]=Horizontale spoel
+Name[pl]=Pozioma cewka
 Name[pt]=Bobina Horizontal
 Name[pt_BR]=Indutor horizontal
+Name[ru]=Горизонтальная катушка индуктивности
+Name[sk]=Vodorovná cievka
 Name[sv]=Horisontell induktans
 Name[uk]=Індуктивна котушка (горизонтально)
 Name[x-test]=xxHorizontal Inductorxx
+Name[zh_TW]=水平導體

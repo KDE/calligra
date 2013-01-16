@@ -25,8 +25,8 @@
 
 #include <KLocale>
 
-KWFrameCreateCommand::KWFrameCreateCommand(KoShapeControllerBase *shapeController, KWFrame *frame, QUndoCommand *parent)
-        : QUndoCommand(i18n("Create Frame"), parent),
+KWFrameCreateCommand::KWFrameCreateCommand(KoShapeBasedDocumentBase *shapeController, KWFrame *frame, KUndo2Command *parent)
+        : KUndo2Command(i18nc("(qtundo-format)", "Create Frame"), parent),
         m_frame(frame),
         m_frameSet(frame->frameSet())
 {
@@ -36,12 +36,12 @@ KWFrameCreateCommand::KWFrameCreateCommand(KoShapeControllerBase *shapeControlle
 void KWFrameCreateCommand::redo()
 {
     m_frameSet->addFrame(m_frame);
-    QUndoCommand::redo();
+    KUndo2Command::redo();
 }
 
 void KWFrameCreateCommand::undo()
 {
-    QUndoCommand::undo();
+    KUndo2Command::undo();
     m_frameSet->removeFrame(m_frame);
 }
 

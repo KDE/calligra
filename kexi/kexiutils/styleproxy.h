@@ -52,8 +52,8 @@ namespace KexiUtils
 class KEXIUTILS_EXPORT StyleProxy : public QStyle
 {
 public:
-    /*! Creates a new style proxy object. 
-     No owner is set for this object, so use QObject::setParent(QObject*) 
+    /*! Creates a new style proxy object.
+     No owner is set for this object, so use QObject::setParent(QObject*)
      to control the ownership. */
     StyleProxy(QStyle* parentStyle);
 
@@ -147,7 +147,7 @@ public:
     }
 
     virtual SubControl hitTestComplexControl(ComplexControl cc,
-            const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *widget = 0) const {
+                                             const QStyleOptionComplex *opt, const QPoint &pt, const QWidget *widget = 0) const {
         SubControl result = parentStyle(15)->hitTestComplexControl(cc, opt, pt, widget);
         *m_method = 0;
         return result;
@@ -201,7 +201,6 @@ public:
         *m_method = 0;
         return result;
     }
-
 protected:
     //! Helper that returns m_style if not called recursively, otherwise returns QApplication::style()
     //! to avoid infinite loop. *m_method is used to tracke two nested calls to the same method.
@@ -210,6 +209,7 @@ protected:
     QPointer<QStyle> m_style;
     int *m_method;
 };
+
 }
 
 #endif

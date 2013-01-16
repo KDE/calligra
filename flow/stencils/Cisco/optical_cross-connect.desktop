@@ -1,7 +1,23 @@
 [Desktop Entry]
 Name=Optical Cross-Connect
+Name[ca]=Connexió creuada òptica
+Name[ca@valencia]=Connexió creuada òptica
+Name[el]=Οπτικό Cross-Connect
+Name[es]=Conexión en cruz óptica
+Name[et]=Optiline ristühendus
+Name[fr]=Optical Cross-Connect
+Name[gl]=Interconexión óptica
+Name[it]=Optical Cross-Connect
+Name[kk]=Оптикалық торабы
+Name[nb]=Optisk kryssforbindelse
+Name[nl]=Optische kruisverbinding
+Name[pl]=Optyczne połączenie krosowane
 Name[pt]=Ligação Cruzada Óptica
 Name[pt_BR]=Conexão cruzada ótica
+Name[ru]=Оптический разветвитель
+Name[sk]=Optické prepojenie
 Name[sv]=Optisk korskoppling
 Name[uk]=Оптичний розгалуджувач
 Name[x-test]=xxOptical Cross-Connectxx
+Name[zh_CN]=光学交叉连接
+Name[zh_TW]=光學交叉互連

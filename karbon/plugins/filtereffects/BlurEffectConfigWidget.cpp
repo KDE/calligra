@@ -24,8 +24,8 @@
 #include <KNumInput>
 #include <KLocale>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
+#include <QGridLayout>
+#include <QLabel>
 
 BlurEffectConfigWidget::BlurEffectConfigWidget(QWidget *parent)
         : KoFilterEffectConfigWidgetBase(parent), m_effect(0)
