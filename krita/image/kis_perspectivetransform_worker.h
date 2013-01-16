@@ -27,10 +27,8 @@
 #include <QRect>
 #include <QRegion>
 #include <QTransform>
-
-
 #include <KoUpdater.h>
-typedef QPointer<KoUpdater> KoUpdaterPtr;
+
 
 class KRITAIMAGE_EXPORT KisPerspectiveTransformWorker : public QObject
 {
@@ -50,6 +48,7 @@ private:
     QRegion m_dstRegion;
     QRectF m_srcRect;
     QTransform m_newTransform;
+    bool m_isIdentity;
 };
 
 #endif
