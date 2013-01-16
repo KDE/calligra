@@ -2008,8 +2008,7 @@ void KexiMainWindow::updateAppCaption()
             d->appCaptionPrefix = d->prj->data()->databaseName();
     }
 
-    setWindowTitle((d->appCaptionPrefix.isEmpty() ? QString() : (d->appCaptionPrefix + QString::fromLatin1(" - ")))
-                   + KGlobal::mainComponent().aboutData()->programName());
+    setWindowTitle(KDialog::makeStandardCaption(d->appCaptionPrefix, this));
 }
 
 bool KexiMainWindow::queryClose()
