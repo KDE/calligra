@@ -24,18 +24,18 @@
 #include "ui_pivotoptions.h"
 #include "pivotoptions.h"
 #include "pivotfilters.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+#include <sheets/ui/Selection.h>
+#include <sheets/Sheet.h>
 #include<QMessageBox>
-#include "Value.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "Map.h"
-#include "DocBase.h"
+#include <sheets/Value.h>
+#include <sheets/ValueCalc.h>
+#include <sheets/ValueConverter.h>
+#include <sheets/Map.h>
+#include <sheets/DocBase.h>
 #include<QTimer>
 #include<QObject>
-#include "Cell.h"
-#include "Style.h"
+#include <sheets/Cell.h>
+#include <sheets/Style.h>
 #include<QColor>
 #include<QPen>
 

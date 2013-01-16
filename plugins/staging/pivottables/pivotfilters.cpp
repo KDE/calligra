@@ -20,8 +20,8 @@
 // Local
 #include "pivotfilters.h"
 #include "ui_pivotfilters.h"
-#include "Sheet.h"
-#include "ui/Selection.h"
+#include <sheets/Sheet.h>
+#include <sheets/ui/Selection.h>
 #include "pivotmain.h"
 #include<QtGui>
 #include<QString>

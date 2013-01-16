@@ -20,8 +20,8 @@
 // Local
 #include "pivotoptions.h"
 #include "ui_pivotoptions.h"
-#include "Sheet.h"
-#include "ui/Selection.h"
+#include <sheets/Sheet.h>
+#include <sheets/ui/Selection.h>
 #include<QtGui>
 #include<QListWidgetItem>
 #include<QListWidget>

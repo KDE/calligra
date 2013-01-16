@@ -33,8 +33,8 @@
 #include <QApplication>
 #include <QMessageBox>
 
-#include "Sheet.h"
-#include "ui/Selection.h"
+#include <sheets/Sheet.h>
+#include <sheets/ui/Selection.h>
 using namespace Calligra::Sheets;
 
 class Pivot::Private

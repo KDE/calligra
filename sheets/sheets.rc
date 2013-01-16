@@ -153,7 +153,6 @@
   <Separator/>
   <Action name="consolidate"/>
   <Action name="subtotals"/>
-  <Action name="pivot"/>
   <Action name="validity"/>
   <Separator/>
   <Action name="goalSeek"/>
