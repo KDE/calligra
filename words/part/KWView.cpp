@@ -298,6 +298,15 @@ void KWView::setupActions()
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, Words shows you tabs, spaces, carriage returns and other non-printing characters."));
 
+    action = new KAction(i18n("Show Field Shadings"), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_fieldshadings", action);
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowInlineObjectVisualization(bool)));
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowInlineObjectVisualization, QVariant(false));
+    action->setChecked(m_document->config().showInlineObjectVisualization()); // will change resource if true
+    action->setToolTip(i18n("Toggle the shaded background of fields"));
+    action->setWhatsThis(i18n("Toggle the visualizaion of fields (variables etc) by drawing their background in a contrasting color."));
+
     action = new KAction(i18n("Show Text Shape Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
@@ -630,6 +639,13 @@ void KWView::toggleViewFrameBorders(bool on)
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, on);
     m_canvas->update();
     m_document->config().setViewFrameBorders(on);
+}
+
+void KWView::setShowInlineObjectVisualization(bool on)
+{
+    m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowInlineObjectVisualization, QVariant(on));
+    m_canvas->update();
+    m_document->config().setShowInlineObjectVisualization(on);
 }
 
 void KWView::setShowFormattingChars(bool on)

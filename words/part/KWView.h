@@ -125,6 +125,8 @@ public slots:
     void toggleViewFrameBorders(bool on);
     /// toggle the display of non-printing characters
     void setShowFormattingChars(bool on);
+    /// toggle the display of field shadings
+    void setShowInlineObjectVisualization(bool on);
     /// toggle the display of table borders
     void setShowTableBorders(bool on);
     /// go to previous page
