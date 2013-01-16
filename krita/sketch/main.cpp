@@ -79,7 +79,7 @@ int main( int argc, char** argv )
     QDir appdir(app.applicationDirPath());
     appdir.cdUp();
 
-#ifdef Q_OS_WIN
+#ifdef SKETCH_ENABLE_STARTUP_MAGIC
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     // If there's no kdehome, set it and restart the process.
     //QMessageBox::information(0, "krita sketch", "KDEHOME: " + env.value("KDEHOME"));
