@@ -172,6 +172,8 @@ void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter,
     KoInputDevice id;
     KoToolManager::instance()->priv()->switchInputDevice(id);
 
+    qDebug() << Q_FUNC_INFO;
+
     switch (event->type()) {
     case QEvent::TouchBegin:
         ev.setTabletButton(Qt::LeftButton);
@@ -188,7 +190,7 @@ void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter,
             if( d->activeTool->wantsTouch() )
                 d->activeTool->touchEvent(event);
             else
-                d->activeTool->mousePressEvent(&ev);
+                d->activeTool->mouseMoveEvent(&ev);
         }
         break;
     case QEvent::TouchEnd:
@@ -197,7 +199,7 @@ void KoToolProxy::touchEvent(QTouchEvent *event, KoViewConverter *viewConverter,
             if( d->activeTool->wantsTouch() )
                 d->activeTool->touchEvent(event);
             else
-                d->activeTool->mousePressEvent(&ev);
+                d->activeTool->mouseReleaseEvent(&ev);
         }
         break;
     default:
