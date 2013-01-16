@@ -77,7 +77,7 @@ class KisToolTransform : public KisTool, KisCommandHistoryListener
     Q_PROPERTY(TransformToolMode transformMode READ transformMode WRITE setTransformMode NOTIFY transformModeChanged)
 
     Q_PROPERTY(double translateX READ translateX WRITE setTranslateX NOTIFY freeTransformChanged)
-    Q_PROPERTY(double translateY READ translateY WRITE setTranslateX NOTIFY freeTransformChanged)
+    Q_PROPERTY(double translateY READ translateY WRITE setTranslateY NOTIFY freeTransformChanged)
 
     Q_PROPERTY(double rotateX READ rotateX WRITE setRotateX NOTIFY freeTransformChanged)
     Q_PROPERTY(double rotateY READ rotateY WRITE setRotateY NOTIFY freeTransformChanged)
@@ -329,8 +329,6 @@ private:
     // Sets m_function according to mouse position and modifier
     void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
 
-    void setDensity(int density);
-
     double gradientDescent_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY);
     double gradientDescent_partialDeriv1_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon);
     double gradientDescent_partialDeriv2_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon);
@@ -456,6 +454,7 @@ private:
     bool m_isActive;
 
     TransformTransactionProperties m_transaction;
+
 
 private:
     QPointF imageToFlake(const QPointF &pt);

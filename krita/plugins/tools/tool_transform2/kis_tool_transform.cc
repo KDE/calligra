@@ -1124,7 +1124,7 @@ void KisToolTransform::setWarpFlexibility( double flexibility )
 
 void KisToolTransform::setWarpPointDensity( int density )
 {
-    setDensity( density );
+    m_optWidget->slotSetWarpDensity(density);
 }
 
 void KisToolTransform::resourceChanged(int key, const QVariant& res)
@@ -2618,6 +2618,37 @@ void KisToolTransform::slotEditingFinished()
 
     m_scaleX_wOutModifier = m_currentArgs.scaleX();
     m_scaleY_wOutModifier = m_currentArgs.scaleY();
+}
+
+
+void KisToolTransform::setShearY(double shear)
+{
+    m_optWidget->slotSetShearY(shear);
+}
+
+void KisToolTransform::setShearX(double shear)
+{
+    m_optWidget->slotSetShearX(shear);
+}
+
+void KisToolTransform::setScaleY(double scale)
+{
+    m_optWidget->slotSetScaleY(scale);
+}
+
+void KisToolTransform::setScaleX(double scale)
+{
+    m_optWidget->slotSetScaleX(scale);
+}
+
+void KisToolTransform::setTranslateY(double translation)
+{
+    m_optWidget->slotSetTranslateY(translation);
+}
+
+void KisToolTransform::setTranslateX(double translation)
+{
+    m_optWidget->slotSetTranslateX(translation);
 }
 
 
