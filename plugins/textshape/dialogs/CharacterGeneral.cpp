@@ -74,6 +74,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     m_languageTab->setVisible(false);
 
     connect(widget.name, SIGNAL(textChanged(const QString &)), this, SIGNAL(nameChanged(const QString&)));
+    m_nameHidden = false;
 }
 
 void CharacterGeneral::hideStyleName(bool hide)
@@ -114,8 +115,9 @@ void CharacterGeneral::save(KoCharacterStyle *style)
 {
     KoCharacterStyle *savingStyle;
     if (style == 0) {
-        if (m_style == 0)
+        if (m_style == 0) {
             return;
+        }
         else
             savingStyle = m_style;
     }

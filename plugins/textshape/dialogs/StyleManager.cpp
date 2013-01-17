@@ -47,6 +47,7 @@ StyleManager::StyleManager(QWidget *parent)
         , m_blockStyleChangeSignals(false)
         , m_unappliedStyleChanges(false)
         , m_currentStyleChanged(false)
+        , m_nonExistingStyleId(8094)
 {
     widget.setupUi(this);
     layout()->setMargin(0);
@@ -131,6 +132,9 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
 
 void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 {
+    if (!style) {
+        return;
+    }
     m_blockStyleChangeSignals = true;
     m_selectedCharStyle = 0;
     m_selectedParagStyle = style;
@@ -162,6 +166,9 @@ void StyleManager::setParagraphStyle(KoParagraphStyle *style)
 
 void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
 {
+    if (!style) {
+        return;
+    }
     m_blockStyleChangeSignals = true;
     m_selectedParagStyle = 0;
     m_selectedCharStyle = style;
@@ -170,8 +177,8 @@ void StyleManager::setCharacterStyle(KoCharacterStyle *style, bool canDelete)
     widget.characterStylePage->save();
     KoCharacterStyle *localStyle;
 
-    if (m_draftParagraphStyles.contains(style->styleId())) {
-        localStyle = m_draftParagraphStyles[style->styleId()];
+    if (m_draftCharacterStyles.contains(style->styleId())) {
+        localStyle = m_draftCharacterStyles[style->styleId()];
     }
     else if (!m_alteredCharacterStyles.contains(style->styleId())) {
         localStyle = style->clone();
@@ -207,6 +214,7 @@ void StyleManager::save()
     m_styleManager->beginEdit();
 
     m_paragraphStylesModel->clearDraftStyles(); // clear draft styles in Style Model.
+    m_characterStylesModel->clearDraftStyles();
     foreach(KoParagraphStyle *style, m_draftParagraphStyles.values()) {
         m_styleManager->add(style);
     }
@@ -238,6 +246,7 @@ void StyleManager::save()
 
         m_alteredCharacterStyles.insert(m_selectedCharStyle->styleId(), localStyle);
 
+        widget.characterStylesListView->setCurrentIndex(m_characterStylesModel->indexForCharacterStyle(*m_selectedCharStyle));
         widget.characterStylePage->setStyle(localStyle);
     }
     else
@@ -248,6 +257,7 @@ void StyleManager::save()
 
         m_alteredParagraphStyles.insert(m_selectedParagStyle->styleId(), localStyle);
 
+        widget.paragraphStylesListView->setCurrentIndex(m_paragraphStylesModel->indexForParagraphStyle(*m_selectedParagStyle));
         widget.paragraphStylePage->setStyle(localStyle);
     }
     else
@@ -342,7 +352,14 @@ void StyleManager::buttonNewPressed()
         return;
     }
     if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
-        KoParagraphStyle *newStyle = m_selectedParagStyle->clone();
+        KoParagraphStyle *newStyle;
+        if (m_selectedParagStyle) {
+            newStyle = m_selectedParagStyle->clone();
+        }
+        else {
+            newStyle = new KoParagraphStyle();
+            newStyle->setStyleId(-m_nonExistingStyleId++);
+        }
         newStyle->setName(i18n("New Style"));
         m_paragraphStylesModel->addDraftParagraphStyle(newStyle);
         m_draftParagraphStyles.insert(newStyle->styleId(), newStyle);
@@ -350,7 +367,14 @@ void StyleManager::buttonNewPressed()
         widget.paragraphStylePage->selectName();
     }
     else {
-        KoCharacterStyle *newStyle = m_selectedCharStyle->clone();
+        KoCharacterStyle *newStyle;
+        if (m_selectedCharStyle) {
+            newStyle = m_selectedCharStyle->clone();
+        }
+        else {
+            newStyle = new KoCharacterStyle();
+            newStyle->setStyleId(-m_nonExistingStyleId++);
+        }
         newStyle->setName(i18n("New Style"));
         m_characterStylesModel->addDraftCharacterStyle(newStyle);
         m_draftCharacterStyles.insert(newStyle->styleId(), newStyle);
@@ -419,9 +443,10 @@ bool StyleManager::checkUniqueStyleName()
         QList<int> styleListChar = m_characterStylesModel->StyleList();
         QList<int>::iterator iterChar = styleListChar.begin();
         for ( ; iterChar != styleListChar.end(); ++iterChar) {
-            KoCharacterStyle *temp = m_styleManager->characterStyle(*iterChar);;
-            if (!temp && m_draftCharacterStyles.contains(*iterChar))
+            KoCharacterStyle *temp = m_styleManager->characterStyle(*iterChar);
+            if (!temp && m_draftCharacterStyles.contains(*iterChar)){
                 temp = m_draftCharacterStyles[*iterChar];
+            }
 
             if (widget.characterStylePage->styleName() == temp->name()) {
                 if (temp != m_selectedCharStyle) {

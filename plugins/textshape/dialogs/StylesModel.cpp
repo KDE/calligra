@@ -378,10 +378,10 @@ void StylesModel::updateCharacterStyles()
 
     foreach(KoCharacterStyle *style, styles) {
         if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
-	    m_styleList.append(style->styleId());
+            m_styleList.append(style->styleId());
             m_styleMapper->setMapping(style, style->styleId());
             connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));
-	}
+        }
     }
 
     endResetModel();
@@ -440,7 +440,7 @@ void StylesModel::updateName(int styleId)
                 }
                 if (oldIndex != newIndex) {
                     // beginMoveRows needs the index where it would be placed when it is still in the old position
-                    // so add one when newIndex > oldIndex 
+                    // so add one when newIndex > oldIndex
                     beginMoveRows(QModelIndex(), oldIndex, oldIndex, QModelIndex(), newIndex > oldIndex ? newIndex + 1 : newIndex);
                     m_styleList.removeAt(oldIndex);
                     m_styleList.insert(newIndex, styleId);
@@ -477,7 +477,7 @@ void StylesModel::updateName(int styleId)
                 }
                 if (oldIndex != newIndex) {
                     // beginMoveRows needs the index where it would be placed when it is still in the old position
-                    // so add one when newIndex > oldIndex 
+                    // so add one when newIndex > oldIndex
                     beginMoveRows(QModelIndex(), oldIndex, oldIndex, QModelIndex(), newIndex > oldIndex ? newIndex + 1 : newIndex);
                     m_styleList.removeAt(oldIndex);
                     m_styleList.insert(newIndex, styleId);
@@ -520,10 +520,7 @@ void StylesModel::addDraftParagraphStyle(KoParagraphStyle *style)
 
 void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
 {
-    if (m_draftCharStyleList.count() == 0) // we have a character style "m_defaultCharacterStyle" with style id -1 in style model.
-        style->setStyleId(-(m_draftCharStyleList.count()+2));
-    else
-        style->setStyleId(-(m_draftCharStyleList.count()+1));
+    style->setStyleId(-(m_draftCharStyleList.count()+2)); //id -1 corresponds to style "None"
     m_draftCharStyleList.insert(style->styleId(), style);
     addCharacterStyle(style);
 }

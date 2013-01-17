@@ -81,6 +81,8 @@ private:
     bool m_blockStyleChangeSignals;
     bool m_unappliedStyleChanges;
     bool m_currentStyleChanged;
+
+    int m_nonExistingStyleId;
 };
 
 #endif

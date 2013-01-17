@@ -84,6 +84,9 @@ void FormattingPreview::setText(const QString &sampleText)
 //Character properties
 void FormattingPreview::setCharacterStyle(const KoCharacterStyle* style)
 {
+    if (!style) {
+        return;
+    }
     if (m_characterStyle) {
         delete m_characterStyle;
     }
@@ -97,6 +100,9 @@ void FormattingPreview::setCharacterStyle(const KoCharacterStyle* style)
 
 void FormattingPreview::setParagraphStyle(const KoParagraphStyle *style)
 {
+    if (!style) {
+        return;
+    }
     if (m_paragraphStyle) {
         delete m_paragraphStyle;
     }
@@ -120,7 +126,9 @@ void FormattingPreview::paintEvent(QPaintEvent *event)
     QRect rectang = contentsRect();
 
     p->fillRect(rectang, QBrush(QColor(Qt::white)));
-    p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle,m_paragraphStyle,rectang.size(),m_previewLayoutRequired, KoStyleThumbnailer::NoFlags));
+    if (m_characterStyle) {
+        p->drawImage(rectang, m_thumbnailer->thumbnail(m_characterStyle,m_paragraphStyle,rectang.size(),m_previewLayoutRequired, KoStyleThumbnailer::NoFlags));
+    }
 
     m_previewLayoutRequired = false;
 
