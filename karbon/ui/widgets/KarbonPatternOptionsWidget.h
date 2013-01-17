@@ -29,7 +29,7 @@
 class KARBONUI_EXPORT KarbonPatternOptionsWidget : public QWidget {
     Q_OBJECT
 public:
-    KarbonPatternOptionsWidget(QWidget * parent = 0);
+    explicit KarbonPatternOptionsWidget(QWidget *parent = 0);
     virtual ~KarbonPatternOptionsWidget();
 
     /// Sets the pattern repeat
