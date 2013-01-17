@@ -36,7 +36,7 @@ class StatisticsPreferencesPopup : public QMenu
 {
     Q_OBJECT
 public:
-    StatisticsPreferencesPopup(QWidget *parent = 0);
+    explicit StatisticsPreferencesPopup(QWidget *parent = 0);
     virtual QSize sizeHint() const;
     Ui::StatisticsPreferencesPopup *w;
 
