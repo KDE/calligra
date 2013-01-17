@@ -49,7 +49,7 @@ class FunctionCompletion : public QObject
 
 public:
 
-    FunctionCompletion(CellEditor* editor);
+    explicit FunctionCompletion(CellEditor *editor);
     ~FunctionCompletion();
 
     /**

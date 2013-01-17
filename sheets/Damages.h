@@ -188,7 +188,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
 class CALLIGRA_SHEETS_ODF_EXPORT SelectionDamage : public Damage
 {
 public:
-    SelectionDamage(const Region& region);
+    explicit SelectionDamage(const Region &region);
     virtual ~SelectionDamage();
 
     virtual Type type() const {

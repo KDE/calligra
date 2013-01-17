@@ -54,7 +54,7 @@ class SheetAccessModel : public QStandardItemModel
     Q_OBJECT
 
 public:
-    SheetAccessModel(Map *map);
+    explicit SheetAccessModel(Map *map);
     virtual ~SheetAccessModel();
 
 public Q_SLOTS:
