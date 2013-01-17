@@ -20,73 +20,87 @@ import QtQuick 1.1
 import "components"
 
 Page {
-    DropShadow {
+
+    Rectangle {
+        anchors.fill: parent;
+    }
+
+    Header {
+        id: header;
+
         anchors {
             top: parent.top;
             left: parent.left;
             right: parent.right;
         }
 
-        height: Constants.GridHeight;
-        z: 10;
+        text: "Share";
 
-        Header {
-            text: "Share";
-
-            leftArea: Button {
-                width: Constants.GridWidth;
-                height: Constants.GridHeight;
-                highlightColor: Constants.Theme.HighlightColor;
-                text: "<";
-                onClicked: pageStack.pop();
-            }
-
-            rightArea: Button {
-                width: Constants.GridWidth * 2;
-                height: Constants.GridHeight;
-                color: Constants.Theme.PositiveColor;
-                textColor: "white";
-                text: "Upload";
-                onClicked: pageStack.pop();
-            }
+        background: "images/header_red.png";
+        leftArea: Button {
+            width: Constants.GridWidth;
+            height: Constants.GridHeight;
+            highlightColor: Constants.Theme.HighlightColor;
+            image: "./images/svg/icon-back.svg";
+            onClicked: pageStack.pop();
         }
+
+        rightArea: Button {
+            width: Constants.GridWidth * 2;
+            height: Constants.GridHeight;
+            color: Constants.Theme.PositiveColor;
+            textColor: "white";
+            text: "Upload";
+            onClicked: pageStack.pop();
+        }
+    }
+
+    Image {
+        anchors.top: header.bottom;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        source: "images/shadow-smooth.png";
+        z: 5;
     }
 
     CategorySwitcher {
         anchors.bottom: parent.bottom;
-        height: Constants.GridHeight * 7;
+        height: Constants.GridHeight * (Constants.GridRows - 2);
 
-        categories: [ { name: "DeviantArt", page: contentPage }, { name: "MediaGoblin", page: contentPage } ];
+        categories: [ { name: "DeviantArt", page: contentPage }/*, { name: "MediaGoblin", page: contentPage }*/ ];
 
-        Component { id: contentPage; Page {
-            Flickable {
-                anchors.fill: parent;
-                anchors.margins: Constants.DefaultMargin;
+        Component {
+            id: contentPage;
+            Page {
+                Item {
+                    anchors.fill: parent;
+                    anchors.margins: Constants.DefaultMargin;
+/*
+                    contentWidth: width;
+                    contentHeight: content.height;*/
 
-                contentWidth: width;
-                contentHeight: content.height;
+                    Column {
+                        id: content;
+                        width: parent.width;
+                        spacing: Constants.DefaultMargin;
 
-                Column {
-                    id: content;
-                    width: parent.width;
-                    spacing: Constants.DefaultMargin;
+                        DropShadow {
+                            anchors.horizontalCenter: parent.horizontalCenter;
+                            width: Constants.GridWidth * 4;
+                            height: Constants.GridHeight * 3;
 
-                    DropShadow {
-                        anchors.horizontalCenter: parent.horizontalCenter;
-                        width: Constants.GridWidth * 4;
-                        height: Constants.GridHeight * 3;
+    //                         Image {
+    //                             anchors.fill: parent;
+    //                             source:
+    //                         }
+                        }
 
-//                         Image {
-//                             anchors.fill: parent;
-//                             source:
-//                         }
+                        TextField { placeholder: "Title"; }
+                        TextField { placeholder: "Tags"; }
+                        TextFieldMultiline { height: Constants.GridHeight * 4; placeholder: "Description"; }
                     }
-
-                    TextField { placeholder: "Title"; }
-                    TextField { placeholder: "Tags"; }
-                    TextField { height: Constants.GridHeight * 4; placeholder: "Description"; }
                 }
             }
-        }}
+        }
     }
 }
