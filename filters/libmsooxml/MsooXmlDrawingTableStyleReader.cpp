@@ -80,7 +80,7 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read(MsooXmlReaderCon
     KoFilter::ConversionStatus result = read_tblStyleLst();
     Q_ASSERT(result == KoFilter::OK);
 
-    return KoFilter::OK;
+    return result;
 }
 
 #undef CURRENT_EL
@@ -97,10 +97,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
 {
     READ_PROLOGUE
 
-    while(!atEnd()) {
+    while (!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)
-        if(isStartElement()) {
+        if (isStartElement()) {
             TRY_READ_IF(tblStyle)
             ELSE_WRONG_FORMAT
         }
@@ -135,12 +135,10 @@ KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyleLst()
 KoFilter::ConversionStatus MsooXmlDrawingTableStyleReader::read_tblStyle()
 {
     READ_PROLOGUE
-
     m_currentStyle = new DrawingTableStyle;
 
     QXmlStreamAttributes attrs(attributes());
     READ_ATTR_WITHOUT_NS(styleId)
-
     while(!atEnd()) {
         readNext();
         BREAK_IF_END_OF(CURRENT_EL)

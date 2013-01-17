@@ -737,6 +737,20 @@ KoFilter::ConversionStatus MsooXmlImport::loadAndParseDocument(
     return status;
 }
 
+KoFilter::ConversionStatus MsooXmlImport::loadAndParseFromDevice(MsooXmlReader* reader, QIODevice* device,
+        MsooXmlReaderContext* context)
+{
+    KoFilter::ConversionStatus status;
+    reader->setDevice(device);
+    reader->setFileName("PreDefinedDrawingMLTables"); // for error reporting
+    status = reader->read(context);
+    if (status != KoFilter::OK) {
+        reader->raiseError(reader->errorString());
+        return status;
+    }
+    return status;
+}
+
 KoFilter::ConversionStatus MsooXmlImport::openFile(KoOdfWriters *writers, QString& errorMessage)
 {
     static const char *Content_Types_xml = "[Content_Types].xml";

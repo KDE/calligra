@@ -73,6 +73,10 @@ public:
             QString& errorMessage,
             MsooXmlReaderContext* context = 0);
 
+    //! Loads a file from a device
+    KoFilter::ConversionStatus loadAndParseFromDevice(MsooXmlReader* reader, QIODevice* device,
+            MsooXmlReaderContext* context);
+
     /*! Copies file @a sourceName from the input archive to the output document
     under @a destinationName name. @return KoFilter::OK on success.
     On failure @a errorMessage is set.
