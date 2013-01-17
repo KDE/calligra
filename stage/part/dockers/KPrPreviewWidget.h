@@ -37,7 +37,7 @@ class STAGE_EXPORT KPrPreviewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPreviewWidget( QWidget* parent = 0 );
+    explicit KPrPreviewWidget(QWidget *parent = 0);
     ~KPrPreviewWidget();
 
     /**

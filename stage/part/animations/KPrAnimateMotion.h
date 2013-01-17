@@ -30,7 +30,7 @@ class KoPathShape;
 class STAGE_EXPORT KPrAnimateMotion : public KPrAnimationBase
 {
 public:
-    KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
+    explicit KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimateMotion();
 
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
