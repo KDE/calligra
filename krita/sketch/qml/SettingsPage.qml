@@ -37,7 +37,7 @@ Page {
                 width: Constants.GridWidth;
                 height: Constants.GridHeight;
                 highlightColor: Constants.Theme.HighlightColor;
-                text: "<";
+                image: "./images/svg/icon-back.svg";
                 onClicked: pageStack.pop();
             }
         }
