@@ -112,7 +112,7 @@ namespace Charting
         class GradientStop
         {
         public:
-            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor = QString(); }
+            void reset(){ position = 1.0; knownColorValue = QColor(); tintVal = 0; satVal = 0; shadeVal = 0; referenceColor.clear(); }
             qreal position;
             QColor knownColorValue;
             qreal tintVal;
