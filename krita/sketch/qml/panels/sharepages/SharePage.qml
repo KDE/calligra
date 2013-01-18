@@ -17,7 +17,11 @@
  */
 
 import QtQuick 1.1
+import "../../components"
 
 Page {
     property string pluginName: "You must set the plugin name when implementing sharing pages";
+    function submitArt(plugin) {
+        console.debug("If you are seeing this, you forgot to implement the submitArt call");
+    }
 }
