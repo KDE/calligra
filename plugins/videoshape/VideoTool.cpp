@@ -36,8 +36,9 @@
 #include <QPainter>
 #include <QPointer>
 
-struct VideoToolUI: public QWidget, public Ui::VideoTool
+class VideoToolUI: public QWidget, public Ui::VideoTool
 {
+public:
     VideoToolUI()
     {
         setupUi(this);

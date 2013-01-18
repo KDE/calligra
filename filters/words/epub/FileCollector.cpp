@@ -57,7 +57,7 @@ struct FileInfo
 };
 
 
-struct FileCollectorPrivate
+class FileCollectorPrivate
 {
 public:
     FileCollectorPrivate();
