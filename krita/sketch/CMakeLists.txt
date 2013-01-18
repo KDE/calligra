@@ -43,6 +43,7 @@ set(kritasketch_SRCS
     KisSketchCanvas.cpp
     KisSketchCanvasFactory.cpp
     DocumentManager.cpp
+    SharingManager.cpp
 )
 
 set(kritasketch_kritaintegrationmodels_SRCS
