@@ -444,9 +444,9 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             if (rc.intersects(clipRectOnPage.toRect())) {
                                 paintRegion += rc;
                                 int tilex = 0, tiley = 0;
-                                for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                                for (int x = 0, i = 0; x < pageCache->m_tilesx; ++x) {
                                     int dx = pageCache->cache[i].width();
-                                    for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                                    for (int y = 0; y < pageCache->m_tilesy; ++y, ++i) {
                                         QImage& img = pageCache->cache[i];
                                         QRect tile(tilex, tiley, img.width(), img.height());
                                         QRect toClear = tile.intersected(rc);
@@ -481,9 +481,9 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             shapeManager()->paint(tilePainter, *viewConverter(), false);
 
                             int tilex = 0, tiley = 0;
-                            for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                            for (int x = 0, i = 0; x < pageCache->m_tilesx; ++x) {
                                 int dx = pageCache->cache[i].width();
-                                for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                                for (int y = 0; y < pageCache->m_tilesy; ++y, ++i) {
                                     QImage& tileImg = pageCache->cache[i];
                                     QRect tile(tilex, tiley, tileImg.width(), tileImg.height());
                                     QRect toPaint = tile.intersected(r);
@@ -501,9 +501,9 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     // paint from the cached page image on the original painter
 
                     int tilex = 0, tiley = 0;
-                    for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                    for (int x = 0, i = 0; x < pageCache->m_tilesx; ++x) {
                         int dx = pageCache->cache[i].width();
-                        for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                        for (int y = 0; y < pageCache->m_tilesy; ++y, ++i) {
                             const QImage& cacheImage = pageCache->cache[i];
                             QRectF tile(tilex, tiley, cacheImage.width(), cacheImage.height());
                             QRectF toPaint = tile.intersected(clipRectOnPage);
