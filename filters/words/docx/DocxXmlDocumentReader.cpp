@@ -2374,7 +2374,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_p()
                             fontSize = m_context->m_defaultFontSizePt;
                         }
                         qreal base = 10; //fair enough
-                        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+                        if (!fontSize.isEmpty() && fontSize.endsWith(QLatin1String("pt"))) {
                             fontSize.chop(2);
                             STRING_TO_QREAL(fontSize, base, QString("PictureType: processing font-size"));
                         }

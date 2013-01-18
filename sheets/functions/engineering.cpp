@@ -567,13 +567,13 @@ Value func_decimal(valVector args, ValueCalc *calc, FuncExtra *)
         if (text.startsWith("0x", Qt::CaseInsensitive)) {
             text = text.mid(2);
         }
-        if (text.endsWith('h', Qt::CaseInsensitive)) {
-            text = text.left(text.length() - 1);  // all but the last char
+        if (text.endsWith(QLatin1Char('h'), Qt::CaseInsensitive)) {
+            text.chop(1);  // all but the last char
         }
     }
     if (radix == 2) {
-        if (text.endsWith('b', Qt::CaseInsensitive)) {
-            text = text.left(text.length() - 1);  // all but the last char
+        if (text.endsWith(QLatin1Char('b'), Qt::CaseInsensitive)) {
+            text.chop(1);  // all but the last char
         }
     }
 

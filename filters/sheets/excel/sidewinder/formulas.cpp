@@ -990,8 +990,9 @@ static QString escapeSheetName(const QString& sheetName)
     if (!hasSpecial) return sheetName;
 
     QString res = sheetName;
-    while(res.startsWith('\'') && res.endsWith('\''))
-        res = res.mid(1, res.length() - 2);
+    while(res.startsWith(QLatin1Char('\'')) && res.endsWith(QLatin1Char('\''))) {
+        res.remove(0, 1).chop(1);
+    }
     return "$'" + res.replace('\'', QLatin1String("\'\'")) + "'";
 }
 

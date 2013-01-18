@@ -2165,9 +2165,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
             } else if (ch == '>') {
                 if (inside_tag) {
                     inside_tag = false;
-                    if (tag.startsWith("a href=\"", Qt::CaseSensitive))
-                        if (tag.endsWith('"'))
-                            qml_link = tag.mid(8, tag.length() - 9);
+                    if (tag.startsWith(QLatin1String("a href=\""), Qt::CaseSensitive) &&
+                        tag.endsWith(QLatin1Char('"'))) {
+                        qml_link.remove(0, 8).chop(1);
+                    }
                     tag.clear();
                 }
             } else {
