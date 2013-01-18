@@ -54,7 +54,7 @@ Page {
             textColor: "white";
             text: "Upload";
             onClicked: {
-                sharingManager.sharingHandler(switcher.page.pluginName);
+                switcher.currentPage.submitArt(sharingManager.sharingHandler(switcher.currentPage.pluginName));
             }
         }
     }
