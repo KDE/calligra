@@ -21,6 +21,7 @@ import QtQuick 1.1
 Row {
     id: base;
     property variant categories;
+    property alias currentPage: pageStack.currentPage;
 
     ListView {
         id: view;
