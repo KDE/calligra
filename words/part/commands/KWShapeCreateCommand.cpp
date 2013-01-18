@@ -22,7 +22,7 @@
 
 #include <KoShape.h>
 #include <KoShapeContainer.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 #include <KWDocument.h>
 
 #include <klocale.h>
@@ -48,7 +48,7 @@
 //     bool deleteShape;
 // };
 
-KWShapeCreateCommand::KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KoTextAnchor *anchor, KUndo2Command *parent):
+KWShapeCreateCommand::KWShapeCreateCommand(KWDocument *doc, KoShape *shape, KoShapeAnchor *anchor, KUndo2Command *parent):
     KUndo2Command(parent),
     m_document(doc),
     m_shape(shape),

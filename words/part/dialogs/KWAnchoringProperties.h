@@ -25,13 +25,14 @@
 #include <dialogs/KWShapeConfigFactory.h>
 
 #include <KoShapeConfigWidgetBase.h>
-#include <KoTextAnchor.h>
+#include <KoShapeAnchor.h>
 
 #include <QList>
 #include <QPointF>
 
 class KWFrame;
 class KoShape;
+class KWCanvas;
 
 /// A widget that is shown to allow the user to select the anchoring properties
 class KWAnchoringProperties : public KoShapeConfigWidgetBase
@@ -49,7 +50,7 @@ public:
     /// reimplemented
     void save();
     /// save but add to undo command if command != 0
-    void save(KUndo2Command *command);
+    void save(KUndo2Command *command, KWCanvas *canvas);
 
     /// reimplemented
     virtual bool showOnShapeCreate() {
@@ -76,7 +77,6 @@ private:
     QButtonGroup *m_vertPosGroup;
     QButtonGroup *m_horizPosGroup;
     QList<KWFrame*> m_frames;
-//     QList<KoTextAnchor *> m_anchors;
     KoShape *m_shape;
     int m_anchorType;
     int m_vertPos;

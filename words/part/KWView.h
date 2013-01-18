@@ -28,7 +28,6 @@
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoFindMatch.h>
-#include <KoTextAnchor.h>
 
 #include <QWidget>
 
@@ -42,7 +41,6 @@ class KoCanvasBase;
 class KoZoomController;
 class KoFindText;
 class KoFindStyle;
-class KoTextAnchor;
 
 #ifdef SHOULD_BUILD_RDF
 class KoRdfSemanticItem;
