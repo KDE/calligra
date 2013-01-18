@@ -178,9 +178,11 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             case Name: return QVariant();
             case ShapeThumbnail: return thisAnimation->shape()->name();
             case AnimationIcon: return getAnimationName(thisAnimation);
-            case StartTime: return i18n("Start after %1 seconds. Duration of %2 seconds").
-                                    arg(thisAnimation->timeRange().first / 1000).
-                                    arg(thisAnimation->globalDuration() / 1000);
+            case StartTime: {
+                const float startDelay = thisAnimation->timeRange().first / 1000.0;
+                const float duration = thisAnimation->globalDuration() / 1000.0;
+                return i18n("Start after %1 seconds. Duration of %2 seconds.", startDelay, duration);
+            }
             case Duration: return QVariant();
             case AnimationClass: return thisAnimation->presetClassText();
             case NodeType: return QVariant();
