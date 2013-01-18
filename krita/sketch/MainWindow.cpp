@@ -74,6 +74,7 @@
 #include "PanelConfiguration.h"
 #include "cpuid.h"
 #include "DocumentManager.h"
+#include "SharingManager.h"
 
 class MainWindow::Private
 {
@@ -121,6 +122,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     qmlRegisterType<CompositeOpModel>("org.krita.sketch", 1, 0, "CompositeOpModel");
     qmlRegisterType<PanelConfiguration>("org.krita.sketch", 1, 0, "PanelConfiguration");
     qmlRegisterType<KeyboardModel>("org.krita.sketch", 1, 0, "KeyboardModel");
+    qmlRegisterType<SharingManager>("org.krita.sketch", 1, 0, "SharingManager");
 
     qmlRegisterUncreatableType<LayerCompositeDetails>("org.krita.sketch", 1, 0, "LayerCompositeDetails", "This type is returned by the LayerModel class");
 
