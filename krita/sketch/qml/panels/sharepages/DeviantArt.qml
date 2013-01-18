@@ -20,7 +20,10 @@ import QtQuick 1.1
 import "../../components"
 
 SharePage {
-    pluginName: "imageshare"
+    pluginName: "ImageShare"
+    function submitArt(plugin) {
+        console.debug("Submit using " + plugin);
+    }
     Item {
         anchors.fill: parent;
         anchors.margins: Constants.DefaultMargin;
