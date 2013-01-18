@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef FLOWSHAPETEMPLATEMODEL_H
-#define FLOWSHAPETEMPLATEMODEL_H
+#ifndef COLLECTIONITEMMODEL_H
+#define COLLECTIONITEMMODEL_H
 
 #include <KoProperties.h>
 #include <KoShape.h>
@@ -73,4 +73,4 @@ class CollectionItemModel : public QAbstractListModel
         QListView::ViewMode m_viewMode;
 };
 
-#endif //FLOWSHAPETEMPLATEMODEL_H
+#endif // COLLECTIONITEMMODEL_H

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRPART_H
-#define KPRPART_H
+#ifndef FLOWPART_H
+#define FLOWPART_H
 
 #include <KoPart.h>
 
@@ -61,4 +61,4 @@ protected:
     FlowDocument *m_document;
 };
 
-#endif
+#endif // FLOWPART_H

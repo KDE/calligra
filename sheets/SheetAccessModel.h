@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef SHEETACCESSMODEL_H
+#define SHEETACCESSMODEL_H
+
 #include <QStandardItemModel>
 
 #include "Sheet.h"
@@ -69,3 +72,5 @@ private:
 
 } // namespace Sheets
 } // namespace Calligra
+
+#endif
