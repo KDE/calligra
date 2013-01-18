@@ -103,7 +103,7 @@ public:
     virtual QString value() const = 0;
     virtual QString type() const = 0;
     virtual unsigned size() const = 0;
-    XmlTk(const unsigned char* data) {
+    explicit XmlTk(const unsigned char* data) {
         m_xmlTkTag = readU16(data + 2);
     }
     virtual ~XmlTk() {}
@@ -115,7 +115,7 @@ public:
     virtual QString value() const { return QString::number(m_value); }
     virtual QString type() const { return "bool"; }
     virtual unsigned size() const { return 6; }
-    XmlTkBool(const unsigned char* data) : XmlTk(data) {
+    explicit XmlTkBool(const unsigned char* data) : XmlTk(data) {
         m_value = readU8(data + 4);
     }
 };
@@ -126,7 +126,7 @@ public:
     virtual QString value() const { return QString::number(m_value); }
     virtual QString type() const { return "double"; }
     virtual unsigned size() const { return 12; }
-    XmlTkDouble(const unsigned char* data) : XmlTk(data) {
+    explicit XmlTkDouble(const unsigned char* data) : XmlTk(data) {
         m_value = readFloat64(data + 4);
     }
 };
@@ -137,7 +137,7 @@ public:
     virtual QString value() const { return QString::number(m_value); }
     virtual QString type() const { return "dword"; }
     virtual unsigned size() const { return 8; }
-    XmlTkDWord(const unsigned char* data) : XmlTk(data) {
+    explicit XmlTkDWord(const unsigned char* data) : XmlTk(data) {
         m_value = readS32(data + 4);
     }
 };
@@ -148,7 +148,7 @@ public:
     virtual QString value() const { return m_value; }
     virtual QString type() const { return "string"; }
     virtual unsigned size() const { return 8 + m_size; }
-    XmlTkString(const unsigned char* data) : XmlTk(data) {
+    explicit XmlTkString(const unsigned char* data) : XmlTk(data) {
         m_cchValue = readU32(data + 4);
         m_value = readUnicodeChars(data + 8, m_cchValue, -1, 0, &m_size);
     }
@@ -163,7 +163,7 @@ public:
     virtual QString value() const { return QString::number(m_value); }
     virtual QString type() const { return "token"; }
     virtual unsigned size() const { return 6; }
-    XmlTkToken(const unsigned char* data) : XmlTk(data) {
+    explicit XmlTkToken(const unsigned char* data) : XmlTk(data) {
         m_value = readU16(data + 4);
     }
 };
@@ -179,7 +179,7 @@ public:
     }
     virtual QString type() const { return "blob"; }
     virtual unsigned size() const { return 8 + m_cbBlob; }
-    XmlTkBlob(const unsigned char* data);
+    explicit XmlTkBlob(const unsigned char* data);
     virtual ~XmlTkBlob() { qDeleteAll(m_tokens); }
 private:
     unsigned m_cbBlob;
@@ -190,7 +190,7 @@ public:
     virtual QString value() const { return QString(); }
     virtual QString type() const { return "begin"; }
     virtual unsigned size() const { return 4; }
-    XmlTkBegin(const unsigned char* data) : XmlTk(data) {}
+    explicit XmlTkBegin(const unsigned char* data) : XmlTk(data) {}
 };
 
 class XmlTkEnd : public XmlTk {
@@ -198,7 +198,7 @@ public:
     virtual QString value() const { return QString(); }
     virtual QString type() const { return "end"; }
     virtual unsigned size() const { return 4; }
-    XmlTkEnd(const unsigned char* data) : XmlTk(data) {}
+    explicit XmlTkEnd(const unsigned char* data) : XmlTk(data) {}
 };
 
 XmlTk* parseXmlTk(const unsigned char* data) {

@@ -29,7 +29,7 @@ class LatexExportIface: public DCOPObject
     K_DCOP
 
 public:
-    LatexExportIface(KSpreadLatexExportDiaImpl* dia);
+    explicit LatexExportIface(KSpreadLatexExportDiaImpl* dia);
 
     ~LatexExportIface();
 

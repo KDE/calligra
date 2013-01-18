@@ -117,7 +117,7 @@ private:
 
         WordsGraphicsHandler* const gh;
     public:
-        DrawClient(WordsGraphicsHandler* p) :gh(p) {}
+        explicit DrawClient(WordsGraphicsHandler *p) :gh(p) {}
 };
 public:
     WordsGraphicsHandler(Document* document,

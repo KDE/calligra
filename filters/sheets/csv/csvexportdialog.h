@@ -38,7 +38,7 @@ class Map;
 class ExportDialogUI : public QWidget, public Ui::ExportDialogUI
 {
 public:
-    ExportDialogUI(QWidget *parent) : QWidget(parent) {
+    explicit ExportDialogUI(QWidget *parent) : QWidget(parent) {
         setupUi(this);
     }
 };
@@ -48,7 +48,7 @@ class CSVExportDialog : public KDialog
 {
     Q_OBJECT
 public:
-    CSVExportDialog(QWidget * parent);
+    explicit CSVExportDialog(QWidget *parent);
     ~CSVExportDialog();
 
     QChar   getDelimiter() const;

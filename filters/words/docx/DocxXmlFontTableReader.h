@@ -33,7 +33,7 @@ class KoGenStyles;
 class DocxXmlFontTableReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
-    DocxXmlFontTableReaderContext(KoGenStyles& _styles);
+    explicit DocxXmlFontTableReaderContext(KoGenStyles& _styles);
     KoGenStyles* styles;
 };
 
