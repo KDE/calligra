@@ -17,7 +17,9 @@
  */
 
 import QtQuick 1.1
+import org.krita.sketch 1.0
 import "components"
+import "panels/sharepages"
 
 Page {
 
@@ -51,7 +53,9 @@ Page {
             color: Constants.Theme.PositiveColor;
             textColor: "white";
             text: "Upload";
-            onClicked: pageStack.pop();
+            onClicked: {
+                sharingManager.sharingHandler(switcher.page.pluginName);
+            }
         }
     }
 
@@ -63,43 +67,21 @@ Page {
         z: 5;
     }
 
+    SharingManager {
+        id: sharingManager;
+        view: sketchView.view;
+    }
+
     CategorySwitcher {
+        id: switcher;
         anchors.bottom: parent.bottom;
         height: Constants.GridHeight * (Constants.GridRows - 2);
 
-        categories: [ { name: "DeviantArt", page: contentPage }/*, { name: "MediaGoblin", page: contentPage }*/ ];
+        categories: [ { name: "DeviantArt Sta.sh", page: contentPage }/*, { name: "MediaGoblin", page: contentPage }*/ ];
 
         Component {
             id: contentPage;
-            Page {
-                Item {
-                    anchors.fill: parent;
-                    anchors.margins: Constants.DefaultMargin;
-/*
-                    contentWidth: width;
-                    contentHeight: content.height;*/
-
-                    Column {
-                        id: content;
-                        width: parent.width;
-                        spacing: Constants.DefaultMargin;
-
-                        DropShadow {
-                            anchors.horizontalCenter: parent.horizontalCenter;
-                            width: Constants.GridWidth * 4;
-                            height: Constants.GridHeight * 3;
-
-    //                         Image {
-    //                             anchors.fill: parent;
-    //                             source:
-    //                         }
-                        }
-
-                        TextField { placeholder: "Title"; }
-                        TextField { placeholder: "Tags"; }
-                        TextFieldMultiline { height: Constants.GridHeight * 4; placeholder: "Description"; }
-                    }
-                }
+            DeviantArt {
             }
         }
     }
