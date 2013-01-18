@@ -727,7 +727,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                     m_pageCacheManager = new KWPageCacheManager(m_cacheSize);
                 }
 
-                if (!m_currentZoom == viewConverter()->zoom()) {
+                if (m_currentZoom != viewConverter()->zoom()) {
                     m_currentZoom = viewConverter()->zoom();
                     m_pageCacheManager->clear();
                 }
