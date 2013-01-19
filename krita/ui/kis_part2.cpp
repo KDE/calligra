@@ -127,7 +127,7 @@ QList<KoPart::CustomDocumentWidgetItem> KisPart2::createCustomDocumentWidgets(QW
 
     QList<KoPart::CustomDocumentWidgetItem> widgetList;
     KoPart::CustomDocumentWidgetItem item;
-    item.widget = new KisCustomImageWidget(parent, qobject_cast<KisDoc2*>(document()), w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(), "unnamed");
+    item.widget = new KisCustomImageWidget(parent, qobject_cast<KisDoc2*>(document()), w, h, clipAvailable, cfg.defImageResolution(), cfg.defColorModel(), cfg.defColorDepth(), cfg.defColorProfile(), i18n("unnamed"));
     widgetList << item;
 
     return widgetList;
