@@ -2,6 +2,7 @@
 Type=Service
 Name=OpenDocument Spreadsheets
 Name[da]=OpenDocument-regneark
+Name[de]=OpenDocument-Tabellenkalkulationen
 Name[el]=OpenDocument φύλλα εργασίας
 Name[es]=Hojas de cálculo OpenDocument
 Name[et]=OpenDocument-arvutustabelid
