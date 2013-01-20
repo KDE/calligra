@@ -233,11 +233,6 @@ private:
     void endBody();
 
     /**
-    * Store the delete changes in the deleteChangeTable. Will be processed when "change" is encountered
-    */
-    void storeDeleteChanges(KoXmlElement &tag);
-
-    /**
     * This is called in case of a paragraph or a header split.
     * Mark the blocks from the start of the split till the end as an insertion type
     * and set the corresponding changeId in the charFormat

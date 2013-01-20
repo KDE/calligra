@@ -140,7 +140,6 @@ public:
                      QTextTable *currentTable = 0,
                      QTextList *currentList = 0);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
-    void saveAllChanges();
 
 private:
 
@@ -156,11 +155,9 @@ private:
         TableCell
     };
 
-
-    void saveODF12Change(QTextCharFormat format);
     QString generateDeleteChangeXml(KoDeleteChangeMarker *marker);
-    int openTagRegion(int position, ElementType elementType, TagInformation& tagInformation);
-    void closeTagRegion(int changeId);
+    void openTagRegion(int position, ElementType elementType, TagInformation& tagInformation);
+    void closeTagRegion();
 
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat);
@@ -234,8 +231,6 @@ private:
     // Common methods
     void writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element);
     void writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren = false);
-    void removeLeavingContentStart(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId, int endIdCounter);
-    void removeLeavingContentEnd(QTextStream &outputXmlStream, int endIdCounter);
     void insertAroundContent(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId);
 
     QString createXmlId();

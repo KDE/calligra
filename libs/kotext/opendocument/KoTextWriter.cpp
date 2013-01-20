@@ -60,37 +60,8 @@ KoTextWriter::~KoTextWriter()
 
 void KoTextWriter::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, QTextDocument *document, int from, int to)
 {
-    InsertDeleteChangesCommand *insertCommand = new InsertDeleteChangesCommand(document);
-    RemoveDeleteChangesCommand *removeCommand = new RemoveDeleteChangesCommand(document);
-
-    KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
-    KoChangeTracker::ChangeSaveFormat changeSaveFormat = KoChangeTracker::UNKNOWN;
-    if (changeTracker) {
-        changeSaveFormat = changeTracker->saveFormat();
-        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
-            KoTextDocument(document).textEditor()->instantlyExecuteCommand(insertCommand);
-        }
-
-        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
-            KoTextDocument(document).textEditor()->instantlyExecuteCommand(removeCommand);
-        }
-    }
-
     KoTextWriter writer(context, rdfData);
     writer.write(document, from, to);
-
-    if (changeTracker) {
-        changeSaveFormat = changeTracker->saveFormat();
-        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
-            insertCommand->undo();
-            delete insertCommand;
-        }
-
-        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
-            removeCommand->undo();
-            delete removeCommand;
-        }
-    }
 }
 
 QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context)
@@ -139,10 +110,6 @@ void KoTextWriter::write(const QTextDocument *document, int from, int to)
 {
     d->document = const_cast<QTextDocument*>(document);
     d->styleManager = KoTextDocument(document).styleManager();
-    d->changeTracker = KoTextDocument(document).changeTracker();
-
-    d->saveAllChanges();
-
 
     QTextBlock fromblock = document->findBlock(from);
     QTextBlock toblock = document->findBlock(to);
