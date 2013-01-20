@@ -1,5 +1,4 @@
 [Desktop Entry]
-Version=1.0
 Type=Application
 Name=Calligra Active
 Name[bs]=Calligra aktivno
@@ -30,7 +29,7 @@ Name[uk]=Портативна Calligra
 Name[x-test]=xxCalligra Activexx
 Name[zh_CN]=Calligra Active
 Name[zh_TW]=Calligra Active
-Exec=/usr/bin/calligraactive
+Exec=calligraactive
 Icon=calligramobile
 X-Window-Icon=calligramobile
 X-Window-Icon-Dimmed=calligramobile
