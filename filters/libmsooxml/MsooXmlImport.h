@@ -32,6 +32,7 @@
 #include <QHash>
 #include <QVariant>
 
+#include <KoBorder.h>
 #include <KoOdfExporter.h>
 #include <KoXmlReader.h>
 
