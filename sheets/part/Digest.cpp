@@ -258,7 +258,7 @@ static void __rtl_digest_swapLong(sal_uInt32 *pData, sal_uInt32 nDatLen)
     X = pData;
     n = nDatLen;
 
-    for (i = 0; i < n; i++)
+    for (i = 0; i < n; ++i)
         X[i] = OSL_SWAPDWORD(X[i]);
 }
 
@@ -609,13 +609,13 @@ static void __rtl_digest_endSHA(DigestContextSHA *ctx)
     i += 1;
 
     if (i >= (DIGEST_LBLOCK_SHA - 2)) {
-        for (; i < DIGEST_LBLOCK_SHA; i++)
+        for (; i < DIGEST_LBLOCK_SHA; ++i)
             X[i] = 0;
         __rtl_digest_updateSHA(ctx);
         i = 0;
     }
 
-    for (; i < (DIGEST_LBLOCK_SHA - 2); i++)
+    for (; i < (DIGEST_LBLOCK_SHA - 2); ++i)
         X[i] = 0;
 
     X[DIGEST_LBLOCK_SHA - 2] = ctx->m_nH;

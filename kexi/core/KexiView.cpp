@@ -304,6 +304,9 @@ KexiView::KexiView(QWidget *parent)
             d->saveDesignButton->setToolTip(i18n("Save current design"));
             d->saveDesignButton->setWhatsThis(i18n("Saves changes made to the current design."));
             d->topBarLyr->addWidget(d->saveDesignButton);
+
+            a = sharedAction("project_saveas");
+            d->mainMenu()->addAction(a);
         }
         else {
             d->saveDesignButton = 0;
@@ -427,19 +430,40 @@ KexiDB::SchemaData* KexiView::storeNewData(const KexiDB::SchemaData& sdata,
 {
     Q_UNUSED(options)
     Q_UNUSED(cancel)
-    KexiDB::SchemaData *new_schema = new KexiDB::SchemaData();
+    QScopedPointer<KexiDB::SchemaData> new_schema(new KexiDB::SchemaData);
     *new_schema = sdata;
 
-    if (!KexiMainWindowIface::global()->project()->dbConnection()
-            ->storeObjectSchemaData(*new_schema, true)
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    if (!conn->storeObjectSchemaData(*new_schema.data(), true)
+        || !conn->removeDataBlock(new_schema->id()) // for sanity
         || !KexiMainWindowIface::global()->project()->removeUserDataBlock(new_schema->id()) // for sanity
        )
     {
-        delete new_schema;
-        new_schema = 0;
+        return 0;
     }
     d->newlyAssignedID = new_schema->id();
-    return new_schema;
+    return new_schema.take();
+}
+
+KexiDB::SchemaData* KexiView::copyData(const KexiDB::SchemaData& sdata,
+                                        KexiView::StoreNewDataOptions options,
+                                        bool &cancel)
+{
+    Q_UNUSED(options)
+    Q_UNUSED(cancel)
+    QScopedPointer<KexiDB::SchemaData> new_schema(new KexiDB::SchemaData);
+    *new_schema = sdata;
+
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    if (!conn->storeObjectSchemaData(*new_schema.data(), true)
+        || !conn->copyDataBlock(d->window->id(), new_schema->id())
+        || !KexiMainWindowIface::global()->project()->copyUserDataBlock(d->window->id(), new_schema->id())
+       )
+    {
+        return 0;
+    }
+    d->newlyAssignedID = new_schema->id();
+    return new_schema.take();
 }
 
 tristate KexiView::storeData(bool dontAsk)

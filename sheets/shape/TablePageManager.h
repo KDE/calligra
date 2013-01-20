@@ -34,7 +34,7 @@ public:
     /**
      * Constructor.
      */
-    TablePageManager(TableShape* masterShape);
+    explicit TablePageManager(TableShape *masterShape);
 
     /**
      * Destructor.

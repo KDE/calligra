@@ -32,7 +32,7 @@ class WORDS_EXPORT CAuPart : public KWPart
     Q_OBJECT
 
 public:
-    CAuPart(QObject *parent);
+    explicit CAuPart(QObject *parent);
 
     void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 

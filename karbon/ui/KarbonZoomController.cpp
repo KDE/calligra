@@ -76,7 +76,7 @@ KarbonZoomController::KarbonZoomController(KoCanvasController *controller, KActi
     d->zoomHandler = dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(d->canvas->viewConverter()));
 
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(setAvailableSize()));
-    connect(d->canvasController->proxyObject, SIGNAL(zoomRelative(qreal, const QPointF&)), this, SLOT(requestZoomRelative(qreal, const QPointF&)));
+    connect(d->canvasController->proxyObject, SIGNAL(zoomRelative(qreal,QPointF)), this, SLOT(requestZoomRelative(qreal,QPointF)));
     connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
             d->canvas, SLOT(setDocumentOffset(QPoint)));
 

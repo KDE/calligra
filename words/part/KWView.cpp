@@ -111,6 +111,8 @@
 KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
         : KoView(part, document, parent)
         , m_canvas(0)
+        , m_minPageNum(1)
+        , m_maxPageNum(1)
 {
     setAcceptDrops(true);
 
@@ -158,7 +160,8 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     // the zoom controller needs to be initialized after the status bar gets initialized as
     // that resulted in bug 180759
     m_zoomController->setPageSize(m_currentPage.rect().size());
-    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
+    m_zoomController->setTextMinMax(m_currentPage.contentRect().left(), m_currentPage.contentRect().right());
+    KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_TEXT;
     if (m_canvas->viewMode()->hasPages())
         modes |= KoZoomMode::ZOOM_PAGE;
     m_zoomController->zoomAction()->setZoomModes(modes);
@@ -783,6 +786,7 @@ void KWView::zoomChanged(KoZoomMode::Mode mode, qreal zoom)
 void KWView::selectionChanged()
 {
     KoShape *shape = canvasBase()->shapeManager()->selection()-> firstSelectedShape();
+
     m_actionFormatFrameSet->setEnabled(shape != 0);
     m_actionAddBookmark->setEnabled(shape != 0);
     if (shape) {
@@ -818,14 +822,6 @@ void KWView::setCurrentPage(const KWPage &currentPage)
     if (currentPage != m_currentPage) {
         m_currentPage = currentPage;
         m_canvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, m_currentPage.pageNumber());
-
-        QSizeF newPageSize = m_currentPage.rect().size();
-        QSizeF newMaxPageSize = QSize(qMax(m_maxPageSize.width(), newPageSize.width()),
-                                     qMax(m_maxPageSize.height(), newPageSize.height()));
-        if (newMaxPageSize != m_maxPageSize) {
-            m_maxPageSize = newMaxPageSize;
-            m_zoomController->setPageSize(m_maxPageSize);
-        }
 
         m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
@@ -931,7 +927,7 @@ void KWView::offsetInDocumentMoved(int yOffset)
 {
     const qreal offset = -m_zoomHandler.viewToDocumentY(yOffset);
     const qreal height = m_zoomHandler.viewToDocumentY(m_gui->viewportSize().height());
-    if (m_currentPage.isValid()) { // most of the time the current will not change.
+/*    if (m_currentPage.isValid()) { // most of the time the current will not change.
         const qreal pageTop = m_currentPage.offsetInDocument();
         const qreal pageBottom = pageTop + m_currentPage.height();
         const qreal visibleArea = qMin(offset + height, pageBottom) - qMax(pageTop, offset);
@@ -942,21 +938,51 @@ void KWView::offsetInDocumentMoved(int yOffset)
         if (pageTop > offset && pageTop < offset + height) { // check if the page above is a candidate.
             KWPage page = m_currentPage.previous();
             if (page.isValid() && pageTop - offset > visibleArea) {
-                setCurrentPage(page);
+                firstDrawnPage = page;
                 return;
             }
         }
         if (pageBottom > offset && pageBottom < offset + height) { // check if the page above is a candidate.
             KWPage page = m_currentPage.next();
             if (page.isValid() && m_currentPage.height() - height > visibleArea) {
-                setCurrentPage(page);
+                firstDrawnPage = page;
                 return;
             }
         }
     }
-    KWPage page = m_document->pageManager()->page(qreal(offset + height / 2.0));
-    if (page.isValid())
-        setCurrentPage(page);
+*/
+    KWPage page = m_document->pageManager()->page(qreal(offset));
+    qreal pageTop = page.offsetInDocument();
+    QSizeF maxPageSize;
+    qreal minTextX =1000000000;
+    qreal maxTextX = -10000000000;
+    int minPageNum = page.pageNumber();
+    int maxPageNum = page.pageNumber();
+    while (page.isValid() && pageTop < qreal(offset + height)) {
+        pageTop += page.height();
+        QSizeF pageSize = page.rect().size();
+        maxPageSize = QSize(qMax(maxPageSize.width(), pageSize.width()),
+                                     qMax(maxPageSize.height(), pageSize.height()));
+        minTextX = qMin(minTextX, page.contentRect().left());
+        maxTextX = qMax(maxTextX, page.contentRect().right());
+        maxPageNum = page.pageNumber();
+        page = page.next();
+    }
+
+    if (maxPageSize != m_pageSize) {
+        m_pageSize = maxPageSize;
+        m_zoomController->setPageSize(m_pageSize);
+    }
+    if (minTextX != m_textMinX || maxTextX != m_textMaxX) {
+        m_textMinX = minTextX;
+        m_textMaxX = maxTextX;
+        m_zoomController->setTextMinMax(minTextX, maxTextX);
+    }
+    if (minPageNum != m_minPageNum || maxPageNum != m_maxPageNum) {
+        m_minPageNum = minPageNum;
+        m_maxPageNum = maxPageNum;
+        emit shownPagesChanged();
+    }
 }
 
 #ifdef SHOULD_BUILD_RDF

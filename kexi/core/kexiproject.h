@@ -248,7 +248,7 @@ public:
 
     /*! removes \a item from internal dictionaries. The item is destroyed
      after successful removal.
-     Used to delete an unstored part item previusly created with createPartItem(). */
+     Used to delete an unstored part item previously created with createPartItem(). */
     void deleteUnstoredItem(KexiPart::Item *item);
 
     /**
@@ -303,20 +303,30 @@ public:
     /*! Loads current user's data block, referenced by \a objectID and \a dataID
      and puts it to \a dataString.
      \return true on success, false on failure and cancelled when there is no such data block
-     \sa storeUserDataBlock(). */
+     \sa storeUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::loadDataBlock(). */
     tristate loadUserDataBlock(int objectID, const QString& dataID, QString *dataString);
 
     /*! Stores current user's data block \a dataString, referenced by \a objectID and \a dataID.
      The block will be stored in "kexi__userdata" table
      If there is already such record in the table, it's simply overwritten.
      \return true on success
-     \sa loadUserDataBlock(). */
+     \sa loadUserDataBlock() removeUserDataBlock() copyUserDataBlock() KexiDB::Connection::storeDataBlock(). */
     bool storeUserDataBlock(int objectID, const QString& dataID, const QString &dataString);
+
+    /*! Copies urrent user's data blocks referenced by \a sourceObjectID and pointed
+     by optional \a dataID.
+     \return true on success. Does not fail if blocks do not exist.
+     Prior to copying, existing user data blocks are removed even if there is nothing to copy.
+     Copied data blocks will have \a destObjectID object identifier assigned.
+     Note that if \a dataID is not specified, all user data blocks found for the \a sourceObjectID
+     will be copied.
+     \sa loadUserDataBlock() storeUserDataBlock() removeUserDataBlock() KexiDB::Connection::copyDataBlock(). */
+    bool copyUserDataBlock(int sourceObjectID, int destObjectID, const QString &dataID = QString());
 
     /*! Removes current user's data block referenced by \a objectID and \a dataID.
      \return true on success. Does not fail if the block does not exist.
      Note that if \a dataID is not specified, all data blocks for this user and object will be removed.
-     \sa loadUserDataBlock() storeUserDataBlock(). */
+     \sa loadUserDataBlock() storeUserDataBlock() copyUserDataBlock() KexiDB::Connection::removeDataBlock(). */
     bool removeUserDataBlock(int objectID, const QString& dataID = QString());
 
 protected:

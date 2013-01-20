@@ -110,8 +110,8 @@ bool KWRdfDockerTree::dropMimeData(QTreeWidgetItem *parent, int index,
         while (!ss.atEnd()) {
             QString fileName = ss.readLine();
             //kDebug(30015) << "fileName:" << fileName;
-            if (fileName.startsWith("file:")) {
-                fileName = fileName.mid(strlen("file:"));
+            if (fileName.startsWith(QLatin1String("file:"))) {
+                fileName.remove(0, 5);
             }
             QFile f(fileName);
             f.open(QIODevice::ReadOnly);

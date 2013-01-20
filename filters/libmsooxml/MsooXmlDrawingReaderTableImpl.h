@@ -308,6 +308,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tableStyleId()
     READ_PROLOGUE
 
     readNext();
+    QString id = text().toString();
+
+    QString predefinedTable = getPresetTable(id);
+    if (!predefinedTable.isEmpty()) {
+        predefinedTable.prepend("<a:tblStyleLst xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\">");
+        predefinedTable.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+        predefinedTable.append("</a:tblStyleLst>");
+        QString tableStylesFile;
+        QString tableStylesPath;
+        QBuffer tempDevice;
+        tempDevice.setData(predefinedTable.toAscii());
+        tempDevice.open(QIODevice::ReadOnly);
+        MSOOXML::Utils::splitPathAndFile(m_context->tableStylesFilePath, &tableStylesPath, &tableStylesFile);
+        MSOOXML::MsooXmlDrawingTableStyleReader tableStyleReader(this);
+        MSOOXML::MsooXmlDrawingTableStyleContext tableStyleReaderContext(m_context->import, tableStylesPath,
+                                                                         tableStylesFile, &m_context->slideMasterProperties->theme,
+                                                                         d->tableStyleList, m_context->colorMap);
+        m_context->import->loadAndParseFromDevice(&tableStyleReader, &tempDevice, &tableStyleReaderContext);
+    }
+
     m_tableStyle = d->tableStyleList->value(text().toString());
     readNext();
 

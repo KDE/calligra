@@ -29,7 +29,7 @@ class KPrShapeAnimation;
 class KPrAnimationAttribute
 {
 public:
-    KPrAnimationAttribute(QString attributeName);
+    explicit KPrAnimationAttribute(const QString &attributeName);
     virtual ~KPrAnimationAttribute();
     QString attributeName() const;
 

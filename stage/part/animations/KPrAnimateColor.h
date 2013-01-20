@@ -25,7 +25,7 @@
 class KPrAnimateColor : public KPrAnimationBase
 {
 public:
-    KPrAnimateColor(KPrShapeAnimation *shapeAnimation);
+    explicit KPrAnimateColor(KPrShapeAnimation *shapeAnimation);
     virtual ~KPrAnimateColor();
 
     virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );

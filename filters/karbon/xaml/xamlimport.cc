@@ -151,19 +151,23 @@ XAMLImport::convert()
 double
 XAMLImport::toPercentage(QString s)
 {
-    if (s.endsWith('%'))
-        return s.remove('%').toDouble();
-    else
-        return s.toDouble() * 100.0;
+    if (s.endsWith(QLatin1Char('%'))) {
+        s.chop(1);
+        return s.toDouble();
+    }
+
+    return s.toDouble() * 100.0;
 }
 
 double
 XAMLImport::fromPercentage(QString s)
 {
-    if (s.endsWith('%'))
-        return s.remove('%').toDouble() / 100.0;
-    else
-        return s.toDouble();
+    if (s.endsWith(QLatin1Char('%'))) {
+        s.chop(1);
+        return s.toDouble() / 100.0;
+    }
+
+    return s.toDouble();
 }
 
 // parses the number into parameter number

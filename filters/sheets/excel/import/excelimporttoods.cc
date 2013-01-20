@@ -572,8 +572,9 @@ void ExcelImport::Private::processWorkbookForBody(KoOdfWriteStore* store, Workbo
             xmlWriter->startElement("table:named-range");
             xmlWriter->addAttribute("table:name", it->first.second ); // e.g. "My Named Range"
             QString range = it->second;
-            if(range.startsWith('[') && range.endsWith(']'))
-                range = range.mid(1, range.length() - 2);
+            if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
+                range.remove(0, 1).chop(1);
+            }
             xmlWriter->addAttribute("table:cell-range-address", range); // e.g. "$Sheet1.$B$2:.$B$3"
             xmlWriter->endElement();//[Sheet1.$B$2:$B$3]
         }

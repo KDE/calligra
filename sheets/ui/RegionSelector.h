@@ -50,7 +50,7 @@ public:
     enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
     enum DisplayMode { Widget, Dialog };
 
-    RegionSelector(QWidget* parent = 0);
+    explicit RegionSelector(QWidget *parent = 0);
     ~RegionSelector();
 
     void setSelectionMode(SelectionMode mode);

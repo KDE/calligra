@@ -32,7 +32,7 @@ class XlsxComments;
 class XlsxComment
 {
 public:
-    XlsxComment(uint authorId);
+    explicit XlsxComment(uint authorId);
     QString texts;
 //    QString ref;
     inline QString author(const XlsxComments* comments) const;

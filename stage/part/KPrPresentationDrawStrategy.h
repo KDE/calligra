@@ -27,7 +27,7 @@
 class KPrPresentationDrawStrategy : public KPrPresentationStrategyBase
 {
 public:
-    KPrPresentationDrawStrategy( KPrPresentationTool * tool );
+    explicit KPrPresentationDrawStrategy(KPrPresentationTool *tool);
     virtual ~KPrPresentationDrawStrategy();
 
     virtual bool keyPressEvent( QKeyEvent * event );

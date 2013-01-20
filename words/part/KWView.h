@@ -115,6 +115,12 @@ public:
 
     virtual KoZoomController *zoomController() const { return m_zoomController; }
 
+    int minPageNumber() const { return m_minPageNum; }
+    int maxPageNumber() const { return m_maxPageNum; }
+
+signals:
+    void shownPagesChanged();
+
 public slots:
     void offsetInDocumentMoved(int yOffset);
 
@@ -227,8 +233,11 @@ private:
     bool m_snapToGrid;
     QString m_lastPageSettingsTab;
 
-    QSizeF m_maxPageSize; // The maximum size of the pages we have encountered. This is used to
-                         // make sure that we always show all pages correctly in page/pagewidth mode.
+    QSizeF m_pageSize; // The max size of the pages we currently show. Prevents endless loop
+    qreal m_textMinX; // The min x value where text can appear we currently show. Prevents endless loop
+    qreal m_textMaxX; // The max x value where text can appear we currently show. Prevents endless loop
+    int m_minPageNum;
+    int m_maxPageNum;
 };
 
 #endif

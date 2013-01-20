@@ -49,7 +49,7 @@ class SheetPropertiesDialog : public KDialog
 
 public:
 
-    SheetPropertiesDialog(QWidget* parent = 0);
+    explicit SheetPropertiesDialog(QWidget *parent = 0);
 
     ~SheetPropertiesDialog();
 

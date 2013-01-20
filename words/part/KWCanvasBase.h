@@ -48,7 +48,7 @@ class KWPageCacheManager;
 class WORDS_EXPORT KWCanvasBase : public KoCanvasBase
 {
 public:
-    KWCanvasBase(KWDocument *document, QObject *parent = 0);
+    explicit KWCanvasBase(KWDocument *document, QObject *parent = 0);
     ~KWCanvasBase();
 
 public: // KoCanvasBase interface methods.

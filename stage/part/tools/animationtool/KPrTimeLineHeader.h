@@ -31,7 +31,7 @@ class KPrTimeLineHeader : public QWidget
 {
     Q_OBJECT
 public:
-    KPrTimeLineHeader(QWidget *parent);
+    explicit KPrTimeLineHeader(QWidget *parent);
     QSize minimumSizeHint() const;
     QSize sizeHint() const {return minimumSizeHint();}
 protected:

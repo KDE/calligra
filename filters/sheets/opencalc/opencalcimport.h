@@ -63,7 +63,7 @@ private:
     class OpenCalcPoint
     {
     public:
-        OpenCalcPoint(QString const & str);
+        explicit OpenCalcPoint(const QString &str);
 
         QString table;
         QString translation;

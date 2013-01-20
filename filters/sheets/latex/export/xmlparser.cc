@@ -30,7 +30,7 @@ FileHeader* XmlParser::_fileHeader = 0;
 Document* XmlParser::_root = 0;
 KoStore* XmlParser::_in = NULL;
 
-XmlParser::XmlParser(QString filename): _filename(filename)
+XmlParser::XmlParser(const QString &filename): _filename(filename)
 {
     QFile f(filename);
     if (!f.open(QIODevice::ReadOnly))

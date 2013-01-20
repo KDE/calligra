@@ -47,8 +47,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::parseCSS(const QString& style)
         if (name.isEmpty()) {
             continue;
         }
-        if (value.startsWith("'") && value.endsWith("'")) {
-            value = value.mid(1, value.length() - 2); // strip ' '
+        if (value.startsWith(QLatin1Char('\'')) && value.endsWith(QLatin1Char('\''))) {
+            value.remove(0, 1).chop(1);
         }
 #ifdef VMLREADER_DEBUG
         kDebug() << "name:" << name << "value:" << value;
@@ -492,7 +492,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     // shadow offset
     // ------------------------------
     QString offset = m_currentVMLProperties.shadowXOffset;
-    if (offset.endsWith('%')) {
+    if (offset.endsWith(QLatin1Char('%'))) {
         offset.chop(1);
         bool ok;
         int p = offset.toInt(&ok);
@@ -505,7 +505,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     m_currentDrawStyle->addProperty("draw:shadow-offset-x", offset);
 
     offset = m_currentVMLProperties.shadowYOffset;
-    if (offset.endsWith("%")) {
+    if (offset.endsWith(QLatin1Char('%'))) {
         offset.chop(1);
         bool ok;
         int p = offset.toInt(&ok);

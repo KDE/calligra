@@ -55,7 +55,7 @@ namespace RtfReader
     /**
        Normal constructor
     */
-    Reader( QObject *parent = 0 );
+    explicit Reader( QObject *parent = 0 );
 
     /**
        Open a document

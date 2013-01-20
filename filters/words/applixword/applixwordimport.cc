@@ -672,8 +672,6 @@ APPLIXWORDImport::readTagLine(QTextStream &stream)
 void
 APPLIXWORDImport::replaceSpecial(QString &textstr)
 {
-    int ok, pos;
-
     // 1. Replace Part for this characters: <, >, &
     textstr.replace('&', "&amp;");
     textstr.replace('<', "&lt;");
@@ -681,8 +679,8 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
 
 
     // 2. Replace part for this characters: applixwear qoutes
-    ok = true;
-    pos = 0;
+    bool ok = true;
+    int pos = 0;
     do {
         // Searching for an quote
         pos = textstr.indexOf('\"', pos);
