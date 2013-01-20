@@ -82,7 +82,7 @@ public:
 };
 
 KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 * canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent, KisOpenGLImageTexturesSP imageTextures)
-        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent, KisOpenGL::sharedContextWidget())
+        : QGLWidget(QGLFormat(QGL::SampleBuffers | QGL::SingleBuffer), parent, KisOpenGL::sharedContextWidget())
         , KisCanvasWidgetBase(canvas, coordinatesConverter)
         , m_d(new Private())
 {
