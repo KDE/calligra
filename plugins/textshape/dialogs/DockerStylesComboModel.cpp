@@ -237,13 +237,16 @@ void DockerStylesComboModel::setCurrentParagraphStyle(int styleId)
 
 void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
 {
+    if (!style) {
+        return;
+    }
     if (!m_usedStylesId.contains(style->styleId())) {
         m_usedStylesId.append(style->styleId());
         if (m_sourceModel->stylesType() == AbstractStylesModel::CharacterStyle) {
             QVector<int>::iterator begin = m_usedStyles.begin();
             for ( ; begin != m_usedStyles.end(); ++begin) {
                 KoCharacterStyle *s = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
+                if (!s || KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
                     break;
                 }
             }
@@ -253,7 +256,7 @@ void DockerStylesComboModel::styleApplied(const KoCharacterStyle *style)
             QVector<int>::iterator begin = m_usedStyles.begin();
             for ( ; begin != m_usedStyles.end(); ++begin) {
                 KoParagraphStyle *s = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                if (KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
+                if (!s || KStringHandler::naturalCompare(style->name(), s->name()) < 0) {
                     break;
                 }
             }
@@ -287,7 +290,7 @@ void DockerStylesComboModel::createMapping()
                         QVector<int>::iterator begin = m_unusedStyles.begin();
                         for ( ; begin != m_unusedStyles.end(); ++begin) {
                             KoParagraphStyle *style = m_styleManager->paragraphStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                            if (KStringHandler::naturalCompare(paragStyle->name(), style->name()) < 0) {
+                            if (! style || KStringHandler::naturalCompare(paragStyle->name(), style->name()) < 0) {
                                 break;
                             }
                         }
@@ -305,7 +308,7 @@ void DockerStylesComboModel::createMapping()
                         QVector<int>::iterator begin = m_unusedStyles.begin();
                         for ( ; begin != m_unusedStyles.end(); ++begin) {
                             KoCharacterStyle *style = m_styleManager->characterStyle(m_sourceModel->index(*begin, 0, QModelIndex()).internalId());
-                            if (KStringHandler::naturalCompare(charStyle->name(), style->name()) < 0) {
+                            if (! style || KStringHandler::naturalCompare(charStyle->name(), style->name()) < 0) {
                                 break;
                             }
                         }
