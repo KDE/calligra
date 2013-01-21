@@ -456,6 +456,16 @@ public:
     QVector<int> usedCharacterStyles() const;
     QVector<int> usedParagraphStyles() const;
 
+    /** Creates a set of text styles to be used by applications which do not use full blown styling (loaded from an odt for example).
+     * For example Krita. These applications do not create a KoStyleManager by default. When they create a textshape, a KoStyleManager is created.
+     * The textshape factory will then call this method to generate a default set of styles. This will also set a flag (isUsingDefaultSet) which will be tested in the
+     * textshape ui in order not to hide the Standard style (default).
+     * TODO: maybe find a better system for all this.
+     */
+
+    void createDefaultSet();
+    bool isUsingDefaultSet();
+
 signals:
     void styleAdded(KoParagraphStyle*);
     void styleAdded(KoCharacterStyle*);

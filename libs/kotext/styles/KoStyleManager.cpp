@@ -57,7 +57,7 @@
 class KoStyleManager::Private
 {
 public:
-    Private() : defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0), undoStack(0), changeCommand(0)
+    Private() : defaultCharacterStyle(0), defaultParagraphStyle(0), defaultListStyle(0), defaultOutlineStyle(0), outlineStyle(0), undoStack(0), changeCommand(0), usingDefaultSet(false)
     {
     }
     ~Private() {
@@ -91,6 +91,8 @@ public:
     KoOdfBibliographyConfiguration *bibliographyConfiguration;
     KUndo2Stack *undoStack;
     ChangeStylesMacroCommand *changeCommand;
+
+    bool usingDefaultSet;
 
     QVector<int> m_usedCharacterStyles;
     QVector<int> m_usedParagraphStyles;
@@ -1167,6 +1169,45 @@ KoTextTableTemplate *KoStyleManager::tableTemplate(const QString &name) const
 KoTextTableTemplate *KoStyleManager::tableTemplate(int id) const
 {
     return d->tableTemplates.value(id, 0);
+}
+
+void KoStyleManager::createDefaultSet()
+{
+    d->paragStyles.clear();
+    d->usingDefaultSet = true;
+
+    KoParagraphStyle *paragStyle = new KoParagraphStyle();
+    paragStyle->setName(i18n("Standard"));
+    paragStyle->setFontPointSize(12);
+    add(paragStyle);
+    d->defaultParagraphStyle = paragStyle;
+
+    paragStyle = new KoParagraphStyle();
+    paragStyle->setName(i18n("Document title"));
+    paragStyle->setFontPointSize(26);
+    paragStyle->setFontWeight(75);
+    paragStyle->setAlignment(Qt::AlignHCenter);
+    paragStyle->setNextStyle(d->defaultParagraphStyle->styleId());
+    add(paragStyle);
+
+    paragStyle = new KoParagraphStyle();
+    paragStyle->setName(i18n("Head 1"));
+    paragStyle->setFontPointSize(20);
+    paragStyle->setFontWeight(75);
+    paragStyle->setNextStyle(d->defaultParagraphStyle->styleId());
+    add(paragStyle);
+
+    paragStyle = new KoParagraphStyle();
+    paragStyle->setName(i18n("Head 2"));
+    paragStyle->setFontPointSize(16);
+    paragStyle->setFontWeight(75);
+    paragStyle->setNextStyle(d->defaultParagraphStyle->styleId());
+    add(paragStyle);
+}
+
+bool KoStyleManager::isUsingDefaultSet()
+{
+    return d->usingDefaultSet;
 }
 
 #include <KoStyleManager.moc>
