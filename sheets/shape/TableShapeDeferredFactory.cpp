@@ -31,7 +31,6 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
-#include <KoShapeRegistry.h>
 
 #include <Map.h>
 

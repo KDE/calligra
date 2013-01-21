@@ -54,7 +54,6 @@
 #include <QToolButton>
 #include <QSqlDatabase>
 #include <QSizePolicy>
-#include <QList>
 #include <QScrollBar>
 
 // KDE includes

@@ -20,7 +20,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "SheetPrint.h"
 #include "SheetPrint_p.h"
 
 #include "PrintSettings.h"
