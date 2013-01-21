@@ -54,7 +54,7 @@ Page {
             textColor: "white";
             text: "Upload";
             onClicked: {
-                switcher.currentPage.submitArt(sharingManager.sharingHandler(switcher.currentPage.pluginName));
+                switcher.currentPage.submitArt();
             }
         }
     }
@@ -76,6 +76,7 @@ Page {
         id: switcher;
         anchors.bottom: parent.bottom;
         height: Constants.GridHeight * (Constants.GridRows - 2);
+        onCurrentPageChanged: currentPage.sharingHandler = sharingManager.sharingHandler(currentPage.pluginName);
 
         categories: [ { name: "DeviantArt Sta.sh", page: contentPage }/*, { name: "MediaGoblin", page: contentPage }*/ ];
 
