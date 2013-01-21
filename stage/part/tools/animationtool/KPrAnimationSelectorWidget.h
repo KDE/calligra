@@ -51,11 +51,11 @@ public:
     void init();
 
 signals:
-    /// this signal is emited when an animation is hovered
+    /// this signal is emitted when an animation is hovered
     void requestPreviewAnimation(KPrShapeAnimation *animation);
-    /// this signal is emited when an animation is selected
+    /// this signal is emitted when an animation is selected
     void requestAcceptAnimation(KPrShapeAnimation *animation);
-    /// signal emited if automatic preview checkbox state is changed
+    /// signal emitted if automatic preview checkbox state is changed
     void previousStateChanged(bool state);
 
 private slots:

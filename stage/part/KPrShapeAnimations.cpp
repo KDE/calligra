@@ -168,7 +168,7 @@ QVariant KPrShapeAnimations::data(const QModelIndex &index, int role) const
             switch (index.column()) {
             case Group:
             case StepCount: return QVariant();
-            case TriggerEvent:/// emited if an item time range has changed (return the index of the item changed)
+            case TriggerEvent:/// emitted if an item time range has changed (return the index of the item changed)
                 if (currentData.nodeType == KPrShapeAnimation::OnClick)
                     return i18n("start on mouse click");
                 if (currentData.nodeType == KPrShapeAnimation::AfterPrevious)
