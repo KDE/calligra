@@ -139,7 +139,7 @@ bool KPrSmilValues::saveOdf(KoPASavingContext &paContext) const
     KoXmlWriter &writer = paContext.xmlWriter();
     // values
     QString values;
-    foreach (KPrFormulaParser valueParser, m_values) {
+    foreach (const KPrFormulaParser &valueParser, m_values) {
         if (values.isEmpty()) {
             values = QString("%1").arg(valueParser.formula());
         } else {
