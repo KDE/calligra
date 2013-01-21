@@ -37,29 +37,29 @@
 class ApplyTransformCmdData : public KisSelectedTransactionData
 {
 public:
-    ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node);
+    ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node);
     virtual ~ApplyTransformCmdData();
 
 public:
     virtual void redo();
     virtual void undo();
-    ToolTransformArgs::TransfMode mode() const;
+    ToolTransformArgs::TransformMode mode() const;
 private:
     KisToolTransform *m_tool;
-    ToolTransformArgs::TransfMode m_mode;
+    ToolTransformArgs::TransformMode m_mode;
 };
 
 
 class ApplyTransformCmd : public KisTransaction
 {
 public:
-    ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node);
+    ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node);
 };
 
 class TransformCmd : public KUndo2Command
 {
 public:
-    TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos, const QImage &origImg, const QImage &origSelectionImg);
+    TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos);
     virtual ~TransformCmd();
 
 public:
@@ -69,7 +69,6 @@ public:
     KisSelectionSP origSelection(QPoint &startPos, QPoint &endPos) const;
 
     const QImage &originalImage() const;
-    const QImage &originalSelectionImage() const;
 
 private:
     ToolTransformArgs m_args;
@@ -77,8 +76,6 @@ private:
     KisSelectionSP m_origSelection;
     QPoint m_originalTopLeft;
     QPoint m_originalBottomRight;
-    QImage m_origImg;
-    QImage m_origSelectionImg;
 };
 
 #endif // TOOL_TRANSFORM_COMMANDS_H_

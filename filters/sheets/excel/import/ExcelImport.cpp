@@ -282,8 +282,9 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     const std::map<std::pair<unsigned, QString>, QString>& namedAreas = d->workbook->namedAreas();
     for (std::map<std::pair<unsigned, QString>, QString>::const_iterator it = namedAreas.begin(); it != namedAreas.end(); ++it) {
         QString range = it->second;
-        if(range.startsWith('[') && range.endsWith(']'))
-            range = range.mid(1, range.length() - 2);
+        if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
+            range.remove(0, 1).chop(1);
+        }
         Calligra::Sheets::Region region(Calligra::Sheets::Region::loadOdf(range), d->outputDoc->map());
         if (!region.isValid() || !region.lastSheet()) {
             kDebug() << "invalid area" << range;

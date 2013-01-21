@@ -21,7 +21,7 @@
 #include "tool_transform_commands.h"
 #include <kis_image.h>
 
-ApplyTransformCmdData::ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node)
+ApplyTransformCmdData::ApplyTransformCmdData(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node)
         : KisSelectedTransactionData(i18n("Apply transformation"), node)
         , m_tool(tool)
 {
@@ -32,7 +32,7 @@ ApplyTransformCmdData::~ApplyTransformCmdData()
 {
 }
 
-ToolTransformArgs::TransfMode ApplyTransformCmdData::mode() const
+ToolTransformArgs::TransformMode ApplyTransformCmdData::mode() const
 {
     return m_mode;
 }
@@ -47,12 +47,12 @@ void ApplyTransformCmdData::undo()
     KisSelectedTransactionData::undo();
 }
 
-ApplyTransformCmd::ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransfMode mode, KisNodeSP node)
+ApplyTransformCmd::ApplyTransformCmd(KisToolTransform *tool, ToolTransformArgs::TransformMode mode, KisNodeSP node)
 {
     m_transactionData = new ApplyTransformCmdData(tool, mode, node);
 }
 
-TransformCmd::TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos, const QImage &origImg, const QImage &origSelectionImg)
+TransformCmd::TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args, KisSelectionSP origSel, QPoint startPos, QPoint endPos)
         : KUndo2Command(i18nc("(qtundo-format)", "Transform"))
 {
     m_args = args;
@@ -60,8 +60,6 @@ TransformCmd::TransformCmd(KisToolTransform *tool, const ToolTransformArgs &args
     m_origSelection = origSel;
     m_originalTopLeft = startPos;
     m_originalBottomRight = endPos;
-    m_origImg = origImg;
-    m_origSelectionImg = origSelectionImg;
 }
 
 TransformCmd::~TransformCmd()
@@ -78,16 +76,6 @@ KisSelectionSP TransformCmd::origSelection(QPoint &originalTopLeft, QPoint &orig
     originalTopLeft = m_originalTopLeft;
     originalBottomRight = m_originalBottomRight;
     return m_origSelection;
-}
-
-const QImage &TransformCmd::originalImage() const
-{
-    return m_origImg;
-}
-
-const QImage &TransformCmd::originalSelectionImage() const
-{
-    return m_origSelectionImg;
 }
 
 void TransformCmd::redo()

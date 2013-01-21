@@ -1571,8 +1571,8 @@ bool Sheet::loadOdf(const KoXmlElement& sheetElement,
                             BackgroundImageProperties bgProperties;
                             if( element.hasAttribute("draw:opacity") ) {
                                 QString opacity = element.attribute("draw:opacity", "");
-                                if( opacity.endsWith('%') ) {
-                                    opacity = opacity.left(opacity.size() - 2);
+                                if( opacity.endsWith(QLatin1Char('%')) ) {
+                                    opacity.chop(1);
                                 }
                                 bool ok;
                                 float opacityFloat = opacity.toFloat( &ok );

@@ -37,7 +37,7 @@ class Selection;
 class MergeCommand : public AbstractRegionCommand
 {
 public:
-    MergeCommand(KUndo2Command* parent = 0);
+    explicit MergeCommand(KUndo2Command *parent = 0);
     virtual ~MergeCommand();
 
     virtual bool preProcessing();

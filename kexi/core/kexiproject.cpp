@@ -1093,6 +1093,7 @@ void KexiProject::deleteUnstoredItem(KexiPart::Item *item)
     if (!item)
         return;
     d->unstoredItems.remove(item);
+    delete item;
 }
 
 KexiDB::Parser* KexiProject::sqlParser()
@@ -1335,6 +1336,30 @@ bool KexiProject::storeUserDataBlock(int objectID, const QString& dataID, const 
                + ", " + d->connection->driver()->valueToSQL(KexiDB::Field::Text, dataID)
                + ", " + d->connection->driver()->valueToSQL(KexiDB::Field::LongText, dataString)
                + ")");
+}
+
+bool KexiProject::copyUserDataBlock(int sourceObjectID, int destObjectID, const QString &dataID)
+{
+    if (!checkObjectId("storeUserDataBlock(sourceObjectID)", sourceObjectID)) {
+        return false;
+    }
+    if (!checkObjectId("storeUserDataBlock(destObjectID)", destObjectID)) {
+        return false;
+    }
+    if (sourceObjectID == destObjectID)
+        return true;
+    if (!removeUserDataBlock(destObjectID, dataID)) // remove before copying
+        return false;
+    QString sql(QString::fromLatin1(
+         "INSERT INTO kexi__userdata SELECT t.d_user, %2, t.d_sub_id, t.d_data "
+         "FROM kexi__userdata AS t WHERE d_user=%1 AND o_id=%3")
+         .arg(d->connection->driver()->valueToSQL(KexiDB::Field::Text, d->userName()))
+         .arg(destObjectID)
+         .arg(sourceObjectID));
+    if (!dataID.isEmpty()) {
+        sql += " AND " + KexiDB::sqlWhere(d->connection->driver(), KexiDB::Field::Text, "d_sub_id", dataID);
+    }
+    return d->connection->executeSQL(sql);
 }
 
 bool KexiProject::removeUserDataBlock(int objectID, const QString& dataID)

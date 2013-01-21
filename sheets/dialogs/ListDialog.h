@@ -37,7 +37,7 @@ class ListDialog: public KDialog
 {
     Q_OBJECT
 public:
-    ListDialog(QWidget* parent);
+    explicit ListDialog(QWidget *parent);
     ~ListDialog();
 
     void init();

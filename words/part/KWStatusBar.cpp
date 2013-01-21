@@ -47,7 +47,8 @@
 
 const KLocalizedString i18nModified = ki18n("Modified");
 const KLocalizedString i18nSaved = ki18n("Saved");
-const KLocalizedString i18nPage = ki18n("Page %1/%2");
+const KLocalizedString i18nPage = ki18n("Page %1 of %2");
+const KLocalizedString i18nPageRange = ki18n("Page %1-%2 of %3");
 const KLocalizedString i18nLine = ki18n("Line %1");
 
 #define KWSTATUSBAR "KWStatusBarPointer"
@@ -127,7 +128,7 @@ KWStatusBar::KWStatusBar(KStatusBar *statusBar, KWView *view)
     m_statusbar->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     m_pageLabel = new KWStatusBarEditItem();
-    m_pageLabel->setFixedWidth(QFontMetrics(m_pageLabel->m_label->font()).width(i18nPage.subs("9999").subs("9999").toString()));
+    m_pageLabel->setFixedWidth(QFontMetrics(m_pageLabel->m_label->font()).width(i18nPageRange.subs("9999").subs("9999").subs("9999").toString()));
     m_statusbar->addWidget(m_pageLabel);
     m_pageLabel->setVisible(document->config().statusBarShowPage());
     connect(m_pageLabel->m_edit, SIGNAL(returnPressed()), this, SLOT(gotoPage()));
@@ -256,8 +257,12 @@ void KWStatusBar::setModified(bool modified)
 
 void KWStatusBar::updatePageCount()
 {
-    if (m_currentView) {
-        m_pageLabel->m_label->setText(i18nPage.subs(m_currentView->currentPage().pageNumber()).subs(m_currentView->kwdocument()->pageCount()).toString());
+   if (m_currentView) {
+        if (m_currentView->minPageNumber() == m_currentView->maxPageNumber()) {
+            m_pageLabel->m_label->setText(i18nPage.subs(m_currentView->minPageNumber()).subs(m_currentView->kwdocument()->pageCount()).toString());
+        } else {
+            m_pageLabel->m_label->setText(i18nPageRange.subs(m_currentView->minPageNumber()).subs(m_currentView->maxPageNumber()).subs(m_currentView->kwdocument()->pageCount()).toString());
+        }
         m_pageLabel->m_edit->setText(QString::number(m_currentView->currentPage().pageNumber()));
         if (m_modifiedLabel->text().isEmpty())
             setModified(m_currentView->kwdocument()->isModified());
@@ -345,7 +350,6 @@ void KWStatusBar::resourceChanged(int key, const QVariant &value)
 {
     Q_UNUSED(value);
     if (key ==  KoCanvasResourceManager::CurrentPage) {
-        updatePageCount();
         updateCursorPosition();
         updatePageStyle();
         updatePageSize();
@@ -419,6 +423,7 @@ void KWStatusBar::setCurrentView(KWView *view)
                 disconnect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()));
             }
         }
+        disconnect(m_currentView, SIGNAL(shownPagesChanged()), this, SLOT(updatePageCount()));
     }
 
     m_currentView = view;
@@ -452,6 +457,7 @@ void KWStatusBar::setCurrentView(KWView *view)
             connect(editor, SIGNAL(cursorPositionChanged()), this, SLOT(updateCursorPosition()), Qt::QueuedConnection);
         }
     }
+    connect(m_currentView, SIGNAL(shownPagesChanged()), this, SLOT(updatePageCount()));
 }
 
 void KWStatusBar::createZoomWidget()

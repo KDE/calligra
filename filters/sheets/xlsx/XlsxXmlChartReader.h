@@ -48,7 +48,7 @@ public:
 class XlsxXmlChartReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    XlsxXmlChartReader(KoOdfWriters *writers);
+    explicit XlsxXmlChartReader(KoOdfWriters *writers);
     virtual ~XlsxXmlChartReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
     void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, KoGenStyle::Type formatType, const QString& formatString = QString());

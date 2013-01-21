@@ -197,6 +197,11 @@ protected:
                                              KexiView::StoreNewDataOptions options,
                                              bool &cancel);
 
+    /*! Reimplemented from KexiView, because cloning of table objects is more complex. */
+    virtual KexiDB::SchemaData* copyData(const KexiDB::SchemaData& sdata,
+                                          KexiView::StoreNewDataOptions options,
+                                          bool &cancel);
+
     /*! Reimplemented from KexiView, because table storage is more complex.
      Table schema altering may be required, so just buildSchema() is used to create a new schema.
     */

@@ -38,7 +38,7 @@ public:
     /**
      * Constructor.
      */
-    NamedAreaCommand(KUndo2Command* parent = 0);
+    explicit NamedAreaCommand(KUndo2Command *parent = 0);
 
     /**
      * Destructor.

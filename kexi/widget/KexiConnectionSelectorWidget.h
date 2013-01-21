@@ -20,7 +20,7 @@
 #ifndef KEXICONNECTIONSELECTORWIDGET_H
 #define KEXICONNECTIONSELECTORWIDGET_H
 
-#include <kexidbconnectionset.h>
+#include <core/kexidbconnectionset.h>
 #include <db/driver.h>
 
 #include <KDialog>

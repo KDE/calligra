@@ -252,39 +252,39 @@ void LinkDialog::setText(const QString& text)
 // "www.calligra.org" only, since protocol is used to decide which page to show
 void LinkDialog::setLink(const QString& link)
 {
-    if (link.startsWith("https://")) {
-        d->internetLink->setText(link.mid(QString("https://").length()));
+    if (link.startsWith(QLatin1String("https://"))) {
+        d->internetLink->setText(link.mid(8));
         setCurrentPage(d->p1);
         return;
     }
 
-    if (link.startsWith("http://")) {
-        d->internetLink->setText(link.mid(QString("http://").length()));
+    if (link.startsWith(QLatin1String("http://"))) {
+        d->internetLink->setText(link.mid(7));
         setCurrentPage(d->p1);
         return;
     }
 
-    if (link.startsWith("ftp://")) {
-        d->internetLink->setText(link.mid(QString("ftp://").length()));
+    if (link.startsWith(QLatin1String("ftp://"))) {
+        d->internetLink->setText(link.mid(6));
         setCurrentPage(d->p1);
         return;
     }
 
-    if (link.startsWith("mailto:")) {
+    if (link.startsWith(QLatin1String("mailto:"))) {
         QUrl url(link);
         if (url.isValid()) {
             d->mailLink->setText(url.toString(QUrl::RemoveScheme | QUrl::RemoveQuery));
             d->mailSubject->setText(url.queryItemValue("subject"));
         } else {
-            d->mailLink->setText(link.mid(QString("mailto:").length()));
+            d->mailLink->setText(link.mid(7));
         }
         setCurrentPage(d->p2);
         return;
     }
 
-    if (link.startsWith("file:/")) {
-        QString s = link.mid(QString("file:/").length());
-        while (s.startsWith("//")) s.remove(0, 1);
+    if (link.startsWith(QLatin1String("file:/"))) {
+        QString s = link.mid(6);
+        while (s.startsWith(QLatin1String("//"))) s.remove(0, 1);
         d->fileLink->lineEdit()->setText(s);
         setCurrentPage(d->p3);
         return;

@@ -2386,7 +2386,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     // used if another run is inserted after the last run specified.
     if (!rRead) {
         QString fontSize = endParaRPrFontSize;
-        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+        if (!fontSize.isEmpty() && fontSize.endsWith(QLatin1String("pt"))) {
             fontSize.chop(2);
             qreal realSize = fontSize.toDouble();
             if (realSize > m_maxParaFontPt) {
@@ -2412,7 +2412,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
 
     //required to set size of the picture bullet properly
     if (m_listStylePropertiesAltered && m_currentBulletProperties.bulletSizePt() == "UNUSED") {
-        if (!fontSize.isEmpty() && fontSize.endsWith("pt")) {
+        if (!fontSize.isEmpty() && fontSize.endsWith(QLatin1String("pt"))) {
             fontSize.chop(2);
             qreal bulletSize = fontSize.toDouble();
 

@@ -137,7 +137,7 @@ public:
 class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
-    XlsxXmlDrawingReader(KoOdfWriters *writers);
+    explicit XlsxXmlDrawingReader(KoOdfWriters *writers);
     virtual ~XlsxXmlDrawingReader();
     virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
 

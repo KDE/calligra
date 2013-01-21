@@ -49,7 +49,7 @@ public:
      * The derived class should create here the Function objects and
      * should register them via \ref add.
      */
-    FunctionModule(QObject* parent);
+    explicit FunctionModule(QObject *parent);
 
     /**
      * Destroys the module and the provided Function objects.

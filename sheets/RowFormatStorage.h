@@ -33,7 +33,7 @@ class Sheet;
 class CALLIGRA_SHEETS_ODF_EXPORT RowFormatStorage
 {
 public:
-    RowFormatStorage(Sheet* sheet);
+    explicit RowFormatStorage(Sheet *sheet);
     ~RowFormatStorage();
 
     Sheet* sheet() const;

@@ -41,7 +41,7 @@ namespace Sheets
 class CALLIGRA_SHEETS_COMMON_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
 public:
-    AbstractDataManipulator(KUndo2Command* parent = 0);
+    explicit AbstractDataManipulator(KUndo2Command *parent = 0);
     virtual ~AbstractDataManipulator();
 
     virtual bool process(Element* element);
@@ -84,7 +84,7 @@ protected:
 class AbstractDFManipulator : public AbstractDataManipulator
 {
 public:
-    AbstractDFManipulator(KUndo2Command *parent = 0);
+    explicit AbstractDFManipulator(KUndo2Command *parent = 0);
     virtual ~AbstractDFManipulator();
     virtual bool process(Element* element);
 
@@ -111,7 +111,7 @@ protected:
 class DataManipulator : public AbstractDataManipulator
 {
 public:
-    DataManipulator(KUndo2Command* parent = 0);
+    explicit DataManipulator(KUndo2Command *parent = 0);
     virtual ~DataManipulator();
     void setParsing(bool val) {
         m_parsing = val;
@@ -229,7 +229,7 @@ class ShiftManipulator : public AbstractRegionCommand
 {
 public:
     enum Direction { ShiftRight, ShiftBottom };
-    ShiftManipulator(KUndo2Command* parent = 0);
+    explicit ShiftManipulator(KUndo2Command *parent = 0);
     virtual ~ShiftManipulator();
     void setDirection(Direction direction) {
         m_direction = direction;

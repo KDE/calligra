@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2010 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2012 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -207,15 +207,26 @@ public:
                                      bool sortedProperties = false,
                                      const QByteArray& propertyToSelect = QByteArray()) = 0;
 
+    //! Options used in saveObject()
+    enum SaveObjectOption
+    {
+        DoNotAsk = 1,    //!< Do not ask for confirmation of overwriting
+        SaveObjectAs = 2 //!< Saving object with a new name
+    };
+    Q_DECLARE_FLAGS(SaveObjectOptions, SaveObjectOption)
+
     /*! Saves window's \a window data. If window's data is never saved,
      user is asked for name and title, before saving (see getNewObjectInfo()).
      \return true on successul saving or false on error.
      If saving was cancelled by user, cancelled is returned.
      \a messageWhenAskingForName is a i18n'ed text that will be visible
      within name/caption dialog (see KexiNameDialog), which is popped
-     up for never saved objects. */
+     up for never saved objects.
+     Saving object with a new name is also supported here, to do so
+     SaveObjectOption::SaveObjectAs should be added to @a options. */
     virtual tristate saveObject(KexiWindow *window,
-                                const QString& messageWhenAskingForName = QString(), bool dontAsk = false) = 0;
+                                const QString& messageWhenAskingForName = QString(),
+                                SaveObjectOptions options = 0) = 0;
 
     /*! Closes window \a window. If window's data (see KexiWindow::isDirty()) is unsaved,
      used will be asked if saving should be perforemed.
@@ -228,7 +239,7 @@ public:
      \return 0 if no windows found. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item* item) = 0;
 
-    /*! Displays a window for entering object's name and title.
+    /*! Displays a dialog for entering object's name and title.
      Used on new object saving.
      \return true on successul closing or cancelled on cancel returned.
      It's unlikely to have false returned here.
@@ -239,8 +250,13 @@ public:
      a name of existing object.
      You can check \a overwriteNeeded after calling this method.
      If it's true, user agreed on overwriting, if it's false, user picked
-     nonexisting name, so no overwrite will be needed. */
-    virtual tristate getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part,
+     nonexisting name, so no overwrite will be needed.
+     If \a originalName is not empty, the dialog will make sure the entered name
+     is different, what is useful for "Saving As" objects.
+    */
+    virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
+                                      const QString &originalName,
+                                      KexiPart::Part *part,
                                       bool allowOverwriting,
                                       bool *overwriteNeeded,
                                       const QString& messageWhenAskingForName = QString()) = 0;
@@ -301,6 +317,6 @@ protected: // slots:
 
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KexiMainWindowIface::SaveObjectOptions)
 
 #endif
-

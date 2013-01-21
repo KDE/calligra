@@ -33,7 +33,7 @@ class KOWIDGETS_EXPORT KoShadowConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KoShadowConfigWidget(QWidget *parent);
+    explicit KoShadowConfigWidget(QWidget *parent);
     ~KoShadowConfigWidget();
 
     /// Sets the shadow color

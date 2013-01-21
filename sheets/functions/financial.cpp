@@ -537,7 +537,7 @@ static double vdbInterVDB(const double cost, const double salvage,
     double gda;
     unsigned long i;
 
-    for (i = 1; i <= loopEnd; i++) {
+    for (i = 1; i <= loopEnd; ++i) {
         if (!nowLia) {
             gda = vdbGetGDA(cost, salvage, life, (double) i, depreciationFactor);
             lia = balance / (life1 - (double)(i - 1));
@@ -728,7 +728,7 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
     cost -= nRate;
     rest = cost - salvage;
 
-    for (n = 0 ; n < period ; n++) {
+    for (n = 0 ; n < period ; ++n) {
         nRate = ROUND(rate * cost, 0);
         rest -= nRate;
 
@@ -874,7 +874,7 @@ static QDate coup_cd(const QDate& settlement, const QDate& maturity, int freq, b
 
     QDate result;
     do {
-        periods++;
+        ++periods;
         result = maturity.addMonths(-periods * months);
         if (is_eom_special) {
             result.setDate(result.year(), result.month(), result.daysInMonth());
@@ -922,7 +922,7 @@ static int daysBetween_30Ep_360(const QDate& from, const QDate& to)
             d1 = 30;
     if (d2 == 31) {
             d2 = 1;
-            m2++;
+            ++m2;
             /* No need to check for m2 == 13 since 12*30 == 360 */
     }
 
@@ -1618,7 +1618,7 @@ Value func_ipmt(valVector args, ValueCalc *calc, FuncExtra *)
 static double irrResult(Value sec, ValueCalc *calc, double rate)
 {
     double res = 0;
-    for (unsigned i = 0; i < sec.count(); i++) {
+    for (unsigned i = 0; i < sec.count(); ++i) {
         double val = calc->conv()->asFloat(sec.element(i)).asFloat();
         res += val / pow(1.0 + rate, double(i));
     }
@@ -1628,7 +1628,7 @@ static double irrResult(Value sec, ValueCalc *calc, double rate)
 static double irrResultDerive(Value sec, ValueCalc *calc, double rate)
 {
     double res = 0;
-    for (unsigned i = 0; i < sec.count(); i++) {
+    for (unsigned i = 0; i < sec.count(); ++i) {
         double val = calc->conv()->asFloat(sec.element(i)).asFloat();
         res += -double(i) * val / pow(1.0 + rate, double(i + 1));
     }
@@ -2351,7 +2351,7 @@ Value func_tbillyield(valVector args, ValueCalc *calc, FuncExtra *)
     double price = calc->conv()->asFloat(args[2]).asFloat();
 
     double days = days360(settlement, maturity, false);  // false -> US
-    days++;
+    ++days;
 
     if (settlement >= maturity || days > 360 || price <= 0.0)
         return Value::errorVALUE();
@@ -2403,7 +2403,7 @@ Value func_vdb(valVector args, ValueCalc *calc, FuncExtra *)
 
     if (flag) {
         // no straight-line depreciation
-        for (unsigned long i = loopStart + 1; i <= loopEnd; i++) {
+        for (unsigned long i = loopStart + 1; i <= loopEnd; ++i) {
             double term = vdbGetGDA(cost, salvage, life, (double) i, depreciationFactor);
 
             //
@@ -2491,7 +2491,7 @@ Value func_xirr(valVector args, ValueCalc *calc, FuncExtra *)
 Value func_xnpv(valVector args, ValueCalc *calc, FuncExtra *)
 {
     double rate = calc->conv()->asFloat(args[0]).asFloat();
-    rate++;
+    ++rate;
 
     int numValues = args[1].count();
     int numDates  = args[2].count();
