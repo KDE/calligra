@@ -21,7 +21,8 @@ import "../../components"
 
 Page {
     property string pluginName: "You must set the plugin name when implementing sharing pages";
-    function submitArt(plugin) {
-        console.debug("If you are seeing this, you forgot to implement the submitArt call");
+    property QtObject sharingHandler: null;
+    function submitArt() {
+        console.debug("If you are seeing this, you forgot to implement the submitArt call for " + sharingHandler);
     }
 }
