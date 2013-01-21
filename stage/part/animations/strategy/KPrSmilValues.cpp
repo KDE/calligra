@@ -75,7 +75,7 @@ qreal KPrSmilValues::endValue() const
 bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySplines, SmilCalcMode calcMode)
 {
     m_calcMode = calcMode;
-    QStringList valuesList = values.split(";");
+    QStringList valuesList = values.split(QLatin1Char(';'));
     if (valuesList.size() < 2) {
         return false;
     }
@@ -95,7 +95,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
         }
     }
     else {
-        QStringList keyTimesList = keyTimes.split(";");
+        QStringList keyTimesList = keyTimes.split(QLatin1Char(';'));
         if (valuesList.size() != keyTimesList.size()) {
             return false;
         }

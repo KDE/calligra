@@ -503,7 +503,7 @@ void RowHeader::focusOut(QFocusEvent*)
 
 void RowHeader::doToolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = toolId.startsWith("KSpread");
+    m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
 }
 
@@ -1078,7 +1078,7 @@ void ColumnHeader::focusOut(QFocusEvent*)
 
 void ColumnHeader::doToolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = toolId.startsWith("KSpread");
+    m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
 }
 
@@ -1157,6 +1157,6 @@ void SelectAllButton::mouseRelease(KoPointerEvent* event)
 
 void SelectAllButton::doToolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = toolId.startsWith("KSpread");
+    m_cellToolIsActive = toolId.startsWith(QLatin1String("KSpread"));
     update();
 }

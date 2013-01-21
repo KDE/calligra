@@ -32,7 +32,7 @@ class CACanvasItem : public QDeclarativeItem
     Q_OBJECT
     Q_PROPERTY (bool editable READ editable WRITE setEditable NOTIFY editableChanged)
 public:
-    CACanvasItem(QDeclarativeItem* parent = 0);
+    explicit CACanvasItem(QDeclarativeItem* parent = 0);
     virtual ~CACanvasItem();
 
     KoCanvasBase *koCanvas();

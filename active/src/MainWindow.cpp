@@ -67,7 +67,7 @@ MainWindow::MainWindow (QWidget* parent)
     QList<QObject*> recentPresentations;
     QSettings settings;
     foreach (const QString &string, settings.value ("recentFiles").toStringList()) {
-        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (";"));
+        CADocumentInfo* docInfo = CADocumentInfo::fromStringList (string.split (QLatin1Char(';')));
         recentFiles.append (docInfo);
         switch (docInfo->type()) {
         case CADocumentInfo::TextDocument:
