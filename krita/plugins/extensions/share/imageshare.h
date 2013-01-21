@@ -43,11 +43,17 @@ public:
     ImageShare(QObject *parent, const QVariantList &);
     virtual ~ImageShare();
 
+    Q_INVOKABLE QObject* stash();
+Q_SIGNALS:
+    void openBrowser(const QUrl &url);
+    void closeBrowser();
+    void linkingSucceeded();
+
 private slots:
 
     void slotImageShare();
-    void openBrowser(const QUrl &url);
-    void closeBrowser();
+    void slotOpenBrowser(const QUrl &url);
+    void slotCloseBrowser();
     void showSubmit();
     void testCallCompleted(Stash::Call, bool result);
     void performUpload();

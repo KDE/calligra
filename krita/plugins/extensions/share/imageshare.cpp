@@ -72,6 +72,21 @@ ImageShare::~ImageShare()
     m_view = 0;
 }
 
+QObject* ImageShare::stash()
+{
+    m_deviantArt = new O2DeviantART(this);
+    m_deviantArt->setClientId("272");
+    m_deviantArt->setClientSecret("a8464938f858f68661c4246347f09b62");
+    connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SIGNAL(openBrowser(QUrl)));
+    connect(m_deviantArt, SIGNAL(closeBrowser()), SIGNAL(closeBrowser()));
+    connect(m_deviantArt, SIGNAL(linkingSucceeded()), SIGNAL(linkingSucceeded()));
+    if (!m_deviantArt->linked()) {
+        QTimer::singleShot(0, m_deviantArt, SLOT(link()));
+    }
+    m_stash = new Stash(m_deviantArt, this);
+    return m_stash;
+}
+
 void ImageShare::slotImageShare()
 {
     if(!m_submitDlg)
@@ -80,8 +95,8 @@ void ImageShare::slotImageShare()
     m_deviantArt->setClientId("272");
     m_deviantArt->setClientSecret("a8464938f858f68661c4246347f09b62");
 
-    connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SLOT(openBrowser(QUrl)));
-    connect(m_deviantArt, SIGNAL(closeBrowser()), SLOT(closeBrowser()));
+    connect(m_deviantArt, SIGNAL(openBrowser(QUrl)), SLOT(slotOpenBrowser(QUrl)));
+    connect(m_deviantArt, SIGNAL(closeBrowser()), SLOT(slotCloseBrowser()));
     connect(m_deviantArt, SIGNAL(linkingSucceeded()), SLOT(showSubmit()));
 
     qDebug() << "slotImageShare" << m_deviantArt->token() << m_deviantArt->linked();
@@ -94,7 +109,7 @@ void ImageShare::slotImageShare()
     }
 }
 
-void ImageShare::openBrowser(const QUrl &url)
+void ImageShare::slotOpenBrowser(const QUrl &url)
 {
     qDebug() << "openBrowser" << url << m_deviantArt->token();
     DlgLogin dlgLogin(m_deviantArt);
@@ -102,7 +117,7 @@ void ImageShare::openBrowser(const QUrl &url)
     dlgLogin.exec();
 }
 
-void ImageShare::closeBrowser()
+void ImageShare::slotCloseBrowser()
 {
     qDebug() << "close browser" << m_deviantArt->token();
 }
