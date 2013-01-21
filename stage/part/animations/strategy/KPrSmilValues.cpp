@@ -112,7 +112,7 @@ bool KPrSmilValues::loadValues(QString values, QString keyTimes, QString keySpli
     // keySplines
     if (m_calcMode ==  KPrAnimationValue::spline) {
         kWarning(33003) << "keySpline not yes supported";
-        QStringList keySplinesList = keySplines.split(";");
+//         QStringList keySplinesList = keySplines.split(QLatin1Char(';'));
     }
     return true;
 }
