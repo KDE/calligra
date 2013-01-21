@@ -34,6 +34,7 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
+#include <sheets/ElapsedTime_p.h>
 #include <sheets/CalculationSettings.h>
 #include <sheets/Cell.h>
 #include <sheets/part/Doc.h>

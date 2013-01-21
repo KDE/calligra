@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright (C) 2012 Philip Van Hoof <philip@codeminded.be>
+             (C) 2005-2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
              (C) 2006 Fredrik Edemar <f_edemar@linux.se>
              (C) 2005-2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
              (C) 2004 Tomas Mecir <mecirt@gmail.com>
@@ -27,8 +28,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_GLOBAL_H
-#define KSPREAD_GLOBAL_H
+
+#ifndef ELAPSED_TIME_P_H
+#define ELAPSED_TIME_P_H
 
 #include <kdebug.h>
 #include <QTime>
@@ -38,42 +40,49 @@ namespace Calligra
 namespace Sheets
 {
 
-/**
- * This namespace collects enumerations related to
- * pasting operations.
- */
-namespace Paste
+class ElapsedTime
 {
-/**
- * The pasted content
- */
-enum Mode {
-    Normal /** Everything */,
-    Text /** Text only */,
-    Format /** Format only */,
-    NoBorder /** not the borders */,
-    Comment /** Comment only */,
-    Result /** Result only, no formula */,
-    NormalAndTranspose /** */,
-    TextAndTranspose /** */,
-    FormatAndTranspose /** */,
-    NoBorderAndTranspose /** */
-};
-/**
- * The current cell value treatment.
- */
-enum Operation {
-    OverWrite /** Overwrite */,
-    Add /** Add */,
-    Mul /** Multiply */,
-    Sub /** Subtract */,
-    Div /** Divide */
-};
-} // namespace Paste
+public:
+    enum OutputMode { Default, PrintOnlyTime };
 
-// necessary due to QDock* enums (Werner)
-enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
-enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
+#ifdef NDEBUG
+
+    ElapsedTime() {}
+    explicit ElapsedTime(const QString &, OutputMode = Default) {}
+
+#else // NDEBUG
+
+    ElapsedTime() {
+        m_time.start();
+    }
+
+    explicit ElapsedTime(const QString &name, OutputMode mode = Default)
+            : m_name(name) {
+        m_time.start();
+        if (mode != PrintOnlyTime) {
+            kDebug(36001) << QString("*** (" + name + ")... Starting measuring...");
+        }
+    }
+
+    ~ElapsedTime() {
+        uint milliSec = m_time.elapsed();
+        uint min = static_cast<uint>(milliSec / (1000 * 60));
+        milliSec -= (min * 60 * 1000);
+        uint sec = static_cast<uint>(milliSec / 1000);
+        milliSec -= sec * 1000;
+
+        if (m_name.isNull())
+            kDebug(36001) << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec);
+        else
+            kDebug(36001) << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec);
+    }
+
+private:
+    QTime   m_time;
+    QString m_name;
+
+#endif // NDEBUG
+};
 
 } // namespace Sheets
 } // namespace Calligra

@@ -52,6 +52,8 @@
 #include "Map.h"
 #include "SheetAccessModel.h"
 
+#include "ElapsedTime_p.h"
+
 #include "part/View.h" // TODO: get rid of this dependency
 
 using namespace Calligra::Sheets;

@@ -63,7 +63,7 @@
 #include <KoPointerEvent.h>
 #include <KoGlobal.h>
 
-// KSpread
+// Sheets
 #include "CanvasBase.h"
 #include "Cell.h"
 #include "Doc.h"
@@ -71,6 +71,7 @@
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
+#include "ElapsedTime_p.h"
 
 // commands
 #include "commands/RowColumnManipulators.h"
