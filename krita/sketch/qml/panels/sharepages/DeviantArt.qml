@@ -17,36 +17,88 @@
  */
 
 import QtQuick 1.1
+import QtWebKit 1.0
 import "../../components"
 
 SharePage {
     pluginName: "ImageShare"
-    function submitArt(plugin) {
-        console.debug("Submit using " + plugin);
+    function submitArt() {
+        console.debug("Submit using " + sharingHandler);
     }
-    Item {
+    Connections {
+        target: sharingHandler;
+        onOpenBrowser: {
+            shareStack.push(webPage);
+            showUrl = url;
+        }
+        onCloseBrowser: shareStack.pop();
+    }
+    property string showUrl: "";
+    property QtObject stash: null;
+    onSharingHandlerChanged: {
+        if(sharingHandler !== null) {
+            stash = sharingHandler.stash();
+        }
+    }
+
+    PageStack {
+        id: shareStack;
         anchors.fill: parent;
-        anchors.margins: Constants.DefaultMargin;
+        clip: true;
+        initialPage: detailsPage;
+    }
 
-        Column {
-            id: content;
-            width: parent.width;
-            spacing: Constants.DefaultMargin;
+    Component {
+        id: detailsPage;
+        Item {
+            anchors.fill: parent;
+            anchors.margins: Constants.DefaultMargin;
 
-            DropShadow {
-                anchors.horizontalCenter: parent.horizontalCenter;
-                width: Constants.GridWidth * 4;
-                height: Constants.GridHeight * 3;
+            Column {
+                id: content;
+                width: parent.width;
+                spacing: Constants.DefaultMargin;
 
-//                         Image {
-//                             anchors.fill: parent;
-//                             source:
-//                         }
+                DropShadow {
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    width: Constants.GridWidth * 4;
+                    height: Constants.GridHeight * 3;
+
+    //                         Image {
+    //                             anchors.fill: parent;
+    //                             source:
+    //                         }
+                }
+
+                TextField { placeholder: "Title"; }
+                TextField { placeholder: "Tags"; }
+                TextFieldMultiline { height: Constants.GridHeight * 4; placeholder: "Description"; }
             }
-
-            TextField { placeholder: "Title"; }
-            TextField { placeholder: "Tags"; }
-            TextFieldMultiline { height: Constants.GridHeight * 4; placeholder: "Description"; }
+        }
+    }
+    Component {
+        id: webPage;
+        Item {
+            anchors.fill: parent;
+            anchors.margins: Constants.DefaultMargin;
+            Flickable {
+                width: parent.width
+                contentWidth: Math.max(parent.width, webView.width)
+                contentHeight: Math.max(parent.height, webView.height)
+                anchors.fill: parent;
+                pressDelay: 200
+                onWidthChanged : {
+                    // Expand (but not above 1:1) if otherwise would be smaller that available width.
+                    if (width > webView.width*webView.contentsScale && webView.contentsScale < 1.0)
+                        webView.contentsScale = width / webView.width * webView.contentsScale;
+                }
+                WebView {
+                    id: webView;
+                    preferredWidth: shareStack.width;
+                    preferredHeight: shareStack.height;
+                    url: showUrl;
+                }
+            }
         }
     }
 }
