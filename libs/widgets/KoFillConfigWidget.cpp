@@ -222,12 +222,14 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     button->setIcon(QPixmap((const char **) buttonpattern));
     button->setToolTip(i18n("Pattern"));
     button->setCheckable(true);
+    button->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     d->group->addButton(button, Pattern);
     layout->addWidget(button);
 
     connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(styleButtonPressed(int)));
 
     d->colorButton = new QToolButton(this);
+    d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     layout->addWidget(d->colorButton);
 
     d->colorAction = new KoColorPopupAction(this);
