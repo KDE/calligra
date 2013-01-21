@@ -460,6 +460,9 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(shape->background());
 
     if (colorBackground) {
+        d->colorButton->setDefaultAction(d->colorAction);
+        d->colorButton->setPopupMode(QToolButton::InstantPopup);
+        d->colorAction->setCurrentColor(colorBackground->color());
         d->group->button(KoFillConfigWidget::Solid)->setChecked(true);
     } else if (gradientBackground) {
         d->group->button(KoFillConfigWidget::Gradient)->setChecked(true);
