@@ -43,19 +43,13 @@ KoTextWriter::Private::Private(KoShapeSavingContext &context)
     : rdfData(0)
     , sharedData(0)
     , styleManager(0)
-    , changeTracker(0)
     , document(0)
     , writer(0)
     , context(context)
     , splitEndBlockNumber(-1)
-    , splitRegionOpened(false)
-    , splitIdCounter(1)
-    , deleteMergeRegionOpened(false)
-    , deleteMergeEndBlockNumber(-1)
 {
     currentPairedInlineObjectsStack = new QStack<KoInlineObject*>();
     writer = &context.xmlWriter();
-    changeStack.push(0);
 }
 
 
@@ -459,9 +453,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             break;
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
-            QTextCharFormat compFormat = charFormat;
-            previousCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-            compFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
 
             if ((!previousFragmentLink.isEmpty()) && (charFormat.anchorHref() != previousFragmentLink || !charFormat.isAnchor())) {
                 // Close the current text:a
@@ -1032,7 +1023,6 @@ void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
     nameSpacesStream << "xmlns:smil=\"" << KoXmlNS::smil << "\" ";
     nameSpacesStream << "xmlns:calligra=\"" << KoXmlNS::calligra << "\" ";
     nameSpacesStream << "xmlns:officeooo=\"" << KoXmlNS::officeooo << "\" ";
-    nameSpacesStream << "xmlns:delta=\"" << KoXmlNS::delta << "\" ";
     nameSpacesStream << "xmlns:split=\"" << KoXmlNS::split << "\" ";
     nameSpacesStream << "xmlns:ac=\"" << KoXmlNS::ac << "\" ";
     nameSpacesStream << ">";
@@ -1053,65 +1043,11 @@ void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const
     } while (secondChild == "removed-content");
 }
 
-void KoTextWriter::Private::insertAroundContent(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId)
+void KoTextWriter::Private::insertAroundContent(QTextStream &outputXmlStream, KoXmlElement &element)
 {
     outputXmlStream << "<text:" << element.localName();
     writeAttributes(outputXmlStream, element);
     outputXmlStream << ">";
-}
-
-bool KoTextWriter::Private::checkForDeleteStartInListItem(KoXmlElement &element, bool checkRecursively)
-{
-    bool returnValue = false;
-    KoXmlElement childElement;
-    forEachElement(childElement, element) {
-        if (childElement.localName() == "p") {
-            if (childElement.lastChild().toElement().localName() == "removed-content") {
-                returnValue = true;
-                break;
-            }
-        } else if ((childElement.localName() == "list") && (checkRecursively)) {
-            KoXmlElement listItem;
-            forEachElement(listItem, childElement) {
-                returnValue = checkForDeleteStartInListItem(listItem);
-                if (returnValue)
-                    break;
-            }
-        } else {
-        }
-
-        if (returnValue)
-            break;
-    }
-
-    return returnValue;
-}
-
-bool KoTextWriter::Private::checkForDeleteEndInListItem(KoXmlElement &element, bool checkRecursively)
-{
-    bool returnValue = false;
-    KoXmlElement childElement;
-    forEachElement(childElement, element) {
-        if (childElement.localName() == "p") {
-            if (childElement.firstChild().toElement().localName() == "removed-content") {
-                returnValue = true;
-                break;
-            }
-        } else if ((childElement.localName() == "list") && (checkRecursively)) {
-            KoXmlElement listItem;
-            forEachElement(listItem, childElement) {
-                returnValue = checkForDeleteStartInListItem(listItem);
-                if (returnValue)
-                    break;
-            }
-        } else {
-        }
-
-        if (returnValue)
-            break;
-    }
-
-    return returnValue;
 }
 
 void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element)

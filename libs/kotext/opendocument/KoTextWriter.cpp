@@ -27,10 +27,6 @@
 
 #include <KoTextWriter_p.h>
 
-#include <commands/InsertDeleteChangesCommand.h>
-#include <commands/RemoveDeleteChangesCommand.h>
-
-
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
     : d(new Private(context))
 {
