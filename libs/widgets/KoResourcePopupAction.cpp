@@ -137,7 +137,9 @@ void KoResourcePopupAction::updateIcon()
             delete g;
         } else {
             d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
-            p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, dynamic_cast<KoPattern*>(currentResource())->image());
+            if (currentResource()) {
+                p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, dynamic_cast<KoPattern*>(currentResource())->image());
+            }
         }
     }
     else {
@@ -156,7 +158,9 @@ void KoResourcePopupAction::updateIcon()
             delete g;
         } else {
             d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
-            p.fillRect(0, 0, iconSize.width(), iconSize.height(), currentResource()->image());
+            if (currentResource()) {
+                p.fillRect(0, 0, iconSize.width(), iconSize.height(), currentResource()->image());
+            }
         }
     }
     p.end();

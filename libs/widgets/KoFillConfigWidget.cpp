@@ -299,27 +299,24 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
         case KoFillConfigWidget::None:
             // Direct manipulation
             d->colorButton->setDefaultAction(d->colorAction);
-            d->colorButton->setPopupMode(QToolButton::InstantPopup);
             noColorSelected();
             break;
         case KoFillConfigWidget::Solid:
             d->colorButton->setDefaultAction(d->colorAction);
-            d->colorButton->setPopupMode(QToolButton::InstantPopup);
             colorChanged();
             break;
         case KoFillConfigWidget::Gradient:
             // Only select mode in the widget, don't set actual gradient :/
             d->colorButton->setDefaultAction(d->gradientAction);
-            d->colorButton->setPopupMode(QToolButton::InstantPopup);
             gradientChanged(d->gradientAction->currentResource());
             break;
         case KoFillConfigWidget::Pattern:
             // Only select mode in the widget, don't set actual pattern :/
             d->colorButton->setDefaultAction(d->patternAction);
-            d->colorButton->setPopupMode(QToolButton::InstantPopup);
             patternChanged(d->patternAction->currentResource());
             break;
     }
+    d->colorButton->setPopupMode(QToolButton::InstantPopup);
 }
 
 void KoFillConfigWidget::noColorSelected()
