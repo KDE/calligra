@@ -42,6 +42,7 @@ public:
     {}
     QMenu *menu;
     KoResourceItemView *resourceList;
+    KoResource* resource;
     bool applyMode;
     KoCheckerBoardPainter checkerPainter;
 };
@@ -62,7 +63,9 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
     KoResourceModel * resourceModel = qobject_cast<KoResourceModel*>(d->resourceList->model());
     if (resourceModel)
         resourceModel->setColumnCount(1);
-
+    
+    d->resource = resourceAdapter->resources().at(0);
+    
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->addWidget(d->resourceList);
     widget->setLayout(layout);
@@ -84,7 +87,7 @@ KoResourcePopupAction::~KoResourcePopupAction()
 
 KoResource *KoResourcePopupAction::currentResource()
 {
-    return static_cast<KoResource*>(d->resourceList->currentIndex().internalPointer());
+    return d->resource;
 }
 
 
@@ -95,9 +98,9 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
 
     d->menu->hide();
 
-    KoResource * resource = static_cast<KoResource*>( modelIndex.internalPointer());
-    if(resource)
-        emit resourceSelected(resource);
+    d->resource = static_cast<KoResource*>(modelIndex.internalPointer());
+    if(d->resource)
+        emit resourceSelected(d->resource);
 
     updateIcon();
 }
