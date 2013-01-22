@@ -22,6 +22,8 @@ import "../../components"
 Page {
     property string pluginName: "You must set the plugin name when implementing sharing pages";
     property QtObject sharingHandler: null;
+    // Update this property when the required fields are filled in
+    property bool canShare: false;
     function submitArt() {
         console.debug("If you are seeing this, you forgot to implement the submitArt call for " + sharingHandler);
     }
