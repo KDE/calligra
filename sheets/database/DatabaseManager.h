@@ -42,7 +42,7 @@ public:
     /**
      * Constructor.
      */
-    DatabaseManager(const Map* map);
+    explicit DatabaseManager(const Map *map);
 
     /**
      * Destructor.

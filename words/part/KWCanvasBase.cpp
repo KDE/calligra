@@ -28,6 +28,7 @@
 #include "KWViewMode.h"
 #include "KWPage.h"
 #include "KWPageCacheManager.h"
+#include "frames/KWFrameLayout.h"
 
 // calligra libs includes
 #include <KoShapeManager.h>
@@ -138,6 +139,9 @@ void KWCanvasBase::clipToDocument(const KoShape *shape, QPointF &move) const
         else if (shapeBounds.bottom() < pageRect.top()) // need to move down some
             move.setY(move.y() + pageRect.top() - shapeBounds.bottom());
     }
+
+    // Also make sure any anchoring restrictions are adhered to
+    KWFrameLayout::proposeShapeMove(shape, move, page);
 }
 
 KoGuidesData *KWCanvasBase::guidesData()
@@ -440,9 +444,9 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             if (rc.intersects(clipRectOnPage.toRect())) {
                                 paintRegion += rc;
                                 int tilex = 0, tiley = 0;
-                                for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                                for (int x = 0, i = 0; x < pageCache->m_tilesx; ++x) {
                                     int dx = pageCache->cache[i].width();
-                                    for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                                    for (int y = 0; y < pageCache->m_tilesy; ++y, ++i) {
                                         QImage& img = pageCache->cache[i];
                                         QRect tile(tilex, tiley, img.width(), img.height());
                                         QRect toClear = tile.intersected(rc);
@@ -477,9 +481,9 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                             shapeManager()->paint(tilePainter, *viewConverter(), false);
 
                             int tilex = 0, tiley = 0;
-                            for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                            for (int x = 0, i = 0; x < pageCache->m_tilesx; ++x) {
                                 int dx = pageCache->cache[i].width();
-                                for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                                for (int y = 0; y < pageCache->m_tilesy; ++y, ++i) {
                                     QImage& tileImg = pageCache->cache[i];
                                     QRect tile(tilex, tiley, tileImg.width(), tileImg.height());
                                     QRect toPaint = tile.intersected(r);
@@ -497,9 +501,9 @@ void KWCanvasBase::paint(QPainter &painter, const QRectF &paintRect)
                     // paint from the cached page image on the original painter
 
                     int tilex = 0, tiley = 0;
-                    for (int x = 0, i = 0; x < pageCache->m_tilesx; x++) {
+                    for (int x = 0, i = 0; x < pageCache->m_tilesx; ++x) {
                         int dx = pageCache->cache[i].width();
-                        for (int y = 0; y < pageCache->m_tilesy; y++, i++) {
+                        for (int y = 0; y < pageCache->m_tilesy; ++y, ++i) {
                             const QImage& cacheImage = pageCache->cache[i];
                             QRectF tile(tilex, tiley, cacheImage.width(), cacheImage.height());
                             QRectF toPaint = tile.intersected(clipRectOnPage);
@@ -723,7 +727,7 @@ void KWCanvasBase::updateCanvas(const QRectF &rc)
                     m_pageCacheManager = new KWPageCacheManager(m_cacheSize);
                 }
 
-                if (!m_currentZoom == viewConverter()->zoom()) {
+                if (m_currentZoom != viewConverter()->zoom()) {
                     m_currentZoom = viewConverter()->zoom();
                     m_pageCacheManager->clear();
                 }

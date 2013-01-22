@@ -55,7 +55,7 @@ public:
     * \param parent The optional parent QObject instance
     * this QObject is child of.
     */
-    ScriptingModule(QObject* parent = 0);
+    explicit ScriptingModule(QObject *parent = 0);
 
     /**
     * Destructor.

@@ -233,11 +233,21 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
                 if (frame->anchoredPageNumber() == pageNumber) {
                     qreal oldOffset = frame->anchoredFrameOffset();
                     qreal newOffset = rootAreaPage->page.offsetInDocument();
+                    KoShape *shape = frame->shape();
                     if (!qFuzzyCompare(1 + oldOffset, 1 + newOffset)) {
                         frame->setAnchoredFrameOffset(newOffset);
-                        QPointF pos(frame->shape()->position().x(), newOffset - oldOffset + frame->shape()->position().y());
-                        frame->shape()->setPosition(pos);
+                        QPointF pos(shape->position().x(), newOffset - oldOffset + shape->position().y());
+                        shape->setPosition(pos);
                     }
+
+                    // During load we make page anchored shapes invisible, because otherwise
+                    // they leave empty rects in the text if there is run-around
+                    // now is the time to make them visible again
+                    shape->setVisible(true);
+
+                    QPointF delta;
+                    KWFrameLayout::proposeShapeMove(shape, delta, rootAreaPage->page);
+                    shape->setPosition(shape->position() + delta);
                 }
             }
         }

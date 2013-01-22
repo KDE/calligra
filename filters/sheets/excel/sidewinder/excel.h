@@ -241,7 +241,7 @@ public:
         return this->id;
     }
 
-    ExternBookRecord(Workbook *book);
+    explicit ExternBookRecord(Workbook *book);
 
     ~ExternBookRecord();
 
@@ -278,7 +278,7 @@ public:
         return this->id;
     }
 
-    ExternNameRecord(Workbook *book);
+    explicit ExternNameRecord(Workbook *book);
 
     ~ExternNameRecord();
 
@@ -330,7 +330,7 @@ public:
     /**
      * Creates a new formula record.
      */
-    FormulaRecord(Workbook *book);
+    explicit FormulaRecord(Workbook *book);
 
     /**
      * Destroy the record.
@@ -391,7 +391,7 @@ public:
     /**
      * Creates a new shared formula record.
      */
-    SharedFormulaRecord(Workbook *book);
+    explicit SharedFormulaRecord(Workbook *book);
 
     /**
      * Destroy the record.
@@ -437,7 +437,7 @@ public:
     /**
      * Creates a new MulRK record.
      */
-    MulRKRecord(Workbook *book);
+    explicit MulRKRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -512,7 +512,7 @@ public:
         return this->id;
     }
 
-    NameRecord(Workbook *book);
+    explicit NameRecord(Workbook *book);
 
     ~NameRecord();
 
@@ -559,7 +559,7 @@ public:
     /**
      * Creates a new RK record.
      */
-    RKRecord(Workbook *book);
+    explicit RKRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -652,7 +652,7 @@ public:
     /**
      * Creates a new Label record.
      */
-    RStringRecord(Workbook *book);
+    explicit RStringRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -711,7 +711,7 @@ public:
     /**
      * Creates a new SST record.
      */
-    SSTRecord(Workbook *book);
+    explicit SSTRecord(Workbook *book);
 
     /**
      * Destroys the record.
@@ -766,7 +766,7 @@ class ObjRecord : public Record
 public:
     Object *m_object;
     static const unsigned id;
-    ObjRecord(Workbook *book);
+    explicit ObjRecord(Workbook *book);
     virtual ~ObjRecord();
     virtual unsigned rtti() const {
         return this->id;
@@ -803,7 +803,7 @@ public:
     VerticalAlignment valign;
 
     static const unsigned id;
-    TxORecord(Workbook *book=0);
+    explicit TxORecord(Workbook *book=0);
     virtual ~TxORecord();
     virtual unsigned rtti() const {
         return this->id;
@@ -819,7 +819,7 @@ class MsoDrawingRecord : public Record
 {
 public:
     static const unsigned id;
-    MsoDrawingRecord(Workbook *book);
+    explicit MsoDrawingRecord(Workbook *book);
     virtual ~MsoDrawingRecord();
 
     virtual unsigned rtti() const {
@@ -846,7 +846,7 @@ class MsoDrawingGroupRecord : public Record
 {
 public:
     static const unsigned id;
-    MsoDrawingGroupRecord(Workbook *book);
+    explicit MsoDrawingGroupRecord(Workbook *book);
     virtual ~MsoDrawingGroupRecord();
     virtual unsigned rtti() const {
         return this->id;
@@ -897,7 +897,7 @@ public:
 
     virtual unsigned rtti() const { return this->id; }
 
-    BkHimRecord(Workbook *book);
+    explicit BkHimRecord(Workbook *book);
     virtual ~BkHimRecord();
 
     BkHimRecord( const BkHimRecord& record );

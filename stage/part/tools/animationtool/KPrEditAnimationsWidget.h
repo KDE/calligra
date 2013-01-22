@@ -77,11 +77,11 @@ public:
     QModelIndex currentIndex();
 
 signals:
-    /// emited if an item on Time line view has been clicked
+    /// emitted ed if an item on Time line view has been clicked
     void itemClicked(const QModelIndex &index);
     /// Request animation preview for the current index
     void requestAnimationPreview();
-    /// Emited if user has changed the state of automatic preview check box
+    /// Emitted if user has changed the state of automatic preview check box
     void previousStateChanged(bool isEnabled);
 
 public slots:

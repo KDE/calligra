@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    PageManager(Sheet* sheet);
+    explicit PageManager(Sheet *sheet);
 
     /**
      * Destructor.

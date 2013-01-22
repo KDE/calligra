@@ -52,7 +52,7 @@ public:
     *
     * @param filterChain the filter chain of the filter using the lib.
     */
-    Leader(KoFilterChain *filterChain);
+    explicit Leader(KoFilterChain *filterChain);
 
     /**
     * This constructor set up the Worker at initialization.

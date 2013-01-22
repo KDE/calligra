@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    NamedAreaManager(const Map* map);
+    explicit NamedAreaManager(const Map *map);
 
     /**
      * Destructor.

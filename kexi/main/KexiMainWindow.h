@@ -277,13 +277,16 @@ public slots:
 
     /*! Implemented for KexiMainWindow */
     virtual tristate saveObject(KexiWindow *window,
-                                const QString& messageWhenAskingForName = QString(), bool dontAsk = false);
+                                const QString& messageWhenAskingForName = QString(),
+                                SaveObjectOptions options = 0);
 
     /*! Implemented for KexiMainWindowIface. */
     virtual KexiWindow *openedWindowFor(const KexiPart::Item *item);
 
     /*! Implemented for KexiMainWindow */
-    virtual tristate getNewObjectInfo(KexiPart::Item *partItem, KexiPart::Part *part,
+    virtual tristate getNewObjectInfo(KexiPart::Item *partItem,
+                                      const QString &originalName,
+                                      KexiPart::Part *part,
                                       bool allowOverwriting, bool *overwriteNeeded,
                                       const QString& messageWhenAskingForName = QString());
 

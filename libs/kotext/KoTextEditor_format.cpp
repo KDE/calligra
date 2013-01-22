@@ -30,6 +30,7 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 #include "commands/TextPasteCommand.h"
+#include "commands/ParagraphFormattingCommand.h"
 
 #include <KLocale>
 #include <kundo2stack.h>
@@ -582,77 +583,12 @@ void KoTextEditor::mergeAutoStyle(const QTextCharFormat &deltaCharFormat)
     emit textFormatChanged();
 }
 
-class MergeAutoParagraphStyleVisitor : public KoTextVisitor
+
+void KoTextEditor::applyDirectFormatting(const QTextCharFormat &deltaCharFormat,
+                                  const QTextBlockFormat &deltaBlockFormat,
+                                  const KoListLevelProperties &llp)
 {
-public:
-    MergeAutoParagraphStyleVisitor(KoTextEditor *editor, const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat)
-        : KoTextVisitor(editor)
-        , m_deltaCharFormat(deltaCharFormat)
-        , m_deltaBlockFormat(deltaBlockFormat)
-    {
-    }
-
-    virtual void visitBlock(QTextBlock &block, const QTextCursor &caret)
-    {
-        for (QTextBlock::iterator it = block.begin(); it != block.end(); ++it) {
-            QTextCursor fragmentSelection(caret);
-            fragmentSelection.setPosition(it.fragment().position());
-            fragmentSelection.setPosition(it.fragment().position() + it.fragment().length(), QTextCursor::KeepAnchor);
-
-            if (fragmentSelection.anchor() >= fragmentSelection.position()) {
-                continue;
-            }
-
-            visitFragmentSelection(fragmentSelection);
-        }
-
-        QList<QTextCharFormat>::Iterator it = m_formats.begin();
-        foreach(QTextCursor cursor, m_cursors) {
-            QTextFormat prevFormat(cursor.charFormat());
-            cursor.setCharFormat(*it);
-            editor()->registerTrackedChange(cursor, KoGenChange::FormatChange, i18n("Formatting"), *it, prevFormat, false);
-            ++it;
-        }
-        QTextCursor cursor(caret);
-        cursor.mergeBlockFormat(m_deltaBlockFormat);
-        cursor.mergeBlockCharFormat(m_deltaCharFormat);
-    }
-
-    virtual void visitFragmentSelection(QTextCursor &fragmentSelection)
-    {
-        QTextCharFormat format = fragmentSelection.charFormat();
-        format.merge(m_deltaCharFormat);
-
-        m_formats.append(format);
-        m_cursors.append(fragmentSelection);
-    }
-
-    QTextCharFormat m_deltaCharFormat;
-    QTextBlockFormat m_deltaBlockFormat;
-    QList<QTextCharFormat> m_formats;
-    QList<QTextCursor> m_cursors;
-};
-
-void KoTextEditor::mergeAutoStyle(const QTextCharFormat &deltaCharFormat, const QTextBlockFormat &deltaBlockFormat)
-{
-    d->updateState(KoTextEditor::Private::Custom, "Formatting");
-
-    int caretAnchor = d->caret.anchor();
-    int caretPosition = d->caret.position();
-    MergeAutoParagraphStyleVisitor visitor(this, deltaCharFormat, deltaBlockFormat);
-
-    recursivelyVisitSelection(d->document->rootFrame()->begin(), visitor);
-
-    if (!isEditProtected() && caretAnchor == caretPosition) { //if there is no selection, it can happen that the caret does not get the proper style applied (begining of a block). We need to force it.
-        d->caret.mergeBlockFormat(deltaBlockFormat);
-        d->caret.mergeBlockCharFormat(deltaCharFormat);
-    }
-    else {
-        d->caret.setPosition(caretAnchor);
-        d->caret.setPosition(caretPosition, QTextCursor::KeepAnchor);
-    }
-
-    d->updateState(KoTextEditor::Private::NoOp);
+    addCommand(new ParagraphFormattingCommand(this, deltaCharFormat, deltaBlockFormat, llp));
     emit textFormatChanged();
 }
 

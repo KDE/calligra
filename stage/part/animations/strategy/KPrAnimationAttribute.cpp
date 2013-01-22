@@ -19,7 +19,7 @@
 
 #include "KPrAnimationAttribute.h"
 
-KPrAnimationAttribute::KPrAnimationAttribute(QString attributeName):m_attributeName(attributeName)
+KPrAnimationAttribute::KPrAnimationAttribute(const QString &attributeName):m_attributeName(attributeName)
 {
 }
 

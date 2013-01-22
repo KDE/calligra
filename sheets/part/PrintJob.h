@@ -35,7 +35,7 @@ class SheetSelectPage;
 class PrintJob : public KoPrintingDialog
 {
 public:
-    PrintJob(View *view);
+    explicit PrintJob(View *view);
     virtual ~PrintJob();
 
     virtual int documentFirstPage() const;

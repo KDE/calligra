@@ -57,7 +57,7 @@ public:
      * Constructor.
      * Creates a database named \p name.
      */
-    Database(const QString& name);
+    explicit Database(const QString &name);
 
     /**
      * Copy Constructor.

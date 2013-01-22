@@ -38,50 +38,6 @@ namespace Calligra
 namespace Sheets
 {
 
-class ElapsedTime
-{
-public:
-    enum OutputMode { Default, PrintOnlyTime };
-
-#ifdef NDEBUG
-
-    ElapsedTime() {}
-    explicit ElapsedTime(QString const& , OutputMode = Default) {}
-
-#else // NDEBUG
-
-    ElapsedTime() {
-        m_time.start();
-    }
-
-    explicit ElapsedTime(QString const & name, OutputMode mode = Default)
-            : m_name(name) {
-        m_time.start();
-        if (mode != PrintOnlyTime) {
-            kDebug(36001) << QString("*** (" + name + ")... Starting measuring...");
-        }
-    }
-
-    ~ElapsedTime() {
-        uint milliSec = m_time.elapsed();
-        uint min = (uint)(milliSec / (1000 * 60));
-        milliSec -= (min * 60 * 1000);
-        uint sec = (uint)(milliSec / 1000);
-        milliSec -= sec * 1000;
-
-        if (m_name.isNull())
-            kDebug(36001) << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec);
-        else
-            kDebug(36001) << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec);
-    }
-
-private:
-    QTime   m_time;
-    QString m_name;
-
-#endif // NDEBUG
-};
-
 /**
  * This namespace collects enumerations related to
  * pasting operations.

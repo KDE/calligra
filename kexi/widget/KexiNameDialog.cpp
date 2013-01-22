@@ -30,23 +30,36 @@
 #include <QGridLayout>
 #include <QLabel>
 
+KexiNameDialogValidator::KexiNameDialogValidator()
+{
+}
+
+KexiNameDialogValidator::~KexiNameDialogValidator()
+{
+}
+
+// --
+
 class KexiNameDialog::Private
 {
 
 public:
     Private() {}
+    ~Private() {
+        delete validator;
+    }
 
     QLabel *icon;
     KexiNameWidget* widget;
     const KexiProject *project;
     const KexiPart::Part *part;
+    KexiNameDialogValidator *validator;
     bool checkIfObjectExists;
     bool allowOverwriting;
     bool *overwriteNeeded;
 };
 
-KexiNameDialog::KexiNameDialog(
-    const QString& message, QWidget * parent)
+KexiNameDialog::KexiNameDialog(const QString& message, QWidget * parent)
         : KDialog(parent)
         , d(new Private)
 {
@@ -77,6 +90,7 @@ void KexiNameDialog::init()
 {
     d->checkIfObjectExists = false;
     d->allowOverwriting = false;
+    d->validator = 0;
     setButtons(Ok | Cancel | Help);
     QGridLayout *lyr = new QGridLayout(mainWidget());
     d->icon = new QLabel(mainWidget());
@@ -166,6 +180,11 @@ bool KexiNameDialog::canOverwrite()
 
 void KexiNameDialog::accept()
 {
+    if (d->validator) {
+        if (!d->validator->validate(this)) {
+            return;
+        }
+    }
     if (!d->widget->checkValidity())
         return;
 
@@ -217,6 +236,12 @@ int KexiNameDialog::execAndCheckIfObjectExists(const KexiProject &project,
 void KexiNameDialog::setAllowOverwriting(bool set)
 {
     d->allowOverwriting = set;
+}
+
+void KexiNameDialog::setValidator(KexiNameDialogValidator *validator)
+{
+    delete d->validator;
+    d->validator = validator;
 }
 
 #include "KexiNameDialog.moc"

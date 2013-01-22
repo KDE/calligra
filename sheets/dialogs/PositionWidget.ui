@@ -338,7 +338,6 @@ Vertical text puts your text vertically.</string>
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
  <tabstops>
   <tabstop>standard</tabstop>
   <tabstop>left</tabstop>

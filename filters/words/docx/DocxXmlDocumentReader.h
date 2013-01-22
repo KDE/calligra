@@ -45,7 +45,7 @@ class DocxXmlDocumentReaderContext;
 namespace MSOOXML
 {
 class MsooXmlRelationships;
-class TableStyleProperties;
+struct TableStyleProperties;
 class LocalTableStyles;
 }
 

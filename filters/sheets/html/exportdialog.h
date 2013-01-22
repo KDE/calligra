@@ -27,7 +27,7 @@
 class ExportWidget : public QWidget, public Ui::ExportWidget
 {
 public:
-    ExportWidget(QWidget *parent) : QWidget(parent) {
+    explicit ExportWidget(QWidget *parent) : QWidget(parent) {
         setupUi(this);
     }
 };

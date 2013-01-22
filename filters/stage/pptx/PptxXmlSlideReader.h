@@ -80,7 +80,7 @@ class PptxPlaceholder
 {
 public:
     PptxPlaceholder();
-    PptxPlaceholder(const PptxShapeProperties &other);
+    explicit PptxPlaceholder(const PptxShapeProperties &other);
     ~PptxPlaceholder();
     int x;
     int y;

@@ -61,7 +61,7 @@ typedef double          QP_INT64 ;
 class QpIStream
 {
 public:
-    QpIStream(const char* pFileName);
+    explicit QpIStream(const char *pFileName);
     QpIStream(unsigned char* pBuffer, unsigned int pLen);
     ~QpIStream();
 

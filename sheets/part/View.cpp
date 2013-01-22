@@ -54,7 +54,6 @@
 #include <QToolButton>
 #include <QSqlDatabase>
 #include <QSizePolicy>
-#include <QList>
 #include <QScrollBar>
 
 // KDE includes
@@ -103,7 +102,7 @@
 #include <KoModeBoxFactory.h>
 #include <KoIcon.h>
 
-// KSpread includes
+// Sheets includes
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -136,6 +135,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "PrintJob.h"
+#include "ElapsedTime_p.h"
 
 // commands
 #include "commands/CopyCommand.h"

@@ -35,7 +35,7 @@ class KoStore;
 class STAGE_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase {
 public:
     /// constructor
-    KPrSoundCollection(QObject *parent = 0);
+    explicit KPrSoundCollection(QObject *parent = 0);
     ~KPrSoundCollection();
 
     /**

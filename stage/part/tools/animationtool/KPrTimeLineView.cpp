@@ -67,14 +67,14 @@ QSize KPrTimeLineView::sizeHint() const
 {
     int rows = m_mainView->model()
             ? m_mainView->rowCount() : 1;
-    return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeigth());
+    return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeight());
 }
 
 QSize KPrTimeLineView::minimumSizeHint() const
 {
     int rows = m_mainView->model()
             ? m_mainView->rowCount() : 1;
-    return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeigth());
+    return QSize(m_mainView->totalWidth(), rows * m_mainView->rowsHeight());
 }
 
 bool KPrTimeLineView::eventFilter(QObject *target, QEvent *event)
@@ -311,7 +311,7 @@ bool KPrTimeLineView::event(QEvent *event)
 
 int KPrTimeLineView::rowAt(int ypos)
 {
-    int row = static_cast<int>(ypos / m_mainView->rowsHeigth());
+    int row = static_cast<int>(ypos / m_mainView->rowsHeight());
     return row;
 }
 
@@ -337,8 +337,8 @@ QRectF KPrTimeLineView::getRowRect(const int row, const int column)
     for (int i = 0; i < KPrShapeAnimations::StartTime; i++) {
         startPos = startPos + m_mainView->widthOfColumn(i);
     }
-    int y = row * m_mainView->rowsHeigth();
-    QRect rect(startPos, y, startPos+m_mainView->widthOfColumn(column), m_mainView->rowsHeigth());
+    int y = row * m_mainView->rowsHeight();
+    QRect rect(startPos, y, startPos+m_mainView->widthOfColumn(column), m_mainView->rowsHeight());
 
     int lineHeigth = qMin(LINE_HEIGHT, rect.height());
     int yCenter = (rect.height() - lineHeigth) / 2;
@@ -355,7 +355,7 @@ void KPrTimeLineView::paintEvent(QPaintEvent *event)
     if (!m_mainView->model()) {
         return;
     }
-    const int RowHeigth = m_mainView->rowsHeigth();
+    const int RowHeigth = m_mainView->rowsHeight();
     const int MinY = qMax(0, event->rect().y() - RowHeigth);
     const int MaxY = MinY + event->rect().height() + RowHeigth;
 

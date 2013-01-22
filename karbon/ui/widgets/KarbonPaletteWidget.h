@@ -29,7 +29,7 @@ class KarbonPaletteWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KarbonPaletteWidget(QWidget *parent = 0);
+    explicit KarbonPaletteWidget(QWidget *parent = 0);
     virtual ~KarbonPaletteWidget();
 
     /// Set orientation of color bar

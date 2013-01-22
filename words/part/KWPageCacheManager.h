@@ -60,7 +60,7 @@ class KWPageCacheManager {
 
 public:
 
-    KWPageCacheManager(int cacheSize);
+    explicit KWPageCacheManager(int cacheSize);
 
     ~KWPageCacheManager();
 
