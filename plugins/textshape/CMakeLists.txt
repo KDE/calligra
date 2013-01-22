@@ -91,6 +91,15 @@ SET ( textshape_SRCS
     dialogs/BibliographyPreview.cpp
     dialogs/ListLevelChooser.cpp
 
+    dialogs/stylemanager/CharacterHighlightingTab.cpp
+    dialogs/stylemanager/ParagraphBulletsNumbersTab.cpp
+    dialogs/stylemanager/ParagraphDecorationsTab.cpp
+    dialogs/stylemanager/ParagraphDropCapsTab.cpp
+    dialogs/stylemanager/ParagraphIndentSpacingTab.cpp
+    dialogs/stylemanager/ParagraphLayoutTab.cpp
+    dialogs/stylemanager/ParagraphStylesTab.cpp
+    dialogs/stylemanager/StylesManager.cpp
+
     commands/ChangeListLevelCommand.cpp
     commands/ShowChangesCommand.cpp
     commands/AcceptChangeCommand.cpp
@@ -123,7 +132,16 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/TableDialog.ui
     dialogs/BibliographyConfigureDialog.ui
     dialogs/TableOfContentsConfigure.ui
-    dialogs/TableOfContentsStyleConfigure.ui 
+    dialogs/TableOfContentsStyleConfigure.ui
+
+    dialogs/stylemanager/CharacterHighlightingTab.ui
+    dialogs/stylemanager/ParagraphBulletsNumbersTab.ui
+    dialogs/stylemanager/ParagraphDecorationsTab.ui
+    dialogs/stylemanager/ParagraphDropCapsTab.ui
+    dialogs/stylemanager/ParagraphIndentSpacingTab.ui
+    dialogs/stylemanager/ParagraphLayoutTab.ui
+    dialogs/stylemanager/ParagraphStylesTab.ui
+    dialogs/stylemanager/StylesManager.ui
 
     dialogs/FontDecorations.ui
     dialogs/LanguageTab.ui

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ParagraphStylesTab</class>
+ <widget class="QWidget" name="ParagraphStylesTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>883</width>
+    <height>414</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetNoConstraint</enum>
+     </property>
+     <item>
+      <widget class="QListView" name="paragraphListView"/>
+     </item>
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <property name="documentMode">
+        <bool>true</bool>
+       </property>
+       <widget class="CharacterHighlightingTab" name="characterHighlighting">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <attribute name="title">
+         <string>Font</string>
+        </attribute>
+       </widget>
+       <widget class="ParagraphIndentSpacingTab" name="indentSpacing">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <attribute name="title">
+         <string>Indent/Spacing</string>
+        </attribute>
+       </widget>
+       <widget class="ParagraphLayoutTab" name="paragraphLayout">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <attribute name="title">
+         <string>GeneralLayout</string>
+        </attribute>
+       </widget>
+       <widget class="ParagraphBulletsNumbersTab" name="bulletNumbers">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <attribute name="title">
+         <string>Bullet/Numbers</string>
+        </attribute>
+       </widget>
+       <widget class="ParagraphDecorationsTab" name="decorations">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <attribute name="title">
+         <string>Decorations</string>
+        </attribute>
+       </widget>
+       <widget class="ParagraphDropCapsTab" name="dropCaps">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <attribute name="title">
+         <string>Drop Caps</string>
+        </attribute>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CharacterHighlightingTab</class>
+   <extends>QWidget</extends>
+   <header>dialogs/stylemanager/CharacterHighlightingTab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ParagraphIndentSpacingTab</class>
+   <extends>QWidget</extends>
+   <header>dialogs/stylemanager/ParagraphIndentSpacingTab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ParagraphLayoutTab</class>
+   <extends>QWidget</extends>
+   <header>dialogs/stylemanager/ParagraphLayoutTab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ParagraphBulletsNumbersTab</class>
+   <extends>QWidget</extends>
+   <header>dialogs/stylemanager/ParagraphBulletsNumbersTab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ParagraphDecorationsTab</class>
+   <extends>QWidget</extends>
+   <header>dialogs/stylemanager/ParagraphDecorationsTab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ParagraphDropCapsTab</class>
+   <extends>QWidget</extends>
+   <header>dialogs/stylemanager/ParagraphDropCapsTab.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -25,6 +25,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
      <widget class="QListView" name="paragraphStylesListView">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">

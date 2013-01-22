@@ -38,6 +38,8 @@
 #include "commands/ChangeListLevelCommand.h"
 #include "FontSizeAction.h"
 
+#include "dialogs/stylemanager/StylesManager.h"
+
 #include <KoOdf.h>
 #include <KoCanvasBase.h>
 #include <KoShapeController.h>
@@ -2488,7 +2490,10 @@ void TextTool::showStyleManager(int styleId)
     Q_ASSERT(styleManager);
     if (!styleManager)
         return;  //don't crash
-    StyleManagerDialog *dia = new StyleManagerDialog(canvas()->canvasWidget());
+
+    StylesManager *dia = new StylesManager();
+    dia->show();
+/*    StyleManagerDialog *dia = new StyleManagerDialog(canvas()->canvasWidget());
     dia->setStyleManager(styleManager);
     dia->setUnit(canvas()->unit());
 
@@ -2501,6 +2506,7 @@ void TextTool::showStyleManager(int styleId)
         dia->setCharacterStyle(characterStyle);
     }
     dia->show();
+*/
 }
 
 void TextTool::startTextEditingPlugin(const QString &pluginId)
