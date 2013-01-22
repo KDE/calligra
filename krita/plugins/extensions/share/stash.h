@@ -94,6 +94,11 @@ public slots:
 
     /// Upload the given image to deviantart as PNG)
     void submit(KisImageWSP image, const QString& filename, const QString& title, const QString& comments, const QStringList& keywords, const QString& folder);
+    /// Overloaded submit call, which takes a QObject of a view rather than an image.
+    /// This allows us to call the function from QML. Do not call this from C++ without
+    /// good reason (one which you don't have, as the view will always enable you to
+    /// use the other function)
+    void submit(QObject* view, const QString& filename, const QString& title, const QString& comments, const QStringList& keywords, const QString& folder);
 
     /// Update the given item
     void update(const QString &stashid, const QString &title, const QString comments, const QStringList& keywords);

@@ -26,6 +26,7 @@
 #include <QImageWriter>
 #include <complex>
 #include <kis_image.h>
+#include <kis_view2.h>
 
 Stash::Stash(O2DeviantART *deviant, QObject *parent)
     : QObject(parent)
@@ -92,6 +93,13 @@ void Stash::submit(KisImageWSP image, const QString &filename, const QString &ti
     request.setRawHeader(QString("Content-Length").toAscii(), QString::number(data.length()).toAscii());
 
     m_callMap[m_requestor->post(request, data)] = Submit;
+}
+
+void Stash::submit(QObject* view, const QString& filename, const QString& title, const QString& comments, const QStringList& keywords, const QString& folder)
+{
+    KisView2* tmpView = qobject_cast<KisView2*>(view);
+    if(tmpView)
+        submit(tmpView->image(), filename, title, comments, keywords, folder);
 }
 
 void Stash::update(const QString &stashid, const QString &title, const QString comments, const QStringList& keywords)
