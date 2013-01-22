@@ -21,10 +21,15 @@ import QtWebKit 1.0
 import "../../components"
 
 SharePage {
+    id: root;
     pluginName: "ImageShare"
     function submitArt() {
         console.debug("Submit using " + sharingHandler);
+        if(stash !== null) {
+            stash.submit(sketchView.view, sketchView.fileTitle, title, description, tags, "");
+        }
     }
+    canShare: false
     Connections {
         target: sharingHandler;
         onOpenBrowser: {
@@ -40,6 +45,9 @@ SharePage {
             stash = sharingHandler.stash();
         }
     }
+    property string title: "";
+    property string tags: "";
+    property string description: "";
 
     PageStack {
         id: shareStack;
@@ -69,10 +77,15 @@ SharePage {
     //                             source:
     //                         }
                 }
-
-                TextField { placeholder: "Title"; }
-                TextField { placeholder: "Tags"; }
-                TextFieldMultiline { height: Constants.GridHeight * 4; placeholder: "Description"; }
+                function updateCanShare() {
+                    root.canShare = (txtTitle.text !== "" && txtTags.text !== "" && txtDescription.text !== "");
+                    root.title = txtTitle.text;
+                    root.tags = txtTags.text;
+                    root.description = txtDescription.text;
+                }
+                TextField { id: txtTitle; placeholder: "Title"; onTextChanged: content.updateCanShare(); }
+                TextField { id: txtTags; placeholder: "Tags"; onTextChanged: content.updateCanShare(); }
+                TextFieldMultiline { id: txtDescription; height: Constants.GridHeight * 4; placeholder: "Description"; onTextChanged: content.updateCanShare(); }
             }
         }
     }
