@@ -53,6 +53,7 @@ Page {
             color: Constants.Theme.PositiveColor;
             textColor: "white";
             text: "Upload";
+            enabled: (switcher.currentPage !== undefined && switcher.currentPage.canShare)
             onClicked: {
                 switcher.currentPage.submitArt();
             }
