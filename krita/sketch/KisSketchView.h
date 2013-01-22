@@ -27,6 +27,7 @@ class KisSketchView : public QDeclarativeItem
     Q_PROPERTY(QObject* selectionManager READ selectionManager NOTIFY viewChanged)
     Q_PROPERTY(QObject* view READ view NOTIFY viewChanged)
     Q_PROPERTY(QString file READ file WRITE setFile NOTIFY fileChanged)
+    Q_PROPERTY(QString fileTitle READ fileTitle NOTIFY fileChanged);
     Q_PROPERTY(bool modified READ isModified NOTIFY modifiedChanged)
 
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY canUndoChanged);
@@ -40,6 +41,7 @@ public:
     QObject* doc() const;
     QObject* view() const;
     QString file() const;
+    QString fileTitle() const;
     bool isModified() const;
 
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);

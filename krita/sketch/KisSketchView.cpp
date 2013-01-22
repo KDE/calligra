@@ -229,6 +229,12 @@ QString KisSketchView::file() const
     return d->file;
 }
 
+QString KisSketchView::fileTitle() const
+{
+    QFileInfo file(d->file);
+    return file.fileName();
+}
+
 bool KisSketchView::isModified() const
 {
     return d->doc->isModified();
