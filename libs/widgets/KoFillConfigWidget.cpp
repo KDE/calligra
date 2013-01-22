@@ -462,13 +462,15 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(shape->background());
 
     if (colorBackground) {
-        d->colorButton->setDefaultAction(d->colorAction);
         d->colorAction->setCurrentColor(colorBackground->color());
         d->group->button(KoFillConfigWidget::Solid)->setChecked(true);
+        d->colorButton->setDefaultAction(d->colorAction);
     } else if (gradientBackground) {
         d->group->button(KoFillConfigWidget::Gradient)->setChecked(true);
+        d->colorButton->setDefaultAction(d->gradientAction);
     } else if (patternBackground) {
         d->group->button(KoFillConfigWidget::Pattern)->setChecked(true);
+        d->colorButton->setDefaultAction(d->patternAction);
     } else {
         // No Fill
         d->group->button(KoFillConfigWidget::None)->setChecked(true);
