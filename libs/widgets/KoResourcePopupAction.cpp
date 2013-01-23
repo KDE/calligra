@@ -27,6 +27,10 @@
 #include "KoResourceItemDelegate.h"
 #include "KoResource.h"
 #include "KoCheckerBoardPainter.h"
+#include "KoShapeBackground.h"
+#include <KoGradientBackground.h>
+#include <KoPatternBackground.h>
+#include <KoImageCollection.h>
 
 #include <QMenu>
 #include <QHBoxLayout>
@@ -38,12 +42,11 @@
 class KoResourcePopupAction::Private
 {
 public:
-    Private() : applyMode(true), checkerPainter(4)
+    Private() : checkerPainter(4)
     {}
     QMenu *menu;
     KoResourceItemView *resourceList;
-    KoResource* resource;
-    bool applyMode;
+    KoShapeBackground *background;
     KoCheckerBoardPainter checkerPainter;
 };
 
@@ -64,8 +67,17 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
     if (resourceModel)
         resourceModel->setColumnCount(1);
     
-    d->resource = resourceAdapter->resources().at(0);
-    
+    KoResource *resource = resourceAdapter->resources().at(0);
+    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
+    KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
+    if (gradient) {
+        d->background = new KoGradientBackground(gradient->toQGradient());
+    } else if (pattern) {
+        KoImageCollection *collection = new KoImageCollection();
+        collection->createImageData(pattern->image());
+        d->background = new KoPatternBackground(collection);
+    }
+
     QHBoxLayout *layout = new QHBoxLayout(widget);
     layout->addWidget(d->resourceList);
     widget->setLayout(layout);
@@ -78,6 +90,8 @@ KoResourcePopupAction::KoResourcePopupAction(KoAbstractResourceServerAdapter *re
     d->menu->layout()->setMargin(0);
 
     connect(d->resourceList, SIGNAL(clicked(QModelIndex)), this, SLOT(indexChanged(QModelIndex)));
+
+    updateIcon();
 }
 
 KoResourcePopupAction::~KoResourcePopupAction()
@@ -85,9 +99,16 @@ KoResourcePopupAction::~KoResourcePopupAction()
     delete d;
 }
 
-KoResource *KoResourcePopupAction::currentResource()
+KoShapeBackground *KoResourcePopupAction::currentBackground()
 {
-    return d->resource;
+    return d->background;
+}
+
+void KoResourcePopupAction::setCurrentBackground(KoShapeBackground* background)
+{
+    d->background = background;
+
+    updateIcon();
 }
 
 
@@ -98,11 +119,22 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
 
     d->menu->hide();
 
-    d->resource = static_cast<KoResource*>(modelIndex.internalPointer());
-    if(d->resource)
-        emit resourceSelected(d->resource);
+    KoResource *resource = static_cast<KoResource*>(modelIndex.internalPointer());
+    if(resource) {        
+        KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
+        KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
+        if (gradient) {
+            d->background = new KoGradientBackground(gradient->toQGradient());
+        } else if (pattern) {
+            KoImageCollection *collection = new KoImageCollection();
+            collection->createImageData(pattern->image());
+            d->background = new KoPatternBackground(collection);
+        }
 
-    updateIcon();
+        emit resourceSelected(d->background);
+
+        updateIcon();
+    }
 }
 
 void KoResourcePopupAction::updateIcon()
@@ -115,59 +147,28 @@ void KoResourcePopupAction::updateIcon()
     {
         pm = QImage(iconSize, QImage::Format_ARGB32_Premultiplied);
         pm.fill(Qt::transparent);
-        // there was no icon set so we assume
-        // that we create an icon from the current color
-        d->applyMode = false;
     }
     QPainter p(&pm);
-    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(currentResource());
-    if(d->applyMode) {
-        QRect innerRect(0, iconSize.height() - 4, iconSize.width(), 4);
-        if (gradient) {
-            QGradient * g = gradient->toQGradient();
+    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(d->background);
+    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(d->background);
+    
+    QRect innerRect(0, 0, iconSize.width(), iconSize.height());
+    if (gradientBackground) {
+        QLinearGradient paintGradient;
+        paintGradient.setStops(gradientBackground->gradient()->stops());
+        paintGradient.setStart(innerRect.topLeft());
+        paintGradient.setFinalStop(innerRect.topRight());
 
-            QLinearGradient paintGradient;
-            paintGradient.setStops(g->stops());
-            paintGradient.setStart(innerRect.topLeft());
-            paintGradient.setFinalStop(innerRect.topRight());
-
-            d->checkerPainter.paint(p, innerRect);
-            p.fillRect(innerRect, QBrush(paintGradient));
-
-            delete g;
-        } else {
-            d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
-            if (currentResource()) {
-                p.fillRect(0, iconSize.height() - 4, iconSize.width(), 4, dynamic_cast<KoPattern*>(currentResource())->image());
-            }
-        }
+        d->checkerPainter.paint(p, innerRect);
+        p.fillRect(innerRect, QBrush(paintGradient));
+    } else if (patternBackground) {
+        d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
+        p.fillRect(0, 0, iconSize.width(), iconSize.height(), patternBackground->pattern());
     }
-    else {
-        QRect innerRect(0, 0, iconSize.width(), iconSize.height());
-        if (gradient) {
-            QGradient * g = gradient->toQGradient();
 
-            QLinearGradient paintGradient;
-            paintGradient.setStops(g->stops());
-            paintGradient.setStart(innerRect.topLeft());
-            paintGradient.setFinalStop(innerRect.topRight());
-
-            d->checkerPainter.paint(p, innerRect);
-            p.fillRect(innerRect, QBrush(paintGradient));
-
-            delete g;
-        } else {
-            d->checkerPainter.paint(p, QRect(QPoint(),iconSize));
-            if (currentResource()) {
-                p.fillRect(0, 0, iconSize.width(), iconSize.height(), currentResource()->image());
-            }
-        }
-    }
     p.end();
 
     setIcon(QIcon(QPixmap::fromImage(pm)));
-
-    delete gradient;
 }
 
 #include <KoResourcePopupAction.moc>

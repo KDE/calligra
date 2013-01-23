@@ -56,10 +56,10 @@ private slots:
     void colorChanged();
 
     /// the gradient of the fill changed, apply the changes
-    void gradientChanged(KoResource *resource);
+    void gradientChanged(KoShapeBackground *background);
 
     /// the pattern of the fill changed, apply the changes
-    void patternChanged(KoResource *resource);
+    void patternChanged(KoShapeBackground *background);
 
     /// update the opacity of the shape
     void updateOpacity(qreal opacity);

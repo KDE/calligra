@@ -23,7 +23,7 @@
 
 #include <KAction>
 
-class KoResource;
+class KoShapeBackground;
 class KoAbstractResourceServerAdapter;
 class QModelIndex;
 
@@ -44,11 +44,12 @@ public:
      */
     virtual ~KoResourcePopupAction();
 
-    KoResource *currentResource();
+    KoShapeBackground *currentBackground();
+    void setCurrentBackground(KoShapeBackground *background);
 
 signals:
     /// Emitted when a resource was selected
-    void resourceSelected(KoResource * resource);
+    void resourceSelected(KoShapeBackground * background);
 
 private slots:
     void indexChanged(QModelIndex modelIndex);

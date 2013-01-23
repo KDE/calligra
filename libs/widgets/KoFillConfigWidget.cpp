@@ -55,6 +55,7 @@
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>
 #include <KoResourcePopupAction.h>
+#include "KoZoomHandler.h"
 
 static const char* const buttonnone[]={
     "16 16 3 1",
@@ -244,13 +245,13 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     KoAbstractResourceServerAdapter *gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer(), this);
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
     d->gradientAction->setToolTip(i18n("Change the filling color"));
-    connect(d->gradientAction, SIGNAL(resourceSelected(KoResource*)), this, SLOT(gradientChanged(KoResource*)));
+    connect(d->gradientAction, SIGNAL(resourceSelected(KoShapeBackground*)), this, SLOT(gradientChanged(KoShapeBackground*)));
 
     // Pattern selector
     KoAbstractResourceServerAdapter *patternResourceAdapter = new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer(), this);
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling color"));
-    connect(d->patternAction, SIGNAL(resourceSelected(KoResource*)), this, SLOT(patternChanged(KoResource*)));
+    connect(d->patternAction, SIGNAL(resourceSelected(KoShapeBackground*)), this, SLOT(patternChanged(KoShapeBackground*)));
 
     // Opacity setting
     // FIXME: There is also an opacity setting in the color chooser. How do they interact?
@@ -308,12 +309,12 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
         case KoFillConfigWidget::Gradient:
             // Only select mode in the widget, don't set actual gradient :/
             d->colorButton->setDefaultAction(d->gradientAction);
-            gradientChanged(d->gradientAction->currentResource());
+            gradientChanged(d->gradientAction->currentBackground());
             break;
         case KoFillConfigWidget::Pattern:
             // Only select mode in the widget, don't set actual pattern :/
             d->colorButton->setDefaultAction(d->patternAction);
-            patternChanged(d->patternAction->currentResource());
+            patternChanged(d->patternAction->currentBackground());
             break;
     }
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
@@ -358,7 +359,7 @@ void KoFillConfigWidget::colorChanged()
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoFillConfigWidget::gradientChanged(KoResource *resource)
+void KoFillConfigWidget::gradientChanged(KoShapeBackground* background)
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -366,20 +367,16 @@ void KoFillConfigWidget::gradientChanged(KoResource *resource)
     if (!selection || !selection->count())
         return;
 
-    KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
-    if (! gradient)
-        return;
-
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     if (selectedShapes.isEmpty())
         return;
 
-    QGradient *newGradient = gradient->toQGradient();
-    if (! newGradient)
+    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(background);
+    if (! gradientBackground)
         return;
 
-    QGradientStops newStops = newGradient->stops();
-    delete newGradient;
+    QGradientStops newStops = gradientBackground->gradient()->stops();
+    delete gradientBackground;
 
     KUndo2Command *firstCommand = 0;
     foreach (KoShape *shape, selectedShapes) {
@@ -394,7 +391,7 @@ void KoFillConfigWidget::gradientChanged(KoResource *resource)
     canvasController->canvas()->addCommand(firstCommand);
 }
 
-void KoFillConfigWidget::patternChanged(KoResource *resource)
+void KoFillConfigWidget::patternChanged(KoShapeBackground* background)
 {
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -402,8 +399,8 @@ void KoFillConfigWidget::patternChanged(KoResource *resource)
     if (!selection || !selection->count())
         return;
 
-    KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
-    if (! pattern)
+    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background);
+    if(! patternBackground)
         return;
 
     QList<KoShape*> selectedShapes = canvasController->canvas()->shapeManager()->selection()->selectedShapes();
@@ -413,10 +410,10 @@ void KoFillConfigWidget::patternChanged(KoResource *resource)
     KoImageCollection *imageCollection = canvasController->canvas()->shapeController()->resourceManager()->imageCollection();
     if (imageCollection) {
         KoPatternBackground *fill = new KoPatternBackground(imageCollection);
-        fill->setPattern(pattern->image());
+        fill->setPattern(patternBackground->pattern());
         canvasController->canvas()->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
-
     }
+    delete patternBackground;
 }
 
 void KoFillConfigWidget::updateOpacity(qreal opacity)
@@ -448,24 +445,42 @@ void KoFillConfigWidget::shapeChanged()
 
 void KoFillConfigWidget::updateWidget(KoShape *shape)
 {
+    if(! shape)
+        return;
+
+    KoZoomHandler zoomHandler;
+    const qreal realWidth = zoomHandler.resolutionX() * width();
+    const qreal realHeight = zoomHandler.resolutionX() * height();
+
+    const qreal zoom = (realWidth > realHeight) ? realHeight : realWidth;
+    zoomHandler.setZoom(zoom);
+
+    shape->waitUntilReady(zoomHandler, false);
+
+    KoShapeBackground *background = shape->background();
+    if(! background)
+        return;
+
     // We don't want the opacity slider to send any signals when it's only initialized.
     // Otherwise an undo record is created.
     d->opacity->blockSignals(true);
     d->opacity->setValue(100 - shape->transparency() * 100);
     d->opacity->blockSignals(false);
 
-    KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(shape->background());
-    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(shape->background());
-    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(shape->background());
+    KoColorBackground *colorBackground = dynamic_cast<KoColorBackground*>(background);
+    KoGradientBackground *gradientBackground = dynamic_cast<KoGradientBackground*>(background);
+    KoPatternBackground *patternBackground = dynamic_cast<KoPatternBackground*>(background);
 
     if (colorBackground) {
         d->colorAction->setCurrentColor(colorBackground->color());
         d->group->button(KoFillConfigWidget::Solid)->setChecked(true);
         d->colorButton->setDefaultAction(d->colorAction);
     } else if (gradientBackground) {
+        d->gradientAction->setCurrentBackground(background);
         d->group->button(KoFillConfigWidget::Gradient)->setChecked(true);
         d->colorButton->setDefaultAction(d->gradientAction);
     } else if (patternBackground) {
+        d->patternAction->setCurrentBackground(background);
         d->group->button(KoFillConfigWidget::Pattern)->setChecked(true);
         d->colorButton->setDefaultAction(d->patternAction);
     } else {
@@ -491,7 +506,7 @@ KoShapeBackground *KoFillConfigWidget::applyFillGradientStops(KoShape *shape, co
         newGradient->setTransform(oldGradient->transform());
     }
     else {
-        // no gradient yet, so create a new one
+        // No gradient yet, so create a new one.
         QLinearGradient *g = new QLinearGradient(QPointF(0, 0), QPointF(1, 1));
         g->setCoordinateMode(QGradient::ObjectBoundingMode);
         g->setStops(stops);
