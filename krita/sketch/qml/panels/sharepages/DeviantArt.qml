@@ -18,6 +18,7 @@
 
 import QtQuick 1.1
 import QtWebKit 1.0
+import org.krita.sketch 1.0
 import "../../components"
 
 SharePage {
@@ -87,6 +88,19 @@ SharePage {
                 TextField { id: txtTitle; placeholder: "Title"; text: sketchView.fileTitle.substring(0, sketchView.fileTitle.indexOf(".")); onTextChanged: content.updateCanShare(); }
                 TextField { id: txtTags; placeholder: "Tags"; onTextChanged: content.updateCanShare(); }
                 TextFieldMultiline { id: txtDescription; height: Constants.GridHeight * 4; placeholder: "Description"; onTextChanged: content.updateCanShare(); }
+            }
+
+            Button {
+                anchors {
+                    top: parent.top;
+                    right: parent.right;
+                    margins: Constants.DefaultMargin;
+                }
+                width: Constants.GridWidth * 2;
+                height: textSize + Constants.DefaultMargin;
+                color: "transparent";
+                text: "Open Your Sta.sh...";
+                onClicked: Qt.openUrlExternally("http://sta.sh/");
             }
         }
     }
