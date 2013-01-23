@@ -25,16 +25,21 @@
 #include <KTemporaryFile>
 #include <QImageWriter>
 #include <complex>
+#include <klocalizedstring.h>
 #include <kis_image.h>
 #include <kis_view2.h>
+#include <KoUpdater.h>
 
 Stash::Stash(O2DeviantART *deviant, QObject *parent)
     : QObject(parent)
     , m_bytesAvailable(-1)
+    , m_progressUpdater(0)
+    , m_progressSubtask(0)
 {
     m_requestor = new O2Requestor(&m_networkAccessManager, deviant, this);
     connect(m_requestor, SIGNAL(finished(int,QNetworkReply::NetworkError,QByteArray)), SLOT(slotFinished(int,QNetworkReply::NetworkError,QByteArray)));
     connect(m_requestor, SIGNAL(uploadProgress(int,qint64,qint64)), SIGNAL(uploadProgress(int,qint64,qint64)));
+    connect(m_requestor, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(slotUploadProgress(int,qint64,qint64)));
 }
 
 Stash::~Stash()
@@ -98,8 +103,13 @@ void Stash::submit(KisImageWSP image, const QString &filename, const QString &ti
 void Stash::submit(QObject* view, const QString& filename, const QString& title, const QString& comments, const QStringList& keywords, const QString& folder)
 {
     KisView2* tmpView = qobject_cast<KisView2*>(view);
-    if(tmpView)
+    if(tmpView) {
+        m_progressUpdater = tmpView->createProgressUpdater();
+        m_progressUpdater->start(100, i18n("Uploading to Sta.sh"));
+        m_progressSubtask = m_progressUpdater->startSubtask(1, i18n("Uploading to Sta.sh"));
+        m_progressSubtask->setRange(0, 1);
         submit(tmpView->image(), filename, title, comments, keywords, folder);
+    }
 }
 
 void Stash::update(const QString &stashid, const QString &title, const QString comments, const QStringList& keywords)
@@ -187,6 +197,7 @@ void Stash::slotFinished(int id, QNetworkReply::NetworkError error, const QByteA
 void Stash::testCallFinished(const QByteArray& data)
 {
     QJson::Parser parser;
+    qDebug() << Q_FUNC_INFO << data;
     bool ok(false);
     QVariantMap result = parser.parse(data, &ok).toMap();
     if(ok && result.contains("status")) {
@@ -207,7 +218,13 @@ void Stash::submitCallFinished(const QByteArray& data)
     }
     emit callFinished(Submit, false);
     emit callError(QString("Unknown error submitting new artwork: %1").arg(QString(data)));
-    updateAvailableSpace();
+    if(m_progressUpdater) {
+        m_progressUpdater->deleteLater();
+        m_progressUpdater = 0;
+        m_progressSubtask = 0;
+    }
+    /// TODO reenable this when sta.sh decides to not be a derp
+    //updateAvailableSpace();
 }
 
 void Stash::updateCallFinished(const QByteArray& data)
@@ -271,6 +288,16 @@ void Stash::deltaCallFinished(const QByteArray& data)
 void Stash::fetchCallFinished(const QByteArray& data)
 {
 
+}
+
+void Stash::slotUploadProgress(int id, qint64 bytesSent, qint64 bytesTotal)
+{
+    if(m_progressUpdater) {
+        if(m_progressSubtask->max == 1) {
+            m_progressSubtask->setRange(0, bytesTotal);
+        }
+        m_progressSubtask->setValue(bytesSent);
+    }
 }
 
 #include "stash.moc"

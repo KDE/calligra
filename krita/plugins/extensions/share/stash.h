@@ -32,6 +32,7 @@
 #include "o2requestor.h"
 #include "o2deviantart.h"
 
+class KoProgressUpdater;
 struct Submission {
 
     /// The ID of the stash entry. This may be empty (will be empty if isFolder is true)
@@ -121,6 +122,7 @@ public slots:
 
 private slots:
     void slotFinished(int id, QNetworkReply::NetworkError error, const QByteArray &data);
+    void slotUploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
 
 signals:
     void availableSpaceChanged();
@@ -138,6 +140,8 @@ private:
     O2Requestor *m_requestor;
     QList<Submission> m_submissions;
     int m_bytesAvailable;
+    KoProgressUpdater* m_progressUpdater;
+    QPointer<KoUpdater> m_progressSubtask;
 
     void testCallFinished(const QByteArray& data);
     void submitCallFinished(const QByteArray& data);
