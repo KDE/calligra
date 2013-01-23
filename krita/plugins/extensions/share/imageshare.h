@@ -48,6 +48,7 @@ Q_SIGNALS:
     void openBrowser(const QUrl &url);
     void closeBrowser();
     void linkingSucceeded();
+    void sharingSuccessful(const QString& message, const QString& url);
 
 private slots:
 
@@ -61,6 +62,7 @@ private slots:
     void submitCallCompleted(Stash::Call, bool result);
     void uploadProgress(int id, qint64 bytesSent, qint64 bytesTotal);
     void availableSpaceChanged();
+    void newSubmission(int stashId, QString folder, int folderId);
 
 private:
 

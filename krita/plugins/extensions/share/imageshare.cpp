@@ -128,6 +128,7 @@ void ImageShare::showSubmit()
     connect(m_stash, SIGNAL(callFinished(Stash::Call,bool)), SLOT(testCallCompleted(Stash::Call,bool)));
     connect(m_stash, SIGNAL(submissionsChanged()), SLOT(submissionsChanged()));
     connect(m_stash, SIGNAL(uploadProgress(int,qint64,qint64)), SLOT(uploadProgress(int,qint64,qint64)));
+    connect(m_stash, SIGNAL(newSubmission(int,QString,int)), SLOT(newSubmission(int,QString,int)));
     // This will need doing... once deviantArt fixes the call
     //connect(m_stash, SIGNAL(availableSpaceChanged()), SLOT(availableSpaceChanged()));
     m_stash->testCall();
@@ -191,6 +192,11 @@ void ImageShare::availableSpaceChanged()
     if(m_submitDlg) {
         m_submitDlg->submitDlg()->lblRemaining->setText(i18n("Remaining space: %1", m_stash->availableSpace()));
     }
+}
+
+void ImageShare::newSubmission(int stashId, QString folder, int folderId)
+{
+    emit sharingSuccessful(i18n("The image was successfully uploaded to DeviantArt Sta.sh"), QString("http://sta.sh/0%1").arg(stashId, 0, 36));
 }
 
 #include "imageshare.moc"
