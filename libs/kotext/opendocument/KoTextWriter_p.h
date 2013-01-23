@@ -59,12 +59,7 @@
 #include <KoTableColumnStyle.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
-#include <changetracker/KoChangeTracker.h>
-#include <changetracker/KoChangeTrackerElement.h>
-#include <changetracker/KoDeleteChangeMarker.h>
-#include <changetracker/KoFormatChangeInformation.h>
-#include <KoGenChange.h>
-#include <KoGenChanges.h>
+
 #include <KoXmlWriter.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 #include <KoBibliographyInfo.h>
@@ -155,7 +150,7 @@ private:
         TableCell
     };
 
-    void openTagRegion(int position, ElementType elementType, TagInformation& tagInformation);
+    void openTagRegion(KoTextWriter::Private::ElementType elementType, TagInformation &tagInformation);
     void closeTagRegion();
 
     QString saveParagraphStyle(const QTextBlock &block);
@@ -175,12 +170,9 @@ private:
 
     void addNameSpaceDefinitions(QString &generatedXmlString);
 
-    void generateFinalXml(QTextStream &outputXmlStream, const KoXmlElement &element);
-
     // Common methods
     void writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element);
     void writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren = false);
-    void insertAroundContent(QTextStream& outputXmlStream, KoXmlElement& element);
 
     QString createXmlId();
 

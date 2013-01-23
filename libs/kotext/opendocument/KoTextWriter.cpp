@@ -38,8 +38,6 @@ KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdf
 
     if (!d->sharedData) {
         d->sharedData = new KoTextSharedSavingData();
-        KoGenChanges *changes = new KoGenChanges();
-        d->sharedData->setGenChanges(*changes);
         if (!sharedData) {
             context.addSharedData(KOTEXT_SHARED_SAVING_ID, d->sharedData);
         } else {
