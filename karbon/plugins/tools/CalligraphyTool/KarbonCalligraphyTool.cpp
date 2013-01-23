@@ -101,7 +101,7 @@ void KarbonCalligraphyTool::mousePressEvent(KoPointerEvent *event)
     m_isDrawing = true;
     m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape(m_caps);
-    m_shape->setBackground(new KoColorBackground(canvas()->resourceManager()->backgroundColor().toQColor()));
+    m_shape->setBackground(new KoColorBackground(canvas()->resourceManager()->foregroundColor().toQColor()));
     //addPoint( event );
 }
 
@@ -329,7 +329,7 @@ qreal KarbonCalligraphyTool::calculateAngle(const QPointF &oldSpeed,
 
 void KarbonCalligraphyTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    useCursor(Qt::ArrowCursor);
+    useCursor(Qt::CrossCursor);
     m_lastShape = 0;
 }
 
