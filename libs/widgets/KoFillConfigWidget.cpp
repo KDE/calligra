@@ -457,8 +457,13 @@ void KoFillConfigWidget::updateWidget(KoShape *shape)
     shape->waitUntilReady(zoomHandler, false);
 
     KoShapeBackground *background = shape->background();
-    if(! background)
+    if (! background) {
+        // No Fill
+        d->group->button(KoFillConfigWidget::None)->setChecked(true);
+        d->colorButton->setDefaultAction(d->colorAction);
+        d->colorButton->setPopupMode(QToolButton::InstantPopup);
         return;
+    }
 
     // We don't want the opacity slider to send any signals when it's only initialized.
     // Otherwise an undo record is created.
