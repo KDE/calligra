@@ -126,7 +126,9 @@ void KoResourcePopupAction::indexChanged(QModelIndex modelIndex)
         KoAbstractGradient *gradient = dynamic_cast<KoAbstractGradient*>(resource);
         KoPattern *pattern = dynamic_cast<KoPattern*>(resource);
         if (gradient) {
-            d->background = new KoGradientBackground(gradient->toQGradient());
+            QGradient *qg = gradient->toQGradient();
+            qg->setCoordinateMode(QGradient::ObjectBoundingMode);
+            d->background = new KoGradientBackground(qg);
         } else if (pattern) {
             KoImageCollection *collection = new KoImageCollection();
             d->background = new KoPatternBackground(collection);
