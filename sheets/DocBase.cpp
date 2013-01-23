@@ -29,8 +29,8 @@
    Boston, MA 02110-1301, USA.
 */
 #include "DocBase.h"
-#include "DocBase.moc"
 #include "DocBase_p.h"
+#include "DocBase.moc"
 
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
@@ -51,6 +51,8 @@
 #include "CalculationSettings.h"
 #include "Map.h"
 #include "SheetAccessModel.h"
+
+#include "ElapsedTime_p.h"
 
 #include "part/View.h" // TODO: get rid of this dependency
 
